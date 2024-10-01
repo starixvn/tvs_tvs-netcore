@@ -1,13 +1,11 @@
-import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { Result } from '../../../../../utility/models/result';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { FilterModel } from '../../filter/filter.model';
-import { WrongOddsModel } from '../../models/event-wrong-odds.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest } from '../../models/get-log-info.model';
+import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
+import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
-import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
+import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
+import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
 import { LogInfoService } from './log-info.service';
@@ -16,24 +14,7 @@ class Helper {
   static readonly fakeMatchId = 1;
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeWrongOddsModel = new WrongOddsModel();
-  static readonly fakeLinkedLogsViewModel: LinkedLogsViewModel = {
-    isLinkGroup1X2: true,
-    isLinkGroupAIO: true,
-    result: new Result(),
-    poolHouseLinkedLogsData: [
-      {
-        groupName: '1X2',
-        isShow: true,
-        logsData: []
-      },
-      {
-        groupName: 'AIO',
-        isShow: true,
-        logsData: []
-      },
-    ]
-  };
+  static readonly fakeWrongOddsSportsBookModel = new WrongOddsSportsBookModel();
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
     eventDate: '',
@@ -42,7 +23,8 @@ class Helper {
     action: '1',
     isTest: true,
     isVoided: false,
-    isAbnormal: false
+    isAbnormal: false,
+    actions: []
   };
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
@@ -58,42 +40,36 @@ class Helper {
     scoreNormalTicket: '',
     scoreOfMatch: '',
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeTicketRequest: TicketRequest = {
     transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
     requestId: 1,
+    createdBy: 'admin',
   };
-  static readonly fakeFilterWrongOddsModel: FilterWrongOddsModel = {
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    betTeam: 'h',
+  static readonly fakeFilterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel = {
+    fromDateTime: Helper.fakeFromDateTime,
+    toDateTime: Helper.fakeToDateTime,
     correctOdds: '1',
-    favoriteValue: '1',
-    filterFavoriteType: 'h',
     filterOddsType: 'value',
-    filterOuType: 'h',
     fromOdds: '1',
     oddsValue: '1',
-    ouValue: '1',
     liveIndicator: 0,
     toOdds: '1'
   };
-  static readonly fakeLogInfoWrongOdds: LogInfoWrongOdds = {
+  static readonly fakeLogInfoWrongOddsSportsBook: LogInfoWrongOddsSportsBook = {
     matchId: Helper.fakeMatchId,
-    filterWrongOdds: new FilterWrongOddsModel(),
+    filterWrongOddsSportsBook: new FilterWrongOddsSportsBookModel(),
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [],
-    isPoolHouseAffected: false,
-    linkedLogsViewModel: new LinkedLogsViewModel(),
-    poolHouseCheckedBetTypes: ''
+    betTeamsResult: [],
+    checkedBetTypes: []
   };
   static readonly fakeGetLogInfoModel: GetLogInfoModel = {
     matchId: Helper.fakeMatchId,
     validation: {
       isInvalidTotalTickets: true,
       isExistedInOtherRequest: true,
-      isPoolHouseAffected: false
-    },
+    } as Validation,
     ticketRequest: [Helper.fakeTicketRequest],
     logInfoDetail: Helper.fakeLogInfoDetail
   };
@@ -104,35 +80,23 @@ class Helper {
 }
 
 describe('LogInfoService', () => {
-  it('#getLogInfo should call #eventWrongOddsService.getWrongOddsModel', async () => {
-    const eventWrongOddsService = new EventWrongOddsSportsBookService(null);
-    eventWrongOddsService.getWrongOddsModel = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeFilterWrongOddsModel));
+  it('#getLogInfo should call #eventWrongOddsSportsBookService.getWrongOddsSportsBookModel', async () => {
+    const eventWrongOddsSportsBookService = new EventWrongOddsSportsBookService();
+    eventWrongOddsSportsBookService.getWrongOddsSportsBookGetLogInfoModel = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeFilterWrongOddsSportsBookModel));
     const commonService = new CommonService(null);
     commonService.getLogInfo = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));
 
-    const mockService = new LogInfoService(commonService, eventWrongOddsService);
-    await mockService.getLogInfo(Helper.fakeLogInfoWrongOdds, false, 1, Helper.fakeFilterModel, new PrimitiveProperty());
+    const mockService = new LogInfoService(commonService, eventWrongOddsSportsBookService);
+    await mockService.getLogInfo(Helper.fakeLogInfoWrongOddsSportsBook, false, 1, Helper.fakeFilterModel, new PrimitiveProperty());
 
-    expect(eventWrongOddsService.getWrongOddsModel).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getLogInfo should call #eventWrongOddsService.getWrongOddsModel when isEdit', async () => {
-    const eventWrongOddsService = new EventWrongOddsSportsBookService(null);
-    eventWrongOddsService.getWrongOddsModel = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeFilterWrongOddsModel));
-    const commonService = new CommonService(null);
-    commonService.getLogInfo = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));
-
-    const mockService = new LogInfoService(commonService, eventWrongOddsService);
-    await mockService.getLogInfo(Helper.fakeLogInfoWrongOdds, true, 1, Helper.fakeFilterModel, new PrimitiveProperty());
-
-    expect(eventWrongOddsService.getWrongOddsModel).toHaveBeenCalledTimes(1);
+    expect(eventWrongOddsSportsBookService.getWrongOddsSportsBookGetLogInfoModel).toHaveBeenCalledTimes(1);
   });
 
   it('#resetLogInfoOfEvent should update logInfoDetail to null', async () => {
     const mockService = new LogInfoService(null, null);
-    mockService.resetLogInfoOfEvent(Helper.fakeLogInfoWrongOdds);
+    mockService.resetLogInfoOfEvent(Helper.fakeLogInfoWrongOddsSportsBook);
 
-    expect(Helper.fakeLogInfoWrongOdds.logInfoDetail).toBeNull();
-    expect(Helper.fakeLogInfoWrongOdds.messageValidationLogInfo).toBeNull();
+    expect(Helper.fakeLogInfoWrongOddsSportsBook.logInfoDetail).toBeNull();
+    expect(Helper.fakeLogInfoWrongOddsSportsBook.messageValidationLogInfo).toBeNull();
   });
 });

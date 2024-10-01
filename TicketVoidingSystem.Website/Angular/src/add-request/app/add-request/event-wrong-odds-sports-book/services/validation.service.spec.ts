@@ -1,40 +1,18 @@
-import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { Result } from '../../../../../utility/models/result';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../../filter/filter.model';
-import { WrongOddsModel } from '../../models/event-wrong-odds.model';
+import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
-import { FilterWrongOddsComponent } from '../filter-wrong-odds/filter-wrong-odds.component';
-import { FilterOddsTypeConstant, FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
-import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
+import { FilterWrongOddsSportsBookComponent } from '../filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
+import { FilterOddsTypeConstant, FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
+import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { ValidationService } from './validation.service';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeWrongOddsModel = new WrongOddsModel();
-  static readonly fakeLinkedLogsViewModel: LinkedLogsViewModel = {
-    isLinkGroup1X2: true,
-    isLinkGroupAIO: true,
-    result: new Result(),
-    poolHouseLinkedLogsData: [
-      {
-        groupName: '1X2',
-        isShow: true,
-        logsData: []
-      },
-      {
-        groupName: 'AIO',
-        isShow: true,
-        logsData: []
-      },
-    ]
-  };
+  static readonly fakeWrongOddsSportsBookModel = new WrongOddsSportsBookModel();
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
     eventDate: '',
@@ -43,7 +21,8 @@ class Helper {
     action: '1',
     isTest: true,
     isVoided: false,
-    isAbnormal: false
+    isAbnormal: false,
+    actions: []
   };
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
@@ -58,31 +37,29 @@ class Helper {
     instantlySettleCount: 2,
     scoreNormalTicket: '',
     scoreOfMatch: '',
-    cancelCashOutCount: 1
+    cancelCashOutCount: 1,
+    actionType: '1',
+    isHasWarningRangeTime: false,
+    minTransId: '1',
+    transVoidToTime: new Date(Helper.fakeToDateTime),
   };
-  static readonly fakeFilterWrongOddsModel: FilterWrongOddsModel = {
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    betTeam: 'h',
+  static readonly fakeFilterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel = {
+    fromDateTime: Helper.fakeFromDateTime,
+    toDateTime: Helper.fakeToDateTime,
     correctOdds: '1',
-    favoriteValue: '1',
-    filterFavoriteType: 'h',
     filterOddsType: 'value',
-    filterOuType: 'h',
     fromOdds: '1',
     oddsValue: '1',
-    ouValue: '1',
     liveIndicator: 0,
     toOdds: '1'
   };
-  static readonly fakeLogInfoWrongOdds: LogInfoWrongOdds = {
+  static readonly fakeLogInfoWrongOddsSportsBook: LogInfoWrongOddsSportsBook = {
     matchId: 12345,
-    filterWrongOdds: new FilterWrongOddsModel(),
+    filterWrongOddsSportsBook: new FilterWrongOddsSportsBookModel(),
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [],
-    isPoolHouseAffected: false,
-    linkedLogsViewModel: new LinkedLogsViewModel(),
-    poolHouseCheckedBetTypes: ''
+    betTeamsResult: [],
+    checkedBetTypes: []
   };
 }
 
@@ -94,153 +71,97 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when match invalid', async () => {
-    const leagueEvent = new LeagueEventRedCardComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => false);
     const actual = service.validateCommonData(leagueEvent, null);
 
     expect(actual).toBeFalsy();
   });
 
-  it('#validateCommonData should return false when filterWrongOddsComponent invalid', async () => {
-    const leagueEvent = new LeagueEventRedCardComponent(null, null);
+  it('#validateCommonData should return false when filterWrongOddsSportsBookComponent invalid', async () => {
+    const leagueEvent = new EventLeagueComponent(null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
-    const filterWrongOddsComponent = new FilterWrongOddsComponent(null, null);
-    filterWrongOddsComponent.isValid = jest.fn().mockImplementation(() => false);
-    const actual = service.validateCommonData(leagueEvent, filterWrongOddsComponent);
+    const filterWrongOddsSportsBookComponent = new FilterWrongOddsSportsBookComponent(null, null);
+    filterWrongOddsSportsBookComponent.isValidity = jest.fn().mockImplementation(() => false);
+    const actual = service.validateCommonData(leagueEvent, filterWrongOddsSportsBookComponent);
 
     expect(actual).toBeFalsy();
   });
 
   it('#validateCommonData should return true', async () => {
-    const leagueEvent = new LeagueEventRedCardComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
-    const filterWrongOddsComponent = new FilterWrongOddsComponent(null, null);
-    filterWrongOddsComponent.isValid = jest.fn().mockImplementation(() => true);
-    const actual = service.validateCommonData(leagueEvent, filterWrongOddsComponent);
+    const filterWrongOddsSportsBookComponent = new FilterWrongOddsSportsBookComponent(null, null);
+    filterWrongOddsSportsBookComponent.isValidity = jest.fn().mockImplementation(() => true);
+    const actual = service.validateCommonData(leagueEvent, filterWrongOddsSportsBookComponent);
 
     expect(actual).toBeTruthy();
   });
 
   it('#isFromTimeSameOrBeforeToTime should return true', async () => {
-    const filter = new FilterWrongOddsModel();
-    filter.filterFromTransTime = Helper.fakeFromDateTime;
-    filter.filterToTransTime = Helper.fakeToDateTime;
+    const filter = new FilterWrongOddsSportsBookModel();
+    filter.fromDateTime = Helper.fakeFromDateTime;
+    filter.toDateTime = Helper.fakeToDateTime;
 
     const actual = service.isFromTimeSameOrBeforeToTime(filter, new Tooltip());
 
     expect(actual).toBeTruthy();
   });
 
-  it('#isValidFilterWrongOdds should return false when isValidFilterOddsType false', async () => {
+  it('#isValidFilterWrongOddsSportsBook should return false when isValidFilterOddsType false', async () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
-    const filter = new FilterWrongOddsModel();
+    const filter = new FilterWrongOddsSportsBookModel();
     filter.filterOddsType = FilterOddsTypeConstant.RANGE;
     filter.fromOdds = '1';
     filter.toOdds = '1a';
-    const actual = service.isValidFilterWrongOdds(filter, tooltip, null);
+    const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip, null);
 
     expect(actual).toBeFalsy();
   });
 
-  it('#isValidFilterWrongOdds should return false when isValidFilterCorrectValue false', async () => {
+  it('#isValidFilterWrongOddsSportsBook should return false when isValidFilterCorrectValue false', async () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
-    const filter = new FilterWrongOddsModel();
+    const filter = new FilterWrongOddsSportsBookModel();
     filter.filterOddsType = FilterOddsTypeConstant.VALUE;
     filter.fromOdds = '1';
     filter.toOdds = '1';
     filter.oddsValue = '1';
     filter.correctOdds = null;
-    const actual = service.isValidFilterWrongOdds(filter, tooltip, null);
+    const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip, null);
 
     expect(actual).toBeFalsy();
   });
 
-  it('#isValidFilterWrongOdds should return false when isValidFilterFavorite false', async () => {
+  it('#isValidFilterWrongOddsSportsBook should return false when isValidFilterLiveIndicator false', async () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
-    const filter = new FilterWrongOddsModel();
+    const filter = new FilterWrongOddsSportsBookModel();
     filter.filterOddsType = FilterOddsTypeConstant.VALUE;
     filter.fromOdds = '1';
     filter.toOdds = '1';
     filter.oddsValue = '1';
     filter.correctOdds = '1';
-    filter.favoriteValue = null;
-    const actual = service.isValidFilterWrongOdds(filter, tooltip, '1');
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidFilterWrongOdds should return false when isValidFilterOu false', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const filter = new FilterWrongOddsModel();
-    filter.filterOddsType = FilterOddsTypeConstant.VALUE;
-    filter.fromOdds = '1';
-    filter.toOdds = '1';
-    filter.oddsValue = '1';
-    filter.correctOdds = '1';
-    filter.favoriteValue = '1';
-    filter.ouValue = null;
-    const actual = service.isValidFilterWrongOdds(filter, tooltip, SubIssueTypeConstant.OVER_UNDER.toString());
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidFilterWrongOdds should return false when isValidFilterLiveIndicator false', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const filter = new FilterWrongOddsModel();
-    filter.filterOddsType = FilterOddsTypeConstant.VALUE;
-    filter.fromOdds = '1';
-    filter.toOdds = '1';
-    filter.oddsValue = '1';
-    filter.correctOdds = '1';
-    filter.favoriteValue = '1';
-    filter.ouValue = '1';
     [null, undefined].forEach(x => {
       filter.liveIndicator = x;
-      const actual = service.isValidFilterWrongOdds(filter, tooltip, '1');
+      const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip, '1');
 
       expect(actual).toBeFalsy();
     });
   });
 
-  it('#isValidFilterWrongOdds should return false when isValidFilterBetTeam false', async () => {
+  it('#isValidFilterWrongOddsSportsBook should return true', async () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
-    const filter = new FilterWrongOddsModel();
+    const filter = new FilterWrongOddsSportsBookModel();
     filter.filterOddsType = FilterOddsTypeConstant.VALUE;
     filter.fromOdds = '1';
     filter.toOdds = '1';
     filter.oddsValue = '1';
     filter.correctOdds = '1';
-    filter.favoriteValue = '1';
-    filter.ouValue = '1';
     filter.liveIndicator = 1;
-    [null, undefined, ''].forEach(x => {
-      filter.betTeam = x;
-      const actual = service.isValidFilterWrongOdds(filter, tooltip, '1');
-
-      expect(actual).toBeFalsy();
-    });
-  });
-
-  it('#isValidFilterWrongOdds should return true', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const filter = new FilterWrongOddsModel();
-    filter.filterOddsType = FilterOddsTypeConstant.VALUE;
-    filter.fromOdds = '1';
-    filter.toOdds = '1';
-    filter.oddsValue = '1';
-    filter.correctOdds = '1';
-    filter.favoriteValue = '1';
-    filter.ouValue = '1';
-    filter.liveIndicator = 1;
-    filter.betTeam = 'h';
-    const actual = service.isValidFilterWrongOdds(filter, tooltip, '1');
+    const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip, '1');
 
     expect(actual).toBeTruthy();
   });
@@ -248,21 +169,11 @@ describe('ValidationService', () => {
   it('#isValidLogInfoEvent should return false', async () => {
     const errorMsg = new ValidationMessage();
     errorMsg.isError = true;
-    const logInfo = new LogInfoWrongOdds();
+    const logInfo = new LogInfoWrongOddsSportsBook();
     logInfo.messageValidationLogInfo = [errorMsg];
     const actual = service.isValidLogInfoEvent(logInfo);
 
     expect(actual).toBeFalsy();
-  });
-
-  it('#isValidFilterOu should return true', async () => {
-    const tooltip = new Tooltip();
-    tooltip.hide = jest.fn();
-    const filter = new FilterWrongOddsModel();
-    filter.ouValue = '1';
-    const actual = service['isValidFilterOu'](filter, tooltip);
-
-    expect(actual).toBeTruthy();
   });
 
   it('#isValidFilterOddsValue should return false when oddsValue null', async () => {
@@ -317,43 +228,6 @@ describe('ValidationService', () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
     const actual = service['isValidFilterOddsRange']('1', '2', tooltip);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#checkCanShowConfirmationWrongOdds should return false', async () => {
-    const element = document.createElement('body');
-    element.setAttribute("user-id", "2");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.logInfoEvent = new LogInfoWrongOdds();
-    saveRequestArg.logInfoEvent.messageValidationLogInfo = null;
-    saveRequestArg.isEdit = true;
-    saveRequestArg.userId = 2;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    saveRequestArg.actionIdOfFirstTimeAccess = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    const actual = service.checkCanShowConfirmationWrongOdds(saveRequestArg);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#checkCanShowConfirmationWrongOdds should return true', async () => {
-    const errorMsg = new ValidationMessage();
-    errorMsg.isError = false;
-
-    const element = document.createElement('body');
-    element.setAttribute("user-id", "2");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.logInfoEvent = new LogInfoWrongOdds();
-    saveRequestArg.logInfoEvent.messageValidationLogInfo = [errorMsg];
-    saveRequestArg.isEdit = true;
-    saveRequestArg.userId = 2;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    saveRequestArg.actionIdOfFirstTimeAccess = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    const actual = service.checkCanShowConfirmationWrongOdds(saveRequestArg);
 
     expect(actual).toBeTruthy();
   });

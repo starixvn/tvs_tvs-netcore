@@ -8,20 +8,20 @@ import { ModalService } from '../../../../../utility/components/modal/modal.serv
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { FilterModel } from '../../filter/filter.model';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
+import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
+import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
+import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
+import { LogAnalysisService } from '../../services/log-analysis.service';
 import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
 import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
+import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
 import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp.component';
-import { PoolHouseTicketViewModel, PoolHouseTicketsModel, GetPoolHouseTicketQuery } from '../../pool-house-ticket/pool-house-ticket.model';
-import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
-import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
-import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
-import { LogAnalysisService } from '../../services/log-analysis.service';
-import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
-import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -87,7 +87,8 @@ class Helper {
     action: '1',
     isTest: true,
     isVoided: false,
-    isAbnormal: false
+    isAbnormal: false,
+    actions: []
   };
   static readonly fakeGetPoolHouseTicketQuery: GetPoolHouseTicketQuery = {
     matchId: 75785,

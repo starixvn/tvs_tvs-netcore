@@ -1,5 +1,5 @@
-import { Selection } from 'src/utility/models/selection.model';
 import { SubIssueType } from '../../../../utility/models/issue-type.model';
+import { Selection } from '../../../../utility/models/selection.model';
 export class FilterModel {
   issueTypeId?: string;
   subIssueTypeId: string;

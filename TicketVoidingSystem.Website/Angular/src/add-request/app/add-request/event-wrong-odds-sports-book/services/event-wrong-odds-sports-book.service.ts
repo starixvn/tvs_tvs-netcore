@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { DateTimeFormat } from "../../../../../utility/constants/config";
 import { WrongOddsSportsBookModel } from "../../models/event-wrong-odds-sports-book.model";
 import { FilterOddsTypeConstant, FilterWrongOddsSportsBookModel } from "../models/filter-wrong-odds-sports-book.model";

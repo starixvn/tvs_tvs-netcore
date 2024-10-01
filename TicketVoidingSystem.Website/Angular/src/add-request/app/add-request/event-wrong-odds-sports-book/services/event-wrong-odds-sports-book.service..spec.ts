@@ -1,10 +1,9 @@
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
-import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds.model';
+import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
 import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
-import { EventWrongOddsSportsBookSportsBookService } from './event-wrong-odds-sports-book.service';
+import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -18,7 +17,8 @@ class Helper {
     action: '1',
     isTest: true,
     isVoided: false,
-    isAbnormal: false
+    isAbnormal: false,
+    actions: []
   };
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
@@ -34,19 +34,14 @@ class Helper {
     scoreNormalTicket: '',
     scoreOfMatch: '',
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeFilterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel = {
     fromDateTime: Helper.fakeFromDateTime,
     toDateTime: Helper.fakeToDateTime,
-    betTeam: 'h',
     correctOdds: '1',
-    favoriteValue: '1',
-    filterFavoriteType: 'h',
     filterOddsType: 'value',
-    filterOuType: 'h',
     fromOdds: '1',
     oddsValue: '1',
-    ouValue: '1',
     liveIndicator: 0,
     toOdds: '1'
   };
@@ -54,44 +49,29 @@ class Helper {
     matchId: 12345,
     filterWrongOddsSportsBook: new FilterWrongOddsSportsBookModel(),
     logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: []
+    messageValidationLogInfo: [],
+    betTeamsResult: [],
+    checkedBetTypes: []
   };
 }
 
 describe('EventWrongOddsSportsBookService', () => {
-  let service: EventWrongOddsSportsBookSportsBookService;
+  let service: EventWrongOddsSportsBookService;
 
   beforeEach(() => {
-    service = new EventWrongOddsSportsBookSportsBookService(null);
+    service = new EventWrongOddsSportsBookService();
   });
 
   it('#assignModelsToEvents should return expected model', async () => {
     const actual = service.assignModelsToEvents(Helper.fakeWrongOddsSportsBookModel);
 
     expect(actual.matchId).toBe(Helper.fakeWrongOddsSportsBookModel.matchId);
-    expect(actual.poolHouseCheckedBetTypes).toBe(Helper.fakeWrongOddsSportsBookModel.poolHouseCheckedBetTypes);
   });
 
   it('#getWrongOddsSportsBookModel should return expected model', async () => {
-    const actual = service.getWrongOddsSportsBookModel(Helper.fakeFilterModel, Helper.fakeLogInfoWrongOddsSportsBook);
+    const actual = service.getWrongOddsSportsBookModel(Helper.fakeLogInfoWrongOddsSportsBook, '1');
 
     expect(actual.matchId).toBe(Helper.fakeLogInfoWrongOddsSportsBook.matchId);
     expect(actual.subIssueTypeId ).toBe(Number(Helper.fakeFilterModel.subIssueTypeId));
-  });
-
-  it('#getLinkedLog should call #addRequestApiService.getLinkedLogs', async () => {
-    const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.getLinkedLogs = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeLinkedLogsViewModel));
-    const mockService = new EventWrongOddsSportsBookSportsBookService(addRequestApiService);
-    const actual = await mockService.getLinkedLog(Helper.fakeLogInfoWrongOddsSportsBook, Helper.fakeFilterModel);
-
-    expect(addRequestApiService.getLinkedLogs).toHaveBeenCalledTimes(1);
-    expect(actual).toBeDefined();
-  });
-
-  it('#initDefaultLogInfoWrongOddsSportsBook should return expected model', async () => {
-    const actual = service.initDefaultLogInfoWrongOddsSportsBook();
-
-    expect(actual.poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.SELECT_ALL_BETTYPE);
   });
 });

@@ -5,7 +5,7 @@ import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateContent, TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
-import { EventType } from '../../../../utility/constants/sport.constant';
+import { EventType, SportType } from '../../../../utility/constants/sport.constant';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { CommonService } from '../../../../utility/services/common.service';
@@ -80,11 +80,20 @@ export class VoidPageService {
       templateValue.toTransTime = voidPageItem.voidTicketsMini.toTime;
     }
 
-    if(StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())) {
+    if(StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString()) || this.isSportTypeSoccer(requestDetail.request.sportType)) {
       templateValue.actualMarketSportsBook = this.createActualMarketSportsBook(requestDetail, templateValue);
+      templateValue.score = this.getLiveScoreForTemplateMessage(requestDetail.wrongOddsSportsBookModel.logInfoDetail.scoreNormalTicket, requestDetail.wrongOddsSportsBookModel.logInfoDetail.scoreOfMatch);
     }
 
     return templateValue;
+  }
+  
+  public isSportTypeSoccer(sportType: number): boolean{
+    return sportType === SportType.SOCCER;
+  }
+
+  private getLiveScoreForTemplateMessage(scoreNormalTicket: string, scoreOfMatch: string): string {
+    return !scoreNormalTicket ? scoreOfMatch : scoreNormalTicket.split('|')[0].replace(/ /g, '');
   }
 
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo {

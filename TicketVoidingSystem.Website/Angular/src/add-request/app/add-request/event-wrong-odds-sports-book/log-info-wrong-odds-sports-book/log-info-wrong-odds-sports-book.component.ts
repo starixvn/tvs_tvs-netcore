@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment-timezone';
-import { BetTypeAddRequest } from 'src/utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
-import { ItemsSelect } from 'src/utility/components/multiple-selection/items-select';
-import { MultipleSelection } from 'src/utility/components/multiple-selection/multiple-selection';
+import moment from 'moment-timezone';
+import { BetTypeAddRequest } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { ItemsSelect } from '../../../../../utility/components/multiple-selection/items-select';
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';

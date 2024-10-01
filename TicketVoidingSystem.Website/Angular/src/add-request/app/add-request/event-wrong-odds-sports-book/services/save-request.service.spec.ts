@@ -1,19 +1,18 @@
-import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { Result } from '../../../../../utility/models/result';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
-import { WrongOddsModel } from '../../models/event-wrong-odds.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest } from '../../models/get-log-info.model';
+import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
+import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { OthersModel } from '../../others/others.model';
 import { PopupService } from '../../services/popup.service';
-import { FilterOddsTypeConstant, FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
-import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
+import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
+import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
@@ -22,24 +21,7 @@ class Helper {
   static readonly fakeMatchId = 12345;
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeWrongOddsModel = new WrongOddsModel();
-  static readonly fakeLinkedLogsViewModel: LinkedLogsViewModel = {
-    isLinkGroup1X2: true,
-    isLinkGroupAIO: true,
-    result: new Result(),
-    poolHouseLinkedLogsData: [
-      {
-        groupName: '1X2',
-        isShow: true,
-        logsData: []
-      },
-      {
-        groupName: 'AIO',
-        isShow: true,
-        logsData: []
-      },
-    ]
-  };
+  static readonly fakeWrongOddsSportsBookModel = new WrongOddsSportsBookModel();
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
     eventDate: '',
@@ -48,7 +30,8 @@ class Helper {
     action: '1',
     isTest: true,
     isVoided: false,
-    isAbnormal: false
+    isAbnormal: false,
+    actions: []
   };
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
@@ -64,42 +47,36 @@ class Helper {
     scoreNormalTicket: '',
     scoreOfMatch: '',
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeTicketRequest: TicketRequest = {
     transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
     requestId: 1,
+    createdBy: 'admin',
   };
-  static readonly fakeFilterWrongOddsModel: FilterWrongOddsModel = {
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    betTeam: 'h',
+  static readonly fakeFilterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel = {
+    fromDateTime: Helper.fakeFromDateTime,
+    toDateTime: Helper.fakeToDateTime,
     correctOdds: '1',
-    favoriteValue: '1',
-    filterFavoriteType: 'h',
     filterOddsType: 'value',
-    filterOuType: 'h',
     fromOdds: '1',
     oddsValue: '1',
-    ouValue: '1',
     liveIndicator: 0,
     toOdds: '1'
   };
-  static readonly fakeLogInfoWrongOdds: LogInfoWrongOdds = {
+  static readonly fakeLogInfoWrongOddsSportsBook: LogInfoWrongOddsSportsBook = {
     matchId: Helper.fakeMatchId,
-    filterWrongOdds: new FilterWrongOddsModel(),
+    filterWrongOddsSportsBook: new FilterWrongOddsSportsBookModel(),
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [],
-    isPoolHouseAffected: false,
-    linkedLogsViewModel: new LinkedLogsViewModel(),
-    poolHouseCheckedBetTypes: ''
+    betTeamsResult: [],
+    checkedBetTypes: []
   };
   static readonly fakeGetLogInfoModel: GetLogInfoModel = {
     matchId: Helper.fakeMatchId,
     validation: {
       isInvalidTotalTickets: true,
-      isExistedInOtherRequest: true,
-      isPoolHouseAffected: false
-    },
+      isExistedInOtherRequest: true
+    } as Validation,
     ticketRequest: [Helper.fakeTicketRequest],
     logInfoDetail: Helper.fakeLogInfoDetail
   };
@@ -113,7 +90,7 @@ describe('SaveRequestService', () => {
   let service: SaveRequestService;
 
   beforeEach(() => {
-    service = new SaveRequestService(null, null, null, null);
+    service = new SaveRequestService(null, null, null, null, null);
   });
 
   it('#recheckLogInfoBeforeSaveRequest should return false when does not pass validation', async () => {
@@ -125,7 +102,7 @@ describe('SaveRequestService', () => {
     const validationService = new ValidationService();
     validationService.validateCommonData = jest.fn().mockImplementation(() => false);
 
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null);
+    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
 
     const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
@@ -148,7 +125,7 @@ describe('SaveRequestService', () => {
     const validationService = new ValidationService();
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isValidLogInfoEvent = jest.fn().mockImplementation(() => true);
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null);
+    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
 
     const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
@@ -172,7 +149,7 @@ describe('SaveRequestService', () => {
     const validationService = new ValidationService();
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isValidLogInfoEvent = jest.fn().mockImplementation(() => false);
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null);
+    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
 
     const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
@@ -222,19 +199,15 @@ describe('SaveRequestService', () => {
     service['proceedSaveRequest'] = jest.fn();
 
     const validationService = new ValidationService();
-    validationService.checkCanShowConfirmationWrongOdds = jest.fn().mockImplementation(() => true);
-
     const popupService = new PopupService(null);
     const spyShowConfirm = jest.spyOn(popupService, 'showConfirm').mockImplementation(() => {});
 
-    const saveRequestService = new SaveRequestService(validationService, null, popupService, null);
-    saveRequestService['getMessageConfirmationWrongOdds'] = jest.fn().mockImplementation(() => 'aaa');
+    const saveRequestService = new SaveRequestService(validationService, null, popupService, null, null);
+    saveRequestService['getMessageConfirmationWrongOddsSportsBook'] = jest.fn().mockImplementation(() => 'aaa');
     saveRequestService['onClickConfirmSave'] = jest.fn();
 
     saveRequestService['proceedSaveRequest'](saveRequestArg);
 
-    expect(validationService.checkCanShowConfirmationWrongOdds).toHaveBeenCalledTimes(1);
-    expect(saveRequestService['getMessageConfirmationWrongOdds']).toHaveBeenCalledTimes(1);
 
     expect(spyShowConfirm.mock.calls[0][0]).toEqual('aaa');
     expect(spyShowConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
@@ -247,59 +220,11 @@ describe('SaveRequestService', () => {
     expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
   });
 
-  it('#proceedSaveRequest should called #executeSaveRequestApi', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    const validationService = new ValidationService();
-    validationService.checkCanShowConfirmationWrongOdds = jest.fn().mockImplementation(() => false);
-
-    const saveRequestService = new SaveRequestService(validationService, null, null, null);
-    saveRequestService['executeSaveRequestApi'] = jest.fn();
-
-    saveRequestService['proceedSaveRequest'](saveRequestArg);
-
-    expect(validationService.checkCanShowConfirmationWrongOdds).toHaveBeenCalledTimes(1);
-    expect(saveRequestService['executeSaveRequestApi']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getMessageConfirmation should return expected msg', async () => {
-    const expected = '<div>There are some warnings in this request.'
-    + '</div><div>Ticket(s) on request will be unmarked.</div>'
-    + '<div style=\"color:red\">Please remind this request undefined is confirmed by undefined.</div><div class=\'mg-top-10\'>'
-    + '<i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>';
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.userId = 11111;
-    saveRequestArg.isEdit = true;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = '2';
-    saveRequestArg.actionIdOfFirstTimeAccess = '5';
-    saveRequestArg.logInfoEvent = Helper.fakeLogInfoWrongOdds;
-    saveRequestArg.logInfoEvent.logInfoDetail.settleCount = 1;
-    saveRequestArg.logInfoEvent.messageValidationLogInfo.push({ isError: false, reason: 'aaa'});
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-
-    const actual = service['getMessageConfirmationWrongOdds'](saveRequestArg);
-
-    expect(actual).toBe(expected);
-  });
-
-  it('#getMessageConfirmationWrongOdds should return expected msg', async () => {
-    const expected = '<div class=\'mg-top-10\'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>';
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.isEdit = false;
-    saveRequestArg.logInfoEvent = new LogInfoWrongOdds();
-    saveRequestArg.logInfoEvent.messageValidationLogInfo = null;
-
-    const actual = service['getMessageConfirmationWrongOdds'](saveRequestArg);
-
-    expect(actual).toBe(expected);
-  });
 
   it('#executeSaveRequestApi should called #executeSaveRequest', async () => {
     const addRequestService = new AddRequestService(null, null, null);
     const spyExecuteSaveRequest = jest.spyOn(addRequestService, 'executeSaveRequest').mockImplementation();
-    const saveRequestService = new SaveRequestService(null, null, null, addRequestService);
+    const saveRequestService = new SaveRequestService(null, null, null, addRequestService, null);
     saveRequestService['initAddRequestQuery'] = jest.fn();
 
     await saveRequestService['executeSaveRequestApi'](new SaveRequestArg());
@@ -317,7 +242,7 @@ describe('SaveRequestService', () => {
     const popupService = new PopupService(null);
     const spyShowError = jest.spyOn(popupService, 'showError').mockImplementation(() => {});
 
-    const saveRequestService = new SaveRequestService(null, null, popupService, null);
+    const saveRequestService = new SaveRequestService(null, null, popupService, null, null);
     saveRequestService['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
 
     await saveRequestService['onClickConfirmSave'](arg);
@@ -339,19 +264,21 @@ describe('SaveRequestService', () => {
     expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
   });
 
-  it('#initAddRequestQuery should return expected model when request is voided', async () => {
+  it('#initAddRequestQuery should not call #eventService.getWrongOddsSportsBookModel when request is voided', async () => {
     const arg = new SaveRequestArg();
     arg.filter = new FilterModel();
     arg.others = new OthersModel();
     arg.filter.isVoided = true;
-    arg.logInfoEvent = Helper.fakeLogInfoWrongOdds;
+    arg.logInfoEvent = Helper.fakeLogInfoWrongOddsSportsBook;
     arg.primitiveProps = new PrimitiveProperty();
-    service['getWrongOddsInfo'] = jest.fn();
+    const eventService = new EventWrongOddsSportsBookService();
+    eventService.getWrongOddsSportsBookModel = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeWrongOddsSportsBookModel));
+    const saveRequestService = new SaveRequestService(null, null, null, null, eventService);
 
-    const actual = service['initAddRequestQuery'](arg);
+    const actual = saveRequestService['initAddRequestQuery'](arg);
 
     expect(actual).toBeDefined();
-    expect(service['getWrongOddsInfo']).toHaveBeenCalledTimes(0);
+    expect(eventService.getWrongOddsSportsBookModel).toHaveBeenCalledTimes(0);
   });
 
   it('#initAddRequestQuery should return expected model when transInfoAddRequestModel not null', async () => {
@@ -360,62 +287,17 @@ describe('SaveRequestService', () => {
     arg.filter.isVoided = false;
     arg.others = new OthersModel();
     arg.filter.issueTypeId = IssueTypeConstant.WRONG_ODDS;
-    arg.logInfoEvent = Helper.fakeLogInfoWrongOdds;
+    arg.logInfoEvent = Helper.fakeLogInfoWrongOddsSportsBook;
     arg.primitiveProps = new PrimitiveProperty();
     arg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
-    service['getWrongOddsInfo'] = jest.fn();
+    service['getWrongOddsSportsBookInfo'] = jest.fn();
+    const eventService = new EventWrongOddsSportsBookService();
+    eventService.getWrongOddsSportsBookModel = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeWrongOddsSportsBookModel));
+    const saveRequestService = new SaveRequestService(null, null, null, null, eventService);
 
-    const actual = service['initAddRequestQuery'](arg);
-
-    expect(actual).toBeDefined();
-    expect(service['getWrongOddsInfo']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getWrongOddsInfo should return expected when isSubTypeOuOr1stOu', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.others = new OthersModel();
-    arg.filter.issueTypeId = IssueTypeConstant.WRONG_1ST_HDP;
-    arg.logInfoEvent = Helper.fakeLogInfoWrongOdds;
-    arg.logInfoEvent.filterWrongOddsSportsBook.filterOddsType = FilterOddsTypeConstant.VALUE;
-    const validationService = new ValidationService();
-    validationService.isSubTypeOuOr1stOu = jest.fn().mockImplementation(() => true);
-    const saveRequestService = new SaveRequestService(validationService, null, null, null);
-
-    const actual = saveRequestService['getWrongOddsInfo'](Helper.fakeLogInfoWrongOdds, '1');
+    const actual = saveRequestService['initAddRequestQuery'](arg);
 
     expect(actual).toBeDefined();
+    expect(eventService.getWrongOddsSportsBookModel).toHaveBeenCalledTimes(1);
   });
-
-  it('#getWrongOddsInfo should return expected when is not SubTypeOuOr1stOu', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.others = new OthersModel();
-    arg.filter.issueTypeId = IssueTypeConstant.WRONG_1ST_HDP;
-    arg.logInfoEvent = Helper.fakeLogInfoWrongOdds;
-    arg.logInfoEvent.filterWrongOddsSportsBook.filterOddsType = FilterOddsTypeConstant.RANGE;
-    const validationService = new ValidationService();
-    validationService.isSubTypeOuOr1stOu = jest.fn().mockImplementation(() => false);
-    const saveRequestService = new SaveRequestService(validationService, null, null, null);
-
-    const actual = saveRequestService['getWrongOddsInfo'](Helper.fakeLogInfoWrongOdds, '1');
-
-    expect(actual).toBeDefined();
-  });
-  // it('#getWrongHdpInfo should return expected', async () => {
-  //   const arg = new SaveRequestArg();
-  //   arg.filter = new FilterModel();
-  //   arg.others = new OthersModel();
-  //   arg.filter.issueTypeId = IssueTypeConstant.WRONG_1ST_HDP;
-  //   arg.allEvents = [Helper.fakeLogInfoWrongHdp];
-
-  //   const validationService = new ValidationService();
-  //   validationService.isSubTypeWrongHdpOrWrong1stHdp = jest.fn().mockImplementation(() => false);
-  //   const saveRequestService = new SaveRequestService(validationService, null, null, null);
-
-  //   const actual = saveRequestService['getWrongHdpInfo'](Helper.fakeLogInfoWrongHdp, '1');
-
-  //   expect(actual).toBeDefined();
-  //   expect(validationService.isSubTypeWrongHdpOrWrong1stHdp).toHaveBeenCalledTimes(1);
-  // });
 });

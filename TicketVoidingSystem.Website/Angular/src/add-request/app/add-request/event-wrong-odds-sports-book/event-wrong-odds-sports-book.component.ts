@@ -27,7 +27,7 @@ import { ValidationService } from './services/validation.service';
   templateUrl: './event-wrong-odds-sports-book.component.html',
   styleUrls: ['./event-wrong-odds-sports-book.component.scss']
 })
-export class EventWrongOddsSportsBookSportsBookComponent implements OnInit {
+export class EventWrongOddsSportsBookComponent implements OnInit {
   @Input() isEdit: boolean;
   @Input() userId: number;
   @Input() requestedBy: string;

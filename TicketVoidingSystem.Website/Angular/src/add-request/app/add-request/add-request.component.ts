@@ -19,7 +19,7 @@ import { EventReducedOverComponent } from './event-reduced-over/event-reduced-ov
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
 import { EventWrongHdpComponent } from './event-wrong-hdp/event-wrong-hdp.component';
 import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered/event-wrong-market-offered.component';
-import { EventWrongOddsSportsBookSportsBookComponent } from './event-wrong-odds-sports-book/event-wrong-odds-sports-book.component';
+import { EventWrongOddsSportsBookComponent } from './event-wrong-odds-sports-book/event-wrong-odds-sports-book.component';
 import { EventWrongOddsComponent } from './event-wrong-odds/event-wrong-odds.component';
 import { EventWrongOuComponent } from './event-wrong-ou/event-wrong-ou.component';
 import { EventWrongScoreComponent } from './event-wrong-score/event-wrong-score.component';
@@ -56,7 +56,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventWrongHDP') eventWrongHdpComponent: EventWrongHdpComponent;
   @ViewChild('eventWrongOU') eventWrongOuComponent: EventWrongOuComponent;
   @ViewChild('eventWrongOdds') eventWrongOddsComponent: EventWrongOddsComponent;
-  @ViewChild('eventWrongOddsSportsBook') eventWrongOddsSportsBookComponent: EventWrongOddsSportsBookSportsBookComponent;
+  @ViewChild('eventWrongOddsSportsBook') eventWrongOddsSportsBookComponent: EventWrongOddsSportsBookComponent;
   @ViewChild('eventReducedOver') eventReducedOverComponent: EventReducedOverComponent;
   @ViewChild('eventDuplicateTickets') eventDuplicateTicketsComponent: EventDuplicateTicketsComponent;
   @ViewChild('eventNotParticipate') eventNotParticipateComponent: EventNotParticipateComponent;
