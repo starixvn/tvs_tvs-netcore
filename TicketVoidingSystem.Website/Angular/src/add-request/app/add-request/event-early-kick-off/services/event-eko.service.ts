@@ -23,6 +23,8 @@ export class EventEarlyKickOffService {
       event.kickOffTime = x.kickOffTime;
       event.isCollapse = filter.isVoided || !x.isMainMatch;
       event.matchModel = x.match;
+      event.matchModel = x.match;
+      event.sportType = x.sportType;
       allEvents.push(event);
     });
   }

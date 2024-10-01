@@ -31,6 +31,7 @@ import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-dup
 import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
 import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
 import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
+import { TicketCountOtherSportsModule } from '../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.module';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.com
     UtilityModule,
     IssueTypeModule,
     ToastrModule.forRoot(),
+    TicketCountOtherSportsModule
   ],
   providers: [
   ],

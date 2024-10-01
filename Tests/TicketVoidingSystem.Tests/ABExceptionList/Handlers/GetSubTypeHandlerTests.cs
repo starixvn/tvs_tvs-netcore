@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -22,7 +21,8 @@ public class GetSubTypeHandlerTests
         var request = new GetSubTypeRequest();
         var subTypes = new List<AbExceptionSubTypeViewModel>
         {
-            new() {SubIssueTypeIds = "", SubIssueTypeName = ""}
+            new() {SubIssueTypeIds = "27", SubIssueTypeName = "2"},
+            new() {SubIssueTypeIds = "6", SubIssueTypeName = "6"}
         };
         var repository = Substitute.For<IDynamicRepository>();
         repository.FetchAsync<AbExceptionSubTypeViewModel>(Arg.Any<GetSubTypeRequest>()).ReturnsForAnyArgs(subTypes);
@@ -32,7 +32,7 @@ public class GetSubTypeHandlerTests
         var actualResult = await handler.Handle(request, default);
 
         // Assert
-        await repository.Received(1).FetchAsync<AbExceptionSubTypeViewModel>(Arg.Any<GetSubTypeRequest>());
-        Assert.Equal(subTypes.Count, actualResult.Count());
+        await repository.Received(1).FetchAsync<AbExceptionSubTypeViewModel>(request);
+        Assert.Single(actualResult);
     }
 }

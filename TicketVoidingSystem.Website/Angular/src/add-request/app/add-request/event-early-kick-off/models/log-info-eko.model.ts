@@ -23,4 +23,5 @@ export class LogInfoEarlyKickOff {
   isHasInstantlySettledTicket: boolean;
   isShowValidation: boolean;
   templateValue?: TemplateValue;
+  sportType: number;
 }

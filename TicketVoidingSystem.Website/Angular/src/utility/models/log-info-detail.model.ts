@@ -14,10 +14,6 @@ export class LogInfoDetail {
     highlightAcceptType?: number;
     scoreNormalTicket: string;
     scoreOfMatch: string;
-    liveGameEarlySingleCount?: number;
-    liveGameEarlyCashOutCount?: number;
-    liveGameEarlySettleCount?: number;
-    liveGameEarlyInstantlySettleCount?: number;
     poolHouseSingleCount?: number;
     poolHouseCashOutCount?: number;
     poolHouseSettleCount?: number;
@@ -25,7 +21,6 @@ export class LogInfoDetail {
     poolHouseInstantlySettleCount?: number;
     minTransId: string;
     actionType: string;
-    liveGameEarlyTicketsJson?: string;
     isHasWarningRangeTime: boolean;
     logInfoTicketsJson?: string;
 }

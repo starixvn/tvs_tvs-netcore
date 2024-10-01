@@ -5,6 +5,7 @@ import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../utility
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../utility/services/static.service';
+import { SportType } from '../../../utility/constants/sport.constant';
 
 @Component({
   selector: 'log-info',
@@ -19,6 +20,7 @@ export class LogInfoComponent {
   @Input() correctOddsHomeOver: string;
   @Input() correctOddsAwayUnder: string;
   @Input() isPoolHouseAffected: boolean;
+  @Input() sportType: number;
 
   acceptTypeName = "";
 
@@ -90,5 +92,9 @@ export class LogInfoComponent {
 
   isReducedOver(): boolean {
     return this.issueTypeId === Number(IssueTypeConstant.REDUCED_OVER) || this.issueTypeId === Number(IssueTypeConstant.ABANDONED) ;
+  }
+
+  public isSportTypeSoccer(): boolean{
+    return this.sportType === SportType.SOCCER;
   }
 }

@@ -25,7 +25,7 @@ export class WrongOddsModel {
   toOddsNotVoidHomeOver?: string;
   fromOddsNotVoidAwayUnder?: string;
   toOddsNotVoidAwayUnder?: string;
-
   voidFromTime?: string;
   voidToTime?: string;
+  sportType: number;
 }

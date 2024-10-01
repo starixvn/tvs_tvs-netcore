@@ -17,6 +17,7 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
+import { SportType } from '../../../../../utility/constants/sport.constant';
 
 @Component({
   selector: 'log-info-wrong-hdp',
@@ -147,11 +148,11 @@ export class LogInfoWrongHdpComponent {
     return ticketCount === 0 ? '-' : transId;
   }
 
-  public async openLiveGameEarlyDetails(): Promise<void> {
+  public async openTicketDetails(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    if (this.logInfo.logInfoDetail.liveGameEarlyTicketsJson) {
+    if (this.logInfo.logInfoDetail.logInfoTicketsJson) {
       const query: LogInfoTicketsQuery = {
-        logInfoTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
+        logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
         issueTypeId: Number(this.filter.issueTypeId)
       };
 
@@ -187,5 +188,9 @@ export class LogInfoWrongHdpComponent {
     this.poolHouseTicketsModel.checkedBetTypes = this.logInfo.poolHouseCheckedBetTypes;
     this.poolHouseTicketsModel.isOpen = true;
     this.poolHouseTicketsModel = _.clone(this.poolHouseTicketsModel);
+  }
+
+  public isSportTypeSoccer(): boolean{
+    return this.logInfo.sportType === SportType.SOCCER;
   }
 }

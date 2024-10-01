@@ -98,6 +98,7 @@ export class EventWrongOddsService {
   assignModelsToEvents(inputModels: WrongOddsModel): LogInfoWrongOdds {
     const event = new LogInfoWrongOdds();
     event.matchId = inputModels.matchId;
+    event.sportType = inputModels.sportType;
     event.logInfoDetail = inputModels.logInfoDetail;
     event.poolHouseCheckedBetTypes = inputModels.poolHouseCheckedBetTypes;
     event.isPoolHouseAffected = inputModels.isPoolHouseAffected;

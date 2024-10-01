@@ -10,4 +10,5 @@ export class EarlyKickOffModel {
   eventDate: Date;
   kickOffTime: string;
   match?: MatchModel
+  sportType: number;
 }

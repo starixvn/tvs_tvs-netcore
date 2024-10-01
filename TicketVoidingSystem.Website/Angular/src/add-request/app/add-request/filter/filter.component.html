@@ -28,7 +28,7 @@
           [clearable]="false"
           [searchable]="false"
           [disabled]="model.isVoided"
-          (change)="onChangeSubIssueType()">
+          (change)="updateModel(true)">
         </ng-select>
       </div>
       <div *ngIf="isShowButtonSelectSubType()">

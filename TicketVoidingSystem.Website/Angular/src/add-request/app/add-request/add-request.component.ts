@@ -126,6 +126,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     this.matchId = match?.matchId;
     this.parentMatchId = match?.parentId;
   }
+  
   async saveRequest(): Promise<void> { // NOSONAR
     if (!this.isEdit) {
       localStorage.setItem(LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_ADD_REQUEST + document.getElementById('body').getAttribute('user-id'),
@@ -205,11 +206,8 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   public getEventLabel(): string {
     if (this.isAbnormalAccount()) {
       return 'Username';
-    } else if (this.isArchivedTicketIssueType() || this.isRecoverTicket()) {
-      return 'Ticket Info';
-    } else {
-      return 'Event';
-    }
+    } 
+    return this.isArchivedTicketIssueType() || this.isRecoverTicket() ? 'Ticket Info' : 'Event';
   }
 
   async copyEmailRequestInfo() {

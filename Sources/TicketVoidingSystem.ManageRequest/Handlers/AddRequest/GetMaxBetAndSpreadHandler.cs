@@ -42,8 +42,8 @@ public class GetMaxBetAndSpreadHandler : IRequestHandler<GetMaxBetAndSpreadReque
     {
         return new OddsInfoModel
         {
-            SubIssueTypeId = subIssueTypeId,
-            Spread = GetMaxBetSpreadBySubIssueType(maxBetSpreadInfo.Spread, subIssueTypeId),
+            SubIssueTypeId = subIssueTypeId.ToString(),
+            Spread = GetMaxBetSpreadBySubIssueType(maxBetSpreadInfo.Spread, subIssueTypeId)?.ToString(),
             MaxBet = GetMaxBetSpreadBySubIssueType(maxBetSpreadInfo.Maxbet, subIssueTypeId)
         };
     }

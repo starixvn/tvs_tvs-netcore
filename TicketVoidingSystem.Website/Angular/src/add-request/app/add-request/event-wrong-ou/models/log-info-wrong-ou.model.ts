@@ -17,4 +17,5 @@ export class LogInfoWrongOu {
   linkedLogsViewModel: LinkedLogsViewModel;
   isShowValidation: boolean;
   eventDate?: Date;
+  sportType: number;
 }

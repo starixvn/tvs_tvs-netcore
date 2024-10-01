@@ -23,4 +23,5 @@ public class WrongOuViewModel
     public bool IsLinkGroup1X2 { get; set; }
     public bool IsLinkGroupAIO { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
+    public int SportType { get; set; }
 }

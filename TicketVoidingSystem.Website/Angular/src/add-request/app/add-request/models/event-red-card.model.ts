@@ -24,6 +24,7 @@ export class RedCardModel {
     subIssueTypeName: string;
     matchType: number;
     logInfoDetail: LogInfoDetail;
+    sportType: number;
 }
 
 export class RedCardGetLogInfoQuery {

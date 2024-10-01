@@ -14,6 +14,7 @@ import { LogAnalysisService } from '../../services/log-analysis.service';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOddsService } from '../services/event-wrong-odds.service';
+import { SportType } from '../../../../../utility/constants/sport.constant';
 
 @Component({
   selector: 'log-info-wrong-odds',
@@ -91,11 +92,11 @@ export class LogInfoWrongOddsComponent implements OnInit {
     return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
   }
 
-  public async openLiveGameEarlyDetails(): Promise<void> {
+  public async openTicketDetails(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    if (this.logInfo.logInfoDetail.liveGameEarlyTicketsJson) {
+    if (this.logInfo.logInfoDetail.logInfoTicketsJson) {
       const query: LogInfoTicketsQuery = {
-        logInfoTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
+        logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
         issueTypeId: Number(this.filter.issueTypeId)
       };
 
@@ -130,5 +131,9 @@ export class LogInfoWrongOddsComponent implements OnInit {
     this.poolHouseTicketsModel.checkedBetTypes = this.logInfo.poolHouseCheckedBetTypes;
     this.poolHouseTicketsModel.isOpen = true;
     this.poolHouseTicketsModel = _.clone(this.poolHouseTicketsModel);
+  }
+
+  public isSportTypeSoccer(): boolean{
+    return this.logInfo.sportType === SportType.SOCCER;
   }
 }

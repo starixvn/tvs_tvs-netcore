@@ -3,33 +3,36 @@
   <div class="log-info">
     <div class="list-group-item flex-column align-items-start wrapper-tooltip body-log-info-main">
       <div *ngIf="logInfo.isShowValidation">
-        <ng-container *ngIf="logInfo.logInfoDetail">
-          <span>Live Score: </span><strong>{{logInfo.logInfoDetail.liveScores}}</strong>.
-          Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
-          LG/Early - Single Count: <strong>{{logInfo.logInfoDetail.liveGameEarlySingleCount}}</strong>
-          <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount)" class="text-red"
-          [innerHTML]="countInfoContent(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount) | sanitizeHtml">
-        </span>&nbsp;
-        <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openLiveGameEarlyDetails()">Details</span><br />
-        </ng-container>
-
-        <ng-container>
-          <div *ngIf="logInfo.logInfoDetail">
-            PH - Single Count: <strong>{{logInfo.logInfoDetail.poolHouseSingleCount}}</strong>
-            <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount)" class="text-red"
-            [innerHTML]="countInfoContent(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
-            </span>,
-            Parlay Count: <strong>{{logInfo.logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
-            <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openPoolHouseDetails()">Details</span>
+        <div *ngIf="logInfo.logInfoDetail" class="ticket-count">
+          <ng-container class="void-time">
+            <span>Live Score: </span><strong>{{logInfo.logInfoDetail.liveScores}}</strong>.
+            Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
+          </ng-container>
+          <div *ngIf="isSportTypeSoccer()" class="soccer">
+            <ng-container class="single-count">
+              LG/Early - Single Count: <strong>{{logInfo.logInfoDetail.singleCount}}</strong>
+              <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount)" class="text-red"
+                [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml">
+              </span>&nbsp;
+              <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openTicketDetails()">Details</span><br />
+            </ng-container>
+            <ng-container class="pool-house-count">
+              PH - Single Count: <strong>{{logInfo.logInfoDetail.poolHouseSingleCount}}</strong>
+              <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount)" class="text-red"
+                [innerHTML]="countInfoContent(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
+              </span>,
+              Parlay Count: <strong>{{logInfo.logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
+              <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openPoolHouseDetails()">Details</span>
+              <span *ngIf="!logInfo.logInfoDetail && !filter.isVoided" class="ticket-details" (click)="openPoolHouseDetails()">PH Details</span>
+              <div *ngIf="logInfo.linkedLogsViewModel.result && !logInfo.linkedLogsViewModel.result?.isSuccessful" class="warning-text d-flex align-items-center">
+                <i class="fa fa-exclamation-triangle icon-warning-message mr-1" aria-hidden="true"></i>Cannot get link log, please search again.
+              </div>
+            </ng-container>
           </div>
-          
-          <span *ngIf="!logInfo.logInfoDetail && !filter.isVoided" class="ticket-details" (click)="openPoolHouseDetails()">PH Details</span>
-
-          <div *ngIf="logInfo.linkedLogsViewModel.result && !logInfo.linkedLogsViewModel.result?.isSuccessful" class="warning-text d-flex align-items-center">
-            <i class="fa fa-exclamation-triangle icon-warning-message mr-1" aria-hidden="true"></i>Cannot get link log, please search again.
-          </div>
-        </ng-container>
-
+          <ticket-count-other-sports *ngIf="!isSportTypeSoccer()" [logInfoDetail]="logInfo.logInfoDetail" [isVoided]="filter.isVoided" 
+            (openTicketDetails)="openTicketDetails()">
+          </ticket-count-other-sports>
+        </div>
         <ng-container *ngIf="logInfo.messageValidationLogInfo?.length > 0">
           <div class="message">
             <span *ngFor="let msg of logInfo.messageValidationLogInfo">

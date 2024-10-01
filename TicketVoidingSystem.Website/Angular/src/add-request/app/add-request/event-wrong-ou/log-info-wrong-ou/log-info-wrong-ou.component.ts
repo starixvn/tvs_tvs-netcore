@@ -16,6 +16,7 @@ import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
+import { SportType } from '../../../../../utility/constants/sport.constant';
 
 @Component({
   selector: 'log-info-wrong-ou',
@@ -101,11 +102,11 @@ export class LogInfoWrongOuComponent implements OnInit {
     return query;
   }
 
-  public async openLiveGameEarlyDetails(): Promise<void> {
+  public async openTicketDetails(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    if (this.logInfo.logInfoDetail.liveGameEarlyTicketsJson) {
+    if (this.logInfo.logInfoDetail.logInfoTicketsJson) {
       const query: LogInfoTicketsQuery = {
-        logInfoTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
+        logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
         issueTypeId: Number(this.filter.issueTypeId)
       };
 
@@ -171,5 +172,9 @@ export class LogInfoWrongOuComponent implements OnInit {
 
   public isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
     return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
+  }
+
+  public isSportTypeSoccer(): boolean{
+    return this.logInfo.sportType === SportType.SOCCER;
   }
 }

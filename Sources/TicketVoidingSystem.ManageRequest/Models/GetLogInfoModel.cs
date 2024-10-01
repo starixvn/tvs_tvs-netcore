@@ -24,11 +24,7 @@ public class LogInfoDetail
     public DateTime VoidFromTime { get; set; }
     public DateTime VoidToTime { get; set; }
     public DateTime TransVoidToTime { get; set; }
-    public int SingleCount { get; set; }
-    public int CashOutCount { get; set; }
     public int CancelCashOutCount { get; set; }
-    public int SettleCount { get; set; }
-    public int InstantlySettleCount { get; set; }
     public int MainParlayCount { get; set; }
     public DateTime? HighlightMinTime { get; set; }
     public int? HighlightAcceptType { get; set; }
@@ -38,21 +34,19 @@ public class LogInfoDetail
     public string ActionType { get; set; }
 
     // Wrong HDP/1stHDP
+    public int SingleCount { get; set; }
 
-    public int LiveGameEarlySingleCount { get; set; }
-    public int LiveGameEarlyCashOutCount { get; set; }
-    public int LiveGameEarlySettleCount { get; set; }
-    public int LiveGameEarlyInstantlySettleCount { get; set; }
+    public int CashOutCount { get; set; }
+    public int SettleCount { get; set; }
+    public int InstantlySettleCount { get; set; }
+
     public int PoolHouseSingleCount { get; set; }
     public int PoolHouseCashOutCount { get; set; }
     public int PoolHouseSettleCount { get; set; }
     public int PoolHouseMainParlayCount { get; set; }
     public int PoolHouseInstantlySettleCount { get; set; }
 
-    // Wrong HDP/1stHDP, Wrong OU/1H OU, Wrong Odds
-    public string? LiveGameEarlyTicketsJson { get; set; }
-
-    // Wrong Market Offered & Technical Error
+    //Wrong HDP/1stHDP, Wrong OU/1H OU, Wrong Odds Wrong Market Offered & Technical Error
     public string? LogInfoTicketsJson { get; set; }
 }
 
