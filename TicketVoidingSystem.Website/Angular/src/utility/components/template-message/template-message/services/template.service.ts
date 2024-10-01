@@ -6,8 +6,6 @@ import { TemplateValue } from '../template.model';
 
 @Injectable()
 export class TemplateService {
-  constructor() { }
-
   initializeTemplateValue(match: MatchModel): TemplateValue {
     return {
       sportType: {

@@ -21,19 +21,15 @@ export class TemplateInputsForTVSService {
     if (StaticService.isWrongScoreNumber(issueTypeId)) {
       this.templateWrongScoreService.replaceActualScore(subIssueTypeId, templateValue, outputMessage);
     } else if (StaticService.isWrongHDPNumber(issueTypeId) || StaticService.isWrong1stHDPNumber(issueTypeId)) {
-      // this.selectedTemplated.inputTexts = [];
       this.replaceWrongMarketTVS(templateValue, outputMessage);
       this.replaceActualMarketOthersIssueType(templateValue, outputMessage);
       this.replaceHdpTVS(templateValue, outputMessage);
     } else if (StaticService.isWrongOUNumber(issueTypeId) || StaticService.isWrong1stOUNumber(issueTypeId)) {
-      // this.selectedTemplated.inputTexts = [];
       this.replaceWrongMarketTVS(templateValue, outputMessage);
       this.replaceActualMarketOthersIssueType(templateValue, outputMessage);
     } else if (StaticService.isWrongOddsNumber(issueTypeId)) {
-      // this.selectedTemplated.inputTexts = []; //hide inputs for TVS
       this.templateWrongOddsService.replaceActualMarketTVS(subIssueTypeId, templateValue, outputMessage);
     } else if (StaticService.isWrongOddsSportsBookNumber(issueTypeId)) {
-      // this.selectedTemplated.inputTexts = []; //hide inputs for TVS
       this.templateWrongOddsSportBookService.replaceActualMarketSportsBook(templateValue, outputMessage);
     }
   }

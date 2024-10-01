@@ -145,6 +145,10 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.NOT_PARTICIPATE;
   }
 
+  static isNotParticipateNumber(issueTypeId: number): boolean {
+    return this.isNotParticipate(issueTypeId?.toString());
+  }
+
   static isRecoverTicket(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.RECOVER_TICKET;
   }

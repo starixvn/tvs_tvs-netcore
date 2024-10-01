@@ -166,30 +166,9 @@ export class TemplateMessageComponent implements OnChanges {
 
   updateMessage() {
     this.resetMessage();
-
-    this.replaceEventTypeService.execute(this.value, this.issueTypeId, this.subIssueTypeId, this.message);
-    this.replaceCommonValuesService.replaceSportType(this.value, this.message);
-    this.replaceCommonValuesService.replaceHomeTeamName(this.value, this.message);
-    this.replaceCommonValuesService.replaceAwayTeamName(this.value, this.message);
-    this.replaceCommonValuesService.replaceLeagueName(this.value, this.message);
-    this.replaceCommonValuesService.replaceEventDate(this.value, this.message);
-    this.replacePlacedFromTimeRangeService.execute(this.value, this.message, this.selectedTemplated.templateId);
-    this.replaceCommonValuesService.replaceKickOffTime(this.value, this.message);
-    this.replaceCommonValuesService.replacePlayerName(this.value, this.message);
-
-    this.templateInputsService.updateOrdinalNumberForInputsNextCorner(this.issueTypeId, this.selectedTemplated, this.value);
-    if (this.isTVSVoidPage()) {
-      this.templateInputsServiceForTVS.replaceInputsByIssueType(this.issueTypeId, this.subIssueTypeId, this.value, this.message);
-    } else {
-      this.templateInputsService.replaceInputs(this.subIssueTypeId, this.selectedTemplated, this.message);
-    }
-
-    this.replaceScoreService.execute(this.value, this.message);
-    this.replaceCommonValuesService.replaceParlay(this.isAbnormalBetMixOrSystemParlay(), this.message);
-    this.replaceCommonValuesService.replaceCheckStatement(this.value, this.message);
-    this.replaceAIOMessageService.execute(this.isVoidSinglePage(), this.value, this.message);
-    this.replaceSpecialBetTypeService.execute(this.isLikelyWrongMarketOffered(), this.issueTypeUpdateSpecialBetTypeVoidSingleBet(), this.value, this.message);
-
+    this.replaceEventDetails();
+    this.replaceFromInputs();
+    this.replaceOthersInfo();
     this.message.isTVSAddOrEditPage = this.isTVSAddOrEditPage();
   }
 
@@ -199,6 +178,35 @@ export class TemplateMessageComponent implements OnChanges {
     this.message.contentChineseSimplified = this.selectedTemplated.msgChineseSimplified;
     this.message.contentNewChineseSimplified = this.selectedTemplated.msgChineseNewSimplified;
   }
+
+  private replaceEventDetails(): void  {
+    this.replaceEventTypeService.execute(this.value, this.issueTypeId, this.subIssueTypeId, this.message);
+    this.replaceCommonValuesService.replaceSportType(this.value, this.message);
+    this.replaceCommonValuesService.replaceHomeTeamName(this.value, this.message);
+    this.replaceCommonValuesService.replaceAwayTeamName(this.value, this.message);
+    this.replaceCommonValuesService.replaceLeagueName(this.value, this.message);
+    this.replaceCommonValuesService.replaceEventDate(this.value, this.message);
+    this.replaceCommonValuesService.replaceKickOffTime(this.value, this.message);
+    this.replaceCommonValuesService.replacePlayerName(this.value, this.message);
+    this.replaceCommonValuesService.replaceParlay(this.isAbnormalBetMixOrSystemParlay(), this.message);
+    this.replaceCommonValuesService.replaceCheckStatement(this.value, this.message);
+    this.replacePlacedFromTimeRangeService.execute(this.value, this.message, this.selectedTemplated.templateId);
+  }
+
+  private replaceFromInputs(): void  {
+    this.templateInputsService.updateOrdinalNumberForInputsNextCorner(this.issueTypeId, this.selectedTemplated, this.value);
+    if (this.isTVSVoidPage()) {
+      this.templateInputsServiceForTVS.replaceInputsByIssueType(this.issueTypeId, this.subIssueTypeId, this.value, this.message);
+    } else {
+      this.templateInputsService.replaceInputs(this.subIssueTypeId, this.selectedTemplated, this.message);
+    }
+  }
+
+  private replaceOthersInfo(): void {
+    this.replaceScoreService.execute(this.value, this.message);
+    this.replaceAIOMessageService.execute(this.isVoidSinglePage(), this.value, this.message);
+    this.replaceSpecialBetTypeService.execute(this.isLikelyWrongMarketOffered(), this.issueTypeUpdateSpecialBetTypeVoidSingleBet(), this.value, this.message);
+ }
 
   issueTypeUpdateSpecialBetTypeVoidSingleBet(): boolean {
     return this.isVoidSinglePage() &&
@@ -273,17 +281,13 @@ export class TemplateMessageComponent implements OnChanges {
 
   isShowDynamicInputs(): boolean {
     return this.isVoidSinglePage()
-      || (this.isTVSVoidPage() && !StaticService.isWrongScoreNumber(this.issueTypeId) && !StaticService.isWrongOddsNumber(this.issueTypeId) && !this.isWrongOddsSportsBook()
+      || (this.isTVSVoidPage() && !StaticService.isWrongScoreNumber(this.issueTypeId) && !StaticService.isWrongOddsNumber(this.issueTypeId) && !StaticService.isWrongOddsSportsBookNumber(this.issueTypeId)
         && !StaticService.isWrongHDPNumber(this.issueTypeId) && !StaticService.isWrong1stHDPNumber(this.issueTypeId)
         && !StaticService.isWrongOUNumber(this.issueTypeId) && !StaticService.isWrong1stOUNumber(this.issueTypeId));
   }
 
   isLikelyWrongMarketOffered(): boolean {
     return StaticService.isLikelyWrongMarketOffered(this.issueTypeId?.toString())
-      || StaticService.isWrongOddsSportsBook(this.issueTypeId?.toString());
-  }
-
-  isWrongOddsSportsBook(): boolean {
-    return StaticService.isWrongOddsSportsBook(this.issueTypeId?.toString());
+      || StaticService.isWrongOddsSportsBookNumber(this.issueTypeId);
   }
 }
