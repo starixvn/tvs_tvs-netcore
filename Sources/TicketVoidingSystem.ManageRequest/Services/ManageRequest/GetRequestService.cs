@@ -410,8 +410,7 @@ public class GetRequestServiceImp : GetRequestService
             ToOdds = model.ToOdds,
             CorrectOdds = model.CorrectOdds,
             BetTeamsResult = betTypesAdvancedMode,
-            GroupBetTypes = groupBetTypes,
-            ActualMarket = model.ActualMarket
+            GroupBetTypes = groupBetTypes
         };
     }
 

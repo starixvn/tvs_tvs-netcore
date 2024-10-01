@@ -21,5 +21,4 @@ public class WrongOddsSportsBookViewModel
     public IEnumerable<BetTeamAddRequestResult> BetTeamsResult { get; set; }
     public IEnumerable<GroupBetTypeModel> GroupBetTypes { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
-    public string ActualMarket { get; set; }
 }

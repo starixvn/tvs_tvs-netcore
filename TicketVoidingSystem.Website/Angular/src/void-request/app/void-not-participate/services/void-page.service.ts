@@ -80,9 +80,12 @@ export class VoidPageService {
       templateValue.toTransTime = voidPageItem.voidTicketsMini.toTime;
     }
 
-    if(StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString()) || this.isSportTypeSoccer(requestDetail.request.sportType)) {
+    if(StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())){
       templateValue.actualMarketSportsBook = this.createActualMarketSportsBook(requestDetail, templateValue);
-      templateValue.score = this.getLiveScoreForTemplateMessage(requestDetail.wrongOddsSportsBookModel.logInfoDetail.scoreNormalTicket, requestDetail.wrongOddsSportsBookModel.logInfoDetail.scoreOfMatch);
+      
+      if(this.isSportTypeSoccer(requestDetail.request.sportType)){
+        templateValue.score = this.getLiveScoreForTemplateMessage(requestDetail.wrongOddsSportsBookModel.logInfoDetail.scoreNormalTicket, requestDetail.wrongOddsSportsBookModel.logInfoDetail.scoreOfMatch);
+      }
     }
 
     return templateValue;

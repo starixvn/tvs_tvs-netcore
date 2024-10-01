@@ -10,7 +10,6 @@ import { EventType } from '../../../../utility/constants/sport.constant';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { VoidMatch } from '../../models/void-match.model';
-import { WrongOddsSportsBookModel } from '../../../../add-request/app/add-request/models/event-wrong-odds-sports-book.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +37,6 @@ export class TemplateMessageService {
       this.initValueForWrongOu(templateValue, voidMatch, requestDetail.wrongOuModels);
     } else if (StaticService.isRedCard(issueTypeId)) {
       this.initValueForLikelyDangerAccepted(templateValue, voidMatch.logInfoDetail, requestDetail.redCardModels[0].filterBy, voidMatch.isCheckedVar);
-    } else if(StaticService.isWrongOddsSportsBook(issueTypeId)) {
-      this.initValueForWrongOddsSportsBook(templateValue, voidMatch, requestDetail.wrongOddsSportsBookModel);
     }
 
     return templateValue;
@@ -75,14 +72,6 @@ export class TemplateMessageService {
     templateValue.score = _.first(liveScoreList).replace(/ /g, '');
     templateValue.wrongMarket = wrongOuModel.wrongMarket;
     templateValue.actualMarket = wrongOuModel.actualMarket;
-    templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
-  }
-
-  private initValueForWrongOddsSportsBook(templateValue: TemplateValue, voidMatch: VoidMatch, wrongOddsSportsBook: WrongOddsSportsBookModel): void {
-    const liveScoreList = voidMatch.logInfoDetail.liveScores.split('|');
-    templateValue.eventType = voidMatch.isAllLiveTickets ? EventType.LIVE : null;
-    templateValue.score = _.first(liveScoreList).replace(/ /g, '');
-    templateValue.actualMarket = wrongOddsSportsBook.actualMarket;
     templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
   }
 }

@@ -18,5 +18,4 @@ export class WrongOddsSportsBookModel {
   liveIndicator: number;
   betTeamsResult?: BetTeamAddRequestResult[];
   groupBetTypes?: GroupBetTypeAddRequest[];
-  actualMarket: string;
 }

@@ -41,7 +41,6 @@ class Helper {
     subIssueTypeId: 1,
     logInfoDetail: new LogInfoDetail(),
     matchId: 1,
-    actualMarket: '1',
     correctOdds: '1.5',
     filterOddsType: '1',
     fromOdds: '1.5',
