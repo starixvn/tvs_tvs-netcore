@@ -198,9 +198,8 @@ export class FilterComponent implements OnInit, OnChanges {
     }
     this.addRequestStore.changeAllowanceTime(this.subIssueTypeDialogModel.allowanceTime);
     this.issueTypes.subIssueId = subIssueTypeId;
-    this.model.isChangeSubTypeManual = true;
     this.isHighlightSubType = false;
-    this.updateModel();
+    this.updateModel(true);
   }
 
   openDialog(): void {
@@ -222,11 +221,6 @@ export class FilterComponent implements OnInit, OnChanges {
     this.setWidthControlByIssueType();
     this.issueTypeChange.emit(this.model.issueTypeId);
     await this.logAnalysisService.writeLogAccessFunction(this.isEdit, this.issueTypes.issueId.toString(), this.accessIssueTypeCount);
-  }
-
-  onChangeSubIssueType(): void {
-    this.model.isChangeSubTypeManual = true;
-    this.updateModel();
   }
 
   private setWidthControlByIssueType(): void {
@@ -296,7 +290,8 @@ export class FilterComponent implements OnInit, OnChanges {
       .filter(x => this.issueTypesPermission.findIndex(y => y.issueTypeId === x.issueTypeId) > -1);
   }
 
-  updateModel() {
+  updateModel(isChangeSubTypeManual = false) {
+    this.model.isChangeSubTypeManual = isChangeSubTypeManual;
     this.model.eventDate = `${this.date.year}/${this.date.month}/${this.date.day}`;
     this.model.issueTypeId = this.issueTypes.issueId?.toString();
     this.model.subIssueTypeId = this.issueTypes.subIssueId?.toString();
