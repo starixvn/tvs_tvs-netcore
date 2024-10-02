@@ -1,4 +1,4 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Models;
+﻿namespace TicketVoidingSystem.SharedApi.Models;
 
 public class Currency
 {

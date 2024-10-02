@@ -3,15 +3,14 @@ using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using Fanex.NAP.Client.Helpers.Business;
 using NSubstitute;
-using SpecialDelete.VoidByCurrency.Criteria;
-using SpecialDelete.VoidByCurrency.Models;
 using SpecialDelete.VoidByCurrency.Services;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.SharedApi.Criteria.SharedApi;
+using TicketVoidingSystem.SharedApi.Models;
 using TicketVoidingSystem.Web;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidByCurrency.Services;
-
 
 public class FilterAreaServiceTest
 {

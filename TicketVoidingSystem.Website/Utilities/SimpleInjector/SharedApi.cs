@@ -19,5 +19,6 @@ public static class SharedApi
         services.AddTransient<CheckTicketsStatusService, CheckTicketsStatusServiceImp>();
         services.AddTransient<SpecialBetTypeContentService, SpecialBetTypeContentServiceImp>();
         services.AddTransient<UserActionLogService, UserActionLogServiceImp>();
+        services.AddTransient<FilterCurrencyLicenseeService, FilterCurrencyLicenseeServiceImp>();
     }
 }

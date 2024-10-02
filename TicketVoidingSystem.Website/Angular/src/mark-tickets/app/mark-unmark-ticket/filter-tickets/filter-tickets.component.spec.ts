@@ -181,7 +181,7 @@ describe('FilterTicketsComponent', () => {
     // Arrange
     const { instance } = await shallow
       .mock(AppService, {
-        getLicensees: jest.fn().mockImplementation(() => Helper.getGroupLicensee())
+        getGroupLicensees: jest.fn().mockImplementation(() => Helper.getGroupLicensee())
       })
       .render();
 

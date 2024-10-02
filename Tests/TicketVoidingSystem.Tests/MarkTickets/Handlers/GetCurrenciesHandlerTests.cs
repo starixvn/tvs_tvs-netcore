@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
-using TicketVoidingSystem.MarkTickets.Handlers;
 using TicketVoidingSystem.MarkTickets.Models;
+using TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.MarkTickets.Handlers;

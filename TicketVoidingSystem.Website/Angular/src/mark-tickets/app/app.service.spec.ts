@@ -68,7 +68,7 @@ describe('AppService', () => {
         mockHttpService.getJson.mockResolvedValue(expectedLicensees);
 
         // Action and Assert
-        const result = await appService.getLicensees();
+        const result = await appService.getGroupLicensees();
 
         expect(result.length).toBe(2);
         expect(result[0].groupName).toBe('China rules');

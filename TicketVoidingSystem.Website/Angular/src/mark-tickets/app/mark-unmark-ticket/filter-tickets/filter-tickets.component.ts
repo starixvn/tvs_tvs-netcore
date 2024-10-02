@@ -82,7 +82,7 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
   }
 
   async renderGroupLicensees() {
-    const data = await this.appService.getLicensees();
+    const data = await this.appService.getGroupLicensees();
     this.groupLicensees = [];
     data.forEach(group => {
       const licensees = new Array<Licensee>();

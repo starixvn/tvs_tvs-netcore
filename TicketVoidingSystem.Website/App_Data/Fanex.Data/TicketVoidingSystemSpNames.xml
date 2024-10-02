@@ -115,9 +115,6 @@
         <Setting Key="TicketVoiding_AutoUnmarkSetting_Insert" SpName="TicketVoiding_AutoUnmarkSetting_Insert" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="Nap_SpecialDelete_UserLog_MarkTickets_Select" SpName="Nap_SpecialDelete_UserLog_MarkTickets_Select" DbName="DBLOG.bodb_CustomerLog.wsv_nap" TimeOut="600" />
         <Setting Key="NAP_SpecialDelete_UserLog_TicketInfo_Select" SpName="NAP_SpecialDelete_UserLog_TicketInfo_Select" DbName="DBACC.bodb02.wsv_nap" TimeOut="600" />
-
-        <Setting Key="NAP_SpecialDelete_VoidByCurrency_SelectAllCurrency" SpName="NAP_SpecialDelete_VoidByCurrency_SelectAllCurrency" DbName="DBCUST.CustDB.wsv_nap" TimeOut="600" />
-        <Setting Key="NAP_SpecialDelete_VoidByCurrency_SelectLicensees" SpName="NAP_SpecialDelete_VoidByCurrency_SelectLicensees" DbName="DBOIC.bodb_OIC.wsv_nap" TimeOut="600" />
     </Function>
     <Function Name="ParlayTicket">
         <Setting Key="DBCTG.NAP_BettransSelDetailSpecialDel_MixParlay" SpName="NAP_BettransSelDetailSpecialDel_MixParlay" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
@@ -296,6 +293,8 @@
         <Setting Key="TicketVoiding_AccountWinLost_Update" SpName="TicketVoiding_AccountWinLost_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_Request_CheckRecoverTicket" SpName="TicketVoiding_Request_CheckRecoverTicket" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_DecidedBy_Select" SpName="TicketVoiding_DecidedBy_Select" DbName="DBCUST.CustDB.wsv_nap" TimeOut="600" />
+        <Setting Key="TicketVoiding_Currency_Select" SpName="TicketVoiding_Currency_Select" DbName="DBCUST.CustDB.wsv_nap" TimeOut="600" />
+        <Setting Key="TicketVoiding_Licensees_Select" SpName="TicketVoiding_Licensees_Select" DbName="DBOIC.bodb_OIC.wsv_nap" TimeOut="600" />
     </Function>
     <Function Name="VirtualSport">
         <Setting Key="DBCTG.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
@@ -351,8 +350,6 @@
         <Setting Key="DBSIG2.NAP_SpecialDelete_VoidByCurrency_Update" SpName="NAP_SpecialDelete_VoidByCurrency_Update" DbName="DBSIG2.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSIG3.NAP_SpecialDelete_VoidByCurrency_Update" SpName="NAP_SpecialDelete_VoidByCurrency_Update" DbName="DBSIG3.bodb02.wsv_nap" TimeOut="600" />
 
-        <Setting Key="NAP_SpecialDelete_VoidByCurrency_SelectLicensees" SpName="NAP_SpecialDelete_VoidByCurrency_SelectLicensees" DbName="DBOIC.bodb_OIC.wsv_nap" TimeOut="600" />
-        <Setting Key="NAP_SpecialDelete_VoidByCurrency_SelectAllCurrency" SpName="NAP_SpecialDelete_VoidByCurrency_SelectAllCurrency" DbName="DBCUST.CustDB.wsv_nap" TimeOut="600" />
         <Setting Key="NAP_SpecialDelete_VoidByCurrency_MatchInfo_Select" SpName="NAP_SpecialDelete_VoidByCurrency_MatchInfo_Select" DbName="DBPRO.bodb02.wsv_nap" TimeOut="600" />
     </Function>
     <Function Name="VoidByBetId">

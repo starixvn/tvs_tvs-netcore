@@ -17,11 +17,11 @@ export class AppService {
   constructor(private readonly httpService: HttpService) { }
 
   async getCurrencies(): Promise<Currency[]> {
-    return this.httpService.getJson(`api/MarkTickets/GetCurrencies`);
+    return this.httpService.getJson(`api/SharedApi/GetCurrencies`);
   }
 
-  async getLicensees(): Promise<GroupLicensee[]> {
-    return this.httpService.getJson(`api/MarkTickets/GetLicensees`);
+  async getGroupLicensees(): Promise<GroupLicensee[]> {
+    return this.httpService.getJson(`api/SharedApi/GetGroupLicensees`);
   }
 
   async getTickets(query: GetTicketsQuery): Promise<TicketsModel> {

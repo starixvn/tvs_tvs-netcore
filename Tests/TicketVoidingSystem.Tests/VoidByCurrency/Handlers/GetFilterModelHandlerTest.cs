@@ -6,10 +6,10 @@ using SpecialDelete.VoidByCurrency.Handlers;
 using SpecialDelete.VoidByCurrency.Models;
 using SpecialDelete.VoidByCurrency.Services;
 using SpecialDelete.VoidByCurrency.ViewModels;
+using TicketVoidingSystem.SharedApi.Models;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidByCurrency.Handlers;
-
 
 public class GetFilterModelHandlerTest
 {

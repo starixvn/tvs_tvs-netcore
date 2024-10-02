@@ -9,7 +9,9 @@ using TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Handlers.UserLogs;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 using Xunit;
+using GetLicenseesRequest = TicketVoidingSystem.MarkTickets.Handlers.GetLicenseesRequest;
 
 namespace TicketVoidingSystem.Tests.MarkTickets.Controllers;
 
