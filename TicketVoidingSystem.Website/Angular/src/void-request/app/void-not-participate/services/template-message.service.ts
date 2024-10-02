@@ -7,7 +7,9 @@ import { StaticService } from 'src/utility/services/static.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TemplateMessageService {
   constructor(
     private readonly templateService: TemplateService
