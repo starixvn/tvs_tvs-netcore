@@ -4,7 +4,6 @@ import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { AbnormalFilterBy, MatchIdConstant, TVSRequestActionType } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventAbnormalComponent } from '../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
 import { FilterModel } from '../filter/filter.model';
 import { DuplicateTicketsModel } from '../models/event-duplicate-tickets.model';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
@@ -13,6 +12,7 @@ import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-duplicate-tickets',
@@ -28,7 +28,7 @@ export class EventDuplicateTicketsComponent implements OnInit {
   @Input() duplicateTicketsModel = new DuplicateTicketsModel();
   @Output() updateMatchId = new EventEmitter<number>();
   @ViewChild('betIds') betIdsComponent: BetIdsComponent;
-  @ViewChild('leagueEvent') leagueEventComponent: LeagueEventAbnormalComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
 
   primitiveProps = new PrimitiveProperty();
   permission = new PermissionAddRequest();
@@ -94,7 +94,7 @@ export class EventDuplicateTicketsComponent implements OnInit {
       duplicateTicketsModel: this.createDuplicateTicketsModel(),
       others: this.others,
       betIdsComponent: this.betIdsComponent,
-      leagueEventComponent: this.leagueEventComponent,
+      eventLeagueComponent: this.eventLeagueComponent,
       addRequestStore: this.addRequestStore,
       tooltip: this.tooltip
     };
@@ -105,7 +105,7 @@ export class EventDuplicateTicketsComponent implements OnInit {
   private async checkValidBusinessRule(): Promise<boolean> {
     const validation = await this.validationService.checkValidBusinessRule(this.initSaveRequestInput());
     if (this.duplicateTicketsModel.filterBy === AbnormalFilterBy.SINGLE) {
-      this.updateMatchId.emit(this.leagueEventComponent.selectedMatchId);
+      this.updateMatchId.emit(this.eventLeagueComponent.selectedMatch.matchId);
     }
     return validation;
   }
@@ -120,7 +120,7 @@ export class EventDuplicateTicketsComponent implements OnInit {
 
   private createDuplicateTicketsModel(): DuplicateTicketsModel {
     const model = new DuplicateTicketsModel();
-    model.matchId = this.validationService.isFilterMixParlay(this.duplicateTicketsModel.filterBy) ? MatchIdConstant.Parlay : this.leagueEventComponent.selectedMatchId;
+    model.matchId = this.validationService.isFilterMixParlay(this.duplicateTicketsModel.filterBy) ? MatchIdConstant.Parlay : this.eventLeagueComponent.selectedMatch.matchId;
     model.transIds = this.betIdsComponent.getAllBetIds();
     model.subIssueTypeId = Number(this.filter.subIssueTypeId);
     model.filterBy = this.duplicateTicketsModel.filterBy;

@@ -1,12 +1,8 @@
-<div class="mb-3">
-  <league-event-red-card #leagueEvent
-    [isEdit]="isEdit"
-    [initSportType]="filter.sportType"
-    [eventDate]="filter.eventDate"
-    [initMatchId]="logInfoEvent.matchId"
-    (changeEvent)="changeMatchEvent()">
-  </league-event-red-card>
-</div>
+<event-league #leagueEvent
+  [isEdit]="isEdit"
+  [matchId]="logInfoEvent.matchId"
+  (changeEvent)="changeMatchEvent()">
+</event-league>
 <filter-reduced-over #filterReducedOver
   *ngIf="primitivePropertyEvent.isShowFilterArea"
   [isEdit]="isEdit"
@@ -17,15 +13,13 @@
   [originalPlayers]="originalPlayers"
   [matchId]="logInfoEvent.matchId"
   (changeFilterEvent)="resetLogInfoOfEvent()">
-
 </filter-reduced-over>
-<div class="mb-3 d-flex">
+<div class="mb-3 mt-3 d-flex">
   <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
     (click)="clickSearch()">
     Search
   </button>
 </div>
-
 <log-info-reduced-over #logInfo
   [primitiveProps]="primitivePropertyEvent"
   [logInfo]="logInfoEvent">

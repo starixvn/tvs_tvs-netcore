@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { NotParticipateModel } from '../models/event-not-participate.model';
 import { OthersModel } from '../others/others.model';
@@ -14,6 +13,7 @@ import { FilterNotParticipateService } from './services/filter-not-participate.s
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-not-participate',
@@ -31,7 +31,7 @@ export class EventNotParticipateComponent implements OnInit {
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Output() updateMatchId = new EventEmitter<number>();
-  @ViewChild('leagueEvent') leagueEventNotParticipateComponent: LeagueEventRedCardComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChild('filterNotParticipate') filterNotParticipateComponent: FilterNotParticipateComponent;
 
   logInfoEvent = new LogInfoNotParticipate();
@@ -70,7 +70,7 @@ export class EventNotParticipateComponent implements OnInit {
 
   public async clickSearch(): Promise<void> {
     this.primitivePropertyEvent.isShowValidation = false;
-    if (!this.validationService.validateCommonData(this.leagueEventNotParticipateComponent, this.filterNotParticipateComponent)) {
+    if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.filterNotParticipateComponent)) {
       return;
     }
 
@@ -98,7 +98,7 @@ export class EventNotParticipateComponent implements OnInit {
     arg.filter = this.filter;
     arg.primitiveProps = this.primitivePropertyEvent;
     arg.filterNotParticipateComponent = this.filterNotParticipateComponent;
-    arg.leagueEventNotParticipateComponent = this.leagueEventNotParticipateComponent;
+    arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.logInfoEvent = this.logInfoEvent;
     arg.addRequestStore = this.addRequestStore;
 
@@ -112,8 +112,8 @@ export class EventNotParticipateComponent implements OnInit {
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
 
-    if (this.leagueEventNotParticipateComponent?.selectedMatch.matchId) {
-      this.logInfoEvent.matchId = this.leagueEventNotParticipateComponent.selectedMatch.matchId;
+    if (this.eventLeagueComponent?.selectedMatch.matchId) {
+      this.logInfoEvent.matchId = this.eventLeagueComponent.selectedMatch.matchId;
       await this.updateModelWhenChangeMatchId();
       this.resetFilterNotParticipate();
       this.primitivePropertyEvent.isShowFilterArea = true;

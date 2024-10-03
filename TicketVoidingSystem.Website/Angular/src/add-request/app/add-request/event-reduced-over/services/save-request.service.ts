@@ -37,7 +37,7 @@ export class SaveRequestService {
     argReducedOver.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoReducedOverService.resetLogInfoOfEvent(argReducedOver.logInfoEvent);
 
-    if (!this.validationService.validateCommonData(argReducedOver.leagueEventReducedOverComponent, argReducedOver.filterReducedOverComponent)) {
+    if (!this.validationService.validateCommonData(argReducedOver.eventLeagueComponent, argReducedOver.filterReducedOverComponent)) {
       return false;
     }
 
@@ -117,7 +117,6 @@ export class SaveRequestService {
     query.isTest = argReducedOver.filter.isTest;
     query.actionId = argReducedOver.filter.action;
     query.isVoided = argReducedOver.filter.isVoided;
-
     query.mistakenBy = argReducedOver.others.mistakenBy;
     query.decidedBy = argReducedOver.others.decidedBy;
     query.remark = argReducedOver.others.remark;

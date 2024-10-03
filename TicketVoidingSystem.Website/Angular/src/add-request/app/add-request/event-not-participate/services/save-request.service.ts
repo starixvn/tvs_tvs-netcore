@@ -37,7 +37,7 @@ export class SaveRequestService {
     argNotParticipate.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoNotParticipateService.resetLogInfoOfEvent(argNotParticipate.logInfoEvent);
 
-    if (!this.validationService.validateCommonData(argNotParticipate.leagueEventNotParticipateComponent, argNotParticipate.filterNotParticipateComponent)) {
+    if (!this.validationService.validateCommonData(argNotParticipate.eventLeagueComponent, argNotParticipate.filterNotParticipateComponent)) {
       return false;
     }
 

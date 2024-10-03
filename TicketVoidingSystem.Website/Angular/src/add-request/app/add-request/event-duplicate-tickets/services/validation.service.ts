@@ -3,12 +3,12 @@ import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-i
 import { AbnormalFilterBy, MatchIdConstant, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { LeagueEventAbnormalComponent } from '../../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
 import { DuplicateTicketsModel } from '../../models/event-duplicate-tickets.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel, ValidationDuplicateTickets } from '../models/check-duplicate-tickets.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 @Injectable({
   providedIn: 'root'
@@ -32,14 +32,14 @@ export class ValidationService {
     return isHasWarningEditTakeNoteRequest;
   }
 
-  public validateCommonData(betIdsComponent: BetIdsComponent, leagueEventComponent: LeagueEventAbnormalComponent,
+  public validateCommonData(betIdsComponent: BetIdsComponent, eventLeagueComponent: EventLeagueComponent,
     primitiveProps: PrimitiveProperty, duplicateTicketsModel: DuplicateTicketsModel): boolean {
     if (betIdsComponent.isHasBetId()) {
       return true;
     }
 
     if (duplicateTicketsModel.filterBy === AbnormalFilterBy.SINGLE) {
-      leagueEventComponent.updateUndefinedMatchAndLeague();
+      eventLeagueComponent.updateUndefinedMatchAndLeague();
     }
 
     const transIdAreNotNumber = betIdsComponent.getAllBetIdsAreNotNumber();
@@ -50,7 +50,7 @@ export class ValidationService {
   }
 
   public async checkValidBusinessRule(args: SaveRequestArg): Promise<boolean> {
-    if (!this.validateCommonData(args.betIdsComponent, args.leagueEventComponent, args.primitiveProps, args.duplicateTicketsModel)) {
+    if (!this.validateCommonData(args.betIdsComponent, args.eventLeagueComponent, args.primitiveProps, args.duplicateTicketsModel)) {
       return false;
     }
 
@@ -74,7 +74,7 @@ export class ValidationService {
     args.primitiveProps.transInfoAddRequestModel = validationViewModel.transInfoAddRequestModel;
     args.duplicateTicketsModel.matchId = validationViewModel.match?.matchId;
     if (!this.isFilterMixParlay(args.duplicateTicketsModel.filterBy)) {
-      args.leagueEventComponent.updateInfoWithOnlyOneMatch(validationViewModel.match);
+      args.eventLeagueComponent.updateInfoWithOnlyOneMatch(validationViewModel.match);
     }
     const isHasPermissionAddSettledTicket = this.checkCanAddSettledTickets(args.permission, args.filter.action);
     this.highlightInvalidTransIds(validationViewModel.validation, args.betIdsComponent, isHasPermissionAddSettledTicket);
@@ -83,7 +83,7 @@ export class ValidationService {
 
   private async callApiCheckDuplicateTickets(args: SaveRequestArg): Promise<CheckDuplicateTicketsViewModel> {
     const transIds = args.betIdsComponent.getAllBetIds();
-    const matchId = !this.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? args.leagueEventComponent?.selectedMatchId : MatchIdConstant.Parlay;
+    const matchId = !this.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? args.eventLeagueComponent?.selectedMatch.matchId : MatchIdConstant.Parlay;
     const filterBy = !this.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? null : args.duplicateTicketsModel.filterBy;
     const query: CheckDuplicateTicketsQuery = {
       matchId: matchId,

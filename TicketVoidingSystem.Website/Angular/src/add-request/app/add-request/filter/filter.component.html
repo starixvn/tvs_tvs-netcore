@@ -59,43 +59,7 @@
       </div>
     </div>
   
-    <div class="filter-sport mr-4" *ngIf="isShowSportType()"
-      [style.width.px]="widthSportControl">
-      <label class="col-form-label">Sport</label>
-      <div class="input-sport">
-        <ng-select class="custom-sm"
-          [disabled]="isDisabledSportControl()"
-          [items]="sports"
-          bindLabel="sportName"
-          bindValue="sportType"
-          [(ngModel)]="model.sportType"
-          [clearable]="false"
-          (change)="updateModel()">
-        </ng-select>
-      </div>
-    </div>
     <div class="d-flex">      
-      <div class="filter-event-date mr-4" *ngIf="isShowEventDate()"
-      [style.width.px]="widthDateControl">
-        <label class="col-form-label">Event Date</label>
-        <div class="input-event-date">
-          <div class="input-group">
-            <input class="form-control form-control-sm {{isEdit ? '' : 'bg-white'}}"
-              [disabled]="isEdit" placeholder="yyyy-mm-dd" name="dp"
-              [(ngModel)]="date"
-              (ngModelChange)="updateModel()"
-              ngbDatepicker #d="ngbDatepicker"
-              (click)="d.toggle()"
-              [maxDate]="maxDate"
-              [minDate]="minDate"
-              [readOnly]="true"/>
-            <div class="input-group-append pointer">
-              <span class="input-group-text" (click)="d.toggle()"><em class="fa fa-calendar"></em></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    
       <div class="d-flex align-items-end">
         <div class="form-check form-check-inline form-control-sm checkbox-test">
           <input class="form-check-input"

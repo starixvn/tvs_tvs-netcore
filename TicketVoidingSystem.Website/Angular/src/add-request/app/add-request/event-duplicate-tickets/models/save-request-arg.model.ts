@@ -1,12 +1,12 @@
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AddRequestStore } from '../../add-request.store';
-import { LeagueEventAbnormalComponent } from '../../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
 import { FilterModel } from '../../filter/filter.model';
 import { DuplicateTicketsModel } from '../../models/event-duplicate-tickets.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { OthersModel } from '../../others/others.model';
 import { PrimitiveProperty } from './primitive-property.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 export class SaveRequestArg {
   requestId?: number;
@@ -18,8 +18,7 @@ export class SaveRequestArg {
   duplicateTicketsModel: DuplicateTicketsModel;
   others: OthersModel;
   betIdsComponent: BetIdsComponent;
-  leagueEventComponent: LeagueEventAbnormalComponent;
+  eventLeagueComponent: EventLeagueComponent;
   addRequestStore: AddRequestStore;
   tooltip: Tooltip;
-
 }

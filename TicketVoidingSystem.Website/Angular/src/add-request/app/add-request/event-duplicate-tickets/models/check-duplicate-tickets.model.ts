@@ -1,5 +1,5 @@
-import { MatchInfo } from "../../../../../utility/models/event.model";
 import { TransInfoAddRequestModel } from "../../models/trans-info-add-request.model";
+import { MatchModel } from '../../../../../utility/models/match.model';
 
 export interface CheckDuplicateTicketsQuery {
   matchId: number;
@@ -12,7 +12,7 @@ export interface CheckDuplicateTicketsQuery {
 
 export class CheckDuplicateTicketsViewModel {
   transInfoAddRequestModel: TransInfoAddRequestModel;
-  match: MatchInfo;
+  match: MatchModel;
   validation: ValidationDuplicateTickets;
 }
 

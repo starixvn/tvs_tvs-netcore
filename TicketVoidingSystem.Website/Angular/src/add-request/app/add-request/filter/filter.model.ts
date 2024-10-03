@@ -1,7 +1,5 @@
 import { SubIssueType } from '../../../../utility/models/issue-type.model';
 export class FilterModel {
-  sportType: number;
-  eventDate?: string;  // to be remove
   issueTypeId?: string;
   subIssueTypeId: string;
   action: string;

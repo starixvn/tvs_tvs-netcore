@@ -1,14 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
-import { DateTimeFormat, TVSRequestActionType } from '../../../../utility/constants/config';
+import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { LocalStorageCacheConstant } from '../../../../utility/constants/local-storage-cache.constant';
-import { SportType } from '../../../../utility/constants/sport.constant';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
-import { SportInfo } from '../../../../utility/models/event.model';
 import { IssueType } from '../../../../utility/models/issue-type.model';
 import { Selection } from '../../../../utility/models/selection.model';
 import { CommonService } from '../../../../utility/services/common.service';
@@ -37,20 +33,14 @@ export class FilterComponent implements OnInit, OnChanges {
   @Output() modelChange = new EventEmitter<FilterModel>();
   @Output() issueTypeChange = new EventEmitter<string>();
 
-  sports: SportInfo[] = [];
   actions: Selection[] = [];
   originActions: Selection[] = [];
-  date: NgbDate;
-  maxDate: NgbDate;
-  minDate: NgbDate;
   issueTypesPermission: IssueType[] = [];
   actionIds: string[] = [];
   isHighlightSubType: boolean;
   widthIssueTypeControl: number;
   widthSubIssueTypeControl: number;
   widthActionControl: number;
-  widthSportControl: number;
-  widthDateControl: number;
   subIssueTypeDialogModel = new SubIssueTypeDialogModel();
   abnormalFilterBySubscription = new Subscription();
   abnormalFilterBy: number;
@@ -70,7 +60,6 @@ export class FilterComponent implements OnInit, OnChanges {
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['model'] && this.isEditOrExternalUrl()) {
-      this.initDate();
       await this.initData();
       this.updateIssueBySub();
       this.updateCurrentAction();
@@ -91,7 +80,6 @@ export class FilterComponent implements OnInit, OnChanges {
 
   async ngOnInit() {
     this.subscribeSubScription();
-    this.initDate();
     await this.initData();
     if (!this.isEditOrExternalUrl()) {
       this.updateModel();
@@ -137,13 +125,6 @@ export class FilterComponent implements OnInit, OnChanges {
     return this.SELECT_SUB_TYPE_TEXT;
   }
 
-  private setLimitDate() {
-    const lastNDays = 7;
-    const minDate = new Date();
-    minDate.setDate(minDate.getDate() - lastNDays);
-    this.minDate = new NgbDate(minDate.getFullYear(), minDate.getMonth() + 1, minDate.getDate());
-  }
-
   async initData() {
     if (!this.initialize) {
       this.initialize = true;
@@ -174,16 +155,7 @@ export class FilterComponent implements OnInit, OnChanges {
     return issueTypeDefault;
   }
 
-  initDate() {
-    const date = this.isEdit ? new Date(this.model.eventDate) :
-      new Date(moment.utc().tz('America/Caracas').format(DateTimeFormat.SHORT_DATE_FORMAT));
-    this.date = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
-    this.setLimitDate();
-  }
-
   async initSelections() {
-    this.sports = await this.filterService.getSportsType();
-    this.model.sportType = this.isEdit ? this.model.sportType : SportType.SOCCER;
     this.originActions = await this.commonService.getVoidActions();
     this.updateCurrentAction();
 
@@ -210,11 +182,6 @@ export class FilterComponent implements OnInit, OnChanges {
 
   async onChangeIssueType(): Promise<void> {
     this.addRequestStore.changeSavingRequestStatus(false);
-    if (this.isReducedOver() || this.isAbandoned()) {
-      this.model.sportType = SportType.CRICKET;
-    } else {
-      this.model.sportType = SportType.SOCCER;
-    }
     this.updateSubByIssue();
     this.updateCurrentAction();
     this.updateModel();
@@ -225,33 +192,31 @@ export class FilterComponent implements OnInit, OnChanges {
 
   private setWidthControlByIssueType(): void {
     const widthMapping: { [key: number]: { [key: string]: number } } = {
-      [IssueTypeConstant.DANGER_ACCEPTED]: { issueType: 180, subIssueType: 300, action: 150, sport: 150 },
-      [IssueTypeConstant.EARLY_KICK_OFF]: { issueType: 180, subIssueType: 150, action: 170, sport: 220 },
-      [IssueTypeConstant.WRONG_KICK_OFF]: { issueType: 180, subIssueType: 150, action: 170, sport: 220 },
+      [IssueTypeConstant.DANGER_ACCEPTED]: { issueType: 180, subIssueType: 300, action: 150 },
+      [IssueTypeConstant.EARLY_KICK_OFF]: { issueType: 180, subIssueType: 150, action: 170 },
+      [IssueTypeConstant.WRONG_KICK_OFF]: { issueType: 180, subIssueType: 150, action: 170 },
       [IssueTypeConstant.ABNORMAL_ACCOUNT]: { issueType: 180, subIssueType: 170, action: 210 },
-      [IssueTypeConstant.RED_CARD]: { issueType: 180, subIssueType: 285, action: 150, sport: 150 },
-      [IssueTypeConstant.WRONG_HDP]: { issueType: 180, subIssueType: 220, action: 150, sport: 150 },
-      [IssueTypeConstant.WRONG_1ST_HDP]: { issueType: 180, subIssueType: 220, action: 150, sport: 150 },
-      [IssueTypeConstant.WRONG_OU]: { issueType: 180, subIssueType: 220, action: 150, sport: 150 },
-      [IssueTypeConstant.WRONG_1ST_OU]: { issueType: 180, subIssueType: 220, action: 150, sport: 150 },
-      [IssueTypeConstant.ABNORMAL_BET]: { issueType: 180, subIssueType: 170, action: 250, sport: 150 },
-      [IssueTypeConstant.WRONG_SCORE]: { issueType: 180, subIssueType: 380, action: 150, sport: 150 },
+      [IssueTypeConstant.RED_CARD]: { issueType: 180, subIssueType: 285, action: 150 },
+      [IssueTypeConstant.WRONG_HDP]: { issueType: 180, subIssueType: 220, action: 150 },
+      [IssueTypeConstant.WRONG_1ST_HDP]: { issueType: 180, subIssueType: 220, action: 150 },
+      [IssueTypeConstant.WRONG_OU]: { issueType: 180, subIssueType: 220, action: 150 },
+      [IssueTypeConstant.WRONG_1ST_OU]: { issueType: 180, subIssueType: 220, action: 150 },
+      [IssueTypeConstant.ABNORMAL_BET]: { issueType: 180, subIssueType: 170, action: 250 },
+      [IssueTypeConstant.WRONG_SCORE]: { issueType: 180, subIssueType: 380, action: 150 },
       [IssueTypeConstant.WRONG_ODDS]: { issueType: 180, subIssueType: 150, action: 150 },
       [IssueTypeConstant.ARCHIVED_TICKET]: { issueType: 180, action: 150 },
-      [IssueTypeConstant.REDUCED_OVER]: { issueType: 180, action: 200, sport: 150 },
-      [IssueTypeConstant.ABANDONED]: { issueType: 180, action: 200, sport: 150 },
-      [IssueTypeConstant.DUPLICATE_TICKETS]: { issueType: 180, action: 170, sport: 150 },
-      [IssueTypeConstant.NOT_PARTICIPATE]: { issueType: 180, action: 200, sport: 150 },
+      [IssueTypeConstant.REDUCED_OVER]: { issueType: 180, action: 200 },
+      [IssueTypeConstant.ABANDONED]: { issueType: 180, action: 200 },
+      [IssueTypeConstant.DUPLICATE_TICKETS]: { issueType: 180, action: 170 },
+      [IssueTypeConstant.NOT_PARTICIPATE]: { issueType: 180, action: 200 },
       [IssueTypeConstant.WRONG_MARKET_OFFERED]: { issueType: 180, action: 170 },
       [IssueTypeConstant.TECHNICAL_ERROR]: { issueType: 180, action: 170 }
     };
 
     const widthValues = widthMapping[this.model.issueTypeId] || {};
-
     this.widthIssueTypeControl = widthValues.issueType || 0;
     this.widthSubIssueTypeControl = widthValues.subIssueType || 0;
     this.widthActionControl = widthValues.action || 0;
-    this.widthSportControl = widthValues.sport || 0;
   }
 
   private updateCurrentAction(): void { 
@@ -272,7 +237,6 @@ export class FilterComponent implements OnInit, OnChanges {
     this.issueTypes = new IssueTypes(data);
     this.issueTypesChange.emit(this.issueTypes);
  
-
     if (!this.isEdit) {
       if (this.haveAbnormalBetFromPermission()) {
         this.issueTypes.issueId = Number(IssueTypeConstant.ABNORMAL_BET);
@@ -292,61 +256,14 @@ export class FilterComponent implements OnInit, OnChanges {
 
   updateModel(isChangeSubTypeManual = false) {
     this.model.isChangeSubTypeManual = isChangeSubTypeManual;
-    this.model.eventDate = `${this.date.year}/${this.date.month}/${this.date.day}`;
     this.model.issueTypeId = this.issueTypes.issueId?.toString();
     this.model.subIssueTypeId = this.issueTypes.subIssueId?.toString();
     this.model.subIssueTypes = this.issueTypes.selectedSubIssueTypes;
-    if (this.isLikelyDangerAccepted() || this.isWrongScore()) {
-      this.model.sportType = SportType.SOCCER;
-    }
-    if (this.isReducedOver() || this.isNotParticipate() || this.isAbandoned()) {
-      this.model.sportType = SportType.CRICKET;
-    }
     this.modelChange.emit(this.model);
-  }
-
-  public isDisabledSportControl(): boolean {
-    const issuTypeDisableSportControl = [
-      IssueTypeConstant.DANGER_ACCEPTED,
-      IssueTypeConstant.RED_CARD,
-      IssueTypeConstant.WRONG_SCORE,
-      IssueTypeConstant.WRONG_HDP,
-      IssueTypeConstant.WRONG_1ST_HDP,
-      IssueTypeConstant.WRONG_OU,
-      IssueTypeConstant.WRONG_1ST_OU,
-      IssueTypeConstant.WRONG_ODDS,
-      IssueTypeConstant.REDUCED_OVER,
-      IssueTypeConstant.NOT_PARTICIPATE,
-      IssueTypeConstant.ABANDONED,
-    ];
-
-    return this.isEdit || issuTypeDisableSportControl.includes(this.issueTypes.issueId?.toString());
-  }
-
-  isShowButtonSelectSubType(): boolean {
-    return StaticService.isDangerAccepted(this.issueTypes.issueId?.toString())
-      || StaticService.isRedCard(this.issueTypes.issueId?.toString())
-      || StaticService.isWrongScore(this.issueTypes.issueId?.toString());
-  }
-
-  isAbnormalBet(): boolean {
-    return StaticService.isAbnormalBet(this.issueTypes.issueId?.toString());
-  }
-
-  isAbnormalAccount(): boolean {
-    return StaticService.isAbnormalAccount(this.isEdit ? this.model.issueTypeId : this.issueTypes.issueId?.toString());
   }
 
   isWrongScore(): boolean {
     return StaticService.isWrongScore(this.issueTypes.issueId?.toString());
-  }
-
-  isWrongHDP(): boolean {
-    return StaticService.isWrongHDP(this.issueTypes.issueId?.toString());
-  }
-
-  isWrong1stHDP(): boolean {
-    return StaticService.isWrong1stHDP(this.issueTypes.issueId?.toString());
   }
 
   isLikelyDangerAccepted(): boolean {
@@ -354,56 +271,8 @@ export class FilterComponent implements OnInit, OnChanges {
       || StaticService.isRedCard(this.issueTypes.issueId?.toString());
   }
 
-  isDangerAccepted(): boolean {
-    return StaticService.isDangerAccepted(this.issueTypes.issueId?.toString());
-  }
-
-  isRedCard(): boolean {
-    return StaticService.isRedCard(this.issueTypes.issueId?.toString());
-  }
-
   isArchivedTicket(): boolean {
     return StaticService.isArchivedTicket(this.issueTypes.issueId?.toString());
-  }
-
-  isWrongOU(): boolean {
-    return StaticService.isWrongOU(this.issueTypes.issueId?.toString());
-  }
-
-  isWrong1stOU(): boolean {
-    return StaticService.isWrong1stOU(this.issueTypes.issueId?.toString());
-  }
-
-  isWrongOdds(): boolean {
-    return StaticService.isWrongOdds(this.issueTypes.issueId?.toString());
-  }
-
-  isReducedOver(): boolean {
-    return StaticService.isReducedOver(this.issueTypes.issueId?.toString());
-  }
-
-  isAbandoned(): boolean {
-    return StaticService.isAbandoned(this.issueTypes.issueId?.toString());
-  }
-
-  isDuplicateTickets(): boolean {
-    return StaticService.isDuplicateTickets(this.issueTypes.issueId?.toString());
-  }
-
-  isNotParticipate(): boolean {
-    return StaticService.isNotParticipate(this.issueTypes.issueId?.toString());
-  }
-
-  isEarlyKickOff(): boolean {
-    return StaticService.isEarlyKickOff(this.issueTypes.issueId?.toString());
-  }
-
-  isWrongKickOff(): boolean {
-    return StaticService.isWrongKickOff(this.issueTypes.issueId?.toString());
-  }
-
-  isRecoverTicket(): boolean {
-    return StaticService.isRecoverTicket(this.issueTypes.issueId?.toString());
   }
 
   haveAbnormalBetFromPermission(): boolean {
@@ -429,13 +298,14 @@ export class FilterComponent implements OnInit, OnChanges {
     return this.isEdit || this.isExternalUrl;
   }
 
+  isShowButtonSelectSubType(): boolean {
+    const IssueTypeHasSelectSubType = [IssueTypeConstant.DANGER_ACCEPTED, IssueTypeConstant.RED_CARD, IssueTypeConstant.WRONG_SCORE];
+    return IssueTypeHasSelectSubType.includes(this.issueTypes.issueId?.toString())
+  }
+
   updateSubByIssue() {
     this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.issueTypeId === this.issueTypes.issueId);
-    if (this.isDangerAccepted() || this.isRedCard() || this.isWrongScore()) {
-      this.issueTypes.subIssueId = null;
-    } else {
-      this.issueTypes.subIssueId = this.issueTypes.selectedSubIssueTypes[0].subIssueTypeId;
-    }
+    this.issueTypes.subIssueId = this.isShowButtonSelectSubType() ? null : this.issueTypes.selectedSubIssueTypes[0].subIssueTypeId;
   }
 
   private updateIssueBySub() {
@@ -475,52 +345,6 @@ export class FilterComponent implements OnInit, OnChanges {
     ]
     return this.issueTypes.selectedSubIssueTypes.length > 1
       && !issueTypeNotShowSubType.includes(this.issueTypes.issueId?.toString());
-  }
-
-  public isShowSportType(): boolean {
-    const issueTypeNotShowSportType = [
-      IssueTypeConstant.ABNORMAL_BET,
-      IssueTypeConstant.ABNORMAL_ACCOUNT,
-      IssueTypeConstant.ARCHIVED_TICKET,
-      IssueTypeConstant.DUPLICATE_TICKETS,
-      IssueTypeConstant.RECOVER_TICKET,
-      IssueTypeConstant.WRONG_MARKET_OFFERED,
-      IssueTypeConstant.TECHNICAL_ERROR,
-      IssueTypeConstant.WRONG_ODDS,
-      IssueTypeConstant.WRONG_SCORE,
-      IssueTypeConstant.WRONG_HDP,
-      IssueTypeConstant.WRONG_1ST_HDP,
-      IssueTypeConstant.WRONG_OU,
-      IssueTypeConstant.WRONG_1ST_OU,
-      IssueTypeConstant.DANGER_ACCEPTED,
-      IssueTypeConstant.EARLY_KICK_OFF,
-      IssueTypeConstant.WRONG_KICK_OFF,
-      IssueTypeConstant.RED_CARD
-    ];
-    return !issueTypeNotShowSportType.includes(this.issueTypes.issueId?.toString());
-  }
-
-  public isShowEventDate(): boolean {
-    const issueTypeNotShowEventDate = [
-      IssueTypeConstant.ABNORMAL_BET,
-      IssueTypeConstant.ABNORMAL_ACCOUNT,
-      IssueTypeConstant.ARCHIVED_TICKET,
-      IssueTypeConstant.DUPLICATE_TICKETS,
-      IssueTypeConstant.RECOVER_TICKET,
-      IssueTypeConstant.WRONG_MARKET_OFFERED,
-      IssueTypeConstant.TECHNICAL_ERROR,
-      IssueTypeConstant.WRONG_ODDS,
-      IssueTypeConstant.WRONG_SCORE,
-      IssueTypeConstant.WRONG_HDP,
-      IssueTypeConstant.WRONG_1ST_HDP,
-      IssueTypeConstant.WRONG_OU,
-      IssueTypeConstant.WRONG_1ST_OU,
-      IssueTypeConstant.DANGER_ACCEPTED,
-      IssueTypeConstant.EARLY_KICK_OFF,
-      IssueTypeConstant.WRONG_KICK_OFF,
-      IssueTypeConstant.RED_CARD
-    ];
-    return !issueTypeNotShowEventDate.includes(this.issueTypes.issueId?.toString());
   }
 
   public isDisableActionVoid(): boolean {

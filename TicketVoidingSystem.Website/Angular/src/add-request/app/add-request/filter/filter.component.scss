@@ -7,11 +7,7 @@ $minWidth: 150px;
     }
 }
 
-.max-width-450 {
-    max-width: 450px;
-}
-
-.filter-issue-type, .filter-sub-issue-type, .filter-action, .filter-sport, .filter-event-date {
+.filter-issue-type, .filter-sub-issue-type, .filter-action {
     min-width: $minWidth;
 }
 
@@ -19,12 +15,7 @@ $minWidth: 150px;
     width: 180px;
 }
 
-.filter-event-date {
-    width: 150px;
-}
-
-.filter-checkbox-test .checkbox-test,
-.filter-checkbox-abnormal .checkbox-abnormal {
+.checkbox-test, .checkbox-abnormal {
     margin-top: 34px;
     min-width: 52px;
 }

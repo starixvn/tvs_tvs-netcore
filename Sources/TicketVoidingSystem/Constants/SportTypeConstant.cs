@@ -32,6 +32,10 @@ public static class SportTypeConstant
 
     public const int VirtuallySoccer = 147;     // Virtual Sports 5
 
+    public const int VirtualHorseRacing = 198;     // Virtual Sports 2
+
+    public const int VirtualDogRacing = 177;     // Virtual Sports 2
+
     public static readonly Dictionary<int, string> RefIdVirtualSports = new()
     {
         { VirtualFootballCup, "LVS_MatchCode" },

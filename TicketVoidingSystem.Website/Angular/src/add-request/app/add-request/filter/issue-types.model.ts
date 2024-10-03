@@ -4,7 +4,6 @@ import * as _ from 'lodash';
 export class IssueTypes {
   issueTypes: IssueType[] = [];
   subIssueTypes: SubIssueType[] = [];
-
   issueId: number;
   selectedSubIssueTypes: SubIssueType[] = [];
   subIssueId: number;

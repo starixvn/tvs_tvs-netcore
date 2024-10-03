@@ -28,8 +28,9 @@
     </bet-ids>
   </div>
 </div>
-
-<league-event-abnormal *ngIf="isShowLeagueEvent()" #leagueEvent [isEdit]="isEdit" [initSportType]="filter.sportType"
-  [eventDate]="filter.eventDate" [initMatchId]="duplicateTicketsModel.matchId" [actionId]="filter.action">
-</league-event-abnormal>
+<event-league #leagueEvent *ngIf="isShowLeagueEvent()" 
+  [isEdit]="isEdit"
+  [matchId]="duplicateTicketsModel.matchId"
+  [isShowSportType]="false">
+</event-league>
 <tooltip [tooltip]="tooltip"></tooltip>
