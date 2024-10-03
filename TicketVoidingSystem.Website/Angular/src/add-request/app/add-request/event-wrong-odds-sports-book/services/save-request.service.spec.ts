@@ -2,6 +2,7 @@ import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.c
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
+import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
@@ -70,7 +71,7 @@ class Helper {
     messageValidationLogInfo: [],
     betTeamsResult: [],
     checkedBetTypes: []
-  };
+  } as LogInfoWrongOddsSportsBook;
   static readonly fakeGetLogInfoModel: GetLogInfoModel = {
     matchId: Helper.fakeMatchId,
     validation: {
@@ -99,7 +100,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
-    const validationService = new ValidationService();
+    const validationService = new ValidationService(null);
     validationService.validateCommonData = jest.fn().mockImplementation(() => false);
 
     const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
@@ -113,23 +114,27 @@ describe('SaveRequestService', () => {
   });
 
   it('#recheckLogInfoBeforeSaveRequest should return true when #validationService.isValidLogInfoEvent true', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.primitiveProps = new PrimitiveProperty();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
+    const arg = new SaveRequestArg();
+    arg.filter = Helper.fakeFilterModel;
+    arg.logInfoEvent = Helper.fakeLogInfoWrongOddsSportsBook;
+    arg.primitiveProps = new PrimitiveProperty();
+    arg.addRequestStore = new AddRequestStore();
+    arg.addRequestStore.changeSavingRequestStatus = jest.fn();
 
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     logInfoService.getLogInfo = jest.fn();
 
-    const validationService = new ValidationService();
+    const validationService = new ValidationService(null);
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isValidLogInfoEvent = jest.fn().mockImplementation(() => true);
+    validationService.isAccountHasAddRequestPermission = jest.fn().mockImplementation(() => true);
+
     const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
 
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(arg);
 
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
+    expect(arg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
     expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
     expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
     expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
@@ -137,89 +142,64 @@ describe('SaveRequestService', () => {
   });
 
   it('#recheckLogInfoBeforeSaveRequest should return false when #validationService.isValidLogInfoEvent false', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.primitiveProps = new PrimitiveProperty();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
+    const arg = new SaveRequestArg();
+    arg.filter = Helper.fakeFilterModel;
+    arg.logInfoEvent = Helper.fakeLogInfoWrongOddsSportsBook;
+    arg.primitiveProps = new PrimitiveProperty();
+    arg.addRequestStore = new AddRequestStore();
+    arg.addRequestStore.changeSavingRequestStatus = jest.fn();
 
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     logInfoService.getLogInfo = jest.fn();
 
-    const validationService = new ValidationService();
+    const validationService = new ValidationService(null);
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isValidLogInfoEvent = jest.fn().mockImplementation(() => false);
+    validationService.isAccountHasAddRequestPermission = jest.fn().mockImplementation(() => true);
     const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
 
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(arg);
 
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
+    expect(arg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
     expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
     expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
     expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
     expect(actual).toBeFalsy();
   });
 
-  it('#saveRequest should not called #proceedSaveRequest', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.isVoided = false;
-    service['proceedSaveRequest'] = jest.fn();
+  it('#saveRequest should not called #showPopupConfirmSave', async () => {
+    const arg = new SaveRequestArg();
+    arg.addRequestStore = new AddRequestStore();
+    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
+    arg.addRequestStore.changeSavingRequestStatus = jest.fn();
+    arg.filter = new FilterModel();
+    arg.filter.isVoided = false;
+    service['showPopupConfirmSave'] = jest.fn();
     service['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
 
-    await service.saveRequest(saveRequestArg);
+    await service.saveRequest(arg);
 
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(saveRequestArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-    expect(service['proceedSaveRequest']).toHaveBeenCalledTimes(0);
+    expect(arg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
+    expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    expect(service['showPopupConfirmSave']).toHaveBeenCalledTimes(0);
   });
 
-  it('#saveRequest should called #proceedSaveRequest', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.isVoided = true;
-    service['proceedSaveRequest'] = jest.fn();
+  it('#saveRequest should called #showPopupConfirmSave', async () => {
+    const arg = new SaveRequestArg();
+    arg.addRequestStore = new AddRequestStore();
+    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
+    arg.addRequestStore.changeSavingRequestStatus = jest.fn();
+    arg.filter = new FilterModel();
+    arg.filter.isVoided = true;
+    arg.confirmAddRequest = new ConfirmAddRequestModel();
+    service['showPopupConfirmSave'] = jest.fn();
 
-    await service.saveRequest(saveRequestArg);
+    await service.saveRequest(arg);
 
-    expect(saveRequestArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-    expect(service['proceedSaveRequest']).toHaveBeenCalledTimes(1);
+    expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    expect(service['showPopupConfirmSave']).toHaveBeenCalledTimes(1);
   });
-
-  it('#proceedSaveRequest should showConfirm', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    service['proceedSaveRequest'] = jest.fn();
-
-    const validationService = new ValidationService();
-    const popupService = new PopupService(null);
-    const spyShowConfirm = jest.spyOn(popupService, 'showConfirm').mockImplementation(() => {});
-
-    const saveRequestService = new SaveRequestService(validationService, null, popupService, null, null);
-    saveRequestService['getMessageConfirmationWrongOddsSportsBook'] = jest.fn().mockImplementation(() => 'aaa');
-    saveRequestService['onClickConfirmSave'] = jest.fn();
-
-    saveRequestService['proceedSaveRequest'](saveRequestArg);
-
-
-    expect(spyShowConfirm.mock.calls[0][0]).toEqual('aaa');
-    expect(spyShowConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
-    expect(spyShowConfirm.mock.calls[0][2]).toBeInstanceOf(Function);
-
-    spyShowConfirm.mock.calls[0][1]();
-    expect(saveRequestService['onClickConfirmSave']).toHaveBeenCalledTimes(1);
-
-    spyShowConfirm.mock.calls[0][2]();
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-  });
-
 
   it('#executeSaveRequestApi should called #executeSaveRequest', async () => {
     const addRequestService = new AddRequestService(null, null, null);

@@ -39,6 +39,8 @@ export class LogInfoService {
   private assignResultLogInfoToEvents(logInfoEvent: LogInfoWrongOddsSportsBook, logInfoModels: GetLogInfoModel[]): void {
     const logInfoModel = logInfoModels.find(x => x.matchId === logInfoEvent.matchId);
     if (logInfoModel) {
+      logInfoEvent.isHasSettledTicket = logInfoModel.validation.isHasSettledTicket;
+      logInfoEvent.isHasInstantlySettledTicket = logInfoModel.validation.isHasInstantlySettledTicket;
       logInfoEvent.logInfoDetail = logInfoModel.logInfoDetail;
       logInfoEvent.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel);
     }

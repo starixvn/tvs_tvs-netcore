@@ -38,7 +38,6 @@ EventWrongOddsSportsBookComponent {
   },
   "validationService": null,
   "wrongOddsSportsBookModel": Object {
-    "actualMarket": "1",
     "correctOdds": "1.5",
     "filterFromTransTime": "2021-12-18 12:08:49.737",
     "filterOddsType": "1",

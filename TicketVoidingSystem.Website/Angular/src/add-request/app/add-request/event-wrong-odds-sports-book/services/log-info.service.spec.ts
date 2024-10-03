@@ -63,7 +63,7 @@ class Helper {
     messageValidationLogInfo: [],
     betTeamsResult: [],
     checkedBetTypes: []
-  };
+  } as LogInfoWrongOddsSportsBook;
   static readonly fakeGetLogInfoModel: GetLogInfoModel = {
     matchId: Helper.fakeMatchId,
     validation: {

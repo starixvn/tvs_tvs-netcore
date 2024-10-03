@@ -45,8 +45,15 @@ export class SaveRequestService {
     argWrongOddsSportsBook.addRequestStore.changeBlockingUiStatus(true);
     argWrongOddsSportsBook.primitiveProps.isShowValidation = false;
     await this.logInfoWrongOddsSportsBookService.getLogInfo(argWrongOddsSportsBook.logInfoEvent, argWrongOddsSportsBook.isEdit, argWrongOddsSportsBook.requestId, argWrongOddsSportsBook.filter, argWrongOddsSportsBook.primitiveProps);
-    argWrongOddsSportsBook.addRequestStore.changeBlockingUiStatus(false);
+
+    if (!this.validationService.isAccountHasAddRequestPermission(argWrongOddsSportsBook.filter.action, argWrongOddsSportsBook.logInfoEvent.isHasInstantlySettledTicket,
+      argWrongOddsSportsBook.logInfoEvent.isHasSettledTicket, argWrongOddsSportsBook.permission)) {
+      argWrongOddsSportsBook.addRequestStore.changeBlockingUiStatus(false);
+      return false;
+    }
+
     argWrongOddsSportsBook.primitiveProps.isShowValidation = true;
+    argWrongOddsSportsBook.addRequestStore.changeBlockingUiStatus(false);
 
     if (this.validationService.isValidLogInfoEvent(argWrongOddsSportsBook.logInfoEvent)) {
       return true;
@@ -98,7 +105,7 @@ export class SaveRequestService {
     query.decidedBy = argWrongOddsSportsBook.others.decidedBy;
     query.remark = argWrongOddsSportsBook.others.remark;
     if (!argWrongOddsSportsBook.filter.isVoided) {
-      query.wrongOddsSportsBookInfo= this.eventWrongOddsSportsBookService.getWrongOddsSportsBookModel(
+      query.wrongOddsSportsBookInfo = this.eventWrongOddsSportsBookService.getWrongOddsSportsBookModel(
         argWrongOddsSportsBook.logInfoEvent, argWrongOddsSportsBook.filter.subIssueTypeId);
     }
 

@@ -60,14 +60,14 @@ class Helper {
     messageValidationLogInfo: [],
     betTeamsResult: [],
     checkedBetTypes: []
-  };
+  } as LogInfoWrongOddsSportsBook;
 }
 
 describe('ValidationService', () => {
   let service: ValidationService;
 
   beforeEach(() => {
-    service = new ValidationService();
+    service = new ValidationService(null);
   });
 
   it('#validateCommonData should return false when match invalid', async () => {
@@ -115,7 +115,7 @@ describe('ValidationService', () => {
     filter.filterOddsType = FilterOddsTypeConstant.RANGE;
     filter.fromOdds = '1';
     filter.toOdds = '1a';
-    const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip, null);
+    const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip);
 
     expect(actual).toBeFalsy();
   });
@@ -129,7 +129,7 @@ describe('ValidationService', () => {
     filter.toOdds = '1';
     filter.oddsValue = '1';
     filter.correctOdds = null;
-    const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip, null);
+    const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip);
 
     expect(actual).toBeFalsy();
   });
@@ -145,7 +145,7 @@ describe('ValidationService', () => {
     filter.correctOdds = '1';
     [null, undefined].forEach(x => {
       filter.liveIndicator = x;
-      const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip, '1');
+      const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip);
 
       expect(actual).toBeFalsy();
     });
@@ -161,7 +161,7 @@ describe('ValidationService', () => {
     filter.oddsValue = '1';
     filter.correctOdds = '1';
     filter.liveIndicator = 1;
-    const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip, '1');
+    const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip);
 
     expect(actual).toBeTruthy();
   });

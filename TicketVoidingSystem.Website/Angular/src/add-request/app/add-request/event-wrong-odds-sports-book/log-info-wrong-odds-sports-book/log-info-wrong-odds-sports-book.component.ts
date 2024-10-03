@@ -71,7 +71,7 @@ export class LogInfoWrongOddsSportsBookComponent implements OnInit {
         logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
         issueTypeId: Number(this.issueTypeId)
       };
-      let ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
+      const ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
       this.affectedTicketsModel.tickets = new TicketsModel();
       this.affectedTicketsModel.tickets.initData(ticketsLogInfo);
       this.affectedTicketsModel.tickets.checkAllTickets();
@@ -98,7 +98,6 @@ export class LogInfoWrongOddsSportsBookComponent implements OnInit {
     await this.updateAffectedTickets();
     this.updateCheckedBetTypeIds();
     this.addRequestStore.changeBlockingUiStatus(false);
-
     this.affectedTicketsModel.isOpen = true;
     this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
    }

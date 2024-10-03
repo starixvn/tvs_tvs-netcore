@@ -6,6 +6,8 @@ import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
 import { FilterWrongOddsSportsBookComponent } from '../filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
 import { FilterOddsTypeConstant, FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
@@ -21,6 +23,14 @@ export class ValidationService {
   private readonly FROM_ODDS_CLASS = 'from-odds';
   private readonly TO_ODDS_CLASS = 'to-odds';
   private readonly FILTER_LIVE_INDICATOR_CLASS = 'filter-live-indicator';
+
+  constructor(
+    private readonly checkPermissionService: CheckAddPermissionService
+  ) { }
+
+  public isAccountHasAddRequestPermission(action: string, isHasInstantlySettledTicket: boolean, isHasSettledTicket: boolean, permission: PermissionAddRequest): boolean {
+    return this.checkPermissionService.isAccountHasAddRequestPermission(action, isHasInstantlySettledTicket, isHasSettledTicket, permission);
+  }
 
   public validateCommonData(eventLeague: EventLeagueComponent, filterTimeComponent: FilterWrongOddsSportsBookComponent, advancedMode?: AdvancedModeAddRequestComponent): boolean {
     if (!eventLeague.isMatchIdValid()) {
@@ -38,29 +48,29 @@ export class ValidationService {
     return true;
   }
 
-  public isFromTimeSameOrBeforeToTime(FilterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel, tooltip: Tooltip): boolean {
-    return StaticService.isFromTimeSameOrBeforeToTime(FilterWrongOddsSportsBookModel.fromDateTime, FilterWrongOddsSportsBookModel.fromDateTime, tooltip, this.FROM_DATE_TIME_CLASS);
+  public isFromTimeSameOrBeforeToTime(filterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel, tooltip: Tooltip): boolean {
+    return StaticService.isFromTimeSameOrBeforeToTime(filterWrongOddsSportsBookModel.fromDateTime, filterWrongOddsSportsBookModel.fromDateTime, tooltip, this.FROM_DATE_TIME_CLASS);
 
   }
 
-  public isValidFilterWrongOddsSportsBook(FilterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel, tooltip: Tooltip, subIssueTypeId: string): boolean {
-    if (!this.isValidFilterOddsType(FilterWrongOddsSportsBookModel, tooltip)) {
+  public isValidFilterWrongOddsSportsBook(filterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel, tooltip: Tooltip): boolean {
+    if (!this.isValidFilterOddsType(filterWrongOddsSportsBookModel, tooltip)) {
       return false;
     }
 
-    if (!this.isValidFilterCorrectValue(FilterWrongOddsSportsBookModel, tooltip)) {
+    if (!this.isValidFilterCorrectValue(filterWrongOddsSportsBookModel, tooltip)) {
       return false;
     }
 
-    if (!this.isValidFilterLiveIndicator(FilterWrongOddsSportsBookModel, tooltip)) {
+    if (!this.isValidFilterLiveIndicator(filterWrongOddsSportsBookModel, tooltip)) {
       return false;
     }
 
     return true;
   }
 
-  public isValidLogInfoEvent(LogInfoWrongOddsSportsBook: LogInfoWrongOddsSportsBook): boolean {
-    return !LogInfoWrongOddsSportsBook.messageValidationLogInfo.some(y => y.isError);
+  public isValidLogInfoEvent(logInfoWrongOddsSportsBook: LogInfoWrongOddsSportsBook): boolean {
+    return !logInfoWrongOddsSportsBook.messageValidationLogInfo.some(y => y.isError);
   }
 
   private isValidFilterLiveIndicator(filter: FilterWrongOddsSportsBookModel, tooltip: Tooltip): boolean {
@@ -82,8 +92,8 @@ export class ValidationService {
   }
 
   private isValidFilterOddsType(filter: FilterWrongOddsSportsBookModel, tooltip: Tooltip): boolean {
-   return (filter.filterOddsType === FilterOddsTypeConstant.VALUE && this.isValidFilterOddsValue(filter.oddsValue, tooltip))
-    || (filter.filterOddsType === FilterOddsTypeConstant.RANGE && this.isValidFilterOddsRange(filter.fromOdds, filter.toOdds, tooltip));
+    return (filter.filterOddsType === FilterOddsTypeConstant.VALUE && this.isValidFilterOddsValue(filter.oddsValue, tooltip))
+      || (filter.filterOddsType === FilterOddsTypeConstant.RANGE && this.isValidFilterOddsRange(filter.fromOdds, filter.toOdds, tooltip));
   }
 
   private isValidFilterOddsValue(oddsValue: string, tooltip: Tooltip): boolean {
@@ -92,7 +102,7 @@ export class ValidationService {
       return false;
     }
 
-    if(!StaticService.isCorrectFormatMultipleDecimal(oddsValue, this.ODDS_VALUE_INPUT_CLASS, tooltip, TEXT.INVALID_ODDS)) {
+    if (!StaticService.isCorrectFormatMultipleDecimal(oddsValue, this.ODDS_VALUE_INPUT_CLASS, tooltip, TEXT.INVALID_ODDS)) {
       return false;
     }
 
@@ -125,7 +135,7 @@ export class ValidationService {
 
     if (!StaticService.isCorrectFormatSingleDecimal(fromOdds, this.FROM_ODDS_CLASS, tooltip, TEXT.INVALID_ODDS) ||
       !StaticService.isCorrectFormatSingleDecimal(toOdds, this.TO_ODDS_CLASS, tooltip, TEXT.INVALID_ODDS)) {
-        return false;
+      return false;
     }
 
     if (this.isValidOddsValueHaveNotZero(fromOdds, tooltip, this.FROM_ODDS_CLASS)) {

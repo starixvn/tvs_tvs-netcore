@@ -51,8 +51,8 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [],
     betTeamsResult: [],
-    checkedBetTypes: []
-  };
+    checkedBetTypes: [],
+  } as LogInfoWrongOddsSportsBook;
 }
 
 describe('EventWrongOddsSportsBookService', () => {
@@ -68,8 +68,19 @@ describe('EventWrongOddsSportsBookService', () => {
     expect(actual.matchId).toBe(Helper.fakeWrongOddsSportsBookModel.matchId);
   });
 
-  it('#getWrongOddsSportsBookModel should return expected model', async () => {
-    const actual = service.getWrongOddsSportsBookModel(Helper.fakeLogInfoWrongOddsSportsBook, '1');
+  it('#getWrongOddsSportsBookModel should return expected model when filter by range', async () => {
+    const model = Helper.fakeLogInfoWrongOddsSportsBook;
+    model.filterWrongOddsSportsBook.filterOddsType = 'range';
+    const actual = service.getWrongOddsSportsBookModel(model, '1');
+
+    expect(actual.matchId).toBe(Helper.fakeLogInfoWrongOddsSportsBook.matchId);
+    expect(actual.subIssueTypeId ).toBe(Number(Helper.fakeFilterModel.subIssueTypeId));
+  });
+
+  it('#getWrongOddsSportsBookModel should return expected model when filter by value', async () => {
+    const model = Helper.fakeLogInfoWrongOddsSportsBook;
+    model.filterWrongOddsSportsBook.filterOddsType = 'value';
+    const actual = service.getWrongOddsSportsBookModel(model, '1');
 
     expect(actual.matchId).toBe(Helper.fakeLogInfoWrongOddsSportsBook.matchId);
     expect(actual.subIssueTypeId ).toBe(Number(Helper.fakeFilterModel.subIssueTypeId));

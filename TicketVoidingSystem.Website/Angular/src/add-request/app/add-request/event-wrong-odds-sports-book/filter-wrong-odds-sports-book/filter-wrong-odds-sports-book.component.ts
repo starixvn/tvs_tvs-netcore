@@ -70,7 +70,7 @@ export class FilterWrongOddsSportsBookComponent {
   }
 
   private isValidFilter(): boolean {
-    return this.validationService.isValidFilterWrongOddsSportsBook(this.filterWrongOddsSportsBookModel, this.tooltip, this.subIssueTypeId);
+    return this.validationService.isValidFilterWrongOddsSportsBook(this.filterWrongOddsSportsBookModel, this.tooltip);
   }
 
   public emitRefreshEvent() {

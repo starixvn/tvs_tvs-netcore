@@ -69,7 +69,7 @@ describe('FilterWrongOddsSportsBookComponent', () => {
   });
 
   it('#isValidDateTime should return true', async () => {
-    const validationService = new ValidationService();
+    const validationService = new ValidationService(null);
     validationService.isFromTimeSameOrBeforeToTime = jest.fn().mockImplementation(() => true);
     validationService.isValidFilterWrongOddsSportsBook = jest.fn().mockImplementation(() => true);
     const component = new FilterWrongOddsSportsBookComponent(null, validationService);
@@ -94,7 +94,7 @@ describe('FilterWrongOddsSportsBookComponent', () => {
   });
 
   it('#isValidMultipleOdds should return true', async () => {
-    const validationService = new ValidationService();
+    const validationService = new ValidationService(null);
     validationService.isValidOddsValueHaveNotZero = jest.fn().mockImplementation(() => true);
     const component = new FilterWrongOddsSportsBookComponent(null, validationService);
     const actual = component.isValidMultipleOdds('1&2', 'test');
@@ -112,7 +112,7 @@ describe('FilterWrongOddsSportsBookComponent', () => {
   });
 
   it('#isValidSingleOdds should return true', async () => {
-    const validationService = new ValidationService();
+    const validationService = new ValidationService(null);
     validationService.isValidOddsValueHaveNotZero = jest.fn().mockImplementation(() => true);
     const component = new FilterWrongOddsSportsBookComponent(null, validationService);
     const actual = component.isValidSingleOdds('2', 'test');

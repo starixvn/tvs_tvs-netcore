@@ -7,11 +7,13 @@ import { GetBetTypesQuery } from '../../../../utility/components/advanced-mode/g
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ModeType } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { WrongOddsSportsBookModel } from '../models/event-wrong-odds-sports-book.model';
+import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { OthersModel } from '../others/others.model';
 import { FilterWrongOddsSportsBookComponent } from './filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
 import { LogInfoWrongOddsSportsBook } from './models/log-info-wrong-odds-sports-book.model';
@@ -48,6 +50,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
   logInfoEvent = new LogInfoWrongOddsSportsBook();
   confirmAddRequest = new ConfirmAddRequestModel();
   primitiveProps = new PrimitiveProperty();
+  permission = new PermissionAddRequest();
 
   constructor(
     private readonly validationService: ValidationService,
@@ -55,10 +58,12 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
     private readonly logInfoService: LogInfoService,
     private readonly addRequestStore: AddRequestStore,
     private readonly saveRequestService: SaveRequestService,
+    private readonly addRequestApiService: AddRequestApiService,
     private readonly commonService: CommonService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.permission = await this.addRequestApiService.getPermissionAddRequest();
     if (this.isEdit) {
       this.updateDataWhenEditRequest();
     } else {
@@ -107,6 +112,13 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
     this.addRequestStore.changeBlockingUiStatus(true);
     await this.logInfoService.getLogInfo(this.logInfoEvent, this.isEdit, this.requestId, this.filter, this.primitiveProps);
     this.logInfoEvent.checkedBetTypes = this.groupBetTypesModel.getCheckedBetTypes();
+
+    if (!this.validationService.isAccountHasAddRequestPermission(this.filter.action, this.logInfoEvent.isHasInstantlySettledTicket,
+      this.logInfoEvent.isHasSettledTicket, this.permission)) {
+      this.addRequestStore.changeBlockingUiStatus(false);
+      return;
+    }
+
     this.primitiveProps.isShowValidation = true;
     this.addRequestStore.changeBlockingUiStatus(false);
     this.addRequestStore.changeSavingRequestStatus(false);
@@ -174,6 +186,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
     arg.logInfoEvent = this.logInfoEvent;
     arg.confirmAddRequest = this.confirmAddRequest;
     arg.addRequestStore = this.addRequestStore;
+    arg.permission = this.permission;
 
     return arg;
   }

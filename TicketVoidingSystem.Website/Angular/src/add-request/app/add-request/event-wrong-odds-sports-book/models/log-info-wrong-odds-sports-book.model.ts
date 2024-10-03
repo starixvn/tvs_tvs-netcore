@@ -11,4 +11,7 @@ export class LogInfoWrongOddsSportsBook {
   messageValidationLogInfo?: ValidationMessage[];
   checkedBetTypes: BetTypeAddRequest[];
   betTeamsResult: BetTeamAddRequestResult[];
+
+  isHasSettledTicket: boolean;
+  isHasInstantlySettledTicket: boolean;
 }

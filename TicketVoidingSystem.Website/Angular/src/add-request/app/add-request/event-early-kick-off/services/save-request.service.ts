@@ -5,6 +5,7 @@ import { TEXT } from '../../../../../utility/constants/text';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { EarlyKickOffModel } from '../../models/event-eko.model';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
 import { PopupService } from '../../services/popup.service';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
@@ -20,6 +21,7 @@ export class SaveRequestService {
     private readonly logInfoService: LogInfoService,
     private readonly validationService: ValidationService,
     private readonly addRequestApiService: AddRequestService,
+    private readonly checkPermissionService: CheckAddPermissionService
   ) { }
 
   async saveRequest(arg: SaveRequestArg): Promise<void> {
@@ -46,7 +48,8 @@ export class SaveRequestService {
     arg.primitiveProps.transInfoAddRequestModel = getLogInfoResult.transInfoAddRequestModel;
 
 
-    if (!this.validationService.isAccountHasAddRequestPermission(arg.filter.action, arg.allEvents, arg.permission)) {
+    if (!this.checkPermissionService.isAccountHasAddRequestPermission(arg.filter.action,
+      arg.allEvents.some(x => x.isHasInstantlySettledTicket), arg.allEvents.some(x => x.isHasSettledTicket), arg.permission)) {
       arg.addRequestStore.changeBlockingUiStatus(false);
       return false;
     }
