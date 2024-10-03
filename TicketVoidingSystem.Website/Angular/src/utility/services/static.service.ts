@@ -10,6 +10,7 @@ import { AbnormalFilterBy, DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVS
 import { IssueTypeConstant } from '../constants/issue-type.constant';
 import { LABELS } from '../constants/labels';
 import { RegexConstant } from '../constants/regex';
+import { CheckIssueTypeObjectType } from '../models/check-issue-type.model';
 
 export class StaticService {
   static isVoidAction(actionId: number): boolean {
@@ -21,148 +22,118 @@ export class StaticService {
       || actionId === TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID;
   }
 
-  static isAbnormalBet(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.ABNORMAL_BET;
+  static checkAllIssueTypes(issueTypeId: string | number): CheckIssueTypeObjectType {
+    const result: CheckIssueTypeObjectType = {
+      isAbnormalBet: StaticService.isAbnormalBet(issueTypeId),
+      isEarlyKickOff: StaticService.isEarlyKickOff(issueTypeId),
+      isWrongKickOff: StaticService.isWrongKickOff(issueTypeId),
+      isDangerAccepted: StaticService.isDangerAccepted(issueTypeId),
+      isRedCard: StaticService.isRedCard(issueTypeId),
+      isAbnormalAccount: StaticService.isAbnormalAccount(issueTypeId),
+      isWrongScore: StaticService.isWrongScore(issueTypeId),
+      isArchivedTicket: StaticService.isArchivedTicket(issueTypeId),
+      isWrongHDP: StaticService.isWrongHDP(issueTypeId),
+      isWrong1stHDP: StaticService.isWrong1stHDP(issueTypeId),
+      isWrongOU: StaticService.isWrongOU(issueTypeId),
+      isWrong1stOU: StaticService.isWrong1stOU(issueTypeId),
+      isWrongOdds: StaticService.isWrongOdds(issueTypeId),
+      isWrongOddsSportsBook: StaticService.isWrongOddsSportsBook(issueTypeId),
+      isReducedOver: StaticService.isReducedOver(issueTypeId),
+      isAbandoned: StaticService.isAbandoned(issueTypeId),
+      isDuplicateTickets: StaticService.isDuplicateTickets(issueTypeId),
+      isNotParticipate: StaticService.isNotParticipate(issueTypeId),
+      isRecoverTicket: StaticService.isRecoverTicket(issueTypeId),
+      isLikelyWrongMarketOffered: StaticService.isLikelyWrongMarketOffered(issueTypeId)
+    }
+
+    return result;
+  }
+  static isAbnormalBet(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.ABNORMAL_BET;
   }
 
-  static isAbnormalBetNumber(issueTypeId: number): boolean {
-    return this.isAbnormalBet(issueTypeId?.toString());
+  static isDangerAccepted(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.DANGER_ACCEPTED;
   }
 
-  static isDangerAccepted(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED;
+  static isRedCard(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.RED_CARD;
   }
 
-  static isDangerAcceptedNumber(issueTypeId: number): boolean {
-    return this.isDangerAccepted(issueTypeId?.toString());
+  static isWrongScore(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.WRONG_SCORE;
   }
 
-  static isRedCard(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.RED_CARD;
+  static isAbnormalAccount(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT;
   }
 
-  static isRedCardNumber(issueTypeId: number): boolean {
-    return this.isRedCard(issueTypeId?.toString());
+  static isEarlyKickOff(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.EARLY_KICK_OFF;
   }
 
-  static isWrongScore(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.WRONG_SCORE;
+  static isWrongKickOff(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.WRONG_KICK_OFF;
   }
 
-  static isWrongScoreNumber(issueTypeId: number): boolean {
-    return this.isWrongScore(issueTypeId?.toString());
+  static isWrongOdds(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.WRONG_ODDS;
   }
 
-  static isAbnormalAccount(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.ABNORMAL_ACCOUNT;
+  static isWrongHDP(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.WRONG_HDP;
   }
 
-  static isAbnormalAccountNumber(issueTypeId: number): boolean {
-    return this.isAbnormalAccount(issueTypeId?.toString());
+  static isWrong1stHDP(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.WRONG_1ST_HDP;
   }
 
-  static isEarlyKickOff(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.EARLY_KICK_OFF;
+  static isWrongQuarterHDP(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.WRONG_QUARTER_HDP;
   }
 
-  static isWrongKickOff(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.WRONG_KICK_OFF;
+  static isWrongOU(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.WRONG_OU;
   }
 
-  static isWrongOdds(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.WRONG_ODDS;
+  static isWrong1stOU(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.WRONG_1ST_OU;
   }
 
-  static isWrongOddsNumber(issueTypeId: number): boolean {
-    return this.isWrongOdds(issueTypeId?.toString());
+  static isArchivedTicket(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.ARCHIVED_TICKET;
   }
 
-  static isWrongHDP(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.WRONG_HDP;
+  static isOtherIssues(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.OTHER_ISSUES;
   }
 
-  static isWrongHDPNumber(issueTypeId: number): boolean {
-    return this.isWrongHDP(issueTypeId?.toString());
+  static isReducedOver(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.REDUCED_OVER;
   }
 
-  static isWrong1stHDP(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.WRONG_1ST_HDP;
+  static isAbandoned(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.ABANDONED;
   }
 
-  static isWrong1stHDPNumber(issueTypeId: number): boolean {
-    return this.isWrong1stHDP(issueTypeId?.toString());
+  static isDuplicateTickets(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.DUPLICATE_TICKETS;
   }
 
-  static isWrongQuarterHDP(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.WRONG_QUARTER_HDP;
+  static isNotParticipate(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.NOT_PARTICIPATE;
   }
 
-  static isWrongQuarterHDPNumber(issueTypeId: number): boolean {
-    return this.isWrongQuarterHDP(issueTypeId?.toString());
+  static isRecoverTicket(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.RECOVER_TICKET;
   }
 
-  static isWrongOU(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.WRONG_OU;
+  static isLikelyWrongMarketOffered(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.WRONG_MARKET_OFFERED || issueTypeId?.toString() === IssueTypeConstant.TECHNICAL_ERROR;
   }
 
-  static isWrongOUNumber(issueTypeId: number): boolean {
-    return this.isWrongOU(issueTypeId?.toString());
-  }
-
-  static isWrong1stOU(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.WRONG_1ST_OU;
-  }
-
-  static isWrong1stOUNumber(issueTypeId: number): boolean {
-    return this.isWrong1stOU(issueTypeId?.toString());
-  }
-
-  static isArchivedTicket(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.ARCHIVED_TICKET;
-  }
-
-  static isOtherIssues(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.OTHER_ISSUES;
-  }
-
-  static isReducedOver(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.REDUCED_OVER;
-  }
-
-  static isAbandoned(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.ABANDONED;
-  }
-
-  static isDuplicateTickets(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.DUPLICATE_TICKETS;
-  }
-
-  static isDuplicateTicketsNumber(issueTypeId: number): boolean {
-    return this.isDuplicateTickets(issueTypeId?.toString());
-  }
-
-  static isNotParticipate(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.NOT_PARTICIPATE;
-  }
-
-  static isNotParticipateNumber(issueTypeId: number): boolean {
-    return this.isNotParticipate(issueTypeId?.toString());
-  }
-
-  static isRecoverTicket(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.RECOVER_TICKET;
-  }
-
-  static isLikelyWrongMarketOffered(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.WRONG_MARKET_OFFERED || issueTypeId === IssueTypeConstant.TECHNICAL_ERROR;
-  }
-
-  static isWrongOddsSportsBook(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK;
-  }
-
-  static isWrongOddsSportsBookNumber(issueTypeId: number): boolean {
-    return this.isWrongOddsSportsBook(issueTypeId?.toString());
+  static isWrongOddsSportsBook(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK;
   }
 
   static isFilterByMixOrSystemParlay(filterBy: number): boolean {
@@ -181,35 +152,35 @@ export class StaticService {
   }
 
   static getSubIssueTypeId(requestDetail: RequestDetailViewModel): number {
-    if (this.isWrongScore(requestDetail.request.issueTypeId.toString())) {
+    if (this.isWrongScore(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongScoreModels[0].subIssueTypeId;
-    } else if (this.isDangerAccepted(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isDangerAccepted(requestDetail.request.issueTypeId)) {
       return requestDetail.dangerAcceptedModels.find(x => x.isMainMatch).subIssueTypeId;
-    } else if (this.isRedCard(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isRedCard(requestDetail.request.issueTypeId)) {
       return requestDetail.redCardModels.find(x => x.isMainMatch).subIssueTypeId;
-    } else if (this.isWrongHDP(requestDetail.request.issueTypeId.toString()) || this.isWrong1stHDP(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isWrongHDP(requestDetail.request.issueTypeId) || this.isWrong1stHDP(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongHdpModels.find(x => x.isMainMatch).subIssueTypeId;
-    } else if (this.isWrongOU(requestDetail.request.issueTypeId.toString()) || this.isWrong1stOU(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isWrongOU(requestDetail.request.issueTypeId) || this.isWrong1stOU(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongOuModels.find(x => x.isMainMatch).subIssueTypeId;
-    } else if (this.isWrongOdds(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isWrongOdds(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongOddsModels[0].subIssueTypeId;
-    } else if (this.isReducedOver(requestDetail.request.issueTypeId.toString()) || this.isAbandoned(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isReducedOver(requestDetail.request.issueTypeId) || this.isAbandoned(requestDetail.request.issueTypeId)) {
       return requestDetail.reducedOverModels[0].subIssueTypeId;
-    } else if (this.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isNotParticipate(requestDetail.request.issueTypeId)) {
       return requestDetail.notParticipateModels[0].subIssueTypeId;
-    } else if (this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isDuplicateTickets(requestDetail.request.issueTypeId)) {
       return requestDetail.duplicateTicketsModel.subIssueTypeId;
-    } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId.toString()) || this.isWrongKickOff(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId) || this.isWrongKickOff(requestDetail.request.issueTypeId)) {
       return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).subIssueTypeId;
-    } else if (this.isAbnormalAccount(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isAbnormalAccount(requestDetail.request.issueTypeId)) {
       return requestDetail.abnormalAccountModel.subIssueTypeId;
-    } else if (this.isRecoverTicket(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isRecoverTicket(requestDetail.request.issueTypeId)) {
       return requestDetail.recoverTicketModel.subIssueTypeId;
-    } else if (this.isAbnormalBet(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isAbnormalBet(requestDetail.request.issueTypeId)) {
       return requestDetail.abnormalBetModel.subIssueTypeId;
-    } else if (this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongMarketOfferedModel.subIssueTypeId;
-    } else if (this.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongOddsSportsBookModel.subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
@@ -217,31 +188,31 @@ export class StaticService {
   }
 
   static getEventDate(requestDetail: RequestDetailViewModel): Date {
-    if (this.isWrongScore(requestDetail.request.issueTypeId.toString())) {
+    if (this.isWrongScore(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongScoreModels[0].eventDate;
-    } else if (this.isDangerAccepted(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isDangerAccepted(requestDetail.request.issueTypeId)) {
       return requestDetail.dangerAcceptedModels.find(x => x.isMainMatch).eventDate;
-    } else if (this.isRedCard(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isRedCard(requestDetail.request.issueTypeId)) {
       return requestDetail.redCardModels.find(x => x.isMainMatch).eventDate;
-    } else if (this.isWrongHDP(requestDetail.request.issueTypeId.toString()) || this.isWrong1stHDP(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isWrongHDP(requestDetail.request.issueTypeId) || this.isWrong1stHDP(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongHdpModels.find(x => x.isMainMatch).eventDate;
-    } else if (this.isWrongOU(requestDetail.request.issueTypeId.toString()) || this.isWrong1stOU(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isWrongOU(requestDetail.request.issueTypeId) || this.isWrong1stOU(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongOuModels.find(x => x.isMainMatch).eventDate;
-    } else if (this.isWrongOdds(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isWrongOdds(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongOddsModels[0].eventDate;
-    } else if (this.isReducedOver(requestDetail.request.issueTypeId.toString()) || this.isAbandoned(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isReducedOver(requestDetail.request.issueTypeId) || this.isAbandoned(requestDetail.request.issueTypeId)) {
       return requestDetail.reducedOverModels[0].eventDate;
-    } else if (this.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isNotParticipate(requestDetail.request.issueTypeId)) {
       return requestDetail.notParticipateModels[0].eventDate;
-    } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId.toString()) || this.isWrongKickOff(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId) || this.isWrongKickOff(requestDetail.request.issueTypeId)) {
       return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).eventDate;
     } else if (
-      this.isAbnormalAccount(requestDetail.request.issueTypeId.toString())
-      || this.isRecoverTicket(requestDetail.request.issueTypeId.toString())
-      || this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())
-      || this.isAbnormalBet(requestDetail.request.issueTypeId.toString())
-      || this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())
-      || this.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())) {
+      this.isAbnormalAccount(requestDetail.request.issueTypeId)
+      || this.isRecoverTicket(requestDetail.request.issueTypeId)
+      || this.isDuplicateTickets(requestDetail.request.issueTypeId)
+      || this.isAbnormalBet(requestDetail.request.issueTypeId)
+      || this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)
+      || this.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       return null;
     } else {
       return requestDetail.event.eventDate;
@@ -252,12 +223,12 @@ export class StaticService {
     return functionId === FunctionConst.SINGLE;
   }
 
-  static checkHandlingCashOutAsUnSettledTicketByIssueTypeId(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED ||
-      issueTypeId === IssueTypeConstant.RED_CARD ||
-      issueTypeId === IssueTypeConstant.WRONG_SCORE ||
-      issueTypeId === IssueTypeConstant.EARLY_KICK_OFF ||
-      issueTypeId === IssueTypeConstant.WRONG_KICK_OFF;
+  static checkHandlingCashOutAsUnSettledTicketByIssueTypeId(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.DANGER_ACCEPTED ||
+      issueTypeId?.toString() === IssueTypeConstant.RED_CARD ||
+      issueTypeId?.toString() === IssueTypeConstant.WRONG_SCORE ||
+      issueTypeId?.toString() === IssueTypeConstant.EARLY_KICK_OFF ||
+      issueTypeId?.toString() === IssueTypeConstant.WRONG_KICK_OFF;
   }
 
   static isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
@@ -309,12 +280,12 @@ export class StaticService {
     return subIssueTypeId && SubIssueTypeGroup.SUBTYPE_VAR.includes(subIssueTypeId);
   }
 
-  static isHaveCancelCashOutTicket(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED ||
-      issueTypeId === IssueTypeConstant.RED_CARD ||
-      issueTypeId === IssueTypeConstant.WRONG_SCORE ||
-      issueTypeId === IssueTypeConstant.WRONG_MARKET_OFFERED ||
-      issueTypeId === IssueTypeConstant.TECHNICAL_ERROR;
+  static isHaveCancelCashOutTicket(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.DANGER_ACCEPTED ||
+      issueTypeId?.toString() === IssueTypeConstant.RED_CARD ||
+      issueTypeId?.toString() === IssueTypeConstant.WRONG_SCORE ||
+      issueTypeId?.toString() === IssueTypeConstant.WRONG_MARKET_OFFERED ||
+      issueTypeId?.toString() === IssueTypeConstant.TECHNICAL_ERROR;
   }
 
   static isCorrectFormatMultipleDecimal(value: string, element: string, tooltip: Tooltip, errorText: string): boolean {

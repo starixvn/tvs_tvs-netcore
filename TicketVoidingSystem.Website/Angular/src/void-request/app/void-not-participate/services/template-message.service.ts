@@ -20,7 +20,7 @@ export class TemplateMessageService {
     templateValue.groupPHAffected = voidPageItem.voidTicketsMini.groupPHAffected;
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;
     templateValue.eventType = voidPageItem.voidTicketsMini.isAllLiveTickets ? EventType.LIVE : null;
-    if (StaticService.isNotParticipateNumber(requestDetail.request.issueTypeId)) {
+    if (StaticService.isNotParticipate(requestDetail.request.issueTypeId)) {
       templateValue.playerName = this.getPlayerName(requestDetail.playerNames[0]);
     }
 
@@ -33,7 +33,7 @@ export class TemplateMessageService {
 
   private isSpecialBetType(issueTypeId: number): boolean {
     return StaticService.isLikelyWrongMarketOffered(issueTypeId.toString())
-      || StaticService.isWrongOddsSportsBookNumber(issueTypeId);
+      || StaticService.isWrongOddsSportsBook(issueTypeId);
   }
 
   private setSpecialBetTypeProperties(templateValue: TemplateValue, voidTicketsMini: TicketsModel, requestDetail: RequestDetailViewModel) {
@@ -43,7 +43,7 @@ export class TemplateMessageService {
     templateValue.fromTransTime = voidTicketsMini.fromTime;
     templateValue.toTransTime = voidTicketsMini.toTime;
 
-    if (StaticService.isWrongOddsSportsBookNumber(requestDetail.request.issueTypeId)) {
+    if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       templateValue.totalBetTypesSelected = requestDetail.wrongOddsSportsBookModel.betTeamsResult.length;
       templateValue.uniqueBetTypeSelected = templateValue.totalBetTypesSelected === 1 ? requestDetail.wrongOddsSportsBookModel.betTeamsResult[0] : null;
       templateValue.correctOdds = requestDetail.wrongOddsSportsBookModel.correctOdds;

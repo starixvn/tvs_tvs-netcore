@@ -130,7 +130,7 @@ export class TemplateMessageComponent implements OnChanges {
 
   updateTemplate() {
     let templateId = 0;
-    if (StaticService.isAbnormalAccountNumber(this.issueTypeId) || this.isAbnormalBetMixOrSystemParlay()) {
+    if (StaticService.isAbnormalAccount(this.issueTypeId) || this.isAbnormalBetMixOrSystemParlay()) {
       templateId = MESSAGE_TEMPLATE_ID_37;
     } else if (this.isDuplicateTicketsMixParlay()) {
       templateId = MESSAGE_TEMPLATE_ID_65;
@@ -210,8 +210,8 @@ export class TemplateMessageComponent implements OnChanges {
 
   issueTypeUpdateSpecialBetTypeVoidSingleBet(): boolean {
     return this.isVoidSinglePage() &&
-      (StaticService.isWrongHDPNumber(this.issueTypeId) || StaticService.isWrongQuarterHDPNumber(this.issueTypeId) || StaticService.isWrongOddsNumber(this.issueTypeId)
-        || this.isLikelyWrongMarketOffered() || (StaticService.isWrongOUNumber(this.issueTypeId) && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38));
+      (StaticService.isWrongHDP(this.issueTypeId) || StaticService.isWrongQuarterHDP(this.issueTypeId) || StaticService.isWrongOdds(this.issueTypeId)
+        || this.isLikelyWrongMarketOffered() || (StaticService.isWrongOU(this.issueTypeId) && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38));
   }
 
   checkValidation(): boolean {
@@ -239,32 +239,32 @@ export class TemplateMessageComponent implements OnChanges {
 
   isShowCheckBoxVarMessage(): boolean {
     return this.isShowMessages
-      && this.isVoidSinglePage() && (StaticService.isDangerAcceptedNumber(this.issueTypeId) || StaticService.isRedCardNumber(this.issueTypeId) || StaticService.isWrongScoreNumber(this.issueTypeId))
+      && this.isVoidSinglePage() && (StaticService.isDangerAccepted(this.issueTypeId) || StaticService.isRedCard(this.issueTypeId) || StaticService.isWrongScore(this.issueTypeId))
       && this.templateSettings.some(x => x.subIssueTypeId === this.subIssueTypeId && x.isCheckedVar);
   }
 
   isShowAioCheckBoxMessage(): boolean {
     return this.isShowMessages && this.isVoidSinglePage()
-      && (StaticService.isWrongHDPNumber(this.issueTypeId) || StaticService.isWrong1stHDPNumber(this.issueTypeId)
-        || StaticService.isWrongOUNumber(this.issueTypeId) || StaticService.isWrong1stOUNumber(this.issueTypeId) || StaticService.isWrongOddsNumber(this.issueTypeId));
+      && (StaticService.isWrongHDP(this.issueTypeId) || StaticService.isWrong1stHDP(this.issueTypeId)
+        || StaticService.isWrongOU(this.issueTypeId) || StaticService.isWrong1stOU(this.issueTypeId) || StaticService.isWrongOdds(this.issueTypeId));
   }
 
   isShowEarlyEventCheckBoxMessage(): boolean {
-    return this.isShowMessages && (this.issueTypeShowEarlyEventCheckBox() || StaticService.isWrongOddsNumber(this.issueTypeId));
+    return this.isShowMessages && (this.issueTypeShowEarlyEventCheckBox() || StaticService.isWrongOdds(this.issueTypeId));
   }
 
   issueTypeShowEarlyEventCheckBox(): boolean {
     return this.isVoidSinglePage()
-      && (StaticService.isWrongHDPNumber(this.issueTypeId) || StaticService.isWrong1stHDPNumber(this.issueTypeId)
-        || StaticService.isWrongOUNumber(this.issueTypeId) || StaticService.isWrong1stOUNumber(this.issueTypeId));
+      && (StaticService.isWrongHDP(this.issueTypeId) || StaticService.isWrong1stHDP(this.issueTypeId)
+        || StaticService.isWrongOU(this.issueTypeId) || StaticService.isWrong1stOU(this.issueTypeId));
   }
 
   isAbnormalBetMixOrSystemParlay(): boolean {
-    return StaticService.isAbnormalBetNumber(this.issueTypeId) && StaticService.isFilterByMixOrSystemParlay(this.value.filterBy);
+    return StaticService.isAbnormalBet(this.issueTypeId) && StaticService.isFilterByMixOrSystemParlay(this.value.filterBy);
   }
 
   isDuplicateTicketsMixParlay(): boolean {
-    return StaticService.isDuplicateTicketsNumber(this.issueTypeId) && this.value.filterBy === AbnormalFilterBy.MIX_PARLAY;
+    return StaticService.isDuplicateTickets(this.issueTypeId) && this.value.filterBy === AbnormalFilterBy.MIX_PARLAY;
   }
 
   isTVSVoidPage(): boolean {
@@ -281,13 +281,13 @@ export class TemplateMessageComponent implements OnChanges {
 
   isShowDynamicInputs(): boolean {
     return this.isVoidSinglePage()
-      || (this.isTVSVoidPage() && !StaticService.isWrongScoreNumber(this.issueTypeId) && !StaticService.isWrongOddsNumber(this.issueTypeId) && !StaticService.isWrongOddsSportsBookNumber(this.issueTypeId)
-        && !StaticService.isWrongHDPNumber(this.issueTypeId) && !StaticService.isWrong1stHDPNumber(this.issueTypeId)
-        && !StaticService.isWrongOUNumber(this.issueTypeId) && !StaticService.isWrong1stOUNumber(this.issueTypeId));
+      || (this.isTVSVoidPage() && !StaticService.isWrongScore(this.issueTypeId) && !StaticService.isWrongOdds(this.issueTypeId) && !StaticService.isWrongOddsSportsBook(this.issueTypeId)
+        && !StaticService.isWrongHDP(this.issueTypeId) && !StaticService.isWrong1stHDP(this.issueTypeId)
+        && !StaticService.isWrongOU(this.issueTypeId) && !StaticService.isWrong1stOU(this.issueTypeId));
   }
 
   isLikelyWrongMarketOffered(): boolean {
     return StaticService.isLikelyWrongMarketOffered(this.issueTypeId?.toString())
-      || StaticService.isWrongOddsSportsBookNumber(this.issueTypeId);
+      || StaticService.isWrongOddsSportsBook(this.issueTypeId);
   }
 }

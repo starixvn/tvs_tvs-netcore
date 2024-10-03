@@ -33,7 +33,7 @@ export class TemplateInputsService {
 
   public updateOrdinalNumberForInputsNextCorner(issueTypeId: number, selectedTemplated: TemplateModel, templateValue: TemplateValue): void {
     for (const element of selectedTemplated.inputTexts) {
-      if (StaticService.isDangerAcceptedNumber(issueTypeId) && templateValue.numberOfCorner && element.msgEnglish === "Next Corner") {
+      if (StaticService.isDangerAccepted(issueTypeId) && templateValue.numberOfCorner && element.msgEnglish === "Next Corner") {
         const nextCorner = OrdinalNumberConstant.ORDINAL_NUMBER.find(x => x.value === templateValue.numberOfCorner.toString());
         element.msgEnglishValue = nextCorner.englishValue;
         element.msgChineseTraditionalValue = `第${nextCorner.chineseTraditionalValue}`;

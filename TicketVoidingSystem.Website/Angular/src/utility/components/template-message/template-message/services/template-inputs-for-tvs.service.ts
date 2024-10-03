@@ -18,18 +18,18 @@ export class TemplateInputsForTVSService {
     private readonly templateWrongOddsSportBookService: TemplateWrongOddsSportBookService) { }
 
   public replaceInputsByIssueType(issueTypeId: number, subIssueTypeId: number, templateValue: TemplateValue, outputMessage: Message): void {
-    if (StaticService.isWrongScoreNumber(issueTypeId)) {
+    if (StaticService.isWrongScore(issueTypeId)) {
       this.templateWrongScoreService.replaceActualScore(subIssueTypeId, templateValue, outputMessage);
-    } else if (StaticService.isWrongHDPNumber(issueTypeId) || StaticService.isWrong1stHDPNumber(issueTypeId)) {
+    } else if (StaticService.isWrongHDP(issueTypeId) || StaticService.isWrong1stHDP(issueTypeId)) {
       this.replaceWrongMarketTVS(templateValue, outputMessage);
       this.replaceActualMarketOthersIssueType(templateValue, outputMessage);
       this.replaceHdpTVS(templateValue, outputMessage);
-    } else if (StaticService.isWrongOUNumber(issueTypeId) || StaticService.isWrong1stOUNumber(issueTypeId)) {
+    } else if (StaticService.isWrongOU(issueTypeId) || StaticService.isWrong1stOU(issueTypeId)) {
       this.replaceWrongMarketTVS(templateValue, outputMessage);
       this.replaceActualMarketOthersIssueType(templateValue, outputMessage);
-    } else if (StaticService.isWrongOddsNumber(issueTypeId)) {
+    } else if (StaticService.isWrongOdds(issueTypeId)) {
       this.templateWrongOddsService.replaceActualMarketTVS(subIssueTypeId, templateValue, outputMessage);
-    } else if (StaticService.isWrongOddsSportsBookNumber(issueTypeId)) {
+    } else if (StaticService.isWrongOddsSportsBook(issueTypeId)) {
       this.templateWrongOddsSportBookService.replaceActualMarketSportsBook(templateValue, outputMessage);
     }
   }

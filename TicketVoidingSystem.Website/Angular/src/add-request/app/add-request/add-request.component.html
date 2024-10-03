@@ -17,7 +17,7 @@
         </div>
         <div class="list-group-item flex-column align-items-start wrapper-tooltip" [hidden]="isCollapse">
           <event-early-kick-off #eventEarlyKickOff
-            *ngIf="isEarlyOrWrongKO()"
+            *ngIf="checkAllIssueTypes().isEarlyKickOff || checkAllIssueTypes().isWrongKickOff"
             [filter]="model.filter"
             [isEdit]="isEdit"
             [issueTypes]="issueTypes"
@@ -32,7 +32,7 @@
           </event-early-kick-off>
 
           <event-abnormal-bet #eventAbnormalBet
-            *ngIf="isAbnormalBet()"
+            *ngIf="checkAllIssueTypes().isAbnormalBet"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [isEdit]="isEdit"
@@ -45,7 +45,7 @@
           </event-abnormal-bet>
 
           <event-danger-accepted #eventDangerAccepted
-            *ngIf="isDangerAccepted()"
+            *ngIf="checkAllIssueTypes().isDangerAccepted"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [isEdit]="isEdit"
@@ -58,7 +58,8 @@
             (updateMatchId)="updateMatchInfo($event)">
           </event-danger-accepted>
 
-          <event-red-card #eventRedCard *ngIf="isRedCard()"
+          <event-red-card #eventRedCard 
+            *ngIf="checkAllIssueTypes().isRedCard"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [filter]="model.filter"
@@ -71,7 +72,8 @@
             (updateMatchId)="updateMatchInfo($event)">
           </event-red-card>
 
-          <event-wrong-hdp #eventWrongHDP *ngIf="isWrongHDP() || isWrong1stHDP()"
+          <event-wrong-hdp #eventWrongHDP 
+            *ngIf="checkAllIssueTypes().isWrongHDP || checkAllIssueTypes().isWrong1stHDP"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
@@ -84,7 +86,8 @@
             (updateMatchId)="updateMatchId($event)">
           </event-wrong-hdp>
 
-          <event-wrong-ou #eventWrongOU *ngIf="isWrongOU() || isWrong1stOU()"
+          <event-wrong-ou #eventWrongOU 
+            *ngIf="checkAllIssueTypes().isWrongOU || checkAllIssueTypes().isWrong1stOU"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
@@ -98,7 +101,7 @@
           </event-wrong-ou>
 
           <abnormal-accounts #abnormalAccount
-            *ngIf="isAbnormalAccount()"
+            *ngIf="checkAllIssueTypes().isAbnormalAccount"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [filter]="model.filter"
@@ -111,7 +114,7 @@
           </abnormal-accounts>
 
           <event-wrong-score #wrongScore
-            *ngIf="isWrongScoreIssueType()"
+            *ngIf="checkAllIssueTypes().isWrongScore"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [filter]="model.filter"
@@ -127,7 +130,7 @@
           </event-wrong-score>
 
           <event-ticket14 #eventTicket14
-            *ngIf="isArchivedTicketIssueType()"
+            *ngIf="checkAllIssueTypes().isArchivedTicket"
             [isEdit]="isEdit"
             [requestId]="requestId"
             [filter]="model.filter"
@@ -136,7 +139,7 @@
           </event-ticket14>
 
           <event-wrong-odds #eventWrongOdds
-            *ngIf="isWrongOdds()"
+            *ngIf="checkAllIssueTypes().isWrongOdds"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
@@ -149,7 +152,7 @@
           </event-wrong-odds>
 
           <event-reduced-over #eventReducedOver
-            *ngIf="isEventReducedOver()"
+            *ngIf="checkAllIssueTypes().isReducedOver || checkAllIssueTypes().isAbandoned"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
@@ -162,7 +165,7 @@
           </event-reduced-over>
 
           <event-duplicate-tickets #eventDuplicateTickets
-            *ngIf="isDuplicateTickets()"
+            *ngIf="checkAllIssueTypes().isDuplicateTickets"
             [isEdit]="isEdit"
             [requestId]="requestId"
             [filter]="model.filter"
@@ -173,7 +176,7 @@
           </event-duplicate-tickets>
 
           <event-not-participate #eventNotParticipate
-            *ngIf="isNotParticipate()"
+            *ngIf="checkAllIssueTypes().isNotParticipate"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [isEdit]="isEdit"
@@ -186,7 +189,7 @@
           </event-not-participate>
 
           <event-recover-ticket #eventRecoverTicket
-            *ngIf="isRecoverTicket()"
+            *ngIf="checkAllIssueTypes().isRecoverTicket"
             [isEdit]="isEdit"
             [requestId]="requestId"
             [filter]="model.filter"
@@ -195,7 +198,7 @@
           </event-recover-ticket>
 
           <event-wrong-market-offered #eventWrongMarketOffered
-            *ngIf="isLikelyWrongMarketOffered()"
+            *ngIf="checkAllIssueTypes().isLikelyWrongMarketOffered"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [isEdit]="isEdit"
@@ -208,7 +211,7 @@
           </event-wrong-market-offered>
 
           <event-wrong-odds-sports-book #eventWrongOddsSportsBook
-            *ngIf="isWrongOddsSportsBook()"
+            *ngIf="checkAllIssueTypes().isWrongOddsSportsBook"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [isEdit]="isEdit"
@@ -231,15 +234,15 @@
       [parentMatchId]="parentMatchId"
       [issueTypeId]="model.filter.issueTypeId">
     </others>
-    <abnormal-accounts-other *ngIf="isAbnormalAccount()"
+    <abnormal-accounts-other *ngIf="isShowOthersLikeAbnormalAccount()"
       [isEdit]="isEdit"
       [model]="model.others">
     </abnormal-accounts-other>
-    <others-abnormal-bet *ngIf="isAbnormalBet() || isArchivedTicketIssueType() || isDuplicateTickets() || isRecoverTicket()"
+    <others-abnormal-bet *ngIf="isShowOthersLikeAbnormalBet()"
       [isEdit]="isEdit"
       [model]="model.others">
     </others-abnormal-bet>
-    <others-wrong-hdp *ngIf="isShowOthersSimpleFields()"
+    <others-wrong-hdp *ngIf="isShowOthersLikeWrongHDP()"
       [isEdit]="isEdit"
       [model]="model.others">
     </others-wrong-hdp>
