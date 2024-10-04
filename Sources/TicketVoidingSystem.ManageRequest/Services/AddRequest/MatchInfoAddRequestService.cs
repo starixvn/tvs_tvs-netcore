@@ -51,8 +51,8 @@ public class MatchInfoAddRequestServiceImp : MatchInfoAddRequestService
             SportTypeConstant.NumberGame => $"Number Game No.{match.MatchCode}",
             SportTypeConstant.Happy5 => $"Happy 5 No.{match.MatchCode}",
             SportTypeConstant.Bullfighting => $"{remotingRefWrapperService.GetBFName(match.HomeId)} - vs - {remotingRefWrapperService.GetBFName(match.AwayId)}",
-            SportTypeConstant.VirtualHorseRacing => $"'Event' + <<{match.VendorMatchId}>>",
-            SportTypeConstant.VirtualDogRacing => $"'Event' + <<{match.VendorMatchId}>>",
+            SportTypeConstant.VirtualHorseRacing => $"Event {match.VendorMatchId}",
+            SportTypeConstant.VirtualDogRacing => $"Event {match.VendorMatchId}",
             _ => match.IsOutright ? $"{match.HomeName} - {match.LeagueName}" : $"{match.HomeName} - vs - {match.AwayName}"
         };
     }
