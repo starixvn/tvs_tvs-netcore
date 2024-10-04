@@ -7076,7 +7076,7 @@
       ],
       "Inputs": [
         {
-          "Name": "Value",
+          "Name": "Point",
           "Value": "",
           "IsMultiple": true,
           "XmlAttribute": "YY"
@@ -7270,25 +7270,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
-              "Name": "Home",
-              "Value": "h"
-            },
-            {
-              "Name": "Away",
-              "Value": "a"
-            }
-          ],
-          "Name": "Team",
-          "Value": "All",
-          "XmlAttribute": "Team"
-        },
-        {
-          "Items": [
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -7309,6 +7290,25 @@
           "Value": "All",
           "IsMultiple": true,
           "XmlAttribute": "BetIdX"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            }
+          ],
+          "Name": "Team",
+          "Value": "All",
+          "XmlAttribute": "Team"
         }
       ],
       "Type": 1,
@@ -11935,7 +11935,7 @@
       ],
       "Inputs": [
         {
-          "Name": "Value",
+          "Name": "Point",
           "Value": "",
           "IsMultiple": true,
           "XmlAttribute": "YY"
