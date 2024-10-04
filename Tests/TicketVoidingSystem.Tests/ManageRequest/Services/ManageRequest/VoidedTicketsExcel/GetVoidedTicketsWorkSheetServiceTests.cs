@@ -52,7 +52,7 @@ public class GetVoidedTicketsWorkSheetServiceTests
             SportType = 190
         };
         getVoidedTicketsService.GetMatchInfo(Arg.Any<int>()).Returns(mockMatch);
-        betListService.GetVirtualSportMatchCode(mockMatch.SportType, Arg.Any<string>()).ReturnsForAnyArgs("1");
+        betListService.GetVirtualSportMatchCode(mockMatch.SportType, Arg.Any<string>(), 1).ReturnsForAnyArgs("1");
 
         // Act
         await service.BindingContent(worksheet, mockModel);
@@ -62,7 +62,7 @@ public class GetVoidedTicketsWorkSheetServiceTests
         await getVoidedTicketsService.Received(1).GetMatchInfo(mockModel.MatchId.Value);
         matchService.Received(1).UpdateMatchInfoFromRemotingRef(mockMatch);
         cellService.Received(1).AddMatch(worksheet, mockMatch);
-        betListService.Received(1).GetVirtualSportMatchCode(mockMatch.SportType, Arg.Any<string>());
+        betListService.Received(1).GetVirtualSportMatchCode(mockMatch.SportType, Arg.Any<string>(), 1);
     }
 
     [Theory]
