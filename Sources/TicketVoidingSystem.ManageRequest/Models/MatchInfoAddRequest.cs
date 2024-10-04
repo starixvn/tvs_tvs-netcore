@@ -19,4 +19,5 @@ public class MatchInfoAddRequest
     public bool IsOutright { get; set; }
     public DateTime EventDate { get; set; }
     public DateTime GlobalShowTime { get; set; }
+    public int VendorMatchId { get; set; }
 }

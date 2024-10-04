@@ -304,7 +304,7 @@ public class GetRequestServiceImp : GetRequestService
         return matchService.UpdateMatchInfoFromRemotingRef(match);
     }
 
-    private static DuplicateTicketsViewModel MapEventDuplicateTickets(IEnumerable<RequestEventModel> requestEventModels)
+    private DuplicateTicketsViewModel MapEventDuplicateTickets(IEnumerable<RequestEventModel> requestEventModels)
     {
         var model = requestEventModels.First();
         return new DuplicateTicketsViewModel
@@ -313,7 +313,8 @@ public class GetRequestServiceImp : GetRequestService
             OrgTransIds = model.OrgTransIds,
             MatchId = model.MatchId,
             FilterBy = model.FilterBy,
-            SubIssueTypeId = model.SubIssueTypeId
+            SubIssueTypeId = model.SubIssueTypeId,
+            SportType = model.SportType
         };
     }
 

@@ -12,7 +12,7 @@ import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { CommonService } from '../../../../utility/services/common.service';
 
 @Component({
   selector: 'event-duplicate-tickets',
@@ -28,25 +28,31 @@ export class EventDuplicateTicketsComponent implements OnInit {
   @Input() duplicateTicketsModel = new DuplicateTicketsModel();
   @Output() updateMatchId = new EventEmitter<number>();
   @ViewChild('betIds') betIdsComponent: BetIdsComponent;
-  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
 
   primitiveProps = new PrimitiveProperty();
   permission = new PermissionAddRequest();
   isCancelAfterFocusOutBetIdsEvent = false;
   abnormalFilterBy = new AbnormalFilterBy();
   tooltip = new Tooltip();
+  
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
     private readonly validationService: ValidationService,
     private readonly saveRequestService: SaveRequestService,
     private readonly addRequestStore: AddRequestStore,
-    private readonly element: ElementRef
+    private readonly element: ElementRef,
+    private readonly commonService: CommonService
     ) {
       this.tooltip.element = this.element;
     }
 
   async ngOnInit(): Promise<void> {
-    if (!this.isEdit) {
+    if (this.isEdit) {
+      const viewModel = await this.commonService.getMatchInfoAddRequest(this.duplicateTicketsModel.matchId, this.duplicateTicketsModel.sportType);
+      this.duplicateTicketsModel.leagueName = viewModel.match.leagueName;
+      this.duplicateTicketsModel.name = viewModel.match.name;
+    }
+    else {
       this.duplicateTicketsModel.filterBy = AbnormalFilterBy.SINGLE;
     }
     this.addRequestStore.changeAbnormalFilterBy(this.duplicateTicketsModel.filterBy);
@@ -94,7 +100,6 @@ export class EventDuplicateTicketsComponent implements OnInit {
       duplicateTicketsModel: this.createDuplicateTicketsModel(),
       others: this.others,
       betIdsComponent: this.betIdsComponent,
-      eventLeagueComponent: this.eventLeagueComponent,
       addRequestStore: this.addRequestStore,
       tooltip: this.tooltip
     };
@@ -103,9 +108,11 @@ export class EventDuplicateTicketsComponent implements OnInit {
   }
 
   private async checkValidBusinessRule(): Promise<boolean> {
-    const validation = await this.validationService.checkValidBusinessRule(this.initSaveRequestInput());
+    let args = this.initSaveRequestInput();
+    const validation = await this.validationService.checkValidBusinessRule(args);
     if (this.duplicateTicketsModel.filterBy === AbnormalFilterBy.SINGLE) {
-      this.updateMatchId.emit(this.eventLeagueComponent.selectedMatch.matchId);
+      this.duplicateTicketsModel.name = args.duplicateTicketsModel.name;
+      this.duplicateTicketsModel.leagueName = args.duplicateTicketsModel.leagueName;
     }
     return validation;
   }
@@ -120,7 +127,7 @@ export class EventDuplicateTicketsComponent implements OnInit {
 
   private createDuplicateTicketsModel(): DuplicateTicketsModel {
     const model = new DuplicateTicketsModel();
-    model.matchId = this.validationService.isFilterMixParlay(this.duplicateTicketsModel.filterBy) ? MatchIdConstant.Parlay : this.eventLeagueComponent.selectedMatch.matchId;
+    model.matchId = this.validationService.isFilterMixParlay(this.duplicateTicketsModel.filterBy) ? MatchIdConstant.Parlay : this.duplicateTicketsModel.matchId;
     model.transIds = this.betIdsComponent.getAllBetIds();
     model.subIssueTypeId = Number(this.filter.subIssueTypeId);
     model.filterBy = this.duplicateTicketsModel.filterBy;

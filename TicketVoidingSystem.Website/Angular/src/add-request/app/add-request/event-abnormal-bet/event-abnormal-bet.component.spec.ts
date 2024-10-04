@@ -17,7 +17,7 @@ import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet/confirm-abno
 import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet/confirm-abnormal-bet.model';
 import { EventAbnormalBetComponent } from './event-abnormal-bet.component';
 import { AbnormalBetTicketViewModel, PrimitiveProperty } from './event-abnormal-bet.model';
-import { LeagueEventAbnormalComponent } from './league-event-abnormal/league-event-abnormal.component';
+import { LeagueEventAbnormalComponent } from '../event-duplicate-tickets/league-event-abnormal/league-event-abnormal.component';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationBusinessRuleOutput } from './services/validation.model';
 import { ValidationService } from './services/validation.service';

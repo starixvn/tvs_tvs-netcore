@@ -1,7 +1,7 @@
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
-import { LeagueEventAbnormalComponent } from '../../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
+import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-event-abnormal.component';
 import { FilterModel } from '../../filter/filter.model';
 import { DuplicateTicketsModel } from '../../models/event-duplicate-tickets.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';

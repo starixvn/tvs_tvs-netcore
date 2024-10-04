@@ -31,7 +31,7 @@ public class GetMatchInfoVoidByCurrencyHandler : IRequestHandler<GetMatchInfoVoi
         match = matchService.UpdateMatchInfoFromRemotingRef(match);
         if (match != null)
         {
-            match.MatchCode = betListService.GetVirtualSportMatchCode(match.SportType, match.MatchCode);
+            match.MatchCode = betListService.GetVirtualSportMatchCode(match.SportType, match.MatchCode, match.MatchId);
         }
 
         return match;

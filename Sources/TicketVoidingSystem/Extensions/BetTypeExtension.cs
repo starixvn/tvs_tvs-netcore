@@ -82,6 +82,11 @@ public static class BetTypeExtension
         return VirtualSportsSportTypeIds.Contains(sportTypeId);
     }
 
+    public static bool IsVirtualSports2Betradar(this int sportTypeId)
+    {
+        return sportTypeId is SportTypeConstant.VirtualHorseRacing or SportTypeConstant.VirtualDogRacing;
+    }
+
     public static bool IsVirtualSport345(this int sportTypeId) // Sport Type of VS3-VS4-VS5
     {
         List<int> VirtualSportsSportTypeIds = new() { 178, 179, 188, 9908, 147 };

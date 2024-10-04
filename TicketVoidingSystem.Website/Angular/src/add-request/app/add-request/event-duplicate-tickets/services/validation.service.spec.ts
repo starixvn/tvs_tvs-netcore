@@ -2,7 +2,7 @@ import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-i
 import { GroupNumber } from '../../../../../utility/components/bet-ids/bet-ids.model';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { LeagueEventAbnormalComponent } from '../../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
+import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-event-abnormal.component';
 import { FilterModel } from '../../filter/filter.model';
 import { DuplicateTicketsModel } from '../../models/event-duplicate-tickets.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';

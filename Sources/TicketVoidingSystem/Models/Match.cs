@@ -94,4 +94,6 @@ public class Match
     public string OriginLeagueNameTraditional { get; set; }
 
     public int Subtype { get; set; }
+
+    public int VendorMatchId { get; set; }
 }

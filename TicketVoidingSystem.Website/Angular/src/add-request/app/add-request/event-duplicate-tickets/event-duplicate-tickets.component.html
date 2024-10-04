@@ -28,9 +28,16 @@
     </bet-ids>
   </div>
 </div>
-<event-league #leagueEvent *ngIf="isShowLeagueEvent()" 
-  [isEdit]="isEdit"
-  [matchId]="duplicateTicketsModel.matchId"
-  [isShowSportType]="false">
-</event-league>
+
+<div *ngIf="isShowLeagueEvent()" class="d-flex event-league">
+  <div class="event col-md-6 col-sm-6 col-12">
+    <label class="col-form-label">Event</label>
+    <input type="text" class="form-control form-control-sm" disabled [(ngModel)]="duplicateTicketsModel.name">
+  </div>
+  <div class="league col-md-6 col-sm-6 col-12">
+    <label class="col-form-label">League</label>
+    <input type="text" class="form-control form-control-sm" disabled [(ngModel)]="duplicateTicketsModel.leagueName">
+  </div>
+</div>
+
 <tooltip [tooltip]="tooltip"></tooltip>

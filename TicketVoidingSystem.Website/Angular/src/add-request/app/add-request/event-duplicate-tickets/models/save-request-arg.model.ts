@@ -6,7 +6,6 @@ import { DuplicateTicketsModel } from '../../models/event-duplicate-tickets.mode
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { OthersModel } from '../../others/others.model';
 import { PrimitiveProperty } from './primitive-property.model';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 export class SaveRequestArg {
   requestId?: number;
@@ -18,7 +17,6 @@ export class SaveRequestArg {
   duplicateTicketsModel: DuplicateTicketsModel;
   others: OthersModel;
   betIdsComponent: BetIdsComponent;
-  eventLeagueComponent: EventLeagueComponent;
   addRequestStore: AddRequestStore;
   tooltip: Tooltip;
 }

@@ -7,7 +7,7 @@ import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.mo
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventAbnormalComponent } from '../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
+import { LeagueEventAbnormalComponent } from './league-event-abnormal/league-event-abnormal.component';
 import { FilterModel } from '../filter/filter.model';
 import { DuplicateTicketsModel } from '../models/event-duplicate-tickets.model';
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets.component';

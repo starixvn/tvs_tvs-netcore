@@ -44,7 +44,7 @@ public interface BetListService
 
     string[] GetComboName(string betTeam, string betCheck, decimal handicap1, decimal handicap2);
 
-    string GetVirtualSportMatchCode(int sportType, string matchCode);
+    string GetVirtualSportMatchCode(int sportType, string matchCode, int MatchId);
 
     string GetSportTypeName(int sportType, string languageCode);
 
@@ -236,8 +236,12 @@ public class BetListServiceImp : BetListService
         return remotingRefWrapperService.GetComboParlayName(betTeam, betCheck, handicap1, handicap2);
     }
 
-    public string GetVirtualSportMatchCode(int sportType, string matchCode)
+    public string GetVirtualSportMatchCode(int sportType, string matchCode, int matchId)
     {
+        if (sportType.IsVirtualSports2Betradar())
+        {
+            return matchId.ToString();
+        }
         if (sportType.IsVirtualSport2())
         {
             return remotingRefWrapperService.GetMatchCodeBetRadar(matchCode);
@@ -277,4 +281,5 @@ public class BetListServiceImp : BetListService
             ? $"{liveHomeScore} - {liveAwayScore}"
             : string.Empty;
     }
+
 }

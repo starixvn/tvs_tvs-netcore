@@ -29,7 +29,6 @@ import { AddRequestComponent } from './add-request.component';
 import { AffectedTicketComponent } from './affected-ticket/affected-ticket.component';
 import { ConfirmAbnormalBetComponent } from './event-abnormal-bet/confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-bet.component';
-import { LeagueEventAbnormalComponent } from './event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
 import { OthersAbnormalBetComponent } from './event-abnormal-bet/others-abnormal-bet/others-abnormal-bet.component';
 import { ConfirmDangerAcceptedComponent } from './event-danger-accepted/confirm-danger-accepted/confirm-danger-accepted.component';
 import { EventDangerAcceptedComponent } from './event-danger-accepted/event-danger-accepted.component';
@@ -47,7 +46,6 @@ import { ConfirmRedCardComponent } from './event-red-card/confirm-red-card/confi
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { FilterTimeAreaComponent } from './event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowanceComponent } from './event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
-import { LeagueEventRedCardComponent } from './event-red-card/league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from './event-red-card/log-info-red-card/log-info-red-card.component';
 import { EventReducedOverComponent } from './event-reduced-over/event-reduced-over.component';
 import { FilterReducedOverItemComponent } from './event-reduced-over/filter-reduced-over-item/filter-reduced-over-item.component';
@@ -101,13 +99,11 @@ import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket
         EventWrongScoreComponent,
         EventRedCardComponent,
         WrongScoreInfoComponent,
-        LeagueEventAbnormalComponent,
         FilterTimeWithAllowanceComponent,
         SubIssueTypeDialogComponent,
         AllowanceTimeComponent,
         FilterTimeAreaComponent,
         ConfirmWrongScoreComponent,
-        LeagueEventRedCardComponent,
         LogInfoRedCardComponent,
         ConfirmRedCardComponent,
         ConfirmDangerAcceptedComponent,
