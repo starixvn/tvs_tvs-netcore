@@ -31,7 +31,7 @@ public class GetMatchInfoHandler : IRequestHandler<GetMatchInfoRequest, Match>
         match = matchService.UpdateMatchInfoFromRemotingRef(match);
         if (match != null)
         {
-            match.MatchCode = betListService.GetVirtualSportMatchCode(match.SportType, match.MatchCode, match.MatchId);
+            match.MatchCode = betListService.GetVirtualSportMatchCode(match.SportType, match.MatchCode);
         }
 
         return match;

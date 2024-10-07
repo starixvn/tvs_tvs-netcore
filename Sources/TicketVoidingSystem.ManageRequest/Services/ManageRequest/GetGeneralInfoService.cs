@@ -60,9 +60,6 @@ public class GetGeneralInfoServiceImp : GetGeneralInfoService
         generalInfo.KickOffTimeString = generalInfo.KickOffTime.ToString("hh:mm tt");
         generalInfo.NegativeBalanceUsers = !string.IsNullOrWhiteSpace(generalInfo.NegativeBalanceUsers)
             ? string.Join(", ", generalInfo.NegativeBalanceUsers.Split(',')) : generalInfo.NegativeBalanceUsers;
-        generalInfo.MatchEvent = generalInfo.HomeId > 0 && generalInfo.AwayId > 0
-            ? $"{remotingRefService.GetTeamName(generalInfo.SportType, generalInfo.HomeId, LanguageCode.English)} - vs - {remotingRefService.GetTeamName(generalInfo.SportType, generalInfo.AwayId, LanguageCode.English)}"
-            : generalInfo.MatchEvent;
 
         return generalInfo;
     }

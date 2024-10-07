@@ -35,7 +35,7 @@ public class GetVoidedTicketsWorkSheetService : WorkSheetService<GetVoidedTicket
         matchService.UpdateMatchInfoFromRemotingRef(match);
         if (match != null)
         {
-            match.MatchCode = betListService.GetVirtualSportMatchCode(match.SportType, match.MatchCode, match.MatchId);
+            match.MatchCode = betListService.GetVirtualSportMatchCode(match.SportType, match.MatchCode);
         }
 
         AddMatchContent(worksheet, match);

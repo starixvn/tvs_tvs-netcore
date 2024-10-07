@@ -432,7 +432,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         remotingRefWrapperService.GetMatchCodeBetRadar("1").Returns(matchCodeExpected);
 
         // Act
-        var result = service.GetVirtualSportMatchCode(sportType, "1", 1);
+        var result = service.GetVirtualSportMatchCode(sportType, "1");
 
         // Assert
         AssertExtension.Equal(matchCodeExpected, result);
@@ -448,7 +448,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         remotingRefWrapperService.GetMatchCodeVS345(sportType, "1").Returns(matchCodeExpected);
 
         // Act
-        var result = service.GetVirtualSportMatchCode(sportType, "1", 1);
+        var result = service.GetVirtualSportMatchCode(sportType, "1");
 
         // Assert
         AssertExtension.Equal(matchCodeExpected, result);
@@ -460,7 +460,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         // Act
-        var result = service.GetVirtualSportMatchCode(1, "1", 1);
+        var result = service.GetVirtualSportMatchCode(1, "1");
 
         // Assert
         AssertExtension.Equal("1", result);
