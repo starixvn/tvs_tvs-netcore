@@ -16,7 +16,7 @@
             <div class="list-group">
               <div class="section-header" (click)="isCollapsed = !isCollapsed"
                 [attr.aria-expanded]="!isCollapsed">
-                <strong>Affected Bet Types</strong> 
+                <strong>Affected Bet Types</strong>
               </div>
               <div class="section-body list-group-item" [(ngbCollapse)]="isCollapsed">
                 <ng-container *ngFor="let group of model.groupBetTypesCount">
@@ -25,14 +25,14 @@
                     <span class="ml-3">&#x2022; {{item.name}}</span><br/>
                   </ng-container>
                 </ng-container>
-              </div> 
+              </div>
             </div>
           </div>
-          <div class="filter-bet-Types mb-2">
-            <multiple-selection class="multiple-selection" [multipleSelect]="model.filterBetTypes" (checkedItems)="updateSelectedBetTypes($event)">
+          <div class="filter-bet-Types mb-2" *ngIf="filterBetTypes">
+            <multiple-selection class="multiple-selection" [multipleSelect]="filterBetTypes" (checkedItems)="updateSelectedBetTypes($event)">
             </multiple-selection>
           </div>
-          <tickets [model]="model.tickets"></tickets>
+          <tickets [model]="tickets" [blockUi]="blockBetList"></tickets>
         </div>
       </div>
     </div>

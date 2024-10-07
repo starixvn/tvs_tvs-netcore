@@ -97,17 +97,14 @@ export class ValidationService {
   }
 
   private isValidFilterOddsValue(oddsValue: string, tooltip: Tooltip): boolean {
-    if (!oddsValue) {
-      tooltip.display(this.ODDS_VALUE_INPUT_CLASS, TEXT.REQUIRED_FIELD);
-      return false;
-    }
+    if (oddsValue) {
+      if (!StaticService.isCorrectFormatMultipleDecimal(oddsValue, this.ODDS_VALUE_INPUT_CLASS, tooltip, TEXT.INVALID_ODDS)) {
+        return false;
+      }
 
-    if (!StaticService.isCorrectFormatMultipleDecimal(oddsValue, this.ODDS_VALUE_INPUT_CLASS, tooltip, TEXT.INVALID_ODDS)) {
-      return false;
-    }
-
-    if (this.isValidOddsValueHaveNotZero(oddsValue, tooltip, this.ODDS_VALUE_INPUT_CLASS)) {
-      return false;
+      if (this.isValidOddsValueHaveNotZero(oddsValue, tooltip, this.ODDS_VALUE_INPUT_CLASS)) {
+        return false;
+      }
     }
 
     return true;
@@ -123,6 +120,11 @@ export class ValidationService {
   }
 
   private isValidFilterOddsRange(fromOdds: string, toOdds: string, tooltip: Tooltip): boolean {
+    if (!fromOdds && !toOdds) {
+      tooltip.display(this.FROM_ODDS_CLASS, TEXT.REQUIRED_FIELD);
+      return true;
+    }
+
     if (!fromOdds) {
       tooltip.display(this.FROM_ODDS_CLASS, TEXT.REQUIRED_FIELD);
       return false;
@@ -138,11 +140,8 @@ export class ValidationService {
       return false;
     }
 
-    if (this.isValidOddsValueHaveNotZero(fromOdds, tooltip, this.FROM_ODDS_CLASS)) {
-      return false;
-    }
-
-    if (this.isValidOddsValueHaveNotZero(toOdds, tooltip, this.TO_ODDS_CLASS)) {
+    if (this.isValidOddsValueHaveNotZero(fromOdds, tooltip, this.FROM_ODDS_CLASS) ||
+        this.isValidOddsValueHaveNotZero(toOdds, tooltip, this.TO_ODDS_CLASS)) {
       return false;
     }
 
