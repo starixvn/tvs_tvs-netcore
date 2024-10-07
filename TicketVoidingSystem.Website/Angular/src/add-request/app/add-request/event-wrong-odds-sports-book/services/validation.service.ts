@@ -96,27 +96,25 @@ export class ValidationService {
       || (filter.filterOddsType === FilterOddsTypeConstant.RANGE && this.isValidFilterOddsRange(filter.fromOdds, filter.toOdds, tooltip));
   }
 
-  private isValidFilterOddsValue(oddsValue: string, tooltip: Tooltip): boolean {
+  public isValidFilterOddsValue(oddsValue: string, tooltip: Tooltip): boolean {
     if (oddsValue) {
       if (!StaticService.isCorrectFormatMultipleDecimal(oddsValue, this.ODDS_VALUE_INPUT_CLASS, tooltip, TEXT.INVALID_ODDS)) {
         return false;
       }
 
-      if (this.isValidOddsValueHaveNotZero(oddsValue, tooltip, this.ODDS_VALUE_INPUT_CLASS)) {
-        return false;
-      }
+      return this.isOddsValueHaveNotZeroNumber(oddsValue, tooltip, this.ODDS_VALUE_INPUT_CLASS);
     }
 
     return true;
   }
 
-  public isValidOddsValueHaveNotZero(oddsValue: string, tooltip: Tooltip, elementClass: string): boolean {
-    if (oddsValue.split('&').some(x => Number(x) === 0)) {
+  public isOddsValueHaveNotZeroNumber(oddsValue: string, tooltip: Tooltip, elementClass: string): boolean {
+    if (oddsValue.split('&').some(x => parseFloat(x) === 0)) {
       tooltip.display(elementClass, TEXT.INVALID_ODDS);
-      return true;
+      return false;
     }
 
-    return false;
+    return true;
   }
 
   private isValidFilterOddsRange(fromOdds: string, toOdds: string, tooltip: Tooltip): boolean {
@@ -140,8 +138,8 @@ export class ValidationService {
       return false;
     }
 
-    if (this.isValidOddsValueHaveNotZero(fromOdds, tooltip, this.FROM_ODDS_CLASS) ||
-        this.isValidOddsValueHaveNotZero(toOdds, tooltip, this.TO_ODDS_CLASS)) {
+    if (!this.isOddsValueHaveNotZeroNumber(fromOdds, tooltip, this.FROM_ODDS_CLASS) ||
+        !this.isOddsValueHaveNotZeroNumber(toOdds, tooltip, this.TO_ODDS_CLASS)) {
       return false;
     }
 

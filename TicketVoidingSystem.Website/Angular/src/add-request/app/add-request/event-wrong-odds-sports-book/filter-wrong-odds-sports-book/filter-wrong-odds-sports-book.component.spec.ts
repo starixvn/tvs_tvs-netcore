@@ -88,16 +88,16 @@ describe('FilterWrongOddsSportsBookComponent', () => {
     const component = new FilterWrongOddsSportsBookComponent(null, null);
     component.tooltip = new Tooltip();
     component.tooltip.display = jest.fn();
-    const actual = component.isValidMultipleOdds('1aa@', 'test');
+    const actual = component.isValidOddsFilterByValue('1aa@', 'test');
 
     expect(actual).toBeFalsy();
   });
 
   it('#isValidMultipleOdds should return true', async () => {
     const validationService = new ValidationService(null);
-    validationService.isValidOddsValueHaveNotZero = jest.fn().mockImplementation(() => true);
+    validationService.isOddsValueHaveZeroNumber = jest.fn().mockImplementation(() => true);
     const component = new FilterWrongOddsSportsBookComponent(null, validationService);
-    const actual = component.isValidMultipleOdds('1&2', 'test');
+    const actual = component.isValidOddsFilterByValue('1&2', 'test');
 
     expect(actual).toBeTruthy();
   });
@@ -106,16 +106,16 @@ describe('FilterWrongOddsSportsBookComponent', () => {
     const component = new FilterWrongOddsSportsBookComponent(null, null);
     component.tooltip = new Tooltip();
     component.tooltip.display = jest.fn();
-    const actual = component.isValidSingleOdds('a', 'test');
+    const actual = component.isValidOddsFilterByRange('a', 'test');
 
     expect(actual).toBeFalsy();
   });
 
   it('#isValidSingleOdds should return true', async () => {
     const validationService = new ValidationService(null);
-    validationService.isValidOddsValueHaveNotZero = jest.fn().mockImplementation(() => true);
+    validationService.isOddsValueHaveZeroNumber = jest.fn().mockImplementation(() => true);
     const component = new FilterWrongOddsSportsBookComponent(null, validationService);
-    const actual = component.isValidSingleOdds('2', 'test');
+    const actual = component.isValidOddsFilterByRange('2', 'test');
 
     expect(actual).toBeTruthy();
   });

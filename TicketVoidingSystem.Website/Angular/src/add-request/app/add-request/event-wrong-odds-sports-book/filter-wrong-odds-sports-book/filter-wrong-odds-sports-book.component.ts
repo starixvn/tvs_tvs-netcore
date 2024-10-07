@@ -35,20 +35,20 @@ export class FilterWrongOddsSportsBookComponent {
     this.changeFilterEvent.emit();
   }
 
-  public isValidMultipleOdds(value: string, elementClass: string): boolean {
-    if (!StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_ODDS)) {
-      return false;
-    }
-
-    return this.validationService.isValidOddsValueHaveNotZero(value, this.tooltip, elementClass);
+  public isValidOddsFilterByValue(value: string): boolean {
+    return this.validationService.isValidFilterOddsValue(value, this.tooltip);
   }
 
-  public isValidSingleOdds(value: string, elementClass: string): boolean {
-    if (!StaticService.isCorrectFormatSingleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_ODDS)) {
-      return false;
+  public isValidOddsFilterByRange(value: string, elementClass: string): boolean {
+    if (value) {
+      if (!StaticService.isCorrectFormatSingleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_ODDS)) {
+        return false;
+      }
+
+      return this.validationService.isOddsValueHaveNotZeroNumber(value, this.tooltip, elementClass);
     }
 
-    return this.validationService.isValidOddsValueHaveNotZero(value, this.tooltip, elementClass);
+    return true;
   }
 
   public isCorrectFormatMultipleDecimal(value: string, elementClass: string): boolean {

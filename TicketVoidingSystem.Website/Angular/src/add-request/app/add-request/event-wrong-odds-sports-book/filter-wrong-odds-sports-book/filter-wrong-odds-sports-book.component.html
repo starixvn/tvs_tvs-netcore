@@ -27,20 +27,20 @@
         <div *ngIf="filterWrongOddsSportsBookModel.filterOddsType === 'value'"
           class="input-group input-group-sm filter-odds-type-input">
           <input type="text" [(ngModel)]="filterWrongOddsSportsBookModel.oddsValue"
-            (ngModelChange)="changeFilter();isValidMultipleOdds($event, 'filter-odds-type-input')"
+            (ngModelChange)="changeFilter();isValidOddsFilterByValue($event)"
             class="form-control border-radius-left-0 odds-value-input" placeholder="Ex: 0.75&1&1.25"
             [disabled]="isVoided">
         </div>
         <div *ngIf="filterWrongOddsSportsBookModel.filterOddsType === 'range'"
           class="input-group input-group-sm filter-odds-type-input">
           <input type="text" [(ngModel)]="filterWrongOddsSportsBookModel.fromOdds"
-            (ngModelChange)="changeFilter();isValidSingleOdds($event, 'from-odds')"
+            (ngModelChange)="changeFilter();isValidOddsFilterByRange($event, 'from-odds')"
             class="form-control border-radius-left-0 from-odds" [disabled]="isVoided">
           <div class="input-group-prepend">
             <span class="input-group-text">-</span>
           </div>
           <input type="text" [(ngModel)]="filterWrongOddsSportsBookModel.toOdds"
-            (ngModelChange)="changeFilter();isValidSingleOdds($event, 'to-odds')" class="form-control to-odds"
+            (ngModelChange)="changeFilter();isValidOddsFilterByRange($event, 'to-odds')" class="form-control to-odds"
             [disabled]="isVoided">
         </div>
       </div>
