@@ -3,9 +3,9 @@ import { BetTypeAddRequest } from 'src/utility/components/advanced-mode-add-requ
 import { ItemsSelect } from 'src/utility/components/multiple-selection/items-select';
 import { StaticService } from 'src/utility/services/static.service';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
-import { AddRequestApiService } from '../add-request-api.service';
-import { AffectedTicketsModel, LogInfoTicketsQuery } from '../models/live-game-early-ticket.model';
+import { AffectedTicketsModel } from '../models/live-game-early-ticket.model';
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
+import { AffectedTicketService } from './affected-ticket.service';
 
 @Component({
   selector: 'affected-ticket',
@@ -19,7 +19,7 @@ export class AffectedTicketComponent implements OnChanges {
   tickets = new TicketsModel();
   blockBetList: boolean;
 
-  constructor( private readonly addRequestApiService: AddRequestApiService ){}
+  constructor(private readonly affectedTicketService: AffectedTicketService) { }
 
   public async ngOnChanges(changes: SimpleChanges) {
     if (changes['model'] && this.model.isOpen) {
@@ -39,18 +39,9 @@ export class AffectedTicketComponent implements OnChanges {
     this.tickets.checkTicketByBetTypesForLGEarlyPopup(betTypes.map(i => Number(i)));
   }
 
-  public async updateAffectedTickets(){
-    if (this.model.logInfoTicketsJson) {
-      const query: LogInfoTicketsQuery = {
-        logInfoTicketsJson: this.model.logInfoTicketsJson,
-        issueTypeId: this.model.issueTypeId
-      };
-      const ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
-      this.tickets.initData(ticketsLogInfo);
-      this.tickets.groups[0].name = null;
-    } else {
-      this.tickets = new TicketsModel();
-    }
+  public async updateAffectedTickets() {
+    this.tickets = await this.affectedTicketService.getAffectedTickets(this.model.issueTypeId, this.model.logInfoTicketsJson);
+    this.tickets.groups[0].name = null;
   }
 
   private initFilterBetTypes(betTypes: BetTypeAddRequest[]) {
