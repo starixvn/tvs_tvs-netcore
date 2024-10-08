@@ -35,51 +35,56 @@ public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
 
         var viewModel = new TicketsViewModel
         {
-            TotalSingle = groupTicket.Find(x => x.Name != "Parlay")?.DisplayTotalTickets ?? 0,
-            TotalParlay = groupTicket.Find(x => x.Name == "Parlay")?.DisplayTotalTickets ?? 0,
+            TotalSingle = voidTickets.Count(ticket => !ticket.IsMixParlay),
+            TotalParlay = voidTickets.Count(ticket => ticket.IsMixParlay),
             Groups = groupTicket
         };
 
         return viewModel;
     }
 
-    private List<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels, int issueTypeId)
+    private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels, int issueTypeId)
     {
-        var singleTickets = new List<TicketViewModel>();
-        var parlayTickets = new List<TicketViewModel>();
-
-        foreach (var item in getTicketModels)
+        var ticketViewModels = getTicketModels.Select(item =>
         {
             var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
             ticket.SubBetTypeId = (short)item.SubBetType;
-            if (ticket.IsParlay)
-            {
-                parlayTickets.Add(ticket);
-            }
-            else
-            {
-                singleTickets.Add(ticket);
-            }
-        }
+            ticket.GroupName = GetGroupNameByIssueType(issueTypeId, ticket);
 
-        var groups = new List<Group<TicketViewModel>>();
+            return ticket;
+        });
 
-        AddGroupIfNotEmpty(groups, singleTickets, singleTickets.FirstOrDefault()?.BetType);
-        AddGroupIfNotEmpty(groups, parlayTickets, "Parlay");
-
-        return groups;
+        return ticketViewModels.GroupBy(b => b.GroupName)
+            .Select(ToGroupTicket)
+            .OrderBy(group => group.Name == "Parlay")
+            .ThenBy(group => group.Name);
     }
 
-    private static void AddGroupIfNotEmpty(List<Group<TicketViewModel>> groups, List<TicketViewModel> tickets, string groupName)
+    private Group<TicketViewModel> ToGroupTicket(IGrouping<string, TicketViewModel> group)
     {
-        if (tickets.Any())
+        return new Group<TicketViewModel>
         {
-            groups.Add(new Group<TicketViewModel>
-            {
-                Name = groupName,
-                Tickets = tickets,
-                DisplayTotalTickets = tickets.Count
-            });
+            Name = group.Key,
+            Tickets = group.ToList(),
+            DisplayTotalTickets = group.Count()
+        };
+    }
+
+    private string GetGroupNameByIssueType(int issueTypeId, TicketViewModel ticket)
+    {
+        switch (issueTypeId)
+        {
+            case IssueTypeConstant.WrongHDP:
+            case IssueTypeConstant.Wrong1stHDP:
+            case IssueTypeConstant.WrongOU:
+            case IssueTypeConstant.Wrong1stOU:
+            case IssueTypeConstant.WrongOdds:
+                return ticket.IsParlay ? "Parlay" : ticket.BetType;
+            case IssueTypeConstant.WrongMarketOffered:
+            case IssueTypeConstant.WrongOddsSportsBook:
+                return string.Empty;
+            default:
+                return ticket.GroupName;
         }
     }
 }

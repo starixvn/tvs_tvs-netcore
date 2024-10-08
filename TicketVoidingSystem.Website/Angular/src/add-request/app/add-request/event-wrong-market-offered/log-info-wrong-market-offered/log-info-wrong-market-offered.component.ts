@@ -21,7 +21,7 @@ export class LogInfoWrongMarketOfferedComponent {
   @Input() logInfo: LogInfoWrongMarketOffered;
   @Input() primitiveProps = new PrimitivePropertyEvent();
   @Input() issueTypeId: string;
- 
+
   constructor(private readonly addRequestApiService: AddRequestApiService) { }
 
   groupBetTypesCount: GroupBetTypeCountModel[] = [];
@@ -67,6 +67,7 @@ export class LogInfoWrongMarketOfferedComponent {
 
   public async showAffectedTicketsDetails() {
     this.updateBetTypeCountModel();
+    this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
     this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
     this.affectedTicketsModel.checkedBetTypes = this.logInfo.checkedBetTypes
     this.affectedTicketsModel.isOpen = true;

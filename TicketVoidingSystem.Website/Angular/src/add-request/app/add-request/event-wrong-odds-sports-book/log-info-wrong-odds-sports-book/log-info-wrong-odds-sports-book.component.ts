@@ -60,6 +60,7 @@ export class LogInfoWrongOddsSportsBookComponent implements OnInit {
   }
 
   public async showAffectedTicketsDetails() {
+    this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
     this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
     this.affectedTicketsModel.checkedBetTypes = this.logInfo.checkedBetTypes
     this.affectedTicketsModel.isOpen = true;

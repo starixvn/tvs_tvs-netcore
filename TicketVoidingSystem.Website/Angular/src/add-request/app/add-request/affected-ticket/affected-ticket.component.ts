@@ -41,7 +41,6 @@ export class AffectedTicketComponent implements OnChanges {
 
   public async updateAffectedTickets() {
     this.tickets = await this.affectedTicketService.getAffectedTickets(this.model.issueTypeId, this.model.logInfoTicketsJson);
-    this.tickets.groups[0].name = null;
   }
 
   private initFilterBetTypes(betTypes: BetTypeAddRequest[]) {

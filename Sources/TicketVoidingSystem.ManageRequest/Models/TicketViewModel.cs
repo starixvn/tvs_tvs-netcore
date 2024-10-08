@@ -61,4 +61,5 @@ public class TicketViewModel
     public bool IsMarked { get; set; }
     public int SiteDbGroupId { get; set; }
     public short? GroupBetTypeId { get; set; }
+    public string GroupName { get; set; }
 }

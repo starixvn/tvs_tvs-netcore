@@ -148,6 +148,7 @@ export class LogInfoWrongHdpComponent {
   }
 
   public async showAffectedTicketsDetails() {
+    this.affectedTicketsModel.issueTypeId = Number(this.filter.issueTypeId);
     this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
     this.affectedTicketsModel.isOpen = true;
     this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
