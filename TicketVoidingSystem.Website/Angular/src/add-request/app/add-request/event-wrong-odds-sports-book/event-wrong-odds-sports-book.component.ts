@@ -192,7 +192,6 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
   }
 
   public async changeMatchEvent(): Promise<void> {
-    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitiveProps.isShowValidation = false;
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);

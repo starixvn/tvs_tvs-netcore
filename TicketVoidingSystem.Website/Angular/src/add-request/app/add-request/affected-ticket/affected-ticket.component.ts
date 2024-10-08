@@ -5,6 +5,7 @@ import { StaticService } from 'src/utility/services/static.service';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
 import { AffectedTicketsModel } from '../models/live-game-early-ticket.model';
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
+import { LogAnalysisService } from '../services/log-analysis.service';
 import { AffectedTicketService } from './affected-ticket.service';
 
 @Component({
@@ -19,13 +20,17 @@ export class AffectedTicketComponent implements OnChanges {
   tickets = new TicketsModel();
   blockBetList: boolean;
 
-  constructor(private readonly affectedTicketService: AffectedTicketService) { }
+  constructor(
+    private readonly logAnalysisService: LogAnalysisService,
+    private readonly affectedTicketService: AffectedTicketService
+  ) { }
 
   public async ngOnChanges(changes: SimpleChanges) {
     if (changes['model'] && this.model.isOpen) {
       this.blockBetList = true;
       this.initFilterBetTypes(this.model.checkedBetTypes);
       await this.updateAffectedTickets();
+      await this.logAnalysisService.writeLogClickLiveGameDetails(`${this.model.issueTypeId}`);
       this.blockBetList = false;
     }
   }

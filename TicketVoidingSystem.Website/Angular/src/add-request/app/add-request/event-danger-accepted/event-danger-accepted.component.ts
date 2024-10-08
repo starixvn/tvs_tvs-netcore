@@ -1,10 +1,11 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
+import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
-import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
@@ -17,6 +18,7 @@ import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { AddRelatedEventArg } from '../models/add-related-event.model';
 import { RedCardModel } from '../models/event-red-card.model';
+import { GetChildMatchQuery } from '../models/get-child-match.query';
 import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
 import { LABELS } from './../../../../utility/constants/labels';
@@ -28,9 +30,6 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { GetChildMatchQuery } from '../models/get-child-match.query';
-import moment from 'moment-timezone';
-import { DateTimeFormat } from '../../../../utility/constants/config';
 
 @Component({
   selector: 'event-danger-accepted',
@@ -150,7 +149,6 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   }
   
   changeMatchEvent(): void {
-    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitiveProps.isShowLogInfoMainMatch = false;
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
