@@ -45,9 +45,10 @@ public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
 
     private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels, int issueTypeId)
     {
-        var ticketViewModels = getTicketModels.Select(item =>
+        var ticketViewModels = getTicketModels.Select((item, index) =>
         {
             var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
+            ticket.No = index + 1;
             ticket.SubBetTypeId = (short)item.SubBetType;
             ticket.GroupName = GetGroupNameByIssueType(issueTypeId, ticket);
 
@@ -80,9 +81,11 @@ public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
             case IssueTypeConstant.Wrong1stOU:
             case IssueTypeConstant.WrongOdds:
                 return ticket.IsParlay ? "Parlay" : ticket.BetType;
+
             case IssueTypeConstant.WrongMarketOffered:
             case IssueTypeConstant.WrongOddsSportsBook:
                 return string.Empty;
+
             default:
                 return ticket.GroupName;
         }
