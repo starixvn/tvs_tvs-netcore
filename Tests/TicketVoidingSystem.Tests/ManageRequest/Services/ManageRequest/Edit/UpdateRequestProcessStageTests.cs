@@ -1,100 +1,109 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using Fanex.Data.Repository;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
+using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
+using TicketVoidingSystem.ManageRequest.ViewModels;
+using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.Edit;
 
 public class UpdateRequestProcessStageTests
 {
-    private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
     private readonly IMapper mapper;
     private readonly IDynamicRepository repository;
+    private readonly SessionService sessionService;
+    private readonly LoggingService loggingService;
     private readonly AccountWinLostService accountWinLostService;
+    private readonly GetUpdateResultService getUpdateResultService;
     private readonly UpdateRequestProcessStageImp service;
 
     public UpdateRequestProcessStageTests()
     {
         mapper = Substitute.For<IMapper>();
-        var sessionService = Substitute.For<SessionService>();
+        sessionService = Substitute.For<SessionService>();
         repository = Substitute.For<IDynamicRepository>();
         accountWinLostService = Substitute.For<AccountWinLostService>();
-        insertAutoVoidRequestQueueService = Substitute.For<InsertAutoVoidRequestQueueService>();
-        //service = new UpdateRequestProcessStageImp(mapper, repository, accountWinLostService, sessionService,
-        //    insertAutoVoidRequestQueueService);
+        loggingService = Substitute.For<LoggingService>();
+        var insertAutoVoidRequestQueueService = Substitute.For<InsertAutoVoidRequestQueueService>();
+        getUpdateResultService = Substitute.For<GetUpdateResultService>();
+        service = new UpdateRequestProcessStageImp(mapper, repository, loggingService, accountWinLostService, sessionService,
+            insertAutoVoidRequestQueueService, getUpdateResultService);
     }
 
-    //[Fact]
-    //public async Task Execute_ValidData_HasCalledExpected()
-    //{
-    //    // Arrange
-    //    var query = new EditRequestQuery
-    //    {
-    //        RequestId = 1,
-    //        ActionId = 1,
-    //        MatchId = 1,
-    //        OperatorsList = new List<OperatorQuery> { new() },
-    //        WrongScoreInfo = new List<WrongScoreInfoViewModel>(),
-    //        WrongOuInfo = new List<WrongOuViewModel>(),
-    //        Wrong1stOuInfo = new List<WrongOuViewModel>(),
-    //        WrongHdpInfo = new List<WrongHdpViewModel>(),
-    //        Wrong1stHdpInfo = new List<WrongHdpViewModel>(),
-    //        WrongOddsInfo = new List<WrongOddsViewModel>(),
-    //        ReducedOverInfo = new List<ReducedOverViewModel>(),
-    //        DangerAcceptedInfo = new List<DangerAcceptedViewModel>(),
-    //        RedCardInfo = new List<DangerAcceptedViewModel>(),
-    //        AbnormalAccountInfo = new AbnormalAccountViewModel(),
-    //        DuplicateTicketsInfo = new DuplicateTicketsViewModel(),
-    //        NotParticipateInfo = new List<NotParticipateViewModel>(),
-    //        EarlyKickOffInfo = new List<EarlyKickOffViewModel>(),
-    //        RecoverTicketInfo = new RecoverTicketViewModel(),
-    //    };
-    //    var expected = new Result
-    //    {
-    //        Data = new
-    //        {
-    //            query.MatchId,
-    //            query.RequestId
-    //        }
-    //    };
-    //    mapper.Map<EditRequestCommand>(Arg.Any<EditRequestQuery>())
-    //        .ReturnsForAnyArgs(new EditRequestCommand { RequestId = 1 });
+    [Fact]
+    public async Task Execute_HasErrorEditRequest_CalledExpected()
+    {
+        // Arrange
+        var query = new EditRequestQuery
+        {
+            RequestId = 1,
+            ActionId = 1,
+            MatchId = 1,
+            WrongMarketOfferedInfo = new WrongMarketOfferedViewModel
+            {
+                BetTypeCount = new List<BetTypeTicketsInfo>(),
+                FilterFromTransTime = DateTime.Today,
+                FilterToTransTime = DateTime.Today,
+                LogInfoDetail = new LogInfoDetail
+                {
+                    VoidFromTime = DateTime.Today,
+                    VoidToTime = DateTime.Today
+                }
+            },
+            IssueTypeId = IssueTypeConstant.WrongMarketOffered
+        };
+        var markedTicketsSuccessful = new List<long> { 1, 2 };
+        mapper.Map<EditRequestCommand>(query).Returns(new EditRequestCommand());
+        sessionService.GetClientIp().Returns("127:00:42");
+        var e = new Exception();
+        repository.ExecuteAsync(Arg.Any<EditRequestCommand>()).Throws(e);
+        getUpdateResultService.CreateErrorResult(e, markedTicketsSuccessful).Returns(new Result());
 
-    //    // Act
-    //    var actual = await service.Execute(query);
+        // Act
+        await service.Execute(query, markedTicketsSuccessful);
 
-    //    // Assert
-    //    await repository.Received(1).ExecuteAsync(Arg.Any<EditRequestCommand>());
-    //    await insertAutoVoidRequestQueueService.Received(1).Execute(query.RequestId, query.ActionId, Arg.Any<AbnormalBetViewModel>(), Arg.Any<IEnumerable<EarlyKickOffViewModel>>());
-    //    AssertExtension.Equal(expected, actual);
-    //}
+        // Assert
+        await loggingService.Received(1).ErrorAsync(e);
+        getUpdateResultService.Received(1).CreateErrorResult(e, markedTicketsSuccessful);
+    }
 
-    //[Fact]
-    //public async Task Execute_IsAbnormalAccount_CalledExpected()
-    //{
-    //    // Arrange
-    //    var query = new EditRequestQuery
-    //    {
-    //        RequestId = 1,
-    //        ActionId = 1,
-    //        MatchId = 1,
-    //        AbnormalAccountInfo = new AbnormalAccountViewModel
-    //        {
-    //            AccountWinlostModels = new List<AccountWinlostModel> { new() }
-    //        },
-    //        IssueTypeId = IssueTypeConstant.AbnormalAccount
-    //    };
+    [Fact]
+    public async Task Execute_IsAbnormalAccountHasValidData_CalledExpected()
+    {
+        // Arrange
+        var query = new EditRequestQuery
+        {
+            RequestId = 1,
+            ActionId = 1,
+            MatchId = 1,
+            AbnormalAccountInfo = new AbnormalAccountViewModel
+            {
+                AccountWinlostModels = new List<AccountWinlostModel>()
+            },
+            IssueTypeId = IssueTypeConstant.AbnormalAccount
+        };
+        var markedTicketsSuccessful = new List<long> { 1, 2 };
+        mapper.Map<EditRequestCommand>(query).Returns(new EditRequestCommand());
+        sessionService.GetClientIp().Returns("127:00:42");
+        getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString(), markedTicketsSuccessful)
+            .Returns(new Result());
 
-    //    var command = new EditRequestCommand { RequestId = 1 };
-    //    mapper.Map<EditRequestCommand>(Arg.Any<EditRequestQuery>()).ReturnsForAnyArgs(command);
+        // Act
+        await service.Execute(query, markedTicketsSuccessful);
 
-    //    // Act
-    //    _ = await service.Execute(query);
-
-    //    // Assert
-    //    await accountWinLostService.Received(1).SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
-    //}
+        // Assert
+        await accountWinLostService.Received(1).SaveAccountWinLost(Arg.Any<int>(), query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
+        getUpdateResultService.Received(1).CreateSuccessResult(query.RequestId, query.MatchId.ToString(), markedTicketsSuccessful);
+    }
 }

@@ -46,8 +46,7 @@ public class GetGeneralInfoServiceTests
                 VoidedTimeString = DateTime.Now.ZoneManila().ToString("dd/MM/yyyy - hh:mm:ss tt"),
                 VoidedTime = DateTime.Now,
                 KickOffTimeString = DateTime.Now.ToString("hh:mm tt"),
-                KickOffTime = DateTime.Now,
-                MatchEvent = "Chen  - vs - Bat"
+                KickOffTime = DateTime.Now
             }
         };
 

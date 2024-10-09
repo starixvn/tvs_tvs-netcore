@@ -47,7 +47,7 @@ public class GetMatchInfoHandlerTests
         var expectedMatch = new Match { MatchCode = "ABC", SportType = 190, MatchId = 1 };
         matchService.GetMatch(Arg.Any<GetMatchInfoRequest>()).ReturnsForAnyArgs(expectedMatch);
         matchService.UpdateMatchInfoFromRemotingRef(Arg.Any<Match>()).ReturnsForAnyArgs(expectedMatch);
-        betListService.GetVirtualSportMatchCode(190, "ABC", 1).Returns("XYZ");
+        betListService.GetVirtualSportMatchCode(190, "ABC").Returns("XYZ");
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
