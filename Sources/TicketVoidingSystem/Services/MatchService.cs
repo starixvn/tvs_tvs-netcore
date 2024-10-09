@@ -126,8 +126,8 @@ public class MatchServiceImp : MatchService
             SportType161 => StringResource.NumberGameNo + match.MatchCode,
             SportType164 => $"Happy 5 No .{match.MatchCode}",
             SportType207 => $"{remotingRefWrapperService.GetBFName(match.HomeId)} - vs - {remotingRefWrapperService.GetBFName(match.AwayId)}",
-            SportTypeConstant.VirtualHorseRacing => $"Event {match.VendorMatchId}",
-            SportTypeConstant.VirtualDogRacing => $"Event {match.VendorMatchId}",
+            SportTypeConstant.VirtualHorseRacing => $"Event {match.VendorMatchId} - ID {match.RaceId}",
+            SportTypeConstant.VirtualDogRacing => $"Event {match.VendorMatchId} - ID {match.RaceId}",
             _ => match.IsOutright ? $"{match.HomeName} - {match.LeagueName}" : $"{match.HomeName} - vs - {match.AwayName}"
         };
     }

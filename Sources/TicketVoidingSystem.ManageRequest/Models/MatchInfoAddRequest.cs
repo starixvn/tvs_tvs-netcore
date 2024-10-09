@@ -20,4 +20,5 @@ public class MatchInfoAddRequest
     public DateTime EventDate { get; set; }
     public DateTime GlobalShowTime { get; set; }
     public int VendorMatchId { get; set; }
+    public int RaceId { get; set; }
 }
