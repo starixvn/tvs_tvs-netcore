@@ -60,7 +60,7 @@ public class CompressDataAddRequestServiceImp : CompressDataService
         {
             var compressedBytes = Convert.FromHexString(logInfoTicketsJson.TrimStart('0', 'x'));
             var tickets = DecompressJson<GetTicketModel>(compressedBytes);
-            return tickets;
+            return tickets.OrderBy(x => x.TransId);
         }
         catch
         {
