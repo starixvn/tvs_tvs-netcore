@@ -88,8 +88,8 @@ describe('LogInfoService', () => {
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
     filter.subIssueTypeId = '10';
-    const leagueEventRedCardComponent = new EventLeagueComponent(null, null);
-    leagueEventRedCardComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongScoreComponent = new FilterWrongScoreComponent(null, null, null, null);
     filterWrongScoreComponent.isValid = jest.fn().mockImplementation(() => true);
     const wrongScoreInfoComponent = new WrongScoreInfoComponent(null, null, null, null, null);
@@ -98,7 +98,7 @@ describe('LogInfoService', () => {
     const service = new ValidationService();
     service.isSubTypeFilterByAcceptedTime = jest.fn().mockImplementation(() => false);
 
-    const result = service.validateCommonData(filter, leagueEventRedCardComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents);
+    const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents);
 
     expect(result).toBe(false);
   });
@@ -108,13 +108,13 @@ describe('LogInfoService', () => {
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
     filter.subIssueTypeId = '10';
-    const leagueEventRedCardComponent = new EventLeagueComponent(null, null);
-    leagueEventRedCardComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
     const service = new ValidationService();
 
-    const result = service.validateCommonData(filter, leagueEventRedCardComponent, addRequestStore, null,  null);
+    const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, null,  null);
 
-    expect(leagueEventRedCardComponent.isMatchIdValid).toBeCalledTimes(1);
+    expect(eventLeagueComponent.isMatchIdValid).toBeCalledTimes(1);
     expect(result).toBe(false);
   });
 
@@ -135,8 +135,8 @@ describe('LogInfoService', () => {
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
     filter.subIssueTypeId = '10';
-    const leagueEventRedCardComponent = new EventLeagueComponent(null, null);
-    leagueEventRedCardComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongScoreComponent = new FilterWrongScoreComponent(null, null, null, null);
     filterWrongScoreComponent.isValid = jest.fn().mockImplementation(() => false);
     const wrongScoreInfoComponents: WrongScoreInfoComponent[] = [];
@@ -145,7 +145,7 @@ describe('LogInfoService', () => {
     const service = new ValidationService();
     service.isSubTypeFilterByAcceptedTime = jest.fn().mockImplementation(() => true);
 
-    const result = service.validateCommonData(filter, leagueEventRedCardComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents);
+    const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents);
 
     expect(result).toBe(false);
   });
@@ -155,8 +155,8 @@ describe('LogInfoService', () => {
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
     filter.subIssueTypeId = '10';
-    const leagueEventRedCardComponent = new EventLeagueComponent(null, null);
-    leagueEventRedCardComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongScoreComponent = new FilterWrongScoreComponent(null, null, null, null);
     filterWrongScoreComponent.isValid = jest.fn().mockImplementation(() => false);
     const wrongScoreInfoComponents: WrongScoreInfoComponent[] = [];
@@ -164,7 +164,7 @@ describe('LogInfoService', () => {
     const service = new ValidationService();
     service.isSubTypeFilterByAcceptedTime = jest.fn().mockImplementation(() => false);
 
-    const result = service.validateCommonData(filter, leagueEventRedCardComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents);
+    const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents);
 
     expect(result).toBe(true);
   });

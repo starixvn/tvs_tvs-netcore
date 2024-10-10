@@ -39,7 +39,8 @@ class Helper {
     sportType: 2,
     voidedBy: null,
     userId: 0,
-    requestId: 1
+    requestId: 1,
+    briefInfoNote: ''
   };
   static readonly fakeRequestDetailViewModel: RequestDetailViewModel = {
     requestId: 1,

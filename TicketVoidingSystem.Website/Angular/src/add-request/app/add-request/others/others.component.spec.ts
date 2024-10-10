@@ -168,24 +168,6 @@ describe('OthersComponent', () => {
     expect(instance['updateSelectedValueGroupOperators']).toHaveBeenCalledTimes(0);
   });
   
-  it('#ngOnChanges should call #ngOnInit', async () => {
-    const { instance } = await shallow
-        .mock(OthersService, { getOperators : jest.fn().mockImplementation(() => Helper.getFakeOperatorInfo())})
-        .render();
-    instance['intDefaultValueGroupOperators'] = jest.fn();
-    instance['updateSelectedValueGroupOperators'] = jest.fn();
-    const changes = {
-      'matchId': new SimpleChange('0', '1', true) 
-    };
-    instance.matchId = null;
-    instance.ngOnInit = jest.fn();
-    
-    await instance.ngOnChanges(changes);
-
-    // Assert
-    expect(instance.ngOnInit).toHaveBeenCalledTimes(1);
-  });
-  
   it('#updateSelectedValueGroupOperators should update data', async () => {
     const { instance } = await shallow
         .mock(OthersService, { getOperators : jest.fn().mockImplementation(() => Helper.getFakeOperatorInfo())})

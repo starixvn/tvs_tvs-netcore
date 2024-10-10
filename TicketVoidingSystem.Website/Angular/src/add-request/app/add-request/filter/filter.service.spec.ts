@@ -1,4 +1,3 @@
-import { SportInfo } from '../../../../utility/models/event.model';
 import { HttpService } from '../../../../utility/services/http.service';
 import { FilterService } from './filter.service';
 
@@ -37,26 +36,5 @@ describe('FilterService', () => {
 
     // Assert
     expect(actualResult).toStrictEqual(expectedIssueTypes);
-  });
-
-  it('#getSportsType should return expected data', async () => {
-    // Arrange
-    const expectedSportInfo: SportInfo[] = [
-      {
-        sportType: 1,
-        sportName: 'Soccer'
-      },
-      {
-        sportType: 2,
-        sportName: 'BasketBall'
-      }
-    ];
-    mockHttpService.getJson.mockResolvedValue(expectedSportInfo);
-
-    // Action
-    const actualResult = await filterService.getSportsType();
-
-    // Assert
-    expect(actualResult).toStrictEqual(expectedSportInfo);
   });
 });

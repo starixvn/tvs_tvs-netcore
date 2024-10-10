@@ -19,8 +19,6 @@ class Helper {
   static readonly fakeRequestId = 10222;
   static readonly fakeTransId = '100000002';
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '11',
     subIssueTypeId: '1',
     action: '1',
@@ -38,12 +36,13 @@ class Helper {
     requestedBy: '',
     transIds: '1022222',
     ticketsOfVIPCustomer: '2123122',
-    settledTickets:'2123122',
+    settledTickets: '2123122',
     ticketsOfCustomerClass201: '2123122',
     ticketsOfCustomerClass4K: '2123122',
     isHasWarningRemovedTickets: false,
-    listBetType : 'aa',
-    listBetTeam : 'bb'
+    issueTypeName: '',
+    subIssueTypeName: '',
+    actionName: ''
   };
   static readonly fakeSaveRequestArg: SaveRequestArg = {
     requestId: Helper.fakeRequestId,

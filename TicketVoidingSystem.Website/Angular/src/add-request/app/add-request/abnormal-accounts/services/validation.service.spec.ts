@@ -13,14 +13,13 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from '../models/validation.model';
 import { ProductFilterComponent } from '../product-filter/product-filter.component';
 import { ValidationService } from './validation.service';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
 
 class Helper {
   static readonly url = 'http://localhost:60196/';
   static readonly fakeRequestId = 10222;
   static readonly fakeTransId = '100000002';
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '11',
     subIssueTypeId: '1',
     action: '1',
@@ -263,6 +262,15 @@ describe('ValidationService', () => {
     expect(actual).toEqual(new CheckUsernamesViewModel());
   });
 
+  it('#getValidation should get accountWinlostModels when actionId isAutoVoidWithPolicy', async () => {
+    const args = Helper.fakeValidationBusinessRuleArgs;
+    args.actionId = TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
+    addRequestApiService.checkValidUsernames = jest.fn().mockReturnValue(new CheckUsernamesViewModel());
+    const actual = await validationService['getValidation'](args);
+
+    expect(actual.accountWinlostModels).toEqual(args.abnormalAccountModel.accountWinlostModels);
+  });
+
   it('#isHasWarningEditTakeNoteRequest should return true', async () => {
     const actual = validationService['isHasWarningEditTakeNoteRequest'](true, '2', '5');
 
@@ -273,5 +281,14 @@ describe('ValidationService', () => {
     const actual = validationService['isEditingByAnotherUser'](true, 1, 2);
 
     expect(actual).toBeTruthy();
+  });
+
+  it('#isAutoVoidAction should return true', async () => {
+    let inputsTest = [TVSRequestActionType.AUTO_VOID_INSTANT_ID.toString(), TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString()];
+    inputsTest.forEach(x => {
+      const actual = validationService['isAutoVoidAction'](x);
+      expect(actual).toBeTruthy();
+    }
+    ) 
   });
 });

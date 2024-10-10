@@ -1,17 +1,15 @@
 import * as _ from 'lodash';
-import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { MatchModel } from '../../../../../utility/models/match.model';
-import { AddRequestStore } from '../../add-request.store';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../../filter/filter.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { ValidationService } from './validation.service';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeValidationMessageError: ValidationMessage = {
@@ -38,72 +36,57 @@ class Helper {
     leagueName: '',
     matchModel: new MatchModel(),
     pagingModel: new PagingModel(),
-    subIssueTypeId: 1,
     isInvalidTotalTickets: false,
     tableTicketsModel: new TableTicketsModel(),
-    messageValidationLogInfo: [Helper.fakeValidationMessageNotError]
+    messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
+    isHasSettledTicket: false,
+    isHasInstantlySettledTicket: false,
+    sportType: 0
   };
 }
 
 describe('ValidationService', () => {
   let validationService: ValidationService;
-  let mockAddRequestStore: AddRequestStore;
 
   beforeEach(() => {
-    validationService = new ValidationService();
-    mockAddRequestStore = new AddRequestStore() as jest.Mocked<AddRequestStore>;
+    validationService = new ValidationService(null);
   });
   it('#validateCommonData should return false when #leagueEventComponent.isMatchIdValid return false', async () => {
-    const leagueEventRedCardComponent = new LeagueEventRedCardComponent(null, null);
-    const spyIsMatchIdValid = jest.spyOn(leagueEventRedCardComponent, 'isMatchIdValid').mockImplementation(() => false);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const spyIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => false);
 
-    const result = validationService.validateCommonData(leagueEventRedCardComponent, null, null);
+    const result = validationService.validateCommonData(eventLeagueComponent, null);
 
     expect(spyIsMatchIdValid).toHaveBeenCalledTimes(1);
     expect(result).toBe(false);
   });
 
   it('#validateCommonData should return false when #kickOffTime invalid', async () => {
-    const leagueEventRedCardComponent = new LeagueEventRedCardComponent(null, null);
-    const spyisMatchIdValid = jest.spyOn(leagueEventRedCardComponent, 'isMatchIdValid').mockImplementation(() => true);
-    const kickOffTimeComponent = new DateFullTimeNewComponent(null);
-    const spyValidateWithTooltip = jest.spyOn(kickOffTimeComponent, 'validateWithTooltip').mockImplementation(() => false);
-    
-    const result = validationService.validateCommonData(leagueEventRedCardComponent, null, kickOffTimeComponent);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const spyisMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
+    validationService['isTimeKickOffValid'] = jest.fn().mockReturnValue(false);
+
+    const result = validationService.validateCommonData(eventLeagueComponent, null);
 
     expect(spyisMatchIdValid).toHaveBeenCalledTimes(1);
-    expect(spyValidateWithTooltip).toHaveBeenCalledTimes(1);
     expect(result).toBe(false);
   });
 
   it('#validateCommonData should return true', async () => {
-    const leagueEventRedCardComponent = new LeagueEventRedCardComponent(null, null);
-    const spyisMatchIdValid = jest.spyOn(leagueEventRedCardComponent, 'isMatchIdValid').mockImplementation(() => true);
-    const kickOffTimeComponent = new DateFullTimeNewComponent(null);
-    const spyValidateWithTooltip = jest.spyOn(kickOffTimeComponent, 'validateWithTooltip').mockImplementation(() => true);
-    
-    const result = validationService.validateCommonData(leagueEventRedCardComponent, null, kickOffTimeComponent);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const spyisMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
+    eventLeagueComponent.selectedMatch = {matchId: 1} as MatchModel;
+    validationService['isTimeKickOffValid'] = jest.fn().mockReturnValue(true);
+    const result = validationService.validateCommonData(eventLeagueComponent, null);
 
     expect(spyisMatchIdValid).toHaveBeenCalledTimes(1);
-    expect(spyValidateWithTooltip).toHaveBeenCalledTimes(1);
     expect(result).toBeTruthy();
-  });
-  
-  it('#isEventMatchValid should return false when mainMatch has error', async () => {
-    const event = Helper.fakeLogInfoEarlyKickOff;
-    event.isMainMatch = true;
-    event.messageValidationLogInfo = [Helper.fakeValidationMessageError];
-
-    const result = validationService.isAllEventsValid([event]);
-
-    expect(result).toBe(false);
   });
 
   it('#isEventMatchValid should return false when is not mainMatch and has error NO_VALID_TICKETS_IN_RANGE', async () => {
-    const event = Helper.fakeLogInfoEarlyKickOff;
-    event.isMainMatch = false;
-    event.messageValidationLogInfo = [Helper.fakeValidationMessageError];
-    event.messageValidationLogInfo[0].reason = '';
+    const event = new LogInfoEarlyKickOff();
+    event.isMainMatch = true;
+    event.isInvalidTotalTickets = true;
 
     const result = validationService.isAllEventsValid([event]);
 

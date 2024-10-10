@@ -687,19 +687,6 @@ describe('RequestListComponent', () => {
     expect(actual).toBe(true);
   });
 
-  // it('#showTickets should not update ticketListModal', async () => {
-  //   const { instance } = await shallow.render();
-  //   instance.permission = new PermissionManage();
-  //   instance.permission.voidRead = false;
-  //   instance.permission.verifyRead = false;
-  //   instance.showTickets(2, 2);
-
-  //   expect(instance.ticketListModal.open).toBe(false);
-  //   expect(instance.ticketListModal.requestId).toBe(1);
-  //   expect(instance.ticketListModal.matchId).toBe(1);
-  //   expect(instance.ticketListModal.minimize).toBe(false);
-  // });
-
   it('#openRequestDetails should not call window.open', async () => {
     const { instance } = await shallow.render();
     window.open = jest.fn();
@@ -729,10 +716,22 @@ describe('RequestListComponent', () => {
     const { instance } = await shallow.render();
 
     // Action
-    const actual = instance['isIssueTypeHaveMultipleMatches'](0);
+    const actual = instance['isIssueTypeHaveMultipleMatches'](0, 1);
 
     // Assert
     expect(actual).toBeFalsy();
+  });
+
+  it('#isIssueTypeHaveMultipleMatches should return true', async () => {
+    // Arrange
+    const { instance } = await shallow.render();
+    const dataTests = [{issueTypeId: 1, filterBy: 1}, {issueTypeId: 11, filterBy: null}];
+
+    // Action & Assert
+    dataTests.forEach(x => {
+      const actual = instance['isIssueTypeHaveMultipleMatches'](x.issueTypeId, x.filterBy);
+      expect(actual).toBeTruthy();
+    })
   });
 
   it('#copyRequestDescription should call #requestDescriptionService.copyToClipboard', async () => {

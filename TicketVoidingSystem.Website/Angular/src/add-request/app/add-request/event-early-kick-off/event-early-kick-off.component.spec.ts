@@ -14,7 +14,6 @@ import { MatchType } from '../../../../utility/constants/config';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { HttpService } from '../../../../utility/services/http.service';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { EarlyKickOffModel } from '../models/event-eko.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../models/get-log-info.model';
@@ -32,6 +31,9 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { TableTicketsModel } from './tickets-list/table-tickets.model';
 import { TicketsListComponent } from './tickets-list/tickets-list.component';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { AddRequestApiService } from '../add-request-api.service';
+import { SearchEventService } from './services/search-event.service';
 
 class Helper {
   static readonly hourSelector = 'input.hour';
@@ -45,7 +47,8 @@ class Helper {
     isMainMatch: true,
     kickOffTime: '',
     matchId: 1,
-    subIssueTypeId: 1
+    subIssueTypeId: 1,
+    sportType: 0
   }
   static readonly fakeTemplateValue: TemplateValue = {
     matchId: 0,
@@ -109,8 +112,6 @@ class Helper {
     transInfoAddRequestModel: new TransInfoAddRequestModel()
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '2020-11-09 12:08:49.737',
     issueTypeId: '11',
     subIssueTypeId: '27',
     action: '5',
@@ -196,7 +197,6 @@ class Helper {
     isMainMatch: true,
     kickOffTime: '2019-11-18 12:08:49.737',
     matchId: 1,
-    subIssueTypeId: 1,
     leagueName: '',
     eventName: '',
     tableTicketsModel: new TableTicketsModel,
@@ -205,7 +205,10 @@ class Helper {
     pagingModel: undefined,
     isInvalidTotalTickets: false,
     isShowValidation: false,
-    templateValue: Helper.fakeTemplateValue
+    templateValue: Helper.fakeTemplateValue,
+    isHasSettledTicket: false,
+    isHasInstantlySettledTicket: false,
+    sportType: 0
   }
 }
 
@@ -213,7 +216,7 @@ describe('EventEarlyKickOffComponent', () => {
   @NgModule({
     declarations: [
       TicketsListComponent,
-      LeagueEventRedCardComponent,
+      EventLeagueComponent,
       AddChildMatchComponent,
       ConfirmEkoComponent
     ],
@@ -241,18 +244,17 @@ describe('EventEarlyKickOffComponent', () => {
   });
 
   it('EventEarlyKickOffComponent init should match snapshot', async () => {
-    const component = new EventEarlyKickOffComponent(null, null, null, null, null, null, null);
+    const component = new EventEarlyKickOffComponent(null, null, null, null, null, null, null, null);
     expect(component).toMatchSnapshot();
   });
 
 
-  it('#changeMatchEvent should call expected method when have not league event', async () => {
+  it('#changeMatchEvent should call change changeEvent', async () => {
     // Arrange
     const mockResetLogInfoOfEvent = jest.fn();
-    const mockGetTemplateValue = jest.fn();
     const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
     const { instance } = await shallow
-    .mock(LogInfoService, { getTemplateValue: mockGetTemplateValue, resetLogInfoOfEvent: mockResetLogInfoOfEvent})
+    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent})
     .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
     .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
@@ -264,7 +266,7 @@ describe('EventEarlyKickOffComponent', () => {
     instance.primitiveProps = new PrimitiveProperty();
     instance.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff];
     instance.mainEvent = Helper.fakeLogInfoEarlyKickOff;
-    instance.leagueEventComponent = null;
+    instance.eventLeagueComponent = null;
     instance.updateMatchId.emit = jest.fn();
 
     // Action
@@ -279,7 +281,7 @@ describe('EventEarlyKickOffComponent', () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
     const { instance } = await shallow
-    .mock(LogInfoService, { getTemplateValue: jest.fn().mockReturnValue(new TemplateValue()), resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+    .mock(LogInfoService, {resetLogInfoOfEvent: mockResetLogInfoOfEvent })
     .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
     .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
@@ -291,9 +293,9 @@ describe('EventEarlyKickOffComponent', () => {
     instance.primitiveProps = new PrimitiveProperty();
     instance.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff];
     instance.mainEvent = Helper.fakeLogInfoEarlyKickOff;
-    const leagueEventWrongHdpComponent = new LeagueEventRedCardComponent(null, null);
-    leagueEventWrongHdpComponent.selectedMatch = new MatchModel();
-    instance.leagueEventComponent = leagueEventWrongHdpComponent;
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.selectedMatch = new MatchModel();
+    instance.eventLeagueComponent = eventLeagueComponent;
     instance.updateMatchId.emit = jest.fn();
 
     instance.changeMatchEvent();
@@ -398,7 +400,7 @@ describe('EventEarlyKickOffComponent', () => {
         filter: Helper.fakeFilterModel,
       }
     });
-    instance.saveRequest(true);
+    instance.saveRequest();
 
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);
   });
@@ -522,12 +524,13 @@ describe('EventEarlyKickOffComponent', () => {
   it('#saveRelatedEvent should be call expected function when have not new matches diff match id', async () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const mockUpdateEvents = jest.fn().mockReturnValue([new LogInfoEarlyKickOff()]);
-    const mockGetLogInfo = jest.fn();
+    const mockGetLogInfo = jest.fn().mockReturnValue({getLogInfoModels: null} as GetLogInfoViewModel);
     const { instance } = await shallow
     .mock(RelatedEventService, { mapChildMatchesToEvents: mockUpdateEvents })
     .mock(LogInfoService, {
       getLogInfo: mockGetLogInfo,
       resetLogInfoOfEvent: mockResetLogInfoOfEvent,
+      assignResultLogInfoToEvents: jest.fn()
     })
     .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn()})
     .render({
@@ -718,28 +721,11 @@ describe('EventEarlyKickOffComponent', () => {
     expect(actual).toBe('2023-11-18 12:08:49.737');
   });
 
-  it('#handleSearchEvent should be return when inValidateCommonData', async () => {
-    const mockValidateCommonData = jest.fn().mockImplementation(() => false);
-    const { instance } = await shallow
-      .mock(ValidationService, { validateCommonData: mockValidateCommonData })
-      .render({
-        bind: {
-          filter: Helper.fakeFilterModel,
-          earlyKickOffModels: [Helper.fakeEarlyKickOffModel],
-          isEdit: false,
-        }
-      });
-    await instance.handleSearchEvent();
-
-    expect(instance.primitiveProps.isShowLogInfoEvents).toBeFalsy();
-    expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
-  });
-
   it('#handleSearchEvent should be call #getLogInfo', async () => {
     const mockValidateCommonData = jest.fn().mockImplementation(() => true);
     const mockChangeBlockingUiStatus = jest.fn();
     const mockGetChildMatches = jest.fn();
-    const mockGetDataWhenSearch = jest.fn();
+
     const { instance } = await shallow
       .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
       .mock(AddRequestStore, {
@@ -747,9 +733,9 @@ describe('EventEarlyKickOffComponent', () => {
       })
       .mock(ValidationService, { validateCommonData: mockValidateCommonData })
       .mock(RelatedEventService, {
-        getChildMatches: mockGetChildMatches,
-        getDataWhenSearch: mockGetDataWhenSearch,
+        getChildMatches: mockGetChildMatches
       })
+      .mock(SearchEventService, {searchEvents: jest.fn().mockReturnValue(true)})
       .render({
         bind: {
           filter: Helper.fakeFilterModel,
@@ -765,11 +751,11 @@ describe('EventEarlyKickOffComponent', () => {
     instance.getTicketsMainEvent = jest.fn();
     instance.mainEvent = Helper.fakeLogInfoEarlyKickOff ;
     instance.mainEvent.templateValue = Helper.fakeTemplateValue;
+    instance.getTicketsMainEvent = jest.fn()
     await instance.handleSearchEvent();
 
     expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
     expect(mockGetChildMatches).toHaveBeenCalledTimes(1);
-    expect(mockGetDataWhenSearch).toHaveBeenCalledTimes(1);
     expect(instance.getTicketsMainEvent).toHaveBeenCalledTimes(1);
   });
 
@@ -780,11 +766,12 @@ describe('EventEarlyKickOffComponent', () => {
     eventEarlyKickOffService.assignModelsToEvents = jest.fn();
     const addRequestStore = new AddRequestStore();
     addRequestStore.changeBlockingUiStatus = mockChangeBlockingUiStatus;
+    const addRequestApiService = new AddRequestApiService(null);
+    addRequestApiService.getPermissionAddRequest = jest.fn();
     const relatedEventService = new RelatedEventService(null, null, null);
     relatedEventService.getChildMatches = mockGetChildMatches;
     const logInfoService = new LogInfoService(null, null, null, null);
-    logInfoService.getTemplateValue = jest.fn().mockReturnValue(new TemplateValue())
-    const component = new EventEarlyKickOffComponent(null, addRequestStore, logInfoService, null, null, relatedEventService, eventEarlyKickOffService);
+    const component = new EventEarlyKickOffComponent(null, addRequestStore, logInfoService, null, relatedEventService, eventEarlyKickOffService, null, addRequestApiService);
     component.filter = Helper.fakeFilterModel;
     component.filter.isVoided = true;
     component.isEdit = true;
@@ -808,11 +795,12 @@ describe('EventEarlyKickOffComponent', () => {
     eventEarlyKickOffService.assignModelsToEvents = jest.fn();
     const addRequestStore = new AddRequestStore();
     addRequestStore.changeBlockingUiStatus = mockChangeBlockingUiStatus;
+    const addRequestApiService = new AddRequestApiService(null);
+    addRequestApiService.getPermissionAddRequest = jest.fn();
     const logInfoService = new LogInfoService(null, null, null, null);
-    logInfoService.getTemplateValue = jest.fn().mockReturnValue(new TemplateValue())
     const relatedEventService = new RelatedEventService(null, null, null);
     relatedEventService.getChildMatches = mockGetChildMatches;
-    const component = new EventEarlyKickOffComponent(null, addRequestStore, logInfoService, null, null, relatedEventService, eventEarlyKickOffService);
+    const component = new EventEarlyKickOffComponent(null, addRequestStore, logInfoService, null, relatedEventService, eventEarlyKickOffService, null, addRequestApiService);
 
     const childEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
     component.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff, childEvent];

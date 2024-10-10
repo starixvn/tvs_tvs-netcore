@@ -23,19 +23,7 @@ exports[`LogInfoNewComponent LogInfoNewComponent init should match snapshot 1`] 
         2020/11/06 12:00:00.000 AM - 2020/11/06 12:00:00.000 AM
       </strong>
       <br />
-       Affected Single Count: 
-      <strong>
-        1
-      </strong>
-      <span
-        class="text-red"
-      />
-      , Parlay Count: 
-      <strong>
-        1
-      </strong>
-      , 
-      <br />
+      <ticket-count-other-sports />
     </div>
   </log-info-new>
 </ng-component>

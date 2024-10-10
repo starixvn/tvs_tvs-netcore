@@ -28,13 +28,12 @@ public class LinkedLogHttpClientServiceImp : LinkedLogHttpClientService
     {
         const string actionName = "api/PoolHouse/GetLinkLog";
         var response = await httpClient.PostAsJsonAsync(actionName, new { matchId, liveIndicator });
+        await loggingService.InfoAsync(await CreateLogResponse(actionName, response));
         if (response.IsSuccessStatusCode)
         {
-            await loggingService.InfoAsync(await CreateLogResponse(actionName, response));
             return await response.Content.ReadAsAsync<IEnumerable<PoolHouseLinkedLogResponse>>();
         }
 
-        await loggingService.InfoAsync(await CreateLogResponse(actionName, response));
         return null;
     }
 

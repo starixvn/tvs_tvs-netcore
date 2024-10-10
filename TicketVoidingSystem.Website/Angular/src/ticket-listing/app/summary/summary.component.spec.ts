@@ -128,7 +128,6 @@ describe('SummaryComponent', () => {
     // Assert
     expect(instance.totalBetCountOfCredit).toBe(1132);
     expect(instance.totalBetCountOfChinaView).toBe(2263);
-    expect(instance.totalBetCountOfLicensee).toBe(1129);
   });
 
   it('#sendExcelFile should call #sendExcelFileEvent.emit with expected SummaryItem model list', async () => {

@@ -73,7 +73,38 @@ exports[`EventDuplicateTicketsComponent #EventDuplicateTicketsComponent init sho
         <bet-ids />
       </div>
     </div>
-    <league-event-abnormal />
+    <div
+      class="d-flex event-league"
+    >
+      <div
+        class="event col-md-6 col-sm-6 col-12"
+      >
+        <label
+          class="col-form-label"
+        >
+          Event
+        </label>
+        <input
+          class="form-control form-control-sm ng-untouched ng-pristine"
+          disabled=""
+          type="text"
+        />
+      </div>
+      <div
+        class="league col-md-6 col-sm-6 col-12"
+      >
+        <label
+          class="col-form-label"
+        >
+          League
+        </label>
+        <input
+          class="form-control form-control-sm ng-untouched ng-pristine"
+          disabled=""
+          type="text"
+        />
+      </div>
+    </div>
     <tooltip />
   </event-duplicate-tickets>
 </ng-component>

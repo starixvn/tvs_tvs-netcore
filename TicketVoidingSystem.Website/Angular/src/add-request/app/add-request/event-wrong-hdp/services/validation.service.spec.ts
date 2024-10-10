@@ -29,7 +29,8 @@ class Helper {
     isPoolHouseAffected: false,
     linkedLogsViewModel: null,
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
   static readonly fakeWrongHdpModel: WrongHdpModel = {
     matchId: 122,
@@ -46,7 +47,8 @@ class Helper {
     isLinkGroupAIO: false,
     isPoolHouseAffected: false,
     liveIndicator: 0,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    sportType: 0
   };
 }
 
@@ -70,7 +72,7 @@ describe('ValidationService', () => {
     const eventLeagueComponent = new EventLeagueComponent(null, null);
     eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
 
-    const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
     logInfoWrongHdpComponent.filterWithHdpComponent = new FilterWithHdpComponent(null, null);
     logInfoWrongHdpComponent.filterWithHdpComponent.isValid = jest.fn().mockImplementation(() => false);
 
@@ -83,7 +85,7 @@ describe('ValidationService', () => {
     const eventLeagueComponent = new EventLeagueComponent(null, null);
     eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
 
-    const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
     logInfoWrongHdpComponent.filterWithHdpComponent = new FilterWithHdpComponent(null, null);
     logInfoWrongHdpComponent.filterWithHdpComponent.isValid = jest.fn().mockImplementation(() => true);
 
@@ -277,34 +279,16 @@ describe('ValidationService', () => {
     const arg = new SaveRequestArg();
     arg.filter = new FilterModel();
     arg.filter.isVoided = false;
-    arg.isEdit = true;
+    arg.isEdit = false;
     arg.userId = 1;
     arg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    arg.actionIdOfFirstTimeAccess = TVSRequestActionType.TAKE_NOTE_ID.toString();
+    arg.actionIdOfFirstTimeAccess = "1";
     const event = _.cloneDeep(Helper.fakeLogInfoWrongHdp);
     event.logInfoDetail.settleCount = 0;
     arg.allEvents = [event];
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);
-    const actual = service.checkCanShowConfirmation(arg);
-
-    expect(actual).toBeFalsy();
-  });
-
-
-  it('#checkCanShowConfirmation should return false', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    arg.isEdit = false;
-    arg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    arg.actionIdOfFirstTimeAccess = TVSRequestActionType.MANUAL_VOID.toString();
-    const event = _.cloneDeep(Helper.fakeLogInfoWrongHdp);
-    event.logInfoDetail.settleCount = 0;
-    event.messageValidationLogInfo.push({isError: true, reason: ''});
-    arg.allEvents = [event];
-
     const actual = service.checkCanShowConfirmation(arg);
 
     expect(actual).toBeFalsy();

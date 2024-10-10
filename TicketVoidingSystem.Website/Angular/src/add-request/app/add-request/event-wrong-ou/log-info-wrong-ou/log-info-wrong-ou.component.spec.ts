@@ -6,7 +6,6 @@ import { Shallow } from 'shallow-render';
 import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { PipeModule } from '../../../../../utility/pipes/pipe.module';
@@ -21,6 +20,11 @@ import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
 import { LogInfoWrongOuComponent } from './log-info-wrong-ou.component';
 import { PoolHouseTicketsModel, GetPoolHouseTicketQuery, PoolHouseTicketViewModel } from '../../pool-house-ticket/pool-house-ticket.model';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
+import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
+import { LogAnalysisService } from '../../services/log-analysis.service';
+import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -58,11 +62,10 @@ class Helper {
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -76,7 +79,10 @@ describe('LogInfoWrongOuComponent', () => {
   @NgModule({
     declarations: [
       DateFullTimeNewComponent,
-      FilterWrongOuComponent
+      FilterWrongOuComponent,
+      TicketCountOtherSportsComponent,
+      PoolHouseTicketComponent,
+      AffectedTicketComponent
     ],
     imports: [
       NgbModule,
@@ -89,7 +95,9 @@ describe('LogInfoWrongOuComponent', () => {
       LogInfoService,
       ModalService,
       AddRequestStore,
-      AddRequestApiService
+      AddRequestApiService,
+      EventWrongOuService,
+      LogAnalysisService
     ]
   })
   class AppModuleTest { }

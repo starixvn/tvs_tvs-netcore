@@ -2,7 +2,6 @@ import { ElementRef, NgModule, SimpleChanges, SimpleChange } from '@angular/core
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
-import { LinkedLogsViewModel } from '../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { AddRequestApiService } from '../add-request-api.service';
@@ -21,6 +20,8 @@ import { ValidationService } from './services/validation.service';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { CalculateOddsService } from './services/calculate-odds.service';
+import { LinkedLogsViewModel } from '../pool-house-ticket/linked-log/linked-log.model';
+
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
@@ -62,9 +63,10 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
-    linkedLogsViewModel: new LinkedLogsViewModel(),
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    linkedLogsViewModel: new LinkedLogsViewModel,
+    sportType: 0
   };
   static readonly fakeMatch: MatchModel = {
     matchId: 876543,
@@ -73,7 +75,6 @@ class Helper {
     matchEvent: 'xyz'
   }
   static readonly FakeFilter: FilterModel = {
-    sportType: 7,
     subIssueTypeId: '2',
     action: '',
     isTest: false,
@@ -172,6 +173,8 @@ describe('EventWrongOddsComponent', () => {
     const changes: SimpleChanges = {
       filter: new SimpleChange(Helper.FakeFilter, newFilter, true)
     };
+    instance.eventLeagueComponent = new EventLeagueComponent(null, null);
+    instance.eventLeagueComponent.selectedMatch = {matchId: 1} as MatchModel;
 
     await instance.ngOnChanges(changes);
 

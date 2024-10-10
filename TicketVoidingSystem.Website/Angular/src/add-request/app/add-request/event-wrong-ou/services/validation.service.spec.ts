@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongOuModel } from '../../models/event-wrong-ou.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
@@ -29,7 +28,8 @@ class Helper {
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
   static readonly fakeWrongOuModel: WrongOuModel = {
     matchId: 122,
@@ -44,7 +44,8 @@ class Helper {
     isLinkGroupAIO: true,
     isPoolHouseAffected: true,
     liveIndicator: 1,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    sportType: 0
   };
 }
 
@@ -180,10 +181,10 @@ describe('ValidationService', () => {
     const arg = new SaveRequestArg();
     arg.filter = new FilterModel();
     arg.filter.isVoided = false;
-    arg.isEdit = true;
+    arg.isEdit = false;
     arg.userId = 1;
     arg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    arg.actionIdOfFirstTimeAccess = TVSRequestActionType.TAKE_NOTE_ID.toString();
+    arg.actionIdOfFirstTimeAccess = "1";
     const event = _.cloneDeep(Helper.fakeLogInfoWrongOu);
     event.logInfoDetail.settleCount = 0;
     event.messageValidationLogInfo.push({isError: true, reason: ''});
@@ -192,24 +193,6 @@ describe('ValidationService', () => {
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);
 
-    const actual = service.checkCanShowConfirmationWrongOu(arg);
-
-    expect(actual).toBeFalsy();
-  });
-
-
-  it('#checkCanShowConfirmation should return false', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    arg.isEdit = false;
-    arg.userId = 1;
-    arg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    arg.actionIdOfFirstTimeAccess = TVSRequestActionType.MANUAL_VOID.toString();
-    const event = _.cloneDeep(Helper.fakeLogInfoWrongOu);
-    event.logInfoDetail.settleCount = 0;
-    event.messageValidationLogInfo.push({isError: true, reason: ''});
-    arg.allEvents = [event];
     const actual = service.checkCanShowConfirmationWrongOu(arg);
 
     expect(actual).toBeFalsy();

@@ -81,10 +81,9 @@ class Helper {
     voidTimeArea: Helper.fakeVoidTimeArea,
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
+    sportType: 0
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: Helper.fakeEventDate,
     issueTypeId: '11',
     subIssueTypeId: '27',
     action: '5',

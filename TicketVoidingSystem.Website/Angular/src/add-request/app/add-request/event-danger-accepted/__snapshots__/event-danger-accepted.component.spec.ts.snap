@@ -6,7 +6,7 @@ exports[`EventDangerAcceptedComponent #EventDangerAcceptedComponent init should 
 >
   <event-danger-accepted>
     <div>
-      <league-event-red-card />
+      <event-league />
       <filter-time-area />
       <div
         class="mb-3"

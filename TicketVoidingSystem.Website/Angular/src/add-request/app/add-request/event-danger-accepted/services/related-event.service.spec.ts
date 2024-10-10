@@ -41,7 +41,8 @@ class Helper {
     subIssueTypeId: 5,
     subIssueTypeName: '',
     logInfoDetail: null,
-    leagueName: ''
+    leagueName: '',
+    sportType: 0
   };
   static readonly fakeFilterTimeWithAllowance: FilterTimeWithAllowance = {
     fromDateTime: Helper.fakeFromDateTime,
@@ -51,8 +52,6 @@ class Helper {
     saTime: 12,
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -90,7 +89,8 @@ class Helper {
     subIssueTypeId: SubIssueTypeConstant.MAIN_CORNER,
     voidTimeArea: Helper.fakeFilterTimeWithAllowance,
     logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: Helper.fakeValidationMessage
+    messageValidationLogInfo: Helper.fakeValidationMessage,
+    sportType: 0
   };
   static readonly fakeChildMatchModel: ChildMatchModel = {
     matchId: Helper.fakeMatchId,
@@ -144,7 +144,7 @@ describe('RelatedEventService', () => {
     const mockRelatedEventService = new RelatedEventService(addRequestApiService, null, null, null);
 
     // Action
-    const actual = await mockRelatedEventService.getChildMatches(1, new FilterModel(), true);
+    const actual = await mockRelatedEventService.getChildMatches(null);
 
     // Assert
     expect(actual.length).toBe(1);
@@ -207,7 +207,8 @@ describe('RelatedEventService', () => {
     arg.tooltip.display = jest.fn();
     arg.primitiveProps = new PrimitiveProperty();
     arg.primitiveProps.inputRelatedMatchId = 111;
-
+    arg.filter = new FilterModel();
+    arg.mainEvent = {} as LogInfoRedCard; 
     const validationService = new ValidationService();
     validationService.isValidInputRelatedEvent = jest.fn().mockImplementation(() => true);
     const mockRelatedEventService = new RelatedEventService(null, validationService, null, null);
@@ -231,9 +232,10 @@ describe('RelatedEventService', () => {
     arg.primitiveProps.inputRelatedMatchId = 111;
     arg.mainEvent = Helper.fakeLogInfoRedCard;
     arg.allEvents = [];
+    arg.filter = new FilterModel()
     const validationService = new ValidationService();
     validationService.isValidInputRelatedEvent = jest.fn().mockImplementation(() => true);
-    const eventDangerAcceptedService = new EventDangerAcceptedService(null);
+    const eventDangerAcceptedService = new EventDangerAcceptedService(null, null);
     eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime = jest.fn();
     const logInfoService = new LogInfoService(null, null);
     logInfoService.getLogInfo = jest.fn();
@@ -291,7 +293,7 @@ describe('RelatedEventService', () => {
     const args = new AddRelatedEventArg();
     args.mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
     args.allEvents = _.cloneDeep([Helper.fakeLogInfoRedCard]);
-    const eventDangerAcceptedService = new EventDangerAcceptedService(null);
+    const eventDangerAcceptedService = new EventDangerAcceptedService(null, null);
     eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime = jest.fn().mockImplementation();
     const mockRelatedEventService = new RelatedEventService(null, null, null, eventDangerAcceptedService);
     mockRelatedEventService['assignChildMatchToLogInfoModel'] = jest.fn().mockImplementation(() => [new LogInfoRedCard()]);

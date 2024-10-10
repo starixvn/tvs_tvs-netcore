@@ -13,15 +13,16 @@ class Helper {
     isHasWarningEditTakeNoteRequest: false,
     transIds: '1022222',
     ticketsOfVIPCustomer: '2123122',
-    settledTickets:'2123122',
+    settledTickets: '2123122',
     ticketsOfCustomerClass201: '2123122',
     ticketsOfCustomerClass4K: '2123122',
     isHasWarningRemovedTickets: false,
     isEditingByAnotherUser: false,
     requestId: 1,
     requestedBy: '',
-    listBetType : '',
-    listBetTeam : ''
+    issueTypeName: '',
+    subIssueTypeName: '',
+    actionName: ''
   };
 }
 

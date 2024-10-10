@@ -42,11 +42,7 @@ class Helper {
     {
       errorCode: 0,
       errorMsg: '',
-      isSuccessful: true,
-      data: {
-        matchId: '12345',
-        requestId: 111
-      }
+      isSuccessful: true
     }
   ];
   static readonly fakeAddRequestResultModelFail: Result<AddRequestResultModel>[] = [
@@ -61,31 +57,19 @@ class Helper {
     {
       errorCode: 1,
       errorMsg: 'error',
-      isSuccessful: false,
-      data: {
-        matchId: '12345',
-        requestId: 111
-      }
+      isSuccessful: false
     }
   ];
   static readonly fakeAddRequestResultModelForAlert: Result<AddRequestResultModel>[] = [
     {
       errorCode: 1,
       errorMsg: 'error',
-      isSuccessful: false,
-      data: {
-        matchId: '12345',
-        requestId: 111
-      }
+      isSuccessful: false
     },
     {
       errorCode: 0,
       errorMsg: '',
-      isSuccessful: true,
-      data: {
-        matchId: '54321',
-        requestId: 222
-      }
+      isSuccessful: true
     }
   ];
   static readonly fakeLogInfoDetailList: LogInfoDetail[] = [
@@ -105,8 +89,6 @@ class Helper {
     } as LogInfoDetail
   ];
   static readonly fakeAbnormalFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '11',
     subIssueTypeId: '',
     action: '1',
@@ -115,8 +97,6 @@ class Helper {
     isAbnormal: false
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -256,7 +236,7 @@ describe('AddRequestComponent', () => {
     component.model = fakeRequestModel;
     component.eventAbnormalBetComponent = eventAbnormalBetComponent;
 
-    await component.saveRequest(false);
+    await component.saveRequest();
 
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);
   });
@@ -271,7 +251,7 @@ describe('AddRequestComponent', () => {
     component.model = fakeRequestModel;
     component.eventTicket14Component = eventArchivedTicketComponent;
 
-    await component.saveRequest(false);
+    await component.saveRequest();
 
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);
   });
@@ -286,7 +266,7 @@ describe('AddRequestComponent', () => {
     component.model = fakeRequestModel;
     component.abnormalAccountsComponent = abnormalAccountsComponent;
 
-    await component.saveRequest(false);
+    await component.saveRequest();
 
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);
   });
@@ -301,7 +281,7 @@ describe('AddRequestComponent', () => {
     component.model = fakeRequestModel;
     component.eventRecoverTicketComponent = eventRecoverTicketComponent;
 
-    await component.saveRequest(false);
+    await component.saveRequest();
 
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);
   });
@@ -310,13 +290,13 @@ describe('AddRequestComponent', () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = IssueTypeConstant.DUPLICATE_TICKETS;
     const mockSaveRequest = jest.fn();
-    const eventDuplicateTicketsComponent = new EventDuplicateTicketsComponent(null, null, null, null, null);
+    const eventDuplicateTicketsComponent = new EventDuplicateTicketsComponent(null, null, null, null, null, null);
     eventDuplicateTicketsComponent.saveRequest = mockSaveRequest;
     const component = new AddRequestComponent(null, null);
     component.model = fakeRequestModel;
     component.eventDuplicateTicketsComponent = eventDuplicateTicketsComponent;
 
-    await component.saveRequest(false);
+    await component.saveRequest();
 
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);
   });

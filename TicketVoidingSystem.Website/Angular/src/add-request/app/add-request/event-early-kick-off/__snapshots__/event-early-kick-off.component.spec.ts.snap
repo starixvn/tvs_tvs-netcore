@@ -4,6 +4,7 @@ exports[`EventEarlyKickOffComponent EventEarlyKickOffComponent init should match
 EventEarlyKickOffComponent {
   "INPUT_MATCH_ID_CLASS": "input-related-match-id",
   "addChildMatchModel": AddChildMatchModel {},
+  "addRequestApiService": null,
   "addRequestStore": null,
   "allSelectedEvents": Array [],
   "confirmEarlyKickOff": ConfirmEarlyKickOffModel {
@@ -35,10 +36,12 @@ EventEarlyKickOffComponent {
     },
   },
   "others": OthersModel {},
+  "permission": PermissionAddRequest {},
   "primitiveProps": PrimitiveProperty {},
   "relatedEventService": null,
   "relatedEvents": Array [],
   "saveRequestService": null,
+  "searchEventService": null,
   "tooltip": Tooltip {
     "element": null,
   },
@@ -51,6 +54,5 @@ EventEarlyKickOffComponent {
     "observers": Array [],
     "thrownError": null,
   },
-  "validationService": null,
 }
 `;

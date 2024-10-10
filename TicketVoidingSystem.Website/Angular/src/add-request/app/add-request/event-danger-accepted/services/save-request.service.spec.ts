@@ -39,7 +39,10 @@ class Helper {
   };
   static readonly fakeAddRequestResultModel: AddRequestResultModel = {
     requestId: 1111,
-    matchId: ''
+    matchId: '',
+    logResults: [],
+    logStageName: '',
+    markedTicketsSuccessful: []
   };
   static readonly fakeResultSuccessful: Result<AddRequestResultModel> = {
     isSuccessful: true,
@@ -89,11 +92,10 @@ class Helper {
     subIssueTypeId: 7,
     voidTimeArea: Helper.fakeFilterTimeWithAllowance,
     logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [Helper.fakeValidationMessageNotError]
+    messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
+    sportType: 0
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '11',
     subIssueTypeId: '1',
     action: '1',
@@ -110,9 +112,10 @@ class Helper {
     isHasWarningEditTakeNoteRequest: true,
     warningRelatedEvents: [],
     isEditingByAnotherUser: false,
-    isHasWarningSettledTicket: false,
     requestId: 1,
-    requestedBy: ''
+    requestedBy: '',
+    isHasSettledTicket: false,
+    isHasWarningRangeTime: false
   };
   static fakeIssueType: IssueType[] = [{
     issueTypeId: 11,
@@ -141,7 +144,7 @@ class Helper {
     primitiveProps: new PrimitiveProperty(),
     defaultFilterTimeWithAllowance: new FilterTimeWithAllowance(),
     allEvents: [],
-    leagueEventDangerAcceptedComponent: null,
+    eventLeagueComponent: null,
     filterTimeAreaComponent: null,
     logInfoComponents: null,
     confirmDangerAccepted: Helper.fakeConfirmDangerAcceptedModel,
@@ -358,7 +361,7 @@ describe('SaveRequestService', () => {
     args.filter.issueTypeId = issueTypeId.toString();
     args.filter.subIssueTypeId = subIssueTypeId.toString();
     args.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    args.actionIdOfFirstTimeAccess = TVSRequestActionType.MANUAL_VOID;
+    args.actionIdOfFirstTimeAccess = TVSRequestActionType.MANUAL_VOID_ID.toString();
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);

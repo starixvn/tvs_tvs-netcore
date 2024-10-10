@@ -38,7 +38,8 @@ class Helper {
     subIssueTypeId: 5,
     subIssueTypeName: '',
     logInfoDetail: null,
-    leagueName: ''
+    leagueName: '',
+    sportType: 0
   };
   static readonly fakeFilterTimeWithAllowance: FilterTimeWithAllowance = {
     fromDateTime: Helper.fakeFromDateTime,
@@ -48,8 +49,6 @@ class Helper {
     saTime: 12,
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -87,7 +86,8 @@ class Helper {
     subIssueTypeId: SubIssueTypeConstant.MAIN_CORNER,
     voidTimeArea: Helper.fakeFilterTimeWithAllowance,
     logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: Helper.fakeValidationMessage
+    messageValidationLogInfo: Helper.fakeValidationMessage,
+    sportType: 0
   };
   static readonly fakeChildMatchModel: ChildMatchModel = {
     matchId: Helper.fakeMatchId,

@@ -58,38 +58,6 @@ describe('CalculateOddsService', () => {
     expect(oddsInfo.correctOddsAwayUnder).toBe('');
   });
 
-  it('#updateMaxBetAbsSpread should not update max bet and spread when has not maxBetAndSpreadInfo', () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBet: 0, spread: '' } as FilterWrongOddsModel;
-    const subIssueTypeId = 'subIssueType1';
-
-    service.updateMaxBetAbsSpread(oddsInfo, subIssueTypeId);
-
-    expect(oddsInfo.maxBet).toBe(0);
-    expect(oddsInfo.spread).toEqual('');
-  });
-
-  it('#updateMaxBetAbsSpread should not update max bet and spread when maxBetAndSpreadInfo has not value', () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBet: 0, spread: '', maxBetAndSpreadInfo: [] } as FilterWrongOddsModel;
-    const subIssueTypeId = 'subIssueType1';
-
-    service.updateMaxBetAbsSpread(oddsInfo, subIssueTypeId);
-
-    expect(oddsInfo.maxBet).toBe(0);
-    expect(oddsInfo.spread).toEqual('');
-  });
-
-  it('#updateMaxBetAbsSpread should update max bet and spread correctly', () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBetAndSpreadInfo: [{ subIssueTypeId: 'subIssueType1', maxBet: 100, spread: '0.2' }] } as FilterWrongOddsModel;
-    const inputTests = [{subIssueTypeId: "subIssueType1", maxBet: 100, spread: '0.2'}, 
-      {subIssueTypeId: "subIssueType2", maxBet: 0, spread: '0'}
-    ]
-    inputTests.forEach(test => {
-      service.updateMaxBetAbsSpread(oddsInfo, test.subIssueTypeId);
-      expect(oddsInfo.maxBet).toBe(test.maxBet);
-      expect(oddsInfo.spread).toBe(test.spread);
-    })
-  });
-
   it('#updateAllowanceRate should update allowance rate default 20 when maxBet & spread is 0', () => {
     const oddsInfo: FilterWrongOddsModel = { maxBet: 0, spread: '0', maxBetAndSpreadInfo: [] } as FilterWrongOddsModel;
 

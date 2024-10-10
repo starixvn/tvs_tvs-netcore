@@ -35,7 +35,7 @@ public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
 
         var viewModel = new TicketsViewModel
         {
-            TotalSingle = groupTicket.FirstOrDefault()?.DisplayTotalTickets ?? 0,
+            TotalSingle = groupTicket.Find(x => x.Name != "Parlay")?.DisplayTotalTickets ?? 0,
             TotalParlay = groupTicket.Find(x => x.Name == "Parlay")?.DisplayTotalTickets ?? 0,
             Groups = groupTicket
         };
@@ -63,25 +63,23 @@ public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
         }
 
         var groups = new List<Group<TicketViewModel>>();
-        if (singleTickets.Any())
-        {
-            groups.Add(new Group<TicketViewModel>
-            {
-                Name = singleTickets[0].BetType,
-                Tickets = singleTickets,
-                DisplayTotalTickets = singleTickets.Count
-            });
-        }
-        if (parlayTickets.Any())
-        {
-            groups.Add(new Group<TicketViewModel>
-            {
-                Name = "Parlay",
-                Tickets = parlayTickets,
-                DisplayTotalTickets = parlayTickets.Count
-            });
-        }
+
+        AddGroupIfNotEmpty(groups, singleTickets, singleTickets.FirstOrDefault()?.BetType);
+        AddGroupIfNotEmpty(groups, parlayTickets, "Parlay");
 
         return groups;
+    }
+
+    private static void AddGroupIfNotEmpty(List<Group<TicketViewModel>> groups, List<TicketViewModel> tickets, string groupName)
+    {
+        if (tickets.Any())
+        {
+            groups.Add(new Group<TicketViewModel>
+            {
+                Name = groupName,
+                Tickets = tickets,
+                DisplayTotalTickets = tickets.Count
+            });
+        }
     }
 }

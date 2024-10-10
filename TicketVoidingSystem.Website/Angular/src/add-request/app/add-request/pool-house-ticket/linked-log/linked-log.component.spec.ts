@@ -4,7 +4,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { LinkedLogComponent } from './linked-log.component';
 import { LinkedLogsViewModel } from './linked-log.model';
-import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
 
 describe('LinkedLogComponent ', () => { 
   @NgModule({
@@ -12,8 +11,7 @@ describe('LinkedLogComponent ', () => {
     ],
     imports: [
       NgbModule,
-      FormsModule,
-      BlockUiModule
+      FormsModule
     ],
     providers: [
     ]

@@ -1,7 +1,6 @@
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../../filter/filter.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { PrimitivePropertyItem } from '../filter-reduced-over-item/filter-reduced-over-item.model';
@@ -11,6 +10,7 @@ import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { ValidationService } from './validation.service';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeReducedOverBetTypes: ReducedOverBetType[] = [
@@ -49,7 +49,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when match invalid', async () => {
-    const leagueEvent = new LeagueEventRedCardComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => false);
     const actual = service.validateCommonData(leagueEvent, null);
 
@@ -57,7 +57,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when filterReducedOverComponent invalid', async () => {
-    const leagueEvent = new LeagueEventRedCardComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterReducedOverComponent = new FilterReducedOverComponent(null);
     filterReducedOverComponent.isValid = jest.fn().mockReturnValue(false);
@@ -68,7 +68,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return true', async () => {
-    const leagueEvent = new LeagueEventRedCardComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterReducedOverComponent = new FilterReducedOverComponent(null);
     filterReducedOverComponent.isValid = jest.fn().mockReturnValue(true);

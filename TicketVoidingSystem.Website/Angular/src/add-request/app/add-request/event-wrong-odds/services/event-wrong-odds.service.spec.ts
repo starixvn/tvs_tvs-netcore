@@ -1,6 +1,4 @@
 import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
-import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
-import { PoolHouseTicketValue } from '../../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { Result } from '../../../../../utility/models/result';
 import { AddRequestApiService } from '../../add-request-api.service';
@@ -11,6 +9,7 @@ import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { EventWrongOddsService } from './event-wrong-odds.service';
 import { ValidationService } from './validation.service';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -26,7 +25,8 @@ class Helper {
     isLinkGroup1X2: false,
     isLinkGroupAIO: false,
     liveIndicator: 0,
-    oddsInfo: new OddsInfo()
+    oddsInfo: new OddsInfo(),
+    sportType: 0
   };
   static readonly fakeLinkedLogsViewModel: LinkedLogsViewModel = {
     isLinkGroup1X2: true,
@@ -46,8 +46,6 @@ class Helper {
     ]
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '11',
     subIssueTypeId: '1',
     action: '1',
@@ -95,7 +93,8 @@ class Helper {
     isPoolHouseAffected: false,
     linkedLogsViewModel: new LinkedLogsViewModel(),
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
 }
 
@@ -143,11 +142,5 @@ describe('EventWrongOddsService', () => {
     expect(addRequestApiService.getLinkedLogs).toHaveBeenCalledTimes(1);
     expect(actual).toBeDefined();
     });  
-  });
-
-  it('#initDefaultLogInfoWrongOdds should return expected model', async () => {
-    const actual = service.initDefaultLogInfoWrongOdds();
-
-    expect(actual.poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.SELECT_ALL_BETTYPE);
   });
 });

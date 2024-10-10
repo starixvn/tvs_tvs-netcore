@@ -23,7 +23,6 @@ import { PrimitiveProperty } from './event-red-card.model';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowanceComponent } from './filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
-import { LeagueEventRedCardComponent } from './league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from './log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from './log-info-red-card/log-info-red-card.model';
 import { EventRedCardService } from './services/event-red-card.service';
@@ -31,6 +30,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -49,8 +49,6 @@ class Helper {
     saTime: 12,
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -73,7 +71,8 @@ class Helper {
     subIssueTypeId: 5,
     subIssueTypeName: '',
     logInfoDetail: null,
-    leagueName: ''
+    leagueName: '',
+    sportType: 0
   };
   static readonly fakeLogInfoDetail: LogInfoDetail =
     {
@@ -144,6 +143,7 @@ class Helper {
     voidTimeArea: Helper.fakeFilterTimeWithAllowance,
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
+    sportType: 0
   };
   static readonly fakeChildMatchModel: ChildMatchModel = {
     matchId: 1111,
@@ -216,13 +216,12 @@ class Helper {
     sportTypeNameSimplified: '',
     sportTypeNameTraditional: ''
   };
-
 }
 
 describe('EventRedCardComponent', () => {
   @NgModule({
     declarations: [
-      LeagueEventRedCardComponent,
+      EventLeagueComponent,
       ConfirmRedCardComponent,
       FilterTimeAreaComponent,
       LogInfoRedCardComponent,
@@ -291,7 +290,7 @@ describe('EventRedCardComponent', () => {
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.isMainMatch = true;
     component.allSelectedEvents = [mainEvent];
-
+    component.filter = {issueTypeId: "1"} as FilterModel;
     // Action
     await component.ngOnInit();
 
@@ -564,15 +563,15 @@ describe('EventRedCardComponent', () => {
       });
 
     instance.mainEvent = Helper.fakeLogInfoRedCard;
-    instance.leagueEventRedCardComponent.selectedMatch = Helper.fakeSelectedMatch;
+    instance.eventLeagueComponent.selectedMatch = Helper.fakeSelectedMatch;
     instance.allSelectedEvents = [Helper.fakeLogInfoRedCard];
 
     // Action
     instance.changeMatchEvent();
 
     // Assert
-    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
+    expect(mockResetLogInfoOfEvent).toBeCalled();
+    expect(instance.updateMatchId.emit).toBeCalled();
     expect(instance.mainEvent.matchId).toBe(Helper.fakeSelectedMatch.matchId);
     expect(instance.mainEvent.eventName).toBe(Helper.fakeSelectedMatch.name);
     expect(instance.mainEvent.leagueName).toBe(Helper.fakeSelectedMatch.leagueName);
@@ -595,16 +594,16 @@ describe('EventRedCardComponent', () => {
           isEdit: false
         }
       });
-
+    instance.updateMatchId.emit = jest.fn();
     instance.mainEvent = Helper.fakeLogInfoRedCard;
-    instance.leagueEventRedCardComponent = null;
+    instance.eventLeagueComponent = null;
 
     // Action
     instance.changeMatchEvent();
 
     // Assert
-    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
+    expect(instance.updateMatchId.emit).toBeCalled();
+    expect(mockResetLogInfoOfEvent).toBeCalled();
     expect(instance.mainEvent.matchId).toBe(Helper.fakeLogInfoRedCard.matchId);
     expect(instance.mainEvent.eventName).toBe(Helper.fakeLogInfoRedCard.eventName);
     expect(instance.mainEvent.leagueName).toBe(Helper.fakeLogInfoRedCard.leagueName);

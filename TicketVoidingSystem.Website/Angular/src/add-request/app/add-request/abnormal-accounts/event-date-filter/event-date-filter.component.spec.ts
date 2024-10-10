@@ -11,7 +11,6 @@ import { EventDateFilterComponent } from './event-date-filter.component';
 class Helper {
   static readonly fromDate = '2021-12-18 12:08:49.737';
   static readonly toDate = '2021-12-21 12:08:49.737';
-
   static readonly fakeBalanceUp: BalanceUp = {
     balanceUpDay: new Date('2021-12-16'),
     moveBetsDay: new Date('2021-12-26')

@@ -1,7 +1,6 @@
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
-import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-event-abnormal.component';
 import { FilterModel } from '../../filter/filter.model';
 import { DuplicateTicketsModel } from '../../models/event-duplicate-tickets.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
@@ -224,7 +223,6 @@ describe('SaveRequestService', () => {
     saveRequestArg.filter = new FilterModel();
     saveRequestArg.filter.isVoided = false;
     saveRequestArg.duplicateTicketsModel = new DuplicateTicketsModel();
-    saveRequestArg.leagueEventComponent = new LeagueEventAbnormalComponent(null, null);
     saveRequestArg.primitiveProps = new PrimitiveProperty();
     saveRequestArg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
     saveRequestArg.primitiveProps.transInfoAddRequestModel.markTransIds = '123,12';

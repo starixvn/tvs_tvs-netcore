@@ -1,7 +1,6 @@
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupNumber } from '../../../../../utility/components/bet-ids/bet-ids.model';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
-import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AbnormalBetModel } from '../../models/abnormal-bet.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
@@ -38,20 +37,21 @@ class Helper {
     isEditingByAnotherUser: false,
     transIds: '1022222',
     ticketsOfVIPCustomer: '2123122',
-    settledTickets:'2123122',
+    settledTickets: '2123122',
     ticketsOfCustomerClass201: '2123122',
     ticketsOfCustomerClass4K: '2123122',
     isHasWarningRemovedTickets: false,
     requestId: 0,
     requestedBy: '',
-    listBetTeam: 'aa',
-    listBetType: 'bb'
+    issueTypeName: '',
+    subIssueTypeName: '',
+    actionName: ''
   };
   static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
     isValid: false,
-    warningModel: Helper.fakeConfirmAbnormalBetModel,
     transInfoAddRequestModel: new TransInfoAddRequestModel(),
-    abnormalBetTicketRequests: []
+    abnormalBetTicketRequests: [],
+    warningModel: new ValidationAbnormalBet
   };
   static readonly fakeValidationBusinessRuleArgs: ValidationBusinessRuleArgs = {
     requestId: Helper.fakeRequestId,
@@ -77,9 +77,7 @@ class Helper {
     transIdsOfCustomerClass4K: Helper.fakeTransId,
     abWhiteListTransIds: Helper.fakeTransId,
     isHasWarningRemovedTickets: false,
-    isHasUusTickets: true,
-    listBetteam: 'aa',
-    listBettype: 'bb'
+    isHasUusTickets: true
   };
 }
 
@@ -196,56 +194,45 @@ describe('ValidationService', () => {
     expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
     expect(mockBetIdsComponentIsAllBetIdsValid).toHaveBeenCalledTimes(1);
-    expect(mockGetConfirmAbnormalBetModel).toHaveBeenCalledTimes(1);
     expect(mockHighlightInvalidTransIds).toHaveBeenCalledTimes(1);
     expect(result.isValid).toBe(false);
   });
 
-  it('#isValidationHasWarningTicket should return false when settledTickets is null', async () => {
+  it('#isValidationHasWarningTicket should return true', async () => {
     // Arrange
     const permission = new PermissionAddRequest();
     const confirmModel = new ConfirmAbnormalBetModel();
     permission.isAddSettledTickets = true;
     confirmModel.settledTickets = null;
-
-    // Action
-    const result = validationService.isValidationHasWarningTicket(permission, confirmModel);
-
-    // Assert
-    expect(result).toBe(false);
-  });
-
-  it('#isValidationHasWarningTicket should return false when have not transId', async () => {
-    // Arrange
-    const permission = new PermissionAddRequest();
-    const confirmModel = new ConfirmAbnormalBetModel();
+    const validationResult = new ValidationAbnormalBet();
     permission.isAddSettledTickets = true;
-    confirmModel.settledTickets = '';
-    confirmModel.ticketsOfVIPCustomer = '';
-    confirmModel.ticketsOfCustomerClass201 = '';
-    confirmModel.ticketsOfCustomerClass4K = '';
-    confirmModel.listBetTeam = '';
-    confirmModel.listBetType = '';
+    validationResult.settledTransIds = '';
+    validationResult.transIdsOfVIPCustomer = '34,5';
+    validationResult.transIdsOfCustomerClass201 = '';
+    validationResult.transIdsOfCustomerClass4K = '';
 
     // Action
-    const result = validationService.isValidationHasWarningTicket(permission, confirmModel);
-
-    // Assert
-    expect(result).toBe(false);
-  });
-
-  it('#isValidationHasWarningTicket should return true when have settledTickets', async () => {
-    // Arrange
-    const permission = new PermissionAddRequest();
-    const confirmModel = new ConfirmAbnormalBetModel();
-    permission.isAddSettledTickets = true;
-    confirmModel.settledTickets = '11111';
-
-    // Action
-    const result = validationService.isValidationHasWarningTicket(permission, confirmModel);
+    const result = validationService.isValidationHasWarningTicket(permission, validationResult);
 
     // Assert
     expect(result).toBe(true);
+  });
+
+  it('#isValidationHasWarningTicket should return false', async () => {
+    // Arrange
+    const permission = new PermissionAddRequest();
+    const validationResult = new ValidationAbnormalBet();
+    permission.isAddSettledTickets = true;
+    validationResult.settledTransIds = '';
+    validationResult.transIdsOfVIPCustomer = '';
+    validationResult.transIdsOfCustomerClass201 = '';
+    validationResult.transIdsOfCustomerClass4K = '';
+
+    // Action
+    const result = validationService.isValidationHasWarningTicket(permission, validationResult);
+
+    // Assert
+    expect(result).toBe(false);
   });
 
   it('#isHasWarningEditTakeNoteRequest should return true', async () => {
@@ -354,29 +341,6 @@ describe('ValidationService', () => {
     expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalled();
     expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalled();
     expect(betIdsComponent.groupNumber.updateDifferent).toHaveBeenCalled();
-  });
-
-  it('#getConfirmAbnormalBetModel should be return expected model', async () => {
-    // Action
-    const result = validationService['getConfirmAbnormalBetModel'](Helper.fakeValidationAbnormalBet);
-
-    // Assert
-    expect(result.settledTickets).toEqual(Helper.fakeValidationAbnormalBet.settledTransIds);
-    expect(result.ticketsOfVIPCustomer).toEqual(Helper.fakeValidationAbnormalBet.transIdsOfVIPCustomer);
-    expect(result.ticketsOfCustomerClass201).toEqual(Helper.fakeValidationAbnormalBet.transIdsOfCustomerClass201);
-    expect(result.ticketsOfCustomerClass4K).toEqual(Helper.fakeValidationAbnormalBet.transIdsOfCustomerClass4K);
-    expect(result.listBetType).toEqual(Helper.fakeValidationAbnormalBet.listBettype);
-    expect(result.listBetTeam).toEqual(Helper.fakeValidationAbnormalBet.listBetteam);
-  });
-
-  it('#isAbnormalBetMixParlay should return true', async () => {
-    const args = new ValidationBusinessRuleArgs();
-    args.issueTypeId = IssueTypeConstant.ABNORMAL_BET;
-    args.abnormalBetModel = new AbnormalBetModel();
-    args.abnormalBetModel.filterBy = AbnormalFilterBy.MIX_PARLAY;
-    const result = validationService['isAbnormalBetMixOrSystemParlay'](args);
-
-    expect(result).toBeTruthy();
   });
 
   it('#checkCanAddSettledTickets should return true', async () => {

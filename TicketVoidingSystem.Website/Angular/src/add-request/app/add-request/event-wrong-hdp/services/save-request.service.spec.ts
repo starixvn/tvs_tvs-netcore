@@ -1,4 +1,3 @@
-import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestService } from '../../add-request.service';
@@ -16,6 +15,7 @@ import { EventWrongHdpService } from './event-wrong-hdp.service';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -32,7 +32,8 @@ class Helper {
     isPoolHouseAffected: false,
     linkedLogsViewModel: new LinkedLogsViewModel(),
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
   static readonly fakeWrongHdpModel: WrongHdpModel = {
     matchId: 122,
@@ -49,7 +50,8 @@ class Helper {
     isLinkGroupAIO: false,
     isPoolHouseAffected: false,
     liveIndicator: 0,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    sportType: 0
   };
 
   static readonly fakeSaveRequestArg: SaveRequestArg = {
@@ -88,7 +90,7 @@ describe('SaveRequestService', () => {
 
   it('#recheckLogInfoBeforeSaveRequest should return false when does not pass validation', async () => {
     logInfoService.resetLogInfoOfEvent = jest.fn();
-    const logInfoComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    const logInfoComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
     const arg = Helper.fakeSaveRequestArg;
     arg.logInfoComponents = [logInfoComponent];
     validationService.validateCommonData = jest.fn().mockReturnValue(false);
@@ -115,7 +117,7 @@ describe('SaveRequestService', () => {
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isAllEventsValid = jest.fn().mockImplementation(() => false);
 
-    const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    const logInfoWrongHdpComponent = {logInfo: {}} as LogInfoWrongHdpComponent;
     saveRequestArg.logInfoComponents = [logInfoWrongHdpComponent];
     const eventWrongHdpService = new EventWrongHdpService(null, null);
     eventWrongHdpService.getLinkedLog = jest.fn();
@@ -145,7 +147,7 @@ describe('SaveRequestService', () => {
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isAllEventsValid = jest.fn().mockImplementation(() => true);
 
-    const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    const logInfoWrongHdpComponent = {logInfo: {}} as LogInfoWrongHdpComponent;
     saveRequestArg.logInfoComponents = [logInfoWrongHdpComponent];
     const eventWrongHdpService = new EventWrongHdpService(null, null);
     eventWrongHdpService.getLinkedLog = jest.fn();

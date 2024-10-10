@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestService } from '../../add-request.service';
@@ -17,6 +16,7 @@ import { EventWrongOuService } from './event-wrong-ou.service';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -33,7 +33,8 @@ class Helper {
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
   static readonly fakeWrongOuModel: WrongOuModel = {
     matchId: 122,
@@ -48,7 +49,8 @@ class Helper {
     isLinkGroupAIO: true,
     isPoolHouseAffected: true,
     liveIndicator: 1,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    sportType: 0
   };
 }
 
@@ -88,6 +90,8 @@ describe('SaveRequestService', () => {
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
     saveRequestArg.mainEvent = new LogInfoWrongOu();
+    saveRequestArg.logInfoComponents = [{logInfo:{isShowValidation: true}} as LogInfoWrongOuComponent];
+
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     logInfoService.getLogInfo = jest.fn();
@@ -96,8 +100,6 @@ describe('SaveRequestService', () => {
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isAllEventsValid = jest.fn().mockImplementation(() => false);
 
-    const logInfoWrongOuComponent = new LogInfoWrongOuComponent(null, null, null, null, null, null);
-    saveRequestArg.logInfoComponents = [logInfoWrongOuComponent];
     const eventWrongOuService = new EventWrongOuService(null);
     eventWrongOuService.getLinkedLog = jest.fn();
     const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, eventWrongOuService);
@@ -118,6 +120,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
     saveRequestArg.mainEvent = new LogInfoWrongOu();
+    saveRequestArg.logInfoComponents = [{logInfo:{isShowValidation: true}} as LogInfoWrongOuComponent];
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     logInfoService.getLogInfo = jest.fn();
@@ -126,8 +129,6 @@ describe('SaveRequestService', () => {
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isAllEventsValid = jest.fn().mockImplementation(() => true);
 
-    const logInfoWrongOuComponent = new LogInfoWrongOuComponent(null, null, null, null, null, null);
-    saveRequestArg.logInfoComponents = [logInfoWrongOuComponent];
     const eventWrongOuService = new EventWrongOuService(null);
     eventWrongOuService.getLinkedLog = jest.fn();
     const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, eventWrongOuService);

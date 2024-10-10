@@ -1,4 +1,3 @@
-import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';
 import { CommonService } from '../../../utility/services/common.service';
 import { AddRequestApiService } from './add-request-api.service';
@@ -7,25 +6,7 @@ import { AddRequestStore } from './add-request.store';
 import { AddRequestQuery } from './models/add-request.query';
 import { AddRequestResultModel } from './models/request.model';
 import { PopupService } from './services/popup.service';
-
-class Helper {
-  static readonly url = 'http://localhost:60196/';
-  static readonly fakeAddRequestResultModel: AddRequestResultModel = {
-    requestId: 1111,
-    matchId: ''
-  };
-  static readonly fakeResultSuccessful: Result<AddRequestResultModel> = {
-    isSuccessful: true,
-    errorCode: null,
-    errorMsg: 'Error...',
-    data: Helper.fakeAddRequestResultModel,
-  };
-  static readonly fakeResultError: Result<AddRequestResultModel> = {
-    isSuccessful: false,
-    errorCode: 1,
-    errorMsg: 'Error',
-  };
-}
+import { HttpService } from '../../../utility/services/http.service';
 
 jest.mock('../../../utility/services/http.service');
 describe('AppService', () => {
@@ -56,81 +37,88 @@ describe('AppService', () => {
   });
 
   it('#addRequest should call #showAddedRequestSuccessful', async () => {
-    const mockAddRequestStore = new AddRequestStore();
-    mockAddRequestStore.changeSavingRequestStatus = jest.fn();
-    const spyAddRequestServiceAddRequest = jest.spyOn(mockAddRequestApiService, 'addRequest').mockImplementation(() => Promise.resolve(Helper.fakeResultSuccessful));
-    const spyPopupServiceShowAddedRequestSuccessful = jest.spyOn(mockPopupService, 'showAddedRequestSuccessfulWithMatches').mockImplementation();
-    Object.defineProperty(window, 'location', {
-      value: new URL(Helper.url)
-    });
-    window.location.reload = jest.fn();
-    window.location.assign = jest.fn();
-    mockAddRequestService = new AddRequestService(mockAddRequestApiService, mockPopupService, mockCommonService);
-    await mockAddRequestService['addRequest'](new AddRequestQuery(), mockAddRequestStore, false);
+    let addRequestStore = new AddRequestStore();
+    let httpService = new HttpService(null);
+    addRequestStore.changeSavingRequestStatus = jest.fn();
+    let query = new AddRequestQuery();
+    const fakeFunctionGetTimeFilterTicket = jest.fn().mockReturnValue(1);
+    let addRequestApiService = new AddRequestApiService(httpService);
+    addRequestApiService.addRequest = jest.fn().mockReturnValue(new Result<AddRequestResultModel>());
+    const fakeFunctionHandleAfterAddRequest = jest.fn();
+    let service = new AddRequestService(addRequestApiService, null, null);
+    service['getTimeFilterTicket'] = fakeFunctionGetTimeFilterTicket;
+    service['handleAfterAddRequest'] = fakeFunctionHandleAfterAddRequest;
 
-    expect(spyAddRequestServiceAddRequest).toHaveBeenCalledTimes(1);
-    expect(spyPopupServiceShowAddedRequestSuccessful).toHaveBeenCalledTimes(1);
-    expect(spyPopupServiceShowAddedRequestSuccessful.mock.calls[0][0]).toEqual(Helper.fakeResultSuccessful.data.requestId);
-    expect(spyPopupServiceShowAddedRequestSuccessful.mock.calls[0][2]).toBeInstanceOf(Function);
-    spyPopupServiceShowAddedRequestSuccessful.mock.calls[0][2]();
-    expect(window.location.assign).toHaveBeenCalledTimes(1);
+    await service['addRequest'](query, addRequestStore);
+
+    expect(fakeFunctionGetTimeFilterTicket).toHaveBeenCalledTimes(1);
+    expect(fakeFunctionHandleAfterAddRequest).toHaveBeenCalledTimes(1);
   });
 
-  it('#addRequest should call #showSaveRequestError', async () => {
-    const mockAddRequestStore = new AddRequestStore();
-    mockAddRequestStore.changeSavingRequestStatus = jest.fn();
-    const spyAddRequestServiceAddRequest = jest.spyOn(mockAddRequestApiService, 'addRequest').mockImplementation(() => Promise.resolve(Helper.fakeResultError));
-    const spyPopupServiceShowSaveRequestError = jest.spyOn(mockPopupService, 'showSaveRequestError').mockImplementation();
-    Object.defineProperty(window, 'location', {
-      value: new URL(Helper.url)
-    });
-    window.location.reload = jest.fn();
-    mockAddRequestService = new AddRequestService(mockAddRequestApiService, mockPopupService, mockCommonService);
+  it('#addRequest should call getAddResultCache when AddedRequest not Successful', async () => {
+    let addRequestStore = new AddRequestStore();
+    let httpService = new HttpService(null);
+    addRequestStore.changeSavingRequestStatus = jest.fn();
+    let query = new AddRequestQuery();
+    const fakeFunctionGetTimeFilterTicket = jest.fn().mockReturnValue(1);
+    let addRequestApiService = new AddRequestApiService(httpService);
+    addRequestApiService.addRequest = jest.fn().mockReturnValue(null);
+    const fakeFunctionHandleAfterAddRequest = jest.fn();
+    const fakeFunctionGetAddResultCache = jest.fn();
+    let service = new AddRequestService(addRequestApiService, null, null);
+    service['getTimeFilterTicket'] = fakeFunctionGetTimeFilterTicket;
+    service['getAddResultCache'] = fakeFunctionGetTimeFilterTicket;
+    service['handleAfterAddRequest'] = fakeFunctionHandleAfterAddRequest;
+    service['getAddResultCache'] = fakeFunctionGetAddResultCache;
 
-    await mockAddRequestService['addRequest'](new AddRequestQuery(), mockAddRequestStore, false);
+    await service['addRequest'](query, addRequestStore);
 
-    expect(spyAddRequestServiceAddRequest).toHaveBeenCalledTimes(1);
-    expect(spyPopupServiceShowSaveRequestError).toHaveBeenCalledTimes(1);
-    expect(spyPopupServiceShowSaveRequestError.mock.calls[0][0]).toEqual(Helper.fakeResultError.errorMsg);
-    expect(spyPopupServiceShowSaveRequestError.mock.calls[0][1]).toEqual(LABELS.ADD_REQUEST_RESULT_TITLE);
+    expect(fakeFunctionGetAddResultCache).toHaveBeenCalledTimes(1);
+    expect(fakeFunctionHandleAfterAddRequest).toHaveBeenCalledTimes(0);
   });
 
   it('#editRequest should call #showEditedRequestSuccessful', async () => {
-    const fakeAddRequestQuery = new AddRequestQuery();
-    fakeAddRequestQuery.requestId = 1111;
-    const mockAddRequestStore = new AddRequestStore();
-    mockAddRequestStore.changeSavingRequestStatus = jest.fn();
-    const spyAddRequestServiceEditRequest = jest.spyOn(mockAddRequestApiService, 'editRequest').mockImplementation(() => Promise.resolve(Helper.fakeResultSuccessful));
-    const spyPopupServiceShowEditedRequestSuccessful = jest.spyOn(mockPopupService, 'showEditedRequestSuccessful').mockImplementation();
-    Object.defineProperty(window, 'location', {
-      value: new URL(Helper.url)
-    });
-    window.location.reload = jest.fn();
-    window.location.assign = jest.fn();
-    mockAddRequestService = new AddRequestService(mockAddRequestApiService, mockPopupService, mockCommonService);
+    let addRequestStore = new AddRequestStore();
+    let httpService = new HttpService(null);
+    addRequestStore.changeSavingRequestStatus = jest.fn();
+    let query = new AddRequestQuery();
+    query.issueTypeId = "11";
+    let addRequestApiService = new AddRequestApiService(httpService);
+    addRequestApiService.editRequest = jest.fn().mockReturnValue({isSuccessful: true} as Result<AddRequestResultModel>);
+    let popupService = new PopupService(null);
+    const fakeShowEditedRequestSuccessful = jest.fn();
+    popupService.showEditedRequestSuccessful = fakeShowEditedRequestSuccessful;
+    const fakeFunctionHandleAfterAddRequest = jest.fn();
+    let service = new AddRequestService(addRequestApiService, popupService, null);
 
-    await mockAddRequestService['editRequest'](fakeAddRequestQuery, mockAddRequestStore, false);
+    service['handleAfterAddRequest'] = fakeFunctionHandleAfterAddRequest;
 
-    expect(spyAddRequestServiceEditRequest).toHaveBeenCalledTimes(1);
-    expect(spyPopupServiceShowEditedRequestSuccessful).toHaveBeenCalledTimes(1);
-    expect(spyPopupServiceShowEditedRequestSuccessful.mock.calls[0][0]).toEqual(Helper.fakeResultSuccessful.data.requestId);
-    expect(spyPopupServiceShowEditedRequestSuccessful.mock.calls[0][1]).toBeInstanceOf(Function);
-    spyPopupServiceShowEditedRequestSuccessful.mock.calls[0][1]();
-    expect(window.location.assign).toHaveBeenCalledTimes(1);
+    await service['editRequest'](query, addRequestStore);
+
+    expect(fakeShowEditedRequestSuccessful).toHaveBeenCalledTimes(1);
   });
 
-  it('#editRequest should call #showSaveRequestError', async () => {
-    const mockAddRequestStore = new AddRequestStore();
-    mockAddRequestStore.changeSavingRequestStatus = jest.fn();
-    const spyAddRequestServiceEditRequest = jest.spyOn(mockAddRequestApiService, 'editRequest').mockImplementation(() => Promise.resolve(Helper.fakeResultError));
-    const spyPopupServiceShowError = jest.spyOn(mockPopupService, 'showSaveRequestError').mockImplementation();
-    mockAddRequestService = new AddRequestService(mockAddRequestApiService, mockPopupService, mockCommonService);
+  it('#editRequest should call #showSaveRequestError when editRequest has error', async () => {
+    let addRequestStore = new AddRequestStore();
+    let httpService = new HttpService(null);
+    addRequestStore.changeSavingRequestStatus = jest.fn();
+    let query = new AddRequestQuery();
+    query.issueTypeId = "11";
+    let addRequestApiService = new AddRequestApiService(httpService);
+    addRequestApiService.editRequest = jest.fn().mockReturnValue({isSuccessful: false} as Result<AddRequestResultModel>);
+    let popupService = new PopupService(null);
+    const fakeShowEditedRequestSuccessful = jest.fn();
+    popupService.showEditedRequestSuccessful = fakeShowEditedRequestSuccessful;
+    const fakeShowSaveRequestError = jest.fn();
+    popupService.showSaveRequestError = fakeShowSaveRequestError;
+    const fakeFunctionHandleAfterAddRequest = jest.fn();
+    let service = new AddRequestService(addRequestApiService, popupService, null);
 
-    await mockAddRequestService['editRequest'](new AddRequestQuery(), mockAddRequestStore, false);
+    service['handleAfterAddRequest'] = fakeFunctionHandleAfterAddRequest;
 
-    expect(spyAddRequestServiceEditRequest).toHaveBeenCalledTimes(1);
-    expect(spyPopupServiceShowError).toHaveBeenCalledTimes(1);
-    expect(spyPopupServiceShowError.mock.calls[0][0]).toEqual(Helper.fakeResultError.errorMsg);
-    expect(spyPopupServiceShowError.mock.calls[0][1]).toEqual(LABELS.EDIT_REQUEST_RESULT_TITLE);
+    await service['editRequest'](query, addRequestStore);
+
+    expect(fakeShowEditedRequestSuccessful).toHaveBeenCalledTimes(0);
+    expect(fakeShowSaveRequestError).toHaveBeenCalledTimes(1);
   });
 });

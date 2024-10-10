@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import { PoolHouseTicketValue } from '../../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { CommonService } from '../../../../../utility/services/common.service';
@@ -11,6 +10,7 @@ import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongHdpService } from './event-wrong-hdp.service';
 import { LogInfoService } from './log-info.service';
+import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -27,7 +27,8 @@ class Helper {
     isPoolHouseAffected: true,
     poolHouseCheckedBetTypes: '',
     linkedLogsViewModel: null,
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
   static readonly fakeWrongHdpModel: WrongHdpModel = {
     matchId: 122,
@@ -44,7 +45,8 @@ class Helper {
     isLinkGroupAIO: true,
     isPoolHouseAffected: true,
     poolHouseCheckedBetTypes: '',
-    liveIndicator: 0
+    liveIndicator: 0,
+    sportType: 0
   };
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {

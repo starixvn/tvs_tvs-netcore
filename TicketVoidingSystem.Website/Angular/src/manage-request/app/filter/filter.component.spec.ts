@@ -57,7 +57,8 @@ class Helper {
     subIssueType: '27',
     status: '0',
     isExcludeTest: true,
-    createdBy: ''
+    createdBy: '',
+    isDisplayMissingInfo: false
   };
   static readonly fakeIssueTypeList: IssueType[] = [
     { issueTypeId: 1, issueTypeName: Helper.dangerAccepted},
@@ -166,7 +167,7 @@ describe('FilterComponent', () => {
     instance.initDefaultFilter = jest.fn();
     instance.updateSubByIssue = jest.fn();
     instance.issueTypeSelectList = Helper.fakeIssueTypeSelectList;
-
+    instance.selectedIssueTypes = ["1"];
     // Action
     instance.controlFilter('MatchId');
 
@@ -175,7 +176,7 @@ describe('FilterComponent', () => {
     expect(instance.updateSubByIssue).toHaveBeenCalledTimes(1);
     expect(instance.model.requestId).toBeNull();
     expect(instance.model.status).toBe(ManageRequestStatus.ALL_ID.toString());
-    expect(instance.model.issueTypeId).toBe('11');
+    expect(instance.model.issueTypeId).toBe('1');
     expect(instance.model.isExcludeTest).toBe(true);
   });
 
@@ -197,7 +198,7 @@ describe('FilterComponent', () => {
     const { instance } = await shallow.render();
     instance.initDefaultFilter = jest.fn();
     instance.issueTypeSelectList = Helper.fakeIssueTypeSelectList;
-
+    instance.selectedIssueTypes = ["1"];
     // Action
     instance.controlFilter('RequestId');
 
@@ -205,7 +206,7 @@ describe('FilterComponent', () => {
     expect(instance.initDefaultFilter).toHaveBeenCalledTimes(1);
     expect(instance.model.matchId).toBeNull();
     expect(instance.model.status).toBe(ManageRequestStatus.ALL_ID.toString());
-    expect(instance.model.issueTypeId).toBe('11');
+    expect(instance.model.issueTypeId).toBe('1');
     expect(instance.model.isExcludeTest).toBe(true);
   });
 
@@ -223,7 +224,7 @@ describe('FilterComponent', () => {
     expect(instance.model.ngbFromDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
     expect(instance.model.ngbToDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
     expect(instance.model.status).toBe(ManageRequestStatus.ALL_ID.toString());
-    expect(instance.model.issueTypeId).toBe('11');
+    expect(instance.model.issueTypeId).toBe('11,1,8,9');
     expect(instance.model.isExcludeTest).toBe(true);
   });
 
@@ -317,10 +318,11 @@ describe('FilterComponent', () => {
     }
   });
 
-  it('#validate should return true when search by matchid', async () => {
+  it('#validate should return true when search by matchId', async () => {
     // Arrange
     const { instance } = await shallow.render();
     instance.filterByMatch = true;
+    instance.model = {matchId: 1, requestId: 1, issueTypeId: "1"} as FilterModel;
 
     // Action
     const actualResult = instance.validate();
@@ -375,15 +377,15 @@ describe('FilterComponent', () => {
         getIssueTypePermissionList: jest.fn().mockImplementation(() => Helper.fakeIssueTypeList )
       })
       .render();
-
+  
     // Action
     await instance['setIssueTypeSelectList']();
 
     // Assert
-    expect(instance.issueTypeSelectList.length).toBe(5);
-    expect(instance.issueTypeSelectList[0].name).toBe('All');
-    expect(instance.issueTypeSelectList[0].value).toBe('1,11,8,9');
-    expect(instance.model.issueTypeId).toBe('1,11,8,9');
+    expect(instance.issueTypeSelectList.length).toBe(4);
+    expect(instance.issueTypeSelectList[0].group).toBe('All');
+    expect(instance.issueTypeSelectList[0].value).toBe('1');
+    expect(instance.model.issueTypeId).toBe('1');
   });
 
   it('#updateSubByIssue should set none subtype when not permission on IssueType', async () => {

@@ -35,7 +35,10 @@ class Helper {
   } as Validation;
   static readonly fakeAddRequestResultModel: AddRequestResultModel = {
     requestId: 1111,
-    matchId: ''
+    matchId: '',
+    logResults: [],
+    logStageName: '',
+    markedTicketsSuccessful: []
   };
   static readonly fakeResultSuccessful: Result<AddRequestResultModel> = {
     isSuccessful: true,
@@ -86,10 +89,9 @@ class Helper {
     voidTimeArea: Helper.fakeFilterTimeWithAllowance,
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
+    sportType: 0
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',

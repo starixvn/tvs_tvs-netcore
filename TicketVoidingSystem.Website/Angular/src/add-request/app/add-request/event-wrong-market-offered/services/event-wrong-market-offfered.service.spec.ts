@@ -17,7 +17,8 @@ class Helper {
     logInfoDetail: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTypeCount: [],
-    betTeamsResult: []
+    betTeamsResult: [],
+    checkedBetTypes: []
   };
   static readonly fakeWrongMarketOfferedModel: WrongMarketOfferedModel = {
     betTypeCount: [],

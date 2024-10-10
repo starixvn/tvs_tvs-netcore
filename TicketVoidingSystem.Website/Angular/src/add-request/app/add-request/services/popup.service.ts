@@ -24,8 +24,6 @@ export class PopupService {
     );
   }
 
-
-
   showAddedRequestSuccessful(query: AddRequestQuery, addRequestResult: AddRequestResultModel, onOkCallback: () => void) {
     const matchIdsContent = this.getMatchIdsContent(query, addRequestResult);
     const markTicketsContent = this.getMarkTicketsContent(query, addRequestResult);
