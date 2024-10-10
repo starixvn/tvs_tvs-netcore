@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
     <Nullable>disable</Nullable>
   </PropertyGroup>
@@ -61,9 +61,9 @@
     <PackageReference Include="Fanex.NAP.Client" Version="2.0.0.1" />
     <PackageReference Include="Fanex.NAP.SignIn" Version="2.0.1.2-beta1" />
     <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.396" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.12" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="7.0.12" />
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="8.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.10" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ONEbook.UM" Version="3.1.6" />
     <PackageReference Include="ONEbook.UM.AspNetCore" Version="3.1.1.1" />
