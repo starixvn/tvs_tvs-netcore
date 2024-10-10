@@ -7,7 +7,7 @@
         <issue-type [issueTypeName]="issueTypeName" [isShowVar]="isShowVar"></issue-type>
         <div *ngIf="isAbnormalAccount()">
             <div class="row no-gutters">Product:&nbsp;<strong>{{getProducts(requestDetail.abnormalAccountModel.productIds)}}</strong></div>
-            <div class="row no-gutters">Ticket Status:&nbsp;<strong>{{getProducts(requestDetail.abnormalAccountModel.statusIds)}}</strong></div>
+            <div class="row no-gutters">Ticket Status:&nbsp;<strong>{{getStatus(requestDetail.abnormalAccountModel.statusIds)}}</strong></div>
             <div class="row no-gutters">From/To Event Date:&nbsp;<strong>{{requestDetail.abnormalAccountModel.fromDate | date: 'yyyy/MM/dd'}} -
             {{requestDetail.abnormalAccountModel.toDate | date: 'yyyy/MM/dd'}}
             </strong></div>
