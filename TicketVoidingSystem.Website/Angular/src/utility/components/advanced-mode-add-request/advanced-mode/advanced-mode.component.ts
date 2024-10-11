@@ -125,11 +125,14 @@ export class AdvancedModeComponent {
       case 'team':
         return checkedBetType.team;
       case 'hdp':
+      case 'hdp1':
+      case 'hdp2':
         return checkedBetType.hdp;
       case 'player':
         return checkedBetType.player;
       case 'playerandodds':
         return checkedBetType.playerAndOdds;
+      case '_xx':
       case '_xxx':
       case 'betidx':
         return checkedBetType.betIdX;

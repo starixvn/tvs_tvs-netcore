@@ -6709,10 +6709,10 @@
       ],
       "Inputs": [
         {
-          "Name": "Value",
+          "Name": "Point",
           "Value": "",
           "IsMultiple": true,
-          "XmlAttribute": "Hdp"
+          "XmlAttribute": "_XX"
         }
       ],
       "Type": 1,
@@ -6742,10 +6742,10 @@
       ],
       "Inputs": [
         {
-          "Name": "Value",
+          "Name": "Point",
           "Value": "",
           "IsMultiple": true,
-          "XmlAttribute": "Hdp"
+          "XmlAttribute": "_XX"
         }
       ],
       "Type": 1,
@@ -11054,10 +11054,10 @@
       ],
       "Inputs": [
         {
-          "Name": "Value",
+          "Name": "Point",
           "Value": "",
           "IsMultiple": true,
-          "XmlAttribute": "Hdp"
+          "XmlAttribute": "YY"
         }
       ],
       "Type": 1,
@@ -11115,10 +11115,10 @@
       ],
       "Inputs": [
         {
-          "Name": "Value",
+          "Name": "Point",
           "Value": "",
           "IsMultiple": true,
-          "XmlAttribute": "Hdp"
+          "XmlAttribute": "YY"
         }
       ],
       "Type": 1,

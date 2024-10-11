@@ -225,6 +225,8 @@ export class BetTeamAddRequest {
         result.team = value;
         break;
       case 'hdp':
+      case 'hdp1':
+      case 'hdp2':
         result.hdp = value;
         break;
       case 'player':
@@ -232,6 +234,10 @@ export class BetTeamAddRequest {
         break;
       case 'playerandodds':
         result.playerAndOdds = value;
+        break;
+      case '_xx': // use for input: XX value in betid type 8XX; link to column betId
+        result.betIdX = value;
+        result.filterBetIdX = this.getValueBetIdTypeXx(value);
         break;
       case '_xxx': // use for input: XXX value in betid type 8XXX, 8XXXYY; link to column betId
         result.betIdX = value;
@@ -256,6 +262,17 @@ export class BetTeamAddRequest {
         result.secondValue = value;
         break;
     }
+  }
+
+  getValueBetIdTypeXx(value: string): string {
+    if (!value) {
+      return '___';
+    }
+
+    return value.split('&')
+      .filter(Boolean)
+      .map(x => `_${x.padStart(2, '0')}`)
+      .join('&');
   }
 
   getValueBetIdTypeXxx(value: string): string {
