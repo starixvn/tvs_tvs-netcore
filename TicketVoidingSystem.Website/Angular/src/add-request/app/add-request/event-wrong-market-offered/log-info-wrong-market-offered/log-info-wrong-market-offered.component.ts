@@ -69,7 +69,6 @@ export class LogInfoWrongMarketOfferedComponent {
     this.updateBetTypeCountModel();
     this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
     this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
-    this.affectedTicketsModel.checkedBetTypes = this.logInfo.checkedBetTypes
     this.affectedTicketsModel.isOpen = true;
     this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
   }

@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { BetTypeAddRequest } from 'src/utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
+import * as _ from 'lodash';
 import { ItemsSelect } from 'src/utility/components/multiple-selection/items-select';
 import { StaticService } from 'src/utility/services/static.service';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
@@ -28,8 +28,8 @@ export class AffectedTicketComponent implements OnChanges {
   public async ngOnChanges(changes: SimpleChanges) {
     if (changes['model'] && this.model.isOpen) {
       this.blockBetList = true;
-      this.initFilterBetTypes(this.model.checkedBetTypes);
-      await this.updateAffectedTickets();
+      this.tickets = await this.affectedTicketService.getAffectedTickets(this.model.issueTypeId, this.model.logInfoTicketsJson);
+      this.initFilterBetTypes();
       await this.logAnalysisService.writeLogClickLiveGameDetails(`${this.model.issueTypeId}`);
       this.blockBetList = false;
     }
@@ -41,17 +41,16 @@ export class AffectedTicketComponent implements OnChanges {
   }
 
   updateSelectedBetTypes(betTypes: string[]) {
-    this.tickets.checkTicketByBetTypesForLGEarlyPopup(betTypes.map(i => Number(i)));
+    this.tickets.checkTicketByBetTypesForLGEarlyPopup(betTypes);
   }
 
-  public async updateAffectedTickets() {
-    this.tickets = await this.affectedTicketService.getAffectedTickets(this.model.issueTypeId, this.model.logInfoTicketsJson);
-  }
-
-  private initFilterBetTypes(betTypes: BetTypeAddRequest[]) {
-    if (this.model.checkedBetTypes) {
+  private initFilterBetTypes() {
+    if (this.tickets.groups.length > 0) {
+      const betTypes = this.tickets.groups.flatMap(group =>
+        group.tickets.map(x => new ItemsSelect(0, x.betType, x.betType, true, true, true, []))
+      );
       const filterBetTypes = StaticService.initDefaultMultipleSelection('280px', 1);
-      filterBetTypes.items = betTypes.map(x => new ItemsSelect(0, x.id.toString(), x.name, true, true, true, []));
+      filterBetTypes.items = _.uniqBy(betTypes, 'text');
 
       this.filterBetTypes = filterBetTypes;
     }

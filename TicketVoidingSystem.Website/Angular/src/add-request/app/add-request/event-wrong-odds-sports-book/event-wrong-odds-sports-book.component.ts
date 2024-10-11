@@ -77,7 +77,6 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
     const checkedBetTypes = groupBetTypes.flatMap(x => x.betTypes);
     this.logInfoEvent = this.eventWrongOddsSportsBookService.assignModelsToEvents(this.wrongOddsSportsBookModel);
     this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], groupBetTypes), true, '', this.filter.isVoided);
-    this.logInfoEvent.checkedBetTypes = this.groupBetTypesModel.getCheckedBetTypes();
     const betTeamsResult = this.wrongOddsSportsBookModel.betTeamsResult;
     betTeamsResult.forEach(x => x.isDisabled = this.filter.isVoided);
     this.advancedModeAddRequestModel = {
@@ -111,7 +110,6 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
 
     this.addRequestStore.changeBlockingUiStatus(true);
     await this.logInfoService.getLogInfo(this.logInfoEvent, this.isEdit, this.requestId, this.filter, this.primitiveProps);
-    this.logInfoEvent.checkedBetTypes = this.groupBetTypesModel.getCheckedBetTypes();
 
     if (!this.validationService.isAccountHasAddRequestPermission(this.filter.action, this.logInfoEvent.isHasInstantlySettledTicket,
       this.logInfoEvent.isHasSettledTicket, this.permission)) {

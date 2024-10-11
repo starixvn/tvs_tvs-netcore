@@ -49,7 +49,7 @@
   <div class="ticket-content">
     <table>
       <tbody *ngFor="let group of model.groups">
-        <tr *ngIf="group.name">
+        <tr *ngIf="group.name && group.displayTotalTickets > 0">
           <td [attr.colspan]="13" class="group-ticket" (click)="group.isExpanded = !group.isExpanded">
             <span [ngClass]="{'icon-down':group.isExpanded, 'icon-right':!group.isExpanded}"></span>
             {{group.name}} ({{group.displayTotalTickets}})
@@ -96,7 +96,7 @@
         </tr>
       </tbody>
     </table>
-    <table *ngIf="model.groups === undefined || model.groups.length == 0 || model.groups == null">
+    <table *ngIf="isShowNoData()">
       <tbody>
         <tr>
           <td class="no-data">There is no data</td>
