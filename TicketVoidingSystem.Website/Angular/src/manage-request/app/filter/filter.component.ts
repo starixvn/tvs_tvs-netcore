@@ -3,11 +3,11 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
-import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
-import { TEXT } from '../../../utility/constants/text';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ManageRequestStatus } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
+import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
+import { TEXT } from '../../../utility/constants/text';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
@@ -82,7 +82,7 @@ export class FilterComponent implements OnInit {
       this.model.ngbFromDate = this.minDate;
     }
     this.model.status = ManageRequestStatus.ALL_ID.toString();
-    this.model.issueTypeId = this.issueTypeSelectList[0].value;
+    this.model.issueTypeId = this.selectedIssueTypes.join(',');
     this.model.isExcludeTest = true;
   }
 
