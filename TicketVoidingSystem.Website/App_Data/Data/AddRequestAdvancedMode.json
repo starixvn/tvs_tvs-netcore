@@ -14734,11 +14734,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -17417,11 +17417,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -17961,17 +17961,25 @@
               "Value": "All"
             },
             {
-              "Name": "Odd",
-              "Value": "h"
+              "Name": "Over",
+              "Value": "o"
             },
             {
-              "Name": "Even",
-              "Value": "a"
+              "Name": "Under",
+              "Value": "u"
             }
           ],
-          "Name": "Odd/Even",
+          "Name": "Over/Under",
           "Value": "All",
           "XmlAttribute": "Team"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp1"
         }
       ],
       "Type": 1,
@@ -18138,6 +18146,25 @@
           "Value": "All",
           "IsMultiple": true,
           "XmlAttribute": "BetIdY"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Odd",
+              "Value": "o"
+            },
+            {
+              "Name": "Even",
+              "Value": "e"
+            }
+          ],
+          "Name": "Odd/Even",
+          "Value": "All",
+          "XmlAttribute": "Team"
         }
       ],
       "Type": 1,
@@ -18919,11 +18946,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -18972,11 +18999,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -19025,11 +19052,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -19078,11 +19105,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -19131,11 +19158,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -19184,11 +19211,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -19237,11 +19264,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -19290,11 +19317,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -19343,11 +19370,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -21812,11 +21839,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -25713,11 +25740,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -25738,11 +25765,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -25763,11 +25790,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -25788,11 +25815,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -25813,11 +25840,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -25838,11 +25865,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -25863,11 +25890,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -25896,11 +25923,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -25929,11 +25956,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -25962,11 +25989,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -25995,11 +26022,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26028,11 +26055,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26061,11 +26088,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26094,11 +26121,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26127,11 +26154,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26160,11 +26187,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26193,11 +26220,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26226,11 +26253,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26259,11 +26286,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26292,11 +26319,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26325,11 +26352,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26358,11 +26385,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26391,11 +26418,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26424,11 +26451,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26457,11 +26484,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26482,11 +26509,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26507,11 +26534,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26532,11 +26559,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26557,11 +26584,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26582,11 +26609,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26607,11 +26634,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26632,11 +26659,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26657,11 +26684,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26682,11 +26709,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -26707,11 +26734,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -28084,11 +28111,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -28552,11 +28579,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -28585,11 +28612,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -28618,11 +28645,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -28651,11 +28678,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -28684,11 +28711,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -28717,11 +28744,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -29779,11 +29806,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -29849,11 +29876,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -29919,11 +29946,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -29989,11 +30016,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -30059,11 +30086,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -30129,11 +30156,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -30199,11 +30226,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -30269,11 +30296,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -30339,11 +30366,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
@@ -30409,11 +30436,11 @@
             },
             {
               "Name": "Odd",
-              "Value": "h"
+              "Value": "o"
             },
             {
               "Name": "Even",
-              "Value": "a"
+              "Value": "e"
             }
           ],
           "Name": "Odd/Even",
