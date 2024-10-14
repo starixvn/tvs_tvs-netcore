@@ -5309,7 +5309,6 @@
           ],
           "Name": "",
           "Value": "All",
-          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -5343,7 +5342,6 @@
           ],
           "Name": "",
           "Value": "All",
-          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -21379,6 +21377,10 @@
         {
           "Items": [
             {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
               "Name": "Top or Mid",
               "Value": "NB"
             },
@@ -21389,7 +21391,6 @@
           ],
           "Name": "",
           "Value": "All",
-          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -22516,12 +22517,12 @@
               "Value": "All"
             },
             {
-              "Name": "Home",
-              "Value": "h"
+              "Name": "Mid",
+              "Value": "M"
             },
             {
-              "Name": "Away",
-              "Value": "a"
+              "Name": "Top or Bottom",
+              "Value": "NM"
             }
           ],
           "Name": "Team",
@@ -22829,12 +22830,12 @@
               "Value": "All"
             },
             {
-              "Name": "Home",
-              "Value": "h"
+              "Name": "Top",
+              "Value": "T"
             },
             {
-              "Name": "Away",
-              "Value": "a"
+              "Name": "Mid or Bottom",
+              "Value": "NT"
             }
           ],
           "Name": "Team",
@@ -23004,12 +23005,12 @@
               "Value": "All"
             },
             {
-              "Name": "Home",
-              "Value": "h"
+              "Name": "Mid",
+              "Value": "M"
             },
             {
-              "Name": "Away",
-              "Value": "a"
+              "Name": "Top or Bottom",
+              "Value": "NM"
             }
           ],
           "Name": "Team",
