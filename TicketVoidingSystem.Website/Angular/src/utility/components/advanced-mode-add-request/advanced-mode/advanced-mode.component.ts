@@ -225,7 +225,7 @@ export class AdvancedModeComponent {
   }
 
   private renderSelectionCricketWithPlayer(betTeam: BetTeamAddRequest, baseBetType: Selection[]): void {
-    const playerSelection = betTeam.selections.find(x => x.name === 'Player:');
+    const playerSelection = betTeam.selections.find(x => x.name === 'Player');
     if (playerSelection.multiSelection?.multipleSelect.items.length === 0) {
       const validItems = baseBetType
         .filter(x => betTeam.betTypes.includes(x.value))
@@ -234,7 +234,7 @@ export class AdvancedModeComponent {
       playerSelection.items = _.uniqWith(validItems, _.isEqual);
 
       betTeam.selections
-        .filter(x => x.name === 'Player:')
+        .filter(x => x.name === 'Player')
         .forEach(x => x.multiSelection = betTeam.renderMultipleSelection(x));
     }
   }
