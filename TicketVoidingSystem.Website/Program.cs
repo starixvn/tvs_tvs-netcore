@@ -1,7 +1,4 @@
-using Fanex.NAP.Client;
-using Fanex.NAP.Client.Configuration;
-using Fanex.NAP.Client.Helpers.Web;
-using Fanex.NAP.SignIn.Attribute;
+using Fanex.NAP.Client.Attributes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +29,6 @@ services.AddHttpClient<OWPHttpClientService, OWPHttpClientServiceImp>();
 services.RegisterFanexData(configuration);
 services.RegisterFanexExceptionHandler();
 services.RegisterSentry();
-services.RegisterOneBookUM(configuration);
 services.RegisterRemotingRef();
 services.RegisterLetstalk();
 services.RegisterCoreServices(configuration);
@@ -74,9 +70,6 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
-NapClientManager
-    .UseConfig(app.Services.GetService<INapSettings>())
-    .UseSession(app.Services.GetService<INapSession>());
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

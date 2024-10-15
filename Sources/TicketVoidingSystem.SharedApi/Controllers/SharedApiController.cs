@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Fanex.NAP.Client.Session;
+using Fanex.NAP.Client;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

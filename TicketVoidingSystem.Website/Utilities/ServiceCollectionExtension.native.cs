@@ -12,10 +12,6 @@ using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.AspNetCore;
 using Fanex.Logging.Sentry.RavenClient;
 using Fanex.MailDeliver.MailClient;
-using Fanex.NAP.Client.Configuration;
-using Fanex.NAP.Client.Helpers.Web;
-using Fanex.NAP.Client.Services;
-using Fanex.NAP.Client.Session;
 using Fanex.RemotingRef;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -23,12 +19,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ONEbook.UM.AspNetCore;
-using ONEbook.UM.AspNetCore.Filters;
-using ONEbook.UM.Configurations;
-using ONEbook.UM.Helpers;
-using ONEbook.UM.Services;
-using ONEbook.UM.Transport;
 using SharpRaven;
 using SpecialDelete.CashOutTransaction;
 using SpecialDelete.CashOutTransaction.CancelCashOut;
@@ -170,32 +160,17 @@ public static class ServiceCollectionExtension
 
     public static void RegisterCoreServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        services.AddSingleton<INapSettings>(new NapSettings(configuration));
-        services.AddSingleton<INapSession, NapSession>();
-        services.AddSingleton<ISecurityService, SecurityService>();
-        services.AddSingleton<IGroupService, GroupService>();
-        services.AddSingleton<IUserService, UserService>();
+        services.AddNapClient(configuration);
+        services.AddOneBookUm(configuration);
         services.AddScoped<IDynamicRepository, DynamicRepository>();
         services.AddTransient<ILogger, Logger>();
         services.AddSingleton<IUserIdProvider, CustomIdProvider>();
-        services.AddScoped<CheckUMFilterAttribute>();
         services.AddSingleton<IRemotingRefService, RemotingRefService>();
     }
 
     public static void RegisterFanexCaching(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddRedisCache(configuration.GetSection("FanexCachingRedis"));
-    }
-
-    public static void RegisterOneBookUM(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddSingleton(new UMClientConfiguration().Initialize(configuration));
-        services.AddSingleton<IUMCacheService, MemoryUMCacheService>();
-        services.AddSingleton<IUMRestClient, UMRestClient>();
-        services.AddSingleton<IPHelper, IPHelperImpl>();
-        services.AddSingleton<IHttpContextHelper, HttpContextHelper>();
-        services.AddSingleton<IMaintenanceService, MaintenanceService>();
     }
 
     public static void RegisterFanexMailService(this IServiceCollection services)
