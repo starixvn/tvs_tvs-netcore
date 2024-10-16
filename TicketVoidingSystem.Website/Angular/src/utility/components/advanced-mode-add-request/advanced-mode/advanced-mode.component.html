@@ -1,10 +1,10 @@
 <div class="advanced-mode" *ngIf="isShowAdvancedModeFilter">
   <div class="advanced-mode-header border-top-radius" [ngClass]="{'border-bottom-radius':isCollapse}"
-    (click)="isCollapse=!isCollapse">
+    (click)="expandAndValidate()">
     <em class="fa mr-1" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
-    <strong>Advanced Mode</strong>
+    <strong class="advanced-mode-header-label">Advanced Mode</strong>
   </div>
-  <div class="advanced-mode-body border-bottom-radius" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapse">
+  <div class="advanced-mode-body border-bottom-radius" *ngIf="!isCollapse">
     <div *ngFor="let betTeam of betTeams">
       <div [ngSwitch]="betTeam.type" *ngIf="betTeam.isShow">
         <div *ngSwitchCase="1" class="bet-team">
@@ -28,7 +28,7 @@
                   </multiple-select>
                 </div>
               </ng-container>
-              <div class="d-flex" *ngIf="betTeam.inputs?.length > 0">
+              <ng-container class="d-flex" *ngIf="betTeam.inputs?.length > 0">
                 <div class="input-item-adv" *ngFor="let item of betTeam.inputs">
                   <span class="mr-1" *ngIf="item.name !== ''">{{item.name}}:</span>
                   <input class="bet-team-{{betTeam.index}}-input-{{item.index}}" type="text" [(ngModel)]="item.value"
@@ -38,7 +38,7 @@
                       item.isMultiple, $event); changeFilter()"
                     triggers="manual" multipleDecimal />
                 </div>
-              </div>
+              </ng-container>
             </div>
           </div>
         </div>

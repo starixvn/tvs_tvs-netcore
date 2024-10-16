@@ -1,5 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
+import { Subscription, timer } from 'rxjs';
+import { TEXT } from 'src/utility/constants/text';
 import { LABELS } from '../../../../utility/constants/labels';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
@@ -28,6 +30,8 @@ export class AdvancedModeComponent {
   baseSpecialBetTypeCricket: Selection[] = [];
   baseBetTeams: BetTeamAddRequest[] = [];
   isShowAdvancedModeFilter: boolean;
+  private delayForSearchSubscription: Subscription;
+  private readonly observableTimer = timer(500);
 
   constructor(
     private readonly service: AdvancedModeService,
@@ -58,6 +62,11 @@ export class AdvancedModeComponent {
     })
     await this.getSpecialBetTeamCricket(matchId);
     this.renderBetTeams(this.baseBetTeams);
+  }
+
+  expandAndValidate() {
+    this.isCollapse = !this.isCollapse;
+    this.validateWithDelay();
   }
 
   changeFilter() {
@@ -239,6 +248,21 @@ export class AdvancedModeComponent {
     }
   }
 
+  validateWithDelay() {
+    this.unsubscribeFromDelay();
+    this.delayForSearchSubscription = this.observableTimer.subscribe(() => {
+      if (!this.isCollapse) {
+        this.isValidity();
+      }
+    });
+  }
+
+  private unsubscribeFromDelay(): void {
+    if (this.delayForSearchSubscription) {
+      this.delayForSearchSubscription.unsubscribe();
+    }
+  }
+
   isValidity(): boolean {
     return this.betTeams
       .filter(x => x.isShow)
@@ -255,8 +279,12 @@ export class AdvancedModeComponent {
 
   private isValidSelectionWithToolTip(betTeamIndex: number, selection: Selection): boolean {
     if (!this.isValidSelectionValue(selection)) {
-      const className = `bet-team-${betTeamIndex}-selection-${selection.index}`;
-      this.tooltip.display(className, LABELS.SELECT_AT_LEAST_ONE_OPTION);
+      if (this.isCollapse) {
+        this.showTooltipWhenCollapsed();
+      } else {
+        const className = `bet-team-${betTeamIndex}-selection-${selection.index}`;
+        this.tooltip.display(className, LABELS.SELECT_AT_LEAST_ONE_OPTION);
+      }
       return false;
     }
 
@@ -265,12 +293,20 @@ export class AdvancedModeComponent {
 
   private isValidInputWithToolTip(betTeamIndex: number, inputIndex: number, isMultiple: boolean, value: string): boolean {
     if (value && !this.isValidInputDecimalValue(isMultiple, value)) {
-      const className = `bet-team-${betTeamIndex}-input-${inputIndex}`;
-      this.tooltip.display(className, LABELS.INVALID_VALUE);
+      if (this.isCollapse) {
+        this.showTooltipWhenCollapsed();
+      } else {
+        const className = `bet-team-${betTeamIndex}-input-${inputIndex}`;
+        this.tooltip.display(className, LABELS.INVALID_VALUE);
+      }
       return false;
     }
 
     return true;
+  }
+
+  private showTooltipWhenCollapsed() {
+      this.tooltip.display('advanced-mode-header-label', TEXT.THERE_ARE_INVALID_FIELDS);
   }
 
   private isValidInputDecimalValue(isMultiple: boolean, value: string): boolean {

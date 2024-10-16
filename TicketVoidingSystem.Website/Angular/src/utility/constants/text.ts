@@ -87,4 +87,5 @@ export class TEXT {
     static readonly NOTIFY_RECOVER_SETTLED_MATCH = 'The selected ticket(s) will return to "Running" status, ' +
     'please resettle the match(es) to calculate it again.';
     static readonly INVALID_SELECTION = 'Please select at least one option!';
+    static readonly THERE_ARE_INVALID_FIELDS = 'There are invalid fields';
 }
