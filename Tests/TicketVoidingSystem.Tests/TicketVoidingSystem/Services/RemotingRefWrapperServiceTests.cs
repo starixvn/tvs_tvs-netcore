@@ -72,7 +72,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
             // Arrange
 
             // Act
-            _ = service.GetLeagueName(1, "1");
+            _ = service.GetLeagueName(1, 1, "1");
 
             // Assert
             remotingRefService.Received(1).GetLeagueName("1", "1", string.Empty);
@@ -108,7 +108,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
             // Arrange
 
             // Act
-            _ = service.GetTeamName(DBNull.Value, "1");
+            _ = service.GetTeamName(1, DBNull.Value, "1");
 
             // Assert
             remotingRefService.Received(1).GetTeamName(string.Empty, "1", string.Empty);
@@ -148,6 +148,19 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
 
             // Assert
             remotingRefService.Received(1).GetSportName("1", "1");
+        }
+
+        [Fact]
+        public void GetMatchCodeVS345_RemotingRefServiceCalledGetVirtualSportMatchCodeFormat()
+        {
+            // Arrange
+            remotingRefService.GetVirtualSportMatchCodeFormat("1", "VYVS_MatchCode", LanguageCode.English).Returns("abc");
+
+            // Act
+            _ = service.GetMatchCodeVS345(147, "1");
+
+            // Assert
+            remotingRefService.Received(1).GetVirtualSportMatchCodeFormat("1", "VYVS_MatchCode", LanguageCode.English);
         }
     }
 }

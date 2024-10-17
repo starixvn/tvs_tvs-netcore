@@ -1,6 +1,9 @@
 import { NgbModalConfig } from "@ng-bootstrap/ng-bootstrap";
 import { ModalService } from "../../../../utility/components/modal/modal.service";
 import { PopupService } from "./popup.service";
+import { AddRequestResultModel } from '../models/request.model';
+import { Result } from "src/utility/models/result";
+import { AddRequestQuery } from '../models/add-request.query';
 
 describe('PopupService', () => {
   let popupService: PopupService;
@@ -22,9 +25,11 @@ describe('PopupService', () => {
   it('#showAddedRequestSuccessful should call #modalService.open', async () => {
     const modalService = new ModalService(new NgbModalConfig(null), null, null);
     modalService.open = jest.fn();
+    let addRequestResult = {requestId: 1} as AddRequestResultModel;
     popupService = new PopupService(modalService);
-
-    popupService.showAddedRequestSuccessful(null, () => {});
+    popupService['getMarkTicketsContent'] = jest.fn()
+    let query = new AddRequestQuery();
+    popupService.showAddedRequestSuccessful(query, addRequestResult, () => {});
 
     expect(modalService.open).toHaveBeenCalledTimes(1);
   });
@@ -32,9 +37,10 @@ describe('PopupService', () => {
   it('#showEditedRequestSuccessful should call #modalService.open', async () => {
     const modalService = new ModalService(new NgbModalConfig(null), null, null);
     modalService.open = jest.fn();
+    let addRequestResult = {requestId: 1, markedTicketsSuccessful: [3]} as AddRequestResultModel;
     popupService = new PopupService(modalService);
-
-    popupService.showEditedRequestSuccessful(null, () => {});
+    popupService['getMarkTicketsContent'] = jest.fn()
+    popupService.showEditedRequestSuccessful(null, addRequestResult, () => {});
 
     expect(modalService.open).toHaveBeenCalledTimes(1);
   });
@@ -42,10 +48,11 @@ describe('PopupService', () => {
   it('#showSaveRequestError should call #modalService.open', async () => {
     const modalService = new ModalService(new NgbModalConfig(null), null, null);
     const mockModalServiceOpen = jest.fn();
+    let addResult = {data: null} as Result<AddRequestResultModel>;
     modalService.open = mockModalServiceOpen;
     popupService = new PopupService(modalService);
-
-    popupService.showSaveRequestError(null, null);
+    popupService['getMarkTicketsContent'] = jest.fn()
+    popupService.showSaveRequestError(null, addResult, null);
 
     expect(modalService.open).toHaveBeenCalledTimes(1);
     mockModalServiceOpen.mock.calls[0][1]();
@@ -59,15 +66,5 @@ describe('PopupService', () => {
     popupService.showConfirm(null);
 
     expect(modalService.confirm).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#showAddedRequestSuccessfulWithMatches should call #modalService.open', async () => {
-    const modalService = new ModalService(new NgbModalConfig(null), null, null);
-    modalService.open = jest.fn();
-    popupService = new PopupService(modalService);
-
-    popupService.showAddedRequestSuccessfulWithMatches(1, '1', () => {});
-
-    expect(modalService.open).toHaveBeenCalledTimes(1);
   });
 });

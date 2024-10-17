@@ -64,11 +64,10 @@ class Helper {
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -91,7 +90,8 @@ class Helper {
     isLinkGroupAIO: false,
     isPoolHouseAffected: false,
     liveIndicator: 0,
-    poolHouseCheckedBetTypes: null
+    poolHouseCheckedBetTypes: null,
+    sportType: 0
   };
   static readonly fakeChildMatches: ChildMatchModel[] = [
     {
@@ -221,7 +221,7 @@ describe('EventWrongOuComponent', () => {
     expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
   });
 
-  it('handleSearchEvent should call #getChildMatches', async () => {
+  it('#handleSearchEvent should call #getChildMatches', async () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const mockValidateCommonData = jest.fn().mockImplementation(() => true);
     const mockGetLogInfo = jest.fn();
@@ -247,6 +247,7 @@ describe('EventWrongOuComponent', () => {
     instance.primitiveProps = new PrimitiveProperty();
     const logInfoWrongHdpComponents = new LogInfoWrongOuComponent(null, null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
+    logInfoWrongHdpComponents.logInfo = {} as LogInfoWrongOu;
     const logInfoComponents = new QueryList<LogInfoWrongOuComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
     instance.logInfoComponents = logInfoComponents;
@@ -409,6 +410,7 @@ describe('EventWrongOuComponent', () => {
       });
     const logInfoWrongHdpComponents = new LogInfoWrongOuComponent(null, null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
+    logInfoWrongHdpComponents.logInfo = {} as LogInfoWrongOu;
     const logInfoComponents = new QueryList<LogInfoWrongOuComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
 
@@ -572,6 +574,7 @@ describe('EventWrongOuComponent', () => {
     component.isEdit = true;
     component.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
     component.mainEvent = Helper.fakeLogInfoWrongHdp;
+    component.filter = Helper.fakeFilterModel;
 
     await component.ngOnInit();
 

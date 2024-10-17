@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using MediatR;
 using TicketVoidingSystem.Criteria;
-using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
@@ -30,9 +29,9 @@ public class GetMatchInfoVoidByCurrencyHandler : IRequestHandler<GetMatchInfoVoi
     {
         var match = await matchService.GetMatchVoidByCurrency(request);
         match = matchService.UpdateMatchInfoFromRemotingRef(match);
-        if (match != null && match.SportType.IsVirtualSport())
+        if (match != null)
         {
-            match.MatchCode = betListService.GetMatchCodeBetradar(match.MatchCode);
+            match.MatchCode = betListService.GetVirtualSportMatchCode(match.SportType, match.MatchCode);
         }
 
         return match;

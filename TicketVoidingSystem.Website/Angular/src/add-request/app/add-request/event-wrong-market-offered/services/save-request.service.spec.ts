@@ -29,7 +29,8 @@ class Helper {
     logInfoDetail: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTypeCount: [],
-    betTeamsResult: []
+    betTeamsResult: [],
+    checkedBetTypes: []
   };
 }
 

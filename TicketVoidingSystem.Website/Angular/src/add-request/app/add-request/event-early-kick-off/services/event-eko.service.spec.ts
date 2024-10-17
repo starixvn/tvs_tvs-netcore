@@ -19,9 +19,11 @@ class Helper {
     leagueName: '',
     matchModel: new MatchModel(),
     pagingModel: new PagingModel(),
-    subIssueTypeId: 1,
     isInvalidTotalTickets: false,
-    tableTicketsModel: new TableTicketsModel()
+    tableTicketsModel: new TableTicketsModel(),
+    isHasSettledTicket: false,
+    isHasInstantlySettledTicket: false,
+    sportType: 0
   };
 
   static readonly fakeEarlyKickOffModel: EarlyKickOffModel = {
@@ -29,7 +31,8 @@ class Helper {
     isMainMatch: true,
     kickOffTime: '',
     matchId: 1,
-    subIssueTypeId: 1
+    subIssueTypeId: 1,
+    sportType: 0
   }
 }
 
@@ -49,7 +52,7 @@ describe('EventEarlyKickOffService', () => {
 
   it('#initDefaultMainEvent should return mainEevent with isMainMatch = true and has kickOffTime', async () => {
     const allEvents = [];
-    const actual = service.initDefaultMainEvent(allEvents, '1');
+    const actual = service.initDefaultMainEvent(allEvents);
 
     expect(actual).toBeDefined();
     expect(actual.isMainMatch).toBeTruthy();

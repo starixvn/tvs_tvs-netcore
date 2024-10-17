@@ -1,7 +1,7 @@
 {
   "Groups": [
     {
-      "SportTypes": [ 190, 191, 192, 194, 195, 196, 197 ],
+      "SportTypes": [ 177, 190, 191, 192, 194, 195, 196, 197, 198 ],
       "BetTypes": [
         {
           "Id": 2701,
@@ -30,6 +30,14 @@
         {
           "Id": 2707,
           "Name": "Correct Score"
+        },
+        {
+          "Id": 2770,
+          "Name": "Win"
+        },
+        {
+          "Id": 2771,
+          "Name": "Place"
         },
         {
           "Id": 2799,
@@ -99,6 +107,39 @@
         },
         {
           "Id": 10449,
+          "Name": "Mix Parlay"
+        }
+      ]
+    },
+    {
+      "SportTypes": [ 147 ],
+      "BetTypes": [
+        {
+          "Id": 11050,
+          "Name": "FT.1X2"
+        },
+        {
+          "Id": 11051,
+          "Name": "Double Chance"
+        },
+        {
+          "Id": 11052,
+          "Name": "1H 1X2"
+        },
+        {
+          "Id": 11053,
+          "Name": "Correct Score"
+        },
+        {
+          "Id": 11054,
+          "Name": "Handicap"
+        },
+        {
+          "Id": 11055,
+          "Name": "Over/Under"
+        },
+        {
+          "Id": 11099,
           "Name": "Mix Parlay"
         }
       ]

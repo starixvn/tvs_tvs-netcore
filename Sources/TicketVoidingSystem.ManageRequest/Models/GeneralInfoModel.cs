@@ -16,11 +16,11 @@ public class GeneralInfoModel
 
     public string LeagueName { get; set; }
 
-    public string MatchEvent { get; set; }
-
     public int HomeId { get; set; }
 
     public int AwayId { get; set; }
+
+    public int SportType { get; set; }
 
     public int Total { get; set; }
 

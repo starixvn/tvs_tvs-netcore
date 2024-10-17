@@ -25,8 +25,6 @@ import { ValidationService } from './services/validation.service';
 class Helper {
   static readonly fakeDate: string = '2020-11-09 12:08:49.737';
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: Helper.fakeDate,
     issueTypeId: '11',
     subIssueTypeId: '27',
     action: '5',

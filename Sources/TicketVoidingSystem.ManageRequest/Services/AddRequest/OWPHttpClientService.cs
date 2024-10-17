@@ -30,18 +30,12 @@ public class OWPHttpClientServiceImp : OWPHttpClientService
         var actionName = matchId.Equals(parentId)
             ? $"api/maxbet/{parentId}"
             : $"api/maxbet/{parentId}/{subType}";
-        try
+        var response = await httpClient.GetAsync(actionName);
+        await loggingService.InfoAsync(await CreateLogResponse(actionName, response));
+
+        if (response.IsSuccessStatusCode)
         {
-            var response = await httpClient.GetAsync(actionName);
-            if (response.IsSuccessStatusCode)
-            {
-                await loggingService.InfoAsync(await CreateLogResponse(actionName, response));
-                return await Helper.DeserializeResponseStream<OWPMaxBetAndSpreadInfo>(response);
-            }
-        }
-        catch (Exception exception)
-        {
-            await loggingService.ErrorAsync($"URL: {AppSettingService.AppSetting.OWPUrl}{actionName}{Environment.NewLine}Response:{Environment.NewLine}{exception}");
+            return await Helper.DeserializeResponseStream<OWPMaxBetAndSpreadInfo>(response);
         }
 
         return null;

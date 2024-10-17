@@ -4,4 +4,7 @@ export class DuplicateTicketsModel {
   orgTransIds: string;
   filterBy?: number;
   subIssueTypeId: number;
+  name: string;
+  leagueName: string;
+  sportType: number;
 }

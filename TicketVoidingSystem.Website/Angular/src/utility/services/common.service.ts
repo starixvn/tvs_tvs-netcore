@@ -148,12 +148,12 @@ export class CommonService {
     return this.httpService.postJson(query, `api/ManageRequest/CopyRequestInfo`);
   }
 
-  async getMatchInfoAddRequest(sportType: number, eventDate: string, transIds: string, isUpdRequest: boolean, matchId: number): Promise<MatchInfoViewModel> {
-    return this.httpService.postJson({ sportType, eventDate, transIds, isUpdRequest, matchId }, 'api/MatchInfo/GetInfoForAddRequest');
-  }
-
   async getMatchInfoAddRequestTvs(matchId: number): Promise<MatchInfoViewModel> {
     return this.httpService.postJson({ matchId }, 'api/MatchInfo/GetInfoForAddRequest');
+  }
+
+  async getMatchInfoAddRequest(matchId: number, sportType: number, ): Promise<MatchInfoViewModel> {
+    return this.httpService.postJson({ sportType, matchId }, 'api/MatchInfo/GetInfoForAddRequest');
   }
 
   async logAccessFunction(functionName: string): Promise<boolean> {

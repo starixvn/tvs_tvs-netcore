@@ -3,12 +3,12 @@ import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { PrimitivePropertyItem } from '../filter-reduced-over-item/filter-reduced-over-item.model';
 import { FilterReducedOverComponent } from '../filter-reduced-over/filter-reduced-over.component';
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +23,8 @@ export class ValidationService {
   constructor() {
   }
 
-  public validateCommonData(leagueEventComponent: LeagueEventRedCardComponent, filterReducedOverComponent: FilterReducedOverComponent): boolean {
-    if (!leagueEventComponent.isMatchIdValid()) {
+  public validateCommonData(eventLeagueComponent: EventLeagueComponent, filterReducedOverComponent: FilterReducedOverComponent): boolean {
+    if (!eventLeagueComponent.isMatchIdValid()) {
       return false;
     }
 

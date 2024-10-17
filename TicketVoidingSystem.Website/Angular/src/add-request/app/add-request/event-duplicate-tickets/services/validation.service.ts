@@ -3,8 +3,6 @@ import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-i
 import { AbnormalFilterBy, MatchIdConstant, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { LeagueEventAbnormalComponent } from '../../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
-import { DuplicateTicketsModel } from '../../models/event-duplicate-tickets.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel, ValidationDuplicateTickets } from '../models/check-duplicate-tickets.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
@@ -32,14 +30,9 @@ export class ValidationService {
     return isHasWarningEditTakeNoteRequest;
   }
 
-  public validateCommonData(betIdsComponent: BetIdsComponent, leagueEventComponent: LeagueEventAbnormalComponent,
-    primitiveProps: PrimitiveProperty, duplicateTicketsModel: DuplicateTicketsModel): boolean {
+  public validateCommonData(betIdsComponent: BetIdsComponent, primitiveProps: PrimitiveProperty): boolean {
     if (betIdsComponent.isHasBetId()) {
       return true;
-    }
-
-    if (duplicateTicketsModel.filterBy === AbnormalFilterBy.SINGLE) {
-      leagueEventComponent.updateUndefinedMatchAndLeague();
     }
 
     const transIdAreNotNumber = betIdsComponent.getAllBetIdsAreNotNumber();
@@ -50,7 +43,7 @@ export class ValidationService {
   }
 
   public async checkValidBusinessRule(args: SaveRequestArg): Promise<boolean> {
-    if (!this.validateCommonData(args.betIdsComponent, args.leagueEventComponent, args.primitiveProps, args.duplicateTicketsModel)) {
+    if (!this.validateCommonData(args.betIdsComponent, args.primitiveProps)) {
       return false;
     }
 
@@ -73,8 +66,10 @@ export class ValidationService {
   private updateModelAfterCallApi(args: SaveRequestArg, validationViewModel: CheckDuplicateTicketsViewModel): void {
     args.primitiveProps.transInfoAddRequestModel = validationViewModel.transInfoAddRequestModel;
     args.duplicateTicketsModel.matchId = validationViewModel.match?.matchId;
+    
     if (!this.isFilterMixParlay(args.duplicateTicketsModel.filterBy)) {
-      args.leagueEventComponent.updateInfoWithOnlyOneMatch(validationViewModel.match);
+      args.duplicateTicketsModel.name = validationViewModel.match?.name;
+      args.duplicateTicketsModel.leagueName = validationViewModel.match?.leagueName;
     }
     const isHasPermissionAddSettledTicket = this.checkCanAddSettledTickets(args.permission, args.filter.action);
     this.highlightInvalidTransIds(validationViewModel.validation, args.betIdsComponent, isHasPermissionAddSettledTicket);
@@ -83,7 +78,7 @@ export class ValidationService {
 
   private async callApiCheckDuplicateTickets(args: SaveRequestArg): Promise<CheckDuplicateTicketsViewModel> {
     const transIds = args.betIdsComponent.getAllBetIds();
-    const matchId = !this.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? args.leagueEventComponent?.selectedMatchId : MatchIdConstant.Parlay;
+    const matchId = !this.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? args.duplicateTicketsModel.matchId : MatchIdConstant.Parlay;
     const filterBy = !this.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? null : args.duplicateTicketsModel.filterBy;
     const query: CheckDuplicateTicketsQuery = {
       matchId: matchId,

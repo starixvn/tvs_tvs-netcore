@@ -43,7 +43,8 @@ public class MapDataForConfirmAutoUnmarkServiceImp : MapDataForConfirmAutoUnmark
             MarkedBy = itemModel.MarkedBy,
             TotalItems = itemModel.MarkedTrans,
             SportName = remotingRefService.GetSportName(itemModel.SportType.ToString(), ""),
-            Event = $"{remotingRefService.GetTeamName(itemModel.HomeId, LanguageCode.English)} - vs - {remotingRefService.GetTeamName(itemModel.AwayId, LanguageCode.English)}",
+            Event = $"{remotingRefService.GetTeamName(itemModel.SportType, itemModel.HomeId, LanguageCode.English)} " +
+                    $"- vs - {remotingRefService.GetTeamName(itemModel.SportType, itemModel.AwayId, LanguageCode.English)}",
             MarkType = itemModel.MarkType,
             ChildMatchId = itemModel.ChildMatchId
         }).ToList();
@@ -63,6 +64,5 @@ public class MapDataForConfirmAutoUnmarkServiceImp : MapDataForConfirmAutoUnmark
     {
         var isParseSuccess = long.TryParse(betId, out var betIdNumber);
         return isParseSuccess ? betIdNumber : null;
-
     }
 }

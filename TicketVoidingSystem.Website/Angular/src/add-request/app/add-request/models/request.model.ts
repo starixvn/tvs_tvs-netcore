@@ -16,6 +16,7 @@ import { WrongOddsModel } from './event-wrong-odds.model';
 import { WrongOuModel } from './event-wrong-ou.model';
 import { WrongScoreModel } from './event-wrong-score.model';
 import { RecoverTicketModel } from './recover-ticket.model';
+
 export class RequestModel { // Rename AddRequestModel or remove this
   filter: FilterModel;
   eventDetail: EventDetailModel;

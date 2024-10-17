@@ -92,8 +92,6 @@ class Helper {
     getLogInfoModels: [Helper.fakeGetLogInfoModel],
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -104,7 +102,6 @@ class Helper {
 }
 
 describe('LogInfoService', () => {
-  let validationService: ValidationService;
   let commonService: CommonService;
   let logInfoService: LogInfoService;
 

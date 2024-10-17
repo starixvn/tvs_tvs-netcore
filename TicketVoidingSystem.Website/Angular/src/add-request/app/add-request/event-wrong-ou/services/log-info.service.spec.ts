@@ -27,7 +27,8 @@ class Helper {
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
   static readonly fakeWrongOuModel: WrongOuModel = {
     matchId: 122,
@@ -42,7 +43,8 @@ class Helper {
     isLinkGroupAIO: true,
     isPoolHouseAffected: true,
     liveIndicator: 1,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    sportType: 0
   };
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {

@@ -19,7 +19,7 @@
     <label class="col-form-label">League</label>
     <span type="text" class="form-control form-control-sm disabled">{{selectedMatch.leagueName}}</span>
   </div>
-  <div class="sport-name col-md-2 col-sm-2 pl-4">
+  <div *ngIf="isShowSportType" class="sport-name col-md-2 col-sm-2 pl-4">
     <label class="col-form-label">Sport</label>
     <span type="text" class="form-control form-control-sm disabled">{{selectedMatch.sportTypeName}}</span>
   </div>

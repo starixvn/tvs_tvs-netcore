@@ -93,7 +93,8 @@ class Helper {
     subIssueType: '27',
     status: '',
     isExcludeTest: true,
-    createdBy: ''
+    createdBy: '',
+    isDisplayMissingInfo: false
   };
 }
 

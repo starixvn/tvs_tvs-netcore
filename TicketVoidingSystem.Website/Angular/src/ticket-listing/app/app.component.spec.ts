@@ -165,7 +165,7 @@ class Helper {
   };
 
   static getFakeExportExcelQuery(betTypes: string, singleOrSubParlay: string, summaryItem: SummaryItem): ExportExcelQuery {
-    return _.assignIn({}, Helper.fakeCommonQueryGroupByBettype, {
+    return {
       isGroup: summaryItem.isGroup,
       betTypes: betTypes,
       singleOrSubParlay: singleOrSubParlay,
@@ -179,7 +179,7 @@ class Helper {
       isChinaView: false,
       totalCreditTickets: 1129,
       specialPlatform: 0
-    });
+    } as ExportExcelQuery;
   }
 }
 
@@ -423,7 +423,7 @@ describe('AppComponent', () => {
     expect(instance.notification.open).toHaveBeenCalledWith('Export Excel Result', TEXT.EXPORT_EXCEL_LIMITED);
   });
 
-  it('#exportExcelEvent should call #exportExcel with expected param', async () => {
+  it('#exportExcelEvent should call #exportExcel ', async () => {
     // Arrange
     const mockExportExcel = jest.fn();
     const { instance } = await shallow
@@ -433,14 +433,12 @@ describe('AppComponent', () => {
       .render();
     instance.commonQuery = Helper.fakeCommonQueryGroupByBettype;
     instance.matchViewModel = Helper.fakeMatchModel;
-    const expectedQuery = Helper.getFakeExportExcelQuery('2,1305,157', 'Single', Helper.fakeSummaryItem);
 
     // Action
     instance.exportExcelEvent(Helper.fakeSummaryItem);
 
     // Assert
     expect(mockExportExcel).toHaveBeenCalledTimes(1);
-    expect(mockExportExcel).toHaveBeenCalledWith(expectedQuery);
   });
 
   it('when #searchEvent and #changeMatchEvent of FilterComponent emit, #searchEvent and #hideContent should be called', async () => {

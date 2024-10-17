@@ -23,8 +23,6 @@ class Helper {
   static readonly fakeRequestId = 10222;
   static readonly fakeTransId = '100000002';
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '11',
     subIssueTypeId: '1',
     action: '1',

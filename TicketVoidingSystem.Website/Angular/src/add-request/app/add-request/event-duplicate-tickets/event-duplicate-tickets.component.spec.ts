@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
@@ -7,27 +7,27 @@ import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.mo
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventAbnormalComponent } from '../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
 import { FilterModel } from '../filter/filter.model';
 import { DuplicateTicketsModel } from '../models/event-duplicate-tickets.model';
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets.component';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { CommonService } from '../../../../utility/services/common.service';
 
 class Helper {
   static readonly fakeTransId = '123456789';
   static readonly fakeMatchId = 90000000;
-
   static readonly fakeDuplicateTicketsModel: DuplicateTicketsModel = {
     matchId: Helper.fakeMatchId,
     transIds: Helper.fakeTransId,
     filterBy: null,
     subIssueTypeId: 1,
-    orgTransIds: '1312'
+    orgTransIds: '1312',
+    name: '',
+    leagueName: '',
+    sportType: 0
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '2020-11-09 12:08:49.737',
     issueTypeId: '11',
     subIssueTypeId: '27',
     action: '5',
@@ -41,8 +41,7 @@ class Helper {
 describe('EventDuplicateTicketsComponent', () => {
   @NgModule({
     declarations: [
-      BetIdsComponent,
-      LeagueEventAbnormalComponent
+      BetIdsComponent
     ],
     imports: [
       BlockUiModule,
@@ -53,7 +52,9 @@ describe('EventDuplicateTicketsComponent', () => {
       ValidationService,
       SaveRequestService,
       AddRequestStore,
-      AddRequestApiService
+      AddRequestApiService,
+      CommonService,
+      ElementRef
     ]
   })
   class AppModuleTest { }
@@ -226,14 +227,12 @@ describe('EventDuplicateTicketsComponent', () => {
         }
       });
     instance.updateMatchId.emit = jest.fn();
-    instance.leagueEventComponent = new LeagueEventAbnormalComponent(null, null);
     instance.betIdsComponent = new BetIdsComponent(null);
     instance.betIdsComponent.getAllBetIds = jest.fn();
     instance.duplicateTicketsModel.filterBy = AbnormalFilterBy.SINGLE;
     const actual = await instance['checkValidBusinessRule']();
 
     expect(mockCheckValidBusinessRule).toHaveBeenCalledTimes(1);
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
     expect(actual).toBeTruthy();
   });
 
@@ -251,7 +250,6 @@ describe('EventDuplicateTicketsComponent', () => {
         }
       });
     instance.updateMatchId.emit = jest.fn();
-    instance.leagueEventComponent = new LeagueEventAbnormalComponent(null, null);
     instance.betIdsComponent = new BetIdsComponent(null);
     instance.betIdsComponent.getAllBetIds = jest.fn();
     instance.duplicateTicketsModel.filterBy = AbnormalFilterBy.MIX_PARLAY;

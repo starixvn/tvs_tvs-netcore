@@ -79,10 +79,9 @@ class Helper {
     poolHouseCheckedBetTypes: '',
     isShowValidation: false,
     linkedLogsViewModel: Helper.fakeLinkedLogsViewModel,
+    sportType: 0
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -435,7 +434,7 @@ describe('LogInfoWrongHdpComponent', () => {
     });
   });
 
-  it('recalculatePoolHouseTicket should call #refreshLogInfoByPoolHouseEvent', async () => {
+  it('recalculatePoolHouseTicket should update poolHouseCheckedBetTypes expected', async () => {
     const { instance } = await shallow
     .render({
       bind: {
@@ -444,11 +443,12 @@ describe('LogInfoWrongHdpComponent', () => {
         logInfo: Helper.fakeLogInfoWrongHdp
       }
     });
+    let model = {checkedBetTypes: "123,4"} as PoolHouseTicketsModel;
     instance.refreshLogInfoByPoolHouseEvent = jest.fn();
 
-    instance.recalculatePoolHouseTicket(new PoolHouseTicketsModel());
+    instance.recalculatePoolHouseTicket(model);
 
-    expect(instance.refreshLogInfoByPoolHouseEvent).toHaveBeenCalledTimes(1);
+    expect(instance.logInfo.poolHouseCheckedBetTypes).toBe("123,4");
   });
 
   it('openPoolHouseDetails should call #getPoolHouseTickets', async () => {

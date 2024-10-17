@@ -51,14 +51,14 @@ public class MapUserLogsServiceTests
         };
 
         var remotingRefService = Substitute.For<RemotingRefWrapperService>();
-        remotingRefService.GetTeamName(default, default).ReturnsForAnyArgs("");
+        remotingRefService.GetTeamName(default, default, default).ReturnsForAnyArgs("");
         var service = new MapUserLogsServiceImp(remotingRefService);
 
         // Act
         var actual = service.MapToUserLogViewModels(originalLogs, userLogTicketInfo);
         var originalLog = actual.First();
 
-        // Assert       
+        // Assert
         AssertExtension.Equal(expected.MatchId, originalLog.MatchId);
         AssertExtension.Equal(expected.No, originalLog.No);
         AssertExtension.Equal(expected.ActionId, originalLog.ActionId);

@@ -255,4 +255,30 @@ public class BetTypeExtensionTests
         // Assert
         Assert.False(result);
     }
+
+    [Theory]
+    [InlineData(BetTypeConstant.SabaOUTimeMachine)]
+    [InlineData(BetTypeConstant.SabaHdpTimeMachine)]
+    public void IsSabaTimeMachine_BettypeSabaMachine_returnTrue(int betTypeId)
+    {
+        // Arrange
+        // Act
+        var result = betTypeId.IsSabaTimeMachine();
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void IsSabaTimeMachine_BettypeNotSabaMachine_returnFalse()
+    {
+        // Arrange
+        const int betTypeId = BetTypeConstant.Handicap;
+
+        // Act
+        var result = betTypeId.IsSabaTimeMachine();
+
+        // Assert
+        Assert.False(result);
+    }
 }

@@ -10,8 +10,6 @@ import { SaveRequestService } from './save-request.service';
 
 class Helper {
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '11',
     subIssueTypeId: '1',
     action: '1',

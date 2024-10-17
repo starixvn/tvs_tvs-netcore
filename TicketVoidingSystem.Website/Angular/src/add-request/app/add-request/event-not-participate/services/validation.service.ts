@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterNotParticipateComponent } from '../filter-not-participate/filter-not-participate.component';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,8 @@ export class ValidationService {
   private readonly PLAYER_CLASS = 'player-dropdown';
   private readonly GROUP_BET_TYPE_CLASS = 'bet-type-dropdown';
 
-  public validateCommonData(leagueEventComponent: LeagueEventRedCardComponent, filterNotParticipateComponent: FilterNotParticipateComponent): boolean {
-    if (!leagueEventComponent.isMatchIdValid()) {
+  public validateCommonData(eventLeagueComponent: EventLeagueComponent, filterNotParticipateComponent: FilterNotParticipateComponent): boolean {
+    if (!eventLeagueComponent.isMatchIdValid()) {
       return false;
     }
 

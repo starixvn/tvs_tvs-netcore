@@ -15,8 +15,6 @@ class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -55,7 +53,8 @@ class Helper {
     isPoolHouseAffected: false,
     linkedLogsViewModel: null,
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
 }
 
@@ -71,7 +70,7 @@ describe('RelatedEventService', () => {
     const spyGetChildMatches = jest.spyOn(addRequestApiService, 'getChildMatches').mockImplementation(() => Promise.resolve(Helper.fakeChildMatches));
     const relatedEventService = new RelatedEventService(addRequestApiService, null);
 
-    const actual = await relatedEventService.getChildMatches(null, Helper.fakeFilterModel, null);
+    const actual = await relatedEventService.getChildMatches(null);
 
     expect(spyGetChildMatches).toHaveBeenCalledTimes(1);
     expect(actual.length).toBe(Helper.fakeChildMatches.length);
@@ -98,6 +97,8 @@ describe('RelatedEventService', () => {
     arg.allEvents = [];
     arg.primitiveProps = new PrimitiveProperty();
     arg.primitiveProps.inputRelatedMatchId = '123';
+    arg.filter = new FilterModel();
+    arg.mainEvent = new LogInfoWrongHdp();
     const validationService = new ValidationService();
     const spyIsValidInputRelatedEvent = jest.spyOn(validationService, 'isValidInputRelatedEvent').mockImplementation(() => true);
     const relatedEventService = new RelatedEventService(null, validationService);
@@ -145,6 +146,8 @@ describe('RelatedEventService', () => {
     arg.primitiveProps.inputRelatedMatchId = '123';
     arg.tooltip = new Tooltip();
     arg.tooltip.display = jest.fn();
+    arg.filter = new FilterModel();
+    arg.mainEvent = new LogInfoWrongHdp();
     const validationService = new ValidationService();
     const spyIsValidInputRelatedEvent = jest.spyOn(validationService, 'isValidInputRelatedEvent').mockImplementation(() => true);
     const relatedEventService = new RelatedEventService(null, validationService);

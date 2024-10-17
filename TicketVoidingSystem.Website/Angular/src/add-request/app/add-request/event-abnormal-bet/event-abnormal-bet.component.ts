@@ -138,7 +138,6 @@ export class EventAbnormalBetComponent implements OnInit {
     this.confirmAbnormalBetModel.issueTypeName = this.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === this.filter.issueTypeId).issueTypeName;
     this.confirmAbnormalBetModel.subIssueTypeName = this.issueTypes.selectedSubIssueTypes.find(x => x.subIssueTypeId.toString() === this.filter.subIssueTypeId).subIssueTypeName;
     this.confirmAbnormalBetModel.actionName = TVSRequestActionType.NAME_MAPPING[this.filter.action];
-
     this.confirmAbnormalBetModel.isHasWarningForAbnormalBet = !this.filter.isVoided ? this.validationService.isValidationHasWarningTicket(this.permission, validationResult) : false;
     this.confirmAbnormalBetModel.isHasWarningEditTakeNoteRequest = !this.filter.isVoided ? this.validationService.isHasWarningEditTakeNoteRequest(this.isEdit, this.filter.action, this.actionIdOfFirstTimeAccess) : false;
     this.confirmAbnormalBetModel.settledTickets = validationResult.settledTransIds;

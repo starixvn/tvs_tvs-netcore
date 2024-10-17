@@ -67,8 +67,8 @@ public class MapAbnormalBetTicketsExcelServiceTests : RemotingRefFixture
             }
         };
         var getTicketModel = new GetTicketModel { BetType = betType, SportType = sportType, IsMixParlay = isMixParlay };
-        remotingRefWrapperService.GetLeagueName(1, LanguageCode.English).ReturnsForAnyArgs("LeagueName");
-        remotingRefWrapperService.GetTeamName(1, LanguageCode.English).ReturnsForAnyArgs("1");
+        remotingRefWrapperService.GetLeagueName(sportType, 1, LanguageCode.English).ReturnsForAnyArgs("LeagueName");
+        remotingRefWrapperService.GetTeamName(sportType, 1, LanguageCode.English).ReturnsForAnyArgs("1");
         betListService.GetOdds(Arg.Any<Ticket>(), false).ReturnsForAnyArgs("odds");
         betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("BetTypeName");
         betListService.GetHandicap(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("");

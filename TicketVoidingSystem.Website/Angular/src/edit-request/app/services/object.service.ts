@@ -33,10 +33,7 @@ export class ObjectService {
   }
 
   private mapFilter(requestModel: RequestModel, detailViewModel: RequestDetailViewModel) {
-    const eventDate = StaticService.getEventDate(detailViewModel);
     requestModel.filter = {
-      sportType: detailViewModel.request.sportType,
-      eventDate: eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null,
       action: detailViewModel.request.actionId.toString(),
       subIssueTypeId: StaticService.getSubIssueTypeId(detailViewModel).toString(),
       isTest: detailViewModel.request.isTest,

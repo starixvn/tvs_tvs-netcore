@@ -37,7 +37,10 @@ class Helper {
   };
   static readonly fakeAddRequestResultModel: AddRequestResultModel = {
     requestId: 1111,
-    matchId: ''
+    matchId: '',
+    logResults: [],
+    logStageName: '',
+    markedTicketsSuccessful: []
   };
   static readonly fakeResultSuccessful: Result<AddRequestResultModel> = {
     isSuccessful: true,
@@ -88,10 +91,9 @@ class Helper {
     voidTimeArea: Helper.fakeFilterTimeWithAllowance,
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
+    sportType: 0
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '11',
     subIssueTypeId: '1',
     action: '1',
@@ -110,9 +112,9 @@ class Helper {
     userId: 0,
     requestId: 1,
     requestedBy: '',
-    isHasWarningSettledTicket: false,
     isHasWarningEvent: false,
-    warningRelatedEvents: []
+    warningRelatedEvents: [],
+    isHasSettledTicket: false
   };
   static fakeIssueType: IssueType[] = [{
     issueTypeId: 11,
@@ -141,7 +143,7 @@ class Helper {
     primitiveProps: new PrimitiveProperty(),
     defaultFilterTimeWithAllowance: new FilterTimeWithAllowance(),
     allEvents: [new LogInfoRedCard()],
-    leagueEventRedCardComponent: null,
+    eventLeagueComponent: null,
     filterTimeAreaComponent: null,
     logInfoComponents: null,
     confirmRedCard: Helper.fakeConfirmRedCardModel,
@@ -352,7 +354,7 @@ describe('SaveRequestService', () => {
     args.filter.issueTypeId = issueTypeId.toString();
     args.filter.subIssueTypeId = subIssueTypeId.toString();
     args.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    args.actionIdOfFirstTimeAccess = TVSRequestActionType.MANUAL_VOID;
+    args.actionIdOfFirstTimeAccess = TVSRequestActionType.MANUAL_VOID_ID.toString();
     let fackLogInfoRedCard = new LogInfoRedCard();
     fackLogInfoRedCard.logInfoDetail = null;
     fackLogInfoRedCard.messageValidationLogInfo = null;

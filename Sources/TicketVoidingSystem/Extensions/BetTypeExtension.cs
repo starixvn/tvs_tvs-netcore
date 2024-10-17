@@ -12,7 +12,8 @@ public static class BetTypeExtension
 {
     public static bool IsParlay(this int id)
     {
-        return id is BetTypeConstant.SystemParlay or BetTypeConstant.VirtualSportParlay or BetTypeConstant.VirtualSport4MixParlay;
+        List<int> betTypesParlay = new() { BetTypeConstant.SystemParlay, BetTypeConstant.VirtualSportParlay, BetTypeConstant.VirtualSport4MixParlay, BetTypeConstant.VirtualSport5MixParlay };
+        return betTypesParlay.Contains(id);
     }
 
     public static bool IsParlayAndBetBuilder(this int id)
@@ -61,7 +62,7 @@ public static class BetTypeExtension
     {
         return id is >= BetTypeConstant.FirstVirtualSport and <= BetTypeConstant.SecondVirtualSport
                    or >= BetTypeConstant.MinVirtualSportBetType and <= BetTypeConstant.MaxVirtualSportBetType
-               || id.IsVirtualSport4BetType();
+               || id.IsVirtualSport4BetType() || IsVirtualSport5BetType(id);
     }
 
     private static bool IsVirtualSport4BetType(this int id)
@@ -69,11 +70,27 @@ public static class BetTypeExtension
         return id is BetTypeConstant.VirtualSport4MixParlay or BetTypeConstant.VirtualSport4MatchWinner;
     }
 
-    private static readonly List<int> VirtualSports = new() { 190, 191, 192, 193, 194, 195, 196, 197, 178, 179, 188 };
-
-    public static bool IsVirtualSport(this int sportTypeId)
+    private static bool IsVirtualSport5BetType(this int id)
     {
-        return VirtualSports.Contains(sportTypeId);
+        List<int> betTypesVirtualSport5 = new() { 11050, 11051, 11052, 11053, 11054, 11055, 11099 };
+        return betTypesVirtualSport5.Contains(id);
+    }
+
+    public static bool IsVirtualSport2(this int sportTypeId)    // Sport Type of VirtualSport2 except 177, 198
+    {
+        List<int> VirtualSportsSportTypeIds = new() { 190, 191, 192, 193, 194, 195, 196, 197 };
+        return VirtualSportsSportTypeIds.Contains(sportTypeId);
+    }
+
+    public static bool IsVirtualSports2Betradar(this int sportTypeId)
+    {
+        return sportTypeId is SportTypeConstant.VirtualHorseRacing or SportTypeConstant.VirtualDogRacing;
+    }
+
+    public static bool IsVirtualSport345(this int sportTypeId) // Sport Type of VS3-VS4-VS5
+    {
+        List<int> VirtualSportsSportTypeIds = new() { 178, 179, 188, 9908, 147 };
+        return VirtualSportsSportTypeIds.Contains(sportTypeId);
     }
 
     public static bool IsSabaTimeMachine(this int betTypeId)

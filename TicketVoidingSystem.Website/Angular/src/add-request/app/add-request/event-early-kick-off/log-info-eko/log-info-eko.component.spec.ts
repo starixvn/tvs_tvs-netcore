@@ -29,9 +29,11 @@ class Helper {
     leagueName: '',
     matchModel: new MatchModel(),
     pagingModel: new PagingModel(),
-    subIssueTypeId: 1,
     isInvalidTotalTickets: false,
-    tableTicketsModel: new TableTicketsModel()
+    tableTicketsModel: new TableTicketsModel(),
+    isHasSettledTicket: false,
+    isHasInstantlySettledTicket: false,
+    sportType: 0
   };
 }
 

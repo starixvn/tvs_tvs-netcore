@@ -19,6 +19,8 @@ import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-tic
 import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
 import { LogAnalysisService } from '../../services/log-analysis.service';
 import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
+import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -63,11 +65,10 @@ class Helper {
     isPoolHouseAffected: false,
     linkedLogsViewModel: new LinkedLogsViewModel(),
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -119,7 +120,9 @@ class Helper {
 describe('LogInfoWrongOddsComponent', () => {
   @NgModule({
     declarations: [
-      PoolHouseTicketComponent
+      PoolHouseTicketComponent,
+      AffectedTicketComponent,
+      TicketCountOtherSportsComponent
     ],
     imports: [
       NgbModule,
@@ -130,7 +133,8 @@ describe('LogInfoWrongOddsComponent', () => {
       ModalService,
       EventWrongOddsService,
       AddRequestStore,
-      AddRequestApiService
+      AddRequestApiService,
+      LogAnalysisService
     ]
   })
   class AppModuleTest { }
@@ -248,38 +252,7 @@ describe('LogInfoWrongOddsComponent', () => {
 
     expect(mockModalOpen).toHaveBeenCalledTimes(1);
   });
-
-  it('clearDataValidation should update to null', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        primitiveProps: new PrimitiveProperty(),
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongOdds
-      }
-    });
-    instance.clearDataValidation();
-
-    expect(instance.logInfo.logInfoDetail).toBeNull();
-    expect(instance.logInfo.messageValidationLogInfo ).toBeNull();
-  });
-
-  it('displayFullDateTimeFormat should return time', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        primitiveProps: new PrimitiveProperty(),
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongOdds
-      }
-    });
-    const actual = instance.displayFullDateTimeFormat(new Date(Helper.fakeFromDateTime));
-
-    expect(actual).toBe('2020/10/08 09:44:46.361 PM');
-  });
-
+  
   it('openPoolHouseDetails should update poolHouseTicketsModel expected', async () => {
     let fakeFunctionWriteLog = jest.fn();
     const mockGetPoolHouseTickets = jest.fn().mockReturnValue(Helper.fakePoolHouseTicketViewModel);

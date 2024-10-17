@@ -5,8 +5,8 @@ import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { EventWrongOuService } from './event-wrong-ou.service';
 import { FilterModel } from '../../filter/filter.model';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -23,7 +23,8 @@ class Helper {
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };  
   static readonly fakeWrongOuModel: WrongOuModel = {
     matchId: 122,
@@ -38,10 +39,10 @@ class Helper {
     isLinkGroupAIO: true,
     isPoolHouseAffected: true,
     liveIndicator: 1,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    sportType: 0
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 0,
     subIssueTypeId: '',
     action: '',
     isTest: false,
@@ -95,7 +96,8 @@ describe('EventWrongOuService', () => {
       filterWrongOu: new FilterWrongOuModel,
       logInfoDetail: new LogInfoDetail,
       linkedLogsViewModel: new LinkedLogsViewModel,
-      isShowValidation: false
+      isShowValidation: false,
+      sportType: 0
     }
     let actual = await service.getWrongOuModel(Helper.fakeFilterModel, [logInfoWrongOu]);
 

@@ -66,11 +66,10 @@ class Helper {
     isPoolHouseAffected: false,
     poolHouseCheckedBetTypes: null,
     linkedLogsViewModel: null,
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -93,7 +92,8 @@ class Helper {
     isLinkGroupAIO: false,
     isPoolHouseAffected: false,
     liveIndicator: 0,
-    poolHouseCheckedBetTypes: null
+    poolHouseCheckedBetTypes: null,
+    sportType: 0
   };
   static readonly fakeChildMatches: ChildMatchModel[] = [
     {
@@ -212,6 +212,7 @@ describe('EventWrongHdpComponent', () => {
     });
     const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
+    logInfoWrongHdpComponents.logInfo = {} as LogInfoWrongHdp;
     const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
     instance.logInfoComponents = logInfoComponents;
@@ -222,7 +223,7 @@ describe('EventWrongHdpComponent', () => {
     expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
   });
 
-  it('handleSearchEvent should call #getChildMatches', async () => {
+  it('#handleSearchEvent should call #getChildMatches', async () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const mockValidateCommonData = jest.fn().mockImplementation(() => true);
     const mockGetLogInfo = jest.fn();
@@ -246,6 +247,7 @@ describe('EventWrongHdpComponent', () => {
     instance.primitiveProps = new PrimitiveProperty();
     const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
+    logInfoWrongHdpComponents.logInfo = {} as LogInfoWrongHdp;
     const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
     instance.logInfoComponents = logInfoComponents;
@@ -393,7 +395,7 @@ describe('EventWrongHdpComponent', () => {
     expect(mockAddRelatedEventByInput).toHaveBeenCalledTimes(1);
   });
 
-  it('saveRequest should update data', async () => {
+  it('#saveRequest should update data', async () => {
     const mockSaveRequest = jest.fn();
     const { instance } = await shallow
     .mock(SaveRequestService, { saveRequest: mockSaveRequest })
@@ -408,6 +410,7 @@ describe('EventWrongHdpComponent', () => {
     });
     const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
+    logInfoWrongHdpComponents.logInfo = {} as LogInfoWrongHdp;
     const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
     instance.logInfoComponents = logInfoComponents;
@@ -571,6 +574,7 @@ describe('EventWrongHdpComponent', () => {
     component.isEdit = true;
     component.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
     component.mainEvent = Helper.fakeLogInfoWrongHdp;
+    component.filter = Helper.fakeFilterModel;
 
     await component.ngOnInit();
 

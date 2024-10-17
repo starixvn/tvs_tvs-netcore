@@ -17,7 +17,6 @@ import { PrimitiveProperty } from '../event-red-card/event-red-card.model';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowanceComponent } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from '../event-red-card/log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from '../event-red-card/log-info-red-card/log-info-red-card.model';
 import { FilterModel } from '../filter/filter.model';
@@ -31,6 +30,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -49,8 +49,6 @@ class Helper {
     saTime: 12,
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -73,7 +71,8 @@ class Helper {
     subIssueTypeId: 5,
     subIssueTypeName: '',
     logInfoDetail: null,
-    leagueName: ''
+    leagueName: '',
+    sportType: 0
   };
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
@@ -106,6 +105,7 @@ class Helper {
     voidTimeArea: Helper.fakeFilterTimeWithAllowance,
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
+    sportType: 0
   };
   static readonly fakeChildMatches: ChildMatchModel[] = [
     {
@@ -150,7 +150,7 @@ class Helper {
 describe('EventDangerAcceptedComponent', () => {
   @NgModule({
     declarations: [
-      LeagueEventRedCardComponent,
+      EventLeagueComponent,
       ConfirmDangerAcceptedComponent,
       FilterTimeAreaComponent,
       LogInfoRedCardComponent,
@@ -384,7 +384,7 @@ describe('EventDangerAcceptedComponent', () => {
       });
     instance.primitiveProps = new PrimitiveProperty();
     instance.mainEvent =  new LogInfoRedCard();
-    instance.leagueEventDangerAcceptedComponent.selectedMatch = new MatchModel();
+    instance.eventLeagueComponent.selectedMatch = new MatchModel();
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.isMainMatch = true;
     instance.allSelectedEvents = [mainEvent];
@@ -415,7 +415,7 @@ describe('EventDangerAcceptedComponent', () => {
       });
     instance.primitiveProps = new PrimitiveProperty();
     instance.mainEvent =  new LogInfoRedCard();
-    instance.leagueEventDangerAcceptedComponent = null;
+    instance.eventLeagueComponent = new EventLeagueComponent(null, null);
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.isMainMatch = true;
     instance.allSelectedEvents = [mainEvent];
@@ -1022,7 +1022,7 @@ describe('EventDangerAcceptedComponent', () => {
     const addRequestStore = new AddRequestStore();
     addRequestStore.blockingUiStatus.subscribe = jest.fn();
     addRequestStore.getAllowanceTimeSubject.subscribe = jest.fn();
-    const eventDangerAcceptedService = new EventDangerAcceptedService(null);
+    const eventDangerAcceptedService = new EventDangerAcceptedService(null, null);
     eventDangerAcceptedService.updateDefaultFilterTime = jest.fn();
     eventDangerAcceptedService.assignModelsToEvents = jest.fn();
     const relatedEventService = new RelatedEventService(null, null, null, null);
@@ -1032,7 +1032,7 @@ describe('EventDangerAcceptedComponent', () => {
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.isMainMatch = true;
     component.allSelectedEvents = [mainEvent];
-
+    component.filter = {issueTypeId: "1"} as FilterModel;
     // Action
     await component.ngOnInit();
 
@@ -1046,7 +1046,7 @@ describe('EventDangerAcceptedComponent', () => {
     // Arrange
     const addRequestStore = new AddRequestStore();
     addRequestStore.blockingUiStatus.subscribe = jest.fn();
-    const eventDangerAcceptedService = new EventDangerAcceptedService(null);
+    const eventDangerAcceptedService = new EventDangerAcceptedService(null, null);
     eventDangerAcceptedService.initDefaultMainEvent = jest.fn();
     eventDangerAcceptedService.initDefaultFilterTime = jest.fn();
     const component = new EventDangerAcceptedComponent(null, null, null, null, addRequestStore, null, eventDangerAcceptedService);

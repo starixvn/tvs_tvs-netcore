@@ -6,7 +6,7 @@ exports[`EventRedCardComponent #EventRedCardComponent init should match snapshot
 >
   <event-red-card>
     <div>
-      <league-event-red-card />
+      <event-league />
       <div>
         <div
           class="var-check-selection mt-2"

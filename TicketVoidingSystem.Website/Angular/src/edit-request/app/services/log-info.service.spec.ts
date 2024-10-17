@@ -45,7 +45,8 @@ class Helper {
     sportType: 2,
     voidedBy: null,
     userId: 0,
-    requestId: 1
+    requestId: 1,
+    briefInfoNote: ''
   };
   static readonly fakeRequestDetailViewModel: RequestDetailViewModel = {
     requestId: Helper.fakeRequestId,
@@ -115,7 +116,8 @@ class Helper {
     isPoolHouseAffected: false,
     isLinkGroup1X2: false,
     isLinkGroupAIO: false,
-    oddsInfo: null
+    oddsInfo: null,
+    sportType: 0
   };
 }
 

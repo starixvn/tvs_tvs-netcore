@@ -29,7 +29,8 @@ describe('AppService', () => {
       sportType: 2,
       voidedBy: null,
       userId: 0,
-      requestId: 1
+      requestId: 1,
+      briefInfoNote: ''
     };
     const fakeRequestDetailViewModel: RequestDetailViewModel = {
       requestId: 111,

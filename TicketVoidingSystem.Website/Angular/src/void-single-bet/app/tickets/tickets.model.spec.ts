@@ -1,8 +1,6 @@
 ﻿import { GroupModel } from './group.model';
 import { TicketModel } from './ticket.model';
 import { TicketsModel } from './tickets.model';
-import { BetID } from '../../../utility/models/bet-id.model';
-import { SiteDbGroupModel } from '../../../utility/models/site-db-group.model';
 
 describe('Tickets - TicketsModel', () => {
     enum IconCheckBox {

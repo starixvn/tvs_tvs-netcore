@@ -5,7 +5,6 @@ import { Shallow } from 'shallow-render';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { NotParticipateModel } from '../models/event-not-participate.model';
 import { EventNotParticipateComponent } from './event-not-participate.component';
@@ -20,6 +19,7 @@ import { FilterNotParticipateService } from './services/filter-not-participate.s
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 class Helper {
   static readonly fromDate = '2021-12-18 12:08:49.737';
   static readonly toDate = '2021-12-21 12:08:49.737';
@@ -50,7 +50,7 @@ describe('EventNotParticipateComponent', () => {
   @NgModule({
     declarations: [
       FilterNotParticipateComponent,
-      LeagueEventRedCardComponent,
+      EventLeagueComponent,
       LogInfoNotParticipateComponent
     ],
     imports: [
@@ -204,9 +204,9 @@ describe('EventNotParticipateComponent', () => {
         filter: new FilterModel(),
       }
     });
-    instance.leagueEventNotParticipateComponent = new LeagueEventRedCardComponent(null, null);
-    instance.leagueEventNotParticipateComponent.selectedMatch = new MatchModel();
-    instance.leagueEventNotParticipateComponent.selectedMatch.matchId = 1;
+    instance.eventLeagueComponent = new EventLeagueComponent(null, null);
+    instance.eventLeagueComponent.selectedMatch = new MatchModel();
+    instance.eventLeagueComponent.selectedMatch.matchId = 1;
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();
     instance.logInfoEvent = Helper.fakeLogInfoNotParticipate;
     instance['updateModelWhenChangeMatchId'] = jest.fn();
@@ -226,8 +226,8 @@ describe('EventNotParticipateComponent', () => {
         filter: new FilterModel(),
       }
     });
-    instance.leagueEventNotParticipateComponent = new LeagueEventRedCardComponent(null, null);
-    instance.leagueEventNotParticipateComponent = null;
+    instance.eventLeagueComponent = new EventLeagueComponent(null, null);
+    instance.eventLeagueComponent = null;
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();
     instance.logInfoEvent = Helper.fakeLogInfoNotParticipate;
     instance['updateModelWhenChangeMatchId'] = jest.fn();

@@ -3,7 +3,6 @@ export class GeneralInfo {
     voidedTimeString: string;
     kickOffTimeString?: string;
     leagueName?: string;
-    matchEvent?: string;
     totalTicketsProcessed: number;
     totalCancelCashOutProcessed: number;
     decidedBy: string;

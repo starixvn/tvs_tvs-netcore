@@ -42,7 +42,8 @@ class Helper {
     subIssueTypeId: 5,
     subIssueTypeName: '',
     logInfoDetail: null,
-    leagueName: ''
+    leagueName: '',
+    sportType: 0
   };
   static readonly fakeFilterTimeWithAllowance: FilterTimeWithAllowance = {
     fromDateTime: Helper.fakeFromDateTime,
@@ -80,11 +81,10 @@ class Helper {
     subIssueTypeId: SubIssueTypeConstant.MAIN_CORNER,
     voidTimeArea: Helper.fakeFilterTimeWithAllowance,
     logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: Helper.fakeValidationMessage
+    messageValidationLogInfo: Helper.fakeValidationMessage,
+    sportType: 0
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -174,7 +174,7 @@ describe('RelatedEventService', () => {
     addRequestApiService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeChildMatchModel]));
 
     // Action
-    const actual = await service.getChildMatches(1, new FilterModel(), true);
+    const actual = await service.getChildMatches(null);
 
     // Assert
     expect(actual.length).toBe(1);
@@ -281,7 +281,8 @@ describe('RelatedEventService', () => {
       subIssueTypeId: SubIssueTypeConstant.MAIN_CORNER,
       voidTimeArea: Helper.fakeFilterTimeWithAllowance,
       logInfoDetail: Helper.fakeLogInfoDetail,
-      messageValidationLogInfo: Helper.fakeValidationMessage
+      messageValidationLogInfo: Helper.fakeValidationMessage,
+      sportType: 0
     };
     let fackChildMatchModel = Helper.fakeChildMatchModel;
     fackChildMatchModel.matchId = 213;
@@ -311,7 +312,8 @@ describe('RelatedEventService', () => {
       subIssueTypeId: SubIssueTypeConstant.MAIN_CORNER,
       voidTimeArea: Helper.fakeFilterTimeWithAllowance,
       logInfoDetail: Helper.fakeLogInfoDetail,
-      messageValidationLogInfo: Helper.fakeValidationMessage
+      messageValidationLogInfo: Helper.fakeValidationMessage,
+      sportType: 0
     };
     let fackChildMatchModel = Helper.fakeChildMatchModel;
     fackChildMatchModel.matchId = 213;

@@ -5,8 +5,7 @@ import { Shallow } from 'shallow-render';
 import { ConfirmWrongScoreComponent } from './confirm-wrong-score.component';
 
 @NgModule({
-  declarations: [
-  ],
+  declarations: [],
   imports: [FormsModule]
 })
 class AppModuleTest { }

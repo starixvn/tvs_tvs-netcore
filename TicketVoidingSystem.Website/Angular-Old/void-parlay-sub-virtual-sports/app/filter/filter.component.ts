@@ -83,11 +83,15 @@ export class FilterComponent {
     }
 
     private inValidSportTypeVirtualSport2(sportType: number){
-      return (sportType < 190 || sportType > 199);
+      return ((sportType < 190 || sportType > 199) && sportType !== 177);
     }
 
     private inValidSportTypeVirtualSport4(sportType: number){
-      return sportType !== 188;
+      return sportType !== 188 && sportType !== 9908 ;
+    }
+
+    private inValidSportTypeVirtualSport5(sportType: number){
+      return sportType !== 147;
     }
 
     checkMatch() {
@@ -95,7 +99,8 @@ export class FilterComponent {
             this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
             this.isSuccessMatch = false;
         }
-        else if (this.inValidSportTypeVirtualSport2(this.match.sportType) && this.inValidSportTypeVirtualSport4(this.match.sportType)) {
+        else if (this.inValidSportTypeVirtualSport2(this.match.sportType) && this.inValidSportTypeVirtualSport4(this.match.sportType)
+          && this.inValidSportTypeVirtualSport5(this.match.sportType)) {
             this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
             this.isSuccessMatch = false;
         }
@@ -130,7 +135,8 @@ export class FilterComponent {
             this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
             return false;
         }
-        else if (this.inValidSportTypeVirtualSport2(this.match.sportType) && this.inValidSportTypeVirtualSport4(this.match.sportType)) {
+        else if (this.inValidSportTypeVirtualSport2(this.match.sportType) && this.inValidSportTypeVirtualSport4(this.match.sportType)
+          && this.inValidSportTypeVirtualSport5(this.match.sportType)) {
             this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
             return false;
         }

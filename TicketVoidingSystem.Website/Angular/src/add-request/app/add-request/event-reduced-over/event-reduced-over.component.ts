@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { OddsInfo } from '../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { ReducedOverModel } from '../models/event-reduced-over.model';
 import { OthersModel } from '../others/others.model';
@@ -15,6 +14,7 @@ import { FilterReducedOverService } from './services/filter-reduced-over.service
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-reduced-over',
@@ -31,7 +31,7 @@ export class EventReducedOverComponent implements OnInit {
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Output() updateMatchId = new EventEmitter<number>();
-  @ViewChild('leagueEvent') leagueEventReducedOverComponent: LeagueEventRedCardComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChild('filterReducedOver') filterReducedOverComponent: FilterReducedOverComponent;
 
   logInfoEvent = new LogInfoReducedOver();
@@ -72,7 +72,7 @@ export class EventReducedOverComponent implements OnInit {
 
   public async clickSearch(): Promise<void> {
     this.primitivePropertyEvent.isShowValidation = false;
-    if (!this.validationService.validateCommonData(this.leagueEventReducedOverComponent, this.filterReducedOverComponent)) {
+    if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.filterReducedOverComponent)) {
       return;
     }
 
@@ -100,7 +100,7 @@ export class EventReducedOverComponent implements OnInit {
     arg.filter = this.filter;
     arg.primitiveProps = this.primitivePropertyEvent;
     arg.filterReducedOverComponent = this.filterReducedOverComponent;
-    arg.leagueEventReducedOverComponent = this.leagueEventReducedOverComponent;
+    arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.logInfoEvent = this.logInfoEvent;
     arg.addRequestStore = this.addRequestStore;
 
@@ -114,8 +114,8 @@ export class EventReducedOverComponent implements OnInit {
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
 
-    if (this.leagueEventReducedOverComponent?.selectedMatch.matchId) {
-      this.logInfoEvent.matchId = this.leagueEventReducedOverComponent.selectedMatch.matchId;
+    if (this.eventLeagueComponent?.selectedMatch.matchId) {
+      this.logInfoEvent.matchId = this.eventLeagueComponent.selectedMatch.matchId;
       await this.updateModelWhenChangeMatchId();
       this.resetFilterReducedOver();
       this.primitivePropertyEvent.isShowFilterArea = true;

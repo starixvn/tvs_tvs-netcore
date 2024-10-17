@@ -10,28 +10,6 @@ import { TicketsQuery } from './ticket-list/tickets/tickets.query';
 
 jest.mock('../../utility/services/http.service');
 
-class Helper {
-  static readonly fakeDate = '2019-11-18 12:08:49.737';
-  static readonly fakeGeneralInfo : GeneralInfo = {
-    voidedTimeString: '',
-    voidingHistoryIds: '',
-    kickOffTimeString: Helper.fakeDate,
-    leagueName: '',
-    matchEvent: 'MU - vs Barca',
-    licenseeNames: '',
-    totalTicketsProcessed: 1,
-    decidedBy: '',
-    requestedBy: '',
-    negativeBalanceUsers: '',
-    generalBetTypeCombinations: '',
-    scoreResult: '',
-    reason: '',
-    totalCancelCashOutProcessed: 0,
-    cancelCashOutLicenseesName: '',
-    singleTransIds: ''
-  } as GeneralInfo;
-}
-
 describe('AppService', () => {
   let mockHttpService: jest.Mocked<HttpService>;
   let appService: AppService;
@@ -140,7 +118,7 @@ describe('AppService', () => {
     // Arrange
 
     const generalInfoViewModel: GeneralInfoViewModel = {
-      generalInfoModel: Helper.fakeGeneralInfo,
+      generalInfoModel: {} as GeneralInfo,
       userVoidMessages: [],
       succeedEmails: [],
       failedEmails: [],

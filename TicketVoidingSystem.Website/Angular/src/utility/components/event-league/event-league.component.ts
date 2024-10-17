@@ -16,6 +16,7 @@ import { Tooltip } from '../tooltip/tooltip.model';
 export class EventLeagueComponent implements OnChanges {
   @Input() isEdit: boolean;
   @Input() matchId: number;
+  @Input() isShowSportType = true;
   @Output() changeEvent = new EventEmitter<MatchModel>();
 
   selectedMatch = new MatchModel();
@@ -80,7 +81,7 @@ export class EventLeagueComponent implements OnChanges {
     this.changeEvent.emit(match);
   }
 
-  private updateInfoWithOnlyOneMatch(match: MatchModel): void {
+  public updateInfoWithOnlyOneMatch(match: MatchModel): void {
     if (match) {
       this.matches = [match];
       this.selectedMatch = match;

@@ -1,7 +1,6 @@
 ﻿using Epplus.Mapper.Extensions;
 using OfficeOpenXml;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.Models;
@@ -34,9 +33,9 @@ public class GetVoidedTicketsWorkSheetService : WorkSheetService<GetVoidedTicket
         worksheet.Cells[1, 1].Value = cellService.CreateTitle(model.MatchId ?? 0, model.IssueTypeId);
         var match = IsNotAddMatchForExcel(model.IssueTypeId, model.MatchId) ? null : await getVoidedTicketsService.GetMatchInfo(model.MatchId.Value);
         matchService.UpdateMatchInfoFromRemotingRef(match);
-        if (match != null && match.SportType.IsVirtualSport())
+        if (match != null)
         {
-            match.MatchCode = betListService.GetMatchCodeBetradar(match.MatchCode);
+            match.MatchCode = betListService.GetVirtualSportMatchCode(match.SportType, match.MatchCode);
         }
 
         AddMatchContent(worksheet, match);

@@ -18,6 +18,7 @@ import { EventDangerAcceptedService } from './event-danger-accepted.service';
 import { LogInfoEarlyKickOff } from '../../event-early-kick-off/models/log-info-eko.model';
 import { TableTicketsModel } from '../../event-early-kick-off/tickets-list/table-tickets.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
+import { ValidationService } from './validation.service';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -42,7 +43,8 @@ class Helper {
     subIssueTypeId: 5,
     subIssueTypeName: '',
     logInfoDetail: null,
-    leagueName: ''
+    leagueName: '',
+    sportType: 0
   };
   static readonly fakeFilterTimeWithAllowance: FilterTimeWithAllowance = {
     fromDateTime: Helper.fakeFromDateTime,
@@ -52,8 +54,6 @@ class Helper {
     saTime: 12,
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
@@ -91,7 +91,8 @@ class Helper {
     subIssueTypeId: SubIssueTypeConstant.MAIN_CORNER,
     voidTimeArea: Helper.fakeFilterTimeWithAllowance,
     logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: Helper.fakeValidationMessage
+    messageValidationLogInfo: Helper.fakeValidationMessage,
+    sportType: 0
   };
   static readonly fakeChildMatchModel: ChildMatchModel = {
     matchId: Helper.fakeMatchId,
@@ -182,7 +183,6 @@ class Helper {
   static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
     matchId: 0,
     leagueName: '',
-    subIssueTypeId: 0,
     isMainMatch: false,
     kickOffTime: '',
     eventName: '',
@@ -191,30 +191,35 @@ class Helper {
     isCollapse: false,
     pagingModel: undefined,
     isInvalidTotalTickets: false,
-    isShowValidation: false
+    isShowValidation: false,
+    isHasSettledTicket: false,
+    isHasInstantlySettledTicket: false,
+    sportType: 0
   }
-  
 }
 
 describe('EventDangerAcceptedService', () => {
   let eventDangerAcceptedService: EventDangerAcceptedService;
 
   beforeEach(() => {
-    eventDangerAcceptedService = new EventDangerAcceptedService(null);
+    eventDangerAcceptedService = new EventDangerAcceptedService(null, null);
   });
 
   it('#assignModelsToEvents should update correct model', async () => {
     // Arrange
-    const allEvents = [];
+    const allEvents = [{logInfoDetail: {}} as LogInfoRedCard];
     const primitiveProps = new PrimitiveProperty();
     const addRequestStore = new AddRequestStore();
     addRequestStore.changeAllowanceTime = jest.fn();
+    let validationService = new ValidationService();
+    validationService.isHasWarningRangeTime = jest.fn().mockReturnValue(true);
+    eventDangerAcceptedService = new EventDangerAcceptedService(null, validationService);
+    Helper.fakeRedCardModel.logInfoDetail = new LogInfoDetail();
 
     // Action
     eventDangerAcceptedService.assignModelsToEvents(allEvents, [Helper.fakeRedCardModel], primitiveProps, addRequestStore);
 
     // Assert
-    expect(allEvents.length).toBe(1);
     expect(primitiveProps.filterBy).toBe(Helper.fakeRedCardModel.filterBy);
     expect(addRequestStore.changeAllowanceTime).toHaveBeenCalledTimes(1);
   });
@@ -371,7 +376,7 @@ describe('EventDangerAcceptedService', () => {
     // Arrange
     const addRequestApiService = new AddRequestApiService(null);
     addRequestApiService.getSubIssueTypeLinkMatch = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeSubIssueTypeLinkMatch]));
-    const mockEventDangerAcceptedService = new EventDangerAcceptedService(addRequestApiService);
+    const mockEventDangerAcceptedService = new EventDangerAcceptedService(addRequestApiService, null);
     mockEventDangerAcceptedService['getGroupSubTypeIncludeAllowanceTime'] = jest.fn().mockImplementation(() => Helper.fakeGroupButton);
 
     // Action

@@ -44,10 +44,10 @@ public class GetMatchInfoHandlerTests
     {
         // Arrange
         var request = new GetMatchInfoRequest();
-        var expectedMatch = new Match { MatchCode = "ABC", SportType = 190 };
+        var expectedMatch = new Match { MatchCode = "ABC", SportType = 190, MatchId = 1 };
         matchService.GetMatch(Arg.Any<GetMatchInfoRequest>()).ReturnsForAnyArgs(expectedMatch);
         matchService.UpdateMatchInfoFromRemotingRef(Arg.Any<Match>()).ReturnsForAnyArgs(expectedMatch);
-        betListService.GetMatchCodeBetradar(Arg.Any<string>()).ReturnsForAnyArgs("XYZ");
+        betListService.GetVirtualSportMatchCode(190, "ABC").Returns("XYZ");
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);

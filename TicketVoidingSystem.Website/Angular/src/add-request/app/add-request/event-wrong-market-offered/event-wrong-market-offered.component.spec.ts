@@ -8,7 +8,6 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { WrongMarketOfferedModel } from '../models/event-wrong-market-offered.model';
 import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered.component';
@@ -42,7 +41,8 @@ class Helper {
     logInfoDetail: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTypeCount: [],
-    betTeamsResult: []
+    betTeamsResult: [],
+    checkedBetTypes: []
   };
 }
 
@@ -50,7 +50,7 @@ describe('EventWrongMarketOfferedComponent', () => {
   @NgModule({
     declarations: [
       FilterTimeComponent,
-      LeagueEventRedCardComponent,
+      EventLeagueComponent,
       LogInfoWrongMarketOfferedComponent,
       AdvancedModeAddRequestComponent,
       EventLeagueComponent

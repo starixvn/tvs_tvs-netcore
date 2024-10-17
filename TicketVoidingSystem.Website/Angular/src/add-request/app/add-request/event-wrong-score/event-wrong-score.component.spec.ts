@@ -15,9 +15,7 @@ import { MatchModel } from '../../../../utility/models/match.model';
 import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
-import { ConfirmAbnormalBetModel } from '../event-abnormal-bet/confirm-abnormal-bet/confirm-abnormal-bet.model';
 import { ValidationBusinessRuleOutput } from '../event-abnormal-bet/services/validation.model';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { WrongScoreModel } from '../models/event-wrong-score.model';
@@ -32,6 +30,7 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
+import { ValidationAbnormalBet } from '../event-abnormal-bet/event-abnormal-bet.model';
 
 class Helper {
   static readonly fakeTransId = '111102';
@@ -44,8 +43,6 @@ class Helper {
     saTime: 1,
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '3',
     subIssueTypeId: '33',
     action: '1',
@@ -113,15 +110,15 @@ class Helper {
   }];
   static readonly fakeValidationBusinessRuleOutputSuccessful: ValidationBusinessRuleOutput = {
     isValid: true,
-    warningModel: new ConfirmAbnormalBetModel(),
     transInfoAddRequestModel: null,
-    abnormalBetTicketRequests: []
+    abnormalBetTicketRequests: [],
+    warningModel: new ValidationAbnormalBet
   };
   static readonly fakeValidationBusinessRuleOutputError: ValidationBusinessRuleOutput = {
     isValid: false,
-    warningModel: new ConfirmAbnormalBetModel(),
     transInfoAddRequestModel: null,
-    abnormalBetTicketRequests: []
+    abnormalBetTicketRequests: [],
+    warningModel: new ValidationAbnormalBet
   };
 
   static initHtml(): void {
@@ -153,7 +150,7 @@ class Helper {
 describe('EventWrongScoreComponent', () => {
   @NgModule({
     declarations: [
-      LeagueEventRedCardComponent,
+      EventLeagueComponent,
       ConfirmWrongScoreComponent,
       WrongScoreInfoComponent,
       FilterWrongScoreComponent,

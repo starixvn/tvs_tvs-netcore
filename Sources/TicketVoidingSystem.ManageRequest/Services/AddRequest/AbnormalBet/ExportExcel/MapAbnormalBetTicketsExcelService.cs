@@ -106,8 +106,8 @@ public class MapAbnormalBetTicketsExcelServiceImp : MapAbnormalBetTicketsExcelSe
     {
         var ticket = mapper.Map<AbnormalBetTicketViewModel>(item);
         ticket.BetId = item.TransId.ToString();
-        ticket.LeagueName = remotingRefWrapperService.GetLeagueName(item.LeagueId, LanguageCode.English);
-        ticket.MatchEvent = GetMatchEvent(item.HomeId, item.AwayId);
+        ticket.LeagueName = remotingRefWrapperService.GetLeagueName(item.SportType, item.LeagueId, LanguageCode.English);
+        ticket.MatchEvent = GetMatchEvent(item.SportType, item.HomeId, item.AwayId);
         ticket.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
         ticket.Member = item.UserName;
         ticket.WinLoss = item.Status.IsRunningOrWaiting()
@@ -123,10 +123,10 @@ public class MapAbnormalBetTicketsExcelServiceImp : MapAbnormalBetTicketsExcelSe
         return ticket;
     }
 
-    private string GetMatchEvent(int? homeId, int? awayId)
+    private string GetMatchEvent(int sportType, int homeId, int awayId)
     {
-        var homeName = remotingRefWrapperService.GetTeamName(homeId, LanguageCode.English);
-        var awayName = remotingRefWrapperService.GetTeamName(awayId, LanguageCode.English);
+        var homeName = remotingRefWrapperService.GetTeamName(sportType, homeId, LanguageCode.English);
+        var awayName = remotingRefWrapperService.GetTeamName(sportType, awayId, LanguageCode.English);
         return $"{homeName} - vs - {awayName}";
     }
 }

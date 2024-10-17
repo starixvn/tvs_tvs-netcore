@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongHdpModel } from '../../models/event-wrong-hdp.model';
@@ -7,6 +6,7 @@ import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { EventWrongHdpService } from './event-wrong-hdp.service';
 import { ValidationService } from './validation.service';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -23,7 +23,8 @@ class Helper {
     linkedLogsViewModel: new LinkedLogsViewModel(),
     isPoolHouseAffected: true,
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };  
   static readonly fakeWrongHdpModel: WrongHdpModel = {
     matchId: 122,
@@ -40,7 +41,8 @@ class Helper {
     isLinkGroupAIO: true,
     isPoolHouseAffected: true,
     poolHouseCheckedBetTypes: '',
-    liveIndicator: 0
+    liveIndicator: 0,
+    sportType: 0
   };
 }
 

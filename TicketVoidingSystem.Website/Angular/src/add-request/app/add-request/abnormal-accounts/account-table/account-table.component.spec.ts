@@ -34,8 +34,6 @@ class Helper {
     validation: new ValidationAbnormalAccount()
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: Helper.fakeDate,
     issueTypeId: '11',
     subIssueTypeId: '27',
     action: '5',

@@ -51,7 +51,8 @@ class Helper {
     sportType: 2,
     voidedBy: null,
     userId: 0,
-    requestId: 1
+    requestId: 1,
+    briefInfoNote: ''
   };
   static readonly fakeRequestDetailViewModel: RequestDetailViewModel = {
     requestId: Helper.fakeRequestId,
@@ -166,7 +167,6 @@ describe('ObjectService', () => {
       fakeRequestDetailViewModel.abnormalBetModel.subIssueTypeId = 1;
       objectService['mapFilter'](requestModel, fakeRequestDetailViewModel);
 
-      expect(requestModel.filter.sportType).toEqual(Helper.fakeRequestDetailViewModel.request.sportType);
       expect(requestModel.filter.action).toEqual(Helper.fakeRequestDetailViewModel.request.actionId.toString());
       expect(requestModel.filter.isTest).toEqual(Helper.fakeRequestDetailViewModel.request.isTest);
       expect(requestModel.filter.isVoided).toEqual(Helper.fakeRequestDetailViewModel.request.isVoided);

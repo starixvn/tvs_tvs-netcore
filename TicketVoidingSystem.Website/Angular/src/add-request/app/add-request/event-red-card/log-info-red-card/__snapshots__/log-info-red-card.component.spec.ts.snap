@@ -90,7 +90,7 @@ exports[`LogInfoRedCardComponent LogInfoRedCardComponent init should match snaps
           >
             <filter-time-with-allowance />
             <div
-              class="mb-2"
+              class="mb-1"
             >
               <hr
                 class="mt-2 mb-2"

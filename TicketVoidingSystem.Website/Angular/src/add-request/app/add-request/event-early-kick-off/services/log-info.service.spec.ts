@@ -30,16 +30,19 @@ class Helper {
     leagueName: '',
     matchModel: new MatchModel(),
     pagingModel: new PagingModel(),
-    subIssueTypeId: 1,
     isInvalidTotalTickets: false,
-    tableTicketsModel: new TableTicketsModel()
+    tableTicketsModel: new TableTicketsModel(),
+    isHasSettledTicket: false,
+    isHasInstantlySettledTicket: false,
+    sportType: 0
   };
   static readonly fakeEarlyKickOffModel: EarlyKickOffModel = {
     eventDate: new Date(),
     isMainMatch: true,
     kickOffTime: '',
     matchId: 1,
-    subIssueTypeId: 1
+    subIssueTypeId: 1,
+    sportType: 0
   }
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
@@ -89,12 +92,10 @@ describe('LogInfoService', () => {
     eventEarlyKickOffService.getEarlyKickOffModel = jest.fn();
     const logInfoService = new LogInfoService(null, commonService, eventEarlyKickOffService, null);
     logInfoService['initGetLogInfoEarlyKickOffQuery'] = jest.fn();
-    logInfoService['assignResultLogInfoToEvents'] = jest.fn();
 
-    await logInfoService.getLogInfo(null, null, null, null, new PrimitiveProperty());
+    await logInfoService.getLogInfo(null, null, null, null);
 
     expect(logInfoService['initGetLogInfoEarlyKickOffQuery']).toHaveBeenCalledTimes(1);
-    expect(logInfoService['assignResultLogInfoToEvents']).toHaveBeenCalledTimes(1);
     expect(commonService.getLogInfo).toHaveBeenCalledTimes(1);
   });
 
@@ -179,7 +180,7 @@ describe('LogInfoService', () => {
     const mockService = new LogInfoService(httpService, null, null, null);
     mockService.getLogInfo = jest.fn();
 
-    mockService.getTickets(new GetTicketsQuery(), event, true, 1, new FilterModel(), primitiveProperty);
+    mockService.getTickets(new GetTicketsQuery(), event, true, 1, new FilterModel());
 
     expect(mockService.getLogInfo).toHaveBeenCalledTimes(1);
     expect(event.isCollapse).toBeFalsy();

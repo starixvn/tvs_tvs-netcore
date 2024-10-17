@@ -1,4 +1,3 @@
-import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { Result } from '../../../../../utility/models/result';
 import { CommonService } from '../../../../../utility/services/common.service';
@@ -11,6 +10,7 @@ import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOddsService } from './event-wrong-odds.service';
 import { LogInfoService } from './log-info.service';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeMatchId = 1;
@@ -35,8 +35,6 @@ class Helper {
     ]
   };
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '11',
     subIssueTypeId: '1',
     action: '1',
@@ -86,7 +84,8 @@ class Helper {
     isPoolHouseAffected: false,
     linkedLogsViewModel: new LinkedLogsViewModel(),
     poolHouseCheckedBetTypes: '',
-    isShowValidation: false
+    isShowValidation: false,
+    sportType: 0
   };
   static readonly fakeGetLogInfoModel: GetLogInfoModel = {
     matchId: Helper.fakeMatchId,

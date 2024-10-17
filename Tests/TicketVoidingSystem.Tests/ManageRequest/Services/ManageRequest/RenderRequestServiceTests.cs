@@ -40,8 +40,8 @@ public class RenderRequestServiceTests
         var requestViewModel = new RequestViewModel();
         var requestDescription = new RequestDescription();
         var detail = new RequestEventViewModel();
-        remotingRefWrapperService.GetTeamName(default, default).ReturnsForAnyArgs("aa");
-        remotingRefWrapperService.GetLeagueName(default, default).ReturnsForAnyArgs("bb");
+        remotingRefWrapperService.GetTeamName(1, default, default).ReturnsForAnyArgs("aa");
+        remotingRefWrapperService.GetLeagueName(1, default, default).ReturnsForAnyArgs("bb");
         mapper.Map<RequestEventViewModel>(Arg.Any<RequestModel>()).ReturnsForAnyArgs(detail);
         descriptionService.Build(Arg.Any<RequestDescription>()).ReturnsForAnyArgs("abc");
         mapper.Map<RequestViewModel>(Arg.Any<RequestModel>()).ReturnsForAnyArgs(requestViewModel);
@@ -64,8 +64,8 @@ public class RenderRequestServiceTests
         mapper.Map<RequestViewModel>(Arg.Any<RequestModel>()).ReturnsForAnyArgs(viewModel);
         var requestDescription = new RequestDescription();
         var detail = new RequestEventViewModel();
-        remotingRefWrapperService.GetTeamName(default, default).ReturnsForAnyArgs("aa");
-        remotingRefWrapperService.GetLeagueName(default, default).ReturnsForAnyArgs("bb");
+        remotingRefWrapperService.GetTeamName(1, default, default).ReturnsForAnyArgs("aa");
+        remotingRefWrapperService.GetLeagueName(1, default, default).ReturnsForAnyArgs("bb");
         mapper.Map<RequestEventViewModel>(Arg.Any<RequestModel>()).ReturnsForAnyArgs(detail);
         descriptionService.Build(Arg.Any<RequestDescription>()).ReturnsForAnyArgs("abc");
         matchService.GetMatchEvent(Arg.Any<RequestDescription>()).Returns("A - B");

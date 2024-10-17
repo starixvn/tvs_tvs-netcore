@@ -41,21 +41,6 @@ describe('TicketsComponent', () => {
     expect(fixture).toMatchSnapshot();
   });
   
-  it('changeTickets should emit ticketsChange', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: new TicketsModel(),
-      }
-    });
-    instance.model.getNumberOfCheckedTickets = jest.fn();
-    instance.ticketsChange.emit = jest.fn();
-
-    instance.changeTickets();
-
-    expect(instance.ticketsChange.emit).toHaveBeenCalledTimes(1);
-  });
-  
   it('pagingEvent should emit ticketsChange', async () => {
     const { instance } = await shallow
     .render({

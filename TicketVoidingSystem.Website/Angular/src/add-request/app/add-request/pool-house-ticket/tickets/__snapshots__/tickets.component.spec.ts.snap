@@ -15,6 +15,14 @@ exports[`TicketsComponent TicketsComponent init should match snapshot 1`] = `
           <thead>
             <tr>
               <th
+                class="col-tb-1"
+                scope="col"
+              >
+                <div>
+                  No
+                </div>
+              </th>
+              <th
                 class="col-tb-3"
                 scope="col"
               >
