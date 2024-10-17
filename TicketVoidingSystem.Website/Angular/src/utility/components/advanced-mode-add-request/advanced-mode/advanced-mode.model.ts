@@ -313,9 +313,16 @@ export class BetTeamAddRequest {
   }
 
   private getCombinedSelectionValueBetTypeFullTimeCorrectScore(selection1: Selection, selection2: Selection) {
-    if (selection1.value === 'All' && selection2.value === 'All') return 'All';
-    if (selection1.value === 'All') return selection1.items.slice(1).map(item1 => `${item1.value}/${selection2.value}`).join(',');
-    if (selection2.value === 'All') return selection2.items.slice(1).map(item2 => `${selection1.value}/${item2.value}`).join(',');
+    if (selection1.value?.toLowerCase() === 'all' && selection2.value?.toLowerCase() === 'all') {
+      return 'All';
+    }
+    if (selection1.value?.toLowerCase() === 'all') {
+      return selection1.items.slice(1).map(item1 => `${item1.value}/${selection2.value}`).join(',');
+    }
+    if (selection2.value?.toLowerCase() === 'all') {
+      return selection2.items.slice(1).map(item2 => `${selection1.value}/${item2.value}`).join(',');
+    }
+
     return `${selection1.value}/${selection2.value}`;
   }
 
@@ -327,9 +334,11 @@ export class BetTeamAddRequest {
 
   private updateForBetTypesCricketWithFancy(result: BetTeamAddRequestResult, betTypeId: string): void {
     if (AdvancedModeConstants.BETTYPES_CRICKET_UPDATE_FANCY.split(',').includes(betTypeId)) {
-      if (result.team === 'n') {
+      if (result.team?.toLowerCase() === 'all') {
+        result.hdp = result.firstValue;
+      } else if(result.team?.toLowerCase() === 'n') {
         result.hdp1 = result.firstValue;
-      } else if (result.team === 'y') {
+      } else if (result.team?.toLowerCase() === 'y') {
         result.hdp2 = result.firstValue;
       }
     }

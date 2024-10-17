@@ -97,7 +97,7 @@ public class BetTypesRepositoryTests : AppSettingFixture, IClassFixture<Remoting
             .ReturnsForAnyArgs(data);
 
         // Act
-        _ = await service.GetBetTypesHaveTicketsForTvs(1, null, null);
+        _ = await service.GetBetTypesHaveTicketsForTvs(1, false, null, null);
 
         // Assert
         await repository.Received().FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteria>());

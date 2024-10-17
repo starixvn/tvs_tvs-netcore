@@ -44,6 +44,8 @@ public class BetTeamAddRequestResult
 
     public string Hdp1 { get; set; }
 
+    public string Hdp2 { get; set; }
+
     public string Player { get; set; }
 
     public string PlayerAndOdds { get; set; }
