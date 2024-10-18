@@ -192,26 +192,52 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
     {
         var betTypeIds = allTickets.Select(ticket => ticket.IsMixParlay ? ticket.SubBetType : ticket.BetType).Distinct();
         model.BetTypes = string.Join(",", betTypeIds);
-        model.BetTypeNameReplaceMessage = GetSpecialBetTypeContent(betTypeIds, allTickets);
-    }
-
-    private ContentByLanguageModel GetSpecialBetTypeContent(IEnumerable<int> betTypeIds, IEnumerable<GetTicketModel> allTickets)
-    {
         if (betTypeIds.Count() == 1)
         {
-            var emailTickets = allTickets.Select(x => new TicketEmailModel
-            {
-                IsMixParlay = x.IsMixParlay,
-                BetTypeId = x.BetType,
-                BetId = x.BetId,
-                SubBetType = x.SubBetType,
-                SubBetCheck = x.SubBetCheck
-            });
+            var betTypeId = betTypeIds.FirstOrDefault();
+            model.BetTypeNameReplaceMessage = GetSpecialBetTypeContent(allTickets);
+            model.BetTeam = GetSpecialBetTeam(betTypeId, allTickets);
+            model.InputOverUnder = GetInputOverUnder(betTypeId, allTickets);
+        }
+    }
 
-            return specialBetTypeContentService.GetContentForVoidPage(emailTickets);
+    private ContentByLanguageModel GetSpecialBetTypeContent(IEnumerable<GetTicketModel> allTickets)
+    {
+        var emailTickets = allTickets.Select(x => new TicketEmailModel
+        {
+            IsMixParlay = x.IsMixParlay,
+            BetTypeId = x.BetType,
+            BetId = x.BetId,
+            SubBetType = x.SubBetType,
+            SubBetCheck = x.SubBetCheck
+        });
+
+        return specialBetTypeContentService.GetContentForVoidPage(emailTickets);
+    }
+
+    private static string GetSpecialBetTeam(int betTypeId, IEnumerable<GetTicketModel> allTickets)
+    {
+        var SpecialBetTypes = new List<int>
+        {
+            BetTypeConstant.Handicap, BetTypeConstant.FirstHalfHandicap
+        };
+        if (SpecialBetTypes.Contains(betTypeId))
+        {
+            var betTeams = allTickets.Select(x => x.BetTeam).Distinct();
+            return betTeams.Count() > 1 ? "All" : betTeams.First();
         }
 
-        return new ContentByLanguageModel();
+        return string.Empty;
+    }
+
+    private static decimal GetInputOverUnder(int betTypeId, IEnumerable<GetTicketModel> allTickets)
+    {
+        var SpecialBetTypes = new List<int>
+        {
+            BetTypeConstant.OverUnder, BetTypeConstant.FirstHalfOverUnder
+        };
+
+        return SpecialBetTypes.Contains(betTypeId) ? allTickets.FirstOrDefault().Hdp1 : 0;
     }
 
     private static void UpdateTimeViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> data)

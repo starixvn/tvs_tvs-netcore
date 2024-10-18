@@ -30,21 +30,22 @@ export class TemplateWrongOddsSportBookService {
   }
 
   private createActualMarketContent(templateValue: TemplateValue): TemplateContent {
-    if (templateValue.totalBetTypesSelected === 1) {
-      if (this.isHandicapBetType(templateValue.uniqueBetTypeSelected.id)) {
-        return this.createActualMarketBetTypeHdp(templateValue.uniqueBetTypeSelected.id, templateValue.correctOdds, templateValue);
+    if (templateValue.betTypeId) {
+      if (this.isHandicapBetType(templateValue.betTypeId, templateValue.betTeam)) {
+        templateValue.filterFavoriteType = templateValue.betTeam;
+        return this.createActualMarketBetTypeHdp(templateValue.betTypeId, templateValue.correctOdds, templateValue);
       }
 
-      if (this.isOverUnderBetType(templateValue.uniqueBetTypeSelected.id)) {
-        return this.createActualMarketBetTypeOu(templateValue.uniqueBetTypeSelected.id, templateValue.correctOdds, templateValue.uniqueBetTypeSelected.hdp1);
+      if (this.isOverUnderBetType(templateValue.betTypeId)) {
+        return this.createActualMarketBetTypeOu(templateValue.betTypeId, templateValue.correctOdds, templateValue.inputOverUnder);
       }
     }
 
     return this.createActualMarketOtherBetType(templateValue.correctOdds);
   }
 
-  private isHandicapBetType(betTypeId: string): boolean {
-    return [SpecialSportsBookBetTypes.Handicap, SpecialSportsBookBetTypes._1HHandicap].includes(betTypeId);
+  private isHandicapBetType(betTypeId: string, betTeam: string): boolean {
+    return [SpecialSportsBookBetTypes.Handicap, SpecialSportsBookBetTypes._1HHandicap].includes(betTypeId) && betTeam !== "All";
   }
 
   private isOverUnderBetType(betTypeId: string): boolean {
@@ -74,7 +75,7 @@ export class TemplateWrongOddsSportBookService {
     const actualMarket: TemplateContent = {
       msgEnglish: `${prefixSubType.msgEnglish}${TemplateContentConst.OVER.msgEnglish}-${inputOverUnder}@${TemplateContentConst.ODDS.msgEnglish} ${correctOdds}`,
       msgChineseTraditional: `${prefixSubType.msgChineseTraditional}${TemplateContentConst.OVER.msgChineseTraditional}-${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseTraditional} ${correctOdds}`,
-      msgChineseSimplified: `${prefixSubType.msgChineseSimplified}${TemplateContentConst.OVER.msgChineseSimplified}${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseSimplified} ${correctOdds}`,
+      msgChineseSimplified: `${prefixSubType.msgChineseSimplified}${TemplateContentConst.OVER.msgChineseSimplified}-${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseSimplified} ${correctOdds}`,
       msgChineseNewSimplified: `${prefixSubType.msgChineseNewSimplified}${TemplateContentConst.OVER.msgChineseNewSimplified}-${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${correctOdds}`
     };
 

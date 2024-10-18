@@ -29,6 +29,8 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
   cricketTickets: BetID[];
   uncheckedTransIds: string[];
   betTypes: string;
+  betTeam: string;
+  inputOverUnder: string;
   isHasSettledTicket: boolean;
   isAllLiveTickets: boolean;
   isAllNonLiveTickets: boolean;

@@ -6,6 +6,7 @@ import { EventType, SportType } from 'src/utility/constants/sport.constant';
 import { StaticService } from 'src/utility/services/static.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class TemplateMessageService {
     }
 
     if (this.isSpecialBetType(requestDetail.request.issueTypeId)) {
-      this.setSpecialBetTypeProperties(templateValue, voidPageItem.voidTicketsMini, requestDetail);
+      this.setSpecialBetTypeProperties(templateValue, voidPageItem.voidTicketsMini, requestDetail, voidPageItem.logInfoDetail);
     }
 
     return templateValue;
@@ -36,7 +37,8 @@ export class TemplateMessageService {
       || StaticService.isWrongOddsSportsBook(issueTypeId);
   }
 
-  private setSpecialBetTypeProperties(templateValue: TemplateValue, voidTicketsMini: TicketsModel, requestDetail: RequestDetailViewModel) {
+  private setSpecialBetTypeProperties(templateValue: TemplateValue, voidTicketsMini: TicketsModel, requestDetail: RequestDetailViewModel,
+    logInfoDetail: LogInfoDetail ) {
     templateValue.isCheckedSpecialBetType = true;
     templateValue.betTypeNameReplaceMessage = voidTicketsMini.betTypeNameReplaceMessage;
     templateValue.totalTickets = voidTicketsMini.total;
@@ -44,11 +46,15 @@ export class TemplateMessageService {
     templateValue.toTransTime = voidTicketsMini.toTime;
 
     if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
-      templateValue.totalBetTypesSelected = requestDetail.wrongOddsSportsBookModel.betTeamsResult.length;
-      templateValue.uniqueBetTypeSelected = templateValue.totalBetTypesSelected === 1 ? requestDetail.wrongOddsSportsBookModel.betTeamsResult[0] : null;
       templateValue.correctOdds = requestDetail.wrongOddsSportsBookModel.correctOdds;
+      if(voidTicketsMini.betTypes.split(',').length === 1){
+        templateValue.betTypeId = voidTicketsMini.betTypes.split(',')[0];
+        templateValue.betTeam = voidTicketsMini.betTeam;
+        templateValue.inputOverUnder = voidTicketsMini.inputOverUnder;
+      }
+      
       if (this.isSportTypeSoccer(requestDetail.request.sportType)) {
-        templateValue.score = this.getLiveScoreForTemplateMessage(requestDetail.wrongOddsSportsBookModel.logInfoDetail.scoreNormalTicket, requestDetail.wrongOddsSportsBookModel.logInfoDetail.scoreOfMatch);
+        templateValue.score = this.getLiveScoreForTemplateMessage(logInfoDetail.scoreNormalTicket, logInfoDetail.scoreOfMatch);
       }
     }
   }
