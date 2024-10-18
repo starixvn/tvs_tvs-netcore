@@ -101,20 +101,20 @@ export class BetTeam {
   inputs: Item[];
   checkedBetTypes: string[];
   isChecked: boolean;
-  isTicketListing: boolean;
+  isShowMultiSelectionList: boolean;
 
   constructor(
     commonInfo: [string, string, number, string, string],
     selections: Selection[],
     items: Item[],
     inputs: Item[],
-    isTicketListing: boolean) {
+    isShowMultiSelectionList: boolean) {
     this.name = commonInfo[0];
     this.value = commonInfo[1];
     this.type = commonInfo[2];
     this.enableBetTypes = commonInfo[3];
     this.betTypes = commonInfo[4];
-    this.isTicketListing = isTicketListing;
+    this.isShowMultiSelectionList = isShowMultiSelectionList;
     this.renderSelections(selections);
     this.renderItems(items);
     this.renderInputs(inputs);
@@ -132,7 +132,7 @@ export class BetTeam {
 
   renderValidSelection(selections: Selection[]) {
     selections.forEach(item => {
-      if (this.isTicketListing &&
+      if (this.isShowMultiSelectionList &&
         (item.isCanSelectMapFromOutside || item.isCanSelectRoundFromOutside ||item.isCanSelectQuarterFromOutside
           || item.isCanSelectSetFromOutside || item.isCanSelectGameFromOutside || item.isCanSelectInningFromOutside)) {
         this.renderMultipleSelectWithAllBetType(item);
@@ -343,8 +343,8 @@ export class BetTeam {
     return result;
   }
 
-  isTicketListingAndBettypeMapOrRound(name: string): boolean {
-    if (this.isTicketListing) {
+  isShowMultiSelectionListAndBettypeMapOrRound(name: string): boolean {
+    if (this.isShowMultiSelectionList) {
       if (name === AdvancedModeConstants.MAP || name === AdvancedModeConstants.ROUND) {
         return true;
       } else {
@@ -357,8 +357,8 @@ export class BetTeam {
   updateBySelection(result: BetTeamResult) {
     this.selections.forEach(select => {
       this.updateResult(result, select.xmlAttribute, select.value);
-      if (select.multiSelection !== undefined && (!this.isTicketListing ||
-        !this.isTicketListingAndBettypeMapOrRound(select.multiSelection.name))) {
+      if (select.multiSelection !== undefined && (!this.isShowMultiSelectionList ||
+        !this.isShowMultiSelectionListAndBettypeMapOrRound(select.multiSelection.name))) {
         const value = select.multiSelection.multipleSelect.getValueItems();
         this.updateResult(result, select.multiSelection.xmlAttribute, value);
       }
@@ -366,7 +366,7 @@ export class BetTeam {
   }
 
   updateByMultipleSelectionWithTicketListing(result: BetTeamResult) {
-    if (this.multiSelectionList !== undefined && this.isTicketListing) {
+    if (this.multiSelectionList !== undefined && this.isShowMultiSelectionList) {
       this.multiSelectionList.forEach(item => {
         let value = item.multipleSelect.getValueItems();
         if (item.multipleSelect.selectionTitle === 'All' &&
@@ -614,7 +614,7 @@ export class BetTeam {
     if (AdvancedModeConstants.BETTYPE_MAP_X_FIRST_TO_Y_OVER_UNDER.split(',').includes(betTypeId)) {
       let mapValues = '';
       const yValue = this.selections.find(x => x.name === 'Y value:').value;
-      if (this.isTicketListing) {
+      if (this.isShowMultiSelectionList) {
         mapValues = this.multiSelectionList.find(x => x.name === 'Map:').multipleSelect.getValueItems();
       } else {
         mapValues = this.selections.find(x => x.name === 'Map:').multiSelection.multipleSelect.getValueItems();

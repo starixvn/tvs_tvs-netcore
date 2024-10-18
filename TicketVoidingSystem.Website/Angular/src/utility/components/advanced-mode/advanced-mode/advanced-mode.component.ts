@@ -22,7 +22,7 @@ export class AdvancedModeComponent implements OnChanges {
   @Input() getPlayerQuery: GetPlayersQuery;
   @Input() matchId: string;
   @Input() allBetTypes: BetType[];
-  @Input() isTicketListing: boolean;
+  @Input() isShowMultiSelectionList: boolean;
 
   baseBetTeam: BetTeam[] = [];
   betTeams: BetTeam[] = [];
@@ -56,7 +56,7 @@ export class AdvancedModeComponent implements OnChanges {
     this.betTeams = [];
     data.forEach(item => {
       const betTeam = new BetTeam([item.name, item.value, item.type, item.enableBetTypes, item.betTypes],
-        item.selections, item.items, item.inputs, this.isTicketListing);
+        item.selections, item.items, item.inputs, this.isShowMultiSelectionList);
       this.betTeams.push(betTeam);
     });
   }
@@ -303,7 +303,7 @@ export class AdvancedModeComponent implements OnChanges {
       }
     }
 
-    if (this.checkCheckedBetTypesWithHDPBetType(betTeam) && this.isTicketListing && result) {
+    if (this.checkCheckedBetTypesWithHDPBetType(betTeam) && this.isShowMultiSelectionList && result) {
       return this.checkEmptyCheckboxWithTicketListing(result, i);
     }
 
