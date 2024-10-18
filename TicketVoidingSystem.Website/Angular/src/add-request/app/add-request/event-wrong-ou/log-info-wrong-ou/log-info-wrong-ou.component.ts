@@ -101,7 +101,7 @@ export class LogInfoWrongOuComponent implements OnInit {
     return query;
   }
 
-  public async showAffectedTicketsDetails() {
+  public showAffectedTicketsDetails() {
     this.affectedTicketsModel.issueTypeId = Number(this.filter.issueTypeId);
     this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
     this.affectedTicketsModel.isOpen = true;

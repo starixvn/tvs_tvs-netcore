@@ -65,7 +65,7 @@ export class LogInfoWrongMarketOfferedComponent {
     this.affectedTicketsModel.isShowDetailBetTypeCount = true;
   }
 
-  public async showAffectedTicketsDetails() {
+  public showAffectedTicketsDetails() {
     this.updateBetTypeCountModel();
     this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
     this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;

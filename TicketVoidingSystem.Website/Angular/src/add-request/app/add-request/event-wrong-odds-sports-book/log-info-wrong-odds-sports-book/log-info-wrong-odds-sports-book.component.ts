@@ -59,7 +59,7 @@ export class LogInfoWrongOddsSportsBookComponent implements OnInit {
     return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
   }
 
-  public async showAffectedTicketsDetails() {
+  public showAffectedTicketsDetails() {
     this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
     this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
     this.affectedTicketsModel.isOpen = true;
