@@ -199,6 +199,10 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
             model.BetTeam = GetSpecialBetTeam(betTypeId, allTickets);
             model.InputOverUnder = GetInputOverUnder(betTypeId, allTickets);
         }
+        else
+        {
+            model.BetTypeNameReplaceMessage = new ContentByLanguageModel();
+        }
     }
 
     private ContentByLanguageModel GetSpecialBetTypeContent(IEnumerable<GetTicketModel> allTickets)
