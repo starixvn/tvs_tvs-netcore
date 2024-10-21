@@ -19,7 +19,7 @@ public class TicketsViewModel
     public bool IsAllNonLiveTickets { get; set; }
     public string BetTypes { get; set; }
     public string BetTeam { get; set; }
-    public decimal InputOverUnder { get; set; }
+    public string InputOverUnder { get; set; }
     public DateTime FromTime { get; set; }
     public DateTime ToTime { get; set; }
     public DateTime FromDate { get; set; }

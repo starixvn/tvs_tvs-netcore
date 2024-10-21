@@ -37,7 +37,7 @@ export class TemplateWrongOddsSportBookService {
       }
 
       if (this.isOverUnderBetType(templateValue.betTypeId)) {
-        return this.createActualMarketBetTypeOu(templateValue.betTypeId, templateValue.correctOdds, templateValue.inputOverUnder);
+        return this.createActualMarketBetTypeOu(templateValue.betTypeId, templateValue.correctOdds, templateValue.inputOverUnder, templateValue.betTeam);
       }
     }
 
@@ -69,14 +69,14 @@ export class TemplateWrongOddsSportBookService {
     return actualMarket;
   }
 
-  private createActualMarketBetTypeOu(betTypeId: string, correctOdds: string, inputOverUnder: string) {
+  private createActualMarketBetTypeOu(betTypeId: string, correctOdds: string, inputOverUnder: string, filterFavoriteType: string) {
     const isFirstHalf = this.isFirstHalfBetType(betTypeId);
     const prefixSubType = this.templateInputsService.getPrefixSubType(isFirstHalf);
     const actualMarket: TemplateContent = {
-      msgEnglish: `${prefixSubType.msgEnglish}${TemplateContentConst.OVER.msgEnglish}-${inputOverUnder}@${TemplateContentConst.ODDS.msgEnglish} ${correctOdds}`,
-      msgChineseTraditional: `${prefixSubType.msgChineseTraditional}${TemplateContentConst.OVER.msgChineseTraditional}-${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseTraditional} ${correctOdds}`,
-      msgChineseSimplified: `${prefixSubType.msgChineseSimplified}${TemplateContentConst.OVER.msgChineseSimplified}-${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseSimplified} ${correctOdds}`,
-      msgChineseNewSimplified: `${prefixSubType.msgChineseNewSimplified}${TemplateContentConst.OVER.msgChineseNewSimplified}-${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${correctOdds}`
+      msgEnglish: `${prefixSubType.msgEnglish}${this.getOverOrUnder(filterFavoriteType)}-${inputOverUnder}@${TemplateContentConst.ODDS.msgEnglish} ${correctOdds}`,
+      msgChineseTraditional: `${prefixSubType.msgChineseTraditional}${this.getOverOrUnderTraditional(filterFavoriteType)}-${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseTraditional} ${correctOdds}`,
+      msgChineseSimplified: `${prefixSubType.msgChineseSimplified}${this.getOverOrUnderSimplified(filterFavoriteType)}-${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseSimplified} ${correctOdds}`,
+      msgChineseNewSimplified: `${prefixSubType.msgChineseNewSimplified}${this.getOverOrUnderNewSimplified(filterFavoriteType)}-${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${correctOdds}`
     };
 
     return actualMarket;
@@ -91,5 +91,21 @@ export class TemplateWrongOddsSportBookService {
     };
 
     return actualMarket;
+  }
+
+  public getOverOrUnder(filterFavoriteType: string): string {
+    return filterFavoriteType === 'a' ? TemplateContentConst.UNDER.msgEnglish : TemplateContentConst.OVER.msgEnglish;
+  }
+
+  public getOverOrUnderTraditional(filterFavoriteType): string {
+    return filterFavoriteType === 'a' ? TemplateContentConst.UNDER.msgChineseTraditional : TemplateContentConst.OVER.msgChineseTraditional;
+  }
+
+  public getOverOrUnderSimplified(filterFavoriteType): string {
+    return filterFavoriteType === 'a' ? TemplateContentConst.UNDER.msgChineseSimplified : TemplateContentConst.OVER.msgChineseSimplified;
+  }
+
+  public getOverOrUnderNewSimplified(filterFavoriteType): string {
+    return filterFavoriteType === 'a' ? TemplateContentConst.UNDER.msgChineseNewSimplified : TemplateContentConst.OVER.msgChineseNewSimplified;
   }
 }

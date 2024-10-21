@@ -192,9 +192,10 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
     {
         var betTypeIds = allTickets.Select(ticket => ticket.IsMixParlay ? ticket.SubBetType : ticket.BetType).Distinct();
         model.BetTypes = string.Join(",", betTypeIds);
+
         if (betTypeIds.Count() == 1)
         {
-            var betTypeId = betTypeIds.FirstOrDefault();
+            var betTypeId = betTypeIds.First();
             model.BetTypeNameReplaceMessage = GetSpecialBetTypeContent(allTickets);
             model.BetTeam = GetSpecialBetTeam(betTypeId, allTickets);
             model.InputOverUnder = GetInputOverUnder(betTypeId, allTickets);
@@ -223,25 +224,33 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
     {
         var SpecialBetTypes = new List<int>
         {
-            BetTypeConstant.Handicap, BetTypeConstant.FirstHalfHandicap
+            BetTypeConstant.Handicap, BetTypeConstant.FirstHalfHandicap, BetTypeConstant.OverUnder, BetTypeConstant.FirstHalfOverUnder
         };
-        if (SpecialBetTypes.Contains(betTypeId))
+
+        if (!SpecialBetTypes.Contains(betTypeId))
         {
-            var betTeams = allTickets.Select(x => x.BetTeam).Distinct();
-            return betTeams.Count() > 1 ? "All" : betTeams.First();
+            return string.Empty;
         }
 
-        return string.Empty;
+        var betTeams = allTickets.Select(x => x.BetTeam).Distinct();
+
+        return betTeams.Count() > 1 ? "All" : betTeams.First();
     }
 
-    private static decimal GetInputOverUnder(int betTypeId, IEnumerable<GetTicketModel> allTickets)
+    private static string GetInputOverUnder(int betTypeId, IEnumerable<GetTicketModel> allTickets)
     {
         var SpecialBetTypes = new List<int>
         {
             BetTypeConstant.OverUnder, BetTypeConstant.FirstHalfOverUnder
         };
 
-        return SpecialBetTypes.Contains(betTypeId) ? allTickets.FirstOrDefault().Hdp1 : 0;
+        if (!SpecialBetTypes.Contains(betTypeId))
+        {
+            return string.Empty;
+        }
+        var inputOver = allTickets.Select(x => Math.Abs(x.Hdp1));
+
+        return string.Join(", ", inputOver);
     }
 
     private static void UpdateTimeViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> data)
