@@ -101,6 +101,10 @@
         {
           "Name": "WE Live Casino",
           "Value": "80"
+        },
+        {
+          "Name": "ON Casino",
+          "Value": "96"
         }
       ]
     },
@@ -198,6 +202,10 @@
         {
           "Name": "FA CHAI",
           "Value": "89"
+        },
+        {
+          "Name": "GPI",
+          "Value": "48"
         }
       ]
     },
