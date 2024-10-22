@@ -1,34 +1,32 @@
 ﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Models.SendEmail;
-using TicketVoidingSystem.SharedApi.Services.MessageTemplate;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 public interface TicketsViewModelService
 {
-    void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId,
-        VoidPermission voidPermission);
+    void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId, VoidPermission voidPermission);
 }
 
 public class TicketsViewModelServiceImp : TicketsViewModelService
 {
-    private readonly SpecialBetTypeContentService specialBetTypeContentService;
+    private readonly GetTicketsViewModelService getTicketsViewModelService;
+    private readonly GetInfoTicketsForMessage getInfoTicketsForMessage;
 
-    public TicketsViewModelServiceImp(SpecialBetTypeContentService specialBetTypeContentService)
+    public TicketsViewModelServiceImp(GetTicketsViewModelService getTicketsViewModelService, GetInfoTicketsForMessage getInfoTicketsForMessage)
     {
-        this.specialBetTypeContentService = specialBetTypeContentService;
+        this.getTicketsViewModelService = getTicketsViewModelService;
+        this.getInfoTicketsForMessage = getInfoTicketsForMessage;
     }
 
     public void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId,
         VoidPermission voidPermission)
     {
-        var ticketsByGroup = GetTicketsByGroup(allTickets);
-        var validTickets = GetValidTickets(ticketsByGroup, voidPermission, issueTypeId);
+        var ticketsByGroup = getTicketsViewModelService.GetTicketsByGroup(allTickets);
+        var validTickets = getTicketsViewModelService.GetValidTickets(ticketsByGroup, voidPermission, issueTypeId);
         var voidTickets = validTickets.SingleTickets.Union(validTickets.ParlayTickets)
             .Union(validTickets.CricketTickets);
 
@@ -40,29 +38,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         UpdateCheckPermissionTickets(model, allTickets);
         UpdateTotalCounts(model, allTickets, ticketsByGroup);
         UpdateVariableForTemplateMessage(model, voidTickets);
-        model.GroupPHAffected = GetGroupPhAffected(allTickets);
-    }
-
-    private static short GetGroupPhAffected(IEnumerable<GetTicketModel> data)
-    {
-        var isHasTicketPh1X2Affected = data.Any(x => x.GroupPHAffected == 1);
-        var isHasTicketPhAioAffected = data.Any(x => x.GroupPHAffected == 2);
-        if (isHasTicketPh1X2Affected && isHasTicketPhAioAffected)
-        {
-            return GroupPHAffectedConstant.Group1X2AndAIO;
-        }
-
-        if (isHasTicketPh1X2Affected)
-        {
-            return GroupPHAffectedConstant.Group1X2;
-        }
-
-        if (isHasTicketPhAioAffected)
-        {
-            return GroupPHAffectedConstant.GroupAIO;
-        }
-
-        return 0;
+        model.GroupPHAffected = getTicketsViewModelService.GetGroupPhAffected(allTickets);
     }
 
     private static void UpdateValidTickets(TicketsViewModel model, TicketsByGroupInRequest validTickets)
@@ -105,44 +81,6 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
             TransId = model.IsMixParlay ? model.SubTransId.ToString() : model.TransId.ToString(),
             SiteDbGroupId = model.SiteDbGroupId,
             MatchId = model.MatchId
-        };
-    }
-
-    private static TicketsByGroupInRequest GetTicketsByGroup(IEnumerable<GetTicketModel> allTickets)
-    {
-        return new TicketsByGroupInRequest
-        {
-            SingleTickets = allTickets.Where(item => !item.IsMixParlay && !item.IsCricket && !item.IsCancelCashOut),
-            ParlayTickets = allTickets.Where(item => item.IsMixParlay && !item.IsCricket && !item.IsCancelCashOut),
-            CricketTickets = allTickets.Where(item => item.IsCricket),
-            CancelCashOutTickets = allTickets.Where(item => item.IsCancelCashOut)
-        };
-    }
-
-    private static TicketsByGroupInRequest GetValidTickets(TicketsByGroupInRequest ticketsInRequest,
-        VoidPermission permission, int issueTypeId)
-    {
-        var enableSingle = ticketsInRequest.SingleTickets.Where(x => !x.IsDisable(permission, issueTypeId));
-        var disableBonusSingle =
-            ticketsInRequest.SingleTickets.Where(x => x.IsDisable(permission, issueTypeId) && x.WalletType > 0);
-        var validVoidSingleTickets = enableSingle.Concat(disableBonusSingle);
-
-        var validVoidParlayTickets = ticketsInRequest.ParlayTickets.Where(x => !x.IsDisable(permission, issueTypeId));
-
-        var enableCricket = ticketsInRequest.CricketTickets.Where(x => !x.IsDisable(permission, issueTypeId));
-        var disableBonusCricket =
-            ticketsInRequest.CricketTickets.Where(x => x.IsDisable(permission, issueTypeId) && x.WalletType > 0);
-        var validVoidCricketTickets = enableCricket.Concat(disableBonusCricket);
-
-        var validCancelCashOutTickets =
-            ticketsInRequest.CancelCashOutTickets.Where(x => !x.IsDisable(permission, issueTypeId));
-
-        return new TicketsByGroupInRequest
-        {
-            SingleTickets = validVoidSingleTickets,
-            ParlayTickets = validVoidParlayTickets,
-            CricketTickets = validVoidCricketTickets,
-            CancelCashOutTickets = validCancelCashOutTickets
         };
     }
 
@@ -196,61 +134,14 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         if (betTypeIds.Count() == 1)
         {
             var betTypeId = betTypeIds.First();
-            model.BetTypeNameReplaceMessage = GetSpecialBetTypeContent(allTickets);
-            model.BetTeam = GetSpecialBetTeam(betTypeId, allTickets);
-            model.InputOverUnder = GetInputOverUnder(betTypeId, allTickets);
+            model.BetTypeNameReplaceMessage = getInfoTicketsForMessage.GetSpecialBetTypeContent(allTickets);
+            model.BetTeam = getInfoTicketsForMessage.GetSpecialBetTeam(betTypeId, allTickets);
+            model.InputOverUnder = getInfoTicketsForMessage.GetInputOverUnder(betTypeId, allTickets);
         }
         else
         {
             model.BetTypeNameReplaceMessage = new ContentByLanguageModel();
         }
-    }
-
-    private ContentByLanguageModel GetSpecialBetTypeContent(IEnumerable<GetTicketModel> allTickets)
-    {
-        var emailTickets = allTickets.Select(x => new TicketEmailModel
-        {
-            IsMixParlay = x.IsMixParlay,
-            BetTypeId = x.BetType,
-            BetId = x.BetId,
-            SubBetType = x.SubBetType,
-            SubBetCheck = x.SubBetCheck
-        });
-
-        return specialBetTypeContentService.GetContentForVoidPage(emailTickets);
-    }
-
-    private static string GetSpecialBetTeam(int betTypeId, IEnumerable<GetTicketModel> allTickets)
-    {
-        var SpecialBetTypes = new List<int>
-        {
-            BetTypeConstant.Handicap, BetTypeConstant.FirstHalfHandicap, BetTypeConstant.OverUnder, BetTypeConstant.FirstHalfOverUnder
-        };
-
-        if (!SpecialBetTypes.Contains(betTypeId))
-        {
-            return string.Empty;
-        }
-
-        var betTeams = allTickets.Select(x => x.BetTeam).Distinct();
-
-        return betTeams.Count() > 1 ? "All" : betTeams.First();
-    }
-
-    private static string GetInputOverUnder(int betTypeId, IEnumerable<GetTicketModel> allTickets)
-    {
-        var SpecialBetTypes = new List<int>
-        {
-            BetTypeConstant.OverUnder, BetTypeConstant.FirstHalfOverUnder
-        };
-
-        if (!SpecialBetTypes.Contains(betTypeId))
-        {
-            return string.Empty;
-        }
-        var inputOver = allTickets.Select(x => Math.Abs(x.Hdp1));
-
-        return string.Join(", ", inputOver);
     }
 
     private static void UpdateTimeViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> data)

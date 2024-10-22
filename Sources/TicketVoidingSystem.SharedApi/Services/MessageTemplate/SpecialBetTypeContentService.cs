@@ -10,8 +10,6 @@ namespace TicketVoidingSystem.SharedApi.Services.MessageTemplate;
 public interface SpecialBetTypeContentService
 {
     ContentByLanguageModel GetContentForVoidPage(IEnumerable<TicketEmailModel> tickets);
-
-    IEnumerable<ContentByLanguageModel> GetListSpecialBetType(IEnumerable<TicketEmailModel> tickets);
 }
 
 public class SpecialBetTypeContentServiceImp : SpecialBetTypeContentService
