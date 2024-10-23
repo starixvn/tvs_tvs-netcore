@@ -12,6 +12,7 @@
 .advanced-mode {
   margin-bottom: 10px;
   ::ng-deep .multiple-selection {
+    min-width: 0;
     width: 100%;
     button {
       border: 1px solid #c8c8c8 !important;
