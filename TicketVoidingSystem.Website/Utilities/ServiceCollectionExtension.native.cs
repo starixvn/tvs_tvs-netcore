@@ -182,6 +182,7 @@ public static class ServiceCollectionExtension
     public static void RegisterFanexData(this IServiceCollection services, IConfiguration configuration)
     {
         DbSettingProviderManager.StartNewSession().Register(configuration, true).Run();
+        services.AddFanexData(configuration);
     }
 
     public static void RegisterBusinessServices(this IServiceCollection services)
