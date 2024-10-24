@@ -2,6 +2,7 @@ import { BetTeamAddRequestResult } from "../../../../../utility/components/advan
 import { LogInfoDetail } from "../../../../../utility/models/log-info-detail.model";
 import { ValidationMessage } from "../../models/get-log-info.model";
 import { FilterWrongOddsSportsBookModel } from "./filter-wrong-odds-sports-book.model";
+import { ControlsAllBetTypesQuery } from '../../../../../utility/components/advanced-mode-add-request/controls-all-bet-types/controls-all-bet-types.model';
 
 export class LogInfoWrongOddsSportsBook {
   matchId: number;
@@ -11,4 +12,5 @@ export class LogInfoWrongOddsSportsBook {
   betTeamsResult: BetTeamAddRequestResult[];
   isHasSettledTicket: boolean;
   isHasInstantlySettledTicket: boolean;
+  controlsAllBetTypesQueryList: ControlsAllBetTypesQuery[];
 }

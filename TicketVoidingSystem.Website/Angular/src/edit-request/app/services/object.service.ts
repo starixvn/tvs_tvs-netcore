@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FilterModel } from '../../../add-request/app/add-request/filter/filter.model';
 import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
-import { TVSRequestFilterBy } from '../../../utility/constants/config';
 import { StaticService } from '../../../utility/services/static.service';
 import { MapEventArg } from '../models/map-event.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';

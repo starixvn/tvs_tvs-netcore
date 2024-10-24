@@ -1,0 +1,21 @@
+@import '../advanced-mode/advanced-mode.component.scss';
+
+.bet-team-1 {
+    display: flex;
+    justify-content: space-between;
+
+    .right {
+      display: flex;
+      justify-content: flex-start;
+      width: 555px;
+      flex-wrap: wrap;
+      row-gap: 3px;
+
+      .input-area {
+        display: contents;
+      }
+    }
+    .left {
+        padding-left: 5px;
+    }
+  }

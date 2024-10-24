@@ -8,6 +8,7 @@ using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Resources;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace TicketVoidingSystem.ManageRequest.Extension;
 
@@ -380,15 +381,16 @@ public static class ObjectToXMLExtension
             PlayerName = x.PlayerName
         });
         var stringBuilder = $"<r MatchId = '{model.MatchId}' "
-               + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-               + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-               + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-               + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-               + $"SubIssueTypeId='{model.SubIssueTypeId}' "
-               + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
-               + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
-               + $"BetTypeCount='{SecurityElement.Escape(JsonSerializer.Serialize(betTypeCountJson, options))}' "
-               + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}' />";
+                            + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                            + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                            + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                            + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                            + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                            + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
+                            + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
+                            + $"BetTypeCount='{SecurityElement.Escape(JsonSerializer.Serialize(betTypeCountJson, options))}' "
+                            + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}' "
+                            + $"IssueDetail='{SecurityElement.Escape(JsonSerializer.Serialize(model.ControlsAllBetTypesQueryList, options))}' />";
 
         return $"<root>{stringBuilder.Trim()}</root>";
     }
@@ -415,8 +417,8 @@ public static class ObjectToXMLExtension
             + $"FromOdds='{SecurityElement.Escape(model.FromOdds)}' "
             + $"ToOdds='{SecurityElement.Escape(model.ToOdds)}' "
             + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' "
-            + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}' />";
-
+            + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}' "
+            + $"IssueDetail='{SecurityElement.Escape(JsonSerializer.Serialize(model.ControlsAllBetTypesQueryList, options))}' />";
         return $"<root>{stringBuilder.Trim()}</root>";
     }
 

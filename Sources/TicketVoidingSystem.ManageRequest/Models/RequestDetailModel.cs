@@ -80,6 +80,7 @@ public class RequestEventModel
     public bool NonLive { get; set; }
     public int PlayerId { get; set; }
     public string AdvancedExtraInfo { get; set; }
+
     public string RequestExtraInfo { get; set; }
 
     public string Usernames { get; set; }
@@ -111,7 +112,8 @@ public class RequestEventModel
     public string FromOdds { get; set; }
     public string ToOdds { get; set; }
     public string CorrectOdds { get; set; }
-
+    public string ControlsAllBetTypesJson { get; set; }
+    
     public string CurrencyIds { get; set; }
     public string LicenseeNames { get; set; }
     public string WrongName { get; set; }

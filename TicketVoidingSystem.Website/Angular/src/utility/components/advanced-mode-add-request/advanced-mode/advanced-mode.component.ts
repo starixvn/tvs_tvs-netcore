@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription, timer } from 'rxjs';
 import { LABELS } from '../../../../utility/constants/labels';
@@ -12,6 +12,8 @@ import { Tooltip } from '../../tooltip/tooltip.model';
 import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advanced-mode.model';
+import { ControlsAllBetTypesComponent } from '../controls-all-bet-types/controls-all-bet-types.component';
+import { ControlsAllBetTypesQuery } from '../controls-all-bet-types/controls-all-bet-types.model';
 
 @Component({
   selector: 'advanced-mode',
@@ -23,6 +25,8 @@ export class AdvancedModeComponent {
   @Input() changedBetTypes: BetTypeAddRequest[] = [];
   @Input() advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   @Output() changeFilterEvent = new EventEmitter();
+  @ViewChild('controlsAllBetTypes') controlsAllBetTypesComponent: ControlsAllBetTypesComponent;
+
   betTeams: BetTeamAddRequest[] = [];
   isCollapse = true;
   tooltip = new Tooltip();
@@ -83,12 +87,6 @@ export class AdvancedModeComponent {
     this.isShowAdvancedModeFilter = false;
     this.isCollapse = true;
     this.betTeams = [];
-  }
-
-  unckeckedAllBetTeam() {
-    this.betTeams.forEach(x => {
-      x.isShow = false;
-    });
   }
 
   public async getSpecialBetTeamCricket(matchId: number): Promise<void> {
@@ -319,5 +317,16 @@ export class AdvancedModeComponent {
     return selection.isMultiple
       ? selection.multiSelection.multipleSelect.getValueItems() !== ''
       : selection.value !== '';
+  } 
+
+  public getControlsAllBetTypesListQuery(): ControlsAllBetTypesQuery[]{
+    let controlsAllBetTypesList = [];
+    this.controlsAllBetTypesComponent.controlsAllBetTypesLists.forEach(x => {
+      if(x.isShow){
+        controlsAllBetTypesList.push({type: x.type, values: x.items.getValueItems()} as ControlsAllBetTypesQuery);
+      }
+    })
+    
+    return controlsAllBetTypesList;
   }
 }
