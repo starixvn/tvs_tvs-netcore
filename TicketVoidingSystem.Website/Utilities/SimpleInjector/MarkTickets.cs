@@ -10,7 +10,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 public static class MarkTickets
 {
-    public static void RegisterMarkTicketsServices(this IServiceCollection services)
+    public static void AddMarkTicketsServices(this IServiceCollection services)
     {
         services.AddTransient<CombineValidationService, CombineValidationServiceImp>();
         services.AddTransient<ConfirmAutoUnmarkService, ConfirmAutoUnmarkServiceImp>();

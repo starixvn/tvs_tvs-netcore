@@ -9,7 +9,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.VoidRequest;
 
 public static class VoidRequest
 {
-    public static void RegisterVoidRequestServices(this IServiceCollection services)
+    public static void AddVoidRequestServices(this IServiceCollection services)
     {
         services.AddTransient<CellService, CellServiceImp>();
         services.AddTransient<GetTicketsForExportExcelService, GetTicketsForExportExcelServiceImp>();

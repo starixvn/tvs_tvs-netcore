@@ -10,7 +10,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 public static class CancelCashOut
 {
-    public static void RegisterCancelCashOutServices(this IServiceCollection services)
+    public static void AddCancelCashOutServices(this IServiceCollection services)
     {
         services.AddTransient<Repository, RepositoryImp>();
         services.AddTransient<BetListCoreService, BetListCoreServiceImp>();

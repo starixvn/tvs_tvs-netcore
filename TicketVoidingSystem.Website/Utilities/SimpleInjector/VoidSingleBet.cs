@@ -9,7 +9,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 public static class VoidSingleBet
 {
-    public static void RegisterVoidSingleBetServices(this IServiceCollection services)
+    public static void AddVoidSingleBetServices(this IServiceCollection services)
     {
         services.AddTransient<CellService, CellServiceImp>();
         services.AddTransient<WorkSheetService<GetTicketsQuery>, GetTicketsWorksheetService>();

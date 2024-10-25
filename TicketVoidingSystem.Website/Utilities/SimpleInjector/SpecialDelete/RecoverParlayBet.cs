@@ -11,7 +11,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 public static class RecoverParlayBet
 {
-    public static void RegisterRecoverParlayBetServices(this IServiceCollection services)
+    public static void AddRecoverParlayBetServices(this IServiceCollection services)
     {
         services.AddTransient<PermissionService, PermissionServiceImp>();
         services.AddTransient<Repository, RepositoryImp>();

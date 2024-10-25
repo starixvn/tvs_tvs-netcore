@@ -15,7 +15,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 public static class ManageRequest
 {
-    public static void RegisterManageRequestServices(this IServiceCollection services)
+    public static void AddManageRequestServices(this IServiceCollection services)
     {
         services.AddTransient<DescriptionElementService, DescriptionElementServiceImp>();
         services.AddTransient<DescriptionService, DescriptionServiceImp>();

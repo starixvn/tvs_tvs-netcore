@@ -1,3 +1,4 @@
+using Fanex.Data;
 using Fanex.NAP.Client.Attributes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -26,18 +27,18 @@ services.AddHttpClient<AmendmentOicHttpClientService, AmendmentOicHttpClientServ
 services.AddHttpClient<CashOutHttpClientService, CashOutHttpClientServiceImp>();
 services.AddHttpClient<LinkedLogHttpClientService, LinkedLogHttpClientServiceImp>();
 services.AddHttpClient<OWPHttpClientService, OWPHttpClientServiceImp>();
-services.RegisterFanexData(configuration);
-services.RegisterFanexExceptionHandler();
-services.RegisterSentry();
-services.RegisterRemotingRef();
-services.RegisterLetstalk();
-services.RegisterCoreServices(configuration);
-services.RegisterBusinessServices();
-services.RegisterFanexCaching(configuration);
-services.RegisterFanexMailService();
-services.RegisterMediatR();
-services.RegisterAutoMapper();
-services.RegisterSignalR();
+services.AddFanexData(configuration);
+services.AddExceptionHandler();
+services.AddSentry();
+services.AddRemotingRef();
+services.AddLetstalk();
+services.AddCoreServices(configuration);
+services.AddBusinessServices();
+services.AddFanexCaching(configuration);
+services.AddFanexMailService();
+services.AddMediatR();
+services.AddAutoMapper();
+services.AddTvsSignalR();
 services.AddResponseCompression(options => { options.MimeTypes = new[] { "text/html", "text/css", "application/javascript", "application/json" }; });
 services.AddRazorPages();
 services.AddControllersWithViews(options =>
@@ -75,4 +76,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapHub<NotificationHub>("/SignalR/NotificationHub");
 
-app.Run();
+await app.RunAsync();

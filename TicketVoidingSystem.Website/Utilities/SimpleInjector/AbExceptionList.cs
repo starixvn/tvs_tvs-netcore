@@ -5,7 +5,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 public static class AbExceptionList
 {
-    public static void RegisterAbExceptionListServices(this IServiceCollection services)
+    public static void AddAbExceptionListServices(this IServiceCollection services)
     {
         services.AddTransient<GetUsersService, GetUsersServiceImp>();
     }

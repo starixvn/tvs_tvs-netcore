@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 public static class CashOutTransactionRecover
 {
-    public static void RegisterRecoverCashOutServices(this IServiceCollection services)
+    public static void AddRecoverCashOutServices(this IServiceCollection services)
     {
         services.AddTransient<HandlerService, HandlerServiceImp>();
         services.AddTransient<DisplayUiService, DisplayUiServiceImp>();

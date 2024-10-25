@@ -9,7 +9,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 public static class TicketListing
 {
-    public static void RegisterTicketListingServices(this IServiceCollection services)
+    public static void AddTicketListingServices(this IServiceCollection services)
     {
         services.AddTransient<CellService, CellServiceImp>();
         services.AddTransient<ConvertBetListForExcelService, ConvertBetListForExcelServiceImp>();

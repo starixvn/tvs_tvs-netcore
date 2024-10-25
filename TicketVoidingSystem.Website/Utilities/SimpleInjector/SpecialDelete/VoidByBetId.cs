@@ -11,7 +11,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 public static class VoidByBetId
 {
-    public static void RegisterVoidByBetIdServices(this IServiceCollection services)
+    public static void AddVoidByBetIdServices(this IServiceCollection services)
     {
         services.AddTransient<BetListCoreService, BetListCoreServiceImp>();
         services.AddTransient<ConditionService, ConditionServiceImp>();
