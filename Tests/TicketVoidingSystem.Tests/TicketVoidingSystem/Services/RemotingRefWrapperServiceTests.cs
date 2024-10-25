@@ -151,7 +151,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
         }
 
         [Fact]
-        public void GetMatchCodeVS345_RemotingRefServiceCalledGetVirtualSportMatchCodeFormat()
+        public void GetMatchCodeVS3456_RemotingRefServiceCalledGetVirtualSportMatchCodeFormat()
         {
             // Arrange
             remotingRefService.GetVirtualSportMatchCodeFormat("1", "VYVS_MatchCode", LanguageCode.English).Returns("abc");

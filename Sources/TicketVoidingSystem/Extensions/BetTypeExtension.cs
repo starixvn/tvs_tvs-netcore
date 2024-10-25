@@ -62,7 +62,7 @@ public static class BetTypeExtension
     {
         return id is >= BetTypeConstant.FirstVirtualSport and <= BetTypeConstant.SecondVirtualSport
                    or >= BetTypeConstant.MinVirtualSportBetType and <= BetTypeConstant.MaxVirtualSportBetType
-               || id.IsVirtualSport4BetType() || IsVirtualSport5BetType(id);
+               || id.IsVirtualSport4BetType() || IsVirtualSport5BetType(id) || IsVirtualSport6BetType(id);
     }
 
     private static bool IsVirtualSport4BetType(this int id)
@@ -74,6 +74,12 @@ public static class BetTypeExtension
     {
         List<int> betTypesVirtualSport5 = new() { 11050, 11051, 11052, 11053, 11054, 11055, 11099 };
         return betTypesVirtualSport5.Contains(id);
+    }
+
+    public static bool IsVirtualSport6BetType(this int id)
+    {
+        List<int> betTypesVirtualSport6 = new() { 13000, 13001, 13002, 13003, 13004, 13005, 13006, 13007, 13008, 13009, 13010, 13011 };
+        return betTypesVirtualSport6.Contains(id);
     }
 
     public static bool IsVirtualSport2(this int sportTypeId)    // Sport Type of VirtualSport2 except 177, 198

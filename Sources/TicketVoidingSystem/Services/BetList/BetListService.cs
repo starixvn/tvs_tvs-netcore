@@ -265,7 +265,7 @@ public class BetListServiceImp : BetListService
 
     public string GetVirtualSportMatchCode(int sportType, string matchCode)
     {
-        if (sportType.IsVirtualSports2Betradar())
+        if (sportType.IsVirtualSports2Betradar() || sportType.IsVirtualSport6BetType())
         {
             return "-";
         }
