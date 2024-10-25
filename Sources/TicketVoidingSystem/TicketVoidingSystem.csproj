@@ -22,7 +22,7 @@
     <PackageReference Include="DeepCloner" Version="0.10.4" />
     <PackageReference Include="EPPlus" Version="6.2.10" />
     <PackageReference Include="Fanex.BetList.Core" Version="3.0.4.2" />
-    <PackageReference Include="Fanex.Caching.Redis.AspNetCore" Version="2.2.4" />
+    <PackageReference Include="Fanex.Caching.Redis.AspNetCore" Version="2.2.5" />
     <PackageReference Include="Fanex.Data.ProxyClient" Version="1.0.0" />
     <PackageReference Include="Fanex.LetstalkService.Client" Version="1.0.0.20" />
     <PackageReference Include="Fanex.Logging" Version="2.0.1.1" />

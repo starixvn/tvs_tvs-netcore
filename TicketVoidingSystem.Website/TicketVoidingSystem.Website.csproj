@@ -6,11 +6,7 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;8601;8604;8618;8632;8669</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  <PropertyGroup>
     <NoWarn>1701;1702;8601;8604;8618;8632;8669</NoWarn>
   </PropertyGroup>
 
@@ -48,9 +44,9 @@
     <PackageReference Include="Fanex.BetList.CashOut" Version="2.0.0" />
     <PackageReference Include="Fanex.BetList.Core.RemotingRef" Version="2.0.0.2" />
     <PackageReference Include="Fanex.BetList.ESports" Version="2.0.0" />
-    <PackageReference Include="Fanex.Caching.AspNetCore" Version="2.2.4" />
-    <PackageReference Include="Fanex.Caching.Redis" Version="2.2.4" />
-    <PackageReference Include="Fanex.Caching.Redis.AspNetCore" Version="2.2.4" />
+    <PackageReference Include="Fanex.Caching.AspNetCore" Version="2.2.5" />
+    <PackageReference Include="Fanex.Caching.Redis" Version="2.2.5" />
+    <PackageReference Include="Fanex.Caching.Redis.AspNetCore" Version="2.2.5" />
     <PackageReference Include="Fanex.BetList.NumberGame" Version="2.0.0.3" />
     <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.1.1" />
     <PackageReference Include="Fanex.Data.ProxyClient" Version="1.0.0" />
