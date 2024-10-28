@@ -235,7 +235,7 @@ export class BetTeamAddRequest {
       case 'playerandodds':
         result.playerAndOdds = value;
         break;
-      case '_xx': // use for input: XX value in betid type 8XX; link to column betId
+      case '_xx': // use for input: XX value & selections round: XX in betid type 8XX; link to column betId
         result.betIdX = value;
         result.filterBetIdX = this.getValueBetIdTypeXx(value);
         break;
@@ -269,7 +269,9 @@ export class BetTeamAddRequest {
       return '___';
     }
 
-    return value.split('&')
+    const newValue = value.replaceAll(',','&'); //replace values selection
+
+    return newValue.split('&')
       .filter(Boolean)
       .map(x => `_${x.padStart(2, '0')}`)
       .join('&');

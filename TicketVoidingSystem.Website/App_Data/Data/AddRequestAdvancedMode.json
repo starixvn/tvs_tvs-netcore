@@ -2659,29 +2659,29 @@
           "Items": [
             {
               "Name": "1",
-              "Value": "801"
+              "Value": "01"
             },
             {
               "Name": "2",
-              "Value": "802"
+              "Value": "02"
             },
             {
               "Name": "3",
-              "Value": "803"
+              "Value": "03"
             },
             {
               "Name": "4",
-              "Value": "804"
+              "Value": "04"
             },
             {
               "Name": "5",
-              "Value": "805"
+              "Value": "05"
             }
           ],
           "Name": "Round",
           "Value": "All",
           "IsMultiple": true,
-          "XmlAttribute": "BetIdX"
+          "XmlAttribute": "_XX"
         },
         {
           "Items": [
@@ -2712,29 +2712,29 @@
           "Items": [
             {
               "Name": "1",
-              "Value": "801"
+              "Value": "01"
             },
             {
               "Name": "2",
-              "Value": "802"
+              "Value": "02"
             },
             {
               "Name": "3",
-              "Value": "803"
+              "Value": "03"
             },
             {
               "Name": "4",
-              "Value": "804"
+              "Value": "04"
             },
             {
               "Name": "5",
-              "Value": "805"
+              "Value": "05"
             }
           ],
           "Name": "Round",
           "Value": "All",
           "IsMultiple": true,
-          "XmlAttribute": "BetIdX"
+          "XmlAttribute": "_XX"
         },
         {
           "Items": [
@@ -2765,29 +2765,29 @@
           "Items": [
             {
               "Name": "1",
-              "Value": "801"
+              "Value": "01"
             },
             {
               "Name": "2",
-              "Value": "802"
+              "Value": "02"
             },
             {
               "Name": "3",
-              "Value": "803"
+              "Value": "03"
             },
             {
               "Name": "4",
-              "Value": "804"
+              "Value": "04"
             },
             {
               "Name": "5",
-              "Value": "805"
+              "Value": "05"
             }
           ],
           "Name": "Round",
           "Value": "All",
           "IsMultiple": true,
-          "XmlAttribute": "BetIdX"
+          "XmlAttribute": "_XX"
         },
         {
           "Items": [
@@ -2818,29 +2818,29 @@
           "Items": [
             {
               "Name": "1",
-              "Value": "801"
+              "Value": "01"
             },
             {
               "Name": "2",
-              "Value": "802"
+              "Value": "02"
             },
             {
               "Name": "3",
-              "Value": "803"
+              "Value": "03"
             },
             {
               "Name": "4",
-              "Value": "804"
+              "Value": "04"
             },
             {
               "Name": "5",
-              "Value": "805"
+              "Value": "05"
             }
           ],
           "Name": "Round",
           "Value": "All",
           "IsMultiple": true,
-          "XmlAttribute": "BetIdX"
+          "XmlAttribute": "_XX"
         },
         {
           "Items": [
@@ -2872,11 +2872,11 @@
           "Items": [
             {
               "Name": "1",
-              "Value": "801"
+              "Value": "01"
             },
             {
               "Name": "2",
-              "Value": "802"
+              "Value": "02"
             },
             {
               "Name": "3",
@@ -2884,17 +2884,17 @@
             },
             {
               "Name": "4",
-              "Value": "804"
+              "Value": "04"
             },
             {
               "Name": "5",
-              "Value": "805"
+              "Value": "05"
             }
           ],
           "Name": "Round",
           "Value": "All",
           "IsMultiple": true,
-          "XmlAttribute": "BetIdX"
+          "XmlAttribute": "_XX"
         },
         {
           "Items": [
