@@ -2,7 +2,7 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 import { BetTeamAddRequest } from '../advanced-mode/advanced-mode.model';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { ControlsAllBetTypesQuery, ControlsAllBetTypesLists } from './controls-all-bet-types.model';
-import { AdvancedModeConstants } from '../../advanced-mode/advanced-mode.constants';
+
 @Component({
   selector: 'controls-all-bet-types',
   templateUrl: './controls-all-bet-types.component.html',
@@ -59,12 +59,6 @@ export class ControlsAllBetTypesComponent {
   }
 
   private checkShowAllBetTypeMap(type: string): boolean{
-    return this.betTeams.filter(betTeam => betTeam.isShow && betTeam.selections.find(y => y.name === type) 
-      && this.checkBetTypesShowControlsAll(betTeam.betTypes)).length > 0;
-  }
-
-  private checkBetTypesShowControlsAll(betTypes: string){
-    const betTypesList = betTypes.split(',');
-    return betTypesList.find(x => (!AdvancedModeConstants.BETTYPE_NOT_SELECT_ROUND_All_CONTROLS.split(',').includes(x))) ? true : false;
+    return this.betTeams.filter(betTeam => betTeam.isShow && betTeam.selections.find(y => y.name === type)).length > 0;
   }
 }
