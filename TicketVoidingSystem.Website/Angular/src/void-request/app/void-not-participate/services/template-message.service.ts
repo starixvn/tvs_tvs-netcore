@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { PlayerName, RequestDetailViewModel } from 'src/edit-request/app/request.model';
-import { TemplateService } from 'src/utility/components/template-message/template-message/services/template.service';
-import { TemplateContent, TemplateValue } from 'src/utility/components/template-message/template-message/template.model';
-import { EventType, SportType } from 'src/utility/constants/sport.constant';
-import { StaticService } from 'src/utility/services/static.service';
+import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
+import { TemplateContent, TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
+import { EventType, SportType } from '../../../../utility/constants/sport.constant';
+import { StaticService } from '../../../../utility/services/static.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
@@ -28,12 +28,12 @@ export class TemplateMessageService {
     if (this.isSpecialBetType(requestDetail.request.issueTypeId)) {
       this.setSpecialBetTypeProperties(templateValue, voidPageItem.voidTicketsMini, requestDetail, voidPageItem.logInfoDetail);
     }
-
+    
     return templateValue;
   }
 
   private isSpecialBetType(issueTypeId: number): boolean {
-    return StaticService.isLikelyWrongMarketOffered(issueTypeId.toString())
+    return StaticService.isLikelyWrongMarketOffered(issueTypeId)
       || StaticService.isWrongOddsSportsBook(issueTypeId);
   }
 
@@ -58,7 +58,6 @@ export class TemplateMessageService {
       }
     }
   }
-
 
   private getPlayerName(playerName: PlayerName): TemplateContent {
     return {

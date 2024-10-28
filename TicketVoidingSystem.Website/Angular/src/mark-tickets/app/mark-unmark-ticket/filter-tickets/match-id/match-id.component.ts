@@ -4,11 +4,13 @@ import {
   OnInit, Output, QueryList, ViewChild, ViewChildren
 } from '@angular/core';
 import * as _ from 'lodash';
+import moment from 'moment';
 import { AdvancedModeComponent } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GetPlayersQuery } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GroupBetTypesComponent } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { GroupLicenseeModel } from '../../../../../utility/components/licensees/licensees.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ModeType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
@@ -18,8 +20,6 @@ import { GetTicketsQuery, RangeTime } from '../../../models/query.model';
 import { EventType } from '../filter.model';
 import { Duration } from './../../../models/query.model';
 import { Currencies } from './../filter.model';
-import { GroupLicensee } from './licensees/licensees.model';
-import moment from 'moment';
 
 @Component({
   selector: 'match-id',
@@ -28,7 +28,7 @@ import moment from 'moment';
 })
 export class MatchIdComponent implements OnInit {
   @Input() currencies = new Currencies();
-  @Input() groupLicensees: GroupLicensee[];
+  @Input() groupLicenseeModel: GroupLicenseeModel;
   @Input() model = new GetTicketsQuery();
   @Output() blockComponent = new EventEmitter<boolean>();
   @Output() modelChange = new EventEmitter<GetTicketsQuery>();
@@ -145,12 +145,7 @@ export class MatchIdComponent implements OnInit {
   }
 
   getCheckedLicensees() {
-    let result: string[] = [];
-    this.groupLicensees.forEach(group => {
-      result = result.concat(group.getLicenseesName());
-    });
-
-    return result;
+    return this.groupLicenseeModel.getCheckedLicensees().map(license => license.name);
   }
 
   checkValidationOfMatch(): boolean {

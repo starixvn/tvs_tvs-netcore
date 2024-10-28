@@ -267,4 +267,12 @@ public static class LogInfoExtension
             + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' "
             + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}'/></root>";
     }
+
+    public static string ToWrongOfferedNameInfoXml(this WrongOfferedNameViewModel model)
+    {
+        return $"<root><r MatchId = '{model.MatchId}' "
+               + $"CurrencyIds='{model.CurrencyIds}' "
+               + $"LicenseeNames='{model.LicenseeNames}' "
+               + $"SubIssueTypeId='{model.SubIssueTypeId}'/></root>";
+    }
 }

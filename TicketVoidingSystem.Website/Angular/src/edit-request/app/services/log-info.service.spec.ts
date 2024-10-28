@@ -15,7 +15,6 @@ import { LogInfoArg } from '../models/log-info.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { RequestDetailModel, RequestDetailViewModel } from '../request.model';
 import { LogInfoService } from './log-info.service';
-import { ValidationService } from './validation.service';
 
 class Helper {
   static readonly fakeScoreId = 28291;
@@ -122,119 +121,111 @@ class Helper {
 }
 
 describe('LogInfoService', () => {
-  let validationService: ValidationService;
   let commonService: CommonService;
   let logInfoService: LogInfoService;
 
   beforeEach(() => {
-    validationService = new ValidationService();
     commonService = new CommonService(null);
-    logInfoService = new LogInfoService(commonService, validationService);
+    logInfoService = new LogInfoService(commonService);
   });
 
   it('#getLogInfo should call expected function when isRedCard', async () => {
     // Arrange
-    const spyIsRedCard = jest.spyOn(validationService, 'isRedCard').mockImplementation(() => true);
     logInfoService['createLogInfoArg'] = jest.fn();
     logInfoService['getLogInfoRedCard'] = jest.fn();
+    const fakeModel = Helper.fakeRequestDetailViewModel;
+    fakeModel.request.issueTypeId = Number(IssueTypeConstant.RED_CARD);
 
     // Action
-    await logInfoService.getLogInfo(null, Helper.fakeRequestDetailViewModel);
+    await logInfoService.getLogInfo(null, fakeModel);
 
     // Assert
     expect(logInfoService['createLogInfoArg']).toHaveBeenCalledTimes(1);
     expect(logInfoService['getLogInfoRedCard']).toHaveBeenCalledTimes(1);
-    expect(spyIsRedCard).toHaveBeenCalledTimes(1);
   });
 
   it('#getLogInfo should call expected function when isWrongHdp', async () => {
     // Arrange
-    const spyIsWrongHdp = jest.spyOn(validationService, 'isWrongHdp').mockImplementation(() => true);
     logInfoService['getLogInfoWrongHdp'] = jest.fn();
+    const fakeModel = Helper.fakeRequestDetailViewModel;
+    fakeModel.request.issueTypeId = Number(IssueTypeConstant.WRONG_HDP);
+
 
     // Action
-    await logInfoService.getLogInfo(null, Helper.fakeRequestDetailViewModel);
+    await logInfoService.getLogInfo(null, fakeModel);
 
     // Assert
     expect(logInfoService['getLogInfoWrongHdp']).toHaveBeenCalledTimes(1);
-    expect(spyIsWrongHdp).toHaveBeenCalledTimes(1);
   });
 
   it('#getLogInfo should call expected function when isWrong1stHdp', async () => {
     // Arrange
-    const spyIsWrong1stHdp = jest.spyOn(validationService, 'isWrong1stHdp').mockImplementation(() => true);
     logInfoService['getLogInfoWrongHdp'] = jest.fn();
+    const fakeModel = Helper.fakeRequestDetailViewModel;
+    fakeModel.request.issueTypeId = Number(IssueTypeConstant.WRONG_1ST_HDP);
+
 
     // Action
-    await logInfoService.getLogInfo(null, Helper.fakeRequestDetailViewModel);
+    await logInfoService.getLogInfo(null, fakeModel);
 
     // Assert
     expect(logInfoService['getLogInfoWrongHdp']).toHaveBeenCalledTimes(1);
-    expect(spyIsWrong1stHdp).toHaveBeenCalledTimes(1);
   });
 
   it('#getLogInfo should call expected function when isWrongOu', async () => {
     // Arrange
-    const spyIsWrongOu = jest.spyOn(validationService, 'isWrongOu').mockImplementation(() => true);
     logInfoService['getLogInfoWrongOu'] = jest.fn();
+    const fakeModel = Helper.fakeRequestDetailViewModel;
+    fakeModel.request.issueTypeId = Number(IssueTypeConstant.WRONG_OU);
 
     // Action
-    await logInfoService.getLogInfo(null, Helper.fakeRequestDetailViewModel);
+    await logInfoService.getLogInfo(null, fakeModel);
 
     // Assert
     expect(logInfoService['getLogInfoWrongOu']).toHaveBeenCalledTimes(1);
-    expect(spyIsWrongOu).toHaveBeenCalledTimes(1);
   });
 
   it('#getLogInfo should call expected function when isWrong1stOu', async () => {
     // Arrange
-    const spyIsWrong1stOu = jest.spyOn(validationService, 'isWrong1stOu').mockImplementation(() => true);
     logInfoService['getLogInfoWrongOu'] = jest.fn();
+    const fakeModel = Helper.fakeRequestDetailViewModel;
+    fakeModel.request.issueTypeId = Number(IssueTypeConstant.WRONG_1ST_OU);
 
     // Action
-    await logInfoService.getLogInfo(null, Helper.fakeRequestDetailViewModel);
+    await logInfoService.getLogInfo(null, fakeModel);
 
     // Assert
     expect(logInfoService['getLogInfoWrongOu']).toHaveBeenCalledTimes(1);
-    expect(spyIsWrong1stOu).toHaveBeenCalledTimes(1);
   });
 
   it('#getLogInfo should call expected function when isWrongScore', async () => {
     // Arrange
-    const spyIsRedCard = jest.spyOn(validationService, 'isRedCard').mockImplementation(() => false);
-    const spyIsWrongScore = jest.spyOn(validationService, 'isWrongScore').mockImplementation(() => true);
-
+    const fakeModel = Helper.fakeRequestDetailViewModel;
+    fakeModel.request.issueTypeId = Number(IssueTypeConstant.WRONG_SCORE);
     logInfoService['createLogInfoArg'] = jest.fn();
     logInfoService['getLogInfoWrongScore'] = jest.fn();
 
     // Action
-    await logInfoService.getLogInfo(null, Helper.fakeRequestDetailViewModel);
+    await logInfoService.getLogInfo(null, fakeModel);
 
     // Assert
     expect(logInfoService['createLogInfoArg']).toHaveBeenCalledTimes(1);
     expect(logInfoService['getLogInfoWrongScore']).toHaveBeenCalledTimes(1);
-    expect(spyIsRedCard).toHaveBeenCalledTimes(1);
-    expect(spyIsWrongScore).toHaveBeenCalledTimes(1);
   });
 
   it('#getLogInfo should call expected function when isDangerAccepted', async () => {
     // Arrange
-    const spyIsRedCard = jest.spyOn(validationService, 'isRedCard').mockImplementation(() => false);
-    const spyIsWrongScore = jest.spyOn(validationService, 'isWrongScore').mockImplementation(() => false);
-    const spyIsDangerAccepted = jest.spyOn(validationService, 'isDangerAccepted').mockImplementation(() => true);
-
     logInfoService['createLogInfoArg'] = jest.fn();
     logInfoService['getLogInfoDangerAccepted'] = jest.fn();
+    const fakeModel = Helper.fakeRequestDetailViewModel;
+    fakeModel.request.issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
 
     // Action
-    await logInfoService.getLogInfo(null, null);
+    await logInfoService.getLogInfo(null, fakeModel);
 
     // Assert
     expect(logInfoService['createLogInfoArg']).toHaveBeenCalledTimes(1);
     expect(logInfoService['getLogInfoDangerAccepted']).toHaveBeenCalledTimes(1);
-    expect(spyIsRedCard).toHaveBeenCalledTimes(1);
-    expect(spyIsWrongScore).toHaveBeenCalledTimes(1);
-    expect(spyIsDangerAccepted).toHaveBeenCalledTimes(1);
   });
 
   it('#getLogInfo should call expected function when isWrongOdds', async () => {
@@ -280,56 +271,6 @@ describe('LogInfoService', () => {
     // Assert
     expect(logInfoService['createLogInfoArg']).toHaveBeenCalledTimes(1);
     expect(logInfoService['getLogInfoNotParticipate']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getLogInfo should call expected function', async () => {
-    // Arrange
-    const spyIsRedCard = jest.spyOn(validationService, 'isRedCard').mockImplementation(() => false);
-    const spyIsWrongScore = jest.spyOn(validationService, 'isWrongScore').mockImplementation(() => false);
-    const spyIsDangerAccepted = jest.spyOn(validationService, 'isDangerAccepted').mockImplementation(() => false);
-    const spyIsWrongHdp = jest.spyOn(validationService, 'isWrongHdp').mockImplementation(() => false);
-    const spyIsWrong1stHdp = jest.spyOn(validationService, 'isWrong1stHdp').mockImplementation(() => false);
-    const spyIsWrongOu = jest.spyOn(validationService, 'isWrongOu').mockImplementation(() => false);
-    const spyIsWrong1stOu = jest.spyOn(validationService, 'isWrong1stOu').mockImplementation(() => false);
-    const spyIsWrongOdds = jest.spyOn(validationService, 'isWrongOdds').mockImplementation(() => false);
-    const spyIsReducedOver = jest.spyOn(validationService, 'isReducedOver').mockImplementation(() => false);
-    const spyIsNotParticipate = jest.spyOn(validationService, 'isNotParticipate').mockImplementation(() => false);
-    const spyIsAbandoned = jest.spyOn(validationService, 'isAbandoned').mockImplementation(() => false);
-    const spyIsLikelyWrongMarketOffered = jest.spyOn(validationService, 'isLikelyWrongMarketOffered').mockImplementation(() => false);
-
-    logInfoService['createLogInfoArg'] = jest.fn();
-    logInfoService['getLogInfoDangerAccepted'] = jest.fn();
-    logInfoService['getLogInfoRedCard'] = jest.fn();
-    logInfoService['getLogInfoWrongScore'] = jest.fn();
-    logInfoService['isWrongHdp'] = jest.fn();
-    logInfoService['isWrong1stHdp'] = jest.fn();
-    logInfoService['isWrongOu'] = jest.fn();
-    logInfoService['isWrong1stOu'] = jest.fn();
-    logInfoService['isReducedOver'] = jest.fn();
-    logInfoService['isNotParticipate'] = jest.fn();
-    logInfoService['isAbandoned'] = jest.fn();
-    logInfoService['isLikelyWrongMarketOffered'] = jest.fn();
-
-    // Action
-    await logInfoService.getLogInfo(null, null);
-
-    // Assert
-    expect(logInfoService['createLogInfoArg']).toHaveBeenCalledTimes(1);
-    expect(logInfoService['getLogInfoDangerAccepted']).toHaveBeenCalledTimes(0);
-    expect(logInfoService['getLogInfoRedCard']).toHaveBeenCalledTimes(0);
-    expect(logInfoService['getLogInfoWrongScore']).toHaveBeenCalledTimes(0);
-    expect(spyIsRedCard).toHaveBeenCalledTimes(1);
-    expect(spyIsWrongScore).toHaveBeenCalledTimes(1);
-    expect(spyIsDangerAccepted).toHaveBeenCalledTimes(1);
-    expect(spyIsWrongHdp).toHaveBeenCalledTimes(1);
-    expect(spyIsWrong1stHdp).toHaveBeenCalledTimes(1);
-    expect(spyIsWrongOu).toHaveBeenCalledTimes(1);
-    expect(spyIsWrong1stOu).toHaveBeenCalledTimes(1);
-    expect(spyIsWrongOdds).toHaveBeenCalledTimes(1);
-    expect(spyIsReducedOver).toHaveBeenCalledTimes(1);
-    expect(spyIsNotParticipate).toHaveBeenCalledTimes(1);
-    expect(spyIsAbandoned).toHaveBeenCalledTimes(1);
-    expect(spyIsLikelyWrongMarketOffered).toHaveBeenCalledTimes(1);
   });
 
   it('#getLogInfoRedCard should get correct info', async () => {
@@ -413,14 +354,12 @@ describe('LogInfoService', () => {
     args.detailViewModel = detailViewModel;
 
     [true, false].forEach(async x => {
-      const spyIsWrongHdp = jest.spyOn(validationService, 'isWrongHdp').mockImplementation(() => x);
       // Action
       await logInfoService['getLogInfoWrongHdp'](args);
 
       // Assert
       expect(args.detailViewModel.wrongHdpModels[0].logInfoDetail).toStrictEqual(Helper.fakeGetLogInfoModel.logInfoDetail);
       expect(spyCommonServiceGetLogInfo).toHaveBeenCalled();
-      expect(spyIsWrongHdp).toHaveBeenCalled();
     });
   });
 
@@ -436,15 +375,12 @@ describe('LogInfoService', () => {
     const args = _.clone(Helper.fakeLogInfoArg);
     args.detailViewModel = detailViewModel;
     [true, false].forEach(async x => {
-      const spyIsWrongOu = jest.spyOn(validationService, 'isWrongOu').mockImplementation(() => x);
-
       // Action
       await logInfoService['getLogInfoWrongOu'](args);
 
       // Assert
       expect(args.detailViewModel.wrongOuModels[0].logInfoDetail).toStrictEqual(Helper.fakeGetLogInfoModel.logInfoDetail);
       expect(spyCommonServiceGetLogInfo).toHaveBeenCalled();
-      expect(spyIsWrongOu).toHaveBeenCalled();
     });
   });
 

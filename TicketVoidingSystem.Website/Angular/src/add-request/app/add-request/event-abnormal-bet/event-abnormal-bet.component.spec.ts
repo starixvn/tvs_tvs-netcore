@@ -10,6 +10,7 @@ import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { AbnormalBetModel } from '../models/abnormal-bet.model';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { PopupService } from '../services/popup.service';
@@ -20,7 +21,6 @@ import { AbnormalBetTicketViewModel, PrimitiveProperty, ValidationAbnormalBet } 
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationBusinessRuleOutput } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
-import { IssueTypes } from '../filter/issue-types.model';
 
 class Helper {
   static readonly fakeTransId = '123456789';
@@ -40,7 +40,7 @@ class Helper {
     isVoided: false,
     subIssueTypes: [],
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakePermissionManage: PermissionAddRequest = {
     isAddSettledTickets: false,
     isVoidAllArchivedTickets: false,

@@ -37,7 +37,6 @@ public class CopyRequestInfoServiceTests
         repository = Substitute.For<IDynamicRepository>();
         requestExtraInfoXmlService.ParseXmlToOperators("OperatorInfo").Returns(operators);
         repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(Arg.Any<CopyRequestInfoCriteria>()).Returns((requestInfos, betTypeTickets));
-        requestExtraInfoXmlService.ParseXmlToIsCheckVar(1, "RequestExtraInfo").Returns(true);
         service = new CopyRequestInfoServiceImp(repository, null, null, requestExtraInfoXmlService);
         var requestInfoForCopyExpected = new RequestInfoForCopy()
         {
@@ -47,7 +46,7 @@ public class CopyRequestInfoServiceTests
             IssueTypeId = 1,
             RequestExtraInfo = "RequestExtraInfo",
             Operators = operators,
-            IsCheckedVar = true
+            IsCheckedVar = false
         };
 
         // Act

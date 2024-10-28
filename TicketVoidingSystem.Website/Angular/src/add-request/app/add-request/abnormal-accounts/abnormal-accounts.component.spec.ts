@@ -32,7 +32,7 @@ class Helper {
     isVoided: false,
     subIssueTypes: [],
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeAbnormalAccountModel: AbnormalAccountModel = {
     usernames: '',
     productIds: '',

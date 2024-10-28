@@ -51,7 +51,8 @@ public class AddRequestProcessStageImp : AddRequestProcessStage
         try
         {
             var requestId = await ExecuteAddRequest(query);
-            await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, query.AbnormalBetInfo, query.EarlyKickOffInfo);
+            var matchIdsAutoVoidRequestQueue = insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
+            await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, matchIdsAutoVoidRequestQueue);
             await sendLetstalkAfterAddService.Execute(query.AbnormalBetInfo, requestId);
 
             return getUpdateResultService.CreateSuccessResult(requestId, GetMatchIdAfterAddRequest(query), markedTicketsSuccessful);
@@ -88,6 +89,7 @@ public class AddRequestProcessStageImp : AddRequestProcessStage
         command.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
         command.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
         command.WrongOddsSBInfo = query.WrongOddsSportsBookInfo?.ToEventWrongOddsSportsBookXml();
+        command.WrongOfferedNameInfo = query.WrongOfferedNameInfo?.ToEventWrongOfferedNameXml();
 
         await repository.ExecuteAsync(command);
         if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
@@ -122,6 +124,7 @@ public class AddRequestProcessStageImp : AddRequestProcessStage
             IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedInfo?.MatchId.ToString(),
             IssueTypeConstant.TechnicalError => query.WrongMarketOfferedInfo?.MatchId.ToString(),
             IssueTypeConstant.WrongOddsSportsBook => query.WrongOddsSportsBookInfo?.MatchId.ToString(),
+            IssueTypeConstant.WrongOfferedName => query.WrongOfferedNameInfo?.MatchId.ToString(),
             _ => string.Empty
         };
     }

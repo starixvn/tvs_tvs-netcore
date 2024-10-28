@@ -35,7 +35,7 @@ class Helper {
     isVoided: false,
     subIssueTypes: [],
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakePermissionManage: PermissionManage = {
     manageRequestHost: true,
     verifyRead: true,

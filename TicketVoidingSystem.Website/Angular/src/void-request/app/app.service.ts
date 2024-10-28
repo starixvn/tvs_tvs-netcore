@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { RequestDetailViewModel } from '../../edit-request/app/request.model';
-import { VoidedReason } from '../../utility/models/reason.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
 import { GetTicketsQuery } from './models/get-tickets.query';
@@ -28,10 +27,6 @@ export class AppService {
 
   async getTicketsMini(query: GetTicketsQuery): Promise<TicketsModel> {
     return this.httpService.postJson(query, 'api/VoidRequest/GetTicketsMini');
-  }
-
-  async getVoidedReason(subId: number, sportTypeId: number): Promise<VoidedReason> {
-    return this.httpService.postJson({subId: subId, sportTypeId: sportTypeId}, `api/VoidRequest/GetVoidedReason`);
   }
 
   async insertQueue(query: VoidTicketsQuery): Promise<Result<InsertQueueResult>> {

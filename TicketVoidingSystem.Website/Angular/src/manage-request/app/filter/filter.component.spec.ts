@@ -59,7 +59,7 @@ class Helper {
     isExcludeTest: true,
     createdBy: '',
     isDisplayMissingInfo: false
-  };
+  } as FilterModel;
   static readonly fakeIssueTypeList: IssueType[] = [
     { issueTypeId: 1, issueTypeName: Helper.dangerAccepted},
     { issueTypeId: 11, issueTypeName: 'Abnormal Bet'},
@@ -377,7 +377,7 @@ describe('FilterComponent', () => {
         getIssueTypePermissionList: jest.fn().mockImplementation(() => Helper.fakeIssueTypeList )
       })
       .render();
-  
+
     // Action
     await instance['setIssueTypeSelectList']();
 

@@ -6,10 +6,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ToastrModule } from 'ngx-toastr';
-import { IssueTypeModule } from '../../utility/components/issue-type/issue-type.module';
+import { TicketCountOtherSportsModule } from '../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.module';
 import { RequestInfoModule } from '../../manage-request/app/ticket-list/request-info/request-info.module';
 import { AdvancedModeModule } from '../../utility/components/advanced-mode/advanced-mode.module';
 import { DateTimeModule } from '../../utility/components/date-time/date-time.module';
+import { IssueTypeModule } from '../../utility/components/issue-type/issue-type.module';
 import { PagingModule } from '../../utility/components/paging/paging.module';
 import { TemplateMessageModule } from '../../utility/components/template-message/template-message.module';
 import { BlockUiModule } from './../../utility/components/block-ui/block-ui.module';
@@ -22,7 +23,6 @@ import { FilterComponent } from './filter/filter.component';
 import { LogInfoNewComponent } from './log-info-new/log-info-new.component';
 import { LogInfoComponent } from './log-info/log-info.component';
 import { MessageAreaComponent } from './message-area/message-area.component';
-import { VoidReasonComponent } from './message-area/void-reason/void-reason.component';
 import { PasswordAreaComponent } from './password-area/password-area.component';
 import { TicketsListComponent } from './tickets-list/tickets-list.component';
 import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.component';
@@ -31,7 +31,6 @@ import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-dup
 import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
 import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
 import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
-import { TicketCountOtherSportsModule } from '../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.module';
 
 @NgModule({
   declarations: [
@@ -47,7 +46,6 @@ import { TicketCountOtherSportsModule } from '../../add-request/app/add-request/
     VoidNotParticipateComponent,
     VoidEarlyKickOffComponent,
     VoidAbnormalBetComponent,
-    VoidReasonComponent,
     MessageAreaComponent,
     PasswordAreaComponent
   ],

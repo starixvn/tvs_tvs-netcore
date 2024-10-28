@@ -63,6 +63,14 @@ public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
                 model.ToOdds = root.ToOdds;
                 model.CorrectOdds = root.CorrectOdds;
 
+                model.CurrencyIds = root.CurrencyIds;
+                model.LicenseeNames = root.LicenseeNames;
+                model.WrongName = root.WrongName;
+                model.ActualName = root.ActualName;
+                model.WrongNameT = root.WrongNameT;
+                model.ActualNameT = root.ActualNameT;
+                model.WrongNameS = root.WrongNameS;
+                model.ActualNameS = root.ActualNameS;
             }
         }
     }
@@ -85,7 +93,6 @@ public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
             requestInfoForCopy.ToOdds = root.ToOdds;
             requestInfoForCopy.CorrectOdds = root.CorrectOdds;
         }
-
     }
 
     public IEnumerable<OperatorInfo> ParseXmlToOperators(string operatorXml)

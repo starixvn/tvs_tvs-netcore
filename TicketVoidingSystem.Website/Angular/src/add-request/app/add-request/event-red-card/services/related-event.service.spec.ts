@@ -92,7 +92,7 @@ class Helper {
     isVoided: false,
     isChangeSubTypeManual: true,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakePrimitiveProperty: PrimitiveProperty = {
     isBlock: false,
     isShowLogInfoMainMatch: false,

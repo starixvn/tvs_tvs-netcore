@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
-import { EventType } from 'src/utility/constants/sport.constant';
+import { EventType } from '../../../../../utility/constants/sport.constant';
 import { Message } from '../../messages/message';
 import { FormatDateTime, MessageTemplateId, TemplateContentConst, TemplateReplace } from '../template.const';
 import { TemplateContent, TemplateValue } from '../template.model';

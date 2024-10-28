@@ -148,7 +148,6 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
     {
         var voidTickets = data.Where(item => !item.IsCancelCashOut);
         var cancelCashOutTickets = data.Where(item => item.IsCancelCashOut);
-
         if (voidTickets.Any())
         {
             model.FromTime = voidTickets.Select(item => item.TransDate)

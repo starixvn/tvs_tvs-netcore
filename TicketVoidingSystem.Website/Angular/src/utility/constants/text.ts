@@ -28,8 +28,8 @@ export class TEXT {
     static readonly REQUIRED_VOID_VIP = 'Void VIP is required.';
     static readonly REQUIRED_FIELD = 'Required field.';
 
-    static readonly EMPTY_LICENSEE = 'At least one Licensee  must be selected.';
-    static readonly EMPTY_CURRENCY = 'At least one Currency  must be selected.';
+    static readonly EMPTY_LICENSEE = 'At least one Licensee must be selected.';
+    static readonly EMPTY_CURRENCY = 'At least one Currency must be selected.';
     static readonly EMPTY_TICKET = 'At least one ticket must be selected.';
     static readonly EMPTY_BETTYPE = 'At least one bettype must be selected.';
     static readonly EMPTY_SELECT = 'Please select at least one option!';

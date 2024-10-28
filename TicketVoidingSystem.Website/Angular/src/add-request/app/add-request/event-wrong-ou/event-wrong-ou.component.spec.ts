@@ -7,6 +7,7 @@ import { AddChildMatchComponent } from '../../../../utility/components/add-child
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { BlockFullUiModule } from '../../../../utility/components/block-full-ui/block-full-ui.module';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
@@ -26,7 +27,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -74,7 +74,7 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeWrongHdpModel: WrongHdpModel = {
     matchId: 122,
     subIssueTypeId: 12,
@@ -298,7 +298,7 @@ describe('EventWrongOuComponent', () => {
     instance.primitiveProps = new PrimitiveProperty();
     instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
     instance.mainEvent = Helper.fakeLogInfoWrongHdp;
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     eventLeagueComponent.selectedMatch = new MatchModel();
     instance.eventLeagueComponent = eventLeagueComponent;
     instance.updateMatchId.emit = jest.fn();

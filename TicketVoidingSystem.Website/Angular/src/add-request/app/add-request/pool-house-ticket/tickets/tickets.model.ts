@@ -8,10 +8,16 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
   totalParlay: number;
   selectedSingle: number;
   selectedParlay: number;
+  isHasSettledTicket: boolean;
+  fromTime: Date;
+  toTime: Date;
 
   initData(data: TicketsModel) {
     this.totalSingle = data.totalSingle;
     this.totalParlay = data.totalParlay;
+    this.isHasSettledTicket = data.isHasSettledTicket;
+    this.fromTime = data.fromTime;
+    this.toTime = data.toTime;
     this.mapGroups(data.groups);
     this.changeIconCheckBox();
   }

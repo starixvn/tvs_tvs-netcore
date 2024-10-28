@@ -1,7 +1,6 @@
 import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
 import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
@@ -11,7 +10,12 @@ import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.mod
 import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { FilterModel } from '../../filter/filter.model';
+import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
+import { PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
+import { LogAnalysisService } from '../../services/log-analysis.service';
+import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
 import { FilterWrongOuComponent } from '../filter-wrong-ou/filter-wrong-ou.component';
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
@@ -19,12 +23,6 @@ import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
 import { LogInfoWrongOuComponent } from './log-info-wrong-ou.component';
-import { PoolHouseTicketsModel, GetPoolHouseTicketQuery, PoolHouseTicketViewModel } from '../../pool-house-ticket/pool-house-ticket.model';
-import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
-import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
-import { LogAnalysisService } from '../../services/log-analysis.service';
-import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
-import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -72,7 +70,7 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
-  };
+  } as FilterModel;
 }
 
 describe('LogInfoWrongOuComponent', () => {
@@ -89,7 +87,8 @@ describe('LogInfoWrongOuComponent', () => {
       FormsModule,
       ToolTipModule,
       BlockUiModule,
-      PipeModule    ],
+      PipeModule
+    ],
     providers: [
       ValidationService,
       LogInfoService,
@@ -341,31 +340,6 @@ describe('LogInfoWrongOuComponent', () => {
     const actual = instance.displayTransId(0, '');
 
     expect(actual).toBe('-');
-  });
-
-  it('getPoolHouseData should call #changeBlockingUiStatus', async () => {
-    const fakeLogInfoWrongHdp = _.cloneDeep(Helper.fakeLogInfoWrongOu);
-    fakeLogInfoWrongHdp.linkedLogsViewModel = new LinkedLogsViewModel();
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-    .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
-    .mock(EventWrongOuService, { getLinkedLog: jest.fn().mockImplementation(() => Promise.resolve(new LinkedLogsViewModel())) })
-    .mock(AddRequestApiService, { getPoolHouseTickets: jest.fn().mockImplementation(() => Promise.resolve(new PoolHouseTicketViewModel())) })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongOu
-      }
-    });
-    [true, false].forEach(async x => {
-      instance.isMainMatch = x;
-      instance.poolHouseTicketsModel = new PoolHouseTicketsModel();
-
-      await instance['getPoolHouseData'](new GetPoolHouseTicketQuery());
-
-      expect(mockChangeBlockingUiStatus).toHaveBeenCalled();
-    });
   });
 
   it('refreshLogInfoBySearchEvent should call #refreshLogInfo', async () => {

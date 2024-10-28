@@ -90,7 +90,7 @@ public class GetRequestServiceImp : GetRequestService
 
             case IssueTypeConstant.EarlyKickOffTime:
             case IssueTypeConstant.WrongKickOffTime:
-                viewModel.EarlyKickOffModels = MapEventEarlyKickOff(secondResultSet, secondResultSet.First().SportType);
+                viewModel.EarlyKickOffModels = MapEventEarlyKickOff(secondResultSet);
                 break;
 
             case IssueTypeConstant.DuplicateTickets:
@@ -116,6 +116,10 @@ public class GetRequestServiceImp : GetRequestService
 
             case IssueTypeConstant.WrongOddsSportsBook:
                 viewModel.WrongOddsSportsBookModel = await MapEventWrongOddsSportsBook(secondResultSet);
+                break;
+
+            case IssueTypeConstant.WrongOfferedName:
+                viewModel.WrongOfferedNameModel = MapEventWrongOfferedName(secondResultSet);
                 break;
 
             default:
@@ -284,7 +288,7 @@ public class GetRequestServiceImp : GetRequestService
         });
     }
 
-    private IEnumerable<EarlyKickOffViewModel> MapEventEarlyKickOff(IEnumerable<RequestEventModel> requestEventModels, int sportType)
+    private IEnumerable<EarlyKickOffViewModel> MapEventEarlyKickOff(IEnumerable<RequestEventModel> requestEventModels)
     {
         return requestEventModels.Select(model => new EarlyKickOffViewModel
         {
@@ -296,16 +300,9 @@ public class GetRequestServiceImp : GetRequestService
             SubIssueTypeId = model.SubIssueTypeId,
             EventDate = model.EventDate,
             KickOffTime = model.KickOffTime,
-            Match = GetMatchModel(model, sportType),
+            Match = GetMatchModel(model),
             SportType = model.SportType
         });
-    }
-
-    private Match GetMatchModel(RequestEventModel eventModel, int sportType)
-    {
-        var match = mapper.Map<Match>(eventModel);
-        match.SportType = sportType;
-        return matchService.UpdateMatchInfoFromRemotingRef(match);
     }
 
     private DuplicateTicketsViewModel MapEventDuplicateTickets(IEnumerable<RequestEventModel> requestEventModels)
@@ -412,6 +409,31 @@ public class GetRequestServiceImp : GetRequestService
             BetTeamsResult = betTypesAdvancedMode,
             GroupBetTypes = groupBetTypes
         };
+    }
+
+    private WrongOfferedNameViewModel MapEventWrongOfferedName(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        var model = requestEventModels.First();
+        return new WrongOfferedNameViewModel
+        {
+            MatchId = model.MatchId,
+            SubIssueTypeId = model.SubIssueTypeId,
+            CurrencyIds = model.CurrencyIds,
+            LicenseeNames = model.LicenseeNames,
+            Match = GetMatchModel(model),
+            WrongName = model.WrongName,
+            ActualName = model.ActualName,
+            WrongNameT = model.WrongNameT,
+            ActualNameT = model.ActualNameT,
+            WrongNameS = model.WrongNameS,
+            ActualNameS = model.ActualNameS
+        };
+    }
+
+    private Match GetMatchModel(RequestEventModel eventModel)
+    {
+        var match = mapper.Map<Match>(eventModel);
+        return matchService.UpdateMatchInfoFromRemotingRef(match);
     }
 
     private string GetMatchName(RequestEventModel requestEventModel)

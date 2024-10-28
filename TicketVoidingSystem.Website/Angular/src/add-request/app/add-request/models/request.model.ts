@@ -14,6 +14,7 @@ import { WrongHdpModel } from './event-wrong-hdp.model';
 import { WrongMarketOfferedModel } from './event-wrong-market-offered.model';
 import { WrongOddsSportsBookModel } from './event-wrong-odds-sports-book.model';
 import { WrongOddsModel } from './event-wrong-odds.model';
+import { WrongOfferedNameModel } from './event-wrong-offered-name.model';
 import { WrongOuModel } from './event-wrong-ou.model';
 import { WrongScoreModel } from './event-wrong-score.model';
 import { RecoverTicketModel } from './recover-ticket.model';
@@ -37,6 +38,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
   wrongMarketOfferedModel: WrongMarketOfferedModel;
   earlyKickOffModels: EarlyKickOffModel[];
   recoverTicketModel: RecoverTicketModel;
+  wrongOfferedNameModel: WrongOfferedNameModel;
   others: OthersModel;
 
   constructor() {
@@ -57,6 +59,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
     this.notParticipateModels = [];
     this.wrongMarketOfferedModel = new WrongMarketOfferedModel();
     this.wrongOddsSportsBookModel = new WrongOddsSportsBookModel();
+    this.wrongOfferedNameModel = new WrongOfferedNameModel();
     this.others = new OthersModel();
   }
 }

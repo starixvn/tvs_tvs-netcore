@@ -82,7 +82,7 @@ export class VoidPageService {
   }
 
   private async getVoidedReason(voidPageItem: VoidPageDuplicateTicketsModel): Promise<VoidedReason> {
-    const reason = await this.appService.getVoidedReason(voidPageItem.subIssueType.subIssueTypeId, voidPageItem.matchModel?.sportType);
+    const reason = await this.commonService.getVoidedReason(voidPageItem.subIssueType.subIssueTypeId, voidPageItem.matchModel?.sportType);
     if (this.isDuplicateTicketsMixParlay(voidPageItem.filterBy)) {
       return {
         reasonEnglish: `Mix Parlay - ${reason.reasonEnglish}`,

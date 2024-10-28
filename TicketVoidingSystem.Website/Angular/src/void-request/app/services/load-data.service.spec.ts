@@ -123,7 +123,7 @@ describe('LoadDataService', () => {
 
   it('#checkLoadedFullDataBeforeVoid should called #submitVoidService.submitVoid when isLoadedUnderneathData true and all message initialized', async () => {
     const messageAreaComponent = new MessageAreaComponent();
-    messageAreaComponent.templateMessageComponent = new TemplateMessageComponent(null, null);
+    messageAreaComponent.templateMessageComponent = new TemplateMessageComponent(null, null, null, null, null, null, null, null, null);
     messageAreaComponent.templateMessageComponent.initialize = true;
     const afterLoadUnderneathDataSubscription = new Subscription();
     afterLoadUnderneathDataSubscription.unsubscribe = jest.fn();
@@ -145,7 +145,7 @@ describe('LoadDataService', () => {
 
   it('#checkLoadedFullDataBeforeVoid should not called #submitVoidService.submitVoid when isLoadedUnderneathData false and all message initialized', async () => {
     const messageAreaComponent = new MessageAreaComponent();
-    messageAreaComponent.templateMessageComponent = new TemplateMessageComponent(null, null);
+    messageAreaComponent.templateMessageComponent = new TemplateMessageComponent(null, null, null, null, null, null, null, null, null);
     messageAreaComponent.templateMessageComponent.initialize = true;
     const afterLoadUnderneathDataSubscription = new Subscription();
     afterLoadUnderneathDataSubscription.unsubscribe = jest.fn();

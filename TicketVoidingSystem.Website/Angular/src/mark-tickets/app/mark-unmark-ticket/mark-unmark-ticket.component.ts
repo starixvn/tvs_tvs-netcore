@@ -1,10 +1,10 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import { ErrorCodeLockMatch } from '../../../utility/constants/config';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { ErrorCodeLockMatch } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
 import { CheckingPermissionModel } from '../../../utility/models/checking-permission.model';
 import { MatchModel } from '../../../utility/models/match.model';
@@ -116,7 +116,7 @@ export class MarkUnmarkTicketComponent {
 
   async getMatchInfo(matchId: number) {
     if (this.query.searchBy === FilterSearchBy.MATCH_ID && (this.match === undefined || this.match.matchId !== matchId)) {
-      this.match = await this.commonService.getMatch(matchId, true);
+      this.match = await this.commonService.getMatch(matchId);
     }
   }
 
@@ -137,7 +137,7 @@ export class MarkUnmarkTicketComponent {
     this.isShowMatch = false;
     this.isBetIdBorder = true;
     this.isBlockTickets = true;
-    this.match = await this.commonService.getMatch(parseInt(ticketDetailId.matchId, 10), true);
+    this.match = await this.commonService.getMatch(parseInt(ticketDetailId.matchId, 10));
     const data = await this.appService.getTicketsDetail(this.queryTicket);
     this.isBlockTickets = false;
     this.ticketsModel.initData(data);

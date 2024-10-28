@@ -109,4 +109,26 @@ public class SharedApiControllerTests
         // Assert
         await mediator.Received(1).Send(Arg.Any<GetIssueTypePermissionListRequest>());
     }
+
+    [Fact]
+    public async Task GetLicensees_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        // Act
+        await controller.GetGroupLicensees();
+
+        // Assert
+        await mediator.Received().Send(Arg.Any<GetGroupLicenseesRequest>());
+    }
+
+    [Fact]
+    public async Task GetCurrencies_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        // Act
+        await controller.GetCurrencies();
+
+        // Assert
+        await mediator.Received().Send(Arg.Any<GetCurrenciesRequest>());
+    }
 }

@@ -89,7 +89,7 @@ class Helper {
     isVoided: false,
     subIssueTypes: [],
     isAbnormal: false
-  };
+  } as FilterModel;
 }
 
 describe('FilterComponent', () => {
@@ -832,7 +832,7 @@ describe('FilterComponent', () => {
 
     instance['updateCurrentAction']();
 
-    expect(instance.actions.length).toBeGreaterThan(0);
+    expect(instance.model.actions.length).toBeGreaterThan(0);
   });
 
   it('#updateCurrentAction should update actions when is AB real member', async () => {
@@ -849,7 +849,7 @@ describe('FilterComponent', () => {
 
     instance['updateCurrentAction']();
 
-    expect(instance.actions.length).toBeGreaterThan(0);
+    expect(instance.model.actions.length).toBeGreaterThan(0);
   });
 
   it('#updateCurrentAction should update actions when is Archived ticket', async () => {
@@ -866,7 +866,7 @@ describe('FilterComponent', () => {
 
     instance['updateCurrentAction']();
 
-    expect(instance.actions.length).toBeGreaterThan(0);
+    expect(instance.model.actions.length).toBeGreaterThan(0);
   });
 
   it('#updateCurrentAction should update actions when is Abnormal Account', async () => {
@@ -883,7 +883,7 @@ describe('FilterComponent', () => {
 
     instance['updateCurrentAction']();
 
-    expect(instance.actions.length).toBeGreaterThan(0);
+    expect(instance.model.actions.length).toBeGreaterThan(0);
   });
 
   it('#updateCurrentAction should update actions when is others', async () => {
@@ -900,7 +900,7 @@ describe('FilterComponent', () => {
 
     instance['updateCurrentAction']();
 
-    expect(instance.actions.length).toBeGreaterThan(0);
+    expect(instance.model.actions.length).toBeGreaterThan(0);
   });
 
   it('#filterIssueTypePermission should filter issueTypes', async () => {

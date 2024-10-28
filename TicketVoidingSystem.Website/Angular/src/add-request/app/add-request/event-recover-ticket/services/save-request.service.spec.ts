@@ -19,7 +19,7 @@ class Helper {
     isVoided: false,
     isChangeSubTypeManual: true,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeSaveRequestArg: SaveRequestArg = {
     requestId: 1111,
     isEdit: false,

@@ -9,9 +9,7 @@ using TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Handlers.UserLogs;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 using Xunit;
-using GetLicenseesRequest = TicketVoidingSystem.MarkTickets.Handlers.GetLicenseesRequest;
 
 namespace TicketVoidingSystem.Tests.MarkTickets.Controllers;
 
@@ -204,33 +202,5 @@ public class MarkTicketsControllerTests
 
         // Assert
         await mediator.Received().Send(Arg.Any<GetDataPermissionRequest>());
-    }
-
-    [Fact]
-    public async Task GetLicensees_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
-        var mediator = Substitute.For<IMediator>();
-        var controller = new MarkTicketsController(mediator);
-
-        // Act
-        await controller.GetLicensees();
-
-        // Assert
-        await mediator.Received().Send(Arg.Any<GetLicenseesRequest>());
-    }
-
-    [Fact]
-    public async Task GetCurrencies_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
-        var mediator = Substitute.For<IMediator>();
-        var controller = new MarkTicketsController(mediator);
-
-        // Act
-        await controller.GetCurrencies();
-
-        // Assert
-        await mediator.Received().Send(Arg.Any<GetCurrenciesRequest>());
     }
 }

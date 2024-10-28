@@ -54,7 +54,7 @@ export class VoidPageService {
   }
 
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo {
-    if (StaticService.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
+    if (StaticService.isNotParticipate(requestDetail.request.issueTypeId)) {
       const basicRequestInfo: BasicRequestInfo = {
         matchId: requestDetail.notParticipateModels[0].matchId,
         subIssueTypeId: requestDetail.notParticipateModels[0].subIssueTypeId,
@@ -63,14 +63,14 @@ export class VoidPageService {
       return basicRequestInfo;
     }
 
-    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
+    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)) {
       return {
         matchId: requestDetail.wrongMarketOfferedModel.matchId,
         subIssueTypeId: requestDetail.wrongMarketOfferedModel.subIssueTypeId
       } as BasicRequestInfo;
     }
 
-    if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())) {
+    if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       return {
         matchId: requestDetail.wrongOddsSportsBookModel.matchId,
         subIssueTypeId: requestDetail.wrongOddsSportsBookModel.subIssueTypeId
@@ -91,7 +91,7 @@ export class VoidPageService {
   }
 
   private async getVoidedReason(voidPageItem: VoidNotParticipateModel): Promise<VoidedReason> {
-    return this.appService.getVoidedReason(voidPageItem.subIssueType.subIssueTypeId, voidPageItem.matchModel?.sportType);
+    return this.commonService.getVoidedReason(voidPageItem.subIssueType.subIssueTypeId, voidPageItem.matchModel?.sportType);
   }
 
   private async getLogInfo(requestDetail: RequestDetailViewModel, primitiveProperty: CommonPrimitiveProperty): Promise<GetLogInfoModel> {
@@ -101,15 +101,15 @@ export class VoidPageService {
     query.isShowLogOnly = true;
     query.issueTypeId = requestDetail.request.issueTypeId;
 
-    if (StaticService.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
+    if (StaticService.isNotParticipate(requestDetail.request.issueTypeId)) {
       query.notParticipateModels = MappingModelStaticService.buildNotParticipateGetLogInfoModel(requestDetail.notParticipateModels);
     }
 
-    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
+    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)) {
       query.wrongMarketOfferedModel = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModel(requestDetail.wrongMarketOfferedModel);
     }
 
-    if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())) {
+    if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       query.wrongOddsSportsBookModel = MappingModelStaticService.buildWrongOddsSportsBookGetLogInfoModel(requestDetail.wrongOddsSportsBookModel);
     }
 

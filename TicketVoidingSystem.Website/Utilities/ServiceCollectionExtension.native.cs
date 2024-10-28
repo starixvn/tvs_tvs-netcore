@@ -48,6 +48,7 @@ using SpecialDelete.VoidByBetId;
 using SpecialDelete.VoidByBetId.Controllers;
 using SpecialDelete.VoidByCurrency;
 using SpecialDelete.VoidByCurrency.Controllers;
+using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest;
@@ -148,7 +149,7 @@ public static class ServiceCollectionExtension
             options.Configuration.EndPoints.Add(AppSettingService.AppSetting.RedisConfig.EndPoint);
             options.Configuration.Password = AppSettingService.AppSetting.RedisConfig.Password;
             options.Configuration.DefaultDatabase = AppSettingService.AppSetting.RedisConfig.DefaultDatabase;
-            options.Configuration.ChannelPrefix = AppSettingService.AppSetting.RedisConfig.SignalRChannelPrefix;
+            options.Configuration.ChannelPrefix = RedisChannel.Literal(AppSettingService.AppSetting.RedisConfig.SignalRChannelPrefix);
         });
     }
 
@@ -200,12 +201,12 @@ public static class ServiceCollectionExtension
     public static void RegisterFanexMailService(this IServiceCollection services)
     {
         AppSettings.AppMailId = AppSettingService.AppSetting.FanexMailService.AppMailId;
-        AppSettings.AppMailAddress = AppSettingService.AppSetting.FanexMailService.AppMailAddress;     
+        AppSettings.AppMailAddress = AppSettingService.AppSetting.FanexMailService.AppMailAddress;
     }
 
     public static void RegisterFanexData(this IServiceCollection services, IConfiguration configuration)
     {
-        DbSettingProviderManager.StartNewSession().Register(configuration, true).Run();        
+        DbSettingProviderManager.StartNewSession().Register(configuration, true).Run();
     }
 
     public static void RegisterBusinessServices(this IServiceCollection services)

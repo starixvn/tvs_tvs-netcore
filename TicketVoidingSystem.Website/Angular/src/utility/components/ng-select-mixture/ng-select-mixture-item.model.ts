@@ -53,7 +53,7 @@ export class NgSelectMixtureItem {
       item.checked = selectedItems.includes(item.value);
       item.checkBySelectedItem(selectedItems);
     });
-    this.checked = this.isItemGroup() ? this.items.every(x => x.checked) : selectedItems.includes(this.value);;
+    this.checked = this.isItemGroup() ? this.items.every(x => x.checked) : selectedItems.includes(this.value);
   }
 
   unCheckChilds(): void {

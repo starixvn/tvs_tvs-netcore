@@ -1,16 +1,21 @@
-import { AffectedTicketComponent } from './affected-ticket.component';
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
 import { MultipleSelectionComponent } from '../../../../utility/components/multiple-selection/multiple-selection.component';
 import { TicketsComponent } from '../pool-house-ticket/tickets/tickets.component';
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
-import { GroupModel } from '../pool-house-ticket/tickets/group-tickets.model';
+import { LogAnalysisService } from '../services/log-analysis.service';
+import { AffectedTicketComponent } from './affected-ticket.component';
+import { AffectedTicketService } from './affected-ticket.service';
 
 describe('AffectedTicketComponent', () => {
   @NgModule({
     declarations: [
       MultipleSelectionComponent,
       TicketsComponent
+    ],
+    providers: [
+      LogAnalysisService,
+      AffectedTicketService
     ]
   })
   class AppModuleTest { }
@@ -28,18 +33,13 @@ describe('AffectedTicketComponent', () => {
     expect(instance.model.isOpen).toBeFalsy();
   });
 
-  it('#updateSelectedBetTypes update data expected', async () => {
+  it('#updateSelectedBetTypes call #checkTicketByBetTypesForLGEarlyPopup', async () => {
     const { instance } = await shallow.render();
-    let group1 = { tickets: [{groupBetTypeId: 1}], displayTotalTickets: 1} as GroupModel;
-    let group2 = { tickets: [{groupBetTypeId: 2}], displayTotalTickets: 1} as GroupModel;
+    instance.tickets = new TicketsModel();
+    instance.tickets.checkTicketByBetTypesForLGEarlyPopup = jest.fn();
 
-    let expectedGroup1 = { tickets: [{groupBetTypeId: 1, isChecked: true, no: 1}], displayTotalTickets: 1, isCheckAll: true} as GroupModel;
-    let expectedGroup2 = { tickets: [{groupBetTypeId: 2, isChecked: false, no: 0}], displayTotalTickets: 1, isCheckAll: true} as GroupModel;
-
-    instance.model.tickets = new TicketsModel();
-    instance.model.tickets.groups = [group1, group2];
     instance.updateSelectedBetTypes(["1"]);
-    expect(instance.model.tickets.groups[0]).toEqual(expectedGroup1);
-    expect(instance.model.tickets.groups[1]).toEqual(expectedGroup2);
+
+    expect(instance.tickets.checkTicketByBetTypesForLGEarlyPopup).toHaveBeenCalledTimes(1);
   });
 });

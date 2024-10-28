@@ -1,5 +1,4 @@
 import { RequestDetailModel, RequestDetailViewModel } from '../../edit-request/app/request.model';
-import { VoidedReason } from '../../utility/models/reason.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
 import { AppService } from './app.service';
@@ -107,20 +106,6 @@ describe('AppService', () => {
 
     // Assert
     expect(actualData.total).toEqual(expectedData.total);
-  });
-
-  it('#getVoidedReason should return expected data', async() => {
-    // Arrange
-    const expectedData = new VoidedReason();
-    expectedData.reasonEnglish = 'reason english';
-    expectedData.reasonChineseSimplified = 'reason chinese simplified';
-    mockHttpService.postJson.mockResolvedValue(expectedData);
-
-    // Action
-    const actualData = await appService.getVoidedReason(27, 0);
-
-    // Assert
-    expect(actualData).toEqual(expectedData);
   });
 
   it('#insertQueue should return expected data', async() => {

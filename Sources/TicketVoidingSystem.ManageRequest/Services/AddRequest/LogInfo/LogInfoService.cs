@@ -71,6 +71,7 @@ public class LogInfoServiceImp : LogInfoService
             IssueTypeConstant.WrongKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.WrongMarketOffered => await GetLogInfoViewModelWrongMarketOffered(query, validation, ticketRequest, logInfoDetail, betTypeCount),
             IssueTypeConstant.TechnicalError => await GetLogInfoViewModelWrongMarketOffered(query, validation, ticketRequest, logInfoDetail, betTypeCount),
+            IssueTypeConstant.WrongOfferedName => GetLogInfoViewModelWrongOfferedName(query, validation, ticketRequest, logInfoDetail),
             _ => GetLogInfoViewModelDefault(validation, ticketRequest, logInfoDetail)
         };
     }
@@ -239,6 +240,21 @@ public class LogInfoServiceImp : LogInfoService
         };
     }
 
+    private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongOfferedName(GetLogInfoQuery query, IEnumerable<Validation> validation,
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
+    {
+        return new List<GetLogInfoModel>
+        {
+            new()
+            {
+                MatchId = query.WrongOfferedNameModel.MatchId,
+                Validation = validation.FirstOrDefault(),
+                TicketRequest = ticketRequest,
+                LogInfoDetail = logInfoDetail.FirstOrDefault(),
+            }
+        };
+    }
+
     private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelDefault(IEnumerable<Validation> validation,
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
     {
@@ -272,6 +288,7 @@ public class LogInfoServiceImp : LogInfoService
         criteria.NotParticipateInfo = query.NotParticipateModels?.ToNotParticipateInfoXml();
         criteria.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedModel?.ToWrongMarketOfferedInfoXml() : null;
         criteria.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedModel?.ToWrongMarketOfferedInfoXml() : null;
+        criteria.WrongOfferedNameInfo = query.WrongOfferedNameModel?.ToWrongOfferedNameInfoXml();
         criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
 
         return criteria;

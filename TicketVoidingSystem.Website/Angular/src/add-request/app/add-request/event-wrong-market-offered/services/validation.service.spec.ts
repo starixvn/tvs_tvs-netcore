@@ -16,7 +16,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when match invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => false);
     const actual = service.validateCommonData(leagueEvent, null, null);
 
@@ -24,7 +24,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when filterWrongMarketOfferedComponent invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterTime = new FilterTimeComponent(null);
     filterTime.isValidity = jest.fn().mockReturnValue(false);
@@ -35,7 +35,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when filterWrongMarketOfferedComponent invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterTime = new FilterTimeComponent(null);
     filterTime.isValidity = jest.fn().mockReturnValue(true);
@@ -47,7 +47,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return true', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterTime = new FilterTimeComponent(null);
     filterTime.isValidity = jest.fn().mockReturnValue(true);

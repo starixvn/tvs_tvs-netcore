@@ -101,4 +101,5 @@ public static class SpecialDeleteFunctionKeys
     public const string WrongMarketOffered = "WrongMarketOffered";
     public const string TechnicalError = "TechnicalError";
     public const string WrongOddsSportsBook = "WrongOddsSportsBook";
+    public const string WrongOfferedName = "WrongOfferedName";
 }

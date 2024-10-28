@@ -209,7 +209,8 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.NOT_PARTICIPATE]: {action: 200, sport: 150 },
       [IssueTypeConstant.WRONG_MARKET_OFFERED]: {action: 170 },
       [IssueTypeConstant.TECHNICAL_ERROR]: {action: 170 },
-      [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: {action: 170 }
+      [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: {action: 170 },
+      [IssueTypeConstant.WRONG_OFFERED_NAME]: {subIssueType: 175, action: 165 },
     };
 
     const widthValues = widthMapping[this.model.issueTypeId] || {};

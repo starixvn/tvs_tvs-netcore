@@ -64,7 +64,7 @@ export class VoidPageService {
       element.isCheckedEarlyEvent = false;
       element.templateValue = this.templateMessageService.getTemplateValue(element, requestDetail);
       element.templateValue.numberOfCorner = element.matchModel.numberOfCorner;
-      element.voidReason = await this.appService.getVoidedReason(element.subIssueType.subIssueTypeId, element.matchModel.sportType);
+      element.voidReason = await this.commonService.getVoidedReason(element.subIssueType.subIssueTypeId, element.matchModel.sportType);
       element.licenseeAffectedList = element.voidTicketsMini.licenseeAffectedList;
       element.licenseeAffectedList = _.clone(element.licenseeAffectedList);
     }

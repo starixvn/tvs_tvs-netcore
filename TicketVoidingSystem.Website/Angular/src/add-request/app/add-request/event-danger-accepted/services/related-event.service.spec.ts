@@ -59,7 +59,7 @@ class Helper {
     isVoided: false,
     isChangeSubTypeManual: true,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
     matchId: Helper.fakeMatchId,
@@ -208,7 +208,7 @@ describe('RelatedEventService', () => {
     arg.primitiveProps = new PrimitiveProperty();
     arg.primitiveProps.inputRelatedMatchId = 111;
     arg.filter = new FilterModel();
-    arg.mainEvent = {} as LogInfoRedCard; 
+    arg.mainEvent = {} as LogInfoRedCard;
     const validationService = new ValidationService();
     validationService.isValidInputRelatedEvent = jest.fn().mockImplementation(() => true);
     const mockRelatedEventService = new RelatedEventService(null, validationService, null, null);

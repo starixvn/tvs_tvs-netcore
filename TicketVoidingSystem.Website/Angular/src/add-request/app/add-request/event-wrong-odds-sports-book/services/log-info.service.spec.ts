@@ -16,8 +16,6 @@ class Helper {
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
   static readonly fakeWrongOddsSportsBookModel = new WrongOddsSportsBookModel();
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '11',
     subIssueTypeId: '1',
     action: '1',
@@ -25,7 +23,7 @@ class Helper {
     isVoided: false,
     isAbnormal: false,
     actions: []
-  };
+  } as FilterModel;
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
     matchId: Helper.fakeMatchId,
@@ -61,8 +59,7 @@ class Helper {
     filterWrongOddsSportsBook: new FilterWrongOddsSportsBookModel(),
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [],
-    betTeamsResult: [],
-    checkedBetTypes: []
+    betTeamsResult: []
   } as LogInfoWrongOddsSportsBook;
   static readonly fakeGetLogInfoModel: GetLogInfoModel = {
     matchId: Helper.fakeMatchId,

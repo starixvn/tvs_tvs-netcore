@@ -3,8 +3,11 @@ import { MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
+import { LogInfoEarlyKickOff } from '../../event-early-kick-off/models/log-info-eko.model';
+import { TableTicketsModel } from '../../event-early-kick-off/tickets-list/table-tickets.model';
 import { PrimitiveProperty } from '../../event-red-card/event-red-card.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
@@ -15,9 +18,6 @@ import { ValidationMessage } from '../../models/get-log-info.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch } from '../../models/sub-type-link-match.model';
 import { EventDangerAcceptedService } from './event-danger-accepted.service';
-import { LogInfoEarlyKickOff } from '../../event-early-kick-off/models/log-info-eko.model';
-import { TableTicketsModel } from '../../event-early-kick-off/tickets-list/table-tickets.model';
-import { MatchModel } from '../../../../../utility/models/match.model';
 import { ValidationService } from './validation.service';
 
 class Helper {
@@ -61,7 +61,7 @@ class Helper {
     isVoided: false,
     isChangeSubTypeManual: true,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
     matchId: Helper.fakeMatchId,

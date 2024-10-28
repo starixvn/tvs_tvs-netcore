@@ -1,14 +1,14 @@
 import { Injectable, QueryList } from '@angular/core';
+import moment from 'moment-timezone';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterTimeAreaComponent } from '../../event-red-card/filter-time-area/filter-time-area.component';
 import { LogInfoRedCardComponent } from '../../event-red-card/log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
 import { FilterModel } from '../../filter/filter.model';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import moment from 'moment-timezone';
-import { DateTimeFormat } from '../../../../../utility/constants/config';
 
 @Injectable({
   providedIn: 'root'
@@ -48,16 +48,16 @@ export class ValidationService {
     return true;
   }
 
-  
+
   isAllEventsValid(events: LogInfoRedCard[]): boolean {
     if (events.some(x => !this.isEventMatchValid(x))) {
       return false;
-    } 
+    }
 
     return true;
   }
-  
-  isValidInputRelatedEvent(inputMatchId: number, inputMatchIdClass: string, allEvents: LogInfoRedCard[], tooltip: Tooltip): boolean {    
+
+  isValidInputRelatedEvent(inputMatchId: number, inputMatchIdClass: string, allEvents: LogInfoRedCard[], tooltip: Tooltip): boolean {
     if (inputMatchId === allEvents.find(x => x.isMainMatch).matchId) {
       tooltip.display(inputMatchIdClass, LABELS.INVALID_MATCHID);
       return false;
@@ -92,7 +92,7 @@ export class ValidationService {
     }
 
     const MILLISECONDS_IN_A_MINUTE = 60000;
-    let fromTimeFilter = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);;
+    let fromTimeFilter = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     let toTimeLogInfo = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const diffMilliseconds = toTimeLogInfo.diff(fromTimeFilter);
 

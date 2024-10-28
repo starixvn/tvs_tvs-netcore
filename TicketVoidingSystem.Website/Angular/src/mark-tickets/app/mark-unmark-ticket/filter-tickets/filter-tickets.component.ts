@@ -1,13 +1,12 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { GroupLicenseeModel } from '../../../../utility/components/licensees/licensees.model';
 import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
 import { Selection } from '../../../../utility/models/selection.model';
 import { CommonService } from '../../../../utility/services/common.service';
-import { AppService } from '../../app.service';
 import { GetTicketsQuery } from '../../models/query.model';
 import { Currencies, FilterSearchBy } from './filter.model';
-import { GroupLicensee, Licensee } from './match-id/licensees/licensees.model';
 import { MatchIdComponent } from './match-id/match-id.component';
 
 @Component({
@@ -28,7 +27,8 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
   model = new GetTicketsQuery();
   searchBy = new FilterSearchBy();
   currencies = new Currencies();
-  groupLicensees: GroupLicensee[] = [];
+  groupLicenseeModel = new GroupLicenseeModel([], false);
+
   isBlock: boolean;
   markedByOptions: Selection[];
 
@@ -36,7 +36,6 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
 
   constructor(
     private readonly commonService: CommonService,
-    private readonly appService: AppService,
     private readonly elementRef: ElementRef
   ) { }
 
@@ -66,7 +65,7 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
   }
 
   async initCurrency() {
-    this.currencies.items = await this.appService.getCurrencies();
+    this.currencies.items = await this.commonService.getCurrencies();
     this.currencies.items.forEach(x => x.group = 'All');
     this.currencies.selected = this.currencies.items.map(x => x.id);
     this.model.currencyIds = this.currencies.selected.join(',');
@@ -82,16 +81,8 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
   }
 
   async renderGroupLicensees() {
-    const data = await this.appService.getGroupLicensees();
-    this.groupLicensees = [];
-    data.forEach(group => {
-      const licensees = new Array<Licensee>();
-      group.licensees.forEach(licensee => {
-        const item = new Licensee(licensee.id, licensee.name);
-        licensees.push(item);
-      });
-      this.groupLicensees.push(new GroupLicensee(group.groupName, licensees));
-    });
+    const data = await this.commonService.getGroupLicensees();
+    this.groupLicenseeModel = new GroupLicenseeModel(data, true);
   }
 
   changeSearchBy(value: string) {

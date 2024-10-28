@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChange, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
 import { AbnormalFilterBy, FunctionConst } from '../../../../utility/constants/config';
+import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { EventType } from '../../../../utility/constants/sport.constant';
 import { HttpService } from '../../../../utility/services/http.service';
 import { StaticService } from '../../../../utility/services/static.service';
@@ -196,7 +196,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   private replaceFromInputs(): void  {
-    if (this.isTVSVoidPage()) {
+    if (this.isTVSVoidPage() || this.isTVSAddOrEditPage()) {
       this.templateInputsServiceForTVS.replaceInputsByIssueType(this.issueTypeId, this.subIssueTypeId, this.value, this.message, this.selectedTemplated);
     } else {
       this.templateInputsService.replaceInputs(this.subIssueTypeId, this.selectedTemplated, this.message);
@@ -288,7 +288,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   isLikelyWrongMarketOffered(): boolean {
-    return StaticService.isLikelyWrongMarketOffered(this.issueTypeId?.toString())
+    return StaticService.isLikelyWrongMarketOffered(this.issueTypeId)
       || StaticService.isWrongOddsSportsBook(this.issueTypeId);
   }
 }

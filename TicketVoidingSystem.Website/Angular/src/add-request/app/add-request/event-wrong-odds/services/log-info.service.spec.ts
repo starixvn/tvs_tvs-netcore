@@ -5,12 +5,12 @@ import { FilterModel } from '../../filter/filter.model';
 import { WrongOddsModel } from '../../models/event-wrong-odds.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOddsService } from './event-wrong-odds.service';
 import { LogInfoService } from './log-info.service';
-import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeMatchId = 1;
@@ -41,7 +41,7 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
     matchId: Helper.fakeMatchId,

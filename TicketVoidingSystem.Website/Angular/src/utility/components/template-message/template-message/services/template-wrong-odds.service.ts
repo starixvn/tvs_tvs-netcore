@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SubIssueTypeConstant } from 'src/utility/constants/sub-issue-type.constant';
+import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { Message } from '../../messages/message';
 import { TemplateContentConst, TemplateReplace } from '../template.const';
 import { TemplateContent, TemplateValue } from '../template.model';

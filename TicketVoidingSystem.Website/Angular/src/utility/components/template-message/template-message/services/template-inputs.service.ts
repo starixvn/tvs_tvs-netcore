@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { SubIssueTypeGroup } from 'src/utility/constants/config';
-import { OrdinalNumberConstant } from 'src/utility/constants/ordinal-number.constant';
-import { StaticService } from 'src/utility/services/static.service';
+import { SubIssueTypeGroup } from '../../../../../utility/constants/config';
+import { OrdinalNumberConstant } from '../../../../../utility/constants/ordinal-number.constant';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { Message } from '../../messages/message';
 import { TemplateContentConst, TemplateReplace } from '../template.const';
 import { TemplateContent, TemplateModel, TemplateValue } from '../template.model';

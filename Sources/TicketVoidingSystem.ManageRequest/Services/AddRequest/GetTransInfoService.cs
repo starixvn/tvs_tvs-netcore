@@ -123,6 +123,10 @@ public class GetTransInfoServiceImp : GetTransInfoService
                 criteria.WrongOddsSBInfo = issueInfo;
                 break;
 
+            case IssueTypeConstant.WrongOfferedName:
+                criteria.WrongOfferedNameInfo = issueInfo;
+                break;
+
             default:
                 criteria.IssueTypeId = query.IssueTypeId;
                 break;
@@ -198,6 +202,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
             IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedModel.ToWrongMarketOfferedInfoXml(),
             IssueTypeConstant.TechnicalError => query.WrongMarketOfferedModel.ToWrongMarketOfferedInfoXml(),
             IssueTypeConstant.WrongOddsSportsBook => query.WrongOddsSportsBookModels.ToWrongOddsSportsBookInfoXml(),
+            IssueTypeConstant.WrongOfferedName => query.WrongOfferedNameModel.ToWrongOfferedNameInfoXml(),
             _ => "",
         };
     }

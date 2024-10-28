@@ -3,8 +3,6 @@ import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
 import { ConfirmAutoUnmarkQuery, GetDataForConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark } from './confirm-auto-unmark/confirm-auto-unmark.model';
 import { AllMarkedTicketsModel } from './mark-unmark-ticket/all-marked-ticket-list/all-marked-ticket.model';
-import { Currency } from './mark-unmark-ticket/filter-tickets/filter.model';
-import { GroupLicensee } from './mark-unmark-ticket/filter-tickets/match-id/licensees/licensees.model';
 import { AllMarkedTicketQuery, GetLogsQuery, GetTicketsQuery, MarkedTicketQuery, TicketDetailQuery } from './models/query.model';
 import { DataPermission, ResultMarkTicketModel } from './models/result.model';
 import { TicketsModel } from './tickets-list/tickets.model';
@@ -15,14 +13,6 @@ import { LogsModel } from './user-log/logs-list/logs-list.model';
 })
 export class AppService {
   constructor(private readonly httpService: HttpService) { }
-
-  async getCurrencies(): Promise<Currency[]> {
-    return this.httpService.getJson(`api/SharedApi/GetCurrencies`);
-  }
-
-  async getGroupLicensees(): Promise<GroupLicensee[]> {
-    return this.httpService.getJson(`api/SharedApi/GetGroupLicensees`);
-  }
 
   async getTickets(query: GetTicketsQuery): Promise<TicketsModel> {
     return this.httpService.postJson(query, `api/MarkTickets/GetTickets`);

@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { CheckIssueTypeObjectType } from 'src/utility/models/check-issue-type.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
+import { CheckIssueTypeObjectType } from '../../../utility/models/check-issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
@@ -21,6 +21,7 @@ import { EventWrongHdpComponent } from './event-wrong-hdp/event-wrong-hdp.compon
 import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered/event-wrong-market-offered.component';
 import { EventWrongOddsSportsBookComponent } from './event-wrong-odds-sports-book/event-wrong-odds-sports-book.component';
 import { EventWrongOddsComponent } from './event-wrong-odds/event-wrong-odds.component';
+import { EventWrongOfferedNameComponent } from './event-wrong-offered-name/event-wrong-offered-name.component';
 import { EventWrongOuComponent } from './event-wrong-ou/event-wrong-ou.component';
 import { EventWrongScoreComponent } from './event-wrong-score/event-wrong-score.component';
 import { FilterComponent } from './filter/filter.component';
@@ -62,6 +63,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventNotParticipate') eventNotParticipateComponent: EventNotParticipateComponent;
   @ViewChild('eventRecoverTicket') eventRecoverTicketComponent: EventRecoverTicketComponent;
   @ViewChild('eventWrongMarketOffered') eventWrongMarketOfferedComponent: EventWrongMarketOfferedComponent;
+  @ViewChild('eventWrongOfferedName') eventWrongOfferedNameComponent: EventWrongOfferedNameComponent;
 
   isCollapse: boolean;
   isBlock: boolean;
@@ -132,24 +134,25 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   public async saveRequest(): Promise<void> { // NOSONAR
     this.cachingIssueType();
     this.isDisabledSaveButton = true;
-    const issueTypeId = this.model.filter.issueTypeId;
+    const checkIssueType = this.checkAllIssueTypes();
     const saveTasks = [
-      { condition: StaticService.isAbnormalBet(issueTypeId), component: this.eventAbnormalBetComponent },
-      { condition: StaticService.isEarlyKickOff(issueTypeId) || StaticService.isWrongKickOff(issueTypeId), component: this.eventEarlyKickOffComponent },
-      { condition: StaticService.isDangerAccepted(issueTypeId), component: this.eventDangerAcceptedComponent },
-      { condition: StaticService.isRedCard(issueTypeId), component: this.eventRedCardComponent },
-      { condition: StaticService.isAbnormalAccount(issueTypeId), component: this.abnormalAccountsComponent },
-      { condition: StaticService.isWrongScore(issueTypeId), component: this.eventWrongScoreComponent },
-      { condition: StaticService.isArchivedTicket(issueTypeId), component: this.eventTicket14Component },
-      { condition: StaticService.isWrongHDP(issueTypeId) || StaticService.isWrong1stHDP(issueTypeId), component: this.eventWrongHdpComponent },
-      { condition: StaticService.isWrongOU(issueTypeId) || StaticService.isWrong1stOU(issueTypeId), component: this.eventWrongOuComponent },
-      { condition: StaticService.isWrongOdds(issueTypeId), component: this.eventWrongOddsComponent },
-      { condition: StaticService.isWrongOddsSportsBook(issueTypeId), component: this.eventWrongOddsSportsBookComponent },
-      { condition: StaticService.isReducedOver(issueTypeId) || StaticService.isAbandoned(issueTypeId), component: this.eventReducedOverComponent },
-      { condition: StaticService.isDuplicateTickets(issueTypeId), component: this.eventDuplicateTicketsComponent },
-      { condition: StaticService.isNotParticipate(issueTypeId), component: this.eventNotParticipateComponent },
-      { condition: StaticService.isRecoverTicket(issueTypeId), component: this.eventRecoverTicketComponent },
-      { condition: StaticService.isLikelyWrongMarketOffered(issueTypeId), component: this.eventWrongMarketOfferedComponent }
+      { condition: checkIssueType.isAbnormalBet, component: this.eventAbnormalBetComponent },
+      { condition: checkIssueType.isEarlyKickOff || checkIssueType.isWrongKickOff, component: this.eventEarlyKickOffComponent },
+      { condition: checkIssueType.isDangerAccepted, component: this.eventDangerAcceptedComponent },
+      { condition: checkIssueType.isRedCard, component: this.eventRedCardComponent },
+      { condition: checkIssueType.isAbnormalAccount, component: this.abnormalAccountsComponent },
+      { condition: checkIssueType.isWrongScore, component: this.eventWrongScoreComponent },
+      { condition: checkIssueType.isArchivedTicket, component: this.eventTicket14Component },
+      { condition: checkIssueType.isWrongHDP || checkIssueType.isWrong1stHDP, component: this.eventWrongHdpComponent },
+      { condition: checkIssueType.isWrongOU || checkIssueType.isWrong1stOU, component: this.eventWrongOuComponent },
+      { condition: checkIssueType.isWrongOdds, component: this.eventWrongOddsComponent },
+      { condition: checkIssueType.isWrongOddsSportsBook, component: this.eventWrongOddsSportsBookComponent },
+      { condition: checkIssueType.isReducedOver || checkIssueType.isAbandoned, component: this.eventReducedOverComponent },
+      { condition: checkIssueType.isDuplicateTickets, component: this.eventDuplicateTicketsComponent },
+      { condition: checkIssueType.isNotParticipate, component: this.eventNotParticipateComponent },
+      { condition: checkIssueType.isRecoverTicket, component: this.eventRecoverTicketComponent },
+      { condition: checkIssueType.isLikelyWrongMarketOffered, component: this.eventWrongMarketOfferedComponent },
+      { condition: checkIssueType.isWrongOfferedName, component: this.eventWrongOfferedNameComponent }
     ];
 
     for (const task of saveTasks) {
@@ -248,7 +251,8 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       IssueTypeConstant.NOT_PARTICIPATE,
       IssueTypeConstant.WRONG_MARKET_OFFERED,
       IssueTypeConstant.TECHNICAL_ERROR,
-      IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK
+      IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK,
+      IssueTypeConstant.WRONG_OFFERED_NAME
     ]
 
     return issueTypesHasSimpleFields.includes(this.model.filter.issueTypeId);

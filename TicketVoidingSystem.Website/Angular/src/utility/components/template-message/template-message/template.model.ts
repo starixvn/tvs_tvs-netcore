@@ -66,5 +66,12 @@ export class TemplateValue {
   betTeam?: string;
   betTypeId?: string;
   inputOverUnder?: string;
-  correctOdds?: string; 
+  correctOdds?: string;
+  // for wrong offered name
+  wrongName?: string;
+  actualName?: string;
+  wrongNameT?: string;
+  actualNameT?: string;
+  wrongNameS?: string;
+  actualNameS?: string;
 }

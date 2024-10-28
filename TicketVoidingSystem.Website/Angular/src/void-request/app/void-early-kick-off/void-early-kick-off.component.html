@@ -16,7 +16,7 @@
             <span>League: <strong class="match-text">{{item.matchModel.leagueName}}</strong></span><br />
           </div>
         </div>
-        <div class="col-sm-3 m-0 pd-right-0 pd-left-5">
+        <div *ngIf="isShowLogInfo()" class="col-sm-3 m-0 pd-right-0 pd-left-5">
           <div class="kick-off-time alert alert-dark p-1 m-0">
               <span>KO Time (GMT+8): </span><strong>{{getKickOffDate(item.matchModel.matchId) | date:'yyyy/MM/dd HH:mm:ss'}}</strong>
           </div>

@@ -8,11 +8,13 @@ import { AddChildMatchModel } from '../../../../utility/components/add-child-mat
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { DateTimeModule } from '../../../../utility/components/date-time/date-time.module';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType } from '../../../../utility/constants/config';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { HttpService } from '../../../../utility/services/http.service';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { EarlyKickOffModel } from '../models/event-eko.model';
@@ -28,12 +30,10 @@ import { EventEarlyKickOffService } from './services/event-eko.service';
 import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
+import { SearchEventService } from './services/search-event.service';
 import { ValidationService } from './services/validation.service';
 import { TableTicketsModel } from './tickets-list/table-tickets.model';
 import { TicketsListComponent } from './tickets-list/tickets-list.component';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { AddRequestApiService } from '../add-request-api.service';
-import { SearchEventService } from './services/search-event.service';
 
 class Helper {
   static readonly hourSelector = 'input.hour';
@@ -119,7 +119,7 @@ class Helper {
     isVoided: false,
     subIssueTypes: [],
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeTicketsModel = {
     groups: [
       {
@@ -293,7 +293,7 @@ describe('EventEarlyKickOffComponent', () => {
     instance.primitiveProps = new PrimitiveProperty();
     instance.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff];
     instance.mainEvent = Helper.fakeLogInfoEarlyKickOff;
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     eventLeagueComponent.selectedMatch = new MatchModel();
     instance.eventLeagueComponent = eventLeagueComponent;
     instance.updateMatchId.emit = jest.fn();
@@ -356,7 +356,11 @@ describe('EventEarlyKickOffComponent', () => {
     const mockGetTickets = jest.fn();
     const mockInitQuery = jest.fn();
     const { instance } = await shallow
-    .mock(LogInfoService, { getTickets: mockGetTickets, initQuery: mockInitQuery})
+    .mock(LogInfoService, {
+      getTickets: mockGetTickets,
+      assignTemplateMessageValueToEvent: jest.fn(),
+      initQuery: mockInitQuery
+    })
     .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
     .render({
       bind: {

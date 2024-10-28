@@ -9,10 +9,13 @@ import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
+import { IssueTypes } from '../../filter/issue-types.model';
 import { EarlyKickOffModel } from '../../models/event-eko.model';
-import { ValidationMessage, GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { GetLogInfoViewModel, ValidationMessage } from '../../models/get-log-info.model';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { OthersModel } from '../../others/others.model';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
 import { PopupService } from '../../services/popup.service';
 import { ConfirmEarlyKickOffModel } from '../confirm-eko/confirm-eko.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
@@ -22,8 +25,6 @@ import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
-import { PermissionAddRequest } from '../../models/permission-add-request.model';
-import { IssueTypes } from '../../filter/issue-types.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -95,18 +96,20 @@ describe('SaveRequestService', () => {
   let logInfoService: LogInfoService;
   let popupService: PopupService;
   let addRequestService: AddRequestService;
+  let checkAddPermissionService: CheckAddPermissionService;
 
   beforeEach(() => {
-    validationService = new ValidationService(null);
+    validationService = new ValidationService();
     logInfoService = new LogInfoService(null, null, null, null);
     popupService = new PopupService(null);
     addRequestService = new AddRequestService(null, null, null);
-    service = new SaveRequestService(popupService, logInfoService, validationService, addRequestService);
+    checkAddPermissionService = new CheckAddPermissionService(null);
+    service = new SaveRequestService(popupService, logInfoService, validationService, addRequestService, checkAddPermissionService);
   });
 
   it('#recheckLogInfoBeforeSaveRequest should return false when does not pass validation', async () => {
     logInfoService.resetLogInfoOfEvent = jest.fn();
-    let arg = Helper.fakeSaveRequestArg;
+    const arg = Helper.fakeSaveRequestArg;
     validationService.validateCommonData = jest.fn().mockReturnValue(false);
     arg.addRequestStore = new AddRequestStore();
     arg.addRequestStore.changeBlockingUiStatus = jest.fn();
@@ -118,28 +121,27 @@ describe('SaveRequestService', () => {
   });
 
   it('#recheckLogInfoBeforeSaveRequest should return false when have event invalid', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.primitiveProps = new PrimitiveProperty();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestArg.mainEvent = Helper.fakeLogInfoEarlyKickOff;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
-    const logInfoService = new LogInfoService(null, null, null, null);
+    const arg = new SaveRequestArg();
+    arg.allEvents = [Helper.fakeLogInfoEarlyKickOff];
+    arg.primitiveProps = new PrimitiveProperty();
+    arg.addRequestStore = new AddRequestStore();
+    arg.addRequestStore.changeSavingRequestStatus = jest.fn();
+    arg.mainEvent = Helper.fakeLogInfoEarlyKickOff;
+    arg.filter = new FilterModel();
+    arg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
     logInfoService.resetLogInfoOfEvent = jest.fn();
     logInfoService.getLogInfo = jest.fn().mockReturnValue({getLogInfoModels: null} as GetLogInfoViewModel);
     logInfoService.getTickets = jest.fn();
     logInfoService.assignResultLogInfoToEvents = jest.fn();
-    const validationService = new ValidationService(null);
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isAllEventsValid = jest.fn().mockImplementation(() => false);
-    validationService.isAccountHasAddRequestPermission = jest.fn().mockImplementation(() => true);
+    checkAddPermissionService.isAccountHasAddRequestPermission = jest.fn().mockImplementation(() => true);
 
-    const saveRequestService = new SaveRequestService(null, logInfoService, validationService, null);
+    const saveRequestService = new SaveRequestService(null, logInfoService, validationService, null, checkAddPermissionService);
 
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(arg);
 
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
+    expect(arg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
     expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
     expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
     expect(validationService.isAllEventsValid).toHaveBeenCalledTimes(1);
@@ -156,15 +158,13 @@ describe('SaveRequestService', () => {
     saveRequestArg.filter = new FilterModel();
     saveRequestArg.allEvents = [];
     saveRequestArg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
-    const logInfoService = new LogInfoService(null, null, null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     logInfoService.getLogInfo = jest.fn().mockReturnValue({getLogInfoModels: null} as GetLogInfoViewModel);
     logInfoService.assignResultLogInfoToEvents = jest.fn();
-    const validationService = new ValidationService(null);
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isAllEventsValid = jest.fn().mockImplementation(() => true);
-    validationService.isAccountHasAddRequestPermission = jest.fn().mockImplementation(() => true);
-    const saveRequestService = new SaveRequestService(null, logInfoService, validationService, null);
+    checkAddPermissionService.isAccountHasAddRequestPermission = jest.fn().mockImplementation(() => true);
+    const saveRequestService = new SaveRequestService(null, logInfoService, validationService, null, checkAddPermissionService);
 
     const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
@@ -193,9 +193,8 @@ describe('SaveRequestService', () => {
   });
 
   it('#executeSaveRequestApi should called #executeSaveRequest', async () => {
-    const addRequestService = new AddRequestService(null, null, null);
     const spyExecuteSaveRequest = jest.spyOn(addRequestService, 'executeSaveRequest').mockImplementation();
-    const saveRequestService = new SaveRequestService(null, null, null, addRequestService);
+    const saveRequestService = new SaveRequestService(null, null, null, addRequestService, checkAddPermissionService);
     saveRequestService['initAddRequestQuery'] = jest.fn();
     const arg = new SaveRequestArg();
     arg.addRequestStore = new AddRequestStore();
@@ -210,9 +209,8 @@ describe('SaveRequestService', () => {
     arg.filter = new FilterModel();
     arg.filter.isVoided = false;
     arg.addRequestStore = new AddRequestStore();
-    const popupService = new PopupService(null);
     const spyShowError = jest.spyOn(popupService, 'showError').mockImplementation(() => { });
-    const saveRequestService = new SaveRequestService(popupService, null, null, null);
+    const saveRequestService = new SaveRequestService(popupService, null, null, null, checkAddPermissionService);
     saveRequestService['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
 
     await saveRequestService['onClickConfirmSave'](arg);
@@ -268,8 +266,7 @@ describe('SaveRequestService', () => {
     arg.filter = new FilterModel();
     arg.others = new OthersModel();
     arg.allEvents = [Helper.fakeLogInfoEarlyKickOff];
-    const validationService = new ValidationService(null);
-    const saveRequestService = new SaveRequestService(null, null, validationService, null);
+    const saveRequestService = new SaveRequestService(null, null, validationService, null, checkAddPermissionService);
 
     const actual = saveRequestService['getEarlyKickOffModel'](Helper.fakeLogInfoEarlyKickOff, "1");
 
@@ -286,10 +283,9 @@ describe('SaveRequestService', () => {
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);
-    const validationService = new ValidationService(null);
     const spyIsEditingByAnotherUser = jest.spyOn(validationService, 'isEditingByAnotherUser').mockImplementation(() => false);
 
-    service = new SaveRequestService(null, null, validationService, null);
+    service = new SaveRequestService(null, null, validationService, null, checkAddPermissionService);
 
     service['showPopupConfirmSave'](args);
 
@@ -319,10 +315,8 @@ describe('SaveRequestService', () => {
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);
-    const validationService = new ValidationService(null);
     const spyIsEditingByAnotherUser = jest.spyOn(validationService, 'isEditingByAnotherUser').mockImplementation(() => false);
-
-    service = new SaveRequestService(null, null, validationService, null);
+    service = new SaveRequestService(null, null, validationService, null, checkAddPermissionService);
 
     service['showPopupConfirmSave'](args);
 

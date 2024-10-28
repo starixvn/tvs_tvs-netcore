@@ -21,7 +21,6 @@ import { MapEventArg } from '../models/map-event.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../request.model';
 import { ObjectService } from './object.service';
-import { ValidationService } from './validation.service';
 
 class Helper {
   static readonly fakeScoreId = 28291;
@@ -114,7 +113,7 @@ class Helper {
     earlyKickOffModels: [],
     recoverTicketModel: null,
     wrongMarketOfferedModel: null
-  };
+  } as RequestModel;
   static readonly fakeMapEventArg: MapEventArg = {
     primitiveProperty: Helper.fakePrimitiveProperty,
     requestModel: Helper.fakeRequestModel,
@@ -123,12 +122,10 @@ class Helper {
 }
 
 describe('ObjectService', () => {
-  let validationService: ValidationService;
   let objectService: ObjectService;
 
   beforeEach(() => {
-    validationService = new ValidationService();
-    objectService = new ObjectService(validationService);
+    objectService = new ObjectService();
   });
 
   it('#mapRequestModel should call expected methods', async () => {

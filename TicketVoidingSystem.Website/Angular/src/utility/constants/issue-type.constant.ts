@@ -23,6 +23,7 @@ export class IssueTypeConstant {
   static readonly WRONG_MARKET_OFFERED = '12';
   static readonly TECHNICAL_ERROR = '24';
   static readonly WRONG_ODDS_SPORTS_BOOK = '25';
+  static readonly WRONG_OFFERED_NAME = '26';
   static readonly MATCH_COMPLETED = '14';
   
   static readonly NAME_WRITE_LOG = new Map<string, string>([
@@ -49,6 +50,7 @@ export class IssueTypeConstant {
     [IssueTypeConstant.WRONG_MARKET_OFFERED, 'WRONG_MARKET_OFFERED'],
     [IssueTypeConstant.TECHNICAL_ERROR, 'TECHNICAL_ERROR'],
     [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK, 'WRONG_ODDS_SPORTS_BOOK'],
+    [IssueTypeConstant.WRONG_OFFERED_NAME, 'WRONG_OFFERED_NAME'],
     [IssueTypeConstant.MATCH_COMPLETED, 'MATCH_COMPLETED'],
   ]);
 }

@@ -114,7 +114,6 @@ describe('VoidPageService', () => {
 
   it('#getIssueTypes should return issueTypesModel', async () => {
     const expected = new IssueTypesModel();
-    const commonService = new CommonService(null);
     commonService.getIssueTypes = jest.fn().mockReturnValue(expected);
     const mockVoidPageService = new VoidPageService(null, commonService, null, null);
 
@@ -176,7 +175,7 @@ describe('VoidPageService', () => {
     fakeRequestDetailViewModel.duplicateTicketsModel.subIssueTypeId = 1;
     const spyInitTicketQuery = jest.spyOn(ticketsService, 'initTicketQuery').mockImplementation();
     const spyGetVoidTicketsMini = jest.spyOn(ticketsService, 'getVoidTicketsMini').mockReturnValue(Promise.resolve(new TicketsModel()))
-    const spyGetVoidedReason = jest.spyOn(appService, 'getVoidedReason').mockReturnValue(Promise.resolve(new VoidedReason()));
+    const spyGetVoidedReason = jest.spyOn(commonService, 'getVoidedReason').mockReturnValue(Promise.resolve(new VoidedReason()));
 
     await voidPageService.loadUnderneathVoidPageItemsData(voidItem, fakeRequestDetailViewModel);
 
@@ -202,7 +201,7 @@ describe('VoidPageService', () => {
     const voidItem = new VoidPageDuplicateTicketsModel();
     voidItem.matchModel = new MatchModel();
     voidItem.voidTicketsMini = new TicketsModel();
-    const spyGetTemplateValue = jest.spyOn(templateService, 'getTemplateValue').mockReturnValue(new TemplateValue());
+    const spyGetTemplateValue = jest.spyOn(templateService, 'initializeTemplateValue').mockReturnValue(new TemplateValue());
     const actual = voidPageService['getTemplateValue'](voidItem, Helper.fakeRequestDetailViewModel);
 
     expect(spyGetTemplateValue).toHaveBeenCalledTimes(1);
@@ -241,7 +240,7 @@ describe('VoidPageService', () => {
     voidItem.matchModel = new MatchModel();
     voidItem.subIssueType = new SubIssueType();
     voidItem.filterBy = 1;
-    const spyGetVoidedReason = jest.spyOn(appService, 'getVoidedReason').mockReturnValue(Promise.resolve(mockResult));
+    const spyGetVoidedReason = jest.spyOn(commonService, 'getVoidedReason').mockReturnValue(Promise.resolve(mockResult));
 
     const actual = await voidPageService['getVoidedReason'](voidItem);
 

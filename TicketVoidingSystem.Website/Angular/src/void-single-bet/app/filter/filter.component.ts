@@ -140,13 +140,16 @@ export class FilterComponent implements OnInit{
   }
 
   async getIssueTypes(): Promise<void> {
+    const hiddenIssueTypes = [
+      IssueTypeConstant.EARLY_KICK_OFF,
+      IssueTypeConstant.WRONG_KICK_OFF,
+      IssueTypeConstant.ABNORMAL_BET,
+      IssueTypeConstant.AB_REAL_MEMBER,
+      IssueTypeConstant.RECOVER_TICKET,
+      IssueTypeConstant.WRONG_OFFERED_NAME
+    ]
     const data = await this.commonService.getIssueTypes();
-    data.issueTypes = data.issueTypes.filter(
-      x => x.issueTypeId.toString() !== IssueTypeConstant.EARLY_KICK_OFF && x.issueTypeId.toString() !== IssueTypeConstant.WRONG_KICK_OFF
-        && x.issueTypeId.toString() !== IssueTypeConstant.ABNORMAL_BET && x.issueTypeId.toString() !== IssueTypeConstant.AB_REAL_MEMBER 
-        && x.issueTypeId.toString() !== IssueTypeConstant.RECOVER_TICKET
-    );
-
+    data.issueTypes = data.issueTypes.filter(x => !hiddenIssueTypes.includes(x.issueTypeId.toString()));
     this.issueTypeModel = data;
   }
 

@@ -104,7 +104,7 @@ describe('MarkUnmarkTicketComponent', () => {
     component.ticketsModel = new TicketsModel();
     component.ticketsModel.initData = jest.fn();
     component.query.searchBy = FilterSearchBy.BETIDS;
-    component.filterTickets = new FilterTicketsComponent(null, null, null);
+    component.filterTickets = new FilterTicketsComponent(null, null);
     component.filterTickets.betIdsComponent = new BetIdsComponent(null);
     component.filterTickets.betIdsComponent.groupNumber = new GroupNumber();
     component.filterTickets.betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
@@ -297,7 +297,7 @@ describe('MarkUnmarkTicketComponent', () => {
     const component = new MarkUnmarkTicketComponent(appService, null, null);
     component.query.searchBy = FilterSearchBy.BETIDS;
     component.getTickets = jest.fn();
-    component.filterTickets = new FilterTicketsComponent(null, null, null);
+    component.filterTickets = new FilterTicketsComponent(null, null);
     component.filterTickets.clearBetId = jest.fn();
 
     [true, false].forEach(x => {

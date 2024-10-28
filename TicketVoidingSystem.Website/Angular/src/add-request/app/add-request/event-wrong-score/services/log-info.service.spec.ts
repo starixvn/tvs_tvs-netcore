@@ -7,7 +7,6 @@ import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from 
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { PrimitiveProperty } from '../event-wrong-score.model';
 import { LogInfoService } from './log-info.service';
-import { ValidationService } from './validation.service';
 import { WrongScoreService } from './wrong-score.service';
 
 class Helper {
@@ -98,7 +97,7 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
-  };
+  } as FilterModel;
 }
 
 describe('LogInfoService', () => {

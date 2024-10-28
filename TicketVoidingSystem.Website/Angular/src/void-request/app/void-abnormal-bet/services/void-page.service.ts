@@ -50,7 +50,7 @@ export class VoidPageService {
       const ticketQuery = this.ticketsService.initTicketQuery(requestDetail, element.matchModel);
       element.voidTicketsMini = await this.ticketsService.getVoidTicketsMini(ticketQuery);
       element.templateValue = this.getTemplateValue(element, requestDetail);
-      element.voidReason = await this.appService.getVoidedReason(element.subIssueType.subIssueTypeId, element.matchModel ? element.matchModel.sportType : 0);
+      element.voidReason = await this.commonService.getVoidedReason(element.subIssueType.subIssueTypeId, element.matchModel ? element.matchModel.sportType : 0);
       element.licenseeAffectedList = element.voidTicketsMini.licenseeAffectedList;
       element.licenseeAffectedList = _.clone(element.licenseeAffectedList);
     }

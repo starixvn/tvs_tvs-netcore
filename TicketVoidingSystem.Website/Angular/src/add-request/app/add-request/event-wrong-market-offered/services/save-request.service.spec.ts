@@ -29,8 +29,7 @@ class Helper {
     logInfoDetail: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTypeCount: [],
-    betTeamsResult: [],
-    checkedBetTypes: []
+    betTeamsResult: []
   };
 }
 
@@ -230,7 +229,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.filter.isVoided = true;
     saveRequestArg.primitiveProps = new PrimitivePropertyEvent();
     saveRequestArg.others = new OthersModel();
-    saveRequestArg.eventLeagueComponent = new EventLeagueComponent(null, null);
+    saveRequestArg.eventLeagueComponent = new EventLeagueComponent(null, null, null);
     saveRequestArg.eventLeagueComponent.selectedMatch = new MatchModel();
     const addRequestService = new AddRequestService(null, null, null);
     const spyExecuteSaveRequest = jest.spyOn(addRequestService, 'executeSaveRequest').mockImplementation();
@@ -280,7 +279,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.primitiveProps = new PrimitivePropertyEvent();
     saveRequestArg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
     saveRequestArg.others = new OthersModel();
-    saveRequestArg.eventLeagueComponent = new EventLeagueComponent(null, null);
+    saveRequestArg.eventLeagueComponent = new EventLeagueComponent(null, null, null);
     saveRequestArg.eventLeagueComponent.selectedMatch = new MatchModel();
     const eventWrongMarketOfferedService = new EventWrongMarketOfferedService();
     const spyGetWrongMarketOfferedModel = jest.spyOn(eventWrongMarketOfferedService, 'getWrongMarketOfferedModel').mockImplementation();

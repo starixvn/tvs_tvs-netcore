@@ -1,4 +1,5 @@
 import { QueryList } from '@angular/core';
+import { Selection } from 'src/utility/models/selection.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { IssueType, SubIssueType } from '../../../../../utility/models/issue-type.model';
@@ -6,6 +7,7 @@ import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.mod
 import { Result } from '../../../../../utility/models/result';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
+import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../../filter/filter.model';
 import { IssueTypes } from '../../filter/issue-types.model';
 import { AddRequestQuery } from '../../models/add-request.query';
@@ -14,7 +16,6 @@ import { AddRequestResultModel } from '../../models/request.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { OthersModel } from '../../others/others.model';
 import { PopupService } from '../../services/popup.service';
-import { ConfirmRedCardModel } from '../confirm-red-card/confirm-red-card.model';
 import { PrimitiveProperty } from '../event-red-card.model';
 import { FilterTimeWithAllowanceComponent } from '../filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
@@ -101,21 +102,20 @@ class Helper {
     isVoided: false,
     isChangeSubTypeManual: true,
     isAbnormal: false
-  };
-  static readonly fakeConfirmRedCardModel: ConfirmRedCardModel = {
-    isOpenDialog: null,
+  } as FilterModel;
+  static readonly fakeConfirmRedCardModel: ConfirmAddRequestModel = {
+    isOpen: null,
     issueTypeName: '',
     subIssueTypeName: '',
-    isHasWarningForRedCard: true,
-    isHasWarningEditTakeNoteRequest: true,
+    isHasWarningTicket: true,
+    isHasWarningTakenNote: true,
     isEditingByAnotherUser: false,
     userId: 0,
     requestId: 1,
     requestedBy: '',
-    isHasWarningEvent: false,
     warningRelatedEvents: [],
     isHasSettledTicket: false
-  };
+  } as ConfirmAddRequestModel;
   static fakeIssueType: IssueType[] = [{
     issueTypeId: 11,
     issueTypeName: "Danger Accepted",
@@ -325,12 +325,13 @@ describe('SaveRequestService', () => {
     args.issueTypes.selectedSubIssueTypes[0].subIssueTypeId = subIssueTypeId;
     args.filter.issueTypeId = issueTypeId.toString();
     args.filter.subIssueTypeId = subIssueTypeId.toString();
+    args.filter.action = '2';
+    args.filter.actions = [{value: '2', name: 'name'}] as Selection[];
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);
     args.allEvents = [Helper.fakeLogInfoRedCard];
     const validationService = new ValidationService();
-    const spyIsEditingByAnotherUser = jest.spyOn(validationService, 'isEditingByAnotherUser').mockImplementation(() => false);
 
     mockSaveRequestService = new SaveRequestService(null, validationService, null, null);
 
@@ -338,8 +339,7 @@ describe('SaveRequestService', () => {
     mockSaveRequestService['showPopupConfirmSave'](args);
 
     // Assert
-    expect(args.confirmRedCard.isOpenDialog).toBeTruthy();
-    expect(spyIsEditingByAnotherUser).toHaveBeenCalledTimes(1);
+    expect(args.confirmRedCard.isOpen).toBeTruthy();
   });
 
   it('#showPopupConfirmSave should update data when edit request to action TAKE_NOTE', async () => {
@@ -353,9 +353,10 @@ describe('SaveRequestService', () => {
     args.issueTypes.selectedSubIssueTypes[0].subIssueTypeId = subIssueTypeId;
     args.filter.issueTypeId = issueTypeId.toString();
     args.filter.subIssueTypeId = subIssueTypeId.toString();
-    args.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
+    args.filter.action = '2';
+    args.filter.actions = [{value: '2', name: 'name'}] as Selection[];
     args.actionIdOfFirstTimeAccess = TVSRequestActionType.MANUAL_VOID_ID.toString();
-    let fackLogInfoRedCard = new LogInfoRedCard();
+    const fackLogInfoRedCard = new LogInfoRedCard();
     fackLogInfoRedCard.logInfoDetail = null;
     fackLogInfoRedCard.messageValidationLogInfo = null;
     args.allEvents = [fackLogInfoRedCard];
@@ -363,7 +364,6 @@ describe('SaveRequestService', () => {
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);
     const validationService = new ValidationService();
-    const spyIsEditingByAnotherUser = jest.spyOn(validationService, 'isEditingByAnotherUser').mockImplementation(() => false);
 
     mockSaveRequestService = new SaveRequestService(null, validationService, null, null);
 
@@ -371,8 +371,7 @@ describe('SaveRequestService', () => {
     mockSaveRequestService['showPopupConfirmSave'](args);
 
     // Assert
-    expect(args.confirmRedCard.isOpenDialog).toBeTruthy();
-    expect(spyIsEditingByAnotherUser).toHaveBeenCalledTimes(1);
+    expect(args.confirmRedCard.isOpen).toBeTruthy();
   });
 
   it('#onClickConfirmSave should call #executeSaveRequestApi', async () => {

@@ -12,7 +12,7 @@ import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
-class Helper {  
+class Helper {
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '11',
     subIssueTypeId: '27',
@@ -21,7 +21,7 @@ class Helper {
     isVoided: false,
     subIssueTypes: [],
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeEventTicket14Model: EventTicket14Model = {
     transIds: '12345'
   };
@@ -84,7 +84,7 @@ describe('EventTicket14Component', () => {
 
     expect(mockCheckBusinessRule).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#afterFocusOutBetIds should not call #checkBusinessRule', async () => {
     const mockCheckBusinessRule = jest.fn();
     const { instance } = await shallow
@@ -105,7 +105,7 @@ describe('EventTicket14Component', () => {
 
     expect(mockCheckBusinessRule).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#saveRequest should call #executeApiSaveRequest', async () => {
     const mockChangeBlockingUiStatus = jest.fn();
     const { instance } = await shallow
@@ -127,7 +127,7 @@ describe('EventTicket14Component', () => {
     expect(instance['executeApiSaveRequest']).toHaveBeenCalledTimes(1);
     expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
   });
-  
+
   it('#saveRequest should call #saveWhenRequestNotVoided', async () => {
     const mockChangeBlockingUiStatus = jest.fn();
     const { instance } = await shallow
@@ -149,7 +149,7 @@ describe('EventTicket14Component', () => {
     expect(instance['saveWhenRequestNotVoided']).toHaveBeenCalledTimes(1);
     expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
   });
-  
+
   it('#saveWhenRequestNotVoided should call #executeApiSaveRequest', async () => {
     const mockChangeBlockingUiStatus = jest.fn();
     const mockCheckBusinessRule = jest.fn().mockImplementation(() => Promise.resolve({isValid: true}));
@@ -176,7 +176,7 @@ describe('EventTicket14Component', () => {
 
     expect(instance['executeApiSaveRequest']).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#saveWhenRequestNotVoided should not call #executeApiSaveRequest', async () => {
     const mockChangeSavingRequestStatus = jest.fn();
     const mockCheckBusinessRule = jest.fn().mockImplementation(() => Promise.resolve(false));
@@ -203,7 +203,7 @@ describe('EventTicket14Component', () => {
     expect(instance['executeApiSaveRequest']).toHaveBeenCalledTimes(0);
     expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#executeApiSaveRequest should call #checkBusinessRule', async () => {
     const mockExecuteSave = jest.fn();
     const { instance } = await shallow
@@ -222,9 +222,9 @@ describe('EventTicket14Component', () => {
       instance.filter.isAbnormal = x;
       instance.betIdsComponent = new BetIdsComponent(null);
       instance.betIdsComponent.getAllBetIds = jest.fn();
-  
+
       await instance['executeApiSaveRequest']();
-  
+
       expect(mockExecuteSave).toHaveBeenCalled();
     });
   });

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { VoidReasonComponent } from 'src/void-request/app/message-area/void-reason/void-reason.component';
 import { RequestInfoModule } from '../manage-request/app/ticket-list/request-info/request-info.module';
 import { AdvancedModeModule } from './components/advanced-mode/advanced-mode.module';
 import { AutoRefreshComponent } from './components/auto-refresh/auto-refresh.component';
@@ -17,6 +18,7 @@ import { ConfirmationComponent } from './components/confirmation/confirmation.co
 import { DateTimeModule } from './components/date-time/date-time.module';
 import { EventLeagueComponent } from './components/event-league/event-league.component';
 import { LicenseeAffectedListComponent } from './components/licensee-affected-list/licensee-affected-list.component';
+import { LicenseesComponent } from './components/licensees/licensees.component';
 import { LogInfoMessageComponent } from './components/log-info-detail/log-info-message/log-info-message.component';
 import { LogInfoTicketCountComponent } from './components/log-info-detail/log-info-ticket-count/log-info-ticket-count.component';
 import { MatchDetailComponent } from './components/match-detail/match-detail.component';
@@ -70,7 +72,9 @@ import { HttpService } from './services/http.service';
     LogInfoTicketCountComponent,
     LicenseeAffectedListComponent,
     EventLeagueComponent,
-    LogInfoMessageComponent
+    LogInfoMessageComponent,
+    LicenseesComponent,
+    VoidReasonComponent
   ],
   exports: [
     BaseTicketsListComponent,
@@ -91,7 +95,9 @@ import { HttpService } from './services/http.service';
     SortingModule,
     LicenseeAffectedListComponent,
     EventLeagueComponent,
-    LogInfoMessageComponent
+    LogInfoMessageComponent,
+    LicenseesComponent,
+    VoidReasonComponent
   ],
   providers: [HttpService, CommonService]
 })

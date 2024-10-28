@@ -116,6 +116,11 @@ public static class IssueTypeFunctionKeysConstant
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.WrongOddsSportsBook,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.WrongOddsSportsBook, IssueTypeName = "Wrong Odds (Sportsbook)" }
+                    },
+                    new()
+                    {
+                        FunctionKey = SpecialDeleteFunctionKeys.WrongOfferedName,
+                        IssueType = new IssueType { IssueTypeId = IssueTypeConstant.WrongOfferedName, IssueTypeName = "Wrong Offered Name" }
                     }
                 };
 

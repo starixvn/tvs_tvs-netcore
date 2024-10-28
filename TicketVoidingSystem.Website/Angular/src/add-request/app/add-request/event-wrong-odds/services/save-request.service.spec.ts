@@ -1,6 +1,7 @@
-import { MatchModel } from '../../../../../utility/models/match.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { Result } from '../../../../../utility/models/result';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
@@ -9,6 +10,7 @@ import { WrongOddsModel } from '../../models/event-wrong-odds.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { OthersModel } from '../../others/others.model';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 import { PopupService } from '../../services/popup.service';
 import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
@@ -18,8 +20,6 @@ import { EventWrongOddsService } from './event-wrong-odds.service';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -50,7 +50,7 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
     matchId: Helper.fakeMatchId,
@@ -355,7 +355,7 @@ describe('SaveRequestService', () => {
     arg.filter.isVoided = true;
     arg.logInfoEvent = Helper.fakeLogInfoWrongOdds;
     arg.primitiveProps = new PrimitiveProperty();
-    arg.eventLeagueComponent = new EventLeagueComponent(null, null);
+    arg.eventLeagueComponent = new EventLeagueComponent(null, null, null);
     arg.eventLeagueComponent.selectedMatch = new MatchModel();
     arg.eventLeagueComponent.selectedMatch.sportType = 2;
     service['getWrongOddsInfo'] = jest.fn();
@@ -373,7 +373,7 @@ describe('SaveRequestService', () => {
     arg.others = new OthersModel();
     arg.filter.issueTypeId = IssueTypeConstant.WRONG_ODDS;
     arg.logInfoEvent = Helper.fakeLogInfoWrongOdds;
-    arg.eventLeagueComponent = new EventLeagueComponent(null, null);
+    arg.eventLeagueComponent = new EventLeagueComponent(null, null, null);
     arg.eventLeagueComponent.selectedMatch = new MatchModel();
     arg.eventLeagueComponent.selectedMatch.sportType = 2;
     arg.primitiveProps = new PrimitiveProperty();

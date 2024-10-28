@@ -3,10 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
 using SpecialDelete.VoidByCurrency.Handlers;
-using SpecialDelete.VoidByCurrency.Models;
 using SpecialDelete.VoidByCurrency.Services;
 using SpecialDelete.VoidByCurrency.ViewModels;
 using TicketVoidingSystem.SharedApi.Models;
+using TicketVoidingSystem.SharedApi.Services.SharedApi;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidByCurrency.Handlers;
@@ -25,10 +25,11 @@ public class GetFilterModelHandlerTest
         };
         var request = new GetFilterModelRequest();
         var filterAreaService = Substitute.For<FilterAreaService>();
-        filterAreaService.GetLicensees().ReturnsForAnyArgs(expected.GroupLicensees);
+        var filterCurrencyLicenseeService = Substitute.For<FilterCurrencyLicenseeService>();
+        filterCurrencyLicenseeService.GetGroupLicensees().ReturnsForAnyArgs(expected.GroupLicensees);
+        filterCurrencyLicenseeService.GetCurrencies().ReturnsForAnyArgs(expected.Currencies);
         filterAreaService.GetRemark().ReturnsForAnyArgs(expected.Remark);
-        filterAreaService.GetCurrencies().ReturnsForAnyArgs(expected.Currencies);
-        var handler = new GetFilterModelHandler(filterAreaService);
+        var handler = new GetFilterModelHandler(filterAreaService, filterCurrencyLicenseeService);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);

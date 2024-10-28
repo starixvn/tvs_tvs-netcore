@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EventWrongOfferedNameComponent EventWrongOfferedNameComponent init should match snapshot 1`] = `
+EventWrongOfferedNameComponent {
+  "addRequestStore": AddRequestStore {
+    "abnormalFilterBySubject": Subject {
+      "_isScalar": false,
+      "closed": false,
+      "hasError": false,
+      "isStopped": false,
+      "observers": Array [],
+      "thrownError": null,
+    },
+    "allowanceTimeSubject": Subject {
+      "_isScalar": false,
+      "closed": false,
+      "hasError": false,
+      "isStopped": false,
+      "observers": Array [],
+      "thrownError": null,
+    },
+    "blockingUiStatusSubject": BehaviorSubject {
+      "_isScalar": false,
+      "_value": Array [],
+      "closed": false,
+      "hasError": false,
+      "isStopped": false,
+      "observers": Array [],
+      "thrownError": null,
+    },
+    "changeActionWaitingToManualEditPageSubject": BehaviorSubject {
+      "_isScalar": false,
+      "_value": false,
+      "closed": false,
+      "hasError": false,
+      "isStopped": false,
+      "observers": Array [],
+      "thrownError": null,
+    },
+    "checkValidSubIssueTypeInFilterSubject": Subject {
+      "_isScalar": false,
+      "closed": false,
+      "hasError": false,
+      "isStopped": false,
+      "observers": Array [],
+      "thrownError": null,
+    },
+    "savingRequestStatusSubject": BehaviorSubject {
+      "_isScalar": false,
+      "_value": false,
+      "closed": false,
+      "hasError": false,
+      "isStopped": false,
+      "observers": Array [],
+      "thrownError": null,
+    },
+  },
+  "confirmAddRequest": ConfirmAddRequestModel {
+    "warningRelatedEvents": Array [],
+  },
+  "eventWrongOfferedNameService": EventWrongOfferedNameService {
+    "addRequestApiService": null,
+    "affectedTicketService": null,
+    "commonService": null,
+    "templateService": null,
+    "validationService": null,
+  },
+  "filter": Object {
+    "action": "5",
+    "issueTypeId": "26",
+    "subIssueTypeId": "1",
+  },
+  "issueTypes": IssueTypes {
+    "issueTypes": Array [],
+    "selectedSubIssueTypes": Array [],
+    "subIssueTypes": Array [],
+  },
+  "logInfoEvent": Object {
+    "filterWrongOfferedName": FilterWrongOfferedNameModel {},
+    "logInfoDetail": LogInfoDetail {},
+    "matchId": 1,
+    "messageValidationLogInfo": Array [],
+  },
+  "logInfoService": LogInfoService {
+    "commonService": null,
+    "eventWrongOfferedNameService": null,
+  },
+  "others": OthersModel {},
+  "permission": PermissionAddRequest {},
+  "primitiveProps": PrimitiveProperty {},
+  "saveRequestService": SaveRequestService {
+    "addRequestService": null,
+    "eventWrongOfferedNameService": null,
+    "logInfoService": null,
+    "popupService": null,
+    "validationService": null,
+  },
+  "updateMatchId": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "validationService": ValidationService {
+    "checkPermissionService": null,
+  },
+}
+`;

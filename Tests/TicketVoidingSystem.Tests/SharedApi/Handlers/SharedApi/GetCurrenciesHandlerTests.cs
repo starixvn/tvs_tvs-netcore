@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Fanex.Data.Repository;
 using NSubstitute;
-using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.SharedApi.Handlers.SharedApi;
+using TicketVoidingSystem.SharedApi.Models;
+using TicketVoidingSystem.SharedApi.Services.SharedApi;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.MarkTickets.Handlers;
+namespace TicketVoidingSystem.Tests.SharedApi.Handlers.SharedApi;
 
 public class GetCurrenciesHandlerTests
 {
@@ -17,14 +17,15 @@ public class GetCurrenciesHandlerTests
         // Arrange
         var request = new GetCurrenciesRequest();
         var expected = new List<Currency> { new() { Id = 10002, CurrencyCode = "19" } };
-        var repository = Substitute.For<IDynamicRepository>();
-        repository.FetchAsync<Currency>(default, default).ReturnsForAnyArgs(expected);
-        var handler = new GetCurrenciesHandler(repository);
+        var filterCurrencyLicenseeService = Substitute.For<FilterCurrencyLicenseeService>();
+        filterCurrencyLicenseeService.GetCurrencies().ReturnsForAnyArgs(expected);
+        var handler = new GetCurrenciesHandler(filterCurrencyLicenseeService);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
+        await filterCurrencyLicenseeService.Received(1).GetCurrencies();
         Assert.Equal(expected, actual);
     }
 }

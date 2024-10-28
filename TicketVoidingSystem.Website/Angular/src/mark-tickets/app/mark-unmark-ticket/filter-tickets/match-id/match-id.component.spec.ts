@@ -9,16 +9,17 @@ import { CheckedBetType } from '../../../../../utility/components/advanced-mode/
 import { BetType, GroupBetType, GroupBetTypesModel } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { DateTimeModule } from '../../../../../utility/components/date-time/date-time.module';
+import { LicenseesComponent } from '../../../../../utility/components/licensees/licensees.component';
+import { GroupLicensee, GroupLicenseeModel, Licensee } from '../../../../../utility/components/licensees/licensees.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LABELS } from '../../../../../utility/constants/labels';
 import '../../../../../utility/extensions/string.extension';
+import { Currency } from '../../../../../utility/models/currency.model';
 import { FirstTicketTime } from '../../../../../utility/models/match.model';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { HttpService } from '../../../../../utility/services/http.service';
-import { Currencies, Currency } from '../filter.model';
-import { LicenseesComponent } from './licensees/licensees.component';
-import { GroupLicensee, Licensee } from './licensees/licensees.model';
+import { Currencies } from '../filter.model';
 import { MatchIdComponent } from './match-id.component';
 class Helper {
   static readonly fakeFirstTicketTime: FirstTicketTime = {
@@ -72,7 +73,7 @@ class Helper {
   };
 
   static getGroupLicensee(): GroupLicensee[] {
-    return [new GroupLicensee('China rules', [new Licensee(14, '368Cash')])];
+    return [new GroupLicensee('China rules', [new Licensee(14, '368Cash', true)], true)];
   }
 
   static getGroupBetType(): GroupBetType {
@@ -206,7 +207,7 @@ describe('MatchIdComponent', () => {
 
     expect(instance.rangeTimes[0].from).toBe('0050/08/12 09:35:06.980 AM');
   });
-  
+
   it('#setFromDate should update data when currentDate null', async () => {
     const firstTicketTime = new FirstTicketTime();
     firstTicketTime.minTransDate = null;
@@ -333,7 +334,7 @@ describe('MatchIdComponent', () => {
     expect(instance.getPlayerQuery.matchId).toBe('12345');
     expect(instance.getPlayerQuery.betType).toBe('216');
   });
-  
+
   it('#handleBetType216 should return getPlayerQuery has not data', async () => {
     const { instance } = await shallow.render();
     const groupBetTypesModel = new GroupBetTypesModel([], true);
@@ -365,7 +366,8 @@ describe('MatchIdComponent', () => {
 
   it('#getCheckedLicensees should return expected licensees', async () => {
     const { instance } = await shallow.render();
-    instance.groupLicensees = Helper.getGroupLicensee();
+    instance.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
+    instance.groupLicenseeModel.getCheckedLicensees = jest.fn().mockReturnValue([{ name: '368Cash' }]);
     const actual = instance.getCheckedLicensees();
 
     expect(actual.length).toBe(1);
@@ -439,7 +441,7 @@ describe('MatchIdComponent', () => {
     instance.tooltip.display = jest.fn();
     instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
     instance.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
-    instance.groupLicensees = [];
+    instance.groupLicenseeModel = new GroupLicenseeModel([], true);
     const actual = instance.checkValidate();
 
     expect(actual).toBe(false);
@@ -451,7 +453,7 @@ describe('MatchIdComponent', () => {
     instance.tooltip.display = jest.fn();
     instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
     instance.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
-    instance.groupLicensees = Helper.getGroupLicensee();
+    instance.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
     instance.model.currencyIds = '';
 
     const actual = instance.checkValidate();
@@ -465,7 +467,7 @@ describe('MatchIdComponent', () => {
     instance.tooltip.display = jest.fn();
     instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
     instance.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
-    instance.groupLicensees = Helper.getGroupLicensee();
+    instance.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
     instance.model.currencyIds = '13';
     instance.groupBetTypesComponent.validate = jest.fn().mockImplementation(() => false);
     instance.advancedModelComponent.validate = jest.fn().mockImplementation(() => false);
@@ -480,7 +482,7 @@ describe('MatchIdComponent', () => {
     instance.tooltip.display = jest.fn();
     instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
     instance.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
-    instance.groupLicensees = Helper.getGroupLicensee();
+    instance.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
     instance.model.currencyIds = '13';
     instance.groupBetTypesComponent.validate = jest.fn().mockImplementation(() => true);
     instance.advancedModelComponent.validate = jest.fn().mockImplementation(() => true);
@@ -492,13 +494,14 @@ describe('MatchIdComponent', () => {
 
   it('#getParams should return expected GetTicketsQuery ', async () => {
     const { instance } = await shallow.render();
-    instance.groupLicensees = Helper.getGroupLicensee();
+    instance.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
     instance.eventType.value = '2';
     instance.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
     instance.model.liveHomeScore = 2;
     instance.model.liveAwayScore = 1;
     instance.rangeTimes = [new RangeTime()];
     instance.advancedModelComponent.getBetTypeModels = jest.fn().mockImplementation(() => [Helper.fakeCheckedBetType]);
+    instance.getCheckedLicensees = jest.fn().mockReturnValue(['368Cash']);
 
     instance.getParams();
 
@@ -510,13 +513,14 @@ describe('MatchIdComponent', () => {
 
   it('#getParams should return expected GetTicketsQuery when input wrong', async () => {
     const { instance } = await shallow.render();
-    instance.groupLicensees = Helper.getGroupLicensee();
+    instance.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
     instance.eventType.value = 'a';
     instance.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
     instance.rangeTimes = [new RangeTime()];
     instance.model.liveHomeScore = null;
     instance.model.liveAwayScore = null;
     instance.advancedModelComponent.getBetTypeModels = jest.fn().mockImplementation(() => [Helper.fakeCheckedBetType]);
+    instance.getCheckedLicensees = jest.fn().mockReturnValue(['368Cash']);
     instance.getParams();
 
     expect(instance.model.licenseeNames).toBe('368Cash');

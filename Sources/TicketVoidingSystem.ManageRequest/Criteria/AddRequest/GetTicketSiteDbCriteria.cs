@@ -44,6 +44,8 @@ public class GetTicketSiteDbCriteria : CriteriaBase
 
     public string WrongOddsSBInfo { get; set; }
 
+    public string WrongOfferedNameInfo { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

@@ -41,7 +41,7 @@ export class EventNotParticipateService {
     const model = new NotParticipateGetLogInfoQuery();
     model.matchId = matchId;
     model.subIssueTypeId = subIssueTypeId;
-    model.betTypeIds = inputModel.betTypeIds.join(',');;
+    model.betTypeIds = inputModel.betTypeIds.join(',');
     model.playerId = inputModel.playerId
 
     return model;
@@ -49,7 +49,7 @@ export class EventNotParticipateService {
 
   private createNotParticipateModel(inputModel: FilterNotParticipateModel, matchId: number, subIssueTypeId: number, logInfoDetail: LogInfoDetail): NotParticipateModel {
     const model = new NotParticipateModel();
-    model.betTypeIds = inputModel.betTypeIds.join(',');;
+    model.betTypeIds = inputModel.betTypeIds.join(',');
     model.playerId = inputModel.playerId
     model.matchId = matchId;
     model.subIssueTypeId = subIssueTypeId;

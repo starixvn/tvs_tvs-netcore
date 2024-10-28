@@ -77,7 +77,7 @@ describe('CopyRequestInfoService', () => {
       totalSingleCount: 0,
       totalParlayCount: 0,
       totalCancelCashOutCount: 0
-    }; 
+    } as RequestInfoForCopy;
     const copyRequestInfoResponse : CopyRequestInfoResponse = {
       requestInfo: requestInfo,
       betTypeTickets: []

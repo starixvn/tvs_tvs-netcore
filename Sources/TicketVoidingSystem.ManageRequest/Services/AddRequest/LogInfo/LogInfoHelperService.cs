@@ -38,6 +38,7 @@ public class LogInfoHelperServiceImp : LogInfoHelperService
             Wrong1stOuModels = query.Wrong1stOuModels,
             WrongOddsModels = query.WrongOddsModels,
             WrongOddsSportsBookModels = query.WrongOddsSportsBookModel,
+            WrongOfferedNameModel = query.WrongOfferedNameModel,
             ReducedOverModels = query.ReducedOverModels,
             NotParticipateModels = query.NotParticipateModels,
             EarlyKickOffModels = query.EarlyKickOffModels,
@@ -62,7 +63,7 @@ public class LogInfoHelperServiceImp : LogInfoHelperService
             item.BetTypeName = betListService.GetBetTypeName(new Ticket
             {
                 BetTypeId = item.BetTypeId,
-                BetId = item.BetId,
+                BetId = item.BetId
             });
         }
     }

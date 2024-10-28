@@ -18,7 +18,7 @@
         </ng-select>
       </div>
   </div>
-  <match-id #matchId *ngIf="searchBy.value === '0'" [currencies]="currencies" [groupLicensees]="groupLicensees"
+  <match-id #matchId *ngIf="searchBy.value === '0'" [currencies]="currencies" [groupLicenseeModel]="groupLicenseeModel"
     [(model)]="model" (blockComponent)="blockComponent($event)" (changeMatch)="changeMatch()"></match-id>
   <bet-ids #betIds *ngIf="searchBy.value === '1'" [betIdComponentCss]="'row'"></bet-ids>
   <div class="search">

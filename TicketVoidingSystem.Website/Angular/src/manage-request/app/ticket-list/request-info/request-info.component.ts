@@ -176,7 +176,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
       && !this.isAbnormalBetMixOrSystemParlay()
       && !this.isArchivedTicket()
       && !this.isDuplicateTicketsMixParlay()
-      && !this.isRecoverTicket();;
+      && !this.isRecoverTicket();
   }
 
   public isRecoverTicket(): boolean {

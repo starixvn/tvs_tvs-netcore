@@ -18,7 +18,6 @@ import { AppComponent } from './app.component';
 import { ConfirmAutoUnmarkComponent } from './confirm-auto-unmark/confirm-auto-unmark.component';
 import { AllMarkedTicketListComponent } from './mark-unmark-ticket/all-marked-ticket-list/all-marked-ticket-list.component';
 import { FilterTicketsComponent } from './mark-unmark-ticket/filter-tickets/filter-tickets.component';
-import { LicenseesComponent } from './mark-unmark-ticket/filter-tickets/match-id/licensees/licensees.component';
 import { MatchIdComponent } from './mark-unmark-ticket/filter-tickets/match-id/match-id.component';
 import { MarkUnmarkTicketComponent } from './mark-unmark-ticket/mark-unmark-ticket.component';
 import { TabMarkTicketComponent } from './tab-mark-ticket/tab-mark-ticket.component';
@@ -33,7 +32,6 @@ import { UserLogComponent } from './user-log/user-log.component';
     AppComponent,
     FilterLogsComponent,
     FilterTicketsComponent,
-    LicenseesComponent,
     LogsListComponent,
     MatchIdComponent,
     TicketsListComponent,

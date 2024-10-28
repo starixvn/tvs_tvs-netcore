@@ -1,3 +1,4 @@
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { FilterModel } from '../../filter/filter.model';
@@ -7,7 +8,6 @@ import { FilterNotParticipateModel } from '../models/filter-not-participate.mode
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { ValidationService } from './validation.service';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 describe('ValidationService', () => {
   let service: ValidationService;
@@ -17,7 +17,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when match invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => false);
     const actual = service.validateCommonData(leagueEvent, null);
 
@@ -25,7 +25,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when filterNotParticipateComponent invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterNotParticipateComponent = new FilterNotParticipateComponent(null);
     filterNotParticipateComponent.isValid = jest.fn().mockReturnValue(false);
@@ -36,7 +36,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return true', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterNotParticipateComponent = new FilterNotParticipateComponent(null);
     filterNotParticipateComponent.isValid = jest.fn().mockReturnValue(true);

@@ -157,13 +157,13 @@ describe('SubmitVoidService', () => {
   });
 
   it('#checkValidationBeforeVoid should return result fail when messageComponent.checkValidation false', async () => {
-    const templateMessageComponent1 = new TemplateMessageComponent(null, null);
+    const templateMessageComponent1 = new TemplateMessageComponent(null, null, null, null, null, null, null, null, null);
     templateMessageComponent1.value = new TemplateValue();
     templateMessageComponent1.value.matchId = 1;
     templateMessageComponent1.checkValidation = jest.fn().mockReturnValue(false);
     const messageAreaComponent1 = new MessageAreaComponent();
     messageAreaComponent1.templateMessageComponent = templateMessageComponent1;
-    const templateMessageComponent2 = new TemplateMessageComponent(null, null);
+    const templateMessageComponent2 = new TemplateMessageComponent(null, null, null, null, null, null, null, null, null);
     templateMessageComponent2.value = new TemplateValue();
     templateMessageComponent2.value.matchId = 2;
     templateMessageComponent2.checkValidation = jest.fn().mockReturnValue(false);
@@ -189,7 +189,7 @@ describe('SubmitVoidService', () => {
   });
 
   it('#checkValidationBeforeVoid should return result fail when voidReason?.reasonEnglish is empty', async () => {
-    const templateMessageComponent = new TemplateMessageComponent(null, null);
+    const templateMessageComponent = new TemplateMessageComponent(null, null, null, null, null, null, null, null, null);
     templateMessageComponent.value = new TemplateValue();
     templateMessageComponent.value.matchId = 1;
     templateMessageComponent.checkValidation = jest.fn().mockReturnValue(true);
@@ -210,7 +210,7 @@ describe('SubmitVoidService', () => {
   });
 
   it('#checkValidationBeforeVoid should return result fail when voidReason.reasonChineseSimplified is empty', async () => {
-    const templateMessageComponent = new TemplateMessageComponent(null, null);
+    const templateMessageComponent = new TemplateMessageComponent(null, null, null, null, null, null, null, null, null);
     templateMessageComponent.value = new TemplateValue();
     templateMessageComponent.value.matchId = 1;
     templateMessageComponent.checkValidation = jest.fn().mockReturnValue(true)
@@ -232,7 +232,7 @@ describe('SubmitVoidService', () => {
 
   it('#checkValidationBeforeVoid should return result successful when voidReason.reasonChineseSimplified is empty', async () => {
     const messageAreaComponent = new MessageAreaComponent();
-    messageAreaComponent.templateMessageComponent = new TemplateMessageComponent(null, null);
+    messageAreaComponent.templateMessageComponent = new TemplateMessageComponent(null, null, null, null, null, null, null, null, null);
     messageAreaComponent.templateMessageComponent.value = new TemplateValue();
     messageAreaComponent.templateMessageComponent.value.matchId = 1;
     messageAreaComponent.templateMessageComponent.checkValidation = jest.fn().mockReturnValue(true)

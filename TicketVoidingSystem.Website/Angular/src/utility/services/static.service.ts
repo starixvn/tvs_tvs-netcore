@@ -43,6 +43,7 @@ export class StaticService {
       isDuplicateTickets: StaticService.isDuplicateTickets(issueTypeId),
       isNotParticipate: StaticService.isNotParticipate(issueTypeId),
       isRecoverTicket: StaticService.isRecoverTicket(issueTypeId),
+      isWrongOfferedName: StaticService.isWrongOfferedName(issueTypeId),
       isLikelyWrongMarketOffered: StaticService.isLikelyWrongMarketOffered(issueTypeId)
     }
 
@@ -136,6 +137,10 @@ export class StaticService {
     return issueTypeId?.toString() === IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK;
   }
 
+  static isWrongOfferedName(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.WRONG_OFFERED_NAME;
+  }
+
   static isFilterByMixOrSystemParlay(filterBy: number): boolean {
     return filterBy === AbnormalFilterBy.MIX_PARLAY || filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
   }
@@ -182,6 +187,8 @@ export class StaticService {
       return requestDetail.wrongMarketOfferedModel.subIssueTypeId;
     } else if (this.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongOddsSportsBookModel.subIssueTypeId;
+    } else if (this.isWrongOfferedName(requestDetail.request.issueTypeId)) {
+      return requestDetail.wrongOfferedNameModel.subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }
@@ -211,6 +218,7 @@ export class StaticService {
       || this.isRecoverTicket(requestDetail.request.issueTypeId)
       || this.isDuplicateTickets(requestDetail.request.issueTypeId)
       || this.isAbnormalBet(requestDetail.request.issueTypeId)
+      || this.isWrongOfferedName(requestDetail.request.issueTypeId)
       || this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)
       || this.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       return null;
@@ -427,5 +435,18 @@ export class StaticService {
 
   static isHasWarningTakenNote(currentAction: string, actionIdOfFirstTimeAccess: string): boolean {
     return currentAction === TVSRequestActionType.TAKE_NOTE_ID.toString() && currentAction !== actionIdOfFirstTimeAccess;
+  }
+
+  static getTitleVoidTicket(issueTypeId: string, totalSingle: number, totalParlay: number, totalCancelCashOut: number, strFromTime: string, strToTime: string): string {
+    const hasCancelCashOut = StaticService.isHaveCancelCashOutTicket(issueTypeId);
+    const isAbnormalAccount = StaticService.isAbnormalAccount(issueTypeId);
+
+    const baseTitle = `(Single Count: ${totalSingle}, Parlay Count: ${totalParlay}` +
+      (hasCancelCashOut ? `, Cancel CO: ${totalCancelCashOut}` : '') +
+      `)`;
+
+    return isAbnormalAccount
+      ? baseTitle
+      : `Void Time: ${strFromTime} - ${strToTime} ${baseTitle}`;
   }
 }

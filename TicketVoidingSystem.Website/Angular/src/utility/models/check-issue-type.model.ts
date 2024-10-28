@@ -18,5 +18,6 @@ export type CheckIssueTypeObjectType = {
   isDuplicateTickets: boolean,
   isNotParticipate: boolean,
   isRecoverTicket: boolean,
+  isWrongOfferedName: boolean,
   isLikelyWrongMarketOffered: boolean
 }

@@ -14,8 +14,6 @@ class Helper {
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
   static readonly fakeWrongOddsSportsBookModel = new WrongOddsSportsBookModel();
   static readonly fakeFilterModel: FilterModel = {
-    sportType: 1,
-    eventDate: '',
     issueTypeId: '11',
     subIssueTypeId: '1',
     action: '1',
@@ -23,7 +21,7 @@ class Helper {
     isVoided: false,
     isAbnormal: false,
     actions: []
-  };
+  } as FilterModel;
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
     matchId: 12345,
@@ -58,8 +56,7 @@ class Helper {
     filterWrongOddsSportsBook: new FilterWrongOddsSportsBookModel(),
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [],
-    betTeamsResult: [],
-    checkedBetTypes: []
+    betTeamsResult: []
   } as LogInfoWrongOddsSportsBook;
 }
 
@@ -71,7 +68,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when match invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => false);
     const actual = service.validateCommonData(leagueEvent, null);
 
@@ -79,7 +76,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when filterWrongOddsSportsBookComponent invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongOddsSportsBookComponent = new FilterWrongOddsSportsBookComponent(null, null);
     filterWrongOddsSportsBookComponent.isValidity = jest.fn().mockImplementation(() => false);
@@ -89,7 +86,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return true', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongOddsSportsBookComponent = new FilterWrongOddsSportsBookComponent(null, null);
     filterWrongOddsSportsBookComponent.isValidity = jest.fn().mockImplementation(() => true);
@@ -176,12 +173,12 @@ describe('ValidationService', () => {
     expect(actual).toBeFalsy();
   });
 
-  it('#isValidFilterOddsValue should return false when oddsValue null', async () => {
+  it('#isValidFilterOddsValue should return true when oddsValue null', async () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
     const actual = service['isValidFilterOddsValue'](null, tooltip);
 
-    expect(actual).toBeFalsy();
+    expect(actual).toBeTruthy();
   });
 
   it('#isValidFilterOddsValue should return false when isCorrectFormatMultipleDecimal', async () => {

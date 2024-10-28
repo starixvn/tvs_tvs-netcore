@@ -1,4 +1,6 @@
 import { QueryList } from '@angular/core';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
@@ -7,8 +9,6 @@ import { FilterTimeWithAllowanceComponent } from '../filter-time-with-allowance/
 import { LogInfoRedCardComponent } from '../log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
 import { ValidationService } from './validation.service';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeValidationMessageError: ValidationMessage = {
@@ -112,7 +112,7 @@ describe('ValidationService', () => {
 
   it('#isValidInputRelatedEvent should return true when MatchId is Valid', async () => {
     // Arrange
-    
+
     // Action
     const result = validationService.isValidInputRelatedEvent(1, '1', [Helper.fakeLogInfoRedCard], null);
 
@@ -135,7 +135,7 @@ describe('ValidationService', () => {
       messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
       sportType: 0
     };
-    
+
     // Action
     const result = validationService.isValidInputRelatedEvent(1, '1', [Helper.fakeLogInfoRedCard, fackRelatedEvent], tooltip);
 
@@ -189,7 +189,7 @@ describe('ValidationService', () => {
     const filterModel = new FilterModel();
     filterModel.subIssueTypeId = '1';
 
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const spyIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => false);
 
     // Action
@@ -204,7 +204,7 @@ describe('ValidationService', () => {
     // Arrange
     const filterModel = new FilterModel();
     filterModel.subIssueTypeId = '1';
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const spyeventLeagueComponentIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
 
     const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
@@ -224,7 +224,7 @@ describe('ValidationService', () => {
     const filterModel = new FilterModel();
     filterModel.subIssueTypeId = '1';
 
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const spyeventLeagueComponentIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
 
     const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
@@ -251,7 +251,7 @@ describe('ValidationService', () => {
     const filterModel = new FilterModel();
     filterModel.subIssueTypeId = '1';
 
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const spyeventLeagueComponentIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
 
     const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
