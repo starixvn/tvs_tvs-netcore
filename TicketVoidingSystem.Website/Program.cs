@@ -53,7 +53,7 @@ services.AddControllersWithViews(options =>
     options.JsonSerializerOptions.Converters.Add(new CustomDecimalJsonConverter());
 }).AddSessionStateTempDataProvider();
 
-services.RegisterWebOptimizer();
+services.AddWebOptimizer();
 
 // Build app
 var app = builder.Build();

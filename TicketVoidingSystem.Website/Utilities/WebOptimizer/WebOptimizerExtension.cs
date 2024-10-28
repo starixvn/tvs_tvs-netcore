@@ -6,7 +6,7 @@ namespace TicketVoidingSystem.Website.Utilities.WebOptimizer;
 
 public static class WebOptimizerExtension
 {
-    public static void RegisterWebOptimizer(this IServiceCollection services)
+    public static void AddWebOptimizer(this IServiceCollection services)
     {
         services.AddWebOptimizer(pipeline =>
         {
