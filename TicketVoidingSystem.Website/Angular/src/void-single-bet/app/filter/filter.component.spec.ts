@@ -321,7 +321,7 @@ describe('FilterComponent', () => {
   it('getPlayerValueSelectedFromBetTypeQuery should return expected', async () => {
     // Arrange
     const { instance } = await shallow.render();
-    let betTypes: CheckedBetType[] = [{
+    const betTypes: CheckedBetType[] = [{
       id: 9680,
       betTeam: '',
       set: '',
@@ -380,7 +380,7 @@ describe('FilterComponent', () => {
   it('mapPlayerValueToOddsInfo should return expected', async () => {
     // Arrange
     const { instance } = await shallow.render();
-    let oddsInfo: OddsInfo[] = [{
+    const oddsInfo: OddsInfo[] = [{
       betTypeId: 1,
       oddsId: '',
       playerId: 1,
@@ -448,7 +448,7 @@ describe('FilterComponent', () => {
       .mock(CommonService, { getIssueTypes: mockGetIssueTypes })
       .render();
     instance.getPlayerValueSelectedFromBetTypeQuery = jest.fn().mockReturnValue("aa");
-    let oddsInfo: OddsInfo[] = [{
+    const oddsInfo: OddsInfo[] = [{
       betTypeId: 1,
       oddsId: '',
       playerId: 1,

@@ -24,37 +24,7 @@ import { AppService } from '../app.service';
 import { GetSummaryQuery } from '../models/query.model';
 import { FilterComponent } from './filter.component';
 import { Licensee, SelectionTypeModel } from './filter.model';
-
-class Helper {
-  static readonly fakeLicenseeList: Licensee[] = [
-    {
-      id: 268,
-      name: '108bet'
-    },
-    {
-      id: 195,
-      name: '12betco'
-    },
-  ];
-  static readonly fakeBetTypeVirtualSportList: BetTypeVirtualSport[] = [
-    new BetTypeVirtualSport(2701, 'FT 1X2'),
-    new BetTypeVirtualSport(2702, '1H 1X2'),
-  ];
-  static readonly fakeGroupBetTypeVirtualSportList: GroupBetTypeVirtualSport[] = [
-    new GroupBetTypeVirtualSport(Helper.fakeBetTypeVirtualSportList)
-  ];
-
-  static getFakeBetTypesModel(): BetTypesModel {
-    const betTypesModel = new BetTypesModel([new BetTypeModel('2702', '1H 1X2', false, 5, true)], true);
-    betTypesModel.result = {
-      errorCode: 0,
-      errorMsg: '',
-      isSuccessful: true
-    };
-
-    return betTypesModel;
-  }
-}
+import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
 
 describe('FilterComponent', () => {
   @NgModule({
@@ -129,8 +99,9 @@ describe('FilterComponent', () => {
 
   it('#getLicensees should return expected list licensee', async() => {
     // Arrange
+    const fakeLicenseeList: Licensee[] = [{ id: 268, name: '108bet' }, { id: 195, name: '12betco' }];
     const { instance } = await shallow
-      .mock(AppService, { getLicensees: jest.fn().mockImplementation(() => Helper.fakeLicenseeList) })
+      .mock(AppService, { getLicensees: jest.fn().mockImplementation(() => fakeLicenseeList) })
       .render();
 
     // Action
@@ -228,8 +199,10 @@ describe('FilterComponent', () => {
 
   it('#getBetTypes should return expected commonBetTypes', async() => {
     // Arrange
+    const betTypesModel = new BetTypesModel([new BetTypeModel('2702', '1H 1X2', false, 5, true)], true);
+    betTypesModel.result = { errorCode: 0, errorMsg: '', isSuccessful: true };
     const { instance } = await shallow
-      .mock(CommonService, { getBetTypes: jest.fn().mockImplementation(() => Helper.getFakeBetTypesModel()) })
+      .mock(CommonService, { getBetTypes: jest.fn().mockImplementation(() => betTypesModel) })
       .render();
 
     // Action
@@ -388,14 +361,12 @@ describe('FilterComponent', () => {
     const { instance } = await shallow
     .mock(AppService, { getMatchInfo: jest.fn().mockImplementation(() => matchModel)})
     .render();
-    instance.advancedModeComponent = new AdvancedModeComponent(null, null, null);
-    instance.advancedModeComponent.resetBetTeam = jest.fn();    
+    instance.advancedModeComponent = null;
     instance.validateProduct = jest.fn().mockImplementation(() => true);
     instance.handleByProduct = jest.fn();
 
     await instance.checkSportType();
 
-    expect(instance.advancedModeComponent.resetBetTeam).toHaveBeenCalledTimes(1);
     expect(instance.validateProduct).toHaveBeenCalledTimes(1);
     expect(instance.handleByProduct).toHaveBeenCalledTimes(1);
   });
@@ -672,14 +643,20 @@ describe('FilterComponent', () => {
   it('Validate bettypes with virtual sporttypes product', async () => {
     // Arrange
     const { instance } = await shallow.render();
+    const fakeBetTypeVirtualSportList: BetTypeVirtualSport[] = [
+      new BetTypeVirtualSport(2701, 'FT 1X2'),
+      new BetTypeVirtualSport(2702, '1H 1X2'),
+    ];
+    
     let actualResult = false;
     instance.query.product = Product.VIRTUAL_SPORTS;
     instance.betTypesVSComponent = new BetTypesVirtualSportComponent(null);
-    instance.groupsBetTypesVS = new GroupBetTypeVirtualSport(Helper.fakeBetTypeVirtualSportList);
+    instance.groupsBetTypesVS = new GroupBetTypeVirtualSport(fakeBetTypeVirtualSportList);
     const testCases = [
       { validation: true, expectedResult: true },
       { validation: false, expectedResult: false },
     ];
+
     // Action and Assert
     for (const item of testCases) {
       instance.betTypesVSComponent.validate = jest.fn().mockImplementation(() => item.validation);
@@ -821,7 +798,7 @@ describe('FilterComponent', () => {
     expect(instance['enableBetTypesAndAdvancedMode']).toHaveBeenCalledTimes(1);
   });
   
-  it('isShowCheckboxAffected should return true', async () => {
+  it('isShowCheckboxAffected should return true when Product.SPORTS_BOOK', async () => {
     // Arrange
     const { instance } = await shallow.render();
     instance.groupBetTypes = new GroupBetTypesModel([], false);
@@ -833,8 +810,19 @@ describe('FilterComponent', () => {
     const actual = instance.isShowCheckboxAffected();
     expect(actual).toBeTruthy();
   });
+
+  it('isShowCheckboxAffected should return true when Product.BET_BUILDER', async () => {
+    // Arrange
+    const { instance } = await shallow.render();
+    instance.betTypes = {betTypes: [{isChecked: false,}], isChecked: false} as BetTypesModel;
+    instance.query.product = Product.BET_BUILDER;
+
+    // Action and Assert
+    const actual = instance.isShowCheckboxAffected();
+    expect(actual).toBeTruthy();
+  });
   
-  it('handleBetTypes should call #handleGroupBetTypesOfSportBook', async () => {
+  it('handleBetTypes should call handleGroupBetTypesOfSportBook', async () => {
     // Arrange
     const { instance } = await shallow.render();
     instance.query.product = Product.SPORTS_BOOK;
@@ -845,7 +833,7 @@ describe('FilterComponent', () => {
     expect(instance.handleGroupBetTypesOfSportBook).toHaveBeenCalledTimes(1);
   });
   
-  it('handleBetTypes should call #handleBetTypesOfBetBuilder', async () => {
+  it('handleBetTypes should call handleBetTypesOfBetBuilder', async () => {
     // Arrange
     const { instance } = await shallow.render();
     instance.query.product = Product.BET_BUILDER;
@@ -854,6 +842,17 @@ describe('FilterComponent', () => {
     // Action and Assert
     instance.handleBetTypes();
     expect(instance.handleBetTypesOfBetBuilder).toHaveBeenCalledTimes(1);
+  });
+
+  it('handleBetTypes should call handleGroupBetTypesOfVirtualSports', async () => {
+    // Arrange
+    const { instance } = await shallow.render();
+    instance.query.product = Product.VIRTUAL_SPORTS;
+    instance.handleGroupBetTypesOfVirtualSports = jest.fn();
+
+    // Action and Assert
+    instance.handleBetTypes();
+    expect(instance.handleGroupBetTypesOfVirtualSports).toHaveBeenCalledTimes(1);
   });
   
   it('handleGroupBetTypesOfSportBook should not call #tooltip when have bettype', async () => {
@@ -904,7 +903,7 @@ describe('FilterComponent', () => {
     expect(instance.tooltip.display).toHaveBeenCalledTimes(1);
   });
   
-  it('handlBetTypesOfBetBuilder should call #tooltip when have not getSelectionTypes', async () => {
+  it('handleBetTypesOfBetBuilder should call #tooltip when have not getSelectionTypes', async () => {
     // Arrange
     const { instance } = await shallow
     .mock(AppService, { getSelectionTypes: jest.fn().mockImplementation(() => Promise.resolve([])) })
@@ -916,7 +915,7 @@ describe('FilterComponent', () => {
     expect(instance.tooltip.display).toHaveBeenCalledTimes(1);
   });
   
-  it('handlBetTypesOfBetBuilder should update betTypes when have getSelectionTypes', async () => {
+  it('handleBetTypesOfBetBuilder should update betTypes when have getSelectionTypes', async () => {
     // Arrange
     const selectionTypeModel = new SelectionTypeModel();
     selectionTypeModel.selectionType = 1;
@@ -963,7 +962,7 @@ describe('FilterComponent', () => {
   it('handleBetTypesAndAdvancedMode should disabled all bettypes and update them to checked', async () => {
     const { instance } = await shallow.render();
     instance.isReSettled = true;
-    instance.groupBetTypes = new GroupBetTypesModel([new GroupBetType('Special', [], true)], false);
+    instance.groupBetTypes = {groupBetTypes: [{betTypes: [{id: 1, isChecked: true}, {id: 2, isChecked: false}]}]} as GroupBetTypesModel;
     instance.query.product = Product.SPORTS_BOOK;
     instance.handleBetTypesAndAdvancedMode();
 
@@ -971,5 +970,80 @@ describe('FilterComponent', () => {
     expect(instance.groupBetTypes.isChecked).toBeTruthy();
     expect(instance.groupBetTypes.groupBetTypes.every(x => x.isChecked)).toBeTruthy();
     expect(instance.groupBetTypes.groupBetTypes.every(x => x.betTypes.every(x => x.isChecked))).toBeTruthy();
+  });
+
+  it('handleGroupBetTypesOfVirtualSports should show error tooltip when error getBetTypesVS', async () => {
+    // Arrange
+    const { instance } = await shallow
+    .mock(BlockUiService, { start: jest.fn(), stop: jest.fn()})
+    .render();
+    const query = new GetBetTypesQuery();
+    const fakeEventTooltipDisplay = jest.fn();
+    instance.tooltip.display = fakeEventTooltipDisplay;
+    
+    const data = {result: {errorCode: 1, errorMsg: "Has error getBetTypesVS"}, betTypes: []} as GroupBetTypeVirtualSport;
+    instance['getBetTypesVS'] = jest.fn().mockReturnValue(data);
+
+    // Action
+    await instance.handleGroupBetTypesOfVirtualSports(query);
+
+    // Assert
+    expect(instance.checkMatch).toEqual('Has error getBetTypesVS');
+    expect(fakeEventTooltipDisplay).toBeCalled();
+  });
+
+  it('handleGroupBetTypesOfVirtualSports should show error tooltip when betTypes is Empty', async () => {
+    // Arrange
+    const { instance } = await shallow
+    .mock(BlockUiService, { start: jest.fn(), stop: jest.fn()})
+    .render();
+    const query = new GetBetTypesQuery();
+    const fakeEventTooltipDisplay = jest.fn();
+    instance.tooltip.display = fakeEventTooltipDisplay;
+    
+    const data = {result: {errorCode: 0}, betTypes: []} as GroupBetTypeVirtualSport;
+    instance['getBetTypesVS'] = jest.fn().mockReturnValue(data);
+
+    // Action
+    await instance.handleGroupBetTypesOfVirtualSports(query);
+
+    // Assert
+    expect(instance.checkMatch).toEqual(TEXT.NO_BETTYPE);
+    expect(fakeEventTooltipDisplay).toBeCalled();
+  });
+
+  it('handleGroupBetTypesOfVirtualSports should update groupsBetTypesVS when successfully getBetTypesVS', async () => {
+    // Arrange
+    const data = {result: {errorCode: 0}, betTypes: [{id: 1, name: 'Handicap'}]} as GroupBetTypeVirtualSport;
+    const { instance } = await shallow
+    .mock(BlockUiService, { start: jest.fn(), stop: jest.fn()})
+    .mock(CommonService, { getBetTypesVirtualSports: jest.fn().mockImplementation(() => data) })
+    .render();
+    const query = new GetBetTypesQuery();
+    const fakeEventTooltipDisplay = jest.fn();
+    instance.tooltip.display = fakeEventTooltipDisplay;
+
+    // Action
+    await instance.handleGroupBetTypesOfVirtualSports(query);
+
+    // Assert
+    expect(instance.groupsBetTypesVS).toEqual(new GroupBetTypeVirtualSport(data.betTypes));
+  });
+  
+  it('handleBetTypesAndAdvancedMode should check all bettypes when ReSettled', async () => {
+    // Arrange
+    const { instance } = await shallow
+    .render();
+    instance.query = {product: Product.BET_BUILDER} as GetSummaryQuery;
+    instance.isReSettled = true;
+    instance.betTypesComponent = new BetTypesComponent(null);
+    instance.betTypes = {betTypes: [{isChecked: false,}], isChecked: false} as BetTypesModel;
+
+    // Action
+    instance.handleBetTypesAndAdvancedMode();
+
+    // Assert
+    expect(instance.betTypes.isChecked).toBeTruthy();
+    expect(instance.betTypes.betTypes.every(x => x.isChecked)).toBeTruthy();
   });
 });

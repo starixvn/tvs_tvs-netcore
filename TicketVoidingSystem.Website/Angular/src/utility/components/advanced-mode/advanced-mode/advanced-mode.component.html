@@ -63,7 +63,7 @@
               {{betTeam.name}}:
             </div>
             <div class="right">
-              <ng-container *ngIf="!isTicketListing">
+              <ng-container *ngIf="!isShowMultiSelectionList">
                 <ng-container *ngFor="let selection of betTeam.selections; let indexSelection = index">
                   <div *ngIf="!selection.isMultiple">
                     <div class="dropdown-item-adv">
@@ -81,7 +81,7 @@
                 </ng-container>
               </ng-container>
 
-              <ng-container *ngIf="isTicketListing">
+              <ng-container *ngIf="isShowMultiSelectionList">
                 <div *ngFor="let multiSelection of betTeam.multiSelectionList; let indexSelection = index">
                   <div class="dropdown-item-adv">
                     <span class="mr-1">{{multiSelection.name}}</span>
