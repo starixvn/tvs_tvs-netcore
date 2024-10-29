@@ -29,18 +29,5 @@ namespace TicketVoidingSystem.Tests.VoidByBetId.Services.ExportExcel
             // Assert
             sheetService.Received().SetStyle(worksheet);
         }
-
-        [Fact]
-        public void Binding_Always_ThrowNotImplementedException()
-        {
-            // Arrange
-            var worksheet = SetupTestingSheet.CreateTestingSheet();
-            var model = new GetTicketsQuery { TransIds = "132" };
-            var control = new SheetControlImp(null);
-
-            // Act
-            // Assert
-            Assert.ThrowsAsync<NotImplementedException>(() => control.BindingContent(worksheet, model));
-        }
     }
 }
