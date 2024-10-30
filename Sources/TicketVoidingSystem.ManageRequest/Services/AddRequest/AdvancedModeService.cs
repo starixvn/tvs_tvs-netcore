@@ -14,7 +14,7 @@ public interface AdvancedModeService
 
     Task<IEnumerable<GroupBetTypeModel>> GetGroupBetTypes(int matchId, string betTypeIds);
 
-    IEnumerable<ControlsAllBetTypesQuery> GetControlsAllBetTypes(string controlsAllBetTypesJson);
+    IEnumerable<ControlsAllBetTypes> GetControlsAllBetTypes(string controlsAllBetTypesJson);
 }
 
 public class AdvancedModeServiceImp : AdvancedModeService
@@ -42,8 +42,8 @@ public class AdvancedModeServiceImp : AdvancedModeService
         return (await betTypesRepository.GetGroupBetTypes(betTypeIds, matchId, GameType.SportBook)).GroupBetTypes;
     }
 
-    public IEnumerable<ControlsAllBetTypesQuery> GetControlsAllBetTypes(string controlsAllBetTypesJson)
+    public IEnumerable<ControlsAllBetTypes> GetControlsAllBetTypes(string controlsAllBetTypesJson)
     {
-        return string.IsNullOrWhiteSpace(controlsAllBetTypesJson) ? null : Helper.DeserializeObjectIgnoreNullValue<IEnumerable<ControlsAllBetTypesQuery>>(controlsAllBetTypesJson);
+        return string.IsNullOrWhiteSpace(controlsAllBetTypesJson) ? null : Helper.DeserializeObjectIgnoreNullValue<IEnumerable<ControlsAllBetTypes>>(controlsAllBetTypesJson);
     }
 }

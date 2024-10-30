@@ -390,7 +390,7 @@ public static class ObjectToXMLExtension
                             + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
                             + $"BetTypeCount='{SecurityElement.Escape(JsonSerializer.Serialize(betTypeCountJson, options))}' "
                             + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}' "
-                            + $"IssueDetail='{SecurityElement.Escape(JsonSerializer.Serialize(model.ControlsAllBetTypesQueryList, options))}' />";
+                            + $"IssueDetail='{SecurityElement.Escape(JsonSerializer.Serialize(model.SelectedAllBetTypes, options))}' />";
 
         return $"<root>{stringBuilder.Trim()}</root>";
     }
@@ -418,7 +418,7 @@ public static class ObjectToXMLExtension
             + $"ToOdds='{SecurityElement.Escape(model.ToOdds)}' "
             + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' "
             + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}' "
-            + $"IssueDetail='{SecurityElement.Escape(JsonSerializer.Serialize(model.ControlsAllBetTypesQueryList, options))}' />";
+            + $"IssueDetail='{SecurityElement.Escape(JsonSerializer.Serialize(model.SelectedAllBetTypes, options))}' />";
         return $"<root>{stringBuilder.Trim()}</root>";
     }
 

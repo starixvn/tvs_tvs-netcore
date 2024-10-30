@@ -45,8 +45,3 @@ export class ControlsAllBetTypesLists {
         ControlsAllBetTypesLists.inningList
     ];
 }
-
-export class ControlsAllBetTypesQuery {
-    type: string;
-    values: string;
-}

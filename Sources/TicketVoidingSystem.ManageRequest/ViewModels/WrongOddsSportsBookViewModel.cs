@@ -21,5 +21,5 @@ public class WrongOddsSportsBookViewModel
     public IEnumerable<BetTeamAddRequestResult> BetTeamsResult { get; set; }
     public IEnumerable<GroupBetTypeModel> GroupBetTypes { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
-    public IEnumerable<ControlsAllBetTypesQuery> ControlsAllBetTypesQueryList { get; set; }
+    public IEnumerable<ControlsAllBetTypes> SelectedAllBetTypes { get; set; }
 }

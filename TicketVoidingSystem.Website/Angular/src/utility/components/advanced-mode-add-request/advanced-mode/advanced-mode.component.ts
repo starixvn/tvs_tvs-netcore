@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription, timer } from 'rxjs';
 import { LABELS } from '../../../../utility/constants/labels';
@@ -13,7 +13,7 @@ import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model'
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advanced-mode.model';
 import { ControlsAllBetTypesComponent } from '../controls-all-bet-types/controls-all-bet-types.component';
-import { ControlsAllBetTypesQuery } from '../controls-all-bet-types/controls-all-bet-types.model';
+import { Selection as AllBetTypesSelection} from '../../../../utility/models/selection.model';
 
 @Component({
   selector: 'advanced-mode',
@@ -319,14 +319,8 @@ export class AdvancedModeComponent {
       : selection.value !== '';
   } 
 
-  public getControlsAllBetTypesListQuery(): ControlsAllBetTypesQuery[]{
-    let controlsAllBetTypesList = [];
-    this.controlsAllBetTypesComponent.controlsAllBetTypesLists.forEach(x => {
-      if(x.isShow){
-        controlsAllBetTypesList.push({type: x.type, values: x.items.getValueItems()} as ControlsAllBetTypesQuery);
-      }
-    })
-    
-    return controlsAllBetTypesList;
+  public getControlsAllBetTypesListQuery(): AllBetTypesSelection[]{
+    return this.controlsAllBetTypesComponent.controlsAllBetTypesLists
+      .filter(x => x.isShow).map(y => { return {name: y.type, value: y.items.getValueItems()} as AllBetTypesSelection });
   }
 }

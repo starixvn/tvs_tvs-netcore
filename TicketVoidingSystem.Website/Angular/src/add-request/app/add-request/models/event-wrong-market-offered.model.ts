@@ -2,7 +2,7 @@ import { BetTeamAddRequestResult } from "../../../../utility/components/advanced
 import { GroupBetTypeAddRequest } from "../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model";
 import { LogInfoDetail } from "../../../../utility/models/log-info-detail.model";
 import { BetTypeCountModel } from "./get-log-info.model";
-import { ControlsAllBetTypesQuery } from '../../../../utility/components/advanced-mode-add-request/controls-all-bet-types/controls-all-bet-types.model';
+import { Selection } from '../../../../utility/models/selection.model';
 
 export class WrongMarketOfferedModel {
   matchId: number;
@@ -16,5 +16,5 @@ export class WrongMarketOfferedModel {
   betTeamsResult?: BetTeamAddRequestResult[];
   groupBetTypes?: GroupBetTypeAddRequest[];
   betTypeCount: BetTypeCountModel[];
-  controlsAllBetTypesQueryList: ControlsAllBetTypesQuery[];
+  selectedAllBetTypes: Selection[];
 }

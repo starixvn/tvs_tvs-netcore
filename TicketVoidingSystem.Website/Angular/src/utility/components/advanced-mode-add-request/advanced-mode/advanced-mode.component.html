@@ -6,7 +6,7 @@
   </div>
   <div class="advanced-mode-body border-bottom-radius" *ngIf="!isCollapse">
     <controls-all-bet-types #controlsAllBetTypes [changedBetTypes]="changedBetTypes" [betTeams]="betTeams" 
-    [controlsAllBetTypesQueryList]="advancedModeAddRequestModel?.controlsAllBetTypesQueryList">
+    [selectedAllBetTypes]="advancedModeAddRequestModel?.selectedAllBetTypes">
     </controls-all-bet-types>
     <div *ngFor="let betTeam of betTeams">
       <div [ngSwitch]="betTeam.type" *ngIf="betTeam.isShow">

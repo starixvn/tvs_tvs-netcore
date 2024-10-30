@@ -373,7 +373,7 @@ public class GetRequestServiceImp : GetRequestService
         var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
         var groupBetTypes = await advancedModeService.GetGroupBetTypes(model.MatchId,
             string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));
-        var controlsAllBetTypesQueryList = advancedModeService.GetControlsAllBetTypes(model.ControlsAllBetTypesJson);
+        var SelectedAllBetTypes = advancedModeService.GetControlsAllBetTypes(model.ControlsAllBetTypesJson);
 
         return new WrongMarketOfferedViewModel
         {
@@ -385,7 +385,7 @@ public class GetRequestServiceImp : GetRequestService
             SubIssueTypeId = model.SubIssueTypeId,
             BetTeamsResult = betTypesAdvancedMode,
             GroupBetTypes = groupBetTypes,
-            ControlsAllBetTypesQueryList = controlsAllBetTypesQueryList
+            SelectedAllBetTypes = SelectedAllBetTypes
         };
     }
 
@@ -411,7 +411,7 @@ public class GetRequestServiceImp : GetRequestService
             CorrectOdds = model.CorrectOdds,
             BetTeamsResult = betTypesAdvancedMode,
             GroupBetTypes = groupBetTypes,
-            ControlsAllBetTypesQueryList = advancedModeService.GetControlsAllBetTypes(model.ControlsAllBetTypesJson)
+            SelectedAllBetTypes = advancedModeService.GetControlsAllBetTypes(model.ControlsAllBetTypesJson)
         };
     }
 

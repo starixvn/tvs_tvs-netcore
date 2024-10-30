@@ -4,7 +4,7 @@
       <div class="right">
         <div *ngFor="let item of controlsAllBetTypesLists">
           <div *ngIf="item.isShow" class="dropdown-item-adv">
-            <span class="mr-1"><b>{{item.type}}</b></span>
+            <span class="mr-1"><b>{{item.type}}: </b></span>
             <multiple-select class="multiple-selection" [multipleSelect]="item.items"
               (checkedItems)="updateByControlAllBetType($event, item.type)">
             </multiple-select>

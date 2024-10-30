@@ -1,7 +1,8 @@
+import { Selection } from './../../../models/selection.model';
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { BetTeamAddRequest } from '../advanced-mode/advanced-mode.model';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
-import { ControlsAllBetTypesQuery, ControlsAllBetTypesLists } from './controls-all-bet-types.model';
+import { ControlsAllBetTypesLists } from './controls-all-bet-types.model';
 
 @Component({
   selector: 'controls-all-bet-types',
@@ -11,7 +12,7 @@ import { ControlsAllBetTypesQuery, ControlsAllBetTypesLists } from './controls-a
 export class ControlsAllBetTypesComponent {
   @Input() changedBetTypes: BetTypeAddRequest[] = [];
   @Input() betTeams: BetTeamAddRequest[];
-  @Input() controlsAllBetTypesQueryList?: ControlsAllBetTypesQuery[];
+  @Input() selectedAllBetTypes?: Selection[];
 
   isShowContent: boolean;
   controlsAllBetTypesLists = ControlsAllBetTypesLists.MultipleSelectionList;
@@ -38,14 +39,14 @@ export class ControlsAllBetTypesComponent {
   }
 
   public updateControlsAllBetTypesList(){
-    if(this.controlsAllBetTypesQueryList){
-      this.controlsAllBetTypesQueryList.forEach(x => {
-        const controlsAllBetTypesSelected = this.controlsAllBetTypesLists.find(item => item.type === x.type);
-        controlsAllBetTypesSelected.items.updateItemChecked(x.values.split(','));
+    if(this.selectedAllBetTypes){
+      this.selectedAllBetTypes.forEach(x => {
+        const selectedAllBetTypes = this.controlsAllBetTypesLists.find(item => item.type === x.name);
+        selectedAllBetTypes?.items.updateItemChecked(x.value.split(','));
       })
     }
     
-    this.controlsAllBetTypesQueryList = [];
+    this.selectedAllBetTypes = [];
   }
 
   private updateBetTeam(betTeam: BetTeamAddRequest, type: string, itemList: string[]){

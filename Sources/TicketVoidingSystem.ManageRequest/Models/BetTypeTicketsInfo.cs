@@ -16,8 +16,8 @@ public class BetTypeCountJsonModel
     public string? PlayerName { get; set; }
 }
 
-public class ControlsAllBetTypesQuery
+public class ControlsAllBetTypes
 {
-    public string Type { get; set; }
-    public string Values { get; set; }
+    public string Name { get; set; }
+    public string Value { get; set; }
 }
