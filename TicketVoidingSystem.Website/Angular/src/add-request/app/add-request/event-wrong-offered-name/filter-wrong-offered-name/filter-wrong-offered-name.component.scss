@@ -14,7 +14,9 @@
 }
 
 .input-name {
+  display: flex;
+  flex-wrap: wrap;
   input {
-    width: 293px;
+    width: 423px;
   }
 }
