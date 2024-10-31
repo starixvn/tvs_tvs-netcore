@@ -87,6 +87,9 @@ import { PoolHouseTicketComponent } from './pool-house-ticket/pool-house-ticket.
 import { TicketsComponent } from './pool-house-ticket/tickets/tickets.component';
 import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket-count-other-sports.module';
 import { TvDetectionComponent } from './components/tv-detection/tv-detection.component';
+import { EventOtherIssuesComponent } from './event-other-issues/event-other-issues.component';
+import { FilterOtherIssuesComponent } from './event-other-issues/filter-other-issues/filter-other-issues.component';
+import { LogInfoOtherIssuesComponent } from './event-other-issues/log-info-other-issues/log-info-other-issues.component';
 
 @NgModule({
     declarations: [
@@ -156,6 +159,9 @@ import { TvDetectionComponent } from './components/tv-detection/tv-detection.com
         FilterWrongOfferedNameComponent,
         LogInfoWrongOfferedNameComponent,
         TvDetectionComponent,
+        EventOtherIssuesComponent,
+        FilterOtherIssuesComponent,
+        LogInfoOtherIssuesComponent,
     ],
     exports: [
         AddRequestComponent

@@ -82,4 +82,6 @@ public class AddRequestQuery
     public WrongOddsSportsBookViewModel? WrongOddsSportsBookInfo { get; set; }
 
     public WrongOfferedNameViewModel? WrongOfferedNameInfo { get; set; }
+
+    public OtherIssuesViewModel? OtherIssuesInfo { get; set; }
 }

@@ -468,6 +468,10 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
+  static readonly OTHER_ISSUES: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID
+  ];
 }
 
 export class AllowanceRate {

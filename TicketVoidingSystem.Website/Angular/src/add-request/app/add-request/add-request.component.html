@@ -237,6 +237,20 @@
             [others]="model.others"
             (updateMatchId)="updateMatchId($event)">
           </event-wrong-offered-name>
+
+          <event-other-issues #eventOtherissues
+            *ngIf="checkAllIssueTypes().isOtherIssues"
+            [userId]="userId"
+            [requestedBy]="requestedBy"
+            [isEdit]="isEdit"
+            [requestId]="requestId"
+            [filter]="model.filter"
+            [issueTypes]="issueTypes"
+            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+            [otherIssuesModel]="model.otherIssuesModel"
+            [others]="model.others"
+            (updateMatchId)="updateMatchId($event)">
+          </event-other-issues>
         </div>
       </div>
     </div>

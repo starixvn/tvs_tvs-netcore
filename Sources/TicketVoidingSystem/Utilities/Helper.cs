@@ -101,6 +101,17 @@ public static class Helper
         return await JsonSerializer.DeserializeAsync<T>(responseStream, options);
     }
 
+    public static string JsonSerializerIgnoreNullValue<T>(T model)
+    {
+        var options = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            PropertyNameCaseInsensitive = true
+        };
+
+        return JsonSerializer.Serialize(model, options);
+    }
+
     public static string MessageFailApiCricket(IEnumerable<BetId> transIdCrickets, string actionType)
     {
         var transIds = string.Join(", ", transIdCrickets.Select(x => x.TransId));

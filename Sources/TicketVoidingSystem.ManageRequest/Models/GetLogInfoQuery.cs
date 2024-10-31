@@ -23,6 +23,7 @@ public class GetLogInfoQuery
     public WrongMarketOfferedViewModel? WrongMarketOfferedModel { get; set; }
     public WrongOddsSportsBookViewModel? WrongOddsSportsBookModel { get; set; }
     public WrongOfferedNameViewModel? WrongOfferedNameModel { get; set; }
+    public OtherIssuesViewModel? OtherIssuesModel { get; set; }
     public bool? IsShowLogOnly { get; set; }
     public DateTime? KickOffTime { get; set; }
 }

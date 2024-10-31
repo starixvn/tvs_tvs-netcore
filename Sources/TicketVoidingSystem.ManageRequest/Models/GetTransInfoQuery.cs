@@ -25,4 +25,5 @@ public class GetTransInfoQuery
     public AbnormalBetViewModel? AbnormalBetModel { get; set; }
     public WrongMarketOfferedViewModel? WrongMarketOfferedModel { get; set; }
     public WrongOfferedNameViewModel? WrongOfferedNameModel { get; set; }
+    public OtherIssuesViewModel? OtherIssuesModel { get; set; }
 }

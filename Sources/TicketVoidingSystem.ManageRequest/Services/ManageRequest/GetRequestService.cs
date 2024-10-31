@@ -122,6 +122,10 @@ public class GetRequestServiceImp : GetRequestService
                 viewModel.WrongOfferedNameModel = MapEventWrongOfferedName(secondResultSet);
                 break;
 
+            case IssueTypeConstant.OtherIssues:
+                viewModel.OtherIssuesModel = await MapEventOtherIssues(secondResultSet);
+                break;
+
             default:
                 viewModel.Event = secondResultSet.FirstOrDefault();
 
@@ -441,6 +445,25 @@ public class GetRequestServiceImp : GetRequestService
             ActualNameT = model.ActualNameT,
             WrongNameS = model.WrongNameS,
             ActualNameS = model.ActualNameS
+        };
+    }
+
+    private async Task<OtherIssuesViewModel> MapEventOtherIssues(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        var model = requestEventModels.First();
+        var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
+        var groupBetTypes = await advancedModeService.GetGroupBetTypes(model.MatchId,
+            string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));
+        return new OtherIssuesViewModel
+        {
+            MatchId = model.MatchId,
+            FilterFromTransTime = model.FilterFromTransTime,
+            FilterToTransTime = model.FilterToTransTime,
+            VoidFromTime = model.VoidFromTime,
+            VoidToTime = model.VoidToTime,
+            SubIssueTypeId = model.SubIssueTypeId,
+            BetTeamsResult = betTypesAdvancedMode,
+            GroupBetTypes = groupBetTypes
         };
     }
 

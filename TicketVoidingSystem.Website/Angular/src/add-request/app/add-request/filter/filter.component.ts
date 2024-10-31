@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { SubIssueTypeConstant } from 'src/utility/constants/sub-issue-type.constant';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { LocalStorageCacheConstant } from '../../../../utility/constants/local-storage-cache.constant';
@@ -211,6 +212,7 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.TECHNICAL_ERROR]: {action: 170 },
       [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: {action: 170 },
       [IssueTypeConstant.WRONG_OFFERED_NAME]: {subIssueType: 175, action: 165 },
+      [IssueTypeConstant.OTHER_ISSUES]: {subIssueType: 175, action: 165 }
     };
 
     const widthValues = widthMapping[this.model.issueTypeId] || {};
@@ -303,7 +305,9 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   updateSubByIssue() {
-    this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.issueTypeId === this.issueTypes.issueId);
+    const ignoreSubIssueType = [ SubIssueTypeConstant.GAME_CRASHED_VOID_LIVE ];
+    this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes
+      .filter(x => x.issueTypeId === this.issueTypes.issueId && !ignoreSubIssueType.includes(x.subIssueTypeId));
     this.issueTypes.subIssueId = this.isShowButtonSelectSubType() ? null : this.issueTypes.selectedSubIssueTypes[0].subIssueTypeId;
   }
 

@@ -24,4 +24,5 @@ public static class IssueTypeConstant
     public const int TechnicalError = 24;
     public const int WrongOddsSportsBook = 25;
     public const int WrongOfferedName = 26;
+    public const int OtherIssues = 18;
 }

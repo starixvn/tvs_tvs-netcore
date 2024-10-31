@@ -52,9 +52,10 @@ export class SubIssueTypeConstant {
   static readonly BETRADAR_FC_RED_CARD_AWAY = 66;
   static readonly WRONG_INDICATION_HOME_RC = 17;
   static readonly WRONG_INDICATION_AWAY_RC = 18;
-
   static readonly TEAM_NAME_ENGLISH = 126;
   static readonly LEAGUE_NAME_ENGLISH = 128;
   static readonly TEAM_NAME_CHINESE = 127;
   static readonly LEAGUE_NAME_CHINESE = 129;
+  static readonly GAME_CRASHED_VOID_LIVE = 109;
+  static readonly RESTART = 130;
 }

@@ -45,7 +45,8 @@ export class StaticService {
       isNotParticipate: StaticService.isNotParticipate(issueTypeId),
       isRecoverTicket: StaticService.isRecoverTicket(issueTypeId),
       isWrongOfferedName: StaticService.isWrongOfferedName(issueTypeId),
-      isLikelyWrongMarketOffered: StaticService.isLikelyWrongMarketOffered(issueTypeId)
+      isLikelyWrongMarketOffered: StaticService.isLikelyWrongMarketOffered(issueTypeId),
+      isOtherIssues: StaticService.isOtherIssues(issueTypeId)
     }
 
     return result;
