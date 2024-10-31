@@ -104,4 +104,9 @@ export class ValidationService {
   public isLikelyWrongMarketOffered(detailViewModel: RequestDetailViewModel): boolean {
     return StaticService.isLikelyWrongMarketOffered(detailViewModel.request.issueTypeId.toString());
   }
+
+  /* istanbul ignore next */
+  public isWrongOddsSportsBook(detailViewModel: RequestDetailViewModel): boolean {
+    return StaticService.isWrongOddsSportsBook(detailViewModel.request.issueTypeId.toString());
+  }
 }

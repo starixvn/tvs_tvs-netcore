@@ -8,7 +8,7 @@ using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.WrongMarketOffered;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
@@ -23,7 +23,7 @@ public class GetRequestServiceTests
     private readonly IDynamicRepository repository;
     private readonly MatchService matchService;
     private readonly IMapper mapper;
-    private readonly WrongMarketOfferedService wrongMarketOfferedService;
+    private readonly AdvancedModeService advancedModeService;
     private readonly RequestExtraInfoXmlService requestExtraInfoXmlService;
     private readonly GetRequestServiceImp service;
 
@@ -33,9 +33,9 @@ public class GetRequestServiceTests
         repository = Substitute.For<IDynamicRepository>();
         matchService = Substitute.For<MatchService>();
         mapper = Substitute.For<IMapper>();
-        wrongMarketOfferedService = Substitute.For<WrongMarketOfferedService>();
+        advancedModeService = Substitute.For<AdvancedModeService>();
         requestExtraInfoXmlService = Substitute.For<RequestExtraInfoXmlService>();
-        service = new GetRequestServiceImp(repository, remotingRefService, matchService, mapper, wrongMarketOfferedService, requestExtraInfoXmlService);
+        service = new GetRequestServiceImp(repository, remotingRefService, matchService, mapper, advancedModeService, requestExtraInfoXmlService);
     }
 
     [Fact]

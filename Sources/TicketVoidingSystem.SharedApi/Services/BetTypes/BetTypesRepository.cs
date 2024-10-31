@@ -22,7 +22,7 @@ public interface BetTypesRepository
 
     Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query);
 
-    Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId, DateTime? fromTransDate, DateTime? toTransDate);
+    Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId, bool isGetCancelCashOut, DateTime? fromTransDate, DateTime? toTransDate);
 
     IList<GroupBetTypeVoidParlayVirtualSport> GetVoidParlayVirtualSportsBetTypes();
 }
@@ -114,11 +114,12 @@ public class BetTypesRepositoryImp : BetTypesRepository
         return betTypesInAllServers.Distinct();
     }
 
-    public async Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId, DateTime? fromTransDate, DateTime? toTransDate)
+    public async Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId, bool isGetCancelCashOut, DateTime? fromTransDate, DateTime? toTransDate)
     {
         var criteria = new TicketVoidingGetBetTypesHaveTicketsCriteria
         {
             MatchId = matchId,
+            IsGetCancelCashOut = isGetCancelCashOut,
             FromTransDate = fromTransDate,
             ToTransDate = toTransDate
         };

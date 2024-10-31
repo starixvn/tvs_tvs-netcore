@@ -393,6 +393,35 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.Trim()}</root>";
     }
 
+
+    public static string ToEventWrongOddsSportsBookXml(this WrongOddsSportsBookViewModel model)
+    {
+        var options = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            PropertyNameCaseInsensitive = true
+        };
+
+        var stringBuilder = $"<r MatchId = '{model.MatchId}' "
+            + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+            + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+            + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+            + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
+            + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
+            + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+            + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+            + $"LiveIndicator='{model.LiveIndicator}' "
+            + $"FilterOddsType='{SecurityElement.Escape(model.FilterOddsType)}' "
+            + $"OddsValue='{SecurityElement.Escape(model.OddsValue)}' "
+            + $"FromOdds='{SecurityElement.Escape(model.FromOdds)}' "
+            + $"ToOdds='{SecurityElement.Escape(model.ToOdds)}' "
+            + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' "
+            + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}' />";
+
+
+        return $"<root>{stringBuilder.Trim()}</root>";
+    }
+
     public static string OperatorToXml(this List<OperatorQuery>? operators)
     {
         if (operators is null || operators.Count <= 0)

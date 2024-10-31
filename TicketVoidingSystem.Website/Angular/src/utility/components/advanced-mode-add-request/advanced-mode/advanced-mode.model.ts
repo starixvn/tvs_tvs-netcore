@@ -1,3 +1,4 @@
+import { AdvancedModeConstants } from '../../advanced-mode/advanced-mode.constants';
 import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection';
 
@@ -5,19 +6,21 @@ export class Item {
   index: number;
   name: string;
   value: string;
+  isRowSpan: boolean;
   isDisabled: boolean;
   isChecked: boolean;
   isMultiple: boolean;
   xmlAttribute: string;
   format: string;
 
-  constructor(index: number, name: string, value: string, isDisabled: boolean, isMultiple: boolean, xmlAttribute: string, format: string) {
+  constructor(index: number, name: string, value: string, isRowSpan: boolean, isDisabled: boolean, isMultiple: boolean, xmlAttribute: string, format: string, isChecked: boolean) {
     this.index = index;
     this.name = name;
     this.value = value;
+    this.isRowSpan = isRowSpan;
     this.isDisabled = isDisabled;
     this.isMultiple = isMultiple;
-    this.isChecked = false;
+    this.isChecked = isChecked;
     this.xmlAttribute = xmlAttribute;
     this.format = format;
   }
@@ -74,14 +77,18 @@ export class BetTeamAddRequestResult {
   isDisabled: boolean;
   team: string;
   hdp: string;
-  wicket: string;
-  over: string;
+  hdp1: string;
+  hdp2: string;
   player: string;
   playerAndOdds: string;
-  betIdX: string;
-  betIdY: string;
-  filterBetIdX: string;
-  filterBetIdY: string;
+  betIdX: string; // store selected value
+  betIdY: string; // store selected value
+  filterBetIdX: string; // filter data in SPs only
+  filterBetIdY: string; // filter data in SPs only
+
+  // Add common key for all bet types
+  firstValue: string;
+  secondValue: string;
 }
 
 export class BetTeamAddRequest {
@@ -90,9 +97,10 @@ export class BetTeamAddRequest {
   value: string;
   type: number;
   betTypes: string;
-  selections: Selection[];
-  inputs: Item[];
-  isChecked: boolean;
+  selections: Selection[]; // for dropdown
+  inputs: Item[]; // for input
+  isShow: boolean;
+  isCheckedAllItems: boolean;
 
   constructor(
     commonInfo: [number, string, string, number, string],
@@ -106,7 +114,7 @@ export class BetTeamAddRequest {
     this.betTypes = commonInfo[4];
     this.renderSelections(selections);
     this.renderInputs(inputs);
-    this.isChecked = isChecked;
+    this.isShow = isChecked;
   }
 
   renderSelections(selections: Selection[]) {
@@ -163,13 +171,14 @@ export class BetTeamAddRequest {
     this.inputs = [];
     if (inputs !== null) {
       for (const [index, input] of inputs.entries()) {
-        const temp = new Item(index, input.name, input.value, input.isDisabled, input.isMultiple, input.xmlAttribute, input.format);
+        const temp = new Item(index, input.name, input.value, input.isRowSpan, input.isDisabled, input.isMultiple, input.xmlAttribute, input.format, false);
         this.inputs.push(temp);
       }
     }
   }
+
   resetChecked() {
-    this.isChecked = true;
+    this.isShow = true;
     this.resetSelections();
   }
 
@@ -179,11 +188,17 @@ export class BetTeamAddRequest {
     });
   }
 
-  getResult(betTypes: string): BetTeamAddRequestResult {
+  getResult(betTypeId: string): BetTeamAddRequestResult {
     const result = new BetTeamAddRequestResult();
     this.updateBySelection(result);
     this.updateByInputs(result);
-    result.id = betTypes;
+
+    this.updateBetTypeHalfFullTimeCorrectScore(result, betTypeId)
+    this.updateForPenaltyShootoutCombo376(result, betTypeId);
+    this.updateForBetTypesCricketWithFancy(result, betTypeId);
+    this.updateForBetTypesWithRuns(result, betTypeId);
+
+    result.id = betTypeId;
     return result;
   }
 
@@ -210,6 +225,8 @@ export class BetTeamAddRequest {
         result.team = value;
         break;
       case 'hdp':
+      case 'hdp1':
+      case 'hdp2':
         result.hdp = value;
         break;
       case 'player':
@@ -218,27 +235,46 @@ export class BetTeamAddRequest {
       case 'playerandodds':
         result.playerAndOdds = value;
         break;
-      case '_xxx':
-        result.betIdX = value;
-        result.filterBetIdX = this.getValueBetIdTypeXxx(value);
-        break;
-      case '_xx':
+      case '_xx': // use for input: XX value & selections round: XX in betid type 8XX; link to column betId
         result.betIdX = value;
         result.filterBetIdX = this.getValueBetIdTypeXx(value);
         break;
-      case 'yy':
-        result.betIdY = value;
-        result.filterBetIdY = this.getValueBetIdTypeYy(value);
+      case '_xxx': // use for input: XXX value in betid type 8XXX, 8XXXYY; link to column betId
+        result.betIdX = value;
+        result.filterBetIdX = this.getValueBetIdTypeXxx(value); // value = 1 => _001; value = 11 => _011; value = 1111 => _1111
         break;
-      case 'betidx':
+      case 'yy': // use for input: YY value in betid type (8XXYY, 8XXXYY); link to column betId
+        result.betIdY = value;
+        result.filterBetIdY = this.getValueBetIdTypeYy(value); // value = 1 => 01; value = 11 => 11; value = 111 => 111
+        break;
+      case 'betidx': // use for selection: value is configured in the json file; link to column betId
         result.betIdX = value;
         result.filterBetIdX = value;
         break;
-      case 'betidy':
+      case 'betidy': // use for selection: value is configured in the json file; link to column betId
         result.betIdY = value;
         result.filterBetIdY = value;
         break;
+      case 'firstvalue':
+        result.firstValue = value;
+        break;
+      case 'secondvalue':
+        result.secondValue = value;
+        break;
     }
+  }
+
+  getValueBetIdTypeXx(value: string): string {
+    if (!value) {
+      return '___';
+    }
+
+    const newValue = value.replaceAll(',','&'); //replace values selection
+
+    return newValue.split('&')
+      .filter(Boolean)
+      .map(x => `_${x.padStart(2, '0')}`)
+      .join('&');
   }
 
   getValueBetIdTypeXxx(value: string): string {
@@ -252,17 +288,6 @@ export class BetTeamAddRequest {
       .join('&');
   }
 
-  getValueBetIdTypeXx(value: string): string {
-    if (!value) {
-      return '___';
-    }
-
-    return value.split('&')
-      .filter(Boolean)
-      .map(x => `_${x.padStart(2, '0')}`)
-      .join('&');
-  }
-
   getValueBetIdTypeYy(value: string): string {
     if (!value) {
       return '';
@@ -272,5 +297,60 @@ export class BetTeamAddRequest {
       .filter(Boolean)
       .map(y => y ? y.padStart(2, '0') : '__')
       .join('&');
+  }
+  
+  private updateBetTypeHalfFullTimeCorrectScore(result: BetTeamAddRequestResult, betTypeId: string): void {
+    if (this.isHalfFullTimeCorrectScoreBet(betTypeId)) {
+      const [selection1, selection2] = this.selections;
+      const team = this.getCombinedSelectionValueBetTypeFullTimeCorrectScore(selection1, selection2);
+      result.team = team;
+    }
+  }
+
+  private isHalfFullTimeCorrectScoreBet(betTypeId: string) {
+    return [
+      AdvancedModeConstants.BETTYPE_HALF_FULL_TIME_CORRECT_SCORE,
+      AdvancedModeConstants.BETTYPE_HALF_FULL_TIME_CORRECT_SCORE_AOS,
+    ].includes(betTypeId);
+  }
+
+  private getCombinedSelectionValueBetTypeFullTimeCorrectScore(selection1: Selection, selection2: Selection) {
+    if (selection1.value?.toLowerCase() === 'all' && selection2.value?.toLowerCase() === 'all') {
+      return 'All';
+    }
+    if (selection1.value?.toLowerCase() === 'all') {
+      return selection1.items.slice(1).map(item1 => `${item1.value}/${selection2.value}`).join(',');
+    }
+    if (selection2.value?.toLowerCase() === 'all') {
+      return selection2.items.slice(1).map(item2 => `${selection1.value}/${item2.value}`).join(',');
+    }
+
+    return `${selection1.value}/${selection2.value}`;
+  }
+
+  private updateForPenaltyShootoutCombo376(result: BetTeamAddRequestResult, betTypeId: string): void {
+    if (betTypeId === AdvancedModeConstants.BETTYPE_PENALTY_SHOOTOUT_COMBO) {
+      result.team = `${result.firstValue}-${result.secondValue}`;
+    }
+  }
+
+  private updateForBetTypesCricketWithFancy(result: BetTeamAddRequestResult, betTypeId: string): void {
+    if (AdvancedModeConstants.BETTYPES_CRICKET_UPDATE_FANCY.split(',').includes(betTypeId)) {
+      if (result.team?.toLowerCase() === 'all') {
+        result.hdp = result.firstValue;
+      } else if(result.team?.toLowerCase() === 'n') {
+        result.hdp1 = result.firstValue;
+      } else if (result.team?.toLowerCase() === 'y') {
+        result.hdp2 = result.firstValue;
+      }
+    }
+  }
+
+  private updateForBetTypesWithRuns(result: BetTeamAddRequestResult, betTypeId: string): void {
+    if (AdvancedModeConstants.BETTYPE_OVER_X_EXACT_RUNS.split(',').includes(betTypeId)) {
+      const runesTransform = AdvancedModeConstants.RUNS_SELECTION.find(x => x.value === result.firstValue);
+      result.team = runesTransform.betTeam;
+      result.hdp1 = runesTransform.valueHdp1;
+    }
   }
 }

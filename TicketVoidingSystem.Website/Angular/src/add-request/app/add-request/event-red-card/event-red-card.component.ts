@@ -1,21 +1,24 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
+import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
-import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { AddRelatedEventArg } from '../models/add-related-event.model';
 import { RedCardModel } from '../models/event-red-card.model';
+import { GetChildMatchQuery } from '../models/get-child-match.query';
 import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
+import { EventLeagueComponent } from './../../../../utility/components/event-league/event-league.component';
 import { LABELS } from './../../../../utility/constants/labels';
 import { StaticService } from './../../../../utility/services/static.service';
-import { ConfirmRedCardModel } from './confirm-red-card/confirm-red-card.model';
 import { PrimitiveProperty } from './event-red-card.model';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
@@ -27,10 +30,6 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from './../../../../utility/components/event-league/event-league.component';
-import { GetChildMatchQuery } from '../models/get-child-match.query';
-import moment from 'moment-timezone';
-import { DateTimeFormat } from '../../../../utility/constants/config';
 
 @Component({
   selector: 'event-red-card',
@@ -56,7 +55,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   tooltip = new Tooltip();
   primitiveProps = new PrimitiveProperty();
   defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
-  confirmRedCard = new ConfirmRedCardModel();
+  confirmRedCard = new ConfirmAddRequestModel();
   mainEvent = new LogInfoRedCard();
   allSelectedEvents: LogInfoRedCard[] = [];
   relatedEvents: ChildMatchModel[] = [];
@@ -150,7 +149,6 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   }
 
   changeMatchEvent(): void {
-    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitiveProps.isShowLogInfoMainMatch = false;
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
@@ -178,11 +176,11 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
   }
 
-   async onClickConfirmSaveRequest() {
+  async onClickConfirmSaveRequest() {
     await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
   }
 
-  onClickCancelSaveRequest() {
+  onClickCancel() {
     this.addRequestStore.changeSavingRequestStatus(false);
   }
 

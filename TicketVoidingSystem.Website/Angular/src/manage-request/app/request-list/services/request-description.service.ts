@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import _ from 'lodash';
 import moment from 'moment';
 import { ClipboardService } from 'ngx-clipboard';
+import { FilterOddsTypeConstant } from 'src/add-request/app/add-request/event-wrong-odds-sports-book/models/filter-wrong-odds-sports-book.model';
 import { DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
-import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../../../../utility/models/copy-request-info.query';
+import { BetTypeTicketsInfo, CopyRequestInfoQuery, CopyRequestInfoResponse, RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 
@@ -39,6 +40,10 @@ export class RequestDescriptionService {
       return this.createWrongMarketOfferedLikelyContent(copyInfoResponse);
     }
 
+    if (StaticService.isWrongOddsSportsBook(copyInfoResponse.requestInfo.issueTypeId.toString())) {
+      return this.createWrongOddsSportsBookContent(copyInfoResponse);
+    }
+
     return this.createOthersIssueTypeContent(copyInfoResponse);
   }
 
@@ -57,7 +62,7 @@ export class RequestDescriptionService {
 
     }
 
-    return this.createCommonContent(copyInfoResponse, outputContent, false);
+    return this.createCommonContent(copyInfoResponse, outputContent, '', false);
   }
 
   private createNotParticipateContent(copyInfoResponse: CopyRequestInfoResponse): string {
@@ -71,11 +76,23 @@ export class RequestDescriptionService {
       betTypeContent += `${currentContent}${playerContent}\n`;
     }
 
-    return this.createCommonContent(copyInfoResponse, betTypeContent, false);
+    return this.createCommonContent(copyInfoResponse, betTypeContent, '', false);
   }
 
   private createWrongMarketOfferedLikelyContent(copyInfoResponse: CopyRequestInfoResponse): string {
-    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
+    const betTypeContent = this.generateBetTypeContent(copyInfoResponse.betTypeTickets);
+    return this.createCommonContent(copyInfoResponse, betTypeContent, '', true);
+  }
+
+  private createWrongOddsSportsBookContent(copyInfoResponse: CopyRequestInfoResponse): string {
+    const betTypeContent = this.generateBetTypeContent(copyInfoResponse.betTypeTickets);
+    const oddsContent = this.generateOddsContent(copyInfoResponse.requestInfo);
+
+    return this.createCommonContent(copyInfoResponse, betTypeContent, oddsContent, true);
+  }
+
+  private generateBetTypeContent(betTypeTickets: BetTypeTicketsInfo[]): string {
+    const groupBetTypes = _.groupBy(betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
     let betTypeContent = '';
 
     for (let key in groupBetTypes) {
@@ -85,10 +102,17 @@ export class RequestDescriptionService {
       betTypeContent += `${currentContent}${playerContent}\n`;
     }
 
-    return this.createCommonContent(copyInfoResponse, betTypeContent, true);
+    return betTypeContent;
   }
 
-  private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string, isShowCancelCOCount: boolean): string {
+  private generateOddsContent(requestInfo: RequestInfoForCopy): string {
+    const wrongOdds = requestInfo.filterOddsType === FilterOddsTypeConstant.RANGE
+      ? `${requestInfo.fromOdds} -> ${requestInfo.toOdds}` : requestInfo.oddsValue;
+
+    return `Wrong Odds: ${wrongOdds}\nCorrect Odds: ${requestInfo.correctOdds}\n`;
+  }
+
+  private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string, oddsContent: string, isShowCancelCOCount: boolean): string {
     const cancelCashOutCount = isShowCancelCOCount ? `, Cancel Cash Out: ${copyInfoResponse.requestInfo.totalCancelCashOutCount}` : '';
     const content = `Hi CSD, please void${copyInfoResponse.requestInfo.liveStatus}tickets for us\n`
       + `League: ${copyInfoResponse.requestInfo.leagueName}\n`
@@ -97,6 +121,7 @@ export class RequestDescriptionService {
       + `Request No: ${copyInfoResponse.requestInfo.requestId}\n`
       + `Issue Type: ${copyInfoResponse.requestInfo.issueTypeName}\n\n`
       + betTypeContent
+      + oddsContent
       + `Void Time: ${moment(copyInfoResponse.requestInfo.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} - ${moment(copyInfoResponse.requestInfo.voidToTime).format(DateTimeFormat.TIME_FORMAT)} `
       + `(Single Count: ${copyInfoResponse.requestInfo.totalSingleCount}, Parlay Count: ${copyInfoResponse.requestInfo.totalParlayCount}${cancelCashOutCount})\n`
       + `${copyInfoResponse.requestInfo.remark}`

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import _ from 'lodash';
 import { MatchType } from '../../../../../utility/constants/config';
 import { ChildMatchModel } from '../../models/related-event.model';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { LogInfoService } from './log-info.service';
 import { RelatedEventService } from './related-event.service';
@@ -15,6 +16,7 @@ export class SearchEventService {
     private readonly logInfoService: LogInfoService,
     private readonly relatedEventService: RelatedEventService,
     private readonly validationService: ValidationService,
+    private readonly checkPermissionService: CheckAddPermissionService
   ) { }
 
   public async searchEvents(arg: SaveRequestArg, newestRelatedEvents: ChildMatchModel[]): Promise<boolean> {
@@ -31,7 +33,8 @@ export class SearchEventService {
     await this.getLogInfoForAllEvents(arg, newestRelatedEvents);
     arg.allEvents = _.orderBy(_.uniqBy(arg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
 
-    if (!this.validationService.isAccountHasAddRequestPermission(arg.filter.action, arg.allEvents, arg.permission)) {
+    if (!this.checkPermissionService.isAccountHasAddRequestPermission(arg.filter.action,
+      arg.allEvents.some(x => x.isHasInstantlySettledTicket), arg.allEvents.some(x => x.isHasSettledTicket), arg.permission)) {
       return false;
     }
 

@@ -27,6 +27,7 @@ import { EventDateFilterComponent } from './abnormal-accounts/event-date-filter/
 import { ProductFilterComponent } from './abnormal-accounts/product-filter/product-filter.component';
 import { AddRequestComponent } from './add-request.component';
 import { AffectedTicketComponent } from './affected-ticket/affected-ticket.component';
+import { ConfirmAddRequestComponent } from './confirm-add-request/confirm-add-request.component';
 import { ConfirmAbnormalBetComponent } from './event-abnormal-bet/confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-bet.component';
 import { OthersAbnormalBetComponent } from './event-abnormal-bet/others-abnormal-bet/others-abnormal-bet.component';
@@ -42,7 +43,6 @@ import { FilterNotParticipateItemComponent } from './event-not-participate/filte
 import { FilterNotParticipateComponent } from './event-not-participate/filter-not-participate/filter-not-participate.component';
 import { LogInfoNotParticipateComponent } from './event-not-participate/log-info-not-participate/log-info-not-participate.component';
 import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
-import { ConfirmRedCardComponent } from './event-red-card/confirm-red-card/confirm-red-card.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { FilterTimeAreaComponent } from './event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowanceComponent } from './event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
@@ -59,6 +59,9 @@ import { OthersWrongHdpComponent } from './event-wrong-hdp/others-wrong-hdp/othe
 import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered/event-wrong-market-offered.component';
 import { FilterTimeComponent } from './event-wrong-market-offered/filter-time/filter-time.component';
 import { LogInfoWrongMarketOfferedComponent } from './event-wrong-market-offered/log-info-wrong-market-offered/log-info-wrong-market-offered.component';
+import { EventWrongOddsSportsBookComponent } from './event-wrong-odds-sports-book/event-wrong-odds-sports-book.component';
+import { FilterWrongOddsSportsBookComponent } from './event-wrong-odds-sports-book/filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
+import { LogInfoWrongOddsSportsBookComponent } from './event-wrong-odds-sports-book/log-info-wrong-odds-sports-book/log-info-wrong-odds-sports-book.component';
 import { EventWrongOddsComponent } from './event-wrong-odds/event-wrong-odds.component';
 import { FilterWrongOddsComponent } from './event-wrong-odds/filter-wrong-odds/filter-wrong-odds.component';
 import { LogInfoWrongOddsComponent } from './event-wrong-odds/log-info-wrong-odds/log-info-wrong-odds.component';
@@ -105,7 +108,6 @@ import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket
         FilterTimeAreaComponent,
         ConfirmWrongScoreComponent,
         LogInfoRedCardComponent,
-        ConfirmRedCardComponent,
         ConfirmDangerAcceptedComponent,
         OthersAbnormalBetComponent,
         EventTicket14Component,
@@ -142,6 +144,10 @@ import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket
         GroupBettypesPoolHouseComponent,
         TicketsComponent,
         LinkedLogComponent,
+        EventWrongOddsSportsBookComponent,
+        FilterWrongOddsSportsBookComponent,
+        LogInfoWrongOddsSportsBookComponent,
+        ConfirmAddRequestComponent,
     ],
     exports: [
         AddRequestComponent

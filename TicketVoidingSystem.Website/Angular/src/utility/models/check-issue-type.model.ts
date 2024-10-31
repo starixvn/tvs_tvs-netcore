@@ -1,0 +1,22 @@
+export type CheckIssueTypeObjectType = {
+  isAbnormalBet: boolean,
+  isEarlyKickOff: boolean,
+  isWrongKickOff: boolean,
+  isDangerAccepted: boolean,
+  isRedCard: boolean,
+  isAbnormalAccount: boolean,
+  isWrongScore: boolean,
+  isArchivedTicket: boolean,
+  isWrongHDP: boolean,
+  isWrong1stHDP: boolean,
+  isWrongOU: boolean,
+  isWrong1stOU: boolean,
+  isWrongOdds: boolean,
+  isWrongOddsSportsBook: boolean,
+  isReducedOver: boolean,
+  isAbandoned: boolean,
+  isDuplicateTickets: boolean,
+  isNotParticipate: boolean,
+  isRecoverTicket: boolean,
+  isLikelyWrongMarketOffered: boolean
+}

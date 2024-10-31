@@ -24,29 +24,6 @@ export class MessageTemplateId {
   static readonly PENALTY_SHOOTOUT_RETAKEN = 67;
 }
 
-export class IssueTypeId {
-  static readonly DANGER_ACCEPTED = 1;
-  static readonly WRONG_ODDS = 2;
-  static readonly WRONG_SCORE = 3;
-  static readonly WRONG_HDP = 4;
-  static readonly WRONG_1ST_HDP = 5;
-  static readonly WRONG_OU = 6;
-  static readonly WRONG_1ST_OU = 7;
-  static readonly EARLY_KICK_OFF = 8;
-  static readonly WRONG_KICK_OFF_TIME = 9;
-  static readonly RED_CARD = 10;
-  static readonly ABNORMAL_BET = 11;
-  static readonly ABNORMAL_BET_REAL_MEMBER = 15;
-  static readonly WRONG_MARKET_OFFERED = 12;
-  static readonly ABNORMAL_ACCOUNT = 13;
-  static readonly REDUCED_OVER = 19;
-  static readonly MATCH_COMPLETED = 14;
-  static readonly NOT_PARTICIPATE = 21;
-  static readonly OTHER_ISSUES = 18;
-  static readonly WRONG_QUARTER_HDP = 16;
-  static readonly ABANDONED = 23;
-}
-
 export class SubIssueTypeId {
   static readonly ONWARDS = 33;
   static readonly NO_ONWARDS = 34;
@@ -197,6 +174,13 @@ export class TemplateContentConst {
     msgChineseTraditional: '大盤',
     msgChineseSimplified: '大盘',
     msgChineseNewSimplified: '大盘'
+  };
+
+  static readonly UNDER: TemplateContent = {
+    msgEnglish: 'Under',
+    msgChineseTraditional: '小盤',
+    msgChineseSimplified: '小盘',
+    msgChineseNewSimplified: '小盘'
   };
 
   static readonly ODDS: TemplateContent = {

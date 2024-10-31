@@ -59,7 +59,8 @@ export class AppComponent implements OnInit {
 
   isLikelyVoidNotParticipate(): boolean {
     return StaticService.isNotParticipate(this.requestDetail.request?.issueTypeId.toString())
-      || StaticService.isLikelyWrongMarketOffered(this.requestDetail.request?.issueTypeId.toString());
+      || StaticService.isLikelyWrongMarketOffered(this.requestDetail.request?.issueTypeId.toString())
+      || StaticService.isWrongOddsSportsBook(this.requestDetail.request?.issueTypeId.toString());
   }
 
   isLikelyVoidEarlyKickOff(): boolean {

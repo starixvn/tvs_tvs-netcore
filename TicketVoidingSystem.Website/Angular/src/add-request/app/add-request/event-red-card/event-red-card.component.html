@@ -85,12 +85,12 @@
       </div>
     </div>
   </div>
-  
+
   <add-child-match
     [relatedEvents]="relatedEvents"
     (selectedEventsChange)="saveRelatedEvent($event)"
     [model]="addChildMatchModel">
   </add-child-match>
-  
-<confirm-red-card [model]="confirmRedCard" (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()"></confirm-red-card>
+
+<confirm-add-request [model]="confirmRedCard" (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancel()"></confirm-add-request>
 <tooltip [tooltip]="tooltip"></tooltip>

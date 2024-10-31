@@ -24,20 +24,8 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
     });
   }
 
-  handleCheckTicketByBetTypes(checkedBetTypes: number[]) {
-    this.groups.forEach(group => {
-      let indexTicket = 0;
-      group.tickets.forEach(y => {
-        y.isChecked = this.isCheckedTicket(y, checkedBetTypes);
-        y.no = y.isChecked ? ++indexTicket : indexTicket;
-      });
-      group.displayTotalTickets = group.getCheckedTickets().length;
-      group.isCheckAll = group.tickets.length === group.displayTotalTickets;
-    });
-  }
-
   private isCheckedTicket(ticket:  TicketModel,checkedBetTypes: number[]){
-    return (checkedBetTypes.includes(Number(ticket.betTypeId)) && !ticket.isParlay) 
+    return (checkedBetTypes.includes(Number(ticket.betTypeId)) && !ticket.isParlay)
       || (checkedBetTypes.includes(Number(ticket.subBetTypeId)) && ticket.isParlay)
   }
 
@@ -59,15 +47,28 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
             ticket.no = index + 1;
         });
     });
-  } 
+  }
 
-  checkTicketByBetTypesForLGEarlyPopup(checkedBetTypes: number[]) {
+  checkTicketByBetTypesForLGEarlyPopup(betTypeNames: string[]) {
     this.groups.forEach(group => {
       let indexTicket = 0;
       group.tickets.forEach(y => {
-        y.isChecked = checkedBetTypes.includes(y.groupBetTypeId);
+        y.isChecked = betTypeNames.includes(y.betType);
         y.no = y.isChecked ? ++indexTicket: indexTicket;
       });
+      group.displayTotalTickets = group.getCheckedTickets().length;
+      group.isCheckAll = group.tickets.length === group.displayTotalTickets;
+    });
+  }
+
+  handleCheckTicketByBetTypes(checkedBetTypes: number[]) {
+    this.groups.forEach(group => {
+      let indexTicket = 0;
+      group.tickets.forEach(y => {
+        y.isChecked = this.isCheckedTicket(y, checkedBetTypes);
+        y.no = y.isChecked ? ++indexTicket : indexTicket;
+      });
+      group.displayTotalTickets = group.getCheckedTickets().length;
       group.isCheckAll = group.tickets.length === group.displayTotalTickets;
     });
   }

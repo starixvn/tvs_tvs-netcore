@@ -9,9 +9,9 @@ import { Notification } from '../../utility/components/notification/notification
 import { NotificationComponent } from '../../utility/components/notification/notification.component';
 import { PagingModel } from '../../utility/components/paging/paging/paging.model';
 import { Message } from '../../utility/components/template-message/messages/message';
+import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { TemplateMessageComponent } from '../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../utility/components/template-message/template-message/template.model';
-import { TemplateService } from '../../utility/components/template-message/template-message/template.service';
 import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
 import { TEXT } from '../../utility/constants/text';
 import { MatchModel } from '../../utility/models/match.model';
@@ -36,7 +36,7 @@ class Helper {
   static readonly fakeDate = '2021-10-14 12:08:49.737';
 
   static getFakeMatchViewModel(): MatchModel {
-      return {
+    return {
       matchId: 28321695,
       homeId: 10935,
       homeName: 'American League',
@@ -72,28 +72,31 @@ class Helper {
   }
 
   static readonly fakeTicketsModel = {
-    groups:[
+    groups: [
       {
         name: 'Credit',
         displayTotalTickets: 3,
         tickets: [
-          { no: 1, betId :'108495160329', value: 108495160329, transDate: '03/30/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: '',
-            odds: '<span class=\"underdog\">1.90</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">90</div>',winLoss: '-',
-            currency: 'INH', status: '<div class=\"status\">Waiting</div>', score:'', handicap: '',
+          {
+            no: 1, betId: '108495160329', value: 108495160329, transDate: '03/30/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: '',
+            odds: '<span class=\"underdog\">1.90</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">90</div>', winLoss: '-',
+            currency: 'INH', status: '<div class=\"status\">Waiting</div>', score: '', handicap: '',
             choice: '<div class=""><span class=\"\"></span></div>', soldId: null, mainTransId: 0, isParlay: false, isDisable: false,
-            isCricket: false, isBonus: false, isMarked:false, secondAcceptFlag: ''
+            isCricket: false, isBonus: false, isMarked: false, secondAcceptFlag: ''
           },
-          { no: 2, betId :'108495160330', value: 108495160330, transDate: '03/31/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: 'Single Match Parlay',
-            odds: '<span class=\"underdog\">1.95</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">100</div>',winLoss: '-',
-            currency: 'INH', status: '<div class=\"status\">Running</div>', score:'', handicap: '',
+          {
+            no: 2, betId: '108495160330', value: 108495160330, transDate: '03/31/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: 'Single Match Parlay',
+            odds: '<span class=\"underdog\">1.95</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">100</div>', winLoss: '-',
+            currency: 'INH', status: '<div class=\"status\">Running</div>', score: '', handicap: '',
             choice: '<div class=""><span class=\"{betTeamClassName}\"></span></div>', soldId: null, mainTransId: 0, isParlay: false, isDisable: false,
-            isCricket: false, isBonus: false, isMarked:false, secondAcceptFlag: ''
+            isCricket: false, isBonus: false, isMarked: false, secondAcceptFlag: ''
           },
-          { no: 3, betId :'108495160331', value: 108495160331, transDate: '03/31/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: 'Single Match Parlay',
-            odds: '<span class=\"underdog\">1.95</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">100</div>',winLoss: '-',
-            currency: 'INH', status: '<div class=\"status\">Running</div>', score:'', handicap: '',
+          {
+            no: 3, betId: '108495160331', value: 108495160331, transDate: '03/31/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: 'Single Match Parlay',
+            odds: '<span class=\"underdog\">1.95</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">100</div>', winLoss: '-',
+            currency: 'INH', status: '<div class=\"status\">Running</div>', score: '', handicap: '',
             choice: '<div class=""><span class=\"{betTeamClassName}\"></span></div>', soldId: null, mainTransId: 0, isParlay: false, isDisable: false,
-            isCricket: false, isBonus: false, isMarked:false, secondAcceptFlag: ''
+            isCricket: false, isBonus: false, isMarked: false, secondAcceptFlag: ''
           },
         ]
       }
@@ -156,8 +159,8 @@ describe('AppComponent', () => {
   let shallow: Shallow<AppComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(AppComponent, AppModuleTest)    
-    .mock(SignalRService, { initializeConnection: jest.fn()});
+    shallow = new Shallow(AppComponent, AppModuleTest)
+      .mock(SignalRService, { initializeConnection: jest.fn() });
   });
 
   it('AppComponent should init match snapshot', async () => {
@@ -233,7 +236,7 @@ describe('AppComponent', () => {
     // Arrange
     const isExportedExcel = true;
     const { findComponent, fixture, instance } = await shallow
-      .mock(AppService, { exportExcel: jest.fn().mockImplementation(() => isExportedExcel ) })
+      .mock(AppService, { exportExcel: jest.fn().mockImplementation(() => isExportedExcel) })
       .render();
     instance.ticketsModel.pagingModel = new PagingModel();
     instance.ticketsModel.pagingModel.total = 2;
@@ -271,7 +274,7 @@ describe('AppComponent', () => {
 
   it('#checkValidation should return false and display tooltip when tickets is unchecked ', async () => {
     // Arrange
-    const {instance } = await shallow.render();
+    const { instance } = await shallow.render();
     const ticketsModel = Helper.getFakeTicketsModel();
     ticketsModel.groups[0].tickets[0].isChecked = false;
     ticketsModel.groups[0].tickets[1].isChecked = false;
@@ -289,7 +292,7 @@ describe('AppComponent', () => {
 
   it('#checkValidation should return false when messagesComponent return false ', async () => {
     // Arrange
-    const {instance, findComponent } = await shallow.render();
+    const { instance, findComponent } = await shallow.render();
     instance.ticketsModel = Helper.getFakeTicketsModel();
     const messageComponent = findComponent(TemplateMessageComponent);
     messageComponent.checkValidation = jest.fn().mockImplementation(() => false);
@@ -303,7 +306,7 @@ describe('AppComponent', () => {
 
   it('#checkValidation should return false when confirmComponent return false ', async () => {
     // Arrange
-    const {instance, findComponent } = await shallow.render();
+    const { instance, findComponent } = await shallow.render();
     instance.ticketsModel = Helper.getFakeTicketsModel();
     const messageComponent = findComponent(TemplateMessageComponent);
     messageComponent.checkValidation = jest.fn().mockImplementation(() => true);
@@ -319,7 +322,7 @@ describe('AppComponent', () => {
 
   it('#checkValidation should return false when #checkFilterBeforeVoid return false ', async () => {
     // Arrange
-    const {instance, findComponent } = await shallow.render();
+    const { instance, findComponent } = await shallow.render();
     instance.ticketsModel = Helper.getFakeTicketsModel();
     const messageComponent = findComponent(TemplateMessageComponent);
     messageComponent.checkValidation = jest.fn().mockImplementation(() => true);
@@ -342,7 +345,7 @@ describe('AppComponent', () => {
 
   it('#checkValidation should return true when all everything is valid ', async () => {
     // Arrange
-    const {instance, findComponent } = await shallow.render();
+    const { instance, findComponent } = await shallow.render();
     instance.ticketsModel = Helper.getFakeTicketsModel();
     const messageComponent = findComponent(TemplateMessageComponent);
     messageComponent.checkValidation = jest.fn().mockImplementation(() => true);
@@ -359,8 +362,8 @@ describe('AppComponent', () => {
 
   it('Should void tickets when emit confirmEvent event because has permission', async () => {
     // Arrange
-    const {fixture, instance, findComponent } = await shallow
-      .mock(CommonService, { checkVoidBetPermission: jest.fn().mockImplementation(() => Helper.getFakeSuccessfulSqlResult() ) })
+    const { fixture, instance, findComponent } = await shallow
+      .mock(CommonService, { checkVoidBetPermission: jest.fn().mockImplementation(() => Helper.getFakeSuccessfulSqlResult()) })
       .render();
     const modalComponent = findComponent(ModalComponent);
     instance.ticketsModel = Helper.getFakeTicketsModel();
@@ -405,8 +408,8 @@ describe('AppComponent', () => {
   it('#handleAfterVoidPaging should reload tickets after void', async () => {
     // Arrange
     const testCase = [
-      {total: 5, pageSize: 2, pageIndex: 1},
-      {total: 3, pageSize: 2, pageIndex: 1},
+      { total: 5, pageSize: 2, pageIndex: 1 },
+      { total: 3, pageSize: 2, pageIndex: 1 },
     ];
     const { instance } = await shallow.render();
     instance.ticketsModel = Helper.getFakeTicketsModel();
@@ -426,7 +429,7 @@ describe('AppComponent', () => {
       expect(instance.getTickets).toHaveBeenCalled();
     });
   });
-  
+
   it('#viewLogInfoEvent should correct method', async () => {
     const { instance } = await shallow.render();
     instance['clearCacheTime'] = jest.fn();
@@ -437,14 +440,14 @@ describe('AppComponent', () => {
     expect(instance['clearCacheTime']).toHaveBeenCalledTimes(1);
     expect(instance.getMatchInfoForViewLogInfo).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#getMatchInfoForViewLogInfo should call #getLogInfo and #getMatchInfo', async () => {
     const query = new GetTicketsQuery();
     query.matchId = 9999;
     const mockGetMatchInfo = jest.fn();
     const { instance } = await shallow
-    .mock(AppService, { getMatchInfo: mockGetMatchInfo })
-    .render();
+      .mock(AppService, { getMatchInfo: mockGetMatchInfo })
+      .render();
     instance.matchViewModel = undefined;
     instance.getLogInfo = jest.fn();
 
@@ -453,14 +456,14 @@ describe('AppComponent', () => {
     expect(instance.getLogInfo).toHaveBeenCalledTimes(1);
     expect(mockGetMatchInfo).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#getMatchInfoForViewLogInfo should only call #getLogInfo', async () => {
     const query = new GetTicketsQuery();
     query.matchId = 9999;
     const mockGetMatchInfo = jest.fn();
     const { instance } = await shallow
-    .mock(AppService, { getMatchInfo: mockGetMatchInfo })
-    .render();
+      .mock(AppService, { getMatchInfo: mockGetMatchInfo })
+      .render();
     instance.matchViewModel = new MatchModel();
     instance.matchViewModel.matchId = 9999;
     instance.getLogInfo = jest.fn();
@@ -470,7 +473,7 @@ describe('AppComponent', () => {
     expect(instance.getLogInfo).toHaveBeenCalledTimes(1);
     expect(mockGetMatchInfo).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#getLogInfo should call #handleNoTicket', async () => {
     const query = new GetTicketsQuery();
     query.invalidTransDate = true;
@@ -481,14 +484,14 @@ describe('AppComponent', () => {
 
     expect(instance.handleNoTicketLogInfo).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#getLogInfo should call #GetLogInfo', async () => {
     const query = new GetTicketsQuery();
     query.invalidTransDate = false;
     const mockGetLogInfo = jest.fn();
     const { instance } = await shallow
-    .mock(AppService, { GetLogInfo: mockGetLogInfo })
-    .render();
+      .mock(AppService, { GetLogInfo: mockGetLogInfo })
+      .render();
     instance.handleNoTicket = jest.fn();
     instance.renderDataLogInfo = jest.fn();
 
@@ -496,32 +499,32 @@ describe('AppComponent', () => {
 
     expect(mockGetLogInfo).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#renderDataLogInfo should update correct data', async () => {
     const ticketsModel = new TicketsModel();
     const { instance } = await shallow.render();
     instance.ticketsModel = new TicketsModel();
 
-    [true, false].forEach(async x => {      
-    instance['isNullCacheTransTime'] = jest.fn().mockImplementation(() => x);
-    instance['isNullCacheCheckTime'] = jest.fn().mockImplementation(() => x);
+    [true, false].forEach(async x => {
+      instance['isNullCacheTransTime'] = jest.fn().mockImplementation(() => x);
+      instance['isNullCacheCheckTime'] = jest.fn().mockImplementation(() => x);
 
-    instance.renderDataLogInfo(ticketsModel);
+      instance.renderDataLogInfo(ticketsModel);
 
-    expect(instance.ticketsModel.singleCount).toBe(ticketsModel.singleCount);
-    expect(instance.ticketsModel.parlayCount).toBe(ticketsModel.parlayCount );
-    expect(instance.ticketsModel.fromTransTime).toBe(ticketsModel.fromTransTime);
-    expect(instance.ticketsModel.toTransTime).toBe(ticketsModel.toTransTime);
-    expect(instance.ticketsModel.fromCheckTime).toBe(ticketsModel.fromCheckTime);
-    expect(instance.ticketsModel.toCheckTime).toBe(ticketsModel.toCheckTime);
+      expect(instance.ticketsModel.singleCount).toBe(ticketsModel.singleCount);
+      expect(instance.ticketsModel.parlayCount).toBe(ticketsModel.parlayCount);
+      expect(instance.ticketsModel.fromTransTime).toBe(ticketsModel.fromTransTime);
+      expect(instance.ticketsModel.toTransTime).toBe(ticketsModel.toTransTime);
+      expect(instance.ticketsModel.fromCheckTime).toBe(ticketsModel.fromCheckTime);
+      expect(instance.ticketsModel.toCheckTime).toBe(ticketsModel.toCheckTime);
     });
   });
-  
+
   it('#exportExcel should call #exportExcel', async () => {
     const mockExportExcel = jest.fn();
     const { instance } = await shallow
-    .mock(AppService, { exportExcel: mockExportExcel })
-    .render();
+      .mock(AppService, { exportExcel: mockExportExcel })
+      .render();
     instance.getTicketsQuery = new GetTicketsQuery();
     instance.ticketsModel = Helper.getFakeTicketsModel();
     instance.ticketsModel.pagingModel = null;
@@ -530,7 +533,7 @@ describe('AppComponent', () => {
 
     expect(mockExportExcel).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#renderTickets should update correct data', async () => {
     const ticketsModel = new TicketsModel();
     ticketsModel.groups = [];
@@ -541,7 +544,7 @@ describe('AppComponent', () => {
     instance.getTicketsQuery = new GetTicketsQuery();
     instance.getTicketsQuery.pageIndex = 0;
 
-    [true, false].forEach(async x => {      
+    [true, false].forEach(async x => {
       instance['isNullCacheTransTime'] = jest.fn().mockImplementation(() => x);
       instance['isNullCacheCheckTime'] = jest.fn().mockImplementation(() => x);
 
@@ -551,10 +554,10 @@ describe('AppComponent', () => {
       expect(instance.ticketsModel.pagingModel.pageSize).toBe(instance.getTicketsQuery.pageSize);
     });
   });
-  
+
   it('#voidBet should not call #showConfirmBeforeVoid', async () => {
     const { instance } = await shallow
-    .render();
+      .render();
     instance.checkValidation = jest.fn().mockImplementation(() => false);
     instance.showConfirmBeforeVoid = jest.fn();
 
@@ -562,7 +565,7 @@ describe('AppComponent', () => {
 
     expect(instance.showConfirmBeforeVoid).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#checkFilterBeforeVoid should return false', async () => {
     const filterParamsBeforeVoid = new FilterParams();
     filterParamsBeforeVoid.matchId = 9999;
@@ -578,7 +581,7 @@ describe('AppComponent', () => {
 
     expect(actual).toBe(false);
   });
-  
+
   it('#checkFilterBeforeVoid should return true', async () => {
     const filterParamsBeforeVoid = new FilterParams();
     const { instance } = await shallow.render();
@@ -590,7 +593,7 @@ describe('AppComponent', () => {
 
     expect(actual).toBe(true);
   });
-  
+
   it('#updateTemplateValue should update correct data', async () => {
     const { instance } = await shallow.render();
     instance.ticketsModel = new TicketsModel();
@@ -598,13 +601,13 @@ describe('AppComponent', () => {
     instance.handleNoTicketLogInfo();
 
     expect(instance.isShowLogInfoOnly).toBe(true);
-    expect(instance.isShowConfirm ).toBe(false);
+    expect(instance.isShowConfirm).toBe(false);
   });
-  
+
   it('#updateTemplateValue should update correct data', async () => {
     const { instance } = await shallow
-    .mock(TemplateService, { getTemplateValue: jest.fn().mockImplementation(() => new TemplateValue()) })
-    .render();
+      .mock(TemplateService, { initializeTemplateValue: jest.fn().mockImplementation(() => new TemplateValue()) })
+      .render();
     instance.ticketsModel = new TicketsModel();
     instance.ticketsModel.getNumberOfCheckedTickets = jest.fn();
     instance.getTicketsQuery = new GetTicketsQuery();
@@ -616,13 +619,13 @@ describe('AppComponent', () => {
 
     expect(instance.templateValue.score).toBe('1-1');
   });
-  
+
   it('#confirmEvent should call expected', async () => {
     const mockConfirmPermission = jest.fn();
     const { instance } = await shallow
-    .mock(ModalService, { confirmPermission: mockConfirmPermission })
-    .render();
-    instance.ticketsModel = new TicketsModel ();
+      .mock(ModalService, { confirmPermission: mockConfirmPermission })
+      .render();
+    instance.ticketsModel = new TicketsModel();
     instance.ticketsModel.getAllTicket = jest.fn();
     instance.matchViewModel = new MatchModel();
 
@@ -638,12 +641,12 @@ describe('AppComponent', () => {
     mockConfirmPermission.mock.calls[0][3]();
     expect(instance.confirmationComponent.clearData).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#voidTickets should call #getVoidResultCache', async () => {
     const mockVoidTickets = jest.fn().mockImplementation(() => Promise.resolve(null));
     const { instance } = await shallow
-    .mock(AppService, { voidTickets: mockVoidTickets })
-    .render();
+      .mock(AppService, { voidTickets: mockVoidTickets })
+      .render();
     instance.ticketsModel = new TicketsModel();
     instance.ticketsModel.getTicketEnable = jest.fn();
     instance.ticketsModel.getTicketSold = jest.fn();
@@ -658,14 +661,14 @@ describe('AppComponent', () => {
     expect(mockVoidTickets).toHaveBeenCalledTimes(1);
     expect(instance['getVoidResultCache']).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#handleAfterVoid should call #showMessages', async () => {
     const { instance } = await shallow
-    .render();
+      .render();
     instance['showMessages'] = jest.fn();
     instance['handleAfterVoidPaging'] = jest.fn();
 
-    [0,1].forEach(async x => {
+    [0, 1].forEach(async x => {
       const results = new Result<null>();
       results.errorCode = x;
 
@@ -674,20 +677,20 @@ describe('AppComponent', () => {
       expect(instance['showMessages']).toHaveBeenCalled();
     });
   });
-  
+
   it('#showMessages should update correct data', async () => {
     const { instance } = await shallow
-    .render();
+      .render();
     instance.messagesResult = new MessagesResult();
 
     instance['showMessages']([]);
 
     expect(instance.messagesResult.header).toBe('Void Bet Result');
   });
-  
+
   it('#handleAfterVoidPaging should call #hideContent', async () => {
     const { instance } = await shallow
-    .render();
+      .render();
     instance.ticketsModel = new TicketsModel();
     instance.ticketsModel.pagingModel = new PagingModel();
     instance.ticketsModel.pagingModel.total = 1;
@@ -701,10 +704,10 @@ describe('AppComponent', () => {
 
     expect(instance.hideContent).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#isNullCacheTransTime should return false', async () => {
     const { instance } = await shallow
-    .render();
+      .render();
     instance['fromTransTime'] = new Date();
     instance['toTransTime'] = new Date();
 
@@ -712,10 +715,10 @@ describe('AppComponent', () => {
 
     expect(actual).toBeFalsy();
   });
-  
+
   it('#isNullCacheCheckTime should return false', async () => {
     const { instance } = await shallow
-    .render();
+      .render();
     instance['fromCheckTime'] = new Date();
     instance['toCheckTime'] = new Date();
 
@@ -723,29 +726,29 @@ describe('AppComponent', () => {
 
     expect(actual).toBeFalsy();
   });
-  
+
   it('#updateEventType should update correct data', async () => {
     const { instance } = await shallow
-    .render();
+      .render();
     instance.templateValue = new TemplateValue();
 
     instance.updateEventType('1');
 
     expect(instance.templateValue.eventType).toBe('1');
   });
-  
+
   it('#updateSubIssueType should update correct data', async () => {
     const { instance } = await shallow
-    .render();
+      .render();
 
     instance.updateSubIssueType(1);
 
     expect(instance.subIssueTypeId).toBe(1);
   });
-  
+
   it('#updateIssueType should update correct data', async () => {
     const { instance } = await shallow
-    .render();
+      .render();
 
     instance.updateIssueType(1);
 

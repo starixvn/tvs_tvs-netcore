@@ -3,13 +3,13 @@ import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
+import { SportType } from '../../../../../utility/constants/sport.constant';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
-import { AffectedTicketsModel, LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
+import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
-import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
 import { LogAnalysisService } from '../../services/log-analysis.service';
 import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
@@ -17,7 +17,6 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
-import { SportType } from '../../../../../utility/constants/sport.constant';
 
 @Component({
   selector: 'log-info-wrong-hdp',
@@ -148,25 +147,11 @@ export class LogInfoWrongHdpComponent {
     return ticketCount === 0 ? '-' : transId;
   }
 
-  public async openTicketDetails(): Promise<void> {
-    this.addRequestStore.changeBlockingUiStatus(true);
-    if (this.logInfo.logInfoDetail.logInfoTicketsJson) {
-      const query: LogInfoTicketsQuery = {
-        logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
-        issueTypeId: Number(this.filter.issueTypeId)
-      };
-
-      let ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
-      this.affectedTicketsModel.tickets = new TicketsModel();
-      this.affectedTicketsModel.tickets.initData(ticketsLogInfo);
-      this.affectedTicketsModel.tickets.checkAllTickets();
-    } else {
-      this.affectedTicketsModel.tickets = new TicketsModel();
-    }
-
-    await this.logAnalysisService.writeLogClickLiveGameDetails(this.filter.issueTypeId);
-    this.addRequestStore.changeBlockingUiStatus(false);
+  public showAffectedTicketsDetails() {
+    this.affectedTicketsModel.issueTypeId = Number(this.filter.issueTypeId);
+    this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
     this.affectedTicketsModel.isOpen = true;
+    this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
   }
 
   public async openPoolHouseDetails(): Promise<void> {

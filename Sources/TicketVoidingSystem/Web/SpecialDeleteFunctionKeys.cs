@@ -100,4 +100,5 @@ public static class SpecialDeleteFunctionKeys
     public const string Abandoned = "Abandoned";
     public const string WrongMarketOffered = "WrongMarketOffered";
     public const string TechnicalError = "TechnicalError";
+    public const string WrongOddsSportsBook = "WrongOddsSportsBook";
 }

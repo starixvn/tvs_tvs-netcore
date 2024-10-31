@@ -1,0 +1,42 @@
+<event-league #eventLeague
+  [isEdit]="isEdit"
+  [matchId]="logInfoEvent.matchId"
+  (changeEvent)="changeMatchEvent()">
+</event-league>
+<filter-wrong-odds-sports-book #filterWrongOddsSportsBook
+  [isEdit]="isEdit"
+  [isVoided]="filter.isVoided"
+  [subIssueTypeId]="filter.subIssueTypeId"
+  (changeFilterEvent)="resetLogInfoOfEvent()"
+  (refreshEvent)="refreshEvent()"
+  [filterWrongOddsSportsBookModel]="logInfoEvent.filterWrongOddsSportsBook">
+</filter-wrong-odds-sports-book>
+
+<advanced-mode-add-request #advancedMode
+  [matchId]="logInfoEvent.matchId"
+  [groupBetTypes]="groupBetTypesModel"
+  (changeFilterEvent)="resetLogInfo()"
+  (checkExistBetTypeEvent)="checkExistBetTypeEvent($event)"
+  [model]="advancedModeAddRequestModel">
+</advanced-mode-add-request>
+<div class="mb-3 d-flex mt-1" *ngIf="groupBetTypesModel.groupBetTypes.length > 0">
+  <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
+    (click)="handleSearchEvent()">
+    Search
+  </button>
+</div>
+<log-info-wrong-odds-sports-book
+  [isEdit]="isEdit"
+  [logInfo]="logInfoEvent"
+  [requestId]="requestId"
+  [issueTypeId]="filter.issueTypeId"
+  (searchEvent)="handleSearchEvent()"
+  [primitiveProps]="primitiveProps">
+</log-info-wrong-odds-sports-book>
+<div class="no-ticket mt-2" *ngIf="primitiveProps.isShowErrorNoBetType">
+  <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
+  No valid tickets found in the current range
+</div>
+<confirm-add-request [model]="confirmAddRequest" (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()"></confirm-add-request>
+
+

@@ -11,7 +11,7 @@ import { BlockUiService } from '../../utility/components/block-ui/block-ui.servi
 import { DateTimeModule } from '../../utility/components/date-time/date-time.module';
 import { PagingModule } from '../../utility/components/paging/paging.module';
 import { TemplateMessageModule } from '../../utility/components/template-message/template-message.module';
-import { TemplateService } from '../../utility/components/template-message/template-message/template.service';
+import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
 import { DecimalDirective, NumberRangeDirective } from '../../utility/directives/number.directive';
 import { PipeModule } from '../../utility/pipes/pipe.module';

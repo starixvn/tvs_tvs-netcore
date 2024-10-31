@@ -1,0 +1,18 @@
+<div *ngIf="primitiveProps.isShowValidation">
+  <strong>Main Event - Log Info</strong>
+  <div class="log-info">
+    <div class="list-group-item flex-column align-items-start wrapper-tooltip body-log-info-main">
+      <div *ngIf="logInfo.logInfoDetail">
+        Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
+        Affected Single Count: <strong>{{logInfo.logInfoDetail.singleCount}}</strong>
+        <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount)" class="text-red"
+        [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>,
+        Parlay Count: <strong>{{logInfo.logInfoDetail.mainParlayCount}} </strong>
+        <span class="bet-type-count" (click)="showAffectedTicketsDetails()">Details</span><br />
+        <span *ngIf="logInfo.logInfoDetail.cancelCashOutCount > 0">Cancel Cash Out: <strong>{{logInfo.logInfoDetail.cancelCashOutCount}}</strong></span>
+      </div>
+      <log-info-message [messages]="logInfo.messageValidationLogInfo"></log-info-message>
+    </div>
+  </div>
+</div>
+<affected-ticket [model]="affectedTicketsModel"></affected-ticket>

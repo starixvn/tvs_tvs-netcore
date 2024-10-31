@@ -1,0 +1,38 @@
+<div *ngIf="model.isOpen">
+  <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
+  <div role="dialog" class="fade modal show d-block wrapper-tooltip">
+    <div role="document" class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header primary">
+          <div class="modal-title">
+            <strong>Confirm</strong>
+          </div>
+          <button type="button" class="close" aria-label="Close" (click)="onClickCancel()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="mg-bottom-5">
+            <div>Please double check below type if correct before proceeding</div>
+            <div class="ml-2">
+              <div>Issue Type: <strong>{{model.issueTypeName}}</strong></div>
+              <div *ngIf="model.subIssueTypeName">Sub Type: <strong>{{model.subIssueTypeName}}</strong></div>
+              <div>Action: <strong>{{model.voidAction}}</strong></div>
+            </div>
+          </div>
+          <div class="warning-content">
+            <div *ngIf="model.isHasWarningTicket">There are some warnings in this request.</div>
+            <div *ngIf="model.isHasWarningTakenNote">Ticket(s) on request will be unmarked.</div>
+            <div class="text-red" *ngIf="model.isHasSettledTicket">The request has settled ticket(s).</div>
+            <div class="text-red" *ngIf="model.isEditingByAnotherUser">Please remind this request {{model.requestId}} is confirmed by {{model.requestedBy}}.</div>
+          </div>
+          <div class="mg-top-10"><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn confirm" (click)="onClickOk()">OK</button>
+          <button type="button" class="btn cancel" (click)="onClickCancel()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

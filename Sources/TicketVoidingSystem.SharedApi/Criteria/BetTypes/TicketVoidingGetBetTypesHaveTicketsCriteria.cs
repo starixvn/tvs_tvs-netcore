@@ -13,6 +13,8 @@ public class TicketVoidingGetBetTypesHaveTicketsCriteria : CriteriaBase
 
     public DateTime? ToTransDate { get; set; }
 
+    public bool IsGetCancelCashOut { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

@@ -1,5 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
+import { Subscription, timer } from 'rxjs';
+import { TEXT } from 'src/utility/constants/text';
 import { LABELS } from '../../../../utility/constants/labels';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
@@ -18,7 +20,6 @@ import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advance
 })
 export class AdvancedModeComponent {
   @Input() matchId: number;
-  @Input() isShowAdvancedModeFilter: boolean;
   @Input() changedBetTypes: BetTypeAddRequest[] = [];
   @Input() advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   @Output() changeFilterEvent = new EventEmitter();
@@ -28,9 +29,11 @@ export class AdvancedModeComponent {
   betTypesMoreHDP = AdvancedModeConstants.BETTYPES_MORE_HDP;
   baseSpecialBetTypeCricket: Selection[] = [];
   baseBetTeams: BetTeamAddRequest[] = [];
+  isShowAdvancedModeFilter: boolean;
+  private delayForSearchSubscription: Subscription;
+  private readonly observableTimer = timer(500);
 
   constructor(
-
     private readonly service: AdvancedModeService,
     private readonly commonService: CommonService,
     private readonly element: ElementRef) {
@@ -55,10 +58,15 @@ export class AdvancedModeComponent {
   public async getBetTeamAndRenderValue(matchId: number): Promise<void> {
     await this.getBetTeam();
     this.baseBetTeams.forEach(x => {
-      x.isChecked = this.changedBetTypes.some(y => y.id.toString() === x.betTypes);
+      x.isShow = this.changedBetTypes.some(y => y.id.toString() === x.betTypes);
     })
     await this.getSpecialBetTeamCricket(matchId);
     this.renderBetTeams(this.baseBetTeams);
+  }
+
+  expandAndValidate() {
+    this.isCollapse = !this.isCollapse;
+    this.validateWithDelay();
   }
 
   changeFilter() {
@@ -79,13 +87,13 @@ export class AdvancedModeComponent {
 
   unckeckedAllBetTeam() {
     this.betTeams.forEach(x => {
-      x.isChecked = false;
+      x.isShow = false;
     });
   }
 
   public async getSpecialBetTeamCricket(matchId: number): Promise<void> {
     if (this.matchId && (this.baseSpecialBetTypeCricket === undefined || this.baseSpecialBetTypeCricket.length === 0)) {
-      const data = await this.commonService.GetOddsInfoSpecialBetTypes({matchId: matchId.toString(), betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER});
+      const data = await this.commonService.GetOddsInfoSpecialBetTypes({ matchId: matchId.toString(), betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER });
       this.updatePlayerCricket(data);
     }
   }
@@ -94,23 +102,31 @@ export class AdvancedModeComponent {
     checkedBetTypesAddRequest.forEach(x => {
       const betTeam = this.betTeams.find(y => y.betTypes === x.id);
       if (betTeam) {
-        betTeam.isChecked = true;
-        betTeam.selections.forEach(y => {
-          y.isDisabled = x.isDisabled;
-          if(y.isMultiple) {
-            const value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, x)
-            y.multiSelection.updateItemChecked(value.split(','));
-            y.multiSelection.updateDisabledStatus(x.isDisabled);
-          } else {
-            y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, x);
-          }
-        });
-        betTeam.inputs.forEach(y => {
-          y.isDisabled = x.isDisabled;
-          y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, x)
-        });
+        betTeam.isShow = true;
+        this.updateSelectionsByCheckedValue(betTeam, x);
+        this.updateInputsByCheckedValue(betTeam, x);
       }
     })
+  }
+
+  private updateSelectionsByCheckedValue(betTeam: BetTeamAddRequest, checkedBetType: BetTeamAddRequestResult) {
+    betTeam.selections.forEach(y => {
+      y.isDisabled = checkedBetType.isDisabled;
+      if (y.isMultiple) {
+        const value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, checkedBetType)
+        y.multiSelection.updateItemChecked(value.split(','));
+        y.multiSelection.updateDisabledStatus(checkedBetType.isDisabled);
+      } else {
+        y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, checkedBetType);
+      }
+    });
+  }
+
+  private updateInputsByCheckedValue(betTeam: BetTeamAddRequest, checkedBetType: BetTeamAddRequestResult) {
+    betTeam.inputs.forEach(y => {
+      y.isDisabled = checkedBetType.isDisabled;
+      y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, checkedBetType)
+    });
   }
 
   private getValueUpdateControlFilterByAttribute(attribute: string, checkedBetType: BetTeamAddRequestResult): string { //NOSONAR
@@ -118,22 +134,24 @@ export class AdvancedModeComponent {
       case 'team':
         return checkedBetType.team;
       case 'hdp':
+      case 'hdp1':
+      case 'hdp2':
         return checkedBetType.hdp;
-      case 'wicket':
-        return StaticService.undoConvertStringToBetId8xxx(checkedBetType.wicket);
-      case 'over':
-        return checkedBetType.over;
       case 'player':
         return checkedBetType.player;
       case 'playerandodds':
         return checkedBetType.playerAndOdds;
-      case '_xxx':
       case '_xx':
+      case '_xxx':
       case 'betidx':
         return checkedBetType.betIdX;
       case 'yy':
       case 'betidy':
         return checkedBetType.betIdY;
+      case 'firstvalue':
+        return checkedBetType.firstValue;
+      case 'secondvalue':
+        return checkedBetType.secondValue;
     }
   }
 
@@ -143,7 +161,7 @@ export class AdvancedModeComponent {
         await this.handleBetTeam(betType);
       }
     }
-    this.isShowAdvancedModeFilter = this.betTeams.some(x => x.isChecked);
+    this.isShowAdvancedModeFilter = this.betTeams.some(x => x.isShow);
   }
 
   private async handleBetTeam(betType: BetTypeAddRequest) {
@@ -154,8 +172,8 @@ export class AdvancedModeComponent {
   }
 
   private async changeBetTeam(betType: BetTypeAddRequest, betTeam: BetTeamAddRequest) {
-    betTeam.isChecked = betType.isChecked;
-    if (betTeam.isChecked) {
+    betTeam.isShow = betType.isChecked;
+    if (betTeam.isShow) {
       await this.changeCheckedBetTypes(betType, betTeam);
     } else {
       betTeam.name = "";
@@ -175,7 +193,7 @@ export class AdvancedModeComponent {
     this.betTeams = [];
     for (const [index, item] of data.entries()) {
       const betteam = new BetTeamAddRequest([index, item.name, item.value, item.type, item.betTypes],
-        item.selections, item.inputs, item.isChecked);
+        item.selections, item.inputs, item.isShow);
       this.betTeams.push(betteam);
     }
   }
@@ -190,7 +208,7 @@ export class AdvancedModeComponent {
 
   getCheckedBetTypeModels(): BetTeamAddRequestResult[] {
     return this.betTeams
-      .filter(x => x.isChecked)
+      .filter(x => x.isShow)
       .map(y => y.getResult(y.betTypes));
   }
 
@@ -203,52 +221,51 @@ export class AdvancedModeComponent {
   }
 
   private getItemsPlayerSelection(betTypeId: string, odds: OddsInfo[]): Selection[] {
-    const items: Selection[] = [];
-    if (AdvancedModeConstants.BETTYPE_NEXT_MAN_OUT.split(',').includes(betTypeId)) {
-      const groupsOdds = _.groupBy(odds, 'oddsId');
-      for (const oddsId in groupsOdds) {
-        const oddsName = groupsOdds[oddsId].map(y => y.playerName).join(' & ');
-
-
-        for (const [index, x] of groupsOdds[oddsId].entries()) {
-          items.push(
-            new Selection(index, `${x.playerName} - ${oddsName}`, `${x.betChoice}$${x.oddsId}`, null, true, null)
-          );
-        }
-      }
-    } else {
-      for (const [index, x] of odds.entries()) {
-        items.push(new Selection(index, x.playerName, x.playerId.toString(), null, true, null));
-      }
+    const isNextManOut = AdvancedModeConstants.BETTYPE_NEXT_MAN_OUT.split(',').includes(betTypeId);
+    if (isNextManOut) {
+      return odds.reduce((acc, current, index) => {
+        const group = odds.filter(x => x.oddsId === current.oddsId);
+        const oddsName = group.map(x => x.playerName).join(' & ');
+        return acc.concat(group.map((x, i) => new Selection(i, `${x.playerName} - ${oddsName}`, `${x.betChoice}$${x.oddsId}`, null, true, null)));
+      }, []);
     }
 
-    return items;
+    return odds.map((x, index) => new Selection(index, x.playerName, x.playerId.toString(), null, true, null));
   }
 
   private renderSelectionCricketWithPlayer(betTeam: BetTeamAddRequest, baseBetType: Selection[]): void {
-    const playerSelection = betTeam.selections.find(x => x.name === 'Player:');
+    const playerSelection = betTeam.selections.find(x => x.name === 'Player');
     if (playerSelection.multiSelection?.multipleSelect.items.length === 0) {
-      const items: Selection[] = [];
-      baseBetType.forEach(x => {
-        if (betTeam.betTypes.includes(x.value)) {
-          items.push(...x.items);
-        }
-      });
-      if (playerSelection) {
-        playerSelection.items = [];
-        playerSelection.items.push(..._.uniqWith(items, _.isEqual));
+      const validItems = baseBetType
+        .filter(x => betTeam.betTypes.includes(x.value))
+        .flatMap(x => x.items);
+
+      playerSelection.items = _.uniqWith(validItems, _.isEqual);
+
+      betTeam.selections
+        .filter(x => x.name === 'Player')
+        .forEach(x => x.multiSelection = betTeam.renderMultipleSelection(x));
+    }
+  }
+
+  validateWithDelay() {
+    this.unsubscribeFromDelay();
+    this.delayForSearchSubscription = this.observableTimer.subscribe(() => {
+      if (!this.isCollapse) {
+        this.isValidity();
       }
-      betTeam.selections.forEach(x => {
-        if (x.name === 'Player:') {
-          x.multiSelection = betTeam.renderMultipleSelection(x);
-        }
-      });
+    });
+  }
+
+  private unsubscribeFromDelay(): void {
+    if (this.delayForSearchSubscription) {
+      this.delayForSearchSubscription.unsubscribe();
     }
   }
 
   isValidity(): boolean {
     return this.betTeams
-      .filter(x => x.isChecked)
+      .filter(x => x.isShow)
       .every(x => this.isValidSelections(x) && this.isValidInputs(x));
   }
 
@@ -262,8 +279,12 @@ export class AdvancedModeComponent {
 
   private isValidSelectionWithToolTip(betTeamIndex: number, selection: Selection): boolean {
     if (!this.isValidSelectionValue(selection)) {
-      const className = `bet-team-${betTeamIndex}-selection-${selection.index}`;
-      this.tooltip.display(className, LABELS.NO_BET_TEAM);
+      if (this.isCollapse) {
+        this.showTooltipWhenCollapsed();
+      } else {
+        const className = `bet-team-${betTeamIndex}-selection-${selection.index}`;
+        this.tooltip.display(className, LABELS.SELECT_AT_LEAST_ONE_OPTION);
+      }
       return false;
     }
 
@@ -272,12 +293,20 @@ export class AdvancedModeComponent {
 
   private isValidInputWithToolTip(betTeamIndex: number, inputIndex: number, isMultiple: boolean, value: string): boolean {
     if (value && !this.isValidInputDecimalValue(isMultiple, value)) {
-      const className = `bet-team-${betTeamIndex}-input-${inputIndex}`;
-      this.tooltip.display(className, LABELS.INVALID_VALUE);
+      if (this.isCollapse) {
+        this.showTooltipWhenCollapsed();
+      } else {
+        const className = `bet-team-${betTeamIndex}-input-${inputIndex}`;
+        this.tooltip.display(className, LABELS.INVALID_VALUE);
+      }
       return false;
     }
 
     return true;
+  }
+
+  private showTooltipWhenCollapsed() {
+      this.tooltip.display('advanced-mode-header-label', TEXT.THERE_ARE_INVALID_FIELDS);
   }
 
   private isValidInputDecimalValue(isMultiple: boolean, value: string): boolean {
@@ -290,9 +319,5 @@ export class AdvancedModeComponent {
     return selection.isMultiple
       ? selection.multiSelection.multipleSelect.getValueItems() !== ''
       : selection.value !== '';
-  }
-
-  public isScrollStype(): boolean {
-    return this.betTeams.filter(x => x.isChecked).length > 10;
   }
 }

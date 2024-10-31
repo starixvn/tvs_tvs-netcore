@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment-timezone';
+import { FilterModel } from 'src/add-request/app/add-request/filter/filter.model';
 import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
 import { DateTimeFormat } from '../../../utility/constants/config';
 import { StaticService } from '../../../utility/services/static.service';
@@ -40,7 +41,7 @@ export class ObjectService {
       isVoided: detailViewModel.request.isVoided,
       issueTypeId: detailViewModel.request.issueTypeId.toString(),
       isAbnormal: this.validationService.isAbnormalArchivedTicket(detailViewModel)
-    };
+    } as FilterModel;
   }
 
   private mapEvent(args: MapEventArg) { // NOSONAR
@@ -84,6 +85,8 @@ export class ObjectService {
       args.requestModel.recoverTicketModel = args.detailViewModel.recoverTicketModel;
     } else if (this.validationService.isLikelyWrongMarketOffered(args.detailViewModel)) {
       args.requestModel.wrongMarketOfferedModel = args.detailViewModel.wrongMarketOfferedModel;
+    } else if (this.validationService.isWrongOddsSportsBook(args.detailViewModel)) {
+      args.requestModel.wrongOddsSportsBookModel = args.detailViewModel.wrongOddsSportsBookModel;
     }
   }
 

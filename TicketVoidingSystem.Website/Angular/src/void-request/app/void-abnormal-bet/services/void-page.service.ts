@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import _ from 'lodash';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
-import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AppService } from '../../app.service';
@@ -22,7 +22,7 @@ export class VoidPageService {
     private readonly ticketsService: TicketsService,
     private readonly templateService: TemplateService,
     private readonly voidPageCommonService: VoidPageCommonService
-    ) {
+  ) {
   }
 
   async getIssueTypes(): Promise<IssueTypesModel> {
@@ -57,7 +57,7 @@ export class VoidPageService {
   }
 
   private getTemplateValue(voidPageItem: VoidAbnormalBetModel, requestDetail: RequestDetailViewModel): TemplateValue {
-    const templateValue = voidPageItem.matchModel ? this.templateService.getTemplateValue(voidPageItem.matchModel) : new TemplateValue();
+    const templateValue = voidPageItem.matchModel ? this.templateService.initializeTemplateValue(voidPageItem.matchModel) : new TemplateValue();
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;
     templateValue.filterBy = requestDetail.abnormalBetModel.filterBy;
 

@@ -18,6 +18,8 @@ public class TicketsViewModel
     public bool IsAllLiveTickets { get; set; }
     public bool IsAllNonLiveTickets { get; set; }
     public string BetTypes { get; set; }
+    public string BetTeam { get; set; }
+    public string InputOverUnder { get; set; }
     public DateTime FromTime { get; set; }
     public DateTime ToTime { get; set; }
     public DateTime FromDate { get; set; }
@@ -60,5 +62,5 @@ public class TicketViewModel
     public bool IsBonus { get; set; }
     public bool IsMarked { get; set; }
     public int SiteDbGroupId { get; set; }
-    public short? GroupBetTypeId { get; set; }
+    public string GroupName { get; set; }
 }

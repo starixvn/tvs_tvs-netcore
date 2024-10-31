@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import _ from 'lodash';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
-import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
@@ -10,7 +11,6 @@ import { AppService } from '../../app.service';
 import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidPageDuplicateTicketsModel } from '../models/void-page-duplicate-tickets.model';
-import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class VoidPageService {
     private readonly commonService: CommonService,
     private readonly ticketsService: TicketsService,
     private readonly templateService: TemplateService
-    ) {
+  ) {
   }
 
   async getIssueTypes(): Promise<IssueTypesModel> {
@@ -52,7 +52,7 @@ export class VoidPageService {
   }
 
   private getTemplateValue(voidPageItem: VoidPageDuplicateTicketsModel, requestDetail: RequestDetailViewModel): TemplateValue {
-    const templateValue = voidPageItem.matchModel ? this.templateService.getTemplateValue(voidPageItem.matchModel) : new TemplateValue();
+    const templateValue = voidPageItem.matchModel ? this.templateService.initializeTemplateValue(voidPageItem.matchModel) : new TemplateValue();
     templateValue.filterBy = requestDetail.duplicateTicketsModel.filterBy;
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;
     templateValue.groupPHAffected = voidPageItem.voidTicketsMini.groupPHAffected;

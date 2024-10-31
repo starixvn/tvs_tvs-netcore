@@ -85,7 +85,7 @@ export class LABELS {
   static readonly NO_BETTYPE = 'No bet type is offered for the inputted matchid.';
   static readonly NO_PARLAY_BETTYPE = 'No Parlay bet type is offered for the inputted matchid.';
 
-  static readonly NO_BET_TEAM = 'Please select at least one option!';
+  static readonly SELECT_AT_LEAST_ONE_OPTION = 'Please select at least one option!';
 
   static readonly NO_PERMISSION = 'WARNING! Not allowed to mark settled ticket! You are about to back the page and try a new search.';
 

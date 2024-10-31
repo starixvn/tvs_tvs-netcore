@@ -63,7 +63,7 @@ public class VoidEmailContentServiceImp : VoidEmailContentService
         var issueTypesHasCancelCO = new List<int>
         {
             IssueTypeConstant.DangerAccepted, IssueTypeConstant.RedCard, IssueTypeConstant.WrongScore,
-            IssueTypeConstant.WrongMarketOffered, IssueTypeConstant.TechnicalError
+            IssueTypeConstant.WrongMarketOffered, IssueTypeConstant.TechnicalError, IssueTypeConstant.WrongOddsSportsBook
         };
         if (issueTypesHasCancelCO.Exists(x => x == mailVoidViewModel.IssueTypeId))
         {

@@ -61,7 +61,7 @@ public class MapTicketsServiceImp : MapTicketsService
         ticket.BetTypeId = item.BetType;
         ticket.IsBonus = item.WalletType > 0;
         ticket.IsCancelCashOut = item.IsCancelCashOut;
-        ticket.GroupBetTypeId = item.GroupBetTypeId;
+        ticket.GroupName = item.GroupName;
         return ticket;
     }
 }

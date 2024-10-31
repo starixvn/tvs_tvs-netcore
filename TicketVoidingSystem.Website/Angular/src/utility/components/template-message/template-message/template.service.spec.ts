@@ -1,7 +1,7 @@
 import { Message } from '../messages/message';
+import { TemplateService } from './services/template.service';
 import { TemplateContentConst, TemplateReplace } from './template.const';
 import { TemplateContent } from './template.model';
-import { TemplateService } from './template.service';
 
 describe('TemplateService', () => {
   const templateService = new TemplateService();

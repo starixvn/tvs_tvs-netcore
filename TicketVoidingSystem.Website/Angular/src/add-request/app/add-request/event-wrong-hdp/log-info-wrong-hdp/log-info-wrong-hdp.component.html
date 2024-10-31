@@ -42,7 +42,7 @@
                 <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, 0)" class="text-red"
                 [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, 0) | sanitizeHtml">
                 </span>&nbsp;
-                <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openTicketDetails()">Details</span><br />
+                <span *ngIf="!filter.isVoided" class="ticket-details" (click)="showAffectedTicketsDetails()">Details</span><br />
               </ng-container>
               <ng-container *ngIf="isMainMatch" class="pool-house-count">
                 PH - Single Count: <strong>{{logInfo.logInfoDetail.poolHouseSingleCount}}</strong>
@@ -58,7 +58,7 @@
               </ng-container>
             </div>
             <ticket-count-other-sports *ngIf="!isSportTypeSoccer()" [logInfoDetail]="logInfo.logInfoDetail" [isVoided]="filter.isVoided" 
-              (openTicketDetails)="openTicketDetails()">
+              (openTicketDetails)="showAffectedTicketsDetails()">
             </ticket-count-other-sports>
           </div>
           <ng-container *ngIf="logInfo.messageValidationLogInfo?.length > 0">

@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
-import { AbnormalFilterBy } from '../../../utility/constants/config';
+import { CheckIssueTypeObjectType } from 'src/utility/models/check-issue-type.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
 import { MatchModel } from '../../../utility/models/match.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
@@ -19,6 +19,7 @@ import { EventReducedOverComponent } from './event-reduced-over/event-reduced-ov
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
 import { EventWrongHdpComponent } from './event-wrong-hdp/event-wrong-hdp.component';
 import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered/event-wrong-market-offered.component';
+import { EventWrongOddsSportsBookComponent } from './event-wrong-odds-sports-book/event-wrong-odds-sports-book.component';
 import { EventWrongOddsComponent } from './event-wrong-odds/event-wrong-odds.component';
 import { EventWrongOuComponent } from './event-wrong-ou/event-wrong-ou.component';
 import { EventWrongScoreComponent } from './event-wrong-score/event-wrong-score.component';
@@ -55,6 +56,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventWrongHDP') eventWrongHdpComponent: EventWrongHdpComponent;
   @ViewChild('eventWrongOU') eventWrongOuComponent: EventWrongOuComponent;
   @ViewChild('eventWrongOdds') eventWrongOddsComponent: EventWrongOddsComponent;
+  @ViewChild('eventWrongOddsSportsBook') eventWrongOddsSportsBookComponent: EventWrongOddsSportsBookComponent;
   @ViewChild('eventReducedOver') eventReducedOverComponent: EventReducedOverComponent;
   @ViewChild('eventDuplicateTickets') eventDuplicateTicketsComponent: EventDuplicateTicketsComponent;
   @ViewChild('eventNotParticipate') eventNotParticipateComponent: EventNotParticipateComponent;
@@ -103,131 +105,107 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       this.filterComponent.checkValidSubIssueType();
     });
 
-    if (this.isExternalUrl && this.isAbnormalBet()) {
+    if (this.isExternalUrl && StaticService.isAbnormalBet(this.model.filter.issueTypeId)) {
       await new Promise(resolve => setTimeout(resolve));
       await this.eventAbnormalBetComponent.afterFocusOutBetIds();
     }
   }
 
-  async onChangeIssueType(issueTypeId: string): Promise<void> {
+  public async onChangeIssueType(issueTypeId: string): Promise<void> {
     if (!this.isEdit && (StaticService.isAbnormalBet(issueTypeId)
-        || StaticService.isAbnormalAccount(issueTypeId))) {
+      || StaticService.isAbnormalAccount(issueTypeId))) {
       this.model.others.decidedBy = document.getElementById('body').getAttribute('user-name');
     } else {
       this.model.others.decidedBy = '';
     }
   }
 
-  updateMatchId(matchId: number): void {
+  public updateMatchId(matchId: number): void {
     this.matchId = matchId;
   }
 
-  updateMatchInfo(match: MatchModel): void {
+  public updateMatchInfo(match: MatchModel): void {
     this.matchId = match?.matchId;
     this.parentMatchId = match?.parentId;
   }
-  
-  async saveRequest(): Promise<void> { // NOSONAR
-    if (!this.isEdit) {
-      localStorage.setItem(LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_ADD_REQUEST + document.getElementById('body').getAttribute('user-id'),
-        this.model.filter.issueTypeId);
-    }
+
+  public async saveRequest(): Promise<void> { // NOSONAR
+    this.cachingIssueType();
     this.isDisabledSaveButton = true;
+    const issueTypeId = this.model.filter.issueTypeId;
+    const saveTasks = [
+      { condition: StaticService.isAbnormalBet(issueTypeId), component: this.eventAbnormalBetComponent },
+      { condition: StaticService.isEarlyKickOff(issueTypeId) || StaticService.isWrongKickOff(issueTypeId), component: this.eventEarlyKickOffComponent },
+      { condition: StaticService.isDangerAccepted(issueTypeId), component: this.eventDangerAcceptedComponent },
+      { condition: StaticService.isRedCard(issueTypeId), component: this.eventRedCardComponent },
+      { condition: StaticService.isAbnormalAccount(issueTypeId), component: this.abnormalAccountsComponent },
+      { condition: StaticService.isWrongScore(issueTypeId), component: this.eventWrongScoreComponent },
+      { condition: StaticService.isArchivedTicket(issueTypeId), component: this.eventTicket14Component },
+      { condition: StaticService.isWrongHDP(issueTypeId) || StaticService.isWrong1stHDP(issueTypeId), component: this.eventWrongHdpComponent },
+      { condition: StaticService.isWrongOU(issueTypeId) || StaticService.isWrong1stOU(issueTypeId), component: this.eventWrongOuComponent },
+      { condition: StaticService.isWrongOdds(issueTypeId), component: this.eventWrongOddsComponent },
+      { condition: StaticService.isWrongOddsSportsBook(issueTypeId), component: this.eventWrongOddsSportsBookComponent },
+      { condition: StaticService.isReducedOver(issueTypeId) || StaticService.isAbandoned(issueTypeId), component: this.eventReducedOverComponent },
+      { condition: StaticService.isDuplicateTickets(issueTypeId), component: this.eventDuplicateTicketsComponent },
+      { condition: StaticService.isNotParticipate(issueTypeId), component: this.eventNotParticipateComponent },
+      { condition: StaticService.isRecoverTicket(issueTypeId), component: this.eventRecoverTicketComponent },
+      { condition: StaticService.isLikelyWrongMarketOffered(issueTypeId), component: this.eventWrongMarketOfferedComponent }
+    ];
 
-    if (this.isAbnormalBet()) {
-      await this.eventAbnormalBetComponent.saveRequest();
-    }
-
-    if (this.isEarlyOrWrongKO()) {
-      await this.eventEarlyKickOffComponent.saveRequest();
-    }
-
-    if (this.isDangerAccepted()) {
-      await this.eventDangerAcceptedComponent.saveRequest();
-    }
-
-    if (this.isRedCard()) {
-      await this.eventRedCardComponent.saveRequest();
-    }
-
-    if (this.isAbnormalAccount()) {
-      await this.abnormalAccountsComponent.saveRequest();
-    }
-
-    if (this.isWrongScoreIssueType()) {
-      await this.eventWrongScoreComponent.saveRequest();
-    }
-
-    if (this.isArchivedTicketIssueType()) {
-      await this.eventTicket14Component.saveRequest();
-    }
-
-    if (this.isWrongHDP() || this.isWrong1stHDP()) {
-      await this.eventWrongHdpComponent.saveRequest();
-    }
-
-    if (this.isWrongOU() || this.isWrong1stOU()) {
-      await this.eventWrongOuComponent.saveRequest();
-    }
-
-    if (this.isWrongOdds()) {
-      await this.eventWrongOddsComponent.saveRequest();
-    }
-
-    if (this.isReducedOver() || this.isAbandoned()) {
-      await this.eventReducedOverComponent.saveRequest();
-    }
-
-    if (this.isDuplicateTickets()) {
-      await this.eventDuplicateTicketsComponent.saveRequest();
-    }
-
-    if (this.isNotParticipate()) {
-      await this.eventNotParticipateComponent.saveRequest();
-    }
-
-    if (this.isRecoverTicket()) {
-      await this.eventRecoverTicketComponent.saveRequest();
-    }
-
-    if (this.isLikelyWrongMarketOffered()) {
-      await this.eventWrongMarketOfferedComponent.saveRequest();
+    for (const task of saveTasks) {
+      if (task.condition) {
+        await task.component.saveRequest();
+      }
     }
   }
 
-  backToManagePage() {
+  private cachingIssueType(): void {
+    if (!this.isEdit) {
+      const userId = document.getElementById('body')?.getAttribute('user-id');
+      if (userId) {
+        localStorage.setItem(
+          LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_ADD_REQUEST + userId,
+          this.model.filter.issueTypeId
+        );
+      }
+    }
+  }
+
+  public backToManagePage(): void {
     window.location.assign(`TicketVoidingSystem/ManageRequest/Index`);
   }
 
-  updateModel(filterModel: FilterModel): void {
+  public updateModel(filterModel: FilterModel): void {
     this.model.filter = _.clone(filterModel);
   }
 
   public getEventLabel(): string {
-    if (this.isAbnormalAccount()) {
+    if (StaticService.isAbnormalAccount(this.model.filter.issueTypeId)) {
       return 'Username';
-    } 
-    return this.isArchivedTicketIssueType() || this.isRecoverTicket() ? 'Ticket Info' : 'Event';
+    }
+
+    return StaticService.isArchivedTicket(this.model.filter.issueTypeId) || StaticService.isRecoverTicket(this.model.filter.issueTypeId)
+      ? 'Ticket Info' : 'Event';
   }
 
-  async copyEmailRequestInfo() {
+  async copyEmailRequestInfo(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.copyRequestInfoService.copyEmailRequestInfo(this.requestId, this.matchId, this.model.others.operatorsList);
     this.addRequestStore.changeBlockingUiStatus(false);
     alert(`Request No.${this.requestId} has been copied to clipboard.`);
   }
 
-  async copyLetsTalkRequestInfo() {
+  public async copyLetsTalkRequestInfo(): Promise<void> {
     let logInfoDetail = [];
-    if (this.isRedCard()) {
+    if (StaticService.isRedCard(this.model.filter.issueTypeId)) {
       logInfoDetail = this.eventRedCardComponent.getLogInfoDetail();
     }
 
-    if (this.isDangerAccepted()) {
+    if (StaticService.isDangerAccepted(this.model.filter.issueTypeId)) {
       logInfoDetail = this.eventDangerAcceptedComponent.getLogInfoDetail();
     }
 
-    if (this.isWrongScoreIssueType()) {
+    if (StaticService.isWrongScore(this.model.filter.issueTypeId)) {
       logInfoDetail = this.eventWrongScoreComponent.getLogInfoDetail();
     }
 
@@ -237,7 +215,28 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     alert(`Request No.${this.requestId} has been copied to clipboard.`);
   }
 
-  isShowOthersSimpleFields(): boolean {
+  public isShowOthersFullFields(): boolean {
+    return !this.isShowOthersLikeAbnormalAccount()
+      && !this.isShowOthersLikeAbnormalBet()
+      && !this.isShowOthersLikeWrongHDP();
+  }
+
+  public isShowOthersLikeAbnormalAccount(): boolean {
+    return StaticService.isAbnormalAccount(this.model.filter.issueTypeId);
+  }
+
+  public isShowOthersLikeAbnormalBet(): boolean {
+    const issueTypesShowOthersLikeAB = [
+      IssueTypeConstant.ABNORMAL_BET,
+      IssueTypeConstant.ARCHIVED_TICKET,
+      IssueTypeConstant.DUPLICATE_TICKETS,
+      IssueTypeConstant.RECOVER_TICKET
+    ];
+
+    return issueTypesShowOthersLikeAB.includes(this.model.filter.issueTypeId);
+  }
+
+  public isShowOthersLikeWrongHDP(): boolean {
     const issueTypesHasSimpleFields = [
       IssueTypeConstant.WRONG_HDP,
       IssueTypeConstant.WRONG_1ST_HDP,
@@ -248,103 +247,24 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       IssueTypeConstant.ABANDONED,
       IssueTypeConstant.NOT_PARTICIPATE,
       IssueTypeConstant.WRONG_MARKET_OFFERED,
-      IssueTypeConstant.TECHNICAL_ERROR
+      IssueTypeConstant.TECHNICAL_ERROR,
+      IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK
     ]
 
     return issueTypesHasSimpleFields.includes(this.model.filter.issueTypeId);
   }
 
-  isShowOthersFullFields(): boolean {
-    return !this.isAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTickets()
-      && !this.isRecoverTicket() && !this.isShowOthersSimpleFields();
+  public isShowCopyInfoButton(): boolean {
+    const issueTypesShowCopyInfo = [
+      IssueTypeConstant.DANGER_ACCEPTED,
+      IssueTypeConstant.RED_CARD,
+      IssueTypeConstant.WRONG_SCORE
+    ]
+
+    return this.model.filter.isVoided && issueTypesShowCopyInfo.includes(this.model.filter.issueTypeId);
   }
 
-  isShowCopyInfoButton(): boolean {
-    return this.model.filter.isVoided && (this.isDangerAccepted() || this.isRedCard() || this.isWrongScoreIssueType());
-  }
-
-  public isAbnormalBet(): boolean {
-    return StaticService.isAbnormalBet(this.model.filter.issueTypeId);
-  }
-
-  isAbnormalBetMixOrSystemParlay(): boolean {
-    return this.isAbnormalBet() && StaticService.isFilterByMixOrSystemParlay(this.abnormalFilterBy);
-  }
-
-  isAbnormalAccount(): boolean {
-    return StaticService.isAbnormalAccount(this.model.filter.issueTypeId);
-  }
-
-  isEarlyOrWrongKO(): boolean {
-    return StaticService.isEarlyKickOff(this.model.filter.issueTypeId)
-      || StaticService.isWrongKickOff(this.model.filter.issueTypeId);
-  }
-
-  isDangerAccepted(): boolean {
-    return StaticService.isDangerAccepted(this.model.filter.issueTypeId);
-  }
-
-  isRedCard(): boolean {
-    return StaticService.isRedCard(this.model.filter.issueTypeId);
-  }
-
-  isWrongHDP(): boolean {
-    return StaticService.isWrongHDP(this.model.filter.issueTypeId);
-  }
-
-  isWrong1stHDP(): boolean {
-    return StaticService.isWrong1stHDP(this.model.filter.issueTypeId);
-  }
-
-  isWrongOU(): boolean {
-    return StaticService.isWrongOU(this.model.filter.issueTypeId);
-  }
-
-  isWrong1stOU(): boolean {
-    return StaticService.isWrong1stOU(this.model.filter.issueTypeId);
-  }
-
-  isWrongScoreIssueType(): boolean {
-    return StaticService.isWrongScore(this.model.filter.issueTypeId);
-  }
-
-  isArchivedTicketIssueType(): boolean {
-    return StaticService.isArchivedTicket(this.model.filter.issueTypeId);
-  }
-
-  isWrongOdds(): boolean {
-    return StaticService.isWrongOdds(this.model.filter.issueTypeId);
-  }
-
-  isEventReducedOver(): boolean {
-    return StaticService.isReducedOver(this.model.filter.issueTypeId) || StaticService.isAbandoned(this.model.filter.issueTypeId);
-  }
-
-  isReducedOver(): boolean {
-    return StaticService.isReducedOver(this.model.filter.issueTypeId);
-  }
-
-  isAbandoned(): boolean {
-    return StaticService.isAbandoned(this.model.filter.issueTypeId);
-  }
-
-  isDuplicateTickets(): boolean {
-    return StaticService.isDuplicateTickets(this.model.filter.issueTypeId);
-  }
-
-  isDuplicateTicketsMixParlay(): boolean {
-    return StaticService.isDuplicateTickets(this.model.filter.issueTypeId) && this.abnormalFilterBy === AbnormalFilterBy.MIX_PARLAY;
-  }
-
-  isNotParticipate(): boolean {
-    return StaticService.isNotParticipate(this.model.filter.issueTypeId);
-  }
-
-  isRecoverTicket(): boolean {
-    return StaticService.isRecoverTicket(this.model.filter.issueTypeId);
-  }
-
-  isLikelyWrongMarketOffered(): boolean {
-    return StaticService.isLikelyWrongMarketOffered(this.model.filter.issueTypeId);
+  public checkAllIssueTypes(): CheckIssueTypeObjectType {
+    return StaticService.checkAllIssueTypes(this.model.filter.issueTypeId);
   }
 }

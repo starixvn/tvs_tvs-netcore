@@ -3,8 +3,8 @@ import { Shallow } from 'shallow-render';
 import { HttpService } from '../../../../utility/services/http.service';
 import { ToolTipModule } from '../../tooltip/tooltip.module';
 import { MessagesComponent } from '../messages/messages.component';
+import { TemplateService } from './services/template.service';
 import { TemplateMessageComponent } from './template-message.component';
-import { TemplateService } from './template.service';
 
 describe('FilterComponent', () => {
   @NgModule({

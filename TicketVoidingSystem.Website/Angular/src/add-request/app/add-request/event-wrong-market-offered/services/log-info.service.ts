@@ -27,12 +27,12 @@ export class LogInfoService {
   }
 
   private initWrongMarketOfferedGetLogInfoQuery(isEdit: boolean, requestId: number, filter: FilterModel, logInfo: LogInfoWrongMarketOffered): GetLogInfoQuery {
-    const WrongMarketOfferedModels = this.eventWrongMarketOfferedService.getWrongMarketOfferedGetLogInfoModel(Number(filter.subIssueTypeId), logInfo);
+    const wrongMarketOfferedModels = this.eventWrongMarketOfferedService.getWrongMarketOfferedGetLogInfoModel(Number(filter.subIssueTypeId), logInfo);
     const query = new GetLogInfoQuery();
     query.requestId = isEdit ? requestId : null;
     query.actionId = Number(filter.action);
     query.issueTypeId = Number(filter.issueTypeId);
-    query.wrongMarketOfferedModel = WrongMarketOfferedModels;
+    query.wrongMarketOfferedModel = wrongMarketOfferedModels;
 
     return query;
   }

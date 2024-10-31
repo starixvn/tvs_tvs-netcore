@@ -127,6 +127,4 @@ public class GetTicketModel
     public short GroupPHAffected { get; set; }
 
     public decimal MasterOdds { get; set; }
-
-    public short? GroupBetTypeId { get; set; }
 }

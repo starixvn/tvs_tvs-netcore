@@ -10,7 +10,7 @@ public interface RequestExtraInfoXmlService
 
     public IEnumerable<OperatorInfo> ParseXmlToOperators(string operatorXml);
 
-    public bool ParseXmlToIsCheckVar(int issueTypeId, string requestExtraInfoXml);
+    public void UpdateRequestInfoForCopy(int issueTypeId, RequestInfoForCopy requestInfoForCopy);
 }
 
 public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
@@ -56,6 +56,13 @@ public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
                 model.ToOddsNotVoidHomeOver = root.ToOddsNotVoidHomeOver;
                 model.FromOddsNotVoidAwayUnder = root.FromOddsNotVoidAwayUnder;
                 model.ToOddsNotVoidAwayUnder = root.ToOddsNotVoidAwayUnder;
+
+                model.FilterOddsType = root.FilterOddsType;
+                model.OddsValue = root.OddsValue;
+                model.FromOdds = root.FromOdds;
+                model.ToOdds = root.ToOdds;
+                model.CorrectOdds = root.CorrectOdds;
+
             }
         }
     }
@@ -66,15 +73,19 @@ public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
         return issueTypesHasJsonFormat.Contains(issueTypeId);
     }
 
-    public bool ParseXmlToIsCheckVar(int issueTypeId, string requestExtraInfoXml)
+    public void UpdateRequestInfoForCopy(int issueTypeId, RequestInfoForCopy requestInfoForCopy)
     {
         if (!IsIssueTypesHaveExtraInfoJsonFormat(issueTypeId))
         {
-            var root = requestExtraInfoXml.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.IsCheckedVar;
+            var root = requestInfoForCopy.RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            requestInfoForCopy.IsCheckedVar = root.IsCheckedVar;
+            requestInfoForCopy.FilterOddsType = root.FilterOddsType;
+            requestInfoForCopy.OddsValue = root.OddsValue;
+            requestInfoForCopy.FromOdds = root.FromOdds;
+            requestInfoForCopy.ToOdds = root.ToOdds;
+            requestInfoForCopy.CorrectOdds = root.CorrectOdds;
         }
 
-        return false;
     }
 
     public IEnumerable<OperatorInfo> ParseXmlToOperators(string operatorXml)

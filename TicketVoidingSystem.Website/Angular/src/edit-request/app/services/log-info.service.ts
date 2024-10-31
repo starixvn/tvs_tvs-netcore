@@ -33,6 +33,7 @@ export class LogInfoService {
       { check: this.validationService.isAbandoned, handler: this.getLogInfoReducedOver },
       { check: this.validationService.isNotParticipate, handler: this.getLogInfoNotParticipate },
       { check: this.validationService.isLikelyWrongMarketOffered, handler: this.getLogInfoWrongMarketOffered },
+      { check: this.validationService.isWrongOddsSportsBook, handler: this.getLogInfoWrongOddsSportsBook }
     ];
 
     for (const { check, handler } of logInfoHandlers) {
@@ -198,6 +199,21 @@ export class LogInfoService {
     data.getLogInfoModels.forEach(x => {
       args.detailViewModel.wrongMarketOfferedModel.logInfoDetail = x.logInfoDetail;
       args.detailViewModel.wrongMarketOfferedModel.betTypeCount = x.betTypeCount;
+    });
+  }
+
+  private async getLogInfoWrongOddsSportsBook(args: LogInfoArg): Promise<void> {
+    const models = MappingModelStaticService.buildWrongOddsSportsBookGetLogInfoModel(args.detailViewModel.wrongOddsSportsBookModel);
+    const query = new GetLogInfoQuery();
+    query.requestId = args.primitiveProperty.requestId;
+    query.isShowLogOnly = true;
+    query.issueTypeId = args.detailViewModel.request.issueTypeId;
+    query.actionId = args.detailViewModel.request.actionId;
+    query.wrongOddsSportsBookModel = models;
+
+    const data = await this.commonService.getLogInfo(query);
+    data.getLogInfoModels.forEach(x => {
+      args.detailViewModel.wrongOddsSportsBookModel.logInfoDetail = x.logInfoDetail;
     });
   }
 

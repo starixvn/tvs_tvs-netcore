@@ -1,6 +1,6 @@
 <div class="filter">
   <div class="d-flex flex-wrap">
-    <div class="filter-issue-type mr-4" [style.width.px]="widthIssueTypeControl">
+    <div class="filter-issue-type mr-4">
       <label class="col-form-label">Issue Type</label>
       <div class="input-issue-type">
         <ng-select class="custom-sm"
@@ -47,7 +47,7 @@
       <label class="col-form-label">Action</label>
       <div class="input-action">
         <ng-select class="custom-sm"
-          [items]="actions"
+          [items]="model.actions"
           bindLabel="name"
           bindValue="value"
           [(ngModel)]="model.action"

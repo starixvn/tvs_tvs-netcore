@@ -21,4 +21,5 @@ public class RequestDetailViewModel
     public RecoverTicketViewModel? RecoverTicketModel { get; set; }
     public AbnormalBetViewModel AbnormalBetModel { get; set; }
     public WrongMarketOfferedViewModel? WrongMarketOfferedModel { get; set; }
+    public WrongOddsSportsBookViewModel? WrongOddsSportsBookModel { get; set; }
 }

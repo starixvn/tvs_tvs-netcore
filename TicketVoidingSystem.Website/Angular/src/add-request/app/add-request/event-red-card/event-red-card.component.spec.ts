@@ -756,7 +756,7 @@ describe('EventRedCardComponent', () => {
       });
 
     // Action
-    instance.onClickCancelSaveRequest();
+    instance.onClickCancel();
 
     // Assert
     expect(mockChangeSavingRequestStatus).toHaveBeenCalled();

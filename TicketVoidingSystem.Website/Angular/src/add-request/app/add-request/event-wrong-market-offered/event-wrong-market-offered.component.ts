@@ -67,14 +67,12 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     const checkedBetTypes = groupBetTypes.flatMap(x => x.betTypes);
     this.logInfoEvent = this.eventWrongMarketOfferedService.assignModelsToEvents(this.wrongMarketOfferedModel);
     this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], groupBetTypes), true, '', this.filter.isVoided);
-    this.logInfoEvent.checkedBetTypes = this.groupBetTypesModel.getCheckedBetTypes();
     const betTeamsResult = this.wrongMarketOfferedModel.betTeamsResult;
     betTeamsResult.forEach(x => x.isDisabled = this.filter.isVoided);
     this.advancedModeAddRequestModel = {
       betTeamsResult: betTeamsResult,
       checkedBetTypes: checkedBetTypes
     };
-    this.primitivePropertyEvent.isShowFilterArea = true;
     this.primitivePropertyEvent.isShowValidation = true;
   }
 
@@ -83,7 +81,8 @@ export class EventWrongMarketOfferedComponent implements OnInit {
       mode: ModeType.SPORT_BOOK,
       matchId: this.eventLeague?.selectedMatch.matchId,
       fromTransDate: this.logInfoEvent.filterWrongMarketOfferedModel.fromDateTime,
-      toTransDate: this.logInfoEvent.filterWrongMarketOfferedModel.toDateTime
+      toTransDate: this.logInfoEvent.filterWrongMarketOfferedModel.toDateTime,
+      isGetCancelCashOut: true
     };
     this.addRequestStore.changeBlockingUiStatus(true);
     const data = await this.commonService.getGroupBetTypesTvs(query);
@@ -146,7 +145,6 @@ export class EventWrongMarketOfferedComponent implements OnInit {
 
     this.addRequestStore.changeBlockingUiStatus(true);
     await this.logInfoService.getLogInfo(this.logInfoEvent, this.isEdit, this.requestId, this.filter, this.primitivePropertyEvent);
-    this.logInfoEvent.checkedBetTypes = this.groupBetTypesModel.getCheckedBetTypes();
     this.primitivePropertyEvent.isShowValidation = true;
     this.addRequestStore.changeBlockingUiStatus(false);
     this.addRequestStore.changeSavingRequestStatus(false);
@@ -163,8 +161,6 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   }
 
   public async changeMatchEvent(): Promise<void> {
-    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
-    this.primitivePropertyEvent.isShowFilterArea = false;
     this.primitivePropertyEvent.isShowValidation = false;
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
@@ -172,7 +168,6 @@ export class EventWrongMarketOfferedComponent implements OnInit {
       this.logInfoEvent.matchId = this.eventLeague.selectedMatch.matchId;
       this.addRequestStore.changeSavingRequestStatus(true);
       this.resetBetTypeAndAdvancedMode();
-      this.primitivePropertyEvent.isShowFilterArea = true;
       this.primitivePropertyEvent.isShowErrorNoBetType = false;
     }
   }
@@ -181,6 +176,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     this.advancedMode?.clearBetTeam();
     this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
   }
+
   private initSaveRequestInput() {
     if (!this.filter.isVoided) {
       this.logInfoEvent.betTeamsResult = this.advancedMode.getCheckedBetTypes();

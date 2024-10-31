@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BetTeamAddRequest } from '../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.model';
 import { Result } from '../../../utility/models/result';
 import { HttpService } from '../../../utility/services/http.service';
 import { AddRequestQuery } from '../add-request/models/add-request.query';
@@ -141,11 +140,6 @@ export class AddRequestApiService {
  /* istanbul ignore next */
   async getPermissionAddRequest(): Promise<PermissionAddRequest> {
     return this.httpService.getJson<PermissionAddRequest>('api/AddRequest/GetPermission');
-  }
-
-  /* istanbul ignore next */
-  async getBetTeams(): Promise<BetTeamAddRequest[]> {
-    return this.httpService.getJson<BetTeamAddRequest[]>('api/AddRequest/GetBetTeams');
   }
 
   /* istanbul ignore next */

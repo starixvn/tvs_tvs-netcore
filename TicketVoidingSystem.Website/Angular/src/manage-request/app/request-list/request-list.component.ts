@@ -268,7 +268,8 @@ export class RequestListComponent implements OnInit, OnChanges {
         StaticService.isReducedOver,
         StaticService.isAbandoned,
         StaticService.isNotParticipate,
-        StaticService.isLikelyWrongMarketOffered
+        StaticService.isLikelyWrongMarketOffered,
+        StaticService.isWrongOddsSportsBook
     ].some(fn => fn(issueTypeStr));
 }
 

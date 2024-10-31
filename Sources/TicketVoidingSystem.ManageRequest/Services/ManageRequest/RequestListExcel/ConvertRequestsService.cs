@@ -96,7 +96,8 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
                 {IssueTypeConstant.ArchivedTicket, BuildTotalSingleAndParlay},
                 {IssueTypeConstant.AbnormalAccount, BuildVoidTimeAndTotalAccount},
                 {IssueTypeConstant.DuplicateTickets, BuildDuplicateTickets},
-                {IssueTypeConstant.RecoverTicket, BuildProducts}
+                {IssueTypeConstant.RecoverTicket, BuildProducts},
+                {IssueTypeConstant.WrongOddsSportsBook, BuildVoidTime}
             };
 
         matchingFunctions.TryGetValue(issueId, out var function);

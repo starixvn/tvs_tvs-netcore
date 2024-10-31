@@ -47,7 +47,7 @@ public class CopyRequestInfoServiceImp : CopyRequestInfoService
         var (requestInfos, betTypeTickets) = await repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(criteria);
         var firstRequest = requestInfos.First();
         firstRequest.Operators = requestExtraInfoXmlService.ParseXmlToOperators(firstRequest.OperatorInfo);
-        firstRequest.IsCheckedVar = requestExtraInfoXmlService.ParseXmlToIsCheckVar(firstRequest.IssueTypeId, firstRequest.RequestExtraInfo);
+        requestExtraInfoXmlService.UpdateRequestInfoForCopy(firstRequest.IssueTypeId, firstRequest);
         return (firstRequest, betTypeTickets);
     }
 

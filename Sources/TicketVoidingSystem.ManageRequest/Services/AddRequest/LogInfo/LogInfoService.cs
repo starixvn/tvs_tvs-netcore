@@ -63,6 +63,7 @@ public class LogInfoServiceImp : LogInfoService
             IssueTypeConstant.WrongOU => GetLogInfoViewModelWrongOu(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.Wrong1stOU => GetLogInfoViewModelWrong1stOu(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.WrongOdds => GetLogInfoViewModelWrongOdds(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.WrongOddsSportsBook => GetLogInfoViewModelWrongOddsSportsBook(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.ReducedOver => GetLogInfoViewModelReducedOver(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.Abandoned => GetLogInfoViewModelReducedOver(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.NotParticipate => GetLogInfoViewModelNotParticipate(query, validation, ticketRequest, logInfoDetail),
@@ -223,6 +224,21 @@ public class LogInfoServiceImp : LogInfoService
         };
     }
 
+    private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongOddsSportsBook(GetLogInfoQuery query, IEnumerable<Validation> validation,
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
+    {
+        return new List<GetLogInfoModel>
+        {
+            new()
+            {
+                MatchId = query.WrongOddsSportsBookModel.MatchId,
+                Validation = validation.FirstOrDefault(),
+                TicketRequest = ticketRequest,
+                LogInfoDetail = logInfoDetail.FirstOrDefault(),
+            }
+        };
+    }
+
     private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelDefault(IEnumerable<Validation> validation,
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
     {
@@ -251,6 +267,7 @@ public class LogInfoServiceImp : LogInfoService
         criteria.WrongOuInfo = query.WrongOuModels?.ToWrongOuInfoXml();
         criteria.Wrong1stOuInfo = query.Wrong1stOuModels?.ToWrongOuInfoXml();
         criteria.WrongOddsInfo = query.WrongOddsModels?.ToWrongOddsInfoXml();
+        criteria.WrongOddsSBInfo = query.WrongOddsSportsBookModel?.ToWrongOddsSportsBookInfoXml();
         criteria.ReducedOverInfo = query.ReducedOverModels?.ToReducedOverInfoXml();
         criteria.NotParticipateInfo = query.NotParticipateModels?.ToNotParticipateInfoXml();
         criteria.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedModel?.ToWrongMarketOfferedInfoXml() : null;

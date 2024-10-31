@@ -3,6 +3,7 @@ import { NotParticipateGetLogInfoQuery } from '../event-not-participate/models/g
 import { ReducedOverGetLogInfoQuery } from '../event-reduced-over/models/get-log-info.query';
 import { WrongHdpGetLogInfoQuery } from '../event-wrong-hdp/models/get-log-info.query';
 import { WrongMarketOfferedGetLogInfoQuery } from '../event-wrong-market-offered/models/get-log-info.query';
+import { WrongOddsSportsBookGetLogInfoQuery } from '../event-wrong-odds-sports-book/models/get-log-info.query';
 import { WrongOddsGetLogInfoQuery } from '../event-wrong-odds/models/get-log-info.query';
 import { WrongOuGetLogInfoQuery } from '../event-wrong-ou/models/get-log-info.query';
 import { WrongScoreGetLogInfoQuery } from '../event-wrong-score/event-wrong-score.model';
@@ -16,6 +17,7 @@ import { RedCardGetLogInfoQuery, RedCardModel } from './event-red-card.model';
 import { ReducedOverModel } from './event-reduced-over.model';
 import { WrongHdpModel } from './event-wrong-hdp.model';
 import { WrongMarketOfferedModel } from './event-wrong-market-offered.model';
+import { WrongOddsSportsBookModel } from './event-wrong-odds-sports-book.model';
 import { WrongOddsModel } from './event-wrong-odds.model';
 import { WrongOuModel } from './event-wrong-ou.model';
 import { WrongScoreModel } from './event-wrong-score.model';
@@ -57,7 +59,8 @@ export class AddRequestQuery {
   duplicateTicketsInfo: DuplicateTicketsModel;
   recoverTicketInfo: RecoverTicketModel;
   abnormalBetInfo: AbnormalBetModel;
-  WrongMarketOfferedInfo: WrongMarketOfferedModel;
+  wrongMarketOfferedInfo: WrongMarketOfferedModel;
+  wrongOddsSportsBookInfo: WrongOddsSportsBookModel;
 
   transInfoJson: string;
   unMarkTransIds: string;
@@ -89,4 +92,5 @@ export class GetLogInfoQuery {
   notParticipateModels?: NotParticipateGetLogInfoQuery[];
   earlyKickOffModels?: EarlyKickOffGetLogInfoQuery[];
   wrongMarketOfferedModel?: WrongMarketOfferedGetLogInfoQuery;
+  wrongOddsSportsBookModel?: WrongOddsSportsBookGetLogInfoQuery;
 }

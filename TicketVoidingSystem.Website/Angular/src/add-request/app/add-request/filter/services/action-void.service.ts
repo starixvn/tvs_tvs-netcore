@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { AbnormalFilterBy, ActionVoidByIssueTypeConst, TVSRequestActionType } from '../../../../../utility/constants/config';
+import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { Selection } from '../../../../../utility/models/selection.model';
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,7 @@ export class ActionVoidService {
       [IssueTypeConstant.RECOVER_TICKET]: ActionVoidByIssueTypeConst.RECOVER_TICKET,
       [IssueTypeConstant.WRONG_MARKET_OFFERED]: ActionVoidByIssueTypeConst.WRONG_MARKET_OFFERED,
       [IssueTypeConstant.TECHNICAL_ERROR]: ActionVoidByIssueTypeConst.TECHNICAL_ERROR,
+      [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: ActionVoidByIssueTypeConst.WRONG_ODDS_SPORTS_BOOK,
       [IssueTypeConstant.ABNORMAL_BET]: [],
       [IssueTypeConstant.DUPLICATE_TICKETS]: [],
     };

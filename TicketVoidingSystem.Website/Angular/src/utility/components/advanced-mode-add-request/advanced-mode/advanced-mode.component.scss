@@ -12,12 +12,14 @@
 .advanced-mode {
   margin-bottom: 10px;
   ::ng-deep .multiple-selection {
+    min-width: 0;
     width: 100%;
     button {
       border: 1px solid #c8c8c8 !important;
     }
   }
   .dropdown-item-adv {
+    white-space: nowrap;
     display: flex;
     width: 175px;
     height: fit-content;
@@ -29,17 +31,22 @@
   }
 
   .input-item-adv {
+    white-space: nowrap;
     display: flex;
     justify-content: end;
     width: 175px;
     margin-right: 10px;
     input {
-      width: 80px;
+      width: 100%;
       margin-bottom: 0px;
       height: 20px;
       padding: 1px 2px;
       border-radius: 0;
       border: 1px solid #c8c8c8 !important;
+    }
+
+    input::placeholder {
+      opacity: 0.5; ;
     }
   }
 
@@ -102,10 +109,6 @@
 
           .input-area {
             display: contents;
-          }
-
-          >div.width-280 {
-            width:280px;
           }
         }
       }

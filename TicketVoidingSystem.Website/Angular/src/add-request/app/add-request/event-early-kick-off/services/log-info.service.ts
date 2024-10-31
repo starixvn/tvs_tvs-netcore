@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PagingConstant } from '../../../../../utility/components/paging/paging/paging.model';
-import { TemplateService } from '../../../../../utility/components/template-message/template-message/template.service';
+import { TemplateService } from '../../../../../utility/components/template-message/template-message/services/template.service';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { HttpService } from '../../../../../utility/services/http.service';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -39,7 +39,7 @@ export class LogInfoService {
   }
 
   public assignTemplateMessageValueToEvent(eventLogInfo: LogInfoEarlyKickOff): void {
-    eventLogInfo.templateValue = this.templateService.getTemplateValue(eventLogInfo.matchModel);
+    eventLogInfo.templateValue = this.templateService.initializeTemplateValue(eventLogInfo.matchModel);
     eventLogInfo.templateValue.groupPHAffected = eventLogInfo.tableTicketsModel.groupPHAffected;
     eventLogInfo.templateValue.checkSettled = eventLogInfo.tableTicketsModel.isHasSettledTicket;
     eventLogInfo.templateValue.kickOffTime = eventLogInfo.kickOffTime;

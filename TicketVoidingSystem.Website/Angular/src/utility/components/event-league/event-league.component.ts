@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleCh
 import * as _ from 'lodash';
 import { Subscription, timer } from 'rxjs';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import { AddRequestStore } from '../../../add-request/app/add-request/add-request.store';
 import { LABELS } from '../../../utility/constants/labels';
 import { MatchModel } from '../../../utility/models/match.model';
 import { CommonService } from '../../../utility/services/common.service';
@@ -29,6 +30,7 @@ export class EventLeagueComponent implements OnChanges {
   private readonly observableTimer = timer(300);
 
   constructor(
+    private readonly addRequestStore: AddRequestStore,
     private readonly commonService: CommonService,
     private readonly element: ElementRef
   ) {
@@ -36,7 +38,7 @@ export class EventLeagueComponent implements OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (this.matchId && (changes['matchId'])) {
+    if (this.isEdit && this.matchId && (changes['matchId'])) {
       await this.getMatchInEditPage(this.matchId);
     }
   }
@@ -77,6 +79,7 @@ export class EventLeagueComponent implements OnChanges {
   }
 
   onChangeMatchEvent(match: MatchModel) {
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.selectedMatch = match;
     this.changeEvent.emit(match);
   }

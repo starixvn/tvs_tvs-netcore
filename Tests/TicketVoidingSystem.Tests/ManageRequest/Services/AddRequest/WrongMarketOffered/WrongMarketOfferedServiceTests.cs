@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text.Json;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.WrongMarketOffered;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.SharedApi.Services.BetTypes;
 using Xunit;
 
@@ -12,12 +12,12 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.WrongMarke
 public class WrongMarketOfferedServiceTests
 {
     private readonly BetTypesRepository repository;
-    private readonly WrongMarketOfferedServiceImp service;
+    private readonly AdvancedModeServiceImp service;
 
     public WrongMarketOfferedServiceTests()
     {
         repository = Substitute.For<BetTypesRepository>();
-        service = new WrongMarketOfferedServiceImp(repository);
+        service = new AdvancedModeServiceImp(repository);
     }
 
     [Fact]

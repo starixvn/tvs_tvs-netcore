@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
@@ -62,17 +61,16 @@ export class SaveRequestService {
   }
 
   private showPopupConfirmSave(arg: SaveRequestArg) {
-    arg.confirmRedCard.isOpenDialog = true;
     arg.confirmRedCard.requestId = arg.requestId;
     arg.confirmRedCard.requestedBy = arg.requestedBy;
-    arg.confirmRedCard.isEditingByAnotherUser =
-      this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);
+    arg.confirmRedCard.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
+    arg.confirmRedCard.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
     arg.confirmRedCard.isHasSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);
-    arg.confirmRedCard.isHasWarningForRedCard = arg.allEvents.some(x => x.messageValidationLogInfo?.length > 0);
-    arg.confirmRedCard.isHasWarningEditTakeNoteRequest =
-      (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess);
+    arg.confirmRedCard.isHasWarningTicket = arg.allEvents.some(x => x.messageValidationLogInfo?.length > 0);
     arg.confirmRedCard.issueTypeName = arg.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === arg.filter.issueTypeId).issueTypeName;
     arg.confirmRedCard.subIssueTypeName = arg.issueTypes.selectedSubIssueTypes.find(x => x.subIssueTypeId.toString() === arg.filter.subIssueTypeId).subIssueTypeName;
+    arg.confirmRedCard.voidAction = arg.filter.actions.find(x => x.value === arg.filter.action).name;
+    arg.confirmRedCard.isOpen = true;
     arg.confirmRedCard = _.clone(arg.confirmRedCard);
   }
 

@@ -119,6 +119,10 @@ public class GetTransInfoServiceImp : GetTransInfoService
                 criteria.TechnicalErrorInfo = issueInfo;
                 break;
 
+            case IssueTypeConstant.WrongOddsSportsBook:
+                criteria.WrongOddsSBInfo = issueInfo;
+                break;
+
             default:
                 criteria.IssueTypeId = query.IssueTypeId;
                 break;
@@ -193,6 +197,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
             IssueTypeConstant.RecoverTicket => query.RecoverTicketModel.ToEventRecoverTicketXml(),
             IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedModel.ToWrongMarketOfferedInfoXml(),
             IssueTypeConstant.TechnicalError => query.WrongMarketOfferedModel.ToWrongMarketOfferedInfoXml(),
+            IssueTypeConstant.WrongOddsSportsBook => query.WrongOddsSportsBookModels.ToWrongOddsSportsBookInfoXml(),
             _ => "",
         };
     }

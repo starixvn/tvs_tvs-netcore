@@ -10,9 +10,9 @@ import { ModalService } from '../../utility/components/modal/modal.service';
 import { Notification } from '../../utility/components/notification/notification';
 import { PagingModel } from '../../utility/components/paging/paging/paging.model';
 import { Message } from '../../utility/components/template-message/messages/message';
+import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { TemplateMessageComponent } from '../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../utility/components/template-message/template-message/template.model';
-import { TemplateService } from '../../utility/components/template-message/template-message/template.service';
 import { Tooltip } from '../../utility/components/tooltip/tooltip.model';
 import { FunctionConst } from '../../utility/constants/config';
 import { TEXT } from '../../utility/constants/text';
@@ -239,7 +239,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   updateTemplateValue(betTypeNameReplaceMessage: Message) {
-    this.templateValue = this.templateService.getTemplateValue(this.matchViewModel);
+    this.templateValue = this.templateService.initializeTemplateValue(this.matchViewModel);
     this.templateValue.fromTransTime = this.ticketsModel.fromTransTime;
     this.templateValue.toTransTime = this.ticketsModel.toTransTime;
     this.templateValue.fromCheckTime = this.ticketsModel.fromCheckTime;

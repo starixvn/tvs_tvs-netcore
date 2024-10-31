@@ -1,16 +1,12 @@
 import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { BetTypeAddRequest } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
-import { ItemsSelect } from '../../../../../utility/components/multiple-selection/items-select';
-import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { Item } from '../../../../../utility/models/item.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { GroupBetTypeCountModel } from '../../models/get-log-info.model';
-import { AffectedTicketsModel, LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
-import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
+import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 
@@ -25,7 +21,7 @@ export class LogInfoWrongMarketOfferedComponent {
   @Input() logInfo: LogInfoWrongMarketOffered;
   @Input() primitiveProps = new PrimitivePropertyEvent();
   @Input() issueTypeId: string;
- 
+
   constructor(private readonly addRequestApiService: AddRequestApiService) { }
 
   groupBetTypesCount: GroupBetTypeCountModel[] = [];
@@ -66,44 +62,13 @@ export class LogInfoWrongMarketOfferedComponent {
     };
 
     this.affectedTicketsModel.groupBetTypesCount = this.groupBetTypesCount;
-    this.affectedTicketsModel.tickets = new TicketsModel();
     this.affectedTicketsModel.isShowDetailBetTypeCount = true;
   }
 
-  public async updateAffectedTickets(){
-    if (this.logInfo.logInfoDetail.logInfoTicketsJson) {
-      const query: LogInfoTicketsQuery = {
-        logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
-        issueTypeId: Number(this.issueTypeId)
-      };
-      let ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
-      this.affectedTicketsModel.tickets = new TicketsModel();
-      this.affectedTicketsModel.tickets.initData(ticketsLogInfo);
-      this.affectedTicketsModel.tickets.checkAllTickets();
-      this.affectedTicketsModel.tickets.groups[0].name = null;
-    } else {
-      this.affectedTicketsModel.tickets = new TicketsModel();
-    }
-  }
-
-  public updateCheckedBetTypeIds(){
-    this.affectedTicketsModel.checkedBetTypes = this.logInfo.checkedBetTypes;
-    this.affectedTicketsModel.filterBetTypes = this.initFilterBetTypes(this.logInfo.checkedBetTypes);
-  }
-
-  private initFilterBetTypes(betTypes: BetTypeAddRequest[]): MultipleSelection{
-    const filterBetTypes = StaticService.initDefaultMultipleSelection('280px', 1);
-    filterBetTypes.items = betTypes.map(x => new ItemsSelect(0, x.id.toString(), x.name, true, true, true, []));
-
-    return filterBetTypes;
-  }
-
-  public async showAffectedTicketsDetails(){
-    this.isBlock = true;
+  public showAffectedTicketsDetails() {
     this.updateBetTypeCountModel();
-    await this.updateAffectedTickets();
-    this.updateCheckedBetTypeIds();
-    this.isBlock = false;
+    this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
+    this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
     this.affectedTicketsModel.isOpen = true;
     this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
   }

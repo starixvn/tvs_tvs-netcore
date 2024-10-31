@@ -18,6 +18,7 @@ import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { EarlyKickOffModel } from '../models/event-eko.model';
+import { GetChildMatchQuery } from '../models/get-child-match.query';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { ChildMatchModel } from '../models/related-event.model';
 import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
@@ -33,7 +34,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { SearchEventService } from './services/search-event.service';
-import { GetChildMatchQuery } from '../models/get-child-match.query';
 
 @Component({
   selector: 'event-early-kick-off',
@@ -118,7 +118,6 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   }
 
   public changeMatchEvent(): void {
-    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitiveProps.isShowLogInfoEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);

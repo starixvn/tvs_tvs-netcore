@@ -131,4 +131,10 @@ public class RequestEventModel
     public string ToOddsNotVoidHomeOver { get; set; }
     public string FromOddsNotVoidAwayUnder { get; set; }
     public string ToOddsNotVoidAwayUnder { get; set; }
+
+    public string FilterOddsType { get; set; }
+    public string OddsValue { get; set; }
+    public string FromOdds { get; set; }
+    public string ToOdds { get; set; }
+    public string CorrectOdds { get; set; }
 }

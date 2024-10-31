@@ -149,7 +149,6 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   }
 
   public changeMatchEvent(matchInfo: MatchModel) {
-    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     if (matchInfo) {
       this.resetData();
       this.matchId = matchInfo.matchId;

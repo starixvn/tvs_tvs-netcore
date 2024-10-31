@@ -20,6 +20,8 @@ public static class VoidRequest
         services.AddTransient<InsertVoidingHistoryService, InsertVoidingHistoryServiceImp>();
         services.AddTransient<MapTicketsService, MapTicketsServiceImp>();
         services.AddTransient<TicketsViewModelService, TicketsViewModelServiceImp>();
+        services.AddTransient<GetTicketsViewModelService, GetTicketsViewModelServiceImp>();
+        services.AddTransient<GetInfoTicketsForMessage, GetInfoTicketsForMessageImp>();
         services.RegisterInsertQueueServices();
     }
 }

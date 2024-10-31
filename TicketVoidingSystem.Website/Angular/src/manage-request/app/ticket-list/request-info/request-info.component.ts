@@ -43,7 +43,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   tickets = new TicketsModel();
   generalInfoViewModel = new GeneralInfoViewModel();
   briefInfoModels: BriefInfo[] = [];
-  match: MatchModel;
+  match = new MatchModel();
 
   constructor(
     private readonly appService: AppService,

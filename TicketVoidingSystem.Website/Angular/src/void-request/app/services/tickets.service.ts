@@ -29,9 +29,7 @@ export class TicketsService {
   }
 
   async getVoidTicketsMini(ticketQuery: GetTicketsQuery): Promise<TicketsModel> {
-    const voidTickets = await this.appService.getTicketsMini(ticketQuery);
-
-    return voidTickets;
+    return await this.appService.getTicketsMini(ticketQuery);
   }
 
   async loadVoidTicketsFullOnFirstTime(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel): Promise<void> {

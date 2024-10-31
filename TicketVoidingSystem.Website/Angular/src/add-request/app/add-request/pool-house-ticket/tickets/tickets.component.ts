@@ -14,4 +14,11 @@ export class TicketsComponent extends BaseTicketsListComponent<TicketsModel> imp
   public ngOnInit() {
     this.clickBody();
   }
+
+  isShowNoData(): boolean {
+    return this.model.groups === undefined ||
+      this.model.groups.length === 0 ||
+      this.model.groups === null ||
+      this.model.groups.every(group => group.displayTotalTickets === 0);
+  }
 }

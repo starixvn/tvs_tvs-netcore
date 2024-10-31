@@ -1,3 +1,4 @@
+import { WrongOddsSportsBookModel } from 'src/add-request/app/add-request/models/event-wrong-odds-sports-book.model';
 import { AbnormalAccountModel } from '../../add-request/app/add-request/models/abnormal-account.model';
 import { AbnormalBetModel } from '../../add-request/app/add-request/models/abnormal-bet.model';
 import { DuplicateTicketsModel } from '../../add-request/app/add-request/models/event-duplicate-tickets.model';
@@ -89,6 +90,7 @@ export class RequestDetailViewModel {
   recoverTicketModel?: RecoverTicketModel;
   abnormalBetModel?: AbnormalBetModel;
   wrongMarketOfferedModel?: WrongMarketOfferedModel;
+  wrongOddsSportsBookModel?: WrongOddsSportsBookModel;
 }
 
 export class PlayerName {

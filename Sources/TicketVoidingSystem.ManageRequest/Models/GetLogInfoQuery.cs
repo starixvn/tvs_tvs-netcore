@@ -21,6 +21,7 @@ public class GetLogInfoQuery
     public IEnumerable<NotParticipateViewModel>? NotParticipateModels { get; set; }
     public IEnumerable<EarlyKickOffViewModel>? EarlyKickOffModels { get; set; }
     public WrongMarketOfferedViewModel? WrongMarketOfferedModel { get; set; }
+    public WrongOddsSportsBookViewModel? WrongOddsSportsBookModel { get; set; }
     public bool? IsShowLogOnly { get; set; }
     public DateTime? KickOffTime { get; set; }
 }

@@ -118,7 +118,6 @@ export class EventWrongOddsComponent implements OnInit {
   }
 
   public async changeMatchEvent(): Promise<void> {
-    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.logInfoEvent.matchId = this.eventLeagueComponent.selectedMatch?.matchId;
     this.logInfoEvent.sportType = this.eventLeagueComponent?.selectedMatch.sportType;
     await this.calculateOddsService.updateOddsInfo(this.logInfoEvent.filterWrongOdds, this.eventLeagueComponent.selectedMatch, this.filter?.subIssueTypeId);

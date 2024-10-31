@@ -3,8 +3,8 @@ import { WrongHdpModel } from '../../../../add-request/app/add-request/models/ev
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
 import { WrongScoreModel } from '../../../../add-request/app/add-request/models/event-wrong-score.model';
 import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
+import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
-import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { EventType } from '../../../../utility/constants/sport.constant';
@@ -55,7 +55,7 @@ class Helper {
     singleCount: 1,
     minSingleTransId: 109271486445,
     maxSingleTransId: 109271486446,
-    voidFromTime:new Date('2020-12-16 00:00:00.000'),
+    voidFromTime: new Date('2020-12-16 00:00:00.000'),
     voidToTime: new Date('2020-12-16 00:00:00.000'),
   };
   static readonly fakeRequestDetailViewModel: RequestDetailViewModel = {
@@ -86,20 +86,20 @@ class Helper {
     groupPHAffected: 0
   };
   static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(),
-    voidToTime: new Date(),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    scoreOfMatch: '',
-    scoreNormalTicket: '',
-    instantlySettleCount: 2,
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
+    {
+      matchId: 12345,
+      liveScores: '0 - 0',
+      voidFromTime: new Date(),
+      voidToTime: new Date(),
+      singleCount: 1,
+      mainParlayCount: 1,
+      cashOutCount: 3,
+      settleCount: 1,
+      scoreOfMatch: '',
+      scoreNormalTicket: '',
+      instantlySettleCount: 2,
+      cancelCashOutCount: 1
+    } as LogInfoDetail;
 }
 
 describe('TemplateMessageService', () => {
@@ -123,8 +123,8 @@ describe('TemplateMessageService', () => {
     requestDetail.wrongScoreModels = [new WrongScoreModel()];
     requestDetail.wrongHdpModels = [new WrongHdpModel()];
     requestDetail.wrongOuModels = [new WrongOuModel()];
-    const mockGetTemplateValue = jest.fn().mockImplementation(() => Helper.fakeTemplateValue );
-    templateService.getTemplateValue = mockGetTemplateValue;
+    const mockGetTemplateValue = jest.fn().mockImplementation(() => Helper.fakeTemplateValue);
+    templateService.initializeTemplateValue = mockGetTemplateValue;
 
     const mockTemplateMessageService = new TemplateMessageService(templateService);
     [
@@ -149,8 +149,8 @@ describe('TemplateMessageService', () => {
     // Arrange
     const requestDetail = Helper.fakeRequestDetailViewModel;
     requestDetail.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
-    const mockGetTemplateValue = jest.fn().mockImplementation(() => Helper.fakeTemplateValue );
-    templateService.getTemplateValue = mockGetTemplateValue;
+    const mockGetTemplateValue = jest.fn().mockImplementation(() => Helper.fakeTemplateValue);
+    templateService.initializeTemplateValue = mockGetTemplateValue;
     const voidMatch = new VoidMatch();
     voidMatch.voidTicketsMini = new TicketsModel();
     const mockTemplateMessageService = new TemplateMessageService(templateService);
