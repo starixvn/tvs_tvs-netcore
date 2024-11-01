@@ -54,6 +54,7 @@ public class SendEmailServiceImp : SendEmailService
             VoidReason = model.Reason,
             VoidReasonSC = model.ReasonSC,
             Message = model.Message,
+            SpecialMessageAfterVoidService = model.SpecialMessageAfterVoidService,
             NegativeBalanceUsers = model.NegativeBalanceUsers,
             IssueTypeId = model.IssueTypeId,
             IsFilterByUserName = model.IsFilterByUsername

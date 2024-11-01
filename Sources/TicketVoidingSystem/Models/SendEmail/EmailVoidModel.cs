@@ -9,6 +9,7 @@ public class EmailVoidModel
     public string Reason { get; set; }
     public string ReasonSC { get; set; }
     public Message Message { get; set; }
+    public Message SpecialMessageAfterVoidService { get; set; }
     public int IssueTypeId { get; set; }
     public bool IsFilterByUsername { get; set; }
     public int RequestId { get; set; }

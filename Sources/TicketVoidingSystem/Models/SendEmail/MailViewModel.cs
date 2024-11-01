@@ -25,6 +25,8 @@ public class MailVoidViewModel : MailViewModel
 
     public Message Message { get; set; }
 
+    public Message SpecialMessageAfterVoidService { get; set; }
+
     public string ChineseSimplified => string.IsNullOrWhiteSpace(Message.ContentChineseSimplified) ? null : Message.ContentChineseSimplified.Replace("@@", "");
 
     public string English => string.IsNullOrWhiteSpace(Message.ContentEnglish) ? null : Message.ContentEnglish.Replace("@@", "");

@@ -55,7 +55,9 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
         modelClone.TemplatePath = TemplateEmailPath.VoidBetChinese;
         if (specialPlatformService.IsSiteSpecialPlatform(modelClone.Match, site))
         {
-            modelClone.Message = specialPlatformService.RemoveSabaInMessageContent(modelClone.Match, modelClone.Message);
+            modelClone.Message = isFromAfterVoidService
+                ? mailLicenseesModel.SpecialMessageAfterVoidService
+                : specialPlatformService.RemoveSabaInMessageContent(modelClone.Match, modelClone.Message);
             modelClone.Match = specialPlatformService.RemoveSabaInMatchInfo(modelClone.Match);
         }
 
