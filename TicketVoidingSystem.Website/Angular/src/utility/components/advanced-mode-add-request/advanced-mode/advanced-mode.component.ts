@@ -320,7 +320,9 @@ export class AdvancedModeComponent {
   } 
 
   public getControlsAllBetTypesListQuery(): AllBetTypesSelection[]{
-    return this.controlsAllBetTypesComponent.controlsAllBetTypesLists
-      .filter(x => x.isShow).map(y => { return {name: y.type, value: y.items.getValueItems()} as AllBetTypesSelection });
+    return !this.controlsAllBetTypesComponent?.controlsAllBetTypesLists 
+      ? this.advancedModeAddRequestModel.selectedAllBetTypes
+      : this.controlsAllBetTypesComponent.controlsAllBetTypesLists
+        .filter(x => x.isShow).map(y => { return {name: y.type, value: y.items.getValueItems()} as AllBetTypesSelection });
   }
 }
