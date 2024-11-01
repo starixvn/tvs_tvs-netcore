@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NUglify.Css;
-using NUglify.JavaScript;
 using WebOptimizer;
 
 namespace TicketVoidingSystem.Website.Utilities.WebOptimizer;
 
 public static class LayoutBundle
 {
-    public static void AddLayoutBundle(this IAssetPipeline pipeline, CssSettings cssSetting, CodeSettings scriptSetting)
+    public static void AddLayoutBundle(this IAssetPipeline pipeline, CssSettings cssSetting)
     {
         //// style bundle
         pipeline.AddCssBundle("/old-page/bundle/layout-libs.css", cssSetting,
@@ -27,7 +26,7 @@ public static class LayoutBundle
         pipeline.AddLessBundle("/old-page/bundle/angular-old-styles.css", "old-page/content/base/styles.less");
 
         //// script bundle
-        pipeline.AddJavaScriptBundle("/old-page/bundle/script-libs.js", scriptSetting,
+        pipeline.AddJavaScriptBundle("/old-page/bundle/script-libs.js",
                             "old-page/Scripts/_Libs/jQuery/jquery-1.8.2.js",
                             "old-page/Scripts/_Libs/jQuery/jquery-ui-1.9.1.js",
                             "old-page/Scripts/_Libs/jQuery/jquery.formattyping.js",

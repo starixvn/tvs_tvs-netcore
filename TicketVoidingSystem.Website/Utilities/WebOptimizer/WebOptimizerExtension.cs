@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NUglify.Css;
-using NUglify.JavaScript;
 
 namespace TicketVoidingSystem.Website.Utilities.WebOptimizer;
 
@@ -11,15 +10,18 @@ public static class WebOptimizerExtension
         services.AddWebOptimizer(pipeline =>
         {
             var cssSetting = new CssSettings { OutputMode = NUglify.OutputMode.SingleLine, CommentMode = CssComment.None };
-            var scriptSetting = new CodeSettings { MinifyCode = true };
 
-            pipeline.AddLayoutBundle(cssSetting, scriptSetting);
-            pipeline.AddUploadBatchMessageBundle(scriptSetting);
-            pipeline.AddVoidByBetIdBundle(scriptSetting);
-            pipeline.AddCancelCashOutBundle(scriptSetting);
-            pipeline.AddRecoverCashOutBundle(scriptSetting);
-            pipeline.AddRecoverBetBundle(scriptSetting);
-            pipeline.AddRecoverParlayBetBundle(scriptSetting);
+            pipeline.AddLayoutBundle(cssSetting);
+            pipeline.AddUploadBatchMessageBundle();
+            pipeline.AddVoidByBetIdBundle();
+            pipeline.AddCancelCashOutBundle();
+            pipeline.AddRecoverCashOutBundle();
+            pipeline.AddRecoverBetBundle();
+            pipeline.AddRecoverParlayBetBundle();
+
+            //// Minify all css and js files
+            pipeline.MinifyCssFiles("old-page/**/*.css");
+            pipeline.MinifyJsFiles("old-page/**/*.css");
         });
     }
 }

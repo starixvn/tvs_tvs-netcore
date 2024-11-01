@@ -1,18 +1,17 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using NUglify.JavaScript;
 using WebOptimizer;
 
 namespace TicketVoidingSystem.Website.Utilities.WebOptimizer;
 
 public static class RecoverCashOutBundle
 {
-    public static void AddRecoverCashOutBundle(this IAssetPipeline pipeline, CodeSettings scriptSetting)
+    public static void AddRecoverCashOutBundle(this IAssetPipeline pipeline)
     {
         //// style bundle
         pipeline.AddLessBundle("/old-page/bundle/recover-cash-out-style.css", "old-page/recover-cash-out/recover-cash-out.less");
 
         //// script bundle
-        pipeline.AddJavaScriptBundle("/old-page/bundle/recover-cash-out.js", scriptSetting,
+        pipeline.AddJavaScriptBundle("/old-page/bundle/recover-cash-out.js",
             "old-page/scripts/_libs/ContextMenu/jquery.contextMenu.js",
             "old-page/scripts/Common/Message.Helper.js",
             "old-page/scripts/Common/Message.Validator.js",
