@@ -82,6 +82,7 @@ export class SaveRequestService {
     arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoDetail?.settleCount > 0;
     arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.messageValidationLogInfo?.length > 0;
     arg.confirmAddRequest.issueTypeName = arg.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === arg.filter.issueTypeId).issueTypeName;
+    arg.confirmAddRequest.subIssueTypeName = arg.issueTypes.subIssueTypes.find(x => x.subIssueTypeId.toString() === arg.filter.subIssueTypeId).subIssueTypeName;
     arg.confirmAddRequest.voidAction = arg.filter.actions.find(x => x.value === arg.filter.action).name;
     arg.confirmAddRequest.isOpen = true;
     arg.confirmAddRequest = _.clone(arg.confirmAddRequest);

@@ -47,6 +47,7 @@ export class FilterComponent implements OnInit, OnChanges {
 
   private initialize: boolean;
   private readonly SELECT_SUB_TYPE_TEXT = 'Select Sub Type';
+  private readonly ignoreSubIssueType = [ SubIssueTypeConstant.GAME_CRASHED_VOID_LIVE ];
 
   constructor(
     private readonly filterService: FilterService,
@@ -305,9 +306,8 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   updateSubByIssue() {
-    const ignoreSubIssueType = [ SubIssueTypeConstant.GAME_CRASHED_VOID_LIVE ];
     this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes
-      .filter(x => x.issueTypeId === this.issueTypes.issueId && !ignoreSubIssueType.includes(x.subIssueTypeId));
+      .filter(x => x.issueTypeId === this.issueTypes.issueId && !this.ignoreSubIssueType.includes(x.subIssueTypeId));
     this.issueTypes.subIssueId = this.isShowButtonSelectSubType() ? null : this.issueTypes.selectedSubIssueTypes[0].subIssueTypeId;
   }
 
@@ -315,7 +315,8 @@ export class FilterComponent implements OnInit, OnChanges {
     const sub = this.issueTypes.subIssueTypes.find(x => x.subIssueTypeId === Number(this.model.subIssueTypeId));
     this.issueTypes.issueId = _.isUndefined(sub) ? this.issueTypes.issueId : sub.issueTypeId;
     this.issueTypes.subIssueId = _.isUndefined(sub) ? this.issueTypes.issueId : sub.subIssueTypeId;
-    this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.issueTypeId === this.issueTypes.issueId);
+    this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.issueTypeId === this.issueTypes.issueId
+      && !this.ignoreSubIssueType.includes(x.subIssueTypeId));
   }
 
   changeActionWaitingToManualVoid(): void {

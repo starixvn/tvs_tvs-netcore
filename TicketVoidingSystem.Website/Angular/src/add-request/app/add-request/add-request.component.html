@@ -58,7 +58,7 @@
             (updateMatchId)="updateMatchInfo($event)">
           </event-danger-accepted>
 
-          <event-red-card #eventRedCard 
+          <event-red-card #eventRedCard
             *ngIf="checkAllIssueTypes().isRedCard"
             [userId]="userId"
             [requestedBy]="requestedBy"
@@ -72,7 +72,7 @@
             (updateMatchId)="updateMatchInfo($event)">
           </event-red-card>
 
-          <event-wrong-hdp #eventWrongHDP 
+          <event-wrong-hdp #eventWrongHDP
             *ngIf="checkAllIssueTypes().isWrongHDP || checkAllIssueTypes().isWrong1stHDP"
             [userId]="userId"
             [requestedBy]="requestedBy"
@@ -86,7 +86,7 @@
             (updateMatchId)="updateMatchId($event)">
           </event-wrong-hdp>
 
-          <event-wrong-ou #eventWrongOU 
+          <event-wrong-ou #eventWrongOU
             *ngIf="checkAllIssueTypes().isWrongOU || checkAllIssueTypes().isWrong1stOU"
             [userId]="userId"
             [requestedBy]="requestedBy"
@@ -238,7 +238,7 @@
             (updateMatchId)="updateMatchId($event)">
           </event-wrong-offered-name>
 
-          <event-other-issues #eventOtherissues
+          <event-other-issues #eventOtherIssues
             *ngIf="checkAllIssueTypes().isOtherIssues"
             [userId]="userId"
             [requestedBy]="requestedBy"

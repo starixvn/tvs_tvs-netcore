@@ -5,5 +5,5 @@ export class PrimitiveProperty {
   isShowValidation: boolean;
   transInfoAddRequestModel: TransInfoAddRequestModel;
   isShowErrorNoBetType: boolean;
-  isFetchedBetTypes: boolean;
+  isShowAdvancedModeBetTypes: boolean;
 }

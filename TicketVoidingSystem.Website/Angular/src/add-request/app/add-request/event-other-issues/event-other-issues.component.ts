@@ -58,8 +58,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   ) { }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (changes['filter'] && this.filter.isChangeSubTypeManual &&
-      !this.isSubTypeRestart() && !this.primitiveProps.isFetchedBetTypes) {
+    if (changes['filter'] && this.filter.isChangeSubTypeManual && !this.isSubTypeRestart()) {
       await this.renderDataBetTypesAdvancedMode();
     }
   }
@@ -86,7 +85,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
       await this.getGroupBetTypes();
       const allBetTypes = this.groupBetTypesModel.getAllBetTypes();
       this.advancedMode?.changeBetTypes(allBetTypes);
-      this.primitiveProps.isFetchedBetTypes = true;
+      this.primitiveProps.isShowAdvancedModeBetTypes = true;
       this.primitiveProps.isShowErrorNoBetType = allBetTypes.length === 0;
     }
   }
@@ -159,6 +158,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
       checkedBetTypes: checkedBetTypes
     };
     this.primitiveProps.isShowValidation = true;
+    this.primitiveProps.isShowAdvancedModeBetTypes = true;
   }
 
   isSubTypeRestart() {
@@ -191,7 +191,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   private initSaveRequestInput() {
     const arg = new SaveRequestArg();
     if (!this.filter.isVoided) {
-      this.logInfoEvent.betTeamsResult = this.advancedMode.getCheckedBetTypes();
+      this.logInfoEvent.betTeamsResult = this.advancedMode?.getCheckedBetTypes();
     }
     arg.requestId = this.requestId;
     arg.requestedBy = this.requestedBy;

@@ -126,7 +126,7 @@ public class AddRequestProcessStageImp : AddRequestProcessStage
             IssueTypeConstant.TechnicalError => query.WrongMarketOfferedInfo?.MatchId.ToString(),
             IssueTypeConstant.WrongOddsSportsBook => query.WrongOddsSportsBookInfo?.MatchId.ToString(),
             IssueTypeConstant.WrongOfferedName => query.WrongOfferedNameInfo?.MatchId.ToString(),
-            IssueTypeConstant.OtherIssues => query.WrongOfferedNameInfo?.MatchId.ToString(),
+            IssueTypeConstant.OtherIssues => query.OtherIssuesInfo?.MatchId.ToString(),
             _ => string.Empty
         };
     }

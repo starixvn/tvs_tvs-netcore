@@ -13,7 +13,7 @@
 </filter-other-issues>
 
 <advanced-mode-add-request #advancedMode
-  *ngIf="primitiveProps.isFetchedBetTypes"
+  *ngIf="primitiveProps.isShowAdvancedModeBetTypes"
   [matchId]="logInfoEvent.matchId"
   [groupBetTypes]="groupBetTypesModel"
   (changeFilterEvent)="resetLogInfo()"

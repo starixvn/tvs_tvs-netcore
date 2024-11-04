@@ -191,41 +191,10 @@ export class StaticService {
       return requestDetail.wrongOddsSportsBookModel.subIssueTypeId;
     } else if (this.isWrongOfferedName(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongOfferedNameModel.subIssueTypeId;
+    } else if (this.isOtherIssues(requestDetail.request.issueTypeId)) {
+      return requestDetail.otherIssuesModel.subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
-    }
-  }
-
-  static getEventDate(requestDetail: RequestDetailViewModel): Date {
-    if (this.isWrongScore(requestDetail.request.issueTypeId)) {
-      return requestDetail.wrongScoreModels[0].eventDate;
-    } else if (this.isDangerAccepted(requestDetail.request.issueTypeId)) {
-      return requestDetail.dangerAcceptedModels.find(x => x.isMainMatch).eventDate;
-    } else if (this.isRedCard(requestDetail.request.issueTypeId)) {
-      return requestDetail.redCardModels.find(x => x.isMainMatch).eventDate;
-    } else if (this.isWrongHDP(requestDetail.request.issueTypeId) || this.isWrong1stHDP(requestDetail.request.issueTypeId)) {
-      return requestDetail.wrongHdpModels.find(x => x.isMainMatch).eventDate;
-    } else if (this.isWrongOU(requestDetail.request.issueTypeId) || this.isWrong1stOU(requestDetail.request.issueTypeId)) {
-      return requestDetail.wrongOuModels.find(x => x.isMainMatch).eventDate;
-    } else if (this.isWrongOdds(requestDetail.request.issueTypeId)) {
-      return requestDetail.wrongOddsModels[0].eventDate;
-    } else if (this.isReducedOver(requestDetail.request.issueTypeId) || this.isAbandoned(requestDetail.request.issueTypeId)) {
-      return requestDetail.reducedOverModels[0].eventDate;
-    } else if (this.isNotParticipate(requestDetail.request.issueTypeId)) {
-      return requestDetail.notParticipateModels[0].eventDate;
-    } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId) || this.isWrongKickOff(requestDetail.request.issueTypeId)) {
-      return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).eventDate;
-    } else if (
-      this.isAbnormalAccount(requestDetail.request.issueTypeId)
-      || this.isRecoverTicket(requestDetail.request.issueTypeId)
-      || this.isDuplicateTickets(requestDetail.request.issueTypeId)
-      || this.isAbnormalBet(requestDetail.request.issueTypeId)
-      || this.isWrongOfferedName(requestDetail.request.issueTypeId)
-      || this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)
-      || this.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
-      return null;
-    } else {
-      return requestDetail.event.eventDate;
     }
   }
 
