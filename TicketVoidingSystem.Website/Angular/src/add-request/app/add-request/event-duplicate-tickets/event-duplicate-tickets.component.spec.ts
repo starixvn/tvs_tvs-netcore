@@ -1,11 +1,11 @@
 import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
-import { MatchInfoViewModel } from 'src/utility/models/event.model';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
+import { MatchInfoViewModel } from '../../../../utility/models/event.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestApiService } from '../add-request-api.service';

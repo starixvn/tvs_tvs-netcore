@@ -39,6 +39,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
   groupPHAffected: number;
   licenseeAffectedList: AffectedLicensee[];
   betTypeNameReplaceMessage: Message;
+  smallestMapTicket: string;
 
   initData(data: TicketsModel) {
     this.total = data.total;

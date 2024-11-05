@@ -170,4 +170,11 @@ public static class Helper
 
         return result;
     }
+
+    public static string SubstringBypassLength(this string source, int startIndex, int maxLength)
+    {
+        return string.IsNullOrEmpty(source)
+            ? source
+            : source.Substring(startIndex, Math.Min(source.Length - startIndex, maxLength));
+    }
 }

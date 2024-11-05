@@ -8,8 +8,8 @@ public class WrongOddsViewModel
     public int IssueTypeId { get; set; }
     public int SubIssueTypeId { get; set; }
     public DateTime? EventDate { get; set; }
-    public DateTime FilterFromTransTime { get; set; }
-    public DateTime FilterToTransTime { get; set; }
+    public DateTime? FilterFromTransTime { get; set; }
+    public DateTime? FilterToTransTime { get; set; }
     public DateTime? VoidFromTime { get; set; }
     public DateTime? VoidToTime { get; set; }
     public int LiveIndicator { get; set; }

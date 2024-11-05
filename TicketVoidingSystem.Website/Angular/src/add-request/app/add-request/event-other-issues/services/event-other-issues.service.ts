@@ -35,16 +35,17 @@ export class EventOtherIssuesService {
     return groupBetTypesModel;
   }
 
-  initDefaultFilter(loginfoEvent: LogInfoOtherIssues): void {
+  initDefaultFilter(): FilterOtherIssuesModel {
     const currentMoment = moment.utc().tz('America/Caracas');
-    loginfoEvent.filterOtherIssues = new FilterOtherIssuesModel();
-    loginfoEvent.filterOtherIssues.fromDateTime = moment.utc().tz('America/Caracas').format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    loginfoEvent.filterOtherIssues.toDateTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    return {
+      fromDateTime: currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
+      toDateTime: currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT)
+    } as FilterOtherIssuesModel;
   }
 
   initDefaultLogInfoOtherIssues(): LogInfoOtherIssues {
     const event = new LogInfoOtherIssues();
-    this.initDefaultFilter(event);
+    event.filterOtherIssues = this.initDefaultFilter();
 
     return event;
   }

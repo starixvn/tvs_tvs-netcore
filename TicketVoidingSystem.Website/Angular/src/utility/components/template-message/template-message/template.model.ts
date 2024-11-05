@@ -76,4 +76,6 @@ export class TemplateValue {
   actualNameS?: string;
   // Wrong Odds
   favoriteValue?: string;
+  // other issues
+  smallestMapTicket?: string;
 }

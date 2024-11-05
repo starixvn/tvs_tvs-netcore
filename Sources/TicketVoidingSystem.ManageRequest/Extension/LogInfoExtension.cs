@@ -25,7 +25,7 @@ public static class LogInfoExtension
             var liveAwayScore = scores[1].Trim();
             var line = $"<r LiveHomeScore='{liveHomeScore}' "
                 + $"LiveAwayScore='{liveAwayScore}' "
-                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"ScoreId='{model.ScoreId}' "
                 + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"SubIssueTypeId='{model.SubIssueTypeId}' "
@@ -52,8 +52,8 @@ public static class LogInfoExtension
         foreach (var model in models)
         {
             var line = $"<r MatchId='{model.MatchId}' "
-                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                 + $"AATime='{model.AATime}' "
                 + $"PATime='{model.PATime}' "
@@ -76,8 +76,8 @@ public static class LogInfoExtension
         foreach (var model in models)
         {
             var line = $"<r MatchId='{model.MatchId}' "
-                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"IsMainMatch='{model.IsMainMatch}' "
                 + $"PoolHouseCheckedBetTypes='{model.PoolHouseCheckedBetTypes}' "
                 + $"SubIssueTypeId='{model.SubIssueTypeId}' "
@@ -105,8 +105,8 @@ public static class LogInfoExtension
         foreach (var model in models)
         {
             var line = $"<r MatchId='{model.MatchId}' "
-                       + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                       + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                        + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                        + $"IsMainMatch='{model.IsMainMatch}' "
                        + $"LiveIndicator='{model.LiveIndicator}' "
@@ -132,8 +132,8 @@ public static class LogInfoExtension
         foreach (var model in models)
         {
             var line = $"<r MatchId='{model.MatchId}' "
-                       + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                       + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                        + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                        + $"LiveIndicator='{model.LiveIndicator}' "
                        + $"FilterFavoriteType='{SecurityElement.Escape(model.FilterFavoriteType)}' "
@@ -236,8 +236,8 @@ public static class LogInfoExtension
     public static string ToWrongMarketOfferedInfoXml(this WrongMarketOfferedViewModel model)
     {
         return $"<root><r MatchId = '{model.MatchId}' "
-                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                 + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}'/></root>";
     }
@@ -245,8 +245,8 @@ public static class LogInfoExtension
     public static string ToWrongOddsSportsBookInfoXml(this WrongOddsSportsBookViewModel model)
     {
         return $"<root><r MatchId = '{model.MatchId}' "
-            + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-            + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+            + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+            + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
             + $"SubIssueTypeId='{model.SubIssueTypeId}' "
             + $"LiveIndicator='{model.LiveIndicator}' "
             + $"FilterOddsType='{SecurityElement.Escape(model.FilterOddsType)}' "

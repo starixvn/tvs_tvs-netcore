@@ -25,4 +25,5 @@ public class ListTicketsViewModel
     public IEnumerable<Group<TicketViewModel>> Groups { get; set; }
 
     public List<AffectedLicensee> LicenseeAffectedList { get; set; }
+    public string SmallestMapTicket { get; set; }
 }

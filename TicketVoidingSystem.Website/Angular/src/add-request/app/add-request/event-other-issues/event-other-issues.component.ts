@@ -58,8 +58,13 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   ) { }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (changes['filter'] && this.filter.isChangeSubTypeManual && !this.isSubTypeRestart()) {
-      await this.renderDataBetTypesAdvancedMode();
+    if (changes['filter'] && this.filter.isChangeSubTypeManual) {
+      this.primitiveProps.isShowValidation = false;
+      if (this.isSubTypeRestart()) {
+        this.logInfoEvent.filterOtherIssues = this.eventOtherIssuesService.initDefaultFilter();
+      } else {
+        await this.renderDataBetTypesAdvancedMode();
+      }
     }
   }
 

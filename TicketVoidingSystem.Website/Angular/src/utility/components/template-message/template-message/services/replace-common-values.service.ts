@@ -65,4 +65,8 @@ export class ReplaceCommonValuesService {
       this.replaceMessageService.replaceAll(outputMessage, TemplateReplace.CHECK_STATEMENT, '');
     }
   }
+
+  public replaceMap(templateValue: TemplateValue, outputMessage: Message): void {
+    this.replaceMessageService.replaceAll(outputMessage, TemplateReplace.MAP, templateValue.smallestMapTicket ? `${templateValue.smallestMapTicket} ` : '');
+  }
 }

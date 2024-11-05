@@ -53,8 +53,8 @@ public class RequestEventModel
     public DateTime? GlobalShowTime { get; set; }
     public DateTime? VoidFromTime { get; set; }
     public DateTime? VoidToTime { get; set; }
-    public DateTime FilterFromTransTime { get; set; }
-    public DateTime FilterToTransTime { get; set; }
+    public DateTime? FilterFromTransTime { get; set; }
+    public DateTime? FilterToTransTime { get; set; }
     public string FilterFromBetId { get; set; }
     public string FilterToBetId { get; set; }
     public int? FilterBy { get; set; }

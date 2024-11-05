@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { SubIssueTypeConstant } from 'src/utility/constants/sub-issue-type.constant';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { LocalStorageCacheConstant } from '../../../../utility/constants/local-storage-cache.constant';
+import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
 import { IssueType } from '../../../../utility/models/issue-type.model';
 import { Selection } from '../../../../utility/models/selection.model';

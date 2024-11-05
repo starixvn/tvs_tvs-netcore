@@ -61,6 +61,7 @@ export class TemplateReplace {
   static readonly ACTUAL_NAMET = '{{Actual NameT}}';
   static readonly WRONG_NAMES = '{{Wrong NameS}}';
   static readonly ACTUAL_NAMES = '{{Actual NameS}}';
+  static readonly MAP = '{{Map}}';
 }
 
 export class TemplateContentConst {

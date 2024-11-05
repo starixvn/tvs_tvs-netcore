@@ -10,8 +10,8 @@ public class WrongMarketOfferedViewModel
     public int SubIssueTypeId { get; set; }
     public IEnumerable<BetTeamAddRequestResult> BetTeamsResult { get; set; }
     public IEnumerable<GroupBetTypeModel> GroupBetTypes { get; set; }
-    public DateTime FilterFromTransTime { get; set; }
-    public DateTime FilterToTransTime { get; set; }
+    public DateTime? FilterFromTransTime { get; set; }
+    public DateTime? FilterToTransTime { get; set; }
     public DateTime? VoidFromTime { get; set; }
     public DateTime? VoidToTime { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }

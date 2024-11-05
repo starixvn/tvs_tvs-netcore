@@ -4,6 +4,9 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
+using TicketVoidingSystem.SharedApi.Services.BetTypes;
+using TicketVoidingSystem.Utilities;
 using TicketVoidingSystem.VoidSingleBet.Models;
 using TicketVoidingSystem.VoidSingleBet.ViewModels;
 
@@ -11,21 +14,23 @@ namespace TicketVoidingSystem.VoidSingleBet.Services.GetTickets;
 
 public interface UpdateListTicketsViewModelService
 {
-    void Update(ListTicketsViewModel model, IList<GetTicketModel> data);
+    Task Update(ListTicketsViewModel model, IList<GetTicketModel> data, int matchId);
 }
 
 public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelService
 {
     private readonly IMapper mapper;
     private readonly BetListService betListService;
+    private readonly BetTypesRepository betTypesRepository;
 
-    public UpdateListTicketsViewModelServiceImp(IMapper mapper, BetListService betListService)
+    public UpdateListTicketsViewModelServiceImp(IMapper mapper, BetListService betListService, BetTypesRepository betTypesRepository)
     {
         this.mapper = mapper;
         this.betListService = betListService;
+        this.betTypesRepository = betTypesRepository;
     }
 
-    public void Update(ListTicketsViewModel model, IList<GetTicketModel> data)
+    public async Task Update(ListTicketsViewModel model, IList<GetTicketModel> data, int matchId)
     {
         if (!data.Any())
         {
@@ -38,6 +43,7 @@ public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelSe
         model.LicenseeAffectedList = GetLicenseeAffectedList(data);
         UpdateTimeViewModel(model, data);
         UpdateBetTypeName(model, data);
+        await UpdateSmallestMapTicket(model, data, matchId);
     }
 
     private static List<AffectedLicensee> GetLicenseeAffectedList(IList<GetTicketModel> data)
@@ -113,5 +119,19 @@ public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelSe
         ticket.Odds = item.SubOdds;
 
         return ticket;
+    }
+
+    private async Task UpdateSmallestMapTicket(ListTicketsViewModel model, IEnumerable<GetTicketModel> tickets, int matchId)
+    {
+        var betTypesModel = await betTypesRepository.GetBetTypes(new GetBetTypesCriteria
+        {
+            MatchId = matchId,
+            BetTypes = string.Join(",", tickets.Select(x => x.BetType).Distinct())
+        });
+        var allBetTypesMap = betTypesModel.BetTypes.Where(y => y.Name.StartsWith("Map X")).Select(x => int.Parse(x.Id));
+        var minBetId = tickets.Where(x => allBetTypesMap.Contains(x.BetType)).Min(x => x.BetId)?.ToString();
+        var minValueMap = minBetId.SubstringBypassLength(1, 2);
+
+        model.SmallestMapTicket = int.TryParse(minValueMap, out var value) ? value.ToString() : "";
     }
 }

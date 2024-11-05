@@ -3,27 +3,33 @@ using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
+using TicketVoidingSystem.SharedApi.Services.BetTypes;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 public interface TicketsViewModelService
 {
-    void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId, VoidPermission voidPermission);
+    Task UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId, VoidPermission voidPermission, int? matchId);
 }
 
 public class TicketsViewModelServiceImp : TicketsViewModelService
 {
     private readonly GetTicketsViewModelService getTicketsViewModelService;
     private readonly GetInfoTicketsForMessage getInfoTicketsForMessage;
+    private readonly BetTypesRepository betTypesRepository;
 
-    public TicketsViewModelServiceImp(GetTicketsViewModelService getTicketsViewModelService, GetInfoTicketsForMessage getInfoTicketsForMessage)
+    public TicketsViewModelServiceImp(GetTicketsViewModelService getTicketsViewModelService,
+        GetInfoTicketsForMessage getInfoTicketsForMessage, BetTypesRepository betTypesRepository)
     {
         this.getTicketsViewModelService = getTicketsViewModelService;
         this.getInfoTicketsForMessage = getInfoTicketsForMessage;
+        this.betTypesRepository = betTypesRepository;
     }
 
-    public void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId,
-        VoidPermission voidPermission)
+    public async Task UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId,
+        VoidPermission voidPermission, int? matchId)
     {
         var ticketsByGroup = getTicketsViewModelService.GetTicketsByGroup(allTickets);
         var validTickets = getTicketsViewModelService.GetValidTickets(ticketsByGroup, voidPermission, issueTypeId);
@@ -38,6 +44,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         UpdateCheckPermissionTickets(model, allTickets);
         UpdateTotalCounts(model, allTickets, ticketsByGroup);
         UpdateVariableForTemplateMessage(model, voidTickets);
+        model.SmallestMapTicket = await UpdateSmallestMapTicket(voidTickets, issueTypeId, matchId);
         model.GroupPHAffected = getTicketsViewModelService.GetGroupPhAffected(allTickets);
     }
 
@@ -72,6 +79,25 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
             data.Where(item => !item.IsCancelCashOut).Select(ConvertGetTicketModelToBetId).ToList();
         model.AllCancelCashOutTickets =
             data.Where(item => item.IsCancelCashOut).Select(ConvertGetTicketModelToBetId).ToList();
+    }
+
+    private async Task<string> UpdateSmallestMapTicket(IEnumerable<GetTicketModel> voidTickets, int issueTypeId, int? matchId)
+    {
+        if (issueTypeId is not IssueTypeConstant.OtherIssues)
+        {
+            return null;
+        }
+
+        var betTypesModel = await betTypesRepository.GetBetTypes(new GetBetTypesCriteria
+        {
+            MatchId = matchId ?? 0,
+            BetTypes = string.Join(",", voidTickets.Select(x => x.BetType).Distinct())
+        });
+        var allBetTypesMap = betTypesModel.BetTypes.Where(y => y.Name.StartsWith("Map X")).Select(x => int.Parse(x.Id));
+        var minBetId = voidTickets.Where(x => allBetTypesMap.Contains(x.BetType)).Min(x => x.BetId)?.ToString();
+        var minValueMap = minBetId.SubstringBypassLength(1, 2);
+
+        return int.TryParse(minValueMap, out var value) ? value.ToString() : "";
     }
 
     private static BetId ConvertGetTicketModelToBetId(GetTicketModel model)

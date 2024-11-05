@@ -76,6 +76,13 @@ export class VoidPageService {
         subIssueTypeId: requestDetail.wrongOddsSportsBookModel.subIssueTypeId
       } as BasicRequestInfo;
     }
+
+    if (StaticService.isOtherIssues(requestDetail.request.issueTypeId)) {
+      return {
+        matchId: requestDetail.otherIssuesModel.matchId,
+        subIssueTypeId: requestDetail.otherIssuesModel.subIssueTypeId
+      } as BasicRequestInfo;
+    }
   }
 
   private getSubIssueTypeModel(subIssueTypeId: number, issueTypes: IssueTypesModel): SubIssueType {
@@ -111,6 +118,10 @@ export class VoidPageService {
 
     if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       query.wrongOddsSportsBookModel = MappingModelStaticService.buildWrongOddsSportsBookGetLogInfoModel(requestDetail.wrongOddsSportsBookModel);
+    }
+
+    if (StaticService.isOtherIssues(requestDetail.request.issueTypeId)) {
+      query.otherIssuesModel = MappingModelStaticService.buildOtherIssuesGetLogInfoModel(requestDetail.otherIssuesModel);
     }
 
     const viewModel = await this.commonService.getLogInfo(query);

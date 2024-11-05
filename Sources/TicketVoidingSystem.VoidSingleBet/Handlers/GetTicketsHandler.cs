@@ -36,7 +36,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
             Groups = await CreateGroups(request, getTicketsResult)
         };
 
-        updateListTicketsViewModelService.Update(model, getTicketsResult);
+        await updateListTicketsViewModelService.Update(model, getTicketsResult, request.MatchId);
 
         return model;
     }

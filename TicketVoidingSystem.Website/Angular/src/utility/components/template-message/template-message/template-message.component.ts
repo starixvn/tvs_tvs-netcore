@@ -204,15 +204,25 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   private replaceOthersInfo(): void {
+    this.replaceCommonValuesService.replaceMap(this.value, this.message);
     this.replaceScoreService.execute(this.value, this.message);
     this.replaceAIOMessageService.execute(this.isVoidSinglePage(), this.value, this.message);
-    this.replaceSpecialBetTypeService.execute(this.isLikelyWrongMarketOffered(), this.issueTypeUpdateSpecialBetTypeVoidSingleBet(), this.value, this.message);
+    this.replaceSpecialBetTypeService.execute(this.issueTypeUpdateSpecialBetTypeTvs(), this.issueTypeUpdateSpecialBetTypeVoidSingleBet(), this.value, this.message);
  }
 
+  issueTypeUpdateSpecialBetTypeTvs(): boolean {
+    return this.isTVSVoidPage() && (StaticService.isOtherIssues(this.issueTypeId) || this.isLikelyWrongMarketOffered());
+  }
+
   issueTypeUpdateSpecialBetTypeVoidSingleBet(): boolean {
-    return this.isVoidSinglePage() &&
-      (StaticService.isWrongHDP(this.issueTypeId) || StaticService.isWrongQuarterHDP(this.issueTypeId) || StaticService.isWrongOdds(this.issueTypeId)
-        || this.isLikelyWrongMarketOffered() || (StaticService.isWrongOU(this.issueTypeId) && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38));
+    return this.isVoidSinglePage() && (
+      this.isLikelyWrongMarketOffered() ||
+      StaticService.isWrongHDP(this.issueTypeId) ||
+      StaticService.isWrongQuarterHDP(this.issueTypeId) ||
+      StaticService.isWrongOdds(this.issueTypeId) ||
+      StaticService.isOtherIssues(this.issueTypeId) ||
+      (StaticService.isWrongOU(this.issueTypeId) && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38)
+    );
   }
 
   checkValidation(): boolean {
