@@ -130,7 +130,7 @@ const editRequest = {
 const configPages = [
   //homePage,
   //manageVoidServices,
-  //abExceptionList,
+  abExceptionList,
   //markTickets,
   //ticketListing,
   //voidSingleBet,
