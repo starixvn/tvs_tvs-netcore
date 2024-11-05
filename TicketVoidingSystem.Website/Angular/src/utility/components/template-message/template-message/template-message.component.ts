@@ -138,6 +138,8 @@ export class TemplateMessageComponent implements OnChanges {
       templateId = this.findTemplateId(this.subIssueTypeId, this.value.sportTypeId, this.value.isCheckedVar);
     }
     this.selectedTemplated = this.templates.find(x => x.templateId === templateId);
+    this.templateInputsService.updateOrdinalNumberForInputsNextCorner(this.issueTypeId, this.selectedTemplated, this.value);
+
     this.updateMessage();
   }
 
@@ -194,9 +196,8 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   private replaceFromInputs(): void  {
-    this.templateInputsService.updateOrdinalNumberForInputsNextCorner(this.issueTypeId, this.selectedTemplated, this.value);
     if (this.isTVSVoidPage()) {
-      this.templateInputsServiceForTVS.replaceInputsByIssueType(this.issueTypeId, this.subIssueTypeId, this.value, this.message);
+      this.templateInputsServiceForTVS.replaceInputsByIssueType(this.issueTypeId, this.subIssueTypeId, this.value, this.message, this.selectedTemplated);
     } else {
       this.templateInputsService.replaceInputs(this.subIssueTypeId, this.selectedTemplated, this.message);
     }

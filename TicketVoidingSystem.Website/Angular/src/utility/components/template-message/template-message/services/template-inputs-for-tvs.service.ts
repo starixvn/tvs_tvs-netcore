@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { StaticService } from 'src/utility/services/static.service';
 import { Message } from '../../messages/message';
 import { TemplateReplace } from '../template.const';
-import { TemplateContent, TemplateValue } from '../template.model';
+import { TemplateContent, TemplateValue, TemplateModel } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
 import { TemplateWrongOddsSportBookService } from './template-wrong-odds-sport-book.service';
 import { TemplateWrongOddsService } from './template-wrong-odds.service';
 import { TemplateWrongScoreService } from './template-wrong-score.service';
+import { TemplateInputsService } from './template-inputs.service';
 
 @Injectable()
 export class TemplateInputsForTVSService {
@@ -15,9 +16,11 @@ export class TemplateInputsForTVSService {
     private readonly replaceMessageService: ReplaceMessageService,
     private readonly templateWrongScoreService: TemplateWrongScoreService,
     private readonly templateWrongOddsService: TemplateWrongOddsService,
-    private readonly templateWrongOddsSportBookService: TemplateWrongOddsSportBookService) { }
+    private readonly templateWrongOddsSportBookService: TemplateWrongOddsSportBookService,
+    private readonly templateInputsService: TemplateInputsService,
+  ) { }
 
-  public replaceInputsByIssueType(issueTypeId: number, subIssueTypeId: number, templateValue: TemplateValue, outputMessage: Message): void {
+  public replaceInputsByIssueType(issueTypeId: number, subIssueTypeId: number, templateValue: TemplateValue, outputMessage: Message, selectedTemplated: TemplateModel): void {
     if (StaticService.isWrongScore(issueTypeId)) {
       this.templateWrongScoreService.replaceActualScore(subIssueTypeId, templateValue, outputMessage);
     } else if (StaticService.isWrongHDP(issueTypeId) || StaticService.isWrong1stHDP(issueTypeId)) {
@@ -31,6 +34,8 @@ export class TemplateInputsForTVSService {
       this.templateWrongOddsService.replaceActualMarketTVS(subIssueTypeId, templateValue, outputMessage);
     } else if (StaticService.isWrongOddsSportsBook(issueTypeId)) {
       this.templateWrongOddsSportBookService.replaceActualMarketSportsBook(templateValue, outputMessage);
+    } else if(StaticService.isDangerAccepted(issueTypeId)) {
+      this.templateInputsService.replaceInputs(subIssueTypeId, selectedTemplated, outputMessage);
     }
   }
 
