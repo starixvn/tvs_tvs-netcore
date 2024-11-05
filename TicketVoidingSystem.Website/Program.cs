@@ -20,9 +20,9 @@ var services = builder.Services;
 var configuration = builder.Configuration;
 
 // Add services to the container.
-services.LoadAppSetting(configuration);
+services.AddTvsAppSetting(configuration);
 services.AddRazorPages();
-services.RegisterAuthentication();
+services.AddTvsAuthentication();
 services.AddHttpClient<AmendmentOicHttpClientService, AmendmentOicHttpClientServiceImp>();
 services.AddHttpClient<CashOutHttpClientService, CashOutHttpClientServiceImp>();
 services.AddHttpClient<LinkedLogHttpClientService, LinkedLogHttpClientServiceImp>();

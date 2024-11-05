@@ -64,7 +64,7 @@ namespace TicketVoidingSystem.Website.Utilities;
 
 public static class ServiceCollectionExtension
 {
-    public static void LoadAppSetting(this IServiceCollection services, IConfiguration configuration)
+    public static void AddTvsAppSetting(this IServiceCollection services, IConfiguration configuration)
     {
         AppSettingService.InitSetting(configuration);
     }
@@ -90,7 +90,7 @@ public static class ServiceCollectionExtension
         ExceptionHandler.UseConfig(configuration);
     }
 
-    public static void RegisterAuthentication(this IServiceCollection services)
+    public static void AddTvsAuthentication(this IServiceCollection services)
     {
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
