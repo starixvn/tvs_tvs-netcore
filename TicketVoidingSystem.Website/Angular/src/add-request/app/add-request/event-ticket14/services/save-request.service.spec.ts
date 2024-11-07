@@ -17,7 +17,7 @@ class Helper {
     isVoided: false,
     isChangeSubTypeManual: true,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeSaveRequestArg: SaveRequestArg = {
     requestId: 1111,
     isEdit: false,
@@ -39,9 +39,9 @@ describe('SaveRequestService', () => {
     mockAddRequestService = new AddRequestService(null, null, null);
     mockAddRequestService.executeSaveRequest = jest.fn();
   });
-  
+
   it('#executeSaveRequestApi should call #executeSaveRequest', async () => {
-    const args = Helper.fakeSaveRequestArg;    
+    const args = Helper.fakeSaveRequestArg;
     const spyExecuteSaveRequest = jest.spyOn(mockAddRequestService, 'executeSaveRequest').mockImplementation();
     mockSaveRequestService = new SaveRequestService(mockAddRequestService);
     mockSaveRequestService['initAddRequestQuery'] = jest.fn().mockImplementation(() => new AddRequestQuery());
@@ -49,7 +49,7 @@ describe('SaveRequestService', () => {
 
     expect(spyExecuteSaveRequest).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#initAddRequestQuery should return expected model', async () => {
     const args = Helper.fakeSaveRequestArg;
     args.filter.isVoided = false;

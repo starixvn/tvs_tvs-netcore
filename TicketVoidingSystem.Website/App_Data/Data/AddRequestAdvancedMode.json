@@ -10645,26 +10645,29 @@
         {
           "Items": [
             {
-              "Name": "0-2",
-              "Value": "0-2"
+              "Name": "All",
+              "Value": "All"
             },
             {
-              "Name": "1-2",
-              "Value": "1-2"
+              "Name": "Over",
+              "Value": "o"
             },
             {
-              "Name": "2-0",
-              "Value": "2-0"
-            },
-            {
-              "Name": "2-1",
-              "Value": "2-1"
+              "Name": "Under",
+              "Value": "u"
             }
           ],
-          "Name": "",
+          "Name": "Over/Under",
           "Value": "All",
-          "IsMultiple": true,
           "XmlAttribute": "Team"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp"
         }
       ],
       "Type": 1,

@@ -10,8 +10,6 @@ public class GetMatchInfoCriteria : CriteriaBase
 
     public int Type { get; set; }
 
-    public bool? IsExcludeChildMatchCricket { get; set; }
-
     public override string GetSettingKey() => "NAP_SpecialDelete_MatchInfo_Select";
 
     public override bool IsValid() => MatchId > 0;

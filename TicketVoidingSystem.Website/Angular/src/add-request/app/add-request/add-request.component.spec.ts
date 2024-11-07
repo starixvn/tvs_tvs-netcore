@@ -95,7 +95,7 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '1',
     subIssueTypeId: '1',
@@ -103,7 +103,7 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
-  };
+  } as FilterModel;
   static getFakeRequestViewModel(): Result<string> {
     return {
       errorCode: 0,
@@ -303,7 +303,9 @@ describe('AddRequestComponent', () => {
 
   it('#getEventLabel should return correct "Username"', async () => {
     const component = new AddRequestComponent(null, null);
-    component.isAbnormalAccount = jest.fn().mockImplementation(() => true);
+    component.model = new RequestModel();
+    component.model.filter = new FilterModel();
+    component.model.filter.issueTypeId = IssueTypeConstant.ABNORMAL_ACCOUNT;
     const actual = component.getEventLabel();
 
     expect(actual).toBe('Username');
@@ -311,8 +313,9 @@ describe('AddRequestComponent', () => {
 
   it('#getEventLabel should return correct "Ticket Info"', async () => {
     const component = new AddRequestComponent(null, null);
-    component.isAbnormalAccount = jest.fn().mockImplementation(() => false);
-    component.isArchivedTicketIssueType = jest.fn().mockImplementation(() => true);
+    component.model = new RequestModel();
+    component.model.filter = new FilterModel();
+    component.model.filter.issueTypeId = IssueTypeConstant.ARCHIVED_TICKET;
     const actual = component.getEventLabel();
 
     expect(actual).toBe('Ticket Info');
@@ -320,8 +323,9 @@ describe('AddRequestComponent', () => {
 
   it('#getEventLabel should return correct "Event"', async () => {
     const component = new AddRequestComponent(null, null);
-    component.isAbnormalAccount = jest.fn().mockImplementation(() => false);
-    component.isArchivedTicketIssueType = jest.fn().mockImplementation(() => false);
+    component.model = new RequestModel();
+    component.model.filter = new FilterModel();
+    component.model.filter.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
     const actual = component.getEventLabel();
 
     expect(actual).toBe('Event');

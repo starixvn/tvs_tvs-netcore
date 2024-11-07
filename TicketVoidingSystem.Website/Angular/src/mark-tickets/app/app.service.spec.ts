@@ -9,8 +9,6 @@ import {
     ConfirmAutoUnmarkQuery, ConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark
 } from './confirm-auto-unmark/confirm-auto-unmark.model';
 import { AllMarkedTicketsModel } from './mark-unmark-ticket/all-marked-ticket-list/all-marked-ticket.model';
-import { Currency } from './mark-unmark-ticket/filter-tickets/filter.model';
-import { GroupLicensee } from './mark-unmark-ticket/filter-tickets/match-id/licensees/licensees.model';
 import { AllMarkedTicketQuery, GetLogsQuery, GetTicketsQuery, MarkedTicketQuery, TicketDetailQuery } from './models/query.model';
 import { DataPermission, ResultMarkTicketModel } from './models/result.model';
 import { GroupModel } from './tickets-list/group-tickets.model';
@@ -45,36 +43,6 @@ describe('AppService', () => {
         expect(result.balanceUpDay).toBe(expectedBalanceUp.balanceUpDay);
     });
 
-    it('Get Currencies', async () => {
-        // Arrange
-        const expectedCurrencies: Currency[] = [
-            { id: 13, currencyCode: 'RMB' },
-            { id: 66, currencyCode: 'YUN' }
-        ];
-        mockHttpService.getJson.mockResolvedValue(expectedCurrencies);
-
-        // Action and Assert
-        const result = await appService.getCurrencies();
-
-        expect(result.length).toBe(2);
-    });
-
-    it('Get Licensees', async () => {
-        // Arrange
-        const expectedLicensees: GroupLicensee[] = [
-            new GroupLicensee('China rules', []),
-            new GroupLicensee('Asia rules', [])
-        ];
-        mockHttpService.getJson.mockResolvedValue(expectedLicensees);
-
-        // Action and Assert
-        const result = await appService.getLicensees();
-
-        expect(result.length).toBe(2);
-        expect(result[0].groupName).toBe('China rules');
-
-    });
-
     it('Get Group BetTypes', async () => {
         // Arrange
         const groupBettype: GroupBetType[] = [
@@ -94,7 +62,7 @@ describe('AppService', () => {
     it('Get Tickets', async () => {
         // Arrange
         const expectedTicketsModel = new TicketsModel();
-        expectedTicketsModel.groups.push(new GroupModel('MBC Group', [{mainTransId: '123123123'} as TicketModel ], ['12']));
+        expectedTicketsModel.groups.push(new GroupModel('MBC Group', [{ mainTransId: '123123123' } as TicketModel], ['12']));
         expectedTicketsModel.totalItems = 1;
         expectedTicketsModel.licenseesName = 'MBC Group';
         expectedTicketsModel.invalidTransIds = '105662749481';
@@ -220,7 +188,7 @@ describe('AppService', () => {
     it('Get Tickets Detail', async () => {
         // Arrange
         const expectedTicketsModel = new TicketsModel();
-        expectedTicketsModel.groups.push(new GroupModel('MBC Group', [{mainTransId:'123123'} as TicketModel], []));
+        expectedTicketsModel.groups.push(new GroupModel('MBC Group', [{ mainTransId: '123123' } as TicketModel], []));
         expectedTicketsModel.totalItems = 1;
         expectedTicketsModel.licenseesName = 'MBC Group';
         expectedTicketsModel.invalidTransIds = '105662749481';
@@ -305,7 +273,7 @@ describe('AppService', () => {
         expect(mockHttpService.getJson).toHaveBeenCalledTimes(1);
         expect(mockHttpService.getJson).toHaveBeenCalledWith('api/SharedApi/GetSportsType');
     });
-    
+
     it('#getDataPermission should return expected data', async () => {
         // Arrange
         const expected = new DataPermission();

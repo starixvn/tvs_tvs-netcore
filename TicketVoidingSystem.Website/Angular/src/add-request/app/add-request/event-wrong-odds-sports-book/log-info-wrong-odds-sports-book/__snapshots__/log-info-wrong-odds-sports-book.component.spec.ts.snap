@@ -2,7 +2,6 @@
 
 exports[`LogInfoWrongOddsSportsBookComponent LogInfoWrongOddsSportsBookComponent init should match snapshot 1`] = `
 LogInfoWrongOddsSportsBookComponent {
-  "addRequestApiService": null,
   "addRequestStore": null,
   "affectedTicketsModel": AffectedTicketsModel {},
   "modalService": null,

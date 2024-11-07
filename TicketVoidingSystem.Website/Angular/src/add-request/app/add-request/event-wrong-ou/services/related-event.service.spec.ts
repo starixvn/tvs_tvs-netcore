@@ -21,7 +21,7 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeChildMatches: ChildMatchModel[] = [
     {
       matchId: 12345,
@@ -108,7 +108,7 @@ describe('RelatedEventService', () => {
 
     expect(actual.length).toBe(Helper.fakeChildMatches.length);
   });
-  
+
   it('#updateEvents should update data when defaultFilter has data', async () => {
     const childMatchModel = _.cloneDeep(Helper.fakeChildMatches);
 
@@ -116,7 +116,7 @@ describe('RelatedEventService', () => {
 
     expect(actual.length).toBe(Helper.fakeChildMatches.length);
   });
-  
+
   it('#addRelatedEventByInput should update AddRelatedEventArg', async () => {
     const arg = new AddRelatedEventArg();
     arg.allEvents = [];

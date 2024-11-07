@@ -55,6 +55,12 @@ export class TemplateReplace {
   static readonly PARLAY = '{{Parlay}}';
   static readonly SPECIAL_BET_TYPE = '{{SpecialBetType}}';
   static readonly PLAYER_NAME = '{{Player Name}}';
+  static readonly WRONG_NAME = '{{Wrong Name}}';
+  static readonly ACTUAL_NAME = '{{Actual Name}}';
+  static readonly WRONG_NAMET = '{{Wrong NameT}}';
+  static readonly ACTUAL_NAMET = '{{Actual NameT}}';
+  static readonly WRONG_NAMES = '{{Wrong NameS}}';
+  static readonly ACTUAL_NAMES = '{{Actual NameS}}';
 }
 
 export class TemplateContentConst {

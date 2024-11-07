@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
@@ -9,7 +10,6 @@ import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { ValidationService } from './validation.service';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeValidationMessageError: ValidationMessage = {
@@ -25,7 +25,7 @@ class Helper {
     isShowPopup: true,
     transIds: '',
     requestId: 1,
-  };  
+  };
   static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
     matchId: 1,
     eventName: '',
@@ -49,10 +49,10 @@ describe('ValidationService', () => {
   let validationService: ValidationService;
 
   beforeEach(() => {
-    validationService = new ValidationService(null);
+    validationService = new ValidationService();
   });
   it('#validateCommonData should return false when #leagueEventComponent.isMatchIdValid return false', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const spyIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => false);
 
     const result = validationService.validateCommonData(eventLeagueComponent, null);
@@ -62,7 +62,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when #kickOffTime invalid', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const spyisMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
     validationService['isTimeKickOffValid'] = jest.fn().mockReturnValue(false);
 
@@ -73,7 +73,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return true', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const spyisMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
     eventLeagueComponent.selectedMatch = {matchId: 1} as MatchModel;
     validationService['isTimeKickOffValid'] = jest.fn().mockReturnValue(true);
@@ -92,7 +92,7 @@ describe('ValidationService', () => {
 
     expect(result).toBe(false);
   });
-  
+
   it('#isEventMatchValid should return true', async () => {
     const event = Helper.fakeLogInfoEarlyKickOff;
     event.isMainMatch = false;
@@ -102,7 +102,7 @@ describe('ValidationService', () => {
 
     expect(result).toBeTruthy();
   });
-  
+
   it('#isValidInputRelatedEvent should return false when input mainMatchId', async () => {
     const event = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
     event.isMainMatch = true;
@@ -114,7 +114,7 @@ describe('ValidationService', () => {
     expect(result).toBe(false);
     expect(toolTip.display).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#isValidInputRelatedEvent should return false when input childMatchId', async () => {
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
     mainEvent.isMainMatch = true;
@@ -132,7 +132,7 @@ describe('ValidationService', () => {
     expect(result).toBe(false);
     expect(toolTip.display).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#isValidInputRelatedEvent should return true', async () => {
     const event = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
     event.isMainMatch = true;
@@ -143,7 +143,7 @@ describe('ValidationService', () => {
 
     expect(result).toBe(true);
   });
-  
+
   it('#isEditingByAnotherUser should return true', async () => {
     const result = validationService.isEditingByAnotherUser(true,1, 2);
 

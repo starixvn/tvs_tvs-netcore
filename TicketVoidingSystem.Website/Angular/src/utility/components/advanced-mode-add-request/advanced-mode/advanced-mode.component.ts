@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription, timer } from 'rxjs';
-import { TEXT } from 'src/utility/constants/text';
 import { LABELS } from '../../../../utility/constants/labels';
+import { TEXT } from '../../../../utility/constants/text';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AdvancedModeConstants } from '../../advanced-mode/advanced-mode.constants';

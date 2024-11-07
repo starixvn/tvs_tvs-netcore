@@ -25,8 +25,7 @@ class Helper {
     messageValidationLogInfo: [],
     betTypeCount: [],
     betTeamsResult: [],
-    checkedBetTypes: []
-  };
+  } as LogInfoWrongMarketOffered;
 
   static readonly fakeGetLogInfoModel: GetLogInfoModel = {
     matchId: 1,

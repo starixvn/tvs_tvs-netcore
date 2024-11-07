@@ -223,6 +223,20 @@
             [others]="model.others"
             (updateMatchId)="updateMatchId($event)">
           </event-wrong-odds-sports-book>
+
+          <event-wrong-offered-name #eventWrongOfferedName
+            *ngIf="checkAllIssueTypes().isWrongOfferedName"
+            [userId]="userId"
+            [requestedBy]="requestedBy"
+            [isEdit]="isEdit"
+            [requestId]="requestId"
+            [filter]="model.filter"
+            [issueTypes]="issueTypes"
+            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+            [wrongOfferedNameModel]="model.wrongOfferedNameModel"
+            [others]="model.others"
+            (updateMatchId)="updateMatchId($event)">
+          </event-wrong-offered-name>
         </div>
       </div>
     </div>

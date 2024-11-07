@@ -456,6 +456,11 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
+  static readonly WRONG_OFFERRED_NAME: number[] = [
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID
+  ];
 }
 
 export class AllowanceRate {

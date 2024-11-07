@@ -5,21 +5,12 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
-using TicketVoidingSystem.SharedApi.Services.MessageTemplate;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest;
 
 public class TicketsViewModelServiceTests
 {
-    private static TicketsViewModelServiceImp CreateService()
-    {
-        var specialBetTypeContentService = Substitute.For<SpecialBetTypeContentService>();
-        return new TicketsViewModelServiceImp(specialBetTypeContentService);
-    }
-
-    private readonly TicketsViewModelServiceImp service = CreateService();
-
     [Fact]
     public void UpdateViewModel_UpdateValidTickets_ReturnCorrect()
     {
@@ -72,6 +63,19 @@ public class TicketsViewModelServiceTests
         {
             Settled = true
         };
+        var ticketsGroup = new TicketsByGroupInRequest
+        {
+            SingleTickets = new List<GetTicketModel> { allTickets[0] },
+            ParlayTickets = new List<GetTicketModel> { allTickets[1] },
+            CricketTickets = new List<GetTicketModel> { allTickets[2] },
+            CancelCashOutTickets = new List<GetTicketModel> { allTickets[3] }
+        };
+        var getTicketsViewModelService = Substitute.For<GetTicketsViewModelService>();
+        var getInfoTicketsForMessage = Substitute.For<GetInfoTicketsForMessage>();
+        getTicketsViewModelService.GetValidTickets(Arg.Any<TicketsByGroupInRequest>(), Arg.Any<VoidPermission>(),
+            Arg.Any<int>()).ReturnsForAnyArgs(ticketsGroup);
+        getTicketsViewModelService.GetTicketsByGroup(Arg.Any<IEnumerable<GetTicketModel>>()).ReturnsForAnyArgs(ticketsGroup);
+        var service = new TicketsViewModelServiceImp(getTicketsViewModelService, getInfoTicketsForMessage);
 
         // Act
         service.UpdateViewModel(model, allTickets, 0, permission);
@@ -104,6 +108,19 @@ public class TicketsViewModelServiceTests
             Settled = true
         };
         var uncheckedTransIds = new List<string> { "1" };
+        var ticketsGroup = new TicketsByGroupInRequest
+        {
+            SingleTickets = new List<GetTicketModel> { allTickets[0] },
+            ParlayTickets = new List<GetTicketModel>(),
+            CricketTickets = new List<GetTicketModel>(),
+            CancelCashOutTickets = new List<GetTicketModel>()
+        };
+        var getTicketsViewModelService = Substitute.For<GetTicketsViewModelService>();
+        var getInfoTicketsForMessage = Substitute.For<GetInfoTicketsForMessage>();
+        getTicketsViewModelService.GetValidTickets(Arg.Any<TicketsByGroupInRequest>(), Arg.Any<VoidPermission>(),
+            Arg.Any<int>()).ReturnsForAnyArgs(ticketsGroup);
+        getTicketsViewModelService.GetTicketsByGroup(Arg.Any<IEnumerable<GetTicketModel>>()).ReturnsForAnyArgs(ticketsGroup);
+        var service = new TicketsViewModelServiceImp(getTicketsViewModelService, getInfoTicketsForMessage);
 
         // Act
         service.UpdateViewModel(model, allTickets, 0, permission);
@@ -135,6 +152,19 @@ public class TicketsViewModelServiceTests
         {
             Settled = true
         };
+        var ticketsGroup = new TicketsByGroupInRequest
+        {
+            SingleTickets = new List<GetTicketModel>(),
+            ParlayTickets = new List<GetTicketModel>(),
+            CricketTickets = new List<GetTicketModel>(),
+            CancelCashOutTickets = allTickets
+        };
+        var getTicketsViewModelService = Substitute.For<GetTicketsViewModelService>();
+        var getInfoTicketsForMessage = Substitute.For<GetInfoTicketsForMessage>();
+        getTicketsViewModelService.GetValidTickets(Arg.Any<TicketsByGroupInRequest>(), Arg.Any<VoidPermission>(),
+            Arg.Any<int>()).ReturnsForAnyArgs(ticketsGroup);
+        getTicketsViewModelService.GetTicketsByGroup(Arg.Any<IEnumerable<GetTicketModel>>()).ReturnsForAnyArgs(ticketsGroup);
+        var service = new TicketsViewModelServiceImp(getTicketsViewModelService, getInfoTicketsForMessage);
 
         // Act
         service.UpdateViewModel(model, allTickets, 0, permission);
@@ -185,6 +215,19 @@ public class TicketsViewModelServiceTests
         var FromDate = new DateTime(2022, 12, 2).ZoneManila();
         var ToTime = new DateTime(2022, 12, 4).ZoneManila();
         var ToDate = new DateTime(2022, 12, 4).ZoneManila();
+        var ticketsGroup = new TicketsByGroupInRequest
+        {
+            SingleTickets = new List<GetTicketModel>(),
+            ParlayTickets = new List<GetTicketModel> { allTickets[0] },
+            CricketTickets = new List<GetTicketModel>(),
+            CancelCashOutTickets = new List<GetTicketModel> { allTickets[1] }
+        };
+        var getTicketsViewModelService = Substitute.For<GetTicketsViewModelService>();
+        var getInfoTicketsForMessage = Substitute.For<GetInfoTicketsForMessage>();
+        getTicketsViewModelService.GetValidTickets(Arg.Any<TicketsByGroupInRequest>(), Arg.Any<VoidPermission>(),
+            Arg.Any<int>()).ReturnsForAnyArgs(ticketsGroup);
+        getTicketsViewModelService.GetTicketsByGroup(Arg.Any<IEnumerable<GetTicketModel>>()).ReturnsForAnyArgs(ticketsGroup);
+        var service = new TicketsViewModelServiceImp(getTicketsViewModelService, getInfoTicketsForMessage);
 
         // Act
         service.UpdateViewModel(model, allTickets, 0, permission);
@@ -200,7 +243,7 @@ public class TicketsViewModelServiceTests
     public void UpdateViewModel_HasOnlyCCOTicketNotAny_UpdateTimeFormCCOTicket()
     {
         // Arrange
-        var allTickets = new List<GetTicketModel>
+        var ticketCancelCashOut = new List<GetTicketModel>
         {
             new()
             {
@@ -232,11 +275,24 @@ public class TicketsViewModelServiceTests
         {
             Settled = true
         };
+        var ticketsGroup = new TicketsByGroupInRequest
+        {
+            SingleTickets = new List<GetTicketModel>(),
+            ParlayTickets = new List<GetTicketModel>(),
+            CricketTickets = new List<GetTicketModel>(),
+            CancelCashOutTickets = ticketCancelCashOut
+        };
         var MinTime = new DateTime(2022, 12, 1).ZoneManila();
         var MaxTime = new DateTime(2022, 12, 5).ZoneManila();
+        var getTicketsViewModelService = Substitute.For<GetTicketsViewModelService>();
+        var getInfoTicketsForMessage = Substitute.For<GetInfoTicketsForMessage>();
+        getTicketsViewModelService.GetValidTickets(Arg.Any<TicketsByGroupInRequest>(), Arg.Any<VoidPermission>(),
+            Arg.Any<int>()).ReturnsForAnyArgs(ticketsGroup);
+        getTicketsViewModelService.GetTicketsByGroup(Arg.Any<IEnumerable<GetTicketModel>>()).ReturnsForAnyArgs(ticketsGroup);
+        var service = new TicketsViewModelServiceImp(getTicketsViewModelService, getInfoTicketsForMessage);
 
         // Act
-        service.UpdateViewModel(model, allTickets, 0, permission);
+        service.UpdateViewModel(model, ticketCancelCashOut, 0, permission);
 
         // Assert
         Assert.Equal(MinTime, model.FromTime);
@@ -283,6 +339,19 @@ public class TicketsViewModelServiceTests
         {
             Settled = true
         };
+        var ticketsGroup = new TicketsByGroupInRequest
+        {
+            SingleTickets = new List<GetTicketModel>(),
+            ParlayTickets = new List<GetTicketModel>(),
+            CricketTickets = new List<GetTicketModel>(),
+            CancelCashOutTickets = allTickets
+        };
+        var getTicketsViewModelService = Substitute.For<GetTicketsViewModelService>();
+        var getInfoTicketsForMessage = Substitute.For<GetInfoTicketsForMessage>();
+        getTicketsViewModelService.GetValidTickets(Arg.Any<TicketsByGroupInRequest>(), Arg.Any<VoidPermission>(),
+            Arg.Any<int>()).ReturnsForAnyArgs(ticketsGroup);
+        getTicketsViewModelService.GetTicketsByGroup(Arg.Any<IEnumerable<GetTicketModel>>()).ReturnsForAnyArgs(ticketsGroup);
+        var service = new TicketsViewModelServiceImp(getTicketsViewModelService, getInfoTicketsForMessage);
 
         // Act
         service.UpdateViewModel(model, allTickets, 0, permission);
@@ -327,6 +396,19 @@ public class TicketsViewModelServiceTests
         {
             Settled = true
         };
+        var ticketsGroup = new TicketsByGroupInRequest
+        {
+            SingleTickets = new List<GetTicketModel> { allTickets[0] },
+            ParlayTickets = new List<GetTicketModel> { allTickets[1] },
+            CricketTickets = new List<GetTicketModel>(),
+            CancelCashOutTickets = new List<GetTicketModel>()
+        };
+        var getTicketsViewModelService = Substitute.For<GetTicketsViewModelService>();
+        var getInfoTicketsForMessage = Substitute.For<GetInfoTicketsForMessage>();
+        getTicketsViewModelService.GetValidTickets(Arg.Any<TicketsByGroupInRequest>(), Arg.Any<VoidPermission>(),
+            Arg.Any<int>()).ReturnsForAnyArgs(ticketsGroup);
+        getTicketsViewModelService.GetTicketsByGroup(Arg.Any<IEnumerable<GetTicketModel>>()).ReturnsForAnyArgs(ticketsGroup);
+        var service = new TicketsViewModelServiceImp(getTicketsViewModelService, getInfoTicketsForMessage);
 
         // Act
         service.UpdateViewModel(model, allTickets, 0, permission);
@@ -365,6 +447,19 @@ public class TicketsViewModelServiceTests
         {
             Settled = true
         };
+        var ticketsGroup = new TicketsByGroupInRequest
+        {
+            SingleTickets = new List<GetTicketModel> { allTickets[0] },
+            ParlayTickets = new List<GetTicketModel>(),
+            CricketTickets = new List<GetTicketModel>(),
+            CancelCashOutTickets = new List<GetTicketModel>()
+        };
+        var getTicketsViewModelService = Substitute.For<GetTicketsViewModelService>();
+        var getInfoTicketsForMessage = Substitute.For<GetInfoTicketsForMessage>();
+        getTicketsViewModelService.GetValidTickets(Arg.Any<TicketsByGroupInRequest>(), Arg.Any<VoidPermission>(),
+            Arg.Any<int>()).ReturnsForAnyArgs(ticketsGroup);
+        getTicketsViewModelService.GetTicketsByGroup(Arg.Any<IEnumerable<GetTicketModel>>()).ReturnsForAnyArgs(ticketsGroup);
+        var service = new TicketsViewModelServiceImp(getTicketsViewModelService, getInfoTicketsForMessage);
 
         // Act
         service.UpdateViewModel(model, allTickets, 2, permission);

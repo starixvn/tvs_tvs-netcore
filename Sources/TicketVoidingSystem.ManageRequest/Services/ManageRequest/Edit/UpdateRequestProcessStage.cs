@@ -43,8 +43,9 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
         try
         {
             var command = CreateEditRequestCommand(query);
+            var matchIdsAutoVoidRequestQueue = insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
             await repository.ExecuteAsync(command);
-            await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, query.AbnormalBetInfo, query.EarlyKickOffInfo);
+            await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, matchIdsAutoVoidRequestQueue);
             if (query.IssueTypeId.IsAbnormalAccount())
             {
                 await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
@@ -84,6 +85,7 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
         command.AbnormalBetInfo = query.AbnormalBetInfo?.ToEventAbnormalBetXml();
         command.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
         command.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
+        command.WrongOfferedNameInfo = query.WrongOfferedNameInfo?.ToEventWrongOfferedNameXml();
 
         return command;
     }

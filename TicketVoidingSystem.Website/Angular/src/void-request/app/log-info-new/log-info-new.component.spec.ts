@@ -2,6 +2,7 @@ import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
+import { TicketCountOtherSportsComponent } from '../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
 import { AcceptType } from '../../../utility/constants/config';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { PipeModule } from '../../../utility/pipes/pipe.module';
@@ -28,6 +29,7 @@ class Helper {
 describe('LogInfoNewComponent', () => {
   @NgModule({
     declarations: [
+      TicketCountOtherSportsComponent
     ],
     imports: [
       PipeModule,

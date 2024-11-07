@@ -45,7 +45,6 @@ public class RequestEventModel
 
     [JsonConverter(typeof(GMT8DateTimeJsonConverter))]
     public DateTime? KickOffTime { get; set; }
-
     public int? HTHomeScore { get; set; }
     public int? HTAwayScore { get; set; }
     public int? FinalHomeScore { get; set; }
@@ -58,51 +57,28 @@ public class RequestEventModel
     public string FilterFromBetId { get; set; }
     public string FilterToBetId { get; set; }
     public int? FilterBy { get; set; }
-
     public int? AATime { get; set; }
-
     public int? PATime { get; set; }
-
     public int? SATime { get; set; }
-
     public int ScoreId { get; set; }
-
     public bool IsMainMatch { get; set; }
-
     public string HomeFavorite { get; set; }
-
     public string AwayFavorite { get; set; }
-
     public string ActualMarket { get; set; }
-
     public string WrongMarket { get; set; }
-
     public string HdpValue { get; set; }
-
     public bool IsCheckedVar { get; set; }
-
     public string PoolHouseCheckedBetTypes { get; set; }
-
     public bool IsLinkGroup1X2 { get; set; }
-
     public bool IsLinkGroupAIO { get; set; }
-
     public int LiveIndicator { get; set; }
-
     public string BetTypeIds { get; set; }
-
     public string WicketOver { get; set; }
-
     public string PlayerIds { get; set; }
-
     public string Runs { get; set; }
-
     public bool Live { get; set; }
-
     public bool NonLive { get; set; }
-
     public int PlayerId { get; set; }
-
     public string AdvancedExtraInfo { get; set; }
     public string RequestExtraInfo { get; set; }
 
@@ -114,13 +90,11 @@ public class RequestEventModel
 
     // event wrong score
     public string WrongScore { get; set; }
-
     public string ActualScore { get; set; }
     public int SubIssueTypeId { get; set; }
 
     //event wrong odds
     public string FilterFavoriteType { get; set; }
-
     public string FavoriteValue { get; set; }
     public string WrongOU { get; set; }
     public string Spread { get; set; }
@@ -137,4 +111,13 @@ public class RequestEventModel
     public string FromOdds { get; set; }
     public string ToOdds { get; set; }
     public string CorrectOdds { get; set; }
+
+    public string CurrencyIds { get; set; }
+    public string LicenseeNames { get; set; }
+    public string WrongName { get; set; }
+    public string ActualName { get; set; }
+    public string WrongNameT { get; set; }
+    public string ActualNameT { get; set; }
+    public string WrongNameS { get; set; }
+    public string ActualNameS { get; set; }
 }

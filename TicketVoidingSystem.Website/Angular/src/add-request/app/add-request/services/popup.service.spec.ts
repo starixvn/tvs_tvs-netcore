@@ -1,9 +1,9 @@
 import { NgbModalConfig } from "@ng-bootstrap/ng-bootstrap";
 import { ModalService } from "../../../../utility/components/modal/modal.service";
-import { PopupService } from "./popup.service";
-import { AddRequestResultModel } from '../models/request.model';
-import { Result } from "src/utility/models/result";
+import { Result } from "../../../../utility/models/result";
 import { AddRequestQuery } from '../models/add-request.query';
+import { AddRequestResultModel } from '../models/request.model';
+import { PopupService } from "./popup.service";
 
 describe('PopupService', () => {
   let popupService: PopupService;

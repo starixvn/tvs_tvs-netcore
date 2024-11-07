@@ -13,6 +13,8 @@ public class SendEmailApiDuplicateTicketsRequest : IRequest<IEnumerable<Result>>
 {
     public Message Message { get; set; }
 
+    public Message SpecialMessage { get; set; }
+
     public int IssueTypeId { get; set; }
 
     public int RequestId { get; set; }
@@ -38,6 +40,7 @@ public class SendEmailApiDuplicateTicketsHandler : IRequestHandler<SendEmailApiD
         var emailModel = new EmailVoidModel
         {
             Message = message.Message,
+            SpecialMessageAfterVoidService = message.SpecialMessage,
             IssueTypeId = message.IssueTypeId,
             RequestId = message.RequestId,
             FilterBy = message.FilterBy,

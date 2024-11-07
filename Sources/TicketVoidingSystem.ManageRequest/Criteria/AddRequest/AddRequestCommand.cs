@@ -40,6 +40,7 @@ public class AddRequestCommand : NonQueryCommand
     public string AbnormalBetInfo { get; set; }
     public string WrongMarketOfferedInfo { get; set; }
     public string TechnicalErrorInfo { get; set; }
+    public string WrongOfferedNameInfo { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_Request_Insert";
 

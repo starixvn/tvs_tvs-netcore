@@ -1,10 +1,13 @@
-import { NgModule, ElementRef } from '@angular/core';
+import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
+import { MatchInfoViewModel } from 'src/utility/models/event.model';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
+import { MatchModel } from '../../../../utility/models/match.model';
+import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
@@ -12,7 +15,6 @@ import { DuplicateTicketsModel } from '../models/event-duplicate-tickets.model';
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets.component';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { CommonService } from '../../../../utility/services/common.service';
 
 class Helper {
   static readonly fakeTransId = '123456789';
@@ -35,7 +37,7 @@ class Helper {
     isVoided: false,
     subIssueTypes: [],
     isAbnormal: false
-  };
+  } as FilterModel;
 }
 
 describe('EventDuplicateTicketsComponent', () => {
@@ -67,7 +69,7 @@ describe('EventDuplicateTicketsComponent', () => {
 
   it('#EventDuplicateTicketsComponent init should match snapshot', async () => {
     const { fixture, instance } = await shallow
-      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
+      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -81,10 +83,13 @@ describe('EventDuplicateTicketsComponent', () => {
   });
 
   it('#ngOnInit should be call #getPermissionManageRequest when edit request', async () => {
+    const matchViewModel = { match: new MatchModel() } as MatchInfoViewModel;
     const mockGetPermissionManageRequest = jest.fn();
     const mockChangeAbnormalFilterBy = jest.fn();
+    const mockgetMatchInfoAddRequest = jest.fn().mockReturnValue(matchViewModel);
     const { instance } = await shallow
       .mock(AddRequestStore, { changeAbnormalFilterBy: mockChangeAbnormalFilterBy })
+      .mock(CommonService, { getMatchInfoAddRequest: mockgetMatchInfoAddRequest })
       .mock(AddRequestApiService, { getPermissionAddRequest: mockGetPermissionManageRequest })
       .render({
         bind: {
@@ -102,7 +107,7 @@ describe('EventDuplicateTicketsComponent', () => {
 
   it('#afterFocusOutBetIds should call #getMatchAndCheckValidTransIds', async () => {
     const { instance } = await shallow
-      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
+      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
       .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
@@ -120,7 +125,7 @@ describe('EventDuplicateTicketsComponent', () => {
 
   it('#afterFocusOutBetIds should not call #getMatchAndCheckValidTransIds', async () => {
     const { instance } = await shallow
-      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
+      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
       .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
@@ -141,7 +146,7 @@ describe('EventDuplicateTicketsComponent', () => {
     const { instance } = await shallow
       .mock(ValidationService, { isFilterMixParlay: jest.fn().mockReturnValue(true) })
       .mock(SaveRequestService, { saveRequest: mockSaveRequest })
-      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
+      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -161,7 +166,7 @@ describe('EventDuplicateTicketsComponent', () => {
 
   it('#removeInvalidTransIds should call #betIdsComponent.removeTransId', async () => {
     const { instance } = await shallow
-      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
+      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -180,7 +185,7 @@ describe('EventDuplicateTicketsComponent', () => {
     const mockChangeSavingRequestStatus = jest.fn();
     const { instance } = await shallow
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
+      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -198,15 +203,15 @@ describe('EventDuplicateTicketsComponent', () => {
     const fakeFilterModel = Helper.fakeFilterModel;
     fakeFilterModel.isVoided = false;
     const { instance } = await shallow
-    .mock(AddRequestStore, { changeAbnormalFilterBy: mockChangeAbnormalFilterBy })
-    .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
-    .render({
-      bind: {
-        duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+      .mock(AddRequestStore, { changeAbnormalFilterBy: mockChangeAbnormalFilterBy })
+      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
+      .render({
+        bind: {
+          duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
     instance.changeFilterBy(1);
 
     expect(instance.duplicateTicketsModel.filterBy).toBe(1);

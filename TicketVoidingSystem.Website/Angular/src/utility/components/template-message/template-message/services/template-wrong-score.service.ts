@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { SubIssueTypeGroup } from 'src/utility/constants/config';
+import { SubIssueTypeGroup } from '../../../../../utility/constants/config';
 import { Message } from '../../messages/message';
 import { TemplateReplace } from '../template.const';
-import { TemplateValue, TemplateContent } from '../template.model';
+import { TemplateContent, TemplateValue } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
 import { TemplateInputsService } from './template-inputs.service';
 

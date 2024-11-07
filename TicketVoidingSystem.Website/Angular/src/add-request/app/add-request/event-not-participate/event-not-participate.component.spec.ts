@@ -2,6 +2,7 @@ import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
@@ -19,7 +20,6 @@ import { FilterNotParticipateService } from './services/filter-not-participate.s
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 class Helper {
   static readonly fromDate = '2021-12-18 12:08:49.737';
   static readonly toDate = '2021-12-21 12:08:49.737';
@@ -204,7 +204,7 @@ describe('EventNotParticipateComponent', () => {
         filter: new FilterModel(),
       }
     });
-    instance.eventLeagueComponent = new EventLeagueComponent(null, null);
+    instance.eventLeagueComponent = new EventLeagueComponent(null, null, null);
     instance.eventLeagueComponent.selectedMatch = new MatchModel();
     instance.eventLeagueComponent.selectedMatch.matchId = 1;
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();
@@ -226,7 +226,7 @@ describe('EventNotParticipateComponent', () => {
         filter: new FilterModel(),
       }
     });
-    instance.eventLeagueComponent = new EventLeagueComponent(null, null);
+    instance.eventLeagueComponent = new EventLeagueComponent(null, null, null);
     instance.eventLeagueComponent = null;
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();
     instance.logInfoEvent = Helper.fakeLogInfoNotParticipate;

@@ -38,7 +38,7 @@ export class ValidationService {
       }
 
       if (!this.isValidCommonData(args.productFilterComponent, args.eventDateFilterComponent)) {
-        return { isValid: false } as ValidationBusinessRuleOutput;;
+        return { isValid: false } as ValidationBusinessRuleOutput;
       }
 
       if (usernames.length === 0) {

@@ -1,15 +1,15 @@
 import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { Result } from '../../../../../utility/models/result';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongOddsModel } from '../../models/event-wrong-odds.model';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { EventWrongOddsService } from './event-wrong-odds.service';
 import { ValidationService } from './validation.service';
-import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
-import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -52,7 +52,7 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
     matchId: 12345,
@@ -126,7 +126,7 @@ describe('EventWrongOddsService', () => {
 
     expect(actual.matchId).toBe(Helper.fakeLogInfoWrongOdds.matchId);
     expect(actual.subIssueTypeId ).toBe(Number(Helper.fakeFilterModel.subIssueTypeId));
-    });  
+    });
   });
 
   it('#getLinkedLog should call #addRequestApiService.getLinkedLogs', async () => {
@@ -141,6 +141,6 @@ describe('EventWrongOddsService', () => {
 
     expect(addRequestApiService.getLinkedLogs).toHaveBeenCalledTimes(1);
     expect(actual).toBeDefined();
-    });  
+    });
   });
 });

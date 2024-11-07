@@ -87,7 +87,7 @@ export class NgSelectMixtureModel {
 
     this.isShowPlaceHolder = false;
 
-    return countChecked > maxNumberItems ? `${countChecked}` + this.subfixNumberItemsCheckedText : text;;
+    return countChecked > maxNumberItems ? `${countChecked}` + this.subfixNumberItemsCheckedText : text;
   }
 
   checkAllItems(isChecked: boolean): void {

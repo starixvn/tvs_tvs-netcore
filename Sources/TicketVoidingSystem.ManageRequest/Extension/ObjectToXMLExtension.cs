@@ -393,7 +393,6 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.Trim()}</root>";
     }
 
-
     public static string ToEventWrongOddsSportsBookXml(this WrongOddsSportsBookViewModel model)
     {
         var options = new JsonSerializerOptions
@@ -418,6 +417,21 @@ public static class ObjectToXMLExtension
             + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' "
             + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}' />";
 
+        return $"<root>{stringBuilder.Trim()}</root>";
+    }
+
+    public static string ToEventWrongOfferedNameXml(this WrongOfferedNameViewModel model)
+    {
+        var stringBuilder = $"<r MatchId='{model.MatchId}' "
+                            + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                            + $"CurrencyIds='{model.CurrencyIds}' "
+                            + $"LicenseeNames='{model.LicenseeNames}' "
+                            + $"WrongName='{model.WrongName}' "
+                            + $"ActualName='{model.ActualName}' "
+                            + $"WrongNameS='{model.WrongNameS}' "
+                            + $"ActualNameS='{model.ActualNameS}' "
+                            + $"WrongNameT='{model.WrongNameT}' "
+                            + $"ActualNameT='{model.ActualNameT}' />";
 
         return $"<root>{stringBuilder.Trim()}</root>";
     }

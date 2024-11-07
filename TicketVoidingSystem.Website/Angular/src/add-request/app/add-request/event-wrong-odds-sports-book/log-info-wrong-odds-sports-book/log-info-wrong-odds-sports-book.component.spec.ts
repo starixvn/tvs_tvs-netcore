@@ -2,18 +2,13 @@ import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
-import { BetTypeAddRequest } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
 import { LogInfoMessageComponent } from '../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
-import { GroupModel } from '../../pool-house-ticket/tickets/group-tickets.model';
-import { TicketModel } from '../../pool-house-ticket/tickets/ticket.model';
-import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
 import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
@@ -28,7 +23,6 @@ class Helper {
     logInfoDetail: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTeamsResult: [],
-    checkedBetTypes: []
   } as LogInfoWrongOddsSportsBook;
 }
 
@@ -59,7 +53,7 @@ describe('LogInfoWrongOddsSportsBookComponent', () => {
   });
 
   it('LogInfoWrongOddsSportsBookComponent init should match snapshot', async () => {
-    const component = new LogInfoWrongOddsSportsBookComponent(null, null, null);
+    const component = new LogInfoWrongOddsSportsBookComponent(null, null);
     expect(component).toMatchSnapshot();
   });
 
@@ -144,7 +138,7 @@ describe('LogInfoWrongOddsSportsBookComponent', () => {
   });
 
   it('clearDataValidation should update to null', async () => {
-    const component = new LogInfoWrongOddsSportsBookComponent(null, null, null);
+    const component = new LogInfoWrongOddsSportsBookComponent(null, null);
     component.logInfo = Helper.fakeLogInfoWrongOddsSportsBook;
     component.logInfo.logInfoDetail = new LogInfoDetail();
     component.logInfo.logInfoDetail.logInfoTicketsJson = 'ABC';
@@ -154,82 +148,16 @@ describe('LogInfoWrongOddsSportsBookComponent', () => {
     expect(component.logInfo.messageValidationLogInfo).toBeNull();
   });
 
-  it('showAffectedTicketsDetails should call #updateAffectedTickets', async () => {
-    const mockChangeBlockingUiStatus =  jest.fn();
-    const { instance } = await shallow
-    .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
-    .render({
-      bind: {
-        isEdit: true,
-        primitiveProps: new PrimitiveProperty(),
-        logInfo: Helper.fakeLogInfoWrongOddsSportsBook
-      }
-    });
-    instance.affectedTicketsModel = new AffectedTicketsModel();
-    instance.updateCheckedBetTypeIds = jest.fn();
-    instance.updateAffectedTickets = jest.fn();
-    await instance.showAffectedTicketsDetails();
-
-    expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
-    expect(instance.updateCheckedBetTypeIds).toHaveBeenCalledTimes(1);
-    expect(instance.updateAffectedTickets).toHaveBeenCalledTimes(1);
-  });
-
-  it('updateAffectedTickets should call #addRequestApiService.GetLogInfoTickets', async () => {
-    const ticketJsonModel = new TicketsModel();
-    ticketJsonModel.groups = [new GroupModel('', [ {mainTransId: '1'} as TicketModel ], 2)];
-    const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.GetLogInfoTickets = jest.fn().mockResolvedValue(ticketJsonModel);;
-    const component = new LogInfoWrongOddsSportsBookComponent(null, null, addRequestApiService);
-    component.logInfo = Helper.fakeLogInfoWrongOddsSportsBook;
-    component.logInfo.logInfoDetail = new LogInfoDetail();
-    component.logInfo.logInfoDetail.logInfoTicketsJson = 'ABC';
+  it('showAffectedTicketsDetails should update affectedTicketsModel', async () => {
+    const component = new LogInfoWrongOddsSportsBookComponent(null, null);
     component.affectedTicketsModel = new AffectedTicketsModel();
-
-    await component.updateAffectedTickets();
-
-    expect(addRequestApiService.GetLogInfoTickets).toHaveBeenCalledTimes(1);
-    expect(component.affectedTicketsModel.tickets.groups[0].name).toBeNull();
-    expect(component.affectedTicketsModel.tickets.groups[0].tickets.every(x => x.isChecked)).toBeTruthy();
-  });
-
-  it('updateAffectedTickets should update affectedTicketsModel.tickets to new model', async () => {
-    const component = new LogInfoWrongOddsSportsBookComponent(null, null, null);
-    component.logInfo = Helper.fakeLogInfoWrongOddsSportsBook;
+    component.issueTypeId = '1';
+    component.logInfo = new LogInfoWrongOddsSportsBook();
     component.logInfo.logInfoDetail = new LogInfoDetail();
-    component.logInfo.logInfoDetail.logInfoTicketsJson = null;
-    component.affectedTicketsModel = new AffectedTicketsModel();
 
-    await component.updateAffectedTickets();
+    component.showAffectedTicketsDetails();
 
-    expect(component.affectedTicketsModel.tickets).toEqual(new TicketsModel());
-  });
-
-  it('updateCheckedBetTypeIds should call update checkedBetTypes & filterBetTypes', async () => {
-    const filterBetTypes = new MultipleSelection();
-    const component = new LogInfoWrongOddsSportsBookComponent(null, null, null);
-    component.logInfo = Helper.fakeLogInfoWrongOddsSportsBook;
-    component.logInfo.logInfoDetail = new LogInfoDetail();
-    component.logInfo.logInfoDetail.logInfoTicketsJson = 'ABC';
-    component.affectedTicketsModel = new AffectedTicketsModel();
-    component['initFilterBetTypes'] = jest.fn().mockReturnValue(filterBetTypes);
-
-    component.updateCheckedBetTypeIds();
-
-    expect(component['initFilterBetTypes']).toHaveBeenCalledTimes(1);
-    expect(component.affectedTicketsModel.filterBetTypes).toBe(filterBetTypes);
-    expect(component.affectedTicketsModel.checkedBetTypes).toBe(Helper.fakeLogInfoWrongOddsSportsBook.checkedBetTypes);
-  });
-
-  it('initFilterBetTypes should return expected model', async () => {
-    const betTypeAddRequest =  [new BetTypeAddRequest(1, '', true, false)];
-    const component = new LogInfoWrongOddsSportsBookComponent(null, null, null);
-    component.logInfo = Helper.fakeLogInfoWrongOddsSportsBook;
-    component.logInfo.logInfoDetail = new LogInfoDetail();
-    component.logInfo.logInfoDetail.logInfoTicketsJson = 'ABC';
-    component.affectedTicketsModel = new AffectedTicketsModel();
-    const actual = component['initFilterBetTypes'](betTypeAddRequest);
-
-    expect(actual.items.length).toBe(1);
+    expect(component.affectedTicketsModel.isOpen).toBeTruthy();
+    expect(component.affectedTicketsModel.issueTypeId).toBe(1);
   });
 });

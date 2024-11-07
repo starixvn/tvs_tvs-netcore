@@ -1,26 +1,26 @@
-import { ElementRef, NgModule, SimpleChanges, SimpleChange } from '@angular/core';
+import { ElementRef, NgModule, SimpleChange, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
+import { LinkedLogsViewModel } from '../pool-house-ticket/linked-log/linked-log.model';
 import { EventWrongOddsComponent } from './event-wrong-odds.component';
 import { FilterWrongOddsComponent } from './filter-wrong-odds/filter-wrong-odds.component';
 import { LogInfoWrongOddsComponent } from './log-info-wrong-odds/log-info-wrong-odds.component';
 import { FilterWrongOddsModel, MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from './models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
+import { CalculateOddsService } from './services/calculate-odds.service';
 import { EventWrongOddsService } from './services/event-wrong-odds.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { CalculateOddsService } from './services/calculate-odds.service';
-import { LinkedLogsViewModel } from '../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -81,7 +81,7 @@ class Helper {
     isAbnormal: false,
     isVoided: false,
     isChangeSubTypeManual: false
-  }
+  } as FilterModel;
 }
 
 describe('EventWrongOddsComponent', () => {
@@ -149,7 +149,7 @@ describe('EventWrongOddsComponent', () => {
       expect(instance.logInfoEvent.linkedLogsViewModel).toBe(Helper.fakeLogInfoWrongOdds.linkedLogsViewModel);
     });
   });
-  
+
   it('should call GetMaxBetAndSpreadOfEvent and resetOddsInfo if filter is changed and isChangeSubTypeManual is true', async () => {
     const mockFunctionResetOddsInfo = jest.fn();
     const mockFunctionGetMaxBetAndSpreadOfEvent = jest.fn();
@@ -173,7 +173,7 @@ describe('EventWrongOddsComponent', () => {
     const changes: SimpleChanges = {
       filter: new SimpleChange(Helper.FakeFilter, newFilter, true)
     };
-    instance.eventLeagueComponent = new EventLeagueComponent(null, null);
+    instance.eventLeagueComponent = new EventLeagueComponent(null, null, null);
     instance.eventLeagueComponent.selectedMatch = {matchId: 1} as MatchModel;
 
     await instance.ngOnChanges(changes);
@@ -391,7 +391,7 @@ describe('EventWrongOddsComponent', () => {
         filter: new FilterModel(),
       }
     });
-    instance.eventLeagueComponent = new EventLeagueComponent(null, null);
+    instance.eventLeagueComponent = new EventLeagueComponent(null, null, null);
     instance.eventLeagueComponent.selectedMatch = Helper.fakeMatch;
     instance.primitiveProps = new PrimitiveProperty();
     instance.logInfoEvent = Helper.fakeLogInfoWrongOdds;

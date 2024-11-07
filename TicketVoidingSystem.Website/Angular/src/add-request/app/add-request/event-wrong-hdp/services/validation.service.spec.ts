@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TeamFavorite, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
@@ -12,7 +13,6 @@ import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { ValidationService } from './validation.service';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -60,7 +60,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when invalid match', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
 
     const actual = service.validateCommonData(eventLeagueComponent, null);
@@ -69,7 +69,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when invalid match', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
 
     const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
@@ -82,7 +82,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return true', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
 
     const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);

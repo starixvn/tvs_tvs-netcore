@@ -16,6 +16,7 @@ public class SendEmailApiRequest : IRequest<IEnumerable<Result>>
     public Match Match { get; set; }
     public VoidedReason VoidedReason { get; set; }
     public Message Message { get; set; }
+    public Message SpecialMessage { get; set; }
     public int IssueTypeId { get; set; }
     public string NegativeBalanceUsers { get; set; }
     public IEnumerable<TicketEmailModel> EmailTickets { get; set; }
@@ -36,6 +37,7 @@ public class SendEmailApiHandler : IRequestHandler<SendEmailApiRequest, IEnumera
         {
             Match = message.Match,
             Message = message.Message,
+            SpecialMessageAfterVoidService = message.SpecialMessage,
             IssueTypeId = message.IssueTypeId,
             NegativeBalanceUsers = message.NegativeBalanceUsers,
             Reason = message.VoidedReason.ReasonEnglish,

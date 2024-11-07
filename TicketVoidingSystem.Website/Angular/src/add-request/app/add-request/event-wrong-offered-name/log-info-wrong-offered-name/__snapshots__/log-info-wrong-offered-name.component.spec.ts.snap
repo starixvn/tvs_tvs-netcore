@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogInfoWrongOfferedNameComponent LogInfoWrongOfferedNameComponent init should match snapshot 1`] = `
+LogInfoWrongOfferedNameComponent {
+  "isBlock": false,
+  "logInfo": Object {
+    "filterWrongOfferedName": FilterWrongOfferedNameModel {},
+    "logInfoDetail": LogInfoDetail {},
+    "matchId": 1,
+    "messageValidationLogInfo": Array [],
+  },
+  "modalService": ModalService {
+    "commonService": null,
+    "ngbModal": null,
+  },
+  "searchTicketEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+}
+`;

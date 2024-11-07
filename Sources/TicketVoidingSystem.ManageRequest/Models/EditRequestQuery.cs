@@ -86,4 +86,6 @@ public class EditRequestQuery
     public WrongMarketOfferedViewModel? WrongMarketOfferedInfo { get; set; }
 
     public WrongOddsSportsBookViewModel? WrongOddsSportsBookInfo { get; set; }
+
+    public WrongOfferedNameViewModel? WrongOfferedNameInfo { get; set; }
 }

@@ -101,7 +101,7 @@ describe('SaveRequestService', () => {
 
   it('#checkValidationBeforeSaveRequest should return false when have not actual score', async () => {
     // Arrange
-    const fakeLeagueEventComponent = new EventLeagueComponent(null, null);
+    const fakeLeagueEventComponent = new EventLeagueComponent(null, null, null);
     fakeLeagueEventComponent.selectedMatch = new MatchModel();
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
@@ -122,7 +122,7 @@ describe('SaveRequestService', () => {
 
   it('#checkValidationBeforeSaveRequest should return false', async () => {
     // Arrange
-    const fakeLeagueEventComponent = new EventLeagueComponent(null, null);
+    const fakeLeagueEventComponent = new EventLeagueComponent(null, null, null);
     fakeLeagueEventComponent.selectedMatch = new MatchModel();
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
@@ -147,7 +147,7 @@ describe('SaveRequestService', () => {
 
   it('#checkValidationBeforeSaveRequest should return true', async () => {
     // Arrange
-    const fakeLeagueEventComponent = new EventLeagueComponent(null, null);
+    const fakeLeagueEventComponent = new EventLeagueComponent(null, null, null);
     fakeLeagueEventComponent.selectedMatch = new MatchModel();
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();

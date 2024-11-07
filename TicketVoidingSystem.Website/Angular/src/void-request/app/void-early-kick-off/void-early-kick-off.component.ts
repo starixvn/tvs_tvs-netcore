@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
+import { StaticService } from '../../../utility/services/static.service';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { TicketsService } from '../services/tickets.service';
@@ -18,7 +19,7 @@ import { VoidPageEarlyKickOffModel } from './models/void-page-early-kick-off.mod
 export class VoidEarlyKickOffComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
   @ViewChildren("messageArea") messageAreaComponents: QueryList<MessageAreaComponent>;
-  
+
   public primitiveProperty = new CommonPrimitiveProperty();
   public voidPageItems: VoidPageEarlyKickOffModel[] = [];
   public issueTypes: IssueTypesModel;
@@ -75,5 +76,9 @@ export class VoidEarlyKickOffComponent implements OnInit {
 
   getKickOffDate(matchId: number): string {
     return this.requestDetail.earlyKickOffModels.find(x => x.matchId === matchId).kickOffTime;
+  }
+
+  public isShowLogInfo(): boolean {
+    return StaticService.isEarlyKickOff(this.requestDetail.request.issueTypeId) || StaticService.isWrongKickOff(this.requestDetail.request.issueTypeId);
   }
 }

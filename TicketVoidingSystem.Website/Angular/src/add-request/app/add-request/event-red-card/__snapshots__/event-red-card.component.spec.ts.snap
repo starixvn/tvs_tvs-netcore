@@ -36,7 +36,7 @@ exports[`EventRedCardComponent #EventRedCardComponent init should match snapshot
       </div>
     </div>
     <add-child-match />
-    <confirm-red-card />
+    <confirm-add-request />
     <tooltip />
   </event-red-card>
 </ng-component>

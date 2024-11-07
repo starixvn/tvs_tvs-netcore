@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
-import { EventType } from 'src/utility/constants/sport.constant';
+import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
+import { EventType } from '../../../../../utility/constants/sport.constant';
 import { Message } from '../../messages/message';
-import { FormatDateTime,  SubIssueTypeId, TemplateContentConst, TemplateReplace } from '../template.const';
+import { FormatDateTime, SubIssueTypeId, TemplateContentConst, TemplateReplace } from '../template.const';
 import { TemplateValue } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
-import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
 
 @Injectable()
 export class ReplaceEventTypeService {

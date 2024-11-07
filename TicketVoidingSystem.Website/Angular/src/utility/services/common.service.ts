@@ -8,18 +8,20 @@ import { GetOddsInfoQuery, OddsInfo } from '../components/advanced-mode/advanced
 import { GetBetTypesQuery, GroupBetTypesModel } from '../components/advanced-mode/group-bettypes/group-bettypes.model';
 import { GroupBetTypeVirtualSport } from '../components/bettypes-virtualsports/bettypes-virtualsports.model';
 import { BetTypesModel } from '../components/bettypes/bettypes.model';
+import { GroupLicensee } from '../components/licensees/licensees.model';
 import { NapUserInfoModel } from '../components/menu-bar/menu-bar.model';
 import { Tooltip } from '../components/tooltip/tooltip.model';
 import { BalanceUp } from '../models/balance-up.model';
 import { CheckingPermissionModel } from '../models/checking-permission.model';
 import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../models/copy-request-info.query';
+import { Currency } from '../models/currency.model';
 import { MatchInfoViewModel, SportInfo } from '../models/event.model';
 import { IssueInfo, IssueType, IssueTypesModel } from '../models/issue-type.model';
 import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models/match.model';
+import { VoidedReason } from '../models/reason.model';
 import { Result, SqlResult } from '../models/result';
 import { RequestDetailViewModel } from './../../edit-request/app/request.model';
 import { HttpService } from './http.service';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -61,8 +63,8 @@ export class CommonService {
   }
 
 
-  async getMatch(matchId: number, isExcludeChildMatchCricket?: boolean): Promise<MatchModel> {
-    return this.httpService.postJson({ matchId, isMatch3rd: false, isExcludeChildMatchCricket: isExcludeChildMatchCricket }, 'api/MatchInfo/GetInfo');
+  async getMatch(matchId: number): Promise<MatchModel> {
+    return this.httpService.postJson({ matchId, isMatch3rd: false }, 'api/MatchInfo/GetInfo');
   }
 
   async getVoidActions(): Promise<Selection[]> {
@@ -83,6 +85,19 @@ export class CommonService {
 
   async getFirstTimeAndKickOffTime(id: number): Promise<FirstTicketTime> {
     return this.httpService.getJson(`api/MatchInfo/GetFirstTimeAndKickOffTime/${id}`);
+  }
+
+
+  async getCurrencies(): Promise<Currency[]> {
+    return this.httpService.getJson(`api/SharedApi/GetCurrencies`);
+  }
+
+  async getGroupLicensees(): Promise<GroupLicensee[]> {
+    return this.httpService.getJson(`api/SharedApi/GetGroupLicensees`);
+  }
+
+  async getVoidedReason(subId: number, sportTypeId: number): Promise<VoidedReason> {
+    return this.httpService.postJson({subId: subId, sportTypeId: sportTypeId}, `api/VoidRequest/GetVoidedReason`);
   }
 
   async checkMatchIdWithRefNo(query: CheckMatchWithRefNoQuery, tooltip: Tooltip): Promise<boolean> {

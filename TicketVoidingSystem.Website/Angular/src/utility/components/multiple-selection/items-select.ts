@@ -29,10 +29,10 @@ export class ItemsSelect {
 
   checkBySelectedItem(selectedItems: string[]): void {
     this.items.forEach(item => {
-      item.checked = selectedItems.includes(item.value);
+      item.checked = selectedItems?.includes(item.value);
       item.checkBySelectedItem(selectedItems);
     });
-    this.checked = selectedItems.includes(this.value) || this.allChildIsChecked();
+    this.checked = selectedItems?.includes(this.value) || (this.items.length > 0 && this.allChildIsChecked());
   }
 
   expandedAllItems() {

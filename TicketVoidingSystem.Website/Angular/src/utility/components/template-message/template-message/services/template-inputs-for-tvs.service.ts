@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { StaticService } from 'src/utility/services/static.service';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { Message } from '../../messages/message';
 import { TemplateReplace } from '../template.const';
 import { TemplateContent, TemplateValue, TemplateModel } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
 import { TemplateWrongOddsSportBookService } from './template-wrong-odds-sport-book.service';
 import { TemplateWrongOddsService } from './template-wrong-odds.service';
+import { TemplateWrongOfferedService } from './template-wrong-offfered-name.service';
 import { TemplateWrongScoreService } from './template-wrong-score.service';
 import { TemplateInputsService } from './template-inputs.service';
 
@@ -17,6 +18,7 @@ export class TemplateInputsForTVSService {
     private readonly templateWrongScoreService: TemplateWrongScoreService,
     private readonly templateWrongOddsService: TemplateWrongOddsService,
     private readonly templateWrongOddsSportBookService: TemplateWrongOddsSportBookService,
+    private readonly templateWrongOfferedService: TemplateWrongOfferedService,
     private readonly templateInputsService: TemplateInputsService,
   ) { }
 
@@ -36,6 +38,8 @@ export class TemplateInputsForTVSService {
       this.templateWrongOddsSportBookService.replaceActualMarketSportsBook(templateValue, outputMessage);
     } else if(StaticService.isDangerAccepted(issueTypeId)) {
       this.templateInputsService.replaceInputs(subIssueTypeId, selectedTemplated, outputMessage);
+    } else if (StaticService.isWrongOfferedName(issueTypeId)) {
+      this.templateWrongOfferedService.replaceWrongNameTVS(templateValue, outputMessage);
     }
   }
 

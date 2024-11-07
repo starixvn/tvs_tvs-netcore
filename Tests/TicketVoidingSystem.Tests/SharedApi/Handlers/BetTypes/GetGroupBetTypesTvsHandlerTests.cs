@@ -24,6 +24,7 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.BetTypes
             var request = new GetGroupBetTypesTvsRequest
             {
                 MatchId = 1,
+                IsGetCancelCashOut = true,
                 FromTransDate = DateTime.Now.AddDays(-7),
                 ToTransDate = DateTime.Now
             };
@@ -37,7 +38,7 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.BetTypes
                 new() { Id = "5", GroupName = "Group2" }
             };
 
-            betTypesRepository.GetBetTypesHaveTicketsForTvs(request.MatchId, request.FromTransDate, request.ToTransDate)
+            betTypesRepository.GetBetTypesHaveTicketsForTvs(request.MatchId, request.IsGetCancelCashOut, request.FromTransDate, request.ToTransDate)
                 .Returns(betTypesHaveTickets);
 
             // Act

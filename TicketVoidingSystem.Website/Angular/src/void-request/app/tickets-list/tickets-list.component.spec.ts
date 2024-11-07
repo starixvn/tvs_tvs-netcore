@@ -254,7 +254,7 @@ describe('TicketsListComponent', () => {
     expect(instance.pagingEvent).toHaveBeenCalledTimes(1);
   });
 
-  it('#initTitle should set title when is DangerAccepted', async () => {
+  it('#ngOnChanges should set title when is DangerAccepted', async () => {
     // Arrange
     const { instance } = await shallow.render(
       '<tickets-list [(model)]="ticketsModel"></tickets-list>',
@@ -263,7 +263,7 @@ describe('TicketsListComponent', () => {
       }
     );
     instance.issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
-    instance.initTitle();
+    instance.ngOnChanges();
 
     // Assert
     expect(instance.title).toBe('Void Time: 12:51:48 PM - 12:51:55 PM (Single Count: 3, Parlay Count: 0, Cancel CO: 0)');

@@ -3,7 +3,7 @@
       <template-message #templateMessage [value]="templateValue" [issueTypeId]="issueTypeId"
         [subIssueTypeId]="subIssueTypeId" [voidFunction]="2">
       </template-message>
-      <void-reason #reason [voidReason]="voidReason"></void-reason>
+      <div class="void-reason"><void-reason #reason [voidReason]="voidReason" class=""></void-reason></div>
     </ng-container>
     <ng-container *ngIf="totalVoidTickets === 0">
       <div class="reason-area">

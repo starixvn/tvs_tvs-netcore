@@ -1,5 +1,6 @@
 import { EventEmitter, QueryList } from '@angular/core';
 import * as _ from 'lodash';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestApiService } from '../../add-request-api.service';
@@ -9,7 +10,6 @@ import { FilterWrongScoreModel } from '../models/filter-wrong-score.model';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
 import { ValidationService } from './validation.service';
 import { WrongScoreService } from './wrong-score.service';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 
 class Helper {
@@ -82,7 +82,7 @@ describe('WrongScoreService', () => {
   });
 
   it('#handleCheckedLastScore should call #getWrongScores when have new score', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
 
     const newModels = _.cloneDeep(Helper.fakeWrongScoreModels);
@@ -96,7 +96,7 @@ describe('WrongScoreService', () => {
   });
 
   it('#handleCheckedLastScore should call #getWrongScores when have not new score', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
 
     const newModels = _.cloneDeep(Helper.fakeWrongScoreModels);

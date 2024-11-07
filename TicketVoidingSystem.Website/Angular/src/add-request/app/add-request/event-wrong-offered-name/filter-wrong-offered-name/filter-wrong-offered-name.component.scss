@@ -1,0 +1,22 @@
+@media only screen and (min-width: 1134px) {
+  .filter {
+      width: 1376px;
+  }
+}
+
+.filter-currency-team-league {
+  padding: 0 12px 12px 12px;
+  background: #daecff;
+  border: 1px solid #b3c8df;
+  box-sizing: border-box;
+  border-radius: 3px;
+  display: flex;
+}
+
+.input-name {
+  display: flex;
+  flex-wrap: wrap;
+  input {
+    width: 423px;
+  }
+}

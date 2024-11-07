@@ -9,9 +9,10 @@ import { VoidedReason } from '../../../../utility/models/reason.model';
 })
 export class VoidReasonComponent implements OnChanges {
   @Input('voidReason') voidReason: VoidedReason;
+  @Input() enableCollapse = false;
+  @Input() isCollapse = false;
+  @Input() disabled = false;
   initialReason: VoidedReason;
-
-  constructor() { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['voidReason']) {

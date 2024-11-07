@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
@@ -7,7 +6,7 @@ import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
 import { EarlyKickOffModel } from '../../models/event-eko.model';
 import { RedCardModel } from '../../models/event-red-card.model';
-import { ValidationMessage, GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { GetLogInfoViewModel, ValidationMessage } from '../../models/get-log-info.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { AddRelatedEventArg } from '../models/add-related-event.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
@@ -46,7 +45,7 @@ class Helper {
     isVoided: false,
     isChangeSubTypeManual: true,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeValidationMessage: ValidationMessage[] = [
     {
       isError: false,
@@ -140,7 +139,7 @@ describe('RelatedEventService', () => {
     arg.tooltip.display = jest.fn();
     arg.primitiveProps = new PrimitiveProperty();
     arg.primitiveProps.inputRelatedMatchId = '1';
-    const validationService = new ValidationService(null);
+    const validationService = new ValidationService();
     validationService.isValidInputRelatedEvent = jest.fn().mockImplementation(() => false);
     const mockRelatedEventService = new RelatedEventService(null, validationService, null);
 
@@ -160,7 +159,7 @@ describe('RelatedEventService', () => {
     arg.filter = {} as FilterModel;
     arg.mainEvent = Helper.fakeLogInfoEarlyKickOff;
     arg.allEvents = [];
-    const validationService = new ValidationService(null);
+    const validationService = new ValidationService();
     validationService.isValidInputRelatedEvent = jest.fn().mockImplementation(() => true);
     const mockRelatedEventService = new RelatedEventService(null, validationService, null);
     mockRelatedEventService.getChildMatches = jest.fn().mockReturnValue([]);
@@ -183,8 +182,8 @@ describe('RelatedEventService', () => {
     arg.primitiveProps.inputRelatedMatchId = '1';
     arg.addRequestStore = new AddRequestStore();
     arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    
-    const validationService = new ValidationService(null);
+
+    const validationService = new ValidationService();
     validationService.isValidInputRelatedEvent = jest.fn().mockImplementation(() => true);
     const logInfoService = new LogInfoService(null, null, null, null);
     logInfoService.getLogInfo = jest.fn().mockReturnValue({getLogInfoModels: null} as GetLogInfoViewModel);

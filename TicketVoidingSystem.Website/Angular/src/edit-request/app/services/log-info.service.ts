@@ -6,7 +6,6 @@ import { StaticService } from '../../../utility/services/static.service';
 import { LogInfoArg } from '../models/log-info.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { RequestDetailViewModel } from '../request.model';
-import { ValidationService } from './validation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,30 +13,31 @@ import { ValidationService } from './validation.service';
 
 export class LogInfoService {
   constructor(
-    private readonly commonService: CommonService,
-    private readonly validationService: ValidationService
+    private readonly commonService: CommonService
   ) { }
 
   async getLogInfo(primitiveProperty: PrimitiveProperty, detailViewModel: RequestDetailViewModel): Promise<void> {
     const args = this.createLogInfoArg(primitiveProperty, detailViewModel);
+    const checkIssueType = StaticService.checkAllIssueTypes(detailViewModel.request.issueTypeId);
     const logInfoHandlers = [
-      { check: this.validationService.isRedCard, handler: this.getLogInfoRedCard },
-      { check: this.validationService.isWrongScore, handler: this.getLogInfoWrongScore },
-      { check: this.validationService.isDangerAccepted, handler: this.getLogInfoDangerAccepted },
-      { check: this.validationService.isWrongHdp, handler: this.getLogInfoWrongHdp },
-      { check: this.validationService.isWrong1stHdp, handler: this.getLogInfoWrongHdp },
-      { check: this.validationService.isWrongOu, handler: this.getLogInfoWrongOu },
-      { check: this.validationService.isWrong1stOu, handler: this.getLogInfoWrongOu },
-      { check: this.validationService.isWrongOdds, handler: this.getLogInfoWrongOdds },
-      { check: this.validationService.isReducedOver, handler: this.getLogInfoReducedOver },
-      { check: this.validationService.isAbandoned, handler: this.getLogInfoReducedOver },
-      { check: this.validationService.isNotParticipate, handler: this.getLogInfoNotParticipate },
-      { check: this.validationService.isLikelyWrongMarketOffered, handler: this.getLogInfoWrongMarketOffered },
-      { check: this.validationService.isWrongOddsSportsBook, handler: this.getLogInfoWrongOddsSportsBook }
+      { check: checkIssueType.isRedCard, handler: this.getLogInfoRedCard },
+      { check: checkIssueType.isWrongScore, handler: this.getLogInfoWrongScore },
+      { check: checkIssueType.isDangerAccepted, handler: this.getLogInfoDangerAccepted },
+      { check: checkIssueType.isWrongHDP, handler: this.getLogInfoWrongHdp },
+      { check: checkIssueType.isWrong1stHDP, handler: this.getLogInfoWrongHdp },
+      { check: checkIssueType.isWrongOU, handler: this.getLogInfoWrongOu },
+      { check: checkIssueType.isWrong1stOU, handler: this.getLogInfoWrongOu },
+      { check: checkIssueType.isWrongOdds, handler: this.getLogInfoWrongOdds },
+      { check: checkIssueType.isReducedOver, handler: this.getLogInfoReducedOver },
+      { check: checkIssueType.isAbandoned, handler: this.getLogInfoReducedOver },
+      { check: checkIssueType.isNotParticipate, handler: this.getLogInfoNotParticipate },
+      { check: checkIssueType.isLikelyWrongMarketOffered, handler: this.getLogInfoWrongMarketOffered },
+      { check: checkIssueType.isWrongOddsSportsBook, handler: this.getLogInfoWrongOddsSportsBook },
+      { check: checkIssueType.isWrongOfferedName, handler: this.getLogInfoWrongOfferedName }
     ];
 
     for (const { check, handler } of logInfoHandlers) {
-      if (check(detailViewModel)) {
+      if (check) {
         await handler.call(this, args);
         break; // Exit loop after handling the first valid case
       }
@@ -103,7 +103,7 @@ export class LogInfoService {
     query.isShowLogOnly = true;
     query.issueTypeId = args.detailViewModel.request.issueTypeId;
     query.actionId = args.detailViewModel.request.actionId;
-    if (this.validationService.isWrongHdp(args.detailViewModel)) {
+    if (StaticService.isWrongHDP(args.detailViewModel.request.issueTypeId)) {
       query.wrongHdpModels = models;
     } else {
       query.wrong1stHdpModels = models;
@@ -124,7 +124,7 @@ export class LogInfoService {
     query.isShowLogOnly = true;
     query.issueTypeId = args.detailViewModel.request.issueTypeId;
     query.actionId = args.detailViewModel.request.actionId;
-    if (this.validationService.isWrongOu(args.detailViewModel)) {
+    if (StaticService.isWrongOU(args.detailViewModel.request.issueTypeId)) {
       query.wrongOuModels = models;
     } else {
       query.wrong1stOuModels = models;
@@ -170,7 +170,7 @@ export class LogInfoService {
       model.logInfoDetail = x.logInfoDetail;
     });
   }
-   private async getLogInfoNotParticipate(args: LogInfoArg): Promise<void> {
+  private async getLogInfoNotParticipate(args: LogInfoArg): Promise<void> {
     const models = MappingModelStaticService.buildNotParticipateGetLogInfoModel(args.detailViewModel.notParticipateModels);
     const query = new GetLogInfoQuery();
     query.requestId = args.primitiveProperty.requestId;
@@ -214,6 +214,21 @@ export class LogInfoService {
     const data = await this.commonService.getLogInfo(query);
     data.getLogInfoModels.forEach(x => {
       args.detailViewModel.wrongOddsSportsBookModel.logInfoDetail = x.logInfoDetail;
+    });
+  }
+
+  private async getLogInfoWrongOfferedName(args: LogInfoArg): Promise<void> {
+    const models = MappingModelStaticService.buildWrongOfferedNameGetLogInfoModel(args.detailViewModel.wrongOfferedNameModel);
+    const query = new GetLogInfoQuery();
+    query.requestId = args.primitiveProperty.requestId;
+    query.isShowLogOnly = true;
+    query.issueTypeId = args.detailViewModel.request.issueTypeId;
+    query.actionId = args.detailViewModel.request.actionId;
+    query.wrongOfferedNameModel = models;
+
+    const data = await this.commonService.getLogInfo(query);
+    data.getLogInfoModels.forEach(x => {
+      args.detailViewModel.wrongOfferedNameModel.logInfoDetail = x.logInfoDetail;
     });
   }
 

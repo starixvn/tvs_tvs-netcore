@@ -203,32 +203,4 @@ public class MarkTicketsControllerTests
         // Assert
         await mediator.Received().Send(Arg.Any<GetDataPermissionRequest>());
     }
-
-    [Fact]
-    public async Task GetLicensees_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
-        var mediator = Substitute.For<IMediator>();
-        var controller = new MarkTicketsController(mediator);
-
-        // Act
-        await controller.GetLicensees();
-
-        // Assert
-        await mediator.Received().Send(Arg.Any<GetLicenseesRequest>());
-    }
-
-    [Fact]
-    public async Task GetCurrencies_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
-        var mediator = Substitute.For<IMediator>();
-        var controller = new MarkTicketsController(mediator);
-
-        // Act
-        await controller.GetCurrencies();
-
-        // Assert
-        await mediator.Received().Send(Arg.Any<GetCurrenciesRequest>());
-    }
 }

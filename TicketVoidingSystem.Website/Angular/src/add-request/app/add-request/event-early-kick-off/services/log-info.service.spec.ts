@@ -171,17 +171,21 @@ describe('LogInfoService', () => {
     expect(events[0].messageValidationLogInfo).toBeNull();
   });
 
-  it('#getTickets should call httpService.postJson', async () => {
+  it('#getTickets should call mockService.getLogInfo', async () => {
+    const gtLogInfoViewModel = new GetLogInfoViewModel();
+    gtLogInfoViewModel.transInfoAddRequestModel = new TransInfoAddRequestModel();
     const event = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
     const primitiveProperty = new PrimitiveProperty();
     primitiveProperty.transInfoAddRequestModel = new TransInfoAddRequestModel();
     const httpService = new HttpService(null);
     httpService.postJson = jest.fn().mockReturnValue(new TableTicketsModel());
     const mockService = new LogInfoService(httpService, null, null, null);
-    mockService.getLogInfo = jest.fn();
+    mockService.getLogInfo = jest.fn().mockReturnValue(gtLogInfoViewModel);
+    mockService.assignResultLogInfoToEvents = jest.fn();
 
-    mockService.getTickets(new GetTicketsQuery(), event, true, 1, new FilterModel());
+    await mockService.getTickets(new GetTicketsQuery(), event, true, 1, new FilterModel());
 
+    expect(mockService.assignResultLogInfoToEvents).toHaveBeenCalledTimes(1);
     expect(mockService.getLogInfo).toHaveBeenCalledTimes(1);
     expect(event.isCollapse).toBeFalsy();
   });

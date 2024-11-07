@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Client.Models;
@@ -69,7 +68,6 @@ public class HomeController : Controller
         return Ok("OK");
     }
 
-
     [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<UnderMaintenanceTime>> Um()
@@ -82,7 +80,7 @@ public class HomeController : Controller
     [AllowAnonymous]
     [HttpGet]
     [SkipUMFilter]
-    public IActionResult Gc()
+    public IActionResult Gc() // NOSONAR
     {
         const int megabyte = 1024 * 1024;
         var stringBuilder = new StringBuilder();

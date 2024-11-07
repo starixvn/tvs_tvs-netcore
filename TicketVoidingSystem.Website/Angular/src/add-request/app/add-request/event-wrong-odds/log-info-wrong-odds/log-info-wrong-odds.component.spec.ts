@@ -8,19 +8,19 @@ import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { FilterModel } from '../../filter/filter.model';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
+import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
+import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
+import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
+import { LogAnalysisService } from '../../services/log-analysis.service';
+import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
 import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOddsService } from '../services/event-wrong-odds.service';
 import { LogInfoWrongOddsComponent } from './log-info-wrong-odds.component';
-import { GetPoolHouseTicketQuery, PoolHouseTicketsModel, PoolHouseTicketViewModel } from '../../pool-house-ticket/pool-house-ticket.model';
-import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
-import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
-import { LogAnalysisService } from '../../services/log-analysis.service';
-import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
-import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
-import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -75,7 +75,7 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeGetPoolHouseTicketQuery: GetPoolHouseTicketQuery = {
     matchId: 756352,
     actionId: 0,
@@ -252,7 +252,7 @@ describe('LogInfoWrongOddsComponent', () => {
 
     expect(mockModalOpen).toHaveBeenCalledTimes(1);
   });
-  
+
   it('openPoolHouseDetails should update poolHouseTicketsModel expected', async () => {
     let fakeFunctionWriteLog = jest.fn();
     const mockGetPoolHouseTickets = jest.fn().mockReturnValue(Helper.fakePoolHouseTicketViewModel);

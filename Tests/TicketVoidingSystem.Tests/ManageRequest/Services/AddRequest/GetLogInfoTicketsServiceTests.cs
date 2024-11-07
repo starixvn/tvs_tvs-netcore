@@ -52,11 +52,11 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest
 
             var getTicketModels = new List<GetTicketModel>
             {
-                new() { SubBetType = 2, IsMixParlay = true},
-                new() { SubBetType = 3 }
+                new() { SubBetType = 2, IsMixParlay = true, Status = "Won", SubStatus = "won", GroupName = "Parlay"},
+                new() { SubBetType = 3, Status = "Won", SubStatus = "won", GroupName = "Parlay" }
             };
-            var ticketParlay = new TicketViewModel { BetType = "Handicap", IsParlay = true };
-            var ticketSingle = new TicketViewModel { BetType = "Handicap" };
+            var ticketParlay = new TicketViewModel { BetType = "Handicap", IsParlay = true, Status = "Won", GroupName = "Parlay" };
+            var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Credit" };
 
             compressDataService.DecompressTickets(request.LogInfoTicketsJson).Returns(getTicketModels);
             mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketParlay);
@@ -71,7 +71,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest
             Assert.Equal(1, result.TotalSingle);
             Assert.Equal(1, result.TotalParlay);
             Assert.Equal(2, result.Groups.Count());
-            Assert.Equal("Handicap", result.Groups.First().Name);
+            Assert.Equal("Credit", result.Groups.First().Name);
         }
 
         [Fact]
@@ -86,11 +86,11 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest
 
             var getTicketModels = new List<GetTicketModel>
             {
-                new() { SubBetType = 2, IsMixParlay = true},
-                new() { SubBetType = 3, IsMixParlay = true }
+                new() { SubBetType = 2, IsMixParlay = true, Status = "Won", SubStatus = "won", GroupName = "Parlay" },
+                new() { SubBetType = 3, IsMixParlay = false, Status = "Won", SubStatus = "won", GroupName = "Parlay" }
             };
-            var ticketParlay = new TicketViewModel { BetType = "Handicap", IsParlay = true };
-            var ticketSingle = new TicketViewModel { BetType = "Handicap" };
+            var ticketParlay = new TicketViewModel { BetType = "Handicap", IsParlay = true, Status = "Won", GroupName = "Parlay" };
+            var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Credit" };
 
             compressDataService.DecompressTickets(request.LogInfoTicketsJson).Returns(getTicketModels);
             mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketParlay);
@@ -102,10 +102,10 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest
             var result = service.GetTicketsViewModel(request);
 
             // Assert
-            Assert.Equal(0, result.TotalSingle);
-            Assert.Equal(2, result.TotalParlay);
-            Assert.Single(result.Groups);
-            Assert.Equal("Parlay", result.Groups.First().Name);
+            Assert.Equal(1, result.TotalSingle);
+            Assert.Equal(1, result.TotalParlay);
+            Assert.Equal(2, result.Groups.Count());
+            Assert.Equal("Parlay", result.Groups.Last().Name);
         }
 
         [Fact]
@@ -120,14 +120,11 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest
 
             var getTicketModels = new List<GetTicketModel>
             {
-                new() { SubBetType = 2},
-                new() { SubBetType = 3}
+                new() { SubBetType = 2, Status = "Won", SubStatus = "won", GroupName = "Parlay", IsMixParlay = false }
             };
-            var ticketParlay = new TicketViewModel { BetType = "Handicap", IsParlay = true };
-            var ticketSingle = new TicketViewModel { BetType = "Handicap" };
+            var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Credit" };
 
             compressDataService.DecompressTickets(request.LogInfoTicketsJson).Returns(getTicketModels);
-            mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketParlay);
             mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => !x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketSingle);
 
             service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService);
@@ -136,10 +133,10 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest
             var result = service.GetTicketsViewModel(request);
 
             // Assert
-            Assert.Equal(2, result.TotalSingle);
+            Assert.Equal(1, result.TotalSingle);
             Assert.Equal(0, result.TotalParlay);
             Assert.Single(result.Groups);
-            Assert.Equal("Handicap", result.Groups.First().Name);
+            Assert.Equal("Credit", result.Groups.First().Name);
         }
     }
 }

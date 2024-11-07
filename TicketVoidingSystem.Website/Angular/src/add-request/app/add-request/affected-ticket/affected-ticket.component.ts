@@ -1,8 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
-import { ItemsSelect } from 'src/utility/components/multiple-selection/items-select';
-import { StaticService } from 'src/utility/services/static.service';
+import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
+import { StaticService } from '../../../../utility/services/static.service';
 import { AffectedTicketsModel } from '../models/live-game-early-ticket.model';
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
 import { LogAnalysisService } from '../services/log-analysis.service';

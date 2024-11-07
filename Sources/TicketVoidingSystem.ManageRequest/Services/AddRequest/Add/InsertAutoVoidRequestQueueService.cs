@@ -8,7 +8,10 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
 public interface InsertAutoVoidRequestQueueService
 {
-    Task Execute(int requestId, int? actionId, AbnormalBetViewModel? abnormalBetInfo, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo);
+    Task Execute(int requestId, int? actionId, IEnumerable<int> matchIds);
+
+    IEnumerable<int> GetMatchIdsInRequest(AbnormalBetViewModel? abnormalBetInfo,
+        IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo, WrongOfferedNameViewModel? wrongOfferedNameInfo);
 }
 
 public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueService
@@ -20,11 +23,10 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         this.repository = repository;
     }
 
-    public async Task Execute(int requestId, int? actionId, AbnormalBetViewModel? abnormalBetInfo, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
+    public async Task Execute(int requestId, int? actionId, IEnumerable<int> matchIds)
     {
         if (CheckCanInsertAutoVoidRequestQueue(actionId))
         {
-            var matchIds = GetMatchIdsInRequest(abnormalBetInfo, earlyKickOffInfo);
             if (matchIds.Any())
             {
                 await ExecuteForAutoVoidInstantMultipleMatches(requestId, actionId, matchIds);
@@ -65,7 +67,7 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         await Task.WhenAll(tasks);
     }
 
-    private static IEnumerable<int> GetMatchIdsInRequest(AbnormalBetViewModel? abnormalBetInfo, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
+    public IEnumerable<int> GetMatchIdsInRequest(AbnormalBetViewModel? abnormalBetInfo, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo, WrongOfferedNameViewModel? wrongOfferedNameInfo)
     {
         if (abnormalBetInfo != null)
         {
@@ -77,6 +79,11 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         if (earlyKickOffInfo != null)
         {
             return earlyKickOffInfo.Select(x => x.MatchId);
+        }
+
+        if (wrongOfferedNameInfo != null)
+        {
+            return new List<int> { wrongOfferedNameInfo.MatchId };
         }
 
         return Enumerable.Empty<int>();

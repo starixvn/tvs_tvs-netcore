@@ -170,7 +170,7 @@ describe('VoidPageService', () => {
     voidItem.matchModel.matchId = 1;
     const spyInitTicketQuery = jest.spyOn(ticketsService, 'initTicketQuery').mockImplementation();
     const spyGetVoidTicketsMini = jest.spyOn(ticketsService, 'getVoidTicketsMini').mockReturnValue(Promise.resolve(new TicketsModel()))
-    const spyGetVoidedReason = jest.spyOn(appService, 'getVoidedReason').mockReturnValue(Promise.resolve(new VoidedReason()));
+    const spyGetVoidedReason = jest.spyOn(commonService, 'getVoidedReason').mockReturnValue(Promise.resolve(new VoidedReason()));
     voidPageService['getTemplateValue'] = jest.fn().mockReturnValue(new TemplateValue());
 
     await voidPageService.loadUnderneathVoidPageItemsData([voidItem], Helper.fakeRequestDetailViewModel);
@@ -185,7 +185,7 @@ describe('VoidPageService', () => {
     const voidItem = new VoidAbnormalBetModel();
     voidItem.matchModel = new MatchModel();
     voidItem.voidTicketsMini = new TicketsModel();
-    const spyGetTemplateValue = jest.spyOn(templateService, 'getTemplateValue').mockReturnValue(new TemplateValue());
+    const spyGetTemplateValue = jest.spyOn(templateService, 'initializeTemplateValue').mockReturnValue(new TemplateValue());
     const actual = voidPageService['getTemplateValue'](voidItem, Helper.fakeRequestDetailViewModel);
 
     expect(spyGetTemplateValue).toHaveBeenCalledTimes(1);

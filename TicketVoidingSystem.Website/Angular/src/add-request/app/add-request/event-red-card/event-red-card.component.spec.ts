@@ -6,18 +6,19 @@ import { Subscription } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType, SubIssueTypeGroup, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { FilterModel } from '../filter/filter.model';
 import { RedCardModel } from '../models/event-red-card.model';
 import { ValidationMessage } from '../models/get-log-info.model';
 import { ChildMatchModel } from '../models/related-event.model';
 import { AddChildMatchComponent } from './../../../../utility/components/add-child-match/add-child-match.component';
-import { ConfirmRedCardComponent } from './confirm-red-card/confirm-red-card.component';
 import { EventRedCardComponent } from './event-red-card.component';
 import { PrimitiveProperty } from './event-red-card.model';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
@@ -30,7 +31,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -56,7 +56,7 @@ class Helper {
     isVoided: false,
     isChangeSubTypeManual: true,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeRedCardModel: RedCardModel = {
     matchId: 39420383,
     filterBy: TVSRequestFilterBy.CHECK_TIME,
@@ -222,10 +222,10 @@ describe('EventRedCardComponent', () => {
   @NgModule({
     declarations: [
       EventLeagueComponent,
-      ConfirmRedCardComponent,
       FilterTimeAreaComponent,
       LogInfoRedCardComponent,
-      AddChildMatchComponent
+      AddChildMatchComponent,
+      ConfirmAddRequestComponent
     ],
     imports: [
       NgbModule,

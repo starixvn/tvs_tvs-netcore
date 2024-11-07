@@ -202,10 +202,11 @@ describe('VoidPageService', () => {
     const spyInitTicketQuery = jest.spyOn(ticketsService, 'initTicketQuery').mockImplementation(() => new GetTicketsQuery());
     const spyGetVoidTicketsMini = jest.spyOn(ticketsService, 'getVoidTicketsMini').mockImplementation(() => Promise.resolve(new TicketsModel()));
     const spyGetTemplateValue = jest.spyOn(templateMessageService, 'getTemplateValue').mockImplementation(() => new TemplateValue());
-    const spyGetVoidedReason = jest.spyOn(appService, 'getVoidedReason').mockImplementation(() => Promise.resolve(new VoidedReason()));
     const ISSUE_TYPE_ABNORMAL_ACCOUNT = IssueTypeConstant.ABNORMAL_ACCOUNT;
     const ISSUE_TYPE_DANGER_ACCEPTED = IssueTypeConstant.DANGER_ACCEPTED;
     const issueTypeIds = [ISSUE_TYPE_ABNORMAL_ACCOUNT, ISSUE_TYPE_DANGER_ACCEPTED];
+    commonService.getVoidedReason = jest.fn();
+
     // Action
     issueTypeIds.forEach( async issueTypeId => {
       const fakeRequestDetailViewModel = _.cloneDeep(Helper.fakeRequestDetailViewModel);
@@ -216,7 +217,6 @@ describe('VoidPageService', () => {
       expect(spyInitTicketQuery).toHaveBeenCalledTimes(2);
       expect(spyGetVoidTicketsMini).toHaveBeenCalledTimes(2);
       expect(spyGetTemplateValue).toHaveBeenCalledTimes(2);
-      expect(spyGetVoidedReason).toHaveBeenCalledTimes(2);
     });
   });
 

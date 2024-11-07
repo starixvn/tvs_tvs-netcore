@@ -30,8 +30,8 @@ public class GetInfoTicketsForMessageImp : GetInfoTicketsForMessage
         {
             return string.Empty;
         }
-
-        var inputOver = allTickets.Select(x => Math.Abs(x.Hdp1)).Distinct();
+        var inputOver = allTickets.Select(ticket => ticket.IsMixParlay
+            ? Math.Abs(ticket.SubHdp1) : Math.Abs(ticket.Hdp1)).Distinct();
 
         return string.Join(", ", inputOver);
     }
@@ -47,7 +47,8 @@ public class GetInfoTicketsForMessageImp : GetInfoTicketsForMessage
         {
             return string.Empty;
         }
-        var betTeams = allTickets.Select(x => x.BetTeam).Distinct();
+
+        var betTeams = allTickets.Select(ticket => ticket.IsMixParlay ? ticket.SubBetTeam : ticket.BetTeam).Distinct();
 
         return betTeams.Count() > 1 ? "All" : betTeams.FirstOrDefault();
     }

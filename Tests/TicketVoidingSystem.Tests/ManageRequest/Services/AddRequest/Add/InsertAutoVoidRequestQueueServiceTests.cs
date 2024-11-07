@@ -30,7 +30,7 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
         repository.ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>()).ReturnsForAnyArgs(1);
 
         // Act
-        _ = service.Execute(4, actionId, null, null);
+        _ = service.Execute(4, actionId, new List<int>());
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
@@ -44,7 +44,21 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
         var earlyKickOffInfo = new List<EarlyKickOffViewModel> { new() { MatchId = 1 } };
 
         // Act
-        _ = service.Execute(4, ActionVoidRequestConstant.AutoVoidAllInstantId, null, earlyKickOffInfo);
+        _ = service.Execute(4, ActionVoidRequestConstant.AutoVoidAllInstantId, new List<int>());
+
+        // Assert
+        repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
+    }
+
+    [Fact]
+    public void GetData_HasWrongOfferedNameViewModel_CalledExpected()
+    {
+        // Arrange
+        repository.ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>()).ReturnsForAnyArgs(1);
+        var wrongOfferedName = new WrongOfferedNameViewModel { MatchId = 1 };
+
+        // Act
+        _ = service.Execute(4, ActionVoidRequestConstant.AutoVoidAllInstantId, new List<int>());
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
@@ -61,7 +75,7 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
         var abnormalBetInfo = new AbnormalBetViewModel { FilterBy = filterBy };
 
         // Act
-        _ = service.Execute(requestId, actionId, abnormalBetInfo, null);
+        _ = service.Execute(requestId, actionId, new List<int>());
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
@@ -76,7 +90,7 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
         var abnormalBetInfo = new AbnormalBetViewModel { Matches = new List<MatchInfoAddRequest> { new() { MatchId = 1 } } };
 
         // Act
-        _ = service.Execute(requestId, actionId, abnormalBetInfo, null);
+        _ = service.Execute(requestId, actionId, new List<int>());
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());

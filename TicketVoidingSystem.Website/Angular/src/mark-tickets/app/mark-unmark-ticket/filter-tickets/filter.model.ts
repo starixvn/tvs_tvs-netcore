@@ -1,3 +1,4 @@
+import { Currency } from '../../../../utility/models/currency.model';
 import { Selection } from '../../../../utility/models/selection.model';
 
 export class FilterSearchBy {
@@ -25,10 +26,4 @@ export class EventType {
 export class Currencies {
   items: Currency[];
   selected: number[];
-}
-
-export interface Currency {
-  id: number;
-  currencyCode: string;
-  group?: string;
 }

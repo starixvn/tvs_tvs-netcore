@@ -59,4 +59,10 @@ public class SharedApiController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> CheckNegativeBalance(CheckNegativeBalanceRequest request) => Ok(await mediator.Send(request));
+
+    [HttpGet]
+    public async Task<IActionResult> GetGroupLicensees() => Ok(await mediator.Send(new GetGroupLicenseesRequest()));
+
+    [HttpGet]
+    public async Task<IActionResult> GetCurrencies() => Ok(await mediator.Send(new GetCurrenciesRequest()));
 }

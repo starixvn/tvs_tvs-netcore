@@ -1,12 +1,12 @@
 import * as _ from "lodash";
-import { WrongOddsSportsBookGetLogInfoQuery } from "src/add-request/app/add-request/event-wrong-odds-sports-book/models/get-log-info.query";
-import { WrongOddsSportsBookModel } from "src/add-request/app/add-request/models/event-wrong-odds-sports-book.model";
 import { EarlyKickOffGetLogInfoQuery } from "../../add-request/app/add-request/event-early-kick-off/models/get-log-info.query";
 import { NotParticipateGetLogInfoQuery } from "../../add-request/app/add-request/event-not-participate/models/get-log-info.query";
 import { ReducedOverGetLogInfoQuery } from "../../add-request/app/add-request/event-reduced-over/models/get-log-info.query";
 import { WrongHdpGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-hdp/models/get-log-info.query";
 import { WrongMarketOfferedGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-market-offered/models/get-log-info.query";
+import { WrongOddsSportsBookGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-odds-sports-book/models/get-log-info.query";
 import { WrongOddsGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-odds/models/get-log-info.query";
+import { WrongOfferedNameGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-offered-name/models/get-log-info.query";
 import { WrongOuGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-ou/models/get-log-info.query";
 import { WrongScoreGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-score/event-wrong-score.model";
 import { EarlyKickOffModel } from "../../add-request/app/add-request/models/event-eko.model";
@@ -15,7 +15,9 @@ import { RedCardGetLogInfoQuery, RedCardModel } from "../../add-request/app/add-
 import { ReducedOverModel } from "../../add-request/app/add-request/models/event-reduced-over.model";
 import { WrongHdpModel } from "../../add-request/app/add-request/models/event-wrong-hdp.model";
 import { WrongMarketOfferedModel } from "../../add-request/app/add-request/models/event-wrong-market-offered.model";
+import { WrongOddsSportsBookModel } from "../../add-request/app/add-request/models/event-wrong-odds-sports-book.model";
 import { WrongOddsModel } from "../../add-request/app/add-request/models/event-wrong-odds.model";
+import { WrongOfferedNameModel } from "../../add-request/app/add-request/models/event-wrong-offered-name.model";
 import { WrongOuModel } from "../../add-request/app/add-request/models/event-wrong-ou.model";
 import { WrongScoreModel } from "../../add-request/app/add-request/models/event-wrong-score.model";
 import { StaticService } from "./static.service";
@@ -136,7 +138,7 @@ export class MappingModelStaticService {
       nonLive: x.nonLive
     } as ReducedOverGetLogInfoQuery));
   }
-  
+
   static buildNotParticipateGetLogInfoModel(notParticipateModels: NotParticipateModel[]): NotParticipateGetLogInfoQuery[] {
     if (_.isNull(notParticipateModels) || _.isUndefined(notParticipateModels)) {
       return null;
@@ -175,6 +177,19 @@ export class MappingModelStaticService {
       filterToTransTime: model.voidToTime,
       betTeamsResult: model.betTeamsResult
     } as WrongMarketOfferedGetLogInfoQuery;
+  }
+
+  static buildWrongOfferedNameGetLogInfoModel(model:  WrongOfferedNameModel): WrongOfferedNameGetLogInfoQuery {
+    if (_.isNull(model) || _.isUndefined(model)) {
+      return null;
+    }
+
+    return {
+      matchId: model.matchId,
+      subIssueTypeId: model.subIssueTypeId,
+      currencyIds: model.currencyIds,
+      licenseeNames: model.licenseeNames
+    } as WrongOfferedNameGetLogInfoQuery;
   }
 
   static buildWrongOddsSportsBookGetLogInfoModel(model:  WrongOddsSportsBookModel): WrongOddsSportsBookGetLogInfoQuery {

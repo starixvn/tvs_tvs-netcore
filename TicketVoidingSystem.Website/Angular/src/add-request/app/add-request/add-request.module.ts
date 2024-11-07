@@ -65,6 +65,9 @@ import { LogInfoWrongOddsSportsBookComponent } from './event-wrong-odds-sports-b
 import { EventWrongOddsComponent } from './event-wrong-odds/event-wrong-odds.component';
 import { FilterWrongOddsComponent } from './event-wrong-odds/filter-wrong-odds/filter-wrong-odds.component';
 import { LogInfoWrongOddsComponent } from './event-wrong-odds/log-info-wrong-odds/log-info-wrong-odds.component';
+import { EventWrongOfferedNameComponent } from './event-wrong-offered-name/event-wrong-offered-name.component';
+import { FilterWrongOfferedNameComponent } from './event-wrong-offered-name/filter-wrong-offered-name/filter-wrong-offered-name.component';
+import { LogInfoWrongOfferedNameComponent } from './event-wrong-offered-name/log-info-wrong-offered-name/log-info-wrong-offered-name.component';
 import { EventWrongOuComponent } from './event-wrong-ou/event-wrong-ou.component';
 import { FilterWrongOuComponent } from './event-wrong-ou/filter-wrong-ou/filter-wrong-ou.component';
 import { LogInfoWrongOuComponent } from './event-wrong-ou/log-info-wrong-ou/log-info-wrong-ou.component';
@@ -148,6 +151,9 @@ import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket
         FilterWrongOddsSportsBookComponent,
         LogInfoWrongOddsSportsBookComponent,
         ConfirmAddRequestComponent,
+        EventWrongOfferedNameComponent,
+        FilterWrongOfferedNameComponent,
+        LogInfoWrongOfferedNameComponent,
     ],
     exports: [
         AddRequestComponent

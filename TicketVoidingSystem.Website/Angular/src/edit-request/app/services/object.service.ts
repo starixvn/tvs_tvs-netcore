@@ -1,20 +1,17 @@
 import { Injectable } from '@angular/core';
-import moment from 'moment-timezone';
-import { FilterModel } from 'src/add-request/app/add-request/filter/filter.model';
+import { FilterModel } from '../../../add-request/app/add-request/filter/filter.model';
 import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
-import { DateTimeFormat } from '../../../utility/constants/config';
+import { TVSRequestFilterBy } from '../../../utility/constants/config';
 import { StaticService } from '../../../utility/services/static.service';
 import { MapEventArg } from '../models/map-event.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { RequestDetailViewModel } from '../request.model';
-import { ValidationService } from './validation.service';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class ObjectService {
-  constructor(private readonly validationService: ValidationService) { }
+  constructor() { }
 
   mapRequestModel(requestModel: RequestModel, detailViewModel: RequestDetailViewModel, primitiveProperty: PrimitiveProperty) {
     this.mapFilter(requestModel, detailViewModel);
@@ -40,53 +37,61 @@ export class ObjectService {
       isTest: detailViewModel.request.isTest,
       isVoided: detailViewModel.request.isVoided,
       issueTypeId: detailViewModel.request.issueTypeId.toString(),
-      isAbnormal: this.validationService.isAbnormalArchivedTicket(detailViewModel)
+      isAbnormal: this.isAbnormalArchivedTicket(detailViewModel)
     } as FilterModel;
   }
 
+  private isAbnormalArchivedTicket(detailViewModel: RequestDetailViewModel): boolean {
+    return StaticService.isArchivedTicket(detailViewModel.request.issueTypeId) && detailViewModel.event.filterBy === TVSRequestFilterBy.ABNORMAL;
+  }
+
   private mapEvent(args: MapEventArg) { // NOSONAR
-    if (this.validationService.isWrongScore(args.detailViewModel)) {
+    const checkIssueType = StaticService.checkAllIssueTypes(args.detailViewModel.request.issueTypeId);
+    if (checkIssueType.isWrongScore) {
       args.requestModel.wrongScoreModels = args.detailViewModel.wrongScoreModels;
       args.primitiveProperty.matchId = args.detailViewModel.wrongScoreModels[0].matchId;
-    } else if (this.validationService.isDangerAccepted(args.detailViewModel)) {
+    } else if (checkIssueType.isDangerAccepted) {
       args.requestModel.dangerAcceptedModels = args.detailViewModel.dangerAcceptedModels;
       args.primitiveProperty.matchId = args.detailViewModel.dangerAcceptedModels.find(x => x.isMainMatch).matchId;
-    } else if (this.validationService.isRedCard(args.detailViewModel)) {
+    } else if (checkIssueType.isRedCard) {
       args.requestModel.redCardModel = args.detailViewModel.redCardModels;
       args.primitiveProperty.matchId = args.detailViewModel.redCardModels.find(x => x.isMainMatch).matchId;
-    } else if (this.validationService.isAbnormalBet(args.detailViewModel)) {
+    } else if (checkIssueType.isAbnormalBet) {
       args.requestModel.abnormalBetModel = args.detailViewModel.abnormalBetModel;
-    } else if (this.validationService.isArchivedTicket(args.detailViewModel)) {
+    } else if (checkIssueType.isArchivedTicket) {
       args.requestModel.eventTicket14Model = { transIds: args.detailViewModel.event.transIds };
-    } else if (this.validationService.isWrongHdp(args.detailViewModel) || this.validationService.isWrong1stHdp(args.detailViewModel)) {
+    } else if (checkIssueType.isWrongHDP || checkIssueType.isWrong1stHDP) {
       args.requestModel.wrongHdpModels = args.detailViewModel.wrongHdpModels;
       args.primitiveProperty.matchId = args.detailViewModel.wrongHdpModels.find(x => x.isMainMatch).matchId;
-    } else if (this.validationService.isWrongOu(args.detailViewModel) || this.validationService.isWrong1stOu(args.detailViewModel)) {
+    } else if (checkIssueType.isWrongOU || checkIssueType.isWrong1stOU) {
       args.requestModel.wrongOuModels = args.detailViewModel.wrongOuModels;
       args.primitiveProperty.matchId = args.detailViewModel.wrongOuModels.find(x => x.isMainMatch).matchId;
-    } else if (this.validationService.isWrongOdds(args.detailViewModel)) {
+    } else if (checkIssueType.isWrongOdds) {
       args.requestModel.wrongOddsModels = args.detailViewModel.wrongOddsModels;
       args.primitiveProperty.matchId = args.detailViewModel.wrongOddsModels[0].matchId;
-    } else if (this.validationService.isReducedOver(args.detailViewModel) || this.validationService.isAbandoned(args.detailViewModel)) {
+    } else if (checkIssueType.isReducedOver || checkIssueType.isAbandoned) {
       args.requestModel.reducedOverModels = args.detailViewModel.reducedOverModels;
       args.primitiveProperty.matchId = args.detailViewModel.reducedOverModels[0].matchId;
-    } else if (this.validationService.isNotParticipate(args.detailViewModel)) {
+    } else if (checkIssueType.isNotParticipate) {
       args.requestModel.notParticipateModels = args.detailViewModel.notParticipateModels;
       args.primitiveProperty.matchId = args.detailViewModel.notParticipateModels[0].matchId;
-    } else if (this.validationService.isDuplicateTickets(args.detailViewModel)) {
+    } else if (checkIssueType.isDuplicateTickets) {
       args.requestModel.duplicateTicketsModel = args.detailViewModel.duplicateTicketsModel;
       args.primitiveProperty.matchId = args.detailViewModel.duplicateTicketsModel.matchId;
-    } else if (this.validationService.isAbnormalAccount(args.detailViewModel)) {
+    } else if (checkIssueType.isAbnormalAccount) {
       args.requestModel.abnormalAccountModel = args.detailViewModel.abnormalAccountModel;
-    } else if (this.validationService.isEarlyKickOfOrWrongKickOff(args.detailViewModel)) {
+    } else if (checkIssueType.isEarlyKickOff || checkIssueType.isWrongKickOff) {
       args.requestModel.earlyKickOffModels = args.detailViewModel.earlyKickOffModels;
       args.primitiveProperty.matchId = args.detailViewModel.earlyKickOffModels.find(x => x.isMainMatch).matchId;
-    } else if (this.validationService.isRecoverTicket(args.detailViewModel)) {
+    } else if (checkIssueType.isRecoverTicket) {
       args.requestModel.recoverTicketModel = args.detailViewModel.recoverTicketModel;
-    } else if (this.validationService.isLikelyWrongMarketOffered(args.detailViewModel)) {
+    } else if (checkIssueType.isLikelyWrongMarketOffered) {
       args.requestModel.wrongMarketOfferedModel = args.detailViewModel.wrongMarketOfferedModel;
-    } else if (this.validationService.isWrongOddsSportsBook(args.detailViewModel)) {
+    } else if (checkIssueType.isWrongOddsSportsBook) {
       args.requestModel.wrongOddsSportsBookModel = args.detailViewModel.wrongOddsSportsBookModel;
+    } else if (checkIssueType.isWrongOfferedName) {
+      args.requestModel.wrongOfferedNameModel = args.detailViewModel.wrongOfferedNameModel;
+      //args.primitiveProperty.matchId = args.detailViewModel.wrongOfferedNameModel.matchId;
     }
   }
 

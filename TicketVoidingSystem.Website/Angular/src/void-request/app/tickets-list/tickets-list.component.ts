@@ -19,7 +19,8 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
   }
 
   ngOnChanges() {
-    this.initTitle();
+    this.title = StaticService.getTitleVoidTicket(this.issueTypeId?.toString(), this.model.totalSingle, this.model.totalParlay,
+      this.model.totalCancelCashOut, this.model.strFromTime, this.model.strToTime);
   }
 
   ngOnInit() {
@@ -37,18 +38,6 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
       const lastedGroup = this.model.groups[lastGroup];
       const lastedTicket = lastedGroup.tickets[lastedGroup.tickets.length - 1];
       this.showMessageBetTrade = lastedTicket.member.toLowerCase().indexOf('bettrade') !== -1 && lastedTicket.isChecked;
-    }
-  }
-
-  initTitle() {
-    if (StaticService.isHaveCancelCashOutTicket(this.issueTypeId?.toString())) {
-      this.title = `(Single Count: ${this.model.totalSingle}, Parlay Count: ${this.model.totalParlay}, Cancel CO: ${this.model.totalCancelCashOut})`;
-    } else {
-      this.title = `(Single Count: ${this.model.totalSingle}, Parlay Count: ${this.model.totalParlay})`;
-    }
-
-    if (!StaticService.isAbnormalAccount(this.issueTypeId?.toString())) {
-      this.title = `Void Time: ${this.model.strFromTime} - ${this.model.strToTime} ${this.title}`;
     }
   }
 }

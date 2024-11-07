@@ -113,7 +113,7 @@ export class VoidOtherIssueComponent implements OnInit {
     await this.getMatchInfo();
     this.issue = await this.commonService.getIssueInfo(StaticService.getSubIssueTypeId(this.requestDetail));
     this.issueTypeName = this.issue.name === this.issue.subIssueTypeName ? this.issue.name : `${this.issue.name} - ${this.issue.subIssueTypeName}`;
-    this.reason = await this.appService.getVoidedReason(this.issue.subIssueTypeId, this.isHasMatchInfo() ? this.match.sportType : 0);
+    this.reason = await this.commonService.getVoidedReason(this.issue.subIssueTypeId, this.isHasMatchInfo() ? this.match.sportType : 0);
     await this.initQuery();
     await this.getTickets();
     await this.getGroupBetTypes();

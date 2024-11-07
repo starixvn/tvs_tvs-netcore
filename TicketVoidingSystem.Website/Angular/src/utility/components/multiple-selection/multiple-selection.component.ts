@@ -34,11 +34,13 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
     if (changes['multipleSelect']) {
       this.getTitle();
     }
+    if (changes['selectedItems']) {
+      this.checkBySelectedItem(this.selectedItems);
+    }
   }
 
   ngOnInit() {
     this.isExpanded = true;
-    this.checkBySelectedItem(this.selectedItems);
     this.getTitle();
     this.clickToBody();
   }
@@ -48,6 +50,7 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
       x.checkBySelectedItem(selectedItems);
       x.checkFromChilds();
     });
+    this.updateMultipleSelect();
   }
 
   getTitle() {
@@ -69,6 +72,11 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
   }
 
   changeItems() {
+    this.updateMultipleSelect();
+    this.checkedItems.emit(this.multipleSelect.getValueItems().split(',').filter(x => x !== ''));
+  }
+
+  updateMultipleSelect() {
     const rootItems = this.multipleSelect.items;
     let countChecked = 0;
     let count = 0;
@@ -80,7 +88,6 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
 
     this.multipleSelect.selectionTitle = this.multipleSelect.getDisplayedItems();
     this.multipleSelect.isCheckAll = count === countChecked;
-    this.checkedItems.emit(this.multipleSelect.getValueItems().split(',').filter(x => x !== ''));
   }
 
   toggle() {

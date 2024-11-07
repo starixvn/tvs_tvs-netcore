@@ -3,18 +3,19 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
-import { IssueType, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { AcceptType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
+import { IssueType, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
+import { ValidationAbnormalBet } from '../event-abnormal-bet/event-abnormal-bet.model';
 import { ValidationBusinessRuleOutput } from '../event-abnormal-bet/services/validation.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
@@ -30,7 +31,6 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
-import { ValidationAbnormalBet } from '../event-abnormal-bet/event-abnormal-bet.model';
 
 class Helper {
   static readonly fakeTransId = '111102';
@@ -50,7 +50,7 @@ class Helper {
     isVoided: false,
     isChangeSubTypeManual: false,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeLogInfoDetail: LogInfoDetail =
     {
       matchId: 12345,

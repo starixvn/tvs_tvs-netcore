@@ -3,7 +3,6 @@ import { RedCardModel } from '../../../../add-request/app/add-request/models/eve
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
 import { PlayerName, RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
-import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
@@ -17,6 +16,7 @@ import { CommonPrimitiveProperty } from '../../models/common-primitive-property.
 import { TicketsService } from '../../services/tickets.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
+import { TemplateMessageService } from './template-message.service';
 import { VoidPageService } from './void-page.service';
 
 class Helper {
@@ -137,13 +137,13 @@ describe('VoidPageService', () => {
   let commonService: CommonService;
   let ticketsService: TicketsService;
   let appService: AppService;
-  let templateService: TemplateService;
+  let templateService: TemplateMessageService;
 
   beforeEach(() => {
     commonService = new CommonService(null);
     appService = new AppService(null);
     ticketsService = new TicketsService(null);
-    templateService = new TemplateService();
+    templateService = new TemplateMessageService(null);
     voidPageService = new VoidPageService(appService, commonService, ticketsService, templateService);
   });
 
@@ -215,24 +215,13 @@ describe('VoidPageService', () => {
     fakeRequestDetailViewModel.notParticipateModels[0].subIssueTypeId = 1;
     const spyInitTicketQuery = jest.spyOn(ticketsService, 'initTicketQuery').mockImplementation();
     const spyGetVoidTicketsMini = jest.spyOn(ticketsService, 'getVoidTicketsMini').mockReturnValue(Promise.resolve(new TicketsModel()))
-    const spyGetVoidedReason = jest.spyOn(appService, 'getVoidedReason').mockReturnValue(Promise.resolve(new VoidedReason()));
+    const spyGetVoidedReason = jest.spyOn(commonService, 'getVoidedReason').mockReturnValue(Promise.resolve(new VoidedReason()));
 
     await voidPageService.loadUnderneathVoidPageItemsData(voidItem, fakeRequestDetailViewModel);
 
     expect(spyInitTicketQuery).toHaveBeenCalledTimes(1);
     expect(spyGetVoidTicketsMini).toHaveBeenCalledTimes(1);
     expect(spyGetVoidedReason).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getTemplateValue should called #templateService.getTemplateValue', async () => {
-    const voidItem = new VoidNotParticipateModel();
-    voidItem.matchModel = new MatchModel();
-    voidItem.voidTicketsMini = new TicketsModel();
-    const spyGetTemplateValue = jest.spyOn(templateService, 'getTemplateValue').mockReturnValue(new TemplateValue());
-    const actual = voidPageService['getTemplateValue'](voidItem, Helper.fakeRequestDetailViewModel);
-
-    expect(spyGetTemplateValue).toHaveBeenCalledTimes(1);
-    expect(actual.checkSettled).toBe(voidItem.voidTicketsMini.isHasSettledTicket);
   });
 
   it('#getDisplayIssueTypeName should return DisplayIssueTypeName when issueTypeName = subIssueTypeName ', async () => {
@@ -262,7 +251,7 @@ describe('VoidPageService', () => {
     const voidItem = new VoidNotParticipateModel();
     voidItem.matchModel = new MatchModel();
     voidItem.subIssueType = new SubIssueType();
-    const spyGetVoidedReason = jest.spyOn(appService, 'getVoidedReason').mockReturnValue(Promise.resolve(expected));
+    const spyGetVoidedReason = jest.spyOn(commonService, 'getVoidedReason').mockReturnValue(Promise.resolve(expected));
 
     const actual = await voidPageService['getVoidedReason'](voidItem);
 

@@ -13,7 +13,7 @@ export class ActionVoidService {
     if (!issueTypeId) {
       return originActions;
     }
-    
+
     const actionMapping: { [key: string]: number[] } = {
       [IssueTypeConstant.REDUCED_OVER]: ActionVoidByIssueTypeConst.REDUCED_OVER,
       [IssueTypeConstant.ABANDONED]: ActionVoidByIssueTypeConst.ABANDONED,
@@ -36,6 +36,7 @@ export class ActionVoidService {
       [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: ActionVoidByIssueTypeConst.WRONG_ODDS_SPORTS_BOOK,
       [IssueTypeConstant.ABNORMAL_BET]: [],
       [IssueTypeConstant.DUPLICATE_TICKETS]: [],
+      [IssueTypeConstant.WRONG_OFFERED_NAME]: ActionVoidByIssueTypeConst.WRONG_OFFERRED_NAME,
     };
 
     let actionIds: number[] = [];

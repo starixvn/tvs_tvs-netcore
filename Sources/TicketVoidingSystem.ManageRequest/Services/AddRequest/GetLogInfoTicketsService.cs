@@ -1,4 +1,5 @@
 ﻿using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
@@ -37,7 +38,10 @@ public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
         {
             TotalSingle = voidTickets.Count(ticket => !ticket.IsMixParlay),
             TotalParlay = voidTickets.Count(ticket => ticket.IsMixParlay),
-            Groups = groupTicket
+            Groups = groupTicket,
+            IsHasSettledTicket = voidTickets.Any(ticket => ticket.IsSettledTicket()),
+            FromTime = voidTickets.Min(ticket => ticket.TransDate),
+            ToTime = voidTickets.Max(ticket => ticket.TransDate)
         };
 
         return viewModel;

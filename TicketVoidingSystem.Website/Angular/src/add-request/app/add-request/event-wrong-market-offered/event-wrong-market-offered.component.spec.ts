@@ -41,8 +41,7 @@ class Helper {
     logInfoDetail: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTypeCount: [],
-    betTeamsResult: [],
-    checkedBetTypes: []
+    betTeamsResult: []
   };
 }
 
@@ -170,7 +169,7 @@ describe('EventWrongMarketOfferedComponent', () => {
         filter: new FilterModel(),
       }
     });
-    instance.eventLeague = new EventLeagueComponent(null, null);
+    instance.eventLeague = new EventLeagueComponent(null, null, null);
     instance.eventLeague.selectedMatch = new MatchModel();
     instance.eventLeague.selectedMatch.matchId = 1;
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();

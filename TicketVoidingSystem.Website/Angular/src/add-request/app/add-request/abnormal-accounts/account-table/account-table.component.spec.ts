@@ -41,7 +41,7 @@ class Helper {
     isVoided: false,
     subIssueTypes: [],
     isAbnormal: false
-  };
+  } as FilterModel;
 }
 
 describe('AccountTableComponent', () => {

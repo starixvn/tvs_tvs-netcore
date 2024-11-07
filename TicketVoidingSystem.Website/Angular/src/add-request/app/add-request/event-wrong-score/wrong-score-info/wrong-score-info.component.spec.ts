@@ -36,7 +36,7 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
-  };
+  } as FilterModel;
 
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {

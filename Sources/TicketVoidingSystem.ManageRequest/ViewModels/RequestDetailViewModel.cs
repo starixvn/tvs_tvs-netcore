@@ -22,4 +22,5 @@ public class RequestDetailViewModel
     public AbnormalBetViewModel AbnormalBetModel { get; set; }
     public WrongMarketOfferedViewModel? WrongMarketOfferedModel { get; set; }
     public WrongOddsSportsBookViewModel? WrongOddsSportsBookModel { get; set; }
+    public WrongOfferedNameViewModel? WrongOfferedNameModel { get; set; }
 }

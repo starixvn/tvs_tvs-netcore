@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { FilterModel } from '../../filter/filter.model';
 import { WrongOuModel } from '../../models/event-wrong-ou.model';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { EventWrongOuService } from './event-wrong-ou.service';
-import { FilterModel } from '../../filter/filter.model';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -25,7 +25,7 @@ class Helper {
     poolHouseCheckedBetTypes: '',
     isShowValidation: false,
     sportType: 0
-  };  
+  };
   static readonly fakeWrongOuModel: WrongOuModel = {
     matchId: 122,
     subIssueTypeId: 12,
@@ -48,12 +48,12 @@ class Helper {
     isTest: false,
     isAbnormal: false,
     isVoided: false
-  }
+  } as FilterModel;
 }
 
 describe('EventWrongOuService', () => {
   let service: EventWrongOuService;
-  
+
   beforeEach(() => {
     service = new EventWrongOuService(null);
   });
@@ -85,7 +85,7 @@ describe('EventWrongOuService', () => {
     expect(actual).toBe(viewModel);
   });
 
-  it('#getWrongOuModel should return WrongOuGetLogInfoQuery[]', async () => {    
+  it('#getWrongOuModel should return WrongOuGetLogInfoQuery[]', async () => {
     let logInfoWrongOu: LogInfoWrongOu = {
       matchId: 0,
       leagueName: '',
@@ -111,7 +111,7 @@ describe('EventWrongOuService', () => {
 
     expect(allEvents.length).toBe(1);
   });
-  
+
   it('#initDefaultFilter should update filter data', async () => {
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoWrongOu);
 
@@ -120,7 +120,7 @@ describe('EventWrongOuService', () => {
     expect(mainEvent.filterWrongOu.actualMarket).toBe('');
     expect(mainEvent.filterWrongOu.wrongMarket).toBe('');
   });
-  
+
   it('#initDefaultMainEvent should call #initDefaultFilter', async () => {
     service.initDefaultFilter = jest.fn();
     const actual = service.initDefaultMainEvent([]);

@@ -7,12 +7,12 @@ import { Result } from '../../../../../utility/models/result';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongOddsModel } from '../../models/event-wrong-odds.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 import { FilterWrongOddsComponent } from '../filter-wrong-odds/filter-wrong-odds.component';
 import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { ValidationService } from './validation.service';
-import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -42,7 +42,7 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
     matchId: 12345,
@@ -96,7 +96,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when match invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => false);
     const actual = service.validateCommonData(leagueEvent, null);
 
@@ -104,7 +104,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when filterWrongOddsComponent invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongOddsComponent = new FilterWrongOddsComponent(null, null, null);
     filterWrongOddsComponent.isValid = jest.fn().mockImplementation(() => false);
@@ -114,7 +114,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return true', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null);
+    const leagueEvent = new EventLeagueComponent(null, null, null);
     leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongOddsComponent = new FilterWrongOddsComponent(null, null, null);
     filterWrongOddsComponent.isValid = jest.fn().mockImplementation(() => true);
@@ -264,7 +264,7 @@ describe('ValidationService', () => {
 
     expect(result).toBeTruthy();
   });
-  
+
   it('#isValidFilterWrongOdds should return false for invalid filterWrongOddsModel', () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
@@ -277,7 +277,7 @@ describe('ValidationService', () => {
       const result = service.isValidFilterCorrectOdds(x.homeCorrectOdds, x.spread, tooltip);
       expect(result).toBeFalsy();
     })
-    
+
   });
 
   it('#isValidFilterOu should return true for valid filter', () => {
@@ -300,7 +300,7 @@ describe('ValidationService', () => {
       expect(result).toBeFalsy();
     });
     })
-    
+
   it('#isValidSpread should return true for valid filter', () => {
     const tooltip = new Tooltip();
     const result = service.isValidSpread("0.2", tooltip);
@@ -323,7 +323,7 @@ describe('ValidationService', () => {
       filter.liveIndicator = 1;
       const tooltip = new Tooltip();
       const result = service["isValidFilterLiveIndicator"](filter, tooltip);
-  
+
       expect(result).toBeTruthy();
     });
 
@@ -338,13 +338,13 @@ describe('ValidationService', () => {
         expect(result).toBeFalsy();
       });
     });
-    
+
     it('#isValidFilterFavorite should return true for valid filter', () => {
       const filter = Helper.fakeFilterWrongOddsModel;
       filter.favoriteValue = "0.7";
       const tooltip = new Tooltip();
       const result = service["isValidFilterFavorite"](filter, tooltip);
-  
+
       expect(result).toBeTruthy();
     });
 
@@ -359,5 +359,5 @@ describe('ValidationService', () => {
         expect(result).toBeFalsy();
       });
     });
-  
+
 });

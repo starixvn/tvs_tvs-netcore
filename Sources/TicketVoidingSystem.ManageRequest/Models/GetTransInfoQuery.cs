@@ -24,4 +24,5 @@ public class GetTransInfoQuery
     public IEnumerable<EarlyKickOffViewModel>? EarlyKickOffModels { get; set; }
     public AbnormalBetViewModel? AbnormalBetModel { get; set; }
     public WrongMarketOfferedViewModel? WrongMarketOfferedModel { get; set; }
+    public WrongOfferedNameViewModel? WrongOfferedNameModel { get; set; }
 }

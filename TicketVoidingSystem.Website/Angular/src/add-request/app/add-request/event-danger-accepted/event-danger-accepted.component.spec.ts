@@ -7,6 +7,7 @@ import { Shallow } from 'shallow-render';
 import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
@@ -30,7 +31,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -56,7 +56,7 @@ class Helper {
     isVoided: false,
     isChangeSubTypeManual: false,
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeRedCardModel: RedCardModel = {
     matchId: 39420383,
     filterBy: TVSRequestFilterBy.CHECK_TIME,
@@ -415,7 +415,7 @@ describe('EventDangerAcceptedComponent', () => {
       });
     instance.primitiveProps = new PrimitiveProperty();
     instance.mainEvent =  new LogInfoRedCard();
-    instance.eventLeagueComponent = new EventLeagueComponent(null, null);
+    instance.eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.isMainMatch = true;
     instance.allSelectedEvents = [mainEvent];

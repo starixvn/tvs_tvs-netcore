@@ -1,4 +1,3 @@
-import { PipeModule } from './../../../../../utility/pipes/pipe.module';
 import { ElementRef, NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
@@ -16,6 +15,7 @@ import { ValidationMessage } from '../../models/get-log-info.model';
 import { FilterTimeWithAllowanceComponent } from '../filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoService } from '../services/log-info.service';
+import { PipeModule } from './../../../../../utility/pipes/pipe.module';
 import { LogInfoRedCardComponent } from './log-info-red-card.component';
 import { LogInfoRedCard } from './log-info-red-card.model';
 
@@ -91,7 +91,7 @@ class Helper {
     isVoided: false,
     subIssueTypes: [],
     isAbnormal: false
-  };
+  } as FilterModel;
   static readonly fakeSubIssueTypeDialogModel: SubIssueTypeDialogModel = {
     isOpen: true,
     issueTypeId: '1',

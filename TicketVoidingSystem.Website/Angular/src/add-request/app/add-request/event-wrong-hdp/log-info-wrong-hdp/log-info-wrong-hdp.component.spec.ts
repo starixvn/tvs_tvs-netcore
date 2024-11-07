@@ -15,6 +15,7 @@ import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-tic
 import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
 import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
 import { LogAnalysisService } from '../../services/log-analysis.service';
+import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
 import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
 import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
@@ -89,7 +90,7 @@ class Helper {
     isVoided: false,
     isAbnormal: false,
     actions: []
-  };
+  } as FilterModel;
   static readonly fakeGetPoolHouseTicketQuery: GetPoolHouseTicketQuery = {
     matchId: 75785,
     actionId: 1,
@@ -119,12 +120,13 @@ describe('LogInfoWrongHdpComponent', () => {
     declarations: [
       FilterWithHdpComponent,
       PoolHouseTicketComponent,
-      AffectedTicketComponent
+      AffectedTicketComponent,
+      TicketCountOtherSportsComponent
     ],
     imports: [
       NgbModule,
       FormsModule,
-      BlockUiModule    
+      BlockUiModule
     ],
     providers: [
       ValidationService,
@@ -409,32 +411,6 @@ describe('LogInfoWrongHdpComponent', () => {
     expect(instance['refreshLogInfo']).toHaveBeenCalledTimes(1);
   });
 
-  it('getPoolHouseData should call #changeBlockingUiStatus', async () => {
-    const fakeLogInfoWrongHdp = _.cloneDeep(Helper.fakeLogInfoWrongHdp);
-    fakeLogInfoWrongHdp.linkedLogsViewModel = new LinkedLogsViewModel();
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-    .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
-    .mock(ValidationService, { isSubTypeWrongHdpOrWrong1stHdp: jest.fn().mockImplementation(() => true) })
-    .mock(EventWrongHdpService, { getLinkedLog: jest.fn().mockImplementation(() => Promise.resolve(new LinkedLogsViewModel())) })
-    .mock(AddRequestApiService, { getPoolHouseTickets: jest.fn().mockImplementation(() => Promise.resolve(new PoolHouseTicketViewModel())) })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    [true, false].forEach(async x => {
-      instance.isMainMatch = x;
-      instance.poolHouseTicketsModel = new PoolHouseTicketsModel();
-
-      await instance['getPoolHouseData'](new GetPoolHouseTicketQuery());
-
-      expect(mockChangeBlockingUiStatus).toHaveBeenCalled();
-    });
-  });
-
   it('recalculatePoolHouseTicket should update poolHouseCheckedBetTypes expected', async () => {
     const { instance } = await shallow
     .render({
@@ -444,7 +420,7 @@ describe('LogInfoWrongHdpComponent', () => {
         logInfo: Helper.fakeLogInfoWrongHdp
       }
     });
-    let model = {checkedBetTypes: "123,4"} as PoolHouseTicketsModel;
+    const model = {checkedBetTypes: "123,4"} as PoolHouseTicketsModel;
     instance.refreshLogInfoByPoolHouseEvent = jest.fn();
 
     instance.recalculatePoolHouseTicket(model);

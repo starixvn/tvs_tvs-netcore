@@ -15,6 +15,7 @@ import { TemplateInputsForTVSService } from './template-message/services/templat
 import { TemplateInputsService } from './template-message/services/template-inputs.service';
 import { TemplateWrongOddsSportBookService } from './template-message/services/template-wrong-odds-sport-book.service';
 import { TemplateWrongOddsService } from './template-message/services/template-wrong-odds.service';
+import { TemplateWrongOfferedService } from './template-message/services/template-wrong-offfered-name.service';
 import { TemplateWrongScoreService } from './template-message/services/template-wrong-score.service';
 import { TemplateService } from './template-message/services/template.service';
 import { TemplateMessageComponent } from './template-message/template-message.component';
@@ -38,6 +39,7 @@ import { TemplateMessageComponent } from './template-message/template-message.co
     TemplateService,
     TemplateWrongScoreService,
     TemplateWrongOddsService,
+    TemplateWrongOfferedService,
     TemplateWrongOddsSportBookService,
     TemplateInputsForTVSService,
     TemplateInputsService,

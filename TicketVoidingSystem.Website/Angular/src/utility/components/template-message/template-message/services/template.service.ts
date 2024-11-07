@@ -37,6 +37,6 @@ export class TemplateService {
       matchId: match.matchId,
       match: match,
       groupPHAffected: 0
-    };
+    } as TemplateValue;
   }
 }

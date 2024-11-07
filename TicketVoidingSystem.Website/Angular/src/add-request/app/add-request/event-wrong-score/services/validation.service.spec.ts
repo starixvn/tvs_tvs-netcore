@@ -88,7 +88,7 @@ describe('LogInfoService', () => {
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
     filter.subIssueTypeId = '10';
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongScoreComponent = new FilterWrongScoreComponent(null, null, null, null);
     filterWrongScoreComponent.isValid = jest.fn().mockImplementation(() => true);
@@ -108,7 +108,7 @@ describe('LogInfoService', () => {
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
     filter.subIssueTypeId = '10';
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
     const service = new ValidationService();
 
@@ -135,7 +135,7 @@ describe('LogInfoService', () => {
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
     filter.subIssueTypeId = '10';
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongScoreComponent = new FilterWrongScoreComponent(null, null, null, null);
     filterWrongScoreComponent.isValid = jest.fn().mockImplementation(() => false);
@@ -155,7 +155,7 @@ describe('LogInfoService', () => {
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
     filter.subIssueTypeId = '10';
-    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongScoreComponent = new FilterWrongScoreComponent(null, null, null, null);
     filterWrongScoreComponent.isValid = jest.fn().mockImplementation(() => false);

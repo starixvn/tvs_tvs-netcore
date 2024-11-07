@@ -4,14 +4,14 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { GroupLicensee, Licensee } from '../../../../utility/components/licensees/licensees.model';
 import { BalanceUp } from '../../../../utility/models/balance-up.model';
+import { Currency } from '../../../../utility/models/currency.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { HttpService } from '../../../../utility/services/http.service';
-import { AppService } from '../../app.service';
 import { GetTicketsQuery } from '../../models/query.model';
 import { FilterTicketsComponent } from './filter-tickets.component';
-import { Currency, FilterSearchBy } from './filter.model';
-import { GroupLicensee, Licensee } from './match-id/licensees/licensees.model';
+import { FilterSearchBy } from './filter.model';
 import { MatchIdComponent } from './match-id/match-id.component';
 
 class Helper {
@@ -48,7 +48,7 @@ class Helper {
   ];
 
   static getGroupLicensee(): GroupLicensee[] {
-    return [new GroupLicensee('China rules', [new Licensee(14, '368Cash')])];
+    return [new GroupLicensee('China rules', [new Licensee(14, '368Cash', true)], true)];
   }
 
   static getParamsForMatchid(): GetTicketsQuery {
@@ -107,7 +107,7 @@ describe('FilterTicketsComponent', () => {
 
     expect(instance.changeTab).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#ngOnChanges should not call #changeTab when change status', async () => {
     const { instance } = await shallow.render();
     instance.changeTab = jest.fn();
@@ -136,7 +136,7 @@ describe('FilterTicketsComponent', () => {
     expect(instance.model.markedBy).toBe('8');
     expect(instance.markedByOptions.length).toBe(2);
   });
-  
+
   it('#initData should call #search', async () => {
     const { instance } = await shallow
       .mock(CommonService, {
@@ -163,8 +163,8 @@ describe('FilterTicketsComponent', () => {
   it('#initCurrency should return expected data', async () => {
     // Arrange
     const { instance } = await shallow
-      .mock(AppService, {
-        getCurrencies: jest.fn().mockImplementation(() => Helper.fakeCurrency)
+      .mock(CommonService, {
+        getCurrencies: jest.fn().mockReturnValue(Helper.fakeCurrency)
       })
       .render();
 
@@ -175,22 +175,6 @@ describe('FilterTicketsComponent', () => {
     expect(instance.currencies.items.length).toBe(6);
     expect(instance.currencies.selected.length).toBe(6);
     expect(instance.model.currencyIds).toBe('13,81,20,90,86,9');
-  });
-
-  it('#renderGroupLicensees should return expected data', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .mock(AppService, {
-        getLicensees: jest.fn().mockImplementation(() => Helper.getGroupLicensee())
-      })
-      .render();
-
-    // Act
-    await instance.renderGroupLicensees();
-
-    // Assert
-    expect(instance.groupLicensees.length).toBe(1);
-    expect(instance.groupLicensees[0].licensees.length).toBe(1);
   });
 
   it('#checkValidate should return true when search by matchid', async () => {
@@ -257,7 +241,7 @@ describe('FilterTicketsComponent', () => {
 
     expect(instance.changeSearchBy).toHaveBeenCalledWith('0');
   });
-  
+
   it('#changeTab should not call #changeSearchBy', async () => {
     const { instance } = await shallow.render();
     instance.searchBy.value = FilterSearchBy.MATCH_ID;
@@ -326,7 +310,7 @@ describe('FilterTicketsComponent', () => {
 
     expect(instance.searchEvent.emit).toHaveBeenCalledWith(query);
   });
-  
+
   it('#search should not emit searchEvent event', async () => {
     const { instance } = await shallow.render();
     instance.checkValidate = jest.fn().mockImplementation(() => false);
@@ -359,7 +343,7 @@ describe('FilterTicketsComponent', () => {
     // Assert
     expect(instance.changeMatchInfo.emit).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#getParams should update correct data when filter by BETIDS', async () => {
     const { instance } = await shallow.render();
     instance.searchBy.value = FilterSearchBy.BETIDS;
@@ -371,7 +355,7 @@ describe('FilterTicketsComponent', () => {
     expect(instance.betIdsComponent.getAllBetIds).toHaveBeenCalledTimes(1);
     expect(actual).toBeDefined();
   });
-  
+
   it('#getParams should update correct data when filter by ALL_MARKED', async () => {
     const { instance } = await shallow.render();
     instance.searchBy.value = FilterSearchBy.ALL_MARKED;

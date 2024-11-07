@@ -1,8 +1,8 @@
 <div class="reason-area" *ngIf="voidReason">
-    <div class="gray-header">
+    <div class="gray-header" (click)="enableCollapse && isCollapse = !isCollapse">
       Reason
     </div>
-    <table>
+    <table *ngIf="!isCollapse">
       <tr class="header-language">
         <td>
           <span class="required">&nbsp;&nbsp;*</span> <span>English (Max {{150 -
@@ -15,11 +15,11 @@
       </tr>
       <tr>
         <td>
-          <textarea maxlength="150" class="reason"
+          <textarea maxlength="150" class="reason" [disabled]="disabled"
             [(ngModel)]="voidReason.reasonEnglish"></textarea>
         </td>
         <td>
-          <textarea maxlength="150" class="reasonSC"
+          <textarea maxlength="150" class="reasonSC" [disabled]="disabled"
             [(ngModel)]="voidReason.reasonChineseSimplified"></textarea>
         </td>
       </tr>
