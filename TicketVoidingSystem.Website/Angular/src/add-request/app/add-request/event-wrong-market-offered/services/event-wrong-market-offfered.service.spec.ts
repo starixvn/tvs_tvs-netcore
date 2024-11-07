@@ -18,7 +18,7 @@ class Helper {
     messageValidationLogInfo: [],
     betTypeCount: [],
     betTeamsResult: []
-  };
+  } as LogInfoWrongMarketOffered;
   static readonly fakeWrongMarketOfferedModel: WrongMarketOfferedModel = {
     betTypeCount: [],
     filterFromTransTime: Helper.fromDate,
@@ -26,7 +26,7 @@ class Helper {
     subIssueTypeId: 1,
     logInfoDetail: new LogInfoDetail(),
     matchId: 1,
-  };
+  } as WrongMarketOfferedModel;
 }
 
 describe('EventWrongMarketOfferedService', () => {

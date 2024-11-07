@@ -44,6 +44,8 @@ public class AdvancedModeServiceImp : AdvancedModeService
 
     public IEnumerable<AllBetTypesSelection> GetAllBetTypesSelection(string allBetTypesSelectionJson)
     {
-        return string.IsNullOrWhiteSpace(allBetTypesSelectionJson) ? null : Helper.DeserializeObjectIgnoreNullValue<IEnumerable<AllBetTypesSelection>>(allBetTypesSelectionJson);
+        return string.IsNullOrWhiteSpace(allBetTypesSelectionJson)
+            ? Enumerable.Empty<AllBetTypesSelection>()
+            : Helper.DeserializeObjectIgnoreNullValue<IEnumerable<AllBetTypesSelection>>(allBetTypesSelectionJson);
     }
 }
