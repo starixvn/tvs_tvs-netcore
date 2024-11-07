@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { Subscription, timer } from 'rxjs';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TEXT } from '../../../../utility/constants/text';
+import { Selection as AllBetTypesSelection } from '../../../../utility/models/selection.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AdvancedModeConstants } from '../../advanced-mode/advanced-mode.constants';
@@ -10,10 +11,9 @@ import { OddsInfo } from '../../advanced-mode/advanced-mode/advanced-mode.model'
 import { AdvancedModeService } from '../../advanced-mode/advanced-mode/advanced-mode.service';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model';
+import { ControlsAllBetTypesComponent } from '../controls-all-bet-types/controls-all-bet-types.component';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advanced-mode.model';
-import { ControlsAllBetTypesComponent } from '../controls-all-bet-types/controls-all-bet-types.component';
-import { Selection as AllBetTypesSelection} from '../../../../utility/models/selection.model';
 
 @Component({
   selector: 'advanced-mode',
@@ -319,7 +319,7 @@ export class AdvancedModeComponent {
       : selection.value !== '';
   } 
 
-  public getControlsAllBetTypesListQuery(): AllBetTypesSelection[]{
+  public getAllBetTypesSelection(): AllBetTypesSelection[]{
     return !this.controlsAllBetTypesComponent?.controlsAllBetTypesLists 
       ? this.advancedModeAddRequestModel.selectedAllBetTypes
       : this.controlsAllBetTypesComponent.controlsAllBetTypesLists

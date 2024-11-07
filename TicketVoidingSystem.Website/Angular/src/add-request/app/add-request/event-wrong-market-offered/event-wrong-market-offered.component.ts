@@ -72,7 +72,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     this.advancedModeAddRequestModel = {
       betTeamsResult: betTeamsResult,
       checkedBetTypes: checkedBetTypes,
-      selectedAllBetTypes: this.wrongMarketOfferedModel.selectedAllBetTypes
+      selectedAllBetTypes: this.wrongMarketOfferedModel.allBetTypesSelection
     };
     this.primitivePropertyEvent.isShowValidation = true;
   }
@@ -181,7 +181,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   private initSaveRequestInput() {
     if (!this.filter.isVoided) {
       this.logInfoEvent.betTeamsResult = this.advancedMode.getCheckedBetTypes();
-      this.logInfoEvent.selectedAllBetTypes = this.advancedMode.advancedModeComponent.getControlsAllBetTypesListQuery();
+      this.logInfoEvent.allBetTypesSelection = this.advancedMode.advancedModeComponent.getAllBetTypesSelection();
     }
     const arg = new SaveRequestArg();
     arg.requestId = this.requestId;

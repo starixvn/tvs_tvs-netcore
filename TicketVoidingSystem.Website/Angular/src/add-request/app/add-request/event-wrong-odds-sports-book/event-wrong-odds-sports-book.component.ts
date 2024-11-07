@@ -82,7 +82,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
     this.advancedModeAddRequestModel = {
       betTeamsResult: betTeamsResult,
       checkedBetTypes: checkedBetTypes,
-      selectedAllBetTypes: this.wrongOddsSportsBookModel.selectedAllBetTypes
+      selectedAllBetTypes: this.wrongOddsSportsBookModel.allBetTypesSelection
     };
     this.primitiveProps.isShowValidation = true;
   }
@@ -169,7 +169,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
     const arg = new SaveRequestArg();
     if (!this.filter.isVoided) {
       this.logInfoEvent.betTeamsResult = this.advancedMode.getCheckedBetTypes();
-      this.logInfoEvent.selectedAllBetTypes = this.advancedMode.advancedModeComponent.getControlsAllBetTypesListQuery();
+      this.logInfoEvent.allBetTypesSelection = this.advancedMode.advancedModeComponent.getAllBetTypesSelection();
     }
     arg.requestId = this.requestId;
     arg.requestedBy = this.requestedBy;

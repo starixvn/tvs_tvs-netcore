@@ -1,8 +1,8 @@
 import { BetTeamAddRequestResult } from "../../../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.model";
 import { LogInfoDetail } from "../../../../../utility/models/log-info-detail.model";
+import { Selection } from "../../../../../utility/models/selection.model";
 import { ValidationMessage } from "../../models/get-log-info.model";
 import { FilterWrongOddsSportsBookModel } from "./filter-wrong-odds-sports-book.model";
-import { Selection } from "../../../../../utility/models/selection.model";
 
 export class LogInfoWrongOddsSportsBook {
   matchId: number;
@@ -12,5 +12,5 @@ export class LogInfoWrongOddsSportsBook {
   betTeamsResult: BetTeamAddRequestResult[];
   isHasSettledTicket: boolean;
   isHasInstantlySettledTicket: boolean;
-  selectedAllBetTypes: Selection[];
+  allBetTypesSelection: Selection[];
 }

@@ -45,6 +45,7 @@ public class RequestEventModel
 
     [JsonConverter(typeof(GMT8DateTimeJsonConverter))]
     public DateTime? KickOffTime { get; set; }
+
     public int? HTHomeScore { get; set; }
     public int? HTAwayScore { get; set; }
     public int? FinalHomeScore { get; set; }
@@ -91,11 +92,13 @@ public class RequestEventModel
 
     // event wrong score
     public string WrongScore { get; set; }
+
     public string ActualScore { get; set; }
     public int SubIssueTypeId { get; set; }
 
     //event wrong odds
     public string FilterFavoriteType { get; set; }
+
     public string FavoriteValue { get; set; }
     public string WrongOU { get; set; }
     public string Spread { get; set; }
@@ -112,8 +115,8 @@ public class RequestEventModel
     public string FromOdds { get; set; }
     public string ToOdds { get; set; }
     public string CorrectOdds { get; set; }
-    public string ControlsAllBetTypesJson { get; set; }
-    
+    public string AllBetTypesSelectionJson { get; set; }
+
     public string CurrencyIds { get; set; }
     public string LicenseeNames { get; set; }
     public string WrongName { get; set; }
