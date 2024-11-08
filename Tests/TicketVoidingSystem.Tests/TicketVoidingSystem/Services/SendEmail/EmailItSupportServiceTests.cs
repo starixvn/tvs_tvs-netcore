@@ -118,7 +118,7 @@ public class EmailItSupportServiceTests
                 IsITSupportCreatedRequest = false,
                 IsItSupport = false,
                 Currency = 20
-            },
+            }
         };
         sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItSupport)
             .ReturnsForAnyArgs(new SiteEmail());

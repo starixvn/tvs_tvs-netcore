@@ -38,7 +38,7 @@ public class MapUserLogsServiceTests
                 LogData = "",
                 SessionId = 1,
                 CreatedDate = new DateTime(2022,2,2),
-                TransIds = new List<string> { "100001",  "100002", "100003", "100004", "100005", "100006" } },
+                TransIds = new List<string> { "100001",  "100002", "100003", "100004", "100005", "100006" } }
         };
         var expected = new GetUserLogViewModel
         {

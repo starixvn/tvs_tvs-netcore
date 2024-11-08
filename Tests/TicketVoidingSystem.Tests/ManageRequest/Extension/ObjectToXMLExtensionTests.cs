@@ -1060,7 +1060,7 @@ public class ObjectToXmlExtensionFacts
             FilterFromTransTime = new DateTime(2024, 7, 2, 2, 2, 2),
             FilterToTransTime = new DateTime(2024, 7, 2, 2, 2, 2),
             VoidFromTime = new DateTime(2024, 7, 2, 2, 2, 2),
-            VoidToTime = new DateTime(2024, 7, 2, 2, 2, 2),
+            VoidToTime = new DateTime(2024, 7, 2, 2, 2, 2)
         };
         const string expected = "<root><r MatchId = '8462745' FilterFromTransTime='2024-07-02 02:02:02.000' " +
                                 "FilterToTransTime='2024-07-02 02:02:02.000' SubIssueTypeId='2' AdvancedExtraInfo='null'/></root>";

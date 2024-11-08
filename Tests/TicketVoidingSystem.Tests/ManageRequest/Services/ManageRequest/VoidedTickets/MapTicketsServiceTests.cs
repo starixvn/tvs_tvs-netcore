@@ -47,7 +47,7 @@ public class MapTicketsServiceTests
         {
             new()  { IsMixParlay = false, GroupName = "Group1" },
             new()  { IsMixParlay = true, GroupName = "Group2", IsDeposit = true},
-            new()  { IsMixParlay = true, GroupName = "Group2", IsDeposit = false},
+            new()  { IsMixParlay = true, GroupName = "Group2", IsDeposit = false}
         };
         var allGroups = new List<Group<VoidedTicketModel>>
         {
@@ -76,8 +76,8 @@ public class MapTicketsServiceTests
             Name = "Test Group",
             Tickets = new List<VoidedTicketModel>
             {
-                new() { IsMixParlay = false,}
-            },
+                new() { IsMixParlay = false }
+            }
         };
 
         mapFromBetListService

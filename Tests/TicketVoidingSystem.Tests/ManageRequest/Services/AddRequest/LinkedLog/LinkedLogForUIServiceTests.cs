@@ -150,7 +150,7 @@ public class LinkedLogForUIServiceTests
         // Arrange
         var responseLogs = new List<PoolHouseLinkedLogResponse>
         {
-            new () { LinkGroup = 1, LinkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo> ()},
+            new () { LinkGroup = 1, LinkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo> ()}
         };
         var service = Substitute.ForPartsOf<LinkedLogForUIServiceImp>();
         service.Configure().BuildLogsData(default, default, default)

@@ -33,7 +33,7 @@ public class RecoverTicketServiceTests
             Player = "a",
             TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash),
             WinLost = winLost,
-            Score = score,
+            Score = score
         };
         var betListService = Substitute.For<BetListCoreService>();
         betListService.GetMainParlayTicket(item).ReturnsForAnyArgs(ticket);

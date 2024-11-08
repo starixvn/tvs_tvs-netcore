@@ -43,7 +43,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
                 RefNo = 4,
                 AwayId = 1,
                 HomeId = 0,
-                LeagueId = 3,
+                LeagueId = 3
             };
             var match = new Match();
             const ChoiceType choiceType = ChoiceType.Excel;

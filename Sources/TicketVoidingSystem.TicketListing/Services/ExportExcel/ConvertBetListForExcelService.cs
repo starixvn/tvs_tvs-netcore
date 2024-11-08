@@ -44,7 +44,7 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
             _ when html.Contains(HtmlClass.Lucky3) => GetChoiceLucky3(doc),
             _ when html.Contains(HtmlClass.CombinationLink) => GetChoiceSingleMatchParlay(doc, betId),
             _ when html.Contains(HtmlClass.BetTypeDescription) => GetChoiceBetTypeDescription(doc, html, choice),
-            _ => GetChoiceRefund(doc, html, choice),
+            _ => GetChoiceRefund(doc, html, choice)
         };
     }
 

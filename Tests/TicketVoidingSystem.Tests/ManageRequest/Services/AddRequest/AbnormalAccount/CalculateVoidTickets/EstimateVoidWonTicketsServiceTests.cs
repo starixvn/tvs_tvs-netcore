@@ -47,7 +47,7 @@ public class EstimateVoidWonTicketsServiceTests : IClassFixture<AppSettingFixtur
         // Arrange
         var expected = new List<TicketCalculateWinLostAccount>
         {
-            new() { WinLost = 999, BetId = 1 },
+            new() { WinLost = 999, BetId = 1 }
         };
         var wonTickets = new OrderedTickets
         {
@@ -89,7 +89,7 @@ public class EstimateVoidWonTicketsServiceTests : IClassFixture<AppSettingFixtur
         // Arrange
         var expected = new List<TicketCalculateWinLostAccount>
         {
-            new() { WinLost = 999, BetId = 1 },
+            new() { WinLost = 999, BetId = 1 }
         };
         var wonTickets = new OrderedTickets
         {

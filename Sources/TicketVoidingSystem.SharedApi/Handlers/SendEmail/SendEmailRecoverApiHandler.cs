@@ -33,7 +33,7 @@ public class SendEmailRecoverApiHandler : IRequestHandler<SendEmailRecoverApiReq
             DateTime = DateTimeOffset.Now.DateTime,
             TemplatePath = TemplateEmailPath.RecoverBet,
             ActorUsername = message.ActorUsername,
-            NegativeBalanceUsers = message.NegativeBalanceUsers,
+            NegativeBalanceUsers = message.NegativeBalanceUsers
         };
 
         await sendEmailRecoverService.SendEmail(emailModel, message.Tickets);

@@ -282,7 +282,7 @@ public class GetRequestServiceImp : GetRequestService
             MatchId = model.MatchId,
             SubIssueTypeId = model.SubIssueTypeId,
             PlayerId = model.PlayerId,
-            BetTypeIds = model.BetTypeIds,
+            BetTypeIds = model.BetTypeIds
         });
     }
 

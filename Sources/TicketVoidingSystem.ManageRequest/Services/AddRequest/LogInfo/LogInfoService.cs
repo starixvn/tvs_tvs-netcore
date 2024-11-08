@@ -181,7 +181,7 @@ public class LogInfoServiceImp : LogInfoService
             MatchId = item.MatchId,
             Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
             TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
-            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId)
         });
     }
 
@@ -193,7 +193,7 @@ public class LogInfoServiceImp : LogInfoService
             MatchId = item.MatchId,
             Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
             TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
-            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId)
         });
     }
 
@@ -205,7 +205,7 @@ public class LogInfoServiceImp : LogInfoService
             MatchId = item.MatchId,
             Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
             TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
-            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId)
         });
     }
 
@@ -236,7 +236,7 @@ public class LogInfoServiceImp : LogInfoService
                 MatchId = query.WrongOddsSportsBookModel.MatchId,
                 Validation = validation.FirstOrDefault(),
                 TicketRequest = ticketRequest,
-                LogInfoDetail = logInfoDetail.FirstOrDefault(),
+                LogInfoDetail = logInfoDetail.FirstOrDefault()
             }
         };
     }
@@ -251,7 +251,7 @@ public class LogInfoServiceImp : LogInfoService
                 MatchId = query.WrongOfferedNameModel.MatchId,
                 Validation = validation.FirstOrDefault(),
                 TicketRequest = ticketRequest,
-                LogInfoDetail = logInfoDetail.FirstOrDefault(),
+                LogInfoDetail = logInfoDetail.FirstOrDefault()
             }
         };
     }

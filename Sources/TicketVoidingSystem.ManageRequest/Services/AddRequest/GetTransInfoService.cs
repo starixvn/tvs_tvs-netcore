@@ -208,7 +208,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
             IssueTypeConstant.WrongOddsSportsBook => query.WrongOddsSportsBookModels.ToWrongOddsSportsBookInfoXml(),
             IssueTypeConstant.WrongOfferedName => query.WrongOfferedNameModel.ToWrongOfferedNameInfoXml(),
             IssueTypeConstant.OtherIssues => query.OtherIssuesModel.ToOtherIssuesInfoXml(),
-            _ => "",
+            _ => ""
         };
     }
 }

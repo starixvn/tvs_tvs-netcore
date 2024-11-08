@@ -77,7 +77,7 @@ public class MapTicketsServiceTests
                 No = 1, IsParlay = true,
                 TransDate = new DateTime(2022, 9, 5, 1, 1, 1).ToString(FormatKey.DateTimeWithMillisecondAndSlash),
                 BetId = "1<br>(Follow: 1)", Value = "1", MainTransId = "2", WinLoss = "-", Score = null, IsDisable = true,
-                Member = "<br>(Follow: 123)",
+                Member = "<br>(Follow: 123)"
             }
         };
 

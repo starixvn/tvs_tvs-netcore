@@ -55,7 +55,7 @@ public class GetMaxBetAndSpreadHandler : IRequestHandler<GetMaxBetAndSpreadReque
             SubIssueTypeConstant.Handicap => maxBetSpread.Handicap,
             SubIssueTypeConstant.FirstHalfHandicap => maxBetSpread.FirstHalfHandicap,
             SubIssueTypeConstant.OverUnder => maxBetSpread.OverUnder,
-            _ => maxBetSpread.FirstHalfOverUnder,
+            _ => maxBetSpread.FirstHalfOverUnder
         };
     }
 }

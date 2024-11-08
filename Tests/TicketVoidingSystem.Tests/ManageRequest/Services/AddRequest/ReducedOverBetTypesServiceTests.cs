@@ -28,13 +28,13 @@ public class ReducedOverBetTypesServiceTests
         {
             new () { BetTypeId = 1 },
             new () { BetTypeId = 2 },
-            new () { BetTypeId = 3 },
+            new () { BetTypeId = 3 }
         };
         var data = new List<BetTypeModel>
         {
             new() { Id = "1" },
             new() { Id = "2" },
-            new() { Id = "4" },
+            new() { Id = "4" }
         };
         var expected = new List<ReducedOverBetTypesModel>
         {

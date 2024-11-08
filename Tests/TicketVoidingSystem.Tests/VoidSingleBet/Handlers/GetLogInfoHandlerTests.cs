@@ -66,7 +66,7 @@ public class TestDataGenerator : IEnumerable<object[]>
                 0, 1 },
             new object[] { new List<GetTicketModel> {new () {IsMixParlay = true , TransDate = DateTime.Parse("8/21/2023 3:59:28 PM"), CheckTime  = DateTime.Parse("8/21/2023 3:59:28 PM") },
                     new () {IsMixParlay = false , TransDate = DateTime.Parse("8/21/2023 3:59:28 PM"), CheckTime  = DateTime.Parse("8/21/2023 3:59:28 PM") } },
-                1, 1 },
+                1, 1 }
         };
 
     public IEnumerator<object[]> GetEnumerator() => _data.GetEnumerator();

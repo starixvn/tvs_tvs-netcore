@@ -186,13 +186,13 @@ public class SpecialPlatformServiceTests
         {
             LeagueName = "Saba 123",
             LeagueNameSimplified = "沙巴123",
-            LeagueNameNewSimplified = "沙巴123",
+            LeagueNameNewSimplified = "沙巴123"
         };
         var matchExpected = new Match
         {
             LeagueName = "123",
             LeagueNameSimplified = "123",
-            LeagueNameNewSimplified = "123",
+            LeagueNameNewSimplified = "123"
         };
         var service = new SpecialPlatformServiceImp();
 

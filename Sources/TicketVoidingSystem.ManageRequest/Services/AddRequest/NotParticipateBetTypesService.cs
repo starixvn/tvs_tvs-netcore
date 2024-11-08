@@ -62,7 +62,7 @@ public class NotParticipateBetTypesServiceImp : NotParticipateBetTypesService
                     BetTypeName = x.Name,
                     PlayerId = int.TryParse(x.TransDesc, out var outValue) ? (int?)outValue : default,
                     ParentId = betTypeModel.ParentId,
-                    ParentName = GetGroupName(betTypeModel.ParentId),
+                    ParentName = GetGroupName(betTypeModel.ParentId)
                 };
             });
 

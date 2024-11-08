@@ -221,7 +221,7 @@ internal class CheckBoxTestCase : IEnumerable<object[]>
     {
         Ticket = new GetTicketModel
         {
-            BetType = 228,
+            BetType = 228
         },
         Permission = CheckBoxServiceFactory.SetPermission(false, false, false),
         Expected = true

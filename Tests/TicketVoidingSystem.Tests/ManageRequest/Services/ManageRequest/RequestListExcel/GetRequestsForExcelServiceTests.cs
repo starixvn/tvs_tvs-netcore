@@ -71,7 +71,7 @@ public class GetRequestsForExcelServiceTests
         {
             new() { RequestId = 1, MatchId = 1 },
             new() { RequestId = 2, MatchId = 2 },
-            new() { RequestId = 3, MatchId = 3 },
+            new() { RequestId = 3, MatchId = 3 }
         };
         var renderedViewModels = new RequestViewModel
         {

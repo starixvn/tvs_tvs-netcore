@@ -44,7 +44,7 @@ public class CheckValidUsernamesHandlerTests
                 UnMarkTransIds = "123",
                 MarkTransIds = "456",
                 TransInfoJson = "123"
-            },
+            }
         };
         var checkUsernameService = Substitute.For<CheckUsernameService>();
         var calculateVoidTicketsService = Substitute.For<CalculateVoidTicketsService>();

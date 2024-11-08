@@ -27,7 +27,7 @@ public class ValidationTicketsServiceTests
             SingleTickets = new List<BetId> { new() { TransId = "1" }, new() { TransId = "2", SiteDbGroupId = 1 } },
             ParlayTickets = new List<BetId> { new() { TransId = "3" }, new() { TransId = "4", SiteDbGroupId = 1 } },
             CricketTickets = new List<BetId> { new() { TransId = "5" }, new() { TransId = "6", SiteDbGroupId = 1 } },
-            CancelCashOutTickets = new List<BetId> { new() { TransId = "7" }, new() { TransId = "8", SiteDbGroupId = 1 } },
+            CancelCashOutTickets = new List<BetId> { new() { TransId = "7" }, new() { TransId = "8", SiteDbGroupId = 1 } }
         };
 
         var results = new List<RequestDetailTicketModel> { new() };
@@ -57,7 +57,7 @@ public class ValidationTicketsServiceTests
             SingleTickets = new List<BetId> { new() { TransId = "1" }, new() { TransId = "2", SiteDbGroupId = 1 } },
             ParlayTickets = new List<BetId> { new() { TransId = "3" }, new() { TransId = "4", SiteDbGroupId = 1 } },
             CricketTickets = new List<BetId> { new() { TransId = "5" }, new() { TransId = "6", SiteDbGroupId = 1 } },
-            CancelCashOutTickets = new List<BetId> { new() { TransId = "7" }, new() { TransId = "8", SiteDbGroupId = 1 } },
+            CancelCashOutTickets = new List<BetId> { new() { TransId = "7" }, new() { TransId = "8", SiteDbGroupId = 1 } }
         };
         var tickets = new List<RequestDetailTicketModel> { new() };
         var repository = Substitute.For<IDynamicRepository>();

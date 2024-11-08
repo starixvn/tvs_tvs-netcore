@@ -24,7 +24,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
                 RequestId = "456",
                 IssueTypeName = "IssueTypeName",
                 SubIssueTypeName = "SubIssueTypeName",
-                Provider = "Provider",
+                Provider = "Provider"
             };
             var request = new CopyRequestInfoRequest { RequestId = 123, MatchId = 1 };
             var copyRequestInfoService = Substitute.For<CopyRequestInfoService>();
