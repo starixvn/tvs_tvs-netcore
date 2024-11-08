@@ -53,7 +53,7 @@ public class RecoverSubTicketsServiceImp : SeparabilityService<RecoverSubTicketM
                 return repository.RecoverTickets<RecoverSubTicketModel>(criteria);
             });
 
-            (IEnumerable<RecoverValidationModel> Validation, IEnumerable<RecoverSubTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+            var results = await Task.WhenAll(tasks);
             var validationInAllServers = results.SelectMany(x => x.Validation);
             var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
@@ -133,7 +133,7 @@ public class RecoverMainTicketsServiceImp : SeparabilityService<RecoverMainTicke
                 return repository.RecoverTickets<RecoverMainTicketModel>(criteria);
             });
 
-            (IEnumerable<RecoverValidationModel> Validation, IEnumerable<RecoverMainTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+            var results = await Task.WhenAll(tasks);
             var validationInAllServers = results.SelectMany(x => x.Validation);
             var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 

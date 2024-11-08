@@ -9,7 +9,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
         public void XmlToJson_ValidXmlProvided_ConvertXmlToJson()
         {
             // Arrange
-            string xml = "<root><name>John</name><age>30</age></root>";
+            var xml = "<root><name>John</name><age>30</age></root>";
 
             // Act
             var result = xml.XmlToJson<dynamic>();
@@ -23,7 +23,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
         public void ParseXmlToObject_ValidXmlProvided_DeserializeXmlToObject()
         {
             // Arrange
-            string xml = "<Person><Name>John</Name><Age>30</Age></Person>";
+            var xml = "<Person><Name>John</Name><Age>30</Age></Person>";
 
             // Act
             var result = xml.ParseXmlToObject<Person>();
@@ -38,7 +38,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
         public void ParseXmlToObject_EmptyXmlProvided_ReturnDefaultObject()
         {
             // Arrange
-            string xml = "";
+            var xml = "";
 
             // Act
             var result = xml.ParseXmlToObject<Person>();
@@ -54,6 +54,5 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
             public string Name { get; set; }
             public int Age { get; set; }
         }
-
     }
 }

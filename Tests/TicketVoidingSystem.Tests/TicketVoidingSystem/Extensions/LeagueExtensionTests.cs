@@ -9,10 +9,10 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
         public void IsLeagueGroupIdSaBa_LeagueGroupIdIsInSaBaList_ReturnTrue()
         {
             // Arrange
-            int leagueGroupId = 42;
+            var leagueGroupId = 42;
 
             // Act
-            bool result = leagueGroupId.IsLeagueGroupIdSaBa();
+            var result = leagueGroupId.IsLeagueGroupIdSaBa();
 
             // Assert
             Assert.True(result);
@@ -22,10 +22,10 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
         public void IsLeagueGroupIdSaBa_LeagueGroupIdIsNotInSaBaList_ReturnFalse()
         {
             // Arrange
-            int leagueGroupId = 88;
+            var leagueGroupId = 88;
 
             // Act
-            bool result = leagueGroupId.IsLeagueGroupIdSaBa();
+            var result = leagueGroupId.IsLeagueGroupIdSaBa();
 
             // Assert
             Assert.False(result);
