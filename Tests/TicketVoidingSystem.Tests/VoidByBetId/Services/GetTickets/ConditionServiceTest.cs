@@ -5,169 +5,168 @@ using SpecialDelete.VoidByBetId.Models;
 using SpecialDelete.VoidByBetId.Services.GetTickets;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.VoidByBetId.Services.GetTickets
+namespace TicketVoidingSystem.Tests.VoidByBetId.Services.GetTickets;
+
+[Category("VoidByBetId")]
+public class ConditionServiceTest
 {
-    [Category("VoidByBetId")]
-    public class ConditionServiceTest
+    [Theory]
+    [InlineData(501, true, false)]
+    [InlineData(500, false, false)]
+    [InlineData(501, false, true)]
+    public void IsNetPosition_CheckBetTypeAndIsDeposit_ReturnCricketAndIsNotDeposit(int betType, bool isDeposit, bool expected)
     {
-        [Theory]
-        [InlineData(501, true, false)]
-        [InlineData(500, false, false)]
-        [InlineData(501, false, true)]
-        public void IsNetPosition_CheckBetTypeAndIsDeposit_ReturnCricketAndIsNotDeposit(int betType, bool isDeposit, bool expected)
-        {
-            // Arrange
-            var service = new ConditionServiceImp();
+        // Arrange
+        var service = new ConditionServiceImp();
 
-            // Act
-            var isNetPosition = service.IsNetPosition(betType, isDeposit);
+        // Act
+        var isNetPosition = service.IsNetPosition(betType, isDeposit);
 
-            // Assert
-            Assert.Equal(expected, isNetPosition);
-        }
-
-        [Theory]
-        [ClassData(typeof(TestCase))]
-        public void UnitOfWorkName_ScenarioUnderTest_ExpectedBehavior(CheckBoxModel model)
-        {
-            // Arrange
-            var service = new ConditionServiceImp();
-
-            // Act
-            var isDisable = service.IsDisableCheckBox(model.Item, model.Permission, model.IsVoidByBetId);
-
-            // Assert
-            Assert.Equal(model.Expected, isDisable);
-        }
+        // Assert
+        Assert.Equal(expected, isNetPosition);
     }
 
-    public class CheckBoxModel
+    [Theory]
+    [ClassData(typeof(TestCase))]
+    public void UnitOfWorkName_ScenarioUnderTest_ExpectedBehavior(CheckBoxModel model)
     {
-        public GetTicketModel Item { get; set; }
+        // Arrange
+        var service = new ConditionServiceImp();
 
-        public UserPermission Permission { get; set; }
+        // Act
+        var isDisable = service.IsDisableCheckBox(model.Item, model.Permission, model.IsVoidByBetId);
 
-        public bool IsVoidByBetId { get; set; }
-
-        public bool Expected { get; set; }
+        // Assert
+        Assert.Equal(model.Expected, isDisable);
     }
+}
 
-    internal class TestCase : IEnumerable<object[]>
+public class CheckBoxModel
+{
+    public GetTicketModel Item { get; set; }
+
+    public UserPermission Permission { get; set; }
+
+    public bool IsVoidByBetId { get; set; }
+
+    public bool Expected { get; set; }
+}
+
+internal class TestCase : IEnumerable<object[]>
+{
+    private static readonly CheckBoxModel PhoneBettingWon = new()
     {
-        private static readonly CheckBoxModel PhoneBettingWon = new()
-        {
-            Item = new GetTicketModel { GroupName = "phone betting", Status = "won" },
-            Permission = new UserPermission { SettledTicket = true },
-            Expected = false,
-            IsVoidByBetId = false
-        };
+        Item = new GetTicketModel { GroupName = "phone betting", Status = "won" },
+        Permission = new UserPermission { SettledTicket = true },
+        Expected = false,
+        IsVoidByBetId = false
+    };
 
-        private static readonly CheckBoxModel PhoneBettingLose = new()
-        {
-            Item = new GetTicketModel { GroupName = "phone betting", Status = "Lose" },
-            Permission = new UserPermission { SettledTicket = true },
-            Expected = false,
-            IsVoidByBetId = false
-        };
+    private static readonly CheckBoxModel PhoneBettingLose = new()
+    {
+        Item = new GetTicketModel { GroupName = "phone betting", Status = "Lose" },
+        Permission = new UserPermission { SettledTicket = true },
+        Expected = false,
+        IsVoidByBetId = false
+    };
 
-        private static readonly CheckBoxModel PhoneBettingDraw = new()
-        {
-            Item = new GetTicketModel { GroupName = "phone betting", Status = "DRAW" },
-            Permission = new UserPermission { SettledTicket = true },
-            Expected = false,
-            IsVoidByBetId = false
-        };
+    private static readonly CheckBoxModel PhoneBettingDraw = new()
+    {
+        Item = new GetTicketModel { GroupName = "phone betting", Status = "DRAW" },
+        Permission = new UserPermission { SettledTicket = true },
+        Expected = false,
+        IsVoidByBetId = false
+    };
 
-        private static readonly CheckBoxModel IsSubTicket = new()
-        {
-            Item = new GetTicketModel { GroupName = "credit", TransId = 321, MainTransId = 123 },
-            Permission = new UserPermission { SettledTicket = true },
-            Expected = true,
-            IsVoidByBetId = false
-        };
+    private static readonly CheckBoxModel IsSubTicket = new()
+    {
+        Item = new GetTicketModel { GroupName = "credit", TransId = 321, MainTransId = 123 },
+        Permission = new UserPermission { SettledTicket = true },
+        Expected = true,
+        IsVoidByBetId = false
+    };
 
-        private static readonly CheckBoxModel IsOnlyReadPermission = new()
-        {
-            Item = new GetTicketModel { GroupName = "credit", Status = "running" },
-            Permission = new UserPermission { SettledTicket = false, UnSettledTicket = false },
-            Expected = true,
-            IsVoidByBetId = false
-        };
+    private static readonly CheckBoxModel IsOnlyReadPermission = new()
+    {
+        Item = new GetTicketModel { GroupName = "credit", Status = "running" },
+        Permission = new UserPermission { SettledTicket = false, UnSettledTicket = false },
+        Expected = true,
+        IsVoidByBetId = false
+    };
 
-        private static readonly CheckBoxModel IsSettledPermission = new()
-        {
-            Item = new GetTicketModel { GroupName = "credit", Status = "WON" },
-            Permission = new UserPermission { SettledTicket = true },
-            Expected = false,
-            IsVoidByBetId = false
-        };
+    private static readonly CheckBoxModel IsSettledPermission = new()
+    {
+        Item = new GetTicketModel { GroupName = "credit", Status = "WON" },
+        Permission = new UserPermission { SettledTicket = true },
+        Expected = false,
+        IsVoidByBetId = false
+    };
 
-        private static readonly CheckBoxModel IsUnSettledPermissionAndSettledTicket = new()
-        {
-            Item = new GetTicketModel { GroupName = "credit", Status = "WON" },
-            Permission = new UserPermission { UnSettledTicket = true },
-            Expected = true,
-            IsVoidByBetId = false
-        };
+    private static readonly CheckBoxModel IsUnSettledPermissionAndSettledTicket = new()
+    {
+        Item = new GetTicketModel { GroupName = "credit", Status = "WON" },
+        Permission = new UserPermission { UnSettledTicket = true },
+        Expected = true,
+        IsVoidByBetId = false
+    };
 
-        private static readonly CheckBoxModel IsUnSettledPermissionAndUnsettledTicket = new()
-        {
-            Item = new GetTicketModel { GroupName = "credit", Status = "running" },
-            Permission = new UserPermission { UnSettledTicket = true },
-            Expected = false,
-            IsVoidByBetId = false
-        };
+    private static readonly CheckBoxModel IsUnSettledPermissionAndUnsettledTicket = new()
+    {
+        Item = new GetTicketModel { GroupName = "credit", Status = "running" },
+        Permission = new UserPermission { UnSettledTicket = true },
+        Expected = false,
+        IsVoidByBetId = false
+    };
 
-        private static readonly CheckBoxModel PhoneBetIsUnSettledPermission = new()
-        {
-            Item = new GetTicketModel { GroupName = "phone betting", Status = "running" },
-            Permission = new UserPermission { UnSettledTicket = true },
-            Expected = true,
-            IsVoidByBetId = false
-        };
+    private static readonly CheckBoxModel PhoneBetIsUnSettledPermission = new()
+    {
+        Item = new GetTicketModel { GroupName = "phone betting", Status = "running" },
+        Permission = new UserPermission { UnSettledTicket = true },
+        Expected = true,
+        IsVoidByBetId = false
+    };
 
-        private static readonly CheckBoxModel VoidByBetIdAndSettledStatusLose = new()
-        {
-            Item = new GetTicketModel { GroupName = "phone betting", Status = "Lose" },
-            Permission = new UserPermission { SettledTicket = true },
-            Expected = false,
-            IsVoidByBetId = true
-        };
+    private static readonly CheckBoxModel VoidByBetIdAndSettledStatusLose = new()
+    {
+        Item = new GetTicketModel { GroupName = "phone betting", Status = "Lose" },
+        Permission = new UserPermission { SettledTicket = true },
+        Expected = false,
+        IsVoidByBetId = true
+    };
 
-        private static readonly CheckBoxModel SettledTicketAndSettledStatusRunning = new()
-        {
-            Item = new GetTicketModel { GroupName = "phone betting", Status = "running" },
-            Permission = new UserPermission { SettledTicket = true },
-            Expected = true,
-            IsVoidByBetId = true
-        };
+    private static readonly CheckBoxModel SettledTicketAndSettledStatusRunning = new()
+    {
+        Item = new GetTicketModel { GroupName = "phone betting", Status = "running" },
+        Permission = new UserPermission { SettledTicket = true },
+        Expected = true,
+        IsVoidByBetId = true
+    };
 
-        private static readonly CheckBoxModel VoidByBetIdAndSettledStatusRunning = new()
-        {
-            Item = new GetTicketModel { GroupName = "phone betting", Status = "running" },
-            Permission = new UserPermission { SettledTicket = false },
-            Expected = true,
-            IsVoidByBetId = true
-        };
+    private static readonly CheckBoxModel VoidByBetIdAndSettledStatusRunning = new()
+    {
+        Item = new GetTicketModel { GroupName = "phone betting", Status = "running" },
+        Permission = new UserPermission { SettledTicket = false },
+        Expected = true,
+        IsVoidByBetId = true
+    };
 
-        private readonly IEnumerable<object[]> testCase = new List<object[]>
-        {
-            new object[] { PhoneBettingWon },
-            new object[] { PhoneBettingLose },
-            new object[] { PhoneBettingDraw },
-            new object[] { IsSubTicket },
-            new object[] { IsOnlyReadPermission },
-            new object[] { IsSettledPermission },
-            new object[] { IsUnSettledPermissionAndSettledTicket },
-            new object[] { IsUnSettledPermissionAndUnsettledTicket },
-            new object[] { PhoneBetIsUnSettledPermission },
-            new object[] { VoidByBetIdAndSettledStatusLose },
-            new object[] { SettledTicketAndSettledStatusRunning },
-            new object[] { VoidByBetIdAndSettledStatusRunning }
-        };
+    private readonly IEnumerable<object[]> testCase = new List<object[]>
+    {
+        new object[] { PhoneBettingWon },
+        new object[] { PhoneBettingLose },
+        new object[] { PhoneBettingDraw },
+        new object[] { IsSubTicket },
+        new object[] { IsOnlyReadPermission },
+        new object[] { IsSettledPermission },
+        new object[] { IsUnSettledPermissionAndSettledTicket },
+        new object[] { IsUnSettledPermissionAndUnsettledTicket },
+        new object[] { PhoneBetIsUnSettledPermission },
+        new object[] { VoidByBetIdAndSettledStatusLose },
+        new object[] { SettledTicketAndSettledStatusRunning },
+        new object[] { VoidByBetIdAndSettledStatusRunning }
+    };
 
-        public IEnumerator<object[]> GetEnumerator() => testCase.GetEnumerator();
+    public IEnumerator<object[]> GetEnumerator() => testCase.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

@@ -5,35 +5,33 @@ using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.MarkTickets.Services.MarkUnmarkTickets
+namespace TicketVoidingSystem.Tests.MarkTickets.Services.MarkUnmarkTickets;
+
+using Fanex.NAP.Client.Helpers.Business;
+
+public class UserPermissionServiceTests
 {
-    using Fanex.NAP.Client.Helpers.Business;
+    private readonly SessionService sessionService;
+    private readonly UserPermissionServiceImp service;
 
-    public class UserPermissionServiceTests
+    public UserPermissionServiceTests()
     {
-        private readonly SessionService sessionService;
-        private readonly UserPermissionServiceImp service;
+        sessionService = Substitute.For<SessionService>();
+        service = new UserPermissionServiceImp(sessionService);
+    }
 
-        public UserPermissionServiceTests()
-        {
-            sessionService = Substitute.For<SessionService>();
-            service = new UserPermissionServiceImp(sessionService);
-        }
+    [Fact]
+    public async Task GetUserPermission_HasCalled_ReturnUserPermission()
+    {
+        // Arrange
+        sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host).Returns(true);
+        sessionService.HasPermission(SpecialDeleteFunctionKeys.ViewUsernameOfSpecialSiteOnBetList, Constant.Policy.Read).Returns(true);
 
-        [Fact]
-        public async Task GetUserPermission_HasCalled_ReturnUserPermission()
-        {
-            // Arrange
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host).Returns(true);
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.ViewUsernameOfSpecialSiteOnBetList, Constant.Policy.Read).Returns(true);
+        // Act
+        var actual = await service.GetUserPermission();
 
-            // Act
-            var actual = await service.GetUserPermission();
-
-            // Assert
-            Assert.True(actual.MarkTickets);
-            Assert.True(actual.ViewUserName);
-        }
-
+        // Assert
+        Assert.True(actual.MarkTickets);
+        Assert.True(actual.ViewUserName);
     }
 }

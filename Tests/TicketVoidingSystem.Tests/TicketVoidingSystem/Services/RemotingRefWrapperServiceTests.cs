@@ -5,162 +5,161 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Services;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services;
+
+public class RemotingRefWrapperServiceTests
 {
-    public class RemotingRefWrapperServiceTests
+    private readonly IRemotingRefService remotingRefService;
+    private readonly RemotingRefWrapperServiceImp service;
+
+    public RemotingRefWrapperServiceTests()
     {
-        private readonly IRemotingRefService remotingRefService;
-        private readonly RemotingRefWrapperServiceImp service;
+        remotingRefService = Substitute.For<IRemotingRefService>();
+        service = new RemotingRefWrapperServiceImp(remotingRefService);
+    }
 
-        public RemotingRefWrapperServiceTests()
-        {
-            remotingRefService = Substitute.For<IRemotingRefService>();
-            service = new RemotingRefWrapperServiceImp(remotingRefService);
-        }
+    [Fact]
+    public void GetBetType_RemotingRefServiceCalledGetBetTypeName()
+    {
+        // Arrange
 
-        [Fact]
-        public void GetBetType_RemotingRefServiceCalledGetBetTypeName()
-        {
-            // Arrange
+        // Act
+        _ = service.GetBetType("1", "1");
 
-            // Act
-            _ = service.GetBetType("1", "1");
+        // Assert
+        remotingRefService.Received(1).GetBetTypeName("1", "1");
+    }
 
-            // Assert
-            remotingRefService.Received(1).GetBetTypeName("1", "1");
-        }
+    [Fact]
+    public void GetDisplayedBetTypeName_RemotingRefServiceCalledGetDisplayedBetTypeName()
+    {
+        // Arrange
 
-        [Fact]
-        public void GetDisplayedBetTypeName_RemotingRefServiceCalledGetDisplayedBetTypeName()
-        {
-            // Arrange
+        // Act
+        _ = service.GetDisplayedBetTypeName("1", "1");
 
-            // Act
-            _ = service.GetDisplayedBetTypeName("1", "1");
+        // Assert
+        remotingRefService.Received(1).GetDisplayedBetTypeName("1", string.Empty, 1, LanguageCode.English, string.Empty);
+    }
 
-            // Assert
-            remotingRefService.Received(1).GetDisplayedBetTypeName("1", string.Empty, 1, LanguageCode.English, string.Empty);
-        }
+    [Fact]
+    public void GetBetType_ParamHasNotTypeString_RemotingRefServiceCalledGetBetTypeName()
+    {
+        // Arrange
 
-        [Fact]
-        public void GetBetType_ParamHasNotTypeString_RemotingRefServiceCalledGetBetTypeName()
-        {
-            // Arrange
+        // Act
+        _ = service.GetBetType(1, 1);
 
-            // Act
-            _ = service.GetBetType(1, 1);
+        // Assert
+        remotingRefService.Received(1).GetBetTypeName("1", LanguageCode.English, string.Empty, string.Empty, 1);
+    }
 
-            // Assert
-            remotingRefService.Received(1).GetBetTypeName("1", LanguageCode.English, string.Empty, string.Empty, 1);
-        }
+    [Fact]
+    public void GetParentIdByBetTypeId_RemotingRefServiceCalledGetParentIdByBetTypeId()
+    {
+        // Arrange
 
-        [Fact]
-        public void GetParentIdByBetTypeId_RemotingRefServiceCalledGetParentIdByBetTypeId()
-        {
-            // Arrange
+        // Act
+        _ = service.GetParentIdByBetTypeId(1);
 
-            // Act
-            _ = service.GetParentIdByBetTypeId(1);
+        // Assert
+        remotingRefService.Received(1).GetParentIdByBetTypeId("1", "1");
+    }
 
-            // Assert
-            remotingRefService.Received(1).GetParentIdByBetTypeId("1", "1");
-        }
+    [Fact]
+    public void GetLeagueName_RemotingRefServiceCalledGetLeagueName()
+    {
+        // Arrange
 
-        [Fact]
-        public void GetLeagueName_RemotingRefServiceCalledGetLeagueName()
-        {
-            // Arrange
+        // Act
+        _ = service.GetLeagueName(1, 1, "1");
 
-            // Act
-            _ = service.GetLeagueName(1, 1, "1");
+        // Assert
+        remotingRefService.Received(1).GetLeagueName("1", "1", string.Empty);
+    }
 
-            // Assert
-            remotingRefService.Received(1).GetLeagueName("1", "1", string.Empty);
-        }
+    [Fact]
+    public void GetBFName_RemotingRefServiceCalledGetLeagueName()
+    {
+        // Arrange
 
-        [Fact]
-        public void GetBFName_RemotingRefServiceCalledGetLeagueName()
-        {
-            // Arrange
+        // Act
+        _ = service.GetBFName(1);
 
-            // Act
-            _ = service.GetBFName(1);
+        // Assert
+        remotingRefService.Received(1).GetTeamName3rd("1", LanguageCode.English);
+    }
 
-            // Assert
-            remotingRefService.Received(1).GetTeamName3rd("1", LanguageCode.English);
-        }
+    [Fact]
+    public void GetOddsTypeName_RemotingRefServiceCalledGetOddsTypeName()
+    {
+        // Arrange
 
-        [Fact]
-        public void GetOddsTypeName_RemotingRefServiceCalledGetOddsTypeName()
-        {
-            // Arrange
+        // Act
+        _ = service.GetOddsTypeName(1);
 
-            // Act
-            _ = service.GetOddsTypeName(1);
+        // Assert
+        remotingRefService.Received(1).GetOddsTypeName("1", LanguageCode.English);
+    }
 
-            // Assert
-            remotingRefService.Received(1).GetOddsTypeName("1", LanguageCode.English);
-        }
+    [Fact]
+    public void GetTeamName_RemotingRefServiceCalledGetTeamName()
+    {
+        // Arrange
 
-        [Fact]
-        public void GetTeamName_RemotingRefServiceCalledGetTeamName()
-        {
-            // Arrange
+        // Act
+        _ = service.GetTeamName(1, DBNull.Value, "1");
 
-            // Act
-            _ = service.GetTeamName(1, DBNull.Value, "1");
+        // Assert
+        remotingRefService.Received(1).GetTeamName(string.Empty, "1", string.Empty);
+    }
 
-            // Assert
-            remotingRefService.Received(1).GetTeamName(string.Empty, "1", string.Empty);
-        }
+    [Fact]
+    public void GetComboParlayName_RemotingRefServiceCalledGetCombinationTypeCombo()
+    {
+        // Arrange
 
-        [Fact]
-        public void GetComboParlayName_RemotingRefServiceCalledGetCombinationTypeCombo()
-        {
-            // Arrange
+        // Act
+        _ = service.GetComboParlayName("1", "1", 1, 1);
 
-            // Act
-            _ = service.GetComboParlayName("1", "1", 1, 1);
+        // Assert
+        remotingRefService.Received(1).GetCombinationTypeCombo("1", "1", 1, 1, LanguageCode.English);
+    }
 
-            // Assert
-            remotingRefService.Received(1).GetCombinationTypeCombo("1", "1", 1, 1, LanguageCode.English);
-        }
+    [Fact]
+    public void GetMatchCodeBetRadar_RemotingRefServiceCalledGetBetRadarMatchCodeFormat()
+    {
+        // Arrange
 
-        [Fact]
-        public void GetMatchCodeBetRadar_RemotingRefServiceCalledGetBetRadarMatchCodeFormat()
-        {
-            // Arrange
+        // Act
+        _ = service.GetMatchCodeBetRadar("1");
 
-            // Act
-            _ = service.GetMatchCodeBetRadar("1");
+        // Assert
+        remotingRefService.Received(1).GetBetRadarMatchCodeFormat("1", LanguageCode.English);
+    }
 
-            // Assert
-            remotingRefService.Received(1).GetBetRadarMatchCodeFormat("1", LanguageCode.English);
-        }
+    [Fact]
+    public void GetSportName_RemotingRefServiceCalledGetSportName()
+    {
+        // Arrange
 
-        [Fact]
-        public void GetSportName_RemotingRefServiceCalledGetSportName()
-        {
-            // Arrange
+        // Act
+        _ = service.GetSportName("1", "1");
 
-            // Act
-            _ = service.GetSportName("1", "1");
+        // Assert
+        remotingRefService.Received(1).GetSportName("1", "1");
+    }
 
-            // Assert
-            remotingRefService.Received(1).GetSportName("1", "1");
-        }
-
-        [Fact]
+    [Fact]
         public void GetMatchCodeVS3456_RemotingRefServiceCalledGetVirtualSportMatchCodeFormat()
-        {
-            // Arrange
-            remotingRefService.GetVirtualSportMatchCodeFormat("1", "VYVS_MatchCode", LanguageCode.English).Returns("abc");
+    {
+        // Arrange
+        remotingRefService.GetVirtualSportMatchCodeFormat("1", "VYVS_MatchCode", LanguageCode.English).Returns("abc");
 
-            // Act
-            _ = service.GetMatchCodeVS345(147, "1");
+        // Act
+        _ = service.GetMatchCodeVS345(147, "1");
 
-            // Assert
-            remotingRefService.Received(1).GetVirtualSportMatchCodeFormat("1", "VYVS_MatchCode", LanguageCode.English);
-        }
+        // Assert
+        remotingRefService.Received(1).GetVirtualSportMatchCodeFormat("1", "VYVS_MatchCode", LanguageCode.English);
     }
 }

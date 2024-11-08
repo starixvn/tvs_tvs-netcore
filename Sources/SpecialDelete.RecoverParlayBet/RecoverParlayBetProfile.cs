@@ -1,13 +1,12 @@
-﻿namespace SpecialDelete.RecoverParlayBet
-{
-    using AutoMapper;
-    using ViewModels;
+﻿namespace SpecialDelete.RecoverParlayBet;
 
-    public class RecoverParlayBetProfile : Profile
+using AutoMapper;
+using ViewModels;
+
+public class RecoverParlayBetProfile : Profile
+{
+    public RecoverParlayBetProfile()
     {
-        public RecoverParlayBetProfile()
-        {
-            CreateMap<TicketViewModel, MailTicketViewModel>();
-        }
+        CreateMap<TicketViewModel, MailTicketViewModel>();
     }
 }

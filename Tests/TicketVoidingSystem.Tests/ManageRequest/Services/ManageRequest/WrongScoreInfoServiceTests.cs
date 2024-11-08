@@ -7,32 +7,31 @@ using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
+namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest;
+
+public class WrongScoreInfoServiceTests
 {
-    public class WrongScoreInfoServiceTests
+    private readonly IDynamicRepository repository;
+    private readonly WrongScoreInfoServiceImp service;
+
+    public WrongScoreInfoServiceTests()
     {
-        private readonly IDynamicRepository repository;
-        private readonly WrongScoreInfoServiceImp service;
+        repository = Substitute.For<IDynamicRepository>();
+        service = new WrongScoreInfoServiceImp(repository);
+    }
 
-        public WrongScoreInfoServiceTests()
-        {
-            repository = Substitute.For<IDynamicRepository>();
-            service = new WrongScoreInfoServiceImp(repository);
-        }
+    [Fact]
+    public async Task GetWrongScoreInfo_WhenCalled_ReturnListWrongScoreInfoViewModel()
+    {
+        // Arrange
+        var criteria = new GetWrongScoreInfoCriteria();
+        var expected = new List<WrongScoreInfoViewModel>();
+        repository.FetchAsync<WrongScoreInfoViewModel>(Arg.Any<GetWrongScoreInfoCriteria>()).ReturnsForAnyArgs(expected);
 
-        [Fact]
-        public async Task GetWrongScoreInfo_WhenCalled_ReturnListWrongScoreInfoViewModel()
-        {
-            // Arrange
-            var criteria = new GetWrongScoreInfoCriteria();
-            var expected = new List<WrongScoreInfoViewModel>();
-            repository.FetchAsync<WrongScoreInfoViewModel>(Arg.Any<GetWrongScoreInfoCriteria>()).ReturnsForAnyArgs(expected);
+        // Act
+        var actual = await service.GetWrongScoreInfo(criteria);
 
-            // Act
-            var actual = await service.GetWrongScoreInfo(criteria);
-
-            // Assert
-            AssertExtension.Equal(expected, actual);
-        }
+        // Assert
+        AssertExtension.Equal(expected, actual);
     }
 }
