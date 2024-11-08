@@ -132,7 +132,7 @@ public class CheckBoxExtensionTests
     public void IsUncheck_ReturnsTrue_WhenSpecialGroupContainsGroupName()
     {
         // Arrange
-        var groupName = "phone betting";
+        const string groupName = "phone betting";
 
         // Act
         var result = groupName.IsUncheck();

@@ -13,17 +13,14 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.Add;
 
 public class SendLetstalkAfterAddServiceTests
 {
-    private readonly MatchService matchService;
     private readonly NotificationLetstalkService notificationLetstalkService;
     private readonly SendLetstalkAfterAddServiceImp service;
 
     public SendLetstalkAfterAddServiceTests()
     {
         var sessionService = Substitute.For<SessionService>();
-        matchService = Substitute.For<MatchService>();
         notificationLetstalkService = Substitute.For<NotificationLetstalkService>();
-        service = new SendLetstalkAfterAddServiceImp(sessionService,
-            matchService, notificationLetstalkService);
+        service = new SendLetstalkAfterAddServiceImp(sessionService, notificationLetstalkService);
     }
 
     [Theory]

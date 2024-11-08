@@ -11,12 +11,11 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.WrongMarke
 
 public class WrongMarketOfferedServiceTests
 {
-    private readonly BetTypesRepository repository;
     private readonly AdvancedModeServiceImp service;
 
     public WrongMarketOfferedServiceTests()
     {
-        repository = Substitute.For<BetTypesRepository>();
+        var repository = Substitute.For<BetTypesRepository>();
         service = new AdvancedModeServiceImp(repository);
     }
 

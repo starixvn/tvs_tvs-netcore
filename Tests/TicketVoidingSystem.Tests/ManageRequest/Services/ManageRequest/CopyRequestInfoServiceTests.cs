@@ -38,7 +38,7 @@ public class CopyRequestInfoServiceTests
         requestExtraInfoXmlService.ParseXmlToOperators("OperatorInfo").Returns(operators);
         repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(Arg.Any<CopyRequestInfoCriteria>()).Returns((requestInfos, betTypeTickets));
         service = new CopyRequestInfoServiceImp(repository, null, null, requestExtraInfoXmlService);
-        var requestInfoForCopyExpected = new RequestInfoForCopy()
+        var requestInfoForCopyExpected = new RequestInfoForCopy
         {
             MatchId = 8634527,
             RequestId = "56473",

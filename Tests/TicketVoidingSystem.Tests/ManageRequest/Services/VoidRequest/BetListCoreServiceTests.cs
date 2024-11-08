@@ -105,7 +105,7 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
     public void GetTicket_HasNotAbnormalAccountOrAbnormalBet_MainChoiceHasReplaceValue()
     {
         // Arrange
-        var issueTypeId = IssueTypeConstant.DangerAccepted;
+        const int issueTypeId = IssueTypeConstant.DangerAccepted;
         var item = new GetTicketModel
         {
             BetType = 38,

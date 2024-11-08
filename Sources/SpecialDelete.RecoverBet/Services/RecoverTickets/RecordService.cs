@@ -50,7 +50,7 @@ public class RecordService : RecordRecoverService<MailTicketViewModel, RecoverTi
         return new MailRecord();
     }
 
-    private List<Group<MailTicketViewModel>> GenerateGroups(List<RecoverTicketModel> tickets)
+    private List<Group<MailTicketViewModel>> GenerateGroups(IEnumerable<RecoverTicketModel> tickets)
     {
         var groups = pagingService.Groups(tickets, ticket => ticket.Site);
 

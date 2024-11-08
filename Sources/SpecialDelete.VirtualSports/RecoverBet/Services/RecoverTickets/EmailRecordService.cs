@@ -59,7 +59,7 @@ public class EmailRecordServiceImp : EmailRecordService
         return new MailRecord();
     }
 
-    private List<Group<MailTicketViewModel>> CreateGroups(List<RecoverTicketModel> tickets, Recover typeOfRecover)
+    private List<Group<MailTicketViewModel>> CreateGroups(IEnumerable<RecoverTicketModel> tickets, Recover typeOfRecover)
     {
         var groups = pagingService.Groups(tickets, ticket => ticket.GroupName);
 

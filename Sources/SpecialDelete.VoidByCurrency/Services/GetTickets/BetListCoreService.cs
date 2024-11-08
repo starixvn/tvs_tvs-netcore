@@ -95,7 +95,7 @@ public class BetListCoreServiceImp : BetListCoreService
         ticket.BetId = item.IsMixParlay ? default(long?) : item.BetId;
         ticket.WalletType = item.WalletType.SetWalletType(item.RefCode);
         ticket.RefCode = 0;
-        ticket.SettlementStatus = item.IsMixParlay ? default(byte) : item.SettlementStatus;
+        ticket.SettlementStatus = item.IsMixParlay ? default : item.SettlementStatus;
 
         return ticket;
     }

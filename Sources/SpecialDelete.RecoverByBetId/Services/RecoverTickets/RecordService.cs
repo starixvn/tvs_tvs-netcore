@@ -52,7 +52,7 @@ public class RecordServiceImp : RecordRecoverService<MailTicketViewModel, Recove
         return new MailRecord();
     }
 
-    private List<Group<MailTicketViewModel>> CreateGroups(List<RecoverTicketModel> tickets)
+    private List<Group<MailTicketViewModel>> CreateGroups(IEnumerable<RecoverTicketModel> tickets)
     {
         var groups = pagingService.Groups(tickets, ticket => ticket.GroupName);
 

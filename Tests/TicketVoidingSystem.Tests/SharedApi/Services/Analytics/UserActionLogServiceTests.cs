@@ -28,7 +28,7 @@ public class UserActionLogServiceTests
     public async Task LogAccessFunction_ValidFunctionName_ReturnsTrue()
     {
         // Arrange
-        var functionName = "SomeFunction";
+        const string functionName = "SomeFunction";
 
         // Act
         var result = await userActionLogService.LogAccessFunction(functionName);
@@ -45,7 +45,7 @@ public class UserActionLogServiceTests
     public async Task LogAccessFunction_ExceptionThrown_ReturnsFalse()
     {
         // Arrange
-        var functionName = "SomeFunction";
+        const string functionName = "SomeFunction";
         var exception = new Exception("Test Exception");
         repository.When(x => x.ExecuteAsync(Arg.Any<UserActionLogUpdateCriteria>())).Throw(exception);
 
@@ -61,8 +61,8 @@ public class UserActionLogServiceTests
     public async Task LogChangeContent_ValidFunctionNameAndLogContent_ReturnsTrue()
     {
         // Arrange
-        var functionName = "SomeFunction";
-        var logContent = "Some log content";
+        const string functionName = "SomeFunction";
+        const string logContent = "Some log content";
 
         // Act
         var result = await userActionLogService.LogChangeContent(functionName, logContent);
@@ -80,8 +80,8 @@ public class UserActionLogServiceTests
     public async Task LogChangeContent_ExceptionThrown_ReturnsFalse()
     {
         // Arrange
-        var functionName = "SomeFunction";
-        var logContent = "Some log content";
+        const string functionName = "SomeFunction";
+        const string logContent = "Some log content";
         var exception = new Exception("Test Exception");
         repository.When(x => x.ExecuteAsync(Arg.Any<UserActionLogUpdateCriteria>())).Throw(exception);
 

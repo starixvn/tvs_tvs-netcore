@@ -15,8 +15,8 @@ public class LetstalkServiceTests
     public async Task GetLetstalkModel_ExecuteSuccessful_ReturnExpected()
     {
         // Arrange
-        var requestId = 1;
-        var broadcastSessionId = "1";
+        const int requestId = 1;
+        const string broadcastSessionId = "1";
         var model = new LetstalkModel();
         var models = new List<LetstalkModel> { model };
         var criteria = new GetLetstalkCriteria();
@@ -38,9 +38,9 @@ public class LetstalkServiceTests
     public async Task UpdateLetstalk_ExecuteSuccessful_RepositoryHasCalled()
     {
         // Arrange
-        var requestId = 1;
-        var broadcastSessionId = "1";
-        var statusId = 1;
+        const int requestId = 1;
+        const string broadcastSessionId = "1";
+        const int statusId = 1;
         var repository = Substitute.For<IDynamicRepository>();
         var service = new LetstalkServiceImp(repository);
 

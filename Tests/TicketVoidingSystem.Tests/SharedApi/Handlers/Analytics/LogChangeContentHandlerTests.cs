@@ -13,8 +13,8 @@ public class LogChangeContentHandlerTests
     public async Task Handle_ValidRequest_ReturnsTrue()
     {
         // Arrange
-        var functionName = "TestFunction";
-        var logContent = "Test Log Content";
+        const string functionName = "TestFunction";
+        const string logContent = "Test Log Content";
         var request = new LogChangeContentRequest
         {
             FunctionName = functionName,

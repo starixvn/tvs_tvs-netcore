@@ -60,7 +60,7 @@ public class MarkTicketsServiceTests : IClassFixture<AppSettingFixture>
         sessionService.GetClientIp().ReturnsForAnyArgs("127:00:42");
         sessionService.UserId.ReturnsForAnyArgs(1);
         var results = new List<Result> { new() };
-        List<long> transIds = null;
+        List<long> transIds;
         SiteDbGroupConstant.ServerList.ForEach(x =>
         {
             transIds = new List<long> { x.Id };

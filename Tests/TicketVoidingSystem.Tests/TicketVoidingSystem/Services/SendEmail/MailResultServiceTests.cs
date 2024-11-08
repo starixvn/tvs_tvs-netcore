@@ -18,7 +18,7 @@ public class MailResultServiceTests
     public void CreateSuccess_ReturnsResult(bool isFromAfterVoidService, int errorCode)
     {
         // Arrange
-        var siteName = "Test Site";
+        const string siteName = "Test Site";
         var listEmail = new[] { "email1@example.com", "email2@example.com" };
         var expected = new Result
         {
@@ -51,7 +51,6 @@ public class MailResultServiceTests
         // Assert
         AssertExtension.Equal(expected, result);
     }
-
 
     [Fact]
     public void InsertCombineLicenseesName_ReturnsListResult()

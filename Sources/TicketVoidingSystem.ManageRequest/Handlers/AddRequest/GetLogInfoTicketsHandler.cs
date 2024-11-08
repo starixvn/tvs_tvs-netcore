@@ -20,8 +20,8 @@ public class GetLogInfoTicketsHandler : IRequestHandler<GetLogInfoTicketsRequest
         this.GetLogInfoTicketsService = GetLogInfoTicketsService;
     }
 
-    public async Task<TicketsViewModel> Handle(GetLogInfoTicketsRequest request, CancellationToken cancellationToken)
+    public Task<TicketsViewModel> Handle(GetLogInfoTicketsRequest request, CancellationToken cancellationToken)
     {
-        return GetLogInfoTicketsService.GetTicketsViewModel(request);
+        return Task.FromResult(GetLogInfoTicketsService.GetTicketsViewModel(request));
     }
 }

@@ -17,7 +17,7 @@ public class SendLetstalkAfterAddServiceImp : SendLetstalkAfterAddService
     private readonly SessionService sessionService;
     private readonly NotificationLetstalkService notificationLetstalkService;
 
-    public SendLetstalkAfterAddServiceImp(SessionService sessionService, MatchService matchService, NotificationLetstalkService notificationLetstalkService)
+    public SendLetstalkAfterAddServiceImp(SessionService sessionService, NotificationLetstalkService notificationLetstalkService)
     {
         this.sessionService = sessionService;
         this.notificationLetstalkService = notificationLetstalkService;

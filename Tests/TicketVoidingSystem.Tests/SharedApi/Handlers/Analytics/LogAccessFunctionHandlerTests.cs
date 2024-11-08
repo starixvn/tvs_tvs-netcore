@@ -13,7 +13,7 @@ public class LogAccessFunctionHandlerTests
     public async Task Handle_ValidRequest_ReturnsTrue()
     {
         // Arrange
-        var functionName = "TestFunction";
+        const string functionName = "TestFunction";
         var request = new LogAccessFunctionRequest { FunctionName = functionName };
         var userActionLogService = Substitute.For<UserActionLogService>();
         userActionLogService.LogAccessFunction(functionName).Returns(true);
@@ -30,7 +30,7 @@ public class LogAccessFunctionHandlerTests
     public async Task Handle_ValidRequest_CallsLogAccessFunction()
     {
         // Arrange
-        var functionName = "TestFunction";
+        const string functionName = "TestFunction";
         var request = new LogAccessFunctionRequest { FunctionName = functionName };
         var userActionLogService = Substitute.For<UserActionLogService>();
         var handler = new LogAccessFunctionHandler(userActionLogService);

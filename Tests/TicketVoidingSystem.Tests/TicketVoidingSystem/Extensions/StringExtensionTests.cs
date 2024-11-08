@@ -9,7 +9,7 @@ public class StringExtensionTests
     public void XmlToJson_ValidXmlProvided_ConvertXmlToJson()
     {
         // Arrange
-        var xml = "<root><name>John</name><age>30</age></root>";
+        const string xml = "<root><name>John</name><age>30</age></root>";
 
         // Act
         var result = xml.XmlToJson<dynamic>();
@@ -23,7 +23,7 @@ public class StringExtensionTests
     public void ParseXmlToObject_ValidXmlProvided_DeserializeXmlToObject()
     {
         // Arrange
-        var xml = "<Person><Name>John</Name><Age>30</Age></Person>";
+        const string xml = "<Person><Name>John</Name><Age>30</Age></Person>";
 
         // Act
         var result = xml.ParseXmlToObject<Person>();
@@ -38,7 +38,7 @@ public class StringExtensionTests
     public void ParseXmlToObject_EmptyXmlProvided_ReturnDefaultObject()
     {
         // Arrange
-        var xml = "";
+        const string xml = "";
 
         // Act
         var result = xml.ParseXmlToObject<Person>();

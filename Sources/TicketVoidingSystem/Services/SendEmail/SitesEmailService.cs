@@ -52,7 +52,7 @@ public class SitesEmailServiceImp : SitesEmailService
         return sites;
     }
 
-    private static List<SiteEmail> ExcludeTestSites(List<SiteEmail> sites)
+    private static List<SiteEmail> ExcludeTestSites(IEnumerable<SiteEmail> sites)
     {
         var testSiteNames = new[] { "spondemo", "athena000" };
         return sites.Where(s => !Array.Exists(testSiteNames, t => t.Equals(s.Site, StringComparison.CurrentCultureIgnoreCase)))

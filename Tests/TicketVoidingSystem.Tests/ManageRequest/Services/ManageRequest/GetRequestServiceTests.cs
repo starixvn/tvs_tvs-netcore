@@ -23,8 +23,6 @@ public class GetRequestServiceTests
     private readonly IDynamicRepository repository;
     private readonly MatchService matchService;
     private readonly IMapper mapper;
-    private readonly AdvancedModeService advancedModeService;
-    private readonly RequestExtraInfoXmlService requestExtraInfoXmlService;
     private readonly GetRequestServiceImp service;
 
     public GetRequestServiceTests()
@@ -33,8 +31,8 @@ public class GetRequestServiceTests
         repository = Substitute.For<IDynamicRepository>();
         matchService = Substitute.For<MatchService>();
         mapper = Substitute.For<IMapper>();
-        advancedModeService = Substitute.For<AdvancedModeService>();
-        requestExtraInfoXmlService = Substitute.For<RequestExtraInfoXmlService>();
+        var advancedModeService = Substitute.For<AdvancedModeService>();
+        var requestExtraInfoXmlService = Substitute.For<RequestExtraInfoXmlService>();
         service = new GetRequestServiceImp(repository, remotingRefService, matchService, mapper, advancedModeService, requestExtraInfoXmlService);
     }
 

@@ -61,7 +61,7 @@ public class MatchServiceTests
     public void GetMatch_HasRequestIsId_RepositoryHasGetAsync()
     {
         // Arrange
-        var query = 1;
+        const int query = 1;
         repository.GetAsync<Match>(Arg.Any<GetMatchInfoCriteria>()).Returns(new Match());
         // Act
         _ = service.GetMatch(query);
