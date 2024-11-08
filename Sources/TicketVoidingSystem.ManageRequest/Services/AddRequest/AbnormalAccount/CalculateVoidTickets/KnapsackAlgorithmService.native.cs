@@ -43,7 +43,7 @@ public class KnapsackAlgorithmServiceImp : KnapsackAlgorithmService
             {
                 if (weights[i - 1].WinLostMultiply100 <= w)
                 {
-                    var newValue = dp[w - (weights[i - 1].WinLostMultiply100)] + values[i - 1].WinLostMultiply100;
+                    var newValue = dp[w - weights[i - 1].WinLostMultiply100] + values[i - 1].WinLostMultiply100;
                     if (newValue > dp[w]) //NOSONAR
                     {
                         dp[w] = newValue;

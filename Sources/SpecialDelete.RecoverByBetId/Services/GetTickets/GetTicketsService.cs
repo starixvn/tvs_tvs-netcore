@@ -41,7 +41,7 @@ public class GetTicketsServiceImp : GetTicketsService
     {
         var index = 1;
         var tickets = new List<TicketViewModel>();
-        var isReadOnlyPermission = !(await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverByBetID, Constant.Policy.Host));
+        var isReadOnlyPermission = !await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverByBetID, Constant.Policy.Host);
         foreach (var item in group.Tickets)
         {
             var ticket = ticketService.GetTicket(item, ChoiceType.Html);

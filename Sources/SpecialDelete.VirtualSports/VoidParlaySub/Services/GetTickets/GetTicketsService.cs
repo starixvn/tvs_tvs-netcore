@@ -40,7 +40,7 @@ public class GetTicketsServiceImp : GetTicketsService
 
     public async Task<Group<TicketViewModel>> AssignData(Group<GetTicketModel> groupModel)
     {
-        var isDisable = !(await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidParlaySubBet, Constant.Policy.Host));
+        var isDisable = !await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidParlaySubBet, Constant.Policy.Host);
         var index = 1;
         var tickets = new List<TicketViewModel>();
         foreach (var item in groupModel.Tickets)

@@ -50,7 +50,7 @@ public class DisplayUiServiceImp : DisplayUiService
 
     public async Task<Group<TicketViewModel>> Assign(Group<GetTicketModel> groupTickets)
     {
-        var isDisable = !(await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverCashOutTransaction, Constant.Policy.Host));
+        var isDisable = !await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverCashOutTransaction, Constant.Policy.Host);
         var tickets = new List<TicketViewModel>();
         var index = 1;
         foreach (var item in groupTickets.Tickets)

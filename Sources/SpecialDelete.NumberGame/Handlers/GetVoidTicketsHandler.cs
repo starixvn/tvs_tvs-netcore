@@ -50,7 +50,7 @@ public class GetVoidTicketsHandler : IRequestHandler<GetVoidTicketsRequest, Tick
     private async Task<Group<TicketViewModel>> AssignDataOnGroup(Group<GetTicketModel> group)
     {
         var tickets = new List<TicketViewModel>();
-        var isDisable = !(await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidNumberGameBet, Constant.Policy.Host));
+        var isDisable = !await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidNumberGameBet, Constant.Policy.Host);
         var index = 1;
         foreach (var item in group.Tickets)
         {

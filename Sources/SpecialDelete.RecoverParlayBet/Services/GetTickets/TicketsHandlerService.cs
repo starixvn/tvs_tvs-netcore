@@ -63,7 +63,7 @@ public class SubTicketsHandlerServiceImp : TicketsHandlerService<GetSubTicket, G
     {
         var index = 1;
         var tickets = new List<TicketViewModel>();
-        var isOnlyReadPermission = !(await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverSubParlayBet, Constant.Policy.Host));
+        var isOnlyReadPermission = !await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverSubParlayBet, Constant.Policy.Host);
         foreach (var item in group.Tickets)
         {
             var ticket = displayedTicketService.Map(item, isOnlyReadPermission);

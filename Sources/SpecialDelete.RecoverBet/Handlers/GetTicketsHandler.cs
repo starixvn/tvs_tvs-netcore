@@ -58,7 +58,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
     private async Task<Group<TicketViewModel>> RenderTickets(Group<GetTicketModel> group)
     {
         var tickets = new List<TicketViewModel>();
-        var isReadOnly = !(await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverSportsbookBet, Constant.Policy.Host));
+        var isReadOnly = !await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverSportsbookBet, Constant.Policy.Host);
         var index = 1;
         foreach (var ticket in group.Tickets.Select(item => ticketService.Render(item, isReadOnly)))
         {
