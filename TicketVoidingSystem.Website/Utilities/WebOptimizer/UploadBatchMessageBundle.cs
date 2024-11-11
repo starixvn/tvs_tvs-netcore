@@ -1,18 +1,17 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using NUglify.JavaScript;
 using WebOptimizer;
 
 namespace TicketVoidingSystem.Website.Utilities.WebOptimizer;
 
 public static class UploadBatchMessageBundle
 {
-    public static void AddUploadBatchMessageBundle(this IAssetPipeline pipeline, CodeSettings scriptSetting)
+    public static void AddUploadBatchMessageBundle(this IAssetPipeline pipeline)
     {
         //// style bundle
         pipeline.AddLessBundle("/old-page/bundle/upload-batch-message-style.css", "old-page/upload-batch-message/batch-message.less");
 
         //// script bundle
-        pipeline.AddJavaScriptBundle("/old-page/bundle/upload-batch-message.js", scriptSetting,
+        pipeline.AddJavaScriptBundle("/old-page/bundle/upload-batch-message.js",
             "old-page/Scripts/_Libs/Utils/stdlib.js",
                             "old-page/Scripts/Common/Message.Helper.js",
                             "old-page/Scripts/Common/Message.Validator.js",

@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 public static class VirtualSportsRecover
 {
-    public static void RegisterVirtualSportsRecoverServices(this IServiceCollection services)
+    public static void AddVirtualSportsRecoverServices(this IServiceCollection services)
     {
         services.AddTransient<Repository, RepositoryImp>();
         services.AddTransient<GetTicketsService, GetTicketsServiceImp>();

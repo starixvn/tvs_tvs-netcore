@@ -1,18 +1,17 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using NUglify.JavaScript;
 using WebOptimizer;
 
 namespace TicketVoidingSystem.Website.Utilities.WebOptimizer;
 
 public static class CancelCashOutBundle
 {
-    public static void AddCancelCashOutBundle(this IAssetPipeline pipeline, CodeSettings scriptSetting)
+    public static void AddCancelCashOutBundle(this IAssetPipeline pipeline)
     {
         //// style bundle
         pipeline.AddLessBundle("/old-page/bundle/cancel-cash-out-style.css", "old-page/cancel-cash-out/cancel-cash-out.less");
 
         //// script bundle
-        pipeline.AddJavaScriptBundle("/old-page/bundle/cancel-cash-out.js", scriptSetting,
+        pipeline.AddJavaScriptBundle("/old-page/bundle/cancel-cash-out.js",
             "old-page/scripts/_libs/bootstrap-datepicker/bootstrap-datepicker.js",
             "old-page/scripts/_libs/Moment/moment-2.24.0.js",
             "old-page/scripts/_libs/ContextMenu/jquery.contextMenu.js",

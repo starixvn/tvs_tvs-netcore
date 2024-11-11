@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.AddRequest;
 
 public static class AddRequestCommon
 {
-    public static void RegisterAddRequestServices(this IServiceCollection services)
+    public static void AddAddRequestServices(this IServiceCollection services)
     {
         services.AddTransient<GetTransInfoService, GetTransInfoServiceImp>();
         services.AddTransient<LogInfoService, LogInfoServiceImp>();

@@ -21,7 +21,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.TicketVoidingSyst
 
 public static class TicketVoidingSystemService
 {
-    public static void RegisterTicketVoidingSystemServices(this IServiceCollection services)
+    public static void AddTicketVoidingSystemServices(this IServiceCollection services)
     {
         services.AddSingleton<SessionService, SessionServiceImp>();
         services.AddSingleton<PagingService, PagingServiceImp>();

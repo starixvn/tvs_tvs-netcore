@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Fanex.BetList.Core;
 using Fanex.BetList.Core.RemotingRef;
 using Fanex.Caching.Redis;
-using Fanex.Data;
 using Fanex.Data.Repository;
 using Fanex.LetstalkService.Core.Services;
 using Fanex.Logging;
@@ -12,10 +11,6 @@ using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.AspNetCore;
 using Fanex.Logging.Sentry.RavenClient;
 using Fanex.MailDeliver.MailClient;
-using Fanex.NAP.Client.Configuration;
-using Fanex.NAP.Client.Helpers.Web;
-using Fanex.NAP.Client.Services;
-using Fanex.NAP.Client.Session;
 using Fanex.RemotingRef;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -23,12 +18,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ONEbook.UM.AspNetCore;
-using ONEbook.UM.AspNetCore.Filters;
-using ONEbook.UM.Configurations;
-using ONEbook.UM.Helpers;
-using ONEbook.UM.Services;
-using ONEbook.UM.Transport;
 using SharpRaven;
 using SpecialDelete.CashOutTransaction;
 using SpecialDelete.CashOutTransaction.CancelCashOut;
@@ -75,12 +64,12 @@ namespace TicketVoidingSystem.Website.Utilities;
 
 public static class ServiceCollectionExtension
 {
-    public static void LoadAppSetting(this IServiceCollection services, IConfiguration configuration)
+    public static void AddTvsAppSetting(this IServiceCollection services, IConfiguration configuration)
     {
         AppSettingService.InitSetting(configuration);
     }
 
-    public static void RegisterSentry(this IServiceCollection services)
+    public static void AddSentry(this IServiceCollection services)
     {
         LogManager
             .SetDefaultLogCategory(AppSettingService.AppSetting.CategorySentryLog)
@@ -93,7 +82,7 @@ public static class ServiceCollectionExtension
             });
     }
 
-    public static void RegisterFanexExceptionHandler(this IServiceCollection services)
+    public static void AddExceptionHandler(this IServiceCollection services)
     {
         var configuration = new LoggingConfiguration()
             .GetHttpHeaderInfo()
@@ -101,7 +90,7 @@ public static class ServiceCollectionExtension
         ExceptionHandler.UseConfig(configuration);
     }
 
-    public static void RegisterAuthentication(this IServiceCollection services)
+    public static void AddTvsAuthentication(this IServiceCollection services)
     {
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
@@ -142,7 +131,7 @@ public static class ServiceCollectionExtension
         });
     }
 
-    public static void RegisterSignalR(this IServiceCollection services)
+    public static void AddTvsSignalR(this IServiceCollection services)
     {
         services.AddSignalR().AddStackExchangeRedis(options =>
         {
@@ -153,7 +142,7 @@ public static class ServiceCollectionExtension
         });
     }
 
-    public static void RegisterRemotingRef(this IServiceCollection services)
+    public static void AddRemotingRef(this IServiceCollection services)
     {
         RefDataTypeContainer
             .ConnectTo(new Uri(AppSettingService.AppSetting.FanexRemotingRefServiceUrl))
@@ -163,78 +152,58 @@ public static class ServiceCollectionExtension
         BetListManager.RegisterRemotingRef(new CacheRef());
     }
 
-    public static void RegisterLetstalk(this IServiceCollection services)
+    public static void AddLetstalk(this IServiceCollection services)
     {
         AppConfigService.Config.LetstalkServiceApi = AppSettingService.AppSetting.LetstalkConfig.LetstalkServiceApi;
     }
 
-    public static void RegisterCoreServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddCoreServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        services.AddSingleton<INapSettings>(new NapSettings(configuration));
-        services.AddSingleton<INapSession, NapSession>();
-        services.AddSingleton<ISecurityService, SecurityService>();
-        services.AddSingleton<IGroupService, GroupService>();
-        services.AddSingleton<IUserService, UserService>();
+        services.AddNapClient(configuration);
+        services.AddOneBookUm(configuration);
         services.AddScoped<IDynamicRepository, DynamicRepository>();
         services.AddTransient<ILogger, Logger>();
         services.AddSingleton<IUserIdProvider, CustomIdProvider>();
-        services.AddScoped<CheckUMFilterAttribute>();
         services.AddSingleton<IRemotingRefService, RemotingRefService>();
     }
 
-    public static void RegisterFanexCaching(this IServiceCollection services, IConfiguration configuration)
+    public static void AddFanexCaching(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddRedisCache(configuration.GetSection("FanexCachingRedis"));
     }
 
-    public static void RegisterOneBookUM(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddSingleton(new UMClientConfiguration().Initialize(configuration));
-        services.AddSingleton<IUMCacheService, MemoryUMCacheService>();
-        services.AddSingleton<IUMRestClient, UMRestClient>();
-        services.AddSingleton<IPHelper, IPHelperImpl>();
-        services.AddSingleton<IHttpContextHelper, HttpContextHelper>();
-        services.AddSingleton<IMaintenanceService, MaintenanceService>();
-    }
-
-    public static void RegisterFanexMailService(this IServiceCollection services)
+    public static void AddFanexMailService(this IServiceCollection services)
     {
         AppSettings.AppMailId = AppSettingService.AppSetting.FanexMailService.AppMailId;
         AppSettings.AppMailAddress = AppSettingService.AppSetting.FanexMailService.AppMailAddress;
     }
 
-    public static void RegisterFanexData(this IServiceCollection services, IConfiguration configuration)
+    public static void AddBusinessServices(this IServiceCollection services)
     {
-        DbSettingProviderManager.StartNewSession().Register(configuration, true).Run();
+        services.AddTicketVoidingSystemServices();
+        services.AddSharedApiServices();
+        services.AddAbExceptionListServices();
+        services.AddManageVoidServices();
+        services.AddMarkTicketsServices();
+        services.AddTicketListingServices();
+        services.AddVoidSingleBetServices();
+        services.AddAddRequestServices();
+        services.AddManageRequestServices();
+        services.AddVoidRequestServices();
+        services.AddUploadBatchMessageServices();
+        services.AddVirtualSportsVoidServices();
+        services.AddVirtualSportsRecoverServices();
+        services.AddRecoverByBetIdServices();
+        services.AddVoidNumberGameServices();
+        services.AddVoidByCurrencyServices();
+        services.AddVoidByBetIdServices();
+        services.AddCancelCashOutServices();
+        services.AddRecoverCashOutServices();
+        services.AddRecoverBetServices();
+        services.AddRecoverParlayBetServices();
     }
 
-    public static void RegisterBusinessServices(this IServiceCollection services)
-    {
-        services.RegisterTicketVoidingSystemServices();
-        services.RegisterSharedApiServices();
-        services.RegisterAbExceptionListServices();
-        services.RegisterManageVoidServices();
-        services.RegisterMarkTicketsServices();
-        services.RegisterTicketListingServices();
-        services.RegisterVoidSingleBetServices();
-        services.RegisterAddRequestServices();
-        services.RegisterManageRequestServices();
-        services.RegisterVoidRequestServices();
-        services.RegisterUploadBatchMessageServices();
-        services.RegisterVirtualSportsVoidServices();
-        services.RegisterVirtualSportsRecoverServices();
-        services.RegisterRecoverByBetIdServices();
-        services.RegisterVoidNumberGameServices();
-        services.RegisterVoidByCurrencyServices();
-        services.RegisterVoidByBetIdServices();
-        services.RegisterCancelCashOutServices();
-        services.RegisterRecoverCashOutServices();
-        services.RegisterRecoverBetServices();
-        services.RegisterRecoverParlayBetServices();
-    }
-
-    public static void RegisterMediatR(this IServiceCollection services)
+    public static void AddMediatR(this IServiceCollection services)
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SharedApiController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(PermissionController).Assembly));
@@ -264,7 +233,7 @@ public static class ServiceCollectionExtension
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecoverSubParlayController).Assembly));
     }
 
-    public static void RegisterAutoMapper(this IServiceCollection services)
+    public static void AddAutoMapper(this IServiceCollection services)
     {
         services.AddAutoMapper(typeof(TicketVoidingSystemProfile));
         services.AddAutoMapper(typeof(SharedApiProfile));

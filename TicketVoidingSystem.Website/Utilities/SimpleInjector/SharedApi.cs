@@ -10,7 +10,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 public static class SharedApi
 {
-    public static void RegisterSharedApiServices(this IServiceCollection services)
+    public static void AddSharedApiServices(this IServiceCollection services)
     {
         services.AddTransient<BetTypesRepository, BetTypesRepositoryImp>();
         services.AddTransient<BetTeamsService, BetTeamsServiceImp>();

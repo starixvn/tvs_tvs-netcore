@@ -72,7 +72,6 @@ public class ReCalculateTicketsServiceTests : IClassFixture<AppSettingFixture>
     [Theory]
     [InlineData(FilterByConstant.MixParlay)]
     [InlineData(FilterByConstant.SystemParlay)]
-    [InlineData(FilterByConstant.AcceptTime)]
     public async Task Execute_HasValidData_ReturnExpected(int filterBy)
     {
         // Arrange

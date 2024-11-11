@@ -11,7 +11,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 public static class VirtualSportsVoid
 {
-    public static void RegisterVirtualSportsVoidServices(this IServiceCollection services)
+    public static void AddVirtualSportsVoidServices(this IServiceCollection services)
     {
         services.AddTransient<BetListVirtualSportsService, BetListVirtualSportsServiceImp>();
         services.AddTransient<TicketService, TicketServiceImp>();

@@ -5,7 +5,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 public static class ManageVoidServices
 {
-    public static void RegisterManageVoidServices(this IServiceCollection services)
+    public static void AddManageVoidServices(this IServiceCollection services)
     {
         services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
         services.AddTransient<AutoVoidRequestQueueService, AutoVoidRequestQueueServiceImp>();

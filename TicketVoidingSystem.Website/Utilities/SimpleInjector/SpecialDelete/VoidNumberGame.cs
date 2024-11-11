@@ -10,7 +10,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 public static class VoidNumberGame
 {
-    public static void RegisterVoidNumberGameServices(this IServiceCollection services)
+    public static void AddVoidNumberGameServices(this IServiceCollection services)
     {
         services.AddTransient<Repository, RepositoryImp>();
         services.AddTransient<BetListCoreService, BetListCoreServiceImp>();

@@ -10,7 +10,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 public static class RecoverByBetId
 {
-    public static void RegisterRecoverByBetIdServices(this IServiceCollection services)
+    public static void AddRecoverByBetIdServices(this IServiceCollection services)
     {
         services.AddTransient<Repository, RepositoryImp>();
         services.AddTransient<BetListRecoverBetIdService, BetListRecoverBetIdServiceImp>();

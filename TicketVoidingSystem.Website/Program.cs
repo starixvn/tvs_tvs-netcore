@@ -1,7 +1,5 @@
-using Fanex.NAP.Client;
-using Fanex.NAP.Client.Configuration;
-using Fanex.NAP.Client.Helpers.Web;
-using Fanex.NAP.SignIn.Attribute;
+using Fanex.Data;
+using Fanex.NAP.Client.Attributes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,26 +20,25 @@ var services = builder.Services;
 var configuration = builder.Configuration;
 
 // Add services to the container.
-services.LoadAppSetting(configuration);
+services.AddTvsAppSetting(configuration);
 services.AddRazorPages();
-services.RegisterAuthentication();
+services.AddTvsAuthentication();
 services.AddHttpClient<AmendmentOicHttpClientService, AmendmentOicHttpClientServiceImp>();
 services.AddHttpClient<CashOutHttpClientService, CashOutHttpClientServiceImp>();
 services.AddHttpClient<LinkedLogHttpClientService, LinkedLogHttpClientServiceImp>();
 services.AddHttpClient<OWPHttpClientService, OWPHttpClientServiceImp>();
-services.RegisterFanexData(configuration);
-services.RegisterFanexExceptionHandler();
-services.RegisterSentry();
-services.RegisterOneBookUM(configuration);
-services.RegisterRemotingRef();
-services.RegisterLetstalk();
-services.RegisterCoreServices(configuration);
-services.RegisterBusinessServices();
-services.RegisterFanexCaching(configuration);
-services.RegisterFanexMailService();
-services.RegisterMediatR();
-services.RegisterAutoMapper();
-services.RegisterSignalR();
+services.AddFanexData(configuration);
+services.AddExceptionHandler();
+services.AddSentry();
+services.AddRemotingRef();
+services.AddLetstalk();
+services.AddCoreServices(configuration);
+services.AddBusinessServices();
+services.AddFanexCaching(configuration);
+services.AddFanexMailService();
+services.AddMediatR();
+services.AddAutoMapper();
+services.AddTvsSignalR();
 services.AddResponseCompression(options => { options.MimeTypes = new[] { "text/html", "text/css", "application/javascript", "application/json" }; });
 services.AddRazorPages();
 services.AddControllersWithViews(options =>
@@ -56,7 +53,7 @@ services.AddControllersWithViews(options =>
     options.JsonSerializerOptions.Converters.Add(new CustomDecimalJsonConverter());
 }).AddSessionStateTempDataProvider();
 
-services.RegisterWebOptimizer();
+services.AddWebOptimizer();
 
 // Build app
 var app = builder.Build();
@@ -74,12 +71,9 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
-NapClientManager
-    .UseConfig(app.Services.GetService<INapSettings>())
-    .UseSession(app.Services.GetService<INapSession>());
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapHub<NotificationHub>("/SignalR/NotificationHub");
 
-app.Run();
+await app.RunAsync();

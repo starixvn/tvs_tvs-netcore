@@ -1,16 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <SonarQubeExclude>true</SonarQubeExclude>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <NoWarn>1701;1702;8601;8604;8618;8632;8669</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Epplus.Mapper" Version="6.0.0" />
+    <PackageReference Include="Epplus.Mapper" Version="7.4.2" />
     <PackageReference Include="Fizzler.Systems.HtmlAgilityPack" Version="1.2.1" />
-    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
 
   <ItemGroup>

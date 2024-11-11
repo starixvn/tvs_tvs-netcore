@@ -24,12 +24,12 @@ public class InsertToAmendmentTableStageImp : InsertToAmendmentTableStage
 
     public async Task<IEnumerable<LicenseeFile>> Execute(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery)
     {
-        var insertedResults = await InsertToMainDb052(ticketsJson, sendFileQuery);
-        await InsertToBackupDb053(ticketsJson, sendFileQuery);
+        var insertedResults = await InsertToMainDb053(ticketsJson, sendFileQuery);
+        await InsertToBackupDb052(ticketsJson, sendFileQuery);
         return insertedResults;
     }
 
-    private async Task<IEnumerable<LicenseeFile>> InsertToMainDb052(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery)
+    private async Task<IEnumerable<LicenseeFile>> InsertToMainDb053(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery)
     {
         var criteria = new SendDataOicCriteria
         {
@@ -41,7 +41,7 @@ public class InsertToAmendmentTableStageImp : InsertToAmendmentTableStage
         return await repository.FetchAsync<LicenseeFile>(criteria);
     }
 
-    private async Task InsertToBackupDb053(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery)
+    private async Task InsertToBackupDb052(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery)
     {
         try
         {

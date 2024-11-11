@@ -11,7 +11,7 @@ namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 public static class RecoverBet
 {
-    public static void RegisterRecoverBetServices(this IServiceCollection services)
+    public static void AddRecoverBetServices(this IServiceCollection services)
     {
         services.AddTransient<IRepository, Repository>();
         services.AddTransient<RecordRecoverService<MailTicketViewModel, RecoverTicketModel>, RecordService>();
