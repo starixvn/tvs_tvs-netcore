@@ -33,8 +33,8 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
             AssertExtension.Equal(expected, actual);
             await getTicketsService.Received().GetTickets(Arg.Any<GetTicketsMiniRequest>());
             await checkPermissionOnRequestService.Received().GetVoidPermission();
-            ticketsViewModelService.Received().UpdateViewModel(Arg.Any<TicketsViewModel>(), Arg.Any<IEnumerable<GetTicketModel>>(),
-                        default, Arg.Any<VoidPermission>());
+            await ticketsViewModelService.Received().UpdateViewModel(Arg.Any<TicketsViewModel>(), Arg.Any<IEnumerable<GetTicketModel>>(),
+                        default, Arg.Any<VoidPermission>(), Arg.Any<int?>());
         }
     }
 }

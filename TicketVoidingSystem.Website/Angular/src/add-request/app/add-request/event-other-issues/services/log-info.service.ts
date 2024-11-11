@@ -23,14 +23,14 @@ export class LogInfoService {
     logInfoEvent.messageValidationLogInfo = null;
   }
 
-  async getLogInfo(logInfoEvent: LogInfoOtherIssues, isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty): Promise<void> {
-    const getLogInfoQuery = this.initGetLogInfoOtherIssuesQuery(isEdit, requestId, filter, logInfoEvent);
+  async getLogInfo(logInfoEvent: LogInfoOtherIssues, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty): Promise<void> {
+    const getLogInfoQuery = this.initGetLogInfoOtherIssuesQuery(requestId, filter, logInfoEvent);
     const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
     primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
     this.assignResultLogInfoToEvents(logInfoEvent, viewModel.getLogInfoModels);
   }
 
-  private initGetLogInfoOtherIssuesQuery(isEdit: boolean, requestId: number,
+  private initGetLogInfoOtherIssuesQuery(requestId: number,
     filter: FilterModel, events: LogInfoOtherIssues): GetLogInfoQuery {
     const query = new GetLogInfoQuery();
     query.requestId = requestId;

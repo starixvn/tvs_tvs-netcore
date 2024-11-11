@@ -1,231 +1,97 @@
+import { AdvancedModeAddRequestComponent } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { FilterModel } from '../../filter/filter.model';
-import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
+import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { ValidationMessage } from '../../models/get-log-info.model';
-import { FilterWrongOddsSportsBookComponent } from '../filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
-import { FilterOddsTypeConstant, FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
-import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
+import { FilterOtherIssuesComponent } from '../filter-other-issues/filter-other-issues.component';
+import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
+import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { ValidationService } from './validation.service';
 
-class Helper {
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeWrongOddsSportsBookModel = new WrongOddsSportsBookModel();
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '1',
-    action: '1',
-    isTest: true,
-    isVoided: false,
-    isAbnormal: false,
-    actions: []
-  } as FilterModel;
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    instantlySettleCount: 2,
-    scoreNormalTicket: '',
-    scoreOfMatch: '',
-    cancelCashOutCount: 1,
-    actionType: '1',
-    isHasWarningRangeTime: false,
-    minTransId: '1',
-    transVoidToTime: new Date(Helper.fakeToDateTime),
-  };
-  static readonly fakeFilterWrongOddsSportsBookModel: FilterOtherIssuesModel = {
-    fromDateTime: Helper.fakeFromDateTime,
-    toDateTime: Helper.fakeToDateTime,
-    correctOdds: '1',
-    filterOddsType: 'value',
-    fromOdds: '1',
-    oddsValue: '1',
-    liveIndicator: 0,
-    toOdds: '1'
-  };
-  static readonly fakeLogInfoWrongOddsSportsBook: LogInfoWrongOddsSportsBook = {
-    matchId: 12345,
-    filterWrongOddsSportsBook: new FilterOtherIssuesModel(),
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    betTeamsResult: []
-  } as LogInfoWrongOddsSportsBook;
-}
-
 describe('ValidationService', () => {
-  let service: ValidationService;
+  let mockService: ValidationService;
+  let mockCheckAddPermissionService: CheckAddPermissionService;
 
   beforeEach(() => {
-    service = new ValidationService(null);
+    mockCheckAddPermissionService = new CheckAddPermissionService(null);
+    mockService = new ValidationService(mockCheckAddPermissionService);
   });
 
-  it('#validateCommonData should return false when match invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null, null);
-    leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => false);
-    const actual = service.validateCommonData(leagueEvent, null);
+  it('#isAccountHasAddRequestPermission should return result from #checkPermissionService.isAccountHasAddRequestPermission', async () => {
+    [true, false].forEach(x => {
+      mockCheckAddPermissionService.isAccountHasAddRequestPermission = jest.fn().mockReturnValue(x);
 
-    expect(actual).toBeFalsy();
-  });
+      const actual = mockService.isAccountHasAddRequestPermission('action', true, true, new PermissionAddRequest());
 
-  it('#validateCommonData should return false when filterWrongOddsSportsBookComponent invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null, null);
-    leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
-    const filterWrongOddsSportsBookComponent = new FilterWrongOddsSportsBookComponent(null, null);
-    filterWrongOddsSportsBookComponent.isValidity = jest.fn().mockImplementation(() => false);
-    const actual = service.validateCommonData(leagueEvent, filterWrongOddsSportsBookComponent);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#validateCommonData should return true', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null, null);
-    leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
-    const filterWrongOddsSportsBookComponent = new FilterWrongOddsSportsBookComponent(null, null);
-    filterWrongOddsSportsBookComponent.isValidity = jest.fn().mockImplementation(() => true);
-    const actual = service.validateCommonData(leagueEvent, filterWrongOddsSportsBookComponent);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isFromTimeSameOrBeforeToTime should return true', async () => {
-    const filter = new FilterOtherIssuesModel();
-    filter.fromDateTime = Helper.fakeFromDateTime;
-    filter.toDateTime = Helper.fakeToDateTime;
-
-    const actual = service.isFromTimeSameOrBeforeToTime(filter, new Tooltip());
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isValidFilterWrongOddsSportsBook should return false when isValidFilterOddsType false', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const filter = new FilterOtherIssuesModel();
-    filter.filterOddsType = FilterOddsTypeConstant.RANGE;
-    filter.fromOdds = '1';
-    filter.toOdds = '1a';
-    const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidFilterWrongOddsSportsBook should return false when isValidFilterCorrectValue false', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const filter = new FilterOtherIssuesModel();
-    filter.filterOddsType = FilterOddsTypeConstant.VALUE;
-    filter.fromOdds = '1';
-    filter.toOdds = '1';
-    filter.oddsValue = '1';
-    filter.correctOdds = null;
-    const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidFilterWrongOddsSportsBook should return false when isValidFilterLiveIndicator false', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const filter = new FilterOtherIssuesModel();
-    filter.filterOddsType = FilterOddsTypeConstant.VALUE;
-    filter.fromOdds = '1';
-    filter.toOdds = '1';
-    filter.oddsValue = '1';
-    filter.correctOdds = '1';
-    [null, undefined].forEach(x => {
-      filter.liveIndicator = x;
-      const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip);
-
-      expect(actual).toBeFalsy();
+      expect(actual).toBe(x);
     });
   });
 
-  it('#isValidFilterWrongOddsSportsBook should return true', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const filter = new FilterOtherIssuesModel();
-    filter.filterOddsType = FilterOddsTypeConstant.VALUE;
-    filter.fromOdds = '1';
-    filter.toOdds = '1';
-    filter.oddsValue = '1';
-    filter.correctOdds = '1';
-    filter.liveIndicator = 1;
-    const actual = service.isValidFilterWrongOddsSportsBook(filter, tooltip);
+  it('#validateCommonData should return expected result', async () => {
+    [
+      { event: true, filter: true, advancedMode: true, expected: true },
+      { event: true, filter: false, advancedMode: true, expected: false },
+      { event: false, filter: true, advancedMode: true, expected: false },
+      { event: false, filter: false, advancedMode: true, expected: false },
+      { event: true, filter: true, advancedMode: true, expected: true },
+      { event: true, filter: true, advancedMode: false, expected: false }
+    ].forEach(x => {
+      const eventLeague = new EventLeagueComponent(null, null, null);
+      const filterOtherIssuesComponent = new FilterOtherIssuesComponent(null, null);
+      eventLeague.isMatchIdValid = jest.fn().mockReturnValue(x.event);
+      filterOtherIssuesComponent.isValidity = jest.fn().mockReturnValue(x.filter);
+      const advancedMode = new AdvancedModeAddRequestComponent();
+      advancedMode.isValidity = jest.fn().mockReturnValue(x.advancedMode);
+
+      mockCheckAddPermissionService.isAccountHasAddRequestPermission = jest.fn().mockReturnValue(x);
+
+      const actual = mockService.validateCommonData(eventLeague, filterOtherIssuesComponent, advancedMode);
+
+      expect(actual).toBe(x.expected);
+    });
+  });
+
+  it('#isValidLogInfoEvent should return true', async () => {
+    const logInfoEvent = new LogInfoOtherIssues();
+    logInfoEvent.messageValidationLogInfo = [{ isError: false }, { isError: false }] as ValidationMessage[];
+
+    const actual = mockService.isValidLogInfoEvent(logInfoEvent);
 
     expect(actual).toBeTruthy();
   });
 
-  it('#isValidLogInfoEvent should return false', async () => {
-    const errorMsg = new ValidationMessage();
-    errorMsg.isError = true;
-    const logInfo = new LogInfoWrongOddsSportsBook();
-    logInfo.messageValidationLogInfo = [errorMsg];
-    const actual = service.isValidLogInfoEvent(logInfo);
+  it('#isValidLogInfoEvent should return true', async () => {
+    const logInfoEvent = new LogInfoOtherIssues();
+    logInfoEvent.messageValidationLogInfo = [{ isError: true }, { isError: false }] as ValidationMessage[];
+
+    const actual = mockService.isValidLogInfoEvent(logInfoEvent);
 
     expect(actual).toBeFalsy();
   });
 
-  it('#isValidFilterOddsValue should return true when oddsValue null', async () => {
+  it('#isFromTimeSameOrBeforeToTime should return false', async () => {
+    const model: FilterOtherIssuesModel = {
+      fromDateTime: '2020-10-10 10:44:46.361 PM',
+      toDateTime: '2020-10-09 09:44:46.361 PM'
+    }
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
-    const actual = service['isValidFilterOddsValue'](null, tooltip);
 
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isValidFilterOddsValue should return false when isCorrectFormatMultipleDecimal', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service['isValidFilterOddsValue']('1a', tooltip);
+    const actual = mockService.isFromTimeSameOrBeforeToTime(model, tooltip);
 
     expect(actual).toBeFalsy();
+    expect(tooltip.display).toHaveBeenCalledTimes(1);
   });
 
-  it('#isValidFilterOddsValue should return false when have 0', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service['isValidFilterOddsValue']('0', tooltip);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidFilterOddsRange should return false when fromOdds null', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service['isValidFilterOddsRange'](null, '0', tooltip);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidFilterOddsRange should return false when toOdds null', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service['isValidFilterOddsRange']('1', null, tooltip);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidFilterOddsRange should return false when fromOdds > toOdds', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service['isValidFilterOddsRange']('1', '0', tooltip);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidFilterOddsRange should return true', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service['isValidFilterOddsRange']('1', '2', tooltip);
-
-    expect(actual).toBeTruthy();
+  it('isSubTypeRestart should return expected', async () => {
+    [
+      { subIssueTypeId: SubIssueTypeConstant.RESTART, expected: true },
+      { subIssueTypeId: SubIssueTypeConstant.MAIN_CORNER, expected: false }
+    ].forEach(item => {
+      const actual = mockService['isSubTypeRestart'](item.subIssueTypeId.toString());
+      expect(actual).toEqual(item.expected);
+    });
   });
 });

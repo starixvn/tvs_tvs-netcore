@@ -104,7 +104,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
     }
 
     this.addRequestStore.changeBlockingUiStatus(true);
-    await this.logInfoService.getLogInfo(this.logInfoEvent, this.isEdit, this.requestId, this.filter, this.primitiveProps);
+    await this.logInfoService.getLogInfo(this.logInfoEvent, this.requestId, this.filter, this.primitiveProps);
 
     if (!this.validationService.isAccountHasAddRequestPermission(this.filter.action, this.logInfoEvent.isHasInstantlySettledTicket,
       this.logInfoEvent.isHasSettledTicket, this.permission)) {

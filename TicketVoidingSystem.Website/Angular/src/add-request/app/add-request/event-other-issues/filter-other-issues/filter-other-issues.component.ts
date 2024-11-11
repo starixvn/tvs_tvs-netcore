@@ -5,7 +5,6 @@ import { FilterModel } from '../../filter/filter.model';
 import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
 import { ValidationService } from '../services/validation.service';
 
-
 @Component({
   selector: 'filter-other-issues',
   templateUrl: './filter-other-issues.component.html',

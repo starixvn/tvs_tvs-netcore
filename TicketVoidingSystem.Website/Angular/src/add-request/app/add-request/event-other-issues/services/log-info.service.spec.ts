@@ -1,99 +1,105 @@
+import * as _ from 'lodash';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { CommonService } from '../../../../../utility/services/common.service';
-import { FilterModel } from '../../filter/filter.model';
-import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { CommonService } from "../../../../../utility/services/common.service";
+import { FilterModel } from "../../filter/filter.model";
+import { OtherIssuesModel } from '../../models/event-other-issues.model';
+import { GetLogInfoModel, Validation } from '../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from "../../models/trans-info-add-request.model";
 import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
-import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { EventWrongOddsSportsBookService } from './event-other-issues.service';
-import { LogInfoService } from './log-info.service';
+import { OtherIssuesGetLogInfoQuery } from '../models/get-log-info.query';
+import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
+import { PrimitiveProperty } from "../models/primitive-property.model";
+import { EventOtherIssuesService } from './event-other-issues.service';
+import { LogInfoService } from "./log-info.service";
 
 class Helper {
-  static readonly fakeMatchId = 1;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeWrongOddsSportsBookModel = new WrongOddsSportsBookModel();
+  static readonly fakeOtherIssuesModel: OtherIssuesModel = {
+    logInfoDetail: new LogInfoDetail(),
+    matchId: 1,
+    subIssueTypeId: 1
+  } as OtherIssuesModel;
   static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
+    issueTypeId: '26',
     subIssueTypeId: '1',
-    action: '1',
-    isTest: true,
-    isVoided: false,
-    isAbnormal: false,
-    actions: []
+    action: '5'
   } as FilterModel;
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: Helper.fakeMatchId,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    instantlySettleCount: 2,
-    scoreNormalTicket: '',
-    scoreOfMatch: '',
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeTicketRequest: TicketRequest = {
-    transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
-    requestId: 1,
-    createdBy: 'admin',
-  };
-  static readonly fakeFilterWrongOddsSportsBookModel: FilterOtherIssuesModel = {
-    fromDateTime: Helper.fakeFromDateTime,
-    toDateTime: Helper.fakeToDateTime,
-    correctOdds: '1',
-    filterOddsType: 'value',
-    fromOdds: '1',
-    oddsValue: '1',
-    liveIndicator: 0,
-    toOdds: '1'
-  };
-  static readonly fakeLogInfoWrongOddsSportsBook: LogInfoWrongOddsSportsBook = {
-    matchId: Helper.fakeMatchId,
-    filterWrongOddsSportsBook: new FilterOtherIssuesModel(),
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    betTeamsResult: []
-  } as LogInfoWrongOddsSportsBook;
-  static readonly fakeGetLogInfoModel: GetLogInfoModel = {
-    matchId: Helper.fakeMatchId,
-    validation: {
-      isInvalidTotalTickets: true,
-      isExistedInOtherRequest: true,
-    } as Validation,
-    ticketRequest: [Helper.fakeTicketRequest],
-    logInfoDetail: Helper.fakeLogInfoDetail
-  };
-  static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {
-    transInfoAddRequestModel: new TransInfoAddRequestModel(),
-    getLogInfoModels: [Helper.fakeGetLogInfoModel],
-  };
+  static readonly fakeLogInfoOtherIssues: LogInfoOtherIssues = {
+    matchId: 1,
+    filterOtherIssues: new FilterOtherIssuesModel(),
+    logInfoDetail: new LogInfoDetail(),
+    messageValidationLogInfo: []
+  } as LogInfoOtherIssues;
+  static readonly fakeFilterOtherIssues: FilterOtherIssuesModel = {
+    fromDateTime: '2024-10-08 09:44:46.361 PM',
+    toDateTime: '2024-10-08 09:44:46.362 PM',
+  } as FilterOtherIssuesModel;
+  static readonly fakeGetLogInfoModels: GetLogInfoModel[] = [
+    {
+      matchId: 1,
+      validation: new Validation(),
+      logInfoDetail: new LogInfoDetail()
+    } as GetLogInfoModel
+  ]
 }
 
 describe('LogInfoService', () => {
-  it('#getLogInfo should call #eventWrongOddsSportsBookService.getWrongOddsSportsBookModel', async () => {
-    const eventWrongOddsSportsBookService = new EventWrongOddsSportsBookService();
-    eventWrongOddsSportsBookService.getWrongOddsSportsBookGetLogInfoModel = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeFilterWrongOddsSportsBookModel));
-    const commonService = new CommonService(null);
-    commonService.getLogInfo = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));
+  let mockService: LogInfoService;
+  let mockCommonService: CommonService;
+  let mockEventOtherIssuesService: EventOtherIssuesService;
 
-    const mockService = new LogInfoService(commonService, eventWrongOddsSportsBookService);
-    await mockService.getLogInfo(Helper.fakeLogInfoWrongOddsSportsBook, false, 1, Helper.fakeFilterModel, new PrimitiveProperty());
-
-    expect(eventWrongOddsSportsBookService.getWrongOddsSportsBookGetLogInfoModel).toHaveBeenCalledTimes(1);
+  beforeEach(() => {
+    mockCommonService = new CommonService(null);
+    mockEventOtherIssuesService = new EventOtherIssuesService(null, null);
+    mockService = new LogInfoService(mockCommonService, mockEventOtherIssuesService);
   });
 
-  it('#resetLogInfoOfEvent should update logInfoDetail to null', async () => {
-    const mockService = new LogInfoService(null, null);
-    mockService.resetLogInfoOfEvent(Helper.fakeLogInfoWrongOddsSportsBook);
+  it('getLogInfo should call #commonService.getLogInfo', async () => {
+    const transInfoAddRequest = new TransInfoAddRequestModel();
+    const primitiveProps = new PrimitiveProperty();
+    mockService['assignResultLogInfoToEvents'] = jest.fn();
+    mockService['initGetLogInfoOtherIssuesQuery'] = jest.fn().mockReturnValue(new OtherIssuesGetLogInfoQuery());
+    mockCommonService.getLogInfo = jest.fn().mockReturnValue({ transInfoAddRequestModel: transInfoAddRequest, getLogInfoModels: [] });
 
-    expect(Helper.fakeLogInfoWrongOddsSportsBook.logInfoDetail).toBeNull();
-    expect(Helper.fakeLogInfoWrongOddsSportsBook.messageValidationLogInfo).toBeNull();
+    await mockService.getLogInfo(Helper.fakeLogInfoOtherIssues, 1, Helper.fakeFilterModel, primitiveProps);
+
+    expect(mockService['initGetLogInfoOtherIssuesQuery']).toHaveBeenCalledTimes(1);
+    expect(mockService['assignResultLogInfoToEvents']).toHaveBeenCalledTimes(1);
+    expect(mockCommonService.getLogInfo).toHaveBeenCalledTimes(1);
+    expect(primitiveProps.transInfoAddRequestModel).toEqual(transInfoAddRequest);
+  });
+
+  it('assignResultLogInfoToEvents should call #commonService.getLogInfo', async () => {
+    const logInfoEvent = Helper.fakeLogInfoOtherIssues;
+    const logInfoModels = Helper.fakeGetLogInfoModels;
+    logInfoEvent.matchId = 1;
+    logInfoModels[0].matchId = 1;
+
+    mockService['assignResultLogInfoToEvents'](logInfoEvent, logInfoModels);
+
+    expect(logInfoEvent.isHasSettledTicket).toEqual(logInfoModels[0].validation.isHasSettledTicket);
+    expect(logInfoEvent.isHasInstantlySettledTicket).toEqual(logInfoModels[0].validation.isHasInstantlySettledTicket);
+    expect(logInfoEvent.logInfoDetail).toEqual(logInfoModels[0].logInfoDetail);
+  });
+
+  it('initGetLogInfoOtherIssuesQuery should return GetLogInfoQuery', async () => {
+    const logInfoEvent = Helper.fakeLogInfoOtherIssues;
+    logInfoEvent.messageValidationLogInfo = [];
+    mockEventOtherIssuesService.initOtherIssuesGetLogInfoModel = jest.fn().mockReturnValue(new OtherIssuesGetLogInfoQuery());
+
+    const actual = mockService['initGetLogInfoOtherIssuesQuery'](1, Helper.fakeFilterModel, logInfoEvent);
+
+    expect(actual.actionId).toBe(Number(Helper.fakeFilterModel.action));
+    expect(actual.issueTypeId).toBe(Number(Helper.fakeFilterModel.issueTypeId));
+    expect(mockEventOtherIssuesService.initOtherIssuesGetLogInfoModel).toHaveBeenCalledTimes(1);
+  });
+
+
+  it('#resetLogInfoOfEvent should update model to null', async () => {
+    const events = _.cloneDeep(Helper.fakeLogInfoOtherIssues);
+
+    mockService['resetLogInfoOfEvent'](events);
+
+    expect(events[0].logInfoDetail).toBeNull();
+    expect(events[0].messageValidationLogInfo).toBeNull();
   });
 });

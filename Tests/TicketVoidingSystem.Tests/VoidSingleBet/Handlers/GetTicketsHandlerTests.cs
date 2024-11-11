@@ -45,7 +45,7 @@ public class GetTicketsHandlerTests
 
         // Assert
         await groupTicketService.ReceivedWithAnyArgs(0).CreateGroupTicketViewModel(default, default);
-        updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default);
+        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default, default);
         Assert.Empty(actual.Groups);
     }
 
@@ -66,7 +66,7 @@ public class GetTicketsHandlerTests
 
         // Assert
         await groupTicketService.ReceivedWithAnyArgs(2).CreateGroupTicketViewModel(default, default);
-        updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default);
+        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default, default);
         Assert.Equal(2, actual.Groups.Count());
     }
 }

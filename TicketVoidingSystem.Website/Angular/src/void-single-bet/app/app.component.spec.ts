@@ -8,7 +8,6 @@ import { ModalService } from '../../utility/components/modal/modal.service';
 import { Notification } from '../../utility/components/notification/notification';
 import { NotificationComponent } from '../../utility/components/notification/notification.component';
 import { PagingModel } from '../../utility/components/paging/paging/paging.model';
-import { Message } from '../../utility/components/template-message/messages/message';
 import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { TemplateMessageComponent } from '../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../utility/components/template-message/template-message/template.model';
@@ -615,7 +614,7 @@ describe('AppComponent', () => {
     instance.getTicketsQuery.liveAwayScore = '1';
     instance.getTicketsQuery.liveHomeScore = '1';
 
-    instance.updateTemplateValue(new Message());
+    instance.updateTemplateValue();
 
     expect(instance.templateValue.score).toBe('1-1');
   });

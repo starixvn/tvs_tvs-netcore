@@ -41,7 +41,7 @@ export class ValidationService {
   }
 
   isFromTimeSameOrBeforeToTime(filterOtherIssuesModel: FilterOtherIssuesModel, tooltip: Tooltip): boolean {
-    return StaticService.isFromTimeSameOrBeforeToTime(filterOtherIssuesModel.fromDateTime, filterOtherIssuesModel.fromDateTime, tooltip, this.FROM_DATE_TIME_CLASS);
+    return StaticService.isFromTimeSameOrBeforeToTime(filterOtherIssuesModel.fromDateTime, filterOtherIssuesModel.toDateTime, tooltip, this.FROM_DATE_TIME_CLASS);
   }
 
   isValidLogInfoEvent(logInfoOtherIssues: LogInfoOtherIssues): boolean {

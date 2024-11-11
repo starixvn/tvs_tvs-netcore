@@ -44,7 +44,7 @@ export class SaveRequestService {
 
     argOtherIssues.addRequestStore.changeBlockingUiStatus(true);
     argOtherIssues.primitiveProps.isShowValidation = false;
-    await this.logInfoOtherIssuesService.getLogInfo(argOtherIssues.logInfoEvent, argOtherIssues.isEdit, argOtherIssues.requestId, argOtherIssues.filter, argOtherIssues.primitiveProps);
+    await this.logInfoOtherIssuesService.getLogInfo(argOtherIssues.logInfoEvent, argOtherIssues.requestId, argOtherIssues.filter, argOtherIssues.primitiveProps);
 
     if (!this.validationService.isAccountHasAddRequestPermission(argOtherIssues.filter.action, argOtherIssues.logInfoEvent.isHasInstantlySettledTicket,
       argOtherIssues.logInfoEvent.isHasSettledTicket, argOtherIssues.permission)) {
