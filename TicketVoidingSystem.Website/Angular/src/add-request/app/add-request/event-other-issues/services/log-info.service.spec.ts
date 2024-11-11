@@ -93,13 +93,12 @@ describe('LogInfoService', () => {
     expect(mockEventOtherIssuesService.initOtherIssuesGetLogInfoModel).toHaveBeenCalledTimes(1);
   });
 
-
   it('#resetLogInfoOfEvent should update model to null', async () => {
     const events = _.cloneDeep(Helper.fakeLogInfoOtherIssues);
 
     mockService['resetLogInfoOfEvent'](events);
 
-    expect(events[0].logInfoDetail).toBeNull();
-    expect(events[0].messageValidationLogInfo).toBeNull();
+    expect(events.logInfoDetail).toBeNull();
+    expect(events.messageValidationLogInfo).toBeNull();
   });
 });

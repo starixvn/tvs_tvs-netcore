@@ -103,6 +103,6 @@ describe('EventOtherIssuesService', () => {
 
     const actual = mockService['assignCurrentStateToNewGroupBetType'](newGroupBetTypes, currentCheckedBetTypes);
 
-    expect(actual).toEqual('1');
+    expect(actual).toEqual(newGroupBetTypes);
   });
 });
