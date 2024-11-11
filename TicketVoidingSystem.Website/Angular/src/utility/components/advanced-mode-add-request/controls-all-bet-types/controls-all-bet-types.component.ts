@@ -1,8 +1,5 @@
-import { Selection } from './../../../models/selection.model';
-import { Component, Input, SimpleChanges } from '@angular/core';
-import { BetTeamAddRequest } from '../advanced-mode/advanced-mode.model';
-import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
-import { ControlsAllBetTypesLists } from './controls-all-bet-types.model';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ControlsAllBetTypes } from './controls-all-bet-types.model';
 
 @Component({
   selector: 'controls-all-bet-types',
@@ -10,56 +7,14 @@ import { ControlsAllBetTypesLists } from './controls-all-bet-types.model';
   styleUrls: ['./controls-all-bet-types.component.scss']
 })
 export class ControlsAllBetTypesComponent {
-  @Input() changedBetTypes: BetTypeAddRequest[] = [];
-  @Input() betTeams: BetTeamAddRequest[];
-  @Input() selectedAllBetTypes?: Selection[];
+  @Input() controlsAllBetTypesLists: ControlsAllBetTypes[] = []
+  @Output() changeControlsAll = new EventEmitter<{itemList: string[], type: string}>();
 
-  isShowContent: boolean;
-  controlsAllBetTypesLists = ControlsAllBetTypesLists.MultipleSelectionList;
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['changedBetTypes']) {
-      this.updateControlsAllBetTypesList();
-      this.updateShowControlsAllBetTypes();
-      this.isShowContent = this.isShowControlsAllBetTypes();
-    }
-  }
-  
-  private isShowControlsAllBetTypes(){
+  public isShowContent(){
     return this.controlsAllBetTypesLists.filter(x => x.isShow).length > 0;
   }
-
+  
   public updateByControlAllBetType(itemList: string[], type: string) {
-    this.betTeams.forEach(betTeam => {
-      const selection = betTeam.selections.find(x => x.name === type);
-      if(selection) {
-        this.updateBetTeam(betTeam, type, itemList)
-      } 
-    });
-  }
-
-  public updateControlsAllBetTypesList(){
-    if(this.selectedAllBetTypes){
-      this.selectedAllBetTypes.forEach(x => {
-        const selectedAllBetTypes = this.controlsAllBetTypesLists.find(item => item.type === x.name);
-        selectedAllBetTypes?.items.updateItemChecked(x.value.split(','));
-      })
-    }
-    
-    this.selectedAllBetTypes = [];
-  }
-
-  private updateBetTeam(betTeam: BetTeamAddRequest, type: string, itemList: string[]){
-    betTeam.selections.find(x => x.name === type).multiSelection.updateItemChecked(itemList);
-  }
-
-  private updateShowControlsAllBetTypes(){
-    this.controlsAllBetTypesLists.forEach(x => {
-      x.isShow = this.checkShowAllBetTypeMap(x.type);
-    })
-  }
-
-  private checkShowAllBetTypeMap(type: string): boolean{
-    return this.betTeams.filter(betTeam => betTeam.isShow && betTeam.selections.find(y => y.name === type)).length > 0;
+    this.changeControlsAll.emit({itemList: itemList, type: type});
   }
 }

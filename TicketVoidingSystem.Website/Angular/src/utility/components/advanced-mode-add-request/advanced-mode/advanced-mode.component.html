@@ -5,8 +5,8 @@
     <strong class="advanced-mode-header-label">Advanced Mode</strong>
   </div>
   <div class="advanced-mode-body border-bottom-radius" *ngIf="!isCollapse">
-    <controls-all-bet-types #controlsAllBetTypes [changedBetTypes]="changedBetTypes" [betTeams]="betTeams" 
-    [selectedAllBetTypes]="advancedModeAddRequestModel?.selectedAllBetTypes">
+    <controls-all-bet-types [controlsAllBetTypesLists]="controlsAllBetTypesLists"
+    (changeControlsAll)="changeByControlAllBetType($event)">
     </controls-all-bet-types>
     <div *ngFor="let betTeam of betTeams">
       <div [ngSwitch]="betTeam.type" *ngIf="betTeam.isShow">
