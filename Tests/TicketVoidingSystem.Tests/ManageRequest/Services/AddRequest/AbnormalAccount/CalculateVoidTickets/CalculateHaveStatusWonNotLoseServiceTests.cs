@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
 
-public class CalculateHaveStatusWonNotLoseServiceTests
+public class CalculateHaveStatusWonNotLoseServiceTests : IClassFixture<AppSettingFixture>
 {
     private readonly CombineVoidTicketsService combineVoidTicketsService = Substitute.For<CombineVoidTicketsService>();
     private readonly EstimateVoidWonTicketsService estimateVoidWonTicketsService = Substitute.For<EstimateVoidWonTicketsService>();

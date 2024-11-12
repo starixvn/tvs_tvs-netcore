@@ -13,7 +13,7 @@ using Result = TicketVoidingSystem.Models.Result;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk;
 
-public class NotificationLetstalkServiceTests : AppSettingFixture
+public class NotificationLetstalkServiceTests : IClassFixture<AppSettingFixture>
 {
     private readonly GroupAbnormalBetRequestService groupAbnormalBetRequestService;
     private readonly GroupTicketListingService groupTicketListingService;

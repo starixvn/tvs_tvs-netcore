@@ -15,8 +15,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VirtualSports.VoidParlaySub.Repositories;
 
-
-public class RepositoryTest
+public class RepositoryTest : IClassFixture<AppSettingFixture>
 {
     [Fact]
     public async Task ExecuteQuery_GetVoidTicketsCriteria_ReturnTicketsResult()

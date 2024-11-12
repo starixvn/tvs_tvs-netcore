@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
 
-public class FanexMailApiServiceTests : AppSettingFixture
+public class FanexMailApiServiceTests : IClassFixture<AppSettingFixture>
 {
     private readonly LoggingService loggingService;
     private readonly FanexMailApiServiceImp service;

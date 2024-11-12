@@ -10,7 +10,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.SharedApi.Services.Permission;
 
-public class CheckTicketsStatusServiceTests : RemotingRefFixture
+public class CheckTicketsStatusServiceTests : IClassFixture<AppSettingFixture>
 {
     [Fact]
     public async Task GetTransInfoJsonForCheckPermission_HasTicketsRequest_ExpectedValue()

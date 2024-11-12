@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.SharedApi.Handlers.SharedApi;
 
-public class CheckNegativeBalanceHandlerTests : IClassFixture<RemotingRefFixture>
+public class CheckNegativeBalanceHandlerTests : IClassFixture<RemotingRefFixture>, IClassFixture<AppSettingFixture>
 {
     private readonly IDynamicRepository repository;
     private readonly CheckNegativeBalanceHandler handler;

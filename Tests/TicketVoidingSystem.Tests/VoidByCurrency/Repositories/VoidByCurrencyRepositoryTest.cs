@@ -13,7 +13,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidByCurrency.Repositories;
 
-public class VoidByCurrencyRepositoryTest : IClassFixture<RemotingRefFixture>
+public class VoidByCurrencyRepositoryTest : IClassFixture<RemotingRefFixture>, IClassFixture<AppSettingFixture>
 {
     [Fact]
     public async Task GetTickets_HasCriteria_ReturnTicketsFromDynamicRepository()
