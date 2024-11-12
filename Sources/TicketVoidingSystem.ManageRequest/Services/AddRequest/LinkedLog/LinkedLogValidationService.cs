@@ -173,8 +173,8 @@ public class LinkedLogValidationServiceImp : LinkedLogValidationService
     {
         return getLinkedLogModel.FilterFavoriteType switch
         {
-            FilterTypeWrongOddsConstant.FilterFavoriteTypeHome => decimal.Parse(getLinkedLogModel.FavoriteValue) == linkedOddsInfo.Hdp1,
-            FilterTypeWrongOddsConstant.FilterFavoriteTypeAway => decimal.Parse(getLinkedLogModel.FavoriteValue) == linkedOddsInfo.Hdp2,
+            FilterTypeWrongOddsConstant.BetTeamHome => decimal.Parse(getLinkedLogModel.FavoriteValue) == linkedOddsInfo.Hdp1,
+            FilterTypeWrongOddsConstant.BetTeamAway => decimal.Parse(getLinkedLogModel.FavoriteValue) == linkedOddsInfo.Hdp2,
             _ => false
         };
     }

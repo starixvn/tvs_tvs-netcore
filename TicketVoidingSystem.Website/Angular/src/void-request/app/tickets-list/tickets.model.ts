@@ -30,7 +30,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
   uncheckedTransIds: string[];
   betTypes: string;
   betTeam: string;
-  inputOverUnder: string;
+  hdpValues: string;
   isHasSettledTicket: boolean;
   isAllLiveTickets: boolean;
   isAllNonLiveTickets: boolean;
