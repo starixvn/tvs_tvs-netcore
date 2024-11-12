@@ -74,4 +74,6 @@ export class TemplateValue {
   actualNameT?: string;
   wrongNameS?: string;
   actualNameS?: string;
+  // Wrong Odds
+  favoriteValue?: string;
 }
