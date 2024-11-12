@@ -36,7 +36,7 @@ public class GetTicketsHandler(
     {
         if (!tickets.Any())
         {
-            return Enumerable.Empty<Group<GetTicketModel>>();
+            return [];
         }
 
         var parlayTickets = tickets.Where(ticket => ticket.BetType.IsParlayAndBetBuilder())

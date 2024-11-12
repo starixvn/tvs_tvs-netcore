@@ -14,7 +14,7 @@ public class EditRequestQuery
 
     public string? DecidedBy { get; set; }
 
-    public List<OperatorQuery>? OperatorsList { get; set; } = new();
+    public List<OperatorQuery>? OperatorsList { get; set; } = [];
 
     public string? Provider { get; set; }
 

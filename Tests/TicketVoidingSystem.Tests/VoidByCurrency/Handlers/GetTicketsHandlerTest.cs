@@ -19,14 +19,14 @@ public class GetTicketsHandlerTest
         // Arrange
         var expected = new TicketsViewModel
         {
-            Groups = new List<Group<TicketViewModel>>
-            {
+            Groups =
+            [
                 new()
                 {
                     Name = "TEST",
                     Tickets = new List<TicketViewModel> { new() { BetId = "696969" } }
                 }
-            },
+            ],
             TotalItems = 69
         };
         var request = new GetTicketsRequest { MatchId = 12369 };

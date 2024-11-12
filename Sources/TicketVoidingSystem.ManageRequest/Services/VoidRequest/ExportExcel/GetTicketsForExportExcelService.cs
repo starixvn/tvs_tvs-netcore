@@ -43,7 +43,7 @@ public class GetTicketsForExportExcelServiceImp(
     {
         if (!tickets.Any())
         {
-            return Enumerable.Empty<Group<GetTicketModel>>();
+            return [];
         }
 
         var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay);

@@ -56,13 +56,14 @@ public class LetstalkSingleMessageServiceImp(LetstalkClientService letstalkServi
 
         if (!string.IsNullOrWhiteSpace(attachment?.FileName) && attachment.Bytes != null)
         {
-            finalModel.LetstalkAttachments = new List<LetstalkAttachment>
+            finalModel.LetstalkAttachments =
+            [
+                new()
                 {
-                    new() {
-                        FileName = attachment.FileName,
-                        Bytes = attachment.Bytes
-                    }
-                };
+                    FileName = attachment.FileName,
+                    Bytes = attachment.Bytes
+                }
+            ];
         }
 
         return finalModel;

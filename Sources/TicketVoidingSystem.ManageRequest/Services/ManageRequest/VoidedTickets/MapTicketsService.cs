@@ -21,7 +21,7 @@ public class MapTicketsServiceImp(PagingService pagingService, MapFromBetListSer
         var tickets = pagingService.Paging(originalTickets, query.PageIndex, query.PageSize);
         if (!tickets.Any())
         {
-            return Enumerable.Empty<Group<VoidedTicketModel>>();
+            return [];
         }
 
         var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay);

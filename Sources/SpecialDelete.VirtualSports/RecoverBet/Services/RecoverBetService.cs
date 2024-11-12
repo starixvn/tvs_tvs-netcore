@@ -55,7 +55,7 @@ public class RecoverBetServiceImp(
         var results = new List<Result>();
         if (!model.Tickets.Any())
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         results.AddRange(await ContactUser(model, query));
@@ -67,7 +67,7 @@ public class RecoverBetServiceImp(
     {
         if (model.Validation.IsSuccessful)
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         var results = new List<Result>

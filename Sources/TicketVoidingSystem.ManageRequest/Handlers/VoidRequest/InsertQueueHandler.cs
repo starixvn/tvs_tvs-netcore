@@ -39,10 +39,10 @@ public class InsertQueueHandler(
         var result = new Result();
         if (sessionService.CheckPassword(query.UserPassword))
         {
-            query.SingleTickets ??= Enumerable.Empty<BetId>();
-            query.ParlayTickets ??= Enumerable.Empty<BetId>();
-            query.CricketTickets ??= Enumerable.Empty<BetId>();
-            query.CancelCashOutTickets ??= Enumerable.Empty<BetId>();
+            query.SingleTickets ??= [];
+            query.ParlayTickets ??= [];
+            query.CricketTickets ??= [];
+            query.CancelCashOutTickets ??= [];
             await insertQueueService.InsertTicketVoidingQueue(query);
             await insertQueueService.UpdateIsProcessed(query);
             await UpdateRunningRequest(query.RequestId);

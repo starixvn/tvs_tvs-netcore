@@ -24,10 +24,11 @@ public class GetMaxBetAndSpreadHandler(OWPHttpClientService owpHttpClientService
 
         if (maxBetSpreadInfo == null)
         {
-            return Enumerable.Empty<OddsInfoModel>();
+            return [];
         }
 
-        int[] subIssueTypeIdsWrongOdds = { SubIssueTypeConstant.Handicap, SubIssueTypeConstant.FirstHalfHandicap, SubIssueTypeConstant.OverUnder, SubIssueTypeConstant.FirstHalfOverUnder };
+        int[] subIssueTypeIdsWrongOdds = [SubIssueTypeConstant.Handicap, SubIssueTypeConstant.FirstHalfHandicap, SubIssueTypeConstant.OverUnder, SubIssueTypeConstant.FirstHalfOverUnder
+        ];
 
         return subIssueTypeIdsWrongOdds.Select(subIssueTypeId => GetOddsInfo(maxBetSpreadInfo, subIssueTypeId)).ToList();
     }

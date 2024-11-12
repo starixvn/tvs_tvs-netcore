@@ -59,7 +59,7 @@ public class MarkTicketsServiceImp(
             return new MarkTicketsResult
             {
                 MarkedResults = new List<Result> { new() { ErrorCode = 1, ErrorMsg = e.Message } },
-                MarkedTickets = Enumerable.Empty<long>()
+                MarkedTickets = []
             };
         }
     }

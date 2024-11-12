@@ -48,7 +48,7 @@ public class UploadBatchMessageControllerTest
         // Arrange
         var request = new UpdateMessageRequest
         {
-            CreditTrans = new List<ReceivedUser> { new() { CustId = 1 } }
+            CreditTrans = [new() { CustId = 1 }]
         };
 
         var mediator = Substitute.For<IMediator>();

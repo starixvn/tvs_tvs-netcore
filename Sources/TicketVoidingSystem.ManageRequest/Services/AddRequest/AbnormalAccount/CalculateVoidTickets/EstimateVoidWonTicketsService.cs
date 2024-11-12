@@ -27,7 +27,7 @@ public class EstimateVoidWonTicketsServiceImp(
     {
         if (IsCanNotRunAlgorithm(wonTickets, loseTickets, compareCredit))
         {
-            return Enumerable.Empty<TicketCalculateWinLostAccount>();
+            return [];
         }
 
         var maxCapacity = GetMaxCapacity(wonTickets, loseTickets, compareCredit);

@@ -70,7 +70,7 @@ public class VoidTicketsHandler(
         var results = new List<Result>();
         if (!model.Tickets.Any())
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         results.AddRange(await ContactUser(query, model, warningCrickets));
@@ -84,7 +84,7 @@ public class VoidTicketsHandler(
         var results = new List<Result>();
         if (model.Validation.IsSuccessful)
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         results.Add(new Result { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg });

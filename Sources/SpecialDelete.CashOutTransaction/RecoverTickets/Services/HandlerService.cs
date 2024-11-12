@@ -83,7 +83,7 @@ public class HandlerServiceImp(
     {
         if (string.IsNullOrWhiteSpace(invalidTransIds))
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         var results = new List<Result>

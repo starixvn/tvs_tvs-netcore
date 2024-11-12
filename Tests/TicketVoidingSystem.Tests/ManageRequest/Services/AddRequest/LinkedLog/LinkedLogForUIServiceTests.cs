@@ -24,8 +24,8 @@ public class LinkedLogForUIServiceTests
         // Arrange
         var response = new GroupLinkedLogResponse
         {
-            AffectedLog = Enumerable.Empty<PoolHouseLinkedLogResponse>(),
-            NotAffectedLog = Enumerable.Empty<PoolHouseLinkedLogResponse>()
+            AffectedLog = [],
+            NotAffectedLog = []
         };
 
         // Act
@@ -42,7 +42,7 @@ public class LinkedLogForUIServiceTests
         var response = new GroupLinkedLogResponse
         {
             AffectedLog = new List<PoolHouseLinkedLogResponse> { new() { LinkGroup = 1, HomeScore = 11, AwayScore = 22, LinkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>() } },
-            NotAffectedLog = Enumerable.Empty<PoolHouseLinkedLogResponse>()
+            NotAffectedLog = []
         };
 
         // Act
@@ -61,7 +61,7 @@ public class LinkedLogForUIServiceTests
         // Arrange
         var response = new GroupLinkedLogResponse
         {
-            AffectedLog = Enumerable.Empty<PoolHouseLinkedLogResponse>(),
+            AffectedLog = [],
             NotAffectedLog = new List<PoolHouseLinkedLogResponse> { new() { LinkGroup = 2, HomeScore = 33, AwayScore = 44, LinkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>() } }
         };
 

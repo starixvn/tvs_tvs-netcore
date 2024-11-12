@@ -60,7 +60,7 @@ public class HandlerServiceImp(
         var results = new List<Result>();
         if (!model.Tickets.Any())
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         await CallCashOutApi(model.Tickets);
@@ -84,7 +84,7 @@ public class HandlerServiceImp(
     {
         if (string.IsNullOrWhiteSpace(invalidTransIds))
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         var results = new List<Result>

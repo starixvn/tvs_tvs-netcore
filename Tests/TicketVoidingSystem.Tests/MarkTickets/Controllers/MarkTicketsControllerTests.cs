@@ -71,7 +71,7 @@ public class MarkTicketsControllerTests
         var excelFileModel = new ExcelFileModel
         {
             FileName = "AA",
-            ContentAsByteArray = new byte[] { }
+            ContentAsByteArray = []
         };
         var request = new ExportExcelRequest();
         var mediator = Substitute.For<IMediator>();
@@ -98,7 +98,7 @@ public class MarkTicketsControllerTests
         var excelFileModel = new ExcelFileModel
         {
             FileName = "AA",
-            ContentAsByteArray = new byte[] { }
+            ContentAsByteArray = []
         };
         var request = new ExportExcelDetailTicketsRequest();
         var mediator = Substitute.For<IMediator>();

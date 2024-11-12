@@ -75,7 +75,7 @@ public class VoidByBetIdControllerTest
         var excelFileModel = new ExcelFileModel
         {
             FileName = "Void_By_Bet_ID_2017_07_27_10_10_10",
-            ContentAsByteArray = new byte[] { }
+            ContentAsByteArray = []
         };
         var request = new ExportExcelRequest();
         var mediator = Substitute.For<IMediator>();

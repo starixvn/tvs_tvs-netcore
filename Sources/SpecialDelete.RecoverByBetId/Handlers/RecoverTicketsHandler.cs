@@ -28,7 +28,7 @@ public class RecoverTicketsHandler(
 
     private async Task<IEnumerable<Result>> GetResultsRecoverTicketsSuccess(RecoverTicketsModel model, RecoverTicketsQuery message)
     {
-        return model.Tickets.Any() ? await ContactUser(model, message) : Enumerable.Empty<Result>();
+        return model.Tickets.Any() ? await ContactUser(model, message) : [];
     }
 
     private static IEnumerable<Result> GetResultsRecoverTicketsFail(RecoverTicketsModel model)
@@ -36,7 +36,7 @@ public class RecoverTicketsHandler(
         var results = new List<Result>();
         if (model.Validation.IsSuccessful)
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
         results.Add(new Result { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg });
 

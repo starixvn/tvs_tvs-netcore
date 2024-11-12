@@ -4,7 +4,7 @@ namespace SpecialDelete.VoidByBetId.ViewModels;
 
 public class TicketsViewModel
 {
-    public List<Group<TicketViewModel>> Groups { get; set; } = new();
+    public List<Group<TicketViewModel>> Groups { get; set; } = [];
     public string InvalidTransIds { get; set; }
     public string MovedTransIds { get; set; }
     public IEnumerable<BetId> Tickets { get; set; }

@@ -48,7 +48,7 @@ public class BetTypesRepositoryImp(IDynamicRepository repository) : BetTypesRepo
                     .Select(group => new GroupBetTypeModel { GroupName = group.Key, BetTypes = group.ToList() })
                     .OrderBy(gr => gr.GroupName)
                     .ToList()
-                : new List<GroupBetTypeModel>()
+                : []
         };
     }
 

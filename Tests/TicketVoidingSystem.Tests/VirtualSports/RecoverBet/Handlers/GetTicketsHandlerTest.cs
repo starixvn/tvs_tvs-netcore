@@ -20,14 +20,14 @@ public class GetTicketsHandlerTest
         // Arrange
         var expected = new RecoverTicketsViewModel
         {
-            Groups = new List<Group<TicketViewModel>>
-            {
+            Groups =
+            [
                 new()
                 {
                     Name = "TEST",
                     Tickets = new List<TicketViewModel> { new() { BetId = "696969" } }
                 }
-            },
+            ],
             InvalidTransIds = string.Empty,
             MovedTransIds = string.Empty
         };

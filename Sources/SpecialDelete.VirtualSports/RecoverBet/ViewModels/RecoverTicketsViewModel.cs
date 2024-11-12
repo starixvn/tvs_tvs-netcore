@@ -5,7 +5,7 @@ namespace SpecialDelete.VirtualSports.RecoverBet.ViewModels;
 
 public class RecoverTicketsViewModel
 {
-    public List<Group<TicketViewModel>> Groups { get; set; } = new();
+    public List<Group<TicketViewModel>> Groups { get; set; } = [];
 
     public string InvalidTransIds { get; set; }
 

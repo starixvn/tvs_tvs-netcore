@@ -21,7 +21,7 @@ public class SendDataOicHandlerTest
         var chinaViewQuery = new SendFileQuery { IsChinaView = true };
         var request = new SendDataToOicRequest
         {
-            Queries = new[] { chinaViewQuery }
+            Queries = [chinaViewQuery]
         };
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var sendDataToOicService = Substitute.For<SendDataToOicService>();
@@ -45,7 +45,7 @@ public class SendDataOicHandlerTest
         var jollySportQuery = new SendFileQuery { IsChinaView = false, SpecialPlatform = 2 };
         var request = new SendDataToOicRequest
         {
-            Queries = new[] { jollySportQuery }
+            Queries = [jollySportQuery]
         };
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var sendDataToOicService = Substitute.For<SendDataToOicService>();
@@ -69,7 +69,7 @@ public class SendDataOicHandlerTest
         var chinaViewQuery = new SendFileQuery { IsChinaView = false };
         var request = new SendDataToOicRequest
         {
-            Queries = new[] { chinaViewQuery }
+            Queries = [chinaViewQuery]
         };
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var sendDataToOicService = Substitute.For<SendDataToOicService>();
@@ -94,7 +94,7 @@ public class SendDataOicHandlerTest
         var normalQuery = new SendFileQuery { IsChinaView = false };
         var request = new SendDataToOicRequest
         {
-            Queries = new[] { chinaViewQuery, normalQuery }
+            Queries = [chinaViewQuery, normalQuery]
         };
         var sendDataToOicService = Substitute.For<SendDataToOicService>();
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();

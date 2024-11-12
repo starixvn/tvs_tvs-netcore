@@ -54,7 +54,7 @@ public class GetRequestsServiceImp(
         var archivedRequestInfoJson = await GetRequestInfoInArchivedTable(query);
         if (string.IsNullOrWhiteSpace(archivedRequestInfoJson))
         {
-            return (Enumerable.Empty<RequestModel>(), Enumerable.Empty<string>());
+            return ([], []);
         }
 
         query.RequestInfoJson = archivedRequestInfoJson;

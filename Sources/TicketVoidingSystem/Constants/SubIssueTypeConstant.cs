@@ -25,5 +25,6 @@ public static class SubIssueTypeConstant
     public const int AbnormalAccount_Abnormal = 39;
     public const int AbnormalAccount_ABBet = 104;
 
-    public static readonly ImmutableArray<int> RemovedList = ImmutableArray.Create(AbnormalBet_Abnormal, AbnormalBet_ABBet, AbnormalAccount_Abnormal, AbnormalAccount_ABBet);
+    public static readonly ImmutableArray<int> RemovedList = [AbnormalBet_Abnormal, AbnormalBet_ABBet, AbnormalAccount_Abnormal, AbnormalAccount_ABBet
+    ];
 }

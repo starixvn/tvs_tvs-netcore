@@ -27,7 +27,7 @@ public class MapTicketsExcelServiceImp(
     {
         if (!tickets.Any())
         {
-            return Enumerable.Empty<Group<VoidedTicketModel>>();
+            return [];
         }
 
         var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay);

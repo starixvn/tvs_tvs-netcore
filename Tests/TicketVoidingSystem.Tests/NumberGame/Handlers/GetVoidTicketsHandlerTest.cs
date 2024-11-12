@@ -79,7 +79,7 @@ public class GetVoidTicketsHandlerTest
         var repository = Substitute.For<Repository>();
         repository.GetVoidTickets(new GetVoidTicketsQuery())
             .ReturnsForAnyArgs(new GetTicketsModel
-            { Tickets = new List<GetTicketModel> { new() { TransId = 123 } } });
+            { Tickets = [new() { TransId = 123 }] });
 
         return new GetVoidTicketsHandler(
             sessionService,

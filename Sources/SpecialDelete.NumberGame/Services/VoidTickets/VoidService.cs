@@ -43,7 +43,7 @@ public class VoidServiceImp(
                 ErrorMsg = exception.Message
             };
 
-            return (Enumerable.Empty<TicketEmailModel>(), validation);
+            return ([], validation);
         }
     }
 

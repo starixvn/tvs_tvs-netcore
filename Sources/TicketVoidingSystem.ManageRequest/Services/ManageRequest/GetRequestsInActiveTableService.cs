@@ -107,8 +107,8 @@ public class GetRequestsInActiveTableServiceImp(
         return issueTypeId == IssueTypeConstant.AbnormalBet && filterBy is null;
     }
 
-    private static readonly HashSet<int> SimpleMatchIssueTypes = new()
-    {
+    private static readonly HashSet<int> SimpleMatchIssueTypes =
+    [
         IssueTypeConstant.DangerAccepted,
         IssueTypeConstant.WrongHDP,
         IssueTypeConstant.Wrong1stHDP,
@@ -117,5 +117,5 @@ public class GetRequestsInActiveTableServiceImp(
         IssueTypeConstant.RedCard,
         IssueTypeConstant.EarlyKickOffTime,
         IssueTypeConstant.WrongKickOffTime
-    };
+    ];
 }

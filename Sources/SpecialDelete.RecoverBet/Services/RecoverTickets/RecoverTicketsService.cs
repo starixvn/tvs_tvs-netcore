@@ -44,7 +44,7 @@ public class RecoverTicketsService(
             return new RecoverTicketsModel
             {
                 Validation = validation,
-                Tickets = Enumerable.Empty<RecoverTicketModel>()
+                Tickets = []
             };
         }
     }

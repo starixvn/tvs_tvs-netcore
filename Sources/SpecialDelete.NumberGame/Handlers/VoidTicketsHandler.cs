@@ -20,7 +20,9 @@ public class VoidTicketsHandler(VoidService voidService, LoggingService loggingS
         var model = await voidService.VoidTickets(request);
         return model.Validation.IsSuccessful ?
             await ContactUsers(request, model.Tickets) :
-            new List<Result> { new() { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg } };
+            [
+                new() { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg }
+            ];
     }
 
     private async Task<List<Result>> ContactUsers(VoidTicketsQuery query, IEnumerable<TicketEmailModel> tickets)

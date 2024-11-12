@@ -35,7 +35,7 @@ public class GetPoolHouseTicketServiceTests
         {
             TotalSingle = 0,
             TotalParlay = 0,
-            Groups = Enumerable.Empty<Group<TicketViewModel>>()
+            Groups = []
         };
 
         // Act
@@ -55,7 +55,7 @@ public class GetPoolHouseTicketServiceTests
         {
             TotalSingle = 1,
             TotalParlay = 0,
-            Groups = Enumerable.Empty<Group<TicketViewModel>>()
+            Groups = []
         };
 
         // Act

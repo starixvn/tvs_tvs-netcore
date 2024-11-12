@@ -159,9 +159,9 @@ public class MailResultServiceTests
         // Arrange
         var model = new CombineMessageModel
         {
-            Results = new List<Result>(),
-            SuccessfulLicensees = new List<string>(),
-            FailedLicensees = new List<string>()
+            Results = [],
+            SuccessfulLicensees = [],
+            FailedLicensees = []
         };
         var expected = new List<Result>
         {
@@ -195,9 +195,9 @@ public class MailResultServiceTests
         // Arrange
         var model = new CombineMessageModel
         {
-            Results = new List<Result>(),
-            SuccessfulLicensees = new List<string> { "siteNameSuccess" },
-            FailedLicensees = new List<string> { "siteNameFails" }
+            Results = [],
+            SuccessfulLicensees = ["siteNameSuccess"],
+            FailedLicensees = ["siteNameFails"]
         };
         const string siteNameSuccess = "siteNameSuccess";
         const string siteNameFails = "siteNameFails";

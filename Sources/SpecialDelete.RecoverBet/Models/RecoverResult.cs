@@ -8,5 +8,5 @@ public class RecoverResult
 {
     public bool IsSettledBet { get; set; }
 
-    public List<Result> Results { get; set; } = new();
+    public List<Result> Results { get; set; } = [];
 }

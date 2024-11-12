@@ -5,7 +5,7 @@ namespace SpecialDelete.VirtualSports.VoidParlaySub.ViewModels;
 
 public class TicketsViewModel
 {
-    public List<Group<TicketViewModel>> Groups { get; set; } = new();
+    public List<Group<TicketViewModel>> Groups { get; set; } = [];
 
     public int TotalItems { get; set; }
 

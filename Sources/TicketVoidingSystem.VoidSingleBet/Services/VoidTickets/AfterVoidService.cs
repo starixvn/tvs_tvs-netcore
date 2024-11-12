@@ -35,7 +35,7 @@ public class AfterVoidServiceImp(
     {
         if (!voidResult.Tickets.Any())
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         return await ExecuteWhenHaveVoidTickets(query, voidResult, warningCricket);
@@ -117,7 +117,7 @@ public class AfterVoidServiceImp(
     {
         if (voidResult.Validation.ErrorCode == 0)
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         return new List<Result> { new() { ErrorCode = voidResult.Validation.ErrorCode, ErrorMsg = voidResult.Validation.ErrorMsg } };

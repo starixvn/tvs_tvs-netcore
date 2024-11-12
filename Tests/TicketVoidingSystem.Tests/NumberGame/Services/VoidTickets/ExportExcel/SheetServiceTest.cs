@@ -21,7 +21,7 @@ public class SheetServiceTest
         var repository = Substitute.For<Repository>();
         var model = new GetTicketsModel
         {
-            Tickets = new List<GetTicketModel> { new() { TransId = 132 } }
+            Tickets = [new() { TransId = 132 }]
         };
         var ticketViewModel = new TicketViewModel
         { Choice = "<span>Choice</span><div class='match'></div><div class='league'></div>" };

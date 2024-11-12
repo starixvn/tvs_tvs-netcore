@@ -51,7 +51,7 @@ public class GetDetailTicketsHandler(
     private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupTicketsViewModel(IEnumerable<GetTicketModel> tickets, GetDetailTicketsQuery message)
     {
         var pagingTickets = pagingService.Paging(tickets, message.PageIndex, message.PageSize);
-        return pagingTickets.Any() ? await CreateGroupTicketsViewModel(pagingTickets) : Enumerable.Empty<Group<TicketViewModel>>();
+        return pagingTickets.Any() ? await CreateGroupTicketsViewModel(pagingTickets) : [];
     }
 
     private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupTicketsViewModel(IEnumerable<GetTicketModel> pagingTickets)

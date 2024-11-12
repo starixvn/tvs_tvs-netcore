@@ -4,7 +4,7 @@ namespace SpecialDelete.NumberGame.ViewModels;
 
 public class TicketsViewModel
 {
-    public List<Group<TicketViewModel>> Groups { get; set; } = new();
+    public List<Group<TicketViewModel>> Groups { get; set; } = [];
 
     public string InvalidTransIds { get; set; }
 

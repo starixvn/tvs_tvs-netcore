@@ -104,7 +104,7 @@ public class CheckValidUsernamesHandler(
 
         foreach (var account in accounts)
         {
-            account.VoidTickets = Enumerable.Empty<TicketCalculateWinLostAccount>();
+            account.VoidTickets = [];
         }
     }
 }

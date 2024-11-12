@@ -79,7 +79,7 @@ public class InsertAutoVoidRequestQueueServiceImp(IDynamicRepository repository)
             return new List<int> { wrongOfferedNameInfo.MatchId };
         }
 
-        return Enumerable.Empty<int>();
+        return [];
     }
 
     private static bool CheckCanInsertAutoVoidRequestQueue(int? actionId)

@@ -21,7 +21,7 @@ public class GetTicketsHandlerTest
         var message = new GetTicketsRequest { MatchId = 123 };
         var model = new GetTicketsModel
         {
-            Tickets = new List<GetTicketModel> { new() { GroupName = "AAA" } }
+            Tickets = [new() { GroupName = "AAA" }]
         };
         var groupTickets = new List<Group<GetTicketModel>>
         {

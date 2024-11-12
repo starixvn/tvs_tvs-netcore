@@ -38,7 +38,7 @@ public class GetTicketsHandler(
         var tickets = pagingService.Paging(data, message.PageIndex, message.PageSize);
         if (!tickets.Any())
         {
-            return Enumerable.Empty<Group<GetTicketModel>>();
+            return [];
         }
 
         var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay);

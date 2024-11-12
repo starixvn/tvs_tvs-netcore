@@ -38,7 +38,7 @@ public class HandleServiceImp(
             return new VoidTicketsModel
             {
                 Validation = validation,
-                Tickets = Enumerable.Empty<TicketEmailModel>()
+                Tickets = []
             };
         }
 

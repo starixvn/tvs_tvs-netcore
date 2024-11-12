@@ -74,7 +74,7 @@ public class VoidByCurrencyControllerTest
         var excelFileModel = new ExcelFileModel
         {
             FileName = "AA",
-            ContentAsByteArray = new byte[] { }
+            ContentAsByteArray = []
         };
         mediator.Send(Arg.Any<ExportExcelRequest>()).ReturnsForAnyArgs(excelFileModel);
         var request = new ExportExcelRequest { MatchId = 123465 };

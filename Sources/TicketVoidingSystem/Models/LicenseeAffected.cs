@@ -13,8 +13,8 @@ public class AffectedLicensee
 
 public class AffectedLicenseeList
 {
-    public List<AffectedLicensee> LicenseeAffectedList { get; set; } = new()
-    {
+    public List<AffectedLicensee> LicenseeAffectedList { get; set; } =
+    [
         new()
         {
             Group = "normal",
@@ -23,6 +23,7 @@ public class AffectedLicenseeList
             Color = "#0a0c0f",
             LicenseesName = ""
         },
+
         new()
         {
             Group = "chinaView",
@@ -30,43 +31,48 @@ public class AffectedLicenseeList
             Message = "China View Licensee Affected List: ",
             Color = "#dd5edd",
             LicenseesName = ""
-        },new()
+        },
+        new()
         {
             Group = "jollyView",
             Show = false,
             Message = "Jolly Sports Licensee Affected List: ",
             Color = "goldenrod",
             LicenseesName = ""
-        },new()
+        },
+        new()
         {
             Group = "jollySportCv",
             Show = false,
             Message = "JollySportsCV Licensee Affected List: ",
             Color = "#066924",
             LicenseesName = ""
-        },new()
+        },
+        new()
         {
             Group = "instant",
             Show = false,
             Message = "Instant Payout Licensee Affected List: ",
             Color = "#ff0000",
             LicenseesName = ""
-        },new()
+        },
+        new()
         {
             Group = "cashOut",
             Show = false,
             Message = "Cash Out Licensee Affected List: ",
             Color = "#5548cc",
             LicenseesName = ""
-        },new()
+        },
+        new()
         {
             Group = "cancelCashOut",
             Show = false,
             Message = "Cancel Cash Out Licensee Affected List: ",
             Color = "#0a0c0f",
             LicenseesName = ""
-        }
-        ,new()
+        },
+        new()
         {
             Group = "timeMachine",
             Show = false,
@@ -74,5 +80,5 @@ public class AffectedLicenseeList
             Color = "#6f3096",
             LicenseesName = ""
         }
-    };
+    ];
 }

@@ -23,11 +23,11 @@ public class GetTicketsServiceTest
         // Arrange
         var expected = new GetTicketsModel
         {
-            Tickets = new List<GetTicketModel>
-            {
+            Tickets =
+            [
                 new() { TransId = 1 },
                 new() { TransId = 2 }
-            }
+            ]
         };
         var repository = Substitute.For<Repository>();
         var displayTicketService = Substitute.For<TicketService>();

@@ -87,7 +87,7 @@ public static class ObjectToXMLExtension
             return model.WrongScore.Split('-');
         }
 
-        return new[] { string.Empty, string.Empty };
+        return [string.Empty, string.Empty];
     }
 
     public static string ToEventDangerAcceptedXml(this IEnumerable<DangerAcceptedViewModel> models) // NOSONAR

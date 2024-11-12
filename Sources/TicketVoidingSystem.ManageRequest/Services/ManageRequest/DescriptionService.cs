@@ -123,7 +123,7 @@ public class DescriptionServiceImp(DescriptionElementService elementService) : D
 
     private string BuildVoidArchivedTicket(RequestDescription item)
     {
-        return elementService.BuildTotal(item.TotalSingle, item.TotalParlay, Enumerable.Empty<string>());
+        return elementService.BuildTotal(item.TotalSingle, item.TotalParlay, []);
     }
 
     private string BuildProducts(RequestDescription item)

@@ -4,7 +4,7 @@ namespace SpecialDelete.CashOutTransaction.Common.ViewModels;
 
 public class TicketsViewModel<T>
 {
-    public List<Group<T>> Groups { get; set; } = new();
+    public List<Group<T>> Groups { get; set; } = [];
 
     public string InvalidTransIds { get; set; }
 

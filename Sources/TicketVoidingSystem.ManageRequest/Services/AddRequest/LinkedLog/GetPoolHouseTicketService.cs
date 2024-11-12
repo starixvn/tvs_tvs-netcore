@@ -36,7 +36,7 @@ public class GetPoolHouseTicketServiceImp(MapTicketsService mapTicketsService, P
     {
         if (!originTickets.Any())
         {
-            return Enumerable.Empty<Group<GetTicketModel>>();
+            return [];
         }
 
         return GenerateGroupWhenHaveTicket(originTickets, originTickets);
@@ -46,7 +46,7 @@ public class GetPoolHouseTicketServiceImp(MapTicketsService mapTicketsService, P
     {
         if (!originTickets.Any())
         {
-            return Enumerable.Empty<Group<GetTicketModel>>();
+            return [];
         }
 
         var parlayTicketsPoolHouse = afterPagingTickets.Where(ticket => IsParlayTicketsPoolHouse(ticket.IsMixParlay, ticket.GroupName)).ToList();

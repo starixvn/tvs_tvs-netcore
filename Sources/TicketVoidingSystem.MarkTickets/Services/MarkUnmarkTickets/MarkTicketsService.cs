@@ -51,7 +51,7 @@ public class MarkTicketsServiceImp(IDynamicRepository repository, SessionService
         var ticketsInServer = query.Tickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
         if (!ticketsInServer.Any())
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         criteria.SiteDbGroupId = siteDbGroupId;

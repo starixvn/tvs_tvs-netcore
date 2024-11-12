@@ -25,7 +25,7 @@ public class RenderRequestServiceImp(
         var requestModel = groupRequest.RequestModels.First();
         var viewModel = mapper.Map<RequestViewModel>(requestModel);
         viewModel.CreatedDate = requestModel.CreatedDate.ZoneManila();
-        viewModel.Details = new List<RequestEventViewModel>();
+        viewModel.Details = [];
         AddEventDetail(viewModel, groupRequest.RequestModels);
 
         return viewModel;
@@ -35,7 +35,7 @@ public class RenderRequestServiceImp(
     {
         var viewModel = mapper.Map<RequestViewModel>(item);
         viewModel.CreatedDate = item.CreatedDate.ZoneManila();
-        viewModel.Details = new List<RequestEventViewModel>();
+        viewModel.Details = [];
         AddEventDetailExportExcel(viewModel, item);
 
         return viewModel;

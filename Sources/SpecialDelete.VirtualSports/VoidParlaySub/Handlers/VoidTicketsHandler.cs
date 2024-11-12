@@ -32,7 +32,7 @@ public class VoidTicketsHandler(
         var results = new List<Result>();
         if (!model.Tickets.Any())
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         results.AddRange(await ContactUser(query, model));
@@ -44,7 +44,7 @@ public class VoidTicketsHandler(
     {
         if (model.Validation.IsSuccessful)
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         var results = new List<Result>

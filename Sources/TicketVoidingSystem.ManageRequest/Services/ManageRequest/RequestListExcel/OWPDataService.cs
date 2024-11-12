@@ -36,7 +36,7 @@ public class OWPDataServiceImp(IDynamicRepository repository, LoggingService log
         catch (Exception ex)
         {
             await loggingService.ErrorAsync(nameof(OWPDataService.GetIPTV), ex);
-            return Enumerable.Empty<OWPData>();
+            return [];
         }
     }
 }

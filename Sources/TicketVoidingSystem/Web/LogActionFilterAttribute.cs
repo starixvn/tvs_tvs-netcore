@@ -19,7 +19,7 @@ namespace TicketVoidingSystem.Web;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class LogActionFilterAttribute(ILogger logger) : ActionFilterAttribute
 {
-    private readonly List<string> excludePatterns = new() { "^.*/Auth.*$", "^.*/healthcheck.*$", "^.*recheckin.*$" };
+    private readonly List<string> excludePatterns = ["^.*/Auth.*$", "^.*/healthcheck.*$", "^.*recheckin.*$"];
 
     public override async void OnActionExecuting(ActionExecutingContext context)
     {

@@ -11,5 +11,5 @@ public class TicketCountInfo
 
     public int OutstandingSingleCount { get; set; }
     public int OutstandingParlayCount { get; set; }
-    public HashSet<string> Members { get; set; } = new();
+    public HashSet<string> Members { get; set; } = [];
 }

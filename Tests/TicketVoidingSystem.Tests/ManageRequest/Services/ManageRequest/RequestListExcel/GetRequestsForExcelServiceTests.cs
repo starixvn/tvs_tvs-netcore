@@ -76,14 +76,15 @@ public class GetRequestsForExcelServiceTests
         var renderedViewModels = new RequestViewModel
         {
             BettypeNames = new List<string> { "av" },
-            Details = new List<RequestEventViewModel>
-            {
+            Details =
+            [
                 new()
                 {
                     MatchId = 1
                 },
+
                 new()
-            },
+            ],
             CalcFullTime = new DateTime(2023, 2, 2, 2, 2, 2),
             CalcHalfTime = new DateTime(2023, 2, 2, 2, 2, 2)
         };

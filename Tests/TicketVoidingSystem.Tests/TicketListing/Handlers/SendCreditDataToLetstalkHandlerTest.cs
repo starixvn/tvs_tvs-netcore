@@ -39,7 +39,7 @@ public class SendCreditDataToLetstalkHandlerTest
         getTicketsService.GetTicketsForExportExcel(request).ReturnsForAnyArgs(tickets);
         letstalkService.SendToGroupTicketListing(default, default).ReturnsForAnyArgs(new Result { ErrorCode = errorCodeSentDataToSiteNormal, ErrorMsg = errorMsgSentDataToSiteNormal });
         letstalkService.SendToGroupTicketListing777(default, default).ReturnsForAnyArgs(new Result { ErrorCode = errorCodeSentDataToSite777, ErrorMsg = errorMsgSentDataToSite777 });
-        excelService.GenerateContentAsByteArray(default!, default).ReturnsForAnyArgs(new byte[] { });
+        excelService.GenerateContentAsByteArray(default!, default).ReturnsForAnyArgs([]);
 
         var handler = new SendCreditDataToLetstalkHandler(excelService, letstalkService, getTicketsService);
 

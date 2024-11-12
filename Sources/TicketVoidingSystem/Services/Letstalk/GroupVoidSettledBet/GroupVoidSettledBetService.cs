@@ -39,14 +39,14 @@ public class GroupVoidSettledBetServiceImp(
     {
         if (!tickets.Any())
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         var contents = ticketInfo.IsMemberTemplate ?
             messageContentWithMemberTemplateService.Create(ticketInfo, tickets) : new List<string> { messageContentSingleService.Create(ticketInfo, tickets) };
         if (!contents.Any() || contents.All(string.IsNullOrWhiteSpace))
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         return await SendMultipleMessage(letstalkModel, contents);

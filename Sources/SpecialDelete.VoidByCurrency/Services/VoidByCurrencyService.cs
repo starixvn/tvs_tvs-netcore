@@ -88,7 +88,7 @@ public class VoidByCurrencyServiceImp(
     {
         if (!(model.Tickets?.Count() > 0))
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         await cashOutApiService.VoidBetForCashOutBasketball(model.Tickets);
@@ -100,7 +100,7 @@ public class VoidByCurrencyServiceImp(
     {
         if (model.Validation.ErrorCode == 0)
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         var results = new List<Result> { new() { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg } };
@@ -121,7 +121,7 @@ public class VoidByCurrencyServiceImp(
         catch (Exception exception)
         {
             await loggingService.ErrorAsync(query.MatchId.ToString(), exception);
-            results = new List<Result> { new() { ErrorCode = ErrorCode.SendMessageOrEmailFail, ErrorMsg = exception.Message } };
+            results = [new() { ErrorCode = ErrorCode.SendMessageOrEmailFail, ErrorMsg = exception.Message }];
         }
 
         return results;

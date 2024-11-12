@@ -49,7 +49,7 @@ public class VoidServiceImp(
             return new SubmittedTicketsModel<TicketEmailModel>
             {
                 Validation = validation,
-                Tickets = Enumerable.Empty<TicketEmailModel>()
+                Tickets = []
             };
         }
     }
