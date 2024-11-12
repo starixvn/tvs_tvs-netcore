@@ -10,15 +10,9 @@ public class GetBalanceUpDayRequest : IRequest<BalanceUp>
 {
 }
 
-public class GetBalanceUpDayHandler : IRequestHandler<GetBalanceUpDayRequest, BalanceUp>
+public class GetBalanceUpDayHandler(BalanceUpService balanceUpService)
+    : IRequestHandler<GetBalanceUpDayRequest, BalanceUp>
 {
-    private readonly BalanceUpService balanceUpService;
-
-    public GetBalanceUpDayHandler(BalanceUpService balanceUpService)
-    {
-        this.balanceUpService = balanceUpService;
-    }
-
     public async Task<BalanceUp> Handle(GetBalanceUpDayRequest request, CancellationToken cancellationToken)
     {
         return await balanceUpService.GetBalanceUpDay();

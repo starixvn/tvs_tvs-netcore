@@ -9,17 +9,11 @@ public class GetFilterModelRequest : IRequest<FilterViewModel>
 {
 }
 
-public class GetFilterModelHandler : IRequestHandler<GetFilterModelRequest, FilterViewModel>
+public class GetFilterModelHandler(
+    FilterAreaService filterAreaService,
+    FilterCurrencyLicenseeService filterCurrencyLicenseeService)
+    : IRequestHandler<GetFilterModelRequest, FilterViewModel>
 {
-    private readonly FilterAreaService filterAreaService;
-    private readonly FilterCurrencyLicenseeService filterCurrencyLicenseeService;
-
-    public GetFilterModelHandler(FilterAreaService filterAreaService, FilterCurrencyLicenseeService filterCurrencyLicenseeService)
-    {
-        this.filterAreaService = filterAreaService;
-        this.filterCurrencyLicenseeService = filterCurrencyLicenseeService;
-    }
-
     public async Task<FilterViewModel> Handle(GetFilterModelRequest request, CancellationToken cancellationToken)
     {
         var filterViewModel = new FilterViewModel

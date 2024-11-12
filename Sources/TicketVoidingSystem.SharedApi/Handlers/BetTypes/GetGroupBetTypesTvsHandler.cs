@@ -12,15 +12,9 @@ public class GetGroupBetTypesTvsRequest : BetTypeQueryModel, IRequest<GroupBetTy
 {
 }
 
-public class GetGroupBetTypesTvsHandler : IRequestHandler<GetGroupBetTypesTvsRequest, GroupBetTypesViewModel>
+public class GetGroupBetTypesTvsHandler(BetTypesRepository betTypesRepository)
+    : IRequestHandler<GetGroupBetTypesTvsRequest, GroupBetTypesViewModel>
 {
-    private readonly BetTypesRepository betTypesRepository;
-
-    public GetGroupBetTypesTvsHandler(BetTypesRepository betTypesRepository)
-    {
-        this.betTypesRepository = betTypesRepository;
-    }
-
     public async Task<GroupBetTypesViewModel> Handle(GetGroupBetTypesTvsRequest request, CancellationToken cancellationToken)
     {
         var betTypesHaveTickets = await betTypesRepository.GetBetTypesHaveTicketsForTvs(request.MatchId, request.IsGetCancelCashOut, request.FromTransDate, request.ToTransDate);

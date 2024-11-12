@@ -13,15 +13,9 @@ public class GetLetstalkRequest : IRequest<IEnumerable<LetstalkModel>>
     public int RequestId { get; set; }
 }
 
-public class GetLetstalkHandler : IRequestHandler<GetLetstalkRequest, IEnumerable<LetstalkModel>>
+public class GetLetstalkHandler(LetstalkService letstalkService)
+    : IRequestHandler<GetLetstalkRequest, IEnumerable<LetstalkModel>>
 {
-    private readonly LetstalkService letstalkService;
-
-    public GetLetstalkHandler(LetstalkService letstalkService)
-    {
-        this.letstalkService = letstalkService;
-    }
-
     public async Task<IEnumerable<LetstalkModel>> Handle(GetLetstalkRequest request, CancellationToken cancellationToken)
     {
         return await letstalkService.GetLetstalkModel(request.RequestId, request.BroadcastSessionId);

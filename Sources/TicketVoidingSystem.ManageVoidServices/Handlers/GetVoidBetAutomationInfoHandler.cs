@@ -10,15 +10,9 @@ public class GetVoidBetAutomationInfoRequest : VoidBetAutomationModel, IRequest<
 {
 }
 
-public class GetVoidBetAutomationInfoHandler : IRequestHandler<GetVoidBetAutomationInfoRequest, VoidBetAutomationModel>
+public class GetVoidBetAutomationInfoHandler(AfterVoidService afterVoidService)
+    : IRequestHandler<GetVoidBetAutomationInfoRequest, VoidBetAutomationModel>
 {
-    private readonly AfterVoidService afterVoidService;
-
-    public GetVoidBetAutomationInfoHandler(AfterVoidService afterVoidService)
-    {
-        this.afterVoidService = afterVoidService;
-    }
-
     public async Task<VoidBetAutomationModel> Handle(GetVoidBetAutomationInfoRequest request, CancellationToken cancellationToken)
     {
         return await afterVoidService.GetVoidBetAutomationServiceInfo(request);

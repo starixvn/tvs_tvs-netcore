@@ -12,19 +12,12 @@ public interface SendEmailRecoverService
     Task SendEmail(MailRecoverViewModel viewModel, IEnumerable<TicketRecoverEmailModel> tickets);
 }
 
-public class SendEmailRecoverServiceImp : SendEmailRecoverService
+public class SendEmailRecoverServiceImp(
+    SitesEmailService sitesEmailService,
+    RecoverEmailContentService recoverEmailContentService,
+    EmailSimpleService emailSimpleService)
+    : SendEmailRecoverService
 {
-    private readonly SitesEmailService sitesEmailService;
-    private readonly RecoverEmailContentService recoverEmailContentService;
-    private readonly EmailSimpleService emailSimpleService;
-
-    public SendEmailRecoverServiceImp(SitesEmailService sitesEmailService, RecoverEmailContentService recoverEmailContentService, EmailSimpleService emailSimpleService)
-    {
-        this.sitesEmailService = sitesEmailService;
-        this.recoverEmailContentService = recoverEmailContentService;
-        this.emailSimpleService = emailSimpleService;
-    }
-
     public async Task SendEmail(MailRecoverViewModel viewModel, IEnumerable<TicketRecoverEmailModel> tickets)
     {
         var sites = await sitesEmailService.GetSites();

@@ -9,15 +9,9 @@ public class GetReducedOverBetTypesRequest : IRequest<IEnumerable<ReducedOverBet
     public int MatchId { get; set; }
 }
 
-public class GetReducedOverBetTypesHandler : IRequestHandler<GetReducedOverBetTypesRequest, IEnumerable<ReducedOverBetTypesModel>>
+public class GetReducedOverBetTypesHandler(ReducedOverBetTypesService reducedOverBetTypesService)
+    : IRequestHandler<GetReducedOverBetTypesRequest, IEnumerable<ReducedOverBetTypesModel>>
 {
-    private readonly ReducedOverBetTypesService reducedOverBetTypesService;
-
-    public GetReducedOverBetTypesHandler(ReducedOverBetTypesService reducedOverBetTypesService)
-    {
-        this.reducedOverBetTypesService = reducedOverBetTypesService;
-    }
-
     public async Task<IEnumerable<ReducedOverBetTypesModel>> Handle(GetReducedOverBetTypesRequest request, CancellationToken cancellationToken)
     {
         return await reducedOverBetTypesService.GetBetTypes(request.MatchId);

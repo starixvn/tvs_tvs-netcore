@@ -8,15 +8,8 @@ namespace TicketVoidingSystem.SharedApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class MessageTemplateController : ControllerBase
+public class MessageTemplateController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public MessageTemplateController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetTemplateSettings() => Ok(await mediator.Send(new GetTemplateSettingRequest()));
 

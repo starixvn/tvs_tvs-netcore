@@ -12,17 +12,11 @@ public interface SendLetstalkAfterAddService
     Task Execute(AbnormalBetViewModel model, int requestId);
 }
 
-public class SendLetstalkAfterAddServiceImp : SendLetstalkAfterAddService
+public class SendLetstalkAfterAddServiceImp(
+    SessionService sessionService,
+    NotificationLetstalkService notificationLetstalkService)
+    : SendLetstalkAfterAddService
 {
-    private readonly SessionService sessionService;
-    private readonly NotificationLetstalkService notificationLetstalkService;
-
-    public SendLetstalkAfterAddServiceImp(SessionService sessionService, NotificationLetstalkService notificationLetstalkService)
-    {
-        this.sessionService = sessionService;
-        this.notificationLetstalkService = notificationLetstalkService;
-    }
-
     public async Task Execute(AbnormalBetViewModel model, int requestId)
     {
         if (model is { SubIssueTypeId: SubIssueTypeConstant.FixGame or SubIssueTypeConstant.SystemFormulaBet })

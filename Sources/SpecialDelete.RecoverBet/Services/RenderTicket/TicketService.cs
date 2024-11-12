@@ -12,15 +12,8 @@ public interface ITicketService
     TicketViewModel Render(GetTicketModel item);
 }
 
-public class TicketService : ITicketService
+public class TicketService(IBetListCoreService betListService) : ITicketService
 {
-    private readonly IBetListCoreService betListService;
-
-    public TicketService(IBetListCoreService betListService)
-    {
-        this.betListService = betListService;
-    }
-
     public TicketViewModel Render(GetTicketModel item, bool isReadOnly)
     {
         var ticket = Render(item);

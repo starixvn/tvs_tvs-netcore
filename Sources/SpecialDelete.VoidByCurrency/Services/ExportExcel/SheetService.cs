@@ -20,22 +20,12 @@ public interface SheetService
     void SetStyle(ExcelWorksheet worksheet);
 }
 
-public class SheetServiceImp : SheetService
+public class SheetServiceImp(
+    GetTicketsService getTicketsService,
+    TicketService ticketHtmlService,
+    ConvertService convertService)
+    : SheetService
 {
-    private readonly GetTicketsService getTicketsService;
-    private readonly TicketService ticketHtmlService;
-    private readonly ConvertService convertService;
-
-    public SheetServiceImp(
-        GetTicketsService getTicketsService,
-        TicketService ticketHtmlService,
-        ConvertService convertService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.ticketHtmlService = ticketHtmlService;
-        this.convertService = convertService;
-    }
-
     public void AddTitle(ExcelWorksheet worksheet, int matchId)
     {
         worksheet.Cells[1, 1].Value = $"Void By Currency - MatchId: {matchId}";

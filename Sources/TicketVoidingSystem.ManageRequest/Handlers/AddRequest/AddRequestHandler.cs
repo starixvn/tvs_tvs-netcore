@@ -10,17 +10,9 @@ public class AddRequest : AddRequestQuery, IRequest<Result>
 {
 }
 
-public class AddRequestHandler : IRequestHandler<AddRequest, Result>
+public class AddRequestHandler(ResultCacheService resultCacheService, AddRequestService addRequestService)
+    : IRequestHandler<AddRequest, Result>
 {
-    private readonly ResultCacheService resultCacheService;
-    private readonly AddRequestService addRequestService;
-
-    public AddRequestHandler(ResultCacheService resultCacheService, AddRequestService addRequestService)
-    {
-        this.resultCacheService = resultCacheService;
-        this.addRequestService = addRequestService;
-    }
-
     public async Task<Result> Handle(AddRequest request, CancellationToken cancellationToken)
     {
         if (await resultCacheService.IsExistResult(request.Guid))

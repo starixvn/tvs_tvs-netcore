@@ -14,12 +14,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
 
 public class LinkedLogForUIServiceTests
 {
-    private readonly LinkedLogForUIServiceImp linkedLogForUiService;
-
-    public LinkedLogForUIServiceTests()
-    {
-        linkedLogForUiService = new LinkedLogForUIServiceImp();
-    }
+    private readonly LinkedLogForUIServiceImp linkedLogForUiService = new();
 
     #region Build
 

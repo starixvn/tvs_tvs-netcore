@@ -13,21 +13,13 @@ public interface LogInfoService
     Task<GetLogInfoViewModel> GetLogInfo(GetLogInfoQuery query);
 }
 
-public class LogInfoServiceImp : LogInfoService
+public class LogInfoServiceImp(
+    IMapper mapper,
+    IDynamicRepository repository,
+    SessionService session,
+    LogInfoHelperService logInfoHelperService)
+    : LogInfoService
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly SessionService session;
-    private readonly LogInfoHelperService logInfoHelperService;
-
-    public LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, SessionService session, LogInfoHelperService logInfoHelperService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.session = session;
-        this.logInfoHelperService = logInfoHelperService;
-    }
-
     public async Task<GetLogInfoViewModel> GetLogInfo(GetLogInfoQuery query)
     {
         var criteria = await GetLogInfoCriteria(query);

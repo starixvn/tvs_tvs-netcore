@@ -10,15 +10,9 @@ public class ExportTicketAbnormalBet : CheckValidTransIdsModel, IRequest<ExcelFi
 {
 }
 
-public class ExportTicketAbnormalBetHandler : IRequestHandler<ExportTicketAbnormalBet, ExcelFileModel>
+public class ExportTicketAbnormalBetHandler(ExcelService<CheckValidTransIdsModel> excelService)
+    : IRequestHandler<ExportTicketAbnormalBet, ExcelFileModel>
 {
-    private readonly ExcelService<CheckValidTransIdsModel> excelService;
-
-    public ExportTicketAbnormalBetHandler(ExcelService<CheckValidTransIdsModel> excelService)
-    {
-        this.excelService = excelService;
-    }
-
     public async Task<ExcelFileModel> Handle(ExportTicketAbnormalBet request, CancellationToken cancellationToken)
     {
         var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";

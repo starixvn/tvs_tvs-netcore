@@ -9,17 +9,9 @@ using TicketVoidingSystem.Web;
 namespace TicketVoidingSystem.Website.Controllers;
 
 [Route("[controller]/[action]")]
-public class SportBookController : Controller
+public class SportBookController(SessionService sessionService, UserActionLogService userActionLogService)
+    : Controller
 {
-    private readonly SessionService sessionService;
-    private readonly UserActionLogService userActionLogService;
-
-    public SportBookController(SessionService sessionService, UserActionLogService userActionLogService)
-    {
-        this.sessionService = sessionService;
-        this.userActionLogService = userActionLogService;
-    }
-
     [HttpGet]
     [Route("")]
     [Route("Index")]

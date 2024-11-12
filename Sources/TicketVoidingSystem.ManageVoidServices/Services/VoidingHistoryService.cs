@@ -13,15 +13,8 @@ public interface VoidingHistoryService
     Task UpdateVoidingHistory(int voidingHistoryId, int statusId);
 }
 
-public class VoidingHistoryServiceImp : VoidingHistoryService
+public class VoidingHistoryServiceImp(IDynamicRepository repository) : VoidingHistoryService
 {
-    private readonly IDynamicRepository repository;
-
-    public VoidingHistoryServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<VoidingHistoryModel>> GetByRequestId(int requestId)
     {
         var criteria = new GetVoidingHistoryCriteria

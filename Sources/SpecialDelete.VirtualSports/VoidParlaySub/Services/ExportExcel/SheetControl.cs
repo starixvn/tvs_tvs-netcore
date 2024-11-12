@@ -5,15 +5,8 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace SpecialDelete.VirtualSports.VoidParlaySub.Services.ExportExcel;
 
-public class SheetControlImp : WorkSheetService<ExportExcelQuery>
+public class SheetControlImp(SheetService sheetService) : WorkSheetService<ExportExcelQuery>
 {
-    private readonly SheetService sheetService;
-
-    public SheetControlImp(SheetService sheetService)
-    {
-        this.sheetService = sheetService;
-    }
-
     public async Task BindingContent(ExcelWorksheet worksheet, ExportExcelQuery model)
     {
         const int startRow = 8;

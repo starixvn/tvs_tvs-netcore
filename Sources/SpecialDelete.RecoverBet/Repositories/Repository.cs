@@ -16,17 +16,9 @@ public interface IRepository
     Task<RecoverTicketsModel> RecoverTickets(IEnumerable<BetId> tickets, IEnumerable<BetId> cricketTickets);
 }
 
-public class Repository : IRepository
+public class Repository(IDynamicRepository repository, SessionService sessionService)
+    : IRepository
 {
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-
-    public Repository(IDynamicRepository repository, SessionService sessionService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-    }
-
     public async Task<GetTicketsModel> GetTickets(string transIds)
     {
         var invalidTransIdsViewModel = new List<InvalidTransIds>();

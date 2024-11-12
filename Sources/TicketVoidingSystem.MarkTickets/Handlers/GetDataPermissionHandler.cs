@@ -13,15 +13,9 @@ public class GetDataPermissionRequest : IRequest<DataPermission>
 {
 }
 
-public class GetDataPermissionHandler : IRequestHandler<GetDataPermissionRequest, DataPermission>
+public class GetDataPermissionHandler(SessionService sessionService)
+    : IRequestHandler<GetDataPermissionRequest, DataPermission>
 {
-    private readonly SessionService sessionService;
-
-    public GetDataPermissionHandler(SessionService sessionService)
-    {
-        this.sessionService = sessionService;
-    }
-
     public async Task<DataPermission> Handle(GetDataPermissionRequest request, CancellationToken cancellationToken)
     {
         return new DataPermission

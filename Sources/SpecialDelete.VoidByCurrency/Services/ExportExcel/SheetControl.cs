@@ -7,20 +7,13 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace SpecialDelete.VoidByCurrency.Services.ExportExcel;
 
-public class SheetControlImp : WorkSheetService<GetTicketsQuery>
+public class SheetControlImp(
+    SheetService sheetService,
+    IDynamicRepository repository,
+    MatchService matchService)
+    : WorkSheetService<GetTicketsQuery>
 {
-    private readonly SheetService sheetService;
-    private readonly IDynamicRepository repository;
-    private readonly MatchService matchService;
-
-    public SheetControlImp(
-        SheetService sheetService,
-        IDynamicRepository repository, MatchService matchService)
-    {
-        this.sheetService = sheetService;
-        this.repository = repository;
-        this.matchService = matchService;
-    }
+    private readonly IDynamicRepository repository = repository;
 
     public async Task BindingContent(ExcelWorksheet worksheet, GetTicketsQuery model)
     {

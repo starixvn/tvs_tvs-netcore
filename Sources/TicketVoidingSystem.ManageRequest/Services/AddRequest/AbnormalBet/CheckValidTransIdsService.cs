@@ -11,23 +11,13 @@ public interface CheckValidTransIdsService
     Task<CheckValidTransIdsViewModel> CheckValidTransIds(CheckValidTransIdsModel request);
 }
 
-public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
+public class CheckValidTransIdsServiceImp(
+    IDynamicRepository repository,
+    MatchInfoAddRequestService matchInfoAddRequestService,
+    GetTransInfoService getTransInfoService,
+    MapAbnormalBetTicketsExcelService mapTicketsExcelService)
+    : CheckValidTransIdsService
 {
-    private readonly GetTransInfoService getTransInfoService;
-    private readonly MapAbnormalBetTicketsExcelService mapTicketsExcelService;
-    private readonly MatchInfoAddRequestService matchInfoAddRequestService;
-    private readonly IDynamicRepository repository;
-
-    public CheckValidTransIdsServiceImp(IDynamicRepository repository,
-        MatchInfoAddRequestService matchInfoAddRequestService,
-        GetTransInfoService getTransInfoService, MapAbnormalBetTicketsExcelService mapTicketsExcelService)
-    {
-        this.repository = repository;
-        this.matchInfoAddRequestService = matchInfoAddRequestService;
-        this.getTransInfoService = getTransInfoService;
-        this.mapTicketsExcelService = mapTicketsExcelService;
-    }
-
     public async Task<CheckValidTransIdsViewModel> CheckValidTransIds(CheckValidTransIdsModel request)
     {
         var transInfoJsonList = await GetTransInfoJson(request);

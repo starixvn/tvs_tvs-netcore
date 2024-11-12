@@ -13,15 +13,9 @@ public class ExportExcelRequest : GetTicketsQuery, IRequest<ExcelFileModel>
 {
 }
 
-public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileModel>
+public class ExportExcelHandler(ExcelService<GetTicketsQuery> excelService)
+    : IRequestHandler<ExportExcelRequest, ExcelFileModel>
 {
-    private readonly ExcelService<GetTicketsQuery> excelService;
-
-    public ExportExcelHandler(ExcelService<GetTicketsQuery> excelService)
-    {
-        this.excelService = excelService;
-    }
-
     public async Task<ExcelFileModel> Handle(ExportExcelRequest request, CancellationToken cancellationToken)
     {
         var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";

@@ -11,15 +11,8 @@ public class MarkTicketsRequest : MarkTicketsQuery, IRequest<Result>
 {
 }
 
-public class MarkTicketsHandler : IRequestHandler<MarkTicketsRequest, Result>
+public class MarkTicketsHandler(MarkTicketsService markTicketsService) : IRequestHandler<MarkTicketsRequest, Result>
 {
-    private readonly MarkTicketsService markTicketsService;
-
-    public MarkTicketsHandler(MarkTicketsService markTicketsService)
-    {
-        this.markTicketsService = markTicketsService;
-    }
-
     public async Task<Result> Handle(MarkTicketsRequest request, CancellationToken cancellationToken)
     {
         return await markTicketsService.Execute(request);

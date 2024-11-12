@@ -4,11 +4,6 @@ namespace TicketVoidingSystem.ManageRequest.Models;
 
 public class EditRequestQuery
 {
-    public EditRequestQuery()
-    {
-        OperatorsList = new List<OperatorQuery>();
-    }
-
     public int IssueTypeId { get; set; }
 
     public int SubIssueTypeId { get; set; }
@@ -19,7 +14,7 @@ public class EditRequestQuery
 
     public string? DecidedBy { get; set; }
 
-    public List<OperatorQuery>? OperatorsList { get; set; }
+    public List<OperatorQuery>? OperatorsList { get; set; } = new();
 
     public string? Provider { get; set; }
 

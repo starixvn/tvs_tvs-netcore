@@ -18,25 +18,13 @@ public class GetTicketsRequest : GetTicketsCriteria, IRequest<TicketsViewModel>
     public int PageSize { get; set; }
 }
 
-public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewModel>
+public class GetTicketsHandler(
+    IRepository repository,
+    PagingService pagingService,
+    SessionService sessionService,
+    ITicketService ticketService)
+    : IRequestHandler<GetTicketsRequest, TicketsViewModel>
 {
-    private readonly IRepository repository;
-    private readonly PagingService pagingService;
-    private readonly SessionService sessionService;
-    private readonly ITicketService ticketService;
-
-    public GetTicketsHandler(
-        IRepository repository,
-        PagingService pagingService,
-        SessionService sessionService,
-        ITicketService ticketService)
-    {
-        this.repository = repository;
-        this.pagingService = pagingService;
-        this.sessionService = sessionService;
-        this.ticketService = ticketService;
-    }
-
     public async Task<TicketsViewModel> Handle(GetTicketsRequest request, CancellationToken cancellationToken)
     {
         var model = await repository.GetTickets(request.TransIds);

@@ -12,22 +12,13 @@ public class GetTicketsRequest : GetTicketsQuery, IRequest<ListTicketsViewModel>
 {
 }
 
-public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsViewModel>
+public class GetTicketsHandler(
+    GetTicketsService getTicketsService,
+    MatchService matchService,
+    GroupTicketService groupTicketService,
+    UpdateListTicketsViewModelService updateListTicketsViewModelService)
+    : IRequestHandler<GetTicketsRequest, ListTicketsViewModel>
 {
-    private readonly GetTicketsService getTicketsService;
-    private readonly MatchService matchService;
-    private readonly GroupTicketService groupTicketService;
-    private readonly UpdateListTicketsViewModelService updateListTicketsViewModelService;
-
-    public GetTicketsHandler(GetTicketsService getTicketsService, MatchService matchService, GroupTicketService groupTicketService,
-        UpdateListTicketsViewModelService updateListTicketsViewModelService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.matchService = matchService;
-        this.groupTicketService = groupTicketService;
-        this.updateListTicketsViewModelService = updateListTicketsViewModelService;
-    }
-
     public async Task<ListTicketsViewModel> Handle(GetTicketsRequest request, CancellationToken cancellationToken)
     {
         var getTicketsResult = await getTicketsService.GetTickets(request);

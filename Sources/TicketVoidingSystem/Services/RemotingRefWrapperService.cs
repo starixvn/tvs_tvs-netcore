@@ -31,15 +31,8 @@ public interface RemotingRefWrapperService
     string GetSportName(string sportTypeId, string languageCode);
 }
 
-public class RemotingRefWrapperServiceImp : RemotingRefWrapperService
+public class RemotingRefWrapperServiceImp(IRemotingRefService remotingRefService) : RemotingRefWrapperService
 {
-    private readonly IRemotingRefService remotingRefService;
-
-    public RemotingRefWrapperServiceImp(IRemotingRefService remotingRefService)
-    {
-        this.remotingRefService = remotingRefService;
-    }
-
     public string GetBetType(object betTypeId, string language)
     {
         return remotingRefService.GetBetTypeName(betTypeId.ToString(), language);

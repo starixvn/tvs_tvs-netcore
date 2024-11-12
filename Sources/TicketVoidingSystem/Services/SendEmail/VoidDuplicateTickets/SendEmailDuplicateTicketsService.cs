@@ -13,27 +13,15 @@ public interface SendEmailDuplicateTicketsService
     Task<IEnumerable<Result>> SendEmail(EmailVoidModel model);
 }
 
-public class SendEmailDuplicateTicketsServiceImp : SendEmailDuplicateTicketsService
+public class SendEmailDuplicateTicketsServiceImp(
+    SitesEmailService sitesEmailService,
+    DuplicateTicketsEmailLicenseeService emailLicenseeService,
+    DuplicateTicketsEmailItQaService emailItQaService,
+    DuplicateTicketsEmailItSupportService emailItSupportService,
+    IDynamicRepository repository,
+    RemotingRefWrapperService remotingRefWrapperService)
+    : SendEmailDuplicateTicketsService
 {
-    private readonly SitesEmailService sitesEmailService;
-    private readonly DuplicateTicketsEmailLicenseeService emailLicenseeService;
-    private readonly DuplicateTicketsEmailItQaService emailItQaService;
-    private readonly DuplicateTicketsEmailItSupportService emailItSupportService;
-    private readonly IDynamicRepository repository;
-    private readonly RemotingRefWrapperService remotingRefWrapperService;
-
-    public SendEmailDuplicateTicketsServiceImp(SitesEmailService sitesEmailService, DuplicateTicketsEmailLicenseeService emailLicenseeService,
-        DuplicateTicketsEmailItQaService emailItQaService, DuplicateTicketsEmailItSupportService emailItSupportService, IDynamicRepository repository,
-        RemotingRefWrapperService remotingRefWrapperService)
-    {
-        this.sitesEmailService = sitesEmailService;
-        this.emailLicenseeService = emailLicenseeService;
-        this.emailItQaService = emailItQaService;
-        this.emailItSupportService = emailItSupportService;
-        this.repository = repository;
-        this.remotingRefWrapperService = remotingRefWrapperService;
-    }
-
     public async Task<IEnumerable<Result>> SendEmail(EmailVoidModel model)
     {
         var duplicateTickets = await GetDuplicateTickets(model.RequestId, model.VoidingHistoryId);

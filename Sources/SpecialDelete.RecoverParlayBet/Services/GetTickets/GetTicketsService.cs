@@ -12,19 +12,12 @@ public interface GetTicketsService<T, in U> where T : GetMainTicket
     Task<TicketsViewModel> GetTickets(U query, int matchId);
 }
 
-public class GetTicketsServiceImp<T, U> : GetTicketsService<T, U> where T : GetMainTicket
+public class GetTicketsServiceImp<T, U>(
+    TicketsHandlerService<T, U> getTicketsService,
+    PagingService pagingService)
+    : GetTicketsService<T, U>
+    where T : GetMainTicket
 {
-    private readonly TicketsHandlerService<T, U> getTicketsService;
-    private readonly PagingService pagingService;
-
-    public GetTicketsServiceImp(
-        TicketsHandlerService<T, U> getTicketsService,
-        PagingService pagingService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.pagingService = pagingService;
-    }
-
     public async Task<TicketsViewModel> GetTickets(U query, int matchId)
     {
         var model = await getTicketsService.GetTickets(query);

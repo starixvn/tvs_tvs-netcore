@@ -9,15 +9,9 @@ public class GetVoidActionsRequest : GetActionsCriteria, IRequest<IEnumerable<Vo
 {
 }
 
-public class GetVoidActionsHandler : IRequestHandler<GetVoidActionsRequest, IEnumerable<VoidActionSelection>>
+public class GetVoidActionsHandler(IDynamicRepository repository)
+    : IRequestHandler<GetVoidActionsRequest, IEnumerable<VoidActionSelection>>
 {
-    private readonly IDynamicRepository repository;
-
-    public GetVoidActionsHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<VoidActionSelection>> Handle(GetVoidActionsRequest request, CancellationToken cancellationToken)
     {
         var data = await repository.FetchAsync<VoidAction>(request);

@@ -9,15 +9,8 @@ public interface CalculateTimeService
     Task<IEnumerable<GetCalculateTimeModel>> GetCalculateTime(IEnumerable<string> query);
 }
 
-public class CalculateTimeServiceImp : CalculateTimeService
+public class CalculateTimeServiceImp(IDynamicRepository repository) : CalculateTimeService
 {
-    private readonly IDynamicRepository repository;
-
-    public CalculateTimeServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<GetCalculateTimeModel>> GetCalculateTime(IEnumerable<string> query)
     {
         var calculateTime = new List<GetCalculateTimeModel>();

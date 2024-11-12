@@ -8,15 +8,8 @@ namespace TicketVoidingSystem.SharedApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class PermissionController : ControllerBase
+public class PermissionController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public PermissionController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     public async Task<IActionResult> CheckTicketsStatus(CheckTicketsStatusRequest request) => Ok(await mediator.Send(request));
 

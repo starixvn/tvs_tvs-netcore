@@ -23,28 +23,14 @@ public interface RecoverService
     Task<Result> SendEmail(IEnumerable<RecoverTicketModel> tickets, string negativeBalanceUsers);
 }
 
-public class RecoverServiceImp : RecoverService
+public class RecoverServiceImp(
+    Repository repository,
+    SessionService sessionService,
+    LoggingService loggingService,
+    SendMessageService sendMessageService,
+    EmailRecoverService<MailTicketViewModel, RecoverTicketModel> emailService)
+    : RecoverService
 {
-    private readonly Repository repository;
-    private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
-    private readonly SendMessageService sendMessageService;
-    private readonly EmailRecoverService<MailTicketViewModel, RecoverTicketModel> emailService;
-
-    public RecoverServiceImp(
-        Repository repository,
-        SessionService sessionService,
-        LoggingService loggingService,
-        SendMessageService sendMessageService,
-        EmailRecoverService<MailTicketViewModel, RecoverTicketModel> emailService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.loggingService = loggingService;
-        this.sendMessageService = sendMessageService;
-        this.emailService = emailService;
-    }
-
     public async Task<SubmittedTicketsModel<RecoverTicketModel>> ExecuteQuery(RecoverTicketsQuery query)
     {
         try

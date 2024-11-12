@@ -11,22 +11,13 @@ public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>
 {
 }
 
-public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>?>
+public class VoidTicketsHandler(
+    ResultCacheService resultCacheService,
+    NetPositionForCricketService netPositionForCricketService,
+    VoidTicketsService voidTicketsService,
+    AfterVoidService afterVoidService)
+    : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>?>
 {
-    private readonly ResultCacheService resultCacheService;
-    private readonly NetPositionForCricketService netPositionForCricketService;
-    private readonly VoidTicketsService voidTicketsService;
-    private readonly AfterVoidService afterVoidService;
-
-    public VoidTicketsHandler(ResultCacheService resultCacheService, NetPositionForCricketService netPositionForCricketService,
-        VoidTicketsService voidTicketsService, AfterVoidService afterVoidService)
-    {
-        this.resultCacheService = resultCacheService;
-        this.netPositionForCricketService = netPositionForCricketService;
-        this.voidTicketsService = voidTicketsService;
-        this.afterVoidService = afterVoidService;
-    }
-
     public async Task<IEnumerable<Result>?> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
     {
         if (await resultCacheService.IsExistResult(request.Guid))

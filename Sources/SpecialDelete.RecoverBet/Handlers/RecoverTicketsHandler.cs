@@ -19,25 +19,13 @@ public class RecoverTicketsRequest : IRequest<RecoverResult>
     public IEnumerable<BetId> Tickets { get; set; }
 }
 
-public class RecoverTicketsHandler : IRequestHandler<RecoverTicketsRequest, RecoverResult>
+public class RecoverTicketsHandler(
+    IRecoverTicketsService recoverTicketsService,
+    NetPositionService netPositionService,
+    LoggingService loggingService,
+    CashOutApiService cashOutApiService)
+    : IRequestHandler<RecoverTicketsRequest, RecoverResult>
 {
-    private readonly IRecoverTicketsService recoverTicketsService;
-    private readonly NetPositionService netPositionService;
-    private readonly LoggingService loggingService;
-    private readonly CashOutApiService cashOutApiService;
-
-    public RecoverTicketsHandler(
-        IRecoverTicketsService recoverTicketsService,
-        NetPositionService netPositionService,
-        LoggingService loggingService,
-        CashOutApiService cashOutApiService)
-    {
-        this.recoverTicketsService = recoverTicketsService;
-        this.netPositionService = netPositionService;
-        this.loggingService = loggingService;
-        this.cashOutApiService = cashOutApiService;
-    }
-
     public async Task<RecoverResult> Handle(RecoverTicketsRequest request, CancellationToken cancellationToken)
     {
         var model = await recoverTicketsService.RecoverTickets(request.Tickets, request.TransIdCrickets);

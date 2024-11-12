@@ -9,15 +9,8 @@ namespace SpecialDelete.VirtualSports.RecoverBet.Controllers;
 
 [ApiController]
 [Route("api/VirtualSports/[controller]/[action]")]
-public class RecoverVirtualSportsBetController : ControllerBase
+public class RecoverVirtualSportsBetController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public RecoverVirtualSportsBetController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverVirtualSportsBet)]
     public async Task<IActionResult> GetTickets(GetTicketsRequest request) => Ok(await mediator.Send(request));

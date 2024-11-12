@@ -12,15 +12,9 @@ public class GetVoidingHistoryRequest : IRequest<IEnumerable<VoidingHistoryModel
     public int RequestId { get; set; }
 }
 
-public class GetVoidingHistoryHandler : IRequestHandler<GetVoidingHistoryRequest, IEnumerable<VoidingHistoryModel>>
+public class GetVoidingHistoryHandler(VoidingHistoryService voidingHistoryService)
+    : IRequestHandler<GetVoidingHistoryRequest, IEnumerable<VoidingHistoryModel>>
 {
-    private readonly VoidingHistoryService voidingHistoryService;
-
-    public GetVoidingHistoryHandler(VoidingHistoryService voidingHistoryService)
-    {
-        this.voidingHistoryService = voidingHistoryService;
-    }
-
     public async Task<IEnumerable<VoidingHistoryModel>> Handle(GetVoidingHistoryRequest request, CancellationToken cancellationToken)
     {
         return await voidingHistoryService.GetByRequestId(request.RequestId);

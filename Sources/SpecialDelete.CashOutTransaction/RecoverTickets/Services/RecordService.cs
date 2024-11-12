@@ -15,28 +15,14 @@ using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.CashOutTransaction.RecoverTickets.Services;
 
-public class RecordServiceImp : RecordRecoverService<MailTicketViewModel, RecoverTicketModel>
+public class RecordServiceImp(
+    IMapper mapper,
+    SubjectService subjectService,
+    TemplateEmailService templateEmailService,
+    TicketHtmlService ticketHtmlService,
+    PagingService pagingService)
+    : RecordRecoverService<MailTicketViewModel, RecoverTicketModel>
 {
-    private readonly IMapper mapper;
-    private readonly SubjectService subjectService;
-    private readonly TemplateEmailService templateEmailService;
-    private readonly TicketHtmlService ticketHtmlService;
-    private readonly PagingService pagingService;
-
-    public RecordServiceImp(
-        IMapper mapper,
-        SubjectService subjectService,
-        TemplateEmailService templateEmailService,
-        TicketHtmlService ticketHtmlService,
-        PagingService pagingService)
-    {
-        this.mapper = mapper;
-        this.subjectService = subjectService;
-        this.templateEmailService = templateEmailService;
-        this.ticketHtmlService = ticketHtmlService;
-        this.pagingService = pagingService;
-    }
-
     public MailRecord Create(MailRecoverModel<MailTicketViewModel, RecoverTicketModel> model, EmailGroup group)
     {
         if (model.Valid())

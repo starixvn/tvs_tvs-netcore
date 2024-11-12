@@ -8,15 +8,9 @@ public class GetLinkedLogRequest : GetLinkedLogModel, IRequest<LinkedLogDataView
 {
 }
 
-public class GetLinkedLogHandler : IRequestHandler<GetLinkedLogRequest, LinkedLogDataViewModel>
+public class GetLinkedLogHandler(GetLinkedLogService getLinkedLogService)
+    : IRequestHandler<GetLinkedLogRequest, LinkedLogDataViewModel>
 {
-    private readonly GetLinkedLogService getLinkedLogService;
-
-    public GetLinkedLogHandler(GetLinkedLogService getLinkedLogService)
-    {
-        this.getLinkedLogService = getLinkedLogService;
-    }
-
     public async Task<LinkedLogDataViewModel> Handle(GetLinkedLogRequest request, CancellationToken cancellationToken)
     {
         try

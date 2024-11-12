@@ -11,19 +11,11 @@ public interface EmailService
     void SendEmail(MailRecoverModel<MailTicketViewModel, RecoverTicketModel> model, EmailGroup group, Recover typeOfRecover);
 }
 
-public class EmailServiceImp : EmailService
+public class EmailServiceImp(
+    FanexMailApiService fanexMailApiService,
+    EmailRecordService recordService)
+    : EmailService
 {
-    private readonly FanexMailApiService fanexMailApiService;
-    private readonly EmailRecordService recordService;
-
-    public EmailServiceImp(
-        FanexMailApiService fanexMailApiService,
-        EmailRecordService recordService)
-    {
-        this.fanexMailApiService = fanexMailApiService;
-        this.recordService = recordService;
-    }
-
     public void SendEmail(MailRecoverModel<MailTicketViewModel, RecoverTicketModel> model, EmailGroup group, Recover typeOfRecover)
     {
         try

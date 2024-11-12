@@ -10,15 +10,9 @@ public class ExportExcelRequest : SelectRequestsQuery, IRequest<ExcelFileModel>
 {
 }
 
-public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileModel>
+public class ExportExcelHandler(ExcelService<SelectRequestsQuery> excelService)
+    : IRequestHandler<ExportExcelRequest, ExcelFileModel>
 {
-    private readonly ExcelService<SelectRequestsQuery> excelService;
-
-    public ExportExcelHandler(ExcelService<SelectRequestsQuery> excelService)
-    {
-        this.excelService = excelService;
-    }
-
     public async Task<ExcelFileModel> Handle(ExportExcelRequest request, CancellationToken cancellationToken)
     {
         var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";

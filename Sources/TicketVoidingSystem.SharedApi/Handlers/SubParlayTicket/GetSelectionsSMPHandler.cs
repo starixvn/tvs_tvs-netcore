@@ -14,15 +14,8 @@ public class GetSelectionsSMPRequest : GetSelectionsSMPCriteria, IRequest<string
 {
 }
 
-public class GetSelectionsSMPHandler : IRequestHandler<GetSelectionsSMPRequest, string>
+public class GetSelectionsSMPHandler(IDynamicRepository repository) : IRequestHandler<GetSelectionsSMPRequest, string>
 {
-    private readonly IDynamicRepository repository;
-
-    public GetSelectionsSMPHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<string> Handle(GetSelectionsSMPRequest message, CancellationToken cancellationToken)
     {
         var result = new StringBuilder();

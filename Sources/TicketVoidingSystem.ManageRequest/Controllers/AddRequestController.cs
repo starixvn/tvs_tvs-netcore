@@ -10,15 +10,8 @@ namespace TicketVoidingSystem.ManageRequest.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class AddRequestController : ControllerBase
+public class AddRequestController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public AddRequestController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Constant.Policy.Host)]
     [HttpPost]
     public async Task<IActionResult> AddRequest(AddRequest request) => Ok(await mediator.Send(request));

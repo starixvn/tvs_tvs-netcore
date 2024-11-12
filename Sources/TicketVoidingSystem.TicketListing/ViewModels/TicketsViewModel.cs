@@ -2,12 +2,7 @@
 
 public class TicketsViewModel
 {
-    public TicketsViewModel()
-    {
-        Tickets = new List<TicketViewModel>();
-    }
-
-    public IEnumerable<TicketViewModel> Tickets { get; set; }
+    public IEnumerable<TicketViewModel> Tickets { get; set; } = new List<TicketViewModel>();
 
     public int TotalItems { get; set; }
 }

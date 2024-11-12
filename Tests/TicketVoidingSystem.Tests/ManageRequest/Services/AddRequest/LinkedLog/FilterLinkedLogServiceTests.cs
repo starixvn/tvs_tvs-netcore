@@ -12,12 +12,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
 
 public class FilterLinkedLogServiceTests
 {
-    private readonly LinkedLogValidationService linkedLogValidationService;
-
-    public FilterLinkedLogServiceTests()
-    {
-        linkedLogValidationService = Substitute.For<LinkedLogValidationService>();
-    }
+    private readonly LinkedLogValidationService linkedLogValidationService = Substitute.For<LinkedLogValidationService>();
 
     #region GroupBy
 

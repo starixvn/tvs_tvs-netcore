@@ -20,17 +20,8 @@ public interface BetListVirtualSportsService
     TicketViewModel Create(Ticket ticket, TicketHelper ticketHelper);
 }
 
-public class BetListVirtualSportsServiceImp : BetListVirtualSportsService
+public class BetListVirtualSportsServiceImp(IMapper mapper, BetListService betListService) : BetListVirtualSportsService
 {
-    private readonly IMapper mapper;
-    private readonly BetListService betListService;
-
-    public BetListVirtualSportsServiceImp(IMapper mapper, BetListService betListService)
-    {
-        this.mapper = mapper;
-        this.betListService = betListService;
-    }
-
     public TicketHelper CreateTicketHelper()
     {
         return new TicketHelper

@@ -13,22 +13,13 @@ public interface GetSummaryTicketsService
     Task<GetSummaryViewModel> GetSummaryTickets(GetSummaryQuery query);
 }
 
-public class GetSummaryTicketsServiceImp : GetSummaryTicketsService
+public class GetSummaryTicketsServiceImp(
+    IMapper mapper,
+    IDynamicRepository repository,
+    AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService,
+    BetListService betListService)
+    : GetSummaryTicketsService
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService;
-    private readonly BetListService betListService;
-
-    public GetSummaryTicketsServiceImp(IMapper mapper, IDynamicRepository repository,
-        AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService, BetListService betListService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.affectTicketsFromSettlementHistoryService = affectTicketsFromSettlementHistoryService;
-        this.betListService = betListService;
-    }
-
     public async Task<GetSummaryViewModel> GetSummaryTickets(GetSummaryQuery query)
     {
         var criteria = await CreateGetSummaryCriteria(query);
@@ -57,7 +48,7 @@ public class GetSummaryTicketsServiceImp : GetSummaryTicketsService
         criteria.Type = query.Product;
         criteria.BetTeams = query.BetTeams.ToBetTypeXml();
         criteria.AffectTickets = await affectTicketsFromSettlementHistoryService.GetTickets(query.IsReSettled, query.MatchId);
-        
+
         return criteria;
     }
 
@@ -73,20 +64,20 @@ public class GetSummaryTicketsServiceImp : GetSummaryTicketsService
     {
         var groups = tickets.GroupBy(t => t.LicenseeName);
         var a = groups.Select(view => new SummaryViewModel
+        {
+            Name = view.First().LicenseeName,
+            LicenseeName = view.First().LicenseeName,
+            Total = view.Sum(total => total.TotalTrans),
+            Items = view.Select(item => new SummaryItem
             {
-                Name = view.First().LicenseeName,
-                LicenseeName = view.First().LicenseeName,
-                Total = view.Sum(total => total.TotalTrans),
-                Items = view.Select(item => new SummaryItem
-                {
-                    BetTypes = item.BetTypeId.ToString(),
-                    LicenseeName = item.LicenseeName,
-                    Name = item.BetTypeName,
-                    Total = item.TotalTrans
-                }).ToList(),
-                BetTypes = query.BetTypes,
-                IsChinaView = view.First().IsChinaView,
-                SpecialPlatform = view.First().SpecialPlatform
+                BetTypes = item.BetTypeId.ToString(),
+                LicenseeName = item.LicenseeName,
+                Name = item.BetTypeName,
+                Total = item.TotalTrans
+            }).ToList(),
+            BetTypes = query.BetTypes,
+            IsChinaView = view.First().IsChinaView,
+            SpecialPlatform = view.First().SpecialPlatform
         });
 
         return a;

@@ -13,15 +13,8 @@ public interface AfterVoidService
     Task<VoidBetAutomationModel> GetVoidBetAutomationServiceInfo(VoidBetAutomationModel model);
 }
 
-public class AfterVoidServiceImp : AfterVoidService
+public class AfterVoidServiceImp(IDynamicRepository repository) : AfterVoidService
 {
-    private readonly IDynamicRepository repository;
-
-    public AfterVoidServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task UpdateVoidBetAutomationServiceInfo(VoidBetAutomationModel model)
     {
         if (model.StatusId == null)

@@ -21,20 +21,13 @@ public interface NotificationLetstalkService
     Task<Result> SendToGroupAbnormalBetRequest(string subject, string content, LetstalkAttachment attachment);
 }
 
-public class NotificationLetstalkServiceImp : NotificationLetstalkService
+public class NotificationLetstalkServiceImp(
+    GroupVoidSettledBetService groupVoidSettledBetService,
+    GroupTicketListingService groupTicketListingService,
+    GroupAbnormalBetRequestService groupAbnormalBetRequestService)
+    : NotificationLetstalkService
 {
-    private readonly GroupVoidSettledBetService groupVoidSettledBetService;
-    private readonly GroupTicketListingService groupTicketListingService;
-    private readonly GroupAbnormalBetRequestService groupAbnormalBetRequestService;
     private const string TargetName = "Ticket-Voiding-System";
-
-    public NotificationLetstalkServiceImp(GroupVoidSettledBetService groupVoidSettledBetService,
-        GroupTicketListingService groupTicketListingService, GroupAbnormalBetRequestService groupAbnormalBetRequestService)
-    {
-        this.groupVoidSettledBetService = groupVoidSettledBetService;
-        this.groupTicketListingService = groupTicketListingService;
-        this.groupAbnormalBetRequestService = groupAbnormalBetRequestService;
-    }
 
     public async Task<IEnumerable<Result>> SendToGroupVoidSettledBets(TicketInfoForLetstalk ticketInfo, IEnumerable<TicketEmailModel> tickets)
     {

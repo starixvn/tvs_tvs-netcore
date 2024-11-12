@@ -13,19 +13,11 @@ public interface GetGeneralInfoService
     Task<GeneralInfoViewModel> GetGeneralInfoViewModel(GetGeneralInfoCriteria message);
 }
 
-public class GetGeneralInfoServiceImp : GetGeneralInfoService
+public class GetGeneralInfoServiceImp(
+    RemotingRefWrapperService remotingRefService,
+    IDynamicRepository repository)
+    : GetGeneralInfoService
 {
-    private readonly RemotingRefWrapperService remotingRefService;
-    private readonly IDynamicRepository repository;
-
-    public GetGeneralInfoServiceImp(
-        RemotingRefWrapperService remotingRefService,
-        IDynamicRepository repository)
-    {
-        this.remotingRefService = remotingRefService;
-        this.repository = repository;
-    }
-
     public async Task<GeneralInfoViewModel> GetGeneralInfoViewModel(GetGeneralInfoCriteria message)
     {
         var (sourceGeneralInfo, sourceUserVoidMessages, sourceEmailResults)

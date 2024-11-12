@@ -14,15 +14,8 @@ public interface MapTicketsService
     TicketViewModel MapFromGetTicketModelToTicketViewModel(GetTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId);
 }
 
-public class MapTicketsServiceImp : MapTicketsService
+public class MapTicketsServiceImp(BetListCoreService betListCoreService) : MapTicketsService
 {
-    private readonly BetListCoreService betListCoreService;
-
-    public MapTicketsServiceImp(BetListCoreService betListCoreService)
-    {
-        this.betListCoreService = betListCoreService;
-    }
-
     public Group<TicketViewModel> MapToGroupTicketViewModel(GroupTicketsMappingParameters parameters)
     {
         var tickets = new List<TicketViewModel>();

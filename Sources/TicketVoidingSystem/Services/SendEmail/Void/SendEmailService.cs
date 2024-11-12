@@ -13,24 +13,14 @@ public interface SendEmailService
         bool isFromAfterVoidService = false);
 }
 
-public class SendEmailServiceImp : SendEmailService
+public class SendEmailServiceImp(
+    SitesEmailService sitesEmailService,
+    EmailLicenseeService emailLicenseeService,
+    EmailCashOutService emailCashOutService,
+    EmailItQaService emailItQaService,
+    EmailItSupportService emailItSupportService)
+    : SendEmailService
 {
-    private readonly SitesEmailService sitesEmailService;
-    private readonly EmailLicenseeService emailLicenseeService;
-    private readonly EmailCashOutService emailCashOutService;
-    private readonly EmailItQaService emailItQaService;
-    private readonly EmailItSupportService emailItSupportService;
-
-    public SendEmailServiceImp(SitesEmailService sitesEmailService, EmailLicenseeService emailLicenseeService,
-        EmailCashOutService emailCashOutService, EmailItQaService emailItQaService, EmailItSupportService emailItSupportService)
-    {
-        this.sitesEmailService = sitesEmailService;
-        this.emailLicenseeService = emailLicenseeService;
-        this.emailCashOutService = emailCashOutService;
-        this.emailItQaService = emailItQaService;
-        this.emailItSupportService = emailItSupportService;
-    }
-
     public async Task<IEnumerable<Result>> SendEmail(EmailVoidModel model, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService = false)
     {
         var sites = await sitesEmailService.GetSitesByCategory(model.IssueTypeId);

@@ -18,17 +18,8 @@ public interface BetListCoreService
     string GetScoreBetListUi(int sportType, bool isLiveIndicator, short liveHomeScore, short liveAwayScore);
 }
 
-public class BetListCoreServiceImp : BetListCoreService
+public class BetListCoreServiceImp(IMapper mapper, BetListService betListService) : BetListCoreService
 {
-    private readonly IMapper mapper;
-    private readonly BetListService betListService;
-
-    public BetListCoreServiceImp(IMapper mapper, BetListService betListService)
-    {
-        this.mapper = mapper;
-        this.betListService = betListService;
-    }
-
     public TicketRecoverEmailViewModel GetNormalTicket(TicketRecoverEmailModel item)
     {
         var viewModel = new TicketRecoverEmailViewModel();

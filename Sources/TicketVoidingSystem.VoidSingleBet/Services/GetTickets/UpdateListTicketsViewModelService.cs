@@ -17,19 +17,11 @@ public interface UpdateListTicketsViewModelService
     Task Update(ListTicketsViewModel model, IList<GetTicketModel> data, int matchId);
 }
 
-public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelService
+public class UpdateListTicketsViewModelServiceImp(IMapper mapper,
+    BetListService betListService,
+    BetTypesRepository betTypesRepository)
+    : UpdateListTicketsViewModelService
 {
-    private readonly IMapper mapper;
-    private readonly BetListService betListService;
-    private readonly BetTypesRepository betTypesRepository;
-
-    public UpdateListTicketsViewModelServiceImp(IMapper mapper, BetListService betListService, BetTypesRepository betTypesRepository)
-    {
-        this.mapper = mapper;
-        this.betListService = betListService;
-        this.betTypesRepository = betTypesRepository;
-    }
-
     public async Task Update(ListTicketsViewModel model, IList<GetTicketModel> data, int matchId)
     {
         if (!data.Any())

@@ -9,17 +9,11 @@ public interface CalculateVoidTicketsService
         IEnumerable<AccountWinlostModel> accounts);
 }
 
-public class CalculateVoidTicketsServiceImp : CalculateVoidTicketsService
+public class CalculateVoidTicketsServiceImp(
+    CalculateHaveStatusWonNotLoseService calculateHaveStatusWonNotLoseService,
+    CalculateRemainStatusService calculateRemainStatusService)
+    : CalculateVoidTicketsService
 {
-    private readonly CalculateHaveStatusWonNotLoseService calculateHaveStatusWonNotLoseService;
-    private readonly CalculateRemainStatusService calculateRemainStatusService;
-
-    public CalculateVoidTicketsServiceImp(CalculateHaveStatusWonNotLoseService calculateHaveStatusWonNotLoseService, CalculateRemainStatusService calculateRemainStatusService)
-    {
-        this.calculateHaveStatusWonNotLoseService = calculateHaveStatusWonNotLoseService;
-        this.calculateRemainStatusService = calculateRemainStatusService;
-    }
-
     public async Task<CalcVoidTicketsResult> ExecuteForAbnormalAccountWithPolicy(string statusIds, IList<TicketCalculateWinLostAccount> tickets,
         IEnumerable<AccountWinlostModel> accounts)
     {

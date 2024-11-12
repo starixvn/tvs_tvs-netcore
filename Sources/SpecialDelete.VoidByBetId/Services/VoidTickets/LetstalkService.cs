@@ -17,21 +17,12 @@ public interface LetstalkService
     Task<IEnumerable<Result>> Send(VoidTicketsQuery query, VoidTicketsModel model);
 }
 
-public class LetstalkServiceImp : LetstalkService
+public class LetstalkServiceImp(
+    IMapper mapper,
+    MatchService matchService,
+    NotificationLetstalkService notificationLetstalkService)
+    : LetstalkService
 {
-    private readonly IMapper mapper;
-    private readonly MatchService matchService;
-    private readonly NotificationLetstalkService notificationLetstalkService;
-
-    public LetstalkServiceImp(IMapper mapper,
-        MatchService matchService,
-        NotificationLetstalkService notificationLetstalkService)
-    {
-        this.mapper = mapper;
-        this.matchService = matchService;
-        this.notificationLetstalkService = notificationLetstalkService;
-    }
-
     public async Task<IEnumerable<Result>> Send(VoidTicketsQuery query, VoidTicketsModel model)
     {
         var results = new List<Result>();

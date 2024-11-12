@@ -8,15 +8,8 @@ public class GetLogInfoRequest : GetLogInfoQuery, IRequest<GetLogInfoViewModel>
 {
 }
 
-public class GetLogInfoHandler : IRequestHandler<GetLogInfoRequest, GetLogInfoViewModel>
+public class GetLogInfoHandler(LogInfoService logInfoService) : IRequestHandler<GetLogInfoRequest, GetLogInfoViewModel>
 {
-    private readonly LogInfoService logInfoService;
-
-    public GetLogInfoHandler(LogInfoService logInfoService)
-    {
-        this.logInfoService = logInfoService;
-    }
-
     public async Task<GetLogInfoViewModel> Handle(GetLogInfoRequest request, CancellationToken cancellationToken)
     {
         return await logInfoService.GetLogInfo(request);

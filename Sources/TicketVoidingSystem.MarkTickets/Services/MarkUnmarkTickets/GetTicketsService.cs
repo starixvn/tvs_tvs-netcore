@@ -25,21 +25,13 @@ public interface GetTicketsService
     Task<IEnumerable<AllMarkedTicketModel>> GetAllMarkedTickets(AllMarkedTicketsQuery query);
 }
 
-public class GetTicketsServiceImp : GetTicketsService
+public class GetTicketsServiceImp(
+    IMapper mapper,
+    MapTicketService mapTicketService,
+    IDynamicRepository repository,
+    UserPermissionService userPermissionService)
+    : GetTicketsService
 {
-    private readonly IMapper mapper;
-    private readonly MapTicketService mapTicketService;
-    private readonly IDynamicRepository repository;
-    private readonly UserPermissionService userPermissionService;
-
-    public GetTicketsServiceImp(IMapper mapper, MapTicketService mapTicketService, IDynamicRepository repository, UserPermissionService userPermissionService)
-    {
-        this.mapper = mapper;
-        this.mapTicketService = mapTicketService;
-        this.repository = repository;
-        this.userPermissionService = userPermissionService;
-    }
-
     public async Task<(GetTicketValidationModel Validation, IEnumerable<GetTicketModel> Tickets)> GetTickets(GetTicketsQuery query)
     {
         var (validationInAllServers, ticketsInAllServers) = await GetTicketsInMultipleServer(query);

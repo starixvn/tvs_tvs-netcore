@@ -13,15 +13,8 @@ public interface BalanceUpService
     Task<BalanceUp> GetBalanceUpDayZoneManila();
 }
 
-public class BalanceUpServiceImp : BalanceUpService
+public class BalanceUpServiceImp(IDynamicRepository repository) : BalanceUpService
 {
-    private readonly IDynamicRepository repository;
-
-    public BalanceUpServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<BalanceUp> GetBalanceUpDay()
     {
         var criteria = new GetBalanceUpDayCriteria();

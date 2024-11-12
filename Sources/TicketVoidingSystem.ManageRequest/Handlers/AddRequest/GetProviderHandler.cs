@@ -10,15 +10,8 @@ public class GetProviderRequest : IRequest<Provider>
     public int MatchId { get; set; }
 }
 
-public class GetProviderHandler : IRequestHandler<GetProviderRequest, Provider>
+public class GetProviderHandler(IDynamicRepository repository) : IRequestHandler<GetProviderRequest, Provider>
 {
-    private readonly IDynamicRepository repository;
-
-    public GetProviderHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<Provider> Handle(GetProviderRequest request, CancellationToken cancellationToken)
     {
         var criteria = new GetProviderCriteria

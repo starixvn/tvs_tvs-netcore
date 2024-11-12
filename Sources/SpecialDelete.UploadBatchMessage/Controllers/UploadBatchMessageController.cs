@@ -10,15 +10,8 @@ namespace SpecialDelete.UploadBatchMessage.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class UploadBatchMessageController : ControllerBase
+public class UploadBatchMessageController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public UploadBatchMessageController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetProducts() => this.JsonResultPascalCase(await mediator.Send(new GetProductRequest()));
 

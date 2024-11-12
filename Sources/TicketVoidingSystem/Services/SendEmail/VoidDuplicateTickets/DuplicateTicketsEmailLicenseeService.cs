@@ -15,22 +15,13 @@ public interface DuplicateTicketsEmailLicenseeService
     Task<IEnumerable<Result>> Send(DuplicateTicketsMailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets);
 }
 
-public class DuplicateTicketsEmailLicenseeServiceImp : DuplicateTicketsEmailLicenseeService
+public class DuplicateTicketsEmailLicenseeServiceImp(
+    DuplicateTicketsEmailContentService emailContentService,
+    FanexMailApiService fanexMailApiService,
+    MailResultService mailResultService,
+    SpecialPlatformService specialPlatformService)
+    : DuplicateTicketsEmailLicenseeService
 {
-    private readonly DuplicateTicketsEmailContentService emailContentService;
-    private readonly FanexMailApiService fanexMailApiService;
-    private readonly MailResultService mailResultService;
-    private readonly SpecialPlatformService specialPlatformService;
-
-    public DuplicateTicketsEmailLicenseeServiceImp(DuplicateTicketsEmailContentService emailContentService, FanexMailApiService fanexMailApiService,
-        MailResultService mailResultService, SpecialPlatformService specialPlatformService)
-    {
-        this.emailContentService = emailContentService;
-        this.fanexMailApiService = fanexMailApiService;
-        this.mailResultService = mailResultService;
-        this.specialPlatformService = specialPlatformService;
-    }
-
     public async Task<IEnumerable<Result>> Send(DuplicateTicketsMailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets)
     {
         var results = new CombineMessageModel();

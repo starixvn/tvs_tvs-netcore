@@ -9,15 +9,8 @@ using TicketVoidingSystem.Web;
 namespace TicketVoidingSystem.ManageRequest.Controllers;
 
 [Route("[controller]/[action]")]
-public class AddRequestFromOtherSitesController : Controller
+public class AddRequestFromOtherSitesController(IMediator mediator) : Controller
 {
-    private readonly IMediator mediator;
-
-    public AddRequestFromOtherSitesController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.AbnormalBet, Policy = Constant.Policy.Read)]
     public async Task<ActionResult> CTS()

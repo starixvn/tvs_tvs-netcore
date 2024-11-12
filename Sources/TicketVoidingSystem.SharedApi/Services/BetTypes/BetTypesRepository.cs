@@ -27,15 +27,8 @@ public interface BetTypesRepository
     IList<GroupBetTypeVoidParlayVirtualSport> GetVoidParlayVirtualSportsBetTypes();
 }
 
-public class BetTypesRepositoryImp : BetTypesRepository
+public class BetTypesRepositoryImp(IDynamicRepository repository) : BetTypesRepository
 {
-    private readonly IDynamicRepository repository;
-
-    public BetTypesRepositoryImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<GroupBetTypesViewModel> GetGroupBetTypes(string betTypesHaveTickets, int matchId, byte mode)
     {
         var criteria = new GetBetTypesCriteria

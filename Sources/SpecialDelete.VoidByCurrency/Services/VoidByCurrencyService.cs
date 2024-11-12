@@ -22,37 +22,17 @@ public interface VoidByCurrencyService
     Task<IEnumerable<Result>> VoidBet(VoidTicketsQuery query);
 }
 
-public class VoidByCurrencyServiceImp : VoidByCurrencyService
+public class VoidByCurrencyServiceImp(
+    IMapper mapper,
+    GetTicketsService getTicketsService,
+    LoggingService loggingService,
+    VoidTicketsService voidTicketsService,
+    NetPositionService netPositionService,
+    PagingService pagingService,
+    NotificationLetstalkService notificationLetstalkService,
+    CashOutApiService cashOutApiService)
+    : VoidByCurrencyService
 {
-    private readonly IMapper mapper;
-    private readonly GetTicketsService getTicketsService;
-    private readonly LoggingService loggingService;
-    private readonly VoidTicketsService voidTicketsService;
-    private readonly NetPositionService netPositionService;
-    private readonly PagingService pagingService;
-    private readonly NotificationLetstalkService notificationLetstalkService;
-    private readonly CashOutApiService cashOutApiService;
-
-    public VoidByCurrencyServiceImp(
-        IMapper mapper,
-        GetTicketsService getTicketsService,
-        LoggingService loggingService,
-        VoidTicketsService voidTicketsService,
-        NetPositionService netPositionService,
-        PagingService pagingService,
-        NotificationLetstalkService notificationLetstalkService,
-        CashOutApiService cashOutApiService)
-    {
-        this.mapper = mapper;
-        this.getTicketsService = getTicketsService;
-        this.loggingService = loggingService;
-        this.voidTicketsService = voidTicketsService;
-        this.netPositionService = netPositionService;
-        this.pagingService = pagingService;
-        this.notificationLetstalkService = notificationLetstalkService;
-        this.cashOutApiService = cashOutApiService;
-    }
-
     private string MessageCricket { get; set; }
 
     public async Task<TicketsViewModel> GetTickets(GetTicketsQuery query)

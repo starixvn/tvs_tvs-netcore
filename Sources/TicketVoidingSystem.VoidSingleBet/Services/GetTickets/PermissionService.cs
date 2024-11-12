@@ -10,15 +10,8 @@ public interface PermissionService
     Task<UserPermission> GetUserPermission();
 }
 
-public class PermissionServiceImp : PermissionService
+public class PermissionServiceImp(SessionService sessionService) : PermissionService
 {
-    private readonly SessionService sessionService;
-
-    public PermissionServiceImp(SessionService sessionService)
-    {
-        this.sessionService = sessionService;
-    }
-
     public async Task<UserPermission> GetUserPermission()
     {
         var settledTicketPermissionTask = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host);

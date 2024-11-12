@@ -15,22 +15,13 @@ public interface EmailLicenseeService
     Task<IEnumerable<Result>> Send(MailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService);
 }
 
-public class EmailLicenseeServiceImp : EmailLicenseeService
+public class EmailLicenseeServiceImp(
+    VoidEmailContentService voidEmailContentService,
+    FanexMailApiService fanexMailApiService,
+    MailResultService mailResultService,
+    SpecialPlatformService specialPlatformService)
+    : EmailLicenseeService
 {
-    private readonly VoidEmailContentService voidEmailContentService;
-    private readonly FanexMailApiService fanexMailApiService;
-    private readonly MailResultService mailResultService;
-    private readonly SpecialPlatformService specialPlatformService;
-
-    public EmailLicenseeServiceImp(VoidEmailContentService voidEmailContentService, FanexMailApiService fanexMailApiService,
-        MailResultService mailResultService, SpecialPlatformService specialPlatformService)
-    {
-        this.voidEmailContentService = voidEmailContentService;
-        this.fanexMailApiService = fanexMailApiService;
-        this.mailResultService = mailResultService;
-        this.specialPlatformService = specialPlatformService;
-    }
-
     public async Task<IEnumerable<Result>> Send(MailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)
     {
         var results = new CombineMessageModel();

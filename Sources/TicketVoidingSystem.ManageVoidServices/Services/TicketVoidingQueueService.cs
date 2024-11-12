@@ -15,15 +15,8 @@ public interface TicketVoidingQueueService
     Task UpdateQueueByBatch(int siteDbGroupId, string queueIds, int statusId);
 }
 
-public class TicketVoidingQueueServiceImp : TicketVoidingQueueService
+public class TicketVoidingQueueServiceImp(IDynamicRepository repository) : TicketVoidingQueueService
 {
-    private readonly IDynamicRepository repository;
-
-    public TicketVoidingQueueServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<TicketVoidingQueueModel>> GetQueueInAllServers(int voidingHistoryId)
     {
         var criteria = new GetTicketVoidingQueueCriteria

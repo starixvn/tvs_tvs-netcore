@@ -11,15 +11,9 @@ public class GetLastTimeScoreRequest : GetLastTimeScoreModel, IRequest<GetLastTi
 {
 }
 
-public class GetLastTimeScoreHandler : IRequestHandler<GetLastTimeScoreRequest, GetLastTimeScoreViewModel>
+public class GetLastTimeScoreHandler(IDynamicRepository repository)
+    : IRequestHandler<GetLastTimeScoreRequest, GetLastTimeScoreViewModel>
 {
-    private readonly IDynamicRepository repository;
-
-    public GetLastTimeScoreHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<GetLastTimeScoreViewModel> Handle(GetLastTimeScoreRequest request, CancellationToken cancellationToken)
     {
         var tasks = SiteDbGroupConstant.ServerList.Select(x => GetTimeByServer(x.Id, request));

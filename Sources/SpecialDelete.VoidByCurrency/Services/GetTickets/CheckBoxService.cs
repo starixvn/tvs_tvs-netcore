@@ -7,15 +7,8 @@ public interface CheckBoxService
     bool IsDisable(GetTicketModel item, UserPermission userPermission);
 }
 
-public class CheckBoxServiceImp : CheckBoxService
+public class CheckBoxServiceImp(ValidationService validationService) : CheckBoxService
 {
-    private readonly ValidationService validationService;
-
-    public CheckBoxServiceImp(ValidationService validationService)
-    {
-        this.validationService = validationService;
-    }
-
     public bool IsDisable(GetTicketModel item, UserPermission userPermission)
     {
         var disableWithStatus = validationService.DisableCheckboxWithPermission(item.Status, userPermission, item.GroupName);

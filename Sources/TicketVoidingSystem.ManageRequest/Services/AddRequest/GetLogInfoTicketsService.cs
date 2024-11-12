@@ -12,17 +12,9 @@ public interface GetLogInfoTicketsService
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request);
 }
 
-public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
+public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, CompressDataService compressDataService)
+    : GetLogInfoTicketsService
 {
-    private readonly MapTicketsService mapTicketsService;
-    private readonly CompressDataService compressDataService;
-
-    public GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, CompressDataService compressDataService)
-    {
-        this.mapTicketsService = mapTicketsService;
-        this.compressDataService = compressDataService;
-    }
-
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request)
     {
         var getTicketModels = compressDataService.DecompressTickets(request.LogInfoTicketsJson);

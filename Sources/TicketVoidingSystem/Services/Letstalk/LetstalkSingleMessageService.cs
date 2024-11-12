@@ -13,17 +13,9 @@ public interface LetstalkSingleMessageService
     Task<Result> Send(LetstalkModel model, LetstalkAttachment attachment);
 }
 
-public class LetstalkSingleMessageServiceImp : LetstalkSingleMessageService
+public class LetstalkSingleMessageServiceImp(LetstalkClientService letstalkService, LoggingService loggingService)
+    : LetstalkSingleMessageService
 {
-    private readonly LetstalkClientService letstalkService;
-    private readonly LoggingService loggingService;
-
-    public LetstalkSingleMessageServiceImp(LetstalkClientService letstalkService, LoggingService loggingService)
-    {
-        this.letstalkService = letstalkService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<Result> Send(LetstalkModel model, LetstalkAttachment attachment)
     {
         try

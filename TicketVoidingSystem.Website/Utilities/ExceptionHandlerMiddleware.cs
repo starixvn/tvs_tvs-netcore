@@ -7,20 +7,12 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.Website.Utilities;
 
-public class ExceptionHandlerMiddleware
+public class ExceptionHandlerMiddleware(
+    RequestDelegate next,
+    IConfiguration configuration,
+    LoggingService loggingService)
 {
-    private readonly RequestDelegate next;
-
-    public IConfiguration Configuration { get; }
-
-    private readonly LoggingService loggingService;
-
-    public ExceptionHandlerMiddleware(RequestDelegate next, IConfiguration configuration, LoggingService loggingService)
-    {
-        this.next = next;
-        Configuration = configuration;
-        this.loggingService = loggingService;
-    }
+    public IConfiguration Configuration { get; } = configuration;
 
     public async Task InvokeAsync(HttpContext context)
     {

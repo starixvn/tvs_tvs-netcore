@@ -17,15 +17,8 @@ public interface GetTransInfoService
     Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets, int? matchId);
 }
 
-public class GetTransInfoServiceImp : GetTransInfoService
+public class GetTransInfoServiceImp(IDynamicRepository repository) : GetTransInfoService
 {
-    private readonly IDynamicRepository repository;
-
-    public GetTransInfoServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<string>> GetTransInfoJson(GetTransInfoQuery query)
     {
         var issueInfo = BuildIssueInfo(query);

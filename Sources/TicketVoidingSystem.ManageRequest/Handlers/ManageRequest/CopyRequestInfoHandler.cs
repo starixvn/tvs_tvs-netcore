@@ -12,15 +12,9 @@ public class CopyRequestInfoRequest : IRequest<CopyRequestInfoResponse>
     public int MatchId { get; set; }
 }
 
-public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, CopyRequestInfoResponse>
+public class CopyRequestInfoHandler(CopyRequestInfoService copyRequestInfoService)
+    : IRequestHandler<CopyRequestInfoRequest, CopyRequestInfoResponse>
 {
-    private readonly CopyRequestInfoService copyRequestInfoService;
-
-    public CopyRequestInfoHandler(CopyRequestInfoService copyRequestInfoService)
-    {
-        this.copyRequestInfoService = copyRequestInfoService;
-    }
-
     public async Task<CopyRequestInfoResponse> Handle(CopyRequestInfoRequest request, CancellationToken cancellationToken)
     {
         var (requestInfo, betTypeTickets) = await copyRequestInfoService.GetCopyInfo(request.MatchId, request.RequestId);

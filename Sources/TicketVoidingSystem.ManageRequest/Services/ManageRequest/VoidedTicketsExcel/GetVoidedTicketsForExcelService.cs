@@ -9,17 +9,11 @@ public interface GetVoidedTicketsForExcelService
     Task<IEnumerable<Group<ExcelVoidedTicketModel>>> GetGroupsExcelTickets(GetVoidedTicketsQuery query, Match match);
 }
 
-public class GetVoidedTicketsForExcelServiceImp : GetVoidedTicketsForExcelService
+public class GetVoidedTicketsForExcelServiceImp(
+    GetVoidedTicketsService getVoidedTicketsService,
+    MapTicketsExcelService mapTicketsExcelService)
+    : GetVoidedTicketsForExcelService
 {
-    private readonly GetVoidedTicketsService getVoidedTicketsService;
-    private readonly MapTicketsExcelService mapTicketsExcelService;
-
-    public GetVoidedTicketsForExcelServiceImp(GetVoidedTicketsService getVoidedTicketsService, MapTicketsExcelService mapTicketsExcelService)
-    {
-        this.getVoidedTicketsService = getVoidedTicketsService;
-        this.mapTicketsExcelService = mapTicketsExcelService;
-    }
-
     public async Task<IEnumerable<Group<ExcelVoidedTicketModel>>> GetGroupsExcelTickets(GetVoidedTicketsQuery query, Match match)
     {
         var data = await getVoidedTicketsService.GetTickets(query);

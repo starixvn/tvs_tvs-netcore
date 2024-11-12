@@ -22,15 +22,9 @@ public class SendEmailApiRequest : IRequest<IEnumerable<Result>>
     public IEnumerable<TicketEmailModel> EmailTickets { get; set; }
 }
 
-public class SendEmailApiHandler : IRequestHandler<SendEmailApiRequest, IEnumerable<Result>>
+public class SendEmailApiHandler(SendEmailService sendEmailService)
+    : IRequestHandler<SendEmailApiRequest, IEnumerable<Result>>
 {
-    private readonly SendEmailService sendEmailService;
-
-    public SendEmailApiHandler(SendEmailService sendEmailService)
-    {
-        this.sendEmailService = sendEmailService;
-    }
-
     public async Task<IEnumerable<Result>> Handle(SendEmailApiRequest message, CancellationToken cancellationToken)
     {
         var emailModel = new EmailVoidModel

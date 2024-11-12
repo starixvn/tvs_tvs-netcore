@@ -17,19 +17,12 @@ public interface MapTicketsExcelService
     Group<ExcelVoidedTicketModel> MapToGroupExcelVoidedTickets(Group<VoidedTicketModel> originalGroup, Match match, int startIndex, GetVoidedTicketsQuery query);
 }
 
-public class MapTicketsExcelServiceImp : MapTicketsExcelService
+public class MapTicketsExcelServiceImp(
+    PagingService pagingService,
+    MapFromBetListService mapFromBetListService,
+    IMapper mapper)
+    : MapTicketsExcelService
 {
-    private readonly PagingService pagingService;
-    private readonly MapFromBetListService mapFromBetListService;
-    private readonly IMapper mapper;
-
-    public MapTicketsExcelServiceImp(PagingService pagingService, MapFromBetListService mapFromBetListService, IMapper mapper)
-    {
-        this.pagingService = pagingService;
-        this.mapFromBetListService = mapFromBetListService;
-        this.mapper = mapper;
-    }
-
     public IEnumerable<Group<VoidedTicketModel>> MapToGroupVoidedTickets(IEnumerable<VoidedTicketModel> tickets)
     {
         if (!tickets.Any())

@@ -21,30 +21,15 @@ public interface VoidService
     Task<IEnumerable<Result>> SendEmail(VoidTicketsQuery ticketQuery, IEnumerable<TicketEmailModel> tickets);
 }
 
-public class VoidServiceImp : VoidService
+public class VoidServiceImp(
+    IMapper mapper,
+    Repository repository,
+    SessionService sessionService,
+    LoggingService loggingService,
+    SendMessageService messageService,
+    SendEmailService sendEmailService)
+    : VoidService
 {
-    private readonly IMapper mapper;
-    private readonly Repository repository;
-    private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
-    private readonly SendMessageService messageService;
-    private readonly SendEmailService sendEmailService;
-
-    public VoidServiceImp(IMapper mapper,
-        Repository repository,
-        SessionService sessionService,
-        LoggingService loggingService,
-        SendMessageService messageService,
-        SendEmailService sendEmailService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.loggingService = loggingService;
-        this.messageService = messageService;
-        this.sendEmailService = sendEmailService;
-    }
-
     public async Task<SubmittedTicketsModel<TicketEmailModel>> ExecuteQuery(VoidTicketsQuery query)
     {
         try

@@ -6,15 +6,8 @@ using TicketVoidingSystem.TicketListing.Criteria;
 
 namespace TicketVoidingSystem.TicketListing.Services.ExportExcel;
 
-public class GetTicketsWorkSheetService : WorkSheetService<ExportExcelQuery>
+public class GetTicketsWorkSheetService(CellService cellService) : WorkSheetService<ExportExcelQuery>
 {
-    private readonly CellService cellService;
-
-    public GetTicketsWorkSheetService(CellService cellService)
-    {
-        this.cellService = cellService;
-    }
-
     public async Task BindingContent(ExcelWorksheet worksheet, ExportExcelQuery model)
     {
         worksheet.Cells[1, 1].Value = cellService.CreateTitle(model);

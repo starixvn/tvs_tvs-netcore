@@ -13,17 +13,9 @@ public class CheckByRequest : IRequest<Result>
     public bool IsCheck { get; set; }
 }
 
-public class CheckByHandler : IRequestHandler<CheckByRequest, Result>
+public class CheckByHandler(IDynamicRepository repository, SessionService sessionService)
+    : IRequestHandler<CheckByRequest, Result>
 {
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-
-    public CheckByHandler(IDynamicRepository repository, SessionService sessionService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-    }
-
     public async Task<Result> Handle(CheckByRequest request, CancellationToken cancellationToken)
     {
         var result = new Result();

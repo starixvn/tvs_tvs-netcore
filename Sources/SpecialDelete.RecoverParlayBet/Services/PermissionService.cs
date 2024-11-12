@@ -10,15 +10,8 @@ public interface PermissionService
     Task<PermissionViewModel> GetPermission();
 }
 
-public class PermissionServiceImp : PermissionService
+public class PermissionServiceImp(SessionService sessionService) : PermissionService
 {
-    private readonly SessionService sessionService;
-
-    public PermissionServiceImp(SessionService sessionService)
-    {
-        this.sessionService = sessionService;
-    }
-
     public async Task<PermissionViewModel> GetPermission()
     {
         return new PermissionViewModel

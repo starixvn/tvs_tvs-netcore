@@ -8,15 +8,8 @@ public interface GetDecidedByService
     Task<string[]> GetDecidedBy(GetDecidedByRequest request);
 }
 
-public class GetDecidedByServiceImp : GetDecidedByService
+public class GetDecidedByServiceImp(IDynamicRepository repository) : GetDecidedByService
 {
-    private readonly IDynamicRepository repository;
-
-    public GetDecidedByServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<string[]> GetDecidedBy(GetDecidedByRequest request)
     {
         var decidedBySelect = await repository.FetchAsync<string>(request);
@@ -24,5 +17,4 @@ public class GetDecidedByServiceImp : GetDecidedByService
 
         return sortedDecidedBys;
     }
-
 }

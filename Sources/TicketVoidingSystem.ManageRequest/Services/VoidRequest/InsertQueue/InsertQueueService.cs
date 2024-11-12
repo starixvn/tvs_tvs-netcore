@@ -13,24 +13,14 @@ public interface InsertQueueService
     Task UpdateIsProcessed(InsertQueueQuery query);
 }
 
-public class InsertQueueServiceImp : InsertQueueService
+public class InsertQueueServiceImp(
+    IDynamicRepository repository,
+    SessionService sessionService,
+    MapTicketsService mapTicketsService,
+    ValidationTicketsService validationTicketsService,
+    InsertVoidingHistoryService insertVoidingHistoryService)
+    : InsertQueueService
 {
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-    private readonly MapTicketsService mapTicketsService;
-    private readonly ValidationTicketsService validationTicketsService;
-    private readonly InsertVoidingHistoryService insertVoidingHistoryService;
-
-    public InsertQueueServiceImp(IDynamicRepository repository, SessionService sessionService, MapTicketsService mapTicketsService,
-        ValidationTicketsService validationTicketsService, InsertVoidingHistoryService insertVoidingHistoryService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.mapTicketsService = mapTicketsService;
-        this.validationTicketsService = validationTicketsService;
-        this.insertVoidingHistoryService = insertVoidingHistoryService;
-    }
-
     public async Task InsertTicketVoidingQueue(InsertQueueQuery query)
     {
         var siteGroupInCurrentSessionVoid = query.SingleTickets

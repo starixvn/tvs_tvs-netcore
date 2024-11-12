@@ -14,19 +14,12 @@ public interface ReCalculateTicketsService
     Task<IEnumerable<Result>> Execute(AbnormalBetViewModel? abnormalBetInfo, int issueTypeId, string transIds);
 }
 
-public class ReCalculateTicketsServiceImp : ReCalculateTicketsService
+public class ReCalculateTicketsServiceImp(
+    IDynamicRepository repository,
+    SessionService sessionService,
+    LoggingService loggingService)
+    : ReCalculateTicketsService
 {
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
-
-    public ReCalculateTicketsServiceImp(IDynamicRepository repository, SessionService sessionService, LoggingService loggingService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<IEnumerable<Result>> Execute(AbnormalBetViewModel? abnormalBetInfo, int issueTypeId, string transIds)
     {
         var results = new List<Result>();

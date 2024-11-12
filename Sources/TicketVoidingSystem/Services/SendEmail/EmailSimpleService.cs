@@ -10,15 +10,8 @@ public interface EmailSimpleService
     Task Send(MailRecord mailRecord, EmailGroup group);
 }
 
-public class EmailSimpleServiceImp : EmailSimpleService
+public class EmailSimpleServiceImp(FanexMailApiService fanexMailApiService) : EmailSimpleService
 {
-    private readonly FanexMailApiService fanexMailApiService;
-
-    public EmailSimpleServiceImp(FanexMailApiService fanexMailApiService)
-    {
-        this.fanexMailApiService = fanexMailApiService;
-    }
-
     public async Task Send(MailRecord mailRecord, EmailGroup group)
     {
         try

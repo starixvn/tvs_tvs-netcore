@@ -15,21 +15,13 @@ public interface VoidTicketsService
     Task<VoidTicketsModel> VoidBet(VoidTicketsQuery query);
 }
 
-public class VoidTicketsServiceImp : VoidTicketsService
+public class VoidTicketsServiceImp(
+    SessionService sessionService,
+    IMapper mapper,
+    IDynamicRepository repository,
+    LoggingService loggingService)
+    : VoidTicketsService
 {
-    private readonly IMapper mapper;
-    private readonly SessionService sessionService;
-    private readonly IDynamicRepository repository;
-    private readonly LoggingService loggingService;
-
-    public VoidTicketsServiceImp(SessionService sessionService, IMapper mapper, IDynamicRepository repository, LoggingService loggingService)
-    {
-        this.sessionService = sessionService;
-        this.mapper = mapper;
-        this.repository = repository;
-        this.loggingService = loggingService;
-    }
-
     public async Task<VoidTicketsModel> VoidBet(VoidTicketsQuery query)
     {
         try
@@ -111,7 +103,7 @@ public class VoidTicketsServiceImp : VoidTicketsService
         criteria.BetTypes = query.BetTypes.ToBetTypeXml();
         criteria.UserPassword = query.UserPassword;
         criteria.UserId = sessionService.UserId;
-        
+
         return criteria;
     }
 }

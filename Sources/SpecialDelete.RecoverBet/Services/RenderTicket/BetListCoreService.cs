@@ -15,17 +15,8 @@ public interface IBetListCoreService
     TicketViewModel GetTicket(GetTicketModel item);
 }
 
-public class BetListCoreService : IBetListCoreService
+public class BetListCoreService(IMapper mapper, BetListService betListService) : IBetListCoreService
 {
-    private readonly IMapper mapper;
-    private readonly BetListService betListService;
-
-    public BetListCoreService(IMapper mapper, BetListService betListService)
-    {
-        this.mapper = mapper;
-        this.betListService = betListService;
-    }
-
     public TicketViewModel GetTicket(GetTicketModel item)
     {
         var viewModel = new TicketViewModel();

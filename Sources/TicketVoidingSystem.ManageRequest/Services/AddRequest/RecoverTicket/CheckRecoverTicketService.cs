@@ -11,17 +11,9 @@ public interface CheckRecoverTicketService
     Task<CheckRecoverTicketViewModel> CheckRecoverTicket(CheckRecoverTicketModel request);
 }
 
-public class CheckRecoverTicketServiceImp : CheckRecoverTicketService
+public class CheckRecoverTicketServiceImp(IDynamicRepository repository, GetTransInfoService getTransInfoService)
+    : CheckRecoverTicketService
 {
-    private readonly GetTransInfoService getTransInfoService;
-    private readonly IDynamicRepository repository;
-
-    public CheckRecoverTicketServiceImp(IDynamicRepository repository, GetTransInfoService getTransInfoService)
-    {
-        this.repository = repository;
-        this.getTransInfoService = getTransInfoService;
-    }
-
     public async Task<CheckRecoverTicketViewModel> CheckRecoverTicket(CheckRecoverTicketModel request)
     {
         var transInfoJsonList = await GetTransInfoJson(request);

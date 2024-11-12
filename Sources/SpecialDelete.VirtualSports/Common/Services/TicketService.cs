@@ -15,19 +15,11 @@ public interface TicketService
     TicketViewModel GetTicket(GetTicketModel item, Recover typeOfRecover);
 }
 
-public class TicketServiceImp : TicketService
+public class TicketServiceImp(
+    VoidBetListService voidBetListService,
+    RecoverBetListService recoverBetListService)
+    : TicketService
 {
-    private readonly VoidBetListService voidBetListService;
-    private readonly RecoverBetListService recoverBetListService;
-
-    public TicketServiceImp(
-        VoidBetListService voidBetListService,
-        RecoverBetListService recoverBetListService)
-    {
-        this.voidBetListService = voidBetListService;
-        this.recoverBetListService = recoverBetListService;
-    }
-
     public TicketViewModel GetTicket(GetTicketModel item)
     {
         var ticket = voidBetListService.Create(item);

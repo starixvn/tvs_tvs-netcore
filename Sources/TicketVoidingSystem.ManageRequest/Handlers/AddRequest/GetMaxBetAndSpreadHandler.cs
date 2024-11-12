@@ -14,15 +14,9 @@ public class GetMaxBetAndSpreadRequest : IRequest<IEnumerable<OddsInfoModel>>
     public int SubType { get; set; }
 }
 
-public class GetMaxBetAndSpreadHandler : IRequestHandler<GetMaxBetAndSpreadRequest, IEnumerable<OddsInfoModel>>
+public class GetMaxBetAndSpreadHandler(OWPHttpClientService owpHttpClientService)
+    : IRequestHandler<GetMaxBetAndSpreadRequest, IEnumerable<OddsInfoModel>>
 {
-    private readonly OWPHttpClientService owpHttpClientService;
-
-    public GetMaxBetAndSpreadHandler(OWPHttpClientService owpHttpClientService)
-    {
-        this.owpHttpClientService = owpHttpClientService;
-    }
-
     public async Task<IEnumerable<OddsInfoModel>> Handle(GetMaxBetAndSpreadRequest request,
         CancellationToken cancellationToken)
     {

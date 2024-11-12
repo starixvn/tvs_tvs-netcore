@@ -11,17 +11,9 @@ public interface ValidationTicketsService
     Task<CheckTicketValidationOutput> RecheckTicketsStatus(InsertQueueQuery query, int siteDbGroupId);
 }
 
-public class ValidationTicketsServiceImp : ValidationTicketsService
+public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicketsService mapTicketsService)
+    : ValidationTicketsService
 {
-    private readonly IDynamicRepository repository;
-    private readonly MapTicketsService mapTicketsService;
-
-    public ValidationTicketsServiceImp(IDynamicRepository repository, MapTicketsService mapTicketsService)
-    {
-        this.repository = repository;
-        this.mapTicketsService = mapTicketsService;
-    }
-
     public async Task<CheckTicketValidationOutput> RecheckTicketsStatus(InsertQueueQuery query, int siteDbGroupId)
     {
         if (IsIssueTypeNeedToRecheckValidationTickets(query.IssueTypeId))

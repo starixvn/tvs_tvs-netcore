@@ -16,22 +16,12 @@ public interface GetTicketsService
     Task<Group<TicketViewModel>> GetViewModel(Group<GetTicketModel> group);
 }
 
-public class GetTicketsServiceImp : GetTicketsService
+public class GetTicketsServiceImp(
+    Repository repository,
+    TicketService ticketService,
+    SessionService sessionService)
+    : GetTicketsService
 {
-    private readonly Repository repository;
-    private readonly TicketService ticketService;
-    private readonly SessionService sessionService;
-
-    public GetTicketsServiceImp(
-        Repository repository,
-        TicketService ticketService,
-        SessionService sessionService)
-    {
-        this.repository = repository;
-        this.ticketService = ticketService;
-        this.sessionService = sessionService;
-    }
-
     public async Task<GetTicketsModel> GetTickets(GetTicketsQuery query)
     {
         return await repository.GetTickets(query.TransIds);

@@ -10,15 +10,8 @@ public interface RecoverTicketService
     TicketRecoverEmailViewModel Render(TicketRecoverEmailModel item);
 }
 
-public class RecoverTicketServiceImp : RecoverTicketService
+public class RecoverTicketServiceImp(BetListCoreService betListService) : RecoverTicketService
 {
-    private readonly BetListCoreService betListService;
-
-    public RecoverTicketServiceImp(BetListCoreService betListService)
-    {
-        this.betListService = betListService;
-    }
-
     public TicketRecoverEmailViewModel Render(TicketRecoverEmailModel item)
     {
         var ticket = item.BetType.IsParlay() ? betListService.GetMainParlayTicket(item) : betListService.GetNormalTicket(item);

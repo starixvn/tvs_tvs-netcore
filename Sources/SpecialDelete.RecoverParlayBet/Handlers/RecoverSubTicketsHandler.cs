@@ -9,15 +9,10 @@ public class RecoverSubTicketsRequest : RecoverSubTicketsQuery, IRequest<IEnumer
 {
 }
 
-public class RecoverSubTicketsHandler : IRequestHandler<RecoverSubTicketsRequest, IEnumerable<Result>>
+public class RecoverSubTicketsHandler(
+    RecoverTicketsService<RecoverSubTicketModel, RecoverSubTicketsQuery> recoverTicketsService)
+    : IRequestHandler<RecoverSubTicketsRequest, IEnumerable<Result>>
 {
-    private readonly RecoverTicketsService<RecoverSubTicketModel, RecoverSubTicketsQuery> recoverTicketsService;
-
-    public RecoverSubTicketsHandler(RecoverTicketsService<RecoverSubTicketModel, RecoverSubTicketsQuery> recoverTicketsService)
-    {
-        this.recoverTicketsService = recoverTicketsService;
-    }
-
     public async Task<IEnumerable<Result>> Handle(RecoverSubTicketsRequest request, CancellationToken cancellationToken)
     {
         return await recoverTicketsService.Recover(request);

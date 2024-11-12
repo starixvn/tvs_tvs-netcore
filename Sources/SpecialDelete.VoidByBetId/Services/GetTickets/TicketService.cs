@@ -12,19 +12,11 @@ public interface TicketService
     TicketViewModel GetTicket(GetTicketModel item, ChoiceType choiceType);
 }
 
-public class TicketServiceImp : TicketService
+public class TicketServiceImp(
+    BetListCoreService betListCoreService,
+    ConditionService conditionService)
+    : TicketService
 {
-    private readonly BetListCoreService betListCoreService;
-    private readonly ConditionService conditionService;
-
-    public TicketServiceImp(
-        BetListCoreService betListCoreService,
-        ConditionService conditionService)
-    {
-        this.betListCoreService = betListCoreService;
-        this.conditionService = conditionService;
-    }
-
     public TicketViewModel GetTicket(GetTicketModel item, UserPermission permission, bool isVoidByBetId)
     {
         var ticket = Mapping(item, ChoiceType.Html);

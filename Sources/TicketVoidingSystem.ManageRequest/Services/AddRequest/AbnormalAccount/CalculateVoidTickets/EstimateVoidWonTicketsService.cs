@@ -8,17 +8,11 @@ public interface EstimateVoidWonTicketsService
     IEnumerable<TicketCalculateWinLostAccount> Execute(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit);
 }
 
-public class EstimateVoidWonTicketsServiceImp : EstimateVoidWonTicketsService
+public class EstimateVoidWonTicketsServiceImp(
+    KnapsackAlgorithmService knapsackAlgorithmService,
+    SortAlgorithmService sortAlgorithmService)
+    : EstimateVoidWonTicketsService
 {
-    private readonly KnapsackAlgorithmService knapsackAlgorithmService;
-    private readonly SortAlgorithmService sortAlgorithmService;
-
-    public EstimateVoidWonTicketsServiceImp(KnapsackAlgorithmService knapsackAlgorithmService, SortAlgorithmService sortAlgorithmService)
-    {
-        this.knapsackAlgorithmService = knapsackAlgorithmService;
-        this.sortAlgorithmService = sortAlgorithmService;
-    }
-
     private static bool IsCanNotRunAlgorithm(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit)
     {
         return GetMaxCapacity(wonTickets, loseTickets, compareCredit) <= 0;

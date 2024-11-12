@@ -4,12 +4,7 @@ namespace TicketVoidingSystem.ManageRequest.ViewModels;
 
 public class VoidedTicketsViewModel
 {
-    public VoidedTicketsViewModel()
-    {
-        Groups = new List<Group<VoidedTicketViewModel>>();
-    }
-
-    public IList<Group<VoidedTicketViewModel>> Groups { get; set; }
+    public IList<Group<VoidedTicketViewModel>> Groups { get; set; } = new List<Group<VoidedTicketViewModel>>();
     public int TotalTicketsProcessed { get; set; }
     public int TotalCancelCashOutProcessed { get; set; }
     public string LicenseeNames { get; set; }

@@ -13,15 +13,9 @@ public class GetAutoVoidRequestQueueRequest : IRequest<IEnumerable<AutoVoidReque
     public int? StatusId { get; set; }
 }
 
-public class GetAutoVoidRequestQueueHandler : IRequestHandler<GetAutoVoidRequestQueueRequest, IEnumerable<AutoVoidRequestQueueModel>>
+public class GetAutoVoidRequestQueueHandler(AutoVoidRequestQueueService autoVoidRequestQueueService)
+    : IRequestHandler<GetAutoVoidRequestQueueRequest, IEnumerable<AutoVoidRequestQueueModel>>
 {
-    private readonly AutoVoidRequestQueueService autoVoidRequestQueueService;
-
-    public GetAutoVoidRequestQueueHandler(AutoVoidRequestQueueService autoVoidRequestQueueService)
-    {
-        this.autoVoidRequestQueueService = autoVoidRequestQueueService;
-    }
-
     public async Task<IEnumerable<AutoVoidRequestQueueModel>> Handle(GetAutoVoidRequestQueueRequest request, CancellationToken cancellationToken)
     {
         return await autoVoidRequestQueueService.GetQueueInAllServers(request.BroadcastSessionId, request.StatusId);

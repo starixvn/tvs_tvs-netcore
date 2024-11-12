@@ -13,19 +13,12 @@ public interface UserActionLogService
     Task<bool> LogChangeContent(string functionName, string logContent);
 }
 
-public class UserActionLogServiceImp : UserActionLogService
+public class UserActionLogServiceImp(
+    SessionService sessionService,
+    IDynamicRepository repository,
+    LoggingService loggingService)
+    : UserActionLogService
 {
-    private readonly SessionService sessionService;
-    private readonly IDynamicRepository repository;
-    private readonly LoggingService loggingService;
-
-    public UserActionLogServiceImp(SessionService sessionService, IDynamicRepository repository, LoggingService loggingService)
-    {
-        this.sessionService = sessionService;
-        this.repository = repository;
-        this.loggingService = loggingService;
-    }
-
     public async Task<bool> LogAccessFunction(string functionName)
     {
         try

@@ -16,22 +16,13 @@ public class GetPoolHouseTicketRequest : GetPoolHouseTicketQuery, IRequest<GetPo
 {
 }
 
-public class GetPoolHouseTicketHandler : IRequestHandler<GetPoolHouseTicketRequest, GetPoolHouseTicketViewModel>
+public class GetPoolHouseTicketHandler(
+    IDynamicRepository repository,
+    GetPoolHouseTicketService getPoolHouseTicketService,
+    GetTransInfoService getTransInfoService,
+    IMapper mapper)
+    : IRequestHandler<GetPoolHouseTicketRequest, GetPoolHouseTicketViewModel>
 {
-    private readonly IDynamicRepository repository;
-    private readonly GetTransInfoService getTransInfoService;
-    private readonly GetPoolHouseTicketService getPoolHouseTicketService;
-    private readonly IMapper mapper;
-
-    public GetPoolHouseTicketHandler(IDynamicRepository repository, GetPoolHouseTicketService getPoolHouseTicketService,
-        GetTransInfoService getTransInfoService, IMapper mapper)
-    {
-        this.repository = repository;
-        this.getTransInfoService = getTransInfoService;
-        this.getPoolHouseTicketService = getPoolHouseTicketService;
-        this.mapper = mapper;
-    }
-
     public async Task<GetPoolHouseTicketViewModel> Handle(GetPoolHouseTicketRequest request, CancellationToken cancellationToken)
     {
         var criteria = await CreateGetPoolHouseTicketCriteria(request);

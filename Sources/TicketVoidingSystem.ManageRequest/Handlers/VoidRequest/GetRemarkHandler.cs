@@ -11,15 +11,8 @@ public class GetRemarkRequest : IRequest<IEnumerable<string>>
 {
 }
 
-public class GetRemarkHandler : IRequestHandler<GetRemarkRequest, IEnumerable<string>>
+public class GetRemarkHandler(SessionService sessionService) : IRequestHandler<GetRemarkRequest, IEnumerable<string>>
 {
-    private readonly SessionService sessionService;
-
-    public GetRemarkHandler(SessionService sessionService)
-    {
-        this.sessionService = sessionService;
-    }
-
     public async Task<IEnumerable<string>> Handle(GetRemarkRequest request, CancellationToken cancellationToken)
     {
         return await Task.FromResult(GetRemarksForPermission().ToBlockingEnumerable(cancellationToken));

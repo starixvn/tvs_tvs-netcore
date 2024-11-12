@@ -21,21 +21,13 @@ public interface VoidEmailContentService
         EmailGroup group, bool isFromAfterVoidService);
 }
 
-public class VoidEmailContentServiceImp : VoidEmailContentService
+public class VoidEmailContentServiceImp(
+    IDynamicRepository repository,
+    TicketService ticketService,
+    SubjectService subjectService,
+    TemplateEmailService templateEmailService)
+    : VoidEmailContentService
 {
-    private readonly TicketService ticketService;
-    private readonly SubjectService subjectService;
-    private readonly TemplateEmailService templateEmailService;
-    private readonly IDynamicRepository repository;
-
-    public VoidEmailContentServiceImp(IDynamicRepository repository, TicketService ticketService, SubjectService subjectService, TemplateEmailService templateEmailService)
-    {
-        this.repository = repository;
-        this.ticketService = ticketService;
-        this.subjectService = subjectService;
-        this.templateEmailService = templateEmailService;
-    }
-
     public async Task<MailRecord> Create(MailVoidViewModel mailVoidViewModel, SiteEmail site, IEnumerable<TicketEmailModel> tickets, EmailGroup group, bool isFromAfterVoidService)
     {
         if (tickets.Valid(site))

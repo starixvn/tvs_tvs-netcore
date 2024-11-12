@@ -16,28 +16,14 @@ public interface HandlerService
     Task<List<Result>> RecoverTickets(RecoverTicketsQuery query);
 }
 
-public class HandlerServiceImp : HandlerService
+public class HandlerServiceImp(
+    DisplayUiService getTicketsService,
+    RecoverService recoverTicketsService,
+    LoggingService loggingService,
+    PagingService pagingService,
+    CashOutApiService cashOutApiService)
+    : HandlerService
 {
-    private readonly DisplayUiService getTicketsService;
-    private readonly RecoverService recoverTicketsService;
-    private readonly LoggingService loggingService;
-    private readonly PagingService pagingService;
-    private readonly CashOutApiService cashOutApiService;
-
-    public HandlerServiceImp(
-        DisplayUiService getTicketsService,
-        RecoverService recoverTicketsService,
-        LoggingService loggingService,
-        PagingService pagingService,
-        CashOutApiService cashOutApiService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.recoverTicketsService = recoverTicketsService;
-        this.loggingService = loggingService;
-        this.pagingService = pagingService;
-        this.cashOutApiService = cashOutApiService;
-    }
-
     public async Task<TicketsViewModel<TicketViewModel>> GetTickets(GetTicketsQuery query)
     {
         var viewModel = new TicketsViewModel<TicketViewModel>();

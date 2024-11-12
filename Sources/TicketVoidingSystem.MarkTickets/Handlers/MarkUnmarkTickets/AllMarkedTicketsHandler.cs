@@ -15,22 +15,12 @@ public class AllMarkedTicketsRequest : AllMarkedTicketsQuery, IRequest<AllMarked
 {
 }
 
-public class AllMarkedTicketsHandler : IRequestHandler<AllMarkedTicketsRequest, AllMarkedTicketsViewModel>
+public class AllMarkedTicketsHandler(
+    GetTicketsService getTicketsService,
+    PagingService pagingService,
+    RemotingRefWrapperService remotingRefWrapperService)
+    : IRequestHandler<AllMarkedTicketsRequest, AllMarkedTicketsViewModel>
 {
-    private readonly GetTicketsService getTicketsService;
-    private readonly PagingService pagingService;
-    private readonly RemotingRefWrapperService remotingRefWrapperService;
-
-    public AllMarkedTicketsHandler(
-        GetTicketsService getTicketsService,
-        PagingService pagingService,
-        RemotingRefWrapperService remotingRefWrapperService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.pagingService = pagingService;
-        this.remotingRefWrapperService = remotingRefWrapperService;
-    }
-
     public async Task<AllMarkedTicketsViewModel> Handle(AllMarkedTicketsRequest request, CancellationToken cancellationToken)
     {
         var viewModel = new AllMarkedTicketsViewModel();

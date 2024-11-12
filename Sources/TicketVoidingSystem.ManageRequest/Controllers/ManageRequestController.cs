@@ -12,15 +12,8 @@ using Fanex.NAP.Client.Helpers.Business;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class ManageRequestController : ControllerBase
+public class ManageRequestController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public ManageRequestController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetVoidActions() => Ok(await mediator.Send(new GetVoidActionsRequest()));
 

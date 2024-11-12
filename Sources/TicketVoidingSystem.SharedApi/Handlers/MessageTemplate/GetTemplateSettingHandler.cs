@@ -15,15 +15,9 @@ public class GetTemplateSettingRequest : IRequest<TemplateSettingViewModel>
 {
 }
 
-public class GetTemplateSettingHandler : IRequestHandler<GetTemplateSettingRequest, TemplateSettingViewModel>
+public class GetTemplateSettingHandler(IDynamicRepository repository)
+    : IRequestHandler<GetTemplateSettingRequest, TemplateSettingViewModel>
 {
-    private readonly IDynamicRepository repository;
-
-    public GetTemplateSettingHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<TemplateSettingViewModel> Handle(GetTemplateSettingRequest request, CancellationToken cancellationToken)
     {
         var templateModels = (await repository.FetchAsync<TemplateModel>(new GetTemplatesCriteria())).ToList();

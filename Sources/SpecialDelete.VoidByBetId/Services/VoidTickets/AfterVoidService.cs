@@ -17,24 +17,13 @@ public interface AfterVoidService
     Task<IEnumerable<Result>> SendLetstalk(VoidTicketsQuery query, VoidTicketsModel model);
 }
 
-public class AfterVoidServiceImp : AfterVoidService
+public class AfterVoidServiceImp(
+    IMapper mapper,
+    SendMessageByPlatformService sendMessageByPlatformService,
+    SendEmailService sendEmailService,
+    LetstalkService letstalkService)
+    : AfterVoidService
 {
-    private readonly IMapper mapper;
-    private readonly SendMessageByPlatformService sendMessageByPlatformService;
-    private readonly SendEmailService sendEmailService;
-    private readonly LetstalkService letstalkService;
-
-    public AfterVoidServiceImp(IMapper mapper,
-        SendMessageByPlatformService sendMessageByPlatformService,
-        SendEmailService sendEmailService,
-        LetstalkService letstalkService)
-    {
-        this.mapper = mapper;
-        this.sendMessageByPlatformService = sendMessageByPlatformService;
-        this.sendEmailService = sendEmailService;
-        this.letstalkService = letstalkService;
-    }
-
     public async Task SendMessage(VoidTicketsQuery query, IEnumerable<TicketEmailModel> tickets)
     {
         var param = new SendMessageTargetParam

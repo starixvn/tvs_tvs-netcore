@@ -11,15 +11,8 @@ using Fanex.NAP.Client.Helpers.Business;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class VoidRequestController : ControllerBase
+public class VoidRequestController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public VoidRequestController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingVoidTickets, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> GetRemark() => Ok(await mediator.Send(new GetRemarkRequest()));

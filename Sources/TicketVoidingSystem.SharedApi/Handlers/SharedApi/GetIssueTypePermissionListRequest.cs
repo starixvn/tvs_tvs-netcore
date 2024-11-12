@@ -15,15 +15,9 @@ public class GetIssueTypePermissionListRequest : IRequest<IEnumerable<IssueType>
 {
 }
 
-public class GetIssueTypePermissionListHandler : IRequestHandler<GetIssueTypePermissionListRequest, IEnumerable<IssueType>>
+public class GetIssueTypePermissionListHandler(SessionService sessionService)
+    : IRequestHandler<GetIssueTypePermissionListRequest, IEnumerable<IssueType>>
 {
-    private readonly SessionService sessionService;
-
-    public GetIssueTypePermissionListHandler(SessionService sessionService)
-    {
-        this.sessionService = sessionService;
-    }
-
     public async Task<IEnumerable<IssueType>> Handle(GetIssueTypePermissionListRequest request, CancellationToken cancellationToken)
     {
         var issueTypePermissionList = new List<IssueType>();

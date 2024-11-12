@@ -24,22 +24,12 @@ public interface DisplayUiService
     Task<Group<TicketViewModel>> Assign(Group<GetTicketModel> groupTickets);
 }
 
-public class DisplayUiServiceImp : DisplayUiService
+public class DisplayUiServiceImp(
+    Repository repository,
+    SessionService sessionService,
+    TicketHtmlService ticketHtmlService)
+    : DisplayUiService
 {
-    private readonly Repository repository;
-    private readonly SessionService sessionService;
-    private readonly TicketHtmlService ticketHtmlService;
-
-    public DisplayUiServiceImp(
-        Repository repository,
-        SessionService sessionService,
-        TicketHtmlService ticketHtmlService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.ticketHtmlService = ticketHtmlService;
-    }
-
     public async Task<GetTicketsModel> ExecuteQuery(GetTicketsQuery query)
     {
         var criteria = CreateCriteria(query);

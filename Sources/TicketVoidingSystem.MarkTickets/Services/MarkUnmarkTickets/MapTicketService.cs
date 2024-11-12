@@ -22,19 +22,9 @@ public interface MapTicketService
     IEnumerable<ExcelTicketModel> MapToExcelTicketModel(IEnumerable<GetTicketModel> data, UserPermission permission);
 }
 
-public class MapTicketServiceImp : MapTicketService
+public class MapTicketServiceImp(IMapper mapper, BetListService betListService, CheckBoxService checkBoxService)
+    : MapTicketService
 {
-    private readonly IMapper mapper;
-    private readonly BetListService betListService;
-    private readonly CheckBoxService checkBoxService;
-
-    public MapTicketServiceImp(IMapper mapper, BetListService betListService, CheckBoxService checkBoxService)
-    {
-        this.mapper = mapper;
-        this.betListService = betListService;
-        this.checkBoxService = checkBoxService;
-    }
-
     public Group<TicketViewModel> MapToGroupTicketViewModel(Group<GetTicketModel> group, UserPermission userPermission)
     {
         var tickets = new List<TicketViewModel>();

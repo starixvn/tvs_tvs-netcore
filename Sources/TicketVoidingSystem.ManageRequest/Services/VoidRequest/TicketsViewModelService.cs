@@ -14,20 +14,12 @@ public interface TicketsViewModelService
     Task UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId, VoidPermission voidPermission, int? matchId);
 }
 
-public class TicketsViewModelServiceImp : TicketsViewModelService
+public class TicketsViewModelServiceImp(
+    GetTicketsViewModelService getTicketsViewModelService,
+    GetInfoTicketsForMessage getInfoTicketsForMessage,
+    BetTypesRepository betTypesRepository)
+    : TicketsViewModelService
 {
-    private readonly GetTicketsViewModelService getTicketsViewModelService;
-    private readonly GetInfoTicketsForMessage getInfoTicketsForMessage;
-    private readonly BetTypesRepository betTypesRepository;
-
-    public TicketsViewModelServiceImp(GetTicketsViewModelService getTicketsViewModelService,
-        GetInfoTicketsForMessage getInfoTicketsForMessage, BetTypesRepository betTypesRepository)
-    {
-        this.getTicketsViewModelService = getTicketsViewModelService;
-        this.getInfoTicketsForMessage = getInfoTicketsForMessage;
-        this.betTypesRepository = betTypesRepository;
-    }
-
     public async Task UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId,
         VoidPermission voidPermission, int? matchId)
     {

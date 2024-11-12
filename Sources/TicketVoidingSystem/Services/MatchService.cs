@@ -25,20 +25,13 @@ public interface MatchService
     string GetMatchEvent(Match match);
 }
 
-public class MatchServiceImp : MatchService
+public class MatchServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefWrapperService)
+    : MatchService
 {
-    private readonly IDynamicRepository repository;
-    private readonly RemotingRefWrapperService remotingRefWrapperService;
     private const int SportType160 = 160;
     private const int SportType161 = 161;
     private const int SportType164 = 164;
     private const int SportType207 = 207;
-
-    public MatchServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefWrapperService)
-    {
-        this.repository = repository;
-        this.remotingRefWrapperService = remotingRefWrapperService;
-    }
 
     public async Task<MatchInfoAddRequestViewModel> GetMatchAddRequest(GetMatchInfoAddRequestCriteria criteria)
     {

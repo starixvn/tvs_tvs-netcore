@@ -9,15 +9,8 @@ public interface ReducedOverBetTypesService
     Task<IEnumerable<ReducedOverBetTypesModel>> GetBetTypes(int matchId);
 }
 
-public class ReducedOverBetTypesServiceImp : ReducedOverBetTypesService
+public class ReducedOverBetTypesServiceImp(BetTypesRepository betTypesRepository) : ReducedOverBetTypesService
 {
-    private readonly BetTypesRepository betTypesRepository;
-
-    public ReducedOverBetTypesServiceImp(BetTypesRepository betTypesRepository)
-    {
-        this.betTypesRepository = betTypesRepository;
-    }
-
     public async Task<IEnumerable<ReducedOverBetTypesModel>> GetBetTypes(int matchId)
     {
         const string jsonPath = "App_Data/Data/ReducedOverBetTypes.json";

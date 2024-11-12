@@ -12,15 +12,9 @@ public class GetBetTypesVirtualSportRequest : IRequest<GroupBetTypeVirtualSport>
     public int MatchId { get; set; }
 }
 
-public class GetBetTypesVirtualSportsHandler : IRequestHandler<GetBetTypesVirtualSportRequest, GroupBetTypeVirtualSport>
+public class GetBetTypesVirtualSportsHandler(BetTypesRepository betTypesRepository)
+    : IRequestHandler<GetBetTypesVirtualSportRequest, GroupBetTypeVirtualSport>
 {
-    private readonly BetTypesRepository betTypesRepository;
-
-    public GetBetTypesVirtualSportsHandler(BetTypesRepository betTypesRepository)
-    {
-        this.betTypesRepository = betTypesRepository;
-    }
-
     public async Task<GroupBetTypeVirtualSport> Handle(GetBetTypesVirtualSportRequest message, CancellationToken cancellationToken)
     {
         var betTypesHaveTickets = string.Join(",", await betTypesRepository.GetBetTypesHaveTickets(new BetTypeQueryModel

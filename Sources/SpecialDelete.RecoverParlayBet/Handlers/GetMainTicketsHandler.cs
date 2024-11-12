@@ -10,15 +10,9 @@ public class GetMainTicketsRequest : GetMainTicketsQuery, IRequest<TicketsViewMo
 {
 }
 
-public class GetMainTicketsHandler : IRequestHandler<GetMainTicketsRequest, TicketsViewModel>
+public class GetMainTicketsHandler(GetTicketsService<GetMainTicket, GetMainTicketsQuery> getTicketsService)
+    : IRequestHandler<GetMainTicketsRequest, TicketsViewModel>
 {
-    private readonly GetTicketsService<GetMainTicket, GetMainTicketsQuery> getTicketsService;
-
-    public GetMainTicketsHandler(GetTicketsService<GetMainTicket, GetMainTicketsQuery> getTicketsService)
-    {
-        this.getTicketsService = getTicketsService;
-    }
-
     public async Task<TicketsViewModel> Handle(GetMainTicketsRequest request, CancellationToken cancellationToken)
     {
         return await getTicketsService.GetTickets(request, BetTypeConstant.SystemParlay);

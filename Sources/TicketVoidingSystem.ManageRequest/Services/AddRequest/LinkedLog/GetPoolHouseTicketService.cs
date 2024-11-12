@@ -12,17 +12,9 @@ public interface GetPoolHouseTicketService
     TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketRequest request);
 }
 
-public class GetPoolHouseTicketServiceImp : GetPoolHouseTicketService
+public class GetPoolHouseTicketServiceImp(MapTicketsService mapTicketsService, PagingService pagingService)
+    : GetPoolHouseTicketService
 {
-    private readonly MapTicketsService mapTicketsService;
-    private readonly PagingService pagingService;
-
-    public GetPoolHouseTicketServiceImp(MapTicketsService mapTicketsService, PagingService pagingService)
-    {
-        this.mapTicketsService = mapTicketsService;
-        this.pagingService = pagingService;
-    }
-
     public TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketRequest request)
     {
         var groupsHaveTickets = GenerateGroup(originTickets)

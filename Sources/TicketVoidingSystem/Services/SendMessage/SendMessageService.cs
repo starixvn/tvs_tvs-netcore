@@ -32,17 +32,9 @@ public interface SendMessageService
     Task DeleteTransaction(IEnumerable<BetId> betIds);
 }
 
-public class SendMessageServiceImp : SendMessageService
+public class SendMessageServiceImp(IDynamicRepository repository, MessageItemService messageItemService)
+    : SendMessageService
 {
-    private readonly IDynamicRepository repository;
-    private readonly MessageItemService messageItemService;
-
-    public SendMessageServiceImp(IDynamicRepository repository, MessageItemService messageItemService)
-    {
-        this.repository = repository;
-        this.messageItemService = messageItemService;
-    }
-
     public async Task<int> InsertMessageIdForBatchMessage(Message message, int matchId, int messageContentType)
     {
         return await InsertMessage(message, matchId, null, messageContentType);

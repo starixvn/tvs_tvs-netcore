@@ -11,15 +11,9 @@ public class GetCurrenciesRequest : IRequest<IEnumerable<Currency>>
 {
 }
 
-public class GetCurrenciesHandler : IRequestHandler<GetCurrenciesRequest, IEnumerable<Currency>>
+public class GetCurrenciesHandler(FilterCurrencyLicenseeService filterCurrencyLicenseeService)
+    : IRequestHandler<GetCurrenciesRequest, IEnumerable<Currency>>
 {
-    private readonly FilterCurrencyLicenseeService filterCurrencyLicenseeService;
-
-    public GetCurrenciesHandler(FilterCurrencyLicenseeService filterCurrencyLicenseeService)
-    {
-        this.filterCurrencyLicenseeService = filterCurrencyLicenseeService;
-    }
-
     public async Task<IEnumerable<Currency>> Handle(GetCurrenciesRequest request, CancellationToken cancellationToken)
     {
         return await filterCurrencyLicenseeService.GetCurrencies();

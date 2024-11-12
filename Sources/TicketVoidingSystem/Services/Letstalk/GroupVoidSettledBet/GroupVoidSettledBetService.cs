@@ -15,22 +15,13 @@ public interface GroupVoidSettledBetService
     Task<IEnumerable<Result>> SendMessageWithTicketInfo(LetstalkModel letstalkModel, TicketInfoForLetstalk ticketInfo, IEnumerable<TicketEmailModel> tickets);
 }
 
-public class GroupVoidSettledBetServiceImp : GroupVoidSettledBetService
+public class GroupVoidSettledBetServiceImp(
+    LetstalkSingleMessageService letstalkSingleMessageService,
+    LoggingService loggingService,
+    MessageContentSingleService messageContentSingleService,
+    MessageContentWithMemberTemplateService messageContentWithMemberTemplateService)
+    : GroupVoidSettledBetService
 {
-    private readonly LetstalkSingleMessageService letstalkSingleMessageService;
-    private readonly LoggingService loggingService;
-    private readonly MessageContentSingleService messageContentSingleService;
-    private readonly MessageContentWithMemberTemplateService messageContentWithMemberTemplateService;
-
-    public GroupVoidSettledBetServiceImp(LetstalkSingleMessageService letstalkSingleMessageService, LoggingService loggingService,
-        MessageContentSingleService messageContentSingleService, MessageContentWithMemberTemplateService messageContentWithMemberTemplateService)
-    {
-        this.letstalkSingleMessageService = letstalkSingleMessageService;
-        this.loggingService = loggingService;
-        this.messageContentSingleService = messageContentSingleService;
-        this.messageContentWithMemberTemplateService = messageContentWithMemberTemplateService;
-    }
-
     public async Task<IEnumerable<Result>> SendMessageWithTicketInfo(LetstalkModel letstalkModel, TicketInfoForLetstalk ticketInfo, IEnumerable<TicketEmailModel> tickets)
     {
         try

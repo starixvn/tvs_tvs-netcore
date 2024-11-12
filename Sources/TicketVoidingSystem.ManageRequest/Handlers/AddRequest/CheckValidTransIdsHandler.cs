@@ -9,15 +9,9 @@ public class CheckValidTransIdsRequest : CheckValidTransIdsModel, IRequest<Check
 {
 }
 
-public class CheckValidTransIdsHandler : IRequestHandler<CheckValidTransIdsRequest, CheckValidTransIdsViewModel>
+public class CheckValidTransIdsHandler(CheckValidTransIdsService checkValidTransIdsService)
+    : IRequestHandler<CheckValidTransIdsRequest, CheckValidTransIdsViewModel>
 {
-    private readonly CheckValidTransIdsService checkValidTransIdsService;
-
-    public CheckValidTransIdsHandler(CheckValidTransIdsService checkValidTransIdsService)
-    {
-        this.checkValidTransIdsService = checkValidTransIdsService;
-    }
-
     public async Task<CheckValidTransIdsViewModel> Handle(CheckValidTransIdsRequest request,
         CancellationToken cancellationToken)
     {

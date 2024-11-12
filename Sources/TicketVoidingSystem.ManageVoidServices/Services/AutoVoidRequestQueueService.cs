@@ -14,15 +14,8 @@ public interface AutoVoidRequestQueueService
     Task UpdateQueue(int siteDbGroupId, int queueId, string broadcastSessionId, int? statusId, bool? isUpdateStartTime, string errorMessage);
 }
 
-public class AutoVoidRequestQueueServiceImp : AutoVoidRequestQueueService
+public class AutoVoidRequestQueueServiceImp(IDynamicRepository repository) : AutoVoidRequestQueueService
 {
-    private readonly IDynamicRepository repository;
-
-    public AutoVoidRequestQueueServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<AutoVoidRequestQueueModel>> GetQueueInAllServers(string broadcastSessionId, int? statusId)
     {
         var queueInAllServers = new List<AutoVoidRequestQueueModel>();

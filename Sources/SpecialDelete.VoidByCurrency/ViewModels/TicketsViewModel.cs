@@ -4,12 +4,7 @@ namespace SpecialDelete.VoidByCurrency.ViewModels;
 
 public class TicketsViewModel
 {
-    public TicketsViewModel()
-    {
-        Groups = new List<Group<TicketViewModel>>();
-    }
-
-    public List<Group<TicketViewModel>> Groups { get; set; }
+    public List<Group<TicketViewModel>> Groups { get; set; } = new();
 
     public DateTime FromTransTime { get; set; }
 

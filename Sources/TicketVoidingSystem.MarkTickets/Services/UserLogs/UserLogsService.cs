@@ -19,19 +19,9 @@ public interface UserLogsService
     Task<IEnumerable<GetUserLogViewModel>> CreateUserLogViewModels(IEnumerable<GetUserLogModel> originalLogs);
 }
 
-public class UserLogsServiceImp : UserLogsService
+public class UserLogsServiceImp(IMapper mapper, IDynamicRepository repository, MapUserLogsService mapUserLogsService)
+    : UserLogsService
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly MapUserLogsService mapUserLogsService;
-
-    public UserLogsServiceImp(IMapper mapper, IDynamicRepository repository, MapUserLogsService mapUserLogsService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.mapUserLogsService = mapUserLogsService;
-    }
-
     public async Task<IEnumerable<GetUserLogModel>> GetUserLogs(GetUserLogsQuery query)
     {
         var criteria = mapper.Map<GetUserLogsCriteria>(query);

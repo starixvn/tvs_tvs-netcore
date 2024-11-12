@@ -12,15 +12,8 @@ public interface TicketService
     TicketViewModel GetTicket(GetTicketModel item, bool isRecover);
 }
 
-public class TicketServiceImp : TicketService
+public class TicketServiceImp(BetListCoreService betListCoreService) : TicketService
 {
-    private readonly BetListCoreService betListCoreService;
-
-    public TicketServiceImp(BetListCoreService betListCoreService)
-    {
-        this.betListCoreService = betListCoreService;
-    }
-
     public TicketViewModel GetTicket(GetTicketModel item, bool isDisable, bool isRecover)
     {
         var ticket = GetTicket(item, isRecover);

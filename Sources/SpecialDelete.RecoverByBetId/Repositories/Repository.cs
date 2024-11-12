@@ -15,17 +15,9 @@ public interface Repository
     Task<RecoverTicketsModel> RecoverTickets(IEnumerable<BetId> tickets);
 }
 
-public class RepositoryImp : Repository
+public class RepositoryImp(IDynamicRepository repository, SessionService sessionService)
+    : Repository
 {
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-
-    public RepositoryImp(IDynamicRepository repository, SessionService sessionService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-    }
-
     public async Task<GetTicketsModel> GetTickets(string transIds)
     {
         var criteria = CreateGetTicketsCriteria(transIds);

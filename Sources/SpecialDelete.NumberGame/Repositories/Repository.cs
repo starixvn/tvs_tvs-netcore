@@ -18,19 +18,9 @@ public interface Repository
     Task<(IEnumerable<TicketEmailModel> Tickets, Result Validation)> VoidTickets(VoidTicketsQuery query);
 }
 
-public class RepositoryImp : Repository
+public class RepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
+    : Repository
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-
-    public RepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.sessionService = sessionService;
-    }
-
     public async Task<GetTicketsModel> GetVoidTickets(GetVoidTicketsQuery query)
     {
         var criteria = CreateGetTicketsCriteria(query);

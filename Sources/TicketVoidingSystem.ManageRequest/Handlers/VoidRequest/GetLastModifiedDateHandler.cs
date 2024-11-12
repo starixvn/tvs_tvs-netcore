@@ -9,15 +9,9 @@ public class GetLastModifiedDateRequest : GetRequestLastModifiedDateCriteria, IR
 {
 }
 
-public class GetLastModifiedDateHandler : IRequestHandler<GetLastModifiedDateRequest, RequestLastModifiedDate>
+public class GetLastModifiedDateHandler(IDynamicRepository repository)
+    : IRequestHandler<GetLastModifiedDateRequest, RequestLastModifiedDate>
 {
-    private readonly IDynamicRepository repository;
-
-    public GetLastModifiedDateHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<RequestLastModifiedDate> Handle(GetLastModifiedDateRequest request, CancellationToken cancellationToken)
     {
         return await repository.GetAsync<RequestLastModifiedDate>(request);

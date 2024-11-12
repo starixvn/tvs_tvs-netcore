@@ -11,15 +11,9 @@ public class GetBetTypesVoidParlayVirtualSportRequest : IRequest<IList<GroupBetT
 {
 }
 
-public class GetBetTypesVoidParlayVirtualSportsHandler : IRequestHandler<GetBetTypesVoidParlayVirtualSportRequest, IList<GroupBetTypeVoidParlayVirtualSport>>
+public class GetBetTypesVoidParlayVirtualSportsHandler(BetTypesRepository betTypesRepository)
+    : IRequestHandler<GetBetTypesVoidParlayVirtualSportRequest, IList<GroupBetTypeVoidParlayVirtualSport>>
 {
-    private readonly BetTypesRepository betTypesRepository;
-
-    public GetBetTypesVoidParlayVirtualSportsHandler(BetTypesRepository betTypesRepository)
-    {
-        this.betTypesRepository = betTypesRepository;
-    }
-
     private static IList<GroupBetTypeVoidParlayVirtualSport> GroupBetTypes { get; set; }
 
     public Task<IList<GroupBetTypeVoidParlayVirtualSport>> Handle(GetBetTypesVoidParlayVirtualSportRequest message, CancellationToken cancellationToken)

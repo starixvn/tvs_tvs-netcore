@@ -11,17 +11,9 @@ public interface InsertToAmendmentTableStage
     Task<IEnumerable<LicenseeFile>> Execute(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery);
 }
 
-public class InsertToAmendmentTableStageImp : InsertToAmendmentTableStage
+public class InsertToAmendmentTableStageImp(IDynamicRepository repository, LoggingService loggingService)
+    : InsertToAmendmentTableStage
 {
-    private readonly IDynamicRepository repository;
-    private readonly LoggingService loggingService;
-
-    public InsertToAmendmentTableStageImp(IDynamicRepository repository, LoggingService loggingService)
-    {
-        this.repository = repository;
-        this.loggingService = loggingService;
-    }
-
     public async Task<IEnumerable<LicenseeFile>> Execute(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery)
     {
         var insertedResults = await InsertToMainDb053(ticketsJson, sendFileQuery);

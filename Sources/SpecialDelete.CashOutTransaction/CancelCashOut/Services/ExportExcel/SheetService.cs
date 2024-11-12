@@ -18,19 +18,11 @@ public interface SheetService
     void SetStyle(ExcelWorksheet worksheet);
 }
 
-public class SheetServiceImp : SheetService
+public class SheetServiceImp(
+    Repository repository,
+    TicketHtmlService ticketHtmlService)
+    : SheetService
 {
-    private readonly Repository repository;
-    private readonly TicketHtmlService ticketHtmlService;
-
-    public SheetServiceImp(
-        Repository repository,
-        TicketHtmlService ticketHtmlService)
-    {
-        this.repository = repository;
-        this.ticketHtmlService = ticketHtmlService;
-    }
-
     public async Task<IEnumerable<ExcelTicketModel>> GetTickets(GetTicketsQuery query)
     {
         var criteria = CreateCriteria(query);

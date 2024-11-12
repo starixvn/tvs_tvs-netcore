@@ -10,15 +10,9 @@ public interface NotificationSignalRService
     Task UpdateRequestStatusToAllUser(IEnumerable<RequestStatus> status);
 }
 
-public class NotificationSignalRServiceImp : NotificationSignalRService
+public class NotificationSignalRServiceImp(IHubContext<NotificationHub, ClientEvent> hubContext)
+    : NotificationSignalRService
 {
-    private readonly IHubContext<NotificationHub, ClientEvent> hubContext;
-
-    public NotificationSignalRServiceImp(IHubContext<NotificationHub, ClientEvent> hubContext)
-    {
-        this.hubContext = hubContext;
-    }
-
     public async Task UpdateRequestStatusToAllUser(IEnumerable<RequestStatus> status)
     {
         await hubContext.Clients.All.updateRequestStatus(status);

@@ -18,18 +18,13 @@ public interface DuplicateTicketsEmailContentService
     MailRecord Create(DuplicateTicketsMailVoidViewModel mailVoidViewModel, SiteEmail site, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets, EmailGroup emailGroup);
 }
 
-public class DuplicateTicketsEmailContentServiceImp : DuplicateTicketsEmailContentService
+public class DuplicateTicketsEmailContentServiceImp(
+    DuplicateTicketsSubjectService subjectService,
+    SpecialPlatformService specialPlatformService)
+    : DuplicateTicketsEmailContentService
 {
     private static readonly ConcurrentDictionary<int, IRazorEngineCompiledTemplate> CompiledTemplateCache = new();
-    private readonly DuplicateTicketsSubjectService subjectService;
-    private readonly SpecialPlatformService specialPlatformService;
-
-    public DuplicateTicketsEmailContentServiceImp(DuplicateTicketsSubjectService subjectService, SpecialPlatformService specialPlatformService)
-    {
-        this.subjectService = subjectService;
-        this.specialPlatformService = specialPlatformService;
-    }
-
+    
     public MailRecord Create(DuplicateTicketsMailVoidViewModel mailVoidViewModel, SiteEmail site, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets, EmailGroup emailGroup)
     {
         if (duplicateTickets.Valid(site))

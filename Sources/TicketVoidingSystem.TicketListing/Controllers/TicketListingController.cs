@@ -11,15 +11,8 @@ using Fanex.NAP.Client.Helpers.Business;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class TicketListingController : ControllerBase
+public class TicketListingController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public TicketListingController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketListing, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> GetLicensees() => Ok(await mediator.Send(new GetLicenseesRequest()));

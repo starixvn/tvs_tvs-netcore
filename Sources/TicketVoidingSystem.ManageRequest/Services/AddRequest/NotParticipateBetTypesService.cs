@@ -12,17 +12,11 @@ public interface NotParticipateBetTypesService
     Task<NotParticipateBetTypesViewModel> GetNotParticipateBetType(int matchId);
 }
 
-public class NotParticipateBetTypesServiceImp : NotParticipateBetTypesService
+public class NotParticipateBetTypesServiceImp(
+    BetTypesRepository betTypesRepository,
+    IDynamicRepository dynamicRepository)
+    : NotParticipateBetTypesService
 {
-    private readonly BetTypesRepository betTypesRepository;
-    private readonly IDynamicRepository dynamicRepository;
-
-    public NotParticipateBetTypesServiceImp(BetTypesRepository betTypesRepository, IDynamicRepository dynamicRepository)
-    {
-        this.betTypesRepository = betTypesRepository;
-        this.dynamicRepository = dynamicRepository;
-    }
-
     public async Task<NotParticipateBetTypesViewModel> GetNotParticipateBetType(int matchId)
     {
         const string jsonPath = "App_Data/Data/NotParticipateBetTypes.json";

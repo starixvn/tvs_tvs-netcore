@@ -12,17 +12,9 @@ public interface CheckUsernameService
     Task<CheckUsernamesInDatabaseResult> ExecuteValidationInDb(CheckValidUsernamesRequest request);
 }
 
-public class CheckUsernameServiceImp : CheckUsernameService
+public class CheckUsernameServiceImp(IDynamicRepository repository, GetTransInfoService getTransInfoService)
+    : CheckUsernameService
 {
-    private readonly IDynamicRepository repository;
-    private readonly GetTransInfoService getTransInfoService;
-
-    public CheckUsernameServiceImp(IDynamicRepository repository, GetTransInfoService getTransInfoService)
-    {
-        this.repository = repository;
-        this.getTransInfoService = getTransInfoService;
-    }
-
     public async Task<CheckUsernamesInDatabaseResult> ExecuteValidationInDb(CheckValidUsernamesRequest request)
     {
         var transInfoJsonList = await GetTransInfoJson(request);

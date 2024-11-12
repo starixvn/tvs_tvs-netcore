@@ -10,15 +10,8 @@ public interface Repository
     Task<(IEnumerable<RecoverValidationModel> Validation, IEnumerable<T> Tickets)> RecoverTickets<T>(ICriteria criteria);
 }
 
-public class RepositoryImp : Repository
+public class RepositoryImp(IDynamicRepository repository) : Repository
 {
-    private readonly IDynamicRepository repository;
-
-    public RepositoryImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<(IEnumerable<T> Tickets, IEnumerable<InvalidTransIds> InvalidTransIds)> GetTickets<T>(ICriteria criteria)
     {
         var (tickets, invalidTransIds) = await repository.FetchMultipleAsync<T, InvalidTransIds>(criteria);

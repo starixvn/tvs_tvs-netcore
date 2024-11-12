@@ -4,15 +4,9 @@ namespace TicketVoidingSystem.Criteria.SendMessage;
 
 public class CreateMessageCriteria : CriteriaBase
 {
-    public CreateMessageCriteria()
-    {
-        IsBatch = true;
-        MsgType = 1;
-    }
+    public bool IsBatch { get; set; } = true;
 
-    public bool IsBatch { get; set; }
-
-    public int MsgType { get; set; }
+    public int MsgType { get; set; } = 1;
 
     public string Content_ch { get; set; }
 

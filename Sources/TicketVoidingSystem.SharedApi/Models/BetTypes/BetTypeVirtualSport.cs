@@ -5,12 +5,7 @@ namespace TicketVoidingSystem.SharedApi.Models.BetTypes;
 
 public class GroupBetTypeVirtualSport
 {
-    public GroupBetTypeVirtualSport()
-    {
-        Result = new Result();
-    }
-
-    public Result Result { get; set; }
+    public Result Result { get; set; } = new();
     public IEnumerable<BetTypeVirtualSport> BetTypes { get; set; }
 }
 

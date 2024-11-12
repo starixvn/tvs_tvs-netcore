@@ -13,15 +13,9 @@ public class GetPermissionRequest : IRequest<PermissionABExceptionList>
 {
 }
 
-public class GetPermissionHandler : IRequestHandler<GetPermissionRequest, PermissionABExceptionList>
+public class GetPermissionHandler(SessionService session)
+    : IRequestHandler<GetPermissionRequest, PermissionABExceptionList>
 {
-    private readonly SessionService session;
-
-    public GetPermissionHandler(SessionService session)
-    {
-        this.session = session;
-    }
-
     public async Task<PermissionABExceptionList> Handle(GetPermissionRequest request, CancellationToken cancellationToken)
     {
         var permission = new PermissionABExceptionList

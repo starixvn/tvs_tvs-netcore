@@ -14,19 +14,12 @@ public interface EmailItSupportService
         bool isFromAfterVoidService);
 }
 
-public class EmailItSupportServiceImp : EmailItSupportService
+public class EmailItSupportServiceImp(
+    SitesEmailService sitesEmailService,
+    EmailSimpleService emailSimpleService,
+    VoidEmailContentService voidEmailContentService)
+    : EmailItSupportService
 {
-    private readonly SitesEmailService sitesEmailService;
-    private readonly EmailSimpleService emailSimpleService;
-    private readonly VoidEmailContentService voidEmailContentService;
-
-    public EmailItSupportServiceImp(SitesEmailService sitesEmailService, EmailSimpleService emailSimpleService, VoidEmailContentService voidEmailContentService)
-    {
-        this.sitesEmailService = sitesEmailService;
-        this.emailSimpleService = emailSimpleService;
-        this.voidEmailContentService = voidEmailContentService;
-    }
-
     public async Task Send(MailVoidViewModel mailVoidViewModel, IEnumerable<SiteEmail> sites, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)
     {
         var site = sitesEmailService.GetSiteByName(sites, StringResource.ItSupport);

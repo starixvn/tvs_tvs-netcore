@@ -9,15 +9,9 @@ public class GetWrongScoreInfoRequest : GetWrongScoreInfoCriteria, IRequest<IEnu
 {
 }
 
-public class GetWrongScoreInfoHandler : IRequestHandler<GetWrongScoreInfoRequest, IEnumerable<WrongScoreInfoViewModel>>
+public class GetWrongScoreInfoHandler(WrongScoreInfoService wrongScoreInfoService)
+    : IRequestHandler<GetWrongScoreInfoRequest, IEnumerable<WrongScoreInfoViewModel>>
 {
-    private readonly WrongScoreInfoService wrongScoreInfoService;
-
-    public GetWrongScoreInfoHandler(WrongScoreInfoService wrongScoreInfoService)
-    {
-        this.wrongScoreInfoService = wrongScoreInfoService;
-    }
-
     public async Task<IEnumerable<WrongScoreInfoViewModel>> Handle(GetWrongScoreInfoRequest request, CancellationToken cancellationToken)
     {
         return await wrongScoreInfoService.GetWrongScoreInfo(request);

@@ -13,17 +13,9 @@ public class GetReasonNameRequest : IRequest<VoidedReason>
     public int SportTypeId { get; set; }
 }
 
-public class GetReasonNameHandler : IRequestHandler<GetReasonNameRequest, VoidedReason>
+public class GetReasonNameHandler(IDynamicRepository repository, BetListService betListService)
+    : IRequestHandler<GetReasonNameRequest, VoidedReason>
 {
-    private readonly IDynamicRepository repository;
-    private readonly BetListService betListService;
-
-    public GetReasonNameHandler(IDynamicRepository repository, BetListService betListService)
-    {
-        this.repository = repository;
-        this.betListService = betListService;
-    }
-
     public async Task<VoidedReason> Handle(GetReasonNameRequest request, CancellationToken cancellationToken)
     {
         var voidedReason = await GetVoidedReason(request);

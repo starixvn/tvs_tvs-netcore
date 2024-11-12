@@ -12,19 +12,12 @@ public interface DuplicateTicketsEmailItSupportService
     Task Send(DuplicateTicketsMailVoidViewModel mailVoidViewModel, IEnumerable<SiteEmail> sites, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets);
 }
 
-public class DuplicateTicketsEmailItSupportServiceImp : DuplicateTicketsEmailItSupportService
+public class DuplicateTicketsEmailItSupportServiceImp(
+    SitesEmailService sitesEmailService,
+    EmailSimpleService emailSimpleService,
+    DuplicateTicketsEmailContentService emailContentService)
+    : DuplicateTicketsEmailItSupportService
 {
-    private readonly SitesEmailService sitesEmailService;
-    private readonly EmailSimpleService emailSimpleService;
-    private readonly DuplicateTicketsEmailContentService emailContentService;
-
-    public DuplicateTicketsEmailItSupportServiceImp(SitesEmailService sitesEmailService, EmailSimpleService emailSimpleService, DuplicateTicketsEmailContentService emailContentService)
-    {
-        this.sitesEmailService = sitesEmailService;
-        this.emailSimpleService = emailSimpleService;
-        this.emailContentService = emailContentService;
-    }
-
     public async Task Send(DuplicateTicketsMailVoidViewModel mailVoidViewModel, IEnumerable<SiteEmail> sites, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets)
     {
         var site = sitesEmailService.GetSiteByName(sites, StringResource.ItQa);

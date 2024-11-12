@@ -12,19 +12,11 @@ public class VoidTicketsRequest : VoidTicketsQuery, IRequest<List<Result>>
 {
 }
 
-public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, List<Result>>
+public class VoidTicketsHandler(
+    VoidTicketsService voidTicketsService,
+    LoggingService loggingService)
+    : IRequestHandler<VoidTicketsRequest, List<Result>>
 {
-    private readonly VoidTicketsService voidTicketsService;
-    private readonly LoggingService loggingService;
-
-    public VoidTicketsHandler(
-        VoidTicketsService voidTicketsService,
-        LoggingService loggingService)
-    {
-        this.voidTicketsService = voidTicketsService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<List<Result>> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
     {
         var results = new List<Result>();

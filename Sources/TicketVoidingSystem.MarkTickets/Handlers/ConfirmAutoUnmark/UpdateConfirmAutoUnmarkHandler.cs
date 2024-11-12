@@ -11,15 +11,9 @@ public class UpdateConfirmAutoUnmarkRequest : UpdateConfirmAutoUnmarkQuery, IReq
 {
 }
 
-public class UpdateConfirmAutoUnmarkHandler : IRequestHandler<UpdateConfirmAutoUnmarkRequest, Result>
+public class UpdateConfirmAutoUnmarkHandler(UpdateConfirmAutoUnmarkService updateConfirmAutoUnmarkService)
+    : IRequestHandler<UpdateConfirmAutoUnmarkRequest, Result>
 {
-    private readonly UpdateConfirmAutoUnmarkService updateConfirmAutoUnmarkService;
-
-    public UpdateConfirmAutoUnmarkHandler(UpdateConfirmAutoUnmarkService updateConfirmAutoUnmarkService)
-    {
-        this.updateConfirmAutoUnmarkService = updateConfirmAutoUnmarkService;
-    }
-
     public async Task<Result> Handle(UpdateConfirmAutoUnmarkRequest message, CancellationToken cancellationToken)
     {
         await updateConfirmAutoUnmarkService.InsertAutoUnmarkSetting(message);

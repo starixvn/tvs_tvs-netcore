@@ -16,28 +16,14 @@ public interface RecoverBetService
     Task<IEnumerable<Result>> RecoverTickets(Query query);
 }
 
-public class RecoverBetServiceImp : RecoverBetService
+public class RecoverBetServiceImp(
+    GetTicketsService getTicketsService,
+    PagingService pagingService,
+    RecoverTicketsService recoverTicketsService,
+    NotificationService notificationService,
+    LoggingService loggingService)
+    : RecoverBetService
 {
-    private readonly GetTicketsService getTicketsService;
-    private readonly PagingService pagingService;
-    private readonly RecoverTicketsService recoverTicketsService;
-    private readonly NotificationService notificationService;
-    private readonly LoggingService loggingService;
-
-    public RecoverBetServiceImp(
-        GetTicketsService getTicketsService,
-        PagingService pagingService,
-        RecoverTicketsService recoverTicketsService,
-        NotificationService notificationService,
-        LoggingService loggingService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.pagingService = pagingService;
-        this.recoverTicketsService = recoverTicketsService;
-        this.notificationService = notificationService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<RecoverTicketsViewModel> GetTickets(Query query)
     {
         var viewModel = new RecoverTicketsViewModel();

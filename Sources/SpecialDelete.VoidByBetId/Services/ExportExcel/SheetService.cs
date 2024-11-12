@@ -16,19 +16,11 @@ public interface SheetService
     void SetStyle(ExcelWorksheet worksheet);
 }
 
-public class SheetServiceImp : SheetService
+public class SheetServiceImp(
+    GetTicketsService getTicketsService,
+    TicketService ticketHtmlService)
+    : SheetService
 {
-    private readonly GetTicketsService getTicketsService;
-    private readonly TicketService ticketHtmlService;
-
-    public SheetServiceImp(
-        GetTicketsService getTicketsService,
-        TicketService ticketHtmlService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.ticketHtmlService = ticketHtmlService;
-    }
-
     public async Task<IEnumerable<ExcelTicketModel>> GetTickets(GetTicketsQuery query)
     {
         var excelTickets = new List<ExcelTicketModel>();

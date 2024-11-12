@@ -18,15 +18,8 @@ public interface Repository
     Task<SubmittedTicketsModel<T>> SubmittedTickets<T, U>(U criteria, IEnumerable<BetId> tickets) where U : ICriteria, ExtendSubmittedTicketCriteria;
 }
 
-public class RepositoryImp : Repository
+public class RepositoryImp(IDynamicRepository repository) : Repository
 {
-    private readonly IDynamicRepository repository;
-
-    public RepositoryImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<GetTicketsModel> GetTicketsVoidCashOut(GetTicketsVoidCashOutCriteria criteria)
     {
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>

@@ -13,19 +13,12 @@ public interface GetRequestsInActiveTableService
     Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequestsInActiveTable(SelectRequestsQuery query);
 }
 
-public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableService
+public class GetRequestsInActiveTableServiceImp(
+    IDynamicRepository repository,
+    IMapper mapper,
+    BetListService betListService)
+    : GetRequestsInActiveTableService
 {
-    private readonly IDynamicRepository repository;
-    private readonly IMapper mapper;
-    private readonly BetListService betListService;
-
-    public GetRequestsInActiveTableServiceImp(IDynamicRepository repository, IMapper mapper, BetListService betListService)
-    {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.betListService = betListService;
-    }
-
     public async Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequestsInActiveTable(SelectRequestsQuery query)
     {
         var criteriaActive = mapper.Map<SelectActiveRequestsCriteria>(query);

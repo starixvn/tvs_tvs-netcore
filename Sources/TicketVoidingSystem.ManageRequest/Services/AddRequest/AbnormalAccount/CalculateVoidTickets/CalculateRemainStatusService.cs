@@ -9,15 +9,9 @@ public interface CalculateRemainStatusService
         IReadOnlyDictionary<(int custId, int statusId), OrderedTickets> groupTickets, IList<int> ticketStatusIds);
 }
 
-public class CalculateRemainStatusServiceImp : CalculateRemainStatusService
+public class CalculateRemainStatusServiceImp(CombineVoidTicketsService combineVoidTicketsService)
+    : CalculateRemainStatusService
 {
-    private readonly CombineVoidTicketsService combineVoidTicketsService;
-
-    public CalculateRemainStatusServiceImp(CombineVoidTicketsService combineVoidTicketsService)
-    {
-        this.combineVoidTicketsService = combineVoidTicketsService;
-    }
-
     public async Task<CalcVoidTicketsResult> ExecuteParallel(IList<AccountWinlostModel> orderedAccounts,
         IReadOnlyDictionary<(int custId, int statusId), OrderedTickets> groupTickets, IList<int> ticketStatusIds)
     {

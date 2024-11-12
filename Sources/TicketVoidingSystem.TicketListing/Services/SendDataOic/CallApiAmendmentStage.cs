@@ -9,17 +9,11 @@ public interface CallApiAmendmentStage
     Task<AmendmentResponse> Execute(IEnumerable<LicenseeFile> licensees, string title, DateTime eventDate);
 }
 
-public class CallApiAmendmentStageImp : CallApiAmendmentStage
+public class CallApiAmendmentStageImp(
+    AmendmentOicHttpClientService amendmentOicHttpClientService,
+    LoggingService loggingService)
+    : CallApiAmendmentStage
 {
-    private readonly AmendmentOicHttpClientService amendmentOicHttpClientService;
-    private readonly LoggingService loggingService;
-
-    public CallApiAmendmentStageImp(AmendmentOicHttpClientService amendmentOicHttpClientService, LoggingService loggingService)
-    {
-        this.amendmentOicHttpClientService = amendmentOicHttpClientService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<AmendmentResponse> Execute(IEnumerable<LicenseeFile> licensees, string title, DateTime eventDate)
     {
         var query = CreateQuery(licensees, title, eventDate);

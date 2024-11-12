@@ -15,22 +15,12 @@ public interface GetTicketsService
     Task<Group<TicketViewModel>> AssignData(Group<GetTicketModel> groupTicket, bool isOutright);
 }
 
-public class GetTicketsServiceImp : GetTicketsService
+public class GetTicketsServiceImp(
+    VoidByCurrencyRepository repository,
+    SessionService sessionService,
+    TicketService ticketHtmlService)
+    : GetTicketsService
 {
-    private readonly VoidByCurrencyRepository repository;
-    private readonly SessionService sessionService;
-    private readonly TicketService ticketHtmlService;
-
-    public GetTicketsServiceImp(
-        VoidByCurrencyRepository repository,
-        SessionService sessionService,
-        TicketService ticketHtmlService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.ticketHtmlService = ticketHtmlService;
-    }
-
     public async Task<IEnumerable<GetTicketModel>> GetTickets(GetTicketsQuery query)
     {
         return await repository.GetTickets(query);

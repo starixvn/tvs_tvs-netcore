@@ -12,19 +12,12 @@ public interface EmailCashOutService
     Task Send(MailVoidViewModel mailVoidViewModel, IEnumerable<SiteEmail> sites, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService);
 }
 
-public class EmailCashOutServiceImp : EmailCashOutService
+public class EmailCashOutServiceImp(
+    SitesEmailService sitesEmailService,
+    EmailSimpleService emailSimpleService,
+    VoidEmailContentService voidEmailContentService)
+    : EmailCashOutService
 {
-    private readonly SitesEmailService sitesEmailService;
-    private readonly EmailSimpleService emailSimpleService;
-    private readonly VoidEmailContentService voidEmailContentService;
-
-    public EmailCashOutServiceImp(SitesEmailService sitesEmailService, EmailSimpleService emailSimpleService, VoidEmailContentService voidEmailContentService)
-    {
-        this.sitesEmailService = sitesEmailService;
-        this.emailSimpleService = emailSimpleService;
-        this.voidEmailContentService = voidEmailContentService;
-    }
-
     public async Task Send(MailVoidViewModel mailVoidViewModel, IEnumerable<SiteEmail> sites, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)
     {
         var site = sitesEmailService.GetSiteByName(sites, StringResource.CashOut);

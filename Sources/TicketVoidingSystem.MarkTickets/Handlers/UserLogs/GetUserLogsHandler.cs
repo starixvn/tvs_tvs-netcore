@@ -13,19 +13,11 @@ public class GetUserLogsRequest : GetUserLogsQuery, IRequest<GetUserLogsViewMode
 {
 }
 
-public class GetUserLogsHandler : IRequestHandler<GetUserLogsRequest, GetUserLogsViewModel>
+public class GetUserLogsHandler(
+    UserLogsService userLogsService,
+    PagingService pagingService)
+    : IRequestHandler<GetUserLogsRequest, GetUserLogsViewModel>
 {
-    private readonly UserLogsService userLogsService;
-    private readonly PagingService pagingService;
-
-    public GetUserLogsHandler(
-        UserLogsService userLogsService,
-        PagingService pagingService)
-    {
-        this.userLogsService = userLogsService;
-        this.pagingService = pagingService;
-    }
-
     public async Task<GetUserLogsViewModel> Handle(GetUserLogsRequest message, CancellationToken cancellationToken)
     {
         var model = new GetUserLogsViewModel();

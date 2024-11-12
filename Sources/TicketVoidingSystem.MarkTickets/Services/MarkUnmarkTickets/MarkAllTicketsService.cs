@@ -16,17 +16,8 @@ public interface MarkAllTicketsService
     Task<Result> Execute(MarkAllTicketsQuery query);
 }
 
-public class MarkAllTicketsServiceImp : MarkAllTicketsService
+public class MarkAllTicketsServiceImp(IDynamicRepository repository, SessionService session) : MarkAllTicketsService
 {
-    private readonly IDynamicRepository repository;
-    private readonly SessionService session;
-
-    public MarkAllTicketsServiceImp(IDynamicRepository repository, SessionService session)
-    {
-        this.repository = repository;
-        this.session = session;
-    }
-
     public async Task<Result> Execute(MarkAllTicketsQuery query)
     {
         var resultInAllServers = new List<Result>();

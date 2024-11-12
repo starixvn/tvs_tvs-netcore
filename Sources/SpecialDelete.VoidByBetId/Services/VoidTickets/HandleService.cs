@@ -14,20 +14,11 @@ public interface HandleService
     IEnumerable<Result> CreateWarningMessage(string warningCrickets);
 }
 
-public class HandleServiceImp : HandleService
+public class HandleServiceImp(
+    VoidByBetIdRepository repository,
+    LoggingService loggingService)
+    : HandleService
 {
-    private readonly VoidByBetIdRepository repository;
-    private readonly LoggingService loggingService;
-
-    public HandleServiceImp(
-        VoidByBetIdRepository repository,
-        LoggingService loggingService
-    )
-    {
-        this.repository = repository;
-        this.loggingService = loggingService;
-    }
-
     public async Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query)
     {
         VoidTicketsModel model;

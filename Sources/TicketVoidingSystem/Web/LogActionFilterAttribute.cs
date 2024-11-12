@@ -17,15 +17,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace TicketVoidingSystem.Web;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class LogActionFilterAttribute : ActionFilterAttribute
+public class LogActionFilterAttribute(ILogger logger) : ActionFilterAttribute
 {
     private readonly List<string> excludePatterns = new() { "^.*/Auth.*$", "^.*/healthcheck.*$", "^.*recheckin.*$" };
-    private readonly ILogger logger;
-
-    public LogActionFilterAttribute(ILogger logger)
-    {
-        this.logger = logger;
-    }
 
     public override async void OnActionExecuting(ActionExecutingContext context)
     {

@@ -18,17 +18,8 @@ public interface MapFromBetListService
     VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match? match, ChoiceType choiceType, GetVoidedTicketsQuery query);
 }
 
-public class MapFromBetListServiceImp : MapFromBetListService
+public class MapFromBetListServiceImp(IMapper mapper, BetListService betListService) : MapFromBetListService
 {
-    private readonly IMapper mapper;
-    private readonly BetListService betListService;
-
-    public MapFromBetListServiceImp(IMapper mapper, BetListService betListService)
-    {
-        this.mapper = mapper;
-        this.betListService = betListService;
-    }
-
     public VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match? match, ChoiceType choiceType, GetVoidedTicketsQuery query)
     {
         const int minBetType = 801;

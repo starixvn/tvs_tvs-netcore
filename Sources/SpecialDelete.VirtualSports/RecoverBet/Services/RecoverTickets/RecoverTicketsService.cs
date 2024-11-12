@@ -21,31 +21,15 @@ public interface RecoverTicketsService
     Task SendEmail(RecoverTicketsModel model, Recover typeOfRecover);
 }
 
-public class RecoverTicketsServiceImp : RecoverTicketsService
+public class RecoverTicketsServiceImp(
+    Repository repository,
+    SessionService sessionService,
+    LoggingService loggingService,
+    SendMessageService sendMessageService,
+    SitesEmailService sitesEmailService,
+    EmailService emailService)
+    : RecoverTicketsService
 {
-    private readonly Repository repository;
-    private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
-    private readonly SendMessageService sendMessageService;
-    private readonly SitesEmailService sitesEmailService;
-    private readonly EmailService emailService;
-
-    public RecoverTicketsServiceImp(
-        Repository repository,
-        SessionService sessionService,
-        LoggingService loggingService,
-        SendMessageService sendMessageService,
-        SitesEmailService sitesEmailService,
-        EmailService emailService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.loggingService = loggingService;
-        this.sendMessageService = sendMessageService;
-        this.sitesEmailService = sitesEmailService;
-        this.emailService = emailService;
-    }
-
     public async Task<RecoverTicketsModel> ExecuteQuery(Query query)
     {
         try

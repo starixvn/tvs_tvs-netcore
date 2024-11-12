@@ -20,15 +20,8 @@ public interface ResultCacheService
     Task SetVoidResultsCache(string key, IList<Result> results);
 }
 
-public class ResultCacheServiceImp : ResultCacheService
+public class ResultCacheServiceImp(ICache cacheService) : ResultCacheService
 {
-    private readonly ICache cacheService;
-
-    public ResultCacheServiceImp(ICache cacheService)
-    {
-        this.cacheService = cacheService;
-    }
-
     public async Task<bool> IsExistResult(string key)
     {
         return await cacheService.ContainAsync(key);

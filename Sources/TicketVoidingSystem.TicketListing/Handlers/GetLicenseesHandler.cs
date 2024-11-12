@@ -9,15 +9,9 @@ public class GetLicenseesRequest : IRequest<IEnumerable<Licensee>>
 {
 }
 
-public class GetLicenseesHandler : IRequestHandler<GetLicenseesRequest, IEnumerable<Licensee>>
+public class GetLicenseesHandler(IDynamicRepository repository)
+    : IRequestHandler<GetLicenseesRequest, IEnumerable<Licensee>>
 {
-    private readonly IDynamicRepository repository;
-
-    public GetLicenseesHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<Licensee>> Handle(GetLicenseesRequest request, CancellationToken cancellationToken)
     {
         var criteria = new GetLicenseesCriteria();

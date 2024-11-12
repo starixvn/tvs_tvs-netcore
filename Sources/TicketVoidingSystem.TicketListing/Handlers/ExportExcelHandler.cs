@@ -12,17 +12,9 @@ public class ExportExcelRequest : ExportExcelQuery, IRequest<ExcelFileModel>
 {
 }
 
-public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileModel>
+public class ExportExcelHandler(ExcelService<ExportExcelQuery> excelService, GetTicketsService getTicketsService)
+    : IRequestHandler<ExportExcelRequest, ExcelFileModel>
 {
-    private readonly ExcelService<ExportExcelQuery> excelService;
-    private readonly GetTicketsService getTicketsService;
-
-    public ExportExcelHandler(ExcelService<ExportExcelQuery> excelService, GetTicketsService getTicketsService)
-    {
-        this.excelService = excelService;
-        this.getTicketsService = getTicketsService;
-    }
-
     public async Task<ExcelFileModel> Handle(ExportExcelRequest request, CancellationToken cancellationToken)
     {
         var betTypeName = string.IsNullOrEmpty(request.BetTypeName) ? string.Empty : $"_{request.BetTypeName}";

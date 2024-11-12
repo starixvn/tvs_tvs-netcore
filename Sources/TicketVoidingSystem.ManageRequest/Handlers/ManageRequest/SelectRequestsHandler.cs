@@ -9,22 +9,12 @@ public class SelectRequestsRequest : SelectRequestsQuery, IRequest<IEnumerable<R
 {
 }
 
-public class SelectRequestsHandler : IRequestHandler<SelectRequestsRequest, IEnumerable<RequestViewModel>>
+public class SelectRequestsHandler(
+    GetRequestsService getRequestsService,
+    RenderRequestService renderService,
+    CheckPermissionOnRequestService checkPermissionOnRequestService)
+    : IRequestHandler<SelectRequestsRequest, IEnumerable<RequestViewModel>>
 {
-    private readonly GetRequestsService getRequestsService;
-    private readonly RenderRequestService renderService;
-    private readonly CheckPermissionOnRequestService checkPermissionOnRequestService;
-
-    public SelectRequestsHandler(
-        GetRequestsService getRequestsService,
-        RenderRequestService renderService,
-        CheckPermissionOnRequestService checkPermissionOnRequestService)
-    {
-        this.getRequestsService = getRequestsService;
-        this.renderService = renderService;
-        this.checkPermissionOnRequestService = checkPermissionOnRequestService;
-    }
-
     public async Task<IEnumerable<RequestViewModel>> Handle(SelectRequestsRequest request, CancellationToken cancellationToken)
     {
         if (await IsFilterSearchRequestsValid(request))

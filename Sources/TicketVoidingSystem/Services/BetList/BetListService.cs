@@ -55,17 +55,9 @@ public interface BetListService
     string GetScoreBetListUi(int sportType, bool isLiveIndicator, short liveHomeScore, short liveAwayScore);
 }
 
-public class BetListServiceImp : BetListService
+public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperService, OddsService oddsService)
+    : BetListService
 {
-    private readonly OddsService oddsService;
-    private readonly RemotingRefWrapperService remotingRefWrapperService;
-
-    public BetListServiceImp(RemotingRefWrapperService remotingRefWrapperService, OddsService oddsService)
-    {
-        this.remotingRefWrapperService = remotingRefWrapperService;
-        this.oddsService = oddsService;
-    }
-
     private static BetListHTMLBuilder Builder
     {
         get

@@ -15,25 +15,13 @@ public interface BatchMessageService
     Task<Result> UpdateMessage(UpdateMessageQueryModel query);
 }
 
-public class BatchMessageServiceImp : BatchMessageService
+public class BatchMessageServiceImp(
+    UploadBatchMessageRepository repository,
+    SendMessageService sendMessageService,
+    MessageItemService messageItemService,
+    LoggingService loggingService)
+    : BatchMessageService
 {
-    private readonly UploadBatchMessageRepository repository;
-    private readonly SendMessageService sendMessageService;
-    private readonly MessageItemService messageItemService;
-    private readonly LoggingService loggingService;
-
-    public BatchMessageServiceImp(
-        UploadBatchMessageRepository repository,
-        SendMessageService sendMessageService,
-        MessageItemService messageItemService,
-        LoggingService loggingService)
-    {
-        this.repository = repository;
-        this.sendMessageService = sendMessageService;
-        this.messageItemService = messageItemService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<MessageResult> GetReceivedUsers(CheckTransIdsQueryModel query)
     {
         var criteria = new GetReceivedUsersCriteria

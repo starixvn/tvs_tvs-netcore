@@ -12,17 +12,9 @@ public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>
 {
 }
 
-public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>>
+public class VoidTicketsHandler(VoidService voidService, LoggingService loggingService)
+    : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>>
 {
-    private readonly VoidService voidService;
-    private readonly LoggingService loggingService;
-
-    public VoidTicketsHandler(VoidService voidService, LoggingService loggingService)
-    {
-        this.voidService = voidService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<IEnumerable<Result>> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
     {
         var model = await voidService.VoidTickets(request);

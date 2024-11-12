@@ -14,21 +14,13 @@ public class GetVoidTicketsRequest : GetVoidTicketsQuery, IRequest<TicketsViewMo
 {
 }
 
-public class GetVoidTicketsHandler : IRequestHandler<GetVoidTicketsRequest, TicketsViewModel>
+public class GetVoidTicketsHandler(
+    SessionService sessionService,
+    Repository repository,
+    PagingService pagingService,
+    TicketService ticketService)
+    : IRequestHandler<GetVoidTicketsRequest, TicketsViewModel>
 {
-    private readonly SessionService sessionService;
-    private readonly Repository repository;
-    private readonly PagingService pagingService;
-    private readonly TicketService ticketService;
-
-    public GetVoidTicketsHandler(SessionService sessionService, Repository repository, PagingService pagingService, TicketService ticketService)
-    {
-        this.sessionService = sessionService;
-        this.repository = repository;
-        this.pagingService = pagingService;
-        this.ticketService = ticketService;
-    }
-
     public async Task<TicketsViewModel> Handle(GetVoidTicketsRequest request, CancellationToken cancellationToken)
     {
         var model = await repository.GetVoidTickets(request);

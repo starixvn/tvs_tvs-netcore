@@ -10,15 +10,9 @@ public class GetPermissionRequest : IRequest<PermissionAddRequest>
 {
 }
 
-public class GetPermissionHandler : IRequestHandler<GetPermissionRequest, PermissionAddRequest>
+public class GetPermissionHandler(SessionService sessionService)
+    : IRequestHandler<GetPermissionRequest, PermissionAddRequest>
 {
-    private readonly SessionService sessionService;
-
-    public GetPermissionHandler(SessionService sessionService)
-    {
-        this.sessionService = sessionService;
-    }
-
     public async Task<PermissionAddRequest> Handle(GetPermissionRequest request, CancellationToken cancellationToken)
     {
         return new PermissionAddRequest

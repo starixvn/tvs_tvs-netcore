@@ -9,16 +9,8 @@ public interface DescriptionService
     string Build(RequestDescription item);
 }
 
-public class DescriptionServiceImp : DescriptionService
+public class DescriptionServiceImp(DescriptionElementService elementService) : DescriptionService
 {
-    private readonly DescriptionElementService elementService;
-
-    public DescriptionServiceImp(
-        DescriptionElementService elementService)
-    {
-        this.elementService = elementService;
-    }
-
     public string Build(RequestDescription item)
     {
         var matchingFunctions = new Dictionary<int, Func<RequestDescription, string>>

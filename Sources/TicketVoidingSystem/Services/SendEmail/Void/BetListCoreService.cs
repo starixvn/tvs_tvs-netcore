@@ -15,19 +15,12 @@ public interface BetListCoreService
     TicketEmailViewModel BuildTicket(TicketEmailModel item, Match match, bool isFromAfterVoidService);
 }
 
-public class BetListCoreServiceImp : BetListCoreService
+public class BetListCoreServiceImp(
+    IMapper mapper,
+    BetListService betListService,
+    SpecialPlatformService specialPlatformService)
+    : BetListCoreService
 {
-    private readonly IMapper mapper;
-    private readonly BetListService betListService;
-    private readonly SpecialPlatformService specialPlatformService;
-
-    public BetListCoreServiceImp(IMapper mapper, BetListService betListService, SpecialPlatformService specialPlatformService)
-    {
-        this.mapper = mapper;
-        this.betListService = betListService;
-        this.specialPlatformService = specialPlatformService;
-    }
-
     public TicketEmailViewModel BuildTicket(TicketEmailModel item, Match match, bool isFromAfterVoidService)
     {
         var viewModel = new TicketEmailViewModel();

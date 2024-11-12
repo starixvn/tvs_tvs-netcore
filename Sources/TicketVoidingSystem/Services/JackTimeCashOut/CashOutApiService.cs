@@ -17,17 +17,9 @@ public interface CashOutApiService
     Task VoidBetForCashOutBasketball(IEnumerable<TicketEmailModel> tickets);
 }
 
-public class CashOutApiServiceImp : CashOutApiService
+public class CashOutApiServiceImp(CashOutHttpClientService cashOutHttpClientService, LoggingService loggingService)
+    : CashOutApiService
 {
-    private readonly CashOutHttpClientService cashOutHttpClientService;
-    private readonly LoggingService loggingService;
-
-    public CashOutApiServiceImp(CashOutHttpClientService cashOutHttpClientService, LoggingService loggingService)
-    {
-        this.cashOutHttpClientService = cashOutHttpClientService;
-        this.loggingService = loggingService;
-    }
-
     public async Task VoidBet(CashOutApiModel requestModel)
     {
         const string actionName = "VoidBet";

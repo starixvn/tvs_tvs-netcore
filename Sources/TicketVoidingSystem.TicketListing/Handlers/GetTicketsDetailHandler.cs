@@ -9,15 +9,9 @@ public class GetTicketsDetailRequest : GetTicketsDetailQuery, IRequest<TicketsVi
 {
 }
 
-public class GetTicketsDetailHandler : IRequestHandler<GetTicketsDetailRequest, TicketsViewModel>
+public class GetTicketsDetailHandler(GetTicketsService getTicketsService)
+    : IRequestHandler<GetTicketsDetailRequest, TicketsViewModel>
 {
-    private readonly GetTicketsService getTicketsService;
-
-    public GetTicketsDetailHandler(GetTicketsService getTicketsService)
-    {
-        this.getTicketsService = getTicketsService;
-    }
-
     public async Task<TicketsViewModel> Handle(GetTicketsDetailRequest request, CancellationToken cancellationToken)
     {
         return await getTicketsService.GetTickets(request);

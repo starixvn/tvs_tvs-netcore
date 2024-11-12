@@ -15,17 +15,8 @@ public interface GetVoidedTicketsService
     Task<Match> GetMatchInfo(int matchId);
 }
 
-public class GetVoidedTicketsServiceImp : GetVoidedTicketsService
+public class GetVoidedTicketsServiceImp(IDynamicRepository repository, IMapper mapper) : GetVoidedTicketsService
 {
-    private readonly IDynamicRepository repository;
-    private readonly IMapper mapper;
-
-    public GetVoidedTicketsServiceImp(IDynamicRepository repository, IMapper mapper)
-    {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
-
     public async Task<IEnumerable<VoidedTicketModel>> GetTickets(GetVoidedTicketsQuery query)
     {
         var voidedTickets = await GetTicketsForEachIssueType(query);

@@ -10,15 +10,9 @@ public class ExportExcelRequest : GetVoidTicketsQuery, IRequest<ExcelFileModel>
 {
 }
 
-public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileModel>
+public class ExportExcelHandler(ExcelService<GetVoidTicketsQuery> excelService)
+    : IRequestHandler<ExportExcelRequest, ExcelFileModel>
 {
-    private readonly ExcelService<GetVoidTicketsQuery> excelService;
-
-    public ExportExcelHandler(ExcelService<GetVoidTicketsQuery> excelService)
-    {
-        this.excelService = excelService;
-    }
-
     public async Task<ExcelFileModel> Handle(ExportExcelRequest request, CancellationToken cancellationToken)
     {
         var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";

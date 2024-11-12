@@ -11,15 +11,9 @@ public class GetBetTypesRequest : GetBetTypesCriteria, IRequest<BetTypesViewMode
 {
 }
 
-public class GetBetTypesHandler : IRequestHandler<GetBetTypesRequest, BetTypesViewModel>
+public class GetBetTypesHandler(BetTypesRepository betTypesRepository)
+    : IRequestHandler<GetBetTypesRequest, BetTypesViewModel>
 {
-    private readonly BetTypesRepository betTypesRepository;
-
-    public GetBetTypesHandler(BetTypesRepository betTypesRepository)
-    {
-        this.betTypesRepository = betTypesRepository;
-    }
-
     public async Task<BetTypesViewModel> Handle(GetBetTypesRequest message, CancellationToken cancellationToken)
     {
         return await betTypesRepository.GetBetTypes(message);

@@ -8,15 +8,8 @@ public interface FilterLinkedLogService
     GroupLinkedLogResponse GroupBy(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses);
 }
 
-public class FilterLinkedLogServiceImp : FilterLinkedLogService
+public class FilterLinkedLogServiceImp(LinkedLogValidationService linkedLogValidationService) : FilterLinkedLogService
 {
-    private readonly LinkedLogValidationService linkedLogValidationService;
-
-    public FilterLinkedLogServiceImp(LinkedLogValidationService linkedLogValidationService)
-    {
-        this.linkedLogValidationService = linkedLogValidationService;
-    }
-
     public GroupLinkedLogResponse GroupBy(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
     {
         return getLinkedLogModel.IssueTypeId switch

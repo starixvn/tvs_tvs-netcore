@@ -16,15 +16,8 @@ public interface ConvertBetListForExcelService
     string ChoiceHtmlToText(string html, string betId);
 }
 
-public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
+public class ConvertBetListForExcelServiceImp(IDynamicRepository repository) : ConvertBetListForExcelService
 {
-    private readonly IDynamicRepository repository;
-
-    public ConvertBetListForExcelServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public decimal? WinLossHtmlToText(string html)
     {
         var doc = new HtmlDocument();

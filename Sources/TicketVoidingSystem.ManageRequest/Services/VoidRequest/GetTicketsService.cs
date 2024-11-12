@@ -18,21 +18,13 @@ public interface GetTicketsService
     Task<IEnumerable<GetTicketModel>> GetTickets(GetTicketsQuery query);
 }
 
-public class GetTicketsServiceImp : GetTicketsService
+public class GetTicketsServiceImp(
+    IMapper mapper,
+    IDynamicRepository repository,
+    GetTransInfoService getTransInfoService,
+    LoggingService loggingService)
+    : GetTicketsService
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly GetTransInfoService getTransInfoService;
-    private readonly LoggingService loggingService;
-
-    public GetTicketsServiceImp(IMapper mapper, IDynamicRepository repository, GetTransInfoService getTransInfoService, LoggingService loggingService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.getTransInfoService = getTransInfoService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<IEnumerable<GetTicketModel>> GetTickets(GetTicketsQuery query)
     {
         switch (query.IssueTypeId)

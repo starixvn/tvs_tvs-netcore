@@ -9,15 +9,9 @@ public class GetSummaryRequest : GetSummaryQuery, IRequest<GetSummaryViewModel>
 {
 }
 
-public class GetSummaryHandler : IRequestHandler<GetSummaryRequest, GetSummaryViewModel>
+public class GetSummaryHandler(GetSummaryTicketsService getSummaryTicketsService)
+    : IRequestHandler<GetSummaryRequest, GetSummaryViewModel>
 {
-    private readonly GetSummaryTicketsService getSummaryTicketsService;
-
-    public GetSummaryHandler(GetSummaryTicketsService getSummaryTicketsService)
-    {
-        this.getSummaryTicketsService = getSummaryTicketsService;
-    }
-
     public async Task<GetSummaryViewModel> Handle(GetSummaryRequest request, CancellationToken cancellationToken)
     {
         return await getSummaryTicketsService.GetSummaryTickets(request);

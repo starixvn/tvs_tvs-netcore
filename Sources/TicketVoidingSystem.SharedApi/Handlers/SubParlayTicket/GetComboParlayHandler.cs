@@ -14,15 +14,9 @@ public class GetComboParlayRequest : QueryComboParlay, IRequest<IList<TicketView
 {
 }
 
-public class GetComboParlayHandler : IRequestHandler<GetComboParlayRequest, IList<TicketViewModel>>
+public class GetComboParlayHandler(TicketsService ticketsService)
+    : IRequestHandler<GetComboParlayRequest, IList<TicketViewModel>>
 {
-    private readonly TicketsService ticketsService;
-
-    public GetComboParlayHandler(TicketsService ticketsService)
-    {
-        this.ticketsService = ticketsService;
-    }
-
     public async Task<IList<TicketViewModel>> Handle(GetComboParlayRequest message, CancellationToken cancellationToken)
     {
         var tickets = await ticketsService.GetTickets(message.RefNo);

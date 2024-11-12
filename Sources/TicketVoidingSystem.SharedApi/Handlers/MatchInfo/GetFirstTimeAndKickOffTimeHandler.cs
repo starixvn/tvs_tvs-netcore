@@ -14,15 +14,9 @@ public class GetFirstTimeAndKickOffTimeRequest : IRequest<FirstTicketTime>
     public int MatchId { get; set; }
 }
 
-public class GetFirstTimeAndKickOffTimeHandler : IRequestHandler<GetFirstTimeAndKickOffTimeRequest, FirstTicketTime>
+public class GetFirstTimeAndKickOffTimeHandler(IDynamicRepository repository)
+    : IRequestHandler<GetFirstTimeAndKickOffTimeRequest, FirstTicketTime>
 {
-    private readonly IDynamicRepository repository;
-
-    public GetFirstTimeAndKickOffTimeHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<FirstTicketTime> Handle(GetFirstTimeAndKickOffTimeRequest request, CancellationToken cancellationToken)
     {
         var criteria = new GetFirstTicketTimeCriteria

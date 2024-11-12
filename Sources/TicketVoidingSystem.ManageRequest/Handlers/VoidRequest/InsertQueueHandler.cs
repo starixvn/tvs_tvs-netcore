@@ -12,25 +12,13 @@ public class InsertQueueRequest : InsertQueueQuery, IRequest<Result>
 {
 }
 
-public class InsertQueueHandler : IRequestHandler<InsertQueueRequest, Result>
+public class InsertQueueHandler(
+    InsertQueueService insertQueueService,
+    SessionService sessionService,
+    LoggingService loggingService,
+    NotificationSignalRService signalRService)
+    : IRequestHandler<InsertQueueRequest, Result>
 {
-    private readonly InsertQueueService insertQueueService;
-    private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
-    private readonly NotificationSignalRService signalRService;
-
-    public InsertQueueHandler(
-        InsertQueueService insertQueueService,
-        SessionService sessionService,
-        LoggingService loggingService,
-        NotificationSignalRService signalRService)
-    {
-        this.insertQueueService = insertQueueService;
-        this.sessionService = sessionService;
-        this.loggingService = loggingService;
-        this.signalRService = signalRService;
-    }
-
     public async Task<Result> Handle(InsertQueueRequest request, CancellationToken cancellationToken)
     {
         Result result;

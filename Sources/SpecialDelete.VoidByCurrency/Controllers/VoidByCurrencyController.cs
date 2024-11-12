@@ -10,15 +10,8 @@ namespace SpecialDelete.VoidByCurrency.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class VoidByCurrencyController : ControllerBase
+public class VoidByCurrencyController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public VoidByCurrencyController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByCurrency)]
     public async Task<IActionResult> GetFilterModel() => Ok(await mediator.Send(new GetFilterModelRequest()));

@@ -29,19 +29,12 @@ public class CheckValidUsernamesRequest : IRequest<CheckValidUsernamesViewModel>
     public IEnumerable<AccountWinlostModel>? AccountWinlostModels { get; set; }
 }
 
-public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesRequest, CheckValidUsernamesViewModel>
+public class CheckValidUsernamesHandler(
+    CheckUsernameService checkUsernameService,
+    CalculateVoidTicketsService calculateVoidTicketsService,
+    CompressDataService compressDataAddRequestService)
+    : IRequestHandler<CheckValidUsernamesRequest, CheckValidUsernamesViewModel>
 {
-    private readonly CheckUsernameService checkUsernameService;
-    private readonly CalculateVoidTicketsService calculateVoidTicketsService;
-    private readonly CompressDataService compressDataAddRequestService;
-
-    public CheckValidUsernamesHandler(CheckUsernameService checkUsernameService, CalculateVoidTicketsService calculateVoidTicketsService, CompressDataService compressDataAddRequestService)
-    {
-        this.checkUsernameService = checkUsernameService;
-        this.calculateVoidTicketsService = calculateVoidTicketsService;
-        this.compressDataAddRequestService = compressDataAddRequestService;
-    }
-
     public async Task<CheckValidUsernamesViewModel> Handle(CheckValidUsernamesRequest request, CancellationToken cancellationToken)
     {
         var checkUsernamesResult = await checkUsernameService.ExecuteValidationInDb(request);

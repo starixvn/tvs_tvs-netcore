@@ -9,15 +9,8 @@ public class EditRequest : EditRequestQuery, IRequest<Result>
 {
 }
 
-public class EditRequestHandler : IRequestHandler<EditRequest, Result>
+public class EditRequestHandler(EditRequestService editRequestService) : IRequestHandler<EditRequest, Result>
 {
-    private readonly EditRequestService editRequestService;
-
-    public EditRequestHandler(EditRequestService editRequestService)
-    {
-        this.editRequestService = editRequestService;
-    }
-
     public async Task<Result> Handle(EditRequest request, CancellationToken cancellationToken)
     {
         return await editRequestService.UpdateRequest(request);

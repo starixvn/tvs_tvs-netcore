@@ -4,11 +4,6 @@ namespace TicketVoidingSystem.ManageRequest.Models;
 
 public class AddRequestQuery
 {
-    public AddRequestQuery()
-    {
-        OperatorsList = new List<OperatorQuery>();
-    }
-
     public int SessionTime { get; set; }
 
     public string Guid { get; set; }
@@ -21,7 +16,7 @@ public class AddRequestQuery
 
     public string? DecidedBy { get; set; }
 
-    public List<OperatorQuery>? OperatorsList { get; set; }
+    public List<OperatorQuery>? OperatorsList { get; set; } = new();
 
     public string? Provider { get; set; }
 

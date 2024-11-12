@@ -10,15 +10,8 @@ namespace SpecialDelete.CashOutTransaction.CancelCashOut;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class CancelCashOutController : Controller
+public class CancelCashOutController(IMediator mediator) : Controller
 {
-    private readonly IMediator mediator;
-
-    public CancelCashOutController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.CancelCashOutAction)]
     public async Task<JsonResult> GetTickets(GetTicketsRequest request) => this.JsonResultPascalCase(await mediator.Send(request));

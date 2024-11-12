@@ -12,17 +12,9 @@ public class CheckTickets14Request : CheckTickets14Model, IRequest<CheckTickets1
 {
 }
 
-public class CheckTickets14Handler : IRequestHandler<CheckTickets14Request, CheckTickets14ViewModel>
+public class CheckTickets14Handler(IDynamicRepository repository, GetTransInfoService getTransInfoService)
+    : IRequestHandler<CheckTickets14Request, CheckTickets14ViewModel>
 {
-    private readonly IDynamicRepository repository;
-    private readonly GetTransInfoService getTransInfoService;
-
-    public CheckTickets14Handler(IDynamicRepository repository, GetTransInfoService getTransInfoService)
-    {
-        this.repository = repository;
-        this.getTransInfoService = getTransInfoService;
-    }
-
     public async Task<CheckTickets14ViewModel> Handle(CheckTickets14Request request, CancellationToken cancellationToken)
     {
         var transInfoJsonList = await GetTransInfoJson(request);

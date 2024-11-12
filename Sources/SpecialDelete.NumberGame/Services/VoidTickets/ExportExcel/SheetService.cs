@@ -16,19 +16,9 @@ public interface SheetService
     void SetStyle(ExcelWorksheet worksheet);
 }
 
-public class SheetServiceImp : SheetService
+public class SheetServiceImp(IMapper mapper, Repository repository, TicketService ticketService)
+    : SheetService
 {
-    private readonly IMapper mapper;
-    private readonly Repository repository;
-    private readonly TicketService ticketService;
-
-    public SheetServiceImp(IMapper mapper, Repository repository, TicketService ticketService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.ticketService = ticketService;
-    }
-
     public async Task<IEnumerable<ExcelTicketModel>> GetTickets(GetVoidTicketsQuery query)
     {
         var tickets = new List<ExcelTicketModel>();

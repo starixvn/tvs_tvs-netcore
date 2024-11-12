@@ -18,19 +18,9 @@ public interface MapTicketService
     ExcelTicketModel MapToTicketExcelModel(GetTicketModel item, Match match);
 }
 
-public class MapTicketServiceImp : MapTicketService
+public class MapTicketServiceImp(BetListService betListService, IMapper mapper, CheckBoxService checkBoxService)
+    : MapTicketService
 {
-    private readonly IMapper mapper;
-    private readonly CheckBoxService checkBoxService;
-    private readonly BetListService betListService;
-
-    public MapTicketServiceImp(BetListService betListService, IMapper mapper, CheckBoxService checkBoxService)
-    {
-        this.betListService = betListService;
-        this.mapper = mapper;
-        this.checkBoxService = checkBoxService;
-    }
-
     public TicketViewModel MapToTicketViewModel(GetTicketModel item, Match match, UserPermission permission)
     {
         var viewModel = MapToTicketViewModel(item, match);

@@ -9,15 +9,8 @@ namespace TicketVoidingSystem.SharedApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class MatchInfoController : ControllerBase
+public class MatchInfoController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public MatchInfoController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     public async Task<IActionResult> GetInfo(GetMatchInfoRequest request) => Ok(await mediator.Send(request));
 

@@ -11,19 +11,11 @@ public class RecoverTicketsRequest : RecoverTicketsQuery, IRequest<IEnumerable<R
 {
 }
 
-public class RecoverTicketsHandler : IRequestHandler<RecoverTicketsRequest, IEnumerable<Result>>
+public class RecoverTicketsHandler(
+    RecoverTicketsService recoverTicketsService,
+    LoggingService loggingService)
+    : IRequestHandler<RecoverTicketsRequest, IEnumerable<Result>>
 {
-    private readonly RecoverTicketsService recoverTicketsService;
-    private readonly LoggingService loggingService;
-
-    public RecoverTicketsHandler(
-        RecoverTicketsService recoverTicketsService,
-        LoggingService loggingService)
-    {
-        this.recoverTicketsService = recoverTicketsService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<IEnumerable<Result>> Handle(RecoverTicketsRequest request, CancellationToken cancellationToken)
     {
         var results = new List<Result>();

@@ -16,19 +16,11 @@ public interface TicketHtmlService
     TicketHtmlViewModel GetTicket(GetTicketModel item);
 }
 
-public class TicketHtmlServiceImp : TicketHtmlService
+public class TicketHtmlServiceImp(
+    BetListCoreService betListCoreService,
+    CheckPermissionService permissionService)
+    : TicketHtmlService
 {
-    private readonly BetListCoreService betListCoreService;
-    private readonly CheckPermissionService permissionService;
-
-    public TicketHtmlServiceImp(
-        BetListCoreService betListCoreService,
-        CheckPermissionService permissionService)
-    {
-        this.betListCoreService = betListCoreService;
-        this.permissionService = permissionService;
-    }
-
     public VoidTicketHtmlViewModel GetTicket(GetTicketModel item, UserPermission permission)
     {
         var ticket = new VoidTicketHtmlViewModel

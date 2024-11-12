@@ -12,19 +12,12 @@ public interface MarkTicketsService
     Task<MarkTicketsResult> MarkTicketsInTVS(string markTransIds, int issueTypeId, byte markTypeId);
 }
 
-public class MarkTicketsServiceImp : MarkTicketsService
+public class MarkTicketsServiceImp(
+    IDynamicRepository repository,
+    SessionService sessionService,
+    LoggingService loggingService)
+    : MarkTicketsService
 {
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
-
-    public MarkTicketsServiceImp(IDynamicRepository repository, SessionService sessionService, LoggingService loggingService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<MarkTicketsResult> MarkTicketsInTVS(string markTransIds, int issueTypeId, byte markTypeId)
     {
         var tasks = SiteDbGroupConstant.ServerList.Select(x => MarkTicketsSiteDb(x.Id, markTransIds, issueTypeId, markTypeId));

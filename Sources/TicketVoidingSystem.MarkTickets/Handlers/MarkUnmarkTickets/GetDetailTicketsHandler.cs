@@ -17,25 +17,13 @@ public class GetDetailTicketsRequest : GetDetailTicketsQuery, IRequest<TicketsVi
 {
 }
 
-public class GetDetailTicketsHandler : IRequestHandler<GetDetailTicketsRequest, TicketsViewModel>
+public class GetDetailTicketsHandler(
+    GetTicketsService getTicketsService,
+    MapTicketService mapTicketService,
+    PagingService pagingService,
+    UserPermissionService userPermissionService)
+    : IRequestHandler<GetDetailTicketsRequest, TicketsViewModel>
 {
-    private readonly GetTicketsService getTicketsService;
-    private readonly MapTicketService mapTicketService;
-    private readonly PagingService pagingService;
-    private readonly UserPermissionService userPermissionService;
-
-    public GetDetailTicketsHandler(
-        GetTicketsService getTicketsService,
-        MapTicketService mapTicketService,
-        PagingService pagingService,
-        UserPermissionService userPermissionService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.mapTicketService = mapTicketService;
-        this.pagingService = pagingService;
-        this.userPermissionService = userPermissionService;
-    }
-
     public async Task<TicketsViewModel> Handle(GetDetailTicketsRequest request, CancellationToken cancellationToken)
     {
         var viewModel = new TicketsViewModel();

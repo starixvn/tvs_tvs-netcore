@@ -22,17 +22,11 @@ public class CheckDuplicateTicketsRequest : IRequest<CheckDuplicateTicketsViewMo
     public int SubIssueTypeId { get; set; }
 }
 
-public class CheckDuplicateTicketsHandler : IRequestHandler<CheckDuplicateTicketsRequest, CheckDuplicateTicketsViewModel>
+public class CheckDuplicateTicketsHandler(
+    IDynamicRepository repository,
+    MatchInfoAddRequestService matchInfoAddRequestService)
+    : IRequestHandler<CheckDuplicateTicketsRequest, CheckDuplicateTicketsViewModel>
 {
-    private readonly IDynamicRepository repository;
-    private readonly MatchInfoAddRequestService matchInfoAddRequestService;
-
-    public CheckDuplicateTicketsHandler(IDynamicRepository repository, MatchInfoAddRequestService matchInfoAddRequestService)
-    {
-        this.repository = repository;
-        this.matchInfoAddRequestService = matchInfoAddRequestService;
-    }
-
     public async Task<CheckDuplicateTicketsViewModel> Handle(CheckDuplicateTicketsRequest request, CancellationToken cancellationToken)
     {
         var criteria = await GetCheckDuplicateTicketsCriteria(request);

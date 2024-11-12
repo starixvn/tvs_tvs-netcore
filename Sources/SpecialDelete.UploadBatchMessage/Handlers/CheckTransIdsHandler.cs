@@ -8,15 +8,9 @@ public class CheckTransIdsRequest : CheckTransIdsQueryModel, IRequest<MessageRes
 {
 }
 
-public class CheckTransIdsHandler : IRequestHandler<CheckTransIdsRequest, MessageResult>
+public class CheckTransIdsHandler(BatchMessageService batchMessageService)
+    : IRequestHandler<CheckTransIdsRequest, MessageResult>
 {
-    private readonly BatchMessageService batchMessageService;
-
-    public CheckTransIdsHandler(BatchMessageService batchMessageService)
-    {
-        this.batchMessageService = batchMessageService;
-    }
-
     public async Task<MessageResult> Handle(CheckTransIdsRequest request, CancellationToken cancellationToken)
     {
         return await batchMessageService.GetReceivedUsers(request);

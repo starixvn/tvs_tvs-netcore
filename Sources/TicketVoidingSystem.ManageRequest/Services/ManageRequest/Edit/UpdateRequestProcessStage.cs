@@ -15,29 +15,16 @@ public interface UpdateRequestProcessStage
     Task<Result> Execute(EditRequestQuery query, IEnumerable<long> markedTicketsSuccessful);
 }
 
-public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
+public class UpdateRequestProcessStageImp(
+    IMapper mapper,
+    IDynamicRepository repository,
+    LoggingService loggingService,
+    AccountWinLostService accountWinLostService,
+    SessionService sessionService,
+    InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
+    GetUpdateResultService getUpdateResultService)
+    : UpdateRequestProcessStage
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
-    private readonly AccountWinLostService accountWinLostService;
-    private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
-    private readonly GetUpdateResultService getUpdateResultService;
-
-    public UpdateRequestProcessStageImp(IMapper mapper,
-        IDynamicRepository repository, LoggingService loggingService, AccountWinLostService accountWinLostService,
-        SessionService sessionService, InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService, GetUpdateResultService getUpdateResultService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.loggingService = loggingService;
-        this.accountWinLostService = accountWinLostService;
-        this.insertAutoVoidRequestQueueService = insertAutoVoidRequestQueueService;
-        this.getUpdateResultService = getUpdateResultService;
-    }
-
     public async Task<Result> Execute(EditRequestQuery query, IEnumerable<long> markedTicketsSuccessful)
     {
         try

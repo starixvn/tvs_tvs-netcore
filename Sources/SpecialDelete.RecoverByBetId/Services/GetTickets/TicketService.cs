@@ -10,15 +10,8 @@ public interface TicketService
     TicketViewModel GetTicket(GetTicketModel item, ChoiceType choiceType);
 }
 
-public class TicketServiceImp : TicketService
+public class TicketServiceImp(BetListRecoverBetIdService betListService) : TicketService
 {
-    private readonly BetListRecoverBetIdService betListService;
-
-    public TicketServiceImp(BetListRecoverBetIdService betListService)
-    {
-        this.betListService = betListService;
-    }
-
     public TicketViewModel GetTicket(GetTicketModel item, ChoiceType choiceType)
     {
         var ticket = betListService.GetTicket(item, choiceType);

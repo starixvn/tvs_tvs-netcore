@@ -13,15 +13,8 @@ public interface ConfirmAutoUnmarkService
     Task<IEnumerable<ConfirmAutoUnmarkModel>> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkQuery query);
 }
 
-public class ConfirmAutoUnmarkServiceImp : ConfirmAutoUnmarkService
+public class ConfirmAutoUnmarkServiceImp(IDynamicRepository repository) : ConfirmAutoUnmarkService
 {
-    private readonly IDynamicRepository repository;
-
-    public ConfirmAutoUnmarkServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<ConfirmAutoUnmarkModel>> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkQuery query)
     {
         var transInfoJsonList = await GetTransInfoForAutoUnmark(query);

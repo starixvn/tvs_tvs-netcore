@@ -11,15 +11,9 @@ public interface MatchInfoAddRequestService
     MatchInfoAddRequest UpdateDataFromRemotingRef(MatchInfoAddRequest? matchInfo);
 }
 
-public class MatchInfoAddRequestServiceImp : MatchInfoAddRequestService
+public class MatchInfoAddRequestServiceImp(RemotingRefWrapperService remotingRefWrapperService)
+    : MatchInfoAddRequestService
 {
-    private readonly RemotingRefWrapperService remotingRefWrapperService;
-
-    public MatchInfoAddRequestServiceImp(RemotingRefWrapperService remotingRefWrapperService)
-    {
-        this.remotingRefWrapperService = remotingRefWrapperService;
-    }
-
     public MatchInfoAddRequest UpdateDataFromRemotingRef(MatchInfoAddRequest? matchInfo)
     {
         if (matchInfo == null)

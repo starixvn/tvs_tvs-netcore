@@ -10,15 +10,8 @@ namespace SpecialDelete.VoidByBetId.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class VoidByBetIdController : ControllerBase
+public class VoidByBetIdController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public VoidByBetIdController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID)]
     public async Task<IActionResult> ExportExcel(ExportExcelRequest request)

@@ -17,22 +17,13 @@ public interface GetTicketsService
     Task<ExcelOicModel> GetTicketsForSendDataOic(SendFileQuery query, string affectedTickets);
 }
 
-public class GetTicketsServiceImp : GetTicketsService
+public class GetTicketsServiceImp(
+    IMapper mapper,
+    IDynamicRepository repository,
+    AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService,
+    MapTicketService mapTicketService)
+    : GetTicketsService
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService;
-    private readonly MapTicketService mapTicketService;
-
-    public GetTicketsServiceImp(IMapper mapper, IDynamicRepository repository,
-        AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService, MapTicketService mapTicketService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.affectTicketsFromSettlementHistoryService = affectTicketsFromSettlementHistoryService;
-        this.mapTicketService = mapTicketService;
-    }
-
     public async Task<TicketsViewModel> GetTickets(GetTicketsDetailQuery query)
     {
         var viewModel = new TicketsViewModel();

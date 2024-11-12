@@ -17,15 +17,8 @@ using Fanex.NAP.Client.Helpers.Business;
 [ApiController]
 [Route("api/[controller]/[action]")]
 [AllowAnonymous]
-public class MarkTicketsController : ControllerBase
+public class MarkTicketsController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public MarkTicketsController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketExclusion, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> GetDataPermission() => Ok(await mediator.Send(new GetDataPermissionRequest()));

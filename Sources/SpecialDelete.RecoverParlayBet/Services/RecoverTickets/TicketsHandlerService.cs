@@ -20,22 +20,14 @@ public interface TicketsHandlerService<T, in TU> where T : EmailSupport where TU
     Result WarningMessage(string settledMainTrainIds);
 }
 
-public class TicketsHandlerServiceImp<T, TU> : TicketsHandlerService<T, TU> where T : EmailSupport where TU : RecoverMainTicketsQuery
+public class TicketsHandlerServiceImp<T, TU>(
+    SessionService sessionService,
+    SeparabilityService<T, TU> separabilityService,
+    EmailRecoverService<MailTicketViewModel, T> emailService)
+    : TicketsHandlerService<T, TU>
+    where T : EmailSupport
+    where TU : RecoverMainTicketsQuery
 {
-    private readonly SessionService sessionService;
-    private readonly SeparabilityService<T, TU> separabilityService;
-    private readonly EmailRecoverService<MailTicketViewModel, T> emailService;
-
-    public TicketsHandlerServiceImp(
-        SessionService sessionService,
-        SeparabilityService<T, TU> separabilityService,
-        EmailRecoverService<MailTicketViewModel, T> emailService)
-    {
-        this.sessionService = sessionService;
-        this.separabilityService = separabilityService;
-        this.emailService = emailService;
-    }
-
     public async Task<(RecoverValidationModel Validation, IEnumerable<T> Tickets)> RecoverTickets(TU query)
     {
         return await separabilityService.RecoverTickets(query);

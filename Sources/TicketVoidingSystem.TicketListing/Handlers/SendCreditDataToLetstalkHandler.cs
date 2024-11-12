@@ -15,19 +15,12 @@ public class SendCreditDataToLetstalkRequest : ExportExcelQuery, IRequest<Result
 {
 }
 
-public class SendCreditDataToLetstalkHandler : IRequestHandler<SendCreditDataToLetstalkRequest, Result>
+public class SendCreditDataToLetstalkHandler(
+    ExcelService<ExportExcelQuery> excelService,
+    NotificationLetstalkService notificationLetstalkService,
+    GetTicketsService getTicketsService)
+    : IRequestHandler<SendCreditDataToLetstalkRequest, Result>
 {
-    private readonly ExcelService<ExportExcelQuery> excelService;
-    private readonly NotificationLetstalkService notificationLetstalkService;
-    private readonly GetTicketsService getTicketsService;
-
-    public SendCreditDataToLetstalkHandler(ExcelService<ExportExcelQuery> excelService, NotificationLetstalkService notificationLetstalkService, GetTicketsService getTicketsService)
-    {
-        this.excelService = excelService;
-        this.notificationLetstalkService = notificationLetstalkService;
-        this.getTicketsService = getTicketsService;
-    }
-
     public async Task<Result> Handle(SendCreditDataToLetstalkRequest request, CancellationToken cancellationToken)
     {
         var (isSentDataToSiteNormal, isSentDataToSite777) = await SendToGroupTicketListing(request);

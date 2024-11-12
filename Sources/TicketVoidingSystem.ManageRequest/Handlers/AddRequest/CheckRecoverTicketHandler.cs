@@ -9,15 +9,9 @@ public class CheckRecoverTicketRequest : CheckRecoverTicketModel, IRequest<Check
 {
 }
 
-public class CheckRecoverTicketHandler : IRequestHandler<CheckRecoverTicketRequest, CheckRecoverTicketViewModel>
+public class CheckRecoverTicketHandler(CheckRecoverTicketService checkRecoverTicketService)
+    : IRequestHandler<CheckRecoverTicketRequest, CheckRecoverTicketViewModel>
 {
-    private readonly CheckRecoverTicketService checkRecoverTicketService;
-
-    public CheckRecoverTicketHandler(CheckRecoverTicketService checkRecoverTicketService)
-    {
-        this.checkRecoverTicketService = checkRecoverTicketService;
-    }
-
     public async Task<CheckRecoverTicketViewModel> Handle(CheckRecoverTicketRequest request, CancellationToken cancellationToken)
     {
         return await checkRecoverTicketService.CheckRecoverTicket(request);

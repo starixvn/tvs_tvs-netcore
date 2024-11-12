@@ -14,15 +14,8 @@ public interface AccountWinLostService
     IEnumerable<AccountWinlostExcelModel> GetAccountWinLostExcel(IEnumerable<AccountWinlostModel> models);
 }
 
-public class AccountWinLostServiceImp : AccountWinLostService
+public class AccountWinLostServiceImp(IDynamicRepository repository) : AccountWinLostService
 {
-    private readonly IDynamicRepository repository;
-
-    public AccountWinLostServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task SaveAccountWinLost(int requestId, int? actionId, IEnumerable<AccountWinlostModel>? accountModels)
     {
         var command = new SaveAccountWinLostCommand

@@ -21,19 +21,11 @@ public interface TicketsService
     string[] GetComboName(QueryComboParlay query);
 }
 
-public class TicketsServiceImp : TicketsService
+public class TicketsServiceImp(
+    IDynamicRepository repository,
+    BetListService betListService)
+    : TicketsService
 {
-    private readonly IDynamicRepository repository;
-    private readonly BetListService betListService;
-
-    public TicketsServiceImp(
-        IDynamicRepository repository,
-        BetListService betListService)
-    {
-        this.repository = repository;
-        this.betListService = betListService;
-    }
-
     public async Task<IList<TicketModel>> GetTickets(string refNo)
     {
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>

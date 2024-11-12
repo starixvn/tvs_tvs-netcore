@@ -16,17 +16,9 @@ public interface NetPositionService
     Task RollBackNetPosition(IEnumerable<BetId> transIds);
 }
 
-public class NetPositionServiceImp : NetPositionService
+public class NetPositionServiceImp(LoggingService loggingService, IDynamicRepository repository)
+    : NetPositionService
 {
-    private readonly LoggingService loggingService;
-    private readonly IDynamicRepository repository;
-
-    public NetPositionServiceImp(LoggingService loggingService, IDynamicRepository repository)
-    {
-        this.loggingService = loggingService;
-        this.repository = repository;
-    }
-
     public async Task<bool> UpdateNetPosition(IEnumerable<BetId> transIds, string action)
     {
         if (transIds == null || !transIds.Any())
