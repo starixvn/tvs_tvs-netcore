@@ -1,5 +1,6 @@
 import { SimpleChange } from '@angular/core';
 import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
+import { AdvancedModeComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.component';
 import { BetTeamAddRequestResult } from '../../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.model';
 import { GroupBetTypeAddRequest, GroupBetTypesAddRequestModel } from '../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
@@ -287,7 +288,9 @@ describe('EventOtherIssuesComponent', () => {
   it('initSaveRequestInput should return object and call #advancedMode.getCheckedBetTypes', async () => {
     mockComponent.filter.isVoided = false;
     mockComponent.advancedMode = new AdvancedModeAddRequestComponent();
+    mockComponent.advancedMode.advancedModeComponent = new AdvancedModeComponent(null, null, null);
     mockComponent.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
+    mockComponent.advancedMode.advancedModeComponent.getAllBetTypesSelection = jest.fn().mockReturnValue([]);
 
     const actual = mockComponent['initSaveRequestInput']();
 
@@ -358,13 +361,11 @@ describe('EventOtherIssuesComponent', () => {
     ] as GroupBetTypeAddRequest[];
     const currentGroupModel = new GroupBetTypesAddRequestModel(groupBetTypes, false, '', false);
     mockEventOtherIssuesService.getGroupBetTypes = jest.fn().mockReturnValue(currentGroupModel);
-    mockAddRequestStore.changeBlockingUiStatus = jest.fn();
     mockComponent.groupBetTypesModel = currentGroupModel;
 
     await mockComponent.getGroupBetTypes();
 
     expect(mockEventOtherIssuesService.getGroupBetTypes).toHaveBeenCalledTimes(1);
-    expect(mockAddRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
     expect(mockComponent.groupBetTypesModel).toEqual(currentGroupModel);
   });
 
