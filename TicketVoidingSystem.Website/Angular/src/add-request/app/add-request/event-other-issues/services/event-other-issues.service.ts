@@ -21,12 +21,12 @@ export class EventOtherIssuesService {
     private readonly validationService: ValidationService
   ) { }
 
-  async getGroupBetTypes(matchId: number, otherIssuesModel: OtherIssuesModel, currentCheckedBetTypes: BetTypeAddRequest[]): Promise<GroupBetTypesAddRequestModel> {
+  async getGroupBetTypes(matchId: number, filterOtherIssuesModel: FilterOtherIssuesModel, currentCheckedBetTypes: BetTypeAddRequest[]): Promise<GroupBetTypesAddRequestModel> {
     const query: GetBetTypesQuery = {
       mode: ModeType.SPORT_BOOK,
       matchId: matchId,
-      fromTransDate: otherIssuesModel.filterFromTransTime,
-      toTransDate: otherIssuesModel.filterToTransTime,
+      fromTransDate: filterOtherIssuesModel.fromDateTime,
+      toTransDate: filterOtherIssuesModel.toDateTime,
     };
     const data = await this.commonService.getGroupBetTypesTvs(query);
     const newGroupBetTypes = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);
@@ -56,6 +56,7 @@ export class EventOtherIssuesService {
     model.betTeamsResult = logInfoOtherIssues.betTeamsResult;
     model.logInfoDetail = logInfoOtherIssues.logInfoDetail;
     model.subIssueTypeId = Number(subIssueTypeId);
+    model.allBetTypesSelection = logInfoOtherIssues.allBetTypesSelection;
     if (this.validationService.isSubTypeRestart(subIssueTypeId.toString())) {
       model.filterFromTransTime = logInfoOtherIssues.filterOtherIssues.fromDateTime;
       model.filterToTransTime = logInfoOtherIssues.filterOtherIssues.toDateTime;
@@ -68,6 +69,7 @@ export class EventOtherIssuesService {
     const event = new LogInfoOtherIssues();
     event.matchId = inputModels.matchId;
     event.logInfoDetail = inputModels.logInfoDetail;
+    event.allBetTypesSelection = inputModels.allBetTypesSelection;
     event.filterOtherIssues = {
       fromDateTime: inputModels.filterFromTransTime,
       toDateTime: inputModels.filterToTransTime

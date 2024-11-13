@@ -7,7 +7,6 @@ using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Utilities;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace TicketVoidingSystem.ManageRequest.Extension;
 
@@ -393,7 +392,7 @@ public static class ObjectToXMLExtension
                             + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
                             + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
                             + $"BetTypeCount='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(betTypeCountJson))}' "
-                            + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}' />";
+                            + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}' "
                             + $"AllBetTypesSelectionJson='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.AllBetTypesSelection))}' />";
 
         return $"<root>{stringBuilder.Trim()}</root>";
@@ -415,8 +414,9 @@ public static class ObjectToXMLExtension
                             + $"FromOdds='{SecurityElement.Escape(model.FromOdds)}' "
                             + $"ToOdds='{SecurityElement.Escape(model.ToOdds)}' "
                             + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' "
-                            + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}' />";
-                            + $"AllBetTypesSelectionJson='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.AllBetTypesSelection)}' />";
+                            + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}' "
+                            + $"AllBetTypesSelectionJson='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.AllBetTypesSelection))}' />";
+
         return $"<root>{stringBuilder.Trim()}</root>";
     }
 
@@ -446,7 +446,8 @@ public static class ObjectToXMLExtension
                             + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
                             + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                             + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                            + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}' />";
+                            + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}' "
+                            + $"AllBetTypesSelectionJson='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.AllBetTypesSelection))}' />";
 
         return $"<root>{stringBuilder.Trim()}</root>";
     }

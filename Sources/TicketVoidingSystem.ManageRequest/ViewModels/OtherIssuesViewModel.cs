@@ -15,4 +15,6 @@ public class OtherIssuesViewModel
     public LogInfoDetail? LogInfoDetail { get; set; }
     public IEnumerable<BetTeamAddRequestResult> BetTeamsResult { get; set; }
     public IEnumerable<GroupBetTypeModel> GroupBetTypes { get; set; }
+
+    public IEnumerable<AllBetTypesSelection> AllBetTypesSelection { get; set; }
 }

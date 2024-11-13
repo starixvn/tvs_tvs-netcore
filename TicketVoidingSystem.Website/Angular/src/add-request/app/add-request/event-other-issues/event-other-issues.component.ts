@@ -86,12 +86,14 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
 
   async renderDataBetTypesAdvancedMode() {
     if (this.eventLeagueComponent?.selectedMatch.matchId) {
+      this.addRequestStore.changeBlockingUiStatus(true);
+      this.primitiveProps.isShowAdvancedModeBetTypes = true;
       this.resetLogInfo();
       await this.getGroupBetTypes();
       const allBetTypes = this.groupBetTypesModel.getAllBetTypes();
       this.advancedMode?.changeBetTypes(allBetTypes);
-      this.primitiveProps.isShowAdvancedModeBetTypes = true;
       this.primitiveProps.isShowErrorNoBetType = allBetTypes.length === 0;
+      this.addRequestStore.changeBlockingUiStatus(false);
     }
   }
 
@@ -118,11 +120,9 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   }
 
   async getGroupBetTypes() {
-    this.addRequestStore.changeBlockingUiStatus(true);
     this.groupBetTypesModel = await this.eventOtherIssuesService.getGroupBetTypes(
-      this.eventLeagueComponent?.selectedMatch.matchId, this.otherIssuesModel,
+      this.eventLeagueComponent?.selectedMatch.matchId, this.logInfoEvent.filterOtherIssues,
       this.groupBetTypesModel.groupBetTypes.flatMap(x => x.betTypes).filter(x => x.isChecked));
-    this.addRequestStore.changeBlockingUiStatus(false);
   }
 
   async saveRequest(): Promise<void> {
@@ -160,7 +160,8 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
     betTeamsResult.forEach(x => x.isDisabled = this.filter.isVoided);
     this.advancedModeAddRequestModel = {
       betTeamsResult: betTeamsResult,
-      checkedBetTypes: checkedBetTypes
+      checkedBetTypes: checkedBetTypes,
+      selectedAllBetTypes: this.otherIssuesModel.allBetTypesSelection
     };
     this.primitiveProps.isShowValidation = true;
     this.primitiveProps.isShowAdvancedModeBetTypes = true;
@@ -197,6 +198,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
     const arg = new SaveRequestArg();
     if (!this.filter.isVoided) {
       this.logInfoEvent.betTeamsResult = this.advancedMode?.getCheckedBetTypes();
+      this.logInfoEvent.allBetTypesSelection = this.advancedMode.advancedModeComponent.getAllBetTypesSelection();
     }
     arg.requestId = this.requestId;
     arg.requestedBy = this.requestedBy;

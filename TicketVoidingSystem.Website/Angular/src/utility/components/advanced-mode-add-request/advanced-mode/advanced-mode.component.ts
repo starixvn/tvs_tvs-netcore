@@ -11,9 +11,9 @@ import { OddsInfo } from '../../advanced-mode/advanced-mode/advanced-mode.model'
 import { AdvancedModeService } from '../../advanced-mode/advanced-mode/advanced-mode.service';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model';
+import { ControlsAllBetTypesLists } from '../controls-all-bet-types/controls-all-bet-types.model';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advanced-mode.model';
-import { ControlsAllBetTypesLists } from '../controls-all-bet-types/controls-all-bet-types.model';
 
 @Component({
   selector: 'advanced-mode',
