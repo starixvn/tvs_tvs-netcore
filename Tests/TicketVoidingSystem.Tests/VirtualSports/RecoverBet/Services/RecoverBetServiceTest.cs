@@ -42,7 +42,7 @@ public class RecoverBetServiceTest
         // Arrange
         var expected = new RecoverTicketsViewModel
         {
-            Groups = [new()]
+            Groups = [new Group<TicketViewModel>()]
         };
         var tickets = new List<BetId>
         {

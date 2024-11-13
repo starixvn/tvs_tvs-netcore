@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using NSubstitute;
 using SpecialDelete.UploadBatchMessage.Controllers;
@@ -8,7 +7,6 @@ using TicketVoidingSystem.Models.SendMessage;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.UploadBatchMessage.Controllers;
-
 
 public class UploadBatchMessageControllerTest
 {
@@ -48,7 +46,7 @@ public class UploadBatchMessageControllerTest
         // Arrange
         var request = new UpdateMessageRequest
         {
-            CreditTrans = [new() { CustId = 1 }]
+            CreditTrans = [new ReceivedUser { CustId = 1 }]
         };
 
         var mediator = Substitute.For<IMediator>();

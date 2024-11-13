@@ -60,7 +60,7 @@ public class VoidByCurrencyServiceTest
         var dateTime = DateTimeOffset.Now.DateTime;
         var expected = new TicketsViewModel
         {
-            Groups = [new() { Name = "Test" }],
+            Groups = [new Group<TicketViewModel> { Name = "Test" }],
             TotalItems = 1,
             FromTransTime = dateTime.ZoneManila(),
             ToTransTime = dateTime.ZoneManila()
@@ -99,7 +99,7 @@ public class VoidByCurrencyServiceTest
 
         var expected = new TicketsViewModel
         {
-            Groups = [new() { Name = "Test" }],
+            Groups = [new Group<TicketViewModel> { Name = "Test" }],
             TotalItems = 0
         };
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.LetstalkService.Client;
 using Fanex.LetstalkService.Client.Models;
@@ -58,7 +57,7 @@ public class LetstalkSingleMessageServiceImp(LetstalkClientService letstalkServi
         {
             finalModel.LetstalkAttachments =
             [
-                new()
+                new LetstalkAttachment
                 {
                     FileName = attachment.FileName,
                     Bytes = attachment.Bytes

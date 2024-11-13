@@ -21,7 +21,7 @@ public class VoidTicketsHandler(VoidService voidService, LoggingService loggingS
         return model.Validation.IsSuccessful ?
             await ContactUsers(request, model.Tickets) :
             [
-                new() { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg }
+                new Result { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg }
             ];
     }
 

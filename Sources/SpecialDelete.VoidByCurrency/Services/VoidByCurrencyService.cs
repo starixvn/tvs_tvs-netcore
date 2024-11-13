@@ -121,7 +121,7 @@ public class VoidByCurrencyServiceImp(
         catch (Exception exception)
         {
             await loggingService.ErrorAsync(query.MatchId.ToString(), exception);
-            results = [new() { ErrorCode = ErrorCode.SendMessageOrEmailFail, ErrorMsg = exception.Message }];
+            results = [new Result { ErrorCode = ErrorCode.SendMessageOrEmailFail, ErrorMsg = exception.Message }];
         }
 
         return results;

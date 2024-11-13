@@ -35,7 +35,7 @@ public class EmailRecordServiceTest
         // Arrange
         var model = new MailRecoverModel<MailTicketViewModel, RecoverTicketModel>
         {
-            Tickets = [new() { Status = string.Empty }],
+            Tickets = [new RecoverTicketModel { Status = string.Empty }],
             ViewModel = new MailRecoverViewModel<MailTicketViewModel>(),
             Site = new SiteEmail { ToList = "a@xyz" }
         };
@@ -87,7 +87,7 @@ public class EmailRecordServiceTest
         var expected = new MailRecord();
         var model = new MailRecoverModel<MailTicketViewModel, RecoverTicketModel>
         {
-            Tickets = [new()],
+            Tickets = [new RecoverTicketModel()],
             ViewModel = new MailRecoverViewModel<MailTicketViewModel>(),
             Site = new SiteEmail { ToList = string.Empty }
         };

@@ -11,7 +11,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Handlers;
 
-
 public class GetTicketsHandlerTest
 {
     [Fact]
@@ -22,7 +21,7 @@ public class GetTicketsHandlerTest
         {
             Groups =
             [
-                new()
+                new Group<TicketViewModel>
                 {
                     Name = "TEST",
                     Tickets = new List<TicketViewModel> { new() { BetId = "696969" } }

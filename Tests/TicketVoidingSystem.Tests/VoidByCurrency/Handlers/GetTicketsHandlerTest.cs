@@ -10,7 +10,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidByCurrency.Handlers;
 
-
 public class GetTicketsHandlerTest
 {
     [Fact]
@@ -21,7 +20,7 @@ public class GetTicketsHandlerTest
         {
             Groups =
             [
-                new()
+                new Group<TicketViewModel>
                 {
                     Name = "TEST",
                     Tickets = new List<TicketViewModel> { new() { BetId = "696969" } }

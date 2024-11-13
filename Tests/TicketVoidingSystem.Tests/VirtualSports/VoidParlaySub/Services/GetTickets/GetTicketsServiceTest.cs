@@ -14,7 +14,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VirtualSports.VoidParlaySub.Services.GetTickets;
 
-
 public class GetTicketsServiceTest
 {
     [Fact]
@@ -25,8 +24,8 @@ public class GetTicketsServiceTest
         {
             Tickets =
             [
-                new() { TransId = 1 },
-                new() { TransId = 2 }
+                new GetTicketModel { TransId = 1 },
+                new GetTicketModel { TransId = 2 }
             ]
         };
         var repository = Substitute.For<Repository>();

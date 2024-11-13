@@ -15,7 +15,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.NumberGame.Handlers;
 
-
 public class GetVoidTicketsHandlerTest
 {
     [Fact]
@@ -79,7 +78,7 @@ public class GetVoidTicketsHandlerTest
         var repository = Substitute.For<Repository>();
         repository.GetVoidTickets(new GetVoidTicketsQuery())
             .ReturnsForAnyArgs(new GetTicketsModel
-            { Tickets = [new() { TransId = 123 }] });
+            { Tickets = [new GetTicketModel { TransId = 123 }] });
 
         return new GetVoidTicketsHandler(
             sessionService,
