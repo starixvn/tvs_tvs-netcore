@@ -6,9 +6,7 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class ExportExcelAccountRequest : ExportAccountWinLostQuery, IRequest<ExcelFileModel>
-{
-}
+public class ExportExcelAccountRequest : ExportAccountWinLostQuery, IRequest<ExcelFileModel>;
 
 public class ExportExcelAccountHandler(ExcelService<ExportAccountWinLostQuery> excelService)
     : IRequestHandler<ExportExcelAccountRequest, ExcelFileModel>

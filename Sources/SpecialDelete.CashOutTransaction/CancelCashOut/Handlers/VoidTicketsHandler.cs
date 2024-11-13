@@ -5,9 +5,7 @@ using TicketVoidingSystem.Models;
 
 namespace SpecialDelete.CashOutTransaction.CancelCashOut.Handlers;
 
-public class VoidTicketsRequest : VoidTicketsQuery, IRequest<List<Result>>
-{
-}
+public class VoidTicketsRequest : VoidTicketsQuery, IRequest<List<Result>>;
 
 public class VoidTicketsHandler(HandlerService cashOutService) : IRequestHandler<VoidTicketsRequest, List<Result>>
 {

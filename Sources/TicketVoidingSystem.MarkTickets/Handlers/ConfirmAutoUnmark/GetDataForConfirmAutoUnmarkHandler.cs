@@ -9,9 +9,7 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark;
 
-public class GetDataForConfirmAutoUnmarkRequest : GetDataForConfirmAutoUnmarkQuery, IRequest<GetDataForConfirmAutoUnmarkViewModel>
-{
-}
+public class GetDataForConfirmAutoUnmarkRequest : GetDataForConfirmAutoUnmarkQuery, IRequest<GetDataForConfirmAutoUnmarkViewModel>;
 
 public class GetDataForConfirmAutoUnmarkHandler(
     ConfirmAutoUnmarkService confirmAutoUnmarkService,

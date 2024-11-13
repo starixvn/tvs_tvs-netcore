@@ -10,9 +10,7 @@ using TicketVoidingSystem.SharedApi.ViewModels.SubParlayTicket;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SubParlayTicket;
 
-public class GetComboParlayRequest : QueryComboParlay, IRequest<IList<TicketViewModel>>
-{
-}
+public class GetComboParlayRequest : QueryComboParlay, IRequest<IList<TicketViewModel>>;
 
 public class GetComboParlayHandler(TicketsService ticketsService)
     : IRequestHandler<GetComboParlayRequest, IList<TicketViewModel>>

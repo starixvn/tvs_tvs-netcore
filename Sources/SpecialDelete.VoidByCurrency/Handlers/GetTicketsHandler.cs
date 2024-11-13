@@ -5,9 +5,7 @@ using SpecialDelete.VoidByCurrency.ViewModels;
 
 namespace SpecialDelete.VoidByCurrency.Handlers;
 
-public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>
-{
-}
+public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>;
 
 public class GetTicketsHandler(VoidByCurrencyService voidByCurrencyService)
     : IRequestHandler<GetTicketsRequest, TicketsViewModel>

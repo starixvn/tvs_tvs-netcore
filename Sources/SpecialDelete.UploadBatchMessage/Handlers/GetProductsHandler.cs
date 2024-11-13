@@ -4,9 +4,7 @@ using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.UploadBatchMessage.Handlers;
 
-public class GetProductRequest : IRequest<IEnumerable<Group>>
-{
-}
+public class GetProductRequest : IRequest<IEnumerable<Group>>;
 
 public class GetProductsHandler : IRequestHandler<GetProductRequest, IEnumerable<Group>>
 {

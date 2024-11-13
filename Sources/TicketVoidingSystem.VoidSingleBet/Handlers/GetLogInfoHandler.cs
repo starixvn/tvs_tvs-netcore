@@ -7,9 +7,7 @@ using TicketVoidingSystem.VoidSingleBet.ViewModels;
 
 namespace TicketVoidingSystem.VoidSingleBet.Handlers;
 
-public class GetLogInfoRequest : GetTicketsQuery, IRequest<ListTicketsViewModel>
-{
-}
+public class GetLogInfoRequest : GetTicketsQuery, IRequest<ListTicketsViewModel>;
 
 public class GetLogInfoHandler(GetTicketsService getTicketsService)
     : IRequestHandler<GetLogInfoRequest, ListTicketsViewModel>

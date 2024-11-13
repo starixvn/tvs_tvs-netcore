@@ -7,9 +7,7 @@ using TicketVoidingSystem.SharedApi.ViewModels.BetTypes;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.BetTypes;
 
-public class GetGroupBetTypesRequest : BetTypeQueryModel, IRequest<GroupBetTypesViewModel>
-{
-}
+public class GetGroupBetTypesRequest : BetTypeQueryModel, IRequest<GroupBetTypesViewModel>;
 
 public class GetGroupBetTypesHandler(BetTypesRepository betTypesRepository)
     : IRequestHandler<GetGroupBetTypesRequest, GroupBetTypesViewModel>

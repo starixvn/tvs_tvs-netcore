@@ -8,9 +8,7 @@ using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class CheckTickets14Request : CheckTickets14Model, IRequest<CheckTickets14ViewModel>
-{
-}
+public class CheckTickets14Request : CheckTickets14Model, IRequest<CheckTickets14ViewModel>;
 
 public class CheckTickets14Handler(IDynamicRepository repository, GetTransInfoService getTransInfoService)
     : IRequestHandler<CheckTickets14Request, CheckTickets14ViewModel>

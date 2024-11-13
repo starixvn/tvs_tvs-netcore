@@ -11,9 +11,7 @@ using Result = TicketVoidingSystem.Models.Result;
 
 namespace TicketVoidingSystem.TicketListing.Handlers;
 
-public class SendCreditDataToLetstalkRequest : ExportExcelQuery, IRequest<Result>
-{
-}
+public class SendCreditDataToLetstalkRequest : ExportExcelQuery, IRequest<Result>;
 
 public class SendCreditDataToLetstalkHandler(
     ExcelService<ExportExcelQuery> excelService,

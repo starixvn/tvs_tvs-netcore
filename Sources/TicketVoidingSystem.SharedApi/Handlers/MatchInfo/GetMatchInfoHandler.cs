@@ -8,9 +8,7 @@ using TicketVoidingSystem.Services.BetList;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.MatchInfo;
 
-public class GetMatchInfoRequest : GetMatchInfoCriteria, IRequest<Match>
-{
-}
+public class GetMatchInfoRequest : GetMatchInfoCriteria, IRequest<Match>;
 
 public class GetMatchInfoHandler(
     BetListService betListService,

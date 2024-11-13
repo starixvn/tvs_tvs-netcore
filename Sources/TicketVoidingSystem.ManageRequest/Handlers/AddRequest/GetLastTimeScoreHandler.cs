@@ -7,9 +7,7 @@ using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetLastTimeScoreRequest : GetLastTimeScoreModel, IRequest<GetLastTimeScoreViewModel>
-{
-}
+public class GetLastTimeScoreRequest : GetLastTimeScoreModel, IRequest<GetLastTimeScoreViewModel>;
 
 public class GetLastTimeScoreHandler(IDynamicRepository repository)
     : IRequestHandler<GetLastTimeScoreRequest, GetLastTimeScoreViewModel>

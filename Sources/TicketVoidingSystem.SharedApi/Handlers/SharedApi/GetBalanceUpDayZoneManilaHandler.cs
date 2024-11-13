@@ -6,9 +6,7 @@ using TicketVoidingSystem.SharedApi.Services.SharedApi;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
-public class GetBalanceUpDayZoneManilaRequest : IRequest<BalanceUp>
-{
-}
+public class GetBalanceUpDayZoneManilaRequest : IRequest<BalanceUp>;
 
 public class GetBalanceUpDayZoneManilaHandler(BalanceUpService balanceUpService)
     : IRequestHandler<GetBalanceUpDayZoneManilaRequest, BalanceUp>

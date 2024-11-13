@@ -5,9 +5,7 @@ using SpecialDelete.VirtualSports.RecoverBet.ViewModels;
 
 namespace SpecialDelete.VirtualSports.RecoverBet.Handlers;
 
-public class GetTicketsRequest : Query, IRequest<RecoverTicketsViewModel>
-{
-}
+public class GetTicketsRequest : Query, IRequest<RecoverTicketsViewModel>;
 
 public class GetTicketsHandler(RecoverBetService service) : IRequestHandler<GetTicketsRequest, RecoverTicketsViewModel>
 {

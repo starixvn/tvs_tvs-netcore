@@ -5,9 +5,7 @@ using TicketVoidingSystem.TicketListing.ViewModels;
 
 namespace TicketVoidingSystem.TicketListing.Handlers;
 
-public class GetTicketsDetailRequest : GetTicketsDetailQuery, IRequest<TicketsViewModel>
-{
-}
+public class GetTicketsDetailRequest : GetTicketsDetailQuery, IRequest<TicketsViewModel>;
 
 public class GetTicketsDetailHandler(GetTicketsService getTicketsService)
     : IRequestHandler<GetTicketsDetailRequest, TicketsViewModel>

@@ -7,9 +7,7 @@ namespace TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 
 using Fanex.NAP.Client.Helpers.Business;
 
-public class GetRemarkRequest : IRequest<IEnumerable<string>>
-{
-}
+public class GetRemarkRequest : IRequest<IEnumerable<string>>;
 
 public class GetRemarkHandler(SessionService sessionService) : IRequestHandler<GetRemarkRequest, IEnumerable<string>>
 {

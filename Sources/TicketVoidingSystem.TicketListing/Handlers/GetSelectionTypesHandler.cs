@@ -5,9 +5,7 @@ using TicketVoidingSystem.TicketListing.Models;
 
 namespace TicketVoidingSystem.TicketListing.Handlers;
 
-public class GetSelectionTypesRequest : GetSelectionTypesCriteria, IRequest<IEnumerable<SelectionTypeModel>>
-{
-}
+public class GetSelectionTypesRequest : GetSelectionTypesCriteria, IRequest<IEnumerable<SelectionTypeModel>>;
 
 public class GetSelectionTypesHandler(IDynamicRepository repository)
     : IRequestHandler<GetSelectionTypesRequest, IEnumerable<SelectionTypeModel>>

@@ -8,9 +8,7 @@ using TicketVoidingSystem.Services;
 
 namespace SpecialDelete.VoidByBetId.Handlers;
 
-public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>
-{
-}
+public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>;
 
 public class GetTicketsHandler(
     GetTicketsService getTicketsService,

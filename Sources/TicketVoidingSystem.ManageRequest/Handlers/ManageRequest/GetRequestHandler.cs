@@ -5,9 +5,7 @@ using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class GetRequestRequest : GetRequestCriteria, IRequest<RequestDetailViewModel>
-{
-}
+public class GetRequestRequest : GetRequestCriteria, IRequest<RequestDetailViewModel>;
 
 public class GetRequestHandler(GetRequestService getRequestService)
     : IRequestHandler<GetRequestRequest, RequestDetailViewModel>

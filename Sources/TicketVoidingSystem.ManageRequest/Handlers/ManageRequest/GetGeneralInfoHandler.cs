@@ -5,9 +5,7 @@ using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class GetGeneralInfoRequest : GetGeneralInfoCriteria, IRequest<GeneralInfoViewModel>
-{
-}
+public class GetGeneralInfoRequest : GetGeneralInfoCriteria, IRequest<GeneralInfoViewModel>;
 
 public class GetGeneralInfoHandler(GetGeneralInfoService getGeneralInfoService)
     : IRequestHandler<GetGeneralInfoRequest, GeneralInfoViewModel>

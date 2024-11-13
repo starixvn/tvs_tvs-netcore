@@ -11,9 +11,7 @@ using TicketVoidingSystem.SharedApi.ViewModels.MessageTemplate;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.MessageTemplate;
 
-public class GetTemplateSettingRequest : IRequest<TemplateSettingViewModel>
-{
-}
+public class GetTemplateSettingRequest : IRequest<TemplateSettingViewModel>;
 
 public class GetTemplateSettingHandler(IDynamicRepository repository)
     : IRequestHandler<GetTemplateSettingRequest, TemplateSettingViewModel>

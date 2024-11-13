@@ -9,9 +9,7 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers.UserLogs;
 
-public class GetUserLogsRequest : GetUserLogsQuery, IRequest<GetUserLogsViewModel>
-{
-}
+public class GetUserLogsRequest : GetUserLogsQuery, IRequest<GetUserLogsViewModel>;
 
 public class GetUserLogsHandler(
     UserLogsService userLogsService,

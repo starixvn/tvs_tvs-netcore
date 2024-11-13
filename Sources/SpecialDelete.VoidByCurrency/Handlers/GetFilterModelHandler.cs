@@ -5,9 +5,7 @@ using TicketVoidingSystem.SharedApi.Services.SharedApi;
 
 namespace SpecialDelete.VoidByCurrency.Handlers;
 
-public class GetFilterModelRequest : IRequest<FilterViewModel>
-{
-}
+public class GetFilterModelRequest : IRequest<FilterViewModel>;
 
 public class GetFilterModelHandler(
     FilterAreaService filterAreaService,

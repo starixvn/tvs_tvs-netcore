@@ -8,9 +8,7 @@ using TicketVoidingSystem.Services;
 
 namespace SpecialDelete.VirtualSports.VoidParlaySub.Handlers;
 
-public class VoidTicketsRequest : VoidTicketsQuery, IRequest<List<Result>>
-{
-}
+public class VoidTicketsRequest : VoidTicketsQuery, IRequest<List<Result>>;
 
 public class VoidTicketsHandler(
     VoidTicketsService voidTicketsService,

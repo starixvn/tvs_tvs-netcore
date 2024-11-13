@@ -7,9 +7,7 @@ using TicketVoidingSystem.Services;
 
 namespace SpecialDelete.RecoverByBetId.Handlers;
 
-public class RecoverTicketsRequest : RecoverTicketsQuery, IRequest<IEnumerable<Result>>
-{
-}
+public class RecoverTicketsRequest : RecoverTicketsQuery, IRequest<IEnumerable<Result>>;
 
 public class RecoverTicketsHandler(
     RecoverTicketsService recoverTicketsService,

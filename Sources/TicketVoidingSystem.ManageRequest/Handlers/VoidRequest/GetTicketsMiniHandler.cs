@@ -4,9 +4,7 @@ using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 
-public class GetTicketsMiniRequest : GetTicketsQuery, IRequest<TicketsViewModel>
-{
-}
+public class GetTicketsMiniRequest : GetTicketsQuery, IRequest<TicketsViewModel>;
 
 public class GetTicketsMiniHandler(
     GetTicketsService getTicketsService,

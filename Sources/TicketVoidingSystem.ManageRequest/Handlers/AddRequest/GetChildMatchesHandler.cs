@@ -6,9 +6,7 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetChildMatchesRequest : GetRelatedMatchCriteria, IRequest<IEnumerable<MatchInfoAddRequest>>
-{
-}
+public class GetChildMatchesRequest : GetRelatedMatchCriteria, IRequest<IEnumerable<MatchInfoAddRequest>>;
 
 public class GetChildMatchesHandler(
     IDynamicRepository repository,

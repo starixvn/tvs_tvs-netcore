@@ -13,9 +13,7 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 
-public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>
-{
-}
+public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>;
 
 public class GetTicketsHandler(
     GetTicketsService getTicketsService,

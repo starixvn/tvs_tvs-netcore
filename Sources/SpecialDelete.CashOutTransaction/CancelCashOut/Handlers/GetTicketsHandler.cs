@@ -5,9 +5,7 @@ using SpecialDelete.CashOutTransaction.Common.ViewModels;
 
 namespace SpecialDelete.CashOutTransaction.CancelCashOut.Handlers;
 
-public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel<TicketViewModel>>
-{
-}
+public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel<TicketViewModel>>;
 
 public class GetTicketsHandler(HandlerService cashOutService)
     : IRequestHandler<GetTicketsRequest, TicketsViewModel<TicketViewModel>>

@@ -6,9 +6,7 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace SpecialDelete.NumberGame.Handlers;
 
-public class ExportExcelRequest : GetVoidTicketsQuery, IRequest<ExcelFileModel>
-{
-}
+public class ExportExcelRequest : GetVoidTicketsQuery, IRequest<ExcelFileModel>;
 
 public class ExportExcelHandler(ExcelService<GetVoidTicketsQuery> excelService)
     : IRequestHandler<ExportExcelRequest, ExcelFileModel>

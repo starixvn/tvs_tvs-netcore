@@ -5,9 +5,7 @@ using TicketVoidingSystem.TicketListing.ViewModels;
 
 namespace TicketVoidingSystem.TicketListing.Handlers;
 
-public class GetSummaryRequest : GetSummaryQuery, IRequest<GetSummaryViewModel>
-{
-}
+public class GetSummaryRequest : GetSummaryQuery, IRequest<GetSummaryViewModel>;
 
 public class GetSummaryHandler(GetSummaryTicketsService getSummaryTicketsService)
     : IRequestHandler<GetSummaryRequest, GetSummaryViewModel>

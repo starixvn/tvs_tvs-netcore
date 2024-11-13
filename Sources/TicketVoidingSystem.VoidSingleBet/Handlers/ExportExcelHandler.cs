@@ -6,9 +6,7 @@ using TicketVoidingSystem.VoidSingleBet.Criteria;
 
 namespace TicketVoidingSystem.VoidSingleBet.Handlers;
 
-public class ExportExcelRequest : GetTicketsQuery, IRequest<ExcelFileModel>
-{
-}
+public class ExportExcelRequest : GetTicketsQuery, IRequest<ExcelFileModel>;
 
 public class ExportExcelHandler(ExcelService<GetTicketsQuery> excelService)
     : IRequestHandler<ExportExcelRequest, ExcelFileModel>

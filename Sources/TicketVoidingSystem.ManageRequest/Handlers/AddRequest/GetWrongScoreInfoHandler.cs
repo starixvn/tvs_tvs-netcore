@@ -5,9 +5,7 @@ using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetWrongScoreInfoRequest : GetWrongScoreInfoCriteria, IRequest<IEnumerable<WrongScoreInfoViewModel>>
-{
-}
+public class GetWrongScoreInfoRequest : GetWrongScoreInfoCriteria, IRequest<IEnumerable<WrongScoreInfoViewModel>>;
 
 public class GetWrongScoreInfoHandler(WrongScoreInfoService wrongScoreInfoService)
     : IRequestHandler<GetWrongScoreInfoRequest, IEnumerable<WrongScoreInfoViewModel>>

@@ -7,9 +7,7 @@ using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 
-public class MarkTicketsRequest : MarkTicketsQuery, IRequest<Result>
-{
-}
+public class MarkTicketsRequest : MarkTicketsQuery, IRequest<Result>;
 
 public class MarkTicketsHandler(MarkTicketsService markTicketsService) : IRequestHandler<MarkTicketsRequest, Result>
 {

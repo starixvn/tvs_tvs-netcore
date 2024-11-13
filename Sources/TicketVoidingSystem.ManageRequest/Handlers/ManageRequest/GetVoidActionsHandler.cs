@@ -5,9 +5,7 @@ using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class GetVoidActionsRequest : GetActionsCriteria, IRequest<IEnumerable<VoidActionSelection>>
-{
-}
+public class GetVoidActionsRequest : GetActionsCriteria, IRequest<IEnumerable<VoidActionSelection>>;
 
 public class GetVoidActionsHandler(IDynamicRepository repository)
     : IRequestHandler<GetVoidActionsRequest, IEnumerable<VoidActionSelection>>

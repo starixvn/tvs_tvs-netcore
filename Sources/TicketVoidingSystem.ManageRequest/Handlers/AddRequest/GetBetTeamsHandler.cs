@@ -4,9 +4,7 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetBetTeamsRequest : IRequest<IEnumerable<BetTeamAddRequest>>
-{
-}
+public class GetBetTeamsRequest : IRequest<IEnumerable<BetTeamAddRequest>>;
 
 public class GetBetTeamsHandler(AdvancedModeService advancedModeService)
     : IRequestHandler<GetBetTeamsRequest, IEnumerable<BetTeamAddRequest>>

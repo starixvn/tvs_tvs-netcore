@@ -10,9 +10,7 @@ using TicketVoidingSystem.Constants;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers;
 
-public class GetSubTypeRequest : GetSubTypeCriteria, IRequest<IEnumerable<AbExceptionSubTypeViewModel>>
-{
-}
+public class GetSubTypeRequest : GetSubTypeCriteria, IRequest<IEnumerable<AbExceptionSubTypeViewModel>>;
 
 public class GetSubTypeHandler(IDynamicRepository repository)
     : IRequestHandler<GetSubTypeRequest, IEnumerable<AbExceptionSubTypeViewModel>>

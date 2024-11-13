@@ -6,9 +6,7 @@ using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetOperatorsRequest : GetOperatorsInfoCriteria, IRequest<IEnumerable<OperatorInfo?>>
-{
-}
+public class GetOperatorsRequest : GetOperatorsInfoCriteria, IRequest<IEnumerable<OperatorInfo?>>;
 
 public class GetOperatorsHandler(IDynamicRepository repository)
     : IRequestHandler<GetOperatorsRequest, IEnumerable<OperatorInfo?>>

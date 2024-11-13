@@ -7,9 +7,7 @@ using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class GetVoidedTicketsRequest : GetVoidedTicketsQuery, IRequest<VoidedTicketsViewModel>
-{
-}
+public class GetVoidedTicketsRequest : GetVoidedTicketsQuery, IRequest<VoidedTicketsViewModel>;
 
 public class GetVoidedTicketsHandler(
     GetVoidedTicketsService getVoidedTicketsService,

@@ -6,9 +6,7 @@ using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetPermissionRequest : IRequest<PermissionAddRequest>
-{
-}
+public class GetPermissionRequest : IRequest<PermissionAddRequest>;
 
 public class GetPermissionHandler(SessionService sessionService)
     : IRequestHandler<GetPermissionRequest, PermissionAddRequest>

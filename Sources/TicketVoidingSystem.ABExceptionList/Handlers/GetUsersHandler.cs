@@ -7,9 +7,7 @@ using TicketVoidingSystem.ABExceptionList.Services;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers;
 
-public class GetUsersRequest : GetUsersCriteria, IRequest<UserViewModel>
-{
-}
+public class GetUsersRequest : GetUsersCriteria, IRequest<UserViewModel>;
 
 public class GetUsersHandler(GetUsersService getUsersService) : IRequestHandler<GetUsersRequest, UserViewModel>
 {

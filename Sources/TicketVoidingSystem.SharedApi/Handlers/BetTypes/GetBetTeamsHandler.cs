@@ -7,9 +7,7 @@ using TicketVoidingSystem.SharedApi.Services.BetTypes;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.BetTypes;
 
-public class GetBetTeamsRequest : IRequest<IEnumerable<BetTeam>>
-{
-}
+public class GetBetTeamsRequest : IRequest<IEnumerable<BetTeam>>;
 
 public class GetBetTeamsHandler(BetTeamsService betTeamsService)
     : IRequestHandler<GetBetTeamsRequest, IEnumerable<BetTeam>>

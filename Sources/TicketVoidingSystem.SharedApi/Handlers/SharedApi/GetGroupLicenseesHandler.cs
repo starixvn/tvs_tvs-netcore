@@ -7,9 +7,7 @@ using TicketVoidingSystem.SharedApi.Services.SharedApi;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
-public class GetGroupLicenseesRequest : IRequest<IEnumerable<GroupLicensee>>
-{
-}
+public class GetGroupLicenseesRequest : IRequest<IEnumerable<GroupLicensee>>;
 
 public class GetGroupLicenseesHandler(FilterCurrencyLicenseeService filterCurrencyLicenseeService)
     : IRequestHandler<GetGroupLicenseesRequest, IEnumerable<GroupLicensee>>

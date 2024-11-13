@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
@@ -82,8 +81,7 @@ public class GetPoolHouseTicketServiceTests
         {
             new() { IsMixParlay = false, GroupName = "1" }
         };
-        var groups = new List<Group<GetTicketModel>>
-            { new() { Name = "1", Tickets = singleTickets, DisplayTotalTickets = 1 } };
+        List<Group<GetTicketModel>> groups = [new() { Name = "1", Tickets = singleTickets, DisplayTotalTickets = 1 }];
         pagingService.Groups(singleTickets, ticket => ticket.GroupName).ReturnsForAnyArgs(groups);
         mapTicketsService
             .MapFromGetTicketModelToTicketViewModel(Arg.Any<GetTicketModel>(), null, ChoiceType.None, 1)

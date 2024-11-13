@@ -7,9 +7,7 @@ using TicketVoidingSystem.SharedApi.Services.BetTypes;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.BetTypes;
 
-public class GetBetTypesVoidParlayVirtualSportRequest : IRequest<IList<GroupBetTypeVoidParlayVirtualSport>>
-{
-}
+public class GetBetTypesVoidParlayVirtualSportRequest : IRequest<IList<GroupBetTypeVoidParlayVirtualSport>>;
 
 public class GetBetTypesVoidParlayVirtualSportsHandler(BetTypesRepository betTypesRepository)
     : IRequestHandler<GetBetTypesVoidParlayVirtualSportRequest, IList<GroupBetTypeVoidParlayVirtualSport>>

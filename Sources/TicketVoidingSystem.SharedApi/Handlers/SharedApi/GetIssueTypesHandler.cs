@@ -10,9 +10,7 @@ using TicketVoidingSystem.ViewModels;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
-public class GetIssueTypesRequest : IRequest<IssueTypesViewModel>
-{
-}
+public class GetIssueTypesRequest : IRequest<IssueTypesViewModel>;
 
 public class GetIssueTypesHandler(IDynamicRepository repository)
     : IRequestHandler<GetIssueTypesRequest, IssueTypesViewModel>

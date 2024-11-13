@@ -8,9 +8,7 @@ using TicketVoidingSystem.Services.BetList;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.MatchInfo;
 
-public class GetMatchInfoVoidByCurrencyRequest : GetMatchInfoVoidByCurrencyCriteria, IRequest<Match>
-{
-}
+public class GetMatchInfoVoidByCurrencyRequest : GetMatchInfoVoidByCurrencyCriteria, IRequest<Match>;
 
 public class GetMatchInfoVoidByCurrencyHandler(
     BetListService betListService,

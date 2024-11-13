@@ -10,9 +10,7 @@ using TicketVoidingSystem.SharedApi.Models.SubParlayTicket;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SubParlayTicket;
 
-public class GetSelectionsSMPRequest : GetSelectionsSMPCriteria, IRequest<string>
-{
-}
+public class GetSelectionsSMPRequest : GetSelectionsSMPCriteria, IRequest<string>;
 
 public class GetSelectionsSMPHandler(IDynamicRepository repository) : IRequestHandler<GetSelectionsSMPRequest, string>
 {

@@ -5,9 +5,7 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class GetExcelVoidedTicketForSendLetstalkRequest : GetVoidedTicketsQuery, IRequest<byte[]>
-{
-}
+public class GetExcelVoidedTicketForSendLetstalkRequest : GetVoidedTicketsQuery, IRequest<byte[]>;
 
 public class GetExcelVoidedTicketForSendLetstalkHandler(ExcelService<GetVoidedTicketsQuery> excelService)
     : IRequestHandler<GetExcelVoidedTicketForSendLetstalkRequest, byte[]>

@@ -9,9 +9,7 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 
-public class ExportExcelDetailTicketsRequest : GetDetailTicketsQuery, IRequest<ExcelFileModel>
-{
-}
+public class ExportExcelDetailTicketsRequest : GetDetailTicketsQuery, IRequest<ExcelFileModel>;
 
 public class ExportExcelDetailTicketsHandler(ExcelService<GetDetailTicketsQuery> excelService)
     : IRequestHandler<ExportExcelDetailTicketsRequest, ExcelFileModel>

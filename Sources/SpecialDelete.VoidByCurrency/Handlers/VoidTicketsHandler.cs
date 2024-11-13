@@ -5,9 +5,7 @@ using TicketVoidingSystem.Models;
 
 namespace SpecialDelete.VoidByCurrency.Handlers;
 
-public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>>
-{
-}
+public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>>;
 
 public class VoidTicketsHandler(VoidByCurrencyService voidByCurrencyService)
     : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>>

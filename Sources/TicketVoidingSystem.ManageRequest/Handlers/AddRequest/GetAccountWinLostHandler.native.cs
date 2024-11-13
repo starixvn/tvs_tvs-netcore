@@ -4,9 +4,7 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetAccountWinLostRequest : GetAccountWinLostQuery, IRequest<IEnumerable<AccountWinlostModel>>
-{
-}
+public class GetAccountWinLostRequest : GetAccountWinLostQuery, IRequest<IEnumerable<AccountWinlostModel>>;
 
 public class GetAccountWinLostHandler(AccountWinLostService accountWinLostService)
     : IRequestHandler<GetAccountWinLostRequest, IEnumerable<AccountWinlostModel>>

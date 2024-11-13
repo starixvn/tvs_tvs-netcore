@@ -5,9 +5,7 @@ using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class CheckValidTransIdsRequest : CheckValidTransIdsModel, IRequest<CheckValidTransIdsViewModel>
-{
-}
+public class CheckValidTransIdsRequest : CheckValidTransIdsModel, IRequest<CheckValidTransIdsViewModel>;
 
 public class CheckValidTransIdsHandler(CheckValidTransIdsService checkValidTransIdsService)
     : IRequestHandler<CheckValidTransIdsRequest, CheckValidTransIdsViewModel>

@@ -6,9 +6,7 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class SaveSubIssueTypeNoteRequest : SaveSubIssueTypeNoteCommand, IRequest<Result>
-{
-}
+public class SaveSubIssueTypeNoteRequest : SaveSubIssueTypeNoteCommand, IRequest<Result>;
 
 public class SaveSubIssueTypeNoteHandler(IDynamicRepository repository, LoggingService loggingService)
     : IRequestHandler<SaveSubIssueTypeNoteRequest, Result>

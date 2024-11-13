@@ -7,9 +7,7 @@ using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark;
 
-public class UpdateConfirmAutoUnmarkRequest : UpdateConfirmAutoUnmarkQuery, IRequest<Result>
-{
-}
+public class UpdateConfirmAutoUnmarkRequest : UpdateConfirmAutoUnmarkQuery, IRequest<Result>;
 
 public class UpdateConfirmAutoUnmarkHandler(UpdateConfirmAutoUnmarkService updateConfirmAutoUnmarkService)
     : IRequestHandler<UpdateConfirmAutoUnmarkRequest, Result>

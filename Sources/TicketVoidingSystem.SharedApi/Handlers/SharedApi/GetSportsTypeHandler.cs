@@ -9,9 +9,7 @@ using TicketVoidingSystem.SharedApi.Models;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
-public class GetSportsTypeRequest : IRequest<IEnumerable<SportInfo>>
-{
-}
+public class GetSportsTypeRequest : IRequest<IEnumerable<SportInfo>>;
 
 public class GetSportsTypeHandler(IDynamicRepository repository)
     : IRequestHandler<GetSportsTypeRequest, IEnumerable<SportInfo>>

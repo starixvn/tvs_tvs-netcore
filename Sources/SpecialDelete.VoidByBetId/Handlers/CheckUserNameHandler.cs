@@ -5,9 +5,7 @@ using SpecialDelete.VoidByBetId.Models;
 
 namespace SpecialDelete.VoidByBetId.Handlers;
 
-public class CheckUserNameRequest : GetCustomerInfoCriteria, IRequest<string>
-{
-}
+public class CheckUserNameRequest : GetCustomerInfoCriteria, IRequest<string>;
 
 public class CheckUserNameHandler(IDynamicRepository repository) : IRequestHandler<CheckUserNameRequest, string>
 {

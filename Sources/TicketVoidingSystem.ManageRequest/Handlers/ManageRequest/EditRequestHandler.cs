@@ -5,9 +5,7 @@ using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class EditRequest : EditRequestQuery, IRequest<Result>
-{
-}
+public class EditRequest : EditRequestQuery, IRequest<Result>;
 
 public class EditRequestHandler(EditRequestService editRequestService) : IRequestHandler<EditRequest, Result>
 {

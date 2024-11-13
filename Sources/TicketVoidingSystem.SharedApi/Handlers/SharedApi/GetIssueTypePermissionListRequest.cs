@@ -11,9 +11,7 @@ namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
 using Fanex.NAP.Client.Helpers.Business;
 
-public class GetIssueTypePermissionListRequest : IRequest<IEnumerable<IssueType>>
-{
-}
+public class GetIssueTypePermissionListRequest : IRequest<IEnumerable<IssueType>>;
 
 public class GetIssueTypePermissionListHandler(SessionService sessionService)
     : IRequestHandler<GetIssueTypePermissionListRequest, IEnumerable<IssueType>>

@@ -6,9 +6,7 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class AddRequest : AddRequestQuery, IRequest<Result>
-{
-}
+public class AddRequest : AddRequestQuery, IRequest<Result>;
 
 public class AddRequestHandler(ResultCacheService resultCacheService, AddRequestService addRequestService)
     : IRequestHandler<AddRequest, Result>

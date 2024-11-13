@@ -6,9 +6,7 @@ using TicketVoidingSystem.Services;
 
 namespace SpecialDelete.UploadBatchMessage.Handlers;
 
-public class UpdateMessageRequest : UpdateMessageQueryModel, IRequest<Result>
-{
-}
+public class UpdateMessageRequest : UpdateMessageQueryModel, IRequest<Result>;
 
 public class UpdateMessageHandler(
     BatchMessageService batchMessageService,

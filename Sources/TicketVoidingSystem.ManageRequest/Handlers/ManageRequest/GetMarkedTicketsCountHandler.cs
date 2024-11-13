@@ -7,9 +7,7 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class GetMarkedTicketsCountRequest : IRequest<int>
-{
-}
+public class GetMarkedTicketsCountRequest : IRequest<int>;
 
 public class GetMarkedTicketsCountHandler(IDynamicRepository repository, SessionService sessionService)
     : IRequestHandler<GetMarkedTicketsCountRequest, int>

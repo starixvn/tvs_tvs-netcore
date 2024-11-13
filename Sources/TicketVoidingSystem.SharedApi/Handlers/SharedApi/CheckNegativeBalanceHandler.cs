@@ -10,9 +10,7 @@ using TicketVoidingSystem.SharedApi.Models;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
-public class CheckNegativeBalanceRequest : CheckNegativeBetCreditCriteria, IRequest<IEnumerable<NegativeBalanceModel>>
-{
-}
+public class CheckNegativeBalanceRequest : CheckNegativeBetCreditCriteria, IRequest<IEnumerable<NegativeBalanceModel>>;
 
 public class CheckNegativeBalanceHandler(IDynamicRepository repository)
     : IRequestHandler<CheckNegativeBalanceRequest, IEnumerable<NegativeBalanceModel>>

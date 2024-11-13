@@ -5,9 +5,7 @@ using SpecialDelete.RecoverParlayBet.ViewModels;
 
 namespace SpecialDelete.RecoverParlayBet.Handlers;
 
-public class GetSubTicketsRequest : GetSubTicketsQuery, IRequest<TicketsViewModel>
-{
-}
+public class GetSubTicketsRequest : GetSubTicketsQuery, IRequest<TicketsViewModel>;
 
 public class GetSubTicketsHandler(GetTicketsService<GetSubTicket, GetSubTicketsQuery> getTicketsService)
     : IRequestHandler<GetSubTicketsRequest, TicketsViewModel>

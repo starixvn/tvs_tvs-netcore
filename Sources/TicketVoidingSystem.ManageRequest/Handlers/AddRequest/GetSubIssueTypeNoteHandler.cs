@@ -5,9 +5,7 @@ using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetSubIssueTypeNoteRequest : GetSubIssueTypeNoteCriteria, IRequest<IEnumerable<SubIssueTypeNoteModel>>
-{
-}
+public class GetSubIssueTypeNoteRequest : GetSubIssueTypeNoteCriteria, IRequest<IEnumerable<SubIssueTypeNoteModel>>;
 
 public class GetSubIssueTypeNoteHandler(IDynamicRepository repository)
     : IRequestHandler<GetSubIssueTypeNoteRequest, IEnumerable<SubIssueTypeNoteModel>>

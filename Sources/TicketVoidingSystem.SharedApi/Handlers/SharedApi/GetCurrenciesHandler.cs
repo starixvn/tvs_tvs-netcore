@@ -7,9 +7,7 @@ using TicketVoidingSystem.SharedApi.Services.SharedApi;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
-public class GetCurrenciesRequest : IRequest<IEnumerable<Currency>>
-{
-}
+public class GetCurrenciesRequest : IRequest<IEnumerable<Currency>>;
 
 public class GetCurrenciesHandler(FilterCurrencyLicenseeService filterCurrencyLicenseeService)
     : IRequestHandler<GetCurrenciesRequest, IEnumerable<Currency>>

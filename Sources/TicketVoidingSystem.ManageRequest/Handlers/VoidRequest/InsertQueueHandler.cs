@@ -8,9 +8,7 @@ using TicketVoidingSystem.SignalR;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 
-public class InsertQueueRequest : InsertQueueQuery, IRequest<Result>
-{
-}
+public class InsertQueueRequest : InsertQueueQuery, IRequest<Result>;
 
 public class InsertQueueHandler(
     InsertQueueService insertQueueService,

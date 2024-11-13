@@ -9,9 +9,7 @@ namespace TicketVoidingSystem.ABExceptionList.Handlers;
 
 using Fanex.NAP.Client.Helpers.Business;
 
-public class GetPermissionRequest : IRequest<PermissionABExceptionList>
-{
-}
+public class GetPermissionRequest : IRequest<PermissionABExceptionList>;
 
 public class GetPermissionHandler(SessionService session)
     : IRequestHandler<GetPermissionRequest, PermissionABExceptionList>

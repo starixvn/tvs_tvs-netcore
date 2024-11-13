@@ -99,6 +99,4 @@ public class LogActionFilterAttribute(ILogger logger) : ActionFilterAttribute
 }
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class SkipLoggingAttribute : Attribute
-{
-}
+public class SkipLoggingAttribute : Attribute;

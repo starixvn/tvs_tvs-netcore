@@ -9,9 +9,7 @@ using TicketVoidingSystem.ABExceptionList.Models;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers;
 
-public class GetSitesRequest : GetSitesCriteria, IRequest<IEnumerable<GroupLicenseeSiteViewModel>>
-{
-}
+public class GetSitesRequest : GetSitesCriteria, IRequest<IEnumerable<GroupLicenseeSiteViewModel>>;
 
 public class GetSitesHandler(IDynamicRepository repository)
     : IRequestHandler<GetSitesRequest, IEnumerable<GroupLicenseeSiteViewModel>>

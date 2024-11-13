@@ -12,9 +12,7 @@ using TicketVoidingSystem.SharedApi.Models.BetTypes;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetPoolHouseTicketRequest : GetPoolHouseTicketQuery, IRequest<GetPoolHouseTicketViewModel>
-{
-}
+public class GetPoolHouseTicketRequest : GetPoolHouseTicketQuery, IRequest<GetPoolHouseTicketViewModel>;
 
 public class GetPoolHouseTicketHandler(
     IDynamicRepository repository,

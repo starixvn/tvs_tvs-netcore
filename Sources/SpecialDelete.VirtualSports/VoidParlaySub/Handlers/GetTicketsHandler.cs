@@ -6,9 +6,7 @@ using TicketVoidingSystem.Services;
 
 namespace SpecialDelete.VirtualSports.VoidParlaySub.Handlers;
 
-public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>
-{
-}
+public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>;
 
 public class GetTicketsHandler(
     GetTicketsService getTicketsService,

@@ -10,9 +10,7 @@ using TicketVoidingSystem.Web;
 
 namespace SpecialDelete.NumberGame.Handlers;
 
-public class GetVoidTicketsRequest : GetVoidTicketsQuery, IRequest<TicketsViewModel>
-{
-}
+public class GetVoidTicketsRequest : GetVoidTicketsQuery, IRequest<TicketsViewModel>;
 
 public class GetVoidTicketsHandler(
     SessionService sessionService,

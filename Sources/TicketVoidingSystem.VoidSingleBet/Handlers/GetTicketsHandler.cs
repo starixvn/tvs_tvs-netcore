@@ -8,9 +8,7 @@ using TicketVoidingSystem.VoidSingleBet.ViewModels;
 
 namespace TicketVoidingSystem.VoidSingleBet.Handlers;
 
-public class GetTicketsRequest : GetTicketsQuery, IRequest<ListTicketsViewModel>
-{
-}
+public class GetTicketsRequest : GetTicketsQuery, IRequest<ListTicketsViewModel>;
 
 public class GetTicketsHandler(
     GetTicketsService getTicketsService,

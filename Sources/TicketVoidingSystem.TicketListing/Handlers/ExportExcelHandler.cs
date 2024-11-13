@@ -8,9 +8,7 @@ using TicketVoidingSystem.TicketListing.Services;
 
 namespace TicketVoidingSystem.TicketListing.Handlers;
 
-public class ExportExcelRequest : ExportExcelQuery, IRequest<ExcelFileModel>
-{
-}
+public class ExportExcelRequest : ExportExcelQuery, IRequest<ExcelFileModel>;
 
 public class ExportExcelHandler(ExcelService<ExportExcelQuery> excelService, GetTicketsService getTicketsService)
     : IRequestHandler<ExportExcelRequest, ExcelFileModel>

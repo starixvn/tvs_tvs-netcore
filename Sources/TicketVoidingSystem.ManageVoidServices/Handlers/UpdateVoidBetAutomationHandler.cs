@@ -8,9 +8,7 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageVoidServices.Handlers;
 
-public class UpdateVoidBetAutomationInfoRequest : VoidBetAutomationModel, IRequest<bool>
-{
-}
+public class UpdateVoidBetAutomationInfoRequest : VoidBetAutomationModel, IRequest<bool>;
 
 public class UpdateVoidBetAutomationHandler(AfterVoidService afterVoidService, LoggingService loggingService)
     : IRequestHandler<UpdateVoidBetAutomationInfoRequest, bool>

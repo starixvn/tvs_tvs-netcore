@@ -11,9 +11,7 @@ using TicketVoidingSystem.SharedApi.Models.MessageTemplate;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.MessageTemplate;
 
-public class GetTemplateAbnormalBetRequest : IRequest<object>
-{
-}
+public class GetTemplateAbnormalBetRequest : IRequest<object>;
 
 public class GetTemplateAbnormalBetHandler(IDynamicRepository repository)
     : IRequestHandler<GetTemplateAbnormalBetRequest, object>

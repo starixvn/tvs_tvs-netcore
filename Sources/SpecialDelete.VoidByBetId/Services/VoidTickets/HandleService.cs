@@ -2,7 +2,6 @@
 using SpecialDelete.VoidByBetId.Repositories;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services;
 
 namespace SpecialDelete.VoidByBetId.Services.VoidTickets;

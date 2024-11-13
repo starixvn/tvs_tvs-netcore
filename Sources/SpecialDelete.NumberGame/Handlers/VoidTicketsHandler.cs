@@ -8,9 +8,7 @@ using TicketVoidingSystem.Services;
 
 namespace SpecialDelete.NumberGame.Handlers;
 
-public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>>
-{
-}
+public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>>;
 
 public class VoidTicketsHandler(VoidService voidService, LoggingService loggingService)
     : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>>

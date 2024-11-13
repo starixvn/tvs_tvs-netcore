@@ -6,9 +6,7 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace SpecialDelete.VirtualSports.VoidParlaySub.Handlers;
 
-public class ExportExcelRequest : ExportExcelQuery, IRequest<ExcelFileModel>
-{
-}
+public class ExportExcelRequest : ExportExcelQuery, IRequest<ExcelFileModel>;
 
 public class ExportExcelHandler(ExcelService<ExportExcelQuery> excelService)
     : IRequestHandler<ExportExcelRequest, ExcelFileModel>

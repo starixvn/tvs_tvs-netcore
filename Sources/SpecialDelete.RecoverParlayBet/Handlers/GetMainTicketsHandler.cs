@@ -6,9 +6,7 @@ using TicketVoidingSystem.Constants;
 
 namespace SpecialDelete.RecoverParlayBet.Handlers;
 
-public class GetMainTicketsRequest : GetMainTicketsQuery, IRequest<TicketsViewModel>
-{
-}
+public class GetMainTicketsRequest : GetMainTicketsQuery, IRequest<TicketsViewModel>;
 
 public class GetMainTicketsHandler(GetTicketsService<GetMainTicket, GetMainTicketsQuery> getTicketsService)
     : IRequestHandler<GetMainTicketsRequest, TicketsViewModel>

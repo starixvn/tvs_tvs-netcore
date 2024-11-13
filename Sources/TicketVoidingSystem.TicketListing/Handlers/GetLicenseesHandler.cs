@@ -5,9 +5,7 @@ using TicketVoidingSystem.TicketListing.Models;
 
 namespace TicketVoidingSystem.TicketListing.Handlers;
 
-public class GetLicenseesRequest : IRequest<IEnumerable<Licensee>>
-{
-}
+public class GetLicenseesRequest : IRequest<IEnumerable<Licensee>>;
 
 public class GetLicenseesHandler(IDynamicRepository repository)
     : IRequestHandler<GetLicenseesRequest, IEnumerable<Licensee>>

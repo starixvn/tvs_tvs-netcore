@@ -5,9 +5,7 @@ using TicketVoidingSystem.Models;
 
 namespace SpecialDelete.RecoverParlayBet.Handlers;
 
-public class RecoverSubTicketsRequest : RecoverSubTicketsQuery, IRequest<IEnumerable<Result>>
-{
-}
+public class RecoverSubTicketsRequest : RecoverSubTicketsQuery, IRequest<IEnumerable<Result>>;
 
 public class RecoverSubTicketsHandler(
     RecoverTicketsService<RecoverSubTicketModel, RecoverSubTicketsQuery> recoverTicketsService)

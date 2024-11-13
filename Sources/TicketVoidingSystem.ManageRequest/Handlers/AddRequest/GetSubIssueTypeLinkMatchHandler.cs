@@ -5,9 +5,7 @@ using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetSubIssueTypeLinkMatchRequest : GetSubIssueTypeLinkMatchCriteria, IRequest<IEnumerable<SubIssueTypeLinkMatch>>
-{
-}
+public class GetSubIssueTypeLinkMatchRequest : GetSubIssueTypeLinkMatchCriteria, IRequest<IEnumerable<SubIssueTypeLinkMatch>>;
 
 public class GetSubIssueTypeLinkMatchHandler(IDynamicRepository repository)
     : IRequestHandler<GetSubIssueTypeLinkMatchRequest, IEnumerable<SubIssueTypeLinkMatch>>

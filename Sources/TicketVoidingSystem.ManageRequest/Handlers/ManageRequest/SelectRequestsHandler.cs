@@ -5,9 +5,7 @@ using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class SelectRequestsRequest : SelectRequestsQuery, IRequest<IEnumerable<RequestViewModel>>
-{
-}
+public class SelectRequestsRequest : SelectRequestsQuery, IRequest<IEnumerable<RequestViewModel>>;
 
 public class SelectRequestsHandler(
     GetRequestsService getRequestsService,
@@ -31,7 +29,7 @@ public class SelectRequestsHandler(
                 RequestId = group.Key,
                 RequestModels = group.ToList()
             });
-        var viewModels = groupRequestModels.Select(g => renderService.Render(g));
+        var viewModels = groupRequestModels.Select(renderService.Render);
 
         return viewModels;
     }

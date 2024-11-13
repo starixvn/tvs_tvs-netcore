@@ -5,9 +5,7 @@ using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 
-public class GetLastModifiedDateRequest : GetRequestLastModifiedDateCriteria, IRequest<RequestLastModifiedDate>
-{
-}
+public class GetLastModifiedDateRequest : GetRequestLastModifiedDateCriteria, IRequest<RequestLastModifiedDate>;
 
 public class GetLastModifiedDateHandler(IDynamicRepository repository)
     : IRequestHandler<GetLastModifiedDateRequest, RequestLastModifiedDate>

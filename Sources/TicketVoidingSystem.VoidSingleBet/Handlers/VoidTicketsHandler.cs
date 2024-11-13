@@ -7,9 +7,7 @@ using TicketVoidingSystem.VoidSingleBet.Services.VoidTickets;
 
 namespace TicketVoidingSystem.VoidSingleBet.Handlers;
 
-public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>?>
-{
-}
+public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>?>;
 
 public class VoidTicketsHandler(
     ResultCacheService resultCacheService,

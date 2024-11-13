@@ -4,9 +4,7 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetLinkedLogRequest : GetLinkedLogModel, IRequest<LinkedLogDataViewModel>
-{
-}
+public class GetLinkedLogRequest : GetLinkedLogModel, IRequest<LinkedLogDataViewModel>;
 
 public class GetLinkedLogHandler(GetLinkedLogService getLinkedLogService)
     : IRequestHandler<GetLinkedLogRequest, LinkedLogDataViewModel>

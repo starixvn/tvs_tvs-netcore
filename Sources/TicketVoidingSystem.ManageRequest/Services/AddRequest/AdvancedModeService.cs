@@ -38,7 +38,7 @@ public class AdvancedModeServiceImp(BetTypesRepository betTypesRepository) : Adv
     public IEnumerable<AllBetTypesSelection> GetAllBetTypesSelection(string allBetTypesSelectionJson)
     {
         return string.IsNullOrWhiteSpace(allBetTypesSelectionJson)
-            ? Enumerable.Empty<AllBetTypesSelection>()
+            ? []
             : Helper.DeserializeObjectIgnoreNullValue<IEnumerable<AllBetTypesSelection>>(allBetTypesSelectionJson);
     }
 }

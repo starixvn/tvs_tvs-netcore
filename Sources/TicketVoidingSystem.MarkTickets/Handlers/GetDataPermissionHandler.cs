@@ -9,9 +9,7 @@ namespace TicketVoidingSystem.MarkTickets.Handlers;
 
 using Fanex.NAP.Client.Helpers.Business;
 
-public class GetDataPermissionRequest : IRequest<DataPermission>
-{
-}
+public class GetDataPermissionRequest : IRequest<DataPermission>;
 
 public class GetDataPermissionHandler(SessionService sessionService)
     : IRequestHandler<GetDataPermissionRequest, DataPermission>

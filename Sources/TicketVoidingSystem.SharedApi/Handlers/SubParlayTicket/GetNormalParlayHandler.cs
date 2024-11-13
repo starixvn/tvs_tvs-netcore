@@ -8,9 +8,7 @@ using TicketVoidingSystem.SharedApi.ViewModels.SubParlayTicket;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SubParlayTicket;
 
-public class GetNormalParlayRequest : QueryNormalParlay, IRequest<IList<TicketViewModel>>
-{
-}
+public class GetNormalParlayRequest : QueryNormalParlay, IRequest<IList<TicketViewModel>>;
 
 public class GetNormalParlayHandler(TicketsService ticketsService)
     : IRequestHandler<GetNormalParlayRequest, IList<TicketViewModel>>

@@ -6,9 +6,7 @@ using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequestFromOtherSites;
 
-public class AddRequestFromCTSRequest : AddRequestFromCTSModel, IRequest<string>
-{
-}
+public class AddRequestFromCTSRequest : AddRequestFromCTSModel, IRequest<string>;
 
 public class AddRequestFromCTSHandler : IRequestHandler<AddRequestFromCTSRequest, string>
 {

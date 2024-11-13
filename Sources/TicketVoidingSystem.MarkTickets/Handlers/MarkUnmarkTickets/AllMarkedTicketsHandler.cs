@@ -11,9 +11,7 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 
-public class AllMarkedTicketsRequest : AllMarkedTicketsQuery, IRequest<AllMarkedTicketsViewModel>
-{
-}
+public class AllMarkedTicketsRequest : AllMarkedTicketsQuery, IRequest<AllMarkedTicketsViewModel>;
 
 public class AllMarkedTicketsHandler(
     GetTicketsService getTicketsService,

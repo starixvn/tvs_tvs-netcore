@@ -10,9 +10,7 @@ using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.VoidByBetId.Handlers;
 
-public class VoidTicketsRequest : VoidTicketsQuery, IRequest<List<Result>>
-{
-}
+public class VoidTicketsRequest : VoidTicketsQuery, IRequest<List<Result>>;
 
 public class VoidTicketsHandler(
     NetPositionService netPositionService,

@@ -8,9 +8,7 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers;
 
-public class AddUsersRequest : AddUsersCommand, IRequest<Result>
-{
-}
+public class AddUsersRequest : AddUsersCommand, IRequest<Result>;
 
 public class AddUsersHandler(IDynamicRepository repository, SessionService session)
     : IRequestHandler<AddUsersRequest, Result>

@@ -6,9 +6,7 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace SpecialDelete.VoidByBetId.Handlers;
 
-public class ExportExcelRequest : GetTicketsQuery, IRequest<ExcelFileModel>
-{
-}
+public class ExportExcelRequest : GetTicketsQuery, IRequest<ExcelFileModel>;
 
 public class ExportExcelHandler(ExcelService<GetTicketsQuery> excelService)
     : IRequestHandler<ExportExcelRequest, ExcelFileModel>

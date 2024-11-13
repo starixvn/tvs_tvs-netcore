@@ -7,9 +7,7 @@ namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
 using Fanex.NAP.Client.Helpers.Business;
 
-public class GetPermissionManageRequest : IRequest<PermissionManage>
-{
-}
+public class GetPermissionManageRequest : IRequest<PermissionManage>;
 
 public class GetPermissionManageHandler(SessionService sessionService)
     : IRequestHandler<GetPermissionManageRequest, PermissionManage>

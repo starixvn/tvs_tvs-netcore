@@ -4,9 +4,7 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetLogInfoRequest : GetLogInfoQuery, IRequest<GetLogInfoViewModel>
-{
-}
+public class GetLogInfoRequest : GetLogInfoQuery, IRequest<GetLogInfoViewModel>;
 
 public class GetLogInfoHandler(LogInfoService logInfoService) : IRequestHandler<GetLogInfoRequest, GetLogInfoViewModel>
 {

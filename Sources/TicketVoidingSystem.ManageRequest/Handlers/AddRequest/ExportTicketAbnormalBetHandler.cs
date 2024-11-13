@@ -6,9 +6,7 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class ExportTicketAbnormalBet : CheckValidTransIdsModel, IRequest<ExcelFileModel>
-{
-}
+public class ExportTicketAbnormalBet : CheckValidTransIdsModel, IRequest<ExcelFileModel>;
 
 public class ExportTicketAbnormalBetHandler(ExcelService<CheckValidTransIdsModel> excelService)
     : IRequestHandler<ExportTicketAbnormalBet, ExcelFileModel>

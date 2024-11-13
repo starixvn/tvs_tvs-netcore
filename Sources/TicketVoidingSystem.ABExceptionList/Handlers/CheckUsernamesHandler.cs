@@ -7,9 +7,7 @@ using TicketVoidingSystem.ABExceptionList.Models;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers;
 
-public class CheckUsernamesRequest : CheckUsernamesCriteria, IRequest<CheckUsernamesModel>
-{
-}
+public class CheckUsernamesRequest : CheckUsernamesCriteria, IRequest<CheckUsernamesModel>;
 
 public class CheckUsernamesHandler(IDynamicRepository repository)
     : IRequestHandler<CheckUsernamesRequest, CheckUsernamesModel>

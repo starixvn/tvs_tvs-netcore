@@ -6,9 +6,7 @@ using TicketVoidingSystem.ManageVoidServices.Services;
 
 namespace TicketVoidingSystem.ManageVoidServices.Handlers;
 
-public class GetVoidBetAutomationInfoRequest : VoidBetAutomationModel, IRequest<VoidBetAutomationModel>
-{
-}
+public class GetVoidBetAutomationInfoRequest : VoidBetAutomationModel, IRequest<VoidBetAutomationModel>;
 
 public class GetVoidBetAutomationInfoHandler(AfterVoidService afterVoidService)
     : IRequestHandler<GetVoidBetAutomationInfoRequest, VoidBetAutomationModel>
