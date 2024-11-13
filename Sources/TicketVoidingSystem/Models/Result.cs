@@ -2,7 +2,7 @@
 
 public class Result
 {
-    public int ErrorCode { get; set; } = 0;
+    public int ErrorCode { get; set; }
 
     public string ErrorMsg { get; set; } = string.Empty;
 
