@@ -37,6 +37,7 @@ export class EventWrongOddsSportsBookService {
     model.liveIndicator = logInfoWrongOddsSportsBook.filterWrongOddsSportsBook.liveIndicator;
     model.filterOddsType = logInfoWrongOddsSportsBook.filterWrongOddsSportsBook.filterOddsType;
     model.correctOdds = logInfoWrongOddsSportsBook.filterWrongOddsSportsBook.correctOdds;
+    model.allBetTypesSelection = logInfoWrongOddsSportsBook.allBetTypesSelection;
 
     if (logInfoWrongOddsSportsBook.filterWrongOddsSportsBook.filterOddsType === FilterOddsTypeConstant.VALUE) {
       model.oddsValue = logInfoWrongOddsSportsBook.filterWrongOddsSportsBook.oddsValue;

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
+import { AdvancedModeComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.component';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
@@ -34,7 +35,7 @@ class Helper {
     subIssueTypeId: 1,
     logInfoDetail: new LogInfoDetail(),
     matchId: 1,
-  };
+  } as WrongMarketOfferedModel;
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
     filterWrongMarketOfferedModel: Helper.fakeFilterWrongMarketOfferedModel,
@@ -42,7 +43,7 @@ class Helper {
     messageValidationLogInfo: [],
     betTypeCount: [],
     betTeamsResult: []
-  };
+  } as LogInfoWrongMarketOffered;
 }
 
 describe('EventWrongMarketOfferedComponent', () => {
@@ -148,6 +149,8 @@ describe('EventWrongMarketOfferedComponent', () => {
     });
     instance.advancedMode = new AdvancedModeAddRequestComponent();
     instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
+    instance.advancedMode.advancedModeComponent = new AdvancedModeComponent(null, null, null);
+    instance.advancedMode.advancedModeComponent.getAllBetTypesSelection = jest.fn().mockReturnValue([]);
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();
 
     await instance.saveRequest();

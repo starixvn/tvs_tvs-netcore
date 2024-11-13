@@ -1,6 +1,7 @@
 import { BetTeamAddRequestResult } from "../../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.model";
 import { GroupBetTypeAddRequest } from "../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model";
 import { LogInfoDetail } from "../../../../utility/models/log-info-detail.model";
+import { Selection } from '../../../../utility/models/selection.model';
 import { BetTypeCountModel } from "./get-log-info.model";
 
 export class WrongMarketOfferedModel {
@@ -15,4 +16,5 @@ export class WrongMarketOfferedModel {
   betTeamsResult?: BetTeamAddRequestResult[];
   groupBetTypes?: GroupBetTypeAddRequest[];
   betTypeCount: BetTypeCountModel[];
+  allBetTypesSelection: Selection[];
 }

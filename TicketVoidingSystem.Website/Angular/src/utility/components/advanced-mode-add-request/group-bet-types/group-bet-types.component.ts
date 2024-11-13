@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import * as _ from 'lodash';
 import { LABELS } from '../../../../utility/constants/labels';
 import { Tooltip } from '../../tooltip/tooltip.model';
@@ -9,7 +9,7 @@ import { BetTypeAddRequest, GroupBetTypeAddRequest, GroupBetTypesAddRequestModel
   templateUrl: './group-bet-types.component.html',
   styleUrls: ['./group-bet-types.component.scss']
 })
-export class GroupBetTypesComponent implements OnInit {
+export class GroupBetTypesComponent {
   @Input() model: GroupBetTypesAddRequestModel;
   @Output() betTypesEvent = new EventEmitter<BetTypeAddRequest[]>();
   @Output() checkExistBetTypeEvent = new EventEmitter<boolean>();
@@ -21,9 +21,6 @@ export class GroupBetTypesComponent implements OnInit {
 
   constructor(private readonly element: ElementRef) {
     this.tooltip.element = this.element;
-  }
-
-  ngOnInit() {
   }
 
   changeAllBetTypes() {

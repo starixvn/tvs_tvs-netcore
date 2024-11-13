@@ -8,6 +8,7 @@ import { ToolTipModule } from './../tooltip/tooltip.module';
 import { AdvancedModeAddRequestComponent } from './advanced-mode-add-request.component';
 import { AdvancedModeComponent } from './advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from './group-bet-types/group-bet-types.component';
+import { ControlsAllBetTypesComponent } from './controls-all-bet-types/controls-all-bet-types.component';
 
 @NgModule({
   imports: [
@@ -21,12 +22,14 @@ import { GroupBetTypesComponent } from './group-bet-types/group-bet-types.compon
   declarations: [
     AdvancedModeAddRequestComponent,
     GroupBetTypesComponent,
-    AdvancedModeComponent
+    AdvancedModeComponent,
+    ControlsAllBetTypesComponent
   ],
   exports: [
     AdvancedModeAddRequestComponent,
     GroupBetTypesComponent,
-    AdvancedModeComponent
+    AdvancedModeComponent,
+    ControlsAllBetTypesComponent
   ]
 })
 export class AdvancedModeAddRequestModule {}

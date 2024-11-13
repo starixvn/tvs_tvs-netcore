@@ -24,7 +24,7 @@ export class EventWrongMarketOfferedService {
     model.logInfoDetail = logInfoEvent.logInfoDetail;
     model.betTeamsResult = logInfoEvent.betTeamsResult;
     model.betTypeCount = logInfoEvent.betTypeCount;
-
+    model.allBetTypesSelection = logInfoEvent.allBetTypesSelection;
     return model;
   }
 
@@ -35,6 +35,7 @@ export class EventWrongMarketOfferedService {
     logInfo.filterWrongMarketOfferedModel = this.createFilterWrongMarketOfferedModel(inputModel);
     logInfo.betTypeCount = inputModel.betTypeCount;
     logInfo.betTeamsResult = inputModel.betTeamsResult;
+    logInfo.allBetTypesSelection = inputModel.allBetTypesSelection;
 
     return logInfo;
   }

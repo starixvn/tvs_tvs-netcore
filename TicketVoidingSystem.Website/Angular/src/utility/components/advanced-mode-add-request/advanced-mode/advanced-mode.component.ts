@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { Subscription, timer } from 'rxjs';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TEXT } from '../../../../utility/constants/text';
+import { Selection as AllBetTypesSelection } from '../../../../utility/models/selection.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AdvancedModeConstants } from '../../advanced-mode/advanced-mode.constants';
@@ -12,6 +13,7 @@ import { Tooltip } from '../../tooltip/tooltip.model';
 import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advanced-mode.model';
+import { ControlsAllBetTypesLists } from '../controls-all-bet-types/controls-all-bet-types.model';
 
 @Component({
   selector: 'advanced-mode',
@@ -23,6 +25,7 @@ export class AdvancedModeComponent {
   @Input() changedBetTypes: BetTypeAddRequest[] = [];
   @Input() advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   @Output() changeFilterEvent = new EventEmitter();
+
   betTeams: BetTeamAddRequest[] = [];
   isCollapse = true;
   tooltip = new Tooltip();
@@ -30,6 +33,7 @@ export class AdvancedModeComponent {
   baseSpecialBetTypeCricket: Selection[] = [];
   baseBetTeams: BetTeamAddRequest[] = [];
   isShowAdvancedModeFilter: boolean;
+  controlsAllBetTypesLists = ControlsAllBetTypesLists.MultipleSelectionList;
   private delayForSearchSubscription: Subscription;
   private readonly observableTimer = timer(500);
 
@@ -54,7 +58,7 @@ export class AdvancedModeComponent {
       this.updateBetTeamByCheckedValue(this.advancedModeAddRequestModel.betTeamsResult);
     }
   }
-
+  
   public async getBetTeamAndRenderValue(matchId: number): Promise<void> {
     await this.getBetTeam();
     this.baseBetTeams.forEach(x => {
@@ -83,12 +87,6 @@ export class AdvancedModeComponent {
     this.isShowAdvancedModeFilter = false;
     this.isCollapse = true;
     this.betTeams = [];
-  }
-
-  unckeckedAllBetTeam() {
-    this.betTeams.forEach(x => {
-      x.isShow = false;
-    });
   }
 
   public async getSpecialBetTeamCricket(matchId: number): Promise<void> {
@@ -162,6 +160,7 @@ export class AdvancedModeComponent {
       }
     }
     this.isShowAdvancedModeFilter = this.betTeams.some(x => x.isShow);
+    this.updateControlsAllBetTypes();
   }
 
   private async handleBetTeam(betType: BetTypeAddRequest) {
@@ -319,5 +318,49 @@ export class AdvancedModeComponent {
     return selection.isMultiple
       ? selection.multiSelection.multipleSelect.getValueItems() !== ''
       : selection.value !== '';
+  } 
+
+  public updateControlsAllBetTypes(){
+    if(this.advancedModeAddRequestModel?.selectedAllBetTypes.length > 0){
+      this.advancedModeAddRequestModel.selectedAllBetTypes.forEach(x => {
+        const selectedAllBetTypes = this.controlsAllBetTypesLists.find(item => item.type === x.name);
+        if(selectedAllBetTypes){
+          selectedAllBetTypes.items.updateItemChecked(x.value.split(','));
+          selectedAllBetTypes.isShow = true;
+        }
+      })
+
+      this.advancedModeAddRequestModel.selectedAllBetTypes = [];
+    }
+    else {
+      this.updateShowControlsAllBetTypes()
+    }
+  }
+
+  private updateShowControlsAllBetTypes(){
+    this.controlsAllBetTypesLists.forEach(x => {
+      x.isShow = this.checkShowAllBetType(x.type);
+    })
+  }
+
+  public changeByControlAllBetType(event: { itemList: string[], type: string }) {
+    this.betTeams.forEach(betTeam => {
+      const selection = betTeam.selections.find(x => x.name === event.type);
+      if(selection) {
+        this.updateBetTeam(betTeam, event.type, event.itemList)
+      } 
+    });
+  }
+
+  private updateBetTeam(betTeam: BetTeamAddRequest, type: string, itemList: string[]){
+    betTeam.selections.find(x => x.name === type).multiSelection.updateItemChecked(itemList);
+  }
+
+  private checkShowAllBetType(type: string): boolean{
+    return this.betTeams.filter(betTeam => betTeam.isShow && betTeam.selections.find(y => y.name === type)).length > 0;
+  }
+
+  public getAllBetTypesSelection(): AllBetTypesSelection[]{
+    return this.controlsAllBetTypesLists.filter(x => x.isShow).map(y => { return {name: y.type, value: y.items.getValueItems()} as AllBetTypesSelection });;
   }
 }

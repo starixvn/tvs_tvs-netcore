@@ -16,4 +16,5 @@ public class WrongMarketOfferedViewModel
     public DateTime? VoidToTime { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
     public IEnumerable<BetTypeTicketsInfo>? BetTypeCount { get; set; }
+    public IEnumerable<AllBetTypesSelection> AllBetTypesSelection { get; set; }
 }

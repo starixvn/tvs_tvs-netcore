@@ -30,7 +30,7 @@ class Helper {
     messageValidationLogInfo: [],
     betTypeCount: [],
     betTeamsResult: []
-  };
+  } as LogInfoWrongMarketOffered;
 }
 
 describe('SaveRequestService', () => {

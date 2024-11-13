@@ -1,0 +1,40 @@
+.all-bet-types {
+  margin-bottom: 0px;
+  ::ng-deep .multiple-selection {
+    min-width: 0;
+    width: 100%;
+    
+  }
+  .dropdown-item-adv {
+    white-space: nowrap;
+    display: flex;
+    width: 175px;
+    height: fit-content;
+    margin-right: 10px;
+  }
+}
+
+.bet-team-1 {
+    display: flex;
+    justify-content: space-between;
+
+    .right {
+      display: flex;
+      justify-content: flex-start;
+      width: 555px;
+      flex-wrap: wrap;
+      row-gap: 3px;
+
+      .input-area {
+        display: contents;
+      }
+    }
+    .left {
+        padding-left: 5px;
+    }
+}
+  
+.bet-team {
+  padding: 2px 0 2px 0px;
+  border-bottom: 1px solid #c8c8c8;
+}
