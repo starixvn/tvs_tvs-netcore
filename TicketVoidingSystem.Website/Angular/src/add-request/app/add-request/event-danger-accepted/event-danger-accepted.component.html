@@ -20,6 +20,11 @@
     </div>
 	</div>
 
+  <div>
+    <label class="mr-2"><input type="checkbox" [disabled]="filter.isVoided" />TV Detection</label>
+    <tv-detection></tv-detection>
+  </div>
+
   <filter-time-area #filterTimeArea
     [isDisabled]="!isExistMatchEvent() || filter.isVoided"
     [isEdit]="isEdit"
