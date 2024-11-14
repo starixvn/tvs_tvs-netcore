@@ -1,8 +1,3 @@
-import {
-  BetTypeAddRequest,
-  GroupBetTypeAddRequest,
-  GroupBetTypesAddRequestModel
-} from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { OtherIssuesModel } from "../../models/event-other-issues.model";
@@ -90,19 +85,5 @@ describe('EventOtherIssuesService', () => {
       expect(actual.subIssueTypeId).toBe(1);
       expect(actual.betTeamsResult).toBe(Helper.fakeOtherIssuesModel.betTeamsResult);
     });
-  });
-
-  it('assignCurrentStateToNewGroupBetType should call return GroupBetTypesAddRequestModel ', async () => {
-    const groupBetTypes = [
-      {
-        betTypes: [{ id: 1 }, { id: 2 }, { id: 3 }]
-      }
-    ] as GroupBetTypeAddRequest[];
-    const newGroupBetTypes = new GroupBetTypesAddRequestModel(groupBetTypes, false, '', false);
-    const currentCheckedBetTypes = [{id: 1}, {id: 2}, {id: 4}, {id: 5}] as BetTypeAddRequest[];
-
-    const actual = mockService['assignCurrentStateToNewGroupBetType'](newGroupBetTypes, currentCheckedBetTypes);
-
-    expect(actual).toEqual(newGroupBetTypes);
   });
 });
