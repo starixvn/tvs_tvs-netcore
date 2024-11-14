@@ -159,7 +159,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
 
         if (betTypeIds.Count == 1)
         {
-            var betTypeId = betTypeIds.First();
+            var betTypeId = betTypeIds[0];
             model.BetTypeNameReplaceMessage = getInfoTicketsForMessage.GetSpecialBetTypeContent(allTickets);
             model.BetTeam = getInfoTicketsForMessage.GetSpecialBetTeam(betTypeId, allTickets);
             model.HdpValues = getInfoTicketsForMessage.GetHdpValues(betTypeId, allTickets);

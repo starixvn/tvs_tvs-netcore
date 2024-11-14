@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { BetTypeAddRequest, GroupBetTypesAddRequestModel } from "../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model";
+import { GroupBetTypesAddRequestModel } from "../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model";
 import { GetBetTypesQuery } from "../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model";
 import { DateTimeFormat, ModeType } from "../../../../../utility/constants/config";
 import { CommonService } from "../../../../../utility/services/common.service";
@@ -21,7 +21,7 @@ export class EventOtherIssuesService {
     private readonly validationService: ValidationService
   ) { }
 
-  async getGroupBetTypes(matchId: number, filterOtherIssuesModel: FilterOtherIssuesModel, currentCheckedBetTypes: BetTypeAddRequest[]): Promise<GroupBetTypesAddRequestModel> {
+  async getGroupBetTypes(matchId: number, filterOtherIssuesModel: FilterOtherIssuesModel): Promise<GroupBetTypesAddRequestModel> {
     const query: GetBetTypesQuery = {
       mode: ModeType.SPORT_BOOK,
       matchId: matchId,
@@ -29,8 +29,7 @@ export class EventOtherIssuesService {
       toTransDate: filterOtherIssuesModel.toDateTime,
     };
     const data = await this.commonService.getGroupBetTypesTvs(query);
-    const newGroupBetTypes = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);
-    const groupBetTypesModel = this.assignCurrentStateToNewGroupBetType(newGroupBetTypes, currentCheckedBetTypes);
+    const groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);
 
     return groupBetTypesModel;
   }
@@ -89,17 +88,5 @@ export class EventOtherIssuesService {
     }
 
     return model;
-  }
-
-  private assignCurrentStateToNewGroupBetType(newGroupBetTypes: GroupBetTypesAddRequestModel, currentCheckedBetTypes: BetTypeAddRequest[]): GroupBetTypesAddRequestModel {
-    const newGroupBetTypesList = newGroupBetTypes.groupBetTypes.flatMap(x => x.betTypes);
-    currentCheckedBetTypes.forEach(x => {
-      const model = newGroupBetTypesList.find(z => z.id === x.id);
-      if (model) {
-        model.isChecked = true;
-      }
-    });
-
-    return newGroupBetTypes;
   }
 }

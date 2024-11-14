@@ -66,6 +66,11 @@ export class MultiSelection {
     this.multipleSelect.updateItemChecked(checkedItems);
   }
 
+  resetAllChecked() {
+    this.multipleSelect.checkAllItems(true);
+    this.multipleSelect.isCheckAll = true;
+  }
+
   updateDisabledStatus(isDisabled: boolean) {
     this.multipleSelect.updateDisableStatus(isDisabled);
     this.multipleSelect.isDisabled = isDisabled;
@@ -177,14 +182,9 @@ export class BetTeamAddRequest {
     }
   }
 
-  resetChecked() {
-    this.isShow = true;
-    this.resetSelections();
-  }
-
-  resetSelections() {
+  resetAllChecked(){
     this.selections.forEach(selection => {
-      selection.value = 'All';
+      selection.multiSelection?.resetAllChecked();
     });
   }
 
@@ -192,13 +192,12 @@ export class BetTeamAddRequest {
     const result = new BetTeamAddRequestResult();
     this.updateBySelection(result);
     this.updateByInputs(result);
-
     this.updateBetTypeHalfFullTimeCorrectScore(result, betTypeId)
     this.updateForPenaltyShootoutCombo376(result, betTypeId);
     this.updateForBetTypesCricketWithFancy(result, betTypeId);
     this.updateForBetTypesWithRuns(result, betTypeId);
-
     result.id = betTypeId;
+    
     return result;
   }
 

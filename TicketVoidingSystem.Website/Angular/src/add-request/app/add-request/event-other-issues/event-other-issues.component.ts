@@ -92,6 +92,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
       await this.getGroupBetTypes();
       const allBetTypes = this.groupBetTypesModel.getAllBetTypes();
       this.advancedMode?.changeBetTypes(allBetTypes);
+      this.advancedMode?.resetAllBetTeams();
       this.primitiveProps.isShowErrorNoBetType = allBetTypes.length === 0;
       this.addRequestStore.changeBlockingUiStatus(false);
     }
@@ -121,8 +122,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
 
   async getGroupBetTypes() {
     this.groupBetTypesModel = await this.eventOtherIssuesService.getGroupBetTypes(
-      this.eventLeagueComponent?.selectedMatch.matchId, this.logInfoEvent.filterOtherIssues,
-      this.groupBetTypesModel.groupBetTypes.flatMap(x => x.betTypes).filter(x => x.isChecked));
+      this.eventLeagueComponent?.selectedMatch.matchId, this.logInfoEvent.filterOtherIssues);
   }
 
   async saveRequest(): Promise<void> {

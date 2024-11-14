@@ -363,4 +363,8 @@ export class AdvancedModeComponent {
   public getAllBetTypesSelection(): AllBetTypesSelection[]{
     return this.controlsAllBetTypesLists.filter(x => x.isShow).map(y => { return {name: y.type, value: y.items.getValueItems()} as AllBetTypesSelection });;
   }
+
+  public resetControlsAllBetTypes() {
+    this.controlsAllBetTypesLists.forEach(x => x.resetAllChecked())
+  }
 }
