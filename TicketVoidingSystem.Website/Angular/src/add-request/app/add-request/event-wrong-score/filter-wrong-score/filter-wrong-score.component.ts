@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestStore } from '../../add-request.store';
 import { AllowanceTimeComponent } from '../allowance-time/allowance-time.component';
 import { FilterWrongScoreModel } from '../models/filter-wrong-score.model';
@@ -15,6 +16,7 @@ import { WrongScoreService } from '../services/wrong-score.service';
 export class FilterWrongScoreComponent {
   @Input() filterWrongScoreModel: FilterWrongScoreModel;
   @Input() isVoided: boolean;
+  @Input() tvDetectionValue: number;
   @Output() changeFilterEvent = new EventEmitter();
   @ViewChild('allowanceTimeComponent') allowanceTimeComponent: AllowanceTimeComponent;
   @ViewChild('fromTimeComponent') fromTimeComponent: DateFullTimeNewComponent;
@@ -30,6 +32,10 @@ export class FilterWrongScoreComponent {
     this.tooltip.element = this.element;
   }
 
+  getTvDetectionClass() {
+    return StaticService.getTvDetectionClass(this.tvDetectionValue);
+  }
+
   public changeFilter(): void {
     this.changeFilterEvent.emit();
     this.addRequestStore.changeSavingRequestStatus(true);
@@ -43,7 +49,7 @@ export class FilterWrongScoreComponent {
     return this.wrongScoreService.getDurationTime(this.filterWrongScoreModel.fromDateTime, this.filterWrongScoreModel.toDateTime);
   }
 
-  public isValid(): boolean {    
+  public isValid(): boolean {
     if (!this.fromTimeComponent.validateWithTooltip() || !this.toTimeComponent.validateWithTooltip()) {
       return false;
     }

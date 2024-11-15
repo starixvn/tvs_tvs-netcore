@@ -25,6 +25,12 @@ export class RedCardModel {
     matchType: number;
     logInfoDetail: LogInfoDetail;
     sportType: number;
+
+    tvDetectionValue: number;
+    serviceAcceptTime: string;
+    actualTime: string;
+    minuteOffset: string;
+    secondOffset: string;
 }
 
 export class RedCardGetLogInfoQuery {

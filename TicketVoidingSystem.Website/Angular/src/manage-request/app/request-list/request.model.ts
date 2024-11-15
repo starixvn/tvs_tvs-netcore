@@ -17,11 +17,12 @@ export class RequestModel {
   eventDate: Date;
   status: string;
   details: DetailRequestModel[];
-  isProcessingCopyDescription?: boolean;
+  processingCopyDescriptionClass?: string;
   filterBy?: number;
 }
 
 export class DetailRequestModel {
+  processingCopyDescriptionClass?: string;
   subIssueTypeId: number;
   matchId: number;
   settlementStatus: string;

@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { AddRequestStore } from '../../add-request.store';
-import { PrimitiveProperty } from '../event-red-card.model';
-import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
+import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { Category, GroupButton } from '../../filter/sub-issue-type-dialog/sub-issue-type-json.model';
 import SubIssueTypeRedCardConfig from '../../filter/sub-issue-type-dialog/sub-type-red-card.json';
 import { RedCardModel } from '../../models/event-red-card.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch } from '../../models/sub-type-link-match.model';
+import { PrimitiveProperty } from '../event-red-card.model';
+import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
+import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,13 +30,8 @@ export class EventRedCardService {
       event.isMainMatch = x.isMainMatch;
       event.eventName = x.name;
       event.logInfoDetail = x.logInfoDetail;
-      event.voidTimeArea = {
-        fromDateTime: x.voidFromTime,
-        toDateTime: x.voidToTime,
-        aaTime: x.aaTime,
-        paTime: x.paTime,
-        saTime: x.saTime
-      } as FilterTimeWithAllowance;
+      event.voidTimeArea = this.getVoidTimeModel(x);
+      event.tvDetectionModel = this.getTvDetectionModel(x);
       event.eventDate = x.eventDate;
       event.sportType = x.sportType;
       
@@ -51,6 +47,25 @@ export class EventRedCardService {
     primitiveProps.filterBy = inputMainEvent.filterBy;
   }
 
+  getVoidTimeModel(inputModel: RedCardModel): FilterTimeWithAllowance {
+    return {
+      fromDateTime: inputModel.voidFromTime,
+        toDateTime: inputModel.voidToTime,
+        aaTime: inputModel.aaTime,
+        paTime: inputModel.paTime,
+        saTime: inputModel.saTime
+    } as FilterTimeWithAllowance;
+  }
+
+  getTvDetectionModel(inputModel: RedCardModel): TvDetectionModel {
+    return {
+      serviceAcceptTime: inputModel.serviceAcceptTime,
+      actualTime: inputModel.actualTime,
+      tvDetectionValue: inputModel.tvDetectionValue,
+      minuteOffset: inputModel.minuteOffset,
+      secondOffset: inputModel.secondOffset,
+    } as TvDetectionModel;
+  }
   updateDefaultFilterTime(defaultFilter: FilterTimeWithAllowance, inputModels: RedCardModel[]): void {
     const eventSource = inputModels.find(x => x.isMainMatch);
     defaultFilter.fromDateTime = eventSource.filterFromTransTime;

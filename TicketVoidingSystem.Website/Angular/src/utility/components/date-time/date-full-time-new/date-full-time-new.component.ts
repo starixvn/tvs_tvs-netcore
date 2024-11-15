@@ -21,6 +21,7 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
   @Input() allowedHideDate = false;
   @Input() withOfTime = 130;
   @Input() readonly = true;
+  @Input() timeClass = '';
   @Input() timeFormat = DateTimeFormat.TIME_FORMAT;
   @Output() dateTimeChange = new EventEmitter<string>();
   @Output() changeEvent = new EventEmitter();

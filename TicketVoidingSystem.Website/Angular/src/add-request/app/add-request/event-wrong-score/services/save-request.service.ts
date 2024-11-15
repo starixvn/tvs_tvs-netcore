@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TvDetectionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
@@ -43,7 +44,7 @@ export class SaveRequestService {
   async checkValidationBeforeSaveRequest(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
     args.addRequestStore.changeSavingRequestStatus(true);
     if (!this.validationService.validateCommonData(args.filter, args.leagueEventWrongScoreComponent, args.addRequestStore,
-      args.filterWrongScoreComponent, args.wrongScoreInfoComponents)) {
+      args.filterWrongScoreComponent, args.wrongScoreInfoComponents, args.tvDetectionComponent)) {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
 
@@ -101,6 +102,14 @@ export class SaveRequestService {
       x.subIssueTypeId = Number(args.filter.subIssueTypeId);
       x.matchId = args.leagueEventWrongScoreComponent.selectedMatch.matchId;
       x.isCheckedVar = args.primitiveProps.isCheckedVar;
+      x.tvDetectionValue = args.tvDetectionComponent.model.tvDetectionValue;
+
+      if (x.tvDetectionValue !== TvDetectionType.NONE) {
+        x.serviceAcceptTime = args.tvDetectionComponent.model.serviceAcceptTime;
+        x.actualTime = args.tvDetectionComponent.model.actualTime;
+        x.minuteOffset = args.tvDetectionComponent.model.minuteOffset;
+        x.secondOffset = args.tvDetectionComponent.model.secondOffset;
+      }
     });
 
     return args.wrongScoreModels;

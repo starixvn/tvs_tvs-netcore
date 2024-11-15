@@ -5,6 +5,7 @@ import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestStore } from '../../add-request.store';
+import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
 import { FilterModel } from '../../filter/filter.model';
 import { FilterTimeAreaComponent } from '../filter-time-area/filter-time-area.component';
 import { LogInfoRedCardComponent } from '../log-info-red-card/log-info-red-card.component';
@@ -26,26 +27,15 @@ export class ValidationService {
     return false;
   }
 
-  validateCommonData(filter: FilterModel, eventLeagueComponent: EventLeagueComponent,
-    filterTimeAreaComponent: FilterTimeAreaComponent, logInfoComponents: QueryList<LogInfoRedCardComponent>, addRequestStore: AddRequestStore): boolean {
+  validateCommonData(filter: FilterModel, eventLeagueComponent: EventLeagueComponent, filterTimeAreaComponent: FilterTimeAreaComponent,
+    logInfoComponents: QueryList<LogInfoRedCardComponent>, addRequestStore: AddRequestStore, tvDetectionComponent: TvDetectionComponent): boolean {
     addRequestStore.checkValidSubIssueTypeInFilter();
-    if (!filter.subIssueTypeId) {
-      return false;
-    }
 
-    if (!eventLeagueComponent.isMatchIdValid()) {
-      return false;
-    }
-
-    if (!filterTimeAreaComponent.isValid()) {
-      return false;
-    }
-
-    if (logInfoComponents.some(x => !x.filterTimeWithAllowanceComponent.isValid())) {
-      return false;
-    }
-
-    return true;
+    return filter.subIssueTypeId
+      && eventLeagueComponent.isMatchIdValid()
+      && tvDetectionComponent.isValidality()
+      && filterTimeAreaComponent.isValid()
+      && logInfoComponents.toArray().every(x => x.filterTimeWithAllowanceComponent.isValid());
   }
 
   isAllEventsValid(events: LogInfoRedCard[]): boolean {
@@ -92,8 +82,8 @@ export class ValidationService {
     }
 
     const MILLISECONDS_IN_A_MINUTE = 60000;
-    let fromTimeFilter = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    let toTimeLogInfo = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const fromTimeFilter = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const toTimeLogInfo = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const diffMilliseconds = toTimeLogInfo.diff(fromTimeFilter);
 
     return diffMilliseconds > MILLISECONDS_IN_A_MINUTE;

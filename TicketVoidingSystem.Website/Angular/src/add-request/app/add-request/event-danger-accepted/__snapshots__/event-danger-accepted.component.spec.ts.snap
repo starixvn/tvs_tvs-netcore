@@ -7,6 +7,7 @@ exports[`EventDangerAcceptedComponent #EventDangerAcceptedComponent init should 
   <event-danger-accepted>
     <div>
       <event-league />
+      <tv-detection />
       <filter-time-area />
       <div
         class="mb-3"

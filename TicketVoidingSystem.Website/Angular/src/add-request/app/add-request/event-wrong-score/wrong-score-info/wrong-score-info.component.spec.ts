@@ -75,7 +75,7 @@ class Helper {
     eventDate: null,
     voidFromTime: Helper.fakeFromDateTime,
     voidToTime: Helper.fakeToDateTime,
-  }];
+  }] as WrongScoreModel[];
 }
 
 describe('EventRedCardComponent', () => {

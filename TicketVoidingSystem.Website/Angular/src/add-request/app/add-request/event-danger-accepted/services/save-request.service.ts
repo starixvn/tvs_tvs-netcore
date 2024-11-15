@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { TVSRequestActionType, TvDetectionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
+import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { RedCardModel } from '../../models/event-red-card.model';
@@ -29,7 +30,8 @@ export class SaveRequestService {
     arg.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
 
-    if (!this.validationService.validateCommonData(arg.filter, arg.eventLeagueComponent, arg.filterTimeAreaComponent, arg.logInfoComponents, arg.addRequestStore)) {
+    if (!this.validationService.validateCommonData(arg.filter, arg.eventLeagueComponent, arg.filterTimeAreaComponent,
+        arg.logInfoComponents, arg.addRequestStore, arg.tvDetectionComponent)) {
       return false;
     }
 
@@ -139,24 +141,38 @@ export class SaveRequestService {
 
     if (!arg.filter.isVoided) {
       query.dangerAcceptedInfo = arg.allEvents.filter(x => x.logInfoDetail).map(x => {
-        return {
-          isMainMatch: x.isMainMatch,
-          filterBy: arg.primitiveProps.filterBy,
-          filterFromTransTime: arg.defaultFilterTimeWithAllowance.fromDateTime,
-          filterToTransTime: arg.defaultFilterTimeWithAllowance.toDateTime,
-          voidFromTime: x.voidTimeArea.fromDateTime,
-          voidToTime: x.voidTimeArea.toDateTime,
-          paTime: x.voidTimeArea.paTime,
-          aaTime: x.voidTimeArea.aaTime,
-          saTime: x.voidTimeArea.saTime,
-          subIssueTypeId: x.subIssueTypeId,
-          matchId: x.matchId,
-          logInfoDetail: x.logInfoDetail,
-          isCheckedVar: x.isCheckedVar
-        } as RedCardModel;
+        return this.assignEventToModel(x, arg, arg.allEvents.find(y => y.isMainMatch).tvDetectionModel);
       });
     }
 
     return query;
+  }
+
+  private assignEventToModel(event: LogInfoRedCard, arg: SaveRequestArg, tvDetectionModel: TvDetectionModel): RedCardModel {
+    const model = {
+      isMainMatch: event.isMainMatch,
+      filterBy: arg.primitiveProps.filterBy,
+      filterFromTransTime: arg.defaultFilterTimeWithAllowance.fromDateTime,
+      filterToTransTime: arg.defaultFilterTimeWithAllowance.toDateTime,
+      voidFromTime: event.voidTimeArea.fromDateTime,
+      voidToTime: event.voidTimeArea.toDateTime,
+      paTime: event.voidTimeArea.paTime,
+      aaTime: event.voidTimeArea.aaTime,
+      saTime: event.voidTimeArea.saTime,
+      subIssueTypeId: event.subIssueTypeId,
+      matchId: event.matchId,
+      logInfoDetail: event.logInfoDetail,
+      isCheckedVar: event.isCheckedVar,
+      tvDetectionValue: tvDetectionModel.tvDetectionValue,
+    } as RedCardModel;
+
+    if (model.tvDetectionValue !== TvDetectionType.NONE) {
+      model.serviceAcceptTime = tvDetectionModel.serviceAcceptTime;
+      model.actualTime = tvDetectionModel.actualTime;
+      model.minuteOffset = tvDetectionModel.minuteOffset;
+      model.secondOffset = tvDetectionModel.secondOffset;
+    }
+
+    return model;
   }
 }

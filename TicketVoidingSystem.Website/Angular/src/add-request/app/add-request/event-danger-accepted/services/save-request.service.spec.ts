@@ -8,6 +8,7 @@ import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.mod
 import { Result } from '../../../../../utility/models/result';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
+import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { PrimitiveProperty } from '../../event-red-card/event-red-card.model';
 import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
@@ -93,8 +94,9 @@ class Helper {
     voidTimeArea: Helper.fakeFilterTimeWithAllowance,
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
-    sportType: 0
-  };
+    sportType: 0,
+    tvDetectionModel: new TvDetectionModel()
+  } as LogInfoRedCard;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '11',
     subIssueTypeId: '1',
@@ -151,7 +153,7 @@ class Helper {
     addRequestStore: null,
     requestedBy: '',
     userId: 0
-  };
+  } as SaveRequestArg;
 }
 
 describe('SaveRequestService', () => {

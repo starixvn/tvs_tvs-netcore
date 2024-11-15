@@ -15,6 +15,7 @@ import { MatchModel } from '../../../../utility/models/match.model';
 import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
+import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { ValidationAbnormalBet } from '../event-abnormal-bet/event-abnormal-bet.model';
 import { ValidationBusinessRuleOutput } from '../event-abnormal-bet/services/validation.model';
 import { FilterModel } from '../filter/filter.model';
@@ -90,7 +91,7 @@ class Helper {
     eventDate: null,
     voidFromTime: Helper.fakeFromDateTime,
     voidToTime: Helper.fakeToDateTime,
-  },
+  } as WrongScoreModel,
   {
     scoreId: 5465,
     isActive: false,
@@ -107,7 +108,7 @@ class Helper {
     eventDate: null,
     voidFromTime: Helper.fakeFromDateTime,
     voidToTime: Helper.fakeToDateTime,
-  }];
+  } as WrongScoreModel];
   static readonly fakeValidationBusinessRuleOutputSuccessful: ValidationBusinessRuleOutput = {
     isValid: true,
     transInfoAddRequestModel: null,
@@ -154,7 +155,8 @@ describe('EventWrongScoreComponent', () => {
       ConfirmWrongScoreComponent,
       WrongScoreInfoComponent,
       FilterWrongScoreComponent,
-      EventLeagueComponent
+      EventLeagueComponent,
+      TvDetectionComponent
     ],
     imports: [
       NgbModule,

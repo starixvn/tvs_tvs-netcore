@@ -1,10 +1,11 @@
 import { EventEmitter, Injectable, QueryList } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { StaticService } from '../../../../../utility/services/static.service';
 import { DateTimeFormat, TVSRequestFilterBy, TimeZone } from '../../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
+import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { LastTimeScore, LastTimeScoreQuery } from '../../models/last-time-score.model';
 import { FilterWrongScoreModel } from '../models/filter-wrong-score.model';
@@ -27,7 +28,7 @@ export class WrongScoreService {
     filterWrongScoreModel.fromDateTime = moment.utc().tz(TimeZone.AMERICA_CARACAS).millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     filterWrongScoreModel.toDateTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     filterWrongScoreModel.allowanceTime = new AllowanceTime();
-    
+
     return filterWrongScoreModel;
   }
 
@@ -40,8 +41,18 @@ export class WrongScoreService {
       paTime: wrongScoreModel.paTime,
       saTime: wrongScoreModel.saTime
     };
-    
+
     return filterWrongScoreModel;
+  }
+
+  getTvDetectionModel(inputModel: WrongScoreModel): TvDetectionModel {
+    return {
+      serviceAcceptTime: inputModel.serviceAcceptTime,
+      actualTime: inputModel.actualTime,
+      tvDetectionValue: inputModel.tvDetectionValue,
+      minuteOffset: inputModel.minuteOffset,
+      secondOffset: inputModel.secondOffset,
+    } as TvDetectionModel;
   }
 
   public createMainWrongScoreModel(filterWrongScore: FilterWrongScoreModel) {
@@ -52,7 +63,7 @@ export class WrongScoreService {
     model.paTime = filterWrongScore.allowanceTime?.paTime;
     model.saTime = filterWrongScore.allowanceTime?.saTime;
     model.isChecked = true;
-    
+
     return model;
   }
 
@@ -103,7 +114,7 @@ export class WrongScoreService {
 
     return components;
   }
-  
+
   private async getLastTimeTicket(wrongScoreModel: WrongScoreModel, actionId: number, matchId: number, filterBy: number): Promise<void> {
     const lastTimeModel = await this.getLastTimeScore(wrongScoreModel, actionId, matchId, filterBy);
     wrongScoreModel.filterToTransTime = lastTimeModel.lastTime;
@@ -114,7 +125,7 @@ export class WrongScoreService {
 
     return models;
   }
-  
+
   private async getLastTimeScore(wrongScoreModel: WrongScoreModel, actionId: number, matchId: number, filterBy: number): Promise<LastTimeScore> {
     const query: LastTimeScoreQuery = {
         matchId: matchId,
@@ -127,7 +138,7 @@ export class WrongScoreService {
 
     return data;
   }
-  
+
   public getDurationTime(filterFromTransTime: string, filterToTransTime: string): string {
     const fromTime = moment(filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const toTime = moment(filterToTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);

@@ -23,6 +23,7 @@ exports[`EventRedCardComponent #EventRedCardComponent init should match snapshot
           </label>
         </div>
       </div>
+      <tv-detection />
       <filter-time-area />
       <div
         class="mb-3"

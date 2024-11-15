@@ -9,6 +9,7 @@ import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utili
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
+import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { PrimitiveProperty } from '../event-red-card/event-red-card.model';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
@@ -48,6 +49,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   @Input() dangerAcceptedModels: RedCardModel[] = [];
   @Output() dangerAcceptedModelsChange = new EventEmitter<RedCardModel[]>();
   @Output() updateMatchId = new EventEmitter<MatchModel>();
+  @ViewChild('tvDetection') tvDetectionComponent: TvDetectionComponent;
   @ViewChild('filterTimeArea') filterTimeAreaComponent: FilterTimeAreaComponent;
   @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRedCardComponent>;
@@ -114,9 +116,11 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   async handleSearchEvent(): Promise<void> {
     this.primitiveProps.isShowLogInfoMainMatch = false;
 
-    if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.filterTimeAreaComponent, this.logInfoComponents, this.addRequestStore)) {
+    if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.filterTimeAreaComponent,
+      this.logInfoComponents, this.addRequestStore, this.tvDetectionComponent)) {
       return;
     }
+
     if (this.mainEvent.isCheckedVar == null && this.isShowVarCheck()) {
       this.mainEvent.isHighLightVarCheck = true;
       return;
@@ -147,7 +151,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
 
     return query;
   }
-  
+
   changeMatchEvent(): void {
     this.primitiveProps.isShowLogInfoMainMatch = false;
     this.primitiveProps.isShowRelatedEvents = false;
@@ -235,6 +239,12 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     return this.filter.isVoided || this.relatedEvents.filter(x => x.matchType === MatchType.LINK).length === 0;
   }
 
+  actualTimeChange(actualTime: string) {
+    this.filterTimeAreaComponent.filterTimeWithAllowanceComponent.fromTime = moment(actualTime, DateTimeFormat.SIMPLE_TIME_FORMAT)
+      .format(DateTimeFormat.TIME_FORMAT);
+    this.resetLogInfoAndHideAllEvents();
+  }
+
   private initSaveRequestInput() {
     const arg = new SaveRequestArg();
     arg.requestId = this.requestId;
@@ -247,6 +257,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     arg.others = this.others;
     arg.primitiveProps = this.primitiveProps;
     arg.defaultFilterTimeWithAllowance = this.defaultFilterTimeWithAllowance;
+    arg.tvDetectionComponent = this.tvDetectionComponent;
     arg.allEvents = this.allSelectedEvents;
     arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.filterTimeAreaComponent = this.filterTimeAreaComponent;

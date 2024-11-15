@@ -17,6 +17,7 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
   @Input() isDisabled: boolean;
   @Input() isEdit: boolean;
   @Input() isUseInLogInfo: boolean;
+  @Input() tvDetectionValue: number;
   @Input() filterTimeWithAllowanceModel: FilterTimeWithAllowance;
   @Output() refreshLogInfoEvent = new EventEmitter();
   @Output() changeFilterTimeEvent= new EventEmitter();
@@ -146,6 +147,10 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
 
   refreshLogInfo(): void {
     this.refreshLogInfoEvent.emit();
+  }
+
+  getTvDetectionClass() {
+    return StaticService.getTvDetectionClass(this.tvDetectionValue);
   }
 
   private clearSettingTime(): void {

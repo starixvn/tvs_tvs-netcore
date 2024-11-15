@@ -19,15 +19,13 @@
       <span>{{tooltipVarMessage}}</span>
     </div>
 	</div>
-
-  <div>
-    <label class="mr-2"><input type="checkbox" [disabled]="filter.isVoided" />TV Detection</label>
-    <tv-detection></tv-detection>
-  </div>
-
+  <tv-detection #tvDetection [isEdit]="isEdit" [model]="mainEvent.tvDetectionModel"
+    (actualTimeChange)="actualTimeChange($event)" [disabled]="filter.isVoided">
+  </tv-detection>
   <filter-time-area #filterTimeArea
     [isDisabled]="!isExistMatchEvent() || filter.isVoided"
     [isEdit]="isEdit"
+    [tvDetectionValue]="mainEvent.tvDetectionModel.tvDetectionValue"
     [isVoided]="filter.isVoided"
     [(filterBy)]="primitiveProps.filterBy"
     [filterTimeWithAllowanceModel]="defaultFilterTimeWithAllowance"

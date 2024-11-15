@@ -170,6 +170,7 @@ export class DateTimeFormat {
   static readonly TIME_FORMAT = 'hh:mm:ss.SSS A';
   static readonly SHORT_TIME_FORMAT = 'hh:mm A';
   static readonly FULL_DATE_TIME_FORMAT = 'YYYY/MM/DD hh:mm:ss.SSS A';
+  static readonly SIMPLE_TIME_FORMAT = 'hh:mm:ss A';
 }
 
 export class TVSRequestFilterBy {
@@ -183,6 +184,12 @@ export class TVSRequestFilterBy {
 export class TeamFavorite {
   static readonly HOME = 0;
   static readonly AWAY = 1;
+}
+
+export class TvDetectionType {
+  static readonly NONE = 0;
+  static readonly SLOW = 1;
+  static readonly FAST = 2;
 }
 
 export class AbnormalFilterBy {

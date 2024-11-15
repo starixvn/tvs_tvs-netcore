@@ -7,6 +7,7 @@ import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.mod
 import { Result } from '../../../../../utility/models/result';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
+import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../../filter/filter.model';
 import { IssueTypes } from '../../filter/issue-types.model';
@@ -92,8 +93,9 @@ class Helper {
     voidTimeArea: Helper.fakeFilterTimeWithAllowance,
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
-    sportType: 0
-  };
+    sportType: 0,
+    tvDetectionModel: new TvDetectionModel()
+  } as LogInfoRedCard;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '11',
     subIssueTypeId: '1',
@@ -150,7 +152,7 @@ class Helper {
     addRequestStore: null,
     requestedBy: '',
     userId: 1
-  };
+  } as SaveRequestArg;
 }
 
 describe('SaveRequestService', () => {

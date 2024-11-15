@@ -90,7 +90,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
     sportType: 0
-  };
+  } as LogInfoRedCard;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '1',
     subIssueTypeId: '1',

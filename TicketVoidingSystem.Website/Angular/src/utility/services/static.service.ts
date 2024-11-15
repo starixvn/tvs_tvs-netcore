@@ -6,11 +6,12 @@ import { ModalType } from '../components/modal/modal.model';
 import { ModalService } from '../components/modal/modal.service';
 import { MultipleSelection } from '../components/multiple-selection/multiple-selection';
 import { Tooltip } from '../components/tooltip/tooltip.model';
-import { AbnormalFilterBy, DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType } from '../constants/config';
+import { AbnormalFilterBy, DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType, TvDetectionType } from '../constants/config';
 import { IssueTypeConstant } from '../constants/issue-type.constant';
 import { LABELS } from '../constants/labels';
 import { RegexConstant } from '../constants/regex';
 import { CheckIssueTypeObjectType } from '../models/check-issue-type.model';
+import { RequestInfoForCopy } from '../models/copy-request-info.query';
 
 export class StaticService {
   static isVoidAction(actionId: number): boolean {
@@ -450,5 +451,25 @@ export class StaticService {
     return isAbnormalAccount
       ? baseTitle
       : `Void Time: ${strFromTime} - ${strToTime} ${baseTitle}`;
+  }
+
+  static getProviderInfo(requestInfo: RequestInfoForCopy): string {
+    const issueTypeHasTvDetection = [IssueTypeConstant.DANGER_ACCEPTED, IssueTypeConstant.RED_CARD, IssueTypeConstant.WRONG_SCORE];
+    const tvDetectionInfo = issueTypeHasTvDetection.includes(requestInfo.issueTypeId.toString()) && requestInfo.tvDetectionValue === TvDetectionType.FAST
+       ? `, TV fast ${requestInfo.minuteOffset}m${requestInfo.secondOffset}s`
+       : requestInfo.tvDetectionValue === TvDetectionType.SLOW ? `, TV slow ${requestInfo.minuteOffset}m${requestInfo.secondOffset}s` : '';
+
+    return `${requestInfo.provider}${tvDetectionInfo}`
+  }
+
+  static getTvDetectionClass(tvDetectionValue: number) {
+    switch (tvDetectionValue) {
+      case TvDetectionType.SLOW:
+        return 'slow-color';
+      case TvDetectionType.FAST:
+        return 'fast-color';
+      default:
+        return '';
+    }
   }
 }

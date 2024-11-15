@@ -15,8 +15,12 @@
 			</label>
 		</div>
 	</div>
-
+	<tv-detection #tvDetection [isEdit]="isEdit" [model]="tvDetectionModel"
+		*ngIf="primitiveProps.filterBy === 2" [disabled]="filter.isVoided"
+		(actualTimeChange)="actualTimeChange($event)">
+	</tv-detection>
 	<filter-wrong-score #filterWrongScore
+		[tvDetectionValue]="tvDetectionModel.tvDetectionValue"
 		[isVoided]="isVoided"
 		*ngIf="primitiveProps.filterBy === 2"
 		[filterWrongScoreModel]="filterWrongScoreModel"

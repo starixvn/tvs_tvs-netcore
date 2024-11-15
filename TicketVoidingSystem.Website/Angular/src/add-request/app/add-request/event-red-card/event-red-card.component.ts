@@ -8,6 +8,7 @@ import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utili
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
+import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
@@ -48,6 +49,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   @Input() redCardModels: RedCardModel[] = [];
   @Output() redCardModelsChange = new EventEmitter<RedCardModel[]>();
   @Output() updateMatchId = new EventEmitter<MatchModel>();
+  @ViewChild('tvDetection') tvDetectionComponent: TvDetectionComponent;
   @ViewChild('filterTimeArea') filterTimeAreaComponent: FilterTimeAreaComponent;
   @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRedCardComponent>;
@@ -125,7 +127,8 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   async handleSearchEvent(): Promise<void> {
     this.primitiveProps.isShowLogInfoMainMatch = false;
 
-    if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.filterTimeAreaComponent, this.logInfoComponents, this.addRequestStore)) {
+    if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.filterTimeAreaComponent,
+      this.logInfoComponents, this.addRequestStore, this.tvDetectionComponent)) {
       return;
     }
     if (this.mainEvent.isCheckedVar == null && this.isShowVarCheck()) {
@@ -235,6 +238,12 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     return this.filter.isVoided || this.relatedEvents.filter(x => x.matchType === MatchType.LINK).length === 0;
   }
 
+  actualTimeChange(actualTime: string) {
+    this.filterTimeAreaComponent.filterTimeWithAllowanceComponent.fromTime = moment(actualTime, DateTimeFormat.SIMPLE_TIME_FORMAT)
+      .format(DateTimeFormat.TIME_FORMAT);
+    this.resetLogInfoAndHideAllEvents();
+  }
+
   private initSaveRequestInput() {
     const arg = new SaveRequestArg();
     arg.requestId = this.requestId;
@@ -249,6 +258,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     arg.defaultFilterTimeWithAllowance = this.defaultFilterTimeWithAllowance;
     arg.allEvents = this.allSelectedEvents;
     arg.eventLeagueComponent = this.eventLeagueComponent;
+    arg.tvDetectionComponent = this.tvDetectionComponent;
     arg.filterTimeAreaComponent = this.filterTimeAreaComponent;
     arg.logInfoComponents = this.logInfoComponents;
     arg.confirmRedCard = this.confirmRedCard;

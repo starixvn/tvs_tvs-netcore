@@ -13,6 +13,7 @@ import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
+import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { FilterModel } from '../filter/filter.model';
 import { RedCardModel } from '../models/event-red-card.model';
@@ -73,7 +74,7 @@ class Helper {
     logInfoDetail: null,
     leagueName: '',
     sportType: 0
-  };
+  } as RedCardModel;
   static readonly fakeLogInfoDetail: LogInfoDetail =
     {
       matchId: 12345,
@@ -101,38 +102,9 @@ class Helper {
       matchCode: '111',
       matchEvent: 'Test A vs Test B',
       isChecked: true,
-      matchType: 1,
-      leagueName: '',
-      name: '',
-      homeId: 0,
-      homeName: '',
-      homeNameNewSimplified: '',
-      homeNameSimplified: '',
-      homeNameTraditional: '',
-      awayId: 0,
-      awayName: '',
-      awayNameNewSimplified: '',
-      awayNameSimplified: '',
-      awayNameTraditional: '',
-      eventDate: undefined,
-      dateTime: undefined,
-      leagueId: 0,
-      leagueGroupId: 0,
-      leagueNameNewSimplified: '',
-      leagueNameSimplified: '',
-      leagueNameTraditional: '',
-      matchEventSimplified: '',
-      matchEventNewSimplified: '',
-      kickOffTime: '',
-      startTime: undefined,
-      endTime: undefined,
-      sportType: 0,
-      sportTypeName: '',
-      sportTypeNameNewSimplified: '',
-      sportTypeNameSimplified: '',
-      sportTypeNameTraditional: ''
+      matchType: 1
     }
-  ];
+  ] as ChildMatchModel[];
   static readonly fakeLogInfoRedCard: LogInfoRedCard = {
     matchId: 1111,
     isMainMatch: true,
@@ -144,43 +116,14 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     sportType: 0
-  };
+  } as LogInfoRedCard;
   static readonly fakeChildMatchModel: ChildMatchModel = {
     matchId: 1111,
     matchCode: '222',
     matchEvent: 'TestC - vs - Real Madrid (V)',
     isChecked: true,
-    matchType: MatchType.LINK,
-    leagueName: '',
-    name: '',
-    homeId: 0,
-    homeName: '',
-    homeNameNewSimplified: '',
-    homeNameSimplified: '',
-    homeNameTraditional: '',
-    awayId: 0,
-    awayName: '',
-    awayNameNewSimplified: '',
-    awayNameSimplified: '',
-    awayNameTraditional: '',
-    eventDate: undefined,
-    dateTime: undefined,
-    leagueId: 0,
-    leagueGroupId: 0,
-    leagueNameNewSimplified: '',
-    leagueNameSimplified: '',
-    leagueNameTraditional: '',
-    matchEventSimplified: '',
-    matchEventNewSimplified: '',
-    kickOffTime: '',
-    startTime: undefined,
-    endTime: undefined,
-    sportType: 0,
-    sportTypeName: '',
-    sportTypeNameNewSimplified: '',
-    sportTypeNameSimplified: '',
-    sportTypeNameTraditional: ''
-  };
+    matchType: MatchType.LINK
+  } as ChildMatchModel;
 
   static readonly fakeSelectedMatch: MatchModel = {
     matchId: 1,
@@ -188,34 +131,9 @@ class Helper {
     leagueName: 'leagueName',
     leagueId: 1,
     name: 'name',
-    kickOffTime: '',
     homeId: 0,
-    homeName: '',
-    homeNameNewSimplified: '',
-    homeNameSimplified: '',
-    homeNameTraditional: '',
     awayId: 0,
-    awayName: '',
-    awayNameNewSimplified: '',
-    awayNameSimplified: '',
-    awayNameTraditional: '',
-    eventDate: undefined,
-    dateTime: undefined,
-    leagueGroupId: 0,
-    leagueNameNewSimplified: '',
-    leagueNameSimplified: '',
-    leagueNameTraditional: '',
-    matchEvent: '',
-    matchEventSimplified: '',
-    matchEventNewSimplified: '',
-    startTime: undefined,
-    endTime: undefined,
-    sportType: 0,
-    sportTypeName: '',
-    sportTypeNameNewSimplified: '',
-    sportTypeNameSimplified: '',
-    sportTypeNameTraditional: ''
-  };
+  } as MatchModel;
 }
 
 describe('EventRedCardComponent', () => {
@@ -225,7 +143,8 @@ describe('EventRedCardComponent', () => {
       FilterTimeAreaComponent,
       LogInfoRedCardComponent,
       AddChildMatchComponent,
-      ConfirmAddRequestComponent
+      ConfirmAddRequestComponent,
+      TvDetectionComponent
     ],
     imports: [
       NgbModule,

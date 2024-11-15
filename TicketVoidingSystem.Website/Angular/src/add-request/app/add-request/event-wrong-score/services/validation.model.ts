@@ -1,6 +1,7 @@
 import { EventLeagueComponent } from "../../../../../utility/components/event-league/event-league.component";
 import { Tooltip } from "../../../../../utility/components/tooltip/tooltip.model";
 import { AddRequestStore } from "../../add-request.store";
+import { TvDetectionComponent } from "../../components/tv-detection/tv-detection.component";
 import { FilterModel } from "../../filter/filter.model";
 import { WrongScoreModel } from "../../models/event-wrong-score.model";
 import { PrimitiveProperty } from "../event-wrong-score.model";
@@ -18,6 +19,7 @@ export class ValidationBusinessRuleArgs {
   wrongScoreInfoComponents: WrongScoreInfoComponent[];
   addRequestStore: AddRequestStore;
   filterWrongScoreComponent: FilterWrongScoreComponent;
+  tvDetectionComponent: TvDetectionComponent;
 }
 
 export class ValidationBusinessRuleOutput {

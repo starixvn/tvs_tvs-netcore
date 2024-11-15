@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
+import { TvDetectionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
@@ -26,7 +27,8 @@ export class SaveRequestService {
     arg.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
 
-    if (!this.validationService.validateCommonData(arg.filter, arg.eventLeagueComponent, arg.filterTimeAreaComponent, arg.logInfoComponents, arg.addRequestStore)) {
+    if (!this.validationService.validateCommonData(arg.filter, arg.eventLeagueComponent, arg.filterTimeAreaComponent,
+      arg.logInfoComponents, arg.addRequestStore, arg.tvDetectionComponent)) {
       return false;
     }
 
@@ -122,25 +124,39 @@ export class SaveRequestService {
 
     if (!arg.filter.isVoided) {
       query.redCardInfo = arg.allEvents.filter(x => x.logInfoDetail).map(x => {
-        return {
-          isMainMatch: x.isMainMatch,
-          filterBy: arg.primitiveProps.filterBy,
-          filterFromTransTime: arg.defaultFilterTimeWithAllowance.fromDateTime,
-          filterToTransTime: arg.defaultFilterTimeWithAllowance.toDateTime,
-          voidFromTime: x.voidTimeArea.fromDateTime,
-          voidToTime: x.voidTimeArea.toDateTime,
-          aaTime: x.voidTimeArea.aaTime,
-          paTime: x.voidTimeArea.paTime,
-          saTime: x.voidTimeArea.saTime,
-          subIssueTypeId: x.subIssueTypeId,
-          matchId: x.matchId,
-          logInfoDetail: x.logInfoDetail,
-          isChecked: x.isCheckedVar,
-          isCheckedVar: x.isCheckedVar
-        } as RedCardModel;
+        return this.assignEventToModel(x, arg);
       });
     }
 
     return query;
+  }
+
+  private assignEventToModel(logInfoEvent: LogInfoRedCard, arg: SaveRequestArg): RedCardModel {
+    const model = {
+      isMainMatch: logInfoEvent.isMainMatch,
+      filterBy: arg.primitiveProps.filterBy,
+      filterFromTransTime: arg.defaultFilterTimeWithAllowance.fromDateTime,
+      filterToTransTime: arg.defaultFilterTimeWithAllowance.toDateTime,
+      voidFromTime: logInfoEvent.voidTimeArea.fromDateTime,
+      voidToTime: logInfoEvent.voidTimeArea.toDateTime,
+      aaTime: logInfoEvent.voidTimeArea.aaTime,
+      paTime: logInfoEvent.voidTimeArea.paTime,
+      saTime: logInfoEvent.voidTimeArea.saTime,
+      subIssueTypeId: logInfoEvent.subIssueTypeId,
+      matchId: logInfoEvent.matchId,
+      logInfoDetail: logInfoEvent.logInfoDetail,
+      isChecked: logInfoEvent.isCheckedVar,
+      isCheckedVar: logInfoEvent.isCheckedVar,
+      tvDetectionValue: logInfoEvent.tvDetectionModel.tvDetectionValue
+    } as RedCardModel;
+
+    if (model.tvDetectionValue !== TvDetectionType.NONE) {
+      model.serviceAcceptTime = logInfoEvent.tvDetectionModel.serviceAcceptTime;
+      model.actualTime = logInfoEvent.tvDetectionModel.actualTime;
+      model.minuteOffset = logInfoEvent.tvDetectionModel.minuteOffset;
+      model.secondOffset = logInfoEvent.tvDetectionModel.secondOffset;
+    }
+
+    return model;
   }
 }

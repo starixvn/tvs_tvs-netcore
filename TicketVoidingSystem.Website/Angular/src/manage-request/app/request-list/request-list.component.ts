@@ -89,7 +89,7 @@ export class RequestListComponent implements OnInit, OnChanges {
     const total = details.reduce((sum, item) => sum + item.totalSingleProcessed + item.totalParlayProcessed, 0);
     return total > 0;
   }
-  
+
   checkCanEdit(eventDate: Date, issueTypeId: number, createdDate: Date): boolean {
     if (issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET
       || issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT
@@ -253,10 +253,17 @@ export class RequestListComponent implements OnInit, OnChanges {
     return filterBy === null && StaticService.isAbnormalBet(issueTypeId.toString());
   }
 
-  public async copyRequestDescription(item: RequestModel): Promise<void> {
-    item.isProcessingCopyDescription = true;
-    await this.requestDescriptionService.copyToClipboard(item.requestId, item.details[0].matchId);
-    item.isProcessingCopyDescription = false;
+  public async copyRequestDescriptionSingleMatch(item: RequestModel, matchId: number): Promise<void> {
+    item.processingCopyDescriptionClass = 'fas fa-spinner fa-spin copy-request-info disable-icon';
+    await this.requestDescriptionService.copyToClipboard(item.requestId, matchId);
+    item.processingCopyDescriptionClass = 'fa fa-paste copy-request-info';
+  }
+
+
+  public async copyRequestDescriptionMultiMatches(item: RequestModel, matchId: number, detail: DetailRequestModel): Promise<void> {
+    detail.processingCopyDescriptionClass = 'fas fa-spinner fa-spin copy-request-info disable-icon';
+    await this.requestDescriptionService.copyToClipboard(item.requestId, matchId);
+    detail.processingCopyDescriptionClass = 'fa fa-paste copy-request-info';
   }
 
   public isCanCopyRequestDescription(issueTypeId: number): boolean {
@@ -291,12 +298,6 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   isRecoverTicket(issueTypeId: string): boolean {
     return StaticService.isRecoverTicket(issueTypeId);
-  }
-
-  public getHtmlClassForCopyDescriptionIcon(isProcessingCopyDescription: boolean): string {
-    return isProcessingCopyDescription 
-      ? 'fas fa-spinner fa-spin copy-request-info disable-icon'
-      : 'fa fa-paste copy-request-info';
   }
 
   public isShowIconMissingInfo(value: string): boolean {

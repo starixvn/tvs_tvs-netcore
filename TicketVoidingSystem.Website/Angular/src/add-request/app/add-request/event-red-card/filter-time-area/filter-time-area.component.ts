@@ -17,6 +17,7 @@ export class FilterTimeAreaComponent implements OnInit {
   @Input() isEdit: boolean;
   @Input() isVoided: boolean;
   @Input() filterBy: number;
+  @Input() tvDetectionValue: number;
   @Output() filterByChange = new EventEmitter<number>();
   @Output() changeFilterEvent = new EventEmitter();
   @ViewChild('filterTimeWithAllowance') filterTimeWithAllowanceComponent: FilterTimeWithAllowanceComponent;
@@ -45,7 +46,7 @@ export class FilterTimeAreaComponent implements OnInit {
       }
     });
   }
-  
+
   ngOnDestroy(): void {
     this.changeActionWaitingToManualSubscription?.unsubscribe();
   }

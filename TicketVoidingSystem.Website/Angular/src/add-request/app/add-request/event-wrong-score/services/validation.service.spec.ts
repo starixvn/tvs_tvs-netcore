@@ -7,6 +7,7 @@ import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestStore } from '../../add-request.store';
+import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
@@ -73,7 +74,7 @@ class Helper {
     eventDate: null,
     voidFromTime: Helper.fakeFromDateTime,
     voidToTime: Helper.fakeToDateTime,
-  }];
+  }] as WrongScoreModel[];
 }
 describe('LogInfoService', () => {
 
@@ -97,8 +98,10 @@ describe('LogInfoService', () => {
     const wrongScoreInfoComponents: WrongScoreInfoComponent[] = [wrongScoreInfoComponent];
     const service = new ValidationService();
     service.isSubTypeFilterByAcceptedTime = jest.fn().mockImplementation(() => false);
+    const mockTvDetection = new TvDetectionComponent(null, null);
+    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
 
-    const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents);
+    const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents, mockTvDetection);
 
     expect(result).toBe(false);
   });
@@ -112,22 +115,22 @@ describe('LogInfoService', () => {
     eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
     const service = new ValidationService();
 
-    const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, null,  null);
+    const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, null,  null, null);
 
     expect(eventLeagueComponent.isMatchIdValid).toBeCalledTimes(1);
     expect(result).toBe(false);
   });
 
-  it('#validateCommonData should return false when have not subType', () => {
+  it('#validateCommonData should return undefined when have not subType', () => {
     const addRequestStore = new AddRequestStore();
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
-    filter.subIssueTypeId = null;
+    filter.subIssueTypeId = undefined;
     const service = new ValidationService();
 
-    const result = service.validateCommonData(filter, null, addRequestStore, null,  null);
+    const result = service.validateCommonData(filter, null, addRequestStore, null,  null, null);
 
-    expect(result).toBe(false);
+    expect(result).toBeUndefined();
   });
 
   it('#validateCommonData should return false when filterWrongScoreComponent.isValid is false', () => {
@@ -141,11 +144,13 @@ describe('LogInfoService', () => {
     filterWrongScoreComponent.isValid = jest.fn().mockImplementation(() => false);
     const wrongScoreInfoComponents: WrongScoreInfoComponent[] = [];
     wrongScoreInfoComponents.some = jest.fn().mockImplementation(() => true);
+    const mockTvDetection = new TvDetectionComponent(null, null);
+    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
 
     const service = new ValidationService();
     service.isSubTypeFilterByAcceptedTime = jest.fn().mockImplementation(() => true);
 
-    const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents);
+    const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents, mockTvDetection);
 
     expect(result).toBe(false);
   });
@@ -163,8 +168,10 @@ describe('LogInfoService', () => {
     wrongScoreInfoComponents.some = jest.fn().mockImplementation(() => false);
     const service = new ValidationService();
     service.isSubTypeFilterByAcceptedTime = jest.fn().mockImplementation(() => false);
+    const mockTvDetection = new TvDetectionComponent(null, null);
+    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
 
-    const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents);
+    const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents, mockTvDetection);
 
     expect(result).toBe(true);
   });

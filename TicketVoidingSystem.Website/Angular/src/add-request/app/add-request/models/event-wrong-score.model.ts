@@ -20,4 +20,9 @@ export class WrongScoreModel {
     saTime?: number;
     filterBy: number;
     isCheckedVar?: boolean;
+    tvDetectionValue: number;
+    serviceAcceptTime: string;
+    actualTime: string;
+    minuteOffset: string;
+    secondOffset: string;
 }
