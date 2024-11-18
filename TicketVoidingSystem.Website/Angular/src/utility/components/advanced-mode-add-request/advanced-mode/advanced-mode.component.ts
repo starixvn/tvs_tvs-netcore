@@ -25,6 +25,7 @@ export class AdvancedModeComponent {
   @Input() changedBetTypes: BetTypeAddRequest[] = [];
   @Input() advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   @Output() changeFilterEvent = new EventEmitter();
+  @Output() isLoadingData = new EventEmitter<boolean>();
 
   betTeams: BetTeamAddRequest[] = [];
   isCollapse = true;
@@ -60,12 +61,14 @@ export class AdvancedModeComponent {
   }
   
   public async getBetTeamAndRenderValue(matchId: number): Promise<void> {
+    this.isLoadingData.emit(true);
     await this.getBetTeam();
     this.baseBetTeams.forEach(x => {
       x.isShow = this.changedBetTypes.some(y => y.id.toString() === x.betTypes);
     })
     await this.getSpecialBetTeamCricket(matchId);
     this.renderBetTeams(this.baseBetTeams);
+    this.isLoadingData.emit(false);
   }
 
   expandAndValidate() {

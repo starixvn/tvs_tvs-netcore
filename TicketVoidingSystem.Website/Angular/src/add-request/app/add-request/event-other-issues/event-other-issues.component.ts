@@ -61,6 +61,9 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
       this.primitiveProps.isShowValidation = false;
       if (this.isSubTypeRestart()) {
+        this.addRequestStore.changeSavingRequestStatus(true);
+        this.advancedModeAddRequestModel.checkedBetTypes = [];
+        this.resetBetTypeAndAdvancedMode();
         this.logInfoEvent.filterOtherIssues = this.eventOtherIssuesService.initDefaultFilter();
       } else {
         await this.renderDataBetTypesAdvancedMode();
@@ -86,6 +89,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
 
   async renderDataBetTypesAdvancedMode() {
     if (this.eventLeagueComponent?.selectedMatch.matchId) {
+      this.resetBetTypeAndAdvancedMode();
       this.addRequestStore.changeBlockingUiStatus(true);
       this.primitiveProps.isShowAdvancedModeBetTypes = true;
       this.resetLogInfo();
@@ -122,7 +126,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
 
   async getGroupBetTypes() {
     this.groupBetTypesModel = await this.eventOtherIssuesService.getGroupBetTypes(
-      this.eventLeagueComponent?.selectedMatch.matchId, this.logInfoEvent.filterOtherIssues);
+      this.eventLeagueComponent?.selectedMatch.matchId, this.logInfoEvent.filterOtherIssues, this.filter.subIssueTypeId);
   }
 
   async saveRequest(): Promise<void> {
@@ -187,6 +191,10 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   resetLogInfoOfEvent(): void {
     this.primitiveProps.isShowValidation = false;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
+  }
+
+  checkingLoadDataAdvancedMode(isLoading: boolean): void {
+    this.addRequestStore.changeBlockingUiStatus(isLoading);
   }
 
   private resetBetTypeAndAdvancedMode() {

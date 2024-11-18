@@ -17,16 +17,21 @@ export class AdvancedModeAddRequestComponent {
   @Input() groupBetTypes = new GroupBetTypesAddRequestModel([], false, '', false);
   @Output() checkExistBetTypeEvent = new EventEmitter<boolean>();
   @Output() changeFilterEvent = new EventEmitter();
+  @Output() isLoadingData = new EventEmitter<boolean>();
   @ViewChild('groupBetTypesComponent') groupBetTypesComponent: GroupBetTypesComponent;
   @ViewChild('advancedMode') advancedModeComponent: AdvancedModeComponent;
   changedBetTypes: BetTypeAddRequest[] = [];
-  
+
   changeBetTypes(betTypes: BetTypeAddRequest[]) {
     this.changedBetTypes = betTypes;
   }
 
   changeFilter() {
     this.changeFilterEvent.emit();
+  }
+
+  checkingLoadDataAdvancedMode(isLoading: boolean): void {
+    this.isLoadingData.emit(isLoading);
   }
 
   getCheckedBetTypes(): BetTeamAddRequestResult[] {

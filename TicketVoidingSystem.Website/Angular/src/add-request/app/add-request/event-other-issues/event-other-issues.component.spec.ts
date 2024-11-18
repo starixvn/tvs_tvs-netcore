@@ -1,5 +1,6 @@
 import { SimpleChange } from '@angular/core';
 import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
+import { AdvancedModeAddRequestModel } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
 import { AdvancedModeComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.component';
 import { BetTeamAddRequestResult } from '../../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.model';
 import { GroupBetTypeAddRequest, GroupBetTypesAddRequestModel } from '../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
@@ -85,6 +86,7 @@ describe('EventOtherIssuesComponent', () => {
     mockComponent.filter = Helper.fakeFilterModel;
     mockComponent.filter.isChangeSubTypeManual = true;
     mockComponent.logInfoEvent = Helper.fakeLogInfoOtherIssues;
+    mockComponent.advancedModeAddRequestModel = new AdvancedModeAddRequestModel();
     mockComponent.isSubTypeRestart = jest.fn().mockReturnValue(true);
     mockEventOtherIssuesService.initDefaultFilter = jest.fn().mockReturnValue(Helper.fakeFilterOtherIssues);
 
@@ -374,6 +376,8 @@ describe('EventOtherIssuesComponent', () => {
     mockComponent.getGroupBetTypes = jest.fn();
     mockComponent.resetLogInfo = jest.fn();
     mockComponent.advancedMode = new AdvancedModeAddRequestComponent();
+    mockComponent.advancedMode.advancedModeComponent = new AdvancedModeComponent(null, null, null);
+    mockComponent.advancedMode.advancedModeComponent.clearBetTeam = jest.fn();
     mockComponent.advancedMode.changeBetTypes = jest.fn();
     mockComponent.groupBetTypesModel.getAllBetTypes = jest.fn().mockReturnValue([]);
     mockComponent.primitiveProps = new PrimitiveProperty();
@@ -386,6 +390,7 @@ describe('EventOtherIssuesComponent', () => {
     expect(mockComponent.getGroupBetTypes).toHaveBeenCalledTimes(1);
     expect(mockComponent.resetLogInfo).toHaveBeenCalledTimes(1);
     expect(mockComponent.advancedMode.changeBetTypes).toHaveBeenCalledTimes(1);
+    expect(mockComponent.advancedMode.advancedModeComponent.clearBetTeam).toHaveBeenCalledTimes(1);
     expect(mockComponent.primitiveProps.isShowAdvancedModeBetTypes).toBeTruthy();
     expect(mockComponent.primitiveProps.isShowErrorNoBetType).toBeTruthy();
   });

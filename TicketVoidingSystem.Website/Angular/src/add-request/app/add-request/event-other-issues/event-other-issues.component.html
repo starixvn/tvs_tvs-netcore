@@ -17,6 +17,7 @@
   [matchId]="logInfoEvent.matchId"
   [groupBetTypes]="groupBetTypesModel"
   (changeFilterEvent)="resetLogInfo()"
+  (isLoadingData)="checkingLoadDataAdvancedMode($event)"
   (checkExistBetTypeEvent)="checkExistBetTypeEvent($event)"
   [model]="advancedModeAddRequestModel">
 </advanced-mode-add-request>

@@ -21,13 +21,15 @@ export class EventOtherIssuesService {
     private readonly validationService: ValidationService
   ) { }
 
-  async getGroupBetTypes(matchId: number, filterOtherIssuesModel: FilterOtherIssuesModel): Promise<GroupBetTypesAddRequestModel> {
+  async getGroupBetTypes(matchId: number, filterOtherIssuesModel: FilterOtherIssuesModel, subIssueTypeId: string): Promise<GroupBetTypesAddRequestModel> {
     const query: GetBetTypesQuery = {
       mode: ModeType.SPORT_BOOK,
-      matchId: matchId,
-      fromTransDate: filterOtherIssuesModel.fromDateTime,
-      toTransDate: filterOtherIssuesModel.toDateTime,
+      matchId: matchId
     };
+    if (this.validationService.isSubTypeRestart(subIssueTypeId)) {
+      query.fromTransDate = filterOtherIssuesModel.fromDateTime;
+      query.toTransDate = filterOtherIssuesModel.toDateTime;
+    }
     const data = await this.commonService.getGroupBetTypesTvs(query);
     const groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);
 
