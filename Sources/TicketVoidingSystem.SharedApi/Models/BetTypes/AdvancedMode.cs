@@ -33,7 +33,6 @@ public class BetTeam
     public string Name { get; set; }
     public string Value { get; set; }
     public byte Type { get; set; }
-    public string EnableBetTypes { get; set; }
     public string BetTypes { get; set; }
 }
 

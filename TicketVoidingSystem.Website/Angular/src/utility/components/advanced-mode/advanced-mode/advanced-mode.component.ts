@@ -55,7 +55,7 @@ export class AdvancedModeComponent implements OnChanges {
   renderBetTeams(data: BetTeam[]) {
     this.betTeams = [];
     data.forEach(item => {
-      const betTeam = new BetTeam([item.name, item.value, item.type, item.enableBetTypes, item.betTypes],
+      const betTeam = new BetTeam([item.name, item.value, item.type, item.betTypes],
         item.selections, item.items, item.inputs, this.isShowMultiSelectionList);
       this.betTeams.push(betTeam);
     });
@@ -128,7 +128,6 @@ export class AdvancedModeComponent implements OnChanges {
   private handleBetTeam(betType: BetType) {
     this.betTeams.forEach(betTeam => {
       this.changeBetTeam(betType, betTeam);
-      betTeam.enableInput();
       this.handleChangeFancyBetTypeCricket(betTeam);
     });
   }
@@ -370,13 +369,8 @@ export class AdvancedModeComponent implements OnChanges {
     }
   }
 
-  checkBetTypesMoreHDP(betTeam: BetTeam, isDivOfBetTypesMoreHDP: boolean) {
-    if (betTeam.items.length > 0 && ((betTeam.enableBetTypes === this.betTypesMoreHDP && isDivOfBetTypesMoreHDP)
-      || (betTeam.enableBetTypes !== this.betTypesMoreHDP && !isDivOfBetTypesMoreHDP))) {
-      return true;
-    }
-
-    return false;
+  checkBetTypesMoreHDP(betTeam: BetTeam) {
+    return betTeam.items.length > 0 && this.betTypesMoreHDP.split(',').includes(betTeam.betTypes);
   }
 
   isShowTextBox(betTeam: BetTeam) {
