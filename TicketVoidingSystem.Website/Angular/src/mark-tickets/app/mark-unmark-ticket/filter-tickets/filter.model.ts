@@ -6,10 +6,10 @@ export class FilterSearchBy {
   static readonly BETIDS = '1';
   static readonly ALL_MARKED = '2';
 
-  value = '0';
+  value = '1';
   items: Selection[] = [
-    { name: 'MatchID', value: '0' },
     { name: 'BetID(s)', value: '1' },
+    { name: 'MatchID', value: '0' },
     { name: 'All Marked Tickets', value: '2', hidden: true }
   ];
 }
