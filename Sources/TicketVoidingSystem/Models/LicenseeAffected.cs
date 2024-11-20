@@ -2,83 +2,26 @@
 
 namespace TicketVoidingSystem.Models;
 
-public class AffectedLicensee
+public class AffectedLicensee(string group, bool show, string message, string color)
 {
-    public string Group { get; set; }
-    public string LicenseesName { get; set; }
-    public string Message { get; set; }
-    public bool Show { get; set; }
-    public string Color { get; set; }
+    public string Group { get; set; } = group;
+    public string LicenseesName { get; set; } = string.Empty;
+    public string Message { get; set; } = message;
+    public bool Show { get; set; } = show;
+    public string Color { get; set; } = color;
 }
 
 public class AffectedLicenseeList
 {
     public List<AffectedLicensee> LicenseeAffectedList { get; set; } =
     [
-        new()
-        {
-            Group = "normal",
-            Show = false,
-            Message = "Attn: system will notify affected tickets to these Licensee(s): ",
-            Color = "#0a0c0f",
-            LicenseesName = ""
-        },
-
-        new()
-        {
-            Group = "chinaView",
-            Show = false,
-            Message = "China View Licensee Affected List: ",
-            Color = "#dd5edd",
-            LicenseesName = ""
-        },
-        new()
-        {
-            Group = "jollyView",
-            Show = false,
-            Message = "Jolly Sports Licensee Affected List: ",
-            Color = "goldenrod",
-            LicenseesName = ""
-        },
-        new()
-        {
-            Group = "jollySportCv",
-            Show = false,
-            Message = "JollySportsCV Licensee Affected List: ",
-            Color = "#066924",
-            LicenseesName = ""
-        },
-        new()
-        {
-            Group = "instant",
-            Show = false,
-            Message = "Instant Payout Licensee Affected List: ",
-            Color = "#ff0000",
-            LicenseesName = ""
-        },
-        new()
-        {
-            Group = "cashOut",
-            Show = false,
-            Message = "Cash Out Licensee Affected List: ",
-            Color = "#5548cc",
-            LicenseesName = ""
-        },
-        new()
-        {
-            Group = "cancelCashOut",
-            Show = false,
-            Message = "Cancel Cash Out Licensee Affected List: ",
-            Color = "#0a0c0f",
-            LicenseesName = ""
-        },
-        new()
-        {
-            Group = "timeMachine",
-            Show = false,
-            Message = "Time Machine Licensee Affected List: ",
-            Color = "#6f3096",
-            LicenseesName = ""
-        }
+        new("normal", false, "Attn: system will notify affected tickets to these Licensee(s): ", "#0a0c0f"),
+        new("chinaView", false, "China View Licensee Affected List: ", "#dd5edd"),
+        new("jollyView", false, "Jolly Sports Licensee Affected List: ", "goldenrod"),
+        new("jollySportCv", false, "JollySportsCV Licensee Affected List: ", "#066924"),
+        new("instant", false, "Instant Payout Licensee Affected List: ", "#ff0000"),
+        new("cashOut", false, "Cash Out Licensee Affected List: ", "#5548cc"),
+        new("cancelCashOut", false, "Cancel Cash Out Licensee Affected List: ", "#0a0c0f"),
+        new("timeMachine", false, "Time Machine Licensee Affected List: ", "#6f3096")
     ];
 }
