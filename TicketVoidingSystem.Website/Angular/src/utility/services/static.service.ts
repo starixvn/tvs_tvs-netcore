@@ -232,11 +232,13 @@ export class StaticService {
   }
 
   static checkHandlingCashOutAsUnSettledTicketByIssueTypeId(issueTypeId: string | number): boolean {
-    return issueTypeId?.toString() === IssueTypeConstant.DANGER_ACCEPTED ||
-      issueTypeId?.toString() === IssueTypeConstant.RED_CARD ||
-      issueTypeId?.toString() === IssueTypeConstant.WRONG_SCORE ||
-      issueTypeId?.toString() === IssueTypeConstant.EARLY_KICK_OFF ||
-      issueTypeId?.toString() === IssueTypeConstant.WRONG_KICK_OFF;
+    const issueTypeHaveCashOutAsSettledTicket = [
+      IssueTypeConstant.ABNORMAL_ACCOUNT,
+      IssueTypeConstant.ABNORMAL_BET,
+      IssueTypeConstant.AB_REAL_MEMBER,
+      IssueTypeConstant.ARCHIVED_TICKET
+    ]
+    return !issueTypeHaveCashOutAsSettledTicket.includes(issueTypeId?.toString());
   }
 
   static isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
