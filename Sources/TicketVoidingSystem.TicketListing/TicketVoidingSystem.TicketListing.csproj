@@ -11,7 +11,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="Epplus.Mapper" Version="7.4.2" />
+    <PackageReference Include="Epplus.Mapper" Version="7.5.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
 

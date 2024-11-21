@@ -35,8 +35,6 @@ public static class AppSettingService
                 AbnormalBetRequest = configuration.GetValue<string>($"{nameof(LetstalkConfig)}:{nameof(LetstalkConfig.AbnormalBetRequest)}"),
                 IsProdEnv = configuration.GetValue<bool>($"{nameof(LetstalkConfig)}:{nameof(LetstalkConfig.IsProdEnv)}")
             },
-            CategorySentryLog = configuration.GetValue<string>(nameof(AppSettingModel.CategorySentryLog)),
-            SentryClientKey = configuration.GetValue<string>(nameof(AppSettingModel.SentryClientKey)),
             FanexRemotingRefServiceUrl = configuration.GetValue<string>(nameof(AppSettingModel.FanexRemotingRefServiceUrl)),
             ServiceName = configuration.GetValue<string>(nameof(AppSettingModel.ServiceName)),
             AmendmentApi = configuration.GetValue<string>(nameof(AppSettingModel.AmendmentApi)),

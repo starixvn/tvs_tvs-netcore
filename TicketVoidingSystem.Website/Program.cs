@@ -1,4 +1,6 @@
+using Fanex.Caching.Redis;
 using Fanex.Data;
+using Fanex.Logging.Sentry.RavenClient;
 using Fanex.NAP.Client.Attributes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -29,12 +31,14 @@ services.AddHttpClient<LinkedLogHttpClientService, LinkedLogHttpClientServiceImp
 services.AddHttpClient<OWPHttpClientService, OWPHttpClientServiceImp>();
 services.AddFanexData(configuration);
 services.AddExceptionHandler();
-services.AddSentry();
+services.AddFanexLogSentry(configuration);
 services.AddRemotingRef();
+services.AddNapClient(configuration);
+services.AddOneBookUm(configuration);
 services.AddLetstalk();
 services.AddCoreServices(configuration);
 services.AddBusinessServices();
-services.AddFanexCaching(configuration);
+services.AddRedisCache(configuration.GetSection("FanexCachingRedis"));
 services.AddFanexMailService();
 services.AddMediatR();
 services.AddAutoMapper();

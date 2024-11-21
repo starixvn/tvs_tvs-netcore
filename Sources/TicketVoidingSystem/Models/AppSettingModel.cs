@@ -8,11 +8,6 @@ public class AppSettingModel
 
     public LetstalkConfig LetstalkConfig { get; init; }
 
-    // Sentry
-    public string CategorySentryLog { get; init; }
-
-    public string SentryClientKey { get; init; }
-
     public string FanexRemotingRefServiceUrl { get; init; }
 
     public string ServiceName { get; init; }
