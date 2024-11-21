@@ -77,10 +77,10 @@
                     @transaction.TransDate
             </td>
             <td align="Right">
-                @(new RawString(transaction.Odds))
+                @transaction.Odds
         </td>
         <td align="Right">
-            @(new RawString(transaction.Stake))
+            @transaction.Stake
     </td>
     <td align="Right">
         @transaction.WinLost
@@ -89,7 +89,7 @@
     @transaction.Status
 </td>
 <td align="Right">
-    @(new RawString(transaction.Choice))
+    @transaction.Choice
 </td>
 <td align="Center">
     @transaction.BetFrom

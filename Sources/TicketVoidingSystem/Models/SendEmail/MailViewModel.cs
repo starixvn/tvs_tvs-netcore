@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TicketVoidingSystem.Models.SendMessage;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Models.SendEmail;
 
@@ -34,6 +35,10 @@ public class MailVoidViewModel : MailViewModel
     public int IssueTypeId { get; set; }
 
     public bool IsFilterByUserName { get; set; }
+
+    public bool IsAbnormalBet => Helper.IsAbnormalBet(IssueTypeId);
+
+    public bool IsAbnormalAccount => Helper.IsAbnormalAccount(IssueTypeId);
 
     public IList<Group<TicketEmailViewModel>> GroupTickets { get; set; }
 }

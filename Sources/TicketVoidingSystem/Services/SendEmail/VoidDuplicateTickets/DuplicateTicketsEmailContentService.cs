@@ -21,7 +21,6 @@ public interface DuplicateTicketsEmailContentService
 public class DuplicateTicketsEmailContentServiceImp : DuplicateTicketsEmailContentService
 {
     private static readonly ConcurrentDictionary<int, IRazorEngineCompiledTemplate> CompiledTemplateCache = new();
-
     private readonly DuplicateTicketsSubjectService subjectService;
     private readonly SpecialPlatformService specialPlatformService;
 

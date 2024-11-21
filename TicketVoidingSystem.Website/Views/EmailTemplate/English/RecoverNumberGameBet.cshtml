@@ -77,10 +77,10 @@
                     @ticket.TransDate
             </td>
             <td align="Right">
-                @(new RawString(ticket.Odds))
+                @ticket.Odds
         </td>
         <td align="Right">
-            @(new RawString(ticket.Stake))
+            @ticket.Stake
     </td>
     <td align="Right">
         @ticket.WinLost
@@ -89,7 +89,7 @@
     @ticket.Status
 </td>
 <td align="Right">
-    @(new RawString(ticket.Choice))
+    @ticket.Choice
 </td>
 <td align="Center">
     @ticket.BetFrom

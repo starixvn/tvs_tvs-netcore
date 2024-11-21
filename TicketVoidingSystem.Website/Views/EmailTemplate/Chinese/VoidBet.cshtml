@@ -57,7 +57,7 @@
                             编码<br />
                             Code
                         </td>
-                        @if (Helper.IsAbnormalBet(Model.IssueTypeId))
+                        @if (Model.IsAbnormalBet)
                         {
                             <td width="250">
                                 联赛<br />
@@ -77,7 +77,7 @@
                         <td>
                             @Model.Match.MatchCode
                         </td>
-                        @if (Helper.IsAbnormalBet(Model.IssueTypeId))
+                        @if (Model.IsAbnormalBet)
                         {
                             <td>
                                 @if (!string.IsNullOrEmpty(Model.Match.LeagueNameSimplified))
@@ -188,24 +188,24 @@
                                 @ticket.No
                             </td>
                             <td align="Center">
-                                @(new RawString(ticket.BetId))
+                                @ticket.BetId
                             </td>
                             <td align="Center">
                                 @ticket.TransDate
                             </td>
                             <td align="Center">
-                                @if ((Helper.IsAbnormalBet(Model.IssueTypeId) || Helper.IsAbnormalAccount(Model.IssueTypeId)) && ticket.IsVipMember)
+                                @if ((Model.IsAbnormalBet || Model.IsAbnormalAccount) && ticket.IsVipMember)
                                 {
-                                    <span style="color: red">@(new RawString(ticket.Member))</span>
+                                    <span style="color: red">@ticket.Member</span>
                                 }
                                 else
                                 {
-                                    @(new RawString(ticket.Member))
+                                    @ticket.Member
                                 }
                                 @if (!string.IsNullOrEmpty(ticket.OperatorID))
                                 {
                                     <br />
-                                    @(new RawString("(" + ticket.OperatorID + ")"))
+                                    @("(" + ticket.OperatorID + ")")
                                 }
                             </td>
                             <td align="Center">
@@ -214,16 +214,16 @@
                             <td align="Center">
                                 @if (!string.IsNullOrEmpty(ticket.BetTypeSimplified))
                                 {
-                                    @(new RawString(ticket.BetTypeSimplified))
+                                    @ticket.BetTypeSimplified
                                     <br />
                                 }
-                                @(new RawString(ticket.BetType))
+                                @ticket.BetType
                             </td>
                             <td align="Right">
-                                @(new RawString(ticket.Odds))
+                                @ticket.Odds
                             </td>
                             <td align="Right" class="auto-style2">
-                                @(new RawString(ticket.Stake))
+                                @ticket.Stake
                             </td>
                             <td align="Right">
                                 @ticket.WinLoss
@@ -232,16 +232,16 @@
                                 @ticket.Currency
                             </td>
                             <td align="Center">
-                                @(new RawString(ticket.Status))
+                                @ticket.Status
                             </td>
                             <td align="Center">
                                 @ticket.Score
                             </td>
                             <td align="Center">
-                                @(new RawString(ticket.Handicap))
+                                @ticket.Handicap
                             </td>
                             <td align="Right">
-                                @(new RawString(ticket.Choice))
+                                @ticket.Choice
                             </td>
                             <td align="Center">
                                 @ticket.BetFrom
@@ -251,7 +251,7 @@
                 </table>
                 <br />
             }
-            @if (Helper.IsAbnormalBet(Model.IssueTypeId) || Helper.IsAbnormalAccount(Model.IssueTypeId) || Model.IsFilterByUserName)
+            @if (Model.IsAbnormalBet || Model.IsAbnormalAccount || Model.IsFilterByUserName)
             {
                 <p style="color: red">(*) VIP 会员以红色标注 - VIP Customer is highlighted in RED</p>
             }
