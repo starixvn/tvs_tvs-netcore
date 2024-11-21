@@ -82,7 +82,7 @@ describe('MarkUnmarkTicketComponent', () => {
     commonService.getMatch = jest.fn();
     const component = new MarkUnmarkTicketComponent(null, commonService, null);
     component.query = new GetTicketsQuery();
-    component.query.searchBy = FilterSearchBy.BETIDS;
+    component.query.searchBy = FilterSearchBy.BET_IDS;
     component.match = new MatchModel();
     component.match.matchId = 1;
 
@@ -103,7 +103,7 @@ describe('MarkUnmarkTicketComponent', () => {
     const query = new GetTicketsQuery();
     component.ticketsModel = new TicketsModel();
     component.ticketsModel.initData = jest.fn();
-    component.query.searchBy = FilterSearchBy.BETIDS;
+    component.query.searchBy = FilterSearchBy.BET_IDS;
     component.filterTickets = new FilterTicketsComponent(null, null);
     component.filterTickets.betIdsComponent = new BetIdsComponent(null);
     component.filterTickets.betIdsComponent.groupNumber = new GroupNumber();
@@ -162,7 +162,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
   it('#searchEvent should call #getTickets', async () => {
     const query = {
-      searchBy: FilterSearchBy.BETIDS,
+      searchBy: FilterSearchBy.BET_IDS,
       status: '1',
       matchId: '1'
     } as GetTicketsQuery;
@@ -211,7 +211,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
   it('#pagingEvent should call #getTickets', async () => {
     const component = new MarkUnmarkTicketComponent(null, null, null);
-    component.query.searchBy = FilterSearchBy.BETIDS;
+    component.query.searchBy = FilterSearchBy.BET_IDS;
     component.getDetailTickets = jest.fn();
     component.getTickets = jest.fn();
     component.ticketsModel.updateTicketsByUncheckTransIds = jest.fn();
@@ -271,7 +271,7 @@ describe('MarkUnmarkTicketComponent', () => {
     const component = new MarkUnmarkTicketComponent(appService, null, null);
     component.getAllMarkedTickets = jest.fn();
     component.paging.total = 10000;
-    component.query.searchBy = FilterSearchBy.BETIDS;
+    component.query.searchBy = FilterSearchBy.BET_IDS;
 
     await component.exportExcel();
 
@@ -295,7 +295,7 @@ describe('MarkUnmarkTicketComponent', () => {
     const appService = new AppService(null);
     appService.exportExcel = jest.fn();
     const component = new MarkUnmarkTicketComponent(appService, null, null);
-    component.query.searchBy = FilterSearchBy.BETIDS;
+    component.query.searchBy = FilterSearchBy.BET_IDS;
     component.getTickets = jest.fn();
     component.filterTickets = new FilterTicketsComponent(null, null);
     component.filterTickets.clearBetId = jest.fn();

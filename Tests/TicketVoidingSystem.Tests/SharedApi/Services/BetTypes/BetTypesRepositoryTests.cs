@@ -6,6 +6,7 @@ using TicketVoidingSystem.Models;
 using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
 using TicketVoidingSystem.SharedApi.Services.BetTypes;
+using TicketVoidingSystem.SharedApi.ViewModels.BetTypes;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.SharedApi.Services.BetTypes;
@@ -122,6 +123,44 @@ public class BetTypesRepositoryTests : AppSettingFixture, IClassFixture<Remoting
 
         // Act
         var actual = await service.GetBetTypesTicketListingVirtualSport(1, betTypesHaveTickets);
+
+        // Assert
+        AssertExtension.Equal(expected, actual);
+    }
+
+    [Fact]
+    public async Task GetGroupBetTypes_GetDataSuccessful_ReturnExpectedData()
+    {
+        // Arrange
+        List<BetTypeModel> betTypes = [new() { GroupName = "a", Id = "1" }, new() { GroupName = "a", Id = "2" }, new() { GroupName = "b", Id = "3" }];
+        repository.FetchAsync<BetTypeModel>(Arg.Any<GetBetTypesCriteria>()).Returns(betTypes);
+        List<GroupBetTypeModel> groupBetTypes =
+        [
+            new()
+            {
+                GroupName = "a", BetTypes = new List<BetTypeModel>
+                {
+                    new() { GroupName = "a", Id = "1" },
+                    new() { GroupName = "a", Id = "2" }
+                }
+            },
+            new()
+            {
+                GroupName = "b", BetTypes = new List<BetTypeModel>
+                {
+                    new() { GroupName = "b", Id = "3" },
+                }
+            }
+        ];
+
+        var expected = new GroupBetTypesViewModel
+        {
+            GroupBetTypes = groupBetTypes,
+            Result = new Result { ErrorMsg = null }
+        };
+
+        // Act
+        var actual = await service.GetGroupBetTypes("1", 74363, 0);
 
         // Assert
         AssertExtension.Equal(expected, actual);

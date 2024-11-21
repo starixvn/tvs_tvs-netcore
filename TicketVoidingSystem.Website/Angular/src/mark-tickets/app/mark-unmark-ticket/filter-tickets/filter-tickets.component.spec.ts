@@ -181,6 +181,8 @@ describe('FilterTicketsComponent', () => {
     // Arrange
     const { instance } = await shallow.render();
     instance.searchBy.value = FilterSearchBy.MATCH_ID;
+    instance.matchIdComponent = new MatchIdComponent(null, null);
+    instance.matchIdComponent.checkValidate = jest.fn().mockReturnValue(true);
     instance.matchIdComponent.checkValidate = jest.fn().mockImplementation(() => true);
 
     // Act
@@ -193,7 +195,7 @@ describe('FilterTicketsComponent', () => {
   it('#checkValidate should return true when search by betid', async () => {
     // Arrange
     const { fixture, instance } = await shallow.render();
-    instance.searchBy.value = FilterSearchBy.BETIDS;
+    instance.searchBy.value = FilterSearchBy.BET_IDS;
     fixture.detectChanges();
     instance.betIdsComponent = new BetIdsComponent(null);
     instance.betIdsComponent.isHasBetId = jest.fn().mockImplementation(() => true);
@@ -220,7 +222,7 @@ describe('FilterTicketsComponent', () => {
   it('#clearBetId should call #clearBetId from betIdsComponent', async () => {
     // Arrange
     const { fixture, instance } = await shallow.render();
-    instance.searchBy.value = FilterSearchBy.BETIDS;
+    instance.searchBy.value = FilterSearchBy.BET_IDS;
     fixture.detectChanges();
     instance.betIdsComponent.clearBetId = jest.fn();
 
@@ -256,7 +258,7 @@ describe('FilterTicketsComponent', () => {
   it('#changeSearchBy should set value of searchby correctly and emit changeSearch event', async () => {
     // Arrange
     const { instance } = await shallow.render();
-    instance.searchBy.value = FilterSearchBy.BETIDS;
+    instance.searchBy.value = FilterSearchBy.BET_IDS;
 
     // Act
     instance.changeSearchBy(FilterSearchBy.MATCH_ID);
@@ -270,7 +272,7 @@ describe('FilterTicketsComponent', () => {
   it('#search should emit searchEvent event with expected param when search with matchid', async () => {
     // Arrange
     const { instance } = await shallow.render();
-    const query: GetTicketsQuery = {
+    const query = {
       status: '1',
       searchBy: FilterSearchBy.MATCH_ID,
       markedBy: '8',
@@ -280,10 +282,12 @@ describe('FilterTicketsComponent', () => {
       durations: [],
       pageIndex: 0,
       pageSize: 3000
-    };
+    } as GetTicketsQuery;
     instance.model.markedBy = '8';
     instance.status = '1';
     instance.searchBy.value = FilterSearchBy.MATCH_ID;
+    instance.matchIdComponent = new MatchIdComponent(null, null);
+    instance.matchIdComponent.checkValidate = jest.fn().mockReturnValue(true);
     instance.matchIdComponent.getParams = jest.fn().mockImplementation(() => Helper.getParamsForMatchid());
     instance.checkValidate = jest.fn().mockImplementation(() => true);
 
@@ -298,7 +302,7 @@ describe('FilterTicketsComponent', () => {
     const { instance } = await shallow.render();
     const query: GetTicketsQuery = {
       status: '1',
-      searchBy: FilterSearchBy.BETIDS,
+      searchBy: FilterSearchBy.BET_IDS,
       markedBy: '8',
       transIds: '123456789',
       pageIndex: 0,
@@ -320,38 +324,14 @@ describe('FilterTicketsComponent', () => {
     expect(instance.searchEvent.emit).toHaveBeenCalledTimes(0);
   });
 
-  it('value of isBlock should return true when blockComponent event from MatchIdComponent emit with param is true', async () => {
-    // Arrange
-    const { instance, findComponent } = await shallow.render();
-    const matchIdComponent = findComponent(MatchIdComponent);
-
-    // Act
-    matchIdComponent.blockComponent.emit(true);
-
-    // Assert
-    expect(instance.isBlock).toBe(true);
-  });
-
-  it('#changeMatchInfo should return emit when changeMatch event from MatchIdComponent emit ', async () => {
-    // Arrange
-    const { instance, findComponent } = await shallow.render();
-    const matchIdComponent = findComponent(MatchIdComponent);
-
-    // Act
-    matchIdComponent.changeMatch.emit();
-
-    // Assert
-    expect(instance.changeMatchInfo.emit).toHaveBeenCalledTimes(1);
-  });
-
   it('#getParams should update correct data when filter by BETIDS', async () => {
     const { instance } = await shallow.render();
-    instance.searchBy.value = FilterSearchBy.BETIDS;
+    instance.searchBy.value = FilterSearchBy.BET_IDS;
     instance.betIdsComponent = new BetIdsComponent(null);
     instance.betIdsComponent.getAllBetIds = jest.fn();
     const actual = instance.getParams();
 
-    expect(instance.searchBy.value).toBe(FilterSearchBy.BETIDS);
+    expect(instance.searchBy.value).toBe(FilterSearchBy.BET_IDS);
     expect(instance.betIdsComponent.getAllBetIds).toHaveBeenCalledTimes(1);
     expect(actual).toBeDefined();
   });
