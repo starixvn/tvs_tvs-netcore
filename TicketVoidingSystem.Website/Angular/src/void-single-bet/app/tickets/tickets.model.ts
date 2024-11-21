@@ -38,62 +38,34 @@ export class TicketsModel {
     }
 
     getTicketEnable(): BetID[] {
-        const result = [];
-        this.groups.forEach(group => {
-            const ticketInGroup = group.getEnableTickets();
-            result.push(...ticketInGroup);
-        });
-
-        return result;
+        return this.groups.flatMap(group => group.getEnableTickets());
     }
 
     getAllTicket(): BetID[] {
-        const result = [];
-        this.groups.forEach(group => {
-            const ticketInGroup = group.getTickets();
-            result.push(...ticketInGroup);
-        });
-
-        return result;
+        return this.groups.flatMap(group => group.getTickets());
     }
 
     getTicketCricket(): BetID[] {
-        const result = [];
-        this.groups.forEach(group => {
-            const ticketInGroup = group.getTicketCricket();
-            result.push(...ticketInGroup);
-        });
-
-        return result;
+        return this.groups.flatMap(group => group.getTicketCricket());
     }
 
     getTicketSold(): string {
-        let result = '';
-        this.groups.forEach(group => {
-            const ticketInGroup = group.getTicketSold();
-            result = ticketInGroup !== '' ?
-                result !== '' ? result + ',' + ticketInGroup : ticketInGroup
-                : result;
-        });
-
-        return result + this.getLastedSoldId();
+        const soldTickets = this.groups
+            .map(group => group.getTicketSold())
+            .filter(ticketSold => ticketSold !== '');
+    
+        return soldTickets.join(',') + this.getLastedSoldId();
     }
+    
 
-    changeIconCheckBox() {
-        let numberTickets = 0;
-        let numberTicketsChecked = 0;
-        this.groups.forEach(group => {
-            group.tickets.forEach(ticket => {
-                numberTickets++;
-                if (ticket.isChecked) {
-                    numberTicketsChecked++;
-                }
-            });
-        });
-        this.iconCheckBox =
+    changeIconCheckBox(): void {
+        const numberTickets = this.groups.reduce((count, group) => count + group.tickets.length, 0);
+        const numberTicketsChecked = this.groups.reduce((count, group) => count + group.tickets.filter(ticket => ticket.isChecked).length, 0);
+    
+        this.iconCheckBox = 
             numberTickets === 0 ? IconCheckBox.none :
-                numberTickets === numberTicketsChecked ? IconCheckBox.all :
-                    numberTicketsChecked > 0 ? IconCheckBox.any : IconCheckBox.none;
+            numberTickets === numberTicketsChecked ? IconCheckBox.all :
+            numberTicketsChecked > 0 ? IconCheckBox.any : IconCheckBox.none;
     }
 
     getLastedSoldId(): string {
@@ -104,67 +76,41 @@ export class TicketsModel {
             `,${lastedTicket.soldId}` : '';
     }
 
-    checkAllGroupsDropDown() {
-        if (this.iconCheckBox !== IconCheckBox.all) {
-            this.groups.forEach(group => {
-                group.isCheckAll = !group.isDisabled;
-                group.checkAllTickets();
-            });
-            this.iconCheckBox = IconCheckBox.all;
-        } else {
-            this.groups.forEach(group => {
-                group.isCheckAll = false;
-                group.checkAllTickets();
-            });
-            this.iconCheckBox = IconCheckBox.none;
-        }
+    checkAllGroupsDropDown(): void {
+        const isCheckingAll = this.iconCheckBox !== IconCheckBox.all;
+    
+        this.groups.forEach(group => {
+            group.isCheckAll = isCheckingAll ? !group.isDisabled : false;
+            group.checkAllTickets();
+        });
+    
+        this.iconCheckBox = isCheckingAll ? IconCheckBox.all : IconCheckBox.none;
     }
 
-    checkGroups() {
-        const groupLength = this.groups.length;
-        if (groupLength > 0) {
-            if (this.iconCheckBox !== IconCheckBox.none) {
-                this.groups.forEach(group => {
-                    group.isCheckAll = false;
-                    group.checkAllTickets();
-                });
-                this.iconCheckBox = IconCheckBox.none;
-            } else {
-                this.groups.forEach(group => {
-                    group.isCheckAll = !group.isDisabled;
-                    group.checkAllTickets();
-                });
-                this.iconCheckBox = IconCheckBox.all;
-            }
-        }
+    checkGroups(): void {
+        if (this.groups.length > 0) {
+            const isAllUnchecked = this.iconCheckBox !== IconCheckBox.none;
+
+            this.groups.forEach(group => {
+                group.isCheckAll = isAllUnchecked ? false : !group.isDisabled;
+                group.checkAllTickets();
+            });
+
+            this.iconCheckBox = isAllUnchecked ? IconCheckBox.none : IconCheckBox.all;
+        }   
     }
 
     checkSettledTickets(): boolean {
-        let result = false;
-        this.groups.forEach(item => {
-            if (item.checkSettledTickets()) {
-                result = true;
-            }
-        });
-
-        return result;
+        return this.groups.some(group => group.checkSettledTickets());
     }
 
     isAllItemsChecked(): boolean {
-        let result = true;
-        for (let i = 0; i < this.groups.length && result; i++) {
-            for (let j = 0; j < this.groups[i].tickets.length && result; j++) {
-                const ticket = this.groups[i].tickets[j];
-                result = ticket.isChecked;
-            }
-        }
-
-        return result;
+        return this.groups.every(group =>
+            group.tickets.every(ticket => ticket.isChecked)
+        );
     }
 
     getNumberOfCheckedTickets(): number {
-        let result = 0;
-        this.groups.forEach(item => result += item.getCheckedTickets().length);
-        return result;
+        return this.groups.reduce((count, group) => count + group.getCheckedTickets().length, 0);
     }
 }

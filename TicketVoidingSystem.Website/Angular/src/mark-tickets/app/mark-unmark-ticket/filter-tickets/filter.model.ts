@@ -3,7 +3,7 @@ import { Selection } from '../../../../utility/models/selection.model';
 
 export class FilterSearchBy {
   static readonly MATCH_ID = '0';
-  static readonly BETIDS = '1';
+  static readonly BET_IDS = '1';
   static readonly ALL_MARKED = '2';
 
   value = '1';

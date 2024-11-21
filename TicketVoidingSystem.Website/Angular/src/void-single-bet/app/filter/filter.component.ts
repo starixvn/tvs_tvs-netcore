@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import moment from "moment";
-import { ClipboardService } from 'ngx-clipboard';
 import { AdvancedModeConstants } from '../../../utility/components/advanced-mode/advanced-mode.constants';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { CheckedBetType, GetPlayersQuery, OddsInfo } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
@@ -85,9 +84,8 @@ export class FilterComponent implements OnInit{
   constructor(
     private readonly element: ElementRef,
     private readonly appService: AppService,
-    private readonly commonService: CommonService,
-    private readonly clipboardService: ClipboardService
-  ) {
+    private readonly commonService: CommonService
+    ) {
     this.tooltip.element = this.element;
   }
 
@@ -513,15 +511,11 @@ export class FilterComponent implements OnInit{
       return betType.transdesc.split(',');
     }
 
-    if (betType.oddsId) {
-      const items: string[] = [];
+    if (betType.oddsId && betType.betTeam) {
       const betTeams = betType.betTeam.split(',');
       const oddsIds = betType.oddsId.split(',');
-      for (let i = 0; i < betTeams.length; i++) {
-        items.push(`${betTeams[i]},${oddsIds[i]}`);
-      }
 
-      return items;
+      return betTeams.map((team, i) => `${team},${oddsIds[i]}`);
     }
 
     return [];
@@ -634,11 +628,6 @@ export class FilterComponent implements OnInit{
 
   changeBetTypes(betTypes: BetType[]) {
     this.allBetTypes = betTypes;
-  }
-
-  copyClipboard(text: string) {
-    this.clipboardService.copyFromContent(text);
-    alert('The Licensee list has been copied to clipboard.');
   }
 
   public isCorrectFormatOdds(value: string, elementClass: string): boolean {
