@@ -142,6 +142,8 @@ export class AdvancedModeComponent {
         return checkedBetType.player;
       case 'playerandodds':
         return checkedBetType.playerAndOdds;
+      case 'oddsspread':
+        return checkedBetType.oddsSpread;
       case '_xx':
       case '_xxx':
       case 'betidx':

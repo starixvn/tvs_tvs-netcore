@@ -86,6 +86,7 @@ export class BetTeamAddRequestResult {
   hdp2: string;
   player: string;
   playerAndOdds: string;
+  oddsSpread: string;
   betIdX: string; // store selected value
   betIdY: string; // store selected value
   filterBetIdX: string; // filter data in SPs only
@@ -197,7 +198,7 @@ export class BetTeamAddRequest {
     this.updateForBetTypesCricketWithFancy(result, betTypeId);
     this.updateForBetTypesWithRuns(result, betTypeId);
     result.id = betTypeId;
-    
+
     return result;
   }
 
@@ -233,6 +234,9 @@ export class BetTeamAddRequest {
         break;
       case 'playerandodds':
         result.playerAndOdds = value;
+        break;
+      case 'oddsspread':
+        result.oddsSpread = value;
         break;
       case '_xx': // use for input: XX value & selections round: XX in betid type 8XX; link to column betId
         result.betIdX = value;
@@ -297,7 +301,7 @@ export class BetTeamAddRequest {
       .map(y => y ? y.padStart(2, '0') : '__')
       .join('&');
   }
-  
+
   private updateBetTypeHalfFullTimeCorrectScore(result: BetTeamAddRequestResult, betTypeId: string): void {
     if (this.isHalfFullTimeCorrectScoreBet(betTypeId)) {
       const [selection1, selection2] = this.selections;

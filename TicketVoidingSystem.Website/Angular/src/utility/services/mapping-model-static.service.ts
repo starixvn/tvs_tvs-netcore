@@ -22,6 +22,7 @@ import { WrongOddsModel } from "../../add-request/app/add-request/models/event-w
 import { WrongOfferedNameModel } from "../../add-request/app/add-request/models/event-wrong-offered-name.model";
 import { WrongOuModel } from "../../add-request/app/add-request/models/event-wrong-ou.model";
 import { WrongScoreModel } from "../../add-request/app/add-request/models/event-wrong-score.model";
+import { SubIssueTypeConstant } from "../constants/sub-issue-type.constant";
 import { StaticService } from "./static.service";
 
 export class MappingModelStaticService {
@@ -219,12 +220,15 @@ export class MappingModelStaticService {
       return null;
     }
 
-    return {
-      matchId: model.matchId,
-      subIssueTypeId: model.subIssueTypeId,
-      filterFromTransTime: model.voidFromTime,
-      filterToTransTime: model.voidToTime,
-      betTeamsResult: model.betTeamsResult
-    } as OtherIssuesGetLogInfoQuery;
+    const query = new OtherIssuesGetLogInfoQuery();
+    query.matchId = model.matchId;
+    query.subIssueTypeId = model.subIssueTypeId;
+    query.betTeamsResult = model.betTeamsResult;
+    if (model.subIssueTypeId === SubIssueTypeConstant.RESTART) {
+      query.filterFromTransTime = model.voidFromTime;
+      query.filterToTransTime = model.voidToTime;
+    }
+
+    return query;
   }
 }
