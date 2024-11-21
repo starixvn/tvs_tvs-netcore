@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.BetList.Core;
 using Fanex.BetList.Core.RemotingRef;
-using Fanex.Caching.Redis;
 using Fanex.Data.Repository;
 using Fanex.LetstalkService.Core.Services;
 using Fanex.Logging;
@@ -67,19 +66,6 @@ public static class ServiceCollectionExtension
     public static void AddTvsAppSetting(this IServiceCollection services, IConfiguration configuration)
     {
         AppSettingService.InitSetting(configuration);
-    }
-
-    public static void AddSentry(this IServiceCollection services)
-    {
-        LogManager
-            .SetDefaultLogCategory(AppSettingService.AppSetting.CategorySentryLog)
-            .Use(new List<ILogEngine>
-            {
-                new SentryLogging(new SentryEngineOptions
-                {
-                    Dsn = new Dsn(AppSettingService.AppSetting.SentryClientKey)
-                })
-            });
     }
 
     public static void AddExceptionHandler(this IServiceCollection services)
@@ -159,19 +145,11 @@ public static class ServiceCollectionExtension
 
     public static void AddCoreServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddNapClient(configuration);
-        services.AddOneBookUm(configuration);
         services.AddScoped<IDynamicRepository, DynamicRepository>();
-        services.AddTransient<ILogger, Logger>();
         services.AddSingleton<IUserIdProvider, CustomIdProvider>();
         services.AddSingleton<IRemotingRefService, RemotingRefService>();
     }
-
-    public static void AddFanexCaching(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddRedisCache(configuration.GetSection("FanexCachingRedis"));
-    }
-
+    
     public static void AddFanexMailService(this IServiceCollection services)
     {
         AppSettings.AppMailId = AppSettingService.AppSetting.FanexMailService.AppMailId;
