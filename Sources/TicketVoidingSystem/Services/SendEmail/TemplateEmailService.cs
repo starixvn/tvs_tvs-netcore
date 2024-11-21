@@ -1,6 +1,6 @@
-﻿using System.IO;
-using RazorEngine;
-using RazorEngine.Templating;
+﻿using System.Collections.Concurrent;
+using System.IO;
+using RazorEngineCore;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Utilities;
@@ -18,6 +18,8 @@ public interface TemplateEmailService
 
 public class TemplateEmailServiceImp : TemplateEmailService
 {
+    private static readonly ConcurrentDictionary<int, IRazorEngineCompiledTemplate> CompiledTemplateCache = new();
+
     public MailRecordResult Create(MailVoidViewModel mailVoidViewModel, SiteEmail site, string subject)
     {
         return new MailRecordResult
@@ -52,7 +54,14 @@ public class TemplateEmailServiceImp : TemplateEmailService
     {
         var fullPath = Helper.GetFilePath(path);
         var template = File.ReadAllText(fullPath);
-        var key = typeof(T) + path;
-        return Engine.Razor.RunCompile(template, key, typeof(T), model);
+
+        var hashCode = template.GetHashCode();
+        var compiledTemplate = CompiledTemplateCache.GetOrAdd(hashCode, _ =>
+        {
+            var razorEngine = new RazorEngine();
+            return razorEngine.Compile(template);
+        });
+
+        return compiledTemplate.Run(model);
     }
 }
