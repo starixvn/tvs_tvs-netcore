@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Fanex.MailDeliver.MailClient.Model;
 using Force.DeepCloner;
-using RazorEngine;
-using RazorEngine.Templating;
+using RazorEngineCore;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Subject;
@@ -20,6 +20,8 @@ public interface DuplicateTicketsEmailContentService
 
 public class DuplicateTicketsEmailContentServiceImp : DuplicateTicketsEmailContentService
 {
+    private static readonly ConcurrentDictionary<int, IRazorEngineCompiledTemplate> CompiledTemplateCache = new();
+
     private readonly DuplicateTicketsSubjectService subjectService;
     private readonly SpecialPlatformService specialPlatformService;
 
@@ -66,7 +68,13 @@ public class DuplicateTicketsEmailContentServiceImp : DuplicateTicketsEmailConte
     {
         var fullPath = Helper.GetFilePath(path);
         var template = File.ReadAllText(fullPath);
-        var key = typeof(DuplicateTicketsMailVoidViewModel) + path;
-        return Engine.Razor.RunCompile(template, key, typeof(DuplicateTicketsMailVoidViewModel), model);
+        var hashCode = template.GetHashCode();
+        var compiledTemplate = CompiledTemplateCache.GetOrAdd(hashCode, _ =>
+        {
+            var razorEngine = new RazorEngine();
+            return razorEngine.Compile(template);
+        });
+
+        return compiledTemplate.Run(model);
     }
 }
