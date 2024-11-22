@@ -26,10 +26,10 @@ export class TemplateWrongOddsService {
     const isFirstHalf = subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_HANDICAP || subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_OVER_UNDER;
     const prefixSubType = this.templateInputsService.getPrefixSubType(isFirstHalf);
     const replacedContent: TemplateContent = {
-      msgEnglish: `${prefixSubType.msgEnglish}${this.templateInputsService.getTeamName(templateValue)}@${TemplateContentConst.ODDS.msgEnglish} ${this.getCorrectOdds(templateValue)}`,
-      msgChineseTraditional: `${prefixSubType.msgChineseTraditional}${this.templateInputsService.getTeamNameTraditional(templateValue)}@${TemplateContentConst.ODDS.msgChineseTraditional} ${this.getCorrectOdds(templateValue)}`,
-      msgChineseSimplified: `${prefixSubType.msgChineseSimplified}${this.templateInputsService.getTeamNameSimplified(templateValue)}@${TemplateContentConst.ODDS.msgChineseSimplified} ${this.getCorrectOdds(templateValue)}`,
-      msgChineseNewSimplified: `${prefixSubType.msgChineseNewSimplified}${this.templateInputsService.getTeamNameNewSimplified(templateValue)}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${this.getCorrectOdds(templateValue)}`
+      msgEnglish: `${prefixSubType.msgEnglish}${this.templateInputsService.getTeamName(templateValue)}-${templateValue.favoriteValue}@${TemplateContentConst.ODDS.msgEnglish} ${this.getCorrectOdds(templateValue)}`,
+      msgChineseTraditional: `${prefixSubType.msgChineseTraditional}${this.templateInputsService.getTeamNameTraditional(templateValue)}-${templateValue.favoriteValue}@${TemplateContentConst.ODDS.msgChineseTraditional} ${this.getCorrectOdds(templateValue)}`,
+      msgChineseSimplified: `${prefixSubType.msgChineseSimplified}${this.templateInputsService.getTeamNameSimplified(templateValue)}-${templateValue.favoriteValue}@${TemplateContentConst.ODDS.msgChineseSimplified} ${this.getCorrectOdds(templateValue)}`,
+      msgChineseNewSimplified: `${prefixSubType.msgChineseNewSimplified}${this.templateInputsService.getTeamNameNewSimplified(templateValue)}-${templateValue.favoriteValue}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${this.getCorrectOdds(templateValue)}`
     };
 
     this.replaceMessageService.replaceEachLanguage(message, TemplateReplace.ACTUAL_MARKET, replacedContent);

@@ -8,11 +8,11 @@ namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 public interface GetInfoTicketsForMessage
 {
-    public string GetInputOverUnder(int betTypeId, IEnumerable<GetTicketModel> allTickets);
-
     public string GetSpecialBetTeam(int betTypeId, IEnumerable<GetTicketModel> allTickets);
 
     public ContentByLanguageModel GetSpecialBetTypeContent(IEnumerable<GetTicketModel> allTickets);
+
+    public string GetHdpValues(int betTypeId, IEnumerable<GetTicketModel> allTickets);
 }
 
 public class GetInfoTicketsForMessageImp : GetInfoTicketsForMessage
@@ -24,33 +24,17 @@ public class GetInfoTicketsForMessageImp : GetInfoTicketsForMessage
         this.specialBetTypeContentService = specialBetTypeContentService;
     }
 
-    public string GetInputOverUnder(int betTypeId, IEnumerable<GetTicketModel> allTickets)
-    {
-        if (betTypeId is not (BetTypeConstant.OverUnder or BetTypeConstant.FirstHalfOverUnder))
-        {
-            return string.Empty;
-        }
-        var inputOver = allTickets.Select(ticket => ticket.IsMixParlay
-            ? Math.Abs(ticket.SubHdp1) : Math.Abs(ticket.Hdp1)).Distinct();
-
-        return string.Join(", ", inputOver);
-    }
-
     public string GetSpecialBetTeam(int betTypeId, IEnumerable<GetTicketModel> allTickets)
     {
-        var SpecialBetTypes = new List<int>
-        {
-            BetTypeConstant.Handicap, BetTypeConstant.FirstHalfHandicap, BetTypeConstant.OverUnder, BetTypeConstant.FirstHalfOverUnder
-        };
-
+        List<int> SpecialBetTypes = [BetTypeConstant.Handicap, BetTypeConstant.FirstHalfHandicap, BetTypeConstant.OverUnder, BetTypeConstant.FirstHalfOverUnder];
         if (!SpecialBetTypes.Contains(betTypeId))
         {
             return string.Empty;
         }
 
-        var betTeams = allTickets.Select(ticket => ticket.IsMixParlay ? ticket.SubBetTeam : ticket.BetTeam).Distinct();
+        var betTeams = allTickets.Select(ticket => ticket.IsMixParlay ? ticket.SubBetTeam : ticket.BetTeam).Distinct().ToList();
 
-        return betTeams.Count() > 1 ? "All" : betTeams.FirstOrDefault();
+        return betTeams.Count > 1 ? "All" : betTeams.FirstOrDefault();
     }
 
     public ContentByLanguageModel GetSpecialBetTypeContent(IEnumerable<GetTicketModel> allTickets)
@@ -65,5 +49,31 @@ public class GetInfoTicketsForMessageImp : GetInfoTicketsForMessage
         });
 
         return specialBetTypeContentService.GetContentForVoidPage(emailTickets);
+    }
+
+    private static string GetHdpValuesOverUnder(IEnumerable<GetTicketModel> allTickets)
+    {
+        var inputOver = allTickets.Select(ticket => Math.Abs(ticket.IsMixParlay ? ticket.SubHdp1 : ticket.Hdp1)).Distinct();
+
+        return string.Join(", ", inputOver);
+    }
+
+    private static string GetHdpValuesHandicap(IEnumerable<GetTicketModel> allTickets)
+    {
+        var hdpValues = allTickets.Select(ticket =>
+            Math.Abs(ticket.IsMixParlay ? ticket.SubHdp1 + ticket.SubHdp2 : ticket.Hdp1 + ticket.Hdp2)).Distinct();
+
+        return string.Join(", ", hdpValues);
+    }
+
+    public string GetHdpValues(int betTypeId, IEnumerable<GetTicketModel> allTickets)
+
+    {
+        return betTypeId switch
+        {
+            BetTypeConstant.OverUnder or BetTypeConstant.FirstHalfOverUnder => GetHdpValuesOverUnder(allTickets),
+            BetTypeConstant.Handicap or BetTypeConstant.FirstHalfHandicap => GetHdpValuesHandicap(allTickets),
+            _ => string.Empty
+        };
     }
 }

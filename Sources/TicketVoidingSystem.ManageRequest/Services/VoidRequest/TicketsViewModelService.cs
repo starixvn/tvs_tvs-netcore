@@ -128,15 +128,15 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
 
     private void UpdateBetTypeIdsAndSpecialBetType(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets)
     {
-        var betTypeIds = allTickets.Select(ticket => ticket.IsMixParlay ? ticket.SubBetType : ticket.BetType).Distinct();
+        var betTypeIds = allTickets.Select(ticket => ticket.IsMixParlay ? ticket.SubBetType : ticket.BetType).Distinct().ToList();
         model.BetTypes = string.Join(",", betTypeIds);
 
-        if (betTypeIds.Count() == 1)
+        if (betTypeIds.Count == 1)
         {
             var betTypeId = betTypeIds.First();
             model.BetTypeNameReplaceMessage = getInfoTicketsForMessage.GetSpecialBetTypeContent(allTickets);
             model.BetTeam = getInfoTicketsForMessage.GetSpecialBetTeam(betTypeId, allTickets);
-            model.InputOverUnder = getInfoTicketsForMessage.GetInputOverUnder(betTypeId, allTickets);
+            model.HdpValues = getInfoTicketsForMessage.GetHdpValues(betTypeId, allTickets);
         }
         else
         {

@@ -65,7 +65,7 @@ export class TemplateValue {
   // for template wrong odds sport book
   betTeam?: string;
   betTypeId?: string;
-  inputOverUnder?: string;
+  hdpValues?: string;
   correctOdds?: string;
   // for wrong offered name
   wrongName?: string;
@@ -74,4 +74,6 @@ export class TemplateValue {
   actualNameT?: string;
   wrongNameS?: string;
   actualNameS?: string;
+  // Wrong Odds
+  favoriteValue?: string;
 }

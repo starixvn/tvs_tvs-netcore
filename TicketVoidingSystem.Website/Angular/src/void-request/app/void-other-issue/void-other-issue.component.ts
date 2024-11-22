@@ -236,6 +236,7 @@ export class VoidOtherIssueComponent implements OnInit {
   updateTemplateValueForWrongOdds() {
     if (this.isWrongOdds()) {
       this.templateValue.filterFavoriteType = this.requestDetail.wrongOddsModels[0].filterFavoriteType;
+      this.templateValue.favoriteValue = this.requestDetail.wrongOddsModels[0].favoriteValue;
       this.templateValue.wrongOU = this.requestDetail.wrongOddsModels[0].wrongOU;
       this.templateValue.correctOddsHomeOver = this.requestDetail.wrongOddsModels[0].correctOddsHomeOver;
       this.templateValue.correctOddsAwayUnder = this.requestDetail.wrongOddsModels[0].correctOddsAwayUnder;

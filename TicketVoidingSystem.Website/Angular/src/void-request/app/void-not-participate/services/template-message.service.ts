@@ -50,7 +50,7 @@ export class TemplateMessageService {
       if(voidTicketsMini.betTypes.split(',').length === 1){
         templateValue.betTypeId = voidTicketsMini.betTypes.split(',')[0];
         templateValue.betTeam = voidTicketsMini.betTeam;
-        templateValue.inputOverUnder = voidTicketsMini.inputOverUnder;
+        templateValue.hdpValues = voidTicketsMini.hdpValues;
       }
       
       if (this.isSportTypeSoccer(requestDetail.request.sportType)) {
