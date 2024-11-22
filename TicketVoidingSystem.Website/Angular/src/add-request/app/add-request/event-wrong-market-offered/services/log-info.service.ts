@@ -4,7 +4,7 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { GetLogInfoQuery } from '../../models/add-request.query';
 import { GetLogInfoModel } from '../../models/get-log-info.model';
-import { LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
+import { LogInfoItem, LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { EventWrongMarketOfferedService } from './event-wrong-market-offfered.service';
 
@@ -26,28 +26,32 @@ export class LogInfoService {
     this.assignResultLogInfoToEvents(logInfoEvent, viewModel.getLogInfoModels);
   }
 
+  resetLogInfoOfEvent(logInfoEvent: LogInfoWrongMarketOffered): void {
+    logInfoEvent.logInfoDetails = null;
+    logInfoEvent.messageValidationLogInfo = null;
+  }
+
   private initWrongMarketOfferedGetLogInfoQuery(isEdit: boolean, requestId: number, filter: FilterModel, logInfo: LogInfoWrongMarketOffered): GetLogInfoQuery {
     const wrongMarketOfferedModels = this.eventWrongMarketOfferedService.getWrongMarketOfferedGetLogInfoModel(Number(filter.subIssueTypeId), logInfo);
     const query = new GetLogInfoQuery();
     query.requestId = isEdit ? requestId : null;
     query.actionId = Number(filter.action);
     query.issueTypeId = Number(filter.issueTypeId);
-    query.wrongMarketOfferedModel = wrongMarketOfferedModels;
+    query.wrongMarketOfferedModels = wrongMarketOfferedModels;
 
     return query;
   }
 
   private assignResultLogInfoToEvents(logInfoEvent: LogInfoWrongMarketOffered, logInfoModels: GetLogInfoModel[]): void {
-    const logInfoModel = logInfoModels.find(x => x.matchId === logInfoEvent.matchId);
-    if (logInfoModel) {
-      logInfoEvent.logInfoDetail = logInfoModel.logInfoDetail;
-      logInfoEvent.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel);
-      logInfoEvent.betTypeCount = logInfoModel.betTypeCount;
-    }
+    logInfoEvent.logInfoItems = logInfoModels.map(x => this.createLogInfoItem(x));
   }
 
-  public resetLogInfoOfEvent(logInfoEvent: LogInfoWrongMarketOffered): void {
-    logInfoEvent.logInfoDetail = null;
-    logInfoEvent.messageValidationLogInfo = null;
+  private createLogInfoItem(logInfoModel: GetLogInfoModel): LogInfoItem {
+    return {
+      id: logInfoModel.id,
+      logInfoDetail: logInfoModel.logInfoDetail,
+      messageValidationLogInfo: StaticService.getValidationMessageList(logInfoModel),
+      betTypeCount: logInfoModel.betTypeCount
+    }
   }
 }

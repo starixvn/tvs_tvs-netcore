@@ -204,12 +204,12 @@ public class LogInfoServiceImp(
     private async Task<IEnumerable<GetLogInfoModel>> GetLogInfoViewModelWrongMarketOffered(GetLogInfoQuery query, IEnumerable<Validation> validation,
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
-        await logInfoHelperService.UpdateBetTypeTicketsInfo(query.WrongMarketOfferedModel.MatchId, betTypeCount);
+        await logInfoHelperService.UpdateBetTypeTicketsInfo(query.WrongMarketOfferedModels.First().MatchId, betTypeCount);
         return new List<GetLogInfoModel>
         {
             new()
             {
-                MatchId = query.WrongMarketOfferedModel.MatchId,
+                MatchId = query.WrongMarketOfferedModels.First().MatchId,
                 Validation = validation.FirstOrDefault(),
                 TicketRequest = ticketRequest,
                 LogInfoDetail = logInfoDetail.FirstOrDefault(),
@@ -294,8 +294,8 @@ public class LogInfoServiceImp(
         criteria.WrongOddsSBInfo = query.WrongOddsSportsBookModel?.ToWrongOddsSportsBookInfoXml();
         criteria.ReducedOverInfo = query.ReducedOverModels?.ToReducedOverInfoXml();
         criteria.NotParticipateInfo = query.NotParticipateModels?.ToNotParticipateInfoXml();
-        criteria.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedModel?.ToWrongMarketOfferedInfoXml() : null;
-        criteria.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedModel?.ToWrongMarketOfferedInfoXml() : null;
+        criteria.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedModels?.ToWrongMarketOfferedInfoXml() : null;
+        criteria.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedModels?.ToWrongMarketOfferedInfoXml() : null;
         criteria.WrongOfferedNameInfo = query.WrongOfferedNameModel?.ToWrongOfferedNameInfoXml();
         criteria.OtherIssuesInfo = query.OtherIssuesModel?.ToOtherIssuesInfoXml();
         criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));

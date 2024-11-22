@@ -223,7 +223,11 @@ export class GetBetTypesQuery {
     mode: number;
     matchId: number;
     betTypes?: string;
-    fromTransDate?: string;
-    toTransDate?: string;
+    timeRanges: TimeRangeModel[];
     isGetCancelCashOut?: boolean;
+}
+
+export class TimeRangeModel {
+    fromDate: string;
+    toDate: string;
 }

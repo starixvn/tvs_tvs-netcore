@@ -36,7 +36,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
   wrongOddsSportsBookModel: WrongOddsSportsBookModel;
   reducedOverModels: ReducedOverModel[];
   notParticipateModels: NotParticipateModel[];
-  wrongMarketOfferedModel: WrongMarketOfferedModel;
+  wrongMarketOfferedModels: WrongMarketOfferedModel[];
   earlyKickOffModels: EarlyKickOffModel[];
   recoverTicketModel: RecoverTicketModel;
   wrongOfferedNameModel: WrongOfferedNameModel;
@@ -59,7 +59,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
     this.reducedOverModels = [];
     this.earlyKickOffModels = [];
     this.notParticipateModels = [];
-    this.wrongMarketOfferedModel = new WrongMarketOfferedModel();
+    this.wrongMarketOfferedModels = [];
     this.wrongOddsSportsBookModel = new WrongOddsSportsBookModel();
     this.wrongOfferedNameModel = new WrongOfferedNameModel();
     this.otherIssuesModel = new OtherIssuesModel();

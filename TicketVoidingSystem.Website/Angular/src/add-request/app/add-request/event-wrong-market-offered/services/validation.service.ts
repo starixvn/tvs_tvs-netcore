@@ -31,11 +31,11 @@ export class ValidationService {
   }
 
   public checkCanShowConfirmationWrongMarketOffered(argWrongMarketOffered: SaveRequestArg): boolean {
-    const isHasWarningSettledTicket = argWrongMarketOffered.logInfoEvent.logInfoDetail?.settleCount > 0;
+    const isHasWarningSettledTicket = argWrongMarketOffered.logInfoEvent.logInfoDetails?.settleCount > 0;
     const isHasWarningTicket = argWrongMarketOffered.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError);
     const isEditingByAnotherUser = argWrongMarketOffered.isEdit && argWrongMarketOffered.userId !== Number(document.getElementById('body').getAttribute('user-id'));
     const isHasWarningTakenNote = argWrongMarketOffered.isEdit
-      && argWrongMarketOffered.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() 
+      && argWrongMarketOffered.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString()
       && argWrongMarketOffered.filter.action !== argWrongMarketOffered.actionIdOfFirstTimeAccess;
 
     return isHasWarningSettledTicket || isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;

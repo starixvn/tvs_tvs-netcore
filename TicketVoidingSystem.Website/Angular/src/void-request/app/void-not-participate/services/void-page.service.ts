@@ -65,8 +65,8 @@ export class VoidPageService {
 
     if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)) {
       return {
-        matchId: requestDetail.wrongMarketOfferedModel.matchId,
-        subIssueTypeId: requestDetail.wrongMarketOfferedModel.subIssueTypeId
+        matchId: requestDetail.wrongMarketOfferedModels.matchId,
+        subIssueTypeId: requestDetail.wrongMarketOfferedModels.subIssueTypeId
       } as BasicRequestInfo;
     }
 
@@ -113,7 +113,7 @@ export class VoidPageService {
     }
 
     if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)) {
-      query.wrongMarketOfferedModel = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModel(requestDetail.wrongMarketOfferedModel);
+      query.wrongMarketOfferedModels = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModels(requestDetail.wrongMarketOfferedModels);
     }
 
     if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {

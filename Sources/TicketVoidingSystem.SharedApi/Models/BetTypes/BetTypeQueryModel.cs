@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace TicketVoidingSystem.SharedApi.Models.BetTypes;
 
@@ -10,9 +10,7 @@ public class BetTypeQueryModel
 
     public string BetTypes { get; set; }
 
-    public DateTime? FromTransDate { get; set; }
-
-    public DateTime? ToTransDate { get; set; }
+    public IEnumerable<TimeRangeModel> TimeRanges { get; set; }
 
     public bool IsGetCancelCashOut { get; set; }
 }

@@ -100,7 +100,7 @@ public class GetRequestServiceImp(
 
             case IssueTypeConstant.WrongMarketOffered:
             case IssueTypeConstant.TechnicalError:
-                viewModel.WrongMarketOfferedModel = await MapEventWrongMarketOffered(secondResultSet);
+                viewModel.WrongMarketOfferedModels = await MapEventWrongMarketOffered(secondResultSet);
                 break;
 
             case IssueTypeConstant.WrongOddsSportsBook:
@@ -370,15 +370,15 @@ public class GetRequestServiceImp(
         };
     }
 
-    private async Task<WrongMarketOfferedViewModel> MapEventWrongMarketOffered(IEnumerable<RequestEventModel> requestEventModels)
+    private async Task<IEnumerable<WrongMarketOfferedViewModel>> MapEventWrongMarketOffered(IEnumerable<RequestEventModel> requestEventModels)
     {
-        var model = requestEventModels.First();
-        var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
-        var groupBetTypes = await advancedModeService.GetGroupBetTypes(model.MatchId,
+        var firstModel = requestEventModels.First();
+        var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(firstModel.AdvancedExtraInfo);
+        var groupBetTypes = await advancedModeService.GetGroupBetTypes(firstModel.MatchId,
             string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));
-        var allBetTypesSelection = advancedModeService.GetAllBetTypesSelection(model.AllBetTypesSelectionJson);
+        var allBetTypesSelection = advancedModeService.GetAllBetTypesSelection(firstModel.AllBetTypesSelectionJson);
 
-        return new WrongMarketOfferedViewModel
+        return requestEventModels.Select(model => new WrongMarketOfferedViewModel
         {
             MatchId = model.MatchId,
             FilterFromTransTime = model.FilterFromTransTime,
@@ -389,7 +389,7 @@ public class GetRequestServiceImp(
             BetTeamsResult = betTypesAdvancedMode,
             GroupBetTypes = groupBetTypes,
             AllBetTypesSelection = allBetTypesSelection
-        };
+        });
     }
 
     private async Task<WrongOddsSportsBookViewModel> MapEventWrongOddsSportsBook(IEnumerable<RequestEventModel> requestEventModels)

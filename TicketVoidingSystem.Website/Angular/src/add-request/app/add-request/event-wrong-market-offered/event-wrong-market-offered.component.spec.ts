@@ -38,8 +38,8 @@ class Helper {
   } as WrongMarketOfferedModel;
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
-    filterWrongMarketOfferedModel: Helper.fakeFilterWrongMarketOfferedModel,
-    logInfoDetail: new LogInfoDetail(),
+    filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
+    logInfoDetails: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTypeCount: [],
     betTeamsResult: []
@@ -80,7 +80,7 @@ describe('EventWrongMarketOfferedComponent', () => {
 
   it('EventWrongMarketOfferedComponent init should match snapshot', async () => {
     const component = new EventWrongMarketOfferedComponent(null, null, null, null, null, null);
-    component.wrongMarketOfferedModel = Helper.fakeWrongMarketOfferedModel;
+    component.wrongMarketOfferedModels = Helper.fakeWrongMarketOfferedModel;
 
     expect(component).toMatchSnapshot();
   });

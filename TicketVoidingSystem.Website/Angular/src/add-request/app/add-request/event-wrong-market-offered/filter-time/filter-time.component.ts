@@ -1,8 +1,8 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-offered.model';
+import { EventWrongMarketOfferedService } from '../services/event-wrong-market-offfered.service';
+import { FilterTimeItemComponent } from './filter-time-item/filter-time-item.component';
 
 @Component({
   selector: 'filter-time',
@@ -12,32 +12,38 @@ import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-off
 
 export class FilterTimeComponent {
   @Input() isVoided: boolean;
-  @Input() filterWrongMarketOfferedModel = new FilterWrongMarketOfferedModel();
+  @Input() models: FilterWrongMarketOfferedModel[];
   @Output() changeFilterEvent = new EventEmitter();
   @Output() refreshEvent = new EventEmitter();
-  @ViewChild('fromTimeComponent') fromTimeComponent: DateFullTimeNewComponent;
-  @ViewChild('toTimeComponent') toTimeComponent: DateFullTimeNewComponent;
+  @ViewChildren('filterItem') filterItemComponents: QueryList<FilterTimeItemComponent>;
 
   tooltip = new Tooltip();
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
 
   constructor(
-    private readonly element: ElementRef
+    private readonly element: ElementRef,
+    private readonly eventWrongMarketOfferedService: EventWrongMarketOfferedService
   ) {
     this.tooltip.element = this.element;
   }
 
-  public changeFilter(): void {
+  changeFilter(): void {
     this.changeFilterEvent.emit();
   }
 
-  public isValidity(): boolean {
-    return this.fromTimeComponent.validateWithTooltip() && this.toTimeComponent.validateWithTooltip()
-      && StaticService.isFromTimeSameOrBeforeToTime(this.filterWrongMarketOfferedModel.fromDateTime,
-        this.filterWrongMarketOfferedModel.toDateTime, this.tooltip, this.FROM_DATE_TIME_CLASS);
+  isValidity(): boolean {
+    return this.filterItemComponents.toArray().every(x => x.isValidity());
   }
 
-  public emitRefreshEvent() {
+  emitRefreshEvent() {
     this.refreshEvent.emit();
+  }
+
+  addItem(): void {
+    this.models.push(this.eventWrongMarketOfferedService.initDefaultTime());
+  }
+
+  removeItem(index: number): void {
+    this.models.splice(index, 1);
   }
 }

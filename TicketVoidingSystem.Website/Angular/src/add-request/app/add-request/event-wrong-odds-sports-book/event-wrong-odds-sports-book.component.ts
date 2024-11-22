@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { AdvancedModeAddRequestModel } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
 import { GroupBetTypesAddRequestModel } from '../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
-import { GetBetTypesQuery } from '../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { GetBetTypesQuery, TimeRangeModel } from '../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ModeType } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
@@ -16,6 +16,7 @@ import { WrongOddsSportsBookModel } from '../models/event-wrong-odds-sports-book
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { OthersModel } from '../others/others.model';
 import { FilterWrongOddsSportsBookComponent } from './filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
+import { FilterWrongOddsSportsBookModel } from './models/filter-wrong-odds-sports-book.model';
 import { LogInfoWrongOddsSportsBook } from './models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
@@ -128,8 +129,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
     const query: GetBetTypesQuery = {
       mode: ModeType.SPORT_BOOK,
       matchId: this.eventLeagueComponent?.selectedMatch.matchId,
-      fromTransDate: this.logInfoEvent.filterWrongOddsSportsBook.fromDateTime,
-      toTransDate: this.logInfoEvent.filterWrongOddsSportsBook.toDateTime,
+      timeRanges: [this.createTimeRangeModel(this.logInfoEvent.filterWrongOddsSportsBook)]
     };
     this.addRequestStore.changeBlockingUiStatus(true);
     const data = await this.commonService.getGroupBetTypesTvs(query);
@@ -206,5 +206,12 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
   resetLogInfoOfEvent(): void {
     this.primitiveProps.isShowValidation = false;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
+  }
+
+  private createTimeRangeModel(filterWrongOddsSportsBook: FilterWrongOddsSportsBookModel): TimeRangeModel {
+    return {
+      fromDate: filterWrongOddsSportsBook.fromDateTime,
+      toDate: filterWrongOddsSportsBook.toDateTime
+    }
   }
 }

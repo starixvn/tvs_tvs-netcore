@@ -25,8 +25,7 @@ public class GetGroupBetTypesTvsHandlerTests
         {
             MatchId = 1,
             IsGetCancelCashOut = true,
-            FromTransDate = DateTime.Now.AddDays(-7),
-            ToTransDate = DateTime.Now
+            TimeRanges = [new TimeRangeModel { FromDate = DateTimeOffset.Now.DateTime.AddDays(-7), ToDate = DateTimeOffset.Now.DateTime }]
         };
 
         var betTypesHaveTickets = new List<BetTypeModel>
@@ -38,7 +37,7 @@ public class GetGroupBetTypesTvsHandlerTests
             new() { Id = "5", GroupName = "Group2" }
         };
 
-        betTypesRepository.GetBetTypesHaveTicketsForTvs(request.MatchId, request.IsGetCancelCashOut, request.FromTransDate, request.ToTransDate)
+            betTypesRepository.GetBetTypesHaveTicketsForTvs(request.MatchId, request.IsGetCancelCashOut, request.TimeRanges)
             .Returns(betTypesHaveTickets);
 
         // Act

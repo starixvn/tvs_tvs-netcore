@@ -91,7 +91,7 @@ export class RequestDetailViewModel {
   abnormalAccountModel?: AbnormalAccountModel;
   recoverTicketModel?: RecoverTicketModel;
   abnormalBetModel?: AbnormalBetModel;
-  wrongMarketOfferedModel?: WrongMarketOfferedModel;
+  wrongMarketOfferedModels?: WrongMarketOfferedModel[];
   wrongOddsSportsBookModel?: WrongOddsSportsBookModel;
   wrongOfferedNameModel?: WrongOfferedNameModel;
   otherIssuesModel?: OtherIssuesModel;

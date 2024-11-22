@@ -233,13 +233,26 @@ public static class LogInfoExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
-    public static string ToWrongMarketOfferedInfoXml(this WrongMarketOfferedViewModel model)
+    public static string ToWrongMarketOfferedInfoXml(this IEnumerable<WrongMarketOfferedViewModel> models)
     {
-        return $"<root><r MatchId = '{model.MatchId}' "
-                + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"SubIssueTypeId='{model.SubIssueTypeId}' "
-                + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}'/></root>";
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}' />";
+
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
     public static string ToWrongOddsSportsBookInfoXml(this WrongOddsSportsBookViewModel model)

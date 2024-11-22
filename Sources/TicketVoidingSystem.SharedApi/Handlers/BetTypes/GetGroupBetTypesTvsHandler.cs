@@ -15,7 +15,7 @@ public class GetGroupBetTypesTvsHandler(BetTypesRepository betTypesRepository)
 {
     public async Task<GroupBetTypesViewModel> Handle(GetGroupBetTypesTvsRequest request, CancellationToken cancellationToken)
     {
-        var betTypesHaveTickets = await betTypesRepository.GetBetTypesHaveTicketsForTvs(request.MatchId, request.IsGetCancelCashOut, request.FromTransDate, request.ToTransDate);
+        var betTypesHaveTickets = await betTypesRepository.GetBetTypesHaveTicketsForTvs(request.MatchId, request.IsGetCancelCashOut, request.TimeRanges);
 
         return new GroupBetTypesViewModel
         {

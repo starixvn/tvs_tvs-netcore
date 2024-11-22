@@ -5,6 +5,7 @@ import { Selection } from '../../../../utility/models/selection.model';
 import { BetTypeCountModel } from "./get-log-info.model";
 
 export class WrongMarketOfferedModel {
+  id: number;
   matchId: number;
   subIssueTypeId: number;
   eventDate?: Date;

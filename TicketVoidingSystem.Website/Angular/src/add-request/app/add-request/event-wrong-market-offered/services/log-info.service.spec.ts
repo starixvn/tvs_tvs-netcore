@@ -20,8 +20,8 @@ class Helper {
   };
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
-    filterWrongMarketOfferedModel: Helper.fakeFilterWrongMarketOfferedModel,
-    logInfoDetail: new LogInfoDetail(),
+    filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
+    logInfoDetails: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTypeCount: [],
     betTeamsResult: [],
@@ -54,7 +54,7 @@ describe('LogInfoService', () => {
     const logInfo = _.cloneDeep(Helper.fakeLogInfoWrongMarketOffered);
     service.resetLogInfoOfEvent(logInfo);
 
-    expect(logInfo.logInfoDetail).toBe(null);
+    expect(logInfo.logInfoDetails).toBe(null);
     expect(logInfo.messageValidationLogInfo).toBe(null);
   });
 

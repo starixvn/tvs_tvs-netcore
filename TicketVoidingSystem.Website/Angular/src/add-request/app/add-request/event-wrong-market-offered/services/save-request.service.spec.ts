@@ -25,8 +25,8 @@ class Helper {
   };
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
-    filterWrongMarketOfferedModel: Helper.fakeFilterWrongMarketOfferedModel,
-    logInfoDetail: new LogInfoDetail(),
+    filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
+    logInfoDetails: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTypeCount: [],
     betTeamsResult: []
@@ -198,7 +198,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.filter.action = '2';
     saveRequestArg.actionIdOfFirstTimeAccess = '5';
     saveRequestArg.logInfoEvent = Helper.fakeLogInfoWrongMarketOffered;
-    saveRequestArg.logInfoEvent.logInfoDetail.settleCount = 1;
+    saveRequestArg.logInfoEvent.logInfoDetails.settleCount = 1;
     saveRequestArg.logInfoEvent.messageValidationLogInfo.push({ isError: false, reason: 'aaa'});
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");

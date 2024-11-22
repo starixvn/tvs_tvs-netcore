@@ -86,7 +86,7 @@ export class ObjectService {
     } else if (checkIssueType.isRecoverTicket) {
       args.requestModel.recoverTicketModel = args.detailViewModel.recoverTicketModel;
     } else if (checkIssueType.isLikelyWrongMarketOffered) {
-      args.requestModel.wrongMarketOfferedModel = args.detailViewModel.wrongMarketOfferedModel;
+      args.requestModel.wrongMarketOfferedModels = args.detailViewModel.wrongMarketOfferedModels;
     } else if (checkIssueType.isWrongOddsSportsBook) {
       args.requestModel.wrongOddsSportsBookModel = args.detailViewModel.wrongOddsSportsBookModel;
     } else if (checkIssueType.isWrongOfferedName) {

@@ -8,8 +8,9 @@ export class GetLogInfoViewModel {
 }
 
 export class GetLogInfoModel {
-  scoreId?: number;
-  matchId?: number;
+  id?: number; // wrong market offered
+  scoreId?: number; // wrong score
+  matchId?: number; // issue type have child match
   validation: Validation;
   ticketRequest: TicketRequest[];
   logInfoDetail: LogInfoDetail;

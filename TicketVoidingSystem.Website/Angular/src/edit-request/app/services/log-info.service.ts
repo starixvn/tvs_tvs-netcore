@@ -188,18 +188,19 @@ export class LogInfoService {
   }
 
   private async getLogInfoWrongMarketOffered(args: LogInfoArg): Promise<void> {
-    const models = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModel(args.detailViewModel.wrongMarketOfferedModel);
+    const models = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModels(args.detailViewModel.wrongMarketOfferedModels);
     const query = new GetLogInfoQuery();
     query.requestId = args.primitiveProperty.requestId;
     query.isShowLogOnly = true;
     query.issueTypeId = args.detailViewModel.request.issueTypeId;
     query.actionId = args.detailViewModel.request.actionId;
-    query.wrongMarketOfferedModel = models;
+    query.wrongMarketOfferedModels = models;
 
     const data = await this.commonService.getLogInfo(query);
     data.getLogInfoModels.forEach(x => {
-      args.detailViewModel.wrongMarketOfferedModel.logInfoDetail = x.logInfoDetail;
-      args.detailViewModel.wrongMarketOfferedModel.betTypeCount = x.betTypeCount;
+      const model = args.detailViewModel.wrongMarketOfferedModels.find(y => y.id === x.id);
+      model.logInfoDetail = x.logInfoDetail;
+      model.betTypeCount = x.betTypeCount;
     });
   }
 

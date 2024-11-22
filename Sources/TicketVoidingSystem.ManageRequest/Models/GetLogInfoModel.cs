@@ -2,6 +2,7 @@
 
 public class GetLogInfoModel
 {
+    public int Id { get; set; }
     public int MatchId { get; set; }
     public int ScoreId { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }

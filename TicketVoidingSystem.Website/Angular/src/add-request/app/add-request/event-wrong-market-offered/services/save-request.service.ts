@@ -67,7 +67,7 @@ export class SaveRequestService {
 
   private getMessageConfirmationWrongMarketOffered(argWrongMarketOffered: SaveRequestArg): string {
     let message = '';
-    if (argWrongMarketOffered.logInfoEvent.logInfoDetail.settleCount > 0) {
+    if (argWrongMarketOffered.logInfoEvent.logInfoDetails.settleCount > 0) {
       message = `${message}<div class="text-red">The request has settled ticket(s).</div>`;
     }
 
@@ -113,7 +113,6 @@ export class SaveRequestService {
     query.isTest = argWrongMarketOffered.filter.isTest;
     query.actionId = argWrongMarketOffered.filter.action;
     query.isVoided = argWrongMarketOffered.filter.isVoided;
-
     query.mistakenBy = argWrongMarketOffered.others.mistakenBy;
     query.decidedBy = argWrongMarketOffered.others.decidedBy;
     query.remark = argWrongMarketOffered.others.remark;

@@ -186,7 +186,7 @@ export class StaticService {
     } else if (this.isAbnormalBet(requestDetail.request.issueTypeId)) {
       return requestDetail.abnormalBetModel.subIssueTypeId;
     } else if (this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)) {
-      return requestDetail.wrongMarketOfferedModel.subIssueTypeId;
+      return requestDetail.wrongMarketOfferedModels[0].subIssueTypeId;
     } else if (this.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongOddsSportsBookModel.subIssueTypeId;
     } else if (this.isWrongOfferedName(requestDetail.request.issueTypeId)) {

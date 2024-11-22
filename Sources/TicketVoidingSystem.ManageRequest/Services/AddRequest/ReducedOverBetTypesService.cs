@@ -22,7 +22,7 @@ public class ReducedOverBetTypesServiceImp(BetTypesRepository betTypesRepository
 
     public async Task<IEnumerable<ReducedOverBetTypesModel>> GetReducedOverBetTypesHavesTickets(IEnumerable<ReducedOverBetTypesModel> reducedBetTypes, int matchId)
     {
-        var allBetTypesOfMatch = await betTypesRepository.GetBetTypesHaveTicketsForTvs(matchId, false, null, null);
+        var allBetTypesOfMatch = await betTypesRepository.GetBetTypesHaveTicketsForTvs(matchId, false, []);
 
         var results = reducedBetTypes
             .Where(betType => allBetTypesOfMatch.Any(x => int.Parse(x.Id) == betType.BetTypeId))

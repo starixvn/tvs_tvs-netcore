@@ -1,5 +1,4 @@
-﻿using System;
-using Fanex.Data;
+﻿using Fanex.Data;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Utilities;
 
@@ -9,9 +8,7 @@ public class TicketVoidingGetBetTypesHaveTicketsCriteria : CriteriaBase
 {
     public int MatchId { get; set; }
 
-    public DateTime? FromTransDate { get; set; }
-
-    public DateTime? ToTransDate { get; set; }
+    public string? TimeRangeJson { get; set; }
 
     public bool IsGetCancelCashOut { get; set; }
 

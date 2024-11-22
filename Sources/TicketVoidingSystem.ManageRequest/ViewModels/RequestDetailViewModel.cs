@@ -20,7 +20,7 @@ public class RequestDetailViewModel
     public AbnormalAccountViewModel? AbnormalAccountModel { get; set; }
     public RecoverTicketViewModel? RecoverTicketModel { get; set; }
     public AbnormalBetViewModel AbnormalBetModel { get; set; }
-    public WrongMarketOfferedViewModel? WrongMarketOfferedModel { get; set; }
+    public IEnumerable<WrongMarketOfferedViewModel>? WrongMarketOfferedModels { get; set; }
     public WrongOddsSportsBookViewModel? WrongOddsSportsBookModel { get; set; }
     public WrongOfferedNameViewModel? WrongOfferedNameModel { get; set; }
     public OtherIssuesViewModel? OtherIssuesModel { get; set; }

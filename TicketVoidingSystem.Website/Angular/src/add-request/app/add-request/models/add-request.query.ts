@@ -63,7 +63,7 @@ export class AddRequestQuery {
   duplicateTicketsInfo: DuplicateTicketsModel;
   recoverTicketInfo: RecoverTicketModel;
   abnormalBetInfo: AbnormalBetModel;
-  wrongMarketOfferedInfo: WrongMarketOfferedModel;
+  wrongMarketOfferedInfo: WrongMarketOfferedModel[];
   wrongOddsSportsBookInfo: WrongOddsSportsBookModel;
   wrongOfferedNameInfo: WrongOfferedNameModel;
   otherIssuesInfo: OtherIssuesModel;
@@ -97,7 +97,7 @@ export class GetLogInfoQuery {
   reducedOverModels?: ReducedOverGetLogInfoQuery[];
   notParticipateModels?: NotParticipateGetLogInfoQuery[];
   earlyKickOffModels?: EarlyKickOffGetLogInfoQuery[];
-  wrongMarketOfferedModel?: WrongMarketOfferedGetLogInfoQuery;
+  wrongMarketOfferedModels?: WrongMarketOfferedGetLogInfoQuery[];
   wrongOddsSportsBookModel?: WrongOddsSportsBookGetLogInfoQuery;
   wrongOfferedNameModel?: WrongOfferedNameGetLogInfoQuery;
   otherIssuesModel?: OtherIssuesGetLogInfoQuery;

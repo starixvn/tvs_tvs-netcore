@@ -168,18 +168,18 @@ export class MappingModelStaticService {
     } as EarlyKickOffGetLogInfoQuery));
   }
 
-  static buildWrongMarketOfferedGetLogInfoModel(model:  WrongMarketOfferedModel): WrongMarketOfferedGetLogInfoQuery {
-    if (_.isNull(model) || _.isUndefined(model)) {
+  static buildWrongMarketOfferedGetLogInfoModels(models:  WrongMarketOfferedModel[]): WrongMarketOfferedGetLogInfoQuery[] {
+    if (_.isNull(models) || _.isUndefined(models)) {
       return null;
     }
 
-    return {
-      matchId: model.matchId,
-      subIssueTypeId: model.subIssueTypeId,
-      filterFromTransTime: model.voidFromTime,
-      filterToTransTime: model.voidToTime,
-      betTeamsResult: model.betTeamsResult
-    } as WrongMarketOfferedGetLogInfoQuery;
+    return models.map(x => ({
+      matchId: x.matchId,
+      subIssueTypeId: x.subIssueTypeId,
+      filterFromTransTime: x.voidFromTime,
+      filterToTransTime: x.voidToTime,
+      betTeamsResult: x.betTeamsResult
+    } as WrongMarketOfferedGetLogInfoQuery));
   }
 
   static buildWrongOfferedNameGetLogInfoModel(model:  WrongOfferedNameModel): WrongOfferedNameGetLogInfoQuery {

@@ -6,7 +6,7 @@
 <filter-time #filterTime
   class="mb-1"
   [isVoided]="filter.isVoided"
-  [filterWrongMarketOfferedModel]="logInfoEvent.filterWrongMarketOfferedModel"
+  [models]="logInfoEvent.filterWrongMarketOfferedModels"
   (changeFilterEvent)="changeFilterTime()"
   (refreshEvent)="refreshEvent()">
 </filter-time>

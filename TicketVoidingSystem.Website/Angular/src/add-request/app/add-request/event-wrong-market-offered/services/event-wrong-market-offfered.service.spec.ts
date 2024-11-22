@@ -13,8 +13,8 @@ class Helper {
   };
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
-    filterWrongMarketOfferedModel: Helper.fakeFilterWrongMarketOfferedModel,
-    logInfoDetail: new LogInfoDetail(),
+    filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
+    logInfoDetails: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTypeCount: [],
     betTeamsResult: []
@@ -40,8 +40,8 @@ describe('EventWrongMarketOfferedService', () => {
     const actual = service.getWrongMarketOfferedGetLogInfoModel(1, Helper.fakeLogInfoWrongMarketOffered);
 
     expect(actual.subIssueTypeId).toBe(1);
-    expect(actual.filterFromTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModel.fromDateTime);
-    expect(actual.filterToTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModel.toDateTime);
+    expect(actual.filterFromTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels.fromDateTime);
+    expect(actual.filterToTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels.toDateTime);
     expect(actual.betTeamsResult).toBe(Helper.fakeLogInfoWrongMarketOffered.betTeamsResult);
   });
 
@@ -49,8 +49,8 @@ describe('EventWrongMarketOfferedService', () => {
     const actual = service.getWrongMarketOfferedModel(1, Helper.fakeLogInfoWrongMarketOffered);
 
     expect(actual.subIssueTypeId).toBe(1);
-    expect(actual.filterFromTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModel.fromDateTime);
-    expect(actual.filterToTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModel.toDateTime);
+    expect(actual.filterFromTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels.fromDateTime);
+    expect(actual.filterToTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels.toDateTime);
     expect(actual.betTypeCount).toBe(Helper.fakeLogInfoWrongMarketOffered.betTypeCount);
     expect(actual.betTeamsResult).toBe(Helper.fakeLogInfoWrongMarketOffered.betTeamsResult);
   });
@@ -59,6 +59,6 @@ describe('EventWrongMarketOfferedService', () => {
     const actual = service.assignModelsToEvents(Helper.fakeWrongMarketOfferedModel);
 
     expect(actual.matchId).toBe(Helper.fakeWrongMarketOfferedModel.matchId);
-    expect(actual.logInfoDetail).toEqual(Helper.fakeWrongMarketOfferedModel.logInfoDetail);
+    expect(actual.logInfoDetails).toEqual(Helper.fakeWrongMarketOfferedModel.logInfoDetail);
   });
 });

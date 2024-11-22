@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import moment from 'moment-timezone';
 import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { AdvancedModeAddRequestModel } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
 import { GroupBetTypesAddRequestModel } from '../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
-import { GetBetTypesQuery } from '../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { GetBetTypesQuery, TimeRangeModel } from '../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { DateTimeFormat, ModeType } from '../../../../utility/constants/config';
+import { ModeType } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
@@ -33,7 +32,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   @Input() requestedBy: string;
   @Input() requestId: number;
   @Input() filter: FilterModel;
-  @Input() wrongMarketOfferedModel: WrongMarketOfferedModel;
+  @Input() wrongMarketOfferedModels: WrongMarketOfferedModel[];
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Output() updateMatchId = new EventEmitter<number>();
@@ -47,32 +46,32 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     private readonly validationService: ValidationService,
     private readonly saveRequestService: SaveRequestService,
     private readonly eventWrongMarketOfferedService: EventWrongMarketOfferedService,
-  ) {}
+  ) { }
   logInfoEvent = new LogInfoWrongMarketOffered();
   groupBetTypesModel = new GroupBetTypesAddRequestModel([], false, '', false);
   primitivePropertyEvent = new PrimitivePropertyEvent();
   advancedModeAddRequestModel: AdvancedModeAddRequestModel;
 
   async ngOnInit(): Promise<void> {
-    if (this.isEdit)  {
+    if (this.isEdit) {
       this.updateDataWhenEditRequest();
     } else {
-      this.initDefaultTime(this.logInfoEvent.filterWrongMarketOfferedModel);
+      this.logInfoEvent.filterWrongMarketOfferedModels = [this.eventWrongMarketOfferedService.initDefaultTime()];
     }
   }
 
   public updateDataWhenEditRequest(): void {
-    const groupBetTypes = this.wrongMarketOfferedModel.groupBetTypes;
+    const groupBetTypes = this.wrongMarketOfferedModels[0].groupBetTypes;
     groupBetTypes.forEach(x => x.betTypes.forEach(y => y.isChecked = true));
     const checkedBetTypes = groupBetTypes.flatMap(x => x.betTypes);
-    this.logInfoEvent = this.eventWrongMarketOfferedService.assignModelsToEvents(this.wrongMarketOfferedModel);
+    this.logInfoEvent = this.eventWrongMarketOfferedService.assignModelsToEvents(this.wrongMarketOfferedModels);
     this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], groupBetTypes), true, '', this.filter.isVoided);
-    const betTeamsResult = this.wrongMarketOfferedModel.betTeamsResult;
+    const betTeamsResult = this.wrongMarketOfferedModels[0].betTeamsResult;
     betTeamsResult.forEach(x => x.isDisabled = this.filter.isVoided);
     this.advancedModeAddRequestModel = {
       betTeamsResult: betTeamsResult,
       checkedBetTypes: checkedBetTypes,
-      selectedAllBetTypes: this.wrongMarketOfferedModel.allBetTypesSelection
+      selectedAllBetTypes: this.wrongMarketOfferedModels[0].allBetTypesSelection
     };
     this.primitivePropertyEvent.isShowValidation = true;
   }
@@ -81,20 +80,13 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     const query: GetBetTypesQuery = {
       mode: ModeType.SPORT_BOOK,
       matchId: this.eventLeague?.selectedMatch.matchId,
-      fromTransDate: this.logInfoEvent.filterWrongMarketOfferedModel.fromDateTime,
-      toTransDate: this.logInfoEvent.filterWrongMarketOfferedModel.toDateTime,
+      timeRanges: this.logInfoEvent.filterWrongMarketOfferedModels.map(x => this.createTimeRangeModel(x)),
       isGetCancelCashOut: true
     };
     this.addRequestStore.changeBlockingUiStatus(true);
     const data = await this.commonService.getGroupBetTypesTvs(query);
     this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);;
     this.addRequestStore.changeBlockingUiStatus(false);
-  }
-
-  initDefaultTime(filterTime: FilterWrongMarketOfferedModel): void {
-    const currentMoment = moment.utc().tz('America/Caracas');
-    filterTime.fromDateTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    filterTime.toDateTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
   }
 
   changeFilterTime(): void {
@@ -163,6 +155,13 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   private resetBetTypeAndAdvancedMode() {
     this.advancedMode?.clearBetTeam();
     this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
+  }
+
+  private createTimeRangeModel(filterWrongMarketOfferedModel: FilterWrongMarketOfferedModel): TimeRangeModel {
+    return {
+      fromDate: filterWrongMarketOfferedModel.fromDateTime,
+      toDate: filterWrongMarketOfferedModel.toDateTime
+    }
   }
 
   private initSaveRequestInput() {
