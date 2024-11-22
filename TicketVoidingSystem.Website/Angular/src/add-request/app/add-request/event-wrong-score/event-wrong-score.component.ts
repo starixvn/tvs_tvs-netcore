@@ -273,6 +273,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     args.leagueEventWrongScoreComponent = this.eventLeagueComponent;
     args.filterWrongScoreComponent = this.filterWrongScoreComponent;
     args.tvDetectionComponent = this.tvDetectionComponent;
+    args.tvDetectionModel = this.tvDetectionModel;
     args.addRequestStore = this.addRequestStore;
     args.tooltip = this.tooltip;
 

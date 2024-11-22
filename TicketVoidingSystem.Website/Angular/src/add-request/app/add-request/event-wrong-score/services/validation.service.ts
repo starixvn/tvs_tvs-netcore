@@ -22,13 +22,17 @@ export class ValidationService {
   private readonly TO_DATE_TIME_CLASS = 'to-date-time';
 
   public validateCommonData(filter: FilterModel, eventLeagueComponent: EventLeagueComponent, addRequestStore: AddRequestStore,
-    filterWrongScoreComponent: FilterWrongScoreComponent, wrongScoreInfoComponents: WrongScoreInfoComponent[], tvDetectionComponent: TvDetectionComponent): boolean {
+    filterWrongScoreComponent: FilterWrongScoreComponent, wrongScoreInfoComponents: WrongScoreInfoComponent[], tvDetectionComponent?: TvDetectionComponent): boolean {
     addRequestStore.checkValidSubIssueTypeInFilter();
 
     return filter.subIssueTypeId
       && eventLeagueComponent.isMatchIdValid()
-      && tvDetectionComponent.isValidality()
+      && this.isValidityTvDetection(tvDetectionComponent)
       && this.isValidityWhenFilter(filter, filterWrongScoreComponent, wrongScoreInfoComponents);
+  }
+
+  public isValidityTvDetection(tvDetectionComponent?: TvDetectionComponent): boolean {
+    return tvDetectionComponent ? tvDetectionComponent.isValidality() : true;
   }
 
   public isValidityWhenFilter(filter: FilterModel, filterWrongScoreComponent: FilterWrongScoreComponent, wrongScoreInfoComponents: WrongScoreInfoComponent[]): boolean {

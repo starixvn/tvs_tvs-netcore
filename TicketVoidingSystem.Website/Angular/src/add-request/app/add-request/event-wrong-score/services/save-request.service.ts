@@ -102,13 +102,13 @@ export class SaveRequestService {
       x.subIssueTypeId = Number(args.filter.subIssueTypeId);
       x.matchId = args.leagueEventWrongScoreComponent.selectedMatch.matchId;
       x.isCheckedVar = args.primitiveProps.isCheckedVar;
-      x.tvDetectionValue = args.tvDetectionComponent.model.tvDetectionValue;
+      x.tvDetectionValue = args.tvDetectionModel.tvDetectionValue;
 
       if (x.tvDetectionValue !== TvDetectionType.NONE) {
-        x.serviceAcceptTime = args.tvDetectionComponent.model.serviceAcceptTime;
-        x.actualTime = args.tvDetectionComponent.model.actualTime;
-        x.minuteOffset = args.tvDetectionComponent.model.minuteOffset;
-        x.secondOffset = args.tvDetectionComponent.model.secondOffset;
+        x.serviceAcceptTime = args.tvDetectionModel.serviceAcceptTime;
+        x.actualTime = args.tvDetectionModel.actualTime;
+        x.minuteOffset = args.tvDetectionModel.minuteOffset;
+        x.secondOffset = args.tvDetectionModel.secondOffset;
       }
     });
 

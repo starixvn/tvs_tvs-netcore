@@ -4,6 +4,7 @@ import { TvDetectionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
+import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { RedCardModel } from '../../models/event-red-card.model';
 import { PopupService } from '../../services/popup.service';
@@ -124,14 +125,14 @@ export class SaveRequestService {
 
     if (!arg.filter.isVoided) {
       query.redCardInfo = arg.allEvents.filter(x => x.logInfoDetail).map(x => {
-        return this.assignEventToModel(x, arg);
+        return this.assignEventToModel(x, arg, arg.allEvents.find(y => y.isMainMatch).tvDetectionModel);
       });
     }
 
     return query;
   }
 
-  private assignEventToModel(logInfoEvent: LogInfoRedCard, arg: SaveRequestArg): RedCardModel {
+  private assignEventToModel(logInfoEvent: LogInfoRedCard, arg: SaveRequestArg, tvDetectionModel: TvDetectionModel): RedCardModel {
     const model = {
       isMainMatch: logInfoEvent.isMainMatch,
       filterBy: arg.primitiveProps.filterBy,
@@ -147,14 +148,14 @@ export class SaveRequestService {
       logInfoDetail: logInfoEvent.logInfoDetail,
       isChecked: logInfoEvent.isCheckedVar,
       isCheckedVar: logInfoEvent.isCheckedVar,
-      tvDetectionValue: logInfoEvent.tvDetectionModel.tvDetectionValue
+      tvDetectionValue: tvDetectionModel.tvDetectionValue
     } as RedCardModel;
 
     if (model.tvDetectionValue !== TvDetectionType.NONE) {
-      model.serviceAcceptTime = logInfoEvent.tvDetectionModel.serviceAcceptTime;
-      model.actualTime = logInfoEvent.tvDetectionModel.actualTime;
-      model.minuteOffset = logInfoEvent.tvDetectionModel.minuteOffset;
-      model.secondOffset = logInfoEvent.tvDetectionModel.secondOffset;
+      model.serviceAcceptTime = tvDetectionModel.serviceAcceptTime;
+      model.actualTime = tvDetectionModel.actualTime;
+      model.minuteOffset = tvDetectionModel.minuteOffset;
+      model.secondOffset = tvDetectionModel.secondOffset;
     }
 
     return model;
