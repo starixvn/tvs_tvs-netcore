@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Fanex.LetstalkService.Client;
-using Fanex.LetstalkService.Core.Models;
+using Fanex.LetstalkService.Client.Models;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Services;

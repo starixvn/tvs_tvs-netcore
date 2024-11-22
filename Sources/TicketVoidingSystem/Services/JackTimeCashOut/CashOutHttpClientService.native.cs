@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
@@ -18,7 +19,6 @@ public class CashOutHttpClientServiceImp : CashOutHttpClientService
     public CashOutHttpClientServiceImp(HttpClient httpClient, LoggingService loggingService)
     {
         this.loggingService = loggingService;
-
         this.httpClient = httpClient;
         this.httpClient.BaseAddress = new Uri(AppSettingService.AppSetting.JackTimeCashOutUrl);
         this.httpClient.DefaultRequestHeaders.Clear();

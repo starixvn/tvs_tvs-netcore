@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using Fanex.LetstalkService.Core.Models;
+using Fanex.LetstalkService.Client.Models;
 using MediatR;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Services.Excel;
