@@ -129,17 +129,14 @@ public static class Helper
             return MessageContentType.VoidAbnormal;
         }
 
-        return messageContent.ToLowerInvariant().Contains("kindly double check your statement again") ? MessageContentType.VoidSettled : MessageContentType.VoidUnsettled;
+        return messageContent.ToLowerInvariant().Contains("kindly double check your statement again")
+            ? MessageContentType.VoidSettled
+            : MessageContentType.VoidUnsettled;
     }
 
     public static bool IsAbnormalBet(int issueTypeId)
     {
         return IssueTypeConstant.AbnormalBet == issueTypeId;
-    }
-
-    public static bool IsAbnormalBetSingleRequest(int issueTypeId, int? filterBy)
-    {
-        return IsAbnormalBet(issueTypeId) && filterBy == null;
     }
 
     public static bool IsAbnormalAccount(int issueTypeId)
@@ -149,26 +146,12 @@ public static class Helper
 
     public static string GetBetFrom(string betFrom)
     {
-        string result;
-        switch (betFrom)
+        return betFrom switch
         {
-            case "p":
-            case "s":
-            case "l":
-                result = StringResource.Phone;
-                break;
-
-            case "w":
-            case "m":
-                result = StringResource.Wap;
-                break;
-
-            default:
-                result = StringResource.Internet;
-                break;
-        }
-
-        return result;
+            "p" or "s" or "l" => StringResource.Phone,
+            "w" or "m" => StringResource.Wap,
+            _ => StringResource.Internet
+        };
     }
 
     public static string SubstringBypassLength(this string source, int startIndex, int maxLength)

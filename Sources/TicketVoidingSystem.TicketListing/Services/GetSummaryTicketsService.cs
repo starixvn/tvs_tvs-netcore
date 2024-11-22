@@ -63,7 +63,8 @@ public class GetSummaryTicketsServiceImp(
     private static IEnumerable<SummaryViewModel> GroupTicketsByLicensees(IEnumerable<SummaryTicketModel> tickets, GetSummaryQuery query)
     {
         var groups = tickets.GroupBy(t => t.LicenseeName);
-        var a = groups.Select(view => new SummaryViewModel
+
+        return groups.Select(view => new SummaryViewModel
         {
             Name = view.First().LicenseeName,
             LicenseeName = view.First().LicenseeName,
@@ -79,8 +80,6 @@ public class GetSummaryTicketsServiceImp(
             IsChinaView = view.First().IsChinaView,
             SpecialPlatform = view.First().SpecialPlatform
         });
-
-        return a;
     }
 
     private static IEnumerable<SummaryViewModel> GroupTicketsByBetTypes(IEnumerable<SummaryTicketModel> tickets, GetSummaryQuery query)

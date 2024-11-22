@@ -23,58 +23,28 @@ public static class SubjectFactory
 {
     public static SubjectLabelsService CreateVoid(VoidType type)
     {
-        SubjectLabelsService subjectLabels;
-        switch (type)
+        SubjectLabelsService subjectLabels = type switch
         {
-            case VoidType.CashOut:
-                subjectLabels = new SubjectVoidCashOutImp();
-                break;
-
-            case VoidType.NumberGame:
-                subjectLabels = new SubjectVoidNumberGameImp();
-                break;
-
-            case VoidType.VirtualSports:
-                subjectLabels = new SubjectVoidVirtualSportsImp();
-                break;
-
-            case VoidType.Abnormal:
-                subjectLabels = new SubjectVoidAbnormalImp();
-                break;
-
-            default:
-                subjectLabels = new SubjectVoidImp();
-                break;
-        }
+            VoidType.CashOut => new SubjectVoidCashOutImp(),
+            VoidType.NumberGame => new SubjectVoidNumberGameImp(),
+            VoidType.VirtualSports => new SubjectVoidVirtualSportsImp(),
+            VoidType.Abnormal => new SubjectVoidAbnormalImp(),
+            _ => new SubjectVoidImp()
+        };
 
         return subjectLabels;
     }
 
     public static SubjectLabelsService CreateRecover(RecoverType type)
     {
-        SubjectLabelsService subjectLabels;
-        switch (type)
+        SubjectLabelsService subjectLabels = type switch
         {
-            case RecoverType.CashOut:
-                subjectLabels = new SubjectRecoverCashOutImp();
-                break;
-
-            case RecoverType.NumberGame:
-                subjectLabels = new SubjectRecoverNumberGameImp();
-                break;
-
-            case RecoverType.Parlay:
-                subjectLabels = new SubjectRecoverParlayImp();
-                break;
-
-            case RecoverType.VirtualSports:
-                subjectLabels = new SubjectRecoverVirtualSportsImp();
-                break;
-
-            default:
-                subjectLabels = new SubjectRecoverImp();
-                break;
-        }
+            RecoverType.CashOut => new SubjectRecoverCashOutImp(),
+            RecoverType.NumberGame => new SubjectRecoverNumberGameImp(),
+            RecoverType.Parlay => new SubjectRecoverParlayImp(),
+            RecoverType.VirtualSports => new SubjectRecoverVirtualSportsImp(),
+            _ => new SubjectRecoverImp()
+        };
 
         return subjectLabels;
     }

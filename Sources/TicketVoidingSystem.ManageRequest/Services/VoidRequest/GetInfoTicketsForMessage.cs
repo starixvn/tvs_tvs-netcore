@@ -8,8 +8,6 @@ namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 public interface GetInfoTicketsForMessage
 {
-    public string GetInputOverUnder(int betTypeId, IEnumerable<GetTicketModel> allTickets);
-
     public string GetSpecialBetTeam(int betTypeId, IEnumerable<GetTicketModel> allTickets);
 
     public ContentByLanguageModel GetSpecialBetTypeContent(IEnumerable<GetTicketModel> allTickets);
@@ -17,8 +15,7 @@ public interface GetInfoTicketsForMessage
     public string GetHdpValues(int betTypeId, IEnumerable<GetTicketModel> allTickets);
 }
 
-public class GetInfoTicketsForMessageImp(SpecialBetTypeContentService specialBetTypeContentService)
-    : GetInfoTicketsForMessage
+public class GetInfoTicketsForMessageImp(SpecialBetTypeContentService specialBetTypeContentService) : GetInfoTicketsForMessage
 {
     public string GetSpecialBetTeam(int betTypeId, IEnumerable<GetTicketModel> allTickets)
     {

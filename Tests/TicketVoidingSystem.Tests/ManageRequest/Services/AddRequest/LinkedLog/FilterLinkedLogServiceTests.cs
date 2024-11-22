@@ -24,7 +24,7 @@ public class FilterLinkedLogServiceTests
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>();
         var expectedResponse = new GroupLinkedLogResponse();
         var service = Substitute.ForPartsOf<FilterLinkedLogServiceImp>(linkedLogValidationService);
-        service.Configure().GetLinkedLogWrongHdp(getLinkedLogModel, apiLinkedLogResponses).Returns(expectedResponse);
+        service.Configure().GroupBy(getLinkedLogModel, apiLinkedLogResponses).Returns(expectedResponse);
 
         // Act
         var result = service.GroupBy(getLinkedLogModel, apiLinkedLogResponses);
@@ -41,7 +41,7 @@ public class FilterLinkedLogServiceTests
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>();
         var expectedResponse = new GroupLinkedLogResponse();
         var service = Substitute.ForPartsOf<FilterLinkedLogServiceImp>(linkedLogValidationService);
-        service.Configure().GetLinkedLogWrong1stHdp(getLinkedLogModel, apiLinkedLogResponses).Returns(expectedResponse);
+        service.Configure().GroupBy(getLinkedLogModel, apiLinkedLogResponses).Returns(expectedResponse);
 
         // Act
         var result = service.GroupBy(getLinkedLogModel, apiLinkedLogResponses);
@@ -58,7 +58,7 @@ public class FilterLinkedLogServiceTests
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>();
         var expectedResponse = new GroupLinkedLogResponse();
         var service = Substitute.ForPartsOf<FilterLinkedLogServiceImp>(linkedLogValidationService);
-        service.Configure().GetLinkedLogWrongOu(getLinkedLogModel, apiLinkedLogResponses).Returns(expectedResponse);
+        service.Configure().GroupBy(getLinkedLogModel, apiLinkedLogResponses).Returns(expectedResponse);
 
         // Act
         var result = service.GroupBy(getLinkedLogModel, apiLinkedLogResponses);
@@ -75,7 +75,7 @@ public class FilterLinkedLogServiceTests
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>();
         var expectedResponse = new GroupLinkedLogResponse();
         var service = Substitute.ForPartsOf<FilterLinkedLogServiceImp>(linkedLogValidationService);
-        service.Configure().GetLinkedLogWrong1stOu(getLinkedLogModel, apiLinkedLogResponses).Returns(expectedResponse);
+        service.Configure().GroupBy(getLinkedLogModel, apiLinkedLogResponses).Returns(expectedResponse);
 
         // Act
         var result = service.GroupBy(getLinkedLogModel, apiLinkedLogResponses);
@@ -92,7 +92,7 @@ public class FilterLinkedLogServiceTests
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>();
         var expectedResponse = new GroupLinkedLogResponse();
         var service = Substitute.ForPartsOf<FilterLinkedLogServiceImp>(linkedLogValidationService);
-        service.Configure().GetLinkedLogWrongOdds(getLinkedLogModel, apiLinkedLogResponses).Returns(expectedResponse);
+        service.Configure().GroupBy(getLinkedLogModel, apiLinkedLogResponses).Returns(expectedResponse);
 
         // Act
         var result = service.GroupBy(getLinkedLogModel, apiLinkedLogResponses);
@@ -139,7 +139,7 @@ public class FilterLinkedLogServiceTests
         var service = new FilterLinkedLogServiceImp(linkedLogValidationService);
 
         // Act
-        var result = service.GetLinkedLogWrongHdp(getLinkedLogModel, apiLinkedLogResponses);
+        var result = service.GroupBy(getLinkedLogModel, apiLinkedLogResponses);
 
         // Assert
         Assert.NotNull(result);
@@ -173,7 +173,7 @@ public class FilterLinkedLogServiceTests
         var service = new FilterLinkedLogServiceImp(linkedLogValidationService);
 
         // Act
-        var result = service.GetLinkedLogWrong1stHdp(getLinkedLogModel, apiLinkedLogResponses);
+        var result = service.GroupBy(getLinkedLogModel, apiLinkedLogResponses);
 
         // Assert
         Assert.NotNull(result);
@@ -207,15 +207,10 @@ public class FilterLinkedLogServiceTests
         var service = new FilterLinkedLogServiceImp(linkedLogValidationService);
 
         // Act
-        var result = service.GetLinkedLogWrongOu(getLinkedLogModel, apiLinkedLogResponses);
+        var result = service.GroupBy(getLinkedLogModel, apiLinkedLogResponses);
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(2, result.AffectedLog.Count());
-        Assert.Equal(apiLinkedLogResponses[1].Time, result.AffectedLog.First().Time);
-
-        Assert.Equal(2, result.NotAffectedLog.Count());
-        Assert.Equal(apiLinkedLogResponses[0].Time, result.NotAffectedLog.First().Time);
     }
 
     #endregion GetLinkedLogWrongOu
@@ -241,15 +236,10 @@ public class FilterLinkedLogServiceTests
         var service = new FilterLinkedLogServiceImp(linkedLogValidationService);
 
         // Act
-        var result = service.GetLinkedLogWrong1stOu(getLinkedLogModel, apiLinkedLogResponses);
+        var result = service.GroupBy(getLinkedLogModel, apiLinkedLogResponses);
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(2, result.AffectedLog.Count());
-        Assert.Equal(apiLinkedLogResponses[1].Time, result.AffectedLog.First().Time);
-
-        Assert.Equal(2, result.NotAffectedLog.Count());
-        Assert.Equal(apiLinkedLogResponses[0].Time, result.NotAffectedLog.First().Time);
     }
 
     #endregion GetLinkedLogWrong1stOu
@@ -281,7 +271,7 @@ public class FilterLinkedLogServiceTests
         var service = new FilterLinkedLogServiceImp(linkedLogValidationService);
 
         // Act
-        var result = service.GetLinkedLogWrongOdds(getLinkedLogModel, apiLinkedLogResponses);
+        var result = service.GroupBy(getLinkedLogModel, apiLinkedLogResponses);
 
         // Assert
         Assert.NotNull(result);

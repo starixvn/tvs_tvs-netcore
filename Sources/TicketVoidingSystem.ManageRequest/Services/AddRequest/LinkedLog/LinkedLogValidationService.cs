@@ -6,8 +6,6 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
 public interface LinkedLogValidationService
 {
-    bool IsContainsValue(string parent, decimal? child);
-
     bool IsAffectedLinkTime(DateTime time, GetLinkedLogModel getLinkedLogModel);
 
     bool IsLinkGroupFullTime(int linkGroup);
@@ -36,7 +34,7 @@ public interface LinkedLogValidationService
 
 public class LinkedLogValidationServiceImp : LinkedLogValidationService
 {
-    public bool IsContainsValue(string? parent, decimal? child)
+    private bool IsContainsValue(string? parent, decimal? child)
     {
         return !string.IsNullOrWhiteSpace(parent) && parent.Split('&').Select(x => (decimal?)decimal.Parse(x)).Contains(child);
     }
@@ -82,26 +80,20 @@ public class LinkedLogValidationServiceImp : LinkedLogValidationService
 
     internal virtual bool CheckLinkedOddsForWrongHdp1stHdpBySubIssueType(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
-        switch (getLinkedLogModel.SubIssueTypeId)
+        return getLinkedLogModel.SubIssueTypeId switch
         {
-            case SubIssueTypeConstant.WrongHDP:
-            case SubIssueTypeConstant.Wrong1stHDP:
-                {
-                    return string.IsNullOrWhiteSpace(getLinkedLogModel.HomeFavorite)
-                        ? IsContainsValue(getLinkedLogModel.AwayFavorite, linkedOddsInfo.Hdp2)
-                        : IsContainsValue(getLinkedLogModel.HomeFavorite, linkedOddsInfo.Hdp1);
-                }
-            case SubIssueTypeConstant.WrongHDPHomeVirtualHeadReversed:
-            case SubIssueTypeConstant.Wrong1stHDPHomeVirtualHeadReversed:
-                return IsContainsValue(getLinkedLogModel.HdpValue, linkedOddsInfo.Hdp1);
-
-            case SubIssueTypeConstant.WrongHDPAwayVirtualHeadReversed:
-            case SubIssueTypeConstant.Wrong1stHDPAwayVirtualHeadReversed:
-                return IsContainsValue(getLinkedLogModel.HdpValue, linkedOddsInfo.Hdp2);
-
-            default:
-                return false;
-        }
+            SubIssueTypeConstant.WrongHDP or SubIssueTypeConstant.Wrong1stHDP =>
+                string.IsNullOrWhiteSpace(getLinkedLogModel.HomeFavorite)
+                    ? IsContainsValue(getLinkedLogModel.AwayFavorite, linkedOddsInfo.Hdp2)
+                    : IsContainsValue(getLinkedLogModel.HomeFavorite, linkedOddsInfo.Hdp1),
+            SubIssueTypeConstant.WrongHDPHomeVirtualHeadReversed
+                or SubIssueTypeConstant.Wrong1stHDPHomeVirtualHeadReversed => IsContainsValue(
+                    getLinkedLogModel.HdpValue, linkedOddsInfo.Hdp1),
+            SubIssueTypeConstant.WrongHDPAwayVirtualHeadReversed
+                or SubIssueTypeConstant.Wrong1stHDPAwayVirtualHeadReversed => IsContainsValue(
+                    getLinkedLogModel.HdpValue, linkedOddsInfo.Hdp2),
+            _ => false
+        };
     }
 
     public bool IsAffectedLinkedOddsForWrongOU(Dictionary<int, LinkedOddsInfo> linkedOddsInfoDic, GetLinkedLogModel getLinkedLogModel)

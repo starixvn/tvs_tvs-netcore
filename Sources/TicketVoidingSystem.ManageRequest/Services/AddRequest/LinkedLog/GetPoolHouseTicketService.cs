@@ -34,12 +34,7 @@ public class GetPoolHouseTicketServiceImp(MapTicketsService mapTicketsService, P
 
     private IEnumerable<Group<GetTicketModel>> GenerateGroup(IEnumerable<GetTicketModel> originTickets)
     {
-        if (!originTickets.Any())
-        {
-            return [];
-        }
-
-        return GenerateGroupWhenHaveTicket(originTickets, originTickets);
+        return !originTickets.Any() ? [] : GenerateGroupWhenHaveTicket(originTickets, originTickets);
     }
 
     private IEnumerable<Group<GetTicketModel>> GenerateGroupWhenHaveTicket(IEnumerable<GetTicketModel> originTickets, IEnumerable<GetTicketModel> afterPagingTickets)

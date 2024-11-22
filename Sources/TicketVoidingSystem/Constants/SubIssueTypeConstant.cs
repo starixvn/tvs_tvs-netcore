@@ -18,13 +18,9 @@ public static class SubIssueTypeConstant
     public const int FirstHalfHandicap = 119;
     public const int OverUnder = 120;
     public const int FirstHalfOverUnder = 121;
-
     public const int AbnormalBet_Abnormal = 27;
     public const int AbnormalBet_ABBet = 32;
-
     public const int AbnormalAccount_Abnormal = 39;
     public const int AbnormalAccount_ABBet = 104;
-
-    public static readonly ImmutableArray<int> RemovedList = [AbnormalBet_Abnormal, AbnormalBet_ABBet, AbnormalAccount_Abnormal, AbnormalAccount_ABBet
-    ];
+    public static readonly ImmutableArray<int> RemovedList = [AbnormalBet_Abnormal, AbnormalBet_ABBet, AbnormalAccount_Abnormal, AbnormalAccount_ABBet];
 }

@@ -15,8 +15,6 @@ public interface DisplayUiService
 {
     Task<GetTicketsModel> ExecuteQuery(GetTicketsQuery query);
 
-    GetTicketsVoidCashOutCriteria CreateCriteria(GetTicketsQuery query);
-
     List<GetTicketModel> Paging(List<GetTicketModel> tickets, int index, int size);
 
     List<Group<GetTicketModel>> Groups(List<GetTicketModel> tickets);
@@ -36,7 +34,7 @@ public class DisplayUiServiceImp(
         return await repository.GetTicketsVoidCashOut(criteria);
     }
 
-    public GetTicketsVoidCashOutCriteria CreateCriteria(GetTicketsQuery query)
+    private GetTicketsVoidCashOutCriteria CreateCriteria(GetTicketsQuery query)
     {
         return new GetTicketsVoidCashOutCriteria
         {

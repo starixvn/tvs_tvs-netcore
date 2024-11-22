@@ -74,12 +74,7 @@ public class InsertAutoVoidRequestQueueServiceImp(IDynamicRepository repository)
             return earlyKickOffInfo.Select(x => x.MatchId);
         }
 
-        if (wrongOfferedNameInfo != null)
-        {
-            return new List<int> { wrongOfferedNameInfo.MatchId };
-        }
-
-        return [];
+        return wrongOfferedNameInfo != null ? new List<int> { wrongOfferedNameInfo.MatchId } : [];
     }
 
     private static bool CheckCanInsertAutoVoidRequestQueue(int? actionId)

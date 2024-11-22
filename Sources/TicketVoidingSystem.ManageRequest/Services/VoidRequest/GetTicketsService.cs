@@ -27,22 +27,15 @@ public class GetTicketsServiceImp(
 {
     public async Task<IEnumerable<GetTicketModel>> GetTickets(GetTicketsQuery query)
     {
-        switch (query.IssueTypeId)
+        return query.IssueTypeId switch
         {
-            case IssueTypeConstant.EarlyKickOffTime:
-            case IssueTypeConstant.WrongKickOffTime:
-                return await GetTicketsIssueTypeEarlyKickOffOrWrongKickOff(query);
-
-            case IssueTypeConstant.ArchivedTicket:
-                return await GetTicketsIssueTypeArchivedTicket(query);
-
-            case IssueTypeConstant.AbnormalAccount:
-            case IssueTypeConstant.AbnormalBet:
-                return await GetTicketsRangeActiveAndBackup(query);
-
-            default:
-                return await GetTicketsDefault(query);
-        }
+            IssueTypeConstant.EarlyKickOffTime or IssueTypeConstant.WrongKickOffTime =>
+                await GetTicketsIssueTypeEarlyKickOffOrWrongKickOff(query),
+            IssueTypeConstant.ArchivedTicket => await GetTicketsIssueTypeArchivedTicket(query),
+            IssueTypeConstant.AbnormalAccount or IssueTypeConstant.AbnormalBet =>
+                await GetTicketsRangeActiveAndBackup(query),
+            _ => await GetTicketsDefault(query)
+        };
     }
 
     private async Task<IEnumerable<GetTicketModel>> GetTicketsRangeActiveAndBackup(GetTicketsQuery query)

@@ -10,15 +10,12 @@ using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.SendEmail.RecoverSpecialDeletePage;
-using TicketVoidingSystem.Services.SendMessage;
 
 namespace SpecialDelete.CashOutTransaction.RecoverTickets.Services;
 
 public interface RecoverService
 {
     Task<SubmittedTicketsModel<RecoverTicketModel>> ExecuteQuery(RecoverTicketsQuery query);
-
-    void RemoveMessage(string transIds);
 
     Task<Result> SendEmail(IEnumerable<RecoverTicketModel> tickets, string negativeBalanceUsers);
 }
@@ -27,7 +24,6 @@ public class RecoverServiceImp(
     Repository repository,
     SessionService sessionService,
     LoggingService loggingService,
-    SendMessageService sendMessageService,
     EmailRecoverService<MailTicketViewModel, RecoverTicketModel> emailService)
     : RecoverService
 {
@@ -61,12 +57,6 @@ public class RecoverServiceImp(
             UserId = sessionService.UserId,
             Ip = sessionService.GetClientIp()
         };
-    }
-
-    public void RemoveMessage(string transIds)
-    {
-        var userId = sessionService.UserId;
-        sendMessageService.RemoveMessage(userId, transIds);
     }
 
     public async Task<Result> SendEmail(IEnumerable<RecoverTicketModel> tickets, string negativeBalanceUsers)

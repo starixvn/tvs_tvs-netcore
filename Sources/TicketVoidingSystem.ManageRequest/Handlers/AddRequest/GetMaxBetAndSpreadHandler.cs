@@ -27,8 +27,7 @@ public class GetMaxBetAndSpreadHandler(OWPHttpClientService owpHttpClientService
             return [];
         }
 
-        int[] subIssueTypeIdsWrongOdds = [SubIssueTypeConstant.Handicap, SubIssueTypeConstant.FirstHalfHandicap, SubIssueTypeConstant.OverUnder, SubIssueTypeConstant.FirstHalfOverUnder
-        ];
+        int[] subIssueTypeIdsWrongOdds = [SubIssueTypeConstant.Handicap, SubIssueTypeConstant.FirstHalfHandicap, SubIssueTypeConstant.OverUnder, SubIssueTypeConstant.FirstHalfOverUnder];
 
         return subIssueTypeIdsWrongOdds.Select(subIssueTypeId => GetOddsInfo(maxBetSpreadInfo, subIssueTypeId)).ToList();
     }
