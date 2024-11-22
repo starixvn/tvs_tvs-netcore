@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Fanex.LetstalkService.Core.Models;
+using Fanex.LetstalkService.Client.Models;
 using Result = TicketVoidingSystem.Models.Result;
 
 namespace TicketVoidingSystem.Services.Letstalk.GroupTicketListing;

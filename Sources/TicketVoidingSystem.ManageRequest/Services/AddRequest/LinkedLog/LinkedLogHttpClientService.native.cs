@@ -1,6 +1,8 @@
-﻿using System.Net.Mime;
+﻿using System.Net.Http.Json;
+using System.Net.Mime;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
@@ -31,7 +33,7 @@ public class LinkedLogHttpClientServiceImp : LinkedLogHttpClientService
         await loggingService.InfoAsync(await CreateLogResponse(actionName, response));
         if (response.IsSuccessStatusCode)
         {
-            return await response.Content.ReadAsAsync<IEnumerable<PoolHouseLinkedLogResponse>>();
+            return await Helper.DeserializeResponseStream<IEnumerable<PoolHouseLinkedLogResponse>>(response);
         }
 
         return null;

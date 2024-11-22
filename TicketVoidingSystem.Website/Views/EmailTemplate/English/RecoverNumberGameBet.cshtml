@@ -1,5 +1,3 @@
-@using RazorEngine.Text
-
 <table cellspacing="0" style="border: 1px solid; border-collapse: collapse; font-size: 8pt; font-family: 'Segoe UI',Tahoma,Arial,sans-serif; background-color: #E7F1F3">
     <tr height="70">
         <th style="background-color: #404C5A; color: #ffffff; text-transform: uppercase; padding-left: 10px; font-size: 20px; text-align: left;">
@@ -79,10 +77,10 @@
                     @ticket.TransDate
             </td>
             <td align="Right">
-                @(new RawString(ticket.Odds))
+                @ticket.Odds
         </td>
         <td align="Right">
-            @(new RawString(ticket.Stake))
+            @ticket.Stake
     </td>
     <td align="Right">
         @ticket.WinLost
@@ -91,7 +89,7 @@
     @ticket.Status
 </td>
 <td align="Right">
-    @(new RawString(ticket.Choice))
+    @ticket.Choice
 </td>
 <td align="Center">
     @ticket.BetFrom

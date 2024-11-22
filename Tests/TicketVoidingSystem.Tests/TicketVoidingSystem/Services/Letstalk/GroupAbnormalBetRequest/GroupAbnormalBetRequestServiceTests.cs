@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Fanex.LetstalkService.Core.Models;
+using Fanex.LetstalkService.Client.Models;
 using NSubstitute;
 using TicketVoidingSystem.Services.Letstalk;
 using TicketVoidingSystem.Services.Letstalk.GroupAbnormalBetRequest;

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.BetList.Core;
 using Fanex.BetList.Core.RemotingRef;
 using Fanex.Data.Repository;
-using Fanex.LetstalkService.Core.Services;
-using Fanex.Logging;
+using Fanex.LetstalkService.Client;
 using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.AspNetCore;
-using Fanex.Logging.Sentry.RavenClient;
 using Fanex.MailDeliver.MailClient;
 using Fanex.RemotingRef;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -17,7 +14,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SharpRaven;
 using SpecialDelete.CashOutTransaction;
 using SpecialDelete.CashOutTransaction.CancelCashOut;
 using SpecialDelete.NumberGame;
@@ -149,7 +145,7 @@ public static class ServiceCollectionExtension
         services.AddSingleton<IUserIdProvider, CustomIdProvider>();
         services.AddSingleton<IRemotingRefService, RemotingRefService>();
     }
-    
+
     public static void AddFanexMailService(this IServiceCollection services)
     {
         AppSettings.AppMailId = AppSettingService.AppSetting.FanexMailService.AppMailId;

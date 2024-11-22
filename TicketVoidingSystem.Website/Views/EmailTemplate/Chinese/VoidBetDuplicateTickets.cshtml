@@ -1,6 +1,4 @@
-﻿@using RazorEngine.Text
-
-<head>
+﻿<head>
     <style type="text/css">
         .auto-style1 {
             height: 23px;
@@ -60,9 +58,9 @@
                             @group.Id
                         </td>
                         <td style="padding: 5px;">
-                            <strong>System ID | 系统账号: @(new RawString(group.Usernames))</strong><br />
-                            Ref No: @(new RawString(group.OrgTransIds)) [REMAIN | 保留]<br />
-                            Ref No: @(new RawString(group.VoidedTransIds)) [VOIDED | 作废]<br />
+                            <strong>System ID | 系统账号: @group.Usernames</strong><br />
+                            Ref No: @group.OrgTransIds [REMAIN | 保留]<br />
+                            Ref No: @group.VoidedTransIds [VOIDED | 作废]<br />
                         </td>
                     </tr>
                 }

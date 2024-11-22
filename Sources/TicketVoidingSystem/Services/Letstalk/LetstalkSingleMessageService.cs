@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.LetstalkService.Client;
-using Fanex.LetstalkService.Core.Models;
+using Fanex.LetstalkService.Client.Models;
 using TicketVoidingSystem.Constants;
 using Result = TicketVoidingSystem.Models.Result;
 
