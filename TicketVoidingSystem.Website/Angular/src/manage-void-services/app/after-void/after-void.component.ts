@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -11,8 +11,7 @@ import { SelectVoidBetAutomationInfoQuery, ServiceStatusConstant, VoidBetAutomat
   templateUrl: './after-void.component.html',
   styleUrls: ['./after-void.component.scss']
 })
-export class AfterVoidComponent implements OnInit {
-
+export class AfterVoidComponent {
   selectionItem = ServiceStatusConstant.AfterVoidSelection;
   model = new VoidBetAutomationModel();
   requestId: number;
@@ -29,9 +28,6 @@ export class AfterVoidComponent implements OnInit {
     private readonly modalService: ModalService
   ) {
     this.tooltip.element = this.element;
-  }
-
-  ngOnInit(): void {
   }
 
   resetData() {

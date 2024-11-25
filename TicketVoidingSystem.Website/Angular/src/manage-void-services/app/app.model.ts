@@ -18,7 +18,6 @@ export class VoidBetAutomationModel {
     isInsertedVoidedTransaction?: boolean;
     isUpdatedVoidingHistory?: boolean;
     isSentEmail?: boolean;
-    isSentLetsTalk?: boolean;
     isDeletedZzzBetTrans?: boolean;
     isDeletedMessage?: boolean;
     isDeletedVoidedTransaction?: boolean;
