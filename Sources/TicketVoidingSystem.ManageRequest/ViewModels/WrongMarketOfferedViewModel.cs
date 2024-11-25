@@ -5,6 +5,7 @@ namespace TicketVoidingSystem.ManageRequest.ViewModels;
 
 public class WrongMarketOfferedViewModel
 {
+    public int Id { get; set; }
     public int MatchId { get; set; }
     public int IssueTypeId { get; set; }
     public int SubIssueTypeId { get; set; }

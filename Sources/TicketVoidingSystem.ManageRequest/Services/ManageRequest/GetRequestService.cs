@@ -378,8 +378,9 @@ public class GetRequestServiceImp(
             string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));
         var allBetTypesSelection = advancedModeService.GetAllBetTypesSelection(firstModel.AllBetTypesSelectionJson);
 
-        return requestEventModels.Select(model => new WrongMarketOfferedViewModel
+        return requestEventModels.Select((model, index) => new WrongMarketOfferedViewModel
         {
+            Id = index + 1,
             MatchId = model.MatchId,
             FilterFromTransTime = model.FilterFromTransTime,
             FilterToTransTime = model.FilterToTransTime,
