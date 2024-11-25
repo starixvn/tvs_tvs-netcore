@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail.Void;
 
@@ -22,7 +22,7 @@ public class EmailCashOutServiceImp(
     {
         var site = sitesEmailService.GetSiteByName(sites, StringResource.CashOut);
         var cashOutTickets = tickets.Where(s => s.IsCashOut);
-        var mailRecord = await voidEmailContentService.Create(mailVoidViewModel.DeepClone(), site, cashOutTickets, EmailGroup.CashOut, isFromAfterVoidService);
+        var mailRecord = await voidEmailContentService.Create(MessagePackCloner.Clone(mailVoidViewModel), site, cashOutTickets, EmailGroup.CashOut, isFromAfterVoidService);
         await emailSimpleService.Send(mailRecord, EmailGroup.CashOut);
     }
 }

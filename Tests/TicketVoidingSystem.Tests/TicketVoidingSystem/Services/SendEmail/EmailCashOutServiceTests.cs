@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Fanex.MailDeliver.MailClient.Model;
-using Force.DeepCloner;
 using NSubstitute;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Void;
+using TicketVoidingSystem.Utilities;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
@@ -35,7 +35,7 @@ public class EmailCashOutServiceTests
             { new() { IsCashOut = true }, new() { IsCashOut = true } };
         sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.CashOut)
             .ReturnsForAnyArgs(new SiteEmail());
-        voidEmailContentService.Create(mailVoidViewModel.DeepClone(), Arg.Any<SiteEmail>(),
+        voidEmailContentService.Create(MessagePackCloner.Clone(mailVoidViewModel), Arg.Any<SiteEmail>(),
                 Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.CashOut, true)
             .ReturnsForAnyArgs(new MailRecord());
 

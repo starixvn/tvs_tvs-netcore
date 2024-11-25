@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendMessage;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail.Void;
 
@@ -42,7 +42,7 @@ public class EmailLicenseeServiceImp(
 
     private async Task SendToSite(CombineMessageModel results, MailVoidViewModel mailLicenseesModel, SiteEmail site, IEnumerable<TicketEmailModel> ticketsInSite, bool isFromAfterVoidService)
     {
-        var modelClone = mailLicenseesModel.DeepClone();
+        var modelClone = MessagePackCloner.Clone(mailLicenseesModel);
         modelClone.TemplatePath = TemplateEmailPath.VoidBetChinese;
         if (specialPlatformService.IsSiteSpecialPlatform(modelClone.Match, site))
         {

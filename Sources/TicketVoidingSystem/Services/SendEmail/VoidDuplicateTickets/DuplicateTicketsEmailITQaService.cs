@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail.VoidDuplicateTickets;
 
@@ -22,7 +22,7 @@ public class DuplicateTicketsEmailItQaServiceImp(
     {
         var site = sitesEmailService.GetSiteByName(sites, StringResource.ItQa);
         var uusDuplicateTickets = duplicateTickets.Where(x => x.IsHasUusTickets);
-        var mailReCord = emailContentService.Create(mailVoidViewModel.DeepClone(), site, uusDuplicateTickets, EmailGroup.ItQa);
+        var mailReCord = emailContentService.Create(MessagePackCloner.Clone(mailVoidViewModel), site, uusDuplicateTickets, EmailGroup.ItQa);
 
         await emailSimpleService.Send(mailReCord, EmailGroup.ItQa);
     }

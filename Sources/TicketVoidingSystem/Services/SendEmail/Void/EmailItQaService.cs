@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail.Void;
 
@@ -24,7 +24,7 @@ public class EmailItQaServiceImp(
     {
         var site = sitesEmailService.GetSiteByName(sites, StringResource.ItQa);
         var uusTickets = tickets.Where(s => s.Currency == CurrencyConstant.UusId);
-        var mailRecord = await voidEmailContentService.Create(mailVoidViewModel.DeepClone(), site, uusTickets, EmailGroup.ItQa, isFromAfterVoidService);
+        var mailRecord = await voidEmailContentService.Create(MessagePackCloner.Clone(mailVoidViewModel), site, uusTickets, EmailGroup.ItQa, isFromAfterVoidService);
 
         await emailSimpleService.Send(mailRecord, EmailGroup.ItQa);
     }

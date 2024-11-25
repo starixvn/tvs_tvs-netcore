@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using Fanex.MailDeliver.MailClient.Model;
-using Force.DeepCloner;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria.SendEmail;
 using TicketVoidingSystem.Extensions;
@@ -11,6 +10,7 @@ using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services.SendEmail.Subject;
+using TicketVoidingSystem.Utilities;
 using static TicketVoidingSystem.Utilities.Helper;
 
 namespace TicketVoidingSystem.Services.SendEmail.Void;
@@ -38,7 +38,7 @@ public class VoidEmailContentServiceImp(
                            || mailVoidViewModel.IsFilterByUserName
                 ? VoidType.Abnormal : VoidType.None;
             var subject = subjectService.CreateVoid(mailVoidViewModel, tickets.Select(x => x.Site), site, group, voidType);
-            var mailVoidModelClone = mailVoidViewModel.DeepClone();
+            var mailVoidModelClone = MessagePackCloner.Clone(mailVoidViewModel);
             mailVoidModelClone.NegativeBalanceUsers = tickets.GetNegativeBalanceUsers(group, t => t.UserName, mailVoidViewModel.NegativeBalanceUsers);
             mailVoidModelClone.GroupTickets = transformGroupTickets;
             var mailRecord = templateEmailService.Create(mailVoidModelClone, site, subject);

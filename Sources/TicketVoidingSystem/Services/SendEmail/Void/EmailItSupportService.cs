@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail.Void;
 
@@ -28,7 +28,7 @@ public class EmailItSupportServiceImp(
         {
             realTickets = realTickets.Where(s => s.IsITSupportCreatedRequest);
         }
-        var mailRecord = await voidEmailContentService.Create(mailVoidViewModel.DeepClone(), site, realTickets, EmailGroup.ItSupport, isFromAfterVoidService);
+        var mailRecord = await voidEmailContentService.Create(MessagePackCloner.Clone(mailVoidViewModel), site, realTickets, EmailGroup.ItSupport, isFromAfterVoidService);
 
         await emailSimpleService.Send(mailRecord, EmailGroup.ItSupport);
     }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail.Recover;
 
@@ -21,9 +21,9 @@ public class SendEmailRecoverServiceImp(
     public async Task SendEmail(MailRecoverViewModel viewModel, IEnumerable<TicketRecoverEmailModel> tickets)
     {
         var sites = await sitesEmailService.GetSites();
-        SendMailCSD(sites, tickets, viewModel.DeepClone());
-        SendMailItQa(sites, tickets, viewModel.DeepClone());
-        SendMailItSupport(sites, tickets, viewModel.DeepClone());
+        SendMailCSD(sites, tickets, MessagePackCloner.Clone(viewModel));
+        SendMailItQa(sites, tickets, MessagePackCloner.Clone(viewModel));
+        SendMailItSupport(sites, tickets, MessagePackCloner.Clone(viewModel));
     }
 
     private void SendMailCSD(IEnumerable<SiteEmail> sites, IEnumerable<TicketRecoverEmailModel> tickets, MailRecoverViewModel viewModel)

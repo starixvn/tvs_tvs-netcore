@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Fanex.MailDeliver.MailClient.Model;
-using Force.DeepCloner;
 using NSubstitute;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Void;
+using TicketVoidingSystem.Utilities;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
@@ -74,7 +74,7 @@ public class EmailItSupportServiceTests
         };
         sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItSupport)
             .ReturnsForAnyArgs(new SiteEmail());
-        voidEmailContentService.Create(mailVoidViewModel.DeepClone(), Arg.Any<SiteEmail>(),
+        voidEmailContentService.Create(MessagePackCloner.Clone(mailVoidViewModel), Arg.Any<SiteEmail>(),
                 Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.ItSupport, isFromAfterVoidService)
             .Returns(new MailRecord());
 
@@ -122,7 +122,7 @@ public class EmailItSupportServiceTests
         };
         sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItSupport)
             .ReturnsForAnyArgs(new SiteEmail());
-        voidEmailContentService.Create(mailVoidViewModel.DeepClone(), Arg.Any<SiteEmail>(),
+        voidEmailContentService.Create(MessagePackCloner.Clone(mailVoidViewModel), Arg.Any<SiteEmail>(),
                 Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.ItSupport, isFromAfterVoidService)
             .Returns(new MailRecord());
 
@@ -142,7 +142,7 @@ public class EmailItSupportServiceTests
         var tickets = new List<TicketEmailModel> { new() { IsItSupport = true, Currency = 20 }, new() { IsItSupport = false, Currency = 1 } };
         sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItSupport)
             .ReturnsForAnyArgs(new SiteEmail());
-        voidEmailContentService.Create(mailVoidViewModel.DeepClone(), Arg.Any<SiteEmail>(),
+        voidEmailContentService.Create(MessagePackCloner.Clone(mailVoidViewModel), Arg.Any<SiteEmail>(),
                 Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.ItSupport, true)
             .Returns(new MailRecord());
 
