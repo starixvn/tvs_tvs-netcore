@@ -7,14 +7,13 @@ import { EventWrongMarketOfferedService } from './event-wrong-market-offfered.se
 class Helper {
   static readonly fromDate = '2021-12-18 12:08:49.737';
   static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterWrongMarketOfferedModel: FilterWrongMarketOfferedModel = {
+  static readonly fakeFilterWrongMarketOfferedModel: FilterWrongMarketOfferedModel[] = [{
     fromDateTime: Helper.fromDate,
-    toDateTime: Helper.toDate
-  };
+    toDateTime: Helper.toDate,
+  }] as FilterWrongMarketOfferedModel[];
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
     filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
-    logInfoDetails: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTypeCount: [],
     betTeamsResult: []
@@ -37,28 +36,28 @@ describe('EventWrongMarketOfferedService', () => {
   });
 
   it('#getWrongMarketOfferedGetLogInfoModel should return WrongMarketOfferedGetLogInfoQuery with correct props', async () => {
-    const actual = service.getWrongMarketOfferedGetLogInfoModel(1, Helper.fakeLogInfoWrongMarketOffered);
+    const actual = service.getWrongMarketOfferedGetLogInfoModel(1, Helper.fakeLogInfoWrongMarketOffered)[0];
 
     expect(actual.subIssueTypeId).toBe(1);
-    expect(actual.filterFromTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels.fromDateTime);
-    expect(actual.filterToTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels.toDateTime);
+    expect(actual.filterFromTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels[0].fromDateTime);
+    expect(actual.filterToTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels[0].toDateTime);
     expect(actual.betTeamsResult).toBe(Helper.fakeLogInfoWrongMarketOffered.betTeamsResult);
   });
 
   it('#getWrongMarketOfferedModel should return WrongMarketOfferedModel with correct props', async () => {
-    const actual = service.getWrongMarketOfferedModel(1, Helper.fakeLogInfoWrongMarketOffered);
+    const actual = service.getWrongMarketOfferedModel(1, Helper.fakeLogInfoWrongMarketOffered)[0];
 
     expect(actual.subIssueTypeId).toBe(1);
-    expect(actual.filterFromTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels.fromDateTime);
-    expect(actual.filterToTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels.toDateTime);
+    expect(actual.filterFromTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels[0].fromDateTime);
+    expect(actual.filterToTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels[0].toDateTime);
     expect(actual.betTypeCount).toBe(Helper.fakeLogInfoWrongMarketOffered.betTypeCount);
     expect(actual.betTeamsResult).toBe(Helper.fakeLogInfoWrongMarketOffered.betTeamsResult);
   });
 
   it('#assignModelsToEvents should return LogInfoWrongMarketOffered with correct props', async () => {
-    const actual = service.assignModelsToEvents(Helper.fakeWrongMarketOfferedModel);
+    const actual = service.assignModelsToEvents([Helper.fakeWrongMarketOfferedModel]);
 
     expect(actual.matchId).toBe(Helper.fakeWrongMarketOfferedModel.matchId);
-    expect(actual.logInfoDetails).toEqual(Helper.fakeWrongMarketOfferedModel.logInfoDetail);
+    expect(actual.logInfoItems[0].logInfoDetail).toEqual(Helper.fakeWrongMarketOfferedModel.logInfoDetail);
   });
 });

@@ -47,21 +47,24 @@ export class AdvancedModeComponent {
 
   async ngOnChanges(changes: SimpleChanges) {
     if (this.matchId && changes['changedBetTypes']) {
+      this.isLoadingData.emit(true);
       if (this.betTeams.length === 0) {
         await this.getBetTeamAndRenderValue(this.matchId);
       }
       await this.handleChangedBetTypes();
+      this.isLoadingData.emit(false);
     }
     if (this.advancedModeAddRequestModel !== undefined && changes['advancedModeAddRequestModel']) {
+      this.isLoadingData.emit(true);
       await this.getBetTeamAndRenderValue(this.matchId);
       this.changedBetTypes = this.advancedModeAddRequestModel.checkedBetTypes;
       await this.handleChangedBetTypes();
       this.updateBetTeamByCheckedValue(this.advancedModeAddRequestModel.betTeamsResult);
+      this.isLoadingData.emit(false);
     }
   }
   
   public async getBetTeamAndRenderValue(matchId: number): Promise<void> {
-    this.isLoadingData.emit(true);
     await this.getBetTeam();
     this.baseBetTeams.forEach(x => {
       x.isShow = this.changedBetTypes.some(y => y.id.toString() === x.betTypes);

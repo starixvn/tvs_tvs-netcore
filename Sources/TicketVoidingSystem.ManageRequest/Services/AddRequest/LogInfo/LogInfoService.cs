@@ -205,17 +205,18 @@ public class LogInfoServiceImp(
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
         await logInfoHelperService.UpdateBetTypeTicketsInfo(query.WrongMarketOfferedModels.First().MatchId, betTypeCount);
-        return new List<GetLogInfoModel>
+
+        return query.WrongMarketOfferedModels.Select((item, index) => new GetLogInfoModel
         {
-            new()
-            {
-                MatchId = query.WrongMarketOfferedModels.First().MatchId,
-                Validation = validation.FirstOrDefault(),
-                TicketRequest = ticketRequest,
-                LogInfoDetail = logInfoDetail.FirstOrDefault(),
-                BetTypeCount = betTypeCount.OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetId)
-            }
-        };
+            Id = index + 1,
+            MatchId = query.WrongMarketOfferedModels.First().MatchId,
+            Validation = validation.FirstOrDefault(x => x.Id == item.Id),
+            TicketRequest = ticketRequest.Where(x => x.Id == item.Id),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.Id == item.Id),
+            BetTypeCount = betTypeCount.Where(x => x.Id == item.Id)
+                .OrderBy(x => x.OriginalBetTypeName)
+                .ThenBy(x => x.BetId)
+        });
     }
 
     private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongOddsSportsBook(GetLogInfoQuery query, IEnumerable<Validation> validation,

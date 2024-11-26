@@ -1,9 +1,8 @@
 <label class="col-form-label mt-2">Filter</label>
-
 <div class="filter">
-  <div class="mb-2 mt-2">
+  <div class="mb-2">
     <label class="col-form-label col-form-label-sm">Transaction Time</label>
-    <div class="mb-2" *ngFor="let model of models; index as index; last as isLast; first as isFirst">
+    <div class="mb-1" *ngFor="let model of models; index as index; last as isLast; first as isFirst">
       <filter-time-item #filterItem
         [model]="model"
         [isVoided]="isVoided"
@@ -22,5 +21,3 @@
     </div>
   </div>
 </div>
-<tooltip [tooltip]="tooltip"></tooltip>
-

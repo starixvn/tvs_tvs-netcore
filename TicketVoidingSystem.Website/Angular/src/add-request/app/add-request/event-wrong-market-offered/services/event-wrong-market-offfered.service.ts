@@ -29,16 +29,17 @@ export class EventWrongMarketOfferedService {
      return logInfoEvent.filterWrongMarketOfferedModels.map(filterItem => this.createWrongMarketOfferedModel(subIssueTypeId, logInfoEvent, filterItem));
   }
 
-  createWrongMarketOfferedModel(subIssueTypeId: number, logInfoEvent: LogInfoWrongMarketOffered, filterItem: FilterWrongMarketOfferedModel): WrongMarketOfferedModel {
+  createWrongMarketOfferedModel(subIssueTypeId: number, logInfoEvent: LogInfoWrongMarketOffered,
+    filterItem: FilterWrongMarketOfferedModel): WrongMarketOfferedModel {
     const model = new WrongMarketOfferedModel();
     model.id = filterItem.id;
     model.filterFromTransTime = filterItem.fromDateTime;
     model.filterToTransTime = filterItem.toDateTime;
     model.matchId = logInfoEvent.matchId;
     model.subIssueTypeId = subIssueTypeId;
-    model.logInfoDetail = logInfoEvent.logInfoItems.find(x => x.id === filterItem.id).logInfoDetail;
     model.betTeamsResult = logInfoEvent.betTeamsResult;
-    model.betTypeCount = logInfoEvent.betTypeCount;
+    model.logInfoDetail = logInfoEvent.logInfoItems.find(x => x.id === filterItem.id).logInfoDetail;
+    model.betTypeCount = logInfoEvent.logInfoItems.find(x => x.id === filterItem.id).betTypeCount;
     model.allBetTypesSelection = logInfoEvent.allBetTypesSelection;
     return model;
   }
@@ -46,7 +47,7 @@ export class EventWrongMarketOfferedService {
   assignModelsToEvents(inputModels: WrongMarketOfferedModel[]): LogInfoWrongMarketOffered {
     const logInfo = new LogInfoWrongMarketOffered();
     logInfo.matchId = inputModels[0].matchId;
-    logInfo.betTypeCount = inputModels[0].betTypeCount;
+    //logInfo.betTypeCount = inputModels[0].betTypeCount;
     logInfo.betTeamsResult = inputModels[0].betTeamsResult;
     logInfo.allBetTypesSelection = inputModels[0].allBetTypesSelection;
     logInfo.logInfoItems = inputModels.map(x => this.createLogInfoItem(x));
@@ -72,7 +73,8 @@ export class EventWrongMarketOfferedService {
     return model;
   }
 
-  private createWrongMarketOfferedGetLogInfoQuery(logInfo: LogInfoWrongMarketOffered, subIssueTypeId: number, filterItem: FilterWrongMarketOfferedModel): WrongMarketOfferedGetLogInfoQuery {
+  private createWrongMarketOfferedGetLogInfoQuery(logInfo: LogInfoWrongMarketOffered, subIssueTypeId: number,
+    filterItem: FilterWrongMarketOfferedModel): WrongMarketOfferedGetLogInfoQuery {
     const model = new WrongMarketOfferedGetLogInfoQuery();
     model.matchId = logInfo.matchId;
     model.subIssueTypeId = subIssueTypeId;

@@ -244,6 +244,7 @@ public static class LogInfoExtension
         foreach (var model in models)
         {
             var line = $"<r MatchId='{model.MatchId}' "
+                       + $"Id='{model.Id}' "
                        + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                        + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                        + $"SubIssueTypeId='{model.SubIssueTypeId}' "

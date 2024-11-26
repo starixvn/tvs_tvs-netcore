@@ -1,5 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-offered.model';
 import { EventWrongMarketOfferedService } from '../services/event-wrong-market-offfered.service';
 import { FilterTimeItemComponent } from './filter-time-item/filter-time-item.component';
@@ -17,15 +16,9 @@ export class FilterTimeComponent {
   @Output() refreshEvent = new EventEmitter();
   @ViewChildren('filterItem') filterItemComponents: QueryList<FilterTimeItemComponent>;
 
-  tooltip = new Tooltip();
-  private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
-
   constructor(
-    private readonly element: ElementRef,
     private readonly eventWrongMarketOfferedService: EventWrongMarketOfferedService
-  ) {
-    this.tooltip.element = this.element;
-  }
+  ) { }
 
   changeFilter(): void {
     this.changeFilterEvent.emit();
@@ -40,10 +33,18 @@ export class FilterTimeComponent {
   }
 
   addItem(): void {
+    this.changeFilter();
     this.models.push(this.eventWrongMarketOfferedService.initDefaultTime());
+    this.reRenderId();
   }
 
   removeItem(index: number): void {
+    this.changeFilter();
     this.models.splice(index, 1);
+    this.reRenderId();
+  }
+
+  private reRenderId() {
+    this.models.forEach((model, index) => model.id = index + 1);
   }
 }

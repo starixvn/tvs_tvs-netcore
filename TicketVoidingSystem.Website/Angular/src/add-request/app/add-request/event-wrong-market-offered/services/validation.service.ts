@@ -27,12 +27,12 @@ export class ValidationService {
   }
 
   public isValidLogInfoEvent(logInfoWrongMarketOffered: LogInfoWrongMarketOffered): boolean {
-    return !logInfoWrongMarketOffered.messageValidationLogInfo.some(y => y.isError);
+    return logInfoWrongMarketOffered.logInfoItems.every(y => y.messageValidationLogInfo.every(t => !t.isError));
   }
 
   public checkCanShowConfirmationWrongMarketOffered(argWrongMarketOffered: SaveRequestArg): boolean {
-    const isHasWarningSettledTicket = argWrongMarketOffered.logInfoEvent.logInfoDetails?.settleCount > 0;
-    const isHasWarningTicket = argWrongMarketOffered.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError);
+    const isHasWarningSettledTicket = argWrongMarketOffered.logInfoEvent.logInfoItems.some(x => x.logInfoDetail?.settleCount > 0);
+    const isHasWarningTicket = argWrongMarketOffered.logInfoEvent.logInfoItems.every(y => y.messageValidationLogInfo.every(t => !t.isError));
     const isEditingByAnotherUser = argWrongMarketOffered.isEdit && argWrongMarketOffered.userId !== Number(document.getElementById('body').getAttribute('user-id'));
     const isHasWarningTakenNote = argWrongMarketOffered.isEdit
       && argWrongMarketOffered.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString()

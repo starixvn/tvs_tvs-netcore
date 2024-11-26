@@ -24,10 +24,10 @@ import { ValidationService } from './services/validation.service';
 class Helper {
   static readonly fromDate = '2021-12-18 12:08:49.737';
   static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterWrongMarketOfferedModel: FilterWrongMarketOfferedModel = {
+  static readonly fakeFilterWrongMarketOfferedModel: FilterWrongMarketOfferedModel[] = [{
     fromDateTime: Helper.fromDate,
     toDateTime: Helper.toDate
-  };
+  }] as FilterWrongMarketOfferedModel[];
   static readonly fakeWrongMarketOfferedModel: WrongMarketOfferedModel = {
     betTypeCount: [],
     filterFromTransTime: Helper.fromDate,
@@ -39,7 +39,6 @@ class Helper {
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
     filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
-    logInfoDetails: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTypeCount: [],
     betTeamsResult: []
@@ -80,7 +79,7 @@ describe('EventWrongMarketOfferedComponent', () => {
 
   it('EventWrongMarketOfferedComponent init should match snapshot', async () => {
     const component = new EventWrongMarketOfferedComponent(null, null, null, null, null, null);
-    component.wrongMarketOfferedModels = Helper.fakeWrongMarketOfferedModel;
+    component.wrongMarketOfferedModels = [Helper.fakeWrongMarketOfferedModel];
 
     expect(component).toMatchSnapshot();
   });

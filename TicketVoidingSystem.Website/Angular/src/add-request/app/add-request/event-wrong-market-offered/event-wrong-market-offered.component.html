@@ -14,6 +14,7 @@
   [matchId]="logInfoEvent.matchId"
   [groupBetTypes]="groupBetTypesModel"
   (changeFilterEvent)="resetLogInfo()"
+  (isLoadingData)="checkingLoadDataAdvancedMode($event)"
   (checkExistBetTypeEvent)="checkExistBetTypeEvent($event)"
   [model]="advancedModeAddRequestModel">
 </advanced-mode-add-request>
@@ -33,3 +34,10 @@
   <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
   No valid tickets found in the current range
 </div>
+<confirm-add-request
+  [model]="confirmAddRequest"
+  [issueTypes]="issueTypes"
+  [voidActions]="filter.actions"
+  (clickOk)="onClickConfirmSaveRequest()"
+  (clickCancel)="onClickCancelSaveRequest()">
+</confirm-add-request>

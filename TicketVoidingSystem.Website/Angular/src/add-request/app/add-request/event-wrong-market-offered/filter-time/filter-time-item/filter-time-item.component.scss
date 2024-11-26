@@ -13,10 +13,12 @@
 }
 
 .filter-id {
+  height: 100%;
   margin-right: 10px;
   text-align: center;
   width: 29.5px;
   background-color: #e9ecef;
   border: 1px solid #ced4da;
   border-radius: 4px;
+  box-sizing: border-box;
 }

@@ -1,5 +1,4 @@
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
@@ -8,7 +7,7 @@ import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.mo
 import { OthersModel } from '../../others/others.model';
 import { PopupService } from '../../services/popup.service';
 import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-offered.model';
-import { LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
+import { LogInfoItem, LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventWrongMarketOfferedService } from './event-wrong-market-offfered.service';
@@ -19,14 +18,13 @@ import { ValidationService } from './validation.service';
 class Helper {
   static readonly fromDate = '2021-12-18 12:08:49.737';
   static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterWrongMarketOfferedModel: FilterWrongMarketOfferedModel = {
+  static readonly fakeFilterWrongMarketOfferedModel: FilterWrongMarketOfferedModel[] = [{
     fromDateTime: Helper.fromDate,
     toDateTime: Helper.toDate
-  };
+  }] as FilterWrongMarketOfferedModel[];
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
     filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
-    logInfoDetails: new LogInfoDetail(),
     messageValidationLogInfo: [],
     betTypeCount: [],
     betTeamsResult: []
@@ -198,7 +196,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.filter.action = '2';
     saveRequestArg.actionIdOfFirstTimeAccess = '5';
     saveRequestArg.logInfoEvent = Helper.fakeLogInfoWrongMarketOffered;
-    saveRequestArg.logInfoEvent.logInfoDetails.settleCount = 1;
+    saveRequestArg.logInfoEvent.logInfoItems = [{ logInfoDetail: { settleCount: 1 } } as LogInfoItem];
     saveRequestArg.logInfoEvent.messageValidationLogInfo.push({ isError: false, reason: 'aaa'});
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");

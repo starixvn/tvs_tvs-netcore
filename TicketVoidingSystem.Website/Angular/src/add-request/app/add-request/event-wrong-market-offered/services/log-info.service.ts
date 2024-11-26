@@ -27,8 +27,7 @@ export class LogInfoService {
   }
 
   resetLogInfoOfEvent(logInfoEvent: LogInfoWrongMarketOffered): void {
-    logInfoEvent.logInfoDetails = null;
-    logInfoEvent.messageValidationLogInfo = null;
+    logInfoEvent.logInfoItems = [];
   }
 
   private initWrongMarketOfferedGetLogInfoQuery(isEdit: boolean, requestId: number, filter: FilterModel, logInfo: LogInfoWrongMarketOffered): GetLogInfoQuery {

@@ -174,6 +174,7 @@ export class MappingModelStaticService {
     }
 
     return models.map(x => ({
+      id: x.id,
       matchId: x.matchId,
       subIssueTypeId: x.subIssueTypeId,
       filterFromTransTime: x.voidFromTime,

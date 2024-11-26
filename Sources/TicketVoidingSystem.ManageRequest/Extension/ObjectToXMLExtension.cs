@@ -374,28 +374,39 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.Trim()}</root>";
     }
 
-    public static string ToEventWrongMarketOfferedXml(this WrongMarketOfferedViewModel model)
+    public static string ToEventWrongMarketOfferedXml(this IEnumerable<WrongMarketOfferedViewModel> models)
     {
-        var betTypeCountJson = model.BetTypeCount.Select(x => new BetTypeCountJsonModel
+        if (!models.Any())
         {
-            BetTypeId = x.BetTypeId,
-            TicketsCount = x.TicketsCount,
-            BetId = x.BetId,
-            PlayerName = x.PlayerName
-        });
-        var stringBuilder = $"<r MatchId = '{model.MatchId}' "
-                            + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                            + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                            + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                            + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                            + $"SubIssueTypeId='{model.SubIssueTypeId}' "
-                            + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
-                            + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
-                            + $"BetTypeCount='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(betTypeCountJson))}' "
-                            + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}' "
-                            + $"AllBetTypesSelectionJson='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.AllBetTypesSelection))}' />";
+            return string.Empty;
+        }
 
-        return $"<root>{stringBuilder.Trim()}</root>";
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var betTypeCountJson = model.BetTypeCount.Select(x => new BetTypeCountJsonModel
+            {
+                BetTypeId = x.BetTypeId,
+                TicketsCount = x.TicketsCount,
+                BetId = x.BetId,
+                PlayerName = x.PlayerName
+            });
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
+                       + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
+                       + $"BetTypeCount='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(betTypeCountJson))}' "
+                       + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}' "
+                       + $"AllBetTypesSelectionJson='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.AllBetTypesSelection))}' />";
+
+            stringBuilder.Append(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
     public static string ToEventWrongOddsSportsBookXml(this WrongOddsSportsBookViewModel model)

@@ -11,4 +11,10 @@ export class ConfirmAddRequestModel {
   isHasWarningTicket: boolean;
   isHasWarningTakenNote: boolean;
   isEditingByAnotherUser: boolean;
+  isShowSubIssueType: boolean;
+}
+
+export class ExtraWarningModel {
+  title: string;
+  messages: string[];
 }

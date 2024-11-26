@@ -105,8 +105,8 @@ public class AddRequestProcessStageImp(
                 ? string.Join(", ", query.AbnormalBetInfo.Matches.Select(x => x.MatchId))
                 : BetTypeConstant.SystemParlay.ToString(),
             IssueTypeConstant.DuplicateTickets => query.DuplicateTicketsInfo?.MatchId.ToString(),
-            IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedInfo?.MatchId.ToString(),
-            IssueTypeConstant.TechnicalError => query.WrongMarketOfferedInfo?.MatchId.ToString(),
+            IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedInfo.First().MatchId.ToString(),
+            IssueTypeConstant.TechnicalError => query.WrongMarketOfferedInfo.First().MatchId.ToString(),
             IssueTypeConstant.WrongOddsSportsBook => query.WrongOddsSportsBookInfo?.MatchId.ToString(),
             IssueTypeConstant.WrongOfferedName => query.WrongOfferedNameInfo?.MatchId.ToString(),
             IssueTypeConstant.OtherIssues => query.OtherIssuesInfo?.MatchId.ToString(),

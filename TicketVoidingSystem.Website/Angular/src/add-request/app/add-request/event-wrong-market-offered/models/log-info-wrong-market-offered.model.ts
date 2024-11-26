@@ -7,11 +7,8 @@ import { FilterWrongMarketOfferedModel } from "./filter-wrong-market-offered.mod
 export class LogInfoWrongMarketOffered {
   matchId: number;
   filterWrongMarketOfferedModels: FilterWrongMarketOfferedModel[] = [];
-  logInfoDetails = new LogInfoDetail();
   logInfoItems: LogInfoItem[] = [];
-  messageValidationLogInfo?: ValidationMessage[];
   betTeamsResult: BetTeamAddRequestResult[];
-  betTypeCount: BetTypeCountModel[];
   allBetTypesSelection: Selection[];
 }
 

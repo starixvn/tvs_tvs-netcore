@@ -8,7 +8,9 @@ import { EventLeagueComponent } from '../../../../utility/components/event-leagu
 import { ModeType } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { WrongMarketOfferedModel } from '../models/event-wrong-market-offered.model';
 import { OthersModel } from '../others/others.model';
 import { FilterTimeComponent } from './filter-time/filter-time.component';
@@ -34,6 +36,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   @Input() filter: FilterModel;
   @Input() wrongMarketOfferedModels: WrongMarketOfferedModel[];
   @Input() others = new OthersModel();
+  @Input() issueTypes = new IssueTypes();
   @Input() actionIdOfFirstTimeAccess: string;
   @Output() updateMatchId = new EventEmitter<number>();
   @ViewChild('eventLeague') eventLeague: EventLeagueComponent;
@@ -51,6 +54,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   groupBetTypesModel = new GroupBetTypesAddRequestModel([], false, '', false);
   primitivePropertyEvent = new PrimitivePropertyEvent();
   advancedModeAddRequestModel: AdvancedModeAddRequestModel;
+  confirmAddRequest = new ConfirmAddRequestModel();
 
   async ngOnInit(): Promise<void> {
     if (this.isEdit) {
@@ -58,22 +62,6 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     } else {
       this.logInfoEvent.filterWrongMarketOfferedModels = [this.eventWrongMarketOfferedService.initDefaultTime()];
     }
-  }
-
-  public updateDataWhenEditRequest(): void {
-    const groupBetTypes = this.wrongMarketOfferedModels[0].groupBetTypes;
-    groupBetTypes.forEach(x => x.betTypes.forEach(y => y.isChecked = true));
-    const checkedBetTypes = groupBetTypes.flatMap(x => x.betTypes);
-    this.logInfoEvent = this.eventWrongMarketOfferedService.assignModelsToEvents(this.wrongMarketOfferedModels);
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], groupBetTypes), true, '', this.filter.isVoided);
-    const betTeamsResult = this.wrongMarketOfferedModels[0].betTeamsResult;
-    betTeamsResult.forEach(x => x.isDisabled = this.filter.isVoided);
-    this.advancedModeAddRequestModel = {
-      betTeamsResult: betTeamsResult,
-      checkedBetTypes: checkedBetTypes,
-      selectedAllBetTypes: this.wrongMarketOfferedModels[0].allBetTypesSelection
-    };
-    this.primitivePropertyEvent.isShowValidation = true;
   }
 
   async getGroupBetTypes() {
@@ -87,17 +75,6 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     const data = await this.commonService.getGroupBetTypesTvs(query);
     this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);;
     this.addRequestStore.changeBlockingUiStatus(false);
-  }
-
-  changeFilterTime(): void {
-    this.addRequestStore.changeSavingRequestStatus(true);
-    this.resetBetTypeAndAdvancedMode();
-    this.resetLogInfo();
-  }
-
-  resetLogInfo(): void {
-    this.primitivePropertyEvent.isShowErrorNoBetType = false;
-    this.primitivePropertyEvent.isShowValidation = false;
   }
 
   async refreshEvent() {
@@ -130,17 +107,13 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     this.addRequestStore.changeSavingRequestStatus(false);
   }
 
-  public async saveRequest(): Promise<void> {
+  async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
-  checkExistBetTypeEvent(isHaveBetType: boolean) {
-    this.primitivePropertyEvent.isShowErrorNoBetType = !isHaveBetType;
-  }
-
-  public async changeMatchEvent(): Promise<void> {
+  async changeMatchEvent(): Promise<void> {
     this.primitivePropertyEvent.isShowValidation = false;
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
@@ -150,6 +123,49 @@ export class EventWrongMarketOfferedComponent implements OnInit {
       this.resetBetTypeAndAdvancedMode();
       this.primitivePropertyEvent.isShowErrorNoBetType = false;
     }
+  }
+
+  checkExistBetTypeEvent(isHaveBetType: boolean) {
+    this.primitivePropertyEvent.isShowErrorNoBetType = !isHaveBetType;
+  }
+
+  checkingLoadDataAdvancedMode(isLoading: boolean): void {
+    this.addRequestStore.changeBlockingUiStatus(isLoading);
+  }
+
+  changeFilterTime(): void {
+    this.addRequestStore.changeSavingRequestStatus(true);
+    this.resetBetTypeAndAdvancedMode();
+    this.resetLogInfo();
+  }
+
+  resetLogInfo(): void {
+    this.primitivePropertyEvent.isShowErrorNoBetType = false;
+    this.primitivePropertyEvent.isShowValidation = false;
+  }
+
+  updateDataWhenEditRequest(): void {
+    const groupBetTypes = this.wrongMarketOfferedModels[0].groupBetTypes;
+    groupBetTypes.forEach(x => x.betTypes.forEach(y => y.isChecked = true));
+    const checkedBetTypes = groupBetTypes.flatMap(x => x.betTypes);
+    this.logInfoEvent = this.eventWrongMarketOfferedService.assignModelsToEvents(this.wrongMarketOfferedModels);
+    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], groupBetTypes), true, '', this.filter.isVoided);
+    const betTeamsResult = this.wrongMarketOfferedModels[0].betTeamsResult;
+    betTeamsResult.forEach(x => x.isDisabled = this.filter.isVoided);
+    this.advancedModeAddRequestModel = {
+      betTeamsResult: betTeamsResult,
+      checkedBetTypes: checkedBetTypes,
+      selectedAllBetTypes: this.wrongMarketOfferedModels[0].allBetTypesSelection
+    };
+    this.primitivePropertyEvent.isShowValidation = true;
+  }
+
+  async onClickConfirmSaveRequest() {
+    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
+  }
+
+  onClickCancelSaveRequest() {
+    this.addRequestStore.changeSavingRequestStatus(false);
   }
 
   private resetBetTypeAndAdvancedMode() {
@@ -177,12 +193,14 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     arg.actionIdOfFirstTimeAccess = this.actionIdOfFirstTimeAccess;
     arg.others = this.others;
     arg.filter = this.filter;
+    arg.issueTypes = this.issueTypes;
     arg.primitiveProps = this.primitivePropertyEvent;
     arg.filterTimeComponent = this.filterTimeComponent;
     arg.eventLeagueComponent = this.eventLeague;
     arg.logInfoEvent = this.logInfoEvent;
     arg.addRequestStore = this.addRequestStore;
     arg.advancedModeComponent = this.advancedMode;
+    arg.confirmAddRequest = this.confirmAddRequest;
 
     return arg;
   }
