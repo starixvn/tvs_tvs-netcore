@@ -271,11 +271,8 @@ export class BetTeam {
     if (item.name === 'All') {
       return true;
     }
-    if (name === 'HT:') {
-      return this.handler416WithNameIsHT(item);
-    } else {
-      return this.handler416WithNameIsNotHT(item);
-    }
+    
+    return name === 'HT:' ? this.handler416WithNameIsHT(item) : this.handler416WithNameIsNotHT(item);
   }
 
   isValidOptionForType5(item: Selection, name: string): boolean {
@@ -325,14 +322,7 @@ export class BetTeam {
   }
 
   isShowMultiSelectionListAndBettypeMapOrRound(name: string): boolean {
-    if (this.isShowMultiSelectionList) {
-      if (name === AdvancedModeConstants.MAP || name === AdvancedModeConstants.ROUND) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    return false;
+     return this.isShowMultiSelectionList && (name === AdvancedModeConstants.MAP || name === AdvancedModeConstants.ROUND);
   }
 
   updateBySelection(result: BetTeamResult) {
@@ -408,11 +398,7 @@ export class BetTeam {
     multiSelectOfType.forEach(itemMultiSelection => {
       itemMultiSelection.multipleSelect.items.forEach(item => {
         const object = itemList.find(f => f === item.value);
-        if (object !== undefined) {
-          item.checked = true;
-        } else {
-          item.checked = false;
-        }
+        item.checked = object !== undefined ? true : false;
       });
       this.changeItemsOfMultipleSelection(itemMultiSelection.multipleSelect);
     });
@@ -434,26 +420,24 @@ export class BetTeam {
   mappingDbValue(id: string): string {
     if (this.items[0].xmlAttribute !== 'Goal') {
       return this.items[0].value;
-    } else {
-      const value = (id === AdvancedModeConstants.BETTYPE_EXTRA_TIME_NEXT_GOAL_OWN) ? '800' : '8' + id + '00';
-      return this.items[0].value === '' ?
-        '' : (parseInt(value, 10) + parseInt(this.items[0].value, 10)).toString();
     }
+
+    const value = (id === AdvancedModeConstants.BETTYPE_EXTRA_TIME_NEXT_GOAL_OWN) ? '800' : '8' + id + '00';
+    return this.items[0].value === '' ?
+      '' : (parseInt(value, 10) + parseInt(this.items[0].value, 10)).toString();
   }
 
   getItemsValue(): string {
-    let value = '';
     if (this.isChecked) {
-      value = 'All';
-    } else {
-      this.items.forEach(item => {
-        value = item.isChecked ? value === '' ? item.value : value + ',' + item.value : value;
-      });
+      return 'All';
     }
 
-    return value;
+    return this.items
+        .filter(item => item.isChecked)
+        .map(item => item.value)
+        .join(',');
   }
-
+  
   updateResult(result: BetTeamResult, attribute: string, value: string) { // NOSONAR
     switch (attribute) {
       case 'BetTeam':
@@ -496,24 +480,23 @@ export class BetTeam {
   }
 
   betTeamTypeFive(): string {
-    let temp = '';
     if (this.selections[0].value === 'All' && this.selections[1].value === 'All') {
-      temp = 'All';
-    } else if (this.selections[0].value === 'All') {
-      for (let i = 1; i < this.selections[0].items.length; i++) {
-        const value = this.selections[0].items[i].value + '/' + this.selections[1].value;
-        temp = temp === '' ? value : temp + ',' + value;
-      }
-    } else if (this.selections[1].value === 'All') {
-      for (let i = 1; i < this.selections[1].items.length; i++) {
-        const value = this.selections[0].value + '/' + this.selections[1].items[i].value;
-        temp = temp === '' ? value : temp + ',' + value;
-      }
-    } else {
-      temp = this.selections[0].value + '/' + this.selections[1].value;
+      return 'All';
+    }
+    if (this.selections[0].value === 'All') {
+      return this.selections[0].items
+          .slice(1) // Skip the first item
+          .map(item => `${item.value}/${this.selections[1].value}`)
+          .join(',');
+    }
+    if (this.selections[1].value === 'All') {
+      return this.selections[1].items
+          .slice(1) // Skip the first item
+          .map(item => `${this.selections[0].value}/${item.value}`)
+          .join(',');
     }
 
-    return temp;
+    return `${this.selections[0].value}/${this.selections[1].value}`;
   }
 
   private updateForPenaltyShootoutCombo376(result: BetTeamResult, betTypeId: string): void {
@@ -536,55 +519,39 @@ export class BetTeam {
   }
 
   private updateForBetTypesCricketWithBallDelivery(result: BetTeamResult, betTypeId: string): void { // format "Set" attribute: 8XXXYY
-    const LENGTH_OF_OVER = 3;
-    const LENGTH_OF_BALL = 2;
     if (AdvancedModeConstants.BETTYPES_CRICKET_UPDATE_BALL_DELIVERY_AND_OVER.split(',').includes(betTypeId)) {
-      let overValue = this.inputs.find(x => x.name === 'Over:').value;
-      let ballValue = this.inputs.find(x => x.name === 'Ball/Delivery:').value;
-
-      if (overValue.length < LENGTH_OF_OVER && overValue.length > 0) {
-        overValue = overValue.padStart(LENGTH_OF_OVER, '0');
-      }
-      if (ballValue.length < LENGTH_OF_BALL && ballValue.length > 0) {
-        ballValue = ballValue.padStart(LENGTH_OF_BALL, '0');
-      }
-
-      if (overValue.length === 0 && ballValue.length === 0) {
-        result.set = 'All';
-      } else if (overValue.length === 0) {
-        result.set = `____${ballValue}`;
-      } else if (ballValue.length === 0) {
-        result.set = `_${overValue}__`;
-      } else {
-        result.set = `_${overValue}${ballValue}`;
-      }
+      result.set = this.getSetValue('Ball/Delivery:');
     }
   }
 
   private updateBetTypesCricketOverXBallYExactRuns(result: BetTeamResult, betTypeId: string): void { // format "Set" attribute: 8XXXYY
+    if (AdvancedModeConstants.BETTYPES_OVER_X_BALL_Y_EXACT_RUNS.split(',').includes(betTypeId)) {
+      result.set = this.getSetValue('Ball:');
+    }
+  }
+
+  private getSetValue(ballName: string){
     const LENGTH_OF_OVER = 3;
     const LENGTH_OF_BALL = 2;
-    if (AdvancedModeConstants.BETTYPES_OVER_X_BALL_Y_EXACT_RUNS.split(',').includes(betTypeId)) {
-      let overValue = this.inputs.find(x => x.name === 'Over:').value;
-      let ballValue = this.inputs.find(x => x.name === 'Ball:').value;
+    let overValue = this.inputs.find(x => x.name === 'Over:').value;
+    let ballValue = this.inputs.find(x => x.name === ballName).value;
 
-      if (overValue.length < LENGTH_OF_OVER && overValue.length > 0) {
-        overValue = overValue.padStart(LENGTH_OF_OVER, '0');
-      }
-      if (ballValue.length < LENGTH_OF_BALL && ballValue.length > 0) {
-        ballValue = ballValue.padStart(LENGTH_OF_BALL, '0');
-      }
-
-      if (overValue.length === 0 && ballValue.length === 0) {
-        result.set = 'All';
-      } else if (overValue.length === 0) {
-        result.set = `____${ballValue}`;
-      } else if (ballValue.length === 0) {
-        result.set = `_${overValue}__`;
-      } else {
-        result.set = `_${overValue}${ballValue}`;
-      }
+    if (overValue.length < LENGTH_OF_OVER && overValue.length > 0) {
+      overValue = overValue.padStart(LENGTH_OF_OVER, '0');
     }
+    if (ballValue.length < LENGTH_OF_BALL && ballValue.length > 0) {
+      ballValue = ballValue.padStart(LENGTH_OF_BALL, '0');
+    }
+
+    if (overValue.length === 0 && ballValue.length === 0) {
+      return 'All';
+    }
+    if (overValue.length === 0) {
+      return `____${ballValue}`;
+    }
+
+    return ballValue.length === 0 ? `_${overValue}__`: `_${overValue}${ballValue}`
+    
   }
 
   private updateForBetType9089(result: BetTeamResult, betTypeId: string): void { // format "Set" attribute: 8XXYY

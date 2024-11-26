@@ -129,7 +129,7 @@
         <div *ngSwitchCase="2" class="bet-team">
           <div class="bet-team-2">
             <div class="flex-start">
-              <label class="mr-3">
+              <label class="mr-3 left">
                 <input type="checkbox" [(ngModel)]="betTeam.isChecked" (ngModelChange)="betTeam.checkItems()"
                   class="mr-1 bet-team-{{index}}" />
                 {{betTeam.name}}
@@ -204,24 +204,25 @@
                   </label>
                 </div>
               </div>
-            </div>
-            <ng-container *ngFor="let selection of betTeam.selections; ; let indexSelection = index">
-              <div class="ml-3" >
-                <div *ngIf="!selection.isMultiple">
-                  <div class="right-selection dropdown-item-adv">
-                    <label *ngIf="selection.name !== ''">{{selection.name}}</label>
-                    <select [(ngModel)]="selection.value">
-                      <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
-                    </select>
+              <ng-container *ngFor="let selection of betTeam.selections; ; let indexSelection = index">
+                <div class="ml-3" >
+                  <div *ngIf="!selection.isMultiple">
+                    <div class="right-selection dropdown-item-adv">
+                      <label *ngIf="selection.name !== ''">{{selection.name}}</label>
+                      <select [(ngModel)]="selection.value">
+                        <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="dropdown-item-adv" *ngIf="selection.isMultiple">
+                    <label class="mr-1">{{selection.multiSelection.name}}</label>
+                    <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
+                    </multiple-select>
                   </div>
                 </div>
-                <div class="dropdown-item-adv" *ngIf="selection.isMultiple">
-                  <label class="mr-1">{{selection.multiSelection.name}}</label>
-                  <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
-                  </multiple-select>
-                </div>
-              </div>
-            </ng-container>
+              </ng-container>
+            </div>
+            
           </div>
         </div>
         <!-- // not place bet ticket bettype 216 -->
@@ -345,7 +346,7 @@
         </div>
         <div *ngSwitchCase="8" class="bet-team">
           <div class="bet-team-8">
-            <div class="left mg-right-10">
+            <div class="left">
               {{betTeam.name}}:
             </div>
             <div class="right">

@@ -4,16 +4,11 @@ import { MultipleSelection } from '../../multiple-selection/multiple-selection';
 
 export class ControlsAllBetTypes {
     type: string;
+    values: string;
     items: MultipleSelection;
     isShow: boolean;
 
-    constructor(type: string, items: ItemsSelect[]){
-        this.isShow = false;
-        this.type = type;
-        this.items = this.initSelectionAllBetType(items);
-    }
-
-    private initSelectionAllBetType(items: ItemsSelect[]): MultipleSelection {
+    static initSelectionAllBetType(items: ItemsSelect[]): MultipleSelection {
         const multiSelect = new MultipleSelection();
         multiSelect.checkAllCheckBoxText = 'All';
         multiSelect.allItemsCheckedText = 'All';
@@ -25,9 +20,11 @@ export class ControlsAllBetTypes {
         return multiSelect;
     }
 
-    resetAllChecked(){
-        this.items.checkAllItems(true);
-        this.items.isCheckAll = true;
+    constructor(type: string, items: ItemsSelect[]){
+        this.values = "";
+        this.isShow = false;
+        this.type = type;
+        this.items = ControlsAllBetTypes.initSelectionAllBetType(items);
     }
 }
 

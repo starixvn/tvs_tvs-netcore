@@ -29,8 +29,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1"
     },
@@ -56,8 +54,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "2"
     },
@@ -90,8 +86,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "3"
     },
@@ -124,8 +118,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "7"
     },
@@ -158,8 +150,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8"
     },
@@ -185,8 +175,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "12"
     },
@@ -219,8 +207,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "17"
     },
@@ -246,8 +232,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "20"
     },
@@ -273,8 +257,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "21"
     },
@@ -300,8 +282,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "25"
     },
@@ -334,8 +314,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "153"
     },
@@ -361,8 +339,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "157"
     },
@@ -388,8 +364,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "168"
     },
@@ -422,8 +396,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "183"
     },
@@ -450,8 +422,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "185"
     },
@@ -478,8 +448,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "191"
     },
@@ -505,8 +473,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "206"
     },
@@ -532,8 +498,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "207"
     },
@@ -559,8 +523,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "208"
     },
@@ -586,8 +548,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "209"
     },
@@ -613,8 +573,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "411"
     },
@@ -640,8 +598,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "425"
     },
@@ -667,8 +623,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "432"
     },
@@ -694,8 +648,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "460"
     },
@@ -721,8 +673,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "468"
     },
@@ -748,8 +698,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "488"
     },
@@ -775,8 +723,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "489"
     },
@@ -802,8 +748,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "490"
     },
@@ -829,8 +773,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "491"
     },
@@ -856,8 +798,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "492"
     },
@@ -883,8 +823,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "603"
     },
@@ -911,8 +849,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "604"
     },
@@ -938,8 +874,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "605"
     },
@@ -965,8 +899,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "606"
     },
@@ -992,8 +924,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "635"
     },
@@ -1019,8 +949,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "636"
     },
@@ -1053,8 +981,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "637"
     },
@@ -1080,8 +1006,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "607"
     },
@@ -1114,8 +1038,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "701"
     },
@@ -1148,8 +1070,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "704"
     },
@@ -1175,8 +1095,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1301"
     },
@@ -1209,8 +1127,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1303"
     },
@@ -1243,8 +1159,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1308"
     },
@@ -1270,8 +1184,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1305"
     },
@@ -1304,8 +1216,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1306"
     },
@@ -1331,8 +1241,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "3901"
     },
@@ -1365,8 +1273,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8800"
     },
@@ -1392,8 +1298,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8821"
     },
@@ -1419,8 +1323,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8827"
     },
@@ -1446,8 +1348,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8828"
     },
@@ -1480,8 +1380,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8829"
     },
@@ -1514,8 +1412,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1306"
     },
@@ -1541,8 +1437,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8832"
     },
@@ -1568,8 +1462,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8833"
     },
@@ -1606,8 +1498,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "475"
     },
@@ -1644,8 +1534,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "476"
     },
@@ -1678,8 +1566,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "479"
     },
@@ -1712,8 +1598,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "481"
     },
@@ -1750,8 +1634,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "486"
     },
@@ -1788,8 +1670,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "487"
     },
@@ -1819,8 +1699,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "5"
     },
@@ -1850,8 +1728,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "15"
     },
@@ -1888,8 +1764,6 @@
           "XmlAttribute": "Goal"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "160"
     },
@@ -1927,8 +1801,6 @@
           "XmlAttribute": "Goal"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "164"
     },
@@ -1958,8 +1830,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "167"
     },
@@ -1989,8 +1859,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "176"
     },
@@ -2020,8 +1888,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "177"
     },
@@ -2058,8 +1924,6 @@
           "XmlAttribute": "Goal"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "180"
     },
@@ -2089,8 +1953,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "430"
     },
@@ -2127,8 +1989,6 @@
           "XmlAttribute": "Goal"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "22"
     },
@@ -2158,8 +2018,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "458"
     },
@@ -2189,8 +2047,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "459"
     },
@@ -2220,8 +2076,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "477"
     },
@@ -2251,8 +2105,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "478"
     },
@@ -2289,8 +2141,6 @@
           "XmlAttribute": "Goal"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "396"
     },
@@ -2316,8 +2166,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "136"
     },
@@ -2343,8 +2191,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "137"
     },
@@ -2370,8 +2216,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "138"
     },
@@ -2397,8 +2241,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "139"
     },
@@ -2424,8 +2266,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "184"
     },
@@ -2451,8 +2291,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "428"
     },
@@ -2478,8 +2316,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "194"
     },
@@ -2505,8 +2341,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "203"
     },
@@ -2532,8 +2366,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "470"
     },
@@ -2559,8 +2391,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "471"
     },
@@ -2586,8 +2416,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "472"
     },
@@ -2613,8 +2441,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "706"
     },
@@ -2640,8 +2466,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "400"
     },
@@ -2667,8 +2491,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "394"
     },
@@ -2694,8 +2516,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "393"
     },
@@ -2728,8 +2548,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "18"
     },
@@ -2762,8 +2580,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "178"
     },
@@ -2796,8 +2612,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "197"
     },
@@ -2830,8 +2644,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "198"
     },
@@ -2864,8 +2676,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "204"
     },
@@ -2898,8 +2708,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "205"
     },
@@ -2932,8 +2740,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "401"
     },
@@ -2966,8 +2772,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "402"
     },
@@ -3000,8 +2804,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "403"
     },
@@ -3034,8 +2836,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "404"
     },
@@ -3061,8 +2861,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "469"
     },
@@ -3095,8 +2893,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "482"
     },
@@ -3129,8 +2925,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "483"
     },
@@ -3163,8 +2957,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "484"
     },
@@ -3197,8 +2989,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "485"
     },
@@ -3231,8 +3021,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "702"
     },
@@ -3265,8 +3053,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "705"
     },
@@ -3299,8 +3085,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "386"
     },
@@ -3333,8 +3117,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "387"
     },
@@ -3367,8 +3149,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "388"
     },
@@ -3401,8 +3181,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "389"
     },
@@ -3435,8 +3213,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "638"
     },
@@ -3469,8 +3245,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "639"
     },
@@ -3503,8 +3277,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "641"
     },
@@ -3537,8 +3309,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "3902"
     },
@@ -3571,8 +3341,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8801"
     },
@@ -3605,8 +3373,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8802"
     },
@@ -3639,8 +3405,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8803"
     },
@@ -3673,8 +3437,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8816"
     },
@@ -3707,8 +3469,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8830"
     },
@@ -3734,8 +3494,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "210"
     },
@@ -3761,8 +3519,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "173"
     },
@@ -3788,8 +3544,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "174"
     },
@@ -3815,8 +3569,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "188"
     },
@@ -3842,8 +3594,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "189"
     },
@@ -3869,8 +3619,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "190"
     },
@@ -3896,8 +3644,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "211"
     },
@@ -3923,8 +3669,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "212"
     },
@@ -3950,8 +3694,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "213"
     },
@@ -3977,8 +3719,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "214"
     },
@@ -4004,8 +3744,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "215"
     },
@@ -4031,8 +3769,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "133"
     },
@@ -4058,8 +3794,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "134"
     },
@@ -4085,8 +3819,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "135"
     },
@@ -4112,8 +3844,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "145"
     },
@@ -4139,8 +3869,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "146"
     },
@@ -4166,8 +3894,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "147"
     },
@@ -4193,8 +3919,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "148"
     },
@@ -4220,8 +3944,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "149"
     },
@@ -4247,8 +3969,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "150"
     },
@@ -4274,8 +3994,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "427"
     },
@@ -4301,8 +4019,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "433"
     },
@@ -4328,8 +4044,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "434"
     },
@@ -4355,8 +4069,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "435"
     },
@@ -4382,8 +4094,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "436"
     },
@@ -4409,8 +4119,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "437"
     },
@@ -4436,8 +4144,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "438"
     },
@@ -4463,8 +4169,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "439"
     },
@@ -4490,8 +4194,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "440"
     },
@@ -4517,8 +4219,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "441"
     },
@@ -4544,8 +4244,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "390"
     },
@@ -4571,8 +4269,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "3914"
     },
@@ -4598,8 +4294,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "8815"
     },
@@ -4629,8 +4323,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "140"
     },
@@ -4660,8 +4352,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "452"
     },
@@ -4691,8 +4381,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "442"
     },
@@ -4722,8 +4410,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "496"
     },
@@ -4753,8 +4439,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "497"
     },
@@ -4940,8 +4624,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "467"
     },
@@ -5311,8 +4993,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "493"
     },
@@ -5474,8 +5154,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "494"
     },
@@ -5637,8 +5315,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "495"
     },
@@ -5837,8 +5513,6 @@
           "Value": "All"
         }
       ],
-      "Name": "Half Time/Full Time Correct Score",
-      "Value": "",
       "Type": 5,
       "BetTypes": "152"
     },
@@ -5852,8 +5526,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "Goal Scorer - Anytime:",
-      "Value": "",
       "Type": 4,
       "BetTypes": "216"
     },
@@ -5911,8 +5583,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "609"
     },
@@ -5963,8 +5633,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "612"
     },
@@ -6015,8 +5683,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "617"
     },
@@ -6074,8 +5740,6 @@
           "XmlAttribute": "Game"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "613"
     },
@@ -6126,8 +5790,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "611"
     },
@@ -6185,8 +5847,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "610"
     },
@@ -6244,8 +5904,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "615"
     },
@@ -6303,8 +5961,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "616"
     },
@@ -6374,8 +6030,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Quarter X Winning Margin 7 Way:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "614"
     },
@@ -6436,8 +6090,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Winning Margin 12 Way:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "602"
     },
@@ -6498,8 +6150,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Winning Margin 12 Way:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "608"
     },
@@ -6563,8 +6213,6 @@
           "Value": "A21+"
         }
       ],
-      "Name": "All Winning Margin 14 Way:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "601"
     },
@@ -6698,8 +6346,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Correct Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "4"
     },
@@ -6833,8 +6479,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Correct Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "30"
     },
@@ -6968,8 +6612,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Correct Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "405"
     },
@@ -7103,8 +6745,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Correct Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "9088"
     },
@@ -7238,8 +6878,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Correct Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "644"
     },
@@ -7297,8 +6935,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Extra Time Correct Scores:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "165"
     },
@@ -7728,8 +7364,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "All Next 1 Minutes:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "221"
     },
@@ -8151,8 +7785,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "All Next 5 Minutes:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "222"
     },
@@ -8566,8 +8198,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "All What Will Happen First In Next 1 Minutes:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "223"
     },
@@ -8961,8 +8591,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "All What Will Happen First In Next 5 Minutes:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "224"
     },
@@ -9360,8 +8988,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "All Next 1 Minute Set Piece:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "225"
     },
@@ -9763,8 +9389,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "All Which Combination Will Happen First In Next 1 Mins:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "226"
     },
@@ -10150,8 +9774,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "All Which Combination Will Happen First In Next 5 Mins:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "227"
     },
@@ -10556,8 +10178,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "All SABA OU Time Machine:",
-      "Value": "All",
       "Type": 7,
       "BetTypes": "228"
     },
@@ -10962,8 +10582,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "All SABA HDP Time Machine:",
-      "Value": "All",
       "Type": 7,
       "BetTypes": "229"
     },
@@ -11007,8 +10625,6 @@
           "Value": "2:2"
         }
       ],
-      "Name": "All HT/FT:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "16"
     },
@@ -11036,8 +10652,6 @@
           "Value": "7-over,7&amp;over"
         }
       ],
-      "Name": "All Total Goal:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "6"
     },
@@ -11065,8 +10679,6 @@
           "Value": "7-over,7&amp;over"
         }
       ],
-      "Name": "All Total Goal:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "126"
     },
@@ -11094,8 +10706,6 @@
           "Value": "7-over,7&amp;over"
         }
       ],
-      "Name": "All Total Goal:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "131"
     },
@@ -11123,8 +10733,6 @@
           "Value": "7-over,7&amp;over"
         }
       ],
-      "Name": "All Total Goal:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "132"
     },
@@ -11152,8 +10760,6 @@
           "Value": "0:0"
         }
       ],
-      "Name": "All First Goal/Last Goal:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "14"
     },
@@ -11181,8 +10787,6 @@
           "Value": "0:0"
         }
       ],
-      "Name": "All First Goal/Last Goal:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "127"
     },
@@ -11206,8 +10810,6 @@
           "Value": "ee"
         }
       ],
-      "Name": "All HT/FT Odd/Even:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "128"
     },
@@ -11251,8 +10853,6 @@
           "Value": "7&amp;Over"
         }
       ],
-      "Name": "All Exact Goal:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "129"
     },
@@ -11296,8 +10896,6 @@
           "Value": "7&amp;Over"
         }
       ],
-      "Name": "All Exact Goal:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "130"
     },
@@ -11337,8 +10935,6 @@
           "Value": "g6"
         }
       ],
-      "Name": "All Exact Total Goals:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "159"
     },
@@ -11378,8 +10974,6 @@
           "Value": "g6"
         }
       ],
-      "Name": "All Exact Total Goals:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "179"
     },
@@ -11403,8 +10997,6 @@
           "Value": "g3,3&amp;Over,3-Over"
         }
       ],
-      "Name": "All Exact Team Goals:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "181"
     },
@@ -11428,8 +11020,6 @@
           "Value": "g3,3&amp;Over,3-Over"
         }
       ],
-      "Name": "All Exact Team Goals:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "182"
     },
@@ -11453,8 +11043,6 @@
           "Value": "g3,3&amp;Over,3-Over"
         }
       ],
-      "Name": "All Exact Team Goals:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "161"
     },
@@ -11478,8 +11066,6 @@
           "Value": "g3,3&amp;Over,3-Over"
         }
       ],
-      "Name": "All Exact Team Goals:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "162"
     },
@@ -11503,8 +11089,6 @@
           "Value": "g3,3&amp;Over,3-Over"
         }
       ],
-      "Name": "All Exact Team Goals:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "412"
     },
@@ -11528,8 +11112,6 @@
           "Value": "g3,3&amp;Over,3-Over"
         }
       ],
-      "Name": "All Exact Team Goals:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "429"
     },
@@ -11577,8 +11159,6 @@
           "Value": "NG"
         }
       ],
-      "Name": "Winning Margin:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "171"
     },
@@ -11626,8 +11206,6 @@
           "Value": "NG"
         }
       ],
-      "Name": "Winning Margin:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "426"
     },
@@ -11647,8 +11225,6 @@
           "Value": "12,HA"
         }
       ],
-      "Name": "All Double Chance:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "24"
     },
@@ -11668,8 +11244,6 @@
           "Value": "12,HA"
         }
       ],
-      "Name": "All Double Chance:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "186"
     },
@@ -11689,8 +11263,6 @@
           "Value": "12,HA"
         }
       ],
-      "Name": "All Double Chance:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "151"
     },
@@ -11710,8 +11282,6 @@
           "Value": "12,HA"
         }
       ],
-      "Name": "All Double Chance:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "431"
     },
@@ -11731,8 +11301,6 @@
           "Value": "12,HA"
         }
       ],
-      "Name": "All Double Chance:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "398"
     },
@@ -11768,8 +11336,6 @@
           "Value": "none"
         }
       ],
-      "Name": "All Goal Time:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "169"
     },
@@ -11805,8 +11371,6 @@
           "Value": "none"
         }
       ],
-      "Name": "All Goal Time:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "193"
     },
@@ -11838,8 +11402,6 @@
           "Value": "au"
         }
       ],
-      "Name": "All Result/Total Goal:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "143"
     },
@@ -11871,8 +11433,6 @@
           "Value": "au"
         }
       ],
-      "Name": "All Result/Total Goal:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "144,163"
     },
@@ -11904,8 +11464,6 @@
           "Value": "au"
         }
       ],
-      "Name": "All Result/Total Goal:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "163"
     },
@@ -11925,8 +11483,6 @@
           "Value": "NG"
         }
       ],
-      "Name": "All Last Team To Score:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "448"
     },
@@ -11958,8 +11514,6 @@
           "Value": "2XU"
         }
       ],
-      "Name": "All Double Chance & Total Goals:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "449"
     },
@@ -11983,8 +11537,6 @@
           "Value": "EU"
         }
       ],
-      "Name": "All Odd/Even & Total Goals:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "450"
     },
@@ -12016,8 +11568,6 @@
           "Value": "N2X"
         }
       ],
-      "Name": "All Both Teams to Score / Double Chance:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "451"
     },
@@ -12041,8 +11591,6 @@
           "Value": "7-over"
         }
       ],
-      "Name": "All Exact Team Corners:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "195"
     },
@@ -12066,8 +11614,6 @@
           "Value": "7-over"
         }
       ],
-      "Name": "All Exact Team Corners:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "196"
     },
@@ -12091,8 +11637,6 @@
           "Value": "4-over"
         }
       ],
-      "Name": "All 1H Exact Team Corners:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "200"
     },
@@ -12116,8 +11660,6 @@
           "Value": "4-over"
         }
       ],
-      "Name": "All 1H Exact Team Corners:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "201"
     },
@@ -12145,8 +11687,6 @@
           "Value": "15+"
         }
       ],
-      "Name": "All Total Corners:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "11"
     },
@@ -12174,8 +11714,6 @@
           "Value": "15+"
         }
       ],
-      "Name": "All Total Corners:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "199"
     },
@@ -12203,8 +11741,6 @@
           "Value": "15+"
         }
       ],
-      "Name": "All Total Corners:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "473"
     },
@@ -12228,8 +11764,6 @@
           "Value": "7+"
         }
       ],
-      "Name": "All 1H Total Corners:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "202"
     },
@@ -12253,8 +11787,6 @@
           "Value": "7+"
         }
       ],
-      "Name": "All 1H Total Corners:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "474"
     },
@@ -12302,8 +11834,6 @@
           "Value": "23"
         }
       ],
-      "Name": "All Match Correct Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "1302"
     },
@@ -12365,8 +11895,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "154"
     },
@@ -12428,8 +11956,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "155"
     },
@@ -12491,8 +12017,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1311"
     },
@@ -12554,8 +12078,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1316"
     },
@@ -12617,8 +12139,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "3918"
     },
@@ -12680,8 +12200,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "219"
     },
@@ -12743,8 +12261,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "3903"
     },
@@ -12806,8 +12322,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "3904"
     },
@@ -12869,8 +12383,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "156"
     },
@@ -12932,8 +12444,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1312"
     },
@@ -12988,8 +12498,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1318"
     },
@@ -13092,8 +12600,6 @@
           "Value": "aaos"
         }
       ],
-      "Name": "All Set x Correct Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "1317"
     },
@@ -13211,8 +12717,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1324"
     },
@@ -13367,8 +12871,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9001"
     },
@@ -13523,8 +13025,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9004"
     },
@@ -13679,8 +13179,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9006"
     },
@@ -13835,8 +13333,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9010"
     },
@@ -13991,8 +13487,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9014"
     },
@@ -14147,8 +13641,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9015"
     },
@@ -14303,8 +13795,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9015"
     },
@@ -14459,8 +13949,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9016"
     },
@@ -14615,8 +14103,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9017"
     },
@@ -14771,8 +14257,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9020"
     },
@@ -14927,8 +14411,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9021"
     },
@@ -15083,8 +14565,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9022"
     },
@@ -15239,8 +14719,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9023"
     },
@@ -15395,8 +14873,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9026"
     },
@@ -15551,8 +15027,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9030"
     },
@@ -15707,8 +15181,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9031"
     },
@@ -15863,8 +15335,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9032"
     },
@@ -16019,8 +15489,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9033"
     },
@@ -16175,8 +15643,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9036"
     },
@@ -16331,8 +15797,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9037"
     },
@@ -16487,8 +15951,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9038"
     },
@@ -16643,8 +16105,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9039"
     },
@@ -16799,8 +16259,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9042"
     },
@@ -16955,8 +16413,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9043"
     },
@@ -17111,8 +16567,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9044"
     },
@@ -17268,8 +16722,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9039"
     },
@@ -17424,8 +16876,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9045"
     },
@@ -17580,8 +17030,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9048"
     },
@@ -17736,8 +17184,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9049"
     },
@@ -17892,8 +17338,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9050"
     },
@@ -18048,8 +17492,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9051"
     },
@@ -18204,8 +17646,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9054"
     },
@@ -18360,8 +17800,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9055"
     },
@@ -18516,8 +17954,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9056"
     },
@@ -18672,8 +18108,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9057"
     },
@@ -18828,8 +18262,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9063"
     },
@@ -18984,8 +18416,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9064"
     },
@@ -19140,8 +18570,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9065"
     },
@@ -19296,8 +18724,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9066"
     },
@@ -19452,8 +18878,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9067"
     },
@@ -19608,8 +19032,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9101"
     },
@@ -19764,8 +19186,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9102"
     },
@@ -19920,8 +19340,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9103"
     },
@@ -20076,8 +19494,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9104"
     },
@@ -20232,8 +19648,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9105"
     },
@@ -20388,8 +19802,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9106"
     },
@@ -20544,8 +19956,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9107"
     },
@@ -20700,8 +20110,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9108"
     },
@@ -20856,8 +20264,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9109"
     },
@@ -21012,8 +20418,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9110"
     },
@@ -21168,8 +20572,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9111"
     },
@@ -21324,8 +20726,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9112"
     },
@@ -21480,8 +20880,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9115"
     },
@@ -21636,8 +21034,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9122"
     },
@@ -21792,8 +21188,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9125"
     },
@@ -21871,8 +21265,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9002"
     },
@@ -21950,8 +21342,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9008"
     },
@@ -22029,8 +21419,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9012"
     },
@@ -22108,8 +21496,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9018"
     },
@@ -22187,8 +21573,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9024"
     },
@@ -22266,8 +21650,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9028"
     },
@@ -22345,8 +21727,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9034"
     },
@@ -22424,8 +21804,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9040"
     },
@@ -22503,8 +21881,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9046"
     },
@@ -22582,8 +21958,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9052"
     },
@@ -22661,8 +22035,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9059"
     },
@@ -22740,8 +22112,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9076"
     },
@@ -22819,8 +22189,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9091"
     },
@@ -22898,8 +22266,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9093"
     },
@@ -22977,8 +22343,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9116"
     },
@@ -23056,8 +22420,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9003"
     },
@@ -23135,8 +22497,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9009"
     },
@@ -23214,8 +22574,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9013"
     },
@@ -23293,8 +22651,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9019"
     },
@@ -23372,8 +22728,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9025"
     },
@@ -23451,8 +22805,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9029"
     },
@@ -23530,8 +22882,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9035"
     },
@@ -23609,8 +22959,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9041"
     },
@@ -23688,8 +23036,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9047"
     },
@@ -23767,8 +23113,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9053"
     },
@@ -23846,8 +23190,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9058"
     },
@@ -23925,8 +23267,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9060"
     },
@@ -24004,8 +23344,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9074"
     },
@@ -24083,8 +23421,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9090"
     },
@@ -24162,8 +23498,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9092"
     },
@@ -24241,8 +23575,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9094"
     },
@@ -24320,8 +23652,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9095"
     },
@@ -24399,8 +23729,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9096"
     },
@@ -24478,8 +23806,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9097"
     },
@@ -24557,8 +23883,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9098"
     },
@@ -24636,8 +23960,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9099"
     },
@@ -24715,8 +24037,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9100"
     },
@@ -24794,8 +24114,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9117"
     },
@@ -24873,8 +24191,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9118"
     },
@@ -24952,8 +24268,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9119"
     },
@@ -25031,8 +24345,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9121"
     },
@@ -25110,8 +24422,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9123"
     },
@@ -25189,8 +24499,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9126"
     },
@@ -25268,8 +24576,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9127"
     },
@@ -25347,8 +24653,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9128"
     },
@@ -25426,8 +24730,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9129"
     },
@@ -25505,8 +24807,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9131"
     },
@@ -25584,8 +24884,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9134"
     },
@@ -25663,8 +24961,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9136"
     },
@@ -25742,8 +25038,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9137"
     },
@@ -25821,8 +25115,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9139"
     },
@@ -25900,8 +25192,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9140"
     },
@@ -25972,8 +25262,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9005"
     },
@@ -26044,8 +25332,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9061"
     },
@@ -26116,8 +25402,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9078"
     },
@@ -26188,8 +25472,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9079"
     },
@@ -26260,8 +25542,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9080"
     },
@@ -26332,8 +25612,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9081"
     },
@@ -26404,8 +25682,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9082"
     },
@@ -26476,8 +25752,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9083"
     },
@@ -26548,8 +25822,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9084"
     },
@@ -26620,8 +25892,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9085"
     },
@@ -26692,8 +25962,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9086"
     },
@@ -26764,8 +26032,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9120"
     },
@@ -26859,8 +26125,6 @@
           "XmlAttribute": "Game"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9007"
     },
@@ -26954,8 +26218,6 @@
           "XmlAttribute": "Game"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9062"
     },
@@ -27049,8 +26311,6 @@
           "XmlAttribute": "Game"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9011"
     },
@@ -27144,8 +26404,6 @@
           "XmlAttribute": "Game"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9027"
     },
@@ -27352,8 +26610,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9068"
     },
@@ -27560,8 +26816,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9069"
     },
@@ -27768,8 +27022,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9072"
     },
@@ -27983,8 +27235,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9077"
     },
@@ -28198,8 +27448,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9070"
     },
@@ -28406,8 +27654,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9071"
     },
@@ -28614,8 +27860,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9073"
     },
@@ -28686,8 +27930,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9075"
     },
@@ -28758,8 +28000,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9087"
     },
@@ -28814,8 +28054,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "707"
     },
@@ -28870,8 +28108,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "708"
     },
@@ -28933,8 +28169,6 @@
           "XmlAttribute": "Game"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "712"
     },
@@ -28996,8 +28230,6 @@
           "XmlAttribute": "Game"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "713"
     },
@@ -29059,8 +28291,6 @@
           "XmlAttribute": "Game"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "3909"
     },
@@ -29122,8 +28352,6 @@
           "XmlAttribute": "Game"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "3912"
     },
@@ -29185,8 +28413,6 @@
           "XmlAttribute": "Game"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "3916"
     },
@@ -29241,8 +28467,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "710"
     },
@@ -29297,8 +28521,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "3906"
     },
@@ -29360,8 +28582,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "709"
     },
@@ -29423,8 +28643,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "3908"
     },
@@ -29486,8 +28704,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "3905"
     },
@@ -29549,8 +28765,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "3907"
     },
@@ -29612,8 +28826,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "3908"
     },
@@ -29668,8 +28880,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "714"
     },
@@ -29748,8 +28958,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Game X Winning Margin:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "711"
     },
@@ -29777,8 +28985,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Match Correct Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "703"
     },
@@ -29846,8 +29052,6 @@
           "Flag": true
         }
       ],
-      "Name": "Extra Time Correct Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "166"
     },
@@ -29915,8 +29119,6 @@
           "Flag": true
         }
       ],
-      "Name": "Extra Time Correct Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "399"
     },
@@ -29958,8 +29160,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "395"
     },
@@ -29999,8 +29199,6 @@
           "Value": "NG"
         }
       ],
-      "Name": "Extra Time Winning Margin:",
-      "Value": "All",
       "Type": 3,
       "BetTypes": "397"
     },
@@ -30059,8 +29257,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "385"
     },
@@ -30119,8 +29315,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "384"
     },
@@ -30175,8 +29369,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "383"
     },
@@ -30231,8 +29423,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "381"
     },
@@ -30287,8 +29477,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "382"
     },
@@ -30471,8 +29659,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "376"
     },
@@ -30530,8 +29716,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Last Digit Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "618"
     },
@@ -30589,8 +29773,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Last Digit Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "619"
     },
@@ -30648,8 +29830,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Last Digit Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "620"
     },
@@ -30707,8 +29887,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Last Digit Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "621"
     },
@@ -30766,8 +29944,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Last Digit Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "622"
     },
@@ -30825,8 +30001,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Last Digit Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "623"
     },
@@ -30884,8 +30058,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Last Digit Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "624"
     },
@@ -30943,8 +30115,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Last Digit Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "625"
     },
@@ -31002,8 +30172,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Last Digit Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "626"
     },
@@ -31088,8 +30256,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Quarter X Last Digit Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "627"
     },
@@ -31174,8 +30340,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Quarter X Last Digit Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "628"
     },
@@ -31260,8 +30424,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Quarter X Last Digit Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "629"
     },
@@ -31494,8 +30656,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Quarters/Halves Result:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "633"
     },
@@ -31548,8 +30708,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Quarters/Halves Result:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "634"
     },
@@ -31602,8 +30760,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Quarters/Halves Result:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "645"
     },
@@ -31801,8 +30957,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9606"
     },
@@ -31841,8 +30995,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9553"
     },
@@ -31881,8 +31033,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9554"
     },
@@ -31979,8 +31129,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9089"
     },
@@ -32067,8 +31215,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9113"
     },
@@ -32155,8 +31301,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9114"
     },
@@ -32243,8 +31387,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9130"
     },
@@ -32331,8 +31473,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9135"
     },
@@ -32419,8 +31559,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9138"
     },
@@ -32491,8 +31629,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9124"
     },
@@ -32563,8 +31699,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9132"
     },
@@ -32635,8 +31769,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9133"
     },
@@ -32711,8 +31843,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9141"
     },
@@ -32787,8 +31917,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "9142"
     },
@@ -32854,8 +31982,6 @@
           "XmlAttribute": "Game"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "3915"
     },
@@ -32925,8 +32051,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "3913"
     },
@@ -32981,8 +32105,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "3900"
     },
@@ -33334,8 +32456,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "All",
       "Type": 8,
       "BetTypes": "3910"
     },
@@ -33687,8 +32807,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "All",
       "Type": 8,
       "BetTypes": "3917"
     },
@@ -33777,8 +32895,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Set X Winning Margin:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "3911"
     },
@@ -34193,8 +33309,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "647"
     },
@@ -34609,8 +33723,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "648"
     },
@@ -35025,8 +34137,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "649"
     },
@@ -35466,8 +34576,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "650"
     },
@@ -35494,8 +34602,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8817"
     },
@@ -35522,8 +34628,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8818"
     },
@@ -35561,8 +34665,6 @@
           "XmlAttribute": "ValueHdp1"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8825"
     },
@@ -35609,8 +34711,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8826"
     },
@@ -35658,8 +34758,6 @@
           "Flag": true
         }
       ],
-      "Name": "Winning Margin:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "8822"
     },
@@ -35699,8 +34797,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8804"
     },
@@ -35768,8 +34864,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8805"
     },
@@ -35837,8 +34931,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8810"
     },
@@ -35906,8 +34998,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8819"
     },
@@ -35982,8 +35072,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8806"
     },
@@ -36058,8 +35146,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8811"
     },
@@ -36134,8 +35220,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8823"
     },
@@ -36210,8 +35294,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8807"
     },
@@ -36286,8 +35368,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8808"
     },
@@ -36362,8 +35442,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8809"
     },
@@ -36438,8 +35516,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8812"
     },
@@ -36514,8 +35590,6 @@
           "XmlAttribute": "Value"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8824"
     },
@@ -36587,8 +35661,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8813"
     },
@@ -36647,8 +35719,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8820"
     },
@@ -36719,8 +35789,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8814"
     },
@@ -36798,8 +35866,6 @@
           "Flag": true
         }
       ],
-      "Name": "All Series Correct Score:",
-      "Value": "All",
       "Type": 2,
       "BetTypes": "8831"
     },
@@ -36850,8 +35916,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8834"
     },
@@ -36902,8 +35966,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 8,
       "BetTypes": "8835"
     }
