@@ -11,7 +11,11 @@
   (refreshEvent)="refreshEvent()"
   [model]="logInfoEvent.filterOtherIssues">
 </filter-other-issues>
-
+<div *ngIf="!isSubTypeRestart()" class="btn-reload pt-2">
+  <button [disabled]="filter.isVoided" type="button" class="btn btn-default btn-sm ml-0" (click)="refreshEvent()">
+    <span><i class="fa fa-refresh" aria-hidden="true"></i></span>
+  </button>
+</div>
 <advanced-mode-add-request #advancedMode
   *ngIf="primitiveProps.isShowAdvancedModeBetTypes"
   [matchId]="logInfoEvent.matchId"
