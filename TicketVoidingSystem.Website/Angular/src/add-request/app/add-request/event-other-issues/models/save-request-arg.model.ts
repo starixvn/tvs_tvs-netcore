@@ -3,7 +3,6 @@ import { EventLeagueComponent } from "../../../../../utility/components/event-le
 import { AddRequestStore } from "../../add-request.store";
 import { ConfirmAddRequestModel } from "../../confirm-add-request/confirm-add-request.model";
 import { FilterModel } from "../../filter/filter.model";
-import { IssueTypes } from "../../filter/issue-types.model";
 import { PermissionAddRequest } from "../../models/permission-add-request.model";
 import { OthersModel } from "../../others/others.model";
 import { FilterOtherIssuesComponent } from "../filter-other-issues/filter-other-issues.component";
@@ -18,7 +17,6 @@ export class SaveRequestArg {
   actionIdOfFirstTimeAccess: string;
   filter: FilterModel;
   others: OthersModel;
-  issueTypes: IssueTypes;
   primitiveProps: PrimitiveProperty;
   logInfoEvent: LogInfoOtherIssues;
   eventLeagueComponent: EventLeagueComponent;

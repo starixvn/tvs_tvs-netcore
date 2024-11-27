@@ -252,7 +252,6 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     arg.requestedBy = this.requestedBy;
     arg.actionIdOfFirstTimeAccess = this.actionIdOfFirstTimeAccess;
     arg.filter = this.filter;
-    arg.issueTypes = this.issueTypes;
     arg.others = this.others;
     arg.primitiveProps = this.primitiveProps;
     arg.defaultFilterTimeWithAllowance = this.defaultFilterTimeWithAllowance;

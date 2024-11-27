@@ -14,7 +14,8 @@ export class LogInfoWrongMarketOffered {
 
 export class LogInfoItem {
   id: number;
-  logInfoDetail = new LogInfoDetail();
+  filterTime: FilterWrongMarketOfferedModel;
+  logInfoDetail: LogInfoDetail;
   messageValidationLogInfo?: ValidationMessage[];
   betTypeCount: BetTypeCountModel[];
 }

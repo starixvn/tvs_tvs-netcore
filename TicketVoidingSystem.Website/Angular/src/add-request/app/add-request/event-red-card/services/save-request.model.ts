@@ -4,7 +4,6 @@ import { AddRequestStore } from '../../add-request.store';
 import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
 import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../../filter/filter.model';
-import { IssueTypes } from '../../filter/issue-types.model';
 import { OthersModel } from '../../others/others.model';
 import { PrimitiveProperty } from '../event-red-card.model';
 import { FilterTimeAreaComponent } from '../filter-time-area/filter-time-area.component';
@@ -19,7 +18,6 @@ export class SaveRequestArg {
   isEdit: boolean;
   actionIdOfFirstTimeAccess: string;
   filter: FilterModel;
-  issueTypes: IssueTypes;
   others: OthersModel;
   primitiveProps: PrimitiveProperty;
   defaultFilterTimeWithAllowance: FilterTimeWithAllowance;

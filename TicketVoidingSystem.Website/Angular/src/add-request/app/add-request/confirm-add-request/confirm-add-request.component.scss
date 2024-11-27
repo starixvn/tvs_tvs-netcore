@@ -1,3 +1,5 @@
+@import '../../../../assets/styles/mixin.scss';
+
 .primary {
   background: #6a6a6a;
   color: #fff;
@@ -28,7 +30,10 @@
   font-size: 12px;
   max-height: 500px;
   overflow: auto;
-  .warning-content {
+  @include scroll-style();
+
+  .warning-content,
+  .extra-warning {
     border-top: 1px solid #ccc;
     padding-top: 5px;
   }
@@ -52,4 +57,10 @@
 }
 .text-red {
   color: red;
+}
+.time-range-id {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
 }

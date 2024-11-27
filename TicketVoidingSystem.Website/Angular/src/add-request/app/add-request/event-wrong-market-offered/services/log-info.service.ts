@@ -4,6 +4,7 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { GetLogInfoQuery } from '../../models/add-request.query';
 import { GetLogInfoModel } from '../../models/get-log-info.model';
+import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-offered.model';
 import { LogInfoItem, LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { EventWrongMarketOfferedService } from './event-wrong-market-offfered.service';
@@ -42,12 +43,13 @@ export class LogInfoService {
   }
 
   private assignResultLogInfoToEvents(logInfoEvent: LogInfoWrongMarketOffered, logInfoModels: GetLogInfoModel[]): void {
-    logInfoEvent.logInfoItems = logInfoModels.map(x => this.createLogInfoItem(x));
+    logInfoEvent.logInfoItems = logInfoModels.map(logInfoModel => this.createLogInfoItem(logInfoModel, logInfoEvent.filterWrongMarketOfferedModels));
   }
 
-  private createLogInfoItem(logInfoModel: GetLogInfoModel): LogInfoItem {
+  private createLogInfoItem(logInfoModel: GetLogInfoModel, filterItems: FilterWrongMarketOfferedModel[]): LogInfoItem {
     return {
       id: logInfoModel.id,
+      filterTime: filterItems.find(filterItem => filterItem.id === logInfoModel.id),
       logInfoDetail: logInfoModel.logInfoDetail,
       messageValidationLogInfo: StaticService.getValidationMessageList(logInfoModel),
       betTypeCount: logInfoModel.betTypeCount

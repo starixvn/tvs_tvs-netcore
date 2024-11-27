@@ -12,6 +12,7 @@ export class ConfirmAddRequestComponent implements OnChanges {
   @Input() model = new ConfirmAddRequestModel();
   @Input() issueTypes: IssueTypes;
   @Input() voidActions: Selection[] = [];
+  @Input() selectedVoidAction: string;
   @Output() clickCancel = new EventEmitter();
   @Output() clickOk = new EventEmitter();
 
@@ -20,9 +21,21 @@ export class ConfirmAddRequestComponent implements OnChanges {
   actionName: string;
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.voidActions);
-    console.log(this.issueTypes);
-    console.log(Date.now());
+    this.onChangeIssueType(changes);
+    this.onChangeAction(changes);
+  }
+
+  onChangeIssueType(changes: SimpleChanges) {
+    if (changes['issueTypes']) {
+      this.issueTypeName = this.issueTypes.issueTypes.find(x => x.issueTypeId === this.issueTypes.issueId)?.issueTypeName;
+      this.subIssueTypeName = this.issueTypes.subIssueTypes.find(x => x.subIssueTypeId === this.issueTypes.subIssueId)?.subIssueTypeName;
+    }
+  }
+
+  onChangeAction(changes: SimpleChanges) {
+    if (changes['selectedVoidAction'] || changes['voidActions']) {
+      this.actionName = this.voidActions?.find(x => x.value === this.selectedVoidAction)?.name;
+    }
   }
 
   onClickCancel() {

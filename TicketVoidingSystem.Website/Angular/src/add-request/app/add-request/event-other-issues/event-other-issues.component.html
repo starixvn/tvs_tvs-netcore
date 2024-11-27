@@ -45,6 +45,9 @@
 </div>
 <confirm-add-request
   [model]="confirmAddRequest"
+  [issueTypes]="issueTypes"
+  [voidActions]="filter.actions"
+  [selectedVoidAction]="filter.action"
   (clickOk)="onClickConfirmSaveRequest()"
   (clickCancel)="onClickCancelSaveRequest()">
 </confirm-add-request>

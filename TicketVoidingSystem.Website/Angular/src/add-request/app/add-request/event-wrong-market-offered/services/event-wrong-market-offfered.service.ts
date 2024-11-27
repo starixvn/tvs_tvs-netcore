@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import moment from 'moment-timezone';
 import { DateTimeFormat } from "../../../../../utility/constants/config";
+import { ExtraWarningModel } from "../../confirm-add-request/confirm-add-request.model";
 import { WrongMarketOfferedModel } from "../../models/event-wrong-market-offered.model";
 import { FilterWrongMarketOfferedModel } from "../models/filter-wrong-market-offered.model";
 import { WrongMarketOfferedGetLogInfoQuery } from "../models/get-log-info.query";
@@ -47,13 +48,24 @@ export class EventWrongMarketOfferedService {
   assignModelsToEvents(inputModels: WrongMarketOfferedModel[]): LogInfoWrongMarketOffered {
     const logInfo = new LogInfoWrongMarketOffered();
     logInfo.matchId = inputModels[0].matchId;
-    //logInfo.betTypeCount = inputModels[0].betTypeCount;
     logInfo.betTeamsResult = inputModels[0].betTeamsResult;
     logInfo.allBetTypesSelection = inputModels[0].allBetTypesSelection;
     logInfo.logInfoItems = inputModels.map(x => this.createLogInfoItem(x));
     logInfo.filterWrongMarketOfferedModels = inputModels.map(x => this.createFilterWrongMarketOfferedModel(x));
 
     return logInfo;
+  }
+
+  getExtraWarningModel(logInfoItems: LogInfoItem[]) {
+    const excludeTimeRange = logInfoItems.filter(x => !x.logInfoDetail).map(x => `${x.filterTime.fromDateTime} - ${x.filterTime.toDateTime}`);
+    if (excludeTimeRange.length === 0) {
+      return null;
+    }
+
+    return {
+      title: 'Time range(s) excluded when creating new request because having no valid tickets:',
+      messages: excludeTimeRange
+    } as ExtraWarningModel;
   }
 
   private createLogInfoItem(inputModel: WrongMarketOfferedModel): LogInfoItem {

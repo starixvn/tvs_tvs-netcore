@@ -3,7 +3,8 @@
   [matchId]="logInfoEvent.matchId"
   (changeEvent)="changeMatchEvent()">
 </event-league>
-<filter-wrong-offered-name #filterWrongOfferedName *ngIf="logInfoEvent.filterWrongOfferedName"
+<filter-wrong-offered-name #filterWrongOfferedName
+  *ngIf="logInfoEvent.filterWrongOfferedName"
   [isEdit]="isEdit"
   [filterModel]="filter"
   (changeFilterEvent)="resetLogInfo()"
@@ -24,4 +25,11 @@
   (searchEvent)="handleSearchEvent()"
   [primitiveProps]="primitiveProps">
 </log-info-wrong-offered-name>
-<confirm-add-request [model]="confirmAddRequest" (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()"></confirm-add-request>
+<confirm-add-request
+  [model]="confirmAddRequest"
+  [issueTypes]="issueTypes"
+  [voidActions]="filter.actions"
+  [selectedVoidAction]="filter.action"
+  (clickOk)="onClickConfirmSaveRequest()"
+  (clickCancel)="onClickCancelSaveRequest()">
+</confirm-add-request>

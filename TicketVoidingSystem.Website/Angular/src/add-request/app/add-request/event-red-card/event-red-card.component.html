@@ -95,5 +95,12 @@
     [model]="addChildMatchModel">
   </add-child-match>
 
-<confirm-add-request [model]="confirmRedCard" (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancel()"></confirm-add-request>
+<confirm-add-request
+  [model]="confirmRedCard"
+  [issueTypes]="issueTypes"
+  [voidActions]="filter.actions"
+  [selectedVoidAction]="filter.action"
+  (clickOk)="onClickConfirmSaveRequest()"
+  (clickCancel)="onClickCancel()">
+</confirm-add-request>
 <tooltip [tooltip]="tooltip"></tooltip>

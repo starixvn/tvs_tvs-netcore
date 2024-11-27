@@ -37,6 +37,13 @@
   <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
   No valid tickets found in the current range
 </div>
-<confirm-add-request [model]="confirmAddRequest" (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()"></confirm-add-request>
+<confirm-add-request
+  [model]="confirmAddRequest"
+  [issueTypes]="issueTypes"
+  [voidActions]="filter.actions"
+  [selectedVoidAction]="filter.action"
+  (clickOk)="onClickConfirmSaveRequest()"
+  (clickCancel)="onClickCancelSaveRequest()">
+</confirm-add-request>
 
 

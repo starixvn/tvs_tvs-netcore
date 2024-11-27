@@ -166,7 +166,6 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
     arg.others = this.others;
     arg.filter = this.filter;
     arg.primitiveProps = this.primitiveProps;
-    arg.issueTypes = this.issueTypes;
     arg.filterWrongOddsSportsBookComponent = this.filterWrongOddsSportsBookComponent;
     arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.advancedModeComponent = this.advancedMode;

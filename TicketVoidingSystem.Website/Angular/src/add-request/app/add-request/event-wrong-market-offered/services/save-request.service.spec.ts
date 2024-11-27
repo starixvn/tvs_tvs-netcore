@@ -142,22 +142,16 @@ describe('SaveRequestService', () => {
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
     service['proceedSaveRequest'] = jest.fn();
-
     const validationService = new ValidationService();
-    validationService.checkCanShowConfirmationWrongMarketOffered = jest.fn().mockImplementation(() => true);
-
     const popupService = new PopupService(null);
     const spyShowConfirm = jest.spyOn(popupService, 'showConfirm').mockImplementation(() => {});
-
     const saveRequestService = new SaveRequestService(validationService, null, popupService, null, null);
     saveRequestService['getMessageConfirmationWrongMarketOffered'] = jest.fn().mockImplementation(() => 'aaa');
     saveRequestService['onClickConfirmSave'] = jest.fn();
 
     saveRequestService['proceedSaveRequest'](saveRequestArg);
 
-    expect(validationService.checkCanShowConfirmationWrongMarketOffered).toHaveBeenCalledTimes(1);
     expect(saveRequestService['getMessageConfirmationWrongMarketOffered']).toHaveBeenCalledTimes(1);
-
     expect(spyShowConfirm.mock.calls[0][0]).toEqual('aaa');
     expect(spyShowConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
     expect(spyShowConfirm.mock.calls[0][2]).toBeInstanceOf(Function);
@@ -172,14 +166,11 @@ describe('SaveRequestService', () => {
   it('#proceedSaveRequest should called #executeSaveRequestApi', async () => {
     const saveRequestArg = new SaveRequestArg();
     const validationService = new ValidationService();
-    validationService.checkCanShowConfirmationWrongMarketOffered = jest.fn().mockImplementation(() => false);
-
     const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
     saveRequestService['executeSaveRequestApi'] = jest.fn();
 
     saveRequestService['proceedSaveRequest'](saveRequestArg);
 
-    expect(validationService.checkCanShowConfirmationWrongMarketOffered).toHaveBeenCalledTimes(1);
     expect(saveRequestService['executeSaveRequestApi']).toHaveBeenCalledTimes(1);
   });
 

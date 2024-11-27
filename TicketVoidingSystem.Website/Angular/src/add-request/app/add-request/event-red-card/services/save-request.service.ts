@@ -70,9 +70,7 @@ export class SaveRequestService {
     arg.confirmRedCard.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
     arg.confirmRedCard.isHasSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);
     arg.confirmRedCard.isHasWarningTicket = arg.allEvents.some(x => x.messageValidationLogInfo?.length > 0);
-    arg.confirmRedCard.issueTypeName = arg.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === arg.filter.issueTypeId).issueTypeName;
-    arg.confirmRedCard.subIssueTypeName = arg.issueTypes.selectedSubIssueTypes.find(x => x.subIssueTypeId.toString() === arg.filter.subIssueTypeId).subIssueTypeName;
-    arg.confirmRedCard.voidAction = arg.filter.actions.find(x => x.value === arg.filter.action).name;
+    arg.confirmRedCard.isShowSubIssueType = true;
     arg.confirmRedCard.isOpen = true;
     arg.confirmRedCard = _.clone(arg.confirmRedCard);
   }

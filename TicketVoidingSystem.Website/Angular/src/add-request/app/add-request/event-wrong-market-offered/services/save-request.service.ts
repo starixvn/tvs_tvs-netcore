@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { StaticService } from 'src/utility/services/static.service';
 import { TEXT } from '../../../../../utility/constants/text';
 import { AddRequestService } from '../../add-request.service';
+import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { PopupService } from '../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
@@ -106,17 +107,16 @@ export class SaveRequestService {
   }
 
   private showPopupConfirmSave(arg: SaveRequestArg) {
+    arg.confirmAddRequest.isOpen = true;
     arg.confirmAddRequest.requestId = arg.requestId;
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
     arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
     arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoItems.some(x => x.logInfoDetail?.settleCount > 0);
     arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.logInfoItems.every(y => y.messageValidationLogInfo.every(t => !t.isError));
-    //arg.confirmAddRequest.issueTypeName = arg.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === arg.filter.issueTypeId).issueTypeName;
-    //arg.confirmAddRequest.subIssueTypeName = arg.issueTypes.subIssueTypes.find(x => x.subIssueTypeId.toString() === arg.filter.subIssueTypeId).subIssueTypeName;
-    //arg.confirmAddRequest.voidAction = arg.filter.actions.find(x => x.value === arg.filter.action).name;
-    arg.confirmAddRequest.isOpen = true;
+    arg.confirmAddRequest.extraWarningModel = this.eventWrongMarketOfferedService.getExtraWarningModel(arg.logInfoEvent.logInfoItems);
     arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
+    arg.confirmAddRequest =  new ConfirmAddRequestModel();
   }
 
   private initAddRequestQuery(argWrongMarketOffered: SaveRequestArg): AddRequestQuery {

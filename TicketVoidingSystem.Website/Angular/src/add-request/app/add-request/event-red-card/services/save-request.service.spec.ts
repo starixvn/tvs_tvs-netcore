@@ -107,15 +107,12 @@ class Helper {
   } as FilterModel;
   static readonly fakeConfirmRedCardModel: ConfirmAddRequestModel = {
     isOpen: null,
-    issueTypeName: '',
-    subIssueTypeName: '',
     isHasWarningTicket: true,
     isHasWarningTakenNote: true,
     isEditingByAnotherUser: false,
     userId: 0,
     requestId: 1,
     requestedBy: '',
-    warningRelatedEvents: [],
     isHasSettledTicket: false
   } as ConfirmAddRequestModel;
   static fakeIssueType: IssueType[] = [{
