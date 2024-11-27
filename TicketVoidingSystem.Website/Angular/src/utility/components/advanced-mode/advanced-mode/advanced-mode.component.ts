@@ -205,20 +205,15 @@ export class AdvancedModeComponent implements OnChanges {
     this.allBetTypes.filter(x => x.isChecked && (x.id === 228 || x.id === 229 || this.betTypesMoreHDP.includes(x.id.toString()))).forEach(y => {
       const betTeam = this.betTeams.find(x => x.checkedBetTypes.some(t => t.split(',').includes(y.id.toString())));
       if (betTeam) {
-          isValidOddsSpread = this.isValidOddsSpread(y.id, betTeam);
-          isValidHDP = this.isValidHDP(y.id, betTeam);
+        if (this.isBetTypeSabaTimeMachine(y.id) && !this.validateInputMultipleDecimal(y.id.toString(), betTeam.inputs[0].value, 'bet-type-saba' + y.id.toString())) {
+          isValidOddsSpread = false;
+        } else if (this.isBetTypeMoreHDP(y.id) && !this.validateInputMultipleDecimal(y.id.toString(), betTeam.items[0].value, 'bet-type-more-hdp')) {
+          isValidHDP = false;
+        }
       }
     });
 
     return result && isValidHDP && isValidOddsSpread;
-  }
-
-  private isValidHDP(betTypeId: number, betTeam: BetTeam){
-    return !this.isBetTypeMoreHDP(betTypeId) || this.validateInputMultipleDecimal(betTypeId.toString(), betTeam.items[0].value, 'bet-type-more-hdp');
-  }
-
-  private isValidOddsSpread(betTypeId: number, betTeam: BetTeam){
-    return !this.isBetTypeSabaTimeMachine(betTypeId) || this.validateInputMultipleDecimal(betTypeId.toString(), betTeam.items[0].value, 'bet-type-saba' + betTypeId.toString());
   }
 
   private isBetTypeSabaTimeMachine(id: number): boolean {
