@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { DateFullTimeNewComponent } from 'src/utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { StaticService } from 'src/utility/services/static.service';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
@@ -9,7 +9,7 @@ import { FilterWrongMarketOfferedModel } from '../../models/filter-wrong-market-
   templateUrl: './filter-time-item.component.html',
   styleUrls: ['./filter-time-item.component.scss']
 })
-export class FilterTimeItemComponent implements OnInit {
+export class FilterTimeItemComponent {
   @Input() model: FilterWrongMarketOfferedModel;
   @Input() isVoided: boolean;
   @Input() index: number;
@@ -23,14 +23,8 @@ export class FilterTimeItemComponent implements OnInit {
   tooltip = new Tooltip();
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
 
-  constructor(
-    private readonly element: ElementRef
-  ) {
+  constructor(private readonly element: ElementRef) {
     this.tooltip.element = this.element;
-  }
-
-
-  ngOnInit(): void {
   }
 
   isValidity(): boolean {
@@ -53,5 +47,9 @@ export class FilterTimeItemComponent implements OnInit {
     if (!this.isVoided) {
       this.removeItemEvent.emit(index);
     }
+  }
+
+  showTooltip(className: string, text: string): void {
+   this.tooltip.display(className, text);
   }
 }

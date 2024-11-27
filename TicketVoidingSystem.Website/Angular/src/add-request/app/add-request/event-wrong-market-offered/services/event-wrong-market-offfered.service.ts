@@ -27,7 +27,9 @@ export class EventWrongMarketOfferedService {
   }
 
   getWrongMarketOfferedModel(subIssueTypeId: number, logInfoEvent: LogInfoWrongMarketOffered): WrongMarketOfferedModel[] {
-     return logInfoEvent.filterWrongMarketOfferedModels.map(filterItem => this.createWrongMarketOfferedModel(subIssueTypeId, logInfoEvent, filterItem));
+     return logInfoEvent.logInfoItems.filter(x => x.logInfoDetail)
+      .map(x => x.filterTime)
+      .map(filterItem => this.createWrongMarketOfferedModel(subIssueTypeId, logInfoEvent, filterItem));
   }
 
   createWrongMarketOfferedModel(subIssueTypeId: number, logInfoEvent: LogInfoWrongMarketOffered,

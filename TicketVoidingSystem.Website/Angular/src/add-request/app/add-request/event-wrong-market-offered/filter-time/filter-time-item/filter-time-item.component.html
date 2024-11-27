@@ -11,7 +11,7 @@
   <div class="d-flex align-items-center mr-2">
     <span class="mr-2">To</span>
     <date-full-time-new #toTimeComponent
-      class="to-date-time"
+      class="to-date-time-{{index + 1}}"
       [isDisabled]="isVoided"
       (changeEvent)="changeFilter()"
       [(dateTime)]="model.toDateTime">

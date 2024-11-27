@@ -1,4 +1,7 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import moment from 'moment-timezone';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
 import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-offered.model';
 import { EventWrongMarketOfferedService } from '../services/event-wrong-market-offfered.service';
 import { FilterTimeItemComponent } from './filter-time-item/filter-time-item.component';
@@ -25,7 +28,7 @@ export class FilterTimeComponent {
   }
 
   isValidity(): boolean {
-    return this.filterItemComponents.toArray().every(x => x.isValidity());
+    return this.filterItemComponents.toArray().every(x => x.isValidity()) && this.isToTimeSmallerThanFromTimeNextScore();
   }
 
   emitRefreshEvent() {
@@ -42,6 +45,23 @@ export class FilterTimeComponent {
     this.changeFilter();
     this.models.splice(index, 1);
     this.reRenderId();
+  }
+
+  isToTimeSmallerThanFromTimeNextScore(): boolean {
+    return this.models.every((model, index) => {
+      if (index === this.models.length - 1) {
+        return true;
+      }
+
+      const momentToTime = moment(model.toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+      const momentFromTimeNextScore = moment(this.models[index + 1].fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+      const comparingFromTimeNextScore = momentFromTimeNextScore.subtract(2, 'milliseconds').format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+      if (momentToTime.isSameOrAfter(moment(comparingFromTimeNextScore, DateTimeFormat.FULL_DATE_TIME_FORMAT))) {
+        this.filterItemComponents.toArray()[index].tooltip.display(`to-date-time-${index + 1}`, LABELS.TO_TIME_MUST_SMALLER_THAN_FOLLOWING_CONSECUTIVE_FROM_TIME);
+        return false;
+      }
+      return true;
+    });
   }
 
   private reRenderId() {

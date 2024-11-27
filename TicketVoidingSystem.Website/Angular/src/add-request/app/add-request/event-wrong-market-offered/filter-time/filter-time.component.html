@@ -6,11 +6,11 @@
       <filter-time-item #filterItem
         [model]="model"
         [isVoided]="isVoided"
-        [index]="index"
         [isLast]="isLast"
         [isFirst]="isFirst"
+        [index]="index"
         (addItemEvent)="addItem()"
-        (removeItemEvent)="removeItem(index)"
+        (removeItemEvent)="removeItem($event)"
         (changeFilterEvent)="changeFilter()">
       </filter-time-item>
     </div>
