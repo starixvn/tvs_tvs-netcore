@@ -2,42 +2,42 @@
   {
     "SiteId": 1000001,
     "Site": "IT QA",
-    "ToList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com",
+    "ToList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com;july.nguyen@starixsoft.com;lani.nguyen@starixsoft.com",
     "CcList": "",
     "BccList": ""
   },
   {
     "SiteId": 1000002,
     "Site": "IT Support",
-    "ToList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com",
+    "ToList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com;july.nguyen@starixsoft.com;lani.nguyen@starixsoft.com",
     "CcList": "",
     "BccList": ""
   },
   {
     "SiteId": 1000004,
     "Site": "CSD Recovery",
-    "ToList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com",
+    "ToList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com;july.nguyen@starixsoft.com;lani.nguyen@starixsoft.com",
     "CcList": "",
     "BccList": ""
   },
   {
     "SiteId": 1000005,
     "Site": "BetFair",
-    "ToList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com",
+    "ToList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com;july.nguyen@starixsoft.com;lani.nguyen@starixsoft.com",
     "CcList": "",
     "BccList": ""
   },
   {
     "SiteId": 1000008,
     "Site": "Cash Out",
-    "ToList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com",
+    "ToList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com;july.nguyen@starixsoft.com;lani.nguyen@starixsoft.com",
     "CcList": "",
     "BccList": ""
   },
   {
     "SiteId": 1000009,
     "Site": "spondemo",
-    "ToList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com",
+    "ToList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com;july.nguyen@starixsoft.com;lani.nguyen@starixsoft.com",
     "CcList": "",
     "BccList": ""
   },
@@ -46,13 +46,13 @@
     "Site": "EmailConfiguration",
     "ToList": "",
     "CcList": "",
-    "BccList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com"
+    "BccList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com;july.nguyen@starixsoft.com;lani.nguyen@starixsoft.com"
   },
   {
     "SiteId": 9000000,
     "Site": "EmailConfigurationJollySports",
     "ToList": "",
     "CcList": "",
-    "BccList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com"
+    "BccList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com;july.nguyen@starixsoft.com;lani.nguyen@starixsoft.com"
   }
 ]
