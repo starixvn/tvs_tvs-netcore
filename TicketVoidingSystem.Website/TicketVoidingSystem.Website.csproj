@@ -46,7 +46,7 @@
     <PackageReference Include="Fanex.BetList.ESports" Version="2.0.0" />
     <PackageReference Include="Fanex.Caching.Redis" Version="2.2.6" />
     <PackageReference Include="Fanex.BetList.NumberGame" Version="2.0.0.3" />
-    <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.1.1" />
+    <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.1.3" />
     <PackageReference Include="Fanex.Data.ProxyClient" Version="1.0.1" />
     <PackageReference Include="Fanex.LetstalkService.Client" Version="2.0.0" />
     <PackageReference Include="Fanex.Logging" Version="2.0.1.1" />
