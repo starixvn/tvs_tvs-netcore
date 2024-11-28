@@ -59,7 +59,6 @@ export class AppComponent implements OnInit {
 
   isLikelyVoidNotParticipate(): boolean {
     return StaticService.isNotParticipate(this.requestDetail.request?.issueTypeId)
-      || StaticService.isLikelyWrongMarketOffered(this.requestDetail.request?.issueTypeId)
       || StaticService.isWrongOddsSportsBook(this.requestDetail.request?.issueTypeId)
       || StaticService.isOtherIssues(this.requestDetail.request?.issueTypeId);
   }
@@ -73,8 +72,12 @@ export class AppComponent implements OnInit {
     return StaticService.isAbnormalBet(this.requestDetail.request?.issueTypeId);
   }
 
+  isShowVoidWrongMarketOffered(): boolean {
+    return StaticService.isLikelyWrongMarketOffered(this.requestDetail.request?.issueTypeId);
+  }
+
   isShowVoidOtherIssue(): boolean {
-    return !this.isShowVoidDuplicateTickets() && !this.isLikelyVoidDangerAccepted()
+    return !this.isShowVoidDuplicateTickets() && !this.isLikelyVoidDangerAccepted() && !this.isShowVoidWrongMarketOffered()
       && !this.isLikelyVoidNotParticipate() && !this.isLikelyVoidEarlyKickOff() && !this.isShowVoidAbnormalBet();
   }
 }

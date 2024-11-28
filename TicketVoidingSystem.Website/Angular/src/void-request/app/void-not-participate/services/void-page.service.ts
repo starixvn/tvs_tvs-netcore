@@ -63,13 +63,6 @@ export class VoidPageService {
       return basicRequestInfo;
     }
 
-    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)) {
-      return {
-        matchId: requestDetail.wrongMarketOfferedModels.matchId,
-        subIssueTypeId: requestDetail.wrongMarketOfferedModels.subIssueTypeId
-      } as BasicRequestInfo;
-    }
-
     if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       return {
         matchId: requestDetail.wrongOddsSportsBookModel.matchId,
@@ -83,6 +76,8 @@ export class VoidPageService {
         subIssueTypeId: requestDetail.otherIssuesModel.subIssueTypeId
       } as BasicRequestInfo;
     }
+
+    return null;
   }
 
   private getSubIssueTypeModel(subIssueTypeId: number, issueTypes: IssueTypesModel): SubIssueType {

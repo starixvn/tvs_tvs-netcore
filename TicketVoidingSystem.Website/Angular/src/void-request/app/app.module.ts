@@ -31,6 +31,7 @@ import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-dup
 import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
 import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
 import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
+import { VoidWrongMarketOfferedComponent } from './void-wrong-market-offered/void-wrong-market-offered.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.com
     VoidEarlyKickOffComponent,
     VoidAbnormalBetComponent,
     MessageAreaComponent,
-    PasswordAreaComponent
+    PasswordAreaComponent,
+    VoidWrongMarketOfferedComponent
   ],
   imports: [
     AdvancedModeModule,

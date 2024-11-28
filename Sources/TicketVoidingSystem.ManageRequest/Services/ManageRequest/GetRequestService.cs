@@ -381,6 +381,7 @@ public class GetRequestServiceImp(
         return requestEventModels.Select((model, index) => new WrongMarketOfferedViewModel
         {
             Id = index + 1,
+            RequestDetailId = model.RequestDetailId,
             MatchId = model.MatchId,
             FilterFromTransTime = model.FilterFromTransTime,
             FilterToTransTime = model.FilterToTransTime,
