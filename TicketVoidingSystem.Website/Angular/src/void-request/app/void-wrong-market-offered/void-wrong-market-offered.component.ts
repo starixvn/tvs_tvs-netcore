@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
-import { StaticService } from '../../../utility/services/static.service';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { TicketsService } from '../services/tickets.service';
@@ -41,7 +40,6 @@ export class VoidWrongMarketOfferedComponent implements OnInit {
     this.voidPageItems = await this.voidPageService.getBasicVoidPageItemsData(this.issueTypes, this.requestDetail);
     this.primitiveProperty.isLoadedBasicData = true;
     this.primitiveProperty.isBlockUI = false;
-
     await this.voidPageService.loadUnderneathVoidPageItemsData(this.voidPageItems, this.requestDetail);
     this.primitiveProperty.isLoadedUnderneathData = true;
   }
@@ -68,17 +66,5 @@ export class VoidWrongMarketOfferedComponent implements OnInit {
 
   onClickVoidAllMatches(): void {
     this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, this.messageAreaComponents.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
-  }
-
-  updateDetailViewModel(): void {
-    this.voidPageItems[0].detailViewModel = this.requestDetail;
-  }
-
-  getKickOffDate(matchId: number): string {
-    return this.requestDetail.earlyKickOffModels.find(x => x.matchId === matchId).kickOffTime;
-  }
-
-  public isShowLogInfo(): boolean {
-    return StaticService.isEarlyKickOff(this.requestDetail.request.issueTypeId) || StaticService.isWrongKickOff(this.requestDetail.request.issueTypeId);
   }
 }

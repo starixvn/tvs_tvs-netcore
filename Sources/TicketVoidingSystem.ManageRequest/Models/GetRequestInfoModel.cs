@@ -6,6 +6,8 @@ public class GetRequestInfoModel
 
     public int MatchId { get; set; }
 
+    public int RequestDetailId { get; set; }
+
     public int TotalSingleProcessed { get; set; }
 
     public int TotalParlayProcessed { get; set; }

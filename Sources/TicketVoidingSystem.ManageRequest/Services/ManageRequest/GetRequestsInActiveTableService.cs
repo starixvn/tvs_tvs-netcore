@@ -3,6 +3,7 @@ using Fanex.BetList.Core.Entities;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
+using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services.BetList;
 
@@ -28,10 +29,10 @@ public class GetRequestsInActiveTableServiceImp(
         var totalVoidedTicketModels = await GetTotalVoidedTickets(requestInfoJson.First());
         foreach (var request in requests)
         {
-            request.TotalSingleProcessed = GetTotalVoidedSingle(request, totalVoidedTicketModels);
-            request.TotalParlayProcessed = GetTotalVoidedParlay(request, totalVoidedTicketModels);
-            request.TotalCancelCashOutProcessed = GetTotalCancelCashOut(request, totalVoidedTicketModels);
-            request.TotalResettleProcessed = GetTotalResettled(request, totalVoidedTicketModels);
+            request.TotalSingleProcessed = GetTotalProcessed(request, totalVoidedTicketModels, x => x.TotalSingleProcessed);
+            request.TotalParlayProcessed = GetTotalProcessed(request, totalVoidedTicketModels, x => x.TotalParlayProcessed);
+            request.TotalCancelCashOutProcessed = GetTotalProcessed(request, totalVoidedTicketModels, x => x.TotalCancelCashOutProcessed);
+            request.TotalResettleProcessed = GetTotalProcessed(request, totalVoidedTicketModels, x => x.TotalResettleProcessed);
             request.BettypeNames = GetListBettypeName(request, betTypeForRequests);
         }
 
@@ -54,36 +55,22 @@ public class GetRequestsInActiveTableServiceImp(
         return results.SelectMany(item => item);
     }
 
-    private static int GetTotalVoidedSingle(RequestModel request, IEnumerable<GetRequestInfoModel> totalVoidedTicketModels)
+    private static int GetTotalProcessed(RequestModel request, IEnumerable<GetRequestInfoModel> totalVoidedTicketModels, Func<GetRequestInfoModel, int> selector)
     {
-        return IsHaveMultipleMatches(request)
-            ? totalVoidedTicketModels.Where(x => x.RequestId == request.RequestId && x.MatchId == request.MatchId)
-                .Select(y => y.TotalSingleProcessed).Sum()
-            : totalVoidedTicketModels.Where(x => x.RequestId == request.RequestId).Select(y => y.TotalSingleProcessed).Sum();
-    }
+        var filteredRequestInfo = totalVoidedTicketModels.Where(x => x.RequestId == request.RequestId);
 
-    private static int GetTotalVoidedParlay(RequestModel request, IEnumerable<GetRequestInfoModel> totalVoidedTicketModels)
-    {
-        return IsHaveMultipleMatches(request)
-            ? totalVoidedTicketModels.Where(x => x.RequestId == request.RequestId && x.MatchId == request.MatchId)
-                .Select(y => y.TotalParlayProcessed).Sum()
-            : totalVoidedTicketModels.Where(x => x.RequestId == request.RequestId).Select(y => y.TotalParlayProcessed).Sum();
-    }
+        filteredRequestInfo = request switch
+        {
+            _ when IsDifferenceByMatchId(request) =>
+                filteredRequestInfo.Where(x => x.MatchId == request.MatchId),
 
-    private static int GetTotalCancelCashOut(RequestModel request, IEnumerable<GetRequestInfoModel> totalVoidedTicketModels)
-    {
-        return IsHaveMultipleMatches(request)
-            ? totalVoidedTicketModels.Where(x => x.RequestId == request.RequestId && x.MatchId == request.MatchId)
-                .Select(y => y.TotalCancelCashOutProcessed).Sum()
-            : totalVoidedTicketModels.Where(x => x.RequestId == request.RequestId).Select(y => y.TotalCancelCashOutProcessed).Sum();
-    }
+            _ when IsDifferenceByRequestDetailId(request) =>
+                filteredRequestInfo.Where(x => x.RequestDetailId == request.RequestDetailId),
 
-    private static int GetTotalResettled(RequestModel request, IEnumerable<GetRequestInfoModel> totalVoidedTicketModels)
-    {
-        return IsHaveMultipleMatches(request)
-            ? totalVoidedTicketModels.Where(x => x.RequestId == request.RequestId && x.MatchId == request.MatchId)
-                .Select(y => y.TotalResettleProcessed).Sum()
-            : totalVoidedTicketModels.Where(x => x.RequestId == request.RequestId).Select(y => y.TotalResettleProcessed).Sum();
+            _ => filteredRequestInfo
+        };
+
+        return filteredRequestInfo.Sum(selector);
     }
 
     private IEnumerable<string> GetListBettypeName(RequestModel request, IEnumerable<GetBettypeForRequestModel> bettypeForRequests)
@@ -92,7 +79,12 @@ public class GetRequestsInActiveTableServiceImp(
             .Select(x => betListService.GetBetTypeName(new Ticket { BetId = x.BetId, BetTypeId = x.Bettype }));
     }
 
-    private static bool IsHaveMultipleMatches(RequestModel request)
+    private static bool IsDifferenceByRequestDetailId(RequestModel request)
+    {
+        return request.IssueTypeId.IsLikelyWrongMarketOffered();
+    }
+
+    private static bool IsDifferenceByMatchId(RequestModel request)
     {
         return IsSimpleMatch(request.IssueTypeId) || IsConditionalMatch(request.IssueTypeId, request.FilterBy);
     }
