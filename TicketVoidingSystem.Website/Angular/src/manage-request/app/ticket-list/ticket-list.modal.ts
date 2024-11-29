@@ -3,5 +3,6 @@ export class TicketListModal {
   minimize?: boolean;
   requestId: number;
   matchId: number;
+  requestDetailId: number;
   allMatchIdsInRequest: string;
 }

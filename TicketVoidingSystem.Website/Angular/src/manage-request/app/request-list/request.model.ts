@@ -25,6 +25,7 @@ export class DetailRequestModel {
   processingCopyDescriptionClass?: string;
   subIssueTypeId: number;
   matchId: number;
+  requestDetailId: number;
   settlementStatus: string;
   description: string;
   totalSingleProcessed: number;

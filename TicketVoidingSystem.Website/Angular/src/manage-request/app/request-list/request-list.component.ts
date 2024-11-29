@@ -136,13 +136,14 @@ export class RequestListComponent implements OnInit, OnChanges {
     this.displayedModels = this.models.slice(this.paging.begin - 1, this.paging.end);
   }
 
-  showTickets(request: RequestModel, matchId: number) {
+  showTickets(request: RequestModel, matchId: number, requestDetailId: number) {
     if (this.isCanClickNoOfTickets()) {
       this.ticketListModal = {
         open: true,
         minimize: false,
         requestId: request.requestId,
         matchId,
+        requestDetailId,
         allMatchIdsInRequest: request.details.map(x => x.matchId).join(','),
       };
     }
@@ -208,19 +209,15 @@ export class RequestListComponent implements OnInit, OnChanges {
       if (request) {
         request.status = x.status;
         if (x.simpleInfo) {
-          if (this.isIssueTypeHaveMultipleMatches(request.issueTypeId, request.filterBy)) {
+          request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
+          if (this.isDifferenceByMatchId(request)) {
             const detail = request.details.find(y => y.matchId === x.simpleInfo.matchId);
-            request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
-            detail.totalSingleProcessed = x.simpleInfo.totalSingleProcessed;
-            detail.totalParlayProcessed = x.simpleInfo.totalParlayProcessed;
-            detail.totalCancelCashOutProcessed = x.simpleInfo.totalCancelCashOutProcessed;
-            detail.totalResettleProcessed = x.simpleInfo.totalResettleProcessed;
+            this.updateDetail(detail, x);
+          } else if(this.isDifferenceByRequestDetailId(request)) {
+            const detail = request.details.find(y => y.requestDetailId === x.simpleInfo.matchId);
+            this.updateDetail(detail, x);
           } else {
-            request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
-            request.details[0].totalSingleProcessed = x.simpleInfo.totalSingleProcessed;
-            request.details[0].totalParlayProcessed = x.simpleInfo.totalParlayProcessed;
-            request.details[0].totalCancelCashOutProcessed = x.simpleInfo.totalCancelCashOutProcessed;
-            request.details[0].totalResettleProcessed = x.simpleInfo.totalResettleProcessed;
+            this.updateDetail(request.details[0], x);
           }
         }
       }
@@ -229,8 +226,19 @@ export class RequestListComponent implements OnInit, OnChanges {
     this.changeDetectorRef.detectChanges();
   }
 
-  private isIssueTypeHaveMultipleMatches(issueTypeId: number, filterBy: number): boolean {
-     return this.isSimpleMatch(issueTypeId) || this.isConditionalMatch(issueTypeId, filterBy);
+  private updateDetail(detail: DetailRequestModel, status: RequestStatus) {
+    detail.totalSingleProcessed = status.simpleInfo.totalSingleProcessed;
+    detail.totalParlayProcessed = status.simpleInfo.totalParlayProcessed;
+    detail.totalCancelCashOutProcessed = status.simpleInfo.totalCancelCashOutProcessed;
+    detail.totalResettleProcessed = status.simpleInfo.totalResettleProcessed;
+  };
+
+  private isDifferenceByRequestDetailId(request: RequestModel): boolean {
+    return [IssueTypeConstant.WRONG_MARKET_OFFERED, IssueTypeConstant.TECHNICAL_ERROR].includes(request.issueTypeId.toString());
+  }
+
+  private isDifferenceByMatchId(request: RequestModel): boolean {
+    return this.isSimpleMatch(request.issueTypeId) || this.isConditionalMatch(request.issueTypeId, request.filterBy);
   }
 
   public isSimpleMatch(issueTypeId: number): boolean {
@@ -269,16 +277,16 @@ export class RequestListComponent implements OnInit, OnChanges {
   public isCanCopyRequestDescription(issueTypeId: number): boolean {
     const issueTypeStr = issueTypeId.toString();
     return [
-        StaticService.isDangerAccepted,
-        StaticService.isRedCard,
-        StaticService.isWrongScore,
-        StaticService.isReducedOver,
-        StaticService.isAbandoned,
-        StaticService.isNotParticipate,
-        StaticService.isLikelyWrongMarketOffered,
-        StaticService.isWrongOddsSportsBook
+      StaticService.isDangerAccepted,
+      StaticService.isRedCard,
+      StaticService.isWrongScore,
+      StaticService.isReducedOver,
+      StaticService.isAbandoned,
+      StaticService.isNotParticipate,
+      StaticService.isLikelyWrongMarketOffered,
+      StaticService.isWrongOddsSportsBook
     ].some(fn => fn(issueTypeStr));
-}
+  }
 
   public getDetailTotalTickets(issueTypeId: number, detail: DetailRequestModel): string {
     const info: string[] = [];

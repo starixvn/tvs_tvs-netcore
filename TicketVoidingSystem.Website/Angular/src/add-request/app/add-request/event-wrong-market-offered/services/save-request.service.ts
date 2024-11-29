@@ -52,43 +52,6 @@ export class SaveRequestService {
     return this.validationService.isValidLogInfoEvent(argWrongMarketOffered.logInfoEvent);
   }
 
-  // private proceedSaveRequest(arg: SaveRequestArg) {
-  //   if (this.validationService.checkCanShowConfirmationWrongMarketOffered(arg)) {
-  //     this.popupService.showConfirm(
-  //       this.getMessageConfirmationWrongMarketOffered(arg),
-  //       async () => {
-  //         await this.onClickConfirmSave(arg);
-  //       },
-  //       () => {
-  //         arg.addRequestStore.changeSavingRequestStatus(false);
-  //       });
-  //   } else {
-  //     this.executeSaveRequestApi(arg);
-  //   }
-  // }
-
-  // private getMessageConfirmationWrongMarketOffered(argWrongMarketOffered: SaveRequestArg): string {
-  //   let message = '';
-  //   if (argWrongMarketOffered.logInfoEvent.logInfoItems.some(x => x.logInfoDetail?.settleCount > 0)) {
-  //     message = `${message}<div class="text-red">The request has settled ticket(s).</div>`;
-  //   }
-
-  //   if (argWrongMarketOffered.logInfoEvent.logInfoItems.every(y => y.messageValidationLogInfo.every(t => !t.isError))) {
-  //     message = `${message}<div>There are some warnings in this request.</div>`;
-  //   }
-
-  //   if (argWrongMarketOffered.isEdit && argWrongMarketOffered.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString()
-  //     && argWrongMarketOffered.filter.action !== argWrongMarketOffered.actionIdOfFirstTimeAccess) {
-  //     message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;
-  //   }
-
-  //   if (argWrongMarketOffered.isEdit && argWrongMarketOffered.userId !== Number(document.getElementById('body').getAttribute('user-id'))) {
-  //     message = `${message}<div style="color:red">Please remind this request ${argWrongMarketOffered.requestId} is confirmed by ${argWrongMarketOffered.requestedBy}.</div>`;
-  //   }
-
-  //   return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
-  // }
-
   private async executeSaveRequestApi(argWrongMarketOffered: SaveRequestArg): Promise<void> {
     const query = this.initAddRequestQuery(argWrongMarketOffered);
     await this.addRequestService.executeSaveRequest(argWrongMarketOffered.isEdit, argWrongMarketOffered.requestId, query, argWrongMarketOffered.addRequestStore);
@@ -107,14 +70,16 @@ export class SaveRequestService {
   }
 
   private showPopupConfirmSave(arg: SaveRequestArg) {
+    if (!arg.filter.isVoided) {
+      arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
+      arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoItems.some(x => x.logInfoDetail?.settleCount > 0);
+      arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.logInfoItems.every(y => y.messageValidationLogInfo.every(t => !t.isError));
+      arg.confirmAddRequest.extraWarningModel = this.eventWrongMarketOfferedService.getExtraWarningModel(arg.logInfoEvent.logInfoItems);
+    }
     arg.confirmAddRequest.isOpen = true;
     arg.confirmAddRequest.requestId = arg.requestId;
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
-    arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
-    arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoItems.some(x => x.logInfoDetail?.settleCount > 0);
-    arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.logInfoItems.every(y => y.messageValidationLogInfo.every(t => !t.isError));
-    arg.confirmAddRequest.extraWarningModel = this.eventWrongMarketOfferedService.getExtraWarningModel(arg.logInfoEvent.logInfoItems);
     arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
     arg.confirmAddRequest =  new ConfirmAddRequestModel();
   }

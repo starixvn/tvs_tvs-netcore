@@ -5,7 +5,7 @@
       <div class="log-info-id">{{logInfo.id}}</div>
       <div class="log-info-detail ">
         <log-info-ticket-count
-          [isShowDetailsButton]="true"
+          [isShowDetailsButton]="!isVoided"
           [model]="logInfo.logInfoDetail"
           (openAffectedDetails)="showAffectedTicketsDetails(logInfo)">
         </log-info-ticket-count>
@@ -14,6 +14,4 @@
     </div>
   </ng-container>
 </div>
-
-<affected-ticket [blockUi]="isBlock" [model]="affectedTicketsModel">
-</affected-ticket>
+<affected-ticket [blockUi]="isBlock" [model]="affectedTicketsModel"></affected-ticket>

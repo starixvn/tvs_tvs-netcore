@@ -15,6 +15,7 @@ export class RequestSimpleInfo {
     totalCancelCashOutProcessed: number;
     totalResettleProcessed: number;
     matchId: number;
+    requestDetailId: number;
 }
 
 export class Result {
