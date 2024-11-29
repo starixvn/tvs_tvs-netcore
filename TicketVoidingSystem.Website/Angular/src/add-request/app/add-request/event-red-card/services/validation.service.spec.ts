@@ -2,6 +2,7 @@ import { QueryList } from '@angular/core';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AddRequestStore } from '../../add-request.store';
+import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
 import { FilterModel } from '../../filter/filter.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { FilterTimeAreaComponent } from '../filter-time-area/filter-time-area.component';
@@ -35,7 +36,7 @@ class Helper {
     logInfoDetail: null,
     messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
     sportType: 0
-  };
+  } as LogInfoRedCard;
 }
 
 describe('ValidationService', () => {
@@ -134,7 +135,7 @@ describe('ValidationService', () => {
       logInfoDetail: null,
       messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
       sportType: 0
-    };
+    } as LogInfoRedCard;
 
     // Action
     const result = validationService.isValidInputRelatedEvent(1, '1', [Helper.fakeLogInfoRedCard, fackRelatedEvent], tooltip);
@@ -172,28 +173,31 @@ describe('ValidationService', () => {
     expect(result).toBe(false);
   });
 
-  it('#validateCommonData should return false when has not subIssueTypeId', async () => {
+  it('#validateCommonData should return undefined when has not subIssueTypeId', async () => {
     // Arrange
     const filterModel = new FilterModel();
     filterModel.subIssueTypeId = undefined;
+    const mockTvDetection = new TvDetectionComponent(null, null);
+    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
 
     // Action
-    const result = validationService.validateCommonData(filterModel, null, null, null, mockAddRequestStore);
+    const result = validationService.validateCommonData(filterModel, null, null, null, mockAddRequestStore, mockTvDetection);
 
     // Assert
-    expect(result).toBe(false);
+    expect(result).toBeUndefined();
   });
 
   it('#validateCommonData should return false when #eventLeagueComponent.isMatchIdValid return false', async () => {
     // Arrange
     const filterModel = new FilterModel();
     filterModel.subIssueTypeId = '1';
-
     const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const spyIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => false);
+    const mockTvDetection = new TvDetectionComponent(null, null);
+    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
 
     // Action
-    const result = validationService.validateCommonData(filterModel, eventLeagueComponent, null, null, mockAddRequestStore);
+    const result = validationService.validateCommonData(filterModel, eventLeagueComponent, null, null, mockAddRequestStore, mockTvDetection);
 
     // Assert
     expect(spyIsMatchIdValid).toHaveBeenCalledTimes(1);
@@ -206,12 +210,13 @@ describe('ValidationService', () => {
     filterModel.subIssueTypeId = '1';
     const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const spyeventLeagueComponentIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
-
     const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
     const spyFilterTimeAreaComponentIsValid = jest.spyOn(filterTimeAreaComponent, 'isValid').mockImplementation(() => false);
+    const mockTvDetection = new TvDetectionComponent(null, null);
+    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
 
     // Action
-    const result = validationService.validateCommonData(filterModel, eventLeagueComponent, filterTimeAreaComponent, null, mockAddRequestStore);
+    const result = validationService.validateCommonData(filterModel, eventLeagueComponent, filterTimeAreaComponent, null, mockAddRequestStore, mockTvDetection);
 
     // Assert
     expect(spyeventLeagueComponentIsMatchIdValid).toHaveBeenCalledTimes(1);
@@ -223,22 +228,21 @@ describe('ValidationService', () => {
     // Arrange
     const filterModel = new FilterModel();
     filterModel.subIssueTypeId = '1';
-
     const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const spyeventLeagueComponentIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
-
     const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
     const spyFilterTimeAreaComponentIsValid = jest.spyOn(filterTimeAreaComponent, 'isValid').mockImplementation(() => true);
-
     const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
     logInfoRedCardComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
     logInfoRedCardComponent.filterTimeWithAllowanceComponent.isValid = jest.fn();
     logInfoRedCardComponent.showValidationDetail = jest.fn();
     const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    const mockTvDetection = new TvDetectionComponent(null, null);
+    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
 
     // Action
-    const result = validationService.validateCommonData(filterModel, eventLeagueComponent, filterTimeAreaComponent, logInfoComponents, mockAddRequestStore);
+    const result = validationService.validateCommonData(filterModel, eventLeagueComponent, filterTimeAreaComponent, logInfoComponents, mockAddRequestStore, mockTvDetection);
 
     // Assert
     expect(spyeventLeagueComponentIsMatchIdValid).toHaveBeenCalledTimes(1);
@@ -250,22 +254,21 @@ describe('ValidationService', () => {
     // Arrange
     const filterModel = new FilterModel();
     filterModel.subIssueTypeId = '1';
-
     const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const spyeventLeagueComponentIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
-
     const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
     const spyFilterTimeAreaComponentIsValid = jest.spyOn(filterTimeAreaComponent, 'isValid').mockImplementation(() => true);
-
     const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
     logInfoRedCardComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
     logInfoRedCardComponent.filterTimeWithAllowanceComponent.isValid = jest.fn().mockImplementation(() => true);
     logInfoRedCardComponent.showValidationDetail = jest.fn();
     const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    const mockTvDetection = new TvDetectionComponent(null, null);
+    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
 
     // Action
-    const result = validationService.validateCommonData(filterModel, eventLeagueComponent, filterTimeAreaComponent, logInfoComponents, mockAddRequestStore);
+    const result = validationService.validateCommonData(filterModel, eventLeagueComponent, filterTimeAreaComponent, logInfoComponents, mockAddRequestStore, mockTvDetection);
 
     // Assert
     expect(spyeventLeagueComponentIsMatchIdValid).toHaveBeenCalledTimes(1);

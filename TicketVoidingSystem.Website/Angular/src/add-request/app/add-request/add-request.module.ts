@@ -86,6 +86,7 @@ import { LinkedLogComponent } from './pool-house-ticket/linked-log/linked-log.co
 import { PoolHouseTicketComponent } from './pool-house-ticket/pool-house-ticket.component';
 import { TicketsComponent } from './pool-house-ticket/tickets/tickets.component';
 import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket-count-other-sports.module';
+import { TvDetectionComponent } from './components/tv-detection/tv-detection.component';
 
 @NgModule({
     declarations: [
@@ -154,6 +155,7 @@ import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket
         EventWrongOfferedNameComponent,
         FilterWrongOfferedNameComponent,
         LogInfoWrongOfferedNameComponent,
+        TvDetectionComponent,
     ],
     exports: [
         AddRequestComponent

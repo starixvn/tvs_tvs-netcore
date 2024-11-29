@@ -1,4 +1,5 @@
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
 
@@ -14,6 +15,7 @@ export class LogInfoRedCard {
   voidTimeArea = new FilterTimeWithAllowance();
   logInfoDetail = new LogInfoDetail();
   messageValidationLogInfo?: ValidationMessage[];
+  tvDetectionModel = new TvDetectionModel();
   eventDate?: Date;
   sportType: number;
 }

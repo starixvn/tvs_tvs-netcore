@@ -15,7 +15,7 @@ export class EventWrongOddsSportsBookService {
     const currentMoment = moment.utc().tz('America/Caracas');
     loginfoEvent.filterWrongOddsSportsBook = new FilterWrongOddsSportsBookModel();
     loginfoEvent.filterWrongOddsSportsBook.filterOddsType = FilterOddsTypeConstant.VALUE;
-    loginfoEvent.filterWrongOddsSportsBook.fromDateTime = moment.utc().tz('America/Caracas').format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    loginfoEvent.filterWrongOddsSportsBook.fromDateTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     loginfoEvent.filterWrongOddsSportsBook.toDateTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
   }
 

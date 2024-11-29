@@ -14,6 +14,7 @@ import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
+import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { PrimitiveProperty } from '../event-red-card/event-red-card.model';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowanceComponent } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
@@ -73,7 +74,7 @@ class Helper {
     logInfoDetail: null,
     leagueName: '',
     sportType: 0
-  };
+  } as RedCardModel;
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
     matchId: 12345,
@@ -106,7 +107,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     sportType: 0
-  };
+  } as LogInfoRedCard;
   static readonly fakeChildMatches: ChildMatchModel[] = [
     {
       matchId: 12345,
@@ -154,7 +155,8 @@ describe('EventDangerAcceptedComponent', () => {
       ConfirmDangerAcceptedComponent,
       FilterTimeAreaComponent,
       LogInfoRedCardComponent,
-      AddChildMatchComponent
+      AddChildMatchComponent,
+      TvDetectionComponent
     ],
     imports: [
       NgbModule,

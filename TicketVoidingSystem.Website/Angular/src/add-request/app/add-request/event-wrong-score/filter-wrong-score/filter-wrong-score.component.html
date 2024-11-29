@@ -5,6 +5,7 @@
     <div class="filter-time d-flex">
       <div class="mr-3">
         <date-full-time-new #fromTimeComponent
+          [timeClass]="getTvDetectionClass()"
           class="from-date-time"
           [isDisabled]="isVoided"
           (changeEvent)="changeFilter()"

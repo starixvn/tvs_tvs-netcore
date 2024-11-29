@@ -58,8 +58,8 @@ public class GetComboParlayHandlerTests
     {
         // Arrange
         var request = new GetComboParlayRequest { RefNo = "1" };
-        var expected = new List<TicketViewModel> { new() { Choice = "<div><span class='combo-name'>1 x </span><span class='combo-stake'>1</span></div><div><span " +
-                                                                    "class='combo-name'> x </span><span class='combo-stake'>2</span></div>", SubTransId = "" } };
+        var expected = new List<TicketViewModel> { new() { Choice = "<div><span class='combo-name'>1</span><span class='combo-stake'> x 1</span></div><div><span " +
+                                                                    "class='combo-name'></span><span class='combo-stake'> x 2</span></div>", SubTransId = "" } };
         var comboName = new[] { "1", "" };
         var tickets = new List<TicketModel> { new() { Stake = 1 }, new() { Stake = 2 } };
         ticketsService.GetComboName(Arg.Any<QueryComboParlay>()).ReturnsForAnyArgs(comboName);

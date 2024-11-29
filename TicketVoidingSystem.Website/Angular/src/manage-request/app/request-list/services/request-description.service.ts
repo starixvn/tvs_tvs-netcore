@@ -138,7 +138,7 @@ export class RequestDescriptionService {
       + `Request No: ${copyInfoResponse.requestInfo.requestId}\n`
       + `Issue Type: ${copyInfoResponse.requestInfo.issueTypeName} - ${copyInfoResponse.requestInfo.subIssueTypeName}\n`
       + `VAR: ${copyInfoResponse.requestInfo.isCheckedVar ? 'YES' : 'NO'}\n`
-      + `Provider: ${copyInfoResponse.requestInfo.provider}\n`
+      + `Provider: ${StaticService.getProviderInfo(copyInfoResponse.requestInfo)}\n`
       + `Start Void Time: ${moment(copyInfoResponse.requestInfo.voidFromTime)
         .format(DateTimeFormat.TIME_FORMAT)} (${copyInfoResponse.requestInfo.filterBy === TVSRequestFilterBy.CHECK_TIME ? "Accept time" : "Trans time"})`
 

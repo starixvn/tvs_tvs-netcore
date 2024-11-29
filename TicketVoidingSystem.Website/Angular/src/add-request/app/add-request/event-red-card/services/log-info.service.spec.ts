@@ -5,7 +5,6 @@ import { IssueType } from '../../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { Result } from '../../../../../utility/models/result';
 import { CommonService } from '../../../../../utility/services/common.service';
-import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
 import { GetLogInfoQuery } from '../../models/add-request.query';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation, ValidationMessage } from '../../models/get-log-info.model';
@@ -92,7 +91,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
     sportType: 0
-  };
+  } as LogInfoRedCard;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '11',
     subIssueTypeId: '1',
@@ -133,14 +132,12 @@ describe('LogInfoService', () => {
   let logInfoService: LogInfoService;
   let mockCommonService: CommonService;
   let mockValidationService: ValidationService;
-  let mockAddRequestApiService: AddRequestApiService;
 
   beforeEach(() => {
     mockValidationService = new ValidationService();
     mockValidationService.isEventMatchValid = jest.fn();
     mockValidationService.isHasAllowanceTime = jest.fn();
     mockValidationService.validateCommonData = jest.fn();
-    mockAddRequestApiService = new AddRequestApiService(null);
     mockCommonService = new CommonService(null);
   });
 

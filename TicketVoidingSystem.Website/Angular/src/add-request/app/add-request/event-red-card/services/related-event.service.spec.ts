@@ -44,7 +44,7 @@ class Helper {
     logInfoDetail: null,
     leagueName: '',
     sportType: 0
-  };
+  } as RedCardModel;
   static readonly fakeFilterTimeWithAllowance: FilterTimeWithAllowance = {
     fromDateTime: Helper.fakeFromDateTime,
     toDateTime: Helper.fakeToDateTime,
@@ -83,7 +83,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     sportType: 0
-  };
+  } as LogInfoRedCard;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '1',
     subIssueTypeId: '1',
@@ -283,7 +283,7 @@ describe('RelatedEventService', () => {
       logInfoDetail: Helper.fakeLogInfoDetail,
       messageValidationLogInfo: Helper.fakeValidationMessage,
       sportType: 0
-    };
+    } as LogInfoRedCard;
     let fackChildMatchModel = Helper.fakeChildMatchModel;
     fackChildMatchModel.matchId = 213;
     fackChildMatchModel.matchType = 2;
@@ -314,7 +314,7 @@ describe('RelatedEventService', () => {
       logInfoDetail: Helper.fakeLogInfoDetail,
       messageValidationLogInfo: Helper.fakeValidationMessage,
       sportType: 0
-    };
+    } as LogInfoRedCard;
     let fackChildMatchModel = Helper.fakeChildMatchModel;
     fackChildMatchModel.matchId = 213;
     fackChildMatchModel.matchType = 2;

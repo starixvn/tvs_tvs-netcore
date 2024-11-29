@@ -1,0 +1,53 @@
+<div class="tv-detection">
+  <label class="tv-detection-label">
+    <input type="checkbox" class="mr-1" [(ngModel)]="isCheckedTvDetection" (ngModelChange)="changeTvDetection($event)" [disabled]="disabled" />TV Detection
+  </label>
+
+  <div class="tv-detection-filter" *ngIf="model.tvDetectionValue">
+    <div>
+      <div class="d-flex">
+        <label class="tv-slow mr-3">
+          <input type="radio" class="mr-1" [disabled]="disabled" [(ngModel)]="model.tvDetectionValue" [value]="1" name="tv-state" (ngModelChange)="updateActualTime()"/>
+          TV Slow
+        </label>
+        <label class="tv-slow">
+          <input type="radio" class="mr-1" [disabled]="disabled" [(ngModel)]="model.tvDetectionValue" [value]="2" name="tv-state" (ngModelChange)="updateActualTime()"/>
+          TV Fast
+        </label>
+      </div>
+      <div class="d-flex">
+        <div class="mr-3">
+          <label class="col-form-label col-form-label-sm">Service Accept Time</label>
+          <input type="text" [(ngModel)]="model.serviceAcceptTime" [disabled]="disabled"
+            (ngModelChange)="changeTimeInput(model.serviceAcceptTime, 'service-accept-time');updateActualTime()"
+            class="service-accept-time form-control form-control-sm" [ngClass]="model.tvDetectionValue === 1 ? 'slow-color' : 'fast-color' " />
+        </div>
+        <div class="mr-3 time-off-set">
+          <label class="col-form-label col-form-label-sm">{{model.tvDetectionValue === 1 ? 'TV Slow' : 'TV Fast' }}</label>
+          <div class="input-group input-group-sm">
+            <input type="text" [(ngModel)]="model.minuteOffset" [disabled]="disabled"
+              (ngModelChange)="changeMinuteInput()"
+              class="form-control border-radius-left-0 minute-input" maxlength="3"
+              [ngClass]="model.tvDetectionValue === 1 ? 'slow-color' : 'fast-color' "
+              />
+            <div class="input-group-prepend"><span class="input-group-text">m</span></div>
+            <input type="text" [(ngModel)]="model.secondOffset" [disabled]="disabled"
+              (ngModelChange)="changeSecondInput()"
+              class="form-control second-input" maxlength="4"
+              [ngClass]="model.tvDetectionValue === 1 ? 'slow-color' : 'fast-color' "
+              />
+            <div class="input-group-prepend"><span class="input-group-text second-prepend">s</span></div>
+          </div>
+        </div>
+        <div class="mr-3">
+          <label class="col-form-label col-form-label-sm">Actual Time</label>
+          <input type="text" [(ngModel)]="model.actualTime" disabled
+            (ngModelChange)="changeTimeInput(model.actualTime, 'actual-time')"
+            class="actual-time form-control form-control-sm" [ngClass]="model.tvDetectionValue === 1 ? 'slow-color' : 'fast-color' " />
+        </div>
+      </div>
+    </div>
+    <div class="tv-state-icon" [ngClass]="model.tvDetectionValue === 1 ? 'tv-slow-icon' : 'tv-fast-icon'"></div>
+  </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

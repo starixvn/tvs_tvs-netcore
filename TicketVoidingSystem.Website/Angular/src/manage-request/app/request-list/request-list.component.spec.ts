@@ -725,7 +725,7 @@ describe('RequestListComponent', () => {
   it('#isIssueTypeHaveMultipleMatches should return true', async () => {
     // Arrange
     const { instance } = await shallow.render();
-    const dataTests = [{issueTypeId: 1, filterBy: 1}, {issueTypeId: 11, filterBy: null}];
+    const dataTests = [{ issueTypeId: 1, filterBy: 1 }, { issueTypeId: 11, filterBy: null }];
 
     // Action & Assert
     dataTests.forEach(x => {
@@ -738,16 +738,35 @@ describe('RequestListComponent', () => {
     // Arrange
     const mockCopyToClipboard = jest.fn();
     const { instance } = await shallow
-    .mock(RequestDescriptionService, { copyToClipboard: mockCopyToClipboard })
-    .render();
+      .mock(RequestDescriptionService, { copyToClipboard: mockCopyToClipboard })
+      .render();
     const requestModel = new RequestModel();
     requestModel.details = [new DetailRequestModel()];
     requestModel.details[0].matchId = 1;
 
     // Action
-    await instance.copyRequestDescription(requestModel);
+    await instance.copyRequestDescriptionSingleMatch(requestModel, 1);
 
     // Assert
+    expect(mockCopyToClipboard).toHaveBeenCalledTimes(1);
+  });
+
+  it('#copyRequestDescription should call #requestDescriptionService.copyToClipboard and update prop of detailRequestModel', async () => {
+    // Arrange
+    const mockCopyToClipboard = jest.fn();
+    const { instance } = await shallow
+      .mock(RequestDescriptionService, { copyToClipboard: mockCopyToClipboard })
+      .render();
+    const requestModel = new RequestModel();
+    requestModel.details = [new DetailRequestModel()];
+    requestModel.details[0].matchId = 1;
+    const detailRequestModel = new DetailRequestModel();
+
+    // Action
+    await instance.copyRequestDescriptionMultiMatches(requestModel, 1, detailRequestModel);
+
+    // Assert
+    expect(detailRequestModel.processingCopyDescriptionClass).toBe('fa fa-paste copy-request-info');
     expect(mockCopyToClipboard).toHaveBeenCalledTimes(1);
   });
 

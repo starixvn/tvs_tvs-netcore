@@ -45,7 +45,7 @@ class Helper {
     logInfoDetail: null,
     leagueName: '',
     sportType: 0
-  };
+  } as RedCardModel;
   static readonly fakeFilterTimeWithAllowance: FilterTimeWithAllowance = {
     fromDateTime: Helper.fakeFromDateTime,
     toDateTime: Helper.fakeToDateTime,
@@ -93,7 +93,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     sportType: 0
-  };
+  } as LogInfoRedCard;
   static readonly fakeChildMatchModel: ChildMatchModel = {
     matchId: Helper.fakeMatchId,
     matchCode: '222',

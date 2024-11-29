@@ -68,7 +68,7 @@ class Helper {
     eventDate: null,
     voidFromTime: Helper.fakeFromDateTime,
     voidToTime: Helper.fakeToDateTime,
-  }];
+  }] as WrongScoreModel[];
   static readonly fakeTicketRequest: TicketRequest = {
     transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
     requestId: Helper.fakeRequestId,

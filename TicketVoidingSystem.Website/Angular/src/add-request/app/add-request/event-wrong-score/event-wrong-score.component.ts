@@ -12,6 +12,8 @@ import { MatchModel } from '../../../../utility/models/match.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
+import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
+import { TvDetectionModel } from '../components/tv-detection/tv-detection.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { WrongScoreModel } from '../models/event-wrong-score.model';
@@ -46,6 +48,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   @Input() wrongScoreModels: WrongScoreModel[] = [];
   @Input() issueTypes = new IssueTypes();
   @Output() updateMatchId = new EventEmitter<MatchModel>();
+  @ViewChild('tvDetection') tvDetectionComponent: TvDetectionComponent;
   @ViewChild('eventLeague') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('wrongScoreInfo') wrongScoreInfoComponents: QueryList<WrongScoreInfoComponent>;
   @ViewChild('filterWrongScore') filterWrongScoreComponent: FilterWrongScoreComponent;
@@ -57,6 +60,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   originWrongScoreModels: WrongScoreModel[] = [];
   confirmWrongScoreModel = new ConfirmWrongScoreModel();
   filterWrongScoreModel: FilterWrongScoreModel;
+  tvDetectionModel = new TvDetectionModel();
   getAllowanceTimeSubscription: Subscription;
   acceptTypeName = "";
 
@@ -95,6 +99,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       this.primitiveProps.isCheckedVar = this.wrongScoreModels[0].isCheckedVar;
       this.primitiveProps.isHighLightVarCheck = !this.wrongScoreModels[0].isCheckedVar;
       this.filterWrongScoreModel = this.wrongScoreService.getFilterWrongScore(this.wrongScoreModels[0]);
+      this.tvDetectionModel = this.wrongScoreService.getTvDetectionModel(this.wrongScoreModels[0]);
       await this.updateWrongScoreModels();
     } else {
       this.filterWrongScoreModel = this.wrongScoreService.initDefaultFilterWrongScore();
@@ -108,7 +113,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     }
 
     if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.addRequestStore, this.filterWrongScoreComponent,
-      this.wrongScoreService.getSelectedWrongScoreComponents(this.wrongScoreInfoComponents))) {
+      this.wrongScoreService.getSelectedWrongScoreComponents(this.wrongScoreInfoComponents), this.tvDetectionComponent)) {
       return;
     }
 
@@ -137,6 +142,13 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       }
     });
     this.wrongScoreModels = _.orderBy(_.uniqBy(this.wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
+  }
+
+  actualTimeChange(actualTime: string) {
+    this.filterWrongScoreComponent.fromTimeComponent.time = moment(actualTime, DateTimeFormat.SIMPLE_TIME_FORMAT)
+      .format(DateTimeFormat.TIME_FORMAT);
+    this.resetData();
+    this.addRequestStore.changeSavingRequestStatus(true);
   }
 
   public updateByOriginWrongScoreModel(originWrongScoreModels: WrongScoreModel[]) {
@@ -260,6 +272,8 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     args.wrongScoreInfoComponents = this.wrongScoreService.getSelectedWrongScoreComponents(this.wrongScoreInfoComponents);
     args.leagueEventWrongScoreComponent = this.eventLeagueComponent;
     args.filterWrongScoreComponent = this.filterWrongScoreComponent;
+    args.tvDetectionComponent = this.tvDetectionComponent;
+    args.tvDetectionModel = this.tvDetectionModel;
     args.addRequestStore = this.addRequestStore;
     args.tooltip = this.tooltip;
 
@@ -276,6 +290,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     args.wrongScoreInfoComponents = this.wrongScoreService.getSelectedWrongScoreComponents(this.wrongScoreInfoComponents);
     args.leagueEventWrongScoreComponent = this.eventLeagueComponent;
     args.filterWrongScoreComponent = this.filterWrongScoreComponent;
+    args.tvDetectionComponent = this.tvDetectionComponent;
     args.addRequestStore = this.addRequestStore;
     args.tooltip = this.tooltip;
 

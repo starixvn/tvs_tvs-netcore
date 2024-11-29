@@ -87,6 +87,7 @@ public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
                 return ticket.IsParlay ? "Parlay" : ticket.BetType;
 
             case IssueTypeConstant.WrongMarketOffered:
+            case IssueTypeConstant.TechnicalError:
             case IssueTypeConstant.WrongOddsSportsBook:
                 return string.Empty;
 

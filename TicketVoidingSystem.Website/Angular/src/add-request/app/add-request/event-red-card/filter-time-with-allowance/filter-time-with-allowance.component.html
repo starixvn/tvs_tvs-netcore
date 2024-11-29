@@ -1,6 +1,6 @@
 <div class="d-flex flex-wrap">
   <div class="d-flex flex-wrap mr-2">
-      <div class="full-time from-date-time">
+      <div class="full-time from-date-time mr-3">
           <label class="col-form-label col-form-label-sm mr-2">From</label>
           <div class="input-group mr-2">
               <input *ngIf="isShowInputFromDate"
@@ -22,6 +22,7 @@
           </div>
           <div class="time-filter">
               <input type="text" class="form-control form-control-sm from-time" placeholder="HH:mm:ss.SSS AM/PM"
+                  [ngClass]="getTvDetectionClass()"
                   [(ngModel)]="fromTime"
                   [disabled]="isDisabled"
                   (blur)="isFromTimeValid()"

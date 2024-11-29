@@ -50,8 +50,10 @@ public class GetComboParlayHandler : IRequestHandler<GetComboParlayRequest, ILis
         var result = new StringBuilder();
         for (var i = 0; i < comboName.Length; i++)
         {
-            var comboNameHtml = $"<span class='combo-name'>{comboName[i]} x </span>";
-            var stake = $"<span class='combo-stake'>{tickets[i].Stake:G29}</span>";
+            var comboNameHtml = $"<span class='combo-name'>{comboName[i]}</span>";
+            var stake = tickets.ElementAtOrDefault(i) != null
+                ? $"<span class='combo-stake'> x {tickets.ElementAtOrDefault(i).Stake:G29}</span>"
+                : "";
             result.Append($"<div>{comboNameHtml}{stake}</div>");
         }
 

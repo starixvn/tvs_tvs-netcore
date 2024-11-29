@@ -8,6 +8,7 @@ import { DateTimeFormat, TVSRequestActionType } from '../../../../../utility/con
 import { LABELS } from '../../../../../utility/constants/labels';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { AddRequestStore } from '../../add-request.store';
+import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { FilterWrongScoreComponent } from '../filter-wrong-score/filter-wrong-score.component';
@@ -20,26 +21,26 @@ export class ValidationService {
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
   private readonly TO_DATE_TIME_CLASS = 'to-date-time';
 
-  public validateCommonData(filter: FilterModel, leagueEventWrongScoreComponent: EventLeagueComponent, addRequestStore: AddRequestStore,
-    filterWrongScoreComponent: FilterWrongScoreComponent, wrongScoreInfoComponents: WrongScoreInfoComponent[]): boolean {
+  public validateCommonData(filter: FilterModel, eventLeagueComponent: EventLeagueComponent, addRequestStore: AddRequestStore,
+    filterWrongScoreComponent: FilterWrongScoreComponent, wrongScoreInfoComponents: WrongScoreInfoComponent[], tvDetectionComponent?: TvDetectionComponent): boolean {
     addRequestStore.checkValidSubIssueTypeInFilter();
-    if (!filter.subIssueTypeId) {
-      return false;
+
+    return filter.subIssueTypeId
+      && eventLeagueComponent.isMatchIdValid()
+      && this.isValidityTvDetection(tvDetectionComponent)
+      && this.isValidityWhenFilter(filter, filterWrongScoreComponent, wrongScoreInfoComponents);
+  }
+
+  public isValidityTvDetection(tvDetectionComponent?: TvDetectionComponent): boolean {
+    return tvDetectionComponent ? tvDetectionComponent.isValidality() : true;
+  }
+
+  public isValidityWhenFilter(filter: FilterModel, filterWrongScoreComponent: FilterWrongScoreComponent, wrongScoreInfoComponents: WrongScoreInfoComponent[]): boolean {
+    if (this.isSubTypeFilterByAcceptedTime(filter.subIssueTypeId)) {
+      return filterWrongScoreComponent.isValid();
     }
 
-    if (!leagueEventWrongScoreComponent.isMatchIdValid()) {
-      return false;
-    }
-
-    if (this.isSubTypeFilterByAcceptedTime(filter.subIssueTypeId) && !filterWrongScoreComponent.isValid()) {
-      return false;
-    }
-
-    if (!this.isSubTypeFilterByAcceptedTime(filter.subIssueTypeId) && wrongScoreInfoComponents.some(x => (!x.isValidDateTime()))) {
-      return false;
-    }
-
-    return true;
+    return wrongScoreInfoComponents.every(x => x.isValidDateTime());
   }
 
   public isValidToDateTime(toTimeComponent: DateFullTimeNewComponent, wrongScoreModel: WrongScoreModel): boolean {

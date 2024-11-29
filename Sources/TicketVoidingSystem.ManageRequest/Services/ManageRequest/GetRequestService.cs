@@ -150,7 +150,12 @@ public class GetRequestServiceImp : GetRequestService
             AATime = model.AATime,
             PATime = model.PATime,
             SATime = model.SATime,
-            IsCheckedVar = model.IsCheckedVar
+            IsCheckedVar = model.IsCheckedVar,
+            TvDetectionValue = model.TvDetectionValue,
+            ServiceAcceptTime = model.ServiceAcceptTime,
+            ActualTime = model.ActualTime,
+            MinuteOffset = model.MinuteOffset,
+            SecondOffset = model.SecondOffset
         });
     }
 
@@ -174,7 +179,12 @@ public class GetRequestServiceImp : GetRequestService
             PATime = model.PATime,
             SATime = model.SATime,
             IsCheckedVar = model.IsCheckedVar,
-            SportType = model.SportType
+            SportType = model.SportType,
+            TvDetectionValue = model.TvDetectionValue,
+            ServiceAcceptTime = model.ServiceAcceptTime,
+            ActualTime = model.ActualTime,
+            MinuteOffset = model.MinuteOffset,
+            SecondOffset = model.SecondOffset
         });
     }
 

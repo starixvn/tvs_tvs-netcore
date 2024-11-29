@@ -36,7 +36,7 @@ class Helper {
     logInfoDetail: null,
     leagueName: '',
     sportType: 0
-  };
+  } as RedCardModel;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '1',
     subIssueTypeId: '1',

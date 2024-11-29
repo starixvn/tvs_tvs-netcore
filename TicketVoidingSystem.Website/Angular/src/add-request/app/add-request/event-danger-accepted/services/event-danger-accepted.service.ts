@@ -4,6 +4,7 @@ import { DateTimeFormat, MatchType } from '../../../../../utility/constants/conf
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
+import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { PrimitiveProperty } from '../../event-red-card/event-red-card.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
@@ -48,16 +49,11 @@ export class EventDangerAcceptedService {
       event.eventName = x.name;
       event.logInfoDetail = x.logInfoDetail;
       event.logInfoDetail.isHasWarningRangeTime = this.validationService.isHasWarningRangeTime(x.filterFromTransTime, x.logInfoDetail.transVoidToTime);
-      event.voidTimeArea = {
-        fromDateTime: x.voidFromTime,
-        toDateTime: x.voidToTime,
-        aaTime: x.aaTime,
-        paTime: x.paTime,
-        saTime: x.saTime
-      } as FilterTimeWithAllowance;
+      event.voidTimeArea = this.getVoidTimeModel(x);
+      event.tvDetectionModel = this.getTvDetectionModel(x);
       event.eventDate = x.eventDate;
       event.sportType = x.sportType;
-      
+
       allEvents.push(event);
     });
 
@@ -68,6 +64,26 @@ export class EventDangerAcceptedService {
       saTime: inputMainEvent.saTime,
     });
     primitiveProps.filterBy = inputMainEvent.filterBy;
+  }
+
+  getVoidTimeModel(inputModel: RedCardModel): FilterTimeWithAllowance {
+    return {
+      fromDateTime: inputModel.voidFromTime,
+        toDateTime: inputModel.voidToTime,
+        aaTime: inputModel.aaTime,
+        paTime: inputModel.paTime,
+        saTime: inputModel.saTime
+    } as FilterTimeWithAllowance;
+  }
+
+  getTvDetectionModel(inputModel: RedCardModel): TvDetectionModel {
+    return {
+      serviceAcceptTime: inputModel.serviceAcceptTime,
+      actualTime: inputModel.actualTime,
+      tvDetectionValue: inputModel.tvDetectionValue,
+      minuteOffset: inputModel.minuteOffset,
+      secondOffset: inputModel.secondOffset,
+    } as TvDetectionModel;
   }
 
   updateDefaultFilterTime(defaultFilter: FilterTimeWithAllowance, inputModels: RedCardModel[]): void {

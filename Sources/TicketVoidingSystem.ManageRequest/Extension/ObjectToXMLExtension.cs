@@ -69,7 +69,12 @@ public static class ObjectToXMLExtension
                        + $"MinTransId='{model.LogInfoDetail?.MinTransId}' "
                        + $"ActionType='{model.LogInfoDetail?.ActionType}' "
                        + $"MinTime='{model.LogInfoDetail?.HighlightMinTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                       + $"MinType='{model.LogInfoDetail?.HighlightAcceptType}' />";
+                       + $"MinType='{model.LogInfoDetail?.HighlightAcceptType}' "
+                       + $"TvDetectionValue='{model.TvDetectionValue}' "
+                       + $"ServiceAcceptTime='{model.ServiceAcceptTime}' "
+                       + $"ActualTime='{model.ActualTime}' "
+                       + $"MinuteOffset='{model.MinuteOffset}' "
+                       + $"SecondOffset='{model.SecondOffset}' />";
 
             stringBuilder.AppendLine(line);
         }
@@ -115,7 +120,12 @@ public static class ObjectToXMLExtension
                 + $"MinTransId='{model.LogInfoDetail?.MinTransId}' "
                 + $"ActionType='{model.LogInfoDetail?.ActionType}' "
                 + $"MinTime='{model.LogInfoDetail?.HighlightMinTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"MinType='{model.LogInfoDetail?.HighlightAcceptType}' />";
+                + $"MinType='{model.LogInfoDetail?.HighlightAcceptType}' "
+                + $"TvDetectionValue='{model.TvDetectionValue}' "
+                + $"ServiceAcceptTime='{model.ServiceAcceptTime}' "
+                + $"ActualTime='{model.ActualTime}' "
+                + $"MinuteOffset='{model.MinuteOffset}' "
+                + $"SecondOffset='{model.SecondOffset}' />";
             stringBuilder.AppendLine(line);
         }
 

@@ -68,4 +68,7 @@ public class RequestInfoForCopy
     public string FromOdds { get; set; }
     public string ToOdds { get; set; }
     public string CorrectOdds { get; set; }
+    public int TvDetectionValue { get; set; }
+    public int MinuteOffset { get; set; }
+    public int SecondOffset { get; set; }
 }

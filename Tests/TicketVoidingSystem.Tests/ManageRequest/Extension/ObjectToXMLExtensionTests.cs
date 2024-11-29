@@ -31,12 +31,13 @@ public class ObjectToXmlExtensionFacts
             "<root><r LiveHomeScore='1' LiveAwayScore='1' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='1-1' " +
             "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
             "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' MatchId='123' SingleCount='1' " +
-            "MainParlayCount='1' ActualScore='2-2' FilterBy='' IsCheckedVar='' MinTransId='' ActionType='' MinTime='' MinType='' />" +
+            "MainParlayCount='1' ActualScore='2-2' FilterBy='' IsCheckedVar='' MinTransId='' ActionType='' MinTime='' MinType='' " +
+            "TvDetectionValue='0' ServiceAcceptTime='' ActualTime='' MinuteOffset='' SecondOffset='' />" +
             Environment.NewLine +
             "<r LiveHomeScore='' LiveAwayScore='' ScoreId='0' AATime='' PATime='' SATime='' LiveScores='' " +
             "SubIssueTypeId='0' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='' VoidFromTime='' " +
             "VoidToTime='' MatchId='' SingleCount='' MainParlayCount='' ActualScore='' FilterBy='' IsCheckedVar='' MinTransId='' ActionType='' " +
-            "MinTime='' MinType='' /></root>";
+            "MinTime='' MinType='' TvDetectionValue='0' ServiceAcceptTime='' ActualTime='' MinuteOffset='' SecondOffset='' /></root>";
 
         var logInfoDetail = new LogInfoDetail
         {
@@ -80,7 +81,7 @@ public class ObjectToXmlExtensionFacts
             "<root><r LiveHomeScore='1' LiveAwayScore='1' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='' " +
             "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='' VoidFromTime='' " +
             "VoidToTime='' MatchId='0' SingleCount='0' MainParlayCount='0' ActualScore='2-2' FilterBy='' IsCheckedVar='' MinTransId='' ActionType='' " +
-            "MinTime='' MinType='' /></root>";
+            "MinTime='' MinType='' TvDetectionValue='0' ServiceAcceptTime='' ActualTime='' MinuteOffset='' SecondOffset='' /></root>";
 
         var model = new WrongScoreInfoViewModel
         {
@@ -111,7 +112,8 @@ public class ObjectToXmlExtensionFacts
             "<root><r LiveHomeScore='' LiveAwayScore='' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='1-1' " +
             "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
             "VoidFromTime='' VoidToTime='' MatchId='123' SingleCount='1' MainParlayCount='1' ActualScore='2-2' FilterBy='2' " +
-            "IsCheckedVar='' MinTransId='' ActionType='' MinTime='2018-10-30 16:20:20.222' MinType='1' /></root>";
+            "IsCheckedVar='' MinTransId='' ActionType='' MinTime='2018-10-30 16:20:20.222' MinType='1' TvDetectionValue='0' " +
+            "ServiceAcceptTime='' ActualTime='' MinuteOffset='' SecondOffset='' /></root>";
 
         var logInfoDetail = new LogInfoDetail
         {
@@ -156,7 +158,8 @@ public class ObjectToXmlExtensionFacts
             "<root><r LiveHomeScore='' LiveAwayScore='' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='1-1' " +
             "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
             "VoidFromTime='' VoidToTime='' MatchId='123' SingleCount='1' MainParlayCount='1' ActualScore='2-2' FilterBy='' " +
-            "IsCheckedVar='' MinTransId='' ActionType='' MinTime='2018-10-30 16:20:20.222' MinType='1' /></root>";
+            "IsCheckedVar='' MinTransId='' ActionType='' MinTime='2018-10-30 16:20:20.222' MinType='1' TvDetectionValue='0' " +
+            "ServiceAcceptTime='' ActualTime='' MinuteOffset='' SecondOffset='' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
             MatchId = 123,
@@ -199,7 +202,8 @@ public class ObjectToXmlExtensionFacts
             "<root><r LiveHomeScore='' LiveAwayScore='' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='' " +
             "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
             "VoidFromTime='' VoidToTime='' MatchId='0' SingleCount='0' MainParlayCount='0' ActualScore='2-2' FilterBy='2' " +
-            "IsCheckedVar='' MinTransId='' ActionType='' MinTime='' MinType='' /></root>";
+            "IsCheckedVar='' MinTransId='' ActionType='' MinTime='' MinType='' TvDetectionValue='0' ServiceAcceptTime='' " +
+            "ActualTime='' MinuteOffset='' SecondOffset='' /></root>";
 
         var model = new WrongScoreInfoViewModel
         {
@@ -230,15 +234,16 @@ public class ObjectToXmlExtensionFacts
         var expected = "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' LiveScores='1-1'" +
                        " FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' VoidFromTime='2018-10-30 16:20:20.222' " +
                        "VoidToTime='2018-10-30 16:20:20.222' TransVoidToTime='0001-01-01 00:00:00.000' SingleCount='1' MainParlayCount='1' IsCheckedVar='' " +
-                       "MinTransId='' ActionType='' MinTime='2018-10-30 16:20:20.222' MinType='' />" + Environment.NewLine +
+                       "MinTransId='' ActionType='' MinTime='2018-10-30 16:20:20.222' MinType='' TvDetectionValue='0' ServiceAcceptTime='' ActualTime='' " +
+                       "MinuteOffset='' SecondOffset='' />" + Environment.NewLine +
                        "<r MatchId='0' AATime='' PATime='' SATime='' FilterBy='' " +
                        "IsMainMatch='false' SubIssueTypeId='0' LiveScores='' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='0001-01-01 00:00:00.000' " +
                        "VoidFromTime='' VoidToTime='' TransVoidToTime='' SingleCount='' MainParlayCount='' IsCheckedVar='' MinTransId='' ActionType='' MinTime='' " +
-                       "MinType='' />" + Environment.NewLine +
+                       "MinType='' TvDetectionValue='0' ServiceAcceptTime='' ActualTime='' MinuteOffset='' SecondOffset='' />" + Environment.NewLine +
                        "<r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' LiveScores='1-1' " +
                        "FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' VoidFromTime='2018-10-30 16:20:20.222' " +
                        "VoidToTime='2018-10-30 16:20:20.222' TransVoidToTime='0001-01-01 00:00:00.000' SingleCount='1' MainParlayCount='1' IsCheckedVar='' " +
-                       "MinTransId='' ActionType='' MinTime='' MinType='' /></root>";
+                       "MinTransId='' ActionType='' MinTime='' MinType='' TvDetectionValue='0' ServiceAcceptTime='' ActualTime='' MinuteOffset='' SecondOffset='' /></root>";
 
         var logInfoDetail = new LogInfoDetail
         {
@@ -303,7 +308,8 @@ public class ObjectToXmlExtensionFacts
         const string expected = "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
                                 "LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
                                 "VoidFromTime='' VoidToTime='' TransVoidToTime='0001-01-01 00:00:00.000' SingleCount='1' MainParlayCount='1' " +
-                                "IsCheckedVar='' MinTransId='' ActionType='' MinTime='' MinType='' /></root>";
+                                "IsCheckedVar='' MinTransId='' ActionType='' MinTime='' MinType='' TvDetectionValue='0' ServiceAcceptTime='' " +
+                                "ActualTime='' MinuteOffset='' SecondOffset='' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
             MatchId = 123,
@@ -340,7 +346,7 @@ public class ObjectToXmlExtensionFacts
         const string expected = "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
                                 "LiveScores='' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
                                 "VoidFromTime='' VoidToTime='' TransVoidToTime='' SingleCount='' MainParlayCount='' IsCheckedVar='' MinTransId='' " +
-                                "ActionType='' MinTime='' MinType='' /></root>";
+                                "ActionType='' MinTime='' MinType='' TvDetectionValue='0' ServiceAcceptTime='' ActualTime='' MinuteOffset='' SecondOffset='' /></root>";
 
         var model = new DangerAcceptedViewModel
         {

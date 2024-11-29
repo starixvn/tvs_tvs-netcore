@@ -1,6 +1,7 @@
 import { QueryList } from '@angular/core';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { AddRequestStore } from '../../add-request.store';
+import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
 import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../../filter/filter.model';
 import { IssueTypes } from '../../filter/issue-types.model';
@@ -24,6 +25,7 @@ export class SaveRequestArg {
   defaultFilterTimeWithAllowance: FilterTimeWithAllowance;
   allEvents: LogInfoRedCard[];
   eventLeagueComponent: EventLeagueComponent;
+  tvDetectionComponent: TvDetectionComponent;
   filterTimeAreaComponent: FilterTimeAreaComponent;
   logInfoComponents: QueryList<LogInfoRedCardComponent>;
   confirmRedCard: ConfirmAddRequestModel;

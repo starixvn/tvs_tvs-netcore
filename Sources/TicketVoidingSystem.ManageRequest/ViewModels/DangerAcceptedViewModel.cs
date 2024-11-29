@@ -24,4 +24,9 @@ public class DangerAcceptedViewModel
     public LogInfoDetail? LogInfoDetail { get; set; }
     public bool? IsCheckedVar { get; set; }
     public int SportType { get; set; }
+    public int TvDetectionValue { get; set; }
+    public string ServiceAcceptTime { get; set; }
+    public string ActualTime { get; set; }
+    public int? MinuteOffset { get; set; }
+    public int? SecondOffset { get; set; }
 }
