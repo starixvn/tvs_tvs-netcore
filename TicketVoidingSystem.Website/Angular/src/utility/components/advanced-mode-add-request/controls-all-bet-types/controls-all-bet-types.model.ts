@@ -4,7 +4,6 @@ import { MultipleSelection } from '../../multiple-selection/multiple-selection';
 
 export class ControlsAllBetTypes {
     type: string;
-    values: string;
     items: MultipleSelection;
     isShow: boolean;
 
@@ -21,10 +20,14 @@ export class ControlsAllBetTypes {
     }
 
     constructor(type: string, items: ItemsSelect[]){
-        this.values = "";
         this.isShow = false;
         this.type = type;
         this.items = ControlsAllBetTypes.initSelectionAllBetType(items);
+    }
+
+    resetAllChecked(){
+        this.items.checkAllItems(true);
+        this.items.isCheckAll = true;
     }
 }
 
