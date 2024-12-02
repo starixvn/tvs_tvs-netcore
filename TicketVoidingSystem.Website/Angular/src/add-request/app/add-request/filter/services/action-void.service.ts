@@ -37,6 +37,7 @@ export class ActionVoidService {
       [IssueTypeConstant.ABNORMAL_BET]: [],
       [IssueTypeConstant.DUPLICATE_TICKETS]: [],
       [IssueTypeConstant.WRONG_OFFERED_NAME]: ActionVoidByIssueTypeConst.WRONG_OFFERRED_NAME,
+      [IssueTypeConstant.OTHER_ISSUES]: ActionVoidByIssueTypeConst.OTHER_ISSUES
     };
 
     let actionIds: number[] = [];

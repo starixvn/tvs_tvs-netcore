@@ -34,6 +34,7 @@ public class TicketsViewModel
     public List<BetId> AllCancelCashOutTickets { get; set; }
     public short GroupPHAffected { get; set; }
     public ContentByLanguageModel BetTypeNameReplaceMessage { get; set; }
+    public string SmallestMapTicket { get; set; }
 }
 
 public class TicketViewModel

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { PlayerName, RequestDetailViewModel } from 'src/edit-request/app/request.model';
+import { PlayerName, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateContent, TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { EventType, SportType } from '../../../../utility/constants/sport.constant';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
-import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,13 +28,18 @@ export class TemplateMessageService {
     if (this.isSpecialBetType(requestDetail.request.issueTypeId)) {
       this.setSpecialBetTypeProperties(templateValue, voidPageItem.voidTicketsMini, requestDetail, voidPageItem.logInfoDetail);
     }
+
+    if (StaticService.isOtherIssues(requestDetail.request.issueTypeId)) {
+      templateValue.smallestMapTicket = voidPageItem.voidTicketsMini.smallestMapTicket;
+    }
     
     return templateValue;
   }
 
   private isSpecialBetType(issueTypeId: number): boolean {
     return StaticService.isLikelyWrongMarketOffered(issueTypeId)
-      || StaticService.isWrongOddsSportsBook(issueTypeId);
+      || StaticService.isWrongOddsSportsBook(issueTypeId)
+      || StaticService.isOtherIssues(issueTypeId);
   }
 
   private setSpecialBetTypeProperties(templateValue: TemplateValue, voidTicketsMini: TicketsModel, requestDetail: RequestDetailViewModel,

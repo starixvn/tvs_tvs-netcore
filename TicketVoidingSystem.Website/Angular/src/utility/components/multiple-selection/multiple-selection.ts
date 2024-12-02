@@ -66,8 +66,6 @@ export class MultipleSelection {
         }
         this.isShowPlaceHolder = textDisplay === this.noneItemCheckedText;
 
-
-
         return textDisplay;
     }
 
@@ -80,15 +78,11 @@ export class MultipleSelection {
     }
 
     updateItemChecked(checkedItems: string[]) {
-        this.items.forEach(item => {
-            item.checked = checkedItems.includes(item.value);
-        });
+        this.items.forEach(item => item.checked = checkedItems.includes(item.value));
         this.selectionTitle = this.getDisplayedItems();
     }
 
     updateDisableStatus(isDisabled: boolean) {
-        this.items.forEach(item => {
-            item.enable = !isDisabled;
-        });
+        this.items.forEach(item => item.enable = !isDisabled);
     }
 }

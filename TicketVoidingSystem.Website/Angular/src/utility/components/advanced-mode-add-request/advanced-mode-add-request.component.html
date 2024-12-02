@@ -8,6 +8,7 @@
   </group-bet-types>
   <advanced-mode #advancedMode
     (changeFilterEvent)="changeFilter()"
+    (isLoadingData)="checkingLoadDataAdvancedMode($event)"
     [advancedModeAddRequestModel]="model"
     [matchId]="matchId"
     [changedBetTypes]="changedBetTypes">

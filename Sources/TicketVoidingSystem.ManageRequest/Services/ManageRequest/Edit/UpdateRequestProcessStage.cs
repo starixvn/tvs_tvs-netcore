@@ -86,6 +86,7 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
         command.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
         command.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
         command.WrongOfferedNameInfo = query.WrongOfferedNameInfo?.ToEventWrongOfferedNameXml();
+        command.OtherIssuesInfo = query.OtherIssuesInfo?.ToEventOtherIssuesXml();
 
         return command;
     }

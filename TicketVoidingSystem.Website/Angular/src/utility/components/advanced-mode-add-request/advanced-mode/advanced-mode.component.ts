@@ -11,9 +11,9 @@ import { OddsInfo } from '../../advanced-mode/advanced-mode/advanced-mode.model'
 import { AdvancedModeService } from '../../advanced-mode/advanced-mode/advanced-mode.service';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model';
+import { ControlsAllBetTypesLists } from '../controls-all-bet-types/controls-all-bet-types.model';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advanced-mode.model';
-import { ControlsAllBetTypesLists } from '../controls-all-bet-types/controls-all-bet-types.model';
 
 @Component({
   selector: 'advanced-mode',
@@ -25,6 +25,7 @@ export class AdvancedModeComponent {
   @Input() changedBetTypes: BetTypeAddRequest[] = [];
   @Input() advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   @Output() changeFilterEvent = new EventEmitter();
+  @Output() isLoadingData = new EventEmitter<boolean>();
 
   betTeams: BetTeamAddRequest[] = [];
   isCollapse = true;
@@ -60,12 +61,14 @@ export class AdvancedModeComponent {
   }
   
   public async getBetTeamAndRenderValue(matchId: number): Promise<void> {
+    this.isLoadingData.emit(true);
     await this.getBetTeam();
     this.baseBetTeams.forEach(x => {
       x.isShow = this.changedBetTypes.some(y => y.id.toString() === x.betTypes);
     })
     await this.getSpecialBetTeamCricket(matchId);
     this.renderBetTeams(this.baseBetTeams);
+    this.isLoadingData.emit(false);
   }
 
   expandAndValidate() {
@@ -139,6 +142,8 @@ export class AdvancedModeComponent {
         return checkedBetType.player;
       case 'playerandodds':
         return checkedBetType.playerAndOdds;
+      case 'oddsspread':
+        return checkedBetType.oddsSpread;
       case '_xx':
       case '_xxx':
       case 'betidx':
@@ -362,5 +367,9 @@ export class AdvancedModeComponent {
 
   public getAllBetTypesSelection(): AllBetTypesSelection[]{
     return this.controlsAllBetTypesLists.filter(x => x.isShow).map(y => { return {name: y.type, value: y.items.getValueItems()} as AllBetTypesSelection });;
+  }
+
+  public resetControlsAllBetTypes() {
+    this.controlsAllBetTypesLists.forEach(x => x.resetAllChecked())
   }
 }

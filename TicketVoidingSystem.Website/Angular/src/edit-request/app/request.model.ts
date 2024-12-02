@@ -3,6 +3,7 @@ import { AbnormalBetModel } from '../../add-request/app/add-request/models/abnor
 import { DuplicateTicketsModel } from '../../add-request/app/add-request/models/event-duplicate-tickets.model';
 import { EarlyKickOffModel } from '../../add-request/app/add-request/models/event-eko.model';
 import { NotParticipateModel } from '../../add-request/app/add-request/models/event-not-participate.model';
+import { OtherIssuesModel } from '../../add-request/app/add-request/models/event-other-issues.model';
 import { RedCardModel } from '../../add-request/app/add-request/models/event-red-card.model';
 import { ReducedOverModel } from '../../add-request/app/add-request/models/event-reduced-over.model';
 import { WrongHdpModel } from '../../add-request/app/add-request/models/event-wrong-hdp.model';
@@ -93,6 +94,7 @@ export class RequestDetailViewModel {
   wrongMarketOfferedModel?: WrongMarketOfferedModel;
   wrongOddsSportsBookModel?: WrongOddsSportsBookModel;
   wrongOfferedNameModel?: WrongOfferedNameModel;
+  otherIssuesModel?: OtherIssuesModel;
 }
 
 export class PlayerName {

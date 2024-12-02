@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { LocalStorageCacheConstant } from '../../../../utility/constants/local-storage-cache.constant';
+import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
 import { IssueType } from '../../../../utility/models/issue-type.model';
 import { Selection } from '../../../../utility/models/selection.model';
@@ -46,6 +47,7 @@ export class FilterComponent implements OnInit, OnChanges {
 
   private initialize: boolean;
   private readonly SELECT_SUB_TYPE_TEXT = 'Select Sub Type';
+  private readonly ignoreSubIssueType = [ SubIssueTypeConstant.GAME_CRASHED_VOID_LIVE ];
 
   constructor(
     private readonly filterService: FilterService,
@@ -211,6 +213,7 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.TECHNICAL_ERROR]: {action: 170 },
       [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: {action: 170 },
       [IssueTypeConstant.WRONG_OFFERED_NAME]: {subIssueType: 175, action: 165 },
+      [IssueTypeConstant.OTHER_ISSUES]: {subIssueType: 175, action: 165 }
     };
 
     const widthValues = widthMapping[this.model.issueTypeId] || {};
@@ -303,7 +306,8 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   updateSubByIssue() {
-    this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.issueTypeId === this.issueTypes.issueId);
+    this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes
+      .filter(x => x.issueTypeId === this.issueTypes.issueId && !this.ignoreSubIssueType.includes(x.subIssueTypeId));
     this.issueTypes.subIssueId = this.isShowButtonSelectSubType() ? null : this.issueTypes.selectedSubIssueTypes[0].subIssueTypeId;
   }
 
@@ -311,7 +315,8 @@ export class FilterComponent implements OnInit, OnChanges {
     const sub = this.issueTypes.subIssueTypes.find(x => x.subIssueTypeId === Number(this.model.subIssueTypeId));
     this.issueTypes.issueId = _.isUndefined(sub) ? this.issueTypes.issueId : sub.issueTypeId;
     this.issueTypes.subIssueId = _.isUndefined(sub) ? this.issueTypes.issueId : sub.subIssueTypeId;
-    this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.issueTypeId === this.issueTypes.issueId);
+    this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.issueTypeId === this.issueTypes.issueId
+      && !this.ignoreSubIssueType.includes(x.subIssueTypeId));
   }
 
   changeActionWaitingToManualVoid(): void {

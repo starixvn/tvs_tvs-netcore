@@ -7,6 +7,7 @@ import { EventDetailModel } from './event-detail.model';
 import { DuplicateTicketsModel } from './event-duplicate-tickets.model';
 import { EarlyKickOffModel } from './event-eko.model';
 import { NotParticipateModel } from './event-not-participate.model';
+import { OtherIssuesModel } from './event-other-issues.model';
 import { RedCardModel } from './event-red-card.model';
 import { ReducedOverModel } from './event-reduced-over.model';
 import { EventTicket14Model } from './event-ticket-14.model';
@@ -39,6 +40,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
   earlyKickOffModels: EarlyKickOffModel[];
   recoverTicketModel: RecoverTicketModel;
   wrongOfferedNameModel: WrongOfferedNameModel;
+  otherIssuesModel: OtherIssuesModel;
   others: OthersModel;
 
   constructor() {
@@ -60,6 +62,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
     this.wrongMarketOfferedModel = new WrongMarketOfferedModel();
     this.wrongOddsSportsBookModel = new WrongOddsSportsBookModel();
     this.wrongOfferedNameModel = new WrongOfferedNameModel();
+    this.otherIssuesModel = new OtherIssuesModel();
     this.others = new OthersModel();
   }
 }

@@ -46,6 +46,8 @@ public class GetLogInfoCriteria : CriteriaBase
 
     public string WrongOfferedNameInfo { get; set; }
 
+    public string OtherIssuesInfo { get; set; }
+
     public string? TransInfoJson { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_LogInfo_Select";

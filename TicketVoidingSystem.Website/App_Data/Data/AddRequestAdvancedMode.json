@@ -2199,10 +2199,10 @@
       ],
       "Inputs": [
         {
-          "Name": "Value",
+          "Name": "OU",
           "Value": "",
           "IsMultiple": true,
-          "XmlAttribute": "Hdp1"
+          "XmlAttribute": "OddsSpread"
         }
       ],
       "Type": 1,
@@ -2600,10 +2600,10 @@
       ],
       "Inputs": [
         {
-          "Name": "Value",
+          "Name": "HDP",
           "Value": "",
           "IsMultiple": true,
-          "XmlAttribute": "Hdp1"
+          "XmlAttribute": "OddsSpread"
         }
       ],
       "Type": 1,

@@ -90,6 +90,7 @@ public class AddRequestProcessStageImp : AddRequestProcessStage
         command.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
         command.WrongOddsSBInfo = query.WrongOddsSportsBookInfo?.ToEventWrongOddsSportsBookXml();
         command.WrongOfferedNameInfo = query.WrongOfferedNameInfo?.ToEventWrongOfferedNameXml();
+        command.OtherIssuesInfo = query.OtherIssuesInfo?.ToEventOtherIssuesXml();
 
         await repository.ExecuteAsync(command);
         if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
@@ -125,6 +126,7 @@ public class AddRequestProcessStageImp : AddRequestProcessStage
             IssueTypeConstant.TechnicalError => query.WrongMarketOfferedInfo?.MatchId.ToString(),
             IssueTypeConstant.WrongOddsSportsBook => query.WrongOddsSportsBookInfo?.MatchId.ToString(),
             IssueTypeConstant.WrongOfferedName => query.WrongOfferedNameInfo?.MatchId.ToString(),
+            IssueTypeConstant.OtherIssues => query.OtherIssuesInfo?.MatchId.ToString(),
             _ => string.Empty
         };
     }

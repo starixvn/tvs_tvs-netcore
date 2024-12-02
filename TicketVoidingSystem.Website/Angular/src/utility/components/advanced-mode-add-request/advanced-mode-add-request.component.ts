@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { PrimaryBetType } from '../advanced-mode/group-bettypes/group-bettypes.model';
 import { AdvancedModeAddRequestModel } from './advanced-mode-add-request.model';
 import { AdvancedModeComponent } from './advanced-mode/advanced-mode.component';
@@ -11,21 +11,16 @@ import { BetTypeAddRequest, GroupBetTypesAddRequestModel } from './group-bet-typ
   templateUrl: './advanced-mode-add-request.component.html',
   styleUrls: ['./advanced-mode-add-request.component.scss']
 })
-export class AdvancedModeAddRequestComponent implements OnInit {
+export class AdvancedModeAddRequestComponent {
   @Input() matchId: number;
   @Input() model: AdvancedModeAddRequestModel;
   @Input() groupBetTypes = new GroupBetTypesAddRequestModel([], false, '', false);
   @Output() checkExistBetTypeEvent = new EventEmitter<boolean>();
   @Output() changeFilterEvent = new EventEmitter();
+  @Output() isLoadingData = new EventEmitter<boolean>();
   @ViewChild('groupBetTypesComponent') groupBetTypesComponent: GroupBetTypesComponent;
   @ViewChild('advancedMode') advancedModeComponent: AdvancedModeComponent;
   changedBetTypes: BetTypeAddRequest[] = [];
-
-  constructor( ) {
-  }
-
-  ngOnInit(): void {
-  }
 
   changeBetTypes(betTypes: BetTypeAddRequest[]) {
     this.changedBetTypes = betTypes;
@@ -33,6 +28,10 @@ export class AdvancedModeAddRequestComponent implements OnInit {
 
   changeFilter() {
     this.changeFilterEvent.emit();
+  }
+
+  checkingLoadDataAdvancedMode(isLoading: boolean): void {
+    this.isLoadingData.emit(isLoading);
   }
 
   getCheckedBetTypes(): BetTeamAddRequestResult[] {
@@ -69,5 +68,10 @@ export class AdvancedModeAddRequestComponent implements OnInit {
 
   isValidity() {
     return this.groupBetTypesComponent.isValidity() && this.advancedModeComponent.isValidity();
+  }
+
+  public resetAllBetTeams(){
+    this.advancedModeComponent?.betTeams.forEach(x => x.resetAllChecked());
+    this.advancedModeComponent?.resetControlsAllBetTypes();
   }
 }

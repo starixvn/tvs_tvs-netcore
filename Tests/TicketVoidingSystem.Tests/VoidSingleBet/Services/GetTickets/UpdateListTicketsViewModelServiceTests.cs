@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fanex.BetList.Core.Entities;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
+using TicketVoidingSystem.SharedApi.Models.BetTypes;
+using TicketVoidingSystem.SharedApi.Services.BetTypes;
 using TicketVoidingSystem.VoidSingleBet.Models;
 using TicketVoidingSystem.VoidSingleBet.Services.GetTickets;
 using TicketVoidingSystem.VoidSingleBet.ViewModels;
@@ -18,7 +22,7 @@ public class UpdateListTicketsViewModelServiceTests
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void Update_ValidParams_ModelHasUpdated(bool isMixParlay)
+    public async Task Update_ValidParams_ModelHasUpdated(bool isMixParlay)
     {
         // Arrange
         var betTypeNameReplaceMessage = new ContentByLanguageModel
@@ -36,6 +40,7 @@ public class UpdateListTicketsViewModelServiceTests
         licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.JollyView].LicenseesName = "123";
         var expected = new ListTicketsViewModel
         {
+            SmallestMapTicket = "1",
             TotalItems = 5,
             SingleCount = 4,
             ParlayCount = 1,
@@ -51,35 +56,41 @@ public class UpdateListTicketsViewModelServiceTests
         {
             new()
             {
-                LicenseeName = "343", IsCashOut = true, IsDeposit = true, IsMixParlay = isMixParlay, IsChinaView = true,
-                TransDate = new DateTime(2023, 5, 9, 2, 2, 2), CheckTime = new DateTime(2023, 5, 7, 2, 2, 2)
+                LicenseeName = "343", IsCashOut = true, IsDeposit = true, IsMixParlay = isMixParlay, IsChinaView = true, BetId = 801,
+                BetType = 901, TransDate = new DateTime(2023, 5, 9, 2, 2, 2), CheckTime = new DateTime(2023, 5, 7, 2, 2, 2)
             },
             new()
             {
-                LicenseeName = "343", IsCashOut = true, IsDeposit = false, IsMixParlay = !isMixParlay,
+                LicenseeName = "343", IsCashOut = true, IsDeposit = false, IsMixParlay = !isMixParlay, BetId = 801,
                 IsChinaView = true, TransDate = new DateTime(2023, 5, 7, 2, 2, 2),
-                CheckTime = new DateTime(2023, 5, 9, 2, 2, 2)
+                BetType = 901, CheckTime = new DateTime(2023, 5, 9, 2, 2, 2)
             },
             new()
             {
-                LicenseeName = "12BET", IsInstantSettlement = true, IsDeposit = true, IsMixParlay = false,
+                LicenseeName = "12BET", IsInstantSettlement = true, IsDeposit = true, IsMixParlay = false, BetId = 801,
                 IsChinaView = false, TransDate = new DateTime(2023, 5, 8, 2, 2, 2),
-                CheckTime = new DateTime(2023, 5, 8, 2, 2, 2)
+                BetType = 901, CheckTime = new DateTime(2023, 5, 8, 2, 2, 2)
             },
             new()
             {
-                LicenseeName = "123", IsCashOut = true, IsDeposit = true, IsMixParlay = false, IsChinaView = false,
+                LicenseeName = "123", IsCashOut = true, IsDeposit = true, IsMixParlay = false, IsChinaView = false, BetId = 801,
                 SpecialPlatform = 2, TransDate = new DateTime(2023, 5, 9, 2, 2, 2),
-                CheckTime = new DateTime(2023, 5, 8, 2, 2, 2)
+                BetType = 901, CheckTime = new DateTime(2023, 5, 8, 2, 2, 2)
             },
             new()
             {
-                LicenseeName = "123", IsCashOut = true, IsDeposit = false, IsMixParlay = false, IsChinaView = false,
+                LicenseeName = "123", IsCashOut = true, IsDeposit = false, IsMixParlay = false, IsChinaView = false, BetId = 801,
                 SpecialPlatform = 2, TransDate = new DateTime(2023, 5, 9, 2, 2, 2),
-                CheckTime = new DateTime(2023, 5, 8, 2, 2, 2)
+                BetType = 901, CheckTime = new DateTime(2023, 5, 8, 2, 2, 2)
             }
         };
+        var betTypesViewModel = new BetTypesViewModel
+        {
+            BetTypes = new List<BetTypeModel> { new() { Name = "Map X", Id = "901" } }
+        };
         var betListService = Substitute.For<BetListService>();
+        var betTypesRepository = Substitute.For<BetTypesRepository>();
+        betTypesRepository.GetBetTypes(Arg.Any<GetBetTypesCriteria>()).ReturnsForAnyArgs(betTypesViewModel);
         betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("ContentEnglish");
         betListService.GetBetTypeNameChineseTraditional(Arg.Any<Ticket>())
             .ReturnsForAnyArgs("ContentChineseTraditional");
@@ -87,10 +98,10 @@ public class UpdateListTicketsViewModelServiceTests
         betListService.GetBetTypeNameNewChineseSimplified(Arg.Any<Ticket>())
             .ReturnsForAnyArgs("ContentNewChineseSimplified");
 
-        var service = new UpdateListTicketsViewModelServiceImp(TestSetup.CreateMapper(), betListService);
+        var service = new UpdateListTicketsViewModelServiceImp(TestSetup.CreateMapper(), betListService, betTypesRepository);
 
         // Act
-        service.Update(listTicketsViewModel, tickets);
+        await service.Update(listTicketsViewModel, tickets, 1);
 
         // Assert
         AssertExtension.Equal(expected, listTicketsViewModel);
@@ -98,15 +109,15 @@ public class UpdateListTicketsViewModelServiceTests
     }
 
     [Fact]
-    public void Update_HaveNotAnyTickets_BetListServiceHasNotCalled()
+    public async Task Update_HaveNotAnyTickets_BetListServiceHasNotCalled()
     {
         // Arrange
         var listTicketsViewModel = new ListTicketsViewModel();
         var betListService = Substitute.For<BetListService>();
-        var service = new UpdateListTicketsViewModelServiceImp(TestSetup.CreateMapper(), betListService);
+        var service = new UpdateListTicketsViewModelServiceImp(TestSetup.CreateMapper(), betListService, null);
 
         // Act
-        service.Update(listTicketsViewModel, new List<GetTicketModel>());
+        await service.Update(listTicketsViewModel, new List<GetTicketModel>(), 1);
 
         // Assert
         Assert.NotNull(listTicketsViewModel);

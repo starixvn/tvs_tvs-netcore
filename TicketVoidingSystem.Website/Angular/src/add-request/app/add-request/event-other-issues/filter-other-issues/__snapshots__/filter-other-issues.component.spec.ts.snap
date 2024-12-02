@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterOtherIssuesComponent FilterOtherIssuesComponent init should match snapshot 1`] = `
+FilterOtherIssuesComponent {
+  "changeFilterEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "element": null,
+  "filterModel": FilterModel {},
+  "refreshEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "tooltip": Tooltip {
+    "element": null,
+  },
+  "validationService": ValidationService {
+    "FROM_DATE_TIME_CLASS": "from-date-time",
+    "checkPermissionService": null,
+  },
+}
+`;

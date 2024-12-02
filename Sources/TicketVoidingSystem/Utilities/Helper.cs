@@ -101,6 +101,17 @@ public static class Helper
         return await JsonSerializer.DeserializeAsync<T>(responseStream, options);
     }
 
+    public static string JsonSerializerIgnoreNullValue<T>(T model)
+    {
+        var options = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            PropertyNameCaseInsensitive = true
+        };
+
+        return JsonSerializer.Serialize(model, options);
+    }
+
     public static string MessageFailApiCricket(IEnumerable<BetId> transIdCrickets, string actionType)
     {
         var transIds = string.Join(", ", transIdCrickets.Select(x => x.TransId));
@@ -158,5 +169,12 @@ public static class Helper
         }
 
         return result;
+    }
+
+    public static string SubstringBypassLength(this string source, int startIndex, int maxLength)
+    {
+        return string.IsNullOrEmpty(source)
+            ? source
+            : source.Substring(startIndex, Math.Min(source.Length - startIndex, maxLength));
     }
 }

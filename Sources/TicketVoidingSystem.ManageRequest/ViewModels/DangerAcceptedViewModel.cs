@@ -13,8 +13,8 @@ public class DangerAcceptedViewModel
     public int SubIssueTypeId { get; set; }
     public int? FilterBy { get; set; }
     public DateTime? EventDate { get; set; }
-    public DateTime FilterFromTransTime { get; set; }
-    public DateTime FilterToTransTime { get; set; }
+    public DateTime? FilterFromTransTime { get; set; }
+    public DateTime? FilterToTransTime { get; set; }
     public DateTime? VoidFromTime { get; set; }
     public DateTime? VoidToTime { get; set; }
     public string? TypeAccept { get; set; }

@@ -43,6 +43,7 @@ public class LogInfoHelperServiceImp : LogInfoHelperService
             NotParticipateModels = query.NotParticipateModels,
             EarlyKickOffModels = query.EarlyKickOffModels,
             WrongMarketOfferedModel = query.WrongMarketOfferedModel,
+            OtherIssuesModel = query.OtherIssuesModel,
             MatchId = query.MatchId,
             IssueTypeId = query.IssueTypeId
         };

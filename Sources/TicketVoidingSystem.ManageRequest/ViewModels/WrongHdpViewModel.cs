@@ -20,9 +20,9 @@ public class WrongHdpViewModel
 
     public DateTime? EventDate { get; set; }
 
-    public DateTime FilterFromTransTime { get; set; }
+    public DateTime? FilterFromTransTime { get; set; }
 
-    public DateTime FilterToTransTime { get; set; }
+    public DateTime? FilterToTransTime { get; set; }
 
     public DateTime? VoidFromTime { get; set; }
 

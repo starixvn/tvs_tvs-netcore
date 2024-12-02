@@ -26,7 +26,7 @@ public class GetTicketsMiniHandler : IRequestHandler<GetTicketsMiniRequest, Tick
         var model = new TicketsViewModel();
         var tickets = await getTicketsService.GetTickets(request);
         var voidPermission = await checkPermissionOnRequestService.GetVoidPermission();
-        ticketsViewModelService.UpdateViewModel(model, tickets, request.IssueTypeId, voidPermission);
+        await ticketsViewModelService.UpdateViewModel(model, tickets, request.IssueTypeId, voidPermission, request.Match?.MatchId);
 
         return model;
     }

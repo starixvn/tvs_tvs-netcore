@@ -66,6 +66,11 @@ export class MultiSelection {
     this.multipleSelect.updateItemChecked(checkedItems);
   }
 
+  resetAllChecked() {
+    this.multipleSelect.checkAllItems(true);
+    this.multipleSelect.isCheckAll = true;
+  }
+
   updateDisabledStatus(isDisabled: boolean) {
     this.multipleSelect.updateDisableStatus(isDisabled);
     this.multipleSelect.isDisabled = isDisabled;
@@ -81,6 +86,7 @@ export class BetTeamAddRequestResult {
   hdp2: string;
   player: string;
   playerAndOdds: string;
+  oddsSpread: string;
   betIdX: string; // store selected value
   betIdY: string; // store selected value
   filterBetIdX: string; // filter data in SPs only
@@ -177,14 +183,9 @@ export class BetTeamAddRequest {
     }
   }
 
-  resetChecked() {
-    this.isShow = true;
-    this.resetSelections();
-  }
-
-  resetSelections() {
+  resetAllChecked(){
     this.selections.forEach(selection => {
-      selection.value = 'All';
+      selection.multiSelection?.resetAllChecked();
     });
   }
 
@@ -192,13 +193,12 @@ export class BetTeamAddRequest {
     const result = new BetTeamAddRequestResult();
     this.updateBySelection(result);
     this.updateByInputs(result);
-
     this.updateBetTypeHalfFullTimeCorrectScore(result, betTypeId)
     this.updateForPenaltyShootoutCombo376(result, betTypeId);
     this.updateForBetTypesCricketWithFancy(result, betTypeId);
     this.updateForBetTypesWithRuns(result, betTypeId);
-
     result.id = betTypeId;
+
     return result;
   }
 
@@ -234,6 +234,9 @@ export class BetTeamAddRequest {
         break;
       case 'playerandodds':
         result.playerAndOdds = value;
+        break;
+      case 'oddsspread':
+        result.oddsSpread = value;
         break;
       case '_xx': // use for input: XX value & selections round: XX in betid type 8XX; link to column betId
         result.betIdX = value;
@@ -298,7 +301,7 @@ export class BetTeamAddRequest {
       .map(y => y ? y.padStart(2, '0') : '__')
       .join('&');
   }
-  
+
   private updateBetTypeHalfFullTimeCorrectScore(result: BetTeamAddRequestResult, betTypeId: string): void {
     if (this.isHalfFullTimeCorrectScoreBet(betTypeId)) {
       const [selection1, selection2] = this.selections;

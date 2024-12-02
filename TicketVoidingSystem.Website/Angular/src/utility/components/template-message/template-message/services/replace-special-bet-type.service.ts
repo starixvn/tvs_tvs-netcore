@@ -8,8 +8,8 @@ import { ReplaceMessageService } from './replace-message.service';
 export class ReplaceSpecialBetTypeService {
   constructor(private readonly replaceMessageService: ReplaceMessageService) { }
 
-  public execute(isLikelyWrongMarketOffered: boolean, issueTypeUpdateSpecialBetTypeVoidSingleBet: boolean, templateValue: TemplateValue, outputMessage: Message): void {
-    if (templateValue.isCheckedSpecialBetType && (isLikelyWrongMarketOffered || issueTypeUpdateSpecialBetTypeVoidSingleBet)) {
+  public execute(issueTypeUpdateSpecialBetTypeTvs: boolean, issueTypeUpdateSpecialBetTypeVoidSingleBet: boolean, templateValue: TemplateValue, outputMessage: Message): void {
+    if (templateValue.isCheckedSpecialBetType && (issueTypeUpdateSpecialBetTypeTvs || issueTypeUpdateSpecialBetTypeVoidSingleBet)) {
       this.replaceSpecialBetType(outputMessage, templateValue.betTypeNameReplaceMessage);
     } else {
       this.replaceMessageService.replaceAll(outputMessage, TemplateReplace.SPECIAL_BET_TYPE, '');

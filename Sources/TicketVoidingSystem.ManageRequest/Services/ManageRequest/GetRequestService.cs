@@ -122,6 +122,10 @@ public class GetRequestServiceImp : GetRequestService
                 viewModel.WrongOfferedNameModel = MapEventWrongOfferedName(secondResultSet);
                 break;
 
+            case IssueTypeConstant.OtherIssues:
+                viewModel.OtherIssuesModel = await MapEventOtherIssues(secondResultSet);
+                break;
+
             default:
                 viewModel.Event = secondResultSet.FirstOrDefault();
 
@@ -405,6 +409,8 @@ public class GetRequestServiceImp : GetRequestService
         var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
         var groupBetTypes = await advancedModeService.GetGroupBetTypes(model.MatchId,
             string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));
+        var allBetTypesSelection = advancedModeService.GetAllBetTypesSelection(model.AllBetTypesSelectionJson);
+
         return new WrongOddsSportsBookViewModel
         {
             MatchId = model.MatchId,
@@ -421,7 +427,7 @@ public class GetRequestServiceImp : GetRequestService
             CorrectOdds = model.CorrectOdds,
             BetTeamsResult = betTypesAdvancedMode,
             GroupBetTypes = groupBetTypes,
-            AllBetTypesSelection = advancedModeService.GetAllBetTypesSelection(model.AllBetTypesSelectionJson)
+            AllBetTypesSelection = allBetTypesSelection
         };
     }
 
@@ -441,6 +447,28 @@ public class GetRequestServiceImp : GetRequestService
             ActualNameT = model.ActualNameT,
             WrongNameS = model.WrongNameS,
             ActualNameS = model.ActualNameS
+        };
+    }
+
+    private async Task<OtherIssuesViewModel> MapEventOtherIssues(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        var model = requestEventModels.First();
+        var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
+        var groupBetTypes = await advancedModeService.GetGroupBetTypes(model.MatchId,
+            string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));
+        var allBetTypesSelection = advancedModeService.GetAllBetTypesSelection(model.AllBetTypesSelectionJson);
+
+        return new OtherIssuesViewModel
+        {
+            MatchId = model.MatchId,
+            FilterFromTransTime = model.FilterFromTransTime,
+            FilterToTransTime = model.FilterToTransTime,
+            VoidFromTime = model.VoidFromTime,
+            VoidToTime = model.VoidToTime,
+            SubIssueTypeId = model.SubIssueTypeId,
+            BetTeamsResult = betTypesAdvancedMode,
+            GroupBetTypes = groupBetTypes,
+            AllBetTypesSelection = allBetTypesSelection
         };
     }
 

@@ -13,6 +13,7 @@ import { EventDangerAcceptedComponent } from './event-danger-accepted/event-dang
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
 import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
 import { EventNotParticipateComponent } from './event-not-participate/event-not-participate.component';
+import { EventOtherIssuesComponent } from './event-other-issues/event-other-issues.component';
 import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { EventReducedOverComponent } from './event-reduced-over/event-reduced-over.component';
@@ -64,6 +65,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventRecoverTicket') eventRecoverTicketComponent: EventRecoverTicketComponent;
   @ViewChild('eventWrongMarketOffered') eventWrongMarketOfferedComponent: EventWrongMarketOfferedComponent;
   @ViewChild('eventWrongOfferedName') eventWrongOfferedNameComponent: EventWrongOfferedNameComponent;
+  @ViewChild('eventOtherIssues') eventOtherIssuesComponent: EventOtherIssuesComponent;
 
   isCollapse: boolean;
   isBlock: boolean;
@@ -152,7 +154,8 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       { condition: checkIssueType.isNotParticipate, component: this.eventNotParticipateComponent },
       { condition: checkIssueType.isRecoverTicket, component: this.eventRecoverTicketComponent },
       { condition: checkIssueType.isLikelyWrongMarketOffered, component: this.eventWrongMarketOfferedComponent },
-      { condition: checkIssueType.isWrongOfferedName, component: this.eventWrongOfferedNameComponent }
+      { condition: checkIssueType.isWrongOfferedName, component: this.eventWrongOfferedNameComponent },
+      { condition: checkIssueType.isOtherIssues, component: this.eventOtherIssuesComponent }
     ];
 
     for (const task of saveTasks) {
@@ -252,7 +255,8 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       IssueTypeConstant.WRONG_MARKET_OFFERED,
       IssueTypeConstant.TECHNICAL_ERROR,
       IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK,
-      IssueTypeConstant.WRONG_OFFERED_NAME
+      IssueTypeConstant.WRONG_OFFERED_NAME,
+      IssueTypeConstant.OTHER_ISSUES
     ]
 
     return issueTypesHasSimpleFields.includes(this.model.filter.issueTypeId);

@@ -9,7 +9,6 @@ import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { Notification } from '../../utility/components/notification/notification';
 import { PagingModel } from '../../utility/components/paging/paging/paging.model';
-import { Message } from '../../utility/components/template-message/messages/message';
 import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { TemplateMessageComponent } from '../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../utility/components/template-message/template-message/template.model';
@@ -234,11 +233,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isShowMatch = true;
     this.isShowConfirm = this.ticketsModel.groups.length > 0;
     this.isShowMessages = this.ticketsModel.groups.length > 0;
-    this.updateTemplateValue(data.betTypeNameReplaceMessage);
+    this.updateTemplateValue();
     this.ticketsChange(this.ticketsModel.getNumberOfCheckedTickets());
   }
 
-  updateTemplateValue(betTypeNameReplaceMessage: Message) {
+  updateTemplateValue() {
     this.templateValue = this.templateService.initializeTemplateValue(this.matchViewModel);
     this.templateValue.fromTransTime = this.ticketsModel.fromTransTime;
     this.templateValue.toTransTime = this.ticketsModel.toTransTime;
@@ -255,8 +254,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         ? `${this.getTicketsQuery.liveHomeScore}-${this.getTicketsQuery.liveAwayScore}`
         : '';
     this.templateValue.totalTickets = this.ticketsModel.getNumberOfCheckedTickets();
-    this.templateValue.betTypeNameReplaceMessage = betTypeNameReplaceMessage;
+    this.templateValue.betTypeNameReplaceMessage = this.ticketsModel.betTypeNameReplaceMessage;
     this.templateValue.playerName = this.filterComponent.playerNamesSelected;
+    this.templateValue.smallestMapTicket = this.ticketsModel.smallestMapTicket;
   }
 
   renderTickets(data: TicketsModel) {
@@ -268,6 +268,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.ticketsModel.pagingModel.pageSize = this.getTicketsQuery.pageSize;
     this.ticketsModel.singleCount = data.singleCount;
     this.ticketsModel.parlayCount = data.parlayCount;
+    this.ticketsModel.betTypeNameReplaceMessage = data.betTypeNameReplaceMessage;
+    this.ticketsModel.smallestMapTicket = data.smallestMapTicket;
 
     if (this.isNullCacheTransTime()) {
       this.fromTransTime = data.fromTransTime;

@@ -87,22 +87,8 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     };
     this.addRequestStore.changeBlockingUiStatus(true);
     const data = await this.commonService.getGroupBetTypesTvs(query);
-    const newGroupBetTypes = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);
-    this.groupBetTypesModel = this.assignCurrentStateToNewGroupBetType(newGroupBetTypes);
+    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);;
     this.addRequestStore.changeBlockingUiStatus(false);
-  }
-
-  assignCurrentStateToNewGroupBetType(newGroupBetTypes: GroupBetTypesAddRequestModel): GroupBetTypesAddRequestModel {
-    const currentCheckedBetTypes = this.groupBetTypesModel.groupBetTypes.flatMap(x => x.betTypes).filter(x => x.isChecked);
-    const newGroupBetTypesList = newGroupBetTypes.groupBetTypes.flatMap(x => x.betTypes);
-
-    currentCheckedBetTypes.forEach(x => {
-      const model = newGroupBetTypesList.find(z => z.id === x.id);
-      if(model) {
-        model.isChecked = true;
-      }
-    });
-    return newGroupBetTypes;
   }
 
   initDefaultTime(filterTime: FilterWrongMarketOfferedModel): void {
@@ -131,6 +117,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     await this.getGroupBetTypes();
     const allBetTypes = this.groupBetTypesModel.getAllBetTypes();
     this.advancedMode?.changeBetTypes(allBetTypes);
+    this.advancedMode?.resetAllBetTeams();
     if (allBetTypes.length === 0) {
       this.primitivePropertyEvent.isShowErrorNoBetType = true;
     }

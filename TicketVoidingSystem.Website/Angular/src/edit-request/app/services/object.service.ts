@@ -91,7 +91,8 @@ export class ObjectService {
       args.requestModel.wrongOddsSportsBookModel = args.detailViewModel.wrongOddsSportsBookModel;
     } else if (checkIssueType.isWrongOfferedName) {
       args.requestModel.wrongOfferedNameModel = args.detailViewModel.wrongOfferedNameModel;
-      //args.primitiveProperty.matchId = args.detailViewModel.wrongOfferedNameModel.matchId;
+    } else if (checkIssueType.isOtherIssues) {
+      args.requestModel.otherIssuesModel = args.detailViewModel.otherIssuesModel;
     }
   }
 

@@ -33,7 +33,8 @@ export class LogInfoService {
       { check: checkIssueType.isNotParticipate, handler: this.getLogInfoNotParticipate },
       { check: checkIssueType.isLikelyWrongMarketOffered, handler: this.getLogInfoWrongMarketOffered },
       { check: checkIssueType.isWrongOddsSportsBook, handler: this.getLogInfoWrongOddsSportsBook },
-      { check: checkIssueType.isWrongOfferedName, handler: this.getLogInfoWrongOfferedName }
+      { check: checkIssueType.isWrongOfferedName, handler: this.getLogInfoWrongOfferedName },
+      { check: checkIssueType.isOtherIssues, handler: this.getLogInfoOtherIssues }
     ];
 
     for (const { check, handler } of logInfoHandlers) {
@@ -229,6 +230,21 @@ export class LogInfoService {
     const data = await this.commonService.getLogInfo(query);
     data.getLogInfoModels.forEach(x => {
       args.detailViewModel.wrongOfferedNameModel.logInfoDetail = x.logInfoDetail;
+    });
+  }
+
+  private async getLogInfoOtherIssues(args: LogInfoArg): Promise<void> {
+    const models = MappingModelStaticService.buildOtherIssuesGetLogInfoModel(args.detailViewModel.otherIssuesModel);
+    const query = new GetLogInfoQuery();
+    query.requestId = args.primitiveProperty.requestId;
+    query.isShowLogOnly = true;
+    query.issueTypeId = args.detailViewModel.request.issueTypeId;
+    query.actionId = args.detailViewModel.request.actionId;
+    query.otherIssuesModel = models;
+
+    const data = await this.commonService.getLogInfo(query);
+    data.getLogInfoModels.forEach(x => {
+      args.detailViewModel.otherIssuesModel.logInfoDetail = x.logInfoDetail;
     });
   }
 

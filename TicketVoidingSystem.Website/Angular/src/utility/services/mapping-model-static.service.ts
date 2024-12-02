@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import { EarlyKickOffGetLogInfoQuery } from "../../add-request/app/add-request/event-early-kick-off/models/get-log-info.query";
 import { NotParticipateGetLogInfoQuery } from "../../add-request/app/add-request/event-not-participate/models/get-log-info.query";
+import { OtherIssuesGetLogInfoQuery } from "../../add-request/app/add-request/event-other-issues/models/get-log-info.query";
 import { ReducedOverGetLogInfoQuery } from "../../add-request/app/add-request/event-reduced-over/models/get-log-info.query";
 import { WrongHdpGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-hdp/models/get-log-info.query";
 import { WrongMarketOfferedGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-market-offered/models/get-log-info.query";
@@ -11,6 +12,7 @@ import { WrongOuGetLogInfoQuery } from "../../add-request/app/add-request/event-
 import { WrongScoreGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-score/event-wrong-score.model";
 import { EarlyKickOffModel } from "../../add-request/app/add-request/models/event-eko.model";
 import { NotParticipateModel } from "../../add-request/app/add-request/models/event-not-participate.model";
+import { OtherIssuesModel } from "../../add-request/app/add-request/models/event-other-issues.model";
 import { RedCardGetLogInfoQuery, RedCardModel } from "../../add-request/app/add-request/models/event-red-card.model";
 import { ReducedOverModel } from "../../add-request/app/add-request/models/event-reduced-over.model";
 import { WrongHdpModel } from "../../add-request/app/add-request/models/event-wrong-hdp.model";
@@ -20,6 +22,7 @@ import { WrongOddsModel } from "../../add-request/app/add-request/models/event-w
 import { WrongOfferedNameModel } from "../../add-request/app/add-request/models/event-wrong-offered-name.model";
 import { WrongOuModel } from "../../add-request/app/add-request/models/event-wrong-ou.model";
 import { WrongScoreModel } from "../../add-request/app/add-request/models/event-wrong-score.model";
+import { SubIssueTypeConstant } from "../constants/sub-issue-type.constant";
 import { StaticService } from "./static.service";
 
 export class MappingModelStaticService {
@@ -210,5 +213,22 @@ export class MappingModelStaticService {
       toOdds: model.toOdds,
       liveIndicator: model.liveIndicator
     } as WrongOddsSportsBookGetLogInfoQuery;
+  }
+
+  static buildOtherIssuesGetLogInfoModel(model:  OtherIssuesModel): OtherIssuesGetLogInfoQuery {
+    if (_.isNull(model) || _.isUndefined(model)) {
+      return null;
+    }
+
+    const query = new OtherIssuesGetLogInfoQuery();
+    query.matchId = model.matchId;
+    query.subIssueTypeId = model.subIssueTypeId;
+    query.betTeamsResult = model.betTeamsResult;
+    if (model.subIssueTypeId === SubIssueTypeConstant.RESTART) {
+      query.filterFromTransTime = model.voidFromTime;
+      query.filterToTransTime = model.voidToTime;
+    }
+
+    return query;
   }
 }

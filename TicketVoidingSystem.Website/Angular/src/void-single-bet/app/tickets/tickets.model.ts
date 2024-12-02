@@ -1,9 +1,9 @@
 ﻿import { ElementRef } from '@angular/core';
+import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Message } from '../../../utility/components/template-message/messages/message';
 import { BetID } from '../../../utility/models/bet-id.model';
 import { GroupModel } from './group.model';
-import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 
 enum IconCheckBox {
     none = 0,
@@ -24,6 +24,7 @@ export class TicketsModel {
     strToTime: string;
     licenseeAffectedList: AffectedLicensee[];
     betTypeNameReplaceMessage: Message;
+    smallestMapTicket: string;
     groups: Array<GroupModel>;
     pagingModel: PagingModel;
     iconCheckBox: IconCheckBox;

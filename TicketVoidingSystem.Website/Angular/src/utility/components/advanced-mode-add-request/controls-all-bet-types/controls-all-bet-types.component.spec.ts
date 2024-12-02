@@ -1,25 +1,27 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ControlsAllBetTypesComponent } from './controls-all-bet-types.component';
+import { ControlsAllBetTypesLists } from './controls-all-bet-types.model';
 
 describe('ControlsAllBetTypesComponent', () => {
-  let component: ControlsAllBetTypesComponent;
-  let fixture: ComponentFixture<ControlsAllBetTypesComponent>;
+  it('#isShowContent should return true when betTeam has type controls All', () => {
+    // Arrange
+    const component = new ControlsAllBetTypesComponent();
+    component.controlsAllBetTypesLists = ControlsAllBetTypesLists.MultipleSelectionList;
+    component.controlsAllBetTypesLists[0].isShow = true;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ ControlsAllBetTypesComponent ]
-    })
-    .compileComponents();
+    // Action & Asset
+    expect(component.isShowContent()).toBeTruthy();
   });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ControlsAllBetTypesComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  it('#updateByControlAllBetType should call event changeControlsAll when has change ControlsAllBetTypes', () => {
+    // Arrange
+    const component = new ControlsAllBetTypesComponent();
+    const fakeEventChangeControlsAll = jest.fn();
+    component.changeControlsAll.emit = fakeEventChangeControlsAll;
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    // Action
+    component.updateByControlAllBetType(["801","802"], "map");
+
+    // Asset
+    expect(fakeEventChangeControlsAll).toBeCalledTimes(1);
   });
 });

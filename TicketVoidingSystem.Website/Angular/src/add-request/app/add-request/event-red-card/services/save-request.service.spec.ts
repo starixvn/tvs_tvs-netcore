@@ -1,10 +1,10 @@
 import { QueryList } from '@angular/core';
-import { Selection } from 'src/utility/models/selection.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { IssueType, SubIssueType } from '../../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { Result } from '../../../../../utility/models/result';
+import { Selection } from '../../../../../utility/models/selection.model';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
