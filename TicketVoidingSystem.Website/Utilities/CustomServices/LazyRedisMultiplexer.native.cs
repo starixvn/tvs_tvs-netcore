@@ -22,24 +22,15 @@ public static class LazyRedisMultiplexer
             var oldRedis = redis;
 
             redis = ConnectionMultiplexer.Connect(redisConfig);
-            redis.ConfigurationChanged += Redis_ConfigurationChanged;
-            redis.ConfigurationChangedBroadcast += Redis_ConfigurationChangedBroadcast;
             redis.ConnectionFailed += Redis_ConnectionFailed;
-            redis.ConnectionRestored += Redis_ConnectionRestored;
             redis.InternalError += Redis_InternalError;
             redis.ErrorMessage += Redis_ErrorMessage;
-            redis.HashSlotMoved += Redis_HashSlotMoved;
             oldRedis?.Close();
         }
         catch (Exception e)
         {
             Logger.Log.Error("ConnectionMultiplexer.Connect error.", e);
         }
-    }
-
-    private static void Redis_HashSlotMoved(object sender, HashSlotMovedEventArgs e)
-    {
-        Logger.Log.Error("Redis_InternalError:" + e.OldEndPoint + "-" + e.NewEndPoint + "-" + e.HashSlot);
     }
 
     private static void Redis_ErrorMessage(object sender, RedisErrorEventArgs e)
@@ -52,24 +43,9 @@ public static class LazyRedisMultiplexer
         Logger.Log.Error("Redis_InternalError:" + e.Exception.Message);
     }
 
-    private static void Redis_ConnectionRestored(object sender, ConnectionFailedEventArgs e)
-    {
-        Logger.Log.Error("Redis_ConnectionRestored:" + e.Exception?.Message);
-    }
-
     private static void Redis_ConnectionFailed(object sender, ConnectionFailedEventArgs e)
     {
         Logger.Log.Error("Redis_ConnectionFailed:" + e.Exception?.Message);
-    }
-
-    private static void Redis_ConfigurationChangedBroadcast(object sender, EndPointEventArgs e)
-    {
-        Logger.Log.Error("Redis_ConfigurationChangedBroadcast:" + e.EndPoint);
-    }
-
-    private static void Redis_ConfigurationChanged(object sender, EndPointEventArgs e)
-    {
-        Logger.Log.Error("Redis_ConfigurationChangedBroadcast:" + e.EndPoint);
     }
 
     private static ConnectionMultiplexer RedisMultiplexer
