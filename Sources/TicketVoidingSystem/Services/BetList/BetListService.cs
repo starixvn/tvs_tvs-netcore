@@ -28,17 +28,17 @@ public interface BetListService
 
     string GetDisplayedBetTypeName(int id, long refNo);
 
-    string GetBetTypeName(ITicket ticket);
+    string GetBetTypeName(Ticket ticket);
 
     string GetBetTypeName(int id, long refNo);
 
     string GetBetTeam(Choice_Template choice);
 
-    string GetBetTypeNameChineseSimplified(ITicket ticket);
+    string GetBetTypeNameChineseSimplified(Ticket ticket);
 
-    string GetBetTypeNameChineseTraditional(ITicket ticket);
+    string GetBetTypeNameChineseTraditional(Ticket ticket);
 
-    string GetBetTypeNameNewChineseSimplified(ITicket ticket);
+    string GetBetTypeNameNewChineseSimplified(Ticket ticket);
 
     string GetStatus(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowVnIp);
 
@@ -144,7 +144,7 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         return id is FistNextBet or SecondNextBet ? $"Next {betName}" : betName;
     }
 
-    public string GetBetTypeName(ITicket ticket)
+    public string GetBetTypeName(Ticket ticket)
     {
         var ticketHelper = new TicketHelper();
         var factory = new BetListBaseBuilder();
@@ -158,7 +158,7 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         return builder.GetBetTypeName(ticketCopy, ticketHelper);
     }
 
-    public string GetBetTypeNameChineseSimplified(ITicket ticket)
+    public string GetBetTypeNameChineseSimplified(Ticket ticket)
     {
         var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.ChineseSimplified));
         var factory = new BetListBaseBuilder();
@@ -175,7 +175,7 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         return betTypeName.TranslateChineseSimplified();
     }
 
-    public string GetBetTypeNameChineseTraditional(ITicket ticket)
+    public string GetBetTypeNameChineseTraditional(Ticket ticket)
     {
         var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.ChineseTraditional));
         var factory = new BetListBaseBuilder();
@@ -191,7 +191,7 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         return betTypeName;
     }
 
-    public string GetBetTypeNameNewChineseSimplified(ITicket ticket)
+    public string GetBetTypeNameNewChineseSimplified(Ticket ticket)
     {
         var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.NewChineseSimplified));
         var factory = new BetListBaseBuilder();

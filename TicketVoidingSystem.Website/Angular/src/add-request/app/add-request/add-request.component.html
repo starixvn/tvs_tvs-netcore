@@ -198,7 +198,7 @@
           </event-recover-ticket>
 
           <event-wrong-market-offered #eventWrongMarketOffered
-            *ngIf="checkAllIssueTypes().isLikelyWrongMarketOffered"
+            *ngIf="checkAllIssueTypes().isWrongMarketOffered"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [isEdit]="isEdit"
@@ -252,6 +252,20 @@
             [others]="model.others"
             (updateMatchId)="updateMatchId($event)">
           </event-other-issues>
+
+          <event-technical-error #technicalError
+            *ngIf="checkAllIssueTypes().isTechnicalError"
+            [userId]="userId"
+            [requestedBy]="requestedBy"
+            [isEdit]="isEdit"
+            [requestId]="requestId"
+            [filter]="model.filter"
+            [issueTypes]="issueTypes"
+            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+            [technicalErrorModel]="model.technicalErrorModel"
+            [others]="model.others"
+            (updateMatchId)="updateMatchId($event)">
+          </event-technical-error>
         </div>
       </div>
     </div>

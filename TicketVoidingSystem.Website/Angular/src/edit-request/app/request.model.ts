@@ -6,6 +6,7 @@ import { NotParticipateModel } from '../../add-request/app/add-request/models/ev
 import { OtherIssuesModel } from '../../add-request/app/add-request/models/event-other-issues.model';
 import { RedCardModel } from '../../add-request/app/add-request/models/event-red-card.model';
 import { ReducedOverModel } from '../../add-request/app/add-request/models/event-reduced-over.model';
+import { TechnicalErrorModel } from '../../add-request/app/add-request/models/event-technical-error.model';
 import { WrongHdpModel } from '../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongMarketOfferedModel } from '../../add-request/app/add-request/models/event-wrong-market-offered.model';
 import { WrongOddsSportsBookModel } from '../../add-request/app/add-request/models/event-wrong-odds-sports-book.model';
@@ -95,6 +96,7 @@ export class RequestDetailViewModel {
   wrongOddsSportsBookModel?: WrongOddsSportsBookModel;
   wrongOfferedNameModel?: WrongOfferedNameModel;
   otherIssuesModel?: OtherIssuesModel;
+  technicalErrorModel?: TechnicalErrorModel;
 }
 
 export class PlayerName {

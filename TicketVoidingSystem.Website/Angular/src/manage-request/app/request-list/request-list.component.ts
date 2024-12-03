@@ -161,7 +161,7 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   private getTabName(issueTypeId: number, matchId: number, index: number): string {
     return matchId && !this.isMatchIdParlay(matchId)
-      ? StaticService.isLikelyWrongMarketOffered(issueTypeId) ? `${matchId} (${index + 1})` : `${matchId}`
+      ? StaticService.isWrongMarketOffered(issueTypeId) ? `${matchId} (${index + 1})` : `${matchId}`
       : 'General Info';
   }
 
@@ -170,7 +170,7 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   private checkActivedTab(request: RequestModel, detailRequestModel: DetailRequestModel, matchId: number, requestDetailId: number): boolean {
-    if (StaticService.isLikelyWrongMarketOffered(request.issueTypeId)) {
+    if (StaticService.isWrongMarketOffered(request.issueTypeId)) {
       return detailRequestModel.requestDetailId === requestDetailId;
     }
 
@@ -311,7 +311,8 @@ export class RequestListComponent implements OnInit, OnChanges {
       StaticService.isReducedOver,
       StaticService.isAbandoned,
       StaticService.isNotParticipate,
-      StaticService.isLikelyWrongMarketOffered,
+      StaticService.isWrongMarketOffered,
+      StaticService.isTechnicalError,
       StaticService.isWrongOddsSportsBook
     ].some(fn => fn(issueTypeStr));
   }

@@ -24,4 +24,5 @@ public class RequestDetailViewModel
     public WrongOddsSportsBookViewModel? WrongOddsSportsBookModel { get; set; }
     public WrongOfferedNameViewModel? WrongOfferedNameModel { get; set; }
     public OtherIssuesViewModel? OtherIssuesModel { get; set; }
+    public TechnicalErrorViewModel? TechnicalErrorModel { get; set; }
 }

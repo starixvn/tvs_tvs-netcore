@@ -81,7 +81,7 @@ public class GetRequestsInActiveTableServiceImp(
 
     private static bool IsDifferenceByRequestDetailId(RequestModel request)
     {
-        return request.IssueTypeId.IsLikelyWrongMarketOffered();
+        return request.IssueTypeId.IsWrongMarketOffered();
     }
 
     private static bool IsDifferenceByMatchId(RequestModel request)

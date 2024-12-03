@@ -70,8 +70,8 @@ public class UpdateRequestProcessStageImp(
         command.RecoverTicketInfo = query.RecoverTicketInfo?.ToEventRecoverTicketXml();
         command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
         command.AbnormalBetInfo = query.AbnormalBetInfo?.ToEventAbnormalBetXml();
-        command.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
-        command.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
+        command.WrongMarketOfferedInfo = query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml();
+        command.TechnicalErrorInfo = query.TechnicalErrorInfo?.ToEventTechnicalErrorXml();
         command.WrongOfferedNameInfo = query.WrongOfferedNameInfo?.ToEventWrongOfferedNameXml();
         command.OtherIssuesInfo = query.OtherIssuesInfo?.ToEventOtherIssuesXml();
 

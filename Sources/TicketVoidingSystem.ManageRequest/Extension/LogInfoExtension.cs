@@ -287,4 +287,13 @@ public static class LogInfoExtension
                + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}'/></root>";
     }
+
+    public static string ToTechnicalErrorInfoXml(this TechnicalErrorViewModel model)
+    {
+        return $"<root><r MatchId = '{model.MatchId}' "
+               + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+               + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+               + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+               + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}'/></root>";
+    }
 }

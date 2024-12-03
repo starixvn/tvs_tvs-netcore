@@ -3,6 +3,7 @@ import { EarlyKickOffGetLogInfoQuery } from "../../add-request/app/add-request/e
 import { NotParticipateGetLogInfoQuery } from "../../add-request/app/add-request/event-not-participate/models/get-log-info.query";
 import { OtherIssuesGetLogInfoQuery } from "../../add-request/app/add-request/event-other-issues/models/get-log-info.query";
 import { ReducedOverGetLogInfoQuery } from "../../add-request/app/add-request/event-reduced-over/models/get-log-info.query";
+import { TechnicalErrorGetLogInfoQuery } from "../../add-request/app/add-request/event-technical-error/models/get-log-info.query";
 import { WrongHdpGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-hdp/models/get-log-info.query";
 import { WrongMarketOfferedGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-market-offered/models/get-log-info.query";
 import { WrongOddsSportsBookGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-odds-sports-book/models/get-log-info.query";
@@ -15,6 +16,7 @@ import { NotParticipateModel } from "../../add-request/app/add-request/models/ev
 import { OtherIssuesModel } from "../../add-request/app/add-request/models/event-other-issues.model";
 import { RedCardGetLogInfoQuery, RedCardModel } from "../../add-request/app/add-request/models/event-red-card.model";
 import { ReducedOverModel } from "../../add-request/app/add-request/models/event-reduced-over.model";
+import { TechnicalErrorModel } from "../../add-request/app/add-request/models/event-technical-error.model";
 import { WrongHdpModel } from "../../add-request/app/add-request/models/event-wrong-hdp.model";
 import { WrongMarketOfferedModel } from "../../add-request/app/add-request/models/event-wrong-market-offered.model";
 import { WrongOddsSportsBookModel } from "../../add-request/app/add-request/models/event-wrong-odds-sports-book.model";
@@ -113,7 +115,7 @@ export class MappingModelStaticService {
       spread: x.spread.toString(),
       allowanceRate: x.allowanceRate,
       correctOddsHomeOver: x.correctOddsHomeOver,
-      correctOddsAwayUnder:x.correctOddsAwayUnder,
+      correctOddsAwayUnder: x.correctOddsAwayUnder,
       fromOddsNotVoidHomeOver: x.fromOddsNotVoidHomeOver,
       toOddsNotVoidHomeOver: x.toOddsNotVoidHomeOver,
       fromOddsNotVoidAwayUnder: x.fromOddsNotVoidAwayUnder,
@@ -168,7 +170,7 @@ export class MappingModelStaticService {
     } as EarlyKickOffGetLogInfoQuery));
   }
 
-  static buildWrongMarketOfferedGetLogInfoModels(models:  WrongMarketOfferedModel[]): WrongMarketOfferedGetLogInfoQuery[] {
+  static buildWrongMarketOfferedGetLogInfoModels(models: WrongMarketOfferedModel[]): WrongMarketOfferedGetLogInfoQuery[] {
     if (_.isNull(models) || _.isUndefined(models)) {
       return null;
     }
@@ -183,7 +185,7 @@ export class MappingModelStaticService {
     } as WrongMarketOfferedGetLogInfoQuery));
   }
 
-  static buildWrongOfferedNameGetLogInfoModel(model:  WrongOfferedNameModel): WrongOfferedNameGetLogInfoQuery {
+  static buildWrongOfferedNameGetLogInfoModel(model: WrongOfferedNameModel): WrongOfferedNameGetLogInfoQuery {
     if (_.isNull(model) || _.isUndefined(model)) {
       return null;
     }
@@ -196,7 +198,7 @@ export class MappingModelStaticService {
     } as WrongOfferedNameGetLogInfoQuery;
   }
 
-  static buildWrongOddsSportsBookGetLogInfoModel(model:  WrongOddsSportsBookModel): WrongOddsSportsBookGetLogInfoQuery {
+  static buildWrongOddsSportsBookGetLogInfoModel(model: WrongOddsSportsBookModel): WrongOddsSportsBookGetLogInfoQuery {
     if (_.isNull(model) || _.isUndefined(model)) {
       return null;
     }
@@ -216,7 +218,7 @@ export class MappingModelStaticService {
     } as WrongOddsSportsBookGetLogInfoQuery;
   }
 
-  static buildOtherIssuesGetLogInfoModel(model:  OtherIssuesModel): OtherIssuesGetLogInfoQuery {
+  static buildOtherIssuesGetLogInfoModel(model: OtherIssuesModel): OtherIssuesGetLogInfoQuery {
     if (_.isNull(model) || _.isUndefined(model)) {
       return null;
     }
@@ -231,5 +233,19 @@ export class MappingModelStaticService {
     }
 
     return query;
+  }
+
+  static buildTechnicalErrorGetLogInfoModel(model: TechnicalErrorModel): TechnicalErrorGetLogInfoQuery {
+    if (_.isNull(model) || _.isUndefined(model)) {
+      return null;
+    }
+
+    return {
+      matchId: model.matchId,
+      subIssueTypeId: model.subIssueTypeId,
+      filterFromTransTime: model.voidFromTime,
+      filterToTransTime: model.voidToTime,
+      betTeamsResult: model.betTeamsResult
+    } as TechnicalErrorGetLogInfoQuery;
   }
 }

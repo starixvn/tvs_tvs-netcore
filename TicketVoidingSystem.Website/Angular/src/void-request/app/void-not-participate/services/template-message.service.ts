@@ -37,7 +37,8 @@ export class TemplateMessageService {
   }
 
   private isSpecialBetType(issueTypeId: number): boolean {
-    return StaticService.isLikelyWrongMarketOffered(issueTypeId)
+    return StaticService.isWrongMarketOffered(issueTypeId)
+      || StaticService.isTechnicalError(issueTypeId)
       || StaticService.isWrongOddsSportsBook(issueTypeId)
       || StaticService.isOtherIssues(issueTypeId);
   }

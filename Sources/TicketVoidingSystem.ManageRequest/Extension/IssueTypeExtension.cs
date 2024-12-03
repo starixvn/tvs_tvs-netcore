@@ -98,9 +98,4 @@ public static class IssueTypeExtension
     {
         return id is IssueTypeConstant.TechnicalError;
     }
-
-    public static bool IsLikelyWrongMarketOffered(this int id)
-    {
-        return id is IssueTypeConstant.WrongMarketOffered or IssueTypeConstant.TechnicalError;
-    }
 }

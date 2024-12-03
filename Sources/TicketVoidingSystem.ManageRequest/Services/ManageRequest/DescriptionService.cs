@@ -33,7 +33,7 @@ public class DescriptionServiceImp(DescriptionElementService elementService) : D
                 {IssueTypeConstant.DuplicateTickets, BuildDuplicateTickets},
                 {IssueTypeConstant.NotParticipate, BuildMatchLeague},
                 {IssueTypeConstant.RecoverTicket, BuildProducts},
-                {IssueTypeConstant.WrongMarketOffered, BuildMatchLeague},
+                {IssueTypeConstant.WrongMarketOffered, BuildVoidTimeMatchLeague},
                 {IssueTypeConstant.TechnicalError, BuildMatchLeague},
                 {IssueTypeConstant.WrongOddsSportsBook, BuildVoidTimeMatchLeague},
                 {IssueTypeConstant.WrongOfferedName, BuildMatchLeague},

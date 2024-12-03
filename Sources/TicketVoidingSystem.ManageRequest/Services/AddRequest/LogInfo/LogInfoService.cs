@@ -62,7 +62,7 @@ public class LogInfoServiceImp(
             IssueTypeConstant.EarlyKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.WrongKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.WrongMarketOffered => await GetLogInfoViewModelWrongMarketOffered(query, validation, ticketRequest, logInfoDetail, betTypeCount),
-            IssueTypeConstant.TechnicalError => await GetLogInfoViewModelWrongMarketOffered(query, validation, ticketRequest, logInfoDetail, betTypeCount),
+            IssueTypeConstant.TechnicalError => await GetLogInfoViewModelTechnicalError(query, validation, ticketRequest, logInfoDetail, betTypeCount),
             IssueTypeConstant.WrongOfferedName => GetLogInfoViewModelWrongOfferedName(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.OtherIssues => GetLogInfoViewModelOtherIssues(query, validation, ticketRequest, logInfoDetail),
             _ => GetLogInfoViewModelDefault(validation, ticketRequest, logInfoDetail)
@@ -264,6 +264,23 @@ public class LogInfoServiceImp(
         };
     }
 
+    private async Task<IEnumerable<GetLogInfoModel>> GetLogInfoViewModelTechnicalError(GetLogInfoQuery query, IEnumerable<Validation> validation,
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeTicketsInfo> betTypeCount)
+    {
+        await logInfoHelperService.UpdateBetTypeTicketsInfo(query.TechnicalErrorModel.MatchId, betTypeCount);
+        return new List<GetLogInfoModel>
+        {
+            new()
+            {
+                MatchId = query.TechnicalErrorModel.MatchId,
+                Validation = validation.FirstOrDefault(),
+                TicketRequest = ticketRequest,
+                LogInfoDetail = logInfoDetail.FirstOrDefault(),
+                BetTypeCount = betTypeCount.OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetId)
+            }
+        };
+    }
+
     private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelDefault(IEnumerable<Validation> validation,
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
     {
@@ -295,8 +312,8 @@ public class LogInfoServiceImp(
         criteria.WrongOddsSBInfo = query.WrongOddsSportsBookModel?.ToWrongOddsSportsBookInfoXml();
         criteria.ReducedOverInfo = query.ReducedOverModels?.ToReducedOverInfoXml();
         criteria.NotParticipateInfo = query.NotParticipateModels?.ToNotParticipateInfoXml();
-        criteria.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedModels?.ToWrongMarketOfferedInfoXml() : null;
-        criteria.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedModels?.ToWrongMarketOfferedInfoXml() : null;
+        criteria.WrongMarketOfferedInfo = query.WrongMarketOfferedModels?.ToWrongMarketOfferedInfoXml();
+        criteria.TechnicalErrorInfo = query.TechnicalErrorModel?.ToTechnicalErrorInfoXml();
         criteria.WrongOfferedNameInfo = query.WrongOfferedNameModel?.ToWrongOfferedNameInfoXml();
         criteria.OtherIssuesInfo = query.OtherIssuesModel?.ToOtherIssuesInfoXml();
         criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));

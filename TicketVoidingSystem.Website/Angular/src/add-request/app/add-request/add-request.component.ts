@@ -17,6 +17,7 @@ import { EventOtherIssuesComponent } from './event-other-issues/event-other-issu
 import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { EventReducedOverComponent } from './event-reduced-over/event-reduced-over.component';
+import { EventTechnicalErrorComponent } from './event-technical-error/event-technical-error.component';
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
 import { EventWrongHdpComponent } from './event-wrong-hdp/event-wrong-hdp.component';
 import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered/event-wrong-market-offered.component';
@@ -66,6 +67,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventWrongMarketOffered') eventWrongMarketOfferedComponent: EventWrongMarketOfferedComponent;
   @ViewChild('eventWrongOfferedName') eventWrongOfferedNameComponent: EventWrongOfferedNameComponent;
   @ViewChild('eventOtherIssues') eventOtherIssuesComponent: EventOtherIssuesComponent;
+  @ViewChild('technicalError') eventTechnicalErrorComponent: EventTechnicalErrorComponent;
 
   isCollapse: boolean;
   isBlock: boolean;
@@ -153,9 +155,10 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       { condition: checkIssueType.isDuplicateTickets, component: this.eventDuplicateTicketsComponent },
       { condition: checkIssueType.isNotParticipate, component: this.eventNotParticipateComponent },
       { condition: checkIssueType.isRecoverTicket, component: this.eventRecoverTicketComponent },
-      { condition: checkIssueType.isLikelyWrongMarketOffered, component: this.eventWrongMarketOfferedComponent },
+      { condition: checkIssueType.isWrongMarketOffered, component: this.eventWrongMarketOfferedComponent },
       { condition: checkIssueType.isWrongOfferedName, component: this.eventWrongOfferedNameComponent },
-      { condition: checkIssueType.isOtherIssues, component: this.eventOtherIssuesComponent }
+      { condition: checkIssueType.isOtherIssues, component: this.eventOtherIssuesComponent },
+      { condition: checkIssueType.isTechnicalError, component: this.eventTechnicalErrorComponent }
     ];
 
     for (const task of saveTasks) {

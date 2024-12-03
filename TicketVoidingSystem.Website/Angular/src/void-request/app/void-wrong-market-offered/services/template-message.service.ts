@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Message } from 'src/utility/components/template-message/messages/message';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { EventType } from '../../../../utility/constants/sport.constant';

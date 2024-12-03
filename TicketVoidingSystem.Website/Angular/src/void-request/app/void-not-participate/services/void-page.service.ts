@@ -63,6 +63,13 @@ export class VoidPageService {
       return basicRequestInfo;
     }
 
+    if (StaticService.isTechnicalError(requestDetail.request.issueTypeId)) {
+      return {
+        matchId: requestDetail.technicalErrorModel.matchId,
+        subIssueTypeId: requestDetail.technicalErrorModel.subIssueTypeId
+      } as BasicRequestInfo;
+    }
+
     if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       return {
         matchId: requestDetail.wrongOddsSportsBookModel.matchId,
@@ -107,8 +114,8 @@ export class VoidPageService {
       query.notParticipateModels = MappingModelStaticService.buildNotParticipateGetLogInfoModel(requestDetail.notParticipateModels);
     }
 
-    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)) {
-      query.wrongMarketOfferedModels = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModels(requestDetail.wrongMarketOfferedModels);
+    if (StaticService.isTechnicalError(requestDetail.request.issueTypeId)) {
+      query.technicalErrorModel = MappingModelStaticService.buildTechnicalErrorGetLogInfoModel(requestDetail.technicalErrorModel);
     }
 
     if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {

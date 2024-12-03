@@ -78,5 +78,7 @@ public class AddRequestQuery
 
     public WrongOfferedNameViewModel? WrongOfferedNameInfo { get; set; }
 
+    public TechnicalErrorViewModel? TechnicalErrorInfo { get; set; }
+
     public OtherIssuesViewModel? OtherIssuesInfo { get; set; }
 }

@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import _ from 'lodash';
-import { MappingModelStaticService } from 'src/utility/services/mapping-model-static.service';
 import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { CommonService } from '../../../../utility/services/common.service';
-import { StaticService } from '../../../../utility/services/static.service';
+import { MappingModelStaticService } from '../../../../utility/services/mapping-model-static.service';
 import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidWrongMarketOfferedModel } from '../models/void-wrong-market-offered.model';
@@ -65,9 +64,7 @@ export class VoidPageService {
     query.requestId = requestDetail.requestId;
     query.isShowLogOnly = true;
     query.issueTypeId = requestDetail.request.issueTypeId;
-    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
-      query.wrongMarketOfferedModels = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModels(requestDetail.wrongMarketOfferedModels);
-    }
+    query.wrongMarketOfferedModels = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModels(requestDetail.wrongMarketOfferedModels);
 
     const viewModel = await this.commonService.getLogInfo(query);
 
@@ -75,19 +72,15 @@ export class VoidPageService {
   }
 
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo[] {
-    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)) {
-      return requestDetail.wrongMarketOfferedModels.map(x => {
-        const info: BasicRequestInfo = {
-          id: x.id,
-          matchId: x.matchId,
-          requestDetailId: x.requestDetailId,
-          subIssueTypeId: x.subIssueTypeId
-        } as BasicRequestInfo;
-        return info;
-      });
-    }
-
-    return [];
+    return requestDetail.wrongMarketOfferedModels.map(x => {
+      const info: BasicRequestInfo = {
+        id: x.id,
+        matchId: x.matchId,
+        requestDetailId: x.requestDetailId,
+        subIssueTypeId: x.subIssueTypeId
+      } as BasicRequestInfo;
+      return info;
+    });
   }
 
   private getSubIssueTypeModel(subIssueTypeId: number, issueTypes: IssueTypesModel): SubIssueType {

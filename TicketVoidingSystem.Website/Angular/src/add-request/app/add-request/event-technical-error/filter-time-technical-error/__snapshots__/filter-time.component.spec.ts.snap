@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterTimeComponent FilterTimeComponent init should match snapshot 1`] = `
+FilterTimeComponent {
+  "FROM_DATE_TIME_CLASS": "from-date-time",
+  "changeFilterEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "element": null,
+  "filterTechnicalErrorModel": Object {
+    "fromDateTime": "2021-12-18 12:08:49.737",
+    "toDateTime": "2021-12-21 12:08:49.737",
+  },
+  "refreshEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "tooltip": Tooltip {
+    "element": null,
+  },
+}
+`;

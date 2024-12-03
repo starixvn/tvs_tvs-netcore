@@ -31,10 +31,11 @@ export class LogInfoService {
       { check: checkIssueType.isReducedOver, handler: this.getLogInfoReducedOver },
       { check: checkIssueType.isAbandoned, handler: this.getLogInfoReducedOver },
       { check: checkIssueType.isNotParticipate, handler: this.getLogInfoNotParticipate },
-      { check: checkIssueType.isLikelyWrongMarketOffered, handler: this.getLogInfoWrongMarketOffered },
+      { check: checkIssueType.isWrongMarketOffered, handler: this.getLogInfoWrongMarketOffered },
       { check: checkIssueType.isWrongOddsSportsBook, handler: this.getLogInfoWrongOddsSportsBook },
       { check: checkIssueType.isWrongOfferedName, handler: this.getLogInfoWrongOfferedName },
-      { check: checkIssueType.isOtherIssues, handler: this.getLogInfoOtherIssues }
+      { check: checkIssueType.isOtherIssues, handler: this.getLogInfoOtherIssues },
+      { check: checkIssueType.isTechnicalError, handler: this.getLogInfoTechnicalError },
     ];
 
     for (const { check, handler } of logInfoHandlers) {
@@ -246,6 +247,22 @@ export class LogInfoService {
     const data = await this.commonService.getLogInfo(query);
     data.getLogInfoModels.forEach(x => {
       args.detailViewModel.otherIssuesModel.logInfoDetail = x.logInfoDetail;
+    });
+  }
+
+  private async getLogInfoTechnicalError(args: LogInfoArg): Promise<void> {
+    const models = MappingModelStaticService.buildTechnicalErrorGetLogInfoModel(args.detailViewModel.technicalErrorModel);
+    const query = new GetLogInfoQuery();
+    query.requestId = args.primitiveProperty.requestId;
+    query.isShowLogOnly = true;
+    query.issueTypeId = args.detailViewModel.request.issueTypeId;
+    query.actionId = args.detailViewModel.request.actionId;
+    query.technicalErrorModel = models;
+
+    const data = await this.commonService.getLogInfo(query);
+    data.getLogInfoModels.forEach(x => {
+      args.detailViewModel.technicalErrorModel.logInfoDetail = x.logInfoDetail;
+      args.detailViewModel.technicalErrorModel.betTypeCount = x.betTypeCount;
     });
   }
 

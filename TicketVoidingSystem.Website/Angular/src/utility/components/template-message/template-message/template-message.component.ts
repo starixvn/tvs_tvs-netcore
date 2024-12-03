@@ -211,12 +211,17 @@ export class TemplateMessageComponent implements OnChanges {
  }
 
   issueTypeUpdateSpecialBetTypeTvs(): boolean {
-    return this.isTVSVoidPage() && (StaticService.isOtherIssues(this.issueTypeId) || this.isLikelyWrongMarketOffered());
+    return this.isTVSVoidPage() && (StaticService.isOtherIssues(this.issueTypeId)
+      || StaticService.isWrongMarketOffered(this.issueTypeId)
+      || StaticService.isTechnicalError(this.issueTypeId)
+    );
   }
 
   issueTypeUpdateSpecialBetTypeVoidSingleBet(): boolean {
     return this.isVoidSinglePage() && (
-      this.isLikelyWrongMarketOffered() ||
+      StaticService.isWrongMarketOffered(this.issueTypeId) ||
+      StaticService.isTechnicalError(this.issueTypeId) ||
+      StaticService.isWrongOddsSportsBook(this.issueTypeId) ||
       StaticService.isWrongHDP(this.issueTypeId) ||
       StaticService.isWrongQuarterHDP(this.issueTypeId) ||
       StaticService.isWrongOdds(this.issueTypeId) ||
@@ -295,10 +300,5 @@ export class TemplateMessageComponent implements OnChanges {
       || (this.isTVSVoidPage() && !StaticService.isWrongScore(this.issueTypeId) && !StaticService.isWrongOdds(this.issueTypeId) && !StaticService.isWrongOddsSportsBook(this.issueTypeId)
         && !StaticService.isWrongHDP(this.issueTypeId) && !StaticService.isWrong1stHDP(this.issueTypeId)
         && !StaticService.isWrongOU(this.issueTypeId) && !StaticService.isWrong1stOU(this.issueTypeId));
-  }
-
-  isLikelyWrongMarketOffered(): boolean {
-    return StaticService.isLikelyWrongMarketOffered(this.issueTypeId)
-      || StaticService.isWrongOddsSportsBook(this.issueTypeId);
   }
 }

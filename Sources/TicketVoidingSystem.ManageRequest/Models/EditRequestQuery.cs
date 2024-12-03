@@ -85,4 +85,6 @@ public class EditRequestQuery
     public WrongOfferedNameViewModel? WrongOfferedNameInfo { get; set; }
 
     public OtherIssuesViewModel? OtherIssuesInfo { get; set; }
+
+    public TechnicalErrorViewModel? TechnicalErrorInfo { get; set; }
 }

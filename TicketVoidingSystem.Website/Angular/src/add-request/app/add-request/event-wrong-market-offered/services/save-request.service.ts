@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { StaticService } from 'src/utility/services/static.service';
 import { TEXT } from '../../../../../utility/constants/text';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
 import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 import { AddRequestQuery } from '../../models/add-request.query';

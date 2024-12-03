@@ -36,7 +36,8 @@ export class RequestDescriptionService {
       return this.createNotParticipateContent(copyInfoResponse);
     }
 
-    if (StaticService.isLikelyWrongMarketOffered(copyInfoResponse.requestInfo.issueTypeId.toString())) {
+    if (StaticService.isWrongMarketOffered(copyInfoResponse.requestInfo.issueTypeId.toString())
+      || StaticService.isTechnicalError(copyInfoResponse.requestInfo.issueTypeId.toString())) {
       return this.createWrongMarketOfferedLikelyContent(copyInfoResponse);
     }
 
@@ -120,7 +121,7 @@ export class RequestDescriptionService {
       + `Match ID: ${copyInfoResponse.requestInfo.matchId}\n`
       + `Request No: ${copyInfoResponse.requestInfo.requestId}\n`
       + `Issue Type: ${copyInfoResponse.requestInfo.issueTypeName}\n`
-      + `Mistaken By: ${copyInfoResponse.requestInfo.mistakenBy}\n\n`
+      + this.generateMistakenBy(copyInfoResponse.requestInfo)
       + betTypeContent
       + oddsContent
       + `Void Time: ${moment(copyInfoResponse.requestInfo.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} - ${moment(copyInfoResponse.requestInfo.voidToTime).format(DateTimeFormat.TIME_FORMAT)} `
@@ -144,5 +145,9 @@ export class RequestDescriptionService {
         .format(DateTimeFormat.TIME_FORMAT)} (${copyInfoResponse.requestInfo.filterBy === TVSRequestFilterBy.CHECK_TIME ? "Accept time" : "Trans time"})`
 
     return content;
+  }
+
+  private generateMistakenBy(requestInfo: RequestInfoForCopy): string {
+    return requestInfo.mistakenBy ? `Mistaken By: ${requestInfo.mistakenBy}\n\n` : '\n';
   }
 }

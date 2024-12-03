@@ -10,6 +10,7 @@ import { NotParticipateModel } from './event-not-participate.model';
 import { OtherIssuesModel } from './event-other-issues.model';
 import { RedCardModel } from './event-red-card.model';
 import { ReducedOverModel } from './event-reduced-over.model';
+import { TechnicalErrorModel } from './event-technical-error.model';
 import { EventTicket14Model } from './event-ticket-14.model';
 import { WrongHdpModel } from './event-wrong-hdp.model';
 import { WrongMarketOfferedModel } from './event-wrong-market-offered.model';
@@ -41,6 +42,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
   recoverTicketModel: RecoverTicketModel;
   wrongOfferedNameModel: WrongOfferedNameModel;
   otherIssuesModel: OtherIssuesModel;
+  technicalErrorModel: TechnicalErrorModel;
   others: OthersModel;
 
   constructor() {
@@ -64,6 +66,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
     this.wrongOfferedNameModel = new WrongOfferedNameModel();
     this.otherIssuesModel = new OtherIssuesModel();
     this.others = new OthersModel();
+    this.technicalErrorModel = new TechnicalErrorModel();
   }
 }
 
