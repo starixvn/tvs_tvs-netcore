@@ -11,7 +11,7 @@ import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { RequestStatus } from '../../../utility/models/signal-r.model';
 import { StaticService } from '../../../utility/services/static.service';
-import { TicketListModal } from '../ticket-list/ticket-list.modal';
+import { TabInfoRequest, TicketListModal } from '../ticket-list/ticket-list.modal';
 import { CommonService } from './../../../utility/services/common.service';
 import { AppService } from './../app.service';
 import { PermissionManage } from './../models/permission-manage.model';
@@ -144,9 +144,37 @@ export class RequestListComponent implements OnInit, OnChanges {
         requestId: request.requestId,
         matchId,
         requestDetailId,
-        allMatchIdsInRequest: request.details.map(x => x.matchId).join(','),
+        tabInfoRequest: this.updateTabInfoRequest(request, matchId, requestDetailId)
       };
     }
+  }
+
+  private updateTabInfoRequest(request: RequestModel, matchId: number, requestDetailId: number): TabInfoRequest[] {
+    return request.details.map((detail, index) => ({
+      id: index + 1,
+      isActive: this.checkActivedTab(request, detail, matchId, requestDetailId),
+      matchId: detail.matchId,
+      requestDetailId: detail.requestDetailId,
+      name: this.getTabName(request.issueTypeId, detail.matchId, index)
+    } as TabInfoRequest));
+  }
+
+  private getTabName(issueTypeId: number, matchId: number, index: number): string {
+    return matchId && !this.isMatchIdParlay(matchId)
+      ? StaticService.isLikelyWrongMarketOffered(issueTypeId) ? `${matchId} (${index + 1})` : `${matchId}`
+      : 'General Info';
+  }
+
+  private isMatchIdParlay(matchId: number) {
+    return matchId === 29 || matchId === 11099 || matchId === 2799 || matchId === 10499;
+  }
+
+  private checkActivedTab(request: RequestModel, detailRequestModel: DetailRequestModel, matchId: number, requestDetailId: number): boolean {
+    if (StaticService.isLikelyWrongMarketOffered(request.issueTypeId)) {
+      return detailRequestModel.requestDetailId === requestDetailId;
+    }
+
+    return detailRequestModel.matchId === matchId;
   }
 
   confirmCheckBy(item: RequestModel) {
@@ -213,7 +241,7 @@ export class RequestListComponent implements OnInit, OnChanges {
           if (this.isDifferenceByMatchId(request)) {
             const detail = request.details.find(y => y.matchId === x.simpleInfo.matchId);
             this.updateDetail(detail, x);
-          } else if(this.isDifferenceByRequestDetailId(request)) {
+          } else if (this.isDifferenceByRequestDetailId(request)) {
             const detail = request.details.find(y => y.requestDetailId === x.simpleInfo.matchId);
             this.updateDetail(detail, x);
           } else {

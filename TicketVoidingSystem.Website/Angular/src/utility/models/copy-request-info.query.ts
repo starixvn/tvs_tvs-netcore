@@ -20,6 +20,7 @@ export class RequestInfoForCopy {
   filterBy: number;
   issueTypeName: string;
   subIssueTypeName: string;
+  mistakenBy: string;
   isCheckedVar: boolean;
   provider: string;
   requestedBy: string;

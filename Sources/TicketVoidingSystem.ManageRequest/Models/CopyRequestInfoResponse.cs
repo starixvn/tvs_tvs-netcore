@@ -31,6 +31,8 @@ public class RequestInfoForCopy
 
     public string IssueTypeName { get; set; }
 
+    public string MistakenBy { get; set; }
+
     public string SubIssueTypeName { get; set; }
 
     public string RequestExtraInfo { get; set; }

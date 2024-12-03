@@ -11,10 +11,10 @@ import { StaticService } from '../../../../utility/services/static.service';
 import { AppService } from '../../app.service';
 import { BriefInfo } from '../../models/brief-info.model';
 import { GetGeneralInfoQuery } from '../../models/get-general-info.query';
-import { TicketListModal } from '../ticket-list.modal';
+import { TabInfoRequest, TicketListModal } from '../ticket-list.modal';
 import { TicketsModel } from '../tickets/tickets.model';
 import { TicketsQuery } from '../tickets/tickets.query';
-import { GeneralInfoViewModel, TabInfoRequest } from './request-info.model';
+import { GeneralInfoViewModel } from './request-info.model';
 
 @Component({
   selector: 'request-info',
@@ -27,11 +27,10 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   @Input() issue = new IssueInfo();
   @Input() isShowVar = false;
   @Input() tabInfoRequest: TabInfoRequest[] = [];
-  @Input() selectedMatchId: number;
   @Output() changeTabEvent = new EventEmitter<string>();
   @Output() changeTabBriefInfoEvent = new EventEmitter();
 
-  activeTab: string;
+  activeTab: number;
   issueTypeName: string;
   isExpandGeneralInfo = false;
   isAbnormalBet = false;
@@ -61,8 +60,8 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   async ngOnInit() {
     this.paging = new PagingModel();
     this.paging.pageSize = 500;
-    this.activeTab = this.selectedMatchId !== null ? this.selectedMatchId.toString() : '0';
-    await this.getDataCurrentTab(this.ticketListModal.matchId?.toString());
+    this.activeTab = this.tabInfoRequest.find(x => x.isActive).id;
+    await this.getDataCurrentTab(this.tabInfoRequest.find(x => x.isActive));
   }
 
   async getTickets(matchId: number) {
@@ -86,16 +85,16 @@ export class RequestInfoComponent implements OnInit, OnChanges {
     this.isBlock = false;
   }
 
-  public async changeTab(matchId: string) {
+  public async changeTab(tabInfoRequest: TabInfoRequest) {
     this.isShowBetList = true;
-    await this.getDataCurrentTab(matchId);
+    await this.getDataCurrentTab(tabInfoRequest);
   }
 
-  async getDataCurrentTab(matchIds: string) {
+  async getDataCurrentTab(tabInfoRequest: TabInfoRequest) {
     this.isBlock = true;
-    await this.getGeneralInfo(matchIds);
-    await this.getTickets(Number(matchIds));
-    await this.getMatch(matchIds);
+    await this.getGeneralInfo(tabInfoRequest);
+    await this.getTickets(tabInfoRequest.matchId);
+    await this.getMatch(tabInfoRequest.matchId);
     this.updateGeneralInfoByTickets();
     this.isBlock = false;
   }
@@ -105,8 +104,8 @@ export class RequestInfoComponent implements OnInit, OnChanges {
     this.isBlock = true;
     const generalInfoQuery: GetGeneralInfoQuery = { // same properties with GetGeneralInfoQuery
       requestId: this.ticketListModal.requestId,
-      matchIds: this.ticketListModal.allMatchIdsInRequest
-    }
+      matchIds: this.ticketListModal.tabInfoRequest.map(x => x.matchId).join(','),
+    } as GetGeneralInfoQuery;
     this.briefInfoModels = await this.appService.GetBriefInfo(generalInfoQuery);
     this.isBlock = false;
   }
@@ -117,10 +116,11 @@ export class RequestInfoComponent implements OnInit, OnChanges {
     this.isBlock = false;
   }
 
-  private async getGeneralInfo(matchIds: string): Promise<void> {
+  private async getGeneralInfo(tabInfoRequest: TabInfoRequest): Promise<void> {
     const generalInfoQuery: GetGeneralInfoQuery = {
       requestId: this.ticketListModal.requestId,
-      matchIds: matchIds === '0' ? null : matchIds
+      matchIds: tabInfoRequest.matchId?.toString(),
+      requestDetailId: tabInfoRequest.requestDetailId
     };
     this.generalInfoViewModel = await this.appService.getGeneralInfo(generalInfoQuery);
   }
@@ -135,6 +135,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
 
     return '';
   }
+
   private updateGeneralInfoByTickets(): void {
     if (this.generalInfoViewModel.generalInfoModel && this.tickets) {
       this.generalInfoViewModel.generalInfoModel.licenseeNames = this.tickets.licenseeNames;
@@ -147,14 +148,14 @@ export class RequestInfoComponent implements OnInit, OnChanges {
     }
   }
 
-  private async getMatch(matchId: string) {
+  private async getMatch(matchId: number) {
     if (this.isShowMatchInfo() && this.isValidMatchId(matchId)) {
-      this.match = await this.commonService.getMatch(Number(matchId));
+      this.match = await this.commonService.getMatch(matchId);
     }
   }
 
-  private isValidMatchId(matchId: string): boolean {
-    return matchId !== null && matchId !== '' && matchId !== '0' && matchId !== '29';
+  private isValidMatchId(matchId: number): boolean {
+    return matchId !== null && matchId !== 0 && matchId !== 29;
   }
 
   public async saveBriefInfoNote() {

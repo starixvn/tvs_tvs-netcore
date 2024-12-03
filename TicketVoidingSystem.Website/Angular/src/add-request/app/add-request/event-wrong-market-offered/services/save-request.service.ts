@@ -73,7 +73,7 @@ export class SaveRequestService {
     if (!arg.filter.isVoided) {
       arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
       arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoItems.some(x => x.logInfoDetail?.settleCount > 0);
-      arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.logInfoItems.every(y => y.messageValidationLogInfo.every(t => !t.isError));
+      arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.logInfoItems.every(y => y.messageValidationLogInfo.length > 0 && y.messageValidationLogInfo.every(t => !t.isError));
       arg.confirmAddRequest.extraWarningModel = this.eventWrongMarketOfferedService.getExtraWarningModel(arg.logInfoEvent.logInfoItems);
     }
     arg.confirmAddRequest.isOpen = true;

@@ -119,7 +119,8 @@ export class RequestDescriptionService {
       + `Match: ${copyInfoResponse.requestInfo.matchEvent}\n`
       + `Match ID: ${copyInfoResponse.requestInfo.matchId}\n`
       + `Request No: ${copyInfoResponse.requestInfo.requestId}\n`
-      + `Issue Type: ${copyInfoResponse.requestInfo.issueTypeName}\n\n`
+      + `Issue Type: ${copyInfoResponse.requestInfo.issueTypeName}\n`
+      + `Mistaken By: ${copyInfoResponse.requestInfo.mistakenBy}\n\n`
       + betTypeContent
       + oddsContent
       + `Void Time: ${moment(copyInfoResponse.requestInfo.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} - ${moment(copyInfoResponse.requestInfo.voidToTime).format(DateTimeFormat.TIME_FORMAT)} `
