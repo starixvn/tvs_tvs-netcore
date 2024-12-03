@@ -5,10 +5,10 @@ using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.Factories;
 using Fanex.BetList.Core.Templates;
 using Fanex.BetList.Core.TicketHelper;
-using Force.DeepCloner;
 using HtmlAgilityPack;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.BetList;
 
@@ -149,7 +149,7 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         var ticketHelper = new TicketHelper();
         var factory = new BetListBaseBuilder();
         var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
-        var ticketCopy = ticket.DeepClone();
+        var ticketCopy = MessagePackCloner.Clone(ticket);
 
         if (BetTypeConstant.BetTypesNotNeedRefNoGetBetType.Contains(ticketCopy.BetTypeId))
         {
@@ -163,7 +163,7 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.ChineseSimplified));
         var factory = new BetListBaseBuilder();
         var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
-        var ticketCopy = ticket.DeepClone();
+        var ticketCopy = MessagePackCloner.Clone(ticket);
 
         if (BetTypeConstant.BetTypesNotNeedRefNoGetBetType.Contains(ticketCopy.BetTypeId))
         {
@@ -180,7 +180,7 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.ChineseTraditional));
         var factory = new BetListBaseBuilder();
         var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
-        var ticketCopy = ticket.DeepClone();
+        var ticketCopy = MessagePackCloner.Clone(ticket);
 
         if (BetTypeConstant.BetTypesNotNeedRefNoGetBetType.Contains(ticketCopy.BetTypeId))
         {
@@ -196,7 +196,7 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.NewChineseSimplified));
         var factory = new BetListBaseBuilder();
         var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
-        var ticketCopy = ticket.DeepClone();
+        var ticketCopy = MessagePackCloner.Clone(ticket);
 
         if (BetTypeConstant.BetTypesNotNeedRefNoGetBetType.Contains(ticketCopy.BetTypeId))
         {
