@@ -25,8 +25,6 @@ class Helper {
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
     filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
-    messageValidationLogInfo: [],
-    betTypeCount: [],
     betTeamsResult: []
   } as LogInfoWrongMarketOffered;
 }
@@ -188,7 +186,6 @@ describe('SaveRequestService', () => {
     saveRequestArg.actionIdOfFirstTimeAccess = '5';
     saveRequestArg.logInfoEvent = Helper.fakeLogInfoWrongMarketOffered;
     saveRequestArg.logInfoEvent.logInfoItems = [{ logInfoDetail: { settleCount: 1 } } as LogInfoItem];
-    saveRequestArg.logInfoEvent.messageValidationLogInfo.push({ isError: false, reason: 'aaa'});
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);
@@ -203,7 +200,6 @@ describe('SaveRequestService', () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.isEdit = false;
     saveRequestArg.logInfoEvent = new LogInfoWrongMarketOffered();
-    saveRequestArg.logInfoEvent.messageValidationLogInfo = null;
 
     const actual = service['getMessageConfirmationWrongMarketOffered'](saveRequestArg);
 

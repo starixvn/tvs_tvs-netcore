@@ -246,14 +246,15 @@ public class AddRequestProcessStageTests
             EarlyKickOffInfo = [new EarlyKickOffViewModel { MatchId = 456, KickOffTime = DateTime.Now, IsMainMatch = true }],
             AbnormalBetInfo = new AbnormalBetViewModel { Matches = [new MatchInfoAddRequest { MatchId = 456 }] },
             DuplicateTicketsInfo = new DuplicateTicketsViewModel { MatchId = 456 },
-            WrongMarketOfferedInfo = new WrongMarketOfferedViewModel
+            WrongMarketOfferedInfo = [new WrongMarketOfferedViewModel
             {
                 MatchId = 456,
                 FilterFromTransTime = DateTime.MinValue,
                 FilterToTransTime = DateTime.MinValue,
                 LogInfoDetail = new LogInfoDetail { VoidFromTime = DateTime.MinValue, VoidToTime = DateTime.MinValue },
-                BetTypeCount = new List<BetTypeTicketsInfo> { new() }
-            },
+                BetTypeCount = new List<BetTypeTicketsInfo> { new() },
+                AllBetTypesSelection = []
+            }],
             WrongOddsSportsBookInfo = new WrongOddsSportsBookViewModel
             {
                 MatchId = 456,

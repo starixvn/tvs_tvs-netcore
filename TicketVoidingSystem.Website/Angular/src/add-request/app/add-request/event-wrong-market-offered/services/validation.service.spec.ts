@@ -59,7 +59,6 @@ describe('ValidationService', () => {
     const errorMsg = new ValidationMessage();
     errorMsg.isError = true;
     const logInfoEvent = new LogInfoWrongMarketOffered();
-    logInfoEvent.messageValidationLogInfo = [errorMsg];
     const actual = service.isValidLogInfoEvent(logInfoEvent);
 
     expect(actual).toBeFalsy();

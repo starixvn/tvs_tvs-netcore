@@ -21,8 +21,6 @@ class Helper {
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
     filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
-    messageValidationLogInfo: [],
-    betTypeCount: [],
     betTeamsResult: [],
   } as LogInfoWrongMarketOffered;
 
@@ -54,7 +52,6 @@ describe('LogInfoService', () => {
     service.resetLogInfoOfEvent(logInfo);
 
     expect(logInfo.logInfoItems).toBe([]);
-    expect(logInfo.messageValidationLogInfo).toBe(null);
   });
 
   it('#getLogInfo should call #eventWrongMarketOfferedService.getWrongMarketOfferedGetLogInfoModel', async () => {

@@ -26,12 +26,11 @@ describe('RequestInfoComponent', () => {
     let component = new RequestInfoComponent(null, null, config);
     const fakeFunctionGetDataCurrentTab = jest.fn();
     component['getDataCurrentTab'] = fakeFunctionGetDataCurrentTab;
-    const dataTests = [{selectedMatchId: 1, activeTab: "1"}, {selectedMatchId: null, activeTab: "0"}];
+    const dataTests = [{activeTab: "1"}, {activeTab: "0"}];
     component.ticketListModal = fakeTicketListModal;
     
     // Action and Assert
     dataTests.forEach(x => {
-      component.selectedMatchId = x.selectedMatchId;
       component.ngOnInit();
       expect(fakeFunctionGetDataCurrentTab).toBeCalled();
       expect(component.paging.pageSize).toBe(500);

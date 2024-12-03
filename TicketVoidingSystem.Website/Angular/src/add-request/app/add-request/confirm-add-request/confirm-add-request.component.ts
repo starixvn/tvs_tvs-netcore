@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { Selection } from 'src/utility/models/selection.model';
+import { Selection } from '../../../../utility/models/selection.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { ConfirmAddRequestModel } from './confirm-add-request.model';
 

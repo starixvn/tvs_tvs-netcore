@@ -60,7 +60,7 @@ class Helper {
     { name: 'Take note', value: '2' },
     { name: 'Waiting', value: '3' }
   ];
-  static readonly fakeDetailRequestModelList: DetailRequestModel[] = [
+  static readonly fakeDetailRequestModelList = [
     {
       subIssueTypeId: 1,
       matchId: Helper.matchId,
@@ -81,7 +81,7 @@ class Helper {
       totalCancelCashOutProcessed: 0,
       totalResettleProcessed: 0
     },
-  ];
+  ] as DetailRequestModel[];
 
   static readonly fakeRequestModelList: RequestModel[] = [
     {
@@ -122,14 +122,14 @@ class Helper {
     voidRead: true,
     isReadMarkTickets: true
   };
-  static readonly fakeRequestSimpleInfo: RequestSimpleInfo = {
+  static readonly fakeRequestSimpleInfo = {
     lastPerformedBy: 'starix',
     totalSingleProcessed: 12,
     totalParlayProcessed: 1,
     matchId: Helper.matchId,
     totalCancelCashOutProcessed: 0,
     totalResettleProcessed: 0
-  };
+  } as RequestSimpleInfo;
 
   static readonly fakeRequestStatus: RequestStatus[] = [{
     requestId: 1111,

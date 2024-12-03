@@ -39,8 +39,6 @@ class Helper {
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
     filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
-    messageValidationLogInfo: [],
-    betTypeCount: [],
     betTeamsResult: []
   } as LogInfoWrongMarketOffered;
 }

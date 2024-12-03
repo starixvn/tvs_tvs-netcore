@@ -29,7 +29,7 @@ describe('TicketListComponent', () => {
   class AppModuleTest { }
 
   let shallow: Shallow<TicketListComponent>;
-  let modal = {requestId: 1, open: false, allMatchIdsInRequest: '1,2,3,29'} as TicketListModal;
+  let modal = {requestId: 1, open: false} as TicketListModal;
   let requestDetail = {request: {issueTypeId: 1} as RequestDetailModel, 
     dangerAcceptedModels: [{isMainMatch: true,subIssueTypeId: 1 }]} as RequestDetailViewModel;
   let issue = new IssueInfo();

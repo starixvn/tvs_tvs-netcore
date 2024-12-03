@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { DateFullTimeNewComponent } from 'src/utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { StaticService } from 'src/utility/services/static.service';
+import { DateFullTimeNewComponent } from '../../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { StaticService } from '../../../../../../utility/services/static.service';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { FilterWrongMarketOfferedModel } from '../../models/filter-wrong-market-offered.model';
 

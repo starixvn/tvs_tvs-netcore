@@ -50,7 +50,7 @@ public class UpdateRequestProcessStageTests
             RequestId = 1,
             ActionId = 1,
             MatchId = 1,
-            WrongMarketOfferedInfo = new WrongMarketOfferedViewModel
+            WrongMarketOfferedInfo = [new WrongMarketOfferedViewModel
             {
                 BetTypeCount = new List<BetTypeTicketsInfo>(),
                 FilterFromTransTime = DateTime.Today,
@@ -60,7 +60,7 @@ public class UpdateRequestProcessStageTests
                     VoidFromTime = DateTime.Today,
                     VoidToTime = DateTime.Today
                 }
-            },
+            }],
             IssueTypeId = IssueTypeConstant.WrongMarketOffered
         };
         var markedTicketsSuccessful = new List<long> { 1, 2 };

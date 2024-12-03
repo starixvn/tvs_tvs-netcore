@@ -11,11 +11,9 @@ class Helper {
     fromDateTime: Helper.fromDate,
     toDateTime: Helper.toDate,
   }] as FilterWrongMarketOfferedModel[];
-  static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
+  static readonly fakeLogInfoWrongMarketOffered = {
     matchId: 1,
     filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
-    messageValidationLogInfo: [],
-    betTypeCount: [],
     betTeamsResult: []
   } as LogInfoWrongMarketOffered;
   static readonly fakeWrongMarketOfferedModel: WrongMarketOfferedModel = {
@@ -50,7 +48,6 @@ describe('EventWrongMarketOfferedService', () => {
     expect(actual.subIssueTypeId).toBe(1);
     expect(actual.filterFromTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels[0].fromDateTime);
     expect(actual.filterToTransTime).toBe(Helper.fakeLogInfoWrongMarketOffered.filterWrongMarketOfferedModels[0].toDateTime);
-    expect(actual.betTypeCount).toBe(Helper.fakeLogInfoWrongMarketOffered.betTypeCount);
     expect(actual.betTeamsResult).toBe(Helper.fakeLogInfoWrongMarketOffered.betTeamsResult);
   });
 

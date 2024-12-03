@@ -98,8 +98,6 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
             RefNo = "4"
         };
 
-        service = new BetListServiceImp(null, null);
-
         // Act
         var actual = service.GetBetTypeName(ticket);
 
@@ -115,7 +113,9 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         var ticket = new Ticket
         {
             BetId = 224,
-            BetTeam = "h"
+            BetTeam = "h",
+            BetTypeId = 1,
+            RefNo = "4"
         };
         service = new BetListServiceImp(null, null);
 
@@ -133,7 +133,9 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         var ticket = new Ticket
         {
             BetId = 224,
-            BetTeam = "h"
+            BetTeam = "h",
+            BetTypeId = 1,
+            RefNo = "4"
         };
         service = new BetListServiceImp(null, null);
 
@@ -151,7 +153,9 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         var ticket = new Ticket
         {
             BetId = 224,
-            BetTeam = "h"
+            BetTeam = "h",
+            BetTypeId = 1,
+            RefNo = "4"
         };
         service = new BetListServiceImp(null, null);
 

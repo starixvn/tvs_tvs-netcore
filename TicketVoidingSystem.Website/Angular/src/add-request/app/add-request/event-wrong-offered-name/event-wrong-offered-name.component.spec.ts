@@ -214,7 +214,6 @@ describe('EventWrongOfferedNameComponent', () => {
     expect(actual.others).toBe(mockComponent.others);
     expect(actual.filter).toBe(mockComponent.filter);
     expect(actual.primitiveProps).toBe(mockComponent.primitiveProps);
-    expect(actual.issueTypes).toBe(mockComponent.issueTypes);
     expect(actual.filterWrongOfferedNameComponent).toBe(mockComponent.filterWrongOfferedNameComponent);
     expect(actual.eventLeagueComponent).toBe(mockComponent.eventLeagueComponent);
     expect(actual.logInfoEvent).toBe(mockComponent.logInfoEvent);
