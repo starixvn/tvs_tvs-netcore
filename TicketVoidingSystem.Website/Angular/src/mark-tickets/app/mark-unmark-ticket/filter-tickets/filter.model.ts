@@ -3,13 +3,13 @@ import { Selection } from '../../../../utility/models/selection.model';
 
 export class FilterSearchBy {
   static readonly MATCH_ID = '0';
-  static readonly BETIDS = '1';
+  static readonly BET_IDS = '1';
   static readonly ALL_MARKED = '2';
 
-  value = '0';
+  value = '1';
   items: Selection[] = [
-    { name: 'MatchID', value: '0' },
     { name: 'BetID(s)', value: '1' },
+    { name: 'MatchID', value: '0' },
     { name: 'All Marked Tickets', value: '2', hidden: true }
   ];
 }

@@ -28,10 +28,8 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
   searchBy = new FilterSearchBy();
   currencies = new Currencies();
   groupLicenseeModel = new GroupLicenseeModel([], false);
-
   isBlock: boolean;
   markedByOptions: Selection[];
-
   moveBetNgbDate: NgbDate;
 
   constructor(
@@ -101,7 +99,7 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
   checkValidate(): boolean {
     if (this.searchBy.value === FilterSearchBy.MATCH_ID) {
       return this.matchIdComponent.checkValidate();
-    } else if (this.searchBy.value === FilterSearchBy.BETIDS) {
+    } else if (this.searchBy.value === FilterSearchBy.BET_IDS) {
       this.betIdsComponent.groupNumber.resetAllItemsToValid();
       return this.betIdsComponent.isHasBetId();
     }
@@ -113,7 +111,7 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
     let result = new GetTicketsQuery();
     if (this.searchBy.value === FilterSearchBy.MATCH_ID) {
       result = this.matchIdComponent.getParams();
-    } else if (this.searchBy.value === FilterSearchBy.BETIDS) {
+    } else if (this.searchBy.value === FilterSearchBy.BET_IDS) {
       result.transIds = this.betIdsComponent.getAllBetIds();
     }
     result.markedBy = this.model.markedBy;

@@ -96,7 +96,7 @@ export class MarkUnmarkTicketComponent {
       this.showLicensees = true;
       this.ticketsModel.initData(data);
       this.paging.total = data.totalItems;
-      if (this.query.searchBy === FilterSearchBy.BETIDS) {
+      if (this.query.searchBy === FilterSearchBy.BET_IDS) {
         if (data.invalidTransIds) {
           this.filterTickets.betIdsComponent.groupNumber.updateInvalidItems(data.invalidTransIds);
         }
@@ -203,7 +203,7 @@ export class MarkUnmarkTicketComponent {
       this.getDetailTickets(null);
     } else {
       this.getTickets(this.query);
-      if (this.query.searchBy === FilterSearchBy.BETIDS && isClearBetId) {
+      if (this.query.searchBy === FilterSearchBy.BET_IDS && isClearBetId) {
         this.filterTickets.clearBetId();
       }
     }

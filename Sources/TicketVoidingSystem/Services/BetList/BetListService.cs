@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Fanex.BetList.Core.Builder;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.Factories;
 using Fanex.BetList.Core.Templates;
 using Fanex.BetList.Core.TicketHelper;
+using Force.DeepCloner;
 using HtmlAgilityPack;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
@@ -147,7 +149,7 @@ public class BetListServiceImp : BetListService
         var betName = remotingRefWrapperService.GetBetType(betTypeId, refNo);
         const int FistNextBet = 86;
         const int SecondNextBet = 85;
-        return id == FistNextBet || id == SecondNextBet ? $"Next {betName}" : betName;
+        return id is FistNextBet or SecondNextBet ? $"Next {betName}" : betName;
     }
 
     public string GetBetTypeName(ITicket ticket)
@@ -155,7 +157,13 @@ public class BetListServiceImp : BetListService
         var ticketHelper = new TicketHelper();
         var factory = new BetListBaseBuilder();
         var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
-        return builder.GetBetTypeName(ticket, ticketHelper);
+        var ticketCopy = ticket.DeepClone();
+
+        if (BetTypeConstant.BetTypesNotNeedRefNoGetBetType.Contains(ticketCopy.BetTypeId))
+        {
+            ticketCopy.RefNo = null;
+        }
+        return builder.GetBetTypeName(ticketCopy, ticketHelper);
     }
 
     public string GetBetTypeNameChineseSimplified(ITicket ticket)
@@ -163,7 +171,14 @@ public class BetListServiceImp : BetListService
         var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.ChineseSimplified));
         var factory = new BetListBaseBuilder();
         var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
-        var betTypeName = builder.GetBetTypeName(ticket, ticketHelper);
+        var ticketCopy = ticket.DeepClone();
+
+        if (BetTypeConstant.BetTypesNotNeedRefNoGetBetType.Contains(ticketCopy.BetTypeId))
+        {
+            ticketCopy.RefNo = null;
+        }
+
+        var betTypeName = builder.GetBetTypeName(ticketCopy, ticketHelper);
 
         return betTypeName.TranslateChineseSimplified();
     }
@@ -173,7 +188,13 @@ public class BetListServiceImp : BetListService
         var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.ChineseTraditional));
         var factory = new BetListBaseBuilder();
         var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
-        var betTypeName = builder.GetBetTypeName(ticket, ticketHelper);
+        var ticketCopy = ticket.DeepClone();
+
+        if (BetTypeConstant.BetTypesNotNeedRefNoGetBetType.Contains(ticketCopy.BetTypeId))
+        {
+            ticketCopy.RefNo = null;
+        }
+        var betTypeName = builder.GetBetTypeName(ticketCopy, ticketHelper);
 
         return betTypeName;
     }
@@ -183,7 +204,13 @@ public class BetListServiceImp : BetListService
         var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.NewChineseSimplified));
         var factory = new BetListBaseBuilder();
         var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
-        var betTypeName = builder.GetBetTypeName(ticket, ticketHelper);
+        var ticketCopy = ticket.DeepClone();
+
+        if (BetTypeConstant.BetTypesNotNeedRefNoGetBetType.Contains(ticketCopy.BetTypeId))
+        {
+            ticketCopy.RefNo = null;
+        }
+        var betTypeName = builder.GetBetTypeName(ticketCopy, ticketHelper);
 
         return betTypeName;
     }
@@ -199,7 +226,7 @@ public class BetListServiceImp : BetListService
         var betName = remotingRefWrapperService.GetDisplayedBetTypeName(betTypeId, refNo);
         const int FistNextBet = 86;
         const int SecondNextBet = 85;
-        return id == FistNextBet || id == SecondNextBet ? $"Next {betName}" : betName;
+        return id is FistNextBet or SecondNextBet ? $"Next {betName}" : betName;
     }
 
     public string GetStatus(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowVnIp)
@@ -281,5 +308,4 @@ public class BetListServiceImp : BetListService
             ? $"{liveHomeScore} - {liveAwayScore}"
             : string.Empty;
     }
-
 }

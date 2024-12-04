@@ -11,6 +11,7 @@ import { AdvancedModeConstants } from '../advanced-mode.constants';
 import { BetType } from '../group-bettypes/group-bettypes.model';
 import { BetTeam, CheckedBetType, GetPlayersQuery, OddsInfo, Player, Selection } from './advanced-mode.model';
 import { AdvancedModeService } from './advanced-mode.service';
+import { ControlsAllBetTypes } from '../../advanced-mode-add-request/controls-all-bet-types/controls-all-bet-types.model';
 
 @Component({
   selector: 'advanced-mode',
@@ -55,31 +56,19 @@ export class AdvancedModeComponent implements OnChanges {
   renderBetTeams(data: BetTeam[]) {
     this.betTeams = [];
     data.forEach(item => {
-      const betTeam = new BetTeam([item.name, item.value, item.type, item.enableBetTypes, item.betTypes],
+      const betTeam = new BetTeam([item.name, item.value, item.type, item.betTypes],
         item.selections, item.items, item.inputs, this.isShowMultiSelectionList);
       this.betTeams.push(betTeam);
     });
   }
 
   renderMapAndRound() {
-    this.mapList = this.initSelectionAllBetType(AdvancedModeConstants.MAP_LIST);
-    this.roundList = this.initSelectionAllBetType(AdvancedModeConstants.ROUND_LIST);
-    this.quarterList = this.initSelectionAllBetType(AdvancedModeConstants.QUARTER_LIST);
-    this.setList = this.initSelectionAllBetType(AdvancedModeConstants.SET_LIST);
-    this.gameList = this.initSelectionAllBetType(AdvancedModeConstants.GAME_LIST);
-    this.inningList = this.initSelectionAllBetType(AdvancedModeConstants.INNING_LIST);
-  }
-
-  initSelectionAllBetType(items: ItemsSelect[]): MultipleSelection {
-    const multiSelect = new MultipleSelection();
-    multiSelect.checkAllCheckBoxText = 'All';
-    multiSelect.allItemsCheckedText = 'All';
-    multiSelect.noneItemCheckedText = 'Select options';
-    multiSelect.maxWidth = '100%';
-    multiSelect.items = items;
-    multiSelect.checkAllItems(true);
-
-    return multiSelect;
+    this.mapList = ControlsAllBetTypes.initSelectionAllBetType(AdvancedModeConstants.MAP_LIST);
+    this.roundList = ControlsAllBetTypes.initSelectionAllBetType(AdvancedModeConstants.ROUND_LIST);
+    this.quarterList = ControlsAllBetTypes.initSelectionAllBetType(AdvancedModeConstants.QUARTER_LIST);
+    this.setList = ControlsAllBetTypes.initSelectionAllBetType(AdvancedModeConstants.SET_LIST);
+    this.gameList = ControlsAllBetTypes.initSelectionAllBetType(AdvancedModeConstants.GAME_LIST);
+    this.inningList = ControlsAllBetTypes.initSelectionAllBetType(AdvancedModeConstants.INNING_LIST);
   }
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -128,7 +117,6 @@ export class AdvancedModeComponent implements OnChanges {
   private handleBetTeam(betType: BetType) {
     this.betTeams.forEach(betTeam => {
       this.changeBetTeam(betType, betTeam);
-      betTeam.enableInput();
       this.handleChangeFancyBetTypeCricket(betTeam);
     });
   }
@@ -147,7 +135,7 @@ export class AdvancedModeComponent implements OnChanges {
       this.isShowAdvancedMode = true;
       this.isShowContent = true;
       if (index === -1) {
-        this.addBetTypeName(betType.name, betTeam);
+        betTeam.name = betType.name;
         betTeam.checkedBetTypes.push(betType.value);
       }
       this.updateAllBetTypeSelection(betTeam);
@@ -176,19 +164,11 @@ export class AdvancedModeComponent implements OnChanges {
     }
   }
 
-  private addBetTypeName(name: string, betTeam: BetTeam) {
-    if (betTeam.type === 1 || betTeam.type === 8) {
-      betTeam.name = betTeam.name === '' ? name : betTeam.name + ', ' + name;
-    }
-  }
-
   private removeBetTypeName(name: string, betTeam: BetTeam) {
-    if (betTeam.type === 1 || betTeam.type === 8) {
-      const names = betTeam.name.split(', ');
-      const index = names.indexOf(name);
-      names.splice(index, 1);
-      betTeam.name = names.join(', ');
-    }
+    const names = betTeam.name.split(', ');
+    const index = names.indexOf(name);
+    names.splice(index, 1);
+    betTeam.name = names.join(', ');
   }
 
   async getPlayers() {
@@ -218,11 +198,7 @@ export class AdvancedModeComponent implements OnChanges {
   }
 
   validate(): boolean {
-    let result = true;
-    for (let i = 0; i < this.betTeams.length && result; i++) {
-      result = this.checkEmptyCheckbox(result, i);
-    }
-
+    let result = this.betTeams.every((_, index) => this.checkEmptyCheckbox(true, index));
     let isValidOddsSpread = true;
     let isValidHDP = true;
 
@@ -370,13 +346,8 @@ export class AdvancedModeComponent implements OnChanges {
     }
   }
 
-  checkBetTypesMoreHDP(betTeam: BetTeam, isDivOfBetTypesMoreHDP: boolean) {
-    if (betTeam.items.length > 0 && ((betTeam.enableBetTypes === this.betTypesMoreHDP && isDivOfBetTypesMoreHDP)
-      || (betTeam.enableBetTypes !== this.betTypesMoreHDP && !isDivOfBetTypesMoreHDP))) {
-      return true;
-    }
-
-    return false;
+  checkBetTypesMoreHDP(betTeam: BetTeam) {
+    return betTeam.items.length > 0 && this.betTypesMoreHDP.split(',').includes(betTeam.betTypes);
   }
 
   isShowTextBox(betTeam: BetTeam) {

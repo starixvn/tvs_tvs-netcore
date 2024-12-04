@@ -636,10 +636,9 @@
       ],
       "Inputs": [
         {
-          "Name": "Value",
+          "Name": "Goal",
           "Value": "",
-          "IsMultiple": true,
-          "XmlAttribute": "Hdp"
+          "XmlAttribute": "YY"
         }
       ],
       "Type": 1,
@@ -5003,14 +5002,6 @@
           "Name": "Over/Under",
           "Value": "All",
           "XmlAttribute": "Team"
-        }
-      ],
-      "Inputs": [
-        {
-          "Name": "Value",
-          "Value": "",
-          "IsMultiple": true,
-          "XmlAttribute": "Hdp"
         }
       ],
       "Type": 1,

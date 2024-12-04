@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { ClipboardService } from 'ngx-clipboard';
 import { Shallow } from 'shallow-render';
 import { AdvancedModeModule } from '../../../utility/components/advanced-mode/advanced-mode.module';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
@@ -978,18 +977,6 @@ describe('FilterComponent', () => {
     const actual = instance.checkFilterParams();
 
     expect(actual).toBeFalsy();
-  });
-
-  it('#copyClipboard should call #clipboardService.copyFromContent', async () => {
-    const mockCopyFromContent = jest.fn();
-    const { instance } = await shallow
-      .mock(ClipboardService, { copyFromContent: mockCopyFromContent })
-      .render();
-    window.alert = jest.fn();
-    instance.copyClipboard('');
-
-    expect(mockCopyFromContent).toHaveBeenCalledTimes(1);
-    expect(window.alert).toHaveBeenCalledTimes(1);
   });
 
   it('#isCorrectFormatOdds should return true when value is empty', async () => {

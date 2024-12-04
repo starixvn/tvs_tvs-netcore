@@ -425,9 +425,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ticketsChange(numberOfTikets: number) {
+  ticketsChange(numberOfTickets: number) {
     this.templateValue = _.clone(this.templateValue);
-    this.templateValue.totalTickets = numberOfTikets;
+    this.templateValue.totalTickets = numberOfTickets;
     this.templateValue.checkSettled = this.ticketsModel.checkSettledTickets();
   }
 

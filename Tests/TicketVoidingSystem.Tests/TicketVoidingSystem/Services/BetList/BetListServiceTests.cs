@@ -25,45 +25,6 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     }
 
     [Fact]
-    public void BuildChoiceBlock_ReturnChoice()
-    {
-        // Arrange
-        service = new BetListServiceImp(null, null);
-
-        // Act
-        var actual = service.BuildChoiceBlock(Builder<Ticket>.CreateNew().Build(), new TicketHelper(), null, false);
-
-        // Assert
-        Assert.NotNull(actual);
-    }
-
-    [Fact]
-    public void BuildChoice_ReturnChoice()
-    {
-        // Arrange
-        service = new BetListServiceImp(null, null);
-
-        // Act
-        var actual = service.BuildChoice(Builder<Ticket>.CreateNew().Build(), new TicketHelper(), null, false);
-
-        // Assert
-        Assert.NotNull(actual);
-    }
-
-    [Fact]
-    public void BuildChoiceExcel_ReturnChoice()
-    {
-        // Arrange
-        service = new BetListServiceImp(null, null);
-
-        // Act
-        var actual = service.BuildChoiceExcel(Builder<Ticket>.CreateNew().Build(), new TicketHelper(), null, false);
-
-        // Assert
-        Assert.NotNull(actual);
-    }
-
-    [Fact]
     public void BuildStake_ReturnStake()
     {
         // Arrange
@@ -123,22 +84,28 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         Assert.Equal(expected, actual);
     }
 
-    [Fact]
-    public void GetBetTypeName_ReturnName()
+    [Theory]
+    [InlineData(11099, "Mix Parlay")]
+    [InlineData(29, "System Parlay")]
+    public void GetBetTypeName_ReturnName(int betTypeId, string expected)
     {
         // Arrange
         var ticket = new Ticket
         {
             BetId = 224,
-            BetTeam = "h"
+            BetTeam = "h",
+            BetTypeId = betTypeId,
+            RefNo = "4"
         };
+
         service = new BetListServiceImp(null, null);
 
         // Act
         var actual = service.GetBetTypeName(ticket);
 
         // Assert
-        Assert.Equal("", actual);
+        Assert.Equal(expected, actual);
+        Assert.Equal("4", ticket.RefNo);
     }
 
     [Fact]

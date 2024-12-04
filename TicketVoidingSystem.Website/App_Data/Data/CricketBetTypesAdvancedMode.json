@@ -94,7 +94,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9404",
       "BetTypes": "9404"
     },
     {
@@ -136,7 +135,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9405",
       "BetTypes": "9405"
     },
     {
@@ -178,7 +176,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9406",
       "BetTypes": "9406"
     },
     {
@@ -220,7 +217,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9407",
       "BetTypes": "9407"
     },
     {
@@ -262,7 +258,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9408",
       "BetTypes": "9408"
     },
     {
@@ -304,7 +299,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9409",
       "BetTypes": "9409"
     },
     {
@@ -1519,7 +1513,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9446",
       "BetTypes": "9446"
     },
     {
@@ -1561,7 +1554,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9447",
       "BetTypes": "9447"
     },
     {
@@ -1603,7 +1595,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9448",
       "BetTypes": "9448"
     },
     {
@@ -1645,7 +1636,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9449",
       "BetTypes": "9449"
     },
     {
@@ -1687,7 +1677,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9450",
       "BetTypes": "9450"
     },
     {
@@ -1729,7 +1718,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9451",
       "BetTypes": "9451"
     },
     {
@@ -1771,7 +1759,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9452",
       "BetTypes": "9452"
     },
     {
@@ -1813,7 +1800,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9453",
       "BetTypes": "9453"
     },
     {
@@ -1855,7 +1841,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9454",
       "BetTypes": "9454"
     },
     {
@@ -1897,7 +1882,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9455",
       "BetTypes": "9455"
     },
     {
@@ -1939,7 +1923,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9456",
       "BetTypes": "9456"
     },
     {
@@ -1981,7 +1964,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9457",
       "BetTypes": "9457"
     },
     {
@@ -2023,7 +2005,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9458",
       "BetTypes": "9458"
     },
     {
@@ -2065,7 +2046,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9459",
       "BetTypes": "9459"
     },
     {
@@ -2107,7 +2087,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9460",
       "BetTypes": "9460"
     },
     {
@@ -2149,7 +2128,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9461",
       "BetTypes": "9461"
     },
     {
@@ -2191,7 +2169,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9462",
       "BetTypes": "9462"
     },
     {
@@ -2233,7 +2210,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9463",
       "BetTypes": "9463"
     },
     {
@@ -2275,7 +2251,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9464",
       "BetTypes": "9464"
     },
     {
@@ -2317,7 +2292,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9465",
       "BetTypes": "9465"
     },
     {
@@ -5800,14 +5774,12 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9604",
       "BetTypes": "9604"
     },
     {
@@ -8709,7 +8681,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9708",
       "BetTypes": "9708"
     },
     {
@@ -8751,7 +8722,6 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "9709",
       "BetTypes": "9709"
     },
     {

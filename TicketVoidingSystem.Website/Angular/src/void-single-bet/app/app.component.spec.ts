@@ -32,44 +32,6 @@ import { TicketsModel } from './tickets/tickets.model';
 jest.mock('../../utility/services/signal-r.service.native');
 class Helper {
   static readonly titleSelector = 'div.title';
-  static readonly fakeDate = '2021-10-14 12:08:49.737';
-
-  static getFakeMatchViewModel(): MatchModel {
-    return {
-      matchId: 28321695,
-      homeId: 10935,
-      homeName: 'American League',
-      homeNameNewSimplified: '美国聯盟',
-      homeNameSimplified: '美国聯盟',
-      homeNameTraditional: '美國聯盟',
-      awayId: 16277,
-      awayName: 'National League',
-      awayNameNewSimplified: '国家联盟',
-      awayNameSimplified: '国家联盟',
-      awayNameTraditional: '國家聯盟',
-      matchCode: '*B0001',
-      eventDate: new Date(Helper.fakeDate),
-      dateTime: new Date(Helper.fakeDate),
-      leagueId: 12345,
-      leagueName: '',
-      leagueNameNewSimplified: '',
-      leagueNameSimplified: '',
-      leagueNameTraditional: '',
-      matchEvent: '',
-      matchEventSimplified: '',
-      matchEventNewSimplified: '',
-      kickOffTime: '',
-      sportType: 8,
-      sportTypeName: '',
-      sportTypeNameNewSimplified: '',
-      sportTypeNameSimplified: '',
-      sportTypeNameTraditional: '',
-      startTime: new Date(Helper.fakeDate),
-      endTime: new Date(Helper.fakeDate),
-      leagueGroupId: 0
-    };
-  }
-
   static readonly fakeTicketsModel = {
     groups: [
       {
@@ -569,7 +531,7 @@ describe('AppComponent', () => {
     const filterParamsBeforeVoid = new FilterParams();
     filterParamsBeforeVoid.matchId = 9999;
     const { instance } = await shallow.render();
-    instance.filterComponent = new FilterComponent(null, null, null, null);
+    instance.filterComponent = new FilterComponent(null, null, null);
     instance.filterComponent.getParams = jest.fn().mockImplementation(() => filterParamsBeforeVoid);
     instance.filterComponent.checkFilterParams = jest.fn().mockImplementation(() => false);
     instance.filterParamsBeforeSearch = new FilterParams();
@@ -584,7 +546,7 @@ describe('AppComponent', () => {
   it('#checkFilterBeforeVoid should return true', async () => {
     const filterParamsBeforeVoid = new FilterParams();
     const { instance } = await shallow.render();
-    instance.filterComponent = new FilterComponent(null, null, null, null);
+    instance.filterComponent = new FilterComponent(null, null, null);
     instance.filterComponent.getParams = jest.fn().mockImplementation(() => filterParamsBeforeVoid);
     instance.filterParamsBeforeSearch = filterParamsBeforeVoid;
 
@@ -696,7 +658,7 @@ describe('AppComponent', () => {
     instance.getTicketsQuery = new GetTicketsQuery();
     instance.getTicketsQuery.pageSize = 100;
     instance.hideContent = jest.fn();
-    instance.filterComponent = new FilterComponent(null, null, null, null);
+    instance.filterComponent = new FilterComponent(null, null, null);
     instance.filterComponent.resetFilter = jest.fn();
 
     await instance.handleAfterVoidPaging();
@@ -752,5 +714,50 @@ describe('AppComponent', () => {
     instance.updateIssueType(1);
 
     expect(instance.issueTypeId).toBe(1);
+  });
+
+  it('#searchEvent should getMatchInfo', async () => {
+    const match = {} as MatchModel;
+    const data = {groups: [{name: "a", tickets:[{isChecked: true, betId: "1", status: "a"}]}]} as TicketsModel;
+    const mockGetMatchInfo = jest.fn().mockReturnValue(match);
+    const mockGetTickets = jest.fn().mockReturnValue(data);
+    const { instance } = await shallow
+    .mock(AppService, { getMatchInfo: mockGetMatchInfo, getTickets: mockGetTickets })
+    .render();
+    const getTicketsQuery = {invalidTransDate: false} as GetTicketsQuery;
+    instance.ticketsModel = {groups: []} as TicketsModel;
+    instance.updateTemplateValue = jest.fn();
+    instance.renderTickets = jest.fn();
+    instance.searchEvent(getTicketsQuery);
+
+    expect(mockGetMatchInfo).toBeCalled();
+  });
+
+  it('#ticketsChange should update templateValue', async () => {
+    const { instance } = await shallow
+      .render();
+    instance.ticketsModel = {groups: [{tickets: [{isChecked: true, status: 'won'}]}]} as TicketsModel;
+    instance.templateValue = {} as TemplateValue;
+    instance.ticketsModel.checkSettledTickets = jest.fn().mockReturnValue(true);
+    instance.ticketsChange(1);
+
+    expect(instance.templateValue.totalTickets).toBe(1);
+    expect(instance.templateValue.checkSettled).toBeTruthy();
+  });
+  
+  it('#getMatchInfo should handleNoTicket', async () => {
+    const { instance } = await shallow
+      .render();
+    const query = {matchId: 1} as GetTicketsQuery;
+    query.invalidTransDate = true;
+    instance.renderTickets = jest.fn();
+    instance.matchViewModel = {matchId: 1} as MatchModel;
+    instance.ticketsModel = {groups: [{tickets: [{isChecked: true, status: 'won'}]}]} as TicketsModel;
+    instance.getMatchInfo(query);
+
+    expect(instance.isShowTickets).toBeTruthy();
+    expect(instance.isShowMatch).toBeTruthy();
+    expect(instance.isShowConfirm).toBeFalsy();
+    expect(instance.isShowMessages).toBeFalsy();
   });
 });

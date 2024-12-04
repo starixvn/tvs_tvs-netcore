@@ -1,5 +1,4 @@
 ﻿import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { TicketsModel } from './tickets.model';
 
@@ -18,8 +17,7 @@ export class TicketsComponent implements OnInit {
     isShowListCheckGroup: boolean;
     showMessageBetTrade: boolean;
 
-    constructor(private readonly element: ElementRef) {
-    }
+    constructor(private readonly element: ElementRef) { }
 
     ngOnInit() {
         this.clickBody();
