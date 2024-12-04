@@ -11,6 +11,7 @@ import { VoidReasonComponent } from './void-reason/void-reason.component';
 })
 export class MessageAreaComponent implements OnInit {
   @Input() requestId: number;
+  @Input() id: number;
   @Input('isShowTemplateMessage') isShowTemplateMessage = false;
   @Input('totalVoidTickets') totalVoidTickets = 0;
   @Input('templateValue') templateValue = new TemplateValue();

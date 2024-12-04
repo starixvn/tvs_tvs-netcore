@@ -38,6 +38,7 @@ const MESSAGE_TEMPLATE_ID_65 = 65;
   styleUrls: ['./template-message.component.scss']
 })
 export class TemplateMessageComponent implements OnChanges {
+  @Input() id: number;
   @Input() value = new TemplateValue();
   @Input() subIssueTypeId: number;
   @Input() issueTypeId: number;

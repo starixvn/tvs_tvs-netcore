@@ -32,6 +32,7 @@ export class VoidPageService {
   async getBasicVoidPageItemsData(issueTypes: IssueTypesModel, requestDetail: RequestDetailViewModel): Promise<VoidPageDuplicateTicketsModel> {
     const basicRequestInfo = this.initBasicRequestInfo(requestDetail);
     const voidPageItem = new VoidPageDuplicateTicketsModel();
+    voidPageItem.id = 1;
     voidPageItem.subIssueType = this.getSubIssueTypeModel(basicRequestInfo.subIssueTypeId, issueTypes);
     voidPageItem.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidPageItem.subIssueType, issueTypes);
     voidPageItem.filterBy = basicRequestInfo.filterBy;

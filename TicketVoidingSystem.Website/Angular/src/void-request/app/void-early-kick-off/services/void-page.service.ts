@@ -32,6 +32,7 @@ export class VoidPageService {
     const basicRequestInfo = this.initBasicRequestInfo(requestDetail);
     for (const element of basicRequestInfo) {
       const voidMatchInfo = new VoidPageEarlyKickOffModel();
+      voidMatchInfo.id = element.id;
       voidMatchInfo.subIssueType = this.getSubIssueTypeModel(element.subIssueTypeId, issueTypes);
       voidMatchInfo.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidMatchInfo.subIssueType, issueTypes);
       voidMatchInfo.matchModel = await this.commonService.getMatch(element.matchId);
@@ -57,8 +58,9 @@ export class VoidPageService {
 
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo[] {
     if (StaticService.isEarlyKickOff(requestDetail.request.issueTypeId) || StaticService.isWrongKickOff(requestDetail.request.issueTypeId)) {
-      return requestDetail.earlyKickOffModels.map(x => {
+      return requestDetail.earlyKickOffModels.map((x, index) => {
         const info: BasicRequestInfo = {
+          id: index + 1,
           matchId: x.matchId,
           subIssueTypeId: x.subIssueTypeId,
           isMainMatch: x.isMainMatch,

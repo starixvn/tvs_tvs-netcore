@@ -9,7 +9,7 @@
         [isLast]="isLast"
         [isFirst]="isFirst"
         [index]="index"
-        (addItemEvent)="addItem()"
+        (addItemEvent)="addItem($event)"
         (removeItemEvent)="removeItem($event)"
         (changeFilterEvent)="changeFilter()">
       </filter-time-item>

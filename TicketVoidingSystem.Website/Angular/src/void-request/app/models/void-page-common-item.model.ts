@@ -10,6 +10,7 @@ import { VoidedReason } from "../../../utility/models/reason.model";
 import { TicketsModel } from "../tickets-list/tickets.model";
 
 export class VoidPageCommonItem {
+  id: number;
   templateValue: TemplateValue;
   voidTicketsMini: TicketsModel;
   voidTicketsFull: TicketsModel;

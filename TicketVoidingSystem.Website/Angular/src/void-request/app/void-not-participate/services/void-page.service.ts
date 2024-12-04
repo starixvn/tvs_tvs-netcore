@@ -35,6 +35,7 @@ export class VoidPageService {
   async getBasicVoidPageItemsData(issueTypes: IssueTypesModel, requestDetail: RequestDetailViewModel, primitiveProperty: CommonPrimitiveProperty): Promise<VoidNotParticipateModel> {
     const basicRequestInfo = this.initBasicRequestInfo(requestDetail);
     const voidPageItem = new VoidNotParticipateModel();
+    voidPageItem.id = 1;
     voidPageItem.subIssueType = this.getSubIssueTypeModel(basicRequestInfo.subIssueTypeId, issueTypes);
     voidPageItem.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidPageItem.subIssueType, issueTypes);
     voidPageItem.detailViewModel = requestDetail;

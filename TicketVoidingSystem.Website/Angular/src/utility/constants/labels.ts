@@ -126,7 +126,8 @@ export class LABELS {
   static readonly MATCH_ID_EXISTS_IN_LIST = 'MatchId already exists in the list';
   static readonly FROM_BET_ID_MUST_SMALLER_THAN_TO_BET_ID = 'From BetId must be smaller than To BetId';
   static readonly FROM_TIME_MUST_SMALLER_THAN_TO_TIME = 'From Time must be smaller than To Time';
-  static readonly FROM_TIME_MUST_GREATER_THAN_DEFAULT = 'Edited From Time must be greater than the default From Time.';
+  static readonly FROM_TIME_MUST_GREATER_THAN_DEFAULT = 'Edited From Time must be greater than the default From Time';
+  static readonly TO_TIME_MUST_SMALLER_THAN_NEXT_FROM_TIME = 'Edited TO Time must be smaller than the next From Time';
   static readonly TO_TIME_MUST_SMALLER_THAN_FOLLOWING_CONSECUTIVE_FROM_TIME = 'Edited To Time must be smaller than the default From Time of the following consecutive score.';
   static readonly NO_VALID_TICKETS_IN_RANGE = 'No valid tickets found in the current range';
   static readonly INVALID_SETTING_TIME = 'Please fulfill AA/PA/SA values or left all fields blank.';

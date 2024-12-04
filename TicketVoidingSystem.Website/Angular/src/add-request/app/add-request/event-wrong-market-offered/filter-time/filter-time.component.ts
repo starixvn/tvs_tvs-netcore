@@ -35,9 +35,9 @@ export class FilterTimeComponent {
     this.refreshEvent.emit();
   }
 
-  addItem(): void {
+  addItem(previousTime: FilterWrongMarketOfferedModel): void {
     this.changeFilter();
-    this.models.push(this.eventWrongMarketOfferedService.initDefaultTime());
+    this.models.push(this.eventWrongMarketOfferedService.initRangeTimeByInputTime(previousTime.toDateTime));
     this.reRenderId();
   }
 
@@ -57,7 +57,7 @@ export class FilterTimeComponent {
       const momentFromTimeNextScore = moment(this.models[index + 1].fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
       const comparingFromTimeNextScore = momentFromTimeNextScore.subtract(2, 'milliseconds').format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
       if (momentToTime.isSameOrAfter(moment(comparingFromTimeNextScore, DateTimeFormat.FULL_DATE_TIME_FORMAT))) {
-        this.filterItemComponents.toArray()[index].tooltip.display(`to-date-time-${index + 1}`, LABELS.TO_TIME_MUST_SMALLER_THAN_FOLLOWING_CONSECUTIVE_FROM_TIME);
+        this.filterItemComponents.toArray()[index].tooltip.display(`to-date-time-${index + 1}`, LABELS.TO_TIME_MUST_SMALLER_THAN_NEXT_FROM_TIME);
         return false;
       }
       return true;

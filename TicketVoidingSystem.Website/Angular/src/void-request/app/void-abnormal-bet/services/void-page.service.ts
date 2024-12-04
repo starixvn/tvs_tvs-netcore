@@ -34,6 +34,7 @@ export class VoidPageService {
     const basicRequestInfos = this.initBasicRequestInfo(requestDetail);
     for (const element of basicRequestInfos) {
       const voidPageItem = new VoidAbnormalBetModel();
+      voidPageItem.id = element.id;
       voidPageItem.subIssueType = this.getSubIssueTypeModel(element.subIssueTypeId, issueTypes);
       voidPageItem.displayIssueTypeName = this.voidPageCommonService.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidPageItem.subIssueType, issueTypes);
       voidPageItem.detailViewModel = requestDetail;
@@ -65,8 +66,9 @@ export class VoidPageService {
   }
 
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo[] {
-    return requestDetail.abnormalBetModel.matches.map(x => {
+    return requestDetail.abnormalBetModel.matches.map((x, index) => {
       const model: BasicRequestInfo = {
+        id: index + 1,
         matchId: x.matchId,
         subIssueTypeId: requestDetail.abnormalBetModel.subIssueTypeId
       };

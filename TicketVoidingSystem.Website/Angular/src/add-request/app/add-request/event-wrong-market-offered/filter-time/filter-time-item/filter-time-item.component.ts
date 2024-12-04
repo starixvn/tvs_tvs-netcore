@@ -39,7 +39,7 @@ export class FilterTimeItemComponent {
 
   addBetTypeItem(): void {
     if (!this.isVoided) {
-      this.addItemEvent.emit();
+      this.addItemEvent.emit(this.model);
     }
   }
 

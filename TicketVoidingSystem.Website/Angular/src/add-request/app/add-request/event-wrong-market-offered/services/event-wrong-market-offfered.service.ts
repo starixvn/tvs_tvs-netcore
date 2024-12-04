@@ -23,6 +23,14 @@ export class EventWrongMarketOfferedService {
     return model;
   }
 
+  initRangeTimeByInputTime(time: string): FilterWrongMarketOfferedModel {
+    const model = new FilterWrongMarketOfferedModel();
+    model.fromDateTime = time;
+    model.toDateTime = time;
+
+    return model;
+  }
+
   getWrongMarketOfferedGetLogInfoModel(subIssueTypeId: number, logInfo: LogInfoWrongMarketOffered): WrongMarketOfferedGetLogInfoQuery[] {
     return logInfo.filterWrongMarketOfferedModels.map(filterItem => this.createWrongMarketOfferedGetLogInfoQuery(logInfo, subIssueTypeId, filterItem));
   }

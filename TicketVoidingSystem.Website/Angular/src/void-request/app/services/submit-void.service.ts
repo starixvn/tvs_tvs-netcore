@@ -74,7 +74,7 @@ export class SubmitVoidService {
 
     for (const item of voidPageItems) {
       const messageComponent = item.matchModel
-        ? messageAreaComponents.map(x => x.templateMessageComponent).find(x => x.value.matchId === item.matchModel.matchId)
+        ? messageAreaComponents.map(x => x.templateMessageComponent).find(x => x.id === item.id)
         : messageAreaComponents[0].templateMessageComponent;
       const textInvalidMatch = item.matchModel ? ` (MatchId: ${item.matchModel.matchId})` : '';
 
@@ -119,8 +119,8 @@ export class SubmitVoidService {
 
   private getMatchesHaveWarning(voidPageItems: VoidPageCommonItem[], templateMessageComponents: TemplateMessageComponent[]): number[] {
     const voidPageItemsHasTickets = voidPageItems.filter(item => item.voidTicketsMini.total > 0);
-    const matchHasWarning = voidPageItemsHasTickets.filter(voidMatch =>
-      templateMessageComponents.find(x => x.value.matchId === voidMatch.matchModel.matchId).isHasWarningForDynamicInput());
+    const matchHasWarning = voidPageItemsHasTickets.filter(voidPageItem =>
+      templateMessageComponents.find(x => x.id === voidPageItem.id).isHasWarningForDynamicInput());
 
     return matchHasWarning.map(x => x.matchModel.matchId);
   }

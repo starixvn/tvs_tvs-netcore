@@ -33,6 +33,7 @@ export class VoidPageService {
     const basicRequestInfo = this.initBasicRequestInfo(requestDetail);
     for (const element of basicRequestInfo) {
       const voidPageItem = new VoidWrongMarketOfferedModel();
+      voidPageItem.id = element.id;
       voidPageItem.subIssueType = this.getSubIssueTypeModel(element.subIssueTypeId, issueTypes);
       voidPageItem.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidPageItem.subIssueType, issueTypes);
       voidPageItem.matchModel = await this.commonService.getMatch(element.matchId);
