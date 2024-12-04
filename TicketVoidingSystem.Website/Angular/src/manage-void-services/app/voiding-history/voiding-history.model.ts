@@ -10,8 +10,6 @@ export class VoidingHistoryModel {
   modifiedDate?: Date;
   voidData: string;
   transIds: string;
-  minWinLostDate?: Date;
-  maxWinLostDate?: Date;
   siteDbGroupId: number;
   broadcastSessionId: string;
 }

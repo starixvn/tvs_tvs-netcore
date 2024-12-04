@@ -11,9 +11,10 @@ import { SELECTION_ITEM, VoidBetAutomationModel } from '../../app.model';
   styleUrls: ['./after-void-status.component.scss']
 })
 export class AfterVoidStatusComponent implements OnInit, OnChanges {
-
   @Input() model = new VoidBetAutomationModel();
   @Input() isAutoVoid: boolean;
+  @Input() isRecoverTicket: boolean;
+  @Input() isAbnormalBet: boolean;
 
   selectionItem = SELECTION_ITEM;
   tmpModel;

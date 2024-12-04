@@ -1,4 +1,4 @@
-  
+
     @mixin select-style {
         width: 100px;
         padding: 1px 2px;
@@ -7,7 +7,7 @@
         margin-top: 3px;
         margin-left: 3px;
     }
-    
+
     .void-history {
         margin: 0px 10px 0px;
         padding: 10px 0px;
@@ -34,4 +34,8 @@
         .save-history-status {
             margin-left: 25px;
         }
+    }
+
+    .blur-content {
+        opacity: 0.25;
     }
