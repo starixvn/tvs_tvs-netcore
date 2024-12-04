@@ -13,9 +13,10 @@ import { LogInfoItem, LogInfoWrongMarketOffered } from "../models/log-info-wrong
 
 export class EventWrongMarketOfferedService {
 
-  initDefaultTime(): FilterWrongMarketOfferedModel {
+  initDefaultTime(id: number = null): FilterWrongMarketOfferedModel {
     const currentMoment = moment.utc().tz('America/Caracas');
     const model = new FilterWrongMarketOfferedModel();
+    model.id = id;
     model.fromDateTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     model.toDateTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
 

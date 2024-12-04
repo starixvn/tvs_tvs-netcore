@@ -60,7 +60,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     if (this.isEdit) {
       this.updateDataWhenEditRequest();
     } else {
-      this.logInfoEvent.filterWrongMarketOfferedModels = [this.eventWrongMarketOfferedService.initDefaultTime()];
+      this.logInfoEvent.filterWrongMarketOfferedModels = [this.eventWrongMarketOfferedService.initDefaultTime(1)];
     }
   }
 
