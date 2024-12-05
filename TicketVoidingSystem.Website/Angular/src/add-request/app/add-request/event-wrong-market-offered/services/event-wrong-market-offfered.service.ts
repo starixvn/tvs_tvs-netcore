@@ -15,20 +15,20 @@ export class EventWrongMarketOfferedService {
 
   initDefaultTime(id: number = null): FilterWrongMarketOfferedModel {
     const currentMoment = moment.utc().tz('America/Caracas');
-    const model = new FilterWrongMarketOfferedModel();
-    model.id = id;
-    model.fromDateTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    model.toDateTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-
-    return model;
+    return {
+      id: id,
+      fromDateTime: currentMoment.millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
+      toDateTime: currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT)
+    } as FilterWrongMarketOfferedModel;
   }
 
   initRangeTimeByInputTime(time: string): FilterWrongMarketOfferedModel {
-    const model = new FilterWrongMarketOfferedModel();
-    model.fromDateTime = time;
-    model.toDateTime = time;
-
-    return model;
+    const currentMoment = moment(time, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const newTime = currentMoment.add(100, 'milliseconds').format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    return {
+      fromDateTime: newTime,
+      toDateTime: newTime
+    } as FilterWrongMarketOfferedModel;
   }
 
   getWrongMarketOfferedGetLogInfoModel(subIssueTypeId: number, logInfo: LogInfoWrongMarketOffered): WrongMarketOfferedGetLogInfoQuery[] {

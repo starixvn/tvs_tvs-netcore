@@ -102,9 +102,10 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   public async onClickTabBriefInfo() {
     this.isShowBetList = false;
     this.isBlock = true;
+    const distinctMatchIds = [...new Set(this.ticketListModal.tabInfoRequest.map(x => x.matchId))];
     const generalInfoQuery: GetGeneralInfoQuery = { // same properties with GetGeneralInfoQuery
       requestId: this.ticketListModal.requestId,
-      matchIds: this.ticketListModal.tabInfoRequest.map(x => x.matchId).join(','),
+      matchIds: distinctMatchIds.join(','),
     } as GetGeneralInfoQuery;
     this.briefInfoModels = await this.appService.GetBriefInfo(generalInfoQuery);
     this.isBlock = false;

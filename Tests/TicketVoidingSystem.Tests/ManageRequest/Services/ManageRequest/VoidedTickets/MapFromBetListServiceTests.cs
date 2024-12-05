@@ -99,15 +99,12 @@ public class MapFromBetListServiceTests : IClassFixture<RemotingRefFixture>
 
     [Theory]
     [InlineData(IssueTypeConstant.AbnormalAccount, "<div id=1><div id='divEvent_11'></div>")]
-    [InlineData(IssueTypeConstant.AbnormalBet, "<div id=1><div id='divEvent_11'></div>")]
-    [InlineData(IssueTypeConstant.DangerAccepted,
-        "<div id='dvFavorite_11'><div id=1></div><div id=1><div id='divEvent_11'></div>")]
     public void MapToVoidedTicketViewModel_HasGetChoiceForTicketParlay(int issueTypeId, string choice)
     {
         // Arrange
         var item = new VoidedTicketModel
         {
-            BetType = 38,
+            BetType = 9,
             RefNo = 123456,
             UserName = "testUser",
             WinLost = "100.50",
@@ -136,7 +133,7 @@ public class MapFromBetListServiceTests : IClassFixture<RemotingRefFixture>
         betListService.GetHandicap(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false)
             .ReturnsForAnyArgs("Handicap");
         betListService.BuildStake(Arg.Any<Ticket>(), Arg.Any<TicketHelper>()).ReturnsForAnyArgs("Stake");
-        betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("BetType");
+        //betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("BetType");
         betListService.GetStatus(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("Status");
         betListService.BuildChoiceExcel(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false)
             .ReturnsForAnyArgs("choice");

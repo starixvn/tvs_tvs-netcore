@@ -49,7 +49,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
         // Assert
         betListService
             .DidNotReceive()
-            .GetBetTypeName(Arg.Any<ITicket>());
+            .GetBetTypeName(Arg.Any<Ticket>());
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
         // Assert
         betListService
             .Received(1)
-            .GetBetTypeName(Arg.Any<ITicket>());
+            .GetBetTypeName(Arg.Any<Ticket>());
     }
 
     [Fact]
