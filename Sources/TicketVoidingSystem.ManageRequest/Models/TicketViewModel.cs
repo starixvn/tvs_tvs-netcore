@@ -43,6 +43,7 @@ public class TicketViewModel
     public string BetType { get; set; }
     public short BetTypeId { get; set; }
     public short SubBetTypeId { get; set; }
+    public string SubBetType { get; set; }
     public string Odds { get; set; }
     public string Stake { get; set; }
     public string WinLoss { get; set; }

@@ -49,7 +49,6 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
         {
             var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
             ticket.SubBetTypeId = (short)item.SubBetType;
-            ticket.GroupName = GetGroupNameByIssueType(issueTypeId, ticket);
 
             return ticket;
         });
@@ -68,24 +67,5 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
             Tickets = group.ToList(),
             DisplayTotalTickets = group.Count()
         };
-    }
-
-    private string GetGroupNameByIssueType(int issueTypeId, TicketViewModel ticket)
-    {
-        HashSet<int> IssueTypesHasTicketParlay =
-        [
-            IssueTypeConstant.WrongHDP, IssueTypeConstant.Wrong1stHDP, IssueTypeConstant.WrongOU,
-            IssueTypeConstant.Wrong1stOU, IssueTypeConstant.WrongOdds
-        ];
-
-        if (IssueTypesHasTicketParlay.Contains(issueTypeId))
-        {
-            return ticket.IsParlay ? "Parlay" : ticket.BetType;
-        }
-
-        return issueTypeId is IssueTypeConstant.WrongMarketOffered or IssueTypeConstant.WrongOddsSportsBook
-            or IssueTypeConstant.TechnicalError or IssueTypeConstant.OtherIssues
-            ? string.Empty
-            : ticket.GroupName;
     }
 }

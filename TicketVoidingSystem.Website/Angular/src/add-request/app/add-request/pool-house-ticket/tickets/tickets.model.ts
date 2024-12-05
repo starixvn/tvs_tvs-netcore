@@ -69,7 +69,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
     this.groups.forEach(group => {
       let indexTicket = 0;
       group.tickets.forEach(y => {
-        y.isChecked = betTypeNames.includes(y.betType);
+        y.isChecked = betTypeNames.includes(y.isParlay ? y.subBetType : y.betType);
         y.no = y.isChecked ? ++indexTicket: indexTicket;
       });
       group.displayTotalTickets = group.getCheckedTickets().length;

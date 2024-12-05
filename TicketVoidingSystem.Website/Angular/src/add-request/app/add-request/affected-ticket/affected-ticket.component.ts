@@ -54,7 +54,10 @@ export class AffectedTicketComponent implements OnChanges {
   private initFilterBetTypes() {
     if (this.tickets.groups.length > 0) {
       const betTypes = this.tickets.groups.flatMap(group =>
-        group.tickets.map(x => new ItemsSelect(0, x.betType, x.betType, true, true, true, []))
+        group.tickets.map(x => {
+          let betType = x.isParlay ? x.subBetType : x.betType;
+          return new ItemsSelect(0, betType, betType, true, true, true, [])
+        })
       );
       const filterBetTypes = StaticService.initDefaultMultipleSelection('280px', 1);
       filterBetTypes.items = _.uniqBy(betTypes, 'text');
