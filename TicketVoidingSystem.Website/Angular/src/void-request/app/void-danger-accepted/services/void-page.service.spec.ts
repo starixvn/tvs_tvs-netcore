@@ -28,6 +28,7 @@ class Helper {
   static readonly fakeRequestId = 50121;
   static readonly fakeMatchId = 90000;
   static readonly fakeVoidMatch: VoidMatch = {
+    id: 1,
     subIssueType: new SubIssueType(),
     displayIssueTypeName: '',
     matchModel: new MatchModel(),

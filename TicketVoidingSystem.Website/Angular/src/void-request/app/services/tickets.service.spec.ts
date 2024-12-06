@@ -20,6 +20,7 @@ class Helper {
     errorMsg: '',
   };
   static readonly fakeVoidPageItem: VoidPageCommonItem = {
+    id: 1,
     subIssueType: new SubIssueType(),
     displayIssueTypeName: '',
     matchModel: new MatchModel(),

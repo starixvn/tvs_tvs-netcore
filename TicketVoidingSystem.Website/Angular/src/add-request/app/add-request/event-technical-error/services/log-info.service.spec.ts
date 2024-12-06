@@ -5,10 +5,10 @@ import { FilterModel } from '../../filter/filter.model';
 import { RedCardGetLogInfoQuery } from '../../models/event-red-card.model';
 import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { FilterTechnicalErrorModel } from '../models/filter-wrong-market-offered.model';
-import { LogInfoTechnicalError } from '../models/log-info-wrong-market-offered.model';
+import { FilterTechnicalErrorModel } from '../models/filter-technical-error.model';
+import { LogInfoTechnicalError } from '../models/log-info-technical-error.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
-import { EventTechnicalErrorService } from './event-wrong-market-offfered.service';
+import { EventTechnicalErrorService } from './event-technical-error.service';
 import { LogInfoService } from './log-info.service';
 
 class Helper {

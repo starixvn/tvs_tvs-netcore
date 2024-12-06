@@ -4,7 +4,7 @@ import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { FilterModel } from '../../filter/filter.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { FilterTimeTechnicalErrorComponent } from '../filter-time-technical-error/filter-time-technical-error.component';
-import { LogInfoTechnicalError } from '../models/log-info-wrong-market-offered.model';
+import { LogInfoTechnicalError } from '../models/log-info-technical-error.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { ValidationService } from './validation.service';
 

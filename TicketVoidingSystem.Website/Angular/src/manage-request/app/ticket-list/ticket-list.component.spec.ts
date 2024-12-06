@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
 import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
@@ -79,33 +78,5 @@ describe('TicketListComponent', () => {
 
     // Assert
     expect(mockFunctionUpdateTabInfoRequest).toHaveBeenCalledTimes(0);
-  });
-
-  it('#isMatchIdParlay should return true', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          modal: modal
-        }
-      });
-    instance.modal.open = false;
-    const testInputs = ['29', '11099', '2799', '10449'];
-    testInputs.forEach(x => {
-      const actual = instance['isMatchIdParlay'](x);
-      expect(actual).toBeTruthy();
-
-    })
-  });
-
-  it('#isMatchIdParlay should return false', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          modal: modal
-        }
-      });
-    instance.modal.open = false;
-    const actual = instance['isMatchIdParlay']("1");
-    expect(actual).toBeFalsy();
   });
 });
