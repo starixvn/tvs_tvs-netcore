@@ -33,7 +33,7 @@ public class InsertVoidingHistoryServiceTests
             .ReturnsForAnyArgs(voidingHistoryModel);
 
         // Act
-        var result = await service.InsertVoidingHistory(query, 1, "123");
+        var result = await service.InsertVoidingHistory(query, 1, "123", "11");
 
         // Assert
         await repository.Received()

@@ -72,7 +72,9 @@ public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicke
             IssueTypeConstant.RedCard,
             IssueTypeConstant.WrongScore,
             IssueTypeConstant.AbnormalAccount,
-            IssueTypeConstant.AbnormalBet
+            IssueTypeConstant.AbnormalBet,
+            IssueTypeConstant.WrongMarketOffered,
+            IssueTypeConstant.TechnicalError
         }.Contains(issueTypeId);
     }
 }
