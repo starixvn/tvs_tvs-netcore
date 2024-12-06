@@ -17,6 +17,4 @@ public class VoidingHistoryModel
     public string VoidData { get; set; }
     public string BroadcastSessionId { get; set; }
     public int SiteDbGroupId { get; set; }
-    public DateTime? MinWinLostDate { get; set; }
-    public DateTime? MaxWinLostDate { get; set; }
 }

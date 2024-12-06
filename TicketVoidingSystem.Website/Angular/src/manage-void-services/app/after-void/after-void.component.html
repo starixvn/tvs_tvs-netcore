@@ -15,7 +15,7 @@
   </div>
 
   <div>
-    <after-void-status *ngIf="isShow()" [model]="model" [isAutoVoid]="model.isAutoVoid"></after-void-status>
+    <after-void-status *ngIf="isShow()" [model]="model" [isAutoVoid]="model.isAutoVoid" [isAbnormalBet]="isAbnormalBet" [isRecoverTicket]="isRecoverTicket"></after-void-status>
     <div *ngIf="isShow()" class="void-bet-auto">
       <div class="row udp-status">
         <div class="d-flex">

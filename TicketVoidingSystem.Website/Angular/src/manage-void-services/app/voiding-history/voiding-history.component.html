@@ -29,10 +29,8 @@
               <th scope="col">UserId</th>
               <th scope="col">CreatedDate</th>
               <th scope="col">ModifiedDate</th>
-              <th scope="col">VoidData</th>
-              <th scope="col">TransIds</th>
-              <th scope="col">MinWinLostDate</th>
-              <th scope="col">MaxWinLostDate</th>
+              <th scope="col" class="void-data">VoidData</th>
+              <th scope="col" class="trans-id">TransIds</th>
               <th scope="col">BroadcastSessionId</th>
             </tr>
           </thead>
@@ -49,10 +47,8 @@
               <td>{{ item.userId }}</td>
               <td>{{ item.createdDate }}</td>
               <td>{{ item.modifiedDate }}</td>
-              <td>{{ item.voidData }}</td>
-              <td>{{ item.transIds }}</td>
-              <td>{{ item.minWinLostDate }}</td>
-              <td>{{ item.maxWinLostDate }}</td>
+              <td class="void-data">{{ item.voidData }}</td>
+              <td class="trans-id">{{ item.transIds }}</td>
               <td>{{ item.broadcastSessionId }}</td>
             </tr>
             <tr>

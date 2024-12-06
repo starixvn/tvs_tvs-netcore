@@ -1,4 +1,6 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
+import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
+import { CommonService } from 'src/utility/services/common.service';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -11,8 +13,7 @@ import { SelectVoidBetAutomationInfoQuery, ServiceStatusConstant, VoidBetAutomat
   templateUrl: './after-void.component.html',
   styleUrls: ['./after-void.component.scss']
 })
-export class AfterVoidComponent implements OnInit {
-
+export class AfterVoidComponent {
   selectionItem = ServiceStatusConstant.AfterVoidSelection;
   model = new VoidBetAutomationModel();
   requestId: number;
@@ -21,17 +22,17 @@ export class AfterVoidComponent implements OnInit {
   isNoData = false;
   orgStatusId: number;
   tmpStatusId: number;
+  isRecoverTicket: boolean;
+  isAbnormalBet: boolean;
   tooltip = new Tooltip();
 
   constructor(
     readonly element: ElementRef,
     private readonly appApiService: AppApiService,
-    private readonly modalService: ModalService
+    private readonly modalService: ModalService,
+    private readonly commonService: CommonService
   ) {
     this.tooltip.element = this.element;
-  }
-
-  ngOnInit(): void {
   }
 
   resetData() {
@@ -46,11 +47,18 @@ export class AfterVoidComponent implements OnInit {
     }
     this.isBlock = true;
     this.model = await this.appApiService.getVoidBetAutomationInfo(this.initQuerySelect());
+    await this.updateInfoRequest();
     this.isBlock = false;
     if (!this.model || !this.model.requestId) {
       this.isNoData = true;
     }
     this.orgStatusId = this.tmpStatusId = this.model?.statusId;
+  }
+
+  async updateInfoRequest() {
+    const requestDetailViewModel = await this.commonService.getRequestById(this.model.requestId);
+    this.isRecoverTicket = requestDetailViewModel.request.issueTypeId.toString() === IssueTypeConstant.RECOVER_TICKET;
+    this.isAbnormalBet = requestDetailViewModel.request.issueTypeId.toString() === IssueTypeConstant.ABNORMAL_BET;
   }
 
   initQuerySelect(): SelectVoidBetAutomationInfoQuery {
