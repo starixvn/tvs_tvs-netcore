@@ -105,6 +105,10 @@
         {
           "Name": "ON Casino",
           "Value": "96"
+        },
+        {
+          "Name": "GPI Live Casino",
+          "Value": "90"
         }
       ]
     },
