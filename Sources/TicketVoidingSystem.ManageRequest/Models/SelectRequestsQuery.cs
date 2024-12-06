@@ -15,4 +15,5 @@ public class SelectRequestsQuery
     public bool? IsToDateBeforeBUDay { get; set; }
     public DateTime? BUDay { get; set; }
     public int CreatedBy { get; set; }
+    public string ProductIds { get; set; }
 }

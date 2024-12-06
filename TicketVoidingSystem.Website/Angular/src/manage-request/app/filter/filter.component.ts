@@ -13,6 +13,8 @@ import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { FilterModel } from './filter.model';
+import { ManageProductConstant } from './manage-product.constant';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 
 @Component({
   selector: 'filter',
@@ -47,6 +49,7 @@ export class FilterComponent implements OnInit {
   bUDay = new Date();
   markedTicketsCount = 0;
   userId: string;
+  products: MultipleSelection;
 
   constructor(
     private readonly element: ElementRef,
@@ -54,6 +57,7 @@ export class FilterComponent implements OnInit {
   ) {
     this.tooltip.element = this.element;
     this.statusSelectList = ManageRequestStatus.MULTIPLE_OPTIONS;
+    this.products = ManageProductConstant.initMultiSelectProduct();
   }
 
   async ngOnInit() {
@@ -106,6 +110,7 @@ export class FilterComponent implements OnInit {
     this.model.isExcludeTest = true;
     this.model.createdBy = this.createdBySelectList[0].value;
     this.model.isDisplayMissingInfo = localStorage.getItem(LocalStorageCacheConstant.IS_DISPLAY_REQUEST_MISSING_INFO + this.userId) === 'true';
+    this.model.productIds = this.products?.getValueItems();
     this.updateMissingInfo.emit(this.model.isDisplayMissingInfo);
   }
 
@@ -245,5 +250,9 @@ export class FilterComponent implements OnInit {
       }
       this.multipleSelectSubTypeModel = this.subTypeSelectList.map(x => x.value);
     }
+  }
+
+  updateSelectedProduct(selectedItems: string[]): void {
+    this.model.productIds = selectedItems.join(',');
   }
 }

@@ -18,6 +18,7 @@ import { FilterComponent } from './filter/filter.component';
 import { RequestListComponent } from './request-list/request-list.component';
 import { RequestInfoModule } from './ticket-list/request-info/request-info.module';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
+import { MultipleSelectionModule } from "../../utility/components/multiple-selection/multiple-selection.module";
 
 @NgModule({
   declarations: [
@@ -40,8 +41,9 @@ import { TicketListComponent } from './ticket-list/ticket-list.component';
     PagingModule,
     PipeModule,
     ToastrModule.forRoot(),
-    UtilityModule
-  ],
+    UtilityModule,
+    MultipleSelectionModule
+],
   entryComponents: [
     TicketListComponent
   ],

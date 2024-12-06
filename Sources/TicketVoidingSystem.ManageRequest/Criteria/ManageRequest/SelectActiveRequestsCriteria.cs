@@ -20,6 +20,8 @@ public class SelectActiveRequestsCriteria : CriteriaBase
 
     public int CreatedBy { get; set; }
 
+    public string ProductIds { get; set; }
+
     public override string GetSettingKey() => "TicketVoiding_RequestList_Select";
 
     public override bool IsValid() => true;
