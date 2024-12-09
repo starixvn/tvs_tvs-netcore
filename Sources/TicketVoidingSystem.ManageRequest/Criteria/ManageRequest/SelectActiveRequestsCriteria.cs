@@ -8,7 +8,7 @@ public class SelectActiveRequestsCriteria : CriteriaBase
 
     public string RequestInfoJson { get; set; }
 
-    public int? MatchId { get; set; }
+    public string? MatchId { get; set; }
 
     public string IssueTypeId { get; set; }
 

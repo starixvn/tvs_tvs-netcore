@@ -4,7 +4,7 @@ public class SelectRequestsQuery
 {
     public string? RequestId { get; set; }
     public string? RequestInfoJson { get; set; }
-    public int? MatchId { get; set; }
+    public string? MatchId { get; set; }
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }
     public string IssueTypeId { get; set; }

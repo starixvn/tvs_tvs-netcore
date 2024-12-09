@@ -36,6 +36,15 @@ public class SelectRequestsHandler(
 
     private async Task<bool> IsFilterSearchRequestsValid(SelectRequestsQuery query)
     {
+        if (!string.IsNullOrWhiteSpace(query.MatchId) && !int.TryParse(query.MatchId, out _))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(query.RequestId) && !int.TryParse(query.RequestId, out _))
+        {
+            return true;
+        }
+
         const string NA_OPTION = "-1";
         return query.IssueTypeId.Equals(NA_OPTION) || string.IsNullOrEmpty(query.SubIssueType)
                                                    || (!string.IsNullOrWhiteSpace(query.RequestId) && !await checkPermissionOnRequestService.IsHasPermissionOnRequest(int.Parse(query.RequestId)));
