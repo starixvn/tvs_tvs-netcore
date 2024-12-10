@@ -73,4 +73,7 @@ public class RequestInfoForCopy
     public int TvDetectionValue { get; set; }
     public int MinuteOffset { get; set; }
     public int SecondOffset { get; set; }
+    public string InputtedFromTime { get; set; }
+    public string ServiceAcceptTime { get; set; }
+    public int MinAllowanceTime { get; set; }
 }

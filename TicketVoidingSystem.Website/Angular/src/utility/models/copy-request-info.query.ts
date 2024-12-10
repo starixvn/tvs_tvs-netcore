@@ -45,6 +45,9 @@ export class RequestInfoForCopy {
   tvDetectionValue: number;
   minuteOffset: string;
   secondOffset: string;
+  inputtedFromTime: string;
+  serviceAcceptTime: string;
+  minAllowanceTime: number;
 }
 
 export class BetTypeTicketsInfo {

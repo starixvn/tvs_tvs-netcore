@@ -7,6 +7,7 @@ import { LABELS } from '../../../../../utility/constants/labels';
 import { CommonStaticService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance.model';
+import { TvDetectionService } from '../../../../../manage-request/app/request-list/services/tv-detection.service';
 
 @Component({
   selector: 'filter-time-with-allowance',
@@ -150,7 +151,7 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
   }
 
   getTvDetectionClass() {
-    return StaticService.getTvDetectionClass(this.tvDetectionValue);
+    return TvDetectionService.getTvDetectionClass(this.tvDetectionValue);
   }
 
   private clearSettingTime(): void {

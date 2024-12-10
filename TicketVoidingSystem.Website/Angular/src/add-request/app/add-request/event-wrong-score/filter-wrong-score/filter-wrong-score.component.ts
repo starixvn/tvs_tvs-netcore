@@ -1,12 +1,12 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestStore } from '../../add-request.store';
 import { AllowanceTimeComponent } from '../allowance-time/allowance-time.component';
 import { FilterWrongScoreModel } from '../models/filter-wrong-score.model';
 import { ValidationService } from '../services/validation.service';
 import { WrongScoreService } from '../services/wrong-score.service';
+import { TvDetectionService } from '../../../../../manage-request/app/request-list/services/tv-detection.service';
 
 @Component({
   selector: 'filter-wrong-score',
@@ -33,7 +33,7 @@ export class FilterWrongScoreComponent {
   }
 
   getTvDetectionClass() {
-    return StaticService.getTvDetectionClass(this.tvDetectionValue);
+    return TvDetectionService.getTvDetectionClass(this.tvDetectionValue);
   }
 
   public changeFilter(): void {
