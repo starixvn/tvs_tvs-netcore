@@ -289,16 +289,16 @@ export class RequestListComponent implements OnInit, OnChanges {
     return filterBy === null && StaticService.isAbnormalBet(issueTypeId.toString());
   }
 
-  public async copyRequestDescriptionSingleMatch(item: RequestModel, matchId: number): Promise<void> {
+  public async copyRequestDescriptionSingleMatch(item: RequestModel, matchId: number, requestDetailId: number): Promise<void> {
     item.processingCopyDescriptionClass = 'fas fa-spinner fa-spin copy-request-info disable-icon';
-    await this.requestDescriptionService.copyToClipboard(item.requestId, matchId);
+    await this.requestDescriptionService.copyToClipboard(item.requestId, matchId, requestDetailId);
     item.processingCopyDescriptionClass = 'fa fa-paste copy-request-info';
   }
 
 
   public async copyRequestDescriptionMultiMatches(item: RequestModel, matchId: number, detail: DetailRequestModel): Promise<void> {
     detail.processingCopyDescriptionClass = 'fas fa-spinner fa-spin copy-request-info disable-icon';
-    await this.requestDescriptionService.copyToClipboard(item.requestId, matchId);
+    await this.requestDescriptionService.copyToClipboard(item.requestId, matchId, detail.requestDetailId);
     detail.processingCopyDescriptionClass = 'fa fa-paste copy-request-info';
   }
 

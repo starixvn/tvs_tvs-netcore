@@ -88,7 +88,7 @@
               </div>
             </td>
             <td class="col-tb-5">
-              <i [hidden]="!isCanCopyRequestDescription(item.issueTypeId)" [ngClass]="item.processingCopyDescriptionClass ?? 'fa fa-paste copy-request-info'" (click)="copyRequestDescriptionSingleMatch(item, item.details[0].matchId)" aria-hidden="true"></i>
+              <i [hidden]="!isCanCopyRequestDescription(item.issueTypeId)" [ngClass]="item.processingCopyDescriptionClass ?? 'fa fa-paste copy-request-info'" (click)="copyRequestDescriptionSingleMatch(item, item.details[0].matchId, item.details[0].requestDetailId)" aria-hidden="true"></i>
               <div class="text-right" [innerHtml]="item.details[0].description | sanitizeHtml"></div>
             </td>
             <td class="col-tb-6" [attr.rowspan]="item.details.length">

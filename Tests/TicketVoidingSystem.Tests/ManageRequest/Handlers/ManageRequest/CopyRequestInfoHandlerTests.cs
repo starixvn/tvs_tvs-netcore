@@ -29,14 +29,14 @@ public class CopyRequestInfoHandlerTests
         var request = new CopyRequestInfoRequest { RequestId = 123, MatchId = 1 };
         var copyRequestInfoService = Substitute.For<CopyRequestInfoService>();
         var betTypeTickets = new List<BetTypeTicketsInfo> { new() };
-        copyRequestInfoService.GetCopyInfo(request.MatchId, request.RequestId).ReturnsForAnyArgs((copyRequestInfoModel, betTypeTickets));
+        copyRequestInfoService.GetCopyInfo(request.MatchId, request.RequestId, null).ReturnsForAnyArgs((copyRequestInfoModel, betTypeTickets));
         var handler = new CopyRequestInfoHandler(copyRequestInfoService);
 
         // Act
         _ = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await copyRequestInfoService.Received(1).GetCopyInfo(request.MatchId, request.RequestId);
+        await copyRequestInfoService.Received(1).GetCopyInfo(request.MatchId, request.RequestId, null);
         copyRequestInfoService.Received(1).UpdateMatchInfo(Arg.Any<int>(), Arg.Any<RequestInfoForCopy>());
     }
 }

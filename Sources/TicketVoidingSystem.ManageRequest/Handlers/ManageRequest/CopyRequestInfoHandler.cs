@@ -10,6 +10,8 @@ public class CopyRequestInfoRequest : IRequest<CopyRequestInfoResponse>
     public int RequestId { get; set; }
 
     public int MatchId { get; set; }
+
+    public int? RequestDetailId { get; set; }
 }
 
 public class CopyRequestInfoHandler(CopyRequestInfoService copyRequestInfoService)
@@ -17,7 +19,7 @@ public class CopyRequestInfoHandler(CopyRequestInfoService copyRequestInfoServic
 {
     public async Task<CopyRequestInfoResponse> Handle(CopyRequestInfoRequest request, CancellationToken cancellationToken)
     {
-        var (requestInfo, betTypeTickets) = await copyRequestInfoService.GetCopyInfo(request.MatchId, request.RequestId);
+        var (requestInfo, betTypeTickets) = await copyRequestInfoService.GetCopyInfo(request.MatchId, request.RequestId, request.RequestDetailId);
         requestInfo.GlobalShowTime = requestInfo.GlobalShowTime.ZoneManila();
         copyRequestInfoService.UpdateMatchInfo(request.MatchId, requestInfo);
         copyRequestInfoService.UpdateBetTypeName(betTypeTickets);

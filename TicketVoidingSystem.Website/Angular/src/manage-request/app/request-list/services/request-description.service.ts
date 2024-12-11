@@ -17,10 +17,11 @@ export class RequestDescriptionService {
     private readonly clipboardService: ClipboardService
   ) { }
 
-  public async copyToClipboard(requestId: number, matchId: number): Promise<void> {
+  public async copyToClipboard(requestId: number, matchId: number, requestDetailId?: number): Promise<void> {
     const query: CopyRequestInfoQuery = {
       requestId: requestId,
-      matchId: matchId
+      matchId: matchId,
+      requestDetailId: requestDetailId
     };
     const copyInfoResponse = await this.commonService.copyRequestInfo(query);
     this.clipboardService.copyFromContent(this.createContentCopy(copyInfoResponse));

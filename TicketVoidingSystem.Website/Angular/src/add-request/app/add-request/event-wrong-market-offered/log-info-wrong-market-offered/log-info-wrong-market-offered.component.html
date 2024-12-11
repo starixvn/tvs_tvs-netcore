@@ -6,6 +6,7 @@
       <div class="log-info-detail ">
         <log-info-ticket-count
           [isShowDetailsButton]="!isVoided"
+          [isShowCancelCashOut]="true"
           [model]="logInfo.logInfoDetail"
           (openAffectedDetails)="showAffectedTicketsDetails(logInfo)">
         </log-info-ticket-count>

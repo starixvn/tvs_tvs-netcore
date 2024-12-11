@@ -4,7 +4,8 @@ import { LogInfoDetail } from "./log-info-detail.model";
 export class CopyRequestInfoQuery {
   matchId: number;
   requestId: number;
-  logInfoDetails?: LogInfoDetail[]
+  logInfoDetails?: LogInfoDetail[];
+  requestDetailId?: number;
 }
 
 export class CopyRequestInfoResponse {

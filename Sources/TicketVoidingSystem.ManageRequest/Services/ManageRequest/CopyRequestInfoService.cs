@@ -12,7 +12,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
 public interface CopyRequestInfoService
 {
-    Task<(RequestInfoForCopy, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId);
+    Task<(RequestInfoForCopy, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId, int? requestDetailId);
 
     void UpdateMatchInfo(int matchId, RequestInfoForCopy requestInfo);
 
@@ -28,12 +28,13 @@ public class CopyRequestInfoServiceImp(
     RequestExtraInfoXmlService requestExtraInfoXmlService)
     : CopyRequestInfoService
 {
-    public async Task<(RequestInfoForCopy, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId)
+    public async Task<(RequestInfoForCopy, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId, int? requestDetailId)
     {
         var criteria = new CopyRequestInfoCriteria
         {
             MatchId = matchId,
-            RequestId = requestId
+            RequestId = requestId,
+            RequestDetailId = requestDetailId
         };
 
         var (requestInfos, betTypeTickets) = await repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(criteria);

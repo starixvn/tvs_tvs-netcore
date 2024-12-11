@@ -50,7 +50,7 @@ public class CopyRequestInfoServiceTests
         };
 
         // Act
-        var actual = await service.GetCopyInfo(matchId, requestId);
+        var actual = await service.GetCopyInfo(matchId, requestId, null);
 
         // Assert
         AssertExtension.Equal(requestInfoForCopyExpected, actual.Item1);
