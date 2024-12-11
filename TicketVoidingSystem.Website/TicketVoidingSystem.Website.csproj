@@ -47,13 +47,13 @@
     <PackageReference Include="Fanex.Caching.Redis" Version="2.2.6" />
     <PackageReference Include="Fanex.BetList.NumberGame" Version="2.0.0.3" />
     <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.1.5" />
-    <PackageReference Include="Fanex.Data.ProxyClient" Version="1.0.1" />
+    <PackageReference Include="Fanex.Data.ProxyClient" Version="1.0.2" />
     <PackageReference Include="Fanex.LetstalkService.Client" Version="2.0.0" />
     <PackageReference Include="Fanex.Logging" Version="2.0.1.1" />
     <PackageReference Include="Fanex.Logging.Extensions.AspNetCore" Version="1.1.0" />
     <PackageReference Include="Fanex.Logging.Sentry.RavenClient" Version="1.1.0" />
     <PackageReference Include="Fanex.NAP.Client" Version="2.0.2" />
-    <PackageReference Include="Fanex.NAP.SignIn" Version="2.0.2.4" />
+    <PackageReference Include="Fanex.NAP.SignIn" Version="2.0.2.5" />
     <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.433" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="8.0.10" />
