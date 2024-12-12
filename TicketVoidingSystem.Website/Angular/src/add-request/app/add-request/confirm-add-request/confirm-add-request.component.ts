@@ -13,29 +13,17 @@ export class ConfirmAddRequestComponent implements OnChanges {
   @Input() issueTypes: IssueTypes;
   @Input() voidActions: Selection[] = [];
   @Input() selectedVoidAction: string;
+  @Input() selectedSubIssueType: number;
   @Output() clickCancel = new EventEmitter();
   @Output() clickOk = new EventEmitter();
 
   issueTypeName: string;
-  subIssueTypeName: string;
+  subIssueTypeName: string
   actionName: string;
-
+  
   ngOnChanges(changes: SimpleChanges): void {
     this.onChangeIssueType(changes);
     this.onChangeAction(changes);
-  }
-
-  onChangeIssueType(changes: SimpleChanges) {
-    if (changes['issueTypes']) {
-      this.issueTypeName = this.issueTypes.issueTypes.find(x => x.issueTypeId === this.issueTypes.issueId)?.issueTypeName;
-      this.subIssueTypeName = this.issueTypes.subIssueTypes.find(x => x.subIssueTypeId === this.issueTypes.subIssueId)?.subIssueTypeName;
-    }
-  }
-
-  onChangeAction(changes: SimpleChanges) {
-    if (changes['selectedVoidAction'] || changes['voidActions']) {
-      this.actionName = this.voidActions?.find(x => x.value === this.selectedVoidAction)?.name;
-    }
   }
 
   onClickCancel() {
@@ -46,5 +34,18 @@ export class ConfirmAddRequestComponent implements OnChanges {
   onClickOk() {
     this.model.isOpen = false;
     this.clickOk.emit();
+  }
+
+  onChangeAction(changes: SimpleChanges) {
+    if (changes['selectedVoidAction'] || changes['voidActions']) {
+      this.actionName = this.voidActions?.find(x => x.value === this.selectedVoidAction)?.name;
+    }
+  }
+
+  onChangeIssueType(changes: SimpleChanges) {
+    if (changes['issueTypes'] || changes['selectedSubIssueType']) {
+      this.issueTypeName = this.issueTypes.issueTypes.find(x => x.issueTypeId === this.issueTypes.issueId)?.issueTypeName;
+      this.subIssueTypeName = this.issueTypes.subIssueTypes.find(x => x.subIssueTypeId === this.issueTypes.subIssueId)?.subIssueTypeName;
+    }
   }
 }

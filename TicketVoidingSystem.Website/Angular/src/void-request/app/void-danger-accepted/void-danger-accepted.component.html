@@ -3,7 +3,7 @@
     <div *ngFor="let item of voidMatches; let id = index" class="bg-gray match-void">
       <div class="full-width d-flex bg-gray match-void">
         <div class="index-of-match d-flex align-items-center">
-          <div class="number-circle"><span><strong>{{item.id}}</strong></span></div>
+          <div class="number-circle"><span><strong>{{id+1}}</strong></span></div>
         </div>
         <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">
           <div class="alert alert-dark p-1 m-0 mb-1"><span>
