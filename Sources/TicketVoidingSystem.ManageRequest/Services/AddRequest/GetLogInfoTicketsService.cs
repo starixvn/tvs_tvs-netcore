@@ -24,16 +24,20 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
         }
 
         var voidTickets = getTicketModels.Where(x => !x.IsCancelCashOut);
-        var groupTicket = MapToGroupTicketViewModel(voidTickets, request.IssueTypeId);
+        var affectedTickets = voidTickets.Where(x => !x.IsOtherTicket);
+        var otherTickets = voidTickets.Where(x => x.IsOtherTicket);
+        var groupTicket = MapToGroupTicketViewModel(affectedTickets, request.IssueTypeId);
+        var groupOtherTickets = MapToGroupTicketViewModel(otherTickets, request.IssueTypeId);
 
         var viewModel = new TicketsViewModel
         {
-            TotalSingle = voidTickets.Count(ticket => !ticket.IsMixParlay),
-            TotalParlay = voidTickets.Count(ticket => ticket.IsMixParlay),
+            TotalSingle = affectedTickets.Count(ticket => !ticket.IsMixParlay),
+            TotalParlay = affectedTickets.Count(ticket => ticket.IsMixParlay),
             Groups = groupTicket,
-            IsHasSettledTicket = voidTickets.Any(ticket => ticket.IsSettledTicket()),
-            FromTime = voidTickets.Min(ticket => ticket.TransDate),
-            ToTime = voidTickets.Max(ticket => ticket.TransDate)
+            IsHasSettledTicket = affectedTickets.Any(ticket => ticket.IsSettledTicket()),
+            FromTime = affectedTickets.Min(ticket => ticket.TransDate),
+            ToTime = affectedTickets.Max(ticket => ticket.TransDate),
+            GroupOtherTickets = groupOtherTickets
         };
 
         return viewModel;
@@ -41,10 +45,9 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
 
     private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels, int issueTypeId)
     {
-        var ticketViewModels = getTicketModels.Select((item, index) =>
+        var ticketViewModels = getTicketModels.Select((item) =>
         {
             var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
-            ticket.No = index + 1;
             ticket.SubBetTypeId = (short)item.SubBetType;
             ticket.GroupName = GetGroupNameByIssueType(issueTypeId, ticket);
 

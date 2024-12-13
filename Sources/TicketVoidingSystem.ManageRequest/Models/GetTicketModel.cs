@@ -127,4 +127,5 @@ public class GetTicketModel
     public short GroupPHAffected { get; set; }
 
     public decimal MasterOdds { get; set; }
+    public bool IsOtherTicket { get; set; }
 }

@@ -5,6 +5,7 @@ namespace TicketVoidingSystem.ManageRequest.Models;
 public class TicketsViewModel
 {
     public IEnumerable<Group<TicketViewModel>> Groups { get; set; } = new List<Group<TicketViewModel>>();
+    public IEnumerable<Group<TicketViewModel>> GroupOtherTickets { get; set; }
     public int Total { get; set; }
     public int TotalSingle { get; set; }
     public int TotalParlay { get; set; }
