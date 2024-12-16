@@ -71,6 +71,7 @@ export class VoidPageService {
 
     if (StaticService.isWrongOfferedName(requestDetail.request.issueTypeId)) {
       return [{
+        id: 1,
         matchId: requestDetail.wrongOfferedNameModel.matchId,
         subIssueTypeId: requestDetail.wrongOfferedNameModel.subIssueTypeId
       }] as BasicRequestInfo[];

@@ -1,9 +1,9 @@
 <div>
   <ng-container *ngIf="primitiveProperty.isLoadedBasicData">
-    <div *ngFor="let item of voidPageItems; let id = index" class="bg-gray void-page-item">
+    <div *ngFor="let item of voidPageItems" class="bg-gray void-page-item">
       <div class="full-width d-flex">
         <div class="d-flex align-items-center">
-          <div class="number-circle"><span><strong>{{id+1}}</strong></span></div>
+          <div class="number-circle"><span><strong>{{item.id}}</strong></span></div>
         </div>
         <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">
           <div class="alert alert-dark p-1 m-0 mb-1"><span>
