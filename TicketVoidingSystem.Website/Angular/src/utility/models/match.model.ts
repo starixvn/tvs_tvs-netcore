@@ -36,7 +36,7 @@ export class MatchModel {
   sportTypeNameNewSimplified?: string;
   sportTypeNameSimplified?: string;
   sportTypeNameTraditional?: string;
-  numberOfCorner?: number;
+  numberOfSubType?: number;
   name?: string;
   parentId?: number;
   subtype?: number;
