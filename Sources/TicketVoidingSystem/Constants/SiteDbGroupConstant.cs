@@ -38,7 +38,7 @@ public static class SiteDbGroupConstant
             }
         };
 
-        var ignoreSiteDbList = !string.IsNullOrWhiteSpace(AppSettingService.AppSetting.IgnoreSiteDb)
+        var ignoreSiteDbList = !string.IsNullOrWhiteSpace(AppSettingService.AppSetting?.IgnoreSiteDb)
             ? AppSettingService.AppSetting.IgnoreSiteDb.Split(',').Select(int.Parse)
             : new List<int>();
 
