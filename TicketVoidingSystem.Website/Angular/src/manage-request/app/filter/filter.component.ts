@@ -13,8 +13,8 @@ import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { FilterModel } from './filter.model';
-import { ManageProductConstant } from './manage-product.constant';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { FilterService } from './filter.service';
 
 @Component({
   selector: 'filter',
@@ -56,8 +56,6 @@ export class FilterComponent implements OnInit {
     private readonly commonService: CommonService
   ) {
     this.tooltip.element = this.element;
-    this.statusSelectList = ManageRequestStatus.MULTIPLE_OPTIONS;
-    this.products = ManageProductConstant.initMultiSelectProduct();
   }
 
   async ngOnInit() {
@@ -65,6 +63,8 @@ export class FilterComponent implements OnInit {
     this.filterByValue = this.mode[0];
     this.userId = document.getElementById('body').getAttribute('user-id');
     this.createdBySelectList = [{ name: 'All', value: '0' }, { name: '<<<< Me >>>>', value: this.userId }];
+    this.statusSelectList = ManageRequestStatus.MULTIPLE_OPTIONS;
+    this.products = FilterService.initMultiSelectProduct();
     await this.setIssueTypeSelectList();
     this.initDefaultFilter();
     this.updateSubByIssue();
