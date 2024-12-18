@@ -238,7 +238,8 @@ export class FilterComponent implements OnInit {
     && ((sportType < 190 || sportType > 199) && sportType !== 177)      //sportTypes invalid in  Virtual Sports 2
     && (sportType !== 178 && sportType !== 179)                         //sportTypes invalid in  Virtual Sports 3
     && (sportType !== 188)                                              //sportTypes invalid in  Virtual Sports 4
-    && (sportType !== 147);                                             //sportTypes invalid in  Virtual Sports 5
+    && (sportType !== 147)                                              //sportTypes invalid in  Virtual Sports 5
+    && (sportType !== 134);                                             //sportTypes invalid in  Virtual Sports 6
   }
 
   private isInvalidProduct0(product: number, sportType: number): boolean {
@@ -273,7 +274,7 @@ export class FilterComponent implements OnInit {
       (sportType < 180 || sportType > 186) &&
       ((sportType < 190 || sportType > 199) && sportType !== 177) &&
       sportType !== 178 && sportType !== 179 &&
-      sportType !== 188 && sportType !== 147
+      sportType !== 188 && sportType !== 147 && (sportType !== 134)
     );
   }
 
