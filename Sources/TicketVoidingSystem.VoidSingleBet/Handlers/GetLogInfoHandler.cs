@@ -7,19 +7,11 @@ using TicketVoidingSystem.VoidSingleBet.ViewModels;
 
 namespace TicketVoidingSystem.VoidSingleBet.Handlers;
 
-public class GetLogInfoRequest : GetTicketsQuery, IRequest<ListTicketsViewModel>
+public class GetLogInfoRequest : GetTicketsQuery, IRequest<ListTicketsViewModel>;
+
+public class GetLogInfoHandler(GetTicketsService getTicketsService)
+    : IRequestHandler<GetLogInfoRequest, ListTicketsViewModel>
 {
-}
-
-public class GetLogInfoHandler : IRequestHandler<GetLogInfoRequest, ListTicketsViewModel>
-{
-    private readonly GetTicketsService getTicketsService;
-
-    public GetLogInfoHandler(GetTicketsService getTicketsService)
-    {
-        this.getTicketsService = getTicketsService;
-    }
-
     public async Task<ListTicketsViewModel> Handle(GetLogInfoRequest request, CancellationToken cancellationToken)
     {
         var model = new ListTicketsViewModel();

@@ -1,9 +1,9 @@
 <div>
   <ng-container *ngIf="primitiveProperty.isLoadedBasicData">
-    <div *ngFor="let item of voidPageItems; let id = index" class="bg-gray match-void">
+    <div *ngFor="let item of voidPageItems" class="bg-gray match-void">
       <div class="full-width d-flex bg-gray match-void">
         <div class="index-of-match d-flex align-items-center">
-          <div class="number-circle"><span><strong>{{id + 1}}</strong></span></div>
+          <div class="number-circle"><span><strong>{{item.id}}</strong></span></div>
         </div>
         <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">
           <div class="alert alert-dark p-1 m-0 mb-1"><span>
@@ -38,7 +38,7 @@
           [isDisableCheckbox]="true">
         </tickets-list>
         <message-area #messageArea [isShowTemplateMessage]="item.isShowTemplateMessage" [totalVoidTickets]="item.voidTicketsMini?.total"
-          [templateValue]="item.templateValue" [issueTypeId]="requestDetail.request.issueTypeId"
+          [templateValue]="item.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" [id]="item.id"
           [subIssueTypeId]="item.subIssueType.subIssueTypeId" [voidReason]="item.voidReason" [requestId]="requestDetail.request.requestId">
         </message-area>
       </div>

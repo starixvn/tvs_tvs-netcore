@@ -1,0 +1,45 @@
+<event-league #eventLeague
+  [isEdit]="isEdit"
+  [matchId]="logInfoEvent.matchId"
+  (changeEvent)="changeMatchEvent()">
+</event-league>
+<filter-time-technical-error #filterTime
+  class="mb-1"
+  [isVoided]="filter.isVoided"
+  [filterTechnicalErrorModel]="logInfoEvent.filterTechnicalErrorModel"
+  (changeFilterEvent)="changeFilterTime()"
+  (refreshEvent)="refreshEvent()">
+</filter-time-technical-error>
+<advanced-mode-add-request #advancedMode
+  [matchId]="logInfoEvent.matchId"
+  [groupBetTypes]="groupBetTypesModel"
+  (changeFilterEvent)="resetLogInfo()"
+  (isLoadingData)="checkingLoadDataAdvancedMode($event)"
+  (checkExistBetTypeEvent)="checkExistBetTypeEvent($event)"
+  [model]="advancedModeAddRequestModel">
+</advanced-mode-add-request>
+<div class="mb-3 d-flex mt-1" *ngIf="groupBetTypesModel.groupBetTypes.length > 0">
+  <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
+    (click)="clickSearch()">
+    Search
+  </button>
+</div>
+<log-info-technical-error #logInfo
+  [isVoided]="filter.isVoided"
+  [primitiveProps]="primitivePropertyEvent"
+  [logInfo]="logInfoEvent"
+  [issueTypeId]="filter.issueTypeId">
+</log-info-technical-error>
+<div class="no-ticket mt-2" *ngIf="primitivePropertyEvent.isShowErrorNoBetType">
+  <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
+  No valid tickets found in the current range
+</div>
+<confirm-add-request
+  [model]="confirmAddRequest"
+  [issueTypes]="issueTypes"
+  [voidActions]="filter.actions"
+  [selectedVoidAction]="filter.action"
+  [selectedSubIssueType]="issueTypes.subIssueId"
+  (clickOk)="onClickConfirmSaveRequest()"
+  (clickCancel)="onClickCancelSaveRequest()">
+</confirm-add-request>

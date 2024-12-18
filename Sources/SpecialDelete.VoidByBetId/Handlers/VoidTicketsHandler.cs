@@ -10,34 +10,17 @@ using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.VoidByBetId.Handlers;
 
-public class VoidTicketsRequest : VoidTicketsQuery, IRequest<List<Result>>
+public class VoidTicketsRequest : VoidTicketsQuery, IRequest<List<Result>>;
+
+public class VoidTicketsHandler(
+    NetPositionService netPositionService,
+    HandleService handleService,
+    LoggingService loggingService,
+    ResultCacheService resultCacheService,
+    CashOutApiService cashOutApiService,
+    AfterVoidService afterVoidService)
+    : IRequestHandler<VoidTicketsRequest, List<Result>>
 {
-}
-
-public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, List<Result>>
-{
-    private readonly NetPositionService netPositionService;
-    private readonly HandleService handleService;
-    private readonly LoggingService loggingService;
-    private readonly ResultCacheService resultCacheService;
-    private readonly CashOutApiService cashOutApiService;
-    private readonly AfterVoidService afterVoidService;
-
-    public VoidTicketsHandler(NetPositionService netPositionService,
-        HandleService handleService,
-        LoggingService loggingService,
-        ResultCacheService resultCacheService,
-        CashOutApiService cashOutApiService,
-        AfterVoidService afterVoidService)
-    {
-        this.netPositionService = netPositionService;
-        this.handleService = handleService;
-        this.loggingService = loggingService;
-        this.resultCacheService = resultCacheService;
-        this.cashOutApiService = cashOutApiService;
-        this.afterVoidService = afterVoidService;
-    }
-
     public async Task<List<Result>> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
     {
         if (await resultCacheService.IsExistResult(request.Guid))
@@ -85,7 +68,7 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, List<Resul
         var results = new List<Result>();
         if (!model.Tickets.Any())
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         results.AddRange(await ContactUser(query, model, warningCrickets));
@@ -99,7 +82,7 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, List<Resul
         var results = new List<Result>();
         if (model.Validation.IsSuccessful)
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         results.Add(new Result { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg });

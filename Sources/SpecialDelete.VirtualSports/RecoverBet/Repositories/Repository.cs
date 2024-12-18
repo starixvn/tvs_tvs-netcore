@@ -16,19 +16,9 @@ public interface Repository
     Task<RecoverTicketsModel> RecoverTickets(Query query);
 }
 
-public class RepositoryImp : Repository
+public class RepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
+    : Repository
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-
-    public RepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.sessionService = sessionService;
-    }
-
     public async Task<GetTicketsModel> GetTickets(Query query)
     {
         var criteria = mapper.Map<GetTicketsCriteria>(query);

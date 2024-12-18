@@ -12,15 +12,8 @@ public interface GetUsersService
     Task<IEnumerable<UserModel>> GetUsers(GetUsersRequest request);
 }
 
-public class GetUsersServiceImp : GetUsersService
+public class GetUsersServiceImp(IDynamicRepository repository) : GetUsersService
 {
-    private readonly IDynamicRepository repository;
-
-    public GetUsersServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<UserModel>> GetUsers(GetUsersRequest request)
     {
         var users = await repository.FetchAsync<UserModel>(request);

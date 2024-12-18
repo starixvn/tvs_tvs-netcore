@@ -13,7 +13,7 @@
         </div>
         <div class="modal-body" [blockUi]="isBlock" >
           <request-info *ngIf="isShowRequestInfo" [model]="requestDetail" [issue]="issue" [ticketListModal]="modal"
-            [tabInfoRequest]="tabInfoRequest" [selectedMatchId]="this.modal.matchId"></request-info>
+            [tabInfoRequest]="modal.tabInfoRequest"></request-info>
         </div>
       </div>
     </div>

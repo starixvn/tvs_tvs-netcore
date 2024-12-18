@@ -12,15 +12,9 @@ public class GetTicketVoidingQueueRequest : IRequest<IEnumerable<TicketVoidingQu
     public int VoidingHistoryId { get; set; }
 }
 
-public class GetTicketVoidingQueueHandler : IRequestHandler<GetTicketVoidingQueueRequest, IEnumerable<TicketVoidingQueueModel>>
+public class GetTicketVoidingQueueHandler(TicketVoidingQueueService ticketVoidingQueueService)
+    : IRequestHandler<GetTicketVoidingQueueRequest, IEnumerable<TicketVoidingQueueModel>>
 {
-    private readonly TicketVoidingQueueService ticketVoidingQueueService;
-
-    public GetTicketVoidingQueueHandler(TicketVoidingQueueService ticketVoidingQueueService)
-    {
-        this.ticketVoidingQueueService = ticketVoidingQueueService;
-    }
-
     public async Task<IEnumerable<TicketVoidingQueueModel>> Handle(GetTicketVoidingQueueRequest request, CancellationToken cancellationToken)
     {
         return await ticketVoidingQueueService.GetQueueInAllServers(request.VoidingHistoryId);

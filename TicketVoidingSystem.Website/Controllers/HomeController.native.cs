@@ -12,17 +12,8 @@ using TicketVoidingSystem.Web;
 namespace TicketVoidingSystem.Website.Controllers;
 
 [SkipLogging]
-public class HomeController : Controller
+public class HomeController(IMaintenanceService maintenanceService, ICache cache) : Controller
 {
-    private readonly IMaintenanceService maintenanceService;
-    private readonly ICache cache;
-
-    public HomeController(IMaintenanceService maintenanceService, ICache cache)
-    {
-        this.maintenanceService = maintenanceService;
-        this.cache = cache;
-    }
-
     [HttpGet]
     public IActionResult Index()
     {

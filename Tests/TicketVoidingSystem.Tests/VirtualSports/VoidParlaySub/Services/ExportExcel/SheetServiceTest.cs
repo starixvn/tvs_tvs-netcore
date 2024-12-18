@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using NSubstitute;
 using SpecialDelete.VirtualSports.Common.Models;
@@ -18,9 +17,9 @@ public class SheetServiceTest
     public async Task GetTickets_ValidData_CallTicketService()
     {
         // Arrange
-        var choice = "<a></a><span></span><div class='offer-name-list'></div><div class='bettype'></div><div class='match'></div><div class='league'>";
+        const string choice = "<a></a><span></span><div class='offer-name-list'></div><div class='bettype'></div><div class='match'></div><div class='league'>";
         var query = new ExportExcelQuery { MatchId = 123 };
-        var fakeModel = new GetTicketsModel { Tickets = new List<GetTicketModel> { new() { TransId = 9999 } } };
+        var fakeModel = new GetTicketsModel { Tickets = [new GetTicketModel { TransId = 9999 }] };
         var getTicketsService = Substitute.For<GetTicketsService>();
         getTicketsService.ExecuteQuery(query).ReturnsForAnyArgs(fakeModel);
         var ticketService = Substitute.For<TicketService>();

@@ -8,29 +8,15 @@ using TicketVoidingSystem.SignalR;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 
-public class InsertQueueRequest : InsertQueueQuery, IRequest<Result>
+public class InsertQueueRequest : InsertQueueQuery, IRequest<Result>;
+
+public class InsertQueueHandler(
+    InsertQueueService insertQueueService,
+    SessionService sessionService,
+    LoggingService loggingService,
+    NotificationSignalRService signalRService)
+    : IRequestHandler<InsertQueueRequest, Result>
 {
-}
-
-public class InsertQueueHandler : IRequestHandler<InsertQueueRequest, Result>
-{
-    private readonly InsertQueueService insertQueueService;
-    private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
-    private readonly NotificationSignalRService signalRService;
-
-    public InsertQueueHandler(
-        InsertQueueService insertQueueService,
-        SessionService sessionService,
-        LoggingService loggingService,
-        NotificationSignalRService signalRService)
-    {
-        this.insertQueueService = insertQueueService;
-        this.sessionService = sessionService;
-        this.loggingService = loggingService;
-        this.signalRService = signalRService;
-    }
-
     public async Task<Result> Handle(InsertQueueRequest request, CancellationToken cancellationToken)
     {
         Result result;
@@ -51,10 +37,10 @@ public class InsertQueueHandler : IRequestHandler<InsertQueueRequest, Result>
         var result = new Result();
         if (sessionService.CheckPassword(query.UserPassword))
         {
-            query.SingleTickets ??= Enumerable.Empty<BetId>();
-            query.ParlayTickets ??= Enumerable.Empty<BetId>();
-            query.CricketTickets ??= Enumerable.Empty<BetId>();
-            query.CancelCashOutTickets ??= Enumerable.Empty<BetId>();
+            query.SingleTickets ??= [];
+            query.ParlayTickets ??= [];
+            query.CricketTickets ??= [];
+            query.CancelCashOutTickets ??= [];
             await insertQueueService.InsertTicketVoidingQueue(query);
             await insertQueueService.UpdateIsProcessed(query);
             await UpdateRunningRequest(query.RequestId);

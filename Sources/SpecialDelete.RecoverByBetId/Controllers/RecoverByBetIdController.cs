@@ -9,15 +9,8 @@ namespace SpecialDelete.RecoverByBetId.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class RecoverByBetIdController : ControllerBase
+public class RecoverByBetIdController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public RecoverByBetIdController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverByBetID)]
     public async Task<IActionResult> GetTickets(GetTicketsRequest request) => Ok(await mediator.Send(request));

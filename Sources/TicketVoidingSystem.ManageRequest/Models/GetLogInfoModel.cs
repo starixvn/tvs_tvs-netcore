@@ -2,6 +2,7 @@
 
 public class GetLogInfoModel
 {
+    public int Id { get; set; }
     public int MatchId { get; set; }
     public int ScoreId { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
@@ -18,6 +19,7 @@ public class GetLogInfoViewModel
 
 public class LogInfoDetail
 {
+    public int Id { get; set; }
     public int MatchId { get; set; }
     public int ScoreId { get; set; }
     public string? LiveScores { get; set; }
@@ -52,6 +54,7 @@ public class LogInfoDetail
 
 public class Validation
 {
+    public int Id { get; set; }
     public int ScoreId { get; set; }
     public int MatchId { get; set; }
     public bool IsInvalidTotalTickets { get; set; }

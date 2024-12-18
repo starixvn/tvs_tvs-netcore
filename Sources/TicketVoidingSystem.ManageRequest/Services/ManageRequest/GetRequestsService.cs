@@ -10,22 +10,13 @@ public interface GetRequestsService
     Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequests(SelectRequestsQuery query);
 }
 
-public class GetRequestsServiceImp : GetRequestsService
+public class GetRequestsServiceImp(
+    IMapper mapper,
+    IDynamicRepository repository,
+    GetRequestsInActiveTableService getRequestsInActiveTableService,
+    GetRequestsInArchivedTableService getRequestsInArchivedTableService)
+    : GetRequestsService
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly GetRequestsInActiveTableService getRequestsInActiveTableService;
-    private readonly GetRequestsInArchivedTableService getRequestsInArchivedTableService;
-
-    public GetRequestsServiceImp(IMapper mapper, IDynamicRepository repository,
-        GetRequestsInActiveTableService getRequestsInActiveTableService, GetRequestsInArchivedTableService getRequestsInArchivedTableService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.getRequestsInActiveTableService = getRequestsInActiveTableService;
-        this.getRequestsInArchivedTableService = getRequestsInArchivedTableService;
-    }
-
     public async Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequests(SelectRequestsQuery query)
     {
         if (query.RequestId != null || query.MatchId != null)
@@ -63,7 +54,7 @@ public class GetRequestsServiceImp : GetRequestsService
         var archivedRequestInfoJson = await GetRequestInfoInArchivedTable(query);
         if (string.IsNullOrWhiteSpace(archivedRequestInfoJson))
         {
-            return (Enumerable.Empty<RequestModel>(), Enumerable.Empty<string>());
+            return ([], []);
         }
 
         query.RequestInfoJson = archivedRequestInfoJson;

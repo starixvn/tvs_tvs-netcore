@@ -40,7 +40,7 @@ public class CombineVoidTicketsServiceTests
         var service = new CombineVoidTicketsServiceImp();
 
         // Act
-        var actual = service.Execute(1, new[] { 112, 114 }, groupTickets);
+        var actual = service.Execute(1, [112, 114], groupTickets);
 
         // Assert
         AssertExtension.Equal(ticketDescending, actual);

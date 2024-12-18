@@ -2,6 +2,7 @@ import { EarlyKickOffGetLogInfoQuery } from '../event-early-kick-off/models/get-
 import { NotParticipateGetLogInfoQuery } from '../event-not-participate/models/get-log-info.query';
 import { OtherIssuesGetLogInfoQuery } from '../event-other-issues/models/get-log-info.query';
 import { ReducedOverGetLogInfoQuery } from '../event-reduced-over/models/get-log-info.query';
+import { TechnicalErrorGetLogInfoQuery } from '../event-technical-error/models/get-log-info.query';
 import { WrongHdpGetLogInfoQuery } from '../event-wrong-hdp/models/get-log-info.query';
 import { WrongMarketOfferedGetLogInfoQuery } from '../event-wrong-market-offered/models/get-log-info.query';
 import { WrongOddsSportsBookGetLogInfoQuery } from '../event-wrong-odds-sports-book/models/get-log-info.query';
@@ -18,6 +19,7 @@ import { NotParticipateModel } from './event-not-participate.model';
 import { OtherIssuesModel } from './event-other-issues.model';
 import { RedCardGetLogInfoQuery, RedCardModel } from './event-red-card.model';
 import { ReducedOverModel } from './event-reduced-over.model';
+import { TechnicalErrorModel } from './event-technical-error.model';
 import { WrongHdpModel } from './event-wrong-hdp.model';
 import { WrongMarketOfferedModel } from './event-wrong-market-offered.model';
 import { WrongOddsSportsBookModel } from './event-wrong-odds-sports-book.model';
@@ -63,10 +65,11 @@ export class AddRequestQuery {
   duplicateTicketsInfo: DuplicateTicketsModel;
   recoverTicketInfo: RecoverTicketModel;
   abnormalBetInfo: AbnormalBetModel;
-  wrongMarketOfferedInfo: WrongMarketOfferedModel;
+  wrongMarketOfferedInfo: WrongMarketOfferedModel[];
   wrongOddsSportsBookInfo: WrongOddsSportsBookModel;
   wrongOfferedNameInfo: WrongOfferedNameModel;
   otherIssuesInfo: OtherIssuesModel;
+  technicalErrorInfo: TechnicalErrorModel;
 
   transInfoJson: string;
   unMarkTransIds: string;
@@ -97,8 +100,9 @@ export class GetLogInfoQuery {
   reducedOverModels?: ReducedOverGetLogInfoQuery[];
   notParticipateModels?: NotParticipateGetLogInfoQuery[];
   earlyKickOffModels?: EarlyKickOffGetLogInfoQuery[];
-  wrongMarketOfferedModel?: WrongMarketOfferedGetLogInfoQuery;
+  wrongMarketOfferedModels?: WrongMarketOfferedGetLogInfoQuery[];
   wrongOddsSportsBookModel?: WrongOddsSportsBookGetLogInfoQuery;
   wrongOfferedNameModel?: WrongOfferedNameGetLogInfoQuery;
   otherIssuesModel?: OtherIssuesGetLogInfoQuery;
+  technicalErrorModel?: TechnicalErrorGetLogInfoQuery;
 }

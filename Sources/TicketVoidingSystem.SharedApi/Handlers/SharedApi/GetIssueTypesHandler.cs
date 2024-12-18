@@ -10,19 +10,11 @@ using TicketVoidingSystem.ViewModels;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
-public class GetIssueTypesRequest : IRequest<IssueTypesViewModel>
+public class GetIssueTypesRequest : IRequest<IssueTypesViewModel>;
+
+public class GetIssueTypesHandler(IDynamicRepository repository)
+    : IRequestHandler<GetIssueTypesRequest, IssueTypesViewModel>
 {
-}
-
-public class GetIssueTypesHandler : IRequestHandler<GetIssueTypesRequest, IssueTypesViewModel>
-{
-    private readonly IDynamicRepository repository;
-
-    public GetIssueTypesHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IssueTypesViewModel> Handle(GetIssueTypesRequest request, CancellationToken cancellationToken)
     {
         var issueTypes = await repository.FetchAsync<IssueType>(new GetIssueTypeCriteria());

@@ -9,17 +9,11 @@ public interface CalculateHaveStatusWonNotLoseService
         IReadOnlyDictionary<(int custId, int statusId), OrderedTickets> groupTickets, IList<int> ticketStatusIds);
 }
 
-public class CalculateHaveStatusWonNotLoseServiceImp : CalculateHaveStatusWonNotLoseService
+public class CalculateHaveStatusWonNotLoseServiceImp(
+    EstimateVoidWonTicketsService estimateVoidWonTicketsService,
+    CombineVoidTicketsService combineVoidTicketsService)
+    : CalculateHaveStatusWonNotLoseService
 {
-    private readonly EstimateVoidWonTicketsService estimateVoidWonTicketsService;
-    private readonly CombineVoidTicketsService combineVoidTicketsService;
-
-    public CalculateHaveStatusWonNotLoseServiceImp(EstimateVoidWonTicketsService estimateVoidWonTicketsService, CombineVoidTicketsService combineVoidTicketsService)
-    {
-        this.estimateVoidWonTicketsService = estimateVoidWonTicketsService;
-        this.combineVoidTicketsService = combineVoidTicketsService;
-    }
-
     public async Task<CalcVoidTicketsResult> ExecuteParallel(IList<AccountWinlostModel> orderedAccounts,
         IReadOnlyDictionary<(int custId, int statusId), OrderedTickets> groupTickets, IList<int> ticketStatusIds)
     {

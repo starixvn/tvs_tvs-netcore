@@ -10,15 +10,8 @@ public interface MessageContentSingleService
     string Create(TicketInfoForLetstalk model, IEnumerable<TicketEmailModel> tickets);
 }
 
-public class MessageContentSingleServiceImp : MessageContentSingleService
+public class MessageContentSingleServiceImp(UusTicketService uusTicketService) : MessageContentSingleService
 {
-    private readonly UusTicketService uusTicketService;
-
-    public MessageContentSingleServiceImp(UusTicketService uusTicketService)
-    {
-        this.uusTicketService = uusTicketService;
-    }
-
     public string Create(TicketInfoForLetstalk model, IEnumerable<TicketEmailModel> tickets)
     {
         var countInfo = CountTicketTypes(model, tickets);

@@ -8,15 +8,9 @@ public class CheckAccessRequestPermissionRequest : IRequest<bool>
     public int RequestId { get; set; }
 }
 
-public class CheckAccessRequestPermissionHandler : IRequestHandler<CheckAccessRequestPermissionRequest, bool>
+public class CheckAccessRequestPermissionHandler(CheckPermissionOnRequestService checkPermissionOnRequestService)
+    : IRequestHandler<CheckAccessRequestPermissionRequest, bool>
 {
-    private readonly CheckPermissionOnRequestService checkPermissionOnRequestService;
-
-    public CheckAccessRequestPermissionHandler(CheckPermissionOnRequestService checkPermissionOnRequestService)
-    {
-        this.checkPermissionOnRequestService = checkPermissionOnRequestService;
-    }
-
     public async Task<bool> Handle(CheckAccessRequestPermissionRequest request, CancellationToken cancellationToken)
     {
         var isHasPermission = await checkPermissionOnRequestService.IsHasPermissionOnRequest(request.RequestId);

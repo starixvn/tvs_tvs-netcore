@@ -42,8 +42,3 @@ export class GeneralInfoViewModel {
     succeedEmails: string[];
     failedEmails: string[];
 }
-
-export class TabInfoRequest {
-    id: string;
-    name: string;
-}

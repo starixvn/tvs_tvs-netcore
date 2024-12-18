@@ -7,19 +7,11 @@ using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetLastTimeScoreRequest : GetLastTimeScoreModel, IRequest<GetLastTimeScoreViewModel>
+public class GetLastTimeScoreRequest : GetLastTimeScoreModel, IRequest<GetLastTimeScoreViewModel>;
+
+public class GetLastTimeScoreHandler(IDynamicRepository repository)
+    : IRequestHandler<GetLastTimeScoreRequest, GetLastTimeScoreViewModel>
 {
-}
-
-public class GetLastTimeScoreHandler : IRequestHandler<GetLastTimeScoreRequest, GetLastTimeScoreViewModel>
-{
-    private readonly IDynamicRepository repository;
-
-    public GetLastTimeScoreHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<GetLastTimeScoreViewModel> Handle(GetLastTimeScoreRequest request, CancellationToken cancellationToken)
     {
         var tasks = SiteDbGroupConstant.ServerList.Select(x => GetTimeByServer(x.Id, request));

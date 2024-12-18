@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendMessage;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail.VoidDuplicateTickets;
 
@@ -15,22 +15,13 @@ public interface DuplicateTicketsEmailLicenseeService
     Task<IEnumerable<Result>> Send(DuplicateTicketsMailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets);
 }
 
-public class DuplicateTicketsEmailLicenseeServiceImp : DuplicateTicketsEmailLicenseeService
+public class DuplicateTicketsEmailLicenseeServiceImp(
+    DuplicateTicketsEmailContentService emailContentService,
+    FanexMailApiService fanexMailApiService,
+    MailResultService mailResultService,
+    SpecialPlatformService specialPlatformService)
+    : DuplicateTicketsEmailLicenseeService
 {
-    private readonly DuplicateTicketsEmailContentService emailContentService;
-    private readonly FanexMailApiService fanexMailApiService;
-    private readonly MailResultService mailResultService;
-    private readonly SpecialPlatformService specialPlatformService;
-
-    public DuplicateTicketsEmailLicenseeServiceImp(DuplicateTicketsEmailContentService emailContentService, FanexMailApiService fanexMailApiService,
-        MailResultService mailResultService, SpecialPlatformService specialPlatformService)
-    {
-        this.emailContentService = emailContentService;
-        this.fanexMailApiService = fanexMailApiService;
-        this.mailResultService = mailResultService;
-        this.specialPlatformService = specialPlatformService;
-    }
-
     public async Task<IEnumerable<Result>> Send(DuplicateTicketsMailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets)
     {
         var results = new CombineMessageModel();
@@ -51,7 +42,7 @@ public class DuplicateTicketsEmailLicenseeServiceImp : DuplicateTicketsEmailLice
 
     private async Task SendToSite(CombineMessageModel results, DuplicateTicketsMailVoidViewModel mailLicenseesModel, SiteEmail site, IEnumerable<DuplicateTicketsRequestInfo> groupTicketsInSite)
     {
-        var modelClone = mailLicenseesModel.DeepClone();
+        var modelClone = MessagePackCloner.Clone(mailLicenseesModel);
         modelClone.TemplatePath = TemplateEmailPath.DuplicateTicketsVoidBetChinese;
         if (specialPlatformService.IsSiteSpecialPlatform(modelClone.Match, site))
         {

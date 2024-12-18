@@ -12,19 +12,12 @@ public interface GetRequestsInArchivedTableService
     Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequestsInArchivedTable(SelectRequestsQuery query);
 }
 
-public class GetRequestsInArchivedTableServiceImp : GetRequestsInArchivedTableService
+public class GetRequestsInArchivedTableServiceImp(
+    IMapper mapper,
+    IDynamicRepository repository,
+    BetListService betListService)
+    : GetRequestsInArchivedTableService
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly BetListService betListService;
-
-    public GetRequestsInArchivedTableServiceImp(IMapper mapper, IDynamicRepository repository, BetListService betListService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.betListService = betListService;
-    }
-
     public async Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequestsInArchivedTable(SelectRequestsQuery query)
     {
         var criteriaArchived = mapper.Map<SelectArchivedRequestsCriteria>(query);

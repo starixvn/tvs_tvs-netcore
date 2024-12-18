@@ -38,7 +38,7 @@ public class CopyRequestInfoServiceTests
         requestExtraInfoXmlService.ParseXmlToOperators("OperatorInfo").Returns(operators);
         repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(Arg.Any<CopyRequestInfoCriteria>()).Returns((requestInfos, betTypeTickets));
         service = new CopyRequestInfoServiceImp(repository, null, null, requestExtraInfoXmlService);
-        var requestInfoForCopyExpected = new RequestInfoForCopy()
+        var requestInfoForCopyExpected = new RequestInfoForCopy
         {
             MatchId = 8634527,
             RequestId = "56473",
@@ -50,7 +50,7 @@ public class CopyRequestInfoServiceTests
         };
 
         // Act
-        var actual = await service.GetCopyInfo(matchId, requestId);
+        var actual = await service.GetCopyInfo(matchId, requestId, null);
 
         // Assert
         AssertExtension.Equal(requestInfoForCopyExpected, actual.Item1);

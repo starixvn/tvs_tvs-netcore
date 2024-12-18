@@ -42,10 +42,7 @@ public class RecoverBetServiceTest
         // Arrange
         var expected = new RecoverTicketsViewModel
         {
-            Groups = new List<Group<TicketViewModel>>
-            {
-                new()
-            }
+            Groups = [new Group<TicketViewModel>()]
         };
         var tickets = new List<BetId>
         {
@@ -112,7 +109,7 @@ public class RecoverBetServiceTest
         var recoverTicketsService = Substitute.For<RecoverTicketsService>();
         recoverTicketsService.ExecuteQuery(query).ReturnsForAnyArgs(model);
         var notificationService = Substitute.For<NotificationService>();
-        notificationService.WarningMessage("", "").ReturnsForAnyArgs(new List<Result>());
+        notificationService.WarningMessage("", "").ReturnsForAnyArgs([]);
         var service = CreateService(recoverTicketsService, notificationService);
 
         // Act
@@ -141,7 +138,7 @@ public class RecoverBetServiceTest
         var recoverTicketsService = Substitute.For<RecoverTicketsService>();
         recoverTicketsService.ExecuteQuery(query).ReturnsForAnyArgs(model);
         var notificationService = Substitute.For<NotificationService>();
-        notificationService.WarningMessage("", "").ReturnsForAnyArgs(new List<Result>());
+        notificationService.WarningMessage("", "").ReturnsForAnyArgs([]);
         var service = CreateService(recoverTicketsService, notificationService);
 
         // Act
@@ -170,7 +167,7 @@ public class RecoverBetServiceTest
         var recoverTicketsService = Substitute.For<RecoverTicketsService>();
         recoverTicketsService.ExecuteQuery(query).ReturnsForAnyArgs(model);
         var notificationService = Substitute.For<NotificationService>();
-        notificationService.WarningMessage("", "").ReturnsForAnyArgs(new List<Result>());
+        notificationService.WarningMessage("", "").ReturnsForAnyArgs([]);
         var service = CreateService(recoverTicketsService, notificationService);
 
         // Act
@@ -300,7 +297,7 @@ public class RecoverBetServiceTest
         var recoverTicketsService = Substitute.For<RecoverTicketsService>();
         recoverTicketsService.ExecuteQuery(query).ReturnsForAnyArgs(model);
         var notificationService = Substitute.For<NotificationService>();
-        notificationService.WarningMessage("", "").ReturnsForAnyArgs(new List<Result>());
+        notificationService.WarningMessage("", "").ReturnsForAnyArgs([]);
         var service = CreateService(recoverTicketsService, notificationService);
 
         // Act
@@ -334,7 +331,7 @@ public class RecoverBetServiceTest
         var recoverTicketsService = Substitute.For<RecoverTicketsService>();
         recoverTicketsService.ExecuteQuery(query).ReturnsForAnyArgs(model);
         var notificationService = Substitute.For<NotificationService>();
-        notificationService.WarningMessage("", "").ReturnsForAnyArgs(new List<Result>());
+        notificationService.WarningMessage("", "").ReturnsForAnyArgs([]);
         var service = CreateService(recoverTicketsService, notificationService);
 
         // Act
@@ -367,7 +364,7 @@ public class RecoverBetServiceTest
         var format = StringResource.WarningAutoReSettleTransIds;
         var recoverTicketsService = Substitute.For<RecoverTicketsService>();
         var notificationService = Substitute.For<NotificationService>();
-        notificationService.WarningMessage("", "").ReturnsForAnyArgs(new List<Result>());
+        notificationService.WarningMessage("", "").ReturnsForAnyArgs([]);
         recoverTicketsService.ExecuteQuery(query).ReturnsForAnyArgs(model);
         var service = CreateService(recoverTicketsService, notificationService);
 

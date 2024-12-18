@@ -23,28 +23,14 @@ public interface RecoverTicketsService
     IEnumerable<Result> CreateMessage(RecoverTicketsModel model);
 }
 
-public class RecoverTicketsServiceImp : RecoverTicketsService
+public class RecoverTicketsServiceImp(
+    Repository repository,
+    SessionService sessionService,
+    LoggingService loggingService,
+    SendMessageService sendMessageService,
+    EmailRecoverService<MailTicketViewModel, RecoverTicketModel> emailService)
+    : RecoverTicketsService
 {
-    private readonly Repository repository;
-    private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
-    private readonly SendMessageService sendMessageService;
-    private readonly EmailRecoverService<MailTicketViewModel, RecoverTicketModel> emailService;
-
-    public RecoverTicketsServiceImp(
-        Repository repository,
-        SessionService sessionService,
-        LoggingService loggingService,
-        SendMessageService sendMessageService,
-        EmailRecoverService<MailTicketViewModel, RecoverTicketModel> emailService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.loggingService = loggingService;
-        this.sendMessageService = sendMessageService;
-        this.emailService = emailService;
-    }
-
     public async Task<RecoverTicketsModel> RecoverTickets(RecoverTicketsQuery query)
     {
         try
@@ -63,7 +49,7 @@ public class RecoverTicketsServiceImp : RecoverTicketsService
             return new RecoverTicketsModel
             {
                 Validation = validation,
-                Tickets = Enumerable.Empty<RecoverTicketModel>()
+                Tickets = []
             };
         }
     }

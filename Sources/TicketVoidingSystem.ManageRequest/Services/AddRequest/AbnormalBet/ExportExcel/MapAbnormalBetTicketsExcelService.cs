@@ -17,20 +17,12 @@ public interface MapAbnormalBetTicketsExcelService
         IEnumerable<GetAbnormalBetTicketModel> abnormalBetTickets);
 }
 
-public class MapAbnormalBetTicketsExcelServiceImp : MapAbnormalBetTicketsExcelService
+public class MapAbnormalBetTicketsExcelServiceImp(
+    IMapper mapper,
+    RemotingRefWrapperService remotingRefWrapperService,
+    BetListService betListService)
+    : MapAbnormalBetTicketsExcelService
 {
-    private readonly BetListService betListService;
-    private readonly IMapper mapper;
-    private readonly RemotingRefWrapperService remotingRefWrapperService;
-
-    public MapAbnormalBetTicketsExcelServiceImp(IMapper mapper, RemotingRefWrapperService remotingRefWrapperService,
-        BetListService betListService)
-    {
-        this.mapper = mapper;
-        this.remotingRefWrapperService = remotingRefWrapperService;
-        this.betListService = betListService;
-    }
-
     public IEnumerable<AbnormalBetTicketViewModel> MapDataToAbnormalBetTicketViewModel(
         IEnumerable<GetAbnormalBetTicketModel> abnormalBetTickets)
     {

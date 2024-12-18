@@ -5,17 +5,11 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest.ExportExcel;
 
-public class GetTicketsWorksheetService : WorkSheetService<GetTicketsQuery>
+public class GetTicketsWorksheetService(
+    GetTicketsForExportExcelService getTicketsForExportExcelService,
+    CellService cellService)
+    : WorkSheetService<GetTicketsQuery>
 {
-    private readonly CellService cellService;
-    private readonly GetTicketsForExportExcelService getTicketsForExportExcelService;
-
-    public GetTicketsWorksheetService(GetTicketsForExportExcelService getTicketsForExportExcelService, CellService cellService)
-    {
-        this.getTicketsForExportExcelService = getTicketsForExportExcelService;
-        this.cellService = cellService;
-    }
-
     public async Task BindingContent(ExcelWorksheet worksheet, GetTicketsQuery model)
     {
         bool isHasMatch;

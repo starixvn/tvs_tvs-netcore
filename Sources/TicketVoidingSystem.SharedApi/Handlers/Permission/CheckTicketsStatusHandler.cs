@@ -27,21 +27,13 @@ public class CheckTicketsStatusRequest : IRequest<SqlResult>
     public bool? IsCashOutAsUnSettledTicket { get; set; }
 }
 
-public class CheckTicketsStatusHandler : IRequestHandler<CheckTicketsStatusRequest, SqlResult>
+public class CheckTicketsStatusHandler(
+    IDynamicRepository repository,
+    IMapper mapper,
+    SessionService sessionService,
+    CheckTicketsStatusService checkTicketsStatusService)
+    : IRequestHandler<CheckTicketsStatusRequest, SqlResult>
 {
-    private readonly IDynamicRepository repository;
-    private readonly IMapper mapper;
-    private readonly SessionService sessionService;
-    private readonly CheckTicketsStatusService checkTicketsStatusService;
-
-    public CheckTicketsStatusHandler(IDynamicRepository repository, IMapper mapper, SessionService sessionService, CheckTicketsStatusService checkTicketsStatusService)
-    {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.sessionService = sessionService;
-        this.checkTicketsStatusService = checkTicketsStatusService;
-    }
-
     public async Task<SqlResult> Handle(CheckTicketsStatusRequest request, CancellationToken cancellationToken)
     {
         if (request.ApiKey.Equals("void-by-bet-id-check-void-bet-permission", StringComparison.InvariantCultureIgnoreCase))

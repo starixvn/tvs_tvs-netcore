@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -42,7 +41,7 @@ public class MarkTicketsServiceTests : IClassFixture<AppSettingFixture>
                 new() { ErrorCode = 1, ErrorMsg = e.Message },
                 new() { ErrorCode = 1, ErrorMsg = e.Message },
                 new() { ErrorCode = 1, ErrorMsg = e.Message } },
-            MarkedTickets = Enumerable.Empty<long>()
+            MarkedTickets = []
         };
 
         // Act
@@ -60,10 +59,10 @@ public class MarkTicketsServiceTests : IClassFixture<AppSettingFixture>
         sessionService.GetClientIp().ReturnsForAnyArgs("127:00:42");
         sessionService.UserId.ReturnsForAnyArgs(1);
         var results = new List<Result> { new() };
-        List<long> transIds = null;
+        List<long> transIds;
         SiteDbGroupConstant.ServerList.ForEach(x =>
         {
-            transIds = new List<long> { x.Id };
+            transIds = [x.Id];
             repository.FetchMultipleAsync<Result, long>(Arg.Is<MarkTicketsCommand>(y => y.SiteDbGroupId == x.Id)).Returns((results, transIds));
         });
         var expected = new MarkTicketsResult

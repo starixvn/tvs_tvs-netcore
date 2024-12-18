@@ -11,19 +11,11 @@ using TicketVoidingSystem.SharedApi.Models.MessageTemplate;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.MessageTemplate;
 
-public class GetTemplateAbnormalBetRequest : IRequest<object>
+public class GetTemplateAbnormalBetRequest : IRequest<object>;
+
+public class GetTemplateAbnormalBetHandler(IDynamicRepository repository)
+    : IRequestHandler<GetTemplateAbnormalBetRequest, object>
 {
-}
-
-public class GetTemplateAbnormalBetHandler : IRequestHandler<GetTemplateAbnormalBetRequest, object>
-{
-    private readonly IDynamicRepository repository;
-
-    public GetTemplateAbnormalBetHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<object> Handle(GetTemplateAbnormalBetRequest request, CancellationToken cancellationToken)
     {
         var subIssueTypes = await repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria()).ConfigureAwait(false);

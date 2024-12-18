@@ -9,27 +9,16 @@ namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 public interface InsertVoidingHistoryService
 {
-    Task<int> InsertVoidingHistory(InsertQueueQuery query, int siteDbGroupId, string broadcastSessionId);
+    Task<int> InsertVoidingHistory(InsertQueueQuery query, int siteDbGroupId, string broadcastSessionId, string transIds);
 }
 
-public class InsertVoidingHistoryServiceImp : InsertVoidingHistoryService
+public class InsertVoidingHistoryServiceImp(
+    IDynamicRepository repository,
+    SessionService sessionService,
+    LoggingService loggingService)
+    : InsertVoidingHistoryService
 {
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
-
-    public InsertVoidingHistoryServiceImp(
-        IDynamicRepository repository,
-        SessionService sessionService,
-        LoggingService loggingService
-    )
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.loggingService = loggingService;
-    }
-
-    public async Task<int> InsertVoidingHistory(InsertQueueQuery query, int siteDbGroupId, string broadcastSessionId)
+    public async Task<int> InsertVoidingHistory(InsertQueueQuery query, int siteDbGroupId, string broadcastSessionId, string transIds)
     {
         var command = new InsertVoidingHistoryCriteria
         {
@@ -37,6 +26,7 @@ public class InsertVoidingHistoryServiceImp : InsertVoidingHistoryService
             UserId = sessionService.UserId,
             SiteDbGroupId = siteDbGroupId,
             BroadcastSessionId = broadcastSessionId,
+            TransIds = transIds,
             VoidData = CreateVoidDataXmlModel(query).ToXml()
         };
 

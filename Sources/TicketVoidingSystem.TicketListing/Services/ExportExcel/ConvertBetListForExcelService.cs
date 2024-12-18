@@ -16,15 +16,8 @@ public interface ConvertBetListForExcelService
     string ChoiceHtmlToText(string html, string betId);
 }
 
-public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
+public class ConvertBetListForExcelServiceImp(IDynamicRepository repository) : ConvertBetListForExcelService
 {
-    private readonly IDynamicRepository repository;
-
-    public ConvertBetListForExcelServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public decimal? WinLossHtmlToText(string html)
     {
         var doc = new HtmlDocument();
@@ -44,7 +37,7 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
             _ when html.Contains(HtmlClass.Lucky3) => GetChoiceLucky3(doc),
             _ when html.Contains(HtmlClass.CombinationLink) => GetChoiceSingleMatchParlay(doc, betId),
             _ when html.Contains(HtmlClass.BetTypeDescription) => GetChoiceBetTypeDescription(doc, html, choice),
-            _ => GetChoiceRefund(doc, html, choice),
+            _ => GetChoiceRefund(doc, html, choice)
         };
     }
 

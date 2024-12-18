@@ -7,47 +7,44 @@ using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Void;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
+
+public class SendEmailServiceTests
 {
-    public class SendEmailServiceTests
+    private readonly SitesEmailService sitesEmailService;
+    private readonly SendEmailServiceImp service;
+
+    public SendEmailServiceTests()
     {
-        private readonly SitesEmailService sitesEmailService;
-        private readonly SendEmailServiceImp service;
+        sitesEmailService = Substitute.For<SitesEmailService>();
+        var emailLicenseeService = Substitute.For<EmailLicenseeService>();
+        var emailCashOutService = Substitute.For<EmailCashOutService>();
+        var emailItQaService = Substitute.For<EmailItQaService>();
+        var emailItSupportService = Substitute.For<EmailItSupportService>();
 
-        public SendEmailServiceTests()
-        {
-            sitesEmailService = Substitute.For<SitesEmailService>();
-            var emailLicenseeService = Substitute.For<EmailLicenseeService>();
-            var emailCashOutService = Substitute.For<EmailCashOutService>();
-            var emailItQaService = Substitute.For<EmailItQaService>();
-            var emailItSupportService = Substitute.For<EmailItSupportService>();
+        service = new SendEmailServiceImp(
+            sitesEmailService,
+            emailLicenseeService,
+            emailCashOutService,
+            emailItQaService,
+            emailItSupportService
+        );
+    }
 
-            service = new SendEmailServiceImp(
-                sitesEmailService,
-                emailLicenseeService,
-                emailCashOutService,
-                emailItQaService,
-                emailItSupportService
-            );
-        }
+    [Fact]
+    public async Task SendEmail_ReturnsResultsFromEmailServices()
+    {
+        // Arrange
+        var model = new EmailVoidModel();
+        var tickets = new List<TicketEmailModel>();
+        var expectedResults = new List<Result>();
 
-        [Fact]
-        public async Task SendEmail_ReturnsResultsFromEmailServices()
-        {
-            // Arrange
-            var model = new EmailVoidModel();
-            var tickets = new List<TicketEmailModel>();
-            var expectedResults = new List<Result>();
+        sitesEmailService.GetSitesByCategory(Arg.Any<int>()).Returns(new List<SiteEmail>());
 
-            sitesEmailService.GetSitesByCategory(Arg.Any<int>()).Returns(new List<SiteEmail>());
+        // Act
+        var results = await service.SendEmail(model, tickets, true);
 
-            // Act
-            var results = await service.SendEmail(model, tickets, true);
-
-            // Assert
-            AssertExtension.Equal(expectedResults, results);
-        }
-
-
+        // Assert
+        AssertExtension.Equal(expectedResults, results);
     }
 }

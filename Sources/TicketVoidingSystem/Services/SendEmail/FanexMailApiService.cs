@@ -15,11 +15,9 @@ public interface FanexMailApiService
     Task WriteLog(EmailGroup group, Exception exception);
 }
 
-public class FanexMailApiServiceImp : FanexMailApiService
+public class FanexMailApiServiceImp(LoggingService loggingService, SpecialPlatformService specialPlatformService)
+    : FanexMailApiService
 {
-    private readonly LoggingService loggingService;
-    private readonly SpecialPlatformService specialPlatformService;
-
     private static readonly IDictionary<EmailGroup, string> ErrorEmailMap = new Dictionary<EmailGroup, string>
     {
         { EmailGroup.Csd, ErrorSendEmail.Csd },
@@ -28,12 +26,6 @@ public class FanexMailApiServiceImp : FanexMailApiService
         { EmailGroup.ItQa, ErrorSendEmail.It },
         { EmailGroup.ItSupport, ErrorSendEmail.It }
     };
-
-    public FanexMailApiServiceImp(LoggingService loggingService, SpecialPlatformService specialPlatformService)
-    {
-        this.loggingService = loggingService;
-        this.specialPlatformService = specialPlatformService;
-    }
 
     public void SendEmail(MailRecord mailRecord, SiteEmail site)
     {

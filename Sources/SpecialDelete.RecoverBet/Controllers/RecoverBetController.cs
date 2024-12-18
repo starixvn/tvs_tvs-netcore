@@ -10,15 +10,8 @@ namespace SpecialDelete.RecoverBet.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class RecoverBetController : ControllerBase
+public class RecoverBetController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public RecoverBetController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverSportsbookBet)]
     public async Task<JsonResult> GetTickets(GetTicketsRequest request) => this.JsonResultPascalCase(await mediator.Send(request));

@@ -60,10 +60,7 @@ public class VoidByCurrencyServiceTest
         var dateTime = DateTimeOffset.Now.DateTime;
         var expected = new TicketsViewModel
         {
-            Groups = new List<Group<TicketViewModel>>
-            {
-                new() { Name = "Test" }
-            },
+            Groups = [new Group<TicketViewModel> { Name = "Test" }],
             TotalItems = 1,
             FromTransTime = dateTime.ZoneManila(),
             ToTransTime = dateTime.ZoneManila()
@@ -102,10 +99,7 @@ public class VoidByCurrencyServiceTest
 
         var expected = new TicketsViewModel
         {
-            Groups = new List<Group<TicketViewModel>>
-            {
-                new() { Name = "Test" }
-            },
+            Groups = [new Group<TicketViewModel> { Name = "Test" }],
             TotalItems = 0
         };
 
@@ -271,7 +265,7 @@ public class VoidByCurrencyServiceTest
             new() { TransId = "124" },
             new() { TransId = "125" }
         };
-        var model = new VoidTicketsModel { Validation = validation, Tickets = Enumerable.Empty<TicketEmailModel>() };
+        var model = new VoidTicketsModel { Validation = validation, Tickets = [] };
         var expected = new List<Result>
             { new() { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg } };
         var query = new VoidTicketsQuery { CricketTransIds = new List<BetId> { new() { TransId = "123" } }, Tickets = tickets };
@@ -303,7 +297,7 @@ public class VoidByCurrencyServiceTest
         var model = new VoidTicketsModel
         {
             Validation = validation,
-            Tickets = Enumerable.Empty<TicketEmailModel>()
+            Tickets = []
         };
         var query = new VoidTicketsQuery
         { CricketTransIds = new List<BetId> { new() { TransId = "123" } }, Tickets = tickets };

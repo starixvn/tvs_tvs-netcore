@@ -16,19 +16,9 @@ public interface VoidByBetIdRepository
     Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query);
 }
 
-public class VoidByBetIdRepositoryImp : VoidByBetIdRepository
+public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
+    : VoidByBetIdRepository
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-
-    public VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.sessionService = sessionService;
-    }
-
     public async Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int MatchId)> GetTickets(GetTicketsQuery query)
     {
         var criteria = mapper.Map<GetTicketsCriteria>(query);

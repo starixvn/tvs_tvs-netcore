@@ -12,12 +12,18 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="mg-bottom-5">
+          <div class="mb-2">
             <div>Please double check below type if correct before proceeding</div>
             <div class="ml-2">
-              <div>Issue Type: <strong>{{model.issueTypeName}}</strong></div>
-              <div *ngIf="model.subIssueTypeName">Sub Type: <strong>{{model.subIssueTypeName}}</strong></div>
-              <div>Action: <strong>{{model.voidAction}}</strong></div>
+              <div>Issue Type: <strong>{{issueTypeName}}</strong></div>
+              <div *ngIf="model.isShowSubIssueType">Sub Type: <strong>{{subIssueTypeName}}</strong></div>
+              <div>Action: <strong>{{actionName}}</strong></div>
+            </div>
+          </div>
+          <div class="mb-2 extra-warning" *ngIf="model.extraWarningModel">
+            <div>{{model.extraWarningModel.title}}</div>
+            <div class="ml-2">
+              <div *ngFor="let message of model.extraWarningModel.messages" [innerHTML]="message"></div>
             </div>
           </div>
           <div class="warning-content">

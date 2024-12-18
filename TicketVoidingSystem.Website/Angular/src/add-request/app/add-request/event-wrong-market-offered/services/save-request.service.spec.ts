@@ -1,5 +1,4 @@
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
@@ -8,7 +7,7 @@ import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.mo
 import { OthersModel } from '../../others/others.model';
 import { PopupService } from '../../services/popup.service';
 import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-offered.model';
-import { LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
+import { LogInfoItem, LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventWrongMarketOfferedService } from './event-wrong-market-offfered.service';
@@ -19,16 +18,13 @@ import { ValidationService } from './validation.service';
 class Helper {
   static readonly fromDate = '2021-12-18 12:08:49.737';
   static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterWrongMarketOfferedModel: FilterWrongMarketOfferedModel = {
+  static readonly fakeFilterWrongMarketOfferedModel: FilterWrongMarketOfferedModel[] = [{
     fromDateTime: Helper.fromDate,
     toDateTime: Helper.toDate
-  };
+  }] as FilterWrongMarketOfferedModel[];
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
-    filterWrongMarketOfferedModel: Helper.fakeFilterWrongMarketOfferedModel,
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
-    betTypeCount: [],
+    filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
     betTeamsResult: []
   } as LogInfoWrongMarketOffered;
 }
@@ -144,22 +140,16 @@ describe('SaveRequestService', () => {
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
     service['proceedSaveRequest'] = jest.fn();
-
     const validationService = new ValidationService();
-    validationService.checkCanShowConfirmationWrongMarketOffered = jest.fn().mockImplementation(() => true);
-
     const popupService = new PopupService(null);
     const spyShowConfirm = jest.spyOn(popupService, 'showConfirm').mockImplementation(() => {});
-
     const saveRequestService = new SaveRequestService(validationService, null, popupService, null, null);
     saveRequestService['getMessageConfirmationWrongMarketOffered'] = jest.fn().mockImplementation(() => 'aaa');
     saveRequestService['onClickConfirmSave'] = jest.fn();
 
     saveRequestService['proceedSaveRequest'](saveRequestArg);
 
-    expect(validationService.checkCanShowConfirmationWrongMarketOffered).toHaveBeenCalledTimes(1);
     expect(saveRequestService['getMessageConfirmationWrongMarketOffered']).toHaveBeenCalledTimes(1);
-
     expect(spyShowConfirm.mock.calls[0][0]).toEqual('aaa');
     expect(spyShowConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
     expect(spyShowConfirm.mock.calls[0][2]).toBeInstanceOf(Function);
@@ -174,14 +164,11 @@ describe('SaveRequestService', () => {
   it('#proceedSaveRequest should called #executeSaveRequestApi', async () => {
     const saveRequestArg = new SaveRequestArg();
     const validationService = new ValidationService();
-    validationService.checkCanShowConfirmationWrongMarketOffered = jest.fn().mockImplementation(() => false);
-
     const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
     saveRequestService['executeSaveRequestApi'] = jest.fn();
 
     saveRequestService['proceedSaveRequest'](saveRequestArg);
 
-    expect(validationService.checkCanShowConfirmationWrongMarketOffered).toHaveBeenCalledTimes(1);
     expect(saveRequestService['executeSaveRequestApi']).toHaveBeenCalledTimes(1);
   });
 
@@ -198,8 +185,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.filter.action = '2';
     saveRequestArg.actionIdOfFirstTimeAccess = '5';
     saveRequestArg.logInfoEvent = Helper.fakeLogInfoWrongMarketOffered;
-    saveRequestArg.logInfoEvent.logInfoDetail.settleCount = 1;
-    saveRequestArg.logInfoEvent.messageValidationLogInfo.push({ isError: false, reason: 'aaa'});
+    saveRequestArg.logInfoEvent.logInfoItems = [{ logInfoDetail: { settleCount: 1 } } as LogInfoItem];
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);
@@ -214,7 +200,6 @@ describe('SaveRequestService', () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.isEdit = false;
     saveRequestArg.logInfoEvent = new LogInfoWrongMarketOffered();
-    saveRequestArg.logInfoEvent.messageValidationLogInfo = null;
 
     const actual = service['getMessageConfirmationWrongMarketOffered'](saveRequestArg);
 

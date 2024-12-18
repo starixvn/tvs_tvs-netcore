@@ -1,13 +1,13 @@
 import { SimpleChange } from '@angular/core';
-import { IssueInfo } from '../../../../utility/models/issue-type.model';
-import { RequestInfoComponent } from './request-info.component';
-import { TicketListModal } from '../ticket-list.modal';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
-import { GeneralInfo, GeneralInfoViewModel } from './request-info.model';
 import { NgbAccordionConfig } from '@ng-bootstrap/ng-bootstrap';
-import { AppService } from '../../app.service';
-import { TicketsModel } from '../tickets/tickets.model';
+import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { IssueInfo } from '../../../../utility/models/issue-type.model';
+import { AppService } from '../../app.service';
+import { TicketListModal } from '../ticket-list.modal';
+import { TicketsModel } from '../tickets/tickets.model';
+import { RequestInfoComponent } from './request-info.component';
+import { GeneralInfo, GeneralInfoViewModel } from './request-info.model';
 
 describe('RequestInfoComponent', () => {  
   let fakeTicketListModal = {matchId: 1} as TicketListModal;
@@ -26,13 +26,12 @@ describe('RequestInfoComponent', () => {
     let component = new RequestInfoComponent(null, null, config);
     const fakeFunctionGetDataCurrentTab = jest.fn();
     component['getDataCurrentTab'] = fakeFunctionGetDataCurrentTab;
-    const dataTests = [{selectedMatchId: 1, activeTab: "1"}, {selectedMatchId: null, activeTab: "0"}];
+    const dataTests = [{activeTab: "1"}, {activeTab: "0"}];
     component.ticketListModal = fakeTicketListModal;
     
     // Action and Assert
-    dataTests.forEach(x => {
-      component.selectedMatchId = x.selectedMatchId;
-      component.ngOnInit();
+    dataTests.forEach(async x => {
+      await component.ngOnInit();
       expect(fakeFunctionGetDataCurrentTab).toBeCalled();
       expect(component.paging.pageSize).toBe(500);
       expect(component.activeTab).toBe(x.activeTab);

@@ -15,8 +15,6 @@ public interface DisplayUiService
 {
     Task<GetTicketsModel> ExecuteQuery(GetTicketsQuery query);
 
-    GetTicketsVoidCashOutCriteria CreateCriteria(GetTicketsQuery query);
-
     List<GetTicketModel> Paging(List<GetTicketModel> tickets, int index, int size);
 
     List<Group<GetTicketModel>> Groups(List<GetTicketModel> tickets);
@@ -24,29 +22,19 @@ public interface DisplayUiService
     Task<Group<TicketViewModel>> Assign(Group<GetTicketModel> groupTickets);
 }
 
-public class DisplayUiServiceImp : DisplayUiService
+public class DisplayUiServiceImp(
+    Repository repository,
+    SessionService sessionService,
+    TicketHtmlService ticketHtmlService)
+    : DisplayUiService
 {
-    private readonly Repository repository;
-    private readonly SessionService sessionService;
-    private readonly TicketHtmlService ticketHtmlService;
-
-    public DisplayUiServiceImp(
-        Repository repository,
-        SessionService sessionService,
-        TicketHtmlService ticketHtmlService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.ticketHtmlService = ticketHtmlService;
-    }
-
     public async Task<GetTicketsModel> ExecuteQuery(GetTicketsQuery query)
     {
         var criteria = CreateCriteria(query);
         return await repository.GetTicketsVoidCashOut(criteria);
     }
 
-    public GetTicketsVoidCashOutCriteria CreateCriteria(GetTicketsQuery query)
+    private GetTicketsVoidCashOutCriteria CreateCriteria(GetTicketsQuery query)
     {
         return new GetTicketsVoidCashOutCriteria
         {

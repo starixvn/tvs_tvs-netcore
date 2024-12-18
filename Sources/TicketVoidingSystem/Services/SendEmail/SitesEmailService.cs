@@ -20,17 +20,9 @@ public interface SitesEmailService
     SiteEmail GetSiteByName(IEnumerable<SiteEmail> sites, string name);
 }
 
-public class SitesEmailServiceImp : SitesEmailService
+public class SitesEmailServiceImp(IDynamicRepository repository, SpecialPlatformService specialPlatformService)
+    : SitesEmailService
 {
-    private readonly IDynamicRepository repository;
-    private readonly SpecialPlatformService specialPlatformService;
-
-    public SitesEmailServiceImp(IDynamicRepository repository, SpecialPlatformService specialPlatformService)
-    {
-        this.repository = repository;
-        this.specialPlatformService = specialPlatformService;
-    }
-
     public async Task<IEnumerable<SiteEmail>> GetSites()
     {
         var mailingListCriteria = new MailingListCriteria();
@@ -52,7 +44,7 @@ public class SitesEmailServiceImp : SitesEmailService
         return sites;
     }
 
-    private static List<SiteEmail> ExcludeTestSites(List<SiteEmail> sites)
+    private static List<SiteEmail> ExcludeTestSites(IEnumerable<SiteEmail> sites)
     {
         var testSiteNames = new[] { "spondemo", "athena000" };
         return sites.Where(s => !Array.Exists(testSiteNames, t => t.Equals(s.Site, StringComparison.CurrentCultureIgnoreCase)))

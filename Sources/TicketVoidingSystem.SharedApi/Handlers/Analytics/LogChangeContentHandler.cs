@@ -12,15 +12,9 @@ public class LogChangeContentRequest : IRequest<bool>
     public string? LogContent { get; set; }
 }
 
-public class LogChangeContentHandler : IRequestHandler<LogChangeContentRequest, bool>
+public class LogChangeContentHandler(UserActionLogService userActionLogService)
+    : IRequestHandler<LogChangeContentRequest, bool>
 {
-    private readonly UserActionLogService userActionLogService;
-
-    public LogChangeContentHandler(UserActionLogService userActionLogService)
-    {
-        this.userActionLogService = userActionLogService;
-    }
-
     public async Task<bool> Handle(LogChangeContentRequest request, CancellationToken cancellationToken)
     {
         return await userActionLogService.LogChangeContent(request.FunctionName, request.LogContent);

@@ -11,7 +11,7 @@ import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { RequestStatus } from '../../../utility/models/signal-r.model';
 import { StaticService } from '../../../utility/services/static.service';
-import { TicketListModal } from '../ticket-list/ticket-list.modal';
+import { TabInfoRequest, TicketListModal } from '../ticket-list/ticket-list.modal';
 import { CommonService } from './../../../utility/services/common.service';
 import { AppService } from './../app.service';
 import { PermissionManage } from './../models/permission-manage.model';
@@ -136,16 +136,45 @@ export class RequestListComponent implements OnInit, OnChanges {
     this.displayedModels = this.models.slice(this.paging.begin - 1, this.paging.end);
   }
 
-  showTickets(request: RequestModel, matchId: number) {
+  showTickets(request: RequestModel, matchId: number, requestDetailId: number) {
     if (this.isCanClickNoOfTickets()) {
       this.ticketListModal = {
         open: true,
         minimize: false,
         requestId: request.requestId,
         matchId,
-        allMatchIdsInRequest: request.details.map(x => x.matchId).join(','),
+        requestDetailId,
+        tabInfoRequest: this.updateTabInfoRequest(request, matchId, requestDetailId)
       };
     }
+  }
+
+  private updateTabInfoRequest(request: RequestModel, matchId: number, requestDetailId: number): TabInfoRequest[] {
+    return request.details.map((detail, index) => ({
+      id: index + 1,
+      isActive: this.checkActivedTab(request, detail, matchId, requestDetailId),
+      matchId: detail.matchId,
+      requestDetailId: detail.requestDetailId,
+      name: this.getTabName(request.issueTypeId, detail.matchId, index)
+    } as TabInfoRequest));
+  }
+
+  private getTabName(issueTypeId: number, matchId: number, index: number): string {
+    return matchId && !this.isMatchIdParlay(matchId)
+      ? StaticService.isWrongMarketOffered(issueTypeId) ? `${matchId} (${index + 1})` : `${matchId}`
+      : 'General Info';
+  }
+
+  private isMatchIdParlay(matchId: number) {
+    return matchId === 29 || matchId === 11099 || matchId === 2799 || matchId === 10499;
+  }
+
+  private checkActivedTab(request: RequestModel, detailRequestModel: DetailRequestModel, matchId: number, requestDetailId: number): boolean {
+    if (StaticService.isWrongMarketOffered(request.issueTypeId)) {
+      return detailRequestModel.requestDetailId === requestDetailId;
+    }
+
+    return detailRequestModel.matchId === matchId;
   }
 
   confirmCheckBy(item: RequestModel) {
@@ -208,19 +237,15 @@ export class RequestListComponent implements OnInit, OnChanges {
       if (request) {
         request.status = x.status;
         if (x.simpleInfo) {
-          if (this.isIssueTypeHaveMultipleMatches(request.issueTypeId, request.filterBy)) {
+          request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
+          if (this.isDifferenceByMatchId(request)) {
             const detail = request.details.find(y => y.matchId === x.simpleInfo.matchId);
-            request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
-            detail.totalSingleProcessed = x.simpleInfo.totalSingleProcessed;
-            detail.totalParlayProcessed = x.simpleInfo.totalParlayProcessed;
-            detail.totalCancelCashOutProcessed = x.simpleInfo.totalCancelCashOutProcessed;
-            detail.totalResettleProcessed = x.simpleInfo.totalResettleProcessed;
+            this.updateDetail(detail, x);
+          } else if (this.isDifferenceByRequestDetailId(request)) {
+            const detail = request.details.find(y => y.requestDetailId === x.simpleInfo.matchId);
+            this.updateDetail(detail, x);
           } else {
-            request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
-            request.details[0].totalSingleProcessed = x.simpleInfo.totalSingleProcessed;
-            request.details[0].totalParlayProcessed = x.simpleInfo.totalParlayProcessed;
-            request.details[0].totalCancelCashOutProcessed = x.simpleInfo.totalCancelCashOutProcessed;
-            request.details[0].totalResettleProcessed = x.simpleInfo.totalResettleProcessed;
+            this.updateDetail(request.details[0], x);
           }
         }
       }
@@ -229,8 +254,19 @@ export class RequestListComponent implements OnInit, OnChanges {
     this.changeDetectorRef.detectChanges();
   }
 
-  private isIssueTypeHaveMultipleMatches(issueTypeId: number, filterBy: number): boolean {
-     return this.isSimpleMatch(issueTypeId) || this.isConditionalMatch(issueTypeId, filterBy);
+  private updateDetail(detail: DetailRequestModel, status: RequestStatus) {
+    detail.totalSingleProcessed = status.simpleInfo.totalSingleProcessed;
+    detail.totalParlayProcessed = status.simpleInfo.totalParlayProcessed;
+    detail.totalCancelCashOutProcessed = status.simpleInfo.totalCancelCashOutProcessed;
+    detail.totalResettleProcessed = status.simpleInfo.totalResettleProcessed;
+  };
+
+  private isDifferenceByRequestDetailId(request: RequestModel): boolean {
+    return [IssueTypeConstant.WRONG_MARKET_OFFERED, IssueTypeConstant.TECHNICAL_ERROR].includes(request.issueTypeId.toString());
+  }
+
+  private isDifferenceByMatchId(request: RequestModel): boolean {
+    return this.isSimpleMatch(request.issueTypeId) || this.isConditionalMatch(request.issueTypeId, request.filterBy);
   }
 
   public isSimpleMatch(issueTypeId: number): boolean {
@@ -253,32 +289,33 @@ export class RequestListComponent implements OnInit, OnChanges {
     return filterBy === null && StaticService.isAbnormalBet(issueTypeId.toString());
   }
 
-  public async copyRequestDescriptionSingleMatch(item: RequestModel, matchId: number): Promise<void> {
+  public async copyRequestDescriptionSingleMatch(item: RequestModel, matchId: number, requestDetailId: number): Promise<void> {
     item.processingCopyDescriptionClass = 'fas fa-spinner fa-spin copy-request-info disable-icon';
-    await this.requestDescriptionService.copyToClipboard(item.requestId, matchId);
+    await this.requestDescriptionService.copyToClipboard(item.requestId, matchId, requestDetailId);
     item.processingCopyDescriptionClass = 'fa fa-paste copy-request-info';
   }
 
 
   public async copyRequestDescriptionMultiMatches(item: RequestModel, matchId: number, detail: DetailRequestModel): Promise<void> {
     detail.processingCopyDescriptionClass = 'fas fa-spinner fa-spin copy-request-info disable-icon';
-    await this.requestDescriptionService.copyToClipboard(item.requestId, matchId);
+    await this.requestDescriptionService.copyToClipboard(item.requestId, matchId, detail.requestDetailId);
     detail.processingCopyDescriptionClass = 'fa fa-paste copy-request-info';
   }
 
   public isCanCopyRequestDescription(issueTypeId: number): boolean {
     const issueTypeStr = issueTypeId.toString();
     return [
-        StaticService.isDangerAccepted,
-        StaticService.isRedCard,
-        StaticService.isWrongScore,
-        StaticService.isReducedOver,
-        StaticService.isAbandoned,
-        StaticService.isNotParticipate,
-        StaticService.isLikelyWrongMarketOffered,
-        StaticService.isWrongOddsSportsBook
+      StaticService.isDangerAccepted,
+      StaticService.isRedCard,
+      StaticService.isWrongScore,
+      StaticService.isReducedOver,
+      StaticService.isAbandoned,
+      StaticService.isNotParticipate,
+      StaticService.isWrongMarketOffered,
+      StaticService.isTechnicalError,
+      StaticService.isWrongOddsSportsBook
     ].some(fn => fn(issueTypeStr));
-}
+  }
 
   public getDetailTotalTickets(issueTypeId: number, detail: DetailRequestModel): string {
     const info: string[] = [];

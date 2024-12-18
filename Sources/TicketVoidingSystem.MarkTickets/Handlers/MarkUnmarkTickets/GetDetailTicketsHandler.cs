@@ -13,29 +13,15 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 
-public class GetDetailTicketsRequest : GetDetailTicketsQuery, IRequest<TicketsViewModel>
+public class GetDetailTicketsRequest : GetDetailTicketsQuery, IRequest<TicketsViewModel>;
+
+public class GetDetailTicketsHandler(
+    GetTicketsService getTicketsService,
+    MapTicketService mapTicketService,
+    PagingService pagingService,
+    UserPermissionService userPermissionService)
+    : IRequestHandler<GetDetailTicketsRequest, TicketsViewModel>
 {
-}
-
-public class GetDetailTicketsHandler : IRequestHandler<GetDetailTicketsRequest, TicketsViewModel>
-{
-    private readonly GetTicketsService getTicketsService;
-    private readonly MapTicketService mapTicketService;
-    private readonly PagingService pagingService;
-    private readonly UserPermissionService userPermissionService;
-
-    public GetDetailTicketsHandler(
-        GetTicketsService getTicketsService,
-        MapTicketService mapTicketService,
-        PagingService pagingService,
-        UserPermissionService userPermissionService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.mapTicketService = mapTicketService;
-        this.pagingService = pagingService;
-        this.userPermissionService = userPermissionService;
-    }
-
     public async Task<TicketsViewModel> Handle(GetDetailTicketsRequest request, CancellationToken cancellationToken)
     {
         var viewModel = new TicketsViewModel();
@@ -63,7 +49,7 @@ public class GetDetailTicketsHandler : IRequestHandler<GetDetailTicketsRequest, 
     private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupTicketsViewModel(IEnumerable<GetTicketModel> tickets, GetDetailTicketsQuery message)
     {
         var pagingTickets = pagingService.Paging(tickets, message.PageIndex, message.PageSize);
-        return pagingTickets.Any() ? await CreateGroupTicketsViewModel(pagingTickets) : Enumerable.Empty<Group<TicketViewModel>>();
+        return pagingTickets.Any() ? await CreateGroupTicketsViewModel(pagingTickets) : [];
     }
 
     private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupTicketsViewModel(IEnumerable<GetTicketModel> pagingTickets)

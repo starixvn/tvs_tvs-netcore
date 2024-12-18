@@ -14,17 +14,11 @@ public interface MapDataForConfirmAutoUnmarkService
     IEnumerable<ConfirmAutoUnmarkViewModel> MapToConfirmAutoUnmarkViewModels(IEnumerable<ConfirmAutoUnmarkModel> models);
 }
 
-public class MapDataForConfirmAutoUnmarkServiceImp : MapDataForConfirmAutoUnmarkService
+public class MapDataForConfirmAutoUnmarkServiceImp(
+    RemotingRefWrapperService remotingRefService,
+    BetListService betListService)
+    : MapDataForConfirmAutoUnmarkService
 {
-    private readonly RemotingRefWrapperService remotingRefService;
-    private readonly BetListService betListService;
-
-    public MapDataForConfirmAutoUnmarkServiceImp(RemotingRefWrapperService remotingRefService, BetListService betListService)
-    {
-        this.remotingRefService = remotingRefService;
-        this.betListService = betListService;
-    }
-
     public IEnumerable<ConfirmAutoUnmarkViewModel> MapToConfirmAutoUnmarkViewModels(IEnumerable<ConfirmAutoUnmarkModel> models)
     {
         var index = 1;

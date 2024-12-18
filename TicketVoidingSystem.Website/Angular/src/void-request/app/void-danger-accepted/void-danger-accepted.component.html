@@ -1,9 +1,9 @@
 <div>
   <ng-container *ngIf="primitiveProperty.isLoadedBasicData">
-    <div *ngFor="let item of voidMatches; let id = index" class="bg-gray match-void">
+    <div *ngFor="let item of voidMatches" class="bg-gray match-void">
       <div class="full-width d-flex bg-gray match-void">
         <div class="index-of-match d-flex align-items-center">
-          <div class="number-circle"><span><strong>{{id + 1}}</strong></span></div>
+          <div class="number-circle"><span><strong>{{item.id}}</strong></span></div>
         </div>
         <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">
           <div class="alert alert-dark p-1 m-0 mb-1"><span>
@@ -16,11 +16,11 @@
             <span>Match Event: <strong class="match-text">{{item.matchModel.matchEvent}}</strong></span><br />
             <span>League: <strong class="match-text">{{item.matchModel.leagueName}}</strong></span><br />
             <span *ngIf="isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu()" class="d-flex align-items-center">
-              <input type="checkbox" id="chk-early-event-{{id}}" class="mr-1"
+              <input type="checkbox" id="chk-early-event-{{item.id}}" class="mr-1"
                 [disabled]="item.isAllLiveTickets || item.voidTicketsMini?.total === 0"
                 [(ngModel)]="item.isCheckedEarlyEvent"
                 (change)="changeCheckBoxEarlyEvent(item)"/>
-              <label class="col-form-label col-form-label-sm" for="chk-early-event-{{id}}">Early Event</label>
+              <label class="col-form-label col-form-label-sm" for="chk-early-event-{{item.id}}">Early Event</label>
             </span>
           </div>
         </div>
@@ -62,8 +62,8 @@
           [isBlock]="item.isBlockBetList" (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
           [isDisableCheckbox]="true">
         </tickets-list>
-        <message-area #messageArea [isShowTemplateMessage]="item.isShowTemplateMessage" [totalVoidTickets]="item.voidTicketsMini?.total" 
-          [templateValue]="item.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" 
+        <message-area #messageArea [isShowTemplateMessage]="item.isShowTemplateMessage" [totalVoidTickets]="item.voidTicketsMini?.total"
+          [templateValue]="item.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" [id]="item.id"
           [subIssueTypeId]="item.subIssueType.subIssueTypeId" [voidReason]="item.voidReason" [requestId]="requestDetail.request.requestId">
         </message-area>
       </div>

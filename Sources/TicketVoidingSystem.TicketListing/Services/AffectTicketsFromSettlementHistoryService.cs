@@ -10,15 +10,9 @@ public interface AffectTicketsFromSettlementHistoryService
     Task<string> GetTickets(bool isReSettled, int matchId);
 }
 
-public class AffectTicketsFromSettlementHistoryServiceImp : AffectTicketsFromSettlementHistoryService
+public class AffectTicketsFromSettlementHistoryServiceImp(IDynamicRepository repository)
+    : AffectTicketsFromSettlementHistoryService
 {
-    private readonly IDynamicRepository repository;
-
-    public AffectTicketsFromSettlementHistoryServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<string> GetTickets(bool isReSettled, int matchId)
     {
         if (!isReSettled)

@@ -12,15 +12,8 @@ public interface TicketService
     TicketEmailViewModel GetTicket(TicketEmailModel item, Match match, bool isFromAfterVoidService);
 }
 
-public class TicketServiceImp : TicketService
+public class TicketServiceImp(BetListCoreService betListCoreService) : TicketService
 {
-    private readonly BetListCoreService betListCoreService;
-
-    public TicketServiceImp(BetListCoreService betListCoreService)
-    {
-        this.betListCoreService = betListCoreService;
-    }
-
     public TicketEmailViewModel GetTicket(TicketEmailModel item, Match match, bool isFromAfterVoidService)
     {
         var ticket = betListCoreService.BuildTicket(item, match, isFromAfterVoidService);

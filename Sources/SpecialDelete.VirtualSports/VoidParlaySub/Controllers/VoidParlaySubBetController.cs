@@ -10,15 +10,8 @@ namespace SpecialDelete.VirtualSports.VoidParlaySub.Controllers;
 
 [ApiController]
 [Route("api/VirtualSports/[controller]/[action]")]
-public class VoidParlaySubBetController : ControllerBase
+public class VoidParlaySubBetController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public VoidParlaySubBetController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidParlaySubBet, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> GetTickets(GetTicketsRequest request) => Ok(await mediator.Send(request));

@@ -12,7 +12,7 @@ public class ValidationServiceImp : ValidationService
 {
     private const string PhoneBetting = "Phone Betting";
 
-    private static readonly List<string> SettledStatus = new() { TicketStatus.Draw, TicketStatus.Won, TicketStatus.Lose };
+    private static readonly List<string> SettledStatus = [TicketStatus.Draw, TicketStatus.Won, TicketStatus.Lose];
 
     public bool DisableCheckboxWithPermission(string status, UserPermission permission, string groupName)
     {

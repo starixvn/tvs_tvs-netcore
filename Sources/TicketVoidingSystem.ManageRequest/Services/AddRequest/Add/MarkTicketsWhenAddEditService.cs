@@ -10,15 +10,8 @@ public interface MarkTicketsWhenAddEditService
     Task<MarkTicketsResult> Execute(int issueTypeId, string markTransIds, string unMarkTransIds);
 }
 
-public class MarkTicketsWhenAddEditServiceImp : MarkTicketsWhenAddEditService
+public class MarkTicketsWhenAddEditServiceImp(MarkTicketsService markTicketsService) : MarkTicketsWhenAddEditService
 {
-    private readonly MarkTicketsService markTicketsService;
-
-    public MarkTicketsWhenAddEditServiceImp(MarkTicketsService markTicketsService)
-    {
-        this.markTicketsService = markTicketsService;
-    }
-
     public async Task<MarkTicketsResult> Execute(int issueTypeId, string markTransIds, string unMarkTransIds)
     {
         var combineResults = new List<Result>();

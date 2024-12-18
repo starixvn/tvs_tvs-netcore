@@ -64,7 +64,7 @@ internal class ChoiceTestCase : IEnumerable<object[]>
         new object[] { CashOut },
         new object[] { SingleHasDesc },
         new object[] { SingleParlay },
-        new object[] { Parlay },
+        new object[] { Parlay }
     };
 
     public IEnumerator<object[]> GetEnumerator() => testCase.GetEnumerator();

@@ -20,28 +20,14 @@ public interface VoidService
     Task<IEnumerable<Result>> SendEmail(VoidTicketsQuery query, IEnumerable<TicketEmailModel> tickets);
 }
 
-public class VoidServiceImp : VoidService
+public class VoidServiceImp(
+    IMapper mapper,
+    Repository repository,
+    LoggingService loggingService,
+    SendMessageByPlatformService sendMessageByPlatformService,
+    SendEmailService sendEmailService)
+    : VoidService
 {
-    private readonly IMapper mapper;
-    private readonly Repository repository;
-    private readonly LoggingService loggingService;
-    private readonly SendMessageByPlatformService sendMessageByPlatformService;
-    private readonly SendEmailService sendEmailService;
-
-    public VoidServiceImp(
-        IMapper mapper,
-        Repository repository,
-        LoggingService loggingService,
-        SendMessageByPlatformService sendMessageByPlatformService,
-        SendEmailService sendEmailService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.loggingService = loggingService;
-        this.sendMessageByPlatformService = sendMessageByPlatformService;
-        this.sendEmailService = sendEmailService;
-    }
-
     public async Task<(IEnumerable<TicketEmailModel> Tickets, Result Validation)> VoidTickets(VoidTicketsQuery query)
     {
         try
@@ -57,7 +43,7 @@ public class VoidServiceImp : VoidService
                 ErrorMsg = exception.Message
             };
 
-            return (Enumerable.Empty<TicketEmailModel>(), validation);
+            return ([], validation);
         }
     }
 

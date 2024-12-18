@@ -13,25 +13,15 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 
-public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>
+public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>;
+
+public class GetTicketsHandler(
+    GetTicketsService getTicketsService,
+    MapTicketService mapTicketService,
+    PagingService pagingService,
+    UserPermissionService userPermissionService)
+    : IRequestHandler<GetTicketsRequest, TicketsViewModel>
 {
-}
-
-public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewModel>
-{
-    private readonly GetTicketsService getTicketsService;
-    private readonly MapTicketService mapTicketService;
-    private readonly PagingService pagingService;
-    private readonly UserPermissionService userPermissionService;
-
-    public GetTicketsHandler(GetTicketsService getTicketsService, MapTicketService mapTicketService, PagingService pagingService, UserPermissionService userPermissionService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.mapTicketService = mapTicketService;
-        this.pagingService = pagingService;
-        this.userPermissionService = userPermissionService;
-    }
-
     public async Task<TicketsViewModel> Handle(GetTicketsRequest request, CancellationToken cancellationToken)
     {
         var viewModel = new TicketsViewModel();
@@ -63,7 +53,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
     private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupTicketsViewModel(IEnumerable<GetTicketModel> tickets, GetTicketsQuery message)
     {
         var pagingTickets = pagingService.Paging(tickets, message.PageIndex, message.PageSize);
-        return pagingTickets.Any() ? await CreateGroupTicketsViewModel(pagingTickets) : Enumerable.Empty<Group<TicketViewModel>>();
+        return pagingTickets.Any() ? await CreateGroupTicketsViewModel(pagingTickets) : [];
     }
 
     private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupTicketsViewModel(IEnumerable<GetTicketModel> pagingTickets)

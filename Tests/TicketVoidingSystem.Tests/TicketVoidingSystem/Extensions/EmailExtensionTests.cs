@@ -19,7 +19,7 @@ public class EmailExtensionTests
         // Arrange
         var model = new MailModel<int>
         {
-            Tickets = new List<int> { 1 },
+            Tickets = [1],
             Site = new SiteEmail { ToList = "1" }
         };
 
@@ -36,7 +36,7 @@ public class EmailExtensionTests
         // Arrange
         var model = new MailModel<int>
         {
-            Tickets = new List<int> { 1 },
+            Tickets = [1],
             Site = new SiteEmail { ToList = "" }
         };
 
@@ -53,7 +53,7 @@ public class EmailExtensionTests
         // Arrange
         var model = new MailModel<int>
         {
-            Tickets = new List<int>(),
+            Tickets = [],
             Site = new SiteEmail { ToList = "1" }
         };
 
@@ -269,7 +269,7 @@ public class EmailExtensionTests
         // Arrange
         var model = new MailRecoverModel<MailTicketViewModel, RecoverTicketModel>
         {
-            Tickets = new List<RecoverTicketModel>(),
+            Tickets = [],
             ViewModel = new MailRecoverViewModel<MailTicketViewModel> { NegativeBalanceUsers = "" }
         };
 

@@ -2,7 +2,6 @@
 using SpecialDelete.VoidByBetId.Repositories;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services;
 
 namespace SpecialDelete.VoidByBetId.Services.VoidTickets;
@@ -14,20 +13,11 @@ public interface HandleService
     IEnumerable<Result> CreateWarningMessage(string warningCrickets);
 }
 
-public class HandleServiceImp : HandleService
+public class HandleServiceImp(
+    VoidByBetIdRepository repository,
+    LoggingService loggingService)
+    : HandleService
 {
-    private readonly VoidByBetIdRepository repository;
-    private readonly LoggingService loggingService;
-
-    public HandleServiceImp(
-        VoidByBetIdRepository repository,
-        LoggingService loggingService
-    )
-    {
-        this.repository = repository;
-        this.loggingService = loggingService;
-    }
-
     public async Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query)
     {
         VoidTicketsModel model;
@@ -47,7 +37,7 @@ public class HandleServiceImp : HandleService
             return new VoidTicketsModel
             {
                 Validation = validation,
-                Tickets = Enumerable.Empty<TicketEmailModel>()
+                Tickets = []
             };
         }
 

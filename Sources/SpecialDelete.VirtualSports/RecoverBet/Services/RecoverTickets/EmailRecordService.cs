@@ -20,28 +20,14 @@ public interface EmailRecordService
     MailRecord Create(MailRecoverModel<MailTicketViewModel, RecoverTicketModel> model, EmailGroup group, Recover typeOfRecover);
 }
 
-public class EmailRecordServiceImp : EmailRecordService
+public class EmailRecordServiceImp(
+    IMapper mapper,
+    SubjectService subjectService,
+    TemplateEmailService templateEmailService,
+    TicketService displayTicketService,
+    PagingService pagingService)
+    : EmailRecordService
 {
-    private readonly IMapper mapper;
-    private readonly SubjectService subjectService;
-    private readonly TemplateEmailService templateEmailService;
-    private readonly TicketService displayTicketService;
-    private readonly PagingService pagingService;
-
-    public EmailRecordServiceImp(
-        IMapper mapper,
-        SubjectService subjectService,
-        TemplateEmailService templateEmailService,
-        TicketService displayTicketService,
-        PagingService pagingService)
-    {
-        this.mapper = mapper;
-        this.subjectService = subjectService;
-        this.templateEmailService = templateEmailService;
-        this.displayTicketService = displayTicketService;
-        this.pagingService = pagingService;
-    }
-
     public MailRecord Create(MailRecoverModel<MailTicketViewModel, RecoverTicketModel> model, EmailGroup group, Recover typeOfRecover)
     {
         if (model.Valid())
@@ -59,7 +45,7 @@ public class EmailRecordServiceImp : EmailRecordService
         return new MailRecord();
     }
 
-    private List<Group<MailTicketViewModel>> CreateGroups(List<RecoverTicketModel> tickets, Recover typeOfRecover)
+    private List<Group<MailTicketViewModel>> CreateGroups(IEnumerable<RecoverTicketModel> tickets, Recover typeOfRecover)
     {
         var groups = pagingService.Groups(tickets, ticket => ticket.GroupName);
 

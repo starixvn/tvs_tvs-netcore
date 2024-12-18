@@ -15,15 +15,8 @@ public interface GetInfoTicketsForMessage
     public string GetHdpValues(int betTypeId, IEnumerable<GetTicketModel> allTickets);
 }
 
-public class GetInfoTicketsForMessageImp : GetInfoTicketsForMessage
+public class GetInfoTicketsForMessageImp(SpecialBetTypeContentService specialBetTypeContentService) : GetInfoTicketsForMessage
 {
-    private readonly SpecialBetTypeContentService specialBetTypeContentService;
-
-    public GetInfoTicketsForMessageImp(SpecialBetTypeContentService specialBetTypeContentService)
-    {
-        this.specialBetTypeContentService = specialBetTypeContentService;
-    }
-
     public string GetSpecialBetTeam(int betTypeId, IEnumerable<GetTicketModel> allTickets)
     {
         List<int> SpecialBetTypes = [BetTypeConstant.Handicap, BetTypeConstant.FirstHalfHandicap, BetTypeConstant.OverUnder, BetTypeConstant.FirstHalfOverUnder];

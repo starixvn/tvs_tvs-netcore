@@ -19,19 +19,12 @@ public interface MapTicketService
     IEnumerable<ExcelTicketModel> MapToListExcelTicketsModel(IEnumerable<TicketViewModel> ticketsViewModel);
 }
 
-public class MapTicketServiceImp : MapTicketService
+public class MapTicketServiceImp(
+    BetListService betListService,
+    IMapper mapper,
+    ConvertBetListForExcelService convertBetListForExcelService)
+    : MapTicketService
 {
-    private readonly IMapper mapper;
-    private readonly BetListService betListService;
-    private readonly ConvertBetListForExcelService convertBetListForExcelService;
-
-    public MapTicketServiceImp(BetListService betListService, IMapper mapper, ConvertBetListForExcelService convertBetListForExcelService)
-    {
-        this.betListService = betListService;
-        this.mapper = mapper;
-        this.convertBetListForExcelService = convertBetListForExcelService;
-    }
-
     public IEnumerable<TicketViewModel> MapToListTicketsViewModel(IEnumerable<DetailTicketModel> ticketsModel)
     {
         var tickets = new List<TicketViewModel>();

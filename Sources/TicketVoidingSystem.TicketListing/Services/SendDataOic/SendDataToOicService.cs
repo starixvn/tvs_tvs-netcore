@@ -8,19 +8,12 @@ public interface SendDataToOicService
     Task<AmendmentResponse> Send(IList<SendFileQuery> queries, string affectedTickets);
 }
 
-public class SendDataToOicServiceImp : SendDataToOicService
+public class SendDataToOicServiceImp(
+    GetTicketsService getTicketsService,
+    InsertToAmendmentTableStage insertToAmendmentTableStage,
+    CallApiAmendmentStage callApiAmendmentStage)
+    : SendDataToOicService
 {
-    private readonly InsertToAmendmentTableStage insertToAmendmentTableStage;
-    private readonly CallApiAmendmentStage callApiAmendmentStage;
-    private readonly GetTicketsService getTicketsService;
-
-    public SendDataToOicServiceImp(GetTicketsService getTicketsService, InsertToAmendmentTableStage insertToAmendmentTableStage, CallApiAmendmentStage callApiAmendmentStage)
-    {
-        this.getTicketsService = getTicketsService;
-        this.insertToAmendmentTableStage = insertToAmendmentTableStage;
-        this.callApiAmendmentStage = callApiAmendmentStage;
-    }
-
     public async Task<AmendmentResponse> Send(IList<SendFileQuery> queries, string affectedTickets)
     {
         var joinQuery = queries.FirstOrDefault() ?? new SendFileQuery();

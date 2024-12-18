@@ -67,7 +67,7 @@ public class TicketListingControllerTests
         var excelFileModel = new ExcelFileModel
         {
             FileName = "AA",
-            ContentAsByteArray = new byte[] { }
+            ContentAsByteArray = []
         };
         var request = new ExportExcelRequest();
         var mediator = Substitute.For<IMediator>();

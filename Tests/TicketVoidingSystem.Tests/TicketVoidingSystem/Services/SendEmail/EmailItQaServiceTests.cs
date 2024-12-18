@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using Fanex.MailDeliver.MailClient.Model;
-using Force.DeepCloner;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Void;
+using TicketVoidingSystem.Utilities;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
@@ -36,7 +36,7 @@ public class EmailItQaServiceTests
             { new() { Currency = CurrencyConstant.UusId }, new() { Currency = CurrencyConstant.UusId } };
         sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItQa)
             .ReturnsForAnyArgs(new SiteEmail());
-        voidEmailContentService.Create(mailVoidViewModel.DeepClone(), Arg.Any<SiteEmail>(),
+        voidEmailContentService.Create(MessagePackCloner.Clone(mailVoidViewModel), Arg.Any<SiteEmail>(),
                 Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.ItQa, true)
             .ReturnsForAnyArgs(new MailRecord());
 

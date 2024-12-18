@@ -15,17 +15,8 @@ public interface BetListRecoverBetIdService
     TicketViewModel GetTicket(GetTicketModel item, ChoiceType choiceType);
 }
 
-public class BetListRecoverBetIdServiceImp : BetListRecoverBetIdService
+public class BetListRecoverBetIdServiceImp(IMapper mapper, BetListService betListService) : BetListRecoverBetIdService
 {
-    private readonly IMapper mapper;
-    private readonly BetListService betListService;
-
-    public BetListRecoverBetIdServiceImp(IMapper mapper, BetListService betListService)
-    {
-        this.mapper = mapper;
-        this.betListService = betListService;
-    }
-
     public TicketViewModel GetTicket(GetTicketModel item, ChoiceType choiceType)
     {
         var ticketViewModel = new TicketViewModel();

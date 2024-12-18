@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { GroupBetTypesAddRequestModel } from "../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model";
-import { GetBetTypesQuery } from "../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model";
+import { GetBetTypesQuery, TimeRangeModel } from "../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model";
 import { DateTimeFormat, ModeType } from "../../../../../utility/constants/config";
 import { CommonService } from "../../../../../utility/services/common.service";
 import { OtherIssuesModel } from "../../models/event-other-issues.model";
@@ -27,8 +27,7 @@ export class EventOtherIssuesService {
       matchId: matchId
     };
     if (this.validationService.isSubTypeRestart(subIssueTypeId)) {
-      query.fromTransDate = filterOtherIssuesModel.fromDateTime;
-      query.toTransDate = filterOtherIssuesModel.toDateTime;
+      query.timeRanges = [this.createTimeRangeModel(filterOtherIssuesModel)];
     }
     const data = await this.commonService.getGroupBetTypesTvs(query);
     const groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);
@@ -91,4 +90,12 @@ export class EventOtherIssuesService {
 
     return model;
   }
+
+  private createTimeRangeModel(filterOtherIssuesModel: FilterOtherIssuesModel): TimeRangeModel {
+    return {
+      fromDate: filterOtherIssuesModel.fromDateTime,
+      toDate: filterOtherIssuesModel.toDateTime
+    }
+  }
+
 }

@@ -13,15 +13,9 @@ public interface BetListParlayService<in T>
     TicketViewModel Map(T item, bool isOnlyReadPermission);
 }
 
-public class BetListSubParlayServiceImp<T> : BetListParlayService<T> where T : GetSubTicket
+public class BetListSubParlayServiceImp<T>(BetListService betListService) : BetListParlayService<T>
+    where T : GetSubTicket
 {
-    private readonly BetListService betListService;
-
-    public BetListSubParlayServiceImp(BetListService betListService)
-    {
-        this.betListService = betListService;
-    }
-
     public TicketViewModel Map(T item, bool isOnlyReadPermission)
     {
         var ticketViewModel = new TicketViewModel();
@@ -87,15 +81,9 @@ public class BetListSubParlayServiceImp<T> : BetListParlayService<T> where T : G
     }
 }
 
-public class BetListMainParlayServiceImp<T> : BetListParlayService<T> where T : GetMainTicket
+public class BetListMainParlayServiceImp<T>(BetListService betListService) : BetListParlayService<T>
+    where T : GetMainTicket
 {
-    private readonly BetListService betListService;
-
-    public BetListMainParlayServiceImp(BetListService betListService)
-    {
-        this.betListService = betListService;
-    }
-
     public TicketViewModel Map(T item, bool isOnlyReadPermission)
     {
         var ticketViewModel = new TicketViewModel();

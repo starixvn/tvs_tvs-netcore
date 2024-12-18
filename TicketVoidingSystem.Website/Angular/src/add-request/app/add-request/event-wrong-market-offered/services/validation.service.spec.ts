@@ -1,11 +1,8 @@
 import { AdvancedModeAddRequestComponent } from '../../../../..//utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { FilterModel } from '../../filter/filter.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { FilterTimeComponent } from '../filter-time/filter-time.component';
 import { LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
 import { ValidationService } from './validation.service';
 
 describe('ValidationService', () => {
@@ -58,48 +55,10 @@ describe('ValidationService', () => {
     expect(actual).toBeTruthy();
   });
 
-  it('#checkCanShowConfirmationWrongOdds should return false', async () => {
-    const element = document.createElement('body');
-    element.setAttribute("user-id", "2");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.logInfoEvent = new LogInfoWrongMarketOffered();
-    saveRequestArg.logInfoEvent.messageValidationLogInfo = null;
-    saveRequestArg.isEdit = true;
-    saveRequestArg.userId = 2;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    saveRequestArg.actionIdOfFirstTimeAccess = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    const actual = service.checkCanShowConfirmationWrongMarketOffered(saveRequestArg);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#checkCanShowConfirmationWrongOdds should return true', async () => {
-    const errorMsg = new ValidationMessage();
-    errorMsg.isError = false;
-
-    const element = document.createElement('body');
-    element.setAttribute("user-id", "2");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.logInfoEvent = new LogInfoWrongMarketOffered();
-    saveRequestArg.logInfoEvent.messageValidationLogInfo = [errorMsg];
-    saveRequestArg.isEdit = true;
-    saveRequestArg.userId = 2;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    saveRequestArg.actionIdOfFirstTimeAccess = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    const actual = service.checkCanShowConfirmationWrongMarketOffered(saveRequestArg);
-
-    expect(actual).toBeTruthy();
-  });
-
   it('#isValidLogInfoEvent should return false', async () => {
     const errorMsg = new ValidationMessage();
     errorMsg.isError = true;
     const logInfoEvent = new LogInfoWrongMarketOffered();
-    logInfoEvent.messageValidationLogInfo = [errorMsg];
     const actual = service.isValidLogInfoEvent(logInfoEvent);
 
     expect(actual).toBeFalsy();

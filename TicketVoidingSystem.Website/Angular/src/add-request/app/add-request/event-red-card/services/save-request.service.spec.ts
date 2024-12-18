@@ -107,15 +107,12 @@ class Helper {
   } as FilterModel;
   static readonly fakeConfirmRedCardModel: ConfirmAddRequestModel = {
     isOpen: null,
-    issueTypeName: '',
-    subIssueTypeName: '',
     isHasWarningTicket: true,
     isHasWarningTakenNote: true,
     isEditingByAnotherUser: false,
     userId: 0,
     requestId: 1,
     requestedBy: '',
-    warningRelatedEvents: [],
     isHasSettledTicket: false
   } as ConfirmAddRequestModel;
   static fakeIssueType: IssueType[] = [{
@@ -140,7 +137,6 @@ class Helper {
     isEdit: null,
     actionIdOfFirstTimeAccess: null,
     filter: Helper.fakeFilterModel,
-    issueTypes: Helper.fakeIssueTypes,
     others: new OthersModel(),
     primitiveProps: new PrimitiveProperty(),
     defaultFilterTimeWithAllowance: new FilterTimeWithAllowance(),
@@ -321,10 +317,6 @@ describe('SaveRequestService', () => {
     const issueTypeId = 11;
     const subIssueTypeId = 16;
     const args = Helper.fakeSaveRequestArg;
-    args.issueTypes.issueTypes = Helper.fakeIssueType;
-    args.issueTypes.issueTypes[0].issueTypeId = issueTypeId;
-    args.issueTypes.selectedSubIssueTypes = Helper.fakeSubIssueType;
-    args.issueTypes.selectedSubIssueTypes[0].subIssueTypeId = subIssueTypeId;
     args.filter.issueTypeId = issueTypeId.toString();
     args.filter.subIssueTypeId = subIssueTypeId.toString();
     args.filter.action = '2';
@@ -349,10 +341,6 @@ describe('SaveRequestService', () => {
     const issueTypeId = 11;
     const subIssueTypeId = 16;
     const args = Helper.fakeSaveRequestArg;
-    args.issueTypes.issueTypes = Helper.fakeIssueType;
-    args.issueTypes.issueTypes[0].issueTypeId = issueTypeId;
-    args.issueTypes.selectedSubIssueTypes = Helper.fakeSubIssueType;
-    args.issueTypes.selectedSubIssueTypes[0].subIssueTypeId = subIssueTypeId;
     args.filter.issueTypeId = issueTypeId.toString();
     args.filter.subIssueTypeId = subIssueTypeId.toString();
     args.filter.action = '2';

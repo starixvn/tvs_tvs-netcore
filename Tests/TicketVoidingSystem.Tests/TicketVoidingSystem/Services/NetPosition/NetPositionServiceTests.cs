@@ -10,7 +10,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.NetPosition;
 
-public class NetPositionServiceTests
+public class NetPositionServiceTests : IClassFixture<AppSettingFixture>
 {
     private readonly LoggingService loggingService;
     private readonly IDynamicRepository repository;

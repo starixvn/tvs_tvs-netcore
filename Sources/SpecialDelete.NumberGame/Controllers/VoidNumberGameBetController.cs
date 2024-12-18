@@ -10,15 +10,8 @@ namespace SpecialDelete.NumberGame.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class VoidNumberGameBetController : ControllerBase
+public class VoidNumberGameBetController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public VoidNumberGameBetController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidNumberGameBet, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> GetVoidTickets(GetVoidTicketsRequest request) => Ok(await mediator.Send(request));

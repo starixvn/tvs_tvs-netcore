@@ -40,7 +40,7 @@ public class AccountWinLostWorkSheetServiceTests
         {
             new() { Username = "1" },
             new() { Username = "2" },
-            new() { Username = "3" },
+            new() { Username = "3" }
         };
 
         accountWinLostService.GetAccountWinLostExcel(null).ReturnsForAnyArgs(requests);

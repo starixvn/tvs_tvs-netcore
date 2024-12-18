@@ -15,15 +15,9 @@ public class GetOddsInfoRequest : IRequest<IEnumerable<OddsInfoViewModel>>
     public string BetTypes { get; set; }
 }
 
-public class GetOddsInfoHandler : IRequestHandler<GetOddsInfoRequest, IEnumerable<OddsInfoViewModel>>
+public class GetOddsInfoHandler(IDynamicRepository repository)
+    : IRequestHandler<GetOddsInfoRequest, IEnumerable<OddsInfoViewModel>>
 {
-    private readonly IDynamicRepository repository;
-
-    public GetOddsInfoHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<OddsInfoViewModel>> Handle(GetOddsInfoRequest request, CancellationToken cancellationToken)
     {
         var criteria = new GetOddsInfoCriteria

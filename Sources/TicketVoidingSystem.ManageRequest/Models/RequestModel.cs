@@ -6,6 +6,7 @@ namespace TicketVoidingSystem.ManageRequest.Models;
 public class RequestModel
 {
     public int RequestId { get; set; }
+    public int? RequestDetailId { get; set; }
     public int IssueTypeId { get; set; }
     public int SubIssueTypeId { get; set; }
     public int? MatchId { get; set; }

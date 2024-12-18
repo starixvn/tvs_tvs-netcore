@@ -6,10 +6,16 @@ import { FilterWrongMarketOfferedModel } from "./filter-wrong-market-offered.mod
 
 export class LogInfoWrongMarketOffered {
   matchId: number;
-  filterWrongMarketOfferedModel = new FilterWrongMarketOfferedModel();
-  logInfoDetail = new LogInfoDetail();
-  messageValidationLogInfo?: ValidationMessage[];
+  filterWrongMarketOfferedModels: FilterWrongMarketOfferedModel[] = [];
+  logInfoItems: LogInfoItem[] = [];
   betTeamsResult: BetTeamAddRequestResult[];
-  betTypeCount: BetTypeCountModel[];
   allBetTypesSelection: Selection[];
+}
+
+export class LogInfoItem {
+  id: number;
+  filterTime: FilterWrongMarketOfferedModel;
+  logInfoDetail: LogInfoDetail;
+  messageValidationLogInfo?: ValidationMessage[];
+  betTypeCount: BetTypeCountModel[];
 }

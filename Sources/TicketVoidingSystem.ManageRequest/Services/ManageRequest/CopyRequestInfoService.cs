@@ -12,7 +12,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
 public interface CopyRequestInfoService
 {
-    Task<(RequestInfoForCopy, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId);
+    Task<(RequestInfoForCopy, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId, int? requestDetailId);
 
     void UpdateMatchInfo(int matchId, RequestInfoForCopy requestInfo);
 
@@ -21,27 +21,20 @@ public interface CopyRequestInfoService
     Task UpdatePlayerNameForBetTypeNextManOut(int matchId, IEnumerable<BetTypeTicketsInfo> betTypeTickets);
 }
 
-public class CopyRequestInfoServiceImp : CopyRequestInfoService
+public class CopyRequestInfoServiceImp(
+    IDynamicRepository repository,
+    MatchService matchService,
+    BetListService betListService,
+    RequestExtraInfoXmlService requestExtraInfoXmlService)
+    : CopyRequestInfoService
 {
-    private readonly IDynamicRepository repository;
-    private readonly MatchService matchService;
-    private readonly BetListService betListService;
-    private readonly RequestExtraInfoXmlService requestExtraInfoXmlService;
-
-    public CopyRequestInfoServiceImp(IDynamicRepository repository, MatchService matchService, BetListService betListService, RequestExtraInfoXmlService requestExtraInfoXmlService)
-    {
-        this.repository = repository;
-        this.matchService = matchService;
-        this.betListService = betListService;
-        this.requestExtraInfoXmlService = requestExtraInfoXmlService;
-    }
-
-    public async Task<(RequestInfoForCopy, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId)
+    public async Task<(RequestInfoForCopy, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId, int? requestDetailId)
     {
         var criteria = new CopyRequestInfoCriteria
         {
             MatchId = matchId,
-            RequestId = requestId
+            RequestId = requestId,
+            RequestDetailId = requestDetailId
         };
 
         var (requestInfos, betTypeTickets) = await repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(criteria);

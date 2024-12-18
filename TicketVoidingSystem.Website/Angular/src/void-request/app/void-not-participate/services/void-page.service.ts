@@ -35,6 +35,7 @@ export class VoidPageService {
   async getBasicVoidPageItemsData(issueTypes: IssueTypesModel, requestDetail: RequestDetailViewModel, primitiveProperty: CommonPrimitiveProperty): Promise<VoidNotParticipateModel> {
     const basicRequestInfo = this.initBasicRequestInfo(requestDetail);
     const voidPageItem = new VoidNotParticipateModel();
+    voidPageItem.id = basicRequestInfo.id;
     voidPageItem.subIssueType = this.getSubIssueTypeModel(basicRequestInfo.subIssueTypeId, issueTypes);
     voidPageItem.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidPageItem.subIssueType, issueTypes);
     voidPageItem.detailViewModel = requestDetail;
@@ -56,6 +57,7 @@ export class VoidPageService {
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo {
     if (StaticService.isNotParticipate(requestDetail.request.issueTypeId)) {
       const basicRequestInfo: BasicRequestInfo = {
+        id: 1,
         matchId: requestDetail.notParticipateModels[0].matchId,
         subIssueTypeId: requestDetail.notParticipateModels[0].subIssueTypeId,
       };
@@ -63,15 +65,17 @@ export class VoidPageService {
       return basicRequestInfo;
     }
 
-    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)) {
+    if (StaticService.isTechnicalError(requestDetail.request.issueTypeId)) {
       return {
-        matchId: requestDetail.wrongMarketOfferedModel.matchId,
-        subIssueTypeId: requestDetail.wrongMarketOfferedModel.subIssueTypeId
+        id: 1,
+        matchId: requestDetail.technicalErrorModel.matchId,
+        subIssueTypeId: requestDetail.technicalErrorModel.subIssueTypeId
       } as BasicRequestInfo;
     }
 
     if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       return {
+        id: 1,
         matchId: requestDetail.wrongOddsSportsBookModel.matchId,
         subIssueTypeId: requestDetail.wrongOddsSportsBookModel.subIssueTypeId
       } as BasicRequestInfo;
@@ -79,10 +83,13 @@ export class VoidPageService {
 
     if (StaticService.isOtherIssues(requestDetail.request.issueTypeId)) {
       return {
+        id: 1,
         matchId: requestDetail.otherIssuesModel.matchId,
         subIssueTypeId: requestDetail.otherIssuesModel.subIssueTypeId
       } as BasicRequestInfo;
     }
+
+    return null;
   }
 
   private getSubIssueTypeModel(subIssueTypeId: number, issueTypes: IssueTypesModel): SubIssueType {
@@ -112,8 +119,8 @@ export class VoidPageService {
       query.notParticipateModels = MappingModelStaticService.buildNotParticipateGetLogInfoModel(requestDetail.notParticipateModels);
     }
 
-    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)) {
-      query.wrongMarketOfferedModel = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModel(requestDetail.wrongMarketOfferedModel);
+    if (StaticService.isTechnicalError(requestDetail.request.issueTypeId)) {
+      query.technicalErrorModel = MappingModelStaticService.buildTechnicalErrorGetLogInfoModel(requestDetail.technicalErrorModel);
     }
 
     if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {

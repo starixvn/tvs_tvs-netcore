@@ -6,7 +6,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
 
-public class UusTicketServiceTests : AppSettingFixture
+public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
 {
     private readonly UusTicketServiceImp uusTicketService = new();
 

@@ -6,26 +6,25 @@ using TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
+namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest;
+
+public class GetLastModifiedDateHandlerTests
 {
-    public class GetLastModifiedDateHandlerTests
+    [Fact]
+    public async Task Handle_RepositoryHasCalled_ReturnViewModelExpected()
     {
-        [Fact]
-        public async Task Handle_RepositoryHasCalled_ReturnViewModelExpected()
-        {
-            // Arrange
-            var request = new GetLastModifiedDateRequest();
-            var repository = Substitute.For<IDynamicRepository>();
-            var expected = new RequestLastModifiedDate();
-            repository.GetAsync<RequestLastModifiedDate>(Arg.Any<GetLastModifiedDateRequest>()).ReturnsForAnyArgs(expected);
+        // Arrange
+        var request = new GetLastModifiedDateRequest();
+        var repository = Substitute.For<IDynamicRepository>();
+        var expected = new RequestLastModifiedDate();
+        repository.GetAsync<RequestLastModifiedDate>(Arg.Any<GetLastModifiedDateRequest>()).ReturnsForAnyArgs(expected);
 
-            var handler = new GetLastModifiedDateHandler(repository);
+        var handler = new GetLastModifiedDateHandler(repository);
 
-            // Act
-            var actual = await handler.Handle(request, CancellationToken.None);
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
 
-            // Assert
-            AssertExtension.Equal(expected, actual);
-        }
+        // Assert
+        AssertExtension.Equal(expected, actual);
     }
 }

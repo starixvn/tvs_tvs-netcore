@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
@@ -22,20 +22,13 @@ public interface BetTypesRepository
 
     Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query);
 
-    Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId, bool isGetCancelCashOut, DateTime? fromTransDate, DateTime? toTransDate);
+    Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId, bool isGetCancelCashOut, IEnumerable<TimeRangeModel>? timeRanges);
 
     IList<GroupBetTypeVoidParlayVirtualSport> GetVoidParlayVirtualSportsBetTypes();
 }
 
-public class BetTypesRepositoryImp : BetTypesRepository
+public class BetTypesRepositoryImp(IDynamicRepository repository) : BetTypesRepository
 {
-    private readonly IDynamicRepository repository;
-
-    public BetTypesRepositoryImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<GroupBetTypesViewModel> GetGroupBetTypes(string betTypesHaveTickets, int matchId, byte mode)
     {
         var criteria = new GetBetTypesCriteria
@@ -55,7 +48,7 @@ public class BetTypesRepositoryImp : BetTypesRepository
                     .Select(group => new GroupBetTypeModel { GroupName = group.Key, BetTypes = group.ToList() })
                     .OrderBy(gr => gr.GroupName)
                     .ToList()
-                : new List<GroupBetTypeModel>()
+                : []
         };
     }
 
@@ -114,14 +107,13 @@ public class BetTypesRepositoryImp : BetTypesRepository
         return betTypesInAllServers.Distinct();
     }
 
-    public async Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId, bool isGetCancelCashOut, DateTime? fromTransDate, DateTime? toTransDate)
+    public async Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId, bool isGetCancelCashOut, IEnumerable<TimeRangeModel>? timeRanges)
     {
         var criteria = new TicketVoidingGetBetTypesHaveTicketsCriteria
         {
             MatchId = matchId,
             IsGetCancelCashOut = isGetCancelCashOut,
-            FromTransDate = fromTransDate,
-            ToTransDate = toTransDate
+            TimeRangeJson = timeRanges != null ? JsonSerializer.Serialize(timeRanges) : null
         };
         var betTypesAllServers = new List<BetTypeModel>();
         var fetchTasks = SiteDbGroupConstant.ServerList

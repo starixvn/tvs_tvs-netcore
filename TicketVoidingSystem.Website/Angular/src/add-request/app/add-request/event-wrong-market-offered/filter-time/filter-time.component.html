@@ -1,26 +1,18 @@
 <label class="col-form-label mt-2">Filter</label>
-
 <div class="filter">
-  <div class="mb-2 mt-2 d-flex align-items-center">
-    <span class="mr-1">Transaction Time</span>
-    <div class="filter-time d-flex">
-      <div class="mr-3">
-        <date-full-time-new #fromTimeComponent
-          class="from-date-time"
-          [isDisabled]="isVoided"
-          (changeEvent)="changeFilter()"
-          [(dateTime)]="filterWrongMarketOfferedModel.fromDateTime">
-        </date-full-time-new>
-      </div>
-      <div class="d-flex align-items-center mr-2">
-        <span class="mr-2">To</span>
-        <date-full-time-new #toTimeComponent
-          class="to-date-time"
-          [isDisabled]="isVoided"
-          (changeEvent)="changeFilter()"
-          [(dateTime)]="filterWrongMarketOfferedModel.toDateTime">
-        </date-full-time-new>
-      </div>
+  <div class="mb-2">
+    <label class="col-form-label col-form-label-sm">Transaction Time</label>
+    <div class="mb-1" *ngFor="let model of models; index as index; last as isLast; first as isFirst">
+      <filter-time-item #filterItem
+        [model]="model"
+        [isVoided]="isVoided"
+        [isLast]="isLast"
+        [isFirst]="isFirst"
+        [index]="index"
+        (addItemEvent)="addItem($event)"
+        (removeItemEvent)="removeItem($event)"
+        (changeFilterEvent)="changeFilter()">
+      </filter-time-item>
     </div>
     <div class="btn-reload">
       <button [disabled]="isVoided" type="button" class="btn btn-default btn-sm" (click)="emitRefreshEvent()">
@@ -29,5 +21,3 @@
     </div>
   </div>
 </div>
-<tooltip [tooltip]="tooltip"></tooltip>
-

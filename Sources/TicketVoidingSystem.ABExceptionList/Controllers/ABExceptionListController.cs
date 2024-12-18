@@ -11,15 +11,8 @@ using Fanex.NAP.Client.Helpers.Business;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class ABExceptionListController : ControllerBase
+public class ABExceptionListController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public ABExceptionListController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ABExceptionList, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> CheckUsernames(CheckUsernamesRequest request) => Ok(await mediator.Send(request));

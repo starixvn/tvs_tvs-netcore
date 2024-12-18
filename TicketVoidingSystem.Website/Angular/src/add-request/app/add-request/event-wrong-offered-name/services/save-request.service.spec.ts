@@ -1,5 +1,4 @@
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
-import { IssueType, SubIssueType } from '../../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { MatchModel } from "../../../../../utility/models/match.model";
 import { Selection } from '../../../../../utility/models/selection.model';
@@ -7,7 +6,6 @@ import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
 import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from "../../filter/filter.model";
-import { IssueTypes } from '../../filter/issue-types.model';
 import { WrongOfferedNameModel } from '../../models/event-wrong-offered-name.model';
 import { GetLogInfoModel, Validation } from '../../models/get-log-info.model';
 import { TransInfoAddRequestModel } from "../../models/trans-info-add-request.model";
@@ -285,10 +283,6 @@ describe('SaveRequestService', () => {
     arg.filter.action = '1';
     arg.filter.actions = [{ value: '1', name: 'actionName' }] as Selection[];
     arg.logInfoEvent = Helper.fakeLogInfoWrongOfferedName;
-    arg.issueTypes = {
-      issueTypes: [{ issueTypeName: 'issueName', issueTypeId: 1 }] as IssueType[],
-      subIssueTypes: [{ subIssueTypeName: 'subIssueName', subIssueTypeId: 2 }] as SubIssueType[],
-    } as IssueTypes;
     arg.confirmAddRequest = new ConfirmAddRequestModel();
     mockService['getWrongOddsSportsBookInfo'] = jest.fn();
     mockEventWrongOfferedNameService.initWrongMarketOfferedModel = jest.fn().mockReturnValue(Helper.fakeWrongOfferedNameModel);
@@ -298,8 +292,5 @@ describe('SaveRequestService', () => {
     expect(arg.confirmAddRequest.requestId).toBe(arg.requestId);
     expect(arg.confirmAddRequest.requestedBy).toBe(arg.requestedBy);
     expect(arg.confirmAddRequest.isOpen).toBeTruthy();
-    expect(arg.confirmAddRequest.issueTypeName).toBe('issueName');
-    expect(arg.confirmAddRequest.subIssueTypeName).toBe('subIssueName');
-    expect(arg.confirmAddRequest.voidAction).toBe('actionName');
   });
 });

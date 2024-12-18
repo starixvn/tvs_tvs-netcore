@@ -20,28 +20,14 @@ public interface VoidTicketsService
     Task<IEnumerable<Result>> SendEmail(VoidTicketsQuery query, VoidTicketsModel model);
 }
 
-public class VoidTicketsServiceImp : VoidTicketsService
+public class VoidTicketsServiceImp(
+    IMapper mapper,
+    Repository repository,
+    LoggingService loggingService,
+    SendMessageByPlatformService sendMessageByPlatformService,
+    SendEmailService sendEmailService)
+    : VoidTicketsService
 {
-    private readonly IMapper mapper;
-    private readonly Repository repository;
-    private readonly LoggingService loggingService;
-    private readonly SendMessageByPlatformService sendMessageByPlatformService;
-    private readonly SendEmailService sendEmailService;
-
-    public VoidTicketsServiceImp(
-        IMapper mapper,
-        Repository repository,
-        LoggingService loggingService,
-        SendMessageByPlatformService sendMessageByPlatformService,
-        SendEmailService sendEmailService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.loggingService = loggingService;
-        this.sendMessageByPlatformService = sendMessageByPlatformService;
-        this.sendEmailService = sendEmailService;
-    }
-
     public async Task<VoidTicketsModel> ExecuteQuery(VoidTicketsQuery query)
     {
         try
@@ -60,7 +46,7 @@ public class VoidTicketsServiceImp : VoidTicketsService
             return new VoidTicketsModel
             {
                 Validation = validation,
-                Tickets = Enumerable.Empty<TicketEmailModel>()
+                Tickets = []
             };
         }
     }

@@ -10,19 +10,11 @@ using TicketVoidingSystem.Constants;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers;
 
-public class GetSubTypeRequest : GetSubTypeCriteria, IRequest<IEnumerable<AbExceptionSubTypeViewModel>>
+public class GetSubTypeRequest : GetSubTypeCriteria, IRequest<IEnumerable<AbExceptionSubTypeViewModel>>;
+
+public class GetSubTypeHandler(IDynamicRepository repository)
+    : IRequestHandler<GetSubTypeRequest, IEnumerable<AbExceptionSubTypeViewModel>>
 {
-}
-
-public class GetSubTypeHandler : IRequestHandler<GetSubTypeRequest, IEnumerable<AbExceptionSubTypeViewModel>>
-{
-    private readonly IDynamicRepository repository;
-
-    public GetSubTypeHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<AbExceptionSubTypeViewModel>> Handle(GetSubTypeRequest request, CancellationToken cancellationToken)
     {
         var results = await repository.FetchAsync<AbExceptionSubTypeViewModel>(request);

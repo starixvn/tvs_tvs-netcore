@@ -7,19 +7,11 @@ using TicketVoidingSystem.SharedApi.ViewModels.BetTypes;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.BetTypes;
 
-public class GetGroupBetTypesRequest : BetTypeQueryModel, IRequest<GroupBetTypesViewModel>
+public class GetGroupBetTypesRequest : BetTypeQueryModel, IRequest<GroupBetTypesViewModel>;
+
+public class GetGroupBetTypesHandler(BetTypesRepository betTypesRepository)
+    : IRequestHandler<GetGroupBetTypesRequest, GroupBetTypesViewModel>
 {
-}
-
-public class GetGroupBetTypesHandler : IRequestHandler<GetGroupBetTypesRequest, GroupBetTypesViewModel>
-{
-    private readonly BetTypesRepository betTypesRepository;
-
-    public GetGroupBetTypesHandler(BetTypesRepository betTypesRepository)
-    {
-        this.betTypesRepository = betTypesRepository;
-    }
-
     public async Task<GroupBetTypesViewModel> Handle(GetGroupBetTypesRequest request, CancellationToken cancellationToken)
     {
         var betTypesHaveTickets = string.IsNullOrEmpty(request.BetTypes)

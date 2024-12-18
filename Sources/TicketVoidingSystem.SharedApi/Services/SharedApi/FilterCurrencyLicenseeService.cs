@@ -14,15 +14,8 @@ public interface FilterCurrencyLicenseeService
     Task<IEnumerable<GroupLicensee>> GetGroupLicensees();
 }
 
-public class FilterCurrencyLicenseeServiceImp : FilterCurrencyLicenseeService
+public class FilterCurrencyLicenseeServiceImp(IDynamicRepository repository) : FilterCurrencyLicenseeService
 {
-    private readonly IDynamicRepository repository;
-
-    public FilterCurrencyLicenseeServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<Currency>> GetCurrencies()
     {
         var criteria = new GetCurrenciesCriteria();

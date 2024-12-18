@@ -16,19 +16,9 @@ public interface VoidByCurrencyRepository
     Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query);
 }
 
-public class VoidByCurrencyRepositoryImp : VoidByCurrencyRepository
+public class VoidByCurrencyRepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
+    : VoidByCurrencyRepository
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-
-    public VoidByCurrencyRepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.sessionService = sessionService;
-    }
-
     public async Task<IEnumerable<GetTicketModel>> GetTickets(GetTicketsQuery query)
     {
         var criteria = CreateGetTicketsCriteria(query);

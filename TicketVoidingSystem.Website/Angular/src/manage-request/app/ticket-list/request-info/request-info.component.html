@@ -2,7 +2,7 @@
   <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs custom-nav">
     <ng-container *ngFor="let tab of tabInfoRequest">
       <li [ngbNavItem]="tab.id">
-        <a ngbNavLink (click)="changeTab(tab.id)">{{tab.name}}</a>
+        <a ngbNavLink (click)="changeTab(tab)">{{tab.name}}</a>
         <ng-template ngbNavContent>
           <div class="mb-3 pt-2">
             <div [blockUi]="isBlock">

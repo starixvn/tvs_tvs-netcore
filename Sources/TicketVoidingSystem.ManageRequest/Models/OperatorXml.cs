@@ -15,11 +15,6 @@ public class OperatorXml
 [XmlRoot(ElementName = "root")]
 public class RootOperatorsXml
 {
-    public RootOperatorsXml()
-    {
-        OperatorXmls = new List<OperatorXml>();
-    }
-
     [XmlElement(ElementName = "r")]
-    public List<OperatorXml> OperatorXmls { get; set; }
+    public List<OperatorXml> OperatorXmls { get; set; } = [];
 }

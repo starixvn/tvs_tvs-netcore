@@ -11,15 +11,8 @@ public interface RemarkService
     Task<IndexViewModel> GetInfoPermissionCancelCashOut();
 }
 
-public class RemarkServiceImp : RemarkService
+public class RemarkServiceImp(SessionService sessionService) : RemarkService
 {
-    private readonly SessionService sessionService;
-
-    public RemarkServiceImp(SessionService sessionService)
-    {
-        this.sessionService = sessionService;
-    }
-
     public async Task<IndexViewModel> GetInfoPermissionCancelCashOut()
     {
         return new IndexViewModel

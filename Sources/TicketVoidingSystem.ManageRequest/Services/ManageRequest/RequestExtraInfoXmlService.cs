@@ -101,7 +101,7 @@ public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
         var operators = root.OperatorXmls;
         var result = operators.Count > 0 ? operators.Select(x =>
             new OperatorInfo { OperatorId = x.OperatorId, OperatorType = x.TypeId }
-        ).ToList() : new List<OperatorInfo>();
+        ).ToList() : [];
 
         return result;
     }

@@ -9,19 +9,11 @@ using TicketVoidingSystem.ABExceptionList.Models;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers;
 
-public class GetSitesRequest : GetSitesCriteria, IRequest<IEnumerable<GroupLicenseeSiteViewModel>>
+public class GetSitesRequest : GetSitesCriteria, IRequest<IEnumerable<GroupLicenseeSiteViewModel>>;
+
+public class GetSitesHandler(IDynamicRepository repository)
+    : IRequestHandler<GetSitesRequest, IEnumerable<GroupLicenseeSiteViewModel>>
 {
-}
-
-public class GetSitesHandler : IRequestHandler<GetSitesRequest, IEnumerable<GroupLicenseeSiteViewModel>>
-{
-    private readonly IDynamicRepository repository;
-
-    public GetSitesHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<GroupLicenseeSiteViewModel>> Handle(GetSitesRequest request, CancellationToken cancellationToken)
     {
         var data = await repository.FetchAsync<LicenseeSite>(request);

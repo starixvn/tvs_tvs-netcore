@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.ViewModels;
@@ -1043,30 +1042,6 @@ public class ObjectToXmlExtensionFacts
 
         // Act
         var actual = models.ToEventAbnormalBetXml();
-
-        // Assert
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact]
-    public void ToWrongMarketOfferedInfoXml_ValidData_ReturnExpected()
-    {
-        // Arrange
-        var model = new WrongMarketOfferedViewModel
-        {
-            MatchId = 8462745,
-            IssueTypeId = IssueTypeConstant.WrongMarketOffered,
-            SubIssueTypeId = 2,
-            FilterFromTransTime = new DateTime(2024, 7, 2, 2, 2, 2),
-            FilterToTransTime = new DateTime(2024, 7, 2, 2, 2, 2),
-            VoidFromTime = new DateTime(2024, 7, 2, 2, 2, 2),
-            VoidToTime = new DateTime(2024, 7, 2, 2, 2, 2),
-        };
-        const string expected = "<root><r MatchId = '8462745' FilterFromTransTime='2024-07-02 02:02:02.000' " +
-                                "FilterToTransTime='2024-07-02 02:02:02.000' SubIssueTypeId='2' AdvancedExtraInfo='null'/></root>";
-
-        // Act
-        var actual = model.ToWrongMarketOfferedInfoXml();
 
         // Assert
         Assert.Equal(expected, actual);

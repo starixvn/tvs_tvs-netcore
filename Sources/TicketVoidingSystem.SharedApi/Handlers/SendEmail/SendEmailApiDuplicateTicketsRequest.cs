@@ -26,15 +26,9 @@ public class SendEmailApiDuplicateTicketsRequest : IRequest<IEnumerable<Result>>
     public int VoidingHistoryId { get; set; }
 }
 
-public class SendEmailApiDuplicateTicketsHandler : IRequestHandler<SendEmailApiDuplicateTicketsRequest, IEnumerable<Result>>
+public class SendEmailApiDuplicateTicketsHandler(SendEmailDuplicateTicketsService sendEmailService)
+    : IRequestHandler<SendEmailApiDuplicateTicketsRequest, IEnumerable<Result>>
 {
-    private readonly SendEmailDuplicateTicketsService sendEmailService;
-
-    public SendEmailApiDuplicateTicketsHandler(SendEmailDuplicateTicketsService sendEmailService)
-    {
-        this.sendEmailService = sendEmailService;
-    }
-
     public async Task<IEnumerable<Result>> Handle(SendEmailApiDuplicateTicketsRequest message, CancellationToken cancellationToken)
     {
         var emailModel = new EmailVoidModel

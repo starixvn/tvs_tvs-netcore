@@ -9,27 +9,26 @@ using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.Services;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
+namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest;
+
+public class GetMarkedTicketsCountHandlerTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {
-    public class GetMarkedTicketsCountHandlerTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
+    [Fact]
+    public async Task Handler_HasRequest_ReturnResults()
     {
-        [Fact]
-        public async Task Handler_HasRequest_ReturnResults()
+        var request = new GetMarkedTicketsCountRequest();
+        var model = new AllMarkedTicketModel
         {
-            var request = new GetMarkedTicketsCountRequest();
-            var model = new AllMarkedTicketModel
-            {
-                Total = 10
-            };
-            var models = new List<AllMarkedTicketModel> { model };
-            var repository = Substitute.For<IDynamicRepository>();
-            var session = Substitute.For<SessionService>();
-            repository.FetchAsync<AllMarkedTicketModel>(Arg.Any<AllMarkedTicketsCriteria>()).ReturnsForAnyArgs(models);
-            var handler = new GetMarkedTicketsCountHandler(repository, session);
+            Total = 10
+        };
+        var models = new List<AllMarkedTicketModel> { model };
+        var repository = Substitute.For<IDynamicRepository>();
+        var session = Substitute.For<SessionService>();
+        repository.FetchAsync<AllMarkedTicketModel>(Arg.Any<AllMarkedTicketsCriteria>()).ReturnsForAnyArgs(models);
+        var handler = new GetMarkedTicketsCountHandler(repository, session);
 
-            var actual = await handler.Handle(request, CancellationToken.None);
+        var actual = await handler.Handle(request, CancellationToken.None);
 
-            Assert.True(actual > 0);
-        }
+        Assert.True(actual > 0);
     }
 }

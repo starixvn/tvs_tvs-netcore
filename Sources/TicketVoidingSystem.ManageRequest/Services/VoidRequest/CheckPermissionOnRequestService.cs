@@ -16,17 +16,9 @@ public interface CheckPermissionOnRequestService
     Task<VoidPermission> GetVoidPermission();
 }
 
-public class CheckPermissionOnRequestServiceImp : CheckPermissionOnRequestService
+public class CheckPermissionOnRequestServiceImp(IDynamicRepository repository, SessionService sessionService)
+    : CheckPermissionOnRequestService
 {
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-
-    public CheckPermissionOnRequestServiceImp(IDynamicRepository repository, SessionService sessionService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-    }
-
     public async Task<bool> IsHasPermissionOnRequest(int requestId)
     {
         var criteria = new GetRequestCriteria

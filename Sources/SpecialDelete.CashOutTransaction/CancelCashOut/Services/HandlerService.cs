@@ -17,25 +17,13 @@ public interface HandlerService
     Task<List<Result>> VoidTickets(VoidTicketsQuery query);
 }
 
-public class HandlerServiceImp : HandlerService
+public class HandlerServiceImp(
+    DisplayUiService getTicketsService,
+    VoidService voidTicketsService,
+    LoggingService loggingService,
+    CashOutApiService cashOutApiService)
+    : HandlerService
 {
-    private readonly DisplayUiService getTicketsService;
-    private readonly VoidService voidTicketsService;
-    private readonly LoggingService loggingService;
-    private readonly CashOutApiService cashOutApiService;
-
-    public HandlerServiceImp(
-        DisplayUiService getTicketsService,
-        VoidService voidTicketsService,
-        LoggingService loggingService,
-        CashOutApiService cashOutApiService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.voidTicketsService = voidTicketsService;
-        this.loggingService = loggingService;
-        this.cashOutApiService = cashOutApiService;
-    }
-
     public async Task<TicketsViewModel<TicketViewModel>> GetTickets(GetTicketsQuery query)
     {
         var viewModel = new TicketsViewModel<TicketViewModel>();
@@ -72,7 +60,7 @@ public class HandlerServiceImp : HandlerService
         var results = new List<Result>();
         if (!model.Tickets.Any())
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         await CallCashOutApi(model.Tickets);
@@ -96,7 +84,7 @@ public class HandlerServiceImp : HandlerService
     {
         if (string.IsNullOrWhiteSpace(invalidTransIds))
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         var results = new List<Result>

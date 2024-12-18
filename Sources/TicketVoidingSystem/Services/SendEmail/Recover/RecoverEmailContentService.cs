@@ -14,22 +14,13 @@ public interface RecoverEmailContentService
     MailRecord Create(MailRecoverViewModel viewModel, IEnumerable<TicketRecoverEmailModel> tickets, SiteEmail siteEmail, EmailGroup group);
 }
 
-public class RecoverEmailContentServiceImp : RecoverEmailContentService
+public class RecoverEmailContentServiceImp(
+    SubjectService subjectService,
+    TemplateEmailService templateEmailService,
+    RecoverTicketService recoverTicketService,
+    PagingService pagingService)
+    : RecoverEmailContentService
 {
-    private readonly SubjectService subjectService;
-    private readonly TemplateEmailService templateEmailService;
-    private readonly RecoverTicketService recoverTicketService;
-    private readonly PagingService pagingService;
-
-    public RecoverEmailContentServiceImp(SubjectService subjectService, TemplateEmailService templateEmailService,
-        RecoverTicketService recoverTicketService, PagingService pagingService)
-    {
-        this.subjectService = subjectService;
-        this.templateEmailService = templateEmailService;
-        this.recoverTicketService = recoverTicketService;
-        this.pagingService = pagingService;
-    }
-
     public MailRecord Create(MailRecoverViewModel viewModel, IEnumerable<TicketRecoverEmailModel> tickets, SiteEmail siteEmail, EmailGroup group)
     {
         if (!tickets.Valid(siteEmail))

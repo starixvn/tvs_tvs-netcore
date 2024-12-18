@@ -12,15 +12,8 @@ public class UpdateLetstalkRequest : IRequest<bool>
     public int StatusId { get; set; }
 }
 
-public class UpdateLetstalkHandler : IRequestHandler<UpdateLetstalkRequest, bool>
+public class UpdateLetstalkHandler(LetstalkService letstalkService) : IRequestHandler<UpdateLetstalkRequest, bool>
 {
-    private readonly LetstalkService letstalkService;
-
-    public UpdateLetstalkHandler(LetstalkService letstalkService)
-    {
-        this.letstalkService = letstalkService;
-    }
-
     public async Task<bool> Handle(UpdateLetstalkRequest request, CancellationToken cancellationToken)
     {
         await letstalkService.UpdateLetstalk(request.RequestId, request.BroadcastSessionId, request.StatusId);

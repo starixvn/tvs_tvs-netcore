@@ -9,16 +9,8 @@ public interface DescriptionService
     string Build(RequestDescription item);
 }
 
-public class DescriptionServiceImp : DescriptionService
+public class DescriptionServiceImp(DescriptionElementService elementService) : DescriptionService
 {
-    private readonly DescriptionElementService elementService;
-
-    public DescriptionServiceImp(
-        DescriptionElementService elementService)
-    {
-        this.elementService = elementService;
-    }
-
     public string Build(RequestDescription item)
     {
         var matchingFunctions = new Dictionary<int, Func<RequestDescription, string>>
@@ -41,7 +33,7 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.DuplicateTickets, BuildDuplicateTickets},
                 {IssueTypeConstant.NotParticipate, BuildMatchLeague},
                 {IssueTypeConstant.RecoverTicket, BuildProducts},
-                {IssueTypeConstant.WrongMarketOffered, BuildMatchLeague},
+                {IssueTypeConstant.WrongMarketOffered, BuildVoidTimeMatchLeague},
                 {IssueTypeConstant.TechnicalError, BuildMatchLeague},
                 {IssueTypeConstant.WrongOddsSportsBook, BuildVoidTimeMatchLeague},
                 {IssueTypeConstant.WrongOfferedName, BuildMatchLeague},
@@ -131,7 +123,7 @@ public class DescriptionServiceImp : DescriptionService
 
     private string BuildVoidArchivedTicket(RequestDescription item)
     {
-        return elementService.BuildTotal(item.TotalSingle, item.TotalParlay, Enumerable.Empty<string>());
+        return elementService.BuildTotal(item.TotalSingle, item.TotalParlay, []);
     }
 
     private string BuildProducts(RequestDescription item)

@@ -31,6 +31,7 @@ public class RequestDetailModel
 
 public class RequestEventModel
 {
+    public int RequestDetailId { get; set; }
     public int SportType { get; set; }
     public int MatchId { get; set; }
     public string MatchCode { get; set; }

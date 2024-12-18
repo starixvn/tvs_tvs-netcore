@@ -11,16 +11,10 @@ public interface MessageContentWithMemberTemplateService
     IList<string> Create(TicketInfoForLetstalk model, IEnumerable<TicketEmailModel> tickets);
 }
 
-public class MessageContentWithMemberTemplateServiceImp : MessageContentWithMemberTemplateService
+public class MessageContentWithMemberTemplateServiceImp(UusTicketService uusTicketService)
+    : MessageContentWithMemberTemplateService
 {
     private const int MaxContent = 1024;
-
-    private readonly UusTicketService uusTicketService;
-
-    public MessageContentWithMemberTemplateServiceImp(UusTicketService uusTicketService)
-    {
-        this.uusTicketService = uusTicketService;
-    }
 
     public IList<string> Create(TicketInfoForLetstalk model, IEnumerable<TicketEmailModel> tickets)
     {

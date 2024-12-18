@@ -12,17 +12,11 @@ public class SendDataToOicRequest : IRequest<IList<AmendmentResponse>>
     public IList<SendFileQuery> Queries { get; set; }
 }
 
-public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<AmendmentResponse>>
+public class SendDataOicHandler(
+    SendDataToOicService sendDataToOicService,
+    AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService)
+    : IRequestHandler<SendDataToOicRequest, IList<AmendmentResponse>>
 {
-    private readonly SendDataToOicService sendDataToOicService;
-    private readonly AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService;
-
-    public SendDataOicHandler(SendDataToOicService sendDataToOicService, AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService)
-    {
-        this.sendDataToOicService = sendDataToOicService;
-        this.affectTicketsFromSettlementHistoryService = affectTicketsFromSettlementHistoryService;
-    }
-
     public async Task<IList<AmendmentResponse>> Handle(SendDataToOicRequest request, CancellationToken cancellationToken)
     {
         var resultLicensees = new List<AmendmentResponse>();

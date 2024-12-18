@@ -49,7 +49,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
         // Assert
         betListService
             .DidNotReceive()
-            .GetBetTypeName(Arg.Any<ITicket>());
+            .GetBetTypeName(Arg.Any<Ticket>());
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
         // Assert
         betListService
             .Received(1)
-            .GetBetTypeName(Arg.Any<ITicket>());
+            .GetBetTypeName(Arg.Any<Ticket>());
     }
 
     [Fact]
@@ -152,8 +152,8 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
             Hdp2 = 1,
             RefNo = 1,
             WalletType = 1,
-            IsMixParlay = false,
-        },
+            IsMixParlay = false
+            },
             new()
             {
                 TransId = 100000021,
@@ -169,7 +169,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
                 Hdp2 = 1,
                 RefNo = 1,
                 WalletType = 1,
-                IsMixParlay = false,
+                IsMixParlay = false
             }
         };
         var mapper = Substitute.For<IMapper>();
@@ -197,7 +197,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
             Odds = "",
             Stake = "",
             Choice = "",
-            Currency = "",
+            Currency = ""
         };
         var expected = new List<ExcelTicketModel>
         {

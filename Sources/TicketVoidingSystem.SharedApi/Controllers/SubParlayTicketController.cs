@@ -7,15 +7,8 @@ namespace TicketVoidingSystem.SharedApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class SubParlayTicketController : ControllerBase
+public class SubParlayTicketController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public SubParlayTicketController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     public async Task<IActionResult> GetNormalParlay(GetNormalParlayRequest request) => Ok(await mediator.Send(request));
 

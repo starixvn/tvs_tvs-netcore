@@ -64,7 +64,7 @@ public class CompressDataAddRequestServiceImp : CompressDataService
         }
         catch
         {
-            return Enumerable.Empty<GetTicketModel>();
+            return [];
         }
     }
 

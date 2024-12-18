@@ -37,6 +37,7 @@ export class VoidPageService {
     const basicRequestInfo = this.initBasicRequestInfo(issueTypeId, requestDetail);
     for (const element of basicRequestInfo) {
       const voidMatchInfo = new VoidMatch();
+      voidMatchInfo.id = element.id;
       voidMatchInfo.detailViewModel = requestDetail;
       voidMatchInfo.subIssueType = this.getSubIssueTypeModel(element.subIssueTypeId, issueTypes);
       voidMatchInfo.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidMatchInfo.subIssueType,
@@ -131,8 +132,9 @@ export class VoidPageService {
 
   private initBasicRequestInfo(issueTypeId: string, requestDetail: RequestDetailViewModel): BasicRequestInfo[] {
     if (StaticService.isDangerAccepted(issueTypeId)) {
-      return requestDetail.dangerAcceptedModels.map(x => {
+      return requestDetail.dangerAcceptedModels.map((x, index) => {
         const info: BasicRequestInfo = {
+          id: index + 1,
           matchId: x.matchId,
           subIssueTypeId: x.subIssueTypeId,
           isMainMatch: x.isMainMatch,
@@ -143,8 +145,9 @@ export class VoidPageService {
     }
 
     if (StaticService.isWrongHDP(issueTypeId) || StaticService.isWrong1stHDP(issueTypeId)) {
-      return requestDetail.wrongHdpModels.map(x => {
+      return requestDetail.wrongHdpModels.map((x, index) => {
         const info: BasicRequestInfo = {
+          id: index + 1,
           matchId: x.matchId,
           subIssueTypeId: x.subIssueTypeId,
           wrongMarket: x.homeFavorite ?? x.awayFavorite,
@@ -158,8 +161,9 @@ export class VoidPageService {
     }
 
     if (StaticService.isWrongOU(issueTypeId) || StaticService.isWrong1stOU(issueTypeId)) {
-      return requestDetail.wrongOuModels.map(x => {
+      return requestDetail.wrongOuModels.map((x, index) => {
         const info: BasicRequestInfo = {
+          id: index + 1,
           matchId: x.matchId,
           subIssueTypeId: x.subIssueTypeId,
           wrongMarket: x.wrongMarket,
@@ -172,8 +176,9 @@ export class VoidPageService {
     }
 
     if (StaticService.isRedCard(issueTypeId)) {
-      return requestDetail.redCardModels.map(x => {
+      return requestDetail.redCardModels.map((x, index) => {
         const info: BasicRequestInfo = {
+          id: index + 1,
           matchId: x.matchId,
           subIssueTypeId: x.subIssueTypeId,
           isMainMatch: x.isMainMatch,

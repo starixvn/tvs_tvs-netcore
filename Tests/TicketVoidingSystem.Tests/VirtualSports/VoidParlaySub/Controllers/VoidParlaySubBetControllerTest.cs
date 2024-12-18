@@ -63,7 +63,7 @@ public class VoidParlaySubBetControllerTest
         var excelFileModel = new ExcelFileModel
         {
             FileName = "AA",
-            ContentAsByteArray = new byte[] { }
+            ContentAsByteArray = []
         };
         mediator.Send(Arg.Any<ExportExcelRequest>()).ReturnsForAnyArgs(excelFileModel);
         var response = Task.FromResult(excelFileModel);

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using NSubstitute;
 using SpecialDelete.NumberGame.Models;
@@ -11,7 +10,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.NumberGame.Services.VoidTickets.ExportExcel;
 
-
 public class SheetServiceTest
 {
     [Fact]
@@ -21,7 +19,7 @@ public class SheetServiceTest
         var repository = Substitute.For<Repository>();
         var model = new GetTicketsModel
         {
-            Tickets = new List<GetTicketModel> { new() { TransId = 132 } }
+            Tickets = [new GetTicketModel { TransId = 132 }]
         };
         var ticketViewModel = new TicketViewModel
         { Choice = "<span>Choice</span><div class='match'></div><div class='league'></div>" };

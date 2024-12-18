@@ -16,35 +16,18 @@ public interface AddRequestProcessStage
     Task<Result> Execute(AddRequestQuery query, IEnumerable<long> markedTicketsSuccessful);
 }
 
-public class AddRequestProcessStageImp : AddRequestProcessStage
+public class AddRequestProcessStageImp(
+    IMapper mapper,
+    IDynamicRepository repository,
+    SessionService sessionService,
+    LoggingService loggingService,
+    AccountWinLostService accountWinLostService,
+    InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
+    SendLetstalkAfterAddService sendLetstalkAfterAddService,
+    GetUpdateResultService getUpdateResultService)
+    : AddRequestProcessStage
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
-    private readonly AccountWinLostService accountWinLostService;
-    private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
-    private readonly SendLetstalkAfterAddService sendLetstalkAfterAddService;
-    private readonly GetUpdateResultService getUpdateResultService;
-
-    public AddRequestProcessStageImp(IMapper mapper,  // NOSONAR
-        IDynamicRepository repository,
-        SessionService sessionService,
-        LoggingService loggingService,
-        AccountWinLostService accountWinLostService,
-        InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
-        SendLetstalkAfterAddService sendLetstalkAfterAddService,
-        GetUpdateResultService getUpdateResultService)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.loggingService = loggingService;
-        this.accountWinLostService = accountWinLostService;
-        this.insertAutoVoidRequestQueueService = insertAutoVoidRequestQueueService;
-        this.sendLetstalkAfterAddService = sendLetstalkAfterAddService;
-        this.getUpdateResultService = getUpdateResultService;
-    }
+    // NOSONAR
 
     public async Task<Result> Execute(AddRequestQuery query, IEnumerable<long> markedTicketsSuccessful)
     {
@@ -87,7 +70,7 @@ public class AddRequestProcessStageImp : AddRequestProcessStage
         command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
         command.AbnormalBetInfo = query.AbnormalBetInfo?.ToEventAbnormalBetXml();
         command.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
-        command.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
+        command.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.TechnicalErrorInfo?.ToEventTechnicalErrorXml() : null;
         command.WrongOddsSBInfo = query.WrongOddsSportsBookInfo?.ToEventWrongOddsSportsBookXml();
         command.WrongOfferedNameInfo = query.WrongOfferedNameInfo?.ToEventWrongOfferedNameXml();
         command.OtherIssuesInfo = query.OtherIssuesInfo?.ToEventOtherIssuesXml();
@@ -122,8 +105,8 @@ public class AddRequestProcessStageImp : AddRequestProcessStage
                 ? string.Join(", ", query.AbnormalBetInfo.Matches.Select(x => x.MatchId))
                 : BetTypeConstant.SystemParlay.ToString(),
             IssueTypeConstant.DuplicateTickets => query.DuplicateTicketsInfo?.MatchId.ToString(),
-            IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedInfo?.MatchId.ToString(),
-            IssueTypeConstant.TechnicalError => query.WrongMarketOfferedInfo?.MatchId.ToString(),
+            IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedInfo.First().MatchId.ToString(),
+            IssueTypeConstant.TechnicalError => query.TechnicalErrorInfo?.MatchId.ToString(),
             IssueTypeConstant.WrongOddsSportsBook => query.WrongOddsSportsBookInfo?.MatchId.ToString(),
             IssueTypeConstant.WrongOfferedName => query.WrongOfferedNameInfo?.MatchId.ToString(),
             IssueTypeConstant.OtherIssues => query.OtherIssuesInfo?.MatchId.ToString(),

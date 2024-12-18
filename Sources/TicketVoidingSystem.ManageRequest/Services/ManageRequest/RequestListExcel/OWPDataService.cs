@@ -12,17 +12,9 @@ public interface OWPDataService
     public Task<IEnumerable<OWPData>> GetIPTV(IEnumerable<RequestModel> requests);
 }
 
-public class OWPDataServiceImp : OWPDataService
+public class OWPDataServiceImp(IDynamicRepository repository, LoggingService loggingService)
+    : OWPDataService
 {
-    private readonly IDynamicRepository repository;
-    private readonly LoggingService loggingService;
-
-    public OWPDataServiceImp(IDynamicRepository repository, LoggingService loggingService)
-    {
-        this.repository = repository;
-        this.loggingService = loggingService;
-    }
-
     public async Task<IEnumerable<OWPData>> GetIPTV(IEnumerable<RequestModel> requests)
     {
         try
@@ -44,7 +36,7 @@ public class OWPDataServiceImp : OWPDataService
         catch (Exception ex)
         {
             await loggingService.ErrorAsync(nameof(OWPDataService.GetIPTV), ex);
-            return Enumerable.Empty<OWPData>();
+            return [];
         }
     }
 }

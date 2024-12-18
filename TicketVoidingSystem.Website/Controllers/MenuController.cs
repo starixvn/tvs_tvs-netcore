@@ -7,15 +7,8 @@ using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Controllers;
 
-public class MenuController : Controller
+public class MenuController(UserActionLogService userActionLogService) : Controller
 {
-    private readonly UserActionLogService userActionLogService;
-
-    public MenuController(UserActionLogService userActionLogService)
-    {
-        this.userActionLogService = userActionLogService;
-    }
-
     [HttpGet]
     [Route("[action]")]
     [Route("[action]/Index")]

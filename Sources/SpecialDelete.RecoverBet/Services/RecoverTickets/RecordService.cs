@@ -15,27 +15,14 @@ using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.RecoverBet.Services.RecoverTickets;
 
-public class RecordService : RecordRecoverService<MailTicketViewModel, RecoverTicketModel>
+public class RecordService(
+    IMapper mapper,
+    SubjectService subjectService,
+    TemplateEmailService templateEmailService,
+    ITicketService recoverTicketService,
+    PagingService pagingService)
+    : RecordRecoverService<MailTicketViewModel, RecoverTicketModel>
 {
-    private readonly IMapper mapper;
-    private readonly SubjectService subjectService;
-    private readonly TemplateEmailService templateEmailService;
-    private readonly ITicketService recoverTicketService;
-    private readonly PagingService pagingService;
-
-    public RecordService(IMapper mapper,
-        SubjectService subjectService,
-        TemplateEmailService templateEmailService,
-        ITicketService recoverTicketService,
-        PagingService pagingService)
-    {
-        this.mapper = mapper;
-        this.subjectService = subjectService;
-        this.templateEmailService = templateEmailService;
-        this.recoverTicketService = recoverTicketService;
-        this.pagingService = pagingService;
-    }
-
     public MailRecord Create(MailRecoverModel<MailTicketViewModel, RecoverTicketModel> model, EmailGroup group)
     {
         if (model.Valid())
@@ -50,7 +37,7 @@ public class RecordService : RecordRecoverService<MailTicketViewModel, RecoverTi
         return new MailRecord();
     }
 
-    private List<Group<MailTicketViewModel>> GenerateGroups(List<RecoverTicketModel> tickets)
+    private List<Group<MailTicketViewModel>> GenerateGroups(IEnumerable<RecoverTicketModel> tickets)
     {
         var groups = pagingService.Groups(tickets, ticket => ticket.Site);
 

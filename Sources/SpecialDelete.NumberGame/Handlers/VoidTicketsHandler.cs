@@ -8,27 +8,19 @@ using TicketVoidingSystem.Services;
 
 namespace SpecialDelete.NumberGame.Handlers;
 
-public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>>
+public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>>;
+
+public class VoidTicketsHandler(VoidService voidService, LoggingService loggingService)
+    : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>>
 {
-}
-
-public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>>
-{
-    private readonly VoidService voidService;
-    private readonly LoggingService loggingService;
-
-    public VoidTicketsHandler(VoidService voidService, LoggingService loggingService)
-    {
-        this.voidService = voidService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<IEnumerable<Result>> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
     {
         var model = await voidService.VoidTickets(request);
         return model.Validation.IsSuccessful ?
             await ContactUsers(request, model.Tickets) :
-            new List<Result> { new() { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg } };
+            [
+                new Result { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg }
+            ];
     }
 
     private async Task<List<Result>> ContactUsers(VoidTicketsQuery query, IEnumerable<TicketEmailModel> tickets)

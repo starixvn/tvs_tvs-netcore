@@ -7,29 +7,16 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 
-public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>
+public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>;
+
+public class GetTicketsHandler(
+    GetTicketsService getTicketsService,
+    MapTicketsService mapTicketsService,
+    PagingService pagingService,
+    TicketsViewModelService ticketsViewModelService,
+    CheckPermissionOnRequestService checkPermissionOnRequestService)
+    : IRequestHandler<GetTicketsRequest, TicketsViewModel>
 {
-}
-
-public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewModel>
-{
-    private readonly GetTicketsService getTicketsService;
-    private readonly MapTicketsService mapTicketsService;
-    private readonly PagingService pagingService;
-    private readonly TicketsViewModelService ticketsViewModelService;
-    private readonly CheckPermissionOnRequestService checkPermissionOnRequestService;
-
-    public GetTicketsHandler(
-        GetTicketsService getTicketsService, MapTicketsService mapTicketsService,
-        PagingService pagingService, TicketsViewModelService ticketsViewModelService, CheckPermissionOnRequestService checkPermissionOnRequestService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.mapTicketsService = mapTicketsService;
-        this.pagingService = pagingService;
-        this.ticketsViewModelService = ticketsViewModelService;
-        this.checkPermissionOnRequestService = checkPermissionOnRequestService;
-    }
-
     public async Task<TicketsViewModel> Handle(GetTicketsRequest request, CancellationToken cancellationToken)
     {
         var model = new TicketsViewModel();
@@ -49,7 +36,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
         var tickets = pagingService.Paging(data, message.PageIndex, message.PageSize);
         if (!tickets.Any())
         {
-            return Enumerable.Empty<Group<GetTicketModel>>();
+            return [];
         }
 
         var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay);

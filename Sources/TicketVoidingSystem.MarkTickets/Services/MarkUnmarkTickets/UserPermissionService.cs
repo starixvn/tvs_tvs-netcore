@@ -12,15 +12,8 @@ public interface UserPermissionService
     Task<UserPermission> GetUserPermission();
 }
 
-public class UserPermissionServiceImp : UserPermissionService
+public class UserPermissionServiceImp(SessionService sessionService) : UserPermissionService
 {
-    private readonly SessionService sessionService;
-
-    public UserPermissionServiceImp(SessionService sessionService)
-    {
-        this.sessionService = sessionService;
-    }
-
     public async Task<UserPermission> GetUserPermission()
     {
         var markTicketsPermissionTask = sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host);

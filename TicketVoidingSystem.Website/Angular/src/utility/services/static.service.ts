@@ -45,8 +45,9 @@ export class StaticService {
       isNotParticipate: StaticService.isNotParticipate(issueTypeId),
       isRecoverTicket: StaticService.isRecoverTicket(issueTypeId),
       isWrongOfferedName: StaticService.isWrongOfferedName(issueTypeId),
-      isLikelyWrongMarketOffered: StaticService.isLikelyWrongMarketOffered(issueTypeId),
-      isOtherIssues: StaticService.isOtherIssues(issueTypeId)
+      isWrongMarketOffered: StaticService.isWrongMarketOffered(issueTypeId),
+      isOtherIssues: StaticService.isOtherIssues(issueTypeId),
+      isTechnicalError: StaticService.isTechnicalError(issueTypeId)
     }
 
     return result;
@@ -131,8 +132,8 @@ export class StaticService {
     return issueTypeId?.toString() === IssueTypeConstant.RECOVER_TICKET;
   }
 
-  static isLikelyWrongMarketOffered(issueTypeId: string | number): boolean {
-    return issueTypeId?.toString() === IssueTypeConstant.WRONG_MARKET_OFFERED || issueTypeId?.toString() === IssueTypeConstant.TECHNICAL_ERROR;
+  static isWrongMarketOffered(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.WRONG_MARKET_OFFERED;
   }
 
   static isWrongOddsSportsBook(issueTypeId: string | number): boolean {
@@ -141,6 +142,10 @@ export class StaticService {
 
   static isWrongOfferedName(issueTypeId: string | number): boolean {
     return issueTypeId?.toString() === IssueTypeConstant.WRONG_OFFERED_NAME;
+  }
+
+  static isTechnicalError(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.TECHNICAL_ERROR;
   }
 
   static isFilterByMixOrSystemParlay(filterBy: number): boolean {
@@ -185,14 +190,16 @@ export class StaticService {
       return requestDetail.recoverTicketModel.subIssueTypeId;
     } else if (this.isAbnormalBet(requestDetail.request.issueTypeId)) {
       return requestDetail.abnormalBetModel.subIssueTypeId;
-    } else if (this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId)) {
-      return requestDetail.wrongMarketOfferedModel.subIssueTypeId;
+    } else if (this.isWrongMarketOffered(requestDetail.request.issueTypeId)) {
+      return requestDetail.wrongMarketOfferedModels[0].subIssueTypeId;
     } else if (this.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongOddsSportsBookModel.subIssueTypeId;
     } else if (this.isWrongOfferedName(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongOfferedNameModel.subIssueTypeId;
     } else if (this.isOtherIssues(requestDetail.request.issueTypeId)) {
       return requestDetail.otherIssuesModel.subIssueTypeId;
+    } else if (this.isTechnicalError(requestDetail.request.issueTypeId)) {
+      return requestDetail.technicalErrorModel.subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }

@@ -16,17 +16,8 @@ public interface MarkTicketsService
     Task<Result> Execute(MarkTicketsQuery query);
 }
 
-public class MarkTicketsServiceImp : MarkTicketsService
+public class MarkTicketsServiceImp(IDynamicRepository repository, SessionService session) : MarkTicketsService
 {
-    private readonly IDynamicRepository repository;
-    private readonly SessionService session;
-
-    public MarkTicketsServiceImp(IDynamicRepository repository, SessionService session)
-    {
-        this.repository = repository;
-        this.session = session;
-    }
-
     public async Task<Result> Execute(MarkTicketsQuery query)
     {
         var resultInAllServers = await ExecuteInMultipleServers(query);
@@ -60,7 +51,7 @@ public class MarkTicketsServiceImp : MarkTicketsService
         var ticketsInServer = query.Tickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
         if (!ticketsInServer.Any())
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         criteria.SiteDbGroupId = siteDbGroupId;

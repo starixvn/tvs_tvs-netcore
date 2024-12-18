@@ -17,22 +17,12 @@ public interface GetTicketsService
     Task<Group<TicketViewModel>> AssignData(Group<GetTicketModel> groupModel);
 }
 
-public class GetTicketsServiceImp : GetTicketsService
+public class GetTicketsServiceImp(
+    Repository repository,
+    TicketService displayTicketService,
+    SessionService sessionService)
+    : GetTicketsService
 {
-    private readonly Repository repository;
-    private readonly TicketService displayTicketService;
-    private readonly SessionService sessionService;
-
-    public GetTicketsServiceImp(
-        Repository repository,
-        TicketService displayTicketService,
-        SessionService sessionService)
-    {
-        this.repository = repository;
-        this.displayTicketService = displayTicketService;
-        this.sessionService = sessionService;
-    }
-
     public async Task<GetTicketsModel> ExecuteQuery(GetTicketsQuery query)
     {
         return await repository.GetTickets(query);
@@ -40,7 +30,7 @@ public class GetTicketsServiceImp : GetTicketsService
 
     public async Task<Group<TicketViewModel>> AssignData(Group<GetTicketModel> groupModel)
     {
-        var isDisable = !(await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidParlaySubBet, Constant.Policy.Host));
+        var isDisable = !await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidParlaySubBet, Constant.Policy.Host);
         var index = 1;
         var tickets = new List<TicketViewModel>();
         foreach (var item in groupModel.Tickets)

@@ -15,26 +15,15 @@ public interface GetRequestService
     Task<RequestDetailViewModel> GetRequest(GetRequestRequest request);
 }
 
-public class GetRequestServiceImp : GetRequestService
+public class GetRequestServiceImp(
+    IDynamicRepository repository,
+    RemotingRefWrapperService remotingRefService,
+    MatchService matchService,
+    IMapper mapper,
+    AdvancedModeService advancedModeService,
+    RequestExtraInfoXmlService requestExtraInfoXmlService)
+    : GetRequestService
 {
-    private readonly IDynamicRepository repository;
-    private readonly RemotingRefWrapperService remotingRefService;
-    private readonly MatchService matchService;
-    private readonly AdvancedModeService advancedModeService;
-    private readonly RequestExtraInfoXmlService requestExtraInfoXmlService;
-    private readonly IMapper mapper;
-
-    public GetRequestServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefService, MatchService matchService
-        , IMapper mapper, AdvancedModeService advancedModeService, RequestExtraInfoXmlService requestExtraInfoXmlService)
-    {
-        this.repository = repository;
-        this.remotingRefService = remotingRefService;
-        this.matchService = matchService;
-        this.advancedModeService = advancedModeService;
-        this.mapper = mapper;
-        this.requestExtraInfoXmlService = requestExtraInfoXmlService;
-    }
-
     public async Task<RequestDetailViewModel> GetRequest(GetRequestRequest request)  // NOSONAR
     {
         var (firstResultSet, secondResultSet, thirdResultSet)
@@ -110,8 +99,7 @@ public class GetRequestServiceImp : GetRequestService
                 break;
 
             case IssueTypeConstant.WrongMarketOffered:
-            case IssueTypeConstant.TechnicalError:
-                viewModel.WrongMarketOfferedModel = await MapEventWrongMarketOffered(secondResultSet);
+                viewModel.WrongMarketOfferedModels = await MapEventWrongMarketOffered(secondResultSet);
                 break;
 
             case IssueTypeConstant.WrongOddsSportsBook:
@@ -124,6 +112,10 @@ public class GetRequestServiceImp : GetRequestService
 
             case IssueTypeConstant.OtherIssues:
                 viewModel.OtherIssuesModel = await MapEventOtherIssues(secondResultSet);
+                break;
+
+            case IssueTypeConstant.TechnicalError:
+                viewModel.TechnicalErrorModel = await MapEventTechnicalError(secondResultSet);
                 break;
 
             default:
@@ -282,7 +274,7 @@ public class GetRequestServiceImp : GetRequestService
             MatchId = model.MatchId,
             SubIssueTypeId = model.SubIssueTypeId,
             PlayerId = model.PlayerId,
-            BetTypeIds = model.BetTypeIds,
+            BetTypeIds = model.BetTypeIds
         });
     }
 
@@ -381,16 +373,18 @@ public class GetRequestServiceImp : GetRequestService
         };
     }
 
-    private async Task<WrongMarketOfferedViewModel> MapEventWrongMarketOffered(IEnumerable<RequestEventModel> requestEventModels)
+    private async Task<IEnumerable<WrongMarketOfferedViewModel>> MapEventWrongMarketOffered(IEnumerable<RequestEventModel> requestEventModels)
     {
-        var model = requestEventModels.First();
-        var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
-        var groupBetTypes = await advancedModeService.GetGroupBetTypes(model.MatchId,
+        var firstModel = requestEventModels.First();
+        var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(firstModel.AdvancedExtraInfo);
+        var groupBetTypes = await advancedModeService.GetGroupBetTypes(firstModel.MatchId,
             string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));
-        var allBetTypesSelection = advancedModeService.GetAllBetTypesSelection(model.AllBetTypesSelectionJson);
+        var allBetTypesSelection = advancedModeService.GetAllBetTypesSelection(firstModel.AllBetTypesSelectionJson);
 
-        return new WrongMarketOfferedViewModel
+        return requestEventModels.Select((model, index) => new WrongMarketOfferedViewModel
         {
+            Id = index + 1,
+            RequestDetailId = model.RequestDetailId,
             MatchId = model.MatchId,
             FilterFromTransTime = model.FilterFromTransTime,
             FilterToTransTime = model.FilterToTransTime,
@@ -400,7 +394,7 @@ public class GetRequestServiceImp : GetRequestService
             BetTeamsResult = betTypesAdvancedMode,
             GroupBetTypes = groupBetTypes,
             AllBetTypesSelection = allBetTypesSelection
-        };
+        });
     }
 
     private async Task<WrongOddsSportsBookViewModel> MapEventWrongOddsSportsBook(IEnumerable<RequestEventModel> requestEventModels)
@@ -459,6 +453,28 @@ public class GetRequestServiceImp : GetRequestService
         var allBetTypesSelection = advancedModeService.GetAllBetTypesSelection(model.AllBetTypesSelectionJson);
 
         return new OtherIssuesViewModel
+        {
+            MatchId = model.MatchId,
+            FilterFromTransTime = model.FilterFromTransTime,
+            FilterToTransTime = model.FilterToTransTime,
+            VoidFromTime = model.VoidFromTime,
+            VoidToTime = model.VoidToTime,
+            SubIssueTypeId = model.SubIssueTypeId,
+            BetTeamsResult = betTypesAdvancedMode,
+            GroupBetTypes = groupBetTypes,
+            AllBetTypesSelection = allBetTypesSelection
+        };
+    }
+
+    private async Task<TechnicalErrorViewModel> MapEventTechnicalError(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        var model = requestEventModels.First();
+        var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
+        var groupBetTypes = await advancedModeService.GetGroupBetTypes(model.MatchId,
+            string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));
+        var allBetTypesSelection = advancedModeService.GetAllBetTypesSelection(model.AllBetTypesSelectionJson);
+
+        return new TechnicalErrorViewModel
         {
             MatchId = model.MatchId,
             FilterFromTransTime = model.FilterFromTransTime,

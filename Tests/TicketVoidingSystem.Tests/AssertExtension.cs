@@ -1,16 +1,15 @@
 using Newtonsoft.Json;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests
-{
-    public static class AssertExtension
-    {
-        public static void Equal(object expected, object actual)
-        {
-            var expectedJson = JsonConvert.SerializeObject(expected);
-            var actualJson = JsonConvert.SerializeObject(actual);
+namespace TicketVoidingSystem.Tests;
 
-            Assert.Equal(expectedJson, actualJson);
-        }
+public static class AssertExtension
+{
+    public static void Equal(object expected, object actual)
+    {
+        var expectedJson = JsonConvert.SerializeObject(expected);
+        var actualJson = JsonConvert.SerializeObject(actual);
+
+        Assert.Equal(expectedJson, actualJson);
     }
 }

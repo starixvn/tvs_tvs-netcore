@@ -2,8 +2,8 @@
   <ng-container *ngIf="primitiveProperty.isLoadedBasicData">
     <div class="bg-gray void-page-item">
       <div class="full-width d-flex bg-gray">
-        <div class="index-of-match d-flex align-items-center">
-          <div class="number-circle"><span><strong>1</strong></span></div>
+        <div class="d-flex align-items-center">
+          <div class="number-circle"><span><strong>{{voidPageItem.id}}</strong></span></div>
         </div>
         <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">
           <div class="alert alert-dark p-1 m-0" [ngClass]="{'mb-1':voidPageItem.matchModel}"><span>
@@ -32,7 +32,7 @@
           [isDisableCheckbox]="true">
         </tickets-list>
         <message-area #messageArea [isShowTemplateMessage]="voidPageItem.isShowTemplateMessage" [totalVoidTickets]="voidPageItem.voidTicketsMini?.total"
-          [templateValue]="voidPageItem.templateValue" [issueTypeId]="requestDetail.request.issueTypeId"
+          [templateValue]="voidPageItem.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" [id]="voidPageItem.id"
           [subIssueTypeId]="voidPageItem.subIssueType.subIssueTypeId" [voidReason]="voidPageItem.voidReason" [requestId]="requestDetail.request.requestId">
         </message-area>
       </div>

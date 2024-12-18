@@ -9,15 +9,8 @@ public interface WrongScoreInfoService
     Task<IEnumerable<WrongScoreInfoViewModel>> GetWrongScoreInfo(GetWrongScoreInfoCriteria criteria);
 }
 
-public class WrongScoreInfoServiceImp : WrongScoreInfoService
+public class WrongScoreInfoServiceImp(IDynamicRepository repository) : WrongScoreInfoService
 {
-    private readonly IDynamicRepository repository;
-
-    public WrongScoreInfoServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<WrongScoreInfoViewModel>> GetWrongScoreInfo(GetWrongScoreInfoCriteria criteria)
     {
         return await repository.FetchAsync<WrongScoreInfoViewModel>(criteria);

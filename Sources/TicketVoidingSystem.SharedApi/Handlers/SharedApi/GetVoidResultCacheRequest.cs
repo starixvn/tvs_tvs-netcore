@@ -12,15 +12,9 @@ public class GetVoidResultCacheRequest : IRequest<IList<Result>>
     public string Guid { get; set; }
 }
 
-public class GetVoidResultCacheHandler : IRequestHandler<GetVoidResultCacheRequest, IList<Result>>
+public class GetVoidResultCacheHandler(ResultCacheService resultCacheService)
+    : IRequestHandler<GetVoidResultCacheRequest, IList<Result>>
 {
-    private readonly ResultCacheService resultCacheService;
-
-    public GetVoidResultCacheHandler(ResultCacheService resultCacheService)
-    {
-        this.resultCacheService = resultCacheService;
-    }
-
     public async Task<IList<Result>> Handle(GetVoidResultCacheRequest request, CancellationToken cancellationToken)
     {
         return await resultCacheService.GetVoidResultsCache(request.Guid);

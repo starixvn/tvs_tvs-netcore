@@ -8,6 +8,8 @@ public class CopyRequestInfoCriteria : CriteriaBase
 
     public int MatchId { get; set; }
 
+    public int? RequestDetailId { get; set; }
+
     public override string GetSettingKey() => "TicketVoiding_RequestInfo_Copy";
 
     public override bool IsValid() => true;

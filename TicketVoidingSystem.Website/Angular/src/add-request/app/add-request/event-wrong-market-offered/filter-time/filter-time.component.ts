@@ -1,8 +1,10 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { StaticService } from '../../../../../utility/services/static.service';
+import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import moment from 'moment-timezone';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
 import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-offered.model';
+import { EventWrongMarketOfferedService } from '../services/event-wrong-market-offfered.service';
+import { FilterTimeItemComponent } from './filter-time-item/filter-time-item.component';
 
 @Component({
   selector: 'filter-time',
@@ -12,32 +14,57 @@ import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-off
 
 export class FilterTimeComponent {
   @Input() isVoided: boolean;
-  @Input() filterWrongMarketOfferedModel = new FilterWrongMarketOfferedModel();
+  @Input() models: FilterWrongMarketOfferedModel[];
   @Output() changeFilterEvent = new EventEmitter();
   @Output() refreshEvent = new EventEmitter();
-  @ViewChild('fromTimeComponent') fromTimeComponent: DateFullTimeNewComponent;
-  @ViewChild('toTimeComponent') toTimeComponent: DateFullTimeNewComponent;
-
-  tooltip = new Tooltip();
-  private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
+  @ViewChildren('filterItem') filterItemComponents: QueryList<FilterTimeItemComponent>;
 
   constructor(
-    private readonly element: ElementRef
-  ) {
-    this.tooltip.element = this.element;
-  }
+    private readonly eventWrongMarketOfferedService: EventWrongMarketOfferedService
+  ) { }
 
-  public changeFilter(): void {
+  changeFilter(): void {
     this.changeFilterEvent.emit();
   }
 
-  public isValidity(): boolean {
-    return this.fromTimeComponent.validateWithTooltip() && this.toTimeComponent.validateWithTooltip()
-      && StaticService.isFromTimeSameOrBeforeToTime(this.filterWrongMarketOfferedModel.fromDateTime,
-        this.filterWrongMarketOfferedModel.toDateTime, this.tooltip, this.FROM_DATE_TIME_CLASS);
+  isValidity(): boolean {
+    return this.filterItemComponents.toArray().every(x => x.isValidity()) && this.isToTimeSmallerThanFromTimeNextScore();
   }
 
-  public emitRefreshEvent() {
+  emitRefreshEvent() {
     this.refreshEvent.emit();
+  }
+
+  addItem(previousTime: FilterWrongMarketOfferedModel): void {
+    this.changeFilter();
+    this.models.push(this.eventWrongMarketOfferedService.initRangeTimeByInputTime(previousTime.toDateTime));
+    this.reRenderId();
+  }
+
+  removeItem(index: number): void {
+    this.changeFilter();
+    this.models.splice(index, 1);
+    this.reRenderId();
+  }
+
+  isToTimeSmallerThanFromTimeNextScore(): boolean {
+    return this.models.every((model, index) => {
+      if (index === this.models.length - 1) {
+        return true;
+      }
+
+      const momentToTime = moment(model.toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+      const momentFromTimeNextScore = moment(this.models[index + 1].fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+      const comparingFromTimeNextScore = momentFromTimeNextScore.subtract(2, 'milliseconds').format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+      if (momentToTime.isSameOrAfter(moment(comparingFromTimeNextScore, DateTimeFormat.FULL_DATE_TIME_FORMAT))) {
+        this.filterItemComponents.toArray()[index].tooltip.display(`to-date-time-${index + 1}`, LABELS.TO_TIME_MUST_SMALLER_THAN_NEXT_FROM_TIME);
+        return false;
+      }
+      return true;
+    });
+  }
+
+  private reRenderId() {
+    this.models.forEach((model, index) => model.id = index + 1);
   }
 }

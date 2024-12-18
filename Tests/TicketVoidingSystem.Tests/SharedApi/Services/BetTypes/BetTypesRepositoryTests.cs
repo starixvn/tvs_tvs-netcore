@@ -11,7 +11,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.SharedApi.Services.BetTypes;
 
-public class BetTypesRepositoryTests : AppSettingFixture, IClassFixture<RemotingRefFixture>
+public class BetTypesRepositoryTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {
     private readonly IDynamicRepository repository;
     private readonly BetTypesRepositoryImp service;
@@ -98,7 +98,7 @@ public class BetTypesRepositoryTests : AppSettingFixture, IClassFixture<Remoting
             .ReturnsForAnyArgs(data);
 
         // Act
-        _ = await service.GetBetTypesHaveTicketsForTvs(1, false, null, null);
+        _ = await service.GetBetTypesHaveTicketsForTvs(1, false, null);
 
         // Assert
         await repository.Received().FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteria>());

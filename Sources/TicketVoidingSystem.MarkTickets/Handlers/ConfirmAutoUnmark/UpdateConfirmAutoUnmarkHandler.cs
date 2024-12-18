@@ -7,19 +7,11 @@ using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark;
 
-public class UpdateConfirmAutoUnmarkRequest : UpdateConfirmAutoUnmarkQuery, IRequest<Result>
+public class UpdateConfirmAutoUnmarkRequest : UpdateConfirmAutoUnmarkQuery, IRequest<Result>;
+
+public class UpdateConfirmAutoUnmarkHandler(UpdateConfirmAutoUnmarkService updateConfirmAutoUnmarkService)
+    : IRequestHandler<UpdateConfirmAutoUnmarkRequest, Result>
 {
-}
-
-public class UpdateConfirmAutoUnmarkHandler : IRequestHandler<UpdateConfirmAutoUnmarkRequest, Result>
-{
-    private readonly UpdateConfirmAutoUnmarkService updateConfirmAutoUnmarkService;
-
-    public UpdateConfirmAutoUnmarkHandler(UpdateConfirmAutoUnmarkService updateConfirmAutoUnmarkService)
-    {
-        this.updateConfirmAutoUnmarkService = updateConfirmAutoUnmarkService;
-    }
-
     public async Task<Result> Handle(UpdateConfirmAutoUnmarkRequest message, CancellationToken cancellationToken)
     {
         await updateConfirmAutoUnmarkService.InsertAutoUnmarkSetting(message);

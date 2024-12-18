@@ -15,22 +15,12 @@ public interface GetTicketsService
     Task<Group<TicketViewModel>> AssignData(Group<GetTicketModel> groupTicket, bool isVoidByBetId);
 }
 
-public class GetTicketsServiceImp : GetTicketsService
+public class GetTicketsServiceImp(
+    VoidByBetIdRepository repository,
+    SessionService sessionService,
+    TicketService ticketHtmlService)
+    : GetTicketsService
 {
-    private readonly VoidByBetIdRepository repository;
-    private readonly SessionService sessionService;
-    private readonly TicketService ticketHtmlService;
-
-    public GetTicketsServiceImp(
-        VoidByBetIdRepository repository,
-        SessionService sessionService,
-        TicketService ticketHtmlService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.ticketHtmlService = ticketHtmlService;
-    }
-
     public async Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int matchId)> GetTickets(GetTicketsQuery query)
     {
         return await repository.GetTickets(query);

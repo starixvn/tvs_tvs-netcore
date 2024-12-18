@@ -13,19 +13,12 @@ public interface GroupTicketService
     Task<Group<TicketViewModel>> CreateGroupTicketViewModel(Group<GetTicketModel> group, Match match);
 }
 
-public class GroupTicketServiceImp : GroupTicketService
+public class GroupTicketServiceImp(
+    PagingService pagingService,
+    MapTicketService mapTicketService,
+    PermissionService permissionService)
+    : GroupTicketService
 {
-    private readonly PagingService pagingService;
-    private readonly MapTicketService mapTicketService;
-    private readonly PermissionService permissionService;
-
-    public GroupTicketServiceImp(PagingService pagingService, MapTicketService mapTicketService, PermissionService permissionService)
-    {
-        this.pagingService = pagingService;
-        this.mapTicketService = mapTicketService;
-        this.permissionService = permissionService;
-    }
-
     public IEnumerable<Group<GetTicketModel>> CreateGroupsGetTicketModel(IEnumerable<GetTicketModel> data, GetTicketsQuery query)
     {
         var tickets = pagingService.Paging(data, query.PageIndex, query.PageSize).ToList();

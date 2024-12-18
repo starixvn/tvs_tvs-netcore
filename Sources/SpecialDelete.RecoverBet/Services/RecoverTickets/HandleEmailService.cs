@@ -24,19 +24,11 @@ public interface IHandleEmailService
     void SendMailItSupport(IEnumerable<SiteEmail> sites, List<RecoverTicketModel> tickets, MailRecoverViewModel<MailTicketViewModel> viewModel);
 }
 
-public class HandleEmailService : IHandleEmailService
+public class HandleEmailService(
+    EmailRecoverService<MailTicketViewModel, RecoverTicketModel> emailService,
+    SessionService sessionService)
+    : IHandleEmailService
 {
-    private readonly SessionService sessionService;
-    private readonly EmailRecoverService<MailTicketViewModel, RecoverTicketModel> emailService;
-
-    public HandleEmailService(
-        EmailRecoverService<MailTicketViewModel, RecoverTicketModel> emailService,
-        SessionService sessionService)
-    {
-        this.emailService = emailService;
-        this.sessionService = sessionService;
-    }
-
     public async Task<IEnumerable<SiteEmail>> GetSites()
     {
         return await emailService.GetSites();

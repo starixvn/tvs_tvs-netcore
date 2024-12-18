@@ -18,19 +18,11 @@ public interface SheetService
     void EditMatch(ExcelWorksheet worksheet, ExportExcelQuery query);
 }
 
-public class SheetServiceImp : SheetService
+public class SheetServiceImp(
+    GetTicketsService getTicketsService,
+    TicketService ticketService)
+    : SheetService
 {
-    private readonly GetTicketsService getTicketsService;
-    private readonly TicketService ticketService;
-
-    public SheetServiceImp(
-        GetTicketsService getTicketsService,
-        TicketService ticketService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.ticketService = ticketService;
-    }
-
     public async Task<IEnumerable<ExcelTicketModel>> GetTickets(ExportExcelQuery query)
     {
         var tickets = new List<ExcelTicketModel>();

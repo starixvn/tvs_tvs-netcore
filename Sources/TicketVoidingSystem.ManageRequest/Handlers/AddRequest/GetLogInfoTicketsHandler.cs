@@ -11,17 +11,11 @@ public class GetLogInfoTicketsRequest : IRequest<TicketsViewModel>
     public int IssueTypeId { get; set; }
 }
 
-public class GetLogInfoTicketsHandler : IRequestHandler<GetLogInfoTicketsRequest, TicketsViewModel>
+public class GetLogInfoTicketsHandler(GetLogInfoTicketsService getLogInfoTicketsService)
+    : IRequestHandler<GetLogInfoTicketsRequest, TicketsViewModel>
 {
-    private readonly GetLogInfoTicketsService GetLogInfoTicketsService;
-
-    public GetLogInfoTicketsHandler(GetLogInfoTicketsService GetLogInfoTicketsService)
+    public Task<TicketsViewModel> Handle(GetLogInfoTicketsRequest request, CancellationToken cancellationToken)
     {
-        this.GetLogInfoTicketsService = GetLogInfoTicketsService;
-    }
-
-    public async Task<TicketsViewModel> Handle(GetLogInfoTicketsRequest request, CancellationToken cancellationToken)
-    {
-        return GetLogInfoTicketsService.GetTicketsViewModel(request);
+        return Task.FromResult(getLogInfoTicketsService.GetTicketsViewModel(request));
     }
 }

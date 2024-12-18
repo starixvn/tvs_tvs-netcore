@@ -30,7 +30,7 @@ public class CheckValidUsernamesHandlerTests
             TransInfoJsonCompress = "123",
             TransInfoValidation = transInfoAddRequestModel
         };
-        var calcVoidTicketsResult = new CalcVoidTicketsResult()
+        var calcVoidTicketsResult = new CalcVoidTicketsResult
         {
             Accounts = new List<AccountWinlostModel> { new() },
             VoidTickets = new List<TicketCalculateWinLostAccount> { new() }
@@ -44,7 +44,7 @@ public class CheckValidUsernamesHandlerTests
                 UnMarkTransIds = "123",
                 MarkTransIds = "456",
                 TransInfoJson = "123"
-            },
+            }
         };
         var checkUsernameService = Substitute.For<CheckUsernameService>();
         var calculateVoidTicketsService = Substitute.For<CalculateVoidTicketsService>();
@@ -71,7 +71,7 @@ public class CheckValidUsernamesHandlerTests
             ActionId = ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId,
             AccountWinlostModels = new List<AccountWinlostModel> { new() { Username = "123AA" } }
         };
-        var calcVoidTicketsResult = new CalcVoidTicketsResult()
+        var calcVoidTicketsResult = new CalcVoidTicketsResult
         {
             Accounts = new List<AccountWinlostModel> { new() },
             VoidTickets = new List<TicketCalculateWinLostAccount> { new() }

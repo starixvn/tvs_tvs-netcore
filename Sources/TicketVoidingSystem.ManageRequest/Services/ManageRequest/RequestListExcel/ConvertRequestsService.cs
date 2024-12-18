@@ -36,15 +36,8 @@ public interface ConvertRequestsService
     string GetVarCheckValue(bool isCheckedVar);
 }
 
-public class ConvertRequestsServiceImp : ConvertRequestsService
+public class ConvertRequestsServiceImp(IDynamicRepository repository) : ConvertRequestsService
 {
-    private readonly IDynamicRepository repository;
-
-    public ConvertRequestsServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<IssueType>> GetAllIssueTypes()
     {
         return await repository.FetchAsync<IssueType>(new GetIssueTypeCriteria());

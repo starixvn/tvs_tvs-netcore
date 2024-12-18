@@ -11,34 +11,20 @@ public interface GetLinkedLogService
     Task<LinkedLogDataViewModel> GetLinkedLogWhenError(Exception exception);
 }
 
-public class GetLinkedLogServiceImp : GetLinkedLogService
+public class GetLinkedLogServiceImp(
+    LoggingService loggingService,
+    LinkedLogHttpClientService linkedLogHttpClientService,
+    FilterLinkedLogService filterLinkedLogService,
+    LinkGroupBettypeService linkGroupBettypeService,
+    LinkedLogForUIService linkedLogForUiService)
+    : GetLinkedLogService
 {
-    private readonly LoggingService loggingService;
-    private readonly LinkedLogHttpClientService linkedLogHttpClientService;
-    private readonly FilterLinkedLogService filterLinkedLogService;
-    private readonly LinkGroupBettypeService linkGroupBettypeService;
-    private readonly LinkedLogForUIService linkedLogForUIService;
-
-    public GetLinkedLogServiceImp(LoggingService loggingService,
-        LinkedLogHttpClientService linkedLogHttpClientService,
-        FilterLinkedLogService filterLinkedLogService,
-        LinkGroupBettypeService linkGroupBettypeService,
-        LinkedLogForUIService linkedLogForUIService
-    )
-    {
-        this.loggingService = loggingService;
-        this.linkedLogHttpClientService = linkedLogHttpClientService;
-        this.filterLinkedLogService = filterLinkedLogService;
-        this.linkGroupBettypeService = linkGroupBettypeService;
-        this.linkedLogForUIService = linkedLogForUIService;
-    }
-
     public async Task<LinkedLogDataViewModel> GetLinkedLogWhenSuccess(GetLinkedLogModel getLinkedLogModel)
     {
         var responseFromApi = await linkedLogHttpClientService.GetLinkedLog(getLinkedLogModel.MatchId, getLinkedLogModel.LiveIndicator);
         var groupLinkedLogResponse = filterLinkedLogService.GroupBy(getLinkedLogModel, responseFromApi);
         var (isLinkGroup1X2, isLinkGroupAIO) = linkGroupBettypeService.CheckAffectedToGroup(getLinkedLogModel, groupLinkedLogResponse.AffectedLog);
-        var groupLinkedLogs = linkedLogForUIService.Build(groupLinkedLogResponse, getLinkedLogModel.IssueTypeId, getLinkedLogModel.SubIssueTypeId);
+        var groupLinkedLogs = linkedLogForUiService.Build(groupLinkedLogResponse, getLinkedLogModel.IssueTypeId, getLinkedLogModel.SubIssueTypeId);
 
         return new LinkedLogDataViewModel
         {

@@ -18,6 +18,7 @@
     <void-not-participate *ngIf="isLikelyVoidNotParticipate()" [requestDetail]="requestDetail"></void-not-participate>
     <void-early-kick-off *ngIf="isLikelyVoidEarlyKickOff()" [requestDetail]="requestDetail"></void-early-kick-off>
     <void-abnormal-bet *ngIf="isShowVoidAbnormalBet()" [requestDetail]="requestDetail"></void-abnormal-bet>
+    <void-wrong-market-offered *ngIf="isShowVoidWrongMarketOffered()" [requestDetail]="requestDetail"></void-wrong-market-offered>
   </ng-container>
   <div *ngIf="!isValidRequest()" class="mg-10 no-data">
     Loading...

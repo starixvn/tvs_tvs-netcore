@@ -71,19 +71,20 @@ public class GetRequestsForExcelServiceTests
         {
             new() { RequestId = 1, MatchId = 1 },
             new() { RequestId = 2, MatchId = 2 },
-            new() { RequestId = 3, MatchId = 3 },
+            new() { RequestId = 3, MatchId = 3 }
         };
         var renderedViewModels = new RequestViewModel
         {
             BettypeNames = new List<string> { "av" },
-            Details = new List<RequestEventViewModel>
-            {
-                new()
+            Details =
+            [
+                new RequestEventViewModel
                 {
                     MatchId = 1
                 },
-                new()
-            },
+
+                new RequestEventViewModel()
+            ],
             CalcFullTime = new DateTime(2023, 2, 2, 2, 2, 2),
             CalcHalfTime = new DateTime(2023, 2, 2, 2, 2, 2)
         };

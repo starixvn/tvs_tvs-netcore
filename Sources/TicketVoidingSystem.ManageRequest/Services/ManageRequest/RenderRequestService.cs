@@ -13,28 +13,19 @@ public interface RenderRequestService
     RequestViewModel RenderExportExcel(RequestModel item);
 }
 
-public class RenderRequestServiceImp : RenderRequestService
+public class RenderRequestServiceImp(
+    IMapper mapper,
+    DescriptionService descriptionService,
+    RemotingRefWrapperService remotingRefWrapperService,
+    MatchService matchService)
+    : RenderRequestService
 {
-    private readonly IMapper mapper;
-    private readonly DescriptionService descriptionService;
-    private readonly MatchService matchService;
-    private readonly RemotingRefWrapperService remotingRefWrapperService;
-
-    public RenderRequestServiceImp(IMapper mapper, DescriptionService descriptionService,
-        RemotingRefWrapperService remotingRefWrapperService, MatchService matchService)
-    {
-        this.mapper = mapper;
-        this.descriptionService = descriptionService;
-        this.matchService = matchService;
-        this.remotingRefWrapperService = remotingRefWrapperService;
-    }
-
     public RequestViewModel Render(GroupRequestModel groupRequest)
     {
         var requestModel = groupRequest.RequestModels.First();
         var viewModel = mapper.Map<RequestViewModel>(requestModel);
         viewModel.CreatedDate = requestModel.CreatedDate.ZoneManila();
-        viewModel.Details = new List<RequestEventViewModel>();
+        viewModel.Details = [];
         AddEventDetail(viewModel, groupRequest.RequestModels);
 
         return viewModel;
@@ -44,7 +35,7 @@ public class RenderRequestServiceImp : RenderRequestService
     {
         var viewModel = mapper.Map<RequestViewModel>(item);
         viewModel.CreatedDate = item.CreatedDate.ZoneManila();
-        viewModel.Details = new List<RequestEventViewModel>();
+        viewModel.Details = [];
         AddEventDetailExportExcel(viewModel, item);
 
         return viewModel;

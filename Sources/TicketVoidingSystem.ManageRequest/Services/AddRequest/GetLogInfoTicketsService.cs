@@ -12,17 +12,9 @@ public interface GetLogInfoTicketsService
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request);
 }
 
-public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
+public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, CompressDataService compressDataService)
+    : GetLogInfoTicketsService
 {
-    private readonly MapTicketsService mapTicketsService;
-    private readonly CompressDataService compressDataService;
-
-    public GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, CompressDataService compressDataService)
-    {
-        this.mapTicketsService = mapTicketsService;
-        this.compressDataService = compressDataService;
-    }
-
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request)
     {
         var getTicketModels = compressDataService.DecompressTickets(request.LogInfoTicketsJson);
@@ -77,22 +69,20 @@ public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
 
     private string GetGroupNameByIssueType(int issueTypeId, TicketViewModel ticket)
     {
-        switch (issueTypeId)
+        HashSet<int> IssueTypesHasTicketParlay =
+        [
+            IssueTypeConstant.WrongHDP, IssueTypeConstant.Wrong1stHDP, IssueTypeConstant.WrongOU,
+            IssueTypeConstant.Wrong1stOU, IssueTypeConstant.WrongOdds
+        ];
+
+        if (IssueTypesHasTicketParlay.Contains(issueTypeId))
         {
-            case IssueTypeConstant.WrongHDP:
-            case IssueTypeConstant.Wrong1stHDP:
-            case IssueTypeConstant.WrongOU:
-            case IssueTypeConstant.Wrong1stOU:
-            case IssueTypeConstant.WrongOdds:
-                return ticket.IsParlay ? "Parlay" : ticket.BetType;
-
-            case IssueTypeConstant.WrongMarketOffered:
-            case IssueTypeConstant.TechnicalError:
-            case IssueTypeConstant.WrongOddsSportsBook:
-                return string.Empty;
-
-            default:
-                return ticket.GroupName;
+            return ticket.IsParlay ? "Parlay" : ticket.BetType;
         }
+
+        return issueTypeId is IssueTypeConstant.WrongMarketOffered or IssueTypeConstant.WrongOddsSportsBook
+            or IssueTypeConstant.TechnicalError or IssueTypeConstant.OtherIssues
+            ? string.Empty
+            : ticket.GroupName;
     }
 }

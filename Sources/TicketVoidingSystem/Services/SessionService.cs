@@ -20,21 +20,13 @@ public interface SessionService
     bool CheckPassword(string encodedPassword);
 }
 
-public class SessionServiceImp : SessionService
+public class SessionServiceImp(
+    INapSession currentSession,
+    IUserService userService,
+    INapSettings siteSettings,
+    IHttpContextAccessor httpContextAccessor)
+    : SessionService
 {
-    private readonly INapSession currentSession;
-    private readonly IUserService userService;
-    private readonly INapSettings siteSettings;
-    private readonly IHttpContextAccessor httpContextAccessor;
-
-    public SessionServiceImp(INapSession currentSession, IUserService userService, INapSettings siteSettings, IHttpContextAccessor httpContextAccessor)
-    {
-        this.currentSession = currentSession;
-        this.userService = userService;
-        this.siteSettings = siteSettings;
-        this.httpContextAccessor = httpContextAccessor;
-    }
-
     public int UserId => currentSession.UserId;
 
     public string UserName => currentSession.UserName;

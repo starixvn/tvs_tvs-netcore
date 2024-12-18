@@ -19,28 +19,14 @@ public interface IRecoverTicketsService
     IEnumerable<Result> CreateResultMessage(string settledTransIds, bool isRequiredResettleMatch);
 }
 
-public class RecoverTicketsService : IRecoverTicketsService
+public class RecoverTicketsService(
+    IRepository repository,
+    SessionService sessionService,
+    LoggingService loggingService,
+    SendMessageService sendMessageService,
+    IHandleEmailService emailService)
+    : IRecoverTicketsService
 {
-    private readonly IRepository repository;
-    private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
-    private readonly SendMessageService sendMessageService;
-    private readonly IHandleEmailService emailService;
-
-    public RecoverTicketsService(
-        IRepository repository,
-        SessionService sessionService,
-        LoggingService loggingService,
-        SendMessageService sendMessageService,
-        IHandleEmailService emailService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.loggingService = loggingService;
-        this.sendMessageService = sendMessageService;
-        this.emailService = emailService;
-    }
-
     public async Task<RecoverTicketsModel> RecoverTickets(IEnumerable<BetId> tickets, IEnumerable<BetId> cricketTickets)
     {
         try
@@ -58,7 +44,7 @@ public class RecoverTicketsService : IRecoverTicketsService
             return new RecoverTicketsModel
             {
                 Validation = validation,
-                Tickets = Enumerable.Empty<RecoverTicketModel>()
+                Tickets = []
             };
         }
     }

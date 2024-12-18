@@ -11,26 +11,15 @@ public interface GetRequestsForExcelService
     Task<IEnumerable<ExcelRequestModel>> GetRequestsExcel(SelectRequestsQuery query);
 }
 
-public class GetRequestsForExcelServiceImp : GetRequestsForExcelService
+public class GetRequestsForExcelServiceImp(
+    IMapper mapper,
+    GetRequestsService getRequestsService,
+    CalculateTimeService calculateTimeService,
+    RenderRequestService renderService,
+    ConvertRequestsService convertRequestsService,
+    OWPDataService owpDataService)
+    : GetRequestsForExcelService
 {
-    private readonly IMapper mapper;
-    private readonly GetRequestsService getRequestsService;
-    private readonly CalculateTimeService calculateTimeService;
-    private readonly RenderRequestService renderService;
-    private readonly ConvertRequestsService convertRequestsService;
-    private readonly OWPDataService owpDataService;
-
-    public GetRequestsForExcelServiceImp(IMapper mapper, GetRequestsService getRequestsService, CalculateTimeService calculateTimeService,
-        RenderRequestService renderService, ConvertRequestsService convertRequestsService, OWPDataService owpDataService)
-    {
-        this.mapper = mapper;
-        this.getRequestsService = getRequestsService;
-        this.calculateTimeService = calculateTimeService;
-        this.renderService = renderService;
-        this.convertRequestsService = convertRequestsService;
-        this.owpDataService = owpDataService;
-    }
-
     public async Task<IEnumerable<ExcelRequestModel>> GetRequestsExcel(SelectRequestsQuery query)
     {
         var models = await GetRawRequestsData(query);

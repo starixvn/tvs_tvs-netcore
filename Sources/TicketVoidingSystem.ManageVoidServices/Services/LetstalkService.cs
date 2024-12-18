@@ -13,15 +13,8 @@ public interface LetstalkService
     Task<bool> UpdateLetstalk(int requestId, string broadcastSessionId, int statusId);
 }
 
-public class LetstalkServiceImp : LetstalkService
+public class LetstalkServiceImp(IDynamicRepository repository) : LetstalkService
 {
-    private readonly IDynamicRepository repository;
-
-    public LetstalkServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<LetstalkModel>> GetLetstalkModel(int requestId, string broadcastSessionId)
     {
         var criteria = new GetLetstalkCriteria

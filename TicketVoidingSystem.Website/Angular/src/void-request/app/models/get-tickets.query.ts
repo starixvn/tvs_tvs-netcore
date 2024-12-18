@@ -10,4 +10,5 @@ export class GetTicketsQuery {
   subIssueTypeId: number;
   betTypes?: CheckedBetType[];
   transInfoJson?: string; // only use for EKO search tickets
+  requestDetailId?: number; // only use for likely wrong market offered
 }

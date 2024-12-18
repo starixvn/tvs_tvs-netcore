@@ -10,15 +10,8 @@ namespace SpecialDelete.RecoverParlayBet.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class RecoverSubParlayController : ControllerBase
+public class RecoverSubParlayController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public RecoverSubParlayController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverSubParlayBet, Policy = Constant.Policy.Read)]
     [HttpPost]
     public async Task<JsonResult> GetTickets(GetSubTicketsRequest request) => this.JsonResultPascalCase(await mediator.Send(request));

@@ -8,21 +8,11 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers;
 
-public class RemoveUsersRequest : RemoveUsersCommand, IRequest<Result>
+public class RemoveUsersRequest : RemoveUsersCommand, IRequest<Result>;
+
+public class RemoveUsersHandler(IDynamicRepository repository, SessionService session)
+    : IRequestHandler<RemoveUsersRequest, Result>
 {
-}
-
-public class RemoveUsersHandler : IRequestHandler<RemoveUsersRequest, Result>
-{
-    private readonly IDynamicRepository repository;
-    private readonly SessionService session;
-
-    public RemoveUsersHandler(IDynamicRepository repository, SessionService session)
-    {
-        this.repository = repository;
-        this.session = session;
-    }
-
     public async Task<Result> Handle(RemoveUsersRequest request, CancellationToken cancellationToken)
     {
         var command = new RemoveUsersCommand

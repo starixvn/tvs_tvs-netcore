@@ -6,19 +6,11 @@ using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetOperatorsRequest : GetOperatorsInfoCriteria, IRequest<IEnumerable<OperatorInfo?>>
+public class GetOperatorsRequest : GetOperatorsInfoCriteria, IRequest<IEnumerable<OperatorInfo?>>;
+
+public class GetOperatorsHandler(IDynamicRepository repository)
+    : IRequestHandler<GetOperatorsRequest, IEnumerable<OperatorInfo?>>
 {
-}
-
-public class GetOperatorsHandler : IRequestHandler<GetOperatorsRequest, IEnumerable<OperatorInfo?>>
-{
-    private readonly IDynamicRepository repository;
-
-    public GetOperatorsHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<OperatorInfo?>> Handle(GetOperatorsRequest request, CancellationToken cancellationToken)
     {
         var operators = new List<OperatorInfo?>();

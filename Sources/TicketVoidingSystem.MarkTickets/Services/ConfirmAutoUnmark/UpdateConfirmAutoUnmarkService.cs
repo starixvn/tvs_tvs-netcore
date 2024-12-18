@@ -21,19 +21,12 @@ public interface UpdateConfirmAutoUnmarkService
         IEnumerable<BetId> abnormalBetTickets);
 }
 
-public class UpdateConfirmAutoUnmarkServiceImp : UpdateConfirmAutoUnmarkService
+public class UpdateConfirmAutoUnmarkServiceImp(
+    IDynamicRepository repository,
+    SessionService sessionService,
+    CombineValidationService combineValidationService)
+    : UpdateConfirmAutoUnmarkService
 {
-    private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
-    private readonly CombineValidationService combineValidationService;
-
-    public UpdateConfirmAutoUnmarkServiceImp(IDynamicRepository repository, SessionService sessionService, CombineValidationService combineValidationService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.combineValidationService = combineValidationService;
-    }
-
     public async Task InsertAutoUnmarkSetting(UpdateConfirmAutoUnmarkQuery query)
     {
         var criteria = new InsertAutoUnmarkSettingCriteria

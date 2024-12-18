@@ -121,7 +121,6 @@ export class EventWrongOfferedNameComponent  implements OnInit {
     arg.others = this.others;
     arg.filter = this.filter;
     arg.primitiveProps = this.primitiveProps;
-    arg.issueTypes = this.issueTypes;
     arg.filterWrongOfferedNameComponent = this.filterWrongOfferedNameComponent;
     arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.logInfoEvent = this.logInfoEvent;

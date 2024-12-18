@@ -7,23 +7,13 @@ using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class GetVoidedTicketsRequest : GetVoidedTicketsQuery, IRequest<VoidedTicketsViewModel>
+public class GetVoidedTicketsRequest : GetVoidedTicketsQuery, IRequest<VoidedTicketsViewModel>;
+
+public class GetVoidedTicketsHandler(
+    GetVoidedTicketsService getVoidedTicketsService,
+    MapTicketsService mapTicketsService)
+    : IRequestHandler<GetVoidedTicketsRequest, VoidedTicketsViewModel>
 {
-}
-
-public class GetVoidedTicketsHandler : IRequestHandler<GetVoidedTicketsRequest, VoidedTicketsViewModel>
-{
-    private readonly GetVoidedTicketsService getVoidedTicketsService;
-    private readonly MapTicketsService mapTicketsService;
-
-    public GetVoidedTicketsHandler(
-        GetVoidedTicketsService getVoidedTicketsService,
-        MapTicketsService mapTicketsService)
-    {
-        this.getVoidedTicketsService = getVoidedTicketsService;
-        this.mapTicketsService = mapTicketsService;
-    }
-
     public async Task<VoidedTicketsViewModel> Handle(GetVoidedTicketsRequest request, CancellationToken cancellationToken)
     {
         var voidedTickets = await getVoidedTicketsService.GetTickets(request);

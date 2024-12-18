@@ -98,8 +98,6 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
             RefNo = "4"
         };
 
-        service = new BetListServiceImp(null, null);
-
         // Act
         var actual = service.GetBetTypeName(ticket);
 
@@ -108,14 +106,18 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         Assert.Equal("4", ticket.RefNo);
     }
 
-    [Fact]
-    public void GetBetTypeNameChineseSimplified_ReturnName()
+    [Theory]
+    [InlineData(11099, "串关")]
+    [InlineData(29, "串关")]
+    public void GetBetTypeNameChineseSimplified_ReturnName(int betTypeId, string expected)
     {
         // Arrange
         var ticket = new Ticket
         {
             BetId = 224,
-            BetTeam = "h"
+            BetTeam = "h",
+            BetTypeId = betTypeId,
+            RefNo = "4"
         };
         service = new BetListServiceImp(null, null);
 
@@ -123,17 +125,21 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         var actual = service.GetBetTypeNameChineseSimplified(ticket);
 
         // Assert
-        Assert.Equal("", actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Fact]
-    public void GetBetTypeNameChineseTraditional_ReturnName()
+    [Theory]
+    [InlineData(11099, "串關")]
+    [InlineData(29, "串關")]
+    public void GetBetTypeNameChineseTraditional_ReturnName(int betTypeId, string expected)
     {
         // Arrange
         var ticket = new Ticket
         {
             BetId = 224,
-            BetTeam = "h"
+            BetTeam = "h",
+            BetTypeId = betTypeId,
+            RefNo = "4"
         };
         service = new BetListServiceImp(null, null);
 
@@ -141,17 +147,21 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         var actual = service.GetBetTypeNameChineseTraditional(ticket);
 
         // Assert
-        Assert.Equal("", actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Fact]
-    public void GetBetTypeNameNewChineseSimplified_ReturnName()
+    [Theory]
+    [InlineData(11099, "Mix Parlay")]
+    [InlineData(29, "System Parlay")]
+    public void GetBetTypeNameNewChineseSimplified_ReturnName(int betTypeId, string expected)
     {
         // Arrange
         var ticket = new Ticket
         {
             BetId = 224,
-            BetTeam = "h"
+            BetTeam = "h",
+            BetTypeId = betTypeId,
+            RefNo = "4"
         };
         service = new BetListServiceImp(null, null);
 
@@ -159,7 +169,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         var actual = service.GetBetTypeNameNewChineseSimplified(ticket);
 
         // Assert
-        Assert.Equal("", actual);
+        Assert.Equal(expected, actual);
     }
 
     [Theory]

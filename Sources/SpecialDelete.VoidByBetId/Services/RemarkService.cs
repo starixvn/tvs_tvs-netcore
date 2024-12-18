@@ -11,15 +11,8 @@ public interface RemarkService
     Task<IndexViewModel> GetInfo();
 }
 
-public class RemarkServiceImp : RemarkService
+public class RemarkServiceImp(SessionService sessionService) : RemarkService
 {
-    private readonly SessionService sessionService;
-
-    public RemarkServiceImp(SessionService sessionService)
-    {
-        this.sessionService = sessionService;
-    }
-
     public async Task<IndexViewModel> GetInfo()
     {
         return new IndexViewModel

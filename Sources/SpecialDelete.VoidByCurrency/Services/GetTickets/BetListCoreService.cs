@@ -17,17 +17,8 @@ public interface BetListCoreService
     TicketViewModel GetOutrightTicket(GetTicketModel item);
 }
 
-public class BetListCoreServiceImp : BetListCoreService
+public class BetListCoreServiceImp(IMapper mapper, BetListService betListService) : BetListCoreService
 {
-    private readonly IMapper mapper;
-    private readonly BetListService betListService;
-
-    public BetListCoreServiceImp(IMapper mapper, BetListService betListService)
-    {
-        this.mapper = mapper;
-        this.betListService = betListService;
-    }
-
     public TicketViewModel GetTicket(GetTicketModel item)
     {
         var ticketDetail = new TicketViewModel();
@@ -95,7 +86,7 @@ public class BetListCoreServiceImp : BetListCoreService
         ticket.BetId = item.IsMixParlay ? default(long?) : item.BetId;
         ticket.WalletType = item.WalletType.SetWalletType(item.RefCode);
         ticket.RefCode = 0;
-        ticket.SettlementStatus = item.IsMixParlay ? default(byte) : item.SettlementStatus;
+        ticket.SettlementStatus = item.IsMixParlay ? default : item.SettlementStatus;
 
         return ticket;
     }

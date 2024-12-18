@@ -7,19 +7,11 @@ namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
 using Fanex.NAP.Client.Helpers.Business;
 
-public class GetPermissionManageRequest : IRequest<PermissionManage>
+public class GetPermissionManageRequest : IRequest<PermissionManage>;
+
+public class GetPermissionManageHandler(SessionService sessionService)
+    : IRequestHandler<GetPermissionManageRequest, PermissionManage>
 {
-}
-
-public class GetPermissionManageHandler : IRequestHandler<GetPermissionManageRequest, PermissionManage>
-{
-    private readonly SessionService sessionService;
-
-    public GetPermissionManageHandler(SessionService sessionService)
-    {
-        this.sessionService = sessionService;
-    }
-
     public async Task<PermissionManage> Handle(GetPermissionManageRequest request, CancellationToken cancellationToken)
     {
         var manageRequestHost =

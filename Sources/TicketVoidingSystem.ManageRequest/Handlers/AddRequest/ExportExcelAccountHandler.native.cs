@@ -6,19 +6,11 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class ExportExcelAccountRequest : ExportAccountWinLostQuery, IRequest<ExcelFileModel>
+public class ExportExcelAccountRequest : ExportAccountWinLostQuery, IRequest<ExcelFileModel>;
+
+public class ExportExcelAccountHandler(ExcelService<ExportAccountWinLostQuery> excelService)
+    : IRequestHandler<ExportExcelAccountRequest, ExcelFileModel>
 {
-}
-
-public class ExportExcelAccountHandler : IRequestHandler<ExportExcelAccountRequest, ExcelFileModel>
-{
-    private readonly ExcelService<ExportAccountWinLostQuery> excelService;
-
-    public ExportExcelAccountHandler(ExcelService<ExportAccountWinLostQuery> excelService)
-    {
-        this.excelService = excelService;
-    }
-
     public async Task<ExcelFileModel> Handle(ExportExcelAccountRequest request, CancellationToken cancellationToken)
     {
         var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";

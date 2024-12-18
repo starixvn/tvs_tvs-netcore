@@ -12,19 +12,13 @@ public interface RecoverTicketsService<T, in TU> where T : EmailSupport where TU
     Task<IEnumerable<Result>> Recover(TU query);
 }
 
-public class RecoverTicketsServiceImp<T, TU> : RecoverTicketsService<T, TU> where T : EmailSupport where TU : RecoverMainTicketsQuery
+public class RecoverTicketsServiceImp<T, TU>(
+    TicketsHandlerService<T, TU> ticketsHandlerService,
+    LoggingService loggingService)
+    : RecoverTicketsService<T, TU>
+    where T : EmailSupport
+    where TU : RecoverMainTicketsQuery
 {
-    private readonly TicketsHandlerService<T, TU> ticketsHandlerService;
-    private readonly LoggingService loggingService;
-
-    public RecoverTicketsServiceImp(
-        TicketsHandlerService<T, TU> ticketsHandlerService,
-        LoggingService loggingService)
-    {
-        this.ticketsHandlerService = ticketsHandlerService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<IEnumerable<Result>> Recover(TU query)
     {
         var results = new List<Result>();

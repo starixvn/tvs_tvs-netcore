@@ -18,7 +18,7 @@ public class GetDecidedByServiceTests
         var request = new GetDecidedByRequest();
         var decidedBySelect = new List<string> { "AA", "SSNVA", "SSNVTOM" };
         repository.FetchAsync<string>(request).Returns(decidedBySelect);
-        string[] expected = { "SSNVA", "SSNVTOM", "AA" };
+        string[] expected = ["SSNVA", "SSNVTOM", "AA"];
 
         // Act
         var actual = await service.GetDecidedBy(request);

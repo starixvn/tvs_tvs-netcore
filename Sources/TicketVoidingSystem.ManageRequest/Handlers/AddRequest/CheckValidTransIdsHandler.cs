@@ -5,19 +5,11 @@ using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class CheckValidTransIdsRequest : CheckValidTransIdsModel, IRequest<CheckValidTransIdsViewModel>
+public class CheckValidTransIdsRequest : CheckValidTransIdsModel, IRequest<CheckValidTransIdsViewModel>;
+
+public class CheckValidTransIdsHandler(CheckValidTransIdsService checkValidTransIdsService)
+    : IRequestHandler<CheckValidTransIdsRequest, CheckValidTransIdsViewModel>
 {
-}
-
-public class CheckValidTransIdsHandler : IRequestHandler<CheckValidTransIdsRequest, CheckValidTransIdsViewModel>
-{
-    private readonly CheckValidTransIdsService checkValidTransIdsService;
-
-    public CheckValidTransIdsHandler(CheckValidTransIdsService checkValidTransIdsService)
-    {
-        this.checkValidTransIdsService = checkValidTransIdsService;
-    }
-
     public async Task<CheckValidTransIdsViewModel> Handle(CheckValidTransIdsRequest request,
         CancellationToken cancellationToken)
     {

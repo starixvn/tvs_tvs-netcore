@@ -17,22 +17,13 @@ public interface EmailRecoverService<TViewModel, TModel>
     void Send(MailRecoverModel<TViewModel, TModel> model, EmailGroup group);
 }
 
-public class EmailRecoverServiceImp<TViewModel, TModel> : EmailRecoverService<TViewModel, TModel> where TModel : EmailRecoverSupport
+public class EmailRecoverServiceImp<TViewModel, TModel>(
+    FanexMailApiService fanexMailApiService,
+    RecordRecoverService<TViewModel, TModel> recordService,
+    SitesEmailService sitesService)
+    : EmailRecoverService<TViewModel, TModel>
+    where TModel : EmailRecoverSupport
 {
-    private readonly FanexMailApiService fanexMailApiService;
-    private readonly RecordRecoverService<TViewModel, TModel> recordService;
-    private readonly SitesEmailService sitesService;
-
-    public EmailRecoverServiceImp(
-        FanexMailApiService fanexMailApiService,
-        RecordRecoverService<TViewModel, TModel> recordService,
-        SitesEmailService sitesService)
-    {
-        this.fanexMailApiService = fanexMailApiService;
-        this.recordService = recordService;
-        this.sitesService = sitesService;
-    }
-
     public async Task<IEnumerable<SiteEmail>> GetSites()
     {
         return await sitesService.GetSites();

@@ -22,31 +22,20 @@ public interface AfterVoidService
     IEnumerable<Result> ExecuteWhenVoidFailed(VoidTicketsModel voidResult);
 }
 
-public class AfterVoidServiceImp : AfterVoidService
+public class AfterVoidServiceImp(
+    IMapper mapper,
+    CashOutApiService cashOutApiService,
+    SendMessageByPlatformService sendMessageByPlatformService,
+    SendEmailService sendEmailService,
+    NotificationLetstalkService notificationLetstalkService,
+    LoggingService loggingService)
+    : AfterVoidService
 {
-    private readonly IMapper mapper;
-    private readonly CashOutApiService cashOutApiService;
-    private readonly SendMessageByPlatformService sendMessageByPlatformService;
-    private readonly SendEmailService sendEmailService;
-    private readonly NotificationLetstalkService notificationLetstalkService;
-    private readonly LoggingService loggingService;
-
-    public AfterVoidServiceImp(IMapper mapper, CashOutApiService cashOutApiService, SendMessageByPlatformService sendMessageByPlatformService,
-        SendEmailService sendEmailService, NotificationLetstalkService notificationLetstalkService, LoggingService loggingService)
-    {
-        this.cashOutApiService = cashOutApiService;
-        this.sendMessageByPlatformService = sendMessageByPlatformService;
-        this.sendEmailService = sendEmailService;
-        this.notificationLetstalkService = notificationLetstalkService;
-        this.loggingService = loggingService;
-        this.mapper = mapper;
-    }
-
     public async Task<IEnumerable<Result>> ExecuteWhenVoidSuccess(VoidTicketsQuery query, VoidTicketsModel voidResult, string warningCricket)
     {
         if (!voidResult.Tickets.Any())
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         return await ExecuteWhenHaveVoidTickets(query, voidResult, warningCricket);
@@ -128,7 +117,7 @@ public class AfterVoidServiceImp : AfterVoidService
     {
         if (voidResult.Validation.ErrorCode == 0)
         {
-            return Enumerable.Empty<Result>();
+            return [];
         }
 
         return new List<Result> { new() { ErrorCode = voidResult.Validation.ErrorCode, ErrorMsg = voidResult.Validation.ErrorMsg } };

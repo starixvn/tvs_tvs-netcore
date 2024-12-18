@@ -12,15 +12,9 @@ public class UpdateTicketVoidingQueueRequest : IRequest<bool>
     public int StatusId { get; set; }
 }
 
-public class UpdateTicketVoidingQueueHandler : IRequestHandler<UpdateTicketVoidingQueueRequest, bool>
+public class UpdateTicketVoidingQueueHandler(TicketVoidingQueueService ticketVoidingQueueService)
+    : IRequestHandler<UpdateTicketVoidingQueueRequest, bool>
 {
-    private readonly TicketVoidingQueueService ticketVoidingQueueService;
-
-    public UpdateTicketVoidingQueueHandler(TicketVoidingQueueService ticketVoidingQueueService)
-    {
-        this.ticketVoidingQueueService = ticketVoidingQueueService;
-    }
-
     public async Task<bool> Handle(UpdateTicketVoidingQueueRequest request, CancellationToken cancellationToken)
     {
         await ticketVoidingQueueService.UpdateQueueByBatch(request.SiteDbGroupId, request.QueueIds,

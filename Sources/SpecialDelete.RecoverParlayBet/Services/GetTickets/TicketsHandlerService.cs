@@ -18,22 +18,12 @@ public interface TicketsHandlerService<T, TQ>
     Task<Group<TicketViewModel>> AssignData(Group<T> group);
 }
 
-public class SubTicketsHandlerServiceImp : TicketsHandlerService<GetSubTicket, GetSubTicketsQuery>
+public class SubTicketsHandlerServiceImp(
+    Repository repository,
+    SessionService sessionService,
+    DisplayedTicketService<GetSubTicket> displayedTicketService)
+    : TicketsHandlerService<GetSubTicket, GetSubTicketsQuery>
 {
-    private readonly Repository repository;
-    private readonly SessionService sessionService;
-    private readonly DisplayedTicketService<GetSubTicket> displayedTicketService;
-
-    public SubTicketsHandlerServiceImp(
-        Repository repository,
-        SessionService sessionService,
-        DisplayedTicketService<GetSubTicket> displayedTicketService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.displayedTicketService = displayedTicketService;
-    }
-
     public async Task<GetTicketsModel<GetSubTicket>> GetTickets(GetSubTicketsQuery query)
     {
         var criteria = new GetSubTicketsCriteria
@@ -63,7 +53,7 @@ public class SubTicketsHandlerServiceImp : TicketsHandlerService<GetSubTicket, G
     {
         var index = 1;
         var tickets = new List<TicketViewModel>();
-        var isOnlyReadPermission = !(await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverSubParlayBet, Constant.Policy.Host));
+        var isOnlyReadPermission = !await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverSubParlayBet, Constant.Policy.Host);
         foreach (var item in group.Tickets)
         {
             var ticket = displayedTicketService.Map(item, isOnlyReadPermission);
@@ -75,22 +65,12 @@ public class SubTicketsHandlerServiceImp : TicketsHandlerService<GetSubTicket, G
     }
 }
 
-public class MainTicketsHandlerServiceImp : TicketsHandlerService<GetMainTicket, GetMainTicketsQuery>
+public class MainTicketsHandlerServiceImp(
+    Repository repository,
+    SessionService sessionService,
+    DisplayedTicketService<GetMainTicket> displayedTicketService)
+    : TicketsHandlerService<GetMainTicket, GetMainTicketsQuery>
 {
-    private readonly Repository repository;
-    private readonly SessionService sessionService;
-    private readonly DisplayedTicketService<GetMainTicket> displayedTicketService;
-
-    public MainTicketsHandlerServiceImp(
-        Repository repository,
-        SessionService sessionService,
-        DisplayedTicketService<GetMainTicket> displayedTicketService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-        this.displayedTicketService = displayedTicketService;
-    }
-
     public async Task<GetTicketsModel<GetMainTicket>> GetTickets(GetMainTicketsQuery query)
     {
         var criteria = new GetMainTicketsCriteria

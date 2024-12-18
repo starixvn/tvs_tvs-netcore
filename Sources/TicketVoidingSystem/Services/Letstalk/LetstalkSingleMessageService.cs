@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.LetstalkService.Client;
 using Fanex.LetstalkService.Client.Models;
@@ -13,17 +12,9 @@ public interface LetstalkSingleMessageService
     Task<Result> Send(LetstalkModel model, LetstalkAttachment attachment);
 }
 
-public class LetstalkSingleMessageServiceImp : LetstalkSingleMessageService
+public class LetstalkSingleMessageServiceImp(LetstalkClientService letstalkService, LoggingService loggingService)
+    : LetstalkSingleMessageService
 {
-    private readonly LetstalkClientService letstalkService;
-    private readonly LoggingService loggingService;
-
-    public LetstalkSingleMessageServiceImp(LetstalkClientService letstalkService, LoggingService loggingService)
-    {
-        this.letstalkService = letstalkService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<Result> Send(LetstalkModel model, LetstalkAttachment attachment)
     {
         try
@@ -64,13 +55,14 @@ public class LetstalkSingleMessageServiceImp : LetstalkSingleMessageService
 
         if (!string.IsNullOrWhiteSpace(attachment?.FileName) && attachment.Bytes != null)
         {
-            finalModel.LetstalkAttachments = new List<LetstalkAttachment>
+            finalModel.LetstalkAttachments =
+            [
+                new LetstalkAttachment
                 {
-                    new() {
-                        FileName = attachment.FileName,
-                        Bytes = attachment.Bytes
-                    }
-                };
+                    FileName = attachment.FileName,
+                    Bytes = attachment.Bytes
+                }
+            ];
         }
 
         return finalModel;

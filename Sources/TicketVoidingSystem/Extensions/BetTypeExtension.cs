@@ -12,7 +12,11 @@ public static class BetTypeExtension
 {
     public static bool IsParlay(this int id)
     {
-        List<int> betTypesParlay = new() { BetTypeConstant.SystemParlay, BetTypeConstant.VirtualSportParlay, BetTypeConstant.VirtualSport4MixParlay, BetTypeConstant.VirtualSport5MixParlay };
+        List<int> betTypesParlay =
+        [
+            BetTypeConstant.SystemParlay, BetTypeConstant.VirtualSportParlay, BetTypeConstant.VirtualSport4MixParlay,
+            BetTypeConstant.VirtualSport5MixParlay
+        ];
         return betTypesParlay.Contains(id);
     }
 
@@ -44,7 +48,7 @@ public static class BetTypeExtension
 
     public static bool IsSabaPromotion(this int id)
     {
-        int[] SportTypeSabaPromotions = { 17000, 17001, 17002, 17003, 17004, 17006, 17007, 17008, 17009, 17010 };
+        int[] SportTypeSabaPromotions = [17000, 17001, 17002, 17003, 17004, 17006, 17007, 17008, 17009, 17010];
         return SportTypeSabaPromotions.Contains(id);
     }
 
@@ -72,7 +76,7 @@ public static class BetTypeExtension
 
     private static bool IsVirtualSport5BetType(this int id)
     {
-        List<int> betTypesVirtualSport5 = new() { 11050, 11051, 11052, 11053, 11054, 11055, 11099 };
+        List<int> betTypesVirtualSport5 = [11050, 11051, 11052, 11053, 11054, 11055, 11099];
         return betTypesVirtualSport5.Contains(id);
     }
 
@@ -84,7 +88,7 @@ public static class BetTypeExtension
 
     public static bool IsVirtualSport2(this int sportTypeId)    // Sport Type of VirtualSport2 except 177, 198
     {
-        List<int> VirtualSportsSportTypeIds = new() { 190, 191, 192, 193, 194, 195, 196, 197 };
+        List<int> VirtualSportsSportTypeIds = [190, 191, 192, 193, 194, 195, 196, 197];
         return VirtualSportsSportTypeIds.Contains(sportTypeId);
     }
 
@@ -95,7 +99,7 @@ public static class BetTypeExtension
 
     public static bool IsVirtualSport345(this int sportTypeId) // Sport Type of VS3-VS4-VS5
     {
-        List<int> VirtualSportsSportTypeIds = new() { 178, 179, 188, 9908, 147 };
+        List<int> VirtualSportsSportTypeIds = [178, 179, 188, 9908, 147];
         return VirtualSportsSportTypeIds.Contains(sportTypeId);
     }
 

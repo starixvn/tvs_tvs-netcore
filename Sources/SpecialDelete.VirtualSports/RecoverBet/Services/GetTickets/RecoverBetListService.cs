@@ -11,19 +11,11 @@ public interface RecoverBetListService
     TicketViewModel Create(GetTicketModel item, Recover typeOfRecover);
 }
 
-public class RecoverBetListServiceImp : RecoverBetListService
+public class RecoverBetListServiceImp(
+    BetListService betListService,
+    BetListVirtualSportsService betListVirtualSportsService)
+    : RecoverBetListService
 {
-    private readonly BetListService betListService;
-    private readonly BetListVirtualSportsService betListVirtualSportsService;
-
-    public RecoverBetListServiceImp(
-        BetListService betListService,
-        BetListVirtualSportsService betListVirtualSportsService)
-    {
-        this.betListService = betListService;
-        this.betListVirtualSportsService = betListVirtualSportsService;
-    }
-
     public TicketViewModel Create(GetTicketModel item, Recover typeOfRecover)
     {
         var ticket = betListVirtualSportsService.SetValue(item);

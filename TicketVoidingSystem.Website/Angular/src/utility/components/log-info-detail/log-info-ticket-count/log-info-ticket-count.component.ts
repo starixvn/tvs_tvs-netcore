@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
@@ -12,16 +12,22 @@ import { StaticService } from '../../../../utility/services/static.service';
 export class LogInfoTicketCountComponent {
   @Input() model: LogInfoDetail;
   @Input() isShowCancelCashOut: boolean;
+  @Input() isShowDetailsButton: boolean;
+  @Output() openAffectedDetails = new EventEmitter();
 
-  public displayFullDateTimeFormat(time: Date): string {
+  displayFullDateTimeFormat(time: Date): string {
     return moment(time).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
   }
 
-  public countInfoContent(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
+  countInfoContent(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
     return StaticService.countInfoContent(cashOutCount, settleCount, instantlySettleCount);
   }
 
-  public isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
+  isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
     return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
+  }
+
+  showAffectedTicketsDetails() {
+    this.openAffectedDetails.emit();
   }
 }

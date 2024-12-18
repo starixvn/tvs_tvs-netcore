@@ -9,15 +9,8 @@ public interface FilterAreaService
     Task<string> GetRemark();
 }
 
-public class FilterAreaServiceImp : FilterAreaService
+public class FilterAreaServiceImp(SessionService sessionService) : FilterAreaService
 {
-    private readonly SessionService sessionService;
-
-    public FilterAreaServiceImp(SessionService sessionService)
-    {
-        this.sessionService = sessionService;
-    }
-
     public async Task<string> GetRemark()
     {
         if (await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledCurrencyBet, Constant.Policy.Host))

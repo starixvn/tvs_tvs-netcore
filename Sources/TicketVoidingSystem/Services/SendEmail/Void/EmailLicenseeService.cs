@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendMessage;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail.Void;
 
@@ -15,22 +15,13 @@ public interface EmailLicenseeService
     Task<IEnumerable<Result>> Send(MailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService);
 }
 
-public class EmailLicenseeServiceImp : EmailLicenseeService
+public class EmailLicenseeServiceImp(
+    VoidEmailContentService voidEmailContentService,
+    FanexMailApiService fanexMailApiService,
+    MailResultService mailResultService,
+    SpecialPlatformService specialPlatformService)
+    : EmailLicenseeService
 {
-    private readonly VoidEmailContentService voidEmailContentService;
-    private readonly FanexMailApiService fanexMailApiService;
-    private readonly MailResultService mailResultService;
-    private readonly SpecialPlatformService specialPlatformService;
-
-    public EmailLicenseeServiceImp(VoidEmailContentService voidEmailContentService, FanexMailApiService fanexMailApiService,
-        MailResultService mailResultService, SpecialPlatformService specialPlatformService)
-    {
-        this.voidEmailContentService = voidEmailContentService;
-        this.fanexMailApiService = fanexMailApiService;
-        this.mailResultService = mailResultService;
-        this.specialPlatformService = specialPlatformService;
-    }
-
     public async Task<IEnumerable<Result>> Send(MailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)
     {
         var results = new CombineMessageModel();
@@ -51,7 +42,7 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
 
     private async Task SendToSite(CombineMessageModel results, MailVoidViewModel mailLicenseesModel, SiteEmail site, IEnumerable<TicketEmailModel> ticketsInSite, bool isFromAfterVoidService)
     {
-        var modelClone = mailLicenseesModel.DeepClone();
+        var modelClone = MessagePackCloner.Clone(mailLicenseesModel);
         modelClone.TemplatePath = TemplateEmailPath.VoidBetChinese;
         if (specialPlatformService.IsSiteSpecialPlatform(modelClone.Match, site))
         {

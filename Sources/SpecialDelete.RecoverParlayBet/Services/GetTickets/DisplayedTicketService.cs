@@ -10,15 +10,9 @@ public interface DisplayedTicketService<in T> where T : GetMainTicket
     TicketViewModel Map(T item, bool isOnlyReadPermission);
 }
 
-public class DisplayedTicketServiceImp<T> : DisplayedTicketService<T> where T : GetMainTicket
+public class DisplayedTicketServiceImp<T>(BetListParlayService<T> betListParlayService) : DisplayedTicketService<T>
+    where T : GetMainTicket
 {
-    private readonly BetListParlayService<T> betListParlayService;
-
-    public DisplayedTicketServiceImp(BetListParlayService<T> betListParlayService)
-    {
-        this.betListParlayService = betListParlayService;
-    }
-
     public TicketViewModel Map(T item, bool isOnlyReadPermission)
     {
         var ticket = betListParlayService.Map(item, isOnlyReadPermission);

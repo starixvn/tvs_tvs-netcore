@@ -10,15 +10,8 @@ public interface ExcelService<in T>
     Task<byte[]> GenerateContentAsByteArray(T model, string templatePath);
 }
 
-public class ExcelServiceImp<T> : ExcelService<T>
+public class ExcelServiceImp<T>(WorkSheetService<T> workSheetService) : ExcelService<T>
 {
-    private readonly WorkSheetService<T> workSheetService;
-
-    public ExcelServiceImp(WorkSheetService<T> workSheetService)
-    {
-        this.workSheetService = workSheetService;
-    }
-
     public async Task<byte[]> GenerateContentAsByteArray(T model, string templatePath)
     {
         var fullFilePath = Helper.GetFilePath(templatePath);

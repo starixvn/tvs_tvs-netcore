@@ -7,15 +7,8 @@ namespace TicketVoidingSystem.SharedApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class AnalyticsController : ControllerBase
+public class AnalyticsController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public AnalyticsController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     public async Task<IActionResult> LogAccessFunction(LogAccessFunctionRequest request) => Ok(await mediator.Send(request));
 

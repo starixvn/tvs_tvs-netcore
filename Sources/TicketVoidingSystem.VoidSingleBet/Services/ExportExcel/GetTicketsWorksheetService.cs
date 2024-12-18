@@ -6,17 +6,9 @@ using TicketVoidingSystem.VoidSingleBet.Services.GetTickets;
 
 namespace TicketVoidingSystem.VoidSingleBet.Services.ExportExcel;
 
-public class GetTicketsWorksheetService : WorkSheetService<GetTicketsQuery>
+public class GetTicketsWorksheetService(GetTicketsService getTicketsService, CellService cellService)
+    : WorkSheetService<GetTicketsQuery>
 {
-    private readonly CellService cellService;
-    private readonly GetTicketsService getTicketsService;
-
-    public GetTicketsWorksheetService(GetTicketsService getTicketsService, CellService cellService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.cellService = cellService;
-    }
-
     public async Task BindingContent(ExcelWorksheet worksheet, GetTicketsQuery model)
     {
         const int startRow = 8;

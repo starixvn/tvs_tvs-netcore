@@ -4,15 +4,8 @@ using SpecialDelete.VoidByBetId.Services;
 
 namespace TicketVoidingSystem.Website.ViewComponents;
 
-public class VoidByBetIdFilter : ViewComponent
+public class VoidByBetIdFilter(RemarkService remarkService) : ViewComponent
 {
-    private readonly RemarkService remarkService;
-
-    public VoidByBetIdFilter(RemarkService remarkService)
-    {
-        this.remarkService = remarkService;
-    }
-
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var viewModel = await remarkService.GetInfo();

@@ -9,15 +9,8 @@ namespace TicketVoidingSystem.ManageVoidServices.Controllers;
 [ApiController]
 [Route("api/[controller]/[action]")]
 [AllowAnonymous]
-public class ManageVoidServicesController : ControllerBase
+public class ManageVoidServicesController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public ManageVoidServicesController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     public async Task<IActionResult> GetVoidBetAutomationServiceInfo(GetVoidBetAutomationInfoRequest request)
     {

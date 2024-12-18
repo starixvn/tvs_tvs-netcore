@@ -8,23 +8,13 @@ using TicketVoidingSystem.Services;
 
 namespace SpecialDelete.VoidByBetId.Handlers;
 
-public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>
+public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>;
+
+public class GetTicketsHandler(
+    GetTicketsService getTicketsService,
+    PagingService pagingService)
+    : IRequestHandler<GetTicketsRequest, TicketsViewModel>
 {
-}
-
-public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewModel>
-{
-    private readonly GetTicketsService getTicketsService;
-    private readonly PagingService pagingService;
-
-    public GetTicketsHandler(
-        GetTicketsService getTicketsService,
-        PagingService pagingService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.pagingService = pagingService;
-    }
-
     public async Task<TicketsViewModel> Handle(GetTicketsRequest request, CancellationToken cancellationToken)
     {
         var isVoidByBetId = string.IsNullOrWhiteSpace(request.CustId);
@@ -44,7 +34,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
     {
         if (!tickets.Any())
         {
-            return Enumerable.Empty<Group<GetTicketModel>>();
+            return [];
         }
 
         var parlayTickets = tickets.Where(ticket => ticket.BetType.IsParlayAndBetBuilder())

@@ -11,19 +11,12 @@ public interface SendMessageByPlatformService
     Task Execute(SendMessageTargetParam param);
 }
 
-public class SendMessageByPlatformServiceImp : SendMessageByPlatformService
+public class SendMessageByPlatformServiceImp(
+    SpecialPlatformService specialPlatformService,
+    SendMessageService sendMessageService,
+    SessionService sessionService)
+    : SendMessageByPlatformService
 {
-    private readonly SpecialPlatformService specialPlatformService;
-    private readonly SendMessageService sendMessageService;
-    private readonly SessionService sessionService;
-
-    public SendMessageByPlatformServiceImp(SpecialPlatformService specialPlatformService, SendMessageService sendMessageService, SessionService sessionService)
-    {
-        this.specialPlatformService = specialPlatformService;
-        this.sendMessageService = sendMessageService;
-        this.sessionService = sessionService;
-    }
-
     public async Task Execute(SendMessageTargetParam param)
     {
         param.Message.CreatorId = sessionService.UserId;

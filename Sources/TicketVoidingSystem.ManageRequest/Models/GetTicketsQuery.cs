@@ -19,6 +19,8 @@ public class GetTicketsQuery
 
     public int? RequestId { get; set; }
 
+    public int? RequestDetailId { get; set; }
+
     public int IssueTypeId { get; set; }
 
     public int SubIssueTypeId { get; set; }

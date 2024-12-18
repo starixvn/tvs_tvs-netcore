@@ -14,15 +14,8 @@ public interface NetPositionForCricketService
     Task Rollback(VoidTicketsModel voidResult);
 }
 
-public class NetPositionForCricketServiceImp : NetPositionForCricketService
+public class NetPositionForCricketServiceImp(NetPositionService netPositionService) : NetPositionForCricketService
 {
-    private readonly NetPositionService netPositionService;
-
-    public NetPositionForCricketServiceImp(NetPositionService netPositionService)
-    {
-        this.netPositionService = netPositionService;
-    }
-
     public async Task<(string WarningCricket, IEnumerable<BetId> TicketsAfterUpdateNp)> Update(VoidTicketsQuery query)
     {
         var isSuccessfully = await netPositionService.UpdateNetPosition(query.TransIdCrickets, NetPositionConstant.ActionVoid);

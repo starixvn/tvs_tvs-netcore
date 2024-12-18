@@ -15,15 +15,8 @@ public interface CheckTicketsStatusService
     Task<string> GetTransInfoJsonForCheckPermission(CheckTicketsStatusRequest request);
 }
 
-public class CheckTicketsStatusServiceImp : CheckTicketsStatusService
+public class CheckTicketsStatusServiceImp(IDynamicRepository repository) : CheckTicketsStatusService
 {
-    private readonly IDynamicRepository repository;
-
-    public CheckTicketsStatusServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<string> GetTransInfoJsonForCheckPermission(CheckTicketsStatusRequest request)
     {
         var tickets = request.Tickets ?? new List<BetId>();

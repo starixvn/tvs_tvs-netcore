@@ -5,32 +5,31 @@ using TicketVoidingSystem.SharedApi.Handlers.Analytics;
 using TicketVoidingSystem.SharedApi.Services.Analytics;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.SharedApi.Handlers.Analytics
+namespace TicketVoidingSystem.Tests.SharedApi.Handlers.Analytics;
+
+public class LogChangeContentHandlerTests
 {
-    public class LogChangeContentHandlerTests
+    [Fact]
+    public async Task Handle_ValidRequest_ReturnsTrue()
     {
-        [Fact]
-        public async Task Handle_ValidRequest_ReturnsTrue()
+        // Arrange
+        const string functionName = "TestFunction";
+        const string logContent = "Test Log Content";
+        var request = new LogChangeContentRequest
         {
-            // Arrange
-            var functionName = "TestFunction";
-            var logContent = "Test Log Content";
-            var request = new LogChangeContentRequest
-            {
-                FunctionName = functionName,
-                LogContent = logContent
-            };
+            FunctionName = functionName,
+            LogContent = logContent
+        };
 
-            var userActionLogService = Substitute.For<UserActionLogService>();
-            userActionLogService.LogChangeContent(functionName, logContent).Returns(true);
+        var userActionLogService = Substitute.For<UserActionLogService>();
+        userActionLogService.LogChangeContent(functionName, logContent).Returns(true);
 
-            var handler = new LogChangeContentHandler(userActionLogService);
+        var handler = new LogChangeContentHandler(userActionLogService);
 
-            // Act
-            var result = await handler.Handle(request, CancellationToken.None);
+        // Act
+        var result = await handler.Handle(request, CancellationToken.None);
 
-            // Assert
-            Assert.True(result);
-        }
+        // Assert
+        Assert.True(result);
     }
 }

@@ -304,7 +304,6 @@ describe('EventOtherIssuesComponent', () => {
     expect(actual.others).toBe(mockComponent.others);
     expect(actual.filter).toBe(mockComponent.filter);
     expect(actual.primitiveProps).toBe(mockComponent.primitiveProps);
-    expect(actual.issueTypes).toBe(mockComponent.issueTypes);
     expect(actual.filterOtherIssuesComponent).toBe(mockComponent.filterOtherIssuesComponent);
     expect(actual.eventLeagueComponent).toBe(mockComponent.eventLeagueComponent);
     expect(actual.logInfoEvent).toBe(mockComponent.logInfoEvent);

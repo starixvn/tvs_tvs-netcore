@@ -216,7 +216,6 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
     arg.others = this.others;
     arg.filter = this.filter;
     arg.primitiveProps = this.primitiveProps;
-    arg.issueTypes = this.issueTypes;
     arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.advancedModeComponent = this.advancedMode;
     arg.filterOtherIssuesComponent = this.filterOtherIssuesComponent;

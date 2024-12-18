@@ -17,15 +17,8 @@ public interface GetTransInfoService
     Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets, int? matchId);
 }
 
-public class GetTransInfoServiceImp : GetTransInfoService
+public class GetTransInfoServiceImp(IDynamicRepository repository) : GetTransInfoService
 {
-    private readonly IDynamicRepository repository;
-
-    public GetTransInfoServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<string>> GetTransInfoJson(GetTransInfoQuery query)
     {
         var issueInfo = BuildIssueInfo(query);
@@ -203,12 +196,12 @@ public class GetTransInfoServiceImp : GetTransInfoService
             IssueTypeConstant.Abandoned => query.ReducedOverModels.ToReducedOverInfoXml(),
             IssueTypeConstant.NotParticipate => query.NotParticipateModels.ToNotParticipateInfoXml(),
             IssueTypeConstant.RecoverTicket => query.RecoverTicketModel.ToEventRecoverTicketXml(),
-            IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedModel.ToWrongMarketOfferedInfoXml(),
-            IssueTypeConstant.TechnicalError => query.WrongMarketOfferedModel.ToWrongMarketOfferedInfoXml(),
+            IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedModels.ToWrongMarketOfferedInfoXml(),
+            IssueTypeConstant.TechnicalError => query.TechnicalErrorModel.ToTechnicalErrorInfoXml(),
             IssueTypeConstant.WrongOddsSportsBook => query.WrongOddsSportsBookModels.ToWrongOddsSportsBookInfoXml(),
             IssueTypeConstant.WrongOfferedName => query.WrongOfferedNameModel.ToWrongOfferedNameInfoXml(),
             IssueTypeConstant.OtherIssues => query.OtherIssuesModel.ToOtherIssuesInfoXml(),
-            _ => "",
+            _ => ""
         };
     }
 }

@@ -28,26 +28,26 @@ public class ReducedOverBetTypesServiceTests
         {
             new () { BetTypeId = 1 },
             new () { BetTypeId = 2 },
-            new () { BetTypeId = 3 },
+            new () { BetTypeId = 3 }
         };
         var data = new List<BetTypeModel>
         {
             new() { Id = "1" },
             new() { Id = "2" },
-            new() { Id = "4" },
+            new() { Id = "4" }
         };
         var expected = new List<ReducedOverBetTypesModel>
         {
             new () { BetTypeId = 1 },
             new () { BetTypeId = 2 }
         };
-        repository.GetBetTypesHaveTicketsForTvs(Arg.Any<int>(), false, null, null)
+        repository.GetBetTypesHaveTicketsForTvs(Arg.Any<int>(), false, [])
             .ReturnsForAnyArgs(data);
         // Act
         var actual = await service.GetReducedOverBetTypesHavesTickets(models, 1);
 
         // Assert
-        await repository.Received(1).GetBetTypesHaveTicketsForTvs(Arg.Any<int>(), false, null, null);
+        await repository.Received(1).GetBetTypesHaveTicketsForTvs(Arg.Any<int>(), false, []);
         AssertExtension.Equal(expected, actual);
     }
 }

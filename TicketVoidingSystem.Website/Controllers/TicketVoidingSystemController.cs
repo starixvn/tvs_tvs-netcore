@@ -14,17 +14,9 @@ using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.SharedApi.Services.Analytics;
 
 [Route("[controller]/[action]")]
-public class TicketVoidingSystemController : Controller
+public class TicketVoidingSystemController(IMediator mediator, UserActionLogService userActionLogService)
+    : Controller
 {
-    private readonly IMediator mediator;
-    private readonly UserActionLogService userActionLogService;
-
-    public TicketVoidingSystemController(IMediator mediator, UserActionLogService userActionLogService)
-    {
-        this.mediator = mediator;
-        this.userActionLogService = userActionLogService;
-    }
-
     [HttpGet]
     [Route("")]
     [Route("Index")]

@@ -7,21 +7,11 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class GetMarkedTicketsCountRequest : IRequest<int>
+public class GetMarkedTicketsCountRequest : IRequest<int>;
+
+public class GetMarkedTicketsCountHandler(IDynamicRepository repository, SessionService sessionService)
+    : IRequestHandler<GetMarkedTicketsCountRequest, int>
 {
-}
-
-public class GetMarkedTicketsCountHandler : IRequestHandler<GetMarkedTicketsCountRequest, int>
-{
-    private readonly SessionService sessionService;
-    private readonly IDynamicRepository repository;
-
-    public GetMarkedTicketsCountHandler(IDynamicRepository repository, SessionService sessionService)
-    {
-        this.repository = repository;
-        this.sessionService = sessionService;
-    }
-
     public async Task<int> Handle(GetMarkedTicketsCountRequest request, CancellationToken cancellationToken)
     {
         var dataInAllServers = await GetAllMarkedTickets();

@@ -6,21 +6,11 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class SaveSubIssueTypeNoteRequest : SaveSubIssueTypeNoteCommand, IRequest<Result>
+public class SaveSubIssueTypeNoteRequest : SaveSubIssueTypeNoteCommand, IRequest<Result>;
+
+public class SaveSubIssueTypeNoteHandler(IDynamicRepository repository, LoggingService loggingService)
+    : IRequestHandler<SaveSubIssueTypeNoteRequest, Result>
 {
-}
-
-public class SaveSubIssueTypeNoteHandler : IRequestHandler<SaveSubIssueTypeNoteRequest, Result>
-{
-    private readonly IDynamicRepository repository;
-    private readonly LoggingService loggingService;
-
-    public SaveSubIssueTypeNoteHandler(IDynamicRepository repository, LoggingService loggingService)
-    {
-        this.repository = repository;
-        this.loggingService = loggingService;
-    }
-
     public async Task<Result> Handle(SaveSubIssueTypeNoteRequest request, CancellationToken cancellationToken)
     {
         try

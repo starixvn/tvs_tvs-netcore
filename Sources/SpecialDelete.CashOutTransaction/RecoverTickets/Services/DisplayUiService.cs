@@ -18,22 +18,12 @@ public interface DisplayUiService
     Task<Group<TicketViewModel>> Assign(Group<GetTicketModel> groupTickets);
 }
 
-public class DisplayUiServiceImp : DisplayUiService
+public class DisplayUiServiceImp(
+    Repository repository,
+    TicketHtmlService ticketHtmlService,
+    SessionService sessionService)
+    : DisplayUiService
 {
-    private readonly Repository repository;
-    private readonly TicketHtmlService ticketHtmlService;
-    private readonly SessionService sessionService;
-
-    public DisplayUiServiceImp(
-        Repository repository,
-        TicketHtmlService ticketHtmlService,
-        SessionService sessionService)
-    {
-        this.repository = repository;
-        this.ticketHtmlService = ticketHtmlService;
-        this.sessionService = sessionService;
-    }
-
     public async Task<GetTicketsModel> ExecuteQuery(GetTicketsQuery query)
     {
         var criteria = CreateCriteria(query);
@@ -50,7 +40,7 @@ public class DisplayUiServiceImp : DisplayUiService
 
     public async Task<Group<TicketViewModel>> Assign(Group<GetTicketModel> groupTickets)
     {
-        var isDisable = !(await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverCashOutTransaction, Constant.Policy.Host));
+        var isDisable = !await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverCashOutTransaction, Constant.Policy.Host);
         var tickets = new List<TicketViewModel>();
         var index = 1;
         foreach (var item in groupTickets.Tickets)

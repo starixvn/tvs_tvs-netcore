@@ -5,12 +5,7 @@ namespace SpecialDelete.VoidByBetId.Models;
 
 public class VoidTicketsModel
 {
-    public VoidTicketsModel()
-    {
-        Tickets = new List<TicketEmailModel>();
-    }
-
-    public IEnumerable<TicketEmailModel> Tickets { get; set; }
+    public IEnumerable<TicketEmailModel> Tickets { get; set; } = new List<TicketEmailModel>();
 
     public VoidTicketValidation Validation { get; set; }
 

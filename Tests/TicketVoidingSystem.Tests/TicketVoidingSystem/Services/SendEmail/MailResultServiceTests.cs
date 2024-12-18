@@ -18,7 +18,7 @@ public class MailResultServiceTests
     public void CreateSuccess_ReturnsResult(bool isFromAfterVoidService, int errorCode)
     {
         // Arrange
-        var siteName = "Test Site";
+        const string siteName = "Test Site";
         var listEmail = new[] { "email1@example.com", "email2@example.com" };
         var expected = new Result
         {
@@ -51,7 +51,6 @@ public class MailResultServiceTests
         // Assert
         AssertExtension.Equal(expected, result);
     }
-
 
     [Fact]
     public void InsertCombineLicenseesName_ReturnsListResult()
@@ -160,9 +159,9 @@ public class MailResultServiceTests
         // Arrange
         var model = new CombineMessageModel
         {
-            Results = new List<Result>(),
-            SuccessfulLicensees = new List<string>(),
-            FailedLicensees = new List<string>()
+            Results = [],
+            SuccessfulLicensees = [],
+            FailedLicensees = []
         };
         var expected = new List<Result>
         {
@@ -196,9 +195,9 @@ public class MailResultServiceTests
         // Arrange
         var model = new CombineMessageModel
         {
-            Results = new List<Result>(),
-            SuccessfulLicensees = new List<string> { "siteNameSuccess" },
-            FailedLicensees = new List<string> { "siteNameFails" }
+            Results = [],
+            SuccessfulLicensees = ["siteNameSuccess"],
+            FailedLicensees = ["siteNameFails"]
         };
         const string siteNameSuccess = "siteNameSuccess";
         const string siteNameFails = "siteNameFails";

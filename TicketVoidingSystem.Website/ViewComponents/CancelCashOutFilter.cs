@@ -4,15 +4,8 @@ using SpecialDelete.CashOutTransaction.CancelCashOut.Services;
 
 namespace TicketVoidingSystem.Website.ViewComponents;
 
-public class CancelCashOutFilter : ViewComponent
+public class CancelCashOutFilter(RemarkService remarkService) : ViewComponent
 {
-    private readonly RemarkService remarkService;
-
-    public CancelCashOutFilter(RemarkService remarkService)
-    {
-        this.remarkService = remarkService;
-    }
-
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var viewModel = await remarkService.GetInfoPermissionCancelCashOut();

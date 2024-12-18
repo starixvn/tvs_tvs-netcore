@@ -7,15 +7,8 @@ namespace TicketVoidingSystem.SharedApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class BetTypesController : ControllerBase
+public class BetTypesController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public BetTypesController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpPost]
     public async Task<IActionResult> GetGroupBetTypesNg(GetGroupBetTypesRequest request) => Ok(await mediator.Send(request));
 

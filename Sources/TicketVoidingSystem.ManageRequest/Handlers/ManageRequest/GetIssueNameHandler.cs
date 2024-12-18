@@ -11,17 +11,9 @@ public class GetIssueNameRequest : IRequest<IssueInfo>
     public int SubId { get; init; }
 }
 
-public class GetIssueNameHandler : IRequestHandler<GetIssueNameRequest, IssueInfo>
+public class GetIssueNameHandler(IMapper mapper, IDynamicRepository repository)
+    : IRequestHandler<GetIssueNameRequest, IssueInfo>
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-
-    public GetIssueNameHandler(IMapper mapper, IDynamicRepository repository)
-    {
-        this.mapper = mapper;
-        this.repository = repository;
-    }
-
     public async Task<IssueInfo> Handle(GetIssueNameRequest request, CancellationToken cancellationToken)
     {
         var issueTypes = await repository.FetchAsync<IssueType>(new GetIssueTypeCriteria());

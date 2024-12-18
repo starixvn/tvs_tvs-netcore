@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Fanex.MailDeliver.MailClient.Model;
-using Force.DeepCloner;
 using RazorEngineCore;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
@@ -18,24 +17,19 @@ public interface DuplicateTicketsEmailContentService
     MailRecord Create(DuplicateTicketsMailVoidViewModel mailVoidViewModel, SiteEmail site, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets, EmailGroup emailGroup);
 }
 
-public class DuplicateTicketsEmailContentServiceImp : DuplicateTicketsEmailContentService
+public class DuplicateTicketsEmailContentServiceImp(
+    DuplicateTicketsSubjectService subjectService,
+    SpecialPlatformService specialPlatformService)
+    : DuplicateTicketsEmailContentService
 {
     private static readonly ConcurrentDictionary<int, IRazorEngineCompiledTemplate> CompiledTemplateCache = new();
-    private readonly DuplicateTicketsSubjectService subjectService;
-    private readonly SpecialPlatformService specialPlatformService;
-
-    public DuplicateTicketsEmailContentServiceImp(DuplicateTicketsSubjectService subjectService, SpecialPlatformService specialPlatformService)
-    {
-        this.subjectService = subjectService;
-        this.specialPlatformService = specialPlatformService;
-    }
 
     public MailRecord Create(DuplicateTicketsMailVoidViewModel mailVoidViewModel, SiteEmail site, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets, EmailGroup emailGroup)
     {
         if (duplicateTickets.Valid(site))
         {
             var subject = subjectService.CreateVoidDuplicateTickets(mailVoidViewModel, duplicateTickets.Select(x => x.Site), site, emailGroup);
-            var mailVoidModelClone = mailVoidViewModel.DeepClone();
+            var mailVoidModelClone = MessagePackCloner.Clone(mailVoidViewModel);
             mailVoidModelClone.DuplicateTickets = duplicateTickets.ToList();
             mailVoidModelClone.TotalOrgTransIds = duplicateTickets.Sum(x => x.TotalOrgTransIds);
             UpdateEmailSender(mailVoidModelClone, site);

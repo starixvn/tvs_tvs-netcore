@@ -14,15 +14,9 @@ public class GetBriefInfoRequest : IRequest<IEnumerable<BriefInfoModel>>
     public int RequestId { get; set; }
 }
 
-public class GetBriefInfoHandler : IRequestHandler<GetBriefInfoRequest, IEnumerable<BriefInfoModel>>
+public class GetBriefInfoHandler(IDynamicRepository repository)
+    : IRequestHandler<GetBriefInfoRequest, IEnumerable<BriefInfoModel>>
 {
-    private readonly IDynamicRepository repository;
-
-    public GetBriefInfoHandler(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<IEnumerable<BriefInfoModel>> Handle(GetBriefInfoRequest request, CancellationToken cancellationToken)
     {
         var briefInfoModels = new List<BriefInfoModel>();

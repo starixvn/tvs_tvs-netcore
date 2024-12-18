@@ -17,10 +17,11 @@ export class RequestDescriptionService {
     private readonly clipboardService: ClipboardService
   ) { }
 
-  public async copyToClipboard(requestId: number, matchId: number): Promise<void> {
+  public async copyToClipboard(requestId: number, matchId: number, requestDetailId?: number): Promise<void> {
     const query: CopyRequestInfoQuery = {
       requestId: requestId,
-      matchId: matchId
+      matchId: matchId,
+      requestDetailId: requestDetailId
     };
     const copyInfoResponse = await this.commonService.copyRequestInfo(query);
     this.clipboardService.copyFromContent(this.createContentCopy(copyInfoResponse));
@@ -36,8 +37,12 @@ export class RequestDescriptionService {
       return this.createNotParticipateContent(copyInfoResponse);
     }
 
-    if (StaticService.isLikelyWrongMarketOffered(copyInfoResponse.requestInfo.issueTypeId.toString())) {
-      return this.createWrongMarketOfferedLikelyContent(copyInfoResponse);
+    if (StaticService.isWrongMarketOffered(copyInfoResponse.requestInfo.issueTypeId.toString())) {
+      return this.createWrongMarketOfferedContent(copyInfoResponse);
+    }
+
+    if (StaticService.isTechnicalError(copyInfoResponse.requestInfo.issueTypeId.toString())) {
+      return this.createTechnicalErrorContent(copyInfoResponse);
     }
 
     if (StaticService.isWrongOddsSportsBook(copyInfoResponse.requestInfo.issueTypeId.toString())) {
@@ -62,7 +67,7 @@ export class RequestDescriptionService {
 
     }
 
-    return this.createCommonContent(copyInfoResponse, outputContent, '', false);
+    return this.createCommonContent(copyInfoResponse, outputContent, '', false, false);
   }
 
   private createNotParticipateContent(copyInfoResponse: CopyRequestInfoResponse): string {
@@ -76,19 +81,24 @@ export class RequestDescriptionService {
       betTypeContent += `${currentContent}${playerContent}\n`;
     }
 
-    return this.createCommonContent(copyInfoResponse, betTypeContent, '', false);
+    return this.createCommonContent(copyInfoResponse, betTypeContent, '', false, false);
   }
 
-  private createWrongMarketOfferedLikelyContent(copyInfoResponse: CopyRequestInfoResponse): string {
+  private createWrongMarketOfferedContent(copyInfoResponse: CopyRequestInfoResponse): string {
     const betTypeContent = this.generateBetTypeContent(copyInfoResponse.betTypeTickets);
-    return this.createCommonContent(copyInfoResponse, betTypeContent, '', true);
+    return this.createCommonContent(copyInfoResponse, betTypeContent, '', true, true);
+  }
+
+  private createTechnicalErrorContent(copyInfoResponse: CopyRequestInfoResponse): string {
+    const betTypeContent = this.generateBetTypeContent(copyInfoResponse.betTypeTickets);
+    return this.createCommonContent(copyInfoResponse, betTypeContent, '', true, false);
   }
 
   private createWrongOddsSportsBookContent(copyInfoResponse: CopyRequestInfoResponse): string {
     const betTypeContent = this.generateBetTypeContent(copyInfoResponse.betTypeTickets);
     const oddsContent = this.generateOddsContent(copyInfoResponse.requestInfo);
 
-    return this.createCommonContent(copyInfoResponse, betTypeContent, oddsContent, true);
+    return this.createCommonContent(copyInfoResponse, betTypeContent, oddsContent, true, false);
   }
 
   private generateBetTypeContent(betTypeTickets: BetTypeTicketsInfo[]): string {
@@ -112,14 +122,15 @@ export class RequestDescriptionService {
     return `Wrong Odds: ${wrongOdds}\nCorrect Odds: ${requestInfo.correctOdds}\n`;
   }
 
-  private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string, oddsContent: string, isShowCancelCOCount: boolean): string {
+  private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string, oddsContent: string, isShowCancelCOCount: boolean, isShowMistakenBy: boolean): string {
     const cancelCashOutCount = isShowCancelCOCount ? `, Cancel Cash Out: ${copyInfoResponse.requestInfo.totalCancelCashOutCount}` : '';
     const content = `Hi CSD, please void${copyInfoResponse.requestInfo.liveStatus}tickets for us\n`
       + `League: ${copyInfoResponse.requestInfo.leagueName}\n`
       + `Match: ${copyInfoResponse.requestInfo.matchEvent}\n`
       + `Match ID: ${copyInfoResponse.requestInfo.matchId}\n`
       + `Request No: ${copyInfoResponse.requestInfo.requestId}\n`
-      + `Issue Type: ${copyInfoResponse.requestInfo.issueTypeName}\n\n`
+      + `Issue Type: ${copyInfoResponse.requestInfo.issueTypeName}\n`
+      + this.generateMistakenBy(copyInfoResponse.requestInfo, isShowMistakenBy)
       + betTypeContent
       + oddsContent
       + `Void Time: ${moment(copyInfoResponse.requestInfo.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} - ${moment(copyInfoResponse.requestInfo.voidToTime).format(DateTimeFormat.TIME_FORMAT)} `
@@ -143,5 +154,9 @@ export class RequestDescriptionService {
         .format(DateTimeFormat.TIME_FORMAT)} (${copyInfoResponse.requestInfo.filterBy === TVSRequestFilterBy.CHECK_TIME ? "Accept time" : "Trans time"})`
 
     return content;
+  }
+
+  private generateMistakenBy(requestInfo: RequestInfoForCopy, isShowMistakenBy: boolean): string {
+    return isShowMistakenBy ? `Mistaken By: ${requestInfo.mistakenBy}\n\n` : '\n';
   }
 }

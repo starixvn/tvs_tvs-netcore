@@ -14,19 +14,9 @@ public interface GetTicketsService
     Task<IList<ExcelTicketModel>> GetTicketsForExportExcel(GetTicketsQuery query);
 }
 
-public class GetTicketsServiceImp : GetTicketsService
+public class GetTicketsServiceImp(IDynamicRepository repository, IMapper mapper, MapTicketService mapTicketService)
+    : GetTicketsService
 {
-    private readonly IMapper mapper;
-    private readonly MapTicketService mapTicketService;
-    private readonly IDynamicRepository repository;
-
-    public GetTicketsServiceImp(IDynamicRepository repository, IMapper mapper, MapTicketService mapTicketService)
-    {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.mapTicketService = mapTicketService;
-    }
-
     public async Task<IList<GetTicketModel>> GetTickets(GetTicketsQuery query)
     {
         var criteria = CreateGetTicketsCriteria(query);

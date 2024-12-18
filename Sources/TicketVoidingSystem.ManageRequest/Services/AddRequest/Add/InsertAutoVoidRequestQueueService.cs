@@ -14,15 +14,8 @@ public interface InsertAutoVoidRequestQueueService
         IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo, WrongOfferedNameViewModel? wrongOfferedNameInfo);
 }
 
-public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueService
+public class InsertAutoVoidRequestQueueServiceImp(IDynamicRepository repository) : InsertAutoVoidRequestQueueService
 {
-    private readonly IDynamicRepository repository;
-
-    public InsertAutoVoidRequestQueueServiceImp(IDynamicRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task Execute(int requestId, int? actionId, IEnumerable<int> matchIds)
     {
         if (CheckCanInsertAutoVoidRequestQueue(actionId))
@@ -81,12 +74,7 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
             return earlyKickOffInfo.Select(x => x.MatchId);
         }
 
-        if (wrongOfferedNameInfo != null)
-        {
-            return new List<int> { wrongOfferedNameInfo.MatchId };
-        }
-
-        return Enumerable.Empty<int>();
+        return wrongOfferedNameInfo != null ? new List<int> { wrongOfferedNameInfo.MatchId } : [];
     }
 
     private static bool CheckCanInsertAutoVoidRequestQueue(int? actionId)

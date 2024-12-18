@@ -5,19 +5,11 @@ using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class CheckRecoverTicketRequest : CheckRecoverTicketModel, IRequest<CheckRecoverTicketViewModel>
+public class CheckRecoverTicketRequest : CheckRecoverTicketModel, IRequest<CheckRecoverTicketViewModel>;
+
+public class CheckRecoverTicketHandler(CheckRecoverTicketService checkRecoverTicketService)
+    : IRequestHandler<CheckRecoverTicketRequest, CheckRecoverTicketViewModel>
 {
-}
-
-public class CheckRecoverTicketHandler : IRequestHandler<CheckRecoverTicketRequest, CheckRecoverTicketViewModel>
-{
-    private readonly CheckRecoverTicketService checkRecoverTicketService;
-
-    public CheckRecoverTicketHandler(CheckRecoverTicketService checkRecoverTicketService)
-    {
-        this.checkRecoverTicketService = checkRecoverTicketService;
-    }
-
     public async Task<CheckRecoverTicketViewModel> Handle(CheckRecoverTicketRequest request, CancellationToken cancellationToken)
     {
         return await checkRecoverTicketService.CheckRecoverTicket(request);

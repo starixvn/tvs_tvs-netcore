@@ -12,15 +12,8 @@ public interface SpecialBetTypeContentService
     ContentByLanguageModel GetContentForVoidPage(IEnumerable<TicketEmailModel> tickets);
 }
 
-public class SpecialBetTypeContentServiceImp : SpecialBetTypeContentService
+public class SpecialBetTypeContentServiceImp(BetListService betListService) : SpecialBetTypeContentService
 {
-    private readonly BetListService betListService;
-
-    public SpecialBetTypeContentServiceImp(BetListService betListService)
-    {
-        this.betListService = betListService;
-    }
-
     public ContentByLanguageModel GetContentForVoidPage(IEnumerable<TicketEmailModel> tickets)
     {
         var specialBetTypeList = GetListSpecialBetType(tickets);

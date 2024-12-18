@@ -12,19 +12,12 @@ public interface LogInfoHelperService
     Task UpdateBetTypeTicketsInfo(int matchId, IEnumerable<BetTypeTicketsInfo> betTypeTickets);
 }
 
-public class LogInfoHelperServiceImp : LogInfoHelperService
+public class LogInfoHelperServiceImp(
+    GetTransInfoService getTransInfoService,
+    BetListService betListService,
+    CopyRequestInfoService copyRequestInfoService)
+    : LogInfoHelperService
 {
-    private readonly GetTransInfoService getTransInfoService;
-    private readonly BetListService betListService;
-    private readonly CopyRequestInfoService copyRequestInfoService;
-
-    public LogInfoHelperServiceImp(GetTransInfoService getTransInfoService, BetListService betListService, CopyRequestInfoService copyRequestInfoService)
-    {
-        this.getTransInfoService = getTransInfoService;
-        this.betListService = betListService;
-        this.copyRequestInfoService = copyRequestInfoService;
-    }
-
     public async Task<IEnumerable<string>> GetTransInfoJson(GetLogInfoQuery query)
     {
         var getTransInfoQuery = new GetTransInfoQuery
@@ -42,7 +35,8 @@ public class LogInfoHelperServiceImp : LogInfoHelperService
             ReducedOverModels = query.ReducedOverModels,
             NotParticipateModels = query.NotParticipateModels,
             EarlyKickOffModels = query.EarlyKickOffModels,
-            WrongMarketOfferedModel = query.WrongMarketOfferedModel,
+            WrongMarketOfferedModels = query.WrongMarketOfferedModels,
+            TechnicalErrorModel = query.TechnicalErrorModel,
             OtherIssuesModel = query.OtherIssuesModel,
             MatchId = query.MatchId,
             IssueTypeId = query.IssueTypeId

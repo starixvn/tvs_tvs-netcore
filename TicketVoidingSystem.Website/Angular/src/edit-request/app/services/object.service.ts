@@ -85,14 +85,16 @@ export class ObjectService {
       args.primitiveProperty.matchId = args.detailViewModel.earlyKickOffModels.find(x => x.isMainMatch).matchId;
     } else if (checkIssueType.isRecoverTicket) {
       args.requestModel.recoverTicketModel = args.detailViewModel.recoverTicketModel;
-    } else if (checkIssueType.isLikelyWrongMarketOffered) {
-      args.requestModel.wrongMarketOfferedModel = args.detailViewModel.wrongMarketOfferedModel;
+    } else if (checkIssueType.isWrongMarketOffered) {
+      args.requestModel.wrongMarketOfferedModels = args.detailViewModel.wrongMarketOfferedModels;
     } else if (checkIssueType.isWrongOddsSportsBook) {
       args.requestModel.wrongOddsSportsBookModel = args.detailViewModel.wrongOddsSportsBookModel;
     } else if (checkIssueType.isWrongOfferedName) {
       args.requestModel.wrongOfferedNameModel = args.detailViewModel.wrongOfferedNameModel;
     } else if (checkIssueType.isOtherIssues) {
       args.requestModel.otherIssuesModel = args.detailViewModel.otherIssuesModel;
+    } else if (checkIssueType.isTechnicalError) {
+      args.requestModel.technicalErrorModel = args.detailViewModel.technicalErrorModel;
     }
   }
 

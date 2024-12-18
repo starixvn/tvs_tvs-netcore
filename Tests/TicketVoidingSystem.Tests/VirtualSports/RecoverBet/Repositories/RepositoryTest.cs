@@ -13,8 +13,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Repositories;
 
-
-public class RepositoryTest
+public class RepositoryTest : IClassFixture<AppSettingFixture>
 {
     [Fact]
     public async Task ExecuteQuery_GetRecoverTicketsCriteria_ReturnTicketsResult()

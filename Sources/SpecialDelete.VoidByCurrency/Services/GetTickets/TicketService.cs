@@ -12,19 +12,11 @@ public interface TicketService
     TicketViewModel GetTicketDetail(GetTicketModel item, bool isOutright);
 }
 
-public class TicketServiceImp : TicketService
+public class TicketServiceImp(
+    BetListCoreService betListCoreService,
+    CheckBoxService checkBoxService)
+    : TicketService
 {
-    private readonly BetListCoreService betListCoreService;
-    private readonly CheckBoxService checkBoxService;
-
-    public TicketServiceImp(
-        BetListCoreService betListCoreService,
-        CheckBoxService checkBoxService)
-    {
-        this.betListCoreService = betListCoreService;
-        this.checkBoxService = checkBoxService;
-    }
-
     public TicketViewModel GetTicketDetail(GetTicketModel item, UserPermission userPermission, bool isOutright)
     {
         var ticketDetail = isOutright ? betListCoreService.GetOutrightTicket(item) : betListCoreService.GetTicket(item);

@@ -14,24 +14,6 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
 public class LinkedLogValidationServiceTests
 {
     [Theory]
-    [InlineData("1.0&2.5&3.5", 2.5, true)]
-    [InlineData("1.0&2.5&3.5", 4.5, false)]
-    [InlineData(null, 2.5, false)]
-    [InlineData("", 2.5, false)]
-    public void IsContainsValue_ReturnsExpectedResult(string parent, double child, bool expected)
-    {
-        // Arrange
-        var childDecimal = (decimal)child;
-        var service = new LinkedLogValidationServiceImp();
-
-        // Act
-        var result = service.IsContainsValue(parent, childDecimal);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
     [InlineData("2024-01-01T12:00:00", "2024-01-01T00:00:00", "2024-01-02T00:00:00", true)]
     [InlineData("2024-01-01T12:00:00", "2024-01-01T12:00:00", "2024-01-01T12:00:00", true)]
     [InlineData("2023-12-31T23:59:59", "2024-01-01T00:00:00", "2024-01-02T00:00:00", false)]

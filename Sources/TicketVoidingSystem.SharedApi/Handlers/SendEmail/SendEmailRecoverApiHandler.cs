@@ -17,15 +17,9 @@ public class SendEmailRecoverApiRequest : IRequest<IEnumerable<Result>>
     public IEnumerable<TicketRecoverEmailModel> Tickets { get; set; }
 }
 
-public class SendEmailRecoverApiHandler : IRequestHandler<SendEmailRecoverApiRequest, IEnumerable<Result>>
+public class SendEmailRecoverApiHandler(SendEmailRecoverService sendEmailRecoverService)
+    : IRequestHandler<SendEmailRecoverApiRequest, IEnumerable<Result>>
 {
-    private readonly SendEmailRecoverService sendEmailRecoverService;
-
-    public SendEmailRecoverApiHandler(SendEmailRecoverService sendEmailRecoverService)
-    {
-        this.sendEmailRecoverService = sendEmailRecoverService;
-    }
-
     public async Task<IEnumerable<Result>> Handle(SendEmailRecoverApiRequest message, CancellationToken cancellationToken)
     {
         var emailModel = new MailRecoverViewModel
@@ -33,7 +27,7 @@ public class SendEmailRecoverApiHandler : IRequestHandler<SendEmailRecoverApiReq
             DateTime = DateTimeOffset.Now.DateTime,
             TemplatePath = TemplateEmailPath.RecoverBet,
             ActorUsername = message.ActorUsername,
-            NegativeBalanceUsers = message.NegativeBalanceUsers,
+            NegativeBalanceUsers = message.NegativeBalanceUsers
         };
 
         await sendEmailRecoverService.SendEmail(emailModel, message.Tickets);

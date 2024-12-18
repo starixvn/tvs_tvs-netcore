@@ -1,59 +1,109 @@
 import { Injectable } from "@angular/core";
+import moment from 'moment-timezone';
+import { DateTimeFormat } from "../../../../../utility/constants/config";
+import { ExtraWarningModel } from "../../confirm-add-request/confirm-add-request.model";
 import { WrongMarketOfferedModel } from "../../models/event-wrong-market-offered.model";
 import { FilterWrongMarketOfferedModel } from "../models/filter-wrong-market-offered.model";
 import { WrongMarketOfferedGetLogInfoQuery } from "../models/get-log-info.query";
-import { LogInfoWrongMarketOffered } from "../models/log-info-wrong-market-offered.model";
+import { LogInfoItem, LogInfoWrongMarketOffered } from "../models/log-info-wrong-market-offered.model";
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class EventWrongMarketOfferedService {
-  constructor() { }
 
-  public getWrongMarketOfferedGetLogInfoModel(subIssueTypeId: number, logInfo: LogInfoWrongMarketOffered): WrongMarketOfferedGetLogInfoQuery {
-    return this.createWrongMarketOfferedGetLogInfoQuery(logInfo, Number(subIssueTypeId));
+  initDefaultTime(id: number = null): FilterWrongMarketOfferedModel {
+    const currentMoment = moment.utc().tz('America/Caracas');
+    return {
+      id: id,
+      fromDateTime: currentMoment.millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
+      toDateTime: currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT)
+    } as FilterWrongMarketOfferedModel;
   }
 
-  public getWrongMarketOfferedModel(subIssueTypeId: number, logInfoEvent: LogInfoWrongMarketOffered): WrongMarketOfferedModel {
+  initRangeTimeByInputTime(time: string): FilterWrongMarketOfferedModel {
+    const currentMoment = moment(time, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const newTime = currentMoment.add(100, 'milliseconds').format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    return {
+      fromDateTime: newTime,
+      toDateTime: newTime
+    } as FilterWrongMarketOfferedModel;
+  }
+
+  getWrongMarketOfferedGetLogInfoModel(subIssueTypeId: number, logInfo: LogInfoWrongMarketOffered): WrongMarketOfferedGetLogInfoQuery[] {
+    return logInfo.filterWrongMarketOfferedModels.map(filterItem => this.createWrongMarketOfferedGetLogInfoQuery(logInfo, subIssueTypeId, filterItem));
+  }
+
+  getWrongMarketOfferedModel(subIssueTypeId: number, logInfoEvent: LogInfoWrongMarketOffered): WrongMarketOfferedModel[] {
+     return logInfoEvent.logInfoItems.filter(x => x.logInfoDetail)
+      .map(x => x.filterTime)
+      .map(filterItem => this.createWrongMarketOfferedModel(subIssueTypeId, logInfoEvent, filterItem));
+  }
+
+  createWrongMarketOfferedModel(subIssueTypeId: number, logInfoEvent: LogInfoWrongMarketOffered,
+    filterItem: FilterWrongMarketOfferedModel): WrongMarketOfferedModel {
     const model = new WrongMarketOfferedModel();
-    model.filterFromTransTime = logInfoEvent.filterWrongMarketOfferedModel.fromDateTime;
-    model.filterToTransTime = logInfoEvent.filterWrongMarketOfferedModel.toDateTime;
+    model.id = filterItem.id;
+    model.filterFromTransTime = filterItem.fromDateTime;
+    model.filterToTransTime = filterItem.toDateTime;
     model.matchId = logInfoEvent.matchId;
     model.subIssueTypeId = subIssueTypeId;
-    model.logInfoDetail = logInfoEvent.logInfoDetail;
     model.betTeamsResult = logInfoEvent.betTeamsResult;
-    model.betTypeCount = logInfoEvent.betTypeCount;
+    model.logInfoDetail = logInfoEvent.logInfoItems.find(x => x.id === filterItem.id).logInfoDetail;
+    model.betTypeCount = logInfoEvent.logInfoItems.find(x => x.id === filterItem.id).betTypeCount;
     model.allBetTypesSelection = logInfoEvent.allBetTypesSelection;
     return model;
   }
 
-  public assignModelsToEvents(inputModel: WrongMarketOfferedModel): LogInfoWrongMarketOffered {
+  assignModelsToEvents(inputModels: WrongMarketOfferedModel[]): LogInfoWrongMarketOffered {
     const logInfo = new LogInfoWrongMarketOffered();
-    logInfo.matchId = inputModel.matchId;
-    logInfo.logInfoDetail = inputModel.logInfoDetail;
-    logInfo.filterWrongMarketOfferedModel = this.createFilterWrongMarketOfferedModel(inputModel);
-    logInfo.betTypeCount = inputModel.betTypeCount;
-    logInfo.betTeamsResult = inputModel.betTeamsResult;
-    logInfo.allBetTypesSelection = inputModel.allBetTypesSelection;
+    logInfo.matchId = inputModels[0].matchId;
+    logInfo.betTeamsResult = inputModels[0].betTeamsResult;
+    logInfo.allBetTypesSelection = inputModels[0].allBetTypesSelection;
+    logInfo.logInfoItems = inputModels.map(x => this.createLogInfoItem(x));
+    logInfo.filterWrongMarketOfferedModels = inputModels.map(x => this.createFilterWrongMarketOfferedModel(x));
 
     return logInfo;
   }
 
+  getExtraWarningModel(logInfoItems: LogInfoItem[]) {
+    const excludeTimeRange = logInfoItems.filter(x => !x.logInfoDetail).map(x => `${x.filterTime.fromDateTime} - ${x.filterTime.toDateTime}`);
+    if (excludeTimeRange.length === 0) {
+      return null;
+    }
+
+    return {
+      title: 'Time range(s) excluded when creating new request because having no valid tickets:',
+      messages: excludeTimeRange
+    } as ExtraWarningModel;
+  }
+
+  private createLogInfoItem(inputModel: WrongMarketOfferedModel): LogInfoItem {
+    return {
+      id: inputModel.id,
+      logInfoDetail: inputModel.logInfoDetail,
+      betTypeCount: inputModel.betTypeCount
+    } as LogInfoItem;
+  }
+
   private createFilterWrongMarketOfferedModel(inputModel: WrongMarketOfferedModel): FilterWrongMarketOfferedModel {
     const model = new FilterWrongMarketOfferedModel();
+    model.id = inputModel.id;
     model.fromDateTime = inputModel.filterFromTransTime;
     model.toDateTime = inputModel.filterToTransTime;
 
     return model;
   }
 
-  private createWrongMarketOfferedGetLogInfoQuery(logInfo: LogInfoWrongMarketOffered, subIssueTypeId: number): WrongMarketOfferedGetLogInfoQuery {
+  private createWrongMarketOfferedGetLogInfoQuery(logInfo: LogInfoWrongMarketOffered, subIssueTypeId: number,
+    filterItem: FilterWrongMarketOfferedModel): WrongMarketOfferedGetLogInfoQuery {
     const model = new WrongMarketOfferedGetLogInfoQuery();
     model.matchId = logInfo.matchId;
     model.subIssueTypeId = subIssueTypeId;
-    model.filterFromTransTime = logInfo.filterWrongMarketOfferedModel.fromDateTime;
-    model.filterToTransTime = logInfo.filterWrongMarketOfferedModel.toDateTime;
+    model.id = filterItem.id;
+    model.filterFromTransTime = filterItem.fromDateTime;
+    model.filterToTransTime = filterItem.toDateTime;
     model.betTeamsResult = logInfo.betTeamsResult;
     return model;
   }

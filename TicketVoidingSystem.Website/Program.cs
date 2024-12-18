@@ -44,7 +44,7 @@ services.AddFanexMailService();
 services.AddMediatR();
 services.AddAutoMapper();
 services.AddTvsSignalR();
-services.AddResponseCompression(options => { options.MimeTypes = new[] { "text/html", "text/css", "application/javascript", "application/json" }; });
+services.AddResponseCompression(options => { options.MimeTypes = ["text/html", "text/css", "application/javascript", "application/json"]; });
 services.AddRazorPages();
 services.AddControllersWithViews(options =>
 {

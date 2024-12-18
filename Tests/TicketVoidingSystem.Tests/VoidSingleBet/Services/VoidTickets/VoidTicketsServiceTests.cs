@@ -83,7 +83,7 @@ public class VoidTicketsServiceTests
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
         var service = new VoidTicketsServiceImp(sessionService, TestSetup.CreateMapper(), repository, loggingService);
-        var combineValidation = new VoidTicketValidation()
+        var combineValidation = new VoidTicketValidation
         {
             ErrorCode = 0,
             ErrorMsg = string.Empty,

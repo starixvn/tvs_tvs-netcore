@@ -9,26 +9,14 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark;
 
-public class GetDataForConfirmAutoUnmarkRequest : GetDataForConfirmAutoUnmarkQuery, IRequest<GetDataForConfirmAutoUnmarkViewModel>
+public class GetDataForConfirmAutoUnmarkRequest : GetDataForConfirmAutoUnmarkQuery, IRequest<GetDataForConfirmAutoUnmarkViewModel>;
+
+public class GetDataForConfirmAutoUnmarkHandler(
+    ConfirmAutoUnmarkService confirmAutoUnmarkService,
+    PagingService pagingService,
+    MapDataForConfirmAutoUnmarkService mapDataForConfirmAutoUnmarkService)
+    : IRequestHandler<GetDataForConfirmAutoUnmarkRequest, GetDataForConfirmAutoUnmarkViewModel>
 {
-}
-
-public class GetDataForConfirmAutoUnmarkHandler : IRequestHandler<GetDataForConfirmAutoUnmarkRequest, GetDataForConfirmAutoUnmarkViewModel>
-{
-    private readonly ConfirmAutoUnmarkService confirmAutoUnmarkService;
-    private readonly PagingService pagingService;
-    private readonly MapDataForConfirmAutoUnmarkService mapDataForConfirmAutoUnmarkService;
-
-    public GetDataForConfirmAutoUnmarkHandler(
-        ConfirmAutoUnmarkService confirmAutoUnmarkService,
-        PagingService pagingService,
-        MapDataForConfirmAutoUnmarkService mapDataForConfirmAutoUnmarkService)
-    {
-        this.confirmAutoUnmarkService = confirmAutoUnmarkService;
-        this.pagingService = pagingService;
-        this.mapDataForConfirmAutoUnmarkService = mapDataForConfirmAutoUnmarkService;
-    }
-
     public async Task<GetDataForConfirmAutoUnmarkViewModel> Handle(GetDataForConfirmAutoUnmarkRequest message, CancellationToken cancellationToken)
     {
         var model = new GetDataForConfirmAutoUnmarkViewModel();

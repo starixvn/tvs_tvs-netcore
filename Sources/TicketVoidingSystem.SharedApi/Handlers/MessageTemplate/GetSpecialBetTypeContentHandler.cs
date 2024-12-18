@@ -13,15 +13,9 @@ public class GetSpecialBetTypeContentRequest : IRequest<ContentByLanguageModel>
     public IEnumerable<TicketEmailModel> Tickets { get; set; }
 }
 
-public class GetSpecialBetTypeContentHandler : IRequestHandler<GetSpecialBetTypeContentRequest, ContentByLanguageModel>
+public class GetSpecialBetTypeContentHandler(SpecialBetTypeContentService specialBetTypeContentService)
+    : IRequestHandler<GetSpecialBetTypeContentRequest, ContentByLanguageModel>
 {
-    private readonly SpecialBetTypeContentService specialBetTypeContentService;
-
-    public GetSpecialBetTypeContentHandler(SpecialBetTypeContentService specialBetTypeContentService)
-    {
-        this.specialBetTypeContentService = specialBetTypeContentService;
-    }
-
     public async Task<ContentByLanguageModel> Handle(GetSpecialBetTypeContentRequest request, CancellationToken cancellationToken)
     {
         return await Task.FromResult(specialBetTypeContentService.GetContentForVoidPage(request.Tickets));

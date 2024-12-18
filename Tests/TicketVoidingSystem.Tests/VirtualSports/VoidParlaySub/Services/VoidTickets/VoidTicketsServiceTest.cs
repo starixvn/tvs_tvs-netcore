@@ -54,7 +54,7 @@ public class VoidTicketsServiceTest
         };
         var expected = new VoidTicketsModel
         {
-            Tickets = Enumerable.Empty<TicketEmailModel>(),
+            Tickets = [],
             Validation = validation
         };
         var query = new VoidTicketsQuery { Password = "Test" };

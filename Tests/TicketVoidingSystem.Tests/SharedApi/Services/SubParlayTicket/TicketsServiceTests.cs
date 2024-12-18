@@ -14,7 +14,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.SharedApi.Services.SubParlayTicket;
 
-public class TicketsServiceTests : AppSettingFixture, IClassFixture<RemotingRefFixture>
+public class TicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {
     private readonly BetListService betListService;
     private readonly IDynamicRepository repository;

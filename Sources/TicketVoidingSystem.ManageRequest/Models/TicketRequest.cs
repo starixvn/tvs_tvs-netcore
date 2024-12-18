@@ -2,6 +2,8 @@
 
 public class TicketRequest
 {
+    public int Id { get; set; }
+
     public int ScoreId { get; set; }
 
     public int MatchId { get; set; }

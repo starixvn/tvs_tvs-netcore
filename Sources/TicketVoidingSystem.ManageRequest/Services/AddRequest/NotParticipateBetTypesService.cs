@@ -12,17 +12,11 @@ public interface NotParticipateBetTypesService
     Task<NotParticipateBetTypesViewModel> GetNotParticipateBetType(int matchId);
 }
 
-public class NotParticipateBetTypesServiceImp : NotParticipateBetTypesService
+public class NotParticipateBetTypesServiceImp(
+    BetTypesRepository betTypesRepository,
+    IDynamicRepository dynamicRepository)
+    : NotParticipateBetTypesService
 {
-    private readonly BetTypesRepository betTypesRepository;
-    private readonly IDynamicRepository dynamicRepository;
-
-    public NotParticipateBetTypesServiceImp(BetTypesRepository betTypesRepository, IDynamicRepository dynamicRepository)
-    {
-        this.betTypesRepository = betTypesRepository;
-        this.dynamicRepository = dynamicRepository;
-    }
-
     public async Task<NotParticipateBetTypesViewModel> GetNotParticipateBetType(int matchId)
     {
         const string jsonPath = "App_Data/Data/NotParticipateBetTypes.json";
@@ -49,7 +43,7 @@ public class NotParticipateBetTypesServiceImp : NotParticipateBetTypesService
 
     public async Task<IEnumerable<NotParticipateBetTypesModel>> GetNotParticipateBetTypesHavesTickets(IEnumerable<NotParticipateBetTypesModel> betTypes, int matchId)
     {
-        var allBetTypesOfMatch = await betTypesRepository.GetBetTypesHaveTicketsForTvs(matchId, false, null, null);
+        var allBetTypesOfMatch = await betTypesRepository.GetBetTypesHaveTicketsForTvs(matchId, false, []);
         var results = allBetTypesOfMatch
             .DistinctBy(x => new { x.Id, x.TransDesc })
             .Where(x => betTypes.Any(t => t.BetTypeId == int.Parse(x.Id)))
@@ -62,7 +56,7 @@ public class NotParticipateBetTypesServiceImp : NotParticipateBetTypesService
                     BetTypeName = x.Name,
                     PlayerId = int.TryParse(x.TransDesc, out var outValue) ? (int?)outValue : default,
                     ParentId = betTypeModel.ParentId,
-                    ParentName = GetGroupName(betTypeModel.ParentId),
+                    ParentName = GetGroupName(betTypeModel.ParentId)
                 };
             });
 

@@ -60,7 +60,7 @@ class Helper {
     { name: 'Take note', value: '2' },
     { name: 'Waiting', value: '3' }
   ];
-  static readonly fakeDetailRequestModelList: DetailRequestModel[] = [
+  static readonly fakeDetailRequestModelList = [
     {
       subIssueTypeId: 1,
       matchId: Helper.matchId,
@@ -81,7 +81,7 @@ class Helper {
       totalCancelCashOutProcessed: 0,
       totalResettleProcessed: 0
     },
-  ];
+  ] as DetailRequestModel[];
 
   static readonly fakeRequestModelList: RequestModel[] = [
     {
@@ -122,14 +122,14 @@ class Helper {
     voidRead: true,
     isReadMarkTickets: true
   };
-  static readonly fakeRequestSimpleInfo: RequestSimpleInfo = {
+  static readonly fakeRequestSimpleInfo = {
     lastPerformedBy: 'starix',
     totalSingleProcessed: 12,
     totalParlayProcessed: 1,
     matchId: Helper.matchId,
     totalCancelCashOutProcessed: 0,
     totalResettleProcessed: 0
-  };
+  } as RequestSimpleInfo;
 
   static readonly fakeRequestStatus: RequestStatus[] = [{
     requestId: 1111,
@@ -630,10 +630,10 @@ describe('RequestListComponent', () => {
       x.details = [detailRequestModel];
     });
     const { instance } = await shallow.render();
-    instance['isIssueTypeHaveMultipleMatches'] = jest.fn().mockImplementation(() => true);
+    instance['isDifferenceByMatchId'] = jest.fn().mockImplementation(() => true);
     instance['updateRequestStatus'](Helper.fakeRequestStatus, fakeRequestModelList);
 
-    expect(instance['isIssueTypeHaveMultipleMatches']).toHaveBeenCalledTimes(1);
+    expect(instance['isDifferenceByMatchId']).toHaveBeenCalledTimes(1);
   });
 
   it('#updateRequestStatus should update data when is not Danger Accepted', async () => {
@@ -645,30 +645,30 @@ describe('RequestListComponent', () => {
       x.details = [detailRequestModel];
     });
     const { instance } = await shallow.render();
-    instance['isIssueTypeHaveMultipleMatches'] = jest.fn();
+    instance['isDifferenceByMatchId'] = jest.fn();
     instance['updateRequestStatus'](Helper.fakeRequestStatus, fakeRequestModelList);
 
-    expect(instance['isIssueTypeHaveMultipleMatches']).toHaveBeenCalledTimes(1);
+    expect(instance['isDifferenceByMatchId']).toHaveBeenCalledTimes(1);
   });
 
   it('#updateRequestStatus should not update data when have not SimpleInfo', async () => {
     const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
     fakeRequestStatus.forEach(x => x.simpleInfo = null);
     const { instance } = await shallow.render();
-    instance['isIssueTypeHaveMultipleMatches'] = jest.fn();
+    instance['isDifferenceByMatchId'] = jest.fn();
     instance['updateRequestStatus'](fakeRequestStatus, Helper.fakeRequestModelList);
 
-    expect(instance['isIssueTypeHaveMultipleMatches']).toHaveBeenCalledTimes(0);
+    expect(instance['isDifferenceByMatchId']).toHaveBeenCalledTimes(0);
   });
 
   it('#updateRequestStatus should not update data when have not request', async () => {
     const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
     fakeRequestStatus.forEach(x => x.requestId = 10000);
     const { instance } = await shallow.render();
-    instance['isIssueTypeHaveMultipleMatches'] = jest.fn();
+    instance['isDifferenceByMatchId'] = jest.fn();
     instance['updateRequestStatus'](fakeRequestStatus, Helper.fakeRequestModelList);
 
-    expect(instance['isIssueTypeHaveMultipleMatches']).toHaveBeenCalledTimes(0);
+    expect(instance['isDifferenceByMatchId']).toHaveBeenCalledTimes(0);
   });
 
   it('#isSettlementHT should false', async () => {
@@ -711,25 +711,25 @@ describe('RequestListComponent', () => {
     expect(actual).toBeTruthy();
   });
 
-  it('#isIssueTypeHaveMultipleMatches should return false', async () => {
+  it('#isDifferenceByMatchId should return false', async () => {
     // Arrange
     const { instance } = await shallow.render();
 
     // Action
-    const actual = instance['isIssueTypeHaveMultipleMatches'](0, 1);
+    const actual = instance['isDifferenceByMatchId'](new RequestModel());
 
     // Assert
     expect(actual).toBeFalsy();
   });
 
-  it('#isIssueTypeHaveMultipleMatches should return true', async () => {
+  it('#isDifferenceByMatchId should return true', async () => {
     // Arrange
     const { instance } = await shallow.render();
-    const dataTests = [{ issueTypeId: 1, filterBy: 1 }, { issueTypeId: 11, filterBy: null }];
+    const dataTests = [{ issueTypeId: 1, filterBy: 1 }, { issueTypeId: 11, filterBy: null }] as RequestModel[];
 
     // Action & Assert
     dataTests.forEach(x => {
-      const actual = instance['isIssueTypeHaveMultipleMatches'](x.issueTypeId, x.filterBy);
+      const actual = instance['isDifferenceByMatchId'](x);
       expect(actual).toBeTruthy();
     })
   });

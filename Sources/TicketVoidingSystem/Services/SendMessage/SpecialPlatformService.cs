@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using Fanex.MailDeliver.MailClient;
-using Force.DeepCloner;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendMessage;
 
@@ -66,7 +66,7 @@ public class SpecialPlatformServiceImp : SpecialPlatformService
             return message;
         }
 
-        var outputMessage = message.DeepClone();
+        var outputMessage = MessagePackCloner.Clone(message);
         outputMessage.ContentEnglish = ProcessLeagueNameReplacement(match.OriginLeagueName, outputMessage.ContentEnglish);
         outputMessage.ContentChineseSimplified = ProcessLeagueNameReplacement(match.OriginLeagueNameSimplified, outputMessage.ContentChineseSimplified);
         outputMessage.ContentChineseTraditional = ProcessLeagueNameReplacement(match.OriginLeagueNameTraditional, outputMessage.ContentChineseTraditional);

@@ -41,15 +41,9 @@ public class GeneralInfoModel
 
 public class GroupUserVoidMessage
 {
-    public GroupUserVoidMessage()
-    {
-        Messages = new List<UserVoidMessage>();
-        VoidedBy = string.Empty;
-    }
+    public string VoidedBy { get; set; } = string.Empty;
 
-    public string VoidedBy { get; set; }
-
-    public IEnumerable<UserVoidMessage> Messages { get; set; }
+    public IEnumerable<UserVoidMessage> Messages { get; set; } = new List<UserVoidMessage>();
 }
 
 public class UserVoidMessage

@@ -5,26 +5,14 @@ using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class SelectRequestsRequest : SelectRequestsQuery, IRequest<IEnumerable<RequestViewModel>>
+public class SelectRequestsRequest : SelectRequestsQuery, IRequest<IEnumerable<RequestViewModel>>;
+
+public class SelectRequestsHandler(
+    GetRequestsService getRequestsService,
+    RenderRequestService renderService,
+    CheckPermissionOnRequestService checkPermissionOnRequestService)
+    : IRequestHandler<SelectRequestsRequest, IEnumerable<RequestViewModel>>
 {
-}
-
-public class SelectRequestsHandler : IRequestHandler<SelectRequestsRequest, IEnumerable<RequestViewModel>>
-{
-    private readonly GetRequestsService getRequestsService;
-    private readonly RenderRequestService renderService;
-    private readonly CheckPermissionOnRequestService checkPermissionOnRequestService;
-
-    public SelectRequestsHandler(
-        GetRequestsService getRequestsService,
-        RenderRequestService renderService,
-        CheckPermissionOnRequestService checkPermissionOnRequestService)
-    {
-        this.getRequestsService = getRequestsService;
-        this.renderService = renderService;
-        this.checkPermissionOnRequestService = checkPermissionOnRequestService;
-    }
-
     public async Task<IEnumerable<RequestViewModel>> Handle(SelectRequestsRequest request, CancellationToken cancellationToken)
     {
         if (await IsFilterSearchRequestsValid(request))
@@ -41,7 +29,7 @@ public class SelectRequestsHandler : IRequestHandler<SelectRequestsRequest, IEnu
                 RequestId = group.Key,
                 RequestModels = group.ToList()
             });
-        var viewModels = groupRequestModels.Select(g => renderService.Render(g));
+        var viewModels = groupRequestModels.Select(renderService.Render);
 
         return viewModels;
     }

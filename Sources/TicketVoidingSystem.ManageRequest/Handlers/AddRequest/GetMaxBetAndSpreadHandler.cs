@@ -14,15 +14,9 @@ public class GetMaxBetAndSpreadRequest : IRequest<IEnumerable<OddsInfoModel>>
     public int SubType { get; set; }
 }
 
-public class GetMaxBetAndSpreadHandler : IRequestHandler<GetMaxBetAndSpreadRequest, IEnumerable<OddsInfoModel>>
+public class GetMaxBetAndSpreadHandler(OWPHttpClientService owpHttpClientService)
+    : IRequestHandler<GetMaxBetAndSpreadRequest, IEnumerable<OddsInfoModel>>
 {
-    private readonly OWPHttpClientService owpHttpClientService;
-
-    public GetMaxBetAndSpreadHandler(OWPHttpClientService owpHttpClientService)
-    {
-        this.owpHttpClientService = owpHttpClientService;
-    }
-
     public async Task<IEnumerable<OddsInfoModel>> Handle(GetMaxBetAndSpreadRequest request,
         CancellationToken cancellationToken)
     {
@@ -30,10 +24,10 @@ public class GetMaxBetAndSpreadHandler : IRequestHandler<GetMaxBetAndSpreadReque
 
         if (maxBetSpreadInfo == null)
         {
-            return Enumerable.Empty<OddsInfoModel>();
+            return [];
         }
 
-        int[] subIssueTypeIdsWrongOdds = { SubIssueTypeConstant.Handicap, SubIssueTypeConstant.FirstHalfHandicap, SubIssueTypeConstant.OverUnder, SubIssueTypeConstant.FirstHalfOverUnder };
+        int[] subIssueTypeIdsWrongOdds = [SubIssueTypeConstant.Handicap, SubIssueTypeConstant.FirstHalfHandicap, SubIssueTypeConstant.OverUnder, SubIssueTypeConstant.FirstHalfOverUnder];
 
         return subIssueTypeIdsWrongOdds.Select(subIssueTypeId => GetOddsInfo(maxBetSpreadInfo, subIssueTypeId)).ToList();
     }
@@ -55,7 +49,7 @@ public class GetMaxBetAndSpreadHandler : IRequestHandler<GetMaxBetAndSpreadReque
             SubIssueTypeConstant.Handicap => maxBetSpread.Handicap,
             SubIssueTypeConstant.FirstHalfHandicap => maxBetSpread.FirstHalfHandicap,
             SubIssueTypeConstant.OverUnder => maxBetSpread.OverUnder,
-            _ => maxBetSpread.FirstHalfOverUnder,
+            _ => maxBetSpread.FirstHalfOverUnder
         };
     }
 }

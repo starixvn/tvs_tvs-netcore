@@ -34,7 +34,7 @@ public class KnapsackAlgorithmServiceImp : KnapsackAlgorithmService
 
         for (var i = 0; i <= capacity; i++)
         {
-            selectedItems[i] = new List<int>();
+            selectedItems[i] = [];
         }
 
         for (var i = 1; i <= n; i++)
@@ -43,11 +43,11 @@ public class KnapsackAlgorithmServiceImp : KnapsackAlgorithmService
             {
                 if (weights[i - 1].WinLostMultiply100 <= w)
                 {
-                    var newValue = dp[w - (weights[i - 1].WinLostMultiply100)] + values[i - 1].WinLostMultiply100;
+                    var newValue = dp[w - weights[i - 1].WinLostMultiply100] + values[i - 1].WinLostMultiply100;
                     if (newValue > dp[w]) //NOSONAR
                     {
                         dp[w] = newValue;
-                        selectedItems[w] = new List<int>(selectedItems[w - weights[i - 1].WinLostMultiply100]) { i - 1 };
+                        selectedItems[w] = [..selectedItems[w - weights[i - 1].WinLostMultiply100], i - 1];
                     }
                 }
             }

@@ -26,6 +26,7 @@ public class RequestViewModel
 public class RequestEventViewModel
 {
     public int? MatchId { get; set; }
+    public int? RequestDetailId { get; set; }
     public string SettlementStatus { get; set; }
     public int SubIssueTypeId { get; set; }
     public string Description { get; set; }

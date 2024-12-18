@@ -17,15 +17,8 @@ public interface AdvancedModeService
     IEnumerable<AllBetTypesSelection> GetAllBetTypesSelection(string allBetTypesSelectionJson);
 }
 
-public class AdvancedModeServiceImp : AdvancedModeService
+public class AdvancedModeServiceImp(BetTypesRepository betTypesRepository) : AdvancedModeService
 {
-    private readonly BetTypesRepository betTypesRepository;
-
-    public AdvancedModeServiceImp(BetTypesRepository betTypesRepository)
-    {
-        this.betTypesRepository = betTypesRepository;
-    }
-
     public IEnumerable<BetTeamAddRequest> GetBetTeams()
     {
         const string jsonPath = "App_Data/Data/AddRequestAdvancedMode.json";
@@ -45,7 +38,7 @@ public class AdvancedModeServiceImp : AdvancedModeService
     public IEnumerable<AllBetTypesSelection> GetAllBetTypesSelection(string allBetTypesSelectionJson)
     {
         return string.IsNullOrWhiteSpace(allBetTypesSelectionJson)
-            ? Enumerable.Empty<AllBetTypesSelection>()
+            ? []
             : Helper.DeserializeObjectIgnoreNullValue<IEnumerable<AllBetTypesSelection>>(allBetTypesSelectionJson);
     }
 }

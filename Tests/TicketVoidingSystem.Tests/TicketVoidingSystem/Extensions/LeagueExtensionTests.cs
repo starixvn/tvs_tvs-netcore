@@ -1,34 +1,33 @@
 ﻿using TicketVoidingSystem.Extensions;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions;
+
+public class LeagueExtensionTests
 {
-    public class LeagueExtensionTests
+    [Fact]
+    public void IsLeagueGroupIdSaBa_LeagueGroupIdIsInSaBaList_ReturnTrue()
     {
-        [Fact]
-        public void IsLeagueGroupIdSaBa_LeagueGroupIdIsInSaBaList_ReturnTrue()
-        {
-            // Arrange
-            int leagueGroupId = 42;
+        // Arrange
+        const int leagueGroupId = 42;
 
-            // Act
-            bool result = leagueGroupId.IsLeagueGroupIdSaBa();
+        // Act
+        var result = leagueGroupId.IsLeagueGroupIdSaBa();
 
-            // Assert
-            Assert.True(result);
-        }
+        // Assert
+        Assert.True(result);
+    }
 
-        [Fact]
-        public void IsLeagueGroupIdSaBa_LeagueGroupIdIsNotInSaBaList_ReturnFalse()
-        {
-            // Arrange
-            int leagueGroupId = 88;
+    [Fact]
+    public void IsLeagueGroupIdSaBa_LeagueGroupIdIsNotInSaBaList_ReturnFalse()
+    {
+        // Arrange
+        const int leagueGroupId = 88;
 
-            // Act
-            bool result = leagueGroupId.IsLeagueGroupIdSaBa();
+        // Act
+        var result = leagueGroupId.IsLeagueGroupIdSaBa();
 
-            // Assert
-            Assert.False(result);
-        }
+        // Assert
+        Assert.False(result);
     }
 }

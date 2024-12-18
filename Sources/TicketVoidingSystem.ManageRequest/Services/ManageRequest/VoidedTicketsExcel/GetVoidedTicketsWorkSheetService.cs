@@ -10,24 +10,14 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTicketsExcel;
 
-public class GetVoidedTicketsWorkSheetService : WorkSheetService<GetVoidedTicketsQuery>
+public class GetVoidedTicketsWorkSheetService(
+    CellService cellService,
+    GetVoidedTicketsService getVoidedTicketsService,
+    GetVoidedTicketsForExcelService getVoidedTicketsForExcelService,
+    MatchService matchService,
+    BetListService betListService)
+    : WorkSheetService<GetVoidedTicketsQuery>
 {
-    private readonly CellService cellService;
-    private readonly GetVoidedTicketsService getVoidedTicketsService;
-    private readonly GetVoidedTicketsForExcelService getVoidedTicketsForExcelService;
-    private readonly MatchService matchService;
-    private readonly BetListService betListService;
-
-    public GetVoidedTicketsWorkSheetService(CellService cellService, GetVoidedTicketsService getVoidedTicketsService,
-        GetVoidedTicketsForExcelService getVoidedTicketsForExcelService, MatchService matchService, BetListService betListService)
-    {
-        this.cellService = cellService;
-        this.getVoidedTicketsService = getVoidedTicketsService;
-        this.getVoidedTicketsForExcelService = getVoidedTicketsForExcelService;
-        this.matchService = matchService;
-        this.betListService = betListService;
-    }
-
     public async Task BindingContent(ExcelWorksheet worksheet, GetVoidedTicketsQuery model)
     {
         worksheet.Cells[1, 1].Value = cellService.CreateTitle(model.MatchId ?? 0, model.IssueTypeId);

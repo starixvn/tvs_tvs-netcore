@@ -35,7 +35,7 @@ public static class AppendStringExtension
             .ToList();
     }
 
-    private static string GetIntersectedString(List<string> first, List<string> second)
+    private static string GetIntersectedString(IEnumerable<string> first, IEnumerable<string> second)
     {
         var intersectedItems = first.Intersect(second, StringComparer.OrdinalIgnoreCase);
         return string.Join(", ", intersectedItems);
@@ -56,9 +56,9 @@ public static class AppendStringExtension
         var rootItems = root.Split(',');
         var eliminatedItems = elimination.Split(',');
         var result = from x in rootItems
-            where !eliminatedItems.Contains(x)
-            select x;
-            
+                     where !eliminatedItems.Contains(x)
+                     select x;
+
         return string.Join(",", result);
     }
 }

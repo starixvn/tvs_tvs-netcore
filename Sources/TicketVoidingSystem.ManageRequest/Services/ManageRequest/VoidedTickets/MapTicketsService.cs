@@ -13,23 +13,15 @@ public interface MapTicketsService
     Group<VoidedTicketViewModel> MapToGroupVoidedTicketsViewModel(Group<VoidedTicketModel> group, Match? match, int startIndex, GetVoidedTicketsQuery query);
 }
 
-public class MapTicketsServiceImp : MapTicketsService
+public class MapTicketsServiceImp(PagingService pagingService, MapFromBetListService mapFromBetListService)
+    : MapTicketsService
 {
-    private readonly PagingService pagingService;
-    private readonly MapFromBetListService mapFromBetListService;
-
-    public MapTicketsServiceImp(PagingService pagingService, MapFromBetListService mapFromBetListService)
-    {
-        this.pagingService = pagingService;
-        this.mapFromBetListService = mapFromBetListService;
-    }
-
     public IEnumerable<Group<VoidedTicketModel>> MapToGroupVoidedTickets(IEnumerable<VoidedTicketModel> originalTickets, GetVoidedTicketsQuery query)
     {
         var tickets = pagingService.Paging(originalTickets, query.PageIndex, query.PageSize);
         if (!tickets.Any())
         {
-            return Enumerable.Empty<Group<VoidedTicketModel>>();
+            return [];
         }
 
         var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay);

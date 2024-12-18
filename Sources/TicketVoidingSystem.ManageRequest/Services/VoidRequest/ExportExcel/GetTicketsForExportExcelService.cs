@@ -15,21 +15,13 @@ public interface GetTicketsForExportExcelService
     Task<IEnumerable<Group<ExcelTicketNoMatchModel>>> GetGroupsExcelTicketsRequestNoMatch(GetTicketsQuery query);
 }
 
-public class GetTicketsForExportExcelServiceImp : GetTicketsForExportExcelService
+public class GetTicketsForExportExcelServiceImp(
+    IMapper mapper,
+    GetTicketsService getTicketsService,
+    MapTicketsService mapTicketsService,
+    PagingService pagingService)
+    : GetTicketsForExportExcelService
 {
-    private readonly IMapper mapper;
-    private readonly GetTicketsService getTicketsService;
-    private readonly MapTicketsService mapTicketsService;
-    private readonly PagingService pagingService;
-
-    public GetTicketsForExportExcelServiceImp(IMapper mapper, GetTicketsService getTicketsService, MapTicketsService mapTicketsService, PagingService pagingService)
-    {
-        this.mapper = mapper;
-        this.getTicketsService = getTicketsService;
-        this.mapTicketsService = mapTicketsService;
-        this.pagingService = pagingService;
-    }
-
     public async Task<IEnumerable<Group<ExcelTicketModel>>> GetGroupsExcelTickets(GetTicketsQuery query)
     {
         var data = await getTicketsService.GetTickets(query);
@@ -51,7 +43,7 @@ public class GetTicketsForExportExcelServiceImp : GetTicketsForExportExcelServic
     {
         if (!tickets.Any())
         {
-            return Enumerable.Empty<Group<GetTicketModel>>();
+            return [];
         }
 
         var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay);

@@ -67,7 +67,7 @@ public class TicketListingControllerTests
         var excelFileModel = new ExcelFileModel
         {
             FileName = "AA",
-            ContentAsByteArray = new byte[] { }
+            ContentAsByteArray = []
         };
         mediator.Send(Arg.Any<ExportExcelRequest>()).ReturnsForAnyArgs(excelFileModel);
         var controller = new VoidSingleBetController(mediator)

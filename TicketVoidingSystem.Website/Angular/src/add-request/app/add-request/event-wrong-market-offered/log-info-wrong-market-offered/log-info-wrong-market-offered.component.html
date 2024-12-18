@@ -1,19 +1,18 @@
-<div *ngIf="primitiveProps.isShowValidation">
+<div class="log-info" *ngIf="primitiveProps.isShowValidation">
   <strong>Main Event - Log Info</strong>
-  <div class="log-info list-group-item flex-column align-items-start wrapper-tooltip body-log-info-main">
-    <div *ngIf="logInfo.logInfoDetail">
-      Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
-      Affected Single Count: <strong>{{logInfo.logInfoDetail.singleCount}}</strong>
-      <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount)" class="text-red"
-      [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>,
-      Parlay Count: <strong>{{logInfo.logInfoDetail.mainParlayCount}} </strong>
-      <span class="btn-bet-type-count" (click)="showAffectedTicketsDetails()">Details</span><br />
-      <span *ngIf="logInfo.logInfoDetail.cancelCashOutCount > 0">Cancel Cash Out: <strong>{{logInfo.logInfoDetail.cancelCashOutCount}}</strong></span>
+  <ng-container *ngFor="let logInfo of logInfo.logInfoItems">
+    <div class="log-info-item mb-1">
+      <div class="log-info-id">{{logInfo.id}}</div>
+      <div class="log-info-detail ">
+        <log-info-ticket-count
+          [isShowDetailsButton]="!isVoided"
+          [isShowCancelCashOut]="true"
+          [model]="logInfo.logInfoDetail"
+          (openAffectedDetails)="showAffectedTicketsDetails(logInfo)">
+        </log-info-ticket-count>
+        <log-info-message [messages]="logInfo.messageValidationLogInfo"></log-info-message>
+      </div>
     </div>
-    <log-info-message [messages]="logInfo.messageValidationLogInfo"></log-info-message>
-  </div>
+  </ng-container>
 </div>
-
-<affected-ticket [blockUi]="isBlock"
-  [model]="affectedTicketsModel">
-</affected-ticket>
+<affected-ticket [blockUi]="isBlock" [model]="affectedTicketsModel"></affected-ticket>

@@ -6,19 +6,11 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace SpecialDelete.VirtualSports.VoidParlaySub.Handlers;
 
-public class ExportExcelRequest : ExportExcelQuery, IRequest<ExcelFileModel>
+public class ExportExcelRequest : ExportExcelQuery, IRequest<ExcelFileModel>;
+
+public class ExportExcelHandler(ExcelService<ExportExcelQuery> excelService)
+    : IRequestHandler<ExportExcelRequest, ExcelFileModel>
 {
-}
-
-public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileModel>
-{
-    private readonly ExcelService<ExportExcelQuery> excelService;
-
-    public ExportExcelHandler(ExcelService<ExportExcelQuery> excelService)
-    {
-        this.excelService = excelService;
-    }
-
     public async Task<ExcelFileModel> Handle(ExportExcelRequest request, CancellationToken cancellationToken)
     {
         var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";

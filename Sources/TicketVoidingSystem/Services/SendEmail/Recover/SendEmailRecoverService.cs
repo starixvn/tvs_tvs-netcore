@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail.Recover;
 
@@ -12,25 +12,18 @@ public interface SendEmailRecoverService
     Task SendEmail(MailRecoverViewModel viewModel, IEnumerable<TicketRecoverEmailModel> tickets);
 }
 
-public class SendEmailRecoverServiceImp : SendEmailRecoverService
+public class SendEmailRecoverServiceImp(
+    SitesEmailService sitesEmailService,
+    RecoverEmailContentService recoverEmailContentService,
+    EmailSimpleService emailSimpleService)
+    : SendEmailRecoverService
 {
-    private readonly SitesEmailService sitesEmailService;
-    private readonly RecoverEmailContentService recoverEmailContentService;
-    private readonly EmailSimpleService emailSimpleService;
-
-    public SendEmailRecoverServiceImp(SitesEmailService sitesEmailService, RecoverEmailContentService recoverEmailContentService, EmailSimpleService emailSimpleService)
-    {
-        this.sitesEmailService = sitesEmailService;
-        this.recoverEmailContentService = recoverEmailContentService;
-        this.emailSimpleService = emailSimpleService;
-    }
-
     public async Task SendEmail(MailRecoverViewModel viewModel, IEnumerable<TicketRecoverEmailModel> tickets)
     {
         var sites = await sitesEmailService.GetSites();
-        SendMailCSD(sites, tickets, viewModel.DeepClone());
-        SendMailItQa(sites, tickets, viewModel.DeepClone());
-        SendMailItSupport(sites, tickets, viewModel.DeepClone());
+        SendMailCSD(sites, tickets, MessagePackCloner.Clone(viewModel));
+        SendMailItQa(sites, tickets, MessagePackCloner.Clone(viewModel));
+        SendMailItSupport(sites, tickets, MessagePackCloner.Clone(viewModel));
     }
 
     private void SendMailCSD(IEnumerable<SiteEmail> sites, IEnumerable<TicketRecoverEmailModel> tickets, MailRecoverViewModel viewModel)

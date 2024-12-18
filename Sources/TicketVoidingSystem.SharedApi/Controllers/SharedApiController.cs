@@ -10,17 +10,9 @@ namespace TicketVoidingSystem.SharedApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class SharedApiController : ControllerBase
+public class SharedApiController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
+    : ControllerBase
 {
-    private readonly IMediator mediator;
-    private readonly IHttpContextAccessor httpContextAccessor;
-
-    public SharedApiController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
-    {
-        this.mediator = mediator;
-        this.httpContextAccessor = httpContextAccessor;
-    }
-
     [HttpGet]
     public IActionResult GetNapUserInfo()
     {

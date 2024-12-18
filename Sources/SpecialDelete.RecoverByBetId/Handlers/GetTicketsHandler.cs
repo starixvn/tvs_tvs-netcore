@@ -6,23 +6,13 @@ using TicketVoidingSystem.Services;
 
 namespace SpecialDelete.RecoverByBetId.Handlers;
 
-public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>
+public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>;
+
+public class GetTicketsHandler(
+    GetTicketsService getTicketsService,
+    PagingService pagingService)
+    : IRequestHandler<GetTicketsRequest, TicketsViewModel>
 {
-}
-
-public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewModel>
-{
-    private readonly GetTicketsService getTicketsService;
-    private readonly PagingService pagingService;
-
-    public GetTicketsHandler(
-        GetTicketsService getTicketsService,
-        PagingService pagingService)
-    {
-        this.getTicketsService = getTicketsService;
-        this.pagingService = pagingService;
-    }
-
     public async Task<TicketsViewModel> Handle(GetTicketsRequest request, CancellationToken cancellationToken)
     {
         var model = await getTicketsService.GetTickets(request);

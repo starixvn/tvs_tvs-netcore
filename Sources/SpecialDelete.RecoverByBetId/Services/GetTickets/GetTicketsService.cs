@@ -16,22 +16,12 @@ public interface GetTicketsService
     Task<Group<TicketViewModel>> GetViewModel(Group<GetTicketModel> group);
 }
 
-public class GetTicketsServiceImp : GetTicketsService
+public class GetTicketsServiceImp(
+    Repository repository,
+    TicketService ticketService,
+    SessionService sessionService)
+    : GetTicketsService
 {
-    private readonly Repository repository;
-    private readonly TicketService ticketService;
-    private readonly SessionService sessionService;
-
-    public GetTicketsServiceImp(
-        Repository repository,
-        TicketService ticketService,
-        SessionService sessionService)
-    {
-        this.repository = repository;
-        this.ticketService = ticketService;
-        this.sessionService = sessionService;
-    }
-
     public async Task<GetTicketsModel> GetTickets(GetTicketsQuery query)
     {
         return await repository.GetTickets(query.TransIds);
@@ -41,7 +31,7 @@ public class GetTicketsServiceImp : GetTicketsService
     {
         var index = 1;
         var tickets = new List<TicketViewModel>();
-        var isReadOnlyPermission = !(await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverByBetID, Constant.Policy.Host));
+        var isReadOnlyPermission = !await sessionService.HasPermission(SpecialDeleteFunctionKeys.RecoverByBetID, Constant.Policy.Host);
         foreach (var item in group.Tickets)
         {
             var ticket = ticketService.GetTicket(item, ChoiceType.Html);

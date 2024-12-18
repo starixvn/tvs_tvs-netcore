@@ -10,19 +10,11 @@ public interface VoidBetListService
     TicketViewModel Create(GetTicketModel item);
 }
 
-public class VoidBetListServiceImp : VoidBetListService
+public class VoidBetListServiceImp(
+    BetListService betListService,
+    BetListVirtualSportsService betListCoreService)
+    : VoidBetListService
 {
-    private readonly BetListService betListService;
-    private readonly BetListVirtualSportsService betListCoreService;
-
-    public VoidBetListServiceImp(
-        BetListService betListService,
-        BetListVirtualSportsService betListCoreService)
-    {
-        this.betListService = betListService;
-        this.betListCoreService = betListCoreService;
-    }
-
     public TicketViewModel Create(GetTicketModel item)
     {
         var ticket = betListCoreService.SetValue(item);

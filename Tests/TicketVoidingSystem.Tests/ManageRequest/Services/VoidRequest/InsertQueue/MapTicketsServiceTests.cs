@@ -62,7 +62,7 @@ public class MapTicketsServiceTests
             RecoverParlayTickets = new List<RequestDetailTicketModel> { new() { TransId = 12 } },
             RecoverParlayTickets14 = new List<RequestDetailTicketModel>(),
             RecoverSingleTickets = new List<RequestDetailTicketModel> { new() { TransId = 11 } },
-            RecoverSingleTickets14 = null,
+            RecoverSingleTickets14 = null
         };
 
         var groupTickets = new List<RequestDetailTicketModel>

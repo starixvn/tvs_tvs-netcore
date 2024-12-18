@@ -9,15 +9,8 @@ public interface ReducedOverBetTypesService
     Task<IEnumerable<ReducedOverBetTypesModel>> GetBetTypes(int matchId);
 }
 
-public class ReducedOverBetTypesServiceImp : ReducedOverBetTypesService
+public class ReducedOverBetTypesServiceImp(BetTypesRepository betTypesRepository) : ReducedOverBetTypesService
 {
-    private readonly BetTypesRepository betTypesRepository;
-
-    public ReducedOverBetTypesServiceImp(BetTypesRepository betTypesRepository)
-    {
-        this.betTypesRepository = betTypesRepository;
-    }
-
     public async Task<IEnumerable<ReducedOverBetTypesModel>> GetBetTypes(int matchId)
     {
         const string jsonPath = "App_Data/Data/ReducedOverBetTypes.json";
@@ -29,7 +22,7 @@ public class ReducedOverBetTypesServiceImp : ReducedOverBetTypesService
 
     public async Task<IEnumerable<ReducedOverBetTypesModel>> GetReducedOverBetTypesHavesTickets(IEnumerable<ReducedOverBetTypesModel> reducedBetTypes, int matchId)
     {
-        var allBetTypesOfMatch = await betTypesRepository.GetBetTypesHaveTicketsForTvs(matchId, false, null, null);
+        var allBetTypesOfMatch = await betTypesRepository.GetBetTypesHaveTicketsForTvs(matchId, false, []);
 
         var results = reducedBetTypes
             .Where(betType => allBetTypesOfMatch.Any(x => int.Parse(x.Id) == betType.BetTypeId))

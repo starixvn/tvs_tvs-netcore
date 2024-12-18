@@ -6,8 +6,8 @@ namespace TicketVoidingSystem.Extensions;
 
 public static class StatusExtension
 {
-    private static readonly List<string> SettledStatus = new() { TicketStatus.Draw, TicketStatus.Won, TicketStatus.Lose };
-    private static readonly List<string> RunningOrWaiting = new() { TicketStatus.Running, TicketStatus.Waiting };
+    private static readonly List<string> SettledStatus = [TicketStatus.Draw, TicketStatus.Won, TicketStatus.Lose];
+    private static readonly List<string> RunningOrWaiting = [TicketStatus.Running, TicketStatus.Waiting];
 
     public static bool IsRunningOrWaiting(this string status)
     {

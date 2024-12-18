@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import * as _ from 'lodash';
 import { TEXT } from '../../../../../utility/constants/text';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
+import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { PopupService } from '../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
@@ -26,7 +28,7 @@ export class SaveRequestService {
     const isDataValid = argWrongMarketOffered.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argWrongMarketOffered);
     argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(true);
     if (isDataValid) {
-      this.proceedSaveRequest(argWrongMarketOffered);
+      this.showPopupConfirmSave(argWrongMarketOffered);
     } else {
       argWrongMarketOffered.addRequestStore.changeSavingRequestStatus(false);
     }
@@ -50,49 +52,12 @@ export class SaveRequestService {
     return this.validationService.isValidLogInfoEvent(argWrongMarketOffered.logInfoEvent);
   }
 
-  private proceedSaveRequest(arg: SaveRequestArg) {
-    if (this.validationService.checkCanShowConfirmationWrongMarketOffered(arg)) {
-      this.popupService.showConfirm(
-        this.getMessageConfirmationWrongMarketOffered(arg),
-        async () => {
-          await this.onClickConfirmSave(arg);
-        },
-        () => {
-          arg.addRequestStore.changeSavingRequestStatus(false);
-        });
-    } else {
-      this.executeSaveRequestApi(arg);
-    }
-  }
-
-  private getMessageConfirmationWrongMarketOffered(argWrongMarketOffered: SaveRequestArg): string {
-    let message = '';
-    if (argWrongMarketOffered.logInfoEvent.logInfoDetail.settleCount > 0) {
-      message = `${message}<div class="text-red">The request has settled ticket(s).</div>`;
-    }
-
-    if (argWrongMarketOffered.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError)) {
-      message = `${message}<div>There are some warnings in this request.</div>`;
-    }
-
-    if (argWrongMarketOffered.isEdit && argWrongMarketOffered.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString()
-      && argWrongMarketOffered.filter.action !== argWrongMarketOffered.actionIdOfFirstTimeAccess) {
-      message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;
-    }
-
-    if (argWrongMarketOffered.isEdit && argWrongMarketOffered.userId !== Number(document.getElementById('body').getAttribute('user-id'))) {
-      message = `${message}<div style="color:red">Please remind this request ${argWrongMarketOffered.requestId} is confirmed by ${argWrongMarketOffered.requestedBy}.</div>`;
-    }
-
-    return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
-  }
-
   private async executeSaveRequestApi(argWrongMarketOffered: SaveRequestArg): Promise<void> {
     const query = this.initAddRequestQuery(argWrongMarketOffered);
     await this.addRequestService.executeSaveRequest(argWrongMarketOffered.isEdit, argWrongMarketOffered.requestId, query, argWrongMarketOffered.addRequestStore);
   }
 
-  private async onClickConfirmSave(argWrongMarketOffered: SaveRequestArg) {
+  async onClickConfirmSave(argWrongMarketOffered: SaveRequestArg) {
     // validate again for make sure
     const isDataValidAgain = argWrongMarketOffered.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argWrongMarketOffered);
     argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(true);
@@ -104,6 +69,21 @@ export class SaveRequestService {
     argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(false);
   }
 
+  private showPopupConfirmSave(arg: SaveRequestArg) {
+    if (!arg.filter.isVoided) {
+      arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
+      arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoItems.some(x => x.logInfoDetail?.settleCount > 0);
+      arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.logInfoItems.every(y => y.messageValidationLogInfo.length > 0 && y.messageValidationLogInfo.every(t => !t.isError));
+      arg.confirmAddRequest.extraWarningModel = this.eventWrongMarketOfferedService.getExtraWarningModel(arg.logInfoEvent.logInfoItems);
+    }
+    arg.confirmAddRequest.isOpen = true;
+    arg.confirmAddRequest.requestId = arg.requestId;
+    arg.confirmAddRequest.requestedBy = arg.requestedBy;
+    arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
+    arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
+    arg.confirmAddRequest =  new ConfirmAddRequestModel();
+  }
+
   private initAddRequestQuery(argWrongMarketOffered: SaveRequestArg): AddRequestQuery {
     const query: AddRequestQuery = new AddRequestQuery();
     query.transInfoJson = argWrongMarketOffered.primitiveProps.transInfoAddRequestModel?.transInfoJson;
@@ -113,7 +93,6 @@ export class SaveRequestService {
     query.isTest = argWrongMarketOffered.filter.isTest;
     query.actionId = argWrongMarketOffered.filter.action;
     query.isVoided = argWrongMarketOffered.filter.isVoided;
-
     query.mistakenBy = argWrongMarketOffered.others.mistakenBy;
     query.decidedBy = argWrongMarketOffered.others.decidedBy;
     query.remark = argWrongMarketOffered.others.remark;

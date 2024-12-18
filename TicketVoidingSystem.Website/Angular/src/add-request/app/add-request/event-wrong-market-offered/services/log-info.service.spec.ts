@@ -14,16 +14,13 @@ import { LogInfoService } from './log-info.service';
 class Helper {
   static readonly fromDate = '2021-12-18 12:08:49.737';
   static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterWrongMarketOfferedModel: FilterWrongMarketOfferedModel = {
+  static readonly fakeFilterWrongMarketOfferedModel: FilterWrongMarketOfferedModel[] = [{
     fromDateTime: Helper.fromDate,
     toDateTime: Helper.toDate
-  };
+  }] as FilterWrongMarketOfferedModel[];
   static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
     matchId: 1,
-    filterWrongMarketOfferedModel: Helper.fakeFilterWrongMarketOfferedModel,
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
-    betTypeCount: [],
+    filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
     betTeamsResult: [],
   } as LogInfoWrongMarketOffered;
 
@@ -54,8 +51,7 @@ describe('LogInfoService', () => {
     const logInfo = _.cloneDeep(Helper.fakeLogInfoWrongMarketOffered);
     service.resetLogInfoOfEvent(logInfo);
 
-    expect(logInfo.logInfoDetail).toBe(null);
-    expect(logInfo.messageValidationLogInfo).toBe(null);
+    expect(logInfo.logInfoItems).toBe([]);
   });
 
   it('#getLogInfo should call #eventWrongMarketOfferedService.getWrongMarketOfferedGetLogInfoModel', async () => {

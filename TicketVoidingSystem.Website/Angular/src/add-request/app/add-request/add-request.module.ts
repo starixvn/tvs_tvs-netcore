@@ -27,6 +27,7 @@ import { EventDateFilterComponent } from './abnormal-accounts/event-date-filter/
 import { ProductFilterComponent } from './abnormal-accounts/product-filter/product-filter.component';
 import { AddRequestComponent } from './add-request.component';
 import { AffectedTicketComponent } from './affected-ticket/affected-ticket.component';
+import { TvDetectionComponent } from './components/tv-detection/tv-detection.component';
 import { ConfirmAddRequestComponent } from './confirm-add-request/confirm-add-request.component';
 import { ConfirmAbnormalBetComponent } from './event-abnormal-bet/confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-bet.component';
@@ -42,6 +43,9 @@ import { EventNotParticipateComponent } from './event-not-participate/event-not-
 import { FilterNotParticipateItemComponent } from './event-not-participate/filter-not-participate/filter-not-participate-item/filter-not-participate-item.component';
 import { FilterNotParticipateComponent } from './event-not-participate/filter-not-participate/filter-not-participate.component';
 import { LogInfoNotParticipateComponent } from './event-not-participate/log-info-not-participate/log-info-not-participate.component';
+import { EventOtherIssuesComponent } from './event-other-issues/event-other-issues.component';
+import { FilterOtherIssuesComponent } from './event-other-issues/filter-other-issues/filter-other-issues.component';
+import { LogInfoOtherIssuesComponent } from './event-other-issues/log-info-other-issues/log-info-other-issues.component';
 import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { FilterTimeAreaComponent } from './event-red-card/filter-time-area/filter-time-area.component';
@@ -51,12 +55,16 @@ import { EventReducedOverComponent } from './event-reduced-over/event-reduced-ov
 import { FilterReducedOverItemComponent } from './event-reduced-over/filter-reduced-over-item/filter-reduced-over-item.component';
 import { FilterReducedOverComponent } from './event-reduced-over/filter-reduced-over/filter-reduced-over.component';
 import { LogInfoReducedOverComponent } from './event-reduced-over/log-info-reduced-over/log-info-reduced-over.component';
+import { EventTechnicalErrorComponent } from './event-technical-error/event-technical-error.component';
+import { FilterTimeTechnicalErrorComponent } from './event-technical-error/filter-time-technical-error/filter-time-technical-error.component';
+import { LogInfoTechnicalErrorComponent } from './event-technical-error/log-info-technical-error/log-info-technical-error.component';
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
 import { EventWrongHdpComponent } from './event-wrong-hdp/event-wrong-hdp.component';
 import { FilterWithHdpComponent } from './event-wrong-hdp/filter-with-hdp/filter-with-hdp.component';
 import { LogInfoWrongHdpComponent } from './event-wrong-hdp/log-info-wrong-hdp/log-info-wrong-hdp.component';
 import { OthersWrongHdpComponent } from './event-wrong-hdp/others-wrong-hdp/others-wrong-hdp.component';
 import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered/event-wrong-market-offered.component';
+import { FilterTimeItemComponent } from './event-wrong-market-offered/filter-time/filter-time-item/filter-time-item.component';
 import { FilterTimeComponent } from './event-wrong-market-offered/filter-time/filter-time.component';
 import { LogInfoWrongMarketOfferedComponent } from './event-wrong-market-offered/log-info-wrong-market-offered/log-info-wrong-market-offered.component';
 import { EventWrongOddsSportsBookComponent } from './event-wrong-odds-sports-book/event-wrong-odds-sports-book.component';
@@ -86,10 +94,6 @@ import { LinkedLogComponent } from './pool-house-ticket/linked-log/linked-log.co
 import { PoolHouseTicketComponent } from './pool-house-ticket/pool-house-ticket.component';
 import { TicketsComponent } from './pool-house-ticket/tickets/tickets.component';
 import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket-count-other-sports.module';
-import { TvDetectionComponent } from './components/tv-detection/tv-detection.component';
-import { EventOtherIssuesComponent } from './event-other-issues/event-other-issues.component';
-import { FilterOtherIssuesComponent } from './event-other-issues/filter-other-issues/filter-other-issues.component';
-import { LogInfoOtherIssuesComponent } from './event-other-issues/log-info-other-issues/log-info-other-issues.component';
 
 @NgModule({
     declarations: [
@@ -144,8 +148,11 @@ import { LogInfoOtherIssuesComponent } from './event-other-issues/log-info-other
         AccountTableComponent,
         EventRecoverTicketComponent,
         EventWrongMarketOfferedComponent,
+        EventTechnicalErrorComponent,
         FilterTimeComponent,
+        FilterTimeTechnicalErrorComponent,
         LogInfoWrongMarketOfferedComponent,
+        LogInfoTechnicalErrorComponent,
         AffectedTicketComponent,
         PoolHouseTicketComponent,
         GroupBettypesPoolHouseComponent,
@@ -160,6 +167,7 @@ import { LogInfoOtherIssuesComponent } from './event-other-issues/log-info-other
         LogInfoWrongOfferedNameComponent,
         TvDetectionComponent,
         EventOtherIssuesComponent,
+        FilterTimeItemComponent,
         FilterOtherIssuesComponent,
         LogInfoOtherIssuesComponent,
     ],

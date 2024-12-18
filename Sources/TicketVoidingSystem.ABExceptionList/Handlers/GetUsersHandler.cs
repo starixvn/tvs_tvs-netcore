@@ -7,19 +7,10 @@ using TicketVoidingSystem.ABExceptionList.Services;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers;
 
-public class GetUsersRequest : GetUsersCriteria, IRequest<UserViewModel>
+public class GetUsersRequest : GetUsersCriteria, IRequest<UserViewModel>;
+
+public class GetUsersHandler(GetUsersService getUsersService) : IRequestHandler<GetUsersRequest, UserViewModel>
 {
-}
-
-public class GetUsersHandler : IRequestHandler<GetUsersRequest, UserViewModel>
-{
-    private readonly GetUsersService getUsersService;
-
-    public GetUsersHandler(GetUsersService getUsersService)
-    {
-        this.getUsersService = getUsersService;
-    }
-
     public async Task<UserViewModel> Handle(GetUsersRequest request, CancellationToken cancellationToken)
     {
         var viewModel = new UserViewModel

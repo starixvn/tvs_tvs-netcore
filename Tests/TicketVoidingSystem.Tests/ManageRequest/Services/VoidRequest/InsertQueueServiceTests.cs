@@ -53,7 +53,7 @@ public class InsertQueueServiceTests
             IssueTypeId = issueTypeId
         };
         var mergeTicketsForInsertQueue = new List<RequestDetailTicketModel>();
-        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>())
+        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>(), Arg.Any<string>())
             .ReturnsForAnyArgs(1);
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
@@ -85,7 +85,7 @@ public class InsertQueueServiceTests
             RequestId = 1
         };
 
-        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>()).ReturnsForAnyArgs(1);
+        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(1);
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
         repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
@@ -113,7 +113,7 @@ public class InsertQueueServiceTests
             RequestId = 1
         };
 
-        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>()).ReturnsForAnyArgs(1);
+        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(1);
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
         repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);

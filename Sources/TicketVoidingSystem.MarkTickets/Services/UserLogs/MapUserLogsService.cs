@@ -13,15 +13,8 @@ public interface MapUserLogsService
     IEnumerable<GetUserLogViewModel> MapToUserLogViewModels(IEnumerable<GetUserLogModel> originalLogs, UserLogTicketInfo ticketInfo);
 }
 
-public class MapUserLogsServiceImp : MapUserLogsService
+public class MapUserLogsServiceImp(RemotingRefWrapperService remotingRefService) : MapUserLogsService
 {
-    private readonly RemotingRefWrapperService remotingRefService;
-
-    public MapUserLogsServiceImp(RemotingRefWrapperService remotingRefService)
-    {
-        this.remotingRefService = remotingRefService;
-    }
-
     public IEnumerable<GetUserLogViewModel> MapToUserLogViewModels(IEnumerable<GetUserLogModel> originalLogs, UserLogTicketInfo ticketInfo)
     {
         var index = 1;

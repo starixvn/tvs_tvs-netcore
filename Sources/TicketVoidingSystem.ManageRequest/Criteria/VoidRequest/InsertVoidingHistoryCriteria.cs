@@ -14,6 +14,8 @@ public class InsertVoidingHistoryCriteria : CriteriaBase
 
     public string VoidData { get; set; }
 
+    public string TransIds { get; set; }
+
     public override string GetSettingKey() => "TicketVoiding_VoidingHistory_Insert";
 
     public override bool IsValid() => true;

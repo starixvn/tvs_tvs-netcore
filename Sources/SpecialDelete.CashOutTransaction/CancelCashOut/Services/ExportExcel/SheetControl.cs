@@ -5,15 +5,8 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace SpecialDelete.CashOutTransaction.CancelCashOut.Services.ExportExcel;
 
-public class SheetControlImp : WorkSheetService<GetTicketsQuery>
+public class SheetControlImp(SheetService sheetService) : WorkSheetService<GetTicketsQuery>
 {
-    private readonly SheetService sheetService;
-
-    public SheetControlImp(SheetService sheetService)
-    {
-        this.sheetService = sheetService;
-    }
-
     public async Task BindingContent(ExcelWorksheet worksheet, GetTicketsQuery model)
     {
         const int startRow = 5;

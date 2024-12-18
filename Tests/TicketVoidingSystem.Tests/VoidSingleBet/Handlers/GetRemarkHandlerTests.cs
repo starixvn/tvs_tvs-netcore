@@ -54,7 +54,7 @@ public class GetRemarkHandlerTests
             Settled = true,
             UnSettled = false,
             InstantlySettled = false,
-            Expected = new List<string> { "You can void \"Settled\" or \"Unsettled\" tickets." }
+            Expected = ["You can void \"Settled\" or \"Unsettled\" tickets."]
         };
 
         private static readonly RemarkModelTest OnlyUnSettled = new()
@@ -62,7 +62,7 @@ public class GetRemarkHandlerTests
             Settled = false,
             UnSettled = true,
             InstantlySettled = false,
-            Expected = new List<string> { "You can only void \"Unsettled\" tickets." }
+            Expected = ["You can only void \"Unsettled\" tickets."]
         };
 
         private static readonly RemarkModelTest SettledAndInstant = new()
@@ -70,11 +70,11 @@ public class GetRemarkHandlerTests
             Settled = true,
             UnSettled = false,
             InstantlySettled = true,
-            Expected = new List<string>
-            {
+            Expected =
+            [
                 "You can void \"Settled\" or \"Unsettled\" tickets.",
                 "You can void \"Instantly Settled\" tickets settled by Instant Settlement during live time and SABA Time Machine settled tickets."
-            }
+            ]
         };
 
         private static readonly RemarkModelTest UnSettledAndInstant = new()
@@ -82,11 +82,11 @@ public class GetRemarkHandlerTests
             Settled = false,
             UnSettled = true,
             InstantlySettled = true,
-            Expected = new List<string>
-            {
+            Expected =
+            [
                 "You can only void \"Unsettled\" tickets.",
                 "You can void \"Instantly Settled\" tickets settled by Instant Settlement during live time and SABA Time Machine settled tickets."
-            }
+            ]
         };
 
         private static readonly RemarkModelTest OnlyInstant = new()
@@ -94,11 +94,11 @@ public class GetRemarkHandlerTests
             Settled = false,
             UnSettled = false,
             InstantlySettled = true,
-            Expected = new List<string>
-            {
+            Expected =
+            [
                 "You can only void \"Unsettled\" tickets.",
                 "You can void \"Instantly Settled\" tickets settled by Instant Settlement during live time and SABA Time Machine settled tickets."
-            }
+            ]
         };
 
         private static readonly RemarkModelTest NotAnyPermission = new()
@@ -106,7 +106,7 @@ public class GetRemarkHandlerTests
             Settled = false,
             UnSettled = false,
             InstantlySettled = false,
-            Expected = new List<string>()
+            Expected = []
         };
 
         public IEnumerator<object[]> GetEnumerator()

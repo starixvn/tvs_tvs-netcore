@@ -17,25 +17,13 @@ public interface SeparabilityService<T, in TU>
     Result WarningMessage(string settledMainTrainIds);
 }
 
-public class RecoverSubTicketsServiceImp : SeparabilityService<RecoverSubTicketModel, RecoverSubTicketsQuery>
+public class RecoverSubTicketsServiceImp(
+    SessionService sessionService,
+    Repository repository,
+    SendMessageService sendMessageService,
+    LoggingService loggingService)
+    : SeparabilityService<RecoverSubTicketModel, RecoverSubTicketsQuery>
 {
-    private readonly SessionService sessionService;
-    private readonly Repository repository;
-    private readonly SendMessageService sendMessageService;
-    private readonly LoggingService loggingService;
-
-    public RecoverSubTicketsServiceImp(
-        SessionService sessionService,
-        Repository repository,
-        SendMessageService sendMessageService,
-        LoggingService loggingService)
-    {
-        this.sessionService = sessionService;
-        this.repository = repository;
-        this.sendMessageService = sendMessageService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<(RecoverValidationModel Validation, IEnumerable<RecoverSubTicketModel> Tickets)> RecoverTickets(RecoverSubTicketsQuery query)
     {
         try
@@ -53,7 +41,7 @@ public class RecoverSubTicketsServiceImp : SeparabilityService<RecoverSubTicketM
                 return repository.RecoverTickets<RecoverSubTicketModel>(criteria);
             });
 
-            (IEnumerable<RecoverValidationModel> Validation, IEnumerable<RecoverSubTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+            var results = await Task.WhenAll(tasks);
             var validationInAllServers = results.SelectMany(x => x.Validation);
             var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
@@ -98,25 +86,13 @@ public class RecoverSubTicketsServiceImp : SeparabilityService<RecoverSubTicketM
     }
 }
 
-public class RecoverMainTicketsServiceImp : SeparabilityService<RecoverMainTicketModel, RecoverMainTicketsQuery>
+public class RecoverMainTicketsServiceImp(
+    SessionService sessionService,
+    Repository repository,
+    SendMessageService sendMessageService,
+    LoggingService loggingService)
+    : SeparabilityService<RecoverMainTicketModel, RecoverMainTicketsQuery>
 {
-    private readonly SessionService sessionService;
-    private readonly Repository repository;
-    private readonly SendMessageService sendMessageService;
-    private readonly LoggingService loggingService;
-
-    public RecoverMainTicketsServiceImp(
-        SessionService sessionService,
-        Repository repository,
-        SendMessageService sendMessageService,
-        LoggingService loggingService)
-    {
-        this.sessionService = sessionService;
-        this.repository = repository;
-        this.sendMessageService = sendMessageService;
-        this.loggingService = loggingService;
-    }
-
     public async Task<(RecoverValidationModel Validation, IEnumerable<RecoverMainTicketModel> Tickets)> RecoverTickets(RecoverMainTicketsQuery query)
     {
         try
@@ -133,7 +109,7 @@ public class RecoverMainTicketsServiceImp : SeparabilityService<RecoverMainTicke
                 return repository.RecoverTickets<RecoverMainTicketModel>(criteria);
             });
 
-            (IEnumerable<RecoverValidationModel> Validation, IEnumerable<RecoverMainTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+            var results = await Task.WhenAll(tasks);
             var validationInAllServers = results.SelectMany(x => x.Validation);
             var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
