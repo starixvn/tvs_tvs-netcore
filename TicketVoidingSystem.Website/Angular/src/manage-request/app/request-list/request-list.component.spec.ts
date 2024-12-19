@@ -714,9 +714,10 @@ describe('RequestListComponent', () => {
   it('#isDifferenceByMatchId should return false', async () => {
     // Arrange
     const { instance } = await shallow.render();
+    const request = {issueTypeId: 11, filterBy: 1} as RequestModel;
 
     // Action
-    const actual = instance['isDifferenceByMatchId'](new RequestModel());
+    const actual = instance['isDifferenceByMatchId'](request);
 
     // Assert
     expect(actual).toBeFalsy();
@@ -745,7 +746,7 @@ describe('RequestListComponent', () => {
     requestModel.details[0].matchId = 1;
 
     // Action
-    await instance.copyRequestDescriptionSingleMatch(requestModel, 1);
+    await instance.copyRequestDescriptionSingleMatch(requestModel, 1, 1);
 
     // Assert
     expect(mockCopyToClipboard).toHaveBeenCalledTimes(1);

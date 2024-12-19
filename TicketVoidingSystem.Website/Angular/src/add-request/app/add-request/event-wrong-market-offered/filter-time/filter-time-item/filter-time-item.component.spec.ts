@@ -1,25 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { FilterTimeItemComponent } from './filter-time-item.component';
 
 describe('FilterTimeItemComponent', () => {
-  let component: FilterTimeItemComponent;
-  let fixture: ComponentFixture<FilterTimeItemComponent>;
+  it('#changeFilter should call output event changeFilter', async () => {
+    // Arrange
+    const fakeEventChangeFilter = jest.fn();
+    const component = new FilterTimeItemComponent(null);
+    component.changeFilterEvent.emit = fakeEventChangeFilter;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ FilterTimeItemComponent ]
-    })
-    .compileComponents();
-  });
+    // Action
+    component.changeFilter();
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(FilterTimeItemComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    // Assert
+    expect(fakeEventChangeFilter).toHaveBeenCalledTimes(1);
   });
 });

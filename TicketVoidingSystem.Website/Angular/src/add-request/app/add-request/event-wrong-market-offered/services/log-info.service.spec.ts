@@ -51,7 +51,7 @@ describe('LogInfoService', () => {
     const logInfo = _.cloneDeep(Helper.fakeLogInfoWrongMarketOffered);
     service.resetLogInfoOfEvent(logInfo);
 
-    expect(logInfo.logInfoItems).toBe([]);
+    expect(logInfo.logInfoItems.length).toBe(0);
   });
 
   it('#getLogInfo should call #eventWrongMarketOfferedService.getWrongMarketOfferedGetLogInfoModel', async () => {

@@ -58,9 +58,7 @@ EventOtherIssuesComponent {
       "thrownError": null,
     },
   },
-  "confirmAddRequest": ConfirmAddRequestModel {
-    "warningRelatedEvents": Array [],
-  },
+  "confirmAddRequest": ConfirmAddRequestModel {},
   "eventOtherIssuesService": EventOtherIssuesService {
     "commonService": null,
     "validationService": null,

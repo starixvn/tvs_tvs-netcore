@@ -94,7 +94,7 @@ describe('EventWrongMarketOfferedComponent', () => {
     .render({
       bind: {
         filter: new FilterModel(),
-        wrongMarketOfferedModel: Helper.fakeWrongMarketOfferedModel,
+        wrongMarketOfferedModels: [Helper.fakeWrongMarketOfferedModel],
       }
     });
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();
@@ -118,7 +118,7 @@ describe('EventWrongMarketOfferedComponent', () => {
     .render({
       bind: {
         filter: new FilterModel(),
-        wrongMarketOfferedModel: Helper.fakeWrongMarketOfferedModel,
+        wrongMarketOfferedModels: [Helper.fakeWrongMarketOfferedModel],
       }
     });
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();
@@ -141,7 +141,7 @@ describe('EventWrongMarketOfferedComponent', () => {
     .render({
       bind: {
         filter: new FilterModel(),
-        wrongMarketOfferedModel: Helper.fakeWrongMarketOfferedModel,
+        wrongMarketOfferedModels: [Helper.fakeWrongMarketOfferedModel],
       }
     });
     instance.advancedMode = new AdvancedModeAddRequestComponent();

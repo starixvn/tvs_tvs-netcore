@@ -14,7 +14,8 @@ class Helper {
   static readonly fakeLogInfoWrongMarketOffered = {
     matchId: 1,
     filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
-    betTeamsResult: []
+    betTeamsResult: [],
+    logInfoItems: [{logInfoDetail: {}, filterTime: Helper.fakeFilterWrongMarketOfferedModel[0]}]
   } as LogInfoWrongMarketOffered;
   static readonly fakeWrongMarketOfferedModel: WrongMarketOfferedModel = {
     betTypeCount: [],

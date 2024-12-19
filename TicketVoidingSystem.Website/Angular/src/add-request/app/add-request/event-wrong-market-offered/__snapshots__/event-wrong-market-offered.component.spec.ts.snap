@@ -4,6 +4,7 @@ exports[`EventWrongMarketOfferedComponent EventWrongMarketOfferedComponent init 
 EventWrongMarketOfferedComponent {
   "addRequestStore": null,
   "commonService": null,
+  "confirmAddRequest": ConfirmAddRequestModel {},
   "eventWrongMarketOfferedService": null,
   "groupBetTypesModel": GroupBetTypesAddRequestModel {
     "groupBetTypes": Array [],
@@ -11,9 +12,14 @@ EventWrongMarketOfferedComponent {
     "isDisable": false,
     "name": "",
   },
+  "issueTypes": IssueTypes {
+    "issueTypes": Array [],
+    "selectedSubIssueTypes": Array [],
+    "subIssueTypes": Array [],
+  },
   "logInfoEvent": LogInfoWrongMarketOffered {
-    "filterWrongMarketOfferedModel": FilterWrongMarketOfferedModel {},
-    "logInfoDetail": LogInfoDetail {},
+    "filterWrongMarketOfferedModels": Array [],
+    "logInfoItems": Array [],
   },
   "logInfoService": null,
   "others": OthersModel {},
@@ -31,13 +37,15 @@ EventWrongMarketOfferedComponent {
     "thrownError": null,
   },
   "validationService": null,
-  "wrongMarketOfferedModel": Object {
-    "betTypeCount": Array [],
-    "filterFromTransTime": "2021-12-18 12:08:49.737",
-    "filterToTransTime": "2021-12-21 12:08:49.737",
-    "logInfoDetail": LogInfoDetail {},
-    "matchId": 1,
-    "subIssueTypeId": 1,
-  },
+  "wrongMarketOfferedModels": Array [
+    Object {
+      "betTypeCount": Array [],
+      "filterFromTransTime": "2021-12-18 12:08:49.737",
+      "filterToTransTime": "2021-12-21 12:08:49.737",
+      "logInfoDetail": LogInfoDetail {},
+      "matchId": 1,
+      "subIssueTypeId": 1,
+    },
+  ],
 }
 `;
