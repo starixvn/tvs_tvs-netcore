@@ -11,9 +11,11 @@
     </ng-template>
     <ng-template ngbPanelContent>
       <div class="filter action-area d-flex">
-          <label class="col-form-label mr-2">VoidingHistoryId</label>
-          <input maxlength="150" class="voiding-history-id form-control form-control-sm" type="text" row="1" [(ngModel)]="inputVoidingHistoryId" />
-          <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Search" (click)="searchVoidingQueue()" /></div>
+        <label class="col-form-label mr-2">VoidingHistoryId</label>
+        <input maxlength="150" class="voiding-history-id form-control form-control-sm" type="text" row="1"
+          [(ngModel)]="inputVoidingHistoryId" />
+        <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"
+            value="Search" (click)="searchVoidingQueue()" /></div>
       </div>
       <div class="table-scrollable">
         <table class="table table-sm table-hover table-striped table-bordered">
@@ -78,24 +80,32 @@
   <ngb-panel id="panel-2" title="Second">
     <ng-template ngbPanelHeader>
       <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">Update failed queues to running status</h5>
+        <h5 class="m-0">Update voiding queue status</h5>
         <div>
           <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
         </div>
       </div>
     </ng-template>
-    <ng-template ngbPanelContent *ngIf="failedVoidingQueues.length > 0">
-      <ng-container *ngFor="let queue of failedVoidingQueues; index as i">
+    <ng-template ngbPanelContent *ngIf="voidingQueuesViewModel.length > 0">
+      <ng-container *ngFor="let queue of voidingQueuesViewModel; index as i">
         <div class="d-flex server-row">
-          <label class="col-form-label mr-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
-          <label class="col-form-label mr-2"><strong>Failed Queues:</strong> {{queue.queueIds}}</label>
+          <label
+            class="col-form-label mr-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
+          <label class="col-form-label mr-2"><strong>QueueId </strong></label>
+          <input maxlength="150" class="form-control form-control-sm queue-id" type="text" row="1" disabled
+            [(ngModel)]="queue.queueId" />
 
-          <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Update to Running"
-            (click)="confirmUpdateFailedQueuesToRunning(queue.siteDbGroupId, queue.queueIds)" /></div>
+          <label class="col-form-label ml-4 mr-2"><strong>StatusId</strong></label>
+          <select class="form-control status-select" [(ngModel)]="queue.statusIdSelected">
+            <option *ngFor="let item of voidingQueueStatusSelection" [attr.value]="item.value">{{item.name}}</option>
+          </select>
+
+          <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold" value="Save"
+              (click)="confirmUpdateStatus(queue.siteDbGroupId, queue.queueId, queue.statusIdSelected)" /></div>
         </div>
       </ng-container>
     </ng-template>
-    <ng-template ngbPanelContent *ngIf="failedVoidingQueues.length === 0">
+    <ng-template ngbPanelContent *ngIf="voidingQueuesViewModel.length === 0">
       <tbody>
         <tr>
           <td class="no-data">There is no data</td>
@@ -108,35 +118,25 @@
   <ngb-panel id="panel-3" title="Third">
     <ng-template ngbPanelHeader>
       <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">Update voiding queue status</h5>
-        <div>
-          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
-        </div>
+        <h5 class="m-0">*** Guideline</h5>
       </div>
     </ng-template>
-    <ng-template ngbPanelContent *ngIf="voidingQueuesViewModel.length > 0">
-      <ng-container *ngFor="let queue of voidingQueuesViewModel; index as i">
-        <div class="d-flex server-row">
-          <label class="col-form-label mr-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
-          <label class="col-form-label mr-2"><strong>QueueId </strong></label>
-          <input maxlength="150" class="form-control form-control-sm queue-id" type="text" row="1" disabled [(ngModel)]="queue.queueId" />
-
-          <label class="col-form-label ml-4 mr-2"><strong>StatusId</strong></label>
-          <select class="form-control status-select" [(ngModel)]="queue.statusIdSelected">
-            <option *ngFor="let item of voidingQueueStatusSelection" [attr.value]="item.value">{{item.name}}</option>
-          </select>
-
-          <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Save"
-            (click)="confirmUpdateStatus(queue.siteDbGroupId, queue.queueId, queue.statusIdSelected)" /></div>
+    <ng-template ngbPanelContent>
+      Case: Void queue failed (by lockmatch) -> Request status show <strong class="text-red">Failed</strong><br /><br />
+      <div class="ml-3">
+        1. ​​​​​​​User void tickets by another functions<br />
+        => ​Action: <br />
+        <div class="ml-5">
+          Update Voiding History
         </div>
-      </ng-container>
-    </ng-template>
-    <ng-template ngbPanelContent *ngIf="voidingQueuesViewModel.length === 0">
-      <tbody>
-        <tr>
-          <td class="no-data">There is no data</td>
-        </tr>
-      </tbody>
+      </div>
+      ​​​​​​<div class="ml-3">
+        2. User still not void tickets -> ​​​​​​​Match is unlocked<br />
+        => Action: <br />
+        <div class="ml-5">
+          Change StatusId to 1 - Running & Click "Save" -> The void queue is executed again
+        </div>
+      </div>
     </ng-template>
   </ngb-panel>
 </ngb-accordion>

@@ -1,4 +1,4 @@
-<ngb-accordion #acc="ngbAccordion" activeIds="panel-1,panel-2">
+<ngb-accordion #acc="ngbAccordion" activeIds="panel-1,panel-2,panel-3">
   <ngb-panel id="panel-1" title="First panel">
     <ng-template ngbPanelHeader>
       <div class="d-flex align-items-center justify-content-between">
@@ -11,9 +11,11 @@
     </ng-template>
     <ng-template ngbPanelContent>
       <div class="filter action-area d-flex">
-          <label class="col-form-label mr-2">RequestId </label>
-          <input maxlength="150" class="request-id form-control form-control-sm" type="text" row="1" [(ngModel)]="inputRequestId" />
-          <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Search" (click)="searchVoidingHistory()" /></div>
+        <label class="col-form-label mr-2">RequestId </label>
+        <input maxlength="150" class="request-id form-control form-control-sm" type="text" row="1"
+          [(ngModel)]="inputRequestId" />
+        <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"
+            value="Search" (click)="searchVoidingHistory()" /></div>
       </div>
       <div class="table-scrollable">
         <table class="table table-sm table-hover table-striped table-bordered">
@@ -69,7 +71,7 @@
   <ngb-panel id="panel-2" title="Second">
     <ng-template ngbPanelHeader>
       <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">Update void service status</h5>
+        <h5 class="m-0">Update voiding history status</h5>
         <div>
           <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
         </div>
@@ -79,15 +81,16 @@
       <ng-container *ngFor="let item of voidingHistoryViewModel; index as i">
         <div class="d-flex voiding-history-row">
           <label class="col-form-label mr-2"><strong>VoidingHistoryId </strong></label>
-          <input maxlength="150" class="form-control form-control-sm voiding-history-id" type="text" row="1" disabled [(ngModel)]="item.voidingHistoryId" />
+          <input maxlength="150" class="form-control form-control-sm voiding-history-id" type="text" row="1" disabled
+            [(ngModel)]="item.voidingHistoryId" />
 
           <label class="col-form-label ml-4 mr-2"><strong>StatusId</strong></label>
           <select class="form-control status-select" [(ngModel)]="item.statusIdSelected">
             <option *ngFor="let item of voidingHistorySelection" [attr.value]="item.value">{{item.name}}</option>
           </select>
-        
-          <div class="ml-4"><input type="button" class="btn btn-success btn-sm font-weight-bold" value="Save" 
-            (click)="confirmUpdateStatus(item.voidingHistoryId, item.statusIdSelected)" /></div>
+
+          <div class="ml-4"><input type="button" class="btn btn-success btn-sm font-weight-bold" value="Save"
+              (click)="confirmUpdateStatus(item.voidingHistoryId, item.statusIdSelected)" /></div>
         </div>
       </ng-container>
     </ng-template>
@@ -98,6 +101,25 @@
           <td class="no-data">There is no data</td>
         </tr>
       </tbody>
+    </ng-template>
+  </ngb-panel>
+
+  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+  <ngb-panel id="panel-3" title="Third">
+    <ng-template ngbPanelHeader>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0">*** Guideline</h5>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      Case: Void queue failed (by lockmatch) -> Request status show <strong class="text-red">Failed</strong> -> User
+      void tickets by another functions<br /><br />
+      <div class="ml-3">
+        => ​Action: <br />
+        <div class="ml-5">
+          Change StatusId to 2 - Done & Click "Save" -> Request status will be updated to Completed
+        </div>
+      </div>
     </ng-template>
   </ngb-panel>
 </ngb-accordion>

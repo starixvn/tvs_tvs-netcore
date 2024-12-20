@@ -19,7 +19,7 @@ export class AfterVoidComponent {
   requestId: number;
   voidingHistoryId: number;
   isBlock: boolean;
-  isNoData = false;
+  isNoData = true;
   orgStatusId: number;
   tmpStatusId: number;
   isRecoverTicket: boolean;
