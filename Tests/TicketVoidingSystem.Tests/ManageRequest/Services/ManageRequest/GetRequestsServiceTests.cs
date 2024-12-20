@@ -51,7 +51,7 @@ public class GetRequestsServiceTests
     {
         // Arrange
         var requestModel = new List<RequestModel>();
-        var query = new SelectRequestsQuery { RequestId = null, MatchId = 1 };
+        var query = new SelectRequestsQuery { RequestId = null, MatchId = "1" };
         getRequestsInActiveTableService.GetRequestsInActiveTable(Arg.Any<SelectRequestsQuery>())
             .ReturnsForAnyArgs((requestModel, new List<string>()));
 

@@ -6,7 +6,7 @@ public class SelectArchivedRequestsCriteria : CriteriaBase
 {
     public string RequestInfoJson { get; set; }
 
-    public int? MatchId { get; set; }
+    public string? MatchId { get; set; }
 
     public string IssueTypeId { get; set; }
 
@@ -17,6 +17,8 @@ public class SelectArchivedRequestsCriteria : CriteriaBase
     public bool IsExcludeTest { get; set; }
 
     public int CreatedBy { get; set; }
+
+    public string ProductIds { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_RequestList_Archive_Select";
 

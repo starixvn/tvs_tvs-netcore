@@ -11,4 +11,5 @@ export class GetRequestsQuery {
   isToDateBeforeBUDay?: boolean;
   bUDay: string;
   createdBy: string;
+  productIds: string;
 }

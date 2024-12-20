@@ -13,6 +13,8 @@ import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { FilterModel } from './filter.model';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { FilterService } from './filter.service';
 
 @Component({
   selector: 'filter',
@@ -47,13 +49,13 @@ export class FilterComponent implements OnInit {
   bUDay = new Date();
   markedTicketsCount = 0;
   userId: string;
+  products: MultipleSelection;
 
   constructor(
     private readonly element: ElementRef,
     private readonly commonService: CommonService
   ) {
     this.tooltip.element = this.element;
-    this.statusSelectList = ManageRequestStatus.MULTIPLE_OPTIONS;
   }
 
   async ngOnInit() {
@@ -61,6 +63,8 @@ export class FilterComponent implements OnInit {
     this.filterByValue = this.mode[0];
     this.userId = document.getElementById('body').getAttribute('user-id');
     this.createdBySelectList = [{ name: 'All', value: '0' }, { name: '<<<< Me >>>>', value: this.userId }];
+    this.statusSelectList = ManageRequestStatus.MULTIPLE_OPTIONS;
+    this.products = FilterService.initMultiSelectProduct();
     await this.setIssueTypeSelectList();
     this.initDefaultFilter();
     this.updateSubByIssue();
@@ -106,6 +110,7 @@ export class FilterComponent implements OnInit {
     this.model.isExcludeTest = true;
     this.model.createdBy = this.createdBySelectList[0].value;
     this.model.isDisplayMissingInfo = localStorage.getItem(LocalStorageCacheConstant.IS_DISPLAY_REQUEST_MISSING_INFO + this.userId) === 'true';
+    this.model.productIds = this.products?.getValueItems();
     this.updateMissingInfo.emit(this.model.isDisplayMissingInfo);
   }
 
@@ -245,5 +250,9 @@ export class FilterComponent implements OnInit {
       }
       this.multipleSelectSubTypeModel = this.subTypeSelectList.map(x => x.value);
     }
+  }
+
+  updateSelectedProduct(selectedItems: string[]): void {
+    this.model.productIds = selectedItems.join(',');
   }
 }
