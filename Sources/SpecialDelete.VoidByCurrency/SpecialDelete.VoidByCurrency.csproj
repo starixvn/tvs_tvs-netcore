@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <SonarQubeExclude>true</SonarQubeExclude>
@@ -14,10 +13,8 @@
     <PackageReference Include="Fizzler.Systems.HtmlAgilityPack" Version="1.2.1" />
     <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\TicketVoidingSystem.SharedApi\TicketVoidingSystem.SharedApi.csproj" />
     <ProjectReference Include="..\TicketVoidingSystem\TicketVoidingSystem.csproj" />
   </ItemGroup>
-
 </Project>
