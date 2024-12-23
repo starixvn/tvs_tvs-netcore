@@ -24,7 +24,7 @@ export class FilterService {
         ManageProductConstant.SportsBook.forEach(itemSelect => {
             tempSportsBook.push(new ItemsSelect(0, itemSelect.value, itemSelect.name, true, true, true, []));
         })
-        items.push(new ItemsSelect(0, "1", "Sports Book", true, true, true, tempSportsBook));        
+        items.push(new ItemsSelect(0, "00", "Sportsbook", true, true, true, tempSportsBook));        
         items.push(new ItemsSelect(1, ManageProductConstant.OtherProducts.value, ManageProductConstant.OtherProducts.name, true, true, true, []));
         items.push(new ItemsSelect(2, ManageProductConstant.MainParlay.value, ManageProductConstant.MainParlay.name, true, true, true, []));
         

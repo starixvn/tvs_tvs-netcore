@@ -102,25 +102,32 @@ export class FilterComponent implements OnInit {
 
   initDefaultFilter() {
     const date = new Date(moment.utc().tz('America/Caracas').format('YYYY-MM-DD HH:mm:ss.SSS'));
-    this.selectedIssueTypes = this.getIssueTypeIdDefault();
     this.model.ngbFromDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     this.model.ngbToDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     this.model.status = '-1';
-    this.model.issueTypeId = this.selectedIssueTypes.join(',');
     this.model.isExcludeTest = true;
     this.model.createdBy = this.createdBySelectList[0].value;
     this.model.isDisplayMissingInfo = localStorage.getItem(LocalStorageCacheConstant.IS_DISPLAY_REQUEST_MISSING_INFO + this.userId) === 'true';
-    this.model.productIds = this.products?.getValueItems();
+    this.updateIssueTypeIdDefault();
+    this.updateProductIdDefault();
     this.updateMissingInfo.emit(this.model.isDisplayMissingInfo);
   }
 
-  getIssueTypeIdDefault(): string[] {
+  updateIssueTypeIdDefault(){
     const previousSelectedIssueTypes = localStorage.getItem(LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_MANAGE_REQUEST + this.userId);
-    if (previousSelectedIssueTypes) {
-      return previousSelectedIssueTypes.split(',').filter(x => this.issueTypeSelectList.map(y => y.value).includes(x));
-    }
+    this.selectedIssueTypes = previousSelectedIssueTypes 
+        ? previousSelectedIssueTypes.split(',').filter(x => this.issueTypeSelectList.map(y => y.value).includes(x))
+        : this.issueTypeSelectList.map(x => x.value);
 
-    return this.issueTypeSelectList.map(x => x.value);
+    this.model.issueTypeId = this.selectedIssueTypes.join(',');
+  }
+
+  updateProductIdDefault() {
+    const previousSelectedProducts = localStorage.getItem(LocalStorageCacheConstant.PREVIOUS_SELECTED_PRODUCT_MANAGE_REQUEST + this.userId);
+    if (previousSelectedProducts) {
+      this.products.updateChildItemsChecked(previousSelectedProducts.split(','));
+    }
+    this.model.productIds = this.products?.getValueItems();
   }
 
   newRequest() {
@@ -140,6 +147,9 @@ export class FilterComponent implements OnInit {
       localStorage.setItem(
         LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_MANAGE_REQUEST + this.userId
         ,this.model.issueTypeId);
+      localStorage.setItem(
+        LocalStorageCacheConstant.PREVIOUS_SELECTED_PRODUCT_MANAGE_REQUEST + this.userId
+        ,this.model.productIds);
       this.model.subIssueType = this.multipleSelectSubTypeModel.join(',');
       this.search.emit();
       this.markedTicketsCount = await this.commonService.getMarkedTicketsCount();
@@ -164,6 +174,11 @@ export class FilterComponent implements OnInit {
 
     if (!this.model.issueTypeId) {
       this.tooltip.display('issue-type-dropdown', TEXT.REQUIRED_FIELD);
+      return false;
+    }
+
+    if (!this.model.productIds) {
+      this.tooltip.display('product-dropdown', TEXT.REQUIRED_FIELD);
       return false;
     }
 

@@ -15,10 +15,10 @@ describe('StaticService', () => {
 
   it('#getTvDetection should return expected when TvDetection Off', () => {
     // Arrange
-    const requestInfo = {issueTypeId: 1, inputtedFromTime:'08:04:13', minAllowanceTime: 3, tvDetectionValue: 0} as RequestInfoForCopy;
+    const requestInfo = {issueTypeId: 1, filterFromTransTime: new Date('2024-12-19 08:04:13.000'), minAllowanceTime: 3, tvDetectionValue: 0} as RequestInfoForCopy;
     const expected = `\nTV Detection: Off`
                     + `\n08:04:13(Provider) + 3s = 08:04:16`
-                    + `\nThis check time start void`;
+                    + ` This check time start void`;
                     
     // Action
     const result = TvDetectionService.getTvDetection(requestInfo);
@@ -29,11 +29,11 @@ describe('StaticService', () => {
 
   it('#getTvDetection should return expected when TvDetection On - Slow', () => {
     // Arrange
-    const requestInfo = {issueTypeId: 1, serviceAcceptTime:'08:04:13', minAllowanceTime: 3, 
+    const requestInfo = {issueTypeId: 1, serviceAcceptTime:'08:04:13 AM', minAllowanceTime: 3, 
       tvDetectionValue: 1, minuteOffset: '0', secondOffset: '9'} as RequestInfoForCopy;
     const expected = `\nTV Detection: On`
                     + `\n08:04:13(TV) - 9s(Slow) = 08:04:04 + 3s = 08:04:07`
-                    + `\nThis check time start void`;
+                    + ` This check time start void`;
                     
     // Action
     const result = TvDetectionService.getTvDetection(requestInfo);
@@ -48,7 +48,7 @@ describe('StaticService', () => {
       tvDetectionValue: 2, minuteOffset: '0', secondOffset: '9'} as RequestInfoForCopy;
     const expected = `\nTV Detection: On`
                     + `\n08:04:13(TV) + 9s(Fast) = 08:04:22 + 3s = 08:04:25`
-                    + `\nThis check time start void`;
+                    + ` This check time start void`;
                     
     // Action
     const result = TvDetectionService.getTvDetection(requestInfo);

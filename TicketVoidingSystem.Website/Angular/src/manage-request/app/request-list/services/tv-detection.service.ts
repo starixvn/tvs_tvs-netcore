@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import _ from 'lodash';
-import { TvDetection, TvDetectionType } from '../../../../utility/constants/config';
+import { TvDetection, TvDetectionType, DateTimeFormat } from '../../../../utility/constants/config';
 import { RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -45,24 +46,25 @@ export class TvDetectionService {
   }
 
   private static getTvDetectionTimeOff(requestInfo: RequestInfoForCopy){
-    return `${requestInfo.inputtedFromTime}(Provider) + ${requestInfo.minAllowanceTime}s `
-      + `= ${this.addSecondsToTime(requestInfo.inputtedFromTime, 0, requestInfo.minAllowanceTime)}`;
+    const inputtedFromTime = moment(requestInfo.filterFromTransTime).format("hh:mm:ss")
+    return `${inputtedFromTime}(Provider) + ${requestInfo.minAllowanceTime}s `
+      + `= ${this.addSecondsToTime(inputtedFromTime, 0, requestInfo.minAllowanceTime)}`;
   }
 
   private static getTvDetectionTimeOn(requestInfo: RequestInfoForCopy){
     let time = Number(requestInfo.minuteOffset) !== 0 ? `${requestInfo.minuteOffset}m${requestInfo.secondOffset}s`: `${requestInfo.secondOffset}s`;
+    const serviceAcceptTime = moment(requestInfo.serviceAcceptTime, "hh:mm:ss A").format("hh:mm:ss");;
 
     if(requestInfo.tvDetectionValue === TvDetectionType.FAST){
-      const sumTimeError = this.addSecondsToTime(requestInfo.serviceAcceptTime, Number(requestInfo.minuteOffset), Number(requestInfo.secondOffset));
+      const sumTimeError = this.addSecondsToTime(serviceAcceptTime, Number(requestInfo.minuteOffset), Number(requestInfo.secondOffset));
       const sumAllowanceTime = this.addSecondsToTime(sumTimeError, 0, requestInfo.minAllowanceTime);
-
-      return `${requestInfo.serviceAcceptTime}(TV) + ${time}(Fast) = ${sumTimeError} + ${requestInfo.minAllowanceTime}s = ${sumAllowanceTime}`;
+      return `${serviceAcceptTime}(TV) + ${time}(Fast) = ${sumTimeError} + ${requestInfo.minAllowanceTime}s = ${sumAllowanceTime}`;
     }
 
-    const subTimeError = this.addSecondsToTime(requestInfo.serviceAcceptTime, -Number(requestInfo.minuteOffset), -Number(requestInfo.secondOffset));
+    const subTimeError = this.addSecondsToTime(serviceAcceptTime, -Number(requestInfo.minuteOffset), -Number(requestInfo.secondOffset));
     const sumAllowanceTime = this.addSecondsToTime(subTimeError, 0, requestInfo.minAllowanceTime);
 
-    return `${requestInfo.serviceAcceptTime}(TV) - ${time}(Slow) = ${subTimeError} + ${requestInfo.minAllowanceTime}s = ${sumAllowanceTime}`;
+    return `${serviceAcceptTime}(TV) - ${time}(Slow) = ${subTimeError} + ${requestInfo.minAllowanceTime}s = ${sumAllowanceTime}`;
   }
 
   private static addSecondsToTime(time: string, minutesToAdd: number, secondsToAdd: number): string {

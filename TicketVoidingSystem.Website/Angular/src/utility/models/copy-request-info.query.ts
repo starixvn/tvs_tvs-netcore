@@ -45,7 +45,7 @@ export class RequestInfoForCopy {
   tvDetectionValue: number;
   minuteOffset: string;
   secondOffset: string;
-  inputtedFromTime: string;
+  filterFromTransTime: Date;
   serviceAcceptTime: string;
   minAllowanceTime: number;
 }
