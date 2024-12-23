@@ -34,7 +34,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
 
   mapOtherGroups(groups: Array<GroupModel>) {
     this.groupOtherTickets = [];
-    groups.forEach(item => {
+    groups?.forEach(item => {
       const group = new GroupModel(item.name, item.tickets, item.displayTotalTickets);
       this.groupOtherTickets.push(group);
     });
