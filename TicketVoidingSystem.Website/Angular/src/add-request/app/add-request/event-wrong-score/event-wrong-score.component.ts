@@ -82,6 +82,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       this.primitiveProps.filterBy = this.wrongScoreService.getFilterByBaseOnSubIssueType(this.filter.subIssueTypeId);
       this.primitiveProps.isCheckedVar = null;
       this.primitiveProps.isHighLightVarCheck = null;
+      this.tvDetectionComponent.initDefaultValues();
       this.resetData();
       this.filter.isChangeSubTypeManual = false;
     }
@@ -172,7 +173,6 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     this.wrongScoreModels = [];
     this.primitiveProps.isShowActualScore = false;
     this.primitiveProps.actualScore = '';
-    this.tvDetectionModel = new TvDetectionModel();
   }
 
   public async getWrongScores(matchId: number): Promise<void> {

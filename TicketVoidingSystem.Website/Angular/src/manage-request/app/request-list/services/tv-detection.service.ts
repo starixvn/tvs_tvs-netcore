@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import _ from 'lodash';
-import { TvDetection, TvDetectionType, DateTimeFormat } from '../../../../utility/constants/config';
+import { TvDetection, TvDetectionType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import moment from 'moment';
+import { StaticService } from '../../../../utility/services/static.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,11 +32,11 @@ export class TvDetectionService {
   }
   
   static getTvDetection(requestInfo: RequestInfoForCopy){
-    const issueTypeHasTvDetection = [IssueTypeConstant.DANGER_ACCEPTED, IssueTypeConstant.RED_CARD, IssueTypeConstant.WRONG_SCORE];
-    if(!issueTypeHasTvDetection.includes(requestInfo.issueTypeId.toString())){
+    if(!StaticService.isDangerAccepted(requestInfo.issueTypeId) && !StaticService.isRedCard(requestInfo.issueTypeId)
+      && !(StaticService.isWrongScore(requestInfo.issueTypeId) && requestInfo.filterBy === TVSRequestFilterBy.CHECK_TIME)) {
       return '';
     }
-
+    
     return `\nTV Detection: ${requestInfo.tvDetectionValue === TvDetectionType.NONE ? TvDetection.OFF : TvDetection.ON}\n`
       + this.getTvDetectionTime(requestInfo)
       + ` This check time start void`;
