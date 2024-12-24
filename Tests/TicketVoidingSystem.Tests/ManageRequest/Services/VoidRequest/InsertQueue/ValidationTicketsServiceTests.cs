@@ -39,11 +39,11 @@ public class ValidationTicketsServiceTests
         var service = new ValidationTicketsServiceImp(repository, mapTicketsService);
 
         // Act
-        await service.RecheckTicketsStatus(query, 0);
+        await service.RecheckTicketsStatus(query);
 
         // Assert
-        mapTicketsService.Received(4).MapBetIdToRequestDetailTicket(Arg.Any<IEnumerable<BetId>>(), 0, issueTypeId);
-        await repository.Received(1).FetchAsync<RequestDetailTicketModel>(Arg.Any<CheckTicketsAllowToVoidCriteria>());
+        mapTicketsService.Received(8).MapBetIdToRequestDetailTicket(Arg.Any<IEnumerable<BetId>>(), 0, issueTypeId);
+        await repository.Received(2).FetchAsync<RequestDetailTicketModel>(Arg.Any<CheckTicketsAllowToVoidCriteria>());
     }
 
     [Fact]
@@ -62,22 +62,14 @@ public class ValidationTicketsServiceTests
         var tickets = new List<RequestDetailTicketModel> { new() };
         var repository = Substitute.For<IDynamicRepository>();
         var mapTicketsService = Substitute.For<MapTicketsService>();
-        var expected = new CheckTicketValidationOutput
-        {
-            VoidSingleTickets = tickets,
-            VoidParlayTickets = tickets,
-            VoidCricketTickets = tickets,
-            CancelCOTickets = tickets
-        };
-        mapTicketsService
-            .MapBetIdToRequestDetailTicket(Arg.Any<IEnumerable<BetId>>(), 73642, IssueTypeConstant.EarlyKickOffTime)
-            .ReturnsForAnyArgs(tickets);
+        mapTicketsService.SetVoidingTypeForTickets(default).ReturnsForAnyArgs(tickets);
         var service = new ValidationTicketsServiceImp(repository, mapTicketsService);
 
         // Act
-        var actual = await service.RecheckTicketsStatus(query, 0);
+        var actual = await service.RecheckTicketsStatus(query);
 
         // Assert
-        AssertExtension.Equal(expected, actual);
+        await repository.DidNotReceive().FetchAsync<RequestDetailTicketModel>(Arg.Any<CheckTicketsAllowToVoidCriteria>());
+        AssertExtension.Equal(tickets, actual);
     }
 }
