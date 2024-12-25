@@ -43,17 +43,19 @@ public class NetPositionServiceImp(LoggingService loggingService, IDynamicReposi
         foreach (var siteDbGroupId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
         {
             var transIdsInServer = transIds.Where(x => x.SiteDbGroupId == siteDbGroupId).Select(x => x.TransId);
-            if (transIdsInServer.Any())
+            if (!transIdsInServer.Any())
             {
-                var command = new TicketVoidingNetPositionCriteria
-                {
-                    StrTransIds = string.Join(",", transIdsInServer),
-                    Action = action,
-                    SiteDbGroupId = siteDbGroupId
-                };
-
-                yield return repository.ExecuteAsync(command);
+                continue;
             }
+
+            var command = new TicketVoidingNetPositionCriteria
+            {
+                StrTransIds = string.Join(",", transIdsInServer),
+                Action = action,
+                SiteDbGroupId = siteDbGroupId
+            };
+
+            yield return repository.ExecuteAsync(command);
         }
     }
 
@@ -70,17 +72,19 @@ public class NetPositionServiceImp(LoggingService loggingService, IDynamicReposi
         foreach (var siteDbGroupId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
         {
             var transIdsInServer = transIds.Where(x => x.SiteDbGroupId == siteDbGroupId).Select(x => x.TransId);
-            if (transIdsInServer.Any())
+            if (!transIdsInServer.Any())
             {
-                var command = new TicketVoidingNetPositionCriteria
-                {
-                    StrTransIds = string.Join(",", transIdsInServer),
-                    Action = NetPositionConstant.ActionRecover,
-                    SiteDbGroupId = siteDbGroupId
-                };
-
-                yield return repository.ExecuteAsync(command);
+                continue;
             }
+
+            var command = new TicketVoidingNetPositionCriteria
+            {
+                StrTransIds = string.Join(",", transIdsInServer),
+                Action = NetPositionConstant.ActionRecover,
+                SiteDbGroupId = siteDbGroupId
+            };
+
+            yield return repository.ExecuteAsync(command);
         }
     }
 }

@@ -19,15 +19,16 @@ public class NetPositionForCricketServiceImp(NetPositionService netPositionServi
     public async Task<(string WarningCricket, IEnumerable<BetId> TicketsAfterUpdateNp)> Update(VoidTicketsQuery query)
     {
         var isSuccessfully = await netPositionService.UpdateNetPosition(query.TransIdCrickets, NetPositionConstant.ActionVoid);
-        if (!isSuccessfully)
+        if (isSuccessfully)
         {
-            var warningCricket = Helper.MessageFailApiCricket(query.TransIdCrickets, NetPositionConstant.ActionVoid);
-            var ticketsAfterRemoveCricket = query.Tickets.Where(x => query.TransIdCrickets.All(y => y.TransId != x.TransId));
-
-            return (warningCricket, ticketsAfterRemoveCricket);
+            return (string.Empty, query.Tickets);
         }
 
-        return (string.Empty, query.Tickets);
+        var warningCricket = Helper.MessageFailApiCricket(query.TransIdCrickets, NetPositionConstant.ActionVoid);
+        var ticketsAfterRemoveCricket = query.Tickets.Where(x => query.TransIdCrickets.All(y => y.TransId != x.TransId));
+
+        return (warningCricket, ticketsAfterRemoveCricket);
+
     }
 
     public async Task Rollback(VoidTicketsModel voidResult)

@@ -98,7 +98,11 @@ public class CheckTicketsStatusHandler(
             return CreateSqlResult(criteria);
         }
 
-        if (request.ApiKey.Equals("mark-tickets-check-permission", StringComparison.InvariantCultureIgnoreCase))
+        if (!request.ApiKey.Equals("mark-tickets-check-permission", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return new SqlResult { ErrCode = 1, ErrMsg = "Invalid request message parameters" };
+        }
+
         {
             var criteria = mapper.Map<CheckPermissionMarkTicketsCriteria>(request);
             criteria.TransInfoJson = await checkTicketsStatusService.GetTransInfoJsonForCheckPermission(request);
@@ -107,7 +111,6 @@ public class CheckTicketsStatusHandler(
             return CreateSqlResult(criteria);
         }
 
-        return new SqlResult { ErrCode = 1, ErrMsg = "Invalid request message parameters" };
     }
 
     private static SqlResult CreateSqlResult(CheckVoidBetPermissionCriteria criteria)

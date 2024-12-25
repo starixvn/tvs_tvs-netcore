@@ -97,26 +97,28 @@ public static class HtmlExtension
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        if (html.Contains(HtmlClass.RebateBonus))
+        if (!html.Contains(HtmlClass.RebateBonus))
         {
-            var extend = doc.DocumentNode.SelectNodes("//*[@class='rebate-bonus']")[0];
-            return "(" + extend.InnerText + ")";
+            return null;
         }
 
-        return null;
+        var extend = doc.DocumentNode.SelectNodes("//*[@class='rebate-bonus']")[0];
+        return "(" + extend.InnerText + ")";
+
     }
 
     private static string NPHPromotion(this string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        if (html.Contains(HtmlClass.NphPromotion))
+        if (!html.Contains(HtmlClass.NphPromotion))
         {
-            var extend = doc.DocumentNode.SelectNodes("//*[@class='nph-promotion']")[0];
-            return "(" + extend.InnerText + ")";
+            return null;
         }
 
-        return null;
+        var extend = doc.DocumentNode.SelectNodes("//*[@class='nph-promotion']")[0];
+        return "(" + extend.InnerText + ")";
+
     }
 
     public static string LineBreak(this string html)
@@ -154,14 +156,17 @@ public static class HtmlExtension
             return handicap.AppendWithNewLine(secondLine).StripHtml();
         }
 
-        if (html.Contains(HtmlClass.CashOutFromNo))
+        if (!html.Contains(HtmlClass.CashOutFromNo))
+        {
+            return node.InnerText.StripHtml();
+        }
+
         {
             handicap = node.ChildNodes[0].InnerText;
             var secondLine = node.ChildNodes[1].InnerText + node.ChildNodes[2].InnerText;
             return handicap.AppendWithNewLine(secondLine);
         }
 
-        return node.InnerText.StripHtml();
     }
 
     public static string ChoiceParlay(string html)

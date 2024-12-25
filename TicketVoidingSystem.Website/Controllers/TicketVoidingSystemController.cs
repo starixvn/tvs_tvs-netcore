@@ -32,13 +32,14 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     public async Task<ActionResult> VoidRequest(int id)
     {
         var isHasPermission = await mediator.Send(new CheckAccessRequestPermissionRequest { RequestId = id });
-        if (isHasPermission)
+        if (!isHasPermission)
         {
-            await userActionLogService.LogAccessFunction(nameof(VoidRequest));
-            return View("~/wwwroot/dist/ticket-voiding-system/void-request/index.cshtml");
+            return View("~/Views/Auth/AccessDenied.cshtml");
         }
 
-        return View("~/Views/Auth/AccessDenied.cshtml");
+        await userActionLogService.LogAccessFunction(nameof(VoidRequest));
+        return View("~/wwwroot/dist/ticket-voiding-system/void-request/index.cshtml");
+
     }
 
     [HttpGet]

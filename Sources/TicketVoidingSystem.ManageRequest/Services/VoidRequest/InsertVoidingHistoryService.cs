@@ -67,18 +67,20 @@ public class InsertVoidingHistoryServiceImp(
             IsHasSettledTicket = query.IsHasSettledTicket
         };
 
-        if (query.Message != null)
+        if (query.Message == null)
         {
-            voidData.ContentChineseTraditional = query.Message.ContentChineseTraditional;
-            voidData.ContentChineseSimplified = query.Message.ContentChineseSimplified;
-            voidData.ContentNewChineseSimplified = query.Message.ContentNewChineseSimplified;
-            voidData.ContentEnglish = query.Message.ContentEnglish;
-            voidData.ContentSpanish = query.Message.ContentSpanish;
-            voidData.ContentItalian = query.Message.ContentItalian;
-            voidData.ContentJapanese = query.Message.ContentJapanese;
-            voidData.ContentKorean = query.Message.ContentKorean;
-            voidData.ContentThai = query.Message.ContentThai;
+            return voidData;
         }
+
+        voidData.ContentChineseTraditional = query.Message.ContentChineseTraditional;
+        voidData.ContentChineseSimplified = query.Message.ContentChineseSimplified;
+        voidData.ContentNewChineseSimplified = query.Message.ContentNewChineseSimplified;
+        voidData.ContentEnglish = query.Message.ContentEnglish;
+        voidData.ContentSpanish = query.Message.ContentSpanish;
+        voidData.ContentItalian = query.Message.ContentItalian;
+        voidData.ContentJapanese = query.Message.ContentJapanese;
+        voidData.ContentKorean = query.Message.ContentKorean;
+        voidData.ContentThai = query.Message.ContentThai;
 
         return voidData;
     }

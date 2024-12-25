@@ -26,15 +26,16 @@ public class CheckTicketsStatusServiceImp(IDynamicRepository repository) : Check
         {
             var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == server.Id);
             var cancelCashOutTicketsInSiteDb = cancelCashOutTickets.Where(x => x.SiteDbGroupId == server.Id);
-            if (ticketsInSiteDb.Any() || cancelCashOutTicketsInSiteDb.Any())
+            if (!ticketsInSiteDb.Any() && !cancelCashOutTicketsInSiteDb.Any())
             {
-                criteria.SiteDbGroupId = server.Id;
-                criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
-                criteria.CancelCashOutTransIds = Helper.JoinBetIdList(cancelCashOutTicketsInSiteDb);
-                return repository.GetAsync<string>(criteria);
+                return Task.FromResult(string.Empty);
             }
 
-            return Task.FromResult(string.Empty);
+            criteria.SiteDbGroupId = server.Id;
+            criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
+            criteria.CancelCashOutTransIds = Helper.JoinBetIdList(cancelCashOutTicketsInSiteDb);
+            return repository.GetAsync<string>(criteria);
+
         });
 
         var transInfoJsonList = await Task.WhenAll(tasks);

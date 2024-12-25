@@ -116,14 +116,15 @@ public class MapTicketServiceImp(
 
     private string GetChoice(Ticket ticket, DetailTicketModel item, TicketHelper ticketHelper)
     {
-        if (item.IsParlay)
+        if (!item.IsParlay)
         {
-            var comboParlayNames = betListService.GetComboParlayName(ticket);
-            ticket = SetSubTicket(item);
-            return comboParlayNames + betListService.BuildChoice(ticket, ticketHelper, null, false);
+            return betListService.BuildChoice(ticket, ticketHelper, null, false);
         }
 
-        return betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var comboParlayNames = betListService.GetComboParlayName(ticket);
+        ticket = SetSubTicket(item);
+        return comboParlayNames + betListService.BuildChoice(ticket, ticketHelper, null, false);
+
     }
 
     private Ticket SetMainTicket(DetailTicketModel item)

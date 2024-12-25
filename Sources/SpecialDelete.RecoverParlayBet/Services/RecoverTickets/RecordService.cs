@@ -26,16 +26,17 @@ public class RecordServiceImp<T>(
 {
     public MailRecord Create(MailRecoverModel<MailTicketViewModel, T> model, EmailGroup group)
     {
-        if (model.Valid())
+        if (!model.Valid())
         {
-            model.ViewModel.NegativeBalanceUsers = model.GetNegativeBalanceUsers(group, t => t.Username);
-            model.ViewModel.Groups = CreateGroups(model.Tickets);
-            var subject = subjectService.CreateRecover(model, group, RecoverType.Parlay);
-            var mailRecord = templateEmailService.CreateForRecover(model, subject);
-            return mailRecord.MailRecord;
+            return new MailRecord();
         }
 
-        return new MailRecord();
+        model.ViewModel.NegativeBalanceUsers = model.GetNegativeBalanceUsers(group, t => t.Username);
+        model.ViewModel.Groups = CreateGroups(model.Tickets);
+        var subject = subjectService.CreateRecover(model, group, RecoverType.Parlay);
+        var mailRecord = templateEmailService.CreateForRecover(model, subject);
+        return mailRecord.MailRecord;
+
     }
 
     private List<Group<MailTicketViewModel>> CreateGroups(IEnumerable<T> tickets)

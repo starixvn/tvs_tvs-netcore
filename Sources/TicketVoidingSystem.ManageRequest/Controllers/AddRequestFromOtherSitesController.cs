@@ -16,11 +16,13 @@ public class AddRequestFromOtherSitesController(IMediator mediator) : Controller
     public async Task<ActionResult> CTS()
     {
         var requestJson = TempData["AddRequestFromCTS"] as string;
-        if (!string.IsNullOrWhiteSpace(requestJson))
+        if (string.IsNullOrWhiteSpace(requestJson))
         {
-            var request = JsonSerializer.Deserialize<AddRequestFromCTSRequest>(requestJson);
-            ViewBag.AddRequestIndexViewModel = await mediator.Send(request);
+            return View("~/wwwroot/dist/ticket-voiding-system/add-request/index.cshtml");
         }
+
+        var request = JsonSerializer.Deserialize<AddRequestFromCTSRequest>(requestJson);
+        ViewBag.AddRequestIndexViewModel = await mediator.Send(request);
 
         return View("~/wwwroot/dist/ticket-voiding-system/add-request/index.cshtml");
     }

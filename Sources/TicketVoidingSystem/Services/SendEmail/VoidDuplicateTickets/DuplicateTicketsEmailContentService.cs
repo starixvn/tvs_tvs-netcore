@@ -26,19 +26,20 @@ public class DuplicateTicketsEmailContentServiceImp(
 
     public MailRecord Create(DuplicateTicketsMailVoidViewModel mailVoidViewModel, SiteEmail site, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets, EmailGroup emailGroup)
     {
-        if (duplicateTickets.Valid(site))
+        if (!duplicateTickets.Valid(site))
         {
-            var subject = subjectService.CreateVoidDuplicateTickets(mailVoidViewModel, duplicateTickets.Select(x => x.Site), site, emailGroup);
-            var mailVoidModelClone = MessagePackCloner.Clone(mailVoidViewModel);
-            mailVoidModelClone.DuplicateTickets = duplicateTickets.ToList();
-            mailVoidModelClone.TotalOrgTransIds = duplicateTickets.Sum(x => x.TotalOrgTransIds);
-            UpdateEmailSender(mailVoidModelClone, site);
-            var mailRecord = Create(mailVoidModelClone, site, subject);
-
-            return mailRecord.MailRecord;
+            return new MailRecord();
         }
 
-        return new MailRecord();
+        var subject = subjectService.CreateVoidDuplicateTickets(mailVoidViewModel, duplicateTickets.Select(x => x.Site), site, emailGroup);
+        var mailVoidModelClone = MessagePackCloner.Clone(mailVoidViewModel);
+        mailVoidModelClone.DuplicateTickets = duplicateTickets.ToList();
+        mailVoidModelClone.TotalOrgTransIds = duplicateTickets.Sum(x => x.TotalOrgTransIds);
+        UpdateEmailSender(mailVoidModelClone, site);
+        var mailRecord = Create(mailVoidModelClone, site, subject);
+
+        return mailRecord.MailRecord;
+
     }
 
     private void UpdateEmailSender(DuplicateTicketsMailVoidViewModel mailVoidViewModel, SiteEmail site)

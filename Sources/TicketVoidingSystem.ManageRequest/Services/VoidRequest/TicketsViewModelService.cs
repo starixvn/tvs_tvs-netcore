@@ -178,13 +178,15 @@ public class TicketsViewModelServiceImp(
         }
         else
         {
-            if (cancelCashOutTickets.Any())
+            if (!cancelCashOutTickets.Any())
             {
-                model.FromDate = cancelCashOutTickets.Min(item => item.CheckTimeCancelCashOut).ZoneManila();
-                model.ToDate = cancelCashOutTickets.Max(item => item.CheckTimeCancelCashOut).ZoneManila();
-                model.FromTime = cancelCashOutTickets.Min(item => item.CheckTimeCancelCashOut).ZoneManila();
-                model.ToTime = cancelCashOutTickets.Max(item => item.CheckTimeCancelCashOut).ZoneManila();
+                return;
             }
+
+            model.FromDate = cancelCashOutTickets.Min(item => item.CheckTimeCancelCashOut).ZoneManila();
+            model.ToDate = cancelCashOutTickets.Max(item => item.CheckTimeCancelCashOut).ZoneManila();
+            model.FromTime = cancelCashOutTickets.Min(item => item.CheckTimeCancelCashOut).ZoneManila();
+            model.ToTime = cancelCashOutTickets.Max(item => item.CheckTimeCancelCashOut).ZoneManila();
         }
     }
 }

@@ -27,15 +27,16 @@ public class CheckPermissionOnRequestServiceImp(IDynamicRepository repository, S
         };
         var (firstResultSet, _, _) = await repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(criteria);
 
-        if (firstResultSet.Any())
+        if (!firstResultSet.Any())
         {
-            var issueTypeId = firstResultSet.First().IssueTypeId;
-            var permissionConfig = PermissionIssueTypeConfig.MappingList.First(x => x.IssueTypeId == issueTypeId);
-
-            return await sessionService.HasPermission(permissionConfig.FunctionKey, Constant.Policy.Read);
+            return false;
         }
 
-        return false;
+        var issueTypeId = firstResultSet.First().IssueTypeId;
+        var permissionConfig = PermissionIssueTypeConfig.MappingList.First(x => x.IssueTypeId == issueTypeId);
+
+        return await sessionService.HasPermission(permissionConfig.FunctionKey, Constant.Policy.Read);
+
     }
 
     public async Task<VoidPermission> GetVoidPermission()

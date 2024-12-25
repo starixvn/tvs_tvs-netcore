@@ -76,15 +76,17 @@ public class MailResultServiceImp : MailResultService
 
     private static void InsertDetailText(List<Result> results, string first, string second)
     {
-        if (!string.IsNullOrEmpty(first) || !string.IsNullOrEmpty(second))
+        if (string.IsNullOrEmpty(first) && string.IsNullOrEmpty(second))
         {
-            var detailText = new Result
-            {
-                ErrorCode = ErrorCode.DivideMessageMailDetail,
-                ErrorMsg = StringResource.ForMoreDetails
-            };
-            results.Insert(CategoryEmail.DetailText, detailText);
+            return;
         }
+
+        var detailText = new Result
+        {
+            ErrorCode = ErrorCode.DivideMessageMailDetail,
+            ErrorMsg = StringResource.ForMoreDetails
+        };
+        results.Insert(CategoryEmail.DetailText, detailText);
     }
 
     public static List<Result> InsertCombineLicenseesNameForAfterVoidService(List<Result> results, string siteNameSuccess, string siteNameFails)
@@ -100,16 +102,18 @@ public class MailResultServiceImp : MailResultService
             results.Add(successLicensees);
         }
 
-        if (!string.IsNullOrEmpty(siteNameFails))
+        if (string.IsNullOrEmpty(siteNameFails))
         {
-            var failedLicenses = new Result
-            {
-                ErrorCode = ErrorCode.LicenseeFail,
-                ErrorMsg = string.Format(StringResource.VoidBetSendMailFail, siteNameFails),
-                Data = siteNameFails
-            };
-            results.Add(failedLicenses);
+            return results;
         }
+
+        var failedLicenses = new Result
+        {
+            ErrorCode = ErrorCode.LicenseeFail,
+            ErrorMsg = string.Format(StringResource.VoidBetSendMailFail, siteNameFails),
+            Data = siteNameFails
+        };
+        results.Add(failedLicenses);
 
         return results;
     }

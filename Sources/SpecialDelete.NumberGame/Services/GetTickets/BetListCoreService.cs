@@ -34,11 +34,13 @@ public class BetListCoreServiceImp(IMapper mapper, BetListService betListService
         var choice = betListService.BuildChoice(ticket, ticketHelper, null, false);
         const int BetType = 90;
         viewModel.Choice = item.BetType == BetType ? choice.Split(',').Aggregate((cur, next) => cur + ',' + ' ' + next) : choice;
-        if (!isRecover)
+        if (isRecover)
         {
-            viewModel.BetType = betListService.GetBetType(item.BetType, LanguageCode.English);
-            viewModel.BetTypeSimplified = betListService.GetBetType(item.BetType, LanguageCode.ChineseSimplified);
+            return viewModel;
         }
+
+        viewModel.BetType = betListService.GetBetType(item.BetType, LanguageCode.English);
+        viewModel.BetTypeSimplified = betListService.GetBetType(item.BetType, LanguageCode.ChineseSimplified);
 
         return viewModel;
     }

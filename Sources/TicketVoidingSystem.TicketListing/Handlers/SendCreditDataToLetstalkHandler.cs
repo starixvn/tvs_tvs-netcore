@@ -61,36 +61,38 @@ public class SendCreditDataToLetstalkHandler(
 
     private async Task<Result> SendForCreditNormal(IEnumerable<ExcelTicketModel> ticketsCreditNormal, ExportExcelQuery request)
     {
-        if (ticketsCreditNormal.Any())
+        if (!ticketsCreditNormal.Any())
         {
-            request.TotalCreditTickets = ticketsCreditNormal.Count();
-            request.Tickets = ticketsCreditNormal;
-            var attachment = new LetstalkAttachment
-            {
-                FileName = "Ticket_Listing_for_Bettype_Credit.xlsx",
-                Bytes = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketListing)
-            };
-            return await notificationLetstalkService.SendToGroupTicketListing(CreateContent(request), attachment);
+            return new Result();
         }
 
-        return new Result();
+        request.TotalCreditTickets = ticketsCreditNormal.Count();
+        request.Tickets = ticketsCreditNormal;
+        var attachment = new LetstalkAttachment
+        {
+            FileName = "Ticket_Listing_for_Bettype_Credit.xlsx",
+            Bytes = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketListing)
+        };
+        return await notificationLetstalkService.SendToGroupTicketListing(CreateContent(request), attachment);
+
     }
 
     private async Task<Result> SendForCredit777(IEnumerable<ExcelTicketModel> ticketsCredit777, ExportExcelQuery request)
     {
-        if (ticketsCredit777.Any())
+        if (!ticketsCredit777.Any())
         {
-            request.TotalCreditTickets = ticketsCredit777.Count();
-            request.Tickets = ticketsCredit777;
-            var attachment = new LetstalkAttachment
-            {
-                FileName = "Ticket_Listing_for_Bettype_Credit_777.xlsx",
-                Bytes = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketListing)
-            };
-            return await notificationLetstalkService.SendToGroupTicketListing777(CreateContent(request), attachment);
+            return new Result();
         }
 
-        return new Result();
+        request.TotalCreditTickets = ticketsCredit777.Count();
+        request.Tickets = ticketsCredit777;
+        var attachment = new LetstalkAttachment
+        {
+            FileName = "Ticket_Listing_for_Bettype_Credit_777.xlsx",
+            Bytes = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketListing)
+        };
+        return await notificationLetstalkService.SendToGroupTicketListing777(CreateContent(request), attachment);
+
     }
 
     private static (IEnumerable<ExcelTicketModel> ticketsCredit777, IEnumerable<ExcelTicketModel> ticketsCreditNormal) GroupTicketsTicketListingAlert(IEnumerable<ExcelTicketModel> tickets)

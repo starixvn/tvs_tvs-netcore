@@ -46,11 +46,13 @@ public class AfterVoidServiceImp(
     {
         var emailModel = mapper.Map<EmailVoidModel>(query);
         emailModel.IsFilterByUsername = !query.IsFilterByBetId;
-        if (IsAbnormalBet(query.AbnormalBetType))
+        if (!IsAbnormalBet(query.AbnormalBetType))
         {
-            emailModel.Reason = $"{emailModel.Reason}({query.SubIssueTypeName})";
-            emailModel.ReasonSC = $"{emailModel.ReasonSC}({query.SubIssueTypeNameCS})";
+            return await sendEmailService.SendEmail(emailModel, tickets);
         }
+
+        emailModel.Reason = $"{emailModel.Reason}({query.SubIssueTypeName})";
+        emailModel.ReasonSC = $"{emailModel.ReasonSC}({query.SubIssueTypeNameCS})";
 
         return await sendEmailService.SendEmail(emailModel, tickets);
     }
