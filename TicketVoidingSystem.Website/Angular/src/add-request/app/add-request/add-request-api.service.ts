@@ -132,12 +132,12 @@ export class AddRequestApiService {
     return this.httpService.postJson<{ matchId: number }, NotParticipateBetTypeViewModel>({ matchId: matchId }, 'api/AddRequest/GetNotParticipateBetTypes');
   }
 
-   /* istanbul ignore next */
-   async checkRecoverTicket(query: CheckRecoverTicketQuery): Promise<CheckRecoverTicketResult> {
+  /* istanbul ignore next */
+  async checkRecoverTicket(query: CheckRecoverTicketQuery): Promise<CheckRecoverTicketResult> {
     return this.httpService.postJson<CheckRecoverTicketQuery, CheckRecoverTicketResult>(query, 'api/AddRequest/CheckRecoverTicket');
   }
 
- /* istanbul ignore next */
+  /* istanbul ignore next */
   async getPermissionAddRequest(): Promise<PermissionAddRequest> {
     return this.httpService.getJson<PermissionAddRequest>('api/AddRequest/GetPermission');
   }
@@ -155,5 +155,10 @@ export class AddRequestApiService {
   /* istanbul ignore next */
   async GetDecidedBy(): Promise<string[]> {
     return this.httpService.getJson('api/AddRequest/GetDecidedBy');
+  }
+
+  /* istanbul ignore next */
+  async GetTicketsAbnormalAccount(custId: number, transInfoJson: string): Promise<TicketsModel> {
+    return this.httpService.postJson({ custId, transInfoJson }, 'api/AddRequest/GetTicketsAbnormalAccount');
   }
 }

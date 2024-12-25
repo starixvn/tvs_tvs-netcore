@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
@@ -54,7 +55,7 @@ public class CheckValidUsernamesHandler(
                 RemoveTransIds = checkUsernamesResult.TransInfoValidation.RemoveTransIds,
                 UnMarkTransIds = checkUsernamesResult.TransInfoValidation.UnMarkTransIds,
                 MarkTransIds = checkUsernamesResult.TransInfoValidation.MarkTransIds,
-                TransInfoJson = GetOutputTransInfoAddRequest(request, checkUsernamesResult.TransInfoJsonCompress, calcVoidResult.VoidTickets)
+                TransInfoJson = GetOutputTransInfoAddRequest(request, checkUsernamesResult, calcVoidResult.VoidTickets)
             },
             AccountWinlostModels = calcVoidResult.Accounts
         };
@@ -78,10 +79,15 @@ public class CheckValidUsernamesHandler(
         return accounts;
     }
 
-    private string GetOutputTransInfoAddRequest(CheckValidUsernamesRequest query, string transInfoJsonCompress, IEnumerable<TicketCalculateWinLostAccount> voidTickets)
+    private string GetOutputTransInfoAddRequest(CheckValidUsernamesRequest query, CheckUsernamesInDatabaseResult checkUsernamesResult, IEnumerable<TicketCalculateWinLostAccount> voidTickets)
     {
+        foreach (var ticket in checkUsernamesResult.TicketCalculateWinLostAccount.Where(x => x.StatusId == TicketStatus.WonId))
+        {
+            ticket.IsChecked = voidTickets.Any(y => y.TransId == ticket.TransId);
+        }
+
         return query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
-            ? compressDataAddRequestService.CompressTicket(voidTickets) : transInfoJsonCompress;
+            ? compressDataAddRequestService.CompressTicket(checkUsernamesResult.TicketCalculateWinLostAccount) : checkUsernamesResult.TransInfoJsonCompress;
     }
 
     private static CheckUsernamesModel GetValidationAfterCalc(CheckValidUsernamesRequest query, CheckUsernamesModel validationResult, CalcVoidTicketsResult calcVoidResult)

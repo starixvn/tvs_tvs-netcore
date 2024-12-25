@@ -7,11 +7,11 @@ import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { AccountWinlostModel } from '../models/account-winlost.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
 import { ValidationBusinessRuleArgs } from '../models/validation.model';
 import { ValidationService } from '../services/validation.service';
-import { PermissionAddRequest } from '../../models/permission-add-request.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
 
 @Component({
   selector: 'account-table',
@@ -21,10 +21,12 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 export class AccountTableComponent {
   @Input() filter: FilterModel;
   @Input() requestId?: number;
+  @Input() viewOnly: boolean;
   @Input() abnormalAccountModel: AbnormalAccountModel;
   @Input() accountWinlostModels: AccountWinlostModel[];
   @Input() permission: PermissionAddRequest;
   @Output() changeTable = new EventEmitter();
+  @Output() openAccountAffectedTicketEvent = new EventEmitter();
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;
   tooltip = new Tooltip();
   isCancelRecalculateAmount: boolean;
@@ -125,5 +127,9 @@ export class AccountTableComponent {
     if (!this.filter.isVoided) {
       account.isShowInput = !account.isShowInput;
     }
+  }
+
+  openAccountAffectedTicket() {
+    this.openAccountAffectedTicketEvent.emit();
   }
 }

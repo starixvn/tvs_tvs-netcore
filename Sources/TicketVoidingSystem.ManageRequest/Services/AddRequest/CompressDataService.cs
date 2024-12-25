@@ -1,6 +1,7 @@
 ﻿using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
+using Fanex.Logging;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Utilities;
 
@@ -18,7 +19,7 @@ public class CompressDataAddRequestServiceImp : CompressDataService
     public string CompressTicket(IEnumerable<TicketCalculateWinLostAccount> tickets)
     {
         var jsonTickets = TicketsToJsonModel(tickets);
-        var ticketZipped = CompressJson(jsonTickets);
+        var ticketZipped = CompressJson(tickets);
         var hexString = $"0x{Convert.ToHexString(ticketZipped)}";
         return hexString;
     }
@@ -62,8 +63,9 @@ public class CompressDataAddRequestServiceImp : CompressDataService
             var tickets = DecompressJson<GetTicketModel>(compressedBytes);
             return tickets.OrderBy(x => x.TransId);
         }
-        catch
+        catch (Exception e)
         {
+            LogService.Error(e.Message, e);
             return [];
         }
     }

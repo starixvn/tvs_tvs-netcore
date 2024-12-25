@@ -1,14 +1,15 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
+import { Selection } from "src/utility/models/selection.model";
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
-import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
 import { OthersModel } from '../others/others.model';
+import { AccountAffectedTicketModel } from './account-affected-ticket/account-affected-ticket.model';
 import { AccountTableComponent } from './account-table/account-table.component';
 import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
@@ -41,12 +42,12 @@ export class AbnormalAccountsComponent implements OnInit {
 
   primitiveProps = new PrimitiveProperty();
   confirmAbnormalAccount = new ConfirmAbnormalAccountModel();
+  accountAffectedTicketModel = new AccountAffectedTicketModel();
   constructor(
     private readonly validationService: ValidationService,
     private readonly addRequestStore: AddRequestStore,
     private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly commonService: CommonService
+    private readonly addRequestApiService: AddRequestApiService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -101,7 +102,20 @@ export class AbnormalAccountsComponent implements OnInit {
 
     const validationOutput = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
     this.primitiveProps.validAccountWinlostModels = validationOutput.accountWinlostModels;
+    this.primitiveProps.transInfoAddRequestModel = validationOutput.transInfoAddRequestModel;
     this.addRequestStore.changeBlockingUiStatus(false);
+  }
+
+  openAccountAffectedTicket(): void {
+    this.accountAffectedTicketModel.usernames = this.primitiveProps.validAccountWinlostModels
+    .filter(x => x.isHighlight)
+    .map(x => {
+      return { name: x.username, value: x.custId.toString()  } as Selection;
+    })
+    this.accountAffectedTicketModel.accountWinlostModels = this.primitiveProps.validAccountWinlostModels;
+    this.accountAffectedTicketModel.selectedCustId = this.accountAffectedTicketModel.usernames[0].value;
+    this.accountAffectedTicketModel.transInfoJson = this.primitiveProps.transInfoAddRequestModel.transInfoJson;
+    this.accountAffectedTicketModel.isOpen = true;
   }
 
   private initSaveRequestInput() {

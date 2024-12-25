@@ -33,11 +33,13 @@
     [filter]="filter"
     [requestId]="requestId"
     (changeTable)="hideValidationMessage()"
+    (openAccountAffectedTicketEvent)="openAccountAffectedTicket()"
     [abnormalAccountModel]="abnormalAccountModel"
     [accountWinlostModels]="primitiveProps.validAccountWinlostModels"
     [permission]="primitiveProps.permission">
   </account-table>
 </div>
+<account-affected-ticket [model]="accountAffectedTicketModel" *ngIf="accountAffectedTicketModel.isOpen"></account-affected-ticket>
 
 <confirm-abnormal-account [model]="confirmAbnormalAccount" (close)="triggerCloseEvent()"
   (save)="onYesConfirmWarningModal()">

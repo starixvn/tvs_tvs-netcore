@@ -1,5 +1,5 @@
 <div class="account-list">
-  <div class="title-account-list">
+  <div class="title-account-list" [hidden]="viewOnly">
     <div class="title-account-list-label"></div>
     <div class="title-account-list-toolbox">
       <input type="button" class="title-account-list-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
@@ -15,43 +15,44 @@
           <th scope="col" class="col-tb-2">
             <div class="title-table">
               <span>Username</span>
-              <sorting #sortingComponent [id]="1" (sortEvent)="sorting($event, 'username', 1)"></sorting>
+              <sorting #sortingComponent [id]="1" (sortEvent)="sorting($event, 'username', 1)" [hidden]="viewOnly"></sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-3">
             <div class="title-table">
               <span>Given Credit</span>
-              <sorting #sortingComponent [id]="2" (sortEvent)="sorting($event, 'givenCredit', 2)"></sorting>
+              <sorting #sortingComponent [id]="2" (sortEvent)="sorting($event, 'givenCredit', 2)" [hidden]="viewOnly"></sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-4">
             <div class="title-table">
               <span>Adjust Void Limit</span>
-              <sorting #sortingComponent [id]="3" (sortEvent)="sorting($event, 'adjustVoidLimit', 3)"></sorting>
+              <sorting #sortingComponent [id]="3" (sortEvent)="sorting($event, 'adjustVoidLimit', 3)" [hidden]="viewOnly"></sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-5">
             <div class="title-table">
               <span>Current Losing</span>
-              <sorting #sortingComponent [id]="4" (sortEvent)="sorting($event, 'currentLosing', 4)"></sorting>
+              <sorting #sortingComponent [id]="4" (sortEvent)="sorting($event, 'currentLosing', 4)" [hidden]="viewOnly"></sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-6">
             <div class="title-table">
               <span>Current Winning</span>
-              <sorting #sortingComponent [id]="5" (sortEvent)="sorting($event, 'currentWinning', 5)"></sorting>
+              <sorting #sortingComponent [id]="5" (sortEvent)="sorting($event, 'currentWinning', 5)" [hidden]="viewOnly"></sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-7">
             <div class="title-table">
               <span>Estimate Void Amount</span>
-              <sorting #sortingComponent [id]="6" (sortEvent)="sorting($event, 'estimateVoidAmount', 6)"></sorting>
+              <button [hidden]="viewOnly" (click)="openAccountAffectedTicket()">OPEN ne</button>
+              <sorting #sortingComponent [id]="6" (sortEvent)="sorting($event, 'estimateVoidAmount', 6)" [hidden]="viewOnly"></sorting>
             </div>
           </th>
           <th scope="col">
             <div class="title-table">
               <span>WinLost After Void</span>
-              <sorting #sortingComponent [id]="7" (sortEvent)="sorting($event, 'winLostAfterVoid', 7)"></sorting>
+              <sorting #sortingComponent [id]="7" (sortEvent)="sorting($event, 'winLostAfterVoid', 7)" [hidden]="viewOnly"></sorting>
             </div>
           </th>
         </tr>

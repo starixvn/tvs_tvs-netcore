@@ -14,6 +14,8 @@ public class TicketCalculateWinLostAccount
 
     public bool IsVoid14 { get; set; }
 
+    public bool IsChecked { get; set; }
+
     //// more columns for add request
     public int BetType { get; set; }
 

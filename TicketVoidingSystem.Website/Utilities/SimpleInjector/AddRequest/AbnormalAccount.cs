@@ -26,5 +26,6 @@ public static class AbnormalAccount
         services.AddTransient<AccountWinLostService, AccountWinLostServiceImp>();
         services.AddTransient<CheckUsernameService, CheckUsernameServiceImp>();
         services.AddTransient<CompressDataService, CompressDataAddRequestServiceImp>();
+        services.AddTransient<GetTicketsService, GetTicketsServiceImp>();
     }
 }

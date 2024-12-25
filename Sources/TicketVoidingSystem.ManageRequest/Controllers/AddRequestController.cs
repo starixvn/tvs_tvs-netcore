@@ -104,4 +104,6 @@ public class AddRequestController(IMediator mediator) : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetDecidedBy() => Ok(await mediator.Send(new GetDecidedByRequest()));
+
+    public async Task<IActionResult> GetTicketsAbnormalAccount(GetTicketsAbnormalAccountRequest request) => Ok(await mediator.Send(request));
 }
