@@ -18,12 +18,13 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request)
     {
         var getTicketModels = compressDataService.DecompressTickets(request.LogInfoTicketsJson);
-        if (!getTicketModels.Any())
+        var voidTickets = getTicketModels?.Where(x => !x.IsCancelCashOut);
+
+        if (!voidTickets.Any())
         {
             return new TicketsViewModel();
         }
 
-        var voidTickets = getTicketModels.Where(x => !x.IsCancelCashOut);
         var affectedTickets = voidTickets.Where(x => !x.IsOtherTicket);
         var otherTickets = voidTickets.Where(x => x.IsOtherTicket);
         var groupTicket = MapToGroupTicketViewModel(affectedTickets, request.IssueTypeId);
@@ -31,12 +32,12 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
 
         var viewModel = new TicketsViewModel
         {
-            TotalSingle = affectedTickets.Count(ticket => !ticket.IsMixParlay),
-            TotalParlay = affectedTickets.Count(ticket => ticket.IsMixParlay),
+            TotalSingle = voidTickets.Count(ticket => !ticket.IsMixParlay),
+            TotalParlay = voidTickets.Count(ticket => ticket.IsMixParlay),
             Groups = groupTicket,
-            IsHasSettledTicket = affectedTickets.Any(ticket => ticket.IsSettledTicket()),
-            FromTime = affectedTickets.Min(ticket => ticket.TransDate),
-            ToTime = affectedTickets.Max(ticket => ticket.TransDate),
+            IsHasSettledTicket = voidTickets.Any(ticket => ticket.IsSettledTicket()),
+            FromTime = voidTickets.Min(ticket => ticket.TransDate),
+            ToTime = voidTickets.Max(ticket => ticket.TransDate),
             GroupOtherTickets = groupOtherTickets
         };
 
@@ -45,7 +46,11 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
 
     private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels, int issueTypeId)
     {
-        var ticketViewModels = getTicketModels.Select((item) =>
+        if (!getTicketModels.Any())
+        {
+            return [];
+        }
+        var ticketViewModels = getTicketModels.Select(item =>
         {
             var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
             ticket.SubBetTypeId = (short)item.SubBetType;
