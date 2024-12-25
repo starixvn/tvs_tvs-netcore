@@ -59,11 +59,11 @@ public class DuplicateTicketsEmailContentServiceImp(
 
     private static string GetEmailBody(string path, DuplicateTicketsMailVoidViewModel model)
     {
-        var fullPath = Helper.GetFilePath(path);
-        var template = File.ReadAllText(fullPath);
-        var hashCode = template.GetHashCode();
+        var hashCode = path.GetHashCode();
         var compiledTemplate = CompiledTemplateCache.GetOrAdd(hashCode, _ =>
         {
+            var fullPath = Helper.GetFilePath(path);
+            var template = File.ReadAllText(fullPath);
             var razorEngine = new RazorEngine();
             return razorEngine.Compile(template);
         });

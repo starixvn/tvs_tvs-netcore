@@ -55,7 +55,7 @@ public class GetInfoTicketsForMessageTests
         var service = new GetInfoTicketsForMessageImp(specialBetTypeContentService);
 
         // Act
-        var actual = service.GetSpecialBetTypeContent(allTickets);
+        service.GetSpecialBetTypeContent(allTickets);
 
         // Assert
         specialBetTypeContentService.Received(1).GetContentForVoidPage(Arg.Any<IEnumerable<TicketEmailModel>>());

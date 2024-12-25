@@ -40,20 +40,18 @@ public class LogActionFilterAttribute(ILogger logger) : ActionFilterAttribute
         base.OnActionExecuting(context);
     }
 
-    private async Task<bool> IsSkipAction(ActionDescriptor actionDescriptor, HttpContext httpContext)
+    private async ValueTask<bool> IsSkipAction(ActionDescriptor actionDescriptor, HttpContext httpContext)
     {
-        if (actionDescriptor is ControllerActionDescriptor descriptor)
+        if (actionDescriptor is not ControllerActionDescriptor descriptor)
         {
-            var attrsInAction = descriptor.MethodInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
-            var attrsInController =
-                descriptor.ControllerTypeInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
-
-            if (attrsInAction.Any() || attrsInController.Any() || await IsExcluded(httpContext.Request.GetDisplayUrl()))
-            {
-                return true;
-            }
+            return false;
         }
-        return false;
+
+        var attrsInAction = descriptor.MethodInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
+        var attrsInController =
+            descriptor.ControllerTypeInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
+
+        return attrsInAction.Any() || attrsInController.Any() || await IsExcluded(httpContext.Request.GetDisplayUrl());
     }
 
     public override async void OnActionExecuted(ActionExecutedContext context)
@@ -84,7 +82,7 @@ public class LogActionFilterAttribute(ILogger logger) : ActionFilterAttribute
         base.OnActionExecuted(context);
     }
 
-    private async Task<bool> IsExcluded(string url)
+    private async ValueTask<bool> IsExcluded(string url)
     {
         try
         {

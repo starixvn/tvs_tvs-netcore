@@ -7,10 +7,12 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest;
 
+using System.Threading.Tasks;
+
 public class GetDecidedByServiceTests
 {
     [Fact]
-    public async void UpdateDataFromRemotingRef_HasMatchInfoIsNull_ReturnNull()
+    public async Task UpdateDataFromRemotingRef_HasMatchInfoIsNull_ReturnNull()
     {
         // Arrange
         var repository = Substitute.For<IDynamicRepository>();

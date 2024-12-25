@@ -12,8 +12,6 @@ public class SiteEmail
 
     public string BccList { get; set; }
 
-    public bool IsAvailabe { get; set; }
-
     public bool IsChinaView { get; set; }
 
     public int SpecialPlatform { get; set; }
