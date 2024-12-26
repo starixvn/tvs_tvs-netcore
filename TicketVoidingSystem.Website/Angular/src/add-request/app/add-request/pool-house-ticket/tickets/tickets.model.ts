@@ -19,7 +19,9 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
     this.fromTime = data.fromTime;
     this.toTime = data.toTime;
     this.mapGroups(data.groups);
+    this.mapOtherGroups(data.groupOtherTickets);
     this.changeIconCheckBox();
+    this.checkAllTickets();
   }
 
   mapGroups(groups: Array<GroupModel>) {
@@ -27,6 +29,14 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
     groups.forEach(item => {
       const group = new GroupModel(item.name, item.tickets, item.displayTotalTickets);
       this.groups.push(group);
+    });
+  }
+
+  mapOtherGroups(groups: Array<GroupModel>) {
+    this.groupOtherTickets = [];
+    groups?.forEach(item => {
+      const group = new GroupModel(item.name, item.tickets, item.displayTotalTickets);
+      this.groupOtherTickets.push(group);
     });
   }
 
@@ -59,7 +69,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
     this.groups.forEach(group => {
       let indexTicket = 0;
       group.tickets.forEach(y => {
-        y.isChecked = betTypeNames.includes(y.betType);
+        y.isChecked = betTypeNames.includes(y.isParlay ? y.subBetType : y.betType);
         y.no = y.isChecked ? ++indexTicket: indexTicket;
       });
       group.displayTotalTickets = group.getCheckedTickets().length;

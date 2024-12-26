@@ -15,11 +15,13 @@ import { AffectedTicketService } from './affected-ticket.service';
 })
 export class AffectedTicketComponent implements OnChanges {
   @Input() model = new AffectedTicketsModel();
-  isCollapsed = false;
   filterBetTypes: MultipleSelection;
   tickets = new TicketsModel();
   blockBetList: boolean;
-
+  otherTickets = new TicketsModel();
+  isShowOtherTickets = true;
+  isShowAffectedTickets = true;
+  isShowGroupBetTypesCount = true;
   constructor(
     private readonly logAnalysisService: LogAnalysisService,
     private readonly affectedTicketService: AffectedTicketService
@@ -29,6 +31,9 @@ export class AffectedTicketComponent implements OnChanges {
     if (changes['model'] && this.model.isOpen) {
       this.blockBetList = true;
       this.tickets = await this.affectedTicketService.getAffectedTickets(this.model.issueTypeId, this.model.logInfoTicketsJson);
+      this.otherTickets.groups = _.cloneDeep(this.tickets.groupOtherTickets);
+      this.otherTickets.checkAllTickets();
+
       this.initFilterBetTypes();
       await this.logAnalysisService.writeLogClickLiveGameDetails(`${this.model.issueTypeId}`);
       this.blockBetList = false;
@@ -36,7 +41,9 @@ export class AffectedTicketComponent implements OnChanges {
   }
 
   public closeClick() {
-    this.isCollapsed = false;
+    this.isShowOtherTickets = true;
+    this.isShowAffectedTickets = true;
+    this.isShowGroupBetTypesCount = true;
     this.model.isOpen = false;
   }
 
@@ -47,7 +54,10 @@ export class AffectedTicketComponent implements OnChanges {
   private initFilterBetTypes() {
     if (this.tickets.groups.length > 0) {
       const betTypes = this.tickets.groups.flatMap(group =>
-        group.tickets.map(x => new ItemsSelect(0, x.betType, x.betType, true, true, true, []))
+        group.tickets.map(x => {
+          let betType = x.isParlay ? x.subBetType : x.betType;
+          return new ItemsSelect(0, betType, betType, true, true, true, [])
+        })
       );
       const filterBetTypes = StaticService.initDefaultMultipleSelection('280px', 1);
       filterBetTypes.items = _.uniqBy(betTypes, 'text');

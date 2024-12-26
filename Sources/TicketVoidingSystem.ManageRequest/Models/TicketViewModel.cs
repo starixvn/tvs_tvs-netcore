@@ -5,6 +5,7 @@ namespace TicketVoidingSystem.ManageRequest.Models;
 public class TicketsViewModel
 {
     public IEnumerable<Group<TicketViewModel>> Groups { get; set; } = new List<Group<TicketViewModel>>();
+    public IEnumerable<Group<TicketViewModel>> GroupOtherTickets { get; set; }
     public int Total { get; set; }
     public int TotalSingle { get; set; }
     public int TotalParlay { get; set; }
@@ -42,6 +43,7 @@ public class TicketViewModel
     public string BetType { get; set; }
     public short BetTypeId { get; set; }
     public short SubBetTypeId { get; set; }
+    public string SubBetType { get; set; }
     public string Odds { get; set; }
     public string Stake { get; set; }
     public string WinLoss { get; set; }

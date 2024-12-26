@@ -43,6 +43,7 @@ public class BetListCoreServiceImp(IMapper mapper, BetListService betListService
             BuildChoice(ticket, ticketHelper, item, issueTypeId);
         viewModel.Handicap = betListService.GetHandicap(ticket, ticketHelper, null, false);
         viewModel.Score = betListService.GetScoreBetListUi(item.SportType, item.IsLiveIndicator, item.LiveHomeScore, item.LiveAwayScore);
+        viewModel.SubBetType = item.IsMixParlay ? betListService.GetBetType(item.SubBetType, LanguageCode.English) : string.Empty;
 
         return viewModel;
     }

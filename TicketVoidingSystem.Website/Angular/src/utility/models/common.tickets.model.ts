@@ -13,6 +13,7 @@ export class CommonTicketsModel<T extends CommonGroupTicketsModel<CommonTicketMo
     id: string;
 
     groups = Array<T>();
+    groupOtherTickets = Array<T>();
     iconCheckBox: IconCheckBox;
     iconCheckBoxTop: string;
 

@@ -6,6 +6,7 @@ export class TicketModel extends CommonTicketModel {
   isSettled: boolean;
   betTypeId: number;
   subBetTypeId: number;
+  subBetType: string;
   isInstantSettlement: boolean;
   constructor(item = null) {
     super(item);

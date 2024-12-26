@@ -11,28 +11,45 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-          <div class="affected-bet-type-area mb-2" *ngIf="model.isShowDetailBetTypeCount">
-            <div class="list-group">
-              <div class="section-header" (click)="isCollapsed = !isCollapsed"
-                [attr.aria-expanded]="!isCollapsed">
-                <strong>Affected Bet Types</strong>
-              </div>
-              <div class="section-body list-group-item" [(ngbCollapse)]="isCollapsed">
-                <ng-container *ngFor="let group of model.groupBetTypesCount">
-                  <span>{{group.name}}</span><br/>
-                  <ng-container *ngFor="let item of group.items">
-                    <span class="ml-3">&#x2022; {{item.name}}</span><br/>
+        <div class="modal-body" >
+          <div class="affected-bet-type-area mb-3">
+            <div *ngIf="tickets.groups.length > 0">
+              <div class="bet-type-count mb-2" *ngIf="model.isShowDetailBetTypeCount" >
+                <div class="section-header"(click)="isShowGroupBetTypesCount = !isShowGroupBetTypesCount">
+                  <strong>Affected Bet Types</strong>
+                </div> 
+                <div class="list-group-item item-bet-type-count" *ngIf="isShowGroupBetTypesCount">
+                  <ng-container *ngFor="let group of model.groupBetTypesCount">
+                    <span>{{group.name}}</span><br/>
+                    <ng-container *ngFor="let item of group.items">
+                      <span class="ml-3">&#x2022; {{item.name}}</span><br/>
+                    </ng-container>
                   </ng-container>
-                </ng-container>
+                </div>
+              </div>
+              <div class="section-header mb-2" (click)="isShowAffectedTickets = !isShowAffectedTickets" *ngIf="!model.isShowDetailBetTypeCount">
+                <strong>Affected Tickets</strong>
+              </div>
+              <div *ngIf="filterBetTypes && isShowAffectedTickets"> 
+                <multiple-selection class="multiple-selection mb-2" [multipleSelect]="filterBetTypes" (checkedItems)="updateSelectedBetTypes($event)">
+                </multiple-selection>
+              </div>
+              <div class="section-body" *ngIf="isShowAffectedTickets">        
+                <tickets [model]="tickets" [blockUi]="blockBetList"  *ngIf="isShowAffectedTickets"></tickets>
               </div>
             </div>
           </div>
-          <div class="filter-bet-Types mb-2" *ngIf="filterBetTypes">
-            <multiple-selection class="multiple-selection" [multipleSelect]="filterBetTypes" (checkedItems)="updateSelectedBetTypes($event)">
-            </multiple-selection>
+
+          <div class="affected-bet-type-area">
+            <div *ngIf="otherTickets.groups.length > 0">
+              <div class="section-header mb-2" (click)="isShowOtherTickets = !isShowOtherTickets">
+                  <strong>Other Tickets</strong>
+                </div>
+                <div class="section-body" *ngIf="isShowOtherTickets">        
+                  <tickets [model]="otherTickets" [blockUi]="blockBetList"></tickets>
+                </div>
+            </div>
           </div>
-          <tickets [model]="tickets" [blockUi]="blockBetList"></tickets>
         </div>
       </div>
     </div>

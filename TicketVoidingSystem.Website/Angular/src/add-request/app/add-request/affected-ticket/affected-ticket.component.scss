@@ -31,9 +31,8 @@
 }
 
 .affected-bet-type-area {
-  width: 100%;
-  overflow: auto;
-  display: flex;
+  grid-row-gap: 5px;
+  display: grid;
 }
 
 .caret {
@@ -80,15 +79,6 @@
   }
 }
 
-.affected-bet-type-text {
-  margin-bottom: 0;
-}
-
-.section-body {
-  max-height: 212px;
-  overflow: auto;
-}
-
 ::ng-deep .tree-view-content {
   max-height: 220px !important;
 }
@@ -106,4 +96,21 @@
 
 .list-group {
   width: 100%;
+}
+
+.modal-body {
+  width: 100%;
+  min-height: 60%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+::ng-deep .tickets-list .ticket-content {
+  max-height: 290px !important;
+}
+
+.item-bet-type-count {
+  overflow: auto;
+  max-height: 212px;
 }

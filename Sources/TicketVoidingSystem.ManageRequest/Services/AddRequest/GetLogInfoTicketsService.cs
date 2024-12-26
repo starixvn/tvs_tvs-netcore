@@ -18,13 +18,17 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request)
     {
         var getTicketModels = compressDataService.DecompressTickets(request.LogInfoTicketsJson);
-        if (!getTicketModels.Any())
+        var voidTickets = getTicketModels?.Where(x => !x.IsCancelCashOut);
+
+        if (!voidTickets.Any())
         {
             return new TicketsViewModel();
         }
 
-        var voidTickets = getTicketModels.Where(x => !x.IsCancelCashOut);
-        var groupTicket = MapToGroupTicketViewModel(voidTickets, request.IssueTypeId);
+        var affectedTickets = voidTickets.Where(x => !x.IsOtherTicket);
+        var otherTickets = voidTickets.Where(x => x.IsOtherTicket);
+        var groupTicket = MapToGroupTicketViewModel(affectedTickets, request.IssueTypeId);
+        var groupOtherTickets = MapToGroupTicketViewModel(otherTickets, request.IssueTypeId);
 
         var viewModel = new TicketsViewModel
         {
@@ -33,7 +37,8 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
             Groups = groupTicket,
             IsHasSettledTicket = voidTickets.Any(ticket => ticket.IsSettledTicket()),
             FromTime = voidTickets.Min(ticket => ticket.TransDate),
-            ToTime = voidTickets.Max(ticket => ticket.TransDate)
+            ToTime = voidTickets.Max(ticket => ticket.TransDate),
+            GroupOtherTickets = groupOtherTickets
         };
 
         return viewModel;
@@ -41,12 +46,14 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
 
     private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels, int issueTypeId)
     {
-        var ticketViewModels = getTicketModels.Select((item, index) =>
+        if (!getTicketModels.Any())
+        {
+            return [];
+        }
+        var ticketViewModels = getTicketModels.Select(item =>
         {
             var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
-            ticket.No = index + 1;
             ticket.SubBetTypeId = (short)item.SubBetType;
-            ticket.GroupName = GetGroupNameByIssueType(issueTypeId, ticket);
 
             return ticket;
         });
@@ -65,24 +72,5 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
             Tickets = group.ToList(),
             DisplayTotalTickets = group.Count()
         };
-    }
-
-    private string GetGroupNameByIssueType(int issueTypeId, TicketViewModel ticket)
-    {
-        HashSet<int> IssueTypesHasTicketParlay =
-        [
-            IssueTypeConstant.WrongHDP, IssueTypeConstant.Wrong1stHDP, IssueTypeConstant.WrongOU,
-            IssueTypeConstant.Wrong1stOU, IssueTypeConstant.WrongOdds
-        ];
-
-        if (IssueTypesHasTicketParlay.Contains(issueTypeId))
-        {
-            return ticket.IsParlay ? "Parlay" : ticket.BetType;
-        }
-
-        return issueTypeId is IssueTypeConstant.WrongMarketOffered or IssueTypeConstant.WrongOddsSportsBook
-            or IssueTypeConstant.TechnicalError or IssueTypeConstant.OtherIssues
-            ? string.Empty
-            : ticket.GroupName;
     }
 }
