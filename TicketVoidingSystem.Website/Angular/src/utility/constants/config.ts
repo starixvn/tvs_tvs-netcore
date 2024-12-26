@@ -186,6 +186,11 @@ export class TeamFavorite {
   static readonly AWAY = 1;
 }
 
+export class TvDetection {
+  static readonly ON = 'On';
+  static readonly OFF = 'Off';
+}
+
 export class TvDetectionType {
   static readonly NONE = 0;
   static readonly SLOW = 1;

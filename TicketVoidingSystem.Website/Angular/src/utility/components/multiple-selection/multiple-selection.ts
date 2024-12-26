@@ -82,6 +82,15 @@ export class MultipleSelection {
         this.selectionTitle = this.getDisplayedItems();
     }
 
+    updateChildItemsChecked(checkedItems: string[]) {
+        this.items.forEach(group => {
+            group.items.forEach(item => item.checked = checkedItems.includes(item.value));
+            group.checked = checkedItems.includes(group.value) 
+                || (group.items.filter(x => x.checked).length === group.items.length && group.items.length > 0) ;
+        });
+        this.selectionTitle = this.getDisplayedItems();
+    }
+
     updateDisableStatus(isDisabled: boolean) {
         this.items.forEach(item => item.enable = !isDisabled);
     }

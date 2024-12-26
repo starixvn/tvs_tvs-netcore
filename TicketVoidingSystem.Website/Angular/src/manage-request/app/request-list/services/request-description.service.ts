@@ -7,6 +7,7 @@ import { DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constant
 import { BetTypeTicketsInfo, CopyRequestInfoQuery, CopyRequestInfoResponse, RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
+import { TvDetectionService } from './tv-detection.service';
 
 @Injectable({
   providedIn: 'root'
@@ -149,9 +150,10 @@ export class RequestDescriptionService {
       + `Request No: ${copyInfoResponse.requestInfo.requestId}\n`
       + `Issue Type: ${copyInfoResponse.requestInfo.issueTypeName} - ${copyInfoResponse.requestInfo.subIssueTypeName}\n`
       + `VAR: ${copyInfoResponse.requestInfo.isCheckedVar ? 'YES' : 'NO'}\n`
-      + `Provider: ${StaticService.getProviderInfo(copyInfoResponse.requestInfo)}\n`
+      + `Provider: ${TvDetectionService.getProviderInfo(copyInfoResponse.requestInfo)}\n`
       + `Start Void Time: ${moment(copyInfoResponse.requestInfo.voidFromTime)
         .format(DateTimeFormat.TIME_FORMAT)} (${copyInfoResponse.requestInfo.filterBy === TVSRequestFilterBy.CHECK_TIME ? "Accept time" : "Trans time"})`
+      + TvDetectionService.getTvDetection(copyInfoResponse.requestInfo);
 
     return content;
   }

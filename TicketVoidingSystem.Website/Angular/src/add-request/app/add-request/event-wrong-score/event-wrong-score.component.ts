@@ -82,6 +82,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       this.primitiveProps.filterBy = this.wrongScoreService.getFilterByBaseOnSubIssueType(this.filter.subIssueTypeId);
       this.primitiveProps.isCheckedVar = null;
       this.primitiveProps.isHighLightVarCheck = null;
+      this.tvDetectionComponent.initDefaultValues();
       this.resetData();
       this.filter.isChangeSubTypeManual = false;
     }

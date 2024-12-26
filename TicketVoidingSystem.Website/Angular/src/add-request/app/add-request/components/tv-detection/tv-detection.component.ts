@@ -43,6 +43,7 @@ export class TvDetectionComponent implements OnInit {
     this.model.tvDetectionValue = TvDetectionType.NONE;
     this.model.minuteOffset = '0';
     this.model.secondOffset = '0';
+    this.isCheckedTvDetection = false;
   }
 
   changeMinuteInput() {
