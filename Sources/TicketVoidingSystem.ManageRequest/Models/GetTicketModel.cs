@@ -10,7 +10,7 @@ public class GetTicketModel
 
     public string FollowedUsername { get; set; }
 
-    public long? BetId { get; set; }
+    public int? BetId { get; set; }
 
     public DateTime TransDate { get; set; }
 
@@ -19,6 +19,8 @@ public class GetTicketModel
     public string CurrencyName { get; set; }
 
     public string Status { get; set; }
+
+    public int StatusId { get; set; }
 
     public bool IsLiveIndicator { get; set; }
 
@@ -129,4 +131,6 @@ public class GetTicketModel
     public decimal MasterOdds { get; set; }
 
     public bool IsOtherTicket { get; set; }
+
+    public bool IsChecked { get; set; }
 }

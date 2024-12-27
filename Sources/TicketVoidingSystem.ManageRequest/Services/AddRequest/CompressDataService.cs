@@ -11,7 +11,7 @@ public interface CompressDataService
 {
     string CompressTicket(IEnumerable<TicketCalculateWinLostAccount> tickets);
 
-    IEnumerable<GetTicketModel> DecompressTickets(string logInfoTicketsJson);
+    IEnumerable<T> DecompressTickets<T>(string logInfoTicketsJson);
 }
 
 public class CompressDataAddRequestServiceImp : CompressDataService
@@ -55,13 +55,12 @@ public class CompressDataAddRequestServiceImp : CompressDataService
         return memoryStream.ToArray();
     }
 
-    public IEnumerable<GetTicketModel> DecompressTickets(string logInfoTicketsJson)
+    public IEnumerable<T> DecompressTickets<T>(string logInfoTicketsJson)
     {
         try
         {
             var compressedBytes = Convert.FromHexString(logInfoTicketsJson.TrimStart('0', 'x'));
-            var tickets = DecompressJson<GetTicketModel>(compressedBytes);
-            return tickets.OrderBy(x => x.TransId);
+            return DecompressJson<T>(compressedBytes);
         }
         catch (Exception e)
         {

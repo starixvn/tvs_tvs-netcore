@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AddRequestApiService } from '../../add-request-api.service';
+import { TicketTableViewModel } from '../../components/ticket-table/ticket-table.model';
 import { AccountWinlostModel } from '../models/account-winlost.model';
 import { AccountAffectedTicketModel } from './account-affected-ticket.model';
 
@@ -14,6 +15,7 @@ export class AccountAffectedTicketComponent implements OnInit {
   isBlock: boolean;
   blockBetList: boolean;
   accountWinlostTable: AccountWinlostModel;
+  ticketTableViewModel = new TicketTableViewModel();
   constructor(private readonly addRequestApiService: AddRequestApiService) { }
 
   async ngOnInit() {
@@ -36,8 +38,10 @@ export class AccountAffectedTicketComponent implements OnInit {
   }
 
   async updateTable() {
+    this.isBlock = true;
     this.accountWinlostTable = this.model.accountWinlostModels.find(x => x.custId === Number(this.model.selectedCustId));
-    const x = await this.addRequestApiService.GetTicketsAbnormalAccount(Number(this.model.selectedCustId), this.model.transInfoJson);
-    console.log(x);
+    const result = await this.addRequestApiService.GetTicketsAbnormalAccount(Number(this.model.selectedCustId), this.model.transInfoJson);
+    this.ticketTableViewModel = new TicketTableViewModel(result);
+    this.isBlock = false;
   }
 }

@@ -1,4 +1,5 @@
 ﻿using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
@@ -14,26 +15,40 @@ public class GetTicketsServiceImp(MapTicketsService mapTicketsService, CompressD
 {
     public TicketsViewModel Get(int custId, string transInfoJson)
     {
-        var getTicketModels = compressDataService.DecompressTickets(transInfoJson);
-        if (!getTicketModels.Any())
+        var getTicketModels = compressDataService.DecompressTickets<TicketCalculateWinLostAccount>(transInfoJson);
+        var validTickets = GetTicketsShowPopup(getTicketModels, custId);
+
+        if (!validTickets.Any())
         {
             return new TicketsViewModel();
         }
 
         var viewModel = new TicketsViewModel
         {
-            Groups = MapToGroupTicketViewModel(getTicketModels)
+            Groups = MapToGroupTicketViewModel(validTickets)
         };
 
         return viewModel;
     }
 
-    private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels)
+    public static IEnumerable<TicketCalculateWinLostAccount> GetTicketsShowPopup(IEnumerable<TicketCalculateWinLostAccount> tickets, int custId)
     {
-        var ticketViewModels = getTicketModels
-            .Select(item => mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, IssueTypeConstant.AbnormalAccount));
+        return tickets.Where(x => x.Status.IsWon() && x.CustId == custId)
+            .GroupBy(b => b.MatchId)
+            .Where(x => IsHasBothCheckedAndUncheckedTickets(x.ToList()))
+            .SelectMany(y => y);
+    }
 
-        return ticketViewModels.GroupBy(b => b.GroupName)
+    public static bool IsHasBothCheckedAndUncheckedTickets(IEnumerable<TicketCalculateWinLostAccount> tickets)
+    {
+        return tickets.Any(x => x.IsChecked) && tickets.Any(x => !x.IsChecked);
+    }
+
+    private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> tickets)
+    {
+        return tickets.Select(item
+            => mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, IssueTypeConstant.AbnormalAccount))
+            .GroupBy(b => b.GroupName)
             .Select(ToGroupTicket);
     }
 
@@ -42,8 +57,20 @@ public class GetTicketsServiceImp(MapTicketsService mapTicketsService, CompressD
         return new Group<TicketViewModel>
         {
             Name = groupTickets.Key,
-            Tickets = groupTickets.ToList(),
+            Tickets = ReOrderTickets(groupTickets),
             DisplayTotalTickets = groupTickets.Count()
         };
+    }
+
+    private static IEnumerable<TicketViewModel> ReOrderTickets(IEnumerable<TicketViewModel> tickets)
+    {
+        var orderedTickets = tickets.OrderBy(x => decimal.TryParse(x.WinLoss, out var winLossValue) ? winLossValue : 0).ThenBy(x => x.IsChecked);
+        var index = 1;
+        foreach (var ticket in orderedTickets)
+        {
+            ticket.No = index++;
+        }
+
+        return orderedTickets;
     }
 }

@@ -11,7 +11,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body" [blockUi]="isBlock">
+        <div class="modal-body">
           <div class="filter-user-name mr-4">
             <label class="col-form-label">Username</label>
             <ng-select class="custom-sm"
@@ -28,7 +28,7 @@
             [viewOnly]="true"
             [accountWinlostModels]="[accountWinlostTable]">
           </account-table>
-          <!-- <tickets [model]="section.tickets" [isBlock]="blockBetList"></tickets> -->
+          <ticket-table [model]="ticketTableViewModel" [blockUi]="blockBetList"></ticket-table>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary btn-sm" (click)="saveClick()">Save</button>

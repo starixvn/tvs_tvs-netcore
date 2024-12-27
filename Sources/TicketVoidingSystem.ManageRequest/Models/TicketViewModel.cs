@@ -59,6 +59,7 @@ public class TicketViewModel
     public bool IsCancelCashOut { get; set; }
     public bool IsBonus { get; set; }
     public bool IsMarked { get; set; }
+    public bool IsChecked { get; set; }
     public int SiteDbGroupId { get; set; }
     public string GroupName { get; set; }
 }

@@ -95,6 +95,7 @@ import { PoolHouseTicketComponent } from './pool-house-ticket/pool-house-ticket.
 import { TicketsComponent } from './pool-house-ticket/tickets/tickets.component';
 import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket-count-other-sports.module';
 import { AccountAffectedTicketComponent } from './abnormal-accounts/account-affected-ticket/account-affected-ticket.component';
+import { TicketTableComponent } from './components/ticket-table/ticket-table.component';
 
 @NgModule({
     declarations: [
@@ -172,6 +173,7 @@ import { AccountAffectedTicketComponent } from './abnormal-accounts/account-affe
         FilterOtherIssuesComponent,
         LogInfoOtherIssuesComponent,
         AccountAffectedTicketComponent,
+        TicketTableComponent,
     ],
     exports: [
         AddRequestComponent
