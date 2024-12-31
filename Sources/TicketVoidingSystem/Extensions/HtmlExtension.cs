@@ -104,7 +104,6 @@ public static class HtmlExtension
 
         var extend = doc.DocumentNode.SelectNodes("//*[@class='rebate-bonus']")[0];
         return "(" + extend.InnerText + ")";
-
     }
 
     private static string NPHPromotion(this string html)
@@ -118,7 +117,6 @@ public static class HtmlExtension
 
         var extend = doc.DocumentNode.SelectNodes("//*[@class='nph-promotion']")[0];
         return "(" + extend.InnerText + ")";
-
     }
 
     public static string LineBreak(this string html)
@@ -132,9 +130,9 @@ public static class HtmlExtension
         return DefaultText(temp);
     }
 
-    private static string StripHtml(this string htmlText)
+    public static string StripHtml(this string htmlText)
     {
-        var reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
+        var reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(200));
         var stripped = reg.Replace(htmlText, string.Empty);
         return HttpUtility.HtmlDecode(stripped);
     }
@@ -166,7 +164,6 @@ public static class HtmlExtension
             var secondLine = node.ChildNodes[1].InnerText + node.ChildNodes[2].InnerText;
             return handicap.AppendWithNewLine(secondLine);
         }
-
     }
 
     public static string ChoiceParlay(string html)

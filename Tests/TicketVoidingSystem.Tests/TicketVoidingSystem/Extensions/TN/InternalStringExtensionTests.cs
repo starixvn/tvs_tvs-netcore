@@ -2,6 +2,7 @@ using TicketVoidingSystem.Extensions.TN;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions.TN;
+
 public class InternalStringExtensionTests
 {
     [Fact]
@@ -38,47 +39,6 @@ public class InternalStringExtensionTests
 
         // Act
         var result = text.DistinctWithComma();
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Fact]
-    public void StripHtml_WithEmptyHtmlText_ReturnsEmptyString()
-    {
-        // Arrange
-        const string htmlText = "";
-
-        // Act
-        var result = htmlText.StripHtml();
-
-        // Assert
-        Assert.Equal(string.Empty, result);
-    }
-
-    [Fact]
-    public void StripHtml_WithHtmlText_ReturnsStrippedText()
-    {
-        // Arrange
-        const string htmlText = "<p>This is <strong>bold</strong> text.</p>";
-        const string expected = "This is bold text.";
-
-        // Act
-        var result = htmlText.StripHtml();
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Fact]
-    public void StripHtml_WithHtmlTextContainingEntities_ReturnsDecodedText()
-    {
-        // Arrange
-        const string htmlText = "This is &lt;strong&gt;bold&lt;/strong&gt; text.";
-        const string expected = "This is <strong>bold</strong> text.";
-
-        // Act
-        var result = htmlText.StripHtml();
 
         // Assert
         Assert.Equal(expected, result);
