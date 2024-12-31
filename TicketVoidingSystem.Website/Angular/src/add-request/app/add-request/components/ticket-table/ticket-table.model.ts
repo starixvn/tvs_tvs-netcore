@@ -28,6 +28,7 @@ export class TicketTableModel {
 
 export class GroupTicketTableModel {
   name: string;
+  id: number;
   tickets: TicketTableModel[];
   displayTotalTickets: number;
   isChecked: boolean;
@@ -57,7 +58,11 @@ export class TicketTableViewModel {
 
   constructor(init?: Partial<TicketTableViewModel>) {
     Object.assign(this, init);
-    this.groups = init?.groups.map(group => new GroupTicketTableModel(group));
+    this.groups = init?.groups.map((group, index) => {
+      const newGroup = new GroupTicketTableModel(group);
+      newGroup.id = index;
+      return newGroup;
+    });
     this.isExpanded = true;
   }
 

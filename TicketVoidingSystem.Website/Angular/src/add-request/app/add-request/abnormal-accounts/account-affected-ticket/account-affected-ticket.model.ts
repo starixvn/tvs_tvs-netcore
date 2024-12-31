@@ -1,12 +1,18 @@
 import { Selection } from "src/utility/models/selection.model";
-import { TicketsModel } from "../../pool-house-ticket/tickets/tickets.model";
+import { TicketTableViewModel } from "../../components/ticket-table/ticket-table.model";
 import { AccountWinlostModel } from "../models/account-winlost.model";
 
 export class AccountAffectedTicketModel {
   isOpen: boolean;
   usernames: Selection[];
   selectedCustId: string;
-  affectedTickets: TicketsModel;
+  affectedTickets: TicketTableViewModel;
   transInfoJson: string;
   accountWinlostModels: AccountWinlostModel[];
+}
+
+export class AdjustedAccountModel {
+  custId: number;
+  transId: string;
+  isChecked: boolean;
 }

@@ -5,7 +5,7 @@
         <tr>
           <th scope="col" class="col-tb-0">
             <div>
-              <input type="checkbox" [(ngModel)]="model.isChecked" (change)="model.changeModelToGroups()"/>
+              <input type="checkbox" [(ngModel)]="model.isChecked" (change)="model.changeModelToGroups();handleChangeGroupTicketTable()"/>
             </div>
           </th>
           <th scope="col" class="col-tb-1"><div>No</div></th>
@@ -31,7 +31,7 @@
         <tr *ngIf="group.name && group.displayTotalTickets > 0">
           <td class="col-tb-0">
             <div>
-              <input type="checkbox" [(ngModel)]="group.isChecked" (ngModelChange)="group.changeGroupToTickets();model.changeGroupToModel()" />
+              <input type="checkbox" [(ngModel)]="group.isChecked" (ngModelChange)="group.changeGroupToTickets();model.changeGroupToModel();handleChangeGroup(group.id)" />
             </div>
           </td>
           <td [attr.colspan]="13" class="group-ticket" (click)="group.isExpanded = !group.isExpanded">
@@ -42,7 +42,7 @@
         <tr *ngFor="let ticket of group.tickets" [ngClass]="{'display-none':!group.isExpanded}">
           <td class="col-tb-0">
             <div>
-                <input type="checkbox" [(ngModel)]="ticket.isChecked" (change)="group.changeTicketToGroup();model.changeGroupToModel()"/>
+                <input type="checkbox" [(ngModel)]="ticket.isChecked" (change)="group.changeTicketToGroup();model.changeGroupToModel();handleChangeTicket(ticket)"/>
             </div>
           </td>
           <td class="col-tb-1">{{ticket.no}}</td>

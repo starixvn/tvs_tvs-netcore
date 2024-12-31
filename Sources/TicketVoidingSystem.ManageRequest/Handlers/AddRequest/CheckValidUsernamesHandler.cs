@@ -81,14 +81,21 @@ public class CheckValidUsernamesHandler(
 
     private string GetOutputTransInfoAddRequest(CheckValidUsernamesRequest query, CheckUsernamesInDatabaseResult checkUsernamesResult, IEnumerable<TicketCalculateWinLostAccount> voidTickets)
     {
+        return query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
+            ? GetOutputTransInfoAddRequestActionAutoVoidWithPolicy(checkUsernamesResult, voidTickets)
+            : checkUsernamesResult.TransInfoJsonCompress;
+    }
+
+    private string GetOutputTransInfoAddRequestActionAutoVoidWithPolicy(CheckUsernamesInDatabaseResult checkUsernamesResult, IEnumerable<TicketCalculateWinLostAccount> voidTickets)
+    {
         foreach (var ticket in checkUsernamesResult.TicketCalculateWinLostAccount.Where(x => x.StatusId == TicketStatus.WonId))
         {
             ticket.IsChecked = voidTickets.Any(y => y.TransId == ticket.TransId);
         }
 
-        return query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
-            ? compressDataAddRequestService.CompressTicket(checkUsernamesResult.TicketCalculateWinLostAccount) : checkUsernamesResult.TransInfoJsonCompress;
+        return compressDataAddRequestService.CompressTicket(checkUsernamesResult.TicketCalculateWinLostAccount);
     }
+
 
     private static CheckUsernamesModel GetValidationAfterCalc(CheckValidUsernamesRequest query, CheckUsernamesModel validationResult, CalcVoidTicketsResult calcVoidResult)
     {

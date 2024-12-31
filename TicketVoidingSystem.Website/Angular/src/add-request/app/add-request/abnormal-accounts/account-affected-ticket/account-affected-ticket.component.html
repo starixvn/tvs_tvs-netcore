@@ -28,7 +28,12 @@
             [viewOnly]="true"
             [accountWinlostModels]="[accountWinlostTable]">
           </account-table>
-          <ticket-table [model]="ticketTableViewModel" [blockUi]="blockBetList"></ticket-table>
+          <ticket-table [model]="ticketTableViewModel"
+            [isBlock]="isBlock"
+            (changeTicket)="handleChangeTicket($event)"
+            (changeGroup)="handleChangeGroup($event)"
+            (changeGroupTicketTable)="handleChangeGroupTicketTable()">
+          </ticket-table>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary btn-sm" (click)="saveClick()">Save</button>
