@@ -4,7 +4,6 @@ using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.Extensions.TN;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.ViewModels;

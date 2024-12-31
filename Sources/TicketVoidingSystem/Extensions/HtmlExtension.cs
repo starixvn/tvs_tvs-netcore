@@ -144,26 +144,17 @@ public static class HtmlExtension
             return string.Empty;
         }
 
-        string handicap;
         var node = doc.DocumentNode.SelectNodes("//span")[0];
-
-        if (html.Contains(HtmlClass.ExcludingChoices))
+        return html switch
         {
-            handicap = node.ChildNodes[0].InnerText + node.ChildNodes[1].InnerText;
-            var secondLine = doc.DocumentNode.SelectNodes("//div[@class='excluding-choices']")[0].InnerText;
-            return handicap.AppendWithNewLine(secondLine).StripHtml();
-        }
+            _ when html.Contains(HtmlClass.ExcludingChoices) =>
+                HandleExcludingChoices(node, doc),
 
-        if (!html.Contains(HtmlClass.CashOutFromNo))
-        {
-            return node.InnerText.StripHtml();
-        }
+            _ when html.Contains(HtmlClass.CashOutFromNo) =>
+                HandleCashOutFromNo(node),
 
-        {
-            handicap = node.ChildNodes[0].InnerText;
-            var secondLine = node.ChildNodes[1].InnerText + node.ChildNodes[2].InnerText;
-            return handicap.AppendWithNewLine(secondLine);
-        }
+            _ => node.InnerText.StripHtml()
+        };
     }
 
     public static string ChoiceParlay(string html)
@@ -295,5 +286,21 @@ public static class HtmlExtension
         }
 
         return result;
+    }
+
+    private static string HandleExcludingChoices(HtmlNode node, HtmlDocument doc)
+    {
+        var handicap = node.ChildNodes[0].InnerText + node.ChildNodes[1].InnerText;
+        var secondLine = doc.DocumentNode.SelectNodes("//div[@class='excluding-choices']")[0].InnerText;
+
+        return handicap.AppendWithNewLine(secondLine).StripHtml();
+    }
+
+    private static string HandleCashOutFromNo(HtmlNode node)
+    {
+        var handicap = node.ChildNodes[0].InnerText;
+        var secondLine = node.ChildNodes[1].InnerText + node.ChildNodes[2].InnerText;
+
+        return handicap.AppendWithNewLine(secondLine);
     }
 }
