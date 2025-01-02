@@ -26,9 +26,9 @@
           </div>
           <account-table #accountTable
             [viewOnly]="true"
-            [accountWinlostModels]="[accountWinlostTable]">
+            [accountWinlostModels]="tempAdjustedAccounts.accountWinlostTables">
           </account-table>
-          <ticket-table [model]="ticketTableViewModel"
+          <ticket-table [model]="tempAdjustedAccounts.ticketTableViewModel"
             [isBlock]="isBlock"
             (changeTicket)="handleChangeTicket($event)"
             (changeGroup)="handleChangeGroup($event)"

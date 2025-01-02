@@ -13,6 +13,6 @@ export class AccountAffectedTicketModel {
 
 export class AdjustedAccountModel {
   custId: number;
-  transId: string;
-  isChecked: boolean;
+  accountWinlostTables: AccountWinlostModel[] = [];
+  ticketTableViewModel: TicketTableViewModel;
 }

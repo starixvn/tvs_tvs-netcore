@@ -9,7 +9,7 @@ import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
 import { OthersModel } from '../others/others.model';
-import { AccountAffectedTicketModel } from './account-affected-ticket/account-affected-ticket.model';
+import { AccountAffectedTicketModel, AdjustedAccountModel } from './account-affected-ticket/account-affected-ticket.model';
 import { AccountTableComponent } from './account-table/account-table.component';
 import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
@@ -43,6 +43,8 @@ export class AbnormalAccountsComponent implements OnInit {
   primitiveProps = new PrimitiveProperty();
   confirmAbnormalAccount = new ConfirmAbnormalAccountModel();
   accountAffectedTicketModel = new AccountAffectedTicketModel();
+  adjustedAccounts: AdjustedAccountModel[] = [];
+
   constructor(
     private readonly validationService: ValidationService,
     private readonly addRequestStore: AddRequestStore,

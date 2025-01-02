@@ -39,7 +39,11 @@
     [permission]="primitiveProps.permission">
   </account-table>
 </div>
-<account-affected-ticket [model]="accountAffectedTicketModel" *ngIf="accountAffectedTicketModel.isOpen"></account-affected-ticket>
+<account-affected-ticket
+  *ngIf="accountAffectedTicketModel.isOpen"
+  [model]="accountAffectedTicketModel"
+  [adjustedAccounts]="adjustedAccounts">
+</account-affected-ticket>
 
 <confirm-abnormal-account [model]="confirmAbnormalAccount" (close)="triggerCloseEvent()"
   (save)="onYesConfirmWarningModal()">

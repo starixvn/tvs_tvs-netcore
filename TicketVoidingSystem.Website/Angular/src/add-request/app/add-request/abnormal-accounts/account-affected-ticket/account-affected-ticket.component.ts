@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { TicketTableModel, TicketTableViewModel } from '../../components/ticket-table/ticket-table.model';
-import { AccountWinlostModel } from '../models/account-winlost.model';
 import { AccountAffectedTicketModel, AdjustedAccountModel } from './account-affected-ticket.model';
 
 @Component({
@@ -11,11 +10,12 @@ import { AccountAffectedTicketModel, AdjustedAccountModel } from './account-affe
 })
 export class AccountAffectedTicketComponent implements OnInit {
   @Input() model = new AccountAffectedTicketModel();
+  @Input() adjustedAccounts: AdjustedAccountModel[] = [];
   //@Output() saveEventOutput = new EventEmitter<PoolHouseTicketsModel>();
   isBlock: boolean;
-  accountWinlostTable: AccountWinlostModel;
-  ticketTableViewModel = new TicketTableViewModel();
-  adjustedAccounts: AdjustedAccountModel[] = [];
+  //accountWinlostTables: AccountWinlostModel[] = [];
+  //ticketTableViewModel = new TicketTableViewModel();
+  tempAdjustedAccounts = new AdjustedAccountModel();
   constructor(private readonly addRequestApiService: AddRequestApiService) { }
 
   async ngOnInit() {
@@ -23,11 +23,13 @@ export class AccountAffectedTicketComponent implements OnInit {
   }
 
   async updateTable() {
-    this.isBlock = true;
-    this.accountWinlostTable = this.model.accountWinlostModels.find(x => x.custId === Number(this.model.selectedCustId));
-    const result = await this.addRequestApiService.GetTicketsAbnormalAccount(Number(this.model.selectedCustId), this.model.transInfoJson);
-    this.ticketTableViewModel = new TicketTableViewModel(result);
-    this.isBlock = false;
+    if (this.adjustedAccounts.some(x => x.custId === Number(this.model.selectedCustId))) {
+      const result = this.adjustedAccounts.find(x => x.custId === Number(this.model.selectedCustId)).ticketTableViewModel;
+      this.tempAdjustedAccounts.ticketTableViewModel = new TicketTableViewModel(result);
+    } else {
+      await this.getTicketsAbnormalAccount();
+    }
+    this.tempAdjustedAccounts.accountWinlostTables = [this.model.accountWinlostModels.find(x => x.custId === Number(this.model.selectedCustId))];
   }
 
   closeClick() {
@@ -35,12 +37,12 @@ export class AccountAffectedTicketComponent implements OnInit {
   }
 
   saveClick() {
+    this.updateAdjustedAccounts();
     this.model.isOpen = false;
-
-    //this.saveEventOutput.emit(this.model);
   }
 
   onChangeUsername() {
+    this.updateAdjustedAccounts();
     this.updateTable();
   }
 
@@ -50,39 +52,43 @@ export class AccountAffectedTicketComponent implements OnInit {
   }
 
   handleChangeGroup(groupId: number) {
-    const group = this.ticketTableViewModel.groups.find(x => x.id === groupId);
+    const group = this.tempAdjustedAccounts.ticketTableViewModel.groups.find(x => x.id === groupId);
     const totalWinLoss = group.tickets.reduce((acc, ticket) => acc + BigInt(this.convertStringWithCommaToNumber(ticket.winLoss)), BigInt(0));
     const adjustment = BigInt(group.isChecked ? totalWinLoss : -totalWinLoss);
     this.reCalculateAccount(adjustment);
   }
 
   handleChangeGroupTicketTable() {
-    const totalWinLoss = this.ticketTableViewModel.groups
+    const totalWinLoss = this.tempAdjustedAccounts.ticketTableViewModel.groups
       .flatMap(group => group.tickets)
       .reduce((acc, ticket) => acc + BigInt(this.convertStringWithCommaToNumber(ticket.winLoss)), BigInt(0));
 
-    const adjustment = BigInt(this.ticketTableViewModel.isChecked ? totalWinLoss : -totalWinLoss);
+    const adjustment = BigInt(this.tempAdjustedAccounts.ticketTableViewModel.isChecked ? totalWinLoss : -totalWinLoss);
     this.reCalculateAccount(adjustment);
   }
 
+  private async getTicketsAbnormalAccount() {
+    this.isBlock = true;
+    const result = await this.addRequestApiService.GetTicketsAbnormalAccount(Number(this.model.selectedCustId), this.model.transInfoJson);
+    this.tempAdjustedAccounts.ticketTableViewModel = new TicketTableViewModel(result);
+    this.isBlock = false;
+  }
+
   private updateAdjustedAccounts() {
-    if (this.adjustedAccounts.every(x => x.custId !== this.accountWinlostTable.custId)) {
-      const ticketsByCurrentAccount = this.ticketTableViewModel.groups.flatMap(group => group.tickets).map(ticket => this.convertToAdjustedAccount(ticket));
-      this.adjustedAccounts.push(...ticketsByCurrentAccount);
+    if (this.adjustedAccounts.every(x => x.custId !== this.tempAdjustedAccounts.accountWinlostTables[0].custId)) {
+      this.adjustedAccounts.push({custId: Number(this.model.selectedCustId), ticketTableViewModel: this.tempAdjustedAccounts.ticketTableViewModel} as AdjustedAccountModel);
+    } else {
+      const index = this.adjustedAccounts.findIndex(x => x.custId === this.tempAdjustedAccounts.accountWinlostTables[0].custId);
+      this.adjustedAccounts[index].ticketTableViewModel = this.tempAdjustedAccounts.ticketTableViewModel;
     }
   }
 
-  private convertToAdjustedAccount(ticket: TicketTableModel): AdjustedAccountModel {
-    return {
-      custId: Number(this.model.selectedCustId),
-      transId: ticket.betId,
-      isChecked: ticket.isChecked
-    } as AdjustedAccountModel;
-  }
-
   private reCalculateAccount(winlost: bigint) {
-    this.accountWinlostTable.estimateVoidAmount = Number(BigInt(this.accountWinlostTable.estimateVoidAmount) + winlost);
-    this.accountWinlostTable.winLostAfterVoid = Number(BigInt(this.accountWinlostTable.currentLosing) + BigInt(this.accountWinlostTable.currentWinning) - BigInt(this.accountWinlostTable.estimateVoidAmount));
+    this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmount
+      = Number(BigInt(this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmount) + winlost);
+    this.tempAdjustedAccounts.accountWinlostTables[0].winLostAfterVoid
+      = Number(BigInt(this.tempAdjustedAccounts.accountWinlostTables[0].currentLosing)
+      + BigInt(this.tempAdjustedAccounts.accountWinlostTables[0].currentWinning) - BigInt(this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmount));
   }
 
   private convertStringWithCommaToNumber(value: string): number {
