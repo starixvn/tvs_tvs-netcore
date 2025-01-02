@@ -41,7 +41,7 @@ export class TemplateWrongOddsService {
     const replacedContent: TemplateContent = {
       msgEnglish: `${prefixSubType.msgEnglish}${TemplateContentConst.OVER.msgEnglish}-${templateValue.wrongOU}@${TemplateContentConst.ODDS.msgEnglish} ${templateValue.correctOddsHomeOver}`,
       msgChineseTraditional: `${prefixSubType.msgChineseTraditional}${TemplateContentConst.OVER.msgChineseTraditional}-${templateValue.wrongOU}@${TemplateContentConst.ODDS.msgChineseTraditional} ${templateValue.correctOddsHomeOver}`,
-      msgChineseSimplified: `${prefixSubType.msgChineseSimplified}${TemplateContentConst.OVER.msgChineseSimplified}${templateValue.wrongOU}@${TemplateContentConst.ODDS.msgChineseSimplified} ${templateValue.correctOddsHomeOver}`,
+      msgChineseSimplified: `${prefixSubType.msgChineseSimplified}${TemplateContentConst.OVER.msgChineseSimplified}-${templateValue.wrongOU}@${TemplateContentConst.ODDS.msgChineseSimplified} ${templateValue.correctOddsHomeOver}`,
       msgChineseNewSimplified: `${prefixSubType.msgChineseNewSimplified}${TemplateContentConst.OVER.msgChineseNewSimplified}-${templateValue.wrongOU}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${templateValue.correctOddsHomeOver}`
     };
 

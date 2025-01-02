@@ -74,7 +74,7 @@ public class Match
     [JsonConverter(typeof(GMT8DateTimeJsonConverter))]
     public DateTime GlobalShowTime { get; set; }
 
-    public int? NumberOfCorner { get; set; }
+    public int? NumberOfSubType { get; set; }
 
     /// <summary>
     ///  For Add Request

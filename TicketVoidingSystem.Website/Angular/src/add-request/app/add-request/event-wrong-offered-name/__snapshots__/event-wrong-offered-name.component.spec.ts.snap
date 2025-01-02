@@ -55,9 +55,7 @@ EventWrongOfferedNameComponent {
       "thrownError": null,
     },
   },
-  "confirmAddRequest": ConfirmAddRequestModel {
-    "warningRelatedEvents": Array [],
-  },
+  "confirmAddRequest": ConfirmAddRequestModel {},
   "eventWrongOfferedNameService": EventWrongOfferedNameService {
     "addRequestApiService": null,
     "affectedTicketService": null,

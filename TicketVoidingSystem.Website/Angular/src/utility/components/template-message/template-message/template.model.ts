@@ -60,7 +60,7 @@ export class TemplateValue {
   correctOddsAwayUnder?: string;
   wrongOU?: string;
   playerName?: TemplateContent;
-  numberOfCorner?: number;
+  numberOfSubType?: number;
   isAllNonLiveTickets?: boolean;
   // for template wrong odds sport book
   betTeam?: string;

@@ -3,13 +3,12 @@ import { SubIssueTypeGroup } from '../../../../../utility/constants/config';
 import { OrdinalNumberConstant } from '../../../../../utility/constants/ordinal-number.constant';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { Message } from '../../messages/message';
-import { TemplateContentConst, TemplateReplace } from '../template.const';
+import { TemplateContentConst, TemplateReplace, SubTypeInput } from '../template.const';
 import { TemplateContent, TemplateModel, TemplateValue } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
 
 @Injectable()
 export class TemplateInputsService {
-
   constructor(private readonly replaceMessageService: ReplaceMessageService) { }
 
   public replaceInputs(subIssueTypeId: number, selectedTemplated: TemplateModel, outputMessage: Message): void {
@@ -31,10 +30,10 @@ export class TemplateInputsService {
     }
   }
 
-  public updateOrdinalNumberForInputsNextCorner(issueTypeId: number, selectedTemplated: TemplateModel, templateValue: TemplateValue): void {
+  public updateOrdinalNumberForInputsDangerAccepted(issueTypeId: number, selectedTemplated: TemplateModel, templateValue: TemplateValue): void {
     for (const element of selectedTemplated.inputTexts) {
-      if (StaticService.isDangerAccepted(issueTypeId) && templateValue.numberOfCorner && element.msgEnglish === "Next Corner") {
-        const nextCorner = OrdinalNumberConstant.ORDINAL_NUMBER.find(x => x.value === templateValue.numberOfCorner.toString());
+      if (StaticService.isDangerAccepted(issueTypeId) && templateValue.numberOfSubType && SubTypeInput.SubTypeTextInput.includes(element.msgEnglish)) {
+        const nextCorner = OrdinalNumberConstant.ORDINAL_NUMBER.find(x => x.value === templateValue.numberOfSubType.toString());
         element.msgEnglishValue = nextCorner.englishValue;
         element.msgChineseTraditionalValue = `第${nextCorner.chineseTraditionalValue}`;
         element.msgChineseSimplifiedValue = `第${nextCorner.chineseSimplifiedValue}`;

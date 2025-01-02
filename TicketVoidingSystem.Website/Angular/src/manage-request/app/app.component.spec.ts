@@ -84,7 +84,7 @@ class Helper {
     }
   ];
 
-  static readonly fakeFilterModel: FilterModel = {
+  static readonly fakeFilterModel = {
     requestId: 54321,
     matchId: 12345,
     ngbFromDate: new NgbDate(2020, 8, 4),
@@ -95,7 +95,7 @@ class Helper {
     isExcludeTest: true,
     createdBy: '',
     isDisplayMissingInfo: false
-  };
+  } as FilterModel;
 }
 
 describe('AppComponent', () => {

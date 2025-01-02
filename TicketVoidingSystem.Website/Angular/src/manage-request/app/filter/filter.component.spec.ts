@@ -322,7 +322,7 @@ describe('FilterComponent', () => {
     // Arrange
     const { instance } = await shallow.render();
     instance.filterByMatch = true;
-    instance.model = {matchId: 1, requestId: 1, issueTypeId: "1"} as FilterModel;
+    instance.model = {matchId: 1, requestId: 1, issueTypeId: "1", productIds: "1,2"} as FilterModel;
 
     // Action
     const actualResult = instance.validate();

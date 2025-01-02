@@ -13,6 +13,14 @@ export class VoidFunction {
   static readonly TVS_ADD_PAGE = 4;
 }
 
+export class SubTypeInput {
+  static readonly NEXT_CORNER = 'Next Corner';
+  static readonly NEXT_BOOKING = 'Next Booking';
+  static readonly NEXT_GOAL_KICK = 'Next Goal Kick';
+  static readonly NEXT_GOAL = 'Next Goal';
+  static readonly SubTypeTextInput = [this.NEXT_CORNER, this.NEXT_BOOKING, this.NEXT_GOAL_KICK, this.NEXT_GOAL];
+}
+
 export class MessageTemplateId {
   static readonly NEXT_CORNER = 33;
   static readonly NEXT_BOOKING = 40;
