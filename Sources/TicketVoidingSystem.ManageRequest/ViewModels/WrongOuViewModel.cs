@@ -24,4 +24,10 @@ public class WrongOuViewModel
     public bool IsLinkGroupAIO { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
     public int SportType { get; set; }
+
+    public string FilterBetIdX { get; set; }
+
+    public string FilterBetIdY { get; set; }
+
+    public string FilterBetTypeId { get; set; }
 }

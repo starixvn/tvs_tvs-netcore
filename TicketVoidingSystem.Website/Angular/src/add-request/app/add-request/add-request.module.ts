@@ -95,6 +95,7 @@ import { LinkedLogComponent } from './pool-house-ticket/linked-log/linked-log.co
 import { PoolHouseTicketComponent } from './pool-house-ticket/pool-house-ticket.component';
 import { TicketsComponent } from './pool-house-ticket/tickets/tickets.component';
 import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket-count-other-sports.module';
+import { HdpFilterBetTypeComponent } from './components/hdp-filter-bet-type/hdp-filter-bet-type.component';
 
 @NgModule({
     declarations: [
@@ -172,6 +173,7 @@ import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket
         LogInfoOtherIssuesComponent,
         AccountAffectedTicketComponent,
         TicketTableComponent,
+        HdpFilterBetTypeComponent
     ],
     exports: [
         AddRequestComponent

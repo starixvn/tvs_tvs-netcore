@@ -1,0 +1,12 @@
+.input-bet-type{
+    min-width: 225px;
+}
+
+::ng-deep .input-bet-type .ng-dropdown-panel {
+    width: auto;
+    min-width: 225px;
+}
+
+.items-select {
+    min-width: 85px;
+}

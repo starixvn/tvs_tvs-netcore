@@ -26,9 +26,10 @@
           (searchTicketEvent)="emitSearchEvent()"
           (refreshEvent)="refreshLogInfoBySearchEvent()"
           (changeFilterEvent)="clearDataValidation();"
-          [subIssueTypeId]="filter.subIssueTypeId"
           [isMainMatch]="isMainMatch"
-          [filterWrongOuModel]="logInfo.filterWrongOu">
+          [filterWrongOuModel]="logInfo.filterWrongOu"
+          [filter]="filter"
+          [sportTypeId]="logInfo.sportType">
         </filter-wrong-ou>
         <div *ngIf="logInfo.isShowValidation"><hr class="mt-2 mb-2">
           <div *ngIf="logInfo.logInfoDetail" class="ticket-count">

@@ -11,4 +11,7 @@ export class WrongHdpGetLogInfoQuery {
   isLinkGroup1X2: boolean;
   isLinkGroupAIO: boolean;
   liveIndicator: number;
+  filterBetIdX: string;
+  filterBetIdY: string;
+  filterBetTypeId: string;
 }

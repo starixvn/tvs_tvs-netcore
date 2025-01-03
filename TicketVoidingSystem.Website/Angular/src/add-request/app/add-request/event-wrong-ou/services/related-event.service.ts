@@ -10,6 +10,7 @@ import { AddRelatedEventArg } from '../models/add-related-event-arg.model';
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { ValidationService } from './validation.service';
+import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,7 @@ export class RelatedEventService {
           filter.filterFromTransTime = filterWrongOuModel.filterFromTransTime;
           filter.filterToTransTime = filterWrongOuModel.filterToTransTime; 
         }
+        filter.filterBetType = new FilterBetType(filterWrongOuModel.filterBetType.filterBetIdX, filterWrongOuModel.filterBetType.filterBetIdY, filterWrongOuModel.filterBetType.filterBetTypeId);
 
         return  {
           matchId: x.matchId,

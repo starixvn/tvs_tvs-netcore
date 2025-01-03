@@ -24,7 +24,12 @@
     </div>
   </div>
 </div>
-
+<hdp-filter-bet-type 
+  [sportTypeId]="sportTypeId"
+  [issueTypeId]="filter.issueTypeId"
+  [filterBetType]="filterWrongOuModel.filterBetType"
+  (changeEvent)="changeFilter()">
+</hdp-filter-bet-type>
 <div class="d-flex">
   <div class="mr-2">
     <div class="d-flex">

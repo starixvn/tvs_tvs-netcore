@@ -29,4 +29,7 @@ public class BetTypesController(IMediator mediator) : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetVoidParlayVirtualSport() => Ok(await mediator.Send(new GetBetTypesVoidParlayVirtualSportRequest()));
+
+    [HttpPost]
+    public async Task<IActionResult> GetHdpFilterBetTypes(GetHdpFilterBetTypesRequest request) => Ok(await mediator.Send(request));
 }

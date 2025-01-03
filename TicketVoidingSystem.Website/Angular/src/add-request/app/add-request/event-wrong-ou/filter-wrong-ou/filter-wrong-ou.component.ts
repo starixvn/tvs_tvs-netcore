@@ -1,3 +1,4 @@
+import { FilterModel } from './../../filter/filter.model';
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
@@ -18,9 +19,10 @@ export class FilterWrongOuComponent {
   @Input() filterWrongOuModel: FilterWrongOuModel;
   @Input() isEdit: boolean;
   @Input() matchId: number;
-  @Input() subIssueTypeId: string;
   @Input() isMainMatch: boolean;
   @Input() isDisabled: boolean;
+  @Input() filter: FilterModel;
+  @Input() sportTypeId: number;
   @Output() searchTicketEvent = new EventEmitter();
   @Output() refreshEvent = new EventEmitter();
   @Output() changeFilterEvent = new EventEmitter();
