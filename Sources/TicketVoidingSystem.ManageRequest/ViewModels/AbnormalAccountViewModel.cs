@@ -19,4 +19,6 @@ public class AbnormalAccountViewModel
     public bool? IsVoidAllArchivedTickets { get; set; }
 
     public IEnumerable<AccountWinlostModel>? AccountWinlostModels { get; set; }
+
+    public IEnumerable<AdjustedTickets>? AdjustedTickets { get; set; }
 }

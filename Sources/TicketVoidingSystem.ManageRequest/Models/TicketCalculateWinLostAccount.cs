@@ -26,3 +26,10 @@ public class OrderedTickets
     public IEnumerable<TicketCalculateWinLostAccount> Descending { get; set; }
     public decimal TotalWinLost { get; set; }
 }
+
+public class AdjustedTickets
+{
+    public int CustId { get; set; }
+    public long TransId { get; set; }
+    public bool IsChecked { get; set; }
+}

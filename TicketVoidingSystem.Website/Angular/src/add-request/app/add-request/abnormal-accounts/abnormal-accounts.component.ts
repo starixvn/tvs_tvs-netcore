@@ -6,12 +6,13 @@ import { UsernamesComponent } from '../../../../utility/components/user-names/us
 import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
 import { OthersModel } from '../others/others.model';
-import { AccountAffectedTicketModel, AdjustedAccountModel } from './account-affected-ticket/account-affected-ticket.model';
+import { AccountAffectedTicketModel } from './account-affected-ticket/account-affected-ticket.model';
 import { AccountTableComponent } from './account-table/account-table.component';
-import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request.model';
@@ -34,6 +35,7 @@ export class AbnormalAccountsComponent implements OnInit {
   @Input() requestedBy: string;
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() others = new OthersModel();
+  @Input() issueTypes = new IssueTypes();
   @Input() abnormalAccountModel = new AbnormalAccountModel();
   @ViewChild('usernames') usernamesComponent: UsernamesComponent;
   @ViewChild('products') productFilterComponent: ProductFilterComponent;
@@ -41,9 +43,8 @@ export class AbnormalAccountsComponent implements OnInit {
   @ViewChild('accountTable') accountTableComponent: AccountTableComponent;
 
   primitiveProps = new PrimitiveProperty();
-  confirmAbnormalAccount = new ConfirmAbnormalAccountModel();
+  confirmAddRequest = new ConfirmAddRequestModel();
   accountAffectedTicketModel = new AccountAffectedTicketModel();
-  adjustedAccounts: AdjustedAccountModel[] = [];
 
   constructor(
     private readonly validationService: ValidationService,
@@ -71,10 +72,6 @@ export class AbnormalAccountsComponent implements OnInit {
     await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
   }
 
-  public triggerCloseEvent() {
-    this.addRequestStore.changeSavingRequestStatus(false);
-  }
-
   public async saveRequest(): Promise<void> {
     if (this.accountTableComponent && !this.accountTableComponent.isValid()) {
       this.addRequestStore.changeSavingRequestStatus(false);
@@ -83,8 +80,13 @@ export class AbnormalAccountsComponent implements OnInit {
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
   }
 
-  public async onYesConfirmWarningModal(): Promise<void> {
-    await this.saveRequestService.onYesConfirmWarningModal(this.initSaveRequestInput());
+  public async onClickConfirmSaveRequest(): Promise<void> {
+    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
+  }
+
+
+  public onClickCancelSaveRequest() {
+    this.addRequestStore.changeSavingRequestStatus(false);
   }
 
   public isShowUserInfo(): boolean {
@@ -95,6 +97,7 @@ export class AbnormalAccountsComponent implements OnInit {
     this.addRequestStore.changeBlockingUiStatus(true);
     if (this.accountTableComponent) {
       this.accountTableComponent.isCancelRecalculateAmount = true;
+      this.accountAffectedTicketModel.adjustedAccounts = [];
 
       if (!this.accountTableComponent.isValid()) {
         this.addRequestStore.changeBlockingUiStatus(false);
@@ -135,10 +138,10 @@ export class AbnormalAccountsComponent implements OnInit {
     arg.abnormalAccountModel.accountWinlostModels =
       this.validationService.isAutoVoidWithPolicy(this.filter.action) ? this.primitiveProps.validAccountWinlostModels : null;
     arg.usernamesComponent = this.usernamesComponent;
-    arg.confirmAbnormalAccount = this.confirmAbnormalAccount;
     arg.productFilterComponent = this.productFilterComponent;
     arg.eventDateFilterComponent = this.eventDateFilterComponent;
     arg.accountTableComponent = this.accountTableComponent;
+    arg.confirmAddRequest = this.confirmAddRequest;
 
     return arg;
   }

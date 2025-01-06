@@ -14,4 +14,5 @@ export class PrimitiveProperty {
   validAccountWinlostModels: AccountWinlostModel[] = [];
   permission: PermissionAddRequest;
   minDate: NgbDateStruct;
+  numberOfTicketsExistedInRequest: number;
 }

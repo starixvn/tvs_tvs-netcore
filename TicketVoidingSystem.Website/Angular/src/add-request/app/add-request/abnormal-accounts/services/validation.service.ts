@@ -3,9 +3,8 @@ import moment from 'moment-timezone';
 import { UsernamesComponent } from '../../../../../utility/components/user-names/user-names.component';
 import { DateTimeFormat, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { ConfirmAbnormalAccountModel } from '../confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from '../event-date-filter/event-date-filter.component';
-import { CheckUsernamesViewModel, CheckValidUsernamesQuery, ValidationAbnormalAccount } from '../models/check-username.model';
+import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from '../models/check-username.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from '../models/validation.model';
 import { ProductFilterComponent } from '../product-filter/product-filter.component';
 
@@ -76,7 +75,8 @@ export class ValidationService {
       }
       return {
         isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames),
-        confirmAbnormalAccountModel: this.getConfirmAbnormalBetModel(viewModel.validation),
+        // confirmAbnormalAccountModel: this.getConfirmAbnormalBetModel(viewModel.validation),
+        numberOfTicketsExistedInRequest: viewModel.validation.numberOfTickets,
         transInfoAddRequestModel: viewModel.transInfoAddRequestModel,
         accountWinlostModels: viewModel.accountWinlostModels
       } as ValidationBusinessRuleOutput;
@@ -87,12 +87,12 @@ export class ValidationService {
     }
   }
 
-  private getConfirmAbnormalBetModel(validation: ValidationAbnormalAccount): ConfirmAbnormalAccountModel {
-    const confirmModel = new ConfirmAbnormalAccountModel();
-    confirmModel.numberOfTicketsExistedInRequest = validation.numberOfTickets;
+  // private getConfirmAbnormalBetModel(validation: ValidationAbnormalAccount): ConfirmAbnormalAccountModel {
+  //   const confirmModel = new ConfirmAbnormalAccountModel();
+  //   confirmModel.numberOfTicketsExistedInRequest = validation.numberOfTickets;
 
-    return confirmModel;
-  }
+  //   return confirmModel;
+  // }
 
   public async getValidation(args: ValidationBusinessRuleArgs): Promise<CheckUsernamesViewModel> {
     const query: CheckValidUsernamesQuery = {

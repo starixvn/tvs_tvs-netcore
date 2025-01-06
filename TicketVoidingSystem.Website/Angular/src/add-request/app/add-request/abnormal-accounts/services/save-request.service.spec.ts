@@ -57,7 +57,7 @@ class Helper {
     productFilterComponent: new ProductFilterComponent(null),
     eventDateFilterComponent: new EventDateFilterComponent(null),
     accountTableComponent: new AccountTableComponent(null, null, null, null)
-  };
+  } as SaveRequestArg;
   static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
     isValid: false,
     confirmAbnormalAccountModel: new ConfirmAbnormalAccountModel(),

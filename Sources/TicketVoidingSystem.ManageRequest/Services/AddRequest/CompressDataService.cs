@@ -2,44 +2,43 @@
 using System.Text;
 using System.Text.Json;
 using Fanex.Logging;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
 public interface CompressDataService
 {
-    string CompressTicket(IEnumerable<TicketCalculateWinLostAccount> tickets);
+    string CompressTicket<T>(IEnumerable<T> tickets);
 
     IEnumerable<T> DecompressTickets<T>(string logInfoTicketsJson);
 }
 
 public class CompressDataAddRequestServiceImp : CompressDataService
 {
-    public string CompressTicket(IEnumerable<TicketCalculateWinLostAccount> tickets)
+    public string CompressTicket<T>(IEnumerable<T> tickets)
     {
-        var jsonTickets = TicketsToJsonModel(tickets);
+        //var jsonTickets = TicketsToJsonModel(tickets);
         var ticketZipped = CompressJson(tickets);
         var hexString = $"0x{Convert.ToHexString(ticketZipped)}";
         return hexString;
     }
 
-    private static IEnumerable<TicketAddRequestJson> TicketsToJsonModel(IEnumerable<TicketCalculateWinLostAccount> tickets)
-    {
-        var jsonTickets = tickets.Select(x => new TicketAddRequestJson
-        {
-            mid = x.MatchId,
-            t = x.TransId,
-            c = x.CustId,
-            btype = x.BetType,
-            bid = x.BetId,
-            isP = x.IsMixParlay,
-            sitedb = x.SiteDbGroupId,
-            isV14 = x.IsVoid14
-        });
+    //private static IEnumerable<TicketAddRequestJson> TicketsToJsonModel(IEnumerable<TicketCalculateWinLostAccount> tickets)
+    //{
+    //    var jsonTickets = tickets.Select(x => new TicketAddRequestJson
+    //    {
+    //        mid = x.MatchId,
+    //        t = x.TransId,
+    //        c = x.CustId,
+    //        btype = x.BetType,
+    //        bid = x.BetId,
+    //        isP = x.IsMixParlay,
+    //        sitedb = x.SiteDbGroupId,
+    //        isV14 = x.IsVoid14
+    //    });
 
-        return jsonTickets;
-    }
+    //    return jsonTickets;
+    //}
 
     private static byte[] CompressJson<T>(IEnumerable<T> groups)
     {

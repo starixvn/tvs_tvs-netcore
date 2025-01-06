@@ -24,7 +24,8 @@ public class AddRequestProcessStageImp(
     AccountWinLostService accountWinLostService,
     InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
     SendLetstalkAfterAddService sendLetstalkAfterAddService,
-    GetUpdateResultService getUpdateResultService)
+    GetUpdateResultService getUpdateResultService,
+    CompressDataService compressDataService)
     : AddRequestProcessStage
 {
     // NOSONAR
@@ -49,6 +50,11 @@ public class AddRequestProcessStageImp(
 
     private async Task<int> ExecuteAddRequest(AddRequestQuery query)  // NOSONAR
     {
+        var adjustedTicketsJson = "";
+        if (query.AbnormalAccountInfo?.AdjustedTickets?.Count() > 0)
+        {
+            adjustedTicketsJson = compressDataService.CompressTicket(query.AbnormalAccountInfo?.AdjustedTickets);
+        }
         var command = mapper.Map<AddRequestCommand>(query);
         command.Operators = query.OperatorsList?.OperatorToXml();
         command.UserId = sessionService.UserId;
@@ -64,7 +70,7 @@ public class AddRequestProcessStageImp(
         command.NotParticipateInfo = query.NotParticipateInfo?.ToEventNotParticipateXml();
         command.DangerAcceptedInfo = query.DangerAcceptedInfo?.ToEventDangerAcceptedXml();
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
-        command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();
+        command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml(adjustedTicketsJson);
         command.DuplicateTicketsInfo = query.DuplicateTicketsInfo?.ToDuplicateTicketsXml();
         command.RecoverTicketInfo = query.RecoverTicketInfo?.ToEventRecoverTicketXml();
         command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();

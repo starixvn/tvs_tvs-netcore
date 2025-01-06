@@ -3,6 +3,7 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
@@ -22,7 +23,8 @@ public class UpdateRequestProcessStageImp(
     AccountWinLostService accountWinLostService,
     SessionService sessionService,
     InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
-    GetUpdateResultService getUpdateResultService)
+    GetUpdateResultService getUpdateResultService,
+    CompressDataService compressDataService)
     : UpdateRequestProcessStage
 {
     public async Task<Result> Execute(EditRequestQuery query, IEnumerable<long> markedTicketsSuccessful)
@@ -49,6 +51,11 @@ public class UpdateRequestProcessStageImp(
 
     private EditRequestCommand CreateEditRequestCommand(EditRequestQuery query)  // NOSONAR
     {
+        var adjustedTicketsJson = "";
+        if (query.AbnormalAccountInfo?.AdjustedTickets?.Count() > 0)
+        {
+            adjustedTicketsJson = compressDataService.CompressTicket(query.AbnormalAccountInfo?.AdjustedTickets);
+        }
         var command = mapper.Map<EditRequestCommand>(query);
         command.Operators = query.OperatorsList?.OperatorToXml();
         command.UserId = sessionService.UserId;
@@ -65,7 +72,7 @@ public class UpdateRequestProcessStageImp(
         command.NotParticipateInfo = query.NotParticipateInfo?.ToEventNotParticipateXml();
         command.DangerAcceptedInfo = query.DangerAcceptedInfo?.ToEventDangerAcceptedXml();
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
-        command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();
+        command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml(adjustedTicketsJson);
         command.DuplicateTicketsInfo = query.DuplicateTicketsInfo?.ToDuplicateTicketsXml();
         command.RecoverTicketInfo = query.RecoverTicketInfo?.ToEventRecoverTicketXml();
         command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
