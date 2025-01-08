@@ -45,7 +45,6 @@
           <th scope="col" class="col-tb-7">
             <div class="title-table">
               <span>Estimate Void Amount</span>
-              <button [hidden]="viewOnly" (click)="openAccountAffectedTicket()">OPEN ne</button>
               <sorting #sortingComponent [id]="6" (sortEvent)="sorting($event, 'estimateVoidAmount', 6)" [hidden]="viewOnly"></sorting>
             </div>
           </th>
@@ -74,10 +73,10 @@
               <div>{{showDecimalWithComma(item.givenCredit)}}</div>
             </td>
             <td class="col-tb-4 text-right adjust-gv">
-              <div class="adjust-string" *ngIf="!item.isShowInput" (mousedown)="mouseDownEventAdjustGV(item)">{{item.adjustVoidLimitString ?? showDecimalWithComma(item.adjustVoidLimit)}}</div>
+              <div class="adjust-string" *ngIf="!item.isShowInput || viewOnly" (mousedown)="mouseDownEventAdjustGV(item)">{{item.adjustVoidLimitString ?? showDecimalWithComma(item.adjustVoidLimit)}}</div>
               <div>
-                <input *ngIf="item.isShowInput" class="form-control form-control-sm adjust-gv{{i}}" type="text" [(ngModel)]="item.adjustVoidLimit"
-                (ngModelChange)="onChangeAdjustGV(item, i)" [disabled]="filter.isVoided" onmouseup="this.focus()"
+                <input *ngIf="item.isShowInput" onmouseup="this.focus" class="form-control form-control-sm adjust-gv{{i}}" type="text" [(ngModel)]="item.adjustVoidLimit"
+                (ngModelChange)="onChangeAdjustGV(item, i)" [disabled]="filter.isVoided"
                 (blur)="reCalculate(item, i)"/>
               </div>
             </td>
@@ -88,7 +87,10 @@
               <div>{{showDecimalWithComma(item.currentWinning)}}</div>
             </td>
             <td class="col-tb-7 text-right highlight-amount">
-              <div>{{showDecimalWithComma(item.estimateVoidAmount)}}</div>
+              <div class="title-void-amount">
+                <div><span *ngIf="item.isEdittedTicket && !viewOnly" class="editted-account">Editted</span></div>
+                <div>{{showDecimalWithComma(item.estimateVoidAmount)}}</div>
+              </div>
             </td>
             <td class="text-right highlight-amount">
               <div>{{showDecimalWithComma(item.winLostAfterVoid)}}</div>

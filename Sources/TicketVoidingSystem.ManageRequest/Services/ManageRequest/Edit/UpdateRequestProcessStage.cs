@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Fanex.Data.Repository;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -52,11 +53,12 @@ public class UpdateRequestProcessStageImp(
     private EditRequestCommand CreateEditRequestCommand(EditRequestQuery query)  // NOSONAR
     {
         var adjustedTicketsJson = "";
-        if (query.AbnormalAccountInfo?.AdjustedTickets?.Count() > 0)
-        {
-            adjustedTicketsJson = compressDataService.CompressTicket(query.AbnormalAccountInfo?.AdjustedTickets);
-        }
         var command = mapper.Map<EditRequestCommand>(query);
+        if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
+        {
+            adjustedTicketsJson = compressDataService.CompressTicket(query.AbnormalAccountInfo.AdjustedTickets);
+        }
+
         command.Operators = query.OperatorsList?.OperatorToXml();
         command.UserId = sessionService.UserId;
         command.IP = sessionService.GetClientIp();

@@ -159,3 +159,26 @@ table {
     }
   }
 }
+
+.btn-edit-ticket {
+  color: #f1c40f;
+  margin-right: 2px;
+  cursor: pointer;
+}
+
+.title-void-amount {
+  display: flex;
+  justify-content: space-between;
+
+  i {
+    color: #27ae60;
+  }
+}
+
+.editted-account {
+  color: #000;
+  opacity: 0.4;
+  font-weight: normal;
+  font-style: italic;
+  font-size: 11px;
+}

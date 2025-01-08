@@ -10,4 +10,5 @@ export class AccountWinlostModel {
   isHighlight: boolean;
   adjustVoidLimitString: string;
   isShowInput: boolean;
+  isEdittedTicket: boolean;
 }

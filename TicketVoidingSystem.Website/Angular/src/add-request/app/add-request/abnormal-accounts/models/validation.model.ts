@@ -21,7 +21,6 @@ export class ValidationBusinessRuleArgs {
 
 export class ValidationBusinessRuleOutput {
   isValid: boolean;
-  // confirmAbnormalAccountModel: ConfirmAbnormalAccountModel;
   numberOfTicketsExistedInRequest: number;
   transInfoAddRequestModel: TransInfoAddRequestModel;
   accountWinlostModels: AccountWinlostModel[]

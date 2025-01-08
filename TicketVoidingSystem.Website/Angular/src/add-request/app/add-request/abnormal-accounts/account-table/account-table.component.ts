@@ -26,7 +26,7 @@ export class AccountTableComponent {
   @Input() accountWinlostModels: AccountWinlostModel[];
   @Input() permission: PermissionAddRequest;
   @Output() changeTable = new EventEmitter();
-  @Output() openAccountAffectedTicketEvent = new EventEmitter();
+  // @Output() openAccountAffectedTicketEvent = new EventEmitter<number>();
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;
   tooltip = new Tooltip();
   isCancelRecalculateAmount: boolean;
@@ -40,7 +40,7 @@ export class AccountTableComponent {
     this.tooltip.element = this.element;
   }
 
-  public async reCalculate(account: AccountWinlostModel, index: number): Promise<void> {
+  async reCalculate(account: AccountWinlostModel, index: number) {
     account.isShowInput = false;
     if (this.isCancelRecalculateAmount) {
       this.isCancelRecalculateAmount = false;
@@ -50,6 +50,8 @@ export class AccountTableComponent {
     if (!this.isCorrectFormatVoidLimit(account, index)) {
       return;
     }
+
+    await this.delayForEventFocus();
     this.addRequestStore.changeBlockingUiStatus(true);
     const viewModel = await this.validationService.getValidation(this.createValidationBusinessRuleArgs(account));
     const updatedAccountAmount = viewModel.accountWinlostModels.find(x => x.custId === account.custId);
@@ -65,31 +67,20 @@ export class AccountTableComponent {
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
-  public sorting(isDesc: boolean, orderBy: string, componentId: number): void {
+  async exportExcel() {
+    if (this.accountWinlostModels?.length > 0) {
+      await this.appService.exportAccount(this.accountWinlostModels);
+    }
+  }
+
+  sorting(isDesc: boolean, orderBy: string, componentId: number) {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.sortingComponents.filter(x => x.id !== componentId).forEach(x => x.isDesc = null);
     this.accountWinlostModels = _.orderBy(_.uniqBy(this.accountWinlostModels, x => x.custId), [orderBy], [isDesc ? 'desc' : 'asc']);
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
-  async exportExcel(): Promise<void> {
-    if (this.accountWinlostModels?.length > 0) {
-      await this.appService.exportAccount(this.accountWinlostModels);
-    }
-  }
-
-  private createValidationBusinessRuleArgs(account: AccountWinlostModel): ValidationBusinessRuleArgs {
-    const arg = new ValidationBusinessRuleArgs();
-    arg.requestId = this.requestId;
-    arg.actionId = this.filter.action;
-    arg.abnormalAccountModel = this.abnormalAccountModel;
-    arg.abnormalAccountModel.accountWinlostModels = [account];
-    arg.primitiveProps = new PrimitiveProperty();
-    arg.primitiveProps.permission = this.permission;
-    return arg;
-  }
-
-  public isValid(): boolean {
+  isValid() {
     if (this.accountWinlostModels) {
       return this.accountWinlostModels.every(x => this.isCorrectFormatVoidLimit(x, this.accountWinlostModels.indexOf(x)))
     }
@@ -97,11 +88,11 @@ export class AccountTableComponent {
     return true;
   }
 
-  public onChangeAdjustGV(account: AccountWinlostModel, index: number): void {
+  onChangeAdjustGV(account: AccountWinlostModel, index: number) {
     this.isCorrectFormatVoidLimit(account, index);
   }
 
-  public isCorrectFormatVoidLimit(account: AccountWinlostModel, index: number): boolean {
+  isCorrectFormatVoidLimit(account: AccountWinlostModel, index: number) {
     if (!account.adjustVoidLimit) {
       account.adjustVoidLimitString = null
       return true;
@@ -119,17 +110,38 @@ export class AccountTableComponent {
     return true;
   }
 
-  public showDecimalWithComma(amount: number): string {
+  showDecimalWithComma(amount: number) {
     return amount?.toLocaleString(undefined, { maximumFractionDigits: 4 })
   }
 
-  public mouseDownEventAdjustGV(account: AccountWinlostModel): void {
+  mouseDownEventAdjustGV(account: AccountWinlostModel) {
     if (!this.filter.isVoided) {
       account.isShowInput = !account.isShowInput;
     }
   }
 
-  openAccountAffectedTicket() {
-    this.openAccountAffectedTicketEvent.emit();
+  checkInputOtherAccount() {
+    this.accountWinlostModels.filter(x => x.isShowInput).forEach(x => {
+
+    });
+  }
+
+  // openAccountAffectedTicket(custId: number) {
+  //   this.openAccountAffectedTicketEvent.emit(custId);
+  // }
+
+  private async delayForEventFocus() {
+    await new Promise(f => setTimeout(f, 100));
+  }
+
+  private createValidationBusinessRuleArgs(account: AccountWinlostModel): ValidationBusinessRuleArgs {
+    const arg = new ValidationBusinessRuleArgs();
+    arg.requestId = this.requestId;
+    arg.actionId = this.filter.action;
+    arg.abnormalAccountModel = this.abnormalAccountModel;
+    arg.abnormalAccountModel.accountWinlostModels = [account];
+    arg.primitiveProps = new PrimitiveProperty();
+    arg.primitiveProps.permission = this.permission;
+    return arg;
   }
 }

@@ -51,11 +51,12 @@ public class AddRequestProcessStageImp(
     private async Task<int> ExecuteAddRequest(AddRequestQuery query)  // NOSONAR
     {
         var adjustedTicketsJson = "";
-        if (query.AbnormalAccountInfo?.AdjustedTickets?.Count() > 0)
-        {
-            adjustedTicketsJson = compressDataService.CompressTicket(query.AbnormalAccountInfo?.AdjustedTickets);
-        }
         var command = mapper.Map<AddRequestCommand>(query);
+        if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
+        {
+            adjustedTicketsJson = compressDataService.CompressTicket(query.AbnormalAccountInfo.AdjustedTickets);
+            await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
+        }
         command.Operators = query.OperatorsList?.OperatorToXml();
         command.UserId = sessionService.UserId;
         command.IP = sessionService.GetClientIp();
@@ -82,10 +83,6 @@ public class AddRequestProcessStageImp(
         command.OtherIssuesInfo = query.OtherIssuesInfo?.ToEventOtherIssuesXml();
 
         await repository.ExecuteAsync(command);
-        if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
-        {
-            await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
-        }
 
         return command.RequestId;
     }

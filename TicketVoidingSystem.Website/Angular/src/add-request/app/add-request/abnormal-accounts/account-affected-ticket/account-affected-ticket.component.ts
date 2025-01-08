@@ -15,8 +15,6 @@ export class AccountAffectedTicketComponent implements OnInit {
   isBlock: boolean;
   isEdittedTicket: boolean;
   previousCustId: string;
-  //accountWinlostTables: AccountWinlostModel[] = [];
-  //ticketTableViewModel = new TicketTableViewModel();
   tempAdjustedAccounts = new AdjustedAccountModel();
   constructor(private readonly addRequestApiService: AddRequestApiService) { }
 
@@ -27,13 +25,13 @@ export class AccountAffectedTicketComponent implements OnInit {
   }
 
   async updateTable() {
+    this.tempAdjustedAccounts.accountWinlostTables = [this.model.accountWinlostModels.find(x => x.custId === Number(this.model.selectedCustId))];
     if (this.model.adjustedAccounts.some(x => x.custId === Number(this.model.selectedCustId))) {
       const result = this.model.adjustedAccounts.find(x => x.custId === Number(this.model.selectedCustId)).ticketTableViewModel;
       this.tempAdjustedAccounts.ticketTableViewModel = new TicketTableViewModel(result);
     } else {
       await this.getTicketsAbnormalAccount();
     }
-    this.tempAdjustedAccounts.accountWinlostTables = [this.model.accountWinlostModels.find(x => x.custId === Number(this.model.selectedCustId))];
   }
 
   async onChangeUsername() {
@@ -81,7 +79,6 @@ export class AccountAffectedTicketComponent implements OnInit {
     const totalWinLoss = this.tempAdjustedAccounts.ticketTableViewModel.groups
       .flatMap(group => group.tickets)
       .reduce((acc, ticket) => acc + BigInt(this.convertStringWithCommaToNumber(ticket.winLoss)), BigInt(0));
-
     const adjustment = BigInt(this.tempAdjustedAccounts.ticketTableViewModel.isChecked ? totalWinLoss : -totalWinLoss);
     this.reCalculateAccount(adjustment);
   }
@@ -105,6 +102,7 @@ export class AccountAffectedTicketComponent implements OnInit {
       const index = this.model.adjustedAccounts.findIndex(x => x.custId === previousCustId);
       this.model.adjustedAccounts[index].ticketTableViewModel = this.tempAdjustedAccounts.ticketTableViewModel;
     }
+    this.tempAdjustedAccounts.accountWinlostTables[0].isEdittedTicket = true;
     this.isEdittedTicket = false;
   }
 

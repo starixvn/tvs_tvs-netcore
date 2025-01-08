@@ -53,7 +53,7 @@ export class AbnormalAccountsComponent implements OnInit {
     private readonly addRequestApiService: AddRequestApiService
   ) { }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnInit() {
     if (this.isEdit && this.validationService.isAutoVoidWithPolicy(this.filter.action)) {
       this.addRequestStore.changeBlockingUiStatus(true);
       this.primitiveProps.validAccountWinlostModels = await this.addRequestApiService.getAccountWinLost(this.requestId);
@@ -64,7 +64,7 @@ export class AbnormalAccountsComponent implements OnInit {
     this.primitiveProps.minDate = this.getMinDateByPermission(this.primitiveProps.permission.isVoidAllArchivedTickets);
   }
 
-  public async focusOutUsernames(): Promise<void> {
+  async focusOutUsernames() {
     if (this.primitiveProps.isCancelValidate) {
       this.primitiveProps.isCancelValidate = false;
       return;
@@ -72,7 +72,7 @@ export class AbnormalAccountsComponent implements OnInit {
     await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
   }
 
-  public async saveRequest(): Promise<void> {
+  async saveRequest() {
     if (this.accountTableComponent && !this.accountTableComponent.isValid()) {
       this.addRequestStore.changeSavingRequestStatus(false);
       return;
@@ -80,29 +80,19 @@ export class AbnormalAccountsComponent implements OnInit {
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
   }
 
-  public async onClickConfirmSaveRequest(): Promise<void> {
+  async onClickConfirmSaveRequest() {
     await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
   }
 
-
-  public onClickCancelSaveRequest() {
-    this.addRequestStore.changeSavingRequestStatus(false);
-  }
-
-  public isShowUserInfo(): boolean {
-    return this.filter.action === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
-  }
-
-  public async handleSearchEvent(): Promise<void> {
+  async handleSearchEvent() {
     this.addRequestStore.changeBlockingUiStatus(true);
-    if (this.accountTableComponent) {
-      this.accountTableComponent.isCancelRecalculateAmount = true;
+    if (this.isShowUserInfo()) {
       this.accountAffectedTicketModel.adjustedAccounts = [];
+    }
 
-      if (!this.accountTableComponent.isValid()) {
-        this.addRequestStore.changeBlockingUiStatus(false);
-        return;
-      }
+    if (this.accountTableComponent && !this.accountTableComponent.isValid()) {
+      this.addRequestStore.changeBlockingUiStatus(false);
+      return;
     }
 
     const validationOutput = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
@@ -111,16 +101,49 @@ export class AbnormalAccountsComponent implements OnInit {
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
-  openAccountAffectedTicket(): void {
+  onClickCancelSaveRequest() {
+    this.addRequestStore.changeSavingRequestStatus(false);
+  }
+
+  isShowUserInfo(): boolean {
+    return this.filter.action === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
+  }
+
+  openAccountAffectedTicket() {
     this.accountAffectedTicketModel.usernames = this.primitiveProps.validAccountWinlostModels
-    .filter(x => x.isHighlight)
-    .map(x => {
-      return { name: x.username, value: x.custId.toString()  } as Selection;
-    })
+      .filter(x => x.isHighlight)
+      .map(x => {
+        return { name: x.username, value: x.custId.toString() } as Selection;
+      })
     this.accountAffectedTicketModel.accountWinlostModels = this.primitiveProps.validAccountWinlostModels;
     this.accountAffectedTicketModel.selectedCustId = this.accountAffectedTicketModel.usernames[0].value;
     this.accountAffectedTicketModel.transInfoJson = this.primitiveProps.transInfoAddRequestModel.transInfoJson;
     this.accountAffectedTicketModel.isOpen = true;
+  }
+
+  hideValidationMessage() {
+    this.primitiveProps.isShowError = false;
+  }
+
+  changeFilter() {
+    this.primitiveProps.isShowAccountWinLost = false;
+    this.primitiveProps.isShowError = false;
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
+  }
+
+  isShowButtonAdjustEstimatedVoid() {
+    return this.primitiveProps.validAccountWinlostModels.some(x => x.isHighlight);
+  }
+
+  private getMinDateByPermission(isVoidAllArchivedTickets: boolean): NgbDateStruct {
+    if (isVoidAllArchivedTickets) {
+      return null;
+    }
+
+    const currentMoment = moment.utc().tz('America/Caracas');
+    const momentMinDate = currentMoment.subtract(7, "days");
+
+    return { year: momentMinDate.year(), month: momentMinDate.month() + 1, day: momentMinDate.date() };
   }
 
   private initSaveRequestInput() {
@@ -161,26 +184,5 @@ export class AbnormalAccountsComponent implements OnInit {
     arg.primitiveProps = this.primitiveProps;
 
     return arg;
-  }
-
-  public hideValidationMessage(): void {
-    this.primitiveProps.isShowError = false;
-  }
-
-  public changeFilter(): void {
-    this.primitiveProps.isShowAccountWinLost = false;
-    this.primitiveProps.isShowError = false;
-    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
-  }
-
-  private getMinDateByPermission(isVoidAllArchivedTickets: boolean): NgbDateStruct {
-    if (isVoidAllArchivedTickets) {
-      return null;
-    }
-
-    const currentMoment = moment.utc().tz('America/Caracas');
-    const momentMinDate = currentMoment.subtract(7, "days");
-
-    return { year: momentMinDate.year(), month: momentMinDate.month() + 1, day: momentMinDate.date()};
   }
 }

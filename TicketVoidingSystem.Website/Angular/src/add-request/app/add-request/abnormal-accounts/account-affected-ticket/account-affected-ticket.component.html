@@ -12,8 +12,8 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="filter-user-name mr-4">
-            <label class="col-form-label">Username</label>
+          <div class="filter-user-name mb-2">
+            <label class="col-form-label col-form-label-sm">Username</label>
             <ng-select class="custom-sm"
                 [items]="model.usernames"
                 bindLabel="name"
@@ -24,7 +24,7 @@
                 (change)="onChangeUsername()">
               </ng-select>
           </div>
-          <account-table #accountTable
+          <account-table class="mb-2" #accountTable
             [viewOnly]="true"
             [accountWinlostModels]="tempAdjustedAccounts.accountWinlostTables">
           </account-table>

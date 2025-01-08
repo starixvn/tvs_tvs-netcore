@@ -26,14 +26,17 @@
 <div *ngIf="isShowUserInfo()" class="mt-3">
   <div class="mb-3">
     <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
-      (click)="handleSearchEvent()" (mousedown)="$event.preventDefault()">Search</button>
+      (click)="handleSearchEvent()" (mousedown)="$event.preventDefault()">Search</button><br/>
+  </div>
+  <div *ngIf="isShowButtonAdjustEstimatedVoid()" class="mb-1">
+    <button [disabled]="filter.isVoided" type="submit" class="btn btn-success btn-sm"
+    (click)="openAccountAffectedTicket()">Adjust Estimated Void Amount</button>
   </div>
   <account-table #accountTable
     *ngIf="primitiveProps.isShowAccountWinLost"
     [filter]="filter"
     [requestId]="requestId"
     (changeTable)="hideValidationMessage()"
-    (openAccountAffectedTicketEvent)="openAccountAffectedTicket()"
     [abnormalAccountModel]="abnormalAccountModel"
     [accountWinlostModels]="primitiveProps.validAccountWinlostModels"
     [permission]="primitiveProps.permission">

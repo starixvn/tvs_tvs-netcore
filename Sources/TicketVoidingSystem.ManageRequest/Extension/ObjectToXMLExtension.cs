@@ -318,7 +318,7 @@ public static class ObjectToXMLExtension
         var stringBuilder = $"<r Usernames='{model.Usernames}' "
                             + $"ProductIds='{model.ProductIds}' "
                             + $"StatusIds='{model.StatusIds}' "
-                            + $"AdjustedTickets='{adjustedTicketsJson}' "
+                            + $"ModifiedTicketJson='{adjustedTicketsJson}' "
                             + $"FromDate='{model.FromDate?.ToString(CultureInfo.InvariantCulture)}' "
                             + $"ToDate='{model.ToDate?.ToString(CultureInfo.InvariantCulture)}' />";
 
