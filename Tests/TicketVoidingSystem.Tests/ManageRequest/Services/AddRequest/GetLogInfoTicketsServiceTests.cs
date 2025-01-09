@@ -27,7 +27,7 @@ public class GetLogInfoTicketServiceTests
             LogInfoTicketsJson = "",
             IssueTypeId = 1
         };
-        compressDataService.DecompressTickets(request.LogInfoTicketsJson).Returns(getTicketModels);
+        compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson).ReturnsForAnyArgs(getTicketModels);
 
         service = new GetLogInfoTicketsServiceImp(null, compressDataService);
 
@@ -58,7 +58,7 @@ public class GetLogInfoTicketServiceTests
         var ticketParlay = new TicketViewModel { BetType = "Handicap", IsParlay = true, Status = "Won", GroupName = "Parlay" };
         var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Credit" };
 
-        compressDataService.DecompressTickets(request.LogInfoTicketsJson).Returns(getTicketModels);
+        compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson).ReturnsForAnyArgs(getTicketModels);
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketParlay);
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => !x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketSingle);
 
@@ -92,7 +92,7 @@ public class GetLogInfoTicketServiceTests
         var ticketParlay = new TicketViewModel { BetType = "Handicap", IsParlay = true, Status = "Won", GroupName = "Parlay" };
         var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Credit" };
 
-        compressDataService.DecompressTickets(request.LogInfoTicketsJson).Returns(getTicketModels);
+        compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson).ReturnsForAnyArgs(getTicketModels);
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketParlay);
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => !x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketSingle);
 
@@ -124,7 +124,7 @@ public class GetLogInfoTicketServiceTests
         };
         var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Credit" };
 
-        compressDataService.DecompressTickets(request.LogInfoTicketsJson).Returns(getTicketModels);
+        compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson).ReturnsForAnyArgs(getTicketModels);
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => !x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketSingle);
 
         service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService);

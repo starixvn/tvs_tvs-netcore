@@ -8,6 +8,7 @@ using NSubstitute.ExceptionExtensions;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.ViewModels;
@@ -25,6 +26,7 @@ public class AddRequestProcessStageTests
     private readonly AccountWinLostService accountWinLostService;
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
     private readonly GetUpdateResultService getUpdateResultService;
+    private readonly CompressDataService compressDataService;
     private readonly AddRequestProcessStageImp service;
 
     public AddRequestProcessStageTests()
@@ -37,8 +39,9 @@ public class AddRequestProcessStageTests
         insertAutoVoidRequestQueueService = Substitute.For<InsertAutoVoidRequestQueueService>();
         var sendLetstalkAfterAddService = Substitute.For<SendLetstalkAfterAddService>();
         getUpdateResultService = Substitute.For<GetUpdateResultService>();
+        compressDataService = Substitute.For<CompressDataService>();
         service = new AddRequestProcessStageImp(mapper, repository, sessionService, loggingService,
-            accountWinLostService, insertAutoVoidRequestQueueService, sendLetstalkAfterAddService, getUpdateResultService);
+            accountWinLostService, insertAutoVoidRequestQueueService, sendLetstalkAfterAddService, getUpdateResultService, compressDataService);
     }
 
     [Fact]

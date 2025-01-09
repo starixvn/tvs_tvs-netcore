@@ -7,13 +7,13 @@ import { GroupUsername } from '../../../../utility/components/user-names/user-na
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { FilterModel } from '../filter/filter.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { AbnormalAccountOtherComponent } from './abnormal-accounts-other/abnormal-accounts-other.component';
 import { AbnormalAccountsComponent } from './abnormal-accounts.component';
 import { AccountTableComponent } from './account-table/account-table.component';
-import { ConfirmAbnormalAccountComponent } from './confirm-abnormal-account/confirm-abnormal-account.component';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
 import { AccountWinlostModel } from './models/account-winlost.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
@@ -41,7 +41,7 @@ class Helper {
     toDate: null,
     accountWinlostModels: [],
     subIssueTypeId: 1
-  };
+  } as AbnormalAccountModel;
 }
 
 describe('AbnormalAccountsComponent', () => {
@@ -52,7 +52,7 @@ describe('AbnormalAccountsComponent', () => {
       ProductFilterComponent,
       EventDateFilterComponent,
       AbnormalAccountOtherComponent,
-      ConfirmAbnormalAccountComponent
+      ConfirmAddRequestComponent
     ],
     imports: [
       BlockUiModule,
@@ -142,7 +142,7 @@ describe('AbnormalAccountsComponent', () => {
           isEdit: true,
         }
       });
-    instance.triggerCloseEvent();
+    instance.onClickCancelSaveRequest();
 
     expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
   });
@@ -158,7 +158,7 @@ describe('AbnormalAccountsComponent', () => {
           isEdit: true,
         }
       });
-    instance.triggerCloseEvent();
+    instance.onClickCancelSaveRequest();
 
     expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
   });
@@ -186,7 +186,7 @@ describe('AbnormalAccountsComponent', () => {
   it('#onYesConfirmWarningModal should called #saveRequestService.onYesConfirmWarningModal', async () => {
     const mockOnYesConfirmWarningModal = jest.fn().mockImplementation();
     const { instance } = await shallow
-      .mock(SaveRequestService, { onYesConfirmWarningModal: mockOnYesConfirmWarningModal })
+      .mock(SaveRequestService, { onClickConfirmSave: mockOnYesConfirmWarningModal })
       .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
       .render({
         bind: {
@@ -198,7 +198,7 @@ describe('AbnormalAccountsComponent', () => {
     instance.usernamesComponent = new UsernamesComponent(null);
     instance.usernamesComponent.groupUsername = new GroupUsername();
     instance.usernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('1,2,3');
-    await instance.onYesConfirmWarningModal();
+    await instance.onClickConfirmSaveRequest();
 
     expect(mockOnYesConfirmWarningModal).toHaveBeenCalledTimes(1);
   });

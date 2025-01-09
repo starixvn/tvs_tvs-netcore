@@ -1,19 +1,18 @@
 import { UsernamesComponent } from '../../../../../utility/components/user-names/user-names.component';
 import { GroupUsername } from '../../../../../utility/components/user-names/user-names.model';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { AccountTableComponent } from '../account-table/account-table.component';
-import { ConfirmAbnormalAccountModel } from '../confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from '../event-date-filter/event-date-filter.component';
 import { CheckUsernamesViewModel, ValidationAbnormalAccount } from '../models/check-username.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from '../models/validation.model';
 import { ProductFilterComponent } from '../product-filter/product-filter.component';
 import { ValidationService } from './validation.service';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
 
 class Helper {
   static readonly url = 'http://localhost:60196/';
@@ -28,16 +27,6 @@ class Helper {
     isChangeSubTypeManual: true,
     isAbnormal: false
   } as FilterModel;
-  static readonly fakeConfirmAbnormalAccountModel: ConfirmAbnormalAccountModel = {
-    isOpenDialog: true,
-    isAutoVoid: false,
-    isHasWarningEditTakeNoteRequest: false,
-    isEditingByAnotherUser: false,
-    requestId: 0,
-    requestedBy: '',
-    isHasWarningTicketsExistedInRequest: false,
-    numberOfTicketsExistedInRequest: 1
-  };
   static readonly fakeValidationBusinessRuleArgs: ValidationBusinessRuleArgs = {
     requestId: Helper.fakeRequestId,
     abnormalAccountModel: new AbnormalAccountModel(),
@@ -51,10 +40,9 @@ class Helper {
   };
   static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
     isValid: false,
-    confirmAbnormalAccountModel: new ConfirmAbnormalAccountModel(),
     transInfoAddRequestModel: new TransInfoAddRequestModel(),
     accountWinlostModels: []
-  };
+  } as ValidationBusinessRuleOutput;
 }
 
 describe('ValidationService', () => {
@@ -246,13 +234,6 @@ describe('ValidationService', () => {
     }
   });
 
-  it('#getConfirmAbnormalBetModel should return expected model', async () => {
-    const model = new ValidationAbnormalAccount();
-    const actual = validationService['getConfirmAbnormalBetModel'](model);
-
-    expect(actual.numberOfTicketsExistedInRequest).toBe(model.numberOfTickets)
-  });
-
   it('#getValidation should call #checkValidUsernames', async () => {
     const args = Helper.fakeValidationBusinessRuleArgs;
     addRequestApiService.checkValidUsernames = jest.fn().mockReturnValue(new CheckUsernamesViewModel());
@@ -269,26 +250,5 @@ describe('ValidationService', () => {
     const actual = await validationService['getValidation'](args);
 
     expect(actual.accountWinlostModels).toEqual(args.abnormalAccountModel.accountWinlostModels);
-  });
-
-  it('#isHasWarningEditTakeNoteRequest should return true', async () => {
-    const actual = validationService['isHasWarningEditTakeNoteRequest'](true, '2', '5');
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isEditingByAnotherUser should return true', async () => {
-    const actual = validationService['isEditingByAnotherUser'](true, 1, 2);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isAutoVoidAction should return true', async () => {
-    let inputsTest = [TVSRequestActionType.AUTO_VOID_INSTANT_ID.toString(), TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString()];
-    inputsTest.forEach(x => {
-      const actual = validationService['isAutoVoidAction'](x);
-      expect(actual).toBeTruthy();
-    }
-    )
   });
 });

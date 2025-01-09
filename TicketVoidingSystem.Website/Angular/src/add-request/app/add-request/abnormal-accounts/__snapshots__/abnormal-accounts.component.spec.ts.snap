@@ -10,7 +10,7 @@ exports[`AbnormalAccountsComponent #AbnormalAccountsComponent init should match 
     </div>
     <product-filter />
     <event-date-filter />
-    <confirm-abnormal-account />
+    <confirm-add-request />
   </abnormal-accounts>
 </ng-component>
 `;

@@ -17,28 +17,10 @@ public class CompressDataAddRequestServiceImp : CompressDataService
 {
     public string CompressTicket<T>(IEnumerable<T> tickets)
     {
-        //var jsonTickets = TicketsToJsonModel(tickets);
         var ticketZipped = CompressJson(tickets);
         var hexString = $"0x{Convert.ToHexString(ticketZipped)}";
         return hexString;
     }
-
-    //private static IEnumerable<TicketAddRequestJson> TicketsToJsonModel(IEnumerable<TicketCalculateWinLostAccount> tickets)
-    //{
-    //    var jsonTickets = tickets.Select(x => new TicketAddRequestJson
-    //    {
-    //        mid = x.MatchId,
-    //        t = x.TransId,
-    //        c = x.CustId,
-    //        btype = x.BetType,
-    //        bid = x.BetId,
-    //        isP = x.IsMixParlay,
-    //        sitedb = x.SiteDbGroupId,
-    //        isV14 = x.IsVoid14
-    //    });
-
-    //    return jsonTickets;
-    //}
 
     private static byte[] CompressJson<T>(IEnumerable<T> groups)
     {
