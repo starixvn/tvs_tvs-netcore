@@ -155,12 +155,12 @@ export class CommonService {
     return this.httpService.postJson<{ guid: string }, Result<T>>({ guid: guid }, `api/SharedApi/GetSimpleResultCache`);
   }
 
-  async GetOddsInfoSpecialBetTypes(query: GetOddsInfoQuery): Promise<OddsInfo[]> {
+  async getOddsInfoSpecialBetTypes(query: GetOddsInfoQuery): Promise<OddsInfo[]> {
     const url = 'api/BetTypes/GetOddsInfoSpecialBetTypes';
     return this.httpService.postJson(query, url);
   }
   
-  async GetHdpFilterBetTypes(sportId: string, issueTypeId: number): Promise<Array<HdpFilterBetType>> {
+  async getHdpFilterBetTypes(sportId: string, issueTypeId: number): Promise<Array<HdpFilterBetType>> {
     return this.httpService.postJson({ sportId, issueTypeId }, 'api/BetTypes/GetHdpFilterBetTypes');
   }
 

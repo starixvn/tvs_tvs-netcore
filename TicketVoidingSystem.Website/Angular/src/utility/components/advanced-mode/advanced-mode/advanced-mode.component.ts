@@ -94,7 +94,7 @@ export class AdvancedModeComponent implements OnChanges {
   }
 
   public async getSpecialBetTeamCricket(matchId: string): Promise<void> {
-    const data = await this.commonService.GetOddsInfoSpecialBetTypes({matchId: matchId, betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER});
+    const data = await this.commonService.getOddsInfoSpecialBetTypes({matchId: matchId, betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER});
     this.updatePlayerCricket(data);
     this.oddsInfo = data;
   }

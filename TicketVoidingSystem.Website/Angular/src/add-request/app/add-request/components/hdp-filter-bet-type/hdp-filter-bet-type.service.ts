@@ -12,7 +12,7 @@ export class HdpFilterBetTypeService {
   ) { }
 
   async GetHdpFilterBetTypes(sportId: number, issueTypeId: string) {
-    const allFilterBetTypes = await this.commonService.GetHdpFilterBetTypes(sportId.toString(), Number(issueTypeId));
+    const allFilterBetTypes = await this.commonService.getHdpFilterBetTypes(sportId.toString(), Number(issueTypeId));
     this.initAllBetType(allFilterBetTypes);
 
     return allFilterBetTypes;
@@ -36,10 +36,11 @@ export class HdpFilterBetTypeService {
 
   loadDataEditPage(allFilterBetType: HdpFilterBetType[], filterBetType: FilterBetType){
     const betTypeSelected = allFilterBetType.find(x => x.betType === filterBetType.filterBetTypeId);
-    if(betTypeSelected.selections.length > 0){
+    betTypeSelected.isChecked = true;
+    if(betTypeSelected.selections?.length > 0){
       betTypeSelected.selections[0].value = filterBetType.filterBetIdX;
     }
-    if(betTypeSelected.selections.length > 1){
+    if(betTypeSelected.selections?.length > 1){
       betTypeSelected.selections[1].value = filterBetType.filterBetIdY;
     }
   }
