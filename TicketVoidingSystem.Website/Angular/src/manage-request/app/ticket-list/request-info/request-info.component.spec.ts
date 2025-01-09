@@ -4,43 +4,42 @@ import { RequestDetailViewModel } from '../../../../edit-request/app/request.mod
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { IssueInfo } from '../../../../utility/models/issue-type.model';
 import { AppService } from '../../app.service';
-import { TicketListModal } from '../ticket-list.modal';
+import { TabInfoRequest, TicketListModal } from '../ticket-list.modal';
 import { TicketsModel } from '../tickets/tickets.model';
 import { RequestInfoComponent } from './request-info.component';
 import { GeneralInfo, GeneralInfoViewModel } from './request-info.model';
 
-describe('RequestInfoComponent', () => {  
-  let fakeTicketListModal = {matchId: 1} as TicketListModal;
-  let fakeGeneralInfoViewModel = 
-    {generalInfoModel: {voidingHistoryIds: "2", singleTransIds: "1, 2", recoveredTimeString: ""} as GeneralInfo} as GeneralInfoViewModel;
-  let fakeModel = {request: {issueTypeId: 1}, abnormalBetModel: {filterBy: 1}, duplicateTicketsModel: {filterBy: 1}} as RequestDetailViewModel;
-  let fakeIssue = { name: 'Abnormal', subIssueTypeId: 27, issueTypeId: 11,
-    subIssueTypeName: 'Abnormal', subIssueTypeNameCS: '非正常' } as IssueInfo;
-  let config = new NgbAccordionConfig(null);
+describe('RequestInfoComponent', () => {
+  const fakeTicketListModal = { matchId: 1 } as TicketListModal;
+  const fakeGeneralInfoViewModel =
+    { generalInfoModel: { voidingHistoryIds: "2", singleTransIds: "1, 2", recoveredTimeString: "" } as GeneralInfo } as GeneralInfoViewModel;
+  const fakeModel = { request: { issueTypeId: 1 }, abnormalBetModel: { filterBy: 1 }, duplicateTicketsModel: { filterBy: 1 } } as RequestDetailViewModel;
+  const fakeIssue = {
+    name: 'Abnormal', subIssueTypeId: 27, issueTypeId: 11,
+    subIssueTypeName: 'Abnormal', subIssueTypeNameCS: '非正常'
+  } as IssueInfo;
+  const config = new NgbAccordionConfig(null);
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('#ngOnInit should setting data expected', async () => {
     // Arrange
-    let component = new RequestInfoComponent(null, null, config);
+    const component = new RequestInfoComponent(null, null, config);
     const fakeFunctionGetDataCurrentTab = jest.fn();
     component['getDataCurrentTab'] = fakeFunctionGetDataCurrentTab;
-    const dataTests = [{activeTab: "1"}, {activeTab: "0"}];
     component.ticketListModal = fakeTicketListModal;
-    
+    component.tabInfoRequest = [{ isActive: true, id: 1 }] as TabInfoRequest[];
+
     // Action and Assert
-    dataTests.forEach(async x => {
-      await component.ngOnInit();
-      expect(fakeFunctionGetDataCurrentTab).toBeCalled();
-      expect(component.paging.pageSize).toBe(500);
-      expect(component.activeTab).toBe(x.activeTab);
-    })
+    await component.ngOnInit();
+    expect(fakeFunctionGetDataCurrentTab).toBeCalled();
+    expect(component.paging.pageSize).toBe(500);
   });
 
   it('#ngOnChanges should call updateIssue when has change IssueInfo ', () => {
     // Arrange
-    let component = new RequestInfoComponent(null, null, config);
+    const component = new RequestInfoComponent(null, null, config);
     component.issue = fakeIssue;
     const changes = {
       'issue': new SimpleChange(new IssueInfo(), fakeIssue, true),
@@ -55,7 +54,7 @@ describe('RequestInfoComponent', () => {
 
   it('#ngOnChanges should not call updateIssue when has not change IssueInfo ', () => {
     // Arrange
-    let component = new RequestInfoComponent(null, null, config);
+    const component = new RequestInfoComponent(null, null, config);
     const fakeFunctionUpdateIssue = jest.fn();
     component.issue = fakeIssue;
     const changes = {
@@ -71,10 +70,10 @@ describe('RequestInfoComponent', () => {
 
   it('#getTickets should has getTickets', async () => {
     // Arrange
-    let appService = new AppService(null)
-    let tickets = {totalTicketsProcessed: 1} as TicketsModel;
+    const appService = new AppService(null)
+    const tickets = { totalTicketsProcessed: 1 } as TicketsModel;
     appService.getVoidedTickets = jest.fn().mockReturnValue(tickets);
-    let component = new RequestInfoComponent(appService, null, config);
+    const component = new RequestInfoComponent(appService, null, config);
     component.ticketListModal = fakeTicketListModal;
     component.generalInfoViewModel = fakeGeneralInfoViewModel;
     component.model = fakeModel;
@@ -90,7 +89,7 @@ describe('RequestInfoComponent', () => {
 
   it('#pagingEvent should call getTickets', async () => {
     // Arrange
-    let component = new RequestInfoComponent(null, null, config);
+    const component = new RequestInfoComponent(null, null, config);
     const fakeFunctionGetTickets = jest.fn();
     component.getTickets = fakeFunctionGetTickets;
     component.ticketListModal = fakeTicketListModal;
@@ -104,8 +103,8 @@ describe('RequestInfoComponent', () => {
 
   it('#isShowMatchInfo should return false', () => {
     // Arrange
-    let component = new RequestInfoComponent(null, null, config);
-    let dataTests = [13, 11, 17, 20, 22];
+    const component = new RequestInfoComponent(null, null, config);
+    const dataTests = [13, 11, 17, 20, 22];
     component.model = fakeModel;
 
     // Action & Assert
@@ -115,10 +114,10 @@ describe('RequestInfoComponent', () => {
       expect(actual).toBeFalsy();
     })
   });
-  
+
   it('#isShowMatchInfo should return true', () => {
     // Arrange
-    let component = new RequestInfoComponent(null, null, config);
+    const component = new RequestInfoComponent(null, null, config);
     component.issue.issueTypeId = 1;
     component.model = fakeModel;
 

@@ -5,6 +5,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import moment from 'moment-timezone';
 import { Shallow } from 'shallow-render';
 import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
+import { MultipleSelectionModule } from '../../../utility/components/multiple-selection/multiple-selection.module';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { ManageRequestStatus } from '../../../utility/constants/config';
 import { BalanceUp } from '../../../utility/models/balance-up.model';
@@ -119,7 +120,8 @@ describe('FilterComponent', () => {
         FormsModule,
         NgbModule,
         ToolTipModule,
-        NgSelectModule
+        NgSelectModule,
+        MultipleSelectionModule
       ],
       providers: [
         HttpService
@@ -322,7 +324,7 @@ describe('FilterComponent', () => {
     // Arrange
     const { instance } = await shallow.render();
     instance.filterByMatch = true;
-    instance.model = {matchId: 1, requestId: 1, issueTypeId: "1", productIds: "1,2"} as FilterModel;
+    instance.model = {matchId: 1, requestId: 1, issueTypeId: "1", productTypeIds: "1,2"} as FilterModel;
 
     // Action
     const actualResult = instance.validate();

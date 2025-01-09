@@ -726,6 +726,8 @@ describe('AppComponent', () => {
     .render();
     const getTicketsQuery = {invalidTransDate: false} as GetTicketsQuery;
     instance.ticketsModel = {groups: []} as TicketsModel;
+    instance.ticketsModel.getNumberOfCheckedTickets = jest.fn();
+    instance.ticketsModel.checkSettledTickets = jest.fn();
     instance.updateTemplateValue = jest.fn();
     instance.renderTickets = jest.fn();
     instance.searchEvent(getTicketsQuery);

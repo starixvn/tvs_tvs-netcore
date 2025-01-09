@@ -9,6 +9,7 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { FilterModel } from '../filter/filter.model';
 import { WrongMarketOfferedModel } from '../models/event-wrong-market-offered.model';
 import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered.component';
@@ -50,7 +51,8 @@ describe('EventWrongMarketOfferedComponent', () => {
       EventLeagueComponent,
       LogInfoWrongMarketOfferedComponent,
       AdvancedModeAddRequestComponent,
-      EventLeagueComponent
+      EventLeagueComponent,
+      ConfirmAddRequestComponent
     ],
     imports: [
       NgbModule,
