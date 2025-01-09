@@ -90,9 +90,12 @@ export class AbnormalAccountsComponent implements OnInit {
       this.accountAffectedTicketModel.adjustedAccounts = [];
     }
 
-    if (this.accountTableComponent && !this.accountTableComponent.isValid()) {
-      this.addRequestStore.changeBlockingUiStatus(false);
-      return;
+    if (this.accountTableComponent) {
+      this.accountTableComponent.isCancelRecalculateAmount = true;
+      if (!this.accountTableComponent.isValid()) {
+        this.addRequestStore.changeBlockingUiStatus(false);
+        return;
+      }
     }
 
     const validationOutput = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());

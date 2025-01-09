@@ -26,7 +26,6 @@ export class AccountTableComponent {
   @Input() accountWinlostModels: AccountWinlostModel[];
   @Input() permission: PermissionAddRequest;
   @Output() changeTable = new EventEmitter();
-  // @Output() openAccountAffectedTicketEvent = new EventEmitter<number>();
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;
   tooltip = new Tooltip();
   isCancelRecalculateAmount: boolean;

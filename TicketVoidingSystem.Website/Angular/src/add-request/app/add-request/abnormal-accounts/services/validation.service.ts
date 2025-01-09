@@ -16,18 +16,18 @@ export class ValidationService {
     private readonly addRequestApiService: AddRequestApiService
     ) { }
 
-  public isValidCommonData(productFilterComponent: ProductFilterComponent, eventDateFilterComponent: EventDateFilterComponent): boolean {
+  isValidCommonData(productFilterComponent: ProductFilterComponent, eventDateFilterComponent: EventDateFilterComponent): boolean {
     return productFilterComponent.isValidComponent() && eventDateFilterComponent.isValidEventDate();
   }
 
-  public async checkBusinessRule(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
+  async checkBusinessRule(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
     const result = await this.checkValidUsernames(args);
     args.primitiveProps.isShowAccountWinLost = true;
 
     return result;
   }
 
-  public async checkValidUsernames(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
+  async checkValidUsernames(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
     const usernames = args.usernamesComponent.groupUsername.getAllValue();
     try {
       args.primitiveProps.isShowError = false;
@@ -75,7 +75,6 @@ export class ValidationService {
       }
       return {
         isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames),
-        // confirmAbnormalAccountModel: this.getConfirmAbnormalBetModel(viewModel.validation),
         numberOfTicketsExistedInRequest: viewModel.validation.numberOfTickets,
         transInfoAddRequestModel: viewModel.transInfoAddRequestModel,
         accountWinlostModels: viewModel.accountWinlostModels
@@ -87,14 +86,7 @@ export class ValidationService {
     }
   }
 
-  // private getConfirmAbnormalBetModel(validation: ValidationAbnormalAccount): ConfirmAbnormalAccountModel {
-  //   const confirmModel = new ConfirmAbnormalAccountModel();
-  //   confirmModel.numberOfTicketsExistedInRequest = validation.numberOfTickets;
-
-  //   return confirmModel;
-  // }
-
-  public async getValidation(args: ValidationBusinessRuleArgs): Promise<CheckUsernamesViewModel> {
+  async getValidation(args: ValidationBusinessRuleArgs): Promise<CheckUsernamesViewModel> {
     const query: CheckValidUsernamesQuery = {
       usernames: args.abnormalAccountModel.usernames,
       requestId: args.requestId,
@@ -116,20 +108,7 @@ export class ValidationService {
     return usernamesComponent.checkValidItems();
   }
 
-  public isHasWarningEditTakeNoteRequest(isEdit: boolean, currentActionId: string, actionIdOfFirstTime: string) {
-    return isEdit && currentActionId === TVSRequestActionType.TAKE_NOTE_ID.toString() && currentActionId !== actionIdOfFirstTime;
-  }
-
-  public isEditingByAnotherUser(isEdit: boolean, editingBy: number, createdBy: number): boolean {
-    return isEdit && editingBy !== createdBy;
-  }
-
   public isAutoVoidWithPolicy(actionId: string): boolean {
     return actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
-  }
-
-  public isAutoVoidAction(actionId: string): boolean {
-    return actionId === TVSRequestActionType.AUTO_VOID_INSTANT_ID.toString()
-    || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
   }
 }

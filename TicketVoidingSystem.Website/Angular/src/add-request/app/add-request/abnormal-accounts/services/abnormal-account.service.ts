@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AddRequestApiService } from '../../add-request-api.service';
 import { ExtraWarningModel } from '../../confirm-add-request/confirm-add-request.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AbnormalAccountService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService
-  ) { }
-
-
   getExtraWarningModel(numberOfTicketsExistedInRequest: number) {
     if (numberOfTicketsExistedInRequest > 0) {
       return {
@@ -18,5 +12,7 @@ export class AbnormalAccountService {
         messages: []
       } as ExtraWarningModel;
     }
+
+    return null;
   }
 }
