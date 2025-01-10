@@ -75,7 +75,7 @@
             <td class="col-tb-4 text-right adjust-gv">
               <div class="adjust-string" *ngIf="!item.isShowInput || viewOnly" (mousedown)="mouseDownEventAdjustGV(item)">{{item.adjustVoidLimitString ?? showDecimalWithComma(item.adjustVoidLimit)}}</div>
               <div>
-                <input *ngIf="item.isShowInput" onmouseup="this.focus" class="form-control form-control-sm adjust-gv{{i}}" type="text" [(ngModel)]="item.adjustVoidLimit"
+                <input *ngIf="item.isShowInput" (mouseup)="adjustInputFocus($event)" class="form-control form-control-sm adjust-gv{{i}}" type="text" [(ngModel)]="item.adjustVoidLimit"
                 (ngModelChange)="onChangeAdjustGV(item, i)" [disabled]="filter.isVoided"
                 (blur)="reCalculate(item, i)"/>
               </div>

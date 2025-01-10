@@ -50,6 +50,7 @@ export class AccountTableComponent {
       return;
     }
 
+    account.isShowInput = false;
     await this.delayForEventFocus();
     this.addRequestStore.changeBlockingUiStatus(true);
     const viewModel = await this.validationService.getValidation(this.createValidationBusinessRuleArgs(account));
@@ -70,6 +71,10 @@ export class AccountTableComponent {
     if (this.accountWinlostModels?.length > 0) {
       await this.appService.exportAccount(this.accountWinlostModels);
     }
+  }
+
+  adjustInputFocus(event: MouseEvent): void {
+    (event.target as HTMLInputElement).focus();
   }
 
   sorting(isDesc: boolean, orderBy: string, componentId: number) {
@@ -114,8 +119,9 @@ export class AccountTableComponent {
   }
 
   mouseDownEventAdjustGV(account: AccountWinlostModel) {
+    this.isCancelRecalculateAmount = false;
     if (!this.filter.isVoided) {
-      account.isShowInput = !account.isShowInput;
+      account.isShowInput = true;
     }
   }
 
@@ -124,10 +130,6 @@ export class AccountTableComponent {
 
     });
   }
-
-  // openAccountAffectedTicket(custId: number) {
-  //   this.openAccountAffectedTicketEvent.emit(custId);
-  // }
 
   private async delayForEventFocus() {
     await new Promise(f => setTimeout(f, 100));
