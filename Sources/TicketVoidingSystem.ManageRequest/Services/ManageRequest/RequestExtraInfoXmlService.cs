@@ -80,6 +80,9 @@ public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
         model.ActualNameT = root.ActualNameT;
         model.WrongNameS = root.WrongNameS;
         model.ActualNameS = root.ActualNameS;
+        model.FilterBetIdX = root.FilterBetIdX;
+        model.FilterBetIdY = root.FilterBetIdY;
+        model.FilterBetTypeId = root.FilterBetTypeId;
     }
 
     private bool IsIssueTypesHaveExtraInfoJsonFormat(int issueTypeId)
