@@ -94,7 +94,8 @@ class Helper {
     status: '',
     isExcludeTest: true,
     createdBy: '',
-    isDisplayMissingInfo: false
+    isDisplayMissingInfo: false,
+    productTypeIds: ''
   } as FilterModel;
 }
 

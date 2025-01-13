@@ -22,6 +22,7 @@ public class MapTicketsServiceImp : MapTicketsService
                 RequestId = requestId,
                 TransId = long.Parse(x.TransId),
                 MatchId = x.MatchId ?? 0,
+                SiteDbGroupId = x.SiteDbGroupId,
                 IssueTypeId = issueTypeId,
                 VoidActionId = ActionVoidRequestConstant.ManualVoidId
             });

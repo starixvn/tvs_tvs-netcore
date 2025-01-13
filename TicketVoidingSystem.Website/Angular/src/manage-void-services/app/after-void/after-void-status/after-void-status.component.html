@@ -8,14 +8,6 @@
       </div>
     </div>
     <div class="col-sm-3">
-      <div class="d-flex">
-        <label class="col-form-label">IsRunExternalService</label>
-        <select [(ngModel)]="tmpModel.isRunExternalService">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
-    </div>
-    <div class="col-sm-3">
       <div class="d-flex" [ngClass]="{'blur-content' : isRecoverTicket}">
         <label class="col-form-label">MessageId</label>
         <input type="text" maxlength="150" class="input-control form-control form-control-sm"
@@ -96,6 +88,14 @@
       <div class="d-flex">
         <label class="col-form-label">IsSentEmail</label>
         <select [(ngModel)]="tmpModel.isSentEmail">
+          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">JackTimeCashOutApi</label>
+        <select [(ngModel)]="tmpModel.isRunExternalService">
           <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
         </select>
       </div>

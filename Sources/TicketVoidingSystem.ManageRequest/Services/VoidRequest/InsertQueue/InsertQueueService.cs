@@ -25,20 +25,15 @@ public class InsertQueueServiceImp(
 {
     public async Task InsertTicketVoidingQueue(InsertQueueQuery query)
     {
-        var siteGroupInCurrentSessionVoid = query.SingleTickets
-            .Union(query.ParlayTickets)
-            .Union(query.CancelCashOutTickets)
-            .Union(query.CricketTickets)
-            .Select(x => x.SiteDbGroupId).Distinct();
-
+        var ticketsInsertQueue = await validationTicketsService.RecheckTicketsStatus(query);
+        var siteGroupInCurrentSessionVoid = ticketsInsertQueue.Select(x => x.SiteDbGroupId).Distinct();
         var broadcastSessionId = Guid.NewGuid().ToString();
         foreach (var siteDbGroupId in siteGroupInCurrentSessionVoid)
         {
-            var validationTickets = await validationTicketsService.RecheckTicketsStatus(query, siteDbGroupId);
-            var mergeTicketsForInsertQueue = mapTicketsService.SetVoidingTypeForTickets(validationTickets);
-            var transIds = GetTransIdsInsertVoidingHistory(query.IssueTypeId, mergeTicketsForInsertQueue);
+            var ticketsInsertQueueInCurrentServer = ticketsInsertQueue.Where(x => x.SiteDbGroupId == siteDbGroupId);
+            var transIds = GetTransIdsInsertVoidingHistory(query.IssueTypeId, ticketsInsertQueueInCurrentServer);
             var voidingHistoryId = await insertVoidingHistoryService.InsertVoidingHistory(query, siteDbGroupId, broadcastSessionId, transIds);
-            await InsertQueueBySiteDb(siteDbGroupId, voidingHistoryId, query.RequestId, mergeTicketsForInsertQueue);
+            await InsertQueueBySiteDb(siteDbGroupId, voidingHistoryId, query.RequestId, ticketsInsertQueueInCurrentServer);
         }
     }
 

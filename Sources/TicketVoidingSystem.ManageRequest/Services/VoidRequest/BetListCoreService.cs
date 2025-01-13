@@ -94,12 +94,14 @@ public class BetListCoreServiceImp(IMapper mapper, BetListService betListService
 
     private string BuildChoiceParlay(ITicket ticket, TicketHelper ticketHelper, GetTicketModel item, int issueTypeId, string mainChoice)
     {
-        if (!issueTypeId.IsIssueTypeVoidMainParlay())
+        if (issueTypeId.IsIssueTypeVoidMainParlay())
         {
-            SetValueSubTicket(ticket, item);
-            var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
-            mainChoice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
+            return mainChoice + $"<div id='divEvent_{item.SubTransId}'></div>";
         }
+
+        SetValueSubTicket(ticket, item);
+        var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        mainChoice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
 
         return mainChoice + $"<div id='divEvent_{item.SubTransId}'></div>";
     }

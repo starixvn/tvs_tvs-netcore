@@ -25,16 +25,17 @@ public class RecordService(
 {
     public MailRecord Create(MailRecoverModel<MailTicketViewModel, RecoverTicketModel> model, EmailGroup group)
     {
-        if (model.Valid())
+        if (!model.Valid())
         {
-            model.ViewModel.NegativeBalanceUsers = model.GetNegativeBalanceUsers(group, t => t.UserName);
-            model.ViewModel.Groups = GenerateGroups(model.Tickets);
-            var mailSubject = subjectService.CreateRecover(model, group, RecoverType.Default);
-            var mailRecord = templateEmailService.CreateForRecover(model, mailSubject);
-            return mailRecord.MailRecord;
+            return new MailRecord();
         }
 
-        return new MailRecord();
+        model.ViewModel.NegativeBalanceUsers = model.GetNegativeBalanceUsers(group, t => t.UserName);
+        model.ViewModel.Groups = GenerateGroups(model.Tickets);
+        var mailSubject = subjectService.CreateRecover(model, group, RecoverType.Default);
+        var mailRecord = templateEmailService.CreateForRecover(model, mailSubject);
+        return mailRecord.MailRecord;
+
     }
 
     private List<Group<MailTicketViewModel>> GenerateGroups(IEnumerable<RecoverTicketModel> tickets)

@@ -33,18 +33,20 @@ public class SheetServiceImp(
 
     public void AddMatch(ExcelWorksheet worksheet, Match? match)
     {
-        if (match != null)
+        if (match == null)
         {
-            const int matchCodeCol = 1;
-            const int row = 5;
-            const int matchEventCol = 2;
-            const int eventTimeCol = 4;
-
-            var eventTime = match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
-            worksheet.Cells[row, matchCodeCol].Value = match.MatchCode;
-            worksheet.Cells[row, matchEventCol].Value = match.MatchEvent;
-            worksheet.Cells[row, eventTimeCol].Value = eventTime;
+            return;
         }
+
+        const int matchCodeCol = 1;
+        const int row = 5;
+        const int matchEventCol = 2;
+        const int eventTimeCol = 4;
+
+        var eventTime = match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
+        worksheet.Cells[row, matchCodeCol].Value = match.MatchCode;
+        worksheet.Cells[row, matchEventCol].Value = match.MatchEvent;
+        worksheet.Cells[row, eventTimeCol].Value = eventTime;
     }
 
     public async Task<IEnumerable<ExcelTicketModel>> GetTickets(GetTicketsQuery query)

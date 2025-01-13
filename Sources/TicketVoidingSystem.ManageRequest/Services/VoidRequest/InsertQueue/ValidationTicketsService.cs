@@ -8,23 +8,37 @@ namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
 
 public interface ValidationTicketsService
 {
-    Task<CheckTicketValidationOutput> RecheckTicketsStatus(InsertQueueQuery query, int siteDbGroupId);
+    Task<IEnumerable<RequestDetailTicketModel>> RecheckTicketsStatus(InsertQueueQuery query);
 }
 
 public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicketsService mapTicketsService)
     : ValidationTicketsService
 {
-    public async Task<CheckTicketValidationOutput> RecheckTicketsStatus(InsertQueueQuery query, int siteDbGroupId)
+    public async Task<IEnumerable<RequestDetailTicketModel>> RecheckTicketsStatus(InsertQueueQuery query)
     {
         if (IsIssueTypeNeedToRecheckValidationTickets(query.IssueTypeId))
         {
-            return await ReCheckTicketsStatus(CreateTicketTypeModelByQuery(query, siteDbGroupId), siteDbGroupId);
+            return await ReCheckTicketsStatus(query);
         }
 
-        return CreateTicketTypeModelByQuery(query, siteDbGroupId);
+        return CreateTicketTypeModelByQuery(query);
     }
 
-    private CheckTicketValidationOutput CreateTicketTypeModelByQuery(InsertQueueQuery query, int siteDbGroupId)
+    private IEnumerable<RequestDetailTicketModel> CreateTicketTypeModelByQuery(InsertQueueQuery query)
+    {
+        var validationTickets = new CheckTicketValidationOutput
+        {
+            VoidSingleTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.SingleTickets, query.RequestId, query.IssueTypeId),
+            VoidParlayTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.ParlayTickets, query.RequestId, query.IssueTypeId),
+            VoidCricketTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.CricketTickets, query.RequestId, query.IssueTypeId),
+            CancelCOTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.CancelCashOutTickets, query.RequestId, query.IssueTypeId)
+        };
+        var ticketsInsertQueue = mapTicketsService.SetVoidingTypeForTickets(validationTickets);
+
+        return ticketsInsertQueue;
+    }
+
+    private CheckTicketValidationOutput CreateTicketTypeModelByServer(InsertQueueQuery query, int siteDbGroupId)
     {
         return new CheckTicketValidationOutput
         {
@@ -35,18 +49,9 @@ public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicke
         };
     }
 
-    private async Task<CheckTicketValidationOutput> ReCheckTicketsStatus(CheckTicketValidationOutput inputTickets, int siteDbGroupId)  // NOSONAR
+    private async Task<IEnumerable<RequestDetailTicketModel>> ReCheckTicketsStatus(InsertQueueQuery query)  // NOSONAR
     {
-        var criteria = new CheckTicketsAllowToVoidCriteria
-        {
-            SiteDbGroupId = siteDbGroupId,
-            SingleTicketsJson = JsonSerializer.Serialize(inputTickets.VoidSingleTickets),
-            ParlayTicketsJson = JsonSerializer.Serialize(inputTickets.VoidParlayTickets),
-            CricketTicketsJson = JsonSerializer.Serialize(inputTickets.VoidCricketTickets),
-            CancelCashOutTicketsJson = JsonSerializer.Serialize(inputTickets.CancelCOTickets)
-        };
-
-        var results = (await repository.FetchAsync<RequestDetailTicketModel>(criteria)).ToList();
+        var results = (await ReCheckTicketsStatusByServer(query)).ToList();
         var voidSingleTickets = results.Where(x => x.ValidationType == 1);
         var voidParlayTickets = results.Where(x => x.ValidationType == 3);
         var voidCricketTickets = results.Where(x => x.ValidationType == 5);
@@ -54,7 +59,7 @@ public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicke
         var voidSingleTickets14 = results.Where(x => x.ValidationType == 8);
         var voidParlayTickets14 = results.Where(x => x.ValidationType == 9);
 
-        return new CheckTicketValidationOutput
+        var validationTickets = new CheckTicketValidationOutput
         {
             VoidSingleTickets = voidSingleTickets,
             VoidParlayTickets = voidParlayTickets,
@@ -63,6 +68,38 @@ public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicke
             VoidSingleTickets14 = voidSingleTickets14,
             VoidParlayTickets14 = voidParlayTickets14
         };
+
+        var ticketsInsertQueue = mapTicketsService.SetVoidingTypeForTickets(validationTickets);
+
+        return ticketsInsertQueue;
+    }
+
+    private async Task<IEnumerable<RequestDetailTicketModel>> ReCheckTicketsStatusByServer(InsertQueueQuery query)  // NOSONAR
+    {
+        var siteGroupInCurrentSessionVoid = query.SingleTickets
+            .Union(query.ParlayTickets)
+            .Union(query.CancelCashOutTickets)
+            .Union(query.CricketTickets)
+            .Select(x => x.SiteDbGroupId).Distinct();
+
+        var tasks = siteGroupInCurrentSessionVoid.Select(serverId =>
+        {
+            var ticketsInCurrentServer = CreateTicketTypeModelByServer(query, serverId);
+            var criteria = new CheckTicketsAllowToVoidCriteria
+            {
+                SiteDbGroupId = serverId,
+                SingleTicketsJson = JsonSerializer.Serialize(ticketsInCurrentServer.VoidSingleTickets),
+                ParlayTicketsJson = JsonSerializer.Serialize(ticketsInCurrentServer.VoidParlayTickets),
+                CricketTicketsJson = JsonSerializer.Serialize(ticketsInCurrentServer.VoidCricketTickets),
+                CancelCashOutTicketsJson = JsonSerializer.Serialize(ticketsInCurrentServer.CancelCOTickets)
+            };
+
+            return repository.FetchAsync<RequestDetailTicketModel>(criteria);
+        });
+
+        var results = await Task.WhenAll(tasks);
+
+        return results.SelectMany(x => x);
     }
 
     private static bool IsIssueTypeNeedToRecheckValidationTickets(int issueTypeId)

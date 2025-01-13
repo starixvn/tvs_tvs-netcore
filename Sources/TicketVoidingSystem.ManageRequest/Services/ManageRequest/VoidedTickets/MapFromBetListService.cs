@@ -4,7 +4,6 @@ using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.Extensions.TN;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.ViewModels;
@@ -112,12 +111,14 @@ public class MapFromBetListServiceImp(IMapper mapper, BetListService betListServ
 
     private string GetChoiceForTicketParlay(ITicket ticket, TicketHelper ticketHelper, VoidedTicketModel item, int issueTypeId, string mainChoice)
     {
-        if (!issueTypeId.IsIssueTypeVoidMainParlay())
+        if (issueTypeId.IsIssueTypeVoidMainParlay())
         {
-            SetValueSubTicket(ticket, item);
-            var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
-            mainChoice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
+            return mainChoice + $"<div id='divEvent_{item.SubTransId}'></div>";
         }
+
+        SetValueSubTicket(ticket, item);
+        var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        mainChoice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
 
         return mainChoice + $"<div id='divEvent_{item.SubTransId}'></div>";
     }

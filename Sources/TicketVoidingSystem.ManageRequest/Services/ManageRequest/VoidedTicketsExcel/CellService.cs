@@ -23,20 +23,22 @@ public class CellServiceImp : CellService
 {
     public void AddMatch(ExcelWorksheet worksheet, Match? match)
     {
-        if (match != null)
+        if (match == null)
         {
-            const int matchRow = 5;
-            const int matchCodeColumn = 1;
-            const int leagueNameColumn = 2;
-            const int eventTimeColumn = 4;
-            const int matchEventColumn = 3;
-
-            var eventTime = match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
-            worksheet.Cells[matchRow, matchCodeColumn].Value = match.MatchCode;
-            worksheet.Cells[matchRow, leagueNameColumn].Value = match.LeagueName;
-            worksheet.Cells[matchRow, eventTimeColumn].Value = eventTime;
-            worksheet.Cells[matchRow, matchEventColumn].Value = match.MatchEvent;
+            return;
         }
+
+        const int matchRow = 5;
+        const int matchCodeColumn = 1;
+        const int leagueNameColumn = 2;
+        const int eventTimeColumn = 4;
+        const int matchEventColumn = 3;
+
+        var eventTime = match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
+        worksheet.Cells[matchRow, matchCodeColumn].Value = match.MatchCode;
+        worksheet.Cells[matchRow, leagueNameColumn].Value = match.LeagueName;
+        worksheet.Cells[matchRow, eventTimeColumn].Value = eventTime;
+        worksheet.Cells[matchRow, matchEventColumn].Value = match.MatchEvent;
     }
 
     public string CreateTitle(int matchId, int issueTypeId)

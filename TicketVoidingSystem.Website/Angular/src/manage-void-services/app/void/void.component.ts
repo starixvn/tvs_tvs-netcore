@@ -6,7 +6,7 @@ import { SiteDbGroupConstant } from '../../../utility/constants/config';
 import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
 import { ServiceStatusConstant } from '../app.model';
-import { FailedVoidingQueueViewModel, TicketVoidingQueueModel, TicketVoidingQueueViewModel, UpdateTicketVoidingQueueModel } from './void.model';
+import { TicketVoidingQueueModel, TicketVoidingQueueViewModel, UpdateTicketVoidingQueueModel } from './void.model';
 
 @Component({
   selector: 'void',
@@ -19,7 +19,6 @@ export class VoidComponent implements OnInit {
   isBlock: boolean;
   voidingQueuesOrigin: TicketVoidingQueueModel[] = [];
   voidingQueuesViewModel: TicketVoidingQueueViewModel[] = [];
-  failedVoidingQueues: FailedVoidingQueueViewModel[] = [];
   tooltip = new Tooltip();
 
   constructor(private readonly element: ElementRef,
@@ -39,7 +38,6 @@ export class VoidComponent implements OnInit {
     this.isBlock = true;
     this.voidingQueuesOrigin = await this.appApiService.getTicketVoidingQueue(this.inputVoidingHistoryId);
     this.voidingQueuesViewModel = this.convertToTicketVoidingQueueViewModel(this.voidingQueuesOrigin);
-    this.failedVoidingQueues = this.getFailedVoidingQueues(this.voidingQueuesOrigin);
     this.isBlock = false;
   }
 
@@ -118,27 +116,9 @@ export class VoidComponent implements OnInit {
     return results;
   }
 
-  private getFailedVoidingQueues(queues: TicketVoidingQueueModel[]): FailedVoidingQueueViewModel[] {
-    const results: FailedVoidingQueueViewModel[] = [];
-    for (const server of SiteDbGroupConstant.ServerList) {
-      const failedQueues = queues.filter(x => x.siteDbGroupId === server.id && x.statusId === ServiceStatusConstant.Failed)
-        .map(x => x.queueId);
-      if (failedQueues.length > 0) {
-        results.push({
-          siteDbName: server.serverName,
-          siteDbGroupId: server.id,
-          queueIds: failedQueues.join(',')
-        });
-      }
-    }
-
-    return results;
-  }
-
   private resetOldResult(): void {
     this.voidingQueuesOrigin = [];
     this.voidingQueuesViewModel = [];
-    this.failedVoidingQueues = [];
   }
 
   private isValidSearchQuery(): boolean {

@@ -9,6 +9,7 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { FilterModel } from '../filter/filter.model';
 import { TechnicalErrorModel } from '../models/event-technical-error.model';
 import { EventTechnicalErrorComponent } from './event-technical-error.component';
@@ -53,7 +54,8 @@ describe('EventTechnicalErrorComponent', () => {
       EventLeagueComponent,
       LogInfoTechnicalErrorComponent,
       AdvancedModeAddRequestComponent,
-      EventLeagueComponent
+      EventLeagueComponent,
+      ConfirmAddRequestComponent
     ],
     imports: [
       NgbModule,

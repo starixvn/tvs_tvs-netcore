@@ -3,6 +3,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ManageRequestStatus } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
@@ -13,7 +14,6 @@ import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { FilterModel } from './filter.model';
-import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { FilterService } from './filter.service';
 
 @Component({
@@ -127,7 +127,7 @@ export class FilterComponent implements OnInit {
     if (previousSelectedProducts) {
       this.products.updateChildItemsChecked(previousSelectedProducts.split(','));
     }
-    this.model.productIds = this.products?.getValueItems();
+    this.model.productTypeIds = this.products?.getValueItems();
   }
 
   newRequest() {
@@ -149,7 +149,7 @@ export class FilterComponent implements OnInit {
         ,this.model.issueTypeId);
       localStorage.setItem(
         LocalStorageCacheConstant.PREVIOUS_SELECTED_PRODUCT_MANAGE_REQUEST + this.userId
-        ,this.model.productIds);
+        ,this.model.productTypeIds);
       this.model.subIssueType = this.multipleSelectSubTypeModel.join(',');
       this.search.emit();
       this.markedTicketsCount = await this.commonService.getMarkedTicketsCount();
@@ -177,7 +177,7 @@ export class FilterComponent implements OnInit {
       return false;
     }
 
-    if (!this.model.productIds) {
+    if (!this.model.productTypeIds) {
       this.tooltip.display('product-dropdown', TEXT.REQUIRED_FIELD);
       return false;
     }
@@ -268,6 +268,6 @@ export class FilterComponent implements OnInit {
   }
 
   updateSelectedProduct(selectedItems: string[]): void {
-    this.model.productIds = selectedItems.join(',');
+    this.model.productTypeIds = selectedItems.join(',');
   }
 }

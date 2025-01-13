@@ -52,13 +52,13 @@ public class TemplateEmailServiceImp : TemplateEmailService
 
     private static string GetEmailBody<T>(string path, T model)
     {
-        var fullPath = Helper.GetFilePath(path);
-        var template = File.ReadAllText(fullPath);
-
-        var hashCode = template.GetHashCode();
+        var hashCode = path.GetHashCode();
         var compiledTemplate = CompiledTemplateCache.GetOrAdd(hashCode, _ =>
         {
+            var fullPath = Helper.GetFilePath(path);
+            var template = File.ReadAllText(fullPath);
             var razorEngine = new RazorEngine();
+
             return razorEngine.Compile(template);
         });
 

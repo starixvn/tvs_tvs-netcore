@@ -30,23 +30,24 @@ public class VoidEmailContentServiceImp(
 {
     public async Task<MailRecord> Create(MailVoidViewModel mailVoidViewModel, SiteEmail site, IEnumerable<TicketEmailModel> tickets, EmailGroup group, bool isFromAfterVoidService)
     {
-        if (tickets.Valid(site))
+        if (!tickets.Valid(site))
         {
-            var transformGroupTickets = await AssignGroupTickets(mailVoidViewModel, tickets, isFromAfterVoidService);
-            var voidType = IsAbnormalBet(mailVoidViewModel.IssueTypeId)
-                           || IsAbnormalAccount(mailVoidViewModel.IssueTypeId)
-                           || mailVoidViewModel.IsFilterByUserName
-                ? VoidType.Abnormal : VoidType.None;
-            var subject = subjectService.CreateVoid(mailVoidViewModel, tickets.Select(x => x.Site), site, group, voidType);
-            var mailVoidModelClone = MessagePackCloner.Clone(mailVoidViewModel);
-            mailVoidModelClone.NegativeBalanceUsers = tickets.GetNegativeBalanceUsers(group, t => t.UserName, mailVoidViewModel.NegativeBalanceUsers);
-            mailVoidModelClone.GroupTickets = transformGroupTickets;
-            var mailRecord = templateEmailService.Create(mailVoidModelClone, site, subject);
-
-            return mailRecord.MailRecord;
+            return new MailRecord();
         }
 
-        return new MailRecord();
+        var transformGroupTickets = await AssignGroupTickets(mailVoidViewModel, tickets, isFromAfterVoidService);
+        var voidType = IsAbnormalBet(mailVoidViewModel.IssueTypeId)
+                       || IsAbnormalAccount(mailVoidViewModel.IssueTypeId)
+                       || mailVoidViewModel.IsFilterByUserName
+            ? VoidType.Abnormal : VoidType.None;
+        var subject = subjectService.CreateVoid(mailVoidViewModel, tickets.Select(x => x.Site), site, group, voidType);
+        var mailVoidModelClone = MessagePackCloner.Clone(mailVoidViewModel);
+        mailVoidModelClone.NegativeBalanceUsers = tickets.GetNegativeBalanceUsers(group, t => t.UserName, mailVoidViewModel.NegativeBalanceUsers);
+        mailVoidModelClone.GroupTickets = transformGroupTickets;
+        var mailRecord = templateEmailService.Create(mailVoidModelClone, site, subject);
+
+        return mailRecord.MailRecord;
+
     }
 
     private async Task<IList<Group<TicketEmailViewModel>>> AssignGroupTickets(MailVoidViewModel mailVoidViewModel, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)

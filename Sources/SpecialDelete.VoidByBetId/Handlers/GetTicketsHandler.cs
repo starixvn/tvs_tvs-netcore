@@ -81,12 +81,14 @@ public class GetTicketsHandler(
 
     private static void UpdateTimeViewModel(TicketsViewModel viewModel, IEnumerable<GetTicketModel> tickets)
     {
-        if (tickets.Any())
+        if (!tickets.Any())
         {
-            viewModel.FromTime = tickets.Min(item => item.TransDate).ZoneManila().ToString("hh:mm:ss tt");
-            viewModel.ToTime = tickets.Max(item => item.TransDate).ZoneManila().ToString("hh:mm:ss tt");
-            viewModel.FromDate = tickets.Min(item => item.WinLostDate).ZoneManila().ToString("MM/dd/yyyy");
-            viewModel.ToDate = tickets.Max(item => item.WinLostDate).ZoneManila().ToString("MM/dd/yyyy");
+            return;
         }
+
+        viewModel.FromTime = tickets.Min(item => item.TransDate).ZoneManila().ToString("hh:mm:ss tt");
+        viewModel.ToTime = tickets.Max(item => item.TransDate).ZoneManila().ToString("hh:mm:ss tt");
+        viewModel.FromDate = tickets.Min(item => item.WinLostDate).ZoneManila().ToString("MM/dd/yyyy");
+        viewModel.ToDate = tickets.Max(item => item.WinLostDate).ZoneManila().ToString("MM/dd/yyyy");
     }
 }

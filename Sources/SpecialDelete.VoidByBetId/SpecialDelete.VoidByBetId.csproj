@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <SonarQubeExclude>true</SonarQubeExclude>
@@ -14,18 +13,14 @@
     <EmbeddedResource Remove="Services\Validation\**" />
     <None Remove="Services\Validation\**" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Controllers\" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Epplus.Mapper" Version="7.5.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\TicketVoidingSystem\TicketVoidingSystem.csproj" />
   </ItemGroup>
-
 </Project>

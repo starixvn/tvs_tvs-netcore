@@ -11,5 +11,5 @@ export class FilterModel {
   createdBy: string;
   isExcludeTest = true;
   isDisplayMissingInfo = false;
-  productIds: string;
+  productTypeIds: string;
 }

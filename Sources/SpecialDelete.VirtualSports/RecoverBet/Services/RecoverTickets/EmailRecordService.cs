@@ -30,19 +30,20 @@ public class EmailRecordServiceImp(
 {
     public MailRecord Create(MailRecoverModel<MailTicketViewModel, RecoverTicketModel> model, EmailGroup group, Recover typeOfRecover)
     {
-        if (model.Valid())
+        if (!model.Valid())
         {
-            var usersInSite = model.Tickets.Select(u => u.UserName).ToList();
-            var negativeBalanceUsers = model.ViewModel.NegativeBalanceUsers;
-            var negativeBalanceUsersInSite = negativeBalanceUsers.Intersected(usersInSite);
-            model.ViewModel.Groups = CreateGroups(model.Tickets, typeOfRecover);
-            model.ViewModel.NegativeBalanceUsers = negativeBalanceUsersInSite;
-            var subject = subjectService.CreateRecover(model, group, RecoverType.VirtualSports);
-            var mailRecord = templateEmailService.CreateForRecover(model, subject);
-            return mailRecord.MailRecord;
+            return new MailRecord();
         }
 
-        return new MailRecord();
+        var usersInSite = model.Tickets.Select(u => u.UserName).ToList();
+        var negativeBalanceUsers = model.ViewModel.NegativeBalanceUsers;
+        var negativeBalanceUsersInSite = negativeBalanceUsers.Intersected(usersInSite);
+        model.ViewModel.Groups = CreateGroups(model.Tickets, typeOfRecover);
+        model.ViewModel.NegativeBalanceUsers = negativeBalanceUsersInSite;
+        var subject = subjectService.CreateRecover(model, group, RecoverType.VirtualSports);
+        var mailRecord = templateEmailService.CreateForRecover(model, subject);
+        return mailRecord.MailRecord;
+
     }
 
     private List<Group<MailTicketViewModel>> CreateGroups(IEnumerable<RecoverTicketModel> tickets, Recover typeOfRecover)

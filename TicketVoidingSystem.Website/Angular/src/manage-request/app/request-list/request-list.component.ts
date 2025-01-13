@@ -224,7 +224,7 @@ export class RequestListComponent implements OnInit, OnChanges {
     return StaticService.isVoidAction(actionId);
   }
 
-  requestListTrackByFn(item: RequestModel) {
+  requestListTrackByFn(__: number, item: RequestModel) {
     return item.requestId;
   }
 

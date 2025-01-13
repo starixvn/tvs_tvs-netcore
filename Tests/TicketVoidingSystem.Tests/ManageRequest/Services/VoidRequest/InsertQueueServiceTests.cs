@@ -52,14 +52,13 @@ public class InsertQueueServiceTests
             CricketTickets = new List<BetId> { betId1 },
             IssueTypeId = issueTypeId
         };
-        var mergeTicketsForInsertQueue = new List<RequestDetailTicketModel>();
+        var ticketsInsertQueue = new List<RequestDetailTicketModel> { new() };
+        validationTicketsService.RecheckTicketsStatus(default).ReturnsForAnyArgs(ticketsInsertQueue);
         insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>(), Arg.Any<string>())
             .ReturnsForAnyArgs(1);
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
         repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
-        mapTicketsService.SetVoidingTypeForTickets(Arg.Any<CheckTicketValidationOutput>()).ReturnsForAnyArgs(mergeTicketsForInsertQueue);
-        validationTicketsService.RecheckTicketsStatus(query, default).ReturnsForAnyArgs(new CheckTicketValidationOutput());
 
         // Act
         await service.InsertTicketVoidingQueue(query);
@@ -84,7 +83,8 @@ public class InsertQueueServiceTests
             IssueTypeId = IssueTypeConstant.Wrong1stHDP,
             RequestId = 1
         };
-
+        var ticketsInsertQueue = new List<RequestDetailTicketModel> { new() };
+        validationTicketsService.RecheckTicketsStatus(default).ReturnsForAnyArgs(ticketsInsertQueue);
         insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(1);
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
@@ -112,7 +112,8 @@ public class InsertQueueServiceTests
             IssueTypeId = IssueTypeConstant.Wrong1stHDP,
             RequestId = 1
         };
-
+        var ticketsInsertQueue = new List<RequestDetailTicketModel> { new() };
+        validationTicketsService.RecheckTicketsStatus(default).ReturnsForAnyArgs(ticketsInsertQueue);
         insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(1);
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);

@@ -70,11 +70,13 @@ public class MapTicketServiceImp(IMapper mapper, BetListService betListService, 
         ticket.MainTransId = item.MainTransId.ToString();
         ticket.IsCricket = item.IsCricket;
         ticket.SiteDbGroupId = item.SiteDbGroupId;
-        if (IsGroupSite789Y(permission, item.GroupName))
+        if (!IsGroupSite789Y(permission, item.GroupName))
         {
-            ticket.Member = "-";
-            ticket.Currency = "-";
+            return ticket;
         }
+
+        ticket.Member = "-";
+        ticket.Currency = "-";
 
         return ticket;
     }
@@ -83,11 +85,13 @@ public class MapTicketServiceImp(IMapper mapper, BetListService betListService, 
     {
         var ticket = MapFromBetListToTicketViewModel(item);
         ticket.SiteDbGroupId = item.SiteDbGroupId;
-        if (IsGroupSite789Y(permission, item.GroupName))
+        if (!IsGroupSite789Y(permission, item.GroupName))
         {
-            ticket.Member = "-";
-            ticket.Currency = "-";
+            return ticket;
         }
+
+        ticket.Member = "-";
+        ticket.Currency = "-";
 
         return ticket;
     }

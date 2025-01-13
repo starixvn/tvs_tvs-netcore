@@ -17,21 +17,33 @@ public class MarkTicketsWhenAddEditServiceImp(MarkTicketsService markTicketsServ
         var combineResults = new List<Result>();
         var markedTickets = new List<long>();
 
-        if (!issueTypeId.IsArchivedTicket())
+        if (issueTypeId.IsArchivedTicket())
         {
-            if (!string.IsNullOrWhiteSpace(markTransIds))
+            return new MarkTicketsResult
             {
-                var markResults = await ExecuteMarkTickets(issueTypeId, markTransIds);
-                combineResults.AddRange(markResults.MarkedResults);
-                markedTickets.AddRange(markResults.MarkedTickets);
-            }
-
-            if (!string.IsNullOrWhiteSpace(unMarkTransIds))
-            {
-                var unmarkResults = await ExecuteUnMarkTickets(issueTypeId, unMarkTransIds);
-                combineResults.AddRange(unmarkResults.MarkedResults);
-            }
+                MarkedResults = combineResults,
+                MarkedTickets = markedTickets
+            };
         }
+
+        if (!string.IsNullOrWhiteSpace(markTransIds))
+        {
+            var markResults = await ExecuteMarkTickets(issueTypeId, markTransIds);
+            combineResults.AddRange(markResults.MarkedResults);
+            markedTickets.AddRange(markResults.MarkedTickets);
+        }
+
+        if (string.IsNullOrWhiteSpace(unMarkTransIds))
+        {
+            return new MarkTicketsResult
+            {
+                MarkedResults = combineResults,
+                MarkedTickets = markedTickets
+            };
+        }
+
+        var unmarkResults = await ExecuteUnMarkTickets(issueTypeId, unMarkTransIds);
+        combineResults.AddRange(unmarkResults.MarkedResults);
 
         return new MarkTicketsResult
         {

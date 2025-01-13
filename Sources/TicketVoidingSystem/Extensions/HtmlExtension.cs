@@ -97,26 +97,26 @@ public static class HtmlExtension
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        if (html.Contains(HtmlClass.RebateBonus))
+        if (!html.Contains(HtmlClass.RebateBonus))
         {
-            var extend = doc.DocumentNode.SelectNodes("//*[@class='rebate-bonus']")[0];
-            return "(" + extend.InnerText + ")";
+            return null;
         }
 
-        return null;
+        var extend = doc.DocumentNode.SelectNodes("//*[@class='rebate-bonus']")[0];
+        return "(" + extend.InnerText + ")";
     }
 
     private static string NPHPromotion(this string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        if (html.Contains(HtmlClass.NphPromotion))
+        if (!html.Contains(HtmlClass.NphPromotion))
         {
-            var extend = doc.DocumentNode.SelectNodes("//*[@class='nph-promotion']")[0];
-            return "(" + extend.InnerText + ")";
+            return null;
         }
 
-        return null;
+        var extend = doc.DocumentNode.SelectNodes("//*[@class='nph-promotion']")[0];
+        return "(" + extend.InnerText + ")";
     }
 
     public static string LineBreak(this string html)
@@ -130,9 +130,9 @@ public static class HtmlExtension
         return DefaultText(temp);
     }
 
-    private static string StripHtml(this string htmlText)
+    public static string StripHtml(this string htmlText)
     {
-        var reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
+        var reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(200));
         var stripped = reg.Replace(htmlText, string.Empty);
         return HttpUtility.HtmlDecode(stripped);
     }
@@ -144,24 +144,17 @@ public static class HtmlExtension
             return string.Empty;
         }
 
-        string handicap;
         var node = doc.DocumentNode.SelectNodes("//span")[0];
-
-        if (html.Contains(HtmlClass.ExcludingChoices))
+        return html switch
         {
-            handicap = node.ChildNodes[0].InnerText + node.ChildNodes[1].InnerText;
-            var secondLine = doc.DocumentNode.SelectNodes("//div[@class='excluding-choices']")[0].InnerText;
-            return handicap.AppendWithNewLine(secondLine).StripHtml();
-        }
+            _ when html.Contains(HtmlClass.ExcludingChoices) =>
+                HandleExcludingChoices(node, doc),
 
-        if (html.Contains(HtmlClass.CashOutFromNo))
-        {
-            handicap = node.ChildNodes[0].InnerText;
-            var secondLine = node.ChildNodes[1].InnerText + node.ChildNodes[2].InnerText;
-            return handicap.AppendWithNewLine(secondLine);
-        }
+            _ when html.Contains(HtmlClass.CashOutFromNo) =>
+                HandleCashOutFromNo(node),
 
-        return node.InnerText.StripHtml();
+            _ => node.InnerText.StripHtml()
+        };
     }
 
     public static string ChoiceParlay(string html)
@@ -293,5 +286,21 @@ public static class HtmlExtension
         }
 
         return result;
+    }
+
+    private static string HandleExcludingChoices(HtmlNode node, HtmlDocument doc)
+    {
+        var handicap = node.ChildNodes[0].InnerText + node.ChildNodes[1].InnerText;
+        var secondLine = doc.DocumentNode.SelectNodes("//div[@class='excluding-choices']")[0].InnerText;
+
+        return handicap.AppendWithNewLine(secondLine).StripHtml();
+    }
+
+    private static string HandleCashOutFromNo(HtmlNode node)
+    {
+        var handicap = node.ChildNodes[0].InnerText;
+        var secondLine = node.ChildNodes[1].InnerText + node.ChildNodes[2].InnerText;
+
+        return handicap.AppendWithNewLine(secondLine);
     }
 }

@@ -15,11 +15,13 @@ public class SortAlgorithmServiceImp : SortAlgorithmService
         decimal currentSum = 0;
         foreach (var ticket in wonTickets.Descending)
         {
-            if (currentSum + ticket.WinLost < maxCapacity)
+            if (currentSum + ticket.WinLost >= maxCapacity)
             {
-                voidTickets.Add(ticket);
-                currentSum += ticket.WinLost;
+                continue;
             }
+
+            voidTickets.Add(ticket);
+            currentSum += ticket.WinLost;
         }
 
         return voidTickets;

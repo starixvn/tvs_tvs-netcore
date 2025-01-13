@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <SonarQubeExclude>true</SonarQubeExclude>
@@ -9,13 +8,10 @@
   <PropertyGroup>
     <NoWarn>1701;1702;8601;8604;8618;8632;8669</NoWarn>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\TicketVoidingSystem\TicketVoidingSystem.csproj" />
   </ItemGroup>
-
 </Project>

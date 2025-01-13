@@ -1,4 +1,4 @@
-<ngb-accordion #acc="ngbAccordion" activeIds="toggle-1,toggle-2">
+<ngb-accordion #acc="ngbAccordion" activeIds="toggle-1,toggle-2,toggle-3">
   <ngb-panel id="toggle-1" title="First panel">
     <ng-template ngbPanelHeader>
       <div class="d-flex align-items-center justify-content-between">
@@ -87,6 +87,24 @@
           <td class="no-data">There is no data</td>
         </tr>
       </tbody>
+    </ng-template>
+  </ngb-panel>
+
+  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+  <ngb-panel id="toggle-3" title="Third">
+    <ng-template ngbPanelHeader>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0">*** Guideline</h5>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      Case: user has not received imessage via letstalk<br /><br />
+      <div class="ml-3">
+        => ​Action: <br />
+        <div class="ml-5">
+          Change StatusId to 1 - Running & Click "Save" -> The system will send back a message
+        </div>
+      </div>
     </ng-template>
   </ngb-panel>
 </ngb-accordion>

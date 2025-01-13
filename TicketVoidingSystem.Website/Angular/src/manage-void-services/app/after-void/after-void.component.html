@@ -36,5 +36,40 @@
     <span> There is no data! </span>
   </div>
 </div>
+
+<ngb-accordion #acc="ngbAccordion" activeIds="panel-1">
+  <ngb-panel id="panel-1" title="First">
+    <ng-template ngbPanelHeader>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0">*** Guideline</h5>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      Case: After Void Status = 3 - Failed -> Request status show <strong class="text-red">Failed</strong><br /><br />
+      <div class="ml-3">
+        1. User want to execute all after void steps<br />
+        => ​Action: <br/>
+        Change After Void Status = 1 - Running & Click "Save" -> The after void service is executed again
+      </div><br/>
+      <div class="ml-3">
+        2. User has manually sent email/Letstalk, and all after void steps are failed or Done<br />
+        => ​Action: <br/>
+        <div class="ml-5">
+            2.1. Change IsSentEmail & IsSentLetstalk from Null to True<br/>
+            2.2. Change After Void Status = 1 - Running & Click "Save" -> The after void service is executed again, except sent email/Letstalk
+        </div>
+      </div><br/>
+      <div class="ml-3">
+        3. All after void steps are completed, except send email/Letstalk failed, and user NOT manually send email/letstalk<br />
+        => ​Action: <br/>
+        <div class="ml-5">
+          Change After Void Status = 1 - Running & Click "Save" -> The after void service is executed send email/Letstalk again
+        </div>
+      </div>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
+
+
 <tooltip [tooltip]="tooltip"></tooltip>
 <block-full-ui [isBlock]="isBlock"></block-full-ui>

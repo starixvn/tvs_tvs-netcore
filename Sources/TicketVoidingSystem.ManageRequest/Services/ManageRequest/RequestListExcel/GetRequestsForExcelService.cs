@@ -82,12 +82,14 @@ public class GetRequestsForExcelServiceImp(
 
     private static void AssignCalcTime(RequestModel request, IEnumerable<GetCalculateTimeModel> calculateTimeSets, IEnumerable<int> requestIdsHaveData)
     {
-        if (requestIdsHaveData.Contains(request.RequestId))
+        if (!requestIdsHaveData.Contains(request.RequestId))
         {
-            var calcTime = calculateTimeSets.First(model => model.RequestId == request.RequestId && model.MatchId == request.MatchId);
-            request.CalcHalfTime = calcTime.CalcHalfTime;
-            request.CalcFullTime = calcTime.CalcFullTime;
+            return;
         }
+
+        var calcTime = calculateTimeSets.First(model => model.RequestId == request.RequestId && model.MatchId == request.MatchId);
+        request.CalcHalfTime = calcTime.CalcHalfTime;
+        request.CalcFullTime = calcTime.CalcFullTime;
     }
 
     private static void AssignTVAndIPTV(RequestModel request, IEnumerable<OWPData> owpData, IEnumerable<int> matchIdsHaveData)

@@ -67,15 +67,17 @@ public class BetListCoreServiceImp(
 
     private static void UpdateTicketWithMatch(ITicket ticket, Match match)
     {
-        if (match != null)
+        if (match == null)
         {
-            ticket.HomeId = match.HomeId;
-            ticket.AwayId = match.AwayId;
-            ticket.SportTypeId = match.SportType;
-            ticket.LeagueId = match.LeagueId;
-            ticket.IsNeutral = match.IsNeutral;
-            ticket.MatchCode = match.MatchCode;
+            return;
         }
+
+        ticket.HomeId = match.HomeId;
+        ticket.AwayId = match.AwayId;
+        ticket.SportTypeId = match.SportType;
+        ticket.LeagueId = match.LeagueId;
+        ticket.IsNeutral = match.IsNeutral;
+        ticket.MatchCode = match.MatchCode;
     }
 
     private string BuildChoice(ITicket ticket, ITicketHelper ticketHelper, TicketEmailModel item)

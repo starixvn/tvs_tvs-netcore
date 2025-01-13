@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Web;
+﻿using System.Linq;
 
 namespace TicketVoidingSystem.Extensions.TN;
 
@@ -19,12 +16,5 @@ public static class InternalStringExtension
             .Where(x => !string.IsNullOrWhiteSpace(x))
             .ToArray();
         return string.Join(",", array);
-    }
-
-    public static string StripHtml(this string htmlText)
-    {
-        var reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
-        var stripped = reg.Replace(htmlText, string.Empty);
-        return HttpUtility.HtmlDecode(stripped);
     }
 }

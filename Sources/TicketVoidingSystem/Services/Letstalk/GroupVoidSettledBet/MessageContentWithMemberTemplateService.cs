@@ -69,16 +69,18 @@ public class MessageContentWithMemberTemplateServiceImp(UusTicketService uusTick
 
     private void UpdateCountSingleInstant(TicketCountInfo countInfo, TicketEmailModel ticket)
     {
-        if (uusTicketService.IsValidSettledSingleTicket(ticket))
+        if (!uusTicketService.IsValidSettledSingleTicket(ticket))
         {
-            if (!ticket.IsInstantSettlementTicket)
-            {
-                countInfo.SingleCount++;
-            }
-            else
-            {
-                countInfo.InstantOUCount++;
-            }
+            return;
+        }
+
+        if (!ticket.IsInstantSettlementTicket)
+        {
+            countInfo.SingleCount++;
+        }
+        else
+        {
+            countInfo.InstantOUCount++;
         }
     }
 

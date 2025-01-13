@@ -112,7 +112,7 @@ export class AppComponent implements OnInit {
       isToDateBeforeBUDay: this.isFilterById() ? null : this.isDateBeforeBUDay(this.filter.ngbToDate),
       bUDay: moment(this.bUDay).format(DATETIME_FORMAT),
       createdBy: this.filter.createdBy,
-      productIds: this.filter.productIds
+      productTypeIds: this.filter.productTypeIds
     };
   }
 
@@ -149,7 +149,7 @@ export class AppComponent implements OnInit {
       isExcludeTest: this.filter.isExcludeTest,
       createdBy: this.filter.createdBy,
       isDisplayMissingInfo: this.filter.isDisplayMissingInfo,
-      productIds: this.filter.productIds
+      productTypeIds: this.filter.productTypeIds
     };
     this.cacheSubTypeSelectList = this.filterComponent.subTypeSelectList;
     this.cacheMultipleSelectSubTypeModel = this.filterComponent.multipleSelectSubTypeModel;

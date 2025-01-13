@@ -19,17 +19,12 @@ public class GetTicketsViewModelServiceImp : GetTicketsViewModelService
     {
         var isHasTicketPh1X2Affected = data.Any(x => x.GroupPHAffected == 1);
         var isHasTicketPhAioAffected = data.Any(x => x.GroupPHAffected == 2);
-        if (isHasTicketPh1X2Affected && isHasTicketPhAioAffected)
+        return isHasTicketPh1X2Affected switch
         {
-            return GroupPHAffectedConstant.Group1X2AndAIO;
-        }
-
-        if (isHasTicketPh1X2Affected)
-        {
-            return GroupPHAffectedConstant.Group1X2;
-        }
-
-        return isHasTicketPhAioAffected ? GroupPHAffectedConstant.GroupAIO : (short)0;
+            true when isHasTicketPhAioAffected => GroupPHAffectedConstant.Group1X2AndAIO,
+            true => GroupPHAffectedConstant.Group1X2,
+            _ => isHasTicketPhAioAffected ? GroupPHAffectedConstant.GroupAIO : (short)0
+        };
     }
 
     public TicketsByGroupInRequest GetTicketsByGroup(IEnumerable<GetTicketModel> allTickets)

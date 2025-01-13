@@ -41,15 +41,19 @@ public class KnapsackAlgorithmServiceImp : KnapsackAlgorithmService
         {
             for (var w = capacity; w >= 0; w--)
             {
-                if (weights[i - 1].WinLostMultiply100 <= w)
+                if (weights[i - 1].WinLostMultiply100 > w)
                 {
-                    var newValue = dp[w - weights[i - 1].WinLostMultiply100] + values[i - 1].WinLostMultiply100;
-                    if (newValue > dp[w]) //NOSONAR
-                    {
-                        dp[w] = newValue;
-                        selectedItems[w] = [..selectedItems[w - weights[i - 1].WinLostMultiply100], i - 1];
-                    }
+                    continue;
                 }
+
+                var newValue = dp[w - weights[i - 1].WinLostMultiply100] + values[i - 1].WinLostMultiply100;
+                if (newValue <= dp[w]) //NOSONAR
+                {
+                    continue;
+                }
+
+                dp[w] = newValue;
+                selectedItems[w] = [..selectedItems[w - weights[i - 1].WinLostMultiply100], i - 1];
             }
         }
 
