@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { TicketTableModel, TicketTableViewModel } from './ticket-table.model';
+import bigDecimal from 'js-big-decimal';
+import { TicketTableViewModel } from './ticket-table.model';
 
 @Component({
   selector: 'ticket-table',
@@ -9,9 +10,7 @@ import { TicketTableModel, TicketTableViewModel } from './ticket-table.model';
 export class TicketTableComponent implements OnInit {
   @Input() model = new TicketTableViewModel();
   @Input() isBlock: boolean;
-  @Output() changeTicket = new EventEmitter<TicketTableModel>();
-  @Output() changeGroup = new EventEmitter<number>();
-  @Output() changeGroupTicketTable = new EventEmitter();
+  @Output() changeWinlost = new EventEmitter<bigDecimal>();
 
   public ngOnInit() {
     //this.clickBody();
@@ -24,15 +23,12 @@ export class TicketTableComponent implements OnInit {
       this.model.groups.every(group => group.displayTotalTickets === 0);
   }
 
-  handleChangeTicket(ticket: TicketTableModel) {
-    this.changeTicket.emit(ticket);
+  changeWinlostCheckedTicket() {
+    const checkedTickets = this.model.getAllCheckedTickets();
+    this.changeWinlost.emit(checkedTickets.reduce((sum, current) => new bigDecimal(this.convertStringWithCommaToNumber(current.winLoss)).add(sum), new bigDecimal(0)));
   }
 
-  handleChangeGroup(groupId: number) {
-    this.changeGroup.emit(groupId);
-  }
-
-  handleChangeGroupTicketTable() {
-    this.changeGroupTicketTable.emit();
+  private convertStringWithCommaToNumber(value: string): number {
+    return parseFloat(value.replace(/,/g, ''));
   }
 }

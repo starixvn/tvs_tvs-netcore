@@ -48,6 +48,7 @@ public class CalculateHaveStatusWonNotLoseServiceImp(
             account.EstimateVoidAmount = voidWonTickets.Sum(x => x.WinLost);
             account.WinLostAfterVoid = -currentLosing + (currentWinning - account.EstimateVoidAmount);
             account.VoidTickets = voidWonTickets.Concat(othersVoidTickets);
+            UpdateAccountWinlostByGroupMatchId(account, wonTickets, voidWonTickets);
         }
         else
         {
@@ -58,5 +59,24 @@ public class CalculateHaveStatusWonNotLoseServiceImp(
             account.WinLostAfterVoid = -currentLosing;
             account.VoidTickets = combineVoidTicketsService.Execute(account.CustId, ticketStatusIds, groupTickets);
         }
+    }
+
+    public static void UpdateAccountWinlostByGroupMatchId(AccountWinlostModel account, OrderedTickets wonTickets, IEnumerable<TicketCalculateWinLostAccount> voidWonTickets)
+    {
+        foreach (var ticket in wonTickets.Descending)
+        {
+            ticket.IsChecked = voidWonTickets.Any(y => y.TransId == ticket.TransId);
+        }
+
+        var editableTickets = wonTickets.Descending.GroupBy(b => b.MatchId)
+            .Where(IsHasBothCheckedAndUncheckedTickets).SelectMany(x => x);
+        var editableMatches = editableTickets.Select(x => x.MatchId).Distinct();
+        account.IsCanEditTicket = editableTickets.Any();
+        account.EstimateVoidAmountUnEditableTickets = voidWonTickets.Where(x => !editableMatches.Contains(x.MatchId)).Sum(x => x.WinLost);
+    }
+
+    public static bool IsHasBothCheckedAndUncheckedTickets(IEnumerable<TicketCalculateWinLostAccount> wonTickets)
+    {
+        return wonTickets.Any(x => x.IsChecked) && wonTickets.Any(x => !x.IsChecked);
     }
 }

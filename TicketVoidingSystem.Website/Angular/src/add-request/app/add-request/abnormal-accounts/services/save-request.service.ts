@@ -6,6 +6,7 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { PopupService } from '../../services/popup.service';
+import { AccountWinlostModel } from '../models/account-winlost.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request.model';
 import { ValidationBusinessRuleArgs } from '../models/validation.model';
@@ -38,7 +39,7 @@ export class SaveRequestService {
   async recheckValidationBeforeSaveRequest(args: SaveRequestArg) {
     args.addRequestStore.changeBlockingUiStatus(true);
     const validation = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs(args));
-    args.primitiveProps.validAccountWinlostModels = validation.accountWinlostModels;
+    args.primitiveProps.validAccountWinlostModels = this.getAccountWinlostWhenSaveRequest(args.primitiveProps.validAccountWinlostModels, validation.accountWinlostModels);
     args.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
     args.primitiveProps.numberOfTicketsExistedInRequest = validation.numberOfTicketsExistedInRequest;
     args.addRequestStore.changeBlockingUiStatus(false);
@@ -106,8 +107,27 @@ export class SaveRequestService {
     return query;
   }
 
-  private cancelValidateUsernamesWhenFocusOut(primitiveProps: PrimitiveProperty, usernamesComponent: UsernamesComponent): void {
+  private cancelValidateUsernamesWhenFocusOut(primitiveProps: PrimitiveProperty, usernamesComponent: UsernamesComponent) {
     primitiveProps.isCancelValidate = true;
     usernamesComponent.triggerFocusOutUsernames();
+  }
+
+  private getAccountWinlostWhenSaveRequest(originalAccounts: AccountWinlostModel[], newAccounts: AccountWinlostModel[]) {
+    if (originalAccounts?.length > 0) {
+      const originalMap = new Map(originalAccounts.map(acc => [acc.custId, acc]));
+      return newAccounts.map(account => {
+        const originalAccount = originalMap.get(account.custId);
+        if (originalAccount) {
+          return {
+            ...account,
+            estimateVoidAmount: originalAccount.estimateVoidAmount,
+            winLostAfterVoid: originalAccount.winLostAfterVoid,
+          };
+        }
+        return account;
+      });
+    }
+
+    return newAccounts;
   }
 }

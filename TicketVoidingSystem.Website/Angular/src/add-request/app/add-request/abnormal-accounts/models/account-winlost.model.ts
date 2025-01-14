@@ -6,9 +6,11 @@ export class AccountWinlostModel {
   currentWinning: number;
   currentLosing: number;
   estimateVoidAmount: number;
+  estimateVoidAmountUnEditableTickets: number;
   winLostAfterVoid: number;
   isHighlight: boolean;
   adjustVoidLimitString: string;
   isShowInput: boolean;
-  isEdittedTicket: boolean;
+  isEditedTicket: boolean;
+  isCanEditTicket: boolean;
 }

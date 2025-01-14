@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import bigDecimal from 'js-big-decimal';
+import * as _ from 'lodash';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { TicketTableModel, TicketTableViewModel } from '../../components/ticket-table/ticket-table.model';
+import { TicketTableViewModel } from '../../components/ticket-table/ticket-table.model';
 import { AccountAffectedTicketModel, AdjustedAccountModel, TicketAdjustedAccountModel } from './account-affected-ticket.model';
 
 @Component({
@@ -25,7 +27,7 @@ export class AccountAffectedTicketComponent implements OnInit {
   }
 
   async updateTable() {
-    this.tempAdjustedAccounts.accountWinlostTables = [this.model.accountWinlostModels.find(x => x.custId === Number(this.model.selectedCustId))];
+    this.tempAdjustedAccounts.accountWinlostTables = [_.cloneDeep(this.model.accountWinlostModels.find(x => x.custId === Number(this.model.selectedCustId)))];
     if (this.model.adjustedAccounts.some(x => x.custId === Number(this.model.selectedCustId))) {
       const result = this.model.adjustedAccounts.find(x => x.custId === Number(this.model.selectedCustId)).ticketTableViewModel;
       this.tempAdjustedAccounts.ticketTableViewModel = new TicketTableViewModel(result);
@@ -46,6 +48,7 @@ export class AccountAffectedTicketComponent implements OnInit {
 
   saveClick() {
     this.updateAdjustedAccounts();
+    this.updateValueToAccountTable();
     this.ticketsChange.emit(this.getAdjustedTickets());
     this.model.isOpen = false;
   }
@@ -63,24 +66,24 @@ export class AccountAffectedTicketComponent implements OnInit {
       );
   }
 
-  handleChangeTicket(ticket: TicketTableModel) {
-    const adjustment = BigInt(ticket.isChecked ? this.convertStringWithCommaToNumber(ticket.winLoss) : -this.convertStringWithCommaToNumber(ticket.winLoss));
-    this.reCalculateAccount(adjustment);
+  reCalculateAccount(winlost: bigDecimal) {
+    this.isEdittedTicket = true;
+    this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmount
+      = Number(new bigDecimal(this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmountUnEditableTickets).add(winlost).getValue());
+    this.tempAdjustedAccounts.accountWinlostTables[0].winLostAfterVoid
+      = Number(new bigDecimal(this.tempAdjustedAccounts.accountWinlostTables[0].currentLosing)
+        .add(new bigDecimal(this.tempAdjustedAccounts.accountWinlostTables[0].currentWinning))
+        .add(new bigDecimal(-this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmount))
+        .getValue());
   }
 
-  handleChangeGroup(groupId: number) {
-    const group = this.tempAdjustedAccounts.ticketTableViewModel.groups.find(x => x.id === groupId);
-    const totalWinLoss = group.tickets.reduce((acc, ticket) => acc + BigInt(this.convertStringWithCommaToNumber(ticket.winLoss)), BigInt(0));
-    const adjustment = BigInt(group.isChecked ? totalWinLoss : -totalWinLoss);
-    this.reCalculateAccount(adjustment);
-  }
-
-  handleChangeGroupTicketTable() {
-    const totalWinLoss = this.tempAdjustedAccounts.ticketTableViewModel.groups
-      .flatMap(group => group.tickets)
-      .reduce((acc, ticket) => acc + BigInt(this.convertStringWithCommaToNumber(ticket.winLoss)), BigInt(0));
-    const adjustment = BigInt(this.tempAdjustedAccounts.ticketTableViewModel.isChecked ? totalWinLoss : -totalWinLoss);
-    this.reCalculateAccount(adjustment);
+  private updateValueToAccountTable() {
+    this.model.adjustedAccounts.forEach(item => {
+      const currentAccount = this.model.accountWinlostModels.find(x => x.custId === Number(item.custId));
+      currentAccount.estimateVoidAmount = this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmount;
+      currentAccount.winLostAfterVoid = this.tempAdjustedAccounts.accountWinlostTables[0].winLostAfterVoid;
+      currentAccount.isEditedTicket = this.tempAdjustedAccounts.accountWinlostTables[0].isEditedTicket;
+    });
   }
 
   private async getTicketsAbnormalAccount() {
@@ -102,20 +105,7 @@ export class AccountAffectedTicketComponent implements OnInit {
       const index = this.model.adjustedAccounts.findIndex(x => x.custId === previousCustId);
       this.model.adjustedAccounts[index].ticketTableViewModel = this.tempAdjustedAccounts.ticketTableViewModel;
     }
-    this.tempAdjustedAccounts.accountWinlostTables[0].isEdittedTicket = true;
+    this.tempAdjustedAccounts.accountWinlostTables[0].isEditedTicket = true;
     this.isEdittedTicket = false;
-  }
-
-  private reCalculateAccount(winlost: bigint) {
-    this.isEdittedTicket = true;
-    this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmount
-      = Number(BigInt(this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmount) + winlost);
-    this.tempAdjustedAccounts.accountWinlostTables[0].winLostAfterVoid
-      = Number(BigInt(this.tempAdjustedAccounts.accountWinlostTables[0].currentLosing)
-        + BigInt(this.tempAdjustedAccounts.accountWinlostTables[0].currentWinning) - BigInt(this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmount));
-  }
-
-  private convertStringWithCommaToNumber(value: string): number {
-    return parseInt(value.replace(/,/g, ''), 10);
   }
 }

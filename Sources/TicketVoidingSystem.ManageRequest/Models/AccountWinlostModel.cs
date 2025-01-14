@@ -18,9 +18,15 @@ public class AccountWinlostModel
 
     public decimal EstimateVoidAmount { get; set; }
 
+    public decimal EstimateVoidAmountUnEditableTickets { get; set; }
+
     public decimal WinLostAfterVoid { get; set; }
 
     public bool IsHighlight { get; set; }
+
+    public bool IsEditedTicket { get; set; }
+
+    public bool IsCanEditTicket { get; set; }
 
     public IEnumerable<TicketCalculateWinLostAccount> VoidTickets { get; set; }
 }

@@ -25,6 +25,7 @@ export class AccountTableComponent {
   @Input() abnormalAccountModel: AbnormalAccountModel;
   @Input() accountWinlostModels: AccountWinlostModel[];
   @Input() permission: PermissionAddRequest;
+  @Input() primitiveProps: PrimitiveProperty;
   @Output() changeTable = new EventEmitter();
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;
   tooltip = new Tooltip();
@@ -61,8 +62,11 @@ export class AccountTableComponent {
       account.currentLosing = updatedAccountAmount.currentLosing;
       account.currentWinning = updatedAccountAmount.currentWinning;
       account.estimateVoidAmount = updatedAccountAmount.estimateVoidAmount;
+      account.estimateVoidAmountUnEditableTickets = updatedAccountAmount.estimateVoidAmountUnEditableTickets;
       account.winLostAfterVoid = updatedAccountAmount.winLostAfterVoid;
+      account.isCanEditTicket = updatedAccountAmount.isCanEditTicket;
     }
+    this.primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
     this.changeTable.emit();
     this.addRequestStore.changeBlockingUiStatus(false);
   }
@@ -123,12 +127,6 @@ export class AccountTableComponent {
     if (!this.filter.isVoided) {
       account.isShowInput = true;
     }
-  }
-
-  checkInputOtherAccount() {
-    this.accountWinlostModels.filter(x => x.isShowInput).forEach(x => {
-
-    });
   }
 
   private async delayForEventFocus() {

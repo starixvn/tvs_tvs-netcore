@@ -30,9 +30,7 @@
           </account-table>
           <ticket-table [model]="tempAdjustedAccounts.ticketTableViewModel"
             [isBlock]="isBlock"
-            (changeTicket)="handleChangeTicket($event)"
-            (changeGroup)="handleChangeGroup($event)"
-            (changeGroupTicketTable)="handleChangeGroupTicketTable()">
+            (changeWinlost)="reCalculateAccount($event)">
           </ticket-table>
         </div>
         <div class="modal-footer">

@@ -49,6 +49,10 @@ export class GroupTicketTableModel {
   changeTicketToGroup() {
     this.isChecked = this.tickets.every(ticket => ticket.isChecked);
   }
+
+  getCheckedTickets() {
+    return this.tickets.filter(ticket => ticket.isChecked);
+  }
 }
 
 export class TicketTableViewModel {
@@ -75,5 +79,9 @@ export class TicketTableViewModel {
 
   changeGroupToModel() {
     this.isChecked = this.groups.every(group => group.isChecked);
+  }
+
+  getAllCheckedTickets() {
+    return this.groups.flatMap(group => group.getCheckedTickets());
   }
 }

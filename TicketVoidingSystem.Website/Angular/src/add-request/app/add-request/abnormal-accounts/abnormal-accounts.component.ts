@@ -86,10 +86,6 @@ export class AbnormalAccountsComponent implements OnInit {
 
   async handleSearchEvent() {
     this.addRequestStore.changeBlockingUiStatus(true);
-    if (this.isShowUserInfo()) {
-      this.accountAffectedTicketModel.adjustedAccounts = [];
-    }
-
     if (this.accountTableComponent) {
       this.accountTableComponent.isCancelRecalculateAmount = true;
       if (!this.accountTableComponent.isValid()) {
@@ -101,6 +97,10 @@ export class AbnormalAccountsComponent implements OnInit {
     const validationOutput = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
     this.primitiveProps.validAccountWinlostModels = validationOutput.accountWinlostModels;
     this.primitiveProps.transInfoAddRequestModel = validationOutput.transInfoAddRequestModel;
+    if (this.isShowUserInfo()) {
+      this.accountAffectedTicketModel.adjustedAccounts = [];
+      this.primitiveProps.validAccountWinlostModels.forEach(x => x.isEditedTicket = false);
+    }
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
@@ -114,7 +114,7 @@ export class AbnormalAccountsComponent implements OnInit {
 
   openAccountAffectedTicket() {
     this.accountAffectedTicketModel.usernames = this.primitiveProps.validAccountWinlostModels
-      .filter(x => x.isHighlight)
+      .filter(x => x.isCanEditTicket)
       .map(x => {
         return { name: x.username, value: x.custId.toString() } as Selection;
       })
@@ -131,11 +131,12 @@ export class AbnormalAccountsComponent implements OnInit {
   changeFilter() {
     this.primitiveProps.isShowAccountWinLost = false;
     this.primitiveProps.isShowError = false;
+    this.primitiveProps.validAccountWinlostModels = [];
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
   }
 
   isShowButtonAdjustEstimatedVoid() {
-    return this.primitiveProps.validAccountWinlostModels.some(x => x.isHighlight);
+    return !this.isEdit && this.primitiveProps.validAccountWinlostModels?.some(x => x.isCanEditTicket);
   }
 
   private getMinDateByPermission(isVoidAllArchivedTickets: boolean): NgbDateStruct {
