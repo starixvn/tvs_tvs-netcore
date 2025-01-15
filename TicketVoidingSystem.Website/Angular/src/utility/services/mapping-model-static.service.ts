@@ -75,7 +75,10 @@ export class MappingModelStaticService {
       isLinkGroup1X2: x.isLinkGroup1X2,
       isLinkGroupAIO: x.isLinkGroupAIO,
       isMainMatch: x.isMainMatch,
-      liveIndicator: x.liveIndicator
+      liveIndicator: x.liveIndicator,
+      filterBetIdX: x.filterBetIdX,
+      filterBetIdY: x.filterBetIdY,
+      filterBetTypeId: x.filterBetTypeId
     } as WrongHdpGetLogInfoQuery));
   }
 
@@ -94,7 +97,10 @@ export class MappingModelStaticService {
       isLinkGroup1X2: x.isLinkGroup1X2,
       isLinkGroupAIO: x.isLinkGroupAIO,
       isMainMatch: x.isMainMatch,
-      liveIndicator: x.liveIndicator
+      liveIndicator: x.liveIndicator,
+      filterBetIdX: x.filterBetIdX,
+      filterBetIdY: x.filterBetIdY,
+      filterBetTypeId: x.filterBetTypeId
     } as WrongOuGetLogInfoQuery));
   }
 

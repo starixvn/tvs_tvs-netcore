@@ -13,6 +13,7 @@ export class HdpFilterBetTypeComponent implements OnChanges {
   @Input() sportTypeId: number;
   @Input() issueTypeId: string;
   @Input() filterBetType: FilterBetType;
+  @Input() isDisabled: boolean;
   @Output() changeEvent = new EventEmitter();
 
   allFilterBetType: HdpFilterBetType[];

@@ -89,7 +89,7 @@ public static class LogInfoExtension
                        + $"HdpValue='{SecurityElement.Escape(model.HdpValue)}' "
                        + $"FilterBetIdX='{SecurityElement.Escape(model.FilterBetIdX)}' "
                        + $"FilterBetIdY='{SecurityElement.Escape(model.FilterBetIdY)}' "
-                       + $"FilterBetTypeId='{SecurityElement.Escape(model.FilterBetTypeId)}' />";
+                       + $"FilterBetTypeId='{model.FilterBetTypeId}' />";
 
             stringBuilder.AppendLine(line);
         }

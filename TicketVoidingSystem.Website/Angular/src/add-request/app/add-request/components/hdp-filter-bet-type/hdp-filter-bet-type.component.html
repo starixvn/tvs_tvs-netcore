@@ -3,6 +3,7 @@
         <label class="col-form-label mr-2">Bet Type</label>
         <div class="input-bet-type">
           <ng-select class="custom-sm"
+            [disabled]="isDisabled"
             [items]="allFilterBetType"
             bindLabel="name"
             bindValue="betType"
@@ -18,11 +19,13 @@
           <label class="col-form-label mr-2">{{selection.name}}</label>
           <div class="items-select">
             <ng-select class="custom-sm"
+              [disabled]="isDisabled"
               [items]="selection.items"
               bindLabel="name"
               bindValue="value"
               [(ngModel)]="selection.value"
               (change)="onChangeItemSelect()"
+              [searchable]="false"
               [clearable]="false">
             </ng-select>
           </div>
