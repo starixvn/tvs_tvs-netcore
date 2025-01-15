@@ -17,6 +17,7 @@ import { LogInfoService } from './log-info.service';
 import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
 import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
+import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -34,9 +35,9 @@ class Helper {
     linkedLogsViewModel: null,
     poolHouseCheckedBetTypes: '',
     isShowValidation: false,
-    sportType: 0
+    sportType: 0,
   };
-  static readonly fakeWrongOuModel: WrongOuModel = {
+  static readonly fakeWrongOuModel = {
     matchId: 122,
     subIssueTypeId: 12,
     isMainMatch: true,
@@ -51,7 +52,7 @@ class Helper {
     liveIndicator: 1,
     poolHouseCheckedBetTypes: '',
     sportType: 0
-  };
+  } as WrongOuModel;
 }
 
 describe('SaveRequestService', () => {
@@ -347,23 +348,8 @@ describe('SaveRequestService', () => {
   it('#getWrongOuInfo should return expected', async () => {
     const fakeLogInfoWrongOu = _.cloneDeep(Helper.fakeLogInfoWrongOu);
     fakeLogInfoWrongOu.linkedLogsViewModel = new LinkedLogsViewModel();
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.others = new OthersModel();
-    arg.filter.issueTypeId = IssueTypeConstant.WRONG_1ST_OU;
-    arg.allEvents = [fakeLogInfoWrongOu];
+    fakeLogInfoWrongOu.filterWrongOu.filterBetType = new FilterBetType('', '', '1')
 
-    const validationService = new ValidationService();
-    const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
-
-    const actual = saveRequestService['getWrongOuInfo'](fakeLogInfoWrongOu, '1');
-
-    expect(actual).toBeDefined();
-  });
-
-  it('#getWrongOuInfo should return expected', async () => {
-    const fakeLogInfoWrongOu = _.cloneDeep(Helper.fakeLogInfoWrongOu);
-    fakeLogInfoWrongOu.linkedLogsViewModel = new LinkedLogsViewModel();
     const arg = new SaveRequestArg();
     arg.filter = new FilterModel();
     arg.others = new OthersModel();

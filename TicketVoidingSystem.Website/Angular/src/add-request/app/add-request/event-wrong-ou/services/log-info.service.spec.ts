@@ -16,7 +16,7 @@ class Helper {
   static readonly fakeMatchId = 12345;
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeLogInfoWrongOu: LogInfoWrongOu = {
+  static readonly fakeLogInfoWrongOu = {
     matchId: 12345,
     leagueName: '',
     isMainMatch: true,
@@ -29,7 +29,7 @@ class Helper {
     poolHouseCheckedBetTypes: '',
     isShowValidation: false,
     sportType: 0
-  };
+  } as LogInfoWrongOu;
   static readonly fakeWrongOuModel: WrongOuModel = {
     matchId: 122,
     subIssueTypeId: 12,
@@ -45,7 +45,7 @@ class Helper {
     liveIndicator: 1,
     poolHouseCheckedBetTypes: '',
     sportType: 0
-  };
+  } as WrongOuModel;
   static readonly fakeLogInfoDetail: LogInfoDetail =
   {
     matchId: 123,

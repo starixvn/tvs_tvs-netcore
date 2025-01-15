@@ -6,13 +6,13 @@ import { FilterWrongOuComponent } from './filter-wrong-ou.component';
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeFilterWrongOuModel: FilterWrongOuModel = {
+  static readonly fakeFilterWrongOuModel = {
     filterFromTransTime: Helper.fakeFromDateTime,
     filterToTransTime: Helper.fakeToDateTime,
     actualMarket: '1',
     wrongMarket: '1',
     liveIndicator: 1
-  };
+  } as FilterWrongOuModel;
 }
 
 describe('FilterWithHdpComponent', () => {

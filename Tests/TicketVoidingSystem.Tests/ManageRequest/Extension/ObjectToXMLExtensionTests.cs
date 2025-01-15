@@ -412,7 +412,7 @@ public class ObjectToXmlExtensionFacts
                                 "FilterToTransTime='2018-10-30 16:20:20.222' IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='1' " +
                                 "MainParlayCount ='1' CashOutCount='1' SettleCount='0' InstantlySettleCount='1' PoolHouseSingleCount='0' PoolHouseCashOutCount='0' " +
                                 "PoolHouseMainParlayCount='0' PoolHouseInstantlySettleCount='0' PoolHouseCheckedBetTypes='' VoidFromTime='2018-10-30 16:20:20.222' " +
-                                "VoidToTime='2018-10-30 16:20:20.222' LiveIndicator='0' HomeFavorite='' AwayFavorite='' ActualMarket='' HdpValue='' /></root>";
+                                "VoidToTime='2018-10-30 16:20:20.222' LiveIndicator='0' HomeFavorite='' AwayFavorite='' ActualMarket='' HdpValue='' FilterBetIdX='1' FilterBetIdY='' FilterBetTypeId='1' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
             MatchId = 123,
@@ -422,7 +422,7 @@ public class ObjectToXmlExtensionFacts
             SingleCount = 1,
             CashOutCount = 1,
             InstantlySettleCount = 1,
-            MainParlayCount = 1
+            MainParlayCount = 1,
         };
         var model = new WrongHdpViewModel
         {
@@ -430,7 +430,10 @@ public class ObjectToXmlExtensionFacts
             FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = logInfoDetail,
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterBetTypeId = "1",
+            FilterBetIdX = "1",
+            FilterBetIdY = ""
         };
 
         var models = new List<WrongHdpViewModel> { model };
@@ -450,7 +453,7 @@ public class ObjectToXmlExtensionFacts
                                 "FilterToTransTime='2018-10-30 16:20:20.222' IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='' " +
                                 "MainParlayCount ='' CashOutCount='' SettleCount='' InstantlySettleCount='' PoolHouseSingleCount='' PoolHouseCashOutCount='' " +
                                 "PoolHouseMainParlayCount='' PoolHouseInstantlySettleCount='' PoolHouseCheckedBetTypes='' VoidFromTime='' VoidToTime='' " +
-                                "LiveIndicator='0' HomeFavorite='' AwayFavorite='' ActualMarket='' HdpValue='' /></root>";
+                                "LiveIndicator='0' HomeFavorite='' AwayFavorite='' ActualMarket='' HdpValue='' FilterBetIdX='1' FilterBetIdY='' FilterBetTypeId='1' /></root>";
 
         var model = new WrongHdpViewModel
         {
@@ -458,7 +461,10 @@ public class ObjectToXmlExtensionFacts
             FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = null,
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterBetTypeId = "1",
+            FilterBetIdX = "1",
+            FilterBetIdY = ""
         };
 
         var models = new List<WrongHdpViewModel> { model };
@@ -478,7 +484,7 @@ public class ObjectToXmlExtensionFacts
                                 "FilterFromTransTime='2018-10-30 16:20:20.222' IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='1' " +
                                 "MainParlayCount ='1' CashOutCount='1' SettleCount='0' InstantlySettleCount='1' PoolHouseSingleCount='0' PoolHouseCashOutCount='0' " +
                                 "PoolHouseMainParlayCount='0' PoolHouseInstantlySettleCount='0' PoolHouseCheckedBetTypes='' VoidToTime='2018-10-30 16:20:20.222' " +
-                                "VoidFromTime='2018-10-30 16:20:20.222' LiveIndicator='0' ActualMarket='' WrongMarket='' /></root>";
+                                "VoidFromTime='2018-10-30 16:20:20.222' LiveIndicator='0' ActualMarket='' WrongMarket='' FilterBetIdX='1' FilterBetIdY='' FilterBetTypeId='1' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
             MatchId = 123,
@@ -496,7 +502,10 @@ public class ObjectToXmlExtensionFacts
             FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = logInfoDetail,
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterBetTypeId = "1",
+            FilterBetIdX = "1",
+            FilterBetIdY = ""
         };
 
         var models = new List<WrongOuViewModel> { model };
@@ -516,7 +525,7 @@ public class ObjectToXmlExtensionFacts
                                 "FilterFromTransTime='2018-10-30 16:20:20.222' IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='' " +
                                 "MainParlayCount ='' CashOutCount='' SettleCount='' InstantlySettleCount='' PoolHouseSingleCount='' PoolHouseCashOutCount='' " +
                                 "PoolHouseMainParlayCount='' PoolHouseInstantlySettleCount='' PoolHouseCheckedBetTypes='' VoidToTime='' VoidFromTime='' " +
-                                "LiveIndicator='0' ActualMarket='' WrongMarket='' /></root>";
+                                "LiveIndicator='0' ActualMarket='' WrongMarket='' FilterBetIdX='1' FilterBetIdY='' FilterBetTypeId='1' /></root>";
 
         var model = new WrongOuViewModel
         {
@@ -524,7 +533,10 @@ public class ObjectToXmlExtensionFacts
             FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = null,
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterBetTypeId = "1",
+            FilterBetIdX = "1",
+            FilterBetIdY = ""
         };
 
         var models = new List<WrongOuViewModel> { model };
@@ -608,7 +620,7 @@ public class ObjectToXmlExtensionFacts
         const string expected =
             "<root><r MatchId='1' FilterFromTransTime='' FilterToTransTime='' " +
             "SubIssueTypeId='0' IsMainMatch='False' LiveIndicator='0' PoolHouseCheckedBetTypes='' " +
-            "IsLinkGroup1X2='False' IsLinkGroupAIO ='False' WrongMarket='' /></root>";
+            "IsLinkGroup1X2='False' IsLinkGroupAIO ='False' WrongMarket='' FilterBetIdX='' FilterBetIdY='' FilterBetTypeId='' /></root>";
 
         // Act
         var actual = models.ToWrongOuInfoXml();
@@ -637,7 +649,7 @@ public class ObjectToXmlExtensionFacts
         const string expected =
             "<root><r MatchId='1' FilterFromTransTime='' FilterToTransTime='' " +
             "IsMainMatch='False' PoolHouseCheckedBetTypes='' SubIssueTypeId='0' IsLinkGroup1X2='False' IsLinkGroupAIO ='False' " +
-            "LiveIndicator='0' HomeFavorite='' AwayFavorite='' HdpValue='' /></root>";
+            "LiveIndicator='0' HomeFavorite='' AwayFavorite='' HdpValue='' FilterBetIdX='' FilterBetIdY='' FilterBetTypeId='' /></root>";
 
         // Act
         var actual = models.ToWrongHdpInfoXml();
@@ -1047,5 +1059,134 @@ public class ObjectToXmlExtensionFacts
 
         // Assert
         Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToEventAbnormalBetXml_HasFilterData_ReturnExpected()
+    {
+        // Arrange
+        var model = new OtherIssuesViewModel
+        {
+            MatchId = 846742,
+            SubIssueTypeId = 1,
+            FilterFromTransTime = new DateTime(2025, 2, 2),
+            FilterToTransTime = new DateTime(2025, 2, 2),
+            LogInfoDetail = new LogInfoDetail
+            {
+                SingleCount = 1,
+                MainParlayCount = 0,
+                VoidToTime = new DateTime(2025, 2, 2, 2, 2, 2),
+                VoidFromTime = new DateTime(2025, 2, 2, 2, 2, 35),
+            }
+        };
+        const string expected = "<root><r MatchId = '846742' SubIssueTypeId='1' FilterToTransTime='2025-02-02 00:00:00.000' FilterFromTransTime='2025-02-02 00:00:00.000' " +
+                                "SingleCount ='1' MainParlayCount='0' VoidToTime='2025-02-02 02:02:02.000' VoidFromTime='2025-02-02 02:02:35.000' " +
+                                "AdvancedExtraInfo='null' AllBetTypesSelectionJson='null' /></root>";
+
+        // Act
+        var actual = model.ToEventOtherIssuesXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToEventAbnormalBetXml_NoHasFilterData_ReturnExpected()
+    {
+        // Arrange
+        var model = new OtherIssuesViewModel
+        {
+            MatchId = 846742,
+            SubIssueTypeId = 1,
+            LogInfoDetail = new LogInfoDetail
+            {
+                SingleCount = 1,
+                MainParlayCount = 0,
+                VoidToTime = new DateTime(2025, 2, 2, 2, 2, 2),
+                VoidFromTime = new DateTime(2025, 2, 2, 2, 2, 35),
+            }
+        };
+        const string expected = "<root><r MatchId = '846742' SubIssueTypeId='1' FilterToTransTime='' FilterFromTransTime='' " +
+                                "SingleCount ='1' MainParlayCount='0' VoidToTime='2025-02-02 02:02:02.000' VoidFromTime='2025-02-02 02:02:35.000' " +
+                                "AdvancedExtraInfo='null' AllBetTypesSelectionJson='null' /></root>";
+
+        // Act
+        var actual = model.ToEventOtherIssuesXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToEventTechnicalErrorXml_HasFilterData_ReturnExpected()
+    {
+        // Arrange
+        var model = new TechnicalErrorViewModel
+        {
+            MatchId = 846742,
+            SubIssueTypeId = 1,
+            FilterFromTransTime = new DateTime(2025, 2, 2),
+            FilterToTransTime = new DateTime(2025, 2, 2),
+            LogInfoDetail = new LogInfoDetail
+            {
+                SingleCount = 1,
+                MainParlayCount = 0,
+                VoidToTime = new DateTime(2025, 2, 2, 2, 2, 2),
+                VoidFromTime = new DateTime(2025, 2, 2, 2, 2, 35),
+            },
+            BetTypeCount = [new BetTypeTicketsInfo { BetTypeId = 1, TicketsCount = 2, BetId = 3, PlayerName = "abc" }]
+        };
+        const string expected = "<root><r MatchId = '846742' FilterFromTransTime='2025-02-02 00:00:00.000' FilterToTransTime='2025-02-02 00:00:00.000' " +
+                                "VoidFromTime='2025-02-02 02:02:35.000' VoidToTime='2025-02-02 02:02:02.000' SubIssueTypeId='1' SingleCount ='1' MainParlayCount='0' " +
+                                "BetTypeCount='[{&quot;TicketsCount&quot;:2,&quot;BetTypeId&quot;:1,&quot;BetId&quot;:3,&quot;PlayerName&quot;:&quot;abc&quot;}]' " +
+                                "AdvancedExtraInfo='null' AllBetTypesSelectionJson='null' /></root>";
+
+        // Act
+        var actual = model.ToEventTechnicalErrorXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToEventTechnicalErrorXml_NoHasFilterData_ReturnExpected()
+    {
+        // Arrange
+        var model = new TechnicalErrorViewModel
+        {
+            MatchId = 846742,
+            SubIssueTypeId = 1,
+            LogInfoDetail = new LogInfoDetail
+            {
+                SingleCount = 1,
+                MainParlayCount = 0,
+                VoidToTime = new DateTime(2025, 2, 2, 2, 2, 2),
+                VoidFromTime = new DateTime(2025, 2, 2, 2, 2, 35),
+            },
+            BetTypeCount = [new BetTypeTicketsInfo { BetTypeId = 1, TicketsCount = 2, BetId = 3, PlayerName = "abc" }]
+        };
+        const string expected = "<root><r MatchId = '846742' FilterFromTransTime='' FilterToTransTime='' " +
+                                "VoidFromTime='2025-02-02 02:02:35.000' VoidToTime='2025-02-02 02:02:02.000' SubIssueTypeId='1' SingleCount ='1' MainParlayCount='0' " +
+                                "BetTypeCount='[{&quot;TicketsCount&quot;:2,&quot;BetTypeId&quot;:1,&quot;BetId&quot;:3,&quot;PlayerName&quot;:&quot;abc&quot;}]' " +
+                                "AdvancedExtraInfo='null' AllBetTypesSelectionJson='null' /></root>";
+
+        // Act
+        var actual = model.ToEventTechnicalErrorXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToEventWrongMarketOfferedXml_NoHasModel_ReturnEmpty()
+    {
+        // Arrange
+        List<WrongMarketOfferedViewModel> models = [];
+
+        // Act
+        var result = models.ToEventWrongMarketOfferedXml();
+
+        // Assert
+        Assert.Equal(string.Empty, result);
     }
 }

@@ -46,15 +46,16 @@ class Helper {
     scoreOfMatch: '',
     cancelCashOutCount: 1
   } as LogInfoDetail;
-  static readonly fakeFilterWithHdpModel: FilterWithHdpModel = {
+  static readonly fakeFilterWithHdpModel = {
     filterFromTransTime: Helper.fakeFromDateTime,
     filterToTransTime: Helper.fakeToDateTime,
     homeFavorite: '2',
     awayFavorite: '',
     actualMarket: '1',
     hdpValue: '',
-    liveIndicator: 0
-  };
+    liveIndicator: 0,
+    filterBetType: {filterBetIdX:'1', filterBetIdY:'', filterBetTypeId:'1'}
+  } as FilterWithHdpModel;
   static readonly fakeLogInfoWrongHdp: LogInfoWrongHdp = {
     matchId: 12345,
     leagueName: '',
@@ -77,7 +78,7 @@ class Helper {
     isVoided: false,
     isAbnormal: false
   } as FilterModel;
-  static readonly fakeWrongHdpModel: WrongHdpModel = {
+  static readonly fakeWrongHdpModel = {
     matchId: 122,
     subIssueTypeId: 12,
     isMainMatch: true,
@@ -93,8 +94,11 @@ class Helper {
     isPoolHouseAffected: false,
     liveIndicator: 0,
     poolHouseCheckedBetTypes: null,
-    sportType: 0
-  };
+    sportType: 0,
+    filterBetIdX: '1',
+    filterBetIdY: '',
+    filterBetTypeId: '1'
+  } as WrongHdpModel;
   static readonly fakeChildMatches: ChildMatchModel[] = [
     {
       matchId: 12345,

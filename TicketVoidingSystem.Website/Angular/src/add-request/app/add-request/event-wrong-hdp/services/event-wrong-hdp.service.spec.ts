@@ -2,11 +2,12 @@ import * as _ from 'lodash';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongHdpModel } from '../../models/event-wrong-hdp.model';
-import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
+import { FilterWithHdpModel, FilterBetType } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { EventWrongHdpService } from './event-wrong-hdp.service';
 import { ValidationService } from './validation.service';
 import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
+import { SportType } from '../../../../../utility/constants/sport.constant';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -17,16 +18,16 @@ class Helper {
     leagueName: '',
     isMainMatch: true,
     eventName: '',
-    filterWithHdp: new FilterWithHdpModel(),
+    filterWithHdp: {filterBetType: new FilterBetType('','','1')} as FilterWithHdpModel,
     logInfoDetail: null,
     messageValidationLogInfo: [],
     linkedLogsViewModel: new LinkedLogsViewModel(),
     isPoolHouseAffected: true,
     poolHouseCheckedBetTypes: '',
     isShowValidation: false,
-    sportType: 0
+    sportType: SportType.SOCCER
   };  
-  static readonly fakeWrongHdpModel: WrongHdpModel = {
+  static readonly fakeWrongHdpModel = {
     matchId: 122,
     subIssueTypeId: 12,
     isMainMatch: true,
@@ -43,7 +44,7 @@ class Helper {
     poolHouseCheckedBetTypes: '',
     liveIndicator: 0,
     sportType: 0
-  };
+  } as WrongHdpModel;
 }
 
 describe('EventWrongHdpService', () => {

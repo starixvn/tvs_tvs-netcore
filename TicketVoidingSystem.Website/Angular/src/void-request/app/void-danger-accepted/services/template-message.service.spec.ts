@@ -195,7 +195,7 @@ describe('TemplateMessageService', () => {
     wrongHdpModel.homeFavorite = '123';
 
     // Action
-    templateMessageService['initValueForWrongHdp'](templateValue, voidMatch, [wrongHdpModel]);
+    templateMessageService['initValueForWrongHdp'](templateValue, voidMatch, [wrongHdpModel], "6");
 
     // Assert
     expect(templateValue.eventType).toBe(EventType.LIVE);
@@ -213,7 +213,7 @@ describe('TemplateMessageService', () => {
     voidMatch.isAllLiveTickets = true;
 
     // Action
-    templateMessageService['initValueForWrongOu'](templateValue, voidMatch, [wrongOuModel]);
+    templateMessageService['initValueForWrongOu'](templateValue, voidMatch, [wrongOuModel], "6");
 
     // Assert
     expect(templateValue.eventType).toBe(EventType.LIVE);

@@ -31,7 +31,7 @@ class Helper {
     isShowValidation: false,
     sportType: 0
   };
-  static readonly fakeWrongOuModel: WrongOuModel = {
+  static readonly fakeWrongOuModel = {
     matchId: 122,
     subIssueTypeId: 12,
     isMainMatch: true,
@@ -46,7 +46,7 @@ class Helper {
     liveIndicator: 1,
     poolHouseCheckedBetTypes: '',
     sportType: 0
-  };
+  } as WrongOuModel;
 }
 
 describe('ValidationService', () => {

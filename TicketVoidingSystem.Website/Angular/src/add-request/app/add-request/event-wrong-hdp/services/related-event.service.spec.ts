@@ -4,7 +4,7 @@ import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { AddRelatedEventArg } from '../models/add-related-event-arg.model';
-import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
+import { FilterBetType, FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { RelatedEventService } from './related-event.service';
@@ -40,8 +40,9 @@ class Helper {
     awayFavorite: '',
     actualMarket: '1',
     hdpValue: '',
-    liveIndicator: 0
-  };
+    liveIndicator: 0,
+    filterBetType: {filterBetIdX:'1', filterBetIdY:'', filterBetTypeId:'1'}
+  } as FilterWithHdpModel;
   static readonly fakeLogInfoWrongHdp: LogInfoWrongHdp = {
     matchId: 12345,
     leagueName: '',
@@ -78,8 +79,9 @@ describe('RelatedEventService', () => {
 
   it('#updateEvents should update data when defaultFilter empty', async () => {
     const childMatchModel = _.cloneDeep(Helper.fakeChildMatches);
-
-    const actual = service.updateEvents(childMatchModel, new FilterWithHdpModel());
+    const filterWithHdpModel = new FilterWithHdpModel();
+    filterWithHdpModel.filterBetType = new FilterBetType('','','1');
+    const actual = service.updateEvents(childMatchModel, filterWithHdpModel);
 
     expect(actual.length).toBe(Helper.fakeChildMatches.length);
   });

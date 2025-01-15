@@ -7,6 +7,8 @@ import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-l
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { EventWrongOuService } from './event-wrong-ou.service';
+import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
+import { SportType } from '../../../../../utility/constants/sport.constant';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -17,16 +19,16 @@ class Helper {
     leagueName: '',
     isMainMatch: true,
     eventName: '',
-    filterWrongOu: new FilterWrongOuModel(),
+    filterWrongOu: {filterBetType: new FilterBetType('', '', '1')} as FilterWrongOuModel,
     logInfoDetail: null,
     messageValidationLogInfo: [],
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
     poolHouseCheckedBetTypes: '',
     isShowValidation: false,
-    sportType: 0
+    sportType: SportType.SOCCER
   };
-  static readonly fakeWrongOuModel: WrongOuModel = {
+  static readonly fakeWrongOuModel = {
     matchId: 122,
     subIssueTypeId: 12,
     isMainMatch: true,
@@ -41,7 +43,7 @@ class Helper {
     liveIndicator: 1,
     poolHouseCheckedBetTypes: '',
     sportType: 0
-  };
+  } as WrongOuModel;
   static readonly fakeFilterModel: FilterModel = {
     subIssueTypeId: '',
     action: '',
@@ -93,7 +95,7 @@ describe('EventWrongOuService', () => {
       eventName: '',
       isPoolHouseAffected: false,
       poolHouseCheckedBetTypes: '',
-      filterWrongOu: new FilterWrongOuModel,
+      filterWrongOu: {filterBetType: {filterBetIdX:'1', filterBetIdY:'', filterBetTypeId:'1'}} as FilterWrongOuModel,
       logInfoDetail: new LogInfoDetail,
       linkedLogsViewModel: new LinkedLogsViewModel,
       isShowValidation: false,

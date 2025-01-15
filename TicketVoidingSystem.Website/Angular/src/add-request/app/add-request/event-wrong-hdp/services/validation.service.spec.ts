@@ -32,7 +32,7 @@ class Helper {
     isShowValidation: false,
     sportType: 0
   };
-  static readonly fakeWrongHdpModel: WrongHdpModel = {
+  static readonly fakeWrongHdpModel = {
     matchId: 122,
     subIssueTypeId: 12,
     isMainMatch: true,
@@ -49,7 +49,7 @@ class Helper {
     liveIndicator: 0,
     poolHouseCheckedBetTypes: '',
     sportType: 0
-  };
+  } as WrongHdpModel;
 }
 
 describe('ValidationService', () => {
