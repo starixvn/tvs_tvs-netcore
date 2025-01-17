@@ -1,8 +1,8 @@
-﻿using System.Globalization;
-using Fanex.BetList.Core.Entities;
+﻿using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using SpecialDelete.RecoverParlayBet.Models;
 using SpecialDelete.RecoverParlayBet.ViewModels;
+using System.Globalization;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Services.BetList;
 
@@ -40,7 +40,7 @@ public class BetListSubParlayServiceImp<T>(BetListService betListService) : BetL
         return ticketViewModel;
     }
 
-    private Ticket SetValue(T item)
+    private static Ticket SetValue(T item)
     {
         return new Ticket
         {
@@ -71,7 +71,7 @@ public class BetListSubParlayServiceImp<T>(BetListService betListService) : BetL
 
     private static void SetValueSubTicket(ITicket ticket, T item)
     {
-        ticket.BetId = default;
+        ticket.BetId = null;
         ticket.BetCheck = item.SubBetCheck;
         ticket.BetTeam = item.SubBetTeam;
         ticket.BetTypeId = item.SubBetType;
@@ -98,7 +98,7 @@ public class BetListMainParlayServiceImp<T>(BetListService betListService) : Bet
         return ticketViewModel;
     }
 
-    private Ticket SetValue(T item)
+    private static Ticket SetValue(T item)
     {
         var ticket = new Ticket
         {

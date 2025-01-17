@@ -1,9 +1,9 @@
-﻿using System.Globalization;
-using AutoMapper;
+﻿using AutoMapper;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using SpecialDelete.NumberGame.Models;
 using SpecialDelete.NumberGame.ViewModels;
+using System.Globalization;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Services.BetList;
@@ -32,15 +32,13 @@ public class BetListCoreServiceImp(IMapper mapper, BetListService betListService
         viewModel.Odds = betListService.GetOdds(ticket, item.BetType.IsParlay());
         viewModel.Stake = betListService.BuildStake(ticket, ticketHelper);
         var choice = betListService.BuildChoice(ticket, ticketHelper, null, false);
-        const int BetType = 90;
-        viewModel.Choice = item.BetType == BetType ? choice.Split(',').Aggregate((cur, next) => cur + ',' + ' ' + next) : choice;
-        if (isRecover)
-        {
-            return viewModel;
-        }
+        viewModel.Choice = item.BetType == BetTypeConstant.NumberWheel ? choice.Split(',').Aggregate((cur, next) => cur + ',' + ' ' + next) : choice;
 
-        viewModel.BetType = betListService.GetBetType(item.BetType, LanguageCode.English);
-        viewModel.BetTypeSimplified = betListService.GetBetType(item.BetType, LanguageCode.ChineseSimplified);
+        if (!isRecover)
+        {
+            viewModel.BetType = betListService.GetBetType(item.BetType, LanguageCode.English);
+            viewModel.BetTypeSimplified = betListService.GetBetType(item.BetType, LanguageCode.ChineseSimplified);
+        }
 
         return viewModel;
     }

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using AutoMapper;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.Letstalk;
@@ -202,7 +202,7 @@ public class AfterVoidServiceTests
             sendEmailService, notificationLetstalkService, loggingService);
 
         // Act
-        var actual = service.ExecuteWhenVoidFailed(voidResult);
+        var actual = service.ExecuteWhenVoidFailed(voidResult.Validation);
 
         // Assert
         Assert.False(actual.Any());
@@ -226,7 +226,7 @@ public class AfterVoidServiceTests
             sendEmailService, notificationLetstalkService, loggingService);
 
         // Act
-        var actual = service.ExecuteWhenVoidFailed(voidResult);
+        var actual = service.ExecuteWhenVoidFailed(voidResult.Validation);
 
         // Assert
         var iEnumerable = actual.ToList();

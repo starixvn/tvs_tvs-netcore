@@ -98,12 +98,13 @@ public class VoidByCurrencyServiceImp(
 
     private async Task<IEnumerable<Result>> HandlerErrorVoidTickets(VoidTicketsModel model)
     {
-        if (model.Validation.ErrorCode == 0)
+        var validation = model.Validation;
+        if (validation.IsSuccessful)
         {
             return [];
         }
 
-        var results = new List<Result> { new() { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg } };
+        var results = new List<Result> { new() { ErrorCode = validation.ErrorCode, ErrorMsg = validation.ErrorMsg } };
         await netPositionService.RollBackNetPosition(model.TicketsRollbackNetPosition);
 
         return results;
@@ -137,7 +138,7 @@ public class VoidByCurrencyServiceImp(
         }
     }
 
-    private IEnumerable<Result> WarningMessage()
+    private List<Result> WarningMessage()
     {
         var result = new List<Result>();
         if (!string.IsNullOrEmpty(MessageCricket))

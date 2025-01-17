@@ -32,9 +32,25 @@ public class TicketServiceImp(BetListCoreService betListCoreService) : TicketSer
         ticket.Creator = item.Creator;
         ticket.BallSequence = item.BallSequence;
         ticket.SiteDbGroupId = item.SiteDbGroupId;
-        var winLostByRecover = isRecover ? Convert.ToDecimal(item.WinLost).ToString("#,##0.##") : Convert.ToDecimal(item.WinLost).ToString("#,##0.##") + "<br>" + item.Comm.ToString("0.##");
-        ticket.WinLost = item.Status.IsRunningOrWaiting() ? "-" : winLostByRecover;
+        ticket.WinLost = GetWinLost(item, isRecover);
 
         return ticket;
+    }
+
+    private static string GetWinLost(GetTicketModel item, bool isRecover)
+    {
+        if (item.Status.IsRunningOrWaiting())
+        {
+            return "-";
+        }
+
+        var winLost = Convert.ToDecimal(item.WinLost).ToString("#,##0.##");
+        if (isRecover)
+        {
+            return winLost;
+        }
+
+        var comm = item.Comm.ToString("0.##");
+        return $"{winLost}<br>{comm}";
     }
 }

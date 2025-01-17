@@ -54,7 +54,7 @@ public class VoidServiceImp(
         }
     }
 
-    public VoidTicketsCriteria CreateCriteria(VoidTicketsQuery query)
+    private VoidTicketsCriteria CreateCriteria(VoidTicketsQuery query)
     {
         var criteria = mapper.Map<VoidTicketsCriteria>(query);
         criteria.UserId = sessionService.UserId;

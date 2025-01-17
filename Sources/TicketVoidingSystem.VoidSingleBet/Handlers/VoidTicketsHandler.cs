@@ -41,7 +41,7 @@ public class VoidTicketsHandler(
             query.Tickets = updateNpResult.TicketsAfterUpdateNp;
             var voidResult = await voidTicketsService.VoidBet(query);
             results.AddRange(await afterVoidService.ExecuteWhenVoidSuccess(query, voidResult, updateNpResult.WarningCricket));
-            results.AddRange(afterVoidService.ExecuteWhenVoidFailed(voidResult));
+            results.AddRange(afterVoidService.ExecuteWhenVoidFailed(voidResult.Validation));
             await netPositionForCricketService.Rollback(voidResult);
         }
 

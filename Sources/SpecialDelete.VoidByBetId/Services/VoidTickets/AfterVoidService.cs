@@ -62,7 +62,7 @@ public class AfterVoidServiceImp(
         return await letstalkService.Send(query, model);
     }
 
-    public bool IsAbnormalBet(byte? abnormalBetType)
+    private static bool IsAbnormalBet(byte? abnormalBetType)
     {
         const byte AbnormalBetSingle = 0;
         const byte AbnormalBetMainParlay = 1;

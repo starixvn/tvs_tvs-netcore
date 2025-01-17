@@ -54,7 +54,7 @@ public class HandlerServiceImp(
         return results;
     }
 
-    public async Task<IEnumerable<Result>> HandlerRecoveredTickets(SubmittedTicketsModel<RecoverTicketModel> model, RecoverTicketsQuery query)
+    private async Task<IEnumerable<Result>> HandlerRecoveredTickets(SubmittedTicketsModel<RecoverTicketModel> model, RecoverTicketsQuery query)
     {
         var results = new List<Result>();
         if (!model.Tickets.Any())
@@ -68,7 +68,7 @@ public class HandlerServiceImp(
         return results;
     }
 
-    public IEnumerable<Result> HandlerErrorRecoverTickets(SubmittedTicketsModel<RecoverTicketModel> model)
+    private static IEnumerable<Result> HandlerErrorRecoverTickets(SubmittedTicketsModel<RecoverTicketModel> model)
     {
         var results = new List<Result>();
         if (!model.Validation.IsSuccessful)
