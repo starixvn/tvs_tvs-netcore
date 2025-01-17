@@ -6,6 +6,11 @@
       "BetType": "1"
     },
     {
+      "IssueType": 4,
+      "Sports": "5",
+      "BetType": "153"
+    },
+    {
       "Selections": [
         {
           "Items": [
@@ -1083,17 +1088,12 @@
     },
     {
       "IssueType": 6,
-      "Sports": "1",
-      "BetType": "389"
-    },
-    {
-      "IssueType": 6,
-      "Sports": "1,2,6",
+      "Sports": "2,6",
       "BetType": "401"
     },
     {
       "IssueType": 6,
-      "Sports": "1,2,6",
+      "Sports": "2,6",
       "BetType": "402"
     },
     {
@@ -1179,6 +1179,11 @@
       "IssueType": 6,
       "Sports": "2",
       "BetType": "616"
+    },
+    {
+      "IssueType": 6,
+      "Sports": "6",
+      "BetType": "638"
     },
     {
       "IssueType": 6,
@@ -3442,11 +3447,6 @@
     {
       "IssueType": 6,
       "Sports": "50",
-      "BetType": "9678"
-    },
-    {
-      "IssueType": 6,
-      "Sports": "50",
       "BetType": "9680"
     },
     {
@@ -3528,16 +3528,6 @@
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9737"
-    },
-    {
-      "IssueType": 6,
-      "Sports": "50",
-      "BetType": "9738"
-    },
-    {
-      "IssueType": 6,
-      "Sports": "50",
-      "BetType": "9739"
     }
   ]
 }
