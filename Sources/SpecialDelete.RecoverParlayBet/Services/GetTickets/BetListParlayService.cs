@@ -71,7 +71,7 @@ public class BetListSubParlayServiceImp<T>(BetListService betListService) : BetL
 
     private static void SetValueSubTicket(ITicket ticket, T item)
     {
-        ticket.BetId = null;
+        ticket.BetId = default;
         ticket.BetCheck = item.SubBetCheck;
         ticket.BetTeam = item.SubBetTeam;
         ticket.BetTypeId = item.SubBetType;
