@@ -27,9 +27,11 @@ export class AccountTableComponent {
   @Input() permission: PermissionAddRequest;
   @Input() primitiveProps: PrimitiveProperty;
   @Output() changeTable = new EventEmitter();
+  @Output() openPopupAdjustTicketEvent = new EventEmitter<number>();
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;
   tooltip = new Tooltip();
   isCancelRecalculateAmount: boolean;
+  isCheckedShowAdjustAccount: boolean;
 
   constructor(
     private readonly element: ElementRef,
@@ -57,6 +59,7 @@ export class AccountTableComponent {
     const viewModel = await this.validationService.getValidation(this.createValidationBusinessRuleArgs(account));
     const updatedAccountAmount = viewModel.accountWinlostModels.find(x => x.custId === account.custId);
     if (updatedAccountAmount) {
+      account.isShowOnTable = (!this.primitiveProps.isCheckedShowAdjustAccount && !updatedAccountAmount.isHighlight) || updatedAccountAmount.isHighlight;
       account.isHighlight = updatedAccountAmount.isHighlight;
       account.givenCredit = updatedAccountAmount.givenCredit;
       account.currentLosing = updatedAccountAmount.currentLosing;
@@ -127,6 +130,14 @@ export class AccountTableComponent {
     if (!this.filter.isVoided) {
       account.isShowInput = true;
     }
+  }
+
+  openPopupAdjustTicket(cusId: number) {
+    this.openPopupAdjustTicketEvent.emit(cusId);
+  }
+
+  isShowAccounts() {
+    return this.accountWinlostModels?.length > 0 && this.accountWinlostModels?.some(x => x.isShowOnTable || x.isHighlight);
   }
 
   private async delayForEventFocus() {

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
-import { Selection } from "src/utility/models/selection.model";
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
@@ -73,6 +72,7 @@ export class AbnormalAccountsComponent implements OnInit {
   }
 
   async saveRequest() {
+    this.primitiveProps.isCheckedShowAdjustAccount = false;
     if (this.accountTableComponent && !this.accountTableComponent.isValid()) {
       this.addRequestStore.changeSavingRequestStatus(false);
       return;
@@ -93,15 +93,21 @@ export class AbnormalAccountsComponent implements OnInit {
         return;
       }
     }
-
+    this.primitiveProps.isCheckedShowAdjustAccount = false;
     const validationOutput = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
     this.primitiveProps.validAccountWinlostModels = validationOutput.accountWinlostModels;
     this.primitiveProps.transInfoAddRequestModel = validationOutput.transInfoAddRequestModel;
     if (this.isShowUserInfo()) {
       this.accountAffectedTicketModel.adjustedAccounts = [];
-      this.primitiveProps.validAccountWinlostModels.forEach(x => x.isEditedTicket = false);
+      this.primitiveProps.validAccountWinlostModels?.forEach(x => x.isEditedTicket = false);
     }
     this.addRequestStore.changeBlockingUiStatus(false);
+  }
+
+  changeShowAdjustAccount() {
+    this.primitiveProps.validAccountWinlostModels.forEach(
+      x => x.isShowOnTable = (!this.primitiveProps.isCheckedShowAdjustAccount && !x.isHighlight) || x.isHighlight
+    );
   }
 
   onClickCancelSaveRequest() {
@@ -112,14 +118,9 @@ export class AbnormalAccountsComponent implements OnInit {
     return this.filter.action === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
   }
 
-  openAccountAffectedTicket() {
-    this.accountAffectedTicketModel.usernames = this.primitiveProps.validAccountWinlostModels
-      .filter(x => x.isCanEditTicket)
-      .map(x => {
-        return { name: x.username, value: x.custId.toString() } as Selection;
-      })
+  openPopupAdjustTicket(custId: number) {
     this.accountAffectedTicketModel.accountWinlostModels = this.primitiveProps.validAccountWinlostModels;
-    this.accountAffectedTicketModel.selectedCustId = this.accountAffectedTicketModel.usernames[0].value;
+    this.accountAffectedTicketModel.selectedCustId = custId;
     this.accountAffectedTicketModel.transInfoJson = this.primitiveProps.transInfoAddRequestModel.transInfoJson;
     this.accountAffectedTicketModel.isOpen = true;
   }
@@ -133,10 +134,6 @@ export class AbnormalAccountsComponent implements OnInit {
     this.primitiveProps.isShowError = false;
     this.primitiveProps.validAccountWinlostModels = [];
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
-  }
-
-  isShowButtonAdjustEstimatedVoid() {
-    return !this.isEdit && this.primitiveProps.validAccountWinlostModels?.some(x => x.isCanEditTicket);
   }
 
   private getMinDateByPermission(isVoidAllArchivedTickets: boolean): NgbDateStruct {

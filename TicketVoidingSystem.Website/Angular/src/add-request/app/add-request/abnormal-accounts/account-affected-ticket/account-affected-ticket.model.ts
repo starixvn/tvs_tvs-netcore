@@ -1,11 +1,9 @@
-import { Selection } from "src/utility/models/selection.model";
 import { TicketTableViewModel } from "../../components/ticket-table/ticket-table.model";
 import { AccountWinlostModel } from "../models/account-winlost.model";
 
 export class AccountAffectedTicketModel {
   isOpen: boolean;
-  usernames: Selection[];
-  selectedCustId: string;
+  selectedCustId: number;
   affectedTickets: TicketTableViewModel;
   transInfoJson: string;
   accountWinlostModels: AccountWinlostModel[];

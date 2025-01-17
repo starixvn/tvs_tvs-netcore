@@ -13,4 +13,5 @@ export class AccountWinlostModel {
   isShowInput: boolean;
   isEditedTicket: boolean;
   isCanEditTicket: boolean;
+  isShowOnTable: boolean;
 }

@@ -9,7 +9,7 @@
     <table>
       <thead>
         <tr>
-          <th scope="col" class="col-tb-1">
+          <th scope="col" class="col-tb-1" *ngIf="!viewOnly">
             <div>No</div>
           </th>
           <th scope="col" class="col-tb-2">
@@ -62,12 +62,14 @@
     <table>
       <ng-container *ngFor="let item of accountWinlostModels; index as i">
         <tbody>
-          <tr [ngClass]="item.isHighlight ? 'bg-highlight' : ''">
-            <td class="col-tb-1">
+          <tr *ngIf="item.isShowOnTable || item.isHighlight" [ngClass]="item.isHighlight ? 'bg-highlight' : ''">
+            <td class="col-tb-1" *ngIf="!viewOnly">
               <div>{{i + 1}}</div>
             </td>
             <td class="col-tb-2 text-left">
-              <div>{{item.username}}</div>
+              <div>
+                <span [ngClass]="item.isHighlight && !viewOnly ? 'username-link' : ''" (click)="item.isHighlight && openPopupAdjustTicket(item.custId)">{{item.username}}</span>
+              </div>
             </td>
             <td class="col-tb-3 text-right">
               <div>{{showDecimalWithComma(item.givenCredit)}}</div>
@@ -100,7 +102,7 @@
       </ng-container>
     </table>
 
-    <table *ngIf="accountWinlostModels == null || accountWinlostModels.length == 0">
+    <table *ngIf="!isShowAccounts()">
       <tbody>
         <tr>
           <td class="no-data">There is no data</td>

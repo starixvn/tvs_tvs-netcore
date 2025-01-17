@@ -28,6 +28,8 @@ public class AccountWinlostModel
 
     public bool IsCanEditTicket { get; set; }
 
+    public bool IsShowOnTable { get; set; }
+
     public IEnumerable<TicketCalculateWinLostAccount> VoidTickets { get; set; }
 }
 

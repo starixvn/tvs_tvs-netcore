@@ -6,6 +6,7 @@ using Fanex.Data.Repository;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
@@ -88,7 +89,7 @@ public class UpdateRequestProcessStageTests
         var query = new EditRequestQuery
         {
             RequestId = 1,
-            ActionId = 1,
+            ActionId = ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId,
             MatchId = 1,
             AbnormalAccountInfo = new AbnormalAccountViewModel
             {

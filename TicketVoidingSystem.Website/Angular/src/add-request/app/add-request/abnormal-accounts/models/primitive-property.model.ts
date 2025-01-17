@@ -15,4 +15,5 @@ export class PrimitiveProperty {
   permission: PermissionAddRequest;
   minDate: NgbDateStruct;
   numberOfTicketsExistedInRequest: number;
+  isCheckedShowAdjustAccount: boolean;
 }

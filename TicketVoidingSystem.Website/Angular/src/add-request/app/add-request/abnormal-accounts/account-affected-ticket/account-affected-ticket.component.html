@@ -12,18 +12,6 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="filter-user-name mb-2">
-            <label class="col-form-label col-form-label-sm">Username</label>
-            <ng-select class="custom-sm"
-                [items]="model.usernames"
-                bindLabel="name"
-                bindValue="value"
-                [(ngModel)]="model.selectedCustId"
-                [clearable]="false"
-                [searchable]="false"
-                (change)="onChangeUsername()">
-              </ng-select>
-          </div>
           <account-table class="mb-2" #accountTable
             [viewOnly]="true"
             [accountWinlostModels]="tempAdjustedAccounts.accountWinlostTables">

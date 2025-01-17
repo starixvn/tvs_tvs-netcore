@@ -68,6 +68,7 @@ public class CheckValidUsernamesHandler(
     {
         foreach (var account in accounts)
         {
+            account.IsShowOnTable = true;
             var currentAccount = originalAccounts.FirstOrDefault(x => x.CustId == account.CustId);
             if (currentAccount == null)
             {
@@ -107,6 +108,7 @@ public class CheckValidUsernamesHandler(
         if (!calcVoidResult.VoidTickets.Any())
         {
             validationResult.IsInvalidTotalTicket = true;
+            return validationResult;
         }
 
         validationResult.IsInvalidTotalTicket = query.AccountWinlostModels.Any()

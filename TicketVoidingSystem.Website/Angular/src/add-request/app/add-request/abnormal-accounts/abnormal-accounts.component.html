@@ -28,20 +28,24 @@
     <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
       (click)="handleSearchEvent()" (mousedown)="$event.preventDefault()">Search</button><br/>
   </div>
-  <div *ngIf="isShowButtonAdjustEstimatedVoid()" class="mb-1">
-    <button [disabled]="filter.isVoided" type="submit" class="btn btn-success btn-sm"
-    (click)="openAccountAffectedTicket()">Adjust Estimated Void Amount</button>
+  <div *ngIf="primitiveProps.isShowAccountWinLost">
+    <div class="d-flex align-items-center">
+      <label class="col-form-label col-form-label-sm d-flex align-items-center">
+        <input type="checkbox" [(ngModel)]="primitiveProps.isCheckedShowAdjustAccount" class="mr-1"
+        (ngModelChange)="changeShowAdjustAccount()" [disabled]="isVoided"/>Adjust Estimated Void Amount
+      </label>
+    </div>
+    <account-table #accountTable
+      [filter]="filter"
+      [requestId]="requestId"
+      (changeTable)="hideValidationMessage()"
+      (openPopupAdjustTicketEvent)="openPopupAdjustTicket($event)"
+      [abnormalAccountModel]="abnormalAccountModel"
+      [primitiveProps]="primitiveProps"
+      [accountWinlostModels]="primitiveProps.validAccountWinlostModels"
+      [permission]="primitiveProps.permission">
+    </account-table>
   </div>
-  <account-table #accountTable
-    *ngIf="primitiveProps.isShowAccountWinLost"
-    [filter]="filter"
-    [requestId]="requestId"
-    (changeTable)="hideValidationMessage()"
-    [abnormalAccountModel]="abnormalAccountModel"
-    [primitiveProps]="primitiveProps"
-    [accountWinlostModels]="primitiveProps.validAccountWinlostModels"
-    [permission]="primitiveProps.permission">
-  </account-table>
 </div>
 <account-affected-ticket
   *ngIf="accountAffectedTicketModel.isOpen"

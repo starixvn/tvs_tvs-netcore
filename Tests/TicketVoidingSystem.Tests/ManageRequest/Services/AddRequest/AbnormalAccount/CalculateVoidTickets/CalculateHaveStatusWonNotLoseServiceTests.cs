@@ -73,7 +73,7 @@ public class CalculateHaveStatusWonNotLoseServiceTests : IClassFixture<AppSettin
                 new()
                 {
                     IsHighlight = true, CurrentLosing = -100, CurrentWinning = 150, AdjustVoidLimit = 40,
-                    EstimateVoidAmount = 100, WinLostAfterVoid = -50, VoidTickets = voidTickets, CustId = 1
+                    EstimateVoidAmount = 100, EstimateVoidAmountUnEditableTickets = 100, WinLostAfterVoid = -50, VoidTickets = voidTickets, CustId = 1
                 },
                 new()
                 {
@@ -82,6 +82,7 @@ public class CalculateHaveStatusWonNotLoseServiceTests : IClassFixture<AppSettin
                     CurrentLosing = 0,
                     CurrentWinning = 0,
                     EstimateVoidAmount = 0,
+                    EstimateVoidAmountUnEditableTickets = 0,
                     WinLostAfterVoid = 0,
                     VoidTickets = voidTicketsWithCustId2
                 }

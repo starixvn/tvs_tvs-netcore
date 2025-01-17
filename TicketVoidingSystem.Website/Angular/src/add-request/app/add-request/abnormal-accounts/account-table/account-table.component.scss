@@ -182,3 +182,14 @@ table {
   font-style: italic;
   font-size: 11px;
 }
+
+.username-link {
+  font-weight: bold;
+  color: #4e71bb;
+  cursor: pointer;
+}
+
+.username-link:hover {
+  color: #0080ff;
+  text-decoration: underline;
+}

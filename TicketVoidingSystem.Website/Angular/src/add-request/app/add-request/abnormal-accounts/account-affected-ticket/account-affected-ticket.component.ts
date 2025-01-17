@@ -16,13 +16,11 @@ export class AccountAffectedTicketComponent implements OnInit {
   @Output() ticketsChange = new EventEmitter<TicketAdjustedAccountModel[]>();
   isBlock: boolean;
   isEdittedTicket: boolean;
-  previousCustId: string;
   tempAdjustedAccounts = new AdjustedAccountModel();
   constructor(private readonly addRequestApiService: AddRequestApiService) { }
 
   async ngOnInit() {
     this.isEdittedTicket = false;
-    this.previousCustId = this.model.selectedCustId;
     await this.updateTable();
   }
 
@@ -36,18 +34,12 @@ export class AccountAffectedTicketComponent implements OnInit {
     }
   }
 
-  async onChangeUsername() {
-    this.updateAdjustedAccounts();
-    await this.updateTable();
-    this.previousCustId = this.model.selectedCustId;
-  }
-
   closeClick() {
     this.model.isOpen = false;
   }
 
   saveClick() {
-    this.updateAdjustedAccounts();
+    this.updateAdjustedAccounts(this.model.selectedCustId);
     this.updateValueToAccountTable();
     this.ticketsChange.emit(this.getAdjustedTickets());
     this.model.isOpen = false;
@@ -78,13 +70,11 @@ export class AccountAffectedTicketComponent implements OnInit {
   }
 
   private updateValueToAccountTable() {
-    this.model.adjustedAccounts.forEach(item => {
-      const currentAccount = this.model.accountWinlostModels.find(x => x.custId === Number(item.custId));
-      currentAccount.estimateVoidAmount = this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmount;
-      currentAccount.winLostAfterVoid = this.tempAdjustedAccounts.accountWinlostTables[0].winLostAfterVoid;
-      currentAccount.isEditedTicket = this.tempAdjustedAccounts.accountWinlostTables[0].isEditedTicket;
-    });
-  }
+    const currentAccount = this.model.accountWinlostModels.find(x => x.custId === this.model.selectedCustId);
+    currentAccount.estimateVoidAmount = this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmount;
+    currentAccount.winLostAfterVoid = this.tempAdjustedAccounts.accountWinlostTables[0].winLostAfterVoid;
+    currentAccount.isEditedTicket = this.tempAdjustedAccounts.accountWinlostTables[0].isEditedTicket;
+}
 
   private async getTicketsAbnormalAccount() {
     this.isBlock = true;
@@ -93,17 +83,16 @@ export class AccountAffectedTicketComponent implements OnInit {
     this.isBlock = false;
   }
 
-  private updateAdjustedAccounts() {
+  private updateAdjustedAccounts(custId: number) {
     if (!this.isEdittedTicket) {
       return;
     }
 
-    const previousCustId = Number(this.previousCustId);
-    if (this.model.adjustedAccounts.every(x => x.custId !== previousCustId)) {
-      this.model.adjustedAccounts.push({ custId: previousCustId, ticketTableViewModel: this.tempAdjustedAccounts.ticketTableViewModel } as AdjustedAccountModel);
+    if (this.model.adjustedAccounts.every(x => x.custId !== custId)) {
+      this.model.adjustedAccounts.push({ custId: custId, ticketTableViewModel: this.tempAdjustedAccounts.ticketTableViewModel } as AdjustedAccountModel);
     } else {
-      const index = this.model.adjustedAccounts.findIndex(x => x.custId === previousCustId);
-      this.model.adjustedAccounts[index].ticketTableViewModel = this.tempAdjustedAccounts.ticketTableViewModel;
+      const account = this.model.adjustedAccounts.find(x => x.custId === custId);
+      account.ticketTableViewModel = this.tempAdjustedAccounts.ticketTableViewModel;
     }
     this.tempAdjustedAccounts.accountWinlostTables[0].isEditedTicket = true;
     this.isEdittedTicket = false;
