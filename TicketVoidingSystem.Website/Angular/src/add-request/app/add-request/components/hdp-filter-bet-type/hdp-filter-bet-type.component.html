@@ -24,11 +24,22 @@
               bindLabel="name"
               bindValue="value"
               [(ngModel)]="selection.value"
-              (change)="onChangeItemSelect()"
+              (change)="onChangeFilter()"
               [searchable]="false"
               [clearable]="false">
             </ng-select>
           </div>
+      </div>
+      </ng-container>
+    </div>
+    <div *ngIf="betTypeSelected?.inputs" class="d-flex filter-inputs">
+      <ng-container *ngFor="let input of betTypeSelected.inputs">
+        <div class="d-flex input mr-3">
+          <label class="col-form-label mr-2">{{input.name}}</label>
+          <input class="form-control form-control-sm item-input"
+              [disabled]="isDisabled"
+              [(ngModel)]="input.value"
+              (ngModelChange)="onChangeFilter()"/>
       </div>
       </ng-container>
     </div>

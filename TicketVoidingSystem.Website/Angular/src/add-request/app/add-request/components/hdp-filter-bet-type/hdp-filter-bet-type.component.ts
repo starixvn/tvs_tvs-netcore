@@ -43,7 +43,7 @@ export class HdpFilterBetTypeComponent implements OnChanges {
       this.filterBetTypeId = this.allFilterBetType?.[0].betType;
       this.allFilterBetType[0].isChecked = true;
     }
-    this.onChangeItemSelect();
+    this.onChangeFilter();
   }
 
   onChangeBetType(event: HdpFilterBetType) {
@@ -53,10 +53,10 @@ export class HdpFilterBetTypeComponent implements OnChanges {
     })
     this.allFilterBetType[indexEvent].isChecked = true;
     this.betTypeSelected = event;
-    this.onChangeItemSelect();
+    this.onChangeFilter();
   }
 
-  onChangeItemSelect() {
+  onChangeFilter() {
     this.hdpFilterBetTypeService.updateFilterBetTypeData(this.allFilterBetType, this.filterBetType)
     this.changeEvent.emit();
   }

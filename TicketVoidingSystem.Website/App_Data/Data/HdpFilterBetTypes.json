@@ -2140,6 +2140,12 @@
           "Name": "Map"
         }
       ],
+      "Inputs": [
+        {
+          "Name": "Kill",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "43",
       "BetType": "9089"
@@ -3205,101 +3211,229 @@
       "BetType": "9409"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9410"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9411"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9412"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9413"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9414"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9415"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9416"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9417"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9418"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9419"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9420"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9421"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        },
+        {
+          "Name": "Ball",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9422"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        },
+        {
+          "Name": "Ball",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9423"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Wicket",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9428"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Wicket",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9429"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Wicket",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9430"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Wicket",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9431"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Wicket",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9432"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Wicket",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9433"
@@ -3390,51 +3524,127 @@
       "BetType": "9604"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9607"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9608"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9609"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9610"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9611"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9612"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        },
+        {
+          "Name": "Ball",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9613"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        },
+        {
+          "Name": "Ball",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9614"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        },
+        {
+          "Name": "Delivery",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9616"
     },
     {
+      "Inputs": [
+        {
+          "Name": "Over",
+          "Value": ""
+        },
+        {
+          "Name": "Delivery",
+          "Value": ""
+        }
+      ],
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9617"

@@ -1,4 +1,4 @@
-import { Selection } from '../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { Selection, Item } from '../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 
 export class HdpFilterBetType {
   name: string;
@@ -7,4 +7,5 @@ export class HdpFilterBetType {
   betType: string;
   value: string;
   isChecked: boolean;
+  inputs: Item[] = [];
 }
