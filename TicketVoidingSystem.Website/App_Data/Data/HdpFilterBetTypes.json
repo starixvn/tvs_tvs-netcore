@@ -35,7 +35,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Set"
+          "Name": "Set",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -67,7 +68,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Set"
+          "Name": "Set",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -95,7 +97,8 @@
               "Value": "804"
             }
           ],
-          "Name": "Quarter"
+          "Name": "Quarter",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -142,7 +145,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Game"
+          "Name": "Game",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -174,7 +178,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Set"
+          "Name": "Set",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -182,26 +187,6 @@
       "BetType": "3904"
     },
     {
-      "Selections": [
-        {
-          "Items": [
-            {
-              "Name": "3",
-              "Value": "803"
-            },
-            {
-              "Name": "5",
-              "Value": "805"
-            },
-            {
-              "Name": "7",
-              "Value": "807"
-            }
-          ],
-          "Name": "Inning",
-          "Value": "3"
-        }
-      ],
       "IssueType": 4,
       "Sports": "8",
       "BetType": "8800"
@@ -224,7 +209,8 @@
             }
           ],
           "Name": "Inning",
-          "Value": "3"
+          "Value": "3",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -268,7 +254,8 @@
               "Value": "808"
             }
           ],
-          "Name": "Inning"
+          "Name": "Inning",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -316,7 +303,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Inning"
+          "Name": "Inning",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -353,7 +341,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -385,7 +374,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -417,7 +407,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -449,7 +440,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -481,7 +473,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -513,7 +506,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -545,7 +539,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -577,7 +572,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -609,7 +605,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -641,7 +638,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -673,7 +671,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -705,7 +704,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -737,7 +737,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         },
         {
           "Items": [
@@ -866,7 +867,8 @@
               "Value": ">30"
             }
           ],
-          "Name": "Round"
+          "Name": "Round",
+          "XmlAttribute": "BetIdY"
         }
       ],
       "IssueType": 4,
@@ -914,7 +916,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -962,7 +965,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -1010,7 +1014,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 4,
@@ -1047,7 +1052,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Set"
+          "Name": "Set",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1079,7 +1085,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Set"
+          "Name": "Set",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1117,7 +1124,8 @@
               "Value": "804"
             }
           ],
-          "Name": "Quarter"
+          "Name": "Quarter",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1145,7 +1153,8 @@
               "Value": "804"
             }
           ],
-          "Name": "Quarter"
+          "Name": "Quarter",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1173,7 +1182,8 @@
               "Value": "804"
             }
           ],
-          "Name": "Quarter"
+          "Name": "Quarter",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1230,7 +1240,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Game"
+          "Name": "Game",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1267,7 +1278,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Set"
+          "Name": "Set",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1299,7 +1311,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Set"
+          "Name": "Set",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1331,7 +1344,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Set"
+          "Name": "Set",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1370,7 +1384,8 @@
               "Value": "807"
             }
           ],
-          "Name": "Inning"
+          "Name": "Inning",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1390,7 +1405,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Inning"
+          "Name": "Inning",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1410,7 +1426,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Inning"
+          "Name": "Inning",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1454,7 +1471,8 @@
               "Value": "808"
             }
           ],
-          "Name": "Inning"
+          "Name": "Inning",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1507,7 +1525,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Inning"
+          "Name": "Inning",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1544,7 +1563,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1576,7 +1596,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1608,7 +1629,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1640,7 +1662,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1672,7 +1695,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1736,7 +1760,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1768,7 +1793,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1800,7 +1826,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1832,7 +1859,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1864,7 +1892,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1896,7 +1925,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -1928,7 +1958,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         },
         {
           "Items": [
@@ -2057,7 +2088,8 @@
               "Value": ">30"
             }
           ],
-          "Name": "Round"
+          "Name": "Round",
+          "XmlAttribute": "BetIdY"
         }
       ],
       "IssueType": 6,
@@ -2089,7 +2121,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2137,13 +2170,15 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "Inputs": [
         {
           "Name": "Kill",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "YY"
         }
       ],
       "IssueType": 6,
@@ -2191,7 +2226,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2239,7 +2275,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2287,7 +2324,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2335,7 +2373,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2383,7 +2422,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2431,7 +2471,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2479,7 +2520,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2527,7 +2569,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2575,7 +2618,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2623,7 +2667,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2663,7 +2708,8 @@
               "Value": "807"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2703,7 +2749,8 @@
               "Value": "807"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2743,7 +2790,8 @@
               "Value": "807"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2783,7 +2831,8 @@
               "Value": "807"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2831,7 +2880,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2879,7 +2929,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2927,7 +2978,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -2975,7 +3027,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -3023,7 +3076,8 @@
               "Value": "809"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -3055,7 +3109,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -3087,7 +3142,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -3119,7 +3175,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -3151,7 +3208,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -3183,7 +3241,8 @@
               "Value": "805"
             }
           ],
-          "Name": "Map"
+          "Name": "Map",
+          "XmlAttribute": "BetIdX"
         }
       ],
       "IssueType": 6,
@@ -3214,7 +3273,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3225,7 +3285,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3236,7 +3297,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3247,7 +3309,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3258,7 +3321,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3269,7 +3333,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3280,7 +3345,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3291,7 +3357,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3302,7 +3369,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3313,7 +3381,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3324,7 +3393,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3335,7 +3405,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3346,11 +3417,13 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         },
         {
           "Name": "Ball",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "YY"
         }
       ],
       "IssueType": 6,
@@ -3361,11 +3434,13 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         },
         {
           "Name": "Ball",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "YY"
         }
       ],
       "IssueType": 6,
@@ -3376,7 +3451,8 @@
       "Inputs": [
         {
           "Name": "Wicket",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3387,7 +3463,8 @@
       "Inputs": [
         {
           "Name": "Wicket",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3398,7 +3475,8 @@
       "Inputs": [
         {
           "Name": "Wicket",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3409,7 +3487,8 @@
       "Inputs": [
         {
           "Name": "Wicket",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3420,7 +3499,8 @@
       "Inputs": [
         {
           "Name": "Wicket",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3431,7 +3511,8 @@
       "Inputs": [
         {
           "Name": "Wicket",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3527,7 +3608,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3538,7 +3620,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3549,7 +3632,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3565,13 +3649,15 @@
       ],
       "IssueType": 6,
       "Sports": "50",
-      "BetType": "9610"
+      "BetType": "9610",
+          "XmlAttribute": "_XXX"
     },
     {
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3582,7 +3668,8 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         }
       ],
       "IssueType": 6,
@@ -3593,11 +3680,13 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         },
         {
           "Name": "Ball",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "YY"
         }
       ],
       "IssueType": 6,
@@ -3608,11 +3697,13 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         },
         {
           "Name": "Ball",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "YY"
         }
       ],
       "IssueType": 6,
@@ -3623,11 +3714,13 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         },
         {
           "Name": "Delivery",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "YY"
         }
       ],
       "IssueType": 6,
@@ -3638,11 +3731,13 @@
       "Inputs": [
         {
           "Name": "Over",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "_XXX"
         },
         {
           "Name": "Delivery",
-          "Value": ""
+          "Value": "",
+          "XmlAttribute": "YY"
         }
       ],
       "IssueType": 6,

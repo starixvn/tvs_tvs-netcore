@@ -18,54 +18,85 @@ export class HdpFilterBetTypeService {
     return allFilterBetTypes;
   }
 
-  private initAllBetType(allFilterBetType: HdpFilterBetType[]){
-    allFilterBetType[0].isChecked = true;
+  private initAllBetType(allFilterBetType: HdpFilterBetType[]) {
     allFilterBetType.forEach(x => {
       x.selections?.forEach(selection => selection.value = selection.items[0].value);
     });
   }
 
-  updateFilterBetTypeData(allFilterBetType: HdpFilterBetType[], filterBetType: FilterBetType){
-    if(allFilterBetType.length > 0){
-      let filterData = [];
-      const betTypeSelected = allFilterBetType.find(x => x.isChecked);
-      betTypeSelected.selections?.forEach(x => filterData.push(x.value));
-      betTypeSelected.inputs?.forEach(x => filterData.push(x.value));
+  private reSetDataFilter(filterBetType: FilterBetType, betTypeId: string){
+    filterBetType.filterBetIdX = '';
+    filterBetType.filterBetIdY = '';
+    filterBetType.filterBetTypeId = betTypeId;
+  }
 
-      filterBetType.filterBetIdX = filterData.length > 0 ? filterData[0] : "";
-      filterBetType.filterBetIdY = filterData.length > 1 ? this.getValueBetIdTypeYy(filterData[1]) : "";
-      filterBetType.filterBetTypeId = betTypeSelected.betType;      
+  updateAllFilterBetTypeData(allFilterBetType: HdpFilterBetType[], filterBetType: FilterBetType) {
+    if (allFilterBetType.length > 0) {
+      const betTypeSelected = allFilterBetType.find(x => x.isChecked);
+      this.reSetDataFilter(filterBetType, betTypeSelected.betType)
+      betTypeSelected.selections?.forEach(x => {
+        this.updateFilterBetTypeData(filterBetType, x.xmlAttribute, x.value);
+      });
+      betTypeSelected.inputs?.forEach(x => {
+        this.updateFilterBetTypeData(filterBetType, x.xmlAttribute, x.value);
+      });
+    }
+  }
+
+  updateFilterBetTypeData(filterBetType: FilterBetType, attribute: string, value: string){
+    switch (attribute.toLowerCase()) {
+      case 'betidx':
+        filterBetType.filterBetIdX = value;
+        break;
+      case 'betidy':
+        filterBetType.filterBetIdY = value;
+        break;
+      case '_xxx':
+        filterBetType.filterBetIdX = this.getValueBetIdTypeXxx(value);
+        break;
+      case 'yy':
+        filterBetType.filterBetIdY = this.getValueBetIdTypeYy(value);
+        break;
+      default:
+        filterBetType.filterBetIdX = "";
+        filterBetType.filterBetIdY = "";
     }
   }
 
   getValueBetIdTypeYy(value: string): string {
-    if (!value) {
-      return '';
-    }
-
-    return value.padStart(2, '0');
+    return value ? value.padStart(2, '0') : '';
   }
 
-  loadDataEditPage(allFilterBetType: HdpFilterBetType[], filterBetType: FilterBetType){
+  getValueBetIdTypeXxx(value: string): string {
+    return value ? `_${value.padStart(3, '0')}` : '____';
+  }
+
+  loadDataEditPage(allFilterBetType: HdpFilterBetType[], filterBetType: FilterBetType) {
     const betTypeSelected = allFilterBetType.find(x => x.betType === filterBetType.filterBetTypeId);
     betTypeSelected.isChecked = true;
-    if(betTypeSelected.selections?.length > 0 && betTypeSelected.inputs?.length > 0){
-      betTypeSelected.selections[0].value = filterBetType.filterBetIdX;
-      betTypeSelected.inputs[0].value = filterBetType.filterBetIdY;
-    }
-    else{
-      if(betTypeSelected.selections?.length > 0){
-        betTypeSelected.selections[0].value = filterBetType.filterBetIdX;
-      }
-      if(betTypeSelected.selections?.length > 1){
-        betTypeSelected.selections[1].value = filterBetType.filterBetIdY;
-      }
-      if(betTypeSelected.inputs?.length > 0){
-        betTypeSelected.inputs[0].value = filterBetType.filterBetIdX;
-      }
-      if(betTypeSelected.inputs?.length > 1){
-        betTypeSelected.inputs[1].value = parseInt(filterBetType.filterBetIdY, 10).toString();
-      }
+    betTypeSelected.selections?.forEach(x => {
+      x.value = this.getInputFilterBetTypeEdit(filterBetType, x.xmlAttribute);
+    });
+    betTypeSelected.inputs?.forEach(x => {
+      x.value = this.getInputFilterBetTypeEdit(filterBetType, x.xmlAttribute);
+    });
+  }
+
+  getInputFilterBetTypeEdit(filterBetType: FilterBetType, attribute: string){
+    switch (attribute.toLowerCase()) {
+      case 'betidx':
+        return filterBetType.filterBetIdX;
+      case 'betidy':
+        return filterBetType.filterBetIdY;      
+      case '_xxx':
+        let valueInputX = filterBetType.filterBetIdX;
+        valueInputX.replaceAll('_', '');
+        return isNaN(parseInt(valueInputX, 10)) ? "" : parseInt(valueInputX, 10).toString();
+      case 'yy':
+        let valueInputY = filterBetType.filterBetIdY;
+        return isNaN(parseInt(valueInputY, 10)) ? "" : parseInt(valueInputY, 10).toString();
+      default:
+        return "";
     }
   }
 }
