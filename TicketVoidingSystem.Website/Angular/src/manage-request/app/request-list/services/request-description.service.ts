@@ -125,7 +125,10 @@ export class RequestDescriptionService {
 
   private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string, oddsContent: string, isShowCancelCOCount: boolean, isShowMistakenBy: boolean): string {
     const cancelCashOutCount = isShowCancelCOCount ? `, Cancel Cash Out: ${copyInfoResponse.requestInfo.totalCancelCashOutCount}` : '';
+    const momentGlobalShowTime = moment(copyInfoResponse.requestInfo.globalShowTime);
+
     const content = `Hi CSD, please void${copyInfoResponse.requestInfo.liveStatus}tickets for us\n`
+      + `K.O Time: ${momentGlobalShowTime.format(DateTimeFormat.SHORT_TIME_FORMAT)}\n`
       + `League: ${copyInfoResponse.requestInfo.leagueName}\n`
       + `Match: ${copyInfoResponse.requestInfo.matchEvent}\n`
       + `Match ID: ${copyInfoResponse.requestInfo.matchId}\n`

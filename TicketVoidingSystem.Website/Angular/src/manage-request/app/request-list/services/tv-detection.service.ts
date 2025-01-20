@@ -39,7 +39,7 @@ export class TvDetectionService {
     
     return `\nTV Detection: ${requestInfo.tvDetectionValue === TvDetectionType.NONE ? TvDetection.OFF : TvDetection.ON}\n`
       + this.getTvDetectionTime(requestInfo)
-      + ` This check time start void`;
+      + ` This check time start void (${requestInfo.minAcceptType})`;
   }
 
   private static getTvDetectionTime(requestInfo: RequestInfoForCopy){
