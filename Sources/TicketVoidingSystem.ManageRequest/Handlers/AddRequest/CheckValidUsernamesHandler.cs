@@ -74,7 +74,7 @@ public class CheckValidUsernamesHandler(
             {
                 continue;
             }
-            account.AdjustVoidLimit = currentAccount?.AdjustVoidLimit;
+            account.AdjustVoidLimit = currentAccount.AdjustVoidLimit;
             account.IsEditedTicket = currentAccount.IsEditedTicket;
         }
 
@@ -84,18 +84,21 @@ public class CheckValidUsernamesHandler(
     private string GetOutputTransInfoAddRequest(CheckValidUsernamesRequest query, CheckUsernamesInDatabaseResult checkUsernamesResult, IEnumerable<TicketCalculateWinLostAccount> voidTickets)
     {
         return query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
-            ? GetOutputTransInfoAddRequestActionAutoVoidWithPolicy(checkUsernamesResult, voidTickets)
+            ? GetOutputTransInfoAddRequestActionAutoVoidWithPolicy(checkUsernamesResult, voidTickets, query.StatusIds)
             : checkUsernamesResult.TransInfoJsonCompress;
     }
 
-    private string GetOutputTransInfoAddRequestActionAutoVoidWithPolicy(CheckUsernamesInDatabaseResult checkUsernamesResult, IEnumerable<TicketCalculateWinLostAccount> voidTickets)
+    private string GetOutputTransInfoAddRequestActionAutoVoidWithPolicy(
+        CheckUsernamesInDatabaseResult checkUsernamesResult, IEnumerable<TicketCalculateWinLostAccount> voidTickets, string statusIds)
     {
+        var ticketStatusIds = statusIds.Split(",").Select(int.Parse).ToList();
         foreach (var ticket in checkUsernamesResult.TicketCalculateWinLostAccount.Where(x => x.StatusId == TicketStatus.WonId))
         {
             ticket.IsChecked = voidTickets.Any(y => y.TransId == ticket.TransId);
         }
 
-        return compressDataAddRequestService.CompressTicket(checkUsernamesResult.TicketCalculateWinLostAccount);
+        return compressDataAddRequestService.CompressTicket(
+            checkUsernamesResult.TicketCalculateWinLostAccount.Where(x => ticketStatusIds.Contains(x.StatusId)));
     }
 
     private static CheckUsernamesModel GetValidationAfterCalc(CheckValidUsernamesRequest query, CheckUsernamesModel validationResult, CalcVoidTicketsResult calcVoidResult)
@@ -116,7 +119,6 @@ public class CheckValidUsernamesHandler(
                                                 && calcVoidResult.VoidTickets.All(x => string.Equals(x.Status, TicketStatus.Won, StringComparison.OrdinalIgnoreCase));
 
         return validationResult;
-
     }
 
     private static void ClearVoidTicketsInAccounts(IEnumerable<AccountWinlostModel> accounts)

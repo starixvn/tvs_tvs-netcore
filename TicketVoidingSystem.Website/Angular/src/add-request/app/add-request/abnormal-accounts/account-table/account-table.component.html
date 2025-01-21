@@ -62,13 +62,13 @@
     <table>
       <ng-container *ngFor="let item of accountWinlostModels; index as i">
         <tbody>
-          <tr *ngIf="item.isShowOnTable || item.isHighlight" [ngClass]="item.isHighlight ? 'bg-highlight' : ''">
+          <tr *ngIf="item.isShowOnTable" [ngClass]="item.isHighlight ? 'bg-highlight' : ''">
             <td class="col-tb-1" *ngIf="!viewOnly">
               <div>{{i + 1}}</div>
             </td>
             <td class="col-tb-2 text-left">
               <div>
-                <span [ngClass]="item.isHighlight && !viewOnly ? 'username-link' : ''" (click)="item.isHighlight && openPopupAdjustTicket(item.custId)">{{item.username}}</span>
+                <span [ngClass]="item.isCanEditTicket && !viewOnly ? 'username-link' : ''" (click)="item.isCanEditTicket && openPopupAdjustTicket(item.custId)">{{item.username}}</span>
               </div>
             </td>
             <td class="col-tb-3 text-right">

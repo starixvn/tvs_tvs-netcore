@@ -14,4 +14,5 @@ export class AccountWinlostModel {
   isEditedTicket: boolean;
   isCanEditTicket: boolean;
   isShowOnTable: boolean;
+  transInfoAccountJson: string;
 }

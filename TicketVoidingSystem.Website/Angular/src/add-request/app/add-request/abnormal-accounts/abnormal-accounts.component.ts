@@ -105,8 +105,8 @@ export class AbnormalAccountsComponent implements OnInit {
   }
 
   changeShowAdjustAccount() {
-    this.primitiveProps.validAccountWinlostModels.forEach(
-      x => x.isShowOnTable = (!this.primitiveProps.isCheckedShowAdjustAccount && !x.isHighlight) || x.isHighlight
+    this.primitiveProps.validAccountWinlostModels?.forEach(
+      x => x.isShowOnTable = (!this.primitiveProps.isCheckedShowAdjustAccount && !x.isCanEditTicket) || x.isCanEditTicket
     );
   }
 
@@ -119,9 +119,10 @@ export class AbnormalAccountsComponent implements OnInit {
   }
 
   openPopupAdjustTicket(custId: number) {
+    const transInfoJson = this.primitiveProps.validAccountWinlostModels.find(x => x.custId === custId)?.transInfoAccountJson;
     this.accountAffectedTicketModel.accountWinlostModels = this.primitiveProps.validAccountWinlostModels;
     this.accountAffectedTicketModel.selectedCustId = custId;
-    this.accountAffectedTicketModel.transInfoJson = this.primitiveProps.transInfoAddRequestModel.transInfoJson;
+    this.accountAffectedTicketModel.transInfoJson = transInfoJson ?? this.primitiveProps.transInfoAddRequestModel.transInfoJson;
     this.accountAffectedTicketModel.isOpen = true;
   }
 

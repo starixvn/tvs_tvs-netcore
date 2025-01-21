@@ -68,6 +68,7 @@ public class CheckValidUsernamesHandlerTests
         // Arrange
         var request = new CheckValidUsernamesRequest
         {
+            StatusIds = "1,2",
             ActionId = ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId,
             AccountWinlostModels = new List<AccountWinlostModel> { new() { Username = "123AA" } }
         };
