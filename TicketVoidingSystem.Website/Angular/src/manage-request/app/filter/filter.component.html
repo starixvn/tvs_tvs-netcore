@@ -2,136 +2,142 @@
   <div class="d-flex mg-left-0 mg-bottom-10">
     <div class=""> <span>Search by</span></div>
     <div class="">
-      <label *ngFor="let item of mode" class="form-check-label">
-        <input type="radio" class="form-check-input" name="filter-control" [value]="item"
-           [(ngModel)]="filterByValue" (change)="controlFilter(item); checkAutoRefresh()" />
-        {{item}}
-      </label>
-    </div>
-  </div>
-  <div class="row mg-left-0">
-    <div class="col-2" *ngIf="!filterByMatch">
-      <div class="row">
-        <label class="col-form-label col-form-label-sm mg-right-8">Request No</label>
-        <div>
-          <input maxlength="10" class="form-control form-control-sm input-request-id" type="text" only-number
-            [(ngModel)]="model.requestId" (ngModelChange)="updateModel()" (keyup.enter)="clickSearch()">
-        </div>
+      @for (item of mode; track item) {
+        <label class="form-check-label">
+          <input type="radio" class="form-check-input" name="filter-control" [value]="item"
+            [(ngModel)]="filterByValue" (change)="controlFilter(item); checkAutoRefresh()" />
+            {{item}}
+          </label>
+        }
       </div>
     </div>
-
-    <div *ngIf="filterByMatch" class="d-flex flex-wrap filter-by-match">
-      <div class="d-flex mr-3">
-        <label class="col-form-label col-form-label-sm mr-2">Match Id</label>
-        <div>
-          <input maxlength="10" class="form-control form-control-sm input-match-id" type="text" only-number
-            [(ngModel)]="model.matchId" (ngModelChange)="updateModel()" (keyup.enter)="clickSearch()">
-        </div>
-      </div>
-
-      <div class="d-flex mr-3">
-        <label class="col-form-label col-form-label-sm mr-2">From Date</label>
-        <div class="select-date">
-          <div class="input-group">
-            <input class="form-control form-control-sm bg-white" placeholder="yyyy-mm-dd" name="ngbFromDate"
-              [(ngModel)]="model.ngbFromDate" (ngModelChange)="updateModel(); checkAutoRefresh()" ngbDatepicker
-              #ngbFromDate="ngbDatepicker" (click)="ngbFromDate.toggle()" [minDate]="minDate"
-              [maxDate]="model.ngbToDate" [readOnly]="true">
-            <div class="input-group-append pointer">
-              <span class="input-group-text" (click)="ngbFromDate.toggle()"><em class="fa fa-calendar"></em></span>
+    <div class="row">
+      @if (!filterByMatch) {
+        <div class="col-2">
+          <div class="d-flex">
+            <label class="col-form-label col-form-label-sm mg-right-8">Request No</label>
+            <input maxlength="10" class="form-control form-control-sm input-request-id" type="text" only-number
+                [(ngModel)]="model.requestId" (ngModelChange)="updateModel()" (keyup.enter)="clickSearch()">
             </div>
           </div>
-        </div>
-      </div>
+        }
 
-      <div class="d-flex mr-3">
-        <label class="col-form-label col-form-label-sm mr-2">To Date</label>
-        <div class="select-date">
-          <div class="input-group">
-            <input class="form-control form-control-sm bg-white" placeholder="yyyy-mm-dd" name="ngbToDate"
-              [(ngModel)]="model.ngbToDate" (ngModelChange)="updateModel()" ngbDatepicker #ngbToDate="ngbDatepicker"
-              (click)="ngbToDate.toggle()" [minDate]="model.ngbFromDate" [readOnly]="true">
-            <div class="input-group-append pointer">
-              <span class="input-group-text" (click)="ngbToDate.toggle()"><em class="fa fa-calendar"></em></span>
+        @if (filterByMatch) {
+          <div class="d-flex flex-wrap filter-by-match">
+            <div class="d-flex me-3">
+              <label class="col-form-label col-form-label-sm me-2">Match Id</label>
+              <div>
+                <input maxlength="10" class="form-control form-control-sm input-match-id" type="text" only-number
+                  [(ngModel)]="model.matchId" (ngModelChange)="updateModel()" (keyup.enter)="clickSearch()">
+                </div>
+              </div>
+              <div class="d-flex me-3">
+                <label class="col-form-label col-form-label-sm me-2">From Date</label>
+                <div class="select-date">
+                  <div class="input-group">
+                    <input class="form-control form-control-sm bg-white" placeholder="yyyy-mm-dd" name="ngbFromDate"
+                      [(ngModel)]="model.ngbFromDate" (ngModelChange)="updateModel(); checkAutoRefresh()" ngbDatepicker
+                      #ngbFromDate="ngbDatepicker" (click)="ngbFromDate.toggle()" [minDate]="minDate"
+                      [maxDate]="model.ngbToDate" [readOnly]="true">
+                      <div class="input-group-append pointer">
+                        <span class="input-group-text" (click)="ngbFromDate.toggle()"><em class="fa fa-calendar"></em></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex me-3">
+                  <label class="col-form-label col-form-label-sm me-2">To Date</label>
+                  <div class="select-date">
+                    <div class="input-group">
+                      <input class="form-control form-control-sm bg-white" placeholder="yyyy-mm-dd" name="ngbToDate"
+                        [(ngModel)]="model.ngbToDate" (ngModelChange)="updateModel()" ngbDatepicker #ngbToDate="ngbDatepicker"
+                        (click)="ngbToDate.toggle()" [minDate]="model.ngbFromDate" [readOnly]="true">
+                        <div class="input-group-append pointer">
+                          <span class="input-group-text" (click)="ngbToDate.toggle()"><em class="fa fa-calendar"></em></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="filter-issue-type d-flex me-3">
+                    <label class="col-form-label col-form-label-sm me-2">Issue Type</label>
+                    <ng-select class="issue-type-dropdown" [items]="issueTypeSelectList" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
+                      [clearable]="false" [(ngModel)]="selectedIssueTypes" bindValue="value" (change)="updateSelectedIssueType()"
+                      [disabled]="false" groupBy="group" [selectableGroup]="true"
+                      [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
+                      <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value">
+                          <span class="ng-value-label">
+                            {{items.length === 1 ? items[0].name : items.length === issueTypeSelectList.length ? 'All' : items.length + ' selected'}}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                  <div class="d-flex me-3">
+                    <label class="col-form-label col-form-label-sm me-2">Sub Type</label>
+                    <ng-select class="sub-type-dropdown" [items]="subTypeSelectList" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
+                      [clearable]="false" [(ngModel)]="multipleSelectSubTypeModel" bindValue="value"
+                      [disabled]="isSelectedAllIssueType" groupBy="group" [selectableGroup]="true"
+                      [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
+                      <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value">
+                          <span class="ng-value-label">
+                            {{isNoneSubType ? 'N/A' : (items.length === subTypeSelectList.length ? 'All' : items.length) + ' selected'}}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                  <div class="d-flex me-3">
+                    <label class="col-form-label col-form-label-sm me-2">Status</label>
+                    <ng-select [items]="statusSelectList" bindLabel="name" bindValue="value" [(ngModel)]="model.status"
+                      [clearable]="false">
+                    </ng-select>
+                  </div>
+                  <div class="d-flex me-3">
+                    <label class="col-form-label col-form-label-sm me-2">Product</label>
+                    <multiple-selection class="multiple-selection product-dropdown" [multipleSelect]="products" (checkedItems)="updateSelectedProduct($event)">
+                    </multiple-selection>
+                  </div>
+                  <div class="d-flex">
+                    <label class="col-form-label col-form-label-sm me-2">Created By</label>
+                    <ng-select [items]="createdBySelectList" bindLabel="name" bindValue="value" [(ngModel)]="model.createdBy"
+                      [clearable]="false">
+                    </ng-select>
+                  </div>
+                </div>
+              }
+            </div>
+            <div class="mg-top-10 button-area">
+              <button type=" submit" class="btn btn-primary btn-sm me-3" (click)="clickSearch()">Search</button>
+              @if (permission.manageRequestHost) {
+                <button type="submit" class="btn btn-success btn-sm me-3" (click)="newRequest()">New Request</button>
+              }
+              <button [disabled]="!permission.isReadMarkTickets" type="submit" class="btn btn-primary btn-sm me-3" (click)="openMarkTickets()">Marked Tickets ({{markedTicketsCount}})</button>
+              @if (isShowAutoRefresh) {
+                <auto-refresh [mode]="autoRefreshMode" (countdownEnd)="clickSearch()" class="me-3"></auto-refresh>
+              }
+              <div class="form-check form-switch d-flex align-items-center me-3">
+                <input type="checkbox" class="form-check-input" id="radioDisplayMissingInfo" [(ngModel)]="model.isDisplayMissingInfo" (click)="checkMissingInfo($event)">
+                <label class="form-check-label radio-display-missing-info" for="radioDisplayMissingInfo">Display Request Missing Info</label>
+              </div>
+              <div class="d-flex align-items-center">
+                <label class="col-form-label col-form-label-sm me-2">
+                  <input class="checkbox-exclude-test" type="checkbox" [(ngModel)]="model.isExcludeTest" />Exclude test data
+                </label>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="filter-issue-type d-flex mr-3">
-        <label class="col-form-label col-form-label-sm mr-2">Issue Type</label>
-        <ng-select class="issue-type-dropdown" [items]="issueTypeSelectList" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
-          [clearable]="false" [(ngModel)]="selectedIssueTypes" bindValue="value" (change)="updateSelectedIssueType()"
-          [disabled]="false" groupBy="group" [selectableGroup]="true"
-          [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
-          <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
-          </ng-template>
-          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
-          </ng-template>
-          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
-            <div class="ng-value">
-              <span class="ng-value-label">
-                {{items.length === 1 ? items[0].name : items.length === issueTypeSelectList.length ? 'All' : items.length + ' selected'}}
-              </span>
-            </div>
-          </ng-template>
-        </ng-select>
-      </div>
-      <div class="d-flex mr-3">
-        <label class="col-form-label col-form-label-sm mr-2">Sub Type</label>
-        <ng-select class="sub-type-dropdown" [items]="subTypeSelectList" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
-          [clearable]="false" [(ngModel)]="multipleSelectSubTypeModel" bindValue="value"
-          [disabled]="isSelectedAllIssueType" groupBy="group" [selectableGroup]="true"
-          [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
-          <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
-          </ng-template>
-          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
-          </ng-template>
-          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
-            <div class="ng-value">
-              <span class="ng-value-label">
-                {{isNoneSubType ? 'N/A' : (items.length === subTypeSelectList.length ? 'All' : items.length) + ' selected'}}
-              </span>
-            </div>
-          </ng-template>
-        </ng-select>
-      </div>
-      <div class="d-flex mr-3">
-        <label class="col-form-label col-form-label-sm mr-2">Status</label>
-        <ng-select [items]="statusSelectList" bindLabel="name" bindValue="value" [(ngModel)]="model.status"
-          [clearable]="false">
-        </ng-select>
-      </div>
-      <div class="d-flex mr-3">
-        <label class="col-form-label col-form-label-sm mr-2">Product</label>
-        <multiple-selection class="multiple-selection product-dropdown" [multipleSelect]="products" (checkedItems)="updateSelectedProduct($event)">
-        </multiple-selection>
-      </div>
-      <div class="d-flex">
-        <label class="col-form-label col-form-label-sm mr-2">Created By</label>
-        <ng-select [items]="createdBySelectList" bindLabel="name" bindValue="value" [(ngModel)]="model.createdBy"
-          [clearable]="false">
-        </ng-select>
-      </div>
-    </div>
-  </div>
-  <div class="mg-top-10 button-area">
-    <button type=" submit" class="btn btn-primary btn-sm mr-3" (click)="clickSearch()">Search</button>
-    <button *ngIf="permission.manageRequestHost" type="submit" class="btn btn-success btn-sm mr-3" (click)="newRequest()">New Request</button>
-    <button [disabled]="!permission.isReadMarkTickets" type="submit" class="btn btn-primary btn-sm mr-3" (click)="openMarkTickets()">Marked Tickets ({{markedTicketsCount}})</button>
-    <auto-refresh *ngIf="isShowAutoRefresh" [mode]="autoRefreshMode" (countdownEnd)="clickSearch()" class="mr-3"></auto-refresh>
-    <div class="custom-control custom-switch d-flex align-items-center mr-3">
-      <input type="checkbox" class="custom-control-input" id="radioDisplayMissingInfo" [(ngModel)]="model.isDisplayMissingInfo" (click)="checkMissingInfo($event)">
-      <label class="custom-control-label radio-display-missing-info" for="radioDisplayMissingInfo">Display Request Missing Info</label>
-    </div>
-    <div class="d-flex align-items-center">
-        <label class="col-form-label col-form-label-sm mr-2">
-          <input class="checkbox-exclude-test" type="checkbox" [(ngModel)]="model.isExcludeTest" />Exclude test data
-        </label>
-      </div>
-  </div>
-</div>
-<tooltip [tooltip]="tooltip"></tooltip>
+          <tooltip [tooltip]="tooltip"></tooltip>

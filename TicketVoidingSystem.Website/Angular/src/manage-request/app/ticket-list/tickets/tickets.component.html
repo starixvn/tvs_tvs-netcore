@@ -1,10 +1,12 @@
 <div class="tickets-list">
-  <div class="title-tickets-list" *ngIf="model.groups !== undefined && model.groups.length > 0">
-    <div class="title-tickets-list-label">{{getTitle()}}</div>
-    <div class="title-tickets-list-toolbox">
-      <input type="button" class="title-tickets-list-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
+  @if (model.groups !== undefined && model.groups.length > 0) {
+    <div class="title-tickets-list">
+      <div class="title-tickets-list-label">{{getTitle()}}</div>
+      <div class="title-tickets-list-toolbox">
+        <input type="button" class="title-tickets-list-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
+      </div>
     </div>
-  </div>
+  }
   <div class="ticket-header">
     <table>
       <thead>
@@ -48,12 +50,16 @@
           <th scope="col" class="col-tb-14">
             <div>HDP</div>
           </th>
-          <th *ngIf="!isRecoverTicket()" scope="col" class="col-tb-void-time">
-            <div>Void Time</div>
-          </th>
-          <th *ngIf="isRecoverTicket()" scope="col" class="col-tb-void-time">
-            <div>Recover Time</div>
-          </th>
+          @if (!isRecoverTicket()) {
+            <th scope="col" class="col-tb-void-time">
+              <div>Void Time</div>
+            </th>
+          }
+          @if (isRecoverTicket()) {
+            <th scope="col" class="col-tb-void-time">
+              <div>Recover Time</div>
+            </th>
+          }
           <th scope="col" class="col-tb-15">
             <div>Choice</div>
           </th>
@@ -63,69 +69,75 @@
   </div>
   <div class="ticket-content">
     <table>
-      <tbody *ngFor="let group of model.groups">
-        <tr>
-          <td [attr.colspan]="16" class="group-ticket" (click)="group.isCollapse = !group.isCollapse">
-            <em class="fa" [ngClass]="{'fa-angle-down':!group.isCollapse, 'fa-angle-right':group.isCollapse}"></em>
-            {{group.name}} ({{group.displayTotalTickets}})
-          </td>
-        </tr>
-        <tr *ngFor="let ticket of group.tickets" [ngClass]="{'display-none':group.isCollapse}">
-          <td class="col-tb-2">
-            <div>{{ticket.no}}</div>
-          </td>
-          <td class="col-tb-3">
-            <div [innerHTML]="ticket.betId | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-4">
-            <div>{{ticket.transDate}}</div>
-          </td>
-          <td class="col-tb-5">
-            <div [innerHTML]="ticket.member | sanitizeHtml" title="{{ticket.member}}"></div>
-          </td>
-          <td class="col-tb-6">
-            <div [innerHTML]="ticket.betType | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-7">
-            <div [innerHTML]="ticket.odds | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-8">
-            <div [innerHTML]="ticket.stake | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-9">
-            <div>{{ticket.winLoss}}</div>
-          </td>
-          <td class="col-tb-10">
-            <div>{{ticket.currency}}</div>
-          </td>
-          <td class="col-tb-11">
-            <div [innerHTML]="ticket.status | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-creator">
-            <div [innerHTML]="ticket.creator | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-13">
-            <div [innerHTML]="ticket.score | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-14">
-            <div [innerHTML]="ticket.handicap | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-void-time">
-            <div>{{ticket.voidTime}}</div>
-          </td>
-          <td class="col-tb-15">
-            <div [innerHTML]="ticket.choice | sanitizeHtml"></div>
-          </td>
-        </tr>
-      </tbody>
+      @for (group of model.groups; track group) {
+        <tbody>
+          <tr>
+            <td [attr.colspan]="16" class="group-ticket" (click)="group.isCollapse = !group.isCollapse">
+              <em class="fa" [ngClass]="{'fa-angle-down':!group.isCollapse, 'fa-angle-right':group.isCollapse}"></em>
+              {{group.name}} ({{group.displayTotalTickets}})
+            </td>
+          </tr>
+          @for (ticket of group.tickets; track ticket) {
+            <tr [ngClass]="{'display-none':group.isCollapse}">
+              <td class="col-tb-2">
+                <div>{{ticket.no}}</div>
+              </td>
+              <td class="col-tb-3">
+                <div [innerHTML]="ticket.betId | sanitizeHtml"></div>
+              </td>
+              <td class="col-tb-4">
+                <div>{{ticket.transDate}}</div>
+              </td>
+              <td class="col-tb-5">
+                <div [innerHTML]="ticket.member | sanitizeHtml" title="{{ticket.member}}"></div>
+              </td>
+              <td class="col-tb-6">
+                <div [innerHTML]="ticket.betType | sanitizeHtml"></div>
+              </td>
+              <td class="col-tb-7">
+                <div [innerHTML]="ticket.odds | sanitizeHtml"></div>
+              </td>
+              <td class="col-tb-8">
+                <div [innerHTML]="ticket.stake | sanitizeHtml"></div>
+              </td>
+              <td class="col-tb-9">
+                <div>{{ticket.winLoss}}</div>
+              </td>
+              <td class="col-tb-10">
+                <div>{{ticket.currency}}</div>
+              </td>
+              <td class="col-tb-11">
+                <div [innerHTML]="ticket.status | sanitizeHtml"></div>
+              </td>
+              <td class="col-tb-creator">
+                <div [innerHTML]="ticket.creator | sanitizeHtml"></div>
+              </td>
+              <td class="col-tb-13">
+                <div [innerHTML]="ticket.score | sanitizeHtml"></div>
+              </td>
+              <td class="col-tb-14">
+                <div [innerHTML]="ticket.handicap | sanitizeHtml"></div>
+              </td>
+              <td class="col-tb-void-time">
+                <div>{{ticket.voidTime}}</div>
+              </td>
+              <td class="col-tb-15">
+                <div [innerHTML]="ticket.choice | sanitizeHtml"></div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      }
     </table>
-    <table *ngIf="model.groups === undefined || model.groups.length == 0 || model.groups == null">
-      <tbody>
-        <tr>
-          <td class="no-data">There is no data</td>
-        </tr>
-      </tbody>
-    </table>
+    @if (model.groups === undefined || model.groups.length == 0 || model.groups == null) {
+      <table>
+        <tbody>
+          <tr>
+            <td class="no-data">There is no data</td>
+          </tr>
+        </tbody>
+      </table>
+    }
   </div>
 
   <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging>

@@ -89,7 +89,7 @@
             </td>
             <td class="col-tb-5">
               <i [hidden]="!isCanCopyRequestDescription(item.issueTypeId)" [ngClass]="item.processingCopyDescriptionClass ?? 'fa fa-paste copy-request-info'" (click)="copyRequestDescriptionSingleMatch(item, item.details[0].matchId, item.details[0].requestDetailId)" aria-hidden="true"></i>
-              <div class="text-right" [innerHtml]="item.details[0].description | sanitizeHtml"></div>
+              <div class="text-end" [innerHtml]="item.details[0].description | sanitizeHtml"></div>
             </td>
             <td class="col-tb-6" [attr.rowspan]="item.details.length">
               <div>{{getActionName(item.actionId)}}</div>
@@ -113,7 +113,7 @@
             <td class="col-tb-11" [attr.rowspan]="item.details.length">
               <div>{{item.lastPerformedBy}}</div>
             </td>
-            <td class="col-tb-12 text-left" [attr.rowspan]="item.details.length">
+            <td class="col-tb-12 text-start" [attr.rowspan]="item.details.length">
               <div>
                 <div *ngIf="permission.verifyRead && isVoidAction(item.actionId) && checkVoided(item.details)">
                   <input type="checkbox" [(ngModel)]="item.isCheckedBy" (change)="confirmCheckBy(item)" />
@@ -149,7 +149,7 @@
                   'ft-settlement': isSettlementHT(detail.settlementStatus) === false}">{{detail.settlementStatus}}</span>
                 </div>
               </td>
-              <td *ngIf="index>0" class="text-right">
+              <td *ngIf="index>0" class="text-end">
                 <i *ngIf="isCanCopyRequestDescription(item.issueTypeId)"  [ngClass]="detail.processingCopyDescriptionClass ?? 'fa fa-paste copy-request-info'" (click)="copyRequestDescriptionMultiMatches(item, detail.matchId, detail)" aria-hidden="true"></i>
                 <div [innerHtml]="detail.description | sanitizeHtml"></div>
               </td>

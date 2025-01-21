@@ -15,6 +15,7 @@ import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
+import { _isNumberValue } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'filter',

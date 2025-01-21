@@ -44,9 +44,6 @@ import { MultipleSelectionModule } from "../../utility/components/multiple-selec
     UtilityModule,
     MultipleSelectionModule
 ],
-  entryComponents: [
-    TicketListComponent
-  ],
   providers: [
     { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }
   ],
