@@ -132,8 +132,7 @@
         <Setting Key="NAP_SpecialDelete_TicketListing_Summary" SpName="NAP_SpecialDelete_TicketListing_Summary" DbName="DBACC.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="NAP_SpecialDelete_TicketListing_Detail" SpName="NAP_SpecialDelete_TicketListing_Detail" DbName="DBACC.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="NAP_SpecialDelete_TicketListing_ExcelOic" SpName="NAP_SpecialDelete_TicketListing_ExcelOic" DbName="DBACC.bodb02.wsv_nap" TimeOut="600" />
-        <Setting Key="NAP_SpecialDelete_TicketListing_SendOIC" SpName="NAP_SpecialDelete_TicketListing_SendOIC" DbName="DBLIC.bodb_Licensee.wsv_nap" TimeOut="600" />
-        <Setting Key="NAP_SpecialDelete_TicketListing_SendOIC_Backup" SpName="NAP_SpecialDelete_TicketListing_SendOIC" DbName="DBLIC_STANDBY.bodb_Licensee.wsv_nap" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_TicketListing_SendOIC" SpName="NAP_SpecialDelete_TicketListing_SendOIC" DbName="DBOIC.bodb_OIC.wsv_nap" TimeOut="600" />
         <Setting Key="NAP_SpecialDelete_TicketListing_SettlementHistory" SpName="NAP_SpecialDelete_TicketListing_SettlementHistory" DbName="DBBAH.bodb02.wsv_nap" TimeOut="600" />
     </Function>
     <Function Name="NetPosition">
