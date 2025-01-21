@@ -31,7 +31,7 @@ export class TemplateWrongOddsSportBookService {
 
   private createActualMarketContent(templateValue: TemplateValue): TemplateContent {
     if (templateValue.betTypeId) {
-      if (this.isHandicapBetType(templateValue.betTypeId, templateValue.betTeam)) {
+      if (this.isHandicapBetType(templateValue.groupBetTypeId, templateValue.betTeam)) {
         templateValue.filterFavoriteType = templateValue.betTeam;
         return this.createActualMarketBetTypeHandicap(templateValue.betTypeId, templateValue.correctOdds, templateValue);
       }
@@ -44,8 +44,8 @@ export class TemplateWrongOddsSportBookService {
     return this.createActualMarketOtherBetType(templateValue.correctOdds);
   }
 
-  private isHandicapBetType(betTypeId: string, betTeam: string): boolean {
-    return [SpecialSportsBookBetTypes.Handicap, SpecialSportsBookBetTypes._1HHandicap].includes(betTypeId) && betTeam !== "All";
+  private isHandicapBetType(groupBetTypeId: number, betTeam: string): boolean {
+    return SpecialSportsBookBetTypes.Handicap === groupBetTypeId.toString() && betTeam !== "All"
   }
 
   private isOverUnderBetType(betTypeId: string): boolean {

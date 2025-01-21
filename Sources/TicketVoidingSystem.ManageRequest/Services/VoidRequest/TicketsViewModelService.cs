@@ -155,6 +155,7 @@ public class TicketsViewModelServiceImp(
             model.BetTypeNameReplaceMessage = getInfoTicketsForMessage.GetSpecialBetTypeContent(allTickets);
             model.BetTeam = getInfoTicketsForMessage.GetSpecialBetTeam(betTypeId, allTickets);
             model.HdpValues = getInfoTicketsForMessage.GetHdpValues(betTypeId, allTickets);
+            model.GroupBetTypeId = allTickets.First().GroupBetTypeId;
         }
         else
         {

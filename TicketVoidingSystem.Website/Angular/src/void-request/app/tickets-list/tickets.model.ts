@@ -40,6 +40,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
   licenseeAffectedList: AffectedLicensee[];
   betTypeNameReplaceMessage: Message;
   smallestMapTicket: string;
+  groupBetTypeId: number;
 
   initData(data: TicketsModel) {
     this.total = data.total;
@@ -68,6 +69,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
     this.isAllNonLiveTickets = data.isAllNonLiveTickets;
     this.groupPHAffected = data.groupPHAffected;
     this.betTypeNameReplaceMessage = data.betTypeNameReplaceMessage;
+    this.groupBetTypeId = data.groupBetTypeId;
   }
 
   mapGroups(groups: Array<GroupModel>) {

@@ -62,11 +62,16 @@ public class GetInfoTicketsForMessageImp(SpecialBetTypeContentService specialBet
     public string GetHdpValues(int betTypeId, IEnumerable<GetTicketModel> allTickets)
 
     {
-        return betTypeId switch
+        if (betTypeId is BetTypeConstant.OverUnder or BetTypeConstant.FirstHalfOverUnder)
         {
-            BetTypeConstant.OverUnder or BetTypeConstant.FirstHalfOverUnder => GetHdpValuesOverUnder(allTickets),
-            BetTypeConstant.Handicap or BetTypeConstant.FirstHalfHandicap => GetHdpValuesHandicap(allTickets),
-            _ => string.Empty
-        };
+            return GetHdpValuesOverUnder(allTickets);
+        }
+
+        return IsGroupBetTypeHandicap(allTickets) ? GetHdpValuesHandicap(allTickets) : string.Empty;
+    }
+
+    protected virtual bool IsGroupBetTypeHandicap(IEnumerable<GetTicketModel> allTickets)
+    {
+        return allTickets.All(x => x.GroupBetTypeId is BetTypeConstant.Handicap);
     }
 }

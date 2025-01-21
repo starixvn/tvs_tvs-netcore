@@ -57,6 +57,7 @@ export class TemplateMessageService {
         templateValue.betTypeId = voidTicketsMini.betTypes.split(',')[0];
         templateValue.betTeam = voidTicketsMini.betTeam;
         templateValue.hdpValues = voidTicketsMini.hdpValues;
+        templateValue.groupBetTypeId = voidTicketsMini.groupBetTypeId;
       }
       
       if (this.isSportTypeSoccer(requestDetail.request.sportType)) {
