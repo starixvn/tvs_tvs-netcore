@@ -1,52 +1,57 @@
-<div *ngIf="model.isOpen" class="add-user-modal">
-  <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
-  <div role="dialog" class="fade modal show d-block">
-    <div role="document" class="modal-dialog-custom modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div class="modal-title">
-            <strong>Add New AB Exception List</strong>
+@if (model.isOpen) {
+  <div class="add-user-modal">
+    <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
+    <div role="dialog" class="fade modal show d-block">
+      <div role="document" class="modal-dialog-custom modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-title">
+              <strong>Add New AB Exception List</strong>
+            </div>
+            <button class="close" (click)="closeModal()">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <button class="close" (click)="closeModal()">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body wrapper-tooltip">
-          <user-names #usernames [isAbException]="true" (afterFocusOutBetIds)="afterFocusOutBetIds()"></user-names>
-          <div>
-            <label class="col-form-label col-form-label-sm mr-2">Sub Type</label>
-            <ng-select class="sub-type" [items]="subTypeSelection" [multiple]="true" bindLabel="name" groupBy="group"
-              [selectableGroup]="true" [selectableGroupAsModel]="false" [closeOnSelect]="false" bindValue="value"
-              [(ngModel)]="selectedSubType"
-              [clearable]="false" [searchable]="false">
-              <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{subTypeSelection.length === selectedSubType.length ? 'Unselect All' : 'Select All'}}
-              </ng-template>
-              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                <input class="mr-1" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />{{item.name}}
-              </ng-template>
-              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
-                <div class="ng-value displayed-name" *ngFor="let item of items | slice:0:9">
-                  {{item['name']}}
-                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
-                </div>
-                <div class="number-of-more" *ngIf="items.length > 9">
-                  <span class="ng-value-label">+{{items.length - 9}}</span>
-                </div>
-              </ng-template>
-            </ng-select>
-          </div>
-          <div class="form-check form-check-inline d-flex align-items-center mt-2">
-            <input class="form-check-input" type="checkbox" id="chk-void-vip" [(ngModel)]="isVoidVIP" />
-            <label class="form-check-label" for="chk-void-vip">Void VIP</label>
-          </div>
-
-          <div class="mg-top-10 text-right button-area">
-            <button type="button" class="btn btn-primary btn-sm mr-2" (click)="clickSave()">Save</button>
-            <button type="button" class="btn btn-danger btn-sm" (click)="closeModal()">Cancel</button>
+          <div class="modal-body wrapper-tooltip">
+            <user-names #usernames [isAbException]="true" (afterFocusOutBetIds)="afterFocusOutBetIds()"></user-names>
+            <div>
+              <label class="col-form-label col-form-label-sm mr-2">Sub Type</label>
+              <ng-select class="sub-type" [items]="subTypeSelection" [multiple]="true" bindLabel="name" groupBy="group"
+                [selectableGroup]="true" [selectableGroupAsModel]="false" [closeOnSelect]="false" bindValue="value"
+                [(ngModel)]="selectedSubType"
+                [clearable]="false" [searchable]="false">
+                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{subTypeSelection.length === selectedSubType.length ? 'Unselect All' : 'Select All'}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input class="mr-1" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />{{item.name}}
+                </ng-template>
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  @for (item of items | slice:0:9; track item) {
+                    <div class="ng-value displayed-name">
+                      {{item['name']}}
+                      <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                    </div>
+                  }
+                  @if (items.length > 9) {
+                    <div class="number-of-more">
+                      <span class="ng-value-label">+{{items.length - 9}}</span>
+                    </div>
+                  }
+                </ng-template>
+              </ng-select>
+            </div>
+            <div class="form-check form-check-inline d-flex align-items-center mt-2">
+              <input class="form-check-input" type="checkbox" id="chk-void-vip" [(ngModel)]="isVoidVIP" />
+              <label class="form-check-label" for="chk-void-vip">Void VIP</label>
+            </div>
+            <div class="mg-top-10 text-right button-area">
+              <button type="button" class="btn btn-primary btn-sm mr-2" (click)="clickSave()">Save</button>
+              <button type="button" class="btn btn-danger btn-sm" (click)="closeModal()">Cancel</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+}

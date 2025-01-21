@@ -23,7 +23,7 @@ function transform(transformFolder, indexEJSPath) {
 function getOutputFolder() {
   let content = fs.readFileSync(path.resolve('./angular.json'), encoding);
   let json = JSON.parse(content);
-  return path.resolve(json.projects['angular-v12'].architect['build'].options['outputPath']);
+  return path.resolve(json.projects['project-tvs'].architect['build'].options['outputPath']);
 }
 
 function changeFileNames(outputFolder, transformFolder) {

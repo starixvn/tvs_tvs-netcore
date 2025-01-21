@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-v12": {
+    "project-tvs": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -24,8 +24,10 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],
             "styles": [
-              "src/assets/styles/styles.scss"
+              "src/assets/styles/styles.scss",
+              "node_modules/ngx-toastr/toastr.css"
             ],
+            "allowedCommonJsDependencies": ["lodash", "file-saver", "moment-timezone"],
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -43,7 +45,7 @@
                 }
               ],
               "deployUrl": "dist/add-request/",
-              "optimization": true,
+              "optimization": false,
               "outputHashing": "all",
               "namedChunks": false,
               "vendorChunk": false,
@@ -51,12 +53,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "8mb",
+                  "maximumError": "8mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "8mb",
+                  "maximumError": "8mb"
                 }
               ]
             },
@@ -69,28 +72,27 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-v12:build",
-            "proxyConfig": "proxy.conf.js"
+            "proxyConfig": "proxy.conf.js",
+            "browserTarget": "project-tvs:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "angular-v12:build:production"
+              "browserTarget": "project-tvs:build:production"
             },
             "local-dev": {
-              "browserTarget": "angular-v12:build"
+              "browserTarget": "project-tvs:build"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-v12:build"
+            "browserTarget": "project-tvs:build"
           }
         }
       }
     }
   },
-  "defaultProject": "angular-v12",
   "cli": {
     "analytics": false
   }
