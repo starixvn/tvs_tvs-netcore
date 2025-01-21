@@ -210,6 +210,14 @@
         {
           "Name": "GPI",
           "Value": "48"
+        },
+        {
+          "Name": "Playtech",
+          "Value": "100"
+        },
+        {
+          "Name": "PLAYSTAR",
+          "Value": "91"
         }
       ]
     },
