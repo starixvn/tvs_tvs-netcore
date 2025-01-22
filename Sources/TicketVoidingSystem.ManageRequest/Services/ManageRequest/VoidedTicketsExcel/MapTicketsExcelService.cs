@@ -38,11 +38,11 @@ public class MapTicketsExcelServiceImp(
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
         if (creditParlayTickets.Any())
         {
-            groups.Add(new Group<VoidedTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+            groups.Add(new Group<VoidedTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
         if (depositParlayTickets.Any())
         {
-            groups.Add(new Group<VoidedTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+            groups.Add(new Group<VoidedTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }
 
         return groups;

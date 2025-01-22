@@ -31,11 +31,11 @@ public class MapTicketsServiceImp(PagingService pagingService, MapFromBetListSer
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
         if (creditParlayTickets.Any())
         {
-            groups.Add(new Group<VoidedTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+            groups.Add(new Group<VoidedTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
         if (depositParlayTickets.Any())
         {
-            groups.Add(new Group<VoidedTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+            groups.Add(new Group<VoidedTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }
 
         UpdateCountTicketsByGroup(originalTickets, groups);
@@ -71,11 +71,11 @@ public class MapTicketsServiceImp(PagingService pagingService, MapFromBetListSer
         var allGroups = pagingService.Groups(singleTickets, t => t.GroupName).ToList();
         if (creditParlayTickets.Any())
         {
-            allGroups.Add(new Group<VoidedTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+            allGroups.Add(new Group<VoidedTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
         if (depositParlayTickets.Any())
         {
-            allGroups.Add(new Group<VoidedTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+            allGroups.Add(new Group<VoidedTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }
 
         foreach (var group in outputGroups)

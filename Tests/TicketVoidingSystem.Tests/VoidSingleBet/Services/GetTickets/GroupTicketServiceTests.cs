@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using NSubstitute;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using NSubstitute;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.VoidSingleBet.Criteria;
@@ -67,14 +68,14 @@ public class GroupTicketServiceTests
             new() { Name = "1", Tickets = singleTickets },
             new()
             {
-                Name = "Credit (Parlay)", Tickets = new List<GetTicketModel>
+                Name = GroupTicket.Credit, Tickets = new List<GetTicketModel>
                 {
                     new() { IsMixParlay = true, TransId = 4 }
                 }
             },
             new()
             {
-            Name = "Deposit (Parlay)", Tickets = new List<GetTicketModel>
+            Name = GroupTicket.Deposit, Tickets = new List<GetTicketModel>
             {
                 new() { IsMixParlay = true, TransId = 2, IsDeposit = true}
             }

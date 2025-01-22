@@ -54,11 +54,11 @@ public class GetPoolHouseTicketServiceImp(MapTicketsService mapTicketsService, P
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
         if (creditParlayTickets.Any())
         {
-            groups.Add(new Group<GetTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+            groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
         if (depositParlayTickets.Any())
         {
-            groups.Add(new Group<GetTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+            groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }
         if (othersTickets.Any())
         {
@@ -72,7 +72,7 @@ public class GetPoolHouseTicketServiceImp(MapTicketsService mapTicketsService, P
 
     private static bool IsParlayTicketsPoolHouse(bool isMixParlay, string groupName)
     {
-        return groupName is "Credit (Parlay)" or "Deposit (Parlay)" && isMixParlay;
+        return groupName is GroupTicket.Credit or GroupTicket.Deposit && isMixParlay;
     }
 
     private static void CountAllTicketsForGroup(IEnumerable<GetTicketModel> originalTickets, IEnumerable<Group<GetTicketModel>> outputGroups)

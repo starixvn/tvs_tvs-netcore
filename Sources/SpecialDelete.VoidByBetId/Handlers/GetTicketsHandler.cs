@@ -2,6 +2,7 @@
 using SpecialDelete.VoidByBetId.Models;
 using SpecialDelete.VoidByBetId.Services.GetTickets;
 using SpecialDelete.VoidByBetId.ViewModels;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -46,11 +47,11 @@ public class GetTicketsHandler(
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
         if (creditParlayTickets.Any())
         {
-            groups.Add(new Group<GetTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+            groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
         if (depositParlayTickets.Any())
         {
-            groups.Add(new Group<GetTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+            groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }
 
         return groups;

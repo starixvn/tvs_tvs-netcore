@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
@@ -13,6 +14,8 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 
+public class GetDetailTicketsRequest : GetDetailTicketsQuery, IRequest<TicketsViewModel>;
+
 public class GetTicketsRequest : GetTicketsQuery, IRequest<TicketsViewModel>;
 
 public class GetTicketsHandler(
@@ -20,7 +23,8 @@ public class GetTicketsHandler(
     MapTicketService mapTicketService,
     PagingService pagingService,
     UserPermissionService userPermissionService)
-    : IRequestHandler<GetTicketsRequest, TicketsViewModel>
+    : IRequestHandler<GetTicketsRequest, TicketsViewModel>,
+      IRequestHandler<GetDetailTicketsRequest, TicketsViewModel>
 {
     public async Task<TicketsViewModel> Handle(GetTicketsRequest request, CancellationToken cancellationToken)
     {
@@ -31,12 +35,27 @@ public class GetTicketsHandler(
         viewModel.InvalidTransIds = getTicketsResult.Validation.InvalidTransIds;
         viewModel.MarkedTransIds = getTicketsResult.Validation.MarkedTransIds;
         viewModel.MovedTransIds = getTicketsResult.Validation.MovedTransIds;
-        viewModel.Groups = await CreateGroupTicketsViewModel(getTicketsResult.Tickets, request);
+        viewModel.Groups = await CreateGroupTicketsViewModel(getTicketsResult.Tickets, request.PageIndex, request.PageSize);
         viewModel.TotalItems = getTicketsResult.Tickets.Count();
         viewModel.ParlayCount = getTicketsResult.Tickets.Count(item => item.IsMixParlay);
         viewModel.SingleCount = getTicketsResult.Tickets.Count(item => !item.IsMixParlay);
         viewModel.LicenseesName = GetLicenseesName(getTicketsResult.Tickets);
         UpdateTimeViewModel(viewModel, getTicketsResult.Tickets);
+
+        return viewModel;
+    }
+
+    public async Task<TicketsViewModel> Handle(GetDetailTicketsRequest request, CancellationToken cancellationToken)
+    {
+        var viewModel = new TicketsViewModel();
+        var tickets = await getTicketsService.GetDetailTickets(request);
+        viewModel.TotalItemsList = CreateMapToBetIdList(tickets);
+        viewModel.Groups = await CreateGroupTicketsViewModel(tickets, request.PageIndex, request.PageSize);
+        viewModel.TotalItems = tickets.Count();
+        viewModel.SingleCount = tickets.Count(item => !item.IsMixParlay);
+        viewModel.ParlayCount = tickets.Count(item => item.IsMixParlay);
+        viewModel.LicenseesName = GetLicenseesName(tickets);
+        UpdateTimeViewModel(viewModel, tickets);
 
         return viewModel;
     }
@@ -50,9 +69,9 @@ public class GetTicketsHandler(
         });
     }
 
-    private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupTicketsViewModel(IEnumerable<GetTicketModel> tickets, GetTicketsQuery message)
+    private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupTicketsViewModel(IEnumerable<GetTicketModel> tickets, int pageIndex, int pageSize)
     {
-        var pagingTickets = pagingService.Paging(tickets, message.PageIndex, message.PageSize);
+        var pagingTickets = pagingService.Paging(tickets, pageIndex, pageSize);
         return pagingTickets.Any() ? await CreateGroupTicketsViewModel(pagingTickets) : [];
     }
 
@@ -67,11 +86,11 @@ public class GetTicketsHandler(
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
         if (creditParlayTickets.Any())
         {
-            groups.Add(new Group<GetTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+            groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
         if (depositParlayTickets.Any())
         {
-            groups.Add(new Group<GetTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+            groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }
 
         return groups.Where(item => item.Tickets.Any()).Select(item => mapTicketService.MapToGroupTicketViewModel(item, userPermission));
@@ -92,7 +111,7 @@ public class GetTicketsHandler(
             return;
         }
 
-        model.ToTime = tickets.Max(item => item.TransDate).ZoneManila().ToString("hh:mm:ss tt");
         model.FromTime = tickets.Min(item => item.TransDate).ZoneManila().ToString("hh:mm:ss tt");
+        model.ToTime = tickets.Max(item => item.TransDate).ZoneManila().ToString("hh:mm:ss tt");
     }
 }
