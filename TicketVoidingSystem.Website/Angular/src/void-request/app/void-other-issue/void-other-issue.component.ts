@@ -294,11 +294,7 @@ export class VoidOtherIssueComponent implements OnInit {
   checkSettled(): boolean {
     if (this.isAbnormalAccount()) {
       const UNSETTLED_STATUS = '0,1';
-      if (this.requestDetail.abnormalAccountModel.statusIds === UNSETTLED_STATUS) {
-        return false;
-      }
-
-      return true;
+      return this.requestDetail.abnormalAccountModel.statusIds !== UNSETTLED_STATUS;
     }
 
     return this.ticketsModel.checkSettledTickets();

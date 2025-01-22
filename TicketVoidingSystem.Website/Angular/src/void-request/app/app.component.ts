@@ -14,7 +14,6 @@ export class AppComponent implements OnInit {
   requestDetail = new RequestDetailViewModel();
   isBlockUI: boolean;
   remark: string[];
-
   private isReadyRender = false;
 
   constructor(

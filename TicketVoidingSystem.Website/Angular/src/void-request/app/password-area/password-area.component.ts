@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 
 @Component({
@@ -6,13 +6,9 @@ import { CommonPrimitiveProperty } from '../models/common-primitive-property.mod
   templateUrl: './password-area.component.html',
   styleUrls: ['./password-area.component.scss']
 })
-export class PasswordAreaComponent implements OnInit {
+export class PasswordAreaComponent {
   @Input('primitiveProperty') primitiveProperty: CommonPrimitiveProperty;
   @Output() clickVoidAllEvent = new EventEmitter<boolean>();
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
   public onClickVoidAllMatches(): void{
     this.clickVoidAllEvent.emit();

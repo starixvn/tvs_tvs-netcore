@@ -1,38 +1,52 @@
 <div >
-    <div class="bg-gray mg-10 header-info wrapper-tooltip">
-        <div *ngIf="isAbnormalAccount()" class="affected-username padding-2-10 alert alert-primary">
-            Username: <strong>{{usernames}}</strong>
-        </div>
-        <event-info *ngIf="isHasMatchInfo()" [match]="match"></event-info>
-        <issue-type [issueTypeName]="issueTypeName" [isShowVar]="isShowVar"></issue-type>
-        <div *ngIf="isAbnormalAccount()">
-            <div class="row no-gutters">Product:&nbsp;<strong>{{getProducts(requestDetail.abnormalAccountModel.productIds)}}</strong></div>
-            <div class="row no-gutters">Ticket Status:&nbsp;<strong>{{getStatus(requestDetail.abnormalAccountModel.statusIds)}}</strong></div>
-            <div class="row no-gutters">From/To Event Date:&nbsp;<strong>{{requestDetail.abnormalAccountModel.fromDate | date: 'yyyy/MM/dd'}} -
-            {{requestDetail.abnormalAccountModel.toDate | date: 'yyyy/MM/dd'}}
-            </strong></div>
-        </div>
-        <log-info *ngIf="isHasLogInfo()" [logInfoDetails]="logInfoDetails" [correctOddsHomeOver]="correctOddsHomeOver" [correctOddsAwayUnder]="correctOddsAwayUnder"
-            [issueTypeId]="requestDetail.request.issueTypeId" [filterBy]="filterBy" [actualScore]="actualScore" [isPoolHouseAffected]="isPoolHouseAffected"
-            [sportType]="requestDetail.request.sportType">
-        </log-info>
-        <filter *ngIf="isWrongScore() || isWrongOdds()" [groupBetTypes]="groupBetTypes" [match]="match"
-            [allBetTypes]="allBetTypes" [getPlayerQuery]="getPlayerQuery" (search)="search($event)">
-        </filter>
-    </div>
-    <licensee-affected-list [licenseeAffectedList]="licenseeAffectedList" [isDisplay]="isShowTicket"></licensee-affected-list>
-    <div class="d-flex">
-        <tickets-list *ngIf="isShowTicket" [model]="ticketsModel" [(paging)]="paging" (pagingChange)="pagingEvent()"
+  <div class="bg-gray mg-10 header-info wrapper-tooltip">
+    @if (isAbnormalAccount()) {
+      <div class="affected-username padding-2-10 alert alert-primary">
+        Username: <strong>{{usernames}}</strong>
+      </div>
+    }
+    @if (isHasMatchInfo()) {
+      <event-info [match]="match"></event-info>
+    }
+    <issue-type [issueTypeName]="issueTypeName" [isShowVar]="isShowVar"></issue-type>
+    @if (isAbnormalAccount()) {
+      <div>
+        <div class="row no-gutters">Product:&nbsp;<strong>{{getProducts(requestDetail.abnormalAccountModel.productIds)}}</strong></div>
+        <div class="row no-gutters">Ticket Status:&nbsp;<strong>{{getStatus(requestDetail.abnormalAccountModel.statusIds)}}</strong></div>
+        <div class="row no-gutters">From/To Event Date:&nbsp;<strong>{{requestDetail.abnormalAccountModel.fromDate | date: 'yyyy/MM/dd'}} -
+          {{requestDetail.abnormalAccountModel.toDate | date: 'yyyy/MM/dd'}}
+        </strong></div>
+      </div>
+    }
+    @if (isHasLogInfo()) {
+      <log-info [logInfoDetails]="logInfoDetails" [correctOddsHomeOver]="correctOddsHomeOver" [correctOddsAwayUnder]="correctOddsAwayUnder"
+        [issueTypeId]="requestDetail.request.issueTypeId" [filterBy]="filterBy" [actualScore]="actualScore" [isPoolHouseAffected]="isPoolHouseAffected"
+        [sportType]="requestDetail.request.sportType">
+      </log-info>
+    }
+    @if (isWrongScore() || isWrongOdds()) {
+      <filter [groupBetTypes]="groupBetTypes" [match]="match"
+        [allBetTypes]="allBetTypes" [getPlayerQuery]="getPlayerQuery" (search)="search($event)">
+      </filter>
+    }
+  </div>
+  <licensee-affected-list [licenseeAffectedList]="licenseeAffectedList" [isDisplay]="isShowTicket"></licensee-affected-list>
+  <div class="d-flex">
+    @if (isShowTicket) {
+      <tickets-list [model]="ticketsModel" [(paging)]="paging" (pagingChange)="pagingEvent()"
         (exportExcelEvent)="exportExcel()" [isBlock]="isBlockBetList" (ticketsChange)="ticketsChange()"
         [issueTypeId]="issue.issueTypeId" [isDisableCheckbox]="true">
-        </tickets-list>
-    </div>
-    <div [ngClass]="{'display-block': paging.total > 0, 'display-none': paging.total <= 0}">
-        <template-message *ngIf="!isArchivedTickets()" #messages [value]="templateValue" [issueTypeId]="issue.issueTypeId"
-            [subIssueTypeId]="issue.subIssueTypeId" [voidFunction]="2">
-        </template-message>
-        <confirmation #confirmation (voidAll)="voidAll()" [isDisabledButton]="isBlockBetList"></confirmation>
-    </div>
+      </tickets-list>
+    }
+  </div>
+  <div [ngClass]="{'display-block': paging.total > 0, 'display-none': paging.total <= 0}">
+    @if (!isArchivedTickets()) {
+      <template-message #messages [value]="templateValue" [issueTypeId]="issue.issueTypeId"
+        [subIssueTypeId]="issue.subIssueTypeId" [voidFunction]="2">
+      </template-message>
+    }
+    <confirmation #confirmation (voidAll)="voidAll()" [isDisabledButton]="isBlockBetList"></confirmation>
+  </div>
 </div>
 
 <tooltip [tooltip]="tooltip"></tooltip>

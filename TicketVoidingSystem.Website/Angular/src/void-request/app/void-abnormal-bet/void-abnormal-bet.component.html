@@ -1,54 +1,62 @@
 <div>
-  <ng-container *ngIf="primitiveProperty.isLoadedBasicData">
-    <div *ngFor="let item of voidPageItems" class="bg-gray match-void">
-      <div class="full-width d-flex bg-gray match-void">
-        <div class="index-of-match d-flex align-items-center">
-          <div class="number-circle"><span><strong>{{item.id}}</strong></span></div>
-        </div>
-        <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">
-          <div class="alert alert-dark p-1 m-0 mb-1"><span>
-            Issue Type: <strong>{{item.displayIssueTypeName}}</strong></span>
+  @if (primitiveProperty.isLoadedBasicData) {
+    @for (item of voidPageItems; track item) {
+      <div class="bg-gray match-void">
+        <div class="full-width d-flex bg-gray match-void">
+          <div class="index-of-match d-flex align-items-center">
+            <div class="number-circle"><span><strong>{{item.id}}</strong></span></div>
           </div>
-          <div *ngIf="item.matchModel" class="alert alert-dark match-info p-1 m-0 flex-grow-1">
-            <span>Match Code/ID:
-              <strong class="match-text">{{item.matchModel.matchCode}}/{{item.matchModel.matchId}}</strong></span><br />
-            <span>Match Event: <strong class="match-text">{{item.matchModel.matchEvent}}</strong></span><br />
-            <span>League: <strong class="match-text">{{item.matchModel.leagueName}}</strong></span><br />
+          <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">
+            <div class="alert alert-dark p-1 m-0 mb-1"><span>
+              Issue Type: <strong>{{item.displayIssueTypeName}}</strong></span>
+            </div>
+            @if (item.matchModel) {
+              <div class="alert alert-dark match-info p-1 m-0 flex-grow-1">
+                <span>Match Code/ID:
+                  <strong class="match-text">{{item.matchModel.matchCode}}/{{item.matchModel.matchId}}</strong></span><br />
+                  <span>Match Event: <strong class="match-text">{{item.matchModel.matchEvent}}</strong></span><br />
+                  <span>League: <strong class="match-text">{{item.matchModel.leagueName}}</strong></span><br />
+                </div>
+              }
+            </div>
+            <div class="flex-grow-1">
+              <div class="area-icon">
+                <em [ngClass]="item.isShowTicketFull ? 'icon-show-tickets-expanded': 'icon-show-tickets'"
+                (click)="onClickShowVoidTickets(item)"></em>
+                <em [ngClass]="item.isShowTemplateMessage? 'icon-show-template-message-expanded': 'icon-show-template-message'"
+                (click)="onClickShowTemplateMessage(item)"></em>
+              </div>
+            </div>
+          </div>
+          <licensee-affected-list [licenseeAffectedList]="item.licenseeAffectedList" [isDisplay]="item.isShowTicketFull">
+          </licensee-affected-list>
+          <div>
+            @if (item.isShowTicketFull) {
+              <tickets-list class="m-0" [model]="item.voidTicketsFull"
+                [(paging)]="item.pagingVoidTickets" (pagingChange)="onPagingTicketsChange(item)"
+                (exportExcelEvent)="exportTickets(item)" [isBlock]="item.isBlockBetList"
+                (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
+                [isDisableCheckbox]="true">
+              </tickets-list>
+            }
+            <message-area #messageArea [isShowTemplateMessage]="item.isShowTemplateMessage" [totalVoidTickets]="item.voidTicketsMini?.total"
+              [templateValue]="item.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" [id]="item.id"
+              [subIssueTypeId]="item.subIssueType.subIssueTypeId" [voidReason]="item.voidReason" [requestId]="requestDetail.request.requestId">
+            </message-area>
           </div>
         </div>
-        <div class="flex-grow-1">
-          <div class="area-icon">
-            <em [ngClass]="item.isShowTicketFull ? 'icon-show-tickets-expanded': 'icon-show-tickets'"
-              (click)="onClickShowVoidTickets(item)"></em>
-            <em [ngClass]="item.isShowTemplateMessage? 'icon-show-template-message-expanded': 'icon-show-template-message'"
-              (click)="onClickShowTemplateMessage(item)"></em>
-          </div>
-        </div>
-      </div>
-      <licensee-affected-list [licenseeAffectedList]="item.licenseeAffectedList" [isDisplay]="item.isShowTicketFull">
-      </licensee-affected-list>
-      <div>
-        <tickets-list class="m-0" *ngIf="item.isShowTicketFull" [model]="item.voidTicketsFull"
-          [(paging)]="item.pagingVoidTickets" (pagingChange)="onPagingTicketsChange(item)"
-          (exportExcelEvent)="exportTickets(item)" [isBlock]="item.isBlockBetList"
-          (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
-          [isDisableCheckbox]="true">
-        </tickets-list>
-        <message-area #messageArea [isShowTemplateMessage]="item.isShowTemplateMessage" [totalVoidTickets]="item.voidTicketsMini?.total"
-          [templateValue]="item.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" [id]="item.id"
-          [subIssueTypeId]="item.subIssueType.subIssueTypeId" [voidReason]="item.voidReason" [requestId]="requestDetail.request.requestId">
-        </message-area>
-      </div>
-    </div>
-    <password-area [primitiveProperty]="primitiveProperty" (clickVoidAllEvent)="onClickVoidAllMatches()"></password-area>
-    <tooltip [tooltip]="tooltip"></tooltip>
-  </ng-container>
-</div>
-<div *ngIf="primitiveProperty.isBlockUI">
-  <div class="in modal-backdrop spinner-overlay"></div>
-  <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
-    <div class="loading-message">
-      <div class="loading"></div>
-    </div>
+      }
+      <password-area [primitiveProperty]="primitiveProperty" (clickVoidAllEvent)="onClickVoidAllMatches()"></password-area>
+      <tooltip [tooltip]="tooltip"></tooltip>
+    }
   </div>
-</div>
+  @if (primitiveProperty.isBlockUI) {
+    <div>
+      <div class="in modal-backdrop spinner-overlay"></div>
+      <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
+        <div class="loading-message">
+          <div class="loading"></div>
+        </div>
+      </div>
+    </div>
+  }

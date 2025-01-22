@@ -1,5 +1,5 @@
 <div>
-  <ng-container *ngIf="primitiveProperty.isLoadedBasicData">
+  @if (primitiveProperty.isLoadedBasicData) {
     <div class="bg-gray void-page-item">
       <div class="full-width d-flex bg-gray">
         <div class="index-of-match d-flex align-items-center">
@@ -24,19 +24,21 @@
         <div class="flex-grow-1">
           <div class="area-icon">
             <em [ngClass]="voidPageItem.isShowTicketFull ? 'icon-show-tickets-expanded': 'icon-show-tickets'"
-              (click)="onClickShowVoidTickets(voidPageItem)"></em>
+            (click)="onClickShowVoidTickets(voidPageItem)"></em>
             <em [ngClass]="voidPageItem.isShowTemplateMessage ? 'icon-show-template-message-expanded' : 'icon-show-template-message'"
-              (click)="onClickShowTemplateMessage(voidPageItem)"></em>
+            (click)="onClickShowTemplateMessage(voidPageItem)"></em>
           </div>
         </div>
       </div>
       <licensee-affected-list [licenseeAffectedList]="voidPageItem.licenseeAffectedList" [isDisplay]="voidPageItem.isShowTicketFull"></licensee-affected-list>
       <div>
-        <tickets-list class="m-0" *ngIf="voidPageItem.isShowTicketFull" [model]="voidPageItem.voidTicketsFull"
-          [(paging)]="voidPageItem.pagingVoidTickets" (pagingChange)="onPagingTicketsChange(voidPageItem)" (exportExcelEvent)="exportTickets(voidPageItem)"
-          [isBlock]="voidPageItem.isBlockBetList" (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
-          [isDisableCheckbox]="true">
-        </tickets-list>
+        @if (voidPageItem.isShowTicketFull) {
+          <tickets-list class="m-0" [model]="voidPageItem.voidTicketsFull"
+            [(paging)]="voidPageItem.pagingVoidTickets" (pagingChange)="onPagingTicketsChange(voidPageItem)" (exportExcelEvent)="exportTickets(voidPageItem)"
+            [isBlock]="voidPageItem.isBlockBetList" (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
+            [isDisableCheckbox]="true">
+          </tickets-list>
+        }
         <message-area #messageArea [isShowTemplateMessage]="voidPageItem.isShowTemplateMessage" [totalVoidTickets]="voidPageItem.voidTicketsMini?.total"
           [templateValue]="voidPageItem.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" [id]="voidPageItem.id"
           [subIssueTypeId]="voidPageItem.subIssueType.subIssueTypeId" [voidReason]="voidPageItem.voidReason" [requestId]="requestDetail.request.requestId">
@@ -45,13 +47,15 @@
     </div>
     <password-area [primitiveProperty]="primitiveProperty" (clickVoidAllEvent)="onClickVoidAllMatches()"></password-area>
     <tooltip [tooltip]="tooltip"></tooltip>
-  </ng-container>
+  }
 </div>
-<div *ngIf="primitiveProperty.isBlockUI">
-  <div class="in modal-backdrop spinner-overlay"></div>
-  <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
-    <div class="loading-message">
-      <div class="loading"></div>
+@if (primitiveProperty.isBlockUI) {
+  <div>
+    <div class="in modal-backdrop spinner-overlay"></div>
+    <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
+      <div class="loading-message">
+        <div class="loading"></div>
+      </div>
     </div>
   </div>
-</div>
+}

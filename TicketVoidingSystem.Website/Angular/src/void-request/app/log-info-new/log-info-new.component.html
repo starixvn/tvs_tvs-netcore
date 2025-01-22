@@ -1,35 +1,55 @@
 <div>
-    <span><strong>Log Info</strong></span><br />
-    <span>Live Score: </span><strong>{{logInfoDetail.liveScores}}</strong>.
-    Void time (GMT-4): <strong>{{displayFullDateTimeFormat(logInfoDetail.voidFromTime)}} -
-        {{displayFullDateTimeFormat(logInfoDetail.voidToTime)}}</strong><br />
-    <div *ngIf="isSportTypeSoccer()" class="soccer">
-        <ng-container *ngIf="!isShowPoolHouseTickets()">
-            Affected Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
-            <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red" 
-            [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
-            </span>,
-            Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong><span *ngIf="logInfoDetail.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{displayMinTime(logInfoDetail.highlightMinTime)}}</strong></span>,
-            <span *ngIf="isHaveCancelCashOut()">TransId: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{logInfoDetail.minTransId}}</strong> {{logInfoDetail.actionType}}</span><br/>
-            <span *ngIf="isHaveCancelCashOut()">Cancel Cash Out: <strong>{{logInfoDetail.cancelCashOutCount}}</strong></span>
-        </ng-container>
-        <ng-container *ngIf="isShowPoolHouseTickets()">
-            LG/Early - Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
-            <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red"
-            [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
-            </span><br />
-            <ng-container *ngIf="isMainMatch">
-            <div *ngIf="isPoolHouseAffected">
-                PH - Single Count: <strong>{{logInfoDetail.poolHouseSingleCount}}</strong>
-                <span *ngIf="isShowCountInfo(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount)" class="text-red" 
-                [innerHTML]="countInfoContent(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
-                </span>,
-                Parlay Count: <strong>{{logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
-            </div>
-            <div *ngIf="!isPoolHouseAffected">PH - Not affected.</div>
-            </ng-container>
-        </ng-container>
-    </div>
-    <ticket-count-other-sports *ngIf="!isSportTypeSoccer()" [logInfoDetail]="logInfoDetail" [isVoided]="true">
-    </ticket-count-other-sports>
-</div>
+  <span><strong>Log Info</strong></span><br />
+  <span>Live Score: </span><strong>{{logInfoDetail.liveScores}}</strong>.
+  Void time (GMT-4): <strong>{{displayFullDateTimeFormat(logInfoDetail.voidFromTime)}} -
+{{displayFullDateTimeFormat(logInfoDetail.voidToTime)}}</strong><br />
+@if (isSportTypeSoccer()) {
+  <div class="soccer">
+    @if (!isShowPoolHouseTickets()) {
+      Affected Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
+      @if (isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)) {
+        <span class="text-red"
+          [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
+        </span>
+        },
+        Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong>@if (logInfoDetail.highlightMinTime) {
+        <span>, Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{displayMinTime(logInfoDetail.highlightMinTime)}}</strong></span>
+        },
+        @if (isHaveCancelCashOut()) {
+          <span>TransId: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{logInfoDetail.minTransId}}</strong> {{logInfoDetail.actionType}}</span>
+          }<br/>
+          @if (isHaveCancelCashOut()) {
+            <span>Cancel Cash Out: <strong>{{logInfoDetail.cancelCashOutCount}}</strong></span>
+          }
+        }
+        @if (isShowPoolHouseTickets()) {
+          LG/Early - Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
+          @if (isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)) {
+            <span class="text-red"
+              [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
+            </span>
+            }<br />
+            @if (isMainMatch) {
+              @if (isPoolHouseAffected) {
+                <div>
+                  PH - Single Count: <strong>{{logInfoDetail.poolHouseSingleCount}}</strong>
+                  @if (isShowCountInfo(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount)) {
+                    <span class="text-red"
+                      [innerHTML]="countInfoContent(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
+                    </span>
+                    },
+                    Parlay Count: <strong>{{logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
+                  </div>
+                }
+                @if (!isPoolHouseAffected) {
+                  <div>PH - Not affected.</div>
+                }
+              }
+            }
+          </div>
+        }
+        @if (!isSportTypeSoccer()) {
+          <ticket-count-other-sports [logInfoDetail]="logInfoDetail" [isVoided]="true">
+          </ticket-count-other-sports>
+        }
+      </div>

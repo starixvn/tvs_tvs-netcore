@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
 import { VoidedReason } from '../../../utility/models/reason.model';
@@ -9,7 +9,7 @@ import { VoidReasonComponent } from './void-reason/void-reason.component';
   templateUrl: './message-area.component.html',
   styleUrls: ['./message-area.component.scss']
 })
-export class MessageAreaComponent implements OnInit {
+export class MessageAreaComponent {
   @Input() requestId: number;
   @Input() id: number;
   @Input('isShowTemplateMessage') isShowTemplateMessage = false;
@@ -20,8 +20,4 @@ export class MessageAreaComponent implements OnInit {
   @Input('voidReason') voidReason: VoidedReason;
   @ViewChild("templateMessage") templateMessageComponent: TemplateMessageComponent;
   @ViewChild("reason") reasonComponent: VoidReasonComponent;
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 }
