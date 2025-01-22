@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Injector, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { UsernamesComponent } from '../../../utility/components/user-names/user-names.component';
 import { Selection } from '../../../utility/models/selection.model';
 import { AppStore } from '../app.store';
@@ -20,10 +20,13 @@ export class AddUserComponent implements OnChanges {
   isVoidVIP: boolean;
   
   constructor(
+    private readonly injector: Injector,
     private readonly validationService: ValidationService,
     private readonly userService: UserService,
     private readonly abWhiteListStore: AppStore
-  ) { }
+  ) {
+
+  }
   
   async ngOnChanges(changes: SimpleChanges) {
     if (changes['model']) {

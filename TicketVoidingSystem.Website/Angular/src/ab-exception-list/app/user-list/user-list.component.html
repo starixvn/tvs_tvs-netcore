@@ -34,7 +34,7 @@
           </th>
           @if (permission.abExceptionListHost) {
             <th scope="col" class="col-tb-9 col-remove">
-              <button class="button-remove-users mr-1" (click)="removeUsers()" [disabled]="isDisabledRemoveButton()">REMOVE</button>
+              <button class="button-remove-users me-1" (click)="removeUsers()" [disabled]="isDisabledRemoveButton()">REMOVE</button>
               <input type="checkbox" [(ngModel)]="isCheckedAll" (change)="changedCheckAll()" [disabled]="displayedModels?.length === 0"/>
             </th>
           }

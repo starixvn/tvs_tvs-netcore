@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class AppStore {
-  private readonly blockingUiStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private readonly blockingUiStatusSubject = new BehaviorSubject<boolean>(false);
 
   constructor() {
   }

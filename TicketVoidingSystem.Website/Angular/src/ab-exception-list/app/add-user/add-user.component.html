@@ -8,14 +8,12 @@
             <div class="modal-title">
               <strong>Add New AB Exception List</strong>
             </div>
-            <button class="close" (click)="closeModal()">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="closeModal()"></button>
           </div>
           <div class="modal-body wrapper-tooltip">
             <user-names #usernames [isAbException]="true" (afterFocusOutBetIds)="afterFocusOutBetIds()"></user-names>
             <div>
-              <label class="col-form-label col-form-label-sm mr-2">Sub Type</label>
+              <label class="col-form-label col-form-label-sm me-2">Sub Type</label>
               <ng-select class="sub-type" [items]="subTypeSelection" [multiple]="true" bindLabel="name" groupBy="group"
                 [selectableGroup]="true" [selectableGroupAsModel]="false" [closeOnSelect]="false" bindValue="value"
                 [(ngModel)]="selectedSubType"
@@ -24,7 +22,7 @@
                   <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{subTypeSelection.length === selectedSubType.length ? 'Unselect All' : 'Select All'}}
                 </ng-template>
                 <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                  <input class="mr-1" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />{{item.name}}
+                  <input class="me-1" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />{{item.name}}
                 </ng-template>
                 <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
                   @for (item of items | slice:0:9; track item) {
@@ -42,11 +40,11 @@
               </ng-select>
             </div>
             <div class="form-check form-check-inline d-flex align-items-center mt-2">
-              <input class="form-check-input" type="checkbox" id="chk-void-vip" [(ngModel)]="isVoidVIP" />
+              <input class="form-check-input me-1" type="checkbox" id="chk-void-vip" [(ngModel)]="isVoidVIP" />
               <label class="form-check-label" for="chk-void-vip">Void VIP</label>
             </div>
             <div class="mg-top-10 text-right button-area">
-              <button type="button" class="btn btn-primary btn-sm mr-2" (click)="clickSave()">Save</button>
+              <button type="button" class="btn btn-primary btn-sm me-2" (click)="clickSave()">Save</button>
               <button type="button" class="btn btn-danger btn-sm" (click)="closeModal()">Cancel</button>
             </div>
           </div>

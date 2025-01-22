@@ -1,11 +1,11 @@
 <div class="filter bg-gray mg-bottom-10 min-width-1666">
   <div class="d-flex flex-wrap mb-3">
-    <div class="filter-username d-flex mr-4">
-      <label class="col-form-label col-form-label-sm mr-2">Username</label>
+    <div class="filter-username d-flex me-4">
+      <label class="col-form-label col-form-label-sm me-2">Username</label>
       <input class="username-txt form-control form-control-sm" type="text" [(ngModel)]="filterModel.username">
     </div>
-    <div class="filter-level d-flex mr-4">
-      <label class="col-form-label col-form-label-sm mr-2">Level</label>
+    <div class="filter-level d-flex me-4">
+      <label class="col-form-label col-form-label-sm me-2">Level</label>
       <div>
         <ng-select
           [clearable]="false"
@@ -16,15 +16,15 @@
         </ng-select>
       </div>
     </div>
-    <div class="filter-site d-flex mr-4">
-      <label class="col-form-label col-form-label-sm mr-2">Site</label>
+    <div class="filter-site d-flex me-4">
+      <label class="col-form-label col-form-label-sm me-2">Site</label>
       <div class="dropdown-select-sites">
         <multiple-selection class="multiple-selection filter-site-dropdown" [multipleSelect]="multipleSelection" (checkedItems)="updateSelectedSites($event)">
         </multiple-selection>
       </div>
     </div>
-    <div class="filter-sub-type d-flex mr-4">
-      <label class="col-form-label col-form-label-sm mr-2">Sub Type</label>
+    <div class="filter-sub-type d-flex me-4">
+      <label class="col-form-label col-form-label-sm me-2">Sub Type</label>
       <ng-select class="sub-type-dropdown" [items]="subTypeSelectionFilter" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
         [clearable]="false" [(ngModel)]="selectedSubType" bindValue="value" (change)="updateSelectedSubIssueType()"
         [disabled]="false" groupBy="group" [selectableGroup]="true"
@@ -44,8 +44,8 @@
         </ng-template>
       </ng-select>
     </div>
-    <div class="filter-void-vip d-flex mr-4">
-      <label class="col-form-label col-form-label-sm mr-2">Void VIP</label>
+    <div class="filter-void-vip d-flex me-4">
+      <label class="col-form-label col-form-label-sm me-2">Void VIP</label>
       <ng-select class="void-vip-dropdown" [items]="voidVIPSelection" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
         [clearable]="false" [(ngModel)]="selectedVoidVIP" bindValue="value" (change)="updateSelectedVoidVIP()"
         [disabled]="false" groupBy="group" [selectableGroup]="true"
@@ -67,7 +67,7 @@
     </div>
   </div>
   <div class="button-area">
-    <button type="button" class="btn btn-primary btn-sm mr-2" (click)="clickSearch()">Search</button>
+    <button type="button" class="btn btn-primary btn-sm me-2" (click)="clickSearch()">Search</button>
     @if (permission.abExceptionListHost) {
       <button type="button" class="btn btn-success btn-sm" (click)="clickAddUser()">Add New</button>
     }

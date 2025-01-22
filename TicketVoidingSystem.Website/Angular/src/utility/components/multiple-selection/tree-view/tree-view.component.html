@@ -5,8 +5,8 @@
           <i *ngIf="item.items.length > 0" class="fa" [ngClass]="{'fa-angle-up': item.expanded, 'fa-angle-down': !item.expanded}"
              (click)="item.expanded = !item.expanded"></i>
           <label [ngClass]="{'cursor-not-allowed': isDisabled}">
-              <input type="checkbox" [(ngModel)]="item.checked" class="mr-1" [ngClass]="{'cursor-not-allowed': isDisabled}"
-                     (ngModelChange)="item.checkChilds();handleClick(item)" 
+              <input type="checkbox" [(ngModel)]="item.checked" class="me-1" [ngClass]="{'cursor-not-allowed': isDisabled}"
+                     (ngModelChange)="item.checkChilds();handleClick(item)"
                      [disabled]="!item.enable || isDisabled" (keyup.shift)="keyUpEvent()" (keydown.shift)="keyDownEvent()" />
               {{ item.text }}
           </label>

@@ -1,7 +1,7 @@
 // grab our gulp packages
 const configPages = require('./gulpConfigPages');
 const jeditor = require("gulp-json-editor");
-const shell = require('gulp-shell');
+const { exec } = require('child_process');
 const { task, series, src, dest } = require('gulp');
 let fs = require('fs'),
   cheerio = require('cheerio'),
@@ -105,7 +105,17 @@ const taskList = configPages.map(page => {
       .pipe(dest("./src"));
   });
 
-  task(buildAngularTaskName, shell.task(`ng build --configuration production --deploy-url ${page.deployUrl} --index ${page.index} --main ${page.main}`));
+  task(buildAngularTaskName, (done) => {
+    const command = `ng build --configuration production --deploy-url ${page.deployUrl} --index ${page.index} --main ${page.main}`;
+    exec(command, (error) => {
+      if (error) {
+        console.error(`exec error: ${error}`);
+        done(error);
+        return;
+      }
+      done();
+    });
+  });
 
   task(postbuildTaskName, done => {
     rimraf.sync(page.transformFolder);

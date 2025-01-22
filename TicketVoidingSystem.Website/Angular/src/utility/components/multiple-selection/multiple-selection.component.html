@@ -10,7 +10,7 @@
     [ngClass]="{'style-container-collapse': isCollapse}">
       <div class="dropdown-header" *ngIf="multipleSelect.showHeader" [ngClass]="{'item-selected': multipleSelect.isCheckAll}">
           <label [ngClass]="{'cursor-not-allowed': isDisabled}">
-              <input class="mr-1" type="checkbox" [(ngModel)]="multipleSelect.isCheckAll" [disabled]="isDisabled"
+              <input class="me-1" type="checkbox" [(ngModel)]="multipleSelect.isCheckAll" [disabled]="isDisabled"
                   (ngModelChange)="multipleSelect.checkAllItems(multipleSelect.isCheckAll);changeItems();" [ngClass]="{'cursor-not-allowed': isDisabled}"/>
               {{multipleSelect.checkAllCheckBoxText}}
           </label>

@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChange } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { ABExceptionListLevel, ABExceptionListVoidVIP } from '../../../utility/constants/config';
@@ -12,7 +12,7 @@ import { UserService } from '../services/user.service';
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
 })
-export class UserListComponent {
+export class UserListComponent implements OnChanges {
   @Input() models: UserModel[] = [];
   @Input() permission = new PermissionABExceptionList();
 
@@ -26,7 +26,7 @@ export class UserListComponent {
     private readonly abExceptionListStore: AppStore
   ) { }
 
-  public ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+  public ngOnChanges(changes: SimpleChanges) {
     if (changes['models']) {
       this.paging.total = this.models.length;
       this.paging.pageSize = 500;

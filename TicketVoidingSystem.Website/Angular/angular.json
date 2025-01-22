@@ -27,7 +27,11 @@
               "src/assets/styles/styles.scss",
               "node_modules/ngx-toastr/toastr.css"
             ],
-            "allowedCommonJsDependencies": ["lodash", "file-saver", "moment-timezone"],
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "file-saver",
+              "moment-timezone"
+            ],
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -73,21 +77,21 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "proxyConfig": "proxy.conf.js",
-            "browserTarget": "project-tvs:build"
+            "buildTarget": "project-tvs:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "project-tvs:build:production"
+              "buildTarget": "project-tvs:build:production"
             },
             "local-dev": {
-              "browserTarget": "project-tvs:build"
+              "buildTarget": "project-tvs:build"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "project-tvs:build"
+            "buildTarget": "project-tvs:build"
           }
         }
       }
