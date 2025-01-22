@@ -35,7 +35,7 @@ public class GetInfoTicketsForMessageTests
     {
         // Arrange
         List<GetTicketModel> allTickets =
-            [new() { IsMixParlay = true, SubHdp1 = 1, SubHdp2 = 0 }, new() { IsMixParlay = false, Hdp1 = 2, Hdp2 = 1 }];
+            [new() { GroupBetTypeId = 1, IsMixParlay = true, SubHdp1 = 1, SubHdp2 = 0 }, new() { GroupBetTypeId = 1, IsMixParlay = false, Hdp1 = 2, Hdp2 = 1 }];
         var service = new GetInfoTicketsForMessageImp(null);
 
         // Act
