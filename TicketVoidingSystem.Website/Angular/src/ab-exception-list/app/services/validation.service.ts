@@ -1,21 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { UsernamesComponent } from '../../../utility/components/user-names/user-names.component';
 import { TEXT } from '../../../utility/constants/text';
 import { AppService } from '../app.service';
 import { FilterComponent } from '../filter/filter.component';
 import { FilterModel } from '../filter/filter.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
   private readonly FILTER_SITE_CLASS = 'filter-site-dropdown';
   private readonly FILTER_SUB_TYPE_CLASS = 'sub-type-dropdown';
   private readonly FILTER_VOID_VIP_CLASS = 'void-vip-dropdown';
-
-  constructor(
-    private readonly appService: AppService,
-  ) {}
+  appService = inject(AppService);
 
   async validateUsernames(usernames: string, usernamesComponent: UsernamesComponent): Promise<boolean>{
     if (usernames === '') {

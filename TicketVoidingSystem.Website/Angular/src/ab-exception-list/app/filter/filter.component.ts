@@ -1,5 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
+import { MultipleSelectionModule } from 'src/utility/components/multiple-selection/multiple-selection.module';
+import { ToolTipModule } from 'src/utility/components/tooltip/tooltip.module';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ABExceptionListLevel, ABExceptionListVoidVIP } from '../../../utility/constants/config';
@@ -11,16 +16,18 @@ import { FilterService } from '../services/filter.service';
 import { FilterModel } from './filter.model';
 
 @Component({
+  standalone: true,
   selector: 'filter',
   templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.scss']
+  styleUrls: ['./filter.component.scss'],
+  imports: [MultipleSelectionModule, NgSelectModule, CommonModule, FormsModule, ToolTipModule],
+  providers: [AppStore, FilterService]
 })
 export class FilterComponent implements OnInit {
   @Input() filterModel = new FilterModel();
   @Input() permission = new PermissionABExceptionList();
   @Input() subTypeSelection: Selection[];
   @Output() subTypeSelectionChange = new EventEmitter<Selection[]>();
-
   @Output() filterModelChange = new EventEmitter<FilterModel>();
   @Output() addUserEvent = new EventEmitter();
   @Output() searchEvent = new EventEmitter();

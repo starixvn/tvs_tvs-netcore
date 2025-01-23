@@ -21,23 +21,31 @@
     <div class="container-fluid">
       <div class="collapse navbar-collapse" id="main_nav">
         <ul class="navbar-nav">
-          <div *ngFor="let menuItem of menuItems">
-            <div *ngIf="menuItem.items.length === 0">
-              <li class="nav-item">
-                <a class="nav-link" href="{{menuItem.url}}">{{menuItem.name}}</a>
-              </li>
-            </div>
-            <div *ngIf="menuItem.items.length > 0">
-              <li class="nav-item dropdown">
-                <a class="nav-link  dropdown-toggle" data-bs-toggle="dropdown">{{menuItem.name}}</a>
-                <ul class="dropdown-menu">
-                  <li *ngFor="let item of menuItem.items; index as i">
-                    <a class="dropdown-item" href="{{item.url}}">{{item.name}}</a>
+          @for (menuItem of menuItems; track menuItem) {
+            <div>
+              @if (menuItem.items.length === 0) {
+                <div>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{menuItem.url}}">{{menuItem.name}}</a>
                   </li>
-                </ul>
-              </li>
+                </div>
+              }
+              @if (menuItem.items.length > 0) {
+                <div>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link  dropdown-toggle" data-bs-toggle="dropdown">{{menuItem.name}}</a>
+                    <ul class="dropdown-menu">
+                      @for (item of menuItem.items; track item; let i = $index) {
+                        <li>
+                          <a class="dropdown-item" href="{{item.url}}">{{item.name}}</a>
+                        </li>
+                      }
+                    </ul>
+                  </li>
+                </div>
+              }
             </div>
-          </div>
+          }
         </ul>
       </div>
     </div>

@@ -3,26 +3,32 @@
     [ngClass]="{'disabled-button': isDisabled, 'style-button-collapse': isCollapse}"
     (click)="isCollapse = !isCollapse"
     [style.height]="multipleSelect.buttonHeight">
-      <span class="button-value" [ngClass]="{'place-holder': multipleSelect.isShowPlaceHolder}">{{multipleSelect.selectionTitle }}</span>
-      <i class="fa button-arrow" [ngClass]="{'fa-caret-up': isCollapse, 'fa-caret-down': !isCollapse}" aria-hidden="true"></i>
+    <span class="button-value" [ngClass]="{'place-holder': multipleSelect.isShowPlaceHolder}">{{multipleSelect.selectionTitle }}</span>
+    <i class="fa button-arrow" [ngClass]="{'fa-caret-up': isCollapse, 'fa-caret-down': !isCollapse}" aria-hidden="true"></i>
   </button>
-  <div class="show-tree-view" *ngIf="multipleSelect.items?.length > 0 && isCollapse"
-    [ngClass]="{'style-container-collapse': isCollapse}">
-      <div class="dropdown-header" *ngIf="multipleSelect.showHeader" [ngClass]="{'item-selected': multipleSelect.isCheckAll}">
+  @if (multipleSelect.items?.length > 0 && isCollapse) {
+    <div class="show-tree-view"
+      [ngClass]="{'style-container-collapse': isCollapse}">
+      @if (multipleSelect.showHeader) {
+        <div class="dropdown-header" [ngClass]="{'item-selected': multipleSelect.isCheckAll}">
           <label [ngClass]="{'cursor-not-allowed': isDisabled}">
-              <input class="me-1" type="checkbox" [(ngModel)]="multipleSelect.isCheckAll" [disabled]="isDisabled"
-                  (ngModelChange)="multipleSelect.checkAllItems(multipleSelect.isCheckAll);changeItems();" [ngClass]="{'cursor-not-allowed': isDisabled}"/>
+            <input class="me-1" type="checkbox" [(ngModel)]="multipleSelect.isCheckAll" [disabled]="isDisabled"
+              (ngModelChange)="multipleSelect.checkAllItems(multipleSelect.isCheckAll);changeItems();" [ngClass]="{'cursor-not-allowed': isDisabled}"/>
               {{multipleSelect.checkAllCheckBoxText}}
-          </label>
-          <i class="fa" [ngClass]="{'fa-angle-up': isExpanded, 'fa-angle-down': !isExpanded}" (click)="toggle()"></i>
-      </div>
-      <div class="tree-view-content" [style.max-height]="multipleSelect.maxHeight">
+            </label>
+            <i class="fa" [ngClass]="{'fa-angle-up': isExpanded, 'fa-angle-down': !isExpanded}" (click)="toggle()"></i>
+          </div>
+        }
+        <div class="tree-view-content" [style.max-height]="multipleSelect.maxHeight">
           <tree-view [items]="multipleSelect.items" (change)="changeItems()" [isDisabled]="isDisabled"></tree-view>
+        </div>
       </div>
+    }
+    @if (multipleSelect.items?.length === 0 && isCollapse) {
+      <div
+        [ngClass]="{'style-container-collapse': isCollapse}"
+        class="show-tree-view">
+        <div class="no-item-found">No items found</div>
+      </div>
+    }
   </div>
-  <div *ngIf="multipleSelect.items?.length === 0 && isCollapse"
-    [ngClass]="{'style-container-collapse': isCollapse}"
-    class="show-tree-view">
-    <div class="no-item-found">No items found</div>
-  </div>
-</div>

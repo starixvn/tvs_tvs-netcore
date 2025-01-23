@@ -9,7 +9,9 @@ import { GetUserQuery } from './models/get-user.query';
 import { PermissionABExceptionList } from './models/permission.model';
 import { GroupSiteModel } from './models/site.model';
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class AppService {
   constructor(
     private readonly httpService: HttpService

@@ -1,4 +1,7 @@
-import { Component, Injector, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { UsernamesComponent } from '../../../utility/components/user-names/user-names.component';
 import { Selection } from '../../../utility/models/selection.model';
 import { AppStore } from '../app.store';
@@ -7,27 +10,23 @@ import { ValidationService } from '../services/validation.service';
 import { AddUserModel } from './add-user.model';
 
 @Component({
+  standalone: true,
   selector: 'add-user',
   templateUrl: './add-user.component.html',
-  styleUrls: ['./add-user.component.scss']
+  styleUrls: ['./add-user.component.scss'],
+  imports: [UsernamesComponent, NgSelectModule, FormsModule, CommonModule],
 })
 export class AddUserComponent implements OnChanges {
   @Input() model = new AddUserModel();
   @Input() subTypeSelection: Selection[];
   @ViewChild('usernames') usernamesComponent: UsernamesComponent;
-
   selectedSubType: string[];
   isVoidVIP: boolean;
-  
-  constructor(
-    private readonly injector: Injector,
-    private readonly validationService: ValidationService,
-    private readonly userService: UserService,
-    private readonly abWhiteListStore: AppStore
-  ) {
 
-  }
-  
+  validationService = inject(ValidationService);
+  userService = inject(UserService);
+  abWhiteListStore = inject(AppStore);
+
   async ngOnChanges(changes: SimpleChanges) {
     if (changes['model']) {
       this.selectedSubType = [];
@@ -45,7 +44,7 @@ export class AddUserComponent implements OnChanges {
     }
     this.abWhiteListStore.changeBlockingUiStatus(false);
   }
-  
+
   closeModal() {
     this.model.isOpen = false;
   }

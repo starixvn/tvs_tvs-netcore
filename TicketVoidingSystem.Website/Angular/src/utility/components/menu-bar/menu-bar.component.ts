@@ -1,12 +1,16 @@
+
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { CommonService } from '../../../utility/services/common.service';
 import { MenuItem } from './menu-bar.model';
 
 @Component({
+  standalone: true,
   selector: 'menu-bar',
   templateUrl: './menu-bar.component.html',
-  styleUrls: ['./menu-bar.component.scss']
+  styleUrls: ['./menu-bar.component.scss'],
+  imports: [FormsModule]
 })
 export class MenuBarComponent implements OnInit {
   menuItems: MenuItem[] = [];

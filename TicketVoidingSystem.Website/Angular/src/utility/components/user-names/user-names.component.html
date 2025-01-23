@@ -1,46 +1,55 @@
 <div class="no-gutters" [ngClass]="usernameComponentCss">
-    <div class="d-flex block-username">
-        <div class="col-form-label">Username(s)</div>
-        <button type="submit" class="btn btn-danger btn-sm btn-remove-usernames" *ngIf="isShowButtonRemoveInvalid()" (click)="removeInvalidUserNames()">Remove Invalid</button>
-    </div>
-    <div class="col-12" [ngClass]="inputUsernameCss" [ngStyle]="inputUsernameStyle">
-        <div #usernames class="input-username" [ngClass]="{'point-event-none disabled-input': disabled}"
-            (click)="focusUsername()" (mousedown)="$event.preventDefault()">
-            <div *ngIf="groupUsername.items.length > 0">
-                <div *ngFor="let item of groupUsername.items">
-                    <div class="item-username" [ngClass]="item.cssClass">
-                        <ng-container *ngIf="item.isShowTooltip">
-                            <span ngbTooltip="{{item.tooltipText}}"
-                                tooltipClass="invalid-item-toolTip">{{item.value}}</span>
-                        </ng-container>
-                        <ng-container *ngIf="!item.isShowTooltip">
-                            <span>{{item.value}}</span>
-                        </ng-container>
-                        <span class="icon-delete" (click)="deleteItem(item)">&nbsp;</span>
-                    </div>
-                </div>
+  <div class="d-flex block-username">
+    <div class="col-form-label">Username(s)</div>
+    @if (isShowButtonRemoveInvalid()) {
+      <button type="submit" class="btn btn-danger btn-sm btn-remove-usernames" (click)="removeInvalidUserNames()">Remove Invalid</button>
+    }
+  </div>
+  <div class="col-12" [ngClass]="inputUsernameCss" [ngStyle]="inputUsernameStyle">
+    <div #usernames class="input-username" [ngClass]="{'point-event-none disabled-input': disabled}"
+      (click)="focusUsername()" (mousedown)="$event.preventDefault()">
+      @if (groupUsername.items.length > 0) {
+        <div>
+          @for (item of groupUsername.items; track item) {
+            <div>
+              <div class="item-username" [ngClass]="item.cssClass">
+                @if (item.isShowTooltip) {
+                  <span ngbTooltip="{{item.tooltipText}}"
+                  tooltipClass="invalid-item-toolTip">{{item.value}}</span>
+                }
+                @if (!item.isShowTooltip) {
+                  <span>{{item.value}}</span>
+                }
+                <span class="icon-delete" (click)="deleteItem(item)">&nbsp;</span>
+              </div>
             </div>
-            <input #input class="username" type="text" [(ngModel)]="username" (keydown)="onKey($event)"
-                (blur)="addItem(username, false)" (paste)="pasteItem($event)" (keyup.shift)="shiftKey=false"
-                (keydown.shift)="shiftKey=true" maxlength="30" (blur)="onBlurBetIdInput(username)"/>
+          }
         </div>
-        <span class="invalid-data"></span>
-        <div class="flex-between" *ngIf="!isAbException">
-            <span class="note note-invalid-username">(*) Invalid Username(s) are highlighted in RED.
-                <span class="note note-moved-username mg-left-5">(*) Duplicated Usernames are highlighted in ORANGE.</span>
-            </span>
-            <span class="number-item red">Max: SMA = 50 / Member = 2000</span>
+      }
+      <input #input class="username" type="text" [(ngModel)]="username" (keydown)="onKey($event)"
+        (blur)="addItem(username, false)" (paste)="pasteItem($event)" (keyup.shift)="shiftKey=false"
+        (keydown.shift)="shiftKey=true" maxlength="30" (blur)="onBlurBetIdInput(username)"/>
+      </div>
+      <span class="invalid-data"></span>
+      @if (!isAbException) {
+        <div class="flex-between">
+          <span class="note note-invalid-username">(*) Invalid Username(s) are highlighted in RED.
+            <span class="note note-moved-username mg-left-5">(*) Duplicated Usernames are highlighted in ORANGE.</span>
+          </span>
+          <span class="number-item red">Max: SMA = 50 / Member = 2000</span>
         </div>
-        <div class="flex-between" *ngIf="isAbException">
-            <span>
-                <span class="note note-invalid-username">(*) Invalid Username </span>
-                <span class="note note-moved-username">(*) Duplicated Username</span>
-                <span class="note note-existed-username">(*) Existed Username</span>
-            </span>
-
-            <span class="number-item red">Max: {{maxUsername}} Usernames</span>
+      }
+      @if (isAbException) {
+        <div class="flex-between">
+          <span>
+            <span class="note note-invalid-username">(*) Invalid Username </span>
+            <span class="note note-moved-username">(*) Duplicated Username</span>
+            <span class="note note-existed-username">(*) Existed Username</span>
+          </span>
+          <span class="number-item red">Max: {{maxUsername}} Usernames</span>
         </div>
+      }
     </div>
-</div>
+  </div>
 
-<tooltip [tooltip]="tooltip"></tooltip>
+  <tooltip [tooltip]="tooltip"></tooltip>

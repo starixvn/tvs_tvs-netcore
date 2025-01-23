@@ -4,7 +4,9 @@ import { saveAs } from 'file-saver-es';
 import { of } from "rxjs";
 import { catchError, timeout } from "rxjs/operators";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class HttpService {
   constructor(
     private readonly http: HttpClient) {
