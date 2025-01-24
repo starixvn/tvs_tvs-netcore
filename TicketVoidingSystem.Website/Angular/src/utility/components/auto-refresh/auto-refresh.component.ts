@@ -1,13 +1,18 @@
-import { Component, OnInit, EventEmitter, Output, Input, OnChanges, SimpleChange, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Output, Input, SimpleChange, OnDestroy } from '@angular/core';
 import { RefreshTime, AutoRefreshMode } from './auto-refresh.model';
 import { Subscription, timer } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
+  standalone: true,
   selector: 'auto-refresh',
   templateUrl: './auto-refresh.component.html',
-  styleUrls: ['./auto-refresh.component.scss']
+  styleUrls: ['./auto-refresh.component.scss'],
+  imports: [CommonModule, FormsModule, NgSelectModule]
 })
-export class AutoRefreshComponent implements OnInit, OnChanges, OnDestroy {
+export class AutoRefreshComponent implements OnDestroy {
   @Input() mode: number;
   @Output() countdownEnd = new EventEmitter();
 
@@ -16,11 +21,6 @@ export class AutoRefreshComponent implements OnInit, OnChanges, OnDestroy {
   intervalTimeText: string;
   private intervalTimeSubscription: Subscription;
   private readonly observableTimmer = timer(0, 1000);
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['mode']) {

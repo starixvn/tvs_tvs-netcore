@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
@@ -17,12 +17,17 @@ import { FilterModel } from './filter/filter.model';
 import { GetRequestsQuery } from './models/get-requests.query';
 import { PermissionManage } from './models/permission-manage.model';
 import { RequestModel } from './request-list/request.model';
-
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
+import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
+import { RequestListComponent } from './request-list/request-list.component';
+import { HttpClientModule } from '@angular/common/http';
 
 const DATETIME_FORMAT = 'YYYY/M/D hh:mm:ss.SSS A';
 @Component({
+  standalone: true,
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  imports: [MenuBarComponent, FilterComponent, BlockUiModule, RequestListComponent, HttpClientModule]
 })
 export class AppComponent implements OnInit {
   @ViewChild('filterComponent') filterComponent: FilterComponent;
@@ -43,13 +48,11 @@ export class AppComponent implements OnInit {
   cacheFilterByMatch: boolean;
   cacheFilterByValue: string;
 
-  constructor(
-    private readonly appService: AppService,
-    private readonly commonService: CommonService,
-    private readonly modalService: ModalService,
-    public readonly signalRService: SignalRService
-  ) { }
-
+  appService = inject(AppService);
+  commonService = inject(CommonService);
+  modalService = inject(ModalService);
+  signalRService = inject(SignalRService);
+  
   async ngOnInit() {
     this.initDate();
     this.permission = await this.commonService.getPermissionManageRequest();
