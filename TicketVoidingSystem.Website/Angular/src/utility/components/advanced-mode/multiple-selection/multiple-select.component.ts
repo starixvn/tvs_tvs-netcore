@@ -2,12 +2,16 @@
 import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection';
 import { TreeViewComponent } from './tree-view.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
+  standalone: true,
   selector: 'multiple-select',
   templateUrl: './multiple-select.component.html',
   styleUrls: ['./multiple-select.component.scss'],
-  viewProviders: [TreeViewComponent]
+  viewProviders: [TreeViewComponent],
+  imports: [CommonModule, FormsModule, TreeViewComponent]
 })
 
 export class MultipleSelectComponent implements OnInit, OnChanges {

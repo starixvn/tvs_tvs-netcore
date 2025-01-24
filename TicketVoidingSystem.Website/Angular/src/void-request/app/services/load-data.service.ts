@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
@@ -9,15 +9,11 @@ import { CheckRequestService } from '../services/check-request.service';
 import { SubmitVoidService } from './submit-void.service';
 import { TicketsService } from './tickets.service';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class LoadDataService {
-  constructor(
-    private readonly submitVoidService: SubmitVoidService,
-    private readonly ticketsService: TicketsService,
-    private readonly checkRequestService: CheckRequestService
-  ) { }
+  submitVoidService = inject(SubmitVoidService);
+  ticketsService = inject(TicketsService);
+  checkRequestService = inject(CheckRequestService);
+
   private readonly observableTimer = timer(0, 100);
 
   async onClickShowVoidTickets(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel, primitiveProperty: CommonPrimitiveProperty, allVoidPageItems?: VoidPageCommonItem[]): Promise<void> {

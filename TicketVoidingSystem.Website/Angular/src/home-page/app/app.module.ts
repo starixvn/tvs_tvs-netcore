@@ -16,7 +16,6 @@ import { AppComponent } from './app.component';
     BlockFullUiModule,
     ToastrModule.forRoot(),
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

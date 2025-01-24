@@ -1,11 +1,14 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
 import { VoidedReason } from '../../../../utility/models/reason.model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
+  standalone: true,
   selector: 'void-reason',
   templateUrl: './void-reason.component.html',
-  styleUrls: ['./void-reason.component.scss']
+  styleUrls: ['./void-reason.component.scss'],
+  imports: [FormsModule]
 })
 export class VoidReasonComponent implements OnChanges {
   @Input('voidReason') voidReason: VoidedReason;

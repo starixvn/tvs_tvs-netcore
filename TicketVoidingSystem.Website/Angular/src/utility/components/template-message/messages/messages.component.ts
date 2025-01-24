@@ -2,11 +2,15 @@ import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/cor
 import { LABELS } from '../../../../utility/constants/labels';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { Message } from './message';
+import { TooltipComponent } from '../../tooltip/tooltip.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
+  standalone: true,
   selector: 'messages',
   templateUrl: './messages.component.html',
-  styleUrls: ['./messages.component.scss']
+  styleUrls: ['./messages.component.scss'],
+  imports: [TooltipComponent, FormsModule]
 })
 
 export class MessagesComponent {

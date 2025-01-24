@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
@@ -7,11 +7,8 @@ import { TEXT } from '../../../utility/constants/text';
 import { Result } from '../../../utility/models/result';
 import { VoidMatch } from '../models/void-match.model';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class PopupService {
-  constructor(private readonly modalService: ModalService) { }
+  modalService = inject(ModalService);
 
   showVoidBetConfirm(confirmMessage: string, onYesCallback: () => void) {
     this.modalService.confirm(

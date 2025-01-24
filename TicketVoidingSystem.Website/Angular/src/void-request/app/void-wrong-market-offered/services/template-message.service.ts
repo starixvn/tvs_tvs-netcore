@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
@@ -6,13 +6,8 @@ import { TemplateValue } from '../../../../utility/components/template-message/t
 import { EventType } from '../../../../utility/constants/sport.constant';
 import { VoidWrongMarketOfferedModel } from '../models/void-wrong-market-offered.model';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class TemplateMessageService {
-  constructor(
-    private readonly templateService: TemplateService
-  ) { }
+  templateService = inject(TemplateService);
 
   public getTemplateValue(voidPageItem: VoidWrongMarketOfferedModel, requestDetail: RequestDetailViewModel): TemplateValue {
     const templateValue = voidPageItem.matchModel ? this.templateService.initializeTemplateValue(voidPageItem.matchModel) : new TemplateValue();

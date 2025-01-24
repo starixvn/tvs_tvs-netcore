@@ -6,11 +6,16 @@ import { IssueTypeConstant } from '../../../utility/constants/issue-type.constan
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { SportType } from '../../../utility/constants/sport.constant';
+import { CommonModule } from '@angular/common';
+import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
+import { TicketCountOtherSportsComponent } from '../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
 
 @Component({
+  standalone: true,
   selector: 'log-info',
   templateUrl: './log-info.component.html',
-  styleUrls: ['./log-info.component.scss']
+  styleUrls: ['./log-info.component.scss'],
+  imports: [CommonModule, SanitizeHtmlPipe, TicketCountOtherSportsComponent]
 })
 export class LogInfoComponent {
   @Input() logInfoDetails: LogInfoDetail[];
@@ -75,11 +80,11 @@ export class LogInfoComponent {
   }
 
   displayMinTime(minTime?: Date): string {
-    if(_.isNull(minTime)){
+    if (_.isNull(minTime)) {
       return '-';
     }
-    return (this.acceptTypeName) ? `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)} - ${this.acceptTypeName}`:
-    `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)}`;
+    return (this.acceptTypeName) ? `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)} - ${this.acceptTypeName}` :
+      `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)}`;
   }
 
   isWrongScore(): boolean {
@@ -91,10 +96,10 @@ export class LogInfoComponent {
   }
 
   isReducedOver(): boolean {
-    return this.issueTypeId === Number(IssueTypeConstant.REDUCED_OVER) || this.issueTypeId === Number(IssueTypeConstant.ABANDONED) ;
+    return this.issueTypeId === Number(IssueTypeConstant.REDUCED_OVER) || this.issueTypeId === Number(IssueTypeConstant.ABANDONED);
   }
 
-  public isSportTypeSoccer(): boolean{
+  public isSportTypeSoccer(): boolean {
     return this.sportType === SportType.SOCCER;
   }
 }

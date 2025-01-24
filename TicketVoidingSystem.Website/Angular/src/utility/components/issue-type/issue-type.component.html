@@ -3,7 +3,9 @@
   <label class="col-form-label col-form-label-sm">
     <strong>
       <span class="padding-2-10 alert alert-dark">{{issueTypeName}}</span>
-      <span *ngIf="isShowVar" class="alert padding-2-10 mg-left-5 text-white bg-danger">VAR</span>
+      @if (isShowVar) {
+        <span class="alert padding-2-10 mg-left-5 text-white bg-danger">VAR</span>
+      }
     </strong>
   </label>
 </div>

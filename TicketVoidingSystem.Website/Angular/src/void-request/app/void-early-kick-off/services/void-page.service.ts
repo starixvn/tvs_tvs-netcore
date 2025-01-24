@@ -1,27 +1,18 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import _ from 'lodash';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
-import { AppService } from '../../app.service';
 import { BasicRequestInfo } from '../../models/basic-request-info.model';
 import { TicketsService } from '../../services/tickets.service';
 import { VoidPageEarlyKickOffModel } from '../models/void-page-early-kick-off.model';
 import { TemplateMessageService } from './template-message.service';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class VoidPageService {
-
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly appService: AppService,
-    private readonly ticketsService: TicketsService,
-    private readonly templateMessageService: TemplateMessageService
-  ) {
-  }
+  commonService = inject(CommonService);
+  ticketsService = inject(TicketsService);
+  templateMessageService = inject(TemplateMessageService);
 
   async getIssueTypes(): Promise<IssueTypesModel> {
     return this.commonService.getIssueTypes();

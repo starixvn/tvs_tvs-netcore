@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { PlayerName, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateContent, TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
@@ -8,13 +8,8 @@ import { StaticService } from '../../../../utility/services/static.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class TemplateMessageService {
-  constructor(
-    private readonly templateService: TemplateService
-  ) { }
+  templateService = inject(TemplateService);
 
   public getTemplateValue(voidPageItem: VoidNotParticipateModel, requestDetail: RequestDetailViewModel): TemplateValue {
     const templateValue = voidPageItem.matchModel ? this.templateService.initializeTemplateValue(voidPageItem.matchModel) : new TemplateValue();
@@ -32,7 +27,7 @@ export class TemplateMessageService {
     if (StaticService.isOtherIssues(requestDetail.request.issueTypeId)) {
       templateValue.smallestMapTicket = voidPageItem.voidTicketsMini.smallestMapTicket;
     }
-    
+
     return templateValue;
   }
 
@@ -44,7 +39,7 @@ export class TemplateMessageService {
   }
 
   private setSpecialBetTypeProperties(templateValue: TemplateValue, voidTicketsMini: TicketsModel, requestDetail: RequestDetailViewModel,
-    logInfoDetail: LogInfoDetail ) {
+    logInfoDetail: LogInfoDetail) {
     templateValue.isCheckedSpecialBetType = true;
     templateValue.betTypeNameReplaceMessage = voidTicketsMini.betTypeNameReplaceMessage;
     templateValue.totalTickets = voidTicketsMini.total;
@@ -53,13 +48,13 @@ export class TemplateMessageService {
 
     if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       templateValue.correctOdds = requestDetail.wrongOddsSportsBookModel.correctOdds;
-      if(voidTicketsMini.betTypes.split(',').length === 1){
+      if (voidTicketsMini.betTypes.split(',').length === 1) {
         templateValue.betTypeId = voidTicketsMini.betTypes.split(',')[0];
         templateValue.betTeam = voidTicketsMini.betTeam;
         templateValue.hdpValues = voidTicketsMini.hdpValues;
         templateValue.groupBetTypeId = voidTicketsMini.groupBetTypeId;
       }
-      
+
       if (this.isSportTypeSoccer(requestDetail.request.sportType)) {
         templateValue.score = this.getLiveScoreForTemplateMessage(logInfoDetail.scoreNormalTicket, logInfoDetail.scoreOfMatch);
       }

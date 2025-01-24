@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DecimalOnlyDirective, MultipleDecimalDirective } from '../../directives/numbers-only.directive';
 import { ToolTipModule } from './../tooltip/tooltip.module';
@@ -15,14 +14,13 @@ import { MultipleSelectAdvancedModeModule } from './multiple-selection/multiple-
   imports: [
     MultipleSelectAdvancedModeModule,
     CommonModule,
-    BrowserModule,
     FormsModule,
     NgbModule,
-    ToolTipModule
-  ],
-  declarations: [
+    ToolTipModule,
     AdvancedModeComponent,
     GroupBetTypesComponent,
+  ],
+  declarations: [
     DecimalOnlyDirective,
     MultipleDecimalDirective,
   ],

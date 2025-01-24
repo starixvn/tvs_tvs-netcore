@@ -3,11 +3,14 @@ import { TemplateMessageComponent } from '../../../utility/components/template-m
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
 import { VoidedReason } from '../../../utility/models/reason.model';
 import { VoidReasonComponent } from './void-reason/void-reason.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'message-area',
   templateUrl: './message-area.component.html',
-  styleUrls: ['./message-area.component.scss']
+  styleUrls: ['./message-area.component.scss'],
+  imports: [CommonModule, VoidReasonComponent, TemplateMessageComponent]
 })
 export class MessageAreaComponent {
   @Input() requestId: number;

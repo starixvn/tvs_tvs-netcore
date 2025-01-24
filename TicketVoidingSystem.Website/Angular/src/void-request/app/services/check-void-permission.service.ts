@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { CheckingPermissionModel } from '../../../utility/models/checking-permission.model';
 import { Result } from '../../../utility/models/result';
 import { CommonService } from '../../../utility/services/common.service';
@@ -6,13 +6,8 @@ import { ResultModelService } from '../../../utility/services/result-model.servi
 import { StaticService } from '../../../utility/services/static.service';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class CheckVoidPermissionService {
-  constructor(
-    private readonly commonService: CommonService
-  ) { }
+  commonService = inject(CommonService);
 
   public async checkVoidBetPermission(voidPageItems: VoidPageCommonItem[]): Promise<Result<null>> {
     for (const item of voidPageItems) {

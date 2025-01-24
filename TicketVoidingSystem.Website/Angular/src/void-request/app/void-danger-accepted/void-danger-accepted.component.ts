@@ -11,13 +11,25 @@ import { CommonPrimitiveProperty } from '../models/common-primitive-property.mod
 import { VoidMatch } from '../models/void-match.model';
 import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
-
 import { VoidPageService } from './services/void-page.service';
+import { FormsModule } from '@angular/forms';
+import { LogInfoNewComponent } from '../log-info-new/log-info-new.component';
+import { CommonModule } from '@angular/common';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
+import { PasswordAreaComponent } from '../password-area/password-area.component';
+import { TicketsListComponent } from '../tickets-list/tickets-list.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { TemplateMessageService } from './services/template-message.service';
 
 @Component({
+  standalone: true,
   selector: 'void-danger-accepted',
   templateUrl: './void-danger-accepted.component.html',
-  styleUrls: ['./void-danger-accepted.component.scss']
+  styleUrls: ['./void-danger-accepted.component.scss'],
+  imports: [FormsModule, LogInfoNewComponent, CommonModule, LicenseeAffectedListComponent, TicketsListComponent, MessageAreaComponent,
+    PasswordAreaComponent, TooltipComponent
+  ],
+  providers: [TicketsService, VoidPageService, VoidPageCommonService, TemplateMessageService]
 })
 export class VoidDangerAcceptedComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
@@ -25,14 +37,15 @@ export class VoidDangerAcceptedComponent implements OnInit {
   voidPageService = inject(VoidPageService);
   ticketsService = inject(TicketsService);
   voidPageCommonService = inject(VoidPageCommonService);
- 
+  element = inject(ElementRef);
+
   public primitiveProperty = new CommonPrimitiveProperty();
   public voidMatches: VoidMatch[] = [];
   public issueTypes: IssueTypesModel;
   public tooltip = new Tooltip();
   private readonly afterLoadUnderneathDataSubscription: Subscription;
 
-  constructor(private readonly element: ElementRef) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -69,7 +82,7 @@ export class VoidDangerAcceptedComponent implements OnInit {
   }
 
   onClickVoidAllMatches(): void {
-    this.voidPageCommonService.onClickVoidAllMatches(this.voidMatches, this.messageAreaComponents.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
+    this.voidPageCommonService.onClickVoidAllMatches(this.voidMatches, this.messageAreaComponents?.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }
 
   public changeCheckBoxEarlyEvent(voidMatch: VoidMatch): void {

@@ -1,97 +1,117 @@
-﻿<div class="messages" *ngIf="isShowMessages" [style]="getStyles()">
-  <div class="gray-header" (click)="changedShowContentMessage()">
-    Message
+﻿@if(isShowMessages){
+  <div class="messages" [style]="getStyles()">
+    <div class="gray-header" (click)="changedShowContentMessage()">
+      Message
+    </div>
+    @if(!message.isTVSAddOrEditPage || isShowContentMessage){
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col" colspan="4">
+              <span>Please include "&#64;&#64;" in your message to replace ticket numbers.</span>
+            </th>
+          </tr>
+          <tr class="header-language">
+            <td>
+              <span class="required">*</span>English
+            </td>
+            <td>
+              <span class="required">*</span>Chinese Traditional
+            </td>
+            <td>
+              <span class="required">*</span>Chinese Simplified
+            </td>
+            <td>
+              <span class="required">*</span>New Chinese Simplified
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <textarea rows="1" [(ngModel)]="message.contentEnglish" class="english"
+                (change)="changedMessage()" [disabled]="message.isTVSAddOrEditPage"></textarea>
+            </td>
+            <td>
+              <textarea rows="1" [(ngModel)]="message.contentChineseTraditional" class="chinese-traditional"
+                (change)="changedMessage()" [disabled]="message.isTVSAddOrEditPage"></textarea>
+            </td>
+            <td>
+              <textarea rows="1" [(ngModel)]="message.contentChineseSimplified" class="chinese-simplified"
+                (change)="changedMessage()" [disabled]="message.isTVSAddOrEditPage"></textarea>
+            </td>
+            <td>
+              <textarea rows="1" [(ngModel)]="message.contentNewChineseSimplified" class="new-chinese-simplified"
+                (change)="changedMessage()" [disabled]="message.isTVSAddOrEditPage"></textarea>
+            </td>
+          </tr>
+          @if(!message.isTVSAddOrEditPage){
+            <tr>
+              <th scope="col" colspan="4" class="header-other-language" (click)="isShowOtherLanguage = !isShowOtherLanguage">
+                <span>
+                  Other languages
+                  @if(!isShowOtherLanguage){
+                    <span> [+]</span>
+                  }
+                  @if(isShowOtherLanguage){
+                    <span> [-]</span>
+                  }            
+                </span>
+              </th>
+            </tr>
+          }
+          @if(isShowOtherLanguage){
+            <tr class="header-language">
+              <td>
+                Thai
+              </td>
+              <td>
+                Korean
+              </td>
+              <td>
+                Japanese
+              </td>
+              <td>
+                Italian
+              </td>
+            </tr>
+          }
+          @if(isShowOtherLanguage){
+            <tr>
+              <td>
+                <textarea rows="1" [(ngModel)]="message.contentThai" class="thai" (change)="changedMessage()"></textarea>
+              </td>
+              <td>
+                <textarea rows="1" [(ngModel)]="message.contentKorean" class="korean" (change)="changedMessage()"></textarea>
+              </td>
+              <td>
+                <textarea rows="1" [(ngModel)]="message.contentJapanese" class="japanese"
+                  (change)="changedMessage()"></textarea>
+              </td>
+              <td>
+                <textarea rows="1" [(ngModel)]="message.contentItalian" class="italian"
+                  (change)="changedMessage()"></textarea>
+              </td>
+            </tr>
+          }
+          @if(isShowOtherLanguage){
+            <tr class="header-language">
+              <td>
+                Spanish
+              </td>
+            </tr>
+          }
+          @if(isShowOtherLanguage){
+            <tr>
+              <td>
+                <textarea rows="1" [(ngModel)]="message.contentSpanish" class="spanish"
+                  (change)="changedMessage()"></textarea>
+              </td>
+            </tr>
+          }
+        
+        </tbody>
+      </table>
+    }
   </div>
-  <table *ngIf="!message.isTVSAddOrEditPage || isShowContentMessage" >
-    <tbody>
-      <tr>
-        <th scope="col" colspan="4">
-          <span>Please include "@@" in your message to replace ticket numbers.</span>
-        </th>
-      </tr>
-      <tr class="header-language">
-        <td>
-          <span class="required">*</span>English
-        </td>
-        <td>
-          <span class="required">*</span>Chinese Traditional
-        </td>
-        <td>
-          <span class="required">*</span>Chinese Simplified
-        </td>
-        <td>
-          <span class="required">*</span>New Chinese Simplified
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <textarea rows="1" [(ngModel)]="message.contentEnglish" class="english"
-            (change)="changedMessage()" [disabled]="message.isTVSAddOrEditPage"></textarea>
-        </td>
-        <td>
-          <textarea rows="1" [(ngModel)]="message.contentChineseTraditional" class="chinese-traditional"
-            (change)="changedMessage()" [disabled]="message.isTVSAddOrEditPage"></textarea>
-        </td>
-        <td>
-          <textarea rows="1" [(ngModel)]="message.contentChineseSimplified" class="chinese-simplified"
-            (change)="changedMessage()" [disabled]="message.isTVSAddOrEditPage"></textarea>
-        </td>
-        <td>
-          <textarea rows="1" [(ngModel)]="message.contentNewChineseSimplified" class="new-chinese-simplified"
-            (change)="changedMessage()" [disabled]="message.isTVSAddOrEditPage"></textarea>
-        </td>
-      </tr>
-      <tr *ngIf="!message.isTVSAddOrEditPage">
-        <th scope="col" colspan="4" class="header-other-language" (click)="isShowOtherLanguage = !isShowOtherLanguage">
-          <span>
-            Other languages
-            <span *ngIf="!isShowOtherLanguage"> [+]</span>
-            <span *ngIf="isShowOtherLanguage"> [-]</span>
-          </span>
-        </th>
-      </tr>
-      <tr class="header-language" *ngIf="isShowOtherLanguage">
-        <td>
-          Thai
-        </td>
-        <td>
-          Korean
-        </td>
-        <td>
-          Japanese
-        </td>
-        <td>
-          Italian
-        </td>
-      </tr>
-      <tr *ngIf="isShowOtherLanguage">
-        <td>
-          <textarea rows="1" [(ngModel)]="message.contentThai" class="thai" (change)="changedMessage()"></textarea>
-        </td>
-        <td>
-          <textarea rows="1" [(ngModel)]="message.contentKorean" class="korean" (change)="changedMessage()"></textarea>
-        </td>
-        <td>
-          <textarea rows="1" [(ngModel)]="message.contentJapanese" class="japanese"
-            (change)="changedMessage()"></textarea>
-        </td>
-        <td>
-          <textarea rows="1" [(ngModel)]="message.contentItalian" class="italian"
-            (change)="changedMessage()"></textarea>
-        </td>
-      </tr>
-      <tr class="header-language" *ngIf="isShowOtherLanguage">
-        <td>
-          Spanish
-        </td>
-      </tr>
-      <tr *ngIf="isShowOtherLanguage">
-        <td>
-          <textarea rows="1" [(ngModel)]="message.contentSpanish" class="spanish"
-            (change)="changedMessage()"></textarea>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+}
+
 <tooltip [tooltip]="tooltip"></tooltip>

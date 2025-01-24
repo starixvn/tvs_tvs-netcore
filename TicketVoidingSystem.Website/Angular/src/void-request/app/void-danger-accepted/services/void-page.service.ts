@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { inject } from '@angular/core';
 import _ from 'lodash';
 import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
@@ -13,9 +13,6 @@ import { VoidMatch } from '../../models/void-match.model';
 import { TicketsService } from '../../services/tickets.service';
 import { TemplateMessageService } from './template-message.service';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class VoidPageService {
   commonService = inject(CommonService);
   ticketsService = inject(TicketsService);

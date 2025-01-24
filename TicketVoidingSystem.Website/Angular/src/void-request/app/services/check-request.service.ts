@@ -1,16 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { AppService } from '../app.service';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class CheckRequestService {
-
-  constructor(private readonly appService: AppService,
-    private readonly modalService: ModalService) { }
-
+  appService = inject(AppService);
+  modalService = inject(ModalService);
   async isRequestModified(requestId: number, currentModifiedDate: Date): Promise<boolean> {
     const lastModifiedDate = (await this.appService.getLastModifiedDate(requestId)).lastModifiedDate;
 

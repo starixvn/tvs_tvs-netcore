@@ -1,7 +1,6 @@
 import { _isNumberValue } from '@angular/cdk/coercion';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
-import { _isNumberValue } from '@angular/cdk/coercion';
 import { Subscription, timer } from 'rxjs';
 import { AddRequestStore } from '../../../add-request/app/add-request/add-request.store';
 import { LABELS } from '../../../utility/constants/labels';

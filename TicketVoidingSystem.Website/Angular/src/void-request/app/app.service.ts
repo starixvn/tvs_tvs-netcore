@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
@@ -11,7 +11,7 @@ import { TicketsModel } from './tickets-list/tickets.model';
   providedIn: 'root'
 })
 export class AppService {
-  constructor(private readonly httpService: HttpService) {}
+  httpService = inject(HttpService);
 
   async getRemark(): Promise<string[]> {
     return this.httpService.getJson(`api/VoidRequest/GetRemark`);

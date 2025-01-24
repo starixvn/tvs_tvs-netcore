@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { ToolTipModule } from './../tooltip/tooltip.module';
 import { MessagesComponent } from './messages/messages.component';
 import { ReplaceAIOMessageService } from './template-message/services/replace-aio-message.serivce';
@@ -21,17 +20,14 @@ import { TemplateService } from './template-message/services/template.service';
 import { TemplateMessageComponent } from './template-message/template-message.component';
 
 @NgModule({
-  declarations: [
-    MessagesComponent,
-    TemplateMessageComponent
-  ],
   exports: [
     MessagesComponent,
     TemplateMessageComponent
   ],
   imports: [
+    MessagesComponent,
+    TemplateMessageComponent,
     CommonModule,
-    BrowserModule,
     FormsModule,
     ToolTipModule
   ],

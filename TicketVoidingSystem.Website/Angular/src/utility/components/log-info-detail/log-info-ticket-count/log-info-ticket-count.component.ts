@@ -3,11 +3,14 @@ import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../../utility/services/static.service';
+import { SanitizeHtmlPipe } from '../../../pipes/sanitize-html.pipe';
 
 @Component({
+  standalone: true,
   selector: 'log-info-ticket-count',
   templateUrl: './log-info-ticket-count.component.html',
-  styleUrls: ['./log-info-ticket-count.component.scss']
+  styleUrls: ['./log-info-ticket-count.component.scss'],
+  imports: [SanitizeHtmlPipe]
 })
 export class LogInfoTicketCountComponent {
   @Input() model: LogInfoDetail;

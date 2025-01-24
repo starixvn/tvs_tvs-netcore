@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import moment from 'moment-timezone';
 import { Result } from '../../../utility/models/result';
@@ -8,14 +8,9 @@ import { AppService } from '../app.service';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { VoidTicketsQuery } from '../models/void-tickets.query';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class InsertQueueService {
-  constructor(
-    private readonly appService: AppService,
-    private readonly passwordService: PasswordService
-  ) { }
+  appService = inject(AppService);
+  passwordService = inject(PasswordService);
 
   public async insertQueue(voidPageItems: VoidPageCommonItem[], userName: string, userPassword: string): Promise<Result<null>> {
     for (const item of voidPageItems) {

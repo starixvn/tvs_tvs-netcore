@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, SimpleChange, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnChanges, SimpleChange, ViewEncapsulation } from '@angular/core';
 import * as _ from 'lodash';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TEXT } from '../../../../utility/constants/text';
@@ -10,13 +10,19 @@ import { Tooltip } from '../../tooltip/tooltip.model';
 import { AdvancedModeConstants } from '../advanced-mode.constants';
 import { BetType } from '../group-bettypes/group-bettypes.model';
 import { BetTeam, CheckedBetType, GetPlayersQuery, OddsInfo, Player, Selection } from './advanced-mode.model';
-import { AdvancedModeService } from './advanced-mode.service';
 import { ControlsAllBetTypes } from '../../advanced-mode-add-request/controls-all-bet-types/controls-all-bet-types.model';
+import { AdvancedModeService } from './advanced-mode.service';
+import { TooltipComponent } from '../../tooltip/tooltip.component';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MultipleSelectComponent } from '../multiple-selection/multiple-select.component';
 
 @Component({
+  standalone: true,
   selector: 'advanced-mode',
   templateUrl: './advanced-mode.component.html',
   styleUrls: ['./advanced-mode.component.scss'],
+  imports: [TooltipComponent, FormsModule, CommonModule, MultipleSelectComponent],
   encapsulation: ViewEncapsulation.None
 })
 export class AdvancedModeComponent implements OnChanges {
@@ -45,11 +51,11 @@ export class AdvancedModeComponent implements OnChanges {
   tooltip = new Tooltip();
   oddsInfo: OddsInfo[];
 
-  constructor(
-    private readonly service: AdvancedModeService,
-    private readonly commonService: CommonService,
-    private readonly element: ElementRef
-    ) {
+  service = inject(AdvancedModeService);
+  commonService = inject(CommonService);
+  element = inject(ElementRef);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 

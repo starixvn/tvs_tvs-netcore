@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import * as _ from 'lodash';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
-import { WrongOddsSportsBookModel } from '../../../../add-request/app/add-request/models/event-wrong-odds-sports-book.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
@@ -12,13 +11,8 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { StaticService } from '../../../../utility/services/static.service';
 import { VoidMatch } from '../../models/void-match.model';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class TemplateMessageService {
-
-  constructor(private readonly templateService: TemplateService) {
-  }
+  templateService = inject(TemplateService);
 
   getTemplateValue(voidMatch: VoidMatch, requestDetail: RequestDetailViewModel): TemplateValue {
     const templateValue = this.templateService.initializeTemplateValue(voidMatch.matchModel);

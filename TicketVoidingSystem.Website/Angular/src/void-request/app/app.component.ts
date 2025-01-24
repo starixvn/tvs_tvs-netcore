@@ -1,13 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { StaticService } from '../../utility/services/static.service';
 import { AppService } from './app.service';
+import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
+import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
+import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
+import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
+import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
+import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.component';
+import { VoidWrongMarketOfferedComponent } from './void-wrong-market-offered/void-wrong-market-offered.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
+import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
+import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
+import { PopupService } from './services/popup.service';
+import { CheckRequestService } from './services/check-request.service';
+import { LoadDataService } from './services/load-data.service';
+import { SubmitVoidService } from './services/submit-void.service';
+import { InsertQueueService } from './services/insert-queue.service';
+import { CheckVoidPermissionService } from './services/check-void-permission.service';
+import { LogChangeContentService } from './services/log-change-content.service';
+import { TicketsService } from './services/tickets.service';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  imports: [VoidDangerAcceptedComponent, VoidOtherIssueComponent, VoidDuplicateTicketsComponent,
+    VoidNotParticipateComponent, VoidEarlyKickOffComponent, VoidAbnormalBetComponent,
+    VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiModule],
+  providers: [AppService, SignalRService, TemplateService, PopupService, CheckRequestService, LoadDataService,
+    SubmitVoidService, InsertQueueService, CheckVoidPermissionService, LogChangeContentService, TicketsService]
 })
 export class AppComponent implements OnInit {
   requestId: number;
@@ -16,10 +40,8 @@ export class AppComponent implements OnInit {
   remark: string[];
   private isReadyRender = false;
 
-  constructor(
-    private readonly appService: AppService,
-    private readonly signalRService: SignalRService
-  ) { }
+  appService = inject(AppService);
+  signalRService = inject(SignalRService);
 
   async ngOnInit() {
     this.isBlockUI = true;

@@ -7,8 +7,7 @@ import { ModalContentComponent } from './modal-content/modal-content.component';
 import { ModalService } from './modal.service';
 
 @NgModule({
-    imports: [ClipboardModule, CommonModule, NgbModalModule, PipeModule],
-    declarations: [ModalContentComponent],
+    imports: [ClipboardModule, CommonModule, NgbModalModule, PipeModule, ModalContentComponent],
     exports: [ModalContentComponent],
     providers: [ModalService, NgbModalConfig]
 })

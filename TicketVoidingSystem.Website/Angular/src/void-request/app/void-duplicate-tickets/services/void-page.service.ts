@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import _ from 'lodash';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
@@ -7,23 +6,15 @@ import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { CommonService } from '../../../../utility/services/common.service';
-import { AppService } from '../../app.service';
 import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidPageDuplicateTicketsModel } from '../models/void-page-duplicate-tickets.model';
+import { inject } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class VoidPageService {
-
-  constructor(
-    private readonly appService: AppService,
-    private readonly commonService: CommonService,
-    private readonly ticketsService: TicketsService,
-    private readonly templateService: TemplateService
-  ) {
-  }
+  commonService = inject(CommonService);
+  ticketsService = inject(TicketsService);
+  templateService = inject(TemplateService);
 
   async getIssueTypes(): Promise<IssueTypesModel> {
     return this.commonService.getIssueTypes();
