@@ -1192,7 +1192,7 @@
     },
     {
       "IssueType": 6,
-      "Sports": "6",
+      "Sports": "2",
       "BetType": "638"
     },
     {
@@ -3650,7 +3650,7 @@
       "IssueType": 6,
       "Sports": "50",
       "BetType": "9610",
-          "XmlAttribute": "_XXX"
+      "XmlAttribute": "_XXX"
     },
     {
       "Inputs": [
