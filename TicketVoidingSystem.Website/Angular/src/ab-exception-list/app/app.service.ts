@@ -1,4 +1,4 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
 import { AbExceptionSubType } from './models/ab-exception-sub-type.mode';
@@ -13,9 +13,7 @@ import { GroupSiteModel } from './models/site.model';
   { providedIn: 'root' }
 )
 export class AppService {
-  constructor(
-    private readonly httpService: HttpService
-  ) { }
+  httpService = inject(HttpService);
 
   /* istanbul ignore next */
   async getUsers(query: GetUserQuery): Promise<GetUserModel> {

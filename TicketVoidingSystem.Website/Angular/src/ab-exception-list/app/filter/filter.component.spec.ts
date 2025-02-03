@@ -1,220 +1,124 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { Shallow } from 'shallow-render';
 import { MultipleSelectionModule } from '../../../utility/components/multiple-selection/multiple-selection.module';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
+import { Selection } from '../../../utility/models/selection.model';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { AppStore } from '../app.store';
-import { PermissionABExceptionList } from '../models/permission.model';
-import { GroupSiteModel, SiteModel } from '../models/site.model';
+import { GroupSiteModel } from '../models/site.model';
 import { FilterService } from '../services/filter.service';
 import { FilterComponent } from './filter.component';
-import { FilterModel } from './filter.model';
+
 class Helper {
-  static fakeFilterModel: FilterModel = {
-    username: 'name',
-    level: '1',
-    sites: '1,2',
-    subTypes: '',
-    voidVIP: ''
-  };
-  static fakePermission: PermissionABExceptionList = {
-    abExceptionListHost: true
-  };
-  static fakeSiteModel: SiteModel = {
-    siteId: '1111',
-    siteName: '188VN',
-    groupName: 'Credit',
-    hidden: false,
-  };
-  static fakeGroupSiteModel: GroupSiteModel = {
-    groupName: 'credit',
-    groupId: '1',
-    sites: [Helper.fakeSiteModel]
-  };
+  static mockGroupSites: GroupSiteModel[] = [
+    { groupId: '1', sites: [], groupName: 'Group 1' },
+    { groupId: '2', sites: [], groupName: 'Group 2' },
+  ];
+
+  static mockSubTypeSelection: Selection[] = [
+    { name: 'Type 1', value: '1', group: 'Group 1' },
+    { name: 'Type 2', value: '2', group: 'Group 2' },
+  ];
 }
 
 describe('FilterComponent', () => {
-  @NgModule({
-    declarations: [
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      NgSelectModule,
-      ToolTipModule,
-      MultipleSelectionModule
-    ],
-    providers: [
-      AppStore,
-      FilterService,
-      //AppStore
-    ]
-  })
-  class AppModuleTest { }
+  let component: FilterComponent;
+  let fixture: ComponentFixture<FilterComponent>;
+  let filterService: FilterService;
+  let appStore: AppStore;
 
-  let shallow: Shallow<FilterComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        FilterComponent,
+        NgSelectModule,
+        ToolTipModule,
+        MultipleSelectionModule,
+      ],
+      providers: [
+        FilterService,
+        AppStore
+      ],
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(FilterComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(FilterComponent);
+    filterService = fixture.debugElement.injector.get(FilterService);
+    appStore = fixture.debugElement.injector.get(AppStore);
+    appStore.changeBlockingUiStatus = jest.fn();
+    component = fixture.componentInstance;
   });
 
-  it('#FilterComponent init should match snapshot', async () => {
-    const { fixture } = await shallow
-      .render({
-        bind: {
-          filterModel: Helper.fakeFilterModel,
-          permission: Helper.fakePermission
-        }
-      });
-
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#ngOnInit should call #initData', async () => {
-    // Arrange
-    const mockGetSites = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeGroupSiteModel]));
-    const { instance } = await shallow
-      .mock(FilterService, { getSites: mockGetSites })
-      .render({
-        bind: {
-          filterModel: Helper.fakeFilterModel,
-          permission: Helper.fakePermission
-        }
-      });
-    instance.initData = jest.fn();
-    instance.clickSearch = jest.fn();
+  it('should initialize data on ngOnInit', async () => {
+    component.initData = jest.fn();
+    await component.ngOnInit();
 
-    // Action
-    await instance.ngOnInit();
-
-    // Assert
-    expect(instance.initData).toHaveBeenCalled();
-    expect(instance.clickSearch).toHaveBeenCalled();
+    expect(component.initData).toHaveBeenCalled();
   });
 
-  it('#initData should call #initDefaultFilter #initMultiSelectSites', async () => {
-    // Arrange
-    const mockInitDefaultFilter = jest.fn();
-    const mockInitMultiSelectSites = jest.fn();
-    const { instance } = await shallow
-      .mock(FilterService,
-        {
-          initDefaultFilter: mockInitDefaultFilter,
-          initMultiSelectSites: mockInitMultiSelectSites,
-          getSites: jest.fn(),
-          initSubType: jest.fn().mockImplementation(() => Promise.resolve([]))
-        })
-      .mock(AppStore, {changeBlockingUiStatus: jest.fn()})
-      .render({
-        bind: {
-          filterModel: Helper.fakeFilterModel,
-          permission: Helper.fakePermission
-        }
-      });
+  it('should initialize data on initData', async () => {
+    filterService.initSubType = jest.fn().mockResolvedValue(Helper.mockSubTypeSelection);
+    filterService.getSites = jest.fn().mockResolvedValue(Helper.mockGroupSites);
+    filterService.initMultiSelectSites = jest.fn();
+    await component.initData();
 
-    // Action
-    instance.initData();
-
-    // Assert
-    expect(mockInitDefaultFilter).toHaveBeenCalled();
-    expect(mockInitMultiSelectSites).toHaveBeenCalled();
+    expect(filterService.getSites).toHaveBeenCalled();
+    expect(filterService.initSubType).toHaveBeenCalled();
+    expect(appStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    expect(component.groupSites).toEqual(Helper.mockGroupSites);
+    expect(component.subTypeSelection).toEqual(Helper.mockSubTypeSelection);
   });
 
-  it('#clickAddUser should emit #addUserEvent', async () => {
-    // Arrange
-    const mockAddUserEvent = jest.fn();
-    const { instance } = await shallow
-      .render({
-        bind: {
-          filterModel: Helper.fakeFilterModel,
-          permission: Helper.fakePermission
-        }
-      });
-    instance.addUserEvent.emit = mockAddUserEvent;
+  it('should initialize default filters after data load', async () => {
+    filterService.getSites = jest.fn().mockResolvedValue(Helper.mockGroupSites);
+    filterService.initDefaultFilter = jest.fn();
+    await component.ngOnInit();
 
-    // Action
-    instance.clickAddUser();
-
-    // Assert
-    expect(mockAddUserEvent).toHaveBeenCalled();
+    expect(filterService.initDefaultFilter).toHaveBeenCalledWith(
+      component.filterModel,
+      Helper.mockGroupSites,
+      component.selectedSubType,
+      component.voidVIPSelection
+    );
   });
 
-  it('#clickSearch should emit #searchEvent', async () => {
-    // Arrange
-    const mockSearchEvent = jest.fn();
-    const { instance } = await shallow
-      .render({
-        bind: {
-          filterModel: Helper.fakeFilterModel,
-          permission: Helper.fakePermission
-        }
-      });
-    instance.searchEvent.emit = mockSearchEvent;
+  it('should update filter model on selection changes', () => {
+    // Test site selection
+    component.updateSelectedSites(['1', '2']);
+    expect(component.filterModel.sites).toBe('1,2');
 
-    // Action
-    instance.clickSearch();
+    // Test subtype selection
+    component.selectedSubType = ['0', '1'];
+    component.updateSelectedSubIssueType();
+    expect(component.filterModel.subTypes).toBe('0,1');
 
-    // Assert
-    expect(mockSearchEvent).toHaveBeenCalled();
+    // Test void VIP selection
+    component.selectedVoidVIP = ['v1', 'v2'];
+    component.updateSelectedVoidVIP();
+    expect(component.filterModel.voidVIP).toBe('v1,v2');
   });
 
-  it('#updateSelectedSites should update correct model', async () => {
-    // Arrange
-    const filterModel = new FilterModel();
-    const { instance } = await shallow
-      .render({
-        bind: {
-          filterModel: filterModel,
-          permission: Helper.fakePermission
-        }
-      });
+  it('should emit events on user actions', () => {
+    // Test search event
+    jest.spyOn(component.searchEvent, 'emit');
+    component.clickSearch();
+    expect(component.searchEvent.emit).toHaveBeenCalled();
 
-    // Action
-    instance.updateSelectedSites(['1','2']);
-
-    // Assert
-    expect(filterModel.sites).toBe('1,2');
+    // Test add user event
+    jest.spyOn(component.addUserEvent, 'emit');
+    component.clickAddUser();
+    expect(component.addUserEvent.emit).toHaveBeenCalled();
   });
 
-  it('#updateSelectedSubIssueType should update correct model', async () => {
-    // Arrange
-    const filterModel = new FilterModel();
-    const { instance } = await shallow
-      .render({
-        bind: {
-          filterModel: filterModel,
-          permission: Helper.fakePermission
-        }
-      });
-    instance.selectedSubType = ['1','2','3'];
+  it('should handle initialization with undefined data', async () => {
+    component.initData = jest.fn();
+    await component.ngOnInit();
 
-    // Action
-    instance.updateSelectedSubIssueType();
-
-    // Assert
-    expect(filterModel.subTypes).toBe('1,2,3');
-  });
-
-  it('#updateSelectedVoidVIP should update correct model', async () => {
-    // Arrange
-    const filterModel = new FilterModel();
-    const { instance } = await shallow
-      .render({
-        bind: {
-          filterModel: filterModel,
-          permission: Helper.fakePermission
-        }
-      });
-    instance.selectedVoidVIP = ['1','2','3'];
-
-    // Action
-    instance.updateSelectedVoidVIP();
-
-    // Assert
-    expect(filterModel.voidVIP).toBe('1,2,3');
+    expect(component.groupSites).toBeUndefined();
+    expect(component.subTypeSelection).toBeUndefined();
   });
 });

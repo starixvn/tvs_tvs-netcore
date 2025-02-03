@@ -7,20 +7,15 @@ import { environment } from '../environments/environment';
 import { AppComponent } from './app/app.component';
 
 if (environment.production) {
-    enableProdMode();
+  enableProdMode();
 }
 
 bootstrapApplication(AppComponent, {
-    providers: [
-        provideHttpClient(),
-        importProvidersFrom(
-            BrowserAnimationsModule, // Required for animations
-            ToastrModule.forRoot({
-              timeOut: 3000, // Global default for toast duration
-              positionClass: 'toast-top-right', // Default position
-              preventDuplicates: true, // Prevent duplicate toasts
-            })
-          ),
-
-    ]
+  providers: [
+    provideHttpClient(),
+    importProvidersFrom(
+      BrowserAnimationsModule,
+      ToastrModule.forRoot()
+    ),
+  ]
 }).catch((err) => console.error(err));

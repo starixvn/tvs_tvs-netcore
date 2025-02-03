@@ -1,7 +1,7 @@
 <div class="paging d-flex justify-content-between bg-light">
   <div class="d-flex justify-content-start">
     <label class="text-nowrap text-primary"><strong>Page size</strong></label>
-    <select class="selection form-control form-control-sm" [(ngModel)]="model.pageSize" (change)="changePageSize()">
+    <select class="selection form-select form-select-sm" [(ngModel)]="model.pageSize" (change)="changePageSize()">
       <option *ngFor="let item of model.selection" [attr.value]="item">{{item}}</option>
     </select>
     <ngb-pagination [collectionSize]="model.total" [(page)]="model.page" [pageSize]="model.pageSize" [maxSize]="5"

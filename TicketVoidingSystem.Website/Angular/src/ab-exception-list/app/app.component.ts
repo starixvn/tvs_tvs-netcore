@@ -27,7 +27,7 @@ import { UserListComponent } from './user-list/user-list.component';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   imports: [FilterComponent, UserListComponent, AddUserComponent, MenuBarComponent, BlockFullUiComponent, FormsModule, CommonModule],
-  providers: [UserService, SignalRService, AppStore, ValidationService]
+  providers: [UserService, SignalRService, AppStore, ValidationService, AppService]
 })
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('filterComponent') filterComponent: FilterComponent;

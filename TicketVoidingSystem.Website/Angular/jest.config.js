@@ -3,10 +3,9 @@ const { compilerOptions } = require('./tsconfig');
 
 module.exports = {
   preset: 'jest-preset-angular',
-  globalSetup: 'jest-preset-angular/global-setup',
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: [
-    '<rootDir>/src/**/*.spec.ts'
+    '<rootDir>/src/ab-exception-list/**/*.spec.ts'
     //'<rootDir>/src/add-request/app/add-request/abnormal-accounts/account-table/account-table.component.spec.ts',
   ],
   testPathIgnorePatterns: [

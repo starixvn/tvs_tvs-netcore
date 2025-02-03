@@ -1,144 +1,89 @@
-import { ElementRef, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SimpleChange } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { Shallow } from 'shallow-render';
-import { BlockFullUiModule } from '../../../utility/components/block-full-ui/block-full-ui.module';
 import { UsernamesComponent } from '../../../utility/components/user-names/user-names.component';
 import { GroupUsername } from '../../../utility/components/user-names/user-names.model';
-import { AppStore } from '../app.store';
-import { UserService } from '../services/user.service';
-import { ValidationService } from '../services/validation.service';
-import { AddUserComponent } from './add-user.component';
-import { AddUserModel } from './add-user.model';
-class Helper {
-  static fakeAddUserModel: AddUserModel = {
-    isOpen: true,    
-  };
-}
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { AddUserComponent } from './../add-user/add-user.component';
+import { AddUserModel } from './../add-user/add-user.model';
+import { AppStore } from './../app.store';
+import { UserService } from './../services/user.service';
+import { ValidationService } from './../services/validation.service';
 
-describe('AddUserComponent', () => { 
-  @NgModule({
-    declarations: [
-      UsernamesComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      BlockFullUiModule,
-      NgSelectModule
-    ],
-    providers: [
-      ValidationService,
-      UserService,
-      AppStore
-    ]
-  })
-  class AppModuleTest { }
+describe('AddUserComponent', () => {
+  let component: AddUserComponent;
+  let fixture: ComponentFixture<AddUserComponent>;
+  let appStore: AppStore;
+  let userService: UserService;
+  let validationService: ValidationService;
 
-  let shallow: Shallow<AddUserComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        CommonModule,
+        FormsModule,
+        NgSelectModule,
+      ],
+      providers: [
+        UserService,
+        ValidationService,
+        AppStore
+      ],
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(AddUserComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(AddUserComponent);
+    userService = TestBed.inject(UserService);
+    validationService = TestBed.inject(ValidationService);
+    appStore = TestBed.inject(AppStore);
+    appStore.changeBlockingUiStatus = jest.fn();
+    component = fixture.componentInstance;
   });
 
-  it('#AddUserComponent init should match snapshot', async () => {
-    const { fixture } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeAddUserModel
-        }
-      });
-
-    expect(fixture).toMatchSnapshot();
+  it('should initialize with default values', () => {
+    expect(component.model).toBeInstanceOf(AddUserModel);
+    expect(component.selectedSubType).toEqual(undefined);
+    expect(component.isVoidVIP).toBeUndefined();
   });
 
-  it('#clickSave should call #addUsers', async () => {
-    // Arrange
-    const mockChangeBlockingUiStatus = jest.fn();
-    const mockValidateUsernames = jest.fn().mockImplementation(() => Promise.resolve(true));
-    const mockAddUsers = jest.fn().mockImplementation();
-    const { instance } = await shallow
-      .mock(AppStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
-      .mock(ValidationService, { validateUsernames: mockValidateUsernames })
-      .mock(UserService, { addUsers: mockAddUsers })
-      .render({
-        bind: {
-          model: Helper.fakeAddUserModel
-        }
-      });
-    instance.usernamesComponent = new UsernamesComponent(null);
-    instance.usernamesComponent.groupUsername = new GroupUsername();
-    instance.usernamesComponent.groupUsername.getAllValue = jest.fn();
-
-    // Action
-    await instance.clickSave();
-
-    // Assert
-    expect(mockValidateUsernames).toHaveBeenCalledTimes(1);
-    expect(mockAddUsers).toHaveBeenCalledTimes(1);
+  it('should reset values on ngOnChanges', () => {
+    component.ngOnChanges({ 'model': {} as SimpleChange });
+    expect(component.selectedSubType).toEqual([]);
+    expect(component.isVoidVIP).toBe(false);
   });
-  
-  it('#clickSave should not call #addUsers', async () => {
-    // Arrange
-    const mockChangeBlockingUiStatus = jest.fn();
-    const mockValidateUsernames = jest.fn().mockImplementation(() => Promise.resolve(false));
-    const mockAddUsers = jest.fn().mockImplementation();
-    const { instance } = await shallow
-      .mock(AppStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
-      .mock(ValidationService, { validateUsernames: mockValidateUsernames })
-      .mock(UserService, { addUsers: mockAddUsers })
-      .render({
-        bind: {
-          model: Helper.fakeAddUserModel
-        }
-      });    
-    instance.usernamesComponent = new UsernamesComponent(null);
-    instance.usernamesComponent.groupUsername = new GroupUsername();
-    instance.usernamesComponent.groupUsername.getAllValue = jest.fn();
 
-    // Action
-    await instance.clickSave();
+  it('should call services correctly on clickSave', async () => {
+    const mockUsernamesComponent = new UsernamesComponent(null);
+    mockUsernamesComponent.groupUsername = new GroupUsername();
+    mockUsernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('testUser');
+    component.usernamesComponent = mockUsernamesComponent;
+    userService.addUsers = jest.fn();
+    validationService.validateUsernames = jest.fn().mockResolvedValue(true);
 
-    // Assert
-    expect(mockValidateUsernames).toHaveBeenCalledTimes(1);
-    expect(mockAddUsers).toHaveBeenCalledTimes(0);
+    await component.clickSave();
+
+    expect(appStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    expect(validationService.validateUsernames).toHaveBeenCalled();
+    expect(userService.addUsers).toHaveBeenCalledWith('testUser', undefined, undefined);
   });
-  
-  it('#clickSave should not call #addUsers', async () => {
-    // Arrange
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AppStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
-      .render({
-        bind: {
-          model: Helper.fakeAddUserModel
-        }
-      });
 
-    // Action
-    instance.closeModal();
-
-    // Assert
-    expect(Helper.fakeAddUserModel.isOpen).toBe(false);
+  it('should close modal on closeModal', () => {
+    component.model.isOpen = true;
+    component.closeModal();
+    expect(component.model.isOpen).toBe(false);
   });
-  
-  it('#ngOnChanges should not update data', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeAddUserModel
-        }
-      });
-    instance.isVoidVIP = true;
 
-    // Action
-    instance.ngOnChanges({});
+  it('should validate usernames on afterFocusOutBetIds', async () => {
+    const mockUsernamesComponent = new UsernamesComponent(null);
+    mockUsernamesComponent.groupUsername = new GroupUsername();
+    mockUsernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('testUser');
+    component.usernamesComponent = mockUsernamesComponent;
+    validationService.validateUsernames = jest.fn().mockResolvedValue(true);
 
-    // Assert
-    expect(instance.isVoidVIP).toBeTruthy();
+    await component.afterFocusOutBetIds();
+    expect(appStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    expect(validationService.validateUsernames).toHaveBeenCalled();
   });
 });

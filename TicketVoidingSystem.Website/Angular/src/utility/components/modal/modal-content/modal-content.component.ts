@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
-import { SanitizeHtmlPipe } from 'src/utility/pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../pipes/sanitize-html.pipe';
 import { IModal } from '../modal.model';
 
 @Component({
@@ -22,7 +22,7 @@ export class ModalContentComponent {
   isProcessingOkCallback = false;
   isProcessingYesCallback = false;
 
-  constructor(public activeModal: NgbActiveModal) { }
+  activeModal = inject(NgbActiveModal);
 
   confirmClickOk() {
     this.isProcessingOkCallback = true;
