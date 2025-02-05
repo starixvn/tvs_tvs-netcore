@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import _ from 'lodash';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { PagingConstant } from '../../../utility/components/paging/paging/paging.model';
@@ -12,10 +12,7 @@ import { TicketsModel } from '../tickets-list/tickets.model';
   providedIn: 'root'
 })
 export class TicketsService {
-
-  constructor(
-    private readonly appService: AppService
-  ) { }
+  appService = inject(AppService);
 
   initTicketQuery(requestDetail: RequestDetailViewModel, matchModel?: MatchModel, requestDetailId?: number): GetTicketsQuery {
     const query = new GetTicketsQuery();

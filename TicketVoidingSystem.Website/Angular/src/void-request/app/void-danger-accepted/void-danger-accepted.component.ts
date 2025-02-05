@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
@@ -22,18 +22,17 @@ import { VoidPageService } from './services/void-page.service';
 export class VoidDangerAcceptedComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
   @ViewChildren("messageArea") messageAreaComponents: QueryList<MessageAreaComponent>;
-
+  voidPageService = inject(VoidPageService);
+  ticketsService = inject(TicketsService);
+  voidPageCommonService = inject(VoidPageCommonService);
+ 
   public primitiveProperty = new CommonPrimitiveProperty();
   public voidMatches: VoidMatch[] = [];
   public issueTypes: IssueTypesModel;
   public tooltip = new Tooltip();
   private readonly afterLoadUnderneathDataSubscription: Subscription;
 
-  constructor(
-    private readonly voidPageService: VoidPageService,
-    private readonly ticketsService: TicketsService,
-    private readonly voidPageCommonService: VoidPageCommonService,
-    private readonly element: ElementRef) {
+  constructor(private readonly element: ElementRef) {
     this.tooltip.element = this.element;
   }
 

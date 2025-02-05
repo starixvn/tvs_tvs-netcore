@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription, timer } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
@@ -17,13 +17,11 @@ import { TicketsService } from './tickets.service';
   providedIn: 'root'
 })
 export class VoidPageCommonService {
-  constructor(
-    private readonly clipboardService: ClipboardService,
-    private readonly popupService: PopupService,
-    private readonly ticketsService: TicketsService,
-    private readonly checkRequestService: CheckRequestService,
-    private readonly loadDataService: LoadDataService
-  ) { }
+  clipboardService = inject(ClipboardService);
+  popupService = inject(PopupService);
+  ticketsService = inject(TicketsService);
+  checkRequestService = inject(CheckRequestService);
+  loadDataService = inject(LoadDataService);
   private readonly observableTimer = timer(0, 100);
 
   public showWarningExportExcel() {
