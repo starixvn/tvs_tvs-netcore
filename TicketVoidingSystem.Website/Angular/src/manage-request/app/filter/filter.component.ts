@@ -197,7 +197,7 @@ export class FilterComponent implements OnInit {
     this.issueTypeModel = await this.commonService.getIssueTypes();
     this.issueTypePermissionList = await this.commonService.getIssueTypePermissionList();
     this.issueTypeSelectList = [];
-    if (this.issueTypePermissionList.length > 0) {
+    if (this.issueTypePermissionList?.length > 0) {
       this.issueTypePermissionList.forEach(x => {
         this.issueTypeSelectList.push(
           {

@@ -20,14 +20,13 @@ import { RequestModel } from './request-list/request.model';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
 import { RequestListComponent } from './request-list/request-list.component';
-import { HttpClientModule } from '@angular/common/http';
 
 const DATETIME_FORMAT = 'YYYY/M/D hh:mm:ss.SSS A';
 @Component({
   standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
-  imports: [MenuBarComponent, FilterComponent, BlockUiModule, RequestListComponent, HttpClientModule]
+  imports: [MenuBarComponent, FilterComponent, BlockUiModule, RequestListComponent]
 })
 export class AppComponent implements OnInit {
   @ViewChild('filterComponent') filterComponent: FilterComponent;

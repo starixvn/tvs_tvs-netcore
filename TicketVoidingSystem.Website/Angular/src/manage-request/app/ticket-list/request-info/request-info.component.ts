@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
-import { NgbAccordionConfig, NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAccordionConfig, NgbNav, NgbNavItem, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
@@ -21,14 +21,13 @@ import { IssueTypeModule } from '../../../../utility/components/issue-type/issue
 import { NgClass } from '@angular/common';
 import { TicketsComponent } from '../tickets/tickets.component';
 import { FormsModule } from '@angular/forms';
-import { AutosizeModule } from 'ngx-autosize';
 
 @Component({
   standalone: true,
   selector: 'request-info',
   templateUrl: './request-info.component.html',
   styleUrls: ['./request-info.component.scss'],
-  imports: [NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLink, NgbNavLinkBase, NgbNavContent, BlockUiModule, MatchInfoComponent, IssueTypeModule, NgClass, TicketsComponent, FormsModule, AutosizeModule, NgbNavOutlet]
+  imports: [NgbNav, NgbNavItem, BlockUiModule, MatchInfoComponent, IssueTypeModule, NgClass, TicketsComponent, FormsModule, NgbNavOutlet]
 })
 export class RequestInfoComponent implements OnInit, OnChanges {
   @Input() ticketListModal: TicketListModal;
