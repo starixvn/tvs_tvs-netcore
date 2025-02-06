@@ -11,7 +11,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendMessage;
 
-public class SpecialPlatformServiceTests
+public class SpecialPlatformServiceTests : IClassFixture<AppSettingFixture>
 {
     [Fact]
     public void IsSiteSpecialPlatform_MatchIsNull_ReturnFalse()

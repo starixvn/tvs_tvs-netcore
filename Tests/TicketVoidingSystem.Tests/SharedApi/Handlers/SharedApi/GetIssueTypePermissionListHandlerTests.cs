@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Fanex.NAP.Client.Models.ValueObject;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SharedApi.Handlers.SharedApi;
+using TicketVoidingSystem.Web;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.SharedApi.Handlers.SharedApi;
@@ -28,19 +31,18 @@ public class GetIssueTypePermissionListHandlerTests
     public async Task Handle_Returns_ExpectedListIssueTypes()
     {
         // Arrange
-
-        // Mock the sessionService.HasPermission method to return true for all IssueTypeFunctionKeysConstant values
-        foreach (var issueTypeFunctionKey in IssueTypeFunctionKeysConstant.IssueTypeFunctionKeyList)
+        var mockResults = new List<FunctionPolicy>
         {
-            sessionService.HasPermission(issueTypeFunctionKey.FunctionKey, Constant.Policy.Read).Returns(true);
-        }
+            new() { Key = SpecialDeleteFunctionKeys.AbnormalBet }
+        };
+        sessionService.GetPermissionsAsync(default, default).ReturnsForAnyArgs(mockResults);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(23, result.ToList().Count);
+        Assert.Equal(mockResults.Count, result.ToList().Count);
     }
 
     [Fact]
