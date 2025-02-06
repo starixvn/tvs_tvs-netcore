@@ -7,6 +7,7 @@ import { RequestModel } from './request-list/request.model';
 import { GeneralInfo, GeneralInfoViewModel } from './ticket-list/request-info/request-info.model';
 import { TicketsModel } from './ticket-list/tickets/tickets.model';
 import { TicketsQuery } from './ticket-list/tickets/tickets.query';
+import { TestBed } from '@angular/core/testing';
 
 jest.mock('../../utility/services/http.service');
 
@@ -15,10 +16,16 @@ describe('AppService', () => {
   let appService: AppService;
 
   beforeEach(() => {
-    mockHttpService = new HttpService(null) as jest.Mocked<HttpService>;
-    appService = new AppService(mockHttpService);
-  });
+    TestBed.configureTestingModule({
+      providers: [
+        AppService, { provide: HttpService }
+      ],
+    });
 
+    appService = TestBed.inject(AppService);
+    mockHttpService = TestBed.inject(HttpService) as jest.Mocked<HttpService>;
+  });
+  
   it('#getRequests should return expected data', async () => {
     // Arrange
     const requestModel: RequestModel = {
@@ -46,20 +53,20 @@ describe('AppService', () => {
     expect(actualData).toEqual(expectedData);
   });
 
-  it('#exportRequest should call #downloadFile with expected params', async() => {
+  it('#exportRequest should call #downloadFile with expected params', async () => {
     // Arrange
     const query = new GetRequestsQuery();
     const url = `api/ManageRequest/ExportRequest`;
     mockHttpService.downloadFile = jest.fn();
 
     // Action
-   await appService.exportRequest(query, null);
+    await appService.exportRequest(query, null);
 
     // Assert
     expect(mockHttpService.downloadFile).toHaveBeenCalledWith(query, url, null);
   });
 
-  it('#getVoidedTickets should return expected data', async() => {
+  it('#getVoidedTickets should return expected data', async () => {
     // Arrange
     const expectedData: TicketsModel = {
       groups: [
@@ -85,20 +92,20 @@ describe('AppService', () => {
     expect(actualData).toEqual(expectedData);
   });
 
-  it('#exportTickets should call #downloadFile with expected params', async() => {
+  it('#exportTickets should call #downloadFile with expected params', async () => {
     // Arrange
     const query = new TicketsQuery();
     const url = `api/ManageRequest/ExportVoidedTickets`;
     mockHttpService.downloadFile = jest.fn();
 
     // Action
-   await appService.exportTickets(query);
+    await appService.exportTickets(query);
 
     // Assert
     expect(mockHttpService.downloadFile).toHaveBeenCalledWith(query, url);
   });
 
-  it('#checkBy should return expected data', async() => {
+  it('#checkBy should return expected data', async () => {
     // Arrange
     const expectedData: Result<string> = {
       errorCode: 0,
@@ -114,7 +121,7 @@ describe('AppService', () => {
     expect(actualData).toEqual(expectedData);
   });
 
-  it('#getGeneralInfo should return expected data', async() => {
+  it('#getGeneralInfo should return expected data', async () => {
     // Arrange
 
     const generalInfoViewModel: GeneralInfoViewModel = {

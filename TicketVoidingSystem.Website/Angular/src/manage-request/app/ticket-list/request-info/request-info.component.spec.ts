@@ -1,5 +1,4 @@
 import { SimpleChange } from '@angular/core';
-import { NgbAccordionConfig } from '@ng-bootstrap/ng-bootstrap';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { IssueInfo } from '../../../../utility/models/issue-type.model';
@@ -8,8 +7,33 @@ import { TabInfoRequest, TicketListModal } from '../ticket-list.modal';
 import { TicketsModel } from '../tickets/tickets.model';
 import { RequestInfoComponent } from './request-info.component';
 import { GeneralInfo, GeneralInfoViewModel } from './request-info.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CommonService } from '../../../../utility/services/common.service';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { MatchModel } from '../../../../utility/models/match.model';
 
 describe('RequestInfoComponent', () => {
+  let component: RequestInfoComponent;
+  let fixture: ComponentFixture<RequestInfoComponent>;
+  let commonService: CommonService;
+  let appService: AppService;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule
+      ],
+      providers: [
+        CommonService, AppService
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(RequestInfoComponent);
+    commonService = fixture.debugElement.injector.get(CommonService);
+    appService = fixture.debugElement.injector.get(AppService);
+    component = fixture.componentInstance;
+  });
+
   const fakeTicketListModal = { matchId: 1 } as TicketListModal;
   const fakeGeneralInfoViewModel =
     { generalInfoModel: { voidingHistoryIds: "2", singleTransIds: "1, 2", recoveredTimeString: "" } as GeneralInfo } as GeneralInfoViewModel;
@@ -18,28 +42,25 @@ describe('RequestInfoComponent', () => {
     name: 'Abnormal', subIssueTypeId: 27, issueTypeId: 11,
     subIssueTypeName: 'Abnormal', subIssueTypeNameCS: '非正常'
   } as IssueInfo;
-  const config = new NgbAccordionConfig(null);
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+
 
   it('#ngOnInit should setting data expected', async () => {
     // Arrange
-    const component = new RequestInfoComponent(null, null, config);
     const fakeFunctionGetDataCurrentTab = jest.fn();
     component['getDataCurrentTab'] = fakeFunctionGetDataCurrentTab;
     component.ticketListModal = fakeTicketListModal;
     component.tabInfoRequest = [{ isActive: true, id: 1 }] as TabInfoRequest[];
 
-    // Action and Assert
+    // Action 
     await component.ngOnInit();
-    expect(fakeFunctionGetDataCurrentTab).toBeCalled();
+
+    // Assert
+    expect(fakeFunctionGetDataCurrentTab).toHaveBeenCalled();
     expect(component.paging.pageSize).toBe(500);
   });
 
   it('#ngOnChanges should call updateIssue when has change IssueInfo ', () => {
     // Arrange
-    const component = new RequestInfoComponent(null, null, config);
     component.issue = fakeIssue;
     const changes = {
       'issue': new SimpleChange(new IssueInfo(), fakeIssue, true),
@@ -54,7 +75,6 @@ describe('RequestInfoComponent', () => {
 
   it('#ngOnChanges should not call updateIssue when has not change IssueInfo ', () => {
     // Arrange
-    const component = new RequestInfoComponent(null, null, config);
     const fakeFunctionUpdateIssue = jest.fn();
     component.issue = fakeIssue;
     const changes = {
@@ -70,10 +90,8 @@ describe('RequestInfoComponent', () => {
 
   it('#getTickets should has getTickets', async () => {
     // Arrange
-    const appService = new AppService(null)
     const tickets = { totalTicketsProcessed: 1 } as TicketsModel;
     appService.getVoidedTickets = jest.fn().mockReturnValue(tickets);
-    const component = new RequestInfoComponent(appService, null, config);
     component.ticketListModal = fakeTicketListModal;
     component.generalInfoViewModel = fakeGeneralInfoViewModel;
     component.model = fakeModel;
@@ -89,7 +107,6 @@ describe('RequestInfoComponent', () => {
 
   it('#pagingEvent should call getTickets', async () => {
     // Arrange
-    const component = new RequestInfoComponent(null, null, config);
     const fakeFunctionGetTickets = jest.fn();
     component.getTickets = fakeFunctionGetTickets;
     component.ticketListModal = fakeTicketListModal;
@@ -103,7 +120,6 @@ describe('RequestInfoComponent', () => {
 
   it('#isShowMatchInfo should return false', () => {
     // Arrange
-    const component = new RequestInfoComponent(null, null, config);
     const dataTests = [13, 11, 17, 20, 22];
     component.model = fakeModel;
 
@@ -117,7 +133,6 @@ describe('RequestInfoComponent', () => {
 
   it('#isShowMatchInfo should return true', () => {
     // Arrange
-    const component = new RequestInfoComponent(null, null, config);
     component.issue.issueTypeId = 1;
     component.model = fakeModel;
 
@@ -126,5 +141,20 @@ describe('RequestInfoComponent', () => {
 
     // Assert
     expect(actual).toBeTruthy();
+  });
+
+  it('#getMatch should getMatch success', async () => {
+    // Arrange
+    component.issue.issueTypeId = 1;
+    component.model = fakeModel;
+    const matchId = 56839;
+    const match = { matchId: 56839 } as MatchModel;
+    commonService.getMatch = jest.fn().mockResolvedValue(match);
+
+    // Action
+    await component['getMatch'](matchId);
+
+    // Assert
+    expect(component.match).toEqual(match);
   });
 });

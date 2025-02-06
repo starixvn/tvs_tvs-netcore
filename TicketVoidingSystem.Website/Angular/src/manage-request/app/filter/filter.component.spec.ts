@@ -1,10 +1,7 @@
-import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import moment from 'moment-timezone';
-import { Shallow } from 'shallow-render';
-import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
 import { MultipleSelectionModule } from '../../../utility/components/multiple-selection/multiple-selection.module';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { ManageRequestStatus } from '../../../utility/constants/config';
@@ -12,15 +9,17 @@ import { BalanceUp } from '../../../utility/models/balance-up.model';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
-import { HttpService } from '../../../utility/services/http.service';
 import { FilterComponent } from './filter.component';
 import { FilterModel } from './filter.model';
+import { CommonModule } from '@angular/common';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../utility/modules/testing.module';
 
 class Helper {
   static readonly fakeDate = '2020-11-09 12:08:49.737';
   static readonly requestIdInputSelector = '.input-request-id';
   static readonly matchIdInputSelector = '.input-match-id';
-  static readonly newRequestButtontSelector = '.btn-success';
+  static readonly newRequestButtonSelector = '.btn-success';
   static readonly dangerAccepted = 'Danger Accepted';
   static readonly fakeIssueTypeSelectList: Selection[] = [
     {
@@ -36,7 +35,7 @@ class Helper {
       value: '8'
     },
     {
-      name: 'rong Kick Off Time',
+      name: 'Wrong Kick Off Time',
       value: '9'
     }
   ];
@@ -62,10 +61,10 @@ class Helper {
     isDisplayMissingInfo: false
   } as FilterModel;
   static readonly fakeIssueTypeList: IssueType[] = [
-    { issueTypeId: 1, issueTypeName: Helper.dangerAccepted},
-    { issueTypeId: 11, issueTypeName: 'Abnormal Bet'},
-    { issueTypeId: 8, issueTypeName: 'Early Kick Off'},
-    { issueTypeId: 9, issueTypeName: 'Wrong Kick Off Time'}
+    { issueTypeId: 1, issueTypeName: Helper.dangerAccepted },
+    { issueTypeId: 11, issueTypeName: 'Abnormal Bet' },
+    { issueTypeId: 8, issueTypeName: 'Early Kick Off' },
+    { issueTypeId: 9, issueTypeName: 'Wrong Kick Off Time' }
   ];
   static readonly fakeSubIssueTypeList: SubIssueType[] = [
     {
@@ -108,126 +107,117 @@ class Helper {
     balanceUpDay: new Date('2020-01-16'),
     moveBetsDay: new Date('2020-01-26')
   };
-
+  static readonly year = 2025;
+  static readonly month = 2;
+  static readonly date = 6;
 }
 
-describe('FilterComponent', () => {
-  @NgModule({
-      declarations: [
-        AutoRefreshComponent
-      ],
+describe('UserListComponent', () => {
+  let component: FilterComponent;
+  let fixture: ComponentFixture<FilterComponent>;
+  let commonService: CommonService;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
-        FormsModule,
-        NgbModule,
-        ToolTipModule,
-        NgSelectModule,
-        MultipleSelectionModule
+        TestingModule
       ],
       providers: [
-        HttpService
+        CommonService
       ]
-    })
-  class AppModuleTest { }
+    }).compileComponents();
 
-  let shallow: Shallow<FilterComponent>;
-
-  beforeEach(() => {
-    shallow = new Shallow(FilterComponent, AppModuleTest).dontMock(NgbModule);
+    fixture = TestBed.createComponent(FilterComponent);
+    commonService = fixture.debugElement.injector.get(CommonService);
+    component = fixture.componentInstance;
   });
 
-  it('#ngOnInit should call expected function', async() => {
+  it('#ngOnInit should call expected function', async () => {
     // Arrange
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getBalanceUp: jest.fn().mockImplementation(() => Helper.fakeBalanceUp)
-      })
-      .render();
     const element = document.createElement('body');
     element.setAttribute('id', 'body');
     element.setAttribute('root-url', '/');
     document.body.appendChild(element);
-    instance['setIssueTypeSelectList'] = jest.fn();
-    instance.initDefaultFilter = jest.fn();
-    instance.updateSubByIssue = jest.fn();
-    instance.clickSearch = jest.fn();
-    instance.model.ngbFromDate = new NgbDate(2020, 9, 8);;
+    commonService.getBalanceUp = jest.fn().mockResolvedValue(Helper.fakeBalanceUp);
+    component['setIssueTypeSelectList'] = jest.fn();
+    component.initDefaultFilter = jest.fn();
+    component.updateSubByIssue = jest.fn();
+    component.clickSearch = jest.fn();
+    component.model.ngbFromDate = new NgbDate(Helper.year, Helper.month, Helper.date);
+
     // Action
-    await instance.ngOnInit();
+    await component.ngOnInit();
 
     // Assert
-    expect(instance['setIssueTypeSelectList']).toHaveBeenCalledTimes(1);
-    expect(instance.initDefaultFilter).toHaveBeenCalledTimes(1);
-    expect(instance.updateSubByIssue).toHaveBeenCalledTimes(1);
-    expect(instance.clickSearch).toHaveBeenCalledTimes(1);
-    expect(instance.filterByValue).toBe('MatchId');
-    expect(instance.bUDay).toEqual(new Date(Helper.fakeBalanceUp.balanceUpDay));
+    expect(component['setIssueTypeSelectList']).toHaveBeenCalledTimes(1);
+    expect(component.initDefaultFilter).toHaveBeenCalledTimes(1);
+    expect(component.updateSubByIssue).toHaveBeenCalledTimes(1);
+    expect(component.clickSearch).toHaveBeenCalledTimes(1);
+    expect(component.filterByValue).toBe('MatchId');
+    expect(component.bUDay).toEqual(new Date(Helper.fakeBalanceUp.balanceUpDay));
   });
 
-  it('#controlFilter should assign expected data and call #updateSubByIssue when it search by matchid', async () => {
+  it('#controlFilter should assign expected data and call #updateSubByIssue when it search by matchId', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.initDefaultFilter = jest.fn();
-    instance.updateSubByIssue = jest.fn();
-    instance.issueTypeSelectList = Helper.fakeIssueTypeSelectList;
-    instance.selectedIssueTypes = ["1"];
+    component.initDefaultFilter = jest.fn();
+    component.updateSubByIssue = jest.fn();
+    component.issueTypeSelectList = Helper.fakeIssueTypeSelectList;
+    component.selectedIssueTypes = ["1"];
     // Action
-    instance.controlFilter('MatchId');
+    component.controlFilter('MatchId');
 
     // Assert
-    expect(instance.initDefaultFilter).toHaveBeenCalledTimes(1);
-    expect(instance.updateSubByIssue).toHaveBeenCalledTimes(1);
-    expect(instance.model.requestId).toBeNull();
-    expect(instance.model.status).toBe(ManageRequestStatus.ALL_ID.toString());
-    expect(instance.model.issueTypeId).toBe('1');
-    expect(instance.model.isExcludeTest).toBe(true);
+    expect(component.initDefaultFilter).toHaveBeenCalledTimes(1);
+    expect(component.updateSubByIssue).toHaveBeenCalledTimes(1);
+    expect(component.model.requestId).toBeNull();
+    expect(component.model.status).toBe(ManageRequestStatus.ALL_ID.toString());
+    expect(component.model.issueTypeId).toBe('1');
+    expect(component.model.isExcludeTest).toBe(true);
   });
 
-  it('#handelAutoRefresh should return isShowAutoRefresh is true', async () => {
+  it('#checkAutoRefresh should return isShowAutoRefresh is false', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.model.ngbFromDate = new NgbDate(2020, 9, 8);
-    instance.bUDay = new Date(Helper.fakeDate);
+    component.model.ngbFromDate = new NgbDate(Helper.year, Helper.month, Helper.date);
+    component.bUDay = new Date(Helper.fakeDate);
 
     // Action
-    instance.checkAutoRefresh();
+    component.checkAutoRefresh();
 
     // Assert
-    expect(instance.isShowAutoRefresh).toBe(false);
+    expect(component.isShowAutoRefresh).toBe(true);
   });
 
   it('#controlFilter should assign expected data when it search by requestid', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.initDefaultFilter = jest.fn();
-    instance.issueTypeSelectList = Helper.fakeIssueTypeSelectList;
-    instance.selectedIssueTypes = ["1"];
+    component.initDefaultFilter = jest.fn();
+    component.issueTypeSelectList = Helper.fakeIssueTypeSelectList;
+    component.selectedIssueTypes = ["1"];
+
     // Action
-    instance.controlFilter('RequestId');
+    component.controlFilter('RequestId');
 
     // Assert
-    expect(instance.initDefaultFilter).toHaveBeenCalledTimes(1);
-    expect(instance.model.matchId).toBeNull();
-    expect(instance.model.status).toBe(ManageRequestStatus.ALL_ID.toString());
-    expect(instance.model.issueTypeId).toBe('1');
-    expect(instance.model.isExcludeTest).toBe(true);
+    expect(component.initDefaultFilter).toHaveBeenCalledTimes(1);
+    expect(component.model.matchId).toBeNull();
+    expect(component.model.status).toBe(ManageRequestStatus.ALL_ID.toString());
+    expect(component.model.issueTypeId).toBe('1');
+    expect(component.model.isExcludeTest).toBe(true);
   });
 
   it('#initDefaultFilter should return expected FilterModel', async () => {
     // Arrange
-    const { instance } = await shallow.render();
     const date = new Date(moment.utc().tz('America/Caracas').format('YYYY-MM-DD HH:mm:ss.SSS'));
-    instance.issueTypeSelectList = Helper.fakeIssueTypeSelectList;
-    instance.createdBySelectList = Helper.fakeCreatedBySelectList;
+    component.issueTypeSelectList = Helper.fakeIssueTypeSelectList;
+    component.createdBySelectList = Helper.fakeCreatedBySelectList;
 
     // Action
-    instance.initDefaultFilter();
+    component.initDefaultFilter();
 
     // Assert
-    expect(instance.model.ngbFromDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
-    expect(instance.model.ngbToDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
-    expect(instance.model.status).toBe(ManageRequestStatus.ALL_ID.toString());
-    expect(instance.model.issueTypeId).toBe('11,1,8,9');
-    expect(instance.model.isExcludeTest).toBe(true);
+    expect(component.model.ngbFromDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
+    expect(component.model.ngbToDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
+    expect(component.model.status).toBe(ManageRequestStatus.ALL_ID.toString());
+    expect(component.model.issueTypeId).toBe('11,1,8,9');
+    expect(component.model.isExcludeTest).toBe(true);
   });
 
   it('#newRequest should open tab for add request', async () => {
@@ -235,11 +225,10 @@ describe('FilterComponent', () => {
     const element = document.createElement('body');
     element.setAttribute('id', 'body');
     element.setAttribute('old-site-root-url', '/');
-    const { instance } = await shallow.render();
     window.open = jest.fn();
 
     // Action
-    instance.newRequest();
+    component.newRequest();
 
     // Assert
     expect(window.open).toHaveBeenCalledTimes(1);
@@ -247,221 +236,200 @@ describe('FilterComponent', () => {
 
   it('#modelChange should emit with expected FilterModel when call #updateModel', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.model = Helper.fakeFilterModel;
-    instance.modelChange.emit = jest.fn();
+    component.model = Helper.fakeFilterModel;
+    component.modelChange.emit = jest.fn();
 
     // Action
-    instance.updateModel();
+    component.updateModel();
 
     // Assert
-    expect(instance.modelChange.emit).toHaveBeenCalledWith(Helper.fakeFilterModel);
+    expect(component.modelChange.emit).toHaveBeenCalledWith(Helper.fakeFilterModel);
   });
 
   it('#search should emit with expected FilterModel when call #clickSearch', async () => {
     // Arrange
-    const { instance } = await shallow
-    .mock(CommonService, {
-      getMarkedTicketsCount: jest.fn()
-    })
-    .render();
-    instance.model = Helper.fakeFilterModel;
-    instance.search.emit = jest.fn();
-    instance.validate = jest.fn().mockImplementation(() => true);
-    instance.multipleSelectSubTypeModel = ['27'];
+    component.model = Helper.fakeFilterModel;
+    component.search.emit = jest.fn();
+    component.validate = jest.fn().mockImplementation(() => true);
+    component.multipleSelectSubTypeModel = ['27'];
 
     // Action
-    instance.clickSearch();
+    component.clickSearch();
 
     // Assert
-    expect(instance.search.emit).toHaveBeenCalledTimes(1);
+    expect(component.search.emit).toHaveBeenCalledTimes(1);
   });
 
   it('#search should not call search.emit', async () => {
     // Arrange
-    const { instance } = await shallow
-    .mock(CommonService, {
-      getMarkedTicketsCount: jest.fn()
-    })
-    .render();
-    instance.model = Helper.fakeFilterModel;
-    instance.search.emit = jest.fn();
-    instance.validate = jest.fn().mockImplementation(() => false);
-    instance.multipleSelectSubTypeModel = [];
+    component.model = Helper.fakeFilterModel;
+    component.search.emit = jest.fn();
+    component.validate = jest.fn().mockImplementation(() => false);
+    component.multipleSelectSubTypeModel = [];
 
     // Action
-    instance.clickSearch();
+    component.clickSearch();
 
     // Assert
-    expect(instance.search.emit).toHaveBeenCalledTimes(0);
+    expect(component.search.emit).toHaveBeenCalledTimes(0);
   });
 
   it('#validate should display tooltip', async () => {
     // Arrange
-    const { instance } = await shallow.render();
     let actualResult = true;
     const testCases = [
       { filterByMatch: true, requestId: null, matchId: 'aaaa', expectedResult: false },
-      { filterByMatch: false, requestId: undefined,  matchId: null, expectedResult: false },
-      { filterByMatch: false, requestId: null,  matchId: null, expectedResult: false },
-      { filterByMatch: false, requestId: 'aaa',  matchId: null, expectedResult: false }
+      { filterByMatch: false, requestId: undefined, matchId: null, expectedResult: false },
+      { filterByMatch: false, requestId: null, matchId: null, expectedResult: false },
+      { filterByMatch: false, requestId: 'aaa', matchId: null, expectedResult: false }
     ];
-    instance.tooltip.display = jest.fn();
+    component.tooltip.display = jest.fn();
 
     // Action and Assert
     for (const item of testCases) {
-      instance.filterByMatch = item.filterByMatch;
-      instance.model.requestId = item.requestId;
-      instance.model.matchId = item.matchId;
-      actualResult = instance.validate();
+      component.filterByMatch = item.filterByMatch;
+      component.model.requestId = item.requestId;
+      component.model.matchId = item.matchId;
+      actualResult = component.validate();
 
-      expect(instance.tooltip.display).toHaveBeenCalled();
+      expect(component.tooltip.display).toHaveBeenCalled();
       expect(actualResult).toBe(item.expectedResult);
     }
   });
 
   it('#validate should return true when search by matchId', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.filterByMatch = true;
-    instance.model = {matchId: 1, requestId: 1, issueTypeId: "1", productTypeIds: "1,2"} as FilterModel;
+    component.filterByMatch = true;
+    component.model = { matchId: 1, requestId: 1, issueTypeId: "1", productTypeIds: "1,2" } as FilterModel;
 
     // Action
-    const actualResult = instance.validate();
+    const actualResult = component.validate();
 
     // Assert
     expect(actualResult).toBe(true);
   });
 
-  it('#setIssueTypeSelectList return expected issueTypeSelectList and model.issueTypeId when haven\'t any permission on IssueType', async() => {
+  it('#setIssueTypeSelectList return expected issueTypeSelectList and model.issueTypeId when haven\'t any permission on IssueType', async () => {
     // Arrange
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getIssueTypes: jest.fn().mockImplementation(() => Helper.fakeIssueTypesModel),
-        getIssueTypePermissionList: jest.fn().mockImplementation(() => [])
-      })
-      .render();
+    commonService.getIssueTypes = jest.fn().mockImplementation(() => Helper.fakeIssueTypesModel);
+    commonService.getIssueTypePermissionList = jest.fn().mockResolvedValue([]);
 
     // Action
-    await instance['setIssueTypeSelectList']();
+    await component['setIssueTypeSelectList']();
 
     // Assert
-    expect(instance.issueTypeSelectList.length).toBe(1);
-    expect(instance.issueTypeSelectList[0].name).toBe('N/A');
-    expect(instance.issueTypeSelectList[0].value).toBe('-1');
-    expect(instance.model.issueTypeId).toBe('-1');
+    expect(component.issueTypeSelectList.length).toBe(1);
+    expect(component.issueTypeSelectList[0].name).toBe('N/A');
+    expect(component.issueTypeSelectList[0].value).toBe('-1');
+    expect(component.model.issueTypeId).toBe('-1');
   });
 
-  it('#setIssueTypeSelectList return expected issueTypeSelectList and model.issueTypeId when only 1 IssueType permission', async() => {
+  it('#setIssueTypeSelectList return expected issueTypeSelectList and model.issueTypeId when only 1 IssueType permission', async () => {
     // Arrange
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getIssueTypes: jest.fn().mockImplementation(() => Helper.fakeIssueTypesModel),
-        getIssueTypePermissionList: jest.fn().mockImplementation(() => [Helper.fakeIssueTypeList[0]] )
-      })
-      .render();
+    commonService.getIssueTypes = jest.fn().mockImplementation(() => Helper.fakeIssueTypesModel);
+    commonService.getIssueTypePermissionList = jest.fn().mockResolvedValue([Helper.fakeIssueTypeList[0]]);
 
     // Action
-    await instance['setIssueTypeSelectList']();
+    await component['setIssueTypeSelectList']();
 
     // Assert
-    expect(instance.issueTypeSelectList.length).toBe(1);
-    expect(instance.issueTypeSelectList[0].name).toBe('Danger Accepted');
-    expect(instance.issueTypeSelectList[0].value).toBe('1');
-    expect(instance.model.issueTypeId).toBe('1');
+    expect(component.issueTypeSelectList.length).toBe(1);
+    expect(component.issueTypeSelectList[0].name).toBe('Danger Accepted');
+    expect(component.issueTypeSelectList[0].value).toBe('1');
+    expect(component.model.issueTypeId).toBe('1');
   });
 
-  it('#setIssueTypeSelectList return expected issueTypeSelectList and model.issueTypeId when > 1 IssueType permission', async() => {
+  it('#setIssueTypeSelectList return expected issueTypeSelectList and model.issueTypeId when > 1 IssueType permission', async () => {
     // Arrange
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getIssueTypes: jest.fn().mockImplementation(() => Helper.fakeIssueTypesModel),
-        getIssueTypePermissionList: jest.fn().mockImplementation(() => Helper.fakeIssueTypeList )
-      })
-      .render();
+    commonService.getIssueTypes = jest.fn().mockImplementation(() => Helper.fakeIssueTypesModel);
+    commonService.getIssueTypePermissionList = jest.fn().mockImplementation(() => Helper.fakeIssueTypeList);
 
     // Action
-    await instance['setIssueTypeSelectList']();
+    await component['setIssueTypeSelectList']();
 
     // Assert
-    expect(instance.issueTypeSelectList.length).toBe(4);
-    expect(instance.issueTypeSelectList[0].group).toBe('All');
-    expect(instance.issueTypeSelectList[0].value).toBe('1');
-    expect(instance.model.issueTypeId).toBe('1');
+    expect(component.issueTypeSelectList.length).toBe(4);
+    expect(component.issueTypeSelectList[0].group).toBe('All');
+    expect(component.issueTypeSelectList[0].value).toBe('1');
+    expect(component.model.issueTypeId).toBe('1');
   });
 
   it('#updateSubByIssue should set none subtype when not permission on IssueType', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.model.issueTypeId = '-1';
+    component.model.issueTypeId = '-1';
 
     // Action
-    instance.updateSubByIssue();
+    component.updateSubByIssue();
 
     // Assert
-    expect(instance.isNoneSubType).toBe(true);
-    expect(instance.multipleSelectSubTypeModel.length).toBe(1);
-    expect(instance.multipleSelectSubTypeModel.join(',')).toBe('-1');
+    expect(component.isNoneSubType).toBe(true);
+    expect(component.multipleSelectSubTypeModel.length).toBe(1);
+    expect(component.multipleSelectSubTypeModel.join(',')).toBe('-1');
   });
 
   it('#updateSubByIssue should get subtype when issueType is only one issueType', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.model.issueTypeId = '1';
-    instance.issueTypePermissionList = Helper.fakeIssueTypeList;
-    instance.issueTypeModel = Helper.fakeIssueTypesModel;
+    component.model.issueTypeId = '1';
+    component.issueTypePermissionList = Helper.fakeIssueTypeList;
+    component.issueTypeModel = Helper.fakeIssueTypesModel;
 
     // Action
-    instance.updateSubByIssue();
+    component.updateSubByIssue();
 
     // Assert
-    expect(instance.isNoneSubType).toBe(false);
-    expect(instance.subTypeSelectList.length).toBe(2);
+    expect(component.isNoneSubType).toBe(false);
+    expect(component.subTypeSelectList.length).toBe(2);
   });
 
   it('#updateSubByIssue should get all subtype when issueType is selected All', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.model.issueTypeId = '1,11,8,9';
-    instance.issueTypePermissionList = Helper.fakeIssueTypeList;
-    instance.issueTypeModel = Helper.fakeIssueTypesModel;
+    component.model.issueTypeId = '1,11,8,9';
+    component.issueTypePermissionList = Helper.fakeIssueTypeList;
+    component.issueTypeModel = Helper.fakeIssueTypesModel;
+    const lengthExpected = 5;
 
     // Action
-    instance.updateSubByIssue();
+    component.updateSubByIssue();
 
     // Assert
-    expect(instance.isNoneSubType).toBe(false);
-    expect(instance.subTypeSelectList.length).toBe(5);
+    expect(component.isNoneSubType).toBe(false);
+    expect(component.subTypeSelectList.length).toBe(lengthExpected);
   });
 
   it('should display request id input when search by request', async () => {
     // Arrange
-    const { fixture, find, instance } = await shallow.render();
-    instance.filterByMatch = false;
+    component.filterByMatch = false;
     fixture.detectChanges();
 
+    // Act
+    const requestIdInput = fixture.nativeElement.querySelector(Helper.requestIdInputSelector);
+
     // Assert
-    expect(find(Helper.requestIdInputSelector)).toHaveFoundOne();
+    expect(requestIdInput).toBeTruthy();
   });
 
   it('should display match id input when search by match', async () => {
     // Arrange
-    const { fixture, find, instance } = await shallow.render();
-    instance.filterByMatch = true;
+    component.filterByMatch = true;
     fixture.detectChanges();
 
+    // Act
+    const matchIdInput = fixture.nativeElement.querySelector(Helper.matchIdInputSelector);
+
     // Assert
-    expect(find(Helper.matchIdInputSelector)).toHaveFoundOne();
+    expect(matchIdInput).toBeTruthy();
   });
 
   it('should display new request button when have manageRequestHost permission', async () => {
     // Arrange
-    const { fixture, find, instance } = await shallow.render();
-    instance.permission.manageRequestHost = true;
+    component.permission.manageRequestHost = true;
     fixture.detectChanges();
 
+    // Act
+    const newRequestButton = fixture.nativeElement.querySelector(Helper.newRequestButtonSelector);
+
     // Assert
-    expect(find(Helper.newRequestButtontSelector)).toHaveFoundOne();
+    expect(newRequestButton).toBeTruthy();
   });
 
   it('#openMarkTickets should open tab for mark tickets', async () => {
@@ -470,11 +438,10 @@ describe('FilterComponent', () => {
     element.setAttribute('id', 'body');
     element.setAttribute('root-url', '/');
     document.body.appendChild(element);
-    const { instance } = await shallow.render();
     window.open = jest.fn();
 
     // Action
-    instance.openMarkTickets();
+    component.openMarkTickets();
 
     // Assert
     expect(window.open).toHaveBeenCalledTimes(1);
