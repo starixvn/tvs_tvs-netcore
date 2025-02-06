@@ -551,11 +551,12 @@ public class ObjectToXmlExtensionFacts
         const string expected = "<root><r Usernames='' "
                                 + "ProductIds='p1' "
                                 + "StatusIds='1' "
+                                + "ModifiedTicketJson='' "
                                 + "FromDate='10/30/2018 16:20:20' "
                                 + "ToDate='10/30/2018 16:20:20' /></root>";
 
         // Act
-        var actual = model.ToAbnormalAccountXml();
+        var actual = model.ToAbnormalAccountXml("");
 
         // Assert
         Assert.Equal(expected, actual);
@@ -576,11 +577,12 @@ public class ObjectToXmlExtensionFacts
         const string expected = "<root><r Usernames='' "
                                 + "ProductIds='p1' "
                                 + "StatusIds='1' "
+                                + "ModifiedTicketJson='' "
                                 + "FromDate='' "
                                 + "ToDate='' /></root>";
 
         // Act
-        var actual = model.ToAbnormalAccountXml();
+        var actual = model.ToAbnormalAccountXml("");
 
         // Assert
         Assert.Equal(expected, actual);

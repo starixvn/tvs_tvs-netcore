@@ -102,6 +102,7 @@
 
           <abnormal-accounts #abnormalAccount
             *ngIf="checkAllIssueTypes().isAbnormalAccount"
+            [issueTypes]="issueTypes"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [filter]="model.filter"

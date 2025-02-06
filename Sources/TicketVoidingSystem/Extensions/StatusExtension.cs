@@ -28,4 +28,9 @@ public static class StatusExtension
     {
         return string.IsNullOrEmpty(status) || RunningOrWaiting.Contains(status.ToLowerInvariant());
     }
+
+    public static bool IsWon(this string status)
+    {
+        return status.Equals(TicketStatus.Won, StringComparison.OrdinalIgnoreCase);
+    }
 }

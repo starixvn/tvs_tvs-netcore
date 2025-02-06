@@ -6,8 +6,10 @@ using Fanex.Data.Repository;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
@@ -26,6 +28,7 @@ public class UpdateRequestProcessStageTests
     private readonly LoggingService loggingService;
     private readonly AccountWinLostService accountWinLostService;
     private readonly GetUpdateResultService getUpdateResultService;
+    private readonly CompressDataService compressDataService;
     private readonly UpdateRequestProcessStageImp service;
 
     public UpdateRequestProcessStageTests()
@@ -37,8 +40,9 @@ public class UpdateRequestProcessStageTests
         loggingService = Substitute.For<LoggingService>();
         var insertAutoVoidRequestQueueService = Substitute.For<InsertAutoVoidRequestQueueService>();
         getUpdateResultService = Substitute.For<GetUpdateResultService>();
+        compressDataService = Substitute.For<CompressDataService>();
         service = new UpdateRequestProcessStageImp(mapper, repository, loggingService, accountWinLostService, sessionService,
-            insertAutoVoidRequestQueueService, getUpdateResultService);
+            insertAutoVoidRequestQueueService, getUpdateResultService, compressDataService);
     }
 
     [Fact]
@@ -85,7 +89,7 @@ public class UpdateRequestProcessStageTests
         var query = new EditRequestQuery
         {
             RequestId = 1,
-            ActionId = 1,
+            ActionId = ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId,
             MatchId = 1,
             AbnormalAccountInfo = new AbnormalAccountViewModel
             {

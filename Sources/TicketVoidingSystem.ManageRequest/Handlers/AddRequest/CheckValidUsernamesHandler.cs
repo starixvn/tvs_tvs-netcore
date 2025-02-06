@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
@@ -42,7 +43,7 @@ public class CheckValidUsernamesHandler(
         var calcVoidResult = new CalcVoidTicketsResult();
         if (request.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
         {
-            var accounts = MapAdjustVoidLimitFromUserInput(checkUsernamesResult.AccountWinlost, request.AccountWinlostModels);
+            var accounts = MapInformationFromUserInput(checkUsernamesResult.AccountWinlost, request.AccountWinlostModels);
             calcVoidResult = await calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(request.StatusIds, checkUsernamesResult.TicketCalculateWinLostAccount.ToList(), accounts);
         }
 
@@ -54,7 +55,7 @@ public class CheckValidUsernamesHandler(
                 RemoveTransIds = checkUsernamesResult.TransInfoValidation.RemoveTransIds,
                 UnMarkTransIds = checkUsernamesResult.TransInfoValidation.UnMarkTransIds,
                 MarkTransIds = checkUsernamesResult.TransInfoValidation.MarkTransIds,
-                TransInfoJson = GetOutputTransInfoAddRequest(request, checkUsernamesResult.TransInfoJsonCompress, calcVoidResult.VoidTickets)
+                TransInfoJson = GetOutputTransInfoAddRequest(request, checkUsernamesResult, calcVoidResult.VoidTickets)
             },
             AccountWinlostModels = calcVoidResult.Accounts
         };
@@ -63,34 +64,59 @@ public class CheckValidUsernamesHandler(
         return viewModel;
     }
 
-    private static IEnumerable<AccountWinlostModel> MapAdjustVoidLimitFromUserInput(IEnumerable<AccountWinlostModel> accounts, IEnumerable<AccountWinlostModel>? adjustLimits)
+    private static IEnumerable<AccountWinlostModel> MapInformationFromUserInput(IEnumerable<AccountWinlostModel> accounts, IEnumerable<AccountWinlostModel>? originalAccounts)
     {
-        var validAdjustLimits = adjustLimits?.Where(x => x.AdjustVoidLimit > 0);
         foreach (var account in accounts)
         {
-            var currentAdjustLimits = validAdjustLimits?.FirstOrDefault(x => x.Username.Equals(account.Username, StringComparison.InvariantCultureIgnoreCase));
-            if (currentAdjustLimits != null)
+            account.IsShowOnTable = true;
+            var currentAccount = originalAccounts?.FirstOrDefault(x => x.CustId == account.CustId);
+            if (currentAccount == null)
             {
-                account.AdjustVoidLimit = currentAdjustLimits.AdjustVoidLimit;
+                continue;
             }
+            account.AdjustVoidLimit = currentAccount.AdjustVoidLimit;
+            account.IsEditedTicket = currentAccount.IsEditedTicket;
         }
 
         return accounts;
     }
 
-    private string GetOutputTransInfoAddRequest(CheckValidUsernamesRequest query, string transInfoJsonCompress, IEnumerable<TicketCalculateWinLostAccount> voidTickets)
+    private string GetOutputTransInfoAddRequest(CheckValidUsernamesRequest query, CheckUsernamesInDatabaseResult checkUsernamesResult, IEnumerable<TicketCalculateWinLostAccount> voidTickets)
     {
         return query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
-            ? compressDataAddRequestService.CompressTicket(voidTickets) : transInfoJsonCompress;
+            ? GetOutputTransInfoAddRequestActionAutoVoidWithPolicy(checkUsernamesResult, voidTickets, query.StatusIds)
+            : checkUsernamesResult.TransInfoJsonCompress;
+    }
+
+    private string GetOutputTransInfoAddRequestActionAutoVoidWithPolicy(
+        CheckUsernamesInDatabaseResult checkUsernamesResult, IEnumerable<TicketCalculateWinLostAccount> voidTickets, string statusIds)
+    {
+        var ticketStatusIds = statusIds.Split(",").Select(int.Parse).ToList();
+        foreach (var ticket in checkUsernamesResult.TicketCalculateWinLostAccount.Where(x => x.StatusId == TicketStatus.WonId))
+        {
+            ticket.IsChecked = voidTickets.Any(y => y.TransId == ticket.TransId);
+        }
+
+        return compressDataAddRequestService.CompressTicket(
+            checkUsernamesResult.TicketCalculateWinLostAccount.Where(x => ticketStatusIds.Contains(x.StatusId)));
     }
 
     private static CheckUsernamesModel GetValidationAfterCalc(CheckValidUsernamesRequest query, CheckUsernamesModel validationResult, CalcVoidTicketsResult calcVoidResult)
     {
-        if (query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
-            && !calcVoidResult.VoidTickets.Any())
+        if (query.ActionId is not ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
+        {
+            return validationResult;
+        }
+
+        if (!calcVoidResult.VoidTickets.Any())
         {
             validationResult.IsInvalidTotalTicket = true;
+            return validationResult;
         }
+
+        validationResult.IsInvalidTotalTicket = query.AccountWinlostModels.Any()
+                                                && query.AccountWinlostModels.All(x => x.EstimateVoidAmount == 0)
+                                                && calcVoidResult.VoidTickets.All(x => string.Equals(x.Status, TicketStatus.Won, StringComparison.OrdinalIgnoreCase));
 
         return validationResult;
     }

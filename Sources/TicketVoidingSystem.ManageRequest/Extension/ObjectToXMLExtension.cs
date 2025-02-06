@@ -313,11 +313,12 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
-    public static string ToAbnormalAccountXml(this AbnormalAccountViewModel model)
+    public static string ToAbnormalAccountXml(this AbnormalAccountViewModel model, string adjustedTicketsJson)
     {
         var stringBuilder = $"<r Usernames='{model.Usernames}' "
                             + $"ProductIds='{model.ProductIds}' "
                             + $"StatusIds='{model.StatusIds}' "
+                            + $"ModifiedTicketJson='{adjustedTicketsJson}' "
                             + $"FromDate='{model.FromDate?.ToString(CultureInfo.InvariantCulture)}' "
                             + $"ToDate='{model.ToDate?.ToString(CultureInfo.InvariantCulture)}' />";
 

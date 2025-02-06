@@ -3,14 +3,15 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
-import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
 import { OthersModel } from '../others/others.model';
+import { AccountAffectedTicketModel } from './account-affected-ticket/account-affected-ticket.model';
 import { AccountTableComponent } from './account-table/account-table.component';
-import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request.model';
@@ -33,6 +34,7 @@ export class AbnormalAccountsComponent implements OnInit {
   @Input() requestedBy: string;
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() others = new OthersModel();
+  @Input() issueTypes = new IssueTypes();
   @Input() abnormalAccountModel = new AbnormalAccountModel();
   @ViewChild('usernames') usernamesComponent: UsernamesComponent;
   @ViewChild('products') productFilterComponent: ProductFilterComponent;
@@ -40,16 +42,17 @@ export class AbnormalAccountsComponent implements OnInit {
   @ViewChild('accountTable') accountTableComponent: AccountTableComponent;
 
   primitiveProps = new PrimitiveProperty();
-  confirmAbnormalAccount = new ConfirmAbnormalAccountModel();
+  confirmAddRequest = new ConfirmAddRequestModel();
+  accountAffectedTicketModel = new AccountAffectedTicketModel();
+
   constructor(
     private readonly validationService: ValidationService,
     private readonly addRequestStore: AddRequestStore,
     private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly commonService: CommonService
+    private readonly addRequestApiService: AddRequestApiService
   ) { }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnInit() {
     if (this.isEdit && this.validationService.isAutoVoidWithPolicy(this.filter.action)) {
       this.addRequestStore.changeBlockingUiStatus(true);
       this.primitiveProps.validAccountWinlostModels = await this.addRequestApiService.getAccountWinLost(this.requestId);
@@ -60,7 +63,7 @@ export class AbnormalAccountsComponent implements OnInit {
     this.primitiveProps.minDate = this.getMinDateByPermission(this.primitiveProps.permission.isVoidAllArchivedTickets);
   }
 
-  public async focusOutUsernames(): Promise<void> {
+  async focusOutUsernames() {
     if (this.primitiveProps.isCancelValidate) {
       this.primitiveProps.isCancelValidate = false;
       return;
@@ -68,11 +71,8 @@ export class AbnormalAccountsComponent implements OnInit {
     await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
   }
 
-  public triggerCloseEvent() {
-    this.addRequestStore.changeSavingRequestStatus(false);
-  }
-
-  public async saveRequest(): Promise<void> {
+  async saveRequest() {
+    this.primitiveProps.isCheckedShowAdjustAccount = false;
     if (this.accountTableComponent && !this.accountTableComponent.isValid()) {
       this.addRequestStore.changeSavingRequestStatus(false);
       return;
@@ -80,28 +80,74 @@ export class AbnormalAccountsComponent implements OnInit {
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
   }
 
-  public async onYesConfirmWarningModal(): Promise<void> {
-    await this.saveRequestService.onYesConfirmWarningModal(this.initSaveRequestInput());
+  async onClickConfirmSaveRequest() {
+    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
   }
 
-  public isShowUserInfo(): boolean {
-    return this.filter.action === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
-  }
-
-  public async handleSearchEvent(): Promise<void> {
+  async handleSearchEvent() {
     this.addRequestStore.changeBlockingUiStatus(true);
     if (this.accountTableComponent) {
       this.accountTableComponent.isCancelRecalculateAmount = true;
-
       if (!this.accountTableComponent.isValid()) {
         this.addRequestStore.changeBlockingUiStatus(false);
         return;
       }
     }
-
+    this.primitiveProps.isCheckedShowAdjustAccount = false;
     const validationOutput = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
     this.primitiveProps.validAccountWinlostModels = validationOutput.accountWinlostModels;
+    this.primitiveProps.transInfoAddRequestModel = validationOutput.transInfoAddRequestModel;
+    if (this.isShowUserInfo()) {
+      this.accountAffectedTicketModel.adjustedAccounts = [];
+      this.primitiveProps.validAccountWinlostModels?.forEach(x => x.isEditedTicket = false);
+    }
     this.addRequestStore.changeBlockingUiStatus(false);
+  }
+
+  changeShowAdjustAccount() {
+    this.primitiveProps.validAccountWinlostModels?.forEach(
+      x => x.isShowOnTable = (!this.primitiveProps.isCheckedShowAdjustAccount && !x.isCanEditTicket) || x.isCanEditTicket
+    );
+  }
+
+  onClickCancelSaveRequest() {
+    this.addRequestStore.changeSavingRequestStatus(false);
+  }
+
+  isShowUserInfo(): boolean {
+    return this.filter.action === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
+  }
+
+  openPopupAdjustTicket(custId: number) {
+    const transInfoJson = this.primitiveProps.validAccountWinlostModels.find(x => x.custId === custId)?.transInfoAccountJson;
+    this.accountAffectedTicketModel.accountWinlostModels = this.primitiveProps.validAccountWinlostModels;
+    this.accountAffectedTicketModel.selectedCustId = custId;
+    this.accountAffectedTicketModel.transInfoJson = transInfoJson ?? this.primitiveProps.transInfoAddRequestModel.transInfoJson;
+    this.accountAffectedTicketModel.isOpen = true;
+  }
+
+  reCalculateByAccount(custId: number) {
+    this.accountAffectedTicketModel.adjustedAccounts = this.accountAffectedTicketModel.adjustedAccounts?.filter(x => x.custId !== custId);
+    this.abnormalAccountModel.adjustedTickets = this.abnormalAccountModel.adjustedTickets?.filter(x => x.custId !== custId);
+    this.primitiveProps.isShowError = false;
+  }
+
+  changeFilter() {
+    this.primitiveProps.isShowAccountWinLost = false;
+    this.primitiveProps.isShowError = false;
+    this.primitiveProps.validAccountWinlostModels = [];
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
+  }
+
+  private getMinDateByPermission(isVoidAllArchivedTickets: boolean): NgbDateStruct {
+    if (isVoidAllArchivedTickets) {
+      return null;
+    }
+
+    const currentMoment = moment.utc().tz('America/Caracas');
+    const momentMinDate = currentMoment.subtract(7, "days");
+
+    return { year: momentMinDate.year(), month: momentMinDate.month() + 1, day: momentMinDate.date() };
   }
 
   private initSaveRequestInput() {
@@ -119,10 +165,10 @@ export class AbnormalAccountsComponent implements OnInit {
     arg.abnormalAccountModel.accountWinlostModels =
       this.validationService.isAutoVoidWithPolicy(this.filter.action) ? this.primitiveProps.validAccountWinlostModels : null;
     arg.usernamesComponent = this.usernamesComponent;
-    arg.confirmAbnormalAccount = this.confirmAbnormalAccount;
     arg.productFilterComponent = this.productFilterComponent;
     arg.eventDateFilterComponent = this.eventDateFilterComponent;
     arg.accountTableComponent = this.accountTableComponent;
+    arg.confirmAddRequest = this.confirmAddRequest;
 
     return arg;
   }
@@ -142,26 +188,5 @@ export class AbnormalAccountsComponent implements OnInit {
     arg.primitiveProps = this.primitiveProps;
 
     return arg;
-  }
-
-  public hideValidationMessage(): void {
-    this.primitiveProps.isShowError = false;
-  }
-
-  public changeFilter(): void {
-    this.primitiveProps.isShowAccountWinLost = false;
-    this.primitiveProps.isShowError = false;
-    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
-  }
-
-  private getMinDateByPermission(isVoidAllArchivedTickets: boolean): NgbDateStruct {
-    if (isVoidAllArchivedTickets) {
-      return null;
-    }
-
-    const currentMoment = moment.utc().tz('America/Caracas');
-    const momentMinDate = currentMoment.subtract(7, "days");
-
-    return { year: momentMinDate.year(), month: momentMinDate.month() + 1, day: momentMinDate.date()};
   }
 }

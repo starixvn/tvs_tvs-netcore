@@ -119,7 +119,7 @@ table {
     .adjust-gv {
 
       .adjust-string {
-        height: 100%;
+        height: 90%;
         display: flex;
         justify-content: flex-end;
         align-items: center;
@@ -158,4 +158,38 @@ table {
       }
     }
   }
+}
+
+.btn-edit-ticket {
+  color: #f1c40f;
+  margin-right: 2px;
+  cursor: pointer;
+}
+
+.title-void-amount {
+  display: flex;
+  justify-content: space-between;
+
+  i {
+    color: #27ae60;
+  }
+}
+
+.editted-account {
+  color: #000;
+  opacity: 0.4;
+  font-weight: normal;
+  font-style: italic;
+  font-size: 11px;
+}
+
+.username-link {
+  font-weight: bold;
+  color: #4e71bb;
+  cursor: pointer;
+}
+
+.username-link:hover {
+  color: #0080ff;
+  text-decoration: underline;
 }

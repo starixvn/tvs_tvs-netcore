@@ -64,6 +64,7 @@ public class AccountWinLostServiceImp(IDynamicRepository repository) : AccountWi
         {
             var compareCredit = account.AdjustVoidLimit is > 0 ? (decimal)account.AdjustVoidLimit : account.GivenCredit;
             account.IsHighlight = account.CurrentLosing > compareCredit;
+            account.IsShowOnTable = true;
         }
 
         return accounts;

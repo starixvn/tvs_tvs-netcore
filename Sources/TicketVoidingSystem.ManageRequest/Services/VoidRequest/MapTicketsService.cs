@@ -55,6 +55,8 @@ public class MapTicketsServiceImp(BetListCoreService betListCoreService) : MapTi
         ticket.IsBonus = item.WalletType > 0;
         ticket.IsCancelCashOut = item.IsCancelCashOut;
         ticket.GroupName = item.GroupName;
+        ticket.IsChecked = item.IsChecked;
+
         return ticket;
     }
 }

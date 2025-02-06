@@ -21,12 +21,13 @@ import { UtilityModule } from '../../../utility/utility.module';
 import { ToolTipModule } from './../../../utility/components/tooltip/tooltip.module';
 import { AbnormalAccountOtherComponent } from './abnormal-accounts/abnormal-accounts-other/abnormal-accounts-other.component';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
+import { AccountAffectedTicketComponent } from './abnormal-accounts/account-affected-ticket/account-affected-ticket.component';
 import { AccountTableComponent } from './abnormal-accounts/account-table/account-table.component';
-import { ConfirmAbnormalAccountComponent } from './abnormal-accounts/confirm-abnormal-account/confirm-abnormal-account.component';
 import { EventDateFilterComponent } from './abnormal-accounts/event-date-filter/event-date-filter.component';
 import { ProductFilterComponent } from './abnormal-accounts/product-filter/product-filter.component';
 import { AddRequestComponent } from './add-request.component';
 import { AffectedTicketComponent } from './affected-ticket/affected-ticket.component';
+import { TicketTableComponent } from './components/ticket-table/ticket-table.component';
 import { TvDetectionComponent } from './components/tv-detection/tv-detection.component';
 import { ConfirmAddRequestComponent } from './confirm-add-request/confirm-add-request.component';
 import { ConfirmAbnormalBetComponent } from './event-abnormal-bet/confirm-abnormal-bet/confirm-abnormal-bet.component';
@@ -130,7 +131,6 @@ import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket
         EventWrongOuComponent,
         FilterWrongOuComponent,
         LogInfoWrongOuComponent,
-        ConfirmAbnormalAccountComponent,
         EventWrongOddsComponent,
         FilterWrongOddsComponent,
         LogInfoWrongOddsComponent,
@@ -170,6 +170,8 @@ import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket
         FilterTimeItemComponent,
         FilterOtherIssuesComponent,
         LogInfoOtherIssuesComponent,
+        AccountAffectedTicketComponent,
+        TicketTableComponent,
     ],
     exports: [
         AddRequestComponent

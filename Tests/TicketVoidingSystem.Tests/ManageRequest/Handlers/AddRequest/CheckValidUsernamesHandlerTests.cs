@@ -49,7 +49,7 @@ public class CheckValidUsernamesHandlerTests
         var checkUsernameService = Substitute.For<CheckUsernameService>();
         var calculateVoidTicketsService = Substitute.For<CalculateVoidTicketsService>();
         var compressDataAddRequestService = Substitute.For<CompressDataService>();
-        compressDataAddRequestService.CompressTicket(null).ReturnsForAnyArgs("AAA");
+        compressDataAddRequestService.CompressTicket<GetTicketModel>(null).ReturnsForAnyArgs("AAA");
         calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(null, null, null)
             .ReturnsForAnyArgs(calcVoidTicketsResult);
         checkUsernameService.ExecuteValidationInDb(null).ReturnsForAnyArgs(checkResult);
@@ -68,6 +68,7 @@ public class CheckValidUsernamesHandlerTests
         // Arrange
         var request = new CheckValidUsernamesRequest
         {
+            StatusIds = "1,2",
             ActionId = ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId,
             AccountWinlostModels = new List<AccountWinlostModel> { new() { Username = "123AA" } }
         };
@@ -102,7 +103,7 @@ public class CheckValidUsernamesHandlerTests
         var checkUsernameService = Substitute.For<CheckUsernameService>();
         var calculateVoidTicketsService = Substitute.For<CalculateVoidTicketsService>();
         var compressDataAddRequestService = Substitute.For<CompressDataService>();
-        compressDataAddRequestService.CompressTicket(null).ReturnsForAnyArgs("AAA");
+        compressDataAddRequestService.CompressTicket<GetTicketModel>(null).ReturnsForAnyArgs("AAA");
         calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(null, null, null)
             .ReturnsForAnyArgs(calcVoidTicketsResult);
         checkUsernameService.ExecuteValidationInDb(null).ReturnsForAnyArgs(checkResult);
@@ -114,7 +115,8 @@ public class CheckValidUsernamesHandlerTests
         // Assert
         AssertExtension.Equal(viewModel, actual);
         compressDataAddRequestService.Received(1).CompressTicket(Arg.Any<IEnumerable<TicketCalculateWinLostAccount>>());
-        await calculateVoidTicketsService.Received(1).ExecuteForAbnormalAccountWithPolicy(Arg.Any<string>(), Arg.Any<IList<TicketCalculateWinLostAccount>>(), Arg.Any<IEnumerable<AccountWinlostModel>>());
+        await calculateVoidTicketsService.Received(1)
+            .ExecuteForAbnormalAccountWithPolicy(Arg.Any<string>(), Arg.Any<IList<TicketCalculateWinLostAccount>>(), Arg.Any<IEnumerable<AccountWinlostModel>>());
         AssertExtension.Equal(viewModel, actual);
     }
 }

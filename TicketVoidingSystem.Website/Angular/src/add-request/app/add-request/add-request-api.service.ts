@@ -9,6 +9,7 @@ import { AddRequestResultModel } from '../add-request/models/request.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../add-request/models/sub-type-link-match.model';
 import { AccountWinlostModel } from './abnormal-accounts/models/account-winlost.model';
 import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from './abnormal-accounts/models/check-username.model';
+import { TicketTableViewModel } from './components/ticket-table/ticket-table.model';
 import { CheckTransIdsQuery, CheckTransIdsViewModel } from './event-abnormal-bet/event-abnormal-bet.model';
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel } from './event-duplicate-tickets/models/check-duplicate-tickets.model';
 import { NotParticipateBetTypeViewModel } from './event-not-participate/models/not-participate-bet-type.model';
@@ -132,12 +133,12 @@ export class AddRequestApiService {
     return this.httpService.postJson<{ matchId: number }, NotParticipateBetTypeViewModel>({ matchId: matchId }, 'api/AddRequest/GetNotParticipateBetTypes');
   }
 
-   /* istanbul ignore next */
-   async checkRecoverTicket(query: CheckRecoverTicketQuery): Promise<CheckRecoverTicketResult> {
+  /* istanbul ignore next */
+  async checkRecoverTicket(query: CheckRecoverTicketQuery): Promise<CheckRecoverTicketResult> {
     return this.httpService.postJson<CheckRecoverTicketQuery, CheckRecoverTicketResult>(query, 'api/AddRequest/CheckRecoverTicket');
   }
 
- /* istanbul ignore next */
+  /* istanbul ignore next */
   async getPermissionAddRequest(): Promise<PermissionAddRequest> {
     return this.httpService.getJson<PermissionAddRequest>('api/AddRequest/GetPermission');
   }
@@ -155,5 +156,10 @@ export class AddRequestApiService {
   /* istanbul ignore next */
   async GetDecidedBy(): Promise<string[]> {
     return this.httpService.getJson('api/AddRequest/GetDecidedBy');
+  }
+
+  /* istanbul ignore next */
+  async GetTicketsAbnormalAccount(custId: number, transInfoJson: string): Promise<TicketTableViewModel> {
+    return this.httpService.postJson({ custId, transInfoJson }, 'api/AddRequest/GetTicketsAbnormalAccount');
   }
 }

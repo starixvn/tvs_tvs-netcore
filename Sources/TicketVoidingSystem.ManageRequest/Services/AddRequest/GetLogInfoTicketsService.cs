@@ -17,7 +17,7 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
 {
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request)
     {
-        var getTicketModels = compressDataService.DecompressTickets(request.LogInfoTicketsJson);
+        var getTicketModels = compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson);
         var voidTickets = getTicketModels?.Where(x => !x.IsCancelCashOut);
 
         if (!voidTickets.Any())

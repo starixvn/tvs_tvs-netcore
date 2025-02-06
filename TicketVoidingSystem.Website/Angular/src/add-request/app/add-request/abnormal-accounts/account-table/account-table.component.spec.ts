@@ -12,6 +12,7 @@ import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { AccountWinlostModel } from '../models/account-winlost.model';
 import { CheckUsernamesViewModel, ValidationAbnormalAccount } from '../models/check-username.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
 import { ValidationService } from '../services/validation.service';
 import { AccountTableComponent } from './account-table.component';
 
@@ -101,9 +102,10 @@ describe('AccountTableComponent', () => {
       .mock(ValidationService, { getValidation: jest.fn().mockReturnValue(Helper.fakeCheckUsernamesViewModel) })
       .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
       .render();
+    instance.primitiveProps = new PrimitiveProperty();
     instance.isCancelRecalculateAmount = false;
     instance.isCorrectFormatVoidLimit = jest.fn().mockReturnValue(true);
-    instance.changeTable.emit = jest.fn();
+    instance.reCalculateByAccountEvent.emit = jest.fn();
     instance['createValidationBusinessRuleArgs'] = jest.fn();
 
     await instance.reCalculate(model, 1);
