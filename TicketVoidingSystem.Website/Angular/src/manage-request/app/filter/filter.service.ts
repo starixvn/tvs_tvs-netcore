@@ -1,11 +1,7 @@
 import { ManageProductConstant } from './manage-product.constant';
-import { Injectable } from '@angular/core';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class FilterService {
     static initDefaultProperties(): MultipleSelection {
         const multipleSelection = new MultipleSelection();
