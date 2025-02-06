@@ -126,7 +126,9 @@ export class AbnormalAccountsComponent implements OnInit {
     this.accountAffectedTicketModel.isOpen = true;
   }
 
-  hideValidationMessage() {
+  reCalculateByAccount(custId: number) {
+    this.accountAffectedTicketModel.adjustedAccounts = this.accountAffectedTicketModel.adjustedAccounts?.filter(x => x.custId !== custId);
+    this.abnormalAccountModel.adjustedTickets = this.abnormalAccountModel.adjustedTickets?.filter(x => x.custId !== custId);
     this.primitiveProps.isShowError = false;
   }
 

@@ -240,7 +240,7 @@ describe('AbnormalAccountsComponent', () => {
     expect(instance.primitiveProps.isShowError).toBeFalsy();
   });
 
-  it('#hideValidationMessage should update isShowError to false', async () => {
+  it('#reCalculateByAccount should update isShowError to false', async () => {
     const { instance } = await shallow
       .render({
         bind: {
@@ -249,8 +249,9 @@ describe('AbnormalAccountsComponent', () => {
           isEdit: true,
         }
       });
+    instance.abnormalAccountModel.adjustedTickets = [];
     instance.primitiveProps = new PrimitiveProperty();
-    instance.hideValidationMessage();
+    instance.reCalculateByAccount(1);
 
     expect(instance.primitiveProps.isShowError).toBeFalsy();
   });

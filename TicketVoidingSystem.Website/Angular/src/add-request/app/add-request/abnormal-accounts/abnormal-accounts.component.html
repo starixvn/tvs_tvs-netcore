@@ -38,7 +38,7 @@
     <account-table #accountTable
       [filter]="filter"
       [requestId]="requestId"
-      (changeTable)="hideValidationMessage()"
+      (reCalculateByAccountEvent)="reCalculateByAccount($event)"
       (openPopupAdjustTicketEvent)="openPopupAdjustTicket($event)"
       [abnormalAccountModel]="abnormalAccountModel"
       [primitiveProps]="primitiveProps"

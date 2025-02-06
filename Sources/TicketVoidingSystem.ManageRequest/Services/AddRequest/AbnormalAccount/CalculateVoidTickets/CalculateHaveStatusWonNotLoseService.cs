@@ -63,6 +63,11 @@ public class CalculateHaveStatusWonNotLoseServiceImp(
 
     public static void UpdateAccountWinlostByGroupMatchId(AccountWinlostModel account, OrderedTickets wonTickets, IEnumerable<TicketCalculateWinLostAccount> voidWonTickets)
     {
+        if (wonTickets.Descending == null)
+        {
+            return;
+        }
+
         foreach (var ticket in wonTickets.Descending)
         {
             ticket.IsChecked = voidWonTickets.Any(y => y.TransId == ticket.TransId);

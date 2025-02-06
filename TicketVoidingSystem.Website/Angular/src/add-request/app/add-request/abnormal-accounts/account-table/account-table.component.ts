@@ -26,7 +26,7 @@ export class AccountTableComponent {
   @Input() accountWinlostModels: AccountWinlostModel[];
   @Input() permission: PermissionAddRequest;
   @Input() primitiveProps: PrimitiveProperty;
-  @Output() changeTable = new EventEmitter();
+  @Output() reCalculateByAccountEvent = new EventEmitter<number>();
   @Output() openPopupAdjustTicketEvent = new EventEmitter<number>();
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;
   tooltip = new Tooltip();
@@ -69,8 +69,10 @@ export class AccountTableComponent {
       account.winLostAfterVoid = updatedAccountAmount.winLostAfterVoid;
       account.isCanEditTicket = updatedAccountAmount.isCanEditTicket;
       account.transInfoAccountJson = viewModel.transInfoAddRequestModel.transInfoJson;
+      account.adjustVoidLimit = updatedAccountAmount.adjustVoidLimit;
+      account.isEditedTicket = false;
     }
-    this.changeTable.emit();
+    this.reCalculateByAccountEvent.emit(account.custId);
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 

@@ -69,7 +69,7 @@ public class CheckValidUsernamesHandler(
         foreach (var account in accounts)
         {
             account.IsShowOnTable = true;
-            var currentAccount = originalAccounts.FirstOrDefault(x => x.CustId == account.CustId);
+            var currentAccount = originalAccounts?.FirstOrDefault(x => x.CustId == account.CustId);
             if (currentAccount == null)
             {
                 continue;

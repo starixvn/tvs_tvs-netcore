@@ -105,7 +105,7 @@ describe('AccountTableComponent', () => {
     instance.primitiveProps = new PrimitiveProperty();
     instance.isCancelRecalculateAmount = false;
     instance.isCorrectFormatVoidLimit = jest.fn().mockReturnValue(true);
-    instance.changeTable.emit = jest.fn();
+    instance.reCalculateByAccountEvent.emit = jest.fn();
     instance['createValidationBusinessRuleArgs'] = jest.fn();
 
     await instance.reCalculate(model, 1);
