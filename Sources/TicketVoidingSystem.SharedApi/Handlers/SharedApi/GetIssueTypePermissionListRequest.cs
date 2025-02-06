@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using MediatR;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
@@ -18,17 +20,10 @@ public class GetIssueTypePermissionListHandler(SessionService sessionService)
 {
     public async Task<IEnumerable<IssueType>> Handle(GetIssueTypePermissionListRequest request, CancellationToken cancellationToken)
     {
-        var issueTypePermissionList = new List<IssueType>();
+        var issueTypeHasPermission = await sessionService.GetPermissionsAsync(SpecialDeleteFunctionKeys.TicketVoidingManageByIssue, Constant.Policy.Read);
 
-        foreach (var item in IssueTypeFunctionKeysConstant.IssueTypeFunctionKeyList)
-        {
-            if (await sessionService.HasPermission(item.FunctionKey, Constant.Policy.Read))
-            {
-                issueTypePermissionList.Add(item.IssueType);
-            }
-        }
-        var sortedFunctionKeys = issueTypePermissionList.OrderBy(x => x.IssueTypeName).ToList();
-
-        return sortedFunctionKeys;
+        return IssueTypeFunctionKeysConstant.IssueTypeFunctionKeyList
+            .Where(x => issueTypeHasPermission.Any(y => string.Equals(y.Key, x.FunctionKey, StringComparison.OrdinalIgnoreCase)))
+            .Select(x => x.IssueType);
     }
 }
