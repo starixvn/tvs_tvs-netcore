@@ -64,7 +64,7 @@ public class GetTicketModel
 
     public decimal OddsSpread { get; set; }
 
-    public decimal WinLost { get; set; }
+    public string WinLost { get; set; }
 
     public bool IsMixParlay { get; set; }
 

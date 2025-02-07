@@ -1,4 +1,6 @@
-﻿namespace TicketVoidingSystem.ManageRequest.Models;
+﻿using System.Globalization;
+
+namespace TicketVoidingSystem.ManageRequest.Models;
 
 public class TicketCalculateWinLostAccount : GetTicketModel
 {
@@ -7,6 +9,12 @@ public class TicketCalculateWinLostAccount : GetTicketModel
     public bool IsVoid14 { get; set; }
 
     public int CustId { get; set; }
+
+    public new decimal WinLost
+    {
+        get => decimal.TryParse(base.WinLost, out var result) ? result : 0;
+        set => base.WinLost = value.ToString(CultureInfo.InvariantCulture);
+    }
 }
 
 public class TicketAddRequestJson
