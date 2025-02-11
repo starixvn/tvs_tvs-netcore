@@ -7,7 +7,7 @@ import { AddRequestApiService } from '../../add-request-api.service';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { AddRelatedEventArg } from '../models/add-related-event-arg.model';
-import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
+import { FilterWithHdpModel, FilterBetType } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { ValidationService } from './validation.service';
 
@@ -36,7 +36,7 @@ export class RelatedEventService {
           filterWithHdp.filterFromTransTime = defaultFilter.filterFromTransTime;
           filterWithHdp.filterToTransTime = defaultFilter.filterToTransTime;
         }
-
+        filterWithHdp.filterBetType = new FilterBetType(defaultFilter.filterBetType.filterBetIdX, defaultFilter.filterBetType.filterBetIdY, defaultFilter.filterBetType.filterBetTypeId);
         return {
           matchId: x.matchId,
           matchCode: x.matchCode,

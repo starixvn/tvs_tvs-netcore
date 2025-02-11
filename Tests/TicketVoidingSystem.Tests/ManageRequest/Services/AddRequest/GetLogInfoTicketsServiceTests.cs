@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Fanex.BetList.Core.Entities;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
+using TicketVoidingSystem.Services.BetList;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest;
@@ -14,6 +16,7 @@ public class GetLogInfoTicketServiceTests
 {
     public MapTicketsService mapTicketsService = Substitute.For<MapTicketsService>();
     public CompressDataService compressDataService = Substitute.For<CompressDataService>();
+    public BetListService betListService = Substitute.For<BetListService>();
     public GetLogInfoTicketsService service;
 
     [Fact]
@@ -29,7 +32,7 @@ public class GetLogInfoTicketServiceTests
         };
         compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson).ReturnsForAnyArgs(getTicketModels);
 
-        service = new GetLogInfoTicketsServiceImp(null, compressDataService);
+        service = new GetLogInfoTicketsServiceImp(null, compressDataService, null);
 
         // Act
         var result = service.GetTicketsViewModel(request);
@@ -61,8 +64,9 @@ public class GetLogInfoTicketServiceTests
         compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson).ReturnsForAnyArgs(getTicketModels);
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketParlay);
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => !x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketSingle);
+        betListService.GetBetTypeName(Arg.Any<Ticket>()).Returns("Handicap");
 
-        service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService);
+        service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService, betListService);
 
         // Act
         var result = service.GetTicketsViewModel(request);
@@ -95,8 +99,9 @@ public class GetLogInfoTicketServiceTests
         compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson).ReturnsForAnyArgs(getTicketModels);
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketParlay);
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => !x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketSingle);
+        betListService.GetBetTypeName(Arg.Any<Ticket>()).Returns("Handicap");
 
-        service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService);
+        service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService, betListService);
 
         // Act
         var result = service.GetTicketsViewModel(request);
@@ -127,7 +132,7 @@ public class GetLogInfoTicketServiceTests
         compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson).ReturnsForAnyArgs(getTicketModels);
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => !x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketSingle);
 
-        service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService);
+        service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService, null);
 
         // Act
         var result = service.GetTicketsViewModel(request);

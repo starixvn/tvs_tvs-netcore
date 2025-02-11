@@ -66,4 +66,47 @@ public class RequestExtraInfoXmlServiceTests
         // Assert
         Assert.Empty(actual);
     }
+
+    [Fact]
+    public void UpdateRequestInfoForCopy_IssueTypesHaveExtraInfoJsonFormat_NoNeedUpdate()
+    {
+        // Arrange
+        var requestInfoForCopy = new RequestInfoForCopy
+        {
+            OddsValue = "2"
+        };
+        var service = new RequestExtraInfoXmlServiceImp();
+
+        // Act
+        service.UpdateRequestInfoForCopy(IssueTypeConstant.WrongMarketOffered, requestInfoForCopy);
+
+        // Assert
+        Assert.Equal("2", requestInfoForCopy.OddsValue);
+    }
+
+    [Fact]
+    public void UpdateRequestInfoForCopy_IssueTypesNoHaveExtraInfoJsonFormat_UpdateModel()
+    {
+        // Arrange
+        var requestInfoForCopy = new RequestInfoForCopy
+        {
+            OddsValue = "2",
+            RequestExtraInfo = "<r HdpValue=\"2.5\" IsMainMatch=\"true\" LiveIndicator=\"0\" IsLinkGroup1X2=\"0\" IsLinkGroupAIO=\"0\" " +
+                               "PoolHouseCheckedBetTypes=\"-1\" FilterBetTypeId=\"1\" FilterBetIdX=\"\" FilterBetIdY=\"\" IsCheckedVar=\"1\" OddsValue=\"1\"/>"
+        };
+        var expected = new RequestInfoForCopy
+        {
+            IsCheckedVar = true,
+            OddsValue = "1",
+            RequestExtraInfo = "<r HdpValue=\"2.5\" IsMainMatch=\"true\" LiveIndicator=\"0\" IsLinkGroup1X2=\"0\" IsLinkGroupAIO=\"0\" " +
+                               "PoolHouseCheckedBetTypes=\"-1\" FilterBetTypeId=\"1\" FilterBetIdX=\"\" FilterBetIdY=\"\" IsCheckedVar=\"1\" OddsValue=\"1\"/>"
+        };
+        var service = new RequestExtraInfoXmlServiceImp();
+
+        // Act
+        service.UpdateRequestInfoForCopy(IssueTypeConstant.DangerAccepted, requestInfoForCopy);
+
+        // Assert
+        AssertExtension.Equal(expected, requestInfoForCopy);
+    }
 }

@@ -207,7 +207,10 @@ public class GetRequestServiceImp(
             ActualMarket = model.ActualMarket,
             HdpValue = model.HdpValue,
             LiveIndicator = model.LiveIndicator,
-            SportType = model.SportType
+            SportType = model.SportType,
+            FilterBetIdX = model.FilterBetIdX,
+            FilterBetIdY = model.FilterBetIdY,
+            FilterBetTypeId = model.FilterBetTypeId
         });
     }
 
@@ -232,7 +235,13 @@ public class GetRequestServiceImp(
             ActualMarket = model.ActualMarket,
             WrongMarket = model.WrongMarket,
             LiveIndicator = model.LiveIndicator,
-            SportType = model.SportType
+            SportType = model.SportType,
+            FilterBetIdX = model.FilterBetIdX,
+            FilterBetIdY = model.FilterBetIdY,
+            FilterBetTypeId = model.FilterBetTypeId
+            //FilterBetIdX = "802",
+            //FilterBetIdY = "03",
+            //FilterBetTypeId = "9070"
         });
     }
 

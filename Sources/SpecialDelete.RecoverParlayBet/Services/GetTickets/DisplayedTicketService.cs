@@ -19,10 +19,15 @@ public class DisplayedTicketServiceImp<T>(BetListParlayService<T> betListParlayS
         ticket.BetId = item.TransId.ToString();
         ticket.Player = item.Username;
         ticket.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
-        ticket.WinLost = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.WinLost).ToString("#,##0.##");
+        ticket.WinLost = GetWinLost(item);
         ticket.Status = item.Status;
         ticket.SiteDbGroupId = item.SiteDbGroupId;
 
         return ticket;
+    }
+
+    private static string GetWinLost(T item)
+    {
+        return item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.WinLost).ToString("#,##0.##");
     }
 }

@@ -6,10 +6,11 @@ import { FilterModel } from "../../filter/filter.model";
 import { WrongHdpModel } from "../../models/event-wrong-hdp.model";
 import { GetLinkedLogQuery, LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
-import { FilterWithHdpModel } from "../models/filter-with-hdp.model";
+import { FilterWithHdpModel, FilterBetType } from '../models/filter-with-hdp.model';
 import { WrongHdpGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongHdp } from "../models/log-info-wrong-hdp.model";
 import { ValidationService } from "./validation.service";
+import { SportType } from '../../../../../utility/constants/sport.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,11 @@ export class EventWrongHdpService {
   ) { }
 
   public async getLinkedLog(logInfoWrongHdp: LogInfoWrongHdp, filter: FilterModel): Promise<LinkedLogsViewModel> {
+    if(logInfoWrongHdp.sportType !== SportType.SOCCER)
+    {
+      return new LinkedLogsViewModel();
+    }
+
     const query = {
       matchId: logInfoWrongHdp.matchId,
       issueTypeId: Number(filter.issueTypeId),
@@ -60,7 +66,8 @@ export class EventWrongHdpService {
         awayFavorite: x.awayFavorite,
         actualMarket: x.actualMarket,
         hdpValue: x.hdpValue,
-        liveIndicator: x.liveIndicator
+        liveIndicator: x.liveIndicator,
+        filterBetType: new FilterBetType(x.filterBetIdX, x.filterBetIdY, x.filterBetTypeId)
       } as FilterWithHdpModel;
       event.eventDate = x.eventDate;
       event.sportType = x.sportType;
@@ -78,6 +85,7 @@ export class EventWrongHdpService {
     mainEvent.filterWithHdp.awayFavorite = '';
     mainEvent.filterWithHdp.homeFavorite = '';
     mainEvent.filterWithHdp.hdpValue = '';
+    mainEvent.filterWithHdp.filterBetType = new FilterBetType();
   }
 
   public initDefaultMainEvent(allSelectedEvents: LogInfoWrongHdp[]): LogInfoWrongHdp {
@@ -100,6 +108,9 @@ export class EventWrongHdpService {
       logInfoQuery.filterFromTransTime = x.filterWithHdp.filterFromTransTime;
       logInfoQuery.filterToTransTime = x.filterWithHdp.filterToTransTime;
       logInfoQuery.liveIndicator = x.filterWithHdp.liveIndicator;
+      logInfoQuery.filterBetTypeId = x.filterWithHdp.filterBetType.filterBetTypeId;
+      logInfoQuery.filterBetIdX = x.filterWithHdp.filterBetType.filterBetIdX;
+      logInfoQuery.filterBetIdY = x.filterWithHdp.filterBetType.filterBetIdY;
       if (x.isMainMatch) {
         logInfoQuery.isLinkGroup1X2 = x.linkedLogsViewModel.isLinkGroup1X2;
         logInfoQuery.isLinkGroupAIO = x.linkedLogsViewModel.isLinkGroupAIO;

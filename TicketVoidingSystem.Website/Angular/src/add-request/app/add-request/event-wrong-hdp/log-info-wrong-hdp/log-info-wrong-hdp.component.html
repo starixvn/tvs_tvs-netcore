@@ -26,7 +26,8 @@
           (searchTicketEvent)="emitSearchEvent()"
           (refreshEvent)="refreshLogInfoBySearchEvent()"
           (changeFilterEvent)="clearDataValidation();"
-          [subIssueTypeId]="filter.subIssueTypeId"
+          [filter]="filter"
+          [sportTypeId]="logInfo.sportType"
           [isMainMatch]="isMainMatch"
           [filterWithHdpModel]="logInfo.filterWithHdp">
         </filter-with-hdp>

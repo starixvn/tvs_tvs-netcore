@@ -9,6 +9,7 @@ import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { RelatedEventService } from './related-event.service';
 import { ValidationService } from './validation.service';
+import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -60,13 +61,14 @@ class Helper {
       sportTypeNameTraditional: ''
     }
   ];
-  static readonly fakeFilterWithOuModel: FilterWrongOuModel = {
+  static readonly fakeFilterWithOuModel = {
     filterFromTransTime: Helper.fakeFromDateTime,
     filterToTransTime: Helper.fakeToDateTime,
     actualMarket: '1',
     wrongMarket: '',
-    liveIndicator: 1
-  };
+    liveIndicator: 1,
+    filterBetType: {filterBetIdX:'1', filterBetIdY:'', filterBetTypeId:"1"}
+  } as FilterWrongOuModel;
   static readonly fakeLogInfoWrongOu: LogInfoWrongOu = {
     matchId: 12345,
     leagueName: '',
@@ -103,8 +105,9 @@ describe('RelatedEventService', () => {
 
   it('#updateEvents should update data when defaultFilter empty', async () => {
     const childMatchModel = _.cloneDeep(Helper.fakeChildMatches);
-
-    const actual = service.updateEvents(childMatchModel, new FilterWrongOuModel());
+    const filterWithHdpModel = new FilterWrongOuModel();
+    filterWithHdpModel.filterBetType = new FilterBetType('','','1');
+    const actual = service.updateEvents(childMatchModel, filterWithHdpModel);
 
     expect(actual.length).toBe(Helper.fakeChildMatches.length);
   });

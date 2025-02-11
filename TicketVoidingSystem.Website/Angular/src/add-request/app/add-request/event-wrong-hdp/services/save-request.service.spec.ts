@@ -26,7 +26,7 @@ class Helper {
     leagueName: '',
     isMainMatch: true,
     eventName: '',
-    filterWithHdp: new FilterWithHdpModel(),
+    filterWithHdp: {filterBetType: {filterBetIdX:'', filterBetIdY:'', filterBetTypeId: '1'}} as FilterWithHdpModel,
     logInfoDetail: new LogInfoDetail(),
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
@@ -35,7 +35,7 @@ class Helper {
     isShowValidation: false,
     sportType: 0
   };
-  static readonly fakeWrongHdpModel: WrongHdpModel = {
+  static readonly fakeWrongHdpModel = {
     matchId: 122,
     subIssueTypeId: 12,
     isMainMatch: true,
@@ -52,7 +52,7 @@ class Helper {
     liveIndicator: 0,
     poolHouseCheckedBetTypes: '',
     sportType: 0
-  };
+  } as WrongHdpModel;
 
   static readonly fakeSaveRequestArg: SaveRequestArg = {
     requestId: 1,

@@ -76,17 +76,20 @@ public static class LogInfoExtension
         foreach (var model in models)
         {
             var line = $"<r MatchId='{model.MatchId}' "
-                + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"IsMainMatch='{model.IsMainMatch}' "
-                + $"PoolHouseCheckedBetTypes='{model.PoolHouseCheckedBetTypes}' "
-                + $"SubIssueTypeId='{model.SubIssueTypeId}' "
-                + $"IsLinkGroup1X2='{model.IsLinkGroup1X2}' "
-                + $"IsLinkGroupAIO ='{model.IsLinkGroupAIO}' "
-                + $"LiveIndicator='{model.LiveIndicator}' "
-                + $"HomeFavorite='{SecurityElement.Escape(model.HomeFavorite)}' "
-                + $"AwayFavorite='{SecurityElement.Escape(model.AwayFavorite)}' "
-                + $"HdpValue='{SecurityElement.Escape(model.HdpValue)}' />";
+                       + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"IsMainMatch='{model.IsMainMatch}' "
+                       + $"PoolHouseCheckedBetTypes='{model.PoolHouseCheckedBetTypes}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"IsLinkGroup1X2='{model.IsLinkGroup1X2}' "
+                       + $"IsLinkGroupAIO ='{model.IsLinkGroupAIO}' "
+                       + $"LiveIndicator='{model.LiveIndicator}' "
+                       + $"HomeFavorite='{SecurityElement.Escape(model.HomeFavorite)}' "
+                       + $"AwayFavorite='{SecurityElement.Escape(model.AwayFavorite)}' "
+                       + $"HdpValue='{SecurityElement.Escape(model.HdpValue)}' "
+                       + $"FilterBetIdX='{SecurityElement.Escape(model.FilterBetIdX)}' "
+                       + $"FilterBetIdY='{SecurityElement.Escape(model.FilterBetIdY)}' "
+                       + $"FilterBetTypeId='{model.FilterBetTypeId}' />";
 
             stringBuilder.AppendLine(line);
         }
@@ -113,7 +116,10 @@ public static class LogInfoExtension
                        + $"PoolHouseCheckedBetTypes='{model.PoolHouseCheckedBetTypes}' "
                        + $"IsLinkGroup1X2='{model.IsLinkGroup1X2}' "
                        + $"IsLinkGroupAIO ='{model.IsLinkGroupAIO}' "
-                       + $"WrongMarket='{SecurityElement.Escape(model.WrongMarket)}' />";
+                       + $"WrongMarket='{SecurityElement.Escape(model.WrongMarket)}' "
+                       + $"FilterBetIdX='{SecurityElement.Escape(model.FilterBetIdX)}' "
+                       + $"FilterBetIdY='{SecurityElement.Escape(model.FilterBetIdY)}' "
+                       + $"FilterBetTypeId='{SecurityElement.Escape(model.FilterBetTypeId)}' />";
 
             stringBuilder.AppendLine(line);
         }

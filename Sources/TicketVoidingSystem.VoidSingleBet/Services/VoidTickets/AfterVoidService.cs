@@ -19,7 +19,7 @@ public interface AfterVoidService
 {
     Task<IEnumerable<Result>> ExecuteWhenVoidSuccess(VoidTicketsQuery query, VoidTicketsModel voidResult, string warningCricket);
 
-    IEnumerable<Result> ExecuteWhenVoidFailed(VoidTicketsModel voidResult);
+    IEnumerable<Result> ExecuteWhenVoidFailed(VoidTicketValidation validation);
 }
 
 public class AfterVoidServiceImp(
@@ -64,7 +64,7 @@ public class AfterVoidServiceImp(
         return results;
     }
 
-    private static IEnumerable<Result> CreateWarningMessage(string warningCricket)
+    private static List<Result> CreateWarningMessage(string warningCricket)
     {
         var results = new List<Result>();
 
@@ -113,13 +113,10 @@ public class AfterVoidServiceImp(
         return await notificationLetstalkService.SendToGroupVoidSettledBets(ticketInfoForLetstalk, model.Tickets);
     }
 
-    public IEnumerable<Result> ExecuteWhenVoidFailed(VoidTicketsModel voidResult)
+    public IEnumerable<Result> ExecuteWhenVoidFailed(VoidTicketValidation validation)
     {
-        if (voidResult.Validation.ErrorCode == 0)
-        {
-            return [];
-        }
-
-        return new List<Result> { new() { ErrorCode = voidResult.Validation.ErrorCode, ErrorMsg = voidResult.Validation.ErrorMsg } };
+        return validation.IsSuccessful
+            ? []
+            : new List<Result> { new() { ErrorCode = validation.ErrorCode, ErrorMsg = validation.ErrorMsg } };
     }
 }

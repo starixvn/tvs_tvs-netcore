@@ -13,17 +13,20 @@ using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.SharedApi.Models.BetTypes;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest;
 
 public class GetRequestServiceTests
 {
-    private readonly RemotingRefWrapperService remotingRefService;
-    private readonly IDynamicRepository repository;
-    private readonly MatchService matchService;
-    private readonly IMapper mapper;
-    private readonly GetRequestServiceImp service;
+    public RemotingRefWrapperService remotingRefService;
+    public IDynamicRepository repository;
+    public MatchService matchService;
+    public IMapper mapper;
+    public GetRequestServiceImp service;
+    public AdvancedModeService advancedModeService;
+    public RequestExtraInfoXmlService requestExtraInfoXmlService;
 
     public GetRequestServiceTests()
     {
@@ -31,8 +34,8 @@ public class GetRequestServiceTests
         repository = Substitute.For<IDynamicRepository>();
         matchService = Substitute.For<MatchService>();
         mapper = Substitute.For<IMapper>();
-        var advancedModeService = Substitute.For<AdvancedModeService>();
-        var requestExtraInfoXmlService = Substitute.For<RequestExtraInfoXmlService>();
+        advancedModeService = Substitute.For<AdvancedModeService>();
+        requestExtraInfoXmlService = Substitute.For<RequestExtraInfoXmlService>();
         service = new GetRequestServiceImp(repository, remotingRefService, matchService, mapper, advancedModeService, requestExtraInfoXmlService);
     }
 
@@ -659,6 +662,135 @@ public class GetRequestServiceTests
         // Assert
         await repository.Received(1).FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
+        AssertExtension.Equal(expectedResult, actualResult);
+    }
+
+    [Theory]
+    [InlineData(IssueTypeConstant.OtherIssues)]
+    [InlineData(IssueTypeConstant.TechnicalError)]
+    [InlineData(IssueTypeConstant.WrongOddsSportsBook)]
+    [InlineData(IssueTypeConstant.WrongMarketOffered)]
+    [InlineData(IssueTypeConstant.NotParticipate)]
+    [InlineData(IssueTypeConstant.WrongOfferedName)]
+    [InlineData(0)]
+    public async Task GetRequest_dataValid_ReturnExpectedViewModel(int issueTypeId)
+    {
+        // Arrange
+        var request = new GetRequestRequest { RequestId = 1 };
+        var fakeData = new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
+            new List<RequestDetailModel>
+            {
+                new()
+                {
+                    IssueTypeId = issueTypeId, SportType = 0,
+                    OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+                }
+            },
+            new List<RequestEventModel> { new() { MatchId = 8765, TransIds = "1,2", FilterBy = 1, ProductIds = "0,1", SubIssueTypeId = 1,
+                AdvancedExtraInfo = "<root><r Hdp='1' Id='1'/><r BetIdX='801' FilterBetIdX='801'/></root>", AllBetTypesSelectionJson = "abc" }},
+            new List<PlayerName> { new() }
+        );
+        var betTypesAdvancedMode = new List<BetTeamAddRequestResult>
+            { new() { Hdp = "1", Id = "1", BetIdX = "801", FilterBetIdX = "801" } };
+        var groupBetTypeModels = new List<GroupBetTypeModel> { new() { GroupName = "Single" } };
+        var allBetTypesSelection = new List<AllBetTypesSelection> { new() { Name = "Handicap", Value = "1" } };
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request).ReturnsForAnyArgs(fakeData);
+        advancedModeService = Substitute.For<AdvancedModeService>();
+        advancedModeService.GetGroupBetTypes(8765, "1").Returns(groupBetTypeModels);
+        advancedModeService.GetAllBetTypesSelection("abc").Returns(allBetTypesSelection);
+        advancedModeService.GetBetTypesAdvancedMode(fakeData.Item2.First().AdvancedExtraInfo).Returns(betTypesAdvancedMode);
+        var expectedResult = new RequestDetailViewModel
+        {
+            Request = new RequestDetailModel
+            {
+                IssueTypeId = issueTypeId,
+                SportType = 0,
+                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>",
+                Operators = new List<OperatorInfo>()
+            },
+            PlayerNames = new List<PlayerName> { new() },
+        };
+        switch (issueTypeId)
+        {
+            case IssueTypeConstant.OtherIssues:
+                expectedResult.OtherIssuesModel = new OtherIssuesViewModel
+                {
+                    MatchId = 8765,
+                    SubIssueTypeId = 1,
+                    BetTeamsResult = betTypesAdvancedMode,
+                    GroupBetTypes = groupBetTypeModels,
+                    AllBetTypesSelection = allBetTypesSelection
+                };
+                break;
+
+            case IssueTypeConstant.TechnicalError:
+                expectedResult.TechnicalErrorModel = new TechnicalErrorViewModel
+                {
+                    MatchId = 8765,
+                    SubIssueTypeId = 1,
+                    BetTeamsResult = betTypesAdvancedMode,
+                    GroupBetTypes = groupBetTypeModels,
+                    AllBetTypesSelection = allBetTypesSelection
+                };
+                break;
+
+            case IssueTypeConstant.WrongOddsSportsBook:
+                expectedResult.WrongOddsSportsBookModel = new WrongOddsSportsBookViewModel
+                {
+                    MatchId = 8765,
+                    SubIssueTypeId = 1,
+                    BetTeamsResult = betTypesAdvancedMode,
+                    GroupBetTypes = groupBetTypeModels,
+                    AllBetTypesSelection = allBetTypesSelection
+                };
+                break;
+
+            case IssueTypeConstant.NotParticipate:
+                expectedResult.NotParticipateModels = [new NotParticipateViewModel
+                {
+                    MatchId = 8765,
+                    SubIssueTypeId = 1,
+                }];
+                break;
+
+            case IssueTypeConstant.WrongOfferedName:
+                var match = new Match { MatchId = 8765 };
+                mapper.Map<Match>(Arg.Any<RequestEventModel>()).ReturnsForAnyArgs(match);
+
+                expectedResult.WrongOfferedNameModel = new WrongOfferedNameViewModel
+                {
+                    MatchId = 8765,
+                    SubIssueTypeId = 1,
+                    Match = null
+                };
+                break;
+
+            case IssueTypeConstant.WrongMarketOffered:
+                expectedResult.WrongMarketOfferedModels =
+                [
+                    new WrongMarketOfferedViewModel
+                    {
+                        Id = 1,
+                        MatchId = 8765,
+                        SubIssueTypeId = 1,
+                        BetTeamsResult = betTypesAdvancedMode,
+                        GroupBetTypes = groupBetTypeModels,
+                        AllBetTypesSelection = allBetTypesSelection
+                    }
+                ];
+                break;
+
+            case 0:
+                expectedResult.Event = fakeData.Item2.FirstOrDefault();
+                break;
+        }
+
+        service = new GetRequestServiceImp(repository, remotingRefService, matchService, mapper, advancedModeService, requestExtraInfoXmlService);
+
+        // Act
+        var actualResult = await service.GetRequest(request);
+
+        // Assert
         AssertExtension.Equal(expectedResult, actualResult);
     }
 }

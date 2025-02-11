@@ -145,4 +145,13 @@ public class RequestExtraInfoXml
 
     [XmlAttribute(AttributeName = "ActualNameS")]
     public string ActualNameS { get; set; }
+
+    [XmlAttribute(AttributeName = "FilterBetIdX")]
+    public string FilterBetIdX { get; set; }
+
+    [XmlAttribute(AttributeName = "FilterBetIdY")]
+    public string FilterBetIdY { get; set; }
+
+    [XmlAttribute(AttributeName = "FilterBetTypeId")]
+    public string FilterBetTypeId { get; set; }
 }

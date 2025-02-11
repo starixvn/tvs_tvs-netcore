@@ -144,14 +144,14 @@ describe('VoidPageService', () => {
     appService = new AppService(null);
     ticketsService = new TicketsService(null);
     templateService = new TemplateMessageService(null);
-    voidPageService = new VoidPageService(appService, commonService, ticketsService, templateService);
+    voidPageService = new VoidPageService(commonService, ticketsService, templateService);
   });
 
   it('#getIssueTypes should return issueTypesModel', async () => {
     const expected = new IssueTypesModel();
     const commonService = new CommonService(null);
     commonService.getIssueTypes = jest.fn().mockReturnValue(expected);
-    const mockVoidPageService = new VoidPageService(null, commonService, null, null);
+    const mockVoidPageService = new VoidPageService(commonService, null, null);
 
     const actual = await mockVoidPageService.getIssueTypes();
 

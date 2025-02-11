@@ -152,6 +152,9 @@ export class SaveRequestService {
     model.liveIndicator = logInfoWrongOu.filterWrongOu.liveIndicator;
     model.wrongMarket = logInfoWrongOu.filterWrongOu.wrongMarket;
     model.actualMarket =  logInfoWrongOu.filterWrongOu.actualMarket;
+    model.filterBetIdX = logInfoWrongOu.filterWrongOu.filterBetType.filterBetIdX;
+    model.filterBetIdY = logInfoWrongOu.filterWrongOu.filterBetType.filterBetIdY;
+    model.filterBetTypeId = logInfoWrongOu.filterWrongOu.filterBetType.filterBetTypeId;
     if (logInfoWrongOu.isMainMatch) {
       model.isLinkGroup1X2 = logInfoWrongOu.linkedLogsViewModel.isLinkGroup1X2;
       model.isLinkGroupAIO = logInfoWrongOu.linkedLogsViewModel.isLinkGroupAIO;

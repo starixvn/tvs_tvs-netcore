@@ -33,9 +33,9 @@ export class TemplateMessageService {
     if (StaticService.isDangerAccepted(issueTypeId)) {
       this.initValueForLikelyDangerAccepted(templateValue, voidMatch.logInfoDetail, requestDetail.dangerAcceptedModels[0].filterBy, voidMatch.isCheckedVar);
     } else if (StaticService.isWrongHDP(issueTypeId) || StaticService.isWrong1stHDP(issueTypeId)) {
-      this.initValueForWrongHdp(templateValue, voidMatch, requestDetail.wrongHdpModels);
+      this.initValueForWrongHdp(templateValue, voidMatch, requestDetail.wrongHdpModels, issueTypeId);
     } else if (StaticService.isWrongOU(issueTypeId) || StaticService.isWrong1stOU(issueTypeId)) {
-      this.initValueForWrongOu(templateValue, voidMatch, requestDetail.wrongOuModels);
+      this.initValueForWrongOu(templateValue, voidMatch, requestDetail.wrongOuModels, issueTypeId);
     } else if (StaticService.isRedCard(issueTypeId)) {
       this.initValueForLikelyDangerAccepted(templateValue, voidMatch.logInfoDetail, requestDetail.redCardModels[0].filterBy, voidMatch.isCheckedVar);
     }
@@ -54,8 +54,9 @@ export class TemplateMessageService {
     return !scoreNormalTicket ? scoreOfMatch : scoreNormalTicket.split('|')[0].replace(/ /g, '');
   }
 
-  private initValueForWrongHdp(templateValue: TemplateValue, voidMatch: VoidMatch, wrongHdpModels: WrongHdpModel[]): void {
+  private initValueForWrongHdp(templateValue: TemplateValue, voidMatch: VoidMatch, wrongHdpModels: WrongHdpModel[], issueTypeId: string): void {
     const wrongHdpModel = wrongHdpModels.find(x => x.matchId === voidMatch.matchModel.matchId);
+    const Handicap = "1";
 
     templateValue.eventType = voidMatch.isAllLiveTickets ? EventType.LIVE : null;
     templateValue.score = this.getLiveScoreForTemplateMessage(voidMatch.logInfoDetail.scoreNormalTicket, voidMatch.logInfoDetail.scoreOfMatch);
@@ -63,16 +64,20 @@ export class TemplateMessageService {
     templateValue.actualMarket = wrongHdpModel.actualMarket;
     templateValue.hdpValue = wrongHdpModel.hdpValue;
     templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
+    templateValue.isCheckedSpecialBetType = StaticService.isWrongHDP(issueTypeId) && voidMatch.voidTicketsMini.betTypes !== Handicap;
+    templateValue.betTypeNameReplaceMessage = voidMatch.voidTicketsMini.betTypeNameReplaceMessage;
   }
 
-  private initValueForWrongOu(templateValue: TemplateValue, voidMatch: VoidMatch, wrongOuModels: WrongOuModel[]): void {
+  private initValueForWrongOu(templateValue: TemplateValue, voidMatch: VoidMatch, wrongOuModels: WrongOuModel[], issueTypeId: string): void {
     const wrongOuModel = wrongOuModels.find(x => x.matchId === voidMatch.matchModel.matchId);
     const liveScoreList = voidMatch.logInfoDetail.liveScores.split('|');
-
+    const OverUnder = "3";
     templateValue.eventType = voidMatch.isAllLiveTickets ? EventType.LIVE : null;
     templateValue.score = _.first(liveScoreList).replace(/ /g, '');
     templateValue.wrongMarket = wrongOuModel.wrongMarket;
     templateValue.actualMarket = wrongOuModel.actualMarket;
     templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
+    templateValue.isCheckedSpecialBetType = StaticService.isWrongOU(issueTypeId) && voidMatch.voidTicketsMini.betTypes !== OverUnder;
+    templateValue.betTypeNameReplaceMessage = voidMatch.voidTicketsMini.betTypeNameReplaceMessage;
   }
 }

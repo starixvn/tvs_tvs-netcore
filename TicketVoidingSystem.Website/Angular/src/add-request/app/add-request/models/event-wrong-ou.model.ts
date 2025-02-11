@@ -15,7 +15,9 @@ export class WrongOuModel {
   actualMarket: string;
   wrongMarket: string;
   logInfoDetail: LogInfoDetail;
-  
+  filterBetIdX: string;
+  filterBetIdY: string;
+  filterBetTypeId: string;
   poolHouseCheckedBetTypes : string;
   isPoolHouseAffected: boolean;
   isLinkGroup1X2: boolean;

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using NSubstitute;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -79,6 +79,7 @@ public class VoidTicketsHandlerTests
             .ReturnsForAnyArgs(new List<Result> { new() { ErrorCode = 0 } });
         afterVoidService.ExecuteWhenVoidFailed(default)
             .ReturnsForAnyArgs(new List<Result> { new() { ErrorCode = 1 } });
+        voidTicketsService.VoidBet(Arg.Any<VoidTicketsQuery>()).Returns(new VoidTicketsModel());
         var handler = new VoidTicketsHandler(voidResultCacheService, netPositionForCricketService, voidTicketsService, afterVoidService);
 
         // Act

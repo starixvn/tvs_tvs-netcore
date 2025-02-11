@@ -1,19 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.Website.Utilities;
 
 public class ExceptionHandlerMiddleware(
     RequestDelegate next,
-    IConfiguration configuration,
     LoggingService loggingService)
 {
-    public IConfiguration Configuration { get; } = configuration;
-
     public async Task InvokeAsync(HttpContext context)
     {
         try

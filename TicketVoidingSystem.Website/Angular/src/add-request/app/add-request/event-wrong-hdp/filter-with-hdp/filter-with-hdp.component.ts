@@ -8,6 +8,7 @@ import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { ValidationService } from '../services/validation.service';
+import { FilterModel } from '../../filter/filter.model';
 
 @Component({
   selector: 'filter-with-hdp',
@@ -18,9 +19,10 @@ export class FilterWithHdpComponent implements OnInit {
   @Input() filterWithHdpModel: FilterWithHdpModel;
   @Input() isEdit: boolean;
   @Input() matchId: number;
-  @Input() subIssueTypeId: string;
+  @Input() filter: FilterModel;
   @Input() isMainMatch: boolean;
   @Input() isDisabled: boolean;
+  @Input() sportTypeId: number;
   @Output() searchTicketEvent = new EventEmitter();
   @Output() refreshEvent = new EventEmitter();
   @Output() changeFilterEvent = new EventEmitter();
@@ -125,6 +127,6 @@ export class FilterWithHdpComponent implements OnInit {
   }
 
   public isSubTypeWrongHdpOrWrong1stHdp(): boolean {
-    return this.validationService.isSubTypeWrongHdpOrWrong1stHdp(this.subIssueTypeId);
+    return this.validationService.isSubTypeWrongHdpOrWrong1stHdp(this.filter.subIssueTypeId);
   }
 }

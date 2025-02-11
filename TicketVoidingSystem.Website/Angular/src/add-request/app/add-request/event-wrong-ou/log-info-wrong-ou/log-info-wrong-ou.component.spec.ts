@@ -42,13 +42,14 @@ class Helper {
     scoreOfMatch: '',
     cancelCashOutCount: 1
   } as LogInfoDetail;
-  static readonly fakeFilterWrongOuModel: FilterWrongOuModel = {
+  static readonly fakeFilterWrongOuModel = {
     filterFromTransTime: Helper.fakeFromDateTime,
     filterToTransTime: Helper.fakeToDateTime,
     actualMarket: '1',
     wrongMarket: '1',
-    liveIndicator: 1
-  };
+    liveIndicator: 1,
+    filterBetType: {filterBetIdX:'1', filterBetIdY:'', filterBetTypeId:'1'}
+  } as FilterWrongOuModel;
   static readonly fakeLogInfoWrongOu: LogInfoWrongOu = {
     matchId: 12345,
     leagueName: '',

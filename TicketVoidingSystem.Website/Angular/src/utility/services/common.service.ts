@@ -22,6 +22,7 @@ import { VoidedReason } from '../models/reason.model';
 import { Result, SqlResult } from '../models/result';
 import { RequestDetailViewModel } from './../../edit-request/app/request.model';
 import { HttpService } from './http.service';
+import { HdpFilterBetType } from '../../add-request/app/add-request/models/hdp-filter-betType.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -154,9 +155,13 @@ export class CommonService {
     return this.httpService.postJson<{ guid: string }, Result<T>>({ guid: guid }, `api/SharedApi/GetSimpleResultCache`);
   }
 
-  async GetOddsInfoSpecialBetTypes(query: GetOddsInfoQuery): Promise<OddsInfo[]> {
+  async getOddsInfoSpecialBetTypes(query: GetOddsInfoQuery): Promise<OddsInfo[]> {
     const url = 'api/BetTypes/GetOddsInfoSpecialBetTypes';
     return this.httpService.postJson(query, url);
+  }
+  
+  async getHdpFilterBetTypes(sportId: string, issueTypeId: number): Promise<Array<HdpFilterBetType>> {
+    return this.httpService.postJson({ sportId, issueTypeId }, 'api/BetTypes/GetHdpFilterBetTypes');
   }
 
   async copyRequestInfo(query: CopyRequestInfoQuery): Promise<CopyRequestInfoResponse> {

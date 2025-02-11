@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import moment from 'moment-timezone';
-
 import { DateTimeFormat } from "../../../../../utility/constants/config";
 import { AddRequestApiService } from "../../add-request-api.service";
 import { FilterModel } from "../../filter/filter.model";
@@ -10,6 +9,8 @@ import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.
 import { FilterWrongOuModel } from "../models/filter-wrong-ou.model";
 import { WrongOuGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongOu } from "../models/log-info-wrong-ou.model";
+import { SportType } from '../../../../../utility/constants/sport.constant';
+import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,11 @@ export class EventWrongOuService {
   ) { }
 
   public async getLinkedLog(logInfoWrongOu: LogInfoWrongOu, filter: FilterModel): Promise<LinkedLogsViewModel> {
+    if(logInfoWrongOu.sportType !== SportType.SOCCER)
+    {
+        return new LinkedLogsViewModel();
+    }  
+
     const query = {
       matchId: logInfoWrongOu.matchId,
       issueTypeId: Number(filter.issueTypeId),
@@ -55,7 +61,8 @@ export class EventWrongOuService {
         filterToTransTime: x.filterToTransTime,
         actualMarket: x.actualMarket,
         wrongMarket: x.wrongMarket,
-        liveIndicator: x.liveIndicator
+        liveIndicator: x.liveIndicator,
+        filterBetType: new FilterBetType(x.filterBetIdX, x.filterBetIdY, x.filterBetTypeId)
       } as FilterWrongOuModel;
       event.eventDate = x.eventDate;
       event.sportType = x.sportType;
@@ -71,6 +78,7 @@ export class EventWrongOuService {
     mainEvent.filterWrongOu.filterToTransTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     mainEvent.filterWrongOu.actualMarket = '';
     mainEvent.filterWrongOu.wrongMarket = '';
+    mainEvent.filterWrongOu.filterBetType = new FilterBetType();
   }
 
   public initDefaultMainEvent(allSelectedEvents: LogInfoWrongOu[]): LogInfoWrongOu {
@@ -94,6 +102,9 @@ export class EventWrongOuService {
       logInfoQuery.filterFromTransTime = x.filterWrongOu.filterFromTransTime;
       logInfoQuery.filterToTransTime = x.filterWrongOu.filterToTransTime;
       logInfoQuery.liveIndicator = x.filterWrongOu.liveIndicator;
+      logInfoQuery.filterBetTypeId = x.filterWrongOu.filterBetType.filterBetTypeId;
+      logInfoQuery.filterBetIdX = x.filterWrongOu.filterBetType.filterBetIdX;
+      logInfoQuery.filterBetIdY = x.filterWrongOu.filterBetType.filterBetIdY;
       if (x.isMainMatch) {
         logInfoQuery.isLinkGroup1X2 = x.linkedLogsViewModel.isLinkGroup1X2;
         logInfoQuery.isLinkGroupAIO = x.linkedLogsViewModel.isLinkGroupAIO;

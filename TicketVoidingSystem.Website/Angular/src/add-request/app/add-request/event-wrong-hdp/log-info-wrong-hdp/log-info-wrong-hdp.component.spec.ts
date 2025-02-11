@@ -42,15 +42,16 @@ class Helper {
     scoreOfMatch: '',
     cancelCashOutCount: 1
   } as LogInfoDetail;
-  static readonly fakeFilterWithHdpModel: FilterWithHdpModel = {
+  static readonly fakeFilterWithHdpModel = {
     filterFromTransTime: Helper.fakeFromDateTime,
     filterToTransTime: Helper.fakeToDateTime,
     homeFavorite: '2',
     awayFavorite: '',
     actualMarket: '1',
     hdpValue: '',
-    liveIndicator: 0
-  };
+    liveIndicator: 0,
+    filterBetType: {filterBetIdX:'1', filterBetIdY:'', filterBetTypeId:'1'}
+  } as FilterWithHdpModel;
   static readonly fakeLinkedLogsViewModel: LinkedLogsViewModel = {
     groupLinkedLogs: [
       {

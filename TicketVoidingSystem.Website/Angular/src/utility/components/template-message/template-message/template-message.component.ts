@@ -215,6 +215,8 @@ export class TemplateMessageComponent implements OnChanges {
     return this.isTVSVoidPage() && (StaticService.isOtherIssues(this.issueTypeId)
       || StaticService.isWrongMarketOffered(this.issueTypeId)
       || StaticService.isTechnicalError(this.issueTypeId)
+      || StaticService.isWrongHDP(this.issueTypeId)
+      || StaticService.isWrongOU(this.issueTypeId)
     );
   }
 

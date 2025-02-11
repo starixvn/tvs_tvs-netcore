@@ -132,4 +132,9 @@ public class RequestEventModel
     public string ActualTime { get; set; }
     public int? MinuteOffset { get; set; }
     public int? SecondOffset { get; set; }
+
+    // Wrong HDP / Wrong OU
+    public string FilterBetIdX { get; set; }
+    public string FilterBetIdY { get; set; }
+    public string FilterBetTypeId { get; set; }
 }

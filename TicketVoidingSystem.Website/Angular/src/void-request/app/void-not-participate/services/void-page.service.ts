@@ -8,7 +8,6 @@ import { VoidedReason } from '../../../../utility/models/reason.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { MappingModelStaticService } from '../../../../utility/services/mapping-model-static.service';
 import { StaticService } from '../../../../utility/services/static.service';
-import { AppService } from '../../app.service';
 import { CommonPrimitiveProperty } from '../../models/common-primitive-property.model';
 import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
@@ -21,7 +20,6 @@ import { TemplateMessageService } from './template-message.service';
 export class VoidPageService {
 
   constructor(
-    private readonly appService: AppService,
     private readonly commonService: CommonService,
     private readonly ticketsService: TicketsService,
     private readonly templateMessageService: TemplateMessageService

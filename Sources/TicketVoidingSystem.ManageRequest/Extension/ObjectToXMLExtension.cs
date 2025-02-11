@@ -164,7 +164,10 @@ public static class ObjectToXMLExtension
                 + $"HomeFavorite='{SecurityElement.Escape(model.HomeFavorite)}' "
                 + $"AwayFavorite='{SecurityElement.Escape(model.AwayFavorite)}' "
                 + $"ActualMarket='{SecurityElement.Escape(model.ActualMarket)}' "
-                + $"HdpValue='{SecurityElement.Escape(model.HdpValue)}' />";
+                + $"HdpValue='{SecurityElement.Escape(model.HdpValue)}' "
+                + $"FilterBetIdX='{SecurityElement.Escape(model.FilterBetIdX)}' "
+                + $"FilterBetIdY='{SecurityElement.Escape(model.FilterBetIdY)}' "
+                + $"FilterBetTypeId='{model.FilterBetTypeId}' />";
             stringBuilder.AppendLine(line);
         }
 
@@ -203,7 +206,10 @@ public static class ObjectToXMLExtension
                 + $"VoidFromTime='{model.LogInfoDetail?.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"LiveIndicator='{model.LiveIndicator}' "
                 + $"ActualMarket='{SecurityElement.Escape(model.ActualMarket)}' "
-                + $"WrongMarket='{SecurityElement.Escape(model.WrongMarket)}' />";
+                + $"WrongMarket='{SecurityElement.Escape(model.WrongMarket)}' "
+                + $"FilterBetIdX='{SecurityElement.Escape(model.FilterBetIdX)}' "
+                + $"FilterBetIdY='{SecurityElement.Escape(model.FilterBetIdY)}' "
+                + $"FilterBetTypeId='{SecurityElement.Escape(model.FilterBetTypeId)}' />";
             stringBuilder.AppendLine(line);
         }
 

@@ -23,4 +23,7 @@ export class WrongHdpModel {
   isLinkGroupAIO: boolean;
   liveIndicator: number;
   sportType: number;
+  filterBetIdX: string;
+  filterBetIdY: string;
+  filterBetTypeId: string;
 }

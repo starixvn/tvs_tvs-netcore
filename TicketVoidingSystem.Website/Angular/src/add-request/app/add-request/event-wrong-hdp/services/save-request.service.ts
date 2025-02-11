@@ -147,6 +147,9 @@ export class SaveRequestService {
     model.filterFromTransTime = logInfo.filterWithHdp.filterFromTransTime;
     model.filterToTransTime = logInfo.filterWithHdp.filterToTransTime;
     model.liveIndicator = logInfo.filterWithHdp.liveIndicator;
+    model.filterBetIdX = logInfo.filterWithHdp.filterBetType.filterBetIdX;
+    model.filterBetIdY = logInfo.filterWithHdp.filterBetType.filterBetIdY;
+    model.filterBetTypeId = logInfo.filterWithHdp.filterBetType.filterBetTypeId;
     if (logInfo.isMainMatch) {
       model.isLinkGroup1X2 = logInfo.linkedLogsViewModel.isLinkGroup1X2;
       model.isLinkGroupAIO = logInfo.linkedLogsViewModel.isLinkGroupAIO;

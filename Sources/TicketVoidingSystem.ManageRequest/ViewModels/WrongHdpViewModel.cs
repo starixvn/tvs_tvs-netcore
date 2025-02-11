@@ -47,4 +47,10 @@ public class WrongHdpViewModel
     public LogInfoDetail? LogInfoDetail { get; set; }
 
     public int SportType { get; set; }
+
+    public string FilterBetIdX { get; set; }
+
+    public string FilterBetIdY { get; set; }
+
+    public string FilterBetTypeId { get; set; }
 }

@@ -1,9 +1,11 @@
-﻿using TicketVoidingSystem.Constants;
+﻿using Fanex.BetList.Core.Entities;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services.BetList;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
@@ -12,7 +14,7 @@ public interface GetLogInfoTicketsService
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request);
 }
 
-public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, CompressDataService compressDataService)
+public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, CompressDataService compressDataService, BetListService betListService)
     : GetLogInfoTicketsService
 {
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request)
@@ -54,6 +56,7 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
         {
             var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
             ticket.SubBetTypeId = (short)item.SubBetType;
+            ticket.SubBetType = item.IsMixParlay ? GetSubBetType(item) : string.Empty;
 
             return ticket;
         });
@@ -62,6 +65,17 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
             .Select(ToGroupTicket)
             .OrderBy(group => group.Name == "Parlay")
             .ThenBy(group => group.Name);
+    }
+
+    private string GetSubBetType(GetTicketModel item)
+    {
+        var newTicket = new Ticket
+        {
+            BetTypeId = item.SubBetType,
+            BetId = long.TryParse(item.SubBetCheck, out var betCheckNumber) ? betCheckNumber : null
+        };
+
+        return betListService.GetBetTypeName(newTicket);
     }
 
     private Group<TicketViewModel> ToGroupTicket(IGrouping<string, TicketViewModel> group)

@@ -97,7 +97,7 @@ export class AdvancedModeComponent {
 
   public async getSpecialBetTeamCricket(matchId: number): Promise<void> {
     if (this.matchId && (this.baseSpecialBetTypeCricket === undefined || this.baseSpecialBetTypeCricket.length === 0)) {
-      const data = await this.commonService.GetOddsInfoSpecialBetTypes({ matchId: matchId.toString(), betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER });
+      const data = await this.commonService.getOddsInfoSpecialBetTypes({ matchId: matchId.toString(), betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER });
       this.updatePlayerCricket(data);
     }
   }

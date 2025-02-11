@@ -10,11 +10,12 @@ import { TeamFavorite } from '../../../../../utility/constants/config';
 import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { ValidationService } from '../services/validation.service';
 import { FilterWithHdpComponent } from './filter-with-hdp.component';
+import { FilterModel } from '../../filter/filter.model';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeFilterWithHdpModel: FilterWithHdpModel = {
+  static readonly fakeFilterWithHdpModel = {
     filterFromTransTime: Helper.fakeFromDateTime,
     filterToTransTime: Helper.fakeToDateTime,
     homeFavorite: '2',
@@ -22,7 +23,7 @@ class Helper {
     actualMarket: '1',
     hdpValue: '',
     liveIndicator: 0
-  };
+  } as FilterWithHdpModel;
 }
 
 describe('FilterWithHdpComponent', () => {
@@ -322,6 +323,8 @@ describe('FilterWithHdpComponent', () => {
     const validationService = new ValidationService();
     validationService.isSubTypeWrongHdpOrWrong1stHdp = jest.fn().mockImplementation(() => true);
     const component = new FilterWithHdpComponent(null, validationService);
+    component.filter = new FilterModel();
+    component.filter.subIssueTypeId = "1";
 
     // Action
     const actual = component['isSubTypeWrongHdpOrWrong1stHdp']();
