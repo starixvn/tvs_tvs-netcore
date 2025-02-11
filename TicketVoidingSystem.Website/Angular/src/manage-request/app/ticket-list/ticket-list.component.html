@@ -8,9 +8,7 @@
             <div class="modal-title">
               <strong>Void/Recover Bet Check (Request ID: {{modal.requestId}})</strong>
             </div>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.open = !modal.open">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="modal.open = !modal.open"></button>
           </div>
           <div class="modal-body" [blockUi]="isBlock" >
             @if (isShowRequestInfo) {

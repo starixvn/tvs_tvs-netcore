@@ -33,7 +33,7 @@
               @if (menuItem.items.length > 0) {
                 <div>
                   <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle" data-bs-toggle="dropdown">{{menuItem.name}}</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{menuItem.name}}</a>
                     <ul class="dropdown-menu">
                       @for (item of menuItem.items; track item; let i = $index) {
                         <li>
