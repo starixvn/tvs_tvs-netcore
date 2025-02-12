@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output } from '@angular/core';
 import { LABELS } from '../../../../utility/constants/labels';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { Message } from './message';
@@ -22,10 +22,11 @@ export class MessagesComponent {
   marginX = 10;
   isShowContentMessage = false;
 
-  constructor(private readonly element: ElementRef) {
+  element = inject(ElementRef);
+  constructor() {
     this.tooltip.element = this.element;
   }
-
+  
   checkValidationForMainLanguage(): boolean {
     if (!this.message.contentEnglish) {
       this.tooltip.display('english', LABELS.EMPTY_ENGLISH);

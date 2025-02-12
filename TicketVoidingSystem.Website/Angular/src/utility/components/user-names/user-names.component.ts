@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { Tooltip } from '../../components/tooltip/tooltip.model';
@@ -38,7 +38,8 @@ export class UsernamesComponent implements OnChanges {
   isFocusingUsernames = false;
   isSelectedAll = false;
 
-  constructor(private readonly element: ElementRef) {
+  element = inject(ElementRef);
+  constructor() {
     this.tooltip.element = this.element;
   }
 

@@ -21,6 +21,19 @@ import { InsertQueueService } from './services/insert-queue.service';
 import { CheckVoidPermissionService } from './services/check-void-permission.service';
 import { LogChangeContentService } from './services/log-change-content.service';
 import { TicketsService } from './services/tickets.service';
+import { ReplaceEventTypeService } from '../../utility/components/template-message/template-message/services/replace-event-type.service';
+import { ReplaceMessageService } from '../../utility/components/template-message/template-message/services/replace-message.service';
+import { ReplaceCommonValuesService } from '../../utility/components/template-message/template-message/services/replace-common-values.service';
+import { ReplacePlacedFromTimeRangeService } from '../../utility/components/template-message/template-message/services/replace-placed-from-time-range.service';
+import { ReplaceScoreService } from '../../utility/components/template-message/template-message/services/replace-score.service';
+import { ReplaceAIOMessageService } from '../../utility/components/template-message/template-message/services/replace-aio-message.serivce';
+import { ReplaceSpecialBetTypeService } from '../../utility/components/template-message/template-message/services/replace-special-bet-type.service';
+import { TemplateInputsService } from '../../utility/components/template-message/template-message/services/template-inputs.service';
+import { TemplateInputsForTVSService } from '../../utility/components/template-message/template-message/services/template-inputs-for-tvs.service';
+import { TemplateWrongScoreService } from '../../utility/components/template-message/template-message/services/template-wrong-score.service';
+import { TemplateWrongOddsService } from '../../utility/components/template-message/template-message/services/template-wrong-odds.service';
+import { TemplateWrongOddsSportBookService } from '../../utility/components/template-message/template-message/services/template-wrong-odds-sport-book.service';
+import { TemplateWrongOfferedService } from '../../utility/components/template-message/template-message/services/template-wrong-offfered-name.service';
 
 @Component({
   standalone: true,
@@ -31,7 +44,11 @@ import { TicketsService } from './services/tickets.service';
     VoidNotParticipateComponent, VoidEarlyKickOffComponent, VoidAbnormalBetComponent,
     VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiModule],
   providers: [AppService, SignalRService, TemplateService, PopupService, CheckRequestService, LoadDataService,
-    SubmitVoidService, InsertQueueService, CheckVoidPermissionService, LogChangeContentService, TicketsService]
+    SubmitVoidService, InsertQueueService, CheckVoidPermissionService, LogChangeContentService, TicketsService, 
+    ReplaceEventTypeService, ReplaceCommonValuesService, ReplaceMessageService, ReplacePlacedFromTimeRangeService, 
+    ReplaceScoreService, ReplaceAIOMessageService, ReplaceSpecialBetTypeService, TemplateInputsService,
+    TemplateInputsForTVSService, TemplateWrongScoreService, TemplateWrongOddsService, TemplateWrongOddsSportBookService,
+    TemplateWrongOfferedService ]
 })
 export class AppComponent implements OnInit {
   requestId: number;
@@ -39,7 +56,7 @@ export class AppComponent implements OnInit {
   isBlockUI: boolean;
   remark: string[];
   private isReadyRender = false;
-
+  issueTypeId: number;
   appService = inject(AppService);
   signalRService = inject(SignalRService);
 
@@ -52,6 +69,7 @@ export class AppComponent implements OnInit {
     this.requestDetail = await this.appService.getRequestById(this.requestId);
     this.requestDetail.requestId = this.requestId;
     this.requestDetail.lastModifiedDate = (await this.appService.getLastModifiedDate(this.requestId)).lastModifiedDate;
+    this.issueTypeId = this.requestDetail.request?.issueTypeId;
     this.isReadyRender = true;
     this.isBlockUI = false;
     await this.signalRService.initializeConnection();
@@ -66,36 +84,37 @@ export class AppComponent implements OnInit {
   }
 
   isLikelyVoidDangerAccepted(): boolean {
-    return StaticService.isDangerAccepted(this.requestDetail.request?.issueTypeId)
-      || StaticService.isWrongOU(this.requestDetail.request?.issueTypeId)
-      || StaticService.isWrong1stOU(this.requestDetail.request?.issueTypeId)
-      || StaticService.isWrongHDP(this.requestDetail.request?.issueTypeId)
-      || StaticService.isRedCard(this.requestDetail.request?.issueTypeId)
-      || StaticService.isWrong1stHDP(this.requestDetail.request?.issueTypeId);
+    return StaticService.isDangerAccepted(this.issueTypeId)
+      || StaticService.isWrongOU(this.issueTypeId)
+      || StaticService.isWrong1stOU(this.issueTypeId)
+      || StaticService.isWrongHDP(this.issueTypeId)
+      || StaticService.isRedCard(this.issueTypeId)
+      || StaticService.isWrong1stHDP(this.issueTypeId);
   }
 
   isShowVoidDuplicateTickets(): boolean {
-    return StaticService.isDuplicateTickets(this.requestDetail.request?.issueTypeId);
+    return StaticService.isDuplicateTickets(this.issueTypeId);
   }
 
   isLikelyVoidNotParticipate(): boolean {
-    return StaticService.isNotParticipate(this.requestDetail.request?.issueTypeId)
-      || StaticService.isWrongOddsSportsBook(this.requestDetail.request?.issueTypeId)
-      || StaticService.isTechnicalError(this.requestDetail.request?.issueTypeId)
-      || StaticService.isOtherIssues(this.requestDetail.request?.issueTypeId);
+    return StaticService.isNotParticipate(this.issueTypeId)
+      || StaticService.isWrongOddsSportsBook(this.issueTypeId)
+      || StaticService.isTechnicalError(this.issueTypeId)
+      || StaticService.isOtherIssues(this.issueTypeId);
   }
 
   isLikelyVoidEarlyKickOff(): boolean {
-    return StaticService.isEarlyKickOff(this.requestDetail.request?.issueTypeId) || StaticService.isWrongKickOff(this.requestDetail.request?.issueTypeId)
-      || StaticService.isWrongOfferedName(this.requestDetail.request?.issueTypeId);
+    return StaticService.isEarlyKickOff(this.issueTypeId) 
+      || StaticService.isWrongKickOff(this.issueTypeId)
+      || StaticService.isWrongOfferedName(this.issueTypeId);
   }
 
   isShowVoidAbnormalBet(): boolean {
-    return StaticService.isAbnormalBet(this.requestDetail.request?.issueTypeId);
+    return StaticService.isAbnormalBet(this.issueTypeId);
   }
 
   isShowVoidWrongMarketOffered(): boolean {
-    return StaticService.isWrongMarketOffered(this.requestDetail.request?.issueTypeId);
+    return StaticService.isWrongMarketOffered(this.issueTypeId);
   }
 
   isShowVoidOtherIssue(): boolean {

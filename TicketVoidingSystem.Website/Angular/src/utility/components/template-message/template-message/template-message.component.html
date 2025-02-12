@@ -1,28 +1,30 @@
 @if(isShowMessages) {
   <div class="message-handler">
-    <ng-container @if(isShowDynamicInputs())>
-      @for  (item of selectedTemplated.inputTexts; track item) {
-        <div>
-          <label>{{item.msgEnglish}}</label>
-          <input type="text" class="form-control form-control-sm" [(ngModel)]="item.msgEnglishValue" (ngModelChange)="setChineseInput(item);updateMessage()">
-        </div>
-        <div [hidden]="item.hideChinese">
-          <label>{{item.msgChineseTraditional}}</label>
-          <input type="text" class="form-control form-control-sm" [(ngModel)]="item.msgChineseTraditionalValue" (ngModelChange)="updateMessage()">
-        </div>
-        <div [hidden]="item.hideChinese">
-          <label>{{item.msgChineseSimplified}}</label>
-          <input type="text" class="form-control form-control-sm" [(ngModel)]="item.msgChineseSimplifiedValue" (ngModelChange)="updateMessage()">
-        </div>
-        <div [hidden]="item.hideChinese">
-          <label>{{item.msgChineseNewSimplified}}</label>
-          <input type="text" class="form-control form-control-sm" [(ngModel)]="item.msgChineseNewSimplifiedValue" (ngModelChange)="updateMessage()">
-        </div>
-        <div>
-          <label class="margin-top-30">{{item.pattern}}</label>
-        </div>
-      }
-    </ng-container>
+    @if(isShowDynamicInputs){
+      <ng-container>
+        @for  (item of selectedTemplated.inputTexts; track item) {
+          <div>
+            <label>{{item.msgEnglish}}</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="item.msgEnglishValue" (ngModelChange)="setChineseInput(item);updateMessage()">
+          </div>
+          <div [hidden]="item.hideChinese">
+            <label>{{item.msgChineseTraditional}}</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="item.msgChineseTraditionalValue" (ngModelChange)="updateMessage()">
+          </div>
+          <div [hidden]="item.hideChinese">
+            <label>{{item.msgChineseSimplified}}</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="item.msgChineseSimplifiedValue" (ngModelChange)="updateMessage()">
+          </div>
+          <div [hidden]="item.hideChinese">
+            <label>{{item.msgChineseNewSimplified}}</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="item.msgChineseNewSimplifiedValue" (ngModelChange)="updateMessage()">
+          </div>
+          <div>
+            <label class="margin-top-30">{{item.pattern}}</label>
+          </div>
+        }
+      </ng-container>
+    }
   </div>
 }
 

@@ -60,9 +60,9 @@ import { HttpService } from './services/http.service';
     LogInfoTicketCountComponent,
     LicenseeAffectedListComponent,
     VoidReasonComponent,
+    AutoRefreshComponent
   ],
   declarations: [
-    AutoRefreshComponent,
     BetTypesComponent,
     BetTypesVirtualSportComponent,
     MatchDetailComponent,
@@ -71,7 +71,6 @@ import { HttpService } from './services/http.service';
     NumbersOnlyDirective,
     OnlyNumberDirective,
     BetIdsComponent,
-    AutoRefreshComponent,
     EventLeagueComponent,
     LogInfoMessageComponent,
     LicenseesComponent,
