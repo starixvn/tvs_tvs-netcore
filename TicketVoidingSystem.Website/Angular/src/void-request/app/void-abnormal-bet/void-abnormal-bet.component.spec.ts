@@ -1,155 +1,118 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
+import { SubmitVoidService } from './../services/submit-void.service';
+import { CheckRequestService } from './../services/check-request.service';
+import { PopupService } from './../services/popup.service';
+import { TemplateService } from './../../../utility/components/template-message/template-message/services/template.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
-import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
-import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
-import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
-import { SubIssueType } from '../../../utility/models/issue-type.model';
-import { MatchModel } from '../../../utility/models/match.model';
-import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
-import { CheckRequestService } from '../services/check-request.service';
-import { PopupService } from '../services/popup.service';
-import { SubmitVoidService } from '../services/submit-void.service';
 import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
-import { TicketsListComponent } from '../tickets-list/tickets-list.component';
-import { VoidAbnormalBetModel } from './models/void-abnormal-bet.model';
 import { VoidPageService } from './services/void-page.service';
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { LoadDataService } from '../services/load-data.service';
+import { InsertQueueService } from '../services/insert-queue.service';
+import { CheckVoidPermissionService } from '../services/check-void-permission.service';
+import { LogChangeContentService } from '../services/log-change-content.service';
+import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidAbnormalBetComponent } from './void-abnormal-bet.component';
-import { PasswordAreaComponent } from '../password-area/password-area.component';
+import { QueryList } from '@angular/core';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 
-class Helper {
-}
+describe('VoidAbnormalBetComponent', () => {
+  let component: VoidAbnormalBetComponent;
+  let fixture: ComponentFixture<VoidAbnormalBetComponent>;
+  let ticketsService: TicketsService;
+  let voidPageService: VoidPageService;
+  let voidPageCommonService: VoidPageCommonService;
 
-describe('VoidNotParticipateComponent', () => {
-  @NgModule({
-    declarations: [
-      TicketsListComponent,
-      TemplateMessageComponent,
-      LicenseeAffectedListComponent,
-      MessageAreaComponent,
-      PasswordAreaComponent
-    ],
-    imports: [
-      FormsModule,
-      NgbModule,
-      ToolTipModule,
-    ],
-    providers: [
-      VoidPageService,
-      TicketsService,
-      PopupService,
-      SubmitVoidService,
-      CheckRequestService,
-      VoidPageCommonService
-    ]
-  })
-  class AppModuleTest { }
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [VoidPageService, TicketsService, VoidPageCommonService, TemplateService, PopupService, 
+        CheckRequestService, LoadDataService, SubmitVoidService, InsertQueueService, CheckVoidPermissionService, 
+        LogChangeContentService]
+    }).compileComponents();
 
-  let shallow: Shallow<VoidAbnormalBetComponent>;
-
-  beforeEach(() => {
-    shallow = new Shallow(VoidAbnormalBetComponent, AppModuleTest).dontMock(NgbModule);
+    fixture = TestBed.createComponent(VoidAbnormalBetComponent);
+    component = fixture.componentInstance;
+    ticketsService = TestBed.inject(TicketsService) as jest.Mocked<TicketsService>;
+    voidPageService = TestBed.inject(VoidPageService) as jest.Mocked<VoidPageService>;
+    voidPageCommonService = TestBed.inject(VoidPageCommonService) as jest.Mocked<VoidPageCommonService>;
   });
 
-  it('VoidNotParticipateComponent should init match snapshot', async () => {
-    const { fixture } = await shallow.render();
+  it('VoidAbnormalBetComponent should init match snapshot', async () => {
     fixture.detectChanges();
 
     expect(fixture).toMatchSnapshot();
   });
 
-  it('#ngOnInit should called voidPageService.getBasicVoidPageItemsData', async () => {
+  it('#ngOnInit should called getIssueTypes& getBasicVoidPageItemsData', async () => {
     const requestDetail = new RequestDetailViewModel();
     requestDetail.request = new RequestDetailModel();
     requestDetail.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
-    const voidItem = new VoidAbnormalBetModel();
-    voidItem.matchModel = new MatchModel();
-    voidItem.subIssueType = new SubIssueType();
     document.body.getAttribute = jest.fn().mockReturnValue('sa');
-    const mockLoadUnderneathVoidPageItemsData = jest.fn();
-    const mockGetBasicVoidPageItemsData = jest.fn().mockReturnValue([voidItem]);
-    const mockGetIssueTypes = jest.fn();
-    const { instance } = await shallow
-      .mock(VoidPageService, {
-        loadUnderneathVoidPageItemsData: mockLoadUnderneathVoidPageItemsData,
-        getBasicVoidPageItemsData: mockGetBasicVoidPageItemsData,
-        getIssueTypes: mockGetIssueTypes,
-      })
-      .render({
-        bind: {
-          requestDetail: requestDetail
-        }
-      });
-    instance.primitiveProperty = new CommonPrimitiveProperty();
-    await instance.ngOnInit();
+    voidPageService.loadUnderneathVoidPageItemsData = jest.fn();
+    voidPageService.getBasicVoidPageItemsData =  jest.fn();
+    voidPageService.getIssueTypes = jest.fn();
+    const baseModel = {id: 1, subIssueTypeId: 3, matchId: 8465378} as BasicRequestInfo;
+    voidPageService['initBasicRequestInfo'] = jest.fn().mockReturnValue(baseModel);
+    component.requestDetail = requestDetail;
+    component.primitiveProperty = new CommonPrimitiveProperty();
 
-    expect(mockGetBasicVoidPageItemsData).toHaveBeenCalled();
-    expect(mockGetIssueTypes).toHaveBeenCalled();
-    expect(instance.primitiveProperty.userName).toBe('sa');
+    await component.ngOnInit();
+
+    expect(voidPageService.getBasicVoidPageItemsData).toHaveBeenCalled();
+    expect(voidPageService.getIssueTypes).toHaveBeenCalled();
+    expect(component.primitiveProperty.userName).toBe('sa');
   });
 
   it('#onClickShowVoidTickets should called voidPageCommonService.onClickShowVoidTickets', async () => {
-    const mockOnClickShowVoidTickets = jest.fn();
-    const { instance } = await shallow
-      .mock(VoidPageCommonService, { onClickShowVoidTickets: mockOnClickShowVoidTickets })
-      .render();
-    await instance.onClickShowVoidTickets(null);
+    voidPageCommonService.onClickShowVoidTickets = jest.fn();;
 
-    expect(mockOnClickShowVoidTickets).toHaveBeenCalledTimes(1);
+    await component.onClickShowVoidTickets(null);
+
+    expect(voidPageCommonService.onClickShowVoidTickets).toHaveBeenCalledTimes(1);
   });
 
   it('#onPagingTicketsChange should called voidPageCommonService.loadVoidTicketsFullOnPagingChange', async () => {
-    const mockLoadVoidTicketsFullOnPagingChange = jest.fn();
-    const { instance } = await shallow
-      .mock(TicketsService, { loadVoidTicketsFullOnPagingChange: mockLoadVoidTicketsFullOnPagingChange })
-      .render();
-    await instance.onPagingTicketsChange(null);
+    ticketsService.loadVoidTicketsFullOnPagingChange = jest.fn();
 
-    expect(mockLoadVoidTicketsFullOnPagingChange).toHaveBeenCalledTimes(1);
+    await component.onPagingTicketsChange(null);
+
+    expect(ticketsService.loadVoidTicketsFullOnPagingChange).toHaveBeenCalledTimes(1);
   });
 
   it('#exportTickets should called voidPageCommonService.exportTickets', async () => {
-    const mockExportTickets = jest.fn();
-    const { instance } = await shallow
-      .mock(VoidPageCommonService, { exportTickets: mockExportTickets })
-      .render();
-    await instance.exportTickets(null);
+    voidPageCommonService.exportTickets = jest.fn();
 
-    expect(mockExportTickets).toHaveBeenCalledTimes(1);
+    await component.exportTickets(null);
+
+    expect(voidPageCommonService.exportTickets).toHaveBeenCalledTimes(1);
   });
 
   it('#onClickShowTemplateMessage should called voidPageCommonService.onClickShowTemplateMessage', async () => {
-    const mockOnClickShowTemplateMessage = jest.fn();
-    const { instance } = await shallow
-      .mock(VoidPageCommonService, { onClickShowTemplateMessage: mockOnClickShowTemplateMessage })
-      .render();
-    await instance.onClickShowTemplateMessage(null);
+    voidPageCommonService.onClickShowTemplateMessage = jest.fn();
 
-    expect(mockOnClickShowTemplateMessage).toHaveBeenCalledTimes(1);
+    await component.onClickShowTemplateMessage(null);
+
+    expect(voidPageCommonService.onClickShowTemplateMessage).toHaveBeenCalledTimes(1);
   });
 
   it('#onClickCopyLicenseesToClipboard should called voidPageCommonService.onClickCopyLicenseesToClipboard', async () => {
-    const mockOnClickCopyLicenseesToClipboard = jest.fn();
-    const { instance } = await shallow
-      .mock(VoidPageCommonService, { onClickCopyLicenseesToClipboard: mockOnClickCopyLicenseesToClipboard })
-      .render();
-    instance.onClickCopyLicenseesToClipboard(null);
+    voidPageCommonService.onClickCopyLicenseesToClipboard = jest.fn();
 
-    expect(mockOnClickCopyLicenseesToClipboard).toHaveBeenCalledTimes(1);
+    component.onClickCopyLicenseesToClipboard(null);
+
+    expect(voidPageCommonService.onClickCopyLicenseesToClipboard).toHaveBeenCalledTimes(1);
   });
 
   it('#onClickVoidAllMatches should called voidPageCommonService.onClickVoidAllMatches', async () => {
-    const mockOnClickVoidAllMatches = jest.fn();
-    const { instance } = await shallow
-      .mock(VoidPageCommonService, { onClickVoidAllMatches: mockOnClickVoidAllMatches })
-      .render();
-    instance.onClickVoidAllMatches();
+    voidPageCommonService.onClickVoidAllMatches = jest.fn();
+    component.messageAreaComponents = new QueryList<MessageAreaComponent>();
 
-    expect(mockOnClickVoidAllMatches).toHaveBeenCalledTimes(1);
+    component.onClickVoidAllMatches();
+
+    expect(voidPageCommonService.onClickVoidAllMatches).toHaveBeenCalledTimes(1);
   });
 });

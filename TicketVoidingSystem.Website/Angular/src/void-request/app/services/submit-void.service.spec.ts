@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
@@ -17,13 +18,42 @@ import { LogChangeContentService } from './log-change-content.service';
 import { SubmitVoidService } from './submit-void.service';
 
 describe('SubmitVoidService', () => {
+  let popupService: jest.Mocked<PopupService>;
+  let insertQueueService: jest.Mocked<InsertQueueService>;
+  let checkRequestService: jest.Mocked<CheckRequestService>;
+  let checkVoidPermissionService: jest.Mocked<CheckVoidPermissionService>;
+  let logChangeContentService: jest.Mocked<LogChangeContentService>;
+  let submitVoidService: SubmitVoidService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        SubmitVoidService,
+        {
+          provide: PopupService, useValue: {
+            showVoidBetConfirm: jest.fn(), showWarningVoidBetPermission: jest.fn(),
+            showSubmitVoidRequestSuccess: jest.fn(), showSubmitVoidRequestError: jest.fn()
+          }
+        },
+        { provide: InsertQueueService, useValue: { insertQueue: jest.fn() } },
+        { provide: CheckRequestService, useValue: { isRequestModified: jest.fn() } },
+        { provide: CheckVoidPermissionService, useValue: { checkVoidBetPermission: jest.fn() } },
+        { provide: LogChangeContentService, useValue: { writeLog: jest.fn() } }
+      ]
+    });
+    popupService = TestBed.inject(PopupService) as jest.Mocked<PopupService>;
+    insertQueueService = TestBed.inject(InsertQueueService) as jest.Mocked<InsertQueueService>;
+    checkRequestService = TestBed.inject(CheckRequestService) as jest.Mocked<CheckRequestService>;
+    checkVoidPermissionService = TestBed.inject(CheckVoidPermissionService) as jest.Mocked<CheckVoidPermissionService>;
+    logChangeContentService = TestBed.inject(LogChangeContentService) as jest.Mocked<LogChangeContentService>;
+    submitVoidService = TestBed.inject(SubmitVoidService);
+  });
+
   it('#submitVoid should call #validationService.checkValidationBeforeVoid & return with succesful', async () => {
-    const popupService = new PopupService(null);
-    const spyShowConfirm = jest.spyOn(popupService, 'showVoidBetConfirm').mockImplementation(() => {});
+    const spyShowConfirm = jest.spyOn(popupService, 'showVoidBetConfirm').mockImplementation(() => { });
     const confirmMessage = `<div>${LABELS.CONFIRM_VOID_ALL_TICKETS}</div>`;
     const validation = new Result<null>();
     validation.isSuccessful = true;
-    const submitVoidService = new SubmitVoidService(popupService, null, null, null, null);
     submitVoidService['checkValidationBeforeVoid'] = jest.fn().mockReturnValue(validation);
     submitVoidService['checkRequestModified'] = jest.fn();
 
@@ -39,10 +69,8 @@ describe('SubmitVoidService', () => {
   });
 
   it('#submitVoid should call #validationService.checkValidationBeforeVoid & return with error', async () => {
-    const popupService = new PopupService(null);
     const validation = new Result<null>();
     validation.isSuccessful = false;
-    const submitVoidService = new SubmitVoidService(popupService, null, null, null, null);
     submitVoidService['checkValidationBeforeVoid'] = jest.fn().mockReturnValue(validation);
     submitVoidService['checkRequestModified'] = jest.fn();
     await submitVoidService.submitVoid(null, null, new CommonPrimitiveProperty());
@@ -53,11 +81,8 @@ describe('SubmitVoidService', () => {
   it('#checkRequestModified should call #reCheckVoidBetPermission', async () => {
     const voidPageItem = new VoidPageCommonItem();
     voidPageItem.detailViewModel = new RequestDetailViewModel();
-    const checkRequestService = new CheckRequestService(null, null);
     checkRequestService.isRequestModified = jest.fn().mockReturnValue(false);
-    const logChangeContentService = new LogChangeContentService(null);
     logChangeContentService.writeLog = jest.fn();
-    const submitVoidService = new SubmitVoidService(null, null, checkRequestService, null, logChangeContentService);
     submitVoidService['reCheckVoidBetPermission'] = jest.fn();
 
     await submitVoidService['checkRequestModified']([voidPageItem], new CommonPrimitiveProperty(), []);
@@ -69,9 +94,7 @@ describe('SubmitVoidService', () => {
   it('#checkRequestModified should not call #reCheckVoidBetPermission', async () => {
     const voidPageItem = new VoidPageCommonItem();
     voidPageItem.detailViewModel = new RequestDetailViewModel();
-    const checkRequestService = new CheckRequestService(null, null);
     checkRequestService.isRequestModified = jest.fn().mockReturnValue(true);
-    const submitVoidService = new SubmitVoidService(null, null, checkRequestService, null, null);
     submitVoidService['reCheckVoidBetPermission'] = jest.fn();
 
     await submitVoidService['checkRequestModified']([voidPageItem], new CommonPrimitiveProperty(), null);
@@ -86,10 +109,7 @@ describe('SubmitVoidService', () => {
     const voidPageItem = new VoidPageCommonItem();
     voidPageItem.detailViewModel = new RequestDetailViewModel();
     voidPageItem.detailViewModel.request = new RequestDetailModel();
-    const checkVoidPermissionService = new CheckVoidPermissionService(null);
     checkVoidPermissionService.checkVoidBetPermission = jest.fn().mockReturnValue(validation);
-    const logChangeContentService = new LogChangeContentService(null);
-    const submitVoidService = new SubmitVoidService(null, null, null, checkVoidPermissionService, logChangeContentService);
     submitVoidService['processVoid'] = jest.fn();
 
     await submitVoidService['reCheckVoidBetPermission']([voidPageItem], new CommonPrimitiveProperty(), []);
@@ -101,11 +121,8 @@ describe('SubmitVoidService', () => {
   it('#reCheckVoidBetPermission should call #showWarningVoidBetPermission', async () => {
     const validation = new Result<null>();
     validation.isSuccessful = false;
-    const popupService = new PopupService(null);
     popupService.showWarningVoidBetPermission = jest.fn();
-    const checkVoidPermissionService = new CheckVoidPermissionService(null);
     checkVoidPermissionService.checkVoidBetPermission = jest.fn().mockReturnValue(validation);
-    const submitVoidService = new SubmitVoidService(popupService, null, null, checkVoidPermissionService, null);
     submitVoidService['processVoid'] = jest.fn();
 
     await submitVoidService['reCheckVoidBetPermission']([], new CommonPrimitiveProperty(), []);
@@ -118,11 +135,8 @@ describe('SubmitVoidService', () => {
   it('#processVoid should call #popupService.showSubmitVoidRequestSuccess', async () => {
     const result = new Result<null>();
     result.isSuccessful = true;
-    const popupService = new PopupService(null);
     popupService.showSubmitVoidRequestSuccess = jest.fn();
-    const insertQueueService = new InsertQueueService(null, null);
     insertQueueService.insertQueue = jest.fn().mockReturnValue(result);
-    const submitVoidService = new SubmitVoidService(popupService, insertQueueService, null, null, null);
 
     await submitVoidService['processVoid'](null, new CommonPrimitiveProperty());
 
@@ -133,11 +147,8 @@ describe('SubmitVoidService', () => {
   it('#processVoid should call #popupService.showSubmitVoidRequestError', async () => {
     const result = new Result<null>();
     result.isSuccessful = false;
-    const insertQueueService = new InsertQueueService(null, null);
     insertQueueService.insertQueue = jest.fn().mockReturnValue(result);
-    const popupService = new PopupService(null);
     popupService.showSubmitVoidRequestError = jest.fn();
-    const submitVoidService = new SubmitVoidService(popupService, insertQueueService, null, null, null);
     await submitVoidService['processVoid'](null, new CommonPrimitiveProperty());
 
     expect(popupService.showSubmitVoidRequestError).toHaveBeenCalledTimes(1);
@@ -148,7 +159,6 @@ describe('SubmitVoidService', () => {
     const voidPage = new VoidPageCommonItem();
     voidPage.voidTicketsMini = new TicketsModel();
     voidPage.voidTicketsMini.total = 0;
-    const submitVoidService = new SubmitVoidService(null, null, null, null, null);
 
     const result = submitVoidService['checkValidationBeforeVoid']([voidPage], null);
 
@@ -180,7 +190,6 @@ describe('SubmitVoidService', () => {
     voidPage2.voidTicketsMini.total = 3;
     voidPage2.matchModel = new MatchModel();
     voidPage2.matchModel.matchId = 2;
-    const submitVoidService = new SubmitVoidService(null, null, null, null, null);
 
     const result = submitVoidService['checkValidationBeforeVoid']([voidPage1, voidPage2], [messageAreaComponent1, messageAreaComponent2]);
 
@@ -201,7 +210,6 @@ describe('SubmitVoidService', () => {
     voidPage.matchModel = null;
     voidPage.voidReason = new VoidedReason();
     voidPage.voidReason.reasonEnglish = '';
-    const submitVoidService = new SubmitVoidService(null, null, null, null, null);
 
     const result = submitVoidService['checkValidationBeforeVoid']([voidPage], [messageAreaComponent]);
 
@@ -222,7 +230,6 @@ describe('SubmitVoidService', () => {
     voidPage.matchModel = null;
     voidPage.voidReason = new VoidedReason();
     voidPage.voidReason.reasonChineseSimplified = '';
-    const submitVoidService = new SubmitVoidService(null, null, null, null, null);
 
     const result = submitVoidService['checkValidationBeforeVoid']([voidPage], [messageAreaComponent]);
 
@@ -241,7 +248,6 @@ describe('SubmitVoidService', () => {
     voidPage.voidTicketsMini.total = 1;
     voidPage.matchModel = null;
     voidPage.voidReason = null;
-    const submitVoidService = new SubmitVoidService(null, null, null, null, null);
 
     const result = submitVoidService['checkValidationBeforeVoid']([voidPage], [messageAreaComponent]);
 

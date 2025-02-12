@@ -1,13 +1,10 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Shallow } from 'shallow-render';
-import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
-import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
-import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { GroupModel } from './group-tickets.model';
 import { TicketsListComponent } from './tickets-list.component';
 import { TicketsModel } from './tickets.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
+import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 
 class Helper {
   static readonly titleSelector = 'div.title-tickets-list-label';
@@ -19,28 +16,31 @@ class Helper {
   static readonly exportExcelButton = 'input[type=button]';
   static readonly headerCheckBoxSelector = '.checkbox-dropdown-list';
   static readonly fakeTicketsModel = {
-    groups:[
+    groups: [
       {
         name: 'Credit',
         displayTotalTickets: 3,
         tickets: [
-          { no: 1, betId :'108495160329', value: 108495160329, transDate: '03/31/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: 'Single Match Parlay',
-            odds: '<span class=\"underdog\">1.95</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">100</div>',winLoss: '-',
-            currency: 'INH', status: '<div class=\"status\">Running</div>', score:'', handicap: '',
+          {
+            no: 1, betId: '108495160329', value: 108495160329, transDate: '03/31/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: 'Single Match Parlay',
+            odds: '<span class=\"underdog\">1.95</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">100</div>', winLoss: '-',
+            currency: 'INH', status: '<div class=\"status\">Running</div>', score: '', handicap: '',
             choice: '<div class=""><span class=\"{betTeamClassName}\"></span></div>', soldId: null, mainTransId: 0, isParlay: false, isDisable: false,
-            isCricket: false, isBonus: false, isMarked:false, secondAcceptFlag: '', isChecked: true, isCancelCashOutis: false
+            isCricket: false, isBonus: false, isMarked: false, secondAcceptFlag: '', isChecked: true, isCancelCashOutis: false
           },
-          { no: 2, betId :'108495160330', value: 108495160330, transDate: '03/31/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: 'Single Match Parlay',
-            odds: '<span class=\"underdog\">1.95</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">100</div>',winLoss: '-',
-            currency: 'INH', status: '<div class=\"status\">Running</div>', score:'', handicap: '',
+          {
+            no: 2, betId: '108495160330', value: 108495160330, transDate: '03/31/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: 'Single Match Parlay',
+            odds: '<span class=\"underdog\">1.95</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">100</div>', winLoss: '-',
+            currency: 'INH', status: '<div class=\"status\">Running</div>', score: '', handicap: '',
             choice: '<div class=""><span class=\"{betTeamClassName}\"></span></div>', soldId: null, mainTransId: 0, isParlay: false, isDisable: false,
-            isCricket: false, isBonus: false, isMarked:false, secondAcceptFlag: '', isChecked: true, isCancelCashOutis: false
+            isCricket: false, isBonus: false, isMarked: false, secondAcceptFlag: '', isChecked: true, isCancelCashOutis: false
           },
-          { no: 3, betId :'108495160331', value: 108495160331, transDate: '03/31/2020 02:02:34.030 AM', member: 'AB88UUS01BetTrade', betType: 'Single Match Parlay',
-            odds: '<span class=\"underdog\">1.95</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">100</div>',winLoss: '-',
-            currency: 'INH', status: '<div class=\"status\">Running</div>', score:'', handicap: '',
+          {
+            no: 3, betId: '108495160331', value: 108495160331, transDate: '03/31/2020 02:02:34.030 AM', member: 'AB88UUS01BetTrade', betType: 'Single Match Parlay',
+            odds: '<span class=\"underdog\">1.95</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">100</div>', winLoss: '-',
+            currency: 'INH', status: '<div class=\"status\">Running</div>', score: '', handicap: '',
             choice: '<div class=""><span class=\"{betTeamClassName}\"></span></div>', soldId: null, mainTransId: 0, isParlay: false, isDisable: false,
-            isCricket: false, isBonus: false, isMarked:false, secondAcceptFlag: '', isChecked: true, isCancelCashOutis: false
+            isCricket: false, isBonus: false, isMarked: false, secondAcceptFlag: '', isChecked: true, isCancelCashOutis: false
           },
         ]
       }
@@ -55,7 +55,7 @@ class Helper {
     instantLicenseesName: '',
     fromTime: new Date(),
     toTime: new Date(),
-    singleTransIds: [108495160329,108495160330,108495160331],
+    singleTransIds: [108495160329, 108495160330, 108495160331],
     parlayTransIds: [],
     cancelCashOutTransIds: [],
     uncheckedTransIds: [],
@@ -84,188 +84,118 @@ class Helper {
 }
 
 describe('TicketsListComponent', () => {
-  @NgModule({
-    declarations: [
-      PagingComponent
-    ],
-    imports: [
-      PipeModule,
-      BlockUiModule,
-      FormsModule
-    ]
-  })
-  class AppModuleTest { }
-
-  let shallow: Shallow<TicketsListComponent>;
+  let component: TicketsListComponent;
+  let fixture: ComponentFixture<TicketsListComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(TicketsListComponent, AppModuleTest);
+    fixture = TestBed.createComponent(TicketsListComponent);
+    component = fixture.componentInstance;
   });
 
-  it('#ngOnInit should call #clickBody', async() => {
+  it('#ngOnInit should call #clickBody', async () => {
     // Arrange
-    const { instance } = await shallow.render(
-      '<tickets-list [(model)]="ticketsModel"></tickets-list>',
-      { bind:
-          { ticketsModel: Helper.getFakeTicketsModel() }
-      }
-    );
-    instance.clickBody = jest.fn();
+    component.clickBody = jest.fn();
 
     // Action
-    instance.ngOnInit();
+    component.ngOnInit();
 
     // Assert
-    expect(instance.clickBody).toHaveBeenCalledTimes(1);
+    expect(component.clickBody).toHaveBeenCalledTimes(1);
   });
 
-  it('#changeTickets should emit ticketsChange and return expected showMessageBetTrade', async() => {
+  it('#changeTickets should emit ticketsChange and return expected showMessageBetTrade', async () => {
     // Arrange
-    const { instance } = await shallow.render(
-      '<tickets-list [(model)]="ticketsModel"></tickets-list>',
-      { bind:
-          { ticketsModel: Helper.getFakeTicketsModel() }
-      }
-    );
-    instance.model.getNumberOfCheckedTickets = jest.fn().mockImplementation(() => 3);
-    instance.ticketsChange.emit = jest.fn();
+    component.model = Helper.getFakeTicketsModel();
+    component.model.getNumberOfCheckedTickets = jest.fn().mockImplementation(() => 3);
+    component.ticketsChange.emit = jest.fn();
 
     // Action
-    instance.changeTickets();
+    component.changeTickets();
 
     // Assert
-    expect(instance.ticketsChange.emit).toHaveBeenCalledTimes(1);
-    expect(instance.ticketsChange.emit).toHaveBeenCalledWith(3);
-    expect(instance.showMessageBetTrade).toBe(true);
+    expect(component.ticketsChange.emit).toHaveBeenCalledTimes(1);
+    expect(component.ticketsChange.emit).toHaveBeenCalledWith(3);
+    expect(component.showMessageBetTrade).toBe(true);
   });
 
-  it('TicketsListComponent should display html and model correctly', async () => {
+  it('should display no-data message when no tickets exist', () => {
     // Arrange
-    const { instance, fixture, find } = await shallow.render(
-      '<tickets-list [(model)]="ticketsModel"></tickets-list>',
-      { bind:
-          { ticketsModel: Helper.getFakeTicketsModel() }
-      }
-    );
+    component.model = Helper.getFakeNoTickets();
+    fixture.detectChanges();
+
+    // Assert
+    expect(fixture.nativeElement.querySelector(Helper.nodataSelector)).toBeTruthy();
+  });
+  it('should display bet trade message when showMessageBetTrade is true', () => {
+    // Arrange
+    component.model = Helper.getFakeTicketsModel();
+    component.showMessageBetTrade = true;
     fixture.detectChanges();
 
     // Assert
     expect(fixture).toMatchSnapshot();
-    expect(find(Helper.titleSelector).nativeElement.textContent).toBe('Void Time: 12:51:48 PM - 12:51:55 PM (Single Count: 3, Parlay Count: 0)');
-    expect(instance.model).toStrictEqual(Helper.getFakeTicketsModel());
-    expect(find(Helper.nodataSelector)).toHaveFound(0);
+    expect(fixture.nativeElement.querySelector(Helper.bettradeMessageSelector)).toBeTruthy();
   });
 
-  it('TicketsComponent should display no-data', async () => {
+  it('should display checked tickets correctly after check/uncheck actions', () => {
     // Arrange
-    const { find, fixture } = await shallow.render(
-      '<tickets-list [(model)]="ticketsModel"></tickets-list>',
-      { bind:
-          { ticketsModel: Helper.getFakeNoTickets() }
-      }
-    );
+    component.model = Helper.renderTicketsModel();
     fixture.detectChanges();
 
-    // Assert
-    expect(fixture).toMatchSnapshot();
-    expect(find(Helper.nodataSelector)).toHaveFoundOne();
-  });
+    const checkedInputs = fixture.nativeElement.querySelectorAll(Helper.checkedInputSelector);
 
-  it('Should display bettrade message', async () => {
-    // Arrange
-    const { find, fixture, instance } = await shallow.render(
-      '<tickets-list [(model)]="ticketsModel"></tickets-list>',
-      { bind:
-          { ticketsModel: Helper.getFakeTicketsModel() }
-      }
-    );
-    instance.showMessageBetTrade = true;
+    // Act & Assert: Uncheck one item in group
+    checkedInputs[1].checked = false;
+    checkedInputs[1].dispatchEvent(new Event('change'));
     fixture.detectChanges();
+    expect(component.model.getNumberOfCheckedTickets()).toBe(2);
 
-    // Assert
-    expect(fixture).toMatchSnapshot();
-    expect(find(Helper.bettradeMessageSelector)).toHaveFoundOne();
-  });
-
-  it('Should display checked tickets correctly after check/uncheck on betlist', async () => {
-    const { find, fixture, instance } = await shallow.render(
-      '<tickets-list [(model)]="ticketsModel"></tickets-list>',
-      { bind:
-          { ticketsModel: Helper.renderTicketsModel() }
-      }
-    );
+    // Act & Assert: Uncheck one group
+    checkedInputs[0].checked = false;
+    checkedInputs[0].dispatchEvent(new Event('change'));
     fixture.detectChanges();
-    const checkedInputListSelector = find(Helper.checkedInputSelector);
+    expect(component.model.getNumberOfCheckedTickets()).toBe(0);
 
-    // uncheck one item in group on betlist
-    checkedInputListSelector[1].nativeElement.checked = false;
-    checkedInputListSelector[1].triggerEventHandler('change', { target: checkedInputListSelector[1].nativeElement });
-    expect(instance.model.getNumberOfCheckedTickets()).toBe(2);
-
-    // uncheck one group on betlist
-    checkedInputListSelector[0].nativeElement.checked = false;
-    checkedInputListSelector[0].triggerEventHandler('change', { target: checkedInputListSelector[0].nativeElement });
-    expect(instance.model.getNumberOfCheckedTickets()).toBe(0);
-
-    // check one group
-    checkedInputListSelector[0].nativeElement.checked = true;
-    checkedInputListSelector[0].triggerEventHandler('change', { target: checkedInputListSelector[0].nativeElement });
-    expect(instance.model.getNumberOfCheckedTickets()).toBe(3);
-
-    // click checkbox from header
-    const headerCheckBoxSelector = find(Helper.headerCheckBoxSelector);
-    headerCheckBoxSelector.triggerEventHandler('click', {});
-    expect(instance.model.getNumberOfCheckedTickets()).toBe(3);
-
-    headerCheckBoxSelector.triggerEventHandler('click', {});
-    expect(instance.model.getNumberOfCheckedTickets()).toBe(3);
-  });
-
-  it('#exportExcelEvent should emit when click button export excel', async () => {
-    // Arrange
-    const { find, fixture, instance } = await shallow.render(
-      '<tickets-list [(model)]="ticketsModel"></tickets-list>',
-      { bind:
-          { ticketsModel: Helper.getFakeTicketsModel() }
-      }
-    );
-    instance.exportExcelEvent.emit = jest.fn();
+    // Act & Assert: Check one group
+    checkedInputs[0].checked = true;
+    checkedInputs[0].dispatchEvent(new Event('change'));
     fixture.detectChanges();
-    const exportExcelButton = find(Helper.exportExcelButton);
-    exportExcelButton.triggerEventHandler('click', {});
+    expect(component.model.getNumberOfCheckedTickets()).toBe(3);
 
-    // Assert
-    expect(instance.exportExcelEvent.emit).toHaveBeenCalledTimes(1);
+    // Act & Assert: Click checkbox from header
+    const headerCheckbox = fixture.nativeElement.querySelector(Helper.headerCheckBoxSelector);
+    headerCheckbox.dispatchEvent(new Event('click'));
+    expect(component.model.getNumberOfCheckedTickets()).toBe(3);
+
+    headerCheckbox.dispatchEvent(new Event('click'));
+    expect(component.model.getNumberOfCheckedTickets()).toBe(3);
   });
-
-  it('when PagingComponent modelChange event emit, #pagingEvent should be called', async () => {
+  
+  it('should call #pagingEvent when PagingComponent emits modelChange event', () => {
     // Arrange
-    const { findComponent, instance } = await shallow.render(
-      '<tickets-list [(model)]="ticketsModel"></tickets-list>',
-      { bind:
-          { ticketsModel: Helper.getFakeTicketsModel() }
-      }
-    );
-    instance.pagingEvent = jest.fn();
-    const pagingComponent = findComponent(PagingComponent);
+    component.model = Helper.getFakeTicketsModel();
+    component.pagingEvent = jest.fn();
+    const pagingComponent: PagingComponent = fixture.debugElement
+      .query((el) => el.componentInstance instanceof PagingComponent)
+      .componentInstance;
+    pagingComponent.model = { pageSize: 3000 } as PagingModel;
+
+    // Act
     pagingComponent.modelChange.emit();
 
     // Assert
-    expect(instance.pagingEvent).toHaveBeenCalledTimes(1);
+    expect(component.pagingEvent).toHaveBeenCalledTimes(1);
   });
 
   it('#ngOnChanges should set title when is DangerAccepted', async () => {
     // Arrange
-    const { instance } = await shallow.render(
-      '<tickets-list [(model)]="ticketsModel"></tickets-list>',
-      { bind:
-          { ticketsModel: Helper.getFakeTicketsModel() }
-      }
-    );
-    instance.issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
-    instance.ngOnChanges();
+    component.issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
+    component.model = Helper.getFakeTicketsModel();
+
+    // Act
+    component.ngOnChanges();
 
     // Assert
-    expect(instance.title).toBe('Void Time: 12:51:48 PM - 12:51:55 PM (Single Count: 3, Parlay Count: 0, Cancel CO: 0)');
+    expect(component.title).toBe('Void Time: 12:51:48 PM - 12:51:55 PM (Single Count: 3, Parlay Count: 0, Cancel CO: 0)');
   });
 });

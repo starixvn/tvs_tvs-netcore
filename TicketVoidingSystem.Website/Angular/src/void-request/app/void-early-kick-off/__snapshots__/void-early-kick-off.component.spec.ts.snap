@@ -28,3 +28,36 @@ exports[`VoidDuplicateTicketsComponent VoidDuplicateTicketsComponent should init
   </void-early-kick-off>
 </ng-component>
 `;
+
+exports[`VoidEarlyKickOffComponent VoidDuplicateTicketsComponent should init match snapshot 1`] = `
+<void-early-kick-off
+  element={[Function _ElementRef]}
+  messageAreaComponents={[Function _QueryList]}
+  primitiveProperty={[Function CommonPrimitiveProperty]}
+  ticketsService={[Function Object]}
+  tooltip={[Function Tooltip]}
+  voidPageCommonService={[Function Object]}
+  voidPageItems={[Function Array]}
+  voidPageService={[Function Object]}
+>
+  <div>
+  </div><div>
+    <div
+      class="in modal-backdrop spinner-overlay"
+    />
+    <div
+      aria-atomic="true"
+      aria-live="assertive"
+      class="spinner-message-container"
+    >
+      <div
+        class="loading-message"
+      >
+        <div
+          class="loading"
+        />
+      </div>
+    </div>
+  </div>
+</void-early-kick-off>
+`;

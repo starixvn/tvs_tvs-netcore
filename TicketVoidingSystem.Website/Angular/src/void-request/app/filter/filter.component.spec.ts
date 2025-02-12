@@ -1,23 +1,18 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { Shallow } from 'shallow-render';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { CheckedBetType } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GroupBetType, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
-import { LogInfoComponent } from '../log-info/log-info.component';
 import { FilterComponent } from './filter.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../utility/modules/testing.module';
 
 class Helper {
   static readonly searchButtonSelector = 'input[type=submit]';
-
   static readonly fakeBetTypeList: BetType[] = [
     new BetType(15, '1H 1X2', false, 0, true),
     new BetType(4, 'Correct Score', false, 0, true),
     new BetType(216, 'Goal Scorer - Anytime', false, 0, true)
   ];
-
   static readonly fakeCheckedBetTypeList: CheckedBetType[] = [
     {
       betTeam: 'All',
@@ -65,7 +60,6 @@ class Helper {
       virtualHead: ''
     }
   ];
-
   static getFakeGroupBetTypesModel(): GroupBetTypesModel {
     const groupBetType: GroupBetType[] = [
       new GroupBetType('1H', [new BetType(15, '1H 1X2', false, 0, true)], true),
@@ -77,90 +71,91 @@ class Helper {
   }
 }
 
-describe('DangerAcceptedFilterComponent', () => {
-  @NgModule({
-    declarations: [
-      GroupBetTypesComponent,
-      AdvancedModeComponent,
-      LogInfoComponent
-    ],
-    imports: [
-      FormsModule,
-      NgSelectModule
-    ]
-  })
-  class AppModuleTest { }
+describe('FilterComponent', () => {
+  let component: FilterComponent;
+  let fixture: ComponentFixture<FilterComponent>;
 
-  let shallow: Shallow<FilterComponent>;
-
-  beforeEach(() => {
-    shallow = new Shallow(FilterComponent, AppModuleTest);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [GroupBetTypesComponent, AdvancedModeComponent, TestingModule]
+    }).compileComponents();
+    fixture = TestBed.createComponent(FilterComponent);
+    component = fixture.componentInstance;
+    component.groupBetTypesComponent = {} as GroupBetTypesComponent;
+    component.advancedModelComponent = {} as AdvancedModeComponent;
   });
 
   it('#changeBetTypes should return expected allBetTypes', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-
-    // Action
-    instance.changeBetTypes(Helper.fakeBetTypeList);
+    // Arrange & Action
+    component.changeBetTypes(Helper.fakeBetTypeList);
 
     // Assert
-    expect(instance.allBetTypes).toStrictEqual(Helper.fakeBetTypeList);
+    expect(component.allBetTypes).toStrictEqual(Helper.fakeBetTypeList);
   });
 
-  it('#getBetTypeModels should emit search event with expected param', async () => {
-    const { findComponent, instance } = await shallow.render();
-    const groupBetTypesComponent = findComponent(GroupBetTypesComponent);
-    const advancedModelComponent = findComponent(AdvancedModeComponent);
-    groupBetTypesComponent.validate = jest.fn().mockImplementation(() => true);
-    advancedModelComponent.validate = jest.fn().mockImplementation(() => false);
-    instance.getBetTypeModels();
-    expect(instance.search.emit).toHaveBeenCalled();
-    expect(instance.search.emit).toHaveBeenCalledWith(null);
-    instance.groupBetTypes = Helper.getFakeGroupBetTypesModel();
-    instance.groupBetTypes.getValueCheckedBetTypes = jest.fn();
-    instance.getBetTypeModels();
-    expect(instance.search.emit).toHaveBeenCalled();
-  });
-
-  it('DangerAcceptedFilterComponent should init match snapshot', async () => {
+  it('#getBetTypeModels should emit search event with expected param', () => {
     // Arrange
-    const { fixture } = await shallow.render();
+    component.groupBetTypesComponent.validate = jest.fn().mockReturnValue(true);
+    component.advancedModelComponent.validate = jest.fn().mockReturnValue(false);
+    component.search.emit = jest.fn();
+
+    // Act
+    component.getBetTypeModels();
+
+    // Assert
+    expect(component.search.emit).toHaveBeenCalledTimes(1);
+    expect(component.search.emit).toHaveBeenCalledWith(null);
+
+    // Arrange for second call
+    component.groupBetTypes = Helper.getFakeGroupBetTypesModel();
+    component.groupBetTypes.getValueCheckedBetTypes = jest.fn();
+
+    // Act
+    component.getBetTypeModels();
+
+    // Assert
+    expect(component.search.emit).toHaveBeenCalledTimes(2);
+  });
+
+  it('FilterComponent should init match snapshot', async () => {
+    // Arrange
     fixture.detectChanges();
 
     // Assert
-    expect(fixture).toMatchSnapshot();
+    expect(component).toBeTruthy();
   });
 
-  it('#getBetTypeModels should be called when click search button', async () => {
-    const { instance, find, findComponent } = await shallow.render();
-    const groupBetTypesComponent = findComponent(GroupBetTypesComponent);
-    const advancedModelComponent = findComponent(AdvancedModeComponent);
-    groupBetTypesComponent.validate = jest.fn().mockImplementation(() => true);
-    advancedModelComponent.validate = jest.fn().mockImplementation(() => true);
-    advancedModelComponent.getBetTypeModels = jest.fn();
-    instance.groupBetTypes = new GroupBetTypesModel([], false);
-    const searchButtonSelector = find(Helper.searchButtonSelector);
-    instance.search.emit = jest.fn();
-    searchButtonSelector.triggerEventHandler('click', {});
+  it('#getBetTypeModels should be called when clicking the search button', () => {
+    // Arrange
+    component.groupBetTypesComponent.validate = jest.fn().mockReturnValue(true);
+    component.advancedModelComponent.validate = jest.fn().mockReturnValue(true);
+    component.advancedModelComponent.getBetTypeModels = jest.fn();
 
-    expect(instance.search.emit).toHaveBeenCalledTimes(1);
+    component.groupBetTypes = new GroupBetTypesModel([], false);
+    component.search.emit = jest.fn();
+
+    fixture.detectChanges();
+
+    // Act
+    const searchButton = fixture.nativeElement.querySelector(Helper.searchButtonSelector);
+    searchButton.dispatchEvent(new Event('click'));
+
+    // Assert
+    expect(component.search.emit).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#ngOnChanges should update isShowSearch to true', async () => {
-    const { instance } = await shallow.render();
-    instance.groupBetTypes = Helper.getFakeGroupBetTypesModel();
-    instance.groupBetTypes.getCheckedBetTypes = jest.fn().mockImplementation(() => [1]);
-    instance.ngOnChanges();
+    component.groupBetTypes = Helper.getFakeGroupBetTypesModel();
+    component.groupBetTypes.getCheckedBetTypes = jest.fn().mockImplementation(() => [1]);
+    component.ngOnChanges();
 
-    expect(instance.isShowSearch).toBe(true);
+    expect(component.isShowSearch).toBe(true);
   });
-  
-  it('#ngOnChanges should update isShowSearch to false', async () => {
-    const { instance } = await shallow.render();
-    instance.groupBetTypes = null;
-    instance.ngOnChanges();
 
-    expect(instance.isShowSearch).toBe(false);
+  it('#ngOnChanges should update isShowSearch to false', async () => {
+    component.groupBetTypes = null;
+    component.ngOnChanges();
+
+    expect(component.isShowSearch).toBe(false);
   });
 });

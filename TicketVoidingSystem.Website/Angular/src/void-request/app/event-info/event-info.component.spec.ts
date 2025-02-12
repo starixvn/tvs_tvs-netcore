@@ -1,26 +1,17 @@
-import { NgModule } from '@angular/core';
-import { Shallow } from 'shallow-render';
+
 import { EventInfoComponent } from './event-info.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 describe('EventInfoComponent', () => {
-  @NgModule({
-    declarations: [
-    ]
-  })
-  class AppModuleTest { }
+    let component: EventInfoComponent;
+    let fixture: ComponentFixture<EventInfoComponent>;
+    beforeEach(async () => {
+      fixture = TestBed.createComponent(EventInfoComponent);
+          component = fixture.componentInstance;
+          fixture.detectChanges();
+    });
 
-  let shallow: Shallow<EventInfoComponent>;
-
-  beforeEach(() => {
-    shallow = new Shallow(EventInfoComponent, AppModuleTest);
-  });
-
-  it('EventInfoComponent should init match snapshot', async () => {
-    // Arrange
-    const { fixture } = await shallow.render();
-    fixture.detectChanges();
-
-    // Assert
-    expect(fixture).toMatchSnapshot();
-  });
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
 });

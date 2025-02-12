@@ -1,12 +1,7 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { TicketCountOtherSportsComponent } from '../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
 import { AcceptType } from '../../../utility/constants/config';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
-import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { LogInfoNewComponent } from './log-info-new.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 class Helper {
   static readonly fakeLogInfoDetail: LogInfoDetail =
@@ -27,35 +22,16 @@ class Helper {
 }
 
 describe('LogInfoNewComponent', () => {
-  @NgModule({
-    declarations: [
-      TicketCountOtherSportsComponent
-    ],
-    imports: [
-      PipeModule,
-      NgbModule,
-      FormsModule
-    ],
-    providers: [
-    ]
-  })
-  class AppModuleTest { }
+  let component: LogInfoNewComponent;
+  let fixture: ComponentFixture<LogInfoNewComponent>;
 
-  let shallow: Shallow<LogInfoNewComponent>;
-
-  beforeEach(() => {
-    shallow = new Shallow(LogInfoNewComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(LogInfoNewComponent);
+    component = fixture.componentInstance;
+    component.logInfoDetail = Helper.fakeLogInfoDetail;
   });
 
-  it('LogInfoNewComponent init should match snapshot', async () => {
-    const { fixture } = await shallow.render({
-      bind: {
-        logInfoDetail: Helper.fakeLogInfoDetail,
-      }
-    });
-
+  it('#LogInfoNewComponent init should match snapshot', async () => {
     expect(fixture).toMatchSnapshot();
   });
 
@@ -64,19 +40,14 @@ describe('LogInfoNewComponent', () => {
     const logInfoDetail = Helper.fakeLogInfoDetail;
     logInfoDetail.highlightAcceptType = AcceptType.AUTO_ACCEPT;
     logInfoDetail.highlightMinTime = new Date();
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfoDetail: logInfoDetail,
-      }
-    });
+    component.logInfoDetail = logInfoDetail;
 
     // Action
-    const actual = instance.getHighlightMinTimeClass(new Date());
+    const actual = component.getHighlightMinTimeClass(new Date());
 
     // Assert
     expect(actual).toBe('highlight-min-aa');
-    expect(instance.acceptTypeName).toBe('AA');
+    expect(component.acceptTypeName).toBe('AA');
   });
 
   it('#getHighlightMinTimeClass should return highlight-min-sa', async () => {
@@ -84,19 +55,14 @@ describe('LogInfoNewComponent', () => {
     const logInfoDetail = Helper.fakeLogInfoDetail;
     logInfoDetail.highlightAcceptType = AcceptType.SECOND_ACCEPT;
     logInfoDetail.highlightMinTime = new Date();
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfoDetail: logInfoDetail,
-      }
-    });
+    component.logInfoDetail = logInfoDetail;
 
     // Action
-    const actual = instance.getHighlightMinTimeClass(new Date());
+    const actual = component.getHighlightMinTimeClass(new Date());
 
     // Assert
     expect(actual).toBe('highlight-min-sa');
-    expect(instance.acceptTypeName).toBe('SA');
+    expect(component.acceptTypeName).toBe('SA');
   });
 
   it('#getHighlightMinTimeClass should return highlight-min-pa', async () => {
@@ -104,19 +70,14 @@ describe('LogInfoNewComponent', () => {
     const logInfoDetail = Helper.fakeLogInfoDetail;
     logInfoDetail.highlightAcceptType = AcceptType.PENDING_ACCEPT;
     logInfoDetail.highlightMinTime = new Date();
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfoDetail: logInfoDetail,
-      }
-    });
+    component.logInfoDetail = logInfoDetail;
 
     // Action
-    const actual = instance.getHighlightMinTimeClass(new Date());
+    const actual = component.getHighlightMinTimeClass(new Date());
 
     // Assert
     expect(actual).toBe('highlight-min-pa');
-    expect(instance.acceptTypeName).toBe('PA');
+    expect(component.acceptTypeName).toBe('PA');
   });
 
   it('#getHighlightMinTimeClass should return -', async () => {
@@ -124,73 +85,45 @@ describe('LogInfoNewComponent', () => {
     const logInfoDetail = Helper.fakeLogInfoDetail;
     logInfoDetail.highlightAcceptType = null;
     logInfoDetail.highlightMinTime = null;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfoDetail: logInfoDetail,
-      }
-    });
+    component.logInfoDetail = logInfoDetail;
 
     // Action
-    const actual = instance.getHighlightMinTimeClass(null);
+    const actual = component.getHighlightMinTimeClass(null);
 
     // Assert
     expect(actual).toBe('');
   });
 
   it('#displayMinTime should return -', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfoDetail: Helper.fakeLogInfoDetail,
-      }
-    });
-
-    // Action
-    const actual = instance.displayMinTime(null);
+    // Arrange & Action
+    const actual = component.displayMinTime(null);
 
     // Assert
     expect(actual).toBe('-');
   });
 
   it('#displayMinTime should return expected time', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfoDetail: Helper.fakeLogInfoDetail,
-      }
-    });
-
-    // Action
-    const actual = instance.displayMinTime(new Date("2020-10-08 09:44:46.361 PM"));
+    // Arrange & Action
+    const actual = component.displayMinTime(new Date("2020-10-08 09:44:46.361 PM"));
 
     // Assert
     expect(actual).toBe('09:44:46.361 PM');
   });
 
-  it('displayTransId should return 12312', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfoDetail: Helper.fakeLogInfoDetail,
-      }
-    });
-    const actual = instance.displayTransId(1, '12312');
+  it('#displayTransId should return 12312', async () => {
+    // Arrange & Action
+    const actual = component.displayTransId(1, '12312');
 
+    // Assert
     expect(actual).toBe('12312');
   });
 
-  it('displayTransId should return -', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfoDetail: Helper.fakeLogInfoDetail,
-      }
-    });
-    const actual = instance.displayTransId(0, '');
+  it('#displayTransId should return -', async () => {
+    // Arrange & Action
 
+    const actual = component.displayTransId(0, '');
+
+    // Assert
     expect(actual).toBe('-');
   });
 });

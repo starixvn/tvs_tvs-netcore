@@ -1,30 +1,34 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`VoidDangerAcceptedComponent VoidDangerAcceptedComponent should init match snapshot 1`] = `
-<ng-component
-  __ngContext__={[Function LRootView]}
+<void-danger-accepted
+  element={[Function _ElementRef]}
+  messageAreaComponents={[Function _QueryList]}
+  primitiveProperty={[Function CommonPrimitiveProperty]}
+  ticketsService={[Function Object]}
+  tooltip={[Function Tooltip]}
+  voidMatches={[Function Array]}
+  voidPageCommonService={[Function Object]}
+  voidPageService={[Function Object]}
 >
-  <void-danger-accepted>
-    <div>
-    </div>
-    <div>
+  <div>
+  </div><div>
+    <div
+      class="in modal-backdrop spinner-overlay"
+    />
+    <div
+      aria-atomic="true"
+      aria-live="assertive"
+      class="spinner-message-container"
+    >
       <div
-        class="in modal-backdrop spinner-overlay"
-      />
-      <div
-        aria-atomic="true"
-        aria-live="assertive"
-        class="spinner-message-container"
+        class="loading-message"
       >
         <div
-          class="loading-message"
-        >
-          <div
-            class="loading"
-          />
-        </div>
+          class="loading"
+        />
       </div>
     </div>
-  </void-danger-accepted>
-</ng-component>
+  </div>
+</void-danger-accepted>
 `;

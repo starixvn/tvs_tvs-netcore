@@ -9,16 +9,34 @@ import { CheckRequestService } from "./check-request.service";
 import { LoadDataService } from "./load-data.service";
 import { SubmitVoidService } from './submit-void.service';
 import { TicketsService } from "./tickets.service";
+import { TestBed } from '@angular/core/testing';
 
 describe('LoadDataService', () => {
+  let submitVoidService: jest.Mocked<SubmitVoidService>;
+  let ticketsService: jest.Mocked<TicketsService>;
+  let checkRequestService: jest.Mocked<CheckRequestService>;
+  let service: LoadDataService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        LoadDataService,
+        { provide: TicketsService, useValue: { insertQueue: jest.fn() } },
+        { provide: SubmitVoidService, useValue: { insertQueue: jest.fn() } },
+        { provide: CheckRequestService, useValue: { hash: jest.fn() } }
+      ]
+    });
+    submitVoidService = TestBed.inject(SubmitVoidService) as jest.Mocked<SubmitVoidService>;
+    ticketsService = TestBed.inject(TicketsService) as jest.Mocked<TicketsService>;
+    checkRequestService = TestBed.inject(CheckRequestService) as jest.Mocked<CheckRequestService>;
+    service = TestBed.inject(LoadDataService);
+  });
 
   it('#onClickShowVoidTickets should return when isShowTicketFull & isRequestModified are incorrect', async () => {
     const voidPageCommonItem = new VoidPageCommonItem();
     voidPageCommonItem.isShowTicketFull = false;
     voidPageCommonItem.isLoadedTicketFull = true;
-    const checkRequestService = new CheckRequestService(null, null);
     checkRequestService.isRequestModified = jest.fn().mockReturnValue(true);
-    const service = new LoadDataService(null, null, checkRequestService);
 
     await service.onClickShowVoidTickets(voidPageCommonItem, new RequestDetailViewModel(), new CommonPrimitiveProperty());
 
@@ -29,9 +47,7 @@ describe('LoadDataService', () => {
     const voidPageCommonItem = new VoidPageCommonItem();
     voidPageCommonItem.isShowTicketFull = false;
     voidPageCommonItem.isLoadedTicketFull = true;
-    const checkRequestService = new CheckRequestService(null, null);
     checkRequestService.isRequestModified = jest.fn().mockReturnValue(false);
-    const service = new LoadDataService(null, null, checkRequestService);
 
     await service.onClickShowVoidTickets(voidPageCommonItem, new RequestDetailViewModel(), new CommonPrimitiveProperty());
 
@@ -42,11 +58,8 @@ describe('LoadDataService', () => {
     const voidPageCommonItem = new VoidPageCommonItem();
     voidPageCommonItem.isShowTicketFull = true;
     voidPageCommonItem.isLoadedTicketFull = false;
-    const checkRequestService = new CheckRequestService(null, null);
     checkRequestService.isRequestModified = jest.fn().mockReturnValue(true);
-    const ticketsService = new TicketsService(null);
     ticketsService.loadVoidTicketsFullOnFirstTime = jest.fn();
-    const service = new LoadDataService(null, ticketsService, checkRequestService);
 
     await service.onClickShowVoidTickets(voidPageCommonItem, new RequestDetailViewModel(), new CommonPrimitiveProperty());
 
@@ -57,11 +70,8 @@ describe('LoadDataService', () => {
     const voidPageCommonItem = new VoidPageCommonItem();
     voidPageCommonItem.isShowTicketFull = true;
     voidPageCommonItem.isLoadedTicketFull = true;
-    const checkRequestService = new CheckRequestService(null, null);
     checkRequestService.isRequestModified = jest.fn().mockReturnValue(true);
-    const ticketsService = new TicketsService(null);
     ticketsService.loadVoidTicketsFullOnFirstTime = jest.fn();
-    const service = new LoadDataService(null, ticketsService, checkRequestService);
 
     await service.onClickShowVoidTickets(voidPageCommonItem, new RequestDetailViewModel(), new CommonPrimitiveProperty());
 
@@ -74,7 +84,6 @@ describe('LoadDataService', () => {
     primitiveProperty.isRunningSubscriptionCallback = true;
     const voidPageCommonItem = new VoidPageCommonItem();
     voidPageCommonItem.isShowTemplateMessage = true;
-    const service = new LoadDataService(null, null, null);
 
     await service.checkLoadedFullDataBeforeShowMessageTemplate(voidPageCommonItem, primitiveProperty, afterLoadUnderneathDataSubscription);
 
@@ -89,7 +98,6 @@ describe('LoadDataService', () => {
     primitiveProperty.isLoadedUnderneathData = true;
     const voidPageCommonItem = new VoidPageCommonItem();
     voidPageCommonItem.isShowTemplateMessage = true;
-    const service = new LoadDataService(null, null, null);
 
     await service.checkLoadedFullDataBeforeShowMessageTemplate(voidPageCommonItem, primitiveProperty, afterLoadUnderneathDataSubscription);
 
@@ -104,7 +112,6 @@ describe('LoadDataService', () => {
     primitiveProperty.isLoadedUnderneathData = false;
     const voidPageCommonItem = new VoidPageCommonItem();
     voidPageCommonItem.isShowTemplateMessage = true;
-    const service = new LoadDataService(null, null, null);
 
     await service.checkLoadedFullDataBeforeShowMessageTemplate(voidPageCommonItem, primitiveProperty, afterLoadUnderneathDataSubscription);
 
@@ -114,7 +121,6 @@ describe('LoadDataService', () => {
   it('#checkLoadedFullDataBeforeVoid should return & not update isRunningSubscriptionCallback when isRunningSubscriptionCallback true', async () => {
     const primitiveProperty = new CommonPrimitiveProperty();
     primitiveProperty.isRunningSubscriptionCallback = true;
-    const service = new LoadDataService(null, null, null);
 
     await service.checkLoadedFullDataBeforeVoid(null, null, primitiveProperty, null);
 
@@ -130,9 +136,7 @@ describe('LoadDataService', () => {
     const primitiveProperty = new CommonPrimitiveProperty();
     primitiveProperty.isRunningSubscriptionCallback = false;
     primitiveProperty.isLoadedUnderneathData = true;
-    const submitVoidService = new SubmitVoidService(null, null, null, null, null);
     submitVoidService.submitVoid = jest.fn();
-    const service = new LoadDataService(submitVoidService, null, null);
     const voidPageCommonItem = [new VoidPageCommonItem()];
     voidPageCommonItem[0].voidTicketsMini = new TicketsModel();
     voidPageCommonItem[0].voidTicketsMini.total = 1;
@@ -152,9 +156,7 @@ describe('LoadDataService', () => {
     const primitiveProperty = new CommonPrimitiveProperty();
     primitiveProperty.isRunningSubscriptionCallback = false;
     primitiveProperty.isLoadedUnderneathData = false;
-    const submitVoidService = new SubmitVoidService(null, null, null, null, null);
     submitVoidService.submitVoid = jest.fn();
-    const service = new LoadDataService(submitVoidService, null, null);
 
     await service.checkLoadedFullDataBeforeVoid(null, [messageAreaComponent], primitiveProperty, afterLoadUnderneathDataSubscription);
 
@@ -166,9 +168,7 @@ describe('LoadDataService', () => {
     const voidPageCommonItem = new VoidPageCommonItem();
     voidPageCommonItem.isShowTemplateMessage = false;
     const primitiveProperty = new CommonPrimitiveProperty();
-    const checkRequestService = new CheckRequestService(null, null);
     checkRequestService.isRequestModified = jest.fn().mockReturnValue(true);
-    const service = new LoadDataService(null, null, checkRequestService);
 
     await service.onClickShowTemplateMessage(voidPageCommonItem, primitiveProperty, new RequestDetailViewModel(), null);
 
@@ -179,9 +179,7 @@ describe('LoadDataService', () => {
     const voidPageCommonItem = new VoidPageCommonItem();
     voidPageCommonItem.isShowTemplateMessage = false;
     const primitiveProperty = new CommonPrimitiveProperty();
-    const checkRequestService = new CheckRequestService(null, null);
     checkRequestService.isRequestModified = jest.fn().mockReturnValue(false);
-    const service = new LoadDataService(null, null, checkRequestService);
 
     await service.onClickShowTemplateMessage(voidPageCommonItem, primitiveProperty, new RequestDetailViewModel(), null);
 
@@ -193,7 +191,6 @@ describe('LoadDataService', () => {
     afterLoadUnderneathDataSubscription.unsubscribe = jest.fn();
     const voidPageCommonItem = new VoidPageCommonItem();
     voidPageCommonItem.isShowTemplateMessage = true;
-    const service = new LoadDataService(null, null, null);
 
     jest.useFakeTimers();
     await service.onClickShowTemplateMessage(voidPageCommonItem, null, null, afterLoadUnderneathDataSubscription);
