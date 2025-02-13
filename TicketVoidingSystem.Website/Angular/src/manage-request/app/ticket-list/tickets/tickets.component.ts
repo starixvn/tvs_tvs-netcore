@@ -1,25 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { TicketsModel } from './tickets.model';
+import { NgClass } from '@angular/common';
+import { PagingModule } from '../../../../utility/components/paging/paging.module';
+import { SanitizeHtmlPipe } from '../../../../utility/pipes/sanitize-html.pipe';
 
 @Component({
+  standalone: true,
   selector: 'tickets',
   templateUrl: './tickets.component.html',
-  styleUrls: ['./tickets.component.scss']
+  styleUrls: ['./tickets.component.scss'],
+  imports: [NgClass, PagingModule, SanitizeHtmlPipe]
 })
-export class TicketsComponent implements OnInit {
+export class TicketsComponent {
   @Input() model = new TicketsModel();
   @Input() paging = new PagingModel();
   @Output() pagingChange = new EventEmitter<PagingModel>();
   @Output() exportExcelEvent = new EventEmitter<boolean>();
   @Input() isBlock: boolean;
   @Input() issueTypeId: number;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
   pagingEvent() {
     this.pagingChange.emit(this.paging);

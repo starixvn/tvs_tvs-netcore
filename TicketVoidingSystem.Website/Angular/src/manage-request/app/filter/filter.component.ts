@@ -1,6 +1,5 @@
-import { _isNumberValue } from '@angular/cdk/coercion';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
@@ -15,11 +14,20 @@ import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
+import { _isNumberValue } from '@angular/cdk/coercion';
+import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
+import { FormsModule } from '@angular/forms';
+import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
+import { CommonModule } from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { MultipleSelectionModule } from '../../../utility/components/multiple-selection/multiple-selection.module';
 
 @Component({
+  standalone: true,
   selector: 'filter',
   templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.scss']
+  styleUrls: ['./filter.component.scss'],
+  imports: [ToolTipModule, FormsModule, AutoRefreshComponent, CommonModule, NgbModule, NgSelectModule, MultipleSelectionModule]
 })
 export class FilterComponent implements OnInit {
   @Input() model = new FilterModel();
@@ -50,11 +58,11 @@ export class FilterComponent implements OnInit {
   markedTicketsCount = 0;
   userId: string;
   products: MultipleSelection;
+  
+  element = inject(ElementRef);
+  commonService = inject(CommonService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly commonService: CommonService
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -189,7 +197,7 @@ export class FilterComponent implements OnInit {
     this.issueTypeModel = await this.commonService.getIssueTypes();
     this.issueTypePermissionList = await this.commonService.getIssueTypePermissionList();
     this.issueTypeSelectList = [];
-    if (this.issueTypePermissionList.length > 0) {
+    if (this.issueTypePermissionList?.length > 0) {
       this.issueTypePermissionList.forEach(x => {
         this.issueTypeSelectList.push(
           {

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
 import { BriefInfo } from './models/brief-info.model';
@@ -13,11 +13,8 @@ import { TicketsQuery } from './ticket-list/tickets/tickets.query';
   providedIn: 'root'
 })
 export class AppService {
-
-  constructor(
-    private readonly httpService: HttpService
-  ) { }
-
+  httpService = inject(HttpService);
+  
   async getRequests(query: GetRequestsQuery): Promise<RequestModel[]> {
     return this.httpService.postJson(query, 'api/ManageRequest/GetRequests');
   }

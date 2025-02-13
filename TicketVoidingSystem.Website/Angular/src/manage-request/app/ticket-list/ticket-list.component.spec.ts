@@ -1,82 +1,65 @@
-import { NgModule } from '@angular/core';
-import { Shallow } from 'shallow-render';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
-import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
+
+import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { IssueInfo } from '../../../utility/models/issue-type.model';
 import { CommonService } from '../../../utility/services/common.service';
-import { HttpService } from '../../../utility/services/http.service';
-import { MatchInfoComponent } from './match-info/match-info.component';
-import { RequestInfoComponent } from './request-info/request-info.component';
 import { TicketListComponent } from './ticket-list.component';
 import { TicketListModal } from './ticket-list.modal';
-import { TicketsComponent } from './tickets/tickets.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../utility/modules/testing.module';
 
 describe('TicketListComponent', () => {
-  @NgModule({
-    declarations: [
-      MatchInfoComponent,
-      RequestInfoComponent,
-      TicketsComponent
-    ],
-    imports: [
-      BlockUiModule
-    ],
-    providers: [
-      HttpService
-    ]
-  })
-  class AppModuleTest { }
+  let component: TicketListComponent;
+  let fixture: ComponentFixture<TicketListComponent>;
+  let commonService: CommonService;
 
-  let shallow: Shallow<TicketListComponent>;
-  let modal = {requestId: 1, open: false} as TicketListModal;
-  let requestDetail = {request: {issueTypeId: 1} as RequestDetailModel, 
-    dangerAcceptedModels: [{isMainMatch: true,subIssueTypeId: 1 }]} as RequestDetailViewModel;
-  let issue = new IssueInfo();
-  beforeEach(() => {
-    shallow = new Shallow(TicketListComponent, AppModuleTest);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule
+      ],
+      providers: [
+        CommonService
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TicketListComponent);
+    commonService = fixture.debugElement.injector.get(CommonService);
+    component = fixture.componentInstance;
   });
 
-  it('#ngOnChanges should call expected function', async () => {
+  it('#ngOnChanges should getRequestById & IssueInfo when model is open', async () => {
     // Arrange
-    const mockGetRequestById = jest.fn().mockImplementation(() => requestDetail);
-    const mockGetIssueInfo = jest.fn().mockImplementation(() => issue);
-    
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getRequestById: mockGetRequestById,
-        getIssueInfo: mockGetIssueInfo
-      })
-      .render({
-        bind: {
-          modal: modal
-        }
-      });
-    modal.open = true;
+    const requestDetail = { requestId: 7586, request: { issueTypeId: 1 }, dangerAcceptedModels: [{ isMainMatch: true, subIssueTypeId: 3 }] } as RequestDetailViewModel;
+    const issue = { name: 'Wrong Handicap' } as IssueInfo;
+    commonService.getRequestById = jest.fn().mockResolvedValue(requestDetail);
+    commonService.getIssueInfo = jest.fn().mockResolvedValue(issue);
+    component.modal = { open: true } as TicketListModal;
 
     // Action
-    await instance.ngOnChanges();
+    component.ngOnChanges();
+
+    // Action
+    await component.ngOnChanges();
 
     // Assert
-    expect(mockGetRequestById).toHaveBeenCalled();
-    expect(mockGetIssueInfo).toHaveBeenCalled();
+    expect(component.isBlock).toBeFalsy();
+    expect(component.requestDetail).toEqual(requestDetail);
+    expect(component.issue).toEqual(issue);
   });
 
-  it('#ngOnChanges should not call updateTabInfoRequest when model not open', async () => {
+  it('#ngOnChanges should not getRequestById & IssueInfo when model not open', async () => {
     // Arrange
-    const mockFunctionUpdateTabInfoRequest = jest.fn();
-    const { instance } = await shallow
-      .render({
-        bind: {
-          modal: modal
-        }
-      });
-      instance.modal.open = false;
-      instance['updateTabInfoRequest'] = mockFunctionUpdateTabInfoRequest;
+    const mockGetRequestById = jest.fn();
+    const mockGetIssueInfo = jest.fn();
+    commonService.getRequestById = mockGetRequestById;
+    commonService.getIssueInfo = mockGetIssueInfo;
+    component.modal = { open: false } as TicketListModal;
 
     // Action
-    await instance.ngOnChanges();
+    await component.ngOnChanges();
 
     // Assert
-    expect(mockFunctionUpdateTabInfoRequest).toHaveBeenCalledTimes(0);
+    expect(mockGetRequestById).toHaveBeenCalledTimes(0);
+    expect(mockGetIssueInfo).toHaveBeenCalledTimes(0);
   });
 });

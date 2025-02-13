@@ -156,8 +156,8 @@ public class GetGeneralInfoServiceTests
             {
                 VoidedTimeString = new DateTime().ZoneManila().ToString("dd/MM/yyyy - hh:mm:ss tt"),
                 RecoveredTimeString = "01/01/0001 12:00:00 AM",
-                KickOffTimeString = new DateTime().ToString("hh:mm tt"),
-                KickOffTime = new DateTime(),
+                KickOffTimeString = new DateTime().ZoneManila().ToString("hh:mm tt"),
+                KickOffTime = new DateTime().ZoneManila(),
                 LeagueName = "Champion League"
             },
             UserVoidMessages = new List<GroupUserVoidMessage>

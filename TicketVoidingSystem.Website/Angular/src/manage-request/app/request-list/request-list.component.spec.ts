@@ -1,27 +1,22 @@
-import { EventEmitter, NgModule, SimpleChange } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { EventEmitter, SimpleChange } from '@angular/core';
 import '@angular/localize/init';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
-import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../utility/constants/labels';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Result } from '../../../utility/models/result';
 import { Selection } from '../../../utility/models/selection.model';
 import { RequestSimpleInfo, RequestStatus } from '../../../utility/models/signal-r.model';
-import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { CommonService } from '../../../utility/services/common.service';
-import { HttpService } from '../../../utility/services/http.service';
 import { AppService } from '../app.service';
 import { PermissionManage } from '../models/permission-manage.model';
-import { TicketListComponent } from '../ticket-list/ticket-list.component';
 import { RequestListComponent } from './request-list.component';
 import { DetailRequestModel, RequestModel } from './request.model';
 import { RequestDescriptionService } from './services/request-description.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../utility/modules/testing.module';
 
 class Helper {
   static readonly titleSelector = '.title-request-list-label';
@@ -82,7 +77,6 @@ class Helper {
       totalResettleProcessed: 0
     },
   ] as DetailRequestModel[];
-
   static readonly fakeRequestModelList: RequestModel[] = [
     {
       requestId: 1112,
@@ -139,44 +133,42 @@ class Helper {
 }
 
 describe('RequestListComponent', () => {
-  @NgModule({
-    declarations: [
-      TicketListComponent,
-      PagingComponent
-    ],
-    imports: [
-      FormsModule,
-      PipeModule,
-      NgbModule,
-    ],
-    providers: [
-      HttpService
-    ]
-  })
-  class AppModuleTest { }
+  let component: RequestListComponent;
+  let fixture: ComponentFixture<RequestListComponent>;
+  let modalService: ModalService;
+  let commonService: CommonService;
+  let appService: AppService;
+  let requestDescriptionService: RequestDescriptionService;
 
-  let shallow: Shallow<RequestListComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule
+      ],
+      providers: [
+        ModalService, CommonService, AppService, RequestDescriptionService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(RequestListComponent, AppModuleTest)
-      .dontMock(NgbModule);
+    fixture = TestBed.createComponent(RequestListComponent);
+    modalService = fixture.debugElement.injector.get(ModalService);
+    commonService = fixture.debugElement.injector.get(CommonService);
+    appService = fixture.debugElement.injector.get(AppService);
+    requestDescriptionService = fixture.debugElement.injector.get(RequestDescriptionService);
+    component = fixture.componentInstance;
+    component.requestStatusChangeEvent = new EventEmitter<RequestStatus[]>();
   });
 
   it('#ngOnInit should call #getActions and #getIssueTypes', async () => {
     // Arrange
     const mockGetActions = jest.fn();
     const mockGetIssueTypes = jest.fn();
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getVoidActions: mockGetActions,
-        getIssueTypes: mockGetIssueTypes
-      })
-      .render();
-    instance.requestStatusChangeEvent = new EventEmitter<RequestStatus[]>();
-    instance.requestStatusChangeEvent.emit = jest.fn();
+    commonService.getVoidActions = mockGetActions;
+    commonService.getIssueTypes = mockGetIssueTypes;
+    component.requestStatusChangeEvent.subscribe = jest.fn();
 
     // Action
-    await instance.ngOnInit();
+    await component.ngOnInit();
 
     // Assert
     expect(mockGetActions).toHaveBeenCalled();
@@ -184,63 +176,45 @@ describe('RequestListComponent', () => {
   });
 
   it('#ngOnInit should call #updateRequestStatus', async () => {
-    const mockGetActions = jest.fn();
-    const mockGetIssueTypes = jest.fn();
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getVoidActions: mockGetActions,
-        getIssueTypes: mockGetIssueTypes
-      })
-      .render();
-    instance['updateRequestStatus'] = jest.fn();
-    instance.requestStatusChangeEvent = new EventEmitter<RequestStatus[]>();
-    await instance.ngOnInit();
-    instance.requestStatusChangeEvent.next([]);
+    commonService.getVoidActions = jest.fn();
+    commonService.getIssueTypes = jest.fn();
+    component['updateRequestStatus'] = jest.fn();
+    await component.ngOnInit();
+    component.requestStatusChangeEvent.next([]);
 
-    expect(instance['updateRequestStatus']).toHaveBeenCalled();
+    expect(component['updateRequestStatus']).toHaveBeenCalled();
   });
 
   it('#ngOnChanges should return expected displayedModels', async () => {
     // Arrange
-    const { instance } = await shallow.render('<request-list [models]="requests"></request-list>', {
-      bind: {
-        requests: Helper.fakeRequestModelList
-      }
-    });
     const changes = {
       'models': new SimpleChange(null, Helper.fakeRequestModelList, true)
     };
+    component.models = Helper.fakeRequestModelList;
 
     // Action
-    instance.ngOnChanges(changes);
+    component.ngOnChanges(changes);
 
     // Assert
-    expect(instance.paging.total).toBe(2);
-    expect(instance.displayedModels.length).toBe(2);
+    expect(component.paging.total).toBe(2);
+    expect(component.displayedModels.length).toBe(2);
   });
 
   it('#ngOnChanges should not call @filterDisplayRequests', async () => {
     // Arrange
-    const { instance } = await shallow.render('<request-list [models]="requests"></request-list>', {
-      bind: {
-        requests: Helper.fakeRequestModelList
-      }
-    });
-    instance.filterDisplayRequests = jest.fn();
+    component.filterDisplayRequests = jest.fn();
 
     // Action
-    instance.ngOnChanges({});
+    component.ngOnChanges({});
 
     // Assert
-    expect(instance.filterDisplayRequests).toHaveBeenCalledTimes(0);
+    expect(component.filterDisplayRequests).toHaveBeenCalledTimes(0);
   });
 
   it('#getIssueTypeName should return empty string with param is 0', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-
     // Action
-    const actualData = instance.getIssueTypeName(0);
+    const actualData = component.getIssueTypeName(0);
 
     // Assert
     expect(actualData).toBe('');
@@ -248,8 +222,7 @@ describe('RequestListComponent', () => {
 
   it('#getIssueTypeName should return expected IssueType', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.issueTypesModel = Helper.fakeIssueTypesModel;
+    component.issueTypesModel = Helper.fakeIssueTypesModel;
     let actualData = '';
     const testCases = [
       { subIssueTypeId: 24, expectedData: '' },
@@ -259,15 +232,14 @@ describe('RequestListComponent', () => {
 
     // Action and Assert
     for (const item of testCases) {
-      actualData = instance.getIssueTypeName(item.subIssueTypeId);
+      actualData = component.getIssueTypeName(item.subIssueTypeId);
       expect(actualData).toBe(item.expectedData);
     }
   });
 
   it('#getActionName should return expected action', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.actions = Helper.fakeActions;
+    component.actions = Helper.fakeActions;
     let actualData = '';
     const testCases = [
       { action: 1, expectedData: 'Void' },
@@ -276,17 +248,15 @@ describe('RequestListComponent', () => {
 
     // Action and Assert
     testCases.forEach(item => {
-      actualData = instance.getActionName(item.action);
+      actualData = component.getActionName(item.action);
       expect(actualData).toBe(item.expectedData);
     });
   });
 
   it('#checkVoided should return true', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-
     // Action
-    const actualData = instance.checkVoided(Helper.fakeDetailRequestModelList);
+    const actualData = component.checkVoided(Helper.fakeDetailRequestModelList);
 
     // Assert
     expect(actualData).toBe(true);
@@ -294,10 +264,8 @@ describe('RequestListComponent', () => {
 
   it('#checkVoided should return false', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-
     // Action
-    const actualData = instance.checkVoided([Helper.fakeDetailRequestModelList[0]]);
+    const actualData = component.checkVoided([Helper.fakeDetailRequestModelList[0]]);
 
     // Assert
     expect(actualData).toBeFalsy();
@@ -305,117 +273,89 @@ describe('RequestListComponent', () => {
 
   it('#checkCanEdit should return expected data', async () => {
     // Arrange
-    const { instance } = await shallow.render();
     let actualResult = true;
     const testCases = [
-      { manageHostPermisson: false, eventDate: '2020-02-15', moveBetDay: '2020-03-14', expectedData: false },
-      { manageHostPermisson: true, eventDate: '2020-06-15', moveBetDay: '2020-05-14', expectedData: true },
-      { manageHostPermisson: false, eventDate: '2020-05-14', moveBetDay: '2020-06-15', expectedData: false },
+      { manageHostPermission: false, eventDate: '2020-02-15', moveBetDay: '2020-03-14', expectedData: false },
+      { manageHostPermission: true, eventDate: '2020-06-15', moveBetDay: '2020-05-14', expectedData: true },
+      { manageHostPermission: false, eventDate: '2020-05-14', moveBetDay: '2020-06-15', expectedData: false },
     ];
 
     // Action and Assert
     testCases.forEach(item => {
-      instance.permission.manageRequestHost = item.manageHostPermisson;
-      instance.moveBetDay = new Date(item.moveBetDay);
-      actualResult = instance.checkCanEdit(new Date(item.eventDate), 1, null);
+      component.permission.manageRequestHost = item.manageHostPermission;
+      component.moveBetDay = new Date(item.moveBetDay);
+      actualResult = component.checkCanEdit(new Date(item.eventDate), 1, null);
       expect(actualResult).toBe(item.expectedData);
     });
   });
 
   it('#checkCanVoid should return expected data', async () => {
     // Arrange
-    const { instance } = await shallow.render();
     let actualResult = true;
     const testCases = [
-      { voidReadPermisson: false, actionId: 0, eventDate: '2020-01-16', moveBetDay: '2020-01-17', expectedData: false },
-      { voidReadPermisson: true, actionId: 0, eventDate: '2020-01-18', moveBetDay: '2020-01-19', expectedData: false },
-      { voidReadPermisson: true, actionId: 1, eventDate: '2020-01-21', moveBetDay: '2020-01-20', expectedData: true },
-      { voidReadPermisson: true, actionId: 1, eventDate: '2020-01-14', moveBetDay: '2020-01-15', expectedData: false },
+      { voidReadPermission: false, actionId: 0, eventDate: '2020-01-16', moveBetDay: '2020-01-17', expectedData: false },
+      { voidReadPermission: true, actionId: 0, eventDate: '2020-01-18', moveBetDay: '2020-01-19', expectedData: false },
+      { voidReadPermission: true, actionId: 1, eventDate: '2020-01-21', moveBetDay: '2020-01-20', expectedData: true },
+      { voidReadPermission: true, actionId: 1, eventDate: '2020-01-14', moveBetDay: '2020-01-15', expectedData: false },
     ];
 
     // Action and Assert
     testCases.forEach(item => {
-      instance.permission.voidRead = item.voidReadPermisson;
-      instance.moveBetDay = new Date(item.moveBetDay);
-      actualResult = instance.checkCanVoid(item.actionId, new Date(item.eventDate), 1, null);
+      component.permission.voidRead = item.voidReadPermission;
+      component.moveBetDay = new Date(item.moveBetDay);
+      actualResult = component.checkCanVoid(item.actionId, new Date(item.eventDate), 1, null);
       expect(actualResult).toBe(item.expectedData);
     });
   });
 
   it('#checkCanVoid should return false when is archived ticket', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.permission.voidRead = true;
-    instance.moveBetDay = new Date('2020-01-17');
+    component.permission.voidRead = true;
+    component.moveBetDay = new Date('2020-01-17');
 
     // Action and Assert
-    const actualResult = instance.checkCanVoid(1, new Date('2020-01-21'), 17, new Date('2020-01-21'));
+    const actualResult = component.checkCanVoid(1, new Date('2020-01-21'), 17, new Date('2020-01-21'));
     expect(actualResult).toBe(false);
   });
 
   it('#pagingEvent should call #filterDisplayRequests', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.filterDisplayRequests = jest.fn();
+    component.filterDisplayRequests = jest.fn();
 
     // Action
-    instance.pagingEvent();
+    component.pagingEvent();
 
     // Assert
-    expect(instance.filterDisplayRequests).toHaveBeenCalledTimes(1);
+    expect(component.filterDisplayRequests).toHaveBeenCalledTimes(1);
   });
 
   it('#exportExcelEvent should emit when call #exportExcel', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.exportExcelEvent.emit = jest.fn();
+    component.exportExcelEvent.emit = jest.fn();
 
     // Action
-    instance.exportExcel();
+    component.exportExcel();
 
     // Assert
-    expect(instance.exportExcelEvent.emit).toHaveBeenCalledTimes(1);
+    expect(component.exportExcelEvent.emit).toHaveBeenCalledTimes(1);
   });
-
-  // it('#showTickets should return expected data', async () => {
-  //   // Arrange
-  //   const { instance } = await shallow.render();
-  //   const permissionTestCases = [
-  //     { voidRead: true, verifyRead: false },
-  //     { voidRead: false, verifyRead: true }
-  //   ];
-  //   const requestId = 12345;
-  //   const matchId = 123456789;
-
-  //   // Action and Assert
-  //   permissionTestCases.forEach(item => {
-  //     instance.permission.voidRead = item.voidRead;
-  //     instance.permission.verifyRead = item.verifyRead;
-  //     instance.showTickets(requestId, matchId);
-  //     expect(instance.ticketListModal).toEqual({ open: true, minimize: false, requestId, matchId });
-  //   });
-  // });
 
   it('#confirmCheckBy should call #confirm from modalService with expected param when isCheckedBy is true', async () => {
     const mockModalServiceConfirm = jest.fn();
-    const { instance } = await shallow
-      .mock(ModalService, {
-        confirm: mockModalServiceConfirm
-      })
-      .render();
+    modalService.confirm = mockModalServiceConfirm;
     const confirmModal = {
       title: 'Check By Confirm',
       message: `${LABELS.CONFIRM_CHECK_BY}<strong>${Helper.fakeRequestModelList[0].requestId}</strong>?`
     };
-    instance.confirmCheckBy(Helper.fakeRequestModelList[0]);
+    component.confirmCheckBy(Helper.fakeRequestModelList[0]);
     expect(mockModalServiceConfirm).toHaveBeenCalledTimes(1);
     expect(mockModalServiceConfirm.mock.calls[0][0]).toStrictEqual(confirmModal);
     expect(mockModalServiceConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
     expect(mockModalServiceConfirm.mock.calls[0][2]).toBeInstanceOf(Function);
 
-    instance.checkBy = jest.fn();
+    component.checkBy = jest.fn();
     mockModalServiceConfirm.mock.calls[0][1]();
-    expect(instance.checkBy).toHaveBeenCalledWith(Helper.fakeRequestModelList[0].requestId, true);
+    expect(component.checkBy).toHaveBeenCalledWith(Helper.fakeRequestModelList[0].requestId, true);
 
     mockModalServiceConfirm.mock.calls[0][2]();
     expect(Helper.fakeRequestModelList[0].isCheckedBy).toBe(false);
@@ -423,24 +363,20 @@ describe('RequestListComponent', () => {
 
   it('#confirmCheckBy should call #confirm from modalService with expected param when isCheckedBy is false', async () => {
     const mockModalServiceConfirm = jest.fn();
-    const { instance } = await shallow
-      .mock(ModalService, {
-        confirm: mockModalServiceConfirm
-      })
-      .render();
+    modalService.confirm = mockModalServiceConfirm;
     const confirmModal = {
       title: 'UnCheck By Confirm',
       message: `${LABELS.CONFIRM_UNCHECK_BY}<strong>${Helper.fakeRequestModelList[1].requestId}</strong>?`
     };
-    instance.confirmCheckBy(Helper.fakeRequestModelList[1]);
+    component.confirmCheckBy(Helper.fakeRequestModelList[1]);
     expect(mockModalServiceConfirm).toHaveBeenCalledTimes(1);
     expect(mockModalServiceConfirm.mock.calls[0][0]).toStrictEqual(confirmModal);
     expect(mockModalServiceConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
     expect(mockModalServiceConfirm.mock.calls[0][2]).toBeInstanceOf(Function);
 
-    instance.checkBy = jest.fn();
+    component.checkBy = jest.fn();
     mockModalServiceConfirm.mock.calls[0][1]();
-    expect(instance.checkBy).toHaveBeenCalledWith(Helper.fakeRequestModelList[1].requestId, false);
+    expect(component.checkBy).toHaveBeenCalledWith(Helper.fakeRequestModelList[1].requestId, false);
 
     mockModalServiceConfirm.mock.calls[0][2]();
     expect(Helper.fakeRequestModelList[1].isCheckedBy).toBe(true);
@@ -449,12 +385,8 @@ describe('RequestListComponent', () => {
   it('#checkBy should call #open from modalService with expected param when verifyHost is false', async () => {
     // Arrange
     const mockModalServiceOpen = jest.fn();
-    const { instance } = await shallow
-      .mock(ModalService, {
-        open: mockModalServiceOpen
-      })
-      .render();
-    instance.permission.verifyHost = false;
+    modalService.open = mockModalServiceOpen;
+    component.permission.verifyHost = false;
     const openModal = {
       title: 'Warning',
       message: 'You don\'t have permission!',
@@ -462,7 +394,7 @@ describe('RequestListComponent', () => {
     };
 
     // Action
-    await instance.checkBy(12345, true);
+    await component.checkBy(12345, true);
 
     // Assert
     expect(mockModalServiceOpen).toHaveBeenCalledWith(openModal);
@@ -475,19 +407,15 @@ describe('RequestListComponent', () => {
       errorMsg: '',
       isSuccessful: true
     };
-    const { instance } = await shallow
-      .mock(AppService, {
-        checkBy: jest.fn().mockImplementation(() => checkByResult)
-      })
-      .render();
-    instance.permission.verifyHost = true;
-    instance.reload.emit = jest.fn();
+    appService.checkBy = jest.fn().mockImplementation(() => checkByResult);
+    component.permission.verifyHost = true;
+    component.reload.emit = jest.fn();
 
     // Action
-    await instance.checkBy(12345, true);
+    await component.checkBy(12345, true);
 
     //
-    expect(instance.reload.emit).toHaveBeenCalledWith(true);
+    expect(component.reload.emit).toHaveBeenCalledWith(true);
   });
 
   it('#checkBy should call #open from modalService with expected param when data from api return error', async () => {
@@ -498,15 +426,10 @@ describe('RequestListComponent', () => {
       isSuccessful: false
     };
     const mockModalServiceOpen = jest.fn();
-    const { instance } = await shallow
-      .mock(AppService, {
-        checkBy: jest.fn().mockImplementation(() => checkByResult)
-      })
-      .mock(ModalService, {
-        open: mockModalServiceOpen
-      })
-      .render();
-    instance.permission.verifyHost = true;
+
+    appService.checkBy = jest.fn().mockResolvedValue(checkByResult);
+    modalService.open = mockModalServiceOpen;
+    component.permission.verifyHost = true;
     const openModal = {
       title: 'Check By Result',
       message: 'error',
@@ -514,7 +437,7 @@ describe('RequestListComponent', () => {
     };
 
     // Action
-    await instance.checkBy(12345, true);
+    await component.checkBy(12345, true);
 
     // Assert
     expect(mockModalServiceOpen).toHaveBeenCalledWith(openModal);
@@ -526,12 +449,11 @@ describe('RequestListComponent', () => {
     element.setAttribute('id', 'body');
     element.setAttribute('root-url', '/');
     document.body.appendChild(element);
-    const { instance } = await shallow.render();
-    instance.checkCanEdit = jest.fn().mockImplementation(() => true);
+    component.checkCanEdit = jest.fn().mockImplementation(() => true);
     window.open = jest.fn();
 
     // Action
-    instance.openRequestDetails(12345, new Date(), 1, null);
+    component.openRequestDetails(12345, new Date(), 1, null);
 
     // Assert
     expect(window.open).toHaveBeenCalledTimes(1);
@@ -543,11 +465,10 @@ describe('RequestListComponent', () => {
     element.setAttribute('id', 'body');
     element.setAttribute('root-url', '/');
     document.body.appendChild(element);
-    const { instance } = await shallow.render();
     window.open = jest.fn();
 
     // Action
-    instance.openVoidRequest(12345);
+    component.openVoidRequest(12345);
 
     // Assert
     expect(window.open).toHaveBeenCalledTimes(1);
@@ -555,10 +476,8 @@ describe('RequestListComponent', () => {
 
   it('#isOnlyHasSingleTicket should return true', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-
     // Action
-    const actualResult = instance.isShowOnlyTotalTickets(11);
+    const actualResult = component.isShowOnlyTotalTickets(11);
 
     // Assert
     expect(actualResult).toBe(true);
@@ -566,53 +485,56 @@ describe('RequestListComponent', () => {
 
   it('#isVoidAction should return true', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-
     // Action
-    const actualResult = instance.isVoidAction(5);
+    const actualResult = component.isVoidAction(5);
 
     // Assert
     expect(actualResult).toBe(true);
   });
 
-  it('should display title and icon exportexcel when have request', async () => {
+  it('should display title and icon exportExcel when have request', () => {
     // Arrange
-    const { fixture, find, instance } = await shallow.render();
-    instance.paging.total = 10;
+    component.paging.total = 10;
     fixture.detectChanges();
 
+    // Act
+    const title = fixture.nativeElement.querySelector(Helper.titleSelector);
+    const exportExcelButton = fixture.nativeElement.querySelector(Helper.exportExcelButton);
+
     // Assert
-    expect(find(Helper.titleSelector).nativeElement.textContent).toBe('Manage Request');
-    expect(find(Helper.exportExcelButton)).toHaveFoundOne();
+    expect(title.textContent).toBe('Manage Request');
+    expect(exportExcelButton).toBeTruthy();
   });
 
-  it('should display "There is no data" when have not requests', async () => {
+  it('should display "There is no data" when have not requests', () => {
     // Arrange
-    const { fixture, find, instance } = await shallow.render();
-    instance.displayedModels = [];
+    component.displayedModels = [];
     fixture.detectChanges();
 
+    // Act
+    const noDataElement = fixture.nativeElement.querySelector(Helper.noDataSelector);
+
     // Assert
-    expect(find(Helper.noDataSelector).nativeElement.textContent).toBe('There is no data');
+    expect(noDataElement.textContent).toBe('There is no data');
   });
 
-  it('should display iconVoid for request', async () => {
+  it('should display iconVoid for request', () => {
     // Arrange
-    const { fixture, find, instance } = await shallow.render();
-    instance.displayedModels = Helper.fakeRequestModelList;
-    instance.checkCanVoid = jest.fn().mockImplementation(() => true);
+    component.displayedModels = Helper.fakeRequestModelList;
+    component.checkCanVoid = jest.fn().mockImplementation(() => true);
     fixture.detectChanges();
 
+    // Act
+    const iconVoidElements = fixture.nativeElement.querySelectorAll(Helper.iconVoidSelector);
+
     // Assert
-    expect(find(Helper.iconVoidSelector)).toHaveFound(2);
+    expect(iconVoidElements.length).toBe(2);
   });
 
   it('#isOnlyHasSingleTicket should return true when issueTypeId=13', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-
     // Action
-    const actualResult = instance.isShowOnlyTotalTickets(13);
+    const actualResult = component.isShowOnlyTotalTickets(13);
 
     // Assert
     expect(actualResult).toBeTruthy();
@@ -629,11 +551,10 @@ describe('RequestListComponent', () => {
       x.issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
       x.details = [detailRequestModel];
     });
-    const { instance } = await shallow.render();
-    instance['isDifferenceByMatchId'] = jest.fn().mockImplementation(() => true);
-    instance['updateRequestStatus'](Helper.fakeRequestStatus, fakeRequestModelList);
+    component['isDifferenceByMatchId'] = jest.fn().mockImplementation(() => true);
+    component['updateRequestStatus'](Helper.fakeRequestStatus, fakeRequestModelList);
 
-    expect(instance['isDifferenceByMatchId']).toHaveBeenCalledTimes(1);
+    expect(component['isDifferenceByMatchId']).toHaveBeenCalledTimes(1);
   });
 
   it('#updateRequestStatus should update data when is not Danger Accepted', async () => {
@@ -644,68 +565,61 @@ describe('RequestListComponent', () => {
       x.issueTypeId = Number(IssueTypeConstant.RED_CARD);
       x.details = [detailRequestModel];
     });
-    const { instance } = await shallow.render();
-    instance['isDifferenceByMatchId'] = jest.fn();
-    instance['updateRequestStatus'](Helper.fakeRequestStatus, fakeRequestModelList);
+    component['isDifferenceByMatchId'] = jest.fn();
+    component['updateRequestStatus'](Helper.fakeRequestStatus, fakeRequestModelList);
 
-    expect(instance['isDifferenceByMatchId']).toHaveBeenCalledTimes(1);
+    expect(component['isDifferenceByMatchId']).toHaveBeenCalledTimes(1);
   });
 
   it('#updateRequestStatus should not update data when have not SimpleInfo', async () => {
     const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
     fakeRequestStatus.forEach(x => x.simpleInfo = null);
-    const { instance } = await shallow.render();
-    instance['isDifferenceByMatchId'] = jest.fn();
-    instance['updateRequestStatus'](fakeRequestStatus, Helper.fakeRequestModelList);
+    component['isDifferenceByMatchId'] = jest.fn();
+    component['updateRequestStatus'](fakeRequestStatus, Helper.fakeRequestModelList);
 
-    expect(instance['isDifferenceByMatchId']).toHaveBeenCalledTimes(0);
+    expect(component['isDifferenceByMatchId']).toHaveBeenCalledTimes(0);
   });
 
   it('#updateRequestStatus should not update data when have not request', async () => {
     const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
     fakeRequestStatus.forEach(x => x.requestId = 10000);
-    const { instance } = await shallow.render();
-    instance['isDifferenceByMatchId'] = jest.fn();
-    instance['updateRequestStatus'](fakeRequestStatus, Helper.fakeRequestModelList);
+    component['isDifferenceByMatchId'] = jest.fn();
+    component['updateRequestStatus'](fakeRequestStatus, Helper.fakeRequestModelList);
 
-    expect(instance['isDifferenceByMatchId']).toHaveBeenCalledTimes(0);
+    expect(component['isDifferenceByMatchId']).toHaveBeenCalledTimes(0);
   });
 
   it('#isSettlementHT should false', async () => {
-    const { instance } = await shallow.render();
-    instance.filterDisplayRequests = jest.fn();
-    const actual = instance.isSettlementHT('F');
+    component.filterDisplayRequests = jest.fn();
+    const actual = component.isSettlementHT('F');
 
     expect(actual).toBe(false);
   });
 
   it('#isSettlementHT should true', async () => {
-    const { instance } = await shallow.render();
-    instance.filterDisplayRequests = jest.fn();
-    const actual = instance.isSettlementHT('H');
+    component.filterDisplayRequests = jest.fn();
+    const actual = component.isSettlementHT('H');
 
     expect(actual).toBe(true);
   });
 
   it('#openRequestDetails should not call window.open', async () => {
-    const { instance } = await shallow.render();
     window.open = jest.fn();
-    instance.checkCanEdit = jest.fn().mockImplementation(() => false);
-    instance.openRequestDetails(null, null, null, null);
+    component.checkCanEdit = jest.fn().mockImplementation(() => false);
+    component.openRequestDetails(null, null, null, null);
 
-    expect(instance.checkCanEdit).toHaveBeenCalledTimes(1);
+    expect(component.checkCanEdit).toHaveBeenCalledTimes(1);
     expect(window.open).toHaveBeenCalledTimes(0);
   });
 
   it('#checkCanEdit should be return true when is ARCHIVED_TICKET ', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.permission = new PermissionManage();
-    instance.permission.manageRequestHost = true;
-    instance['isCreatedDateLessThanToday'] = jest.fn().mockImplementation(() => true);
+    component.permission = new PermissionManage();
+    component.permission.manageRequestHost = true;
+    component['isCreatedDateLessThanToday'] = jest.fn().mockImplementation(() => true);
 
     // Action
-    const actual = instance.checkCanEdit(null, 17, null);
+    const actual = component.checkCanEdit(null, 17, null);
 
     // Assert
     expect(actual).toBeTruthy();
@@ -713,11 +627,10 @@ describe('RequestListComponent', () => {
 
   it('#isDifferenceByMatchId should return false', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-    const request = {issueTypeId: 11, filterBy: 1} as RequestModel;
+    const request = { issueTypeId: 11, filterBy: 1 } as RequestModel;
 
     // Action
-    const actual = instance['isDifferenceByMatchId'](request);
+    const actual = component['isDifferenceByMatchId'](request);
 
     // Assert
     expect(actual).toBeFalsy();
@@ -725,12 +638,11 @@ describe('RequestListComponent', () => {
 
   it('#isDifferenceByMatchId should return true', async () => {
     // Arrange
-    const { instance } = await shallow.render();
     const dataTests = [{ issueTypeId: 1, filterBy: 1 }, { issueTypeId: 11, filterBy: null }] as RequestModel[];
 
     // Action & Assert
     dataTests.forEach(x => {
-      const actual = instance['isDifferenceByMatchId'](x);
+      const actual = component['isDifferenceByMatchId'](x);
       expect(actual).toBeTruthy();
     })
   });
@@ -738,15 +650,14 @@ describe('RequestListComponent', () => {
   it('#copyRequestDescription should call #requestDescriptionService.copyToClipboard', async () => {
     // Arrange
     const mockCopyToClipboard = jest.fn();
-    const { instance } = await shallow
-      .mock(RequestDescriptionService, { copyToClipboard: mockCopyToClipboard })
-      .render();
+
+    requestDescriptionService.copyToClipboard = mockCopyToClipboard;
     const requestModel = new RequestModel();
     requestModel.details = [new DetailRequestModel()];
     requestModel.details[0].matchId = 1;
 
     // Action
-    await instance.copyRequestDescriptionSingleMatch(requestModel, 1, 1);
+    await component.copyRequestDescriptionSingleMatch(requestModel, 1, 1);
 
     // Assert
     expect(mockCopyToClipboard).toHaveBeenCalledTimes(1);
@@ -755,16 +666,15 @@ describe('RequestListComponent', () => {
   it('#copyRequestDescription should call #requestDescriptionService.copyToClipboard and update prop of detailRequestModel', async () => {
     // Arrange
     const mockCopyToClipboard = jest.fn();
-    const { instance } = await shallow
-      .mock(RequestDescriptionService, { copyToClipboard: mockCopyToClipboard })
-      .render();
+    requestDescriptionService.copyToClipboard = mockCopyToClipboard;
+
     const requestModel = new RequestModel();
     requestModel.details = [new DetailRequestModel()];
     requestModel.details[0].matchId = 1;
     const detailRequestModel = new DetailRequestModel();
 
     // Action
-    await instance.copyRequestDescriptionMultiMatches(requestModel, 1, detailRequestModel);
+    await component.copyRequestDescriptionMultiMatches(requestModel, 1, detailRequestModel);
 
     // Assert
     expect(detailRequestModel.processingCopyDescriptionClass).toBe('fa fa-paste copy-request-info');
@@ -773,10 +683,8 @@ describe('RequestListComponent', () => {
 
   it('#isCanCopyRequestDescription should return true when isDangerAccepted', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-
     // Action
-    const actual = instance.isCanCopyRequestDescription(Number(IssueTypeConstant.DANGER_ACCEPTED));
+    const actual = component.isCanCopyRequestDescription(Number(IssueTypeConstant.DANGER_ACCEPTED));
 
     // Assert
     expect(actual).toBeTruthy();
@@ -784,10 +692,8 @@ describe('RequestListComponent', () => {
 
   it('#isCanCopyRequestDescription should return false when isEarlyKickOff', async () => {
     // Arrange
-    const { instance } = await shallow.render();
-
     // Action
-    const actual = instance.isCanCopyRequestDescription(Number(IssueTypeConstant.EARLY_KICK_OFF));
+    const actual = component.isCanCopyRequestDescription(Number(IssueTypeConstant.EARLY_KICK_OFF));
 
     // Assert
     expect(actual).toBeFalsy();

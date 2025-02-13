@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
-import { NgbAccordionConfig } from '@ng-bootstrap/ng-bootstrap';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { NgbAccordionConfig, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
@@ -15,11 +15,19 @@ import { TabInfoRequest, TicketListModal } from '../ticket-list.modal';
 import { TicketsModel } from '../tickets/tickets.model';
 import { TicketsQuery } from '../tickets/tickets.query';
 import { GeneralInfoViewModel } from './request-info.model';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { MatchInfoComponent } from '../match-info/match-info.component';
+import { IssueTypeModule } from '../../../../utility/components/issue-type/issue-type.module';
+import { TicketsComponent } from '../tickets/tickets.component';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'request-info',
   templateUrl: './request-info.component.html',
-  styleUrls: ['./request-info.component.scss']
+  styleUrls: ['./request-info.component.scss'],
+  imports: [BlockUiModule, MatchInfoComponent, IssueTypeModule, TicketsComponent, FormsModule, NgbNavModule, CommonModule ]
 })
 export class RequestInfoComponent implements OnInit, OnChanges {
   @Input() ticketListModal: TicketListModal;
@@ -36,21 +44,22 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   isAbnormalBet = false;
   briefInfoNote: string;
   paging = new PagingModel();
-  isBlock: boolean;
+  isBlock = false;
   isShowBetList = true;
   query = new TicketsQuery();
   tickets = new TicketsModel();
   generalInfoViewModel = new GeneralInfoViewModel();
   briefInfoModels: BriefInfo[] = [];
   match = new MatchModel();
-
+  
   constructor(
-    private readonly appService: AppService,
-    private readonly commonService: CommonService,
     config: NgbAccordionConfig) {
     config.closeOthers = true;
   }
 
+  appService = inject(AppService);
+  commonService = inject(CommonService);
+  
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['issue']) {
       this.updateIssue();

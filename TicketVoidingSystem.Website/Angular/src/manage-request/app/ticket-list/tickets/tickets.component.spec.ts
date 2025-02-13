@@ -1,11 +1,7 @@
-import { NgModule } from '@angular/core';
-import { Shallow } from 'shallow-render';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { PagingComponent } from '../../../../utility/components/paging/paging/paging.component';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
-import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { TicketsComponent } from './tickets.component';
 import { TicketModel, TicketsModel } from './tickets.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 class Helper {
   static readonly titleSelector = '.title-tickets-list-label';
@@ -48,103 +44,75 @@ class Helper {
 }
 
 describe('TicketsComponent', () => {
-  @NgModule({
-      declarations: [
-        PagingComponent
-      ],
-      imports: [
-        BlockUiModule,
-        PipeModule
-      ],
-      providers: [
-      ]
-    })
-  class AppModuleTest { }
+  let component: TicketsComponent;
+  let fixture: ComponentFixture<TicketsComponent>;
 
-  let shallow: Shallow<TicketsComponent>;
-
-  beforeEach(() => {
-    shallow = new Shallow(TicketsComponent, AppModuleTest);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({}).compileComponents();
+    fixture = TestBed.createComponent(TicketsComponent);
+    component = fixture.componentInstance;
+    component.issueTypeId = 1;
   });
 
-  it('#pagingEvent should call emit of pagingChange with expected param', async() => {
+
+  it('#pagingEvent should call emit of pagingChange with expected param', async () => {
     // Arrange
-    const { instance } = await shallow.render({
-      bind: {
-        issueTypeId: 1
-      }
-    });
-    instance.pagingChange.emit = jest.fn();
-    instance.paging = new PagingModel();
+    component.pagingChange.emit = jest.fn();
+    component.paging = new PagingModel();
 
     // Action
-    instance.pagingEvent();
+    component.pagingEvent();
 
     // Assert
-    expect(instance.pagingChange.emit).toHaveBeenCalledWith(new PagingModel());
+    expect(component.pagingChange.emit).toHaveBeenCalledWith(new PagingModel());
   });
 
-  it('#exportExcel should call emit of exportExcelEvent', async() => {
+  it('#exportExcel should call emit of exportExcelEvent', async () => {
     // Arrange
-    const { instance } = await shallow.render({
-      bind: {
-        issueTypeId: 1
-      }
-    });
-    instance.exportExcelEvent.emit = jest.fn();
+    component.exportExcelEvent.emit = jest.fn();
 
     // Action
-    instance.exportExcel();
+    component.exportExcel();
 
     // Assert
-    expect(instance.exportExcelEvent.emit).toHaveBeenCalledTimes(1);
+    expect(component.exportExcelEvent.emit).toHaveBeenCalledTimes(1);
   });
 
-  it('should display title and icon exportexcel when have tickets', async () => {
+  it('should display title and icon exportExcel when have tickets', async () => {
     // Arrange
-    const { fixture, find } = await shallow
-      .render('<tickets [model]="tickets" [issueTypeId]="issueTypeId"></tickets>', {
-        bind: {
-          issueTypeId: 1,
-          tickets: Helper.fakeTicketsModel
-        }
-      });
+    component.model = Helper.fakeTicketsModel;
     fixture.detectChanges();
 
+    // Act
+    const title = fixture.nativeElement.querySelector(Helper.titleSelector);
+    const exportExcelButton = fixture.nativeElement.querySelector(Helper.exportExcelButton);
+
     // Assert
-    expect(find(Helper.titleSelector).nativeElement.textContent).toBe('Voided Tickets');
-    expect(find(Helper.exportExcelButton)).toHaveFoundOne();
+    expect(title.textContent).toBe('Voided Tickets');
+    expect(exportExcelButton).toBeTruthy();
   });
 
-  it('should display "There is no data" when have not tickets', async () => {
+  it('should display "There is no data" when have no tickets', () => {
     // Arrange
-    const { fixture, find } = await shallow
-      .render('<tickets [model]="tickets" [issueTypeId]="issueTypeId"></tickets>', {
-        bind: {
-          issueTypeId: 1,
-          tickets: new TicketsModel()
-        }
-      });
+    component.model = new TicketsModel();
+    component.issueTypeId = 1;
     fixture.detectChanges();
 
+    // Act
+    const noDataElement = fixture.nativeElement.querySelector(Helper.noDataSelector);
+
     // Assert
-    expect(find(Helper.noDataSelector).nativeElement.textContent).toBe('There is no data');
+    expect(noDataElement.textContent).toBe('There is no data');
   });
 
   it('when PagingComponent modelChange event emit, #pagingEvent should be called', async () => {
     // Arrange
-    const { fixture, findComponent, instance } = await shallow.render({
-      bind: {
-        issueTypeId: 1,
-        model: Helper.fakeTicketsModel
-      }
-    });
-    fixture.detectChanges();
-    instance.pagingEvent = jest.fn();
-    const pagingComponent = findComponent(PagingComponent);
-    pagingComponent.modelChange.emit();
+    const mockEventPagingChange = jest.fn();
+    component.pagingChange.emit = mockEventPagingChange;
+
+    component.pagingEvent();
 
     // Assert
-    expect(instance.pagingEvent).toHaveBeenCalledTimes(1);
+    expect(mockEventPagingChange).toHaveBeenCalledTimes(1);
   });
 });

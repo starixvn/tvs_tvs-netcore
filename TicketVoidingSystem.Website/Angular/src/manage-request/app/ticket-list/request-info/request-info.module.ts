@@ -12,23 +12,21 @@ import { TicketsComponent } from '../tickets/tickets.component';
 import { RequestInfoComponent } from './request-info.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    NgbModule,
-    IssueTypeModule,
-    PagingModule,
-    PipeModule,
-    BlockUiModule,
-    AutosizeModule
-  ],
-  declarations: [
-    RequestInfoComponent,
-    MatchInfoComponent,
-    TicketsComponent
-  ],
-  exports: [
-    RequestInfoComponent
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        NgbModule,
+        IssueTypeModule,
+        PagingModule,
+        PipeModule,
+        BlockUiModule,
+        AutosizeModule,
+        RequestInfoComponent,
+        MatchInfoComponent,
+        TicketsComponent
+    ],
+    exports: [
+        RequestInfoComponent
+    ]
 })
 export class RequestInfoModule { }

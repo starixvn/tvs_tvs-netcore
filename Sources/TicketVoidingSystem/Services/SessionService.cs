@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fanex.NAP.Client;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Business;
+using Fanex.NAP.Client.Models.ValueObject;
 using Fanex.NAP.Client.Services;
 using Microsoft.AspNetCore.Http;
 
@@ -14,6 +16,8 @@ public interface SessionService
     string UserName { get; }
 
     Task<bool> HasPermission(string functionKey, Constant.Policy policy);
+
+    Task<IEnumerable<FunctionPolicy>> GetPermissionsAsync(string parentFunctionKey, Constant.Policy policy);
 
     string GetClientIp();
 
@@ -34,6 +38,11 @@ public class SessionServiceImp(
     public async Task<bool> HasPermission(string functionKey, Constant.Policy policy)
     {
         return await userService.IsHavingPermissionAsync(currentSession.UserId, siteSettings.SiteId, functionKey, policy);
+    }
+
+    public async Task<IEnumerable<FunctionPolicy>> GetPermissionsAsync(string parentFunctionKey, Constant.Policy policy)
+    {
+        return await userService.GetPermissionsAsync(currentSession.UserId, siteSettings.SiteId, parentFunctionKey);
     }
 
     public string GetClientIp()

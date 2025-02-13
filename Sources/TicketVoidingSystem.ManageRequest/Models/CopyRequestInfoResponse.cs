@@ -76,4 +76,5 @@ public class RequestInfoForCopy
     public DateTime? FilterFromTransTime { get; set; }
     public string ServiceAcceptTime { get; set; }
     public int MinAllowanceTime { get; set; }
+    public string MinAcceptType { get; set; }
 }

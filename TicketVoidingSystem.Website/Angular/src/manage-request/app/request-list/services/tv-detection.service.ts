@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import _ from 'lodash';
 import { TvDetection, TvDetectionType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';
@@ -6,9 +5,6 @@ import { IssueTypeConstant } from '../../../../utility/constants/issue-type.cons
 import moment from 'moment';
 import { StaticService } from '../../../../utility/services/static.service';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class TvDetectionService {
   static getTvDetectionClass(tvDetectionValue: number) {
     switch (tvDetectionValue) {
@@ -39,7 +35,7 @@ export class TvDetectionService {
     
     return `\nTV Detection: ${requestInfo.tvDetectionValue === TvDetectionType.NONE ? TvDetection.OFF : TvDetection.ON}\n`
       + this.getTvDetectionTime(requestInfo)
-      + ` This check time start void`;
+      + ` This check time start void (${requestInfo.minAcceptType})`;
   }
 
   private static getTvDetectionTime(requestInfo: RequestInfoForCopy){

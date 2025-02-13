@@ -1,6 +1,6 @@
 <div class="refresh-area">
     <div class="refresh-area-inner d-flex">
-        <ng-select class="refresh-time-selection mr-1" [items]="refreshTime.items" bindLabel="name" bindValue="value"
+        <ng-select class="refresh-time-selection me-1" [items]="refreshTime.items" bindLabel="name" bindValue="value"
             [(ngModel)]="refreshTime.value" [clearable]="false" [disabled]="isBlock" (change)="startOverCountdown()">
         </ng-select>
         <button type="button" class="btn btn-primary btn-sm" [disabled]="isBlock" (click)="refreshImmediately()">

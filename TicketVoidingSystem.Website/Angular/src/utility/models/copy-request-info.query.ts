@@ -48,6 +48,7 @@ export class RequestInfoForCopy {
   filterFromTransTime: Date;
   serviceAcceptTime: string;
   minAllowanceTime: number;
+  minAcceptType: string;
 }
 
 export class BetTypeTicketsInfo {

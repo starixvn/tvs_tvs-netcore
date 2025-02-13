@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { SanitizeHtmlPipe } from './../../../utility/pipes/sanitize-html.pipe';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { ModalType } from '../../../utility/components/modal/modal.model';
@@ -17,11 +18,17 @@ import { AppService } from './../app.service';
 import { PermissionManage } from './../models/permission-manage.model';
 import { DetailRequestModel, RequestModel } from './request.model';
 import { RequestDescriptionService } from './services/request-description.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { PagingModule } from '../../../utility/components/paging/paging.module';
+import { TicketListComponent } from '../ticket-list/ticket-list.component';
 
 @Component({
+  standalone: true,
   selector: 'request-list',
   templateUrl: './request-list.component.html',
-  styleUrls: ['./request-list.component.scss']
+  styleUrls: ['./request-list.component.scss'],
+  imports: [CommonModule, FormsModule, PagingModule, TicketListComponent, SanitizeHtmlPipe]
 })
 export class RequestListComponent implements OnInit, OnChanges {
   @Input() models: RequestModel[] = [];
@@ -38,15 +45,14 @@ export class RequestListComponent implements OnInit, OnChanges {
   issueTypesModel = new IssueTypesModel();
   ticketListModal = new TicketListModal();
   tooltip = new Tooltip();
-
-  constructor(
-    private readonly modalService: ModalService,
-    private readonly commonService: CommonService,
-    private readonly appService: AppService,
-    private readonly element: ElementRef,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly requestDescriptionService: RequestDescriptionService
-  ) {
+  modalService = inject(ModalService);
+  commonService = inject(CommonService);
+  appService = inject(AppService);
+  element = inject(ElementRef);
+  changeDetectorRef = inject(ChangeDetectorRef);
+  requestDescriptionService = inject(RequestDescriptionService);
+  
+  constructor() {
     this.tooltip.element = this.element;
   }
 
