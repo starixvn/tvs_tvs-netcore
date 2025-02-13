@@ -1,4 +1,4 @@
-﻿using TicketVoidingSystem.Models;
+﻿using SpecialDelete.VirtualSports.Common.Models;
 
 namespace SpecialDelete.VirtualSports.RecoverBet.Models;
 
@@ -20,7 +20,7 @@ public class Query
 
     public string? TransIds { get; set; }
 
-    public IEnumerable<BetId>? Tickets { get; set; }
+    public IEnumerable<BetIdRecover>? Tickets { get; set; }
 
     public Recover TypeOfRecover => GetTypeOfRecover();
 

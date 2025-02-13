@@ -23,6 +23,8 @@ public interface MatchService
     Match UpdateMatchInfoFromRemotingRef(Match match);
 
     string GetMatchEvent(Match match);
+
+    Task<Result> LockMatch(int matchId, int type, int siteDbGroupId);
 }
 
 public class MatchServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefWrapperService)
@@ -143,5 +145,16 @@ public class MatchServiceImp(IDynamicRepository repository, RemotingRefWrapperSe
         }
 
         return isOutright ? $"{homeNameNewSimplified} - {leagueNameNewSimplified}" : $"{homeNameNewSimplified} - vs - {awayNameNewSimplified}";
+    }
+
+    public async Task<Result> LockMatch(int matchId, int type, int siteDbGroupId)
+    {
+        var criteria = new LockMatchCriteria
+        {
+            MatchId = matchId,
+            Type = type,
+            SiteDbGroupId = siteDbGroupId
+        };
+        return await repository.GetAsync<Result>(criteria);
     }
 }

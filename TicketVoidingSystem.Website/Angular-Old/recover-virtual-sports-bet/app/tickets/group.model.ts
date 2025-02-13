@@ -70,7 +70,8 @@ export class GroupModel {
         return this.tickets.filter(ticket => ticket.isChecked && !ticket.isDisable).map(ticket => {
             return {
                 transId: ticket.betId,
-                siteDbGroupId: ticket.siteDbGroupId
+                siteDbGroupId: ticket.siteDbGroupId,
+                sportType: ticket.sportType
             } as BetId;
         });
     }

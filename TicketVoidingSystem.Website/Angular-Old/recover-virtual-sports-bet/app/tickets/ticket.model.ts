@@ -12,6 +12,7 @@
     isChecked: boolean;
     isDisable: boolean;
     siteDbGroupId: number;
+    sportType: number;
 
     constructor(
         no: number,

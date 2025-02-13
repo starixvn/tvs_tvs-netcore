@@ -12,7 +12,7 @@ public interface Repository
 {
     Task<GetTicketsModel> GetTickets(Query query);
 
-    Task<RecoverTicketsModel> RecoverTickets(Query query);
+    Task<RecoverTicketsModel> RecoverTicketsNotVirtualSports2Racing(Query query, IEnumerable<BetIdRecover> tickets);
 }
 
 public class RepositoryImp(IDynamicRepository repository, SessionService sessionService)
@@ -33,18 +33,18 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
         return BuildResultGetTickets(ticketsInAllServers, validationInAllServers);
     }
 
-    public async Task<RecoverTicketsModel> RecoverTickets(Query query)
+    public async Task<RecoverTicketsModel> RecoverTicketsNotVirtualSports2Racing(Query query, IEnumerable<BetIdRecover> tickets)
     {
         var criteria = CreateRecoverTicketsCriteria(query);
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            var ticketsInSiteDb = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
+            var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == server.Id);
             if (!ticketsInSiteDb.Any())
             {
                 return Task.FromResult((Enumerable.Empty<RecoverTicketsValidation>(), Enumerable.Empty<RecoverTicketModel>()));
             }
 
-            criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
+            criteria.TransIds = string.Join(",", ticketsInSiteDb.Select(x => x.TransId));
             criteria.SiteDbGroupId = server.Id;
             return repository.FetchMultipleAsync<RecoverTicketsValidation, RecoverTicketModel>(criteria);
         });
