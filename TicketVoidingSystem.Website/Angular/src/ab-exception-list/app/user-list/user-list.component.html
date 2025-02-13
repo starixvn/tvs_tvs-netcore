@@ -1,7 +1,9 @@
 <div class="user-list" [ngClass]="permission.abExceptionListHost ? 'width-1400' : 'width-1300'">
-  <div class="title-user-list" *ngIf="paging.total > 0">
-    <div class="title-user-list-label">AB Exception List</div>
-  </div>
+  @if (paging.total > 0) {
+    <div class="title-user-list">
+      <div class="title-user-list-label">AB Exception List</div>
+    </div>
+  }
   <div class="table-header">
     <table>
       <thead>
@@ -30,17 +32,19 @@
           <th scope="col" [ngClass]="permission.abExceptionListHost ? 'col-tb-8' : ''">
             <div>Added By</div>
           </th>
-          <th scope="col" class="col-tb-9 col-remove" *ngIf="permission.abExceptionListHost">
-            <button class="button-remove-users mr-1" (click)="removeUsers()" [disabled]="isDisabledRemoveButton()">REMOVE</button>
-            <input type="checkbox" [(ngModel)]="isCheckedAll" (change)="changedCheckAll()" [disabled]="displayedModels?.length === 0"/>
-          </th>
+          @if (permission.abExceptionListHost) {
+            <th scope="col" class="col-tb-9 col-remove">
+              <button class="button-remove-users me-1" (click)="removeUsers()" [disabled]="isDisabledRemoveButton()">REMOVE</button>
+              <input type="checkbox" [(ngModel)]="isCheckedAll" (change)="changedCheckAll()" [disabled]="displayedModels?.length === 0"/>
+            </th>
+          }
         </tr>
       </thead>
     </table>
   </div>
   <div class="table-content">
     <table>
-      <ng-container *ngFor="let item of displayedModels; index as i">
+      @for (item of displayedModels; track item; let i = $index) {
         <tbody>
           <tr>
             <td class="col-tb-1">
@@ -59,10 +63,16 @@
               <div>{{item.subTypeName}}</div>
             </td>
             <td class="col-tb-6">
-              <div *ngIf="isShowCheckBoxVoidVIP(item.isAllowVoidVIP)">
-                <i *ngIf="item.isAllowVoidVIP === '1'" class="fa fa-check" aria-hidden="true"></i>
-              </div>
-              <div *ngIf="!isShowCheckBoxVoidVIP(item.isAllowVoidVIP)">N/A</div>
+              @if (isShowCheckBoxVoidVIP(item.isAllowVoidVIP)) {
+                <div>
+                  @if (item.isAllowVoidVIP === '1') {
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                  }
+                </div>
+              }
+              @if (!isShowCheckBoxVoidVIP(item.isAllowVoidVIP)) {
+                <div>N/A</div>
+              }
             </td>
             <td class="col-tb-7">
               <div>{{item.addedDate | date:'yyyy/MM/dd hh:mm:ss a'}}</div>
@@ -70,23 +80,27 @@
             <td [ngClass]="permission.abExceptionListHost ? 'col-tb-8' : ''">
               <div>{{item.addedBy}}</div>
             </td>
-            <td class="col-tb-9" *ngIf="permission.abExceptionListHost">
-              <div>
-                <input type="checkbox" [(ngModel)]="item.isChecked" (change)="changedCheckItem()"/>
-              </div>
-            </td>            
-          </tr>    
-        </tbody>     
-      </ng-container>
+            @if (permission.abExceptionListHost) {
+              <td class="col-tb-9">
+                <div>
+                  <input type="checkbox" [(ngModel)]="item.isChecked" (change)="changedCheckItem()"/>
+                </div>
+              </td>
+            }
+          </tr>
+        </tbody>
+      }
     </table>
 
-    <table *ngIf="displayedModels.length == 0 || displayedModels == null">
-      <tbody>
-        <tr>
-          <td class="no-data">There is no data</td>
-        </tr>
-      </tbody>
-    </table>
+    @if (displayedModels.length == 0 || displayedModels == null) {
+      <table>
+        <tbody>
+          <tr>
+            <td class="no-data">There is no data</td>
+          </tr>
+        </tbody>
+      </table>
+    }
   </div>
   <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging>
 </div>

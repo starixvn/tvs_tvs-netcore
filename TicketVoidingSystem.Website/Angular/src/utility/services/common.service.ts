@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import moment from 'moment-timezone';
 import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoViewModel } from '../../add-request/app/add-request/models/get-log-info.model';
@@ -27,9 +27,7 @@ import { HdpFilterBetType } from '../../add-request/app/add-request/models/hdp-f
   providedIn: 'root'
 })
 export class CommonService {
-  constructor(
-    private readonly httpService: HttpService
-  ) { }
+  httpService = inject(HttpService);
 
   async getNapUserInfo(): Promise<NapUserInfoModel> {
     return this.httpService.getJson('api/SharedApi/GetNapUserInfo');

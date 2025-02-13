@@ -1,8 +1,8 @@
+import { _isNumberValue } from '@angular/cdk/coercion';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ManageRequestStatus } from '../../../utility/constants/config';
@@ -157,7 +157,7 @@ export class FilterComponent implements OnInit {
   }
 
   validate(): boolean {
-    if (this.filterByMatch && this.model.matchId && !isNumeric(this.model.matchId)) {
+    if (this.filterByMatch && this.model.matchId && !_isNumberValue(this.model.matchId)) {
       this.tooltip.display('input-match-id', LABELS.INVALID_MATCHID);
       return false;
     }
@@ -167,7 +167,7 @@ export class FilterComponent implements OnInit {
       return false;
     }
 
-    if (!this.filterByMatch && !isNumeric(this.model.requestId)) {
+    if (!this.filterByMatch && !_isNumberValue(this.model.requestId)) {
       this.tooltip.display('input-request-id', LABELS.INVALID_REQUESTID);
       return false;
     }

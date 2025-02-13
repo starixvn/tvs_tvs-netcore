@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AppStore {
-  private readonly blockingUiStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
-  constructor() {
-  }
+  private readonly blockingUiStatusSubject = new BehaviorSubject<boolean>(false);
 
   get blockingUiStatus(): Observable<boolean> {
     return this.blockingUiStatusSubject.asObservable();

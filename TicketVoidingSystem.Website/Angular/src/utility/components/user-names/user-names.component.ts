@@ -1,12 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { Tooltip } from '../../components/tooltip/tooltip.model';
 import { LABELS } from '../../constants/labels';
+import { ToolTipModule } from '../tooltip/tooltip.module';
 import { GroupUsername, UsernameItem } from './user-names.model';
 
 @Component({
+  standalone: true,
   selector: 'user-names',
   templateUrl: './user-names.component.html',
-  styleUrls: ['./user-names.component.scss']
+  styleUrls: ['./user-names.component.scss'],
+  imports: [FormsModule, CommonModule, ToolTipModule, NgbTooltip],
 })
 export class UsernamesComponent implements OnChanges {
   private readonly errorTooltipClassName = 'invalid-data';

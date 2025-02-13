@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import * as _ from 'lodash';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
@@ -8,13 +8,9 @@ import { AppService } from '../app.service';
 import { FilterModel } from '../filter/filter.model';
 import { GroupSiteModel, SiteModel } from '../models/site.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FilterService {
-  constructor(
-    private readonly appService: AppService,
-  ) {}
+  appService = inject(AppService);
 
   async getSites(): Promise<GroupSiteModel[]> {
     return this.appService.getSites();

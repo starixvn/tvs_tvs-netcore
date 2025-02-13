@@ -1,281 +1,115 @@
-import { ElementRef, NgModule, SimpleChange } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
+import { SimpleChange } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PagingModule } from '../../../utility/components/paging/paging.module';
-import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { ABExceptionListLevel, ABExceptionListVoidVIP } from '../../../utility/constants/config';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { AppStore } from '../app.store';
-import { PermissionABExceptionList } from '../models/permission.model';
 import { UserModel } from '../models/user.model';
 import { UserService } from '../services/user.service';
 import { UserListComponent } from './user-list.component';
 
-class Helper {
-  static fakePermission: PermissionABExceptionList = {
-    abExceptionListHost: true
-  };
-  static fakeUserModel: UserModel = {
-    username: 'name',
-    level: '1',
-    site: '1,2',
-    addedDate: new Date('2020-11-06 00:00:00.000'),
-    addedBy: 'zane',
-    isChecked: true,
-    custId: 123,
-    subTypeName: '',
-    isAllowVoidVIP: ''
-  };
-}
+describe('UserListComponent', () => {
+  let component: UserListComponent;
+  let fixture: ComponentFixture<UserListComponent>;
+  let userService: UserService;
+  let appStore: AppStore;
 
-describe('UserListComponent', () => { 
-  @NgModule({
-    declarations: [
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      PagingModule
-    ],
-    providers: [
-      UserService,
-      AppStore   
-    ]
-  })
-  class AppModuleTest { }
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        UserListComponent,
+        PagingModule,
+      ],
+      providers: [
+        UserService,
+        AppStore
+      ]
+    }).compileComponents();
 
-  let shallow: Shallow<UserListComponent>;
-
-  beforeEach(() => {
-    shallow = new Shallow(UserListComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(UserListComponent);
+    userService = fixture.debugElement.injector.get(UserService);
+    appStore = fixture.debugElement.injector.get(AppStore);
+    component = fixture.componentInstance;
   });
 
-  it('#UserListComponent init should match snapshot', async () => {
-    const { fixture } = await shallow
-      .render({
-        bind: {
-          models: [Helper.fakeUserModel],
-          permission: Helper.fakePermission
-        }
-      });
+  it('should call removeUsers when remove button is clicked', async () => {
+    const mockUser = new UserModel();
+    mockUser.isChecked = true;
+    component.displayedModels = [mockUser];
+    userService.removeUsers = jest.fn().mockImplementation();
 
-    expect(fixture).toMatchSnapshot();
-  });
-  
- 
-  it('#ngOnChanges should call #filterDisplayRequests', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          models: [Helper.fakeUserModel],
-          permission: Helper.fakePermission
-        }
-      });
-    const changes = {
-      'models': new SimpleChange([Helper.fakeUserModel], [Helper.fakeUserModel], true)
-    };
-    instance.paging = new PagingModel();
-    instance['filterDisplayRequests'] = jest.fn();
-
-    // Action
-    instance.ngOnChanges(changes);
-
-    // Assert
-    expect(instance.paging.total).toBe(1);
-    expect(instance['filterDisplayRequests']).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#ngOnChanges should not call #filterDisplayRequests', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          models: [Helper.fakeUserModel],
-          permission: Helper.fakePermission
-        }
-      });
-    instance['filterDisplayRequests'] = jest.fn();
-
-    // Action
-    instance.ngOnChanges({});
-
-    // Assert
-    expect(instance['filterDisplayRequests']).toHaveBeenCalledTimes(0);
+    await component.removeUsers();
+    expect(userService.removeUsers).toHaveBeenCalledWith([mockUser], appStore);
   });
 
-  it('#pagingEvent should update correct model', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          models: [Helper.fakeUserModel],
-          permission: Helper.fakePermission
-        }
-      });
-    instance['filterDisplayRequests'] = jest.fn();
+  it('should update displayedModels on models change', () => {
+    const models = [new UserModel(), new UserModel()];
+    component.models = models;
+    component.ngOnChanges({ 'models': {} as SimpleChange });
 
-    // Action
-    instance.pagingEvent();
-
-    // Assert
-    expect(instance['filterDisplayRequests']).toHaveBeenCalledTimes(1);
+    expect(component.paging.total).toBe(2);
+    expect(component.displayedModels.length).toBe(2);
   });
-  
-  it('#getLevel should update correct model', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          models: [Helper.fakeUserModel],
-          permission: Helper.fakePermission
-        }
-      });
 
-    // Action
-    const result = instance.getLevel('0');
+  it('should check if all items are checked when isCheckedAll is true', () => {
+    const models = [new UserModel(), new UserModel()];
+    models[0].isChecked = true;
+    models[1].isChecked = true;
+    component.models = models;
+    component.ngOnChanges({ 'models': {} as SimpleChange });
 
-    // Assert
-    expect(result).toBe('All');
+    expect(component.isCheckedAll).toBe(true);
   });
-  
-  it('#removeUsers should call #userService.removeUsers', async () => {
-    // Arrange
-    const mockRemoveUsers = jest.fn().mockImplementation();
-    const { instance } = await shallow
-      .mock(UserService, { removeUsers: mockRemoveUsers })
-      .render({
-        bind: {
-          models: [Helper.fakeUserModel],
-          permission: Helper.fakePermission
-        }
-      });
 
-    // Action
-    await instance.removeUsers();
+  it('should call changedCheckAll to update all checkboxes', () => {
+    const models = [new UserModel(), new UserModel()];
+    component.displayedModels = models;
+    component.isCheckedAll = true;
+    component.changedCheckAll();
 
-    // Assert
-    expect(mockRemoveUsers).toHaveBeenCalledTimes(1);
+    expect(component.displayedModels.every(x => x.isChecked)).toBe(true);
   });
-  
-  it('#changedCheckAll should update correct model', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          models: [Helper.fakeUserModel],
-          permission: Helper.fakePermission
-        }
-      });
-    const isCheckList = [true, false];
 
-    isCheckList.forEach(item => {
-      instance.isCheckedAll = item;
+  it('should call changedCheckItem to update isCheckedAll to false', () => {
+    const models = [new UserModel(), new UserModel()];
+    component.displayedModels = models;
+    component.isCheckedAll = true;
 
-      // Action
-      instance.changedCheckAll();
+    component.changedCheckItem();
 
-      // Assert
-      expect(instance.displayedModels.every(x => x.isChecked)).toBe(item);
+    expect(component.isCheckedAll).toBe(false);
+  });
+
+  it('should return true for isDisabledRemoveButton when no user is checked', () => {
+    const models = [new UserModel(), new UserModel()];
+    component.displayedModels = models;
+    expect(component.isDisabledRemoveButton()).toBe(true);
+  });
+
+  it('should return the correct level name based on id', () => {
+    const result = component.getLevel(ABExceptionListLevel.Super);
+    expect(result).toBe('Super');
+  });
+
+  it('should call isShowCheckBoxVoidVIP to return expected', () => {
+    [
+      { isVoidvip: null, expected: false },
+      { isVoidvip: ABExceptionListVoidVIP.Yes, expected: true },
+      { isVoidvip: ABExceptionListVoidVIP.No, expected: true }
+    ].forEach(testCase => {
+      const result = component.isShowCheckBoxVoidVIP(testCase.isVoidvip);
+      expect(result).toBe(testCase.expected);
     });
   });
-  
-  it('#changedCheckItem should update correct model when at least row unchecked', async () => {
-    // Arrange
-    const fakeUserModel = _.clone(Helper.fakeUserModel);
-    fakeUserModel.isChecked = false;
-    const { instance } = await shallow
-      .render({
-        bind: {
-          models: [fakeUserModel],
-          permission: Helper.fakePermission
-        }
-      });
 
-    // Action
-    instance.changedCheckItem();
+  it('should filter displayed models correctly', () => {
+    const models = [new UserModel(), new UserModel(), new UserModel()];
+    component.models = models;
+    component.paging.pageSize = 2;
+    component.paging.total = 3;
+    component.pagingEvent();
 
-    // Assert
-    expect(instance.isCheckedAll).toBe(false);
-  });
-  
-  it('#changedCheckItem should update correct model when all row unchecked', async () => {
-    // Arrange
-    const fakeUserModel = _.clone(Helper.fakeUserModel);
-    fakeUserModel.isChecked = true;
-    const { instance } = await shallow
-      .render({
-        bind: {
-          models: [fakeUserModel],
-          permission: Helper.fakePermission
-        }
-      });
-
-    // Action
-    instance.changedCheckItem();
-
-    // Assert
-    expect(instance.isCheckedAll).toBe(true);
-  });
-  
-  it('#isDisabledRemoveButton should return false when at least row checked', async () => {
-    // Arrange
-    const fakeUserModel = _.clone(Helper.fakeUserModel);
-    fakeUserModel.isChecked = true;
-    const { instance } = await shallow
-      .render({
-        bind: {
-          models: [fakeUserModel],
-          permission: Helper.fakePermission
-        }
-      });
-
-    // Action
-    const result = instance.isDisabledRemoveButton();
-
-    // Assert
-    expect(result).toBe(false);
-  });
-  
-  it('#isDisabledRemoveButton should return true when all row unchecked', async () => {
-    // Arrange
-    const fakeUserModel = _.clone(Helper.fakeUserModel);
-    fakeUserModel.isChecked = false;
-    const { instance } = await shallow
-      .render({
-        bind: {
-          models: [fakeUserModel],
-          permission: Helper.fakePermission
-        }
-      });
-
-    // Action
-    const result = instance.isDisabledRemoveButton();
-
-    // Assert
-    expect(result).toBe(true);
-  });
-  
-  it('#filterDisplayRequests should update correct model', async () => {
-    // Arrange
-    const fakeUserModel = _.clone(Helper.fakeUserModel);
-    fakeUserModel.isChecked = false;
-    const { instance } = await shallow
-      .render({
-        bind: {
-          models: [fakeUserModel],
-          permission: Helper.fakePermission
-        }
-      });
-    instance.paging = new PagingModel();
-    instance.paging.total = 1;
-
-    // Action
-    instance['filterDisplayRequests']();
-
-    // Assert
-    expect(instance.displayedModels.length).toBe(1);
+    expect(component.displayedModels.length).toBe(2);
   });
 });

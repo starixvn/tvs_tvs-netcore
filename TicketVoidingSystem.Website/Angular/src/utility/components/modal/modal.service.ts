@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { CheckingPermissionModel } from '../../models/checking-permission.model';
@@ -12,13 +12,13 @@ import { IModal, ModalType } from './modal.model';
 })
 export class ModalService {
   private modalReference: NgbModalRef;
+  config = inject(NgbModalConfig);
+  ngbModal = inject(NgbModal);
+  commonService = inject(CommonService);
 
-  constructor(
-    config: NgbModalConfig,
-    private readonly ngbModal: NgbModal,
-    private readonly commonService: CommonService) {
-    config.backdrop = 'static';
-    config.keyboard = false;
+  constructor() {
+    this.config.backdrop = 'static';
+    this.config.keyboard = false;
   }
 
   open(data: IModal, closeEvent?: () => void) {

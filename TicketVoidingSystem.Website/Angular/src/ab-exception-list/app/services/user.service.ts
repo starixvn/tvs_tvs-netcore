@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { TEXT } from '../../../utility/constants/text';
@@ -10,14 +10,10 @@ import { GetUserModel } from '../models/get-user.model';
 import { GetUserQuery } from '../models/get-user.query';
 import { UserModel } from '../models/user.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UserService {
-  constructor(
-    private readonly appService: AppService,
-    private readonly modalService: ModalService
-  ) { }
+  appService = inject(AppService);
+  modalService = inject(ModalService);
 
   async getUsers(filterModel: FilterModel): Promise<GetUserModel> {
     const query: GetUserQuery = {

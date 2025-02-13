@@ -36,7 +36,7 @@ export class AddRequestStore {
   }
 
   checkValidSubIssueTypeInFilter(): void {
-    this.checkValidSubIssueTypeInFilterSubject.next();
+    this.checkValidSubIssueTypeInFilterSubject.next(null);
   }
 
   get getAllowanceTimeSubject(): Observable<AllowanceTime> {

@@ -1,12 +1,10 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
-import { Shallow } from 'shallow-render';
-import { BlockFullUiModule } from '../../utility/components/block-full-ui/block-full-ui.module';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ToastrModule } from 'ngx-toastr';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { Tooltip } from '../../utility/components/tooltip/tooltip.model';
+import { TestingModule } from '../../utility/modules/testing.module';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AddUserComponent } from './add-user/add-user.component';
 import { AppComponent } from './app.component';
@@ -14,173 +12,124 @@ import { AppService } from './app.service';
 import { AppStore } from './app.store';
 import { FilterComponent } from './filter/filter.component';
 import { GetUserModel } from './models/get-user.model';
-import { UserModel } from './models/user.model';
 import { UserService } from './services/user.service';
 import { ValidationService } from './services/validation.service';
 import { UserListComponent } from './user-list/user-list.component';
 
-jest.mock('../../utility/services/signal-r.service.native');
-class Helper {
-  static fakeUsername = 'name';
-  static fakeUserModel: UserModel = {
-    username: 'name',
-    level: '1',
-    site: '1,2',
-    addedDate: new Date('2020-11-06 00:00:00.000'),
-    addedBy: 'zane',
-    isChecked: true,
-    custId: 123,    
-    subTypeName: '',
-    isAllowVoidVIP: ''
-  };
-  static fakeGetUserModel: GetUserModel = {
-    users: [Helper.fakeUserModel],
-    invalidUsername: ''
-  };
-}
+describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let appService: AppService;
+  let signalRService: SignalRService;
+  let userService: UserService;
+  let validationService: ValidationService;
+  let appStore: AppStore;
+  let blockingUiStatusSubject: BehaviorSubject<boolean>;
 
-describe('AppComponent', () => { 
-  @NgModule({
-    declarations: [
-      UserListComponent,
-      FilterComponent,
-      AddUserComponent,
-      MenuBarComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      BlockFullUiModule
-    ],
-    providers: [
-      UserService,
-      AppService,
-      SignalRService,
-      AppStore
-    ]
-  })
-  class AppModuleTest { }
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        BlockFullUiComponent,
+        MenuBarComponent,
+        AddUserComponent,
+        FilterComponent,
+        UserListComponent,
+        ToastrModule.forRoot()
+      ],
+      providers: [
+        AppService,
+        AppStore,
+        SignalRService,
+        UserService,
+        ValidationService
+      ]
+    }).compileComponents();
 
-  let shallow: Shallow<AppComponent>;
-
-  beforeEach(() => {
-    shallow = new Shallow(AppComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    appService = fixture.debugElement.injector.get(AppService);
+    signalRService = fixture.debugElement.injector.get(SignalRService);
+    userService = fixture.debugElement.injector.get(UserService);
+    appStore = fixture.debugElement.injector.get(AppStore);
+    validationService = fixture.debugElement.injector.get(ValidationService);
   });
 
-  it('#AppComponent init should match snapshot', async () => {
-    const { fixture } = await shallow.render();
-
-    expect(fixture).toMatchSnapshot();
+  it('should create the component', () => {
+    expect(component).toBeTruthy();
   });
- 
-  it('#ngOnInit should call #getPermissionABWhiteList', async () => {
-    // Arrange
-    const signalRService = new SignalRService(null);
-    const appService = new AppService(null);
-    appService.getPermissionABExceptionList = jest.fn();
-    const abWhiteListStore = new AppStore();
-    abWhiteListStore.blockingUiStatus.subscribe = jest.fn(); 
+
+  it('should subscribe to blockingUiStatus on init', async () => {
+    blockingUiStatusSubject = new BehaviorSubject<boolean>(false);
+    Object.defineProperty(appStore, 'blockingUiStatus', {
+      get: () => blockingUiStatusSubject.asObservable(),
+    });
+    appService.getPermissionABExceptionList = jest.fn().mockResolvedValue('mockedPermission');
     signalRService.initializeConnection = jest.fn();
 
-    const mockAppComponent = new AppComponent(appService, null, signalRService, abWhiteListStore, null);
+    await component.ngOnInit();
 
-    // Action
-    await mockAppComponent.ngOnInit();
-
-    // Assert
+    blockingUiStatusSubject.next(true);
+    expect(component.isBlockingUi).toBe(true);
+    expect(appService.getPermissionABExceptionList).toHaveBeenCalled();
     expect(signalRService.initializeConnection).toHaveBeenCalled();
+    expect(component.permission).toBe('mockedPermission');
   });
-  
-  it('#ngOnDestroy should call #unsubscribe', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    instance.blockingUiSubscription = new Subscription();
-    instance.blockingUiSubscription.unsubscribe = jest.fn();
-    
-    // Action
-    instance.ngOnDestroy();
 
-    // Assert
-    expect(instance.blockingUiSubscription.unsubscribe).toHaveBeenCalledTimes(1);
+  it('should unsubscribe from blockingUiStatus on destroy', () => {
+    component.blockingUiSubscription = {} as Subscription;
+    component.blockingUiSubscription.unsubscribe = jest.fn();
+    component.ngOnDestroy();
+
+    expect(component.blockingUiSubscription.unsubscribe).toHaveBeenCalled();
   });
-  
-  it('#showAddUserModal should update isOpen', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
 
-    // Action
-    instance.showAddUserModal();
-
-    // Assert
-    expect(instance.addUserModel.isOpen).toBeTruthy();
+  it('should open add user modal', () => {
+    component.showAddUserModal();
+    expect(component.addUserModel.isOpen).toBe(true);
   });
-  
-  it('#handleSearchEvent should return ', async () => {
-    // Arrange
-    const fakeInvalidGetUserModel = new GetUserModel();
-    fakeInvalidGetUserModel.invalidUsername = Helper.fakeUsername;
-    const mockGetUsers = jest.fn().mockImplementation(() => Promise.resolve(fakeInvalidGetUserModel));
-    const mockValidateCommonData = jest.fn().mockImplementation(() => false);
-    const mockTooltipDisplay = jest.fn();
-    const { instance } = await shallow
-      .mock(UserService, { getUsers: mockGetUsers })
-      .mock(ValidationService, { validateCommonData: mockValidateCommonData })
-      .render();
-    instance.filterModel.sites = '1,2';
-    instance.filterComponent = new FilterComponent(null, null, null);
-    instance.filterComponent.tooltip = new Tooltip();
-    instance.filterComponent.tooltip.display = mockTooltipDisplay;
 
-    // Action
-    await instance.handleSearchEvent();
+  it('should handle search event', async () => {
+    jest.spyOn(validationService, 'validateCommonData').mockReturnValue(true);
+    const getUsersSpy = jest.spyOn(component, 'getUsers').mockResolvedValue();
 
-    // Assert
-    expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
+    await component.handleSearchEvent();
+
+    expect(validationService.validateCommonData).toHaveBeenCalledWith(component.filterModel, component.filterComponent);
+    expect(getUsersSpy).toHaveBeenCalled();
   });
-  
-  it('#handleSearchEvent should update user model', async () => {
-    // Arrange
-    const mockGetUsers = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeGetUserModel));
-    const mockValidateCommonData = jest.fn().mockImplementation(() => true);
-    const mockTooltipDisplay = jest.fn();
-    const { instance } = await shallow
-      .mock(UserService, { getUsers: mockGetUsers })
-      .mock(ValidationService, { validateCommonData: mockValidateCommonData })
-      .render();
-    instance.filterModel.sites = '1,2';
-    instance.filterComponent = new FilterComponent(null, null, null);
-    instance.filterComponent.tooltip = new Tooltip();
-    instance.filterComponent.tooltip.display = mockTooltipDisplay;
 
-    // Action
-    await instance.handleSearchEvent();
+  it('should not handle search event if validation fails', async () => {
+    validationService.validateCommonData = jest.fn().mockImplementation(() => false);
+    validationService.validateUsernames = jest.fn().mockResolvedValue(true);
+    component.getUsers = jest.fn();
+    await component.handleSearchEvent();
 
-    // Assert
-    expect(mockGetUsers).toHaveBeenCalledTimes(1);
-    expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
-    expect(instance.userModels).toEqual([Helper.fakeUserModel]);
+    expect(validationService.validateCommonData).toHaveBeenCalledWith(component.filterModel, component.filterComponent);
+    expect(component.getUsers).not.toHaveBeenCalled();
   });
-  
-  it('#getUsers should return when has invalid usernames', async () => {
-    // Arrange
-    const fakeInvalidGetUser = _.cloneDeep(Helper.fakeGetUserModel);
-    fakeInvalidGetUser.invalidUsername = '121221';
-    const mockGetUsers = jest.fn().mockImplementation(() => Promise.resolve(fakeInvalidGetUser));
-    const mockTooltipDisplay = jest.fn();
-    const { instance } = await shallow
-      .mock(UserService, { getUsers: mockGetUsers })
-      .render();
-    instance.filterModel.sites = '1,2';
-    instance.filterComponent = new FilterComponent(null, null, null);
-    instance.filterComponent.tooltip = new Tooltip();
-    instance.filterComponent.tooltip.display = mockTooltipDisplay;
 
-    // Action
-    await instance.getUsers();
+  it('should get users and call filterComponent.tooltip.display', async () => {
+    jest.spyOn(userService, 'getUsers').mockResolvedValue({ invalidUsername: 'test' } as GetUserModel );
+    component.filterComponent = TestBed.createComponent(FilterComponent).componentInstance;
+    component.filterComponent.tooltip = new Tooltip();
+    component.filterComponent.tooltip.display = jest.fn();
 
-    // Assert
-    expect(mockGetUsers).toHaveBeenCalledTimes(1);
+    await component.getUsers();
+
+    expect(component.filterComponent.tooltip.display).toHaveBeenCalledTimes(1);
+    expect(userService.getUsers).toHaveBeenCalledWith(component.filterModel);
+  });
+
+  it('should get users and do not call filterComponent.tooltip.display', async () => {
+    jest.spyOn(userService, 'getUsers').mockResolvedValue({} as GetUserModel );
+    component.filterComponent = TestBed.createComponent(FilterComponent).componentInstance;
+    component.filterComponent.tooltip = new Tooltip();
+    component.filterComponent.tooltip.display = jest.fn();
+
+    await component.getUsers();
+
+    expect(component.filterComponent.tooltip.display).not.toHaveBeenCalled();
+    expect(userService.getUsers).toHaveBeenCalledWith(component.filterModel);
   });
 });

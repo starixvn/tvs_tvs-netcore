@@ -1,10 +1,15 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { Tooltip } from '../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../utility/constants/labels';
 import { Selection } from '../../utility/models/selection.model';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
+import { AddUserComponent } from './add-user/add-user.component';
 import { AddUserModel } from './add-user/add-user.model';
 import { AppService } from './app.service';
 import { AppStore } from './app.store';
@@ -14,16 +19,19 @@ import { PermissionABExceptionList } from './models/permission.model';
 import { UserModel } from './models/user.model';
 import { UserService } from './services/user.service';
 import { ValidationService } from './services/validation.service';
+import { UserListComponent } from './user-list/user-list.component';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [AppStore]
+  imports: [FilterComponent, UserListComponent, AddUserComponent, MenuBarComponent, BlockFullUiComponent, FormsModule, CommonModule],
+  providers: [UserService, SignalRService, AppStore, ValidationService, AppService]
 })
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('filterComponent') filterComponent: FilterComponent;
-
+  private readonly FILTER_USERNAME_CLASS = 'username-txt';
   title = 'Home / AB Exception List';
   filterModel = new FilterModel();
   userModels: UserModel[] = [];
@@ -33,15 +41,12 @@ export class AppComponent implements OnInit, OnDestroy {
   subTypeSelection: Selection[] = [];
   isBlockingUi = false;
   blockingUiSubscription: Subscription;
-  private readonly FILTER_USERNAME_CLASS = 'username-txt';
 
-  constructor(
-    private readonly appService: AppService,
-    private readonly userService: UserService,
-    private readonly signalRService: SignalRService,
-    private readonly abExceptionListStore: AppStore,
-    private readonly validationService: ValidationService,
-  ) { }
+  appService = inject(AppService);
+  userService = inject(UserService);
+  signalRService = inject(SignalRService);
+  abExceptionListStore = inject(AppStore);
+  validationService = inject(ValidationService);
 
   async ngOnInit() {
     this.blockingUiSubscription = this.abExceptionListStore.blockingUiStatus.subscribe(status => {

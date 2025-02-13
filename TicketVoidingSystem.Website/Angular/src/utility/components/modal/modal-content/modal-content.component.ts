@@ -1,11 +1,17 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ClipboardModule } from 'ngx-clipboard';
+import { SanitizeHtmlPipe } from '../../../pipes/sanitize-html.pipe';
 import { IModal } from '../modal.model';
 
 @Component({
+  standalone: true,
   selector: 'modal-content',
   templateUrl: './modal-content.component.html',
-  styleUrls: ['./modal-content.component.scss']
+  styleUrls: ['./modal-content.component.scss'],
+  imports: [FormsModule, CommonModule, SanitizeHtmlPipe, ClipboardModule],
 })
 export class ModalContentComponent {
   data: IModal = {};
@@ -13,10 +19,10 @@ export class ModalContentComponent {
   @Output() confirmYes = new EventEmitter();
   @Output() confirmNo = new EventEmitter();
   @Output() close = new EventEmitter();
-  isProcessingOkCallback: boolean = false;
-  isProcessingYesCallback: boolean = false;
+  isProcessingOkCallback = false;
+  isProcessingYesCallback = false;
 
-  constructor(public activeModal: NgbActiveModal) { }
+  activeModal = inject(NgbActiveModal);
 
   confirmClickOk() {
     this.isProcessingOkCallback = true;

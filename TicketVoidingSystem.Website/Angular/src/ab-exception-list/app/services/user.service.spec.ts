@@ -1,4 +1,4 @@
-import { NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { TestBed } from '@angular/core/testing';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { TEXT } from '../../../utility/constants/text';
@@ -40,45 +40,41 @@ class Helper {
 }
 describe('UserService', () => {
   let userService: UserService;
-  let modalService: ModalService;
-  let appService: AppService;
+  let modalServiceMock: jest.Mocked<ModalService>;;
+  let appServiceMock: jest.Mocked<AppService>;;
 
   beforeEach(() => {
-    modalService = new ModalService(new NgbModalConfig(null), null, null);
-    appService = new AppService(null);
-    userService = new UserService(appService, modalService);
+    TestBed.configureTestingModule({
+      providers: [
+        UserService,
+        { provide: AppService, useValue: { getUsers: jest.fn(), addUsers: jest.fn(), removeUsers: jest.fn() } },
+        { provide: ModalService, useValue: { open: jest.fn(), confirm: jest.fn() } },
+      ],
+    });
+
+    appServiceMock = TestBed.inject(AppService) as jest.Mocked<AppService>;
+    modalServiceMock = TestBed.inject(ModalService) as jest.Mocked<ModalService>;
+    userService = TestBed.inject(UserService);
   });
 
   it('#getUsers should call #appService.getUsers when has not username', async () => {
-    // Arrange
-    appService.getUsers = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeGetUserModel));
-    const mockUserService = new UserService(appService, null);
+    appServiceMock.getUsers.mockResolvedValue(Helper.fakeGetUserModel);
+    const result = await userService.getUsers(new FilterModel());
 
-    // action
-    const result = await mockUserService.getUsers(new FilterModel());
-
-    // Assert
     expect(result).toEqual(Helper.fakeGetUserModel);
   });
 
   it('#getUsers should call #appService.getUsers when has username', async () => {
-    // Arrange
     const filterModel = new FilterModel();
     filterModel.username = 'name';
-    appService.getUsers = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeGetUserModel));
-    const mockUserService = new UserService(appService, null);
+    appServiceMock.getUsers.mockResolvedValue(Helper.fakeGetUserModel);
+    const result = await userService.getUsers(filterModel);
 
-    // action
-    const result = await mockUserService.getUsers(filterModel);
-
-    // Assert
     expect(result).toEqual(Helper.fakeGetUserModel);
   });
 
   it('#addUsers should call #appService.addUsers when addUsers successfully', async () => {
-    // Arrange
-    const spyModalServiceConfirm = jest.spyOn(modalService, 'open').mockImplementation(() => {});
-    const spyAppServiceAddUsers = jest.spyOn(appService, 'addUsers').mockImplementation(() => Promise.resolve(Helper.fakeResultSuccessful));
+    appServiceMock.addUsers.mockResolvedValue(Helper.fakeResultSuccessful);
     Object.defineProperty(window, 'location', {
       value: new URL(Helper.url)
     });
@@ -88,24 +84,18 @@ describe('UserService', () => {
       message: TEXT.AB_WHITE_LIST_ADDED_SUCCESS,
       type: ModalType.Alert
     };
-    // action
     await userService.addUsers('aa', [], false);
 
-    // Assert
-    expect(spyModalServiceConfirm).toHaveBeenCalledTimes(1);
-    expect(spyAppServiceAddUsers).toHaveBeenCalledTimes(1);
-
-    expect(spyModalServiceConfirm.mock.calls[0][0]).toEqual(model);
-    expect(spyModalServiceConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
-
-    spyModalServiceConfirm.mock.calls[0][1]();
+    expect(modalServiceMock.open).toHaveBeenCalledTimes(1);
+    expect(appServiceMock.addUsers).toHaveBeenCalledTimes(1);
+    expect(modalServiceMock.open.mock.calls[0][0]).toEqual(model);
+    expect(modalServiceMock.open.mock.calls[0][1]).toBeInstanceOf(Function);
+    modalServiceMock.open.mock.calls[0][1]();
     expect(window.location.reload).toHaveBeenCalledTimes(1);
   });
 
   it('#addUsers should call #appService.addUsers when addUsers error', async () => {
-    // Arrange
-    const spyModalServiceConfirm = jest.spyOn(modalService, 'open').mockImplementation(() => {});
-    const spyAppServiceAddUsers = jest.spyOn(appService, 'addUsers').mockImplementation(() => Promise.resolve(Helper.fakeResultError));
+    appServiceMock.addUsers.mockResolvedValue(Helper.fakeResultError);
     Object.defineProperty(window, 'location', {
       value: new URL(Helper.url)
     });
@@ -115,28 +105,20 @@ describe('UserService', () => {
       message: TEXT.AB_WHITE_LIST_ADDED_SUCCESS,
       type: ModalType.Error
     };
-    // action
     await userService.addUsers('aa', [], false);
 
-    // Assert
-    expect(spyModalServiceConfirm).toHaveBeenCalledTimes(1);
-    expect(spyAppServiceAddUsers).toHaveBeenCalledTimes(1);
-
-    expect(spyModalServiceConfirm.mock.calls[0][0]).toEqual(model);
-    expect(spyModalServiceConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
-
-    spyModalServiceConfirm.mock.calls[0][1]();
+    expect(modalServiceMock.open).toHaveBeenCalledTimes(1);
+    expect(appServiceMock.addUsers).toHaveBeenCalledTimes(1);
+    expect(modalServiceMock.open.mock.calls[0][0]).toEqual(model);
+    expect(modalServiceMock.open.mock.calls[0][1]).toBeInstanceOf(Function);
+    modalServiceMock.open.mock.calls[0][1]();
     expect(window.location.reload).toHaveBeenCalledTimes(1);
   });
 
   it('#removeUsers should call #onYesConfirm', async () => {
-    // Arrange
     const mockAppStore = new AppStore();
     mockAppStore.changeBlockingUiStatus = jest.fn();
-    const spyModalServiceConfirm = jest.spyOn(modalService, 'confirm').mockImplementation(() => {});
-    const mockUserService = new UserService(appService, modalService);
-    mockUserService['onYesConfirm'] = jest.fn();
-
+    userService['onYesConfirm'] = jest.fn();
     Object.defineProperty(window, 'location', {
       value: new URL(Helper.url)
     });
@@ -147,28 +129,21 @@ describe('UserService', () => {
       type: ModalType.Confirm
     };
 
-    // action
-    await mockUserService.removeUsers([Helper.fakeUserModel], mockAppStore);
+    await userService.removeUsers([Helper.fakeUserModel], mockAppStore);
 
-    // Assert
-    expect(spyModalServiceConfirm).toHaveBeenCalledTimes(1);
-
-    expect(spyModalServiceConfirm.mock.calls[0][0]).toEqual(model);
-    expect(spyModalServiceConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
-    expect(spyModalServiceConfirm.mock.calls[0][2]).toBeInstanceOf(Function);
-
-    spyModalServiceConfirm.mock.calls[0][1]();
-    expect(mockUserService['onYesConfirm']).toHaveBeenCalledTimes(1);
-
-    spyModalServiceConfirm.mock.calls[0][2]();
+    expect(modalServiceMock.confirm).toHaveBeenCalledTimes(1);
+    expect(modalServiceMock.confirm.mock.calls[0][0]).toEqual(model);
+    expect(modalServiceMock.confirm.mock.calls[0][1]).toBeInstanceOf(Function);
+    expect(modalServiceMock.confirm.mock.calls[0][2]).toBeInstanceOf(Function);
+    modalServiceMock.confirm.mock.calls[0][1]();
+    expect(userService['onYesConfirm']).toHaveBeenCalledTimes(1);
+    modalServiceMock.confirm.mock.calls[0][2]();
   });
 
   it('#onYesConfirm should call #appService.removeUsers', async () => {
-    // Arrange
     const mockAppStore = new AppStore();
     mockAppStore.changeBlockingUiStatus = jest.fn();
-    const spyModalServiceConfirm = jest.spyOn(modalService, 'open').mockImplementation(() => {});
-    const spyAppServiceRemoveUsers = jest.spyOn(appService, 'removeUsers').mockImplementation(() => Promise.resolve(Helper.fakeResultSuccessful));
+    appServiceMock.removeUsers.mockResolvedValue(Helper.fakeResultSuccessful);
     Object.defineProperty(window, 'location', {
       value: new URL(Helper.url)
     });
@@ -178,17 +153,14 @@ describe('UserService', () => {
       message: 'Remove user(s) successfully!',
       type: ModalType.Alert
     };
-    // action
+
     await userService['onYesConfirm']('', mockAppStore);
 
-    // Assert
-    expect(spyModalServiceConfirm).toHaveBeenCalledTimes(1);
-    expect(spyAppServiceRemoveUsers).toHaveBeenCalledTimes(1);
-
-    expect(spyModalServiceConfirm.mock.calls[0][0]).toEqual(model);
-    expect(spyModalServiceConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
-
-    spyModalServiceConfirm.mock.calls[0][1]();
+    expect(modalServiceMock.open).toHaveBeenCalledTimes(1);
+    expect(appServiceMock.removeUsers).toHaveBeenCalledTimes(1);
+    expect(modalServiceMock.open.mock.calls[0][0]).toEqual(model);
+    expect(modalServiceMock.open.mock.calls[0][1]).toBeInstanceOf(Function);
+    modalServiceMock.open.mock.calls[0][1]();
     expect(window.location.reload).toHaveBeenCalledTimes(1);
   });
 });

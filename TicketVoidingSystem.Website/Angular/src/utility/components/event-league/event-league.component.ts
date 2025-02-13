@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
+import { _isNumberValue } from '@angular/cdk/coercion';
 import { Subscription, timer } from 'rxjs';
-import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { AddRequestStore } from '../../../add-request/app/add-request/add-request.store';
 import { LABELS } from '../../../utility/constants/labels';
 import { MatchModel } from '../../../utility/models/match.model';
@@ -57,7 +57,7 @@ export class EventLeagueComponent implements OnChanges {
     this.delayForSearchSubscription = this.observableTimer.subscribe(async () => {
       if (_.isNull(keyword.term) || _.isEmpty(keyword.term)) {
         this.validationMessage = '';
-      } else if (isNumeric(keyword.term)) {
+      } else if (_isNumberValue(keyword.term)) {
         const model = await this.commonService.getMatchInfoAddRequestTvs(Number(keyword.term));
         if (model.errorCode === 0) {
           this.matches = [model.match];

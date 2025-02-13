@@ -1,7 +1,12 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelectionModule } from '../../../utility/components/multiple-selection/multiple-selection.module';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { ABExceptionListLevel, ABExceptionListVoidVIP } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
 import { AppStore } from '../app.store';
@@ -11,16 +16,18 @@ import { FilterService } from '../services/filter.service';
 import { FilterModel } from './filter.model';
 
 @Component({
+  standalone: true,
   selector: 'filter',
   templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.scss']
+  styleUrls: ['./filter.component.scss'],
+  imports: [MultipleSelectionModule, NgSelectModule, CommonModule, FormsModule, ToolTipModule],
+  providers: [FilterService]
 })
 export class FilterComponent implements OnInit {
   @Input() filterModel = new FilterModel();
   @Input() permission = new PermissionABExceptionList();
   @Input() subTypeSelection: Selection[];
   @Output() subTypeSelectionChange = new EventEmitter<Selection[]>();
-
   @Output() filterModelChange = new EventEmitter<FilterModel>();
   @Output() addUserEvent = new EventEmitter();
   @Output() searchEvent = new EventEmitter();
@@ -34,11 +41,11 @@ export class FilterComponent implements OnInit {
   selectedVoidVIP: string[];
   tooltip = new Tooltip();
 
-  constructor(
-    private readonly abExceptionListStore: AppStore,
-    private readonly filterService: FilterService,
-    private readonly element: ElementRef,
-  ) {
+  abExceptionListStore = inject(AppStore);
+  filterService = inject(FilterService);
+  element = inject(ElementRef);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -51,13 +58,11 @@ export class FilterComponent implements OnInit {
     this.abExceptionListStore.changeBlockingUiStatus(true);
     this.groupSites = await this.filterService.getSites();
     this.multipleSelection = this.filterService.initMultiSelectSites(this.groupSites);
-
     this.subTypeSelection = await this.filterService.initSubType();
     this.subTypeSelectionChange.emit(this.subTypeSelection);
     this.subTypeSelectionFilter = _.cloneDeep(this.subTypeSelection);
     this.subTypeSelectionFilter.unshift({ name: '(Blank)', value: '0', group: 'All' });
     this.selectedSubType = this.subTypeSelectionFilter.map(x => x.value);
-
     this.selectedVoidVIP = this.voidVIPSelection.map(x => x.value);
     this.abExceptionListStore.changeBlockingUiStatus(false);
 

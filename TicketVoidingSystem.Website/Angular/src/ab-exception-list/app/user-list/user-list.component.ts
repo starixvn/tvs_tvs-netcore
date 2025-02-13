@@ -1,5 +1,8 @@
-import { Component, Input, SimpleChange } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
+import { PagingModule } from '../../../utility/components/paging/paging.module';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { ABExceptionListLevel, ABExceptionListVoidVIP } from '../../../utility/constants/config';
 import { AppStore } from '../app.store';
@@ -8,25 +11,24 @@ import { UserModel } from '../models/user.model';
 import { UserService } from '../services/user.service';
 
 @Component({
+  standalone: true,
   selector: 'user-list',
   templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.scss']
+  styleUrls: ['./user-list.component.scss'],
+  imports: [PagingModule, FormsModule, CommonModule]
 })
-export class UserListComponent {
+export class UserListComponent implements OnChanges {
   @Input() models: UserModel[] = [];
   @Input() permission = new PermissionABExceptionList();
-
   isBlock: boolean;
   isCheckedAll = false;
   paging = new PagingModel();
   displayedModels: UserModel[] = [];
 
-  constructor(
-    private readonly userService: UserService,
-    private readonly abExceptionListStore: AppStore
-  ) { }
+  userService = inject(UserService);
+  abExceptionListStore = inject(AppStore);
 
-  public ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+  public ngOnChanges(changes: SimpleChanges) {
     if (changes['models']) {
       this.paging.total = this.models.length;
       this.paging.pageSize = 500;
