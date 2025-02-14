@@ -1,11 +1,14 @@
-import { inject } from '@angular/core';
-import { CheckingPermissionModel } from '../../../utility/models/checking-permission.model';
+import { inject, Injectable } from '@angular/core';
 import { Result } from '../../../utility/models/result';
 import { CommonService } from '../../../utility/services/common.service';
 import { ResultModelService } from '../../../utility/services/result-model.service';
 import { StaticService } from '../../../utility/services/static.service';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
+import { CheckingPermissionModel } from '../../../utility/models/checking-permission.model';
 
+@Injectable(
+  { providedIn: 'root' }
+)
 export class CheckVoidPermissionService {
   commonService = inject(CommonService);
 

@@ -1,7 +1,11 @@
 import _ from 'lodash';
 import { Message } from '../../messages/message';
 import { TemplateContent } from '../template.model';
+import { Injectable } from '@angular/core';
 
+@Injectable(
+  { providedIn: 'root' }
+)
 export class ReplaceMessageService {
  public replaceEachLanguage(outputMessage: Message, destination: string, value: TemplateContent): void {
     if (!_.isNil(value)) {

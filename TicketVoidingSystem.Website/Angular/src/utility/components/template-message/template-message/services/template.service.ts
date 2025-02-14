@@ -4,7 +4,9 @@ import { MatchModel } from '../../../../models/match.model';
 import { FormatDateTime } from '../template.const';
 import { TemplateValue } from '../template.model';
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class TemplateService {
   initializeTemplateValue(match: MatchModel): TemplateValue {
     return {

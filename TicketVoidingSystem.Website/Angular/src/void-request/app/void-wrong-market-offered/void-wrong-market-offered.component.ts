@@ -25,7 +25,7 @@ import { TemplateMessageService } from './services/template-message.service';
   styleUrls: ['./void-wrong-market-offered.component.scss'],
   imports: [UtilityModule, CommonModule, PasswordAreaComponent, MessageAreaComponent, TooltipComponent, TicketsListComponent,
     LogInfoTicketCountComponent, LicenseeAffectedListComponent],
-    providers: [TicketsService, VoidPageService, VoidPageCommonService, TemplateMessageService]
+    providers: [VoidPageService, TemplateMessageService]
 })
 export class VoidWrongMarketOfferedComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;

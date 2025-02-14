@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import moment from 'moment';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { EventType } from '../../../../../utility/constants/sport.constant';
@@ -7,6 +7,9 @@ import { FormatDateTime, SubIssueTypeId, TemplateContentConst, TemplateReplace }
 import { TemplateValue } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
 
+@Injectable(
+  { providedIn: 'root' }
+)
 export class ReplaceEventTypeService {
   replaceMessageService = inject(ReplaceMessageService);
 

@@ -21,7 +21,7 @@ import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.co
   templateUrl: './void-abnormal-bet.component.html',
   styleUrls: ['./void-abnormal-bet.component.scss'],
   imports: [CommonModule, LicenseeAffectedListComponent, MessageAreaComponent, PasswordAreaComponent, TicketsListComponent, TooltipComponent],
-  providers: [TicketsService, VoidPageService, VoidPageCommonService]
+  providers: [VoidPageService]
 })
 export class VoidAbnormalBetComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;

@@ -1,10 +1,11 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { VoidPageEarlyKickOffModel } from '../models/void-page-early-kick-off.model';
 
+@Injectable()
 export class TemplateMessageService {
   templateService = inject(TemplateService);
 

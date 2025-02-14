@@ -9,8 +9,9 @@ import { CommonService } from '../../../../utility/services/common.service';
 import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidPageDuplicateTicketsModel } from '../models/void-page-duplicate-tickets.model';
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
+@Injectable()
 export class VoidPageService {
   commonService = inject(CommonService);
   ticketsService = inject(TicketsService);

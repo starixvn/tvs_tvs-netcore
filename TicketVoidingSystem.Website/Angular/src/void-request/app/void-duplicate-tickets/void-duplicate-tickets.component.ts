@@ -24,7 +24,7 @@ import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.co
   styleUrls: ['./void-duplicate-tickets.component.scss'],
   imports: [CommonModule, LicenseeAffectedListComponent, TicketsListComponent, MessageAreaComponent,
     PasswordAreaComponent, TooltipComponent],
-    providers: [TicketsService, VoidPageService, VoidPageCommonService]
+    providers: [VoidPageService]
 })
 export class VoidDuplicateTicketsComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;

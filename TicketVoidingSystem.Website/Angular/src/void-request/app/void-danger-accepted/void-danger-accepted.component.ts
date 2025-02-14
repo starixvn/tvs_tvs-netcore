@@ -29,7 +29,7 @@ import { TemplateMessageService } from './services/template-message.service';
   imports: [FormsModule, LogInfoNewComponent, CommonModule, LicenseeAffectedListComponent, TicketsListComponent, MessageAreaComponent,
     PasswordAreaComponent, TooltipComponent
   ],
-  providers: [TicketsService, VoidPageService, VoidPageCommonService, TemplateMessageService]
+  providers: [VoidPageService, TemplateMessageService]
 })
 export class VoidDangerAcceptedComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;

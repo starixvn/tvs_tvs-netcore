@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';
@@ -12,6 +12,9 @@ import { CheckVoidPermissionService } from './check-void-permission.service';
 import { InsertQueueService } from './insert-queue.service';
 import { LogChangeContentService } from './log-change-content.service';
 
+@Injectable(
+  { providedIn: 'root' }
+)
 export class SubmitVoidService {
   popupService = inject(PopupService);
   insertQueueService = inject(InsertQueueService);

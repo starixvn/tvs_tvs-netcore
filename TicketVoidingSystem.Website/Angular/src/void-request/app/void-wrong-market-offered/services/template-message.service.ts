@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
@@ -6,6 +6,7 @@ import { TemplateValue } from '../../../../utility/components/template-message/t
 import { EventType } from '../../../../utility/constants/sport.constant';
 import { VoidWrongMarketOfferedModel } from '../models/void-wrong-market-offered.model';
 
+@Injectable()
 export class TemplateMessageService {
   templateService = inject(TemplateService);
 

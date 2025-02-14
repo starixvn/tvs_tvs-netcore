@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { PasswordAreaComponent } from '../password-area/password-area.component';
 import { TicketsListComponent } from '../tickets-list/tickets-list.component';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { TemplateMessageService } from './services/template-message.service';
 
 @Component({
@@ -24,7 +24,7 @@ import { TemplateMessageService } from './services/template-message.service';
   styleUrls: ['./void-early-kick-off.component.scss'],
   imports: [CommonModule, LicenseeAffectedListComponent, TicketsListComponent, MessageAreaComponent,
     PasswordAreaComponent, TooltipComponent],
-    providers: [TicketsService, VoidPageService, VoidPageCommonService, TemplateMessageService]
+  providers: [VoidPageService, TemplateMessageService]
 })
 export class VoidEarlyKickOffComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;

@@ -1,8 +1,11 @@
-import { inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { AppService } from '../app.service';
 
+@Injectable(
+  { providedIn: 'root' }
+)
 export class CheckRequestService {
   appService = inject(AppService);
   modalService = inject(ModalService);

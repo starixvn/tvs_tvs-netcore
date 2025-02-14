@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
@@ -9,6 +9,9 @@ import { CheckRequestService } from '../services/check-request.service';
 import { SubmitVoidService } from './submit-void.service';
 import { TicketsService } from './tickets.service';
 
+@Injectable(
+  { providedIn: 'root' }
+)
 export class LoadDataService {
   submitVoidService = inject(SubmitVoidService);
   ticketsService = inject(TicketsService);

@@ -6,7 +6,9 @@ import { TemplateContent, TemplateValue } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
 import { TemplateInputsService } from './template-inputs.service';
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class TemplateWrongOddsService {
 
   constructor(

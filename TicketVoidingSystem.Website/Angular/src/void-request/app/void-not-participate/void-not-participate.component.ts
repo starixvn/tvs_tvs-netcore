@@ -24,7 +24,7 @@ import { TemplateMessageService } from './services/template-message.service';
   styleUrls: ['./void-not-participate.component.scss'],
   imports: [CommonModule, LicenseeAffectedListComponent, TicketsListComponent, MessageAreaComponent,
     PasswordAreaComponent, TooltipComponent, LogInfoTicketCountComponent],
-    providers: [TicketsService, VoidPageService, VoidPageCommonService, TemplateMessageService]
+  providers: [VoidPageService, TemplateMessageService]
 })
 export class VoidNotParticipateComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;

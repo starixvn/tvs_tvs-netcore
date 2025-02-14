@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import moment from 'moment-timezone';
 import { Result } from '../../../utility/models/result';
@@ -8,6 +8,9 @@ import { AppService } from '../app.service';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { VoidTicketsQuery } from '../models/void-tickets.query';
 
+@Injectable(
+  { providedIn: 'root' }
+)
 export class InsertQueueService {
   appService = inject(AppService);
   passwordService = inject(PasswordService);

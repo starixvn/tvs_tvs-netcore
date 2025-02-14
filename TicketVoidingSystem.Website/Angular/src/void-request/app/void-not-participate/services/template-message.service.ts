@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { PlayerName, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateContent, TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
@@ -8,6 +8,7 @@ import { StaticService } from '../../../../utility/services/static.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
 
+@Injectable()
 export class TemplateMessageService {
   templateService = inject(TemplateService);
 

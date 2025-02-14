@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import _ from 'lodash';
 import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
@@ -14,17 +14,11 @@ import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
 import { TemplateMessageService } from './template-message.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class VoidPageService {
-
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly ticketsService: TicketsService,
-    private readonly templateMessageService: TemplateMessageService
-  ) {
-  }
+  commonService = inject(CommonService);
+  ticketsService = inject(TicketsService);
+  templateMessageService = inject(TemplateMessageService);
 
   async getIssueTypes(): Promise<IssueTypesModel> {
     return this.commonService.getIssueTypes();

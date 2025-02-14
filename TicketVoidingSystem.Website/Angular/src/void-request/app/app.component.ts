@@ -12,28 +12,6 @@ import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.
 import { VoidWrongMarketOfferedComponent } from './void-wrong-market-offered/void-wrong-market-offered.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
-import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
-import { PopupService } from './services/popup.service';
-import { CheckRequestService } from './services/check-request.service';
-import { LoadDataService } from './services/load-data.service';
-import { SubmitVoidService } from './services/submit-void.service';
-import { InsertQueueService } from './services/insert-queue.service';
-import { CheckVoidPermissionService } from './services/check-void-permission.service';
-import { LogChangeContentService } from './services/log-change-content.service';
-import { TicketsService } from './services/tickets.service';
-import { ReplaceEventTypeService } from '../../utility/components/template-message/template-message/services/replace-event-type.service';
-import { ReplaceMessageService } from '../../utility/components/template-message/template-message/services/replace-message.service';
-import { ReplaceCommonValuesService } from '../../utility/components/template-message/template-message/services/replace-common-values.service';
-import { ReplacePlacedFromTimeRangeService } from '../../utility/components/template-message/template-message/services/replace-placed-from-time-range.service';
-import { ReplaceScoreService } from '../../utility/components/template-message/template-message/services/replace-score.service';
-import { ReplaceAIOMessageService } from '../../utility/components/template-message/template-message/services/replace-aio-message.serivce';
-import { ReplaceSpecialBetTypeService } from '../../utility/components/template-message/template-message/services/replace-special-bet-type.service';
-import { TemplateInputsService } from '../../utility/components/template-message/template-message/services/template-inputs.service';
-import { TemplateInputsForTVSService } from '../../utility/components/template-message/template-message/services/template-inputs-for-tvs.service';
-import { TemplateWrongScoreService } from '../../utility/components/template-message/template-message/services/template-wrong-score.service';
-import { TemplateWrongOddsService } from '../../utility/components/template-message/template-message/services/template-wrong-odds.service';
-import { TemplateWrongOddsSportBookService } from '../../utility/components/template-message/template-message/services/template-wrong-odds-sport-book.service';
-import { TemplateWrongOfferedService } from '../../utility/components/template-message/template-message/services/template-wrong-offfered-name.service';
 
 @Component({
   standalone: true,
@@ -42,13 +20,7 @@ import { TemplateWrongOfferedService } from '../../utility/components/template-m
   styleUrls: ['./app.component.scss'],
   imports: [VoidDangerAcceptedComponent, VoidOtherIssueComponent, VoidDuplicateTicketsComponent,
     VoidNotParticipateComponent, VoidEarlyKickOffComponent, VoidAbnormalBetComponent,
-    VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiModule],
-  providers: [AppService, SignalRService, TemplateService, PopupService, CheckRequestService, LoadDataService,
-    SubmitVoidService, InsertQueueService, CheckVoidPermissionService, LogChangeContentService, TicketsService, 
-    ReplaceEventTypeService, ReplaceCommonValuesService, ReplaceMessageService, ReplacePlacedFromTimeRangeService, 
-    ReplaceScoreService, ReplaceAIOMessageService, ReplaceSpecialBetTypeService, TemplateInputsService,
-    TemplateInputsForTVSService, TemplateWrongScoreService, TemplateWrongOddsService, TemplateWrongOddsSportBookService,
-    TemplateWrongOfferedService ]
+    VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiModule]
 })
 export class AppComponent implements OnInit {
   requestId: number;
@@ -60,7 +32,7 @@ export class AppComponent implements OnInit {
   appService = inject(AppService);
   signalRService = inject(SignalRService);
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.isBlockUI = true;
     this.remark = await this.appService.getRemark();
     const url = window.location.href;
@@ -104,7 +76,7 @@ export class AppComponent implements OnInit {
   }
 
   isLikelyVoidEarlyKickOff(): boolean {
-    return StaticService.isEarlyKickOff(this.issueTypeId) 
+    return StaticService.isEarlyKickOff(this.issueTypeId)
       || StaticService.isWrongKickOff(this.issueTypeId)
       || StaticService.isWrongOfferedName(this.issueTypeId);
   }

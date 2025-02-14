@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
@@ -11,6 +11,7 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { StaticService } from '../../../../utility/services/static.service';
 import { VoidMatch } from '../../models/void-match.model';
 
+@Injectable()
 export class TemplateMessageService {
   templateService = inject(TemplateService);
 

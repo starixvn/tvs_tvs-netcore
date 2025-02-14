@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription, timer } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
@@ -13,6 +13,9 @@ import { PopupService } from '../services/popup.service';
 import { LoadDataService } from './load-data.service';
 import { TicketsService } from './tickets.service';
 
+@Injectable(
+  { providedIn: 'root' }
+)
 export class VoidPageCommonService {
   clipboardService = inject(ClipboardService);
   popupService = inject(PopupService);

@@ -53,7 +53,7 @@ import { IssueTypeComponent } from '../../../utility/components/issue-type/issue
   styleUrls: ['./void-other-issue.component.scss'],
   imports: [CommonModule, TemplateMessageComponent, ConfirmationComponent, LicenseeAffectedListComponent, TicketsListComponent,
     TooltipComponent, LogInfoComponent, FilterComponent, EventInfoComponent, IssueTypeComponent],
-  providers: [CommonService, AppService, ModalService, TemplateService, CheckRequestService, ClipboardService, PasswordService, LogChangeContentService]
+  providers: [ClipboardService]
 })
 export class VoidOtherIssueComponent implements OnInit {
   @Input('requestId') requestId: number;

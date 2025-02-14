@@ -1,9 +1,12 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Message } from '../../../utility/components/template-message/messages/message';
 import { VoidedReason } from '../../../utility/models/reason.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 
+@Injectable(
+  { providedIn: 'root' }
+)
 export class LogChangeContentService {
   commonService = inject(CommonService);
 

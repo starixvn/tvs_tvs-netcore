@@ -4,13 +4,15 @@ import { GroupBetTypesComponent } from '../../../utility/components/advanced-mod
 import { BetType, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
+import { AdvancedModeService } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.service';
 
 @Component({
   standalone: true,
   selector: 'filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
-  imports: [AdvancedModeComponent, GroupBetTypesComponent]
+  imports: [AdvancedModeComponent, GroupBetTypesComponent],
+  providers: [AdvancedModeService]
 })
 export class FilterComponent implements OnChanges {
   @Input() groupBetTypes: GroupBetTypesModel;

@@ -12,7 +12,9 @@ export class SpecialSportsBookBetTypes {
   static readonly _1HOverUnder = "8";
 }
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class TemplateWrongOddsSportBookService {
 
   constructor(
