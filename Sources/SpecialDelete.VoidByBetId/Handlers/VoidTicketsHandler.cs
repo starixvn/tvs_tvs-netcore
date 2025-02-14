@@ -72,7 +72,7 @@ public class VoidTicketsHandler(
         }
 
         results.AddRange(await ContactUser(query, model, warningCrickets));
-        await cashOutApiService.VoidBetForCashOutBasketball(model.Tickets);
+        await cashOutApiService.VoidBet(model.Tickets);
 
         return results;
     }

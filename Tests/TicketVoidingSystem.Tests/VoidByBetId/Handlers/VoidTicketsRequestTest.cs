@@ -142,7 +142,7 @@ public class VoidTicketsRequestTest
         await afterVoidService.Received(1).SendMessage(Arg.Any<VoidTicketsQuery>(), Arg.Any<IEnumerable<TicketEmailModel>>());
         await afterVoidService.Received(1).SendEmail(Arg.Any<VoidTicketsQuery>(), Arg.Any<IEnumerable<TicketEmailModel>>());
         await afterVoidService.Received(1).SendLetstalk(Arg.Any<VoidTicketsQuery>(), Arg.Any<VoidTicketsModel>());
-        await cashOutApiService.Received(1).VoidBetForCashOutBasketball(Arg.Any<IEnumerable<TicketEmailModel>>());
+        await cashOutApiService.Received(1).VoidBet(Arg.Any<IEnumerable<TicketEmailModel>>());
         await netPositionService.Received(1).RollBackNetPosition(Arg.Any<IEnumerable<BetId>>());
     }
 }

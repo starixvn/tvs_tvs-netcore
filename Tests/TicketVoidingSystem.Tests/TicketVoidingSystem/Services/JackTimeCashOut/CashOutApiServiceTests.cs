@@ -64,7 +64,7 @@ public class CashOutApiServiceTests
         };
 
         // Act
-        await service.VoidBetForCashOutBasketball(tickets);
+        await service.VoidBet(tickets);
 
         // Assert
         await cashOutHttpClientService.Received(1).PostRequest("VoidBet", Arg.Any<CashOutApiModel>());
@@ -82,7 +82,7 @@ public class CashOutApiServiceTests
         };
 
         // Act
-        await service.VoidBetForCashOutBasketball(tickets);
+        await service.VoidBet(tickets);
 
         // Assert
         await cashOutHttpClientService.Received(0).PostRequest("VoidBet", Arg.Any<CashOutApiModel>());
@@ -94,9 +94,9 @@ public class CashOutApiServiceTests
         // Arrange
 
         // Act
-        await service.VoidBetForCashOutBasketball(null);
+        await service.VoidBet((IEnumerable<TicketEmailModel>)null);
 
         // Assert
-        await loggingService.Received(1).ErrorAsync("VoidBetForCashOutBasketball", Arg.Any<Exception>());
+        await loggingService.Received(1).ErrorAsync("VoidBet", Arg.Any<Exception>());
     }
 }
