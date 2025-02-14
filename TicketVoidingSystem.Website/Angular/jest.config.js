@@ -5,7 +5,7 @@ module.exports = {
   preset: 'jest-preset-angular',
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: [
-    '<rootDir>/src/ab-exception-list/**/*.spec.ts'
+    '<rootDir>/src/void-request/**/*.spec.ts'
     //'<rootDir>/src/add-request/app/add-request/abnormal-accounts/account-table/account-table.component.spec.ts',
   ],
   testPathIgnorePatterns: [

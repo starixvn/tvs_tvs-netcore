@@ -5,10 +5,10 @@ exports[`VoidNotParticipateComponent VoidNotParticipateComponent should init mat
   element={[Function _ElementRef]}
   messageAreaComponent="undefined"
   primitiveProperty={[Function CommonPrimitiveProperty]}
-  ticketsService={[Function Object]}
+  ticketsService={[Function TicketsService]}
   tooltip={[Function Tooltip]}
-  voidPageCommonService={[Function Object]}
-  voidPageService={[Function Object]}
+  voidPageCommonService={[Function VoidPageCommonService]}
+  voidPageService={[Function VoidPageService]}
 >
   <div>
   </div><div>

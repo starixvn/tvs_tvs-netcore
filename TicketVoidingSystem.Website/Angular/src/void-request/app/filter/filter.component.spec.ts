@@ -5,6 +5,7 @@ import { BetType, GroupBetType, GroupBetTypesModel } from '../../../utility/comp
 import { FilterComponent } from './filter.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../utility/modules/testing.module';
+import { AdvancedModeService } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.service';
 
 class Helper {
   static readonly searchButtonSelector = 'input[type=submit]';
@@ -77,7 +78,8 @@ describe('FilterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GroupBetTypesComponent, AdvancedModeComponent, TestingModule]
+      imports: [GroupBetTypesComponent, AdvancedModeComponent, TestingModule],
+      providers: [AdvancedModeService]
     }).compileComponents();
     fixture = TestBed.createComponent(FilterComponent);
     component = fixture.componentInstance;

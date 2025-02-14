@@ -1,5 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`LogInfoNewComponent #LogInfoNewComponent init should match snapshot 1`] = `
+<log-info-new
+  acceptTypeName=""
+  logInfoDetail={[Function Object]}
+>
+  <div>
+    <span>
+      <strong>
+        Log Info
+      </strong>
+    </span>
+    <br />
+    <span>
+      Live Score: 
+    </span>
+    <strong>
+    </strong>
+    . Void time (GMT-4): 
+    <strong>
+    </strong>
+    <br />
+  </div>
+</log-info-new>
+`;
+
 exports[`LogInfoNewComponent LogInfoNewComponent init should match snapshot 1`] = `
 <log-info-new
   acceptTypeName=""

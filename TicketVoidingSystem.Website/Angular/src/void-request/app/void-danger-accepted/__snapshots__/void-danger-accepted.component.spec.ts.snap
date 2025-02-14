@@ -5,11 +5,11 @@ exports[`VoidDangerAcceptedComponent VoidDangerAcceptedComponent should init mat
   element={[Function _ElementRef]}
   messageAreaComponents={[Function _QueryList]}
   primitiveProperty={[Function CommonPrimitiveProperty]}
-  ticketsService={[Function Object]}
+  ticketsService={[Function TicketsService]}
   tooltip={[Function Tooltip]}
   voidMatches={[Function Array]}
-  voidPageCommonService={[Function Object]}
-  voidPageService={[Function Object]}
+  voidPageCommonService={[Function VoidPageCommonService]}
+  voidPageService={[Function VoidPageService]}
 >
   <div>
   </div><div>

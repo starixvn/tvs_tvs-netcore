@@ -1,9 +1,11 @@
+import { TestBed } from '@angular/core/testing';
+import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { NotParticipateModel } from '../../../../add-request/app/add-request/models/event-not-participate.model';
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
 import { PlayerName, RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
-import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
@@ -11,7 +13,6 @@ import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { Result } from '../../../../utility/models/result';
 import { CommonService } from '../../../../utility/services/common.service';
-import { AppService } from '../../app.service';
 import { CommonPrimitiveProperty } from '../../models/common-primitive-property.model';
 import { TicketsService } from '../../services/tickets.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
@@ -136,24 +137,32 @@ describe('VoidPageService', () => {
   let voidPageService : VoidPageService ;
   let commonService: CommonService;
   let ticketsService: TicketsService;
-  let appService: AppService;
-  let templateService: TemplateMessageService;
-
-  beforeEach(() => {
-    commonService = new CommonService(null);
-    appService = new AppService(null);
-    ticketsService = new TicketsService(null);
-    templateService = new TemplateMessageService(null);
-    voidPageService = new VoidPageService(commonService, ticketsService, templateService);
+  
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [TestingModule],
+        providers: [
+          VoidPageService,
+          {
+            provide: CommonService, useValue: {
+              getIssueTypes: jest.fn().mockReturnValue(Helper.fakeIssueTypesModel),
+              getMatch: jest.fn(), getVoidedReason: jest.fn().mockResolvedValue({ reasonEnglish: "Void" } as VoidedReason)
+            }
+          },
+          { provide: TicketsService, useValue: { initTicketQuery: jest.fn(), getVoidTicketsMini: jest.fn().mockResolvedValue(new TicketsModel()) } },
+          { provide: TemplateMessageService, useValue: { getTemplateValue: jest.fn().mockResolvedValue(new TemplateValue()) } }
+        ]
+      });
+      commonService = TestBed.inject(CommonService) as jest.Mocked<CommonService>;
+      ticketsService = TestBed.inject(TicketsService) as jest.Mocked<TicketsService>;
+      voidPageService = TestBed.inject(VoidPageService);
   });
 
   it('#getIssueTypes should return issueTypesModel', async () => {
     const expected = new IssueTypesModel();
-    const commonService = new CommonService(null);
     commonService.getIssueTypes = jest.fn().mockReturnValue(expected);
-    const mockVoidPageService = new VoidPageService(commonService, null, null);
 
-    const actual = await mockVoidPageService.getIssueTypes();
+    const actual = await voidPageService.getIssueTypes();
 
     expect(actual).toEqual(expected);
   });
@@ -169,15 +178,12 @@ describe('VoidPageService', () => {
     fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
     fakeRequestDetailViewModel.notParticipateModels = [new NotParticipateModel()];
     fakeRequestDetailViewModel.notParticipateModels[0].subIssueTypeId = 1;
-    const spyGetMatch = jest.spyOn(commonService, 'getMatch').mockImplementation(() => Promise.resolve(new MatchModel()));
-    const spyGetLogInfo = jest.spyOn(commonService, 'getLogInfo').mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));
 
-    voidPageService['getAllLogInfo'] = jest.fn().mockImplementation(() => [getLogInfoModel]);
-
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
     const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty());
 
-    expect(spyGetMatch).toHaveBeenCalledTimes(1);
-    expect(spyGetLogInfo).toHaveBeenCalledTimes(1);
+    expect(commonService.getMatch).toHaveBeenCalledTimes(1);
+    expect(commonService.getLogInfo).toHaveBeenCalledTimes(1);
     expect(result).toBeDefined();
   });
 
@@ -192,13 +198,13 @@ describe('VoidPageService', () => {
     fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
     fakeRequestDetailViewModel.notParticipateModels = [new NotParticipateModel()];
     fakeRequestDetailViewModel.notParticipateModels[0].subIssueTypeId = 1;
-    const spyGetMatch = jest.spyOn(commonService, 'getMatch').mockImplementation(() => Promise.resolve(new MatchModel()));
-    const spyGetLogInfo = jest.spyOn(commonService, 'getLogInfo').mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));
+    commonService.getMatch = jest.fn().mockResolvedValue(new MatchModel());
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
 
     const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty());
 
-    expect(spyGetMatch).toHaveBeenCalledTimes(1);
-    expect(spyGetLogInfo).toHaveBeenCalledTimes(1);
+    expect(commonService.getMatch).toHaveBeenCalledTimes(1);
+    expect(commonService.getLogInfo).toHaveBeenCalledTimes(1);
     expect(result).toBeDefined();
   });
 
@@ -213,15 +219,12 @@ describe('VoidPageService', () => {
     fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.DUPLICATE_TICKETS);
     fakeRequestDetailViewModel.notParticipateModels = [new NotParticipateModel()];
     fakeRequestDetailViewModel.notParticipateModels[0].subIssueTypeId = 1;
-    const spyInitTicketQuery = jest.spyOn(ticketsService, 'initTicketQuery').mockImplementation();
-    const spyGetVoidTicketsMini = jest.spyOn(ticketsService, 'getVoidTicketsMini').mockReturnValue(Promise.resolve(new TicketsModel()))
-    const spyGetVoidedReason = jest.spyOn(commonService, 'getVoidedReason').mockReturnValue(Promise.resolve(new VoidedReason()));
 
     await voidPageService.loadUnderneathVoidPageItemsData(voidItem, fakeRequestDetailViewModel);
 
-    expect(spyInitTicketQuery).toHaveBeenCalledTimes(1);
-    expect(spyGetVoidTicketsMini).toHaveBeenCalledTimes(1);
-    expect(spyGetVoidedReason).toHaveBeenCalledTimes(1);
+    expect(ticketsService.initTicketQuery).toHaveBeenCalledTimes(1);
+    expect(ticketsService.getVoidTicketsMini).toHaveBeenCalledTimes(1);
+    expect(commonService.getVoidedReason).toHaveBeenCalledTimes(1);
   });
 
   it('#getDisplayIssueTypeName should return DisplayIssueTypeName when issueTypeName = subIssueTypeName ', async () => {
@@ -251,11 +254,11 @@ describe('VoidPageService', () => {
     const voidItem = new VoidNotParticipateModel();
     voidItem.matchModel = new MatchModel();
     voidItem.subIssueType = new SubIssueType();
-    const spyGetVoidedReason = jest.spyOn(commonService, 'getVoidedReason').mockReturnValue(Promise.resolve(expected));
+    commonService.getVoidedReason = jest.fn().mockReturnValue(Promise.resolve(expected));
 
     const actual = await voidPageService['getVoidedReason'](voidItem);
 
-    expect(spyGetVoidedReason).toHaveBeenCalledTimes(1);
+    expect(commonService.getVoidedReason).toHaveBeenCalledTimes(1);
     expect(actual).toStrictEqual(expected);
   });
 });

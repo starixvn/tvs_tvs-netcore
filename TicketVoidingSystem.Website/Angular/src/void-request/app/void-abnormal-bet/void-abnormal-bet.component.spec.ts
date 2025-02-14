@@ -29,16 +29,15 @@ describe('VoidAbnormalBetComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestingModule],
-      providers: [VoidPageService, TicketsService, VoidPageCommonService, TemplateService, PopupService, 
-        CheckRequestService, LoadDataService, SubmitVoidService, InsertQueueService, CheckVoidPermissionService, 
-        LogChangeContentService]
+      providers: [VoidPageService, VoidPageCommonService, PopupService, TemplateService, CheckRequestService,
+        SubmitVoidService, LoadDataService, InsertQueueService, CheckVoidPermissionService, LogChangeContentService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(VoidAbnormalBetComponent);
     component = fixture.componentInstance;
-    ticketsService = TestBed.inject(TicketsService) as jest.Mocked<TicketsService>;
-    voidPageService = TestBed.inject(VoidPageService) as jest.Mocked<VoidPageService>;
-    voidPageCommonService = TestBed.inject(VoidPageCommonService) as jest.Mocked<VoidPageCommonService>;
+    ticketsService = fixture.debugElement.injector.get(TicketsService);
+    voidPageService = fixture.debugElement.injector.get(VoidPageService);
+    voidPageCommonService = fixture.debugElement.injector.get(VoidPageCommonService);
   });
 
   it('VoidAbnormalBetComponent should init match snapshot', async () => {

@@ -11,6 +11,7 @@ import { VoidPageDuplicateTicketsModel } from './models/void-page-duplicate-tick
 import { VoidPageService } from './services/void-page.service';
 import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../utility/modules/testing.module';
 
 describe('VoidDuplicateTicketsComponent', () => {
   let component: VoidDuplicateTicketsComponent;
@@ -21,30 +22,16 @@ describe('VoidDuplicateTicketsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [
-        VoidDuplicateTicketsComponent,
-        { provide: TicketsService, useValue: { loadVoidTicketsFullOnPagingChange: jest.fn() } },
-        {
-          provide: VoidPageCommonService, useValue: {
-            onClickShowVoidTickets: jest.fn(), exportTickets: jest.fn(),
-            onClickShowTemplateMessage: jest.fn(), onClickCopyLicenseesToClipboard: jest.fn(),
-            onClickVoidAllMatches: jest.fn()
-          }
-        },
-        {
-          provide: VoidPageService, useValue: {
-            getIssueTypes: jest.fn(), getBasicVoidPageItemsData: jest.fn(),
-            loadUnderneathVoidPageItemsData: jest.fn()
-          }
-        },
-      ]
+      imports: [TestingModule],
+      providers: [VoidPageService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(VoidDuplicateTicketsComponent);
     component = fixture.componentInstance;
-    ticketsService = TestBed.inject(TicketsService) as jest.Mocked<TicketsService>;
-    voidPageService = TestBed.inject(VoidPageService) as jest.Mocked<VoidPageService>;
-    voidPageCommonService = TestBed.inject(VoidPageCommonService) as jest.Mocked<VoidPageCommonService>;
+    ticketsService = fixture.debugElement.injector.get(TicketsService);
+    voidPageService = fixture.debugElement.injector.get(VoidPageService);
+    voidPageCommonService = fixture.debugElement.injector.get(VoidPageCommonService);
+    component = fixture.componentInstance;
   });
 
   it('VoidDuplicateTicketsComponent should init match snapshot', async () => {
@@ -63,9 +50,11 @@ describe('VoidDuplicateTicketsComponent', () => {
     voidItem.matchModel = new MatchModel();
     voidItem.subIssueType = new SubIssueType();
     document.body.getAttribute = jest.fn().mockReturnValue('sa');
-    voidPageService.getBasicVoidPageItemsData = jest.fn().mockReturnValue(voidItem);
     component.requestDetail = requestDetail;
     component.primitiveProperty = new CommonPrimitiveProperty();
+    voidPageService.getIssueTypes = jest.fn().mockReturnValue({});
+    voidPageService.getBasicVoidPageItemsData = jest.fn().mockReturnValue(voidItem);
+    voidPageService.loadUnderneathVoidPageItemsData = jest.fn();
     await component.ngOnInit();
 
     expect(voidPageService.getBasicVoidPageItemsData).toHaveBeenCalled();
@@ -74,36 +63,42 @@ describe('VoidDuplicateTicketsComponent', () => {
   });
 
   it('#onClickShowVoidTickets should called voidPageCommonService.onClickShowVoidTickets', async () => {
+    voidPageCommonService.onClickShowVoidTickets = jest.fn();
     await component.onClickShowVoidTickets(null);
 
     expect(voidPageCommonService.onClickShowVoidTickets).toHaveBeenCalledTimes(1);
   });
 
   it('#onPagingTicketsChange should called voidPageCommonService.loadVoidTicketsFullOnPagingChange', async () => {
+    ticketsService.loadVoidTicketsFullOnPagingChange = jest.fn();
     await component.onPagingTicketsChange(null);
 
     expect(ticketsService.loadVoidTicketsFullOnPagingChange).toHaveBeenCalledTimes(1);
   });
 
   it('#exportTickets should called voidPageCommonService.exportTickets', async () => {
+    voidPageCommonService.exportTickets = jest.fn();
     await component.exportTickets(null);
 
     expect(voidPageCommonService.exportTickets).toHaveBeenCalledTimes(1);
   });
 
   it('#onClickShowTemplateMessage should called voidPageCommonService.onClickShowTemplateMessage', async () => {
+    voidPageCommonService.onClickShowTemplateMessage = jest.fn();
     await component.onClickShowTemplateMessage(null);
 
     expect(voidPageCommonService.onClickShowTemplateMessage).toHaveBeenCalledTimes(1);
   });
 
   it('#onClickCopyLicenseesToClipboard should called voidPageCommonService.onClickCopyLicenseesToClipboard', async () => {
+    voidPageCommonService.onClickCopyLicenseesToClipboard = jest.fn();
     component.onClickCopyLicenseesToClipboard(null);
 
     expect(voidPageCommonService.onClickCopyLicenseesToClipboard).toHaveBeenCalledTimes(1);
   });
 
   it('#onClickVoidAllMatches should called voidPageCommonService.onClickVoidAllMatches', async () => {
+    voidPageCommonService.onClickVoidAllMatches = jest.fn();
     component.onClickVoidAllMatches();
 
     expect(voidPageCommonService.onClickVoidAllMatches).toHaveBeenCalledTimes(1);

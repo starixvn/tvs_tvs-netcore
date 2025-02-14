@@ -142,9 +142,9 @@ class Helper {
 }
 
 describe('VoidPageService', () => {
-  let commonService: CommonService;
-  let ticketsService: TicketsService;
-  let templateMessageService: TemplateMessageService;
+  let commonService: jest.Mocked<CommonService>;
+  let ticketsService: jest.Mocked<TicketsService>;
+  let templateMessageService: jest.Mocked<TemplateMessageService>;
   let voidPageService: VoidPageService;
 
   beforeEach(() => {
