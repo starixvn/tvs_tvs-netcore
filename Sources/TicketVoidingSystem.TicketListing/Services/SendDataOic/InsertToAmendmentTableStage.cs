@@ -16,13 +16,6 @@ public class InsertToAmendmentTableStageImp(IDynamicRepository repository, Loggi
 {
     public async Task<IEnumerable<LicenseeFile>> Execute(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery)
     {
-        var insertedResults = await InsertToMainDb053(ticketsJson, sendFileQuery);
-        await InsertToBackupDb052(ticketsJson, sendFileQuery);
-        return insertedResults;
-    }
-
-    private async Task<IEnumerable<LicenseeFile>> InsertToMainDb053(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery)
-    {
         var criteria = new SendDataOicCriteria
         {
             GlobalShowTime = sendFileQuery.GlobalShowTime.ZoneCanada(),
@@ -31,33 +24,5 @@ public class InsertToAmendmentTableStageImp(IDynamicRepository repository, Loggi
         };
 
         return await repository.FetchAsync<LicenseeFile>(criteria);
-    }
-
-    private async Task InsertToBackupDb052(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery)
-    {
-        try
-        {
-            var isEnvHasBackupDb = AppSettingService.AppSetting.EnvironmentName is "SIT" or "UAT" or "PRO" or "KLDR";
-            if (isEnvHasBackupDb)
-            {
-                await ExecuteRepositoryInsertBackupDb(ticketsJson, sendFileQuery);
-            }
-        }
-        catch (Exception e)
-        {
-            await loggingService.ErrorAsync($"MatchId: {sendFileQuery.MatchId}, EventDate: {sendFileQuery.EventDate}", e);
-        }
-    }
-
-    private async Task ExecuteRepositoryInsertBackupDb(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery)
-    {
-        var criteria = new SendDataOicBackupDbCriteria
-        {
-            GlobalShowTime = sendFileQuery.GlobalShowTime.ZoneCanada(),
-            MatchId = sendFileQuery.MatchId,
-            TransInfoSendOICJson = ticketsJson.TransInfoSendOICJson
-        };
-
-        await repository.FetchAsync<LicenseeFile>(criteria);
     }
 }
