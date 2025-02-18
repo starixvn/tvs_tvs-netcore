@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.SharedApi.Handlers.MessageTemplate;
+using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.SharedApi.Controllers;
 
@@ -11,6 +12,7 @@ namespace TicketVoidingSystem.SharedApi.Controllers;
 public class MessageTemplateController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [SkipLogging]
     public async Task<IActionResult> GetTemplateSettings() => Ok(await mediator.Send(new GetTemplateSettingRequest()));
 
     [HttpGet]

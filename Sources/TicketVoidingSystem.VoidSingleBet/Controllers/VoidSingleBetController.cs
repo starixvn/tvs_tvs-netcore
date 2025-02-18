@@ -15,6 +15,7 @@ public class VoidSingleBetController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Read)]
+    [SkipLogging]
     public async Task<IActionResult> GetRemark() => Ok(await mediator.Send(new GetRemarkRequest()));
 
     [HttpPost]

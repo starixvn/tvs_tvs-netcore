@@ -9,6 +9,7 @@ using TicketVoidingSystem.Web;
 namespace TicketVoidingSystem.Website.Controllers;
 
 [Route("[controller]/[action]")]
+[SkipLogging]
 public class SportBookController(SessionService sessionService, UserActionLogService userActionLogService)
     : Controller
 {

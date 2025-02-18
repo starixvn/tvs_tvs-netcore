@@ -9,6 +9,7 @@ namespace TicketVoidingSystem.SharedApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
+[SkipLogging]
 public class MatchInfoController(IMediator mediator) : ControllerBase
 {
     [HttpPost]

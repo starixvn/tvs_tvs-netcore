@@ -2,11 +2,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.SharedApi.Handlers.Analytics;
+using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.SharedApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
+[SkipLogging]
 public class AnalyticsController(IMediator mediator) : ControllerBase
 {
     [HttpPost]

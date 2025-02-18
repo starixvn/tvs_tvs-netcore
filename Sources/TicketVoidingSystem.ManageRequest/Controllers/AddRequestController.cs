@@ -26,6 +26,7 @@ public class AddRequestController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetLastTimeScore(GetLastTimeScoreRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    [SkipLogging]
     public async Task<IActionResult> GetChildMatches(GetChildMatchesRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
@@ -50,6 +51,7 @@ public class AddRequestController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetLinkedLog(GetLinkedLogRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    [SkipLogging]
     public async Task<IActionResult> GetSubIssueTypeNote(GetSubIssueTypeNoteRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
@@ -59,15 +61,19 @@ public class AddRequestController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetPoolHouseTickets(GetPoolHouseTicketRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    [SkipLogging]
     public async Task<IActionResult> GetReducedOverBetTypes(GetReducedOverBetTypesRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    [SkipLogging]
     public async Task<IActionResult> GetNotParticipateBetTypes(GetNotParticipateBetTypesRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    [SkipLogging]
     public async Task<IActionResult> GetOperators(GetOperatorsRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    [SkipLogging]
     public async Task<IActionResult> GetProvider(GetProviderRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
@@ -94,6 +100,7 @@ public class AddRequestController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetPermission() => Ok(await mediator.Send(new GetPermissionRequest()));
 
     [HttpGet]
+    [SkipLogging]
     public async Task<IActionResult> GetBetTeams() => Ok(await mediator.Send(new GetBetTeamsRequest()));
 
     [HttpPost]
@@ -103,6 +110,7 @@ public class AddRequestController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetLogInfoTickets(GetLogInfoTicketsRequest request) => Ok(await mediator.Send(request));
 
     [HttpGet]
+    [SkipLogging]
     public async Task<IActionResult> GetDecidedBy() => Ok(await mediator.Send(new GetDecidedByRequest()));
 
     public async Task<IActionResult> GetTicketsAbnormalAccount(GetTicketsAbnormalAccountRequest request) => Ok(await mediator.Send(request));
