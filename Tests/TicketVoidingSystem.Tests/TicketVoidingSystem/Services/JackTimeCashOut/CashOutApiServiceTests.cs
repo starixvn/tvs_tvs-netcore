@@ -56,10 +56,10 @@ public class CashOutApiServiceTests
         // Arrange
         var tickets = new List<TicketEmailModel>
         {
-            new() { IsCashOut = true, SportTypeId = SportTypeConstant.Basketball, TransId = 1, CustId = 1 },
-            new() { IsCashOut = true, SportTypeId = SportTypeConstant.Basketball, TransId = 2, CustId = 2 },
+            new() { IsCashOut = true, SportTypeId = SportTypeConstant.Basketball, TransId = 1, CustId = 1, ExtraInfo = "<p25 jtseqid='1'/>" },
+            new() { IsCashOut = true, SportTypeId = SportTypeConstant.Basketball, TransId = 2, CustId = 2, ExtraInfo = "<p25 jtseqid='1'/>" },
             new() { IsCashOut = false, SportTypeId = SportTypeConstant.Basketball, TransId = 2, CustId = 2 },
-            new() { IsCashOut = true, SportTypeId = SportTypeConstant.CashOut, TransId = 2, CustId = 2 },
+            new() { IsCashOut = true, SportTypeId = SportTypeConstant.CashOut, TransId = 2, CustId = 2, ExtraInfo = "<p25 jtseqid='1'/>" },
             new() { IsCashOut = false, SportTypeId = SportTypeConstant.CashOut  , TransId = 2, CustId = 2 }
         };
 

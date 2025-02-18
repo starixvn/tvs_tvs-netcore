@@ -88,7 +88,7 @@ public class RecoverTicketsHandler(
     {
         try
         {
-            var jackTimeCashOutTickets = tickets.Where(x => x.IsCashOut && x.SportType.IsHaveJackTimeCashOutTickets());
+            var jackTimeCashOutTickets = tickets.Where(x => x.IsCashOut && JackTimeCashOutExtension.IsHasJackTimeCashOut(x.SportType, x.ExtraInfo));
             if (jackTimeCashOutTickets.Any())
             {
                 var requestModel = new CashOutApiModel { VoidBetInfos = jackTimeCashOutTickets.Select(x => new VoidBetInfo { TransId = x.TransId.ToString(), CustId = x.CustId.ToString() }) };

@@ -122,7 +122,7 @@ public class HandlerServiceImp(
     {
         try
         {
-            var jackTimeCashOutTickets = tickets.Where(x => x.SportTypeId.IsHaveJackTimeCashOutTickets());
+            var jackTimeCashOutTickets = tickets.Where(x => JackTimeCashOutExtension.IsHasJackTimeCashOut(x.SportTypeId, x.ExtraInfo));
             if (jackTimeCashOutTickets.Any())
             {
                 var requestModel = new CashOutApiModel { VoidBetInfos = jackTimeCashOutTickets.Select(x => new VoidBetInfo { TransId = x.TransId.ToString(), CustId = x.CustId.ToString() }) };

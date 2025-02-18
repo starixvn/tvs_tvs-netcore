@@ -30,7 +30,7 @@ public class CashOutApiServiceImp(CashOutHttpClientService cashOutHttpClientServ
     {
         try
         {
-            var jackTimeCashOutTickets = tickets.Where(x => x.IsCashOut && x.SportTypeId.IsHaveJackTimeCashOutTickets());
+            var jackTimeCashOutTickets = tickets.Where(x => x.IsCashOut && JackTimeCashOutExtension.IsHasJackTimeCashOut(x.SportTypeId, x.ExtraInfo));
             if (jackTimeCashOutTickets.Any())
             {
                 var requestModel = new CashOutApiModel { VoidBetInfos = jackTimeCashOutTickets.Select(x => new VoidBetInfo { TransId = x.TransId.ToString(), CustId = x.CustId.ToString() }) };
