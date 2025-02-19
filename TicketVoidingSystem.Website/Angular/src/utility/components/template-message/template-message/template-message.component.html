@@ -1,6 +1,6 @@
 @if(isShowMessages) {
   <div class="message-handler">
-    @if(isShowDynamicInputs){
+    @if(isShowDynamicInputs()){
       <ng-container>
         @for  (item of selectedTemplated.inputTexts; track item) {
           <div>
