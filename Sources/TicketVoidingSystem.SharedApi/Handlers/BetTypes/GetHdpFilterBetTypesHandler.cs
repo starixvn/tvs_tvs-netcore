@@ -27,7 +27,8 @@ public class GetHdpFilterBetTypesHandler(RemotingRefWrapperService remotingRefWr
             .Where(x => x.IssueType == request.IssueTypeId && x.Sports.Split(",").Contains(request.SportId)) // Filter bet types by issueType & sportType
             .Select(x =>
             {
-                x.Name = remotingRefWrapperService.GetBetType(x.BetType, LanguageCode.English);
+                var betType = x.BetType.Split(',').FirstOrDefault();
+                x.Name = remotingRefWrapperService.GetBetType(betType, LanguageCode.English);
                 return x;
             })
             .ToList();

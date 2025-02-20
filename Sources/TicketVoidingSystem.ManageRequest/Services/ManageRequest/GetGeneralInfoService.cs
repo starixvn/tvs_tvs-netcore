@@ -49,8 +49,7 @@ public class GetGeneralInfoServiceImp(
         generalInfo.LeagueName = remotingRefService.GetLeagueName(generalInfo.SportType, generalInfo.LeagueId, LanguageCode.English);
         generalInfo.VoidedTimeString = generalInfo.VoidedTime.ZoneManila().ToString("dd/MM/yyyy - hh:mm:ss tt");
         generalInfo.RecoveredTimeString = generalInfo.RecoveredTime.ToString(FormatKey.LongDateFormatTimeWithSlash);
-        generalInfo.KickOffTime = generalInfo.KickOffTime.ZoneManila();
-        generalInfo.KickOffTimeString = generalInfo.KickOffTime.ToString("hh:mm tt");
+        generalInfo.KickOffTimeString = generalInfo.KickOffTime.ZoneManila().ToString("hh:mm tt");
         generalInfo.NegativeBalanceUsers = !string.IsNullOrWhiteSpace(generalInfo.NegativeBalanceUsers)
             ? string.Join(", ", generalInfo.NegativeBalanceUsers.Split(',')) : generalInfo.NegativeBalanceUsers;
 
