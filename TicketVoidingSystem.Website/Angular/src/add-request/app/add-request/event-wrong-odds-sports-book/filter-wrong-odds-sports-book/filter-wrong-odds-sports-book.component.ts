@@ -52,7 +52,7 @@ export class FilterWrongOddsSportsBookComponent {
   }
 
   public isCorrectFormatMultipleDecimal(value: string, elementClass: string): boolean {
-    return StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_ODDS);
+    return value ? StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_ODDS) : true;
   }
 
   public setFilterOddsType(type: string): void {

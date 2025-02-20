@@ -51,7 +51,7 @@ export class FilterWrongOddsComponent {
   }
 
   public isCorrectFormatSingleDecimal(value: string, elementClass: string): boolean {
-    return StaticService.isCorrectFormatSingleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_INPUT);
+    return value ? StaticService.isCorrectFormatSingleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_INPUT) : true;
   }
 
   public isSubTypeOuOr1stOu(): boolean {

@@ -9,6 +9,7 @@
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
   }
+
   .border-radius-right-0 {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
@@ -22,6 +23,7 @@
       width: 170px;
     }
   }
+
   .filter-favorite-type,
   .filter-ou-type {
     display: flex;
@@ -29,8 +31,14 @@
     flex-wrap: nowrap;
     margin-right: 7px;
 
+    ::ng-deep .ng-select-container {
+      border-end-end-radius: 0px;
+      border-start-end-radius: 0px;
+    }
+
     >div {
       width: 130px;
+
       span {
         width: 100%;
       }
@@ -39,32 +47,50 @@
     .div-input {
       width: 152px !important;
     }
+
+    .favorite-input {
+      margin-left: -1px;
+
+      >input {
+        border-start-start-radius: 0px;
+        border-end-start-radius: 0px;
+      }
+    }
   }
-  
+
   .malay-odds,
   .spread,
-  .allowance-rate{
+  .allowance-rate {
     .div-input {
       width: 152px !important;
     }
-    .input-correct-odds{
+
+    .input-correct-odds {
       padding: 2px 0px;
+
+      ::ng-deep .ng-select-container {
+        border-start-start-radius: 0px;
+        border-end-start-radius: 0px;
+      }
     }
+
     .disabled {
       background-color: #e9ecef;
     }
   }
-  .filter-right{
+
+  .filter-right {
     margin-left: 50px;
   }
 
-  .filter-spread{
+  .filter-spread {
     padding-top: 3px;
   }
 
-  
 
-  .filter-live-indicator, .filter-bet-team {
+
+  .filter-live-indicator,
+  .filter-bet-team {
     padding: 0 5px;
     border: 1px solid #ced4da;
     border-radius: 4px;
@@ -74,24 +100,25 @@
 }
 
 @media only screen and (max-width: 1134px) {
+
   .filter,
   .filter-correct-odds {
-      width: 100%;
+    width: 100%;
   }
 }
 
 @media only screen and (min-width: 1134px) {
   .filter {
-      width: 1065px;
+    width: 1065px;
   }
 }
 
-.input-group-text{
+.input-group-text {
   padding: 4px 8px;
   width: 130px;
   font-size: 13px;
 }
 
-.custom-sm{
+.custom-sm {
   width: 130px;
 }

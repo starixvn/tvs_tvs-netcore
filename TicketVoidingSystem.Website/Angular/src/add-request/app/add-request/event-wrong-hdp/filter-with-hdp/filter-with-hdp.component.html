@@ -53,13 +53,13 @@
           <input *ngIf="teamFavorite===0"
             [disabled]="isDisabled"
             placeholder="Ex: 0.75&1&1.25"
-            (ngModelChange)="changeFilter();isCorrectFormatHdp($event, 'home-favorite-input')"
+            (change)="changeFilter();isCorrectFormatHdp(filterWithHdpModel.homeFavorite, 'home-favorite-input')"
             [(ngModel)]="filterWithHdpModel.homeFavorite"
             type="text" class="home-favorite-input input-team-favorite form-control form-control-sm"/>
           <input *ngIf="teamFavorite===1"
             [disabled]="isDisabled"
             placeholder="Ex: 0.75&1&1.25"
-            (ngModelChange)="changeFilter();isCorrectFormatHdp($event, 'away-favorite-input')"
+            (change)="changeFilter();isCorrectFormatHdp(filterWithHdpModel.awayFavorite, 'away-favorite-input')"
             [(ngModel)]="filterWithHdpModel.awayFavorite"
             type="text" class="away-favorite-input input-team-favorite form-control form-control-sm"/>
         </div>
@@ -68,7 +68,7 @@
         <label class="col-form-label mr-2">Actual Market</label>
         <input [(ngModel)]="filterWithHdpModel.actualMarket"
           [disabled]="isDisabled"
-          (ngModelChange)="changeFilter()"
+          (change)="changeFilter()"
           type="text" class="actual-market-input form-control form-control-sm"/>
       </div>
     </div>
@@ -76,17 +76,17 @@
       <label class="col-form-label mr-2">HDP Value</label>
       <input placeholder="Ex: 0.75&1&1.25"
         [disabled]="isDisabled"
-        (ngModelChange)="changeFilter();isCorrectFormatHdp($event, 'hdp-value-input')"
+        (change)="changeFilter();isCorrectFormatHdp(filterWithHdpModel.hdpValue, 'hdp-value-input')"
         [(ngModel)]="filterWithHdpModel.hdpValue"
         type="text" class="hdp-value-input form-control form-control-sm"/>
     </div>
     <div class="d-flex radio-liveindicator">
       <label class="col-form-label none-live mr-2 d-flex align-items-center">
-        <input class="mr-1" type="radio" name="radio-liveindicator-{{matchId}}" [disabled]="isDisabled" [(ngModel)]="filterWithHdpModel.liveIndicator" [value]="0" (ngModelChange)="changeFilter()" />
+        <input class="mr-1" type="radio" name="radio-liveindicator-{{matchId}}" [disabled]="isDisabled" [(ngModel)]="filterWithHdpModel.liveIndicator" [value]="0" (change)="changeFilter()" />
         Non-Live
       </label>
       <label class="col-form-label live d-flex align-items-center">
-        <input class="mr-1" type="radio" name="radio-liveindicator-{{matchId}}" [disabled]="isDisabled" [(ngModel)]="filterWithHdpModel.liveIndicator" [value]="1" (ngModelChange)="changeFilter()" />
+        <input class="mr-1" type="radio" name="radio-liveindicator-{{matchId}}" [disabled]="isDisabled" [(ngModel)]="filterWithHdpModel.liveIndicator" [value]="1" (change)="changeFilter()" />
         Live
       </label>
     </div>
