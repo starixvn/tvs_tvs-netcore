@@ -2,11 +2,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.SharedApi.Handlers.BetTypes;
+using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.SharedApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
+[SkipLogging]
 public class BetTypesController(IMediator mediator) : ControllerBase
 {
     [HttpPost]

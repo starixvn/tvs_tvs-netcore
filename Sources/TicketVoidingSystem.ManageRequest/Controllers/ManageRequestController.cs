@@ -15,10 +15,12 @@ using Fanex.NAP.Client.Helpers.Business;
 public class ManageRequestController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [SkipLogging]
     public async Task<IActionResult> GetVoidActions() => Ok(await mediator.Send(new GetVoidActionsRequest()));
 
     [HttpGet]
     [Route("{id}")]
+    [SkipLogging]
     public async Task<IActionResult> GetIssueTypeName(int id) => Ok(await mediator.Send(new GetIssueNameRequest { SubId = id }));
 
     [HttpGet]

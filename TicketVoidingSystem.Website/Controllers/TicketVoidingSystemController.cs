@@ -14,6 +14,7 @@ using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.SharedApi.Services.Analytics;
 
 [Route("[controller]/[action]")]
+[SkipLogging]
 public class TicketVoidingSystemController(IMediator mediator, UserActionLogService userActionLogService)
     : Controller
 {
@@ -39,7 +40,6 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
 
         await userActionLogService.LogAccessFunction(nameof(VoidRequest));
         return View("~/wwwroot/dist/ticket-voiding-system/void-request/index.cshtml");
-
     }
 
     [HttpGet]

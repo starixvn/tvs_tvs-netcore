@@ -7,6 +7,7 @@ using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Controllers;
 
+[SkipLogging]
 public class MenuController(UserActionLogService userActionLogService) : Controller
 {
     [HttpGet]

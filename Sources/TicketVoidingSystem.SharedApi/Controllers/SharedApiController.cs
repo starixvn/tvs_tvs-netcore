@@ -14,6 +14,7 @@ public class SharedApiController(IMediator mediator, IHttpContextAccessor httpCo
     : ControllerBase
 {
     [HttpGet]
+    [SkipLogging]
     public IActionResult GetNapUserInfo()
     {
         var session = new NapSession(httpContextAccessor);
@@ -44,9 +45,11 @@ public class SharedApiController(IMediator mediator, IHttpContextAccessor httpCo
     public async Task<IActionResult> GetSimpleResultCache(GetSimpleResultCacheRequest request) => Ok(await mediator.Send(request));
 
     [HttpGet]
+    [SkipLogging]
     public async Task<IActionResult> GetIssueTypes() => Ok(await mediator.Send(new GetIssueTypesRequest()));
 
     [HttpGet]
+    [SkipLogging]
     public async Task<IActionResult> GetIssueTypePermissionList() => Ok(await mediator.Send(new GetIssueTypePermissionListRequest()));
 
     [HttpPost]
