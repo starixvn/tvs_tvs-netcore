@@ -1096,12 +1096,12 @@
     {
       "IssueType": 6,
       "Sports": "2,6",
-      "BetType": "401"
+      "BetType": "401,461"
     },
     {
       "IssueType": 6,
       "Sports": "2,6",
-      "BetType": "402"
+      "BetType": "402,462"
     },
     {
       "Selections": [
@@ -1159,7 +1159,7 @@
       ],
       "IssueType": 6,
       "Sports": "2",
-      "BetType": "615"
+      "BetType": "615,651"
     },
     {
       "Selections": [
@@ -1188,7 +1188,7 @@
       ],
       "IssueType": 6,
       "Sports": "2",
-      "BetType": "616"
+      "BetType": "616,652"
     },
     {
       "IssueType": 6,
