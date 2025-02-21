@@ -182,7 +182,7 @@ export class UsernamesComponent implements OnChanges {
       this.tooltip.display(this.errorTooltipClassName, tooltipMessages[validIndex]);
       return false;
     }
-  
+
     return true;
   }
 
@@ -202,16 +202,20 @@ export class UsernamesComponent implements OnChanges {
     this.change.emit();
   }
 
-  isShowButtonRemoveInvalid(){
+  isShowButtonRemoveInvalid() {
     const validIndex = this.groupUsername.checkValidItems();
-    return this.isAbException && validIndex == 2; 
+    return this.isAbException && validIndex == 2;
   }
 
-  removeInvalidUserNames(){
+  removeInvalidUserNames() {
     this.groupUsername.removeExistedUsernames();
     let usernames = this.groupUsername.getAllValue();
     let duplicatedItems = this.groupUsername.getDuplicatedItems(usernames);
     this.groupUsername.removeInvalidUsernames();
     duplicatedItems.forEach(x => this.addItem(x, true))
+  }
+
+  showErrorTicketLimitExceeded() {
+    this.tooltip.display(this.errorTooltipClassName, LABELS.TICKET_LIMIT_EXCEEDED);
   }
 }

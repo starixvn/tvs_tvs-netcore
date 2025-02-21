@@ -26,6 +26,8 @@ public class CheckUsernamesModel
     public int NumberOfTickets { get; set; }
 
     public string UnMarkTransIds { get; set; }
+
+    public bool IsTicketLimitExceeded { get; set; }
 }
 
 public class CheckUsernamesInDatabaseResult

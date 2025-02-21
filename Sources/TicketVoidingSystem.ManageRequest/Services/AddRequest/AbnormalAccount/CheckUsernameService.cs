@@ -1,4 +1,5 @@
-﻿using Fanex.Data.Repository;
+﻿using System.Text;
+using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
@@ -18,6 +19,14 @@ public class CheckUsernameServiceImp(IDynamicRepository repository, GetTransInfo
     public async Task<CheckUsernamesInDatabaseResult> ExecuteValidationInDb(CheckValidUsernamesRequest request)
     {
         var transInfoJsonList = await GetTransInfoJson(request);
+        if (IsTransInfoJsonTooLarge(transInfoJsonList))
+        {
+            return new CheckUsernamesInDatabaseResult
+            {
+                ValidationResult = new CheckUsernamesModel { IsTicketLimitExceeded = true }
+            };
+        }
+
         var criteria = CreateCriteria(request, transInfoJsonList);
         var (checkUsernamesModel, transInfoValidation, transInfoJsonCompress, ticketCalculateWinLostAccount, accounts) =
             await repository.FetchMultipleAsync<CheckUsernamesModel, TransInfoAddRequestModel, string, TicketCalculateWinLostAccount, AccountWinlostModel>(criteria);
@@ -30,6 +39,14 @@ public class CheckUsernameServiceImp(IDynamicRepository repository, GetTransInfo
             TicketCalculateWinLostAccount = ticketCalculateWinLostAccount,
             AccountWinlost = accounts
         };
+    }
+
+    private static bool IsTransInfoJsonTooLarge(IEnumerable<string> transInfoJsonList)
+    {
+        const int maxByteTransInfoJsonList = 5000000;
+        var transInfoJson = string.Join(",", transInfoJsonList);
+
+        return Encoding.UTF8.GetByteCount(transInfoJson) > maxByteTransInfoJsonList;
     }
 
     private static CheckValidUsernamesCriteria CreateCriteria(CheckValidUsernamesRequest model, IEnumerable<string> transInfoJsonList)
