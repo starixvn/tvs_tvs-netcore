@@ -12,7 +12,10 @@ public interface ProcessRecoverService
     Task<RecoverTicketsModel> Execute(Query query);
 }
 
-public class ProcessRecoverServiceImp(Repository repository, LoggingService loggingService, MatchService matchService) : ProcessRecoverService
+public class ProcessRecoverServiceImp(
+    Repository repository,
+    LoggingService loggingService,
+    MatchService matchService) : ProcessRecoverService
 {
     public async Task<RecoverTicketsModel> Execute(Query query)
     {
@@ -39,12 +42,16 @@ public class ProcessRecoverServiceImp(Repository repository, LoggingService logg
         };
     }
 
-    public async Task<RecoverTicketsModel> ExecuteForVirtualSports2Racing(Query query)
+    public async Task<RecoverTicketsModel> ExecuteForVirtualSports2Racing(Query query, IEnumerable<BetIdRecover> vs2RacingBetIds)
     {
-        var updatedTickets = new BetIdRecover(); // call api to update tickets
-
         try
         {
+            // get tickets
+            var vs2RacingTicketsBetTrans = repository.GetTicketVs2RacingService(vs2RacingBetIds);
+
+            // call api to update tickets
+            var updatedTickets = new BetIdRecover();
+
             // lock match
             var result = await matchService.LockMatch(query.MatchId ?? 0, 1, 1);
 
@@ -64,7 +71,7 @@ public class ProcessRecoverServiceImp(Repository repository, LoggingService logg
             //return new Result
             //{
             //    ErrCode = 1,
-            //    ErrMessage = errorMessage
+            //    ErrorMsg = errorMessage
             //};
         }
     }
