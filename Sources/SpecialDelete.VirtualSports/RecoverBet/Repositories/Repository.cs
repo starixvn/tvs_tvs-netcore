@@ -12,9 +12,9 @@ public interface Repository
 {
     Task<GetTicketsModel> GetTickets(Query query);
 
-    Task<RecoverTicketsModel> RecoverTicketsNotVirtualSports2Racing(Query query, IEnumerable<BetIdRecover> tickets);
+    Task<RecoverTicketsModel> RecoverTickets(Query query, IEnumerable<BetIdRecover> tickets);
 
-    Task<IEnumerable<TicketsBetTransModel>> GetTicketVs2RacingService(IEnumerable<BetIdRecover> vs2RacingTickets);
+    RecoverTicketsModel BuildResultRecoverTickets(IEnumerable<RecoverTicketsValidation> validations, IEnumerable<RecoverTicketModel> tickets);
 }
 
 public class RepositoryImp(IDynamicRepository repository, SessionService sessionService)
@@ -35,7 +35,7 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
         return BuildResultGetTickets(ticketsInAllServers, validationInAllServers);
     }
 
-    public async Task<RecoverTicketsModel> RecoverTicketsNotVirtualSports2Racing(Query query, IEnumerable<BetIdRecover> tickets)
+    public async Task<RecoverTicketsModel> RecoverTickets(Query query, IEnumerable<BetIdRecover> tickets)
     {
         var criteria = CreateRecoverTicketsCriteria(query);
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
@@ -68,28 +68,6 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
         };
     }
 
-    public async Task<IEnumerable<TicketsBetTransModel>> GetTicketVs2RacingService(IEnumerable<BetIdRecover> vs2RacingTickets)
-    {
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
-        {
-            var ticketsInSiteDb = vs2RacingTickets.Where(x => x.SiteDbGroupId == server.Id);
-            if (!ticketsInSiteDb.Any())
-            {
-                return Task.FromResult(Enumerable.Empty<TicketsBetTransModel>());
-            }
-
-            var criteria = new GetTicketsVs2RacingCriteria
-            {
-                TransIds = string.Join(",", ticketsInSiteDb.Select(x => x.TransId)),
-                SiteDbGroupId = server.Id
-            };
-
-            return repository.FetchAsync<TicketsBetTransModel>(criteria);
-        });
-
-        return (await Task.WhenAll(tasks)).SelectMany(x => x);
-    }
-
     private RecoverTicketsCriteria CreateRecoverTicketsCriteria(Query query)
     {
         return new RecoverTicketsCriteria
@@ -117,7 +95,7 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
         };
     }
 
-    private static RecoverTicketsModel BuildResultRecoverTickets(IEnumerable<RecoverTicketsValidation> validations, IEnumerable<RecoverTicketModel> tickets)
+    private RecoverTicketsModel BuildResultRecoverTickets(IEnumerable<RecoverTicketsValidation> validations, IEnumerable<RecoverTicketModel> tickets)
     {
         var failedResult = validations.FirstOrDefault(x => !x.IsSuccessful);
         var validation = new RecoverTicketsValidation

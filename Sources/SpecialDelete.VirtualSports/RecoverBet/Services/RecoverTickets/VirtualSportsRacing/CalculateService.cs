@@ -1,4 +1,5 @@
-﻿using Settlement.Business.Core.Models;
+﻿using AutoMapper;
+using Settlement.Business.Core.Models;
 using Settlement.Business.Services;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
 using TicketVoidingSystem.Constants;
@@ -7,13 +8,17 @@ namespace SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets.Virtual
 
 public interface CalculateService
 {
-    Task<List<TicketsBetTransModel>> ResetToRunning(List<TicketsBetTransModel> tickets);
+    IEnumerable<TicketsBetTransModel> ResetToRunning(IEnumerable<TicketsBetTransModel> tickets);
+
+    Task<IEnumerable<TicketsBetTransModel>> Settle(IEnumerable<TicketsBetTransModel> tickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources);
+
+    IEnumerable<TicketsBetTransModel> Refund(IEnumerable<TicketsBetTransModel> tickets);
 }
 
-public class CalculateServiceImp(MatchService matchService,
+public class CalculateServiceImp(MatchService matchService, IMapper mapper,
     GenerateSettleTicketService generateSettleTicketService) : CalculateService
 {
-    public async Task<List<TicketsBetTransModel>> ResetToRunning(List<TicketsBetTransModel> tickets)
+    public IEnumerable<TicketsBetTransModel> ResetToRunning(IEnumerable<TicketsBetTransModel> tickets)
     {
         foreach (var ticket in tickets)
         {
@@ -25,25 +30,20 @@ public class CalculateServiceImp(MatchService matchService,
             ticket.Creator = ticket.CreatorBackUp;
         }
 
-        return await Task.FromResult(tickets);
+        return tickets;
     }
 
-    public async Task<List<TicketsBetTransModel>> Settle(List<TicketsBetTransModel> tickets)
+    public async Task<IEnumerable<TicketsBetTransModel>> Settle(IEnumerable<TicketsBetTransModel> tickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources)
     {
-        var (_, outright, resources) = await matchService.GetRacingInfo(1);
-        var ticketsAfterCalculate = generateSettleTicketService.Calc(tickets.Cast<Ticket>().ToList(), outright.ToList(), resources.ToList());
+        var ticketsAfterCalculate = await generateSettleTicketService.Calc(mapper.Map<List<Ticket>>(tickets), outright.ToList(), resources.ToList());
 
-        // something
-
-        return new List<TicketsBetTransModel>();
+        return mapper.Map<List<TicketsBetTransModel>>(ticketsAfterCalculate);
     }
 
-    public async Task<List<TicketsBetTransModel>> Refund(List<TicketsBetTransModel> tickets)
+    public IEnumerable<TicketsBetTransModel> Refund(IEnumerable<TicketsBetTransModel> tickets)
     {
-        var ticketsAfterRefund = generateSettleTicketService.Refund(tickets.Cast<Ticket>().ToList());
+        var ticketsAfterRefund = generateSettleTicketService.Refund(mapper.Map<List<Ticket>>(tickets));
 
-        // something
-
-        return new List<TicketsBetTransModel>();
+        return mapper.Map<IEnumerable<TicketsBetTransModel>>(ticketsAfterRefund);
     }
 }

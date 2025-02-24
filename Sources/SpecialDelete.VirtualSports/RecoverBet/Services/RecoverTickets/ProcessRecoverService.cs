@@ -1,5 +1,4 @@
-﻿using SpecialDelete.VirtualSports.Common.Models;
-using SpecialDelete.VirtualSports.RecoverBet.Models;
+﻿using SpecialDelete.VirtualSports.RecoverBet.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Repositories;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
@@ -40,39 +39,5 @@ public class ProcessRecoverServiceImp(
             },
             Tickets = []
         };
-    }
-
-    public async Task<RecoverTicketsModel> ExecuteForVirtualSports2Racing(Query query, IEnumerable<BetIdRecover> vs2RacingBetIds)
-    {
-        try
-        {
-            // get tickets
-            var vs2RacingTicketsBetTrans = repository.GetTicketVs2RacingService(vs2RacingBetIds);
-
-            // call api to update tickets
-            var updatedTickets = new BetIdRecover();
-
-            // lock match
-            var result = await matchService.LockMatch(query.MatchId ?? 0, 1, 1);
-
-            if (result.IsSuccessful)
-            {
-                // call SP update recover
-            }
-
-            return new RecoverTicketsModel();
-        }
-        catch (Exception exception)
-        {
-            //unlock
-            var errorMessage = $"Match Id = {request.EventId} - SiteDb = {site} - {exception.Message}";
-            await matchService.LockMatch(query.MatchId ?? 0, 0, 1);
-
-            //return new Result
-            //{
-            //    ErrCode = 1,
-            //    ErrorMsg = errorMessage
-            //};
-        }
     }
 }

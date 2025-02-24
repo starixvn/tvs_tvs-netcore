@@ -1,9 +1,10 @@
 ﻿using Fanex.Data;
 using Fanex.Data.Repository;
+using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.VirtualSports.RecoverBet.Criteria;
 
-public class UpdateTicketsVs2RacingCriteria : NonQueryCommand
+public class RecoverTicketsVs2RacingCriteria : NonQueryCommand
 {
     public string TransInfoJson { get; set; }
 
@@ -11,10 +12,12 @@ public class UpdateTicketsVs2RacingCriteria : NonQueryCommand
 
     public string ErrorMsg { get; set; }
 
+    public string NegativeBalanceUsers { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 
-    public override string GetSettingKey() => "UpdateTicketsVs2Racing";
+    public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "NAP_SpecialDelete_RecoverSportsRacing_Udp");
 
     public override bool IsValid() => !string.IsNullOrWhiteSpace(TransInfoJson);
 }
