@@ -50,7 +50,6 @@ export class ValidationService {
       }
 
       const viewModel = await this.getValidation(args);
-      viewModel.validation.isTicketLimitExceeded = true;
       if(viewModel.validation.isTicketLimitExceeded){
         args.usernamesComponent.showErrorTicketLimitExceeded();
         return { isValid: false } as ValidationBusinessRuleOutput;

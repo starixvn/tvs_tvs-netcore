@@ -12,6 +12,7 @@ import { AccountWinlostModel } from '../models/account-winlost.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { ValidationBusinessRuleArgs } from '../models/validation.model';
 import { ValidationService } from '../services/validation.service';
+import DescriptionTableAdjustVoidConfig from './describe-table-adjust-void.json';
 
 @Component({
   selector: 'account-table',
@@ -32,7 +33,9 @@ export class AccountTableComponent {
   tooltip = new Tooltip();
   isCancelRecalculateAmount: boolean;
   isCheckedShowAdjustAccount: boolean;
-
+  message = `Current Losing (L)\n
+  Sum winlost (without actual stake) of all LOSE tickets\n
+  Display L as negative number`;
   constructor(
     private readonly element: ElementRef,
     private readonly addRequestStore: AddRequestStore,
@@ -155,5 +158,9 @@ export class AccountTableComponent {
     arg.primitiveProps = new PrimitiveProperty();
     arg.primitiveProps.permission = this.permission;
     return arg;
+  }
+
+  getDescription(columnName: string) {
+    return DescriptionTableAdjustVoidConfig.find(x => x.name === columnName)?.description || '';
   }
 }
