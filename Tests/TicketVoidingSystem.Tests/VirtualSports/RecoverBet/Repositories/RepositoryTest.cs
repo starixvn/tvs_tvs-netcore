@@ -63,7 +63,7 @@ public class RepositoryTest : IClassFixture<AppSettingFixture>
         var repository = new RepositoryImp(dynamicRepository, sessionService);
 
         // Act
-        var model = await repository.RecoverTickets(query);
+        var model = await repository.RecoverNotRacingSports(query);
 
         // Assert
         Assert.NotNull(model.Tickets);
@@ -82,7 +82,7 @@ public class RepositoryTest : IClassFixture<AppSettingFixture>
         var repository = new RepositoryImp(dynamicRepository, sessionService);
 
         // Act
-        await repository.RecoverTickets(query);
+        await repository.RecoverNotRacingSports(query);
 
         // Assert
         await dynamicRepository.Received(0)

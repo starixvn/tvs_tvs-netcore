@@ -1,4 +1,5 @@
 ﻿using Fanex.Data.Repository;
+using Settlement.Business.Core.Models;
 using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Criteria;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
@@ -12,9 +13,9 @@ public interface Repository
 {
     Task<GetTicketsModel> GetTickets(Query query);
 
-    Task<RecoverTicketsModel> RecoverTickets(Query query, IEnumerable<BetIdRecover> tickets);
+    Task<(IEnumerable<RecoverTicketsValidation>, IEnumerable<RecoverTicketModel>)[]> RecoverNotRacingSports(Query query, IEnumerable<BetIdRecover> tickets);
 
-    RecoverTicketsModel BuildResultRecoverTickets(IEnumerable<RecoverTicketsValidation> validations, IEnumerable<RecoverTicketModel> tickets);
+    Task<(IEnumerable<Outright>, IEnumerable<Resources>)> GetRacingInfo(int matchId);
 }
 
 public class RepositoryImp(IDynamicRepository repository, SessionService sessionService)
@@ -35,7 +36,7 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
         return BuildResultGetTickets(ticketsInAllServers, validationInAllServers);
     }
 
-    public async Task<RecoverTicketsModel> RecoverTickets(Query query, IEnumerable<BetIdRecover> tickets)
+    public async Task<(IEnumerable<RecoverTicketsValidation>, IEnumerable<RecoverTicketModel>)[]> RecoverNotRacingSports(Query query, IEnumerable<BetIdRecover> tickets)
     {
         var criteria = CreateRecoverTicketsCriteria(query);
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
@@ -50,11 +51,17 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
             criteria.SiteDbGroupId = server.Id;
             return repository.FetchMultipleAsync<RecoverTicketsValidation, RecoverTicketModel>(criteria);
         });
-        (IEnumerable<RecoverTicketsValidation> Validation, IEnumerable<RecoverTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
-        var validationInAllServers = results.SelectMany(x => x.Validation);
-        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
+        var results = await Task.WhenAll(tasks);
 
-        return BuildResultRecoverTickets(validationInAllServers, ticketsInAllServers);
+        return results;
+    }
+    
+    public async Task<(IEnumerable<Outright>, IEnumerable<Resources>)> GetRacingInfo(int matchId)
+    {
+        var criteria = new GetRacingResultCriteria { MatchId = matchId };
+        var (_, secondResult, thirdResult) = await repository.FetchMultipleAsync<string, Outright, Resources>(criteria);
+
+        return (secondResult, thirdResult);
     }
     
     private static GetTicketsCriteria CreateGetTicketsCriteria(Query query)
@@ -89,25 +96,6 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
         };
 
         return new GetTicketsModel
-        {
-            Tickets = tickets,
-            Validation = validation
-        };
-    }
-
-    private RecoverTicketsModel BuildResultRecoverTickets(IEnumerable<RecoverTicketsValidation> validations, IEnumerable<RecoverTicketModel> tickets)
-    {
-        var failedResult = validations.FirstOrDefault(x => !x.IsSuccessful);
-        var validation = new RecoverTicketsValidation
-        {
-            ErrorCode = failedResult?.ErrorCode ?? 0,
-            ErrorMsg = failedResult?.ErrorMsg ?? string.Empty,
-            CompletedMatchIds = Helper.GetUnionTransIdString(validations.Select(x => x.CompletedMatchIds)),
-            ReCalculatedMainTransIds = Helper.GetUnionTransIdString(validations.Select(x => x.ReCalculatedMainTransIds)),
-            NegativeBalanceUsers = Helper.GetUnionTransIdString(validations.Select(x => x.NegativeBalanceUsers))
-        };
-
-        return new RecoverTicketsModel
         {
             Tickets = tickets,
             Validation = validation

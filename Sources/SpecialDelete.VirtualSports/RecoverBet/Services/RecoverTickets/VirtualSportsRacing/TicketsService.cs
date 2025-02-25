@@ -4,14 +4,13 @@ using Settlement.Business.Core.Models;
 using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Criteria;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 
 namespace SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets.VirtualSportsRacing;
 
 public interface TicketsService
 {
-    Task<IEnumerable<TicketsBetTransModel>> GetTicketVs2Racing(IEnumerable<BetIdRecover> vs2RacingTickets, IEnumerable<Resources> resources);
+    Task<IEnumerable<TicketsBetTransModel>> GetTicketVs2Racing(IEnumerable<BetIdRecover> vs2RacingTickets, IEnumerable<Resources> resources, int siteDbGroupId);
 
     Task<(RecoverTicketsValidation, IEnumerable<RecoverTicketModel>)> RecoverTicketVs2Racing(IEnumerable<TicketsBetTransModel> tickets, int siteDbGroupId);
 
@@ -20,30 +19,23 @@ public interface TicketsService
 
 public class TicketsServicesImp(IDynamicRepository repository, CalculateService calculateService) : TicketsService
 {
-    public async Task<IEnumerable<TicketsBetTransModel>> GetTicketVs2Racing(IEnumerable<BetIdRecover> vs2RacingTickets, IEnumerable<Resources> resources)
+    public async Task<IEnumerable<TicketsBetTransModel>> GetTicketVs2Racing(IEnumerable<BetIdRecover> vs2RacingTickets, IEnumerable<Resources> resources, int siteDbGroupId)
     {
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
+        var resourceIds = string.Join(',', resources.Select(x => x.ResourceId).Distinct());
+        var ticketsInSiteDb = vs2RacingTickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
+        if (!ticketsInSiteDb.Any())
         {
-            var resourceIds = string.Join(',', resources.Select(x => x.ResourceId).Distinct());
-            var ticketsInSiteDb = vs2RacingTickets.Where(x => x.SiteDbGroupId == server.Id);
-            if (!ticketsInSiteDb.Any())
-            {
-                return Task.FromResult(Enumerable.Empty<TicketsBetTransModel>());
-            }
+            return await Task.FromResult(Enumerable.Empty<TicketsBetTransModel>());
+        }
 
-            var criteria = new GetTicketsVs2RacingCriteria
-            {
-                Resources = resourceIds,
-                TransIds = string.Join(",", vs2RacingTickets.Select(x => x.TransId)),
-                SiteDbGroupId = server.Id
-            };
+        var criteria = new GetTicketsVs2RacingCriteria
+        {
+            Resources = resourceIds,
+            TransIds = string.Join(",", vs2RacingTickets.Select(x => x.TransId)),
+            SiteDbGroupId = siteDbGroupId
+        };
 
-            return repository.FetchAsync<TicketsBetTransModel>(criteria);
-        });
-
-        var results = await Task.WhenAll(tasks);
-
-        return results.SelectMany(x => x);
+        return await repository.FetchAsync<TicketsBetTransModel>(criteria);
     }
 
     public async Task<(RecoverTicketsValidation, IEnumerable<RecoverTicketModel>)> RecoverTicketVs2Racing(IEnumerable<TicketsBetTransModel> tickets, int siteDbGroupId)
@@ -76,20 +68,20 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
 
     private async Task<IEnumerable<TicketsBetTransModel>> ProcessSettleTickets(IEnumerable<TicketsBetTransModel> tickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources)
     {
-        var settledTickets = tickets.Where(x => x.Status.IsSettled());
-        if (!settledTickets.Any())
+        var settledTickets = tickets.Where(x => x.Status.IsSettled()).ToList();
+        if (settledTickets.Count == 0)
         {
             return [];
         }
 
         var preparedTickets = calculateService.ResetToRunning(settledTickets);
-        return await calculateService.Settle(preparedTickets, outright, resources);
+        return await calculateService.Settle(preparedTickets, outright.ToList(), resources.ToList());
     }
 
-    private IEnumerable<TicketsBetTransModel> ProcessRefundTickets(IEnumerable<TicketsBetTransModel> tickets)
+    public IEnumerable<TicketsBetTransModel> ProcessRefundTickets(IEnumerable<TicketsBetTransModel> tickets)
     {
-        var refundTickets = tickets.Where(x => x.Status.IsRefund());
-        if (!refundTickets.Any())
+        var refundTickets = tickets.Where(x => x.Status.IsRefund()).ToList();
+        if (refundTickets.Count == 0)
         {
             return [];
         }

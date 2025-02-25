@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Settlement.Business;
 using SpecialDelete.VirtualSports.RecoverBet.Repositories;
 using SpecialDelete.VirtualSports.RecoverBet.Services;
 using SpecialDelete.VirtualSports.RecoverBet.Services.GetTickets;
@@ -21,5 +22,9 @@ public static class VirtualSportsRecover
         services.AddTransient<RecoverBetService, RecoverBetServiceImp>();
         services.AddTransient<CalculateService, CalculateServiceImp>();
         services.AddTransient<TicketsService, TicketsServicesImp>();
+        services.AddTransient<ProcessRecoverService, ProcessRecoverServiceImp>();
+        services.AddTransient<RecoverRacingService, RecoverRacingServiceImp>();
+        services.AddTransient<WinLimitService, WinLimitServiceImp>();
+        services.AddSettlementBusinessServices();
     }
 }

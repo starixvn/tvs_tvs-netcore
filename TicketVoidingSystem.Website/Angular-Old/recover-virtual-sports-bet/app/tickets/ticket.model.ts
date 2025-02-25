@@ -13,6 +13,7 @@
     isDisable: boolean;
     siteDbGroupId: number;
     sportType: number;
+    matchId: number;
 
     constructor(
         no: number,
@@ -26,7 +27,9 @@
         choice: string,
         subTransId: string,
         isDisable: boolean,
-        siteDbGroupId: number) {
+        siteDbGroupId: number,
+        sportType: number,
+        matchId: number) {
         this.no = no;
         this.betId = betId;
         this.member = member;
@@ -40,5 +43,7 @@
         this.isDisable = isDisable;
         this.isChecked = !isDisable;
         this.siteDbGroupId = siteDbGroupId;
+        this.sportType = sportType;
+        this.matchId = matchId;
     }
 }

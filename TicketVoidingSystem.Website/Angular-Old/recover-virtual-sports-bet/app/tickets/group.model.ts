@@ -33,7 +33,9 @@ export class GroupModel {
                 item.choice,
                 item.subTransId,
                 item.isDisable,
-                item.siteDbGroupId);
+                item.siteDbGroupId,
+                item.sportType,
+                item.matchId);
             this.tickets.push(ticket);
         });
     }
@@ -71,7 +73,8 @@ export class GroupModel {
             return {
                 transId: ticket.betId,
                 siteDbGroupId: ticket.siteDbGroupId,
-                sportType: ticket.sportType
+                sportType: ticket.sportType,
+                matchId: ticket.matchId,
             } as BetId;
         });
     }

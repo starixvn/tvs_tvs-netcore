@@ -45,7 +45,7 @@ public class RecoverTicketsServiceTest
         };
         var query = new Query();
         var repository = Substitute.For<Repository>();
-        repository.RecoverTickets(Arg.Any<Query>()).ReturnsForAnyArgs(expected);
+        repository.RecoverNotRacingSports(Arg.Any<Query>()).ReturnsForAnyArgs(expected);
         var service = CreateService(repository);
 
         // Act
@@ -72,7 +72,7 @@ public class RecoverTicketsServiceTest
         var query = new Query();
         var repository = Substitute.For<Repository>();
         repository
-            .When(x => x.RecoverTickets(Arg.Any<Query>()))
+            .When(x => x.RecoverNotRacingSports(Arg.Any<Query>()))
             .Do(_ => throw exception);
         var service = CreateService(repository);
 
@@ -108,7 +108,7 @@ public class RecoverTicketsServiceTest
         var query = new Query();
         var repository = Substitute.For<Repository>();
         repository
-            .When(x => x.RecoverTickets(Arg.Any<Query>()))
+            .When(x => x.RecoverNotRacingSports(Arg.Any<Query>()))
             .Do(_ => throw exception);
         var loggingService = Substitute.For<LoggingService>();
         var service = CreateService(repository, loggingService);

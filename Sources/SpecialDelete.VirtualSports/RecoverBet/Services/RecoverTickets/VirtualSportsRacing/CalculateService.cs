@@ -1,24 +1,24 @@
-﻿using AutoMapper;
+﻿using Settlement.Business.Core.Constants;
 using Settlement.Business.Core.Models;
 using Settlement.Business.Services;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
 using TicketVoidingSystem.Constants;
+using static Settlement.Business.Core.Constants.Status;
 
 namespace SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets.VirtualSportsRacing;
 
 public interface CalculateService
 {
-    IEnumerable<TicketsBetTransModel> ResetToRunning(IEnumerable<TicketsBetTransModel> tickets);
+    List<TicketsBetTransModel> ResetToRunning(List<TicketsBetTransModel> tickets);
 
-    Task<IEnumerable<TicketsBetTransModel>> Settle(IEnumerable<TicketsBetTransModel> tickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources);
+    Task<List<TicketsBetTransModel>> Settle(List<TicketsBetTransModel> tickets, List<Outright> outright, List<Resources> resources);
 
-    IEnumerable<TicketsBetTransModel> Refund(IEnumerable<TicketsBetTransModel> tickets);
+    List<TicketsBetTransModel> Refund(List<TicketsBetTransModel> tickets);
 }
 
-public class CalculateServiceImp(MatchService matchService, IMapper mapper,
-    GenerateSettleTicketService generateSettleTicketService) : CalculateService
+public class CalculateServiceImp(ModdsService moddsService, TicketValueService ticketValueService, WinLimitService winLimitService) : CalculateService
 {
-    public IEnumerable<TicketsBetTransModel> ResetToRunning(IEnumerable<TicketsBetTransModel> tickets)
+    public List<TicketsBetTransModel> ResetToRunning(List<TicketsBetTransModel> tickets)
     {
         foreach (var ticket in tickets)
         {
@@ -33,17 +33,40 @@ public class CalculateServiceImp(MatchService matchService, IMapper mapper,
         return tickets;
     }
 
-    public async Task<IEnumerable<TicketsBetTransModel>> Settle(IEnumerable<TicketsBetTransModel> tickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources)
+    public List<TicketsBetTransModel> Refund(List<TicketsBetTransModel> tickets)
     {
-        var ticketsAfterCalculate = await generateSettleTicketService.Calc(mapper.Map<List<Ticket>>(tickets), outright.ToList(), resources.ToList());
+        tickets.ForEach(item =>
+        {
+            item.WinLost = item.ActualStake;
+            item.AWinLost = 0;
+            item.MWinLost = 0;
+            item.SWinLost = 0;
+            item.PlayerComm = 0;
+            item.Comm = 0;
+            item.AComm = 0;
+            item.SComm = 0;
+            item.Ruben = Ruben.Default;
+            item.StatusWinLost = StatusWinlost.Refund;
+            item.StatusId = StatusId.Refund;
+            item.Status = StatusName.Refund;
+        });
 
-        return mapper.Map<List<TicketsBetTransModel>>(ticketsAfterCalculate);
+        return tickets;
     }
 
-    public IEnumerable<TicketsBetTransModel> Refund(IEnumerable<TicketsBetTransModel> tickets)
+    public async Task<List<TicketsBetTransModel>> Settle(List<TicketsBetTransModel> tickets, List<Outright> outright, List<Resources> resources)
     {
-        var ticketsAfterRefund = generateSettleTicketService.Refund(mapper.Map<List<Ticket>>(tickets));
+        tickets.ForEach(item =>
+        {
+            var resource = resources.Find(r => r.ProfileId == item.ProfileId) ?? new Resources();
+            item.Modds = moddsService.VirtualRacing(item, outright.ToList());
+            item.OddsType = resource.OddsType;
+            item.ActualPayout = ticketValueService.GetActualPayout(item.Modds, item.Odds, item.OddsType, item.ActualStake, item.Stake);
+        });
+        var maxWinLimit = (await winLimitService.GetMaxWinLimit(tickets)).ToList();
 
-        return mapper.Map<IEnumerable<TicketsBetTransModel>>(ticketsAfterRefund);
+        tickets.ForEach(item => ticketValueService.SetValue(item, maxWinLimit));
+
+        return tickets;
     }
 }
