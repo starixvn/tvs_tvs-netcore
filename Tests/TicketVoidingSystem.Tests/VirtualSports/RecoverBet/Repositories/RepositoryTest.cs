@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using Fanex.Data.Repository;
 using NSubstitute;
 using SpecialDelete.VirtualSports.Common.Models;
@@ -26,11 +25,9 @@ public class RepositoryTest : IClassFixture<AppSettingFixture>
         var tickets = new List<GetTicketModel> { new() };
         var dynamicRepository = Substitute.For<IDynamicRepository>();
         var sessionService = Substitute.For<SessionService>();
-        var mapper = Substitute.For<IMapper>();
-        mapper.Map<GetTicketsCriteria>(null).ReturnsForAnyArgs(new GetTicketsCriteria());
         dynamicRepository.FetchMultipleAsync<GetTicketsValidation, GetTicketModel>(new GetTicketsCriteria())
             .ReturnsForAnyArgs((validations, tickets));
-        var repository = new RepositoryImp(mapper, dynamicRepository, sessionService);
+        var repository = new RepositoryImp(dynamicRepository, sessionService);
 
         // Act
         var model = await repository.GetTickets(new Query());
@@ -60,12 +57,10 @@ public class RepositoryTest : IClassFixture<AppSettingFixture>
         var recoverTickets = new List<RecoverTicketModel> { new() };
         var dynamicRepository = Substitute.For<IDynamicRepository>();
         var sessionService = Substitute.For<SessionService>();
-        var mapper = Substitute.For<IMapper>();
-        mapper.Map<GetTicketsCriteria>(null).ReturnsForAnyArgs(new GetTicketsCriteria());
         dynamicRepository
             .FetchMultipleAsync<RecoverTicketsValidation, RecoverTicketModel>(new RecoverTicketsCriteria())
             .ReturnsForAnyArgs((validations, recoverTickets));
-        var repository = new RepositoryImp(mapper, dynamicRepository, sessionService);
+        var repository = new RepositoryImp(dynamicRepository, sessionService);
 
         // Act
         var model = await repository.RecoverTickets(query);
@@ -84,9 +79,7 @@ public class RepositoryTest : IClassFixture<AppSettingFixture>
         };
         var dynamicRepository = Substitute.For<IDynamicRepository>();
         var sessionService = Substitute.For<SessionService>();
-        var mapper = Substitute.For<IMapper>();
-        mapper.Map<GetTicketsCriteria>(null).ReturnsForAnyArgs(new GetTicketsCriteria());
-        var repository = new RepositoryImp(mapper, dynamicRepository, sessionService);
+        var repository = new RepositoryImp(dynamicRepository, sessionService);
 
         // Act
         await repository.RecoverTickets(query);
