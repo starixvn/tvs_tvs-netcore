@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
@@ -31,16 +31,29 @@ import { PasswordService } from '../../../utility/services/password.service';
 import { StaticService } from '../../../utility/services/static.service';
 import { CheckRequestService } from '../services/check-request.service';
 import { LogChangeContentService } from '../services/log-change-content.service';
-import { ConfirmationComponent } from './../../../utility/components/confirmation/confirmation.component';
-import { IssueInfo } from './../../../utility/models/issue-type.model';
+import { ConfirmationComponent } from '../../../utility/components/confirmation/confirmation.component';
+import { IssueInfo } from '../../../utility/models/issue-type.model';
 import { AppService } from './../app.service';
 import { GetTicketsQuery } from './../models/get-tickets.query';
 import { VoidTicketsQuery } from './../models/void-tickets.query';
 import { TicketsModel } from './../tickets-list/tickets.model';
+import { CommonModule } from '@angular/common';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { TicketsListComponent } from '../tickets-list/tickets-list.component';
+import { FilterComponent } from '../filter/filter.component';
+import { LogInfoComponent } from '../log-info/log-info.component';
+import { EventInfoComponent } from '../event-info/event-info.component';
+import { IssueTypeComponent } from '../../../utility/components/issue-type/issue-type.component';
+
 @Component({
+  standalone: true,
   selector: 'void-other-issue',
   templateUrl: './void-other-issue.component.html',
-  styleUrls: ['./void-other-issue.component.scss']
+  styleUrls: ['./void-other-issue.component.scss'],
+  imports: [CommonModule, TemplateMessageComponent, ConfirmationComponent, LicenseeAffectedListComponent, TicketsListComponent,
+    TooltipComponent, LogInfoComponent, FilterComponent, EventInfoComponent, IssueTypeComponent],
+  providers: [ClipboardService]
 })
 export class VoidOtherIssueComponent implements OnInit {
   @Input('requestId') requestId: number;
@@ -81,17 +94,18 @@ export class VoidOtherIssueComponent implements OnInit {
   transInfo: string;
   licenseeAffectedList: AffectedLicensee[] = [];
   issueTypeName: string;
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly appService: AppService,
-    private readonly modalService: ModalService,
-    private readonly templateService: TemplateService,
-    private readonly checkRequestService: CheckRequestService,
-    private readonly clipboardService: ClipboardService,
-    private readonly element: ElementRef,
-    private readonly passwordService: PasswordService,
-    private readonly logChangeContentService: LogChangeContentService
-  ) {
+
+  commonService = inject(CommonService);
+  appService = inject(AppService);
+  modalService = inject(ModalService);
+  templateService = inject(TemplateService);
+  checkRequestService = inject(CheckRequestService);
+  clipboardService = inject(ClipboardService);
+  element = inject(ElementRef);
+  passwordService = inject(PasswordService);
+  logChangeContentService = inject(LogChangeContentService);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -294,11 +308,7 @@ export class VoidOtherIssueComponent implements OnInit {
   checkSettled(): boolean {
     if (this.isAbnormalAccount()) {
       const UNSETTLED_STATUS = '0,1';
-      if (this.requestDetail.abnormalAccountModel.statusIds === UNSETTLED_STATUS) {
-        return false;
-      }
-
-      return true;
+      return this.requestDetail.abnormalAccountModel.statusIds !== UNSETTLED_STATUS;
     }
 
     return this.ticketsModel.checkSettledTickets();

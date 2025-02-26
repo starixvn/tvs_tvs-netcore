@@ -4,7 +4,9 @@ import { TemplateReplace } from '../template.const';
 import { TemplateValue } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class TemplateWrongOfferedService {
 
   constructor(

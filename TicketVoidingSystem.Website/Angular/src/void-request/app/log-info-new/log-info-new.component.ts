@@ -1,3 +1,4 @@
+import { TicketCountOtherSportsComponent } from './../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
 import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
@@ -6,11 +7,15 @@ import { IssueTypeConstant } from '../../../utility/constants/issue-type.constan
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { SportType } from '../../../utility/constants/sport.constant';
+import { CommonModule } from '@angular/common';
+import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
 
 @Component({
+  standalone: true,
   selector: 'log-info-new',
   templateUrl: './log-info-new.component.html',
-  styleUrls: ['./log-info-new.component.scss']
+  styleUrls: ['./log-info-new.component.scss'],
+  imports: [CommonModule, SanitizeHtmlPipe, TicketCountOtherSportsComponent]
 })
 export class LogInfoNewComponent {
   @Input() issueTypeId: number;
@@ -80,7 +85,7 @@ export class LogInfoNewComponent {
     return StaticService.isHaveCancelCashOutTicket(this.issueTypeId?.toString());
   }
 
-  public isSportTypeSoccer(): boolean{
+  public isSportTypeSoccer(): boolean {
     return this.sportType === SportType.SOCCER;
   }
 }

@@ -1,46 +1,74 @@
-  <div class="row no-gutters mt-2">
-    <label class="col-form-label col-form-label-sm log-info-label mr-3">Log Info </label>
-    <div class="col-sm-6 pd-top-8 remark-content">
-      <div *ngFor="let item of logInfoDetails" class="log-info p-2">
-        <span *ngIf="!isReducedOver()">{{displayScoreLabel(filterBy)}}<strong>{{item.liveScores}}</strong>.</span>
+<div class="row no-gutters mt-2">
+  <label class="col-form-label col-form-label-sm log-info-label me-3">Log Info </label>
+  <div class="col-sm-6 pd-top-8 remark-content">
+    @for (item of logInfoDetails; track item) {
+      <div class="log-info p-2">
+        @if (!isReducedOver()) {
+          <span>{{displayScoreLabel(filterBy)}}<strong>{{item.liveScores}}</strong>.</span>
+        }
         {{displayVoidTimeLabel(filterBy)}}<strong>{{displayFullDateTimeFormat(item.voidFromTime)}} - {{displayFullDateTimeFormat(item.voidToTime)}}</strong><br />
-        <div *ngIf="isSportTypeSoccer()" class="soccer">
-          <ng-container *ngIf="!isWrongOdds()">
-            Affected Single Count: <strong>{{item.singleCount}}</strong>
-            <span *ngIf="isShowCountInfo(item.cashOutCount, item.settleCount, item.instantlySettleCount)" class="text-red"
-            [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
-            </span>,
-            Parlay Count: <strong>{{item.mainParlayCount}}</strong><span *ngIf="item.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(item)">{{displayMinTime(item.highlightMinTime)}}</strong></span>
-            <span *ngIf="isWrongScore()">, TransId: <strong [ngClass]="getHighlightMinTimeClass(item)">{{item.minTransId}}</strong> {{item.actionType}}</span>
-            <span *ngIf="!isReducedOver()"><br/>Cancel Cash Out: <strong>{{item.cancelCashOutCount}}</strong></span>
-          </ng-container>
-          <ng-container *ngIf="isWrongOdds()">
-            LG/Early - Single Count: <strong>{{item.singleCount}}</strong>
-            <span *ngIf="isShowCountInfo(item.cashOutCount, item.settleCount, item.instantlySettleCount)" class="text-red"
-            [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
-            </span><br />
-            <div *ngIf="isPoolHouseAffected">
-              PH - Single Count: <strong>{{item.poolHouseSingleCount}}</strong>
-              <span *ngIf="isShowCountInfo(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount)" class="text-red"
-              [innerHTML]="countInfoContent(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount) | sanitizeHtml">
-              </span>,
-              Parlay Count: <strong>{{item.poolHouseMainParlayCount}}</strong>&nbsp;
-            </div>
-            <div *ngIf="!isPoolHouseAffected">PH - Not affected.</div>
-          </ng-container>
+        @if (isSportTypeSoccer()) {
+          <div class="soccer">
+            @if (!isWrongOdds()) {
+              Affected Single Count: <strong>{{item.singleCount}}</strong>
+              @if (isShowCountInfo(item.cashOutCount, item.settleCount, item.instantlySettleCount)) {
+                <span class="text-red"
+                  [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
+                </span>
+                },
+                Parlay Count: <strong>{{item.mainParlayCount}}</strong>@if (item.highlightMinTime) {
+                <span>, Min Time: <strong [ngClass]="getHighlightMinTimeClass(item)">{{displayMinTime(item.highlightMinTime)}}</strong></span>
+              }
+              @if (isWrongScore()) {
+                <span>, TransId: <strong [ngClass]="getHighlightMinTimeClass(item)">{{item.minTransId}}</strong> {{item.actionType}}</span>
+              }
+              @if (!isReducedOver()) {
+                <span><br/>Cancel Cash Out: <strong>{{item.cancelCashOutCount}}</strong></span>
+              }
+            }
+            @if (isWrongOdds()) {
+              LG/Early - Single Count: <strong>{{item.singleCount}}</strong>
+              @if (isShowCountInfo(item.cashOutCount, item.settleCount, item.instantlySettleCount)) {
+                <span class="text-red"
+                  [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
+                </span>
+                }<br />
+                @if (isPoolHouseAffected) {
+                  <div>
+                    PH - Single Count: <strong>{{item.poolHouseSingleCount}}</strong>
+                    @if (isShowCountInfo(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount)) {
+                      <span class="text-red"
+                        [innerHTML]="countInfoContent(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount) | sanitizeHtml">
+                      </span>
+                      },
+                      Parlay Count: <strong>{{item.poolHouseMainParlayCount}}</strong>&nbsp;
+                    </div>
+                  }
+                  @if (!isPoolHouseAffected) {
+                    <div>PH - Not affected.</div>
+                  }
+                }
+              </div>
+            }
+            @if (!isSportTypeSoccer()) {
+              <ticket-count-other-sports [logInfoDetail]="item" [isVoided]="true">
+              </ticket-count-other-sports>
+            }
+          </div>
+        }
+      </div>
+    </div>
+    <div class="row no-gutters mt-2">
+      @if (isWrongScore()) {
+        <div class="d-flex">
+          <span class="col-form-label col-form-label-sm me-3">Actual Score</span>
+          <span class="input-actual-score form-control form-control-sm actual-score-input"><b>{{actualScore}}</b></span>
         </div>
-        <ticket-count-other-sports *ngIf="!isSportTypeSoccer()" [logInfoDetail]="item" [isVoided]="true">
-        </ticket-count-other-sports>
-      </div> 
+      }
+      @if (isWrongOdds()) {
+        <div class="d-flex">
+          <span class="col-form-label col-form-label-sm me-3">Correct Odds</span>
+          <span class="input-actual-score form-control form-control-sm correct-odds-input">Home: <b>{{correctOddsHomeOver}}</b>, Away: <b>{{correctOddsAwayUnder}}</b></span>
+        </div>
+      }
     </div>
-  </div>
-  <div class="row no-gutters mt-2">
-    <div *ngIf="isWrongScore()" class="d-flex">
-      <span class="col-form-label col-form-label-sm mr-3">Actual Score</span>
-      <span class="input-actual-score form-control form-control-sm actual-score-input"><b>{{actualScore}}</b></span>
-    </div>
-    <div *ngIf="isWrongOdds()" class="d-flex">
-      <span class="col-form-label col-form-label-sm mr-3">Correct Odds</span>
-      <span class="input-actual-score form-control form-control-sm correct-odds-input">Home: <b>{{correctOddsHomeOver}}</b>, Away: <b>{{correctOddsAwayUnder}}</b></span>
-    </div>
-  </div>

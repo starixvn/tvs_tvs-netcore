@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
+  standalone: true,
   selector: 'issue-type',
   templateUrl: './issue-type.component.html',
   styleUrls: ['./issue-type.component.scss']

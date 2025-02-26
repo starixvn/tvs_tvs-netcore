@@ -15,7 +15,6 @@ import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { SqlResult } from '../../../../utility/models/result';
 import { CommonService } from '../../../../utility/services/common.service';
-import { AppService } from '../../app.service';
 import { GetTicketsQuery } from '../../models/get-tickets.query';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { VoidMatch } from '../../models/void-match.model';
@@ -23,6 +22,7 @@ import { TicketsService } from '../../services/tickets.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { TemplateMessageService } from './template-message.service';
 import { VoidPageService } from './void-page.service';
+import { TestBed } from '@angular/core/testing';
 
 class Helper {
   static readonly fakeRequestId = 50121;
@@ -97,11 +97,11 @@ class Helper {
   };
 
   static readonly fakeIssueTypeList: IssueType[] = [
-    { issueTypeId: 1, issueTypeName: 'Danger Accepted'},
-    { issueTypeId: 11, issueTypeName: 'Abnormal Bet'},
-    { issueTypeId: 13, issueTypeName: 'Abnormal Account'},
-    { issueTypeId: 8, issueTypeName: 'Early Kick Off'},
-    { issueTypeId: 9, issueTypeName: 'Wrong Kick Off Time'}
+    { issueTypeId: 1, issueTypeName: 'Danger Accepted' },
+    { issueTypeId: 11, issueTypeName: 'Abnormal Bet' },
+    { issueTypeId: 13, issueTypeName: 'Abnormal Account' },
+    { issueTypeId: 8, issueTypeName: 'Early Kick Off' },
+    { issueTypeId: 9, issueTypeName: 'Wrong Kick Off Time' }
   ];
   static readonly fakeSubIssueTypeList: SubIssueType[] = [
     {
@@ -142,31 +142,38 @@ class Helper {
 }
 
 describe('VoidPageService', () => {
-  let commonService: CommonService;
-  let appService: AppService;
-  let ticketsService: TicketsService;
-  let templateMessageService: TemplateMessageService;
+  let commonService: jest.Mocked<CommonService>;
+  let ticketsService: jest.Mocked<TicketsService>;
+  let templateMessageService: jest.Mocked<TemplateMessageService>;
   let voidPageService: VoidPageService;
 
   beforeEach(() => {
-    appService = new AppService(null);
-    ticketsService = new TicketsService(null);
-    templateMessageService = new TemplateMessageService(null);
-    commonService = new CommonService(null);
-    voidPageService = new VoidPageService(commonService, appService, ticketsService, templateMessageService);
+    TestBed.configureTestingModule({
+      providers: [
+        VoidPageService,
+        {
+          provide: CommonService, useValue: {
+            getIssueTypes: jest.fn().mockReturnValue(Helper.fakeIssueTypesModel), getLogInfo: jest.fn(),
+            getMatch: jest.fn(), getVoidedReason: jest.fn().mockResolvedValue({ reasonEnglish: "Void" } as VoidedReason)
+          }
+        },
+        { provide: TicketsService, useValue: { initTicketQuery: jest.fn(), getVoidTicketsMini: jest.fn() } },
+        { provide: TemplateMessageService, useValue: { getTemplateValue: jest.fn().mockResolvedValue(new TemplateValue()) } }
+      ]
+    });
+    ticketsService = TestBed.inject(TicketsService) as jest.Mocked<TicketsService>;
+    commonService = TestBed.inject(CommonService) as jest.Mocked<CommonService>;
+    templateMessageService = TestBed.inject(TemplateMessageService) as jest.Mocked<TemplateMessageService>;
+    voidPageService = TestBed.inject(VoidPageService);
   });
 
   it('#getIssueTypes should return expected model', async () => {
-    // Arrange
-    const issueTypesModel = new IssueTypesModel();
-    const spyGetIssueTypes = jest.spyOn(commonService, 'getIssueTypes').mockImplementation(() => Promise.resolve(issueTypesModel));
-
-    // Action
+    // Arrange & Action
     const result = await voidPageService.getIssueTypes();
 
     // Assert
-    expect(spyGetIssueTypes).toHaveBeenCalledTimes(1);
-    expect(result).toStrictEqual(issueTypesModel);
+    expect(commonService.getIssueTypes).toHaveBeenCalledTimes(1);
+    expect(result).toStrictEqual(Helper.fakeIssueTypesModel);
   });
 
   it('#getBasicVoidMatchesData should return call expected function', async () => {
@@ -180,7 +187,6 @@ describe('VoidPageService', () => {
     const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
     fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
     fakeRequestDetailViewModel.dangerAcceptedModels = [dangerAcceptedModel];
-    const spyGetMatch = jest.spyOn(commonService, 'getMatch').mockImplementation(() => Promise.resolve(new MatchModel()));
 
     voidPageService['getAllLogInfo'] = jest.fn().mockImplementation(() => [getLogInfoModel]);
     voidPageService['getSubIssueTypeModel'] = jest.fn();
@@ -190,7 +196,7 @@ describe('VoidPageService', () => {
     const result = await voidPageService.getBasicVoidMatchesData(null, fakeRequestDetailViewModel, new PrimitiveProperty());
 
     // Assert
-    expect(spyGetMatch).toHaveBeenCalledTimes(1);
+    expect(commonService.getMatch).toHaveBeenCalledTimes(1);
     expect(voidPageService['getAllLogInfo']).toHaveBeenCalledTimes(1);
     expect(voidPageService['getSubIssueTypeModel']).toHaveBeenCalledTimes(1);
     expect(voidPageService['getDisplayIssueTypeName']).toHaveBeenCalledTimes(1);
@@ -202,14 +208,12 @@ describe('VoidPageService', () => {
     // Arrange
     const spyInitTicketQuery = jest.spyOn(ticketsService, 'initTicketQuery').mockImplementation(() => new GetTicketsQuery());
     const spyGetVoidTicketsMini = jest.spyOn(ticketsService, 'getVoidTicketsMini').mockImplementation(() => Promise.resolve(new TicketsModel()));
-    const spyGetTemplateValue = jest.spyOn(templateMessageService, 'getTemplateValue').mockImplementation(() => new TemplateValue());
     const ISSUE_TYPE_ABNORMAL_ACCOUNT = IssueTypeConstant.ABNORMAL_ACCOUNT;
     const ISSUE_TYPE_DANGER_ACCEPTED = IssueTypeConstant.DANGER_ACCEPTED;
     const issueTypeIds = [ISSUE_TYPE_ABNORMAL_ACCOUNT, ISSUE_TYPE_DANGER_ACCEPTED];
-    commonService.getVoidedReason = jest.fn();
 
     // Action
-    issueTypeIds.forEach( async issueTypeId => {
+    issueTypeIds.forEach(async issueTypeId => {
       const fakeRequestDetailViewModel = _.cloneDeep(Helper.fakeRequestDetailViewModel);
       fakeRequestDetailViewModel.request.issueTypeId = Number(issueTypeId);
       await voidPageService.loadUnderneathVoidMatchesData([Helper.fakeVoidMatch], fakeRequestDetailViewModel);
@@ -217,7 +221,7 @@ describe('VoidPageService', () => {
       // Assert
       expect(spyInitTicketQuery).toHaveBeenCalledTimes(2);
       expect(spyGetVoidTicketsMini).toHaveBeenCalledTimes(2);
-      expect(spyGetTemplateValue).toHaveBeenCalledTimes(2);
+      expect(templateMessageService.getTemplateValue).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -255,7 +259,7 @@ describe('VoidPageService', () => {
       getLogInfoModels: getLogInfoModels,
       transInfoAddRequestModel: new TransInfoAddRequestModel()
     };
-    const spyGetLogInfo = jest.spyOn(commonService, 'getLogInfo').mockImplementation(() => Promise.resolve(viewModel));
+    commonService.getLogInfo = jest.fn().mockResolvedValue(viewModel);
     [
       IssueTypeConstant.DANGER_ACCEPTED,
       IssueTypeConstant.WRONG_HDP,
@@ -269,7 +273,7 @@ describe('VoidPageService', () => {
       const result = await voidPageService['getAllLogInfo'](fakeRequestDetailViewModel, new PrimitiveProperty());
 
       // Assert
-      expect(spyGetLogInfo).toHaveBeenCalled();
+      expect(commonService.getLogInfo).toHaveBeenCalled();
       expect(result).toStrictEqual(getLogInfoModels);
     });
   });
@@ -278,6 +282,7 @@ describe('VoidPageService', () => {
     // Arrange
     const issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
     const issueTypes = Helper.fakeIssueTypesModel;
+
     // Action
     const result = voidPageService['getSubIssueTypeModel'](issueTypeId, issueTypes);
 
@@ -290,6 +295,7 @@ describe('VoidPageService', () => {
     const issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
     const subIssueTypeModel = Helper.fakeSubIssueTypeList;
     const issueTypes = Helper.fakeIssueTypesModel;
+
     // Action
     const result = voidPageService['getDisplayIssueTypeName'](issueTypeId, subIssueTypeModel[0], issueTypes);
 
@@ -303,6 +309,7 @@ describe('VoidPageService', () => {
     const subIssueTypeModel = Helper.fakeSubIssueTypeList[0];
     subIssueTypeModel.subIssueTypeName = 'Abnormal Account';
     const issueTypes = Helper.fakeIssueTypesModel;
+
     // Action
     const result = voidPageService['getDisplayIssueTypeName'](issueTypeId, subIssueTypeModel, issueTypes);
 
@@ -314,8 +321,6 @@ describe('VoidPageService', () => {
     // Arrange
     const wrongOuModelHasHomeFavorite = new WrongHdpModel();
     wrongOuModelHasHomeFavorite.homeFavorite = '12';
-    const mockCommonService = new CommonService(null);
-    const mockVoidPageService = new VoidPageService(mockCommonService, null, null, null);
     [
       IssueTypeConstant.WRONG_HDP,
       IssueTypeConstant.WRONG_1ST_HDP
@@ -324,7 +329,7 @@ describe('VoidPageService', () => {
       requestDetail.wrongHdpModels = [new WrongHdpModel(), wrongOuModelHasHomeFavorite];
 
       // Action
-      const actual = mockVoidPageService['initBasicRequestInfo'](x, requestDetail);
+      const actual = voidPageService['initBasicRequestInfo'](x, requestDetail);
 
       // Assert
       expect(actual).toBeDefined();
@@ -333,8 +338,6 @@ describe('VoidPageService', () => {
 
   it('#initBasicRequestInfo should return expected when isWrongOU', async () => {
     // Arrange
-    const mockCommonService = new CommonService(null);
-    const mockVoidPageService = new VoidPageService(mockCommonService, null, null, null);
     [
       IssueTypeConstant.WRONG_OU,
       IssueTypeConstant.WRONG_1ST_OU
@@ -343,7 +346,7 @@ describe('VoidPageService', () => {
       requestDetail.wrongOuModels = [new WrongOuModel()];
 
       // Action
-      const actual = mockVoidPageService['initBasicRequestInfo'](x, requestDetail);
+      const actual = voidPageService['initBasicRequestInfo'](x, requestDetail);
 
       // Assert
       expect(actual).toBeDefined();
@@ -352,12 +355,10 @@ describe('VoidPageService', () => {
 
   it('#initBasicRequestInfo should return []', async () => {
     // Arrange
-    const mockCommonService = new CommonService(null);
-    const mockVoidPageService = new VoidPageService(mockCommonService, null, null, null);
     const requestDetail = new RequestDetailViewModel();
 
     // Action
-    const actual = mockVoidPageService['initBasicRequestInfo']('113123', requestDetail);
+    const actual = voidPageService['initBasicRequestInfo']('113123', requestDetail);
 
     // Assert
     expect(actual.length).toBe(0);

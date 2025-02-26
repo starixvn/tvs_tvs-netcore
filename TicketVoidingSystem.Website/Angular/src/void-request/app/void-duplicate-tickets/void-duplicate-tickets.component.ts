@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -11,11 +11,20 @@ import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
 import { VoidPageDuplicateTicketsModel } from './models/void-page-duplicate-tickets.model';
 import { VoidPageService } from './services/void-page.service';
+import { CommonModule } from '@angular/common';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
+import { PasswordAreaComponent } from '../password-area/password-area.component';
+import { TicketsListComponent } from '../tickets-list/tickets-list.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 
 @Component({
+  standalone: true,
   selector: 'void-duplicate-tickets',
   templateUrl: './void-duplicate-tickets.component.html',
-  styleUrls: ['./void-duplicate-tickets.component.scss']
+  styleUrls: ['./void-duplicate-tickets.component.scss'],
+  imports: [CommonModule, LicenseeAffectedListComponent, TicketsListComponent, MessageAreaComponent,
+    PasswordAreaComponent, TooltipComponent],
+    providers: [VoidPageService]
 })
 export class VoidDuplicateTicketsComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
@@ -26,14 +35,15 @@ export class VoidDuplicateTicketsComponent implements OnInit {
   public issueTypes: IssueTypesModel;
   private readonly afterLoadUnderneathDataSubscription: Subscription;
   public tooltip = new Tooltip();
-  constructor(
-    private readonly element: ElementRef,
-    private readonly ticketsService: TicketsService,
-    private readonly voidPageService: VoidPageService,
-    private readonly voidPageCommonService: VoidPageCommonService
-  ) {
+
+  voidPageService = inject(VoidPageService);
+  ticketsService = inject(TicketsService);
+  voidPageCommonService = inject(VoidPageCommonService);
+  element = inject(ElementRef);
+
+  constructor() {
     this.tooltip.element = this.element;
-   }
+  }
 
   async ngOnInit(): Promise<void> {
     this.primitiveProperty.isBlockUI = true;

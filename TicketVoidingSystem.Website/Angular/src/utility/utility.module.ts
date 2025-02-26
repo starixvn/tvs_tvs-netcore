@@ -52,29 +52,28 @@ import { HttpService } from './services/http.service';
     BlockUiModule,
     BlockFullUiModule,
     RequestInfoModule,
-    SortingModule
-  ],
-  declarations: [
+    SortingModule,
     UsernamesComponent,
     MenuBarComponent,
-    AutoRefreshComponent,
     BaseTicketsListComponent,
+    ConfirmationComponent,
+    LogInfoTicketCountComponent,
+    LicenseeAffectedListComponent,
+    VoidReasonComponent,
+    AutoRefreshComponent
+  ],
+  declarations: [
     BetTypesComponent,
     BetTypesVirtualSportComponent,
-    ConfirmationComponent,
     MatchDetailComponent,
     MessagesResultComponent,
     NotificationComponent,
     NumbersOnlyDirective,
     OnlyNumberDirective,
     BetIdsComponent,
-    AutoRefreshComponent,
-    LogInfoTicketCountComponent,
-    LicenseeAffectedListComponent,
     EventLeagueComponent,
     LogInfoMessageComponent,
     LicenseesComponent,
-    VoidReasonComponent
   ],
   exports: [
     BaseTicketsListComponent,

@@ -1,13 +1,18 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Product } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { BetType, GroupBetType, GroupBetTypesModel } from './group-bettypes.model';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { TooltipComponent } from '../../tooltip/tooltip.component';
 
 @Component({
+  standalone: true,
   selector: 'group-bettypes',
   templateUrl: './group-bettypes.component.html',
-  styleUrls: ['./group-bettypes.component.scss']
+  styleUrls: ['./group-bettypes.component.scss'],
+  imports: [CommonModule, FormsModule, TooltipComponent]
 })
 
 export class GroupBetTypesComponent implements OnInit, OnChanges {
@@ -20,8 +25,9 @@ export class GroupBetTypesComponent implements OnInit, OnChanges {
   @Input() scroll: boolean;
   display: boolean;
   collapse = true;
+  element = inject(ElementRef);
 
-  constructor(private readonly element: ElementRef) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -29,8 +35,10 @@ export class GroupBetTypesComponent implements OnInit, OnChanges {
     this.model = new GroupBetTypesModel(new Array<GroupBetType>(), false);
   }
 
-  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-    this.display = this.product === Product.SPORTS_BOOK;
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['product']) {
+      this.display = this.product === Product.SPORTS_BOOK;
+    }
   }
 
   displayGroup(groups: string[]) {

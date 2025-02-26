@@ -1,25 +1,22 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Message } from '../../../utility/components/template-message/messages/message';
 import { VoidedReason } from '../../../utility/models/reason.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable(
+  { providedIn: 'root' }
+)
 export class LogChangeContentService {
-
-  constructor(
-    private readonly commonService: CommonService
-  ) { }
+  commonService = inject(CommonService);
 
   async writeLog(requestId: number, messageAreaComponents: MessageAreaComponent[]): Promise<void> {
     messageAreaComponents.forEach(x => {
-      if(x.reasonComponent.initialReason.reasonEnglish !== x.voidReason.reasonEnglish) {
+      if (x.reasonComponent.initialReason.reasonEnglish !== x.voidReason.reasonEnglish) {
         this.writeLogEditVoidReason(requestId, x.reasonComponent.initialReason, x.voidReason);
       }
 
-      if(x.templateMessageComponent.initialMessage.contentEnglish !== x.templateMessageComponent.message.contentEnglish) {
+      if (x.templateMessageComponent.initialMessage.contentEnglish !== x.templateMessageComponent.message.contentEnglish) {
         this.writeLogEditVoidMessage(requestId, x.templateMessageComponent.initialMessage, x.templateMessageComponent.message);
       }
     });

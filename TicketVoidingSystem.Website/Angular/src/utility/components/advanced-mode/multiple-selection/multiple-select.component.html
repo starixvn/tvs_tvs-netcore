@@ -6,7 +6,7 @@
     <div class="show-tree-view" *ngIf="multipleSelect.items != undefined && dropdownToggle">
         <div class="dropdown-header" *ngIf="multipleSelect.showHeader">
             <label class="d-flex">
-                <input class="mr-1" type="checkbox" [(ngModel)]="multipleSelect.isCheckAll" [disabled]="multipleSelect.isDisabled"
+                <input class="me-1" type="checkbox" [(ngModel)]="multipleSelect.isCheckAll" [disabled]="multipleSelect.isDisabled"
                     (ngModelChange)="multipleSelect.checkAllItems(multipleSelect.isCheckAll);changeItems();" />
                 {{multipleSelect.checkAllCheckBoxText}}
             </label>

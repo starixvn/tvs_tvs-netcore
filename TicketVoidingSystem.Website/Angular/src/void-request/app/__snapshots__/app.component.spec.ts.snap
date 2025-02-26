@@ -1,25 +1,121 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AppComponent AppComponent should init match snapshot 1`] = `
-<ng-component
-  __ngContext__={[Function LRootView]}
+<app-root
+  appService={[Function AppService]}
+  isBlockUI={[Function Boolean]}
+  isReadyRender="false"
+  requestDetail={[Function RequestDetailViewModel]}
+  signalRService={[Function SignalRService]}
 >
-  <app-root>
-    <menu-bar />
+  <menu-bar>
     <div
-      class="title"
-    >
-       Home / Manage Request / Void Request - 
-    </div>
-    <div
-      class="body"
+      class="menu-bar"
     >
       <div
-        class="mg-10 no-data"
+        class="header-user-info user-info-background"
       >
-         Loading... 
+        <a
+          class="logo"
+          href="?ref=logo"
+        >
+        </a>
+        <div
+          class="user-info"
+        >
+          <div
+            class="dropdown"
+          >
+            <div
+              class="dropdown-user-info"
+            >
+              <i
+                class="fa-solid fa-user"
+              />
+                Welcome,  
+              <span
+                class="user-name"
+              >
+              </span>
+              <i
+                class="fa-solid fa-sort-down"
+              />
+            </div>
+            <div
+              class="dropdown-content"
+            >
+              <li>
+                <a
+                  class="nav-link"
+                  href="Auth/ChangePassword"
+                >
+                  Change Password
+                </a>
+              </li>
+              <li>
+                <a
+                  class="nav-link"
+                  href="Auth/LogOut"
+                >
+                  Sign Out
+                </a>
+              </li>
+            </div>
+          </div>
+        </div>
       </div>
+      <nav
+        class="nav-tvs-expand navbar navbar-expand bg-header-tvs"
+      >
+        <div
+          class="container-fluid"
+        >
+          <div
+            class="collapse navbar-collapse"
+            id="main_nav"
+          >
+            <ul
+              class="navbar-nav"
+            >
+            </ul>
+          </div>
+        </div>
+      </nav>
     </div>
-  </app-root>
-</ng-component>
+  </menu-bar><div
+    class="title"
+  >
+     Home / Manage Request / Void Request - 
+  </div><div
+    class="body"
+  >
+    <div
+      class="mg-10 no-data"
+    >
+       Loading... 
+    </div>
+    <block-ui>
+      <div
+        class="block-ui-container"
+      >
+        <div
+          class="block-ui-overlay"
+        />
+        <div
+          aria-atomic="true"
+          aria-live="assertive"
+          class="block-ui-message-container"
+        >
+          <div
+            class="block-ui-message"
+          >
+            <div
+              class="loading"
+            />
+          </div>
+        </div>
+      </div>
+    </block-ui>
+  </div>
+</app-root>
 `;

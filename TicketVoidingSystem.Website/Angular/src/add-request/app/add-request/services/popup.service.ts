@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { ModalType } from '../../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { LABELS } from '../../../../utility/constants/labels';
@@ -7,11 +7,8 @@ import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestQuery } from '../models/add-request.query';
 import { AddRequestResultModel } from '../models/request.model';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class PopupService {
-  constructor(private readonly modalService: ModalService) { }
+  modalService = inject(ModalService);
 
   showError(messageContent: string, onYesCallback?: () => void) {
     this.modalService.open(
@@ -53,7 +50,7 @@ export class PopupService {
 
   showSaveRequestError(query: AddRequestQuery, addResult: Result<AddRequestResultModel>, titleMessage: string) {
     const markTicketsContent = this.getMarkTicketsContent(query, addResult.data);
-    
+
     this.modalService.open(
       {
         title: titleMessage,

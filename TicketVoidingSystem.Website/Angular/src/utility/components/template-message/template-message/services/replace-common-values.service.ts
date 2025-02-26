@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import moment from 'moment';
 import { Message } from '../../messages/message';
 import { FormatDateTime, TemplateContentConst, TemplateReplace } from '../template.const';
 import { TemplateContent, TemplateValue } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ReplaceCommonValuesService {
-
-  constructor(private readonly replaceMessageService: ReplaceMessageService) { }
+  replaceMessageService = inject(ReplaceMessageService);
 
   public replaceSportType(templateValue: TemplateValue, outputMessage: Message): void {
     this.replaceMessageService.replaceEachLanguage(outputMessage, TemplateReplace.SPORT_TYPE, templateValue.sportType);

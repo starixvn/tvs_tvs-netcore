@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateCustomParserFormatter } from '../../../utility/config/ngb-datepicker-format';
 import { ToolTipModule } from './../tooltip/tooltip.module';
@@ -14,7 +13,7 @@ import { TimeDirective } from './date-time/time.directive';
 
 
 @NgModule({
-  imports: [BrowserModule, CommonModule, FormsModule, HttpClientModule, NgbModule, ToolTipModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, NgbModule, ToolTipModule],
   declarations: [DateFullTimeComponent, DateTimeComponent, FullTimeDirective, TimeDirective, DateFullTimeNewComponent, DateFullTimeNewComponent],
   exports: [DateFullTimeComponent, DateTimeComponent, FullTimeDirective, TimeDirective, DateFullTimeNewComponent],
   providers: [{ provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]

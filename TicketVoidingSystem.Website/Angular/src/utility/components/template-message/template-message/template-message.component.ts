@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChange, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnChanges, SimpleChange, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { AbnormalFilterBy, FunctionConst } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
@@ -6,7 +6,6 @@ import { EventType } from '../../../../utility/constants/sport.constant';
 import { HttpService } from '../../../../utility/services/http.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { Message } from '../messages/message';
-import { MessagesComponent } from './../messages/messages.component';
 import { ReplaceAIOMessageService } from './services/replace-aio-message.serivce';
 import { ReplaceCommonValuesService } from './services/replace-common-values.service';
 import { ReplaceEventTypeService } from './services/replace-event-type.service';
@@ -17,6 +16,8 @@ import { TemplateInputsForTVSService } from './services/template-inputs-for-tvs.
 import { TemplateInputsService } from './services/template-inputs.service';
 import { TemplateSetting, TemplateSettings } from './template-setting.model';
 import { InputText, TemplateModel, TemplateValue } from './template.model';
+import { FormsModule } from '@angular/forms';
+import { MessagesComponent } from '../messages/messages.component';
 
 const MESSAGE_TEMPLATE_ID_8 = 8;
 const MESSAGE_TEMPLATE_ID_9 = 9;
@@ -33,9 +34,11 @@ const MESSAGE_TEMPLATE_ID_38 = 38;
 const MESSAGE_TEMPLATE_ID_65 = 65;
 
 @Component({
+  standalone: true,
   selector: 'template-message',
   templateUrl: './template-message.component.html',
-  styleUrls: ['./template-message.component.scss']
+  styleUrls: ['./template-message.component.scss'],
+  imports: [FormsModule, MessagesComponent],
 })
 export class TemplateMessageComponent implements OnChanges {
   @Input() id: number;
@@ -76,16 +79,15 @@ export class TemplateMessageComponent implements OnChanges {
 
   public initialize: boolean;
 
-  constructor(private readonly httpService: HttpService,
-    private readonly replaceEventTypeService: ReplaceEventTypeService,
-    private readonly replaceCommonValuesService: ReplaceCommonValuesService,
-    private readonly replacePlacedFromTimeRangeService: ReplacePlacedFromTimeRangeService,
-    private readonly replaceScoreService: ReplaceScoreService,
-    private readonly replaceAIOMessageService: ReplaceAIOMessageService,
-    private readonly replaceSpecialBetTypeService: ReplaceSpecialBetTypeService,
-    private readonly templateInputsService: TemplateInputsService,
-    private readonly templateInputsServiceForTVS: TemplateInputsForTVSService
-  ) { }
+  httpService = inject(HttpService);
+  replaceEventTypeService = inject(ReplaceEventTypeService);
+  replaceCommonValuesService = inject(ReplaceCommonValuesService);
+  replacePlacedFromTimeRangeService = inject(ReplacePlacedFromTimeRangeService);
+  replaceScoreService = inject(ReplaceScoreService);
+  replaceAIOMessageService = inject(ReplaceAIOMessageService);
+  replaceSpecialBetTypeService = inject(ReplaceSpecialBetTypeService);
+  templateInputsService = inject(TemplateInputsService);
+  templateInputsServiceForTVS = inject(TemplateInputsForTVSService);
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     await this.init();
@@ -182,7 +184,7 @@ export class TemplateMessageComponent implements OnChanges {
     this.message.contentNewChineseSimplified = this.selectedTemplated.msgChineseNewSimplified;
   }
 
-  private replaceEventDetails(): void  {
+  private replaceEventDetails(): void {
     this.replaceEventTypeService.execute(this.value, this.issueTypeId, this.subIssueTypeId, this.message);
     this.replaceCommonValuesService.replaceSportType(this.value, this.message);
     this.replaceCommonValuesService.replaceHomeTeamName(this.value, this.message);
@@ -196,7 +198,7 @@ export class TemplateMessageComponent implements OnChanges {
     this.replacePlacedFromTimeRangeService.execute(this.value, this.message, this.selectedTemplated.templateId);
   }
 
-  private replaceFromInputs(): void  {
+  private replaceFromInputs(): void {
     if (this.isTVSVoidPage() || this.isTVSAddOrEditPage()) {
       this.templateInputsServiceForTVS.replaceInputsByIssueType(this.issueTypeId, this.subIssueTypeId, this.value, this.message, this.selectedTemplated);
     } else {
@@ -209,7 +211,7 @@ export class TemplateMessageComponent implements OnChanges {
     this.replaceScoreService.execute(this.value, this.message);
     this.replaceAIOMessageService.execute(this.isVoidSinglePage(), this.value, this.message);
     this.replaceSpecialBetTypeService.execute(this.issueTypeUpdateSpecialBetTypeTvs(), this.issueTypeUpdateSpecialBetTypeVoidSingleBet(), this.value, this.message);
- }
+  }
 
   issueTypeUpdateSpecialBetTypeTvs(): boolean {
     return this.isTVSVoidPage() && (StaticService.isOtherIssues(this.issueTypeId)

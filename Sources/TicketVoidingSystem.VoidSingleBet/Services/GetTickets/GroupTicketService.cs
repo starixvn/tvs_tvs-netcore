@@ -1,4 +1,5 @@
-﻿using TicketVoidingSystem.Models;
+﻿using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.VoidSingleBet.Criteria;
 using TicketVoidingSystem.VoidSingleBet.Models;
@@ -35,11 +36,11 @@ public class GroupTicketServiceImp(
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
         if (creditParlayTickets.Any())
         {
-            groups.Add(new Group<GetTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+            groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
         if (depositParlayTickets.Any())
         {
-            groups.Add(new Group<GetTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+            groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }
 
         return groups;

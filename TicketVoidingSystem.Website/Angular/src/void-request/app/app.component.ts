@@ -1,28 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { StaticService } from '../../utility/services/static.service';
 import { AppService } from './app.service';
+import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
+import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
+import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
+import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
+import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
+import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.component';
+import { VoidWrongMarketOfferedComponent } from './void-wrong-market-offered/void-wrong-market-offered.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
+import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  imports: [VoidDangerAcceptedComponent, VoidOtherIssueComponent, VoidDuplicateTicketsComponent,
+    VoidNotParticipateComponent, VoidEarlyKickOffComponent, VoidAbnormalBetComponent,
+    VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiModule]
 })
 export class AppComponent implements OnInit {
   requestId: number;
   requestDetail = new RequestDetailViewModel();
   isBlockUI: boolean;
   remark: string[];
-
   private isReadyRender = false;
+  issueTypeId: number;
+  appService = inject(AppService);
+  signalRService = inject(SignalRService);
 
-  constructor(
-    private readonly appService: AppService,
-    private readonly signalRService: SignalRService
-  ) { }
-
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.isBlockUI = true;
     this.remark = await this.appService.getRemark();
     const url = window.location.href;
@@ -31,6 +41,7 @@ export class AppComponent implements OnInit {
     this.requestDetail = await this.appService.getRequestById(this.requestId);
     this.requestDetail.requestId = this.requestId;
     this.requestDetail.lastModifiedDate = (await this.appService.getLastModifiedDate(this.requestId)).lastModifiedDate;
+    this.issueTypeId = this.requestDetail.request?.issueTypeId;
     this.isReadyRender = true;
     this.isBlockUI = false;
     await this.signalRService.initializeConnection();
@@ -45,36 +56,37 @@ export class AppComponent implements OnInit {
   }
 
   isLikelyVoidDangerAccepted(): boolean {
-    return StaticService.isDangerAccepted(this.requestDetail.request?.issueTypeId)
-      || StaticService.isWrongOU(this.requestDetail.request?.issueTypeId)
-      || StaticService.isWrong1stOU(this.requestDetail.request?.issueTypeId)
-      || StaticService.isWrongHDP(this.requestDetail.request?.issueTypeId)
-      || StaticService.isRedCard(this.requestDetail.request?.issueTypeId)
-      || StaticService.isWrong1stHDP(this.requestDetail.request?.issueTypeId);
+    return StaticService.isDangerAccepted(this.issueTypeId)
+      || StaticService.isWrongOU(this.issueTypeId)
+      || StaticService.isWrong1stOU(this.issueTypeId)
+      || StaticService.isWrongHDP(this.issueTypeId)
+      || StaticService.isRedCard(this.issueTypeId)
+      || StaticService.isWrong1stHDP(this.issueTypeId);
   }
 
   isShowVoidDuplicateTickets(): boolean {
-    return StaticService.isDuplicateTickets(this.requestDetail.request?.issueTypeId);
+    return StaticService.isDuplicateTickets(this.issueTypeId);
   }
 
   isLikelyVoidNotParticipate(): boolean {
-    return StaticService.isNotParticipate(this.requestDetail.request?.issueTypeId)
-      || StaticService.isWrongOddsSportsBook(this.requestDetail.request?.issueTypeId)
-      || StaticService.isTechnicalError(this.requestDetail.request?.issueTypeId)
-      || StaticService.isOtherIssues(this.requestDetail.request?.issueTypeId);
+    return StaticService.isNotParticipate(this.issueTypeId)
+      || StaticService.isWrongOddsSportsBook(this.issueTypeId)
+      || StaticService.isTechnicalError(this.issueTypeId)
+      || StaticService.isOtherIssues(this.issueTypeId);
   }
 
   isLikelyVoidEarlyKickOff(): boolean {
-    return StaticService.isEarlyKickOff(this.requestDetail.request?.issueTypeId) || StaticService.isWrongKickOff(this.requestDetail.request?.issueTypeId)
-      || StaticService.isWrongOfferedName(this.requestDetail.request?.issueTypeId);
+    return StaticService.isEarlyKickOff(this.issueTypeId)
+      || StaticService.isWrongKickOff(this.issueTypeId)
+      || StaticService.isWrongOfferedName(this.issueTypeId);
   }
 
   isShowVoidAbnormalBet(): boolean {
-    return StaticService.isAbnormalBet(this.requestDetail.request?.issueTypeId);
+    return StaticService.isAbnormalBet(this.issueTypeId);
   }
 
   isShowVoidWrongMarketOffered(): boolean {
-    return StaticService.isWrongMarketOffered(this.requestDetail.request?.issueTypeId);
+    return StaticService.isWrongMarketOffered(this.issueTypeId);
   }
 
   isShowVoidOtherIssue(): boolean {

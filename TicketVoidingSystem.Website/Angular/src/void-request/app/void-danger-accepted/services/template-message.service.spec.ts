@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
@@ -13,6 +14,7 @@ import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidMatch } from '../../models/void-match.model';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { TemplateMessageService } from './template-message.service';
+import _ from 'lodash';
 
 class Helper {
   static readonly fakeRequestId = 50121;
@@ -104,18 +106,25 @@ class Helper {
 
 describe('TemplateMessageService', () => {
   let templateMessageService: TemplateMessageService;
-  let templateService: TemplateService;
 
   beforeEach(() => {
-    templateService = new TemplateService();
-    templateMessageService = new TemplateMessageService(templateService);
+    TestBed.configureTestingModule({
+      providers: [
+        TemplateMessageService,
+        { provide: TemplateService, useValue: { initializeTemplateValue: jest.fn().mockReturnValue(Helper.fakeTemplateValue) } }
+      ]
+    });
+    templateMessageService = TestBed.inject(TemplateMessageService);
   });
 
   it('#getTemplateValue should return correct model for request', async () => {
     // Arrange
     const voidMatch = new VoidMatch();
     voidMatch.matchModel = new MatchModel();
-    voidMatch.voidTicketsMini = new TicketsModel();
+    voidMatch.voidTicketsMini = {
+      groupPHAffected: 4, isHasSettledTicket: true, fromTime: new Date(), toTime: new Date(),
+      total: 2, isAllNonLiveTickets: true
+    } as TicketsModel;
     voidMatch.logInfoDetail = new LogInfoDetail();
     voidMatch.logInfoDetail.liveScores = '1-9';
     const requestDetail = Helper.fakeRequestDetailViewModel;
@@ -123,10 +132,6 @@ describe('TemplateMessageService', () => {
     requestDetail.wrongScoreModels = [new WrongScoreModel()];
     requestDetail.wrongHdpModels = [new WrongHdpModel()];
     requestDetail.wrongOuModels = [new WrongOuModel()];
-    const mockGetTemplateValue = jest.fn().mockImplementation(() => Helper.fakeTemplateValue);
-    templateService.initializeTemplateValue = mockGetTemplateValue;
-
-    const mockTemplateMessageService = new TemplateMessageService(templateService);
     [
       IssueTypeConstant.DANGER_ACCEPTED,
       IssueTypeConstant.WRONG_SCORE,
@@ -137,26 +142,25 @@ describe('TemplateMessageService', () => {
     ].forEach(x => {
       requestDetail.request.issueTypeId = Number(x);
       // Action
-      const result = mockTemplateMessageService.getTemplateValue(voidMatch, requestDetail);
+      const result = templateMessageService.getTemplateValue(voidMatch, requestDetail);
 
       // Assert
-      expect(result).toStrictEqual(Helper.fakeTemplateValue);
+      expect(result.groupPHAffected).toBe(4);
+      expect(result.isCheckedEarlyEvent).toBeFalsy();
+      expect(result.totalTickets).toBe(2);
+      expect(result.checkSettled).toBeTruthy();
     });
-
   });
 
   it('#getTemplateValue should return correct model for other request abnormal bet', async () => {
     // Arrange
     const requestDetail = Helper.fakeRequestDetailViewModel;
     requestDetail.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
-    const mockGetTemplateValue = jest.fn().mockImplementation(() => Helper.fakeTemplateValue);
-    templateService.initializeTemplateValue = mockGetTemplateValue;
     const voidMatch = new VoidMatch();
     voidMatch.voidTicketsMini = new TicketsModel();
-    const mockTemplateMessageService = new TemplateMessageService(templateService);
 
     // Action
-    const result = mockTemplateMessageService.getTemplateValue(voidMatch, requestDetail);
+    const result = templateMessageService.getTemplateValue(voidMatch, requestDetail);
 
     // Assert
     expect(result).toStrictEqual(Helper.fakeTemplateValue);

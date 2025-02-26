@@ -1,10 +1,13 @@
 <div class="other-sports">
     <ng-container>
       Affected Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
-      <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red"
-      [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
-      </span>,&nbsp;
+      @if(isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)){
+        <span class="text-red" [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
+        </span>,&nbsp;
+      }
       Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong>&nbsp;
-      <span *ngIf="!isVoided" class="ticket-details" (click)="clickOpenTicketDetails()">Details</span>
+      @if(!isVoided){
+        <span class="ticket-details" (click)="clickOpenTicketDetails()">Details</span>
+      }
     </ng-container>       
 </div>

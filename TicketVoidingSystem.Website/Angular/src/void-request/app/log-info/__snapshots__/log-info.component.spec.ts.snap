@@ -1,44 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LogInfoComponent LogInfoComponent init should match snapshot 1`] = `
-<ng-component
-  __ngContext__={[Function LRootView]}
+exports[`LogInfoComponent #LogInfoComponent init should match snapshot 1`] = `
+<log-info
+  acceptTypeName=""
+  logInfoDetails={[Function Array]}
 >
-  <log-info>
-    <div
-      class="row no-gutters mt-2"
+  <div
+    class="row no-gutters mt-2"
+  >
+    <label
+      class="col-form-label col-form-label-sm log-info-label me-3"
     >
-      <label
-        class="col-form-label col-form-label-sm log-info-label mr-3"
-      >
-        Log Info 
-      </label>
-      <div
-        class="col-sm-6 pd-top-8 remark-content"
-      >
-        <div
-          class="log-info p-2"
-        >
-          <span>
-            Live Score: 
-            <strong>
-              0 - 0
-            </strong>
-            .
-          </span>
-           Void time (GMT-4): 
-          <strong>
-            2020/11/06 12:00:00.000 AM - 2020/11/06 12:00:00.000 AM
-          </strong>
-          <br />
-          <ticket-count-other-sports />
-        </div>
-      </div>
-    </div>
+      Log Info 
+    </label>
     <div
-      class="row no-gutters mt-2"
+      class="col-sm-6 pd-top-8 remark-content"
     >
     </div>
-  </log-info>
-</ng-component>
+  </div><div
+    class="row no-gutters mt-2"
+  >
+  </div>
+</log-info>
+`;
+
+exports[`LogInfoComponent LogInfoComponent init should match snapshot 1`] = `
+<log-info
+  acceptTypeName=""
+  logInfoDetails={[Function Array]}
+>
+  <div
+    class="row no-gutters mt-2"
+  >
+    <label
+      class="col-form-label col-form-label-sm log-info-label me-3"
+    >
+      Log Info 
+    </label>
+    <div
+      class="col-sm-6 pd-top-8 remark-content"
+    >
+    </div>
+  </div><div
+    class="row no-gutters mt-2"
+  >
+  </div>
+</log-info>
 `;

@@ -67,6 +67,7 @@ export class TemplateValue {
   betTypeId?: string;
   hdpValues?: string;
   correctOdds?: string;
+  groupBetTypeId?: number;
   // for wrong offered name
   wrongName?: string;
   actualName?: string;

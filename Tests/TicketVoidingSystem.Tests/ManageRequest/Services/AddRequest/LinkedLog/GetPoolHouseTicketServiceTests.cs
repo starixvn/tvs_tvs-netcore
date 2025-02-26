@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using NSubstitute;
+﻿using NSubstitute;
+using System.Collections.Generic;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -70,8 +70,8 @@ public class GetPoolHouseTicketServiceTests
         // Arrange
         var originTickets = new List<GetTicketModel>
         {
-            new() { IsMixParlay = true, GroupName = "Credit (Parlay)" },
-            new() { IsMixParlay = true, GroupName = "Deposit (Parlay)", IsDeposit = true},
+            new() { IsMixParlay = true, GroupName = GroupTicket.Credit },
+            new() { IsMixParlay = true, GroupName = GroupTicket.Deposit, IsDeposit = true},
             new() { IsMixParlay = true, GroupName = "1" },
             new() { IsMixParlay = false, GroupName = "Others" },
             new() { IsMixParlay = false, GroupName = "1" }
@@ -91,11 +91,11 @@ public class GetPoolHouseTicketServiceTests
             new() { Name = "1", Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 2 },
             new()
             {
-                Name = "Credit (Parlay)", Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 1
+                Name = GroupTicket.Credit, Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 1
             },
             new()
             {
-                Name = "Deposit (Parlay)", Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 1
+                Name = GroupTicket.Deposit, Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 1
             },
             new() { Name = "Others", Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 1 }
         };

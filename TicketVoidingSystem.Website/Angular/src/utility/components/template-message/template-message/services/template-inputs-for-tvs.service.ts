@@ -10,7 +10,9 @@ import { TemplateWrongOfferedService } from './template-wrong-offfered-name.serv
 import { TemplateWrongScoreService } from './template-wrong-score.service';
 import { TemplateInputsService } from './template-inputs.service';
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class TemplateInputsForTVSService {
 
   constructor(

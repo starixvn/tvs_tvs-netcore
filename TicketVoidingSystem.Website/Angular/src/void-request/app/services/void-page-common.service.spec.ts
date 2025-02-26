@@ -9,22 +9,33 @@ import { LoadDataService } from './load-data.service';
 import { PopupService } from './popup.service';
 import { TicketsService } from './tickets.service';
 import { VoidPageCommonService } from './void-page-common.service';
+import { TestBed } from '@angular/core/testing';
 
 describe('VoidPageCommonService', () => {
-  let clipboardService: ClipboardService;
-  let popupService: PopupService;
-  let ticketsService: TicketsService;
-  let checkRequestService: CheckRequestService;
-  let loadDataService: LoadDataService;
+  let clipboardService: jest.Mocked<ClipboardService>;
+  let popupService: jest.Mocked<PopupService>;
+  let ticketsService: jest.Mocked<TicketsService>;
+  let checkRequestService: jest.Mocked<CheckRequestService>;
+  let loadDataService: jest.Mocked<LoadDataService>;
   let voidPageCommonService: VoidPageCommonService;
 
   beforeEach(() => {
-    clipboardService = new ClipboardService(null, null, null);
-    popupService = new PopupService(null);
-    ticketsService = new TicketsService(null);
-    checkRequestService = new CheckRequestService(null, null);
-    loadDataService = new LoadDataService(null, null, null);
-    voidPageCommonService = new VoidPageCommonService(clipboardService, popupService, ticketsService, checkRequestService, loadDataService);
+    TestBed.configureTestingModule({
+      providers: [
+        VoidPageCommonService,
+        { provide: ClipboardService, useValue: { copyFromContent: jest.fn() } },
+        { provide: PopupService, useValue: { showWarningExportExcel: jest.fn() } },
+        { provide: TicketsService, useValue: { exportTicketsAsExcelFile: jest.fn() } },
+        { provide: CheckRequestService, useValue: { isRequestModified: jest.fn() } },
+        { provide: LoadDataService, useValue: { onClickShowVoidTickets: jest.fn(), checkLoadedFullDataBeforeVoid: jest.fn(), onClickShowTemplateMessage: jest.fn() } }
+      ]
+    });
+    clipboardService = TestBed.inject(ClipboardService) as jest.Mocked<ClipboardService>;
+    popupService = TestBed.inject(PopupService) as jest.Mocked<PopupService>;
+    ticketsService = TestBed.inject(TicketsService) as jest.Mocked<TicketsService>;
+    checkRequestService = TestBed.inject(CheckRequestService) as jest.Mocked<CheckRequestService>;
+    loadDataService = TestBed.inject(LoadDataService) as jest.Mocked<LoadDataService>;
+    voidPageCommonService = TestBed.inject(VoidPageCommonService);
   });
 
   it('#showWarningExportExcel should called #popupService.showWarningExportExcel', async () => {

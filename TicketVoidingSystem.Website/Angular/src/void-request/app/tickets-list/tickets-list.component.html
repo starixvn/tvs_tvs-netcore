@@ -1,29 +1,35 @@
 <div class="tickets-list" [blockUi]="isBlock">
-  <div class="title-tickets-list" *ngIf="model.groups !== undefined && model.groups.length > 0">
-    <div class="title-tickets-list-label">{{title}}</div>
-    <div class="title-tickets-list-toolbox">
-      <input type="button" class="title-tickets-list-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
+  @if (model.groups !== undefined && model.groups.length > 0) {
+    <div class="title-tickets-list">
+      <div class="title-tickets-list-label">{{title}}</div>
+      <div class="title-tickets-list-toolbox">
+        <input type="button" class="title-tickets-list-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
+      </div>
     </div>
-  </div>
+  }
   <div class="ticket-header">
     <table>
       <thead>
         <tr>
           <th scope="col" class="list-check-groups-input col-tb-1">
-            <div *ngIf="!isDisableCheckbox">
-              <div class="checkbox-dropdown-list">
+            @if (!isDisableCheckbox) {
+              <div>
+                <div class="checkbox-dropdown-list">
                 <span [ngClass]="{
                                     'icon-checkbox-none':model.iconCheckBox == 0,
                                     'icon-checkbox-any':model.iconCheckBox == 1,
                                     'icon-checkbox-all':model.iconCheckBox == 2}"
-                  (click)="model.checkGroups();changeTickets()">
-                </span>
+                    (click)="model.checkGroups();changeTickets()">
+                  </span>
+                </div>
+                <span class="icon-arrow-white-down" (click)="showListCheckGroup()"></span>
               </div>
-              <span class="icon-arrow-white-down" (click)="showListCheckGroup()"></span>
-            </div>
-            <div *ngIf="isDisableCheckbox" class="checkbox-dropdown-list">
-              <input type="checkbox" disabled [checked]="model.iconCheckBox == 2">
-            </div>
+            }
+            @if (isDisableCheckbox) {
+              <div class="checkbox-dropdown-list">
+                <input type="checkbox" disabled [checked]="model.iconCheckBox == 2">
+              </div>
+            }
           </th>
           <th scope="col" class="col-tb-2">
             <div>No</div>
@@ -70,95 +76,107 @@
   </div>
   <div class="ticket-content">
     <table>
-      <tbody *ngFor="let group of model.groups">
-        <tr>
-          <td class="col-tb-1">
-            <div>
+      @for (group of model.groups; track group) {
+        <tbody>
+          <tr>
+            <td class="col-tb-1">
+              <div>
               <input type="checkbox" [(ngModel)]="group.isCheckAll" (ngModelChange)="group.checkAllTickets();
                                                     model.changeIconCheckBox();
                                                     changeTickets()" [disabled]="group.isDisabled || isDisableCheckbox" />
-            </div>
-          </td>
-          <td [attr.colspan]="13" class="group-ticket" (click)="group.isExpanded = !group.isExpanded">
-            <span [ngClass]="{'icon-down':group.isExpanded, 'icon-right':!group.isExpanded}"></span>
-            {{group.name}} ({{group.displayTotalTickets}})
-          </td>
-        </tr>
-        <tr *ngFor="let ticket of group.tickets" [ngClass]="{'display-none':!group.isExpanded}">
-          <td class="col-tb-1">
-            <div>
+                </div>
+              </td>
+              <td [attr.colspan]="13" class="group-ticket" (click)="group.isExpanded = !group.isExpanded">
+                <span [ngClass]="{'icon-down':group.isExpanded, 'icon-right':!group.isExpanded}"></span>
+                {{group.name}} ({{group.displayTotalTickets}})
+              </td>
+            </tr>
+            @for (ticket of group.tickets; track ticket) {
+              <tr [ngClass]="{'display-none':!group.isExpanded}">
+                <td class="col-tb-1">
+                  <div>
               <input type="checkbox" [(ngModel)]="ticket.isChecked" (change)="group.changeTicketChecked(ticket);
                                              model.changeIconCheckBox();
                                              changeTickets()" [disabled]="ticket.isDisable || isDisableCheckbox" />
-            </div>
-          </td>
-          <td class="col-tb-2">
-            <div>{{ticket.no}}</div>
-          </td>
-          <td class="col-tb-3">
-            <div [class.betIdBorder]="ticket.isMarked" [innerHTML]="ticket.betId | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-4">
-            <div>{{ticket.transDate}}</div>
-          </td>
-          <td class="col-tb-5">
-            <div [innerHTML]="ticket.member | sanitizeHtml" title="{{ticket.member}}"></div>
-          </td>
-          <td class="col-tb-6">
-            <div [innerHTML]="ticket.betType | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-7">
-            <div [innerHTML]="ticket.odds | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-8">
-            <div [innerHTML]="ticket.stake | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-9">
-            <div>{{ticket.winLoss}}</div>
-          </td>
-          <td class="col-tb-10">
-            <div>{{ticket.currency}}</div>
-          </td>
-          <td class="col-tb-11">
-            <div [innerHTML]="ticket.status | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-13">
-            <div [innerHTML]="ticket.score | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-14">
-            <div [innerHTML]="ticket.handicap | sanitizeHtml"></div>
-          </td>
-          <td class="col-tb-15">
-            <div [innerHTML]="ticket.choice | sanitizeHtml"></div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <table *ngIf="model.groups === undefined || model.groups.length == 0 || model.groups == null">
-      <tbody>
-        <tr>
-          <td class="no-data">There is no data</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+                    </div>
+                  </td>
+                  <td class="col-tb-2">
+                    <div>{{ticket.no}}</div>
+                  </td>
+                  <td class="col-tb-3">
+                    <div [class.betIdBorder]="ticket.isMarked" [innerHTML]="ticket.betId | sanitizeHtml"></div>
+                  </td>
+                  <td class="col-tb-4">
+                    <div>{{ticket.transDate}}</div>
+                  </td>
+                  <td class="col-tb-5">
+                    <div [innerHTML]="ticket.member | sanitizeHtml" title="{{ticket.member}}"></div>
+                  </td>
+                  <td class="col-tb-6">
+                    <div [innerHTML]="ticket.betType | sanitizeHtml"></div>
+                  </td>
+                  <td class="col-tb-7">
+                    <div [innerHTML]="ticket.odds | sanitizeHtml"></div>
+                  </td>
+                  <td class="col-tb-8">
+                    <div [innerHTML]="ticket.stake | sanitizeHtml"></div>
+                  </td>
+                  <td class="col-tb-9">
+                    <div>{{ticket.winLoss}}</div>
+                  </td>
+                  <td class="col-tb-10">
+                    <div>{{ticket.currency}}</div>
+                  </td>
+                  <td class="col-tb-11">
+                    <div [innerHTML]="ticket.status | sanitizeHtml"></div>
+                  </td>
+                  <td class="col-tb-13">
+                    <div [innerHTML]="ticket.score | sanitizeHtml"></div>
+                  </td>
+                  <td class="col-tb-14">
+                    <div [innerHTML]="ticket.handicap | sanitizeHtml"></div>
+                  </td>
+                  <td class="col-tb-15">
+                    <div [innerHTML]="ticket.choice | sanitizeHtml"></div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          }
+        </table>
+        @if (model.groups === undefined || model.groups.length == 0 || model.groups == null) {
+          <table>
+            <tbody>
+              <tr>
+                <td class="no-data">There is no data</td>
+              </tr>
+            </tbody>
+          </table>
+        }
+      </div>
 
-  <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging>
-  <div class="list-check-groups" *ngIf="isShowListCheckGroup">
-    <ul [style.top]="model.iconCheckBoxTop">
-      <li [ngClass]="{'li-checked':model.iconCheckBox == 2}" (click)="model.checkAllGroupsDropDown()">All</li>
-      <li *ngFor="let group of model.groups" 
-          [ngClass]="{'li-checked':group.isCheckAll}" 
+      <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging>
+      @if (isShowListCheckGroup) {
+        <div class="list-check-groups">
+          <ul [style.top]="model.iconCheckBoxTop">
+            <li [ngClass]="{'li-checked':model.iconCheckBox == 2}" (click)="model.checkAllGroupsDropDown()">All</li>
+            @for (group of model.groups; track group) {
+              <li
+                [ngClass]="{'li-checked':group.isCheckAll}"
           (click)="group.isCheckAll = group.isDisabled ? false : !group.isCheckAll;
                 group.checkAllTickets();
                 model.changeIconCheckBox();
                 changeTickets()">
-        {{group.name}}
-      </li>
-    </ul>
-  </div>
-</div>
-<div class="note-lasted-bettrade" *ngIf="showMessageBetTrade">
-  (*) Let it be noted that selected BetTrade ticket at the last row has a "SOLD" ticket on the next page which will be
-  voided also.
-</div>
+                {{group.name}}
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+    @if (showMessageBetTrade) {
+      <div class="note-lasted-bettrade">
+        (*) Let it be noted that selected BetTrade ticket at the last row has a "SOLD" ticket on the next page which will be
+        voided also.
+      </div>
+    }

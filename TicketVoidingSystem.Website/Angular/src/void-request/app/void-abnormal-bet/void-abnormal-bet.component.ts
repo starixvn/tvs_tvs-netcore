@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -9,11 +9,19 @@ import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
 import { VoidAbnormalBetModel } from './models/void-abnormal-bet.model';
 import { VoidPageService } from './services/void-page.service';
+import { CommonModule } from '@angular/common';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
+import { PasswordAreaComponent } from '../password-area/password-area.component';
+import { TicketsListComponent } from '../tickets-list/tickets-list.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 
 @Component({
+  standalone: true,
   selector: 'void-abnormal-bet',
   templateUrl: './void-abnormal-bet.component.html',
-  styleUrls: ['./void-abnormal-bet.component.scss']
+  styleUrls: ['./void-abnormal-bet.component.scss'],
+  imports: [CommonModule, LicenseeAffectedListComponent, MessageAreaComponent, PasswordAreaComponent, TicketsListComponent, TooltipComponent],
+  providers: [VoidPageService]
 })
 export class VoidAbnormalBetComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
@@ -24,14 +32,14 @@ export class VoidAbnormalBetComponent implements OnInit {
   public issueTypes: IssueTypesModel;
   public tooltip = new Tooltip();
   private readonly afterLoadUnderneathDataSubscription: Subscription;
-  constructor(
-    private readonly element: ElementRef,
-    private readonly ticketsService: TicketsService,
-    private readonly voidPageService: VoidPageService,
-    private readonly voidPageCommonService: VoidPageCommonService
-  ) {
+  ticketsService = inject(TicketsService);
+  voidPageService = inject(VoidPageService);
+  voidPageCommonService = inject(VoidPageCommonService);
+  element = inject(ElementRef);
+
+  constructor() {
     this.tooltip.element = this.element;
-   }
+  }
 
   async ngOnInit(): Promise<void> {
     this.primitiveProperty.isBlockUI = true;
@@ -66,6 +74,6 @@ export class VoidAbnormalBetComponent implements OnInit {
   }
 
   onClickVoidAllMatches(): void {
-    this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, this.messageAreaComponents.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
+    this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, this.messageAreaComponents?.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }
 }

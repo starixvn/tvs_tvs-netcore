@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { AbnormalBetModel } from '../../../../add-request/app/add-request/models/abnormal-bet.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
@@ -11,7 +12,6 @@ import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { Result } from '../../../../utility/models/result';
 import { CommonService } from '../../../../utility/services/common.service';
-import { AppService } from '../../app.service';
 import { TicketsService } from '../../services/tickets.service';
 import { VoidPageCommonService } from '../../services/void-page-common.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
@@ -130,35 +130,44 @@ describe('VoidPageService', () => {
   let voidPageService : VoidPageService ;
   let commonService: CommonService;
   let ticketsService: TicketsService;
-  let appService: AppService;
   let templateService: TemplateService;
-  let voidPageCommonService: VoidPageCommonService;
 
   beforeEach(() => {
-    commonService = new CommonService(null);
-    appService = new AppService(null);
-    ticketsService = new TicketsService(null);
-    templateService = new TemplateService();
-    voidPageCommonService = new VoidPageCommonService(null, null, null, null, null);
-    voidPageService = new VoidPageService(appService, commonService, ticketsService, templateService, voidPageCommonService);
+    TestBed.configureTestingModule({
+          providers: [
+            VoidPageService,
+            {
+              provide: CommonService, useValue: {
+                getIssueTypes: jest.fn().mockReturnValue(Helper.fakeIssueTypesModel), 
+                getMatch: jest.fn(), getVoidedReason: jest.fn().mockResolvedValue({reasonEnglish: "Void"} as VoidedReason)
+              }
+            },
+            { provide: TicketsService, useValue: { initTicketQuery: jest.fn(), getVoidTicketsMini: jest.fn()} },
+            { provide: TemplateService, useValue: { initializeTemplateValue: jest.fn().mockResolvedValue(new TemplateValue()) } },
+            { provide: VoidPageCommonService, useValue: { getDisplayIssueTypeName: jest.fn() } }
+          ]
+        });
+        ticketsService = TestBed.inject(TicketsService) as jest.Mocked<TicketsService>;
+        commonService = TestBed.inject(CommonService) as jest.Mocked<CommonService>;
+        templateService = TestBed.inject(TemplateService) as jest.Mocked<TemplateService>;
+        voidPageService = TestBed.inject(VoidPageService);
   });
 
   it('#getIssueTypes should return issueTypesModel', async () => {
     const expected = new IssueTypesModel();
-    const commonService = new CommonService(null);
     commonService.getIssueTypes = jest.fn().mockReturnValue(expected);
-    const mockVoidPageService = new VoidPageService(null, commonService, null, null, null);
 
-    const actual = await mockVoidPageService.getIssueTypes();
+    const actual = await voidPageService.getIssueTypes();
 
     expect(actual).toEqual(expected);
   });
 
   it('#getBasicVoidPageItemsData should call getMatch', async () => {
-    const spyGetMatch = jest.spyOn(commonService, 'getMatch').mockImplementation(() => Promise.resolve(new MatchModel()));
+    commonService.getMatch = jest.fn().mockResolvedValue(new MatchModel());
     const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, Helper.fakeRequestDetailViewModel);
 
-    expect(spyGetMatch).toHaveBeenCalledTimes(1);
+    expect(commonService.getMatch).toHaveBeenCalledTimes(1);
+
     expect(result).toBeDefined();
   });
 
@@ -168,16 +177,14 @@ describe('VoidPageService', () => {
     voidItem.matchModel = new MatchModel();
     voidItem.templateValue = new TemplateValue();
     voidItem.matchModel.matchId = 1;
-    const spyInitTicketQuery = jest.spyOn(ticketsService, 'initTicketQuery').mockImplementation();
-    const spyGetVoidTicketsMini = jest.spyOn(ticketsService, 'getVoidTicketsMini').mockReturnValue(Promise.resolve(new TicketsModel()))
-    const spyGetVoidedReason = jest.spyOn(commonService, 'getVoidedReason').mockReturnValue(Promise.resolve(new VoidedReason()));
+    ticketsService.getVoidTicketsMini = jest.fn().mockResolvedValue(new TicketsModel());
     voidPageService['getTemplateValue'] = jest.fn().mockReturnValue(new TemplateValue());
 
     await voidPageService.loadUnderneathVoidPageItemsData([voidItem], Helper.fakeRequestDetailViewModel);
 
-    expect(spyInitTicketQuery).toHaveBeenCalledTimes(1);
-    expect(spyGetVoidTicketsMini).toHaveBeenCalledTimes(1);
-    expect(spyGetVoidedReason).toHaveBeenCalledTimes(1);
+    expect(ticketsService.initTicketQuery).toHaveBeenCalledTimes(1);
+    expect(ticketsService.getVoidTicketsMini).toHaveBeenCalledTimes(1);
+    expect(commonService.getVoidedReason).toHaveBeenCalledTimes(1);
     expect(voidPageService['getTemplateValue']).toHaveBeenCalledTimes(1);
   });
 

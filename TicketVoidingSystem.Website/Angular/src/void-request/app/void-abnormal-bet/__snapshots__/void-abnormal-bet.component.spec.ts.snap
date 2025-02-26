@@ -1,30 +1,66 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`VoidNotParticipateComponent VoidNotParticipateComponent should init match snapshot 1`] = `
-<ng-component
-  __ngContext__={[Function LRootView]}
+exports[`VoidAbnormalBetComponent VoidAbnormalBetComponent should init match snapshot 1`] = `
+<void-abnormal-bet
+  element={[Function _ElementRef]}
+  messageAreaComponents={[Function _QueryList]}
+  primitiveProperty={[Function CommonPrimitiveProperty]}
+  ticketsService={[Function TicketsService]}
+  tooltip={[Function Tooltip]}
+  voidPageCommonService={[Function VoidPageCommonService]}
+  voidPageItems={[Function Array]}
+  voidPageService={[Function VoidPageService]}
 >
-  <void-abnormal-bet>
-    <div>
-    </div>
-    <div>
+  <div>
+  </div><div>
+    <div
+      class="in modal-backdrop spinner-overlay"
+    />
+    <div
+      aria-atomic="true"
+      aria-live="assertive"
+      class="spinner-message-container"
+    >
       <div
-        class="in modal-backdrop spinner-overlay"
-      />
-      <div
-        aria-atomic="true"
-        aria-live="assertive"
-        class="spinner-message-container"
+        class="loading-message"
       >
         <div
-          class="loading-message"
-        >
-          <div
-            class="loading"
-          />
-        </div>
+          class="loading"
+        />
       </div>
     </div>
-  </void-abnormal-bet>
-</ng-component>
+  </div>
+</void-abnormal-bet>
+`;
+
+exports[`VoidNotParticipateComponent VoidNotParticipateComponent should init match snapshot 1`] = `
+<void-not-participate
+  element={[Function _ElementRef]}
+  messageAreaComponent="undefined"
+  primitiveProperty={[Function CommonPrimitiveProperty]}
+  ticketsService={[Function TicketsService]}
+  tooltip={[Function Tooltip]}
+  voidPageCommonService={[Function VoidPageCommonService]}
+  voidPageService={[Function VoidPageService]}
+>
+  <div>
+  </div><div>
+    <div
+      class="in modal-backdrop spinner-overlay"
+    />
+    <div
+      aria-atomic="true"
+      aria-live="assertive"
+      class="spinner-message-container"
+    >
+      <div
+        class="loading-message"
+      >
+        <div
+          class="loading"
+        />
+      </div>
+    </div>
+  </div>
+</void-not-participate>
 `;

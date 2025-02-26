@@ -15,7 +15,6 @@ import { EventEarlyKickOffService } from './event-eko.service';
 @Injectable({
   providedIn: 'root'
 })
-
 export class LogInfoService {
   constructor(
     private readonly httpService: HttpService,

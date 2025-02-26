@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -10,11 +10,21 @@ import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
 import { VoidPageService } from '../void-early-kick-off/services/void-page.service';
 import { VoidPageEarlyKickOffModel } from './models/void-page-early-kick-off.model';
+import { CommonModule } from '@angular/common';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
+import { PasswordAreaComponent } from '../password-area/password-area.component';
+import { TicketsListComponent } from '../tickets-list/tickets-list.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { TemplateMessageService } from './services/template-message.service';
 
 @Component({
+  standalone: true,
   selector: 'void-early-kick-off',
   templateUrl: './void-early-kick-off.component.html',
-  styleUrls: ['./void-early-kick-off.component.scss']
+  styleUrls: ['./void-early-kick-off.component.scss'],
+  imports: [CommonModule, LicenseeAffectedListComponent, TicketsListComponent, MessageAreaComponent,
+    PasswordAreaComponent, TooltipComponent],
+  providers: [VoidPageService, TemplateMessageService]
 })
 export class VoidEarlyKickOffComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
@@ -26,11 +36,12 @@ export class VoidEarlyKickOffComponent implements OnInit {
   public tooltip = new Tooltip();
   private readonly afterLoadUnderneathDataSubscription: Subscription;
 
-  constructor(
-    private readonly voidPageService: VoidPageService,
-    private readonly ticketsService: TicketsService,
-    private readonly voidPageCommonService: VoidPageCommonService,
-    private readonly element: ElementRef) {
+  voidPageService = inject(VoidPageService);
+  ticketsService = inject(TicketsService);
+  voidPageCommonService = inject(VoidPageCommonService);
+  element = inject(ElementRef);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -67,7 +78,7 @@ export class VoidEarlyKickOffComponent implements OnInit {
   }
 
   onClickVoidAllMatches(): void {
-    this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, this.messageAreaComponents.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
+    this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, this.messageAreaComponents?.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }
 
   updateDetailViewModel(): void {

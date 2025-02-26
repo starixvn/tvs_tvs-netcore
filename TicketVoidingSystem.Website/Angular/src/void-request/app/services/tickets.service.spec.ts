@@ -12,6 +12,7 @@ import { GetTicketsQuery } from '../models/get-tickets.query';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { TicketsModel } from '../tickets-list/tickets.model';
 import { TicketsService } from './tickets.service';
+import { TestBed } from '@angular/core/testing';
 
 class Helper {
   static readonly fakeResultError: Result<null> = {
@@ -65,12 +66,18 @@ class Helper {
 }
 
 describe('TicketsService', () => {
-  let appService: AppService;
+  let appService: jest.Mocked<AppService>;
   let ticketsService: TicketsService;
 
   beforeEach(() => {
-    appService = new AppService(null);
-    ticketsService = new TicketsService(null);
+    TestBed.configureTestingModule({
+      providers: [
+        TicketsService,
+        { provide: AppService, useValue: { getTicketsMini: jest.fn(), exportExcel: jest.fn(), getTickets: jest.fn() } }
+      ]
+    });
+    appService = TestBed.inject(AppService) as jest.Mocked<AppService>;
+    ticketsService = TestBed.inject(TicketsService);
   });
 
   it('#initTicketQuery should return model with match undefined', async () => {
@@ -89,21 +96,19 @@ describe('TicketsService', () => {
   it('#getVoidTicketsMini should return TicketsModel', async () => {
     const model = new TicketsModel();
     appService.getTicketsMini = jest.fn().mockImplementation(() => model);
-    const mockTicketsService = new TicketsService(appService);
-    mockTicketsService.initTicketQuery = jest.fn();
+    ticketsService.initTicketQuery = jest.fn();
 
-    const result = await mockTicketsService.getVoidTicketsMini(null);
+    const result = await ticketsService.getVoidTicketsMini(null);
 
     expect(result).toStrictEqual(model);
   });
 
   it('#loadVoidTicketsFullOnFirstTime should update pageSize to 1', async () => {
     const voidMatch = _.clone(Helper.fakeVoidPageItem);
-    const mockTicketsService = new TicketsService(appService);
-    mockTicketsService.initTicketQuery = jest.fn();
-    mockTicketsService['getVoidTicketsFull'] = jest.fn();
+    ticketsService.initTicketQuery = jest.fn();
+    ticketsService['getVoidTicketsFull'] = jest.fn();
 
-    await mockTicketsService.loadVoidTicketsFullOnFirstTime(voidMatch, Helper.fakeRequestDetailViewModel);
+    await ticketsService.loadVoidTicketsFullOnFirstTime(voidMatch, Helper.fakeRequestDetailViewModel);
 
     expect(voidMatch.isLoadedTicketFull).toBeTruthy();
     expect(voidMatch.pagingVoidTickets.pageSize).toBe(PagingConstant.SIZE_ONE);
@@ -123,21 +128,19 @@ describe('TicketsService', () => {
   it('#exportTicketsAsExcelFile should return expected model', async () => {
     const voidMatch = _.clone(Helper.fakeVoidPageItem);
     appService.exportExcel = jest.fn();
-    const mockTicketsService = new TicketsService(appService);
-    mockTicketsService.initTicketQuery = jest.fn().mockImplementation(() => new GetTicketsQuery());
+    ticketsService.initTicketQuery = jest.fn().mockImplementation(() => new GetTicketsQuery());
 
-    await mockTicketsService.exportTicketsAsExcelFile(voidMatch, Helper.fakeRequestDetailViewModel);
+    await ticketsService.exportTicketsAsExcelFile(voidMatch, Helper.fakeRequestDetailViewModel);
 
-    expect(mockTicketsService.initTicketQuery).toHaveBeenCalledTimes(1);
+    expect(ticketsService.initTicketQuery).toHaveBeenCalledTimes(1);
     expect(voidMatch.isBlockBetList).toBe(false);
   });
 
   it('#getVoidTicketsFull should update expected model', async () => {
     const voidMatch = _.clone(Helper.fakeVoidPageItem);
     appService.getTickets = jest.fn().mockImplementation(() => new TicketsModel());
-    const mockTicketsService = new TicketsService(appService);
     ticketsService.initTicketQuery = jest.fn().mockImplementation(() => new GetTicketsQuery());
-    await mockTicketsService['getVoidTicketsFull'](voidMatch, null);
+    await ticketsService['getVoidTicketsFull'](voidMatch, null);
     expect(voidMatch.isShowTicketFull).toBeTruthy();
   });
 });

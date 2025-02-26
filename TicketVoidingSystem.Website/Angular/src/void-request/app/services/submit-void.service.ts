@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';
@@ -12,17 +12,15 @@ import { CheckVoidPermissionService } from './check-void-permission.service';
 import { InsertQueueService } from './insert-queue.service';
 import { LogChangeContentService } from './log-change-content.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable(
+  { providedIn: 'root' }
+)
 export class SubmitVoidService {
-  constructor(
-    private readonly popupService: PopupService,
-    private readonly insertQueueService: InsertQueueService,
-    private readonly checkRequestService: CheckRequestService,
-    private readonly checkVoidPermissionService: CheckVoidPermissionService,
-    private readonly logChangeContentService: LogChangeContentService
-  ) { }
+  popupService = inject(PopupService);
+  insertQueueService = inject(InsertQueueService);
+  checkRequestService = inject(CheckRequestService);
+  checkVoidPermissionService = inject(CheckVoidPermissionService);
+  logChangeContentService = inject(LogChangeContentService);
 
   public async submitVoid(messageAreaComponents: MessageAreaComponent[], voidPageItems: VoidPageCommonItem[],
     primitiveProperty: CommonPrimitiveProperty): Promise<void> {

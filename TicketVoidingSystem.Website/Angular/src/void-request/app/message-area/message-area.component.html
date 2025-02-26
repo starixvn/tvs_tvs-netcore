@@ -1,22 +1,22 @@
 <div [ngClass]="isShowTemplateMessage ? 'display-block' : 'display-none'">
-    <ng-container *ngIf="totalVoidTickets > 0">
-      <template-message #templateMessage [value]="templateValue" [issueTypeId]="issueTypeId"
-        [subIssueTypeId]="subIssueTypeId" [voidFunction]="2" [id]="id">
-      </template-message>
-      <div class="void-reason"><void-reason #reason [voidReason]="voidReason" class=""></void-reason></div>
-    </ng-container>
-    <ng-container *ngIf="totalVoidTickets === 0">
-      <div class="reason-area">
-        <div class="gray-header">
-          Message
-        </div>
-        <textarea class="no-data-text" rows="1" readonly>There is no data</textarea>
+  @if (totalVoidTickets > 0) {
+    <template-message #templateMessage [value]="templateValue" [issueTypeId]="issueTypeId"
+      [subIssueTypeId]="subIssueTypeId" [voidFunction]="2" [id]="id">
+    </template-message>
+    <div class="void-reason"><void-reason #reason [voidReason]="voidReason" class=""></void-reason></div>
+  }
+  @if (totalVoidTickets === 0) {
+    <div class="reason-area">
+      <div class="gray-header">
+        Message
       </div>
-      <div class="reason-area">
-        <div class="gray-header">
-          Reason
-        </div>
-        <textarea class="no-data-text" rows="1" readonly>There is no data</textarea>
+      <textarea class="no-data-text" rows="1" readonly>There is no data</textarea>
+    </div>
+    <div class="reason-area">
+      <div class="gray-header">
+        Reason
       </div>
-    </ng-container>
-  </div>
+      <textarea class="no-data-text" rows="1" readonly>There is no data</textarea>
+    </div>
+  }
+</div>

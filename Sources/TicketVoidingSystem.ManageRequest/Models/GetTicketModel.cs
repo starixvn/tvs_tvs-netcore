@@ -133,4 +133,6 @@ public class GetTicketModel
     public bool IsOtherTicket { get; set; }
 
     public bool IsChecked { get; set; }
+    
+    public short GroupBetTypeId { get; set; }
 }

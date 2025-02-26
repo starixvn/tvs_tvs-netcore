@@ -1,17 +1,20 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
+import { Component, ElementRef, EventEmitter, inject, Input, Output } from '@angular/core';
 import { LABELS } from '../../../utility/constants/labels';
 import { VoidedReason } from '../../../utility/models/reason.model';
 import { Tooltip } from '../../components/tooltip/tooltip.model';
 import { Confirmation } from './confirmation';
+import { FormsModule } from '@angular/forms';
+import { TooltipComponent } from '../tooltip/tooltip.component';
 
 @Component({
+  standalone: true,
   selector: 'confirmation',
   templateUrl: './confirmation.component.html',
-  styleUrls: ['./confirmation.component.scss']
+  styleUrls: ['./confirmation.component.scss'],
+  imports: [FormsModule, TooltipComponent]
 })
 
-export class ConfirmationComponent implements OnInit {
+export class ConfirmationComponent {
   @Output() voidAll = new EventEmitter<boolean>();
   @Input() isDisabledButton = false;
   tooltip = new Tooltip();
@@ -24,14 +27,11 @@ export class ConfirmationComponent implements OnInit {
       reasonChineseSimplified: ''
     } as VoidedReason,
   };
-  constructor(private readonly element: ElementRef) {
+
+  element = inject(ElementRef);
+
+  constructor() {
     this.tooltip.element = this.element;
-  }
-
-  ngOnInit(): void {
-    (async () => {
-
-    })();
   }
 
   voidAllPage() {

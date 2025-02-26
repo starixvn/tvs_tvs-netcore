@@ -5,6 +5,7 @@ import { CommonTicketsModel } from '../../models/common.tickets.model';
 import { PagingModel } from '../paging/paging/paging.model';
 
 @Component({
+  standalone: true,
   selector: 'base-tickets-list',
   template: `
     <p>

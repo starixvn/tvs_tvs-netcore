@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription, timer } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
@@ -13,17 +13,16 @@ import { PopupService } from '../services/popup.service';
 import { LoadDataService } from './load-data.service';
 import { TicketsService } from './tickets.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable(
+  { providedIn: 'root' }
+)
 export class VoidPageCommonService {
-  constructor(
-    private readonly clipboardService: ClipboardService,
-    private readonly popupService: PopupService,
-    private readonly ticketsService: TicketsService,
-    private readonly checkRequestService: CheckRequestService,
-    private readonly loadDataService: LoadDataService
-  ) { }
+  clipboardService = inject(ClipboardService);
+  popupService = inject(PopupService);
+  ticketsService = inject(TicketsService);
+  checkRequestService = inject(CheckRequestService);
+  loadDataService = inject(LoadDataService);
+
   private readonly observableTimer = timer(0, 100);
 
   public showWarningExportExcel() {
@@ -49,12 +48,12 @@ export class VoidPageCommonService {
 
   async checkLoadedFullDataBeforeVoid(voidPageItems: VoidPageCommonItem[], messageAreaComponents: MessageAreaComponent[], primitiveProperty: CommonPrimitiveProperty,
     afterLoadUnderneathDataSubscription: Subscription): Promise<void> {
-      this.loadDataService.checkLoadedFullDataBeforeVoid(voidPageItems, messageAreaComponents, primitiveProperty, afterLoadUnderneathDataSubscription);
+    this.loadDataService.checkLoadedFullDataBeforeVoid(voidPageItems, messageAreaComponents, primitiveProperty, afterLoadUnderneathDataSubscription);
   }
 
   async onClickShowTemplateMessage(voidPageItem: VoidPageCommonItem, primitiveProperty: CommonPrimitiveProperty, requestDetail: RequestDetailViewModel,
     afterLoadUnderneathDataSubscription: Subscription, allVoidPageItems?: VoidPageCommonItem[]): Promise<void> {
-      this.loadDataService.onClickShowTemplateMessage(voidPageItem, primitiveProperty, requestDetail, afterLoadUnderneathDataSubscription, allVoidPageItems);
+    this.loadDataService.onClickShowTemplateMessage(voidPageItem, primitiveProperty, requestDetail, afterLoadUnderneathDataSubscription, allVoidPageItems);
   }
 
   onClickCopyLicenseesToClipboard(text: string): void {

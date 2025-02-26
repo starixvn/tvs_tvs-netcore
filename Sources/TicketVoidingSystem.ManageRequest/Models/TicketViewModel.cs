@@ -31,6 +31,7 @@ public class TicketsViewModel
     public short GroupPHAffected { get; set; }
     public ContentByLanguageModel BetTypeNameReplaceMessage { get; set; }
     public string SmallestMapTicket { get; set; }
+    public short GroupBetTypeId { get; set; }
 }
 
 public class TicketViewModel

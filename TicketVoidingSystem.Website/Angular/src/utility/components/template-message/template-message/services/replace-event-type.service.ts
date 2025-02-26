@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import moment from 'moment';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { EventType } from '../../../../../utility/constants/sport.constant';
@@ -7,10 +7,11 @@ import { FormatDateTime, SubIssueTypeId, TemplateContentConst, TemplateReplace }
 import { TemplateValue } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class ReplaceEventTypeService {
-
-  constructor(private readonly replaceMessageService: ReplaceMessageService) { }
+  replaceMessageService = inject(ReplaceMessageService);
 
   public execute(templateValue: TemplateValue, issueTypeId: number, subIssueTypeId: number, outputMessage: Message): void {
     if (templateValue.eventType === EventType.LIVE) {

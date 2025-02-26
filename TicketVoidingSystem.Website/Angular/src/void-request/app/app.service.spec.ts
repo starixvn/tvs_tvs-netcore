@@ -1,3 +1,5 @@
+import { TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../utility/modules/testing.module';
 import { RequestDetailModel, RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
@@ -13,12 +15,16 @@ class Helper {
 
 jest.mock('../../utility/services/http.service');
 describe('AppService', () => {
-  let mockHttpService: jest.Mocked<HttpService>;
+  let httpService: jest.Mocked<HttpService>;
   let appService: AppService;
 
   beforeEach(() => {
-    mockHttpService = new HttpService(null) as jest.Mocked<HttpService>;
-    appService = new AppService(mockHttpService);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [AppService, HttpService]
+    });
+    httpService = TestBed.inject(HttpService) as jest.Mocked<HttpService>;
+    appService = TestBed.inject(AppService);
   });
 
   it('#getRemark should return expected data', async () => {
@@ -27,16 +33,16 @@ describe('AppService', () => {
       'You can void "Settled" or "Unsettled" tickets.',
       'You can void "Instantly Settled" tickets settled by Instant Settlement during live time.'
     ];
-    mockHttpService.getJson.mockResolvedValue(expectedData);
+    httpService.getJson.mockResolvedValue(expectedData);
 
-   // Action
-   const actualData = await appService.getRemark();
+    // Action
+    const actualData = await appService.getRemark();
 
-   // Assert
-   expect(actualData).toStrictEqual(expectedData);
+    // Assert
+    expect(actualData).toStrictEqual(expectedData);
   });
 
-  it('#getRequestById should return expected data', async() => {
+  it('#getRequestById should return expected data', async () => {
     // Arrange
     const requestDetailModel: RequestDetailModel = {
       actionId: 1,
@@ -72,21 +78,21 @@ describe('AppService', () => {
       duplicateTicketsModel: null,
       notParticipateModels: []
     };
-   mockHttpService.getJson.mockResolvedValue(fakeRequestDetailViewModel);
+    httpService.getJson.mockResolvedValue(fakeRequestDetailViewModel);
 
-   // Action
-   const actualData = await appService.getRequestById(47760);
+    // Action
+    const actualData = await appService.getRequestById(47760);
 
-   // Assert
-   expect(actualData).toEqual(fakeRequestDetailViewModel);
+    // Assert
+    expect(actualData).toEqual(fakeRequestDetailViewModel);
   });
 
 
-  it('#getTickets should return expected data', async() => {
+  it('#getTickets should return expected data', async () => {
     // Arrange
     const expectedData = new TicketsModel();
     expectedData.total = 1;
-    mockHttpService.postJson.mockResolvedValue(expectedData);
+    httpService.postJson.mockResolvedValue(expectedData);
 
     // Action
     const actualData = await appService.getTickets(new GetTicketsQuery());
@@ -95,11 +101,11 @@ describe('AppService', () => {
     expect(actualData.total).toEqual(expectedData.total);
   });
 
-  it('#getTicketsMini should return expected data', async() => {
+  it('#getTicketsMini should return expected data', async () => {
     // Arrange
     const expectedData = new TicketsModel();
     expectedData.total = 1;
-    mockHttpService.postJson.mockResolvedValue(expectedData);
+    httpService.postJson.mockResolvedValue(expectedData);
 
     // Action
     const actualData = await appService.getTicketsMini(new GetTicketsQuery());
@@ -108,7 +114,7 @@ describe('AppService', () => {
     expect(actualData.total).toEqual(expectedData.total);
   });
 
-  it('#insertQueue should return expected data', async() => {
+  it('#insertQueue should return expected data', async () => {
     // Arrange
     const expectedData: Result<InsertQueueResult> = {
       errorCode: 0,
@@ -116,7 +122,7 @@ describe('AppService', () => {
       isSuccessful: false,
       data: { historyId: 1 }
     };
-    mockHttpService.postJson.mockResolvedValue(expectedData);
+    httpService.postJson.mockResolvedValue(expectedData);
 
     // Action
     const actualData = await appService.insertQueue(new VoidTicketsQuery());
@@ -125,25 +131,25 @@ describe('AppService', () => {
     expect(actualData).toEqual(expectedData);
   });
 
-  it('#exportExcel should call #downloadFile with expected params', async() => {
+  it('#exportExcel should call #downloadFile with expected params', async () => {
     // Arrange
     const query = new GetTicketsQuery();
     const url = `api/VoidRequest/ExportExcel`;
-    mockHttpService.downloadFile = jest.fn();
+    httpService.downloadFile = jest.fn();
 
     // Action
-   await appService.exportExcel(query);
+    await appService.exportExcel(query);
 
     // Assert
-    expect(mockHttpService.downloadFile).toHaveBeenCalledWith(query, url);
+    expect(httpService.downloadFile).toHaveBeenCalledWith(query, url);
   });
 
 
-  it('#getLastModifiedDate should return expected data', async() => {
+  it('#getLastModifiedDate should return expected data', async () => {
     // Arrange
     const expectedData = new RequestLastModifiedDate();
     expectedData.lastModifiedDate = new Date(Helper.fakeDate);
-    mockHttpService.postJson.mockResolvedValue(expectedData);
+    httpService.postJson.mockResolvedValue(expectedData);
 
     // Action
     const actualData = await appService.getLastModifiedDate(1);

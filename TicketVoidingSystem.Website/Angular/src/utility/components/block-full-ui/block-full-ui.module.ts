@@ -4,8 +4,7 @@ import { BlockFullUiComponent } from "./block-full-ui.component";
 
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: [BlockFullUiComponent],
+  imports: [CommonModule, BlockFullUiComponent],
   exports: [BlockFullUiComponent],
   providers: []
 })

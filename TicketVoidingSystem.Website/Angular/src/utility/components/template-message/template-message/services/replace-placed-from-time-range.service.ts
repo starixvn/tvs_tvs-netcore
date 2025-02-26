@@ -17,7 +17,9 @@ const MESSAGE_TEMPLATE_IDS_HAVE_TIME_RANGE_NC = [
   MessageTemplateId.PENALTY_SHOOTOUT_VIRTUAL
 ];
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class ReplacePlacedFromTimeRangeService {
   constructor(private readonly replaceMessageService: ReplaceMessageService) { }
 

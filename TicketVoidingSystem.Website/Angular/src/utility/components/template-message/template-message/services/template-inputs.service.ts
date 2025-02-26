@@ -7,7 +7,9 @@ import { TemplateContentConst, TemplateReplace, SubTypeInput } from '../template
 import { TemplateContent, TemplateModel, TemplateValue } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class TemplateInputsService {
   constructor(private readonly replaceMessageService: ReplaceMessageService) { }
 

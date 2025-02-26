@@ -1,17 +1,13 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { VoidPageEarlyKickOffModel } from '../models/void-page-early-kick-off.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class TemplateMessageService {
-  constructor(
-    private readonly templateService: TemplateService
-  ) { }
+  templateService = inject(TemplateService);
 
   public getTemplateValue(voidPageItem: VoidPageEarlyKickOffModel, requestDetail: RequestDetailViewModel): TemplateValue {
     const templateValue = voidPageItem.matchModel ? this.templateService.initializeTemplateValue(voidPageItem.matchModel) : new TemplateValue();
@@ -29,5 +25,4 @@ export class TemplateMessageService {
 
     return templateValue;
   }
-
 }

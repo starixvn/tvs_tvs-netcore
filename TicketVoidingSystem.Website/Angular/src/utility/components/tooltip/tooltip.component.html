@@ -1,4 +1,6 @@
-<div class="ng-tooltip" [style.top]="tooltip.top" [style.left]="tooltip.left" *ngIf="tooltip.show">
-  <em class="ng-tooltip-arrow"></em>
-  <span class="ng-tooltip-inner">{{tooltip.message}}</span>
-</div>
+@if (tooltip.show) {
+  <div class="ng-tooltip" [style.top]="tooltip.top" [style.left]="tooltip.left">
+    <em class="ng-tooltip-arrow"></em>
+    <span class="ng-tooltip-inner">{{tooltip.message}}</span>
+  </div>
+}

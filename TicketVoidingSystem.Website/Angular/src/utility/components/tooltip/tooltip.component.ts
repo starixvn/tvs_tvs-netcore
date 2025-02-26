@@ -2,6 +2,7 @@ import { Component, HostListener, Input } from '@angular/core';
 import { Tooltip } from './tooltip.model';
 
 @Component({
+  standalone: true,
   selector: 'tooltip',
   templateUrl: './tooltip.component.html',
   styleUrls: ['./tooltip.component.scss']

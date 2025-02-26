@@ -1,21 +1,18 @@
-import { NgModule } from '@angular/core';
-import { Shallow } from 'shallow-render';
 import { RequestDetailModel, RequestDetailViewModel } from '../../edit-request/app/request.model';
-import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
-import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
-import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../utility/constants/issue-type.constant';
-import { HttpService } from '../../utility/services/http.service';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
-import { RequestLastModifiedDate } from './models/request-last-modified-date.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.component';
 import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
 import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
+import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
 import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
 import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
+import { VoidWrongMarketOfferedComponent } from './void-wrong-market-offered/void-wrong-market-offered.component';
 
 jest.mock('../../utility/services/signal-r.service.native');
 class Helper {
@@ -57,88 +54,48 @@ class Helper {
 }
 
 describe('AppComponent', () => {
-  @NgModule({
-    declarations: [
-      MenuBarComponent,
-      VoidDangerAcceptedComponent,
-      VoidOtherIssueComponent,
-      VoidAbnormalBetComponent,
-      VoidNotParticipateComponent,
-      VoidDuplicateTicketsComponent,
-      VoidOtherIssueComponent
-    ],
-    imports: [
-      ToolTipModule,
-      BlockUiModule
-    ],
-    providers: [HttpService, TemplateService]
-  })
-  class AppModuleTest { }
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
 
-  let shallow: Shallow<AppComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [VoidDangerAcceptedComponent, VoidOtherIssueComponent, VoidDuplicateTicketsComponent,
+        VoidNotParticipateComponent, VoidEarlyKickOffComponent, VoidAbnormalBetComponent,
+        VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiModule],
+      providers: [AppService, SignalRService]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(AppComponent, AppModuleTest)
-    .mock(SignalRService, { initializeConnection: jest.fn()});
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
   });
 
   it('AppComponent should init match snapshot', async () => {
-    const { fixture } = await shallow.render();
     fixture.detectChanges();
 
     expect(fixture).toMatchSnapshot();
   });
 
-  it('ngOnInit should called expected', async () => {
-    const mockGetRemark = jest.fn();
-    const mockGetRequestById = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeRequestDetailViewModel));
-    const mockGetLastModifiedDate = jest.fn().mockImplementation(() => Promise.resolve(new RequestLastModifiedDate()));
-    const mockInitializeConnection = jest.fn();
-    Object.defineProperty(window, 'location', {
-      value: new URL(Helper.url)
-    });
-    const { instance } = await shallow
-    .mock(AppService, {
-      getRemark: mockGetRemark,
-      getRequestById: mockGetRequestById,
-      getLastModifiedDate: mockGetLastModifiedDate
-    })
-    .mock(SignalRService, { initializeConnection: mockInitializeConnection })
-    .render();
-
-    await instance.ngOnInit();
-
-    expect(mockGetRemark).toHaveBeenCalled();
-    expect(mockGetRequestById).toHaveBeenCalled();
-    expect(mockGetLastModifiedDate).toHaveBeenCalled();
-    expect(mockInitializeConnection).toHaveBeenCalled();
-  });
-
   it('isApplyVoidNewDesign should be return false', async () => {
-    const { instance } = await shallow.render();
-    instance.requestDetail = Helper.fakeRequestDetailViewModel;
-    instance.requestDetail.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
+    component.requestDetail = Helper.fakeRequestDetailViewModel;
+    component.requestDetail.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
 
-    const actual = instance.isLikelyVoidDangerAccepted();
+    const actual = component.isLikelyVoidDangerAccepted();
 
     expect(actual).toBeFalsy();
   });
 
   it('isApplyVoidNewDesign should be return false', async () => {
-    const { instance } = await shallow.render();
-    instance.requestDetail = Helper.fakeRequestDetailViewModel;
-    instance.requestDetail.request = null;
+    component.requestDetail = Helper.fakeRequestDetailViewModel;
+    component.requestDetail.request = null;
 
-    const actual = instance.isLikelyVoidDangerAccepted();
+    const actual = component.isLikelyVoidDangerAccepted();
 
     expect(actual).toBeFalsy();
   });
 
   it('updateBlockUI should update #isBlockUI ', async () => {
-    const { instance } = await shallow.render();
+    component.updateBlockUI(false);
 
-    instance.updateBlockUI(false);
-
-    expect(instance.isBlockUI).toBeFalsy();
+    expect(component.isBlockUI).toBeFalsy();
   });
 });

@@ -19,13 +19,15 @@ public class GetInfoTicketsForMessageImp(SpecialBetTypeContentService specialBet
 {
     public string GetSpecialBetTeam(int betTypeId, IEnumerable<GetTicketModel> allTickets)
     {
-        List<int> SpecialBetTypes = [BetTypeConstant.Handicap, BetTypeConstant.FirstHalfHandicap, BetTypeConstant.OverUnder, BetTypeConstant.FirstHalfOverUnder];
-        if (!SpecialBetTypes.Contains(betTypeId))
+        List<int> SpecialBetTypes = [BetTypeConstant.OverUnder, BetTypeConstant.FirstHalfOverUnder];
+        if (!SpecialBetTypes.Contains(betTypeId) && !IsGroupBetTypeHandicap(allTickets))
         {
             return string.Empty;
         }
 
-        var betTeams = allTickets.Select(ticket => ticket.IsMixParlay ? ticket.SubBetTeam : ticket.BetTeam).Distinct().ToList();
+        var betTeams = allTickets
+            .Select(ticket => ticket.IsMixParlay ? ticket.SubBetTeam.ToLowerInvariant() : ticket.BetTeam.ToLowerInvariant())
+            .Distinct().ToList();
 
         return betTeams.Count > 1 ? "All" : betTeams.FirstOrDefault();
     }
@@ -62,11 +64,16 @@ public class GetInfoTicketsForMessageImp(SpecialBetTypeContentService specialBet
     public string GetHdpValues(int betTypeId, IEnumerable<GetTicketModel> allTickets)
 
     {
-        return betTypeId switch
+        if (betTypeId is BetTypeConstant.OverUnder or BetTypeConstant.FirstHalfOverUnder)
         {
-            BetTypeConstant.OverUnder or BetTypeConstant.FirstHalfOverUnder => GetHdpValuesOverUnder(allTickets),
-            BetTypeConstant.Handicap or BetTypeConstant.FirstHalfHandicap => GetHdpValuesHandicap(allTickets),
-            _ => string.Empty
-        };
+            return GetHdpValuesOverUnder(allTickets);
+        }
+
+        return IsGroupBetTypeHandicap(allTickets) ? GetHdpValuesHandicap(allTickets) : string.Empty;
+    }
+
+    protected virtual bool IsGroupBetTypeHandicap(IEnumerable<GetTicketModel> allTickets)
+    {
+        return allTickets.All(x => x.GroupBetTypeId is BetTypeConstant.Handicap);
     }
 }
