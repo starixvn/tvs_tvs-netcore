@@ -1,6 +1,6 @@
 ﻿namespace TicketVoidingSystem.Constants;
 
-public class GroupTicket
+public static class GroupTicket
 {
     public const string Credit = "Credit (Parlay)";
 
