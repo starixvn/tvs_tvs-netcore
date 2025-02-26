@@ -39,6 +39,8 @@ public class GetTicketsServiceImp(
             ticket.No = index++;
             ticket.IsDisable = isDisable;
             ticket.SiteDbGroupId = item.SiteDbGroupId;
+            ticket.SportType = item.SportType;
+            ticket.MatchId = item.MatchId;
             tickets.Add(ticket);
         }
 

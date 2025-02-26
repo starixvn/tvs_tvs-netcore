@@ -55,7 +55,7 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
 
         return results;
     }
-    
+
     public async Task<(IEnumerable<Outright>, IEnumerable<Resources>)> GetRacingInfo(int matchId)
     {
         var criteria = new GetRacingResultCriteria { MatchId = matchId };
@@ -63,7 +63,7 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
 
         return (secondResult, thirdResult);
     }
-    
+
     private static GetTicketsCriteria CreateGetTicketsCriteria(Query query)
     {
         return new GetTicketsCriteria
