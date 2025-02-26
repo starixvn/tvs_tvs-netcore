@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Fanex.Data.Repository;
+﻿using Fanex.Data.Repository;
 using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Criteria;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
@@ -16,12 +15,12 @@ public interface Repository
     Task<RecoverTicketsModel> RecoverTickets(Query query);
 }
 
-public class RepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
+public class RepositoryImp(IDynamicRepository repository, SessionService sessionService)
     : Repository
 {
     public async Task<GetTicketsModel> GetTickets(Query query)
     {
-        var criteria = mapper.Map<GetTicketsCriteria>(query);
+        var criteria = CreateGetTicketsCriteria(query);
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             criteria.SiteDbGroupId = server.Id;
@@ -54,6 +53,17 @@ public class RepositoryImp(IMapper mapper, IDynamicRepository repository, Sessio
         var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
         return BuildResultRecoverTickets(validationInAllServers, ticketsInAllServers);
+    }
+
+    private static GetTicketsCriteria CreateGetTicketsCriteria(Query query)
+    {
+        return new GetTicketsCriteria
+        {
+            MatchId = query.MatchId,
+            Type = query.Type,
+            TicketType = query.TicketType,
+            TransIds = query.TransIds
+        };
     }
 
     private RecoverTicketsCriteria CreateRecoverTicketsCriteria(Query query)

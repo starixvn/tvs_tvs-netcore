@@ -6,7 +6,7 @@ namespace SpecialDelete.VirtualSports.RecoverBet.Criteria;
 
 public class GetTicketsCriteria : CriteriaBase
 {
-    public int MatchId { get; set; }
+    public int? MatchId { get; set; }
 
     public string TicketType { get; set; }
 
