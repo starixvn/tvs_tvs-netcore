@@ -39,23 +39,23 @@
         <input [(ngModel)]="filterWrongOuModel.wrongMarket"
           [disabled]="isDisabled"
           placeholder="Ex: 0.75&1&1.25"
-          (ngModelChange)="changeFilter();isCorrectFormatHdp($event, 'wrong-market-input')"
+          (change)="changeFilter();isCorrectFormatHdp(filterWrongOuModel.wrongMarket, 'wrong-market-input')"
           type="text" class="wrong-market-input form-control form-control-sm"/>
       </div>
       <div class="actual-market mr-2">
         <label class="col-form-label mr-2">Actual Market</label>
         <input [(ngModel)]="filterWrongOuModel.actualMarket"
           [disabled]="isDisabled"
-          (ngModelChange)="changeFilter()"
+          (change)="changeFilter()"
           type="text" class="actual-market-input form-control form-control-sm"/>
       </div>
       <div class="d-flex radio-liveindicator">
         <label class="col-form-label none-live mr-2 d-flex align-items-center">
-          <input class="mr-1" type="radio" name="radio-liveindicator-{{matchId}}" [disabled]="isDisabled" [(ngModel)]="filterWrongOuModel.liveIndicator" [value]="0" (ngModelChange)="changeFilter()" />
+          <input class="mr-1" type="radio" name="radio-liveindicator-{{matchId}}" [disabled]="isDisabled" [(ngModel)]="filterWrongOuModel.liveIndicator" [value]="0" (change)="changeFilter()" />
           Non-Live
         </label>
         <label class="col-form-label live d-flex align-items-center">
-          <input class="mr-1" type="radio" name="radio-liveindicator-{{matchId}}" [disabled]="isDisabled" [(ngModel)]="filterWrongOuModel.liveIndicator" [value]="1" (ngModelChange)="changeFilter()" />
+          <input class="mr-1" type="radio" name="radio-liveindicator-{{matchId}}" [disabled]="isDisabled" [(ngModel)]="filterWrongOuModel.liveIndicator" [value]="1" (change)="changeFilter()" />
           Live
         </label>
       </div>

@@ -115,7 +115,7 @@ export class FilterWithHdpComponent implements OnInit {
   }
 
   public isCorrectFormatHdp(value: string, elementClass: string): boolean {
-    return StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_HDP);
+    return value ? StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_HDP) : true;
   }
 
   public emitSearchEvent(): void {

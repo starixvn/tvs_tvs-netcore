@@ -21,26 +21,26 @@
     <div class="filter-odds-type">
       <ng-select class="custom-sm" [items]="filterOddsType.items" bindLabel="name" bindValue="value"
         [disabled]="isVoided" [(ngModel)]="filterWrongOddsSportsBookModel.filterOddsType" [clearable]="false"
-        (ngModelChange)="changeFilter()">
+        (change)="changeFilter()">
       </ng-select>
       <div class="input-group input-group-sm d-flex">
         <div *ngIf="filterWrongOddsSportsBookModel.filterOddsType === 'value'"
           class="input-group input-group-sm filter-odds-type-input">
           <input type="text" [(ngModel)]="filterWrongOddsSportsBookModel.oddsValue"
-            (ngModelChange)="changeFilter();isValidOddsFilterByValue($event)"
+            (change)="changeFilter();isValidOddsFilterByValue(filterWrongOddsSportsBookModel.oddsValue)"
             class="form-control border-radius-left-0 odds-value-input" placeholder="Ex: 0.75&1&1.25"
             [disabled]="isVoided">
         </div>
         <div *ngIf="filterWrongOddsSportsBookModel.filterOddsType === 'range'"
           class="input-group input-group-sm filter-odds-type-input">
           <input type="text" [(ngModel)]="filterWrongOddsSportsBookModel.fromOdds"
-            (ngModelChange)="changeFilter();isValidOddsFilterByRange($event, 'from-odds')"
+            (change)="changeFilter();isValidOddsFilterByRange(filterWrongOddsSportsBookModel.fromOdds, 'from-odds')"
             class="form-control border-radius-left-0 from-odds" [disabled]="isVoided">
           <div class="input-group-prepend">
             <span class="input-group-text">-</span>
           </div>
           <input type="text" [(ngModel)]="filterWrongOddsSportsBookModel.toOdds"
-            (ngModelChange)="changeFilter();isValidOddsFilterByRange($event, 'to-odds')" class="form-control to-odds"
+            (change)="changeFilter();isValidOddsFilterByRange(filterWrongOddsSportsBookModel.toOdds, 'to-odds')" class="form-control to-odds"
             [disabled]="isVoided">
         </div>
       </div>
@@ -53,7 +53,7 @@
       </div>
       <div class="input-group input-group-sm div-input correct-odds-input mr-2">
         <input type="text" [(ngModel)]="filterWrongOddsSportsBookModel.correctOdds"
-          (ngModelChange)="changeFilter();isCorrectFormatMultipleDecimal($event, 'correct-odds-input')"
+          (change)="changeFilter();isCorrectFormatMultipleDecimal(filterWrongOddsSportsBookModel.correctOdds, 'correct-odds-input')"
           class="form-control border-radius-left-0" [disabled]="isVoided">
       </div>
       <span class="d-flex align-items-center text-nowrap">(Malay Odds)</span>
@@ -63,14 +63,14 @@
     <div class="filter-live-indicator">
       <div class="form-check mr-3">
         <input class="form-check-input" type="radio" name="radio-live-indicator" id="none-live" [disabled]="isVoided"
-          [(ngModel)]="filterWrongOddsSportsBookModel.liveIndicator" [value]="0" (ngModelChange)="changeFilter()">
+          [(ngModel)]="filterWrongOddsSportsBookModel.liveIndicator" [value]="0" (change)="changeFilter()">
         <label class="form-check-label" for="none-live">
           Non-Live
         </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="radio" name="radio-live-indicator" id="live" [disabled]="isVoided"
-          [(ngModel)]="filterWrongOddsSportsBookModel.liveIndicator" [value]="1" (ngModelChange)="changeFilter()">
+          [(ngModel)]="filterWrongOddsSportsBookModel.liveIndicator" [value]="1" (change)="changeFilter()">
         <label class="form-check-label" for="live">
           Live
         </label>

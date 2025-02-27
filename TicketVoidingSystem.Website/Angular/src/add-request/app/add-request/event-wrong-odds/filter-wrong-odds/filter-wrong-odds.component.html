@@ -1,5 +1,4 @@
 <label class="col-form-label">Filter</label>
-
 <div class="filter mb-2">
   <div class="mb-2">
     <div class="filter-time d-flex">
@@ -30,31 +29,31 @@
 <div class="d-flex line-2 mb-2">
   <div class="filter-favorite-type" *ngIf="!isSubTypeOuOr1stOu()">
     <ng-select class="custom-sm" [items]="filterFavoriteType.items" bindLabel="name" bindValue="value" [disabled]="isDisabled"
-      [(ngModel)]="filterWrongOddsModel.filterFavoriteType" [clearable]="false" (ngModelChange)="changeFilter()">
+      [(ngModel)]="filterWrongOddsModel.filterFavoriteType" [clearable]="false" (change)="changeFilter()">
     </ng-select>
     <div class="input-group input-group-sm div-input favorite-input">
-      <input type="text" [(ngModel)]="filterWrongOddsModel.favoriteValue" (ngModelChange)="changeFilter();isCorrectFormatSingleDecimal($event, 'favorite-input')"
+      <input type="text" [(ngModel)]="filterWrongOddsModel.favoriteValue" (change)="changeFilter();isCorrectFormatSingleDecimal(filterWrongOddsModel.favoriteValue, 'favorite-input')"
         class="form-control" [disabled]="isDisabled">
     </div>
   </div>
   <div class="filter-ou-type" *ngIf="isSubTypeOuOr1stOu()">
     <span class="input-group-text">Wrong OU</span>
     <div class="input-group input-group-sm div-input ou-input filter-lable">
-      <input type="text" [(ngModel)]="filterWrongOddsModel.wrongOU" (ngModelChange)="changeFilter();isCorrectFormatSingleDecimal($event, 'ou-input')"
+      <input type="text" [(ngModel)]="filterWrongOddsModel.wrongOU" (change)="changeFilter();isCorrectFormatSingleDecimal(filterWrongOddsModel.wrongOU, 'ou-input')"
         class="form-control" [disabled]="isDisabled">
     </div>
   </div>
   <div class="filter-live-indicator filter-right">
     <div class="form-check mr-3">
       <input class="form-check-input" type="radio" name="radio-live-indicator" id="none-live" [disabled]="isDisabled"
-      [(ngModel)]="filterWrongOddsModel.liveIndicator" [value]="0" (ngModelChange)="changeFilter()">
+      [(ngModel)]="filterWrongOddsModel.liveIndicator" [value]="0" (change)="changeFilter()">
       <label class="form-check-label" for="none-live">
         Non-Live
       </label>
     </div>
     <div class="form-check">
       <input class="form-check-input" type="radio" name="radio-live-indicator" id="live" [disabled]="isDisabled"
-        [(ngModel)]="filterWrongOddsModel.liveIndicator" [value]="1" (ngModelChange)="changeFilter()">
+        [(ngModel)]="filterWrongOddsModel.liveIndicator" [value]="1" (change)="changeFilter()">
       <label class="form-check-label" for="live">
         Live
       </label>
@@ -69,7 +68,7 @@
         <span class="input-group-text border-radius-right-0">Spread</span>
       </div>
       <div class="input-group-sm div-input spread-input mr-2">
-        <input type="text" [(ngModel)]="filterWrongOddsModel.spread" (ngModelChange)="changeFilter();isValidSpread()" (change)="changeSpread()"
+        <input type="text" [(ngModel)]="filterWrongOddsModel.spread" (change)="changeFilter();isValidSpread()" (change)="changeSpread()"
           class="form-control border-radius-left-0" [disabled]="isDisabled">
       </div>
     </div>
@@ -80,7 +79,7 @@
         <span class="input-group-text filter-right border-radius-right-0">Allowance Rate</span>
       </div>
       <ng-select class="input-group-sm div-input mr-2" [items]="allowanceRates" bindLabel="name" bindValue="value" [disabled]="isDisabled"
-      (ngModelChange)="changeFilter()" [(ngModel)]="filterWrongOddsModel.allowanceRate" [clearable]="false" [searchable]="false">
+      (change)="changeFilter()" [(ngModel)]="filterWrongOddsModel.allowanceRate" [clearable]="false" [searchable]="false">
       </ng-select>
     </div>
   </div>
@@ -98,7 +97,7 @@
       </div>
       <div class="input-group-sm div-input correct-odds-input mr-2">
         <input type="text" [(ngModel)]="filterWrongOddsModel.correctOddsHomeOver" [disabled]="isDisabled"
-        (ngModelChange)="changeFilter();isValidFilterCorrectOdds()" (change)="changeCorrectOdds()"
+        (change)="changeFilter();isValidFilterCorrectOdds()" (change)="changeCorrectOdds()"
           class="form-control border-radius-left-0">
       </div>
     </div>

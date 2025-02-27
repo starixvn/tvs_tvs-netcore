@@ -86,7 +86,7 @@ export class FilterWrongOuComponent {
   }
 
   public isCorrectFormatHdp(value: string, elementClass: string): boolean {
-    return StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_OU);
+    return value ? StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_OU) : true;
   }
 
   public emitSearchEvent(): void {
