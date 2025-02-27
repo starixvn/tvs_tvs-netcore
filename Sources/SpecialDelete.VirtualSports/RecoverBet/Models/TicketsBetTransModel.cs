@@ -14,8 +14,11 @@ public class TicketsBetTransModel : Ticket
     [JsonPropertyName("cr")]
     public int Creator { get; set; }
 
-    [JsonPropertyName("crb")]
+    [JsonIgnore]
     public int CreatorBackUp { get; set; }
+
+    [JsonIgnore]
+    public string? Action { get; set; }
 }
 
 public class KeyGroupTicket

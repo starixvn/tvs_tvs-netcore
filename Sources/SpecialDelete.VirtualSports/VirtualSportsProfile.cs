@@ -18,6 +18,6 @@ public class VirtualSportsProfile : Profile
         CreateMap<VoidTicketsQuery, VoidTicketsCriteria>();
         CreateMap<TicketViewModel, MailTicketViewModel>();
         CreateMap<VoidTicketsQuery, EmailVoidModel>();
-        CreateMap<RecoverTicketsValidation, Result>();
+        CreateMap<Result, RecoverTicketsValidation>();
     }
 }

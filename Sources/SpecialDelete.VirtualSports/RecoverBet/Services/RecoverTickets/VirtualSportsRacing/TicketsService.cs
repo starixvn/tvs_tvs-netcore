@@ -4,7 +4,7 @@ using Settlement.Business.Core.Models;
 using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Criteria;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
-using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.Constants;
 
 namespace SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets.VirtualSportsRacing;
 
@@ -59,7 +59,7 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
 
     public async Task<IEnumerable<TicketsBetTransModel>> PrepareTickets(IEnumerable<TicketsBetTransModel> originalTickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources)
     {
-        var runningTickets = originalTickets.Where(x => x.Status.IsRunning());
+        var runningTickets = originalTickets.Where(x => x.Action is null);
         var updatedCalculateTickets = await ProcessSettleTickets(originalTickets, outright, resources);
         var updatedRefundTickets = ProcessRefundTickets(originalTickets);
 
@@ -68,7 +68,7 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
 
     private async Task<IEnumerable<TicketsBetTransModel>> ProcessSettleTickets(IEnumerable<TicketsBetTransModel> tickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources)
     {
-        var settledTickets = tickets.Where(x => x.Status.IsSettled()).ToList();
+        var settledTickets = tickets.Where(x => string.Equals(x.Action, SettlementAction.ReCalculate, StringComparison.OrdinalIgnoreCase)).ToList();
         if (settledTickets.Count == 0)
         {
             return [];
@@ -80,7 +80,7 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
 
     public IEnumerable<TicketsBetTransModel> ProcessRefundTickets(IEnumerable<TicketsBetTransModel> tickets)
     {
-        var refundTickets = tickets.Where(x => x.Status.IsRefund()).ToList();
+        var refundTickets = tickets.Where(x => string.Equals(x.Action, SettlementAction.Refund, StringComparison.OrdinalIgnoreCase)).ToList();
         if (refundTickets.Count == 0)
         {
             return [];

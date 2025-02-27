@@ -58,7 +58,7 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
 
     public async Task<(IEnumerable<Outright>, IEnumerable<Resources>)> GetRacingInfo(int matchId)
     {
-        var criteria = new GetRacingResultCriteria { MatchId = matchId };
+        var criteria = new GetRacingResultCriteria { EventId = matchId };
         var (_, secondResult, thirdResult) = await repository.FetchMultipleAsync<string, Outright, Resources>(criteria);
 
         return (secondResult, thirdResult);

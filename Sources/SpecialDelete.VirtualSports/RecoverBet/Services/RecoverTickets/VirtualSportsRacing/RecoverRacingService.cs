@@ -31,7 +31,7 @@ public class RecoverRacingServiceImp(TicketsService ticketsService, Repository r
             var (outright, resources) = await repository.GetRacingInfo(group.Key.MatchId);
             var ticketsAfterValidation = await ticketsService.GetTicketVs2Racing(group, resources, group.Key.SiteDbGroupId);
             var preparedTickets = await ticketsService.PrepareTickets(ticketsAfterValidation, outright, resources);
-            var lockMatchResult = await matchService.LockMatch(group.Key.MatchId, LockMatchType.Match, LockMatchStatus.Lock, group.Key.SiteDbGroupId);
+            var lockMatchResult = await matchService.LockMatch(group.Key.MatchId, LockMatchType.VirtualRacing, LockMatchStatus.Lock, group.Key.SiteDbGroupId);
 
             var validation = mapper.Map<RecoverTicketsValidation>(lockMatchResult);
             if (validation.IsSuccessful)
@@ -41,7 +41,7 @@ public class RecoverRacingServiceImp(TicketsService ticketsService, Repository r
                 validation.ErrorMsg = result.Item1.ErrorMsg;
                 validation.NegativeBalanceUsers = result.Item1.NegativeBalanceUsers;
 
-                await matchService.LockMatch(group.Key.MatchId, LockMatchType.Match, LockMatchStatus.UnLock, group.Key.SiteDbGroupId);
+                await matchService.LockMatch(group.Key.MatchId, LockMatchType.VirtualRacing, LockMatchStatus.UnLock, group.Key.SiteDbGroupId);
                 return ([validation], result.Item2);
             }
 
@@ -49,8 +49,8 @@ public class RecoverRacingServiceImp(TicketsService ticketsService, Repository r
         }
         catch (Exception exception)
         {
-            var errorMessage = $"matchId = {group.Key.MatchId} - SiteDbGroupId = {group.Key.SiteDbGroupId} - {exception.Message}";
-            await matchService.LockMatch(group.Key.MatchId, LockMatchType.Match, LockMatchStatus.UnLock, group.Key.SiteDbGroupId);
+            var errorMessage = $"MatchId = {group.Key.MatchId} - SiteDbGroupId = {group.Key.SiteDbGroupId} - {exception.Message}";
+            await matchService.LockMatch(group.Key.MatchId, LockMatchType.VirtualRacing, LockMatchStatus.UnLock, group.Key.SiteDbGroupId);
             var validation = new RecoverTicketsValidation
             {
                 ErrorCode = 1,
