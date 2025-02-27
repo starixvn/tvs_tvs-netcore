@@ -43,7 +43,7 @@ public class CheckUsernameServiceImp(IDynamicRepository repository, GetTransInfo
 
     private static bool IsTransInfoJsonTooLarge(IEnumerable<string> transInfoJsonList)
     {
-        const int maxByteTransInfoJsonList = 5000000;
+        const int maxByteTransInfoJsonList = 8_000_000; // ~ 7.63MB (Data test Local)
         var transInfoJson = string.Join(",", transInfoJsonList);
 
         return Encoding.UTF8.GetByteCount(transInfoJson) > maxByteTransInfoJsonList;
@@ -51,7 +51,7 @@ public class CheckUsernameServiceImp(IDynamicRepository repository, GetTransInfo
 
     private static CheckValidUsernamesCriteria CreateCriteria(CheckValidUsernamesRequest model, IEnumerable<string> transInfoJsonList)
     {
-        var criteria = new CheckValidUsernamesCriteria
+        return new CheckValidUsernamesCriteria
         {
             Usernames = model.Usernames,
             RequestId = model.RequestId,
@@ -63,8 +63,6 @@ public class CheckUsernameServiceImp(IDynamicRepository repository, GetTransInfo
             IsVoidAllArchivedTickets = model.IsVoidAllArchivedTickets,
             TransInfoJson = string.Join(",", transInfoJsonList)
         };
-
-        return criteria;
     }
 
     private async Task<IEnumerable<string>> GetTransInfoJson(CheckValidUsernamesRequest model)
