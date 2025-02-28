@@ -21,9 +21,4 @@ public class TicketsBetTransModel : Ticket
     public string? Action { get; set; }
 }
 
-public class KeyGroupTicket
-{
-    public int MatchId { get; set; }
-
-    public int SiteDbGroupId { get; set; }
-}
+public record KeyGroupTicket(int MatchId, int SiteDbGroupId);

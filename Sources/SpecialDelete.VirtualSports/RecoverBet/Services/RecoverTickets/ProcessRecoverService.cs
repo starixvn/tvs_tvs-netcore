@@ -2,7 +2,6 @@
 using SpecialDelete.VirtualSports.RecoverBet.Repositories;
 using SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets.VirtualSportsRacing;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets;
@@ -12,8 +11,7 @@ public interface ProcessRecoverService
     Task<RecoverTicketsModel> Execute(Query query);
 }
 
-public class ProcessRecoverServiceImp(Repository repository, LoggingService loggingService,
-    RecoverRacingService recoverRacingService) : ProcessRecoverService
+public class ProcessRecoverServiceImp(Repository repository, RecoverRacingService recoverRacingService) : ProcessRecoverService
 {
     public async Task<RecoverTicketsModel> Execute(Query query)
     {

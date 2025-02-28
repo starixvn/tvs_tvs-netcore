@@ -63,7 +63,7 @@ public class RecoverBetServiceImp(
         return results;
     }
 
-    private static IEnumerable<Result> HandlerErrorRecoverTickets(RecoverTicketsModel model)
+    private static List<Result> HandlerErrorRecoverTickets(RecoverTicketsModel model)
     {
         if (model.Validation.IsSuccessful)
         {
@@ -96,7 +96,7 @@ public class RecoverBetServiceImp(
         }
     }
 
-    private IEnumerable<Result> CreateMessage(RecoverTicketsModel model, Recover typeOfRecover)
+    private List<Result> CreateMessage(RecoverTicketsModel model, Recover typeOfRecover)
     {
         List<Result> results;
         string format;

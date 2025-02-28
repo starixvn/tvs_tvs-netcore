@@ -17,14 +17,14 @@ public class RecoverRacingServiceImp(TicketsService ticketsService, Repository r
 {
     public async Task<(IEnumerable<RecoverTicketsValidation>, IEnumerable<RecoverTicketModel>)[]> Execute(IEnumerable<BetIdRecover> vs2RacingBetIds)
     {
-        var groupTickets = vs2RacingBetIds.GroupBy(t => new KeyGroupTicket { MatchId = t.MatchId, SiteDbGroupId = t.SiteDbGroupId });
+        var groupTickets = vs2RacingBetIds.GroupBy(t => new KeyGroupTicket(t.MatchId, t.SiteDbGroupId));
         var tasks = groupTickets.Select(ExecuteOneByOne);
         var results = await Task.WhenAll(tasks);
 
         return results;
     }
 
-    public async Task<(IEnumerable<RecoverTicketsValidation>, IEnumerable<RecoverTicketModel>)> ExecuteOneByOne(IGrouping<KeyGroupTicket, BetIdRecover> group)
+    private async Task<(IEnumerable<RecoverTicketsValidation>, IEnumerable<RecoverTicketModel>)> ExecuteOneByOne(IGrouping<KeyGroupTicket, BetIdRecover> group)
     {
         try
         {
@@ -36,13 +36,14 @@ public class RecoverRacingServiceImp(TicketsService ticketsService, Repository r
             var validation = mapper.Map<RecoverTicketsValidation>(lockMatchResult);
             if (validation.IsSuccessful)
             {
-                var result = await ticketsService.RecoverTicketVs2Racing(preparedTickets, group.Key.SiteDbGroupId);
-                validation.ErrorCode = result.Item1.ErrorCode;
-                validation.ErrorMsg = result.Item1.ErrorMsg;
+                (RecoverTicketsValidation Validation, IEnumerable<RecoverTicketModel> Tickets) result
+                    = await ticketsService.RecoverTicketVs2Racing(preparedTickets, group.Key.SiteDbGroupId);
+                validation.ErrorCode = result.Validation.ErrorCode;
+                validation.ErrorMsg = result.Validation.ErrorMsg;
                 validation.NegativeBalanceUsers = result.Item1.NegativeBalanceUsers;
 
                 await matchService.LockMatch(group.Key.MatchId, LockMatchType.VirtualRacing, LockMatchStatus.UnLock, group.Key.SiteDbGroupId);
-                return ([validation], result.Item2);
+                return ([validation], result.Tickets);
             }
 
             return ([validation], []);
