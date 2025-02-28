@@ -120,14 +120,26 @@ export class ValidationService {
   }
 
   public isSubTypeFilterByAcceptedTime(subIssueTypeId: string): boolean {
-    return subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_NO_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_NO_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_NO_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_NO_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_ONWARDS.toString();
+    const subTypesFilterByAcceptedTime = [
+      SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_NO_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_NO_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_NO_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_NO_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_HOME_CORNER_NO_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_AWAY_CORNER_NO_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_HOME_CORNER_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_AWAY_CORNER_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_NO_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_NO_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_ONWARDS,
+      SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_ONWARDS
+    ];
+  
+    return subTypesFilterByAcceptedTime.includes(Number(subIssueTypeId));
   }
 
   public isSubTypeFilterByTransTimeAndAcceptedTime(subIssueTypeId: string): boolean {

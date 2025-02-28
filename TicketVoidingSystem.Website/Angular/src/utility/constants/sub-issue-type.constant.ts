@@ -58,4 +58,20 @@ export class SubIssueTypeConstant {
   static readonly LEAGUE_NAME_CHINESE = 129;
   static readonly GAME_CRASHED_VOID_LIVE = 109;
   static readonly RESTART = 130;
+  static readonly NO_INDICATION_HOME_CORNER_NO_ONWARDS = 132;
+  static readonly NO_INDICATION_AWAY_CORNER_NO_ONWARDS = 134;
+  static readonly NO_INDICATION_HOME_CORNER_ONWARDS = 133;
+  static readonly NO_INDICATION_AWAY_CORNER_ONWARDS = 135;
+  static readonly NO_INDICATION_HOME_GOAL_KICK_NO_ONWARDS = 136;
+  static readonly NO_INDICATION_AWAY_GOAL_KICK_NO_ONWARDS = 138;
+  static readonly NO_INDICATION_HOME_GOAL_KICK_ONWARDS = 137;
+  static readonly NO_INDICATION_AWAY_GOAL_KICK_ONWARDS = 139;
+  static readonly WRONG_SCORE_NEXT_GOAL_HOME = 140;
+  static readonly WRONG_SCORE_NEXT_GOAL_AWAY = 141;
+  static readonly WRONG_SCORE_NEXT_GOAL = 145;
+  static readonly WRONG_SCORE_NEXT_CORNER_HOME = 142;
+  static readonly WRONG_SCORE_NEXT_CORNER_AWAY = 143;
+  static readonly WRONG_SCORE_NEXT_CORNER = 147;
+  static readonly WRONG_SCORE_NEXT_BOOKING = 144;
+  static readonly WRONG_SCORE_NEXT_GOAL_KICK = 146;
 }

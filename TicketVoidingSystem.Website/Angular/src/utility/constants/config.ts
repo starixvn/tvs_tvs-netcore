@@ -152,14 +152,14 @@ export class TVSRequestActionType {
 
   static readonly NAME_MAPPING = {
     [this.AUTO_VOID_WINNING_ID]: "Auto Void Winning",
-    [this.TAKE_NOTE_ID]:  "Take note",
-    [this.WAITING_ID]:  "Waiting",
-    [this.AUTO_VOID_INSTANT_ID]:  "Auto Void All (Instant)",
-    [this.MANUAL_VOID_ID]:  "Manual Void",
-    [this.AUTO_VOID_INSTANT_WITHOUT_POLICY]:  "Auto Void All (Instant w/o Policy)",
-    [this.AUTO_VOID_RESULT_KEYED_ID]:  "Auto Void All (Result keyed)",
-    [this.AUTO_VOID_INSTANT_WITH_POLICY_ID]:  "Auto Void (Instant with Policy)",
-    [this.AUTO_RECOVER_ID]:  "Auto Recover"
+    [this.TAKE_NOTE_ID]: "Take note",
+    [this.WAITING_ID]: "Waiting",
+    [this.AUTO_VOID_INSTANT_ID]: "Auto Void All (Instant)",
+    [this.MANUAL_VOID_ID]: "Manual Void",
+    [this.AUTO_VOID_INSTANT_WITHOUT_POLICY]: "Auto Void All (Instant w/o Policy)",
+    [this.AUTO_VOID_RESULT_KEYED_ID]: "Auto Void All (Result keyed)",
+    [this.AUTO_VOID_INSTANT_WITH_POLICY_ID]: "Auto Void (Instant with Policy)",
+    [this.AUTO_RECOVER_ID]: "Auto Recover"
   };
 }
 
@@ -283,7 +283,19 @@ export class SubIssueTypeGroup {
     SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_NO_ONWARDS,
     SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_NO_ONWARDS,
     SubIssueTypeConstant.WRONG_INDICATION_SCORE_NO_ONWARDS,
-    SubIssueTypeConstant.WRONG_INDICATION_SWAP_TEAM_SCORE_NO_ONWARDS
+    SubIssueTypeConstant.WRONG_INDICATION_SWAP_TEAM_SCORE_NO_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_HOME_CORNER_NO_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_AWAY_CORNER_NO_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_NO_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_NO_ONWARDS,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_AWAY,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_HOME,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_AWAY,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK,
   ];
 
   static readonly SUBTYPE_ONWARDS: number[] = [
@@ -293,6 +305,18 @@ export class SubIssueTypeGroup {
     SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_ONWARDS,
     SubIssueTypeConstant.WRONG_INDICATION_SCORE_ONWARDS,
     SubIssueTypeConstant.WRONG_INDICATION_SWAP_TEAM_SCORE_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_HOME_CORNER_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_AWAY_CORNER_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_ONWARDS,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_AWAY,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_HOME,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_AWAY,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK
   ];
   static readonly SUBTYPE_WRONG_SCORE_RELATED_EVENT: number[] = [
     SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME,
@@ -361,12 +385,12 @@ export class SiteDbGroupConstant {
 export class ActionVoidByIssueTypeConst {
   static readonly REDUCED_OVER: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
-   // TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
+    // TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly ABANDONED: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
-   // TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
+    // TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly WRONG_ODDS: number[] = [
@@ -456,7 +480,7 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly NOT_PARTICIPATE: number[] = [
-   // TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
+    // TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
@@ -465,12 +489,12 @@ export class ActionVoidByIssueTypeConst {
   ];
   static readonly WRONG_MARKET_OFFERED: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
-  //  TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    //  TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly TECHNICAL_ERROR: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
-  //  TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    //  TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly WRONG_ODDS_SPORTS_BOOK: number[] = [
@@ -492,7 +516,7 @@ export class AllowanceRate {
   static readonly Twenty = '20';
   static readonly TwentyFive = '25';
   static readonly Thirty = '30';
-  
+
   static readonly ALLOWANCE_RATE: Selection[] = [
     { value: AllowanceRate.Twenty, name: '20' },
     { value: AllowanceRate.TwentyFive, name: '25' },
