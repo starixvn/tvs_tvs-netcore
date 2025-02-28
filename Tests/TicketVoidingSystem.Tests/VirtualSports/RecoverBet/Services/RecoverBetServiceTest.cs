@@ -44,7 +44,7 @@ public class RecoverBetServiceTest
         {
             Groups = [new Group<TicketViewModel>()]
         };
-        var tickets = new List<BetId>
+        var tickets = new List<BetIdRecover>
         {
             new() { TransId = "123", SiteDbGroupId = 0 },
             new() { TransId = "124", SiteDbGroupId = 1 },
@@ -86,7 +86,7 @@ public class RecoverBetServiceTest
     public async Task RecoverTickets_ExecuteQueryFail_ReturnFailResult()
     {
         // Arrange
-        var tickets = new List<BetId>
+        var tickets = new List<BetIdRecover>
         {
             new() { TransId = "123", SiteDbGroupId = 0 },
             new() { TransId = "124", SiteDbGroupId = 1 },
@@ -123,7 +123,7 @@ public class RecoverBetServiceTest
     public async Task RecoverTickets_ExecuteQuerySuccess_RemoveMessage()
     {
         // Arrange
-        var tickets = new List<BetId>
+        var tickets = new List<BetIdRecover>
         {
             new() { TransId = "123", SiteDbGroupId = 0 },
             new() { TransId = "124", SiteDbGroupId = 1 },
@@ -152,7 +152,7 @@ public class RecoverBetServiceTest
     public async Task RecoverTickets_ExecuteQuerySuccess_DoNotContactUser()
     {
         // Arrange
-        var tickets = new List<BetId>
+        var tickets = new List<BetIdRecover>
         {
             new() { TransId = "123", SiteDbGroupId = 0 },
             new() { TransId = "124", SiteDbGroupId = 1 },
@@ -181,7 +181,7 @@ public class RecoverBetServiceTest
     public async Task RecoverTickets_SendEmailThrowException_ReturnExceptionResult()
     {
         // Arrange
-        var tickets = new List<BetId>
+        var tickets = new List<BetIdRecover>
         {
             new() { TransId = "123", SiteDbGroupId = 0 },
             new() { TransId = "124", SiteDbGroupId = 1 },
@@ -231,7 +231,7 @@ public class RecoverBetServiceTest
     public async Task RecoverTickets_SendEmailThrowException_WriteLog()
     {
         // Arrange
-        var tickets = new List<BetId>
+        var tickets = new List<BetIdRecover>
         {
             new() { TransId = "123", SiteDbGroupId = 0 },
             new() { TransId = "124", SiteDbGroupId = 1 },
@@ -277,7 +277,7 @@ public class RecoverBetServiceTest
     public async Task CreateMessage_RecoverSingleTicket_CreateWithCompletedMatchIds()
     {
         // Arrange
-        var tickets = new List<BetId>
+        var tickets = new List<BetIdRecover>
         {
             new() { TransId = "123", SiteDbGroupId = 0 },
             new() { TransId = "124", SiteDbGroupId = 1  },
@@ -311,7 +311,7 @@ public class RecoverBetServiceTest
     public async Task CreateMessage_RecoverSubParlayTicket_CreateWithCompletedMatchIds()
     {
         // Arrange
-        var tickets = new List<BetId>
+        var tickets = new List<BetIdRecover>
         {
             new() { TransId = "123", SiteDbGroupId = 0 },
             new() { TransId = "124", SiteDbGroupId = 1  },
@@ -345,7 +345,7 @@ public class RecoverBetServiceTest
     public async Task CreateMessage_RecoverMainParlayTicket_CreateWithCompletedMatchIds()
     {
         // Arrange
-        var tickets = new List<BetId>
+        var tickets = new List<BetIdRecover>
         {
             new() { TransId = "123", SiteDbGroupId = 0 },
             new() { TransId = "124", SiteDbGroupId = 1  },
