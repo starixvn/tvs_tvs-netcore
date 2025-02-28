@@ -1,5 +1,6 @@
 ﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets;
 using TicketVoidingSystem.Models;
@@ -42,7 +43,9 @@ public class MarkTicketsServiceImp(
                 IssueTypeId = issueTypeId,
                 UserId = sessionService.UserId,
                 Ip = sessionService.GetClientIp(),
-                LogActionId = LogActionIdConstant.MarkTicketAddRequestTvs
+                LogActionId = markTypeId is MarkTypeConstant.ExecuteMarkTickets
+                    ? LogActionIdConstant.MarkTicketAddRequestTvs
+                    : LogActionIdConstant.UnMarkTicketAddRequestTvs
             };
 
             var (results, transIds) = await repository.FetchMultipleAsync<Result, long>(markTicketsCommand);
