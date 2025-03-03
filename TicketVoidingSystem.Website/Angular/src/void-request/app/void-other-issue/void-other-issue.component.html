@@ -24,11 +24,6 @@
         [sportType]="requestDetail.request.sportType">
       </log-info>
     }
-    @if (isWrongScore() || isWrongOdds()) {
-      <filter [groupBetTypes]="groupBetTypes" [match]="match"
-        [allBetTypes]="allBetTypes" [getPlayerQuery]="getPlayerQuery" (search)="search($event)">
-      </filter>
-    }
   </div>
   <licensee-affected-list [licenseeAffectedList]="licenseeAffectedList" [isDisplay]="isShowTicket"></licensee-affected-list>
   <div class="d-flex">
