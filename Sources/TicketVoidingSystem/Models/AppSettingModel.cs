@@ -24,8 +24,6 @@ public class AppSettingModel
     public FanexMailService FanexMailService { get; init; }
 
     public string LinkedLogUrl { get; init; }
-
-    public bool IsUseKnapsackAlgorithm { get; set; }
 }
 
 public class AuthSettings

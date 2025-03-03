@@ -52,15 +52,15 @@ public class GetPoolHouseTicketServiceImp(MapTicketsService mapTicketsService, P
         var singleTickets = afterPagingTickets.Where(ticket => !ticket.IsMixParlay && ticket.GroupName != "Others").ToList();
 
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-        if (creditParlayTickets.Any())
+        if (creditParlayTickets.Count != 0)
         {
             groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
-        if (depositParlayTickets.Any())
+        if (depositParlayTickets.Count != 0)
         {
             groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }
-        if (othersTickets.Any())
+        if (othersTickets.Count != 0)
         {
             groups.Add(new Group<GetTicketModel> { Name = "Others", Tickets = othersTickets });
         }

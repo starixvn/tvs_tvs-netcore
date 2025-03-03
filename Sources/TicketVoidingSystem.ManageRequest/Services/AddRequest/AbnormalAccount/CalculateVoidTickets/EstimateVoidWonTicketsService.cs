@@ -1,5 +1,4 @@
 ﻿using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
 
@@ -8,16 +7,9 @@ public interface EstimateVoidWonTicketsService
     IEnumerable<TicketCalculateWinLostAccount> Execute(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit);
 }
 
-public class EstimateVoidWonTicketsServiceImp(
-    KnapsackAlgorithmService knapsackAlgorithmService,
-    SortAlgorithmService sortAlgorithmService)
+public class EstimateVoidWonTicketsServiceImp(SortAlgorithmService sortAlgorithmService)
     : EstimateVoidWonTicketsService
 {
-    private static bool IsCanNotRunAlgorithm(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit)
-    {
-        return GetMaxCapacity(wonTickets, loseTickets, compareCredit) <= 0;
-    }
-
     private static decimal GetMaxCapacity(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit)
     {
         return compareCredit - (loseTickets.TotalWinLost - wonTickets.TotalWinLost);
@@ -25,13 +17,7 @@ public class EstimateVoidWonTicketsServiceImp(
 
     public IEnumerable<TicketCalculateWinLostAccount> Execute(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit)
     {
-        if (IsCanNotRunAlgorithm(wonTickets, loseTickets, compareCredit))
-        {
-            return [];
-        }
-
         var maxCapacity = GetMaxCapacity(wonTickets, loseTickets, compareCredit);
-        return AppSettingService.AppSetting.IsUseKnapsackAlgorithm
-            ? knapsackAlgorithmService.Execute(wonTickets, maxCapacity) : sortAlgorithmService.Execute(wonTickets, maxCapacity);
+        return maxCapacity > 0 ? sortAlgorithmService.Execute(wonTickets, maxCapacity) : [];
     }
 }

@@ -61,7 +61,7 @@ public class CalculateHaveStatusWonNotLoseServiceImp(
         }
     }
 
-    public static void UpdateAccountWinlostByGroupMatchId(AccountWinlostModel account, OrderedTickets wonTickets, IEnumerable<TicketCalculateWinLostAccount> voidWonTickets)
+    private static void UpdateAccountWinlostByGroupMatchId(AccountWinlostModel account, OrderedTickets wonTickets, IEnumerable<TicketCalculateWinLostAccount> voidWonTickets)
     {
         if (wonTickets.Descending == null)
         {
@@ -80,7 +80,7 @@ public class CalculateHaveStatusWonNotLoseServiceImp(
         account.EstimateVoidAmountUnEditableTickets = voidWonTickets.Where(x => !editableMatches.Contains(x.MatchId)).Sum(x => x.WinLost);
     }
 
-    public static bool IsHasBothCheckedAndUncheckedTickets(IEnumerable<TicketCalculateWinLostAccount> wonTickets)
+    private static bool IsHasBothCheckedAndUncheckedTickets(IEnumerable<TicketCalculateWinLostAccount> wonTickets)
     {
         return wonTickets.Any(x => x.IsChecked) && wonTickets.Any(x => !x.IsChecked);
     }

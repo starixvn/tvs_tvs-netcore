@@ -11,19 +11,18 @@ public class SortAlgorithmServiceImp : SortAlgorithmService
 {
     public IEnumerable<TicketCalculateWinLostAccount> Execute(OrderedTickets wonTickets, decimal maxCapacity)
     {
-        var voidTickets = new List<TicketCalculateWinLostAccount>();
-        decimal currentSum = 0;
+        var selectedTickets = new List<TicketCalculateWinLostAccount>();
+        decimal totalWinLost = 0;
+
         foreach (var ticket in wonTickets.Descending)
         {
-            if (currentSum + ticket.WinLost >= maxCapacity)
+            if (totalWinLost + ticket.WinLost < maxCapacity)
             {
-                continue;
+                selectedTickets.Add(ticket);
+                totalWinLost += ticket.WinLost;
             }
-
-            voidTickets.Add(ticket);
-            currentSum += ticket.WinLost;
         }
 
-        return voidTickets;
+        return selectedTickets;
     }
 }

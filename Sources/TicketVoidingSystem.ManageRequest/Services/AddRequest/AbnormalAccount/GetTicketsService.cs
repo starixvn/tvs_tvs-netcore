@@ -31,7 +31,7 @@ public class GetTicketsServiceImp(MapTicketsService mapTicketsService, CompressD
         return viewModel;
     }
 
-    public static IEnumerable<TicketCalculateWinLostAccount> GetTicketsShowPopup(IEnumerable<TicketCalculateWinLostAccount> tickets, int custId)
+    private static IEnumerable<TicketCalculateWinLostAccount> GetTicketsShowPopup(IEnumerable<TicketCalculateWinLostAccount> tickets, int custId)
     {
         return tickets.Where(x => x.Status.IsWon() && x.CustId == custId)
             .GroupBy(b => b.MatchId)
@@ -39,7 +39,7 @@ public class GetTicketsServiceImp(MapTicketsService mapTicketsService, CompressD
             .SelectMany(y => y);
     }
 
-    public static bool IsHasBothCheckedAndUncheckedTickets(IEnumerable<TicketCalculateWinLostAccount> tickets)
+    private static bool IsHasBothCheckedAndUncheckedTickets(IEnumerable<TicketCalculateWinLostAccount> tickets)
     {
         return tickets.Any(x => x.IsChecked) && tickets.Any(x => !x.IsChecked);
     }
