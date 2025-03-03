@@ -2,7 +2,8 @@
 	<event-league #eventLeague
 		[isEdit]="isEdit"
 		[matchId]="matchId"
-		(changeEvent)="changeMatchEvent($event)">
+		(changeEvent)="changeMatchEvent($event)"
+		[subIssueTypeId]="filter.subIssueTypeId">
 	</event-league>
 
 	<div *ngIf="isShowVarCheck()">

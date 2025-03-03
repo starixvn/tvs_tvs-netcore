@@ -94,9 +94,7 @@ export class WrongScoreService {
   }
 
   public getSelectedWrongScores(wrongScoreModels: WrongScoreModel[]): WrongScoreModel[] {
-    const models = wrongScoreModels.filter(x => x.isChecked);
-
-    return models;
+    return wrongScoreModels.filter(x => x.isChecked);
   }
 
   public getFilterByBaseOnSubIssueType(subIssueTypeId: string): number {
