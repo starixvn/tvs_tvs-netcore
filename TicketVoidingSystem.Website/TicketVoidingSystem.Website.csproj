@@ -35,6 +35,7 @@
   <ItemGroup>
     <PackageReference Include="Fanex.BetList.Bitcoin" Version="2.0.0.1" />
     <PackageReference Include="Fanex.BetList.CashOut" Version="2.0.0" />
+    <PackageReference Include="Fanex.BetList.Core" Version="3.0.4.9-basketball-01" />
     <PackageReference Include="Fanex.BetList.Core.RemotingRef" Version="2.0.0.2" />
     <PackageReference Include="Fanex.BetList.ESports" Version="2.0.0" />
     <PackageReference Include="Fanex.Caching.Redis" Version="2.2.7" />
