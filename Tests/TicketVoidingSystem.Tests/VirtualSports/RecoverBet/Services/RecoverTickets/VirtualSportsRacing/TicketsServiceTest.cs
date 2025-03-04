@@ -11,6 +11,7 @@ using SpecialDelete.VirtualSports.RecoverBet.Criteria;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets.VirtualSportsRacing;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Services;
 using Xunit;
 using SettlementResources = Settlement.Business.Core.Models.Resources;
 
@@ -20,6 +21,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
     {
         private readonly IDynamicRepository repository;
         private readonly CalculateService calculateService;
+        private readonly SessionService sessionService;
         private readonly TicketsServicesImp ticketsService;
 
         public TicketsServiceTest()
@@ -27,9 +29,10 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             // Setup mocks
             repository = Substitute.For<IDynamicRepository>();
             calculateService = Substitute.For<CalculateService>();
+            sessionService = Substitute.For<SessionService>();
 
             // Create service instance
-            ticketsService = new TicketsServicesImp(repository, calculateService);
+            ticketsService = new TicketsServicesImp(repository, calculateService, sessionService);
         }
 
         [Fact]
@@ -131,8 +134,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             Assert.Equal("user1", result.Item1.NegativeBalanceUsers);
             Assert.Equal(recoveredTickets, result.Item2);
             var ticketJson = JsonSerializer.Serialize(tickets);
-            await repository.Received(1).FetchAsync<RecoverTicketModel>(
-                Arg.Is<RecoverTicketsVs2RacingCriteria>(c =>
+            await repository.Received(1).FetchAsync<RecoverTicketModel>(Arg.Is<RecoverTicketsVs2RacingCriteria>(c =>
                     c.SiteDbGroupId == 1 && c.TransInfoJson == ticketJson));
         }
 
@@ -152,7 +154,10 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             {
                 new() { OddsType = 1 }
             };
-
+            var runningTickets = new List<TicketsBetTransModel>
+            {
+                new() { TransId = 101, Action = null }
+            };
             var settledTickets = new List<TicketsBetTransModel>
             {
                 new() { TransId = 102, Action = SettlementAction.ReCalculate }
@@ -161,12 +166,11 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             {
                 new() { TransId = 103, Action = SettlementAction.Refund }
             };
-
-            calculateService.ResetToRunning(Arg.Is<List<TicketsBetTransModel>>(
-                list => list.Count == 1 && list[0].Action == SettlementAction.ReCalculate))
+            calculateService.ResetToRunning(Arg.Is<List<TicketsBetTransModel>>(list => list.Count == 1 && list[0].Action == null))
+                .Returns(runningTickets);
+            calculateService.ResetToRunning(Arg.Is<List<TicketsBetTransModel>>(list => list.Count == 1 && list[0].Action == SettlementAction.ReCalculate))
                 .Returns(settledTickets);
-            calculateService.ResetToRunning(Arg.Is<List<TicketsBetTransModel>>(
-                list => list.Count == 1 && list[0].Action == SettlementAction.Refund))
+            calculateService.ResetToRunning(Arg.Is<List<TicketsBetTransModel>>(list => list.Count == 1 && list[0].Action == SettlementAction.Refund))
                 .Returns(refundTickets);
 
             var processedSettleTickets = new List<TicketsBetTransModel>
@@ -192,12 +196,10 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             Assert.Contains(result, t => t is { TransId: 102, Status: "Won" });
             Assert.Contains(result, t => t is { TransId: 103, Status: "Refund" });
 
-            calculateService.Received(1).ResetToRunning(
-                Arg.Is<List<TicketsBetTransModel>>(list =>
+            calculateService.Received(1).ResetToRunning(Arg.Is<List<TicketsBetTransModel>>(list =>
                     list.Count == 1 && list[0].Action == SettlementAction.ReCalculate));
 
-            calculateService.Received(1).ResetToRunning(
-                Arg.Is<List<TicketsBetTransModel>>(list =>
+            calculateService.Received(1).ResetToRunning(Arg.Is<List<TicketsBetTransModel>>(list =>
                     list.Count == 1 && list[0].Action == SettlementAction.Refund));
 
             calculateService.Received(1).Refund(refundTickets);
@@ -218,6 +220,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             {
                 new() { OddsType = 1 }
             };
+            calculateService.ResetToRunning(default).ReturnsForAnyArgs(originalTickets);
 
             // Act
             var result = await ticketsService.PrepareTickets(originalTickets, outright, resources);
@@ -227,7 +230,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             Assert.Contains(result, t => t.TransId == 101);
             Assert.Contains(result, t => t.TransId == 102);
 
-            calculateService.DidNotReceive().ResetToRunning(Arg.Any<List<TicketsBetTransModel>>());
+            calculateService.Received(1).ResetToRunning(Arg.Any<List<TicketsBetTransModel>>());
             await calculateService.DidNotReceive().Settle(
                 Arg.Any<List<TicketsBetTransModel>>(),
                 Arg.Any<List<Outright>>(),

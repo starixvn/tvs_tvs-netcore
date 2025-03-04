@@ -31,8 +31,8 @@ public class RecoverRacingServiceImp(TicketsService ticketsService, Repository r
             var (outright, resources) = await repository.GetRacingInfo(group.Key.MatchId);
             var ticketsAfterValidation = await ticketsService.GetTicketVs2Racing(group, resources, group.Key.SiteDbGroupId);
             var preparedTickets = await ticketsService.PrepareTickets(ticketsAfterValidation, outright, resources);
+            var completedMatchIds = GetCompletedMatches(ticketsAfterValidation);
             var lockMatchResult = await matchService.LockMatch(group.Key.MatchId, LockMatchType.VirtualRacing, LockMatchStatus.Lock, group.Key.SiteDbGroupId);
-
             var validation = mapper.Map<RecoverTicketsValidation>(lockMatchResult);
             if (validation.IsSuccessful)
             {
@@ -40,6 +40,7 @@ public class RecoverRacingServiceImp(TicketsService ticketsService, Repository r
                     = await ticketsService.RecoverTicketVs2Racing(preparedTickets, group.Key.SiteDbGroupId);
                 validation.ErrorCode = result.Validation.ErrorCode;
                 validation.ErrorMsg = result.Validation.ErrorMsg;
+                validation.CompletedMatchIds = string.Join(",", completedMatchIds);
                 validation.NegativeBalanceUsers = result.Item1.NegativeBalanceUsers;
 
                 await matchService.LockMatch(group.Key.MatchId, LockMatchType.VirtualRacing, LockMatchStatus.UnLock, group.Key.SiteDbGroupId);
@@ -60,5 +61,13 @@ public class RecoverRacingServiceImp(TicketsService ticketsService, Repository r
 
             return ([validation], []);
         }
+    }
+
+    private static IEnumerable<int> GetCompletedMatches(IEnumerable<TicketsBetTransModel> ticketsAfterValidation)
+    {
+        return ticketsAfterValidation.Where(x =>
+                string.Equals(x.Action, SettlementAction.ReCalculate, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(x.Action, SettlementAction.Refund, StringComparison.OrdinalIgnoreCase))
+            .Select(x => x.MatchId);
     }
 }

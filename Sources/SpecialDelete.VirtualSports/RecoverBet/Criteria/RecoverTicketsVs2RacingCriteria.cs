@@ -6,6 +6,8 @@ namespace SpecialDelete.VirtualSports.RecoverBet.Criteria;
 
 public class RecoverTicketsVs2RacingCriteria : NonQueryCommand
 {
+    public int MatchId { get; set; }
+
     public string TransInfoJson { get; set; }
 
     public int ErrorCode { get; set; }
@@ -13,6 +15,10 @@ public class RecoverTicketsVs2RacingCriteria : NonQueryCommand
     public string ErrorMsg { get; set; }
 
     public string NegativeBalanceUsers { get; set; }
+
+    public int UserId { get; set; }
+
+    public string Ip { get; set; }
 
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }

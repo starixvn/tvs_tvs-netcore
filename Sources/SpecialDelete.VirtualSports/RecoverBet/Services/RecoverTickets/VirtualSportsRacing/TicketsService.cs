@@ -5,6 +5,7 @@ using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Criteria;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Services;
 
 namespace SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets.VirtualSportsRacing;
 
@@ -17,7 +18,7 @@ public interface TicketsService
     Task<IEnumerable<TicketsBetTransModel>> PrepareTickets(IEnumerable<TicketsBetTransModel> originalTickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources);
 }
 
-public class TicketsServicesImp(IDynamicRepository repository, CalculateService calculateService) : TicketsService
+public class TicketsServicesImp(IDynamicRepository repository, CalculateService calculateService, SessionService sessionService) : TicketsService
 {
     public async Task<IEnumerable<TicketsBetTransModel>> GetTicketVs2Racing(IEnumerable<BetIdRecover> vs2RacingTickets, IEnumerable<Resources> resources, int siteDbGroupId)
     {
@@ -42,8 +43,11 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
     {
         var criteria = new RecoverTicketsVs2RacingCriteria
         {
+            MatchId = tickets.First().MatchId,
             TransInfoJson = JsonSerializer.Serialize(tickets),
-            SiteDbGroupId = siteDbGroupId
+            SiteDbGroupId = siteDbGroupId,
+            UserId = sessionService.UserId,
+            Ip = sessionService.GetClientIp()
         };
 
         var recoveredTickets = await repository.FetchAsync<RecoverTicketModel>(criteria);
@@ -59,11 +63,18 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
 
     public async Task<IEnumerable<TicketsBetTransModel>> PrepareTickets(IEnumerable<TicketsBetTransModel> originalTickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources)
     {
-        var runningTickets = originalTickets.Where(x => x.Action is null);
-        var updatedCalculateTickets = await ProcessSettleTickets(originalTickets, outright, resources);
+        var runningTickets = ProcessRunningTickets(originalTickets);
         var updatedRefundTickets = ProcessRefundTickets(originalTickets);
+        var updatedCalculateTickets = await ProcessSettleTickets(originalTickets, outright, resources);
 
         return runningTickets.Concat(updatedCalculateTickets).Concat(updatedRefundTickets);
+    }
+
+    private List<TicketsBetTransModel> ProcessRunningTickets(IEnumerable<TicketsBetTransModel> tickets)
+    {
+        var runningTickets = tickets.Where(x => x.Action is null).ToList();
+
+        return runningTickets.Count == 0 ? [] : calculateService.ResetToRunning(runningTickets);
     }
 
     private async Task<IEnumerable<TicketsBetTransModel>> ProcessSettleTickets(IEnumerable<TicketsBetTransModel> tickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources)
