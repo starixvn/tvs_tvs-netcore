@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Epplus.Mapper" Version="7.5.0" />
-    <PackageReference Include="Fanex.Settlement.Business.Tvs" Version="1.0.2" />
+    <PackageReference Include="Fanex.Settlement.Business.Tvs" Version="1.0.3" />
     <PackageReference Include="Fanex.BetList.Core" Version="3.0.4.9-basketball-01" />
     <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>

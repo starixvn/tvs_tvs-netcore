@@ -8,9 +8,6 @@ public class TicketsBetTransModel : Ticket
     [JsonPropertyName("mid")]
     public int MatchId { get; set; }
 
-    [JsonPropertyName("sw")]
-    public new byte? StatusWinLost { get; set; }
-
     [JsonPropertyName("cr")]
     public int Creator { get; set; }
 
