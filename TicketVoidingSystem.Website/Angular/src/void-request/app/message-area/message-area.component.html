@@ -1,8 +1,10 @@
 <div [ngClass]="isShowTemplateMessage ? 'display-block' : 'display-none'">
   @if (totalVoidTickets > 0) {
-    <template-message #templateMessage [value]="templateValue" [issueTypeId]="issueTypeId"
-      [subIssueTypeId]="subIssueTypeId" [voidFunction]="2" [id]="id">
-    </template-message>
+    @if (!isArchivedTicket()) {
+      <template-message #templateMessage [value]="templateValue" [issueTypeId]="issueTypeId"
+        [subIssueTypeId]="subIssueTypeId" [voidFunction]="2" [id]="id">
+      </template-message>
+    }
     <div class="void-reason"><void-reason #reason [voidReason]="voidReason" class=""></void-reason></div>
   }
   @if (totalVoidTickets === 0) {

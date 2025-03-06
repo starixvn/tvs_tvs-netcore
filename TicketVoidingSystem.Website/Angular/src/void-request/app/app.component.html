@@ -35,6 +35,9 @@
     @if (isShowVoidWrongMarketOffered()) {
       <void-wrong-market-offered [requestDetail]="requestDetail"></void-wrong-market-offered>
     }
+    @if (isShowVoidArchivedTicket()) {
+      <void-archived-ticket [requestDetail]="requestDetail"></void-archived-ticket>
+    }
   }
   @if (!isValidRequest()) {
     <div class="mg-10 no-data">

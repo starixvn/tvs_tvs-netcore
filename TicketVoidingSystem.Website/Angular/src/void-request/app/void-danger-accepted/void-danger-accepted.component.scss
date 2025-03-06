@@ -157,6 +157,15 @@
 }
 
 .wrong-market div, .actual-market div, .hdp-value div {
+  border: 1px solid #c6c8ca;
+  background-color: #CCE5FF;
   white-space: nowrap;
   min-width: 90px;
+}
+
+.wrong-odds div {
+  border: 1px solid #c6c8ca;
+  background-color: #CCE5FF;
+  white-space: nowrap;
+  min-width: 120px;
 }

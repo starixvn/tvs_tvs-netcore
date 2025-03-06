@@ -16,7 +16,8 @@ export class LogChangeContentService {
         this.writeLogEditVoidReason(requestId, x.reasonComponent.initialReason, x.voidReason);
       }
 
-      if (x.templateMessageComponent.initialMessage.contentEnglish !== x.templateMessageComponent.message.contentEnglish) {
+      if (x.templateMessageComponent
+        && x.templateMessageComponent.initialMessage.contentEnglish !== x.templateMessageComponent.message.contentEnglish) {
         this.writeLogEditVoidMessage(requestId, x.templateMessageComponent.initialMessage, x.templateMessageComponent.message);
       }
     });

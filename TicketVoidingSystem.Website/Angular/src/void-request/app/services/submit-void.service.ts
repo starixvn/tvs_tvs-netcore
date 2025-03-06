@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { StaticService } from 'src/utility/services/static.service';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';
@@ -70,6 +71,23 @@ export class SubmitVoidService {
       return ResultModelService.createFailResult(LABELS.ALL_TICKETS_VOIDED, 1);
     }
 
+    return this.issueTypesHaveMessage(voidPageItems)
+      ? this.validateIssueTypeHaveMessage(voidPageItems, messageAreaComponents)
+      : this.validateIssueTypeHaveNotMessage(voidPageItems);
+  }
+
+  private validateIssueTypeHaveNotMessage(voidPageItems: VoidPageCommonItem[]): Result<null> {
+    for (const item of voidPageItems) {
+      const textInvalidMatch = item.matchModel ? ` (MatchId: ${item.matchModel.matchId})` : '';
+      if (item.voidReason?.reasonEnglish === '' || item.voidReason?.reasonChineseSimplified === '') {
+        return ResultModelService.createFailResult(`${LABELS.INPUT_REASON}${textInvalidMatch}`, 1);
+      }
+    }
+
+    return ResultModelService.createSuccessResult();
+  }
+
+  private validateIssueTypeHaveMessage(voidPageItems: VoidPageCommonItem[], messageAreaComponents: MessageAreaComponent[]): Result<null> {
     for (const item of voidPageItems) {
       const messageComponent = item.matchModel
         ? messageAreaComponents.map(x => x.templateMessageComponent).find(x => x.id === item.id)
@@ -95,7 +113,9 @@ export class SubmitVoidService {
   }
 
   private getConfirmMessage(voidPageItems: VoidPageCommonItem[], messageAreaComponents: MessageAreaComponent[]): string {
-    const warningInputs = this.getWarningInputsInTemplateMessage(voidPageItems, messageAreaComponents.map(x => x.templateMessageComponent));
+    const warningInputs = this.issueTypesHaveMessage(voidPageItems)
+      ? this.getWarningInputsInTemplateMessage(voidPageItems, messageAreaComponents.map(x => x.templateMessageComponent))
+      : '';
 
     return `${warningInputs}<div>${LABELS.CONFIRM_VOID_ALL_TICKETS}</div>`;
   }
@@ -121,5 +141,9 @@ export class SubmitVoidService {
       templateMessageComponents.find(x => x.id === voidPageItem.id).isHasWarningForDynamicInput());
 
     return matchHasWarning.map(x => x.matchModel.matchId);
+  }
+
+  private issueTypesHaveMessage(voidPageItems: VoidPageCommonItem[]) {
+    return !StaticService.isArchivedTicket(voidPageItems[0].detailViewModel.request.issueTypeId);
   }
 }

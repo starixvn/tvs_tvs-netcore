@@ -7,7 +7,12 @@ export class BasicRequestInfo {
   actualMarket?: string;
   hdpValue?: string;
   isCheckedVar?: boolean;
-  isMainMatch: boolean;
-  //filterWithHdp?: FilterWithHdpModel;
-  //FilterWrongOu?: FilterWrongOuModel;
+  isMainMatch?: boolean;
+
+  // Wrong Odds
+  filterFavoriteType?: string;
+  wrongOU?: string;
+  favoriteValue?: string;
+  correctOddsHomeOver?: string;
+  correctOddsAwayUnder?: string;
 }

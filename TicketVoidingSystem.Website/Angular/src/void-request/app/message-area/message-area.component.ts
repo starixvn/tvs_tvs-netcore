@@ -1,9 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, ViewChild } from '@angular/core';
+import { StaticService } from 'src/utility/services/static.service';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
 import { VoidedReason } from '../../../utility/models/reason.model';
 import { VoidReasonComponent } from './void-reason/void-reason.component';
-import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
@@ -23,4 +24,8 @@ export class MessageAreaComponent {
   @Input('voidReason') voidReason: VoidedReason;
   @ViewChild("templateMessage") templateMessageComponent: TemplateMessageComponent;
   @ViewChild("reason") reasonComponent: VoidReasonComponent;
+
+  isArchivedTicket() {
+    return StaticService.isArchivedTicket(this.issueTypeId);
+  }
 }

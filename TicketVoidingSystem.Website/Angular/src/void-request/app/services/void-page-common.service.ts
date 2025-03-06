@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription, timer } from 'rxjs';
+import { CommonService } from 'src/utility/services/common.service';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../utility/constants/labels';
@@ -22,6 +23,7 @@ export class VoidPageCommonService {
   ticketsService = inject(TicketsService);
   checkRequestService = inject(CheckRequestService);
   loadDataService = inject(LoadDataService);
+  commonService = inject(CommonService);
 
   private readonly observableTimer = timer(0, 100);
 
@@ -54,6 +56,10 @@ export class VoidPageCommonService {
   async onClickShowTemplateMessage(voidPageItem: VoidPageCommonItem, primitiveProperty: CommonPrimitiveProperty, requestDetail: RequestDetailViewModel,
     afterLoadUnderneathDataSubscription: Subscription, allVoidPageItems?: VoidPageCommonItem[]): Promise<void> {
     this.loadDataService.onClickShowTemplateMessage(voidPageItem, primitiveProperty, requestDetail, afterLoadUnderneathDataSubscription, allVoidPageItems);
+  }
+
+  async getVoidedReason(subIssueTypeId: number, sportType?: number) {
+    return this.commonService.getVoidedReason(subIssueTypeId, sportType);
   }
 
   onClickCopyLicenseesToClipboard(text: string): void {

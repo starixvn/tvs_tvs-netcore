@@ -34,27 +34,30 @@
                   <log-info-new [logInfoDetail]="item.logInfoDetail" [issueTypeId]="requestDetail.request.issueTypeId" [sportType]="requestDetail.request.sportType" [isMainMatch]="item.isMainMatch" [isPoolHouseAffected]="item.isPoolHouseAffected"></log-info-new>
                 </div>
               </div>
-              @if (isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu()) {
+              @if (isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu() || isWrongOdds()) {
                 <div class="ms-3">
                   @if (item.wrongMarket) {
                     <div class="wrong-market d-flex mb-3">
                       <label for="wrongMarket" class="col-form-label col-form-label-sm me-2">Wrong Market</label>
-                      <input name="wrongMarket" [ngModel]="item.wrongMarket" disabled
-                        type="text" class="wrong-market-input form-control form-control-sm"/>
-                      </div>
+                      <div class="form-control form-control-sm">{{item.wrongMarket}}</div>
+                    </div>
                     }
                     @if (item.actualMarket) {
                       <div class="actual-market d-flex">
                         <label for="actualMarket" class="col-form-label col-form-label-sm me-2">Actual Market</label>
-                        <input [ngModel]="item.actualMarket" name="actualMarket" disabled
-                          type="text" class="actual-market-input form-control form-control-sm"/>
-                        </div>
+                        <div class="form-control form-control-sm">{{item.actualMarket}}</div>
+                      </div>
                       }
                       @if (item.hdpValue) {
                         <div class="hdp-value d-flex">
                           <label for="HdpValue" class="col-form-label col-form-label-sm me-2">HDP Value</label>
-                          <input [ngModel]="item.hdpValue" name="HdpValue" disabled
-                            type="text" class="hdp-value-input form-control form-control-sm"/>
+                          <div class="form-control form-control-sm">{{item.hdpValue}}</div>
+                        </div>
+                        }
+                        @if (item.correctOddsHomeOver || item.correctOddsAwayUnder) {
+                          <div class="wrong-odds d-flex">
+                            <label class="col-form-label col-form-label-sm me-2">Correct Odds</label>
+                            <div class="form-control form-control-sm">Home: <b>{{item.correctOddsHomeOver}}</b>, Away: <b>{{item.correctOddsAwayUnder}}</b></div>
                           </div>
                         }
                       </div>
