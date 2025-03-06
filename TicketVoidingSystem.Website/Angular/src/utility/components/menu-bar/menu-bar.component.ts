@@ -24,12 +24,14 @@ export class MenuBarComponent implements OnInit {
     this.isBlock = true;
     this.rootUrl = document.body.getAttribute('root-url');
     const model = await this.commonService.getNapUserInfo();
-    this.username = model.userName;
-    this.menuItems = _.orderBy(_.uniqBy(model.menuItem.filter(x => x.parentId <= 0), x => x.id), ['displayOrder'], ['asc']);
-    this.menuItems.forEach(t => {
-      t.items = model.menuItem.filter(z => z.parentId === t.id);
-      t.items = _.orderBy(_.uniqBy(t.items, x => x.id), ['displayOrder'], ['asc']);
-    });
-    this.isBlock = false;
+    if (model) {
+      this.username = model.userName;
+      this.menuItems = _.orderBy(_.uniqBy(model.menuItem.filter(x => x.parentId <= 0), x => x.id), ['displayOrder'], ['asc']);
+      this.menuItems.forEach(t => {
+        t.items = model.menuItem.filter(z => z.parentId === t.id);
+        t.items = _.orderBy(_.uniqBy(t.items, x => x.id), ['displayOrder'], ['asc']);
+      });
+      this.isBlock = false;
+    }
   }
 }

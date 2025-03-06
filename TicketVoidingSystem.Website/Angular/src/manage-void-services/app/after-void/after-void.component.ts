@@ -1,10 +1,10 @@
 import { Component, ElementRef } from '@angular/core';
 import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
-import { CommonService } from 'src/utility/services/common.service';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../utility/constants/text';
+import { CommonService } from '../../../utility/services/common.service';
 import { AppApiService } from '../app-api.service';
 import { SelectVoidBetAutomationInfoQuery, ServiceStatusConstant, VoidBetAutomationModel } from '../app.model';
 

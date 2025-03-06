@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { StaticService } from 'src/utility/services/static.service';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
+import { StaticService } from '../../../utility/services/static.service';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { PasswordAreaComponent } from '../password-area/password-area.component';

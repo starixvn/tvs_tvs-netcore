@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, ViewChild } from '@angular/core';
-import { StaticService } from 'src/utility/services/static.service';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
 import { VoidedReason } from '../../../utility/models/reason.model';
+import { StaticService } from '../../../utility/services/static.service';
 import { VoidReasonComponent } from './void-reason/void-reason.component';
 
 @Component({

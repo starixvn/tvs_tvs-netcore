@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { StaticService } from 'src/utility/services/static.service';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';
 import { ResultModelService } from '../../../utility/services/result-model.service';
+import { StaticService } from '../../../utility/services/static.service';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
@@ -144,6 +144,6 @@ export class SubmitVoidService {
   }
 
   private issueTypesHaveMessage(voidPageItems: VoidPageCommonItem[]) {
-    return !StaticService.isArchivedTicket(voidPageItems[0].detailViewModel.request.issueTypeId);
+    return !StaticService.isArchivedTicket(voidPageItems[0]?.detailViewModel?.request?.issueTypeId);
   }
 }

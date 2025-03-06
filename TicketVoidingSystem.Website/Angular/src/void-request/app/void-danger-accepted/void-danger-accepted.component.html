@@ -1,103 +1,109 @@
 <div>
   @if (primitiveProperty.isLoadedBasicData) {
-    @for (item of voidMatches; track item) {
-      <div class="bg-gray match-void">
-        <div class="full-width d-flex bg-gray match-void">
-          <div class="index-of-match d-flex align-items-center">
-            <div class="number-circle"><span><strong>{{item.id}}</strong></span></div>
-          </div>
-          <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">
-            <div class="alert alert-dark p-1 m-0 mb-1"><span>
-              @if (item.isCheckedVar) {
-                <span class="alert padding-2-10 text-white bg-danger">VAR</span>
-              }
-              Issue Type: <strong>{{item.displayIssueTypeName}}</strong></span>
-            </div>
-            <div class="alert alert-dark match-info p-1 m-0 flex-grow-1">
-              <span>Match Code/ID:
-                <strong class="match-text">{{item.matchModel.matchCode}}/{{item.matchModel.matchId}}</strong></span><br />
-                <span>Match Event: <strong class="match-text">{{item.matchModel.matchEvent}}</strong></span><br />
-                <span>League: <strong class="match-text">{{item.matchModel.leagueName}}</strong></span><br />
-                @if (isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu()) {
-                  <span class="d-flex align-items-center">
-                    <input type="checkbox" id="chk-early-event-{{item.id}}" class="me-1"
-                      [disabled]="item.isAllLiveTickets || item.voidTicketsMini?.total === 0"
-                      [(ngModel)]="item.isCheckedEarlyEvent"
-                      (change)="changeCheckBoxEarlyEvent(item)"/>
-                      <label class="col-form-label col-form-label-sm" for="chk-early-event-{{item.id}}">Early Event</label>
-                    </span>
-                  }
-                </div>
-              </div>
-              <div class="col-sm-6 m-0 pd-right-0 pd-left-5">
-                <div class="log-info-cell alert alert-dark p-1 m-0">
-                  <log-info-new [logInfoDetail]="item.logInfoDetail" [issueTypeId]="requestDetail.request.issueTypeId" [sportType]="requestDetail.request.sportType" [isMainMatch]="item.isMainMatch" [isPoolHouseAffected]="item.isPoolHouseAffected"></log-info-new>
-                </div>
-              </div>
-              @if (isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu() || isWrongOdds()) {
-                <div class="ms-3">
-                  @if (item.wrongMarket) {
-                    <div class="wrong-market d-flex mb-3">
-                      <label for="wrongMarket" class="col-form-label col-form-label-sm me-2">Wrong Market</label>
-                      <div class="form-control form-control-sm">{{item.wrongMarket}}</div>
-                    </div>
-                    }
-                    @if (item.actualMarket) {
-                      <div class="actual-market d-flex">
-                        <label for="actualMarket" class="col-form-label col-form-label-sm me-2">Actual Market</label>
-                        <div class="form-control form-control-sm">{{item.actualMarket}}</div>
-                      </div>
-                      }
-                      @if (item.hdpValue) {
-                        <div class="hdp-value d-flex">
-                          <label for="HdpValue" class="col-form-label col-form-label-sm me-2">HDP Value</label>
-                          <div class="form-control form-control-sm">{{item.hdpValue}}</div>
-                        </div>
-                        }
-                        @if (item.correctOddsHomeOver || item.correctOddsAwayUnder) {
-                          <div class="wrong-odds d-flex">
-                            <label class="col-form-label col-form-label-sm me-2">Correct Odds</label>
-                            <div class="form-control form-control-sm">Home: <b>{{item.correctOddsHomeOver}}</b>, Away: <b>{{item.correctOddsAwayUnder}}</b></div>
-                          </div>
-                        }
-                      </div>
-                    }
-                    <div class="flex-grow-1">
-                      <div class="area-icon">
-                        <em [ngClass]="item.isShowTicketFull ? 'icon-show-tickets-expanded': 'icon-show-tickets'"
-                        (click)="onClickShowVoidTickets(item)"></em>
-                        <em [ngClass]="item.isShowTemplateMessage ? 'icon-show-template-message-expanded' : 'icon-show-template-message'"
-                        (click)="onClickShowTemplateMessage(item)"></em>
-                      </div>
-                    </div>
-                  </div>
-                  <licensee-affected-list [licenseeAffectedList]="item.licenseeAffectedList" [isDisplay]="item.isShowTicketFull"></licensee-affected-list>
-                  <div>
-                    @if (item.isShowTicketFull) {
-                      <tickets-list class="m-0" [model]="item.voidTicketsFull"
-                        [(paging)]="item.pagingVoidTickets" (pagingChange)="onPagingTicketsChange(item)" (exportExcelEvent)="exportTickets(item)"
-                        [isBlock]="item.isBlockBetList" (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
-                        [isDisableCheckbox]="true">
-                      </tickets-list>
-                    }
-                    <message-area #messageArea [isShowTemplateMessage]="item.isShowTemplateMessage" [totalVoidTickets]="item.voidTicketsMini?.total"
-                      [templateValue]="item.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" [id]="item.id"
-                      [subIssueTypeId]="item.subIssueType.subIssueTypeId" [voidReason]="item.voidReason" [requestId]="requestDetail.request.requestId">
-                    </message-area>
-                  </div>
-                </div>
-              }
-              <password-area [primitiveProperty]="primitiveProperty" (clickVoidAllEvent)="onClickVoidAllMatches()"></password-area>
-              <tooltip [tooltip]="tooltip"></tooltip>
+  @for (item of voidMatches; track item) {
+  <div class="bg-gray match-void">
+    <div class="full-width d-flex bg-gray match-void">
+      <div class="index-of-match d-flex align-items-center">
+        <div class="number-circle"><span><strong>{{item.id}}</strong></span></div>
+      </div>
+      <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">
+        <div class="alert alert-dark p-1 m-0 mb-1"><span>
+            @if (item.isCheckedVar) {
+            <span class="alert padding-2-10 text-white bg-danger">VAR</span>
             }
-          </div>
-          @if (primitiveProperty.isBlockUI) {
-            <div>
-              <div class="in modal-backdrop spinner-overlay"></div>
-              <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
-                <div class="loading-message">
-                  <div class="loading"></div>
-                </div>
-              </div>
-            </div>
+            Issue Type: <strong>{{item.displayIssueTypeName}}</strong></span>
+        </div>
+        <div class="alert alert-dark match-info p-1 m-0 flex-grow-1">
+          <span>Match Code/ID:
+            <strong class="match-text">{{item.matchModel.matchCode}}/{{item.matchModel.matchId}}</strong></span><br />
+          <span>Match Event: <strong class="match-text">{{item.matchModel.matchEvent}}</strong></span><br />
+          <span>League: <strong class="match-text">{{item.matchModel.leagueName}}</strong></span><br />
+          @if (isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu()) {
+          <span class="d-flex align-items-center">
+            <input type="checkbox" id="chk-early-event-{{item.id}}" class="me-1"
+              [disabled]="item.isAllLiveTickets || item.voidTicketsMini?.total === 0"
+              [(ngModel)]="item.isCheckedEarlyEvent" (change)="changeCheckBoxEarlyEvent(item)" />
+            <label class="col-form-label col-form-label-sm" for="chk-early-event-{{item.id}}">Early Event</label>
+          </span>
           }
+        </div>
+      </div>
+      <div class="col-sm-6 m-0 pd-right-0 pd-left-5">
+        <div class="log-info-cell alert alert-dark p-1 m-0">
+          <log-info-new [logInfoDetail]="item.logInfoDetail" [issueTypeId]="requestDetail.request.issueTypeId"
+            [sportType]="requestDetail.request.sportType" [isMainMatch]="item.isMainMatch"
+            [isPoolHouseAffected]="item.isPoolHouseAffected"></log-info-new>
+        </div>
+      </div>
+      @if (isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu() || isWrongOdds()) {
+      <div class="ms-3">
+        @if (item.wrongMarket) {
+        <div class="wrong-market d-flex mb-3">
+          <label for="wrongMarket" class="col-form-label col-form-label-sm me-2">Wrong Market</label>
+          <div class="form-control form-control-sm">{{item.wrongMarket}}</div>
+        </div>
+        }
+        @if (item.actualMarket) {
+        <div class="actual-market d-flex">
+          <label for="actualMarket" class="col-form-label col-form-label-sm me-2">Actual Market</label>
+          <div class="form-control form-control-sm">{{item.actualMarket}}</div>
+        </div>
+        }
+        @if (item.hdpValue) {
+        <div class="hdp-value d-flex">
+          <label for="HdpValue" class="col-form-label col-form-label-sm me-2">HDP Value</label>
+          <div class="form-control form-control-sm">{{item.hdpValue}}</div>
+        </div>
+        }
+        @if (item.correctOddsHomeOver || item.correctOddsAwayUnder) {
+        <div class="wrong-odds d-flex">
+          <label class="col-form-label col-form-label-sm me-2">Correct Odds</label>
+          <div class="form-control form-control-sm">Home: <b>{{item.correctOddsHomeOver}}</b>, Away:
+            <b>{{item.correctOddsAwayUnder}}</b></div>
+        </div>
+        }
+      </div>
+      }
+      <div class="flex-grow-1">
+        <div class="area-icon">
+          <em [ngClass]="item.isShowTicketFull ? 'icon-show-tickets-expanded': 'icon-show-tickets'"
+            (click)="onClickShowVoidTickets(item)"></em>
+          <em
+            [ngClass]="item.isShowTemplateMessage ? 'icon-show-template-message-expanded' : 'icon-show-template-message'"
+            (click)="onClickShowTemplateMessage(item)"></em>
+        </div>
+      </div>
+    </div>
+    <licensee-affected-list [licenseeAffectedList]="item.licenseeAffectedList"
+      [isDisplay]="item.isShowTicketFull"></licensee-affected-list>
+    <div>
+      @if (item.isShowTicketFull) {
+      <tickets-list class="m-0" [model]="item.voidTicketsFull" [(paging)]="item.pagingVoidTickets"
+        (pagingChange)="onPagingTicketsChange(item)" (exportExcelEvent)="exportTickets(item)"
+        [isBlock]="item.isBlockBetList" (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
+        [isDisableCheckbox]="true">
+      </tickets-list>
+      }
+      <message-area #messageArea [isShowTemplateMessage]="item.isShowTemplateMessage"
+        [totalVoidTickets]="item.voidTicketsMini?.total" [templateValue]="item.templateValue"
+        [issueTypeId]="requestDetail.request.issueTypeId" [id]="item.id"
+        [subIssueTypeId]="item.subIssueType.subIssueTypeId" [voidReason]="item.voidReason"
+        [requestId]="requestDetail.request.requestId">
+      </message-area>
+    </div>
+  </div>
+  }
+  <password-area [primitiveProperty]="primitiveProperty" (clickVoidAllEvent)="onClickVoidAllMatches()"></password-area>
+  <tooltip [tooltip]="tooltip"></tooltip>
+  }
+</div>
+@if (primitiveProperty.isBlockUI) {
+<div>
+  <div class="in modal-backdrop spinner-overlay"></div>
+  <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
+    <div class="loading-message">
+      <div class="loading"></div>
+    </div>
+  </div>
+</div>
+}
