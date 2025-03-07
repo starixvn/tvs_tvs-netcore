@@ -136,4 +136,5 @@ export class LABELS {
   static readonly ALL_TICKETS_VOIDED = 'All tickets has been voided';
   static readonly INVALID_TEMPLATE_MESSAGE = 'Invalid template message.';
   static readonly SELECTED_VAR_OPTIONS = 'Please select NO VAR/VAR.';
+  static readonly TICKET_LIMIT_EXCEEDED = 'Tickets of inputted username are too high. Please reduce and try again.';
 }

@@ -23,5 +23,6 @@ export class ValidationBusinessRuleOutput {
   isValid: boolean;
   numberOfTicketsExistedInRequest: number;
   transInfoAddRequestModel: TransInfoAddRequestModel;
-  accountWinlostModels: AccountWinlostModel[]
+  accountWinlostModels: AccountWinlostModel[];
+  isWarringTooHighTickets: boolean;
 }

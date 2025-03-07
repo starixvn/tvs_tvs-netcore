@@ -1,4 +1,5 @@
-﻿using Fanex.Data.Repository;
+﻿using System.Text;
+using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
@@ -18,6 +19,14 @@ public class CheckUsernameServiceImp(IDynamicRepository repository, GetTransInfo
     public async Task<CheckUsernamesInDatabaseResult> ExecuteValidationInDb(CheckValidUsernamesRequest request)
     {
         var transInfoJsonList = await GetTransInfoJson(request);
+        if (IsTransInfoJsonTooLarge(transInfoJsonList))
+        {
+            return new CheckUsernamesInDatabaseResult
+            {
+                ValidationResult = new CheckUsernamesModel { IsTicketLimitExceeded = true }
+            };
+        }
+
         var criteria = CreateCriteria(request, transInfoJsonList);
         var (checkUsernamesModel, transInfoValidation, transInfoJsonCompress, ticketCalculateWinLostAccount, accounts) =
             await repository.FetchMultipleAsync<CheckUsernamesModel, TransInfoAddRequestModel, string, TicketCalculateWinLostAccount, AccountWinlostModel>(criteria);
@@ -32,9 +41,17 @@ public class CheckUsernameServiceImp(IDynamicRepository repository, GetTransInfo
         };
     }
 
+    private static bool IsTransInfoJsonTooLarge(IEnumerable<string> transInfoJsonList)
+    {
+        const int maxByteTransInfoJsonList = 8_000_000; // ~ 7.63MB (Data test Local)
+        var transInfoJson = string.Join(",", transInfoJsonList);
+
+        return Encoding.UTF8.GetByteCount(transInfoJson) > maxByteTransInfoJsonList;
+    }
+
     private static CheckValidUsernamesCriteria CreateCriteria(CheckValidUsernamesRequest model, IEnumerable<string> transInfoJsonList)
     {
-        var criteria = new CheckValidUsernamesCriteria
+        return new CheckValidUsernamesCriteria
         {
             Usernames = model.Usernames,
             RequestId = model.RequestId,
@@ -46,8 +63,6 @@ public class CheckUsernameServiceImp(IDynamicRepository repository, GetTransInfo
             IsVoidAllArchivedTickets = model.IsVoidAllArchivedTickets,
             TransInfoJson = string.Join(",", transInfoJsonList)
         };
-
-        return criteria;
     }
 
     private async Task<IEnumerable<string>> GetTransInfoJson(CheckValidUsernamesRequest model)

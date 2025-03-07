@@ -39,6 +39,13 @@ public class CheckValidUsernamesHandler(
     public async Task<CheckValidUsernamesViewModel> Handle(CheckValidUsernamesRequest request, CancellationToken cancellationToken)
     {
         var checkUsernamesResult = await checkUsernameService.ExecuteValidationInDb(request);
+        if (checkUsernamesResult.ValidationResult.IsTicketLimitExceeded)
+        {
+            return new CheckValidUsernamesViewModel
+            {
+                Validation = new CheckUsernamesModel { IsTicketLimitExceeded = true }
+            };
+        }
 
         var calcVoidResult = new CalcVoidTicketsResult();
         if (request.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)

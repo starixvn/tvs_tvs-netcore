@@ -29,4 +29,5 @@ export class ValidationAbnormalAccount {
   numberOfTickets: number;
   isExceededTotalUsernames: boolean;
   transInfo: string;
+  isTicketLimitExceeded: boolean;
 }

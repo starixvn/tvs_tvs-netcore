@@ -193,3 +193,26 @@ table {
   color: #0080ff;
   text-decoration: underline;
 }
+
+::ng-deep .tooltip-class {
+  left: 70px !important;
+  top: -0.5rem !important;
+  .tooltip-inner {
+    background-color: #ced4da;
+    color: #000;
+    white-space: pre-line;
+    max-width: 280px;
+    text-align: left;
+    padding: 12px;
+  }
+  .arrow {
+    left: calc(30%) !important;
+  }
+  .arrow::before{
+    border-top-color: #ced4da;
+    border-top-width: 0.9rem;
+    border-right-width: 1.8rem;
+    border-bottom-width: 0px;
+    border-left-width: 0.9rem;
+  }
+}

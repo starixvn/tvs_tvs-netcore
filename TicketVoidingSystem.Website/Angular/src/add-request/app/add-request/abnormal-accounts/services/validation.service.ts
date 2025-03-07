@@ -50,6 +50,11 @@ export class ValidationService {
       }
 
       const viewModel = await this.getValidation(args);
+      if(viewModel.validation.isTicketLimitExceeded){
+        args.usernamesComponent.showErrorTicketLimitExceeded();
+        return { isValid: false } as ValidationBusinessRuleOutput;
+      }
+
       const invalidUsernames = viewModel.validation.invalidUserName;
       if (invalidUsernames) {
         return {
@@ -73,6 +78,7 @@ export class ValidationService {
           accountWinlostModels: viewModel.accountWinlostModels
          } as ValidationBusinessRuleOutput;
       }
+
       return {
         isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames),
         numberOfTicketsExistedInRequest: viewModel.validation.numberOfTickets,
