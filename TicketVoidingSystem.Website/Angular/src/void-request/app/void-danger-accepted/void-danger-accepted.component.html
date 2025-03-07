@@ -31,7 +31,7 @@
       <div class="col-sm-6 m-0 pd-right-0 pd-left-5">
         <div class="log-info-cell alert alert-dark p-1 m-0">
           <log-info-new [logInfoDetail]="item.logInfoDetail" [issueTypeId]="requestDetail.request.issueTypeId"
-            [sportType]="requestDetail.request.sportType" [isMainMatch]="item.isMainMatch"
+            [sportType]="requestDetail.request.sportType" [isHavePoolHouse]="isHavePoolHouse(item)"
             [isPoolHouseAffected]="item.isPoolHouseAffected"></log-info-new>
         </div>
       </div>

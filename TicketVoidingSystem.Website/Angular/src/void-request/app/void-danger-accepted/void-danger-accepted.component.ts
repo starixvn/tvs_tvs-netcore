@@ -85,6 +85,10 @@ export class VoidDangerAcceptedComponent implements OnInit {
     this.voidPageCommonService.onClickVoidAllMatches(this.voidMatches, this.messageAreaComponents?.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }
 
+  isHavePoolHouse(item: VoidMatch) {
+    return this.isWrongOdds() || item.isMainMatch;
+  }
+
   public changeCheckBoxEarlyEvent(voidMatch: VoidMatch): void {
     voidMatch.templateValue.isCheckedEarlyEvent = voidMatch.isCheckedEarlyEvent;
     voidMatch.templateValue = _.clone(voidMatch.templateValue);

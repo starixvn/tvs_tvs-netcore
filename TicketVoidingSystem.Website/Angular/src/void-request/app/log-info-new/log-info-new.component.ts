@@ -1,14 +1,14 @@
-import { TicketCountOtherSportsComponent } from './../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { AcceptType, DateTimeFormat } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
-import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
-import { StaticService } from '../../../utility/services/static.service';
 import { SportType } from '../../../utility/constants/sport.constant';
-import { CommonModule } from '@angular/common';
+import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
+import { StaticService } from '../../../utility/services/static.service';
+import { TicketCountOtherSportsComponent } from './../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
 
 @Component({
   standalone: true,
@@ -19,7 +19,7 @@ import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
 })
 export class LogInfoNewComponent {
   @Input() issueTypeId: number;
-  @Input() isMainMatch: boolean;
+  @Input() isHavePoolHouse: boolean;
   @Input() isPoolHouseAffected: boolean;
   @Input() logInfoDetail: LogInfoDetail;
   @Input() sportType: number;
@@ -34,7 +34,8 @@ export class LogInfoNewComponent {
       Number(IssueTypeConstant.WRONG_HDP),
       Number(IssueTypeConstant.WRONG_1ST_HDP),
       Number(IssueTypeConstant.WRONG_OU),
-      Number(IssueTypeConstant.WRONG_1ST_OU)
+      Number(IssueTypeConstant.WRONG_1ST_OU),
+      Number(IssueTypeConstant.WRONG_ODDS)
     ];
 
     return issueTypesHavePoolHouse.includes(this.issueTypeId);
