@@ -19,7 +19,7 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
   @Input() model = new SubIssueTypeDialogModel();
   @Output() updateSubTypeEvent = new EventEmitter<number>();
   @ViewChild('noteGroup') myDiv: ElementRef;
-
+  @Input() isMainEvent = true;
   subIssueTypes: Category[] = [];
   isCheckedViewAllOptions: boolean;
   isCheckedWrongScoreOnwards = false;
@@ -86,15 +86,28 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
 
   private getSubIssueTypeWrongScoreConfig(): Category[] {
     const subIssueTypeWrongScoreConfig = _.cloneDeep(SubIssueTypeWrongScoreConfig);
-    subIssueTypeWrongScoreConfig[0].groups = this.isCheckedWrongScoreOnwards 
+    const mainCategoryName = "Main Event";
+    if(this.isMainEvent){
+      const mainEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName === mainCategoryName);
+      mainEventSubIssueTypes[0].groups = this.isCheckedWrongScoreOnwards 
       ? SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeOnWards(x)) 
       : SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeNoOnWards(x))
+
+      return mainEventSubIssueTypes;
+    }
+
+    const relatedEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName !== mainCategoryName);
+    relatedEventSubIssueTypes[0].isCollapse = false;
     
-    return subIssueTypeWrongScoreConfig;
+    return relatedEventSubIssueTypes;
   }
 
   public isDangerAccepted(): boolean {
     return StaticService.isDangerAccepted(this.model.issueTypeId);
+  }
+
+  public isMainEventWrongScore(): boolean{
+    return this.isWrongScore() && this.isMainEvent;
   }
 
   public isWrongScore(): boolean {

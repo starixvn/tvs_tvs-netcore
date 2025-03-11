@@ -77,7 +77,8 @@ public class LogInfoServiceImp(
             ScoreId = item.ScoreId,
             Validation = validation.FirstOrDefault(x => x.ScoreId == item.ScoreId),
             TicketRequest = ticketRequest.Where(x => x.ScoreId == item.ScoreId),
-            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.ScoreId == item.ScoreId)
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.ScoreId == item.ScoreId),
+            MatchId = item.MatchId
         });
     }
 

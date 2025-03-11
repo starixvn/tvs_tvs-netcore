@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LogInfoRedCardComponent LogInfoRedCardComponent init should match snapshot 1`] = `
+exports[`LogInfoRelatedEventComponent LogInfoRelatedEventComponent init should match snapshot 1`] = `
 <ng-component
   __ngContext__={[Function LRootView]}
 >
-  <log-info-red-card>
+  <log-info-related-event>
     <div
       class="log-info"
     >
@@ -144,6 +144,6 @@ exports[`LogInfoRedCardComponent LogInfoRedCardComponent init should match snaps
       </div>
     </div>
     <sub-issue-type-dialog />
-  </log-info-red-card>
+  </log-info-related-event>
 </ng-component>
 `;

@@ -25,8 +25,8 @@ import { PrimitiveProperty } from './event-red-card.model';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowanceComponent } from './filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCardComponent } from './log-info-red-card/log-info-red-card.component';
-import { LogInfoRedCard } from './log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
 import { EventRedCardService } from './services/event-red-card.service';
 import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
@@ -105,7 +105,7 @@ class Helper {
       matchType: 1
     }
   ] as ChildMatchModel[];
-  static readonly fakeLogInfoRedCard: LogInfoRedCard = {
+  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
     matchId: 1111,
     isMainMatch: true,
     leagueName: '',
@@ -116,7 +116,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     sportType: 0
-  } as LogInfoRedCard;
+  } as LogInfoRelatedEvent;
   static readonly fakeChildMatchModel: ChildMatchModel = {
     matchId: 1111,
     matchCode: '222',
@@ -141,7 +141,7 @@ describe('EventRedCardComponent', () => {
     declarations: [
       EventLeagueComponent,
       FilterTimeAreaComponent,
-      LogInfoRedCardComponent,
+      LogInfoRelatedEventComponent,
       AddChildMatchComponent,
       ConfirmAddRequestComponent,
       TvDetectionComponent
@@ -393,11 +393,11 @@ describe('EventRedCardComponent', () => {
         }
       });
 
-    const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent = null;
-    logInfoRedCardComponent.showValidationDetail = jest.fn();
-    const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
-    instance.logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    const LogInfoRelatedEventComponent = new LogInfoRelatedEventComponent(null, null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent = null;
+    LogInfoRelatedEventComponent.showValidationDetail = jest.fn();
+    const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
+    instance.logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
     instance.mainEvent.isCheckedVar = false;
     instance.allSelectedEvents = [Helper.fakeLogInfoRedCard];
 
@@ -449,19 +449,19 @@ describe('EventRedCardComponent', () => {
         }
       });
 
-    const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent.updateData = jest.fn();
-    logInfoRedCardComponent.showValidationDetail = jest.fn();
-    const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
-    instance.logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    const LogInfoRelatedEventComponent = new LogInfoRelatedEventComponent(null, null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent.updateData = jest.fn();
+    LogInfoRelatedEventComponent.showValidationDetail = jest.fn();
+    const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
+    instance.logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
     instance.mainEvent.isCheckedVar = false;
 
     // Action
     await instance.handleSearchEvent();
 
     // Assert
-    expect(logInfoRedCardComponent.filterTimeWithAllowanceComponent.updateData).toHaveBeenCalledTimes(1);
+    expect(LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent.updateData).toHaveBeenCalledTimes(1);
   });
 
   it('#changeMatchEvent should be call #resetLogInfoOfEvent & emit updateMatchId when have selectedMatch', async () => {
@@ -544,7 +544,7 @@ describe('EventRedCardComponent', () => {
         }
       });
 
-    instance.mainEvent = new LogInfoRedCard();
+    instance.mainEvent = new LogInfoRelatedEvent();
     instance.mainEvent.matchId = undefined;
 
     // Action
@@ -569,7 +569,7 @@ describe('EventRedCardComponent', () => {
         }
       });
 
-    instance.mainEvent = new LogInfoRedCard();
+    instance.mainEvent = new LogInfoRelatedEvent();
     instance.mainEvent.matchId = 11;
 
     // Action
@@ -710,7 +710,7 @@ describe('EventRedCardComponent', () => {
           isEdit: false
         }
       });
-    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard, new LogInfoRedCard()];
+    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard, new LogInfoRelatedEvent()];
     instance.primitiveProps = new PrimitiveProperty();
     instance.addChildMatchModel.matchType = 1;
     const childMatchModel: ChildMatchModel = {
@@ -782,7 +782,7 @@ describe('EventRedCardComponent', () => {
         }
       });
     instance['initAddRelatedEventArgs'] = jest.fn();
-    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard, new LogInfoRedCard()];
+    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard, new LogInfoRelatedEvent()];
 
     // Action
     await instance.handleClickAddRelatedEvent();
@@ -795,7 +795,7 @@ describe('EventRedCardComponent', () => {
   it('#handleDeleteEvent should be update model', async () => {
     // Arrange
     const mockResetLogInfoOfEvent = jest.fn();
-    const mainEvent = new LogInfoRedCard();
+    const mainEvent = new LogInfoRelatedEvent();
     mainEvent.isMainMatch = true;
     mainEvent.matchId = 999;
     const { instance } = await shallow

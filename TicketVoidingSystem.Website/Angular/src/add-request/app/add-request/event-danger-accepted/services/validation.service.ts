@@ -7,8 +7,8 @@ import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestStore } from '../../add-request.store';
 import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
 import { FilterTimeAreaComponent } from '../../event-red-card/filter-time-area/filter-time-area.component';
-import { LogInfoRedCardComponent } from '../../event-red-card/log-info-red-card/log-info-red-card.component';
-import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterModel } from '../../filter/filter.model';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class ValidationService {
   constructor() {
   }
 
-  isHasAllowanceTime(event: LogInfoRedCard): boolean {
+  isHasAllowanceTime(event: LogInfoRelatedEvent): boolean {
     if (event.voidTimeArea.paTime || event.voidTimeArea.aaTime || event.voidTimeArea.saTime ||
       (event.voidTimeArea.paTime === 0 && event.voidTimeArea.aaTime === 0 && event.voidTimeArea.saTime === 0)) {
       return true;
@@ -28,7 +28,7 @@ export class ValidationService {
   }
 
   validateCommonData(filter: FilterModel, eventLeagueComponent: EventLeagueComponent, filterTimeAreaComponent: FilterTimeAreaComponent,
-    logInfoComponents: QueryList<LogInfoRedCardComponent>, addRequestStore: AddRequestStore, tvDetectionComponent: TvDetectionComponent): boolean {
+    logInfoComponents: QueryList<LogInfoRelatedEventComponent>, addRequestStore: AddRequestStore, tvDetectionComponent: TvDetectionComponent): boolean {
     addRequestStore.checkValidSubIssueTypeInFilter();
 
     return filter.subIssueTypeId
@@ -38,11 +38,11 @@ export class ValidationService {
       && logInfoComponents.toArray().every(x => x.filterTimeWithAllowanceComponent.isValid());
   }
 
-  isAllEventsValid(events: LogInfoRedCard[]): boolean {
+  isAllEventsValid(events: LogInfoRelatedEvent[]): boolean {
     return events.every(x => this.isEventMatchValid(x));
   }
 
-  isValidInputRelatedEvent(inputMatchId: number, inputMatchIdClass: string, allEvents: LogInfoRedCard[], tooltip: Tooltip): boolean {
+  isValidInputRelatedEvent(inputMatchId: number, inputMatchIdClass: string, allEvents: LogInfoRelatedEvent[], tooltip: Tooltip): boolean {
     if (inputMatchId === allEvents.find(x => x.isMainMatch).matchId) {
       tooltip.display(inputMatchIdClass, LABELS.INVALID_MATCHID);
       return false;
@@ -55,7 +55,7 @@ export class ValidationService {
     return true;
   }
 
-  private isEventMatchValid(event: LogInfoRedCard): boolean {
+  private isEventMatchValid(event: LogInfoRelatedEvent): boolean {
     if (event.isMainMatch && event.messageValidationLogInfo.some(x => x.isError)) {
       return false;
     }

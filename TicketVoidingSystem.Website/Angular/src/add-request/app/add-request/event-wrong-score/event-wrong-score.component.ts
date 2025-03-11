@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
-import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { AcceptType, DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
@@ -29,6 +29,14 @@ import { ValidationBusinessRuleArgs } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
+import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
+import { RelatedEventService } from './services/related-event.service';
+import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { ChildMatchModel } from '../models/related-event.model';
+import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
+import { GetChildMatchQuery } from '../models/get-child-match.query';
+import { AddRelatedEventArg } from './models/add-related-event.model';
 
 @Component({
   selector: 'event-wrong-score',
@@ -52,8 +60,10 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   @ViewChild('eventLeague') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('wrongScoreInfo') wrongScoreInfoComponents: QueryList<WrongScoreInfoComponent>;
   @ViewChild('filterWrongScore') filterWrongScoreComponent: FilterWrongScoreComponent;
+  @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRelatedEventComponent>;
 
   private readonly errorTooltipClassName = 'var-check-selection';
+  private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
 
   primitiveProps = new PrimitiveProperty();
   tooltip = new Tooltip();
@@ -63,6 +73,11 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   tvDetectionModel = new TvDetectionModel();
   getAllowanceTimeSubscription: Subscription;
   acceptTypeName = "";
+  allSelectedEvents: LogInfoRelatedEvent[] = [];
+  addChildMatchModel = new AddChildMatchModel();
+  relatedEvents: ChildMatchModel[] = [];
+  defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
+  mainEvent = new LogInfoRelatedEvent();
 
   constructor(
     private readonly element: ElementRef,
@@ -73,6 +88,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     public readonly wrongScoreService: WrongScoreService,
     private readonly logInfoService: LogInfoService,
     private readonly modalService: ModalService,
+    private readonly relatedEventService: RelatedEventService
   ) {
     this.tooltip.element = this.element;
   }
@@ -82,6 +98,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       this.primitiveProps.filterBy = this.wrongScoreService.getFilterByBaseOnSubIssueType(this.filter.subIssueTypeId);
       this.primitiveProps.isCheckedVar = null;
       this.primitiveProps.isHighLightVarCheck = null;
+      this.primitiveProps.isShowRelatedEvents = this.relatedEventService.getChildMatchSubIssueType(Number(this.filter.subIssueTypeId))? true : false;
       this.tvDetectionComponent.initDefaultValues();
       this.resetData();
       this.filter.isChangeSubTypeManual = false;
@@ -108,7 +125,43 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     }
   }
 
+  updateLogInfoWrongScoreModels(wrongScoreModels: WrongScoreModel[], allEvents: LogInfoRelatedEvent[]){
+    allEvents.forEach(x => {
+      const wrongScoreModel = wrongScoreModels.find(y => y.matchId === x.matchId);
+      wrongScoreModel.filterFromTransTime = x.voidTimeArea.fromDateTime;
+      wrongScoreModel.filterToTransTime = x.voidTimeArea.toDateTime;
+      wrongScoreModel.subIssueTypeId = x.subIssueTypeId;
+      wrongScoreModel.aaTime = x.voidTimeArea.aaTime;
+      wrongScoreModel.paTime = x.voidTimeArea.paTime;
+      wrongScoreModel.saTime = x.voidTimeArea.saTime;
+    });
+  }
+
+  private initAddRelatedEventArgs() {
+    const arg = new AddRelatedEventArg();
+    arg.tooltip = this.tooltip;
+    arg.requestId = this.requestId;
+    arg.isEdit = this.isEdit;
+    arg.filter = this.filter;
+    arg.primitiveProps = this.primitiveProps;
+    arg.defaultFilterTimeWithAllowance = this.defaultFilterTimeWithAllowance;
+    arg.allEvents = this.allSelectedEvents;
+    this.wrongScoreModels[0].eventDate = this.mainEvent.eventDate;
+    this.wrongScoreModels[0].matchId = this.matchId;
+    arg.mainEvent = this.wrongScoreModels[0];
+    arg.addRequestStore = this.addRequestStore;
+    arg.inputMatchIdClass = this.INPUT_MATCH_ID_CLASS;
+    this.updateLogInfoWrongScoreModels(this.wrongScoreModels, this.allSelectedEvents)
+    arg.wrongScoreModels = this.wrongScoreModels;
+    
+    return arg;
+  }
+
   public async handleSearchEvent(): Promise<void> {
+    if(!this.validationService.isValidAllSubIssueType(this.logInfoComponents)){
+      return;
+    }
+
     if (this.wrongScoreModels) {
       this.logInfoService.clearDataValidation(this.wrongScoreModels);
     }
@@ -117,19 +170,38 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       this.wrongScoreService.getSelectedWrongScoreComponents(this.wrongScoreInfoComponents), this.tvDetectionComponent)) {
       return;
     }
-
+    this.primitiveProps.isBlock = true;
     if (this.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME) {
-      this.wrongScoreModels = [this.wrongScoreService.createMainWrongScoreModel(this.filterWrongScoreModel)];
-      this.primitiveProps.isBlock = true;
+      if(this.wrongScoreModels.length === 0){
+        this.wrongScoreModels = [this.wrongScoreService.createMainWrongScoreModel(this.filterWrongScoreModel)];
+        this.wrongScoreModels[0].isMainMatch = true;
+      }
       this.logInfoService.clearDataValidation(this.wrongScoreModels);
-      await this.logInfoService.getLogInfo(this.isEdit, this.requestId, this.matchId, this.filter, this.primitiveProps, this.wrongScoreModels);
-      this.primitiveProps.isBlock = false;
-    } else {
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.createGetChildMatchesQuery());
+      await this.relatedEventService.getDataRelatedEventWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
+      this.logInfoComponents.forEach(x => {
+        x.filterTimeWithAllowanceComponent?.updateData();
+        x.showValidationDetail();
+      });
+    }
+     else {
       await this.getWrongScores(this.matchId);
     }
 
+    this.primitiveProps.isBlock = false;
     this.primitiveProps.isShowActualScore = true;
     this.updateStatusButtonSaveRequest();
+  }
+
+  private createGetChildMatchesQuery(): GetChildMatchQuery {
+    const query = new GetChildMatchQuery();
+    query.issueTypeId = Number(this.filter.issueTypeId);
+    query.eventDate = this.mainEvent.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+    query.matchId = this.mainEvent.matchId;
+    query.isMainMatch = true;
+    query.sportType = this.mainEvent.sportType;
+
+    return query;
   }
 
   public async updateWrongScoreModels(): Promise<void> {
@@ -165,6 +237,12 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     if (matchInfo) {
       this.resetData();
       this.matchId = matchInfo.matchId;
+      this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
+      this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
+      this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
+      this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
+      this.mainEvent.eventDate = this.eventLeagueComponent?.selectedMatch.eventDate;
+      this.mainEvent.sportType = this.eventLeagueComponent?.selectedMatch.sportType;
       this.updateMatchId.emit(matchInfo);
     }
   }
@@ -173,6 +251,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     this.wrongScoreModels = [];
     this.primitiveProps.isShowActualScore = false;
     this.primitiveProps.actualScore = '';
+    this.allSelectedEvents = [];
   }
 
   public async getWrongScores(matchId: number): Promise<void> {
@@ -249,7 +328,8 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
 
   /* istanbul ignore next */
   public openPopupTransIds(requestId: number, transIds: string): void {
-    StaticService.openPopupTransIds(requestId, transIds, this.modalService);  }
+    StaticService.openPopupTransIds(requestId, transIds, this.modalService);
+  }
 
   private async saveWhenRequestNotVoided(): Promise<void> {
     const validation = await this.saveRequestService.checkValidationBeforeSaveRequest(this.createValidationBusinessRuleArgs());
@@ -407,5 +487,63 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
 
   public getLogInfoDetail(): LogInfoDetail[] {
     return this.wrongScoreModels.filter(x => x.isChecked).map(x => x.logInfoDetail);
+  }
+
+  async handleClickAddRelatedEvent(): Promise<void> {
+    await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
+    this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+  }
+
+  showAddChildMatchModal(matchType: number) {
+    this.addChildMatchModel.selectedMatchIds = this.allSelectedEvents.map(x => x.matchId);
+    this.addChildMatchModel.matchType = matchType;
+    this.addChildMatchModel.isOpen = true;
+    this.addChildMatchModel = _.clone(this.addChildMatchModel);
+  }
+  countChildMatches(): number {
+    return this.relatedEvents.filter(x => x.matchType === MatchType.CHILD).length;
+  }
+
+  isDisabledChildMatches(): boolean {
+    return this.filter.isVoided || this.relatedEvents.filter(x => x.matchType === MatchType.CHILD).length === 0;
+  }
+
+  countLinkMatches(): number {
+    return this.relatedEvents.filter(x => x.matchType === MatchType.LINK).length;
+  }
+
+  isDisabledLinkMatches(): boolean {
+    return this.filter.isVoided || this.relatedEvents.filter(x => x.matchType === MatchType.LINK).length === 0;
+  }
+
+  async saveRelatedEvent(selectedRelatedEvents: ChildMatchModel[]): Promise<void> {
+    this.primitiveProps.isBlock = true;
+    this.allSelectedEvents = this.allSelectedEvents.filter(x =>
+      (selectedRelatedEvents.some(y => y.matchId === x.matchId)
+        || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
+      || x.isMainMatch);    
+
+   const newChildEvents = selectedRelatedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
+    if (newChildEvents.length > 0) {
+      const newEvents = this.relatedEventService.assignChildMatchToLogInfoModel(newChildEvents, this.wrongScoreModels[0]);
+      this.relatedEventService.updateSubIssueTypeAndAllowanceTime(newEvents, Number(this.filter.subIssueTypeId));
+      const getLogInfoEvents = newEvents.filter(x => x.subIssueTypeId);
+      await this.logInfoService.getLogInfo(this.isEdit, this.requestId, this.filter, this.primitiveProps, getLogInfoEvents, this.matchId);
+      this.wrongScoreModels.push(...newEvents);
+
+      newEvents.forEach(x => {
+        const childMatchModel = selectedRelatedEvents.find(y => y.matchId === x.matchId);
+        const newRelatedEvents = this.relatedEventService.getLogInfoRelatedEvent(x, childMatchModel);
+        this.allSelectedEvents.push(newRelatedEvents);
+      });
+      this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    }
+    
+    this.primitiveProps.isBlock = false;
+  }
+
+  handleDeleteEvent(matchId: number): void {
+    this.allSelectedEvents = this.allSelectedEvents.filter(x => x.matchId !== matchId);
+    this.wrongScoreModels = this.wrongScoreModels.filter(x => x.matchId !== matchId);
   }
 }

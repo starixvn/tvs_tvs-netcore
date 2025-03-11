@@ -5,15 +5,15 @@ import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
-import { PrimitiveProperty } from '../../event-red-card/event-red-card.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { Category, GroupButton } from '../../filter/sub-issue-type-dialog/sub-issue-type-json.model';
 import SubIssueTypeDangerAcceptedConfig from '../../filter/sub-issue-type-dialog/sub-type-danger-accepted.json';
 import { RedCardModel } from '../../models/event-red-card.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../models/sub-type-link-match.model';
 import { ValidationService } from './validation.service';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property,mdel';
 
 @Injectable({
   providedIn: 'root'
@@ -37,9 +37,9 @@ export class EventDangerAcceptedService {
     SubIssueTypeConstant.GOAL_AWAY
   ];
 
-  assignModelsToEvents(allEvents: LogInfoRedCard[], inputModels: RedCardModel[], primitiveProps: PrimitiveProperty, addRequestStore: AddRequestStore): void {
+  assignModelsToEvents(allEvents: LogInfoRelatedEvent[], inputModels: RedCardModel[], primitiveProps: PrimitiveProperty, addRequestStore: AddRequestStore): void {
     inputModels.forEach(x => {
-      const event = new LogInfoRedCard();
+      const event = new LogInfoRelatedEvent();
       event.matchId = x.matchId;
       event.matchCode = x.matchCode;
       event.leagueName = x.leagueName;
@@ -98,15 +98,15 @@ export class EventDangerAcceptedService {
     defaultFilter.toDateTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
   }
 
-  initDefaultMainEvent(allSelectedEvents: LogInfoRedCard[]): LogInfoRedCard {
-    const mainEvent = new LogInfoRedCard();
+  initDefaultMainEvent(allSelectedEvents: LogInfoRelatedEvent[]): LogInfoRelatedEvent {
+    const mainEvent = new LogInfoRelatedEvent();
     mainEvent.isMainMatch = true;
     allSelectedEvents.push(mainEvent);
 
     return allSelectedEvents.find(x => x.isMainMatch);
   }
 
-  async updateSubIssueTypeAndAllowanceTime(allEvents: LogInfoRedCard[], mainEvent: LogInfoRedCard, relatedEvents: ChildMatchModel[],
+  async updateSubIssueTypeAndAllowanceTime(allEvents: LogInfoRelatedEvent[], mainEvent: LogInfoRelatedEvent, relatedEvents: ChildMatchModel[],
     defaultFilter: FilterTimeWithAllowance): Promise<void> {
     let subTypeLinkMatches = [];
     const linkEvents = allEvents.filter(x => relatedEvents.some(y => y.matchId === x.matchId && y.matchType === MatchType.LINK));
@@ -118,7 +118,7 @@ export class EventDangerAcceptedService {
     this.updateAllowanceTime(allEvents, defaultFilter);
   }
 
-  private getSubIssueTypeId(handlingMatchId: number, subTypeLinkMatches: SubIssueTypeLinkMatch[], linkEvents: LogInfoRedCard[], mainEvent: LogInfoRedCard): number {
+  private getSubIssueTypeId(handlingMatchId: number, subTypeLinkMatches: SubIssueTypeLinkMatch[], linkEvents: LogInfoRelatedEvent[], mainEvent: LogInfoRelatedEvent): number {
     const model = subTypeLinkMatches.find(x => x.matchId === handlingMatchId);
     if (linkEvents.some(y => y.matchId === handlingMatchId)) {
       return model?.subIssueTypeId ? model.subIssueTypeId : mainEvent.subIssueTypeId;
@@ -127,19 +127,19 @@ export class EventDangerAcceptedService {
     }
   }
 
-  private updateSubIssueType(allEvents: LogInfoRedCard[], subTypeLinkMatches: SubIssueTypeLinkMatch[], linkEvents: LogInfoRedCard[], mainEvent: LogInfoRedCard): void {
+  private updateSubIssueType(allEvents: LogInfoRelatedEvent[], subTypeLinkMatches: SubIssueTypeLinkMatch[], linkEvents: LogInfoRelatedEvent[], mainEvent: LogInfoRelatedEvent): void {
     allEvents.forEach(x => {
       x.subIssueTypeId = this.getSubIssueTypeId(x.matchId, subTypeLinkMatches, linkEvents, mainEvent);
     });
   }
 
-  private updateAllowanceTime(allEvents: LogInfoRedCard[], defaultFilter: FilterTimeWithAllowance): void {
+  private updateAllowanceTime(allEvents: LogInfoRelatedEvent[], defaultFilter: FilterTimeWithAllowance): void {
     allEvents.forEach(x => {
       x.voidTimeArea = this.getNewFilterTimeWithAllowanceBySubIssueType(x, defaultFilter);
     });
   }
 
-  private getNewFilterTimeWithAllowanceBySubIssueType(event: LogInfoRedCard, defaultFilter: FilterTimeWithAllowance): FilterTimeWithAllowance {
+  private getNewFilterTimeWithAllowanceBySubIssueType(event: LogInfoRelatedEvent, defaultFilter: FilterTimeWithAllowance): FilterTimeWithAllowance {
     const group = this.getGroupSubTypeIncludeAllowanceTime(event.subIssueTypeId);
     const voidTimeArea = {
       aaTime: Number(group.aa),

@@ -106,7 +106,7 @@ export class WrongScoreInfoComponent implements OnInit {
       this.selectedWrongScores.push(this.wrongScoreModel);
     }
     this.isBlock = true;
-    await this.logInfoService.getLogInfo(this.isEdit, this.requestId, this.matchId, this.filter, this.primitiveProps, this.selectedWrongScores);
+    await this.logInfoService.getLogInfo(this.isEdit, this.requestId, this.filter, this.primitiveProps, this.selectedWrongScores, this.matchId);
     this.isBlock = false;
     this.isCollapse = false;
   }

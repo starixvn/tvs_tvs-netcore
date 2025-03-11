@@ -10,7 +10,7 @@ import { LogInfoEarlyKickOff } from '../../event-early-kick-off/models/log-info-
 import { TableTicketsModel } from '../../event-early-kick-off/tickets-list/table-tickets.model';
 import { PrimitiveProperty } from '../../event-red-card/event-red-card.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterModel } from '../../filter/filter.model';
 import { GroupButton } from '../../filter/sub-issue-type-dialog/sub-issue-type-json.model';
 import { RedCardModel } from '../../models/event-red-card.model';
@@ -83,7 +83,7 @@ class Helper {
       reason: '',
     }
   ];
-  static readonly fakeLogInfoRedCard: LogInfoRedCard = {
+  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
     matchId: Helper.fakeMatchId,
     isMainMatch: true,
     eventName: '',
@@ -93,7 +93,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     sportType: 0
-  } as LogInfoRedCard;
+  } as LogInfoRelatedEvent;
   static readonly fakeChildMatchModel: ChildMatchModel = {
     matchId: Helper.fakeMatchId,
     matchCode: '222',
@@ -207,7 +207,7 @@ describe('EventDangerAcceptedService', () => {
 
   it('#assignModelsToEvents should update correct model', async () => {
     // Arrange
-    const allEvents = [{logInfoDetail: {}} as LogInfoRedCard];
+    const allEvents = [{logInfoDetail: {}} as LogInfoRelatedEvent];
     const primitiveProps = new PrimitiveProperty();
     const addRequestStore = new AddRequestStore();
     addRequestStore.changeAllowanceTime = jest.fn();

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, ElementRef } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
@@ -8,28 +8,32 @@ import { SubIssueType } from '../../../../../utility/models/issue-type.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';
-import { PrimitiveProperty } from '../event-red-card.model';
-import { FilterTimeWithAllowanceComponent } from '../filter-time-with-allowance/filter-time-with-allowance.component';
-import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoService } from '../services/log-info.service';
-import { LogInfoRedCard } from './log-info-red-card.model';
+import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { LogInfoService } from '../../event-red-card/services/log-info.service';
+import { LogInfoRelatedEvent } from './log-info-related-event.model';
+import { PrimitiveProperty } from './primitive-property,mdel';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { LogInfoService as WrongScoreLogInfoService } from '../../event-wrong-score/services/log-info.service';
+import { PrimitiveProperty as WrongScorePrimitiveProperty } from '../../event-wrong-score/event-wrong-score.model';
 
 @Component({
-  selector: 'log-info-red-card',
-  templateUrl: './log-info-red-card.component.html',
-  styleUrls: ['./log-info-red-card.component.scss']
+  selector: 'log-info-related-event',
+  templateUrl: './log-info-related-event.component.html',
+  styleUrls: ['./log-info-related-event.component.scss']
 })
-export class LogInfoRedCardComponent {
+export class LogInfoRelatedEventComponent {
   @Input() isEdit: boolean;
   @Input() requestId: number;
   @Input() isMainMatch: boolean;
   @Input() isDisabled: boolean;
   @Input() filter: FilterModel;
-  @Input() primitiveProps: PrimitiveProperty;
+  @Input() filterBy: number;
+  @Input() transInfoAddRequestModel: TransInfoAddRequestModel;
   @Input() subIssueTypes: SubIssueType[] = [];
-  @Input() logInfo: LogInfoRedCard;
+  @Input() logInfo: LogInfoRelatedEvent;
   @Input() defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
-
   @Output() deleteEvent = new EventEmitter<number>();
   @ViewChild('filterTimeWithAllowance') filterTimeWithAllowanceComponent: FilterTimeWithAllowanceComponent;
 
@@ -39,19 +43,45 @@ export class LogInfoRedCardComponent {
   subIssueTypeDialogModel = new SubIssueTypeDialogModel();
   tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
   acceptTypeName = "";
+  tooltip = new Tooltip();
 
   constructor(
     private readonly modalService: ModalService,
     private readonly logInfoService: LogInfoService,
-  ) {}
+    private readonly element: ElementRef,
+    private readonly wrongScoreLogInfoService: WrongScoreLogInfoService,
+  ) {
+    this.tooltip.element = this.element;
+  }
+
+  showTooltipSubType(){
+    this.tooltip.display('btn-select-sub-type', LABELS.REQUIRED_SUB_TYPE);
+  }
 
   async refreshLogInfo(): Promise<void> {
-    this.isBlock = true;
     this.hideValidationDetail();
     this.clearDataValidation();
-
+    if(!this.logInfo.subIssueTypeId){
+      this.showTooltipSubType();
+      return;
+    }
     if (this.filterTimeWithAllowanceComponent.isValid()) {
-      await this.logInfoService.getLogInfo([this.logInfo], this.primitiveProps, this.isEdit, this.requestId, this.filter, this.defaultFilterTimeWithAllowance);
+      
+      this.isBlock = true;
+      if (StaticService.isWrongScore(this.filter.issueTypeId.toString())) {
+        const wrongScorePrimitiveProperty = {
+          filterBy: this.filterBy,
+          transInfoAddRequestModel: this.transInfoAddRequestModel
+        } as WrongScorePrimitiveProperty;
+        await this.wrongScoreLogInfoService.refreshLogInfoForRelatedEvent(this.isEdit, this.requestId, this.filter, wrongScorePrimitiveProperty, this.logInfo);
+      }
+      else {
+        const primitiveProperty = {
+          filterBy: this.filterBy,
+          transInfoAddRequestModel: this.transInfoAddRequestModel
+        } as PrimitiveProperty;
+        await this.logInfoService.getLogInfo([this.logInfo], primitiveProperty , this.isEdit, this.requestId, this.filter, this.defaultFilterTimeWithAllowance);
+      } 
       this.filterTimeWithAllowanceComponent.updateData();
       this.showValidationDetail();
     }

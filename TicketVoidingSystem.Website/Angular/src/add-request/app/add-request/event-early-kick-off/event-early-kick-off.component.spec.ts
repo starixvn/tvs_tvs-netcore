@@ -748,9 +748,9 @@ describe('EventEarlyKickOffComponent', () => {
       });
     const childEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
     childEvent.isMainMatch = false;
-    const logInfoRedCardComponent = new LogInfoEkoComponent(null, null);
+    const LogInfoRelatedEventComponent = new LogInfoEkoComponent(null, null);
     const logInfoComponents = new QueryList<LogInfoEkoComponent>();
-    instance.logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    instance.logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
     instance.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff, childEvent];
     instance.getTicketsMainEvent = jest.fn();
     instance.mainEvent = Helper.fakeLogInfoEarlyKickOff ;

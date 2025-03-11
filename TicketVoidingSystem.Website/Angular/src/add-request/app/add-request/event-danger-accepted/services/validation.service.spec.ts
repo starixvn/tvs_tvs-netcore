@@ -6,8 +6,8 @@ import { AddRequestStore } from '../../add-request.store';
 import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
 import { FilterTimeAreaComponent } from '../../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
-import { LogInfoRedCardComponent } from '../../event-red-card/log-info-red-card/log-info-red-card.component';
-import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterModel } from '../../filter/filter.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { ValidationService } from './validation.service';
@@ -27,7 +27,7 @@ class Helper {
     transIds: '',
     requestId: 1,
   };
-  static readonly fakeLogInfoRedCard: LogInfoRedCard = {
+  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
     matchId: 1111,
     isMainMatch: true,
     eventName: '',
@@ -37,7 +37,7 @@ class Helper {
     logInfoDetail: null,
     messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
     sportType: 0
-  } as LogInfoRedCard;
+  } as LogInfoRelatedEvent;
 }
 
 describe('ValidationService', () => {
@@ -52,7 +52,7 @@ describe('ValidationService', () => {
 
   it('#isHasAllowanceTime should return true when has allowance time and is not zero', async () => {
     // Arrange
-    const logInfoRedCard = new LogInfoRedCard();
+    const logInfoRedCard = new LogInfoRelatedEvent();
     logInfoRedCard.voidTimeArea.aaTime = 1;
     logInfoRedCard.voidTimeArea.paTime = 1;
     logInfoRedCard.voidTimeArea.saTime = 1;
@@ -66,7 +66,7 @@ describe('ValidationService', () => {
 
   it('#isHasAllowanceTime should return true when allowance time and is zero', async () => {
     // Arrange
-    const logInfoRedCard = new LogInfoRedCard();
+    const logInfoRedCard = new LogInfoRelatedEvent();
     logInfoRedCard.voidTimeArea.aaTime = 0;
     logInfoRedCard.voidTimeArea.paTime = 0;
     logInfoRedCard.voidTimeArea.saTime = 0;
@@ -80,7 +80,7 @@ describe('ValidationService', () => {
 
   it('#isHasAllowanceTime should return true when allowance time is null', async () => {
     // Arrange
-    const logInfoRedCard = new LogInfoRedCard();
+    const logInfoRedCard = new LogInfoRelatedEvent();
     logInfoRedCard.voidTimeArea.aaTime = null;
     logInfoRedCard.voidTimeArea.paTime = null;
     logInfoRedCard.voidTimeArea.saTime = null;
@@ -151,12 +151,12 @@ describe('ValidationService', () => {
     const spyeventLeagueComponentIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
     const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
     const spyFilterTimeAreaComponentIsValid = jest.spyOn(filterTimeAreaComponent, 'isValid').mockImplementation(() => true);
-    const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent.isValid = jest.fn();
-    logInfoRedCardComponent.showValidationDetail = jest.fn();
-    const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
-    logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    const LogInfoRelatedEventComponent = new LogInfoRelatedEventComponent(null, null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent.isValid = jest.fn();
+    LogInfoRelatedEventComponent.showValidationDetail = jest.fn();
+    const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
+    logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
     const mockTvDetection = new TvDetectionComponent(null, null);
     mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
 
@@ -177,12 +177,12 @@ describe('ValidationService', () => {
     const spyeventLeagueComponentIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
     const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
     const spyFilterTimeAreaComponentIsValid = jest.spyOn(filterTimeAreaComponent, 'isValid').mockImplementation(() => true);
-    const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent.isValid = jest.fn().mockImplementation(() => true);
-    logInfoRedCardComponent.showValidationDetail = jest.fn();
-    const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
-    logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    const LogInfoRelatedEventComponent = new LogInfoRelatedEventComponent(null, null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent.isValid = jest.fn().mockImplementation(() => true);
+    LogInfoRelatedEventComponent.showValidationDetail = jest.fn();
+    const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
+    logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
     const mockTvDetection = new TvDetectionComponent(null, null);
     mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
 
@@ -254,7 +254,7 @@ describe('ValidationService', () => {
     // Arrange
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.isMainMatch = true;
-    const event = new LogInfoRedCard();
+    const event = new LogInfoRelatedEvent();
     event.matchId = 999;
     const events = [];
     events.push(event);

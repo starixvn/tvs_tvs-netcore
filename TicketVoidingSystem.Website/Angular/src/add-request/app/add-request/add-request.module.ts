@@ -51,7 +51,7 @@ import { EventRecoverTicketComponent } from './event-recover-ticket/event-recove
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { FilterTimeAreaComponent } from './event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowanceComponent } from './event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
-import { LogInfoRedCardComponent } from './event-red-card/log-info-red-card/log-info-red-card.component';
+import { LogInfoRelatedEventComponent } from './components/log-info-related-event/log-info-related-event.component';
 import { EventReducedOverComponent } from './event-reduced-over/event-reduced-over.component';
 import { FilterReducedOverItemComponent } from './event-reduced-over/filter-reduced-over-item/filter-reduced-over-item.component';
 import { FilterReducedOverComponent } from './event-reduced-over/filter-reduced-over/filter-reduced-over.component';
@@ -120,7 +120,7 @@ import { HdpFilterBetTypeComponent } from './components/hdp-filter-bet-type/hdp-
         AllowanceTimeComponent,
         FilterTimeAreaComponent,
         ConfirmWrongScoreComponent,
-        LogInfoRedCardComponent,
+        LogInfoRelatedEventComponent,
         ConfirmDangerAcceptedComponent,
         OthersAbnormalBetComponent,
         EventTicket14Component,

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, QueryList } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
@@ -13,6 +13,8 @@ import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { FilterWrongScoreComponent } from '../filter-wrong-score/filter-wrong-score.component';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
 
 @Injectable({
   providedIn: 'root'
@@ -110,13 +112,23 @@ export class ValidationService {
     return wrongScoreModels.filter(x => x.isChecked);
   }
 
-  public isHasAllowanceTime(wrongScoreModel: WrongScoreModel): boolean {
-    if (wrongScoreModel.aaTime || wrongScoreModel.paTime || wrongScoreModel.saTime ||
-      (wrongScoreModel.aaTime === 0 && wrongScoreModel.paTime === 0 && wrongScoreModel.saTime === 0)) {
+  isHasAllowanceTime(event: LogInfoRelatedEvent): boolean {
+    if (event.voidTimeArea.aaTime || event.voidTimeArea.paTime || event.voidTimeArea.saTime ||
+      (event.voidTimeArea.aaTime === 0 && event.voidTimeArea.paTime === 0 && event.voidTimeArea.saTime === 0)) {
       return true;
     }
 
     return false;
+  }
+
+  public isValidAllSubIssueType(logInfoComponents: QueryList<LogInfoRelatedEventComponent>): boolean {
+    return logInfoComponents.toArray().every(x => {
+      if (!x.logInfo.subIssueTypeId || !this.isHasAllowanceTime(x.logInfo)) {
+        x.showTooltipSubType();
+        return false;
+      }
+      return true;
+    });
   }
 
   public isSubTypeFilterByAcceptedTime(subIssueTypeId: string): boolean {
@@ -136,7 +148,15 @@ export class ValidationService {
       SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_NO_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_NO_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_ONWARDS
+      SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_ONWARDS,
+      SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL, 
+      SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME, 
+      SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_AWAY,
+      SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK,
+      SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER, 
+      SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_HOME, 
+      SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_AWAY,
+      SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING
     ];
   
     return subTypesFilterByAcceptedTime.includes(Number(subIssueTypeId));
@@ -154,4 +174,17 @@ export class ValidationService {
   public isEditingByAnotherUser(isEdit: boolean, editingBy: number, createdBy: number): boolean {
     return isEdit && editingBy !== createdBy;
   }
+
+  isValidInputRelatedEvent(inputMatchId: number, inputMatchIdClass: string, mainMatchId: number, allEvents: LogInfoRelatedEvent[], tooltip: Tooltip): boolean {
+      if (inputMatchId === mainMatchId) {
+        tooltip.display(inputMatchIdClass, LABELS.INVALID_MATCHID);
+        return false;
+      }
+      if (allEvents.filter(x => !x.isMainMatch).some(x => x.matchId === inputMatchId)) {
+        tooltip.display(inputMatchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+        return false;
+      }
+  
+      return true;
+    }
 }

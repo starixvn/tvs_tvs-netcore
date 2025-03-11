@@ -9,6 +9,7 @@ import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { GetLogInfoModel } from '../../models/get-log-info.model';
 import { PrimitiveProperty, WrongScoreGetLogInfoQuery } from '../event-wrong-score.model';
 import { WrongScoreService } from './wrong-score.service';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,42 +17,46 @@ import { WrongScoreService } from './wrong-score.service';
 export class LogInfoService {
   constructor(
     private readonly wrongScoreService: WrongScoreService,
-    private readonly commonService: CommonService) {
+    private readonly commonService: CommonService) { }
+
+  async getLogInfo(isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty,
+    wrongScoreModels: WrongScoreModel[], mainMatchId: number): Promise<void> {
+    const getLogInfoQuery = this.initGetLogInfoQueries(isEdit, requestId, filter, wrongScoreModels, mainMatchId);
+    const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
+    primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
+
+    primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME
+      ? this.assignResultsGetLogInfoRelatedEvent(viewModel.getLogInfoModels, wrongScoreModels)
+      : this.assignResultsGetLogInfoToListModel(viewModel.getLogInfoModels, wrongScoreModels);
   }
 
-  async getLogInfo(isEdit: boolean, requestId: number, matchId: number, filter: FilterModel, primitiveProps: PrimitiveProperty,
-    wrongScoreModels: WrongScoreModel[]): Promise<void> {
-    const getLogInfoQuery = this.initGetLogInfoQueries(isEdit, requestId, matchId, filter, wrongScoreModels);
+  async refreshLogInfoForRelatedEvent(isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty,
+    logInfoRelatedEvent: LogInfoRelatedEvent): Promise<void> {
+    const wrongScoreModel = {
+      matchId: logInfoRelatedEvent.matchId,
+      filterBy: this.wrongScoreService.getFilterByBaseOnSubIssueType(filter.subIssueTypeId),
+      filterFromTransTime: logInfoRelatedEvent.voidTimeArea.fromDateTime,
+      filterToTransTime: logInfoRelatedEvent.voidTimeArea.toDateTime,
+      subIssueTypeId: Number(filter.subIssueTypeId),
+      aaTime: logInfoRelatedEvent.voidTimeArea.aaTime,
+      paTime: logInfoRelatedEvent.voidTimeArea.paTime,
+      saTime: logInfoRelatedEvent.voidTimeArea.saTime
+    } as WrongScoreModel;
+    const getLogInfoQuery = this.initGetLogInfoQueries(isEdit, requestId, filter, [wrongScoreModel], null);
     const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
 
     primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
-    primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME ?
-      this.assignResultsGetLogInfoToModel(viewModel.getLogInfoModels[0], wrongScoreModels[0]) :
-      this.assignResultsGetLogInfoToListModel(viewModel.getLogInfoModels, wrongScoreModels);
+    logInfoRelatedEvent.voidTimeArea.fromDateTime = moment(viewModel.getLogInfoModels[0].logInfoDetail?.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    logInfoRelatedEvent.voidTimeArea.toDateTime = moment(viewModel.getLogInfoModels[0].logInfoDetail?.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    logInfoRelatedEvent.logInfoDetail = viewModel.getLogInfoModels[0].logInfoDetail;
+    logInfoRelatedEvent.messageValidationLogInfo = StaticService.getValidationMessageList(viewModel.getLogInfoModels[0], logInfoRelatedEvent.voidTimeArea.fromDateTime, logInfoRelatedEvent.voidTimeArea.saTime);
   }
 
-  /* istanbul ignore next */
-  public initGetLogInfoQueries(isEdit: boolean, requestId: number, matchId: number, filter: FilterModel,
-    wrongScoreModels: WrongScoreModel[]): GetLogInfoQuery {
-    const wrongScoresForGetLogInfo = this.getWrongScoreModel(matchId, filter, wrongScoreModels);
-
-    const query: GetLogInfoQuery = {
-      requestId: isEdit ? requestId : null,
-      actionId: Number(filter.action),
-      issueTypeId: Number(filter.issueTypeId),
-      subIssueTypeId: Number(filter.subIssueTypeId),
-      wrongScoreModels: wrongScoresForGetLogInfo,
-      isShowLogOnly: false,
-    };
-
-    return query;
-  }
-  
-  private getWrongScoreModel(matchId: number, filter: FilterModel, wrongScoreModels: WrongScoreModel[]): WrongScoreGetLogInfoQuery[] {
+  private getWrongScoreModel(filter: FilterModel, wrongScoreModels: WrongScoreModel[], mainMatchId: number): WrongScoreGetLogInfoQuery[] {
     return wrongScoreModels.map(x => {
       return {
         scoreId: x.scoreId,
-        matchId: matchId,
+        matchId: x.matchId ? x.matchId : mainMatchId,
         wrongScore: x.wrongScore,
         filterBy: this.wrongScoreService.getFilterByBaseOnSubIssueType(filter.subIssueTypeId),
         filterFromTransTime: x.filterFromTransTime,
@@ -61,6 +66,29 @@ export class LogInfoService {
         paTime: x.paTime,
         saTime: x.saTime
       } as WrongScoreGetLogInfoQuery;
+    });
+  }
+  /* istanbul ignore next */
+  public initGetLogInfoQueries(isEdit: boolean, requestId: number, filter: FilterModel,
+    wrongScoreModels: WrongScoreModel[], mainMatchId: number): GetLogInfoQuery {
+    const getWrongScoreModels = this.getWrongScoreModel(filter, wrongScoreModels, mainMatchId);
+
+    const query: GetLogInfoQuery = {
+      requestId: isEdit ? requestId : null,
+      actionId: Number(filter.action),
+      issueTypeId: Number(filter.issueTypeId),
+      subIssueTypeId: Number(filter.subIssueTypeId),
+      wrongScoreModels: getWrongScoreModels,
+      isShowLogOnly: false,
+    };
+
+    return query;
+  }
+
+  private assignResultsGetLogInfoRelatedEvent(logInfoModels: GetLogInfoModel[], wrongScoreModels: WrongScoreModel[]): void {
+    logInfoModels.forEach(model => {
+      const wrongScoreModel = wrongScoreModels.find(y => y.matchId === model.matchId);
+      this.assignResultsGetLogInfoToModel(model, wrongScoreModel);
     });
   }
 
@@ -87,6 +115,13 @@ export class LogInfoService {
       x.messageValidationLogInfo = null;
       x.voidFromTime = null;
       x.voidToTime = null;
+    });
+  }
+
+  public resetLogInfoOfEvent(events: LogInfoRelatedEvent[]): void {
+    events.forEach(event => {
+      event.logInfoDetail = null;
+      event.messageValidationLogInfo = null;
     });
   }
 }

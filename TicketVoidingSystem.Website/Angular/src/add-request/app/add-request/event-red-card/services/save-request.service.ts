@@ -8,7 +8,7 @@ import { TvDetectionModel } from '../../components/tv-detection/tv-detection.mod
 import { AddRequestQuery } from '../../models/add-request.query';
 import { RedCardModel } from '../../models/event-red-card.model';
 import { PopupService } from '../../services/popup.service';
-import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestArg } from './save-request.model';
 import { ValidationService } from './validation.service';
@@ -92,7 +92,7 @@ export class SaveRequestService {
     await this.addRequestService.executeSaveRequest(args.isEdit, args.requestId, query, args.addRequestStore);
   }
 
-  private validateVarCheck(allEvents: LogInfoRedCard[]): boolean {
+  private validateVarCheck(allEvents: LogInfoRelatedEvent[]): boolean {
     let isSelectedVarAllEvents = true;
     allEvents.forEach(x => {
       if(StaticService.isShowVarCheck(x.subIssueTypeId) && (_.isNull(x.isCheckedVar) || _.isUndefined(x.isCheckedVar))) {
@@ -130,7 +130,7 @@ export class SaveRequestService {
     return query;
   }
 
-  private assignEventToModel(logInfoEvent: LogInfoRedCard, arg: SaveRequestArg, tvDetectionModel: TvDetectionModel): RedCardModel {
+  private assignEventToModel(logInfoEvent: LogInfoRelatedEvent, arg: SaveRequestArg, tvDetectionModel: TvDetectionModel): RedCardModel {
     const model = {
       isMainMatch: logInfoEvent.isMainMatch,
       filterBy: arg.primitiveProps.filterBy,

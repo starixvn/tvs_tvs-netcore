@@ -9,6 +9,7 @@ import { LogInfoService } from './log-info.service';
 import { SaveRequestArg } from './save-request.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 import { ValidationService } from './validation.service';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,8 +56,7 @@ export class SaveRequestService {
 
     args.addRequestStore.changeBlockingUiStatus(true);
     this.logInfoService.clearDataValidation(args.wrongScoreModels);
-    await this.logInfoService.getLogInfo(args.isEdit, args.requestId,
-      args.leagueEventWrongScoreComponent.selectedMatch.matchId, args.filter, args.primitiveProps, args.wrongScoreModels);
+    await this.logInfoService.getLogInfo(args.isEdit, args.requestId, args.filter, args.primitiveProps, args.wrongScoreModels, args.wrongScoreModels[0].matchId);
     args.addRequestStore.changeBlockingUiStatus(false);
 
     if (!this.validationService.isValidAllScores(args.wrongScoreModels)) {
@@ -113,5 +113,14 @@ export class SaveRequestService {
     });
 
     return args.wrongScoreModels;
+  }
+
+  isHasAllowanceTime(event: LogInfoRelatedEvent): boolean {
+    if (event.voidTimeArea.aaTime || event.voidTimeArea.paTime || event.voidTimeArea.saTime ||
+      (event.voidTimeArea.aaTime === 0 && event.voidTimeArea.paTime === 0 && event.voidTimeArea.saTime === 0)) {
+      return true;
+    }
+
+    return false;
   }
 }

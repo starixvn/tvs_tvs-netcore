@@ -76,7 +76,6 @@ export class LogInfoService {
     selectedEvents.forEach(event => {
       const logInfoModel = logInfoModels.find(x => x.matchId === event.matchId);
       if (logInfoModel) {
-
         event.isInvalidTotalTickets = logInfoModel.validation.isInvalidTotalTickets;
         event.isHasSettledTicket = logInfoModel.validation.isHasSettledTicket;
         event.isHasInstantlySettledTicket = logInfoModel.validation.isHasInstantlySettledTicket;

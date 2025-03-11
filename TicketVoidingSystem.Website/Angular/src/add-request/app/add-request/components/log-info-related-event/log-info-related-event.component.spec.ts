@@ -12,12 +12,12 @@ import { FilterModel } from '../../filter/filter.model';
 import { SubIssueTypeDialogComponent } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.component';
 import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
-import { FilterTimeWithAllowanceComponent } from '../filter-time-with-allowance/filter-time-with-allowance.component';
-import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoService } from '../services/log-info.service';
-import { PipeModule } from './../../../../../utility/pipes/pipe.module';
-import { LogInfoRedCardComponent } from './log-info-red-card.component';
-import { LogInfoRedCard } from './log-info-red-card.model';
+import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { LogInfoService } from '../../event-red-card/services/log-info.service';
+import { PipeModule } from '../../../../../utility/pipes/pipe.module';
+import { LogInfoRelatedEventComponent } from './log-info-related-event.component';
+import { LogInfoRelatedEvent } from './log-info-related-event.model';
 
 class Helper {
   static readonly fakeTransId = '111102';
@@ -72,7 +72,7 @@ class Helper {
     paTime: 1,
     saTime: 1,
   }
-  static readonly fakeLogInfoRedCard: LogInfoRedCard = {
+  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
     matchId: 111,
     isMainMatch: false,
     leagueName: '',
@@ -82,7 +82,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     sportType: 0
-  } as LogInfoRedCard;
+  } as LogInfoRelatedEvent;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '11',
     subIssueTypeId: '27',
@@ -99,7 +99,7 @@ class Helper {
   };
 }
 
-describe('LogInfoRedCardComponent', () => {
+describe('LogInfoRelatedEventComponent', () => {
   @NgModule({
     declarations: [
       FilterTimeWithAllowanceComponent,
@@ -117,15 +117,15 @@ describe('LogInfoRedCardComponent', () => {
   })
   class AppModuleTest { }
 
-  let shallow: Shallow<LogInfoRedCardComponent>;
+  let shallow: Shallow<LogInfoRelatedEventComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(LogInfoRedCardComponent, AppModuleTest)
+    shallow = new Shallow(LogInfoRelatedEventComponent, AppModuleTest)
       .dontMock(NgbModule)
       .mock(ElementRef, {});
   });
 
-  it('LogInfoRedCardComponent init should match snapshot', async () => {
+  it('LogInfoRelatedEventComponent init should match snapshot', async () => {
     const { fixture, instance } = await shallow.render({
       bind: {
         isEdit: false,

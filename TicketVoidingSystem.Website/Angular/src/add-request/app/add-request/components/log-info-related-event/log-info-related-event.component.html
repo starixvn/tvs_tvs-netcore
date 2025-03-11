@@ -77,6 +77,7 @@
     </div>
   </div>
 </div>
-<sub-issue-type-dialog [model]="subIssueTypeDialogModel" (updateSubTypeEvent)="updateDataAfterClosed($event)">
+<sub-issue-type-dialog [model]="subIssueTypeDialogModel" (updateSubTypeEvent)="updateDataAfterClosed($event)" [isMainEvent]="false">
 </sub-issue-type-dialog>
 
+<tooltip [tooltip]="tooltip"></tooltip>

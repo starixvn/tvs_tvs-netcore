@@ -8,6 +8,8 @@ export class PrimitiveProperty {
   transInfoAddRequestModel: TransInfoAddRequestModel;
   isCheckedVar?: boolean;
   isHighLightVarCheck?: boolean;
+  isShowRelatedEvents: boolean;
+  inputRelatedMatchId?: number;
 }
 
 export interface GetLogInfoQuery {

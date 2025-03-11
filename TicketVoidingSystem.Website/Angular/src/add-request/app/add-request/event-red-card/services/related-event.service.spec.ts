@@ -13,7 +13,7 @@ import { ChildMatchModel } from '../../models/related-event.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { PrimitiveProperty } from '../event-red-card.model';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { EventRedCardService } from './event-red-card.service';
 import { LogInfoService } from './log-info.service';
 import { RelatedEventService } from './related-event.service';
@@ -73,7 +73,7 @@ class Helper {
       reason: '',
     }
   ];
-  static readonly fakeLogInfoRedCard: LogInfoRedCard = {
+  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
     matchId: Helper.fakeMatchId,
     isMainMatch: true,
     eventName: '',
@@ -83,7 +83,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     sportType: 0
-  } as LogInfoRedCard;
+  } as LogInfoRelatedEvent;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '1',
     subIssueTypeId: '1',
@@ -273,7 +273,7 @@ describe('RelatedEventService', () => {
 
   it('#getDataWhenSearch should called expected method', async () => {
     // Arrange
-    let fackLogInfoRedCard: LogInfoRedCard = {
+    let fackLogInfoRedCard: LogInfoRelatedEvent = {
       matchId: 1,
       isMainMatch: true,
       eventName: '',
@@ -283,7 +283,7 @@ describe('RelatedEventService', () => {
       logInfoDetail: Helper.fakeLogInfoDetail,
       messageValidationLogInfo: Helper.fakeValidationMessage,
       sportType: 0
-    } as LogInfoRedCard;
+    } as LogInfoRelatedEvent;
     let fackChildMatchModel = Helper.fakeChildMatchModel;
     fackChildMatchModel.matchId = 213;
     fackChildMatchModel.matchType = 2;
@@ -304,7 +304,7 @@ describe('RelatedEventService', () => {
 
   it('#getDataWhenSearch should addNewRelatedEventHaveTicket when fack preparingModelGetLogInfo', async () => {
     // Arrange
-    let fackLogInfoRedCard: LogInfoRedCard = {
+    let fackLogInfoRedCard: LogInfoRelatedEvent = {
       matchId: 1,
       isMainMatch: true,
       eventName: '',
@@ -314,7 +314,7 @@ describe('RelatedEventService', () => {
       logInfoDetail: Helper.fakeLogInfoDetail,
       messageValidationLogInfo: Helper.fakeValidationMessage,
       sportType: 0
-    } as LogInfoRedCard;
+    } as LogInfoRelatedEvent;
     let fackChildMatchModel = Helper.fakeChildMatchModel;
     fackChildMatchModel.matchId = 213;
     fackChildMatchModel.matchType = 2;
