@@ -33,6 +33,8 @@ export class TemplateMessageService {
       this.initValueForWrongOu(templateValue, voidMatch, requestDetail.wrongOuModels, issueTypeId);
     } else if (StaticService.isRedCard(issueTypeId)) {
       this.initValueForLikelyDangerAccepted(templateValue, voidMatch.logInfoDetail, requestDetail.redCardModels[0].filterBy, voidMatch.isCheckedVar);
+    } else if (StaticService.isWrongOdds(issueTypeId)) {
+      this.initValueForWrongOdds(templateValue, voidMatch);
     }
 
     return templateValue;
@@ -74,5 +76,15 @@ export class TemplateMessageService {
     templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
     templateValue.isCheckedSpecialBetType = StaticService.isWrongOU(issueTypeId) && voidMatch.voidTicketsMini.betTypes !== OverUnder;
     templateValue.betTypeNameReplaceMessage = voidMatch.voidTicketsMini.betTypeNameReplaceMessage;
+  }
+
+  private initValueForWrongOdds(templateValue: TemplateValue, voidMatch: VoidMatch): void {
+    templateValue.filterFavoriteType = voidMatch.filterFavoriteType;
+    templateValue.favoriteValue = voidMatch.favoriteValue;
+    templateValue.wrongOU = voidMatch.wrongOU;
+    templateValue.correctOddsHomeOver = voidMatch.correctOddsHomeOver;
+    templateValue.correctOddsAwayUnder = voidMatch.correctOddsAwayUnder;
+    templateValue.score = this.getLiveScoreForTemplateMessage(voidMatch.logInfoDetail.scoreNormalTicket, voidMatch.logInfoDetail.scoreOfMatch);
+    templateValue.eventType = voidMatch.isAllLiveTickets ? EventType.LIVE : null;
   }
 }

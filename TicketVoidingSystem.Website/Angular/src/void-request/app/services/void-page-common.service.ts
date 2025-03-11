@@ -5,6 +5,7 @@ import { RequestDetailViewModel } from '../../../edit-request/app/request.model'
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../utility/constants/labels';
 import { IssueTypesModel, SubIssueType } from '../../../utility/models/issue-type.model';
+import { CommonService } from '../../../utility/services/common.service';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
@@ -22,6 +23,7 @@ export class VoidPageCommonService {
   ticketsService = inject(TicketsService);
   checkRequestService = inject(CheckRequestService);
   loadDataService = inject(LoadDataService);
+  commonService = inject(CommonService);
 
   private readonly observableTimer = timer(0, 100);
 
@@ -54,6 +56,10 @@ export class VoidPageCommonService {
   async onClickShowTemplateMessage(voidPageItem: VoidPageCommonItem, primitiveProperty: CommonPrimitiveProperty, requestDetail: RequestDetailViewModel,
     afterLoadUnderneathDataSubscription: Subscription, allVoidPageItems?: VoidPageCommonItem[]): Promise<void> {
     this.loadDataService.onClickShowTemplateMessage(voidPageItem, primitiveProperty, requestDetail, afterLoadUnderneathDataSubscription, allVoidPageItems);
+  }
+
+  async getVoidedReason(subIssueTypeId: number, sportType?: number) {
+    return this.commonService.getVoidedReason(subIssueTypeId, sportType);
   }
 
   onClickCopyLicenseesToClipboard(text: string): void {

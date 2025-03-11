@@ -32,8 +32,7 @@ export class VoidPageService {
       voidMatchInfo.id = element.id;
       voidMatchInfo.detailViewModel = requestDetail;
       voidMatchInfo.subIssueType = this.getSubIssueTypeModel(element.subIssueTypeId, issueTypes);
-      voidMatchInfo.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidMatchInfo.subIssueType,
-        issueTypes);
+      voidMatchInfo.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidMatchInfo.subIssueType,        issueTypes);
       voidMatchInfo.matchModel = await this.commonService.getMatch(element.matchId);
       voidMatchInfo.logInfoDetail = logInfoList.find(x => x.logInfoDetail.matchId === element.matchId).logInfoDetail;
       voidMatchInfo.wrongMarket = element.wrongMarket;
@@ -41,6 +40,11 @@ export class VoidPageService {
       voidMatchInfo.hdpValue = element.hdpValue;
       voidMatchInfo.isCheckedVar = element.isCheckedVar;
       voidMatchInfo.isMainMatch = element.isMainMatch;
+      voidMatchInfo.filterFavoriteType = element.filterFavoriteType;
+      voidMatchInfo.wrongOU = element.wrongOU;
+      voidMatchInfo.favoriteValue = element.favoriteValue;
+      voidMatchInfo.correctOddsHomeOver = element.correctOddsHomeOver;
+      voidMatchInfo.correctOddsAwayUnder = element.correctOddsAwayUnder;
       voidMatchInfo.isPoolHouseAffected = logInfoList.find(x => x.logInfoDetail.matchId === element.matchId).validation.isPoolHouseAffected;
       voidMatches.push(voidMatchInfo);
     }
@@ -116,6 +120,10 @@ export class VoidPageService {
       query.redCardModels = MappingModelStaticService.buildRedCardGetLogInfoModel(requestDetail.redCardModels);
     }
 
+    if (StaticService.isWrongOdds(requestDetail.request.issueTypeId.toString())) {
+      query.wrongOddsModels = MappingModelStaticService.buildWrongOddsGetLogInfoModel(requestDetail.wrongOddsModels);
+    }
+
     const viewModel = await this.commonService.getLogInfo(query);
     primitiveProperty.isBlockUI = false;
 
@@ -175,6 +183,22 @@ export class VoidPageService {
           subIssueTypeId: x.subIssueTypeId,
           isMainMatch: x.isMainMatch,
           isCheckedVar: x.isCheckedVar
+        };
+        return info;
+      });
+    }
+
+    if (StaticService.isWrongOdds(issueTypeId)) {
+      return requestDetail.wrongOddsModels.map((x, index) => {
+        const info: BasicRequestInfo = {
+          id: index + 1,
+          matchId: x.matchId,
+          subIssueTypeId: x.subIssueTypeId,
+          filterFavoriteType: x.filterFavoriteType,
+          wrongOU: x.wrongOU,
+          favoriteValue: x.favoriteValue,
+          correctOddsHomeOver: x.correctOddsHomeOver,
+          correctOddsAwayUnder: x.correctOddsAwayUnder
         };
         return info;
       });

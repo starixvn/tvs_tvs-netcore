@@ -1,7 +1,9 @@
+import { TestBed } from '@angular/core/testing';
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription } from 'rxjs';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { CheckRequestService } from './check-request.service';
@@ -9,7 +11,6 @@ import { LoadDataService } from './load-data.service';
 import { PopupService } from './popup.service';
 import { TicketsService } from './tickets.service';
 import { VoidPageCommonService } from './void-page-common.service';
-import { TestBed } from '@angular/core/testing';
 
 describe('VoidPageCommonService', () => {
   let clipboardService: jest.Mocked<ClipboardService>;
@@ -21,6 +22,7 @@ describe('VoidPageCommonService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [ TestingModule ],
       providers: [
         VoidPageCommonService,
         { provide: ClipboardService, useValue: { copyFromContent: jest.fn() } },

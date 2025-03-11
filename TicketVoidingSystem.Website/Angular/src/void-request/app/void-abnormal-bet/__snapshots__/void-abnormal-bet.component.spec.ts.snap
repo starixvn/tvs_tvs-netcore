@@ -32,35 +32,3 @@ exports[`VoidAbnormalBetComponent VoidAbnormalBetComponent should init match sna
   </div>
 </void-abnormal-bet>
 `;
-
-exports[`VoidNotParticipateComponent VoidNotParticipateComponent should init match snapshot 1`] = `
-<void-not-participate
-  element={[Function _ElementRef]}
-  messageAreaComponent="undefined"
-  primitiveProperty={[Function CommonPrimitiveProperty]}
-  ticketsService={[Function TicketsService]}
-  tooltip={[Function Tooltip]}
-  voidPageCommonService={[Function VoidPageCommonService]}
-  voidPageService={[Function VoidPageService]}
->
-  <div>
-  </div><div>
-    <div
-      class="in modal-backdrop spinner-overlay"
-    />
-    <div
-      aria-atomic="true"
-      aria-live="assertive"
-      class="spinner-message-container"
-    >
-      <div
-        class="loading-message"
-      >
-        <div
-          class="loading"
-        />
-      </div>
-    </div>
-  </div>
-</void-not-participate>
-`;

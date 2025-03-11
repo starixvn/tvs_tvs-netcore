@@ -48,13 +48,11 @@ export class VoidPageService {
 
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo {
     if (StaticService.isNotParticipate(requestDetail.request.issueTypeId)) {
-      const basicRequestInfo: BasicRequestInfo = {
+      return {
         id: 1,
         matchId: requestDetail.notParticipateModels[0].matchId,
         subIssueTypeId: requestDetail.notParticipateModels[0].subIssueTypeId,
-      };
-
-      return basicRequestInfo;
+      } as BasicRequestInfo;
     }
 
     if (StaticService.isTechnicalError(requestDetail.request.issueTypeId)) {
@@ -78,6 +76,22 @@ export class VoidPageService {
         id: 1,
         matchId: requestDetail.otherIssuesModel.matchId,
         subIssueTypeId: requestDetail.otherIssuesModel.subIssueTypeId
+      } as BasicRequestInfo;
+    }
+
+    if (StaticService.isReducedOver(requestDetail.request.issueTypeId) || StaticService.isAbandoned(requestDetail.request.issueTypeId)) {
+      return {
+        id: 1,
+        matchId: requestDetail.reducedOverModels[0].matchId,
+        subIssueTypeId: requestDetail.reducedOverModels[0].subIssueTypeId,
+      } as BasicRequestInfo;
+    }
+
+    if (StaticService.isArchivedTicket(requestDetail.request.issueTypeId)) {
+      return {
+        id: 1,
+        matchId: requestDetail.event.matchId,
+        subIssueTypeId: requestDetail.event.subIssueTypeId
       } as BasicRequestInfo;
     }
 
@@ -121,6 +135,11 @@ export class VoidPageService {
 
     if (StaticService.isOtherIssues(requestDetail.request.issueTypeId)) {
       query.otherIssuesModel = MappingModelStaticService.buildOtherIssuesGetLogInfoModel(requestDetail.otherIssuesModel);
+    }
+
+    if (StaticService.isReducedOver(requestDetail.request.issueTypeId) ||
+      StaticService.isAbandoned(requestDetail.request.issueTypeId)) {
+      query.reducedOverModels = MappingModelStaticService.buildReducedOverGetLogInfoModel(requestDetail.reducedOverModels);
     }
 
     const viewModel = await this.commonService.getLogInfo(query);

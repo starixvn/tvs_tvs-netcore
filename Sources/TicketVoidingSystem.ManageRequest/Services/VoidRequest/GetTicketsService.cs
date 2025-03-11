@@ -4,7 +4,6 @@ using System.Text.Json;
 using AutoMapper;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
@@ -92,7 +91,6 @@ public class GetTicketsServiceImp(
     private async Task<IEnumerable<GetTicketModel>> GetBetTransTicket(GetTicketsQuery query, IEnumerable<string> transInfoJsonList)
     {
         var criteria = mapper.Map<GetTicketsCriteria>(query);
-        criteria.BetTypes = query.BetTypes.ToXml();
         criteria.MatchId = query.Match?.MatchId ?? 0;
         criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
 

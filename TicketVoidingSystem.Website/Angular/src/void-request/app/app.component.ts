@@ -1,17 +1,18 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RequestDetailViewModel } from '../../edit-request/app/request.model';
+import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { StaticService } from '../../utility/services/static.service';
 import { AppService } from './app.service';
-import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
-import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
-import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
-import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
-import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
 import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.component';
+import { VoidArchivedTicketComponent } from "./void-archived-ticket/void-archived-ticket.component";
+import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
+import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
+import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
+import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
+import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
 import { VoidWrongMarketOfferedComponent } from './void-wrong-market-offered/void-wrong-market-offered.component';
-import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
 
 @Component({
   standalone: true,
@@ -20,7 +21,7 @@ import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module
   styleUrls: ['./app.component.scss'],
   imports: [VoidDangerAcceptedComponent, VoidOtherIssueComponent, VoidDuplicateTicketsComponent,
     VoidNotParticipateComponent, VoidEarlyKickOffComponent, VoidAbnormalBetComponent,
-    VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiModule]
+    VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiModule, VoidArchivedTicketComponent]
 })
 export class AppComponent implements OnInit {
   requestId: number;
@@ -61,7 +62,8 @@ export class AppComponent implements OnInit {
       || StaticService.isWrong1stOU(this.issueTypeId)
       || StaticService.isWrongHDP(this.issueTypeId)
       || StaticService.isRedCard(this.issueTypeId)
-      || StaticService.isWrong1stHDP(this.issueTypeId);
+      || StaticService.isWrong1stHDP(this.issueTypeId)
+      || StaticService.isWrongOdds(this.issueTypeId);
   }
 
   isShowVoidDuplicateTickets(): boolean {
@@ -72,6 +74,8 @@ export class AppComponent implements OnInit {
     return StaticService.isNotParticipate(this.issueTypeId)
       || StaticService.isWrongOddsSportsBook(this.issueTypeId)
       || StaticService.isTechnicalError(this.issueTypeId)
+      || StaticService.isReducedOver(this.issueTypeId)
+      || StaticService.isAbandoned(this.issueTypeId)
       || StaticService.isOtherIssues(this.issueTypeId);
   }
 
@@ -89,8 +93,14 @@ export class AppComponent implements OnInit {
     return StaticService.isWrongMarketOffered(this.issueTypeId);
   }
 
+  isShowVoidArchivedTicket(): boolean {
+    return StaticService.isArchivedTicket(this.issueTypeId)
+      || StaticService.isAbnormalAccount(this.issueTypeId);
+  }
+
   isShowVoidOtherIssue(): boolean {
     return !this.isShowVoidDuplicateTickets() && !this.isLikelyVoidDangerAccepted() && !this.isShowVoidWrongMarketOffered()
-      && !this.isLikelyVoidNotParticipate() && !this.isLikelyVoidEarlyKickOff() && !this.isShowVoidAbnormalBet();
+      && !this.isLikelyVoidNotParticipate() && !this.isLikelyVoidEarlyKickOff() && !this.isShowVoidAbnormalBet()
+      && !this.isShowVoidArchivedTicket();
   }
 }

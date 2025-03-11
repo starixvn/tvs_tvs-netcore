@@ -10,11 +10,7 @@ public class GetTicketsCriteria : CriteriaBase
 
     public int IssueTypeId { get; set; }
 
-    public string BetTypes { get; set; }
-
     public string TransInfoJson { get; set; }
-
-    public string IsCancelCashOut { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_Void_Select";
 

@@ -15,4 +15,11 @@ export class VoidMatch extends VoidPageCommonItem {
   isCheckedVar?: boolean;
   isMainMatch: boolean;
   isPoolHouseAffected: boolean;
+
+  // Wrong Odds
+  filterFavoriteType?: string;
+  wrongOU?: string;
+  favoriteValue?: string;
+  correctOddsHomeOver?: string;
+  correctOddsAwayUnder?: string;
 }

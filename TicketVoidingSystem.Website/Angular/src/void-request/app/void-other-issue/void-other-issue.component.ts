@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
@@ -9,6 +10,9 @@ import { AdvancedModeComponent } from '../../../utility/components/advanced-mode
 import { CheckedBetType, GetPlayersQuery } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { ConfirmationComponent } from '../../../utility/components/confirmation/confirmation.component';
+import { IssueTypeComponent } from '../../../utility/components/issue-type/issue-type.component';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
@@ -16,12 +20,14 @@ import { PagingConstant, PagingModel } from '../../../utility/components/paging/
 import { TemplateService } from '../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ModeType, SubIssueTypeGroup, TVSRequestFilterBy } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
 import { EventType } from '../../../utility/constants/sport.constant';
 import { TEXT } from '../../../utility/constants/text';
 import { CheckingPermissionModel } from '../../../utility/models/checking-permission.model';
+import { IssueInfo } from '../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { VoidedReason } from '../../../utility/models/reason.model';
@@ -29,22 +35,15 @@ import { CommonService } from '../../../utility/services/common.service';
 import { MappingModelStaticService } from '../../../utility/services/mapping-model-static.service';
 import { PasswordService } from '../../../utility/services/password.service';
 import { StaticService } from '../../../utility/services/static.service';
+import { EventInfoComponent } from '../event-info/event-info.component';
+import { LogInfoComponent } from '../log-info/log-info.component';
 import { CheckRequestService } from '../services/check-request.service';
 import { LogChangeContentService } from '../services/log-change-content.service';
-import { ConfirmationComponent } from '../../../utility/components/confirmation/confirmation.component';
-import { IssueInfo } from '../../../utility/models/issue-type.model';
+import { TicketsListComponent } from '../tickets-list/tickets-list.component';
 import { AppService } from './../app.service';
 import { GetTicketsQuery } from './../models/get-tickets.query';
 import { VoidTicketsQuery } from './../models/void-tickets.query';
 import { TicketsModel } from './../tickets-list/tickets.model';
-import { CommonModule } from '@angular/common';
-import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
-import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
-import { TicketsListComponent } from '../tickets-list/tickets-list.component';
-import { FilterComponent } from '../filter/filter.component';
-import { LogInfoComponent } from '../log-info/log-info.component';
-import { EventInfoComponent } from '../event-info/event-info.component';
-import { IssueTypeComponent } from '../../../utility/components/issue-type/issue-type.component';
 
 @Component({
   standalone: true,
@@ -52,7 +51,7 @@ import { IssueTypeComponent } from '../../../utility/components/issue-type/issue
   templateUrl: './void-other-issue.component.html',
   styleUrls: ['./void-other-issue.component.scss'],
   imports: [CommonModule, TemplateMessageComponent, ConfirmationComponent, LicenseeAffectedListComponent, TicketsListComponent,
-    TooltipComponent, LogInfoComponent, FilterComponent, EventInfoComponent, IssueTypeComponent],
+    TooltipComponent, LogInfoComponent, EventInfoComponent, IssueTypeComponent],
   providers: [ClipboardService]
 })
 export class VoidOtherIssueComponent implements OnInit {
@@ -130,7 +129,6 @@ export class VoidOtherIssueComponent implements OnInit {
     this.reason = await this.commonService.getVoidedReason(this.issue.subIssueTypeId, this.isHasMatchInfo() ? this.match.sportType : 0);
     await this.initQuery();
     await this.getTickets();
-    await this.getGroupBetTypes();
     await this.updateTemplate();
     this.updateUnchecked();
   }
@@ -390,7 +388,7 @@ export class VoidOtherIssueComponent implements OnInit {
               title: 'Warning!',
               message: result.errMsg,
               type: ModalType.Warning
-            }, async () => this.executeGetTickets(true));
+            }, async () => this.executeGetTickets());
           } else {
             await this.insertQueue();
           }
@@ -494,11 +492,8 @@ export class VoidOtherIssueComponent implements OnInit {
     }
   }
 
-  async executeGetTickets(isOnlySearch: boolean): Promise<void> {
+  async executeGetTickets(): Promise<void> {
     await this.getTickets();
-    if (!isOnlySearch) {
-      await this.getGroupBetTypes();
-    }
     this.updateUnchecked();
     this.updateTemplateValue();
   }
@@ -507,7 +502,7 @@ export class VoidOtherIssueComponent implements OnInit {
     if (!_.isNull(checkedBetTypes)) {
       await this.initQuery();
       this.query.betTypes = checkedBetTypes;
-      await this.executeGetTickets(true);
+      await this.executeGetTickets();
     }
   }
 
