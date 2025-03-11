@@ -1,10 +1,10 @@
-﻿using System.Text;
-using Fanex.Data.Repository;
+﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.ViewModels;
+using ResultTicket = (System.Collections.Generic.IEnumerable<TicketVoidingSystem.ManageRequest.ViewModels.CheckUsernamesModel> ValidationResult
+    , System.Collections.Generic.IEnumerable<TicketVoidingSystem.ManageRequest.Models.TicketCalculateWinLostAccount> TicketCalculateWinLostAccount,
+    System.Collections.Generic.IEnumerable<TicketVoidingSystem.ManageRequest.Models.AccountWinlostModel> AccountWinlostModel);
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 
@@ -18,14 +18,14 @@ public class CheckUsernameServiceImp(IDynamicRepository repository, GetTransInfo
 {
     public async Task<CheckUsernamesInDatabaseResult> ExecuteValidationInDb(CheckValidUsernamesRequest request)
     {
-        var transInfoJsonList = await GetTransInfoJson(request);
-        if (IsTransInfoJsonTooLarge(transInfoJsonList))
-        {
-            return new CheckUsernamesInDatabaseResult
-            {
-                ValidationResult = new CheckUsernamesModel { IsTicketLimitExceeded = true }
-            };
-        }
+        //var transInfoJsonList = await GetTransInfoJson(request);
+        //if (IsTransInfoJsonTooLarge(transInfoJsonList))
+        //{
+        //    return new CheckUsernamesInDatabaseResult
+        //    {
+        //        ValidationResult = new CheckUsernamesModel { IsTicketLimitExceeded = true }
+        //    };
+        //}
 
         var criteria = CreateCriteria(request, transInfoJsonList);
         var (checkUsernamesModel, transInfoValidation, transInfoJsonCompress, ticketCalculateWinLostAccount, accounts) =
@@ -41,12 +41,32 @@ public class CheckUsernameServiceImp(IDynamicRepository repository, GetTransInfo
         };
     }
 
-    private static bool IsTransInfoJsonTooLarge(IEnumerable<string> transInfoJsonList)
+    private async Task<ResultTicket> ValidateUsernamesBySite(CheckValidUsernamesRequest request)
     {
-        const int maxByteTransInfoJsonList = 8_000_000; // ~ 7.63MB (Data test Local)
-        var transInfoJson = string.Join(",", transInfoJsonList);
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
+        {
+            var criteria = CreateGetTicketSiteDbCriteria(server.Id);
+            return repository.FetchMultipleAsync<CheckUsernamesModel, TicketCalculateWinLostAccount, AccountWinlostModel>(criteria);
+        });
 
-        return Encoding.UTF8.GetByteCount(transInfoJson) > maxByteTransInfoJsonList;
+        var results = await Task.WhenAll(tasks);
+
+        var validationResults = results.SelectMany(x => x.Item1);
+        var ticketsResults = results.SelectMany(x => x.Item2);
+        var accountResults = results.SelectMany(x => x.Item3);
+
+        return (validationResults, ticketsResults, accountResults);
+    }
+
+    private static GetTicketSiteDbCriteria CreateGetTicketSiteDbCriteria(int siteDbGroupId) // NOSONAR
+    {
+        var criteria = new GetTicketSiteDbCriteria
+        {
+            SiteDbGroupId = siteDbGroupId,
+            //IssueTypeId = query.IssueTypeId
+        };
+
+        return criteria;
     }
 
     private static CheckValidUsernamesCriteria CreateCriteria(CheckValidUsernamesRequest model, IEnumerable<string> transInfoJsonList)

@@ -1,0 +1,2 @@
+﻿global using TicketVoidingSystem.ManageRequest.Models;
+global using TicketVoidingSystem.ManageRequest.ViewModels;
