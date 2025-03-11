@@ -151,7 +151,8 @@ public class GetRequestServiceImp(
             ServiceAcceptTime = model.ServiceAcceptTime,
             ActualTime = model.ActualTime,
             MinuteOffset = model.MinuteOffset,
-            SecondOffset = model.SecondOffset
+            SecondOffset = model.SecondOffset,
+            IsMainMatch = model.IsMainMatch
         });
     }
 

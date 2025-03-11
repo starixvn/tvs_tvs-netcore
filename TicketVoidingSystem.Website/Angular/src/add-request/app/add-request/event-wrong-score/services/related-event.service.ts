@@ -30,14 +30,14 @@ export class RelatedEventService {
     return this.addRequestApiService.getChildMatches(query);
   }
 
-  assignChildMatchToLogInfoModel(models: ChildMatchModel[], wrongScoreModel: WrongScoreModel): WrongScoreModel[] {
+  assignChildMatchToLogInfoModel(models: ChildMatchModel[], defaultFilterTimeWithAllowance: FilterTimeWithAllowance): WrongScoreModel[] {
     const newEvents = models
       .map(x => {
         return {
           matchId: x.matchId,
           filterBy: 2,
-          filterFromTransTime: wrongScoreModel.filterFromTransTime,
-          filterToTransTime: wrongScoreModel.filterToTransTime,
+          filterFromTransTime: defaultFilterTimeWithAllowance.fromDateTime,
+          filterToTransTime: defaultFilterTimeWithAllowance.toDateTime,
           matchType: x.matchType,
         } as WrongScoreModel;
       });
@@ -172,9 +172,9 @@ export class RelatedEventService {
         arg.primitiveProps.isBlock = false;
         return;
       }
-      const newEvents = this.assignChildMatchToLogInfoModel(models, arg.mainEvent);
+      const newEvents = this.assignChildMatchToLogInfoModel(models, arg.defaultFilterTimeWithAllowance);
       await this.updateSubIssueTypeAndAllowanceTime(newEvents, Number(arg.filter.subIssueTypeId));
-      await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, newEvents, arg.wrongScoreModels[0].matchId);
+      await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, newEvents, arg.wrongScoreModels[0].matchId, arg.defaultFilterTimeWithAllowance);
       newEvents.forEach(x => {
         arg.allEvents.push(this.getLogInfoRelatedEvent(x, models.find(y => y.matchId === x.matchId)));
       });
@@ -186,13 +186,13 @@ export class RelatedEventService {
 
   public async getDataRelatedEventWhenSearch(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<void> {
     const eventsGetLogInfo = await this.preparingModelGetLogInfo(relatedEvents, arg);
-    await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, eventsGetLogInfo, arg.wrongScoreModels[0].matchId);
+    await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, eventsGetLogInfo, arg.wrongScoreModels[0].matchId, arg.defaultFilterTimeWithAllowance);
     this.addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo, arg.wrongScoreModels, arg.allEvents, relatedEvents);
   }
 
   private async preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<WrongScoreModel[]> {
     const newLinkEvents = relatedEvents.filter(x => !arg.wrongScoreModels.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
-    const newEvents = this.assignChildMatchToLogInfoModel(newLinkEvents, arg.mainEvent);
+    const newEvents = this.assignChildMatchToLogInfoModel(newLinkEvents, arg.defaultFilterTimeWithAllowance);
     await this.updateSubIssueTypeAndAllowanceTime(newEvents, Number(arg.filter.subIssueTypeId));
     const eventsGetLogInfo = _.cloneDeep(arg.wrongScoreModels);
     eventsGetLogInfo.push(...newEvents.filter(x => x.subIssueTypeId));
@@ -202,7 +202,7 @@ export class RelatedEventService {
 
   private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: WrongScoreModel[], wrongScoreModels: WrongScoreModel[],
     allEvents: LogInfoRelatedEvent[], relatedEvents: ChildMatchModel[]): void {
-    const eventHasLogInfo = eventsGetLogInfo.filter(x => x.logInfoDetail || x.logInfo?.logInfoDetail);
+    const eventHasLogInfo = eventsGetLogInfo.filter(x => x.logInfoDetail);
     eventHasLogInfo.forEach(x => {
       const eventChild = relatedEvents.find(y => y.matchId === x.matchId);
       if (!wrongScoreModels.some(y => y.matchId === x.matchId)) {

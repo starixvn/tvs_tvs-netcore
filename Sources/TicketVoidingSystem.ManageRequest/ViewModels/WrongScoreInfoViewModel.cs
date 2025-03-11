@@ -27,4 +27,5 @@ public class WrongScoreInfoViewModel
     public string ActualTime { get; set; }
     public int? MinuteOffset { get; set; }
     public int? SecondOffset { get; set; }
+    public bool IsMainMatch { get; set; }
 }

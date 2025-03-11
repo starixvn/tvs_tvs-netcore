@@ -10,6 +10,8 @@ import { OthersModel } from "../../others/others.model";
 import { PrimitiveProperty } from "../event-wrong-score.model";
 import { FilterWrongScoreComponent } from "../filter-wrong-score/filter-wrong-score.component";
 import { WrongScoreInfoComponent } from "../wrong-score-info/wrong-score-info.component";
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { FilterTimeWithAllowance } from "../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model";
 
 export class SaveRequestArg {
   requestId?: number;
@@ -27,4 +29,7 @@ export class SaveRequestArg {
   filterWrongScoreComponent: FilterWrongScoreComponent;
   tvDetectionComponent: TvDetectionComponent;
   tvDetectionModel: TvDetectionModel;
+  allSelectedEvents: LogInfoRelatedEvent[];
+  defaultFilterTimeWithAllowance: FilterTimeWithAllowance;
+  ;
 }

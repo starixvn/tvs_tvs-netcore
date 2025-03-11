@@ -10,6 +10,8 @@ import { GetLogInfoModel } from '../../models/get-log-info.model';
 import { PrimitiveProperty, WrongScoreGetLogInfoQuery } from '../event-wrong-score.model';
 import { WrongScoreService } from './wrong-score.service';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { ValidationService } from './validation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +19,12 @@ import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log
 export class LogInfoService {
   constructor(
     private readonly wrongScoreService: WrongScoreService,
-    private readonly commonService: CommonService) { }
+    private readonly commonService: CommonService,
+    private readonly validationService: ValidationService) { }
 
   async getLogInfo(isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty,
-    wrongScoreModels: WrongScoreModel[], mainMatchId: number): Promise<void> {
-    const getLogInfoQuery = this.initGetLogInfoQueries(isEdit, requestId, filter, wrongScoreModels, mainMatchId);
+    wrongScoreModels: WrongScoreModel[], mainMatchId: number, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): Promise<void> {
+    const getLogInfoQuery = this.initGetLogInfoQueries(isEdit, requestId, filter, wrongScoreModels, mainMatchId, defaultFilterTimeWithAllowance);
     const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
     primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
 
@@ -31,18 +34,10 @@ export class LogInfoService {
   }
 
   async refreshLogInfoForRelatedEvent(isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty,
-    logInfoRelatedEvent: LogInfoRelatedEvent): Promise<void> {
-    const wrongScoreModel = {
-      matchId: logInfoRelatedEvent.matchId,
-      filterBy: this.wrongScoreService.getFilterByBaseOnSubIssueType(filter.subIssueTypeId),
-      filterFromTransTime: logInfoRelatedEvent.voidTimeArea.fromDateTime,
-      filterToTransTime: logInfoRelatedEvent.voidTimeArea.toDateTime,
-      subIssueTypeId: Number(filter.subIssueTypeId),
-      aaTime: logInfoRelatedEvent.voidTimeArea.aaTime,
-      paTime: logInfoRelatedEvent.voidTimeArea.paTime,
-      saTime: logInfoRelatedEvent.voidTimeArea.saTime
-    } as WrongScoreModel;
-    const getLogInfoQuery = this.initGetLogInfoQueries(isEdit, requestId, filter, [wrongScoreModel], null);
+    logInfoRelatedEvent: LogInfoRelatedEvent, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): Promise<void> {
+    const wrongScoreModel = this.mapRelatedEventToWrongScoreModel(logInfoRelatedEvent);
+    
+    const getLogInfoQuery = this.initGetLogInfoQueries(isEdit, requestId, filter, [wrongScoreModel], null, defaultFilterTimeWithAllowance);
     const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
 
     primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
@@ -52,26 +47,47 @@ export class LogInfoService {
     logInfoRelatedEvent.messageValidationLogInfo = StaticService.getValidationMessageList(viewModel.getLogInfoModels[0], logInfoRelatedEvent.voidTimeArea.fromDateTime, logInfoRelatedEvent.voidTimeArea.saTime);
   }
 
-  private getWrongScoreModel(filter: FilterModel, wrongScoreModels: WrongScoreModel[], mainMatchId: number): WrongScoreGetLogInfoQuery[] {
+  mapRelatedEventToWrongScoreModel(logInfoRelatedEvent: LogInfoRelatedEvent){
+    const wrongScoreModel = new WrongScoreModel();
+    wrongScoreModel.matchId = logInfoRelatedEvent.matchId;
+    wrongScoreModel.filterBy = this.wrongScoreService.getFilterByBaseOnSubIssueType(logInfoRelatedEvent.subIssueTypeId.toString());
+    wrongScoreModel.filterFromTransTime = logInfoRelatedEvent.voidTimeArea.fromDateTime;
+    wrongScoreModel.filterToTransTime = logInfoRelatedEvent.voidTimeArea.toDateTime;
+    wrongScoreModel.subIssueTypeId = logInfoRelatedEvent.subIssueTypeId;
+    wrongScoreModel.aaTime = logInfoRelatedEvent.voidTimeArea.aaTime;
+    wrongScoreModel.paTime = logInfoRelatedEvent.voidTimeArea.paTime;
+    wrongScoreModel.saTime = logInfoRelatedEvent.voidTimeArea.saTime;
+
+    return wrongScoreModel;
+  }
+  private getWrongScoreModel(filter: FilterModel, wrongScoreModels: WrongScoreModel[], mainMatchId: number, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): WrongScoreGetLogInfoQuery[] {
+    
     return wrongScoreModels.map(x => {
-      return {
-        scoreId: x.scoreId,
-        matchId: x.matchId ? x.matchId : mainMatchId,
-        wrongScore: x.wrongScore,
-        filterBy: this.wrongScoreService.getFilterByBaseOnSubIssueType(filter.subIssueTypeId),
-        filterFromTransTime: x.filterFromTransTime,
-        filterToTransTime: x.filterToTransTime,
-        subIssueTypeId: Number(filter.subIssueTypeId),
-        aaTime: x.aaTime,
-        paTime: x.paTime,
-        saTime: x.saTime
-      } as WrongScoreGetLogInfoQuery;
+      const filterBy = this.wrongScoreService.getFilterByBaseOnSubIssueType(filter.subIssueTypeId);
+      if (this.validationService.isHasAllowanceTimeWrongScoreModel(x) && x.filterBy === TVSRequestFilterBy.CHECK_TIME) {
+        x.filterFromTransTime = defaultFilterTimeWithAllowance.fromDateTime;
+        x.filterToTransTime = defaultFilterTimeWithAllowance.toDateTime;
+      } 
+      const wrongScoreGetLogInfoQuery = new WrongScoreGetLogInfoQuery();
+      wrongScoreGetLogInfoQuery.scoreId = x.scoreId;
+      wrongScoreGetLogInfoQuery.matchId = x.matchId ? x.matchId : mainMatchId;
+      wrongScoreGetLogInfoQuery.wrongScore = x.wrongScore;
+      wrongScoreGetLogInfoQuery.filterBy = filterBy;
+      wrongScoreGetLogInfoQuery.filterFromTransTime = x.filterFromTransTime;
+      wrongScoreGetLogInfoQuery.filterToTransTime = x.filterToTransTime;
+      wrongScoreGetLogInfoQuery.subIssueTypeId = x.subIssueTypeId ? x.subIssueTypeId : Number(filter.subIssueTypeId);
+      wrongScoreGetLogInfoQuery.aaTime = x.aaTime;
+      wrongScoreGetLogInfoQuery.paTime = x.paTime;
+      wrongScoreGetLogInfoQuery.saTime = x.saTime;
+  
+      return wrongScoreGetLogInfoQuery;
     });
   }
+
   /* istanbul ignore next */
   public initGetLogInfoQueries(isEdit: boolean, requestId: number, filter: FilterModel,
-    wrongScoreModels: WrongScoreModel[], mainMatchId: number): GetLogInfoQuery {
-    const getWrongScoreModels = this.getWrongScoreModel(filter, wrongScoreModels, mainMatchId);
+    wrongScoreModels: WrongScoreModel[], mainMatchId: number, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): GetLogInfoQuery {
+    const getWrongScoreModels = this.getWrongScoreModel(filter, wrongScoreModels, mainMatchId, defaultFilterTimeWithAllowance);
 
     const query: GetLogInfoQuery = {
       requestId: isEdit ? requestId : null,

@@ -120,10 +120,19 @@ export class ValidationService {
 
     return false;
   }
+  
+  isHasAllowanceTimeWrongScoreModel(event: WrongScoreModel): boolean {
+    if (event.aaTime || event.paTime || event.saTime ||
+      (event.aaTime === 0 && event.paTime === 0 && event.saTime === 0)) {
+      return true;
+    }
+
+    return false;
+  }
 
   public isValidAllSubIssueType(logInfoComponents: QueryList<LogInfoRelatedEventComponent>): boolean {
     return logInfoComponents.toArray().every(x => {
-      if (!x.logInfo.subIssueTypeId || !this.isHasAllowanceTime(x.logInfo)) {
+      if (!x.logInfo.subIssueTypeId) {
         x.showTooltipSubType();
         return false;
       }

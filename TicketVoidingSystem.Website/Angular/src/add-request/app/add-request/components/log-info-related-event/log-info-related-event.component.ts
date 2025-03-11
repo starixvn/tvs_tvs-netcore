@@ -73,7 +73,7 @@ export class LogInfoRelatedEventComponent {
           filterBy: this.filterBy,
           transInfoAddRequestModel: this.transInfoAddRequestModel
         } as WrongScorePrimitiveProperty;
-        await this.wrongScoreLogInfoService.refreshLogInfoForRelatedEvent(this.isEdit, this.requestId, this.filter, wrongScorePrimitiveProperty, this.logInfo);
+        await this.wrongScoreLogInfoService.refreshLogInfoForRelatedEvent(this.isEdit, this.requestId, this.filter, wrongScorePrimitiveProperty, this.logInfo, this.defaultFilterTimeWithAllowance);
       }
       else {
         const primitiveProperty = {

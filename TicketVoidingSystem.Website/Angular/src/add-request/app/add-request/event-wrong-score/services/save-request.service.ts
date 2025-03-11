@@ -56,7 +56,10 @@ export class SaveRequestService {
 
     args.addRequestStore.changeBlockingUiStatus(true);
     this.logInfoService.clearDataValidation(args.wrongScoreModels);
-    await this.logInfoService.getLogInfo(args.isEdit, args.requestId, args.filter, args.primitiveProps, args.wrongScoreModels, args.wrongScoreModels[0].matchId);
+    const relatedEvents = args.allSelectedEvents.map(x => this.logInfoService.mapRelatedEventToWrongScoreModel(x));
+    args.wrongScoreModels = [...args.wrongScoreModels, ...relatedEvents];
+    await this.logInfoService.getLogInfo(args.isEdit, args.requestId, args.filter, args.primitiveProps, args.wrongScoreModels, args.wrongScoreModels[0].matchId, args.defaultFilterTimeWithAllowance);
+
     args.addRequestStore.changeBlockingUiStatus(false);
 
     if (!this.validationService.isValidAllScores(args.wrongScoreModels)) {
@@ -96,31 +99,24 @@ export class SaveRequestService {
 
   /* istanbul ignore next */
   private getWrongScoreInfoForSaveRequest(args: SaveRequestArg): WrongScoreModel[] {
-    args.wrongScoreModels.forEach(x => {
+    const allMatchSelectedEvents = args.allSelectedEvents.map(x => x.matchId);
+    const mainWrongScoreModels = args.wrongScoreModels.filter(x => !allMatchSelectedEvents.includes(x.matchId));
+    mainWrongScoreModels.forEach(x => {
       x.actualScore = args.primitiveProps.actualScore;
       x.filterBy = args.primitiveProps.filterBy;
       x.subIssueTypeId = Number(args.filter.subIssueTypeId);
       x.matchId = args.leagueEventWrongScoreComponent.selectedMatch.matchId;
       x.isCheckedVar = args.primitiveProps.isCheckedVar;
       x.tvDetectionValue = args.tvDetectionModel.tvDetectionValue;
-
       if (x.tvDetectionValue !== TvDetectionType.NONE) {
         x.serviceAcceptTime = args.tvDetectionModel.serviceAcceptTime;
         x.actualTime = args.tvDetectionModel.actualTime;
         x.minuteOffset = args.tvDetectionModel.minuteOffset;
         x.secondOffset = args.tvDetectionModel.secondOffset;
       }
+      x.isMainMatch = true;
     });
-
-    return args.wrongScoreModels;
-  }
-
-  isHasAllowanceTime(event: LogInfoRelatedEvent): boolean {
-    if (event.voidTimeArea.aaTime || event.voidTimeArea.paTime || event.voidTimeArea.saTime ||
-      (event.voidTimeArea.aaTime === 0 && event.voidTimeArea.paTime === 0 && event.voidTimeArea.saTime === 0)) {
-      return true;
-    }
-
-    return false;
+    const relatedEvents = args.wrongScoreModels.filter(x => allMatchSelectedEvents.includes(x.matchId));
+    return [...mainWrongScoreModels, ...relatedEvents];
   }
 }
