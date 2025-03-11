@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
 using TicketVoidingSystem.Utilities;
@@ -27,7 +26,8 @@ public class GetHdpFilterBetTypesHandler(RemotingRefWrapperService remotingRefWr
             .Where(x => x.IssueType == request.IssueTypeId && x.Sports.Split(",").Contains(request.SportId)) // Filter bet types by issueType & sportType
             .Select(x =>
             {
-                x.Name = remotingRefWrapperService.GetBetType(x.BetType, LanguageCode.English);
+                var betType = x.BetType.Split(',').FirstOrDefault();
+                x.Name = remotingRefWrapperService.GetDisplayedBetTypeName(betType);
                 return x;
             })
             .ToList();

@@ -7,6 +7,7 @@
     <NoWarn>1701;1702;8601;8604;8618;8632;8669</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Fanex.BetList.Core" Version="3.0.4.9-basketball-01" />
     <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
   <ItemGroup>
