@@ -1,4 +1,6 @@
-﻿using Fanex.Data.Repository;
+﻿using Fanex.Data;
+using Fanex.Data.Repository;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
@@ -20,9 +22,10 @@ public class CheckValidUsernamesCriteria : CriteriaBase
 
     public bool IsVoidAllArchivedTickets { get; set; }
 
-    public string? TransInfoJson { get; set; }
+    [SpParam(Ignored = true)]
+    public int SiteDbGroupId { get; set; }
 
-    public override string GetSettingKey() => "TicketVoiding_CheckUserName";
+    public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_CheckUserName");
 
-    public override bool IsValid() => true;
+    public override bool IsValid() => !string.IsNullOrWhiteSpace(Usernames);
 }

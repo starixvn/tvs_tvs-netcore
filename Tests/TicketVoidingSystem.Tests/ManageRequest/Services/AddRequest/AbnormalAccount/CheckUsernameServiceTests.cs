@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Fanex.Data.Repository;
+using NSubstitute;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Fanex.Data.Repository;
-using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -27,11 +27,11 @@ public class CheckUsernameServiceTests
     }
 
     [Fact]
-    public async Task CheckUsernames_ValidRequest_RepositoryHasCalled()
+    public async Task GetUsernameInfo_ValidRequest_RepositoryHasCalled()
     {
         // Arrange(checkUsernamesModel, transInfoValidation, transInfoJsonCompress, ticketCalculateWinLostAccount, accounts
 
-        var checkUsernamesModel = new List<CheckUsernamesModel> { new() { InvalidUserName = "1121" } };
+        var checkUsernamesModel = new List<ValidationInfo> { new() { InvalidUserName = "1121" } };
         var transInfoValidation = new List<TransInfoAddRequestModel> { new() { MarkTransIds = "999" } };
         var transInfoJsonCompress = new List<string>();
         var ticketCalculateWinLostAccount = new List<TicketCalculateWinLostAccount>();
@@ -39,14 +39,14 @@ public class CheckUsernameServiceTests
 
         var request = new CheckValidUsernamesRequest { RequestId = 1 };
         getTransInfoService.GetTransInfoJson(null).ReturnsForAnyArgs(new List<string>());
-        repository.FetchMultipleAsync<CheckUsernamesModel, TransInfoAddRequestModel, string, TicketCalculateWinLostAccount, AccountWinlostModel>(Arg.Any<CheckValidUsernamesCriteria>())
+        repository.FetchMultipleAsync<ValidationInfo, TransInfoAddRequestModel, string, TicketCalculateWinLostAccount, AccountWinlostModel>(Arg.Any<CheckValidUsernamesCriteria>())
             .ReturnsForAnyArgs((checkUsernamesModel, transInfoValidation, transInfoJsonCompress, ticketCalculateWinLostAccount, accounts));
 
         // Act
-        var actual = await service.ExecuteValidationInDb(request);
+        var actual = await service.GetUsernameInfo(request);
 
         // Assert
-        await repository.Received(1).FetchMultipleAsync<CheckUsernamesModel, TransInfoAddRequestModel, string, TicketCalculateWinLostAccount, AccountWinlostModel>
+        await repository.Received(1).FetchMultipleAsync<ValidationInfo, TransInfoAddRequestModel, string, TicketCalculateWinLostAccount, AccountWinlostModel>
             (Arg.Any<CheckValidUsernamesCriteria>());
         await getTransInfoService.Received(1).GetTransInfoJson(Arg.Any<GetTransInfoQuery>());
         Assert.Equal("1123", actual.AccountWinlost.First().Username);

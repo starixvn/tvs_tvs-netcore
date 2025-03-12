@@ -20,7 +20,7 @@ public class CheckValidUsernamesHandlerTests
     {
         // Arrange
         var request = new CheckValidUsernamesRequest();
-        var validation = new CheckUsernamesModel();
+        var validation = new ValidationInfo();
         var transInfoAddRequestModel = new TransInfoAddRequestModel { RemoveTransIds = "123", UnMarkTransIds = "123", MarkTransIds = "456" };
         var checkResult = new CheckUsernamesInDatabaseResult
         {
@@ -37,7 +37,7 @@ public class CheckValidUsernamesHandlerTests
         };
         var viewModel = new CheckValidUsernamesViewModel
         {
-            Validation = new CheckUsernamesModel(),
+            Validation = new ValidationInfo(),
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
                 RemoveTransIds = "123",
@@ -52,7 +52,7 @@ public class CheckValidUsernamesHandlerTests
         compressDataAddRequestService.CompressTicket<GetTicketModel>(null).ReturnsForAnyArgs("AAA");
         calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(null, null, null)
             .ReturnsForAnyArgs(calcVoidTicketsResult);
-        checkUsernameService.ExecuteValidationInDb(null).ReturnsForAnyArgs(checkResult);
+        checkUsernameService.GetUsernameInfo(null).ReturnsForAnyArgs(checkResult);
         var handler = new CheckValidUsernamesHandler(checkUsernameService, calculateVoidTicketsService, compressDataAddRequestService);
 
         // Act
@@ -77,7 +77,7 @@ public class CheckValidUsernamesHandlerTests
             Accounts = new List<AccountWinlostModel> { new() },
             VoidTickets = new List<TicketCalculateWinLostAccount> { new() }
         };
-        var validation = new CheckUsernamesModel();
+        var validation = new ValidationInfo();
         var transInfoAddRequestModel = new TransInfoAddRequestModel { RemoveTransIds = "123", UnMarkTransIds = "123", MarkTransIds = "456" };
         var checkResult = new CheckUsernamesInDatabaseResult
         {
@@ -90,7 +90,7 @@ public class CheckValidUsernamesHandlerTests
 
         var viewModel = new CheckValidUsernamesViewModel
         {
-            Validation = new CheckUsernamesModel(),
+            Validation = new ValidationInfo(),
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
                 RemoveTransIds = "123",
@@ -106,7 +106,7 @@ public class CheckValidUsernamesHandlerTests
         compressDataAddRequestService.CompressTicket<GetTicketModel>(null).ReturnsForAnyArgs("AAA");
         calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(null, null, null)
             .ReturnsForAnyArgs(calcVoidTicketsResult);
-        checkUsernameService.ExecuteValidationInDb(null).ReturnsForAnyArgs(checkResult);
+        checkUsernameService.GetUsernameInfo(null).ReturnsForAnyArgs(checkResult);
         var handler = new CheckValidUsernamesHandler(checkUsernameService, calculateVoidTicketsService, compressDataAddRequestService);
 
         // Act
