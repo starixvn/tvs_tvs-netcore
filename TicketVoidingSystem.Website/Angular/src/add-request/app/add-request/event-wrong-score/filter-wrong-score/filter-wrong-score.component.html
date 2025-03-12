@@ -27,7 +27,9 @@
         </label>
       </div>
       <allowance-time #allowanceTimeComponent
-        [allowanceTime]="filterWrongScoreModel.allowanceTime"
+        [aaTime]="filterWrongScoreModel.aaTime"
+        [paTime]="filterWrongScoreModel.paTime"
+        [saTime]="filterWrongScoreModel.saTime"
         (changeModel)="changeFilter()"
         [isDisabled]="isVoided">
       </allowance-time>

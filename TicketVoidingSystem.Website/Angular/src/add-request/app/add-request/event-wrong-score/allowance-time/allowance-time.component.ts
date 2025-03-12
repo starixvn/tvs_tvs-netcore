@@ -9,16 +9,15 @@ import { AllowanceTime } from '../../../../../utility/models/allowance-time.mode
   styleUrls: ['./allowance-time.component.scss']
 })
 export class AllowanceTimeComponent {
-  @Input() allowanceTime = new AllowanceTime();
+  @Input() aaTime: number;
+  @Input() paTime: number;
+  @Input() saTime: number;
   @Input() isDisabled: boolean;
-
   @Output() changeModel = new EventEmitter<AllowanceTime>();
 
   tooltip = new Tooltip();
 
-  constructor(
-    private readonly element: ElementRef,
-  ) {
+  constructor(private readonly element: ElementRef) {
     this.tooltip.element = this.element;
    }
   
@@ -27,8 +26,8 @@ export class AllowanceTimeComponent {
   }
 
   isValidAllowanceTime(): boolean {
-    if ((this.allowanceTime.aaTime?.toString() || this.allowanceTime.paTime?.toString() || this.allowanceTime.saTime?.toString()) &&
-    (!this.allowanceTime.aaTime?.toString() || !this.allowanceTime.paTime?.toString() || !this.allowanceTime.saTime?.toString())) {
+    if ((this.aaTime?.toString() || this.paTime?.toString() || this.saTime?.toString()) &&
+    (!this.aaTime?.toString() || !this.paTime?.toString() || !this.saTime?.toString())) {
       this.tooltip.display('allowance-time', LABELS.INVALID_SETTING_TIME);
       return false;
     }

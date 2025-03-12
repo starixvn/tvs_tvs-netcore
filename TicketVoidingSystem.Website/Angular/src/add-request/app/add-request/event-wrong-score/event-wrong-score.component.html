@@ -24,7 +24,7 @@
 		[tvDetectionValue]="tvDetectionModel.tvDetectionValue"
 		[isVoided]="isVoided"
 		*ngIf="primitiveProps.filterBy === 2"
-		[filterWrongScoreModel]="filterWrongScoreModel"
+		[filterWrongScoreModel]="defaultFilterTimeWithAllowance"
 		(changeFilterEvent)="resetData()">
 	</filter-wrong-score>
 	<div class="mb-3 mt-3 d-flex">

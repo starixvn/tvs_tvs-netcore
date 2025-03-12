@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import _ from 'lodash';
-import { MatchType, DateTimeFormat } from '../../../../../utility/constants/config';
+import { MatchType, DateTimeFormat, TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
@@ -35,7 +35,7 @@ export class RelatedEventService {
       .map(x => {
         return {
           matchId: x.matchId,
-          filterBy: 2,
+          filterBy: TVSRequestFilterBy.CHECK_TIME,
           filterFromTransTime: defaultFilterTimeWithAllowance.fromDateTime,
           filterToTransTime: defaultFilterTimeWithAllowance.toDateTime,
           matchType: x.matchType,
@@ -174,73 +174,69 @@ export class RelatedEventService {
       }
       const newEvents = this.assignChildMatchToLogInfoModel(models, arg.defaultFilterTimeWithAllowance);
       await this.updateSubIssueTypeAndAllowanceTime(newEvents, Number(arg.filter.subIssueTypeId));
-      await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, newEvents, arg.wrongScoreModels[0].matchId, arg.defaultFilterTimeWithAllowance);
+      await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, newEvents, arg.mainEvent.matchId, arg.defaultFilterTimeWithAllowance);
       newEvents.forEach(x => {
-        arg.allEvents.push(this.getLogInfoRelatedEvent(x, models.find(y => y.matchId === x.matchId)));
+        arg.allEvents.push(this.getLogInfoRelatedEvent(x, models));
       });
       arg.primitiveProps.isBlock = false;
       arg.primitiveProps.inputRelatedMatchId = null;
     }
   }
 
-
   public async getDataRelatedEventWhenSearch(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<void> {
     const eventsGetLogInfo = await this.preparingModelGetLogInfo(relatedEvents, arg);
-    await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, eventsGetLogInfo, arg.wrongScoreModels[0].matchId, arg.defaultFilterTimeWithAllowance);
-    this.addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo, arg.wrongScoreModels, arg.allEvents, relatedEvents);
+    await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, eventsGetLogInfo, arg.mainEvent.matchId, arg.defaultFilterTimeWithAllowance);
+    this.addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo, arg.mainEvent, arg.allEvents, relatedEvents);
   }
 
   private async preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<WrongScoreModel[]> {
-    const newLinkEvents = relatedEvents.filter(x => !arg.wrongScoreModels.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
+    const newLinkEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
     const newEvents = this.assignChildMatchToLogInfoModel(newLinkEvents, arg.defaultFilterTimeWithAllowance);
     await this.updateSubIssueTypeAndAllowanceTime(newEvents, Number(arg.filter.subIssueTypeId));
-    const eventsGetLogInfo = _.cloneDeep(arg.wrongScoreModels);
-    eventsGetLogInfo.push(...newEvents.filter(x => x.subIssueTypeId));
+    const originRelatedEvents = arg.allEvents.map(x => this.logInfoService.mapRelatedEventToWrongScoreModel(x));
+    const eventsGetLogInfo = [arg.mainEvent, ...originRelatedEvents, ...newEvents.filter(x => x.subIssueTypeId)];
 
     return eventsGetLogInfo;
   }
 
-  private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: WrongScoreModel[], wrongScoreModels: WrongScoreModel[],
+  private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: WrongScoreModel[], mainEvent: WrongScoreModel,
     allEvents: LogInfoRelatedEvent[], relatedEvents: ChildMatchModel[]): void {
-    const eventHasLogInfo = eventsGetLogInfo.filter(x => x.logInfoDetail);
-    eventHasLogInfo.forEach(x => {
-      const eventChild = relatedEvents.find(y => y.matchId === x.matchId);
-      if (!wrongScoreModels.some(y => y.matchId === x.matchId)) {
-        wrongScoreModels.push(x);
-        allEvents.push(this.getLogInfoRelatedEvent(x, eventChild));
-      } else {
-        const event = wrongScoreModels.find(y => y.matchId === x.matchId);
-        event.logInfoDetail = x.logInfoDetail;
-        event.messageValidationLogInfo = x.messageValidationLogInfo;
-        event.voidFromTime = x.voidFromTime;
-        event.voidFromTime = x.voidToTime;
-        event.aaTime = x.aaTime;
-        event.paTime = x.paTime;
-        event.saTime = x.saTime;
-        event.subIssueTypeId = x.subIssueTypeId;
 
-        if (!event.isMainMatch) {
-          const relatedEvent = allEvents.find(y => y.matchId === x.matchId);
-          relatedEvent.logInfoDetail = x.logInfoDetail;
-          relatedEvent.messageValidationLogInfo = x.messageValidationLogInfo;
-          relatedEvent.voidTimeArea.aaTime = 2;
-          relatedEvent.voidTimeArea.paTime = x.paTime;
-          relatedEvent.voidTimeArea.saTime = x.saTime;
+    const mainEventLogInfo = eventsGetLogInfo.find(X => X.isMainMatch);
+    mainEvent.logInfoDetail = mainEventLogInfo.logInfoDetail;
+    mainEvent.messageValidationLogInfo = mainEventLogInfo.messageValidationLogInfo;
+    mainEvent.voidFromTime = mainEventLogInfo.voidFromTime;
+    mainEvent.voidFromTime = mainEventLogInfo.voidToTime;
+
+    const allRelatedEventLogInfo = eventsGetLogInfo.filter(x => !x.isMainMatch);
+    allRelatedEventLogInfo.forEach(x => {
+      const relatedEvent = allEvents.find(y => y.matchId === x.matchId);
+      if(relatedEvent){
+        relatedEvent.logInfoDetail = x.logInfoDetail;
+        relatedEvent.messageValidationLogInfo = x.messageValidationLogInfo;
+        if (this.validationService.isHasAllowanceTime(relatedEvent)) {
           relatedEvent.voidTimeArea.fromDateTime = moment(x.logInfoDetail?.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
           relatedEvent.voidTimeArea.toDateTime = moment(x.logInfoDetail?.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-          relatedEvent.subIssueTypeId = x.subIssueTypeId;
+          relatedEvent.voidTimeArea.aaTime = x.aaTime;
+          relatedEvent.voidTimeArea.paTime = x.paTime;
+          relatedEvent.voidTimeArea.saTime = x.saTime;
         }
+      }
+      else if(x.logInfoDetail){
+        allEvents.push(this.getLogInfoRelatedEvent(x, relatedEvents));
       }
     });
   }
-  public getLogInfoRelatedEvent(model: WrongScoreModel, eventChild: ChildMatchModel): LogInfoRelatedEvent {
-    const voidTimeArea: FilterTimeWithAllowance = {
-      fromDateTime: model.voidFromTime,
-      toDateTime: model.voidToTime,
-      aaTime: model.aaTime,
-      paTime: model.paTime,
-      saTime: model.saTime
-    };
+
+  public getLogInfoRelatedEvent(model: WrongScoreModel, allEventChild: ChildMatchModel[]): LogInfoRelatedEvent {
+    const eventChild = allEventChild.find(y => y.matchId === model.matchId);
+    const isHasAllowanceTime = this.validationService.isHasAllowanceTimeWrongScoreModel(model);
+    const voidTimeArea = new FilterTimeWithAllowance();
+    voidTimeArea.fromDateTime = isHasAllowanceTime ? model.voidFromTime : model.filterFromTransTime;
+    voidTimeArea.toDateTime = isHasAllowanceTime ? model.voidToTime : model.filterToTransTime;
+    voidTimeArea.aaTime = model.aaTime;
+    voidTimeArea.paTime = model.paTime;
+    voidTimeArea.saTime = model.saTime;
 
     const logInfoRelatedEventModel = {
       logInfoDetail: model.logInfoDetail,
@@ -251,9 +247,18 @@ export class RelatedEventService {
       matchCode: eventChild.matchCode,
       leagueName: eventChild.leagueName,
       eventName: `${eventChild.matchId} - ${eventChild.matchEvent}`,
-      sportType: eventChild.sportType
+      sportType: eventChild.sportType,
     } as LogInfoRelatedEvent;
 
     return logInfoRelatedEventModel;
+  }
+
+  assignModelsToEvents(allEvents: LogInfoRelatedEvent[], wrongScoreModels: WrongScoreModel[], allChildEvent: ChildMatchModel[]): void {
+    wrongScoreModels.forEach(x => {
+      if (!x.isMainMatch) {
+        allEvents.push(this.getLogInfoRelatedEvent(x, allChildEvent));
+      }
+    });
+    allEvents = _.orderBy(_.uniqBy(allEvents, x => x.matchId), ['matchCode'], ['asc']);
   }
 }

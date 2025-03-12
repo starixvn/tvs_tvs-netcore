@@ -93,7 +93,7 @@ export class ValidationService {
   }
 
   public isValidAllScores(wrongScores: WrongScoreModel[]): boolean {
-    return wrongScores.some(x => x.messageValidationLogInfo.every(y => !y.isError));
+    return wrongScores.some(x => x.messageValidationLogInfo?.every(y => !y.isError));
   }
 
   public isHasWarningEditTakeNoteRequest(isEdit: boolean, currentActionId: string, actionIdOfFirstTime: string) {
@@ -108,10 +108,6 @@ export class ValidationService {
     return wrongScoreModels.some(x => x.logInfoDetail?.settleCount > 0);
   }
 
-  public getSelectedWrongScore(wrongScoreModels: WrongScoreModel[]): WrongScoreModel[] {
-    return wrongScoreModels.filter(x => x.isChecked);
-  }
-
   isHasAllowanceTime(event: LogInfoRelatedEvent): boolean {
     if (event.voidTimeArea.aaTime || event.voidTimeArea.paTime || event.voidTimeArea.saTime ||
       (event.voidTimeArea.aaTime === 0 && event.voidTimeArea.paTime === 0 && event.voidTimeArea.saTime === 0)) {
@@ -120,7 +116,7 @@ export class ValidationService {
 
     return false;
   }
-  
+
   isHasAllowanceTimeWrongScoreModel(event: WrongScoreModel): boolean {
     if (event.aaTime || event.paTime || event.saTime ||
       (event.aaTime === 0 && event.paTime === 0 && event.saTime === 0)) {
@@ -158,16 +154,16 @@ export class ValidationService {
       SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_NO_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_ONWARDS,
-      SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL, 
-      SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME, 
+      SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL,
+      SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME,
       SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_AWAY,
       SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK,
-      SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER, 
-      SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_HOME, 
+      SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER,
+      SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_HOME,
       SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_AWAY,
       SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING
     ];
-  
+
     return subTypesFilterByAcceptedTime.includes(Number(subIssueTypeId));
   }
 
@@ -185,15 +181,15 @@ export class ValidationService {
   }
 
   isValidInputRelatedEvent(inputMatchId: number, inputMatchIdClass: string, mainMatchId: number, allEvents: LogInfoRelatedEvent[], tooltip: Tooltip): boolean {
-      if (inputMatchId === mainMatchId) {
-        tooltip.display(inputMatchIdClass, LABELS.INVALID_MATCHID);
-        return false;
-      }
-      if (allEvents.filter(x => !x.isMainMatch).some(x => x.matchId === inputMatchId)) {
-        tooltip.display(inputMatchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
-        return false;
-      }
-  
-      return true;
+    if (inputMatchId === mainMatchId) {
+      tooltip.display(inputMatchIdClass, LABELS.INVALID_MATCHID);
+      return false;
     }
+    if (allEvents.filter(x => !x.isMainMatch).some(x => x.matchId === inputMatchId)) {
+      tooltip.display(inputMatchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+      return false;
+    }
+
+    return true;
+  }
 }

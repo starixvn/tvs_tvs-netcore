@@ -75,7 +75,7 @@ public class LogInfoServiceImp(
         return query.WrongScoreModels.Select(item => new GetLogInfoModel
         {
             ScoreId = item.ScoreId,
-            Validation = validation.FirstOrDefault(x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId),
+            Validation = validation.FirstOrDefault(x => x.ScoreId == item.ScoreId && (x.MatchId == item.MatchId || x.MatchId == 0)),
             TicketRequest = ticketRequest.Where(x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId),
             LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId),
             MatchId = item.MatchId

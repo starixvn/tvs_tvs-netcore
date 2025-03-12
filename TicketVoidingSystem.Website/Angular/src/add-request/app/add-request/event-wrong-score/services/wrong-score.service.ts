@@ -2,15 +2,14 @@ import { EventEmitter, Injectable, QueryList } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateTimeFormat, TVSRequestFilterBy, TimeZone } from '../../../../../utility/constants/config';
-import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { LastTimeScore, LastTimeScoreQuery } from '../../models/last-time-score.model';
-import { FilterWrongScoreModel } from '../models/filter-wrong-score.model';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
 import { ValidationService } from './validation.service';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,25 +21,22 @@ export class WrongScoreService {
     private readonly validationService: ValidationService
   ) { }
 
-  public initDefaultFilterWrongScore(): FilterWrongScoreModel {
-    const filterWrongScoreModel = new FilterWrongScoreModel();
+  public initDefaultFilterWrongScore(): FilterTimeWithAllowance {
+    const filterWrongScoreModel = new FilterTimeWithAllowance();
     const currentMoment = moment.utc().tz(TimeZone.AMERICA_CARACAS);
     filterWrongScoreModel.fromDateTime = moment.utc().tz(TimeZone.AMERICA_CARACAS).millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     filterWrongScoreModel.toDateTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    filterWrongScoreModel.allowanceTime = new AllowanceTime();
 
     return filterWrongScoreModel;
   }
 
-  public getFilterWrongScore(wrongScoreModel: WrongScoreModel): FilterWrongScoreModel {
-    const filterWrongScoreModel = new FilterWrongScoreModel();
+  public getFilterWrongScore(wrongScoreModel: WrongScoreModel): FilterTimeWithAllowance {
+    const filterWrongScoreModel = new FilterTimeWithAllowance();
     filterWrongScoreModel.fromDateTime = wrongScoreModel.filterFromTransTime;
     filterWrongScoreModel.toDateTime = wrongScoreModel.filterToTransTime;
-    filterWrongScoreModel.allowanceTime = {
-      aaTime: wrongScoreModel.aaTime,
-      paTime: wrongScoreModel.paTime,
-      saTime: wrongScoreModel.saTime
-    };
+    filterWrongScoreModel.aaTime = wrongScoreModel.aaTime;
+    filterWrongScoreModel.paTime = wrongScoreModel.paTime;
+    filterWrongScoreModel.saTime = wrongScoreModel.saTime;
 
     return filterWrongScoreModel;
   }
@@ -55,13 +51,13 @@ export class WrongScoreService {
     } as TvDetectionModel;
   }
 
-  public createMainWrongScoreModel(filterWrongScore: FilterWrongScoreModel) {
+  public createMainWrongScoreModel(filterWrongScore: FilterTimeWithAllowance) {
     const model = new WrongScoreModel();
     model.filterFromTransTime = filterWrongScore.fromDateTime;
     model.filterToTransTime = filterWrongScore.toDateTime;
-    model.aaTime = filterWrongScore.allowanceTime?.aaTime;
-    model.paTime = filterWrongScore.allowanceTime?.paTime;
-    model.saTime = filterWrongScore.allowanceTime?.saTime;
+    model.aaTime = filterWrongScore.aaTime;
+    model.paTime = filterWrongScore.paTime;
+    model.saTime = filterWrongScore.saTime;
     model.isChecked = true;
 
     return model;
@@ -70,13 +66,13 @@ export class WrongScoreService {
   async handleCheckedLastScore(originWrongScoreModels: WrongScoreModel[], wrongScoreModel: WrongScoreModel,
     updateByOriginWrongScoreModelEvent: EventEmitter<WrongScoreModel[]>, matchId: number, actionId: number, filterBy: number): Promise<void> {
     const wrongScores = await this.getWrongScores(matchId);
-    _.find(originWrongScoreModels, {scoreId: wrongScoreModel.scoreId}).filterToTransTime =
-      _.find(wrongScores, {scoreId: wrongScoreModel.scoreId}).filterToTransTime;
+    _.find(originWrongScoreModels, { scoreId: wrongScoreModel.scoreId }).filterToTransTime =
+      _.find(wrongScores, { scoreId: wrongScoreModel.scoreId }).filterToTransTime;
     if (wrongScores.length !== originWrongScoreModels.length) {
       wrongScores.forEach(x => {
         if (!originWrongScoreModels.some(y => y.scoreId === x.scoreId)) {
           x.matchId =
-          originWrongScoreModels.push(_.cloneDeep(x));
+            originWrongScoreModels.push(_.cloneDeep(x));
         }
       });
       updateByOriginWrongScoreModelEvent.emit(originWrongScoreModels);
@@ -86,7 +82,7 @@ export class WrongScoreService {
     }
   }
 
-    /* istanbul ignore next */
+  /* istanbul ignore next */
   public setNullAllowanceTime(wrongScoreModel: WrongScoreModel) {
     wrongScoreModel.aaTime = null;
     wrongScoreModel.paTime = null;
@@ -94,7 +90,7 @@ export class WrongScoreService {
   }
 
   public getSelectedWrongScores(wrongScoreModels: WrongScoreModel[]): WrongScoreModel[] {
-    return wrongScoreModels.filter(x => x.isChecked);
+    return wrongScoreModels.filter(x => x.isChecked || x.isMainMatch);
   }
 
   public getFilterByBaseOnSubIssueType(subIssueTypeId: string): number {
@@ -126,11 +122,11 @@ export class WrongScoreService {
 
   private async getLastTimeScore(wrongScoreModel: WrongScoreModel, actionId: number, matchId: number, filterBy: number): Promise<LastTimeScore> {
     const query: LastTimeScoreQuery = {
-        matchId: matchId,
-        actionId: actionId,
-        scoreId: wrongScoreModel.scoreId,
-        filterBy: filterBy,
-        filterFromTransTime: wrongScoreModel.filterFromTransTime
+      matchId: matchId,
+      actionId: actionId,
+      scoreId: wrongScoreModel.scoreId,
+      filterBy: filterBy,
+      filterFromTransTime: wrongScoreModel.filterFromTransTime
     };
     const data = await this.addRequestApiService.getLastTimeScore(query);
 

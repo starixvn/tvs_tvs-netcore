@@ -9,7 +9,6 @@ import { LogInfoService } from './log-info.service';
 import { SaveRequestArg } from './save-request.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 import { ValidationService } from './validation.service';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 
 @Injectable({
   providedIn: 'root'

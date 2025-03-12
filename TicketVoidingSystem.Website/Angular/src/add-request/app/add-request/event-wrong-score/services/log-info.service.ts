@@ -36,18 +36,20 @@ export class LogInfoService {
   async refreshLogInfoForRelatedEvent(isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty,
     logInfoRelatedEvent: LogInfoRelatedEvent, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): Promise<void> {
     const wrongScoreModel = this.mapRelatedEventToWrongScoreModel(logInfoRelatedEvent);
-    
     const getLogInfoQuery = this.initGetLogInfoQueries(isEdit, requestId, filter, [wrongScoreModel], null, defaultFilterTimeWithAllowance);
     const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
-
+    const evenLogInfo = viewModel.getLogInfoModels[0];
     primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
-    logInfoRelatedEvent.voidTimeArea.fromDateTime = moment(viewModel.getLogInfoModels[0].logInfoDetail?.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    logInfoRelatedEvent.voidTimeArea.toDateTime = moment(viewModel.getLogInfoModels[0].logInfoDetail?.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    logInfoRelatedEvent.logInfoDetail = viewModel.getLogInfoModels[0].logInfoDetail;
+    if (this.validationService.isHasAllowanceTime(logInfoRelatedEvent) && evenLogInfo.logInfoDetail) {
+      logInfoRelatedEvent.voidTimeArea.fromDateTime = moment(evenLogInfo.logInfoDetail.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+      logInfoRelatedEvent.voidTimeArea.toDateTime = moment(evenLogInfo.logInfoDetail.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    }
+
+    logInfoRelatedEvent.logInfoDetail = evenLogInfo.logInfoDetail;  
     logInfoRelatedEvent.messageValidationLogInfo = StaticService.getValidationMessageList(viewModel.getLogInfoModels[0], logInfoRelatedEvent.voidTimeArea.fromDateTime, logInfoRelatedEvent.voidTimeArea.saTime);
   }
 
-  mapRelatedEventToWrongScoreModel(logInfoRelatedEvent: LogInfoRelatedEvent){
+  mapRelatedEventToWrongScoreModel(logInfoRelatedEvent: LogInfoRelatedEvent) {
     const wrongScoreModel = new WrongScoreModel();
     wrongScoreModel.matchId = logInfoRelatedEvent.matchId;
     wrongScoreModel.filterBy = this.wrongScoreService.getFilterByBaseOnSubIssueType(logInfoRelatedEvent.subIssueTypeId.toString());
@@ -60,14 +62,14 @@ export class LogInfoService {
 
     return wrongScoreModel;
   }
+
   private getWrongScoreModel(filter: FilterModel, wrongScoreModels: WrongScoreModel[], mainMatchId: number, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): WrongScoreGetLogInfoQuery[] {
-    
     return wrongScoreModels.map(x => {
       const filterBy = this.wrongScoreService.getFilterByBaseOnSubIssueType(filter.subIssueTypeId);
       if (this.validationService.isHasAllowanceTimeWrongScoreModel(x) && x.filterBy === TVSRequestFilterBy.CHECK_TIME) {
         x.filterFromTransTime = defaultFilterTimeWithAllowance.fromDateTime;
         x.filterToTransTime = defaultFilterTimeWithAllowance.toDateTime;
-      } 
+      }
       const wrongScoreGetLogInfoQuery = new WrongScoreGetLogInfoQuery();
       wrongScoreGetLogInfoQuery.scoreId = x.scoreId;
       wrongScoreGetLogInfoQuery.matchId = x.matchId ? x.matchId : mainMatchId;
@@ -79,7 +81,7 @@ export class LogInfoService {
       wrongScoreGetLogInfoQuery.aaTime = x.aaTime;
       wrongScoreGetLogInfoQuery.paTime = x.paTime;
       wrongScoreGetLogInfoQuery.saTime = x.saTime;
-  
+
       return wrongScoreGetLogInfoQuery;
     });
   }
@@ -125,13 +127,17 @@ export class LogInfoService {
   }
 
   /* istanbul ignore next */
-  public clearDataValidation(wrongScoreModels: WrongScoreModel[]) {
+  public clearDataValidation(wrongScoreModels: WrongScoreModel[], events?: LogInfoRelatedEvent[]) {
     wrongScoreModels.forEach(x => {
       x.logInfoDetail = null;
       x.messageValidationLogInfo = null;
       x.voidFromTime = null;
       x.voidToTime = null;
     });
+    events?.forEach( x => {
+      x.logInfoDetail = null;
+      x.messageValidationLogInfo = null;
+    })
   }
 
   public resetLogInfoOfEvent(events: LogInfoRelatedEvent[]): void {

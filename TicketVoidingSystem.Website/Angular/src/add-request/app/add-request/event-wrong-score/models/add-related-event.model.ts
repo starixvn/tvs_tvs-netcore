@@ -17,5 +17,4 @@ export class AddRelatedEventArg {
   mainEvent: WrongScoreModel;
   addRequestStore: AddRequestStore;
   inputMatchIdClass: string;
-  wrongScoreModels: WrongScoreModel[];
 }

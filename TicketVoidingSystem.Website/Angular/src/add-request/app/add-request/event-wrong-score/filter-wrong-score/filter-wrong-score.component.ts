@@ -3,10 +3,10 @@ import { DateFullTimeNewComponent } from '../../../../../utility/components/date
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AddRequestStore } from '../../add-request.store';
 import { AllowanceTimeComponent } from '../allowance-time/allowance-time.component';
-import { FilterWrongScoreModel } from '../models/filter-wrong-score.model';
 import { ValidationService } from '../services/validation.service';
 import { WrongScoreService } from '../services/wrong-score.service';
 import { TvDetectionService } from '../../../../../manage-request/app/request-list/services/tv-detection.service';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 
 @Component({
   selector: 'filter-wrong-score',
@@ -14,7 +14,7 @@ import { TvDetectionService } from '../../../../../manage-request/app/request-li
   styleUrls: ['./filter-wrong-score.component.scss']
 })
 export class FilterWrongScoreComponent {
-  @Input() filterWrongScoreModel: FilterWrongScoreModel;
+  @Input() filterWrongScoreModel: FilterTimeWithAllowance;
   @Input() isVoided: boolean;
   @Input() tvDetectionValue: number;
   @Output() changeFilterEvent = new EventEmitter();

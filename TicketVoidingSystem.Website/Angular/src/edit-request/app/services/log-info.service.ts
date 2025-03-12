@@ -75,7 +75,7 @@ export class LogInfoService {
 
     const data = await this.commonService.getLogInfo(query);
     data.getLogInfoModels.forEach(x => {
-      const wrongScore = args.detailViewModel.wrongScoreModels.find(y => y.scoreId === x.scoreId);
+      const wrongScore = args.detailViewModel.wrongScoreModels.find(y => y.scoreId === x.scoreId && y.matchId === x.matchId);
       wrongScore.logInfoDetail = x.logInfoDetail;
     });
   }
