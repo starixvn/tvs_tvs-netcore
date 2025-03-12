@@ -64,3 +64,12 @@ public class Validation
     public bool IsHasSettledTicket { get; set; }
     public bool IsHasInstantlySettledTicket { get; set; }
 }
+
+public class LogInfoResult
+{
+    public IEnumerable<Validation> Validations { get; set; }
+    public IEnumerable<TicketRequest> TicketRequests { get; set; }
+    public IEnumerable<LogInfoDetail> LogInfoDetails { get; set; }
+    public IEnumerable<TransInfoAddRequestModel> TransInfoAddRequests { get; set; }
+    public IEnumerable<BetTypeTicketsInfo> BetTypeTickets { get; set; }
+}

@@ -1,4 +1,5 @@
-﻿using Fanex.BetList.Core.Entities;
+﻿using System.Collections.Concurrent;
+using Fanex.BetList.Core.Entities;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
@@ -19,7 +20,7 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
 {
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request)
     {
-        var getTicketModels = compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson);
+        var getTicketModels = DecompressTickets(request.LogInfoTicketsJson);
         var voidTickets = getTicketModels?.Where(x => !x.IsCancelCashOut);
 
         if (!voidTickets.Any())
@@ -44,6 +45,20 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
         };
 
         return viewModel;
+    }
+
+    private IEnumerable<GetTicketModel> DecompressTickets(string logInfoTicketsJsons)
+    {
+        var tickets = logInfoTicketsJsons.Split(",");
+        var results = new ConcurrentBag<IEnumerable<GetTicketModel>>();
+
+        Parallel.ForEach(tickets, json =>
+        {
+            var decompressed = compressDataService.DecompressTickets<GetTicketModel>(json);
+            results.Add(decompressed);
+        });
+
+        return results.SelectMany(x => x);
     }
 
     private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels, int issueTypeId)

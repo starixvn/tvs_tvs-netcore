@@ -3,6 +3,7 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.PoolHouse;
 
 namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.AddRequest;
 
@@ -23,6 +24,7 @@ public static class AddRequestCommon
         services.AddTransient<LinkedLogForUIService, LinkedLogForUIServiceImp>();
         services.AddTransient<FilterLinkedLogService, FilterLinkedLogServiceImp>();
         services.AddTransient<GetLinkedLogService, GetLinkedLogServiceImp>();
+        services.AddTransient<GeneratePoolHouseTicketService, GeneratePoolHouseTicketServiceImp>();
         services.AddTransient<GetPoolHouseTicketService, GetPoolHouseTicketServiceImp>();
         services.AddTransient<LinkGroupBettypeService, LinkGroupBettypeServiceImp>();
         services.AddTransient<LinkedLogValidationService, LinkedLogValidationServiceImp>();

@@ -7,42 +7,101 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 
 public interface LogInfoHelperService
 {
-    Task<IEnumerable<string>> GetTransInfoJson(GetLogInfoQuery query);
-
     Task UpdateBetTypeTicketsInfo(int matchId, IEnumerable<BetTypeTicketsInfo> betTypeTickets);
+
+    TransInfoAddRequestModel CombineTransInfoAddRequest(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests);
+
+    LogInfoDetail CombineLogInfoDetail(IEnumerable<LogInfoDetail> logInfoDetails, Func<LogInfoDetail, bool> filter);
+
+    Validation CombineValidations(IEnumerable<Validation> validations, Func<Validation, bool> filter);
+
+    IEnumerable<TicketRequest> CombineTicketRequest(IEnumerable<TicketRequest> ticketRequests, Func<TicketRequest, bool> filter);
+
+    IEnumerable<BetTypeTicketsInfo> CombineBetTypeTickets(IEnumerable<BetTypeTicketsInfo> betTypeTickets,
+        Func<BetTypeTicketsInfo, bool> filter);
 }
 
-public class LogInfoHelperServiceImp(
-    GetTransInfoService getTransInfoService,
-    BetListService betListService,
-    CopyRequestInfoService copyRequestInfoService)
-    : LogInfoHelperService
+public class LogInfoHelperServiceImp(BetListService betListService, CopyRequestInfoService copyRequestInfoService) : LogInfoHelperService
 {
-    public async Task<IEnumerable<string>> GetTransInfoJson(GetLogInfoQuery query)
+    public Validation CombineValidations(IEnumerable<Validation> validations, Func<Validation, bool> filter)
     {
-        var getTransInfoQuery = new GetTransInfoQuery
+        var selectedItems = validations.Where(filter).ToList();
+        if (selectedItems.Count == 0)
         {
-            WrongScoreModels = query.WrongScoreModels,
-            RedCardModels = query.RedCardModels,
-            DangerAcceptedModels = query.DangerAcceptedModels,
-            WrongHdpModels = query.WrongHdpModels,
-            Wrong1stHdpModels = query.Wrong1stHdpModels,
-            WrongOuModels = query.WrongOuModels,
-            Wrong1stOuModels = query.Wrong1stOuModels,
-            WrongOddsModels = query.WrongOddsModels,
-            WrongOddsSportsBookModels = query.WrongOddsSportsBookModel,
-            WrongOfferedNameModel = query.WrongOfferedNameModel,
-            ReducedOverModels = query.ReducedOverModels,
-            NotParticipateModels = query.NotParticipateModels,
-            EarlyKickOffModels = query.EarlyKickOffModels,
-            WrongMarketOfferedModels = query.WrongMarketOfferedModels,
-            TechnicalErrorModel = query.TechnicalErrorModel,
-            OtherIssuesModel = query.OtherIssuesModel,
-            MatchId = query.MatchId,
-            IssueTypeId = query.IssueTypeId
-        };
+            return null;
+        }
 
-        return await getTransInfoService.GetTransInfoJson(getTransInfoQuery);
+        return new Validation
+        {
+            MatchId = selectedItems[0].MatchId,
+            Id = selectedItems[0].Id,
+            ScoreId = selectedItems[0].ScoreId,
+            IsExistedInOtherRequest = selectedItems.TrueForAll(x => x.IsExistedInOtherRequest),
+            IsExistsSecondAccept = selectedItems.TrueForAll(x => x.IsExistsSecondAccept),
+            IsHasInstantlySettledTicket = selectedItems.TrueForAll(x => x.IsHasInstantlySettledTicket),
+            IsHasSettledTicket = selectedItems.TrueForAll(x => x.IsHasSettledTicket),
+            IsInvalidTotalTickets = selectedItems.TrueForAll(x => x.IsInvalidTotalTickets),
+            IsPoolHouseAffected = selectedItems.TrueForAll(x => x.IsPoolHouseAffected)
+        };
+    }
+
+    public IEnumerable<TicketRequest> CombineTicketRequest(IEnumerable<TicketRequest> ticketRequests, Func<TicketRequest, bool> filter)
+    {
+        return ticketRequests.Where(filter);
+    }
+
+    public LogInfoDetail CombineLogInfoDetail(IEnumerable<LogInfoDetail> logInfoDetails, Func<LogInfoDetail, bool> filter)
+    {
+        var selectedItems = logInfoDetails.Where(filter).ToList();
+        if (selectedItems.Count == 0)
+        {
+            return null;
+        }
+
+        return new LogInfoDetail
+        {
+            MatchId = selectedItems[0].MatchId,
+            Id = selectedItems[0].Id,
+            ScoreId = selectedItems[0].ScoreId,
+            ActionType = selectedItems.Min(x => x.MinTransId),
+            LiveScores = string.Join("|", selectedItems.Select(x => x.LiveScores)),
+            ScoreOfMatch = selectedItems[0].ScoreOfMatch,
+            ScoreNormalTicket = string.Join("|", selectedItems.Select(x => x.ScoreNormalTicket)),
+            MinTransId = selectedItems.Min(x => x.MinTransId),
+            HighlightAcceptType = selectedItems.MinBy(x => x.MinTransId)?.HighlightAcceptType,
+            HighlightMinTime = selectedItems.MinBy(x => x.MinTransId)?.HighlightMinTime,
+            SingleCount = selectedItems.Sum(x => x.SingleCount),
+            MainParlayCount = selectedItems.Sum(x => x.MainParlayCount),
+            CashOutCount = selectedItems.Sum(x => x.CashOutCount),
+            CancelCashOutCount = selectedItems.Sum(x => x.CancelCashOutCount),
+            SettleCount = selectedItems.Sum(x => x.SettleCount),
+            InstantlySettleCount = selectedItems.Sum(x => x.InstantlySettleCount),
+            PoolHouseCashOutCount = selectedItems.Sum(x => x.PoolHouseCashOutCount),
+            PoolHouseInstantlySettleCount = selectedItems.Sum(x => x.PoolHouseInstantlySettleCount),
+            PoolHouseMainParlayCount = selectedItems.Sum(x => x.PoolHouseMainParlayCount),
+            PoolHouseSettleCount = selectedItems.Sum(x => x.PoolHouseSettleCount),
+            PoolHouseSingleCount = selectedItems.Sum(x => x.PoolHouseSingleCount),
+            LogInfoTicketsJson = string.Join(",", selectedItems.Select(x => x.LogInfoTicketsJson)),
+            VoidFromTime = selectedItems.Min(x => x.VoidFromTime),
+            VoidToTime = selectedItems.Max(x => x.VoidToTime),
+            TransVoidToTime = selectedItems.Max(x => x.TransVoidToTime)
+        };
+    }
+
+    public TransInfoAddRequestModel CombineTransInfoAddRequest(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
+    {
+        return new TransInfoAddRequestModel
+        {
+            MarkTransIds = string.Join(",", transInfoAddRequests.Select(x => x.MarkTransIds)),
+            UnMarkTransIds = string.Join(",", transInfoAddRequests.Select(x => x.UnMarkTransIds)),
+            RemoveTransIds = string.Join(",", transInfoAddRequests.Select(x => x.RemoveTransIds)),
+            TransInfoJson = string.Join(",", transInfoAddRequests.Select(x => x.TransInfoJson)),
+        };
+    }
+
+    public IEnumerable<BetTypeTicketsInfo> CombineBetTypeTickets(IEnumerable<BetTypeTicketsInfo> betTypeTickets, Func<BetTypeTicketsInfo, bool> filter)
+    {
+        return betTypeTickets.Where(filter);
     }
 
     public async Task UpdateBetTypeTicketsInfo(int matchId, IEnumerable<BetTypeTicketsInfo> betTypeTickets)

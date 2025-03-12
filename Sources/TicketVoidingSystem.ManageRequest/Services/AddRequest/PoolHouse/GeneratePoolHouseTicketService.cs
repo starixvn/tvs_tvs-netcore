@@ -1,26 +1,25 @@
 ﻿using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.PoolHouse;
 
-public interface GetPoolHouseTicketService
+public interface GeneratePoolHouseTicketService
 {
-    TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketRequest request);
+    TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketQuery query);
 }
 
-public class GetPoolHouseTicketServiceImp(MapTicketsService mapTicketsService, PagingService pagingService)
-    : GetPoolHouseTicketService
+public class GeneratePoolHouseTicketServiceImp(MapTicketsService mapTicketsService, PagingService pagingService)
+    : GeneratePoolHouseTicketService
 {
-    public TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketRequest request)
+    public TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketQuery query)
     {
         var groupsHaveTickets = GenerateGroup(originTickets)
             .Where(item => item.Tickets.Any());
 
-        var groupViewModels = groupsHaveTickets.Select(group => MapToGroupTicketViewModel(group, request.IssueTypeId)).ToList();
+        var groupViewModels = groupsHaveTickets.Select(group => MapToGroupTicketViewModel(group, query.IssueTypeId)).ToList();
 
         var viewModel = new TicketsViewModel
         {

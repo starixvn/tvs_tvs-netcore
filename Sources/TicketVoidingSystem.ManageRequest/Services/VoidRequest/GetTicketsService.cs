@@ -92,7 +92,7 @@ public class GetTicketsServiceImp(
     {
         var criteria = mapper.Map<GetTicketsCriteria>(query);
         criteria.MatchId = query.Match?.MatchId ?? 0;
-        criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
+        //criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
 
         var tickets = await repository.FetchAsync<GetTicketModel>(criteria);
         return tickets.OrderBy(x => x.IsMixParlay);
@@ -101,7 +101,7 @@ public class GetTicketsServiceImp(
     private async Task<IEnumerable<GetTicketModel>> GetBetTrans14Ticket(GetTicketsQuery query, IEnumerable<string> transInfoJsonList)
     {
         var criteria = mapper.Map<GetBetTrans14TicketsCriteria>(query);
-        criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
+        //criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
         var tickets = await repository.FetchAsync<GetTicketModel>(criteria);
 
         return tickets.OrderBy(x => x.IsMixParlay);

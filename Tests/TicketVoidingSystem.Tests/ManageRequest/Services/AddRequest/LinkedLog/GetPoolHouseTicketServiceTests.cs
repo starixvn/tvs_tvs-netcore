@@ -1,9 +1,9 @@
-﻿using NSubstitute;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.PoolHouse;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -15,13 +15,13 @@ public class GetPoolHouseTicketServiceTests
 {
     private readonly MapTicketsService mapTicketsService;
     private readonly PagingService pagingService;
-    private readonly GetPoolHouseTicketServiceImp service;
+    private readonly GeneratePoolHouseTicketServiceImp service;
 
     public GetPoolHouseTicketServiceTests()
     {
         mapTicketsService = Substitute.For<MapTicketsService>();
         pagingService = Substitute.For<PagingService>();
-        service = new GetPoolHouseTicketServiceImp(mapTicketsService, pagingService);
+        service = new GeneratePoolHouseTicketServiceImp(mapTicketsService, pagingService);
     }
 
     [Fact]
