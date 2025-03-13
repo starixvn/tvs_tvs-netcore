@@ -43,8 +43,8 @@ public class GetTicketsServiceImp(
             = await GetTicketsInRequest(query.RequestId, query.RequestDetailId);
         var transInfoJsonVoid14List = await getTransInfoService.GetTransInfoJsonForVoid14(singleTickets, GetMatchIdForQueryTransInfoJson(query));
         var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, GetMatchIdForQueryTransInfoJson(query));
-        var void14Tickets = await GetBetTrans14Ticket(query, transInfoJsonVoid14List);
-        var voidBetTransTickets = await GetBetTransTicket(query, transInfoJsonList);
+        var void14Tickets = await GetBetTrans14Ticket(query);
+        var voidBetTransTickets = await GetBetTransTicket(query);
 
         return void14Tickets.Union(voidBetTransTickets);
     }
@@ -54,7 +54,7 @@ public class GetTicketsServiceImp(
         var (singleTickets, _, _) = await GetTicketsInRequest(query.RequestId, query.RequestDetailId);
         var transInfoJsonVoid14List = await getTransInfoService.GetTransInfoJsonForVoid14(singleTickets, GetMatchIdForQueryTransInfoJson(query));
 
-        return await GetBetTrans14Ticket(query, transInfoJsonVoid14List);
+        return await GetBetTrans14Ticket(query);
     }
 
     private async Task<IEnumerable<GetTicketModel>> GetTicketsIssueTypeEarlyKickOffOrWrongKickOff(GetTicketsQuery query)
@@ -62,7 +62,7 @@ public class GetTicketsServiceImp(
         if (query.RequestId is null or 0) // get tickets when add/edit request
         {
             var transInfoJson = new List<string> { query.TransInfoJson };
-            return await GetBetTransTicket(query, transInfoJson);
+            return await GetBetTransTicket(query);
         }
 
         var (singleTickets, parlayTickets, cancelCashOutTickets)
@@ -70,7 +70,7 @@ public class GetTicketsServiceImp(
         var matchId = GetMatchIdForQueryTransInfoJson(query);
         var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, matchId);
 
-        return await GetBetTransTicket(query, transInfoJsonList);
+        return await GetBetTransTicket(query);
     }
 
     private async Task<IEnumerable<GetTicketModel>> GetTicketsDefault(GetTicketsQuery query)
@@ -82,29 +82,39 @@ public class GetTicketsServiceImp(
         var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, matchId);
         await LogSentryGetTransInfoJsonForVoid(query.RequestId, matchId, transInfoJsonList);
 
-        var tickets = await GetBetTransTicket(query, transInfoJsonList);
+        var tickets = await GetBetTransTicket(query);
         await LogSentryGetBetTransTicket(query.RequestId, matchId, tickets);
 
         return tickets;
     }
 
-    private async Task<IEnumerable<GetTicketModel>> GetBetTransTicket(GetTicketsQuery query, IEnumerable<string> transInfoJsonList)
+    private async Task<IEnumerable<GetTicketModel>> GetBetTransTicket(GetTicketsQuery query)
     {
         var criteria = mapper.Map<GetTicketsCriteria>(query);
         criteria.MatchId = query.Match?.MatchId ?? 0;
-        //criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
 
-        var tickets = await repository.FetchAsync<GetTicketModel>(criteria);
-        return tickets.OrderBy(x => x.IsMixParlay);
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
+        {
+            criteria.SiteDbGroupId = server.Id;
+            return repository.FetchAsync<GetTicketModel>(criteria);
+        });
+
+        var tickets = await Task.WhenAll(tasks);
+        return tickets.SelectMany(x => x).OrderBy(x => x.IsMixParlay);
     }
 
-    private async Task<IEnumerable<GetTicketModel>> GetBetTrans14Ticket(GetTicketsQuery query, IEnumerable<string> transInfoJsonList)
+    private async Task<IEnumerable<GetTicketModel>> GetBetTrans14Ticket(GetTicketsQuery query)
     {
         var criteria = mapper.Map<GetBetTrans14TicketsCriteria>(query);
         //criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
-        var tickets = await repository.FetchAsync<GetTicketModel>(criteria);
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
+        {
+            criteria.SiteDbGroupId = server.Id;
+            return repository.FetchAsync<GetTicketModel>(criteria);
+        });
 
-        return tickets.OrderBy(x => x.IsMixParlay);
+        var tickets = await Task.WhenAll(tasks);
+        return tickets.SelectMany(x => x).OrderBy(x => x.IsMixParlay);
     }
 
     private static int? GetMatchIdForQueryTransInfoJson(GetTicketsQuery query)

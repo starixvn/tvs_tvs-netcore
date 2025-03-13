@@ -47,12 +47,12 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
         return viewModel;
     }
 
-    private IEnumerable<GetTicketModel> DecompressTickets(string logInfoTicketsJsons)
+    public IEnumerable<GetTicketModel> DecompressTickets(string logInfoTicketsJsons)
     {
-        var tickets = logInfoTicketsJsons.Split(",");
+        var jsonItems = logInfoTicketsJsons.Split(",");
         var results = new ConcurrentBag<IEnumerable<GetTicketModel>>();
 
-        Parallel.ForEach(tickets, json =>
+        Parallel.ForEach(jsonItems, json =>
         {
             var decompressed = compressDataService.DecompressTickets<GetTicketModel>(json);
             results.Add(decompressed);
