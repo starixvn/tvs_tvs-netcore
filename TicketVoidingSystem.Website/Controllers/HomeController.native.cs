@@ -63,4 +63,11 @@ public class HomeController(IMaintenanceService maintenanceService, ICache cache
 
         return Ok(result);
     }
+
+    [AllowAnonymous]
+    [SkipUMFilter]
+    public ActionResult AccessDenied()
+    {
+        return View("~/Views/Auth/AccessDenied.cshtml");
+    }
 }
