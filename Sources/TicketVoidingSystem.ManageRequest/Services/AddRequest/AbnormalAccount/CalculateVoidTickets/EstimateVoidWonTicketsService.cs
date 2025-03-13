@@ -1,14 +1,12 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
+﻿namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
-
-public interface EstimateVoidWonTicketsService
+public interface EstimateVoidWonTicketsService1
 {
     IEnumerable<TicketCalculateWinLostAccount> Execute(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit);
 }
 
-public class EstimateVoidWonTicketsServiceImp(SortAlgorithmService sortAlgorithmService)
-    : EstimateVoidWonTicketsService
+public class EstimateVoidWonTicketsServiceImp(SortAlgorithmService1 sortAlgorithmService)
+    : EstimateVoidWonTicketsService1
 {
     private static decimal GetMaxCapacity(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit)
     {

@@ -16,6 +16,8 @@
     <None Remove="TicketVoidingSystem\Services\Excel\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="ManageRequest\Services\AddRequest\AbnormalAccount\CalculateVoidTickets\EstimateVoidWonTicketsServiceTests.cs" />
+    <Compile Remove="ManageRequest\Services\AddRequest\AbnormalAccount\CalculateVoidTickets\SortAlgorithmServiceTests.cs" />
     <Compile Remove="MarkTickets\Handlers\MarkUnmarkTickets\GetDetailTicketsHandlerTests.cs" />
   </ItemGroup>
   <ItemGroup>

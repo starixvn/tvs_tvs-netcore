@@ -1,5 +1,4 @@
 ﻿using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
 
@@ -10,7 +9,6 @@ public interface CalculateHaveStatusWonNotLoseService
 }
 
 public class CalculateHaveStatusWonNotLoseServiceImp(
-    EstimateVoidWonTicketsService estimateVoidWonTicketsService,
     CombineVoidTicketsService combineVoidTicketsService)
     : CalculateHaveStatusWonNotLoseService
 {
@@ -43,12 +41,12 @@ public class CalculateHaveStatusWonNotLoseServiceImp(
             account.CurrentLosing = -currentLosing;
             account.CurrentWinning = currentWinning;
 
-            var voidWonTickets = estimateVoidWonTicketsService.Execute(wonTickets, loseTickets, compareCredit);
+            //var voidWonTickets = estimateVoidWonTicketsService.Execute(wonTickets, loseTickets, compareCredit);
             var othersVoidTickets = combineVoidTicketsService.Execute(account.CustId, ticketStatusIds.Where(x => x != TicketStatus.WonId), groupTickets);
-            account.EstimateVoidAmount = voidWonTickets.Sum(x => x.WinLost);
+            //account.EstimateVoidAmount = voidWonTickets.Sum(x => x.WinLost);
             account.WinLostAfterVoid = -currentLosing + (currentWinning - account.EstimateVoidAmount);
-            account.VoidTickets = voidWonTickets.Concat(othersVoidTickets);
-            UpdateAccountWinlostByGroupMatchId(account, wonTickets, voidWonTickets);
+            //account.VoidTickets = voidWonTickets.Concat(othersVoidTickets);
+            UpdateAccountWinlostByGroupMatchId(account, wonTickets);
         }
         else
         {
@@ -61,23 +59,23 @@ public class CalculateHaveStatusWonNotLoseServiceImp(
         }
     }
 
-    private static void UpdateAccountWinlostByGroupMatchId(AccountWinlostModel account, OrderedTickets wonTickets, IEnumerable<TicketCalculateWinLostAccount> voidWonTickets)
+    private static void UpdateAccountWinlostByGroupMatchId(AccountWinlostModel account, OrderedTickets wonTickets)
     {
         if (wonTickets.Descending == null)
         {
             return;
         }
 
-        foreach (var ticket in wonTickets.Descending)
-        {
-            ticket.IsChecked = voidWonTickets.Any(y => y.TransId == ticket.TransId);
-        }
+        //foreach (var ticket in wonTickets.Descending)
+        //{
+        //    ticket.IsChecked = voidWonTickets.Any(y => y.TransId == ticket.TransId);
+        //}
 
         var editableTickets = wonTickets.Descending.GroupBy(b => b.MatchId)
             .Where(IsHasBothCheckedAndUncheckedTickets).SelectMany(x => x);
-        var editableMatches = editableTickets.Select(x => x.MatchId).Distinct();
+        // var editableMatches = editableTickets.Select(x => x.MatchId).Distinct();
         account.IsCanEditTicket = editableTickets.Any();
-        account.EstimateVoidAmountUnEditableTickets = voidWonTickets.Where(x => !editableMatches.Contains(x.MatchId)).Sum(x => x.WinLost);
+        //account.EstimateVoidAmountUnEditableTickets = voidWonTickets.Where(x => !editableMatches.Contains(x.MatchId)).Sum(x => x.WinLost);
     }
 
     private static bool IsHasBothCheckedAndUncheckedTickets(IEnumerable<TicketCalculateWinLostAccount> wonTickets)

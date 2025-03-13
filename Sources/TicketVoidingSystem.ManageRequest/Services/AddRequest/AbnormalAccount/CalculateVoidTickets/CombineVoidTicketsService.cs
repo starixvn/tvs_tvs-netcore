@@ -1,6 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
-
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
+﻿namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
 
 public interface CombineVoidTicketsService
 {

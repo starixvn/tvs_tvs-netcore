@@ -1,13 +1,11 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
+﻿namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
-
-public interface SortAlgorithmService
+public interface SortAlgorithmService1
 {
     IEnumerable<TicketCalculateWinLostAccount> Execute(OrderedTickets wonTickets, decimal maxCapacity);
 }
 
-public class SortAlgorithmServiceImp : SortAlgorithmService
+public class SortAlgorithmServiceImp : SortAlgorithmService1
 {
     public IEnumerable<TicketCalculateWinLostAccount> Execute(OrderedTickets wonTickets, decimal maxCapacity)
     {

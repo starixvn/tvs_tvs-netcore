@@ -300,7 +300,7 @@
 		<Setting Key="TicketVoiding_Licensees_Select" SpName="TicketVoiding_Licensees_Select" DbName="DBOIC.bodb_OIC.wsv_nap" TimeOut="600" />
 	</Function>
 	<Function Name="AbnormalAccount">
-		<Setting Key="DBCTG.TicketVoiding_CheckUserName" SpName="TicketVoiding_CheckUserName" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+		<Setting Key="DBCTG.TicketVoiding_CheckUserName" SpName="TicketVoiding_CheckUserName_Uat1" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_CheckUserName" SpName="TicketVoiding_CheckUserName_Uat1" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_CheckUserName" SpName="TicketVoiding_CheckUserName_Uat1" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_CheckUserName" SpName="TicketVoiding_CheckUserName_Uat1" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />

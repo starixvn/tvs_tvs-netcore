@@ -1,6 +1,5 @@
 ﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
 
@@ -35,7 +34,7 @@ public class GetTicketsServiceImp(MapTicketsService mapTicketsService, CompressD
     {
         return tickets.Where(x => x.Status.IsWon() && x.CustId == custId)
             .GroupBy(b => b.MatchId)
-            .Where(x => IsHasBothCheckedAndUncheckedTickets(x.ToList()))
+            // .Where(x => IsHasBothCheckedAndUncheckedTickets(x.ToList()))
             .SelectMany(y => y);
     }
 

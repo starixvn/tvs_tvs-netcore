@@ -21,21 +21,21 @@ public static class SiteDbGroupConstant
                 Id = CentralDb,
                 ServerName = "DBCTG"
             },
-            new()
-            {
-                Id = SiteDb1,
-                ServerName = "DBCTG"
-            },
+            //new()
+            //{
+            //    Id = SiteDb1,
+            //    ServerName = "DBSITE01"
+            //},
             //new()
             //{
             //    Id = SiteDb2,
             //    ServerName = "DBSITE02"
             //},
-            //new()
-            //{
-            //    Id = SiteDb3,
-            //    ServerName = "DBSITE03"
-            //}
+            new()
+            {
+                Id = SiteDb3,
+                ServerName = "DBSITE03"
+            }
         };
 
         var ignoreSiteDbList = !string.IsNullOrWhiteSpace(AppSettingService.AppSetting?.IgnoreSiteDb)

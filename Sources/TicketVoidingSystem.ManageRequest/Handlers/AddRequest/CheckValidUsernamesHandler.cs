@@ -25,6 +25,8 @@ public class CheckValidUsernamesRequest : IRequest<CheckValidUsernamesViewModel>
 
     public bool IsVoidAllArchivedTickets { get; set; }
 
+    public decimal AdjustVoidLimit { get; set; }
+
     public IEnumerable<AccountWinlostModel>? AccountWinlostModels { get; set; }
 }
 
@@ -38,44 +40,65 @@ public class CheckValidUsernamesHandler(
     {
         var usernameInfo = await checkUsernameService.GetUsernameInfo(request);
 
-        var calcVoidResult = new CalcVoidTicketsResult();
         if (request.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
         {
-            var accounts = MapInformationFromUserInput(usernameInfo.AccountWinlost, request.AccountWinlostModels);
-            calcVoidResult = await calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(request.StatusIds, usernameInfo.TicketCalculateWinLostAccount.ToList(), accounts);
+            MapInformationFromUserInput(usernameInfo.AccountWinlost, request.AccountWinlostModels);
         }
+
+        // Testing
+        usernameInfo.AccountWinlost.First().IsHighlight = true;
+        usernameInfo.AccountWinlost.First().IsCanEditTicket = true;
+        foreach (var ticket in usernameInfo.TicketCalculateWinLostAccount)
+        {
+            if (ticket.TransId == 367828304981393439)
+            {
+                ticket.IsChecked = true;
+            }
+        }
+
+        var transInfoJson = compressDataAddRequestService.CompressTicket(usernameInfo.TicketCalculateWinLostAccount);
+        //
 
         var viewModel = new CheckValidUsernamesViewModel
         {
-            Validation = GetValidationAfterCalc(request, usernameInfo.ValidationResult, calcVoidResult),
+            Validation = usernameInfo.ValidationResult,// GetValidationAfterCalc(request, usernameInfo.ValidationResult, calcVoidResult),
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
                 UnMarkTransIds = usernameInfo.ValidationResult.UnMarkTransIds,
                 MarkTransIds = usernameInfo.ValidationResult.MarkTransIds,
-                TransInfoJson = GetOutputTransInfoAddRequest(request, usernameInfo, calcVoidResult.VoidTickets)
+                TransInfoJson = transInfoJson// GetOutputTransInfoAddRequest(request, usernameInfo, calcVoidResult.VoidTickets)
             },
-            AccountWinlostModels = calcVoidResult.Accounts
+            AccountWinlostModels = usernameInfo.AccountWinlost
         };
 
-        ClearVoidTicketsInAccounts(calcVoidResult.Accounts);
+        ClearVoidTicketsInAccounts(usernameInfo.AccountWinlost);
         return viewModel;
     }
 
-    private static IEnumerable<AccountWinlostModel> MapInformationFromUserInput(IEnumerable<AccountWinlostModel> accounts, IEnumerable<AccountWinlostModel>? originalAccounts)
+    private static void MapInformationFromUserInput(IEnumerable<AccountWinlostModel> accounts, IEnumerable<AccountWinlostModel>? originalAccounts)
     {
-        foreach (var account in accounts)
-        {
-            account.IsShowOnTable = true;
-            var currentAccount = originalAccounts?.FirstOrDefault(x => x.CustId == account.CustId);
-            if (currentAccount == null)
-            {
-                continue;
-            }
-            account.AdjustVoidLimit = currentAccount.AdjustVoidLimit;
-            account.IsEditedTicket = currentAccount.IsEditedTicket;
-        }
+        var accountList = accounts.ToList();
 
-        return accounts;
+        if (originalAccounts != null)
+        {
+            var originalAccountDict = originalAccounts.ToDictionary(a => a.CustId);
+            foreach (var account in accountList)
+            {
+                account.IsShowOnTable = true;
+                if (originalAccountDict.TryGetValue(account.CustId, out var currentAccount))
+                {
+                    account.AdjustVoidLimit = currentAccount.AdjustVoidLimit;
+                    account.IsEditedTicket = currentAccount.IsEditedTicket;
+                }
+            }
+        }
+        else
+        {
+            foreach (var account in accountList)
+            {
+                account.IsShowOnTable = true;
+            }
+        }
     }
 
     private string GetOutputTransInfoAddRequest(CheckValidUsernamesRequest query, CheckUsernamesInDatabaseResult checkUsernamesResult, IEnumerable<TicketCalculateWinLostAccount> voidTickets)
@@ -98,25 +121,29 @@ public class CheckValidUsernamesHandler(
             checkUsernamesResult.TicketCalculateWinLostAccount.Where(x => ticketStatusIds.Contains(x.StatusId)));
     }
 
-    private static ValidationInfo GetValidationAfterCalc(CheckValidUsernamesRequest query, ValidationInfo validationResult, CalcVoidTicketsResult calcVoidResult)
-    {
-        if (query.ActionId is not ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
-        {
-            return validationResult;
-        }
+    //private static ValidationInfo GetValidationAfterCalc(CheckValidUsernamesRequest query, ValidationInfo validationResult, CalcVoidTicketsResult calcVoidResult)
+    //{
+    //    if (query.ActionId is not ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
+    //    {
+    //        return validationResult;
+    //    }
 
-        if (!calcVoidResult.VoidTickets.Any())
-        {
-            validationResult.IsInvalidTotalTicket = true;
-            return validationResult;
-        }
+    //    if (!calcVoidResult.VoidTickets.Any())
+    //    {
+    //        validationResult.IsInvalidTotalTicket = true;
+    //        return validationResult;
+    //    }
 
-        validationResult.IsInvalidTotalTicket = query.AccountWinlostModels != null
-                                                && query.AccountWinlostModels.All(x => x.EstimateVoidAmount == 0)
-                                                && calcVoidResult.VoidTickets.All(x => string.IsNullOrWhiteSpace(x.Status) && string.Equals(x.Status, TicketStatus.Won, StringComparison.OrdinalIgnoreCase));
+    //    if (query.AccountWinlostModels != null)
+    //    {
+    //        var allEstimateVoidAmountZero = query.AccountWinlostModels.All(x => x.EstimateVoidAmount == 0);
+    //        var allVoidTicketsWon = calcVoidResult.VoidTickets.All(x => string.IsNullOrWhiteSpace(x.Status) && string.Equals(x.Status, TicketStatus.Won, StringComparison.OrdinalIgnoreCase));
 
-        return validationResult;
-    }
+    //        validationResult.IsInvalidTotalTicket = allEstimateVoidAmountZero && allVoidTicketsWon;
+    //    }
+
+    //    return validationResult;
+    //}
 
     private static void ClearVoidTicketsInAccounts(IEnumerable<AccountWinlostModel> accounts)
     {

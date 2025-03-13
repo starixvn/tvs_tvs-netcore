@@ -19,8 +19,8 @@ public static class AbnormalAccount
         services.AddTransient<CalculateRemainStatusService, CalculateRemainStatusServiceImp>();
         services.AddTransient<CalculateVoidTicketsService, CalculateVoidTicketsServiceImp>();
         services.AddTransient<CombineVoidTicketsService, CombineVoidTicketsServiceImp>();
-        services.AddTransient<EstimateVoidWonTicketsService, EstimateVoidWonTicketsServiceImp>();
-        services.AddTransient<SortAlgorithmService, SortAlgorithmServiceImp>();
+        //services.AddTransient<EstimateVoidWonTicketsService, EstimateVoidWonTicketsServiceImp>();
+        //services.AddTransient<SortAlgorithmService, SortAlgorithmServiceImp>();
 
         services.AddTransient<AccountWinLostService, AccountWinLostServiceImp>();
         services.AddTransient<CheckUsernameService, CheckUsernameServiceImp>();

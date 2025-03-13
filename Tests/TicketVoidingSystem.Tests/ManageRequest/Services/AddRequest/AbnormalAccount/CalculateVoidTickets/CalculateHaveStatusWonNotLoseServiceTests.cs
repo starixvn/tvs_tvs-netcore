@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using NSubstitute;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
@@ -12,14 +12,15 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.AbnormalAc
 public class CalculateHaveStatusWonNotLoseServiceTests : IClassFixture<AppSettingFixture>
 {
     private readonly CombineVoidTicketsService combineVoidTicketsService = Substitute.For<CombineVoidTicketsService>();
-    private readonly EstimateVoidWonTicketsService estimateVoidWonTicketsService = Substitute.For<EstimateVoidWonTicketsService>();
+
+    // private readonly EstimateVoidWonTicketsService estimateVoidWonTicketsService = Substitute.For<EstimateVoidWonTicketsService>();
     private CalculateHaveStatusWonNotLoseServiceImp service;
 
     [Fact]
     public async Task ExecuteParallel_ValidRequest_ReturnResultExpected()
     {
         // Arrange
-        service = new CalculateHaveStatusWonNotLoseServiceImp(estimateVoidWonTicketsService, combineVoidTicketsService);
+        service = new CalculateHaveStatusWonNotLoseServiceImp(combineVoidTicketsService);
         var orderedAccounts = new List<AccountWinlostModel>
         {
             new() { CustId = 1, AdjustVoidLimit = 40 },
@@ -50,8 +51,6 @@ public class CalculateHaveStatusWonNotLoseServiceTests : IClassFixture<AppSettin
             }
         };
         var voidWonTickets = new List<TicketCalculateWinLostAccount> { new() { WinLost = 100, CustId = 1, BetId = 1 } };
-        estimateVoidWonTicketsService.Execute(Arg.Any<OrderedTickets>(), Arg.Any<OrderedTickets>(),
-            Arg.Any<decimal>()).ReturnsForAnyArgs(voidWonTickets);
         var othersVoidTickets = new List<TicketCalculateWinLostAccount>
             { new() { WinLost = 100, CustId = 1, BetId = 3 } };
         combineVoidTicketsService.Execute(1, Arg.Any<IEnumerable<int>>(),

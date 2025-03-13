@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using NSubstitute;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -21,14 +21,11 @@ public class CheckValidUsernamesHandlerTests
         // Arrange
         var request = new CheckValidUsernamesRequest();
         var validation = new ValidationInfo();
-        var transInfoAddRequestModel = new TransInfoAddRequestModel { RemoveTransIds = "123", UnMarkTransIds = "123", MarkTransIds = "456" };
         var checkResult = new CheckUsernamesInDatabaseResult
         {
             ValidationResult = validation,
             AccountWinlost = new List<AccountWinlostModel>(),
-            TicketCalculateWinLostAccount = new List<TicketCalculateWinLostAccount>(),
-            TransInfoJsonCompress = "123",
-            TransInfoValidation = transInfoAddRequestModel
+            TicketCalculateWinLostAccount = new List<TicketCalculateWinLostAccount>()
         };
         var calcVoidTicketsResult = new CalcVoidTicketsResult
         {
@@ -78,14 +75,11 @@ public class CheckValidUsernamesHandlerTests
             VoidTickets = new List<TicketCalculateWinLostAccount> { new() }
         };
         var validation = new ValidationInfo();
-        var transInfoAddRequestModel = new TransInfoAddRequestModel { RemoveTransIds = "123", UnMarkTransIds = "123", MarkTransIds = "456" };
         var checkResult = new CheckUsernamesInDatabaseResult
         {
             ValidationResult = validation,
             AccountWinlost = new List<AccountWinlostModel> { new() { Username = "123AA" } },
-            TicketCalculateWinLostAccount = new List<TicketCalculateWinLostAccount> { new() },
-            TransInfoJsonCompress = "123",
-            TransInfoValidation = transInfoAddRequestModel
+            TicketCalculateWinLostAccount = new List<TicketCalculateWinLostAccount> { new() }
         };
 
         var viewModel = new CheckValidUsernamesViewModel
