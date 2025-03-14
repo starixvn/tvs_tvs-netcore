@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using AutoMapper;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
@@ -29,6 +30,8 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
 
     public async Task<LogInfoResult> GetLogInfoAllServer(GetLogInfoQuery query)
     {
+        Stopwatch sw;
+        sw = Stopwatch.StartNew();
         var criteria = GetLogInfoCriteria(query);
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
@@ -36,6 +39,7 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             return repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(criteria);
         });
         var results = await Task.WhenAll(tasks);
+        Debug.WriteLine($"-------   {sw.ElapsedMilliseconds} ms");
 
         return new LogInfoResult
         {
