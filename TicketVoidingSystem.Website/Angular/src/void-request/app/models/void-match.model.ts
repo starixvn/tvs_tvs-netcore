@@ -22,4 +22,10 @@ export class VoidMatch extends VoidPageCommonItem {
   favoriteValue?: string;
   correctOddsHomeOver?: string;
   correctOddsAwayUnder?: string;
+
+  // Wrong Score
+  actualScore?: string;
+  filterBy?: number;
+  wrongScore?: string;
+  subIssueTypeId?: number;
 }

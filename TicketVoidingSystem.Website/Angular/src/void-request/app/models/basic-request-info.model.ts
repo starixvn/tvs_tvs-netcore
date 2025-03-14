@@ -15,4 +15,9 @@ export class BasicRequestInfo {
   favoriteValue?: string;
   correctOddsHomeOver?: string;
   correctOddsAwayUnder?: string;
+
+  // Wrong Score
+  actualScore?: string;
+  filterBy?: number;
+  wrongScore?: string;
 }

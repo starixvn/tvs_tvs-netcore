@@ -32,10 +32,11 @@
         <div class="log-info-cell alert alert-dark p-1 m-0">
           <log-info-new [logInfoDetail]="item.logInfoDetail" [issueTypeId]="requestDetail.request.issueTypeId"
             [sportType]="requestDetail.request.sportType" [isHavePoolHouse]="isHavePoolHouse(item)"
-            [isPoolHouseAffected]="item.isPoolHouseAffected"></log-info-new>
+            [isPoolHouseAffected]="item.isPoolHouseAffected">
+          </log-info-new>
         </div>
       </div>
-      @if (isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu() || isWrongOdds()) {
+      @if (isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu() || isWrongOdds() || isWrongScore()) {
       <div class="ms-3">
         @if (item.wrongMarket) {
         <div class="wrong-market d-flex mb-3">
@@ -62,6 +63,12 @@
             <b>{{item.correctOddsAwayUnder}}</b></div>
         </div>
         }
+        @if (item.actualScore) {
+          <div class="actual-market d-flex">
+            <label for="actualMarket" class="col-form-label col-form-label-sm me-2">Actual Score</label>
+            <div class="form-control form-control-sm">{{item.actualScore}}</div>
+          </div>
+          }
       </div>
       }
       <div class="flex-grow-1">

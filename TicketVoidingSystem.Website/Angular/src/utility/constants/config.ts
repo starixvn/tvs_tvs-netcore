@@ -294,7 +294,16 @@ export class SubIssueTypeGroup {
     SubIssueTypeConstant.WRONG_INDICATION_SCORE_ONWARDS,
     SubIssueTypeConstant.WRONG_INDICATION_SWAP_TEAM_SCORE_ONWARDS,
   ];
-
+  static readonly SUBTYPE_WRONG_SCORE_RELATED_EVENT: number[] = [
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_AWAY,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_HOME,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_AWAY,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING,
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK
+  ];
   static readonly SUBTYPE_VAR: number[] = [
     SubIssueTypeConstant.GOAL,
     SubIssueTypeConstant.GOAL_AWAY,

@@ -26,7 +26,7 @@ export class TemplateInputsForTVSService {
 
   public replaceInputsByIssueType(issueTypeId: number, subIssueTypeId: number, templateValue: TemplateValue, outputMessage: Message, selectedTemplated: TemplateModel): void {
     if (StaticService.isWrongScore(issueTypeId)) {
-      this.templateWrongScoreService.replaceActualScore(subIssueTypeId, templateValue, outputMessage);
+      this.templateWrongScoreService.replaceActualScore(subIssueTypeId, templateValue, outputMessage, selectedTemplated);
     } else if (StaticService.isWrongHDP(issueTypeId) || StaticService.isWrong1stHDP(issueTypeId)) {
       this.replaceWrongMarketTVS(templateValue, outputMessage);
       this.replaceActualMarketOthersIssueType(templateValue, outputMessage);
