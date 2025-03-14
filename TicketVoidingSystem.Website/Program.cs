@@ -1,6 +1,7 @@
 using Fanex.Caching.Redis;
 using Fanex.Data;
 using Fanex.Logging.Sentry.RavenClient;
+using Fanex.NAP.Client;
 using Fanex.NAP.Client.Attributes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,7 @@ services.AddExceptionHandler();
 services.AddFanexLogSentry(configuration);
 services.AddRemotingRef();
 services.AddNapClient(configuration);
-services.AddOneBookUm(configuration);
+services.AddOneBookUmForWeb(configuration);
 services.AddLetstalk();
 services.AddCoreServices(configuration);
 services.AddBusinessServices();
