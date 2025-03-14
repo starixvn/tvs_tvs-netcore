@@ -2,6 +2,7 @@
 using Fanex.BetList.Core.Entities;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -94,9 +95,14 @@ public class GetRequestsInActiveTableServiceImp(
         return SimpleMatchIssueTypes.Contains(issueTypeId);
     }
 
-    private static bool IsConditionalMatch(int issueTypeId, object filterBy)
+    private static bool IsConditionalMatch(int issueTypeId, int? filterBy)
     {
-        return issueTypeId == IssueTypeConstant.AbnormalBet && filterBy is null;
+        return issueTypeId switch
+        {
+            IssueTypeConstant.AbnormalBet when filterBy is null => true,
+            IssueTypeConstant.WrongScore when filterBy == FilterByConstant.AcceptTime => true,
+            _ => false
+        };
     }
 
     private static readonly HashSet<int> SimpleMatchIssueTypes =

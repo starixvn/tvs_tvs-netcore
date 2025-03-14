@@ -12,7 +12,7 @@ import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { VoidMatch } from '../../models/void-match.model';
 import { TicketsService } from '../../services/tickets.service';
 import { TemplateMessageService } from './template-message.service';
-import { TVSRequestFilterBy } from 'src/utility/constants/config';
+import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 
 export class VoidPageService {
   commonService = inject(CommonService);
@@ -59,6 +59,10 @@ export class VoidPageService {
   }
 
   private updateLogIfWrongScore(logInfoList: GetLogInfoModel[], requestDetail: RequestDetailViewModel, voidMatches: VoidMatch[]): void {
+    if(requestDetail.wrongScoreModels?.length ===0) {
+      return;
+    }
+
     requestDetail.wrongScoreModels.forEach(x => {
       x.logInfoDetail = logInfoList.find(y => y.logInfoDetail.matchId === x.matchId && y.scoreId === x.scoreId).logInfoDetail;
     });
