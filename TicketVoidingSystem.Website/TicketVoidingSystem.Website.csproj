@@ -26,11 +26,12 @@
     <None Remove="Angular\**" />
   </ItemGroup>
   <ItemGroup>
-    <Content Remove="App_Data\Data\AddRequestAdvancedMode.json" />
-    <Content Remove="app_data\data\CricketBetTypesAdvancedMode.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Remove="App_Data\Data\VoidParlayVirtualSportsBetTypes.json" />
+    <None Include="App_Data\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\Auth\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Fanex.BetList.Bitcoin" Version="2.0.0.1" />
@@ -38,21 +39,21 @@
     <PackageReference Include="Fanex.BetList.Core" Version="3.0.4.9-basketball-01" />
     <PackageReference Include="Fanex.BetList.Core.RemotingRef" Version="2.0.0.2" />
     <PackageReference Include="Fanex.BetList.ESports" Version="2.0.0" />
-    <PackageReference Include="Fanex.Caching.Redis" Version="2.2.7" />
+    <PackageReference Include="Fanex.Caching.Redis" Version="2.2.8" />
     <PackageReference Include="Fanex.BetList.NumberGame" Version="2.0.0.3" />
     <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.2.2" />
     <PackageReference Include="Fanex.LetstalkService.Client" Version="2.0.0" />
     <PackageReference Include="Fanex.Logging" Version="2.0.2" />
     <PackageReference Include="Fanex.Logging.Extensions.AspNetCore" Version="1.1.0" />
     <PackageReference Include="Fanex.Logging.Sentry.RavenClient" Version="2.0.2" />
-    <PackageReference Include="Fanex.NAP.Client" Version="2.0.2" />
-    <PackageReference Include="Fanex.NAP.SignIn" Version="2.0.2.7" />
+    <PackageReference Include="Fanex.NAP.Client" Version="2.0.3" />
+    <PackageReference Include="Fanex.NAP.SignIn" Version="2.0.3" />
     <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.433" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="ONEbook.UM" Version="3.2.0" />
+    <PackageReference Include="ONEbook.UM" Version="3.2.4" />
     <PackageReference Include="codeessentials.WebOptimizer.Dotless" Version="3.1.0" />
   </ItemGroup>
   <ItemGroup>
