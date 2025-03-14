@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TicketVoidingSystem.Extensions;
@@ -28,18 +27,11 @@ public class CashOutApiServiceImp(CashOutHttpClientService cashOutHttpClientServ
 
     public async Task VoidBet(IEnumerable<TicketEmailModel> tickets)
     {
-        try
+        var jackTimeCashOutTickets = tickets.Where(x => x.IsCashOut && JackTimeCashOutExtension.IsHasJackTimeCashOut(x.SportTypeId, x.ExtraInfo));
+        if (jackTimeCashOutTickets.Any())
         {
-            var jackTimeCashOutTickets = tickets.Where(x => x.IsCashOut && JackTimeCashOutExtension.IsHasJackTimeCashOut(x.SportTypeId, x.ExtraInfo));
-            if (jackTimeCashOutTickets.Any())
-            {
-                var requestModel = new CashOutApiModel { VoidBetInfos = jackTimeCashOutTickets.Select(x => new VoidBetInfo { TransId = x.TransId.ToString(), CustId = x.CustId.ToString() }) };
-                await VoidBet(requestModel);
-            }
-        }
-        catch (Exception exception)
-        {
-            await loggingService.ErrorAsync("VoidBet", exception);
+            var requestModel = new CashOutApiModel { VoidBetInfos = jackTimeCashOutTickets.Select(x => new VoidBetInfo { TransId = x.TransId.ToString(), CustId = x.CustId.ToString() }) };
+            await VoidBet(requestModel);
         }
     }
 

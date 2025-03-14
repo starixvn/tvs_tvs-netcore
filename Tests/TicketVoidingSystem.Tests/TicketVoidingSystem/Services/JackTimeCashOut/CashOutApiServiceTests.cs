@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
@@ -86,17 +85,5 @@ public class CashOutApiServiceTests
 
         // Assert
         await cashOutHttpClientService.Received(0).PostRequest("VoidBet", Arg.Any<CashOutApiModel>());
-    }
-
-    [Fact]
-    public async Task VoidBetForCashOutBasketball_HasTicketsIsNull_HasErrorAsync()
-    {
-        // Arrange
-
-        // Act
-        await service.VoidBet((IEnumerable<TicketEmailModel>)null);
-
-        // Assert
-        await loggingService.Received(1).ErrorAsync("VoidBet", Arg.Any<Exception>());
     }
 }
