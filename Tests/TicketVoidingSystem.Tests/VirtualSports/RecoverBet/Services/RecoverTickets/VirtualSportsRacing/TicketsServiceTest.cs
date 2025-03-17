@@ -22,6 +22,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
         private readonly IDynamicRepository repository;
         private readonly CalculateService calculateService;
         private readonly SessionService sessionService;
+        private readonly HistoryDataService historyDataService;
         private readonly TicketsServicesImp ticketsService;
 
         public TicketsServiceTest()
@@ -30,9 +31,10 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             repository = Substitute.For<IDynamicRepository>();
             calculateService = Substitute.For<CalculateService>();
             sessionService = Substitute.For<SessionService>();
+            historyDataService = Substitute.For<HistoryDataService>();
 
             // Create service instance
-            ticketsService = new TicketsServicesImp(repository, calculateService, sessionService);
+            ticketsService = new TicketsServicesImp(repository, calculateService, sessionService, historyDataService);
         }
 
         [Fact]

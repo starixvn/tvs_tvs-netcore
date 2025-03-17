@@ -18,7 +18,8 @@ public interface TicketsService
     Task<IEnumerable<TicketsBetTransModel>> PrepareTickets(IEnumerable<TicketsBetTransModel> originalTickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources);
 }
 
-public class TicketsServicesImp(IDynamicRepository repository, CalculateService calculateService, SessionService sessionService) : TicketsService
+public class TicketsServicesImp(IDynamicRepository repository, CalculateService calculateService,
+    SessionService sessionService, HistoryDataService historyDataService) : TicketsService
 {
     public async Task<IEnumerable<TicketsBetTransModel>> GetTicketVs2Racing(IEnumerable<BetIdRecover> vs2RacingTickets, IEnumerable<Resources> resources, int siteDbGroupId)
     {
@@ -86,7 +87,10 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
         }
 
         var preparedTickets = calculateService.ResetToRunning(settledTickets);
-        return await calculateService.Settle(preparedTickets, outright.ToList(), resources.ToList());
+        var ticketsAfterCalculate = await calculateService.Settle(preparedTickets, outright.ToList(), resources.ToList());
+        await historyDataService.Insert(ticketsAfterCalculate);
+
+        return ticketsAfterCalculate;
     }
 
     public IEnumerable<TicketsBetTransModel> ProcessRefundTickets(IEnumerable<TicketsBetTransModel> tickets)

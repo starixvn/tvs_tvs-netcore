@@ -16,6 +16,9 @@ public class TicketsBetTransModel : Ticket
 
     [JsonIgnore]
     public string? Action { get; set; }
+
+    [JsonIgnore]
+    public int SportType { get; set; }
 }
 
 public record KeyGroupTicket(int MatchId, int SiteDbGroupId);

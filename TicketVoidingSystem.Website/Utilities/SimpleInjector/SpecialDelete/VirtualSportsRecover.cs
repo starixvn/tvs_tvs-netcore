@@ -25,6 +25,7 @@ public static class VirtualSportsRecover
         services.AddTransient<ProcessRecoverService, ProcessRecoverServiceImp>();
         services.AddTransient<RecoverRacingService, RecoverRacingServiceImp>();
         services.AddTransient<WinLimitService, WinLimitServiceImp>();
+        services.AddTransient<HistoryDataService, HistoryDataServiceImp>();
         services.AddSettlementBusinessServices();
     }
 }
