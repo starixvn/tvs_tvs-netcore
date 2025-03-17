@@ -73,17 +73,9 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
         {
             return [];
         }
-        var ticketViewModels = getTicketModels.Select(item =>
-        {
-            var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
-            ticket.SubBetTypeId = (short)item.SubBetType;
-            ticket.SubBetType = item.IsMixParlay ? GetSubBetType(item) : string.Empty;
 
-            return ticket;
-        });
-
-        return ticketViewModels.GroupBy(b => b.GroupName)
-            .Select(ToGroupTicket)
+        return getTicketModels.GroupBy(b => b.GroupName)
+            .Select(x => ToGroupTicket(x, issueTypeId))
             .OrderBy(group => group.Name == "Parlay")
             .ThenBy(group => group.Name);
     }
@@ -99,13 +91,27 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
         return betListService.GetBetTypeName(newTicket);
     }
 
-    private Group<TicketViewModel> ToGroupTicket(IGrouping<string, TicketViewModel> group)
+    private Group<TicketViewModel> ToGroupTicket(IGrouping<string, GetTicketModel> group, int issueTypeId)
     {
         return new Group<TicketViewModel>
         {
             Name = group.Key,
-            Tickets = group.ToList(),
+            Tickets = UpdateTicketVideModel(group.ToList(), issueTypeId),
             DisplayTotalTickets = group.Count()
         };
+    }
+
+    private IEnumerable<TicketViewModel> UpdateTicketVideModel(IEnumerable<GetTicketModel> tickets, int issueTypeId)
+    {
+        var index = 1;
+        return tickets.Select(ticket =>
+        {
+            var ticketViewModel = mapTicketsService.MapFromGetTicketModelToTicketViewModel(ticket, null, ChoiceType.None, issueTypeId);
+            ticketViewModel.SubBetTypeId = (short)ticket.SubBetType;
+            ticketViewModel.SubBetType = ticket.IsMixParlay ? GetSubBetType(ticket) : string.Empty;
+            ticketViewModel.No = index++;
+
+            return ticketViewModel;
+        });
     }
 }
