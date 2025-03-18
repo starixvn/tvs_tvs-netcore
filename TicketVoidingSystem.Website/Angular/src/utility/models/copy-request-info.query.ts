@@ -21,6 +21,7 @@ export class RequestInfoForCopy {
   filterBy: number;
   issueTypeName: string;
   subIssueTypeName: string;
+  subIssueTypeId: number;
   mistakenBy: string;
   isCheckedVar: boolean;
   provider: string;
@@ -49,6 +50,20 @@ export class RequestInfoForCopy {
   serviceAcceptTime: string;
   minAllowanceTime: number;
   minAcceptType: string;
+
+  //Wrong HDP/Wrong 1st HDP/Wrong OU / Wrong 1st OU
+  wrongMarket?: string;
+  actualMarket?: string;
+  filterFavoriteType?: string;
+  favoriteValue?: string;
+
+  //Wrong Odds
+  fromOddsNotVoidHomeOver?: string;
+  fromOddsNotVoidAwayUnder?: string;
+  toOddsNotVoidHomeOver?: string;
+  toOddsNotVoidAwayUnder?: string;
+  correctOddsHomeOver?: string;
+  correctOddsAwayUnder?: string;
 }
 
 export class BetTypeTicketsInfo {

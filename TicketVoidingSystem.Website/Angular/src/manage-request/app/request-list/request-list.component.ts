@@ -28,7 +28,8 @@ import { TicketListComponent } from '../ticket-list/ticket-list.component';
   selector: 'request-list',
   templateUrl: './request-list.component.html',
   styleUrls: ['./request-list.component.scss'],
-  imports: [CommonModule, FormsModule, PagingModule, TicketListComponent, SanitizeHtmlPipe]
+  imports: [CommonModule, FormsModule, PagingModule, TicketListComponent, SanitizeHtmlPipe],
+  providers: [RequestDescriptionService]
 })
 export class RequestListComponent implements OnInit, OnChanges {
   @Input() models: RequestModel[] = [];
@@ -317,6 +318,14 @@ export class RequestListComponent implements OnInit, OnChanges {
       StaticService.isReducedOver,
       StaticService.isAbandoned,
       StaticService.isNotParticipate,
+      StaticService.isWrongMarketOffered,
+      StaticService.isTechnicalError,
+      StaticService.isWrongOddsSportsBook,
+      StaticService.isWrongHDP,
+      StaticService.isWrongOU,
+      StaticService.isWrongOdds,
+      StaticService.isWrong1stHDP,
+      StaticService.isWrong1stOU,
       StaticService.isWrongMarketOffered,
       StaticService.isTechnicalError,
       StaticService.isWrongOddsSportsBook
