@@ -56,7 +56,7 @@ public class GetLogInfoTicketServiceTests
         var getTicketModels = new List<GetTicketModel>
         {
             new() { SubBetType = 2, IsMixParlay = true, Status = "Won", SubStatus = "won", GroupName = "Parlay"},
-            new() { SubBetType = 3, Status = "Won", SubStatus = "won", GroupName = "Parlay" }
+            new() { SubBetType = 3, Status = "Won", SubStatus = "won", GroupName = "Credit" }
         };
         var ticketParlay = new TicketViewModel { BetType = "Handicap", IsParlay = true, Status = "Won", GroupName = "Parlay" };
         var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Credit" };
@@ -91,7 +91,7 @@ public class GetLogInfoTicketServiceTests
         var getTicketModels = new List<GetTicketModel>
         {
             new() { SubBetType = 2, IsMixParlay = true, Status = "Won", SubStatus = "won", GroupName = "Parlay" },
-            new() { SubBetType = 3, IsMixParlay = false, Status = "Won", SubStatus = "won", GroupName = "Parlay" }
+            new() { SubBetType = 3, IsMixParlay = false, Status = "Won", SubStatus = "won", GroupName = "Credit" }
         };
         var ticketParlay = new TicketViewModel { BetType = "Handicap", IsParlay = true, Status = "Won", GroupName = "Parlay" };
         var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Credit" };
@@ -127,7 +127,7 @@ public class GetLogInfoTicketServiceTests
         {
             new() { SubBetType = 2, Status = "Won", SubStatus = "won", GroupName = "Parlay", IsMixParlay = false }
         };
-        var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Credit" };
+        var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Parlay" };
 
         compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson).ReturnsForAnyArgs(getTicketModels);
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => !x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketSingle);
@@ -141,6 +141,6 @@ public class GetLogInfoTicketServiceTests
         Assert.Equal(1, result.TotalSingle);
         Assert.Equal(0, result.TotalParlay);
         Assert.Single(result.Groups);
-        Assert.Equal("Credit", result.Groups.First().Name);
+        Assert.Equal("Parlay", result.Groups.First().Name);
     }
 }

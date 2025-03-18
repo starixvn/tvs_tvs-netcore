@@ -11,7 +11,7 @@ public class GetTicketsCriteria : CriteriaBase
 
     public int IssueTypeId { get; set; }
 
-    //public string TransInfoJson { get; set; }
+    public int? RequestDetailId { get; set; }
 
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }

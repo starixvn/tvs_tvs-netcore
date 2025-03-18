@@ -17,7 +17,7 @@ public class GetLogInfoHandlerTests
         var request = new GetLogInfoRequest();
         var logInfoService = Substitute.For<LogInfoService>();
         var expected = new GetLogInfoViewModel();
-        logInfoService.GetLogInfo(Arg.Any<GetLogInfoRequest>()).ReturnsForAnyArgs(expected);
+        logInfoService.Get(Arg.Any<GetLogInfoRequest>()).ReturnsForAnyArgs(expected);
 
         var handler = new GetLogInfoHandler(logInfoService);
 

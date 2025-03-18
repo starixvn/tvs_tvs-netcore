@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Diagnostics;
 using Fanex.BetList.Core.Entities;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Extension;
@@ -21,12 +20,7 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
 {
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request)
     {
-        Stopwatch sw;
-        sw = Stopwatch.StartNew();
         var getTicketModels = DecompressTickets(request.LogInfoTicketsJson);
-        Debug.WriteLine($"DecompressTickets -------   {sw.ElapsedMilliseconds} ms");
-        sw = Stopwatch.StartNew();
-
         var voidTickets = getTicketModels?.Where(x => !x.IsCancelCashOut);
 
         if (!voidTickets.Any())
@@ -49,7 +43,6 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
             ToTime = voidTickets.Max(ticket => ticket.TransDate),
             GroupOtherTickets = groupOtherTickets
         };
-        Debug.WriteLine($"MAPMODEL -------   {sw.ElapsedMilliseconds} ms");
         return viewModel;
     }
 
