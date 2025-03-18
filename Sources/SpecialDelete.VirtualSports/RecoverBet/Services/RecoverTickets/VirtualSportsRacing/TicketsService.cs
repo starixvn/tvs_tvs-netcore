@@ -15,7 +15,7 @@ public interface TicketsService
 
     Task<(RecoverTicketsValidation, IEnumerable<RecoverTicketModel>)> RecoverTicketVs2Racing(IEnumerable<TicketsBetTransModel> tickets, int siteDbGroupId);
 
-    Task<IEnumerable<TicketsBetTransModel>> PrepareTickets(IEnumerable<TicketsBetTransModel> originalTickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources);
+    Task<IEnumerable<TicketsBetTransModel>> PrepareTickets(IEnumerable<TicketsBetTransModel> originalTickets, RacingInfoModel racingInfo);
 }
 
 public class TicketsServicesImp(IDynamicRepository repository, CalculateService calculateService,
@@ -62,11 +62,11 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
         return (validation, recoveredTickets);
     }
 
-    public async Task<IEnumerable<TicketsBetTransModel>> PrepareTickets(IEnumerable<TicketsBetTransModel> originalTickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources)
+    public async Task<IEnumerable<TicketsBetTransModel>> PrepareTickets(IEnumerable<TicketsBetTransModel> originalTickets, RacingInfoModel racingInfo)
     {
         var runningTickets = ProcessRunningTickets(originalTickets);
         var updatedRefundTickets = ProcessRefundTickets(originalTickets);
-        var updatedCalculateTickets = await ProcessSettleTickets(originalTickets, outright, resources);
+        var updatedCalculateTickets = await ProcessSettleTickets(originalTickets, racingInfo);
 
         return runningTickets.Concat(updatedCalculateTickets).Concat(updatedRefundTickets);
     }
@@ -78,7 +78,7 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
         return runningTickets.Count == 0 ? [] : calculateService.ResetToRunning(runningTickets);
     }
 
-    private async Task<IEnumerable<TicketsBetTransModel>> ProcessSettleTickets(IEnumerable<TicketsBetTransModel> tickets, IEnumerable<Outright> outright, IEnumerable<Resources> resources)
+    private async Task<IEnumerable<TicketsBetTransModel>> ProcessSettleTickets(IEnumerable<TicketsBetTransModel> tickets, RacingInfoModel racingInfo)
     {
         var settledTickets = tickets.Where(x => string.Equals(x.Action, SettlementAction.ReCalculate, StringComparison.OrdinalIgnoreCase)).ToList();
         if (settledTickets.Count == 0)
@@ -87,7 +87,7 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
         }
 
         var preparedTickets = calculateService.ResetToRunning(settledTickets);
-        var ticketsAfterCalculate = await calculateService.Settle(preparedTickets, outright.ToList(), resources.ToList());
+        var ticketsAfterCalculate = await calculateService.Settle(preparedTickets, racingInfo);
         await historyDataService.Insert(ticketsAfterCalculate);
 
         return ticketsAfterCalculate;

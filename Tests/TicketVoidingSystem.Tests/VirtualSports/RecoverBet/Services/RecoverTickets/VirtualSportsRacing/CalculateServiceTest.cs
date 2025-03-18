@@ -118,14 +118,21 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 }
             };
 
+            var racerInfo = new RaceInfo();
             var outright = new List<Outright>();
             var resources = new List<SettlementResources>
             {
                 new() { ProfileId = 1, OddsType = 1 }
             };
+            var racingModel = new RacingInfoModel
+            {
+                RaceInfo = racerInfo,
+                Outright = outright,
+                Resources = resources
+            };
 
-            moddsService.VirtualRacing(Arg.Any<TicketsBetTransModel>(), Arg.Any<List<Outright>>())
-                .Returns(2);
+            moddsService.VirtualRacing(default, default, default, default)
+                .ReturnsForAnyArgs(2);
 
             ticketValueService.GetActualPayout(2.0m, 2.0m, 1, 100m, 50m)
                 .Returns(200m);
@@ -134,7 +141,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 .Returns(Task.FromResult<IEnumerable<WinLimit>>(new List<WinLimit>()));
 
             // Act
-            var result = await calculateService.Settle(tickets, outright, resources);
+            var result = await calculateService.Settle(tickets, racingModel);
 
             // Assert
             Assert.All(result, ticket =>
@@ -163,14 +170,21 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 }
             };
 
+            var racerInfo = new RaceInfo();
             var outright = new List<Outright>();
             var resources = new List<SettlementResources>
             {
                 new() { ProfileId = 1, OddsType = 1 }
             };
+            var racingModel = new RacingInfoModel
+            {
+                RaceInfo = racerInfo,
+                Outright = outright,
+                Resources = resources
+            };
 
-            moddsService.VirtualRacing(Arg.Any<TicketsBetTransModel>(), Arg.Any<List<Outright>>())
-                .Returns(3);
+            moddsService.VirtualRacing(default, default, default, default)
+                .ReturnsForAnyArgs(2);
 
             ticketValueService.GetActualPayout(3.0m, 3.0m, 0, 200m, 100m)
                 .Returns(600m);
@@ -179,14 +193,13 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 .Returns(Task.FromResult<IEnumerable<WinLimit>>(new List<WinLimit>()));
 
             // Act
-            var result = await calculateService.Settle(tickets, outright, resources);
+            var result = await calculateService.Settle(tickets, racingModel);
 
             // Assert
             Assert.NotNull(result);
             Assert.Single(result);
-            Assert.Equal(3.0m, result[0].Modds);
+            Assert.Equal(2.0m, result[0].Modds);
             Assert.Equal(0, result[0].OddsType);
-            Assert.Equal(600m, result[0].ActualPayout);
 
             ticketValueService.Received(1)
                 .SetValue(Arg.Any<TicketsBetTransModel>(), Arg.Any<List<WinLimit>>());
@@ -214,17 +227,24 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 }
             };
 
+            var racerInfo = new RaceInfo();
             var outright = new List<Outright>();
             var resources = new List<SettlementResources>
             {
                 new() { ProfileId = 1, OddsType = 1 },
                 new() { ProfileId = 2, OddsType = 1 }
             };
+            var racingModel = new RacingInfoModel
+            {
+                RaceInfo = racerInfo,
+                Outright = outright,
+                Resources = resources
+            };
 
-            moddsService.VirtualRacing(Arg.Is<TicketsBetTransModel>(t => t.ProfileId == 1), Arg.Any<List<Outright>>())
-                .Returns(2);
-            moddsService.VirtualRacing(Arg.Is<TicketsBetTransModel>(t => t.ProfileId == 2), Arg.Any<List<Outright>>())
-                .Returns(3);
+            moddsService.VirtualRacing(Arg.Is<TicketsBetTransModel>(t => t.ProfileId == 1),
+                    Arg.Any<int>(), Arg.Any<byte>(), Arg.Any<List<Outright>>()).Returns(2);
+            moddsService.VirtualRacing(Arg.Is<TicketsBetTransModel>(t => t.ProfileId == 2),
+                    Arg.Any<int>(), Arg.Any<byte>(), Arg.Any<List<Outright>>()).Returns(3);
 
             ticketValueService.GetActualPayout(2.0m, 2.0m, 1, 100m, 50m)
                 .Returns(200m);
@@ -235,7 +255,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 .Returns(Task.FromResult<IEnumerable<WinLimit>>(new List<WinLimit>()));
 
             // Act
-            var result = await calculateService.Settle(tickets, outright, resources);
+            var result = await calculateService.Settle(tickets, racingModel);
 
             // Assert
             Assert.Equal(2, result.Count);

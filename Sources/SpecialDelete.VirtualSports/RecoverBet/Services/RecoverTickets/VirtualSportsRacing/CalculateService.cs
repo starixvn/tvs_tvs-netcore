@@ -11,7 +11,7 @@ public interface CalculateService
 {
     List<TicketsBetTransModel> ResetToRunning(List<TicketsBetTransModel> tickets);
 
-    Task<List<TicketsBetTransModel>> Settle(List<TicketsBetTransModel> tickets, List<Outright> outright, List<Resources> resources);
+    Task<List<TicketsBetTransModel>> Settle(List<TicketsBetTransModel> tickets, RacingInfoModel racingInfo);
 
     List<TicketsBetTransModel> Refund(List<TicketsBetTransModel> tickets);
 }
@@ -54,12 +54,12 @@ public class CalculateServiceImp(ModdsService moddsService, TicketValueService t
         return tickets;
     }
 
-    public async Task<List<TicketsBetTransModel>> Settle(List<TicketsBetTransModel> tickets, List<Outright> outright, List<Resources> resources)
+    public async Task<List<TicketsBetTransModel>> Settle(List<TicketsBetTransModel> tickets, RacingInfoModel racingInfo)
     {
         tickets.ForEach(item =>
         {
-            var resource = resources.Find(r => r.ProfileId == item.ProfileId) ?? new Resources();
-            item.Modds = moddsService.VirtualRacing(item, outright.ToList());
+            var resource = racingInfo.Resources.Find(r => r.ProfileId == item.ProfileId) ?? new Resources();
+            item.Modds = moddsService.VirtualRacing(item, racingInfo.RaceInfo.SportType, racingInfo.RaceInfo.Racers, racingInfo.Outright.ToList());
             item.OddsType = resource.OddsType;
             item.ActualPayout = ticketValueService.GetActualPayout(item.Modds, item.Odds, item.OddsType, item.ActualStake, item.Stake);
         });

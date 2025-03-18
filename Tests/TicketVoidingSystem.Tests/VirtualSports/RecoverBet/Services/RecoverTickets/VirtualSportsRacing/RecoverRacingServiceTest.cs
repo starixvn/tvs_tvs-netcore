@@ -52,11 +52,23 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             // Set up mocks for each group processing
             var outright1 = new List<Outright> { new() { Orid = 1 } };
             var resources1 = new List<SettlementResources> { new() { ProfileId = 1, OddsType = 1 } };
-            repository.GetRacingInfo(1).Returns((outright1, resources1));
+            var racingInfo = new RacingInfoModel
+            {
+                RaceInfo = new RaceInfo(),
+                Outright = outright1,
+                Resources = resources1
+            };
+            repository.GetRacingInfo(1).Returns(racingInfo);
 
             var outright2 = new List<Outright> { new() { Orid = 2 } };
             var resources2 = new List<SettlementResources> { new() { ProfileId = 2, OddsType = 2 } };
-            repository.GetRacingInfo(2).Returns((outright2, resources2));
+            var racingInfo2 = new RacingInfoModel
+            {
+                RaceInfo = new RaceInfo(),
+                Outright = outright2,
+                Resources = resources2
+            };
+            repository.GetRacingInfo(2).Returns(racingInfo2);
 
             var ticketsGroup1 = new List<TicketsBetTransModel>
             {
@@ -76,13 +88,13 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             {
                 new() { TransId = 101, MatchId = 1, OddsType = (short)1 }
             };
-            ticketsService.PrepareTickets(ticketsGroup1, outright1, resources1).Returns(preparedTickets1);
+            ticketsService.PrepareTickets(ticketsGroup1, racingInfo).Returns(preparedTickets1);
 
             var preparedTickets2 = new List<TicketsBetTransModel>
             {
                 new() { TransId = 201, MatchId = 2, OddsType = (short)2 }
             };
-            ticketsService.PrepareTickets(ticketsGroup2, outright2, resources2).Returns(preparedTickets2);
+            ticketsService.PrepareTickets(ticketsGroup2, racingInfo2).Returns(preparedTickets2);
 
             var lockResult1 = new Result();
             matchService.LockMatch(1, LockMatchType.VirtualRacing, LockMatchStatus.Lock, 1).Returns(lockResult1);
@@ -166,7 +178,13 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
 
             var outright = new List<Outright> { new() { Orid = 1 } };
             var resources = new List<SettlementResources> { new() { ProfileId = 1, OddsType = 1 } };
-            repository.GetRacingInfo(1).Returns((outright, resources));
+            var racingInfo = new RacingInfoModel
+            {
+                RaceInfo = new RaceInfo(),
+                Outright = outright,
+                Resources = resources
+            };
+            repository.GetRacingInfo(1).Returns(racingInfo);
 
             var tickets = new List<TicketsBetTransModel>
             {
@@ -179,7 +197,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             {
                 new() { TransId = 101, MatchId = 1 }
             };
-            ticketsService.PrepareTickets(tickets, outright, resources).Returns(preparedTickets);
+            ticketsService.PrepareTickets(tickets, racingInfo).Returns(preparedTickets);
 
             var lockResult = new Result { ErrorCode = 5, ErrorMsg = "Match already locked" };
             matchService.LockMatch(1, LockMatchType.VirtualRacing, LockMatchStatus.Lock, 1).Returns(lockResult);
@@ -218,7 +236,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             };
 
             repository.GetRacingInfo(1)
-                .Returns<(IEnumerable<Outright>, IEnumerable<SettlementResources>)>(
+                .Returns<RacingInfoModel>(
                     _ => throw new Exception("Database connection failed"));
 
             // Act

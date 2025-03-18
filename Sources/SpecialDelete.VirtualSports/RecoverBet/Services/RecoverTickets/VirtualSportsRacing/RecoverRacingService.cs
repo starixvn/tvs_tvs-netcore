@@ -28,9 +28,9 @@ public class RecoverRacingServiceImp(TicketsService ticketsService, Repository r
     {
         try
         {
-            var (outright, resources) = await repository.GetRacingInfo(group.Key.MatchId);
-            var ticketsAfterValidation = await ticketsService.GetTicketVs2Racing(group, resources, group.Key.SiteDbGroupId);
-            var preparedTickets = await ticketsService.PrepareTickets(ticketsAfterValidation, outright, resources);
+            var racingInfo = await repository.GetRacingInfo(group.Key.MatchId);
+            var ticketsAfterValidation = await ticketsService.GetTicketVs2Racing(group, racingInfo.Resources, group.Key.SiteDbGroupId);
+            var preparedTickets = await ticketsService.PrepareTickets(ticketsAfterValidation, racingInfo);
             var completedMatchIds = GetCompletedMatches(ticketsAfterValidation);
             var lockMatchResult = await matchService.LockMatch(group.Key.MatchId, LockMatchType.VirtualRacing, LockMatchStatus.Lock, group.Key.SiteDbGroupId);
             var validation = mapper.Map<RecoverTicketsValidation>(lockMatchResult);

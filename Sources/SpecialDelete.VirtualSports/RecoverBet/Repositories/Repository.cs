@@ -15,7 +15,7 @@ public interface Repository
 
     Task<(IEnumerable<RecoverTicketsValidation>, IEnumerable<RecoverTicketModel>)[]> RecoverNotRacingSports(Query query, IEnumerable<BetIdRecover> tickets);
 
-    Task<(IEnumerable<Outright>, IEnumerable<Resources>)> GetRacingInfo(int matchId);
+    Task<RacingInfoModel> GetRacingInfo(int matchId);
 }
 
 public class RepositoryImp(IDynamicRepository repository, SessionService sessionService)
@@ -56,12 +56,17 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
         return results;
     }
 
-    public async Task<(IEnumerable<Outright>, IEnumerable<Resources>)> GetRacingInfo(int matchId)
+    public async Task<RacingInfoModel> GetRacingInfo(int matchId)
     {
         var criteria = new GetRacingResultCriteria { EventId = matchId };
-        var (_, secondResult, thirdResult) = await repository.FetchMultipleAsync<string, Outright, Resources>(criteria);
+        var (raceInfo, outright, resources) = await repository.FetchMultipleAsync<RaceInfo, Outright, Resources>(criteria);
 
-        return (secondResult, thirdResult);
+        return new RacingInfoModel
+        {
+            RaceInfo = raceInfo?.FirstOrDefault(),
+            Outright = outright.ToList(),
+            Resources = resources.ToList()
+        };
     }
 
     private static GetTicketsCriteria CreateGetTicketsCriteria(Query query)

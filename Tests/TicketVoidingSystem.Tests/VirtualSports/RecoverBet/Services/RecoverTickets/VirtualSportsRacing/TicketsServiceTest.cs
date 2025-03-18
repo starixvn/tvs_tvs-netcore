@@ -5,7 +5,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
-using Settlement.Business.Core.Models;
 using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Criteria;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
@@ -151,11 +150,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 new() { TransId = 103, Action = SettlementAction.Refund }
             };
 
-            var outright = new List<Outright> { new() };
-            var resources = new List<SettlementResources>
-            {
-                new() { OddsType = 1 }
-            };
+            var racingInfo = new RacingInfoModel();
             var runningTickets = new List<TicketsBetTransModel>
             {
                 new() { TransId = 101, Action = null }
@@ -184,13 +179,13 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 new() { TransId = 103, Status = "Refund" }
             };
 
-            calculateService.Settle(default, default, default)
+            calculateService.Settle(default, default)
                 .ReturnsForAnyArgs(processedSettleTickets);
             calculateService.Refund(refundTickets)
                 .Returns(processedRefundTickets);
 
             // Act
-            var result = await ticketsService.PrepareTickets(originalTickets, outright, resources);
+            var result = await ticketsService.PrepareTickets(originalTickets, racingInfo);
 
             // Assert
             Assert.Equal(3, result.Count());
@@ -217,15 +212,11 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 new() { TransId = 102, Action = null }
             };
 
-            var outright = new List<Outright> { new() };
-            var resources = new List<SettlementResources>
-            {
-                new() { OddsType = 1 }
-            };
+            var racingInfo = new RacingInfoModel();
             calculateService.ResetToRunning(default).ReturnsForAnyArgs(originalTickets);
 
             // Act
-            var result = await ticketsService.PrepareTickets(originalTickets, outright, resources);
+            var result = await ticketsService.PrepareTickets(originalTickets, racingInfo);
 
             // Assert
             Assert.Equal(2, result.Count());
@@ -233,10 +224,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             Assert.Contains(result, t => t.TransId == 102);
 
             calculateService.Received(1).ResetToRunning(Arg.Any<List<TicketsBetTransModel>>());
-            await calculateService.DidNotReceive().Settle(
-                Arg.Any<List<TicketsBetTransModel>>(),
-                Arg.Any<List<Outright>>(),
-                Arg.Any<List<SettlementResources>>());
+            await calculateService.DidNotReceive().Settle(Arg.Any<List<TicketsBetTransModel>>(), Arg.Any<RacingInfoModel>());
             calculateService.DidNotReceive().Refund(Arg.Any<List<TicketsBetTransModel>>());
         }
     }
