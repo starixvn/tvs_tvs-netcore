@@ -40,7 +40,7 @@ public class MatchInfoAddRequestServiceImp(RemotingRefWrapperService remotingRef
 
     private string GetMatchEvent(MatchInfoAddRequest match)
     {
-        if (match.SportType.IsVirtualSportsSupportVendorMatchId())
+        if (match.SportType.IsRacingVirtualSports())
         {
             return $"Event {match.VendorMatchId} - ID {match.RaceId}";
         }

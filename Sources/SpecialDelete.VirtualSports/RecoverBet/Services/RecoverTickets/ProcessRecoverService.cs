@@ -15,8 +15,8 @@ public class ProcessRecoverServiceImp(Repository repository, RecoverRacingServic
 {
     public async Task<RecoverTicketsModel> Execute(Query query)
     {
-        var racingSportTickets = query.Tickets.Where(x => x.SportType.IsVirtualSports2Betradar()).ToList();
-        var remainingTickets = query.Tickets.Where(x => !x.SportType.IsVirtualSports2Betradar()).ToList();
+        var racingSportTickets = query.Tickets.Where(x => x.SportType.IsRacingVirtualSports()).ToList();
+        var remainingTickets = query.Tickets.Where(x => !x.SportType.IsRacingVirtualSports()).ToList();
 
         var racingTask = racingSportTickets.Count == 0
             ? Task.FromResult(Array.Empty<(IEnumerable<RecoverTicketsValidation>, IEnumerable<RecoverTicketModel>)>())

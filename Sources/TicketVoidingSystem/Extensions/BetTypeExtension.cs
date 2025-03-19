@@ -66,8 +66,7 @@ public static class BetTypeExtension
     {
         return id is >= BetTypeConstant.FirstVirtualSport and <= BetTypeConstant.SecondVirtualSport
                    or >= BetTypeConstant.MinVirtualSportBetType and <= BetTypeConstant.MaxVirtualSportBetType
-               || id.IsVirtualSport4BetType() || IsVirtualSport5BetType(id) || IsVirtualSport6BetType(id)
-               || id.IsVirtualSport7BetType();
+               || id.IsVirtualSport4BetType() || IsVirtualSport5BetType(id) || IsVirtualSport6BetType(id);
     }
 
     private static bool IsVirtualSport4BetType(this int id)
@@ -87,24 +86,18 @@ public static class BetTypeExtension
         return betTypesVirtualSport6.Contains(id);
     }
 
-    public static bool IsVirtualSport7BetType(this int id)
-    {
-        List<int> betTypesVirtualSport6 = [15500, 15501];
-        return betTypesVirtualSport6.Contains(id);
-    }
-
     public static bool IsVirtualSport2(this int sportTypeId)    // Sport Type of VirtualSport2 except 177, 198
     {
         List<int> VirtualSportsSportTypeIds = [190, 191, 192, 193, 194, 195, 196, 197];
         return VirtualSportsSportTypeIds.Contains(sportTypeId);
     }
 
-    public static bool IsVirtualSportsSupportVendorMatchId(this int sportTypeId)
+    public static bool IsRacingVirtualSports(this int sportTypeId)
     {
         List<int> virtualSportsNotSupportMatchCode =
         [
-            SportTypeConstant.VirtualHorseRacing, SportTypeConstant.VirtualDogRacing,
-            SportTypeConstant.VirtualSteepleChase, SportTypeConstant.VirtualHarnessRacing, SportTypeConstant.VirtualMotorRacing
+            SportTypeConstant.VirtualHorseRacing, SportTypeConstant.VirtualDogRacing, // VS2 Racing
+            SportTypeConstant.VirtualSteepleChase, SportTypeConstant.VirtualHarnessRacing, SportTypeConstant.VirtualMotorRacing // VS7
         ];
         return virtualSportsNotSupportMatchCode.Contains(sportTypeId);
     }

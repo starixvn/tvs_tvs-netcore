@@ -21,11 +21,10 @@ public class WinLimitServiceImp(
     {
         if (tickets.Count == 0 || tickets[0].SiteDBGroupId != SiteGroup.SiteDb3)
         {
-            return new List<WinLimit>();
+            return [];
         }
 
         var listCustIds = customerService.GetCustomersByModds(tickets);
-
         var customersJson = JsonSerializer.Serialize(listCustIds);
 
         return await repository.FetchAsync<WinLimit>(new GetMaxPayoutSettingCriteria { ListCust = customersJson });
