@@ -66,7 +66,8 @@ public static class BetTypeExtension
     {
         return id is >= BetTypeConstant.FirstVirtualSport and <= BetTypeConstant.SecondVirtualSport
                    or >= BetTypeConstant.MinVirtualSportBetType and <= BetTypeConstant.MaxVirtualSportBetType
-               || id.IsVirtualSport4BetType() || IsVirtualSport5BetType(id) || IsVirtualSport6BetType(id);
+               || id.IsVirtualSport4BetType() || IsVirtualSport5BetType(id) || IsVirtualSport6BetType(id)
+               || id.IsVirtualSport7BetType();
     }
 
     private static bool IsVirtualSport4BetType(this int id)
@@ -82,7 +83,13 @@ public static class BetTypeExtension
 
     public static bool IsVirtualSport6BetType(this int id)
     {
-        List<int> betTypesVirtualSport6 = new() { 13000, 13001, 13002, 13003, 13004, 13005, 13006, 13007, 13008, 13009, 13010, 13011 };
+        List<int> betTypesVirtualSport6 = [13000, 13001, 13002, 13003, 13004, 13005, 13006, 13007, 13008, 13009, 13010, 13011];
+        return betTypesVirtualSport6.Contains(id);
+    }
+
+    public static bool IsVirtualSport7BetType(this int id)
+    {
+        List<int> betTypesVirtualSport6 = [15500, 15501];
         return betTypesVirtualSport6.Contains(id);
     }
 
@@ -92,9 +99,14 @@ public static class BetTypeExtension
         return VirtualSportsSportTypeIds.Contains(sportTypeId);
     }
 
-    public static bool IsVirtualSports2Betradar(this int sportTypeId)
+    public static bool IsVirtualSportsSupportVendorMatchId(this int sportTypeId)
     {
-        return sportTypeId is SportTypeConstant.VirtualHorseRacing or SportTypeConstant.VirtualDogRacing;
+        List<int> virtualSportsNotSupportMatchCode =
+        [
+            SportTypeConstant.VirtualHorseRacing, SportTypeConstant.VirtualDogRacing,
+            SportTypeConstant.VirtualSteepleChase, SportTypeConstant.VirtualHarnessRacing, SportTypeConstant.VirtualMotorRacing
+        ];
+        return virtualSportsNotSupportMatchCode.Contains(sportTypeId);
     }
 
     public static bool IsVirtualSport345(this int sportTypeId) // Sport Type of VS3-VS4-VS5
