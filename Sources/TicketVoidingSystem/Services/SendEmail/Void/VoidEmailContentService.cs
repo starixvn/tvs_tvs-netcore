@@ -63,13 +63,13 @@ public class VoidEmailContentServiceImp(
             var voidTickets = tickets.Where(x => !x.IsCancelCashOut).ToList();
             var cancelCashOutTickets = tickets.Where(x => x.IsCancelCashOut).ToList();
 
-            if (voidTickets.Any())
+            if (voidTickets.Count > 0)
             {
                 await AddTicketToGroup(groups, voidTickets, mailVoidViewModel.Match,
                     isFromAfterVoidService, StringResource.ListOfVoidedTickets);
             }
 
-            if (cancelCashOutTickets.Any())
+            if (cancelCashOutTickets.Count > 0)
             {
                 await AddTicketToGroup(groups, cancelCashOutTickets, mailVoidViewModel.Match,
                     isFromAfterVoidService, StringResource.ListOfCancelledCashOutTickets);
@@ -84,9 +84,8 @@ public class VoidEmailContentServiceImp(
         return groups;
     }
 
-    private async Task AddTicketToGroup(ICollection<Group<TicketEmailViewModel>> groups,
-        IEnumerable<TicketEmailModel> tickets, Match match, bool isFromAfterVoidService,
-        string groupName)
+    private async Task AddTicketToGroup(ICollection<Group<TicketEmailViewModel>> groups, IEnumerable<TicketEmailModel> tickets, Match match, 
+    bool isFromAfterVoidService, string groupName)
     {
         var groupVoidTicket = new Group<TicketEmailViewModel>
         {
