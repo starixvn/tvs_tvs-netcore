@@ -19,6 +19,12 @@
               <div>Sub Type: <strong>{{model.subIssueTypeName}}</strong></div>    
             </div>
           </div>
+          <div *ngIf="model.warningRelatedEvents.length > 0" class="warning-content">
+            <div>Related match(es) excluded when creating new request because having no valid tickets in the current range:</div>
+            <div class="ml-2">
+              <div *ngFor="let event of model.warningRelatedEvents">{{event}}</div>
+            </div>
+          </div>
           <div *ngIf="model.warningExcludedScores?.length > 0" class="warning-content">
             <div>Score(s) excluded when saving request because having no valid ticket(s) in the current range:</div>
             <div class="ml-2">

@@ -306,7 +306,15 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   private openConfirmWrongScore(): void {
     const selectedScores = this.wrongScoreService.getSelectedWrongScores(this.wrongScoreModels);
     this.confirmWrongScoreModel.warningExcludedScores = [];
+    this.confirmWrongScoreModel.warningRelatedEvents = [];
     if (!this.filter.isVoided) {
+      this.allSelectedEvents.forEach(x => {
+        x.messageValidationLogInfo.forEach(t => {
+          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+            this.confirmWrongScoreModel.warningRelatedEvents.push(x.eventName);
+          }
+        });
+      });
       this.wrongScoreModels.forEach(y => {
         y.messageValidationLogInfo?.forEach(t => {
           if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
@@ -533,7 +541,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     const newChildEvents = selectedRelatedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
     if (newChildEvents.length > 0) {
       const newEvents = this.relatedEventService.assignChildMatchToLogInfoModel(newChildEvents, this.defaultFilterTimeWithAllowance);
-      this.relatedEventService.updateSubIssueTypeAndAllowanceTime(newEvents, Number(this.filter.subIssueTypeId));
+      await this.relatedEventService.updateSubIssueTypeAndAllowanceTime(newEvents, Number(this.filter.subIssueTypeId));
       const getLogInfoEvents = newEvents.filter(x => x.subIssueTypeId);
       await this.logInfoService.getLogInfo(this.isEdit, this.requestId, this.filter, this.primitiveProps, getLogInfoEvents, this.matchId, this.defaultFilterTimeWithAllowance);
 

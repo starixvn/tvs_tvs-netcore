@@ -115,7 +115,7 @@ export class SaveRequestService {
       }
       x.isMainMatch = true;
     });
-    const relatedEvents = args.wrongScoreModels.filter(x => allMatchSelectedEvents.includes(x.matchId));
+    const relatedEvents = args.wrongScoreModels.filter(x => allMatchSelectedEvents.includes(x.matchId) && x.logInfoDetail);
     return [...mainWrongScoreModels, ...relatedEvents];
   }
 }
