@@ -10,10 +10,13 @@
   <ItemGroup>
     <Compile Remove="ManageRequest\Handlers\ManageRequest\RequestListExcel\**" />
     <Compile Remove="TicketVoidingSystem\Services\Excel\**" />
+    <Compile Remove="TicketVoidingSystem\Web\**" />
     <EmbeddedResource Remove="ManageRequest\Handlers\ManageRequest\RequestListExcel\**" />
     <EmbeddedResource Remove="TicketVoidingSystem\Services\Excel\**" />
+    <EmbeddedResource Remove="TicketVoidingSystem\Web\**" />
     <None Remove="ManageRequest\Handlers\ManageRequest\RequestListExcel\**" />
     <None Remove="TicketVoidingSystem\Services\Excel\**" />
+    <None Remove="TicketVoidingSystem\Web\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ManageRequest\Services\AddRequest\AbnormalAccount\CalculateVoidTickets\EstimateVoidWonTicketsServiceTests.cs" />
@@ -51,8 +54,5 @@
     <ProjectReference Include="..\..\Sources\TicketVoidingSystem.VoidSingleBet\TicketVoidingSystem.VoidSingleBet.csproj" />
     <ProjectReference Include="..\..\Sources\TicketVoidingSystem\TicketVoidingSystem.csproj" />
     <ProjectReference Include="..\..\Sources\TicketVoidingSystem.ManageRequest\TicketVoidingSystem.ManageRequest.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TicketVoidingSystem\Web\" />
   </ItemGroup>
 </Project>

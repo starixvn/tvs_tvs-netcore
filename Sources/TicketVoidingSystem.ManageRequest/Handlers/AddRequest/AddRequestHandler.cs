@@ -18,7 +18,7 @@ public class AddRequestHandler(ResultCacheService resultCacheService, AddRequest
         }
 
         var result = new Result();
-        return result;
+
         await resultCacheService.SetSimpleResultCache(request.Guid, result);
         result = await addRequestService.Execute(request);
         await resultCacheService.SetSimpleResultCache(request.Guid, result);

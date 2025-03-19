@@ -20,7 +20,7 @@ public class CheckValidUsernamesCriteria : CriteriaBase
 
     public string StatusIds { get; set; }
 
-    public decimal AdjustVoidLimit { get; set; }
+    public string AdjustVoidLimit { get; set; }
 
     public bool IsVoidAllArchivedTickets { get; set; }
 

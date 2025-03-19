@@ -21,16 +21,16 @@ public static class SiteDbGroupConstant
                 Id = CentralDb,
                 ServerName = "DBCTG"
             },
-            //new()
-            //{
-            //    Id = SiteDb1,
-            //    ServerName = "DBSITE01"
-            //},
-            //new()
-            //{
-            //    Id = SiteDb2,
-            //    ServerName = "DBSITE02"
-            //},
+            new()
+            {
+                Id = SiteDb1,
+                ServerName = "DBSITE01"
+            },
+            new()
+            {
+                Id = SiteDb2,
+                ServerName = "DBSITE02"
+            },
             new()
             {
                 Id = SiteDb3,

@@ -1,5 +1,6 @@
 ﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
@@ -29,9 +30,11 @@ public class CheckUsernameServiceImp(IDynamicRepository repository)
 
     private async Task<ResultTicket> GetUsernameInfoAllSites(CheckValidUsernamesRequest request)
     {
+        var accountAdjustVoidLimitList = GetAccountAdjustVoidLimit(request.AccountWinlostModels);
+        var adjustVoidLimit = accountAdjustVoidLimitList.ToJson();
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            var criteria = CreateCriteria(request, server.Id);
+            var criteria = CreateCriteria(request, server.Id, adjustVoidLimit);
             return repository.FetchMultipleAsync<ValidationInfo, TicketCalculateWinLostAccount, AccountWinlostModel>(criteria);
         });
 
@@ -60,7 +63,21 @@ public class CheckUsernameServiceImp(IDynamicRepository repository)
         };
     }
 
-    private static CheckValidUsernamesCriteria CreateCriteria(CheckValidUsernamesRequest request, int siteDbGroupId)
+    private static IEnumerable<AccountAdjustVoidLimit> GetAccountAdjustVoidLimit(IEnumerable<AccountWinlostModel> accountWinlostModels)
+    {
+        if (accountWinlostModels == null)
+        {
+            return [];
+        }
+
+        return accountWinlostModels.Select(account => new AccountAdjustVoidLimit
+        {
+            CustId = account.CustId,
+            AdjustVoidLimit = account.AdjustVoidLimit
+        });
+    }
+
+    private static CheckValidUsernamesCriteria CreateCriteria(CheckValidUsernamesRequest request, int siteDbGroupId, string adjustVoidLimit)
     {
         return new CheckValidUsernamesCriteria
         {
@@ -72,7 +89,7 @@ public class CheckUsernameServiceImp(IDynamicRepository repository)
             ToDate = request.ToDate,
             ProductIds = request.ProductIds,
             StatusIds = request.StatusIds,
-            AdjustVoidLimit = request.AdjustVoidLimit,
+            AdjustVoidLimit = adjustVoidLimit,
             IsVoidAllArchivedTickets = request.IsVoidAllArchivedTickets,
         };
     }

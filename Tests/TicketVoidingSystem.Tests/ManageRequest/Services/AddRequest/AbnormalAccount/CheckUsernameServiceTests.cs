@@ -26,24 +26,22 @@ public class CheckUsernameServiceTests
     [Fact]
     public async Task GetUsernameInfo_ValidRequest_RepositoryHasCalled()
     {
-        var checkUsernamesModel = new List<ValidationInfo> { new() { InvalidUserName = "1121" } };
-        var transInfoValidation = new List<TransInfoAddRequestModel> { new() { MarkTransIds = "999" } };
-        var transInfoJsonCompress = new List<string>();
+        var validationInfo = new List<ValidationInfo> { new() { InvalidUserName = "1121", MarkTransIds = "2" } };
         var ticketCalculateWinLostAccount = new List<TicketCalculateWinLostAccount>();
         var accounts = new List<AccountWinlostModel> { new() { Username = "1123" } };
 
         var request = new CheckValidUsernamesRequest { RequestId = 1 };
-        repository.FetchMultipleAsync<ValidationInfo, TransInfoAddRequestModel, string, TicketCalculateWinLostAccount, AccountWinlostModel>(Arg.Any<CheckValidUsernamesCriteria>())
-            .ReturnsForAnyArgs((checkUsernamesModel, transInfoValidation, transInfoJsonCompress, ticketCalculateWinLostAccount, accounts));
+        repository.FetchMultipleAsync<ValidationInfo, TicketCalculateWinLostAccount, AccountWinlostModel>(Arg.Any<CheckValidUsernamesCriteria>())
+            .ReturnsForAnyArgs((validationInfo, ticketCalculateWinLostAccount, accounts));
 
         // Act
         var actual = await service.GetUsernameInfo(request);
 
         // Assert
-        await repository.Received(1).FetchMultipleAsync<ValidationInfo, TransInfoAddRequestModel, string, TicketCalculateWinLostAccount, AccountWinlostModel>
+        await repository.Received().FetchMultipleAsync<ValidationInfo, TicketCalculateWinLostAccount, AccountWinlostModel>
             (Arg.Any<CheckValidUsernamesCriteria>());
         Assert.Equal("1123", actual.AccountWinlost.First().Username);
-        Assert.Equal("1121", actual.ValidationResult.InvalidUserName);
-        Assert.Equal("999", actual.ValidationResult.MarkTransIds);
+        Assert.Equal("1121,1121,1121,1121", actual.ValidationResult.InvalidUserName);
+        Assert.Equal("2,2,2,2", actual.ValidationResult.MarkTransIds);
     }
 }
