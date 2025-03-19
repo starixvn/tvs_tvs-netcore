@@ -1,4 +1,5 @@
 ﻿using Fanex.Data.Repository;
+using Settlement.Business.Core.Models;
 using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Criteria;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
@@ -12,7 +13,9 @@ public interface Repository
 {
     Task<GetTicketsModel> GetTickets(Query query);
 
-    Task<RecoverTicketsModel> RecoverTickets(Query query);
+    Task<(IEnumerable<RecoverTicketsValidation>, IEnumerable<RecoverTicketModel>)[]> RecoverNotRacingSports(Query query, IEnumerable<BetIdRecover> tickets);
+
+    Task<RacingInfoModel> GetRacingInfo(int matchId);
 }
 
 public class RepositoryImp(IDynamicRepository repository, SessionService sessionService)
@@ -33,26 +36,37 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
         return BuildResultGetTickets(ticketsInAllServers, validationInAllServers);
     }
 
-    public async Task<RecoverTicketsModel> RecoverTickets(Query query)
+    public async Task<(IEnumerable<RecoverTicketsValidation>, IEnumerable<RecoverTicketModel>)[]> RecoverNotRacingSports(Query query, IEnumerable<BetIdRecover> tickets)
     {
         var criteria = CreateRecoverTicketsCriteria(query);
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            var ticketsInSiteDb = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
+            var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == server.Id);
             if (!ticketsInSiteDb.Any())
             {
                 return Task.FromResult((Enumerable.Empty<RecoverTicketsValidation>(), Enumerable.Empty<RecoverTicketModel>()));
             }
 
-            criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
+            criteria.TransIds = string.Join(",", ticketsInSiteDb.Select(x => x.TransId));
             criteria.SiteDbGroupId = server.Id;
             return repository.FetchMultipleAsync<RecoverTicketsValidation, RecoverTicketModel>(criteria);
         });
-        (IEnumerable<RecoverTicketsValidation> Validation, IEnumerable<RecoverTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
-        var validationInAllServers = results.SelectMany(x => x.Validation);
-        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
+        var results = await Task.WhenAll(tasks);
 
-        return BuildResultRecoverTickets(validationInAllServers, ticketsInAllServers);
+        return results;
+    }
+
+    public async Task<RacingInfoModel> GetRacingInfo(int matchId)
+    {
+        var criteria = new GetRacingResultCriteria { EventId = matchId };
+        var (raceInfo, outright, resources) = await repository.FetchMultipleAsync<RaceInfo, Outright, Resources>(criteria);
+
+        return new RacingInfoModel
+        {
+            RaceInfo = raceInfo?.FirstOrDefault(),
+            Outright = outright.ToList(),
+            Resources = resources.ToList()
+        };
     }
 
     private static GetTicketsCriteria CreateGetTicketsCriteria(Query query)
@@ -87,25 +101,6 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
         };
 
         return new GetTicketsModel
-        {
-            Tickets = tickets,
-            Validation = validation
-        };
-    }
-
-    private static RecoverTicketsModel BuildResultRecoverTickets(IEnumerable<RecoverTicketsValidation> validations, IEnumerable<RecoverTicketModel> tickets)
-    {
-        var failedResult = validations.FirstOrDefault(x => !x.IsSuccessful);
-        var validation = new RecoverTicketsValidation
-        {
-            ErrorCode = failedResult?.ErrorCode ?? 0,
-            ErrorMsg = failedResult?.ErrorMsg ?? string.Empty,
-            CompletedMatchIds = Helper.GetUnionTransIdString(validations.Select(x => x.CompletedMatchIds)),
-            ReCalculatedMainTransIds = Helper.GetUnionTransIdString(validations.Select(x => x.ReCalculatedMainTransIds)),
-            NegativeBalanceUsers = Helper.GetUnionTransIdString(validations.Select(x => x.NegativeBalanceUsers))
-        };
-
-        return new RecoverTicketsModel
         {
             Tickets = tickets,
             Validation = validation

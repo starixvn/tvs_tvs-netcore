@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Fanex.Data.Repository;
+using Polly;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria;
 using TicketVoidingSystem.Models;
@@ -23,6 +25,8 @@ public interface MatchService
     Match UpdateMatchInfoFromRemotingRef(Match match);
 
     string GetMatchEvent(Match match);
+
+    Task<Result> LockMatch(int matchId, int type, byte lockStatus, int siteDbGroupId);
 }
 
 public class MatchServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefWrapperService)
@@ -143,5 +147,24 @@ public class MatchServiceImp(IDynamicRepository repository, RemotingRefWrapperSe
         }
 
         return isOutright ? $"{homeNameNewSimplified} - {leagueNameNewSimplified}" : $"{homeNameNewSimplified} - vs - {awayNameNewSimplified}";
+    }
+
+    public async Task<Result> LockMatch(int matchId, int type, byte lockStatus, int siteDbGroupId)
+    {
+        const byte retryCount = 2;
+        const byte retryTimes = 2;
+        var result = new Result();
+        await Policy
+            .HandleResult<bool>(c => !c && lockStatus == 1)
+            .WaitAndRetryAsync(retryCount,
+                _ => TimeSpan.FromSeconds(retryTimes))
+            .ExecuteAsync(async () =>
+            {
+                result = await repository.GetAsync<Result>(new LockMatchCriteria
+                { MatchId = matchId, Lock = lockStatus, SiteDbGroupId = siteDbGroupId, Type = type });
+                return result.IsSuccessful;
+            });
+
+        return result;
     }
 }

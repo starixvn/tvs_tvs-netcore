@@ -24,6 +24,16 @@ public static class StatusExtension
         return SettledStatus.Contains(status.ToLowerInvariant());
     }
 
+    public static bool IsRefund(this string status)
+    {
+        return status.Equals(TicketStatus.Refund, StringComparison.OrdinalIgnoreCase);
+    }
+
+    public static bool IsRunning(this string status)
+    {
+        return status.Equals(TicketStatus.Running, StringComparison.OrdinalIgnoreCase);
+    }
+
     public static bool IsRunningOrEmpty(this string status)
     {
         return string.IsNullOrEmpty(status) || RunningOrWaiting.Contains(status.ToLowerInvariant());

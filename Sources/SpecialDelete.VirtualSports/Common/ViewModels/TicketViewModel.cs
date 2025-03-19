@@ -25,6 +25,10 @@ public class TicketViewModel
     public bool IsDisable { get; set; }
 
     public int SiteDbGroupId { get; set; }
+
+    public int SportType { get; set; }
+
+    public int MatchId { get; set; }
 }
 
 public class MailTicketViewModel : TicketViewModel

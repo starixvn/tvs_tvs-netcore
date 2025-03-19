@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using NSubstitute;
 using SpecialDelete.VirtualSports.Common.ViewModels;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
-using SpecialDelete.VirtualSports.RecoverBet.Repositories;
 using SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models.SendEmail;
@@ -19,7 +18,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
 
 public class RecoverTicketsServiceTest
 {
-    private static RecoverTicketsServiceImp CreateService(Repository repository)
+    private static RecoverTicketsServiceImp CreateService(ProcessRecoverService processRecoverService)
     {
         var sessionService = Substitute.For<SessionService>();
         var loggingService = Substitute.For<LoggingService>();
@@ -27,7 +26,7 @@ public class RecoverTicketsServiceTest
         var sitesEmailService = Substitute.For<SitesEmailService>();
         var emailService = Substitute.For<EmailService>();
         return new RecoverTicketsServiceImp(
-            repository,
+            processRecoverService,
             sessionService,
             loggingService,
             messageService,
@@ -44,9 +43,9 @@ public class RecoverTicketsServiceTest
             Tickets = new List<RecoverTicketModel>()
         };
         var query = new Query();
-        var repository = Substitute.For<Repository>();
-        repository.RecoverTickets(Arg.Any<Query>()).ReturnsForAnyArgs(expected);
-        var service = CreateService(repository);
+        var processRecoverService = Substitute.For<ProcessRecoverService>();
+        processRecoverService.Execute(Arg.Any<Query>()).ReturnsForAnyArgs(expected);
+        var service = CreateService(processRecoverService);
 
         // Act
         var model = await service.ExecuteQuery(query);
@@ -70,11 +69,11 @@ public class RecoverTicketsServiceTest
             Validation = validation
         };
         var query = new Query();
-        var repository = Substitute.For<Repository>();
-        repository
-            .When(x => x.RecoverTickets(Arg.Any<Query>()))
+        var processRecoverService = Substitute.For<ProcessRecoverService>();
+        processRecoverService
+            .When(x => x.Execute(Arg.Any<Query>()))
             .Do(_ => throw exception);
-        var service = CreateService(repository);
+        var service = CreateService(processRecoverService);
 
         // Act
         var model = await service.ExecuteQuery(query);
@@ -84,7 +83,7 @@ public class RecoverTicketsServiceTest
     }
 
     private static RecoverTicketsServiceImp CreateService(
-        Repository repository,
+        ProcessRecoverService processRecoverService,
         LoggingService loggingService)
     {
         var sessionService = Substitute.For<SessionService>();
@@ -92,7 +91,7 @@ public class RecoverTicketsServiceTest
         var sitesEmailService = Substitute.For<SitesEmailService>();
         var emailService = Substitute.For<EmailService>();
         return new RecoverTicketsServiceImp(
-            repository,
+            processRecoverService,
             sessionService,
             loggingService,
             messageService,
@@ -106,12 +105,12 @@ public class RecoverTicketsServiceTest
         // Arrange
         var exception = new Exception("Execute SP fail");
         var query = new Query();
-        var repository = Substitute.For<Repository>();
-        repository
-            .When(x => x.RecoverTickets(Arg.Any<Query>()))
+        var processRecoverService = Substitute.For<ProcessRecoverService>();
+        processRecoverService
+            .When(x => x.Execute(Arg.Any<Query>()))
             .Do(_ => throw exception);
         var loggingService = Substitute.For<LoggingService>();
-        var service = CreateService(repository, loggingService);
+        var service = CreateService(processRecoverService, loggingService);
 
         // Act
         await service.ExecuteQuery(query);
@@ -122,13 +121,13 @@ public class RecoverTicketsServiceTest
 
     private static RecoverTicketsServiceImp CreateService(SendMessageService messageService)
     {
-        var repository = Substitute.For<Repository>();
+        var processRecoverService = Substitute.For<ProcessRecoverService>();
         var sessionService = Substitute.For<SessionService>();
         var loggingService = Substitute.For<LoggingService>();
         var sitesEmailService = Substitute.For<SitesEmailService>();
         var emailService = Substitute.For<EmailService>();
         return new RecoverTicketsServiceImp(
-            repository,
+            processRecoverService,
             sessionService,
             loggingService,
             messageService,
@@ -155,14 +154,14 @@ public class RecoverTicketsServiceTest
 
     private static RecoverTicketsServiceImp CreateService(EmailService emailService)
     {
-        var repository = Substitute.For<Repository>();
+        var processRecoverService = Substitute.For<ProcessRecoverService>();
         var sessionService = Substitute.For<SessionService>();
         var loggingService = Substitute.For<LoggingService>();
         var messageService = Substitute.For<SendMessageService>();
         var sitesEmailService = Substitute.For<SitesEmailService>();
 
         return new RecoverTicketsServiceImp(
-            repository,
+            processRecoverService,
             sessionService,
             loggingService,
             messageService,

@@ -33,7 +33,9 @@ export class GroupModel {
                 item.choice,
                 item.subTransId,
                 item.isDisable,
-                item.siteDbGroupId);
+                item.siteDbGroupId,
+                item.sportType,
+                item.matchId);
             this.tickets.push(ticket);
         });
     }
@@ -70,7 +72,9 @@ export class GroupModel {
         return this.tickets.filter(ticket => ticket.isChecked && !ticket.isDisable).map(ticket => {
             return {
                 transId: ticket.betId,
-                siteDbGroupId: ticket.siteDbGroupId
+                siteDbGroupId: ticket.siteDbGroupId,
+                sportType: ticket.sportType,
+                matchId: ticket.matchId,
             } as BetId;
         });
     }

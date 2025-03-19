@@ -16,4 +16,5 @@ public static class TicketStatus
     public const string Lose = "lose";
     public const string Sold = "sold";
     public const string Waiting = "waiting";
+    public const string Refund = "refund";
 }

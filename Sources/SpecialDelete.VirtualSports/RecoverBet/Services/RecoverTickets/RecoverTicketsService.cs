@@ -1,6 +1,5 @@
 ﻿using SpecialDelete.VirtualSports.Common.ViewModels;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
-using SpecialDelete.VirtualSports.RecoverBet.Repositories;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
@@ -22,7 +21,7 @@ public interface RecoverTicketsService
 }
 
 public class RecoverTicketsServiceImp(
-    Repository repository,
+    ProcessRecoverService processRecoverService,
     SessionService sessionService,
     LoggingService loggingService,
     SendMessageService sendMessageService,
@@ -34,7 +33,7 @@ public class RecoverTicketsServiceImp(
     {
         try
         {
-            return await repository.RecoverTickets(query);
+            return await processRecoverService.Execute(query);
         }
         catch (Exception exception)
         {
