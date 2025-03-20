@@ -52,7 +52,8 @@ export class EventLeagueComponent implements OnChanges {
   }
 
   isValidSubType(){
-    return this.validationService.checkValidSubType(this.subIssueTypeId, this.selectedMatch?.subtype);
+    return !this.selectedMatch.matchId || !this.subIssueTypeId
+      || this.validationService.checkValidSubType(this.subIssueTypeId, this.selectedMatch?.subtype);
   }
 
   async getMatchInEditPage(matchId: number): Promise<void> {

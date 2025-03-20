@@ -5,13 +5,9 @@ import { SubIssueTypeConstant } from "../../constants/sub-issue-type.constant";
   providedIn: 'root'
 })
 export class ValidationService {
-  checkValidSubType(subIssueTypeId?: string, matchSubTypeId?: number): boolean {
-    if (!subIssueTypeId || !matchSubTypeId) {
-      return true;
-    }
-
+    checkValidSubType(subIssueTypeId?: string, matchSubTypeId?: number): boolean {
     const filterSubTypeId = Number(subIssueTypeId);
-  
+
     return !this.isInvalidGoalMatch(filterSubTypeId, matchSubTypeId)
       && !this.isInvalidGoalKickMatch(filterSubTypeId, matchSubTypeId)
       && !this.isInvalidCornerMatch(filterSubTypeId, matchSubTypeId)
