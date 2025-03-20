@@ -12,15 +12,15 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.AbnormalAccount;
 
-public class CheckUsernameServiceTests
+public class UsernameCheckServiceTests
 {
     private readonly IDynamicRepository repository;
-    private readonly CheckUsernameServiceImp service;
+    private readonly UsernameCheckServiceImp service;
 
-    public CheckUsernameServiceTests()
+    public UsernameCheckServiceTests()
     {
         repository = Substitute.For<IDynamicRepository>();
-        service = new CheckUsernameServiceImp(repository);
+        service = new UsernameCheckServiceImp(repository);
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public class CheckUsernameServiceTests
             .ReturnsForAnyArgs((validationInfo, ticketCalculateWinLostAccount, accounts));
 
         // Act
-        var actual = await service.GetUsernameInfo(request);
+        var actual = await service.GetUsernameInformation(request);
 
         // Assert
         await repository.Received().FetchMultipleAsync<ValidationInfo, TicketCalculateWinLostAccount, AccountWinlostModel>

@@ -6,19 +6,19 @@ using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 
-public record ResultTicket(ValidationInfo ValidationInfo, IEnumerable<TicketCalculateWinLostAccount> Tickets, IEnumerable<AccountWinlostModel> Accounts);
+public record TicketResult(ValidationInfo ValidationInfo, IEnumerable<TicketCalculateWinLostAccount> Tickets, IEnumerable<AccountWinlostModel> Accounts);
 
-public interface CheckUsernameService
+public interface UsernameCheckService
 {
-    Task<CheckUsernamesInDatabaseResult> GetUsernameInfo(CheckValidUsernamesRequest request);
+    Task<CheckUsernamesInDatabaseResult> GetUsernameInformation(CheckValidUsernamesRequest request);
 }
 
-public class CheckUsernameServiceImp(IDynamicRepository repository)
-    : CheckUsernameService
+public class UsernameCheckServiceImp(IDynamicRepository repository)
+    : UsernameCheckService
 {
-    public async Task<CheckUsernamesInDatabaseResult> GetUsernameInfo(CheckValidUsernamesRequest request)
+    public async Task<CheckUsernamesInDatabaseResult> GetUsernameInformation(CheckValidUsernamesRequest request)
     {
-        var results = await GetUsernameInfoAllSites(request);
+        var results = await GetUsernameInformationForAllSites(request);
 
         return new CheckUsernamesInDatabaseResult
         {
@@ -28,24 +28,24 @@ public class CheckUsernameServiceImp(IDynamicRepository repository)
         };
     }
 
-    private async Task<ResultTicket> GetUsernameInfoAllSites(CheckValidUsernamesRequest request)
+    private async Task<TicketResult> GetUsernameInformationForAllSites(CheckValidUsernamesRequest request)
     {
-        var accountAdjustVoidLimitList = GetAccountAdjustVoidLimit(request.AccountWinlostModels);
-        var adjustVoidLimit = accountAdjustVoidLimitList.ToJson();
+        var accountAdjustments = GetAccountAdjustments(request.AccountWinlostModels);
+        var adjustVoidLimitJson = accountAdjustments.ToJson();
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            var criteria = CreateCriteria(request, server.Id, adjustVoidLimit);
+            var criteria = CreateCriteria(request, server.Id, adjustVoidLimitJson);
             return repository.FetchMultipleAsync<ValidationInfo, TicketCalculateWinLostAccount, AccountWinlostModel>(criteria);
         });
 
         var results = await Task.WhenAll(tasks);
 
         var validationResults = results.SelectMany(x => x.Item1);
-        var ticketsResults = results.SelectMany(x => x.Item2);
+        var ticketResults = results.SelectMany(x => x.Item2);
         var accountResults = results.SelectMany(x => x.Item3);
 
         var validationInfo = CreateValidationResult(validationResults);
-        return new ResultTicket(validationInfo, ticketsResults, accountResults);
+        return new TicketResult(validationInfo, ticketResults, accountResults);
     }
 
     private static ValidationInfo CreateValidationResult(IEnumerable<ValidationInfo> validationResults)
@@ -63,7 +63,7 @@ public class CheckUsernameServiceImp(IDynamicRepository repository)
         };
     }
 
-    private static IEnumerable<AccountAdjustVoidLimit> GetAccountAdjustVoidLimit(IEnumerable<AccountWinlostModel> accountWinlostModels)
+    private static IEnumerable<AccountAdjustVoidLimit> GetAccountAdjustments(IEnumerable<AccountWinlostModel> accountWinlostModels)
     {
         if (accountWinlostModels == null)
         {
@@ -77,7 +77,7 @@ public class CheckUsernameServiceImp(IDynamicRepository repository)
         });
     }
 
-    private static CheckValidUsernamesCriteria CreateCriteria(CheckValidUsernamesRequest request, int siteDbGroupId, string adjustVoidLimit)
+    private static CheckValidUsernamesCriteria CreateCriteria(CheckValidUsernamesRequest request, int siteDbGroupId, string adjustVoidLimitJson)
     {
         return new CheckValidUsernamesCriteria
         {
@@ -89,7 +89,7 @@ public class CheckUsernameServiceImp(IDynamicRepository repository)
             ToDate = request.ToDate,
             ProductIds = request.ProductIds,
             StatusIds = request.StatusIds,
-            AdjustVoidLimit = adjustVoidLimit,
+            AdjustVoidLimit = adjustVoidLimitJson,
             IsVoidAllArchivedTickets = request.IsVoidAllArchivedTickets,
         };
     }

@@ -43,14 +43,14 @@ public class CheckValidUsernamesHandlerTests
                 TransInfoJson = "123"
             }
         };
-        var checkUsernameService = Substitute.For<CheckUsernameService>();
+        var usernameCheckService = Substitute.For<UsernameCheckService>();
         var calculateVoidTicketsService = Substitute.For<CalculateVoidTicketsService>();
         var compressDataAddRequestService = Substitute.For<CompressDataService>();
         compressDataAddRequestService.CompressTicket<GetTicketModel>(null).ReturnsForAnyArgs("AAA");
         calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(null, null, null)
             .ReturnsForAnyArgs(calcVoidTicketsResult);
-        checkUsernameService.GetUsernameInfo(null).ReturnsForAnyArgs(checkResult);
-        var handler = new CheckValidUsernamesHandler(checkUsernameService, calculateVoidTicketsService, compressDataAddRequestService);
+        usernameCheckService.GetUsernameInformation(null).ReturnsForAnyArgs(checkResult);
+        var handler = new CheckValidUsernamesHandler(usernameCheckService, calculateVoidTicketsService, compressDataAddRequestService);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);
@@ -94,14 +94,14 @@ public class CheckValidUsernamesHandlerTests
             },
             AccountWinlostModels = calcVoidTicketsResult.Accounts
         };
-        var checkUsernameService = Substitute.For<CheckUsernameService>();
+        var usernameCheckService = Substitute.For<UsernameCheckService>();
         var calculateVoidTicketsService = Substitute.For<CalculateVoidTicketsService>();
         var compressDataAddRequestService = Substitute.For<CompressDataService>();
         compressDataAddRequestService.CompressTicket<GetTicketModel>(null).ReturnsForAnyArgs("AAA");
         calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(null, null, null)
             .ReturnsForAnyArgs(calcVoidTicketsResult);
-        checkUsernameService.GetUsernameInfo(null).ReturnsForAnyArgs(checkResult);
-        var handler = new CheckValidUsernamesHandler(checkUsernameService, calculateVoidTicketsService, compressDataAddRequestService);
+        usernameCheckService.GetUsernameInformation(null).ReturnsForAnyArgs(checkResult);
+        var handler = new CheckValidUsernamesHandler(usernameCheckService, calculateVoidTicketsService, compressDataAddRequestService);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);

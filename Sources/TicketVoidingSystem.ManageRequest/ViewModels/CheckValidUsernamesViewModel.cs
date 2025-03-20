@@ -30,9 +30,6 @@ public class CheckUsernamesInDatabaseResult
 {
     public ValidationInfo ValidationResult { get; set; }
 
-    //public TransInfoAddRequestModel TransInfoValidation { get; set; }
-
-    //public string TransInfoJsonCompress { get; set; }
     public IEnumerable<TicketCalculateWinLostAccount> TicketCalculateWinLostAccount { get; set; }
 
     public IEnumerable<AccountWinlostModel> AccountWinlost { get; set; }

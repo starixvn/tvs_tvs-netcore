@@ -29,14 +29,14 @@ public class CheckValidUsernamesRequest : IRequest<CheckValidUsernamesViewModel>
 }
 
 public class CheckValidUsernamesHandler(
-    CheckUsernameService checkUsernameService,
+    UsernameCheckService usernameCheckService,
     CalculateVoidTicketsService calculateVoidTicketsService,
     CompressDataService compressDataAddRequestService)
     : IRequestHandler<CheckValidUsernamesRequest, CheckValidUsernamesViewModel>
 {
     public async Task<CheckValidUsernamesViewModel> Handle(CheckValidUsernamesRequest request, CancellationToken cancellationToken)
     {
-        var usernameInfo = await checkUsernameService.GetUsernameInfo(request);
+        var usernameInfo = await usernameCheckService.GetUsernameInformation(request);
 
         var calcVoidResult = new CalcVoidTicketsResult();
         if (request.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
