@@ -26,37 +26,74 @@ public class CalculateHaveStatusWonNotLoseServiceImp(
         };
     }
 
-    private void ExecuteByOneAccount(AccountWinlostModel account, IReadOnlyDictionary<(int custId, int statusId),
-        OrderedTickets> groupTickets, IEnumerable<int> ticketStatusIds)
+    private void ExecuteByOneAccount(
+        AccountWinlostModel account,
+        IReadOnlyDictionary<(int custId, int statusId), OrderedTickets> groupedTickets,
+        IEnumerable<int> ticketStatusIds)
     {
-        var wonTickets = groupTickets.GetValueOrDefault((account.CustId, TicketStatus.WonId)) ?? new OrderedTickets();
-        var loseTickets = groupTickets.GetValueOrDefault((account.CustId, TicketStatus.LoseId)) ?? new OrderedTickets();
+        var accountTickets = GetAccountTickets(account.CustId, groupedTickets);
+        var creditLimit = DetermineCreditLimit(account);
 
-        var currentWinning = wonTickets.TotalWinLost;
-        var currentLosing = loseTickets.TotalWinLost;
-        var compareCredit = account.AdjustVoidLimit is > 0 ? (decimal)account.AdjustVoidLimit : account.GivenCredit;
-        if (currentLosing > compareCredit)
+        if (accountTickets.losing > creditLimit)
         {
-            account.IsHighlight = true;
-            account.CurrentLosing = -currentLosing;
-            account.CurrentWinning = currentWinning;
-            var voidWonTickets = wonTickets.Descending.Where(x => x.IsChecked);
-            var othersVoidTickets = combineVoidTicketsService.Execute(account.CustId, ticketStatusIds.Where(x => x != TicketStatus.WonId), groupTickets);
-            account.EstimateVoidAmount = voidWonTickets.Sum(x => x.WinLost);
-            account.WinLostAfterVoid = -currentLosing + (currentWinning - account.EstimateVoidAmount);
-            account.VoidTickets = voidWonTickets.Concat(othersVoidTickets);
-            UpdateAccountWinlostByGroupMatchId(account, wonTickets, voidWonTickets);
+            ProcessSpecialAccount(account, accountTickets, ticketStatusIds, groupedTickets);
         }
         else
         {
-            account.IsHighlight = false;
-            account.CurrentLosing = -currentLosing;
-            account.CurrentWinning = currentWinning;
-            account.EstimateVoidAmount = currentWinning;
-            account.WinLostAfterVoid = -currentLosing;
-            account.VoidTickets = combineVoidTicketsService.Execute(account.CustId, ticketStatusIds, groupTickets);
+            ProcessNormalAccount(account, accountTickets, ticketStatusIds, groupedTickets);
         }
     }
+
+    private void ProcessSpecialAccount(
+        AccountWinlostModel account,
+        (decimal winning, decimal losing, OrderedTickets wonTickets, OrderedTickets loseTickets) accountTickets,
+        IEnumerable<int> ticketStatusIds,
+        IReadOnlyDictionary<(int custId, int statusId), OrderedTickets> groupedTickets)
+    {
+        var voidWonTickets = accountTickets.wonTickets.Descending != null ? accountTickets.wonTickets.Descending.Where(x => x.IsChecked) : [];
+        var otherVoidTickets = combineVoidTicketsService.Execute(
+            account.CustId,
+            ticketStatusIds.Where(x => x != TicketStatus.WonId),
+            groupedTickets);
+
+        var estimateVoidAmount = voidWonTickets.Sum(x => x.WinLost);
+
+        account.IsHighlight = true;
+        account.CurrentLosing = -accountTickets.losing;
+        account.CurrentWinning = accountTickets.winning;
+        account.EstimateVoidAmount = estimateVoidAmount;
+        account.WinLostAfterVoid = -accountTickets.losing + (accountTickets.winning - estimateVoidAmount);
+        account.VoidTickets = voidWonTickets.Concat(otherVoidTickets);
+
+        UpdateAccountWinlostByGroupMatchId(account, accountTickets.wonTickets, voidWonTickets);
+    }
+
+    private void ProcessNormalAccount(
+        AccountWinlostModel account,
+        (decimal winning, decimal losing, OrderedTickets wonTickets, OrderedTickets loseTickets) accountTickets,
+        IEnumerable<int> ticketStatusIds,
+        IReadOnlyDictionary<(int custId, int statusId), OrderedTickets> groupedTickets)
+    {
+        account.IsHighlight = false;
+        account.CurrentLosing = -accountTickets.losing;
+        account.CurrentWinning = accountTickets.winning;
+        account.EstimateVoidAmount = accountTickets.winning;
+        account.WinLostAfterVoid = -accountTickets.losing;
+        account.VoidTickets = combineVoidTicketsService.Execute(account.CustId, ticketStatusIds, groupedTickets);
+    }
+
+    private static (decimal winning, decimal losing, OrderedTickets wonTickets, OrderedTickets loseTickets) GetAccountTickets(
+        int customerId,
+        IReadOnlyDictionary<(int custId, int statusId), OrderedTickets> groupedTickets)
+    {
+        var wonTickets = groupedTickets.GetValueOrDefault((customerId, TicketStatus.WonId)) ?? new OrderedTickets();
+        var loseTickets = groupedTickets.GetValueOrDefault((customerId, TicketStatus.LoseId)) ?? new OrderedTickets();
+
+        return (wonTickets.TotalWinLost, loseTickets.TotalWinLost, wonTickets, loseTickets);
+    }
+
+    private static decimal DetermineCreditLimit(AccountWinlostModel account) =>
+        account.AdjustVoidLimit is > 0 ? (decimal)account.AdjustVoidLimit : account.GivenCredit;
 
     private static void UpdateAccountWinlostByGroupMatchId(AccountWinlostModel account, OrderedTickets wonTickets, IEnumerable<TicketCalculateWinLostAccount> voidWonTickets)
     {
@@ -65,16 +102,19 @@ public class CalculateHaveStatusWonNotLoseServiceImp(
             return;
         }
 
-        var editableTickets = wonTickets.Descending.GroupBy(b => b.MatchId)
-            .Where(IsHasBothCheckedAndUncheckedTickets).SelectMany(x => x);
-        var editableMatches = editableTickets.Select(x => x.MatchId).Distinct();
+        var editableTicketGroups = wonTickets.Descending
+            .GroupBy(ticket => ticket.MatchId)
+            .Where(HasBothCheckedAndUncheckedTickets);
+
+        var editableTickets = editableTicketGroups.SelectMany(x => x);
+        var editableMatchIds = editableTickets.Select(x => x.MatchId).Distinct();
+
         account.IsCanEditTicket = editableTickets.Any();
-
-        account.EstimateVoidAmountUnEditableTickets = voidWonTickets.Where(x => !editableMatches.Contains(x.MatchId)).Sum(x => x.WinLost);
+        account.EstimateVoidAmountUnEditableTickets = voidWonTickets
+            .Where(x => !editableMatchIds.Contains(x.MatchId))
+            .Sum(x => x.WinLost);
     }
 
-    private static bool IsHasBothCheckedAndUncheckedTickets(IEnumerable<TicketCalculateWinLostAccount> wonTickets)
-    {
-        return wonTickets.Any(x => x.IsChecked) && wonTickets.Any(x => !x.IsChecked);
-    }
+    private static bool HasBothCheckedAndUncheckedTickets(IGrouping<int, TicketCalculateWinLostAccount> tickets) =>
+       tickets.Any(x => x.IsChecked) && tickets.Any(x => !x.IsChecked);
 }
