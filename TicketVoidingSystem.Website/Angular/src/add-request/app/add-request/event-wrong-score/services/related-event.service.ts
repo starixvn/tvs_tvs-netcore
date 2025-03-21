@@ -16,6 +16,7 @@ import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../models/
 import { LABELS } from '../../../../../utility/constants/labels';
 import { ValidationService } from './validation.service';
 import moment from 'moment';
+import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -159,14 +160,9 @@ export class RelatedEventService {
         return;
       }
       arg.primitiveProps.isBlock = true;
-      const query = new GetChildMatchQuery();
-      query.issueTypeId = Number(arg.filter.issueTypeId);
-      query.eventDate = arg.mainEvent.eventDate ? moment(arg.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
-      query.matchId = matchId
-      query.isMainMatch = false;
-      query.sportType = arg.mainEvent.sportType;
+      const eventDate = arg.mainEvent.eventDate ? moment(arg.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+      const models = await this.getGetOutChildMatch(eventDate, matchId, arg.mainEvent.sportType);
 
-      const models = await this.getChildMatches(query);
       if (models.length === 0) {
         arg.tooltip.display(arg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         arg.primitiveProps.isBlock = false;
@@ -175,12 +171,25 @@ export class RelatedEventService {
       const newEvents = this.assignChildMatchToLogInfoModel(models, arg.defaultFilterTimeWithAllowance);
       await this.updateSubIssueTypeAndAllowanceTime(newEvents, Number(arg.filter.subIssueTypeId));
       await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, newEvents, arg.mainEvent.matchId, arg.defaultFilterTimeWithAllowance);
-      newEvents.forEach(x => {
-        arg.allEvents.push(this.getLogInfoRelatedEvent(x, models));
-      });
+      for (const event of newEvents) {
+        const relatedEventModel = await this.getLogInfoRelatedEvent(event, models);
+        arg.allEvents.push(relatedEventModel);
+      }
       arg.primitiveProps.isBlock = false;
       arg.primitiveProps.inputRelatedMatchId = null;
     }
+  }
+
+  private async getGetOutChildMatch(eventDate: string, matchId: number, sportType: number): Promise<ChildMatchModel[]> {
+    const query = new GetChildMatchQuery();
+    query.issueTypeId = Number(IssueTypeConstant.WRONG_SCORE);
+    query.eventDate = eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+    query.matchId = matchId;
+    query.isMainMatch = false;
+    query.sportType = sportType;
+    const models = await this.getChildMatches(query);
+
+    return models;
   }
 
   public async getDataRelatedEventWhenSearch(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<void> {
@@ -199,8 +208,8 @@ export class RelatedEventService {
     return eventsGetLogInfo;
   }
 
-  private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: WrongScoreModel[], mainEvent: WrongScoreModel,
-    allEvents: LogInfoRelatedEvent[], relatedEvents: ChildMatchModel[]): void {
+  private async addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: WrongScoreModel[], mainEvent: WrongScoreModel,
+    allEvents: LogInfoRelatedEvent[], relatedEvents: ChildMatchModel[]) {
 
     const mainEventLogInfo = eventsGetLogInfo.find(X => X.isMainMatch);
     mainEvent.logInfoDetail = mainEventLogInfo.logInfoDetail;
@@ -209,27 +218,32 @@ export class RelatedEventService {
     mainEvent.voidFromTime = mainEventLogInfo.voidToTime;
 
     const allRelatedEventLogInfo = eventsGetLogInfo.filter(x => !x.isMainMatch);
-    allRelatedEventLogInfo.forEach(x => {
-      const relatedEvent = allEvents.find(y => y.matchId === x.matchId);
+    for (const event of allRelatedEventLogInfo) {
+      const relatedEvent = allEvents.find(y => y.matchId === event.matchId);
       if(relatedEvent){
-        relatedEvent.logInfoDetail = x.logInfoDetail;
-        relatedEvent.messageValidationLogInfo = x.messageValidationLogInfo;
+        relatedEvent.logInfoDetail = event.logInfoDetail;
+        relatedEvent.messageValidationLogInfo = event.messageValidationLogInfo;
         if (this.validationService.isHasAllowanceTime(relatedEvent)) {
-          relatedEvent.voidTimeArea.fromDateTime = moment(x.logInfoDetail?.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-          relatedEvent.voidTimeArea.toDateTime = moment(x.logInfoDetail?.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-          relatedEvent.voidTimeArea.aaTime = x.aaTime;
-          relatedEvent.voidTimeArea.paTime = x.paTime;
-          relatedEvent.voidTimeArea.saTime = x.saTime;
+          relatedEvent.voidTimeArea.fromDateTime = moment(event.logInfoDetail?.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+          relatedEvent.voidTimeArea.toDateTime = moment(event.logInfoDetail?.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+          relatedEvent.voidTimeArea.aaTime = event.aaTime;
+          relatedEvent.voidTimeArea.paTime = event.paTime;
+          relatedEvent.voidTimeArea.saTime = event.saTime;
         }
+        else if(event.logInfoDetail){
+          const relatedEventModel = await this.getLogInfoRelatedEvent(event, relatedEvents);
+         allEvents.push(relatedEventModel);
+       }
       }
-      else if(x.logInfoDetail){
-        allEvents.push(this.getLogInfoRelatedEvent(x, relatedEvents));
-      }
-    });
+    }
   }
 
-  public getLogInfoRelatedEvent(model: WrongScoreModel, allEventChild: ChildMatchModel[]): LogInfoRelatedEvent {
-    const eventChild = allEventChild.find(y => y.matchId === model.matchId);
+  public async getLogInfoRelatedEvent(model: WrongScoreModel, allEventChild: ChildMatchModel[], evenDate?: string): Promise<LogInfoRelatedEvent> {
+    let eventChild = allEventChild.find(y => y.matchId === model.matchId);
+    if (!eventChild) {
+      const models = await this.getGetOutChildMatch(evenDate, model.matchId, model.sportType);
+      eventChild = models[0];
+    }
     const isHasAllowanceTime = this.validationService.isHasAllowanceTimeWrongScoreModel(model);
     const voidTimeArea = new FilterTimeWithAllowance();
     voidTimeArea.fromDateTime = isHasAllowanceTime ? model.voidFromTime : model.filterFromTransTime;
@@ -253,12 +267,16 @@ export class RelatedEventService {
     return logInfoRelatedEventModel;
   }
 
-  assignModelsToEvents(allEvents: LogInfoRelatedEvent[], wrongScoreModels: WrongScoreModel[], allChildEvent: ChildMatchModel[]): void {
-    wrongScoreModels.forEach(x => {
-      if (!x.isMainMatch) {
-        allEvents.push(this.getLogInfoRelatedEvent(x, allChildEvent));
+  async assignModelsToEvents(allEvents: LogInfoRelatedEvent[], wrongScoreModels: WrongScoreModel[], allChildEvent: ChildMatchModel[]) {
+    const eventDate = wrongScoreModels.find(x => x.isMainMatch)?.eventDate;
+    const eventDateQuery = eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+    for (const wrongScoreModel of wrongScoreModels) {
+      if (wrongScoreModel.isMainMatch) {
+        continue;
       }
-    });
+      const relatedEventModel = await this.getLogInfoRelatedEvent(wrongScoreModel, allChildEvent, eventDateQuery);
+      allEvents.push(relatedEventModel);
+    }
     allEvents = _.orderBy(_.uniqBy(allEvents, x => x.matchId), ['matchCode'], ['asc']);
   }
 }

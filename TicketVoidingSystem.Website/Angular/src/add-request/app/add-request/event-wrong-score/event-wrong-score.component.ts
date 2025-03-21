@@ -122,7 +122,9 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       this.defaultFilterTimeWithAllowance = this.wrongScoreService.getFilterWrongScore(this.mainEvent);
       if(this.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME){
         this.relatedEvents = await this.relatedEventService.getChildMatches(this.createGetChildMatchesQuery());
-        this.relatedEventService.assignModelsToEvents(this.allSelectedEvents, this.wrongScoreModels, this.relatedEvents);
+        
+        await this.relatedEventService.assignModelsToEvents(this.allSelectedEvents, this.wrongScoreModels, this.relatedEvents);
+        console.log(this.allSelectedEvents);
         this.wrongScoreModels = this.wrongScoreModels.filter(x => x.isMainMatch);
       }
       else{
@@ -545,10 +547,11 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       const getLogInfoEvents = newEvents.filter(x => x.subIssueTypeId);
       await this.logInfoService.getLogInfo(this.isEdit, this.requestId, this.filter, this.primitiveProps, getLogInfoEvents, this.matchId, this.defaultFilterTimeWithAllowance);
 
-      newEvents.forEach(x => {
-        const newRelatedEvents = this.relatedEventService.getLogInfoRelatedEvent(x, selectedRelatedEvents);
+      for (const event of newEvents) {
+        const newRelatedEvents = await this.relatedEventService.getLogInfoRelatedEvent(event, selectedRelatedEvents);
         this.allSelectedEvents.push(newRelatedEvents);
-      });
+      }
+      
       this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     }
 
