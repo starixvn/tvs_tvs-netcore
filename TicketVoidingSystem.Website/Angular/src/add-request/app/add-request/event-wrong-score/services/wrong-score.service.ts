@@ -14,7 +14,6 @@ import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-a
 @Injectable({
   providedIn: 'root'
 })
-
 export class WrongScoreService {
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
@@ -65,7 +64,7 @@ export class WrongScoreService {
 
   async handleCheckedLastScore(originWrongScoreModels: WrongScoreModel[], wrongScoreModel: WrongScoreModel,
     updateByOriginWrongScoreModelEvent: EventEmitter<WrongScoreModel[]>, matchId: number, actionId: number, filterBy: number): Promise<void> {
-    const wrongScores = await this.getWrongScores(matchId);
+    const wrongScores = await this.callApiGetWrongScores(matchId);
     _.find(originWrongScoreModels, { scoreId: wrongScoreModel.scoreId }).filterToTransTime =
       _.find(wrongScores, { scoreId: wrongScoreModel.scoreId }).filterToTransTime;
     if (wrongScores.length !== originWrongScoreModels.length) {
@@ -104,20 +103,12 @@ export class WrongScoreService {
   }
 
   public getSelectedWrongScoreComponents(wrongScoreInfoComponents: QueryList<WrongScoreInfoComponent>): WrongScoreInfoComponent[] {
-    const components = wrongScoreInfoComponents.filter(x => x.wrongScoreModel.isChecked);
-
-    return components;
+    return wrongScoreInfoComponents.filter(x => x.wrongScoreModel.isChecked);
   }
 
   private async getLastTimeTicket(wrongScoreModel: WrongScoreModel, actionId: number, matchId: number, filterBy: number): Promise<void> {
     const lastTimeModel = await this.getLastTimeScore(wrongScoreModel, actionId, matchId, filterBy);
     wrongScoreModel.filterToTransTime = lastTimeModel.lastTime;
-  }
-
-  private async getWrongScores(matchId: number): Promise<WrongScoreModel[]> {
-    const models = await this.addRequestApiService.getWrongScores(matchId);
-
-    return models;
   }
 
   private async getLastTimeScore(wrongScoreModel: WrongScoreModel, actionId: number, matchId: number, filterBy: number): Promise<LastTimeScore> {
@@ -138,5 +129,27 @@ export class WrongScoreService {
     const toTime = moment(filterToTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
     return StaticService.getDurations(fromTime, toTime);
+  }
+
+  async callApiGetWrongScores(matchId: number): Promise<WrongScoreModel[]> {
+    const data = await this.addRequestApiService.getWrongScores(matchId);
+
+    return data;
+  }
+
+  getTimeSelectedScore(wrongScoreModels: WrongScoreModel[]): string {
+    let fromTime = '';
+    let toTime = '';
+    if (wrongScoreModels.filter(x => x.isChecked)[0].logInfoDetail) {
+      fromTime = this.displayFullDateTimeFormat(wrongScoreModels.filter(x => x.isChecked)[0].logInfoDetail.voidFromTime);
+    }
+    if (wrongScoreModels.filter(x => x.isChecked)[wrongScoreModels.filter(x => x.isChecked).length - 1].logInfoDetail) {
+      toTime = this.displayFullDateTimeFormat(wrongScoreModels.filter(x => x.isChecked)[wrongScoreModels.filter(x => x.isChecked).length - 1].logInfoDetail.voidToTime);
+    }
+    return `${fromTime} - ${toTime}`;
+  }
+
+  public displayFullDateTimeFormat(time: Date): string {
+    return moment(time).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
   }
 }

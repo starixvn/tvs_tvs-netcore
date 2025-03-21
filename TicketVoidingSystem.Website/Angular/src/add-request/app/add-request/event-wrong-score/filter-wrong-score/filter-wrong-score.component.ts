@@ -38,6 +38,9 @@ export class FilterWrongScoreComponent {
 
   public changeFilter(): void {
     this.changeFilterEvent.emit();
+    this.filterWrongScoreModel.aaTime = Number(this.allowanceTimeComponent.aaTime);
+    this.filterWrongScoreModel.paTime = Number(this.allowanceTimeComponent.paTime);
+    this.filterWrongScoreModel.saTime = Number(this.allowanceTimeComponent.saTime);
     this.addRequestStore.changeSavingRequestStatus(true);
   }
 

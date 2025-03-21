@@ -15,6 +15,7 @@ import { FilterWrongScoreComponent } from '../filter-wrong-score/filter-wrong-sc
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
+import { RelatedEventService } from './related-event.service';
 
 @Injectable({
   providedIn: 'root'
@@ -137,34 +138,10 @@ export class ValidationService {
   }
 
   public isSubTypeFilterByAcceptedTime(subIssueTypeId: string): boolean {
-    const subTypesFilterByAcceptedTime = [
-      SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_NO_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_NO_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_NO_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_NO_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_HOME_CORNER_NO_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_AWAY_CORNER_NO_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_HOME_CORNER_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_AWAY_CORNER_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_NO_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_NO_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_ONWARDS,
-      SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_ONWARDS,
-      SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL,
-      SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME,
-      SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_AWAY,
-      SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK,
-      SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER,
-      SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_HOME,
-      SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_AWAY,
-      SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING
-    ];
+    const allSubIssueType = [...RelatedEventService.SubIssueTypeMapHasRelatedEvent.values(), 
+      ...RelatedEventService.SubIssueTypeMapHasRelatedEvent.keys()];
 
-    return subTypesFilterByAcceptedTime.includes(Number(subIssueTypeId));
+    return allSubIssueType.includes(Number(subIssueTypeId));
   }
 
   public isSubTypeFilterByTransTimeAndAcceptedTime(subIssueTypeId: string): boolean {

@@ -22,6 +22,25 @@ import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.c
   providedIn: 'root'
 })
 export class RelatedEventService {
+  static SubIssueTypeMapHasRelatedEvent = new Map<number, number>([
+    [SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME],
+    [SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME],
+    [SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_AWAY],
+    [SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_AWAY],
+    [SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK],
+    [SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK],
+    [SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK],
+    [SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK],
+    [SubIssueTypeConstant.NO_INDICATION_HOME_CORNER_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_HOME],
+    [SubIssueTypeConstant.NO_INDICATION_HOME_CORNER_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_HOME],
+    [SubIssueTypeConstant.NO_INDICATION_AWAY_CORNER_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_AWAY],
+    [SubIssueTypeConstant.NO_INDICATION_AWAY_CORNER_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_AWAY],
+    [SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING],
+    [SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING],
+    [SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING],
+    [SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING]
+  ]);
+
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
     private readonly logInfoService: LogInfoService,
@@ -47,26 +66,11 @@ export class RelatedEventService {
   }
 
   getChildMatchSubIssueType(filterSubTypeId: number): number | null {
-    const subIssueTypeMap = new Map<number, number>([
-      [SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME],
-      [SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME],
-      [SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_AWAY],
-      [SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_AWAY],
-      [SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK],
-      [SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK],
-      [SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK],
-      [SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK],
-      [SubIssueTypeConstant.NO_INDICATION_HOME_CORNER_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_HOME],
-      [SubIssueTypeConstant.NO_INDICATION_HOME_CORNER_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_HOME],
-      [SubIssueTypeConstant.NO_INDICATION_AWAY_CORNER_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_AWAY],
-      [SubIssueTypeConstant.NO_INDICATION_AWAY_CORNER_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_AWAY],
-      [SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING],
-      [SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING],
-      [SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING],
-      [SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING]
-    ]);
+    return RelatedEventService.SubIssueTypeMapHasRelatedEvent.get(filterSubTypeId) || null;
+  }
 
-    return subIssueTypeMap.get(filterSubTypeId) || null;
+  isHasRelatedEvent(filterSubTypeId: number): boolean {
+    return RelatedEventService.SubIssueTypeMapHasRelatedEvent.has(filterSubTypeId);
   }
 
   updateChildMatchSubIssueType(wrongScoreModel: WrongScoreModel, filterSubTypeId: number): void {
@@ -88,7 +92,6 @@ export class RelatedEventService {
     return group;
   }
 
-
   updateAllowanceTime(wrongScoreModel: WrongScoreModel): void {
     if (!wrongScoreModel.subIssueTypeId) {
       return;
@@ -106,8 +109,7 @@ export class RelatedEventService {
         this.updateChildMatchSubIssueType(x, filterSubTypeId);
         this.updateAllowanceTime(x);
       }
-    }
-    )
+    });
   }
 
   async updateSubIssueTypeAndAllowanceTime(wrongScoreModels: WrongScoreModel[], filterSubTypeId: number) {
@@ -131,14 +133,7 @@ export class RelatedEventService {
   }
 
   isLinkMatchSubIssueTypeAutoAdd(subIssueTypeId): boolean {
-    const SUB_TYPE_AUTO_SELECT_LIST = [SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL,
-    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME,
-    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_AWAY,
-    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK,
-    SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER,
-    SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_HOME,
-    SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_AWAY,
-    SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING];
+    const SUB_TYPE_AUTO_SELECT_LIST = [...RelatedEventService.SubIssueTypeMapHasRelatedEvent.values()];
     return SUB_TYPE_AUTO_SELECT_LIST.includes(subIssueTypeId);
   }
 
@@ -160,32 +155,37 @@ export class RelatedEventService {
         return;
       }
       arg.primitiveProps.isBlock = true;
-      const eventDate = arg.mainEvent.eventDate ? moment(arg.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
-      const models = await this.getGetOutChildMatch(eventDate, matchId, arg.mainEvent.sportType);
+      const models = await this.getGetInfoChildMatch(matchId, false, arg.mainEvent.sportType, arg.mainEvent.eventDate.toString());
 
       if (models.length === 0) {
         arg.tooltip.display(arg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         arg.primitiveProps.isBlock = false;
         return;
       }
-      const newEvents = this.assignChildMatchToLogInfoModel(models, arg.defaultFilterTimeWithAllowance);
-      await this.updateSubIssueTypeAndAllowanceTime(newEvents, Number(arg.filter.subIssueTypeId));
-      await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, newEvents, arg.mainEvent.matchId, arg.defaultFilterTimeWithAllowance);
-      for (const event of newEvents) {
-        const relatedEventModel = await this.getLogInfoRelatedEvent(event, models);
-        arg.allEvents.push(relatedEventModel);
-      }
+      this.addNewLogInfoRelatedEvent(models, arg);  
       arg.primitiveProps.isBlock = false;
       arg.primitiveProps.inputRelatedMatchId = null;
     }
   }
 
-  private async getGetOutChildMatch(eventDate: string, matchId: number, sportType: number): Promise<ChildMatchModel[]> {
+  async addNewLogInfoRelatedEvent(newRelatedEvents: ChildMatchModel[], arg: AddRelatedEventArg){
+    const newEvents = this.assignChildMatchToLogInfoModel(newRelatedEvents, arg.defaultFilterTimeWithAllowance);
+    await this.updateSubIssueTypeAndAllowanceTime(newEvents, Number(arg.filter.subIssueTypeId));
+    await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, newEvents, arg.mainEvent.matchId, arg.defaultFilterTimeWithAllowance);
+    for (const event of newEvents) {
+      const relatedEventModel = await this.getLogInfoRelatedEvent(event, newRelatedEvents);
+      arg.allEvents.push(relatedEventModel);
+    }
+
+    arg.allEvents = _.orderBy(_.uniqBy(arg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
+  }
+
+  async getGetInfoChildMatch(matchId: number, isMainMatch: boolean,sportType: number, eventDate?: string): Promise<ChildMatchModel[]> {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(IssueTypeConstant.WRONG_SCORE);
     query.eventDate = eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
     query.matchId = matchId;
-    query.isMainMatch = false;
+    query.isMainMatch = isMainMatch;
     query.sportType = sportType;
     const models = await this.getChildMatches(query);
 
@@ -211,7 +211,7 @@ export class RelatedEventService {
   private async addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: WrongScoreModel[], mainEvent: WrongScoreModel,
     allEvents: LogInfoRelatedEvent[], relatedEvents: ChildMatchModel[]) {
 
-    const mainEventLogInfo = eventsGetLogInfo.find(X => X.isMainMatch);
+    const mainEventLogInfo = eventsGetLogInfo.find(x => x.isMainMatch);
     mainEvent.logInfoDetail = mainEventLogInfo.logInfoDetail;
     mainEvent.messageValidationLogInfo = mainEventLogInfo.messageValidationLogInfo;
     mainEvent.voidFromTime = mainEventLogInfo.voidFromTime;
@@ -220,20 +220,17 @@ export class RelatedEventService {
     const allRelatedEventLogInfo = eventsGetLogInfo.filter(x => !x.isMainMatch);
     for (const event of allRelatedEventLogInfo) {
       const relatedEvent = allEvents.find(y => y.matchId === event.matchId);
-      if(relatedEvent){
+      if (relatedEvent) {
         relatedEvent.logInfoDetail = event.logInfoDetail;
         relatedEvent.messageValidationLogInfo = event.messageValidationLogInfo;
         if (this.validationService.isHasAllowanceTime(relatedEvent)) {
           relatedEvent.voidTimeArea.fromDateTime = moment(event.logInfoDetail?.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
           relatedEvent.voidTimeArea.toDateTime = moment(event.logInfoDetail?.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-          relatedEvent.voidTimeArea.aaTime = event.aaTime;
-          relatedEvent.voidTimeArea.paTime = event.paTime;
-          relatedEvent.voidTimeArea.saTime = event.saTime;
         }
-        else if(event.logInfoDetail){
-          const relatedEventModel = await this.getLogInfoRelatedEvent(event, relatedEvents);
-         allEvents.push(relatedEventModel);
-       }
+      }
+      else if (event.logInfoDetail) {
+        const relatedEventModel = await this.getLogInfoRelatedEvent(event, relatedEvents);
+        allEvents.push(relatedEventModel);
       }
     }
   }
@@ -241,7 +238,7 @@ export class RelatedEventService {
   public async getLogInfoRelatedEvent(model: WrongScoreModel, allEventChild: ChildMatchModel[], evenDate?: string): Promise<LogInfoRelatedEvent> {
     let eventChild = allEventChild.find(y => y.matchId === model.matchId);
     if (!eventChild) {
-      const models = await this.getGetOutChildMatch(evenDate, model.matchId, model.sportType);
+      const models = await this.getGetInfoChildMatch(model.matchId, false, model.sportType, evenDate);
       eventChild = models[0];
     }
     const isHasAllowanceTime = this.validationService.isHasAllowanceTimeWrongScoreModel(model);
@@ -277,6 +274,5 @@ export class RelatedEventService {
       const relatedEventModel = await this.getLogInfoRelatedEvent(wrongScoreModel, allChildEvent, eventDateQuery);
       allEvents.push(relatedEventModel);
     }
-    allEvents = _.orderBy(_.uniqBy(allEvents, x => x.matchId), ['matchCode'], ['asc']);
   }
 }

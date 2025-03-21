@@ -106,8 +106,8 @@
         </button>
       </div>
     </div>
-    <div *ngIf="allSelectedEvents.length > 0">
-      <div class="mb-2" *ngFor="let event of allSelectedEvents; index as i">
+    <div *ngIf="allRelatedEvents.length > 0">
+      <div class="mb-2" *ngFor="let event of allRelatedEvents; index as i">
         <log-info-related-event #logInfo
           [isMainMatch]="false"
           [isEdit]="isEdit"
@@ -117,7 +117,7 @@
           [isDisabled]="filter.isVoided"
           [subIssueTypes]="issueTypes.subIssueTypes"
           [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance"
-          [logInfo]="allSelectedEvents[i]"
+          [logInfo]="allRelatedEvents[i]"
           [filter]="filter"
           (deleteEvent)="handleDeleteEvent($event)">
         </log-info-related-event>

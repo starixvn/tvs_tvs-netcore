@@ -56,9 +56,9 @@ export class LogInfoService {
     wrongScoreModel.filterFromTransTime = logInfoRelatedEvent.voidTimeArea.fromDateTime;
     wrongScoreModel.filterToTransTime = logInfoRelatedEvent.voidTimeArea.toDateTime;
     wrongScoreModel.subIssueTypeId = logInfoRelatedEvent.subIssueTypeId;
-    wrongScoreModel.aaTime = logInfoRelatedEvent.voidTimeArea.aaTime;
-    wrongScoreModel.paTime = logInfoRelatedEvent.voidTimeArea.paTime;
-    wrongScoreModel.saTime = logInfoRelatedEvent.voidTimeArea.saTime;
+    wrongScoreModel.aaTime = Number(logInfoRelatedEvent.voidTimeArea.aaTime);
+    wrongScoreModel.paTime = Number(logInfoRelatedEvent.voidTimeArea.paTime);
+    wrongScoreModel.saTime = Number(logInfoRelatedEvent.voidTimeArea.saTime);
 
     return wrongScoreModel;
   }
