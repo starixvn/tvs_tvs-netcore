@@ -54,5 +54,6 @@ export class LogInfoService {
     logInfoEvent.isShowValidation = false;
     logInfoEvent.logInfoDetail = null;
     logInfoEvent.messageValidationLogInfo = null;
+    logInfoEvent.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
   }
 }

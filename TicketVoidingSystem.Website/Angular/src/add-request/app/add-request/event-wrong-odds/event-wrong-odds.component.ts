@@ -5,7 +5,6 @@ import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { WrongOddsModel } from '../models/event-wrong-odds.model';
 import { OthersModel } from '../others/others.model';
-import { PoolHouseTicketValue } from '../pool-house-ticket/pool-house-ticket.constant';
 import { FilterWrongOddsComponent } from './filter-wrong-odds/filter-wrong-odds.component';
 import { MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from './models/log-info-wrong-odds.model';
@@ -68,11 +67,6 @@ export class EventWrongOddsComponent implements OnInit {
   public async GetMaxBetAndSpreadOfEvent(): Promise<MaxBetAndSpreadInfo[]>{
     const query = this.calculateOddsService.createMaxBetAndSpreadQuery(this.eventLeagueComponent.selectedMatch);
     return this.addRequestApiService.getMaxBetAndSpreadOfEvent(query);
-  }
-
-  public async clickSearch(): Promise<void> {
-    this.logInfoEvent.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
-    await this.handleSearchEvent();
   }
 
   public async handleSearchEvent(): Promise<void> {
