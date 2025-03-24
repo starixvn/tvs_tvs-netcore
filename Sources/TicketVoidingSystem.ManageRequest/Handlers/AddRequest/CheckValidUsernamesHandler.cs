@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Fanex.Logging;
+using MediatR;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
@@ -36,6 +37,8 @@ public class CheckValidUsernamesHandler(
 {
     public async Task<CheckValidUsernamesViewModel> Handle(CheckValidUsernamesRequest request, CancellationToken cancellationToken)
     {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+
         var usernameInfo = await usernameCheckService.GetUsernameInformation(request);
 
         var calcVoidResult = new CalcVoidTicketsResult();
@@ -56,6 +59,10 @@ public class CheckValidUsernamesHandler(
             },
             AccountWinlostModels = calcVoidResult.Accounts
         };
+
+        watch.Stop();
+        var log = $"New Abnormal account - Execute: {watch.ElapsedMilliseconds}ms - Accounts:{calcVoidResult.Accounts.Count()}";
+        await LogService.InfoAsync(log);
 
         ClearVoidTicketsInAccounts(calcVoidResult.Accounts);
         return viewModel;
