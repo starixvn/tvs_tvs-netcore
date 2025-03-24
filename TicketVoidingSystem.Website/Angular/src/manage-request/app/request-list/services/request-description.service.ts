@@ -33,7 +33,7 @@ export class RequestDescriptionService {
       [IssueTypeConstant.TECHNICAL_ERROR]: this.createTechnicalErrorContent,
       [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: this.createWrongOddsSportsBookContent,
       [IssueTypeConstant.WRONG_HDP]: this.createWrongHdpContent,
-      [IssueTypeConstant.WRONG_1ST_HDP]: this.createWrongOuContent,
+      [IssueTypeConstant.WRONG_1ST_HDP]: this.createWrongHdpContent,
       [IssueTypeConstant.WRONG_OU]: this.createWrongOuContent,
       [IssueTypeConstant.WRONG_1ST_OU]: this.createWrongOuContent,
       [IssueTypeConstant.WRONG_ODDS]: this.createWrongOddsContent
@@ -143,13 +143,13 @@ export class RequestDescriptionService {
     const handicapSubIssueTypeId = 6;
     const _1hHandicapSubIssueTypeId = 119;
     if(requestInfo.subIssueTypeId === handicapSubIssueTypeId || requestInfo.subIssueTypeId === _1hHandicapSubIssueTypeId){
-      return `Wrong Odds: Home >= ${requestInfo.fromOddsNotVoidHomeOver} & =< ${requestInfo.toOddsNotVoidHomeOver}, `
-      + `Away >= ${requestInfo.fromOddsNotVoidAwayUnder} & =< ${requestInfo.toOddsNotVoidAwayUnder}\n`
+      return `Wrong Odds: Home >= ${requestInfo.toOddsNotVoidHomeOver} & =< ${requestInfo.fromOddsNotVoidHomeOver}, `
+      + `Away >= ${requestInfo.toOddsNotVoidAwayUnder} & =< ${requestInfo.fromOddsNotVoidAwayUnder}\n`
       + `Correct Odds: Home ${requestInfo.correctOddsHomeOver}, Away ${requestInfo.correctOddsAwayUnder}\n`;
     }
 
-    return `Wrong Odds: Over >= ${requestInfo.fromOddsNotVoidHomeOver} & =< ${requestInfo.toOddsNotVoidHomeOver}, `
-      + `Under >= ${requestInfo.fromOddsNotVoidAwayUnder} & =< ${requestInfo.toOddsNotVoidAwayUnder}\n`
+    return `Wrong Odds: Over >= ${requestInfo.toOddsNotVoidHomeOver} & =< ${requestInfo.fromOddsNotVoidHomeOver}, `
+      + `Under >= ${requestInfo.toOddsNotVoidAwayUnder} & =< ${requestInfo.fromOddsNotVoidAwayUnder}\n`
       + `Correct Odds: Over ${requestInfo.correctOddsHomeOver}, Under ${requestInfo.correctOddsAwayUnder}\n`;
   }
 
