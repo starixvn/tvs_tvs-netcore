@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
-import { AcceptType, DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
@@ -35,6 +35,7 @@ import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allo
 import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
 import { AddRelatedEventArg } from './models/add-related-event.model';
 import { EditRequestService } from './services/edit-request.service';
+import { EventWrongScoreService } from './services/event-wrong-score.service';
 
 @Component({
   selector: 'event-wrong-score',
@@ -85,17 +86,15 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     private readonly logInfoService: LogInfoService,
     private readonly modalService: ModalService,
     private readonly relatedEventService: RelatedEventService,
-    private readonly editRequestService: EditRequestService
+    private readonly editRequestService: EditRequestService,
+    private readonly eventWrongScoreService: EventWrongScoreService
   ) {
     this.tooltip.element = this.element;
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
-      this.primitiveProps.filterBy = this.wrongScoreService.getFilterByBaseOnSubIssueType(this.filter.subIssueTypeId);
-      this.primitiveProps.isCheckedVar = null;
-      this.primitiveProps.isHighLightVarCheck = null;
-      this.primitiveProps.isShowRelatedEvents = this.relatedEventService.isHasRelatedEvent(Number(this.filter.subIssueTypeId));
+      this.eventWrongScoreService.resetPrimitiveProperty(this.primitiveProps, this.filter.subIssueTypeId);
       this.tvDetectionComponent?.initDefaultValues();
       this.resetData();
       this.filter.isChangeSubTypeManual = false;
@@ -120,7 +119,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
         this.originWrongScoreModels = await this.editRequestService.getScoreWrongScoreModels(this.wrongScoreModels, this.matchId);
       }
       this.defaultFilterTimeWithAllowance = this.wrongScoreService.getFilterWrongScore(this.mainEvent);
-      this.tvDetectionModel = this.wrongScoreService.getTvDetectionModel(this.mainEvent);
+      this.tvDetectionModel = this.eventWrongScoreService.getTvDetectionModel(this.mainEvent);
     } else {
       this.defaultFilterTimeWithAllowance = this.wrongScoreService.initDefaultFilterWrongScore();
       this.addRequestStore.changeSavingRequestStatus(true);
@@ -165,7 +164,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
         this.wrongScoreModels = [this.wrongScoreService.createMainWrongScoreModel(this.defaultFilterTimeWithAllowance)];
         this.wrongScoreModels[0].isMainMatch = true;
       }
-      this.relatedEvents = await this.relatedEventService.getGetInfoChildMatch(this.mainEvent.matchId, true,this.mainEvent.sportType, this.mainEvent.eventDate.toString());
+      this.relatedEvents = await this.relatedEventService.getGetInfoChildMatch(this.mainEvent.matchId, true, this.mainEvent.sportType, this.mainEvent.eventDate.toString());
       await this.relatedEventService.getDataRelatedEventWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
       this.logInfoComponents.forEach(x => {
         x.filterTimeWithAllowanceComponent?.updateData();
@@ -173,7 +172,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       });
     }
     else {
-      await this.getWrongScores(this.matchId);
+      this.originWrongScoreModels = await this.eventWrongScoreService.getAllWrongScoreModels(this.wrongScoreModels, this.matchId);
     }
 
     this.primitiveProps.isBlock = false;
@@ -183,40 +182,24 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
 
   public async updateWrongScoreModels(): Promise<void> {
     this.originWrongScoreModels = await this.wrongScoreService.callApiGetWrongScores(this.matchId);
-    this.originWrongScoreModels.forEach(x => {
-      const model = this.wrongScoreModels.find(y => y.scoreId === x.scoreId);
-      if (model) {
-        model.isActive = x.isActive;
-      } else {
-        this.wrongScoreModels.push(_.cloneDeep(x));
-      }
-    });
-    this.wrongScoreModels = _.orderBy(_.uniqBy(this.wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
+    this.wrongScoreService.mapWrongScoreModel(this.originWrongScoreModels, this.wrongScoreModels);
   }
 
   actualTimeChange(actualTime: string) {
-    this.filterWrongScoreComponent.fromTimeComponent.time = moment(actualTime, DateTimeFormat.SIMPLE_TIME_FORMAT)
-      .format(DateTimeFormat.TIME_FORMAT);
+    this.filterWrongScoreComponent.fromTimeComponent.time = moment(actualTime, DateTimeFormat.SIMPLE_TIME_FORMAT).format(DateTimeFormat.TIME_FORMAT);
     this.resetData();
     this.addRequestStore.changeSavingRequestStatus(true);
   }
 
   public updateByOriginWrongScoreModel(originWrongScoreModels: WrongScoreModel[]) {
-    originWrongScoreModels.forEach(x => {
-      if (!this.wrongScoreModels.some(y => y.scoreId === x.scoreId)) {
-        this.wrongScoreModels.push(_.cloneDeep(x));
-      }
-    });
-    this.wrongScoreModels = _.orderBy(_.uniqBy(this.wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
+    this.wrongScoreService.updateByOriginWrongScoreModel(originWrongScoreModels, this.wrongScoreModels);
   }
 
   public changeMatchEvent(matchInfo: MatchModel) {
     if (matchInfo) {
       this.resetData();
       this.matchId = matchInfo.matchId;
-      this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
-      this.mainEvent.eventDate = this.eventLeagueComponent?.selectedMatch.eventDate;
-      this.mainEvent.sportType = this.eventLeagueComponent?.selectedMatch.sportType;
+      this.eventWrongScoreService.updateMainMatch(this.mainEvent, matchInfo);
       this.updateMatchId.emit(matchInfo);
     }
   }
@@ -227,15 +210,6 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     this.primitiveProps.actualScore = '';
     this.allRelatedEvents = [];
     this.relatedEvents = [];
-  }
-
-  public async getWrongScores(matchId: number): Promise<void> {
-    this.primitiveProps.isBlock = true;
-    this.originWrongScoreModels = await this.wrongScoreService.callApiGetWrongScores(matchId);
-    this.primitiveProps.isBlock = false;
-    if (this.originWrongScoreModels.length > 0) {
-      this.wrongScoreModels = _.cloneDeep(this.originWrongScoreModels);
-    }
   }
 
   public triggerCloseEvent() {
@@ -369,24 +343,9 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   }
 
   getHighlightMinTimeClass(minTime?: Date): string {
-    if (minTime && this.wrongScoreModels[0].logInfoDetail.highlightAcceptType) {
-      switch (this.wrongScoreModels[0].logInfoDetail.highlightAcceptType) {
-        case AcceptType.AUTO_ACCEPT: {
-          this.acceptTypeName = "AA";
-          return 'highlight-min-aa';
-        }
-        case AcceptType.SECOND_ACCEPT: {
-          this.acceptTypeName = "SA";
-          return 'highlight-min-sa';
-        }
-        case AcceptType.PENDING_ACCEPT: {
-          this.acceptTypeName = "PA";
-          return 'highlight-min-pa';
-        }
-      }
-    }
-
-    return '';
+    const highlightTimeClass = this.eventWrongScoreService.getHighlightMinTimeClass(this.wrongScoreModels[0]?.logInfoDetail?.highlightAcceptType, minTime);
+    this.acceptTypeName = highlightTimeClass.acceptTypeName;
+    return highlightTimeClass.highlightTimeClass;
   }
 
   public updateStatusButtonSaveRequest(): void {
@@ -498,10 +457,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
 
   async saveRelatedEvent(selectedRelatedEvents: ChildMatchModel[]): Promise<void> {
     this.primitiveProps.isBlock = true;
-    this.allRelatedEvents = this.allRelatedEvents.filter(x =>
-    (selectedRelatedEvents.some(y => y.matchId === x.matchId)
-      || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType));
-
+    this.allRelatedEvents = this.eventWrongScoreService.updateCheckRelatedEvent(selectedRelatedEvents, this.allRelatedEvents, this.relatedEvents, this.addChildMatchModel.matchType);
     const newChildEvents = selectedRelatedEvents.filter(x => !this.allRelatedEvents.some(y => y.matchId === x.matchId));
     if (newChildEvents.length > 0) {
       await this.relatedEventService.addNewLogInfoRelatedEvent(newChildEvents, this.initAddRelatedEventArgs());     

@@ -6,6 +6,7 @@ import { ChildMatchModel } from '../../models/related-event.model';
 import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { WrongScoreService } from './wrong-score.service';
 import _ from 'lodash';
+import { EventWrongScoreService } from './event-wrong-score.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,9 @@ import _ from 'lodash';
 export class EditRequestService {
   constructor(
     private readonly relatedEventService: RelatedEventService,
-    private readonly wrongScoreService: WrongScoreService) { }
+    private readonly wrongScoreService: WrongScoreService,
+    private readonly eventWrongScoreService: EventWrongScoreService
+  ) { }
 
   assignPrimitivePropsEditRequest(mainEvent: WrongScoreModel, primitiveProps: PrimitiveProperty) {
     primitiveProps.actualScore = mainEvent.actualScore;
@@ -21,7 +24,7 @@ export class EditRequestService {
     primitiveProps.isShowActualScore = true;
     primitiveProps.isCheckedVar = mainEvent.isCheckedVar;
     primitiveProps.isHighLightVarCheck = !mainEvent.isCheckedVar;
-    primitiveProps.isShowRelatedEvents = this.relatedEventService.isHasRelatedEvent(Number(mainEvent.subIssueTypeId));
+    primitiveProps.isShowRelatedEvents = this.eventWrongScoreService.isHasRelatedEvent(Number(mainEvent.subIssueTypeId));
   }
 
   getMainWrongScoreModel(wrongScoreModels: WrongScoreModel[]): WrongScoreModel {

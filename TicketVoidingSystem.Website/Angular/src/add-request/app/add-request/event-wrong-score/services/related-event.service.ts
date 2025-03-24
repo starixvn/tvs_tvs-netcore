@@ -69,10 +69,6 @@ export class RelatedEventService {
     return RelatedEventService.SubIssueTypeMapHasRelatedEvent.get(filterSubTypeId) || null;
   }
 
-  isHasRelatedEvent(filterSubTypeId: number): boolean {
-    return RelatedEventService.SubIssueTypeMapHasRelatedEvent.has(filterSubTypeId);
-  }
-
   updateChildMatchSubIssueType(wrongScoreModel: WrongScoreModel, filterSubTypeId: number): void {
     const childMatchSubIssueTypeId = this.getChildMatchSubIssueType(filterSubTypeId);
     wrongScoreModel.subIssueTypeId = childMatchSubIssueTypeId;

@@ -1,14 +1,12 @@
 import { EventEmitter, Injectable, QueryList } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { DateTimeFormat, TVSRequestFilterBy, TimeZone } from '../../../../../utility/constants/config';
+import { DateTimeFormat, TimeZone } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { LastTimeScore, LastTimeScoreQuery } from '../../models/last-time-score.model';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
-import { ValidationService } from './validation.service';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 
 @Injectable({
@@ -16,9 +14,7 @@ import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-a
 })
 export class WrongScoreService {
   constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly validationService: ValidationService
-  ) { }
+    private readonly addRequestApiService: AddRequestApiService) { }
 
   public initDefaultFilterWrongScore(): FilterTimeWithAllowance {
     const filterWrongScoreModel = new FilterTimeWithAllowance();
@@ -38,16 +34,6 @@ export class WrongScoreService {
     filterWrongScoreModel.saTime = wrongScoreModel.saTime;
 
     return filterWrongScoreModel;
-  }
-
-  getTvDetectionModel(inputModel: WrongScoreModel): TvDetectionModel {
-    return {
-      serviceAcceptTime: inputModel.serviceAcceptTime,
-      actualTime: inputModel.actualTime,
-      tvDetectionValue: inputModel.tvDetectionValue,
-      minuteOffset: inputModel.minuteOffset,
-      secondOffset: inputModel.secondOffset,
-    } as TvDetectionModel;
   }
 
   public createMainWrongScoreModel(filterWrongScore: FilterTimeWithAllowance) {
@@ -92,16 +78,6 @@ export class WrongScoreService {
     return wrongScoreModels.filter(x => x.isChecked || x.isMainMatch);
   }
 
-  public getFilterByBaseOnSubIssueType(subIssueTypeId: string): number {
-    if (this.validationService.isSubTypeFilterByAcceptedTime(subIssueTypeId)) {
-      return TVSRequestFilterBy.CHECK_TIME;
-    } else if (this.validationService.isSubTypeFilterByTransTimeAndAcceptedTime(subIssueTypeId)) {
-      return TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME;
-    } else {
-      return TVSRequestFilterBy.TRANS_TIME;
-    }
-  }
-
   public getSelectedWrongScoreComponents(wrongScoreInfoComponents: QueryList<WrongScoreInfoComponent>): WrongScoreInfoComponent[] {
     return wrongScoreInfoComponents.filter(x => x.wrongScoreModel.isChecked);
   }
@@ -135,6 +111,27 @@ export class WrongScoreService {
     const data = await this.addRequestApiService.getWrongScores(matchId);
 
     return data;
+  }
+
+  mapWrongScoreModel(originWrongScoreModels: WrongScoreModel[],wrongScoreModels: WrongScoreModel[]): void {
+    originWrongScoreModels.forEach(x => {
+      const model = wrongScoreModels.find(y => y.scoreId === x.scoreId);
+      if (model) {
+        model.isActive = x.isActive;
+      } else {
+        wrongScoreModels.push(_.cloneDeep(x));
+      }
+    });
+    wrongScoreModels = _.orderBy(_.uniqBy(wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
+  }
+
+  updateByOriginWrongScoreModel(originWrongScoreModels: WrongScoreModel[], wrongScoreModels: WrongScoreModel[]) {
+    originWrongScoreModels.forEach(x => {
+      if (!wrongScoreModels.some(y => y.scoreId === x.scoreId)) {
+        wrongScoreModels.push(_.cloneDeep(x));
+      }
+    });
+    wrongScoreModels = _.orderBy(_.uniqBy(wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
   }
 
   getTimeSelectedScore(wrongScoreModels: WrongScoreModel[]): string {

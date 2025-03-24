@@ -31,5 +31,4 @@ export class SaveRequestArg {
   tvDetectionModel: TvDetectionModel;
   allSelectedEvents: LogInfoRelatedEvent[];
   defaultFilterTimeWithAllowance: FilterTimeWithAllowance;
-  ;
 }

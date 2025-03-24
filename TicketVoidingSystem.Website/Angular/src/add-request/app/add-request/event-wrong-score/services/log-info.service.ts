@@ -8,17 +8,17 @@ import { GetLogInfoQuery } from '../../models/add-request.query';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { GetLogInfoModel } from '../../models/get-log-info.model';
 import { PrimitiveProperty, WrongScoreGetLogInfoQuery } from '../event-wrong-score.model';
-import { WrongScoreService } from './wrong-score.service';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { ValidationService } from './validation.service';
+import { EventWrongScoreService } from './event-wrong-score.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LogInfoService {
   constructor(
-    private readonly wrongScoreService: WrongScoreService,
+    private readonly eventWrongScoreService: EventWrongScoreService,
     private readonly commonService: CommonService,
     private readonly validationService: ValidationService) { }
 
@@ -52,7 +52,7 @@ export class LogInfoService {
   mapRelatedEventToWrongScoreModel(logInfoRelatedEvent: LogInfoRelatedEvent) {
     const wrongScoreModel = new WrongScoreModel();
     wrongScoreModel.matchId = logInfoRelatedEvent.matchId;
-    wrongScoreModel.filterBy = this.wrongScoreService.getFilterByBaseOnSubIssueType(logInfoRelatedEvent.subIssueTypeId.toString());
+    wrongScoreModel.filterBy = this.eventWrongScoreService.getFilterByBaseOnSubIssueType(logInfoRelatedEvent.subIssueTypeId.toString());
     wrongScoreModel.filterFromTransTime = logInfoRelatedEvent.voidTimeArea.fromDateTime;
     wrongScoreModel.filterToTransTime = logInfoRelatedEvent.voidTimeArea.toDateTime;
     wrongScoreModel.subIssueTypeId = logInfoRelatedEvent.subIssueTypeId;
@@ -65,7 +65,7 @@ export class LogInfoService {
 
   private getWrongScoreModel(filter: FilterModel, wrongScoreModels: WrongScoreModel[], mainMatchId: number, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): WrongScoreGetLogInfoQuery[] {
     return wrongScoreModels.map(x => {
-      const filterBy = this.wrongScoreService.getFilterByBaseOnSubIssueType(filter.subIssueTypeId);
+      const filterBy = this.eventWrongScoreService.getFilterByBaseOnSubIssueType(filter.subIssueTypeId);
       if (this.validationService.isHasAllowanceTimeWrongScoreModel(x) && x.filterBy === TVSRequestFilterBy.CHECK_TIME) {
         x.filterFromTransTime = defaultFilterTimeWithAllowance.fromDateTime;
         x.filterToTransTime = defaultFilterTimeWithAllowance.toDateTime;
