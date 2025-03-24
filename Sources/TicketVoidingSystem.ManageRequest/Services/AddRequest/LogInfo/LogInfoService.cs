@@ -47,7 +47,7 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
         };
     }
 
-    private async Task<IEnumerable<GetLogInfoModel>> GetLogInfoModels(GetLogInfoQuery query, IEnumerable<Validation> validations, // NOSONAR
+    private async Task<List<GetLogInfoModel>> GetLogInfoModels(GetLogInfoQuery query, IEnumerable<Validation> validations, // NOSONAR
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
         return query.IssueTypeId switch
@@ -74,7 +74,7 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
         };
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongScore(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelWrongScore(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
         return query.WrongScoreModels.Select(item => new GetLogInfoModel
@@ -84,10 +84,10 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             TicketRequest = logInfoHelperService.CombineTicketRequest(ticketRequests, x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId),
             LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId)
             MatchId = item.MatchId
-        });
+        }).ToList();
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelDangerAccepted(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelDangerAccepted(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
         return query.DangerAcceptedModels.Select(item => new GetLogInfoModel
@@ -96,10 +96,10 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             Validation = logInfoHelperService.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = logInfoHelperService.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
             LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
-        });
+        }).ToList();
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelRedCard(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelRedCard(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
         return query.RedCardModels.Select(item => new GetLogInfoModel
@@ -108,10 +108,10 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             Validation = logInfoHelperService.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = logInfoHelperService.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
             LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
-        });
+        }).ToList();
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongHdp(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelWrongHdp(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
         return query.WrongHdpModels.Select(item => new GetLogInfoModel
@@ -120,10 +120,10 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             Validation = logInfoHelperService.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = logInfoHelperService.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
             LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
-        });
+        }).ToList();
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrong1stHdp(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelWrong1stHdp(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
         return query.Wrong1stHdpModels.Select(item => new GetLogInfoModel
@@ -132,10 +132,10 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             Validation = logInfoHelperService.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = logInfoHelperService.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
             LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
-        });
+        }).ToList();
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongOu(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelWrongOu(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
         return query.WrongOuModels.Select(item => new GetLogInfoModel
@@ -144,10 +144,10 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             Validation = logInfoHelperService.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = logInfoHelperService.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
             LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
-        });
+        }).ToList();
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrong1stOu(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelWrong1stOu(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
         return query.Wrong1stOuModels.Select(item => new GetLogInfoModel
@@ -156,10 +156,10 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             Validation = logInfoHelperService.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = logInfoHelperService.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
             LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
-        });
+        }).ToList();
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongOdds(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelWrongOdds(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
         return query.WrongOddsModels.Select(item => new GetLogInfoModel
@@ -168,10 +168,10 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             Validation = logInfoHelperService.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = logInfoHelperService.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
             LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
-        });
+        }).ToList();
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelReducedOver(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelReducedOver(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
         return query.ReducedOverModels.Select(item => new GetLogInfoModel
@@ -180,10 +180,10 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             Validation = logInfoHelperService.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = logInfoHelperService.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
             LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
-        });
+        }).ToList();
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelNotParticipate(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelNotParticipate(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
         return query.NotParticipateModels.Select(item => new GetLogInfoModel
@@ -192,10 +192,10 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             Validation = logInfoHelperService.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = logInfoHelperService.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
             LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
-        });
+        }).ToList();
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelEarlyKickOff(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelEarlyKickOff(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
         return query.EarlyKickOffModels.Select(item => new GetLogInfoModel
@@ -204,10 +204,10 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             Validation = logInfoHelperService.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = logInfoHelperService.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
             LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
-        });
+        }).ToList();
     }
 
-    private async Task<IEnumerable<GetLogInfoModel>> GetLogInfoViewModelWrongMarketOffered(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private async Task<List<GetLogInfoModel>> GetLogInfoViewModelWrongMarketOffered(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
         await logInfoHelperService.UpdateBetTypeTicketsInfo(query.WrongMarketOfferedModels.First().MatchId, betTypeCount);
@@ -222,61 +222,61 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             BetTypeCount = betTypeCount.Where(x => x.Id == item.Id)
                 .OrderBy(x => x.OriginalBetTypeName)
                 .ThenBy(x => x.BetId)
-        });
+        }).ToList();
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongOddsSportsBook(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelWrongOddsSportsBook(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
-        return new List<GetLogInfoModel>
-        {
-            new()
+        return
+        [
+            new GetLogInfoModel
             {
                 MatchId = query.WrongOddsSportsBookModel.MatchId,
                 Validation = logInfoHelperService.CombineValidations(validations, x => true),
                 TicketRequest = ticketRequests,
                 LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => true)
             }
-        };
+        ];
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongOfferedName(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelWrongOfferedName(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
-        return new List<GetLogInfoModel>
-        {
-            new()
+        return
+        [
+            new GetLogInfoModel
             {
                 MatchId = query.WrongOfferedNameModel.MatchId,
                 Validation = logInfoHelperService.CombineValidations(validations, x => true),
                 TicketRequest = ticketRequests,
                 LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => true)
             }
-        };
+        ];
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelOtherIssues(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelOtherIssues(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
-        return new List<GetLogInfoModel>
-        {
-            new()
+        return
+        [
+            new GetLogInfoModel
             {
                 MatchId = query.OtherIssuesModel.MatchId,
                 Validation = logInfoHelperService.CombineValidations(validations, x => true),
                 TicketRequest = ticketRequests,
                 LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => true),
             }
-        };
+        ];
     }
 
-    private async Task<IEnumerable<GetLogInfoModel>> GetLogInfoViewModelTechnicalError(GetLogInfoQuery query, IEnumerable<Validation> validations,
+    private async Task<List<GetLogInfoModel>> GetLogInfoViewModelTechnicalError(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
         await logInfoHelperService.UpdateBetTypeTicketsInfo(query.TechnicalErrorModel.MatchId, betTypeCount);
-        return new List<GetLogInfoModel>
-        {
-            new()
+        return
+        [
+            new GetLogInfoModel
             {
                 MatchId = query.TechnicalErrorModel.MatchId,
                 Validation = logInfoHelperService.CombineValidations(validations, x => true),
@@ -284,21 +284,21 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
                 LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => true),
                 BetTypeCount = betTypeCount.OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetId)
             }
-        };
+        ];
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelDefault(IEnumerable<Validation> validations,
+    private List<GetLogInfoModel> GetLogInfoViewModelDefault(IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
-        return new List<GetLogInfoModel>
+        return
+        [
+            new GetLogInfoModel
             {
-                new()
-                {
-                    Validation = logInfoHelperService.CombineValidations(validations, x => true),
-                    TicketRequest = ticketRequests,
-                    LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => true)
-                }
-            };
+                Validation = logInfoHelperService.CombineValidations(validations, x => true),
+                TicketRequest = ticketRequests,
+                LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => true)
+            }
+        ];
     }
 
     private GetLogInfoCriteria GetLogInfoCriteria(GetLogInfoQuery query) //NOSONAR

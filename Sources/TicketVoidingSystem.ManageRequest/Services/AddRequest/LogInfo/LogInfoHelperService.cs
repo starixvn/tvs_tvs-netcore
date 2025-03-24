@@ -63,10 +63,10 @@ public class LogInfoHelperServiceImp(BetListService betListService, CopyRequestI
             MatchId = selectedItems[0].MatchId,
             Id = selectedItems[0].Id,
             ScoreId = selectedItems[0].ScoreId,
-            ActionType = selectedItems.Min(x => x.MinTransId),
-            LiveScores = string.Join("|", selectedItems.Select(x => x.LiveScores)),
+            ActionType = selectedItems.MinBy(x => x.MinTransId).ActionType,
+            LiveScores = JoinStringValue("|", selectedItems.Select(x => x.LiveScores).Distinct()),
             ScoreOfMatch = selectedItems[0].ScoreOfMatch,
-            ScoreNormalTicket = string.Join("|", selectedItems.Select(x => x.ScoreNormalTicket)),
+            ScoreNormalTicket = JoinStringValue("|", selectedItems.Select(x => x.ScoreNormalTicket)),
             MinTransId = selectedItems.Min(x => x.MinTransId),
             HighlightAcceptType = selectedItems.MinBy(x => x.MinTransId)?.HighlightAcceptType,
             HighlightMinTime = selectedItems.MinBy(x => x.MinTransId)?.HighlightMinTime,
@@ -81,11 +81,16 @@ public class LogInfoHelperServiceImp(BetListService betListService, CopyRequestI
             PoolHouseMainParlayCount = selectedItems.Sum(x => x.PoolHouseMainParlayCount),
             PoolHouseSettleCount = selectedItems.Sum(x => x.PoolHouseSettleCount),
             PoolHouseSingleCount = selectedItems.Sum(x => x.PoolHouseSingleCount),
-            LogInfoTicketsJson = string.Join(",", selectedItems.Select(x => x.LogInfoTicketsJson)),
+            LogInfoTicketsJson = JoinStringValue("|", selectedItems.Select(x => x.LogInfoTicketsJson)),
             VoidFromTime = selectedItems.Min(x => x.VoidFromTime),
             VoidToTime = selectedItems.Max(x => x.VoidToTime),
             TransVoidToTime = selectedItems.Max(x => x.TransVoidToTime)
         };
+    }
+
+    public static string JoinStringValue(string? separator, IEnumerable<string> items)
+    {
+        return string.Join(separator, items.Where(x => !string.IsNullOrWhiteSpace(x)));
     }
 
     public TransInfoAddRequestModel CombineTransInfoAddRequest(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
