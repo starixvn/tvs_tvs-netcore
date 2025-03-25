@@ -12,7 +12,7 @@
       </div>
       <div class="col-sm-5 p-0">
         @if (!isMainMatch) {
-        <div class="float-right d-flex">
+        <div class="float-end d-flex">
           <i class="fa-solid fa-trash-can fa-sm delete-event-icon pointer"
             [ngClass]="{'delete-event-icon-disabled': filter.isVoided}" aria-hidden="true"
             (click)="handleDeleteEvent(logInfo.matchId)">

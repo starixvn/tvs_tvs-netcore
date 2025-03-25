@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -15,6 +15,9 @@ import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utili
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
+import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
+import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property,mdel';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
@@ -30,8 +33,6 @@ import { LABELS } from './../../../../utility/constants/labels';
 import { StaticService } from './../../../../utility/services/static.service';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
-import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
 import { EventRedCardService } from './services/event-red-card.service';
 import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
@@ -41,13 +42,13 @@ import { ValidationService } from './services/validation.service';
 import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 
 @Component({
-    selector: 'event-red-card',
-    templateUrl: './event-red-card.component.html',
-    styleUrls: ['./event-red-card.component.scss'],
-    standalone: true,
-    imports: [FormsModule, CommonModule, EventLeagueComponent, FilterTimeAreaComponent, LogInfoRedCardComponent, AddChildMatchComponent,
-      LogInfoRedCardComponent, NgSelectModule, NgbModule, TooltipComponent, BlockUiModule, ConfirmAddRequestComponent,
-      TvDetectionComponent]
+  selector: 'event-red-card',
+  templateUrl: './event-red-card.component.html',
+  styleUrls: ['./event-red-card.component.scss'],
+  standalone: true,
+  imports: [FormsModule, CommonModule, EventLeagueComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent,
+    NgSelectModule, NgbModule, TooltipComponent, BlockUiModule, ConfirmAddRequestComponent,
+    TvDetectionComponent]
 })
 export class EventRedCardComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;
@@ -78,16 +79,15 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   getAllowanceTimeSubscription: Subscription;
 
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
+  private readonly element = inject(ElementRef);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly validationService = inject(ValidationService);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly relatedEventService = inject(RelatedEventService);
+  private readonly eventRedCardService = inject(EventRedCardService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly logInfoService: LogInfoService,
-    private readonly validationService: ValidationService,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly relatedEventService: RelatedEventService,
-    private readonly eventRedCardService: EventRedCardService,
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -125,7 +125,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     this.getAllowanceTimeSubscription?.unsubscribe();
   }
 
-  private createGetChildMatchesQuery(): GetChildMatchQuery{
+  private createGetChildMatchesQuery(): GetChildMatchQuery {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(this.filter.issueTypeId);
     query.eventDate = this.mainEvent.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;

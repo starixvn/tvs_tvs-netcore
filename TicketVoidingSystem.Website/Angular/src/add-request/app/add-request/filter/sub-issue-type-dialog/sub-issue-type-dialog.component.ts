@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
@@ -30,8 +30,7 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
   isCheckedWrongScoreOnwards = false;
   userId: string;
   isBlockUi: boolean;
-
-  constructor(private readonly apiService: AddRequestApiService) { }
+  private readonly apiService = inject(AddRequestApiService);
 
   public async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['model'] && this.model.isOpen) {

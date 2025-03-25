@@ -54,15 +54,15 @@ exports[`ConfirmWrongScoreComponent ConfirmWrongScoreComponent should match snap
                   Please double check below type if correct before proceeding
                 </div>
                 <div
-                  class="ml-2"
+                  class="ms-2"
                 >
                   <div>
-                    Issue Type: 
+                    Issue Type:
                     <strong>
                     </strong>
                   </div>
                   <div>
-                    Sub Type: 
+                    Sub Type:
                     <strong>
                     </strong>
                   </div>

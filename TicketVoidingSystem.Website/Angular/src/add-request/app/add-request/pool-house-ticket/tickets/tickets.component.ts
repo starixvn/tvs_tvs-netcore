@@ -1,3 +1,4 @@
+
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +12,7 @@ import { TicketsModel } from './tickets.model';
     templateUrl: './tickets.component.html',
     styleUrls: ['./tickets.component.scss'],
     standalone: true,
-    imports: [CommonModule, FormsModule, BlockUiModule, PipeModule]
+    imports: [FormsModule, BlockUiModule, PipeModule, CommonModule]
 })
 export class TicketsComponent extends BaseTicketsListComponent<TicketsModel> implements OnInit {
   @Input() model = new TicketsModel();

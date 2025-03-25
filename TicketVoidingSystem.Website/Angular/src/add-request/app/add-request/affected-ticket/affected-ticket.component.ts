@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
 import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
 import { MultipleSelectionComponent } from 'src/utility/components/multiple-selection/multiple-selection.component';
@@ -12,11 +12,11 @@ import { LogAnalysisService } from '../services/log-analysis.service';
 import { AffectedTicketService } from './affected-ticket.service';
 
 @Component({
-    selector: 'affected-ticket',
-    templateUrl: './affected-ticket.component.html',
-    styleUrls: ['./affected-ticket.component.scss'],
-    standalone: true,
-    imports: [MultipleSelectionComponent, TicketsComponent, BlockUiModule]
+  selector: 'affected-ticket',
+  templateUrl: './affected-ticket.component.html',
+  styleUrls: ['./affected-ticket.component.scss'],
+  standalone: true,
+  imports: [MultipleSelectionComponent, TicketsComponent, BlockUiModule]
 })
 export class AffectedTicketComponent implements OnChanges {
   @Input() model = new AffectedTicketsModel();
@@ -27,10 +27,8 @@ export class AffectedTicketComponent implements OnChanges {
   isShowOtherTickets = true;
   isShowAffectedTickets = true;
   isShowGroupBetTypesCount = true;
-  constructor(
-    private readonly logAnalysisService: LogAnalysisService,
-    private readonly affectedTicketService: AffectedTicketService
-  ) { }
+  private readonly logAnalysisService = inject(LogAnalysisService);
+  private readonly affectedTicketService = inject(AffectedTicketService);
 
   public async ngOnChanges(changes: SimpleChanges) {
     if (changes['model'] && this.model.isOpen) {

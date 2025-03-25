@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import moment from 'moment-timezone';
 import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
@@ -9,11 +9,11 @@ import { TvDetectionModel } from './tv-detection.model';
 import { TvDetectionService } from './tv-detection.service';
 
 @Component({
-    selector: 'tv-detection',
-    templateUrl: './tv-detection.component.html',
-    styleUrls: ['./tv-detection.component.scss'],
-    standalone: true,
-    imports: [FormsModule, TooltipComponent, CommonModule]
+  selector: 'tv-detection',
+  templateUrl: './tv-detection.component.html',
+  styleUrls: ['./tv-detection.component.scss'],
+  standalone: true,
+  imports: [FormsModule, TooltipComponent, CommonModule]
 })
 export class TvDetectionComponent implements OnInit {
   @Input() disabled: boolean;
@@ -22,11 +22,10 @@ export class TvDetectionComponent implements OnInit {
   @Output() actualTimeChange = new EventEmitter<string>();
   tooltip = new Tooltip();
   isCheckedTvDetection: boolean;
+  private readonly element = inject(ElementRef);
+  private readonly tvDetectionService = inject(TvDetectionService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly tvDetectionService: TvDetectionService
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -52,7 +51,7 @@ export class TvDetectionComponent implements OnInit {
   }
 
   changeMinuteInput() {
-    if (this.tvDetectionService.isValidityMinute(this.model.minuteOffset, this.tooltip)){
+    if (this.tvDetectionService.isValidityMinute(this.model.minuteOffset, this.tooltip)) {
       this.updateActualTime();
     }
   }

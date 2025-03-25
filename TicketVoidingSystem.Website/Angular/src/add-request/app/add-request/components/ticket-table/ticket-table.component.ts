@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import bigDecimal from 'js-big-decimal';
 import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
@@ -13,14 +13,10 @@ import { TicketTableViewModel } from './ticket-table.model';
     standalone: true,
     imports: [BlockUiModule, FormsModule, SanitizeHtmlPipe, CommonModule]
 })
-export class TicketTableComponent implements OnInit {
+export class TicketTableComponent {
   @Input() model = new TicketTableViewModel();
   @Input() isBlock: boolean;
   @Output() changeWinlost = new EventEmitter<bigDecimal>();
-
-  public ngOnInit() {
-    //this.clickBody();
-  }
 
   isShowNoData(): boolean {
     return this.model.groups === undefined ||

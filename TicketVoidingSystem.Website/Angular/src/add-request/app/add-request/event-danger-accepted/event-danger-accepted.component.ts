@@ -15,11 +15,12 @@ import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utili
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
+import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
+import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property,mdel';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
-import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { AddRelatedEventArg } from '../models/add-related-event.model';
@@ -45,7 +46,7 @@ import { PrimitiveProperty } from '../components/log-info-related-event/primitiv
   templateUrl: './event-danger-accepted.component.html',
   styleUrls: ['./event-danger-accepted.component.scss'],
   imports: [FormsModule, CommonModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiModule,
-    TvDetectionComponent, FilterTimeAreaComponent, LogInfoRedCardComponent, AddChildMatchComponent, ConfirmDangerAcceptedComponent],
+    TvDetectionComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent, ConfirmDangerAcceptedComponent],
   providers: [
     LogInfoService,
     ValidationService,
@@ -83,7 +84,6 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   getAllowanceTimeSubscription: Subscription;
 
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
-
   private readonly element = inject(ElementRef);
   private readonly logInfoService = inject(LogInfoService);
   private readonly validationService = inject(ValidationService);

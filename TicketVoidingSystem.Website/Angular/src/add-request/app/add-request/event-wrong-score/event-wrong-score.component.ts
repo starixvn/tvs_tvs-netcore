@@ -1,7 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
+import { AddChildMatchComponent } from 'src/utility/components/add-child-match/add-child-match.component';
+import { BlockUiDirective } from 'src/utility/components/block-ui/block-ui.directive';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
+import { PipeModule } from 'src/utility/pipes/pipe.module';
+import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
@@ -11,36 +18,39 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestStore } from '../add-request.store';
+import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { TvDetectionModel } from '../components/tv-detection/tv-detection.model';
+import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { WrongScoreModel } from '../models/event-wrong-score.model';
+import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
+import { ConfirmWrongScoreComponent } from './confirm-wrong-score/confirm-wrong-score.component';
 import { ConfirmWrongScoreModel } from './confirm-wrong-score/confirm-wrong-score.model';
 import { PrimitiveProperty } from './event-wrong-score.model';
 import { FilterWrongScoreComponent } from './filter-wrong-score/filter-wrong-score.component';
+import { AddRelatedEventArg } from './models/add-related-event.model';
+import { EditRequestService } from './services/edit-request.service';
+import { EventWrongScoreService } from './services/event-wrong-score.service';
 import { LogInfoService } from './services/log-info.service';
+import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationBusinessRuleArgs } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
-import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
-import { RelatedEventService } from './services/related-event.service';
-import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
-import { ChildMatchModel } from '../models/related-event.model';
-import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
-import { AddRelatedEventArg } from './models/add-related-event.model';
-import { EditRequestService } from './services/edit-request.service';
-import { EventWrongScoreService } from './services/event-wrong-score.service';
 
 @Component({
+  standalone: true,
   selector: 'event-wrong-score',
   templateUrl: './event-wrong-score.component.html',
-  styleUrls: ['./event-wrong-score.component.scss']
+  styleUrls: ['./event-wrong-score.component.scss'],
+  imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, PipeModule, ConfirmWrongScoreComponent,
+    LogInfoRelatedEventComponent, AddChildMatchComponent, CommonModule, FormsModule, TooltipComponent, BlockUiDirective]
 })
 export class EventWrongScoreComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;

@@ -9,7 +9,7 @@ exports[`AllowanceTimeComponent AllowanceTimeComponent should init match snapsho
       class="d-flex"
     >
       <label
-        class="col-form-label mr-2 label-width-60"
+        class="col-form-label-sm me-2 label-width-60"
       >
         AA/PA/SA
       </label>
@@ -17,36 +17,36 @@ exports[`AllowanceTimeComponent AllowanceTimeComponent should init match snapsho
         class="d-flex allowance-time"
       >
         <input
-          class="form-control form-control-sm mr-1 aa-time ng-untouched ng-pristine ng-valid"
+          class="form-control form-control-sm me-1 aa-time ng-untouched ng-pristine ng-valid"
           maxlength="2"
           only-number=""
           type="text"
         />
         <label
-          class="col-form-label mr-1"
+          class="col-form-label-sm me-1"
         >
           /
         </label>
         <input
-          class="form-control form-control-sm mr-1 pa-time ng-untouched ng-pristine ng-valid"
+          class="form-control form-control-sm me-1 pa-time ng-untouched ng-pristine ng-valid"
           maxlength="2"
           only-number=""
           type="text"
         />
         <label
-          class="col-form-label mr-1"
+          class="col-form-label-sm me-1"
         >
           /
         </label>
         <input
-          class="form-control form-control-sm mr-1 sa-time ng-untouched ng-pristine ng-valid"
+          class="form-control form-control-sm me-1 sa-time ng-untouched ng-pristine ng-valid"
           maxlength="2"
           only-number=""
           type="text"
         />
       </div>
       <label
-        class="col-form-label"
+        class="col-form-label-sm"
       >
         (s)
       </label>

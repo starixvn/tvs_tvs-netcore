@@ -10,50 +10,64 @@
       <thead>
         <tr>
           @if (!viewOnly) {
-            <th scope="col" class="col-tb-1">
-              <div>No</div>
-            </th>
+          <th scope="col" class="col-tb-1">
+            <div>No</div>
+          </th>
           }
           <th scope="col" class="col-tb-2">
-            <div class="title-table" [ngbTooltip]="getDescription('Username')" tooltipClass="tooltip-class" placement="top">
+            <div class="title-table" [ngbTooltip]="getDescription('Username')" tooltipClass="tooltip-class"
+              placement="top">
               <span>Username</span>
-              <sorting #sortingComponent [id]="1" (sortEvent)="sorting($event, 'username', 1)" [hidden]="viewOnly"></sorting>
+              <sorting #sortingComponent [id]="1" (sortEvent)="sorting($event, 'username', 1)" [hidden]="viewOnly">
+              </sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-3">
-            <div class="title-table" [ngbTooltip]="getDescription('Given Credit')" tooltipClass="tooltip-class" placement="top">
+            <div class="title-table" [ngbTooltip]="getDescription('Given Credit')" tooltipClass="tooltip-class"
+              placement="top">
               <span>Given Credit</span>
-              <sorting #sortingComponent [id]="2" (sortEvent)="sorting($event, 'givenCredit', 2)" [hidden]="viewOnly"></sorting>
+              <sorting #sortingComponent [id]="2" (sortEvent)="sorting($event, 'givenCredit', 2)" [hidden]="viewOnly">
+              </sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-4">
-            <div class="title-table" [ngbTooltip]="getDescription('Adjust Void Limit')" tooltipClass="tooltip-class" placement="top">
+            <div class="title-table" [ngbTooltip]="getDescription('Adjust Void Limit')" tooltipClass="tooltip-class"
+              placement="top">
               <span>Adjust Void Limit</span>
-              <sorting #sortingComponent [id]="3" (sortEvent)="sorting($event, 'adjustVoidLimit', 3)" [hidden]="viewOnly"></sorting>
+              <sorting #sortingComponent [id]="3" (sortEvent)="sorting($event, 'adjustVoidLimit', 3)"
+                [hidden]="viewOnly"></sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-5">
-            <div class="title-table" [ngbTooltip]="getDescription('Current Losing')" tooltipClass="tooltip-class" placement="top">
+            <div class="title-table" [ngbTooltip]="getDescription('Current Losing')" tooltipClass="tooltip-class"
+              placement="top">
               <span>Current Losing</span>
-              <sorting #sortingComponent [id]="4" (sortEvent)="sorting($event, 'currentLosing', 4)" [hidden]="viewOnly"></sorting>
+              <sorting #sortingComponent [id]="4" (sortEvent)="sorting($event, 'currentLosing', 4)" [hidden]="viewOnly">
+              </sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-6">
-            <div class="title-table" [ngbTooltip]="getDescription('Current Winning')" tooltipClass="tooltip-class" placement="top">
+            <div class="title-table" [ngbTooltip]="getDescription('Current Winning')" tooltipClass="tooltip-class"
+              placement="top">
               <span>Current Winning</span>
-              <sorting #sortingComponent [id]="5" (sortEvent)="sorting($event, 'currentWinning', 5)" [hidden]="viewOnly"></sorting>
+              <sorting #sortingComponent [id]="5" (sortEvent)="sorting($event, 'currentWinning', 5)"
+                [hidden]="viewOnly"></sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-7">
-            <div class="title-table" [ngbTooltip]="getDescription('Estimate Void Amount')" tooltipClass="tooltip-class" placement="top">
+            <div class="title-table" [ngbTooltip]="getDescription('Estimate Void Amount')" tooltipClass="tooltip-class"
+              placement="top">
               <span>Estimate Void Amount</span>
-              <sorting #sortingComponent [id]="6" (sortEvent)="sorting($event, 'estimateVoidAmount', 6)" [hidden]="viewOnly"></sorting>
+              <sorting #sortingComponent [id]="6" (sortEvent)="sorting($event, 'estimateVoidAmount', 6)"
+                [hidden]="viewOnly"></sorting>
             </div>
           </th>
           <th scope="col">
-            <div class="title-table" [ngbTooltip]="getDescription('WinLost After Void')" tooltipClass="tooltip-class" placement="top">
+            <div class="title-table" [ngbTooltip]="getDescription('WinLost After Void')" tooltipClass="tooltip-class"
+              placement="top">
               <span>WinLost After Void</span>
-              <sorting #sortingComponent [id]="7" (sortEvent)="sorting($event, 'winLostAfterVoid', 7)" [hidden]="viewOnly"></sorting>
+              <sorting #sortingComponent [id]="7" (sortEvent)="sorting($event, 'winLostAfterVoid', 7)"
+                [hidden]="viewOnly"></sorting>
             </div>
           </th>
         </tr>
@@ -63,65 +77,68 @@
   <div class="table-content">
     <table>
       @for (item of accountWinlostModels; track item; let i = $index) {
-        <tbody>
-          @if (item.isShowOnTable) {
-            <tr [ngClass]="item.isHighlight ? 'bg-highlight' : ''">
-              @if (!viewOnly) {
-                <td class="col-tb-1">
-                  <div>{{i + 1}}</div>
-                </td>
-              }
-              <td class="col-tb-2 text-left">
-                <div>
-                  <span [ngClass]="item.isCanEditTicket && !viewOnly ? 'username-link' : ''" (click)="item.isCanEditTicket && openPopupAdjustTicket(item.custId)">{{item.username}}</span>
-                </div>
-              </td>
-              <td class="col-tb-3 text-right">
-                <div>{{showDecimalWithComma(item.givenCredit)}}</div>
-              </td>
-              <td class="col-tb-4 text-right adjust-gv">
-                @if (!item.isShowInput || viewOnly) {
-                  <div class="adjust-string" (mousedown)="mouseDownEventAdjustGV(item)">{{item.adjustVoidLimitString ?? showDecimalWithComma(item.adjustVoidLimit)}}</div>
-                }
-                <div>
-                  @if (item.isShowInput) {
-                    <input (mouseup)="adjustInputFocus($event)" class="form-control form-control-sm adjust-gv{{i}}" type="text" [(ngModel)]="item.adjustVoidLimit"
-                      (ngModelChange)="onChangeAdjustGV(item, i)" [disabled]="filter.isVoided"
-                      (blur)="reCalculate(item, i)"/>
-                  }
-                </div>
-              </td>
-              <td class="col-tb-5 text-right">
-                <div>{{showDecimalWithComma(item.currentLosing)}}</div>
-              </td>
-              <td class="col-tb-6 text-right">
-                <div>{{showDecimalWithComma(item.currentWinning)}}</div>
-              </td>
-              <td class="col-tb-7 text-right highlight-amount">
-                <div class="title-void-amount">
-                  <div>@if (item.isEditedTicket && !viewOnly) {
-                    <span class="editted-account">Edited</span>
-                  }</div>
-                  <div>{{showDecimalWithComma(item.estimateVoidAmount)}}</div>
-                </div>
-              </td>
-              <td class="text-right highlight-amount">
-                <div>{{showDecimalWithComma(item.winLostAfterVoid)}}</div>
-              </td>
-            </tr>
+      <tbody>
+        @if (item.isShowOnTable) {
+        <tr [ngClass]="item.isHighlight ? 'bg-highlight' : ''">
+          @if (!viewOnly) {
+          <td class="col-tb-1">
+            <div>{{i + 1}}</div>
+          </td>
           }
-        </tbody>
+          <td class="col-tb-2 text-left">
+            <div>
+              <span [ngClass]="item.isCanEditTicket && !viewOnly ? 'username-link' : ''"
+                (click)="item.isCanEditTicket && openPopupAdjustTicket(item.custId)">{{item.username}}</span>
+            </div>
+          </td>
+          <td class="col-tb-3 text-right">
+            <div>{{showDecimalWithComma(item.givenCredit)}}</div>
+          </td>
+          <td class="col-tb-4 text-right adjust-gv">
+            @if (!item.isShowInput || viewOnly) {
+            <div class="adjust-string" (mousedown)="mouseDownEventAdjustGV(item)">{{item.adjustVoidLimitString ??
+              showDecimalWithComma(item.adjustVoidLimit)}}</div>
+            }
+            <div>
+              @if (item.isShowInput) {
+              <input (mouseup)="adjustInputFocus($event)" class="form-control form-control-sm adjust-gv{{i}}"
+                type="text" [(ngModel)]="item.adjustVoidLimit" (ngModelChange)="onChangeAdjustGV(item, i)"
+                [disabled]="filter.isVoided" (blur)="reCalculate(item, i)" />
+              }
+            </div>
+          </td>
+          <td class="col-tb-5 text-right">
+            <div>{{showDecimalWithComma(item.currentLosing)}}</div>
+          </td>
+          <td class="col-tb-6 text-right">
+            <div>{{showDecimalWithComma(item.currentWinning)}}</div>
+          </td>
+          <td class="col-tb-7 text-right highlight-amount">
+            <div class="title-void-amount">
+              <div>@if (item.isEditedTicket && !viewOnly) {
+                <span class="editted-account">Edited</span>
+                }
+              </div>
+              <div>{{showDecimalWithComma(item.estimateVoidAmount)}}</div>
+            </div>
+          </td>
+          <td class="text-right highlight-amount">
+            <div>{{showDecimalWithComma(item.winLostAfterVoid)}}</div>
+          </td>
+        </tr>
+        }
+      </tbody>
       }
     </table>
 
     @if (!isShowAccounts()) {
-      <table>
-        <tbody>
-          <tr>
-            <td class="no-data">There is no data</td>
-          </tr>
-        </tbody>
-      </table>
+    <table>
+      <tbody>
+        <tr>
+          <td class="no-data">There is no data</td>
+        </tr>
+      </tbody>
+    </table>
     }
   </div>
   <!-- <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging> -->
