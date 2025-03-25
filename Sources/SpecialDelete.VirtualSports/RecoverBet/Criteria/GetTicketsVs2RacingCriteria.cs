@@ -13,7 +13,7 @@ public class GetTicketsVs2RacingCriteria : CriteriaBase
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 
-    public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_RecoverVS2_Validation");
+    public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_RecoverVSRacing_Validation");
 
     public override bool IsValid() => true;
 }
