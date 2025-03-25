@@ -50,49 +50,6 @@ public class LogInfoHelperServiceImp(BetListService betListService, CopyRequestI
         return ticketRequests.Where(filter);
     }
 
-    public LogInfoDetail CombineLogInfoDetail(IEnumerable<LogInfoDetail> logInfoDetails, Func<LogInfoDetail, bool> filter)
-    {
-        var selectedItems = logInfoDetails.Where(filter).ToList();
-        if (selectedItems.Count == 0)
-        {
-            return null;
-        }
-
-        return new LogInfoDetail
-        {
-            MatchId = selectedItems[0].MatchId,
-            Id = selectedItems[0].Id,
-            ScoreId = selectedItems[0].ScoreId,
-            ActionType = selectedItems.MinBy(x => x.MinTransId).ActionType,
-            LiveScores = JoinStringValue("|", selectedItems.Select(x => x.LiveScores).Distinct()),
-            ScoreOfMatch = selectedItems[0].ScoreOfMatch,
-            ScoreNormalTicket = JoinStringValue("|", selectedItems.Select(x => x.ScoreNormalTicket)),
-            MinTransId = selectedItems.Min(x => x.MinTransId),
-            HighlightAcceptType = selectedItems.MinBy(x => x.MinTransId)?.HighlightAcceptType,
-            HighlightMinTime = selectedItems.MinBy(x => x.MinTransId)?.HighlightMinTime,
-            SingleCount = selectedItems.Sum(x => x.SingleCount),
-            MainParlayCount = selectedItems.Sum(x => x.MainParlayCount),
-            CashOutCount = selectedItems.Sum(x => x.CashOutCount),
-            CancelCashOutCount = selectedItems.Sum(x => x.CancelCashOutCount),
-            SettleCount = selectedItems.Sum(x => x.SettleCount),
-            InstantlySettleCount = selectedItems.Sum(x => x.InstantlySettleCount),
-            PoolHouseCashOutCount = selectedItems.Sum(x => x.PoolHouseCashOutCount),
-            PoolHouseInstantlySettleCount = selectedItems.Sum(x => x.PoolHouseInstantlySettleCount),
-            PoolHouseMainParlayCount = selectedItems.Sum(x => x.PoolHouseMainParlayCount),
-            PoolHouseSettleCount = selectedItems.Sum(x => x.PoolHouseSettleCount),
-            PoolHouseSingleCount = selectedItems.Sum(x => x.PoolHouseSingleCount),
-            LogInfoTicketsJson = JoinStringValue("|", selectedItems.Select(x => x.LogInfoTicketsJson)),
-            VoidFromTime = selectedItems.Min(x => x.VoidFromTime),
-            VoidToTime = selectedItems.Max(x => x.VoidToTime),
-            TransVoidToTime = selectedItems.Max(x => x.TransVoidToTime)
-        };
-    }
-
-    public static string JoinStringValue(string? separator, IEnumerable<string> items)
-    {
-        return string.Join(separator, items.Where(x => !string.IsNullOrWhiteSpace(x)));
-    }
-
     public TransInfoAddRequestModel CombineTransInfoAddRequest(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
     {
         return new TransInfoAddRequestModel
@@ -113,6 +70,91 @@ public class LogInfoHelperServiceImp(BetListService betListService, CopyRequestI
     {
         UpdateBetTypeName(betTypeTickets);
         await UpdatePlayerNameForBetTypeNextManOut(matchId, betTypeTickets);
+    }
+
+    public LogInfoDetail CombineLogInfoDetail(IEnumerable<LogInfoDetail> logInfoDetails, Func<LogInfoDetail, bool> filter)
+    {
+        var selectedItems = logInfoDetails.Where(filter).ToList();
+        if (selectedItems.Count == 0)
+        {
+            return null;
+        }
+
+        return new LogInfoDetail
+        {
+            MatchId = selectedItems[0].MatchId,
+            Id = selectedItems[0].Id,
+            ScoreId = selectedItems[0].ScoreId,
+            LiveScores = JoinStringValue("|", selectedItems.Select(x => x.LiveScores).Distinct()),
+            ScoreOfMatch = selectedItems[0].ScoreOfMatch,
+            ScoreNormalTicket = JoinStringValue("|", selectedItems.Select(x => x.ScoreNormalTicket)),
+            SingleCount = selectedItems.Sum(x => x.SingleCount),
+            MainParlayCount = selectedItems.Sum(x => x.MainParlayCount),
+            CashOutCount = selectedItems.Sum(x => x.CashOutCount),
+            CancelCashOutCount = selectedItems.Sum(x => x.CancelCashOutCount),
+            SettleCount = selectedItems.Sum(x => x.SettleCount),
+            InstantlySettleCount = selectedItems.Sum(x => x.InstantlySettleCount),
+            PoolHouseCashOutCount = selectedItems.Sum(x => x.PoolHouseCashOutCount),
+            PoolHouseInstantlySettleCount = selectedItems.Sum(x => x.PoolHouseInstantlySettleCount),
+            PoolHouseMainParlayCount = selectedItems.Sum(x => x.PoolHouseMainParlayCount),
+            PoolHouseSettleCount = selectedItems.Sum(x => x.PoolHouseSettleCount),
+            PoolHouseSingleCount = selectedItems.Sum(x => x.PoolHouseSingleCount),
+            LogInfoTicketsJson = JoinStringValue(",", selectedItems.Select(x => x.LogInfoTicketsJson)),
+            VoidFromTime = CombineVoidFromTime(selectedItems),
+            VoidToTime = CombineVoidToTime(selectedItems),
+            MinTransId = CombineMinTransId(selectedItems),
+            HighlightAcceptType = CombineHighlightAcceptType(selectedItems),
+            HighlightMinTime = CombineHighlightMinTime(selectedItems),
+            ActionType = CombineActionType(selectedItems),
+            TransVoidToTime = CombineTransVoidToTime(selectedItems)
+        };
+    }
+
+    private static DateTime? CombineVoidFromTime(IEnumerable<LogInfoDetail> items)
+    {
+        return items.Select(x => x.VoidFromTime)
+            .Where(x => x != null).Min(x => x);
+    }
+
+    private static DateTime? CombineVoidToTime(IEnumerable<LogInfoDetail> items)
+    {
+        return items.Select(x => x.VoidToTime)
+            .Where(x => x != null).Max(x => x);
+    }
+
+    private static string CombineMinTransId(IEnumerable<LogInfoDetail> items)
+    {
+        return items.Select(x => x.MinTransId)
+            .Where(x => !string.IsNullOrWhiteSpace(x)).Min(x => x);
+    }
+
+    private static int? CombineHighlightAcceptType(IEnumerable<LogInfoDetail> items)
+    {
+        return items.Where(x => x.MinTransId != null)
+            .MinBy(x => x.MinTransId)?.HighlightAcceptType;
+    }
+
+    private static DateTime? CombineHighlightMinTime(IEnumerable<LogInfoDetail> items)
+    {
+        return items.Where(x => x.MinTransId != null)
+            .MinBy(x => x.MinTransId)?.HighlightMinTime;
+    }
+
+    private static string CombineActionType(IEnumerable<LogInfoDetail> items)
+    {
+        return items.Where(x => !string.IsNullOrWhiteSpace(x.MinTransId))
+            .MinBy(x => x.MinTransId)?.ActionType;
+    }
+
+    private static DateTime? CombineTransVoidToTime(IEnumerable<LogInfoDetail> items)
+    {
+        return items.Where(x => x.TransVoidToTime != null)
+            .Max(x => x.TransVoidToTime);
+    }
+
+    private static string JoinStringValue(string? separator, IEnumerable<string> items)
+    {
+        return string.Join(separator, items.Where(x => !string.IsNullOrWhiteSpace(x)));
     }
 
     private void UpdateBetTypeName(IEnumerable<BetTypeTicketsInfo> betTypeTickets)

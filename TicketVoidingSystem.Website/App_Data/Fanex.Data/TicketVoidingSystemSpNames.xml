@@ -219,6 +219,16 @@
 		<Setting Key="DBSITE01.TicketVoiding_CheckingProcess" SpName="TicketVoiding_CheckingProcess" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_CheckingProcess" SpName="TicketVoiding_CheckingProcess" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_CheckingProcess" SpName="TicketVoiding_CheckingProcess" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBCTG.TicketVoiding_PoolHouseTicket_Select" SpName="TicketVoiding_PoolHouseTicket_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE01.TicketVoiding_PoolHouseTicket_Select" SpName="TicketVoiding_PoolHouseTicket_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE02.TicketVoiding_PoolHouseTicket_Select" SpName="TicketVoiding_PoolHouseTicket_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE03.TicketVoiding_PoolHouseTicket_Select" SpName="TicketVoiding_PoolHouseTicket_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
+
+        <Setting Key="DBCTG.TicketVoiding_Void_Select" SpName="TicketVoiding_Void_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE01.TicketVoiding_Void_Select" SpName="TicketVoiding_Void_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE02.TicketVoiding_Void_Select" SpName="TicketVoiding_Void_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE03.TicketVoiding_Void_Select" SpName="TicketVoiding_Void_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
+
 		<Setting Key="TicketVoiding_Request_CheckDuplicateTickets" SpName="TicketVoiding_Request_CheckDuplicateTickets" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="TicketVoiding_DuplicateTickets_TransIds_Select" SpName="TicketVoiding_DuplicateTickets_TransIds_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="TicketVoiding_DuplicateTickets_Select" SpName="TicketVoiding_DuplicateTickets_Select" DbName="DBRPT.bodb_Report.wsv_nap" TimeOut="600" />
