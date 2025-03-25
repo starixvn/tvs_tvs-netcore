@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import moment from 'moment-timezone';
 import { DateTimeFormat, MatchType } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
@@ -15,14 +15,10 @@ import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../models/
 import { ValidationService } from './validation.service';
 import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class EventDangerAcceptedService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly validationService: ValidationService
-  ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly validationService = inject(ValidationService);
 
   private readonly SUB_TYPE_AUTO_SELECT_LIST = [
     SubIssueTypeConstant.MAIN_CORNER,

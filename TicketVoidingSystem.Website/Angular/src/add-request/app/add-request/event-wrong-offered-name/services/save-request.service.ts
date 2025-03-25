@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -10,18 +10,13 @@ import { EventWrongOfferedNameService } from './event-wrong-offered-name.service
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class SaveRequestService {
-  constructor(
-    private readonly popupService: PopupService,
-    private readonly addRequestService: AddRequestService,
-    private readonly validationService: ValidationService,
-    private readonly logInfoService: LogInfoService,
-    private readonly eventWrongOfferedNameService: EventWrongOfferedNameService
-  ) { }
+  private readonly popupService = inject(PopupService);
+  private readonly addRequestService = inject(AddRequestService);
+  private readonly validationService = inject(ValidationService);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly eventWrongOfferedNameService = inject(EventWrongOfferedNameService);
 
   async saveRequest(argWrongOfferedName: SaveRequestArg): Promise<void> {
     const isDataValid = argWrongOfferedName.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argWrongOfferedName);

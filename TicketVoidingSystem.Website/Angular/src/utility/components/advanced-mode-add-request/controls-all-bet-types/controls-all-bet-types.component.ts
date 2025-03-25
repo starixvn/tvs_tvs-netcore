@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MultipleSelectComponent } from '../../advanced-mode/multiple-selection/multiple-select.component';
 import { ControlsAllBetTypes } from './controls-all-bet-types.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +19,7 @@ export class ControlsAllBetTypesComponent {
   public isShowContent(){
     return this.controlsAllBetTypesLists.filter(x => x.isShow).length > 0;
   }
-  
+
   public updateByControlAllBetType(itemList: string[], type: string) {
     this.changeControlsAll.emit({itemList: itemList, type: type});
   }

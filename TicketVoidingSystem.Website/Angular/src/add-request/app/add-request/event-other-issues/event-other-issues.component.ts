@@ -1,3 +1,4 @@
+
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
@@ -6,6 +7,7 @@ import { GroupBetTypesAddRequestModel } from '../../../../utility/components/adv
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
@@ -13,6 +15,7 @@ import { OtherIssuesModel } from '../models/event-other-issues.model';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { OthersModel } from '../others/others.model';
 import { FilterOtherIssuesComponent } from './filter-other-issues/filter-other-issues.component';
+import { LogInfoOtherIssuesComponent } from './log-info-other-issues/log-info-other-issues.component';
 import { LogInfoOtherIssues } from './models/log-info-other-issues.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
@@ -22,9 +25,11 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-  selector: 'event-other-issues',
-  templateUrl: './event-other-issues.component.html',
-  styleUrls: ['./event-other-issues.component.scss']
+    selector: 'event-other-issues',
+    templateUrl: './event-other-issues.component.html',
+    styleUrls: ['./event-other-issues.component.scss'],
+    standalone: true,
+    imports: [EventLeagueComponent, FilterOtherIssuesComponent, AdvancedModeAddRequestComponent, LogInfoOtherIssuesComponent, ConfirmAddRequestComponent]
 })
 export class EventOtherIssuesComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;

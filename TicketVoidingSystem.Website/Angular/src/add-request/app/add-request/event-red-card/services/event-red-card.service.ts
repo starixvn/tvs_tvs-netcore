@@ -34,7 +34,7 @@ export class EventRedCardService {
       event.tvDetectionModel = this.getTvDetectionModel(x);
       event.eventDate = x.eventDate;
       event.sportType = x.sportType;
-      
+
       allEvents.push(event);
     });
 

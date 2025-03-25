@@ -16,11 +16,13 @@
   </colgroup>
 </ng-template>
 <div class="tickets-list" [blockUi]="isBlock">
-  <div class="title-tickets-list" *ngIf="model.groups !== undefined && model.groups.length > 0">
+  @if (model.groups !== undefined && model.groups.length > 0) {
+  <div class="title-tickets-list">
     <div class="title-tickets-list-label">Void Time: {{model.strFromTime}} - {{model.strToTime}} (Single
       Count:
       {{model.totalSingle}}, Parlay Count: {{model.totalParlay}})</div>
   </div>
+  }
   <div class="ticket-header">
     <table>
       <ng-template [ngTemplateOutlet]="colgroup"></ng-template>
@@ -72,7 +74,8 @@
   <div class="ticket-content">
     <table>
       <ng-template [ngTemplateOutlet]="colgroup"></ng-template>
-      <tbody *ngFor="let group of model.groups">
+      @for (group of model.groups; track group) {
+      <tbody>
         <tr>
           <td>
           </td>
@@ -81,7 +84,8 @@
             {{group.name}} ({{group.displayTotalTickets}})
           </td>
         </tr>
-        <tr *ngFor="let ticket of group.tickets" [ngClass]="{'display-none':!group.isExpanded}">
+        @for (ticket of group.tickets; track ticket) {
+        <tr [ngClass]="{'display-none':!group.isExpanded}">
           <td>
             <div>{{ticket.no}}</div>
           </td>
@@ -122,15 +126,19 @@
             <div [innerHTML]="ticket.choice | sanitizeHtml"></div>
           </td>
         </tr>
+        }
       </tbody>
+      }
     </table>
-    <table *ngIf="model.groups === undefined || model.groups.length == 0 || model.groups == null">
+    @if (model.groups === undefined || model.groups.length == 0 || model.groups == null) {
+    <table>
       <tbody>
         <tr>
           <td class="no-data">There is no data</td>
         </tr>
       </tbody>
     </table>
+    }
   </div>
 
   <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging>

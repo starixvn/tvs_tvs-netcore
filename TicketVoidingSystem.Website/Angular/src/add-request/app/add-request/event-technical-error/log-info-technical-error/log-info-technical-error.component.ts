@@ -1,19 +1,25 @@
 import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
+import { LogInfoMessageComponent } from 'src/utility/components/log-info-detail/log-info-message/log-info-message.component';
+import { PipeModule } from 'src/utility/pipes/pipe.module';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { Item } from '../../../../../utility/models/item.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { GroupBetTypeCountModel } from '../../models/get-log-info.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogInfoTechnicalError } from '../models/log-info-technical-error.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 
 @Component({
-  selector: 'log-info-technical-error',
-  templateUrl: './log-info-technical-error.component.html',
-  styleUrls: ['./log-info-technical-error.component.scss']
+    selector: 'log-info-technical-error',
+    templateUrl: './log-info-technical-error.component.html',
+    styleUrls: ['./log-info-technical-error.component.scss'],
+    standalone: true,
+    imports: [AffectedTicketComponent, LogInfoMessageComponent, BlockUiModule, PipeModule]
 })
 
 export class LogInfoTechnicalErrorComponent {

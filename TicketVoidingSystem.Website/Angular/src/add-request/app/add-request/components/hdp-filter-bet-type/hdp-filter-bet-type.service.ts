@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CommonService } from '../../../../../utility/services/common.service';
-import { HdpFilterBetType } from '../../models/hdp-filter-betType.model';
 import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
+import { HdpFilterBetType } from '../../models/hdp-filter-betType.model';
 
 @Injectable({
   providedIn: 'root'
@@ -87,7 +87,7 @@ export class HdpFilterBetTypeService {
       case 'betidx':
         return filterBetType.filterBetIdX;
       case 'betidy':
-        return filterBetType.filterBetIdY;      
+        return filterBetType.filterBetIdY;
       case '_xxx':
         let valueInputX = filterBetType.filterBetIdX;
         valueInputX.replaceAll('_', '');

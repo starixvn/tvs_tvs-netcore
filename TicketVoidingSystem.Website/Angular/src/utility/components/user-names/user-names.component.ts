@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { Tooltip } from '../../components/tooltip/tooltip.model';
 import { LABELS } from '../../constants/labels';
-import { ToolTipModule } from '../tooltip/tooltip.module';
+import { TooltipComponent } from '../tooltip/tooltip.component';
 import { GroupUsername, UsernameItem } from './user-names.model';
 
 @Component({
@@ -12,7 +12,7 @@ import { GroupUsername, UsernameItem } from './user-names.model';
   selector: 'user-names',
   templateUrl: './user-names.component.html',
   styleUrls: ['./user-names.component.scss'],
-  imports: [FormsModule, CommonModule, ToolTipModule, NgbTooltip],
+  imports: [FormsModule, CommonModule, TooltipComponent, NgbTooltip],
 })
 export class UsernamesComponent implements OnChanges {
   private readonly errorTooltipClassName = 'invalid-data';

@@ -1,4 +1,6 @@
+
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { AdvancedModeAddRequestModel } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
@@ -9,6 +11,7 @@ import { ModeType } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
@@ -16,6 +19,7 @@ import { WrongOddsSportsBookModel } from '../models/event-wrong-odds-sports-book
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { OthersModel } from '../others/others.model';
 import { FilterWrongOddsSportsBookComponent } from './filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
+import { LogInfoWrongOddsSportsBookComponent } from './log-info-wrong-odds-sports-book/log-info-wrong-odds-sports-book.component';
 import { FilterWrongOddsSportsBookModel } from './models/filter-wrong-odds-sports-book.model';
 import { LogInfoWrongOddsSportsBook } from './models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
@@ -26,9 +30,11 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-  selector: 'event-wrong-odds-sports-book',
-  templateUrl: './event-wrong-odds-sports-book.component.html',
-  styleUrls: ['./event-wrong-odds-sports-book.component.scss']
+    selector: 'event-wrong-odds-sports-book',
+    templateUrl: './event-wrong-odds-sports-book.component.html',
+    styleUrls: ['./event-wrong-odds-sports-book.component.scss'],
+    standalone: true,
+    imports: [EventLeagueComponent, FilterWrongOddsSportsBookComponent, FormsModule, LogInfoWrongOddsSportsBookComponent, AdvancedModeAddRequestComponent, ConfirmAddRequestComponent]
 })
 export class EventWrongOddsSportsBookComponent implements OnInit {
   @Input() isEdit: boolean;

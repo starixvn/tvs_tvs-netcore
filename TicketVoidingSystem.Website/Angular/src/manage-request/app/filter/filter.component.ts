@@ -1,7 +1,14 @@
+import { _isNumberValue } from '@angular/cdk/coercion';
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { MultipleSelectionComponent } from 'src/utility/components/multiple-selection/multiple-selection.component';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
+import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ManageRequestStatus } from '../../../utility/constants/config';
@@ -14,20 +21,13 @@ import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
-import { _isNumberValue } from '@angular/cdk/coercion';
-import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
-import { FormsModule } from '@angular/forms';
-import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
-import { CommonModule } from '@angular/common';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { MultipleSelectionModule } from '../../../utility/components/multiple-selection/multiple-selection.module';
 
 @Component({
   standalone: true,
   selector: 'filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
-  imports: [ToolTipModule, FormsModule, AutoRefreshComponent, CommonModule, NgbModule, NgSelectModule, MultipleSelectionModule]
+  imports: [TooltipComponent, FormsModule, AutoRefreshComponent, CommonModule, NgbModule, NgSelectModule, MultipleSelectionComponent]
 })
 export class FilterComponent implements OnInit {
   @Input() model = new FilterModel();

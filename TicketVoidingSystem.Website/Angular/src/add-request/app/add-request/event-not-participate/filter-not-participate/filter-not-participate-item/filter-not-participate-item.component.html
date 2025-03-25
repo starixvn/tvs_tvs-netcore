@@ -1,29 +1,21 @@
 <div class="d-flex filter-not-participate">
-  <ng-select class="player-dropdown mr-2"
-    [disabled]="isVoided"
-    [items]="distincedPlayers"
-    bindLabel="playerName"
-    bindValue="playerId"
-    [clearable]="false"
-    placeholder="Select player"
-    (change)="changeFilter();updateCheckedPlayer($event)"
-    [(ngModel)]="model.playerId"
-    >
+  <ng-select class="player-dropdown me-2" [disabled]="isVoided" [items]="distincedPlayers" bindLabel="playerName"
+    bindValue="playerId" [clearable]="false" placeholder="Select player"
+    (change)="changeFilter();updateCheckedPlayer($event)" [(ngModel)]="model.playerId">
   </ng-select>
-  <div class="filter-bet-type d-flex mr-2">
-    <multiple-selection
-      class="multiple-selection bet-type-dropdown{{index}} mr-2"
-      [selectedItems]="model.betTypeIds"
-      [isDisabled]="isVoided"
-      [multipleSelect]="model.betTypeMultipleSelection"
+  <div class="filter-bet-type d-flex me-2">
+    <multiple-selection class="multiple-selection bet-type-dropdown{{index}} me-2" [selectedItems]="model.betTypeIds"
+      [isDisabled]="isVoided" [multipleSelect]="model.betTypeMultipleSelection"
       (checkedItems)="changeFilter();updateCheckedBetTypes($event)">
     </multiple-selection>
   </div>
-  <div *ngIf="!(isFirst && isLast)"class="d-flex align-items-center mr-2">
-    <em class="pointer fa fa-minus-circle fa-icon-remove" (click)="removeBetTypeItem(index)" [ngClass]="{'cursor-not-allowed': isVoided}"></em>
+  <div *ngIf="!(isFirst && isLast)" class="d-flex align-items-center me-2">
+    <em class="pointer fa fa-minus-circle fa-icon-remove" (click)="removeBetTypeItem(index)"
+      [ngClass]="{'cursor-not-allowed': isVoided}"></em>
   </div>
   <div *ngIf="isLast" class="d-flex align-items-center">
-    <em class="pointer fa fa-plus-circle fa-icon-add" (click)="addBetTypeItem()" [ngClass]="{'cursor-not-allowed': isVoided}"></em>
+    <em class="pointer fa fa-plus-circle fa-icon-add" (click)="addBetTypeItem()"
+      [ngClass]="{'cursor-not-allowed': isVoided}"></em>
   </div>
 </div>
 <tooltip [tooltip]="tooltip"></tooltip>

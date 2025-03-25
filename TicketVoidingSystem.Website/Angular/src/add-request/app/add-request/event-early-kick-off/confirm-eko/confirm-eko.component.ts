@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ConfirmEarlyKickOffModel } from './confirm-eko.model';
 
 @Component({
-  selector: 'confirm-eko',
-  templateUrl: './confirm-eko.component.html',
-  styleUrls: ['./confirm-eko.component.scss']
+    selector: 'confirm-eko',
+    templateUrl: './confirm-eko.component.html',
+    styleUrls: ['./confirm-eko.component.scss'],
+    standalone: true
 })
 export class ConfirmEkoComponent {
   @Input() model = new ConfirmEarlyKickOffModel();

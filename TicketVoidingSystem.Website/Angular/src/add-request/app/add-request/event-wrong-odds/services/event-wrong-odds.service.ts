@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import moment from 'moment-timezone';
 import { AllowanceRate, DateTimeFormat } from "../../../../../utility/constants/config";
 import { AddRequestApiService } from "../../add-request-api.service";
@@ -11,15 +11,10 @@ import { WrongOddsGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongOdds } from "../models/log-info-wrong-odds.model";
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class EventWrongOddsService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly validationService: ValidationService
-  ) {}
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly validationService = inject(ValidationService);
 
   public initDefaultFilter(logInfoEvent: LogInfoWrongOdds): void {
     logInfoEvent.filterWrongOdds = new FilterWrongOddsModel();
@@ -53,7 +48,7 @@ export class EventWrongOddsService {
       fromOddsNotVoidAwayUnder: logInfoEvent.filterWrongOdds.fromOddsNotVoidAwayUnder,
       fromOddsNotVoidHomeOver: logInfoEvent.filterWrongOdds.fromOddsNotVoidHomeOver,
       toOddsNotVoidAwayUnder: logInfoEvent.filterWrongOdds.toOddsNotVoidAwayUnder,
-      toOddsNotVoidHomeOver: logInfoEvent.filterWrongOdds.toOddsNotVoidHomeOver      
+      toOddsNotVoidHomeOver: logInfoEvent.filterWrongOdds.toOddsNotVoidHomeOver
     } as GetLinkedLogQuery;
 
     if (this.validationService.isSubTypeOuOr1stOu(filter.subIssueTypeId)) {

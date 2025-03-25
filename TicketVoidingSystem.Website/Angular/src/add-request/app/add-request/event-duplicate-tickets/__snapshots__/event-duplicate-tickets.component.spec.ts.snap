@@ -53,7 +53,7 @@ exports[`EventDuplicateTicketsComponent #EventDuplicateTicketsComponent init sho
         class="mb-3"
       >
         <div
-          class="mr-4 mb-1"
+          class="me-4 mb-1"
         >
           Original BetID(s)
         </div>
@@ -66,7 +66,7 @@ exports[`EventDuplicateTicketsComponent #EventDuplicateTicketsComponent init sho
       </div>
       <div>
         <div
-          class="mr-4 mb-1"
+          class="me-4 mb-1"
         >
           Duplicated BetID(s)
         </div>
@@ -80,7 +80,7 @@ exports[`EventDuplicateTicketsComponent #EventDuplicateTicketsComponent init sho
         class="event col-md-6 col-sm-6 col-12"
       >
         <label
-          class="col-form-label"
+          class="col-form-label-sm"
         >
           Event
         </label>
@@ -94,7 +94,7 @@ exports[`EventDuplicateTicketsComponent #EventDuplicateTicketsComponent init sho
         class="league col-md-6 col-sm-6 col-12"
       >
         <label
-          class="col-form-label"
+          class="col-form-label-sm"
         >
           League
         </label>

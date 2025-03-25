@@ -8,67 +8,79 @@
     <div class="list-group-item flex-column align-items-start" [hidden]="isCollapse">
       <div class="other-container d-flex flex-wrap row">
         <div class="col-6 col-sm-6 col-md-4">
-          <label class="col-form-label">Mistaken By</label>
+          <label class="col-form-label-sm">Mistaken By</label>
           <div class="input-area">
             <input type="text" class="form-control form-control-sm" [(ngModel)]="model.mistakenBy"
               (change)="updateModel()" maxlength="200">
+            </div>
           </div>
-        </div>
-        <div class="col-6 col-sm-6 col-md-4">
-          <label class="col-form-label">Decided By</label>
-          <div class="input-area">
-            <input *ngIf="!isIssueTypeSupportSuggestion()" type="text" class="form-control form-control-sm" [(ngModel)]="model.decidedBy" (change)="updateModel()"
-              maxlength="200">
-            <ng-select *ngIf="isIssueTypeSupportSuggestion()" [items]="decidedBys" [(ngModel)]="model.decidedBy" [addTag]="true" (add)="addDecidedBy($event)" dropdownPosition="bottom">
-              <ng-template let-items="decidedBys" let-clear="clear">
-                <div class="ng-value" *ngFor="let item of decidedBys">
-                  <span class="ng-value-label">{{ item }}</span>
-                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true"></span>
-                </div>             
-              </ng-template>
-            </ng-select>
+          <div class="col-6 col-sm-6 col-md-4">
+            <label class="col-form-label-sm">Decided By</label>
+            <div class="input-area">
+              @if (!isIssueTypeSupportSuggestion()) {
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="model.decidedBy" (change)="updateModel()"
+                  maxlength="200">
+              }
+              @if (isIssueTypeSupportSuggestion()) {
+                <ng-select [items]="decidedBys" [(ngModel)]="model.decidedBy" [addTag]="true" (add)="addDecidedBy($event)" dropdownPosition="bottom">
+                  <ng-template let-items="decidedBys" let-clear="clear">
+                    @for (item of decidedBys; track item) {
+                      <div class="ng-value">
+                        <span class="ng-value-label">{{ item }}</span>
+                        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true"></span>
+                      </div>
+                    }
+                  </ng-template>
+                </ng-select>
+              }
+            </div>
           </div>
-        </div>
-        <div class="col-6 col-sm-6 col-md-4" *ngFor="let group of groupOperators">
-          <label class="col-form-label">{{group.name}}</label>
-          <div class="operator-list">
-            <ng-select [items]="group.items" [multiple]="true" [closeOnSelect]="false" bindLabel="userName"
-              [(ngModel)]="group.selected" (change)="onSelectOperator()" [clearable]="false">
-              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
-                <div class="ng-value" *ngFor="let item of items | slice: 0:2">
-                  <span class="ng-value-label">{{ item['userName'] }}</span>
-                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
-                </div>
-                <div class="ng-value" *ngIf="items.length > 2">
-                  <span class="ng-value-label">{{ items.length - 2 }} more...</span>
-                </div>
-              </ng-template>
-            </ng-select>
-          </div>
-        </div>
+          @for (group of groupOperators; track group) {
+            <div class="col-6 col-sm-6 col-md-4">
+              <label class="col-form-label-sm">{{group.name}}</label>
+              <div class="operator-list">
+                <ng-select [items]="group.items" [multiple]="true" [closeOnSelect]="false" bindLabel="userName"
+                  [(ngModel)]="group.selected" (change)="onSelectOperator()" [clearable]="false">
+                  <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                    @for (item of items | slice: 0:2; track item) {
+                      <div class="ng-value">
+                        <span class="ng-value-label">{{ item['userName'] }}</span>
+                        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                      </div>
+                    }
+                    @if (items.length > 2) {
+                      <div class="ng-value">
+                        <span class="ng-value-label">{{ items.length - 2 }} more...</span>
+                      </div>
+                    }
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+          }
 
-        <div class="col-6 col-sm-6 col-md-4">
-          <label class="col-form-label">Provider</label>
-          <div class="input-area">
-            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.provider" (change)="updateModel()">
+          <div class="col-6 col-sm-6 col-md-4">
+            <label class="col-form-label-sm">Provider</label>
+            <div class="input-area">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="model.provider" (change)="updateModel()">
+            </div>
           </div>
-        </div>
 
-        <div class="col-6 col-sm-6 col-md-4">
-          <label class="col-form-label">Source</label>
-          <div class="input-area">
-            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.source" (change)="updateModel()">
+          <div class="col-6 col-sm-6 col-md-4">
+            <label class="col-form-label-sm">Source</label>
+            <div class="input-area">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="model.source" (change)="updateModel()">
+            </div>
           </div>
-        </div>
 
-        <div class="col-12">
-          <label class="col-form-label">Remark</label>
-          <div>
-            <textarea [(ngModel)]="model.remark" class="remark form-control form-control-sm"
+          <div class="col-12">
+            <label class="col-form-label-sm">Remark</label>
+            <div>
+              <textarea [(ngModel)]="model.remark" class="remark form-control form-control-sm"
               placeholder='Enter text here...' rows="3" (ngModelChange)="updateModel()"></textarea>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>

@@ -1,16 +1,23 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
+import { PipeModule } from 'src/utility/pipes/pipe.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { SportType } from '../../../../../utility/constants/sport.constant';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { FilterModel } from '../../filter/filter.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
+import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
 import { LogAnalysisService } from '../../services/log-analysis.service';
+import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
 import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
@@ -22,7 +29,11 @@ import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.
 @Component({
   selector: 'log-info-wrong-hdp',
   templateUrl: './log-info-wrong-hdp.component.html',
-  styleUrls: ['./log-info-wrong-hdp.component.scss']
+  styleUrls: ['./log-info-wrong-hdp.component.scss'],
+  standalone: true,
+  imports: [AffectedTicketComponent, BlockUiModule, PipeModule, FilterWithHdpComponent, FormsModule, CommonModule,
+    TicketCountOtherSportsComponent, PoolHouseTicketComponent],
+  providers: [LogAnalysisService, ModalService, AddRequestApiService]
 })
 export class LogInfoWrongHdpComponent {
   @Input() isMainMatch: boolean;
@@ -34,7 +45,6 @@ export class LogInfoWrongHdpComponent {
   @Input() primitiveProps: PrimitiveProperty;
   @Output() searchTicketEvent = new EventEmitter();
   @Output() deleteEvent = new EventEmitter();
-
   @ViewChild('filterWithHdp') filterWithHdpComponent: FilterWithHdpComponent;
 
   isCollapse: boolean;
@@ -42,15 +52,13 @@ export class LogInfoWrongHdpComponent {
   poolHouseTicketsModel = new PoolHouseTicketsModel();
   affectedTicketsModel = new AffectedTicketsModel();
 
-  constructor(
-    private readonly modalService: ModalService,
-    private readonly logInfoService: LogInfoService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly validationService: ValidationService,
-    private readonly eventWrongHdpService: EventWrongHdpService,
-    private readonly logAnalysisService: LogAnalysisService
-  ) { }
+  private readonly modalService = inject(ModalService);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly validationService = inject(ValidationService);
+  private readonly eventWrongHdpService = inject(EventWrongHdpService);
+  private readonly logAnalysisService = inject(LogAnalysisService);
 
   public ngOnInit(): void {
     if (this.isEdit) {
@@ -180,7 +188,7 @@ export class LogInfoWrongHdpComponent {
     this.poolHouseTicketsModel = _.clone(this.poolHouseTicketsModel);
   }
 
-  public isSportTypeSoccer(): boolean{
+  public isSportTypeSoccer(): boolean {
     return this.logInfo.sportType === SportType.SOCCER;
   }
 }

@@ -1,15 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectComponent } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import { StaticService } from '../../../../utility/services/static.service';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { GroupOperator, OperatorDefault, OperatorInfo, OthersModel } from './others.model';
 import { OthersService } from './others.service';
-import { AddRequestApiService } from '../add-request-api.service';
 
 @Component({
-  selector: 'others',
-  templateUrl: './others.component.html',
-  styleUrls: ['./others.component.scss']
+    selector: 'others',
+    templateUrl: './others.component.html',
+    styleUrls: ['./others.component.scss'],
+    standalone: true,
+    imports: [FormsModule, CommonModule, NgbModule, NgSelectComponent]
 })
 export class OthersComponent implements OnChanges, OnInit {
   @Input() isEdit: boolean;

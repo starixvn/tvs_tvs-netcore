@@ -2,7 +2,8 @@ import { ComponentRef, Directive, ElementRef, Input, OnChanges, SimpleChange, Vi
 import { BlockUiComponent } from './block-ui.component';
 
 @Directive({
-  selector: '[blockUi]'
+  selector: '[blockUi]',
+  standalone: true
 })
 export class BlockUiDirective implements OnChanges {
   constructor(

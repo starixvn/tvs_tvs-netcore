@@ -7,9 +7,11 @@ import { EventWrongMarketOfferedService } from '../services/event-wrong-market-o
 import { FilterTimeItemComponent } from './filter-time-item/filter-time-item.component';
 
 @Component({
-  selector: 'filter-time',
-  templateUrl: './filter-time.component.html',
-  styleUrls: ['./filter-time.component.scss']
+    selector: 'filter-time',
+    templateUrl: './filter-time.component.html',
+    styleUrls: ['./filter-time.component.scss'],
+    standalone: true,
+    imports: [FilterTimeItemComponent]
 })
 
 export class FilterTimeComponent {

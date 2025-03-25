@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ModalType } from '../../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { LABELS } from '../../../../utility/constants/labels';
@@ -7,6 +7,9 @@ import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestQuery } from '../models/add-request.query';
 import { AddRequestResultModel } from '../models/request.model';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class PopupService {
   modalService = inject(ModalService);
 
@@ -94,7 +97,7 @@ export class PopupService {
       return '';
     }
 
-    return `<div class="ml-2 mt-1">- Match(es): <strong>${addRequestResult.matchId}</strong></div>`;
+    return `<div class="ms-2 mt-1">- Match(es): <strong>${addRequestResult.matchId}</strong></div>`;
   }
 
   private getMarkTicketsContent(query: AddRequestQuery, addRequestResult: AddRequestResultModel): string {

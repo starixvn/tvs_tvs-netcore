@@ -1,18 +1,23 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { LogInfoMessageComponent } from 'src/utility/components/log-info-detail/log-info-message/log-info-message.component';
+import { PipeModule } from 'src/utility/pipes/pipe.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestStore } from '../../add-request.store';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 
 @Component({
-  selector: 'log-info-wrong-odds-sports-book',
-  templateUrl: './log-info-wrong-odds-sports-book.component.html',
-  styleUrls: ['./log-info-wrong-odds-sports-book.component.scss']
+    selector: 'log-info-wrong-odds-sports-book',
+    templateUrl: './log-info-wrong-odds-sports-book.component.html',
+    styleUrls: ['./log-info-wrong-odds-sports-book.component.scss'],
+    standalone: true,
+    imports: [AffectedTicketComponent, LogInfoMessageComponent, PipeModule]
 })
 export class LogInfoWrongOddsSportsBookComponent implements OnInit {
   @Input() logInfo: LogInfoWrongOddsSportsBook;

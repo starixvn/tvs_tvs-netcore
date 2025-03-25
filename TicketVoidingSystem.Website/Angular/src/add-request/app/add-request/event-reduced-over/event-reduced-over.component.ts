@@ -1,10 +1,15 @@
+
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OddsInfo } from '../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { ReducedOverModel } from '../models/event-reduced-over.model';
 import { OthersModel } from '../others/others.model';
 import { FilterReducedOverComponent } from './filter-reduced-over/filter-reduced-over.component';
+import { LogInfoReducedOverComponent } from './log-info-reduced-over/log-info-reduced-over.component';
 import { ReducedOverBetType } from './models/bet-type-reduced-over-json.model';
 import { LogInfoReducedOver } from './models/log-info-reduced-over.model';
 import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
@@ -14,12 +19,13 @@ import { FilterReducedOverService } from './services/filter-reduced-over.service
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
-  selector: 'event-reduced-over',
-  templateUrl: './event-reduced-over.component.html',
-  styleUrls: ['./event-reduced-over.component.scss']
+    selector: 'event-reduced-over',
+    templateUrl: './event-reduced-over.component.html',
+    styleUrls: ['./event-reduced-over.component.scss'],
+    standalone: true,
+    imports: [FormsModule, NgbModule, EventLeagueComponent, FilterReducedOverComponent, LogInfoReducedOverComponent]
 })
 export class EventReducedOverComponent implements OnInit {
   @Input() isEdit: boolean;

@@ -17,14 +17,31 @@ textarea {
   resize: none;
 }
 
-.event-league {
-  max-width: 1063px;
+.match {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+
+  input {
+    text-overflow: ellipsis;
+  }
 }
 
-.event {
-  padding-left: 0px;
+@media only screen and (max-width: 1134px) {
+  .main-container {
+    width: 100%;
+  }
 }
 
-.league {
-  padding-right: 0px;
+@media only screen and (min-width: 1134px) {
+  .main-container {
+    width: 1065px;
+  }
+}
+
+@media only screen and (min-width: 540px) {
+  .event,
+  .league {
+    flex: 1;
+  }
 }

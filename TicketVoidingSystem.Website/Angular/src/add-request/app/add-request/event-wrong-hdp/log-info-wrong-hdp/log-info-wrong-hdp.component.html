@@ -3,79 +3,107 @@
     <div class="list-group-item list-group-item-header pointer"
       [ngClass]="{'header-log-info-main': isMainMatch, 'header-log-info-child': !isMainMatch, 'border-radius-header' : isCollapse}"
       (click)="isCollapse=!isCollapse">
-      <div class="mr-1 d-flex">
-        <div class="mr-1"><em class="fa" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em></div>
+      <div class="me-1 d-flex">
+        <div class="me-1"><em class="fa" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em></div>
         <div>
           <div>{{logInfo.eventName}}</div>
           <div>{{logInfo.leagueName}}</div>
         </div>
       </div>
-      <div class="float-right d-flex" *ngIf="!isMainMatch">
+      @if (!isMainMatch) {
+      <div class="float-right d-flex">
         <i class="fa-solid fa-trash-can fa-sm delete-event-icon" [ngClass]="{'delete-event-icon-disabled': isDisabled}"
           aria-hidden="true" (click)="handleDeleteEvent(logInfo.matchId)">
         </i>
       </div>
+      }
     </div>
     <div class="list-group-item flex-column align-items-start wrapper-tooltip" [hidden]="isCollapse"
       [ngClass]="{'body-log-info-main': isMainMatch, 'body-log-info-child': !isMainMatch}">
       <div class="log" [blockUi]="isBlock">
-        <filter-with-hdp #filterWithHdp
-          [matchId]="logInfo.matchId"
-          [isEdit]="isEdit"
-          [isDisabled]="isDisabled"
-          (searchTicketEvent)="emitSearchEvent()"
-          (refreshEvent)="refreshLogInfoBySearchEvent()"
-          (changeFilterEvent)="clearDataValidation();resetPoolHouseCheckedBetTypes()"
-          [filter]="filter"
-          [sportTypeId]="logInfo.sportType"
-          [isMainMatch]="isMainMatch"
-          [filterWithHdpModel]="logInfo.filterWithHdp">
+        <filter-with-hdp #filterWithHdp [matchId]="logInfo.matchId" [isEdit]="isEdit" [isDisabled]="isDisabled"
+          (searchTicketEvent)="emitSearchEvent()" (refreshEvent)="refreshLogInfoBySearchEvent()"
+          (changeFilterEvent)="clearDataValidation();resetPoolHouseCheckedBetTypes()" [filter]="filter" [sportTypeId]="logInfo.sportType"
+          [isMainMatch]="isMainMatch" [filterWithHdpModel]="logInfo.filterWithHdp">
         </filter-with-hdp>
-        <div *ngIf="logInfo.isShowValidation"><hr class="mt-2 mb-2">
-          <div *ngIf="logInfo.logInfoDetail" class="ticket-count">
+        @if (logInfo.isShowValidation) {
+        <div>
+          <hr class="mt-2 mb-2">
+          @if (logInfo.logInfoDetail) {
+          <div class="ticket-count">
             <ng-container class="void-time">
               <span>Live Score: </span><strong>{{logInfo.logInfoDetail.liveScores}}</strong>.
-              Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
+              Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} -
+                {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
             </ng-container>
-            <div *ngIf="isSportTypeSoccer()" class="soccer">
+            @if (isSportTypeSoccer()) {
+            <div class="soccer">
               <ng-container class="single-count">
                 LG/Early - Single Count: <strong>{{logInfo.logInfoDetail.singleCount}}</strong>
-                <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, 0)" class="text-red"
-                [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, 0) | sanitizeHtml">
-                </span>&nbsp;
-                <span *ngIf="!filter.isVoided" class="ticket-details" (click)="showAffectedTicketsDetails()">Details</span><br />
+                @if (isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, 0)) {
+                <span class="text-red"
+                  [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, 0) | sanitizeHtml">
+                </span>
+                }&nbsp;
+                @if (!filter.isVoided) {
+                <span class="ticket-details" (click)="showAffectedTicketsDetails()">Details</span>
+                }<br />
               </ng-container>
-              <ng-container *ngIf="isMainMatch" class="pool-house-count">
+              @if (isMainMatch) {
+              <ng-container class="pool-house-count">
                 PH - Single Count: <strong>{{logInfo.logInfoDetail.poolHouseSingleCount}}</strong>
-                <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount)" class="text-red"
-                [innerHTML]="countInfoContent(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
-                </span>,
+                @if (isShowCountInfo(logInfo.logInfoDetail.poolHouseCashOutCount,
+                logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount)) {
+                <span class="text-red"
+                  [innerHTML]="countInfoContent(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
+                </span>
+                },
                 Parlay Count: <strong>{{logInfo.logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
-                <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openPoolHouseDetails()">Details</span>
-                <span *ngIf="!logInfo.logInfoDetail && !filter.isVoided" class="ticket-details" (click)="openPoolHouseDetails()">PH Details</span>
-                <div *ngIf="logInfo.linkedLogsViewModel.result && !logInfo.linkedLogsViewModel.result?.isSuccessful" class="warning-text d-flex align-items-center">
-                  <i class="fa fa-exclamation-triangle icon-warning-message mr-1" aria-hidden="true"></i>Cannot get link log, please search again.
+                @if (!filter.isVoided) {
+                <span class="ticket-details" (click)="openPoolHouseDetails()">Details</span>
+                }
+                @if (!logInfo.logInfoDetail && !filter.isVoided) {
+                <span class="ticket-details" (click)="openPoolHouseDetails()">PH Details</span>
+                }
+                @if (logInfo.linkedLogsViewModel.result && !logInfo.linkedLogsViewModel.result?.isSuccessful) {
+                <div class="warning-text d-flex align-items-center">
+                  <i class="fa fa-exclamation-triangle icon-warning-message me-1" aria-hidden="true"></i>Cannot get link
+                  log, please search again.
                 </div>
+                }
               </ng-container>
+              }
             </div>
-            <ticket-count-other-sports *ngIf="!isSportTypeSoccer()" [logInfoDetail]="logInfo.logInfoDetail" [isVoided]="filter.isVoided" 
+            }
+            @if (!isSportTypeSoccer()) {
+            <ticket-count-other-sports [logInfoDetail]="logInfo.logInfoDetail" [isVoided]="filter.isVoided"
               (openTicketDetails)="showAffectedTicketsDetails()">
             </ticket-count-other-sports>
+            }
           </div>
-          <ng-container *ngIf="logInfo.messageValidationLogInfo?.length > 0">
-            <div class="message">
-              <span *ngFor="let msg of logInfo.messageValidationLogInfo">
-                <div *ngIf="msg.isError" class="error-text d-flex align-items-center">
-                  <i class="fa fa-times-circle icon-error-message mr-1" aria-hidden="true"></i>{{msg.reason}}
-                </div>
-                <div *ngIf="!msg.isError" class="d-flex align-items-center" [ngClass]="msg.isShowPopup ? 'warning-text-shorten' : 'warning-text'"
-                  (click)="msg.isShowPopup && openPopupTransIds(msg.requestId, msg.transIds)">
-                  <i class="fa fa-exclamation-triangle icon-warning-message mr-1" aria-hidden="true"></i>{{msg.reason}}
-                </div>
-              </span>
-            </div>
-          </ng-container>
+          }
+          @if (logInfo.messageValidationLogInfo?.length > 0) {
+          <div class="message">
+            @for (msg of logInfo.messageValidationLogInfo; track msg) {
+            <span>
+              @if (msg.isError) {
+              <div class="error-text d-flex align-items-center">
+                <i class="fa fa-times-circle icon-error-message me-1" aria-hidden="true"></i>{{msg.reason}}
+              </div>
+              }
+              @if (!msg.isError) {
+              <div class="d-flex align-items-center"
+                [ngClass]="msg.isShowPopup ? 'warning-text-shorten' : 'warning-text'"
+                (click)="msg.isShowPopup && openPopupTransIds(msg.requestId, msg.transIds)">
+                <i class="fa fa-exclamation-triangle icon-warning-message me-1" aria-hidden="true"></i>{{msg.reason}}
+              </div>
+              }
+            </span>
+            }
+          </div>
+          }
         </div>
+        }
       </div>
     </div>
   </div>

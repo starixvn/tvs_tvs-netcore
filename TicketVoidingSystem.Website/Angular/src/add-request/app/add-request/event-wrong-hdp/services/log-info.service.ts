@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
@@ -9,15 +9,10 @@ import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongHdpService } from './event-wrong-hdp.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class LogInfoService {
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly eventWrongHdpService: EventWrongHdpService) {
-  }
+  private readonly commonService = inject(CommonService);
+  private readonly eventWrongHdpService = inject(EventWrongHdpService);
 
   async getLogInfo(allEvents: LogInfoWrongHdp[], isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty): Promise<void> {
     const getLogInfoQuery = this.initGetLogInfoWrongHdpQuery(isEdit, requestId, filter, allEvents);

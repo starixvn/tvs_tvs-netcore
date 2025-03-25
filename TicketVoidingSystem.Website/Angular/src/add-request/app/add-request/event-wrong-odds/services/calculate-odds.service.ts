@@ -1,16 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterWrongOddsModel, MaxBetAndSpreadQuery } from '../models/filter-wrong-odds.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CalculateOddsService {
-
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService
-  ) {}
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   public async updateOddsInfo(oddsInfo: FilterWrongOddsModel, match: MatchModel, subIssueTypeId: string): Promise<void> {
     if(match.matchId){
@@ -35,7 +30,7 @@ export class CalculateOddsService {
     oddsInfo.correctOddsHomeOver = "";
     oddsInfo.correctOddsAwayUnder = "";
   }
-  
+
   public updateMaxBetAndSpread(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string){
     if(oddsInfo.maxBetAndSpreadInfo?.length > 0){
       oddsInfo.maxBet = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId === subIssueTypeId)?.maxBet ?? 0;
@@ -68,23 +63,23 @@ export class CalculateOddsService {
       const spreadNum = Number(oddsInfo.spread);
       const sum = correctOddsHomeOverNum + spreadNum;
       const correctOddsAwayUnderNum = sum >= 1 ? 2 - sum : -sum;
-      
-      oddsInfo.correctOddsAwayUnder = correctOddsAwayUnderNum.toFixed(precision);    
+
+      oddsInfo.correctOddsAwayUnder = correctOddsAwayUnderNum.toFixed(precision);
     }
   }
 
   public calculateOddsRange(oddsInfo: FilterWrongOddsModel): void {
     const precision = 2;  // Define the number of decimal places
     if(oddsInfo.correctOddsAwayUnder){
-      const allowanceRateNum = Number(oddsInfo.allowanceRate)/100; 
+      const allowanceRateNum = Number(oddsInfo.allowanceRate)/100;
       const correctOddsHomeOverNum = Number(oddsInfo.correctOddsHomeOver);
       const correctOddsAwayUnderNum = Number(oddsInfo.correctOddsAwayUnder);
-  
+
       const aboveHomeOver = correctOddsHomeOverNum + allowanceRateNum;
       const aboveAwayUnder = correctOddsAwayUnderNum + allowanceRateNum;
       oddsInfo.toOddsNotVoidHomeOver = (aboveHomeOver >= 1 ? -2 + aboveHomeOver : aboveHomeOver).toFixed(precision);
       oddsInfo.toOddsNotVoidAwayUnder = (aboveAwayUnder >= 1 ? -2 + aboveAwayUnder : aboveAwayUnder).toFixed(precision);
-  
+
       const belowHomeOver = correctOddsHomeOverNum - allowanceRateNum;
       const belowAwayUnder = correctOddsAwayUnderNum - allowanceRateNum;
       oddsInfo.fromOddsNotVoidHomeOver = (belowHomeOver <= -1 ? 2 + belowHomeOver: belowHomeOver).toFixed(precision);

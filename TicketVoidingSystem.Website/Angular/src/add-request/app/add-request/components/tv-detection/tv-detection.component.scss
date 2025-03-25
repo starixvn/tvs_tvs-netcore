@@ -75,7 +75,6 @@
   .second-input {
     text-align: right;
     width: 50px;
-    border-right: none;
   }
 
   .input-group {
@@ -85,11 +84,6 @@
 
   span {
     height: fit-content;
-  }
-
-  .second-prepend {
-    border-top-right-radius: .2rem;
-    border-bottom-right-radius: .2rem;
   }
 }
 

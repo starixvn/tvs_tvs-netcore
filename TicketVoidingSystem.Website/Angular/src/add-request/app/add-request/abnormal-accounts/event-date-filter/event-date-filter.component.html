@@ -1,23 +1,13 @@
 <div class="event-date-filter">
-  <label class="col-form-label col-form-label-sm">Event Date</label>
+  <label class="col-form-label-sm col-form-label-sm">Event Date</label>
   <div class="d-flex">
-    <div class="input-group">
-      <input class="from-date form-control form-control-sm {{isDisabled ? '' : 'bg-white'}}" name="ngbFromDate"
-        [(ngModel)]="fromDate" placeholder="yyyy-mm-dd" ngbDatepicker #fd="ngbDatepicker" (click)="fd.toggle()"
-        [minDate]="minDate" [readOnly]="true" [disabled]="isDisabled" (ngModelChange)="changeFilter()"/>
-      <div class="input-group-append pointer">
-        <span class="input-group-text" (click)="fd.toggle()"><em class="fa fa-calendar"></em></span>
-      </div>
-    </div>
-    <label class="col-form-label col-form-label-sm to-time-label">To</label>
-    <div class="input-group">
-      <input class="to-date form-control form-control-sm {{isDisabled ? '' : 'bg-white'}}" name="ngbToDate"
-        [(ngModel)]="toDate" placeholder="yyyy-mm-dd" ngbDatepicker #td="ngbDatepicker" (click)="td.toggle()"
-        [disabled]="isDisabled" (blur)="isValidEventDate()" (ngModelChange)="changeFilter()"/>
-      <div class="input-group-append pointer">
-        <span class="input-group-text" (click)="td.toggle()"><em class="fa fa-calendar"></em></span>
-      </div>
-    </div>
+    <date-picker [disabled]="isDisabled" [minDate]="minDate" [readonly]="true"
+      [(date)]="fromDate" (dateChange)="changeFilter()" class="me-2">
+    </date-picker>
+    <label class="col-form-label-sm to-time-label">To</label>
+    <date-picker [disabled]="isDisabled" [minDate]="minDate" [readonly]="true" (blur)="isValidEventDate()"
+      [(date)]="toDate" (dateChange)="changeFilter()" class="me-2">
+    </date-picker>
   </div>
 </div>
 

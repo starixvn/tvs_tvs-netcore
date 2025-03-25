@@ -1,11 +1,16 @@
+
 import {
   Component, ElementRef, EventEmitter, Input,
   OnChanges,
   OnInit, Output,
   QueryList, SimpleChanges, ViewChild, ViewChildren
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { AddChildMatchComponent } from 'src/utility/components/add-child-match/add-child-match.component';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
@@ -23,6 +28,7 @@ import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { ChildMatchModel } from '../models/related-event.model';
 import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
 import { OthersModel } from '../others/others.model';
+import { ConfirmEkoComponent } from './confirm-eko/confirm-eko.component';
 import { ConfirmEarlyKickOffModel } from './confirm-eko/confirm-eko.model';
 import { LogInfoEkoComponent } from './log-info-eko/log-info-eko.component';
 import { AddRelatedEventArg } from './models/add-related-event.model';
@@ -36,9 +42,11 @@ import { SaveRequestService } from './services/save-request.service';
 import { SearchEventService } from './services/search-event.service';
 
 @Component({
-  selector: 'event-early-kick-off',
-  templateUrl: './event-early-kick-off.component.html',
-  styleUrls: ['./event-early-kick-off.component.scss']
+    selector: 'event-early-kick-off',
+    templateUrl: './event-early-kick-off.component.html',
+    styleUrls: ['./event-early-kick-off.component.scss'],
+    standalone: true,
+    imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, DateFullTimeNewComponent, LogInfoEkoComponent, AddChildMatchComponent, ConfirmEkoComponent]
 })
 export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   @Input() filter: FilterModel;

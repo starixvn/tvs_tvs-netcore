@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { GroupLicensee, GroupLicenseeModel } from "../../../../../utility/components/licensees/licensees.model";
 import { ItemsSelect } from "../../../../../utility/components/multiple-selection/items-select";
 import { MultipleSelection } from "../../../../../utility/components/multiple-selection/multiple-selection";
@@ -10,11 +10,12 @@ import { FilterModel } from "../../filter/filter.model";
 import { FilterWrongOfferedNameModel } from "../models/filter-wrong-offered-name.model";
 import { ValidationService } from "./validation.service";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FilterWrongOfferedNameService {
-  constructor(private readonly validationService: ValidationService) {
+  private readonly validationService = inject(ValidationService);
+  constructor() {
+    console.log('MyService instance created');
+
   }
   private readonly FILTER_CURRENCY_DROPDOWN = 'filter-currency-dropdown';
   private readonly GROUP_LICENSEE = 'check-group-licensee';

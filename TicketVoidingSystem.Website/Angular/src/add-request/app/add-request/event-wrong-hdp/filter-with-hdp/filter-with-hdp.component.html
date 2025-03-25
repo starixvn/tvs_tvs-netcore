@@ -1,106 +1,100 @@
 <div class="mb-2">
   <div class="filter-time d-flex">
-    <div class="mr-3">
-      <date-full-time-new #fromTimeComponent
-        class="from-date-time"
-        [isDisabled]="isDisabled"
-        (changeEvent)="changeFilter()"
-        [(dateTime)]="filterWithHdpModel.filterFromTransTime">
+    <div class="me-3">
+      <date-full-time-new #fromTimeComponent class="from-date-time" [isDisabled]="isDisabled"
+        (changeEvent)="changeFilter()" [(dateTime)]="filterWithHdpModel.filterFromTransTime">
       </date-full-time-new>
     </div>
-    <div class="d-flex mr-2">
-      <label class="col-form-label mr-2">To</label>
-      <date-full-time-new #toTimeComponent
-        class="to-date-time"
-        [isDisabled]="isDisabled"
-        (changeEvent)="changeFilter()"
+    <div class="d-flex me-2">
+      <label class="col-form-label-sm me-2">To</label>
+      <date-full-time-new #toTimeComponent class="to-date-time" [isDisabled]="isDisabled" (changeEvent)="changeFilter()"
         [(dateTime)]="filterWithHdpModel.filterToTransTime">
       </date-full-time-new>
     </div>
     <div class="d-flex align-items-center">
-      <label class="col-form-label duration">
+      <label class="col-form-label-sm duration">
         (Duration:&nbsp;<span class="bold">{{getDurationTime()}}</span>)
       </label>
     </div>
   </div>
 </div>
 
-<hdp-filter-bet-type 
-  [sportTypeId]="sportTypeId"
-  [issueTypeId]="filter.issueTypeId"
-  [filterBetType]="filterWithHdpModel.filterBetType"
-  [isDisabled]="isDisabled"
-  (changeEvent)="changeFilter()">
+<hdp-filter-bet-type [sportTypeId]="sportTypeId" [issueTypeId]="filter.issueTypeId"
+  [filterBetType]="filterWithHdpModel.filterBetType" [isDisabled]="isDisabled" (changeEvent)="changeFilter()">
 </hdp-filter-bet-type>
 
 <div class="d-flex">
-  <div class="mr-2 d-flex">
-    <div class="d-flex mr-2" *ngIf="isSubTypeWrongHdpOrWrong1stHdp()">
-      <div class="d-flex mr-3">
+  <div class="me-2 d-flex">
+    @if (isSubTypeWrongHdpOrWrong1stHdp()) {
+    <div class="d-flex me-2">
+      <div class="d-flex me-3">
         <div class="team-favorite">
-          <div class="team-favorite-item home-team"
-            (click)="!isDisabled && changeTeamFavorite(0)"
+          <div class="team-favorite-item home-team" (click)="!isDisabled && changeTeamFavorite(0)"
             [ngClass]="{'team-favorite-selected':teamFavorite===0, 'team-favorite-unselected':teamFavorite!==0, 'team-favorite-disabled':isDisabled}">
             Home Favorite
           </div>
-          <div class="team-favorite-item away-team"
-            (click)="!isDisabled && changeTeamFavorite(1)"
+          <div class="team-favorite-item away-team" (click)="!isDisabled && changeTeamFavorite(1)"
             [ngClass]="{'team-favorite-selected':teamFavorite===1, 'team-favorite-unselected':teamFavorite!==1, 'team-favorite-disabled':isDisabled}">
             Away Favorite
           </div>
         </div>
         <div>
-          <input *ngIf="teamFavorite===0"
-            [disabled]="isDisabled"
-            placeholder="Ex: 0.75&1&1.25"
+          @if (teamFavorite===0) {
+          <input [disabled]="isDisabled" placeholder="Ex: 0.75&1&1.25"
             (change)="changeFilter();isCorrectFormatHdp(filterWithHdpModel.homeFavorite, 'home-favorite-input')"
-            [(ngModel)]="filterWithHdpModel.homeFavorite"
-            type="text" class="home-favorite-input input-team-favorite form-control form-control-sm"/>
-          <input *ngIf="teamFavorite===1"
-            [disabled]="isDisabled"
-            placeholder="Ex: 0.75&1&1.25"
+            [(ngModel)]="filterWithHdpModel.homeFavorite" type="text"
+            class="home-favorite-input input-team-favorite form-control form-control-sm" />
+          }
+          @if (teamFavorite===1) {
+          <input [disabled]="isDisabled" placeholder="Ex: 0.75&1&1.25"
             (change)="changeFilter();isCorrectFormatHdp(filterWithHdpModel.awayFavorite, 'away-favorite-input')"
-            [(ngModel)]="filterWithHdpModel.awayFavorite"
-            type="text" class="away-favorite-input input-team-favorite form-control form-control-sm"/>
+            [(ngModel)]="filterWithHdpModel.awayFavorite" type="text"
+            class="away-favorite-input input-team-favorite form-control form-control-sm" />
+          }
         </div>
       </div>
       <div class="actual-market">
-        <label class="col-form-label mr-2">Actual Market</label>
-        <input [(ngModel)]="filterWithHdpModel.actualMarket"
-          [disabled]="isDisabled"
-          (change)="changeFilter()"
-          type="text" class="actual-market-input form-control form-control-sm"/>
+        <label class="col-form-label-sm me-2">Actual Market</label>
+        <input [(ngModel)]="filterWithHdpModel.actualMarket" [disabled]="isDisabled" (change)="changeFilter()"
+          type="text" class="actual-market-input form-control form-control-sm" />
       </div>
     </div>
-    <div class="hdp-value mr-2" *ngIf="!isSubTypeWrongHdpOrWrong1stHdp()">
-      <label class="col-form-label mr-2">HDP Value</label>
-      <input placeholder="Ex: 0.75&1&1.25"
-        [disabled]="isDisabled"
+    }
+    @if (!isSubTypeWrongHdpOrWrong1stHdp()) {
+    <div class="hdp-value me-2">
+      <label class="col-form-label-sm me-2">HDP Value</label>
+      <input placeholder="Ex: 0.75&1&1.25" [disabled]="isDisabled"
         (change)="changeFilter();isCorrectFormatHdp(filterWithHdpModel.hdpValue, 'hdp-value-input')"
-        [(ngModel)]="filterWithHdpModel.hdpValue"
-        type="text" class="hdp-value-input form-control form-control-sm"/>
+        [(ngModel)]="filterWithHdpModel.hdpValue" type="text" class="hdp-value-input form-control form-control-sm" />
     </div>
+    }
     <div class="d-flex radio-liveindicator">
-      <label class="col-form-label none-live mr-2 d-flex align-items-center">
-        <input class="mr-1" type="radio" name="radio-liveindicator-{{matchId}}" [disabled]="isDisabled" [(ngModel)]="filterWithHdpModel.liveIndicator" [value]="0" (change)="changeFilter()" />
+      <label class="col-form-label-sm none-live me-2 d-flex align-items-center">
+        <input class="me-1" type="radio" name="radio-liveindicator-{{matchId}}" [disabled]="isDisabled"
+          [(ngModel)]="filterWithHdpModel.liveIndicator" [value]="0" (change)="changeFilter()" />
         Non-Live
       </label>
-      <label class="col-form-label live d-flex align-items-center">
-        <input class="mr-1" type="radio" name="radio-liveindicator-{{matchId}}" [disabled]="isDisabled" [(ngModel)]="filterWithHdpModel.liveIndicator" [value]="1" (change)="changeFilter()" />
+      <label class="col-form-label-sm live d-flex align-items-center">
+        <input class="me-1" type="radio" name="radio-liveindicator-{{matchId}}" [disabled]="isDisabled"
+          [(ngModel)]="filterWithHdpModel.liveIndicator" [value]="1" (change)="changeFilter()" />
         Live
       </label>
     </div>
   </div>
   <div>
-    <div class="btn-reload" *ngIf="!isMainMatch">
+    @if (!isMainMatch) {
+    <div class="btn-reload">
       <button [disabled]="isDisabled" type="button" class="btn btn-default btn-sm" (click)="emitRefreshEvent()">
         <span><i class="fa fa-refresh" aria-hidden="true"></i></span>
       </button>
     </div>
-    <div *ngIf="isMainMatch">
+    }
+    @if (isMainMatch) {
+    <div>
       <button [disabled]="isDisabled" type="submit" class="btn btn-primary btn-sm"
-      (click)="emitSearchEvent()">Search</button>
+        (click)="emitSearchEvent()">Search</button>
     </div>
+    }
   </div>
 </div>
 

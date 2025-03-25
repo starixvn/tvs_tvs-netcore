@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+
+import { Component, EventEmitter, inject, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
@@ -6,6 +8,7 @@ import { FilterModel } from '../filter/filter.model';
 import { WrongOddsModel } from '../models/event-wrong-odds.model';
 import { OthersModel } from '../others/others.model';
 import { FilterWrongOddsComponent } from './filter-wrong-odds/filter-wrong-odds.component';
+import { LogInfoWrongOddsComponent } from './log-info-wrong-odds/log-info-wrong-odds.component';
 import { MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from './models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
@@ -18,9 +21,19 @@ import { ValidationService } from './services/validation.service';
 import { PoolHouseTicketValue } from '../pool-house-ticket/pool-house-ticket.constant';
 
 @Component({
-  selector: 'event-wrong-odds',
-  templateUrl: './event-wrong-odds.component.html',
-  styleUrls: ['./event-wrong-odds.component.scss']
+    selector: 'event-wrong-odds',
+    templateUrl: './event-wrong-odds.component.html',
+    styleUrls: ['./event-wrong-odds.component.scss'],
+    standalone: true,
+    imports: [EventLeagueComponent, FilterWrongOddsComponent, FormsModule, LogInfoWrongOddsComponent],
+    providers: [
+      ValidationService,
+      EventWrongOddsService,
+      LogInfoService,
+      SaveRequestService,
+      CalculateOddsService,
+      AddRequestApiService
+    ]
 })
 export class EventWrongOddsComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -37,15 +50,13 @@ export class EventWrongOddsComponent implements OnInit {
   logInfoEvent = new LogInfoWrongOdds();
   primitiveProps = new PrimitiveProperty();
 
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly eventWrongOddsService: EventWrongOddsService,
-    private readonly logInfoService: LogInfoService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly calculateOddsService: CalculateOddsService,
-    private readonly addRequestApiService: AddRequestApiService
-    ) { }
+  private readonly validationService = inject(ValidationService);
+  private readonly eventWrongOddsService = inject(EventWrongOddsService);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly calculateOddsService = inject(CalculateOddsService);
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   ngOnInit(): void {
     if (this.isEdit) {

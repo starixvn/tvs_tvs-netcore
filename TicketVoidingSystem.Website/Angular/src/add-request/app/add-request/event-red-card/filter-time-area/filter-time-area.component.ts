@@ -1,4 +1,6 @@
+
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
@@ -7,9 +9,11 @@ import { FilterTimeWithAllowanceComponent } from '../filter-time-with-allowance/
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
 
 @Component({
-  selector: 'filter-time-area',
-  templateUrl: './filter-time-area.component.html',
-  styleUrls: ['./filter-time-area.component.scss']
+    selector: 'filter-time-area',
+    templateUrl: './filter-time-area.component.html',
+    styleUrls: ['./filter-time-area.component.scss'],
+    standalone: true,
+    imports: [FilterTimeWithAllowanceComponent, FormsModule]
 })
 export class FilterTimeAreaComponent implements OnInit {
   @Input() filterTimeWithAllowanceModel = new FilterTimeWithAllowance();

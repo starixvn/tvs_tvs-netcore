@@ -1,18 +1,24 @@
 import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
+import { LogInfoMessageComponent } from 'src/utility/components/log-info-detail/log-info-message/log-info-message.component';
+import { LogInfoTicketCountComponent } from 'src/utility/components/log-info-detail/log-info-ticket-count/log-info-ticket-count.component';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { Item } from '../../../../../utility/models/item.model';
 import { StaticService } from '../../../../../utility/services/static.service';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { GroupBetTypeCountModel } from '../../models/get-log-info.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogInfoItem, LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 
 @Component({
-  selector: 'log-info-wrong-market-offered',
-  templateUrl: './log-info-wrong-market-offered.component.html',
-  styleUrls: ['./log-info-wrong-market-offered.component.scss']
+    selector: 'log-info-wrong-market-offered',
+    templateUrl: './log-info-wrong-market-offered.component.html',
+    styleUrls: ['./log-info-wrong-market-offered.component.scss'],
+    standalone: true,
+    imports: [AffectedTicketComponent, LogInfoTicketCountComponent, LogInfoMessageComponent, BlockUiModule]
 })
 
 export class LogInfoWrongMarketOfferedComponent {

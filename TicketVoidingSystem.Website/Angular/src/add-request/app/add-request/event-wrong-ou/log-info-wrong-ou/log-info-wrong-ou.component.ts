@@ -1,16 +1,23 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
+import { PipeModule } from 'src/utility/pipes/pipe.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { SportType } from '../../../../../utility/constants/sport.constant';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { FilterModel } from '../../filter/filter.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
+import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
 import { LogAnalysisService } from '../../services/log-analysis.service';
+import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
 import { FilterWrongOuComponent } from '../filter-wrong-ou/filter-wrong-ou.component';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
@@ -19,9 +26,12 @@ import { LogInfoService } from '../services/log-info.service';
 import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 
 @Component({
-  selector: 'log-info-wrong-ou',
-  templateUrl: './log-info-wrong-ou.component.html',
-  styleUrls: ['./log-info-wrong-ou.component.scss']
+    selector: 'log-info-wrong-ou',
+    templateUrl: './log-info-wrong-ou.component.html',
+    styleUrls: ['./log-info-wrong-ou.component.scss'],
+    standalone: true,
+    imports: [AffectedTicketComponent, PoolHouseTicketComponent, TicketCountOtherSportsComponent,
+      FormsModule, CommonModule, PipeModule, FilterWrongOuComponent, BlockUiModule]
 })
 export class LogInfoWrongOuComponent implements OnInit {
   @Input() isMainMatch: boolean;

@@ -1,4 +1,5 @@
-<div *ngIf="model.isOpen">
+@if (model.isOpen) {
+<div>
   <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
   <div role="dialog" class="fade modal show d-block wrapper-tooltip">
     <div role="document" class="modal-dialog modal-dialog-centered">
@@ -7,32 +8,46 @@
           <div class="modal-title">
             <strong>Confirm</strong>
           </div>
-          <button type="button" class="close" aria-label="Close" (click)="onClickCancel()">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="onClickCancel()"></button>
         </div>
         <div class="modal-body">
           <div class="mb-2">
             <div>Please double check below type if correct before proceeding</div>
-            <div class="ml-2">
+            <div class="ms-2">
               <div>Issue Type: <strong>{{issueTypeName}}</strong></div>
-              <div *ngIf="model.isShowSubIssueType">Sub Type: <strong>{{subIssueTypeName}}</strong></div>
+              @if (model.isShowSubIssueType) {
+              <div>Sub Type: <strong>{{subIssueTypeName}}</strong></div>
+              }
               <div>Action: <strong>{{actionName}}</strong></div>
             </div>
           </div>
-          <div class="mb-2 extra-warning" *ngIf="model.extraWarningModel">
+          @if (model.extraWarningModel) {
+          <div class="mb-2 extra-warning">
             <div>{{model.extraWarningModel.title}}</div>
-            <div class="ml-2">
-              <div *ngFor="let message of model.extraWarningModel.messages" [innerHTML]="message"></div>
+            <div class="ms-2">
+              @for (message of model.extraWarningModel.messages; track message) {
+              <div [innerHTML]="message"></div>
+              }
             </div>
           </div>
+          }
           <div class="warning-content">
-            <div *ngIf="model.isHasWarningTicket">There are some warnings in this request.</div>
-            <div *ngIf="model.isHasWarningTakenNote">Ticket(s) on request will be unmarked.</div>
-            <div class="text-red" *ngIf="model.isHasSettledTicket">The request has settled ticket(s).</div>
-            <div class="text-red" *ngIf="model.isEditingByAnotherUser">Please remind this request {{model.requestId}} is confirmed by {{model.requestedBy}}.</div>
+            @if (model.isHasWarningTicket) {
+            <div>There are some warnings in this request.</div>
+            }
+            @if (model.isHasWarningTakenNote) {
+            <div>Ticket(s) on request will be unmarked.</div>
+            }
+            @if (model.isHasSettledTicket) {
+            <div class="text-red">The request has settled ticket(s).</div>
+            }
+            @if (model.isEditingByAnotherUser) {
+            <div class="text-red">Please remind this request {{model.requestId}} is confirmed by {{model.requestedBy}}.
+            </div>
+            }
           </div>
-          <div class="mg-top-10"><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>
+          <div class="mg-top-10"><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS
+            WITH ABOVE INFO?</div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn confirm" (click)="onClickOk()">OK</button>
@@ -42,3 +57,4 @@
     </div>
   </div>
 </div>
+}

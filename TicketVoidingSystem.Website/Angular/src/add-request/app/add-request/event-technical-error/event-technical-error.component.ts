@@ -9,12 +9,14 @@ import { EventLeagueComponent } from '../../../../utility/components/event-leagu
 import { DateTimeFormat, ModeType } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { TechnicalErrorModel } from '../models/event-technical-error.model';
 import { OthersModel } from '../others/others.model';
 import { FilterTimeTechnicalErrorComponent } from './filter-time-technical-error/filter-time-technical-error.component';
+import { LogInfoTechnicalErrorComponent } from './log-info-technical-error/log-info-technical-error.component';
 import { FilterTechnicalErrorModel } from './models/filter-technical-error.model';
 import { LogInfoTechnicalError } from './models/log-info-technical-error.model';
 import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
@@ -25,9 +27,12 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-  selector: 'event-technical-error',
-  templateUrl: './event-technical-error.component.html',
-  styleUrls: ['./event-technical-error.component.scss']
+    selector: 'event-technical-error',
+    templateUrl: './event-technical-error.component.html',
+    styleUrls: ['./event-technical-error.component.scss'],
+    standalone: true,
+    imports: [EventLeagueComponent, AdvancedModeAddRequestComponent, FilterTimeTechnicalErrorComponent,
+      LogInfoTechnicalErrorComponent, ConfirmAddRequestComponent]
 })
 export class EventTechnicalErrorComponent implements OnInit {
   @Input() isEdit: boolean;

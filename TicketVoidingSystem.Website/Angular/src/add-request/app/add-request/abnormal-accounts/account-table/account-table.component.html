@@ -9,9 +9,11 @@
     <table>
       <thead>
         <tr>
-          <th scope="col" class="col-tb-1" *ngIf="!viewOnly">
-            <div>No</div>
-          </th>
+          @if (!viewOnly) {
+            <th scope="col" class="col-tb-1">
+              <div>No</div>
+            </th>
+          }
           <th scope="col" class="col-tb-2">
             <div class="title-table" [ngbTooltip]="getDescription('Username')" tooltipClass="tooltip-class" placement="top">
               <span>Username</span>
@@ -60,55 +62,67 @@
   </div>
   <div class="table-content">
     <table>
-      <ng-container *ngFor="let item of accountWinlostModels; index as i">
+      @for (item of accountWinlostModels; track item; let i = $index) {
         <tbody>
-          <tr *ngIf="item.isShowOnTable" [ngClass]="item.isHighlight ? 'bg-highlight' : ''">
-            <td class="col-tb-1" *ngIf="!viewOnly">
-              <div>{{i + 1}}</div>
-            </td>
-            <td class="col-tb-2 text-left">
-              <div>
-                <span [ngClass]="item.isCanEditTicket && !viewOnly ? 'username-link' : ''" (click)="item.isCanEditTicket && openPopupAdjustTicket(item.custId)">{{item.username}}</span>
-              </div>
-            </td>
-            <td class="col-tb-3 text-right">
-              <div>{{showDecimalWithComma(item.givenCredit)}}</div>
-            </td>
-            <td class="col-tb-4 text-right adjust-gv">
-              <div class="adjust-string" *ngIf="!item.isShowInput || viewOnly" (mousedown)="mouseDownEventAdjustGV(item)">{{item.adjustVoidLimitString ?? showDecimalWithComma(item.adjustVoidLimit)}}</div>
-              <div>
-                <input *ngIf="item.isShowInput" (mouseup)="adjustInputFocus($event)" class="form-control form-control-sm adjust-gv{{i}}" type="text" [(ngModel)]="item.adjustVoidLimit"
-                (ngModelChange)="onChangeAdjustGV(item, i)" [disabled]="filter.isVoided"
-                (blur)="reCalculate(item, i)"/>
-              </div>
-            </td>
-            <td class="col-tb-5 text-right">
-              <div>{{showDecimalWithComma(item.currentLosing)}}</div>
-            </td>
-            <td class="col-tb-6 text-right">
-              <div>{{showDecimalWithComma(item.currentWinning)}}</div>
-            </td>
-            <td class="col-tb-7 text-right highlight-amount">
-              <div class="title-void-amount">
-                <div><span *ngIf="item.isEditedTicket && !viewOnly" class="editted-account">Edited</span></div>
-                <div>{{showDecimalWithComma(item.estimateVoidAmount)}}</div>
-              </div>
-            </td>
-            <td class="text-right highlight-amount">
-              <div>{{showDecimalWithComma(item.winLostAfterVoid)}}</div>
-            </td>
-          </tr>
+          @if (item.isShowOnTable) {
+            <tr [ngClass]="item.isHighlight ? 'bg-highlight' : ''">
+              @if (!viewOnly) {
+                <td class="col-tb-1">
+                  <div>{{i + 1}}</div>
+                </td>
+              }
+              <td class="col-tb-2 text-left">
+                <div>
+                  <span [ngClass]="item.isCanEditTicket && !viewOnly ? 'username-link' : ''" (click)="item.isCanEditTicket && openPopupAdjustTicket(item.custId)">{{item.username}}</span>
+                </div>
+              </td>
+              <td class="col-tb-3 text-right">
+                <div>{{showDecimalWithComma(item.givenCredit)}}</div>
+              </td>
+              <td class="col-tb-4 text-right adjust-gv">
+                @if (!item.isShowInput || viewOnly) {
+                  <div class="adjust-string" (mousedown)="mouseDownEventAdjustGV(item)">{{item.adjustVoidLimitString ?? showDecimalWithComma(item.adjustVoidLimit)}}</div>
+                }
+                <div>
+                  @if (item.isShowInput) {
+                    <input (mouseup)="adjustInputFocus($event)" class="form-control form-control-sm adjust-gv{{i}}" type="text" [(ngModel)]="item.adjustVoidLimit"
+                      (ngModelChange)="onChangeAdjustGV(item, i)" [disabled]="filter.isVoided"
+                      (blur)="reCalculate(item, i)"/>
+                  }
+                </div>
+              </td>
+              <td class="col-tb-5 text-right">
+                <div>{{showDecimalWithComma(item.currentLosing)}}</div>
+              </td>
+              <td class="col-tb-6 text-right">
+                <div>{{showDecimalWithComma(item.currentWinning)}}</div>
+              </td>
+              <td class="col-tb-7 text-right highlight-amount">
+                <div class="title-void-amount">
+                  <div>@if (item.isEditedTicket && !viewOnly) {
+                    <span class="editted-account">Edited</span>
+                  }</div>
+                  <div>{{showDecimalWithComma(item.estimateVoidAmount)}}</div>
+                </div>
+              </td>
+              <td class="text-right highlight-amount">
+                <div>{{showDecimalWithComma(item.winLostAfterVoid)}}</div>
+              </td>
+            </tr>
+          }
         </tbody>
-      </ng-container>
+      }
     </table>
 
-    <table *ngIf="!isShowAccounts()">
-      <tbody>
-        <tr>
-          <td class="no-data">There is no data</td>
-        </tr>
-      </tbody>
-    </table>
+    @if (!isShowAccounts()) {
+      <table>
+        <tbody>
+          <tr>
+            <td class="no-data">There is no data</td>
+          </tr>
+        </tbody>
+      </table>
+    }
   </div>
   <!-- <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging> -->
 </div>

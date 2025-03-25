@@ -1,4 +1,5 @@
-<div *ngIf="model.isOpenDialog">
+@if (model.isOpenDialog) {
+<div>
   <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
   <div role="dialog" class="fade modal show d-block wrapper-tooltip">
     <div role="document" class="modal-dialog modal-dialog-centered">
@@ -14,25 +15,39 @@
         <div class="modal-body">
           <div class="mg-bottom-5">
             <div>Please double check below type if correct before proceeding</div>
-            <div class="ml-2">
+            <div class="ms-2">
               <div>Issue Type: <strong>{{model.issueTypeName}}</strong></div>
               <div>Action: <strong>{{model.actionName}}</strong></div>
             </div>
           </div>
-          <div *ngIf="model.warningRelatedEvents.length > 0" class="warning-content">
-            <div>Related match(es) excluded when creating new request because having no valid tickets in the current range:</div>
-            <div class="ml-2">
-              <div *ngFor="let event of model.warningRelatedEvents">{{event}}</div>
+          @if (model.warningRelatedEvents.length > 0) {
+          <div class="warning-content">
+            <div>Related match(es) excluded when creating new request because having no valid tickets in the current
+              range:</div>
+            <div class="ms-2">
+              @for (event of model.warningRelatedEvents; track event) {
+              <div>{{event}}</div>
+              }
             </div>
           </div>
+          }
           <div class="warning-content">
-            <div *ngIf="model.isHasWarningEvent">There are some warnings in this request.</div>
-            <div *ngIf="model.isHasWarningEditTakeNoteRequest">Ticket(s) on request will be unmarked.</div>
-            <div class="text-red" *ngIf="model.isHasSettledTicket">The request has settled ticket(s).</div>
-            <div class="text-red" *ngIf="model.isEditingByAnotherUser">Please remind this request {{model.requestId}} is confirmed by {{model.requestedBy}}.</div>
+            @if (model.isHasWarningEvent) {
+            <div>There are some warnings in this request.</div>
+            }
+            @if (model.isHasWarningEditTakeNoteRequest) {
+            <div>Ticket(s) on request will be unmarked.</div>
+            }
+            @if (model.isHasSettledTicket) {
+            <div class="text-red">The request has settled ticket(s).</div>
+            }
+            @if (model.isEditingByAnotherUser) {
+            <div class="text-red">Please remind this request {{model.requestId}} is confirmed by {{model.requestedBy}}.
+            </div>
+            }
           </div>
-
-          <div class="mg-top-10"><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>
+          <div class="mg-top-10"><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS
+            WITH ABOVE INFO?</div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn confirm" (click)="onClickOk()">OK</button>
@@ -42,3 +57,4 @@
     </div>
   </div>
 </div>
+}

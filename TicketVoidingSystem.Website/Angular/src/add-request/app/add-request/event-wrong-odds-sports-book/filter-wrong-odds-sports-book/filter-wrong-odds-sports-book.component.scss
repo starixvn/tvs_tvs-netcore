@@ -5,16 +5,6 @@
   box-sizing: border-box;
   border-radius: 3px;
 
-  .border-radius-left-0 {
-    border-bottom-left-radius: 0;
-    border-top-left-radius: 0;
-  }
-
-  .border-radius-right-0 {
-    border-bottom-right-radius: 0;
-    border-top-right-radius: 0;
-  }
-
   ::ng-deep .ng-select .ng-select-container {
     width: 130px;
     min-height: auto;
@@ -24,30 +14,14 @@
   }
 
   .filter-odds-type {
-    display: flex;
+    width: 274px;
+    min-width: 274px;
     margin-right: 37px;
-
-    .filter-odds-type-input {
-      width: 153px;
-    }
   }
 
   .filter-correct-odds {
-    display: flex;
-    width: auto;
-    flex-wrap: nowrap;
-
-    >div {
-      width: 130px;
-
-      span {
-        width: 100%;
-      }
-    }
-
-    .div-input {
-      width: 153px !important;
-    }
+    width: 274px;
+    min-width: 274px;
   }
 
   .filter-live-indicator {

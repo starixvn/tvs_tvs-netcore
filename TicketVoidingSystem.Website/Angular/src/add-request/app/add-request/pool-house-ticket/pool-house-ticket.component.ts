@@ -1,17 +1,27 @@
+
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
+import { MultipleSelectionComponent } from 'src/utility/components/multiple-selection/multiple-selection.component';
 import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
 import { StaticService } from '../../../../utility/services/static.service';
+import { GroupBettypesPoolHouseComponent } from './group-bettypes-pool-house/group-bettypes-pool-house.component';
 import { GroupBetType, GroupBetTypesModel } from './group-bettypes-pool-house/group-bettypes-pool-house.model';
+import { LinkedLogComponent } from './linked-log/linked-log.component';
 import { PoolHouseTicketValue } from './pool-house-ticket.constant';
 import { PoolHouseTicketsModel, PoolHouseTicketsSection } from './pool-house-ticket.model';
+import { TicketsComponent } from './tickets/tickets.component';
 import { TicketsModel } from './tickets/tickets.model';
 
 @Component({
-  selector: 'pool-house-tickets',
-  templateUrl: './pool-house-ticket.component.html',
-  styleUrls: ['./pool-house-ticket.component.scss']
+    selector: 'pool-house-tickets',
+    templateUrl: './pool-house-ticket.component.html',
+    styleUrls: ['./pool-house-ticket.component.scss'],
+    standalone: true,
+    imports: [FormsModule, LinkedLogComponent, GroupBettypesPoolHouseComponent, MultipleSelectionComponent, NgbModule, TicketsComponent, BlockUiModule]
 })
 export class PoolHouseTicketComponent implements OnChanges {
   @Input() model = new PoolHouseTicketsModel();

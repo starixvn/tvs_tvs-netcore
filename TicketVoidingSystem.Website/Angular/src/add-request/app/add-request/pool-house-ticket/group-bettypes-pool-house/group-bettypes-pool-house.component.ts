@@ -1,12 +1,18 @@
+
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { GroupBetTypesModel } from './group-bettypes-pool-house.model';
 
 @Component({
-  selector: 'group-bettypes-pool-house',
-  templateUrl: './group-bettypes-pool-house.component.html',
-  styleUrls: ['./group-bettypes-pool-house.component.scss']
+    selector: 'group-bettypes-pool-house',
+    templateUrl: './group-bettypes-pool-house.component.html',
+    styleUrls: ['./group-bettypes-pool-house.component.scss'],
+    standalone: true,
+    imports: [FormsModule, NgbModule, TooltipComponent]
 })
 export class GroupBettypesPoolHouseComponent implements OnInit {
   @Input() affectedGroupBetTypesModel: GroupBetTypesModel;

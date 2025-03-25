@@ -1,6 +1,12 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { AddChildMatchComponent } from 'src/utility/components/add-child-match/add-child-match.component';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
@@ -23,9 +29,18 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-  selector: 'event-wrong-ou',
-  templateUrl: './event-wrong-ou.component.html',
-  styleUrls: ['./event-wrong-ou.component.scss']
+    selector: 'event-wrong-ou',
+    templateUrl: './event-wrong-ou.component.html',
+    styleUrls: ['./event-wrong-ou.component.scss'],
+    standalone: true,
+    imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiModule, AddChildMatchComponent, LogInfoWrongOuComponent],
+    providers: [
+      EventWrongOuService,
+      LogInfoService,
+      RelatedEventService,
+      SaveRequestService,
+      ValidationService
+    ]
 })
 export class EventWrongOuComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -48,16 +63,15 @@ export class EventWrongOuComponent implements OnInit {
   primitiveProps = new PrimitiveProperty();
   tooltip = new Tooltip();
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
+  private readonly element = inject(ElementRef);
+  private readonly logInfoWrongOuService = inject(LogInfoService);
+  private readonly eventWrongOuService = inject(EventWrongOuService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly validationService = inject(ValidationService);
+  private readonly relatedEventService = inject(RelatedEventService);
+  private readonly saveRequestService = inject(SaveRequestService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly logInfoWrongOuService: LogInfoService,
-    private readonly eventWrongOuService: EventWrongOuService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly validationService: ValidationService,
-    private readonly relatedEventService: RelatedEventService,
-    private readonly saveRequestService: SaveRequestService
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 

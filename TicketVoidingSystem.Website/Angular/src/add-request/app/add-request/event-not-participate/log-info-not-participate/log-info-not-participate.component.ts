@@ -1,5 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import moment from 'moment-timezone';
+import { LogInfoTicketCountComponent } from 'src/utility/components/log-info-detail/log-info-ticket-count/log-info-ticket-count.component';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -7,9 +9,11 @@ import { LogInfoNotParticipate } from '../models/log-info-not-participate.model'
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 
 @Component({
-  selector: 'log-info-not-participate',
-  templateUrl: './log-info-not-participate.component.html',
-  styleUrls: ['./log-info-not-participate.component.scss']
+    selector: 'log-info-not-participate',
+    templateUrl: './log-info-not-participate.component.html',
+    styleUrls: ['./log-info-not-participate.component.scss'],
+    standalone: true,
+    imports: [LogInfoTicketCountComponent, CommonModule]
 })
 export class LogInfoNotParticipateComponent {
   @Input() logInfo: LogInfoNotParticipate;

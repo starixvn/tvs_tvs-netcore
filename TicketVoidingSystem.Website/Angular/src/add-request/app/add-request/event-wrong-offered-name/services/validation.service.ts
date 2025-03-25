@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
@@ -6,13 +6,9 @@ import { CheckAddPermissionService } from '../../services/check-permission.servi
 import { FilterWrongOfferedNameComponent } from '../filter-wrong-offered-name/filter-wrong-offered-name.component';
 import { LogInfoWrongOfferedName } from '../models/log-info-wrong-offered-name.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
-  constructor(
-    private readonly checkPermissionService: CheckAddPermissionService
-  ) { }
+  private readonly checkPermissionService = inject(CheckAddPermissionService);
 
   isAccountHasAddRequestPermission(action: string, isHasInstantlySettledTicket: boolean, isHasSettledTicket: boolean, permission: PermissionAddRequest): boolean {
     return this.checkPermissionService.isAccountHasAddRequestPermission(action, isHasInstantlySettledTicket, isHasSettledTicket, permission);

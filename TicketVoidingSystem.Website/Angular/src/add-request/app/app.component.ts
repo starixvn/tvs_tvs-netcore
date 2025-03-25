@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
+import { MenuBarComponent } from 'src/utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
+import { AddRequestComponent } from './add-request/add-request.component';
 import { InitializedRequestModel, RequestModel } from './add-request/models/request.model';
 
-
 @Component({
+  standalone: true,
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  imports: [MenuBarComponent, AddRequestComponent]
 })
 export class AppComponent implements OnInit {
   model = new RequestModel();

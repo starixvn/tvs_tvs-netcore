@@ -66,7 +66,7 @@ export class ValidationService {
   private updateModelAfterCallApi(args: SaveRequestArg, validationViewModel: CheckDuplicateTicketsViewModel): void {
     args.primitiveProps.transInfoAddRequestModel = validationViewModel.transInfoAddRequestModel;
     args.duplicateTicketsModel.matchId = validationViewModel.match?.matchId;
-    
+
     if (!this.isFilterMixParlay(args.duplicateTicketsModel.filterBy)) {
       args.duplicateTicketsModel.name = validationViewModel.match?.name;
       args.duplicateTicketsModel.leagueName = validationViewModel.match?.leagueName;

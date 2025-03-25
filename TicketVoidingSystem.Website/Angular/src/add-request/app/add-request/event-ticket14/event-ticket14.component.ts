@@ -1,4 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
@@ -12,9 +14,11 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-  selector: 'event-ticket14',
-  templateUrl: './event-ticket14.component.html',
-  styleUrls: ['./event-ticket14.component.scss']
+    selector: 'event-ticket14',
+    templateUrl: './event-ticket14.component.html',
+    styleUrls: ['./event-ticket14.component.scss'],
+    standalone: true,
+    imports: [BetIdsComponent, FormsModule, BlockUiModule]
 })
 export class EventTicket14Component {
   @Input() isEdit: boolean;

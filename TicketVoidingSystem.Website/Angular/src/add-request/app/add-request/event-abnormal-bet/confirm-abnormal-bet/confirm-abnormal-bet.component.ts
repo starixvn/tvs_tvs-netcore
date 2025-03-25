@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet.model';
 
 @Component({
-  selector: 'confirm-abnormal-bet',
-  templateUrl: './confirm-abnormal-bet.component.html',
-  styleUrls: ['./confirm-abnormal-bet.component.scss']
+    selector: 'confirm-abnormal-bet',
+    templateUrl: './confirm-abnormal-bet.component.html',
+    styleUrls: ['./confirm-abnormal-bet.component.scss'],
+    standalone: true,
+    imports: [FormsModule]
 })
 export class ConfirmAbnormalBetComponent implements OnChanges {
   @Input() model = new ConfirmAbnormalBetModel();

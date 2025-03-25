@@ -1,18 +1,23 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
+import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
+import { TvDetectionService } from '../../../../../manage-request/app/request-list/services/tv-detection.service';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TimeZone } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { CommonStaticService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance.model';
-import { TvDetectionService } from '../../../../../manage-request/app/request-list/services/tv-detection.service';
 
 @Component({
-  selector: 'filter-time-with-allowance',
-  templateUrl: './filter-time-with-allowance.component.html',
-  styleUrls: ['./filter-time-with-allowance.component.scss']
+    selector: 'filter-time-with-allowance',
+    templateUrl: './filter-time-with-allowance.component.html',
+    styleUrls: ['./filter-time-with-allowance.component.scss'],
+    standalone: true,
+    imports: [FormsModule, CommonModule, TooltipComponent, NgbModule]
 })
 export class FilterTimeWithAllowanceComponent implements OnInit {
   @Input() isDisabled: boolean;

@@ -1,7 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { AbnormalFilterBy, MatchIdConstant, TVSRequestActionType } from '../../../../utility/constants/config';
+import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
@@ -12,12 +17,13 @@ import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { CommonService } from '../../../../utility/services/common.service';
 
 @Component({
-  selector: 'event-duplicate-tickets',
-  templateUrl: './event-duplicate-tickets.component.html',
-  styleUrls: ['./event-duplicate-tickets.component.scss']
+    selector: 'event-duplicate-tickets',
+    templateUrl: './event-duplicate-tickets.component.html',
+    styleUrls: ['./event-duplicate-tickets.component.scss'],
+    standalone: true,
+    imports: [FormsModule, BlockUiModule, CommonModule, BetIdsComponent, TooltipComponent]
 })
 export class EventDuplicateTicketsComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -34,7 +40,7 @@ export class EventDuplicateTicketsComponent implements OnInit {
   isCancelAfterFocusOutBetIdsEvent = false;
   abnormalFilterBy = new AbnormalFilterBy();
   tooltip = new Tooltip();
-  
+
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
     private readonly validationService: ValidationService,

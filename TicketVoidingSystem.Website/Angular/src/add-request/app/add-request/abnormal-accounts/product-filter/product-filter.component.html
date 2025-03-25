@@ -1,6 +1,6 @@
 <div class="product-filter flex-wrap">
-  <div class="mr-4">
-    <label class="col-form-label col-form-label-sm text-right">Product</label>
+  <div class="me-4">
+    <label class="col-form-label-sm text-right">Product</label>
     <div class="d-flex dropdown-area">
       <div class="multi-select">
         <ng-select class="product" [items]="products" [multiple]="true" bindLabel="name" groupBy="group"
@@ -12,16 +12,20 @@
             selectedProducts.length ? 'Unselect All' : 'Select All'}}
           </ng-template>
           <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-            <input class="mr-1" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />{{item.name}}
+            <input class="me-1" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />{{item.name}}
           </ng-template>
           <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
-            <div class="ng-value displayed-name" *ngFor="let item of items | slice:0:4">
-              {{item['name']}}
-              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
-            </div>
-            <div class="number-of-more" *ngIf="items.length > 4">
-              <span class="ng-value-label">+{{items.length - 4}}</span>
-            </div>
+            @for (item of items | slice:0:4; track item) {
+              <div class="ng-value displayed-name">
+                {{item['name']}}
+                <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+              </div>
+            }
+            @if (items.length > 4) {
+              <div class="number-of-more">
+                <span class="ng-value-label">+{{items.length - 4}}</span>
+              </div>
+            }
           </ng-template>
         </ng-select>
       </div>
@@ -29,7 +33,7 @@
   </div>
 
   <div>
-    <label class="col-form-label col-form-label-sm">Ticket Status</label>
+    <label class="col-form-label-sm col-form-label-sm">Ticket Status</label>
     <div class="multi-select">
       <ng-select class="ticket-status" [items]="ticketStatus" [multiple]="true" bindLabel="name" groupBy="group"
         [selectableGroup]="true" [selectableGroupAsModel]="false" [closeOnSelect]="false" bindValue="value"
@@ -40,16 +44,20 @@
           selectedTicketStatus.length ? 'Unselect All' : 'Select All'}}
         </ng-template>
         <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-          <input class="mr-1" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />{{item.name}}
+          <input class="me-1" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />{{item.name}}
         </ng-template>
         <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
-          <div class="ng-value displayed-name" *ngFor="let item of items | slice:0:4">
-            {{item['name']}}
-            <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
-          </div>
-          <div class="ng-value number-of-more" *ngIf="items.length > 4">
-            <span class="ng-value-label">+{{items.length - 4}}</span>
-          </div>
+          @for (item of items | slice:0:4; track item) {
+            <div class="ng-value displayed-name">
+              {{item['name']}}
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+          }
+          @if (items.length > 4) {
+            <div class="ng-value number-of-more">
+              <span class="ng-value-label">+{{items.length - 4}}</span>
+            </div>
+          }
         </ng-template>
       </ng-select>
     </div>

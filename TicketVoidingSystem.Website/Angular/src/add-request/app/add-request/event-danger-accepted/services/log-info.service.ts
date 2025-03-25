@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { CommonService } from '../../../../../utility/services/common.service';
@@ -12,14 +12,10 @@ import { GetLogInfoModel } from '../../models/get-log-info.model';
 import { ValidationService } from './validation.service';
 import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class LogInfoService {
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly commonService: CommonService) {
-  }
+  private readonly validationService = inject(ValidationService);
+  private readonly commonService = inject(CommonService);
 
   async getLogInfo(allEvents: LogInfoRelatedEvent[], primitiveProps: PrimitiveProperty, isEdit: boolean, requestId: number, filter: FilterModel,
     defaultFilterTimeWithAllowance: FilterTimeWithAllowance): Promise<void> {

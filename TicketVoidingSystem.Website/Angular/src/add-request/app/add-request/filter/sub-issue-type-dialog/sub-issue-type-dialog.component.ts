@@ -1,5 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
 import { SubIssueTypeGroup } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
@@ -11,9 +14,11 @@ import SubIssueTypeRedCardConfig from './sub-type-red-card.json';
 import SubIssueTypeWrongScoreConfig from './sub-type-wrong-score.json';
 
 @Component({
-  selector: 'sub-issue-type-dialog',
-  templateUrl: './sub-issue-type-dialog.component.html',
-  styleUrls: ['./sub-issue-type-dialog.component.scss']
+    selector: 'sub-issue-type-dialog',
+    templateUrl: './sub-issue-type-dialog.component.html',
+    styleUrls: ['./sub-issue-type-dialog.component.scss'],
+    standalone: true,
+    imports: [FormsModule, CommonModule, BlockUiModule]
 })
 export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
   @Input() model = new SubIssueTypeDialogModel();

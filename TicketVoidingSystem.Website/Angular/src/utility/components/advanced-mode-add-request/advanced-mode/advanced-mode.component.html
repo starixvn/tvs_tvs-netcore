@@ -5,6 +5,7 @@
     <strong class="advanced-mode-header-label">Advanced Mode</strong>
   </div>
   <div class="advanced-mode-body border-bottom-radius" *ngIf="!isCollapse">
+
     <controls-all-bet-types [controlsAllBetTypesLists]="controlsAllBetTypesLists"
     (changeControlsAll)="changeByControlAllBetType($event)">
     </controls-all-bet-types>

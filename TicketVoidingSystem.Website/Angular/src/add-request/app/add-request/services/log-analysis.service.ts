@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { CommonService } from '../../../../utility/services/common.service';
 
@@ -6,10 +6,7 @@ import { CommonService } from '../../../../utility/services/common.service';
   providedIn: 'root'
 })
 export class LogAnalysisService {
-
-  constructor(
-    private readonly commonService: CommonService
-  ) { }
+  private readonly commonService = inject(CommonService);
 
   async writeLogAccessFunction(isEditRequestPage: boolean, issueTypeId: string, accessIssueTypeCount: Map<string, number>): Promise<void> {
     const pageName = isEditRequestPage ? 'EditRequest' : 'AddRequest';

@@ -1,12 +1,16 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { ChildMatchModel } from '../../../add-request/app/add-request/models/related-event.model';
+import { BlockUiDirective } from '../block-ui/block-ui.directive';
 import { AddChildMatchModel } from './add-child-match.model';
 
 @Component({
   selector: 'add-child-match',
   templateUrl: './add-child-match.component.html',
-  styleUrls: ['./add-child-match.component.scss']
+  styleUrls: ['./add-child-match.component.scss'],
+  standalone: true,
+  imports: [FormsModule, BlockUiDirective]
 })
 export class AddChildMatchComponent implements OnInit, OnChanges {
   @Input() relatedEvents: ChildMatchModel[] = [];

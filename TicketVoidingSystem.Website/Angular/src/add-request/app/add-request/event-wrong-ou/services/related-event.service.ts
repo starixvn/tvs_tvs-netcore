@@ -1,25 +1,21 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../add-request-api.service';
+import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { AddRelatedEventArg } from '../models/add-related-event-arg.model';
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { ValidationService } from './validation.service';
-import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class RelatedEventService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly validationService: ValidationService,
-  ) {}
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly validationService = inject(ValidationService);
 
   async getChildMatches(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
     return this.addRequestApiService.getChildMatches(query);
@@ -28,14 +24,14 @@ export class RelatedEventService {
   updateEvents(models: ChildMatchModel[], filterWrongOuModel: FilterWrongOuModel): LogInfoWrongOu[] {
     const newEvents = models
       .map(x => {
-        const filter = new FilterWrongOuModel();     
+        const filter = new FilterWrongOuModel();
         if (!filterWrongOuModel.filterFromTransTime || !filterWrongOuModel.filterToTransTime) {
           const currentMoment = moment.utc().tz('America/Caracas');
           filter.filterFromTransTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
           filter.filterToTransTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-        } else {          
+        } else {
           filter.filterFromTransTime = filterWrongOuModel.filterFromTransTime;
-          filter.filterToTransTime = filterWrongOuModel.filterToTransTime; 
+          filter.filterToTransTime = filterWrongOuModel.filterToTransTime;
         }
         filter.filterBetType = new FilterBetType(filterWrongOuModel.filterBetType.filterBetIdX, filterWrongOuModel.filterBetType.filterBetIdY, filterWrongOuModel.filterBetType.filterBetTypeId);
 
@@ -54,7 +50,7 @@ export class RelatedEventService {
 
       return newEvents;
   }
-  
+
   async addRelatedEventByInput(addRelatedEventArg: AddRelatedEventArg): Promise<void> {
     if (!addRelatedEventArg.primitiveProps.inputRelatedMatchId) {
       addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.REQUIRED_MATCHID);
@@ -70,7 +66,7 @@ export class RelatedEventService {
       query.matchId = matchId
       query.isMainMatch = false;
       query.sportType = addRelatedEventArg.mainEvent.sportType;
-      
+
       const models = await this.getChildMatches(query);
       if (!models || models.length === 0) {
         addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.INVALID_MATCHID);

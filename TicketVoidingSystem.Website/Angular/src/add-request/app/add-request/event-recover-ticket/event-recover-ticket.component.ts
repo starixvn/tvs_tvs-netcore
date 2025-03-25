@@ -1,4 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
@@ -12,9 +16,11 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-  selector: 'event-recover-ticket',
-  templateUrl: './event-recover-ticket.component.html',
-  styleUrls: ['./event-recover-ticket.component.scss']
+    selector: 'event-recover-ticket',
+    templateUrl: './event-recover-ticket.component.html',
+    styleUrls: ['./event-recover-ticket.component.scss'],
+    standalone: true,
+    imports: [BetIdsComponent, NgSelectModule, FormsModule, CommonModule, BlockUiModule]
 })
 export class EventRecoverTicketComponent implements OnInit {
   @Input() recoverTicketModel = new RecoverTicketModel();

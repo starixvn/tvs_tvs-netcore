@@ -1,17 +1,22 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { LogInfoMessageComponent } from 'src/utility/components/log-info-detail/log-info-message/log-info-message.component';
+import { PipeModule } from 'src/utility/pipes/pipe.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 
 @Component({
-  selector: 'log-info-other-issues',
-  templateUrl: './log-info-other-issues.component.html',
-  styleUrls: ['./log-info-other-issues.component.scss']
+    selector: 'log-info-other-issues',
+    templateUrl: './log-info-other-issues.component.html',
+    styleUrls: ['./log-info-other-issues.component.scss'],
+    standalone: true,
+    imports: [LogInfoMessageComponent, AffectedTicketComponent, PipeModule]
 })
 export class LogInfoOtherIssuesComponent implements OnInit {
   @Input() logInfo: LogInfoOtherIssues;

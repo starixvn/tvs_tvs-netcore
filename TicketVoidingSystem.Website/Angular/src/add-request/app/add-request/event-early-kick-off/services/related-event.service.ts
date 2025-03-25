@@ -97,7 +97,7 @@ export class RelatedEventService {
       query.matchId = matchId
       query.isMainMatch = false;
       query.sportType = addRelatedEventArg.mainEvent.sportType;
-      
+
       const models = await this.getChildMatches(query);
       if (!models || models.length === 0) {
         addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.INVALID_MATCHID);

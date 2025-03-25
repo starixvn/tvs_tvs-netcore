@@ -1,4 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
+import { TemplateMessageComponent } from 'src/utility/components/template-message/template-message/template-message.component';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { PagingConstant } from '../../../../../utility/components/paging/paging/paging.model';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -7,11 +10,14 @@ import { IssueTypes } from '../../filter/issue-types.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { LogInfoService } from '../services/log-info.service';
+import { TicketsListComponent } from '../tickets-list/tickets-list.component';
 
 @Component({
-  selector: 'log-info-eko',
-  templateUrl: './log-info-eko.component.html',
-  styleUrls: ['./log-info-eko.component.scss']
+    selector: 'log-info-eko',
+    templateUrl: './log-info-eko.component.html',
+    styleUrls: ['./log-info-eko.component.scss'],
+    standalone: true,
+    imports: [TemplateMessageComponent, CommonModule, TicketsListComponent, BlockUiModule],
 })
 export class LogInfoEkoComponent implements OnInit {
   @Input() isMainMatch: boolean;

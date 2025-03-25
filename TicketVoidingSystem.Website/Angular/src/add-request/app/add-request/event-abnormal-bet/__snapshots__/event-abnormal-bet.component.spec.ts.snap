@@ -11,7 +11,7 @@ exports[`EventAbnormalBetComponent #EventAbnormalBetComponent init should match 
         style="max-width: 1065px;"
       >
         <div
-          class="mr-4"
+          class="me-4"
         >
           Bet ID(s)
         </div>

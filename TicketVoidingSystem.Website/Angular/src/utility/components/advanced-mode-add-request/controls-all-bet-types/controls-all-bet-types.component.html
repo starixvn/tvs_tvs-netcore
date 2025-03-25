@@ -1,18 +1,18 @@
-<div [hidden]="!isShowContent()"  class="all-bet-types bet-team">
+<div [hidden]="!isShowContent()" class="all-bet-types bet-team">
   <div class="bet-team-1 d-flex">
     <div class="left"><b>All bet types: </b></div>
     <div class="right">
       @for (item of controlsAllBetTypesLists; track item) {
-        <div>
-          @if (item.isShow) {
-            <div class="dropdown-item-adv">
-              <span class="me-1"><b>{{item.type}}: </b></span>
-              <multiple-select class="multiple-selection" [multipleSelect]="item.items"
-                (checkedItems)="updateByControlAllBetType($event, item.type)">
-              </multiple-select>
-            </div>
-          }
+      <div>
+        @if (item.isShow) {
+        <div class="dropdown-item-adv">
+          <span class="me-1"><b>{{item.type}}: </b></span>
+          <multiple-select class="multiple-selection" [multipleSelect]="item.items"
+            (checkedItems)="updateByControlAllBetType($event, item.type)">
+          </multiple-select>
         </div>
+        }
+      </div>
       }
     </div>
   </div>

@@ -1,29 +1,28 @@
-import { TicketsListComponent } from './../tickets-list/tickets-list.component';
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
+import { LogInfoTicketCountComponent } from '../../../utility/components/log-info-detail/log-info-ticket-count/log-info-ticket-count.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
+import { PasswordAreaComponent } from '../password-area/password-area.component';
 import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
+import { TicketsListComponent } from './../tickets-list/tickets-list.component';
 import { VoidWrongMarketOfferedModel } from './models/void-wrong-market-offered.model';
-import { VoidPageService } from './services/void-page.service';
-import { UtilityModule } from '../../../utility/utility.module';
-import { CommonModule } from '@angular/common';
-import { PasswordAreaComponent } from '../password-area/password-area.component';
-import { LogInfoTicketCountComponent } from '../../../utility/components/log-info-detail/log-info-ticket-count/log-info-ticket-count.component';
-import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
-import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { TemplateMessageService } from './services/template-message.service';
+import { VoidPageService } from './services/void-page.service';
 
 @Component({
   standalone: true,
   selector: 'void-wrong-market-offered',
   templateUrl: './void-wrong-market-offered.component.html',
   styleUrls: ['./void-wrong-market-offered.component.scss'],
-  imports: [UtilityModule, CommonModule, PasswordAreaComponent, MessageAreaComponent, TooltipComponent, TicketsListComponent,
+  imports: [CommonModule, PasswordAreaComponent, MessageAreaComponent, TooltipComponent, TicketsListComponent,
     LogInfoTicketCountComponent, LicenseeAffectedListComponent],
   providers: [VoidPageService, TemplateMessageService]
 })

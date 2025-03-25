@@ -11,12 +11,8 @@ import { LogInfoRelatedEventComponent } from '../../components/log-info-related-
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterModel } from '../../filter/filter.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
-  constructor() {
-  }
 
   isHasAllowanceTime(event: LogInfoRelatedEvent): boolean {
     if (event.voidTimeArea.paTime || event.voidTimeArea.aaTime || event.voidTimeArea.saTime ||

@@ -1,5 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../utility/constants/config';
 import { StaticService } from '../../../../utility/services/static.service';
@@ -20,9 +23,11 @@ import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './serv
 import { ValidationService } from './services/validation.service';
 
 @Component({
-  selector: 'event-abnormal-bet',
-  templateUrl: './event-abnormal-bet.component.html',
-  styleUrls: ['./event-abnormal-bet.component.scss']
+    selector: 'event-abnormal-bet',
+    templateUrl: './event-abnormal-bet.component.html',
+    styleUrls: ['./event-abnormal-bet.component.scss'],
+    standalone: true,
+    imports: [FormsModule, BetIdsComponent, ConfirmAbnormalBetComponent, BlockUiModule, CommonModule]
 })
 export class EventAbnormalBetComponent implements OnInit {
   @Input() isEdit: boolean;

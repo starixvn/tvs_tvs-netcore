@@ -1,4 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectComponent } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
@@ -16,14 +19,17 @@ import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
 import { ActionVoidService } from './services/action-void.service';
+import { SubIssueTypeDialogComponent } from './sub-issue-type-dialog/sub-issue-type-dialog.component';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog/sub-issue-type-dialog.model';
 import { Category } from './sub-issue-type-dialog/sub-issue-type-json.model';
 import SubIssueTypeDangerAcceptedConfig from './sub-issue-type-dialog/sub-type-danger-accepted.json';
 
 @Component({
-  selector: 'filter',
-  templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.scss']
+    selector: 'filter',
+    templateUrl: './filter.component.html',
+    styleUrls: ['./filter.component.scss'],
+    standalone: true,
+    imports: [FormsModule, CommonModule, NgSelectComponent, SubIssueTypeDialogComponent]
 })
 export class FilterComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;

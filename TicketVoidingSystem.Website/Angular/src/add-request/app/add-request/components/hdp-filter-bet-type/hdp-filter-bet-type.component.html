@@ -1,46 +1,52 @@
-<div *ngIf="iddShowFilterBetType()" class="d-flex mb-2">
-    <div class="d-flex filter-bet-type mr-3">
-        <label class="col-form-label mr-2">Bet Type</label>
-        <div class="input-bet-type">
-          <ng-select class="custom-sm"
-            [disabled]="isDisabled"
-            [items]="allFilterBetType"
-            bindLabel="name"
-            bindValue="betType"
-            [(ngModel)]="filterBetTypeId"
-            (change)="onChangeBetType($event)"
-            [clearable]="false">
-          </ng-select>
-        </div>
-    </div>
-    <div *ngIf="betTypeSelected?.selections" class="d-flex filter-selections">
-      <ng-container *ngFor="let selection of betTypeSelected.selections">
-        <div class="d-flex selection mr-3">
-          <label class="col-form-label mr-2">{{selection.name}}</label>
-          <div class="items-select">
-            <ng-select class="custom-sm"
-              [disabled]="isDisabled"
-              [items]="selection.items"
-              bindLabel="name"
-              bindValue="value"
-              [(ngModel)]="selection.value"
-              (change)="onChangeFilter()"
-              [searchable]="false"
-              [clearable]="false">
-            </ng-select>
-          </div>
+@if (iddShowFilterBetType()) {
+  <div class="d-flex mb-2">
+    <div class="d-flex filter-bet-type me-3">
+      <label class="col-form-label-sm me-2">Bet Type</label>
+      <div class="input-bet-type">
+        <ng-select class="custom-sm"
+          [disabled]="isDisabled"
+          [items]="allFilterBetType"
+          bindLabel="name"
+          bindValue="betType"
+          [(ngModel)]="filterBetTypeId"
+          (change)="onChangeBetType($event)"
+          [clearable]="false">
+        </ng-select>
       </div>
-      </ng-container>
     </div>
-    <div *ngIf="betTypeSelected?.inputs" class="d-flex filter-inputs">
-      <ng-container *ngFor="let input of betTypeSelected.inputs">
-        <div class="d-flex input mr-3">
-          <label class="col-form-label mr-2">{{input.name}}</label>
-          <input class="form-control form-control-sm item-input"
+    @if (betTypeSelected?.selections) {
+      <div class="d-flex filter-selections">
+        @for (selection of betTypeSelected.selections; track selection) {
+          <div class="d-flex selection me-3">
+            <label class="col-form-label-sm me-2">{{selection.name}}</label>
+            <div class="items-select">
+              <ng-select class="custom-sm"
+                [disabled]="isDisabled"
+                [items]="selection.items"
+                bindLabel="name"
+                bindValue="value"
+                [(ngModel)]="selection.value"
+                (change)="onChangeFilter()"
+                [searchable]="false"
+                [clearable]="false">
+              </ng-select>
+            </div>
+          </div>
+        }
+      </div>
+    }
+    @if (betTypeSelected?.inputs) {
+      <div class="d-flex filter-inputs">
+        @for (input of betTypeSelected.inputs; track input) {
+          <div class="d-flex input me-3">
+            <label class="col-form-label-sm me-2">{{input.name}}</label>
+            <input class="form-control form-control-sm item-input"
               [disabled]="isDisabled"
               [(ngModel)]="input.value"
               (ngModelChange)="onChangeFilter()"/>
-      </div>
-      </ng-container>
+            </div>
+          }
+        </div>
+      }
     </div>
-</div>
+  }

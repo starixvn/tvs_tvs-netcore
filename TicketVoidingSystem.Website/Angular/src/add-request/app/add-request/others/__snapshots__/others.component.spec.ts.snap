@@ -31,7 +31,7 @@ exports[`OthersComponent OthersComponent should init match snapshot 1`] = `
               class="col-6 col-sm-6 col-md-4"
             >
               <label
-                class="col-form-label"
+                class="col-form-label-sm"
               >
                 Mistaken By
               </label>
@@ -49,7 +49,7 @@ exports[`OthersComponent OthersComponent should init match snapshot 1`] = `
               class="col-6 col-sm-6 col-md-4"
             >
               <label
-                class="col-form-label"
+                class="col-form-label-sm"
               >
                 Decided By
               </label>
@@ -67,7 +67,7 @@ exports[`OthersComponent OthersComponent should init match snapshot 1`] = `
               class="col-6 col-sm-6 col-md-4"
             >
               <label
-                class="col-form-label"
+                class="col-form-label-sm"
               >
                 Trader
               </label>
@@ -85,7 +85,7 @@ exports[`OthersComponent OthersComponent should init match snapshot 1`] = `
               class="col-6 col-sm-6 col-md-4"
             >
               <label
-                class="col-form-label"
+                class="col-form-label-sm"
               >
                 Suspender
               </label>
@@ -103,7 +103,7 @@ exports[`OthersComponent OthersComponent should init match snapshot 1`] = `
               class="col-6 col-sm-6 col-md-4"
             >
               <label
-                class="col-form-label"
+                class="col-form-label-sm"
               >
                 Provider
               </label>
@@ -120,7 +120,7 @@ exports[`OthersComponent OthersComponent should init match snapshot 1`] = `
               class="col-6 col-sm-6 col-md-4"
             >
               <label
-                class="col-form-label"
+                class="col-form-label-sm"
               >
                 Source
               </label>
@@ -137,7 +137,7 @@ exports[`OthersComponent OthersComponent should init match snapshot 1`] = `
               class="col-12"
             >
               <label
-                class="col-form-label"
+                class="col-form-label-sm"
               >
                 Remark
               </label>

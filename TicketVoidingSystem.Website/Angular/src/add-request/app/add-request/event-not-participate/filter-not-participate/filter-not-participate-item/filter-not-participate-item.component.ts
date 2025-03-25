@@ -1,5 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
+import { MultipleSelectionComponent } from 'src/utility/components/multiple-selection/multiple-selection.component';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { Selection } from '../../../../../../utility/models/selection.model';
 import { FilterNotParticipateModel } from '../../models/filter-not-participate.model';
@@ -8,9 +13,11 @@ import { FilterNotParticipateService } from '../../services/filter-not-participa
 import { ValidationService } from '../../services/validation.service';
 
 @Component({
-  selector: 'filter-not-participate-item',
-  templateUrl: './filter-not-participate-item.component.html',
-  styleUrls: ['./filter-not-participate-item.component.scss']
+    selector: 'filter-not-participate-item',
+    templateUrl: './filter-not-participate-item.component.html',
+    styleUrls: ['./filter-not-participate-item.component.scss'],
+    standalone: true,
+    imports: [FormsModule, CommonModule, MultipleSelectionComponent, TooltipComponent, NgSelectModule]
 })
 export class FilterNotParticipateItemComponent {
   @Input() isEdit: boolean;

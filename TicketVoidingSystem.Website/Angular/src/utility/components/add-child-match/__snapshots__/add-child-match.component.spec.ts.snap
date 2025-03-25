@@ -81,7 +81,7 @@ exports[`AddChildMatchComponent #AddChildMatchComponent init should match snapsh
                               class="col-check-box"
                             >
                               <div
-                                class="mr-1"
+                                class="me-1"
                               >
                                 Related
                               </div>
@@ -119,7 +119,7 @@ exports[`AddChildMatchComponent #AddChildMatchComponent init should match snapsh
                 </div>
               </div>
               <div
-                class="mg-top-10 text-right button-area"
+                class="mg-top-10 text-end button-area"
               >
                 <button
                   class="btn btn-primary btn-sm mg-right-10"

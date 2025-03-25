@@ -1,7 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
+import { AddChildMatchComponent } from 'src/utility/components/add-child-match/add-child-match.component';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
@@ -9,6 +16,7 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
@@ -33,9 +41,13 @@ import { ValidationService } from './services/validation.service';
 import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 
 @Component({
-  selector: 'event-red-card',
-  templateUrl: './event-red-card.component.html',
-  styleUrls: ['./event-red-card.component.scss']
+    selector: 'event-red-card',
+    templateUrl: './event-red-card.component.html',
+    styleUrls: ['./event-red-card.component.scss'],
+    standalone: true,
+    imports: [FormsModule, CommonModule, EventLeagueComponent, FilterTimeAreaComponent, LogInfoRedCardComponent, AddChildMatchComponent,
+      LogInfoRedCardComponent, NgSelectModule, NgbModule, TooltipComponent, BlockUiModule, ConfirmAddRequestComponent,
+      TvDetectionComponent]
 })
 export class EventRedCardComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;

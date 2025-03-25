@@ -1,14 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import moment from 'moment-timezone';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TvDetectionType } from '../../../../../utility/constants/config';
 import { TvDetectionModel } from './tv-detection.model';
 import { TvDetectionService } from './tv-detection.service';
 
 @Component({
-  selector: 'tv-detection',
-  templateUrl: './tv-detection.component.html',
-  styleUrls: ['./tv-detection.component.scss']
+    selector: 'tv-detection',
+    templateUrl: './tv-detection.component.html',
+    styleUrls: ['./tv-detection.component.scss'],
+    standalone: true,
+    imports: [FormsModule, TooltipComponent, CommonModule]
 })
 export class TvDetectionComponent implements OnInit {
   @Input() disabled: boolean;

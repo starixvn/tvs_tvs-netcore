@@ -1,5 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
+import { MultipleSelectionComponent } from 'src/utility/components/multiple-selection/multiple-selection.component';
+import { NgSelectMixtureComponent } from 'src/utility/components/ng-select-mixture/ng-select-mixture.component';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
@@ -9,9 +15,11 @@ import { ValidationService } from '../services/validation.service';
 import { PrimitivePropertyItem } from './filter-reduced-over-item.model';
 
 @Component({
-  selector: 'filter-reduced-over-item',
-  templateUrl: './filter-reduced-over-item.component.html',
-  styleUrls: ['./filter-reduced-over-item.component.scss']
+    selector: 'filter-reduced-over-item',
+    templateUrl: './filter-reduced-over-item.component.html',
+    styleUrls: ['./filter-reduced-over-item.component.scss'],
+    standalone: true,
+    imports: [FormsModule, CommonModule, NgSelectModule, TooltipComponent, NgSelectMixtureComponent, MultipleSelectionComponent]
 })
 export class FilterReducedOverItemComponent implements OnInit {
   @Input() isEdit: boolean;

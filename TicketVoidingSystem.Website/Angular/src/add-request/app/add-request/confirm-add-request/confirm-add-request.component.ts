@@ -4,9 +4,10 @@ import { IssueTypes } from '../filter/issue-types.model';
 import { ConfirmAddRequestModel } from './confirm-add-request.model';
 
 @Component({
-  selector: 'confirm-add-request',
-  templateUrl: './confirm-add-request.component.html',
-  styleUrls: ['./confirm-add-request.component.scss']
+    selector: 'confirm-add-request',
+    templateUrl: './confirm-add-request.component.html',
+    styleUrls: ['./confirm-add-request.component.scss'],
+    standalone: true
 })
 export class ConfirmAddRequestComponent implements OnChanges {
   @Input() model = new ConfirmAddRequestModel();

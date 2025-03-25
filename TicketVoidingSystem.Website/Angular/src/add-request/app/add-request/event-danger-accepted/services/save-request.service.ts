@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { TVSRequestActionType, TvDetectionType } from '../../../../../utility/constants/config';
+import { TvDetectionType, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -14,17 +14,12 @@ import { LogInfoService } from './log-info.service';
 import { SaveRequestArg } from './save-request.model';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class SaveRequestService {
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly logInfoService: LogInfoService,
-    private readonly popupService: PopupService,
-    private readonly addRequestService: AddRequestService
-  ) { }
+  private readonly validationService = inject(ValidationService);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly popupService = inject(PopupService);
+  private readonly addRequestService = inject(AddRequestService);
 
   async recheckLogInfoBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
     arg.addRequestStore.changeSavingRequestStatus(true);

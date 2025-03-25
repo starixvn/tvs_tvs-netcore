@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import * as _ from 'lodash';
 import { LABELS } from '../../../../utility/constants/labels';
+import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { BetTypeAddRequest, GroupBetTypeAddRequest, GroupBetTypesAddRequestModel } from './group-bet-types.model';
 import { CommonModule } from '@angular/common';

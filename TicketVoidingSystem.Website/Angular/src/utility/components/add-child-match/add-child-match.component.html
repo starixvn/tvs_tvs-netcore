@@ -1,4 +1,5 @@
-<div *ngIf="model.isOpen">
+@if (model.isOpen) {
+<div>
   <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
   <div role="dialog" class="fade modal show d-block wrapper-tooltip">
     <div role="document" class="modal-dialog-custom modal-dialog-centered modal-dialog-scrollable">
@@ -7,9 +8,8 @@
           <div class="modal-title">
             <strong>Add Related Event</strong>
           </div>
-          <button class="close" (click)="closeChildMatchModal()">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="btn-close btn-close-white" aria-label="Close"
+            (click)="closeChildMatchModal()"></button>
         </div>
         <div class="modal-body" [blockUi]="isBlock">
           <div class="modal-body-content">
@@ -26,9 +26,8 @@
                       </th>
                       <th scope="col" class="col-tb-3">
                         <div class="col-check-box">
-                          <div class="mr-1">Related</div>
-                          <input type="checkbox" (click)="handleCheckAllMatches($event)"
-                            [(ngModel)]="isCheckedAll" />
+                          <div class="me-1">Related</div>
+                          <input type="checkbox" (click)="handleCheckAllMatches($event)" [(ngModel)]="isCheckedAll" />
                         </div>
                       </th>
                     </tr>
@@ -37,32 +36,33 @@
               </div>
               <div class="event-content scroller-firefox">
                 <table>
-                  <ng-container *ngFor="let model of tempRelatedEvents; index as i">
-                    <tbody>
-                      <tr>
-                        <td class="col-tb-1">{{model.matchId}}</td>
-                        <td class="col-tb-2 text-left">{{model.matchEvent}}</td>
-                        <td class="col-tb-3">
-                          <div class="col-check-box">
-                            <input type="checkbox" (change)="handleCheckBox()" [(ngModel)]="model.isChecked" />
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </ng-container>
+                  @for (model of tempRelatedEvents; track model; let i = $index) {
+                  <tbody>
+                    <tr>
+                      <td class="col-tb-1">{{model.matchId}}</td>
+                      <td class="col-tb-2 text-left">{{model.matchEvent}}</td>
+                      <td class="col-tb-3">
+                        <div class="col-check-box">
+                          <input type="checkbox" (change)="handleCheckBox()" [(ngModel)]="model.isChecked" />
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                  }
                 </table>
-                <table class="empty-table" *ngIf="!tempRelatedEvents || (tempRelatedEvents.length === 0)">
+                @if (!tempRelatedEvents || (tempRelatedEvents.length === 0)) {
+                <table class="empty-table">
                   <tbody>
                     <tr class="text-center">
                       <div class="no-data">There is no data</div>
                     </tr>
                   </tbody>
                 </table>
+                }
               </div>
             </div>
           </div>
-
-          <div class="mg-top-10 text-right button-area">
+          <div class="mg-top-10 text-end button-area">
             <button type="button" class="btn btn-primary btn-sm mg-right-10"
               (click)="saveSelectedRelatedEvents(); clickButtonSave()">Save</button>
             <button type="button" class="btn btn-danger btn-sm" (click)="closeChildMatchModal()">Cancel</button>
@@ -72,3 +72,4 @@
     </div>
   </div>
 </div>
+}

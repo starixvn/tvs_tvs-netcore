@@ -9,18 +9,18 @@ exports[`FilterTimeWithAllowanceComponent FilterTimeWithAllowanceComponent init 
       class="d-flex flex-wrap"
     >
       <div
-        class="d-flex flex-wrap mr-2"
+        class="d-flex flex-wrap me-2"
       >
         <div
-          class="full-time from-date-time mr-3"
+          class="full-time from-date-time me-3"
         >
           <label
-            class="col-form-label col-form-label-sm mr-2"
+            class="col-form-label-sm me-2"
           >
             From
           </label>
           <div
-            class="input-group mr-2"
+            class="input-group me-2"
           >
             <input
               class="bg-white form-control form-control-sm input-date ng-untouched ng-pristine ng-valid"
@@ -54,12 +54,12 @@ exports[`FilterTimeWithAllowanceComponent FilterTimeWithAllowanceComponent init 
           class="full-time to-date-time"
         >
           <label
-            class="col-form-label col-form-label-sm mr-2"
+            class="col-form-label-sm me-2"
           >
             To
           </label>
           <div
-            class="input-group input-group-to-date mr-2"
+            class="input-group input-group-to-date me-2"
           >
             <input
               class="bg-white form-control form-control-sm input-date ng-untouched ng-pristine ng-valid"
@@ -91,27 +91,27 @@ exports[`FilterTimeWithAllowanceComponent FilterTimeWithAllowanceComponent init 
         </div>
       </div>
       <div
-        class="mr-3 align-items-center d-flex"
+        class="me-3 align-items-center d-flex"
       >
-         (Duration:  
+         (Duration:
         <span
           class="bold"
         >
           46080m0s
         </span>
-        ) 
+        )
       </div>
       <div
         class="d-flex flex-wrap"
       >
         <div
-          class="d-flex setting-void-time mr-2"
+          class="d-flex setting-void-time me-2"
         >
           <div
             class="d-flex"
           >
             <label
-              class="col-form-label col-form-label-sm mr-2 label-width-60"
+              class="col-form-label-sm me-2 label-width-60"
             >
               AA/PA/SA
             </label>
@@ -122,31 +122,31 @@ exports[`FilterTimeWithAllowanceComponent FilterTimeWithAllowanceComponent init 
                 class="d-flex"
               >
                 <input
-                  class="form-control form-control-sm mr-1 aa-time ng-untouched ng-pristine"
+                  class="form-control form-control-sm me-1 aa-time ng-untouched ng-pristine"
                   disabled=""
                   maxlength="2"
                   only-number=""
                   type="text"
                 />
                 <label
-                  class="col-form-label col-form-label-sm mr-1"
+                  class="col-form-label-sm me-1"
                 >
                   /
                 </label>
                 <input
-                  class="form-control form-control-sm mr-1 pa-time ng-untouched ng-pristine"
+                  class="form-control form-control-sm me-1 pa-time ng-untouched ng-pristine"
                   disabled=""
                   maxlength="2"
                   only-number=""
                   type="text"
                 />
                 <label
-                  class="col-form-label col-form-label-sm mr-1"
+                  class="col-form-label-sm me-1"
                 >
                   /
                 </label>
                 <input
-                  class="form-control form-control-sm mr-1 sa-time ng-untouched ng-pristine"
+                  class="form-control form-control-sm me-1 sa-time ng-untouched ng-pristine"
                   disabled=""
                   maxlength="2"
                   only-number=""
@@ -155,7 +155,7 @@ exports[`FilterTimeWithAllowanceComponent FilterTimeWithAllowanceComponent init 
               </div>
             </div>
             <label
-              class="col-form-label col-form-label-sm"
+              class="col-form-label-sm col-form-label-sm"
             >
               (s)
             </label>

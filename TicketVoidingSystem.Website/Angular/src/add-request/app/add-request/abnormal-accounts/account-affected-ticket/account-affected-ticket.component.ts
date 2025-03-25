@@ -2,13 +2,17 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import bigDecimal from 'js-big-decimal';
 import * as _ from 'lodash';
 import { AddRequestApiService } from '../../add-request-api.service';
+import { TicketTableComponent } from '../../components/ticket-table/ticket-table.component';
 import { TicketTableViewModel } from '../../components/ticket-table/ticket-table.model';
+import { AccountTableComponent } from '../account-table/account-table.component';
 import { AccountAffectedTicketModel, AdjustedAccountModel, TicketAdjustedAccountModel } from './account-affected-ticket.model';
 
 @Component({
-  selector: 'account-affected-ticket',
-  templateUrl: './account-affected-ticket.component.html',
-  styleUrls: ['./account-affected-ticket.component.scss']
+    selector: 'account-affected-ticket',
+    templateUrl: './account-affected-ticket.component.html',
+    styleUrls: ['./account-affected-ticket.component.scss'],
+    standalone: true,
+    imports: [AccountTableComponent, TicketTableComponent]
 })
 export class AccountAffectedTicketComponent implements OnInit {
   @Input() model = new AccountAffectedTicketModel();

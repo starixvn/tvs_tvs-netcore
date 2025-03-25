@@ -1,5 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { SortingComponent } from '../../../../../utility/components/sorting/sorting/sorting.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { RegexConstant } from '../../../../../utility/constants/regex';
@@ -15,9 +19,11 @@ import { ValidationService } from '../services/validation.service';
 import DescriptionTableAdjustVoidConfig from './describe-table-adjust-void.json';
 
 @Component({
-  selector: 'account-table',
-  templateUrl: './account-table.component.html',
-  styleUrls: ['./account-table.component.scss']
+    selector: 'account-table',
+    templateUrl: './account-table.component.html',
+    styleUrls: ['./account-table.component.scss'],
+    standalone: true,
+    imports: [SortingComponent, TooltipComponent, NgbTooltip, FormsModule, CommonModule]
 })
 export class AccountTableComponent {
   @Input() filter: FilterModel;

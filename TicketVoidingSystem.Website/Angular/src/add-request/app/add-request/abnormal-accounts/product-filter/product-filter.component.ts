@@ -1,13 +1,19 @@
+import { SlicePipe } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { ProductFilter, TVSRequestActionType, TicketStatus } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 
 @Component({
-  selector: 'product-filter',
-  templateUrl: './product-filter.component.html',
-  styleUrls: ['./product-filter.component.scss']
+    selector: 'product-filter',
+    templateUrl: './product-filter.component.html',
+    styleUrls: ['./product-filter.component.scss'],
+    standalone: true,
+    imports: [NgSelectModule, FormsModule, TooltipComponent, SlicePipe]
 })
 export class ProductFilterComponent implements OnInit {
   @Input() isEdit: boolean;

@@ -1,14 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { BlockFullUiComponent } from 'src/utility/components/block-full-ui/block-full-ui.component';
+import { PipeModule } from 'src/utility/pipes/pipe.module';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
 import { CheckIssueTypeObjectType } from '../../../utility/models/check-issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { StaticService } from '../../../utility/services/static.service';
+import { AbnormalAccountOtherComponent } from './abnormal-accounts/abnormal-accounts-other/abnormal-accounts-other.component';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
 import { AddRequestStore } from './add-request.store';
 import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-bet.component';
+import { OthersAbnormalBetComponent } from './event-abnormal-bet/others-abnormal-bet/others-abnormal-bet.component';
 import { EventDangerAcceptedComponent } from './event-danger-accepted/event-danger-accepted.component';
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
 import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
@@ -20,6 +27,7 @@ import { EventReducedOverComponent } from './event-reduced-over/event-reduced-ov
 import { EventTechnicalErrorComponent } from './event-technical-error/event-technical-error.component';
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
 import { EventWrongHdpComponent } from './event-wrong-hdp/event-wrong-hdp.component';
+import { OthersWrongHdpComponent } from './event-wrong-hdp/others-wrong-hdp/others-wrong-hdp.component';
 import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered/event-wrong-market-offered.component';
 import { EventWrongOddsSportsBookComponent } from './event-wrong-odds-sports-book/event-wrong-odds-sports-book.component';
 import { EventWrongOddsComponent } from './event-wrong-odds/event-wrong-odds.component';
@@ -30,13 +38,44 @@ import { FilterComponent } from './filter/filter.component';
 import { FilterModel } from './filter/filter.model';
 import { IssueTypes } from './filter/issue-types.model';
 import { RequestModel } from './models/request.model';
+import { OthersComponent } from './others/others.component';
 import { CopyRequestInfoService } from './services/copy-request-info.service';
 
 @Component({
-  selector: 'add-request',
-  templateUrl: './add-request.component.html',
-  styleUrls: ['./add-request.component.scss'],
-  providers: [AddRequestStore]
+    selector: 'add-request',
+    templateUrl: './add-request.component.html',
+    styleUrls: ['./add-request.component.scss'],
+    providers: [],
+    standalone: true,
+    imports: [FormsModule,
+      CommonModule,
+      PipeModule,
+      NgbModule,
+      FilterComponent,
+      BlockFullUiComponent,
+      OthersAbnormalBetComponent,
+      OthersWrongHdpComponent,
+      OthersComponent,
+      AbnormalAccountOtherComponent,
+      EventAbnormalBetComponent,
+      EventEarlyKickOffComponent,
+      EventDangerAcceptedComponent,
+      EventRedCardComponent,
+      AbnormalAccountsComponent,
+      EventWrongScoreComponent,
+      EventTicket14Component,
+      EventWrongHdpComponent,
+      EventWrongOuComponent,
+      EventWrongOddsComponent,
+      EventWrongOddsSportsBookComponent,
+      EventReducedOverComponent,
+      EventDuplicateTicketsComponent,
+      EventNotParticipateComponent,
+      EventRecoverTicketComponent,
+      EventWrongMarketOfferedComponent,
+      EventWrongOfferedNameComponent,
+      EventOtherIssuesComponent,
+      EventTechnicalErrorComponent]
 })
 export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() isEdit = false;
