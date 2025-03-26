@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { FilterModel } from '../../filter/filter.model';
 import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';

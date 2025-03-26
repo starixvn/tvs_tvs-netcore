@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
-import { TemplateMessageComponent } from 'src/utility/components/template-message/template-message/template-message.component';
-import { VoidReasonComponent } from 'src/void-request/app/message-area/void-reason/void-reason.component';
+import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { TemplateMessageComponent } from '../../../../../utility/components/template-message/template-message/template-message.component';
 import { StaticService } from '../../../../../utility/services/static.service';
+import { VoidReasonComponent } from '../../../../../void-request/app/message-area/void-reason/void-reason.component';
 import { FilterModel } from '../../filter/filter.model';
 import { TicketsComponent } from '../../pool-house-ticket/tickets/tickets.component';
 import { LogInfoWrongOfferedName } from '../models/log-info-wrong-offered-name.model';
@@ -18,7 +18,6 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
     styleUrls: ['./log-info-wrong-offered-name.component.scss'],
     standalone: true,
     imports: [FormsModule, CommonModule, NgbModule, BlockUiModule, TemplateMessageComponent, VoidReasonComponent, TicketsComponent],
-    providers: [ModalService]
 })
 export class LogInfoWrongOfferedNameComponent {
   @Input() isEdit: boolean;

@@ -4,26 +4,24 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { BlockUiDirective } from 'src/utility/components/block-ui/block-ui.directive';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
-import { PipeModule } from 'src/utility/pipes/pipe.module';
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AcceptType, DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { SubIssueType } from '../../../../../utility/models/issue-type.model';
+import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { PrimitiveProperty as WrongScorePrimitiveProperty } from '../../event-wrong-score/event-wrong-score.model';
-import { LogInfoService as WrongScoreLogInfoService } from '../../event-wrong-score/services/log-info.service';
 import { FilterModel } from '../../filter/filter.model';
 import { SubIssueTypeDialogComponent } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.component';
 import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { LogInfoRelatedEvent } from './log-info-related-event.model';
-import { PrimitiveProperty } from './primitive-property.model';
 import { LogInfoRelatedEventService } from './log-info-related-event.service';
+import { PrimitiveProperty } from './primitive-property.model';
 
 @Component({
   standalone: true,
@@ -31,7 +29,8 @@ import { LogInfoRelatedEventService } from './log-info-related-event.service';
   templateUrl: './log-info-related-event.component.html',
   styleUrls: ['./log-info-related-event.component.scss'],
   imports: [CommonModule, FormsModule, TooltipComponent, NgbModule, SubIssueTypeDialogComponent,
-    FilterTimeWithAllowanceComponent, BlockUiDirective, PipeModule]
+    FilterTimeWithAllowanceComponent, BlockUiDirective, PipeModule],
+  providers: [LogInfoRelatedEventService]
 })
 export class LogInfoRelatedEventComponent {
   @Input() isEdit: boolean;
@@ -57,8 +56,8 @@ export class LogInfoRelatedEventComponent {
 
   private readonly element = inject(ElementRef);
   private readonly modalService = inject(ModalService);
-  private readonly wrongScoreLogInfoService = inject(WrongScoreLogInfoService);
-    private readonly logInfoRelatedEventService: LogInfoRelatedEventService
+  private readonly logInfoRelatedEventService = inject(LogInfoRelatedEventService);
+
   constructor() {
     this.tooltip.element = this.element;
   }

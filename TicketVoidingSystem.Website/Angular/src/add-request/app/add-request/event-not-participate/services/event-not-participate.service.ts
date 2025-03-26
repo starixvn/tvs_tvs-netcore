@@ -5,13 +5,8 @@ import { FilterNotParticipateModel } from "../models/filter-not-participate.mode
 import { NotParticipateGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoNotParticipate } from "../models/log-info-not-participate.model";
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class EventNotParticipateService {
-  constructor() { }
-
   public getNotParticipateGetLogInfoModel(subIssueTypeId: number, matchId: number, filterNotParticipateModels: FilterNotParticipateModel[]): NotParticipateGetLogInfoQuery[] {
     return filterNotParticipateModels.map(x => this.createNotParticipateGetLogInfoQuery(x, matchId, Number(subIssueTypeId)));
   }

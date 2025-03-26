@@ -3,11 +3,11 @@ import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, Que
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { AddChildMatchComponent } from 'src/utility/components/add-child-match/add-child-match.component';
-import { BlockUiDirective } from 'src/utility/components/block-ui/block-ui.directive';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
+import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType } from '../../../../utility/constants/config';
 import { AddRequestStore } from '../add-request.store';

@@ -11,7 +11,6 @@ import { FilterModel } from '../../filter/filter.model';
 import { IssueTypes } from '../../filter/issue-types.model';
 import { OthersModel } from '../../others/others.model';
 import { ConfirmDangerAcceptedModel } from '../confirm-danger-accepted/confirm-danger-accepted.model';
-import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
 export class SaveRequestArg {
   requestId: number;

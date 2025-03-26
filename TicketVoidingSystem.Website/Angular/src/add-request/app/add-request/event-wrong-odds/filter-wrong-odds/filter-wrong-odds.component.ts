@@ -2,8 +2,8 @@ import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild }
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import moment from 'moment-timezone';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AllowanceRate, DateTimeFormat } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';

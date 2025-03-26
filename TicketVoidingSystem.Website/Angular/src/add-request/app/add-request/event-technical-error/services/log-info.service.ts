@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
@@ -8,15 +8,10 @@ import { LogInfoTechnicalError } from '../models/log-info-technical-error.model'
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { EventTechnicalErrorService } from './event-technical-error.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class LogInfoService {
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly eventTechnicalErrorService: EventTechnicalErrorService) {
-  }
+  private readonly commonService = inject(CommonService);
+  private readonly eventTechnicalErrorService = inject(EventTechnicalErrorService);
 
   async getLogInfo(logInfoEvent: LogInfoTechnicalError, isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitivePropertyEvent): Promise<void> {
     const getLogInfoQuery = this.initTechnicalErrorGetLogInfoQuery(isEdit, requestId, filter, logInfoEvent);

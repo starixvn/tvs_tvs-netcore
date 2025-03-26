@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
-import { MultipleSelectionComponent } from 'src/utility/components/multiple-selection/multiple-selection.component';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
+import { MultipleSelectionComponent } from '../../../../../../utility/components/multiple-selection/multiple-selection.component';
+import { TooltipComponent } from '../../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { Selection } from '../../../../../../utility/models/selection.model';
 import { FilterNotParticipateModel } from '../../models/filter-not-participate.model';
@@ -52,11 +52,11 @@ export class FilterNotParticipateItemComponent {
       group: 'All 2'
     }
   ];
+  private readonly element = inject(ElementRef);
+  private readonly validationService = inject(ValidationService);
+  private readonly filterService = inject(FilterNotParticipateService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly validationService: ValidationService,
-    private readonly filterService: FilterNotParticipateService) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 

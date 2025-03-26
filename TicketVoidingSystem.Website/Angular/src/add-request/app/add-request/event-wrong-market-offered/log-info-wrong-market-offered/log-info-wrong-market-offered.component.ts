@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
-import { LogInfoMessageComponent } from 'src/utility/components/log-info-detail/log-info-message/log-info-message.component';
-import { LogInfoTicketCountComponent } from 'src/utility/components/log-info-detail/log-info-ticket-count/log-info-ticket-count.component';
+import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
+import { LogInfoMessageComponent } from '../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';
+import { LogInfoTicketCountComponent } from '../../../../../utility/components/log-info-detail/log-info-ticket-count/log-info-ticket-count.component';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { Item } from '../../../../../utility/models/item.model';
 import { StaticService } from '../../../../../utility/services/static.service';

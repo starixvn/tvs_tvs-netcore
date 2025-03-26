@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
@@ -7,11 +7,11 @@ import { FilterNotParticipateService } from '../services/filter-not-participate.
 import { FilterNotParticipateItemComponent } from './filter-not-participate-item/filter-not-participate-item.component';
 
 @Component({
-    selector: 'filter-not-participate',
-    templateUrl: './filter-not-participate.component.html',
-    styleUrls: ['./filter-not-participate.component.scss'],
-    standalone: true,
-    imports: [FormsModule, FilterNotParticipateItemComponent]
+  selector: 'filter-not-participate',
+  templateUrl: './filter-not-participate.component.html',
+  styleUrls: ['./filter-not-participate.component.scss'],
+  standalone: true,
+  imports: [FormsModule, FilterNotParticipateItemComponent]
 })
 export class FilterNotParticipateComponent {
   @Input() isEdit: boolean;
@@ -23,8 +23,7 @@ export class FilterNotParticipateComponent {
   @Output() changeFilterEvent = new EventEmitter();
   @ViewChildren('filterItem') filterItemComponents: QueryList<FilterNotParticipateItemComponent>;
 
-  constructor(private readonly filterService: FilterNotParticipateService) { }
-
+  private readonly filterService = inject(FilterNotParticipateService);
   public changeFilter(): void {
     this.changeFilterEvent.emit();
   }

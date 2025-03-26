@@ -11,7 +11,6 @@ import { RedCardModel } from '../../models/event-red-card.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch } from '../../models/sub-type-link-match.model';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
 @Injectable()
 export class EventRedCardService {

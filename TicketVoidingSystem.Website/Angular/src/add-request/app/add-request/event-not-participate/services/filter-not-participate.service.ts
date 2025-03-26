@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { ItemsSelect } from '../../../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
@@ -6,13 +6,9 @@ import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { NotParticipateBetTypeModel, NotParticipateBetTypeViewModel } from '../models/not-participate-bet-type.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FilterNotParticipateService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService
-  ) {}
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   public initDefaultFilter(): FilterNotParticipateModel {
     const model = new FilterNotParticipateModel();

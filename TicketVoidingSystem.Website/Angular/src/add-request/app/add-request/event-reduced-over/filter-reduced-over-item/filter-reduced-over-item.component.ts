@@ -3,10 +3,10 @@ import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } fr
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
-import { MultipleSelectionComponent } from 'src/utility/components/multiple-selection/multiple-selection.component';
-import { NgSelectMixtureComponent } from 'src/utility/components/ng-select-mixture/ng-select-mixture.component';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { MultipleSelectionComponent } from '../../../../../utility/components/multiple-selection/multiple-selection.component';
+import { NgSelectMixtureComponent } from '../../../../../utility/components/ng-select-mixture/ng-select-mixture.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';

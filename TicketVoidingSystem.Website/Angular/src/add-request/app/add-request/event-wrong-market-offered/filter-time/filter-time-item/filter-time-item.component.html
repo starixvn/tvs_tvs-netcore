@@ -1,14 +1,14 @@
 <div class="d-flex">
   <label class="col-form-label-sm filter-id">{{index + 1}}</label>
   <div class="me-3">
-    <date-full-time-new #fromTimeComponent class="from-date-time" [isDisabled]="isVoided" (changeEvent)="changeFilter()"
-      [(dateTime)]="model.fromDateTime">
+    <date-full-time-new #fromTimeComponent class="from-date-time" [isDisabled]="isVoided" (ngModelChange)="changeFilter()"
+      [(ngModel)]="model.fromDateTime">
     </date-full-time-new>
   </div>
   <div class="d-flex align-items-center me-2">
     <span class="me-2">To</span>
     <date-full-time-new #toTimeComponent class="to-date-time-{{index + 1}}" [isDisabled]="isVoided"
-      (changeEvent)="changeFilter()" [(dateTime)]="model.toDateTime">
+      (ngModelChange)="changeFilter()" [(ngModel)]="model.toDateTime">
     </date-full-time-new>
   </div>
   @if (!(isFirst && isLast)) {

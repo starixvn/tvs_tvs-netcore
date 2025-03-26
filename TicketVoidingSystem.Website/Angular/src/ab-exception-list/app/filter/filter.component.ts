@@ -3,9 +3,9 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, inject } fr
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
-import { MultipleSelectionComponent } from 'src/utility/components/multiple-selection/multiple-selection.component';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ABExceptionListLevel, ABExceptionListVoidVIP } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';

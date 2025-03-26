@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { BetIdsComponent } from "../../../../../utility/components/bet-ids/bet-ids.component";
 import { LABELS } from "../../../../../utility/constants/labels";
 import { AddRequestApiService } from "../../add-request-api.service";
@@ -9,13 +9,9 @@ import { CheckRecoverTicketResult } from "../models/check-recover-ticket-result.
 import { CheckRecoverTicketQuery } from "../models/check-recover-ticket.query";
 import { ValidationBusinessRuleOutput } from "../models/validation.model";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-  ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   public async checkBusinessRule(betIdsComponent: BetIdsComponent, recoverTicketModel: RecoverTicketModel,
     filter: FilterModel, requestId: number, permission: PermissionAddRequest): Promise<ValidationBusinessRuleOutput> {

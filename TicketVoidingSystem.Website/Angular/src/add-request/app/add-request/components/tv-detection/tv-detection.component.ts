@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import moment from 'moment-timezone';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TvDetectionType } from '../../../../../utility/constants/config';
 import { TvDetectionModel } from './tv-detection.model';

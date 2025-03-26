@@ -3,13 +3,13 @@ import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, Vie
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
-import { BlockUiDirective } from 'src/utility/components/block-ui/block-ui.directive';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
-import { PipeModule } from 'src/utility/pipes/pipe.module';
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
+import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';

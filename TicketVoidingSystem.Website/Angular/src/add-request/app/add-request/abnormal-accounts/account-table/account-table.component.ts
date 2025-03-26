@@ -3,8 +3,8 @@ import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChil
 import { FormsModule } from '@angular/forms';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { SortingComponent } from '../../../../../utility/components/sorting/sorting/sorting.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { RegexConstant } from '../../../../../utility/constants/regex';
 import { AddRequestApiService } from '../../add-request-api.service';

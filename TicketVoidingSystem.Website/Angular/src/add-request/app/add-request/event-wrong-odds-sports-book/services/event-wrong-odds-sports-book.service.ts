@@ -6,11 +6,9 @@ import { FilterOddsTypeConstant, FilterWrongOddsSportsBookModel } from "../model
 import { WrongOddsSportsBookGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongOddsSportsBook } from "../models/log-info-wrong-odds-sports-book.model";
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class EventWrongOddsSportsBookService {
+
   initDefaultFilter(loginfoEvent: LogInfoWrongOddsSportsBook): void {
     const currentMoment = moment.utc().tz('America/Caracas');
     loginfoEvent.filterWrongOddsSportsBook = new FilterWrongOddsSportsBookModel();

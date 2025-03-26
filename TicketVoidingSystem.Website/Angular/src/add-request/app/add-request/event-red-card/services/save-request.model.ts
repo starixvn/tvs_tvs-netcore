@@ -10,7 +10,6 @@ import { FilterModel } from '../../filter/filter.model';
 import { OthersModel } from '../../others/others.model';
 import { FilterTimeAreaComponent } from '../filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
 export class SaveRequestArg {
   requestId: number;

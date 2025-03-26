@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, Input, ViewChild, forwardRef } from '@angular/core';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgbDate, NgbInputDatepicker, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -8,9 +8,16 @@ import { NgbDate, NgbInputDatepicker, NgbModule } from '@ng-bootstrap/ng-bootstr
   standalone: true,
   imports: [FormsModule, CommonModule, NgbModule],
   templateUrl: './date-picker.component.html',
-  styleUrl: './date-picker.component.scss'
+  styleUrl: './date-picker.component.scss',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DatePickerComponent),
+      multi: true
+    }
+  ]
 })
-export class DatePickerComponent {
+export class DatePickerComponent implements ControlValueAccessor {
   @Input() index: number = null;
   @Input() disabled: boolean;
   @Input() maxDate: NgbDate;
@@ -18,8 +25,6 @@ export class DatePickerComponent {
   @Input() readonly = true;
   @Input() showInput = true;
   @Input() allowedHideDate = false;
-  @Input() date: NgbDate;
-  @Output() dateChange = new EventEmitter<NgbDate>();
   @ViewChild('datePicker') datePicker: NgbInputDatepicker;
 
   private _date: NgbDate;

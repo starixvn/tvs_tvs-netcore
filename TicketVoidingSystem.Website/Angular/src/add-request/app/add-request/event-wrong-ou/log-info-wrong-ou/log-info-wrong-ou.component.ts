@@ -3,11 +3,11 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
-import { PipeModule } from 'src/utility/pipes/pipe.module';
+import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { SportType } from '../../../../../utility/constants/sport.constant';
+import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';

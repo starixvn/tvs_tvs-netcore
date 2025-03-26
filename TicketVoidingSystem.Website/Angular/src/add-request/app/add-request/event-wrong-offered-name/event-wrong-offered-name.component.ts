@@ -26,7 +26,9 @@ import { ValidationService } from './services/validation.service';
     templateUrl: './event-wrong-offered-name.component.html',
     styleUrls: ['./event-wrong-offered-name.component.scss'],
     standalone: true,
-    imports: [FormsModule, NgbModule, EventLeagueComponent, ConfirmAddRequestComponent, FilterWrongOfferedNameComponent, LogInfoWrongOfferedNameComponent]
+    imports: [FormsModule, NgbModule, EventLeagueComponent, ConfirmAddRequestComponent,
+      FilterWrongOfferedNameComponent, LogInfoWrongOfferedNameComponent],
+    providers: [EventWrongOfferedNameService, LogInfoService, SaveRequestService, ValidationService]
 })
 export class EventWrongOfferedNameComponent  implements OnInit {
   @Input() isEdit: boolean;

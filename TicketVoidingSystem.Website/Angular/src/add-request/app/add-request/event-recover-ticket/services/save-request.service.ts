@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { TEXT } from '../../../../../utility/constants/text';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
@@ -6,16 +6,11 @@ import { PopupService } from '../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SaveRequestService {
-
-  constructor(
-    private readonly addRequestService: AddRequestService,
-    private readonly validationService: ValidationService,
-    private readonly popupService: PopupService
-  ) { }
+  private readonly addRequestService = inject(AddRequestService);
+  private readonly validationService = inject(ValidationService);
+  private readonly popupService = inject(PopupService);
 
   async saveRequest(arg: SaveRequestArg): Promise<void> {
     arg.addRequestStore.changeSavingRequestStatus(true);

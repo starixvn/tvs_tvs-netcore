@@ -3,8 +3,8 @@ import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, Vie
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TeamFavorite } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';

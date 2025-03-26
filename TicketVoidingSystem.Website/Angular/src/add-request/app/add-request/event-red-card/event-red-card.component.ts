@@ -6,10 +6,10 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
-import { AddChildMatchComponent } from 'src/utility/components/add-child-match/add-child-match.component';
-import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
+import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
@@ -39,7 +39,6 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 
 @Component({
   selector: 'event-red-card',

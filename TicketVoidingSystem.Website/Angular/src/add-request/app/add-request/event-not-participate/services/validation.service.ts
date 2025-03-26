@@ -8,9 +8,7 @@ import { FilterNotParticipateModel } from '../models/filter-not-participate.mode
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
   private readonly PLAYER_CLASS = 'player-dropdown';
   private readonly GROUP_BET_TYPE_CLASS = 'bet-type-dropdown';

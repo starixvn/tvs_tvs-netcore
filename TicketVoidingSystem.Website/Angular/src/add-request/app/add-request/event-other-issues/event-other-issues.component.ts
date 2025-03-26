@@ -194,6 +194,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   }
 
   resetLogInfoOfEvent(): void {
+    this.primitiveProps.isShowErrorNoBetType = false;
     this.primitiveProps.isShowValidation = false;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
   }

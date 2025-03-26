@@ -4,7 +4,7 @@
   <label class="col-form-label-sm">KO Time</label>
   <div class="d-flex">
     <date-full-time-new #kickOffTime class="kick-off-time me-1" [isDisabled]="filter.isVoided" [timeFormat]="'HH:mm:ss'"
-      [withOfTime]="80" (changeEvent)="changeKickOffTime()" [(dateTime)]="mainEvent.kickOffTime">
+      [withOfTime]="80" (ngModelChange)="changeKickOffTime()" [(ngModel)]="mainEvent.kickOffTime">
     </date-full-time-new>
     <label class="col-form-label-sm">(GMT+8)</label>
   </div>

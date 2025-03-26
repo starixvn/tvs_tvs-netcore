@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { AbnormalFilterBy, MatchIdConstant, TVSRequestActionType } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';

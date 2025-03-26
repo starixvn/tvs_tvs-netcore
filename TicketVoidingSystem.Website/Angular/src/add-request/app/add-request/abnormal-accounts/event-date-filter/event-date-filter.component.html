@@ -2,11 +2,11 @@
   <label class="col-form-label-sm col-form-label-sm">Event Date</label>
   <div class="d-flex">
     <date-picker [disabled]="isDisabled" [minDate]="minDate" [readonly]="true"
-      [(date)]="fromDate" (dateChange)="changeFilter()" class="me-2">
+      [(ngModel)]="fromDate" (ngModelChange)="changeFilter()" class="me-2">
     </date-picker>
     <label class="col-form-label-sm to-time-label">To</label>
     <date-picker [disabled]="isDisabled" [minDate]="minDate" [readonly]="true" (blur)="isValidEventDate()"
-      [(date)]="toDate" (dateChange)="changeFilter()" class="me-2">
+      [(ngModel)]="toDate" (ngModelChange)="changeFilter()" class="me-2">
     </date-picker>
   </div>
 </div>

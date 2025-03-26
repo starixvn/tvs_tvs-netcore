@@ -5,13 +5,13 @@
     <div class="filter-time d-flex">
       <div class="me-3">
         <date-full-time-new #fromTimeComponent [timeClass]="getTvDetectionClass()" class="from-date-time"
-          [isDisabled]="isVoided" (changeEvent)="changeFilter()" [(dateTime)]="filterWrongScoreModel.fromDateTime">
+          [isDisabled]="isVoided" (ngModelChange)="changeFilter()" [(ngModel)]="filterWrongScoreModel.fromDateTime">
         </date-full-time-new>
       </div>
       <div class="d-flex me-2">
         <label class="col-form-label-sm me-2">To</label>
-        <date-full-time-new #toTimeComponent class="to-date-time" [isDisabled]="isVoided" (changeEvent)="changeFilter()"
-          [(dateTime)]="filterWrongScoreModel.toDateTime">
+        <date-full-time-new #toTimeComponent class="to-date-time" [isDisabled]="isVoided" (ngModelChange)="changeFilter()"
+          [(ngModel)]="filterWrongScoreModel.toDateTime">
         </date-full-time-new>
       </div>
       <div class="d-flex align-items-center me-3">

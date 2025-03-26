@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';

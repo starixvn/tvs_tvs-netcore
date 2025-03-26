@@ -2,8 +2,8 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@ang
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
-import { DatePickerComponent } from 'src/utility/components/date-time/date-picker/date-picker.component';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
+import { DatePickerComponent } from '../../../../../utility/components/date-time/date-picker/date-picker.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';

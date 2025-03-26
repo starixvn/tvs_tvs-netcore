@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import _ from 'lodash';
-import { MatchModel } from 'src/utility/models/match.model';
 import { AcceptType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';

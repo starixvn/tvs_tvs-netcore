@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
@@ -30,11 +30,13 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-    selector: 'event-wrong-odds-sports-book',
-    templateUrl: './event-wrong-odds-sports-book.component.html',
-    styleUrls: ['./event-wrong-odds-sports-book.component.scss'],
-    standalone: true,
-    imports: [EventLeagueComponent, FilterWrongOddsSportsBookComponent, FormsModule, LogInfoWrongOddsSportsBookComponent, AdvancedModeAddRequestComponent, ConfirmAddRequestComponent]
+  selector: 'event-wrong-odds-sports-book',
+  templateUrl: './event-wrong-odds-sports-book.component.html',
+  styleUrls: ['./event-wrong-odds-sports-book.component.scss'],
+  standalone: true,
+  imports: [EventLeagueComponent, FilterWrongOddsSportsBookComponent, FormsModule,
+    LogInfoWrongOddsSportsBookComponent, AdvancedModeAddRequestComponent, ConfirmAddRequestComponent],
+  providers: [EventWrongOddsSportsBookService, LogInfoService, SaveRequestService, ValidationService]
 })
 export class EventWrongOddsSportsBookComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -59,15 +61,13 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
   primitiveProps = new PrimitiveProperty();
   permission = new PermissionAddRequest();
 
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly eventWrongOddsSportsBookService: EventWrongOddsSportsBookService,
-    private readonly logInfoService: LogInfoService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly commonService: CommonService
-  ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly eventWrongOddsSportsBookService = inject(EventWrongOddsSportsBookService);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly commonService = inject(CommonService);
+  private readonly validationService = inject(ValidationService);
 
   async ngOnInit() {
     this.permission = await this.addRequestApiService.getPermissionAddRequest();
@@ -152,6 +152,8 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
   resetLogInfo(): void {
     this.primitiveProps.isShowErrorNoBetType = false;
     this.primitiveProps.isShowValidation = false;
+    this.advancedModeAddRequestModel = new AdvancedModeAddRequestModel();
+    this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
   }
 
   checkExistBetTypeEvent(isHaveBetType: boolean) {
@@ -206,11 +208,6 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
 
   onClickCancelSaveRequest() {
     this.addRequestStore.changeSavingRequestStatus(false);
-  }
-
-  resetLogInfoOfEvent(): void {
-    this.primitiveProps.isShowValidation = false;
-    this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
   }
 
   private createTimeRangeModel(filterWrongOddsSportsBook: FilterWrongOddsSportsBookModel): TimeRangeModel {

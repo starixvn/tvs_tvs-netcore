@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { AdvancedModeAddRequestComponent } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
@@ -13,9 +13,7 @@ import { FilterOddsTypeConstant, FilterWrongOddsSportsBookModel } from '../model
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
   private readonly ODDS_VALUE_INPUT_CLASS = 'odds-value-input';
@@ -23,10 +21,7 @@ export class ValidationService {
   private readonly FROM_ODDS_CLASS = 'from-odds';
   private readonly TO_ODDS_CLASS = 'to-odds';
   private readonly FILTER_LIVE_INDICATOR_CLASS = 'filter-live-indicator';
-
-  constructor(
-    private readonly checkPermissionService: CheckAddPermissionService
-  ) { }
+  private readonly checkPermissionService = inject(CheckAddPermissionService);
 
   public isAccountHasAddRequestPermission(action: string, isHasInstantlySettledTicket: boolean, isHasSettledTicket: boolean, permission: PermissionAddRequest): boolean {
     return this.checkPermissionService.isAccountHasAddRequestPermission(action, isHasInstantlySettledTicket, isHasSettledTicket, permission);

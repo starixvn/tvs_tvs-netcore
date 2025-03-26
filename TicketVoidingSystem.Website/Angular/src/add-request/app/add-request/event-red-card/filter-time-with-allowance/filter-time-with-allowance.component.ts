@@ -3,8 +3,8 @@ import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } fr
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { TvDetectionService } from '../../../../../manage-request/app/request-list/services/tv-detection.service';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TimeZone } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';

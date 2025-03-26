@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
@@ -8,15 +8,10 @@ import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class LogInfoService {
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly eventWrongOddsSportsBookService: EventWrongOddsSportsBookService) {
-  }
+  private readonly commonService = inject(CommonService);
+  private readonly eventWrongOddsSportsBookService = inject(EventWrongOddsSportsBookService);
 
   async getLogInfo(logInfoEvent: LogInfoWrongOddsSportsBook, isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty): Promise<void> {
     const getLogInfoQuery = this.initGetLogInfoWrongOddsSportsBookQuery(isEdit, requestId, filter, logInfoEvent);

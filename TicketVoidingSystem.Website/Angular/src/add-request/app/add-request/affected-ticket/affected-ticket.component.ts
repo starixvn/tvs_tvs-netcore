@@ -1,9 +1,9 @@
 import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
-import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
-import { MultipleSelectionComponent } from 'src/utility/components/multiple-selection/multiple-selection.component';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelectionComponent } from '../../../../utility/components/multiple-selection/multiple-selection.component';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AffectedTicketsModel } from '../models/live-game-early-ticket.model';
 import { TicketsComponent } from '../pool-house-ticket/tickets/tickets.component';

@@ -4,12 +4,8 @@ import { FilterTechnicalErrorModel } from "../models/filter-technical-error.mode
 import { TechnicalErrorGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoTechnicalError } from "../models/log-info-technical-error.model";
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class EventTechnicalErrorService {
-  constructor() { }
 
   public getTechnicalErrorGetLogInfoModel(subIssueTypeId: number, logInfo: LogInfoTechnicalError): TechnicalErrorGetLogInfoQuery {
     return this.createTechnicalErrorGetLogInfoQuery(logInfo, Number(subIssueTypeId));

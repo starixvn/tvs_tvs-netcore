@@ -6,9 +6,7 @@ import { FilterTimeTechnicalErrorComponent } from '../filter-time-technical-erro
 import { LogInfoTechnicalError } from '../models/log-info-technical-error.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
   public validateCommonData(eventLeague: EventLeagueComponent, filterTimeComponent: FilterTimeTechnicalErrorComponent, advancedMode?: AdvancedModeAddRequestComponent): boolean {
     if (!eventLeague.isMatchIdValid()) {

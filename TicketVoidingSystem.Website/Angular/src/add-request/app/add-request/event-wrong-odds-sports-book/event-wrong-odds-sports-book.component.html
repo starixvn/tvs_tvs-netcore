@@ -1,7 +1,7 @@
 <event-league #eventLeague [isEdit]="isEdit" [matchId]="logInfoEvent.matchId" (changeEvent)="changeMatchEvent()">
 </event-league>
 <filter-wrong-odds-sports-book #filterWrongOddsSportsBook [isEdit]="isEdit" [isVoided]="filter.isVoided"
-  [subIssueTypeId]="filter.subIssueTypeId" (changeFilterEvent)="resetLogInfoOfEvent()" (refreshEvent)="refreshEvent()"
+  [subIssueTypeId]="filter.subIssueTypeId" (changeFilterEvent)="resetLogInfo()" (refreshEvent)="refreshEvent()"
   [filterWrongOddsSportsBookModel]="logInfoEvent.filterWrongOddsSportsBook">
 </filter-wrong-odds-sports-book>
 

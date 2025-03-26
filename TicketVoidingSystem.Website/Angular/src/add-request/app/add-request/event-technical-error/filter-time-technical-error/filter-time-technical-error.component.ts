@@ -1,17 +1,17 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterTechnicalErrorModel } from '../models/filter-technical-error.model';
 
 @Component({
-    selector: 'filter-time-technical-error',
-    templateUrl: './filter-time-technical-error.component.html',
-    styleUrls: ['./filter-time-technical-error.component.scss'],
-    standalone: true,
-    imports: [DateFullTimeNewComponent, TooltipComponent, FormsModule]
+  selector: 'filter-time-technical-error',
+  templateUrl: './filter-time-technical-error.component.html',
+  styleUrls: ['./filter-time-technical-error.component.scss'],
+  standalone: true,
+  imports: [DateFullTimeNewComponent, TooltipComponent, FormsModule]
 })
 
 export class FilterTimeTechnicalErrorComponent {
@@ -24,10 +24,9 @@ export class FilterTimeTechnicalErrorComponent {
 
   tooltip = new Tooltip();
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
+  private readonly element = inject(ElementRef);
 
-  constructor(
-    private readonly element: ElementRef
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 

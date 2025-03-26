@@ -2,7 +2,7 @@ import { SlicePipe } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { ProductFilter, TVSRequestActionType, TicketStatus } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';

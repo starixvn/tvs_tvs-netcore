@@ -10,17 +10,12 @@ import { FilterModel } from "../../filter/filter.model";
 import { FilterWrongOfferedNameModel } from "../models/filter-wrong-offered-name.model";
 import { ValidationService } from "./validation.service";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FilterWrongOfferedNameService {
-  private readonly validationService = inject(ValidationService);
-  constructor() {
-    console.log('MyService instance created');
-  }
   private readonly FILTER_CURRENCY_DROPDOWN = 'filter-currency-dropdown';
   private readonly GROUP_LICENSEE = 'check-group-licensee';
   private readonly CURRENCY_RMB_ID = 13;
+  private readonly validationService = inject(ValidationService);
 
   renderGroupLicensees(isEdit: boolean, originalGroupLicensees: GroupLicensee[], filterWrongOfferedName: FilterWrongOfferedNameModel, filterRequest: FilterModel): GroupLicenseeModel {
     return isEdit

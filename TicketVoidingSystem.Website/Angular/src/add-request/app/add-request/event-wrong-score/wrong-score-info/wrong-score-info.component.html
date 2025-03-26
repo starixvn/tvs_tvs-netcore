@@ -29,8 +29,8 @@
         @if (isShowLabel()) {
         <label class="col-form-label-sm">From Time</label>
         }
-        <date-full-time-new #fromTimeComponent class="from-date-time" [(dateTime)]="wrongScoreModel.filterFromTransTime"
-          [maxDate]="maxDate" (changeEvent)="clearDataValidation();setNullAllowanceTime()"
+        <date-full-time-new #fromTimeComponent class="from-date-time" [(ngModel)]="wrongScoreModel.filterFromTransTime"
+          [maxDate]="maxDate" (ngModelChange)="clearDataValidation();setNullAllowanceTime()"
           [isDisabled]="isVoided || !wrongScoreModel.isChecked">
         </date-full-time-new>
       </div>
@@ -39,8 +39,8 @@
         <label class="col-form-label-sm">To Time</label>
         }
         @if (wrongScoreModel.filterToTransTime) {
-        <date-full-time-new #toTimeComponent class="to-date-time" [(dateTime)]="wrongScoreModel.filterToTransTime"
-          [maxDate]="maxDate" (changeEvent)="clearDataValidation();setNullAllowanceTime()"
+        <date-full-time-new #toTimeComponent class="to-date-time" [(ngModel)]="wrongScoreModel.filterToTransTime"
+          [maxDate]="maxDate" (ngModelChange)="clearDataValidation();setNullAllowanceTime()"
           [isDisabled]="isVoided || !wrongScoreModel.isChecked">
         </date-full-time-new>
         }

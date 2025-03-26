@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
@@ -26,7 +26,7 @@ export class AllowanceTimeComponent {
   constructor() {
     this.tooltip.element = this.element;
    }
-  
+
   emitModelChange(): void {
     this.changeModel.emit();
   }

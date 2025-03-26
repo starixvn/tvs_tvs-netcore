@@ -1,9 +1,9 @@
 
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -11,11 +11,11 @@ import { FilterOddsType, FilterWrongOddsSportsBookModel } from '../models/filter
 import { ValidationService } from '../services/validation.service';
 
 @Component({
-    selector: 'filter-wrong-odds-sports-book',
-    templateUrl: './filter-wrong-odds-sports-book.component.html',
-    styleUrls: ['./filter-wrong-odds-sports-book.component.scss'],
-    standalone: true,
-    imports: [DateFullTimeNewComponent, FormsModule, NgSelectComponent, TooltipComponent]
+  selector: 'filter-wrong-odds-sports-book',
+  templateUrl: './filter-wrong-odds-sports-book.component.html',
+  styleUrls: ['./filter-wrong-odds-sports-book.component.scss'],
+  standalone: true,
+  imports: [DateFullTimeNewComponent, FormsModule, NgSelectComponent, TooltipComponent]
 })
 export class FilterWrongOddsSportsBookComponent {
   @Input() filterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel;
@@ -30,10 +30,10 @@ export class FilterWrongOddsSportsBookComponent {
 
   tooltip = new Tooltip();
   filterOddsType = new FilterOddsType();
+  private readonly element = inject(ElementRef);
+  private readonly validationService = inject(ValidationService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly validationService: ValidationService) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 

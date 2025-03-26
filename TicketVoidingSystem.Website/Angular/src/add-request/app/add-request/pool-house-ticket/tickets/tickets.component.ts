@@ -2,9 +2,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
-import { PipeModule } from 'src/utility/pipes/pipe.module';
 import { BaseTicketsListComponent } from '../../../../../utility/components/base-tickets-list/base-tickets-list.component';
+import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
+import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { TicketsModel } from './tickets.model';
 
 @Component({

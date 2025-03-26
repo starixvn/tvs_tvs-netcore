@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
-import { TemplateMessageComponent } from 'src/utility/components/template-message/template-message/template-message.component';
+import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { TemplateMessageComponent } from '../../../../../utility/components/template-message/template-message/template-message.component';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { IssueTypes } from '../../filter/issue-types.model';
