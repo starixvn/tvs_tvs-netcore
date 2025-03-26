@@ -39,8 +39,10 @@ public class GetPoolHouseTicketServiceImp(IMapper mapper, IDynamicRepository rep
             return repository.FetchMultipleAsync<BetTypeModel, GetTicketModel>(criteria);
         });
         var results = await Task.WhenAll(tasks);
+        var betTypes = results.SelectMany(x => x.Item1).DistinctBy(x => x.Id);
+        var tickets = results.SelectMany(x => x.Item2).DistinctBy(x => x.TransId);
 
-        return (results.SelectMany(x => x.Item1), results.SelectMany(x => x.Item2));
+        return (betTypes, tickets);
     }
 
     private static IEnumerable<GroupBetTypeModel> MappingGroupBetType(IEnumerable<BetTypeModel> betTypes)
