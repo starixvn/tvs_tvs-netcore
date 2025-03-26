@@ -1,6 +1,6 @@
 
 import {
-  Component, ElementRef, EventEmitter, Input,
+  Component, ElementRef, EventEmitter, inject, Input,
   OnChanges,
   OnInit, Output,
   QueryList, SimpleChanges, ViewChild, ViewChildren
@@ -40,13 +40,16 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { SearchEventService } from './services/search-event.service';
+import { ValidationService } from './services/validation.service';
 
 @Component({
-    selector: 'event-early-kick-off',
-    templateUrl: './event-early-kick-off.component.html',
-    styleUrls: ['./event-early-kick-off.component.scss'],
-    standalone: true,
-    imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, DateFullTimeNewComponent, LogInfoEkoComponent, AddChildMatchComponent, ConfirmEkoComponent]
+  selector: 'event-early-kick-off',
+  templateUrl: './event-early-kick-off.component.html',
+  styleUrls: ['./event-early-kick-off.component.scss'],
+  standalone: true,
+  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, DateFullTimeNewComponent,
+    LogInfoEkoComponent, AddChildMatchComponent, ConfirmEkoComponent],
+  providers: [EventEarlyKickOffService, LogInfoService, SaveRequestService, ValidationService, RelatedEventService, SearchEventService]
 })
 export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   @Input() filter: FilterModel;
@@ -63,8 +66,6 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChild('kickOffTime') kickOffTimeComponent: DateFullTimeNewComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoEkoComponent>;
-  private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
-
   permission = new PermissionAddRequest();
   transInfoAddRequestModel: TransInfoAddRequestModel;
   mainEvent = new LogInfoEarlyKickOff();
@@ -74,16 +75,18 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   confirmEarlyKickOff = new ConfirmEarlyKickOffModel();
   primitiveProps = new PrimitiveProperty();
   tooltip = new Tooltip();
-  constructor(
-    private readonly element: ElementRef,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly logInfoService: LogInfoService,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly relatedEventService: RelatedEventService,
-    private readonly eventEarlyKickOffService: EventEarlyKickOffService,
-    private readonly searchEventService: SearchEventService,
-    private readonly addRequestApiService: AddRequestApiService
-  ) {
+  private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
+
+  private readonly element = inject(ElementRef);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly relatedEventService = inject(RelatedEventService);
+  private readonly eventEarlyKickOffService = inject(EventEarlyKickOffService);
+  private readonly searchEventService = inject(SearchEventService);
+  private readonly addRequestApiService = inject(AddRequestApiService);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -114,7 +117,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     }
   }
 
-  private createGetChildMatchesQuery(): GetChildMatchQuery{
+  private createGetChildMatchesQuery(): GetChildMatchQuery {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(this.filter.issueTypeId);
     query.eventDate = this.mainEvent.matchModel.eventDate ? moment(this.mainEvent.matchModel.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;

@@ -9,11 +9,11 @@ import { PagingModel } from '../../../../../utility/components/paging/paging/pag
 import { TableTicketsModel } from './table-tickets.model';
 
 @Component({
-    selector: 'tickets-list',
-    templateUrl: './tickets-list.component.html',
-    styleUrls: ['./tickets-list.component.scss'],
-    standalone: true,
-    imports: [FormsModule, CommonModule, NgbModule, BlockUiModule, PipeModule, PagingModule]
+  selector: 'tickets-list',
+  templateUrl: './tickets-list.component.html',
+  styleUrls: ['./tickets-list.component.scss'],
+  standalone: true,
+  imports: [FormsModule, CommonModule, NgbModule, BlockUiModule, PipeModule, PagingModule]
 })
 export class TicketsListComponent {
   @Input() model: TableTicketsModel;

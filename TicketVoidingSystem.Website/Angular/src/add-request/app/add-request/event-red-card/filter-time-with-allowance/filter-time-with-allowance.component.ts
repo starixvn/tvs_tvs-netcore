@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
@@ -13,11 +13,11 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance.model';
 
 @Component({
-    selector: 'filter-time-with-allowance',
-    templateUrl: './filter-time-with-allowance.component.html',
-    styleUrls: ['./filter-time-with-allowance.component.scss'],
-    standalone: true,
-    imports: [FormsModule, CommonModule, TooltipComponent, NgbModule]
+  selector: 'filter-time-with-allowance',
+  templateUrl: './filter-time-with-allowance.component.html',
+  styleUrls: ['./filter-time-with-allowance.component.scss'],
+  standalone: true,
+  imports: [FormsModule, CommonModule, TooltipComponent, NgbModule]
 })
 export class FilterTimeWithAllowanceComponent implements OnInit {
   @Input() isDisabled: boolean;
@@ -26,12 +26,12 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
   @Input() tvDetectionValue: number;
   @Input() filterTimeWithAllowanceModel: FilterTimeWithAllowance;
   @Output() refreshLogInfoEvent = new EventEmitter();
-  @Output() changeFilterTimeEvent= new EventEmitter();
-  @Output() changeAllowanceSettingTimeEvent= new EventEmitter();
+  @Output() changeFilterTimeEvent = new EventEmitter();
+  @Output() changeAllowanceSettingTimeEvent = new EventEmitter();
 
   private readonly FROM_TIME_CLASS = 'from-time';
   private readonly TO_TIME_CLASS = 'to-time';
-  
+
   fromDate: NgbDate;
   fromTime: string;
   toDate: NgbDate;
@@ -40,10 +40,9 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
   tooltip = new Tooltip();
   isShowInputFromDate: boolean;
   isShowInputToDate: boolean;
+  private readonly element = inject(ElementRef);
 
-  constructor(
-    private readonly element: ElementRef,
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -59,7 +58,7 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
   setDefaultValue(): void {
     if (this.isUseInLogInfo) {
       this.isShowInputFromDate = false;
-      this.isShowInputToDate = false; 
+      this.isShowInputToDate = false;
     } else {
       this.isShowInputFromDate = true;
       this.isShowInputToDate = true;
@@ -136,7 +135,7 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
   changeFilterDateTime(): void {
     if (this.isUseInLogInfo) {
       this.clearSettingTime();
-    } 
+    }
 
     this.updateFilterTime();
     this.changeFilterTimeEvent.emit();
@@ -211,5 +210,5 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
 
     return true;
   }
-  
+
 }

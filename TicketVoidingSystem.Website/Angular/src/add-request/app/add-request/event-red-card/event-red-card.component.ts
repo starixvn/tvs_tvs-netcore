@@ -48,7 +48,8 @@ import { PrimitiveProperty } from '../components/log-info-related-event/primitiv
   standalone: true,
   imports: [FormsModule, CommonModule, EventLeagueComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent,
     NgSelectModule, NgbModule, TooltipComponent, BlockUiModule, ConfirmAddRequestComponent,
-    TvDetectionComponent]
+    TvDetectionComponent],
+  providers: [EventRedCardService, LogInfoService, SaveRequestService, ValidationService, RelatedEventService]
 })
 export class EventRedCardComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;

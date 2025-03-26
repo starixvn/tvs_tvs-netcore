@@ -1,26 +1,24 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import _ from 'lodash';
-import { MatchType, DateTimeFormat, TVSRequestFilterBy } from '../../../../../utility/constants/config';
+import moment from 'moment';
+import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
+import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
+import { LABELS } from '../../../../../utility/constants/labels';
+import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { GetChildMatchQuery } from '../../models/get-child-match.query';
-import { ChildMatchModel } from '../../models/related-event.model';
-import { LogInfoService } from './log-info.service';
-import { WrongScoreModel } from '../../models/event-wrong-score.model';
-import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { Category, GroupButton } from '../../filter/sub-issue-type-dialog/sub-issue-type-json.model';
 import SubIssueTypeWrongScoreConfig from '../../filter/sub-issue-type-dialog/sub-type-wrong-score.json';
-import { AddRelatedEventArg } from '../models/add-related-event.model';
+import { WrongScoreModel } from '../../models/event-wrong-score.model';
+import { GetChildMatchQuery } from '../../models/get-child-match.query';
+import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../models/sub-type-link-match.model';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { AddRelatedEventArg } from '../models/add-related-event.model';
+import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
-import moment from 'moment';
-import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class RelatedEventService {
   static SubIssueTypeMapHasRelatedEvent = new Map<number, number>([
     [SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_NO_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME],
@@ -41,10 +39,9 @@ export class RelatedEventService {
     [SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_ONWARDS, SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING]
   ]);
 
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly logInfoService: LogInfoService,
-    private readonly validationService: ValidationService) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly validationService = inject(ValidationService);
 
   async getChildMatches(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
     return this.addRequestApiService.getChildMatches(query);

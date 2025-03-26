@@ -7,6 +7,15 @@ $minWidth: 150px;
     }
 }
 
+.filter-id {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    line-height: 1.5;
+}
+
 .max-width-450 {
     max-width: 450px;
 }
@@ -17,12 +26,6 @@ $minWidth: 150px;
 
 .filter-issue-type {
     width: 180px;
-}
-
-.filter-checkbox-test .checkbox-test,
-.filter-checkbox-abnormal .checkbox-abnormal {
-    margin-top: 34px;
-    min-width: 52px;
 }
 
 .btn-select-sub-type {

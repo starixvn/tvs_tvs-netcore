@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectMixtureItem } from '../ng-select-mixture-item.model';
+import { NgSelectMixtureComponent } from '../ng-select-mixture.component';
 
 @Component({
   selector: 'ng-select-tree-view',
   templateUrl: './ng-select-tree-view.component.html',
   styleUrls: ['./ng-select-tree-view.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule]
+  imports: [FormsModule, CommonModule, NgSelectMixtureComponent]
 })
 export class NgSelectTreeViewComponent {
   @Input() items: NgSelectMixtureItem[];

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { ValidationMessage } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { ModalService } from '../../modal/modal.service';
@@ -13,8 +13,7 @@ import { ModalService } from '../../modal/modal.service';
 })
 export class LogInfoMessageComponent {
   @Input() messages: ValidationMessage[];
-
-  constructor(private readonly modalService: ModalService) { }
+  private readonly modalService = inject(ModalService);
 
   public openPopupTransIds(requestId: number, transIds: string): void {
     StaticService.openPopupTransIds(requestId, transIds, this.modalService);

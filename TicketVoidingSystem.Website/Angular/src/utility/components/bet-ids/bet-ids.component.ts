@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LABELS } from '../../constants/labels';
@@ -25,22 +25,19 @@ export class BetIdsComponent implements OnInit {
   @Input() warningMoveText = '(*) Moved tickets are highlighted in ORANGE.';
   @Input() hideInvalid = false;
   @Input() hideDifferentMatch = true;
-  @Input() leftBetIdCss = '';
-  @Input() rightBetIdCss = '';
   @Input() betIdComponentCss = '';
   @Input() betIdInputCss: {};
   @Input() disabled = false;
   @Input() isShowLabel = true;
-
   @Output() afterFocusOutBetIds = new EventEmitter<string>();
-
   groupNumber = new GroupNumber();
   transId: string;
   lastItem: NumberItem;
   shiftKey: boolean;
   tooltip = new Tooltip();
+  private readonly element = inject(ElementRef);
 
-  constructor(private readonly element: ElementRef) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 

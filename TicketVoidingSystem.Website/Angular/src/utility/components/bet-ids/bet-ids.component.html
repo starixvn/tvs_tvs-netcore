@@ -1,36 +1,43 @@
 <div class="no-gutters" [ngClass]="betIdComponentCss">
-    <div *ngIf="isShowLabel" class="width-170" [ngClass]="leftBetIdCss"><label>Bet ID(s)</label></div>
-    <div class="col-12 col-sm-8" [ngClass]="rightBetIdCss" [ngStyle]="betIdInputCss">
-        <div class="input-bet-ids" (mousedown)="$event.preventDefault()" (click)="focusBetIdInput()"
-            [ngClass]="{'point-event-none disabled-input': disabled}">
-            <div *ngIf="groupNumber.items.length > 0">
-                <div *ngFor="let item of groupNumber.items">
-                    <div class="item-number" [ngClass]="item.cssClass">
-                        <ng-container *ngIf="item.isShowTooltip">
-                            <span ngbTooltip="{{item.tooltipText}}" tooltipClass="invalid-item-toolTip">{{item.value}}</span>
-                        </ng-container>
-                        <ng-container *ngIf="!item.isShowTooltip">
-                            <span>{{item.value}}</span>
-                        </ng-container>
-                        <span class="icon-delete" (click)="groupNumber.remove(item)">&nbsp;</span>
-                    </div>
-                </div>
-            </div>
-            <input #betIdInput class="trans-id" type="text" maxlength="19" [(ngModel)]="transId" (keydown)="onKey($event)"
-                (blur)="onBlurBetIdInput(transId)" (paste)="pasteItem($event)" (keyup.shift)="shiftKey=false"
-                (keydown.shift)="shiftKey=true" />
+  @if (isShowLabel) {
+  <div><label class="col-form-label-sm">Bet ID(s)</label></div>
+  }
+  <div class="col-12 col-sm-12" [ngStyle]="betIdInputCss">
+    <div class="input-bet-ids" (mousedown)="$event.preventDefault()" (click)="focusBetIdInput()"
+      [ngClass]="{'point-event-none disabled-input': disabled}">
+      @if (groupNumber.items.length > 0) {
+      <div>
+        @for (item of groupNumber.items; track item) {
+        <div>
+          <div class="item-number" [ngClass]="item.cssClass">
+            @if (item.isShowTooltip) {
+            <span ngbTooltip="{{item.tooltipText}}" tooltipClass="invalid-item-toolTip">{{item.value}}</span>
+            }
+            @if (!item.isShowTooltip) {
+            <span>{{item.value}}</span>
+            }
+            <span class="icon-delete" (click)="groupNumber.remove(item)">&nbsp;</span>
+          </div>
         </div>
-        <span class="invalid-data"></span>
-        <span class="note note-invalid-tickets" [hidden]="hideInvalid">(*) Invalid BetID(s) are highlighted in RED.</span>
-        <span class="note note-moved-tickets" [hidden]="hideWarningMove">{{warningMoveText}}</span>
-        <span class="note note-different-tickets" [hidden]="hideDifferentMatch">
-            (*) BetID(s) of different match are highlighted in BLUE.
-        </span>
-        <div class="flex-between">
-            <span class="example">Ex: 1234567890, 1223457890, 2234567890</span>
-            <span class="number-item red">Max: {{maxItems - groupNumber.items.length}} bets</span>
-        </div>
+        }
+      </div>
+      }
+      <input #betIdInput class="trans-id" type="text" maxlength="19" [(ngModel)]="transId" (keydown)="onKey($event)"
+        (blur)="onBlurBetIdInput(transId)" (paste)="pasteItem($event)" (keyup.shift)="shiftKey=false"
+        (keydown.shift)="shiftKey=true" />
     </div>
+    <span class="invalid-data"></span>
+    <span class="note note-invalid-tickets" [hidden]="hideInvalid">(*) Invalid BetID(s) are highlighted in
+      RED.</span>
+    <span class="note note-moved-tickets" [hidden]="hideWarningMove">{{warningMoveText}}</span>
+    <span class="note note-different-tickets" [hidden]="hideDifferentMatch">
+      (*) BetID(s) of different match are highlighted in BLUE.
+    </span>
+    <div class="flex-between">
+      <span class="example">Ex: 1234567890, 1223457890, 2234567890</span>
+      <span class="number-item red">Max: {{maxItems - groupNumber.items.length}} bets</span>
+    </div>
+  </div>
 </div>
 
 <tooltip [tooltip]="tooltip"></tooltip>

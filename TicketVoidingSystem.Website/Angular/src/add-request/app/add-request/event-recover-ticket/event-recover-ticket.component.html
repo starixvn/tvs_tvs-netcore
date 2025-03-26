@@ -9,8 +9,7 @@
   </div>
   <label class="col-form-label-sm">Bet ID(s)</label>
   <div [blockUi]="primitiveProps.isBlockBetIds">
-    <bet-ids #betIds [leftBetIdCss]="'col-form-label'" [rightBetIdCss]="'col-sm-8'"
-      [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false"
+    <bet-ids #betIds [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false"
       [hideDifferentMatch]="true" [disabled]="filter.isVoided" [initBetIds]="recoverTicketModel.transIds"
       (afterFocusOutBetIds)="afterFocusOutBetIds()" [isShowLabel]="false"
       [warningMoveText]="'(*) Moved or Duplicated tickets are highlighted in ORANGE.'">

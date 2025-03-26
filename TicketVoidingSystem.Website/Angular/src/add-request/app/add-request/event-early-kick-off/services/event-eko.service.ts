@@ -7,10 +7,7 @@ import { EarlyKickOffGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoEarlyKickOff } from "../models/log-info-eko.model";
 import { TableTicketsModel } from "../tickets-list/table-tickets.model";
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class EventEarlyKickOffService {
   assignModelsToEvents(allEvents: LogInfoEarlyKickOff[], inputModels: EarlyKickOffModel[], filter: FilterModel): void {
     inputModels.forEach(x => {

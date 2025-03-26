@@ -86,7 +86,7 @@
         [filterBy]="primitiveProps.filterBy"
         (updateByOriginWrongScoreModelEvent)="updateByOriginWrongScoreModel($event)" [matchId]="matchId"
         (checkScoreEvent)="updateStatusButtonSaveRequest()" [filter]="filter" [primitiveProps]="primitiveProps"
-        [selectedWrongScores]="wrongScoreService.getSelectedWrongScores(wrongScoreModels)">
+        [selectedWrongScores]="getSelectedWrongScores(wrongScoreModels)">
       </wrong-score-info>
     </div>
     }

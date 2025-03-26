@@ -1,22 +1,18 @@
-import { Injectable } from '@angular/core';
-import { WrongScoreModel } from '../../models/event-wrong-score.model';
-import { PrimitiveProperty } from '../event-wrong-score.model';
-import { RelatedEventService } from './related-event.service';
-import { ChildMatchModel } from '../../models/related-event.model';
-import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
-import { WrongScoreService } from './wrong-score.service';
+import { inject, Injectable } from '@angular/core';
 import _ from 'lodash';
+import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
+import { WrongScoreModel } from '../../models/event-wrong-score.model';
+import { ChildMatchModel } from '../../models/related-event.model';
+import { PrimitiveProperty } from '../event-wrong-score.model';
 import { EventWrongScoreService } from './event-wrong-score.service';
+import { RelatedEventService } from './related-event.service';
+import { WrongScoreService } from './wrong-score.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class EditRequestService {
-  constructor(
-    private readonly relatedEventService: RelatedEventService,
-    private readonly wrongScoreService: WrongScoreService,
-    private readonly eventWrongScoreService: EventWrongScoreService
-  ) { }
+  private readonly relatedEventService = inject(RelatedEventService);
+  private readonly wrongScoreService = inject(WrongScoreService);
+  private readonly eventWrongScoreService = inject(EventWrongScoreService);
 
   assignPrimitivePropsEditRequest(mainEvent: WrongScoreModel, primitiveProps: PrimitiveProperty) {
     primitiveProps.actualScore = mainEvent.actualScore;

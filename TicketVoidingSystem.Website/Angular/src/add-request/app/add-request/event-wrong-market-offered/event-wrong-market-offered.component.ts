@@ -32,7 +32,9 @@ import { ValidationService } from './services/validation.service';
     templateUrl: './event-wrong-market-offered.component.html',
     styleUrls: ['./event-wrong-market-offered.component.scss'],
     standalone: true,
-    imports: [EventLeagueComponent, FilterTimeComponent, AdvancedModeAddRequestComponent, FormsModule, LogInfoWrongMarketOfferedComponent, ConfirmAddRequestComponent]
+    imports: [EventLeagueComponent, FilterTimeComponent, AdvancedModeAddRequestComponent, FormsModule,
+      LogInfoWrongMarketOfferedComponent, ConfirmAddRequestComponent],
+  providers: [LogInfoService, SaveRequestService, ValidationService, EventWrongMarketOfferedService]
 })
 export class EventWrongMarketOfferedComponent implements OnInit {
   @Input() isEdit: boolean;

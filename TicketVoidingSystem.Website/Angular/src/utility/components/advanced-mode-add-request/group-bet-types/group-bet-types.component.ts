@@ -24,6 +24,7 @@ export class GroupBetTypesComponent {
 
   @Input() scroll: boolean;
   collapse = true;
+  private readonly element = inject(ElementRef);
 
   constructor(private readonly element: ElementRef) {
     this.tooltip.element = this.element;
@@ -54,7 +55,7 @@ export class GroupBetTypesComponent {
     this.checkExistBetTypeEvent.emit(this.model.groupBetTypes.length > 0);
     if (this.model.groupBetTypes.length === 0) {
       return false;
-    } else if(this.model.groupBetTypes.every(x => x.betTypes.every(y => !y.isChecked))) {
+    } else if (this.model.groupBetTypes.every(x => x.betTypes.every(y => !y.isChecked))) {
       this.tooltip.display('group-bettypes-all-checkbox', LABELS.NO_CHECKED_BETTYPE);
       return false;
     }

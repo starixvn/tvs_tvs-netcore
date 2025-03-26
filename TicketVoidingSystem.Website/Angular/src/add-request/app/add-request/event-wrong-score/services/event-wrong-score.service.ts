@@ -1,24 +1,20 @@
-import { Injectable } from '@angular/core';
-import { AcceptType, TVSRequestFilterBy} from '../../../../../utility/constants/config';
+import { inject, Injectable } from '@angular/core';
+import _ from 'lodash';
+import { MatchModel } from 'src/utility/models/match.model';
+import { AcceptType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { ChildMatchModel } from '../../models/related-event.model';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
-import { ValidationService } from './validation.service';
-import { RelatedEventService } from './related-event.service';
+import { ChildMatchModel } from '../../models/related-event.model';
 import { PrimitiveProperty } from '../event-wrong-score.model';
-import { MatchModel } from 'src/utility/models/match.model';
+import { RelatedEventService } from './related-event.service';
+import { ValidationService } from './validation.service';
 import { WrongScoreService } from './wrong-score.service';
-import _ from 'lodash';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class EventWrongScoreService {
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly wrongScoreService: WrongScoreService
-  ) { }
+  private readonly validationService = inject(ValidationService);
+  private readonly wrongScoreService = inject(WrongScoreService);
 
   public async getAllWrongScoreModels(wrongScoreModels: WrongScoreModel[], matchId: number) {
     const allWrongScoreModels = await this.wrongScoreService.callApiGetWrongScores(matchId);

@@ -25,11 +25,10 @@
     </div>
     <div>
       <label class="col-form-label-sm">Duplicated BetID(s)</label>
-      <bet-ids #betIds [rightBetIdCss]="'col-sm-12'" [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false"
-        [hideWarningMove]="false" [hideDifferentMatch]="duplicateTicketsModel.filterBy === 1"
-        [disabled]="isDisableBetIds()" [initBetIds]="duplicateTicketsModel.transIds"
-        (afterFocusOutBetIds)="afterFocusOutBetIds()" [isShowLabel]="false"
-        [warningMoveText]="'(*) Moved or Duplicated tickets are highlighted in ORANGE.'">
+      <bet-ids #betIds [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false"
+        [hideDifferentMatch]="duplicateTicketsModel.filterBy === 1" [disabled]="isDisableBetIds()"
+        [initBetIds]="duplicateTicketsModel.transIds" (afterFocusOutBetIds)="afterFocusOutBetIds()"
+        [isShowLabel]="false" [warningMoveText]="'(*) Moved or Duplicated tickets are highlighted in ORANGE.'">
       </bet-ids>
     </div>
   </div>

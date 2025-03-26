@@ -26,10 +26,10 @@
       </div>
     </div>
 
-    <bet-ids #betIds [leftBetIdCss]="'col-form-label'" [rightBetIdCss]="'col-sm-12'"
-      [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false" [hideDifferentMatch]="true"
-      [disabled]="filter.isVoided" [initBetIds]="abnormalBetModel.transIds" (afterFocusOutBetIds)="afterFocusOutBetIds()"
-      [isShowLabel]="false" [warningMoveText]="'(*) Moved or Duplicated tickets are highlighted in ORANGE.'">
+    <bet-ids #betIds [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false"
+      [hideDifferentMatch]="true" [disabled]="filter.isVoided" [initBetIds]="abnormalBetModel.transIds"
+      (afterFocusOutBetIds)="afterFocusOutBetIds()" [isShowLabel]="false"
+      [warningMoveText]="'(*) Moved or Duplicated tickets are highlighted in ORANGE.'">
     </bet-ids>
   </div>
 

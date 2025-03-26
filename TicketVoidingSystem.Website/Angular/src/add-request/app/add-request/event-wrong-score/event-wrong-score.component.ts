@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
@@ -50,7 +50,8 @@ import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.com
   templateUrl: './event-wrong-score.component.html',
   styleUrls: ['./event-wrong-score.component.scss'],
   imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, PipeModule, ConfirmWrongScoreComponent,
-    LogInfoRelatedEventComponent, AddChildMatchComponent, CommonModule, FormsModule, TooltipComponent, BlockUiDirective]
+    LogInfoRelatedEventComponent, AddChildMatchComponent, CommonModule, FormsModule, TooltipComponent, BlockUiDirective],
+  providers: [EventWrongScoreService, LogInfoService, SaveRequestService, ValidationService, WrongScoreService, RelatedEventService, EditRequestService]
 })
 export class EventWrongScoreComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;
@@ -86,19 +87,18 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   relatedEvents: ChildMatchModel[] = [];
   defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
   mainEvent = new WrongScoreModel();
+  private readonly element = inject(ElementRef);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly validationService = inject(ValidationService);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly wrongScoreService = inject(WrongScoreService);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly modalService = inject(ModalService);
+  private readonly relatedEventService = inject(RelatedEventService);
+  private readonly editRequestService = inject(EditRequestService);
+  private readonly eventWrongScoreService = inject(EventWrongScoreService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly validationService: ValidationService,
-    private readonly saveRequestService: SaveRequestService,
-    public readonly wrongScoreService: WrongScoreService,
-    private readonly logInfoService: LogInfoService,
-    private readonly modalService: ModalService,
-    private readonly relatedEventService: RelatedEventService,
-    private readonly editRequestService: EditRequestService,
-    private readonly eventWrongScoreService: EventWrongScoreService
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -259,7 +259,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   }
 
   private openConfirmWrongScore(): void {
-    const selectedScores = this.wrongScoreService.getSelectedWrongScores(this.wrongScoreModels);
+    const selectedScores = this.getSelectedWrongScores(this.wrongScoreModels);
     this.confirmWrongScoreModel.warningExcludedScores = [];
     this.confirmWrongScoreModel.warningRelatedEvents = [];
     if (!this.filter.isVoided) {
@@ -292,6 +292,10 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     this.confirmWrongScoreModel = _.clone(this.confirmWrongScoreModel);
   }
 
+  public getSelectedWrongScores(wrongScoreModels: WrongScoreModel[]): WrongScoreModel[] {
+    return wrongScoreModels.filter(x => x.isChecked || x.isMainMatch);
+  }
+
   /* istanbul ignore next */
   public openPopupTransIds(requestId: number, transIds: string): void {
     StaticService.openPopupTransIds(requestId, transIds, this.modalService);
@@ -315,7 +319,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     args.others = this.others;
     args.issueTypes = this.issueTypes;
     args.primitiveProps = this.primitiveProps;
-    args.wrongScoreModels = this.wrongScoreService.getSelectedWrongScores(this.wrongScoreModels);
+    args.wrongScoreModels = this.getSelectedWrongScores(this.wrongScoreModels);
     args.wrongScoreInfoComponents = this.wrongScoreService.getSelectedWrongScoreComponents(this.wrongScoreInfoComponents);
     args.leagueEventWrongScoreComponent = this.eventLeagueComponent;
     args.filterWrongScoreComponent = this.filterWrongScoreComponent;
@@ -335,7 +339,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     args.isEdit = this.isEdit;
     args.filter = this.filter;
     args.primitiveProps = this.primitiveProps;
-    args.wrongScoreModels = this.wrongScoreService.getSelectedWrongScores(this.wrongScoreModels);
+    args.wrongScoreModels = this.getSelectedWrongScores(this.wrongScoreModels);
     args.wrongScoreInfoComponents = this.wrongScoreService.getSelectedWrongScoreComponents(this.wrongScoreInfoComponents);
     args.leagueEventWrongScoreComponent = this.eventLeagueComponent;
     args.filterWrongScoreComponent = this.filterWrongScoreComponent;

@@ -7,11 +7,8 @@ import { LABELS } from '../../../../../utility/constants/labels';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
-  public constructor() { }
 
   public validateCommonData(eventLeagueComponent: EventLeagueComponent, kickOffTimeComponent: DateFullTimeNewComponent): boolean {
     if (!eventLeagueComponent.isMatchIdValid()) {

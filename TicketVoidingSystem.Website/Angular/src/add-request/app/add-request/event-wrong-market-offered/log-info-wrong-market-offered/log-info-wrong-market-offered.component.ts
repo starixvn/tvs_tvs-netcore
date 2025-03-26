@@ -14,11 +14,11 @@ import { LogInfoItem, LogInfoWrongMarketOffered } from '../models/log-info-wrong
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 
 @Component({
-    selector: 'log-info-wrong-market-offered',
-    templateUrl: './log-info-wrong-market-offered.component.html',
-    styleUrls: ['./log-info-wrong-market-offered.component.scss'],
-    standalone: true,
-    imports: [AffectedTicketComponent, LogInfoTicketCountComponent, LogInfoMessageComponent, BlockUiModule]
+  selector: 'log-info-wrong-market-offered',
+  templateUrl: './log-info-wrong-market-offered.component.html',
+  styleUrls: ['./log-info-wrong-market-offered.component.scss'],
+  standalone: true,
+  imports: [AffectedTicketComponent, LogInfoTicketCountComponent, LogInfoMessageComponent, BlockUiModule]
 })
 
 export class LogInfoWrongMarketOfferedComponent {

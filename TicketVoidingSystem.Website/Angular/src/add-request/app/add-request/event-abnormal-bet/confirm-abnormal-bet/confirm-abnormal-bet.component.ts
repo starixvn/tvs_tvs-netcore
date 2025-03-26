@@ -26,8 +26,6 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
   isCanNotSelectedRemoveTicketCC4K = false;
   isConfirmCalculator = true;
 
-  constructor() { }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes['model'] && this.model.isOpenDialog) {
       this.updateData();

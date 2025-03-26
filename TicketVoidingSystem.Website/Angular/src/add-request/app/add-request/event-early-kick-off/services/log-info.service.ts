@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { PagingConstant } from '../../../../../utility/components/paging/paging/paging.model';
 import { TemplateService } from '../../../../../utility/components/template-message/template-message/services/template.service';
 import { CommonService } from '../../../../../utility/services/common.service';
@@ -12,16 +12,12 @@ import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { EventEarlyKickOffService } from './event-eko.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class LogInfoService {
-  constructor(
-    private readonly httpService: HttpService,
-    private readonly commonService: CommonService,
-    private readonly eventEarlyKickOffService: EventEarlyKickOffService,
-    private readonly templateService: TemplateService) {
-  }
+  private readonly httpService = inject(HttpService);
+  private readonly commonService = inject(CommonService);
+  private readonly eventEarlyKickOffService = inject(EventEarlyKickOffService);
+  private readonly templateService = inject(TemplateService);
 
   public async getTickets(query: GetTicketsQuery, logInfo: LogInfoEarlyKickOff, isEdit: boolean, requestId: number, filter: FilterModel): Promise<void> {
     this.resetLogInfoOfEvent([logInfo]);

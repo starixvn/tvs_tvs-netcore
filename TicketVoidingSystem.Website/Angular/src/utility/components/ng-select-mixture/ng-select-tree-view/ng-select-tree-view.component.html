@@ -1,32 +1,33 @@
 <div class="ng-select-tree-view">
-  <div *ngFor="let item of items">
-    <div *ngIf="!isHaveCheckBox(item)"
-      class="ng-select-tree-view-item"
-      [ngClass]="{'item-selected': item.checked, 'cursor-not-allowed': isDisabled}"
-      [style.padding-left]="paddingLeft+'px'"
-      (click)="!isDisabled && handleClickSingleItem(item)">
+  @for (item of items; track item) {
+  <div>
+    @if (!isHaveCheckBox(item)) {
+    <div class="ng-select-tree-view-item" [ngClass]="{'item-selected': item.checked, 'cursor-not-allowed': isDisabled}"
+      [style.padding-left]="paddingLeft+'px'" (click)="!isDisabled && handleClickSingleItem(item)">
       <label [ngClass]="{'cursor-not-allowed': isDisabled}">{{ item.name }}</label>
     </div>
-    <div *ngIf="isHaveCheckBox(item)"
-      class="ng-select-tree-view-item"
-      [ngClass]="{'item-selected': item.checked, 'cursor-not-allowed': isDisabled}"
+    }
+    @if (isHaveCheckBox(item)) {
+    <div class="ng-select-tree-view-item" [ngClass]="{'item-selected': item.checked, 'cursor-not-allowed': isDisabled}"
       [style.padding-left]="paddingLeft+'px'">
-      <i *ngIf="item.items.length > 0" class="fa" (click)="item.expanded = !item.expanded"
+      @if (item.items.length > 0) {
+      <i class="fa" (click)="item.expanded = !item.expanded"
         [ngClass]="{'fa-angle-up': item.expanded, 'fa-angle-down': !item.expanded}" aria-hidden="true"></i>
-
+      }
       <label [ngClass]="{'cursor-not-allowed': isDisabled}">
-        <input type="checkbox" [(ngModel)]="item.checked" [ngClass]="{'cursor-not-allowed': isDisabled}"
-          class="mr-1" (ngModelChange)="item.checkChilds();handleClickChildItem()" [disabled]="!item.enabled || isDisabled" />
+        <input type="checkbox" [(ngModel)]="item.checked" [ngClass]="{'cursor-not-allowed': isDisabled}" class="me-1"
+          (ngModelChange)="item.checkChilds();handleClickChildItem()" [disabled]="!item.enabled || isDisabled" />
         {{ item.name }}
       </label>
     </div>
-    <div *ngIf="item.expanded" (click)="$event.stopPropagation()">
-      <ng-select-tree-view
-        [isDisabled]="isDisabled"
-        (emitchildEvent)="handleClickChildItem()"
-        (change)="checkFromChildEvent(item)"
-        [items]="item.items" [paddingLeft]="paddingLeft+25">
+    }
+    @if (item.expanded) {
+    <div (click)="$event.stopPropagation()">
+      <ng-select-tree-view [isDisabled]="isDisabled" (emitchildEvent)="handleClickChildItem()" [items]="item.items"
+        (emitchildEvent)="checkFromChildEvent(item)" [paddingLeft]="paddingLeft+25">
       </ng-select-tree-view>
     </div>
+    }
   </div>
+  }
 </div>

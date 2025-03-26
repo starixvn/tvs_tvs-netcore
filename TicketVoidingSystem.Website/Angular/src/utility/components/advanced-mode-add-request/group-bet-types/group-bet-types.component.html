@@ -1,4 +1,5 @@
-<div class="group-bettypes area-filter" *ngIf="model.groupBetTypes.length > 0">
+@if (model.groupBetTypes.length > 0) {
+<div class="group-bettypes area-filter">
   <table>
     <thead>
       <tr>
@@ -6,8 +7,7 @@
           <div>
             <label>
               <input type="checkbox" class="group-bettypes-all-checkbox me-1" [(ngModel)]="model.isChecked"
-              [disabled]="model.isDisable"
-              (ngModelChange)="model.changeCheckedModelToGroup(); changeAllBetTypes()" />
+                [disabled]="model.isDisable" (ngModelChange)="model.changeCheckedModelToGroup(); changeAllBetTypes()" />
               All Bet types
             </label>
           </div>
@@ -15,28 +15,37 @@
       </tr>
     </thead>
     <tbody class="scroller-firefox" [ngClass]="{'collapse': collapse && scroll}">
-      <tr *ngFor="let group of model.groupBetTypes; last as isLast;" [ngClass]="{'last-group' : isLast}">
-        <td *ngIf="group.isShow && group.betTypes.length > 0">
+      @for (group of model.groupBetTypes; track group; let isLast = $last) {
+      <tr [ngClass]="{'last-group' : isLast}">
+        @if (group.isShow && group.betTypes.length > 0) {
+        <td>
           <label>
             <input class="me-1" type="checkbox" [(ngModel)]="group.isChecked"
-            (ngModelChange)="group.changeCheckedGroupToBetType(); model.changeCheckedGroupToModel();changeGroupBetTypes(group)"
-              [disabled]="group.isDisable"/>
+              (ngModelChange)="group.changeCheckedGroupToBetType(); model.changeCheckedGroupToModel();changeGroupBetTypes(group)"
+              [disabled]="group.isDisable" />
             {{group.groupName}}
           </label>
         </td>
-        <td *ngIf="group.isShow">
+        }
+        @if (group.isShow) {
+        <td>
           <div class="display-flex">
-            <div class="bet-type" *ngFor="let betType of group.betTypes">
+            @for (betType of group.betTypes; track betType) {
+            <div class="bet-type">
               <label>
                 <input class="me-1" type="checkbox" [(ngModel)]="betType.isChecked" [disabled]="betType.isDisable"
-                (ngModelChange)="group.changeCheckedBetTypeToGroup(); model.changeCheckedGroupToModel(); changeBetTypeItem(betType)" />
+                  (ngModelChange)="group.changeCheckedBetTypeToGroup(); model.changeCheckedGroupToModel(); changeBetTypeItem(betType)" />
                 {{betType.name}}
               </label>
             </div>
+            }
           </div>
         </td>
+        }
       </tr>
+      }
     </tbody>
   </table>
 </div>
+}
 <tooltip [tooltip]="tooltip"></tooltip>

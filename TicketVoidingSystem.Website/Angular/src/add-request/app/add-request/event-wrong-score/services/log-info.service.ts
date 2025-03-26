@@ -1,26 +1,23 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import moment from 'moment-timezone';
 import { DateTimeFormat, TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { FilterModel } from '../../filter/filter.model';
 import { GetLogInfoQuery } from '../../models/add-request.query';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { GetLogInfoModel } from '../../models/get-log-info.model';
 import { PrimitiveProperty, WrongScoreGetLogInfoQuery } from '../event-wrong-score.model';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { ValidationService } from './validation.service';
 import { EventWrongScoreService } from './event-wrong-score.service';
+import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class LogInfoService {
-  constructor(
-    private readonly eventWrongScoreService: EventWrongScoreService,
-    private readonly commonService: CommonService,
-    private readonly validationService: ValidationService) { }
+  private readonly commonService = inject(CommonService);
+  private readonly validationService = inject(ValidationService);
+  private readonly eventWrongScoreService = inject(EventWrongScoreService);
 
   async getLogInfo(isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty,
     wrongScoreModels: WrongScoreModel[], mainMatchId: number, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): Promise<void> {

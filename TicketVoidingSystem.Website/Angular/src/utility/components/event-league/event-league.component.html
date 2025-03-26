@@ -1,7 +1,7 @@
 <div class="event-leage">
   <div class="d-flex flex-wrap">
     <div class="event col-12">
-      <label class="col-form-label">Event</label>
+      <label class="col-form-label-sm">Event</label>
       <div class="d-flex">
         <ng-select class="custom-sm match-id col-md-7 col-sm-7" [disabled]="isEdit" [items]="matches" bindLabel="name"
           (blur)="blurMatchSelect()" bindValue="matchId" [(ngModel)]="selectedMatch.matchId" [clearable]="false"
@@ -11,22 +11,26 @@
             {{item.name}}
           </ng-template>
         </ng-select>
-        <div *ngIf="isShowWarningSubType" class="warning-sub-type">
+        @if (isShowWarningSubType) {
+        <div class="warning-sub-type">
           <label><strong>This event does not match with Sub Type.</strong></label>
         </div>
+        }
       </div>
     </div>
   </div>
   <div class="d-flex flex-wrap">
-  <div class="league col-md-7 col-sm-7">
-    <label class="col-form-label">League</label>
-    <span type="text" class="form-control form-control-sm disabled">{{selectedMatch.leagueName}}</span>
+    <div class="league col-md-7 col-sm-7 me-4">
+      <label class="col-form-label-sm">League</label>
+      <span type="text" class="form-control form-control-sm disabled">{{selectedMatch.leagueName}}</span>
+    </div>
+    @if (isShowSportType) {
+    <div class="sport-name col-md-2 col-sm-2">
+      <label class="col-form-label-sm">Sport</label>
+      <span type="text" class="form-control form-control-sm disabled">{{selectedMatch.sportTypeName}}</span>
+    </div>
+    }
   </div>
-  <div *ngIf="isShowSportType" class="sport-name col-md-2 col-sm-2 pl-4">
-    <label class="col-form-label">Sport</label>
-    <span type="text" class="form-control form-control-sm disabled">{{selectedMatch.sportTypeName}}</span>
-  </div>
-</div>
 </div>
 
 <tooltip [tooltip]="tooltip"></tooltip>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
@@ -23,11 +23,12 @@ import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './serv
 import { ValidationService } from './services/validation.service';
 
 @Component({
-    selector: 'event-abnormal-bet',
-    templateUrl: './event-abnormal-bet.component.html',
-    styleUrls: ['./event-abnormal-bet.component.scss'],
-    standalone: true,
-    imports: [FormsModule, BetIdsComponent, ConfirmAbnormalBetComponent, BlockUiModule, CommonModule]
+  selector: 'event-abnormal-bet',
+  templateUrl: './event-abnormal-bet.component.html',
+  styleUrls: ['./event-abnormal-bet.component.scss'],
+  standalone: true,
+  imports: [FormsModule, BetIdsComponent, ConfirmAbnormalBetComponent, BlockUiModule, CommonModule],
+  providers: [SaveRequestService, ValidationService]
 })
 export class EventAbnormalBetComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -48,13 +49,11 @@ export class EventAbnormalBetComponent implements OnInit {
   isCancelAfterFocusOutBetIdsEvent = false;
   abnormalFilterBy = new AbnormalFilterBy();
   exportTickets: AbnormalBetTicketViewModel[];
-
-  constructor(private readonly popupService: PopupService,
-    private readonly validationService: ValidationService,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly addRequestApiService: AddRequestApiService
-  ) { }
+  private readonly popupService = inject(PopupService);
+  private readonly validationService = inject(ValidationService);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   async ngOnInit(): Promise<void> {
     if (!this.isEdit) {

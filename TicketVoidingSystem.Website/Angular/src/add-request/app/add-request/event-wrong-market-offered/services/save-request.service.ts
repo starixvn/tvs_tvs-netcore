@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -11,18 +11,13 @@ import { EventWrongMarketOfferedService } from './event-wrong-market-offfered.se
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class SaveRequestService {
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly logInfoWrongMarketOfferedService: LogInfoService,
-    private readonly popupService: PopupService,
-    private readonly addRequestService: AddRequestService,
-    private readonly eventWrongMarketOfferedService: EventWrongMarketOfferedService
-  ) { }
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly validationService = inject(ValidationService);
+  private readonly addRequestService = inject(AddRequestService);
+  private readonly popupService = inject(PopupService);
+  private readonly eventWrongMarketOfferedService = inject(EventWrongMarketOfferedService);
 
   async saveRequest(argWrongMarketOffered: SaveRequestArg): Promise<void> {
     const isDataValid = argWrongMarketOffered.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argWrongMarketOffered);
@@ -37,7 +32,7 @@ export class SaveRequestService {
 
   async recheckLogInfoBeforeSaveRequest(argWrongMarketOffered: SaveRequestArg): Promise<boolean> {
     argWrongMarketOffered.addRequestStore.changeSavingRequestStatus(true);
-    this.logInfoWrongMarketOfferedService.resetLogInfoOfEvent(argWrongMarketOffered.logInfoEvent);
+    this.logInfoService.resetLogInfoOfEvent(argWrongMarketOffered.logInfoEvent);
 
     if (!this.validationService.validateCommonData(argWrongMarketOffered.eventLeagueComponent, argWrongMarketOffered.filterTimeComponent, argWrongMarketOffered.advancedModeComponent)) {
       return false;
@@ -45,7 +40,7 @@ export class SaveRequestService {
 
     argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(true);
     argWrongMarketOffered.primitiveProps.isShowValidation = false;
-    await this.logInfoWrongMarketOfferedService.getLogInfo(argWrongMarketOffered.logInfoEvent, argWrongMarketOffered.isEdit, argWrongMarketOffered.requestId, argWrongMarketOffered.filter, argWrongMarketOffered.primitiveProps);
+    await this.logInfoService.getLogInfo(argWrongMarketOffered.logInfoEvent, argWrongMarketOffered.isEdit, argWrongMarketOffered.requestId, argWrongMarketOffered.filter, argWrongMarketOffered.primitiveProps);
     argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(false);
     argWrongMarketOffered.primitiveProps.isShowValidation = true;
 

@@ -4,9 +4,7 @@ import { EventLeagueComponent } from '../../../../../utility/components/event-le
 import { FilterTimeComponent } from '../filter-time/filter-time.component';
 import { LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
   validateCommonData(eventLeague: EventLeagueComponent, filterTimeComponent: FilterTimeComponent, advancedMode?: AdvancedModeAddRequestComponent): boolean {
     if (!eventLeague.isMatchIdValid()) {

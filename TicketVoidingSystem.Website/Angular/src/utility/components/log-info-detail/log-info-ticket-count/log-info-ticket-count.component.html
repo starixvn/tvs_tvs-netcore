@@ -1,19 +1,21 @@
 @if (model) {
-  <div>
-    Void time: <strong>{{displayFullDateTimeFormat(model.voidFromTime)}} - {{displayFullDateTimeFormat(model.voidToTime)}}</strong><br />
-    Affected Single Count: <strong>{{model.singleCount}}</strong>
-    @if (isShowCountInfo(model.cashOutCount, model.settleCount, model.instantlySettleCount))
-    {
-      <span class="text-red" [innerHTML]="countInfoContent(model.cashOutCount, model.settleCount, model.instantlySettleCount) | sanitizeHtml"></span>,
-    }
-    Parlay Count: <strong>{{model.mainParlayCount}} </strong>
-    @if (isShowDetailsButton)
-    {
-      <span class="detail-tickets" (click)="showAffectedTicketsDetails()">Details</span><br />
-    }
-    @if (isShowCancelCashOut && model.cancelCashOutCount > 0)
-    {
-      <span>Cancel Cash Out: <strong>{{model.cancelCashOutCount}}</strong></span>
-    }
-  </div>
+<div>
+  Void time: <strong>{{displayFullDateTimeFormat(model.voidFromTime)}} -
+    {{displayFullDateTimeFormat(model.voidToTime)}}</strong><br />
+  Affected Single Count: <strong>{{model.singleCount}}</strong>
+  @if (isShowCountInfo(model.cashOutCount, model.settleCount, model.instantlySettleCount))
+  {
+  <span class="text-red"
+    [innerHTML]="countInfoContent(model.cashOutCount, model.settleCount, model.instantlySettleCount) | sanitizeHtml"></span>,
+  }
+  Parlay Count: <strong>{{model.mainParlayCount}} </strong>
+  @if (isShowDetailsButton)
+  {
+  <span class="detail-tickets" (click)="showAffectedTicketsDetails()">Details</span><br />
+  }
+  @if (isShowCancelCashOut && model.cancelCashOutCount > 0)
+  {
+  <span>Cancel Cash Out: <strong>{{model.cancelCashOutCount}}</strong></span>
+  }
+</div>
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatchIdConstant } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
@@ -8,14 +8,9 @@ import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abn
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
 import { SaveRequestArg } from './save-request.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SaveRequestService {
-
-  constructor(
-    private readonly addRequestService: AddRequestService,
-  ) { }
+  private readonly addRequestService = inject(AddRequestService);
 
   async executeSave(args: SaveRequestArg): Promise<void> {
     const query = this.initAddRequestQuery(args);
