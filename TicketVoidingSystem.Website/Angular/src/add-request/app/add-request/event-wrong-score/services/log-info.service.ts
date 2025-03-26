@@ -33,22 +33,6 @@ export class LogInfoService {
       : this.assignResultsGetLogInfoToListModel(viewModel.getLogInfoModels, wrongScoreModels);
   }
 
-  async refreshLogInfoForRelatedEvent(isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty,
-    logInfoRelatedEvent: LogInfoRelatedEvent, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): Promise<void> {
-    const wrongScoreModel = this.mapRelatedEventToWrongScoreModel(logInfoRelatedEvent);
-    const getLogInfoQuery = this.initGetLogInfoQueries(isEdit, requestId, filter, [wrongScoreModel], null, defaultFilterTimeWithAllowance);
-    const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
-    const evenLogInfo = viewModel.getLogInfoModels[0];
-    primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
-    if (this.validationService.isHasAllowanceTime(logInfoRelatedEvent) && evenLogInfo.logInfoDetail) {
-      logInfoRelatedEvent.voidTimeArea.fromDateTime = moment(evenLogInfo.logInfoDetail.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-      logInfoRelatedEvent.voidTimeArea.toDateTime = moment(evenLogInfo.logInfoDetail.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    }
-
-    logInfoRelatedEvent.logInfoDetail = evenLogInfo.logInfoDetail;  
-    logInfoRelatedEvent.messageValidationLogInfo = StaticService.getValidationMessageList(viewModel.getLogInfoModels[0], logInfoRelatedEvent.voidTimeArea.fromDateTime, logInfoRelatedEvent.voidTimeArea.saTime);
-  }
-
   mapRelatedEventToWrongScoreModel(logInfoRelatedEvent: LogInfoRelatedEvent) {
     const wrongScoreModel = new WrongScoreModel();
     wrongScoreModel.matchId = logInfoRelatedEvent.matchId;
@@ -56,9 +40,9 @@ export class LogInfoService {
     wrongScoreModel.filterFromTransTime = logInfoRelatedEvent.voidTimeArea.fromDateTime;
     wrongScoreModel.filterToTransTime = logInfoRelatedEvent.voidTimeArea.toDateTime;
     wrongScoreModel.subIssueTypeId = logInfoRelatedEvent.subIssueTypeId;
-    wrongScoreModel.aaTime = Number(logInfoRelatedEvent.voidTimeArea.aaTime);
-    wrongScoreModel.paTime = Number(logInfoRelatedEvent.voidTimeArea.paTime);
-    wrongScoreModel.saTime = Number(logInfoRelatedEvent.voidTimeArea.saTime);
+    wrongScoreModel.aaTime = logInfoRelatedEvent.voidTimeArea.aaTime;
+    wrongScoreModel.paTime = logInfoRelatedEvent.voidTimeArea.paTime;
+    wrongScoreModel.saTime = logInfoRelatedEvent.voidTimeArea.saTime;
 
     return wrongScoreModel;
   }
@@ -134,16 +118,9 @@ export class LogInfoService {
       x.voidFromTime = null;
       x.voidToTime = null;
     });
-    events?.forEach( x => {
+    events?.forEach(x => {
       x.logInfoDetail = null;
       x.messageValidationLogInfo = null;
     })
-  }
-
-  public resetLogInfoOfEvent(events: LogInfoRelatedEvent[]): void {
-    events.forEach(event => {
-      event.logInfoDetail = null;
-      event.messageValidationLogInfo = null;
-    });
   }
 }

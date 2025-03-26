@@ -13,7 +13,7 @@ import { RedCardModel } from '../../models/event-red-card.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../models/sub-type-link-match.model';
 import { ValidationService } from './validation.service';
-import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property,mdel';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
 @Injectable({
   providedIn: 'root'

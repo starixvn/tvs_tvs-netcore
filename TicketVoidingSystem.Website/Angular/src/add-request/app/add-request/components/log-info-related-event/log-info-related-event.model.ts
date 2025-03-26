@@ -19,3 +19,14 @@ export class LogInfoRelatedEvent {
   eventDate?: Date;
   sportType: number;
 }
+
+export class BaseLogInfoQuery {
+  filterFromTransTime: string;
+  filterToTransTime: string;
+  matchId: number;
+  filterBy: number;
+  subIssueTypeId: number;
+  aaTime: number;
+  paTime: number;
+  saTime: number;
+}

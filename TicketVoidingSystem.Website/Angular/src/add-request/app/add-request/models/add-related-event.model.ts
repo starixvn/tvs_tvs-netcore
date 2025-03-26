@@ -4,7 +4,7 @@ import { FilterTimeWithAllowance } from "../event-red-card/filter-time-with-allo
 import { LogInfoRelatedEvent } from "../components/log-info-related-event/log-info-related-event.model";
 import { FilterModel } from "../filter/filter.model";
 import { ChildMatchModel } from "./related-event.model";
-import { PrimitiveProperty } from "../components/log-info-related-event/primitive-property,mdel";
+import { PrimitiveProperty } from "../components/log-info-related-event/primitive-property.model";
 
 export class AddRelatedEventArg {
   tooltip: Tooltip;

@@ -10,7 +10,7 @@ import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch } from '../../models/sub-type-link-match.model';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property,mdel';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
 @Injectable({
   providedIn: 'root'

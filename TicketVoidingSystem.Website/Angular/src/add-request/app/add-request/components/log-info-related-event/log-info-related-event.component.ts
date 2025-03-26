@@ -10,13 +10,11 @@ import { FilterModel } from '../../filter/filter.model';
 import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';
 import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoService } from '../../event-red-card/services/log-info.service';
 import { LogInfoRelatedEvent } from './log-info-related-event.model';
-import { PrimitiveProperty } from './primitive-property,mdel';
+import { PrimitiveProperty } from './primitive-property.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { LogInfoService as WrongScoreLogInfoService } from '../../event-wrong-score/services/log-info.service';
-import { PrimitiveProperty as WrongScorePrimitiveProperty } from '../../event-wrong-score/event-wrong-score.model';
+import { LogInfoRelatedEventService } from './log-info-related-event.service';
 
 @Component({
   selector: 'log-info-related-event',
@@ -47,41 +45,28 @@ export class LogInfoRelatedEventComponent {
 
   constructor(
     private readonly modalService: ModalService,
-    private readonly logInfoService: LogInfoService,
     private readonly element: ElementRef,
-    private readonly wrongScoreLogInfoService: WrongScoreLogInfoService,
+    private readonly logInfoRelatedEventService: LogInfoRelatedEventService
   ) {
     this.tooltip.element = this.element;
   }
 
-  showTooltipSubType(){
+  showTooltipSubType() {
     this.tooltip.display('btn-select-sub-type', LABELS.REQUIRED_SUB_TYPE);
   }
 
   async refreshLogInfo(): Promise<void> {
     this.hideValidationDetail();
     this.clearDataValidation();
-    if(!this.logInfo.subIssueTypeId){
+    if (!this.logInfo.subIssueTypeId) {
       this.showTooltipSubType();
       return;
     }
+
     if (this.filterTimeWithAllowanceComponent.isValid()) {
-      
       this.isBlock = true;
-      if (StaticService.isWrongScore(this.filter.issueTypeId.toString())) {
-        const wrongScorePrimitiveProperty = {
-          filterBy: this.filterBy,
-          transInfoAddRequestModel: this.transInfoAddRequestModel
-        } as WrongScorePrimitiveProperty;
-        await this.wrongScoreLogInfoService.refreshLogInfoForRelatedEvent(this.isEdit, this.requestId, this.filter, wrongScorePrimitiveProperty, this.logInfo, this.defaultFilterTimeWithAllowance);
-      }
-      else {
-        const primitiveProperty = {
-          filterBy: this.filterBy,
-          transInfoAddRequestModel: this.transInfoAddRequestModel
-        } as PrimitiveProperty;
-        await this.logInfoService.getLogInfo([this.logInfo], primitiveProperty , this.isEdit, this.requestId, this.filter, this.defaultFilterTimeWithAllowance);
-      } 
+      const primitiveProperty = { filterBy: this.filterBy, transInfoAddRequestModel: this.transInfoAddRequestModel } as PrimitiveProperty;
+      await this.logInfoRelatedEventService.refreshLogInfoForRelatedEvent(this.isEdit, this.requestId, this.filter, primitiveProperty, this.logInfo, this.defaultFilterTimeWithAllowance);
       this.filterTimeWithAllowanceComponent.updateData();
       this.showValidationDetail();
     }
@@ -100,10 +85,6 @@ export class LogInfoRelatedEventComponent {
 
   showValidationDetail() {
     this.isShowValidation = true;
-  }
-
-  isLogInfoHasError(): boolean {
-    return this.logInfo.messageValidationLogInfo.some(x => x.isError);
   }
 
   updateDataAfterClosed(subIssueTypeId: number): void {

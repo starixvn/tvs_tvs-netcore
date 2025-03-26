@@ -15,9 +15,6 @@ import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log
   providedIn: 'root'
 })
 export class ValidationService {
-  constructor() {
-  }
-
   isHasAllowanceTime(event: LogInfoRelatedEvent): boolean {
     if (event.voidTimeArea.aaTime || event.voidTimeArea.paTime || event.voidTimeArea.saTime ||
       (event.voidTimeArea.aaTime === 0 && event.voidTimeArea.paTime === 0 && event.voidTimeArea.saTime === 0)) {

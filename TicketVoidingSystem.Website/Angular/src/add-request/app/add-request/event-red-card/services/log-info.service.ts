@@ -10,7 +10,7 @@ import { GetLogInfoQuery } from '../../models/add-request.query';
 import { RedCardGetLogInfoQuery } from '../../models/event-red-card.model';
 import { GetLogInfoModel } from '../../models/get-log-info.model';
 import { ValidationService } from './validation.service';
-import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property,mdel';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,7 @@ export class LogInfoService {
   private initGetLogInfoRedCardQuery(filterBy: number, isEdit: boolean, requestId: number,
     filter: FilterModel, events: LogInfoRelatedEvent[], defaultFilterTimeWithAllowance: FilterTimeWithAllowance): GetLogInfoQuery {
     const getLogInfoQuery = this.getLogInfoModel(filterBy, events, defaultFilterTimeWithAllowance);
+    
     const query = new GetLogInfoQuery();
     query.requestId = isEdit ? requestId : null;
     query.actionId = Number(filter.action);

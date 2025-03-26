@@ -30,7 +30,7 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property,mdel';
+import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 
 @Component({
   selector: 'event-red-card',

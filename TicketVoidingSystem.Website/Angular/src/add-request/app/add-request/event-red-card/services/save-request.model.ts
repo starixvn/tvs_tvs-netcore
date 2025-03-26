@@ -9,7 +9,7 @@ import { FilterTimeAreaComponent } from '../filter-time-area/filter-time-area.co
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property,mdel';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
 export class SaveRequestArg {
   requestId: number;
