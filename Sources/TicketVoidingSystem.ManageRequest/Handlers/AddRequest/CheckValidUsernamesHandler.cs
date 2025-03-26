@@ -61,7 +61,7 @@ public class CheckValidUsernamesHandler(
         };
 
         watch.Stop();
-        var log = $"New Abnormal account - Execute: {watch.ElapsedMilliseconds}ms - Accounts:{calcVoidResult.Accounts.Count()}";
+        var log = $"New Abnormal account - Execute: {watch.ElapsedMilliseconds}ms - Accounts:{calcVoidResult.Accounts?.Count()}";
         await LogService.InfoAsync(log);
 
         ClearVoidTicketsInAccounts(calcVoidResult.Accounts);
