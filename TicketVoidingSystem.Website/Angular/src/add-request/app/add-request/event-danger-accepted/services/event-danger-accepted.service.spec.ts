@@ -1,388 +1,336 @@
-import * as _ from 'lodash';
-import { MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
-import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
-import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { MatchModel } from '../../../../../utility/models/match.model';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { AddRequestStore } from '../../add-request.store';
-import { LogInfoEarlyKickOff } from '../../event-early-kick-off/models/log-info-eko.model';
-import { TableTicketsModel } from '../../event-early-kick-off/tickets-list/table-tickets.model';
-import { PrimitiveProperty } from '../../event-red-card/event-red-card.model';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { FilterModel } from '../../filter/filter.model';
-import { GroupButton } from '../../filter/sub-issue-type-dialog/sub-issue-type-json.model';
-import { RedCardModel } from '../../models/event-red-card.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
-import { ChildMatchModel } from '../../models/related-event.model';
-import { SubIssueTypeLinkMatch } from '../../models/sub-type-link-match.model';
+import { TestBed } from '@angular/core/testing';
 import { EventDangerAcceptedService } from './event-danger-accepted.service';
 import { ValidationService } from './validation.service';
-
-class Helper {
-  static readonly fakeMatchId = 12345;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeAllowanceTime: AllowanceTime = {
-    aaTime: 1,
-    paTime: 1,
-    saTime: 1,
-  };
-  static readonly fakeRedCardModel: RedCardModel = {
-    matchId: Helper.fakeMatchId,
-    filterBy: TVSRequestFilterBy.CHECK_TIME,
-    filterFromTransTime: null,
-    filterToTransTime: null,
-    aaTime: 1,
-    paTime: 2,
-    saTime: 1,
-    isMainMatch: true,
-    matchEvent: '',
-    matchType: 1,
-    subIssueTypeId: 5,
-    subIssueTypeName: '',
-    logInfoDetail: null,
-    leagueName: '',
-    sportType: 0
-  } as RedCardModel;
-  static readonly fakeFilterTimeWithAllowance: FilterTimeWithAllowance = {
-    fromDateTime: Helper.fakeFromDateTime,
-    toDateTime: Helper.fakeToDateTime,
-    aaTime: 1,
-    paTime: 12,
-    saTime: 12,
-  };
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '1',
-    subIssueTypeId: '1',
-    action: '1',
-    isTest: true,
-    isVoided: false,
-    isChangeSubTypeManual: true,
-    isAbnormal: false
-  } as FilterModel;
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: Helper.fakeMatchId,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    scoreOfMatch: '',
-    scoreNormalTicket: '',
-    instantlySettleCount: 2,
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeValidationMessage: ValidationMessage[] = [
-    {
-      isError: false,
-      reason: '',
-    }
-  ];
-  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
-    matchId: Helper.fakeMatchId,
-    isMainMatch: true,
-    eventName: '',
-    leagueName: '',
-    subIssueTypeId: SubIssueTypeConstant.MAIN_CORNER,
-    voidTimeArea: Helper.fakeFilterTimeWithAllowance,
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: Helper.fakeValidationMessage,
-    sportType: 0
-  } as LogInfoRelatedEvent;
-  static readonly fakeChildMatchModel: ChildMatchModel = {
-    matchId: Helper.fakeMatchId,
-    matchCode: '222',
-    matchEvent: 'TestC - vs - Real Madrid (V)',
-    isChecked: true,
-    matchType: MatchType.LINK,
-    leagueName: '',
-    name: '',
-    homeId: 0,
-    homeName: '',
-    homeNameNewSimplified: '',
-    homeNameSimplified: '',
-    homeNameTraditional: '',
-    awayId: 0,
-    awayName: '',
-    awayNameNewSimplified: '',
-    awayNameSimplified: '',
-    awayNameTraditional: '',
-    eventDate: undefined,
-    dateTime: undefined,
-    leagueId: 0,
-    leagueGroupId: 0,
-    leagueNameNewSimplified: '',
-    leagueNameSimplified: '',
-    leagueNameTraditional: '',
-    matchEventSimplified: '',
-    matchEventNewSimplified: '',
-    kickOffTime: '',
-    startTime: undefined,
-    endTime: undefined,
-    sportType: 0,
-    sportTypeName: '',
-    sportTypeNameNewSimplified: '',
-    sportTypeNameSimplified: '',
-    sportTypeNameTraditional: ''
-  };
-  static readonly fakeSubIssueTypeLinkMatch: SubIssueTypeLinkMatch = {
-    matchId: Helper.fakeMatchId,
-    subIssueTypeId: 26
-  };
-  static readonly fakeGroupButton: GroupButton = {
-    name: 'Home',
-    iconClass: '',
-    buttonSelectHomeAway: [],
-    buttonSelectAll: [],
-    aa: '4',
-    pa: '4',
-    sa: '4',
-    description: [],
-    groupId: 1,
-    note: '',
-    noteEditable: false
-  };
-  static readonly fakeMatchModel:MatchModel = {
-    matchId: 0,
-    homeId: 0,
-    homeName: '',
-    homeNameNewSimplified: '',
-    homeNameSimplified: '',
-    homeNameTraditional: '',
-    awayId: 0,
-    awayName: '',
-    awayNameNewSimplified: '',
-    awayNameSimplified: '',
-    awayNameTraditional: '',
-    matchCode: '',
-    eventDate: undefined,
-    dateTime: undefined,
-    leagueId: 0,
-    leagueGroupId: 0,
-    leagueName: '',
-    leagueNameNewSimplified: '',
-    leagueNameSimplified: '',
-    leagueNameTraditional: '',
-    matchEvent: '',
-    matchEventSimplified: '',
-    matchEventNewSimplified: '',
-    kickOffTime: '',
-    startTime: undefined,
-    endTime: undefined,
-    sportType: 0,
-    sportTypeName: '',
-    sportTypeNameNewSimplified: '',
-    sportTypeNameSimplified: '',
-    sportTypeNameTraditional: ''
-  }
-  static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
-    matchId: 0,
-    leagueName: '',
-    isMainMatch: false,
-    kickOffTime: '',
-    eventName: '',
-    tableTicketsModel: new TableTicketsModel,
-    matchModel: Helper.fakeMatchModel,
-    isCollapse: false,
-    pagingModel: undefined,
-    isInvalidTotalTickets: false,
-    isShowValidation: false,
-    isHasSettledTicket: false,
-    isHasInstantlySettledTicket: false,
-    sportType: 0
-  }
-}
+import { AddRequestApiService } from '../../add-request-api.service';
+import { AddRequestStore } from '../../add-request.store';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
+import { RedCardModel } from '../../models/event-red-card.model';
+import { ChildMatchModel } from '../../models/related-event.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { MatchType } from '../../../../../utility/constants/config';
+import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 
 describe('EventDangerAcceptedService', () => {
-  let eventDangerAcceptedService: EventDangerAcceptedService;
+  let service: EventDangerAcceptedService;
+  let addRequestApiService: AddRequestApiService;
+  let addRequestStore: AddRequestStore;
 
   beforeEach(() => {
-    eventDangerAcceptedService = new EventDangerAcceptedService(null, null);
+    TestBed.configureTestingModule({
+      providers: [
+        EventDangerAcceptedService,
+        {
+          provide: ValidationService,
+          useValue: {
+            isHasWarningRangeTime: jest.fn().mockReturnValue(false)
+          }
+        },
+        {
+          provide: AddRequestApiService,
+          useValue: {
+            getSubIssueTypeLinkMatch: jest.fn().mockResolvedValue([])
+          }
+        },
+        {
+          provide: AddRequestStore,
+          useValue: {
+            changeAllowanceTime: jest.fn()
+          }
+        }
+      ]
+    });
+
+    service = TestBed.inject(EventDangerAcceptedService);
+    addRequestApiService = TestBed.inject(AddRequestApiService);
+    addRequestStore = TestBed.inject(AddRequestStore);
   });
 
-  it('#assignModelsToEvents should update correct model', async () => {
-    // Arrange
-    const allEvents = [{logInfoDetail: {}} as LogInfoRelatedEvent];
-    const primitiveProps = new PrimitiveProperty();
-    const addRequestStore = new AddRequestStore();
-    addRequestStore.changeAllowanceTime = jest.fn();
-    let validationService = new ValidationService();
-    validationService.isHasWarningRangeTime = jest.fn().mockReturnValue(true);
-    eventDangerAcceptedService = new EventDangerAcceptedService(null, validationService);
-    Helper.fakeRedCardModel.logInfoDetail = new LogInfoDetail();
+  describe('assignModelsToEvents', () => {
+    it('should assign models to events and update store', () => {
+      const allEvents: LogInfoRelatedEvent[] = [];
+      const inputModels: RedCardModel[] = [
+        {
+          matchId: 1,
+          matchCode: 'TEST1',
+          matchEvent: 'Test Event',
+          leagueName: 'Test League',
+          filterBy: 1,
+          isMainMatch: true,
+          filterFromTransTime: '2024-01-01 10:00:00',
+          filterToTransTime: '2024-01-01 11:00:00',
+          name: 'Test Event',
+          subIssueTypeId: 1,
+          subIssueTypeName: 'Test Sub Issue Type',
+          matchType: MatchType.LINK,
+          isCheckedVar: true,
+          logInfoDetail: {} as any,
+          voidFromTime: '2024-01-01 10:00:00',
+          voidToTime: '2024-01-01 11:00:00',
+          aaTime: 5,
+          paTime: 5,
+          saTime: 5,
+          serviceAcceptTime: '2024-01-01 10:00:00',
+          actualTime: '2024-01-01 10:00:00',
+          tvDetectionValue: 1,
+          minuteOffset: '1',
+          secondOffset: '30',
+          eventDate: new Date('2024-01-01'),
+          sportType: 1
+        }
+      ];
+      const primitiveProps = {} as PrimitiveProperty;
 
-    // Action
-    eventDangerAcceptedService.assignModelsToEvents(allEvents, [Helper.fakeRedCardModel], primitiveProps, addRequestStore);
+      service.assignModelsToEvents(allEvents, inputModels, primitiveProps, addRequestStore);
 
-    // Assert
-    expect(primitiveProps.filterBy).toBe(Helper.fakeRedCardModel.filterBy);
-    expect(addRequestStore.changeAllowanceTime).toHaveBeenCalledTimes(1);
+      expect(allEvents.length).toBe(1);
+      expect(allEvents[0].matchId).toBe(1);
+      expect(allEvents[0].matchCode).toBe('TEST1');
+      expect(allEvents[0].leagueName).toBe('Test League');
+      expect(allEvents[0].subIssueTypeId).toBe(1);
+      expect(allEvents[0].isCheckedVar).toBe(true);
+      expect(allEvents[0].isMainMatch).toBe(true);
+      expect(allEvents[0].eventName).toBe('Test Event');
+      expect(allEvents[0].logInfoDetail.isHasWarningRangeTime).toBe(false);
+      expect(allEvents[0].voidTimeArea).toEqual({
+        fromDateTime: '2024-01-01 10:00:00',
+        toDateTime: '2024-01-01 11:00:00',
+        aaTime: 5,
+        paTime: 5,
+        saTime: 5
+      });
+      expect(allEvents[0].tvDetectionModel).toEqual({
+        serviceAcceptTime: '2024-01-01 10:00:00',
+        actualTime: '2024-01-01 10:00:00',
+        tvDetectionValue: 1,
+        minuteOffset: '1',
+        secondOffset: '30'
+      });
+      expect(allEvents[0].eventDate).toEqual(new Date('2024-01-01'));
+      expect(allEvents[0].sportType).toBe(1);
+      expect(addRequestStore.changeAllowanceTime).toHaveBeenCalledWith({
+        aaTime: 5,
+        paTime: 5,
+        saTime: 5
+      });
+      expect(primitiveProps.filterBy).toBe(1);
+    });
   });
 
-  it('#updateDefaultFilterTime should update correct model', async () => {
-    // Arrange
-    const defaultFilter = new FilterTimeWithAllowance();
+  describe('getVoidTimeModel', () => {
+    it('should return void time model', () => {
+      const inputModel: RedCardModel = {
+        voidFromTime: '2024-01-01 10:00:00',
+        voidToTime: '2024-01-01 11:00:00',
+        aaTime: 5,
+        paTime: 5,
+        saTime: 5
+      } as RedCardModel;
 
-    // Action
-    eventDangerAcceptedService.updateDefaultFilterTime(defaultFilter, [Helper.fakeRedCardModel]);
+      const result = service.getVoidTimeModel(inputModel);
 
-    // Assert
-    expect(defaultFilter.fromDateTime).toBe(Helper.fakeRedCardModel.filterFromTransTime);
-    expect(defaultFilter.toDateTime).toBe(Helper.fakeRedCardModel.filterToTransTime);
+      expect(result).toEqual({
+        fromDateTime: '2024-01-01 10:00:00',
+        toDateTime: '2024-01-01 11:00:00',
+        aaTime: 5,
+        paTime: 5,
+        saTime: 5
+      });
+    });
   });
 
-  it('#initDefaultFilterTime should update correct model', async () => {
-    // Arrange
-    const defaultFilter = new FilterTimeWithAllowance();
+  describe('getTvDetectionModel', () => {
+    it('should return tv detection model', () => {
+      const inputModel: RedCardModel = {
+        serviceAcceptTime: '2024-01-01 10:00:00',
+        actualTime: '2024-01-01 10:00:00',
+        tvDetectionValue: 1,
+        minuteOffset: '1',
+        secondOffset: '30'
+      } as RedCardModel;
 
-    // Action
-    eventDangerAcceptedService.initDefaultFilterTime(defaultFilter);
+      const result = service.getTvDetectionModel(inputModel);
 
-    // Assert
-    expect(defaultFilter.fromDateTime).toBeDefined();
-    expect(defaultFilter.toDateTime).toBeDefined();
+      expect(result).toEqual({
+        serviceAcceptTime: '2024-01-01 10:00:00',
+        actualTime: '2024-01-01 10:00:00',
+        tvDetectionValue: 1,
+        minuteOffset: '1',
+        secondOffset: '30'
+      });
+    });
   });
 
-  it('#initDefaultMainEvent should return main event', async () => {
-    // Arrange
-    const allSelectedEvents = [];
+  describe('updateDefaultFilterTime', () => {
+    it('should update default filter time from main event', () => {
+      const defaultFilter = {} as FilterTimeWithAllowance;
+      const inputModels: RedCardModel[] = [
+        {
+          matchId: 1,
+          matchEvent: 'Test Event',
+          leagueName: 'Test League',
+          filterBy: 1,
+          isMainMatch: true,
+          filterFromTransTime: '2024-01-01 10:00:00',
+          filterToTransTime: '2024-01-01 11:00:00',
+          name: 'Test Event',
+          subIssueTypeId: 1,
+          subIssueTypeName: 'Test Sub Issue Type',
+          matchType: MatchType.LINK,
+          isCheckedVar: true,
+          logInfoDetail: {} as any,
+          voidFromTime: '2024-01-01 10:00:00',
+          voidToTime: '2024-01-01 11:00:00',
+          aaTime: 5,
+          paTime: 5,
+          saTime: 5,
+          serviceAcceptTime: '2024-01-01 10:00:00',
+          actualTime: '2024-01-01 10:00:00',
+          tvDetectionValue: 1,
+          minuteOffset: '1',
+          secondOffset: '30',
+          eventDate: new Date('2024-01-01'),
+          sportType: 1
+        }
+      ];
 
-    // Action
-    const actual = eventDangerAcceptedService.initDefaultMainEvent(allSelectedEvents);
+      service.updateDefaultFilterTime(defaultFilter, inputModels);
 
-    // Assert
-    expect(actual.isMainMatch).toBeTruthy();
-    expect(allSelectedEvents.length).toBe(1);
+      expect(defaultFilter.fromDateTime).toBe('2024-01-01 10:00:00');
+      expect(defaultFilter.toDateTime).toBe('2024-01-01 11:00:00');
+    });
   });
 
-  it('#updateSubIssueTypeAndAllowanceTime should call #getSubIssueTypeLinkMatch', async () => {
-    // Arrange
-    const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
-    mainEvent.subIssueTypeId = 11;
-    eventDangerAcceptedService['getSubIssueTypeLinkMatch'] = jest.fn();
-    eventDangerAcceptedService['updateSubIssueType'] = jest.fn();
-    eventDangerAcceptedService['updateAllowanceTime'] = jest.fn();
+  describe('initDefaultFilterTime', () => {
+    it('should initialize default filter time with current time', () => {
+      const defaultFilter = {} as FilterTimeWithAllowance;
 
-    // Action
-    await eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime([Helper.fakeLogInfoRedCard], mainEvent, [Helper.fakeChildMatchModel], null);
+      service.initDefaultFilterTime(defaultFilter);
 
-    // Assert
-    expect(eventDangerAcceptedService['getSubIssueTypeLinkMatch']).toHaveBeenCalledTimes(0);
-    expect(eventDangerAcceptedService['updateSubIssueType']).toHaveBeenCalledTimes(1);
-    expect(eventDangerAcceptedService['updateAllowanceTime']).toHaveBeenCalledTimes(1);
+      expect(defaultFilter.fromDateTime).toBeDefined();
+      expect(defaultFilter.toDateTime).toBeDefined();
+    });
   });
 
-  it('#updateSubIssueTypeAndAllowanceTime should not call #getSubIssueTypeLinkMatch', async () => {
-    // Arrange
-    eventDangerAcceptedService['getSubIssueTypeLinkMatch'] = jest.fn();
-    eventDangerAcceptedService['updateSubIssueType'] = jest.fn();
-    eventDangerAcceptedService['updateAllowanceTime'] = jest.fn();
+  describe('initDefaultMainEvent', () => {
+    it('should initialize default main event', () => {
+      const allSelectedEvents: LogInfoRelatedEvent[] = [];
 
-    // Action
-    await eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime([Helper.fakeLogInfoRedCard], Helper.fakeLogInfoRedCard, [Helper.fakeChildMatchModel], null);
+      const result = service.initDefaultMainEvent(allSelectedEvents);
 
-    // Assert
-    expect(eventDangerAcceptedService['getSubIssueTypeLinkMatch']).toHaveBeenCalledTimes(1);
-    expect(eventDangerAcceptedService['updateSubIssueType']).toHaveBeenCalledTimes(1);
-    expect(eventDangerAcceptedService['updateAllowanceTime']).toHaveBeenCalledTimes(1);
+      expect(allSelectedEvents.length).toBe(1);
+      expect(result.isMainMatch).toBe(true);
+    });
   });
 
-  it('#getSubIssueTypeId should return expected issue type id when have SubIssueTypeLinkMatch', async () => {
-    // Action
-    const actual = eventDangerAcceptedService['getSubIssueTypeId'](Helper.fakeMatchId, [Helper.fakeSubIssueTypeLinkMatch], [Helper.fakeLogInfoRedCard], Helper.fakeLogInfoRedCard);
+  describe('updateSubIssueTypeAndAllowanceTime', () => {
+    it('should update sub issue type and allowance time for link events', async () => {
+      const allEvents: LogInfoRelatedEvent[] = [
+        {
+          matchId: 1,
+          subIssueTypeId: SubIssueTypeConstant.MAIN_CORNER
+        },
+        {
+          matchId: 2,
+          subIssueTypeId: SubIssueTypeConstant.MAIN_CORNER
+        }
+      ] as LogInfoRelatedEvent[];
 
-    // Assert
-    expect(actual).toBe(Helper.fakeSubIssueTypeLinkMatch.subIssueTypeId);
+      const mainEvent = allEvents[0];
+      const relatedEvents: ChildMatchModel[] = [
+        {
+          matchId: 2,
+          matchType: MatchType.LINK,
+          isChecked: true,
+          matchCode: 'TEST2',
+          leagueName: 'Test League',
+          matchEvent: 'Test Event'
+        }
+      ];
+
+      const defaultFilter = {
+        fromDateTime: '2024-01-01 10:00:00',
+        toDateTime: '2024-01-01 11:00:00',
+        aaTime: 5,
+        paTime: 5,
+        saTime: 5
+      } as FilterTimeWithAllowance;
+
+      await service.updateSubIssueTypeAndAllowanceTime(allEvents, mainEvent, relatedEvents, defaultFilter);
+
+      expect(addRequestApiService.getSubIssueTypeLinkMatch).toHaveBeenCalled();
+      expect(allEvents[0].subIssueTypeId).toBe(SubIssueTypeConstant.MAIN_CORNER);
+      expect(allEvents[1].subIssueTypeId).toBe(SubIssueTypeConstant.MAIN_CORNER);
+      expect(allEvents[0].voidTimeArea).toBeDefined();
+      expect(allEvents[1].voidTimeArea).toBeDefined();
+    });
   });
 
-  it('#getSubIssueTypeId should return expected issue type id when SubIssueTypeLinkMatch.subIssueTypeId is Null', async () => {
-    // Arrange
-    const fakeSubIssueTypeLinkMatch = _.cloneDeep(Helper.fakeSubIssueTypeLinkMatch);
-    fakeSubIssueTypeLinkMatch.subIssueTypeId = null;
+  describe('getSubIssueTypeId', () => {
+    it('should return subIssueTypeId from subTypeLinkMatches when handlingMatchId is link event and has subIssueTypeId', () => {
+      const handlingMatchId = 2;
+      const subTypeLinkMatches = [
+        {
+          matchId: 2,
+          subIssueTypeId: 3
+        }
+      ];
+      const linkEvents = [
+        {
+          matchId: 2
+        }
+      ] as LogInfoRelatedEvent[];
+      const mainEvent = {
+        subIssueTypeId: 1
+      } as LogInfoRelatedEvent;
 
-    // Action
-    const actual = eventDangerAcceptedService['getSubIssueTypeId'](Helper.fakeMatchId, [fakeSubIssueTypeLinkMatch], [Helper.fakeLogInfoRedCard], Helper.fakeLogInfoRedCard);
+      const result = service['getSubIssueTypeId'](handlingMatchId, subTypeLinkMatches, linkEvents, mainEvent);
 
-    // Assert
-    expect(actual).toBe(Helper.fakeLogInfoRedCard.subIssueTypeId);
-  });
+      expect(result).toBe(3);
+    });
 
-  it('#getSubIssueTypeId should return expected issue type id', async () => {
-    // Arrange
-    const fakeSubIssueTypeLinkMatch = _.cloneDeep(Helper.fakeSubIssueTypeLinkMatch);
-    fakeSubIssueTypeLinkMatch.subIssueTypeId = null;
+    it('should return mainEvent.subIssueTypeId when handlingMatchId is link event but no subIssueTypeId in subTypeLinkMatches', () => {
+      const handlingMatchId = 2;
+      const subTypeLinkMatches = [
+        {
+          matchId: 2,
+          subIssueTypeId: 0
+        }
+      ];
+      const linkEvents = [
+        {
+          matchId: 2
+        }
+      ] as LogInfoRelatedEvent[];
+      const mainEvent = {
+        subIssueTypeId: 1
+      } as LogInfoRelatedEvent;
 
-    // Action
-    const actual = eventDangerAcceptedService['getSubIssueTypeId'](Helper.fakeMatchId, [], [Helper.fakeLogInfoRedCard], Helper.fakeLogInfoRedCard);
+      const result = service['getSubIssueTypeId'](handlingMatchId, subTypeLinkMatches, linkEvents, mainEvent);
 
-    // Assert
-    expect(actual).toBe(Helper.fakeLogInfoRedCard.subIssueTypeId);
-  });
+      expect(result).toBe(1);
+    });
 
-  it('#getSubIssueTypeId should return expected issue type id when handling matchId is not same', async () => {
-    // Arrange
-    const fakeSubIssueTypeLinkMatch = _.cloneDeep(Helper.fakeSubIssueTypeLinkMatch);
-    fakeSubIssueTypeLinkMatch.subIssueTypeId = null;
+    it('should return mainEvent.subIssueTypeId when handlingMatchId is not link event', () => {
+      const handlingMatchId = 2;
+      const subTypeLinkMatches = [
+        {
+          matchId: 2,
+          subIssueTypeId: 3
+        }
+      ];
+      const linkEvents = [
+        {
+          matchId: 3
+        }
+      ] as LogInfoRelatedEvent[];
+      const mainEvent = {
+        subIssueTypeId: 1
+      } as LogInfoRelatedEvent;
 
-    // Action
-    const actual = eventDangerAcceptedService['getSubIssueTypeId'](1119, [], [Helper.fakeLogInfoRedCard], Helper.fakeLogInfoRedCard);
+      const result = service['getSubIssueTypeId'](handlingMatchId, subTypeLinkMatches, linkEvents, mainEvent);
 
-    // Assert
-    expect(actual).toBe(Helper.fakeLogInfoRedCard.subIssueTypeId);
-  });
-
-  it('#updateSubIssueType should update correct data ', async () => {
-    // Arrange
-    eventDangerAcceptedService['getSubIssueTypeId'] = jest.fn();
-
-    // Action
-    eventDangerAcceptedService['updateSubIssueType']([Helper.fakeLogInfoRedCard], [Helper.fakeSubIssueTypeLinkMatch],
-      [Helper.fakeLogInfoRedCard], Helper.fakeLogInfoRedCard);
-
-    // Assert
-    expect(eventDangerAcceptedService['getSubIssueTypeId']).toHaveBeenCalled();
-  });
-
-  it('#updateAllowanceTime should update correct data ', async () => {
-    // Arrange
-    eventDangerAcceptedService['getNewFilterTimeWithAllowanceBySubIssueType'] = jest.fn();
-
-    // Action
-    eventDangerAcceptedService['updateAllowanceTime']([Helper.fakeLogInfoRedCard], null);
-
-    // Assert
-    expect(eventDangerAcceptedService['getNewFilterTimeWithAllowanceBySubIssueType']).toHaveBeenCalled();
-  });
-
-  it('#getNewFilterTimeWithAllowanceBySubIssueType should return VoidTimeArea ', async () => {
-    // Arrange
-    eventDangerAcceptedService['getGroupSubTypeIncludeAllowanceTime'] = jest.fn().mockImplementation(() => Helper.fakeGroupButton);
-
-    // Action
-    const actual = eventDangerAcceptedService['getNewFilterTimeWithAllowanceBySubIssueType'](Helper.fakeLogInfoRedCard, new FilterTimeWithAllowance());
-
-    // Assert
-    expect(actual.aaTime.toString()).toBe(Helper.fakeGroupButton.aa);
-    expect(actual.paTime.toString()).toBe(Helper.fakeGroupButton.pa);
-    expect(actual.saTime.toString()).toBe(Helper.fakeGroupButton.sa);
-  });
-
-  it('#getSubIssueTypeLinkMatch should return VoidTimeArea ', async () => {
-    // Arrange
-    const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.getSubIssueTypeLinkMatch = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeSubIssueTypeLinkMatch]));
-    const mockEventDangerAcceptedService = new EventDangerAcceptedService(addRequestApiService, null);
-    mockEventDangerAcceptedService['getGroupSubTypeIncludeAllowanceTime'] = jest.fn().mockImplementation(() => Helper.fakeGroupButton);
-
-    // Action
-    const actual = await mockEventDangerAcceptedService['getSubIssueTypeLinkMatch'](55, '1,2');
-
-    // Assert
-    expect(actual).toEqual([Helper.fakeSubIssueTypeLinkMatch]);
+      expect(result).toBe(1);
+    });
   });
 });

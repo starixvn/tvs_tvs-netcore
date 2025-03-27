@@ -15,7 +15,6 @@ import { FilterModel } from '../../filter/filter.model';
   providedIn: 'root'
 })
 export class ValidationService {
-
   isHasAllowanceTime(event: LogInfoRelatedEvent): boolean {
     if (event.voidTimeArea.paTime || event.voidTimeArea.aaTime || event.voidTimeArea.saTime ||
       (event.voidTimeArea.paTime === 0 && event.voidTimeArea.aaTime === 0 && event.voidTimeArea.saTime === 0)) {

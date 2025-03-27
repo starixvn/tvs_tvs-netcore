@@ -12,8 +12,6 @@ export class ConfirmDangerAcceptedComponent {
   @Output() clickCancel = new EventEmitter();
   @Output() clickOk = new EventEmitter();
 
-  constructor() { }
-
   onClickCancel() {
     this.model.isOpenDialog = false;
     this.clickCancel.emit();

@@ -1,326 +1,582 @@
-import * as _ from 'lodash';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
-import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
-import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { PrimitiveProperty } from '../../event-red-card/event-red-card.model';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { FilterModel } from '../../filter/filter.model';
-import { AddRelatedEventArg } from '../../models/add-related-event.model';
-import { RedCardModel } from '../../models/event-red-card.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
-import { ChildMatchModel } from '../../models/related-event.model';
-import { EventDangerAcceptedService } from './event-danger-accepted.service';
-import { LogInfoService } from './log-info.service';
+import { TestBed } from '@angular/core/testing';
 import { RelatedEventService } from './related-event.service';
 import { ValidationService } from './validation.service';
-
-class Helper {
-  static readonly fakeMatchId = 12345;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeAllowanceTime: AllowanceTime = {
-    aaTime: 1,
-    paTime: 1,
-    saTime: 1,
-  };
-  static readonly fakeRedCardModel: RedCardModel = {
-    matchId: Helper.fakeMatchId,
-    filterBy: TVSRequestFilterBy.CHECK_TIME,
-    filterFromTransTime: null,
-    filterToTransTime: null,
-    aaTime: 1,
-    paTime: 2,
-    saTime: 1,
-    isMainMatch: true,
-    matchEvent: '',
-    matchType: 1,
-    subIssueTypeId: 5,
-    subIssueTypeName: '',
-    logInfoDetail: null,
-    leagueName: '',
-    sportType: 0
-  } as RedCardModel;
-  static readonly fakeFilterTimeWithAllowance: FilterTimeWithAllowance = {
-    fromDateTime: Helper.fakeFromDateTime,
-    toDateTime: Helper.fakeToDateTime,
-    aaTime: 1,
-    paTime: 12,
-    saTime: 12,
-  };
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '1',
-    subIssueTypeId: '1',
-    action: '1',
-    isTest: true,
-    isVoided: false,
-    isChangeSubTypeManual: true,
-    isAbnormal: false
-  } as FilterModel;
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: Helper.fakeMatchId,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    scoreOfMatch: '',
-    scoreNormalTicket: '',
-    instantlySettleCount: 2,
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeValidationMessage: ValidationMessage[] = [
-    {
-      isError: false,
-      reason: '',
-    }
-  ];
-  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
-    matchId: Helper.fakeMatchId,
-    isMainMatch: true,
-    eventName: '',
-    leagueName: '',
-    subIssueTypeId: SubIssueTypeConstant.MAIN_CORNER,
-    voidTimeArea: Helper.fakeFilterTimeWithAllowance,
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: Helper.fakeValidationMessage,
-    sportType: 0
-  } as LogInfoRelatedEvent;
-  static readonly fakeChildMatchModel: ChildMatchModel = {
-    matchId: Helper.fakeMatchId,
-    matchCode: '222',
-    matchEvent: 'TestC - vs - Real Madrid (V)',
-    isChecked: true,
-    matchType: MatchType.LINK,
-    leagueName: '',
-    name: '',
-    homeId: 0,
-    homeName: '',
-    homeNameNewSimplified: '',
-    homeNameSimplified: '',
-    homeNameTraditional: '',
-    awayId: 0,
-    awayName: '',
-    awayNameNewSimplified: '',
-    awayNameSimplified: '',
-    awayNameTraditional: '',
-    eventDate: undefined,
-    dateTime: undefined,
-    leagueId: 0,
-    leagueGroupId: 0,
-    leagueNameNewSimplified: '',
-    leagueNameSimplified: '',
-    leagueNameTraditional: '',
-    matchEventSimplified: '',
-    matchEventNewSimplified: '',
-    kickOffTime: '',
-    startTime: undefined,
-    endTime: undefined,
-    sportType: 0,
-    sportTypeName: '',
-    sportTypeNameNewSimplified: '',
-    sportTypeNameSimplified: '',
-    sportTypeNameTraditional: ''
-  };
-}
+import { LogInfoService } from './log-info.service';
+import { AddRequestStore } from '../../add-request.store';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { ChildMatchModel } from '../../models/related-event.model';
+import { AddRelatedEventArg } from '../../models/add-related-event.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { FilterModel } from '../../filter/filter.model';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
+import { LABELS } from '../../../../../utility/constants/labels';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { MatchType } from '../../../../../utility/constants/config';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { ValidationMessage } from '../../models/get-log-info.model';
+import { GetChildMatchQuery } from '../../models/get-child-match.query';
 
 describe('RelatedEventService', () => {
-  let relatedEventService: RelatedEventService;
+  let service: RelatedEventService;
+  let validationService: ValidationService;
+  let logInfoService: LogInfoService;
+  let addRequestApiService: AddRequestApiService;
 
   beforeEach(() => {
-    relatedEventService = new RelatedEventService(null, null, null, null);
+    TestBed.configureTestingModule({
+      providers: [
+        RelatedEventService,
+        {
+          provide: ValidationService,
+          useValue: {
+            isValidInputRelatedEvent: jest.fn(),
+            isHasAllowanceTime: jest.fn()
+          }
+        },
+        {
+          provide: LogInfoService,
+          useValue: {
+            getLogInfo: jest.fn(),
+            updateIsCheckedVar: jest.fn()
+          }
+        },
+        {
+          provide: AddRequestStore,
+          useValue: {}
+        },
+        {
+          provide: AddRequestApiService,
+          useValue: {
+            getChildMatches: jest.fn()
+          }
+        }
+      ]
+    });
+
+    service = TestBed.inject(RelatedEventService);
+    validationService = TestBed.inject(ValidationService);
+    logInfoService = TestBed.inject(LogInfoService);
+    addRequestApiService = TestBed.inject(AddRequestApiService);
   });
 
-  it('#getChildMatches should call #getChildMatches', async () => {
-    // Arrange
-    const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeChildMatchModel]));
-    const mockRelatedEventService = new RelatedEventService(addRequestApiService, null, null, null);
+  describe('addRelatedEventByInput', () => {
+    it('should display required message when inputRelatedMatchId is empty', async () => {
+      const arg = {
+        primitiveProps: {
+          inputRelatedMatchId: null,
+          isBlock: false,
+          filterBy: 1
+        } as PrimitiveProperty,
+        tooltip: { display: jest.fn() } as unknown as Tooltip,
+        inputMatchIdClass: 'test-class',
+        allEvents: [],
+        filter: {
+          issueTypeId: '1'
+        } as FilterModel,
+        mainEvent: {
+          eventDate: new Date('2024-01-01'),
+          sportType: 1,
+          subIssueTypeId: 1,
+          isCheckedVar: true,
+          isMainMatch: true
+        } as LogInfoRelatedEvent,
+        isEdit: false,
+        requestId: 1,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
+        addRequestStore: {} as any,
+        originalRelatedEvents: [],
+        subIssueTypeId: '1'
+      } as AddRelatedEventArg;
 
-    // Action
-    const actual = await mockRelatedEventService.getChildMatches(null);
+      await service.addRelatedEventByInput(arg);
 
-    // Assert
-    expect(actual.length).toBe(1);
-    expect(addRequestApiService.getChildMatches).toHaveBeenCalledTimes(1);
+      expect(arg.tooltip.display).toHaveBeenCalledWith('test-class', LABELS.REQUIRED_MATCHID);
+      expect(arg.primitiveProps.isBlock).toBe(false);
+    });
+
+    it('should display invalid message when getChildMatches returns empty array', async () => {
+      const arg = {
+        primitiveProps: {
+          inputRelatedMatchId: 123,
+          isBlock: false,
+          filterBy: 1
+        } as PrimitiveProperty,
+        tooltip: { display: jest.fn() } as unknown as Tooltip,
+        inputMatchIdClass: 'test-class',
+        allEvents: [],
+        filter: {
+          issueTypeId: '1'
+        } as FilterModel,
+        mainEvent: {
+          eventDate: new Date('2024-01-01'),
+          sportType: 1,
+          subIssueTypeId: 1,
+          isCheckedVar: true,
+          isMainMatch: true
+        } as LogInfoRelatedEvent,
+        isEdit: false,
+        requestId: 1,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
+        addRequestStore: {} as any,
+        originalRelatedEvents: [],
+        subIssueTypeId: '1'
+      } as AddRelatedEventArg;
+
+      jest.spyOn(validationService, 'isValidInputRelatedEvent').mockReturnValue(true);
+      jest.spyOn(service as any, 'getChildMatches').mockResolvedValue([]);
+
+      await service.addRelatedEventByInput(arg);
+
+      expect(arg.tooltip.display).toHaveBeenCalledWith('test-class', LABELS.INVALID_MATCHID);
+      expect(arg.primitiveProps.isBlock).toBe(false);
+    });
+
+    it('should add new events when getChildMatches returns valid data', async () => {
+      const arg = {
+        primitiveProps: {
+          inputRelatedMatchId: 123,
+          isBlock: false,
+          filterBy: 1
+        } as PrimitiveProperty,
+        tooltip: { display: jest.fn() } as unknown as Tooltip,
+        inputMatchIdClass: 'test-class',
+        allEvents: [],
+        filter: {
+          issueTypeId: '1'
+        } as FilterModel,
+        mainEvent: {
+          eventDate: new Date('2024-01-01'),
+          sportType: 1,
+          subIssueTypeId: 1,
+          isCheckedVar: true,
+          isMainMatch: true
+        } as LogInfoRelatedEvent,
+        isEdit: false,
+        requestId: 1,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
+        addRequestStore: {} as any,
+        originalRelatedEvents: [],
+        subIssueTypeId: '1'
+      } as AddRelatedEventArg;
+
+      const mockChildMatches = [
+        {
+          matchId: 123,
+          matchCode: 'TEST123',
+          leagueName: 'Test League',
+          matchEvent: 'Test Event',
+          matchType: MatchType.LINK,
+          isChecked: true
+        }
+      ] as ChildMatchModel[];
+
+      jest.spyOn(validationService, 'isValidInputRelatedEvent').mockReturnValue(true);
+      jest.spyOn(service as any, 'getChildMatches').mockResolvedValue(mockChildMatches);
+      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
+      jest.spyOn(logInfoService, 'updateIsCheckedVar');
+
+      await service.addRelatedEventByInput(arg);
+
+      expect(arg.allEvents.length).toBe(1);
+      expect(arg.allEvents[0].matchId).toBe(123);
+      expect(arg.allEvents[0].matchCode).toBe('TEST123');
+      expect(arg.primitiveProps.isBlock).toBe(false);
+      expect(arg.primitiveProps.inputRelatedMatchId).toBeNull();
+      expect(logInfoService.getLogInfo).toHaveBeenCalled();
+      expect(logInfoService.updateIsCheckedVar).toHaveBeenCalled();
+    });
   });
 
-  it('#assignChildMatchToLogInfoModel should return expected model', async () => {
-    // Arrange
-    const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeChildMatchModel]));
-    const mockRelatedEventService = new RelatedEventService(addRequestApiService, null, null, null);
+  describe('getDataWhenSearch', () => {
+    it('should add new events and update existing events', async () => {
+      const relatedEvents = [
+        {
+          matchId: 1,
+          matchCode: 'TEST1',
+          leagueName: 'Test League',
+          matchEvent: 'Test Event',
+          matchType: MatchType.LINK,
+          isChecked: true
+        },
+        {
+          matchId: 2,
+          matchCode: 'TEST2',
+          leagueName: 'Test League',
+          matchEvent: 'Test Event',
+          matchType: MatchType.LINK,
+          isChecked: true
+        }
+      ] as ChildMatchModel[];
 
-    // Action
-    const actual = mockRelatedEventService.assignChildMatchToLogInfoModel([Helper.fakeChildMatchModel], new FilterTimeWithAllowance(), 1);
+      const arg = {
+        allEvents: [
+          {
+            matchId: 1,
+            logInfoDetail: null,
+            messageValidationLogInfo: null,
+            voidTimeArea: null,
+            subIssueTypeId: 1,
+            leagueName: 'Test League',
+            isMainMatch: true,
+            eventName: 'Test Event',
+            tvDetectionModel: null,
+            sportType: 1
+          }
+        ],
+        primitiveProps: {
+          isShowLogInfoMainMatch: false,
+          filterBy: 1
+        } as PrimitiveProperty,
+        filter: {
+          issueTypeId: '1'
+        } as FilterModel,
+        mainEvent: {
+          eventDate: new Date('2024-01-01'),
+          sportType: 1,
+          subIssueTypeId: 1,
+          leagueName: 'Test League',
+          isMainMatch: true
+        } as LogInfoRelatedEvent,
+        isEdit: false,
+        requestId: 1,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
+        addRequestStore: {} as any,
+        originalRelatedEvents: [],
+        subIssueTypeId: '1'
+      } as AddRelatedEventArg;
 
-    // Assert
-    expect(actual).toBeDefined();
-    expect(actual[0].logInfoDetail).toBeNull();
-    expect(actual[0].messageValidationLogInfo).toBeNull();
+      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
+      jest.spyOn(service as any, 'preparingModelGetLogInfo').mockResolvedValue([
+        {
+          matchId: 1,
+          logInfoDetail: {
+            matchId: 1,
+            liveScores: '',
+            singleCount: 0,
+            cashOutCount: 0,
+            settleCount: 0,
+            instantlySettleCount: 0,
+            mainParlayCount: 0,
+            cancelCashOutCount: 0,
+            voidFromTime: new Date('2024-01-01 10:00:00'),
+            voidToTime: new Date('2024-01-01 11:00:00'),
+            transVoidToTime: new Date('2024-01-01 11:00:00'),
+            isHasWarningRangeTime: false,
+            scoreNormalTicket: '0',
+            scoreOfMatch: '0',
+            minTransId: '0',
+            actionType: ''
+          } as LogInfoDetail,
+          messageValidationLogInfo: [
+            {
+              type: 'error',
+              content: 'test',
+              isError: true,
+              reason: 'test'
+            } as ValidationMessage
+          ],
+          voidTimeArea: {
+            fromDateTime: '2024-01-01 10:00:00',
+            toDateTime: '2024-01-01 11:00:00',
+            aaTime: 5,
+            paTime: 5,
+            saTime: 5
+          } as FilterTimeWithAllowance,
+          subIssueTypeId: 1,
+          leagueName: 'Test League',
+          isMainMatch: true,
+          eventName: 'Test Event',
+          tvDetectionModel: null,
+          sportType: 1
+        },
+        {
+          matchId: 2,
+          logInfoDetail: {
+            matchId: 2,
+            liveScores: '',
+            singleCount: 0,
+            cashOutCount: 0,
+            settleCount: 0,
+            instantlySettleCount: 0,
+            mainParlayCount: 0,
+            cancelCashOutCount: 0,
+            voidFromTime: new Date('2024-01-01 10:00:00'),
+            voidToTime: new Date('2024-01-01 11:00:00'),
+            transVoidToTime: new Date('2024-01-01 11:00:00'),
+            isHasWarningRangeTime: false,
+            scoreNormalTicket: '0',
+            scoreOfMatch: '0',
+            minTransId: '0',
+            actionType: ''
+          } as LogInfoDetail,
+          messageValidationLogInfo: [
+            {
+              type: 'error',
+              content: 'test',
+              isError: true,
+              reason: 'test'
+            } as ValidationMessage
+          ],
+          voidTimeArea: {
+            fromDateTime: '2024-01-01 10:00:00',
+            toDateTime: '2024-01-01 11:00:00',
+            aaTime: 5,
+            paTime: 5,
+            saTime: 5
+          } as FilterTimeWithAllowance,
+          subIssueTypeId: 1,
+          leagueName: 'Test League',
+          isMainMatch: true,
+          eventName: 'Test Event',
+          tvDetectionModel: null,
+          sportType: 1
+        }
+      ]);
+
+      await service.getDataWhenSearch(relatedEvents, arg);
+
+      expect(arg.allEvents.length).toBe(2);
+      expect(arg.allEvents[0].logInfoDetail).toBeDefined();
+      expect(arg.allEvents[1].logInfoDetail).toBeDefined();
+      expect(logInfoService.getLogInfo).toHaveBeenCalled();
+    });
   });
 
-  it('#addRelatedEventByInput should call #tooltip.display', async () => {
-    // Arrange
-    const arg = new AddRelatedEventArg();
-    arg.tooltip = new Tooltip();
-    arg.tooltip.display = jest.fn();
-    arg.primitiveProps = new PrimitiveProperty();
-    arg.primitiveProps.inputRelatedMatchId = null;
+  describe('preparingModelGetLogInfo', () => {
+    it('should return events with new child events', async () => {
+      const relatedEvents = [
+        {
+          matchId: 1,
+          matchCode: 'TEST1',
+          leagueName: 'Test League',
+          matchEvent: 'Test Event',
+          matchType: MatchType.LINK,
+          isChecked: true
+        },
+        {
+          matchId: 2,
+          matchCode: 'TEST2',
+          leagueName: 'Test League',
+          matchEvent: 'Test Event',
+          matchType: MatchType.LINK,
+          isChecked: true
+        }
+      ] as ChildMatchModel[];
 
-    // Action
-    await relatedEventService.addRelatedEventByInput(arg);
+      const arg = {
+        allEvents: [
+          {
+            matchId: 1,
+            leagueName: 'Test League',
+            isMainMatch: true,
+            eventName: 'Test Event',
+            tvDetectionModel: null,
+            sportType: 1
+          }
+        ],
+        mainEvent: {
+          subIssueTypeId: 1
+        } as LogInfoRelatedEvent,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
+        addRequestStore: {} as any,
+        originalRelatedEvents: [],
+        subIssueTypeId: '1'
+      } as AddRelatedEventArg;
 
-    // Assert
-    expect(arg.tooltip.display).toHaveBeenCalledTimes(1);
+      const result = await service['preparingModelGetLogInfo'](relatedEvents, arg);
+
+      expect(result.length).toBe(2);
+      expect(result[0].matchId).toBe(1);
+      expect(result[1].matchId).toBe(2);
+    });
   });
 
-  it('#addRelatedEventByInput should return when #validationService.isValidInputRelatedEvent is false', async () => {
-    // Arrange
-    const arg = new AddRelatedEventArg();
-    arg.tooltip = new Tooltip();
-    arg.tooltip.display = jest.fn();
-    arg.primitiveProps = new PrimitiveProperty();
-    arg.primitiveProps.inputRelatedMatchId = 111;
+  describe('addNewRelatedEventHaveTicketOrUpdateExistedEvent', () => {
+    it('should add new event when event does not exist and has logInfoDetail', () => {
+      const eventsGetLogInfo = [
+        {
+          matchId: 1,
+          logInfoDetail: {
+            matchId: 1,
+            isHasWarningRangeTime: false,
+            scoreNormalTicket: '0',
+            scoreOfMatch: '0',
+            minTransId: '0'
+          } as LogInfoDetail,
+          messageValidationLogInfo: [
+            {
+              type: 'error',
+              content: 'test',
+              isError: true,
+              reason: 'test'
+            } as ValidationMessage
+          ],
+          voidTimeArea: {
+            fromDateTime: '2024-01-01 10:00:00',
+            toDateTime: '2024-01-01 11:00:00',
+            aaTime: 5,
+            paTime: 5,
+            saTime: 5
+          } as FilterTimeWithAllowance,
+          subIssueTypeId: 1,
+          isMainMatch: true,
+          sportType: 1,
+          leagueName: '',
+          eventName: '',
+          tvDetectionModel: null
+        }
+      ] as LogInfoRelatedEvent[];
 
-    const validationService = new ValidationService();
-    validationService.isValidInputRelatedEvent = jest.fn().mockImplementation(() => false);
-    const mockRelatedEventService = new RelatedEventService(null, validationService, null, null);
+      const originalAllEvents: LogInfoRelatedEvent[] = [];
 
-    // Action
-    await mockRelatedEventService.addRelatedEventByInput(arg);
+      service['addNewRelatedEventHaveTicketOrUpdateExistedEvent'](eventsGetLogInfo, originalAllEvents);
 
-    // Assert
-    expect(validationService.isValidInputRelatedEvent).toHaveBeenCalledTimes(1);
+      expect(originalAllEvents.length).toBe(1);
+      expect(originalAllEvents[0].matchId).toBe(1);
+      expect(originalAllEvents[0].logInfoDetail).toBeDefined();
+    });
+
+    it('should update existing event when event exists', () => {
+      const eventsGetLogInfo = [
+        {
+          matchId: 1,
+          logInfoDetail: {
+            matchId: 1,
+            isHasWarningRangeTime: false,
+            scoreNormalTicket: '0',
+            scoreOfMatch: '0',
+            minTransId: '0'
+          } as LogInfoDetail,
+          messageValidationLogInfo: [
+            {
+              type: 'error',
+              content: 'new',
+              isError: true,
+              reason: 'new'
+            } as ValidationMessage
+          ],
+          voidTimeArea: {
+            fromDateTime: '2024-01-01 10:00:00',
+            toDateTime: '2024-01-01 11:00:00',
+            aaTime: 5,
+            paTime: 5,
+            saTime: 5
+          } as FilterTimeWithAllowance,
+          subIssueTypeId: 2,
+          isMainMatch: true,
+          sportType: 1,
+          leagueName: '',
+          eventName: '',
+          tvDetectionModel: null
+        }
+      ] as LogInfoRelatedEvent[];
+
+      const originalAllEvents: LogInfoRelatedEvent[] = [
+        {
+          matchId: 1,
+          logInfoDetail: {
+            matchId: 1,
+            isHasWarningRangeTime: false,
+            scoreNormalTicket: '0',
+            scoreOfMatch: '0',
+            minTransId: '0'
+          } as LogInfoDetail,
+          messageValidationLogInfo: [
+            {
+              type: 'error',
+              content: 'old',
+              isError: true,
+              reason: 'old'
+            } as ValidationMessage
+          ],
+          voidTimeArea: {
+            fromDateTime: '2024-01-01 10:00:00',
+            toDateTime: '2024-01-01 11:00:00',
+            aaTime: 5,
+            paTime: 5,
+            saTime: 5
+          } as FilterTimeWithAllowance,
+          subIssueTypeId: 1,
+          isMainMatch: true,
+          sportType: 1,
+          leagueName: '',
+          eventName: '',
+          tvDetectionModel: null
+        }
+      ];
+
+      service['addNewRelatedEventHaveTicketOrUpdateExistedEvent'](eventsGetLogInfo, originalAllEvents);
+
+      expect(originalAllEvents.length).toBe(1);
+      expect(originalAllEvents[0].logInfoDetail).toBeDefined();
+      expect(originalAllEvents[0].voidTimeArea).toBeDefined();
+      expect(originalAllEvents[0].subIssueTypeId).toBe(2);
+    });
   });
 
-  it('#addRelatedEventByInput should return when #getChildMatches return null', async () => {
-    // Arrange
-    const arg = new AddRelatedEventArg();
-    arg.tooltip = new Tooltip();
-    arg.tooltip.display = jest.fn();
-    arg.primitiveProps = new PrimitiveProperty();
-    arg.primitiveProps.inputRelatedMatchId = 111;
-    arg.filter = new FilterModel();
-    arg.mainEvent = {} as LogInfoRelatedEvent;
-    const validationService = new ValidationService();
-    validationService.isValidInputRelatedEvent = jest.fn().mockImplementation(() => true);
-    const mockRelatedEventService = new RelatedEventService(null, validationService, null, null);
-    mockRelatedEventService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([]));
+  describe('getChildMatches', () => {
+    it('should call addRequestApiService.getChildMatches with correct parameters and return result', async () => {
+      const query = {
+        matchId: 123,
+        issueTypeId: 1,
+        subIssueTypeId: '2',
+        isMainMatch: true,
+        eventDate: '2024-01-01',
+        sportType: 1
+      } as GetChildMatchQuery;
 
-    // Action
-    await mockRelatedEventService.addRelatedEventByInput(arg);
+      const expectedResult = [
+        {
+          matchId: 1,
+          matchCode: 'TEST1',
+          leagueName: 'Test League',
+          matchEvent: 'Test Event',
+          matchType: MatchType.LINK,
+          isChecked: true
+        }
+      ] as ChildMatchModel[];
 
-    // Assert
-    expect(arg.tooltip.display).toHaveBeenCalledTimes(1);
-    expect(validationService.isValidInputRelatedEvent).toHaveBeenCalledTimes(1);
-    expect(mockRelatedEventService.getChildMatches).toHaveBeenCalledTimes(1);
-  });
+      jest.spyOn(addRequestApiService, 'getChildMatches').mockResolvedValue(expectedResult);
 
-  it('#addRelatedEventByInput should call #getLogInfo', async () => {
-    // Arrange
-    const arg = new AddRelatedEventArg();
-    arg.tooltip = new Tooltip();
-    arg.tooltip.display = jest.fn();
-    arg.primitiveProps = new PrimitiveProperty();
-    arg.primitiveProps.inputRelatedMatchId = 111;
-    arg.mainEvent = Helper.fakeLogInfoRedCard;
-    arg.allEvents = [];
-    arg.filter = new FilterModel()
-    const validationService = new ValidationService();
-    validationService.isValidInputRelatedEvent = jest.fn().mockImplementation(() => true);
-    const eventDangerAcceptedService = new EventDangerAcceptedService(null, null);
-    eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime = jest.fn();
-    const logInfoService = new LogInfoService(null, null);
-    logInfoService.getLogInfo = jest.fn();
-    const mockRelatedEventService = new RelatedEventService(null, validationService, logInfoService, eventDangerAcceptedService);
-    mockRelatedEventService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([new ChildMatchModel()]));
-    mockRelatedEventService.assignChildMatchToLogInfoModel = jest.fn().mockImplementation(() => [Helper.fakeLogInfoRedCard]);
+      const result = await service.getChildMatches(query);
 
-    // Action
-    await mockRelatedEventService.addRelatedEventByInput(arg);
+      expect(addRequestApiService.getChildMatches).toHaveBeenCalledWith(query);
+      expect(result).toEqual(expectedResult);
+    });
 
-    // Assert
-    expect(validationService.isValidInputRelatedEvent).toHaveBeenCalledTimes(1);
-    expect(eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime).toHaveBeenCalledTimes(1);
-    expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(mockRelatedEventService.getChildMatches).toHaveBeenCalledTimes(1);
-    expect(mockRelatedEventService.assignChildMatchToLogInfoModel).toHaveBeenCalledTimes(1);
-  });
+    it('should handle empty result from addRequestApiService.getChildMatches', async () => {
+      const query = {
+        matchId: 123,
+        issueTypeId: 1,
+        subIssueTypeId: '2',
+        isMainMatch: true,
+        eventDate: '2024-01-01',
+        sportType: 1
+      } as GetChildMatchQuery;
 
-  it('#addNewRelatedEventHaveTicketOrUpdateExistedEvent should add new related event', async () => {
-    // Arrange
-    const originalAllEvents: LogInfoRelatedEvent[] = [];
-    const events = _.cloneDeep([Helper.fakeLogInfoRedCard]);
-    events.forEach(x => x.logInfoDetail = new LogInfoDetail());
-    const mockRelatedEventService = new RelatedEventService(null, null, null, null);
+      jest.spyOn(addRequestApiService, 'getChildMatches').mockResolvedValue([]);
 
-    // Action
-    mockRelatedEventService['addNewRelatedEventHaveTicketOrUpdateExistedEvent'](events, originalAllEvents);
+      const result = await service.getChildMatches(query);
 
-    // Assert
-    expect(originalAllEvents.length).toBe(events.length);
-  });
+      expect(addRequestApiService.getChildMatches).toHaveBeenCalledWith(query);
+      expect(result).toEqual([]);
+    });
 
-  it('#addNewRelatedEventHaveTicketOrUpdateExistedEvent should update model', async () => {
-    // Arrange
-    const originalAllEvents =_.cloneDeep([Helper.fakeLogInfoRedCard]);
-    const events = _.cloneDeep([Helper.fakeLogInfoRedCard]);
-    events.forEach(x => x.logInfoDetail = new LogInfoDetail());
-    const mockRelatedEventService = new RelatedEventService(null, null, null, null);
+    it('should propagate error from addRequestApiService.getChildMatches', async () => {
+      const query = {
+        matchId: 123,
+        issueTypeId: 1,
+        subIssueTypeId: '2',
+        isMainMatch: true,
+        eventDate: '2024-01-01',
+        sportType: 1
+      } as GetChildMatchQuery;
 
-    // Action
-    mockRelatedEventService['addNewRelatedEventHaveTicketOrUpdateExistedEvent'](events, originalAllEvents);
+      const error = new Error('API Error');
+      jest.spyOn(addRequestApiService, 'getChildMatches').mockRejectedValue(error);
 
-    // Assert
-    expect(originalAllEvents[0].logInfoDetail).toEqual(events[0].logInfoDetail);
-    expect(originalAllEvents[0].messageValidationLogInfo).toEqual(events[0].messageValidationLogInfo);
-    expect(originalAllEvents[0].voidTimeArea).toEqual(events[0].voidTimeArea );
-    expect(originalAllEvents[0].subIssueTypeId).toEqual(events[0].subIssueTypeId);
-  });
-
-  it('#preparingModelGetLogInfo should return expected model', async () => {
-    // Arrange
-    const childMatchModel = new ChildMatchModel();
-    childMatchModel.matchType = MatchType.LINK;
-    childMatchModel.matchId = 100000000;
-    const args = new AddRelatedEventArg();
-    args.mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
-    args.allEvents = _.cloneDeep([Helper.fakeLogInfoRedCard]);
-    const eventDangerAcceptedService = new EventDangerAcceptedService(null, null);
-    eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime = jest.fn().mockImplementation();
-    const mockRelatedEventService = new RelatedEventService(null, null, null, eventDangerAcceptedService);
-    mockRelatedEventService['assignChildMatchToLogInfoModel'] = jest.fn().mockImplementation(() => [new LogInfoRelatedEvent()]);
-
-    // Action
-    const actual = await mockRelatedEventService['preparingModelGetLogInfo']([childMatchModel], args);
-
-    // Assert
-    expect(actual.length).toBe(2);
-  });
-
-  it('#getDataWhenSearch should called expected method', async () => {
-    // Arrange
-    const args = new AddRelatedEventArg();
-    args.primitiveProps = new PrimitiveProperty();
-    const logInfoService = new LogInfoService(null, null);
-    logInfoService.getLogInfo = jest.fn().mockImplementation();
-    const mockRelatedEventService = new RelatedEventService(null, null, logInfoService, null);
-    mockRelatedEventService['preparingModelGetLogInfo'] = jest.fn();
-    mockRelatedEventService['addNewRelatedEventHaveTicketOrUpdateExistedEvent'] = jest.fn();
-
-    // Action
-    await mockRelatedEventService['getDataWhenSearch'](null, args);
-
-    // Assert
-    expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(mockRelatedEventService['preparingModelGetLogInfo']).toHaveBeenCalledTimes(1);
-    expect(mockRelatedEventService['addNewRelatedEventHaveTicketOrUpdateExistedEvent']).toHaveBeenCalledTimes(1);
+      await expect(service.getChildMatches(query)).rejects.toThrow('API Error');
+    });
   });
 });

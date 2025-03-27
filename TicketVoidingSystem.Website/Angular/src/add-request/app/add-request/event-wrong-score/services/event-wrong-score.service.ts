@@ -26,13 +26,13 @@ export class EventWrongScoreService {
     return allWrongScoreModels;
   }
 
-  updateMainMatch(mainEvent: WrongScoreModel, selectedMatch: MatchModel){
+  updateMainMatch(mainEvent: WrongScoreModel, selectedMatch: MatchModel) {
     mainEvent.matchId = selectedMatch.matchId;
     mainEvent.eventDate = selectedMatch.eventDate;
     mainEvent.sportType = selectedMatch.sportType;
   }
 
-  resetPrimitiveProperty(primitiveProps: PrimitiveProperty, subIssueTypeId: string){
+  resetPrimitiveProperty(primitiveProps: PrimitiveProperty, subIssueTypeId: string) {
     primitiveProps.filterBy = this.getFilterByBaseOnSubIssueType(subIssueTypeId);
     primitiveProps.isCheckedVar = null;
     primitiveProps.isHighLightVarCheck = null;
@@ -63,24 +63,24 @@ export class EventWrongScoreService {
     if (minTime && highlightAcceptType) {
       switch (highlightAcceptType) {
         case AcceptType.AUTO_ACCEPT: {
-          return {acceptTypeName: "AA", highlightTimeClass: 'highlight-min-aa'};
+          return { acceptTypeName: "AA", highlightTimeClass: 'highlight-min-aa' };
         }
         case AcceptType.SECOND_ACCEPT: {
-          return {acceptTypeName: "SA", highlightTimeClass: 'highlight-min-sa'};
+          return { acceptTypeName: "SA", highlightTimeClass: 'highlight-min-sa' };
 
         }
         case AcceptType.PENDING_ACCEPT: {
-          return {acceptTypeName: "PA", highlightTimeClass: 'highlight-min-pa'};
+          return { acceptTypeName: "PA", highlightTimeClass: 'highlight-min-pa' };
         }
       }
     }
 
-    return {acceptTypeName: '', highlightTimeClass: ''};
+    return { acceptTypeName: '', highlightTimeClass: '' };
   }
 
-  updateCheckRelatedEvent(selectedRelatedEvents: ChildMatchModel[], allRelatedEvents: LogInfoRelatedEvent[], relatedEvents: ChildMatchModel[], matchType: number){
+  updateCheckRelatedEvent(selectedRelatedEvents: ChildMatchModel[], allRelatedEvents: LogInfoRelatedEvent[], relatedEvents: ChildMatchModel[], matchType: number) {
     return allRelatedEvents.filter(x => (selectedRelatedEvents.some(y => y.matchId === x.matchId)
-        || relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== matchType));
+      || relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== matchType));
   }
 
   isHasRelatedEvent(filterSubTypeId: number): boolean {

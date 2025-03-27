@@ -13,11 +13,11 @@ import { LogInfoWrongOfferedName } from '../models/log-info-wrong-offered-name.m
 import { PrimitiveProperty } from '../models/primitive-property.model';
 
 @Component({
-    selector: 'log-info-wrong-offered-name',
-    templateUrl: './log-info-wrong-offered-name.component.html',
-    styleUrls: ['./log-info-wrong-offered-name.component.scss'],
-    standalone: true,
-    imports: [FormsModule, CommonModule, NgbModule, BlockUiModule, TemplateMessageComponent, VoidReasonComponent, TicketsComponent],
+  selector: 'log-info-wrong-offered-name',
+  templateUrl: './log-info-wrong-offered-name.component.html',
+  styleUrls: ['./log-info-wrong-offered-name.component.scss'],
+  standalone: true,
+  imports: [FormsModule, CommonModule, NgbModule, BlockUiModule, TemplateMessageComponent, VoidReasonComponent, TicketsComponent],
 })
 export class LogInfoWrongOfferedNameComponent {
   @Input() isEdit: boolean;

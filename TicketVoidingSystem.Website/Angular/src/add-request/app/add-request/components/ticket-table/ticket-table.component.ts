@@ -7,11 +7,11 @@ import { SanitizeHtmlPipe } from '../../../../../utility/pipes/sanitize-html.pip
 import { TicketTableViewModel } from './ticket-table.model';
 
 @Component({
-    selector: 'ticket-table',
-    templateUrl: './ticket-table.component.html',
-    styleUrls: ['./ticket-table.component.scss'],
-    standalone: true,
-    imports: [BlockUiModule, FormsModule, SanitizeHtmlPipe, CommonModule]
+  selector: 'ticket-table',
+  templateUrl: './ticket-table.component.html',
+  styleUrls: ['./ticket-table.component.scss'],
+  standalone: true,
+  imports: [BlockUiModule, FormsModule, SanitizeHtmlPipe, CommonModule]
 })
 export class TicketTableComponent {
   @Input() model = new TicketTableViewModel();

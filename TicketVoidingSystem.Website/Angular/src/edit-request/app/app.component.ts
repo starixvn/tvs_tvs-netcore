@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AddRequestComponent } from 'src/add-request/app/add-request/add-request.component';
-import { BlockFullUiComponent } from 'src/utility/components/block-full-ui/block-full-ui.component';
-import { MenuBarComponent } from 'src/utility/components/menu-bar/menu-bar.component';
+import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { RequestModel } from '../../add-request/app/add-request/models/request.model';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppService } from './app.service';

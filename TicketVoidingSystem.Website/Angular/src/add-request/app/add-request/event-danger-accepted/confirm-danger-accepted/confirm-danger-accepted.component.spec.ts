@@ -1,65 +1,54 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfirmDangerAcceptedComponent } from './confirm-danger-accepted.component';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { ConfirmDangerAcceptedModel } from './confirm-danger-accepted.model';
 
-describe('ConfirmRedCardComponent', () => {
-  @NgModule({
-    declarations: [],
-    imports: [      
-      FormsModule,
-      NgbModule,
-    ],
-    providers: [
-    ]
-  })
-  class AppModuleTest { }
+describe('ConfirmDangerAcceptedComponent', () => {
+  let component: ConfirmDangerAcceptedComponent;
+  let fixture: ComponentFixture<ConfirmDangerAcceptedComponent>;
 
-  let shallow: Shallow<ConfirmDangerAcceptedComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(ConfirmDangerAcceptedComponent, AppModuleTest).dontMock(NgbModule);
+    fixture = TestBed.createComponent(ConfirmDangerAcceptedComponent);
+    component = fixture.componentInstance;
   });
 
-  it('ConfirmRedCardComponent should init match snapshot', async () => {
-    // Arrange
-    const { instance, fixture } = await shallow.render();
-    instance.model = new ConfirmDangerAcceptedModel();
-    fixture.detectChanges();
-    // Assert
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#clickCancel should emit when call #onClickCancel', async () => {
+  it('should initialize with default model', () => {
+    expect(component.model).toBeInstanceOf(ConfirmDangerAcceptedModel);
+  });
+
+  it('should emit clickCancel event and set isOpenDialog to false when onClickCancel is called', () => {
     // Arrange
-    const { instance } = await shallow.render({
-      bind: {
-        model: new ConfirmDangerAcceptedModel()
-      }
-    });
+    component.model.isOpenDialog = true;
+    component.clickCancel.emit = jest.fn();
 
     // Action
-    instance.onClickCancel();
+    component.onClickCancel();
 
     // Assert
-    expect(instance.clickCancel.emit).toHaveBeenCalledTimes(1);
-    expect(instance.model.isOpenDialog).toEqual(false);
+    expect(component.model.isOpenDialog).toBeFalsy();
+    expect(component.clickCancel.emit).toHaveBeenCalled();
   });
-  
-  it('#clickOk should emit when call #onClickOk', async () => {
+
+  it('should emit clickOk event and set isOpenDialog to false when onClickOk is called', () => {
     // Arrange
-    const { instance } = await shallow.render({
-      bind: {
-        model: new ConfirmDangerAcceptedModel()
-      }
-    });
+    component.model.isOpenDialog = true;
+    component.clickOk.emit = jest.fn();
 
     // Action
-    instance.onClickOk();
+    component.onClickOk();
 
     // Assert
-    expect(instance.clickOk.emit).toHaveBeenCalledTimes(1);
+    expect(component.model.isOpenDialog).toBeFalsy();
+    expect(component.clickOk.emit).toHaveBeenCalled();
   });
 });
