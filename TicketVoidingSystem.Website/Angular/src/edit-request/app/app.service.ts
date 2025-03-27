@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpService } from '../../utility/services/http.service';
 import { RequestDetailViewModel } from './request.model';
 
@@ -6,10 +6,7 @@ import { RequestDetailViewModel } from './request.model';
   providedIn: 'root'
 })
 export class AppService {
-
-  constructor(
-    private readonly httpService: HttpService
-  ) { }
+  httpService = inject(HttpService);
 
   async getRequestById(id: number): Promise<RequestDetailViewModel> {
     return this.httpService.getJson(`api/ManageRequest/GetRequest/${id}`);
