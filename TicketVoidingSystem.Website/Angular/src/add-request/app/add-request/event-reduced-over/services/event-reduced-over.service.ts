@@ -6,12 +6,8 @@ import { FilterReducedOverModel } from "../models/filter-reduced-over.model";
 import { ReducedOverGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoReducedOver } from "../models/log-info-reduced-over.model";
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class EventReducedOverService {
-  constructor() { }
 
   public getReducedOverGetLogInfoModel(subIssueTypeId: number, matchId: number, filterReducedOverModels: FilterReducedOverModel[]): ReducedOverGetLogInfoQuery[] {
     return filterReducedOverModels.map(x => this.createReducedOverGetLogInfoQuery(x, matchId, Number(subIssueTypeId)));

@@ -82,7 +82,7 @@ public class LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, Se
             ScoreId = item.ScoreId,
             Validation = logInfoHelperService.CombineValidations(validations, x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId),
             TicketRequest = logInfoHelperService.CombineTicketRequest(ticketRequests, x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId),
-            LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId)
+            LogInfoDetail = logInfoHelperService.CombineLogInfoDetail(logInfoDetails, x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId),
             MatchId = item.MatchId
         }).ToList();
     }

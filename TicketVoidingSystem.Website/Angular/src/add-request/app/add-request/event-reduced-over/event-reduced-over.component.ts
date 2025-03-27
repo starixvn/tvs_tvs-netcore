@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OddsInfo } from '../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
@@ -21,11 +21,12 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-    selector: 'event-reduced-over',
-    templateUrl: './event-reduced-over.component.html',
-    styleUrls: ['./event-reduced-over.component.scss'],
-    standalone: true,
-    imports: [FormsModule, NgbModule, EventLeagueComponent, FilterReducedOverComponent, LogInfoReducedOverComponent]
+  selector: 'event-reduced-over',
+  templateUrl: './event-reduced-over.component.html',
+  styleUrls: ['./event-reduced-over.component.scss'],
+  standalone: true,
+  imports: [FormsModule, NgbModule, EventLeagueComponent, FilterReducedOverComponent, LogInfoReducedOverComponent],
+  providers: [ValidationService, LogInfoService, SaveRequestService, EventReducedOverService, FilterReducedOverService]
 })
 export class EventReducedOverComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -46,14 +47,12 @@ export class EventReducedOverComponent implements OnInit {
   originalPlayers: OddsInfo[];
   groupReducedOverBetTypes: ReducedOverBetType[];
 
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly logInfoService: LogInfoService,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly eventReducedOverService: EventReducedOverService,
-    private readonly filterService: FilterReducedOverService
-    ) { }
+  private readonly validationService = inject(ValidationService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly eventReducedOverService = inject(EventReducedOverService);
+  private readonly filterService = inject(FilterReducedOverService);
 
   async ngOnInit(): Promise<void> {
     if (this.isEdit) {

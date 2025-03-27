@@ -70,7 +70,7 @@ export class FilterComponent implements OnInit, OnChanges {
       this.updateIssueBySub();
       this.updateCurrentAction();
       if (!this.haveIssueTypeFromPermission(this.issueTypes.issueId?.toString())) {
-        this.backToNotAuthorizedPage();
+        this.backToAccessDeniedPage();
         return;
       }
       if (this.isLikelyDangerAccepted()) {
@@ -236,7 +236,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.issueTypesPermission = await this.commonService.getIssueTypePermissionList();
     if (_.isNil(this.issueTypesPermission) || this.issueTypesPermission.length === 0) {
-      this.backToNotAuthorizedPage();
+      this.backToAccessDeniedPage();
       return;
     }
 
@@ -298,8 +298,8 @@ export class FilterComponent implements OnInit, OnChanges {
     }) > -1;
   }
 
-  backToNotAuthorizedPage() {
-    window.location.assign(`Home/NotAuthorized`);
+  backToAccessDeniedPage() {
+    window.location.assign(`Home/AccessDenied`);
   }
 
   isEditOrExternalUrl(): boolean {

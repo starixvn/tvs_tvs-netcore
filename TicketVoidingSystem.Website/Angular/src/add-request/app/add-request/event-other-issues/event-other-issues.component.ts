@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { AdvancedModeAddRequestModel } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
@@ -25,11 +25,13 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-    selector: 'event-other-issues',
-    templateUrl: './event-other-issues.component.html',
-    styleUrls: ['./event-other-issues.component.scss'],
-    standalone: true,
-    imports: [EventLeagueComponent, FilterOtherIssuesComponent, AdvancedModeAddRequestComponent, LogInfoOtherIssuesComponent, ConfirmAddRequestComponent]
+  selector: 'event-other-issues',
+  templateUrl: './event-other-issues.component.html',
+  styleUrls: ['./event-other-issues.component.scss'],
+  standalone: true,
+  imports: [EventLeagueComponent, FilterOtherIssuesComponent, AdvancedModeAddRequestComponent,
+    LogInfoOtherIssuesComponent, ConfirmAddRequestComponent],
+  providers: [ValidationService, EventOtherIssuesService, LogInfoService, SaveRequestService]
 })
 export class EventOtherIssuesComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;
@@ -53,14 +55,12 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   confirmAddRequest = new ConfirmAddRequestModel();
   primitiveProps = new PrimitiveProperty();
   permission = new PermissionAddRequest();
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly eventOtherIssuesService: EventOtherIssuesService,
-    private readonly logInfoService: LogInfoService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestApiService: AddRequestApiService
-  ) { }
+  private readonly validationService = inject(ValidationService);
+  private readonly eventOtherIssuesService = inject(EventOtherIssuesService);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   async ngOnChanges(changes: SimpleChanges) {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {

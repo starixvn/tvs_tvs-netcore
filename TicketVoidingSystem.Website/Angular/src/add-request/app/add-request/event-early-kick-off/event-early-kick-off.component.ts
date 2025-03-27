@@ -14,7 +14,6 @@ import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.compone
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType } from '../../../../utility/constants/config';
 import { MatchModel } from '../../../../utility/models/match.model';
@@ -166,8 +165,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   }
 
   public async getTicketsMainEvent(): Promise<void> {
-    const query = this.logInfoService.initQuery(PagingConstant.INDEX_ZERO, PagingConstant.SIZE_ONE, this.mainEvent, this.filter);
-    await this.logInfoService.getTickets(query, this.mainEvent, this.isEdit, this.requestId, this.filter);
+    await this.logInfoService.getTickets(this.mainEvent, this.isEdit, this.requestId, this.filter);
     this.logInfoService.assignTemplateMessageValueToEvent(this.mainEvent);
   }
 

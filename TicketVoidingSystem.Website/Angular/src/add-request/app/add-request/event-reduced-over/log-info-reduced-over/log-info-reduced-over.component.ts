@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
@@ -11,18 +11,16 @@ import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 
 @Component({
-    selector: 'log-info-reduced-over',
-    templateUrl: './log-info-reduced-over.component.html',
-    styleUrls: ['./log-info-reduced-over.component.scss'],
-    standalone: true,
-    imports: [FormsModule, CommonModule, NgbModule, PipeModule]
+  selector: 'log-info-reduced-over',
+  templateUrl: './log-info-reduced-over.component.html',
+  styleUrls: ['./log-info-reduced-over.component.scss'],
+  standalone: true,
+  imports: [FormsModule, CommonModule, NgbModule, PipeModule]
 })
 export class LogInfoReducedOverComponent {
   @Input() logInfo: LogInfoReducedOver;
   @Input() primitiveProps = new PrimitivePropertyEvent();
-
-  constructor(private readonly modalService: ModalService) { }
-
+  private readonly modalService = inject(ModalService);
   public displayFullDateTimeFormat(time: Date): string {
     return moment(time).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
   }

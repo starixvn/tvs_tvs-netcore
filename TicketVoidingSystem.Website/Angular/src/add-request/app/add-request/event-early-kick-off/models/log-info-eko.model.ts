@@ -1,4 +1,4 @@
-import { PagingModel } from "../../../../../utility/components/paging/paging/paging.model";
+import { LogInfoDetail } from "src/utility/models/log-info-detail.model";
 import { TemplateValue } from '../../../../../utility/components/template-message/template-message/template.model';
 import { MatchModel } from "../../../../../utility/models/match.model";
 import { ValidationMessage } from "../../models/get-log-info.model";
@@ -11,12 +11,9 @@ export class LogInfoEarlyKickOff {
   isMainMatch: boolean;
   kickOffTime: string;
   eventName: string;
-
   tableTicketsModel = new TableTicketsModel();
   matchModel: MatchModel;
   isCollapse: boolean;
-  pagingModel = new PagingModel();
-
   messageValidationLogInfo?: ValidationMessage[];
   isInvalidTotalTickets: boolean;
   isHasSettledTicket: boolean;
@@ -24,4 +21,5 @@ export class LogInfoEarlyKickOff {
   isShowValidation: boolean;
   templateValue?: TemplateValue;
   sportType: number;
+  logInfoDetail = new LogInfoDetail();
 }

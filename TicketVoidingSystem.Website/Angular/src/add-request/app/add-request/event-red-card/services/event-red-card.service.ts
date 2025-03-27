@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { AddRequestStore } from '../../add-request.store';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property,mdel';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { Category, GroupButton } from '../../filter/sub-issue-type-dialog/sub-issue-type-json.model';
 import SubIssueTypeRedCardConfig from '../../filter/sub-issue-type-dialog/sub-type-red-card.json';

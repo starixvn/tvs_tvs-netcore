@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { GroupBetTypesAddRequestModel } from "../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model";
@@ -11,15 +11,10 @@ import { OtherIssuesGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoOtherIssues } from "../models/log-info-other-issues.model";
 import { ValidationService } from "./validation.service";
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class EventOtherIssuesService {
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly validationService: ValidationService
-  ) { }
+  private readonly commonService = inject(CommonService);
+  private readonly validationService = inject(ValidationService);
 
   async getGroupBetTypes(matchId: number, filterOtherIssuesModel: FilterOtherIssuesModel, subIssueTypeId: string): Promise<GroupBetTypesAddRequestModel> {
     const query: GetBetTypesQuery = {

@@ -42,9 +42,7 @@
           </div>
           }
           <ng-container>
-            <tickets-list [model]="logInfo.tableTicketsModel" [(paging)]="logInfo.pagingModel"
-              (pagingChange)="pagingEvent()" [isBlock]="isBlockBetList">
-            </tickets-list>
+            <tickets-list [model]="logInfo.tableTicketsModel" [isBlock]="isBlockBetList"></tickets-list>
           </ng-container>
         </div>
         }

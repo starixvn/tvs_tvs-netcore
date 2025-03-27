@@ -4,9 +4,10 @@ import { DateTimeFormat, MatchType } from '../../../../../utility/constants/conf
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { Category, GroupButton } from '../../filter/sub-issue-type-dialog/sub-issue-type-json.model';
 import SubIssueTypeDangerAcceptedConfig from '../../filter/sub-issue-type-dialog/sub-type-danger-accepted.json';
 import { RedCardModel } from '../../models/event-red-card.model';
@@ -15,7 +16,9 @@ import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../models/
 import { ValidationService } from './validation.service';
 import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class EventDangerAcceptedService {
   private readonly addRequestApiService = inject(AddRequestApiService);
   private readonly validationService = inject(ValidationService);

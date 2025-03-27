@@ -17,7 +17,7 @@ import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
 import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
-import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property,mdel';
+import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';

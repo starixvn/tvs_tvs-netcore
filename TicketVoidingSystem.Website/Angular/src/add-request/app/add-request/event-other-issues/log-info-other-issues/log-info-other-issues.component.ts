@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { LogInfoMessageComponent } from 'src/utility/components/log-info-detail/log-info-message/log-info-message.component';
@@ -26,10 +26,7 @@ export class LogInfoOtherIssuesComponent implements OnInit {
   @Input() issueTypeId: string;
   @Output() searchEvent = new EventEmitter<string>();
   affectedTicketsModel = new AffectedTicketsModel();
-
-  constructor(
-    private readonly modalService: ModalService
-  ) { }
+  private readonly modalService = inject(ModalService);
 
   ngOnInit(): void {
     if (this.isEdit) {

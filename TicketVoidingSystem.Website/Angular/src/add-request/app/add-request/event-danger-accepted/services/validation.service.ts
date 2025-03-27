@@ -5,13 +5,15 @@ import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestStore } from '../../add-request.store';
-import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
-import { FilterTimeAreaComponent } from '../../event-red-card/filter-time-area/filter-time-area.component';
 import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
+import { FilterTimeAreaComponent } from '../../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterModel } from '../../filter/filter.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ValidationService {
 
   isHasAllowanceTime(event: LogInfoRelatedEvent): boolean {

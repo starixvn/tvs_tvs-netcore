@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { ItemsSelect } from '../../../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
@@ -10,14 +10,10 @@ import { GroupReducedOverConstant } from '../constants/bet-type-reduced-over.con
 import { GroupReducedOverBetType, ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FilterReducedOverService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly commonService: CommonService
-  ) {}
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly commonService = inject(CommonService);
 
   public initDefaultFilter(reducedOverBetTypes: ReducedOverBetType[]): FilterReducedOverModel {
     const model = new FilterReducedOverModel();
@@ -53,14 +49,14 @@ export class FilterReducedOverService {
 
   private createGroupReducedOverBetTypeWithItem(parentId: number, betTypes: ReducedOverBetType[]): GroupReducedOverBetType {
     return {
-      betTypeId : parentId,
-      betTypeName : this.getGroupName(parentId),
+      betTypeId: parentId,
+      betTypeName: this.getGroupName(parentId),
       items: betTypes.filter(x => x.parentId === parentId)
-     } as GroupReducedOverBetType;
+    } as GroupReducedOverBetType;
   }
 
   private getGroupName(id: number): string {
-    switch(id) {
+    switch (id) {
       case GroupReducedOverConstant.ALL_HOME_OE:
         return 'All Home OE Bet Types';
       case GroupReducedOverConstant.ALL_AWAY_OE:
@@ -96,7 +92,7 @@ export class FilterReducedOverService {
   }
 
   public async getPlayers(matchId: number, betTypes: string): Promise<OddsInfo[]> {
-    return this.commonService.getOddsInfoSpecialBetTypes({matchId: matchId?.toString(), betTypes: betTypes});
+    return this.commonService.getOddsInfoSpecialBetTypes({ matchId: matchId?.toString(), betTypes: betTypes });
   }
 
   public renderPlayer(oddsInfoList: OddsInfo[]): ItemsSelect[] {
@@ -109,10 +105,10 @@ export class FilterReducedOverService {
     const items: NgSelectMixtureItem[] = [];
     betTypes.forEach(group => {
       const temp = [];
-        group.items?.forEach(itemSelect => {
-          temp.push(new NgSelectMixtureItem(itemSelect.betTypeId.toString(), itemSelect.betTypeName, itemSelect.parentId, false, true, true, []));
-        });
-        items.push(new NgSelectMixtureItem(group.betTypeId.toString(), group.betTypeName, group.parentId, false, true, true, temp));
+      group.items?.forEach(itemSelect => {
+        temp.push(new NgSelectMixtureItem(itemSelect.betTypeId.toString(), itemSelect.betTypeName, itemSelect.parentId, false, true, true, []));
+      });
+      items.push(new NgSelectMixtureItem(group.betTypeId.toString(), group.betTypeName, group.parentId, false, true, true, temp));
     });
 
     return items;

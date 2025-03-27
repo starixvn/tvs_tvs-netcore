@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
@@ -15,11 +15,11 @@ import { ValidationService } from '../services/validation.service';
 import { PrimitivePropertyItem } from './filter-reduced-over-item.model';
 
 @Component({
-    selector: 'filter-reduced-over-item',
-    templateUrl: './filter-reduced-over-item.component.html',
-    styleUrls: ['./filter-reduced-over-item.component.scss'],
-    standalone: true,
-    imports: [FormsModule, CommonModule, NgSelectModule, TooltipComponent, NgSelectMixtureComponent, MultipleSelectionComponent]
+  selector: 'filter-reduced-over-item',
+  templateUrl: './filter-reduced-over-item.component.html',
+  styleUrls: ['./filter-reduced-over-item.component.scss'],
+  standalone: true,
+  imports: [FormsModule, CommonModule, NgSelectModule, TooltipComponent, NgSelectMixtureComponent, MultipleSelectionComponent]
 })
 export class FilterReducedOverItemComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -36,11 +36,11 @@ export class FilterReducedOverItemComponent implements OnInit {
   tooltip = new Tooltip();
 
   primitivePropertyItem = new PrimitivePropertyItem();
+  private readonly element = inject(ElementRef);
+  private readonly validationService = inject(ValidationService);
+  private readonly filterService = inject(FilterReducedOverService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly validationService: ValidationService,
-    private readonly filterService: FilterReducedOverService) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -68,7 +68,7 @@ export class FilterReducedOverItemComponent implements OnInit {
     return this.validationService.isValidOnlyNumberWicketOver(value, `${elementClass}${this.index}`, this.tooltip);
   }
 
-  public updateCheckedBetTypes(checkedBetTypeIds: string[]){
+  public updateCheckedBetTypes(checkedBetTypeIds: string[]) {
     this.resetValue(checkedBetTypeIds);
     if (checkedBetTypeIds.length > 0) {
       this.updateStatusControlByCheckedBetTypes(checkedBetTypeIds);

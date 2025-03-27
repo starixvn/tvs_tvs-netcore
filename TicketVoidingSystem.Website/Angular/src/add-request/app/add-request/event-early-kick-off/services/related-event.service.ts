@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment';
-import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { MatchModel } from '../../../../../utility/models/match.model';
@@ -38,7 +37,6 @@ export class RelatedEventService {
           messageValidationLogInfo: null,
           isCollapse: true,
           isShowValidation: false,
-          pagingModel: new PagingModel(),
           tableTicketsModel: new TableTicketsModel(),
           matchModel: matchModel,
           sportType: x.sportType

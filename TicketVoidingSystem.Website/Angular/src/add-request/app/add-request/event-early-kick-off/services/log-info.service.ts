@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { PagingConstant } from '../../../../../utility/components/paging/paging/paging.model';
 import { TemplateService } from '../../../../../utility/components/template-message/template-message/services/template.service';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { HttpService } from '../../../../../utility/services/http.service';
@@ -7,7 +6,6 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { GetLogInfoQuery } from '../../models/add-request.query';
 import { GetLogInfoModel, GetLogInfoViewModel } from '../../models/get-log-info.model';
-import { GetTicketsQuery } from '../../models/get-tickets.query';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { EventEarlyKickOffService } from './event-eko.service';
@@ -19,18 +17,17 @@ export class LogInfoService {
   private readonly eventEarlyKickOffService = inject(EventEarlyKickOffService);
   private readonly templateService = inject(TemplateService);
 
-  public async getTickets(query: GetTicketsQuery, logInfo: LogInfoEarlyKickOff, isEdit: boolean, requestId: number, filter: FilterModel): Promise<void> {
+  public async getTickets(logInfo: LogInfoEarlyKickOff, isEdit: boolean, requestId: number, filter: FilterModel): Promise<void> {
     this.resetLogInfoOfEvent([logInfo]);
     const getLogInfoResult = await this.getLogInfo([logInfo], isEdit, requestId, filter);
     this.assignResultLogInfoToEvents([logInfo], getLogInfoResult.getLogInfoModels);
-    query.transInfoJson = getLogInfoResult.transInfoAddRequestModel.transInfoJson;
-
-    const data = await this.httpService.postJson<GetTicketsQuery, TableTicketsModel>(query, 'api/VoidRequest/GetTickets');
-    logInfo.pagingModel.pageSize = PagingConstant.SIZE_ONE;
-    logInfo.tableTicketsModel.initData(data);
+    const result = await this.httpService.postJson<{}, TableTicketsModel>({
+      issueTypeId: 8,
+      logInfoTicketsJson: logInfo.logInfoDetail.logInfoTicketsJson
+    }, 'api/AddRequest/GetLogInfoTickets');
+    logInfo.tableTicketsModel.initData(result);
     logInfo.isShowValidation = true;
     logInfo.isCollapse = false;
-    logInfo.pagingModel.total = data.total;
   }
 
   public assignTemplateMessageValueToEvent(eventLogInfo: LogInfoEarlyKickOff): void {
@@ -40,22 +37,9 @@ export class LogInfoService {
     eventLogInfo.templateValue.kickOffTime = eventLogInfo.kickOffTime;
   }
 
-  public initQuery(pageIndex: number, pageSize: number, logInfo: LogInfoEarlyKickOff, filter: FilterModel): GetTicketsQuery {
-    const model = new GetTicketsQuery();
-    model.pageIndex = pageIndex;
-    model.pageSize = pageSize;
-    model.match = logInfo.matchModel;
-    model.kickOffDate = logInfo.kickOffTime;
-    model.issueTypeId = Number(filter.issueTypeId);
-    model.requestId = null;
-    model.actionId = Number(filter.action);
-
-    return model;
-  }
-
   public async getLogInfo(selectedEvents: LogInfoEarlyKickOff[], isEdit: boolean, requestId: number, filter: FilterModel): Promise<GetLogInfoViewModel> {
     const getLogInfoQuery = this.initGetLogInfoEarlyKickOffQuery(isEdit, requestId, filter, selectedEvents);
-    return await this.commonService.getLogInfo(getLogInfoQuery);
+    return this.commonService.getLogInfo(getLogInfoQuery);
   }
 
   private initGetLogInfoEarlyKickOffQuery(isEdit: boolean, requestId: number, filter: FilterModel, events: LogInfoEarlyKickOff[]): GetLogInfoQuery {
@@ -76,6 +60,7 @@ export class LogInfoService {
         event.isHasSettledTicket = logInfoModel.validation.isHasSettledTicket;
         event.isHasInstantlySettledTicket = logInfoModel.validation.isHasInstantlySettledTicket;
         event.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel);
+        event.logInfoDetail = logInfoModel.logInfoDetail;
         event.isCollapse = logInfoModel.validation.isInvalidTotalTickets ? false : event.isCollapse;
         if (logInfoModel.validation.isInvalidTotalTickets) {  // check note***
           event.isShowValidation = true;

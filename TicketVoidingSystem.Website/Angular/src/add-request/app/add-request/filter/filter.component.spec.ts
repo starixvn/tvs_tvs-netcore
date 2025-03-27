@@ -172,7 +172,7 @@ describe('FilterComponent', () => {
     window.location.assign = jest.fn();
 
     // Act
-    instance.backToNotAuthorizedPage();
+    instance.backToAccessDeniedPage();
 
     // Assert
     expect(window.location.assign).toHaveBeenCalledWith(Helper.urlNotAuthorizedPage);
@@ -198,7 +198,7 @@ describe('FilterComponent', () => {
     instance.issueTypes = new IssueTypes(Helper.fakeIssueTypes);
     instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
     instance.haveIssueTypeFromPermission = jest.fn().mockImplementation(() => false);
-    instance.backToNotAuthorizedPage = jest.fn();
+    instance.backToAccessDeniedPage = jest.fn();
 
     // Act
     await instance.ngOnChanges(changes);
@@ -804,11 +804,11 @@ describe('FilterComponent', () => {
         }
       });
 
-    [IssueTypeConstant.DANGER_ACCEPTED, IssueTypeConstant.EARLY_KICK_OFF, IssueTypeConstant.WRONG_KICK_OFF, 
-      IssueTypeConstant.ABNORMAL_ACCOUNT, IssueTypeConstant.RED_CARD, IssueTypeConstant.WRONG_HDP, 
-      IssueTypeConstant.WRONG_1ST_HDP, IssueTypeConstant.WRONG_OU, IssueTypeConstant.WRONG_1ST_OU, 
-      IssueTypeConstant.ABNORMAL_BET, IssueTypeConstant.WRONG_SCORE, IssueTypeConstant.WRONG_ODDS, 
-      IssueTypeConstant.ABANDONED, IssueTypeConstant.DUPLICATE_TICKETS, IssueTypeConstant.NOT_PARTICIPATE, 
+    [IssueTypeConstant.DANGER_ACCEPTED, IssueTypeConstant.EARLY_KICK_OFF, IssueTypeConstant.WRONG_KICK_OFF,
+      IssueTypeConstant.ABNORMAL_ACCOUNT, IssueTypeConstant.RED_CARD, IssueTypeConstant.WRONG_HDP,
+      IssueTypeConstant.WRONG_1ST_HDP, IssueTypeConstant.WRONG_OU, IssueTypeConstant.WRONG_1ST_OU,
+      IssueTypeConstant.ABNORMAL_BET, IssueTypeConstant.WRONG_SCORE, IssueTypeConstant.WRONG_ODDS,
+      IssueTypeConstant.ABANDONED, IssueTypeConstant.DUPLICATE_TICKETS, IssueTypeConstant.NOT_PARTICIPATE,
       IssueTypeConstant.ARCHIVED_TICKET, IssueTypeConstant.REDUCED_OVER].forEach(issueId => {
       instance.model.issueTypeId = issueId.toString();
 

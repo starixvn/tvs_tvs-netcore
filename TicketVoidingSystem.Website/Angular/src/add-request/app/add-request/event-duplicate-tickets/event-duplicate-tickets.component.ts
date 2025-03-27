@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
 import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
@@ -19,11 +19,12 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-    selector: 'event-duplicate-tickets',
-    templateUrl: './event-duplicate-tickets.component.html',
-    styleUrls: ['./event-duplicate-tickets.component.scss'],
-    standalone: true,
-    imports: [FormsModule, BlockUiModule, CommonModule, BetIdsComponent, TooltipComponent]
+  selector: 'event-duplicate-tickets',
+  templateUrl: './event-duplicate-tickets.component.html',
+  styleUrls: ['./event-duplicate-tickets.component.scss'],
+  standalone: true,
+  imports: [FormsModule, BlockUiModule, CommonModule, BetIdsComponent, TooltipComponent],
+  providers: [ValidationService, SaveRequestService]
 })
 export class EventDuplicateTicketsComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -40,17 +41,16 @@ export class EventDuplicateTicketsComponent implements OnInit {
   isCancelAfterFocusOutBetIdsEvent = false;
   abnormalFilterBy = new AbnormalFilterBy();
   tooltip = new Tooltip();
+  private readonly element = inject(ElementRef);
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly validationService = inject(ValidationService);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly commonService = inject(CommonService);
 
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly validationService: ValidationService,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly element: ElementRef,
-    private readonly commonService: CommonService
-    ) {
-      this.tooltip.element = this.element;
-    }
+  constructor() {
+    this.tooltip.element = this.element;
+  }
 
   async ngOnInit(): Promise<void> {
     if (this.isEdit) {

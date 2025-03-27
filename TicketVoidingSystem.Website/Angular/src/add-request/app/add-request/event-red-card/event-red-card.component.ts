@@ -17,7 +17,7 @@ import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
 import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
-import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property,mdel';
+import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';

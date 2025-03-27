@@ -3,7 +3,6 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
 import { TemplateMessageComponent } from 'src/utility/components/template-message/template-message/template-message.component';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { PagingConstant } from '../../../../../utility/components/paging/paging/paging.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { IssueTypes } from '../../filter/issue-types.model';
@@ -35,19 +34,11 @@ export class LogInfoEkoComponent {
   private readonly modalService = inject(ModalService);
   private readonly logInfoService = inject(LogInfoService);
 
-  async pagingEvent() {
-    this.isBlock = true;
-    const query = this.logInfoService.initQuery(this.logInfo.pagingModel.page - 1, this.logInfo.pagingModel.pageSize, this.logInfo, this.filter);
-    await this.logInfoService.getTickets(query, this.logInfo, this.isEdit, this.requestId, this.filter);
-    this.isBlock = false;
-  }
-
   public async clickHeader(): Promise<void> {
     this.logInfo.isCollapse = !this.logInfo.isCollapse;
     if (!this.logInfo.isCollapse) {
       this.isBlock = true;
-      const query = this.logInfoService.initQuery(PagingConstant.INDEX_ZERO, PagingConstant.SIZE_ONE, this.logInfo, this.filter);
-      await this.logInfoService.getTickets(query, this.logInfo, this.isEdit, this.requestId, this.filter);
+      await this.logInfoService.getTickets(this.logInfo, this.isEdit, this.requestId, this.filter);
       this.logInfoService.assignTemplateMessageValueToEvent(this.logInfo);
       this.isBlock = false;
     }
