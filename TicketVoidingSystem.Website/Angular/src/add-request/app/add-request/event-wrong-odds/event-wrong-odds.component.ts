@@ -21,19 +21,19 @@ import { ValidationService } from './services/validation.service';
 import { PoolHouseTicketValue } from '../pool-house-ticket/pool-house-ticket.constant';
 
 @Component({
-    selector: 'event-wrong-odds',
-    templateUrl: './event-wrong-odds.component.html',
-    styleUrls: ['./event-wrong-odds.component.scss'],
-    standalone: true,
-    imports: [EventLeagueComponent, FilterWrongOddsComponent, FormsModule, LogInfoWrongOddsComponent],
-    providers: [
-      ValidationService,
-      EventWrongOddsService,
-      LogInfoService,
-      SaveRequestService,
-      CalculateOddsService,
-      AddRequestApiService
-    ]
+  selector: 'event-wrong-odds',
+  templateUrl: './event-wrong-odds.component.html',
+  styleUrls: ['./event-wrong-odds.component.scss'],
+  standalone: true,
+  imports: [EventLeagueComponent, FilterWrongOddsComponent, FormsModule, LogInfoWrongOddsComponent],
+  providers: [
+    ValidationService,
+    EventWrongOddsService,
+    LogInfoService,
+    SaveRequestService,
+    CalculateOddsService,
+    AddRequestApiService
+  ]
 })
 export class EventWrongOddsComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -68,7 +68,7 @@ export class EventWrongOddsComponent implements OnInit {
 
   async ngOnChanges(changes: SimpleChanges) {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
-      if(!this.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo && this.eventLeagueComponent.selectedMatch.matchId){
+      if (!this.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo && this.eventLeagueComponent.selectedMatch.matchId) {
         this.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo = await this.GetMaxBetAndSpreadOfEvent();
       }
 
@@ -76,7 +76,7 @@ export class EventWrongOddsComponent implements OnInit {
     }
   }
 
-  public async GetMaxBetAndSpreadOfEvent(): Promise<MaxBetAndSpreadInfo[]>{
+  public async GetMaxBetAndSpreadOfEvent(): Promise<MaxBetAndSpreadInfo[]> {
     const query = this.calculateOddsService.createMaxBetAndSpreadQuery(this.eventLeagueComponent.selectedMatch);
     return this.addRequestApiService.getMaxBetAndSpreadOfEvent(query);
   }
