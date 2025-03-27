@@ -10,7 +10,7 @@
   [isEdit]="isEdit"
   [isDisabled]="filter.isVoided"
   [subIssueTypeId]="filter.subIssueTypeId"
-  (changeFilterEvent)="resetLogInfoOfEvent()"
+  (changeFilterEvent)="resetLogInfoOfEvent();resetPoolHouseCheckedBetTypes()"
   [filterWrongOddsModel]="logInfoEvent.filterWrongOdds">
 </filter-wrong-odds>
 <div class="mb-3 d-flex">
