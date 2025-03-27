@@ -107,9 +107,11 @@ public class CheckValidUsernamesHandler(
         CheckUsernamesInDatabaseResult checkUsernamesResult, IEnumerable<TicketCalculateWinLostAccount> voidTickets, string statusIds)
     {
         var ticketStatusIds = statusIds.Split(",").Select(int.Parse).ToList();
+        var voidTicketTransIds = new HashSet<long>(voidTickets.Select(x => x.TransId));
+
         foreach (var ticket in checkUsernamesResult.TicketCalculateWinLostAccount.Where(x => x.StatusId == TicketStatus.WonId))
         {
-            ticket.IsChecked = voidTickets.Any(y => y.TransId == ticket.TransId);
+            ticket.IsChecked = voidTicketTransIds.Contains(ticket.TransId);
         }
 
         return compressDataAddRequestService.CompressTicket(

@@ -5,24 +5,20 @@
 		<Setting Key="DBSITE01.TicketVoiding_CheckVoidBetPermission_TransInfo" SpName="TicketVoiding_CheckVoidBetPermission_TransInfo" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_CheckVoidBetPermission_TransInfo" SpName="TicketVoiding_CheckVoidBetPermission_TransInfo" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_CheckVoidBetPermission_TransInfo" SpName="TicketVoiding_CheckVoidBetPermission_TransInfo" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_GetBetTypesHaveTickets" SpName="NAP_GetBetTypesHaveTickets" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_GetBetTypesHaveTickets" SpName="NAP_GetBetTypesHaveTickets" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_GetBetTypesHaveTickets" SpName="NAP_GetBetTypesHaveTickets" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_GetBetTypesHaveTickets" SpName="NAP_GetBetTypesHaveTickets" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_BettransCheckNegativeBalance" SpName="NAP_BettransCheckNegativeBalance" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_BettransCheckNegativeBalance" SpName="NAP_BettransCheckNegativeBalance" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_BettransCheckNegativeBalance" SpName="NAP_BettransCheckNegativeBalance" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_BettransCheckNegativeBalance" SpName="NAP_BettransCheckNegativeBalance" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="TicketVoiding_Site_Select" SpName="TicketVoiding_Site_Select" DbName="DBACC.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="NAP_BetTypeSel" SpName="NAP_BetTypeSel" DbName="DBPRO.bodb02.wsv_nap" TimeOut="600">
 			<Mapping DataField="typeid" ObjectProperty="Id" />
 			<Mapping DataField="bettypename" ObjectProperty="Name" />
 		</Setting>
 		<Setting Key="NAP_BetTypeSel_TicketListing_VirtualSport" SpName="NAP_BetTypeSel_TicketListing_VirtualSport" DbName="DBPRO.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="NAP_SelectionTypeSel" SpName="NAP_SelectionTypeSel" DbName="DBPRO.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="Age_SelBalanceUpDay" SpName="Age_SelBalanceUpDay" DbName="DBAGE.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="TicketVoiding_SportsType_Select" SpName="TicketVoiding_SportsType_Select" DbName="DBPRO.bodb02.wsv_nap" TimeOut="600" />
@@ -46,22 +42,18 @@
 		<Setting Key="DBSITE01.TicketVoiding_ManageVoidServices_AutoVoidQueue_Select" SpName="TicketVoiding_ManageVoidServices_AutoVoidQueue_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_ManageVoidServices_AutoVoidQueue_Select" SpName="TicketVoiding_ManageVoidServices_AutoVoidQueue_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_ManageVoidServices_AutoVoidQueue_Select" SpName="TicketVoiding_ManageVoidServices_AutoVoidQueue_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_AutoVoidRequest_Queue_Update" SpName="TicketVoiding_AutoVoidRequest_Queue_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_AutoVoidRequest_Queue_Update" SpName="TicketVoiding_AutoVoidRequest_Queue_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_AutoVoidRequest_Queue_Update" SpName="TicketVoiding_AutoVoidRequest_Queue_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_AutoVoidRequest_Queue_Update" SpName="TicketVoiding_AutoVoidRequest_Queue_Update" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_ManageVoidServices_Queue_Select" SpName="TicketVoiding_ManageVoidServices_Queue_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_ManageVoidServices_Queue_Select" SpName="TicketVoiding_ManageVoidServices_Queue_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_ManageVoidServices_Queue_Select" SpName="TicketVoiding_ManageVoidServices_Queue_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_ManageVoidServices_Queue_Select" SpName="TicketVoiding_ManageVoidServices_Queue_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_ManageVoidServices_Queue_Update" SpName="TicketVoiding_ManageVoidServices_Queue_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_ManageVoidServices_Queue_Update" SpName="TicketVoiding_ManageVoidServices_Queue_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_ManageVoidServices_Queue_Update" SpName="TicketVoiding_ManageVoidServices_Queue_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_ManageVoidServices_Queue_Update" SpName="TicketVoiding_ManageVoidServices_Queue_Update" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="TicketVoiding_ManageVoidServices_Letstalk_Select" SpName="TicketVoiding_ManageVoidServices_Letstalk_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="TicketVoiding_Letstalk_Update" SpName="TicketVoiding_Letstalk_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="TicketVoiding_VoidBetAutomation_Service_Sel" SpName="TicketVoiding_VoidBetAutomation_Service_Sel" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
@@ -74,42 +66,34 @@
 		<Setting Key="DBSITE01.TicketVoiding_AutoUnmark_TransInfo_Select" SpName="TicketVoiding_AutoUnmark_TransInfo_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_AutoUnmark_TransInfo_Select" SpName="TicketVoiding_AutoUnmark_TransInfo_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_AutoUnmark_TransInfo_Select" SpName="TicketVoiding_AutoUnmark_TransInfo_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_AutoUnmark_Update" SpName="TicketVoiding_AutoUnmark_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_AutoUnmark_Update" SpName="TicketVoiding_AutoUnmark_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_AutoUnmark_Update" SpName="TicketVoiding_AutoUnmark_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_AutoUnmark_Update" SpName="TicketVoiding_AutoUnmark_Update" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.Nap_SpecialDelete_AllMarkedTicketsSummary_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.Nap_SpecialDelete_AllMarkedTicketsSummary_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.Nap_SpecialDelete_AllMarkedTicketsSummary_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.Nap_SpecialDelete_AllMarkedTicketsSummary_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.Nap_SpecialDelete_AllMarkedTicketsSummary_Update" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.Nap_SpecialDelete_AllMarkedTicketsSummary_Update" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.Nap_SpecialDelete_AllMarkedTicketsSummary_Update" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.Nap_SpecialDelete_AllMarkedTicketsSummary_Update" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Update" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.Nap_SpecialDelete_AllMarkedTicketsDetail_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsDetail_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.Nap_SpecialDelete_AllMarkedTicketsDetail_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsDetail_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.Nap_SpecialDelete_AllMarkedTicketsDetail_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsDetail_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.Nap_SpecialDelete_AllMarkedTicketsDetail_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsDetail_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.Nap_SpecialDelete_MarkTickets_Select" SpName="Nap_SpecialDelete_MarkTickets_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.Nap_SpecialDelete_MarkTickets_Select" SpName="Nap_SpecialDelete_MarkTickets_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.Nap_SpecialDelete_MarkTickets_Select" SpName="Nap_SpecialDelete_MarkTickets_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.Nap_SpecialDelete_MarkTickets_Select" SpName="Nap_SpecialDelete_MarkTickets_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_AutoVoidRequest_Queue_Insert" SpName="TicketVoiding_AutoVoidRequest_Queue_Insert" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_AutoVoidRequest_Queue_Insert" SpName="TicketVoiding_AutoVoidRequest_Queue_Insert" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_AutoVoidRequest_Queue_Insert" SpName="TicketVoiding_AutoVoidRequest_Queue_Insert" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_AutoVoidRequest_Queue_Insert" SpName="TicketVoiding_AutoVoidRequest_Queue_Insert" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="TicketVoiding_AutoUnmark_Select" SpName="TicketVoiding_AutoUnmark_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="TicketVoiding_AutoUnmark_Ticket_Select" SpName="TicketVoiding_AutoUnmark_Ticket_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="TicketVoiding_AutoUnmarkSetting_Insert" SpName="TicketVoiding_AutoUnmarkSetting_Insert" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
@@ -121,7 +105,6 @@
 		<Setting Key="DBSITE01.NAP_BettransSelDetailSpecialDel_MixParlay" SpName="NAP_BettransSelDetailSpecialDel_MixParlay" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_BettransSelDetailSpecialDel_MixParlay" SpName="NAP_BettransSelDetailSpecialDel_MixParlay" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_BettransSelDetailSpecialDel_MixParlay" SpName="NAP_BettransSelDetailSpecialDel_MixParlay" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="NAP_SpecialDelete_SMP_Selections_Select" SpName="NAP_SpecialDelete_SMP_Selections_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 	</Function>
 	<Function Name="TicketListing">
@@ -144,13 +127,11 @@
 		<Setting Key="DBSITE01.NAP_SpecialDelete_VoidSingleBet_Select" SpName="NAP_SpecialDelete_VoidSingleBet_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_VoidSingleBet_Select" SpName="NAP_SpecialDelete_VoidSingleBet_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_VoidSingleBet_Select" SpName="NAP_SpecialDelete_VoidSingleBet_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_SpecialDelete_VoidSingleBet_Update" SpName="NAP_SpecialDelete_VoidSingleBet_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_SpecialDelete_VoidSingleBet_Update" SpName="NAP_SpecialDelete_VoidSingleBet_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_VoidSingleBet_Update" SpName="NAP_SpecialDelete_VoidSingleBet_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_VoidSingleBet_Update" SpName="NAP_SpecialDelete_VoidSingleBet_Update" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
 	</Function>
-
 	<Function Name="UpdateMessage">
 		<Setting Key="Acc_BettransSelBet_BatchMsg" SpName="Acc_BettransSelBet_BatchMsg" DbName="DBACC.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="NAP_SpecialDelete_Message_Select" SpName="NAP_SpecialDelete_Message_Select" DbName="DBMSG.bodb_Message.wsv_nap" TimeOut="600" />
@@ -167,88 +148,71 @@
 		<Setting Key="TicketVoiding_VoidedTransaction_Insert" SpName="TicketVoiding_VoidedTransaction_Insert" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="Dot_Admin_message_new_insert" SpName="Dot_Admin_message_new_insert" DbName="DBONUSER.ON_USER.wsv_nap" TimeOut="600" />
 	</Function>
-
 	<Function Name="TicketVoiding">
 		<Setting Key="DBCTG.TicketVoiding_AutoVoidRequest_Validation" SpName="TicketVoiding_AutoVoidRequest_Validation" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_AutoVoidRequest_Validation" SpName="TicketVoiding_AutoVoidRequest_Validation" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_AutoVoidRequest_Validation" SpName="TicketVoiding_AutoVoidRequest_Validation" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_AutoVoidRequest_Validation" SpName="TicketVoiding_AutoVoidRequest_Validation" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_VoidedTicket_Select" SpName="TicketVoiding_VoidedTicket_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_VoidedTicket_Select" SpName="TicketVoiding_VoidedTicket_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_VoidedTicket_Select" SpName="TicketVoiding_VoidedTicket_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_VoidedTicket_Select" SpName="TicketVoiding_VoidedTicket_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_RecoveredTicket_Select" SpName="TicketVoiding_RecoveredTicket_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_RecoveredTicket_Select" SpName="TicketVoiding_RecoveredTicket_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_RecoveredTicket_Select" SpName="TicketVoiding_RecoveredTicket_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_RecoveredTicket_Select" SpName="TicketVoiding_RecoveredTicket_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_Queue_Insert" SpName="TicketVoiding_Queue_Insert" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_Queue_Insert" SpName="TicketVoiding_Queue_Insert" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_Queue_Insert" SpName="TicketVoiding_Queue_Insert" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_Queue_Insert" SpName="TicketVoiding_Queue_Insert" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_VoidedTicket14_Select" SpName="TicketVoiding_VoidedTicket14_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_VoidedTicket14_Select" SpName="TicketVoiding_VoidedTicket14_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_VoidedTicket14_Select" SpName="TicketVoiding_VoidedTicket14_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_VoidedTicket14_Select" SpName="TicketVoiding_VoidedTicket14_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_TransInfo_Void_Select" SpName="TicketVoiding_TransInfo_Void_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_TransInfo_Void_Select" SpName="TicketVoiding_TransInfo_Void_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_TransInfo_Void_Select" SpName="TicketVoiding_TransInfo_Void_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_TransInfo_Void_Select" SpName="TicketVoiding_TransInfo_Void_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_TransInfo_VoidARC_Select" SpName="TicketVoiding_TransInfo_VoidARC_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_TransInfo_VoidARC_Select" SpName="TicketVoiding_TransInfo_VoidARC_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_TransInfo_VoidARC_Select" SpName="TicketVoiding_TransInfo_VoidARC_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_TransInfo_VoidARC_Select" SpName="TicketVoiding_TransInfo_VoidARC_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_ReCalculate_Single_PreUpdate" SpName="TicketVoiding_ReCalculate_Single_PreUpdate" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_ReCalculate_Single_PreUpdate" SpName="TicketVoiding_ReCalculate_Single_PreUpdate" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_ReCalculate_Single_PreUpdate" SpName="TicketVoiding_ReCalculate_Single_PreUpdate" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_ReCalculate_Single_PreUpdate" SpName="TicketVoiding_ReCalculate_Single_PreUpdate" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_LastTime_Select" SpName="TicketVoiding_LastTime_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_LastTime_Select" SpName="TicketVoiding_LastTime_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_LastTime_Select" SpName="TicketVoiding_LastTime_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_LastTime_Select" SpName="TicketVoiding_LastTime_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_TotalVoidedTicket_Select" SpName="TicketVoiding_TotalVoidedTicket_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_TotalVoidedTicket_Select" SpName="TicketVoiding_TotalVoidedTicket_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_TotalVoidedTicket_Select" SpName="TicketVoiding_TotalVoidedTicket_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_TotalVoidedTicket_Select" SpName="TicketVoiding_TotalVoidedTicket_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.Nap_SpecialDelete_AllMarkedTicketsSummary_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.Nap_SpecialDelete_AllMarkedTicketsSummary_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.Nap_SpecialDelete_AllMarkedTicketsSummary_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.Nap_SpecialDelete_AllMarkedTicketsSummary_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_GetBetTypesHaveTickets" SpName="TicketVoiding_GetBetTypesHaveTickets" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_GetBetTypesHaveTickets" SpName="TicketVoiding_GetBetTypesHaveTickets" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_GetBetTypesHaveTickets" SpName="TicketVoiding_GetBetTypesHaveTickets" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_GetBetTypesHaveTickets" SpName="TicketVoiding_GetBetTypesHaveTickets" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_BriefInfo_Select" SpName="TicketVoiding_BriefInfo_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_BriefInfo_Select" SpName="TicketVoiding_BriefInfo_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_BriefInfo_Select" SpName="TicketVoiding_BriefInfo_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_BriefInfo_Select" SpName="TicketVoiding_BriefInfo_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_CheckingProcess" SpName="TicketVoiding_CheckingProcess" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_CheckingProcess" SpName="TicketVoiding_CheckingProcess" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_CheckingProcess" SpName="TicketVoiding_CheckingProcess" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_CheckingProcess" SpName="TicketVoiding_CheckingProcess" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="TicketVoiding_Request_CheckDuplicateTickets" SpName="TicketVoiding_Request_CheckDuplicateTickets" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="TicketVoiding_DuplicateTickets_TransIds_Select" SpName="TicketVoiding_DuplicateTickets_TransIds_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="TicketVoiding_DuplicateTickets_Select" SpName="TicketVoiding_DuplicateTickets_Select" DbName="DBRPT.bodb_Report.wsv_nap" TimeOut="600" />
@@ -309,32 +273,26 @@
 		<Setting Key="NAP_Admin_VS_Betradar_HorseDog_Result_Sel" SpName="NAP_Admin_VS_Betradar_HorseDog_Result_Sel" DbName="DBPRO.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="NAP_Admin_Settlement_MaxPayoutSetting_Sel" SpName="NAP_Admin_Settlement_MaxPayoutSetting_Sel" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="Task_Winlimit_InsertHistoryData" SpName="Task_Winlimit_InsertHistoryData" DbName="DBCUST.CustDB.wsv_nap" />
-
 		<Setting Key="DBCTG.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_SpecialDelete_RecoverVSBetRadar_Sel" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Sel" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_SpecialDelete_RecoverVSBetRadar_Sel" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Sel" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_RecoverVSBetRadar_Sel" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Sel" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_RecoverVSBetRadar_Sel" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Sel" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_SpecialDelete_RecoverVSBetRadar_Upd" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Upd" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_SpecialDelete_RecoverVSBetRadar_Upd" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Upd" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_RecoverVSBetRadar_Upd" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Upd" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_RecoverVSBetRadar_Upd" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Upd" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_RecoverVS2_Validation" SpName="TicketVoiding_RecoverVS2_Validation" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_RecoverVS2_Validation" SpName="TicketVoiding_RecoverVS2_Validation" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_RecoverVS2_Validation" SpName="TicketVoiding_RecoverVS2_Validation" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_RecoverVS2_Validation" SpName="TicketVoiding_RecoverVS2_Validation" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.TicketVoiding_RecoverVS2_Update" SpName="TicketVoiding_RecoverVS2_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_RecoverVS2_Update" SpName="TicketVoiding_RecoverVS2_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_RecoverVS2_Update" SpName="TicketVoiding_RecoverVS2_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
@@ -345,7 +303,6 @@
 		<Setting Key="DBSITE01.NAP_SpecialDelete_RecoverByBetId_Select" SpName="NAP_SpecialDelete_RecoverByBetId_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_RecoverByBetId_Select" SpName="NAP_SpecialDelete_RecoverByBetId_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_RecoverByBetId_Select" SpName="NAP_SpecialDelete_RecoverByBetId_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_SpecialDelete_RecoverByBetId_Update" SpName="NAP_SpecialDelete_RecoverByBetId_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_SpecialDelete_RecoverByBetId_Update" SpName="NAP_SpecialDelete_RecoverByBetId_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_RecoverByBetId_Update" SpName="NAP_SpecialDelete_RecoverByBetId_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
@@ -356,7 +313,6 @@
 		<Setting Key="DBSITE01.NAP_BettransSelSpecialDel_NumberGame" SpName="NAP_BettransSelSpecialDel_NumberGame" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_BettransSelSpecialDel_NumberGame" SpName="NAP_BettransSelSpecialDel_NumberGame" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_BettransSelSpecialDel_NumberGame" SpName="NAP_BettransSelSpecialDel_NumberGame" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_BettransDelSpecial_NumberGame" SpName="NAP_BettransDelSpecial_NumberGame" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_BettransDelSpecial_NumberGame" SpName="NAP_BettransDelSpecial_NumberGame" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_BettransDelSpecial_NumberGame" SpName="NAP_BettransDelSpecial_NumberGame" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
@@ -367,12 +323,10 @@
 		<Setting Key="DBSITE01.NAP_SpecialDelete_VoidByCurrency_Select" SpName="NAP_SpecialDelete_VoidByCurrency_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_VoidByCurrency_Select" SpName="NAP_SpecialDelete_VoidByCurrency_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_VoidByCurrency_Select" SpName="NAP_SpecialDelete_VoidByCurrency_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_SpecialDelete_VoidByCurrency_Update" SpName="NAP_SpecialDelete_VoidByCurrency_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_SpecialDelete_VoidByCurrency_Update" SpName="NAP_SpecialDelete_VoidByCurrency_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_VoidByCurrency_Update" SpName="NAP_SpecialDelete_VoidByCurrency_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_VoidByCurrency_Update" SpName="NAP_SpecialDelete_VoidByCurrency_Update" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="NAP_SpecialDelete_VoidByCurrency_MatchInfo_Select" SpName="NAP_SpecialDelete_VoidByCurrency_MatchInfo_Select" DbName="DBPRO.bodb02.wsv_nap" TimeOut="600" />
 	</Function>
 	<Function Name="VoidByBetId">
@@ -380,12 +334,10 @@
 		<Setting Key="DBSITE01.NAP_SpecialDelete_VoidBetIdList_Sel" SpName="NAP_SpecialDelete_VoidBetIdList_Sel" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_VoidBetIdList_Sel" SpName="NAP_SpecialDelete_VoidBetIdList_Sel" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_VoidBetIdList_Sel" SpName="NAP_SpecialDelete_VoidBetIdList_Sel" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_SpecialDelete_VoidBetIdList_Upd" SpName="NAP_SpecialDelete_VoidBetIdList_Upd" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_SpecialDelete_VoidBetIdList_Upd" SpName="NAP_SpecialDelete_VoidBetIdList_Upd" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_VoidBetIdList_Upd" SpName="NAP_SpecialDelete_VoidBetIdList_Upd" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_VoidBetIdList_Upd" SpName="NAP_SpecialDelete_VoidBetIdList_Upd" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="NAP_CustomerSelInfoByUsername" SpName="NAP_CustomerSelInfoByUsername" DbName="DBACC.bodb02.wsv_nap" TimeOut="600" />
 	</Function>
 	<Function Name="CashOutTransaction">
@@ -393,17 +345,14 @@
 		<Setting Key="DBSITE01.NAP_SpecialDelete_VoidCashOutTransaction_Select" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_VoidCashOutTransaction_Select" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_VoidCashOutTransaction_Select" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_SpecialDelete_VoidCashOutTransaction_Update" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_SpecialDelete_VoidCashOutTransaction_Update" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_VoidCashOutTransaction_Update" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_VoidCashOutTransaction_Update" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Update" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_SpecialDelete_RecoverCashOutTransaction_Select" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_SpecialDelete_RecoverCashOutTransaction_Select" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_RecoverCashOutTransaction_Select" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_RecoverCashOutTransaction_Select" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_SpecialDelete_RecoverCashOutTransaction_Update" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_SpecialDelete_RecoverCashOutTransaction_Update" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_SpecialDelete_RecoverCashOutTransaction_Update" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
@@ -414,7 +363,6 @@
 		<Setting Key="DBSITE01.NAP_BettransSelRecoverBet" SpName="NAP_BettransSelRecoverBet" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_BettransSelRecoverBet" SpName="NAP_BettransSelRecoverBet" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_BettransSelRecoverBet" SpName="NAP_BettransSelRecoverBet" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_BettransRecoverBet" SpName="NAP_BettransRecoverBet" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_BettransRecoverBet" SpName="NAP_BettransRecoverBet" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_BettransRecoverBet" SpName="NAP_BettransRecoverBet" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
@@ -425,22 +373,18 @@
 		<Setting Key="DBSITE01.NAP_BettransSelRecoverParlayBet_Sub" SpName="NAP_BettransSelRecoverParlayBet_Sub" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_BettransSelRecoverParlayBet_Sub" SpName="NAP_BettransSelRecoverParlayBet_Sub" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_BettransSelRecoverParlayBet_Sub" SpName="NAP_BettransSelRecoverParlayBet_Sub" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_BettransRecoverParlayBet_Sub" SpName="NAP_BettransRecoverParlayBet_Sub" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_BettransRecoverParlayBet_Sub" SpName="NAP_BettransRecoverParlayBet_Sub" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_BettransRecoverParlayBet_Sub" SpName="NAP_BettransRecoverParlayBet_Sub" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_BettransRecoverParlayBet_Sub" SpName="NAP_BettransRecoverParlayBet_Sub" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_BettransSelRecoverParlayBet_Main" SpName="NAP_BettransSelRecoverParlayBet_Main" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_BettransSelRecoverParlayBet_Main" SpName="NAP_BettransSelRecoverParlayBet_Main" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_BettransSelRecoverParlayBet_Main" SpName="NAP_BettransSelRecoverParlayBet_Main" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_BettransSelRecoverParlayBet_Main" SpName="NAP_BettransSelRecoverParlayBet_Main" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="DBCTG.NAP_BettransRecoverParlayBet_Main" SpName="NAP_BettransRecoverParlayBet_Main" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.NAP_BettransRecoverParlayBet_Main" SpName="NAP_BettransRecoverParlayBet_Main" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.NAP_BettransRecoverParlayBet_Main" SpName="NAP_BettransRecoverParlayBet_Main" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_BettransRecoverParlayBet_Main" SpName="NAP_BettransRecoverParlayBet_Main" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-
 		<Setting Key="TicketVoiding_Json_Test" SpName="TicketVoiding_Json_Test" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
 	</Function>
 </Functions>

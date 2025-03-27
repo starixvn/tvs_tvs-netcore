@@ -50,7 +50,13 @@ public class CalculateHaveStatusWonNotLoseServiceImp(
         IEnumerable<int> ticketStatusIds,
         IReadOnlyDictionary<(int custId, int statusId), OrderedTickets> groupedTickets)
     {
-        var voidWonTickets = accountTickets.wonTickets.Descending != null ? accountTickets.wonTickets.Descending.Where(x => x.IsChecked) : [];
+        var voidWonTickets = Enumerable.Empty<TicketCalculateWinLostAccount>();
+
+        if (accountTickets.wonTickets.Descending != null)
+        {
+            voidWonTickets = accountTickets.wonTickets.Descending.Where(x => x.IsChecked);
+        }
+
         var otherVoidTickets = combineVoidTicketsService.Execute(
             account.CustId,
             ticketStatusIds.Where(x => x != TicketStatus.WonId),
@@ -107,7 +113,7 @@ public class CalculateHaveStatusWonNotLoseServiceImp(
             .Where(HasBothCheckedAndUncheckedTickets);
 
         var editableTickets = editableTicketGroups.SelectMany(x => x);
-        var editableMatchIds = editableTickets.Select(x => x.MatchId).Distinct();
+        var editableMatchIds = new HashSet<int>(editableTickets.Select(x => x.MatchId));
 
         account.IsCanEditTicket = editableTickets.Any();
         account.EstimateVoidAmountUnEditableTickets = voidWonTickets
@@ -115,6 +121,28 @@ public class CalculateHaveStatusWonNotLoseServiceImp(
             .Sum(x => x.WinLost);
     }
 
-    private static bool HasBothCheckedAndUncheckedTickets(IGrouping<int, TicketCalculateWinLostAccount> tickets) =>
-       tickets.Any(x => x.IsChecked) && tickets.Any(x => !x.IsChecked);
+    private static bool HasBothCheckedAndUncheckedTickets(IGrouping<int, TicketCalculateWinLostAccount> tickets)
+    {
+        var hasChecked = false;
+        var hasUnchecked = false;
+
+        foreach (var ticket in tickets)
+        {
+            if (ticket.IsChecked)
+            {
+                hasChecked = true;
+            }
+            else
+            {
+                hasUnchecked = true;
+            }
+
+            if (hasChecked && hasUnchecked)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
