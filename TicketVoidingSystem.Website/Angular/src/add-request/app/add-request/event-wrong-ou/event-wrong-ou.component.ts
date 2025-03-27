@@ -11,7 +11,6 @@ import { WrongOuModel } from '../models/event-wrong-ou.model';
 import { GetChildMatchQuery } from '../models/get-child-match.query';
 import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
-import { PoolHouseTicketValue } from '../pool-house-ticket/pool-house-ticket.constant';
 import { LogInfoWrongOuComponent } from './log-info-wrong-ou/log-info-wrong-ou.component';
 import { AddRelatedEventArg } from './models/add-related-event-arg.model';
 import { LogInfoWrongOu } from './models/log-info-wrong-ou.model';
@@ -98,7 +97,6 @@ export class EventWrongOuComponent implements OnInit {
   }
 
   public async handleSearchEvent(): Promise<void> {
-    this.mainEvent.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
     this.logInfoWrongOuService.resetLogInfoOfEvent([this.mainEvent]);
     const mainLogInfo = this.logInfoComponents.find(x => x.isMainMatch);
 

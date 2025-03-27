@@ -77,4 +77,21 @@ public class RequestInfoForCopy
     public string ServiceAcceptTime { get; set; }
     public int MinAllowanceTime { get; set; }
     public string MinAcceptType { get; set; }
+
+    //Wrong HDP/Wrong 1st HDP/Wrong OU / Wrong 1st OU
+
+    public string? WrongMarket { get; set; }
+    public string? ActualMarket { get; set; }
+    public string? FilterFavoriteType { get; set; }
+    public string? FavoriteValue { get; set; }
+
+    //Wrong Odds
+
+    public string? FromOddsNotVoidHomeOver { get; set; }
+    public string? FromOddsNotVoidAwayUnder { get; set; }
+    public string? ToOddsNotVoidHomeOver { get; set; }
+    public string? ToOddsNotVoidAwayUnder { get; set; }
+    public string? CorrectOddsHomeOver { get; set; }
+    public string? CorrectOddsAwayUnder { get; set; }
+    public int? SubIssueTypeId { get; set; }
 }

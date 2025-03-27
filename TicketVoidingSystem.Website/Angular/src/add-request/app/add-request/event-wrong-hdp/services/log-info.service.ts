@@ -62,6 +62,7 @@ export class LogInfoService {
       event.isShowValidation = false;
       event.logInfoDetail = null;
       event.messageValidationLogInfo = null;
+      event.poolHouseCheckedBetTypes = event.isMainMatch ? PoolHouseTicketValue.SELECT_ALL_BETTYPE : null;
     });
   }
 }

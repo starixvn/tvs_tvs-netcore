@@ -13,6 +13,8 @@ import { RequestModel } from './request-list/request.model';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../utility/modules/testing.module';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
+import { ChangeDetectorRef } from '@angular/core';
+import { RequestDescriptionService } from './request-list/services/request-description.service';
 
 jest.mock('../../utility/services/signal-r.service.native');
 class Helper {
@@ -108,7 +110,7 @@ describe('AppComponent', () => {
         TestingModule, FilterComponent
       ],
       providers: [
-        ModalService, CommonService, AppService, SignalRService
+        ModalService, CommonService, AppService, SignalRService, RequestDescriptionService, ChangeDetectorRef
       ]
     }).compileComponents();
 

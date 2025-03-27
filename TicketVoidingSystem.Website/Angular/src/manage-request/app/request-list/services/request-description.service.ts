@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import _ from 'lodash';
 import moment from 'moment';
 import { ClipboardService } from 'ngx-clipboard';
@@ -6,18 +6,13 @@ import { FilterOddsTypeConstant } from '../../../../add-request/app/add-request/
 import { DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { BetTypeTicketsInfo, CopyRequestInfoQuery, CopyRequestInfoResponse, RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';
 import { CommonService } from '../../../../utility/services/common.service';
-import { StaticService } from '../../../../utility/services/static.service';
 import { TvDetectionService } from './tv-detection.service';
+import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class RequestDescriptionService {
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly clipboardService: ClipboardService
-  ) { }
-
+  commonService = inject(CommonService);
+  clipboardService = inject(ClipboardService);
+  
   public async copyToClipboard(requestId: number, matchId: number, requestDetailId?: number): Promise<void> {
     const query: CopyRequestInfoQuery = {
       requestId: requestId,
@@ -30,39 +25,34 @@ export class RequestDescriptionService {
   }
 
   private createContentCopy(copyInfoResponse: CopyRequestInfoResponse): string {
-    if (StaticService.isReducedOver(copyInfoResponse.requestInfo.issueTypeId.toString()) || StaticService.isAbandoned(copyInfoResponse.requestInfo.issueTypeId.toString())) {
-      return this.createReducedOversOrAbandonedContent(copyInfoResponse);
-    }
+    const ISSUE_TYPE_HANDLERS = {
+      [IssueTypeConstant.REDUCED_OVER]: this.createReducedOversOrAbandonedContent,
+      [IssueTypeConstant.ABANDONED]: this.createReducedOversOrAbandonedContent,
+      [IssueTypeConstant.NOT_PARTICIPATE]: this.createNotParticipateContent,
+      [IssueTypeConstant.WRONG_MARKET_OFFERED]: this.createWrongMarketOfferedContent,
+      [IssueTypeConstant.TECHNICAL_ERROR]: this.createTechnicalErrorContent,
+      [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: this.createWrongOddsSportsBookContent,
+      [IssueTypeConstant.WRONG_HDP]: this.createWrongHdpContent,
+      [IssueTypeConstant.WRONG_1ST_HDP]: this.createWrongHdpContent,
+      [IssueTypeConstant.WRONG_OU]: this.createWrongOuContent,
+      [IssueTypeConstant.WRONG_1ST_OU]: this.createWrongOuContent,
+      [IssueTypeConstant.WRONG_ODDS]: this.createWrongOddsContent
+    };
+    const handler = ISSUE_TYPE_HANDLERS[copyInfoResponse.requestInfo.issueTypeId.toString()];
 
-    if (StaticService.isNotParticipate(copyInfoResponse.requestInfo.issueTypeId.toString())) {
-      return this.createNotParticipateContent(copyInfoResponse);
-    }
-
-    if (StaticService.isWrongMarketOffered(copyInfoResponse.requestInfo.issueTypeId.toString())) {
-      return this.createWrongMarketOfferedContent(copyInfoResponse);
-    }
-
-    if (StaticService.isTechnicalError(copyInfoResponse.requestInfo.issueTypeId.toString())) {
-      return this.createTechnicalErrorContent(copyInfoResponse);
-    }
-
-    if (StaticService.isWrongOddsSportsBook(copyInfoResponse.requestInfo.issueTypeId.toString())) {
-      return this.createWrongOddsSportsBookContent(copyInfoResponse);
-    }
-
-    return this.createOthersIssueTypeContent(copyInfoResponse);
+    return handler ? handler.call(this, copyInfoResponse) : this.createOthersIssueTypeContent(copyInfoResponse);
   }
 
   private createReducedOversOrAbandonedContent(copyInfoResponse: CopyRequestInfoResponse): string {
     const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, "betTypeId");
     let outputContent = '';
 
-    for (let key in groupBetTypes) {
+    for (const key in groupBetTypes) {
       const values = groupBetTypes[key];
       const inputtedRunsText = values[0].inputtedRuns ? ` - Above ${values[0].inputtedRuns} should be voided` : '';
       const betTypeContent = `${values[0].betTypeName}${inputtedRunsText}\n`;
 
-      let playerContent = values.map(element => element.playerName ? `${element.playerName} - ${element.ticketsCount} ticket(s)\n`
+      const playerContent = values.map(element => element.playerName ? `${element.playerName} - ${element.ticketsCount} ticket(s)\n`
         : `${element.ticketsCount} ticket(s)\n`).join('');
       outputContent += `${betTypeContent}${playerContent}\n`;
 
@@ -75,10 +65,10 @@ export class RequestDescriptionService {
     const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, "betTypeId");
     let betTypeContent = '';
 
-    for (let key in groupBetTypes) {
+    for (const key in groupBetTypes) {
       const values = groupBetTypes[key];
-      let currentContent = `${values[0].betTypeName}\n`;
-      let playerContent = values.map(element => `${element.playerName} - ${element.ticketsCount} ticket(s)\n`).join('');
+      const currentContent = `${values[0].betTypeName}\n`;
+      const playerContent = values.map(element => `${element.playerName} - ${element.ticketsCount} ticket(s)\n`).join('');
       betTypeContent += `${currentContent}${playerContent}\n`;
     }
 
@@ -90,14 +80,29 @@ export class RequestDescriptionService {
     return this.createCommonContent(copyInfoResponse, betTypeContent, '', true, true);
   }
 
+  private createWrongHdpContent(copyInfoResponse: CopyRequestInfoResponse): string {
+    const oddsContent = this.generateOddsContentWrongHdp(copyInfoResponse.requestInfo);
+    return this.createCommonContent(copyInfoResponse, '', oddsContent, false, true);
+  }
+
+  private createWrongOuContent(copyInfoResponse: CopyRequestInfoResponse): string {
+    const oddsContent = this.generateOddsContentWrongOu(copyInfoResponse.requestInfo);
+    return this.createCommonContent(copyInfoResponse, '', oddsContent, false, true);
+  }
+
+  private createWrongOddsContent(copyInfoResponse: CopyRequestInfoResponse): string {
+    const oddsContent = this.generateOddsContentWrongOdds(copyInfoResponse.requestInfo);
+    return this.createCommonContent(copyInfoResponse, '', oddsContent, false, true);
+  }
+
   private createTechnicalErrorContent(copyInfoResponse: CopyRequestInfoResponse): string {
     const betTypeContent = this.generateBetTypeContent(copyInfoResponse.betTypeTickets);
-    return this.createCommonContent(copyInfoResponse, betTypeContent, '', true, false);
+    return this.createCommonContent(copyInfoResponse, betTypeContent, '', false, false);
   }
 
   private createWrongOddsSportsBookContent(copyInfoResponse: CopyRequestInfoResponse): string {
     const betTypeContent = this.generateBetTypeContent(copyInfoResponse.betTypeTickets);
-    const oddsContent = this.generateOddsContent(copyInfoResponse.requestInfo);
+    const oddsContent = this.generateOddsContentWrongOddsSportsBook(copyInfoResponse.requestInfo);
 
     return this.createCommonContent(copyInfoResponse, betTypeContent, oddsContent, true, false);
   }
@@ -106,22 +111,48 @@ export class RequestDescriptionService {
     const groupBetTypes = _.groupBy(betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
     let betTypeContent = '';
 
-    for (let key in groupBetTypes) {
+    for (const key in groupBetTypes) {
       const values = groupBetTypes[key];
-      let currentContent = `${values[0].betTypeName}\n`;
-      let playerContent = values.map(element => `${element.playerName ? (element.playerName + ' - ') : ''}${element.ticketsCount} ticket(s)\n`).join('');
+      const currentContent = `${values[0].betTypeName}\n`;
+      const playerContent = values.map(element => `${element.playerName ? (element.playerName + ' - ') : ''}${element.ticketsCount} ticket(s)\n`).join('');
       betTypeContent += `${currentContent}${playerContent}\n`;
     }
 
     return betTypeContent;
   }
 
-  private generateOddsContent(requestInfo: RequestInfoForCopy): string {
+  private generateOddsContentWrongOddsSportsBook(requestInfo: RequestInfoForCopy): string {
     const wrongOdds = requestInfo.filterOddsType === FilterOddsTypeConstant.RANGE
       ? `${requestInfo.fromOdds} -> ${requestInfo.toOdds}` : requestInfo.oddsValue;
 
     return `Wrong Odds: ${wrongOdds}\nCorrect Odds: ${requestInfo.correctOdds}\n`;
   }
+
+  private generateOddsContentWrongHdp(requestInfo: RequestInfoForCopy): string {
+    if(requestInfo.filterFavoriteType === 'h'){
+      return `Wrong Home: ${requestInfo.favoriteValue}\nCorrect Home: ${requestInfo.actualMarket}\n`;
+    }
+    return `Wrong Away: ${requestInfo.favoriteValue}\nCorrect Away: ${requestInfo.actualMarket}\n`;
+  }
+
+  private generateOddsContentWrongOu(requestInfo: RequestInfoForCopy): string {
+    return `Wrong: ${requestInfo.wrongMarket}\nCorrect: ${requestInfo.actualMarket}\n`;
+  }
+
+  private generateOddsContentWrongOdds(requestInfo: RequestInfoForCopy): string {
+    const handicapSubIssueTypeId = 6;
+    const _1hHandicapSubIssueTypeId = 119;
+    if(requestInfo.subIssueTypeId === handicapSubIssueTypeId || requestInfo.subIssueTypeId === _1hHandicapSubIssueTypeId){
+      return `Wrong Odds: Home >= ${requestInfo.toOddsNotVoidHomeOver} & =< ${requestInfo.fromOddsNotVoidHomeOver}, `
+      + `Away >= ${requestInfo.toOddsNotVoidAwayUnder} & =< ${requestInfo.fromOddsNotVoidAwayUnder}\n`
+      + `Correct Odds: Home ${requestInfo.correctOddsHomeOver}, Away ${requestInfo.correctOddsAwayUnder}\n`;
+    }
+
+    return `Wrong Odds: Over >= ${requestInfo.toOddsNotVoidHomeOver} & =< ${requestInfo.fromOddsNotVoidHomeOver}, `
+      + `Under >= ${requestInfo.toOddsNotVoidAwayUnder} & =< ${requestInfo.fromOddsNotVoidAwayUnder}\n`
+      + `Correct Odds: Over ${requestInfo.correctOddsHomeOver}, Under ${requestInfo.correctOddsAwayUnder}\n`;
+  }
+
 
   private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string, oddsContent: string, isShowCancelCOCount: boolean, isShowMistakenBy: boolean): string {
     const cancelCashOutCount = isShowCancelCOCount ? `, Cancel Cash Out: ${copyInfoResponse.requestInfo.totalCancelCashOutCount}` : '';
@@ -162,6 +193,7 @@ export class RequestDescriptionService {
   }
 
   private generateMistakenBy(requestInfo: RequestInfoForCopy, isShowMistakenBy: boolean): string {
+    requestInfo.mistakenBy = requestInfo.mistakenBy ?? '';
     return isShowMistakenBy ? `Mistaken By: ${requestInfo.mistakenBy}\n\n` : '\n';
   }
 }

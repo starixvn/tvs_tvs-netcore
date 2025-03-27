@@ -11,7 +11,6 @@ import { WrongHdpModel } from '../models/event-wrong-hdp.model';
 import { GetChildMatchQuery } from '../models/get-child-match.query';
 import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
-import { PoolHouseTicketValue } from '../pool-house-ticket/pool-house-ticket.constant';
 import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp/log-info-wrong-hdp.component';
 import { AddRelatedEventArg } from './models/add-related-event-arg.model';
 import { LogInfoWrongHdp } from './models/log-info-wrong-hdp.model';
@@ -98,7 +97,6 @@ export class EventWrongHdpComponent implements OnInit {
   }
 
   public async handleSearchEvent(): Promise<void> {
-    this.mainEvent.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
     this.logInfoService.resetLogInfoOfEvent([this.mainEvent]);
     const mainLogInfo = this.logInfoComponents.find(x => x.isMainMatch);
     mainLogInfo.logInfo.isShowValidation = false;

@@ -9,8 +9,8 @@
         <div class="alert alert-dark p-1 m-0" [ngClass]="{'mb-1':isAbnormalAccount()}"><span>
             Issue Type: <strong>{{voidPageItem.displayIssueTypeName}}</strong></span>
         </div>
+        @if (isAbnormalAccount()) {
         <div class="alert alert-dark filter-info p-1 m-0 flex-grow-1">
-          @if (isAbnormalAccount()) {
           <div>
             <div>Product:&nbsp;<strong
                 class="text-data">{{getProducts(requestDetail.abnormalAccountModel.productIds)}}</strong></div>
@@ -21,15 +21,17 @@
                 {{requestDetail.abnormalAccountModel.toDate | date: 'yyyy/MM/dd'}}
               </strong></div>
           </div>
-          }
         </div>
+        }
       </div>
+      @if (isAbnormalAccount()) {
       <div class="col-sm-6 m-0 pd-right-0 pd-left-5">
         <div class="log-info-cell alert alert-dark p-1 m-0">
           <span><strong>Username</strong></span><br />
           <strong class="text-data">{{requestDetail.abnormalAccountModel.usernames}}</strong>
         </div>
       </div>
+      }
       <div class="flex-grow-1">
         <div class="area-icon">
           <em [ngClass]="voidPageItem.isShowTicketFull ? 'icon-show-tickets-expanded': 'icon-show-tickets'"
