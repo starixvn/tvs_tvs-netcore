@@ -14,23 +14,26 @@ public interface GetPoolHouseTicketService
     Task<GetPoolHouseTicketViewModel> Get(GetPoolHouseTicketQuery query);
 }
 
-public class GetPoolHouseTicketServiceImp(IMapper mapper, IDynamicRepository repository, GeneratePoolHouseTicketService generatePoolHouseTicketService)
+public class GetPoolHouseTicketServiceImp(IMapper mapper, IDynamicRepository repository, GeneratePoolHouseTicketService ticketGenerator)
     : GetPoolHouseTicketService
 {
+    private const string OthersGroupName = "Others";
+
     public async Task<GetPoolHouseTicketViewModel> Get(GetPoolHouseTicketQuery query)
     {
         var (betTypes, tickets) = await GetPoolHouseTicketAllServer(query);
-        var affectedTickets = tickets.Where(x => x.GroupName != "Others");
-        var otherTickets = tickets.Where(x => x.GroupName is "Others");
+
+        var (affectedTickets, otherTickets) = SeparateTickets(tickets);
+
         return new GetPoolHouseTicketViewModel
         {
             GroupBetTypes = MappingGroupBetType(betTypes),
-            AffectedTickets = generatePoolHouseTicketService.GetTicketsViewModel(affectedTickets, query),
-            OtherTickets = generatePoolHouseTicketService.GetTicketsViewModel(otherTickets, query)
+            AffectedTickets = ticketGenerator.GetTicketsViewModel(affectedTickets, query),
+            OtherTickets = ticketGenerator.GetTicketsViewModel(otherTickets, query)
         };
     }
 
-    public async Task<(IEnumerable<BetTypeModel>, IEnumerable<GetTicketModel>)> GetPoolHouseTicketAllServer(GetPoolHouseTicketQuery query)
+    private async Task<(IEnumerable<BetTypeModel>, IEnumerable<GetTicketModel>)> GetPoolHouseTicketAllServer(GetPoolHouseTicketQuery query)
     {
         var criteria = CreateGetPoolHouseTicketCriteria(query);
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
@@ -39,17 +42,30 @@ public class GetPoolHouseTicketServiceImp(IMapper mapper, IDynamicRepository rep
             return repository.FetchMultipleAsync<BetTypeModel, GetTicketModel>(criteria);
         });
         var results = await Task.WhenAll(tasks);
-        var betTypes = results.SelectMany(x => x.Item1).DistinctBy(x => x.Id);
-        var tickets = results.SelectMany(x => x.Item2).DistinctBy(x => x.TransId);
 
-        return (betTypes, tickets);
+        return (
+            results.SelectMany(x => x.Item1).DistinctBy(x => x.Id),
+            results.SelectMany(x => x.Item2).DistinctBy(x => x.TransId)
+        );
+    }
+
+    private static (IEnumerable<GetTicketModel> Affected, IEnumerable<GetTicketModel> Others) SeparateTickets(IEnumerable<GetTicketModel> tickets)
+    {
+        return (
+            Affected: tickets.Where(x => x.GroupName != OthersGroupName),
+            Others: tickets.Where(x => x.GroupName == OthersGroupName)
+        );
     }
 
     private static IEnumerable<GroupBetTypeModel> MappingGroupBetType(IEnumerable<BetTypeModel> betTypes)
     {
         return betTypes
-            .GroupBy(b => b.GroupName)
-            .Select(group => new GroupBetTypeModel { GroupName = group.Key, BetTypes = group.ToList() })
+            .GroupBy(betType => betType.GroupName)
+            .Select(group => new GroupBetTypeModel
+            {
+                GroupName = group.Key,
+                BetTypes = group.ToList()
+            })
             .OrderBy(gr => gr.GroupName);
     }
 

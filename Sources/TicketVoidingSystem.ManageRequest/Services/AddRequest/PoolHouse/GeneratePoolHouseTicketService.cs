@@ -14,82 +14,120 @@ public interface GeneratePoolHouseTicketService
 public class GeneratePoolHouseTicketServiceImp(MapTicketsService mapTicketsService, PagingService pagingService)
     : GeneratePoolHouseTicketService
 {
+    private const string OthersGroupName = "Others";
+
     public TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketQuery query)
     {
-        var groupsHaveTickets = GenerateGroup(originTickets)
-            .Where(item => item.Tickets.Any());
+        if (originTickets == null || !originTickets.Any())
+        {
+            return new TicketsViewModel();
+        }
 
-        var groupViewModels = groupsHaveTickets.Select(group => MapToGroupTicketViewModel(group, query.IssueTypeId)).ToList();
+        var ticketsList = originTickets.ToList();
+        var groups = GenerateTicketGroups(ticketsList)
+            .Where(group => group.Tickets.Any())
+            .Select(group => CreateGroupViewModel(group, query.IssueTypeId))
+            .ToList();
 
         var viewModel = new TicketsViewModel
         {
             TotalSingle = originTickets.Count(x => !x.IsMixParlay),
             TotalParlay = originTickets.Count(x => x.IsMixParlay),
-            Groups = groupViewModels
+            Groups = groups
         };
 
         return viewModel;
     }
 
-    private IEnumerable<Group<GetTicketModel>> GenerateGroup(IEnumerable<GetTicketModel> originTickets)
+    private IEnumerable<Group<GetTicketModel>> GenerateTicketGroups(List<GetTicketModel> tickets)
     {
-        return !originTickets.Any() ? [] : GenerateGroupWhenHaveTicket(originTickets, originTickets);
-    }
-
-    private IEnumerable<Group<GetTicketModel>> GenerateGroupWhenHaveTicket(IEnumerable<GetTicketModel> originTickets, IEnumerable<GetTicketModel> afterPagingTickets)
-    {
-        if (!originTickets.Any())
+        if (tickets.Count == 0)
         {
             return [];
         }
 
-        var parlayTicketsPoolHouse = afterPagingTickets.Where(ticket => IsParlayTicketsPoolHouse(ticket.IsMixParlay, ticket.GroupName)).ToList();
-        var creditParlayTickets = parlayTicketsPoolHouse.Where(ticket => !ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
-        var depositParlayTickets = parlayTicketsPoolHouse.Where(ticket => ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
-        var othersTickets = afterPagingTickets.Where(ticket => ticket.GroupName == "Others")
-            .OrderBy(ticket => ticket.TransId).ToList();
-        var singleTickets = afterPagingTickets.Where(ticket => !ticket.IsMixParlay && ticket.GroupName != "Others").ToList();
-
-        var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-        if (creditParlayTickets.Count != 0)
-        {
-            groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
-        }
-        if (depositParlayTickets.Count != 0)
-        {
-            groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
-        }
-        if (othersTickets.Count != 0)
-        {
-            groups.Add(new Group<GetTicketModel> { Name = "Others", Tickets = othersTickets });
-        }
-
-        CountAllTicketsForGroup(originTickets, groups);
+        var groupedTickets = SeparateTicketsByType(tickets);
+        var groups = CreateGroupsFromSeparatedTickets(groupedTickets);
+        UpdateGroupTicketCounts(tickets, groups);
 
         return groups;
     }
 
-    private static bool IsParlayTicketsPoolHouse(bool isMixParlay, string groupName)
+    private TicketGroups SeparateTicketsByType(IEnumerable<GetTicketModel> tickets)
     {
-        return groupName is GroupTicket.Credit or GroupTicket.Deposit && isMixParlay;
+        var parlayTickets = tickets.Where(ticket =>
+            IsParlayPoolHouseTicket(ticket.IsMixParlay, ticket.GroupName)).ToList();
+
+        return new TicketGroups
+        {
+            CreditParlay = parlayTickets
+                .Where(t => !t.IsDeposit)
+                .OrderBy(t => t.TransId).ToList(),
+
+            DepositParlay = parlayTickets
+                .Where(t => t.IsDeposit)
+                .OrderBy(t => t.TransId).ToList(),
+
+            Others = tickets
+                .Where(t => t.GroupName == OthersGroupName)
+                .OrderBy(t => t.TransId).ToList(),
+
+            Single = tickets.Where(t => !t.IsMixParlay && t.GroupName != OthersGroupName).ToList()
+        };
     }
 
-    private static void CountAllTicketsForGroup(IEnumerable<GetTicketModel> originalTickets, IEnumerable<Group<GetTicketModel>> outputGroups)
+    private List<Group<GetTicketModel>> CreateGroupsFromSeparatedTickets(TicketGroups groupedTickets)
     {
-        foreach (var group in outputGroups)
+        var groups = pagingService.Groups(groupedTickets.Single, ticket => ticket.GroupName).ToList();
+
+        AddGroupIfHasTickets(groups, GroupTicket.Credit, groupedTickets.CreditParlay);
+        AddGroupIfHasTickets(groups, GroupTicket.Deposit, groupedTickets.DepositParlay);
+        AddGroupIfHasTickets(groups, OthersGroupName, groupedTickets.Others);
+
+        return groups;
+    }
+
+    private static void AddGroupIfHasTickets(List<Group<GetTicketModel>> groups, string groupName, List<GetTicketModel> tickets)
+    {
+        if (tickets.Count > 0)
         {
-            var total = originalTickets.Count(x => x.GroupName.Equals(group.Name, StringComparison.CurrentCultureIgnoreCase));
-            group.DisplayTotalTickets = total;
+            groups.Add(new Group<GetTicketModel>
+            {
+                Name = groupName,
+                Tickets = tickets
+            });
         }
     }
 
-    private Group<TicketViewModel> MapToGroupTicketViewModel(Group<GetTicketModel> group, int issueTypeId)
+    private static void UpdateGroupTicketCounts(IEnumerable<GetTicketModel> allTickets, IEnumerable<Group<GetTicketModel>> groups)
+    {
+        var ticketCounts = allTickets
+            .GroupBy(x => x.GroupName, StringComparer.CurrentCultureIgnoreCase)
+            .ToDictionary(g => g.Key, g => g.Count(), StringComparer.CurrentCultureIgnoreCase);
+
+        foreach (var group in groups)
+        {
+            group.DisplayTotalTickets = ticketCounts.GetValueOrDefault(group.Name);
+        }
+    }
+
+    private static bool IsParlayPoolHouseTicket(bool isMixParlay, string groupName)
+    {
+        return isMixParlay && groupName is GroupTicket.Credit or GroupTicket.Deposit;
+    }
+
+    private Group<TicketViewModel> CreateGroupViewModel(Group<GetTicketModel> group, int issueTypeId)
     {
         var tickets = new List<TicketViewModel>();
 
         foreach (var item in group.Tickets)
         {
-            var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
+            var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(
+                item,
+                null,
+                ChoiceType.None,
+                issueTypeId);
+
             ticket.SubBetTypeId = (short)item.SubBetType;
             tickets.Add(ticket);
         }
@@ -100,5 +138,13 @@ public class GeneratePoolHouseTicketServiceImp(MapTicketsService mapTicketsServi
             Tickets = tickets,
             DisplayTotalTickets = group.DisplayTotalTickets
         };
+    }
+
+    private sealed class TicketGroups
+    {
+        public List<GetTicketModel> CreditParlay { get; init; } = [];
+        public List<GetTicketModel> DepositParlay { get; init; } = [];
+        public List<GetTicketModel> Others { get; init; } = [];
+        public List<GetTicketModel> Single { get; init; } = [];
     }
 }
