@@ -34,7 +34,6 @@ export class FilterTimeAreaComponent implements OnInit {
   tooltip = new Tooltip();
   isMainMatch = true;
   changeActionWaitingToManualSubscription: Subscription;
-
   private readonly element = inject(ElementRef);
   private readonly addRequestStore = inject(AddRequestStore);
 

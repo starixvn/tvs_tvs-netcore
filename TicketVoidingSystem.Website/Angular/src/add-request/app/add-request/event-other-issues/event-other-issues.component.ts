@@ -14,6 +14,7 @@ import { IssueTypes } from '../filter/issue-types.model';
 import { OtherIssuesModel } from '../models/event-other-issues.model';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { OthersModel } from '../others/others.model';
+import { CheckAddPermissionService } from '../services/check-permission.service';
 import { FilterOtherIssuesComponent } from './filter-other-issues/filter-other-issues.component';
 import { LogInfoOtherIssuesComponent } from './log-info-other-issues/log-info-other-issues.component';
 import { LogInfoOtherIssues } from './models/log-info-other-issues.model';
@@ -31,7 +32,9 @@ import { ValidationService } from './services/validation.service';
   standalone: true,
   imports: [EventLeagueComponent, FilterOtherIssuesComponent, AdvancedModeAddRequestComponent,
     LogInfoOtherIssuesComponent, ConfirmAddRequestComponent],
-  providers: [ValidationService, EventOtherIssuesService, LogInfoService, SaveRequestService]
+  providers: [ValidationService, EventOtherIssuesService, LogInfoService, SaveRequestService,
+    CheckAddPermissionService
+  ]
 })
 export class EventOtherIssuesComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;
@@ -200,6 +203,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   }
 
   checkingLoadDataAdvancedMode(isLoading: boolean): void {
+    console.log("checkingLoadDataAdvancedMode" + isLoading);
     this.addRequestStore.changeBlockingUiStatus(isLoading);
   }
 
@@ -212,7 +216,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
     const arg = new SaveRequestArg();
     if (!this.filter.isVoided) {
       this.logInfoEvent.betTeamsResult = this.advancedMode?.getCheckedBetTypes();
-      this.logInfoEvent.allBetTypesSelection = this.advancedMode.advancedModeComponent.getAllBetTypesSelection();
+      this.logInfoEvent.allBetTypesSelection = this.advancedMode?.advancedModeComponent.getAllBetTypesSelection();
     }
     arg.requestId = this.requestId;
     arg.requestedBy = this.requestedBy;

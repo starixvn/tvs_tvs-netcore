@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
@@ -11,11 +11,11 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 
 @Component({
-    selector: 'event-date-filter',
-    templateUrl: './event-date-filter.component.html',
-    styleUrls: ['./event-date-filter.component.scss'],
-    standalone: true,
-    imports: [NgbModule, FormsModule, TooltipComponent, DatePickerComponent]
+  selector: 'event-date-filter',
+  templateUrl: './event-date-filter.component.html',
+  styleUrls: ['./event-date-filter.component.scss'],
+  standalone: true,
+  imports: [NgbModule, FormsModule, TooltipComponent, DatePickerComponent]
 })
 export class EventDateFilterComponent implements OnInit {
   @Input() isDisabled: boolean;
@@ -27,14 +27,12 @@ export class EventDateFilterComponent implements OnInit {
   fromDate: NgbDate;
   toDate: NgbDate;
   tooltip = new Tooltip();
-
   private readonly TO_DATE_CLASS = 'to-date';
+  private readonly element = inject(ElementRef);
 
-  constructor(
-    private readonly element: ElementRef
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
-   }
+  }
 
   ngOnInit(): void {
     this.initEventDate();

@@ -11,6 +11,7 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
 import { FilterModel } from '../../filter/filter.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
@@ -26,7 +27,9 @@ import { EventWrongOddsService } from '../services/event-wrong-odds.service';
     templateUrl: './log-info-wrong-odds.component.html',
     styleUrls: ['./log-info-wrong-odds.component.scss'],
     standalone: true,
-    imports: [AffectedTicketComponent, PoolHouseTicketComponent, TicketCountOtherSportsComponent, FormsModule, CommonModule, PipeModule]
+    imports: [AffectedTicketComponent, PoolHouseTicketComponent, TicketCountOtherSportsComponent,
+      FormsModule, CommonModule, PipeModule],
+    providers: [AffectedTicketService]
 })
 export class LogInfoWrongOddsComponent implements OnInit {
   @Input() logInfo: LogInfoWrongOdds;

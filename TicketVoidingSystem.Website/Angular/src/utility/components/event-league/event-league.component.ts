@@ -1,5 +1,5 @@
 import { _isNumberValue } from '@angular/cdk/coercion';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
@@ -17,7 +17,8 @@ import { ValidationService } from './validation.service';
   templateUrl: './event-league.component.html',
   styleUrls: ['./event-league.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgSelectModule, TooltipComponent]
+  imports: [FormsModule, NgSelectModule, TooltipComponent],
+  providers: [ValidationService]
 })
 
 export class EventLeagueComponent implements OnChanges {
@@ -38,12 +39,12 @@ export class EventLeagueComponent implements OnChanges {
   private delayForSearchSubscription: Subscription;
   private readonly observableTimer = timer(300);
 
-  constructor(
-    private readonly addRequestStore: AddRequestStore,
-    private readonly commonService: CommonService,
-    private readonly element: ElementRef,
-    private readonly validationService: ValidationService
-  ) {
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly commonService = inject(CommonService);
+  private readonly element = inject(ElementRef);
+  private readonly validationService = inject(ValidationService);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 

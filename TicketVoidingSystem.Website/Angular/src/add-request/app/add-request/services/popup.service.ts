@@ -11,7 +11,7 @@ import { AddRequestResultModel } from '../models/request.model';
   providedIn: 'root'
 })
 export class PopupService {
-  modalService = inject(ModalService);
+  private readonly modalService = inject(ModalService);
 
   showError(messageContent: string, onYesCallback?: () => void) {
     this.modalService.open(

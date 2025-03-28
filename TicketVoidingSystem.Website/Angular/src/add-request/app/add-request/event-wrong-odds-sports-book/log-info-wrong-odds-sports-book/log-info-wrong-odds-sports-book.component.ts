@@ -7,6 +7,7 @@ import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
@@ -16,7 +17,8 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
   templateUrl: './log-info-wrong-odds-sports-book.component.html',
   styleUrls: ['./log-info-wrong-odds-sports-book.component.scss'],
   standalone: true,
-  imports: [AffectedTicketComponent, LogInfoMessageComponent, PipeModule]
+  imports: [AffectedTicketComponent, LogInfoMessageComponent, PipeModule],
+  providers: [AffectedTicketService]
 })
 export class LogInfoWrongOddsSportsBookComponent implements OnInit {
   @Input() logInfo: LogInfoWrongOddsSportsBook;

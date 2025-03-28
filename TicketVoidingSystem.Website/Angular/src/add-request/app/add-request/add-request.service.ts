@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import moment from 'moment-timezone';
 import { LABELS } from '../../../utility/constants/labels';
@@ -15,11 +15,9 @@ import { PopupService } from './services/popup.service';
   providedIn: 'root'
 })
 export class AddRequestService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly popupService: PopupService,
-    private readonly commonService: CommonService
-  ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly popupService = inject(PopupService);
+  private readonly commonService = inject(CommonService);
 
   async executeSaveRequest(isEdit: boolean, requestId: number, query: AddRequestQuery, addRequestStore: AddRequestStore): Promise<void> {
     if (isEdit) {

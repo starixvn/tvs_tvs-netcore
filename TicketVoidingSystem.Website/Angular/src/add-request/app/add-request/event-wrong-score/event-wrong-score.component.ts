@@ -22,6 +22,7 @@ import { LogInfoRelatedEventComponent } from '../components/log-info-related-eve
 import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { TvDetectionModel } from '../components/tv-detection/tv-detection.model';
+import { TvDetectionService } from '../components/tv-detection/tv-detection.service';
 import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
@@ -51,7 +52,8 @@ import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.com
   styleUrls: ['./event-wrong-score.component.scss'],
   imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, PipeModule, ConfirmWrongScoreComponent,
     LogInfoRelatedEventComponent, AddChildMatchComponent, CommonModule, FormsModule, TooltipComponent, BlockUiDirective],
-  providers: [EventWrongScoreService, LogInfoService, SaveRequestService, ValidationService, WrongScoreService, RelatedEventService, EditRequestService]
+  providers: [EventWrongScoreService, LogInfoService, SaveRequestService, ValidationService, WrongScoreService,
+    RelatedEventService, EditRequestService, TvDetectionService]
 })
 export class EventWrongScoreComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;

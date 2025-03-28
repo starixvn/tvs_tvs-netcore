@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { AddRequestStore } from '../add-request.store';
+import { AffectedTicketService } from '../affected-ticket/affected-ticket.service';
 import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
@@ -11,6 +12,7 @@ import { IssueTypes } from '../filter/issue-types.model';
 import { WrongOfferedNameModel } from '../models/event-wrong-offered-name.model';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { OthersModel } from '../others/others.model';
+import { CheckAddPermissionService } from '../services/check-permission.service';
 import { FilterWrongOfferedNameComponent } from './filter-wrong-offered-name/filter-wrong-offered-name.component';
 import { LogInfoWrongOfferedNameComponent } from './log-info-wrong-offered-name/log-info-wrong-offered-name.component';
 import { LogInfoWrongOfferedName } from './models/log-info-wrong-offered-name.model';
@@ -22,15 +24,17 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-    selector: 'event-wrong-offered-name',
-    templateUrl: './event-wrong-offered-name.component.html',
-    styleUrls: ['./event-wrong-offered-name.component.scss'],
-    standalone: true,
-    imports: [FormsModule, NgbModule, EventLeagueComponent, ConfirmAddRequestComponent,
-      FilterWrongOfferedNameComponent, LogInfoWrongOfferedNameComponent],
-    providers: [EventWrongOfferedNameService, LogInfoService, SaveRequestService, ValidationService]
+  selector: 'event-wrong-offered-name',
+  templateUrl: './event-wrong-offered-name.component.html',
+  styleUrls: ['./event-wrong-offered-name.component.scss'],
+  standalone: true,
+  imports: [FormsModule, NgbModule, EventLeagueComponent, ConfirmAddRequestComponent,
+    FilterWrongOfferedNameComponent, LogInfoWrongOfferedNameComponent],
+  providers: [EventWrongOfferedNameService, LogInfoService, SaveRequestService, ValidationService,
+    CheckAddPermissionService, AffectedTicketService
+  ]
 })
-export class EventWrongOfferedNameComponent  implements OnInit {
+export class EventWrongOfferedNameComponent implements OnInit {
   @Input() isEdit: boolean;
   @Input() userId: number;
   @Input() requestedBy: string;

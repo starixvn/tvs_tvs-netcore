@@ -7,6 +7,7 @@ import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { WrongOddsModel } from '../models/event-wrong-odds.model';
 import { OthersModel } from '../others/others.model';
+import { PoolHouseTicketValue } from '../pool-house-ticket/pool-house-ticket.constant';
 import { FilterWrongOddsComponent } from './filter-wrong-odds/filter-wrong-odds.component';
 import { LogInfoWrongOddsComponent } from './log-info-wrong-odds/log-info-wrong-odds.component';
 import { MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
@@ -18,7 +19,6 @@ import { EventWrongOddsService } from './services/event-wrong-odds.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { PoolHouseTicketValue } from '../pool-house-ticket/pool-house-ticket.constant';
 
 @Component({
   selector: 'event-wrong-odds',

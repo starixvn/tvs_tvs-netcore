@@ -10,6 +10,7 @@ import { DateTimeFormat, TeamFavorite } from '../../../../../utility/constants/c
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { HdpFilterBetTypeComponent } from '../../components/hdp-filter-bet-type/hdp-filter-bet-type.component';
+import { HdpFilterBetTypeService } from '../../components/hdp-filter-bet-type/hdp-filter-bet-type.service';
 import { FilterModel } from '../../filter/filter.model';
 import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { ValidationService } from '../services/validation.service';
@@ -19,7 +20,8 @@ import { ValidationService } from '../services/validation.service';
   templateUrl: './filter-with-hdp.component.html',
   styleUrls: ['./filter-with-hdp.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule, TooltipComponent, DateFullTimeNewComponent, HdpFilterBetTypeComponent]
+  imports: [FormsModule, CommonModule, TooltipComponent, DateFullTimeNewComponent, HdpFilterBetTypeComponent],
+  providers: [HdpFilterBetTypeService]
 })
 export class FilterWithHdpComponent implements OnInit {
   @Input() filterWithHdpModel: FilterWithHdpModel;

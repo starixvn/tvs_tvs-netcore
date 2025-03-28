@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
@@ -21,16 +21,22 @@ import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request.model';
 import { ValidationBusinessRuleArgs } from './models/validation.model';
 import { ProductFilterComponent } from './product-filter/product-filter.component';
+import { AbnormalAccountService } from './services/abnormal-account.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-    selector: 'abnormal-accounts',
-    templateUrl: './abnormal-accounts.component.html',
-    styleUrls: ['./abnormal-accounts.component.scss'],
-    standalone: true,
-    imports: [NgbModule, FormsModule, ConfirmAddRequestComponent, UsernamesComponent, ProductFilterComponent,
-      EventDateFilterComponent, AccountTableComponent, AccountAffectedTicketComponent, BlockUiModule]
+  selector: 'abnormal-accounts',
+  templateUrl: './abnormal-accounts.component.html',
+  styleUrls: ['./abnormal-accounts.component.scss'],
+  standalone: true,
+  imports: [NgbModule, FormsModule, ConfirmAddRequestComponent, UsernamesComponent, ProductFilterComponent,
+    EventDateFilterComponent, AccountTableComponent, AccountAffectedTicketComponent, BlockUiModule],
+  providers: [
+    SaveRequestService,
+    ValidationService,
+    AbnormalAccountService
+  ]
 })
 export class AbnormalAccountsComponent implements OnInit {
   @Input() isVoided: boolean;
@@ -51,13 +57,10 @@ export class AbnormalAccountsComponent implements OnInit {
   primitiveProps = new PrimitiveProperty();
   confirmAddRequest = new ConfirmAddRequestModel();
   accountAffectedTicketModel = new AccountAffectedTicketModel();
-
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestApiService: AddRequestApiService
-  ) { }
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly validationService = inject(ValidationService);
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   async ngOnInit() {
     if (this.isEdit && this.validationService.isAutoVoidWithPolicy(this.filter.action)) {

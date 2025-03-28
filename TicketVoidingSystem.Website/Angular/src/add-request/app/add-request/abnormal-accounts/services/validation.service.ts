@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import moment from 'moment-timezone';
 import { UsernamesComponent } from '../../../../../utility/components/user-names/user-names.component';
 import { DateTimeFormat, TVSRequestActionType } from '../../../../../utility/constants/config';
@@ -8,13 +8,9 @@ import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from '../models/che
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from '../models/validation.model';
 import { ProductFilterComponent } from '../product-filter/product-filter.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService
-    ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   isValidCommonData(productFilterComponent: ProductFilterComponent, eventDateFilterComponent: EventDateFilterComponent): boolean {
     return productFilterComponent.isValidComponent() && eventDateFilterComponent.isValidEventDate();

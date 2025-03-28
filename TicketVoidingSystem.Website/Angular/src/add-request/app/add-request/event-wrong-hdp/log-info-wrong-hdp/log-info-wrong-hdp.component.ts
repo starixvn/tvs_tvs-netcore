@@ -12,9 +12,11 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
 import { FilterModel } from '../../filter/filter.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
+import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
 import { LogAnalysisService } from '../../services/log-analysis.service';
 import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
@@ -24,7 +26,6 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
-import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 
 @Component({
   selector: 'log-info-wrong-hdp',
@@ -33,7 +34,7 @@ import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.
   standalone: true,
   imports: [AffectedTicketComponent, BlockUiModule, PipeModule, FilterWithHdpComponent, FormsModule, CommonModule,
     TicketCountOtherSportsComponent, PoolHouseTicketComponent],
-  providers: [LogAnalysisService, ModalService, AddRequestApiService]
+  providers: [ModalService, AddRequestApiService, AffectedTicketService]
 })
 export class LogInfoWrongHdpComponent {
   @Input() isMainMatch: boolean;

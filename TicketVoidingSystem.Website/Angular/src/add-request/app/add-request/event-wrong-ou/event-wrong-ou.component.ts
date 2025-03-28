@@ -29,18 +29,18 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-    selector: 'event-wrong-ou',
-    templateUrl: './event-wrong-ou.component.html',
-    styleUrls: ['./event-wrong-ou.component.scss'],
-    standalone: true,
-    imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiModule, AddChildMatchComponent, LogInfoWrongOuComponent],
-    providers: [
-      EventWrongOuService,
-      LogInfoService,
-      RelatedEventService,
-      SaveRequestService,
-      ValidationService
-    ]
+  selector: 'event-wrong-ou',
+  templateUrl: './event-wrong-ou.component.html',
+  styleUrls: ['./event-wrong-ou.component.scss'],
+  standalone: true,
+  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiModule, AddChildMatchComponent, LogInfoWrongOuComponent],
+  providers: [
+    EventWrongOuService,
+    LogInfoService,
+    RelatedEventService,
+    SaveRequestService,
+    ValidationService
+  ]
 })
 export class EventWrongOuComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -99,7 +99,7 @@ export class EventWrongOuComponent implements OnInit {
     }
   }
 
-  private createGetChildMatchesQuery(): GetChildMatchQuery{
+  private createGetChildMatchesQuery(): GetChildMatchQuery {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(this.filter.issueTypeId);
     query.eventDate = this.mainEvent.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;

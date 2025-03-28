@@ -8,6 +8,7 @@ import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { Item } from '../../../../../utility/models/item.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
 import { GroupBetTypeCountModel } from '../../models/get-log-info.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogInfoItem, LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
@@ -18,7 +19,8 @@ import { PrimitivePropertyEvent } from '../models/primitive-property-event.model
   templateUrl: './log-info-wrong-market-offered.component.html',
   styleUrls: ['./log-info-wrong-market-offered.component.scss'],
   standalone: true,
-  imports: [AffectedTicketComponent, LogInfoTicketCountComponent, LogInfoMessageComponent, BlockUiModule]
+  imports: [AffectedTicketComponent, LogInfoTicketCountComponent, LogInfoMessageComponent, BlockUiModule],
+  providers: [AffectedTicketService]
 })
 
 export class LogInfoWrongMarketOfferedComponent {

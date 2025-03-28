@@ -27,6 +27,7 @@ import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { ChildMatchModel } from '../models/related-event.model';
 import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
 import { OthersModel } from '../others/others.model';
+import { CheckAddPermissionService } from '../services/check-permission.service';
 import { ConfirmEkoComponent } from './confirm-eko/confirm-eko.component';
 import { ConfirmEarlyKickOffModel } from './confirm-eko/confirm-eko.model';
 import { LogInfoEkoComponent } from './log-info-eko/log-info-eko.component';
@@ -48,7 +49,8 @@ import { ValidationService } from './services/validation.service';
   standalone: true,
   imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, DateFullTimeNewComponent,
     LogInfoEkoComponent, AddChildMatchComponent, ConfirmEkoComponent],
-  providers: [EventEarlyKickOffService, LogInfoService, SaveRequestService, ValidationService, RelatedEventService, SearchEventService]
+  providers: [EventEarlyKickOffService, LogInfoService, SaveRequestService,
+    ValidationService, RelatedEventService, SearchEventService, CheckAddPermissionService]
 })
 export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   @Input() filter: FilterModel;
@@ -75,7 +77,6 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   primitiveProps = new PrimitiveProperty();
   tooltip = new Tooltip();
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
-
   private readonly element = inject(ElementRef);
   private readonly addRequestStore = inject(AddRequestStore);
   private readonly logInfoService = inject(LogInfoService);

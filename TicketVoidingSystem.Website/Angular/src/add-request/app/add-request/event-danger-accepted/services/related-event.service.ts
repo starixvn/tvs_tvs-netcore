@@ -12,9 +12,7 @@ import { ChildMatchModel } from '../../models/related-event.model';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class RelatedEventService {
   private readonly addRequestApiService = inject(AddRequestApiService);
   private readonly validationService = inject(ValidationService);

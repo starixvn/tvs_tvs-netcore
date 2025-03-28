@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
@@ -42,12 +42,12 @@ export class AccountTableComponent {
   message = `Current Losing (L)\n
   Sum winlost (without actual stake) of all LOSE tickets\n
   Display L as negative number`;
-  constructor(
-    private readonly element: ElementRef,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly appService: AddRequestApiService,
-    private readonly validationService: ValidationService
-  ) {
+  private readonly element = inject(ElementRef);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly appService = inject(AddRequestApiService);
+  private readonly validationService = inject(ValidationService);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 

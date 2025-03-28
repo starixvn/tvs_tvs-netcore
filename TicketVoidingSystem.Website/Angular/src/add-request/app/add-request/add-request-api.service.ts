@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Result } from '../../../utility/models/result';
 import { HttpService } from '../../../utility/services/http.service';
 import { AddRequestQuery } from '../add-request/models/add-request.query';
@@ -31,9 +31,7 @@ import { TicketsModel } from './pool-house-ticket/tickets/tickets.model';
   providedIn: 'root'
 })
 export class AddRequestApiService {
-  constructor(
-    private readonly httpService: HttpService
-  ) { }
+  private readonly httpService = inject(HttpService);
 
   /* istanbul ignore next */
   async addRequest(query: AddRequestQuery): Promise<Result<AddRequestResultModel>> {

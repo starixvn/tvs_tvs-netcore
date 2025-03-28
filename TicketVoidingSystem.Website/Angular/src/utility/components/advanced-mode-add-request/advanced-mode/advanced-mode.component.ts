@@ -84,7 +84,6 @@ export class AdvancedModeComponent {
     })
     await this.getSpecialBetTeamCricket(matchId);
     this.renderBetTeams(this.baseBetTeams);
-    this.isLoadingData.emit(false);
   }
 
   expandAndValidate() {

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import moment from 'moment-timezone';
 import { AcceptType, DateTimeFormat } from '../../../../utility/constants/config';
 import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../../../../utility/models/copy-request-info.query';
@@ -10,7 +10,7 @@ import { OperatorInfo, OperatorType } from '../others/others.model';
   providedIn: 'root'
 })
 export class CopyRequestInfoService {
-  constructor(private readonly commonService: CommonService) { }
+  private readonly commonService = inject(CommonService);
 
   async copyEmailRequestInfo(requestId: number, matchId: number, operatorsList: OperatorInfo[]) {
     const query: CopyRequestInfoQuery = {

@@ -19,6 +19,7 @@ import { LogInfoRelatedEventComponent } from '../components/log-info-related-eve
 import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
 import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
+import { TvDetectionService } from '../components/tv-detection/tv-detection.service';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { FilterModel } from '../filter/filter.model';
@@ -51,7 +52,8 @@ import { ValidationService } from './services/validation.service';
     ValidationService,
     SaveRequestService,
     RelatedEventService,
-    EventDangerAcceptedService
+    EventDangerAcceptedService,
+    TvDetectionService
   ]
 })
 export class EventDangerAcceptedComponent implements OnInit, OnChanges {

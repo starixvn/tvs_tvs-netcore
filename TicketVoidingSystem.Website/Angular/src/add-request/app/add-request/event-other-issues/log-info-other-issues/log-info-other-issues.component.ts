@@ -7,6 +7,7 @@ import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
@@ -16,7 +17,8 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
     templateUrl: './log-info-other-issues.component.html',
     styleUrls: ['./log-info-other-issues.component.scss'],
     standalone: true,
-    imports: [LogInfoMessageComponent, AffectedTicketComponent, PipeModule]
+    imports: [LogInfoMessageComponent, AffectedTicketComponent, PipeModule],
+    providers: [AffectedTicketService]
 })
 export class LogInfoOtherIssuesComponent implements OnInit {
   @Input() logInfo: LogInfoOtherIssues;

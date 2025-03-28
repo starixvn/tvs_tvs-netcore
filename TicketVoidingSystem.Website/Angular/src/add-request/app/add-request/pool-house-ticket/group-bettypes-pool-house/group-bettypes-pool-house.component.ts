@@ -8,11 +8,11 @@ import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model
 import { GroupBetTypesModel } from './group-bettypes-pool-house.model';
 
 @Component({
-    selector: 'group-bettypes-pool-house',
-    templateUrl: './group-bettypes-pool-house.component.html',
-    styleUrls: ['./group-bettypes-pool-house.component.scss'],
-    standalone: true,
-    imports: [FormsModule, NgbModule, TooltipComponent]
+  selector: 'group-bettypes-pool-house',
+  templateUrl: './group-bettypes-pool-house.component.html',
+  styleUrls: ['./group-bettypes-pool-house.component.scss'],
+  standalone: true,
+  imports: [FormsModule, NgbModule, TooltipComponent]
 })
 export class GroupBettypesPoolHouseComponent implements OnInit {
   @Input() affectedGroupBetTypesModel: GroupBetTypesModel;
@@ -21,8 +21,6 @@ export class GroupBettypesPoolHouseComponent implements OnInit {
 
   tooltip = new Tooltip;
   displayGroupBetTypesModel: GroupBetTypesModel[] = [];
-
-  constructor() { }
 
   public ngOnInit(): void {
     this.renderDisplayGroupBetTypes();

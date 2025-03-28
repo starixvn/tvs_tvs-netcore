@@ -14,11 +14,11 @@ import SubIssueTypeRedCardConfig from './sub-type-red-card.json';
 import SubIssueTypeWrongScoreConfig from './sub-type-wrong-score.json';
 
 @Component({
-    selector: 'sub-issue-type-dialog',
-    templateUrl: './sub-issue-type-dialog.component.html',
-    styleUrls: ['./sub-issue-type-dialog.component.scss'],
-    standalone: true,
-    imports: [FormsModule, CommonModule, BlockUiModule]
+  selector: 'sub-issue-type-dialog',
+  templateUrl: './sub-issue-type-dialog.component.html',
+  styleUrls: ['./sub-issue-type-dialog.component.scss'],
+  standalone: true,
+  imports: [FormsModule, CommonModule, BlockUiModule]
 })
 export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
   @Input() model = new SubIssueTypeDialogModel();
@@ -91,11 +91,11 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
   private getSubIssueTypeWrongScoreConfig(): Category[] {
     const subIssueTypeWrongScoreConfig = _.cloneDeep(SubIssueTypeWrongScoreConfig);
     const mainCategoryName = "Main Event";
-    if(this.isMainEvent){
+    if (this.isMainEvent) {
       const mainEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName === mainCategoryName);
       mainEventSubIssueTypes[0].groups = this.isCheckedWrongScoreOnwards
-      ? SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeOnWards(x))
-      : SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeNoOnWards(x))
+        ? SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeOnWards(x))
+        : SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeNoOnWards(x))
 
       return mainEventSubIssueTypes;
     }
@@ -110,7 +110,7 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
     return StaticService.isDangerAccepted(this.model.issueTypeId);
   }
 
-  public isMainEventWrongScore(): boolean{
+  public isMainEventWrongScore(): boolean {
     return this.isWrongScore() && this.isMainEvent;
   }
 

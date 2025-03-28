@@ -14,9 +14,6 @@ export class AddRequestStore {
   private readonly abnormalFilterBySubject: Subject<number> = new Subject();
   private startTimeFilterTicket: Date;
 
-  constructor() {
-  }
-
   get getStartTimeFilterTicket(): Date {
     return this.startTimeFilterTicket;
   }

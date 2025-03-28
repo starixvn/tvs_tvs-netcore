@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
@@ -42,40 +42,40 @@ import { OthersComponent } from './others/others.component';
 import { CopyRequestInfoService } from './services/copy-request-info.service';
 
 @Component({
-    selector: 'add-request',
-    templateUrl: './add-request.component.html',
-    styleUrls: ['./add-request.component.scss'],
-    providers: [],
-    standalone: true,
-    imports: [FormsModule,
-      CommonModule,
-      PipeModule,
-      NgbModule,
-      FilterComponent,
-      BlockFullUiComponent,
-      OthersAbnormalBetComponent,
-      OthersWrongHdpComponent,
-      OthersComponent,
-      AbnormalAccountOtherComponent,
-      EventAbnormalBetComponent,
-      EventEarlyKickOffComponent,
-      EventDangerAcceptedComponent,
-      EventRedCardComponent,
-      AbnormalAccountsComponent,
-      EventWrongScoreComponent,
-      EventTicket14Component,
-      EventWrongHdpComponent,
-      EventWrongOuComponent,
-      EventWrongOddsComponent,
-      EventWrongOddsSportsBookComponent,
-      EventReducedOverComponent,
-      EventDuplicateTicketsComponent,
-      EventNotParticipateComponent,
-      EventRecoverTicketComponent,
-      EventWrongMarketOfferedComponent,
-      EventWrongOfferedNameComponent,
-      EventOtherIssuesComponent,
-      EventTechnicalErrorComponent]
+  selector: 'add-request',
+  templateUrl: './add-request.component.html',
+  styleUrls: ['./add-request.component.scss'],
+  providers: [],
+  standalone: true,
+  imports: [FormsModule,
+    CommonModule,
+    PipeModule,
+    NgbModule,
+    FilterComponent,
+    BlockFullUiComponent,
+    OthersAbnormalBetComponent,
+    OthersWrongHdpComponent,
+    OthersComponent,
+    AbnormalAccountOtherComponent,
+    EventAbnormalBetComponent,
+    EventEarlyKickOffComponent,
+    EventDangerAcceptedComponent,
+    EventRedCardComponent,
+    AbnormalAccountsComponent,
+    EventWrongScoreComponent,
+    EventTicket14Component,
+    EventWrongHdpComponent,
+    EventWrongOuComponent,
+    EventWrongOddsComponent,
+    EventWrongOddsSportsBookComponent,
+    EventReducedOverComponent,
+    EventDuplicateTicketsComponent,
+    EventNotParticipateComponent,
+    EventRecoverTicketComponent,
+    EventWrongMarketOfferedComponent,
+    EventWrongOfferedNameComponent,
+    EventOtherIssuesComponent,
+    EventTechnicalErrorComponent]
 })
 export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() isEdit = false;
@@ -119,10 +119,8 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   abnormalFilterBy: number;
   parentMatchId: number = null;
 
-  constructor(
-    private readonly addRequestStore: AddRequestStore,
-    private readonly copyRequestInfoService: CopyRequestInfoService
-  ) { }
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly copyRequestInfoService = inject(CopyRequestInfoService);
 
   ngOnInit(): void {
     this.savingRequestSubscription = this.addRequestStore.savingRequestStatus.subscribe(status => {

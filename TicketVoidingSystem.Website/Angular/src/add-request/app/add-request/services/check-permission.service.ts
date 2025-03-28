@@ -1,15 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { PopupService } from './popup.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CheckAddPermissionService {
-  constructor(
-    private readonly popupService: PopupService
-  ) { }
+  private readonly popupService = inject(PopupService);
 
   public isAccountHasAddRequestPermission(currentActionId: string, isHasInstantlySettledTicket: boolean,
     isHasSettledTicket: boolean, permission: PermissionAddRequest): boolean {

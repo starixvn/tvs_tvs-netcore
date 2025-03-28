@@ -19,6 +19,7 @@ import { LogInfoRelatedEventComponent } from '../components/log-info-related-eve
 import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
 import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
+import { TvDetectionService } from '../components/tv-detection/tv-detection.service';
 import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
@@ -48,7 +49,7 @@ import { ValidationService } from './services/validation.service';
   imports: [FormsModule, CommonModule, EventLeagueComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent,
     NgSelectModule, NgbModule, TooltipComponent, BlockUiModule, ConfirmAddRequestComponent,
     TvDetectionComponent],
-  providers: [EventRedCardService, LogInfoService, SaveRequestService, ValidationService, RelatedEventService]
+  providers: [EventRedCardService, LogInfoService, SaveRequestService, ValidationService, RelatedEventService, TvDetectionService]
 })
 export class EventRedCardComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;
@@ -77,7 +78,6 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   addChildMatchModel = new AddChildMatchModel();
   tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
   getAllowanceTimeSubscription: Subscription;
-
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
   private readonly element = inject(ElementRef);
   private readonly logInfoService = inject(LogInfoService);

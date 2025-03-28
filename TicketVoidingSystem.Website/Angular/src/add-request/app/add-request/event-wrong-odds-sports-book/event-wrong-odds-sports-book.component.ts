@@ -18,6 +18,7 @@ import { IssueTypes } from '../filter/issue-types.model';
 import { WrongOddsSportsBookModel } from '../models/event-wrong-odds-sports-book.model';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { OthersModel } from '../others/others.model';
+import { CheckAddPermissionService } from '../services/check-permission.service';
 import { FilterWrongOddsSportsBookComponent } from './filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
 import { LogInfoWrongOddsSportsBookComponent } from './log-info-wrong-odds-sports-book/log-info-wrong-odds-sports-book.component';
 import { FilterWrongOddsSportsBookModel } from './models/filter-wrong-odds-sports-book.model';
@@ -36,7 +37,9 @@ import { ValidationService } from './services/validation.service';
   standalone: true,
   imports: [EventLeagueComponent, FilterWrongOddsSportsBookComponent, FormsModule,
     LogInfoWrongOddsSportsBookComponent, AdvancedModeAddRequestComponent, ConfirmAddRequestComponent],
-  providers: [EventWrongOddsSportsBookService, LogInfoService, SaveRequestService, ValidationService]
+  providers: [EventWrongOddsSportsBookService, LogInfoService, SaveRequestService, ValidationService,
+    CheckAddPermissionService
+  ]
 })
 export class EventWrongOddsSportsBookComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -152,7 +155,6 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
   resetLogInfo(): void {
     this.primitiveProps.isShowErrorNoBetType = false;
     this.primitiveProps.isShowValidation = false;
-    this.advancedModeAddRequestModel = new AdvancedModeAddRequestModel();
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
   }
 

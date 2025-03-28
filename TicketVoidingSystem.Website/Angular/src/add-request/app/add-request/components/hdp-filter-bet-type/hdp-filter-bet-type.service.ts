@@ -1,15 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 import { HdpFilterBetType } from '../../models/hdp-filter-betType.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class HdpFilterBetTypeService {
-  constructor(
-    private readonly commonService: CommonService
-  ) { }
+  private readonly commonService = inject(CommonService);
 
   async GetHdpFilterBetTypes(sportId: number, issueTypeId: string) {
     const allFilterBetTypes = await this.commonService.getHdpFilterBetTypes(sportId.toString(), Number(issueTypeId));

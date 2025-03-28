@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectComponent } from '@ng-select/ng-select';
@@ -25,16 +25,12 @@ export class OthersComponent implements OnChanges, OnInit {
   @Input() model = new OthersModel();
   @Output() modelChange = new EventEmitter<OthersModel>();
   isCollapse: boolean;
-
   operators: OperatorInfo[] = [];
   groupOperators: GroupOperator[] = [];
   decidedBys = [];
-
-  constructor(
-    private readonly othersService: OthersService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly addRequestApiService: AddRequestApiService
-  ) { }
+  private readonly othersService = inject(OthersService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   async ngOnInit() {
     this.operators = [OperatorDefault.TRADER, OperatorDefault.SUSPENDER];
