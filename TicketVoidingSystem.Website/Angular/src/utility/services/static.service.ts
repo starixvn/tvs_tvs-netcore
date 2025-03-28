@@ -162,17 +162,22 @@ export class StaticService {
     return `${ngbDate.year}/${transformMonth}/${transformDay}`;
   }
 
-  static getSubIssueTypeId(requestDetail: RequestDetailViewModel): number {
+  static getSubIssueTypeId(requestDetail: RequestDetailViewModel, matchId?: number): number {
     if (this.isWrongScore(requestDetail.request.issueTypeId)) {
-      return requestDetail.wrongScoreModels[0].subIssueTypeId;
+      return matchId ? requestDetail.wrongScoreModels.find(x => x.matchId === matchId).subIssueTypeId
+        : requestDetail.wrongScoreModels[0].subIssueTypeId;
     } else if (this.isDangerAccepted(requestDetail.request.issueTypeId)) {
-      return requestDetail.dangerAcceptedModels.find(x => x.isMainMatch).subIssueTypeId;
+      return matchId ? requestDetail.dangerAcceptedModels.find(x => x.matchId === matchId).subIssueTypeId
+        : requestDetail.dangerAcceptedModels.find(x => x.isMainMatch).subIssueTypeId;
     } else if (this.isRedCard(requestDetail.request.issueTypeId)) {
-      return requestDetail.redCardModels.find(x => x.isMainMatch).subIssueTypeId;
+      return matchId ? requestDetail.redCardModels.find(x => x.matchId === matchId).subIssueTypeId
+        : requestDetail.redCardModels.find(x => x.isMainMatch).subIssueTypeId;
     } else if (this.isWrongHDP(requestDetail.request.issueTypeId) || this.isWrong1stHDP(requestDetail.request.issueTypeId)) {
-      return requestDetail.wrongHdpModels.find(x => x.isMainMatch).subIssueTypeId;
+      return matchId ? requestDetail.wrongHdpModels.find(x => x.matchId === matchId).subIssueTypeId
+        : requestDetail.wrongHdpModels.find(x => x.isMainMatch).subIssueTypeId;
     } else if (this.isWrongOU(requestDetail.request.issueTypeId) || this.isWrong1stOU(requestDetail.request.issueTypeId)) {
-      return requestDetail.wrongOuModels.find(x => x.isMainMatch).subIssueTypeId;
+      return matchId ? requestDetail.wrongOuModels.find(x => x.matchId === matchId).subIssueTypeId
+        : requestDetail.wrongOuModels.find(x => x.isMainMatch).subIssueTypeId;
     } else if (this.isWrongOdds(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongOddsModels[0].subIssueTypeId;
     } else if (this.isReducedOver(requestDetail.request.issueTypeId) || this.isAbandoned(requestDetail.request.issueTypeId)) {
@@ -182,7 +187,8 @@ export class StaticService {
     } else if (this.isDuplicateTickets(requestDetail.request.issueTypeId)) {
       return requestDetail.duplicateTicketsModel.subIssueTypeId;
     } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId) || this.isWrongKickOff(requestDetail.request.issueTypeId)) {
-      return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).subIssueTypeId;
+      return matchId ? requestDetail.earlyKickOffModels.find(x => x.matchId === matchId).subIssueTypeId
+        : requestDetail.earlyKickOffModels.find(x => x.isMainMatch).subIssueTypeId;
     } else if (this.isAbnormalAccount(requestDetail.request.issueTypeId)) {
       return requestDetail.abnormalAccountModel.subIssueTypeId;
     } else if (this.isRecoverTicket(requestDetail.request.issueTypeId)) {

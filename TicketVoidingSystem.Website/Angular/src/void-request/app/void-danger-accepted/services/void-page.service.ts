@@ -59,7 +59,7 @@ export class VoidPageService {
   }
 
   private updateLogIfWrongScore(logInfoList: GetLogInfoModel[], requestDetail: RequestDetailViewModel, voidMatches: VoidMatch[]): void {
-    if(requestDetail.wrongScoreModels?.length ===0) {
+    if(!StaticService.isWrongScore(requestDetail.request.issueTypeId.toString())) {
       return;
     }
 
