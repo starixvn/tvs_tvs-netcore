@@ -72,7 +72,7 @@ export class RelatedEventService {
       query.sportType = arg.mainEvent.sportType;
       
       const models = await this.getChildMatches(query);
-      if (models.length === 0) {
+      if (!models || models.length === 0) {
         arg.tooltip.display(arg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         arg.primitiveProps.isBlock = false;
         return;

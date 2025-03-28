@@ -40,7 +40,7 @@ export class EventWrongScoreService {
     primitiveProps.filterBy = this.getFilterByBaseOnSubIssueType(subIssueTypeId);
     primitiveProps.isCheckedVar = null;
     primitiveProps.isHighLightVarCheck = null;
-    primitiveProps.isShowRelatedEvents = this.isHasRelatedEvent(Number(subIssueTypeId));
+    primitiveProps.isShowRelatedEvents = false;
   }
 
   getTvDetectionModel(inputModel: WrongScoreModel): TvDetectionModel {

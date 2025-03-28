@@ -153,12 +153,12 @@ export class RelatedEventService {
       arg.primitiveProps.isBlock = true;
       const models = await this.getGetInfoChildMatch(matchId, false, arg.mainEvent.sportType, arg.mainEvent.eventDate.toString());
 
-      if (models.length === 0) {
+      if (!models || models?.length === 0) {
         arg.tooltip.display(arg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         arg.primitiveProps.isBlock = false;
         return;
       }
-      this.addNewLogInfoRelatedEvent(models, arg);  
+      await this.addNewLogInfoRelatedEvent(models, arg);
       arg.primitiveProps.isBlock = false;
       arg.primitiveProps.inputRelatedMatchId = null;
     }
@@ -172,8 +172,6 @@ export class RelatedEventService {
       const relatedEventModel = await this.getLogInfoRelatedEvent(event, newRelatedEvents);
       arg.allEvents.push(relatedEventModel);
     }
-
-    arg.allEvents = _.orderBy(_.uniqBy(arg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
   }
 
   async getGetInfoChildMatch(matchId: number, isMainMatch: boolean,sportType: number, eventDate?: string): Promise<ChildMatchModel[]> {
@@ -192,6 +190,7 @@ export class RelatedEventService {
     const eventsGetLogInfo = await this.preparingModelGetLogInfo(relatedEvents, arg);
     await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, eventsGetLogInfo, arg.mainEvent.matchId, arg.defaultFilterTimeWithAllowance);
     this.addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo, arg.mainEvent, arg.allEvents, relatedEvents);
+    arg.allEvents = _.orderBy(_.uniqBy(arg.allEvents, x => x.matchId), ['matchCode'], ['asc']); 
   }
 
   private async preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<WrongScoreModel[]> {
@@ -206,7 +205,6 @@ export class RelatedEventService {
 
   private async addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: WrongScoreModel[], mainEvent: WrongScoreModel,
     allEvents: LogInfoRelatedEvent[], relatedEvents: ChildMatchModel[]) {
-
     const mainEventLogInfo = eventsGetLogInfo.find(x => x.isMainMatch);
     mainEvent.logInfoDetail = mainEventLogInfo.logInfoDetail;
     mainEvent.messageValidationLogInfo = mainEventLogInfo.messageValidationLogInfo;

@@ -174,7 +174,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     else {
       this.originWrongScoreModels = await this.eventWrongScoreService.getAllWrongScoreModels(this.wrongScoreModels, this.matchId);
     }
-
+    this.primitiveProps.isShowRelatedEvents = this.eventWrongScoreService.isHasRelatedEvent(Number(this.filter.subIssueTypeId));
     this.primitiveProps.isBlock = false;
     this.primitiveProps.isShowActualScore = true;
     this.updateStatusButtonSaveRequest();
@@ -429,7 +429,6 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
 
   async handleClickAddRelatedEvent(): Promise<void> {
     await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
-    this.allRelatedEvents = _.orderBy(_.uniqBy(this.allRelatedEvents, x => x.matchId), ['matchCode'], ['asc']);
   }
 
   showAddChildMatchModal(matchType: number) {
@@ -460,7 +459,8 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     this.allRelatedEvents = this.eventWrongScoreService.updateCheckRelatedEvent(selectedRelatedEvents, this.allRelatedEvents, this.relatedEvents, this.addChildMatchModel.matchType);
     const newChildEvents = selectedRelatedEvents.filter(x => !this.allRelatedEvents.some(y => y.matchId === x.matchId));
     if (newChildEvents.length > 0) {
-      await this.relatedEventService.addNewLogInfoRelatedEvent(newChildEvents, this.initAddRelatedEventArgs());     
+      await this.relatedEventService.addNewLogInfoRelatedEvent(newChildEvents, this.initAddRelatedEventArgs());  
+      this.allRelatedEvents = _.orderBy(_.uniqBy(this.allRelatedEvents, x => x.matchId), ['matchCode'], ['asc']);  
     }
 
     this.primitiveProps.isBlock = false;

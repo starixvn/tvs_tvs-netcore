@@ -58,7 +58,7 @@ export class RelatedEventService {
   async addRelatedEventByInput(addRelatedEventArg: AddRelatedEventArg): Promise<void> {
     if (!addRelatedEventArg.primitiveProps.inputRelatedMatchId) {
       addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.REQUIRED_MATCHID);
-    } else {      
+    } else {
       const matchId = Number(addRelatedEventArg.primitiveProps.inputRelatedMatchId);
       if (!this.validationService.isValidInputRelatedEvent(matchId, addRelatedEventArg.inputMatchIdClass, addRelatedEventArg.allEvents, addRelatedEventArg.tooltip)) {
         return;
@@ -72,7 +72,7 @@ export class RelatedEventService {
       query.sportType = addRelatedEventArg.mainEvent.sportType;
       
       const models = await this.getChildMatches(query);
-      if (models.length === 0) {
+      if (!models || models.length === 0) {
         addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         addRelatedEventArg.primitiveProps.isBlock = false;
         return;
