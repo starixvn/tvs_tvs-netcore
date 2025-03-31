@@ -197,7 +197,7 @@ export class RelatedEventService {
     const newLinkEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
     const newEvents = this.assignChildMatchToLogInfoModel(newLinkEvents, arg.defaultFilterTimeWithAllowance);
     await this.updateSubIssueTypeAndAllowanceTime(newEvents, Number(arg.filter.subIssueTypeId));
-    const originRelatedEvents = arg.allEvents.map(x => this.logInfoService.mapRelatedEventToWrongScoreModel(x));
+    const originRelatedEvents = arg.allEvents.map(x => this.logInfoService.mapRelatedEventToWrongScoreModel(x, arg.defaultFilterTimeWithAllowance));
     const eventsGetLogInfo = [arg.mainEvent, ...originRelatedEvents, ...newEvents.filter(x => x.subIssueTypeId)];
 
     return eventsGetLogInfo;

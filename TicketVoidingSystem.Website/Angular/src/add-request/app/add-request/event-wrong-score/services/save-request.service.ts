@@ -55,7 +55,7 @@ export class SaveRequestService {
 
     args.addRequestStore.changeBlockingUiStatus(true);
     this.logInfoService.clearDataValidation(args.wrongScoreModels);
-    const relatedEvents = args.allSelectedEvents.map(x => this.logInfoService.mapRelatedEventToWrongScoreModel(x));
+    const relatedEvents = args.allSelectedEvents.map(x => this.logInfoService.mapRelatedEventToWrongScoreModel(x, args.defaultFilterTimeWithAllowance));
     args.wrongScoreModels = [...args.wrongScoreModels, ...relatedEvents];
     await this.logInfoService.getLogInfo(args.isEdit, args.requestId, args.filter, args.primitiveProps, args.wrongScoreModels, args.wrongScoreModels[0].matchId, args.defaultFilterTimeWithAllowance);
 

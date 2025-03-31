@@ -33,12 +33,14 @@ export class LogInfoService {
       : this.assignResultsGetLogInfoToListModel(viewModel.getLogInfoModels, wrongScoreModels);
   }
 
-  mapRelatedEventToWrongScoreModel(logInfoRelatedEvent: LogInfoRelatedEvent) {
+  mapRelatedEventToWrongScoreModel(logInfoRelatedEvent: LogInfoRelatedEvent, defaultFilterTimeWithAllowance: FilterTimeWithAllowance) {
     const wrongScoreModel = new WrongScoreModel();
+    wrongScoreModel.filterFromTransTime = this.validationService.isHasAllowanceTime(logInfoRelatedEvent)
+      ? defaultFilterTimeWithAllowance.fromDateTime : logInfoRelatedEvent.voidTimeArea.fromDateTime;
+    wrongScoreModel.filterToTransTime =this.validationService.isHasAllowanceTime(logInfoRelatedEvent)
+      ? defaultFilterTimeWithAllowance.toDateTime : logInfoRelatedEvent.voidTimeArea.toDateTime;
     wrongScoreModel.matchId = logInfoRelatedEvent.matchId;
     wrongScoreModel.filterBy = this.eventWrongScoreService.getFilterByBaseOnSubIssueType(logInfoRelatedEvent.subIssueTypeId.toString());
-    wrongScoreModel.filterFromTransTime = logInfoRelatedEvent.voidTimeArea.fromDateTime;
-    wrongScoreModel.filterToTransTime = logInfoRelatedEvent.voidTimeArea.toDateTime;
     wrongScoreModel.subIssueTypeId = logInfoRelatedEvent.subIssueTypeId;
     wrongScoreModel.aaTime = logInfoRelatedEvent.voidTimeArea.aaTime;
     wrongScoreModel.paTime = logInfoRelatedEvent.voidTimeArea.paTime;
@@ -50,17 +52,19 @@ export class LogInfoService {
   private getWrongScoreModel(filter: FilterModel, wrongScoreModels: WrongScoreModel[], mainMatchId: number, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): WrongScoreGetLogInfoQuery[] {
     return wrongScoreModels.map(x => {
       const filterBy = this.eventWrongScoreService.getFilterByBaseOnSubIssueType(filter.subIssueTypeId);
-      if (this.validationService.isHasAllowanceTimeWrongScoreModel(x) && x.filterBy === TVSRequestFilterBy.CHECK_TIME) {
-        x.filterFromTransTime = defaultFilterTimeWithAllowance.fromDateTime;
-        x.filterToTransTime = defaultFilterTimeWithAllowance.toDateTime;
-      }
       const wrongScoreGetLogInfoQuery = new WrongScoreGetLogInfoQuery();
+      if (this.validationService.isHasAllowanceTimeWrongScoreModel(x) && x.filterBy === TVSRequestFilterBy.CHECK_TIME) {
+        wrongScoreGetLogInfoQuery.filterFromTransTime = defaultFilterTimeWithAllowance.fromDateTime;
+        wrongScoreGetLogInfoQuery.filterToTransTime = defaultFilterTimeWithAllowance.toDateTime;
+      }
+      else {
+        wrongScoreGetLogInfoQuery.filterFromTransTime = x.filterFromTransTime;
+        wrongScoreGetLogInfoQuery.filterToTransTime = x.filterToTransTime;
+      }
       wrongScoreGetLogInfoQuery.scoreId = x.scoreId;
       wrongScoreGetLogInfoQuery.matchId = x.matchId ? x.matchId : mainMatchId;
       wrongScoreGetLogInfoQuery.wrongScore = x.wrongScore;
       wrongScoreGetLogInfoQuery.filterBy = filterBy;
-      wrongScoreGetLogInfoQuery.filterFromTransTime = x.filterFromTransTime;
-      wrongScoreGetLogInfoQuery.filterToTransTime = x.filterToTransTime;
       wrongScoreGetLogInfoQuery.subIssueTypeId = x.subIssueTypeId ? x.subIssueTypeId : Number(filter.subIssueTypeId);
       wrongScoreGetLogInfoQuery.aaTime = x.aaTime;
       wrongScoreGetLogInfoQuery.paTime = x.paTime;

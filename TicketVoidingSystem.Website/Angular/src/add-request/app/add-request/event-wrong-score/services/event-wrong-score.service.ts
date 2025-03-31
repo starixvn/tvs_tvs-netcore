@@ -16,7 +16,7 @@ import _ from 'lodash';
 })
 export class EventWrongScoreService {
   constructor(
-    private readonly validationService: ValidationService,  
+    private readonly validationService: ValidationService,
     private readonly wrongScoreService: WrongScoreService
   ) { }
 
@@ -52,7 +52,7 @@ export class EventWrongScoreService {
       secondOffset: inputModel.secondOffset,
     } as TvDetectionModel;
   }
-  
+
   public getFilterByBaseOnSubIssueType(subIssueTypeId: string): number {
     if (this.validationService.isSubTypeFilterByAcceptedTime(subIssueTypeId)) {
       return TVSRequestFilterBy.CHECK_TIME;
