@@ -6,10 +6,10 @@ import { BlockUiDirective } from '../block-ui/block-ui.directive';
 import { AddChildMatchModel } from './add-child-match.model';
 
 @Component({
+  standalone: true,
   selector: 'add-child-match',
   templateUrl: './add-child-match.component.html',
   styleUrls: ['./add-child-match.component.scss'],
-  standalone: true,
   imports: [FormsModule, BlockUiDirective]
 })
 export class AddChildMatchComponent implements OnChanges {

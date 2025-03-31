@@ -68,8 +68,8 @@ export class TvDetectionComponent implements OnInit {
     }
   }
 
-  isValidality(): boolean {
-    return this.tvDetectionService.isValidality(this.model, this.tooltip);
+  isValid(): boolean {
+    return this.tvDetectionService.isValid(this.model, this.tooltip);
   }
 
   updateActualTime() {

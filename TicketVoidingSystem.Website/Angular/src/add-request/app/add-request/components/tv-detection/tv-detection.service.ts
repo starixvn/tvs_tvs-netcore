@@ -12,7 +12,7 @@ export class TvDetectionService {
   private readonly MINUTE_INPUT = 'minute-input';
   private readonly SECOND_INPUT = 'second-input';
 
-  isValidality(model: TvDetectionModel, tooltip: Tooltip): boolean {
+  isValid(model: TvDetectionModel, tooltip: Tooltip): boolean {
     return model.tvDetectionValue === TvDetectionType.NONE
       || (this.isValidityTime(model.serviceAcceptTime, this.SERVICE_ACCEPT_TIME, tooltip)
       && this.isValidityTime(model.actualTime, this.ACTUAL_TIME, tooltip)

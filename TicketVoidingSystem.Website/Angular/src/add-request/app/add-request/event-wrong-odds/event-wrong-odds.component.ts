@@ -21,19 +21,13 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
+  standalone: true,
   selector: 'event-wrong-odds',
   templateUrl: './event-wrong-odds.component.html',
   styleUrls: ['./event-wrong-odds.component.scss'],
-  standalone: true,
   imports: [EventLeagueComponent, FilterWrongOddsComponent, FormsModule, LogInfoWrongOddsComponent],
-  providers: [
-    ValidationService,
-    EventWrongOddsService,
-    LogInfoService,
-    SaveRequestService,
-    CalculateOddsService,
-    AddRequestApiService
-  ]
+  providers: [ ValidationService, EventWrongOddsService, LogInfoService,
+    SaveRequestService, CalculateOddsService, AddRequestApiService ]
 })
 export class EventWrongOddsComponent implements OnInit {
   @Input() isEdit: boolean;

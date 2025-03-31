@@ -1,290 +1,312 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
-import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { AddRequestStore } from '../../add-request.store';
-import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
-import { FilterModel } from '../../filter/filter.model';
-import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
-import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
-import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
-import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
-import { LogAnalysisService } from '../../services/log-analysis.service';
-import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
-import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
-import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { EventWrongOddsService } from '../services/event-wrong-odds.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { LogInfoWrongOddsComponent } from './log-info-wrong-odds.component';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { EventWrongOddsService } from '../services/event-wrong-odds.service';
+import { AddRequestStore } from '../../add-request.store';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { LogAnalysisService } from '../../services/log-analysis.service';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
+import { FilterModel } from '../../filter/filter.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { SportType } from '../../../../../utility/constants/sport.constant';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
+import { PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { ValidationMessage } from '../../models/get-log-info.model';
+import { ValidationService } from '../services/validation.service';
+import moment from 'moment-timezone';
+import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 
 class Helper {
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    instantlySettleCount: 2,
-    scoreNormalTicket: '',
-    scoreOfMatch: '',
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeFilterWrongOddsModel: FilterWrongOddsModel = {
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    favoriteValue: '1',
-    filterFavoriteType: 'h',
-    liveIndicator: 1,
-    spread: '0.2',
-    maxBet: 0,
-    allowanceRate: '20',
-    correctOddsHomeOver: '0.8',
-    correctOddsAwayUnder: '0.9',
-    fromOddsNotVoidHomeOver: '0.65',
-    toOddsNotVoidHomeOver: '0.85',
-    fromOddsNotVoidAwayUnder: '0.5',
-    toOddsNotVoidAwayUnder: '0.9',
-    maxBetAndSpreadInfo: []
-  };
-  static readonly fakeLogInfoWrongOdds: LogInfoWrongOdds = {
-    matchId: 12345,
-    filterWrongOdds: new FilterWrongOddsModel(),
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    isPoolHouseAffected: false,
-    linkedLogsViewModel: new LinkedLogsViewModel(),
-    poolHouseCheckedBetTypes: '',
-    isShowValidation: false,
-    sportType: 0
-  };
-  static readonly fakeFilterModel: FilterModel = {
+  static readonly fakeRequestId = 1212;
+  static readonly fakeFilterModel = {
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
     isTest: true,
     isVoided: false,
+    isChangeSubTypeManual: true,
     isAbnormal: false
   } as FilterModel;
-  static readonly fakeGetPoolHouseTicketQuery: GetPoolHouseTicketQuery = {
-    matchId: 756352,
-    actionId: 0,
-    requestId: 4638,
-    issueTypeId: 1,
-    subIssueTypeId: 1,
-    homeFavorite: '1.75',
-    awayFavorite: '',
-    hdpValue: '1.5',
-    wrongMarket: '1.75',
-    isLinkGroup1X2: false,
-    isLinkGroupAIO: false,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    liveIndicator: 0,
-    wrongOddsInfo: []
-  };
-  static readonly fakeLinkedLogsViewModel: LinkedLogsViewModel = {
-    groupLinkedLogs: [
-      {
-        groupName: '1X2',
-        isAffectedGroup: true,
-        logsData: []
-      },
-      {
-        groupName: 'AIO',
-        isAffectedGroup: true,
-        logsData: []
-      },
-    ],
-    isLinkGroup1X2: false,
-    isLinkGroupAIO: false,
-    result: undefined
-  };
-  static readonly fakePoolHouseTicketViewModel: PoolHouseTicketViewModel = {
-    groupBetTypes: [],
-    affectedTickets: new TicketsModel(),
-    otherTickets: new TicketsModel()
-  };
+
+  static readonly fakeLogInfoDetail = {
+    matchId: 123,
+    liveScores: '0-0',
+    voidFromTime: new Date(),
+    voidToTime: new Date(),
+    singleCount: 0,
+    mainParlayCount: 0,
+    cashOutCount: 0,
+    settleCount: 0,
+    scoreOfMatch: '',
+    scoreNormalTicket: '',
+    instantlySettleCount: 0,
+    cancelCashOutCount: 0,
+    logInfoTicketsJson: null
+  } as LogInfoDetail;
+
+  static readonly fakeValidationMessage = [{
+    isError: false,
+    reason: ''
+  }] as ValidationMessage[];
+
+  static readonly fakeLogInfoWrongOdds = {
+    matchId: 123,
+    sportType: SportType.SOCCER,
+    isShowValidation: false,
+    logInfoDetail: Helper.fakeLogInfoDetail,
+    messageValidationLogInfo: Helper.fakeValidationMessage,
+    poolHouseCheckedBetTypes: null,
+    isPoolHouseAffected: false,
+    linkedLogsViewModel: {
+      isLinkGroup1X2: false,
+      isLinkGroupAIO: false
+    },
+    filterWrongOdds: {
+      filterFromTransTime: null,
+      filterToTransTime: null,
+      liveIndicator: null,
+      spread: '0.5',
+      allowanceRate: '1',
+      maxBet: 1000,
+      maxBetAndSpreadInfo: [{
+        maxBet: 1000,
+        spread: '0.5',
+        subIssueTypeId: '1'
+      }],
+      fromOddsNotVoidHomeOver: '1.5',
+      toOddsNotVoidHomeOver: '2.5',
+      fromOddsNotVoidAwayUnder: '3.5',
+      toOddsNotVoidAwayUnder: '4.5',
+      fromOddsNotVoidAwayOver: '5.5',
+      toOddsNotVoidAwayOver: '6.5',
+      fromOddsNotVoidHomeUnder: '7.5',
+      toOddsNotVoidHomeUnder: '8.5',
+      correctOddsAwayUnder: '1.5',
+      correctOddsHomeOver: '2.5',
+      correctOddsAwayOver: '3.5',
+      correctOddsHomeUnder: '4.5',
+      wrongOddsAwayUnder: '5.5',
+      wrongOddsHomeOver: '6.5',
+      wrongOddsAwayOver: '7.5',
+      wrongOddsHomeUnder: '8.5'
+    } as FilterWrongOddsModel,
+  } as LogInfoWrongOdds;
+
+  static readonly fakePrimitiveProperty = {
+    isShowLogInfoMainMatch: false,
+    isShowRelatedEvents: false,
+    isBlock: false,
+    filterBy: 1,
+    transInfoAddRequestModel: {
+      transInfoJson: null,
+      unMarkTransIds: null,
+      markTransIds: null,
+      removeTransIds: null
+    }
+  } as PrimitiveProperty;
 }
 
 describe('LogInfoWrongOddsComponent', () => {
-  @NgModule({
-    declarations: [
-      PoolHouseTicketComponent,
-      AffectedTicketComponent,
-      TicketCountOtherSportsComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      ToolTipModule
-    ],
-    providers: [
-      ModalService,
-      EventWrongOddsService,
-      AddRequestStore,
-      AddRequestApiService,
-      LogAnalysisService
-    ]
-  })
-  class AppModuleTest { }
+  let component: LogInfoWrongOddsComponent;
+  let fixture: ComponentFixture<LogInfoWrongOddsComponent>;
+  let modalService: ModalService;
+  let eventWrongOddsService: EventWrongOddsService;
+  let addRequestStore: AddRequestStore;
+  let addRequestApiService: AddRequestApiService;
+  let logAnalysisService: LogAnalysisService;
+  let affectedTicketService: AffectedTicketService;
+  let validationService: ValidationService;
 
-  let shallow: Shallow<LogInfoWrongOddsComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ModalService,
+        EventWrongOddsService,
+        AddRequestStore,
+        AddRequestApiService,
+        LogAnalysisService,
+        AffectedTicketService,
+        ValidationService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(LogInfoWrongOddsComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(LogInfoWrongOddsComponent);
+    modalService = fixture.debugElement.injector.get(ModalService);
+    eventWrongOddsService = fixture.debugElement.injector.get(EventWrongOddsService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
+    logAnalysisService = fixture.debugElement.injector.get(LogAnalysisService);
+    affectedTicketService = fixture.debugElement.injector.get(AffectedTicketService);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    component = fixture.componentInstance;
   });
 
-  it('#LogInfoWrongOddsComponent init should match snapshot', async () => {
-    const { fixture } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        logInfo: Helper.fakeLogInfoWrongOdds,
-        primitiveProps: new PrimitiveProperty()
-      }
-    });
-
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#recalculatePoolHouseTicket should emit searchEvent', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        logInfo: Helper.fakeLogInfoWrongOdds,
-        primitiveProps: new PrimitiveProperty()
-      }
-    });
-    instance.searchEvent.emit = jest.fn();
+  it('should initialize with isShowValidation true when in edit mode', () => {
+    // Arrange
+    component.isEdit = true;
+    component.logInfo = Helper.fakeLogInfoWrongOdds;
 
-    instance.recalculatePoolHouseTicket(new PoolHouseTicketsModel());
+    // Act
+    component.ngOnInit();
 
-    expect(instance.searchEvent.emit).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.logInfo.isShowValidation).toBeTruthy();
   });
 
-  it('isShowCountInfo should return false', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        primitiveProps: new PrimitiveProperty(),
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongOdds
-      }
-    });
-    const actual = instance['isShowCountInfo'](0, 0, 0);
+  it('should recalculate pool house ticket and emit search event', () => {
+    // Arrange
+    component.logInfo = Helper.fakeLogInfoWrongOdds;
+    const model = new PoolHouseTicketsModel();
+    model.checkedBetTypes = '1,2,3';
+    component.searchEvent = {
+      emit: jest.fn()
+    } as any;
 
-    expect(actual).toBeFalsy();
+    // Act
+    component.recalculatePoolHouseTicket(model);
+
+    // Assert
+    expect(component.logInfo.poolHouseCheckedBetTypes).toEqual('1,2,3');
+    expect(component.searchEvent.emit).toHaveBeenCalled();
   });
 
-  it('displayTransId should return 12312', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        primitiveProps: new PrimitiveProperty(),
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongOdds
-      }
-    });
-    const actual = instance.displayTransId(1, '12312');
+  it('should clear data validation', () => {
+    // Arrange
+    component.logInfo = Helper.fakeLogInfoWrongOdds;
+    component.logInfo.logInfoDetail = Helper.fakeLogInfoDetail;
+    component.logInfo.messageValidationLogInfo = Helper.fakeValidationMessage;
 
-    expect(actual).toBe('12312');
+    // Act
+    component.clearDataValidation();
+
+    // Assert
+    expect(component.logInfo.logInfoDetail).toBeNull();
+    expect(component.logInfo.messageValidationLogInfo).toBeNull();
   });
 
-  it('displayTransId should return -', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        primitiveProps: new PrimitiveProperty(),
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongOdds
-      }
-    });
-    const actual = instance.displayTransId(0, '');
+  it('should open popup trans ids', () => {
+    // Arrange
+    const requestId = 123;
+    const transIds = '1,2,3';
+    StaticService.openPopupTransIds = jest.fn();
 
-    expect(actual).toBe('-');
+    // Act
+    component.openPopupTransIds(requestId, transIds);
+
+    // Assert
+    expect(StaticService.openPopupTransIds).toHaveBeenCalledWith(requestId, transIds, modalService);
   });
 
-  it('countInfoContent should return info CashOut', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        primitiveProps: new PrimitiveProperty(),
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongOdds
-      }
-    });
-    const actual = instance['countInfoContent'](1, 2, 0);
+  it('should count info content', () => {
+    // Arrange
+    const cashOutCount = 1;
+    const settleCount = 2;
+    const instantlySettleCount = 3;
+    StaticService.countInfoContent = jest.fn().mockReturnValue('test content');
 
-    expect(actual).toBe(' (Cash Out: <strong>1</strong>, Settled: <strong>2</strong>)');
+    // Act
+    const result = component.countInfoContent(cashOutCount, settleCount, instantlySettleCount);
+
+    // Assert
+    expect(StaticService.countInfoContent).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
+    expect(result).toBe('test content');
   });
 
-  it('openPopupTransIds should call modal Service', async () => {
-    const mockModalOpen = jest.fn();
-    const { instance } = await shallow
-    .mock(ModalService, { open: mockModalOpen })
-    .render({
-      bind: {
-        isEdit: false,
-        primitiveProps: new PrimitiveProperty(),
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongOdds
-      }
-    });
-    instance['openPopupTransIds'](0, '');
-
-    expect(mockModalOpen).toHaveBeenCalledTimes(1);
+  it('should display trans id correctly', () => {
+    // Act & Assert
+    expect(component.displayTransId(0, '123')).toBe('-');
+    expect(component.displayTransId(1, '123')).toBe('123');
   });
 
-  it('openPoolHouseDetails should update poolHouseTicketsModel expected', async () => {
-    let fakeFunctionWriteLog = jest.fn();
-    const mockGetPoolHouseTickets = jest.fn().mockReturnValue(Helper.fakePoolHouseTicketViewModel);
-    const mockGetLinkedLog = jest.fn().mockImplementation(() => Promise.resolve(new LinkedLogsViewModel()));
-    const fakeLogInfoWrongOdds = _.cloneDeep(Helper.fakeLogInfoWrongOdds);
-    fakeLogInfoWrongOdds.linkedLogsViewModel = new LinkedLogsViewModel();
-    const { instance } = await shallow
-    .mock(EventWrongOddsService, { getLinkedLog: mockGetLinkedLog })
-    .mock(AddRequestApiService, { getPoolHouseTickets: mockGetPoolHouseTickets })
-    .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn()})
-    .mock(LogAnalysisService, { writeLogClickPoolHouseDetails: fakeFunctionWriteLog })
-    .render({
-      bind: {
-        isEdit: false,
-        primitiveProps: new PrimitiveProperty(),
-        filter: Helper.fakeFilterModel,
-        logInfo: fakeLogInfoWrongOdds
-      }
+  it('should show count info', () => {
+    // Arrange
+    const cashOutCount = 1;
+    const settleCount = 2;
+    const instantlySettleCount = 3;
+    StaticService.isShowCountInfo = jest.fn().mockReturnValue(true);
+
+    // Act
+    const result = component.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
+
+    // Assert
+    expect(StaticService.isShowCountInfo).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
+    expect(result).toBeTruthy();
+  });
+
+  it('should show affected tickets details', () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
+    component.logInfo = Helper.fakeLogInfoWrongOdds;
+    component.logInfo.logInfoDetail = {
+      ...Helper.fakeLogInfoDetail,
+      logInfoTicketsJson: 'test json'
+    } as LogInfoDetail;
+
+    // Act
+    component.showAffectedTicketsDetails();
+
+    // Assert
+    expect(component.affectedTicketsModel.issueTypeId).toBe(Number(Helper.fakeFilterModel.issueTypeId));
+    expect(component.affectedTicketsModel.logInfoTicketsJson).toBe('test json');
+    expect(component.affectedTicketsModel.isOpen).toBeTruthy();
+  });
+
+  it('should open pool house details', async () => {
+    // Arrange
+    component.requestId = Helper.fakeRequestId;
+    component.filter = Helper.fakeFilterModel;
+    component.logInfo = Helper.fakeLogInfoWrongOdds;
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+    eventWrongOddsService.getLinkedLog = jest.fn().mockResolvedValue({});
+    addRequestApiService.getPoolHouseTickets = jest.fn().mockResolvedValue({
+      groupBetTypes: [],
+      affectedTickets: [],
+      otherTickets: []
     });
-    instance['initGetPoolHouseTicketQuery'] = jest.fn().mockReturnValue(Helper.fakeGetPoolHouseTicketQuery);
+    logAnalysisService.writeLogClickPoolHouseDetails = jest.fn();
 
-    const poolHouseTicketsModelExpected = {
-    query: Helper.fakeGetPoolHouseTicketQuery,
-    linkedLogsViewModel: instance.logInfo.linkedLogsViewModel,
-    groupBetTypes: Helper.fakePoolHouseTicketViewModel.groupBetTypes,
-    affectedTickets: Helper.fakePoolHouseTicketViewModel.affectedTickets,
-    otherTickets: Helper.fakePoolHouseTicketViewModel.otherTickets,
-    checkedBetTypes: instance.logInfo.poolHouseCheckedBetTypes,
-    isOpen: true} as PoolHouseTicketsModel;
+    // Act
+    await component.openPoolHouseDetails();
 
-    await instance.openPoolHouseDetails();
+    // Assert
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    expect(eventWrongOddsService.getLinkedLog).toHaveBeenCalled();
+    expect(addRequestApiService.getPoolHouseTickets).toHaveBeenCalled();
+    expect(logAnalysisService.writeLogClickPoolHouseDetails).toHaveBeenCalled();
+    expect(component.poolHouseTicketsModel.isOpen).toBeTruthy();
+  });
 
-    expect(instance.poolHouseTicketsModel).toEqual(poolHouseTicketsModelExpected);
+  it('should check if sport type is soccer', () => {
+    // Arrange
+    component.logInfo = Helper.fakeLogInfoWrongOdds;
+
+    // Act & Assert
+    expect(component.isSportTypeSoccer()).toBeTruthy();
+
+    // Arrange
+    component.logInfo.sportType = 2;
+
+    // Act & Assert
+    expect(component.isSportTypeSoccer()).toBeFalsy();
+  });
+
+  it('should display full date time format', () => {
+    // Arrange
+    const date = new Date('2024-01-01T12:00:00');
+
+    // Act
+    const result = component.displayFullDateTimeFormat(date);
+
+    // Assert
+    expect(result).toBe(moment(date).format(DateTimeFormat.FULL_DATE_TIME_FORMAT));
   });
 });

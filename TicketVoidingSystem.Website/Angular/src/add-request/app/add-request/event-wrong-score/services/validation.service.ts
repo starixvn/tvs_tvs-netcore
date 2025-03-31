@@ -33,7 +33,7 @@ export class ValidationService {
   }
 
   public isValidityTvDetection(tvDetectionComponent?: TvDetectionComponent): boolean {
-    return tvDetectionComponent ? tvDetectionComponent.isValidality() : true;
+    return tvDetectionComponent ? tvDetectionComponent.isValid() : true;
   }
 
   public isValidityWhenFilter(filter: FilterModel, filterWrongScoreComponent: FilterWrongScoreComponent, wrongScoreInfoComponents: WrongScoreInfoComponent[]): boolean {

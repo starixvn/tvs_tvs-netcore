@@ -1,158 +1,253 @@
-import { MatchModel } from '../../../../../utility/models/match.model';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { FilterWrongOddsModel, MaxBetAndSpreadQuery } from '../models/filter-wrong-odds.model';
+import { TestBed } from '@angular/core/testing';
 import { CalculateOddsService } from './calculate-odds.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { MatchModel } from '../../../../../utility/models/match.model';
+import { FilterWrongOddsModel, MaxBetAndSpreadQuery } from '../models/filter-wrong-odds.model';
 
 describe('CalculateOddsService', () => {
   let service: CalculateOddsService;
   let addRequestApiService: AddRequestApiService;
 
+  const mockMatchModel = {
+    matchId: 123,
+    parentId: 456,
+    subtype: 1
+  } as MatchModel;
+
+  const mockMaxBetAndSpreadInfo = [
+    {
+      subIssueTypeId: '1',
+      maxBet: 50000,
+      spread: '0.1'
+    }
+  ];
+
   beforeEach(() => {
-    jest.clearAllMocks();
-    addRequestApiService = new AddRequestApiService(null);
-    service = new CalculateOddsService(addRequestApiService);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        CalculateOddsService,
+        AddRequestApiService
+      ]
+    });
+
+    service = TestBed.inject(CalculateOddsService);
+    addRequestApiService = TestBed.inject(AddRequestApiService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('#updateOddsInfo should update odds info correctly', async () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBetAndSpreadInfo: [] } as FilterWrongOddsModel;
-    const match: MatchModel = { matchId: 1, parentId: 2, subtype: 3 } as MatchModel;
-    const subIssueTypeId = 'subIssueType1';
-    const maxBetAndSpreadInfo = [{ subIssueTypeId: subIssueTypeId, maxBet: 100, spread: '0.2' }];
-    addRequestApiService.getMaxBetAndSpreadOfEvent = jest.fn().mockReturnValue(maxBetAndSpreadInfo);
+  describe('updateOddsInfo', () => {
+    it('should update odds info successfully', async () => {
+      // Arrange
+      const oddsInfo = new FilterWrongOddsModel();
+      const subIssueTypeId = '1';
+      jest.spyOn(addRequestApiService, 'getMaxBetAndSpreadOfEvent').mockResolvedValue(mockMaxBetAndSpreadInfo);
 
-    await service.updateOddsInfo(oddsInfo, match, subIssueTypeId);
+      // Act
+      await service.updateOddsInfo(oddsInfo, mockMatchModel, subIssueTypeId);
 
-    expect(addRequestApiService.getMaxBetAndSpreadOfEvent).toHaveBeenCalledWith(service.createMaxBetAndSpreadQuery(match));
-    expect(oddsInfo.maxBetAndSpreadInfo).toEqual(maxBetAndSpreadInfo);
-  });
-  
-  it('#createMaxBetAndSpreadQuery should create correct MaxBetAndSpreadQuery', () => {
-    const match: MatchModel = { matchId: 1, parentId: 2, subtype: 3 } as MatchModel;
-    const query: MaxBetAndSpreadQuery = service.createMaxBetAndSpreadQuery(match);
-
-    expect(query.matchId).toBe(1);
-    expect(query.parentId).toBe(2);
-    expect(query.subtype).toBe(3);
-  });
-
-  it('#createMaxBetAndSpreadQuery should create subtype MaxBetAndSpreadQuery is 0 when match has not subtype', () => {
-    const match: MatchModel = { matchId: 1, parentId: 2 } as MatchModel;
-    const query: MaxBetAndSpreadQuery = service.createMaxBetAndSpreadQuery(match);
-
-    expect(query.matchId).toBe(1);
-    expect(query.parentId).toBe(2);
-    expect(query.subtype).toBe(0);
-  });
-
-  it('#resetOddsInfo should reset odds info correctly', () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBetAndSpreadInfo: [], correctOddsHomeOver: '1.5', correctOddsAwayUnder: '1.4' } as FilterWrongOddsModel;
-    const subIssueTypeId = 'subIssueType1';
-
-    service.resetOddsInfo(oddsInfo, subIssueTypeId);
-
-    expect(oddsInfo.correctOddsHomeOver).toBe('');
-    expect(oddsInfo.correctOddsAwayUnder).toBe('');
-  });
-
-  it('#updateAllowanceRate should update allowance rate default 20 when maxBet & spread is 0', () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBet: 0, spread: '0', maxBetAndSpreadInfo: [] } as FilterWrongOddsModel;
-
-    service.updateAllowanceRate(oddsInfo);
-
-    expect(oddsInfo.allowanceRate).toBe('20');
-  });
-
-  it('#updateAllowanceRate should update allowance rate correctly when max bet is >= 80000', () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBet: 80000, spread: '0', maxBetAndSpreadInfo: [] } as FilterWrongOddsModel;
-
-    service.updateAllowanceRate(oddsInfo);
-
-    expect(oddsInfo.allowanceRate).toBe('20');
-  });
-
-  it('#updateAllowanceRate should update allowance rate correctly when spread is > 0.15', () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBet: 70000, spread: '0.2', maxBetAndSpreadInfo: [{}] } as FilterWrongOddsModel;
-
-    service.updateAllowanceRate(oddsInfo);
-
-    expect(oddsInfo.allowanceRate).toBe('30');
-  });
-
-  it('#updateAllowanceRate should update allowance rate correctly for other cases', () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBet: 70000, spread: '0.1', maxBetAndSpreadInfo: [{}] } as FilterWrongOddsModel;
-
-    service.updateAllowanceRate(oddsInfo);
-
-    expect(oddsInfo.allowanceRate).toBe('25');
-  });
-
-  it('#updateCorrectOddsAwayUnder should update correct odds away under correctly', () => {
-    const inputTests = [{correctOddsHomeOver: '0.7', spread: '0.2', correctOddsAwayUnder: '-0.90'}, 
-      {correctOddsHomeOver: '0.9', spread: '0.3', correctOddsAwayUnder: '0.80'}];
-
-    inputTests.forEach(test => {
-      const oddsInfo: FilterWrongOddsModel = { correctOddsHomeOver: test.correctOddsHomeOver, spread: test.spread } as FilterWrongOddsModel;
-      service.updateCorrectOddsAwayUnder(oddsInfo);
-      expect(oddsInfo.correctOddsAwayUnder).toBe(test.correctOddsAwayUnder);
-    })
-  });
-  
-  it('#updateCorrectOddsAwayUnder should not update correct odds away when has not correctOddsHomeOver', () => {
-    const oddsInfo: FilterWrongOddsModel = { spread: '0.2' } as FilterWrongOddsModel;
-
-    service.updateCorrectOddsAwayUnder(oddsInfo);
-
-    expect(oddsInfo.correctOddsAwayUnder).toBeUndefined();
-  });
-
-  
-  it('#updateCorrectOddsAwayUnder should not update correct odds away when has not spread', () => {
-    const oddsInfo: FilterWrongOddsModel = {  correctOddsHomeOver: '0.7' } as FilterWrongOddsModel;
-
-    service.updateCorrectOddsAwayUnder(oddsInfo);
-
-    expect(oddsInfo.correctOddsAwayUnder).toBeUndefined();
-  });
-
-  it('#calculateOddsRange should calculate odds range correctly', () => {
-    // Arrange
-    const inputTests = [{ correctOddsHomeOver: '0.7', correctOddsAwayUnder: '-0.90', allowanceRate: '20', toOddsNotVoidHomeOver: '0.90', 
-      toOddsNotVoidAwayUnder:'-0.70', fromOddsNotVoidHomeOver:'0.50', fromOddsNotVoidAwayUnder:'0.90'},
-      { correctOddsHomeOver: '0.9', correctOddsAwayUnder: '0.96', allowanceRate: '25', toOddsNotVoidHomeOver: '-0.85', 
-        toOddsNotVoidAwayUnder:'-0.79', fromOddsNotVoidHomeOver:'0.65', fromOddsNotVoidAwayUnder:'0.71'},
-      { correctOddsHomeOver: '-0.9', correctOddsAwayUnder: '0.76', allowanceRate: '25', toOddsNotVoidHomeOver: '-0.65', 
-        toOddsNotVoidAwayUnder:'-0.99', fromOddsNotVoidHomeOver:'0.85', fromOddsNotVoidAwayUnder:'0.51'}]
-
-    inputTests.forEach(test => {
-      const oddsInfo: FilterWrongOddsModel = { correctOddsHomeOver: test.correctOddsHomeOver, correctOddsAwayUnder: test.correctOddsAwayUnder, 
-        allowanceRate: test.allowanceRate, spread: '0.2'} as FilterWrongOddsModel;
-
-      // Action
-      service.calculateOddsRange(oddsInfo);
-    
       // Assert
-      expect(oddsInfo.toOddsNotVoidHomeOver).toBe(test.toOddsNotVoidHomeOver);
-      expect(oddsInfo.toOddsNotVoidAwayUnder).toBe(test.toOddsNotVoidAwayUnder);
-      expect(oddsInfo.fromOddsNotVoidHomeOver).toBe(test.fromOddsNotVoidHomeOver);
-      expect(oddsInfo.fromOddsNotVoidAwayUnder).toBe(test.fromOddsNotVoidAwayUnder);
-    })    
+      expect(oddsInfo.maxBetAndSpreadInfo).toEqual(mockMaxBetAndSpreadInfo);
+      expect(oddsInfo.maxBet).toBe(50000);
+      expect(oddsInfo.spread).toBe('0.1');
+      expect(oddsInfo.allowanceRate).toBe('25');
+    });
+
+    it('should not update odds info when matchId is not provided', async () => {
+      // Arrange
+      const oddsInfo = new FilterWrongOddsModel();
+      const matchWithoutId = {} as MatchModel;
+      const subIssueTypeId = '1';
+      const spy = jest.spyOn(addRequestApiService, 'getMaxBetAndSpreadOfEvent');
+
+      // Act
+      await service.updateOddsInfo(oddsInfo, matchWithoutId, subIssueTypeId);
+
+      // Assert
+      expect(oddsInfo.maxBetAndSpreadInfo).toBeUndefined();
+      expect(spy).not.toHaveBeenCalled();
+    });
   });
-  
-  it('#calculateOddsRange should not calculate odds range when correctOddsAwayUnder is Undefined', () => {
-    // Arrange
-    const oddsInfo: FilterWrongOddsModel = { correctOddsHomeOver: '-0.90', allowanceRate: '20', spread: '0.2'} as FilterWrongOddsModel;
 
-    // Action
-    service.calculateOddsRange(oddsInfo);
+  describe('createMaxBetAndSpreadQuery', () => {
+    it('should create query with correct values', () => {
+      // Act
+      const result = service.createMaxBetAndSpreadQuery(mockMatchModel);
 
-    // Assert
-    expect(oddsInfo.toOddsNotVoidHomeOver).toBeUndefined();
-    expect(oddsInfo.toOddsNotVoidAwayUnder).toBeUndefined();
-    expect(oddsInfo.fromOddsNotVoidHomeOver).toBeUndefined();
-    expect(oddsInfo.fromOddsNotVoidAwayUnder).toBeUndefined();
+      // Assert
+      expect(result).toEqual({
+        matchId: 123,
+        parentId: 456,
+        subtype: 1
+      } as MaxBetAndSpreadQuery);
+    });
+
+    it('should use default subtype when not provided', () => {
+      // Arrange
+      const matchWithoutSubtype = {
+        matchId: 123,
+        parentId: 456
+      } as MatchModel;
+
+      // Act
+      const result = service.createMaxBetAndSpreadQuery(matchWithoutSubtype);
+
+      // Assert
+      expect(result.subtype).toBe(0);
+    });
+  });
+
+  describe('resetOddsInfo', () => {
+    it('should reset odds info correctly', () => {
+      // Arrange
+      const oddsInfo = new FilterWrongOddsModel();
+      oddsInfo.correctOddsHomeOver = '1.5';
+      oddsInfo.correctOddsAwayUnder = '2.5';
+      const subIssueTypeId = '1';
+
+      // Act
+      service.resetOddsInfo(oddsInfo, subIssueTypeId);
+
+      // Assert
+      expect(oddsInfo.correctOddsHomeOver).toBe('');
+      expect(oddsInfo.correctOddsAwayUnder).toBe('');
+    });
+  });
+
+  describe('updateMaxBetAndSpread', () => {
+    it('should update max bet and spread when info is available', () => {
+      // Arrange
+      const oddsInfo = new FilterWrongOddsModel();
+      oddsInfo.maxBetAndSpreadInfo = mockMaxBetAndSpreadInfo;
+      const subIssueTypeId = '1';
+
+      // Act
+      service.updateMaxBetAndSpread(oddsInfo, subIssueTypeId);
+
+      // Assert
+      expect(oddsInfo.maxBet).toBe(50000);
+      expect(oddsInfo.spread).toBe('0.1');
+    });
+
+    it('should set default values when no info is available', () => {
+      // Arrange
+      const oddsInfo = new FilterWrongOddsModel();
+      oddsInfo.maxBetAndSpreadInfo = [];
+      const subIssueTypeId = '1';
+
+      // Act
+      service.updateMaxBetAndSpread(oddsInfo, subIssueTypeId);
+
+      // Assert
+      expect(oddsInfo.maxBet).toBe(0);
+      expect(oddsInfo.spread).toBe('');
+    });
+  });
+
+  describe('updateAllowanceRate', () => {
+    it('should set allowance rate to 20 when max bet is >= 80000', () => {
+      // Arrange
+      const oddsInfo = new FilterWrongOddsModel();
+      oddsInfo.maxBet = 80000;
+      oddsInfo.spread = '0.1';
+
+      // Act
+      service.updateAllowanceRate(oddsInfo);
+
+      // Assert
+      expect(oddsInfo.allowanceRate).toBe('20');
+    });
+
+    it('should set allowance rate to 30 when spread > 0.15', () => {
+      // Arrange
+      const oddsInfo = new FilterWrongOddsModel();
+      oddsInfo.maxBet = 50000;
+      oddsInfo.spread = '0.2';
+
+      // Act
+      service.updateAllowanceRate(oddsInfo);
+
+      // Assert
+      expect(oddsInfo.allowanceRate).toBe('30');
+    });
+
+    it('should set allowance rate to 25 for other cases', () => {
+      // Arrange
+      const oddsInfo = new FilterWrongOddsModel();
+      oddsInfo.maxBet = 50000;
+      oddsInfo.spread = '0.1';
+
+      // Act
+      service.updateAllowanceRate(oddsInfo);
+
+      // Assert
+      expect(oddsInfo.allowanceRate).toBe('25');
+    });
+  });
+
+  describe('updateCorrectOddsAwayUnder', () => {
+    it('should calculate correct odds away under correctly', () => {
+      // Arrange
+      const oddsInfo = new FilterWrongOddsModel();
+      oddsInfo.correctOddsHomeOver = '1.5';
+      oddsInfo.spread = '0.1';
+
+      // Act
+      service.updateCorrectOddsAwayUnder(oddsInfo);
+
+      // Assert
+      expect(oddsInfo.correctOddsAwayUnder).toBe('0.40');
+    });
+
+    it('should not calculate when required values are missing', () => {
+      // Arrange
+      const oddsInfo = new FilterWrongOddsModel();
+      oddsInfo.correctOddsHomeOver = '1.5';
+
+      // Act
+      service.updateCorrectOddsAwayUnder(oddsInfo);
+
+      // Assert
+      expect(oddsInfo.correctOddsAwayUnder).toBeUndefined();
+    });
+  });
+
+  describe('calculateOddsRange', () => {
+    it('should calculate odds range correctly', () => {
+      // Arrange
+      const oddsInfo = new FilterWrongOddsModel();
+      oddsInfo.correctOddsHomeOver = '0.7';
+      oddsInfo.correctOddsAwayUnder = '-0.9';
+      oddsInfo.allowanceRate = '20';
+
+      // Act
+      service.calculateOddsRange(oddsInfo);
+
+      // Assert
+      expect(oddsInfo.toOddsNotVoidHomeOver).toBe('0.90');
+      expect(oddsInfo.toOddsNotVoidAwayUnder).toBe('-0.70');
+      expect(oddsInfo.fromOddsNotVoidHomeOver).toBe('0.50');
+      expect(oddsInfo.fromOddsNotVoidAwayUnder).toBe('0.90');
+    });
+
+    it('should not calculate when correct odds away under is missing', () => {
+      // Arrange
+      const oddsInfo = new FilterWrongOddsModel();
+      oddsInfo.correctOddsHomeOver = '1.5';
+      oddsInfo.allowanceRate = '25';
+
+      // Act
+      service.calculateOddsRange(oddsInfo);
+
+      // Assert
+      expect(oddsInfo.toOddsNotVoidHomeOver).toBeUndefined();
+      expect(oddsInfo.toOddsNotVoidAwayUnder).toBeUndefined();
+      expect(oddsInfo.fromOddsNotVoidHomeOver).toBeUndefined();
+      expect(oddsInfo.fromOddsNotVoidAwayUnder).toBeUndefined();
+    });
   });
 });

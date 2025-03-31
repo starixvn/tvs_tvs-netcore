@@ -1,187 +1,208 @@
-import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
-import { ValidationService } from '../services/validation.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { FilterWrongOddsComponent } from './filter-wrong-odds.component';
+import { ValidationService } from '../services/validation.service';
 import { CalculateOddsService } from '../services/calculate-odds.service';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
+import { TEXT } from '../../../../../utility/constants/text';
+import moment from 'moment-timezone';
 
 class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterWrongOddsModel: FilterWrongOddsModel = {
-    filterFromTransTime: Helper.fromDate,
-    filterToTransTime: Helper.toDate,
-    favoriteValue: '1',
-    filterFavoriteType: 'h',
-    liveIndicator: 1,
-    spread: '0.2',
-    maxBet: 0,
-    allowanceRate: '20',
-    correctOddsHomeOver: '0.8',
-    correctOddsAwayUnder: '0.9',
-    fromOddsNotVoidHomeOver: '0.65',
-    toOddsNotVoidHomeOver: '0.85',
-    fromOddsNotVoidAwayUnder: '0.5',
-    toOddsNotVoidAwayUnder: '0.9',
-    maxBetAndSpreadInfo: []
-  };
+  static readonly fakeFilterWrongOddsModel = {
+    filterFromTransTime: moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
+    filterToTransTime: moment().add(1, 'hour').format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
+    spread: '0.5',
+    allowanceRate: '1',
+    correctOddsHomeOver: '1.5',
+    correctOddsAwayUnder: '2.5'
+  } as FilterWrongOddsModel;
 }
 
 describe('FilterWrongOddsComponent', () => {
   let component: FilterWrongOddsComponent;
-  let calculateOddsService: CalculateOddsService;
+  let fixture: ComponentFixture<FilterWrongOddsComponent>;
   let validationService: ValidationService;
+  let calculateOddsService: CalculateOddsService;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService, CalculateOddsService, StaticService
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(FilterWrongOddsComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    calculateOddsService = fixture.debugElement.injector.get(CalculateOddsService);
+    component = fixture.componentInstance;
+    component.filterWrongOddsModel = Helper.fakeFilterWrongOddsModel;
   });
 
   it('should create', () => {
-    component = new FilterWrongOddsComponent(null, null, null);
     expect(component).toBeTruthy();
   });
 
-  it('#changeFilter should emit #changeFilterEvent', async () => {
-    const fakeEventChangeFilterEvent = jest.fn().mockReturnValue(false); 
-    component = new FilterWrongOddsComponent(null, null, null);
-    component.changeFilterEvent.emit = fakeEventChangeFilterEvent;
+  it('should emit changeFilterEvent when changeFilter is called', () => {
+    // Arrange
+    component.changeFilterEvent = {
+      emit: jest.fn()
+    } as any;
+
+    // Act
     component.changeFilter();
 
-    expect(fakeEventChangeFilterEvent).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.changeFilterEvent.emit).toHaveBeenCalled();
   });
 
-  it('#getDurationTime should return expected', async () => {
-    component = new FilterWrongOddsComponent(null, null, null);
-    component.filterWrongOddsModel = Helper.fakeFilterWrongOddsModel;
-    component.fromTimeComponent = new DateFullTimeNewComponent(null);
-    component.fromTimeComponent.isTimeValid = jest.fn().mockImplementation(() => true);
-    component.toTimeComponent = new DateFullTimeNewComponent(null);
-    component.toTimeComponent.isTimeValid = jest.fn().mockImplementation(() => true);
+  it('should return duration time when times are valid', () => {
+    // Arrange
+    component.fromTimeComponent = {
+      isTimeValid: jest.fn().mockReturnValue(true)
+    } as any;
+    component.toTimeComponent = {
+      isTimeValid: jest.fn().mockReturnValue(true)
+    } as any;
+    StaticService.getDurations = jest.fn().mockReturnValue('1 hour');
 
-    const actual = component.getDurationTime();
+    // Act
+    const result = component.getDurationTime();
 
-    expect(actual).toBe('4320m0s');
+    // Assert
+    expect(result).toBe('1 hour');
   });
 
-  it('#isCorrectFormatSingleDecimal should return true', async () => {
-    component = new FilterWrongOddsComponent(null, null, null);
-    component.filterWrongOddsModel = new FilterWrongOddsModel();
+  it('should return "-" when times are invalid', () => {
+    // Arrange
+    component.fromTimeComponent = {
+      isTimeValid: jest.fn().mockReturnValue(false)
+    } as any;
+    component.toTimeComponent = {
+      isTimeValid: jest.fn().mockReturnValue(false)
+    } as any;
 
-    const actual = component.isCorrectFormatSingleDecimal('1', '');
+    // Act
+    const result = component.getDurationTime();
 
-    expect(actual).toBeTruthy();
+    // Assert
+    expect(result).toBe('-');
   });
 
-  it('#isSubTypeOuOr1stOu should return true', async () => {
-    const mockIsSubTypeOuOr1stOu = jest.fn().mockImplementation(() => true);
-    validationService = new ValidationService();
-    validationService.isSubTypeOuOr1stOu = mockIsSubTypeOuOr1stOu;
-    component = new FilterWrongOddsComponent(null, validationService, null);
-    component.filterWrongOddsModel = Helper.fakeFilterWrongOddsModel;
+  it('should validate single decimal format', () => {
+    // Arrange
+    StaticService.isCorrectFormatSingleDecimal = jest.fn().mockReturnValue(true);
 
-    const actual = component['isSubTypeOuOr1stOu']();
+    // Act
+    const result = component.isCorrectFormatSingleDecimal('1.5', 'test-class');
 
-    expect(mockIsSubTypeOuOr1stOu).toHaveBeenCalledTimes(1);
-    expect(actual).toBeTruthy();
+    // Assert
+    expect(StaticService.isCorrectFormatSingleDecimal).toHaveBeenCalledWith('1.5', 'test-class', component.tooltip, TEXT.INVALID_INPUT);
+    expect(result).toBeTruthy();
   });
 
-  it('#isValid should return true', async () => {
-    component = new FilterWrongOddsComponent(null, null, null);
-    component.filterWrongOddsModel = Helper.fakeFilterWrongOddsModel;
-    component['isValidDateTime'] = jest.fn().mockImplementation(() => true);
-    component['isValidFilter'] = jest.fn().mockImplementation(() => true);
-    const actual = component.isValid();
+  it('should return true for empty value in single decimal validation', () => {
+    // Act
+    const result = component.isCorrectFormatSingleDecimal('', 'test-class');
 
-    expect(actual).toBeTruthy();
+    // Assert
+    expect(result).toBeTruthy();
   });
 
-  it('#isValidFilter should return true', async () => {
-    const mockIsValidFilterWrongOdds = jest.fn().mockImplementation(() => true);
-    validationService = new ValidationService();
-    validationService.isValidFilterWrongOdds = mockIsValidFilterWrongOdds;
-    component = new FilterWrongOddsComponent(null, validationService, null);
-    const actual = component['isValidFilter']();
+  it('should check if sub type is OU or 1st OU', () => {
+    // Arrange
+    validationService.isSubTypeOuOr1stOu = jest.fn().mockReturnValue(true);
 
-    expect(mockIsValidFilterWrongOdds).toHaveBeenCalledTimes(1);
-    expect(actual).toBeTruthy();
+    // Act
+    const result = component.isSubTypeOuOr1stOu();
+
+    // Assert
+    expect(validationService.isSubTypeOuOr1stOu).toHaveBeenCalledWith(component.subIssueTypeId);
+    expect(result).toBeTruthy();
   });
 
-  it('#isValidDateTime should return true', async () => {
-    const mockIsFromTimeSameOrBeforeToTime = jest.fn().mockImplementation(() => true);
-    validationService = new ValidationService();
-    validationService.isFromTimeSameOrBeforeToTime = mockIsFromTimeSameOrBeforeToTime;
-    component = new FilterWrongOddsComponent(null, validationService, null);
-    component.fromTimeComponent = new DateFullTimeNewComponent(null);
-    component.fromTimeComponent.validateWithTooltip = jest.fn().mockImplementation(() => true);
-    component.toTimeComponent = new DateFullTimeNewComponent(null);
-    component.toTimeComponent.validateWithTooltip = jest.fn().mockImplementation(() => true);
-    const actual = component['isValidDateTime']();
+  it('should validate filter when both date time and filter are valid', () => {
+    // Arrange
+    component.fromTimeComponent = {
+      validateWithTooltip: jest.fn().mockReturnValue(true)
+    } as any;
+    component.toTimeComponent = {
+      validateWithTooltip: jest.fn().mockReturnValue(true)
+    } as any;
+    validationService.isFromTimeSameOrBeforeToTime = jest.fn().mockReturnValue(true);
+    validationService.isValidFilterWrongOdds = jest.fn().mockReturnValue(true);
 
-    expect(mockIsFromTimeSameOrBeforeToTime).toHaveBeenCalledTimes(1);
-    expect(actual).toBeTruthy();
+    // Act
+    const result = component.isValid();
+
+    // Assert
+    expect(result).toBeTruthy();
   });
 
-  it('#isValidFilterCorrectOdds should return true', async () => {
-    const mockFunction = jest.fn().mockImplementation(() => true);
-    validationService = new ValidationService();
-    validationService.isValidFilterCorrectOdds = mockFunction;
-    component = new FilterWrongOddsComponent(null, validationService, null);
-    component.filterWrongOddsModel = Helper.fakeFilterWrongOddsModel;
-    
-    const actual = component.isValidFilterCorrectOdds();
+  it('should validate correct odds', () => {
+    // Arrange
+    validationService.isValidFilterCorrectOdds = jest.fn().mockReturnValue(true);
 
-    expect(actual).toBeTruthy();
+    // Act
+    const result = component.isValidFilterCorrectOdds();
+
+    // Assert
+    expect(validationService.isValidFilterCorrectOdds).toHaveBeenCalledWith(
+      component.filterWrongOddsModel.correctOddsHomeOver,
+      component.filterWrongOddsModel.spread,
+      component.tooltip
+    );
+    expect(result).toBeTruthy();
   });
 
-  it('#changeCorrectOdds not validFilterCorrectOdds should update correctOddsAwayUnder is Empty', async () => {
-    calculateOddsService = new CalculateOddsService(null);
-    const mockUpdateCorrectOddsAwayUnder = jest.fn();
-    calculateOddsService.updateCorrectOddsAwayUnder = mockUpdateCorrectOddsAwayUnder;
-    component = new FilterWrongOddsComponent(null, null, calculateOddsService);
-    component['isValidFilterCorrectOdds'] = jest.fn().mockReturnValue(false);
-    component.filterWrongOddsModel = Helper.fakeFilterWrongOddsModel;
-    component.filterWrongOddsModel.correctOddsAwayUnder = "0.9";
+  it('should update correct odds away under when filter is valid', () => {
+    // Arrange
+    validationService.isValidFilterCorrectOdds = jest.fn().mockReturnValue(true);
+    calculateOddsService.updateCorrectOddsAwayUnder = jest.fn();
+
+    // Act
     component.changeCorrectOdds();
 
+    // Assert
+    expect(calculateOddsService.updateCorrectOddsAwayUnder).toHaveBeenCalledWith(component.filterWrongOddsModel);
+  });
+
+  it('should clear correct odds away under when filter is invalid', () => {
+    // Arrange
+    validationService.isValidFilterCorrectOdds = jest.fn().mockReturnValue(false);
+
+    // Act
+    component.changeCorrectOdds();
+
+    // Assert
     expect(component.filterWrongOddsModel.correctOddsAwayUnder).toBe('');
-    expect(mockUpdateCorrectOddsAwayUnder).toHaveBeenCalledTimes(0);
   });
 
-  it('#changeCorrectOdds validFilterCorrectOdds should called updateCorrectOddsAwayUnder', async () => {
-    calculateOddsService = new CalculateOddsService(null);
-    const mockUpdateCorrectOddsAwayUnder = jest.fn();
-    calculateOddsService.updateCorrectOddsAwayUnder = mockUpdateCorrectOddsAwayUnder;
-    component = new FilterWrongOddsComponent(null, null, calculateOddsService);
-    component['isValidFilterCorrectOdds'] = jest.fn().mockReturnValue(true);
-    component.filterWrongOddsModel = Helper.fakeFilterWrongOddsModel;
-    component.changeCorrectOdds();
+  it('should validate spread', () => {
+    // Arrange
+    validationService.isValidSpread = jest.fn().mockReturnValue(true);
 
-    expect(mockUpdateCorrectOddsAwayUnder).toHaveBeenCalledTimes(1);
-  });
- 
-  it('#isValidSpread should return true', async () => {
-    const mockIsValidSpread = jest.fn().mockReturnValue(true);
-    validationService = new ValidationService();
-    validationService.isValidSpread = mockIsValidSpread;
-    component = new FilterWrongOddsComponent(null, validationService, null);
-    component.filterWrongOddsModel = Helper.fakeFilterWrongOddsModel;
-    const actual = component['isValidSpread']();
+    // Act
+    const result = component.isValidSpread();
 
-    expect(mockIsValidSpread).toHaveBeenCalledTimes(1);
-    expect(actual).toBeTruthy();
+    // Assert
+    expect(validationService.isValidSpread).toHaveBeenCalledWith(component.filterWrongOddsModel.spread, component.tooltip);
+    expect(result).toBeTruthy();
   });
 
-  it('#changeSpread isValidSpread should updateAllowanceRate and updateCorrectOddsAwayUnder', async () => {
-    const mockUpdateAllowanceRate = jest.fn();
-    const mockUpdateCorrectOddsAwayUnder = jest.fn();
-    calculateOddsService = new CalculateOddsService(null);
-    calculateOddsService.updateAllowanceRate = mockUpdateAllowanceRate;
-    calculateOddsService.updateCorrectOddsAwayUnder = mockUpdateCorrectOddsAwayUnder;
-    component = new FilterWrongOddsComponent(null, null, calculateOddsService);
-    component.isValidSpread = jest.fn().mockReturnValue(true);
+  it('should update allowance rate and correct odds when spread is valid', () => {
+    // Arrange
+    validationService.isValidSpread = jest.fn().mockReturnValue(true);
+    calculateOddsService.updateAllowanceRate = jest.fn();
+    calculateOddsService.updateCorrectOddsAwayUnder = jest.fn();
 
+    // Act
     component.changeSpread();
 
-    expect(mockUpdateAllowanceRate).toHaveBeenCalledTimes(1);
-    expect(mockUpdateCorrectOddsAwayUnder).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(calculateOddsService.updateAllowanceRate).toHaveBeenCalledWith(component.filterWrongOddsModel);
+    expect(calculateOddsService.updateCorrectOddsAwayUnder).toHaveBeenCalledWith(component.filterWrongOddsModel);
   });
 });

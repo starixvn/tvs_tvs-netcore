@@ -99,7 +99,7 @@ describe('LogInfoService', () => {
     const service = new ValidationService();
     service.isSubTypeFilterByAcceptedTime = jest.fn().mockImplementation(() => false);
     const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
+    mockTvDetection.isValid = jest.fn().mockReturnValue(true);
 
     const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents, mockTvDetection);
 
@@ -145,7 +145,7 @@ describe('LogInfoService', () => {
     const wrongScoreInfoComponents: WrongScoreInfoComponent[] = [];
     wrongScoreInfoComponents.some = jest.fn().mockImplementation(() => true);
     const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
+    mockTvDetection.isValid = jest.fn().mockReturnValue(true);
 
     const service = new ValidationService();
     service.isSubTypeFilterByAcceptedTime = jest.fn().mockImplementation(() => true);
@@ -169,7 +169,7 @@ describe('LogInfoService', () => {
     const service = new ValidationService();
     service.isSubTypeFilterByAcceptedTime = jest.fn().mockImplementation(() => false);
     const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
+    mockTvDetection.isValid = jest.fn().mockReturnValue(true);
 
     const result = service.validateCommonData(filter, eventLeagueComponent, addRequestStore, filterWrongScoreComponent,  wrongScoreInfoComponents, mockTvDetection);
 

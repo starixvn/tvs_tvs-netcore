@@ -178,7 +178,7 @@ describe('ValidationService', () => {
     const filterModel = new FilterModel();
     filterModel.subIssueTypeId = undefined;
     const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
+    mockTvDetection.isValid = jest.fn().mockReturnValue(true);
 
     // Action
     const result = validationService.validateCommonData(filterModel, null, null, null, mockAddRequestStore, mockTvDetection);
@@ -194,7 +194,7 @@ describe('ValidationService', () => {
     const eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const spyIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => false);
     const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
+    mockTvDetection.isValid = jest.fn().mockReturnValue(true);
 
     // Action
     const result = validationService.validateCommonData(filterModel, eventLeagueComponent, null, null, mockAddRequestStore, mockTvDetection);
@@ -213,7 +213,7 @@ describe('ValidationService', () => {
     const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
     const spyFilterTimeAreaComponentIsValid = jest.spyOn(filterTimeAreaComponent, 'isValid').mockImplementation(() => false);
     const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
+    mockTvDetection.isValid = jest.fn().mockReturnValue(true);
 
     // Action
     const result = validationService.validateCommonData(filterModel, eventLeagueComponent, filterTimeAreaComponent, null, mockAddRequestStore, mockTvDetection);
@@ -239,7 +239,7 @@ describe('ValidationService', () => {
     const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
     const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
+    mockTvDetection.isValid = jest.fn().mockReturnValue(true);
 
     // Action
     const result = validationService.validateCommonData(filterModel, eventLeagueComponent, filterTimeAreaComponent, logInfoComponents, mockAddRequestStore, mockTvDetection);
@@ -265,7 +265,7 @@ describe('ValidationService', () => {
     const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
     const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
+    mockTvDetection.isValid = jest.fn().mockReturnValue(true);
 
     // Action
     const result = validationService.validateCommonData(filterModel, eventLeagueComponent, filterTimeAreaComponent, logInfoComponents, mockAddRequestStore, mockTvDetection);

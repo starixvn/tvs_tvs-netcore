@@ -13,10 +13,10 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance.model';
 
 @Component({
+  standalone: true,
   selector: 'filter-time-with-allowance',
   templateUrl: './filter-time-with-allowance.component.html',
   styleUrls: ['./filter-time-with-allowance.component.scss'],
-  standalone: true,
   imports: [FormsModule, CommonModule, TooltipComponent, NgbModule]
 })
 export class FilterTimeWithAllowanceComponent implements OnInit {

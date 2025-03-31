@@ -28,7 +28,7 @@ export class ValidationService {
 
     return filter.subIssueTypeId
       && eventLeagueComponent.isMatchIdValid()
-      && tvDetectionComponent.isValidality()
+      && tvDetectionComponent.isValid()
       && filterTimeAreaComponent.isValid()
       && logInfoComponents.toArray().every(x => x.filterTimeWithAllowanceComponent.isValid());
   }

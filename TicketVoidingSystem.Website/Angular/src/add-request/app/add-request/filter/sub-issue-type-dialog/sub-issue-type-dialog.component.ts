@@ -14,10 +14,10 @@ import SubIssueTypeRedCardConfig from './sub-type-red-card.json';
 import SubIssueTypeWrongScoreConfig from './sub-type-wrong-score.json';
 
 @Component({
+  standalone: true,
   selector: 'sub-issue-type-dialog',
   templateUrl: './sub-issue-type-dialog.component.html',
   styleUrls: ['./sub-issue-type-dialog.component.scss'],
-  standalone: true,
   imports: [FormsModule, CommonModule, BlockUiModule]
 })
 export class SubIssueTypeDialogComponent implements OnChanges, OnInit {

@@ -30,7 +30,7 @@ describe('ValidationService', () => {
         },
         {
           provide: TvDetectionComponent,
-          useValue: { isValidality: jest.fn().mockReturnValue(true) }
+          useValue: { isValid: jest.fn().mockReturnValue(true) }
         },
         {
           provide: AddRequestStore,
