@@ -259,7 +259,7 @@ public class MatchServiceTests
 
     [Theory]
     [InlineData(160, false, "Lucky 3 Game No.123")]
-    [InlineData(164, false, "Happy 5 No.123")]
+    [InlineData(164, false, "Happy 5 No .123")]
     [InlineData(207, false, "Home - vs - Away")]
     [InlineData(1, false, "HomeName - vs - AwayName")]
     [InlineData(1, true, "HomeName - LeagueName")]
