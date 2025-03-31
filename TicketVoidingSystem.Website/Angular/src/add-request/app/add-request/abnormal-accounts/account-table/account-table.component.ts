@@ -17,6 +17,7 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { ValidationBusinessRuleArgs } from '../models/validation.model';
 import { ValidationService } from '../services/validation.service';
 import DescriptionTableAdjustVoidConfig from './describe-table-adjust-void.json';
+import { TicketStatus } from 'src/utility/constants/config';
 
 @Component({
     selector: 'account-table',
@@ -53,7 +54,7 @@ export class AccountTableComponent {
 
   async reCalculate(account: AccountWinlostModel, index: number) {
     account.isShowInput = false;
-    if (this.isCancelRecalculateAmount) {
+    if (this.isCancelRecalculateAmount || _.isEmpty(account.adjustVoidLimit)) {
       this.isCancelRecalculateAmount = false;
       return;
     }
@@ -138,7 +139,8 @@ export class AccountTableComponent {
 
   mouseDownEventAdjustGV(account: AccountWinlostModel) {
     this.isCancelRecalculateAmount = false;
-    if (!this.filter.isVoided) {
+    const isLose = this.abnormalAccountModel.statusIds.split(',').includes(TicketStatus.LOSE.toString())
+    if (!this.filter.isVoided && !isLose) {
       account.isShowInput = true;
     }
   }
