@@ -40,6 +40,7 @@ export class AccountTableComponent {
   tooltip = new Tooltip();
   isCancelRecalculateAmount: boolean;
   isCheckedShowAdjustAccount: boolean;
+  previousAdjustVoidLimit : number = null;
   message = `Current Losing (L)\n
   Sum winlost (without actual stake) of all LOSE tickets\n
   Display L as negative number`;
@@ -52,9 +53,11 @@ export class AccountTableComponent {
     this.tooltip.element = this.element;
   }
 
-  async reCalculate(account: AccountWinlostModel, index: number) {
+  async reCalculate(account: AccountWinlostModel, previousAdjustVoid: number, index: number) {
     account.isShowInput = false;
-    if (this.isCancelRecalculateAmount || _.isEmpty(account.adjustVoidLimit)) {
+    this.previousAdjustVoidLimit = account.adjustVoidLimit;
+
+    if (this.isCancelRecalculateAmount || this.isWrongAdjustVoidLimit(account, previousAdjustVoid)) {
       this.isCancelRecalculateAmount = false;
       return;
     }
@@ -84,6 +87,10 @@ export class AccountTableComponent {
     }
     this.reCalculateByAccountEvent.emit(account.custId);
     this.addRequestStore.changeBlockingUiStatus(false);
+  }
+
+  isWrongAdjustVoidLimit(account: AccountWinlostModel, previousAdjustVoid: number) {
+    return Number(previousAdjustVoid) === Number(account.adjustVoidLimit);
   }
 
   async exportExcel() {
