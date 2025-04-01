@@ -5,7 +5,7 @@ import { SubIssueTypeConstant } from "../../constants/sub-issue-type.constant";
   providedIn: 'root'
 })
 export class ValidationService {
-    checkValidSubType(subIssueTypeId?: string, matchSubTypeId?: number): boolean {
+  checkValidSubType(subIssueTypeId?: string, matchSubTypeId?: number): boolean {
     const filterSubTypeId = Number(subIssueTypeId);
 
     return !this.isInvalidGoalMatch(filterSubTypeId, matchSubTypeId)
@@ -15,8 +15,6 @@ export class ValidationService {
   }
 
   private isInvalidGoalMatch(filterSubTypeId: number, matchSubTypeId: number): boolean {
-    const minSubTypeGoalMatch = 400;
-    const maxSubTypeGoalMatch = 599;
     const goalMatchSubTypeIds = [
       SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_NO_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_ONWARDS,
@@ -24,65 +22,82 @@ export class ValidationService {
       SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_ONWARDS
     ];
     const isGoalMatchSubType = goalMatchSubTypeIds.includes(filterSubTypeId);
-    const isInRange = minSubTypeGoalMatch <= matchSubTypeId && matchSubTypeId <= maxSubTypeGoalMatch;
 
-    return isGoalMatchSubType && !isInRange;
+    return isGoalMatchSubType &&
+      (this.isMatchRemarkSubtypeGoalKick(matchSubTypeId)
+      || this.isMatchRemarkSubtypeCorner(matchSubTypeId)
+      ||  this.isMatchRemarkSubtypeBooking(matchSubTypeId));
   }
 
-  private isInvalidGoalKickMatch(filterSubTypeId: number, matchSubTypeId: number): boolean {
+  private isMatchRemarkSubtypeGoalKick(matchSubTypeId: number) {
+    const matchRemarkSubtypeGoalKick = [3800, 4200, 4000, 4100];
     const minSubTypeGoalKickMatchRange1 = 3900;
     const maxSubTypeGoalKickMatchRange1 = 3999;
     const minSubTypeGoalKickMatchRange2 = 4300;
     const maxSubTypeGoalKickMatchRange2 = 4399;
+    const isInRange1 = minSubTypeGoalKickMatchRange1 <= matchSubTypeId && matchSubTypeId <= maxSubTypeGoalKickMatchRange1;
+    const isInRange2 = minSubTypeGoalKickMatchRange2 <= matchSubTypeId && matchSubTypeId <= maxSubTypeGoalKickMatchRange2;
+
+    return matchRemarkSubtypeGoalKick.includes(matchSubTypeId) || isInRange1 || isInRange2;
+  }
+
+  private isInvalidGoalKickMatch(filterSubTypeId: number, matchSubTypeId: number): boolean {
     const goalKickMatchSubTypeIds = [
       SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_NO_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_KICK_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_NO_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_KICK_ONWARDS
     ];
-
     const isGoalKickMatchSubType = goalKickMatchSubTypeIds.includes(filterSubTypeId);
-    const isInRange1 = minSubTypeGoalKickMatchRange1 <= matchSubTypeId && matchSubTypeId <= maxSubTypeGoalKickMatchRange1;
-    const isInRange2 = minSubTypeGoalKickMatchRange2 <= matchSubTypeId && matchSubTypeId <= maxSubTypeGoalKickMatchRange2;
 
-    return isGoalKickMatchSubType && !(isInRange1 || isInRange2);
+    return isGoalKickMatchSubType && !this.isMatchRemarkSubtypeGoalKick(matchSubTypeId);
   }
 
-  private isInvalidCornerMatch(filterSubTypeId: number, matchSubTypeId: number): boolean {
+  private isMatchRemarkSubtypeCorner(matchSubTypeId: number) {
+    const matchRemarkSubtypeCorner = [2000, 2300, 2400, 2500];
     const minSubTypeCornerMatchRange1 = 2100;
     const maxSubTypeCornerMatchRange1 = 2199;
     const minSubTypeCornerMatchRange2 = 2600;
     const maxSubTypeCornerMatchRange2 = 2699;
+    const isInRange1 = minSubTypeCornerMatchRange1 <= matchSubTypeId && matchSubTypeId <= maxSubTypeCornerMatchRange1;
+    const isInRange2 = minSubTypeCornerMatchRange2 <= matchSubTypeId && matchSubTypeId <= maxSubTypeCornerMatchRange2;
+
+    return matchRemarkSubtypeCorner.includes(matchSubTypeId) || isInRange1 || isInRange2;
+  }
+
+  private isInvalidCornerMatch(filterSubTypeId: number, matchSubTypeId: number): boolean {
     const cornerMatchSubTypeIds = [
       SubIssueTypeConstant.NO_INDICATION_HOME_CORNER_NO_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_HOME_CORNER_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_AWAY_CORNER_NO_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_AWAY_CORNER_ONWARDS
     ];
-
     const isCornerMatchSubType = cornerMatchSubTypeIds.includes(filterSubTypeId);
-    const isInRange1 = minSubTypeCornerMatchRange1 <= matchSubTypeId && matchSubTypeId <= maxSubTypeCornerMatchRange1;
-    const isInRange2 = minSubTypeCornerMatchRange2 <= matchSubTypeId && matchSubTypeId <= maxSubTypeCornerMatchRange2;
 
-    return isCornerMatchSubType && !(isInRange1 || isInRange2);
+    return isCornerMatchSubType && !this.isMatchRemarkSubtypeCorner(matchSubTypeId);
   }
 
-  private isInvalidBookingMatch(filterSubTypeId: number, matchSubTypeId: number): boolean {
+  private isMatchRemarkSubtypeBooking(matchSubTypeId: number) {
+    const matchRemarkSubtypeBooking = [2800, 3300, 3000, 3100, 3200, 3300];
     const minSubTypeBookingMatchRange1 = 2900;
     const maxSubTypeBookingMatchRange1 = 2999;
     const minSubTypeBookingMatchRange2 = 3400;
     const maxSubTypeBookingMatchRange2 = 3499;
+    const isInRange1 = minSubTypeBookingMatchRange1 <= matchSubTypeId && matchSubTypeId <= maxSubTypeBookingMatchRange1;
+    const isInRange2 = minSubTypeBookingMatchRange2 <= matchSubTypeId && matchSubTypeId <= maxSubTypeBookingMatchRange2;
+
+    return matchRemarkSubtypeBooking.includes(matchSubTypeId) || isInRange1 || isInRange2;
+  }
+
+  private isInvalidBookingMatch(filterSubTypeId: number, matchSubTypeId: number): boolean {
     const bookingMatchSubTypeIds = [
       SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_NO_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_NO_ONWARDS,
       SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_ONWARDS
     ];
-
     const isBookingMatchSubType = bookingMatchSubTypeIds.includes(filterSubTypeId);
-    const isInRange1 = minSubTypeBookingMatchRange1 <= matchSubTypeId && matchSubTypeId <= maxSubTypeBookingMatchRange1;
-    const isInRange2 = minSubTypeBookingMatchRange2 <= matchSubTypeId && matchSubTypeId <= maxSubTypeBookingMatchRange2;
 
-    return isBookingMatchSubType && !(isInRange1 || isInRange2);
+    return isBookingMatchSubType && !this.isMatchRemarkSubtypeBooking(matchSubTypeId);
   }
 }
