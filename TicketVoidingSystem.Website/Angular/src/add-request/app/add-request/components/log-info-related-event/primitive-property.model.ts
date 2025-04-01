@@ -1,4 +1,4 @@
-import { TransInfoAddRequestModel } from "../models/trans-info-add-request.model";
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 
 export class PrimitiveProperty {
   isBlock = false;
@@ -7,6 +7,4 @@ export class PrimitiveProperty {
   isShowRelatedEvents? = false;
   filterBy: number;
   transInfoAddRequestModel: TransInfoAddRequestModel;
-  isCheckedVar?: boolean;
-  isHighLightVarCheck?: boolean;
 }

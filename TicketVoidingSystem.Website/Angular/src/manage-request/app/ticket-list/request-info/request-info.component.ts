@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { NgbAccordionConfig, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
@@ -29,10 +29,9 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./request-info.component.scss'],
   imports: [BlockUiModule, MatchInfoComponent, IssueTypeModule, TicketsComponent, FormsModule, NgbNavModule, CommonModule ]
 })
-export class RequestInfoComponent implements OnInit, OnChanges {
+export class RequestInfoComponent implements OnInit {
   @Input() ticketListModal: TicketListModal;
   @Input() model = new RequestDetailViewModel();
-  @Input() issue = new IssueInfo();
   @Input() isShowVar = false;
   @Input() tabInfoRequest: TabInfoRequest[] = [];
   @Output() changeTabEvent = new EventEmitter<string>();
@@ -51,6 +50,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   generalInfoViewModel = new GeneralInfoViewModel();
   briefInfoModels: BriefInfo[] = [];
   match = new MatchModel();
+  issue = new IssueInfo();
   
   constructor(
     config: NgbAccordionConfig) {
@@ -59,18 +59,17 @@ export class RequestInfoComponent implements OnInit, OnChanges {
 
   appService = inject(AppService);
   commonService = inject(CommonService);
-  
-  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-    if (changes['issue']) {
-      this.updateIssue();
-    }
-  }
 
   async ngOnInit() {
     this.paging = new PagingModel();
     this.paging.pageSize = 500;
     this.activeTab = this.tabInfoRequest.find(x => x.isActive).id;
     await this.getDataCurrentTab(this.tabInfoRequest.find(x => x.isActive));
+  }
+
+  private async getIssue(matchId: number) {
+    this.issue = await this.commonService.getIssueInfo(StaticService.getSubIssueTypeId(this.model, matchId));
+    this.updateIssue();
   }
 
   async getTickets(matchId: number) {
@@ -104,6 +103,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
     await this.getGeneralInfo(tabInfoRequest);
     await this.getTickets(tabInfoRequest.matchId);
     await this.getMatch(tabInfoRequest.matchId);
+    await this.getIssue(tabInfoRequest.matchId);
     this.updateGeneralInfoByTickets();
     this.isBlock = false;
   }

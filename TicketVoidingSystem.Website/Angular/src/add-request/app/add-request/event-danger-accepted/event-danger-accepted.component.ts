@@ -10,11 +10,10 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
-import { PrimitiveProperty } from '../event-red-card/event-red-card.model';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCardComponent } from '../event-red-card/log-info-red-card/log-info-red-card.component';
-import { LogInfoRedCard } from '../event-red-card/log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { AddRelatedEventArg } from '../models/add-related-event.model';
@@ -31,6 +30,7 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 
 @Component({
   selector: 'event-danger-accepted',
@@ -52,14 +52,14 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   @ViewChild('tvDetection') tvDetectionComponent: TvDetectionComponent;
   @ViewChild('filterTimeArea') filterTimeAreaComponent: FilterTimeAreaComponent;
   @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
-  @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRedCardComponent>;
+  @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRelatedEventComponent>;
 
   tooltip = new Tooltip();
   primitiveProps = new PrimitiveProperty();
   defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
   confirmDangerAccepted = new ConfirmDangerAcceptedModel();
-  mainEvent = new LogInfoRedCard();
-  allSelectedEvents: LogInfoRedCard[] = [];
+  mainEvent = new LogInfoRelatedEvent();
+  allSelectedEvents: LogInfoRelatedEvent[] = [];
   relatedEvents: ChildMatchModel[] = [];
   addChildMatchModel = new AddChildMatchModel();
   tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;

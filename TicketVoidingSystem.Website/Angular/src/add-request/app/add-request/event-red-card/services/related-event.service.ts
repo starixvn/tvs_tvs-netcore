@@ -4,7 +4,7 @@ import { MatchType, DateTimeFormat } from '../../../../../utility/constants/conf
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { LogInfoService } from './log-info.service';
@@ -28,7 +28,7 @@ export class RelatedEventService {
     return this.addRequestApiService.getChildMatches(query);
   }
 
-  assignChildMatchToLogInfoModel(models: ChildMatchModel[], defaultFilter: FilterTimeWithAllowance, defaultSubIssueTypeId: number): LogInfoRedCard[] {
+  assignChildMatchToLogInfoModel(models: ChildMatchModel[], defaultFilter: FilterTimeWithAllowance, defaultSubIssueTypeId: number): LogInfoRelatedEvent[] {
     const newEvents = models
       .map(x => {
         const voidTimeArea: FilterTimeWithAllowance = {
@@ -49,7 +49,7 @@ export class RelatedEventService {
           logInfoDetail: null,
           messageValidationLogInfo: null,
           sportType: x.sportType
-        } as LogInfoRedCard;
+        } as LogInfoRelatedEvent;
       });
 
       return newEvents;
@@ -72,7 +72,7 @@ export class RelatedEventService {
       query.sportType = arg.mainEvent.sportType;
       
       const models = await this.getChildMatches(query);
-      if (models.length === 0) {
+      if (!models || models.length === 0) {
         arg.tooltip.display(arg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         arg.primitiveProps.isBlock = false;
         return;
@@ -95,7 +95,7 @@ export class RelatedEventService {
     this.addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo, arg.allEvents);
   }
 
-  private async preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<LogInfoRedCard[]> {
+  private async preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<LogInfoRelatedEvent[]> {
     const newChildEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
     const newEvents = this.assignChildMatchToLogInfoModel(newChildEvents, arg.defaultFilterTimeWithAllowance, arg.mainEvent.subIssueTypeId);
     const eventsGetLogInfo = _.cloneDeep(arg.allEvents);
@@ -105,7 +105,7 @@ export class RelatedEventService {
     return eventsGetLogInfo;
   }
 
-  private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: LogInfoRedCard[], originalAllEvents: LogInfoRedCard[]): void {
+  private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: LogInfoRelatedEvent[], originalAllEvents: LogInfoRelatedEvent[]): void {
     eventsGetLogInfo.forEach(x => {
       if (!originalAllEvents.some(y => y.matchId === x.matchId) && x.logInfoDetail) {
         originalAllEvents.push(x);

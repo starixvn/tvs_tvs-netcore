@@ -12,12 +12,7 @@ exports[`LogInfoNewComponent #LogInfoNewComponent init should match snapshot 1`]
       </strong>
     </span>
     <br />
-    <span>
-      Live Score: 
-    </span>
-    <strong>
-    </strong>
-    . Void time (GMT-4): 
+     Void time (GMT-4): 
     <strong>
     </strong>
     <br />

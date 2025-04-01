@@ -11,7 +11,6 @@ import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-
 import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
 import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
 import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
-import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
 import { VoidWrongMarketOfferedComponent } from './void-wrong-market-offered/void-wrong-market-offered.component';
 
 jest.mock('../../utility/services/signal-r.service.native');
@@ -59,7 +58,7 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VoidDangerAcceptedComponent, VoidOtherIssueComponent, VoidDuplicateTicketsComponent,
+      imports: [VoidDangerAcceptedComponent, VoidDuplicateTicketsComponent,
         VoidNotParticipateComponent, VoidEarlyKickOffComponent, VoidAbnormalBetComponent,
         VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiModule],
       providers: [AppService, SignalRService]

@@ -5,12 +5,11 @@ import { Subscription } from 'rxjs';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
-import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { StaticService } from '../../../../utility/services/static.service';
-import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { TvDetectionModel } from '../components/tv-detection/tv-detection.model';
@@ -21,7 +20,6 @@ import { OthersModel } from '../others/others.model';
 import { ConfirmWrongScoreModel } from './confirm-wrong-score/confirm-wrong-score.model';
 import { PrimitiveProperty } from './event-wrong-score.model';
 import { FilterWrongScoreComponent } from './filter-wrong-score/filter-wrong-score.component';
-import { FilterWrongScoreModel } from './models/filter-wrong-score.model';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
@@ -29,6 +27,15 @@ import { ValidationBusinessRuleArgs } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
+import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
+import { RelatedEventService } from './services/related-event.service';
+import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { ChildMatchModel } from '../models/related-event.model';
+import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
+import { AddRelatedEventArg } from './models/add-related-event.model';
+import { EditRequestService } from './services/edit-request.service';
+import { EventWrongScoreService } from './services/event-wrong-score.service';
 
 @Component({
   selector: 'event-wrong-score',
@@ -52,37 +59,43 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   @ViewChild('eventLeague') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('wrongScoreInfo') wrongScoreInfoComponents: QueryList<WrongScoreInfoComponent>;
   @ViewChild('filterWrongScore') filterWrongScoreComponent: FilterWrongScoreComponent;
+  @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRelatedEventComponent>;
 
   private readonly errorTooltipClassName = 'var-check-selection';
+  private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
 
   primitiveProps = new PrimitiveProperty();
   tooltip = new Tooltip();
   originWrongScoreModels: WrongScoreModel[] = [];
   confirmWrongScoreModel = new ConfirmWrongScoreModel();
-  filterWrongScoreModel: FilterWrongScoreModel;
   tvDetectionModel = new TvDetectionModel();
   getAllowanceTimeSubscription: Subscription;
   acceptTypeName = "";
+  allRelatedEvents: LogInfoRelatedEvent[] = [];
+  addChildMatchModel = new AddChildMatchModel();
+  relatedEvents: ChildMatchModel[] = [];
+  defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
+  mainEvent = new WrongScoreModel();
 
   constructor(
     private readonly element: ElementRef,
-    private readonly addRequestApiService: AddRequestApiService,
     private readonly addRequestStore: AddRequestStore,
     private readonly validationService: ValidationService,
     private readonly saveRequestService: SaveRequestService,
     public readonly wrongScoreService: WrongScoreService,
     private readonly logInfoService: LogInfoService,
     private readonly modalService: ModalService,
+    private readonly relatedEventService: RelatedEventService,
+    private readonly editRequestService: EditRequestService,
+    private readonly eventWrongScoreService: EventWrongScoreService
   ) {
     this.tooltip.element = this.element;
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
-      this.primitiveProps.filterBy = this.wrongScoreService.getFilterByBaseOnSubIssueType(this.filter.subIssueTypeId);
-      this.primitiveProps.isCheckedVar = null;
-      this.primitiveProps.isHighLightVarCheck = null;
-      this.tvDetectionComponent.initDefaultValues();
+      this.eventWrongScoreService.resetPrimitiveProperty(this.primitiveProps, this.filter.subIssueTypeId);
+      this.tvDetectionComponent?.initDefaultValues();
       this.resetData();
       this.filter.isChangeSubTypeManual = false;
     }
@@ -90,27 +103,54 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
 
   public async ngOnInit(): Promise<void> {
     this.getAllowanceTimeSubscription = this.addRequestStore.getAllowanceTimeSubject.subscribe(model => {
-      this.filterWrongScoreModel.allowanceTime = model;
+      this.defaultFilterTimeWithAllowance.aaTime = model.aaTime;
+      this.defaultFilterTimeWithAllowance.paTime = model.paTime;
+      this.defaultFilterTimeWithAllowance.saTime = model.saTime;
     });
     if (this.isEdit) {
-      this.matchId = this.wrongScoreModels[0].matchId;
-      this.primitiveProps.actualScore = this.wrongScoreModels[0].actualScore;
-      this.primitiveProps.filterBy = this.wrongScoreModels[0].filterBy;
-      this.primitiveProps.isShowActualScore = true;
-      this.primitiveProps.isCheckedVar = this.wrongScoreModels[0].isCheckedVar;
-      this.primitiveProps.isHighLightVarCheck = !this.wrongScoreModels[0].isCheckedVar;
-      this.filterWrongScoreModel = this.wrongScoreService.getFilterWrongScore(this.wrongScoreModels[0]);
-      this.tvDetectionModel = this.wrongScoreService.getTvDetectionModel(this.wrongScoreModels[0]);
-      await this.updateWrongScoreModels();
+      this.mainEvent = this.editRequestService.getMainWrongScoreModel(this.wrongScoreModels);
+      this.matchId = this.mainEvent.matchId;
+      this.editRequestService.assignPrimitivePropsEditRequest(this.mainEvent, this.primitiveProps);
+      if (this.mainEvent.filterBy === TVSRequestFilterBy.CHECK_TIME) {
+        this.allRelatedEvents = await this.editRequestService.getAllRelatedEvents(this.wrongScoreModels, this.mainEvent, this.relatedEvents);
+        this.wrongScoreModels = [this.mainEvent]
+      }
+      else {
+        this.originWrongScoreModels = await this.editRequestService.getScoreWrongScoreModels(this.wrongScoreModels, this.matchId);
+      }
+      this.defaultFilterTimeWithAllowance = this.wrongScoreService.getFilterWrongScore(this.mainEvent);
+      this.tvDetectionModel = this.eventWrongScoreService.getTvDetectionModel(this.mainEvent);
     } else {
-      this.filterWrongScoreModel = this.wrongScoreService.initDefaultFilterWrongScore();
+      this.defaultFilterTimeWithAllowance = this.wrongScoreService.initDefaultFilterWrongScore();
       this.addRequestStore.changeSavingRequestStatus(true);
     }
   }
 
+  private initAddRelatedEventArgs() {
+    const arg = new AddRelatedEventArg();
+    arg.tooltip = this.tooltip;
+    arg.requestId = this.requestId;
+    arg.isEdit = this.isEdit;
+    arg.filter = this.filter;
+    arg.primitiveProps = this.primitiveProps;
+    arg.defaultFilterTimeWithAllowance = this.defaultFilterTimeWithAllowance;
+    arg.allEvents = this.allRelatedEvents;
+    this.wrongScoreModels[0].eventDate = this.mainEvent.eventDate;
+    this.wrongScoreModels[0].matchId = this.matchId;
+    arg.mainEvent = this.wrongScoreModels[0];
+    arg.addRequestStore = this.addRequestStore;
+    arg.inputMatchIdClass = this.INPUT_MATCH_ID_CLASS;
+
+    return arg;
+  }
+
   public async handleSearchEvent(): Promise<void> {
+    if (!this.validationService.isValidAllSubIssueType(this.logInfoComponents)) {
+      return;
+    }
+
     if (this.wrongScoreModels) {
-      this.logInfoService.clearDataValidation(this.wrongScoreModels);
+      this.logInfoService.clearDataValidation(this.wrongScoreModels, this.allRelatedEvents);
     }
 
     if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.addRequestStore, this.filterWrongScoreComponent,
@@ -118,53 +158,48 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       return;
     }
 
+    this.primitiveProps.isBlock = true;
     if (this.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME) {
-      this.wrongScoreModels = [this.wrongScoreService.createMainWrongScoreModel(this.filterWrongScoreModel)];
-      this.primitiveProps.isBlock = true;
-      this.logInfoService.clearDataValidation(this.wrongScoreModels);
-      await this.logInfoService.getLogInfo(this.isEdit, this.requestId, this.matchId, this.filter, this.primitiveProps, this.wrongScoreModels);
-      this.primitiveProps.isBlock = false;
-    } else {
-      await this.getWrongScores(this.matchId);
+      if (this.wrongScoreModels.length === 0) {
+        this.wrongScoreModels = [this.wrongScoreService.createMainWrongScoreModel(this.defaultFilterTimeWithAllowance)];
+        this.wrongScoreModels[0].isMainMatch = true;
+      }
+      this.relatedEvents = await this.relatedEventService.getGetInfoChildMatch(this.mainEvent.matchId, true, this.mainEvent.sportType, this.mainEvent.eventDate.toString());
+      await this.relatedEventService.getDataRelatedEventWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
+      this.logInfoComponents.forEach(x => {
+        x.filterTimeWithAllowanceComponent?.updateData();
+        x.showValidationDetail();
+      });
     }
-
+    else {
+      this.originWrongScoreModels = await this.eventWrongScoreService.getAllWrongScoreModels(this.wrongScoreModels, this.matchId);
+    }
+    this.primitiveProps.isShowRelatedEvents = this.eventWrongScoreService.isHasRelatedEvent(Number(this.filter.subIssueTypeId));
+    this.primitiveProps.isBlock = false;
     this.primitiveProps.isShowActualScore = true;
     this.updateStatusButtonSaveRequest();
   }
 
   public async updateWrongScoreModels(): Promise<void> {
-    this.originWrongScoreModels = await this.callApiGetWrongScores(this.matchId);
-    this.originWrongScoreModels.forEach(x => {
-      const model = this.wrongScoreModels.find(y => y.scoreId === x.scoreId);
-      if (model) {
-        model.isActive = x.isActive;
-      } else {
-        this.wrongScoreModels.push(_.cloneDeep(x));
-      }
-    });
-    this.wrongScoreModels = _.orderBy(_.uniqBy(this.wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
+    this.originWrongScoreModels = await this.wrongScoreService.callApiGetWrongScores(this.matchId);
+    this.wrongScoreService.mapWrongScoreModel(this.originWrongScoreModels, this.wrongScoreModels);
   }
 
   actualTimeChange(actualTime: string) {
-    this.filterWrongScoreComponent.fromTimeComponent.time = moment(actualTime, DateTimeFormat.SIMPLE_TIME_FORMAT)
-      .format(DateTimeFormat.TIME_FORMAT);
+    this.filterWrongScoreComponent.fromTimeComponent.time = moment(actualTime, DateTimeFormat.SIMPLE_TIME_FORMAT).format(DateTimeFormat.TIME_FORMAT);
     this.resetData();
     this.addRequestStore.changeSavingRequestStatus(true);
   }
 
   public updateByOriginWrongScoreModel(originWrongScoreModels: WrongScoreModel[]) {
-    originWrongScoreModels.forEach(x => {
-      if (!this.wrongScoreModels.some(y => y.scoreId === x.scoreId)) {
-        this.wrongScoreModels.push(_.cloneDeep(x));
-      }
-    });
-    this.wrongScoreModels = _.orderBy(_.uniqBy(this.wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
+    this.wrongScoreService.updateByOriginWrongScoreModel(originWrongScoreModels, this.wrongScoreModels);
   }
 
   public changeMatchEvent(matchInfo: MatchModel) {
     if (matchInfo) {
       this.resetData();
       this.matchId = matchInfo.matchId;
+      this.eventWrongScoreService.updateMainMatch(this.mainEvent, matchInfo);
       this.updateMatchId.emit(matchInfo);
     }
   }
@@ -173,21 +208,8 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     this.wrongScoreModels = [];
     this.primitiveProps.isShowActualScore = false;
     this.primitiveProps.actualScore = '';
-  }
-
-  public async getWrongScores(matchId: number): Promise<void> {
-    this.originWrongScoreModels = await this.callApiGetWrongScores(matchId);
-    if (this.originWrongScoreModels.length > 0) {
-      this.wrongScoreModels = _.cloneDeep(this.originWrongScoreModels);
-    }
-  }
-
-  private async callApiGetWrongScores(matchId: number): Promise<WrongScoreModel[]> {
-    this.primitiveProps.isBlock = true;
-    const data = await this.addRequestApiService.getWrongScores(matchId);
-    this.primitiveProps.isBlock = false;
-
-    return data;
+    this.allRelatedEvents = [];
+    this.relatedEvents = [];
   }
 
   public triggerCloseEvent() {
@@ -196,6 +218,11 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
 
   public async saveRequest(): Promise<void> {
     if (!this.validateVarCheck()) {
+      this.addRequestStore.changeSavingRequestStatus(false);
+      return;
+    }
+
+    if (!this.validationService.isValidAllSubIssueType(this.logInfoComponents)) {
       this.addRequestStore.changeSavingRequestStatus(false);
       return;
     }
@@ -224,7 +251,15 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   private openConfirmWrongScore(): void {
     const selectedScores = this.wrongScoreService.getSelectedWrongScores(this.wrongScoreModels);
     this.confirmWrongScoreModel.warningExcludedScores = [];
+    this.confirmWrongScoreModel.warningRelatedEvents = [];
     if (!this.filter.isVoided) {
+      this.allRelatedEvents.forEach(x => {
+        x.messageValidationLogInfo?.forEach(t => {
+          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+            this.confirmWrongScoreModel.warningRelatedEvents.push(x.eventName);
+          }
+        });
+      });
       this.wrongScoreModels.forEach(y => {
         y.messageValidationLogInfo?.forEach(t => {
           if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
@@ -249,7 +284,8 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
 
   /* istanbul ignore next */
   public openPopupTransIds(requestId: number, transIds: string): void {
-    StaticService.openPopupTransIds(requestId, transIds, this.modalService);  }
+    StaticService.openPopupTransIds(requestId, transIds, this.modalService);
+  }
 
   private async saveWhenRequestNotVoided(): Promise<void> {
     const validation = await this.saveRequestService.checkValidationBeforeSaveRequest(this.createValidationBusinessRuleArgs());
@@ -277,6 +313,8 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     args.tvDetectionModel = this.tvDetectionModel;
     args.addRequestStore = this.addRequestStore;
     args.tooltip = this.tooltip;
+    args.allSelectedEvents = this.allRelatedEvents;
+    args.defaultFilterTimeWithAllowance = this.defaultFilterTimeWithAllowance;
 
     return args;
   }
@@ -294,6 +332,8 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     args.tvDetectionComponent = this.tvDetectionComponent;
     args.addRequestStore = this.addRequestStore;
     args.tooltip = this.tooltip;
+    args.allSelectedEvents = this.allRelatedEvents;
+    args.defaultFilterTimeWithAllowance = this.defaultFilterTimeWithAllowance;
 
     return args;
   }
@@ -303,24 +343,9 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   }
 
   getHighlightMinTimeClass(minTime?: Date): string {
-    if (minTime && this.wrongScoreModels[0].logInfoDetail.highlightAcceptType) {
-      switch (this.wrongScoreModels[0].logInfoDetail.highlightAcceptType) {
-        case AcceptType.AUTO_ACCEPT: {
-          this.acceptTypeName = "AA";
-          return 'highlight-min-aa';
-        }
-        case AcceptType.SECOND_ACCEPT: {
-          this.acceptTypeName = "SA";
-          return 'highlight-min-sa';
-        }
-        case AcceptType.PENDING_ACCEPT: {
-          this.acceptTypeName = "PA";
-          return 'highlight-min-pa';
-        }
-      }
-    }
-
-    return '';
+    const highlightTimeClass = this.eventWrongScoreService.getHighlightMinTimeClass(this.wrongScoreModels[0]?.logInfoDetail?.highlightAcceptType, minTime);
+    this.acceptTypeName = highlightTimeClass.acceptTypeName;
+    return highlightTimeClass.highlightTimeClass;
   }
 
   public updateStatusButtonSaveRequest(): void {
@@ -363,7 +388,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   }
 
   isShowLogInfoSelectedScores(wrongScoreModels: WrongScoreModel[]): boolean {
-    if (wrongScoreModels.filter(x => x.isChecked).length > 1) {
+    if (wrongScoreModels.filter(x => x.isChecked).length > 1 && this.primitiveProps.filterBy !== TVSRequestFilterBy.CHECK_TIME) {
       return true;
     }
     return false;
@@ -385,6 +410,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     });
     return totalParlayCount;
   }
+
   getCancelCashOutCountSelectedScore(wrongScoreModels: WrongScoreModel[]): number {
     let totalCancelCashOutCount = 0;
     wrongScoreModels.filter(x => x.isChecked).forEach(wrongScoreModel => {
@@ -394,18 +420,53 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   }
 
   getTimeSelectedScore(wrongScoreModels: WrongScoreModel[]): string {
-    let fromTime = '';
-    let toTime = '';
-    if (wrongScoreModels.filter(x => x.isChecked)[0].logInfoDetail) {
-      fromTime = this.displayFullDateTimeFormat(wrongScoreModels.filter(x => x.isChecked)[0].logInfoDetail.voidFromTime);
-    }
-    if (wrongScoreModels.filter(x => x.isChecked)[wrongScoreModels.filter(x => x.isChecked).length - 1].logInfoDetail) {
-      toTime = this.displayFullDateTimeFormat(wrongScoreModels.filter(x => x.isChecked)[wrongScoreModels.filter(x => x.isChecked).length - 1].logInfoDetail.voidToTime);
-    }
-    return `${fromTime} - ${toTime}`;
+    return this.wrongScoreService.getTimeSelectedScore(wrongScoreModels);
   }
 
   public getLogInfoDetail(): LogInfoDetail[] {
-    return this.wrongScoreModels.filter(x => x.isChecked).map(x => x.logInfoDetail);
+    return this.wrongScoreModels.filter(x => x.isChecked || !x.isMainMatch).map(x => x.logInfoDetail);
+  }
+
+  async handleClickAddRelatedEvent(): Promise<void> {
+    await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
+  }
+
+  showAddChildMatchModal(matchType: number) {
+    this.addChildMatchModel.selectedMatchIds = this.allRelatedEvents.map(x => x.matchId);
+    this.addChildMatchModel.matchType = matchType;
+    this.addChildMatchModel.isOpen = true;
+    this.addChildMatchModel = _.clone(this.addChildMatchModel);
+  }
+
+  countChildMatches(): number {
+    return this.relatedEvents.filter(x => x.matchType === MatchType.CHILD).length;
+  }
+
+  isDisabledChildMatches(): boolean {
+    return this.filter.isVoided || this.relatedEvents.filter(x => x.matchType === MatchType.CHILD).length === 0;
+  }
+
+  countLinkMatches(): number {
+    return this.relatedEvents.filter(x => x.matchType === MatchType.LINK).length;
+  }
+
+  isDisabledLinkMatches(): boolean {
+    return this.filter.isVoided || this.relatedEvents.filter(x => x.matchType === MatchType.LINK).length === 0;
+  }
+
+  async saveRelatedEvent(selectedRelatedEvents: ChildMatchModel[]): Promise<void> {
+    this.primitiveProps.isBlock = true;
+    this.allRelatedEvents = this.eventWrongScoreService.updateCheckRelatedEvent(selectedRelatedEvents, this.allRelatedEvents, this.relatedEvents, this.addChildMatchModel.matchType);
+    const newChildEvents = selectedRelatedEvents.filter(x => !this.allRelatedEvents.some(y => y.matchId === x.matchId));
+    if (newChildEvents.length > 0) {
+      await this.relatedEventService.addNewLogInfoRelatedEvent(newChildEvents, this.initAddRelatedEventArgs());
+      this.allRelatedEvents = _.orderBy(_.uniqBy(this.allRelatedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    }
+
+    this.primitiveProps.isBlock = false;
+  }
+
+  handleDeleteEvent(matchId: number): void {
+    this.allRelatedEvents = this.allRelatedEvents.filter(x => x.matchId !== matchId);
   }
 }

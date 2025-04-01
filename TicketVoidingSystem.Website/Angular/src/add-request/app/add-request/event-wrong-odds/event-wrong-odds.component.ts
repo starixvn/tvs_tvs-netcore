@@ -15,6 +15,7 @@ import { EventWrongOddsService } from './services/event-wrong-odds.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { PoolHouseTicketValue } from '../pool-house-ticket/pool-house-ticket.constant';
 
 @Component({
   selector: 'event-wrong-odds',
@@ -121,5 +122,9 @@ export class EventWrongOddsComponent implements OnInit {
 
   public resetLogInfoOfEvent(): void {
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
+  }
+
+  public resetPoolHouseCheckedBetTypes(): void {
+    this.logInfoEvent.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
   }
 }

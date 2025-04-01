@@ -1,55 +1,56 @@
 <div>
   <span><strong>Log Info</strong></span><br />
-  <span>Live Score: </span><strong>{{logInfoDetail.liveScores}}</strong>.
+  @if (logInfoDetail.liveScores) {
+    <span>Live Score: </span><strong>{{logInfoDetail.liveScores}}</strong>.
+  }
   Void time (GMT-4): <strong>{{displayFullDateTimeFormat(logInfoDetail.voidFromTime)}} -
-{{displayFullDateTimeFormat(logInfoDetail.voidToTime)}}</strong><br />
-@if (isSportTypeSoccer()) {
-  <div class="soccer">
-    @if (!isShowPoolHouseTickets()) {
-      Affected Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
-      @if (isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)) {
-        <span class="text-red"
-          [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
-        </span>
+  {{displayFullDateTimeFormat(logInfoDetail.voidToTime)}}</strong><br />
+  @if (isSportTypeSoccer()) {
+    <div class="soccer">
+      @if (!isShowPoolHouseTickets()) {
+        Affected Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
+        @if (isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)) {
+          <span class="text-red"
+            [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
+          </span>
         },
-        Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong>@if (logInfoDetail.highlightMinTime) {
-        <span>, Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{displayMinTime(logInfoDetail.highlightMinTime)}}</strong></span>
-        },
-        @if (isHaveCancelCashOut()) {
+        Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong>
+        @if (logInfoDetail.highlightMinTime) {
+          <span>, Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{displayMinTime(logInfoDetail.highlightMinTime)}}</strong></span>,
           <span>TransId: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{logInfoDetail.minTransId}}</strong> {{logInfoDetail.actionType}}</span>
-          }<br/>
-          @if (isHaveCancelCashOut()) {
-            <span>Cancel Cash Out: <strong>{{logInfoDetail.cancelCashOutCount}}</strong></span>
-          }
+        }<br/>
+        @if (isHaveCancelCashOut()) {
+          <span>Cancel Cash Out: <strong>{{logInfoDetail.cancelCashOutCount}}</strong></span>
         }
-        @if (isShowPoolHouseTickets()) {
-          LG/Early - Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
-          @if (isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)) {
-            <span class="text-red"
-              [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
-            </span>
-            }<br />
-            @if (isHavePoolHouse) {
-              @if (isPoolHouseAffected) {
-                <div>
-                  PH - Single Count: <strong>{{logInfoDetail.poolHouseSingleCount}}</strong>
-                  @if (isShowCountInfo(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount)) {
-                    <span class="text-red"
-                      [innerHTML]="countInfoContent(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
-                    </span>
-                    },
-                    Parlay Count: <strong>{{logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
-                  </div>
-                }
-                @if (!isPoolHouseAffected) {
-                  <div>PH - Not affected.</div>
-                }
+      }
+      @if (isShowPoolHouseTickets()) {
+        LG/Early - Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
+        @if (isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)) {
+          <span class="text-red"
+            [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
+          </span>
+          }<br />
+          @if (isHavePoolHouse) {
+            @if (isPoolHouseAffected) {
+              <div>
+                PH - Single Count: <strong>{{logInfoDetail.poolHouseSingleCount}}</strong>
+                @if (isShowCountInfo(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount)) {
+                  <span class="text-red"
+                    [innerHTML]="countInfoContent(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
+                  </span>
+                  },
+                  Parlay Count: <strong>{{logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
+                </div> 
+              }
+              @if (!isPoolHouseAffected) {
+                <div>PH - Not affected.</div> 
               }
             }
-          </div>
-        }
-        @if (!isSportTypeSoccer()) {
-          <ticket-count-other-sports [logInfoDetail]="logInfoDetail" [isVoided]="true">
-          </ticket-count-other-sports>
-        }
-      </div>
+          }
+    </div>
+  }
+  @if (!isSportTypeSoccer()) {
+    <ticket-count-other-sports [logInfoDetail]="logInfoDetail" [isVoided]="true">
+    </ticket-count-other-sports>
+  }
+</div>

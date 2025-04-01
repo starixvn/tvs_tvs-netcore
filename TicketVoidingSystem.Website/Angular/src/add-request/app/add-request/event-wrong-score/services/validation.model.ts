@@ -7,6 +7,8 @@ import { WrongScoreModel } from "../../models/event-wrong-score.model";
 import { PrimitiveProperty } from "../event-wrong-score.model";
 import { FilterWrongScoreComponent } from "../filter-wrong-score/filter-wrong-score.component";
 import { WrongScoreInfoComponent } from "../wrong-score-info/wrong-score-info.component";
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 
 export class ValidationBusinessRuleArgs {
   requestId?: number;
@@ -20,6 +22,8 @@ export class ValidationBusinessRuleArgs {
   addRequestStore: AddRequestStore;
   filterWrongScoreComponent: FilterWrongScoreComponent;
   tvDetectionComponent: TvDetectionComponent;
+  allSelectedEvents: LogInfoRelatedEvent[];
+  defaultFilterTimeWithAllowance: FilterTimeWithAllowance;
 }
 
 export class ValidationBusinessRuleOutput {

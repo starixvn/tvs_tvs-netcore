@@ -12,7 +12,7 @@ import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch } from '../../models/sub-type-link-match.model';
 import { PrimitiveProperty } from '../event-red-card.model';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { EventRedCardService } from './event-red-card.service';
 
 class Helper {
@@ -78,7 +78,7 @@ class Helper {
       reason: '',
     }
   ];
-  static readonly fakeLogInfoRedCard: LogInfoRedCard = {
+  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
     matchId: Helper.fakeMatchId,
     isMainMatch: true,
     eventName: '',
@@ -88,7 +88,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     sportType: 0
-  } as LogInfoRedCard;
+  } as LogInfoRelatedEvent;
   static readonly fakeChildMatchModel: ChildMatchModel = {
     matchId: Helper.fakeMatchId,
     matchCode: '222',

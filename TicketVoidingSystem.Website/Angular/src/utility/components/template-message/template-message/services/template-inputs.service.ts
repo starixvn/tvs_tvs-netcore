@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SubIssueTypeGroup } from '../../../../../utility/constants/config';
 import { OrdinalNumberConstant } from '../../../../../utility/constants/ordinal-number.constant';
-import { StaticService } from '../../../../../utility/services/static.service';
 import { Message } from '../../messages/message';
 import { TemplateContentConst, TemplateReplace, SubTypeInput } from '../template.const';
 import { TemplateContent, TemplateModel, TemplateValue } from '../template.model';
@@ -15,7 +14,7 @@ export class TemplateInputsService {
 
   public replaceInputs(subIssueTypeId: number, selectedTemplated: TemplateModel, outputMessage: Message): void {
     if (selectedTemplated.inputTexts?.length > 0) {
-      if (SubIssueTypeGroup.SUBTYPE_ONWARDS.includes(subIssueTypeId)) {
+      if (SubIssueTypeGroup.SUBTYPE_ONWARDS.includes(subIssueTypeId) && !SubIssueTypeGroup.SUBTYPE_WRONG_SCORE_RELATED_EVENT.includes(subIssueTypeId)) {
         this.replaceWrongScoreOfWrongScoreIssueType(outputMessage, selectedTemplated.inputTexts[0].msgEnglishValue);
         this.replaceActualScoreOfWrongScoreIssueType(outputMessage, selectedTemplated.inputTexts[1].msgEnglishValue);
       } else {
@@ -32,9 +31,9 @@ export class TemplateInputsService {
     }
   }
 
-  public updateOrdinalNumberForInputsDangerAccepted(issueTypeId: number, selectedTemplated: TemplateModel, templateValue: TemplateValue): void {
+  public updateOrdinalNumberForInputsDangerAccepted(selectedTemplated: TemplateModel, templateValue: TemplateValue): void {
     for (const element of selectedTemplated.inputTexts) {
-      if (StaticService.isDangerAccepted(issueTypeId) && templateValue.numberOfSubType && SubTypeInput.SubTypeTextInput.includes(element.msgEnglish)) {
+      if (templateValue.numberOfSubType && SubTypeInput.SubTypeTextInput.includes(element.msgEnglish)) {
         const nextCorner = OrdinalNumberConstant.ORDINAL_NUMBER.find(x => x.value === templateValue.numberOfSubType.toString());
         element.msgEnglishValue = nextCorner.englishValue;
         element.msgChineseTraditionalValue = `第${nextCorner.chineseTraditionalValue}`;

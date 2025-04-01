@@ -7,6 +7,7 @@ import { LABELS } from '../../../utility/constants/labels';
 import { MatchModel } from '../../../utility/models/match.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { Tooltip } from '../tooltip/tooltip.model';
+import { ValidationService } from './validation.service';
 
 @Component({
   selector: 'event-league',
@@ -18,21 +19,25 @@ export class EventLeagueComponent implements OnChanges {
   @Input() isEdit: boolean;
   @Input() matchId: number;
   @Input() isShowSportType = true;
+  @Input() subIssueTypeId?: string;
   @Output() changeEvent = new EventEmitter<MatchModel>();
-
+  
   selectedMatch = new MatchModel();
   matches: MatchModel[];
   isBlock: boolean;
   tooltip = new Tooltip();
   validationMessage: string;
-
+  warningSubType: string;
+  isShowWarningSubType = false;
+  
   private delayForSearchSubscription: Subscription;
   private readonly observableTimer = timer(300);
 
   constructor(
     private readonly addRequestStore: AddRequestStore,
     private readonly commonService: CommonService,
-    private readonly element: ElementRef
+    private readonly element: ElementRef,
+    private readonly validationService: ValidationService
   ) {
     this.tooltip.element = this.element;
   }
@@ -41,6 +46,14 @@ export class EventLeagueComponent implements OnChanges {
     if (this.isEdit && this.matchId && (changes['matchId'])) {
       await this.getMatchInEditPage(this.matchId);
     }
+    if((changes['subIssueTypeId'])) {
+      this.isShowWarningSubType = !this.isValidSubType();
+    }
+  }
+
+  isValidSubType(){
+    return !this.selectedMatch.matchId || !this.subIssueTypeId
+      || this.validationService.checkValidSubType(this.subIssueTypeId, this.selectedMatch?.subtype);
   }
 
   async getMatchInEditPage(matchId: number): Promise<void> {
@@ -81,6 +94,7 @@ export class EventLeagueComponent implements OnChanges {
   onChangeMatchEvent(match: MatchModel) {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.selectedMatch = match;
+    this.isShowWarningSubType = !this.isValidSubType();
     this.changeEvent.emit(match);
   }
 

@@ -1,9 +1,9 @@
 <div class="event-leage">
   <div class="d-flex flex-wrap">
-    <div class="event col-md-7 col-sm-7 col-12">
+    <div class="event col-12">
       <label class="col-form-label">Event</label>
-      <div>
-        <ng-select class="custom-sm match-id" [disabled]="isEdit" [items]="matches" bindLabel="name"
+      <div class="d-flex">
+        <ng-select class="custom-sm match-id col-md-7 col-sm-7" [disabled]="isEdit" [items]="matches" bindLabel="name"
           (blur)="blurMatchSelect()" bindValue="matchId" [(ngModel)]="selectedMatch.matchId" [clearable]="false"
           (change)="onChangeMatchEvent($event)" (search)="onSearchMatch($event)" [notFoundText]="validationMessage"
           [loading]="isBlock" placeholder="Input MatchID">
@@ -11,6 +11,9 @@
             {{item.name}}
           </ng-template>
         </ng-select>
+        <div *ngIf="isShowWarningSubType" class="warning-sub-type">
+          <label><strong>This event does not match with Sub Type.</strong></label>
+        </div>
       </div>
     </div>
   </div>

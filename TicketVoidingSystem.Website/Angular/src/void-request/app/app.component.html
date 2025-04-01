@@ -15,10 +15,6 @@
     @if (isLikelyVoidDangerAccepted()) {
       <void-danger-accepted [requestDetail]="requestDetail"></void-danger-accepted>
     }
-    @if (isShowVoidOtherIssue()) {
-      <void-other-issue [requestId]="requestId" [requestDetail]="requestDetail">
-      </void-other-issue>
-    }
     @if (isShowVoidDuplicateTickets()) {
       <void-duplicate-tickets [requestDetail]="requestDetail">
       </void-duplicate-tickets>

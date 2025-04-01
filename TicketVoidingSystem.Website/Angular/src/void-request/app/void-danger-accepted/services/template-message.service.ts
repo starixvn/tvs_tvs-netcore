@@ -5,7 +5,7 @@ import { WrongOuModel } from '../../../../add-request/app/add-request/models/eve
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
-import { TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { SubIssueTypeGroup, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { EventType } from '../../../../utility/constants/sport.constant';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../../utility/services/static.service';
@@ -14,6 +14,23 @@ import { VoidMatch } from '../../models/void-match.model';
 @Injectable()
 export class TemplateMessageService {
   templateService = inject(TemplateService);
+
+  private initValueForWrongScore(templateValue: TemplateValue, voidMatch: VoidMatch): void {
+    const score = (voidMatch.filterBy === TVSRequestFilterBy.TRANS_TIME || voidMatch.filterBy === TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME)
+      ? voidMatch.wrongScore
+      : this.getLiveScoreForTemplateMessage(voidMatch.logInfoDetail.scoreNormalTicket, voidMatch.logInfoDetail.scoreOfMatch);
+
+    if (SubIssueTypeGroup.SUBTYPE_NO_ONWARDS.includes(voidMatch.subIssueTypeId)) {
+      templateValue.score = score;
+    } else {
+      templateValue.wrongScore = score;
+    }
+
+    templateValue.filterBy = voidMatch.filterBy;
+    templateValue.actualScore = voidMatch.actualScore;
+    templateValue.eventType = EventType.LIVE;
+    templateValue.isCheckedVar = voidMatch.isCheckedVar;
+  }
 
   getTemplateValue(voidMatch: VoidMatch, requestDetail: RequestDetailViewModel): TemplateValue {
     const templateValue = this.templateService.initializeTemplateValue(voidMatch.matchModel);
@@ -35,6 +52,8 @@ export class TemplateMessageService {
       this.initValueForLikelyDangerAccepted(templateValue, voidMatch.logInfoDetail, requestDetail.redCardModels[0].filterBy, voidMatch.isCheckedVar);
     } else if (StaticService.isWrongOdds(issueTypeId)) {
       this.initValueForWrongOdds(templateValue, voidMatch);
+    } else if (StaticService.isWrongScore(issueTypeId)) {
+      this.initValueForWrongScore(templateValue, voidMatch);
     }
 
     return templateValue;

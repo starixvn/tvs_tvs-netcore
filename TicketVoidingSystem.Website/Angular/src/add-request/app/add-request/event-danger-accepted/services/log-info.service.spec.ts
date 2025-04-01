@@ -6,7 +6,7 @@ import { CommonService } from '../../../../../utility/services/common.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { PrimitiveProperty } from '../../event-red-card/event-red-card.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterModel } from '../../filter/filter.model';
 import { GetLogInfoQuery } from '../../models/add-request.query';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation, ValidationMessage } from '../../models/get-log-info.model';
@@ -80,7 +80,7 @@ class Helper {
       instantlySettleCount: 2,
       cancelCashOutCount: 1
     } as LogInfoDetail;
-  static readonly fakeLogInfoRedCard: LogInfoRedCard = {
+  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
     matchId: Helper.fakeFirstMatchId,
     isMainMatch: true,
     eventName: '',
@@ -90,7 +90,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
     sportType: 0
-  } as LogInfoRedCard;
+  } as LogInfoRelatedEvent;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '1',
     subIssueTypeId: '1',

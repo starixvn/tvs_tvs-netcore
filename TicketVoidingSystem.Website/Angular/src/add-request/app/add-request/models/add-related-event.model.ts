@@ -1,10 +1,10 @@
 import { Tooltip } from "../../../../utility/components/tooltip/tooltip.model";
 import { AddRequestStore } from "../add-request.store";
-import { PrimitiveProperty } from "../event-red-card/event-red-card.model";
 import { FilterTimeWithAllowance } from "../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model";
-import { LogInfoRedCard } from "../event-red-card/log-info-red-card/log-info-red-card.model";
+import { LogInfoRelatedEvent } from "../components/log-info-related-event/log-info-related-event.model";
 import { FilterModel } from "../filter/filter.model";
 import { ChildMatchModel } from "./related-event.model";
+import { PrimitiveProperty } from "../components/log-info-related-event/primitive-property.model";
 
 export class AddRelatedEventArg {
   tooltip: Tooltip;
@@ -13,9 +13,10 @@ export class AddRelatedEventArg {
   filter: FilterModel;
   primitiveProps: PrimitiveProperty;
   defaultFilterTimeWithAllowance: FilterTimeWithAllowance;
-  allEvents: LogInfoRedCard[];
-  mainEvent: LogInfoRedCard;
+  allEvents: LogInfoRelatedEvent[];
+  mainEvent: LogInfoRelatedEvent;
   addRequestStore: AddRequestStore;
   inputMatchIdClass: string;
   originalRelatedEvents: ChildMatchModel[];
+  subIssueTypeId: string;
 }

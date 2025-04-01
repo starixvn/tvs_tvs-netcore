@@ -1,5 +1,6 @@
 import { LogInfoDetail } from "../../../../utility/models/log-info-detail.model";
 import { ValidationMessage } from "./get-log-info.model";
+
 export class WrongScoreModel {
     scoreId: number;
     isActive: boolean;
@@ -25,4 +26,7 @@ export class WrongScoreModel {
     actualTime: string;
     minuteOffset: string;
     secondOffset: string;
+    sportType: number;
+    isMainMatch: boolean;
+    matchType: number;
 }

@@ -55,8 +55,10 @@ export class SaveRequestService {
 
     args.addRequestStore.changeBlockingUiStatus(true);
     this.logInfoService.clearDataValidation(args.wrongScoreModels);
-    await this.logInfoService.getLogInfo(args.isEdit, args.requestId,
-      args.leagueEventWrongScoreComponent.selectedMatch.matchId, args.filter, args.primitiveProps, args.wrongScoreModels);
+    const relatedEvents = args.allSelectedEvents.map(x => this.logInfoService.mapRelatedEventToWrongScoreModel(x, args.defaultFilterTimeWithAllowance));
+    args.wrongScoreModels = [...args.wrongScoreModels, ...relatedEvents];
+    await this.logInfoService.getLogInfo(args.isEdit, args.requestId, args.filter, args.primitiveProps, args.wrongScoreModels, args.wrongScoreModels[0].matchId, args.defaultFilterTimeWithAllowance);
+
     args.addRequestStore.changeBlockingUiStatus(false);
 
     if (!this.validationService.isValidAllScores(args.wrongScoreModels)) {
@@ -80,7 +82,6 @@ export class SaveRequestService {
     query.actionId = args.filter.action;
     query.isTest = args.filter.isTest;
     query.isVoided = args.filter.isVoided;
-
     query.mistakenBy = args.others.mistakenBy;
     query.decidedBy = args.others.decidedBy;
     query.operatorsList = args.others.operatorsList;
@@ -96,22 +97,24 @@ export class SaveRequestService {
 
   /* istanbul ignore next */
   private getWrongScoreInfoForSaveRequest(args: SaveRequestArg): WrongScoreModel[] {
-    args.wrongScoreModels.forEach(x => {
+    const allMatchSelectedEvents = args.allSelectedEvents.map(x => x.matchId);
+    const mainWrongScoreModels = args.wrongScoreModels.filter(x => !allMatchSelectedEvents.includes(x.matchId));
+    mainWrongScoreModels.forEach(x => {
       x.actualScore = args.primitiveProps.actualScore;
       x.filterBy = args.primitiveProps.filterBy;
       x.subIssueTypeId = Number(args.filter.subIssueTypeId);
       x.matchId = args.leagueEventWrongScoreComponent.selectedMatch.matchId;
       x.isCheckedVar = args.primitiveProps.isCheckedVar;
       x.tvDetectionValue = args.tvDetectionModel.tvDetectionValue;
-
       if (x.tvDetectionValue !== TvDetectionType.NONE) {
         x.serviceAcceptTime = args.tvDetectionModel.serviceAcceptTime;
         x.actualTime = args.tvDetectionModel.actualTime;
         x.minuteOffset = args.tvDetectionModel.minuteOffset;
         x.secondOffset = args.tvDetectionModel.secondOffset;
       }
+      x.isMainMatch = true;
     });
-
-    return args.wrongScoreModels;
+    const relatedEvents = args.wrongScoreModels.filter(x => allMatchSelectedEvents.includes(x.matchId) && x.logInfoDetail);
+    return [...mainWrongScoreModels, ...relatedEvents];
   }
 }

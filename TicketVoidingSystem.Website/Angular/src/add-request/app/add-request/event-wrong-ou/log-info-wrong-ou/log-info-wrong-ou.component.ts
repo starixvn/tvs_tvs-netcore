@@ -16,6 +16,7 @@ import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
+import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 
 @Component({
   selector: 'log-info-wrong-ou',
@@ -141,6 +142,10 @@ export class LogInfoWrongOuComponent implements OnInit {
     this.logInfo.isShowValidation = false;
     this.logInfo.logInfoDetail = null;
     this.logInfo.messageValidationLogInfo = null;
+  }
+
+  public resetPoolHouseCheckedBetTypes(): void {
+    this.logInfo.poolHouseCheckedBetTypes = this.logInfo.isMainMatch ? PoolHouseTicketValue.SELECT_ALL_BETTYPE : null;
   }
 
   public openPopupTransIds(requestId: number, transIds: string): void {

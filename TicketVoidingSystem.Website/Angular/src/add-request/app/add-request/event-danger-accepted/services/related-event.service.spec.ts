@@ -7,7 +7,7 @@ import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.mod
 import { AddRequestApiService } from '../../add-request-api.service';
 import { PrimitiveProperty } from '../../event-red-card/event-red-card.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterModel } from '../../filter/filter.model';
 import { AddRelatedEventArg } from '../../models/add-related-event.model';
 import { RedCardModel } from '../../models/event-red-card.model';
@@ -81,7 +81,7 @@ class Helper {
       reason: '',
     }
   ];
-  static readonly fakeLogInfoRedCard: LogInfoRedCard = {
+  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
     matchId: Helper.fakeMatchId,
     isMainMatch: true,
     eventName: '',
@@ -91,7 +91,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     sportType: 0
-  } as LogInfoRedCard;
+  } as LogInfoRelatedEvent;
   static readonly fakeChildMatchModel: ChildMatchModel = {
     matchId: Helper.fakeMatchId,
     matchCode: '222',
@@ -208,7 +208,7 @@ describe('RelatedEventService', () => {
     arg.primitiveProps = new PrimitiveProperty();
     arg.primitiveProps.inputRelatedMatchId = 111;
     arg.filter = new FilterModel();
-    arg.mainEvent = {} as LogInfoRedCard;
+    arg.mainEvent = {} as LogInfoRelatedEvent;
     const validationService = new ValidationService();
     validationService.isValidInputRelatedEvent = jest.fn().mockImplementation(() => true);
     const mockRelatedEventService = new RelatedEventService(null, validationService, null, null);
@@ -256,7 +256,7 @@ describe('RelatedEventService', () => {
 
   it('#addNewRelatedEventHaveTicketOrUpdateExistedEvent should add new related event', async () => {
     // Arrange
-    const originalAllEvents: LogInfoRedCard[] = [];
+    const originalAllEvents: LogInfoRelatedEvent[] = [];
     const events = _.cloneDeep([Helper.fakeLogInfoRedCard]);
     events.forEach(x => x.logInfoDetail = new LogInfoDetail());
     const mockRelatedEventService = new RelatedEventService(null, null, null, null);
@@ -296,7 +296,7 @@ describe('RelatedEventService', () => {
     const eventDangerAcceptedService = new EventDangerAcceptedService(null, null);
     eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime = jest.fn().mockImplementation();
     const mockRelatedEventService = new RelatedEventService(null, null, null, eventDangerAcceptedService);
-    mockRelatedEventService['assignChildMatchToLogInfoModel'] = jest.fn().mockImplementation(() => [new LogInfoRedCard()]);
+    mockRelatedEventService['assignChildMatchToLogInfoModel'] = jest.fn().mockImplementation(() => [new LogInfoRelatedEvent()]);
 
     // Action
     const actual = await mockRelatedEventService['preparingModelGetLogInfo']([childMatchModel], args);

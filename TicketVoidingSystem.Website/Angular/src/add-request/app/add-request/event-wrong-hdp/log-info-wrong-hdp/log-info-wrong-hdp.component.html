@@ -25,7 +25,7 @@
           [isDisabled]="isDisabled"
           (searchTicketEvent)="emitSearchEvent()"
           (refreshEvent)="refreshLogInfoBySearchEvent()"
-          (changeFilterEvent)="clearDataValidation();"
+          (changeFilterEvent)="clearDataValidation();resetPoolHouseCheckedBetTypes()"
           [filter]="filter"
           [sportTypeId]="logInfo.sportType"
           [isMainMatch]="isMainMatch"

@@ -125,4 +125,8 @@ export class VoidDangerAcceptedComponent implements OnInit {
   private isSubTypeWrong1stHdp(): boolean {
     return this.voidMatches[0].subIssueType.subIssueTypeId === SubIssueTypeConstant.WRONG_1ST_HDP;
   }
+
+  public isWrongScore(): boolean {
+    return StaticService.isWrongScore(this.requestDetail.request?.issueTypeId.toString());
+  }
 }

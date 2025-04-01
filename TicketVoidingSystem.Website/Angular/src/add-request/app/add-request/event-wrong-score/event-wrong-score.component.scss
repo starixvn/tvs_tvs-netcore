@@ -84,3 +84,46 @@
   background-color: #fffef4;
   border: 1px solid #c6c8ca;
 }
+
+@media only screen and (min-width: 1134px) {
+  .related-event-log-info {    
+    width: 1065px;
+  }
+}
+
+.related-event-log-info {
+  margin: 16px 0px;
+  button {
+    white-space: nowrap;
+  }
+
+  .input-related-match-id-area {
+    flex-grow: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.btn-add-event {
+  z-index: 2;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.btn-open-modal-related-event:disabled {
+  cursor: not-allowed;
+}
+
+.input-related-match-id::-webkit-input-placeholder {
+  font-style: italic;
+}
+
+@supports (-moz-appearance: none) {
+  .button-area {
+    margin-bottom: 16px;
+  }
+
+  .input-related-match-id::-moz-placeholder {
+    font-style: italic;
+  }
+}

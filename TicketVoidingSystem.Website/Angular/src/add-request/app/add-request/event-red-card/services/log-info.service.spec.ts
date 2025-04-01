@@ -12,7 +12,7 @@ import { AddRequestResultModel } from '../../models/request.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { PrimitiveProperty } from '../event-red-card.model';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
@@ -81,7 +81,7 @@ class Helper {
       instantlySettleCount: 2,
       cancelCashOutCount: 1
     } as LogInfoDetail;
-  static readonly fakeLogInfoRedCard: LogInfoRedCard = {
+  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
     matchId: Helper.fakeFirstMatchId,
     isMainMatch: true,
     eventName: '',
@@ -91,7 +91,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
     sportType: 0
-  } as LogInfoRedCard;
+  } as LogInfoRelatedEvent;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '11',
     subIssueTypeId: '1',

@@ -8,5 +8,6 @@ export class ConfirmWrongScoreModel {
   isEditingByAnotherUser: boolean;
   requestId: number;
   requestedBy: string;
+  warningRelatedEvents: string[] = [];
   warningExcludedScores: string[];
 }

@@ -12,6 +12,7 @@ import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { VoidMatch } from '../../models/void-match.model';
 import { TicketsService } from '../../services/tickets.service';
 import { TemplateMessageService } from './template-message.service';
+import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 
 export class VoidPageService {
   commonService = inject(CommonService);
@@ -32,7 +33,7 @@ export class VoidPageService {
       voidMatchInfo.id = element.id;
       voidMatchInfo.detailViewModel = requestDetail;
       voidMatchInfo.subIssueType = this.getSubIssueTypeModel(element.subIssueTypeId, issueTypes);
-      voidMatchInfo.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidMatchInfo.subIssueType,        issueTypes);
+      voidMatchInfo.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidMatchInfo.subIssueType, issueTypes);
       voidMatchInfo.matchModel = await this.commonService.getMatch(element.matchId);
       voidMatchInfo.logInfoDetail = logInfoList.find(x => x.logInfoDetail.matchId === element.matchId).logInfoDetail;
       voidMatchInfo.wrongMarket = element.wrongMarket;
@@ -45,11 +46,34 @@ export class VoidPageService {
       voidMatchInfo.favoriteValue = element.favoriteValue;
       voidMatchInfo.correctOddsHomeOver = element.correctOddsHomeOver;
       voidMatchInfo.correctOddsAwayUnder = element.correctOddsAwayUnder;
+      voidMatchInfo.actualScore = element.actualScore;
+      voidMatchInfo.wrongScore = element.wrongScore;
+      voidMatchInfo.filterBy = element.filterBy;
       voidMatchInfo.isPoolHouseAffected = logInfoList.find(x => x.logInfoDetail.matchId === element.matchId).validation.isPoolHouseAffected;
+      voidMatchInfo.subIssueTypeId = element.subIssueTypeId;
       voidMatches.push(voidMatchInfo);
     }
+    this.updateLogIfWrongScore(logInfoList, requestDetail, voidMatches);
 
     return voidMatches;
+  }
+
+  private updateLogIfWrongScore(logInfoList: GetLogInfoModel[], requestDetail: RequestDetailViewModel, voidMatches: VoidMatch[]): void {
+    if(!StaticService.isWrongScore(requestDetail.request.issueTypeId.toString())) {
+      return;
+    }
+
+    requestDetail.wrongScoreModels.forEach(x => {
+      x.logInfoDetail = logInfoList.find(y => y.logInfoDetail.matchId === x.matchId && y.scoreId === x.scoreId).logInfoDetail;
+    });
+    if (requestDetail.wrongScoreModels[0].filterBy !== TVSRequestFilterBy.CHECK_TIME) {
+      voidMatches[0].logInfoDetail.singleCount = _.sumBy(requestDetail.wrongScoreModels.filter(x => x.logInfoDetail), x => x.logInfoDetail.singleCount);
+      voidMatches[0].logInfoDetail.mainParlayCount = _.sumBy(requestDetail.wrongScoreModels.filter(x => x.logInfoDetail), x => x.logInfoDetail.mainParlayCount);
+      voidMatches[0].logInfoDetail.cancelCashOutCount = _.sumBy(requestDetail.wrongScoreModels.filter(x => x.logInfoDetail), x => x.logInfoDetail.cancelCashOutCount);
+      voidMatches[0].logInfoDetail.voidFromTime = requestDetail.wrongScoreModels.find(x => x.logInfoDetail).logInfoDetail.voidFromTime;
+      voidMatches[0].logInfoDetail.voidToTime = requestDetail.wrongScoreModels.findLast(x => x.logInfoDetail).logInfoDetail.voidToTime;
+      voidMatches[0].logInfoDetail.liveScores = null;
+    }
   }
 
   async loadUnderneathVoidMatchesData(voidMatches: VoidMatch[], requestDetail: RequestDetailViewModel): Promise<void> {
@@ -122,6 +146,10 @@ export class VoidPageService {
 
     if (StaticService.isWrongOdds(requestDetail.request.issueTypeId.toString())) {
       query.wrongOddsModels = MappingModelStaticService.buildWrongOddsGetLogInfoModel(requestDetail.wrongOddsModels);
+    }
+
+    if (StaticService.isWrongScore(requestDetail.request.issueTypeId.toString())) {
+      query.wrongScoreModels = MappingModelStaticService.buildWrongScoreGetLogInfoModel(requestDetail.wrongScoreModels);
     }
 
     const viewModel = await this.commonService.getLogInfo(query);
@@ -199,6 +227,23 @@ export class VoidPageService {
           favoriteValue: x.favoriteValue,
           correctOddsHomeOver: x.correctOddsHomeOver,
           correctOddsAwayUnder: x.correctOddsAwayUnder
+        };
+        return info;
+      });
+    }
+
+    if (StaticService.isWrongScore(issueTypeId)) {
+      const voidMatchWrongScoreModels = requestDetail.wrongScoreModels[0].filterBy !== TVSRequestFilterBy.CHECK_TIME
+        ? [requestDetail.wrongScoreModels[0]]
+        : requestDetail.wrongScoreModels;
+      return voidMatchWrongScoreModels.map((x, index) => {
+        const info: BasicRequestInfo = {
+          id: index + 1,
+          matchId: x.matchId,
+          subIssueTypeId: x.subIssueTypeId,
+          filterBy: x.filterBy,
+          actualScore: x.actualScore,
+          isCheckedVar: x.isCheckedVar
         };
         return info;
       });

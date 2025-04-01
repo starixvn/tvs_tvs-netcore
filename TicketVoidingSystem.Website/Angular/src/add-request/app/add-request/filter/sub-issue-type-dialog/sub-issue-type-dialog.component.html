@@ -16,7 +16,7 @@
             <input type="checkbox" id="view-all-option" class="mr-1" [(ngModel)]="isCheckedViewAllOptions" />
             <label class="col-form-label" for="view-all-option"> View all options</label>
           </div>
-          <div class="check-type-wrong-score" *ngIf="isWrongScore()">
+          <div class="check-type-wrong-score" *ngIf="isMainEventWrongScore()">
             <div>
               <label class="no-onwards">
                 <input class="mr-1" type="radio"

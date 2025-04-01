@@ -19,7 +19,7 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
   @Input() model = new SubIssueTypeDialogModel();
   @Output() updateSubTypeEvent = new EventEmitter<number>();
   @ViewChild('noteGroup') myDiv: ElementRef;
-
+  @Input() isMainEvent = true;
   subIssueTypes: Category[] = [];
   isCheckedViewAllOptions: boolean;
   isCheckedWrongScoreOnwards = false;
@@ -65,42 +65,49 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
 
   public checkCanShowButtonSelectAll(buttons: Button[]): boolean {
     if (this.isHaveButton(buttons)) {
-      if (SubIssueTypeGroup.SUBTYPE_HAVE_HIDE_OPTION.includes(buttons[0].subIssueTypeId)) {
-        return this.isCheckedViewAllOptions;
-      }
-
-      return true;
+      return SubIssueTypeGroup.SUBTYPE_HAVE_HIDE_OPTION.includes(buttons[0].subIssueTypeId) ? this.isCheckedViewAllOptions : true;
     }
 
     return false;
   }
 
   private getSubTypeConfig(): Category[] {
-    if (StaticService.isDangerAccepted(this.model.issueTypeId)) {
-      return SubIssueTypeDangerAcceptedConfig;
-    } else if (StaticService.isRedCard(this.model.issueTypeId)) {
-      return SubIssueTypeRedCardConfig;
-    } else if (StaticService.isWrongScore(this.model.issueTypeId)) {
-      return this.getSubIssueTypeWrongScoreConfig();
+    switch (true) {
+      case StaticService.isDangerAccepted(this.model.issueTypeId):
+        return SubIssueTypeDangerAcceptedConfig;
+      case StaticService.isRedCard(this.model.issueTypeId):
+        return SubIssueTypeRedCardConfig;
+      case StaticService.isWrongScore(this.model.issueTypeId):
+        return this.getSubIssueTypeWrongScoreConfig();
+      default:
+        return [];
     }
-
-    return [];
   }
 
   private getSubIssueTypeWrongScoreConfig(): Category[] {
     const subIssueTypeWrongScoreConfig = _.cloneDeep(SubIssueTypeWrongScoreConfig);
+    const mainCategoryName = "Main Event";
+    if(this.isMainEvent){
+      const mainEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName === mainCategoryName);
+      mainEventSubIssueTypes[0].groups = this.isCheckedWrongScoreOnwards 
+      ? SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeOnWards(x)) 
+      : SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeNoOnWards(x))
 
-    if (this.isCheckedWrongScoreOnwards) {
-      subIssueTypeWrongScoreConfig[0].groups = SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeOnWards(x));
-    } else {
-      subIssueTypeWrongScoreConfig[0].groups = SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeNoOnWards(x));
+      return mainEventSubIssueTypes;
     }
 
-    return subIssueTypeWrongScoreConfig;
+    const relatedEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName !== mainCategoryName);
+    relatedEventSubIssueTypes[0].isCollapse = false;
+    
+    return relatedEventSubIssueTypes;
   }
 
   public isDangerAccepted(): boolean {
     return StaticService.isDangerAccepted(this.model.issueTypeId);
+  }
+
+  public isMainEventWrongScore(): boolean{
+    return this.isWrongScore() && this.isMainEvent;
   }
 
   public isWrongScore(): boolean {

@@ -141,7 +141,7 @@ export class TemplateMessageComponent implements OnChanges {
       templateId = this.findTemplateId(this.subIssueTypeId, this.value.sportTypeId, this.value.isCheckedVar);
     }
     this.selectedTemplated = this.templates.find(x => x.templateId === templateId);
-    this.templateInputsService.updateOrdinalNumberForInputsDangerAccepted(this.issueTypeId, this.selectedTemplated, this.value);
+    this.templateInputsService.updateOrdinalNumberForInputsDangerAccepted(this.selectedTemplated, this.value);
 
     this.updateMessage();
   }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, QueryList } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
@@ -13,6 +13,9 @@ import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { FilterWrongScoreComponent } from '../filter-wrong-score/filter-wrong-score.component';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
+import { RelatedEventService } from './related-event.service';
 
 @Injectable({
   providedIn: 'root'
@@ -91,7 +94,7 @@ export class ValidationService {
   }
 
   public isValidAllScores(wrongScores: WrongScoreModel[]): boolean {
-    return wrongScores.some(x => x.messageValidationLogInfo.every(y => !y.isError));
+    return wrongScores.some(x => x.messageValidationLogInfo?.every(y => !y.isError));
   }
 
   public isHasWarningEditTakeNoteRequest(isEdit: boolean, currentActionId: string, actionIdOfFirstTime: string) {
@@ -106,28 +109,39 @@ export class ValidationService {
     return wrongScoreModels.some(x => x.logInfoDetail?.settleCount > 0);
   }
 
-  public getSelectedWrongScore(wrongScoreModels: WrongScoreModel[]): WrongScoreModel[] {
-    return wrongScoreModels.filter(x => x.isChecked);
-  }
-
-  public isHasAllowanceTime(wrongScoreModel: WrongScoreModel): boolean {
-    if (wrongScoreModel.aaTime || wrongScoreModel.paTime || wrongScoreModel.saTime ||
-      (wrongScoreModel.aaTime === 0 && wrongScoreModel.paTime === 0 && wrongScoreModel.saTime === 0)) {
+  isHasAllowanceTime(event: LogInfoRelatedEvent): boolean {
+    if (event.voidTimeArea.aaTime || event.voidTimeArea.paTime || event.voidTimeArea.saTime ||
+      (event.voidTimeArea.aaTime === 0 && event.voidTimeArea.paTime === 0 && event.voidTimeArea.saTime === 0)) {
       return true;
     }
 
     return false;
   }
 
+  isHasAllowanceTimeWrongScoreModel(event: WrongScoreModel): boolean {
+    if (event.aaTime || event.paTime || event.saTime ||
+      (event.aaTime === 0 && event.paTime === 0 && event.saTime === 0)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public isValidAllSubIssueType(logInfoComponents: QueryList<LogInfoRelatedEventComponent>): boolean {
+    return logInfoComponents.toArray().every(x => {
+      if (!x.logInfo.subIssueTypeId) {
+        x.showTooltipSubType();
+        return false;
+      }
+      return true;
+    });
+  }
+
   public isSubTypeFilterByAcceptedTime(subIssueTypeId: string): boolean {
-    return subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_NO_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_NO_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_NO_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_NO_ONWARDS.toString() ||
-      subIssueTypeId === SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_ONWARDS.toString();
+    const allSubIssueType = [...RelatedEventService.SubIssueTypeMapHasRelatedEvent.values(), 
+      ...RelatedEventService.SubIssueTypeMapHasRelatedEvent.keys()];
+
+    return allSubIssueType.includes(Number(subIssueTypeId));
   }
 
   public isSubTypeFilterByTransTimeAndAcceptedTime(subIssueTypeId: string): boolean {
@@ -141,5 +155,18 @@ export class ValidationService {
 
   public isEditingByAnotherUser(isEdit: boolean, editingBy: number, createdBy: number): boolean {
     return isEdit && editingBy !== createdBy;
+  }
+
+  isValidInputRelatedEvent(inputMatchId: number, inputMatchIdClass: string, mainMatchId: number, allEvents: LogInfoRelatedEvent[], tooltip: Tooltip): boolean {
+    if (inputMatchId === mainMatchId) {
+      tooltip.display(inputMatchIdClass, LABELS.INVALID_MATCHID);
+      return false;
+    }
+    if (allEvents.filter(x => !x.isMainMatch).some(x => x.matchId === inputMatchId)) {
+      tooltip.display(inputMatchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+      return false;
+    }
+
+    return true;
   }
 }

@@ -23,6 +23,19 @@
   ::ng-deep .ng-select .ng-select-container .ng-value-container .ng-placeholder {
     font-style: italic;
   }
+
+  ::ng-deep .ng-select {
+    padding: 0px;
+  }
+  
+  .warning-sub-type {
+    margin-left: 1.5rem;
+    margin-top: 5px;
+    label {
+      color: orange;
+
+    }
+  }
 }
 
 .text-red {

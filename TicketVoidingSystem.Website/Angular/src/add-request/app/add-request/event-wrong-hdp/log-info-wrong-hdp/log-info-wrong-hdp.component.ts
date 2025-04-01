@@ -17,6 +17,7 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
+import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 
 @Component({
   selector: 'log-info-wrong-hdp',
@@ -120,6 +121,10 @@ export class LogInfoWrongHdpComponent {
     this.logInfo.isShowValidation = false;
     this.logInfo.logInfoDetail = null;
     this.logInfo.messageValidationLogInfo = null;
+  }
+
+  public resetPoolHouseCheckedBetTypes(): void {
+    this.logInfo.poolHouseCheckedBetTypes = this.logInfo.isMainMatch ? PoolHouseTicketValue.SELECT_ALL_BETTYPE : null;
   }
 
   public emitSearchEvent(): void {

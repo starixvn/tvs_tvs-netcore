@@ -15,12 +15,11 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
-import { PrimitiveProperty } from '../event-red-card/event-red-card.model';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowanceComponent } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCardComponent } from '../event-red-card/log-info-red-card/log-info-red-card.component';
-import { LogInfoRedCard } from '../event-red-card/log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
 import { FilterModel } from '../filter/filter.model';
 import { RedCardModel } from '../models/event-red-card.model';
 import { ValidationMessage } from '../models/get-log-info.model';
@@ -96,7 +95,7 @@ class Helper {
       reason: '',
     }
   ];
-  static readonly fakeLogInfoRedCard: LogInfoRedCard = {
+  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
     matchId: 1111,
     isMainMatch: true,
     leagueName: '',
@@ -107,7 +106,7 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     sportType: 0
-  } as LogInfoRedCard;
+  } as LogInfoRelatedEvent;
   static readonly fakeChildMatches: ChildMatchModel[] = [
     {
       matchId: 12345,
@@ -154,7 +153,7 @@ describe('EventDangerAcceptedComponent', () => {
       EventLeagueComponent,
       ConfirmDangerAcceptedComponent,
       FilterTimeAreaComponent,
-      LogInfoRedCardComponent,
+      LogInfoRelatedEventComponent,
       AddChildMatchComponent,
       TvDetectionComponent
     ],
@@ -297,11 +296,11 @@ describe('EventDangerAcceptedComponent', () => {
         }
       });
 
-    const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent = null;
-    logInfoRedCardComponent.showValidationDetail = jest.fn();
-    const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
-    instance.logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    const LogInfoRelatedEventComponent = new LogInfoRelatedEventComponent(null, null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent = null;
+    LogInfoRelatedEventComponent.showValidationDetail = jest.fn();
+    const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
+    instance.logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
     instance.mainEvent.isCheckedVar = false;
     instance.allSelectedEvents = [Helper.fakeLogInfoRedCard];
 
@@ -353,19 +352,19 @@ describe('EventDangerAcceptedComponent', () => {
         }
       });
 
-    const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent.updateData = jest.fn();
-    logInfoRedCardComponent.showValidationDetail = jest.fn();
-    const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
-    instance.logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    const LogInfoRelatedEventComponent = new LogInfoRelatedEventComponent(null, null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent.updateData = jest.fn();
+    LogInfoRelatedEventComponent.showValidationDetail = jest.fn();
+    const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
+    instance.logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
     instance.mainEvent.isCheckedVar = false;
 
     // Action
     await instance.handleSearchEvent();
 
     // Assert
-    expect(logInfoRedCardComponent.filterTimeWithAllowanceComponent.updateData).toHaveBeenCalledTimes(1);
+    expect(LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent.updateData).toHaveBeenCalledTimes(1);
   });
 
   it('#changeMatchEvent should be call #resetAllEventBeforeSearch & emit updateMatchId when have have #selectedMatch', async () => {
@@ -385,7 +384,7 @@ describe('EventDangerAcceptedComponent', () => {
         }
       });
     instance.primitiveProps = new PrimitiveProperty();
-    instance.mainEvent =  new LogInfoRedCard();
+    instance.mainEvent =  new LogInfoRelatedEvent();
     instance.eventLeagueComponent.selectedMatch = new MatchModel();
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.isMainMatch = true;
@@ -416,7 +415,7 @@ describe('EventDangerAcceptedComponent', () => {
         }
       });
     instance.primitiveProps = new PrimitiveProperty();
-    instance.mainEvent =  new LogInfoRedCard();
+    instance.mainEvent =  new LogInfoRelatedEvent();
     instance.eventLeagueComponent = new EventLeagueComponent(null, null, null);
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.isMainMatch = true;
@@ -446,7 +445,7 @@ describe('EventDangerAcceptedComponent', () => {
           isEdit: false
         }
       });
-    instance.mainEvent =  new LogInfoRedCard();
+    instance.mainEvent =  new LogInfoRelatedEvent();
     instance.mainEvent.matchId = undefined;
 
     // Action
@@ -472,7 +471,7 @@ describe('EventDangerAcceptedComponent', () => {
           isEdit: false
         }
       });
-    instance.mainEvent =  new LogInfoRedCard();
+    instance.mainEvent =  new LogInfoRelatedEvent();
     instance.mainEvent.matchId = 11;
 
     // Action
@@ -808,7 +807,7 @@ describe('EventDangerAcceptedComponent', () => {
   it('#handleDeleteEvent should be update model', async () => {
     // Arrange
     const mockResetLogInfoOfEvent = jest.fn();
-    const mainEvent = new LogInfoRedCard();
+    const mainEvent = new LogInfoRelatedEvent();
     mainEvent.isMainMatch = true;
     mainEvent.matchId = 999;
     const { instance } = await shallow
@@ -851,7 +850,7 @@ describe('EventDangerAcceptedComponent', () => {
         }
       });
     instance['initAddRelatedEventArgs'] = jest.fn();
-    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard, new LogInfoRedCard()];
+    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard, new LogInfoRelatedEvent()];
 
     // Action
     await instance.handleClickAddRelatedEvent();
@@ -928,7 +927,7 @@ describe('EventDangerAcceptedComponent', () => {
           isEdit: false
         }
       });
-    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard, new LogInfoRedCard()];
+    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard, new LogInfoRelatedEvent()];
     instance.primitiveProps = new PrimitiveProperty();
     instance.addChildMatchModel.matchType = 1;
     const childMatchModel: ChildMatchModel = {
@@ -1007,7 +1006,7 @@ describe('EventDangerAcceptedComponent', () => {
         isEdit: false
       }
     });
-    instance.allSelectedEvents = [new LogInfoRedCard()];
+    instance.allSelectedEvents = [new LogInfoRelatedEvent()];
     instance.primitiveProps = new PrimitiveProperty();
 
     // Action

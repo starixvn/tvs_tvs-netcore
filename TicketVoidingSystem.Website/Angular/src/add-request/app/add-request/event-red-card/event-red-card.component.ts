@@ -20,17 +20,17 @@ import { OthersModel } from '../others/others.model';
 import { EventLeagueComponent } from './../../../../utility/components/event-league/event-league.component';
 import { LABELS } from './../../../../utility/constants/labels';
 import { StaticService } from './../../../../utility/services/static.service';
-import { PrimitiveProperty } from './event-red-card.model';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCardComponent } from './log-info-red-card/log-info-red-card.component';
-import { LogInfoRedCard } from './log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
 import { EventRedCardService } from './services/event-red-card.service';
 import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 
 @Component({
   selector: 'event-red-card',
@@ -52,14 +52,14 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   @ViewChild('tvDetection') tvDetectionComponent: TvDetectionComponent;
   @ViewChild('filterTimeArea') filterTimeAreaComponent: FilterTimeAreaComponent;
   @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
-  @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRedCardComponent>;
+  @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRelatedEventComponent>;
 
   tooltip = new Tooltip();
   primitiveProps = new PrimitiveProperty();
   defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
   confirmRedCard = new ConfirmAddRequestModel();
-  mainEvent = new LogInfoRedCard();
-  allSelectedEvents: LogInfoRedCard[] = [];
+  mainEvent = new LogInfoRelatedEvent();
+  allSelectedEvents: LogInfoRelatedEvent[] = [];
   relatedEvents: ChildMatchModel[] = [];
   addChildMatchModel = new AddChildMatchModel();
   tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;

@@ -12,8 +12,8 @@ import { TvDetectionModel } from '../../components/tv-detection/tv-detection.mod
 import { PrimitiveProperty } from '../../event-red-card/event-red-card.model';
 import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCardComponent } from '../../event-red-card/log-info-red-card/log-info-red-card.component';
-import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
+import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterModel } from '../../filter/filter.model';
 import { IssueTypes } from '../../filter/issue-types.model';
 import { AddRequestQuery } from '../../models/add-request.query';
@@ -85,7 +85,7 @@ class Helper {
       scoreNormalTicket: '',
       cancelCashOutCount: 1
     } as LogInfoDetail;
-  static readonly fakeLogInfoRedCard: LogInfoRedCard = {
+  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
     matchId: 1111,
     isMainMatch: true,
     eventName: '',
@@ -96,7 +96,7 @@ class Helper {
     messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
     sportType: 0,
     tvDetectionModel: new TvDetectionModel()
-  } as LogInfoRedCard;
+  } as LogInfoRelatedEvent;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '11',
     subIssueTypeId: '1',
@@ -211,12 +211,12 @@ describe('SaveRequestService', () => {
     const spyValidationServiceValidateCommonData = jest.spyOn(mockValidationService, 'validateCommonData').mockImplementation(() => true);
     const spyValidationServiceIsAllEventsValid = jest.spyOn(mockValidationService, 'isAllEventsValid').mockImplementation(() => true);
 
-    const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent.updateData = jest.fn();
-    logInfoRedCardComponent.showValidationDetail = jest.fn();
-    const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
-    logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    const LogInfoRelatedEventComponent = new LogInfoRelatedEventComponent(null, null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent.updateData = jest.fn();
+    LogInfoRelatedEventComponent.showValidationDetail = jest.fn();
+    const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
+    logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
 
     args.addRequestStore = mockAddRequestStore;
     args.logInfoComponents = logInfoComponents;
@@ -239,11 +239,11 @@ describe('SaveRequestService', () => {
     const args = Helper.fakeSaveRequestArg;
     const spyValidationServiceValidateCommonData = jest.spyOn(mockValidationService, 'validateCommonData').mockImplementation(() => true);
     const spyValidationServiceIsAllEventsValid = jest.spyOn(mockValidationService, 'isAllEventsValid').mockImplementation(() => false);
-    const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent = null;
-    logInfoRedCardComponent.showValidationDetail = jest.fn();
-    const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
-    logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    const LogInfoRelatedEventComponent = new LogInfoRelatedEventComponent(null, null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent = null;
+    LogInfoRelatedEventComponent.showValidationDetail = jest.fn();
+    const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
+    logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
 
     args.addRequestStore = mockAddRequestStore;
     args.logInfoComponents = logInfoComponents;
@@ -265,11 +265,11 @@ describe('SaveRequestService', () => {
     const args = Helper.fakeSaveRequestArg;
     const spyValidationServiceValidateCommonData = jest.spyOn(mockValidationService, 'validateCommonData').mockImplementation(() => true);
     const spyValidationServiceIsAllEventsValid = jest.spyOn(mockValidationService, 'isAllEventsValid').mockImplementation(() => true);
-    const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent = null;
-    logInfoRedCardComponent.showValidationDetail = jest.fn();
-    const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
-    logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    const LogInfoRelatedEventComponent = new LogInfoRelatedEventComponent(null, null);
+    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent = null;
+    LogInfoRelatedEventComponent.showValidationDetail = jest.fn();
+    const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
+    logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
 
     args.addRequestStore = mockAddRequestStore;
     args.logInfoComponents = logInfoComponents;
@@ -347,10 +347,10 @@ describe('SaveRequestService', () => {
     const issueTypeId = 11;
     const subIssueTypeId = 16;
     const args = Helper.fakeSaveRequestArg;
-    const childEvent = new LogInfoRedCard();
+    const childEvent = new LogInfoRelatedEvent();
     childEvent.messageValidationLogInfo = [_.cloneDeep(Helper.fakeValidationMessageError)];
     childEvent.messageValidationLogInfo[0].reason = LABELS.NO_VALID_TICKETS_IN_RANGE;
-    const linkEvent = new LogInfoRedCard();
+    const linkEvent = new LogInfoRelatedEvent();
     linkEvent.messageValidationLogInfo = [_.cloneDeep(Helper.fakeValidationMessageNotError)];
     args.issueTypes.issueTypes = Helper.fakeIssueType;
     args.issueTypes.issueTypes[0].issueTypeId = issueTypeId;
