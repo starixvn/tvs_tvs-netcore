@@ -16,6 +16,7 @@ import { MatchType } from '../../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 describe('RelatedEventService', () => {
   let service: RelatedEventService;
@@ -84,7 +85,29 @@ describe('RelatedEventService', () => {
         isEdit: false,
         requestId: 1,
         defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
-        addRequestStore: {} as any,
+        addRequestStore: {
+          savingRequestStatusSubject: new BehaviorSubject(false),
+          checkValidSubIssueTypeInFilterSubject: new Subject(),
+          allowanceTimeSubject: new Subject(),
+          blockingUiStatusSubject: new BehaviorSubject([]),
+          changeActionWaitingToManualEditPageSubject: new BehaviorSubject(false),
+          abnormalFilterBySubject: new Subject(),
+          startTimeFilterTicket: new Date(),
+          getStartTimeFilterTicket: new Date(),
+          changeStartTimeFilterAnalysis: () => {},
+          savingRequestStatus: new BehaviorSubject(false).asObservable(),
+          changeSavingRequestStatus: () => {},
+          getAllowanceTimeSubject: new Subject().asObservable(),
+          changeAllowanceTime: () => {},
+          blockingUiStatus: new BehaviorSubject([]).asObservable(),
+          changeBlockingUiStatus: () => {},
+          getChangeActionWaitingToManualEditPageSubject: new BehaviorSubject(false).asObservable(),
+          changeActionWaitingToManualEditPage: () => {},
+          getAbnormalFilterBySubject: new Subject().asObservable(),
+          changeAbnormalFilterBy: () => {},
+          getCheckValidSubIssueTypeInFilterSubject: new Subject().asObservable(),
+          checkValidSubIssueTypeInFilter: () => {}
+        } as unknown as AddRequestStore,
         originalRelatedEvents: [],
         subIssueTypeId: '1'
       } as AddRelatedEventArg;
@@ -118,13 +141,35 @@ describe('RelatedEventService', () => {
         isEdit: false,
         requestId: 1,
         defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
-        addRequestStore: {} as any,
+        addRequestStore: {
+          savingRequestStatusSubject: new BehaviorSubject(false),
+          checkValidSubIssueTypeInFilterSubject: new Subject(),
+          allowanceTimeSubject: new Subject(),
+          blockingUiStatusSubject: new BehaviorSubject([]),
+          changeActionWaitingToManualEditPageSubject: new BehaviorSubject(false),
+          abnormalFilterBySubject: new Subject(),
+          startTimeFilterTicket: new Date(),
+          getStartTimeFilterTicket: new Date(),
+          changeStartTimeFilterAnalysis: () => {},
+          savingRequestStatus: new BehaviorSubject(false).asObservable(),
+          changeSavingRequestStatus: () => {},
+          getAllowanceTimeSubject: new Subject().asObservable(),
+          changeAllowanceTime: () => {},
+          blockingUiStatus: new BehaviorSubject([]).asObservable(),
+          changeBlockingUiStatus: () => {},
+          getChangeActionWaitingToManualEditPageSubject: new BehaviorSubject(false).asObservable(),
+          changeActionWaitingToManualEditPage: () => {},
+          getAbnormalFilterBySubject: new Subject().asObservable(),
+          changeAbnormalFilterBy: () => {},
+          getCheckValidSubIssueTypeInFilterSubject: new Subject().asObservable(),
+          checkValidSubIssueTypeInFilter: () => {}
+        } as unknown as AddRequestStore,
         originalRelatedEvents: [],
         subIssueTypeId: '1'
       } as AddRelatedEventArg;
 
       jest.spyOn(validationService, 'isValidInputRelatedEvent').mockReturnValue(true);
-      jest.spyOn(service as any, 'getChildMatches').mockResolvedValue([]);
+      service['getChildMatches'] =jest.fn().mockResolvedValue([]);
 
       await service.addRelatedEventByInput(arg);
 
@@ -155,7 +200,29 @@ describe('RelatedEventService', () => {
         isEdit: false,
         requestId: 1,
         defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
-        addRequestStore: {} as any,
+        addRequestStore: {
+          savingRequestStatusSubject: new BehaviorSubject(false),
+          checkValidSubIssueTypeInFilterSubject: new Subject(),
+          allowanceTimeSubject: new Subject(),
+          blockingUiStatusSubject: new BehaviorSubject([]),
+          changeActionWaitingToManualEditPageSubject: new BehaviorSubject(false),
+          abnormalFilterBySubject: new Subject(),
+          startTimeFilterTicket: new Date(),
+          getStartTimeFilterTicket: new Date(),
+          changeStartTimeFilterAnalysis: () => {},
+          savingRequestStatus: new BehaviorSubject(false).asObservable(),
+          changeSavingRequestStatus: () => {},
+          getAllowanceTimeSubject: new Subject().asObservable(),
+          changeAllowanceTime: () => {},
+          blockingUiStatus: new BehaviorSubject([]).asObservable(),
+          changeBlockingUiStatus: () => {},
+          getChangeActionWaitingToManualEditPageSubject: new BehaviorSubject(false).asObservable(),
+          changeActionWaitingToManualEditPage: () => {},
+          getAbnormalFilterBySubject: new Subject().asObservable(),
+          changeAbnormalFilterBy: () => {},
+          getCheckValidSubIssueTypeInFilterSubject: new Subject().asObservable(),
+          checkValidSubIssueTypeInFilter: () => {}
+        } as unknown as AddRequestStore,
         originalRelatedEvents: [],
         subIssueTypeId: '1'
       } as AddRelatedEventArg;
@@ -172,7 +239,7 @@ describe('RelatedEventService', () => {
       ] as ChildMatchModel[];
 
       jest.spyOn(validationService, 'isValidInputRelatedEvent').mockReturnValue(true);
-      jest.spyOn(service as any, 'getChildMatches').mockResolvedValue(mockChildMatches);
+      service['getChildMatches'] = jest.fn().mockResolvedValue(mockChildMatches);
       jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
       jest.spyOn(logInfoService, 'updateIsCheckedVar');
 
@@ -241,13 +308,35 @@ describe('RelatedEventService', () => {
         isEdit: false,
         requestId: 1,
         defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
-        addRequestStore: {} as any,
+        addRequestStore: {
+          savingRequestStatusSubject: new BehaviorSubject(false),
+          checkValidSubIssueTypeInFilterSubject: new Subject(),
+          allowanceTimeSubject: new Subject(),
+          blockingUiStatusSubject: new BehaviorSubject([]),
+          changeActionWaitingToManualEditPageSubject: new BehaviorSubject(false),
+          abnormalFilterBySubject: new Subject(),
+          startTimeFilterTicket: new Date(),
+          getStartTimeFilterTicket: new Date(),
+          changeStartTimeFilterAnalysis: () => {},
+          savingRequestStatus: new BehaviorSubject(false).asObservable(),
+          changeSavingRequestStatus: () => {},
+          getAllowanceTimeSubject: new Subject().asObservable(),
+          changeAllowanceTime: () => {},
+          blockingUiStatus: new BehaviorSubject([]).asObservable(),
+          changeBlockingUiStatus: () => {},
+          getChangeActionWaitingToManualEditPageSubject: new BehaviorSubject(false).asObservable(),
+          changeActionWaitingToManualEditPage: () => {},
+          getAbnormalFilterBySubject: new Subject().asObservable(),
+          changeAbnormalFilterBy: () => {},
+          getCheckValidSubIssueTypeInFilterSubject: new Subject().asObservable(),
+          checkValidSubIssueTypeInFilter: () => {}
+        } as unknown as AddRequestStore,
         originalRelatedEvents: [],
         subIssueTypeId: '1'
       } as AddRelatedEventArg;
 
       jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
-      jest.spyOn(service as any, 'preparingModelGetLogInfo').mockResolvedValue([
+      service['preparingModelGetLogInfo'] = jest.fn().mockResolvedValue([
         {
           matchId: 1,
           logInfoDetail: {
@@ -379,7 +468,27 @@ describe('RelatedEventService', () => {
           subIssueTypeId: 1
         } as LogInfoRelatedEvent,
         defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
-        addRequestStore: {} as any,
+        addRequestStore: {
+          savingRequestStatusSubject: new BehaviorSubject(false),
+          checkValidSubIssueTypeInFilterSubject: new Subject(),
+          allowanceTimeSubject: new Subject(),
+          blockingUiStatusSubject: new BehaviorSubject([]),
+          changeActionWaitingToManualEditPageSubject: new BehaviorSubject(false),
+          abnormalFilterBySubject: new Subject(),
+          startTimeFilterTicket: new Date(),
+          getStartTimeFilterTicket: new Date(),
+          changeStartTimeFilterAnalysis: () => {},
+          savingRequestStatus: new BehaviorSubject(false).asObservable(),
+          changeSavingRequestStatus: () => {},
+          getAllowanceTimeSubject: new Subject().asObservable(),
+          changeAllowanceTime: () => {},
+          blockingUiStatus: new BehaviorSubject([]).asObservable(),
+          changeBlockingUiStatus: () => {},
+          getChangeActionWaitingToManualEditPageSubject: new BehaviorSubject(false).asObservable(),
+          changeActionWaitingToManualEditPage: () => {},
+          getAbnormalFilterBySubject: new Subject().asObservable(),
+          changeAbnormalFilterBy: () => {}
+        } as unknown as AddRequestStore,
         originalRelatedEvents: [],
         subIssueTypeId: '1'
       } as AddRelatedEventArg;

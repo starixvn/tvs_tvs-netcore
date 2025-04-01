@@ -10,6 +10,7 @@ import { ChildMatchModel } from '../../models/related-event.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { MatchType } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 
 describe('EventDangerAcceptedService', () => {
   let service: EventDangerAcceptedService;
@@ -64,7 +65,7 @@ describe('EventDangerAcceptedService', () => {
           subIssueTypeName: 'Test Sub Issue Type',
           matchType: MatchType.LINK,
           isCheckedVar: true,
-          logInfoDetail: {} as any,
+          logInfoDetail: {} as LogInfoDetail,
           voidFromTime: '2024-01-01 10:00:00',
           voidToTime: '2024-01-01 11:00:00',
           aaTime: 5,
@@ -178,7 +179,7 @@ describe('EventDangerAcceptedService', () => {
           subIssueTypeName: 'Test Sub Issue Type',
           matchType: MatchType.LINK,
           isCheckedVar: true,
-          logInfoDetail: {} as any,
+          logInfoDetail: {} as LogInfoDetail,
           voidFromTime: '2024-01-01 10:00:00',
           voidToTime: '2024-01-01 11:00:00',
           aaTime: 5,

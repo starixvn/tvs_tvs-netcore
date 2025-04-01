@@ -612,12 +612,12 @@ describe('EventDangerAcceptedComponent', () => {
         selectedMatchIds: [],
         isOpen: false
       };
-      jest.spyOn(eventDangerAcceptedService as any, 'getGroupSubTypeIncludeAllowanceTime').mockReturnValue({
+      eventDangerAcceptedService['getGroupSubTypeIncludeAllowanceTime'] = jest.fn().mockReturnValue({
         aa: '3',
         pa: '3',
         sa: '5'
       });
-      jest.spyOn(eventDangerAcceptedService as any, 'getSubIssueTypeLinkMatch').mockResolvedValue([
+      eventDangerAcceptedService['getSubIssueTypeLinkMatch'] = jest.fn().mockResolvedValue([
         {
           matchId: 1,
           subIssueTypeId: 1

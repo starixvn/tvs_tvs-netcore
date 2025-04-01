@@ -16,7 +16,13 @@ import { SaveRequestArg } from './save-request.model';
 import { ConfirmDangerAcceptedModel } from '../confirm-danger-accepted/confirm-danger-accepted.model';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { IssueTypes } from '../../filter/issue-types.model';
+import { OthersModel } from '../../others/others.model';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import * as _ from 'lodash';
+import { QueryList } from '@angular/core';
+import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
@@ -95,15 +101,23 @@ describe('SaveRequestService', () => {
         filter: {} as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
-        logInfoComponents: { forEach: jest.fn() } as any,
-        primitiveProps: {} as any,
+        logInfoComponents: {
+          toArray: () => [{
+            filterTimeWithAllowanceComponent: { isValid: () => true, updateData: jest.fn() },
+            showValidationDetail: jest.fn()
+          }],
+          forEach: function(callback: any) {
+            this.toArray().forEach(callback);
+          }
+        } as unknown as QueryList<LogInfoRelatedEventComponent>,
+        primitiveProps: {} as PrimitiveProperty,
         isEdit: false,
         requestId: 1,
         userId: 1,
         requestedBy: 'test',
-        issueTypes: {} as any,
-        defaultFilterTimeWithAllowance: {} as any,
-        others: {} as any,
+        issueTypes: {} as IssueTypes,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
+        others: {} as OthersModel,
         actionIdOfFirstTimeAccess: '0',
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
@@ -127,15 +141,23 @@ describe('SaveRequestService', () => {
         filter: {} as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
-        logInfoComponents: { forEach: jest.fn() } as any,
-        primitiveProps: {} as any,
+        logInfoComponents: {
+          toArray: () => [{
+            filterTimeWithAllowanceComponent: { isValid: () => true, updateData: jest.fn() },
+            showValidationDetail: jest.fn()
+          }],
+          forEach: function(callback: any) {
+            this.toArray().forEach(callback);
+          }
+        } as unknown as QueryList<LogInfoRelatedEventComponent>,
+        primitiveProps: {} as PrimitiveProperty,
         isEdit: false,
         requestId: 1,
         userId: 1,
         requestedBy: 'test',
-        issueTypes: {} as any,
-        defaultFilterTimeWithAllowance: {} as any,
-        others: {} as any,
+        issueTypes: {} as IssueTypes,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
+        others: {} as OthersModel,
         actionIdOfFirstTimeAccess: '0',
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
@@ -165,8 +187,16 @@ describe('SaveRequestService', () => {
         } as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
-        logInfoComponents: { forEach: jest.fn() } as any,
-        primitiveProps: {} as any,
+        logInfoComponents: {
+          toArray: () => [{
+            filterTimeWithAllowanceComponent: { isValid: () => true, updateData: jest.fn() },
+            showValidationDetail: jest.fn()
+          }],
+          forEach: function(callback: any) {
+            this.toArray().forEach(callback);
+          }
+        } as unknown as QueryList<LogInfoRelatedEventComponent>,
+        primitiveProps: {} as PrimitiveProperty,
         isEdit: false,
         requestId: 1,
         userId: 1,
@@ -182,9 +212,9 @@ describe('SaveRequestService', () => {
             issueTypeId: 1,
             subIssueTypeNameCS: 'Test Sub Issue Type CS'
           }]
-        } as any,
-        defaultFilterTimeWithAllowance: {} as any,
-        others: {} as any,
+        } as IssueTypes,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
+        others: {} as OthersModel,
         actionIdOfFirstTimeAccess: '0',
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
@@ -204,15 +234,23 @@ describe('SaveRequestService', () => {
         filter: { isVoided: false } as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
-        logInfoComponents: { forEach: jest.fn() } as any,
-        primitiveProps: {} as any,
+        logInfoComponents: {
+          toArray: () => [{
+            filterTimeWithAllowanceComponent: { isValid: () => true, updateData: jest.fn() },
+            showValidationDetail: jest.fn()
+          }],
+          forEach: function(callback: any) {
+            this.toArray().forEach(callback);
+          }
+        } as unknown as QueryList<LogInfoRelatedEventComponent>,
+        primitiveProps: {} as PrimitiveProperty,
         isEdit: false,
         requestId: 1,
         userId: 1,
         requestedBy: 'test',
-        issueTypes: {} as any,
-        defaultFilterTimeWithAllowance: {} as any,
-        others: {} as any,
+        issueTypes: {} as IssueTypes,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
+        others: {} as OthersModel,
         actionIdOfFirstTimeAccess: '0',
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
@@ -232,15 +270,23 @@ describe('SaveRequestService', () => {
         filter: { isVoided: false } as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
-        logInfoComponents: { forEach: jest.fn() } as any,
-        primitiveProps: {} as any,
+        logInfoComponents: {
+          toArray: () => [{
+            filterTimeWithAllowanceComponent: { isValid: () => true, updateData: jest.fn() },
+            showValidationDetail: jest.fn()
+          }],
+          forEach: function(callback: any) {
+            this.toArray().forEach(callback);
+          }
+        } as unknown as QueryList<LogInfoRelatedEventComponent>,
+        primitiveProps: {} as PrimitiveProperty,
         isEdit: false,
         requestId: 1,
         userId: 1,
         requestedBy: 'test',
-        issueTypes: {} as any,
-        defaultFilterTimeWithAllowance: {} as any,
-        others: {} as any,
+        issueTypes: {} as IssueTypes,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
+        others: {} as OthersModel,
         actionIdOfFirstTimeAccess: '0',
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
@@ -262,15 +308,23 @@ describe('SaveRequestService', () => {
         filter: { isVoided: false } as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
-        logInfoComponents: { forEach: jest.fn() } as any,
-        primitiveProps: {} as any,
+        logInfoComponents: {
+          toArray: () => [{
+            filterTimeWithAllowanceComponent: { isValid: () => true, updateData: jest.fn() },
+            showValidationDetail: jest.fn()
+          }],
+          forEach: function(callback: any) {
+            this.toArray().forEach(callback);
+          }
+        } as unknown as QueryList<LogInfoRelatedEventComponent>,
+        primitiveProps: {} as PrimitiveProperty,
         isEdit: false,
         requestId: 1,
         userId: 1,
         requestedBy: 'test',
-        issueTypes: {} as any,
-        defaultFilterTimeWithAllowance: {} as any,
-        others: {} as any,
+        issueTypes: {} as IssueTypes,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
+        others: {} as OthersModel,
         actionIdOfFirstTimeAccess: '0',
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
@@ -345,7 +399,11 @@ describe('SaveRequestService', () => {
         } as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
-        logInfoComponents: { forEach: jest.fn() } as any,
+        logInfoComponents: {
+          toArray: () => [{
+            filterTimeWithAllowanceComponent: { isValid: () => true }
+          }]
+        } as unknown as QueryList<LogInfoRelatedEventComponent>,
         primitiveProps: {} as any,
         isEdit: false,
         requestId: 1,
@@ -401,7 +459,11 @@ describe('SaveRequestService', () => {
         } as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
-        logInfoComponents: { forEach: jest.fn() } as any,
+        logInfoComponents: {
+          toArray: () => [{
+            filterTimeWithAllowanceComponent: { isValid: () => true }
+          }]
+        } as unknown as QueryList<LogInfoRelatedEventComponent>,
         primitiveProps: {} as any,
         isEdit: false,
         requestId: 1,
@@ -444,7 +506,7 @@ describe('SaveRequestService', () => {
           isVoided: false,
           issueTypeId: '1',
           subIssueTypeId: '1'
-        },
+        } as FilterModel,
         allEvents: [
           {
             isMainMatch: false,
@@ -454,11 +516,11 @@ describe('SaveRequestService', () => {
                 reason: LABELS.NO_VALID_TICKETS_IN_RANGE
               }
             ]
-          }
+          } as LogInfoRelatedEvent
         ],
         confirmDangerAccepted: {
           warningRelatedEvents: []
-        },
+        } as ConfirmDangerAcceptedModel,
         issueTypes: {
           issueTypes: [{
             issueTypeId: 1,
@@ -468,7 +530,7 @@ describe('SaveRequestService', () => {
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
-        }
+        } as IssueTypes
       } as SaveRequestArg;
 
       service['showPopupConfirmSave'](arg);
@@ -482,7 +544,7 @@ describe('SaveRequestService', () => {
           isVoided: false,
           issueTypeId: '1',
           subIssueTypeId: '1'
-        },
+        } as FilterModel,
         allEvents: [
           {
             isMainMatch: false,
@@ -491,9 +553,9 @@ describe('SaveRequestService', () => {
             logInfoDetail: {
               settleCount: 1
             }
-          }
+          } as LogInfoRelatedEvent
         ],
-        confirmDangerAccepted: {},
+        confirmDangerAccepted: {} as ConfirmDangerAcceptedModel,
         issueTypes: {
           issueTypes: [{
             issueTypeId: 1,
@@ -503,7 +565,7 @@ describe('SaveRequestService', () => {
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
-        }
+        } as IssueTypes
       } as SaveRequestArg;
 
       service['showPopupConfirmSave'](arg);
@@ -517,7 +579,7 @@ describe('SaveRequestService', () => {
           isVoided: false,
           issueTypeId: '1',
           subIssueTypeId: '1'
-        },
+        } as FilterModel,
         allEvents: [
           {
             isMainMatch: false,
@@ -528,9 +590,9 @@ describe('SaveRequestService', () => {
                 reason: 'Test reason'
               }
             ]
-          }
+          } as LogInfoRelatedEvent
         ],
-        confirmDangerAccepted: {},
+        confirmDangerAccepted: {} as ConfirmDangerAcceptedModel,
         issueTypes: {
           issueTypes: [{
             issueTypeId: 1,
@@ -540,7 +602,7 @@ describe('SaveRequestService', () => {
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
-        }
+        } as IssueTypes
       } as SaveRequestArg;
 
       service['showPopupConfirmSave'](arg);
@@ -555,10 +617,10 @@ describe('SaveRequestService', () => {
           issueTypeId: '1',
           subIssueTypeId: '1',
           action: TVSRequestActionType.TAKE_NOTE_ID.toString()
-        },
+        } as FilterModel,
         allEvents: [],
         actionIdOfFirstTimeAccess: 'DIFFERENT_ACTION',
-        confirmDangerAccepted: {},
+        confirmDangerAccepted: {} as ConfirmDangerAcceptedModel,
         issueTypes: {
           issueTypes: [{
             issueTypeId: 1,
@@ -568,7 +630,7 @@ describe('SaveRequestService', () => {
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
-        }
+        } as IssueTypes
       } as SaveRequestArg;
 
       service['showPopupConfirmSave'](arg);
@@ -582,7 +644,7 @@ describe('SaveRequestService', () => {
           isVoided: false,
           issueTypeId: '1',
           subIssueTypeId: '1'
-        },
+        } as FilterModel,
         allEvents: [
           {
             isMainMatch: false,
@@ -591,9 +653,9 @@ describe('SaveRequestService', () => {
             logInfoDetail: {
               isHasWarningRangeTime: true
             }
-          }
+          } as LogInfoRelatedEvent
         ],
-        confirmDangerAccepted: {},
+        confirmDangerAccepted: {} as ConfirmDangerAcceptedModel,
         issueTypes: {
           issueTypes: [{
             issueTypeId: 1,
@@ -603,7 +665,7 @@ describe('SaveRequestService', () => {
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
-        }
+        } as IssueTypes
       } as SaveRequestArg;
 
       service['showPopupConfirmSave'](arg);
@@ -617,11 +679,11 @@ describe('SaveRequestService', () => {
           isVoided: false,
           issueTypeId: '1',
           subIssueTypeId: '1'
-        },
+        } as FilterModel,
         allEvents: [],
         requestId: 123,
         requestedBy: 'testUser',
-        confirmDangerAccepted: {},
+        confirmDangerAccepted: {} as ConfirmDangerAcceptedModel,
         issueTypes: {
           issueTypes: [{
             issueTypeId: 1,
@@ -631,7 +693,7 @@ describe('SaveRequestService', () => {
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
-        }
+        } as IssueTypes
       } as SaveRequestArg;
 
       service['showPopupConfirmSave'](arg);
@@ -646,11 +708,11 @@ describe('SaveRequestService', () => {
           isVoided: false,
           issueTypeId: '1',
           subIssueTypeId: '1'
-        },
+        } as FilterModel,
         allEvents: [],
         isEdit: true,
         userId: 456,
-        confirmDangerAccepted: {},
+        confirmDangerAccepted: {} as ConfirmDangerAcceptedModel,
         issueTypes: {
           issueTypes: [{
             issueTypeId: 1,
@@ -660,7 +722,7 @@ describe('SaveRequestService', () => {
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
-        }
+        } as IssueTypes
       } as SaveRequestArg;
 
       jest.spyOn(validationService, 'isEditingByAnotherUser').mockReturnValue(true);
@@ -676,7 +738,7 @@ describe('SaveRequestService', () => {
           isVoided: false,
           issueTypeId: '1',
           subIssueTypeId: '2'
-        },
+        } as FilterModel,
         allEvents: [],
         issueTypes: {
           issueTypes: [
@@ -691,8 +753,8 @@ describe('SaveRequestService', () => {
               subIssueTypeName: 'Test Sub Issue Type'
             }
           ]
-        },
-        confirmDangerAccepted: {}
+        } as IssueTypes,
+        confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
       } as SaveRequestArg;
 
       service['showPopupConfirmSave'](arg);
@@ -707,9 +769,9 @@ describe('SaveRequestService', () => {
           isVoided: false,
           issueTypeId: '1',
           subIssueTypeId: '1'
-        },
+        } as FilterModel,
         allEvents: [],
-        confirmDangerAccepted: {},
+        confirmDangerAccepted: {} as ConfirmDangerAcceptedModel,
         issueTypes: {
           issueTypes: [{
             issueTypeId: 1,
@@ -719,7 +781,7 @@ describe('SaveRequestService', () => {
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
-        }
+        } as IssueTypes
       } as SaveRequestArg;
 
       service['showPopupConfirmSave'](arg);
@@ -734,7 +796,7 @@ describe('SaveRequestService', () => {
           isVoided: true,
           issueTypeId: '1',
           subIssueTypeId: '1'
-        },
+        } as FilterModel,
         allEvents: [
           {
             isMainMatch: false,
@@ -748,11 +810,11 @@ describe('SaveRequestService', () => {
               settleCount: 1,
               isHasWarningRangeTime: true
             }
-          }
+          } as LogInfoRelatedEvent
         ],
         confirmDangerAccepted: {
           warningRelatedEvents: []
-        },
+        } as ConfirmDangerAcceptedModel,
         issueTypes: {
           issueTypes: [{
             issueTypeId: 1,
@@ -762,7 +824,7 @@ describe('SaveRequestService', () => {
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
-        }
+        } as IssueTypes
       } as SaveRequestArg;
 
       service['showPopupConfirmSave'](arg);

@@ -7,6 +7,8 @@ import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log
 import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { FilterModel } from '../../filter/filter.model';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { ValidationMessage, GetLogInfoViewModel } from '../../models/get-log-info.model';
 
 describe('LogInfoService', () => {
   let service: LogInfoService;
@@ -79,15 +81,35 @@ describe('LogInfoService', () => {
           {
             matchId: 1,
             logInfoDetail: {
-              voidFromTime: '2024-01-01 10:00:00',
-              voidToTime: '2024-01-01 11:00:00',
-              transVoidToTime: '2024-01-01 11:00:00'
+              matchId: 1,
+              liveScores: '',
+              voidFromTime: new Date('2024-01-01 10:00:00'),
+              voidToTime: new Date('2024-01-01 11:00:00'),
+              transVoidToTime: new Date('2024-01-01 11:00:00'),
+              singleCount: 0,
+              cashOutCount: 0,
+              settleCount: 0,
+              instantlySettleCount: 0,
+              mainParlayCount: 0,
+              cancelCashOutCount: 0,
+              scoreNormalTicket: '0',
+              scoreOfMatch: '0',
+              minTransId: '0',
+              actionType: '',
+              isHasWarningRangeTime: false
+            } as LogInfoDetail,
+            validation: {
+              isPoolHouseAffected: false,
+              isInvalidTotalTickets: false,
+              isExistedInOtherRequest: false,
+              isExistsSecondAccept: false,
+              isHasSettledTicket: false,
+              isHasInstantlySettledTicket: false
             },
-            validation: {},
-            ticketRequest: {}
+            ticketRequest: []
           }
         ]
-      } as any;
+      } as GetLogInfoViewModel;
 
       jest.spyOn(validationService, 'isHasAllowanceTime').mockReturnValue(true);
       jest.spyOn(commonService, 'getLogInfo').mockResolvedValue(mockLogInfoResponse);
@@ -118,20 +140,24 @@ describe('LogInfoService', () => {
             voidToTime: new Date('2024-01-01 11:00:00'),
             transVoidToTime: new Date('2024-01-01 11:00:00'),
             isHasWarningRangeTime: false,
-            scoreNormalTicket: 0,
-            scoreOfMatch: 0,
-            minTransId: 0,
+            scoreNormalTicket: '0',
+            scoreOfMatch: '0',
+            minTransId: '0',
             actionType: ''
-          } as any,
+          } as LogInfoDetail,
           messageValidationLogInfo: [
             {
               message: 'message1',
-              type: 'error'
-            } as any,
+              type: 'error',
+              isError: true,
+              reason: 'error1'
+            } as ValidationMessage,
             {
               message: 'message2',
-              type: 'warning'
-            } as any
+              type: 'warning',
+              isError: false,
+              reason: 'warning1'
+            } as ValidationMessage
           ],
           leagueName: 'Test League',
           isMainMatch: true,

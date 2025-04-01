@@ -11,6 +11,7 @@ import { FilterModel } from '../../filter/filter.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { GetLogInfoViewModel } from '../../models/get-log-info.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { WrongOddsGetLogInfoQuery } from '../models/get-log-info.query';
 
 describe('LogInfoService', () => {
   let service: LogInfoService;
@@ -75,7 +76,7 @@ describe('LogInfoService', () => {
       }];
 
       jest.spyOn(commonService, 'getLogInfo').mockResolvedValue(mockGetLogInfoResponse);
-      jest.spyOn(eventWrongOddsService, 'getWrongOddsModel').mockReturnValue({} as any);
+      eventWrongOddsService.getWrongOddsModel = jest.fn().mockReturnValue({} as WrongOddsGetLogInfoQuery);
 
       // Act
       await service.getLogInfo(mockLogInfoWrongOdds, false, 0, mockFilter, mockPrimitiveProps);
@@ -104,7 +105,7 @@ describe('LogInfoService', () => {
       mockGetLogInfoResponse.getLogInfoModels = [];
 
       jest.spyOn(commonService, 'getLogInfo').mockResolvedValue(mockGetLogInfoResponse);
-      jest.spyOn(eventWrongOddsService, 'getWrongOddsModel').mockReturnValue({} as any);
+      eventWrongOddsService.getWrongOddsModel = jest.fn().mockReturnValue({} as WrongOddsGetLogInfoQuery);
 
       // Save initial state
       const initialState = {

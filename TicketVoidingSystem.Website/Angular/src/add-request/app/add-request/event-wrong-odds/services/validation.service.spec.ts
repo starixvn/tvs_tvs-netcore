@@ -10,6 +10,8 @@ import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
+import { EventLeagueComponent } from 'src/utility/components/event-league/event-league.component';
+import { FilterWrongOddsComponent } from '../filter-wrong-odds/filter-wrong-odds.component';
 
 describe('ValidationService', () => {
   let service: ValidationService;
@@ -37,10 +39,10 @@ describe('ValidationService', () => {
       // Arrange
       const eventLeagueComponent = {
         isMatchIdValid: jest.fn().mockReturnValue(true)
-      } as any;
+      } as unknown as EventLeagueComponent;
       const filterWrongOddsComponent = {
         isValid: jest.fn().mockReturnValue(true)
-      } as any;
+      } as unknown as FilterWrongOddsComponent;
 
       // Act
       const result = service.validateCommonData(eventLeagueComponent, filterWrongOddsComponent);
@@ -53,10 +55,10 @@ describe('ValidationService', () => {
       // Arrange
       const eventLeagueComponent = {
         isMatchIdValid: jest.fn().mockReturnValue(false)
-      } as any;
+      } as unknown as EventLeagueComponent;
       const filterWrongOddsComponent = {
         isValid: jest.fn().mockReturnValue(true)
-      } as any;
+      } as unknown as FilterWrongOddsComponent;
 
       // Act
       const result = service.validateCommonData(eventLeagueComponent, filterWrongOddsComponent);
@@ -234,7 +236,7 @@ describe('ValidationService', () => {
           action: TVSRequestActionType.TAKE_NOTE_ID.toString()
         }
       } as SaveRequestArg;
-      document.getElementById = jest.fn().mockReturnValue({ getAttribute: () => '2' } as any);
+      document.getElementById = jest.fn().mockReturnValue({ getAttribute: () => '2' } as unknown as HTMLElement);
 
       // Act
       const result = service.checkCanShowConfirmationWrongOdds(argWrongOdds);

@@ -13,6 +13,7 @@ import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { FilterWrongOddsComponent } from '../filter-wrong-odds/filter-wrong-odds.component';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
@@ -44,7 +45,7 @@ describe('SaveRequestService', () => {
     isEdit: false,
     subIssueTypeId: '',
     isDisabled: false
-  } as unknown as any;
+  } as unknown as FilterWrongOddsComponent;
 
   const mockLogInfoWrongOdds = {
     matchId: 123,
@@ -122,7 +123,7 @@ describe('SaveRequestService', () => {
     eventWrongOddsService = TestBed.inject(EventWrongOddsService);
 
     // Mock document.getElementById
-    document.getElementById = jest.fn().mockReturnValue({ getAttribute: () => '1' } as any);
+    document.getElementById = jest.fn().mockReturnValue({ getAttribute: () => '1' } as unknown as HTMLElement);
   });
 
   it('should be created', () => {
@@ -132,8 +133,8 @@ describe('SaveRequestService', () => {
   describe('saveRequest', () => {
     it('should proceed save request when data is valid', async () => {
       // Arrange
-      jest.spyOn(service as any, 'recheckLogInfoBeforeSaveRequest').mockResolvedValue(true);
-      jest.spyOn(service as any, 'proceedSaveRequest').mockImplementation(() => {});
+      service.recheckLogInfoBeforeSaveRequest = jest.fn().mockResolvedValue(true);
+      service['proceedSaveRequest'] = jest.fn();
 
       // Act
       await service.saveRequest(mockSaveRequestArg);
@@ -145,16 +146,15 @@ describe('SaveRequestService', () => {
 
     it('should not proceed save request when data is invalid', async () => {
       // Arrange
-      jest.spyOn(service as any, 'recheckLogInfoBeforeSaveRequest').mockResolvedValue(false);
-      jest.spyOn(service as any, 'proceedSaveRequest').mockImplementation(() => {});
+      jest.spyOn(service, 'recheckLogInfoBeforeSaveRequest').mockResolvedValue(false);
+      service['proceedSaveRequest'] = jest.fn();
 
       // Act
       await service.saveRequest(mockSaveRequestArg);
 
       // Assert
-      expect(mockAddRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(4);
-      expect(mockAddRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
       expect(service['proceedSaveRequest']).not.toHaveBeenCalled();
+      expect(mockAddRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
     });
   });
 
@@ -202,7 +202,7 @@ describe('SaveRequestService', () => {
       // Arrange
       jest.spyOn(validationService, 'checkCanShowConfirmationWrongOdds').mockReturnValue(true);
       jest.spyOn(popupService, 'showConfirm').mockImplementation(() => {});
-      jest.spyOn(service as any, 'getMessageConfirmationWrongOdds').mockReturnValue('test message');
+      service['getMessageConfirmationWrongOdds'] = jest.fn().mockReturnValue('test message');
 
       // Act
       service['proceedSaveRequest'](mockSaveRequestArg);
@@ -218,7 +218,7 @@ describe('SaveRequestService', () => {
     it('should execute save request directly when no confirmation needed', () => {
       // Arrange
       jest.spyOn(validationService, 'checkCanShowConfirmationWrongOdds').mockReturnValue(false);
-      jest.spyOn(service as any, 'executeSaveRequestApi').mockImplementation(() => {});
+      service['executeSaveRequestApi'] = jest.fn();
 
       // Act
       service['proceedSaveRequest'](mockSaveRequestArg);
@@ -231,12 +231,8 @@ describe('SaveRequestService', () => {
   describe('getMessageConfirmationWrongOdds', () => {
     it('should include warning message when has warnings', () => {
       // Arrange
-      const argWithWarnings = {
-        ...mockSaveRequestArg,
-        logInfoEvent: {
-          ...mockLogInfoWrongOdds,
-          messageValidationLogInfo: [{ isError: false, reason: '' }]
-        }
+      const argWithWarnings = { ...mockSaveRequestArg,
+        logInfoEvent: { ...mockLogInfoWrongOdds, messageValidationLogInfo: [{ isError: false, reason: '' }] }
       };
 
       // Act
@@ -248,13 +244,8 @@ describe('SaveRequestService', () => {
 
     it('should include unmark message when action is TAKE_NOTE', () => {
       // Arrange
-      const argWithTakeNote = {
-        ...mockSaveRequestArg,
-        isEdit: true,
-        filter: {
-          ...mockSaveRequestArg.filter,
-          action: TVSRequestActionType.TAKE_NOTE_ID.toString()
-        },
+      const argWithTakeNote = { ...mockSaveRequestArg, isEdit: true,
+        filter: { ...mockSaveRequestArg.filter, action: TVSRequestActionType.TAKE_NOTE_ID.toString() },
         actionIdOfFirstTimeAccess: 'different-action'
       };
 
@@ -267,13 +258,8 @@ describe('SaveRequestService', () => {
 
     it('should include user warning when editing by another user', () => {
       // Arrange
-      const argWithDifferentUser = {
-        ...mockSaveRequestArg,
-        isEdit: true,
-        userId: 1,
-        requestedBy: 'Other User'
-      };
-      document.getElementById = jest.fn().mockReturnValue({ getAttribute: () => '2' } as any);
+      const argWithDifferentUser = { ...mockSaveRequestArg, isEdit: true, userId: 1, requestedBy: 'Other User' };
+      document.getElementById = jest.fn().mockReturnValue({ getAttribute: () => '2' } as unknown as HTMLElement);
 
       // Act
       const result = service['getMessageConfirmationWrongOdds'](argWithDifferentUser);

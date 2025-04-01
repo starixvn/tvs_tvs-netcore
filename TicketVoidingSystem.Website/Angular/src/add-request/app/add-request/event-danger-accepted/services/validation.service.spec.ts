@@ -8,6 +8,8 @@ import { FilterModel } from '../../filter/filter.model';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../../../utility/constants/labels';
+import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
+import { QueryList } from '@angular/core';
 
 describe('ValidationService', () => {
   let service: ValidationService;
@@ -86,8 +88,7 @@ describe('ValidationService', () => {
         toArray: () => [{
           filterTimeWithAllowanceComponent: { isValid: () => true }
         }]
-      } as any;
-
+      } as QueryList<LogInfoRelatedEventComponent>;
       const result = service.validateCommonData(
         filter,
         eventLeagueComponent,
@@ -113,7 +114,7 @@ describe('ValidationService', () => {
         toArray: () => [{
           filterTimeWithAllowanceComponent: { isValid: () => true }
         }]
-      } as any;
+      } as QueryList<LogInfoRelatedEventComponent>;
 
       const result = service.validateCommonData(
         filter,
