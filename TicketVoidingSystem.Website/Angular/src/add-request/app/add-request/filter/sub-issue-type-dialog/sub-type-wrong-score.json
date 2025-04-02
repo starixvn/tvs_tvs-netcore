@@ -27,9 +27,9 @@
         "description": [
           "Provider missed or delayed Score show by more than one (1) minute.",
           "=> Missed update Home/Away score -> But there is happened score awarded.",
-          "Att: Actual Goal/Corner/Goal kick/booking compare last ticket trans.time base on 1 min to use message type.",
-          "Over 1 min consider wrong score/Missed > Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:01:00.",
-          "Within 1mins consider danger accept Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:00:20.",
+          "Att: Actual Goal compare last ticket trans.time base on 1 min to use message type.",
+          "Over 1 min consider wrong score/Missed > Goal 10:00:00, last ticket trans.time 10:01:00.",
+          "Within 1mins consider danger accept Goal 10:00:00, last ticket trans.time 10:00:20.",
           "* Home Missed > Request Home. Away Missed > Request Away."
         ],
         "note":"",
@@ -58,9 +58,9 @@
         "description": [
           "Provider missed or delayed Score show by more than one (1) minute.",
           "=> Missed update Home/Away score -> But there is happened score awarded.",
-          "Att: Actual Goal/Corner/Goal kick/booking compare last ticket trans.time base on 1 min to use message type.",
-          "Over 1 min consider wrong score/Missed > Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:01:00.",
-          "Within 1mins consider danger accept Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:00:20.",
+          "Att: Actual Goal compare last ticket trans.time base on 1 min to use message type.",
+          "Over 1 min consider wrong score/Missed > Goal 10:00:00, last ticket trans.time 10:01:00.",
+          "Within 1mins consider danger accept Goal 10:00:00, last ticket trans.time 10:00:20.",
           "* Home Missed > Request Home. Away Missed > Request Away."
         ],
         "note":"",
@@ -213,10 +213,10 @@
         "description": [
           "Provider missed or delayed Score show by more than one (1) minute.",
           "=> Missed update Home/Away score -> But there is happened score awarded.",
-          "Att: Actual Goal/Corner/Goal kick/booking compare last ticket trans.time base on 1 min to use message type.",
-          "Over 1 min consider wrong score/Missed > Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:01:00.",
-          "Within 1mins consider danger accept Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:00:20.",
-		      "* Home Missed > Request Home. Away Missed > Request Away."
+          "Att: Actual Booking compare last ticket trans.time base on 1 min to use message type.",
+          "Over 1 min consider wrong score/Missed > Booking 10:00:00, last ticket trans.time 10:01:00.",
+          "Within 1mins consider danger accept Booking 10:00:00, last ticket trans.time 10:00:20.",
+          "* Home Missed > Request Home. Away Missed > Request Away."
         ],
         "note":"",
         "noteEditable": false
@@ -244,10 +244,10 @@
         "description": [
           "Provider missed or delayed Score show by more than one (1) minute.",
           "=> Missed update Home/Away score -> But there is happened score awarded.",
-          "Att: Actual Goal/Corner/Goal kick/booking compare last ticket trans.time base on 1 min to use message type.",
-          "Over 1 min consider wrong score/Missed > Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:01:00.",
-          "Within 1mins consider danger accept Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:00:20.",
-		      "* Home Missed > Request Home. Away Missed > Request Away."
+          "Att: Actual Booking compare last ticket trans.time base on 1 min to use message type.",
+          "Over 1 min consider wrong score/Missed > Booking 10:00:00, last ticket trans.time 10:01:00.",
+          "Within 1mins consider danger accept Booking 10:00:00, last ticket trans.time 10:00:20.",
+          "* Home Missed > Request Home. Away Missed > Request Away."
         ],
         "note":"",
         "noteEditable": false
@@ -318,7 +318,7 @@
         "description": [
           "Provider wrong display Swap Team Score.",
           "=> Wrong update Away Score -> Correct there is Home Score awarded. So Single team O/U home team admin will wrong accept.",
-          "Example: 0-0 to 0-1 wrong update,  Correct is 1-0, need void all ticket. Single team O/U home team score 0-0 accept after Goal is wrong, need void all."
+          "Example: 0-0 to 0-1 wrong update, Correct is 1-0, need void all ticket. Single team O/U home team score 0-0 accept after Goal is wrong, need void all."
         ],
         "note":"",
         "noteEditable": false
@@ -341,7 +341,7 @@
         "description": [
           "Provider wrong display Swap Team Score.",
           "=> Wrong update Away Score -> Correct there is Home Score awarded. So Single team O/U home team admin will wrong accept.",
-          "Example: 0-0 to 0-1 wrong update,  Correct is 1-0, need void all ticket. Single team O/U home team score 0-0 accept after Goal is wrong, need void all."
+          "Example: 0-0 to 0-1 wrong update, Correct is 1-0, need void all ticket. Single team O/U home team score 0-0 accept after Goal is wrong, need void all."
         ],
         "note":"",
         "noteEditable": false
