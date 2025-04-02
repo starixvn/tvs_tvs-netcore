@@ -52,12 +52,15 @@ public class CopyRequestInfoServiceImp(
             HomeId = requestInfo.HomeId,
             AwayId = requestInfo.AwayId,
             LeagueId = requestInfo.LeagueId,
-            IsNeutral = requestInfo.IsNeutral
+            IsNeutral = requestInfo.IsNeutral,
+            SportType = requestInfo.SportType
         };
         matchService.UpdateMatchInfoFromRemotingRef(match);
 
         requestInfo.MatchEvent = match.MatchEvent;
         requestInfo.LeagueName = match.LeagueName;
+        requestInfo.HomeName = match.HomeName;
+        requestInfo.AwayName = match.AwayName;
     }
 
     public void UpdateBetTypeName(IEnumerable<BetTypeTicketsInfo> betTypeTickets)

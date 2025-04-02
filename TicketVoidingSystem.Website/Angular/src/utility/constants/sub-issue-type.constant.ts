@@ -27,6 +27,8 @@ export class SubIssueTypeConstant {
   static readonly PENALTY_SHOOTOUT_RETAKEN = 124;
   static readonly WRONG_HDP = 8;
   static readonly WRONG_1ST_HDP = 9;
+  static readonly AWAY_VIRTUAL_HEAD_REVERSED_HDP = 22;
+  static readonly AWAY_VIRTUAL_HEAD_REVERSED_1ST_HDP = 24;
   static readonly HANDICAP = 6;
   static readonly FIRST_HALF_HANDICAP = 119;
   static readonly OVER_UNDER = 120;

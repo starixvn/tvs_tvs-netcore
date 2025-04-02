@@ -56,6 +56,9 @@ export class RequestInfoForCopy {
   actualMarket?: string;
   filterFavoriteType?: string;
   favoriteValue?: string;
+  hdpValue?: string;
+  homeName?: string;
+  awayName?: string;
 
   //Wrong Odds
   fromOddsNotVoidHomeOver?: string;
