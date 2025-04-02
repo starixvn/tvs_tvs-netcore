@@ -6,8 +6,6 @@ namespace SpecialDelete.VirtualSports.RecoverBet.Criteria;
 
 public class GetTicketsVs2RacingCriteria : CriteriaBase
 {
-    public string Resources { get; set; }
-
     public string TransIds { get; set; }
 
     [SpParam(Ignored = true)]

@@ -20,7 +20,6 @@ public static class VirtualSportsRecover
         services.AddTransient<NotificationService, NotificationServiceImp>();
         services.AddTransient<RecoverTicketsService, RecoverTicketsServiceImp>();
         services.AddTransient<RecoverBetService, RecoverBetServiceImp>();
-        services.AddTransient<CalculateService, CalculateServiceImp>();
         services.AddTransient<TicketsService, TicketsServicesImp>();
         services.AddTransient<ProcessRecoverService, ProcessRecoverServiceImp>();
         services.AddTransient<RecoverRacingService, RecoverRacingServiceImp>();
