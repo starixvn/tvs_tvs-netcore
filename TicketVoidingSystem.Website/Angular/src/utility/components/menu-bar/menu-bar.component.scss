@@ -5,6 +5,40 @@
 
 .header-user-info {
   height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notification-icon {
+  font-size: 1.2em;
+  color: #fff;
+  margin-right: 10px;
+}
+
+@keyframes subtle-shake {
+  0% { transform: rotate(0); }
+  25% { transform: rotate(8deg); }
+  50% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+  100% { transform: rotate(0); }
+}
+
+.fa-bell-ring {
+  display: inline-block;
+  animation: subtle-shake 0.6s infinite ease-in-out !important;
+}
+
+.fa-bell-ring::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: red;
+  border-radius: 50%;
+  box-shadow: 0 0 2px #fff;
 }
 
 .bg-header-tvs {
@@ -30,10 +64,15 @@
   font-family: 'Segoe UI Light', 'Segoe UI', Helvetica, Tahoma, Arial, sans-serif;
 }
 
+.right-content {
+  display: flex;
+  justify-self: flex-end;
+  align-items: center;
+}
+
 .user-info {
   cursor: default;
   color: white;
-  float: right;
   padding: 0 5px;
   display: flex;
   align-items: center;
@@ -52,11 +91,11 @@
   .dropdown {
     padding: 0 5px;
   }
-  
+
   .dropdown-content li {
     list-style: none;
     list-style-type: none;
-  }  
+  }
 
   .dropdown-content li a:hover,
   .dropdown-content li a:focus {
@@ -74,7 +113,7 @@
     margin-left: -5px;
     padding: 5px 0;
   }
-  
+
   .dropdown-content a {
     display: block;
     padding: 3px 20px;
@@ -86,7 +125,7 @@
   .dropdown-content:hover > a {
     text-decoration: none;
     background-color: #8799bf;
-  }  
+  }
   .dropdown:hover .dropdown-content { display: block; }
   .dropdown:hover { background-color: #fff; }
   .dropdown:hover .dropdown-user-info { color: #000; }
@@ -105,7 +144,7 @@
     text-decoration: none;
     color: #1d4088 !important
   }
-  
+
   .navbar-expand-sm {
     flex-flow: row nowrap;
     justify-content: flex-start;
@@ -118,7 +157,7 @@
     padding: 4px 5px;
     white-space: nowrap;
   }
-  
+
   .dropdown .dropdown-toggle:after {
     content: none;
   }

@@ -1,8 +1,10 @@
-
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { CommonService } from '../../../utility/services/common.service';
+import { NotificationPopupComponent } from '../notification-popup/notification-popup.component';
+import { NotificationPopupService } from '../notification-popup/notification-popup.service';
 import { MenuItem } from './menu-bar.model';
 
 @Component({
@@ -10,14 +12,16 @@ import { MenuItem } from './menu-bar.model';
   selector: 'menu-bar',
   templateUrl: './menu-bar.component.html',
   styleUrls: ['./menu-bar.component.scss'],
-  imports: [FormsModule]
+  imports: [CommonModule, FormsModule, NotificationPopupComponent]
 })
 export class MenuBarComponent implements OnInit {
   menuItems: MenuItem[] = [];
   username: string;
   isBlock: boolean;
   rootUrl = '/';
-  private readonly commonService = inject(CommonService);
+  notificationClass = '';
+  notificationService = inject(NotificationPopupService);
+  commonService = inject(CommonService);
 
   async ngOnInit(): Promise<void> {
     this.isBlock = true;
@@ -32,5 +36,12 @@ export class MenuBarComponent implements OnInit {
       });
       this.isBlock = false;
     }
+  }
+
+  toggleNotification(event: Event) {
+    event.stopPropagation();
+    this.notificationClass = this.notificationClass === '' ? 'fa-bell-ring' : '';
+    console.log('Menu bar toggle notification clicked');
+    this.notificationService.toggle();
   }
 }

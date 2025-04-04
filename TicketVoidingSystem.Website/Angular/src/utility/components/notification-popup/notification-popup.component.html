@@ -1,0 +1,53 @@
+@if (isOpen) {
+<div class="notification-container">
+  <div class="tabs d-flex">
+    <div class="tab" [class.active]="activeTab === 'notification'" (click)="selectTab('notification')">
+      Notification <span class="count">{{ unreadNotificationCount }}</span>
+    </div>
+    <div class="tab" [class.active]="activeTab === 'error'" (click)="selectTab('error')">
+      Error <span class="count">{{ errorNotificationCount }}</span>
+    </div>
+  </div>
+
+  <div class="filter-options">
+    <div class="filter-tabs">
+      <span class="badge rounded-pill text-bg-primary" [ngClass]="{
+          'text-bg-light': filterTab !== 'all',
+          'text-bg-primary': filterTab === 'all'
+        }" (click)="selectFilterTab('all')">All</span>
+      <span class="badge rounded-pill" [ngClass]="{
+          'text-bg-light': filterTab !== 'unread',
+          'text-bg-primary': filterTab === 'unread'
+        }" (click)="selectFilterTab('unread')">Unread</span>
+    </div>
+
+    <span class="mark-all" (click)="markAllAsRead()">Mark all as read</span>
+  </div>
+
+  <div class="notification-list" [ngStyle]="{ 'max-height.px': notificationHeight }" [@fadeSlide]>
+    @for (group of groupedNotificationsArray(); track group[0]) {
+    <div class="notification-date">{{ group[0] }}</div>
+    @for (notification of group[1]; track notification.message; let isLast = $last) {
+    <div class="notification" [class.unread]="notification.unread" [class.last-item]="isLast"
+      (click)="clickNotification($event, notification)">
+      <p>{{ notification.message }}</p>
+      <span class="time">{{ notification.time }}</span>
+      @if (notification.unread) {
+      <div class="unread-dot"></div>
+      }
+    </div>
+    }
+    }
+  </div>
+
+  <div class="show-toggle" (click)="toggleNotifications()">
+    <span>
+      {{ isExpanded ? 'Show less' : 'Show more' }}
+      <i class="ml-1 fa-solid" [ngClass]="{
+          'fa-angle-up': isExpanded,
+          'fa-angle-down': !isExpanded
+        }"></i>
+    </span>
+  </div>
+</div>
+}

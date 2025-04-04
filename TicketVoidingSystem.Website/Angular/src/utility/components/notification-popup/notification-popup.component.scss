@@ -1,0 +1,148 @@
+.notification-container {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 300px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: white;
+  z-index: 1000;
+
+  .tabs {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+
+    .tab {
+      padding: 5px 16px;
+      cursor: pointer;
+      font-weight: 500;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease;
+
+      &.active {
+        border-color: #0d6efd;
+        color: #0d6efd;
+      }
+
+      &:hover {
+        background: #f9f9f9;
+      }
+    }
+
+    .count {
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 12px;
+      margin-left: 5px;
+    }
+  }
+
+  .filter-options {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #555;
+
+    .filter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      .badge {
+        cursor: pointer;
+        width: 50px;
+      }
+    }
+
+    .mark-all {
+      cursor: pointer;
+      color: #0d6efd;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .notification-list {
+    overflow-y: auto;
+    transition: max-height 0.3s ease-in-out;
+
+    .notification-date {
+      text-align: center;
+      position: relative;
+      color: #666;
+
+      &::before, &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 30%;
+        height: 1px;
+        background-color: #ddd;
+      }
+
+      &::before {
+        left: 0;
+      }
+
+      &::after {
+        right: 0;
+      }
+    }
+
+    .notification {
+      padding: 0 10px;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+
+      &.unread {
+        background: #f0f8ff;
+      }
+
+      &.last-item {
+        border-bottom: none;
+      }
+
+      p {
+        margin: 0;
+        font-size: 14px;
+      }
+
+      .time {
+        font-size: 12px;
+        color: gray;
+      }
+
+      .unread-dot {
+        width: 8px;
+        height: 8px;
+        background: #0d6efd;
+        border-radius: 50%;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+    }
+  }
+
+  .show-toggle {
+    margin: 5px auto;
+    text-align: center;
+    color: #0d6efd;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.2s;
+
+    i {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
