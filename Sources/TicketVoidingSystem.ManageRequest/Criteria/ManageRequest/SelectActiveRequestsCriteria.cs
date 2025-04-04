@@ -14,7 +14,7 @@ public class SelectActiveRequestsCriteria : CriteriaBase
 
     public string SubIssueType { get; set; }
 
-    public int Status { get; set; }
+    public string StatusIds { get; set; }
 
     public bool IsExcludeTest { get; set; }
 

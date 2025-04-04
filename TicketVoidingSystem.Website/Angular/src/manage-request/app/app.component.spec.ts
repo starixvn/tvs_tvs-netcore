@@ -88,7 +88,7 @@ class Helper {
     ngbToDate: new NgbDate(2020, 8, 6),
     issueTypeId: '11',
     subIssueType: '27',
-    status: '',
+    statusIds: '',
     isExcludeTest: true,
     createdBy: '',
     isDisplayMissingInfo: false,

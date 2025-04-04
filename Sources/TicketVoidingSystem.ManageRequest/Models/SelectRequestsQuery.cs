@@ -9,7 +9,7 @@ public class SelectRequestsQuery
     public DateTime? ToDate { get; set; }
     public string IssueTypeId { get; set; }
     public string SubIssueType { get; set; }
-    public int Status { get; set; }
+    public string StatusIds { get; set; }
     public bool IsExcludeTest { get; set; }
     public bool? IsFromDateBeforeBUDay { get; set; }
     public bool? IsToDateBeforeBUDay { get; set; }

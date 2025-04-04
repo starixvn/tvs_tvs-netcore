@@ -82,4 +82,7 @@ public class ManageRequestController(IMediator mediator) : ControllerBase
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Constant.Policy.Host)]
     public async Task<IActionResult> UpdateRequest(EditRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateStatusRequest(UpdateStatusRequest request) => Ok(await mediator.Send(request));
 }

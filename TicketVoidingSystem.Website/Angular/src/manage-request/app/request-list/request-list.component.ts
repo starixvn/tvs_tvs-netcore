@@ -52,7 +52,7 @@ export class RequestListComponent implements OnInit, OnChanges {
   element = inject(ElementRef);
   changeDetectorRef = inject(ChangeDetectorRef);
   requestDescriptionService = inject(RequestDescriptionService);
-  
+
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -60,14 +60,16 @@ export class RequestListComponent implements OnInit, OnChanges {
   async ngOnInit() {
     this.requestStatusChangeEvent.subscribe((requestStatus: RequestStatus[]) => {
       this.updateRequestStatus(requestStatus, this.displayedModels);
+      this.displayedModels.forEach(x => x.isStored = true);
     });
+
     this.actions = await this.commonService.getVoidActions();
     this.issueTypesModel = await this.commonService.getIssueTypes();
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['models']) {
-      this.paging.total = this.models.length;
+      this.paging.total = this.models?.length;
       this.filterDisplayRequests();
     }
   }
@@ -140,7 +142,7 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   filterDisplayRequests() {
-    this.displayedModels = this.models.slice(this.paging.begin - 1, this.paging.end);
+    this.displayedModels = this.models?.slice(this.paging.begin - 1, this.paging.end);
   }
 
   showTickets(request: RequestModel, matchId: number, requestDetailId: number) {
@@ -257,7 +259,6 @@ export class RequestListComponent implements OnInit, OnChanges {
         }
       }
     });
-
     this.changeDetectorRef.detectChanges();
   }
 
@@ -354,5 +355,10 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   public isShowIconMissingInfo(value: string): boolean {
     return this.isShowMissingInfo && !value;
+  }
+
+  changeStoreRequest(index: number){
+    this.displayedModels[index].isStored = !this.displayedModels[index].isStored;
+    this.appService.updateStatusRequest(this.displayedModels[index].requestId, this.displayedModels[index].isStored);
   }
 }

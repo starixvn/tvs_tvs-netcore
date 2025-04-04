@@ -102,8 +102,22 @@
                   </div>
                   <div class="d-flex me-3">
                     <label class="col-form-label col-form-label-sm me-2">Status</label>
-                    <ng-select [items]="statusSelectList" bindLabel="name" bindValue="value" [(ngModel)]="model.status"
-                      [clearable]="false">
+                    <ng-select class="sub-type-dropdown" [items]="statusSelectList" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
+                    bindValue="value" [(ngModel)]="selectedStatus" groupBy="group" [selectableGroup]="true"[selectableGroupAsModel]="false"
+                    [clearable]="false" [searchable]="false" placeholder="Select an option" (change)="updateSelectedStatus()">
+                      <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index" >
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value">
+                          <span class="ng-value-label">
+                            {{items.length === 1 ? items[0].name : items.length === statusSelectList.length ? 'All' : items.length + ' selected'}}
+                          </span>
+                        </div>
+                      </ng-template>
                     </ng-select>
                   </div>
                   <div class="d-flex me-3">

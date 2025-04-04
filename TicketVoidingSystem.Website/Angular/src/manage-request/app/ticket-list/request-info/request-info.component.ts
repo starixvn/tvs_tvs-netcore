@@ -116,7 +116,7 @@ export class RequestInfoComponent implements OnInit {
       requestId: this.ticketListModal.requestId,
       matchIds: distinctMatchIds.join(','),
     } as GetGeneralInfoQuery;
-    this.briefInfoModels = await this.appService.GetBriefInfo(generalInfoQuery);
+    this.briefInfoModels = await this.appService.getBriefInfo(generalInfoQuery);
     this.isBlock = false;
   }
 
@@ -169,7 +169,7 @@ export class RequestInfoComponent implements OnInit {
   }
 
   public async saveBriefInfoNote() {
-    await this.appService.SaveBriefInfoNote(this.model.request.requestId, this.model.request.briefInfoNote);
+    await this.appService.saveBriefInfoNote(this.model.request.requestId, this.model.request.briefInfoNote);
   }
 
   private updateIssue() {

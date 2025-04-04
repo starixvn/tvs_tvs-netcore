@@ -120,23 +120,20 @@ export class MarkType {
 }
 
 export class ManageRequestStatus {
-  static readonly ALL_ID = -1;
   static readonly NEW_ID = 0;
   static readonly RUNNING_ID = 1;
   static readonly COMPLETED_ID = 2;
   static readonly FAILED_ID = 3;
-
-  static readonly RUNNING = 'Running';
-  static readonly FAILED = 'Failed';
-  static readonly COMPLETED = 'Completed';
+  static readonly STORED_ID = 4;
 
   static readonly MULTIPLE_OPTIONS: Selection[] = [
-    { value: ManageRequestStatus.ALL_ID.toString(), name: 'All' },
-    { value: ManageRequestStatus.NEW_ID.toString(), name: 'New' },
-    { value: ManageRequestStatus.RUNNING_ID.toString(), name: 'Running' },
-    { value: ManageRequestStatus.FAILED_ID.toString(), name: 'Failed' },
-    { value: ManageRequestStatus.COMPLETED_ID.toString(), name: 'Completed' }
+    { value: ManageRequestStatus.NEW_ID.toString(), name: 'New', group: 'All' },
+    { value: ManageRequestStatus.RUNNING_ID.toString(), name: 'Running', group: 'All' },
+    { value: ManageRequestStatus.FAILED_ID.toString(), name: 'Failed', group: 'All' },
+    { value: ManageRequestStatus.COMPLETED_ID.toString(), name: 'Completed', group: 'All' },
+    { value: ManageRequestStatus.STORED_ID.toString(), name: 'Stored', group: 'All' }
   ];
+  static readonly DEFAULT_STATUS = this.MULTIPLE_OPTIONS.filter(x => x.value !== ManageRequestStatus.STORED_ID.toString()).map(x => x.value);
 }
 
 export class TVSRequestActionType {
