@@ -109,6 +109,10 @@
         {
           "Name": "GPI Live Casino",
           "Value": "90"
+        },
+        {
+          "Name": "Microgaming Live",
+          "Value": "107"
         }
       ]
     },
@@ -216,8 +220,20 @@
           "Value": "100"
         },
         {
+          "Name": "SABA Keno",
+          "Value": "102"
+        },
+        {
           "Name": "PLAYSTAR",
           "Value": "91"
+        },
+        {
+          "Name": "ASKMESLOT",
+          "Value": "103"
+        },
+        {
+          "Name": "HOTDOG",
+          "Value": "95"
         }
       ]
     },
