@@ -17,7 +17,7 @@ import { EventLeagueComponent } from '../../../../utility/components/event-leagu
 import { MatchModel } from '../../../../utility/models/match.model';
 import { PoolHouseTicketValue } from '../pool-house-ticket/pool-house-ticket.constant';
 import { FilterWrongOddsComponent } from './filter-wrong-odds/filter-wrong-odds.component';
-import { EventEmitter, SimpleChange } from '@angular/core';
+import { SimpleChange } from '@angular/core';
 
 class Helper {
   static readonly fakeRequestId = 1212;

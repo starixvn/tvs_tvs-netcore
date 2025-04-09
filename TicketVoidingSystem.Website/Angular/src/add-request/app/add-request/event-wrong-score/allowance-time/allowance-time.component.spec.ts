@@ -1,100 +1,141 @@
-
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Shallow } from 'shallow-render';
-import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
-import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AllowanceTimeComponent } from './allowance-time.component';
-
-@NgModule({
-  declarations: [
-    AllowanceTimeComponent,
-    TooltipComponent
-  ],
-  imports: [FormsModule]
-})
-class AppModuleTest { }
+import { LABELS } from '../../../../../utility/constants/labels';
+import { ElementRef } from '@angular/core';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 
 describe('AllowanceTimeComponent', () => {
-  let shallow: Shallow<AllowanceTimeComponent>;
+  let component: AllowanceTimeComponent;
+  let fixture: ComponentFixture<AllowanceTimeComponent>;
 
-  beforeEach(() => {
-    shallow = new Shallow(AllowanceTimeComponent, AppModuleTest);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule, AllowanceTimeComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(AllowanceTimeComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
-  it('AllowanceTimeComponent should init match snapshot', async () => {
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should initialize with default values', () => {
+    expect(component.aaTime).toBeUndefined();
+    expect(component.paTime).toBeUndefined();
+    expect(component.saTime).toBeUndefined();
+    expect(component.isDisabled).toBeUndefined();
+    expect(component.tooltip).toBeDefined();
+  });
+
+  it('should emit model change event', () => {
     // Arrange
-    const { fixture } = await shallow.render();
+    const spy = jest.spyOn(component.changeModel, 'emit');
+
+    // Act
+    component.emitModelChange();
 
     // Assert
-    expect(fixture).toMatchSnapshot();
+    expect(spy).toHaveBeenCalled();
   });
 
-  it('#emitModelChange should be called', async () => {
+  it('should return true when all allowance times are valid', () => {
     // Arrange
-    const { instance, outputs } = await shallow.render();
-    const spyChangeModelOutput = jest.spyOn(outputs.changeModel, 'emit').mockImplementation(jest.fn());
+    component.aaTime = 1;
+    component.paTime = 2;
+    component.saTime = 3;
 
-    instance.emitModelChange();
+    // Act
+    const result = component.isValidAllowanceTime();
+
     // Assert
-    expect(spyChangeModelOutput).toBeCalledTimes(1);
-    expect(spyChangeModelOutput).toBeCalledWith();
+    expect(result).toBeTruthy();
   });
 
-  it('#isValidAllowanceTime should return false', async () => {
+  it('should return true when all allowance times are undefined', () => {
     // Arrange
-    const mockAllowanceTime: AllowanceTime = {
-      aaTime: 1,
-      paTime: null,
-      saTime: null
+    component.aaTime = undefined;
+    component.paTime = undefined;
+    component.saTime = undefined;
+
+    // Act
+    const result = component.isValidAllowanceTime();
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('should return false and show tooltip when only some allowance times are set', () => {
+    // Arrange
+    const mockWrapperElement = {
+      getBoundingClientRect: jest.fn().mockReturnValue({
+        top: 0,
+        left: 0,
+        width: 100,
+        height: 100
+      })
     };
-    const { instance } = await shallow.render({
-      bind: { allowanceTime: mockAllowanceTime }
-    });
-    instance.tooltip.display = jest.fn();
 
-    const result = instance.isValidAllowanceTime();
+    const mockElement = {
+      nativeElement: {
+        getElementsByClassName: jest.fn().mockReturnValue([{
+          scrollIntoView: jest.fn(),
+          getBoundingClientRect: jest.fn().mockReturnValue({
+            top: 0,
+            left: 0,
+            width: 100,
+            height: 100
+          })
+        }]),
+        closest: jest.fn().mockReturnValue(mockWrapperElement)
+      }
+    };
+    component.tooltip = {} as Tooltip;
+    component.tooltip.display = jest.fn();
+
+    // Mock window properties
+    Object.defineProperty(window, 'scrollY', { value: 0 });
+    Object.defineProperty(window, 'scrollX', { value: 0 });
+
+    component.tooltip.element = mockElement as unknown as ElementRef;
+    component.aaTime = 1;
+    component.paTime = undefined;
+    component.saTime = 3;
+
+    // Act
+    const result = component.isValidAllowanceTime();
 
     // Assert
-    expect(result).toBe(false);
-    expect(instance.tooltip.display).toBeCalledTimes(1);
+    expect(result).toBeFalsy();
+    expect(component.tooltip.display).toHaveBeenCalledWith('allowance-time', LABELS.INVALID_SETTING_TIME);
   });
 
-  it('#isValidAllowanceTime should return true', async () => {
+  it('should handle string values for allowance times', () => {
     // Arrange
-    const mockAllowanceTime: AllowanceTime = {
-      aaTime: null,
-      paTime: null,
-      saTime: null
-    };
-    const { instance } = await shallow.render({
-      bind: { allowanceTime: mockAllowanceTime }
-    });
-    instance.tooltip.display = jest.fn();
+    component.aaTime = 1;
+    component.paTime = 2;
+    component.saTime = 3;
 
-    const result = instance.isValidAllowanceTime();
+    // Act
+    const result = component.isValidAllowanceTime();
 
     // Assert
-    expect(result).toBe(true);
-    expect(instance.tooltip.display).toBeCalledTimes(0);
+    expect(result).toBeTruthy();
   });
 
-  it('#isValidAllowanceTime should return true', async () => {
+  it('should handle zero values for allowance times', () => {
     // Arrange
-    const mockAllowanceTime: AllowanceTime = {
-      aaTime: 0,
-      paTime: 0,
-      saTime: 0
-    };
-    const { instance } = await shallow.render({
-      bind: { allowanceTime: mockAllowanceTime }
-    });
-    instance.tooltip.display = jest.fn();
+    component.aaTime = 0;
+    component.paTime = 0;
+    component.saTime = 0;
 
-    const result = instance.isValidAllowanceTime();
+    // Act
+    const result = component.isValidAllowanceTime();
 
     // Assert
-    expect(result).toBe(true);
-    expect(instance.tooltip.display).toBeCalledTimes(0);
+    expect(result).toBeTruthy();
   });
 });

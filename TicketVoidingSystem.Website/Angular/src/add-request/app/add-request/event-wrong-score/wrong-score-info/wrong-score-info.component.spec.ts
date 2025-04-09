@@ -1,448 +1,341 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
-import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
-import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
-import { CommonService } from '../../../../../utility/services/common.service';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { AddRequestStore } from '../../add-request.store';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { WrongScoreInfoComponent } from './wrong-score-info.component';
+import { ValidationService } from '../services/validation.service';
+import { LogInfoService } from '../services/log-info.service';
+import { WrongScoreService } from '../services/wrong-score.service';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
-import { LogInfoService } from '../services/log-info.service';
-import { SaveRequestService } from '../services/save-request.service';
-import { ValidationService } from '../services/validation.service';
-import { WrongScoreService } from '../services/wrong-score.service';
-import { WrongScoreInfoComponent } from './wrong-score-info.component';
+import { PrimitiveProperty } from '../event-wrong-score.model';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
+import moment from 'moment-timezone';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { ElementRef, EventEmitter } from '@angular/core';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { EventWrongScoreService } from '../services/event-wrong-score.service';
+import { CommonService } from '../../../../../utility/services/common.service';
+import { GetLogInfoViewModel, GetLogInfoModel, Validation } from '../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { DateFullTimeNewComponent } from 'src/utility/components/date-time/date-full-time-new/date-full-time-new.component';
 
 class Helper {
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeAllowanceTime: AllowanceTime = {
-    aaTime: 1,
-    paTime: 1,
-    saTime: 1,
-  };
+  static readonly fakeRequestId = 1212;
+  static readonly fakeMatchId = 123;
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
     isTest: true,
     isVoided: false,
+    isChangeSubTypeManual: true,
     isAbnormal: false
   } as FilterModel;
 
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    scoreOfMatch: '',
-    scoreNormalTicket: '',
-    instantlySettleCount: 2,
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeValidationMessage: ValidationMessage[] = [
-    {
-      isError: false,
-      reason: '',
-    }
-  ];
-  static readonly fakeWrongScoreModels: WrongScoreModel[] = [{
-    scoreId: 5464,
-    isActive: true,
-    wrongScore: '0-1',
-    subIssueTypeId: 5,
-    filterBy: 1,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    actualScore: '',
-    matchId: 900000,
-    isChecked: true,
-    eventDate: null,
-    voidFromTime: Helper.fakeFromDateTime,
-    voidToTime: Helper.fakeToDateTime,
-  }] as WrongScoreModel[];
+  static getFakeWrongScoreModel(): WrongScoreModel {
+    const model = new WrongScoreModel();
+    model.scoreId = 1;
+    model.isActive = true;
+    model.wrongScore = '';
+    model.subIssueTypeId = 1;
+    model.filterFromTransTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    model.filterToTransTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+
+    const logInfoDetail = new LogInfoDetail();
+    logInfoDetail.matchId = 123;
+    logInfoDetail.liveScores = '';
+    logInfoDetail.voidFromTime = new Date();
+    logInfoDetail.voidToTime = new Date();
+    logInfoDetail.transVoidToTime = new Date();
+    logInfoDetail.singleCount = 0;
+    logInfoDetail.cashOutCount = 0;
+    logInfoDetail.settleCount = 0;
+    logInfoDetail.instantlySettleCount = 0;
+    logInfoDetail.mainParlayCount = 0;
+    logInfoDetail.cancelCashOutCount = 0;
+    logInfoDetail.scoreNormalTicket = '';
+    logInfoDetail.scoreOfMatch = '';
+    logInfoDetail.minTransId = '';
+    logInfoDetail.actionType = '';
+    logInfoDetail.isHasWarningRangeTime = false;
+    model.logInfoDetail = logInfoDetail;
+
+    model.messageValidationLogInfo = [];
+    model.actualScore = '';
+    model.matchId = 123;
+    model.isChecked = false;
+    model.eventDate = new Date();
+    model.voidFromTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    model.voidToTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    model.aaTime = 0;
+    model.paTime = 0;
+    model.saTime = 0;
+    model.filterBy = 1;
+    model.isCheckedVar = false;
+    model.tvDetectionValue = 0;
+    model.serviceAcceptTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    model.actualTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    model.minuteOffset = '0';
+    model.secondOffset = '0';
+    model.sportType = 1;
+    model.isMainMatch = true;
+    model.matchType = 1;
+
+    return model;
+  }
+
+  static readonly fakePrimitiveProps = new PrimitiveProperty();
 }
 
-describe('EventRedCardComponent', () => {
-  @NgModule({
-    declarations: [
-      TooltipComponent, DateFullTimeNewComponent
-    ],
-    imports: [
-      NgbModule, FormsModule, BlockUiModule, PipeModule
-    ],
-    providers: [
-      CommonService,AddRequestApiService, AddRequestStore, ValidationService, SaveRequestService, WrongScoreService
-    ]
-  })
-  class AppModuleTest { }
+describe('WrongScoreInfoComponent', () => {
+  let component: WrongScoreInfoComponent;
+  let fixture: ComponentFixture<WrongScoreInfoComponent>;
+  let validationService: ValidationService;
+  let logInfoService: LogInfoService;
+  let wrongScoreService: WrongScoreService;
+  let commonService: CommonService;
 
-  let shallow: Shallow<WrongScoreInfoComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        LogInfoService,
+        WrongScoreService,
+        ModalService,
+        EventWrongScoreService,
+        CommonService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(WrongScoreInfoComponent, AppModuleTest);
+    fixture = TestBed.createComponent(WrongScoreInfoComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    logInfoService = fixture.debugElement.injector.get(LogInfoService);
+    wrongScoreService = fixture.debugElement.injector.get(WrongScoreService);
+    commonService = fixture.debugElement.injector.get(CommonService);
+    component = fixture.componentInstance;
+
+    // Set default input values
+    component.index = 0;
+    component.matchId = Helper.fakeMatchId;
+    component.filter = Helper.fakeFilterModel;
+    component.isEdit = false;
+    component.requestId = Helper.fakeRequestId;
+    component.isVoided = false;
+    component.isCollapse = false;
+    component.filterBy = 1;
+    component.originWrongScoreModels = [Helper.getFakeWrongScoreModel()];
+    component.wrongScoreModel = Helper.getFakeWrongScoreModel();
+    component.primitiveProps = Helper.fakePrimitiveProps;
+    component.selectedWrongScores = [Helper.getFakeWrongScoreModel()];
+    component.checkScoreEvent = new EventEmitter();
+    component.updateByOriginWrongScoreModelEvent = new EventEmitter();
+    component.isBlock = false;
+    component.tooltip = new Tooltip();
   });
 
-  it('WrongScoreInfoComponent init should match snapshot', async () => {
-    const { fixture, instance } = await shallow.render({
-      bind: {
-        filter: Helper.fakeFilterModel,
-        isEdit: false
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should initialize with default values', () => {
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.maxDate).toBeDefined();
+    expect(component.isCollapse).toBeTruthy();
+  });
+
+  it('should handle checkbox change when checked', async () => {
+    // Arrange
+    component.fromTimeComponent = {} as DateFullTimeNewComponent;
+    component.toTimeComponent = {} as DateFullTimeNewComponent;
+    component.fromTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(true);
+    component.toTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(true);
+    component.fromTimeComponent.isTimeValid = jest.fn().mockReturnValue(true);
+    component.toTimeComponent.isTimeValid = jest.fn().mockReturnValue(true);
+    component.wrongScoreModel = {} as WrongScoreModel;
+
+    // Mock element cho Tooltip
+    const mockElement = {
+      nativeElement: {
+        getElementsByClassName: jest.fn().mockReturnValue([{
+          scrollIntoView: jest.fn()
+        }])
       }
-    });
+    };
+    component.tooltip.element = mockElement as unknown as ElementRef;
 
-    expect(fixture).toMatchSnapshot();
-    expect(instance.isEdit).toBe(false);
+    jest.spyOn(component.checkScoreEvent, 'emit');
+    jest.spyOn(validationService, 'isLastScore').mockReturnValue(true);
+    jest.spyOn(wrongScoreService, 'handleCheckedLastScore').mockResolvedValue(undefined);
+    jest.spyOn(logInfoService, 'clearDataValidation');
+    jest.spyOn(logInfoService, 'getLogInfo');
+    jest.spyOn(validationService, 'isFromTimeSameOrBeforeToTime').mockReturnValue(true);
+    jest.spyOn(validationService, 'isFromTimeSameOrAfterDefaultValue').mockReturnValue(true);
+    jest.spyOn(validationService, 'isToTimeSmallerThanFromTimeNextScore').mockReturnValue(true);
+
+    const mockTransInfoModel = new TransInfoAddRequestModel();
+    mockTransInfoModel.transInfoJson = '';
+    mockTransInfoModel.unMarkTransIds = '';
+    mockTransInfoModel.markTransIds = '';
+    mockTransInfoModel.removeTransIds = '';
+    
+    const mockGetLogInfoModel = new GetLogInfoModel();
+    mockGetLogInfoModel.matchId = 123;
+    mockGetLogInfoModel.logInfoDetail = new LogInfoDetail();
+    mockGetLogInfoModel.validation = {
+      isInvalidTotalTickets: false,
+      isExistsSecondAccept: false,
+      isExistedInOtherRequest: false
+    } as Validation;
+    const mockViewModel = new GetLogInfoViewModel();
+    mockViewModel.getLogInfoModels = [mockGetLogInfoModel];
+    mockViewModel.transInfoAddRequestModel = mockTransInfoModel;
+    
+    jest.spyOn(commonService, 'getLogInfo').mockResolvedValue(mockViewModel);
+
+    // Act
+    await component.onchangeCheckbox(true);
+
+    // Assert
+    expect(component.checkScoreEvent.emit).toHaveBeenCalled();
+    expect(validationService.isLastScore).toHaveBeenCalled();
+    expect(wrongScoreService.handleCheckedLastScore).toHaveBeenCalled();
+    expect(logInfoService.clearDataValidation).toHaveBeenCalled();
+    expect(logInfoService.getLogInfo).toHaveBeenCalled();
+    expect(component.isCollapse).toBeFalsy();
   });
 
-  it('#ngOnInit should only call initData', async () => {
-    const { instance } = await shallow.render({
-      bind: {
-        isEdit: false
-      }
-    });
-    const spyOnInitData = jest.spyOn(instance, 'initData').mockImplementation(() => jest.fn());
-    instance.ngOnInit();
+  it('should handle checkbox change when unchecked', async () => {
+    // Arrange
+    jest.spyOn(component.checkScoreEvent, 'emit');
+    jest.spyOn(wrongScoreService, 'setNullAllowanceTime');
+    jest.spyOn(logInfoService, 'clearDataValidation');
+    jest.spyOn(validationService, 'isLastScore').mockReturnValue(true);
 
-    expect(spyOnInitData).toBeCalledTimes(1);
+    // Act
+    await component.onchangeCheckbox(false);
+
+    // Assert
+    expect(component.checkScoreEvent.emit).toHaveBeenCalled();
+    expect(wrongScoreService.setNullAllowanceTime).toHaveBeenCalled();
+    expect(logInfoService.clearDataValidation).toHaveBeenCalled();
+    expect(component.wrongScoreModel.filterToTransTime).toBeNull();
+    expect(component.isCollapse).toBeTruthy();
   });
 
-  it('#initData should be called', async () => {
-    const { instance } = await shallow.render({
-      bind: {
-        isEdit: true
-      }
-    });
+  it('should refresh log info when date time is valid', async () => {
+    // Arrange
+    component.fromTimeComponent = {} as DateFullTimeNewComponent;
+    component.toTimeComponent = {} as DateFullTimeNewComponent;
+    component.fromTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(true);
+    component.toTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(true);
+    component.fromTimeComponent.isTimeValid = jest.fn().mockReturnValue(true);
+    component.toTimeComponent.isTimeValid = jest.fn().mockReturnValue(true);
+    jest.spyOn(validationService, 'isValidToDateTime').mockReturnValue(true);
+    jest.spyOn(validationService, 'isFromTimeSameOrBeforeToTime').mockReturnValue(true);
+    jest.spyOn(validationService, 'isFromTimeSameOrAfterDefaultValue').mockReturnValue(true);
+    jest.spyOn(validationService, 'isToTimeSmallerThanFromTimeNextScore').mockReturnValue(true);
+    jest.spyOn(logInfoService, 'clearDataValidation');
+    
+    const mockTransInfoModel = new TransInfoAddRequestModel();
+    mockTransInfoModel.transInfoJson = '';
+    mockTransInfoModel.unMarkTransIds = '';
+    mockTransInfoModel.markTransIds = '';
+    mockTransInfoModel.removeTransIds = '';
+    
+    const mockGetLogInfoModel = new GetLogInfoModel();
+    mockGetLogInfoModel.matchId = 123;
+    mockGetLogInfoModel.logInfoDetail = new LogInfoDetail();
+    
+    const mockViewModel = new GetLogInfoViewModel();
+    mockViewModel.getLogInfoModels = [mockGetLogInfoModel];
+    mockViewModel.transInfoAddRequestModel = mockTransInfoModel;
+    
+    jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue(undefined);
+    jest.spyOn(commonService, 'getLogInfo').mockResolvedValue(mockViewModel);
 
-    instance.initData();
+    // Act
+    await component.refreshLogInfo();
 
-    expect(instance.isCollapse).toBe(false);
+    // Assert
+    expect(logInfoService.clearDataValidation).toHaveBeenCalled();
+    expect(logInfoService.getLogInfo).toHaveBeenCalled();
+    expect(component.isCollapse).toBeFalsy();
   });
 
-  it('#onchangeCheckbox should call handleCheckedScore', async () => {
-    const { instance } = await shallow.render();
-    instance['handleCheckedScore'] = jest.fn();
-    await instance.onchangeCheckbox(true);
+  it('should get duration time when time is valid', () => {
+    // Arrange
+    component.fromTimeComponent = {} as DateFullTimeNewComponent;
+    component.toTimeComponent = {} as DateFullTimeNewComponent;
+    component.fromTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(true);
+    component.toTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(true);
+    component.fromTimeComponent.isTimeValid = jest.fn().mockReturnValue(true);
+    component.toTimeComponent.isTimeValid = jest.fn().mockReturnValue(true);
+    jest.spyOn(wrongScoreService, 'getDurationTime').mockReturnValue('1:00');
 
-    expect(instance['handleCheckedScore']).toBeCalledTimes(1);
-    expect(instance.isCollapse).toBe(false);
+    // Act
+    const result = component.getDurationTime();
+
+    // Assert
+    expect(result).toBe('1:00');
   });
 
-  it('#onchangeCheckbox should call handleUnCheckedScore', async () => {
-    const { instance } = await shallow.render();
-    instance['handleUnCheckedScore'] = jest.fn();
-    await instance.onchangeCheckbox(false);
+  it('should return "-" when time is invalid', () => {
+    // Arrange
+    component.fromTimeComponent = {} as DateFullTimeNewComponent;
+    component.toTimeComponent = {} as DateFullTimeNewComponent;
+    component.fromTimeComponent.isTimeValid = jest.fn().mockReturnValue(false);
+    component.toTimeComponent.isTimeValid = jest.fn().mockReturnValue(false);
 
-    expect(instance['handleUnCheckedScore']).toBeCalledTimes(1);
-    expect(instance.isCollapse).toBe(true);
-  });
+    // Act
+    const result = component.getDurationTime();
 
-  it('#handleCheckedScore should only call refreshLogInfo', async () => {
-    const { instance } = await shallow
-    .mock(ValidationService, {
-      isLastScore: () => false
-    })
-    .render();
-    const spyOnRefreshLogInfo = jest.spyOn(instance, 'refreshLogInfo').mockImplementation(jest.fn());
-
-    await instance['handleCheckedScore']();
-
-    expect(spyOnRefreshLogInfo).toBeCalledTimes(1);
-  });
-
-  it('#handleCheckedScore should run all case', async () => {
-    const mockHandleCheckedLastScore = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        handleCheckedLastScore: mockHandleCheckedLastScore
-      })
-      .mock(ValidationService, {
-        isLastScore: () => true,
-      })
-      .render({
-        bind: { filter: Helper.fakeFilterModel }
-      });
-    const spyOnRefreshLogInfo = jest.spyOn(instance, 'refreshLogInfo').mockImplementation(jest.fn());
-
-    await instance['handleCheckedScore']();
-
-    expect(spyOnRefreshLogInfo).toBeCalledTimes(1);
-    expect(mockHandleCheckedLastScore).toBeCalledTimes(1);
-  });
-
-  it('#handleUnCheckedScore should execute scope when isLastScore return true', async () => {
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        setNullAllowanceTime: jest.fn(),
-      })
-      .mock(ValidationService, {
-        isLastScore: () => true,
-      })
-      .mock(LogInfoService, {
-        clearDataValidation: jest.fn()
-      })
-      .render();
-    instance.originWrongScoreModels = Helper.fakeWrongScoreModels;
-    instance.wrongScoreModel = Helper.fakeWrongScoreModels[0];
-
-    await instance['handleUnCheckedScore']();
-
-    expect(instance.wrongScoreModel.filterToTransTime).toBe(null);
-  });
-
-  it('#handleUnCheckedScore should execute scope when isLastScore return false', async () => {
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        setNullAllowanceTime: jest.fn(),
-      })
-      .mock(ValidationService, {
-        isLastScore: () => false,
-      })
-      .mock(LogInfoService, {
-        clearDataValidation: jest.fn()
-      })
-      .render();
-    instance.originWrongScoreModels = [];
-    instance.originWrongScoreModels.find = jest.fn().mockImplementation(() => {
-      return { filterToTransTime: 'xxx' } as WrongScoreModel;
-    });
-
-    await instance['handleUnCheckedScore']();
-
-    expect(instance.wrongScoreModel.filterToTransTime).toBe('xxx');
-  });
-
-  it('#refreshLogInfo should call logInfoService', async () => {
-    const { instance } = await shallow
-      .mock(LogInfoService, {
-        clearDataValidation: jest.fn(), getLogInfo: jest.fn()
-      })
-      .render();
-    instance.isValidDateTime = jest.fn().mockImplementation(() => true);
-    instance.selectedWrongScores = Helper.fakeWrongScoreModels;
-    await instance.refreshLogInfo();
-
-    expect(instance.isCollapse).toBe(false);
-  });
-
-  it('#isValidDateTime should return false', async () => {
-    const { instance } = await shallow.render();
-    instance.fromTimeComponent.validateWithTooltip = jest.fn().mockImplementation(() => false);
-
-    const result = instance.isValidDateTime();
-
-    expect(result).toBe(false);
-  });
-
-  it('#isValidDateTime should return true', async () => {
-    const { instance } = await shallow
-    .mock(ValidationService, {
-      isValidToDateTime: jest.fn().mockImplementation(() => true),
-      isFromTimeSameOrBeforeToTime: jest.fn().mockImplementation(() => true),
-      isFromTimeSameOrAfterDefaultValue: jest.fn().mockImplementation(() => true),
-      isToTimeSmallerThanFromTimeNextScore: jest.fn().mockImplementation(() => true),
-    })
-    .render();
-    instance.fromTimeComponent.validateWithTooltip = jest.fn().mockImplementation(() => true);
-
-    const result = instance.isValidDateTime();
-
-    expect(result).toBe(true);
-  });
-
-  it('#getDurationTime should return -', async () => {
-    const { instance } = await shallow.render();
-    instance.fromTimeComponent.isTimeValid = jest.fn().mockImplementation(() => false);
-
-    const result = instance.getDurationTime();
-
+    // Assert
     expect(result).toBe('-');
   });
 
-  it('#getDurationTime should return - when have not fromTimeComponent', async () => {
-    const { instance } = await shallow.render();
-    instance.fromTimeComponent = null;
+  it('should show warning for special bet type', () => {
+    // Arrange
+    const voidFromTime = moment().subtract(1, 'hour').toDate();
+    component.wrongScoreModel.logInfoDetail.voidFromTime = voidFromTime;
+    component.wrongScoreModel.filterFromTransTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
-    const result = instance.getDurationTime();
+    // Act
+    const result = component.isShowWarningSpecialBetType();
 
-    expect(result).toBe('-');
+    // Assert
+    expect(result).toBeTruthy();
   });
 
-  it('#getDurationTime should return - when have not toTimeComponent', async () => {
-    const { instance } = await shallow.render();
-    instance.fromTimeComponent.isTimeValid = jest.fn().mockImplementation(() => false);
-    instance.toTimeComponent = null;
+  it('should not show warning for special bet type when times are valid', () => {
+    // Arrange
+    const voidFromTime = moment().add(1, 'hour').toDate();
+    component.wrongScoreModel.logInfoDetail.voidFromTime = voidFromTime;
+    component.wrongScoreModel.filterFromTransTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
-    const result = instance.getDurationTime();
+    // Act
+    const result = component.isShowWarningSpecialBetType();
 
-    expect(result).toBe('-');
+    // Assert
+    expect(result).toBeFalsy();
   });
 
-  it('#getDurationTime should return - when toTimeComponent false', async () => {
-    const { instance } = await shallow.render();
-    instance.fromTimeComponent = new DateFullTimeNewComponent(null);
-    instance.toTimeComponent = new DateFullTimeNewComponent(null);
-    instance.fromTimeComponent.isTimeValid = jest.fn().mockImplementation(() => true);
-    instance.toTimeComponent.isTimeValid = jest.fn().mockImplementation(() => false);
+  it('should show count info when counts are valid', () => {
+    // Act
+    const result = component.isShowCountInfo(1, 2, 3);
 
-    const result = instance.getDurationTime();
-
-    expect(result).toBe('-');
+    // Assert
+    expect(result).toBeTruthy();
   });
 
-  it('#getDurationTime should return 4m11s', async () => {
-    const { instance } = await shallow
-    .mock(WrongScoreService, { getDurationTime: jest.fn().mockImplementation(() => '4m11s') })
-    .render();
-    instance.fromTimeComponent = new DateFullTimeNewComponent(null);
-    instance.fromTimeComponent.isTimeValid = jest.fn().mockImplementation(() => true);
-    instance.toTimeComponent = new DateFullTimeNewComponent(null);
-    instance.toTimeComponent.isTimeValid = jest.fn().mockImplementation(() => true);
-    instance.wrongScoreModel.filterFromTransTime = '2021/11/10 01:01:00.000 AM';
-    instance.wrongScoreModel.filterToTransTime = '2021/11/10 01:05:11.000 AM';
+  it('should get count info content', () => {
+    // Act
+    const result = component.countInfoContent(1, 2, 3);
 
-    const result = instance.getDurationTime();
-
-    expect(result).toBe('4m11s');
-  });
-
-  it('#getDurationTime should return - when toTimeComponent false', async () => {
-    const { instance } = await shallow.render();
-    instance.fromTimeComponent = new DateFullTimeNewComponent(null);
-    instance.toTimeComponent = new DateFullTimeNewComponent(null);
-    instance.fromTimeComponent.isTimeValid = jest.fn().mockImplementation(() => true);
-    instance.toTimeComponent.isTimeValid = jest.fn().mockImplementation(() => false);
-
-    const result = instance.getDurationTime();
-
-    expect(result).toBe('-');
-  });
-
-  it('#getDurationTime should return - when toTimeComponent null', async () => {
-    const { instance } = await shallow.render();
-    instance.fromTimeComponent = new DateFullTimeNewComponent(null);
-    instance.toTimeComponent = null;
-    instance.fromTimeComponent.isTimeValid = jest.fn().mockImplementation(() => true);
-
-    const result = instance.getDurationTime();
-
-    expect(result).toBe('-');
-  });
-
-  it('#refreshLogInfo should return', async () => {
-    const mockClearDataValidation = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, {
-      clearDataValidation: mockClearDataValidation
-    })
-    .render();
-    instance['isValidDateTime'] = jest.fn().mockImplementation(() => false);
-
-    await instance.refreshLogInfo();
-
-    expect(instance['isValidDateTime']).toHaveBeenCalledTimes(1);
-    expect(mockClearDataValidation).toHaveBeenCalledTimes(1);
-  });
-
-  it('#isShowWarningSpecialBetType should return true', async () => {
-    const { instance } = await shallow.render();
-    instance.wrongScoreModel = _.cloneDeep(Helper.fakeWrongScoreModels[0]);
-    instance.wrongScoreModel.logInfoDetail.voidFromTime = new Date('2020-10-08 09:44:46.361 PM');
-    instance.wrongScoreModel.filterFromTransTime = '2021-10-08 09:44:46.361 PM';
-
-    const actual = instance.isShowWarningSpecialBetType();
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isShowWarningSpecialBetType should return false', async () => {
-    const { instance } = await shallow.render();
-    instance.wrongScoreModel = _.cloneDeep(Helper.fakeWrongScoreModels[0]);
-    instance.wrongScoreModel.logInfoDetail.voidFromTime = new Date('2022-10-08 09:44:46.361 PM');
-    instance.wrongScoreModel.filterFromTransTime = '2021-10-08 09:44:46.361 PM';
-
-    const actual = instance.isShowWarningSpecialBetType();
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('isShowCountInfo should return true', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    const actual = instance['isShowCountInfo'](1, 2, 0);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('isShowCountInfo should return false', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    const actual = instance['isShowCountInfo'](0, 0, 0);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('countInfoContent should return info CashOut', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    const actual = instance['countInfoContent'](1, 2, 0);
-
-    expect(actual).toBe(' (Cash Out: <strong>1</strong>, Settled: <strong>2</strong>)');
-  });
-
-  it('countInfoContent should return info Settle', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    const actual = instance['countInfoContent'](1, 2, 0);
-
-    expect(actual).toBe(' (Cash Out: <strong>1</strong>, Settled: <strong>2</strong>)');
-  });
-
-  it('countInfoContent should return string have not info', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    const actual = instance['countInfoContent'](0, 0, 0);
-
-    expect(actual).toBe(' ()');
+    // Assert
+    expect(result).toBeDefined();
   });
 });

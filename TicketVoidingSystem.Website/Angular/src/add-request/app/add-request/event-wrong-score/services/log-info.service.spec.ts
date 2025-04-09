@@ -1,151 +1,150 @@
-import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { PrimitiveProperty } from '../event-wrong-score.model';
 import { LogInfoService } from './log-info.service';
-import { WrongScoreService } from './wrong-score.service';
-
-class Helper {
-  static readonly fakeRequestId = 1001;
-  static readonly fakeFirstMatchId = 1111;
-  static readonly fakeSecondMatchId = 2222;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeAllowanceTime: AllowanceTime = {
-    aaTime: 1,
-    paTime: 1,
-    saTime: 1,
-  };
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    scoreOfMatch: '',
-    scoreNormalTicket: '',
-    instantlySettleCount: 2,
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeWrongScoreModels: WrongScoreModel[] = [{
-    scoreId: 5464,
-    isActive: true,
-    wrongScore: '0-1',
-    subIssueTypeId: 5,
-    filterBy: 1,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    actualScore: '',
-    matchId: 900000,
-    isChecked: true,
-    eventDate: null,
-    voidFromTime: Helper.fakeFromDateTime,
-    voidToTime: Helper.fakeToDateTime,
-  },
-  {
-    scoreId: 5465,
-    isActive: false,
-    wrongScore: '2-1',
-    subIssueTypeId: 5,
-    filterBy: 1,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    actualScore: '',
-    matchId: 900000,
-    isChecked: false,
-    eventDate: null,
-    voidFromTime: Helper.fakeFromDateTime,
-    voidToTime: Helper.fakeToDateTime,
-  }] as WrongScoreModel[];
-  static readonly fakeTicketRequest: TicketRequest = {
-    transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
-    requestId: Helper.fakeRequestId,
-  } as TicketRequest;
-  static readonly fakeGetLogInfoModel: GetLogInfoModel = {
-    matchId: Helper.fakeFirstMatchId,
-    validation: {
-      isInvalidTotalTickets: false,
-      isExistedInOtherRequest: true,
-      isPoolHouseAffected: false
-    } as Validation,
-    ticketRequest: [{
-      transIds: '123456789',
-      requestId: 123
-    } as TicketRequest],
-    logInfoDetail: Helper.fakeLogInfoDetail
-  };
-  static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {
-    transInfoAddRequestModel: new TransInfoAddRequestModel(),
-    getLogInfoModels: [Helper.fakeGetLogInfoModel],
-  };
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '1',
-    subIssueTypeId: '1',
-    action: '1',
-    isTest: true,
-    isVoided: false,
-    isAbnormal: false
-  } as FilterModel;
-}
+import { TestBed } from '@angular/core/testing';
+import { ValidationService } from './validation.service';
+import { EventWrongScoreService } from './event-wrong-score.service';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { ValidationMessage } from '../../models/get-log-info.model';
 
 describe('LogInfoService', () => {
+  let service: LogInfoService;
   let commonService: CommonService;
-  let logInfoService: LogInfoService;
+  let validationService: ValidationService;
+  let eventWrongScoreService: EventWrongScoreService;
 
   beforeEach(() => {
-    commonService = new CommonService(null);
-    logInfoService = new LogInfoService(null, commonService);
+    TestBed.configureTestingModule({
+      providers: [
+        LogInfoService,
+        { provide: CommonService, useValue: { getLogInfo: jest.fn() } },
+        {
+          provide: ValidationService, useValue: {
+            isHasAllowanceTime: jest.fn(),
+            isHasAllowanceTimeWrongScoreModel: jest.fn()
+          }
+        },
+        { provide: EventWrongScoreService, useValue: { getFilterByBaseOnSubIssueType: jest.fn() } }
+      ]
+    });
+
+    service = TestBed.inject(LogInfoService);
+    commonService = TestBed.inject(CommonService);
+    validationService = TestBed.inject(ValidationService);
+    eventWrongScoreService = TestBed.inject(EventWrongScoreService);
   });
 
-  it('#getLogInfo should call #assignResultsGetLogInfoToListModel', async () => {
-    // Arrange
-    const mockCommonService = new CommonService(null);
-    mockCommonService.getLogInfo = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));
-    const mockLogInfoService = new LogInfoService(null, mockCommonService);
-    mockLogInfoService['assignResultsGetLogInfoToModel'] = jest.fn();
-    mockLogInfoService['assignResultsGetLogInfoToListModel'] = jest.fn();
-    mockLogInfoService['initGetLogInfoQueries'] = jest.fn();
-
-    await mockLogInfoService.getLogInfo(false, 1, 1, new FilterModel(), {filterBy: 1} as PrimitiveProperty, []);
-
-    expect(mockLogInfoService['assignResultsGetLogInfoToListModel']).toBeCalledTimes(1);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#getLogInfo should call #assignResultsGetLogInfoToModel', async () => {
-    // Arrange
-    const mockCommonService = new CommonService(null);
-    mockCommonService.getLogInfo = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));
-    const mockLogInfoService = new LogInfoService(null, mockCommonService);
-    mockLogInfoService['assignResultsGetLogInfoToModel'] = jest.fn();
-    mockLogInfoService['initGetLogInfoQueries'] = jest.fn();
+  describe('getLogInfo', () => {
+    it('should get log info and assign results for CHECK_TIME filter', async () => {
+      const isEdit = false;
+      const requestId = 1;
+      const filter = new FilterModel();
+      filter.subIssueTypeId = '1';
+      const primitiveProps: PrimitiveProperty = {
+        filterBy: TVSRequestFilterBy.CHECK_TIME,
+        isBlock: false,
+        actualScore: '',
+        isShowActualScore: false,
+        transInfoAddRequestModel: null,
+        isShowRelatedEvents: false
+      };
+      const wrongScoreModel = new WrongScoreModel();
+      wrongScoreModel.matchId = 1;
+      wrongScoreModel.filterFromTransTime = '2024-03-20T09:00:00';
+      wrongScoreModel.filterToTransTime = '2024-03-20T12:00:00';
+      wrongScoreModel.saTime = 11;
+      wrongScoreModel.logInfoDetail = new LogInfoDetail();
+      wrongScoreModel.messageValidationLogInfo = [];
+      const wrongScoreModels = [wrongScoreModel];
+      const mainMatchId = 1;
+      const defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
+      defaultFilterTimeWithAllowance.fromDateTime = '2024-03-20T09:00:00';
+      defaultFilterTimeWithAllowance.toDateTime = '2024-03-20T12:00:00';
 
-    await mockLogInfoService.getLogInfo(false, 1, 1, new FilterModel(), {filterBy: 2} as PrimitiveProperty, []);
+      const mockResponse = {
+        transInfoAddRequestModel: {},
+        getLogInfoModels: [{
+          matchId: 1,
+          logInfoDetail: {
+            voidFromTime: '2024-03-20T10:00:00',
+            voidToTime: '2024-03-20T11:00:00'
+          },
+          validation: { isInvalidTotalTickets: false }
+        }]
+      };
+      commonService.getLogInfo = jest.fn().mockResolvedValue(mockResponse);
+      eventWrongScoreService.getFilterByBaseOnSubIssueType = jest.fn().mockReturnValue(TVSRequestFilterBy.CHECK_TIME);
 
-    expect(mockLogInfoService['assignResultsGetLogInfoToModel']).toBeCalledTimes(1);
+      await service.getLogInfo(isEdit, requestId, filter, primitiveProps, wrongScoreModels, mainMatchId, defaultFilterTimeWithAllowance);
+
+      expect(commonService.getLogInfo).toHaveBeenCalled();
+      expect(wrongScoreModels[0].voidFromTime).toBeDefined();
+      expect(wrongScoreModels[0].voidToTime).toBeDefined();
+    });
   });
 
-  it('#getWrongScoreModel should be return query', async () => {
-    // Arrange
-    const wrongScoreService = new WrongScoreService(null, null);
-    wrongScoreService.getFilterByBaseOnSubIssueType = jest.fn();
-    logInfoService = new LogInfoService(wrongScoreService, null);
+  describe('mapRelatedEventToWrongScoreModel', () => {
+    it('should map LogInfoRelatedEvent to WrongScoreModel with allowance time', () => {
+      const logInfoRelatedEvent = new LogInfoRelatedEvent();
+      logInfoRelatedEvent.matchId = 1;
+      logInfoRelatedEvent.subIssueTypeId = 1;
+      logInfoRelatedEvent.voidTimeArea = {
+        fromDateTime: '2024-03-20T10:00:00',
+        toDateTime: '2024-03-20T11:00:00',
+        aaTime: 10,
+        paTime: 10.5,
+        saTime: 11
+      };
 
-    // Action
-    const result = logInfoService['getWrongScoreModel'](1, Helper.fakeFilterModel, Helper.fakeWrongScoreModels);
+      const defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
+      defaultFilterTimeWithAllowance.fromDateTime = '2024-03-20T09:00:00';
+      defaultFilterTimeWithAllowance.toDateTime = '2024-03-20T12:00:00';
+      validationService.isHasAllowanceTime = jest.fn().mockReturnValue(true);
+      eventWrongScoreService.getFilterByBaseOnSubIssueType = jest.fn().mockReturnValue(TVSRequestFilterBy.CHECK_TIME);
 
-    // Assert
-    expect(result.length).toEqual(Helper.fakeWrongScoreModels.length);
+      const result = service.mapRelatedEventToWrongScoreModel(logInfoRelatedEvent, defaultFilterTimeWithAllowance);
+
+      expect(result.matchId).toBe(1);
+      expect(result.filterFromTransTime).toBe(defaultFilterTimeWithAllowance.fromDateTime);
+      expect(result.filterToTransTime).toBe(defaultFilterTimeWithAllowance.toDateTime);
+    });
+  });
+
+  describe('clearDataValidation', () => {
+    it('should clear validation data from wrongScoreModels', () => {
+      const wrongScoreModels = [new WrongScoreModel()];
+      wrongScoreModels[0].logInfoDetail = new LogInfoDetail();
+      wrongScoreModels[0].messageValidationLogInfo = [new ValidationMessage()];
+      wrongScoreModels[0].voidFromTime = '2024-03-20T10:00:00';
+      wrongScoreModels[0].voidToTime = '2024-03-20T11:00:00';
+
+      service.clearDataValidation(wrongScoreModels);
+
+      expect(wrongScoreModels[0].logInfoDetail).toBeNull();
+      expect(wrongScoreModels[0].messageValidationLogInfo).toBeNull();
+      expect(wrongScoreModels[0].voidFromTime).toBeNull();
+      expect(wrongScoreModels[0].voidToTime).toBeNull();
+    });
+
+    it('should clear validation data from events if provided', () => {
+      const wrongScoreModels = [new WrongScoreModel()];
+      const events = [new LogInfoRelatedEvent()];
+      events[0].logInfoDetail = new LogInfoDetail();
+      events[0].messageValidationLogInfo = [new ValidationMessage()];
+
+      service.clearDataValidation(wrongScoreModels, events);
+
+      expect(events[0].logInfoDetail).toBeNull();
+      expect(events[0].messageValidationLogInfo).toBeNull();
+    });
   });
 });

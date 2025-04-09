@@ -380,6 +380,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     if (_.isNull(minTime)) {
       return '-';
     }
+
     return (this.acceptTypeName) ? `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)} - ${this.acceptTypeName}` :
       `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)}`;
   }
@@ -404,10 +405,10 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   }
 
   isShowLogInfoSelectedScores(wrongScoreModels: WrongScoreModel[]): boolean {
-    if (wrongScoreModels.filter(x => x.isChecked).length > 1 && this.primitiveProps.filterBy !== TVSRequestFilterBy.CHECK_TIME) {
-      return true;
-    }
-    return false;
+    const checkedScoresCount = wrongScoreModels.filter(x => x.isChecked).length;
+    const isNotCheckTimeFilter = this.primitiveProps.filterBy !== TVSRequestFilterBy.CHECK_TIME;
+
+    return checkedScoresCount > 1 && isNotCheckTimeFilter;
   }
 
   getSingleCountSelectedScore(wrongScoreModels: WrongScoreModel[]): number {
