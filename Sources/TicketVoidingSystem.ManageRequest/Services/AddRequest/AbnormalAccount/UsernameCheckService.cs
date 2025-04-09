@@ -50,17 +50,38 @@ public class UsernameCheckServiceImp(IDynamicRepository repository)
 
     private static ValidationInfo CreateValidationResult(IEnumerable<ValidationInfo> validationResults)
     {
+        var results = validationResults.ToList();
+
         return new ValidationInfo
         {
-            IsExistedInOtherRequest = validationResults.All(x => x.IsExistedInOtherRequest),
-            NumberOfTickets = validationResults.Sum(x => x.NumberOfTickets),
-            IsInvalidTotalTicket = !validationResults.Any(x => x.IsInvalidTotalTicket),
-            IsBeingMoveBetDate = validationResults.All(x => x.IsBeingMoveBetDate),
-            InvalidUserName = string.Join(",", validationResults.Where(x => !string.IsNullOrWhiteSpace(x.InvalidUserName)).Select(x => x.InvalidUserName)),
-            MatchIds = string.Join(",", validationResults.Where(x => !string.IsNullOrWhiteSpace(x.MatchIds)).Select(x => x.MatchIds)),
-            UnMarkTransIds = string.Join(",", validationResults.Where(x => !string.IsNullOrWhiteSpace(x.UnMarkTransIds)).Select(x => x.UnMarkTransIds)),
-            MarkTransIds = string.Join(",", validationResults.Where(x => !string.IsNullOrWhiteSpace(x.MarkTransIds)).Select(x => x.MarkTransIds)),
+            IsExistedInOtherRequest = results.TrueForAll(x => x.IsExistedInOtherRequest),
+            NumberOfTickets = results.Sum(x => x.NumberOfTickets),
+            IsInvalidTotalTicket = DetermineIsInvalidTotalTicket(results),
+            IsBeingMoveBetDate = results.TrueForAll(x => x.IsBeingMoveBetDate),
+            InvalidUserName = JoinNonEmptyValues(results, x => x.InvalidUserName),
+            MatchIds = JoinNonEmptyValues(results, x => x.MatchIds),
+            UnMarkTransIds = JoinNonEmptyValues(results, x => x.UnMarkTransIds),
+            MarkTransIds = JoinNonEmptyValues(results, x => x.MarkTransIds),
         };
+    }
+
+    private static string JoinNonEmptyValues(IEnumerable<ValidationInfo> results, Func<ValidationInfo, string> selector)
+    {
+        return string.Join(",",
+            results.Where(x => !string.IsNullOrWhiteSpace(selector(x)))
+                .Select(selector));
+    }
+
+    private static bool DetermineIsInvalidTotalTicket(IReadOnlyCollection<ValidationInfo> results)
+    {
+        var hasAnyInvalidTicket = results.Any(x => !x.IsInvalidTotalTicket);
+        if (hasAnyInvalidTicket)
+        {
+            return false;
+        }
+
+        var allTicketsAreInvalid = results.All(x => x.IsInvalidTotalTicket);
+        return allTicketsAreInvalid;
     }
 
     private static IEnumerable<AccountAdjustVoidLimit> GetAccountAdjustments(IEnumerable<AccountWinlostModel> accountWinlostModels)
