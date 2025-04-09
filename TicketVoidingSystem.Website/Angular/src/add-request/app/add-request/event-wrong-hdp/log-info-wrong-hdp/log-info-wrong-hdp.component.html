@@ -23,8 +23,8 @@
       <div class="log" [blockUi]="isBlock">
         <filter-with-hdp #filterWithHdp [matchId]="logInfo.matchId" [isEdit]="isEdit" [isDisabled]="isDisabled"
           (searchTicketEvent)="emitSearchEvent()" (refreshEvent)="refreshLogInfoBySearchEvent()"
-          (changeFilterEvent)="clearDataValidation();resetPoolHouseCheckedBetTypes()" [filter]="filter" [sportTypeId]="logInfo.sportType"
-          [isMainMatch]="isMainMatch" [filterWithHdpModel]="logInfo.filterWithHdp">
+          (changeFilterEvent)="clearDataValidation();resetPoolHouseCheckedBetTypes()" [filter]="filter"
+          [sportTypeId]="logInfo.sportType" [isMainMatch]="isMainMatch" [filterWithHdpModel]="logInfo.filterWithHdp">
         </filter-with-hdp>
         @if (logInfo.isShowValidation) {
         <div>
@@ -44,9 +44,9 @@
                 <span class="text-red"
                   [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, 0) | sanitizeHtml">
                 </span>
-                }&nbsp;
+                }
                 @if (!filter.isVoided) {
-                <span class="ticket-details" (click)="showAffectedTicketsDetails()">Details</span>
+                &nbsp;<span class="ticket-details" (click)="showAffectedTicketsDetails()">Details</span>
                 }<br />
               </ng-container>
               @if (isMainMatch) {

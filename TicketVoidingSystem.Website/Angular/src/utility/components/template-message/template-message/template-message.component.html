@@ -35,7 +35,7 @@
       <label class="col-form-label col-form-label-sm" for="chk-aio-msg"> AIO Message</label>
     </div>
   }
-  @if(isDisabledCheckBoxEarlyEvent()){
+  @if(isShowEarlyEventCheckBoxMessage()){
     <div class="d-flex align-items-center me-3">
       <input [(ngModel)]="value.isCheckedEarlyEvent" [disabled]="isDisabledCheckBoxEarlyEvent()" type="checkbox" id="chk-early-event" class="me-1" (ngModelChange)="updateMessage()"/>
       <label class="col-form-label col-form-label-sm" for="chk-early-event"> Early Event</label>

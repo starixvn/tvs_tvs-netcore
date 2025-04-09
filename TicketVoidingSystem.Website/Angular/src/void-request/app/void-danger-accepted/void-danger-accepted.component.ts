@@ -89,6 +89,10 @@ export class VoidDangerAcceptedComponent implements OnInit {
     return this.isWrongOdds() || item.isMainMatch;
   }
 
+  isShowEarlyEventCheckBoxMessage(item: VoidMatch): boolean {
+    return item.templateValue && (this.isWrongHdp() || this.isWrong1stHdp() || this.isWrongOu() || this.isWrong1stOu());
+  }
+
   public changeCheckBoxEarlyEvent(voidMatch: VoidMatch): void {
     voidMatch.templateValue.isCheckedEarlyEvent = voidMatch.isCheckedEarlyEvent;
     voidMatch.templateValue = _.clone(voidMatch.templateValue);
