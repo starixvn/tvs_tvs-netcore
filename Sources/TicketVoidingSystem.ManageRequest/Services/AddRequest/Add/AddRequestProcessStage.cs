@@ -20,7 +20,6 @@ public class AddRequestProcessStageImp(
     IMapper mapper,
     IDynamicRepository repository,
     SessionService sessionService,
-    LoggingService loggingService,
     AccountWinLostService accountWinLostService,
     InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
     SendLetstalkAfterAddService sendLetstalkAfterAddService,
@@ -32,20 +31,12 @@ public class AddRequestProcessStageImp(
 
     public async Task<Result> Execute(AddRequestQuery query, IEnumerable<long> markedTicketsSuccessful)
     {
-        try
-        {
-            var requestId = await ExecuteAddRequest(query);
-            var matchIdsAutoVoidRequestQueue = insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-            await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, matchIdsAutoVoidRequestQueue);
-            await sendLetstalkAfterAddService.Execute(query.AbnormalBetInfo, requestId);
+        var requestId = await ExecuteAddRequest(query);
+        var matchIdsAutoVoidRequestQueue = insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
+        await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, matchIdsAutoVoidRequestQueue);
+        await sendLetstalkAfterAddService.Execute(query.AbnormalBetInfo, requestId);
 
-            return getUpdateResultService.CreateSuccessResult(requestId, GetMatchIdAfterAddRequest(query), markedTicketsSuccessful);
-        }
-        catch (Exception exception)
-        {
-            await loggingService.ErrorAsync(exception);
-            return getUpdateResultService.CreateErrorResult(exception, markedTicketsSuccessful);
-        }
+        return getUpdateResultService.CreateSuccessResult(requestId, GetMatchIdAfterAddRequest(query), markedTicketsSuccessful);
     }
 
     private async Task<int> ExecuteAddRequest(AddRequestQuery query)  // NOSONAR

@@ -1,5 +1,6 @@
 ﻿using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
@@ -11,19 +12,28 @@ public interface AddRequestService
 public class AddRequestServiceImp(
     AddRequestProcessStage addRequestProcessStage,
     MarkTicketsWhenAddEditService marketTicketsWhenEditService,
-    GetUpdateResultService getUpdateResultService)
+    GetUpdateResultService getUpdateResultService,
+    LoggingService loggingService)
     : AddRequestService
 {
     public async Task<Result> Execute(AddRequestQuery query)
     {
         var markTicketResult = await marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds);
-
         var markTicketError = getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService), markTicketResult.MarkedTickets);
         if (markTicketError != null)
         {
             return markTicketError;
         }
 
-        return await addRequestProcessStage.Execute(query, markTicketResult.MarkedTickets);
+
+        try
+        {
+            return await addRequestProcessStage.Execute(query, markTicketResult.MarkedTickets);
+        }
+        catch (Exception exception)
+        {
+            await loggingService.ErrorAsync(exception);
+            return getUpdateResultService.CreateErrorResult(exception, markTicketResult.MarkedTickets);
+        }
     }
 }

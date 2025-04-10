@@ -2,10 +2,16 @@
 <div class="notification-container">
   <div class="tabs d-flex">
     <div class="tab" [class.active]="activeTab === 'notification'" (click)="selectTab('notification')">
-      Notification <span class="count">{{ unreadNotificationCount }}</span>
+      Notification
+      @if(unreadNotificationCount != '0') {
+        <span class="badge rounded-pill bg-primary">{{ unreadNotificationCount }}</span>
+      }
     </div>
     <div class="tab" [class.active]="activeTab === 'error'" (click)="selectTab('error')">
-      Error <span class="count">{{ errorNotificationCount }}</span>
+      Error
+      @if(unreadErrorCount != '0') {
+        <span class="badge rounded-pill bg-danger">{{ unreadErrorCount }}</span>
+      }
     </div>
   </div>
 

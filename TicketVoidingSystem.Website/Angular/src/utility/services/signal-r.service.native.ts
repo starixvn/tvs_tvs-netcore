@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, inject, Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { ToastrService } from 'ngx-toastr';
 import { VoidBetResultCode } from '../constants/void-bet-result-code';
@@ -10,37 +10,52 @@ import { RequestStatus, Result } from '../models/signal-r.model';
 export class SignalRService {
   public hubConnection: signalR.HubConnection;
   public requestStatusChange = new EventEmitter<RequestStatus[]>();
-
-  constructor(private toastr: ToastrService) { }
+  public notificationChange = new EventEmitter<string[]>();
+  public notificationIconClass = new EventEmitter<string>();
+  toastr = inject(ToastrService);
 
   public async initializeConnection(): Promise<void> {
     this.configToastr();
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${window.location.origin}${document.body.getAttribute('root-url')}SignalR/NotificationHub`)
+      .withKeepAliveInterval(10000)
       .configureLogging(signalR.LogLevel.Trace)
       .build();
 
-    this.registerShowVoidResultEvent(this.hubConnection);
-    this.registerShowErrorMessage(this.hubConnection);
-    this.registerReceiveRequestStatusModelEvent(this.hubConnection);
+    this.registerEvent();
     await this.hubConnection.start();
   }
 
-  private registerShowVoidResultEvent(connection: signalR.HubConnection): void {
-    connection.on('showVoidResult', (results: Result[]) => {
+  private registerEvent() {
+    this.registerShowVoidResultEvent();
+    this.registerShowErrorMessage();
+    this.registerReceiveRequestStatusModelEvent();
+    this.registerReceiveNotification()
+  }
+
+  private registerShowVoidResultEvent() {
+    this.hubConnection.on('showVoidResult', (results: Result[]) => {
       this.showMessageForVoidResult(results);
     });
   }
 
-  private registerShowErrorMessage(connection: signalR.HubConnection) {
-    connection.on('showErrorMessage', (message: string) => {
+  private registerShowErrorMessage() {
+    this.hubConnection.on('showErrorMessage', (message: string) => {
       this.toastr.error(message);
     });
   }
 
-  private registerReceiveRequestStatusModelEvent(connection: signalR.HubConnection): void {
-    connection.on('updateRequestStatus', (model: RequestStatus[]) => {
+  private registerReceiveRequestStatusModelEvent() {
+    this.hubConnection.on('updateRequestStatus', (model: RequestStatus[]) => {
       this.requestStatusChange.emit(model);
+    });
+  }
+
+  private registerReceiveNotification() {
+    this.hubConnection.on('notifyMessage', (message: string[]) => {
+      this.notificationChange.emit(message);
+      this.notificationIconClass.emit('fa-bell-ring fa-bell-unread');
+      console.log("notificationChange.emit(message)");
     });
   }
 

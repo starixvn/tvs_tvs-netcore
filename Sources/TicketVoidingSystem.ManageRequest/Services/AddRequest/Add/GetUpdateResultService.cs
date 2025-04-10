@@ -25,7 +25,7 @@ public class GetUpdateResultServiceImp : GetUpdateResultService
         return new Result
         {
             ErrorCode = firstError.ErrorCode,
-            ErrorMsg = firstError.ErrorMsg,
+            ErrorMsg = "Add request error!!!",
             Data = new AddRequestResultData
             {
                 LogStageName = logStageName,
@@ -39,6 +39,8 @@ public class GetUpdateResultServiceImp : GetUpdateResultService
     {
         return new Result
         {
+            ErrorCode = 0,
+            ErrorMsg = $"<strong>Request {requestId} is added successfully",
             Data = new AddRequestResultData
             {
                 RequestId = requestId,
@@ -53,7 +55,7 @@ public class GetUpdateResultServiceImp : GetUpdateResultService
         return new Result
         {
             ErrorCode = 1,
-            ErrorMsg = exception.Message,
+            ErrorMsg = "Add request error!!!",
             Data = new AddRequestResultData
             {
                 MarkedTicketsSuccessful = markedTicketsSuccessful

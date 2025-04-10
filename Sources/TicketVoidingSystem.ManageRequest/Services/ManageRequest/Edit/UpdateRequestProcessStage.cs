@@ -20,7 +20,6 @@ public interface UpdateRequestProcessStage
 public class UpdateRequestProcessStageImp(
     IMapper mapper,
     IDynamicRepository repository,
-    LoggingService loggingService,
     AccountWinLostService accountWinLostService,
     SessionService sessionService,
     InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
@@ -30,24 +29,16 @@ public class UpdateRequestProcessStageImp(
 {
     public async Task<Result> Execute(EditRequestQuery query, IEnumerable<long> markedTicketsSuccessful)
     {
-        try
+        var command = CreateEditRequestCommand(query);
+        var matchIdsAutoVoidRequestQueue = insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
+        await repository.ExecuteAsync(command);
+        await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, matchIdsAutoVoidRequestQueue);
+        if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
         {
-            var command = CreateEditRequestCommand(query);
-            var matchIdsAutoVoidRequestQueue = insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-            await repository.ExecuteAsync(command);
-            await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, matchIdsAutoVoidRequestQueue);
-            if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
-            {
-                await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
-            }
+            await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
+        }
 
-            return getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString(), markedTicketsSuccessful);
-        }
-        catch (Exception exception)
-        {
-            await loggingService.ErrorAsync(exception);
-            return getUpdateResultService.CreateErrorResult(exception, markedTicketsSuccessful);
-        }
+        return getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString(), markedTicketsSuccessful);
     }
 
     private EditRequestCommand CreateEditRequestCommand(EditRequestQuery query)  // NOSONAR

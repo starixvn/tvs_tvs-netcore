@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
+import { SignalRService } from 'src/utility/services/signal-r.service.native';
 import { CommonService } from '../../../utility/services/common.service';
 import { NotificationPopupComponent } from '../notification-popup/notification-popup.component';
 import { NotificationPopupService } from '../notification-popup/notification-popup.service';
@@ -19,9 +21,14 @@ export class MenuBarComponent implements OnInit {
   username: string;
   isBlock: boolean;
   rootUrl = '/';
-  notificationClass = '';
+  notificationIconClass = '';
+
+  notificationIconClassSubscription: Subscription;
+  private notificationTimer: any;
+
   notificationService = inject(NotificationPopupService);
   commonService = inject(CommonService);
+  signalRService = inject(SignalRService);
 
   async ngOnInit(): Promise<void> {
     this.isBlock = true;
@@ -36,12 +43,34 @@ export class MenuBarComponent implements OnInit {
       });
       this.isBlock = false;
     }
+
+    this.notificationIconClassSubscription = this.signalRService.notificationIconClass.subscribe((value: string) => {
+      this.notificationIconClass = value;
+      if (value) {
+        // Clear any existing timer
+        if (this.notificationTimer) {
+          clearTimeout(this.notificationTimer);
+        }
+        // Set new timer to remove class after 3 seconds
+        this.notificationTimer = setTimeout(() => {
+          this.notificationIconClass = 'fa-bell-unread';
+        }, 5000);
+      }
+    });
   }
 
   toggleNotification(event: Event) {
     event.stopPropagation();
-    this.notificationClass = this.notificationClass === '' ? 'fa-bell-ring' : '';
-    console.log('Menu bar toggle notification clicked');
+    this.notificationIconClass = '';
     this.notificationService.toggle();
+  }
+
+  ngOnDestroy() {
+    if (this.notificationTimer) {
+      clearTimeout(this.notificationTimer);
+    }
+    if (this.notificationIconClassSubscription) {
+      this.notificationIconClassSubscription.unsubscribe();
+    }
   }
 }

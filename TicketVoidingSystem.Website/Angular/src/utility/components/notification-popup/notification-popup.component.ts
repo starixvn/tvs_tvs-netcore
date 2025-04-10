@@ -1,6 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, inject } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { SignalRService } from 'src/utility/services/signal-r.service.native';
 import { NotificationPopupService } from './notification-popup.service';
 
@@ -10,6 +11,7 @@ import { NotificationPopupService } from './notification-popup.service';
   imports: [CommonModule],
   templateUrl: './notification-popup.component.html',
   styleUrls: ['./notification-popup.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('fadeSlide', [
       transition(':enter', [
@@ -23,6 +25,7 @@ import { NotificationPopupService } from './notification-popup.service';
   ]
 })
 export class NotificationPopupComponent {
+  notificationChange: string[] = [];
   notifications = [
     { message: "Request 12345 is added successfully", time: "07:33 AM", createdDate: "2024-04-04", unread: true, isError: false },
     { message: "Request 12346 is edited successfully", time: "08:00 AM", createdDate: "2024-04-04", unread: false, isError: false },
@@ -43,30 +46,49 @@ export class NotificationPopupComponent {
   activeTab: 'notification' | 'error' = 'notification';
   filterTab: 'all' | 'unread' = 'all';
   notificationHeight = 250;
+  maximumOfUnread = 99;
   isOpen = false;
   isExpanded = false;
+
+  openNotificationSubscription: Subscription;
+  notificationChangeSubscription: Subscription;
+
   notificationService = inject(NotificationPopupService);
   signalRService = inject(SignalRService);
+  cdr = inject(ChangeDetectorRef);
 
   constructor() {
-    this.notificationService.isOpen$.subscribe(open => {
+    this.openNotificationSubscription = this.notificationService.isOpen$.subscribe(open => {
+      this.cdr.markForCheck();
       this.isOpen = open;
     });
   }
 
   async ngOnInit() {
-    await this.signalRService.initializeConnection();
+    this.notificationChangeSubscription = this.signalRService.notificationChange.subscribe((notification: string[]) => {
+      console.log("notificationChangeSubscription");
+      const messsage = {message: notification[0], time: "07:33 AM", createdDate: "2024-04-04", unread: true, isError: false};
+      this.notifications.push(messsage);
+      this.activeTab = messsage.isError ? 'error' : 'notification';
+      this.cdr.markForCheck();
+    });
   }
 
-  get unreadNotificationCount(): number {
+  ngOnDestroy() {
+    this.openNotificationSubscription?.unsubscribe();
+    this.notificationChangeSubscription?.unsubscribe();
+  }
+
+  get unreadNotificationCount(): string {
     console.log("unreadNotificationCount");
-    return this.notifications.filter(n => n.unread && !n.isError).length;
+    const count = this.notifications.filter(n => n.unread && !n.isError).length;
+    return count <= this.maximumOfUnread ? `${count}` : '99+';
   }
 
-  get errorNotificationCount(): number {
-    console.log("errorNotificationCount");
-
-    return this.notifications.filter(n => n.unread && n.isError).length;
+  get unreadErrorCount(): string {
+    console.log("unreadErrorCount");
+    const count = this.notifications.filter(n => n.unread && n.isError).length;
+    return count <= this.maximumOfUnread ? `${count}` : '99+';
   }
 
   selectTab(tab: 'notification' | 'error') {
@@ -108,6 +130,7 @@ export class NotificationPopupComponent {
     if (this.filterTab === 'unread') {
       filtered = filtered.filter(n => n.unread);
     }
+    console.log("groupedNotificationsArray");
 
     const grouped = filtered.reduce((groups, notification) => {
       const date = notification.createdDate;

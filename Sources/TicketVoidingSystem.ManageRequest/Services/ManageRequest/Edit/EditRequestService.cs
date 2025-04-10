@@ -1,6 +1,7 @@
 ﻿using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 
@@ -13,7 +14,8 @@ public class EditRequestServiceImp(
     MarkTicketsWhenAddEditService marketTicketsWhenEditService,
     ReCalculateTicketsService reCalculateTicketsService,
     UpdateRequestProcessStage updateRequestProcessStage,
-    GetUpdateResultService getUpdateResultService)
+    GetUpdateResultService getUpdateResultService,
+    LoggingService loggingService)
     : EditRequestService
 {
     public async Task<Result> UpdateRequest(EditRequestQuery query)
@@ -32,6 +34,14 @@ public class EditRequestServiceImp(
             return reCalcTicketError;
         }
 
-        return await updateRequestProcessStage.Execute(query, markTicketResult.MarkedTickets);
+        try
+        {
+            return await updateRequestProcessStage.Execute(query, markTicketResult.MarkedTickets);
+        }
+        catch (Exception exception)
+        {
+            await loggingService.ErrorAsync(exception);
+            return getUpdateResultService.CreateErrorResult(exception, markTicketResult.MarkedTickets);
+        }
     }
 }
