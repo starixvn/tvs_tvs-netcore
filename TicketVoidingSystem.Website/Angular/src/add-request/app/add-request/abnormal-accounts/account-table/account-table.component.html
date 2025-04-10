@@ -15,49 +15,67 @@
           </th>
           }
           <th scope="col" class="col-tb-2">
-            <div class="title-table" [ngbTooltip]="getDescription('Username')" tooltipClass="tooltip-class">
+            <div class="title-table" [ngbTooltip]="getDescription('Username')" placement="top" [disableTooltip]="!isShowTooltip" tooltipClass="tooltip-class">
               <span>Username</span>
               <sorting #sortingComponent [id]="1" (sortEvent)="sorting($event, 'username', 1)" [hidden]="viewOnly">
               </sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-3">
-            <div class="title-table" [ngbTooltip]="getDescription('Given Credit')" tooltipClass="tooltip-class">
+            <div class="title-table" [ngbTooltip]="tooltipTemplate" placement="top" [disableTooltip]="!isShowTooltip" tooltipClass="tooltip-class">
+              <ng-template #tooltipTemplate>
+                <div [innerHTML]="getDescription('Given Credit') | sanitizeHtml"></div>
+              </ng-template>
               <span>Given Credit</span>
               <sorting #sortingComponent [id]="2" (sortEvent)="sorting($event, 'givenCredit', 2)" [hidden]="viewOnly">
               </sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-4">
-            <div class="title-table" [ngbTooltip]="getDescription('Adjust Void Limit')" tooltipClass="tooltip-class">
+            <div class="title-table" [ngbTooltip]="tooltipTemplate2" placement="top" [disableTooltip]="!isShowTooltip" tooltipClass="tooltip-class">
+              <ng-template #tooltipTemplate2>
+                <div [innerHTML]="getDescription('Adjust Void Limit') | sanitizeHtml"></div>
+              </ng-template>
               <span>Adjust Void Limit</span>
               <sorting #sortingComponent [id]="3" (sortEvent)="sorting($event, 'adjustVoidLimit', 3)"
                 [hidden]="viewOnly"></sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-5">
-            <div class="title-table" [ngbTooltip]="getDescription('Current Losing')" tooltipClass="tooltip-class">
+            <div class="title-table" [ngbTooltip]="tooltipTemplate3" placement="top" [disableTooltip]="!isShowTooltip" tooltipClass="tooltip-class">
+              <ng-template #tooltipTemplate3>
+                <div [innerHTML]="getDescription('Current Losing') | sanitizeHtml"></div>
+              </ng-template>
               <span>Current Losing</span>
               <sorting #sortingComponent [id]="4" (sortEvent)="sorting($event, 'currentLosing', 4)" [hidden]="viewOnly">
               </sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-6">
-            <div class="title-table" [ngbTooltip]="getDescription('Current Winning')" tooltipClass="tooltip-class">
+            <div class="title-table" [ngbTooltip]="tooltipTemplate4" placement="top" [disableTooltip]="!isShowTooltip" tooltipClass="tooltip-class">
+              <ng-template #tooltipTemplate4>
+                <div [innerHTML]="getDescription('Current Winning') | sanitizeHtml"></div>
+              </ng-template>
               <span>Current Winning</span>
               <sorting #sortingComponent [id]="5" (sortEvent)="sorting($event, 'currentWinning', 5)"
                 [hidden]="viewOnly"></sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-7">
-            <div class="title-table" [ngbTooltip]="getDescription('Estimate Void Amount')" tooltipClass="tooltip-class">
+            <div class="title-table" [ngbTooltip]="tooltipTemplate5" placement="top" [disableTooltip]="!isShowTooltip" tooltipClass="tooltip-class">
+              <ng-template #tooltipTemplate5>
+                <div [innerHTML]="getDescription('Estimate Void Amount') | sanitizeHtml"></div>
+              </ng-template>
               <span>Estimate Void Amount</span>
               <sorting #sortingComponent [id]="6" (sortEvent)="sorting($event, 'estimateVoidAmount', 6)"
                 [hidden]="viewOnly"></sorting>
             </div>
           </th>
           <th scope="col">
-            <div class="title-table" [ngbTooltip]="getDescription('WinLost After Void')" tooltipClass="tooltip-class">
+            <div class="title-table" [ngbTooltip]="tooltipTemplate6" placement="top" [disableTooltip]="!isShowTooltip" tooltipClass="tooltip-class">
+              <ng-template #tooltipTemplate6>
+                <div [innerHTML]="getDescription('WinLost After Void') | sanitizeHtml"></div>
+              </ng-template>
               <span>WinLost After Void</span>
               <sorting #sortingComponent [id]="7" (sortEvent)="sorting($event, 'winLostAfterVoid', 7)"
                 [hidden]="viewOnly"></sorting>

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { SortingComponent } from '../../../../../utility/components/sorting/sorting/sorting.component';
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
@@ -17,14 +17,15 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { ValidationBusinessRuleArgs } from '../models/validation.model';
 import { ValidationService } from '../services/validation.service';
 import DescriptionTableAdjustVoidConfig from './describe-table-adjust-void.json';
-import { TicketStatus } from 'src/utility/constants/config';
+import { TicketStatus } from '../../../../../utility/constants/config';
+import { SanitizeHtmlPipe } from '../../../../../utility/pipes/sanitize-html.pipe';
 
 @Component({
     selector: 'account-table',
     templateUrl: './account-table.component.html',
     styleUrls: ['./account-table.component.scss'],
     standalone: true,
-    imports: [SortingComponent, TooltipComponent, NgbTooltip, FormsModule, CommonModule]
+    imports: [SortingComponent, TooltipComponent, NgbTooltipModule, FormsModule, CommonModule, SanitizeHtmlPipe]
 })
 export class AccountTableComponent {
   @Input() filter: FilterModel;
@@ -34,6 +35,7 @@ export class AccountTableComponent {
   @Input() accountWinlostModels: AccountWinlostModel[];
   @Input() permission: PermissionAddRequest;
   @Input() primitiveProps: PrimitiveProperty;
+  @Input() isShowTooltip: boolean = false;
   @Output() reCalculateByAccountEvent = new EventEmitter<number>();
   @Output() openPopupAdjustTicketEvent = new EventEmitter<number>();
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;
