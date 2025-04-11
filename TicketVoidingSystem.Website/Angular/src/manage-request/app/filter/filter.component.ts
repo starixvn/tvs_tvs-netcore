@@ -90,11 +90,11 @@ export class FilterComponent implements OnInit {
     if (this.filterByMatch) {
       this.model.requestId = null;
       this.updateSubByIssue();
+      this.model.statusIds = this.selectedStatus.join(',');
     } else {
       this.model.matchId = null;
       this.model.ngbFromDate = this.minDate;
     }
-    this.model.statusIds = ManageRequestStatus.DEFAULT_STATUS.join(',');
     this.model.issueTypeId = this.selectedIssueTypes.join(',');
     this.model.isExcludeTest = true;
   }
@@ -152,6 +152,9 @@ export class FilterComponent implements OnInit {
   }
 
   async clickSearch() {
+    if(!this.filterByMatch){
+      this.model.statusIds = ManageRequestStatus.MULTIPLE_OPTIONS.map(x => x.value).join(',');
+    }
     if (this.validate()) {
       localStorage.setItem(
         LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_MANAGE_REQUEST + this.userId
@@ -188,6 +191,11 @@ export class FilterComponent implements OnInit {
 
     if (!this.model.productTypeIds) {
       this.tooltip.display('product-dropdown', TEXT.REQUIRED_FIELD);
+      return false;
+    }
+
+    if (!this.model.statusIds) {
+      this.tooltip.display('status-dropdown', TEXT.REQUIRED_FIELD);
       return false;
     }
 

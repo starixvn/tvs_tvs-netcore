@@ -60,7 +60,6 @@ export class RequestListComponent implements OnInit, OnChanges {
   async ngOnInit() {
     this.requestStatusChangeEvent.subscribe((requestStatus: RequestStatus[]) => {
       this.updateRequestStatus(requestStatus, this.displayedModels);
-      this.displayedModels.forEach(x => x.isStored = true);
     });
 
     this.actions = await this.commonService.getVoidActions();

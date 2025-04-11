@@ -102,7 +102,7 @@
                   </div>
                   <div class="d-flex me-3">
                     <label class="col-form-label col-form-label-sm me-2">Status</label>
-                    <ng-select class="sub-type-dropdown" [items]="statusSelectList" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
+                    <ng-select class="status-dropdown" [items]="statusSelectList" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
                     bindValue="value" [(ngModel)]="selectedStatus" groupBy="group" [selectableGroup]="true"[selectableGroupAsModel]="false"
                     [clearable]="false" [searchable]="false" placeholder="Select an option" (change)="updateSelectedStatus()">
                       <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
