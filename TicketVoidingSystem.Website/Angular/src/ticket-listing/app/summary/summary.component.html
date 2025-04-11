@@ -1,106 +1,137 @@
-﻿<div class="summary d-flex" *ngIf="display">
-  <div class="summary-table" [style.max-width]="getWidth()">
-    <div class="summary-header">
-      <table>
-        <thead>
-          <tr>
-            <th>
-              <div>LICENSEE</div>
-            </th>
-            <th>
-              <div>TOTAL BETS</div>
-            </th>
-            <th>
-              <div>EXPORT</div>
-            </th>
-            <th *ngIf="showSendColumn">
-              <div>
-                <button class="btn-send-data btn btn-success btn-sm" *ngIf="isShowSend" (click)="sendExcelFile()">SEND DATA</button>
-              </div>
-              <input type="checkbox" [(ngModel)]="checkedAll" (change)="changedCheckAll()" />
-            </th>
-          </tr>
-        </thead>
-      </table>
+﻿@if (display) {
+  <div class="summary d-flex">
+    <div class="summary-table" [style.max-width]="getWidth()">
+      <div class="summary-header">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <div>LICENSEE</div>
+              </th>
+              <th>
+                <div>TOTAL BETS</div>
+              </th>
+              <th>
+                <div>EXPORT</div>
+              </th>
+              @if (showSendColumn) {
+                <th>
+                  <div>
+                    @if (isShowSend) {
+                      <button class="btn-send-data btn btn-success btn-sm" (click)="sendExcelFile()">SEND DATA</button>
+                    }
+                  </div>
+                  <input type="checkbox" [(ngModel)]="checkedAll" (change)="changedCheckAll()" />
+                </th>
+              }
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="summary-content">
+        <table>
+          @for (item of items; track item) {
+            <tbody>
+              <tr class="summary-parent">
+                <td class="expanded" (click)="item.isShow = !item.isShow">
+                  <div>
+                    <span [ngClass]="{'icon-down':item.isShow, 'icon-right':!item.isShow}"></span>
+                    {{item.name}}
+                  </div>
+                </td>
+                <td>
+                  <div><a (click)="getTicketsDetail(item)">{{item.total}}</a></div>
+                </td>
+                <td>
+                  <div><a (click)="exportExcel(item)"><em class="icon-excel"></em></a></div>
+                </td>
+                @if (showSendColumn) {
+                  <td>
+                    <div>
+                      @if (item.name != 'Credit') {
+                        <input type="checkbox"
+                          [(ngModel)]="item.isChecked" (change)="changedCheckItem()" />
+                      }
+                      @if (item.name == 'Credit') {
+                        <button class="btn-send-letstalk btn btn-success btn-sm" (click)="sendCreditDataToLetstalk(item)">SEND LETSTALK</button>
+                      }
+                    </div>
+                  </td>
+                }
+              </tr>
+              @for (child of item.items; track child) {
+                <tr [ngClass]="{'display-none': !item.isShow}">
+                  <td>
+                    <div><span class="child-name">{{child.name}}</span></div>
+                  </td>
+                  <td>
+                    <div><a (click)="getTicketsDetail(child)">{{child.total}}</a></div>
+                  </td>
+                  <td>
+                    <div><a (click)="exportExcel(child)"><em class="icon-excel"></em></a></div>
+                  </td>
+                  @if (showSendColumn) {
+                    <td></td>
+                  }
+                </tr>
+              }
+            </tbody>
+          }
+        </table>
+        @if (items.length == 0) {
+          <table class="empty-table">
+            <tr>
+              <td>There is no data</td>
+            </tr>
+          </table>
+        }
+      </div>
     </div>
-    <div class="summary-content">
-      <table>
-        <tbody *ngFor="let item of items">
-          <tr class="summary-parent">
-            <td class="expanded" (click)="item.isShow = !item.isShow">
-              <div>
-                <span [ngClass]="{'icon-down':item.isShow, 'icon-right':!item.isShow}"></span>
-                {{item.name}}
-              </div>
-            </td>
-            <td>
-              <div><a (click)="getTicketsDetail(item)">{{item.total}}</a></div>
-            </td>
-            <td>
-              <div><a (click)="exportExcel(item)"><em class="icon-excel"></em></a></div>
-            </td>
-            <td *ngIf="showSendColumn">
-              <div>
-                <input *ngIf="item.name != 'Credit'" type="checkbox"
-                  [(ngModel)]="item.isChecked" (change)="changedCheckItem()" />
-                <button class="btn-send-letstalk btn btn-success btn-sm" *ngIf="item.name == 'Credit'" (click)="sendCreditDataToLetstalk(item)">SEND LETSTALK</button>
-              </div>
-            </td>
-          </tr>
-
-          <tr *ngFor="let child of item.items" [ngClass]="{'display-none': !item.isShow}">
-            <td>
-              <div><span class="child-name">{{child.name}}</span></div>
-            </td>
-            <td>
-              <div><a (click)="getTicketsDetail(child)">{{child.total}}</a></div>
-            </td>
-            <td>
-              <div><a (click)="exportExcel(child)"><em class="icon-excel"></em></a></div>
-            </td>
-            <td *ngIf="showSendColumn"></td>
-          </tr>
-        </tbody>
-      </table>
-      <table class="empty-table" *ngIf="items.length == 0">
-        <tr>
-          <td>There is no data</td>
-        </tr>
-      </table>
+    <div>
+      @if (display) {
+        <div class="licensee-info-total-bet mb-2">
+          <div class="note">Total Affected Bets Count: -
+            <div>- Credit Total bet: <strong>{{totalBetCountOfCredit}}</strong></div>
+            <div>- Normal Licensee Total bet: <strong>{{totalBetCountOfNormalLicensee}}</strong>, Total Licensee: <strong>{{totalLicenseeCountOfNormal}}</strong></div>
+            <div>- CV Licensee Total bet: <strong>{{totalBetCountOfChinaView}}</strong>, Total CV Licensee: <strong>{{totalLicenseeCountOfChinaView}}</strong></div>
+            <div>- JS Licensee Total bet: <strong>{{totalBetCountOfJollySport}}</strong>, Total JS Licensee: <strong>{{totalLicenseeCountOfJollySport}}</strong></div>
+            <div>- JSCV Licensee Total bet: <strong>{{totalBetCountOfJollySportCV}}</strong>, Total JSCV Licensee: <strong>{{totalLicenseeCountOfJollySportCV}}</strong></div>
+          </div>
+          <div class="note">Negative Balance: [Licensee]</div>
+        </div>
+      }
+      @if (isShowAffectedLicensees()) {
+        <div class="affected-licensees">
+          <span class="note">Attn: system will notify affected tickets to these Licensee(s): </span><br />
+          @if (affectedLicensees) {
+            <div>
+              <span class="affected-licensees-highlight" id="all-licensees-highlight"
+              (click)="copyClipboard(affectedLicensees)">{{affectedLicensees}}</span>
+            </div>
+          }
+          @if (chinaViewLicensees) {
+            <div class="china-view-licensee">
+              <span class="note">CV Licensee(s): </span>
+              <span class="affected-licensees-highlight" id="china-view-licensees-highlight"
+              (click)="copyClipboard(chinaViewLicensees)">{{chinaViewLicensees}}</span>
+            </div>
+          }
+          @if (jollyViewLicensees) {
+            <div class="jolly-view-licensee">
+              <span class="note">JS Licensee(s): </span>
+              <span class="affected-licensees-highlight" id="jolly-view-licensees-highlight"
+              (click)="copyClipboard(jollyViewLicensees)">{{jollyViewLicensees}}</span>
+            </div>
+          }
+          @if (jollySportCvLicensees) {
+            <div class="jolly-view-licensee">
+              <span class="note">JSCV Licensee(s): </span>
+              <span class="affected-licensees-highlight" id="jolly-view-licensees-highlight"
+              (click)="copyClipboard(jollySportCvLicensees)">{{jollySportCvLicensees}}</span>
+            </div>
+          }
+        </div>
+      }
     </div>
   </div>
-  <div>
-    <div class="licensee-info-total-bet mb-2" *ngIf="display">
-      <div class="note">Total Affected Bets Count: -
-        <div>- Credit Total bet: <strong>{{totalBetCountOfCredit}}</strong></div>
-        <div>- Normal Licensee Total bet: <strong>{{totalBetCountOfNormalLicensee}}</strong>, Total Licensee: <strong>{{totalLicenseeCountOfNormal}}</strong></div>
-        <div>- CV Licensee Total bet: <strong>{{totalBetCountOfChinaView}}</strong>, Total CV Licensee: <strong>{{totalLicenseeCountOfChinaView}}</strong></div>
-        <div>- JS Licensee Total bet: <strong>{{totalBetCountOfJollySport}}</strong>, Total JS Licensee: <strong>{{totalLicenseeCountOfJollySport}}</strong></div>
-        <div>- JSCV Licensee Total bet: <strong>{{totalBetCountOfJollySportCV}}</strong>, Total JSCV Licensee: <strong>{{totalLicenseeCountOfJollySportCV}}</strong></div>
-      </div>
-      <div class="note">Negative Balance: [Licensee]</div>
-    </div>
-    <div class="affected-licensees" *ngIf="isShowAffectedLicensees()">
-      <span class="note">Attn: system will notify affected tickets to these Licensee(s): </span><br />
-      <div *ngIf="affectedLicensees">
-        <span class="affected-licensees-highlight" id="all-licensees-highlight"
-          (click)="copyClipboard(affectedLicensees)">{{affectedLicensees}}</span>
-      </div>
-      <div class="china-view-licensee" *ngIf="chinaViewLicensees">
-        <span class="note">CV Licensee(s): </span>
-        <span class="affected-licensees-highlight" id="china-view-licensees-highlight"
-          (click)="copyClipboard(chinaViewLicensees)">{{chinaViewLicensees}}</span>
-      </div>
-      <div class="jolly-view-licensee" *ngIf="jollyViewLicensees">
-        <span class="note">JS Licensee(s): </span>
-        <span class="affected-licensees-highlight" id="jolly-view-licensees-highlight"
-          (click)="copyClipboard(jollyViewLicensees)">{{jollyViewLicensees}}</span>
-      </div>
-      <div class="jolly-view-licensee" *ngIf="jollySportCvLicensees">
-        <span class="note">JSCV Licensee(s): </span>
-        <span class="affected-licensees-highlight" id="jolly-view-licensees-highlight"
-          (click)="copyClipboard(jollySportCvLicensees)">{{jollySportCvLicensees}}</span>
-      </div>
-    </div>
-  </div>
-</div>
+}

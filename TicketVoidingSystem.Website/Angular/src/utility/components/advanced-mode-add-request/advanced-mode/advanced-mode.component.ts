@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, inject } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription, timer } from 'rxjs';
 import { LABELS } from '../../../../utility/constants/labels';
@@ -14,11 +14,19 @@ import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model'
 import { ControlsAllBetTypesLists } from '../controls-all-bet-types/controls-all-bet-types.model';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advanced-mode.model';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { TooltipComponent } from '../../tooltip/tooltip.component';
+import { MultipleSelectComponent } from '../../advanced-mode/multiple-selection/multiple-select.component';
+import { ControlsAllBetTypesComponent } from '../controls-all-bet-types/controls-all-bet-types.component';
 
 @Component({
+  standalone: true,
   selector: 'advanced-mode',
   templateUrl: './advanced-mode.component.html',
-  styleUrls: ['./advanced-mode.component.scss']
+  styleUrls: ['./advanced-mode.component.scss'],
+  imports: [TooltipComponent, FormsModule, CommonModule, MultipleSelectComponent, ControlsAllBetTypesComponent],
+  providers: [AdvancedModeService]
 })
 export class AdvancedModeComponent {
   @Input() matchId: number;
@@ -37,11 +45,11 @@ export class AdvancedModeComponent {
   controlsAllBetTypesLists = ControlsAllBetTypesLists.MultipleSelectionList;
   private delayForSearchSubscription: Subscription;
   private readonly observableTimer = timer(500);
-
-  constructor(
-    private readonly service: AdvancedModeService,
-    private readonly commonService: CommonService,
-    private readonly element: ElementRef) {
+  
+  commonService = inject(CommonService);
+  service = inject(AdvancedModeService);
+  element = inject(ElementRef);
+  constructor() {
     this.tooltip.element = this.element;
   }
 

@@ -4,11 +4,16 @@ import { Product } from '../../constants/config';
 import { TEXT } from '../../constants/text';
 import { Tooltip } from '../tooltip/tooltip.model';
 import { BetTypesModel } from './bettypes.model';
+import { FormsModule } from '@angular/forms';
+import { TooltipComponent } from '../tooltip/tooltip.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
+    standalone: true,
     selector: 'bettypes',
     templateUrl: './bettypes.component.html',
-    styleUrls: ['./bettypes.component.scss']
+    styleUrls: ['./bettypes.component.scss'],
+    imports: [FormsModule, TooltipComponent, CommonModule]
 })
 
 export class BetTypesComponent implements OnChanges {

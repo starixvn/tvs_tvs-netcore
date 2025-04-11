@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { PrimaryBetType } from '../advanced-mode/group-bettypes/group-bettypes.model';
 import { AdvancedModeAddRequestModel } from './advanced-mode-add-request.model';
 import { AdvancedModeComponent } from './advanced-mode/advanced-mode.component';
@@ -7,9 +9,11 @@ import { GroupBetTypesComponent } from './group-bet-types/group-bet-types.compon
 import { BetTypeAddRequest, GroupBetTypesAddRequestModel } from './group-bet-types/group-bet-types.model';
 
 @Component({
+  standalone: true,
   selector: 'advanced-mode-add-request',
   templateUrl: './advanced-mode-add-request.component.html',
-  styleUrls: ['./advanced-mode-add-request.component.scss']
+  styleUrls: ['./advanced-mode-add-request.component.scss'],
+  imports: [CommonModule, FormsModule, GroupBetTypesComponent, AdvancedModeComponent]
 })
 export class AdvancedModeAddRequestComponent {
   @Input() matchId: number;
@@ -44,7 +48,7 @@ export class AdvancedModeAddRequestComponent {
         .map(betType => ({ id: betType.id.toString() } as BetTeamAddRequestResult));
 
     return this.getMoreBetTypeSameDisplayedId([...betTypesHaveAdvancedMode, ...betTypesHaveNotAdvancedMode]);
-}
+  }
 
   getMoreBetTypeSameDisplayedId(inputModels: BetTeamAddRequestResult[]): BetTeamAddRequestResult[] {
     return inputModels.flatMap(x => this.getMoreBetTypeSameDisplayedIdByItem(x));

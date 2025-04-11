@@ -1,10 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ControlsAllBetTypes } from './controls-all-bet-types.model';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MultipleSelectComponent } from '../../advanced-mode/multiple-selection/multiple-select.component';
 
 @Component({
+  standalone: true,
   selector: 'controls-all-bet-types',
   templateUrl: './controls-all-bet-types.component.html',
-  styleUrls: ['./controls-all-bet-types.component.scss']
+  styleUrls: ['./controls-all-bet-types.component.scss'],
+  imports: [CommonModule, FormsModule, MultipleSelectComponent]
 })
 export class ControlsAllBetTypesComponent {
   @Input() controlsAllBetTypesLists: ControlsAllBetTypes[] = []

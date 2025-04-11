@@ -13,8 +13,8 @@ import { TimeDirective } from './date-time/time.directive';
 
 
 @NgModule({
-  imports: [CommonModule, FormsModule, HttpClientModule, NgbModule, ToolTipModule],
-  declarations: [DateFullTimeComponent, DateTimeComponent, FullTimeDirective, TimeDirective, DateFullTimeNewComponent, DateFullTimeNewComponent],
+  imports: [CommonModule, FormsModule, HttpClientModule, NgbModule, ToolTipModule, DateFullTimeNewComponent, DateFullTimeNewComponent],
+  declarations: [DateFullTimeComponent, DateTimeComponent, FullTimeDirective, TimeDirective],
   exports: [DateFullTimeComponent, DateTimeComponent, FullTimeDirective, TimeDirective, DateFullTimeNewComponent],
   providers: [{ provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })

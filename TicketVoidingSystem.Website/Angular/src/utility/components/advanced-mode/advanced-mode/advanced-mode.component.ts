@@ -204,11 +204,11 @@ export class AdvancedModeComponent implements OnChanges {
   }
 
   validate(): boolean {
-    let result = this.betTeams.every((_, index) => this.checkEmptyCheckbox(true, index));
+    const result = this.betTeams.every((_, index) => this.checkEmptyCheckbox(true, index));
     let isValidOddsSpread = true;
     let isValidHDP = true;
 
-    this.allBetTypes.filter(x => x.isChecked && (x.id === 228 || x.id === 229 || this.betTypesMoreHDP.includes(x.id.toString()))).forEach(y => {
+    this.allBetTypes?.filter(x => x.isChecked && (x.id === 228 || x.id === 229 || this.betTypesMoreHDP.includes(x.id.toString()))).forEach(y => {
       const betTeam = this.betTeams.find(x => x.checkedBetTypes.some(t => t.split(',').includes(y.id.toString())));
       if (betTeam) {
         if (this.isBetTypeSabaTimeMachine(y.id) && !this.validateInputMultipleDecimal(y.id.toString(), betTeam.inputs[0].value, 'bet-type-saba' + y.id.toString())) {

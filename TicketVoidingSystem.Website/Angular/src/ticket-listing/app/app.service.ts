@@ -1,19 +1,20 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { inject, Injectable } from '@angular/core';
 import { GetBetTypesQuery } from '../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
 import { GetMatchQuery, MatchModel } from './../../utility/models/match.model';
 import { Licensee, SelectionTypeModel } from './filter/filter.model';
-import {
-  AmendmentReponse, ExportExcelQuery, GetSummaryQuery,
-  GetTicketsDetailModel, GetTicketsDetailQuery, SendFileQuery
-} from './models/query.model';
+import { AmendmentReponse, ExportExcelQuery, GetSummaryQuery, GetTicketsDetailModel, GetTicketsDetailQuery,
+  SendFileQuery } from './models/query.model';
 import { SummaryItemViewModel } from './summary/summary.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AppService {
-  constructor(private readonly httpService: HttpService, private readonly blockUIService: BlockUiService) { }
+  httpService = inject(HttpService);
+  blockUIService = inject(BlockUiService);
 
   async getLicensees(): Promise<Array<Licensee>> {
     const url = 'api/TicketListing/GetLicensees';

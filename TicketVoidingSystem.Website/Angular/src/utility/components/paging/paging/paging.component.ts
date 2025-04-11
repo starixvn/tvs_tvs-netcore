@@ -1,10 +1,15 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PagingModel } from './paging.model';
+import { CommonModule } from '@angular/common';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
 
 @Component({
+  standalone: true,
   selector: 'paging',
   templateUrl: './paging.component.html',
-  styleUrls: ['./paging.component.scss']
+  styleUrls: ['./paging.component.scss'],
+  imports: [ CommonModule, FormsModule, NgbPaginationModule ]
 })
 export class PagingComponent {
   @Input() model = new PagingModel();

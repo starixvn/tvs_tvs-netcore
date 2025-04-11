@@ -8,9 +8,7 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     FormsModule,
-    NgbPaginationModule
-  ],
-  declarations: [
+    NgbPaginationModule,
     PagingComponent
   ],
   exports: [

@@ -5,11 +5,16 @@ import { DateTimeFormat } from '../../../../utility/constants/config';
 import { CommonStaticService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { Tooltip } from '../../tooltip/tooltip.model';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TooltipComponent } from '../../tooltip/tooltip.component';
 
 @Component({
+  standalone: true,
   selector: 'date-full-time-new',
   templateUrl: './date-full-time-new.component.html',
-  styleUrls: ['./date-full-time-new.component.scss']
+  styleUrls: ['./date-full-time-new.component.scss'],
+  imports: [FormsModule, NgbModule, TooltipComponent]
 })
 export class DateFullTimeNewComponent implements OnInit, OnChanges {
   @Input() index: number = null;

@@ -5,7 +5,7 @@
         <th scope="col" colspan="2">
           <div>
             <label>
-              <input type="checkbox" class="group-bettypes-all-checkbox mr-1" [(ngModel)]="model.isChecked"
+              <input type="checkbox" class="group-bettypes-all-checkbox me-1" [(ngModel)]="model.isChecked"
               [disabled]="model.isDisable"
               (ngModelChange)="model.changeCheckedModelToGroup(); changeAllBetTypes()" />
               All Bet types
@@ -18,7 +18,7 @@
       <tr *ngFor="let group of model.groupBetTypes; last as isLast;" [ngClass]="{'last-group' : isLast}">
         <td *ngIf="group.isShow && group.betTypes.length > 0">
           <label>
-            <input class="mr-1" type="checkbox" [(ngModel)]="group.isChecked"
+            <input class="me-1" type="checkbox" [(ngModel)]="group.isChecked"
             (ngModelChange)="group.changeCheckedGroupToBetType(); model.changeCheckedGroupToModel();changeGroupBetTypes(group)"
               [disabled]="group.isDisable"/>
             {{group.groupName}}
@@ -28,7 +28,7 @@
           <div class="display-flex">
             <div class="bet-type" *ngFor="let betType of group.betTypes">
               <label>
-                <input class="mr-1" type="checkbox" [(ngModel)]="betType.isChecked" [disabled]="betType.isDisable"
+                <input class="me-1" type="checkbox" [(ngModel)]="betType.isChecked" [disabled]="betType.isDisable"
                 (ngModelChange)="group.changeCheckedBetTypeToGroup(); model.changeCheckedGroupToModel(); changeBetTypeItem(betType)" />
                 {{betType.name}}
               </label>

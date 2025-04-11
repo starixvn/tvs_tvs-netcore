@@ -1,14 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
-import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { Notification } from '../../utility/components/notification/notification';
@@ -27,11 +20,25 @@ import { AmendmentReponse, CommonQuery, ExportExcelQuery, GetTicketsDetailQuery,
 import { SummaryComponent } from './summary/summary.component';
 import { SummaryItem, SummaryItemViewModel } from './summary/summary.model';
 import { TicketsModel } from './tickets/ticket.model';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FilterComponent } from './filter/filter.component';
+import { TicketsComponent } from './tickets/tickets.component';
+import { MessagesResponseComponent } from './messages-response/messages-response.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
+import { NotificationComponent } from '../../utility/components/notification/notification.component';
+import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
+import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';
+import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  imports: [MenuBarComponent, CommonModule, RouterModule, SummaryComponent, FilterComponent, TicketsComponent,
+    MessagesResponseComponent, NotificationComponent, MatchDetailComponent, TooltipComponent],
+  providers: [ClipboardService]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'Home / Ticket Listing';
@@ -62,17 +69,14 @@ export class AppComponent implements OnInit, AfterViewInit {
   failedItems: SummaryItem[];
   licenseesName: string;
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly blockUIService: BlockUiService,
-    private readonly modalService: ModalService,
-    private readonly appService: AppService,
-    private readonly clipboardService: ClipboardService,
-    private readonly signalRService: SignalRService
-  ) { }
+  element = inject(ElementRef);
+  modalService = inject(ModalService);
+  appService = inject(AppService);
+  clipboardService = inject(ClipboardService);
+  signalRService = inject(SignalRService);
+  blockUIService = inject(BlockUiService);
 
   public async ngOnInit() {
-
     this.tooltip.element = this.element;
     await this.signalRService.initializeConnection();
   }
@@ -80,6 +84,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.blockUIService.blockUIEvent.subscribe((event: boolean) => this.blockUnBlockUI(event));
   }
+
   private blockUnBlockUI(event: boolean) {
     this.blockUI = event;
   }
@@ -116,8 +121,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.summaryComponent.isShowSend = true;
     this.summaryItems = [];
     this.summaryItemsGroupByLicensee = summaryItemViewModel.groupByLicensees;
-    const items =
-      this.commonQuery.groupBy.toString() === '0' ? summaryItemViewModel.groupByLicensees : summaryItemViewModel.groupByBetTypes;
+    const items = this.commonQuery.groupBy.toString() === '0'
+      ? summaryItemViewModel.groupByLicensees : summaryItemViewModel.groupByBetTypes;
     items.forEach(item => {
       this.summaryItems.push(new SummaryItem(item.name, item.total, item.isChinaView, item.licenseeName, item.betTypes, item.items, '', item.specialPlatform));
     });
@@ -127,42 +132,47 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (item.total > CONFIG.TICKET_LISTING_LIMITED) {
       this.notification.open('Ticket Listing Result', TEXT.TICKET_LISTING_LIMITED);
     } else {
-      const betTypes = item.betTypes === '29' ? this.commonQuery.betTypes : item.betTypes;
-      const singleOrSubParlay = this.getSingleOrSubParlayParam(
-        item.betTypes,
-        item.isGroup,
-        this.commonQuery.groupBy,
-        this.commonQuery.singleOrSubParlay
-      );
-      this.getTicketsDetailQuery = _.assignIn({}, this.commonQuery, {
-        licenseeName: item.licenseeName,
-        betTypes: betTypes,
-        singleOrSubParlay: singleOrSubParlay,
-        pageIndex: 0,
-        pageSize: 50
-      });
       this.isShowTickets = false;
-      const subfix =
-        this.getTicketsDetailQuery.groupBy.toString() === '0'
-          ? 'Licensee: ' + this.getTicketsDetailQuery.licenseeName
-          : 'Bet type: ' + item.betTypeName;
+      this.getTicketsDetailQuery = this.RenTicketsDetailQuery(item);
+      const subfix = this.getSubfix(item);
       this.titleTicketsListing = `Tickets Listing for - Match ID: ${this.commonQuery.matchId} - ${subfix}`;
       this.currentItem = item;
       await this.getTicketsDetail();
     }
   }
 
-  private getSingleOrSubParlayParam(betTypes: string, isGroup: boolean, groupBy: number, defaultSingleOrSubParlay: string): string {
-    if (betTypes === '29') {
+  private getSubfix(item: SummaryItem){
+    return this.getTicketsDetailQuery.groupBy.toString() === '0'
+          ? 'Licensee: ' + this.getTicketsDetailQuery.licenseeName
+          : 'Bet type: ' + item.betTypeName;
+  }
+
+  private RenTicketsDetailQuery(item: SummaryItem){
+    const betTypes = item.betTypes === '29' ? this.commonQuery.betTypes : item.betTypes;
+    const singleOrSubParlay = this.getSingleOrSubParlayParam(item);
+
+    return _.assignIn({}, this.commonQuery,
+      {
+        licenseeName: item.licenseeName,
+        betTypes: betTypes,
+        singleOrSubParlay: singleOrSubParlay,
+        pageIndex: 0,
+        pageSize: 50
+      });
+  }
+
+  private getSingleOrSubParlayParam(item: SummaryItem): string {
+    if (item.betTypes === '29') {
       return 'SubParlay';
     }
 
-    if (!isGroup || groupBy.toString() === '1') {
+    if (!item.isGroup || this.commonQuery.groupBy.toString() === '1') {
       return 'Single';
     }
 
-    return defaultSingleOrSubParlay;
+    return this.commonQuery.singleOrSubParlay;
   }
+  
   async pagingSearchTicket(pagingEvent: PagingModel) {
     this.getTicketsDetailQuery.pageIndex = pagingEvent.page - 1;
     this.getTicketsDetailQuery.pageSize = pagingEvent.pageSize;
@@ -192,12 +202,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private getQueryExportExcel(item: SummaryItem): ExportExcelQuery {
     const betTypes = item.betTypes === '29' ? this.commonQuery.betTypes : item.betTypes;
-    const singleOrSubParlay = this.getSingleOrSubParlayParam(
-      item.betTypes,
-      item.isGroup,
-      this.commonQuery.groupBy,
-      this.commonQuery.singleOrSubParlay
-    );
+    const singleOrSubParlay = this.getSingleOrSubParlayParam(item);
     const query: ExportExcelQuery = _.assignIn({}, this.commonQuery, {
       isGroup: item.isGroup,
       betTypes: betTypes,
@@ -245,33 +250,32 @@ export class AppComponent implements OnInit, AfterViewInit {
     const titleAmendmentOic = this.getTitleAmendmentOic();
     this.sendFileQueries = [];
     this.sendFileItems.forEach(async item => {
-      const betTypes = item.betTypes === '29' ? this.commonQuery.betTypes : item.betTypes;
-      const singleOrSubParlay = this.getSingleOrSubParlayParam(
-        item.betTypes,
-        item.isGroup,
-        this.commonQuery.groupBy,
-        this.commonQuery.singleOrSubParlay
-      );
-      const query: SendFileQuery = _.assignIn({}, this.commonQuery, {
-        betTypes: betTypes,
-        singleOrSubParlay: singleOrSubParlay,
-        betTypeName: item.betTypeName,
-        licenseeName: item.licenseeName,
-        isChinaView: item.isChinaView,
-        eventDate: this.matchViewModel.eventDate,
-        globalShowTime: this.matchViewModel.globalShowTime,
-        title: titleAmendmentOic,
-        matchCode: null,
-        matchEvent: null,
-        startTime: null,
-        endTime: null,
-        specialPlatform: item.specialPlatform
-      });
-
+      const query = this.createSendFileQuery(item, titleAmendmentOic);
       this.sendFileQueries.push(query);
     });
     const result = await this.appService.sendDataToOic(this.sendFileQueries);
     this.showResultAmendmentOic(result);
+  }
+
+  private createSendFileQuery(item: SummaryItem, titleAmendmentOic: string){
+    const betTypes = item.betTypes === '29' ? this.commonQuery.betTypes : item.betTypes;
+    const singleOrSubParlay = this.getSingleOrSubParlayParam(item);
+
+    return _.assignIn({}, this.commonQuery, {
+      betTypes: betTypes,
+      singleOrSubParlay: singleOrSubParlay,
+      betTypeName: item.betTypeName,
+      licenseeName: item.licenseeName,
+      isChinaView: item.isChinaView,
+      eventDate: this.matchViewModel.eventDate,
+      globalShowTime: this.matchViewModel.globalShowTime,
+      title: titleAmendmentOic,
+      matchCode: null,
+      matchEvent: null,
+      startTime: null,
+      endTime: null,
+      specialPlatform: item.specialPlatform
+    });
   }
 
   private getTitleAmendmentOic() {
