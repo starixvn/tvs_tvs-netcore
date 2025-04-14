@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Fanex.Logging;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
-using Fanex.Logging;
-using Newtonsoft.Json;
 
 namespace TicketVoidingSystem.Extensions;
 
@@ -37,5 +39,10 @@ public static class StringExtension
 
             return new T();
         }
+    }
+
+    public static string ToJson<T>(this IEnumerable<T> list)
+    {
+        return list != null && list.Any() ? System.Text.Json.JsonSerializer.Serialize(list) : string.Empty;
     }
 }

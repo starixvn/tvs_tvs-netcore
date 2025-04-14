@@ -1,4 +1,5 @@
 ﻿using Epplus.Mapper.Annotations;
+using System.Text.Json.Serialization;
 
 namespace TicketVoidingSystem.ManageRequest.Models;
 
@@ -60,4 +61,13 @@ public class AccountWinlostExcelModel
     public decimal WinLostAfterVoid { get; set; }
 
     public bool IsHighlight { get; set; }
+}
+
+public class AccountAdjustVoidLimit
+{
+    [JsonPropertyName("ci")]
+    public int CustId { get; set; }
+
+    [JsonPropertyName("av")]
+    public decimal? AdjustVoidLimit { get; set; }
 }

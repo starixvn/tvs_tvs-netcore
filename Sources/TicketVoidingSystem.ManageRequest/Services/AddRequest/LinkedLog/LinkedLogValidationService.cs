@@ -24,7 +24,6 @@ public interface LinkedLogValidationService
 
     bool IsAffectedLinkedOddsForWrongOdds(Dictionary<int, LinkedOddsInfo> linkedOddsInfoDic, GetLinkedLogModel getLinkedLogModel);
 
-    //// For Not Affected
     bool IsNotAffectedLinkTime(DateTime time, DateTime filterFromTransTime);
 
     bool IsAnyLinkedOddsByBetType(Dictionary<int, LinkedOddsInfo> linkedOddsInfoDic, int betType);
@@ -34,7 +33,7 @@ public interface LinkedLogValidationService
 
 public class LinkedLogValidationServiceImp : LinkedLogValidationService
 {
-    private bool IsContainsValue(string? parent, decimal? child)
+    private static bool IsContainsValue(string? parent, decimal? child)
     {
         return !string.IsNullOrWhiteSpace(parent) && parent.Split('&').Select(x => (decimal?)decimal.Parse(x)).Contains(child);
     }
@@ -131,7 +130,7 @@ public class LinkedLogValidationServiceImp : LinkedLogValidationService
         return linkedOddsInfoDic.Values.Any(y => IsValidBetTypeWrongOdds(y.BetType, getLinkedLogModel));
     }
 
-    public static bool IsValidBetTypeWrongOdds(int betType, GetLinkedLogModel getLinkedLogModel)
+    private static bool IsValidBetTypeWrongOdds(int betType, GetLinkedLogModel getLinkedLogModel)
     {
         return getLinkedLogModel.SubIssueTypeId switch
         {
@@ -143,7 +142,7 @@ public class LinkedLogValidationServiceImp : LinkedLogValidationService
         };
     }
 
-    public static bool IsValidHdpWrongOdds(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    private static bool IsValidHdpWrongOdds(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
         return getLinkedLogModel.SubIssueTypeId switch
         {
@@ -155,13 +154,13 @@ public class LinkedLogValidationServiceImp : LinkedLogValidationService
         };
     }
 
-    public static bool IsValidOddsWrongOdds(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    private static bool IsValidOddsWrongOdds(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
         return decimal.Parse(getLinkedLogModel.FromOddsNotVoidHomeOver) > linkedOddsInfo.Odds1a || decimal.Parse(getLinkedLogModel.ToOddsNotVoidHomeOver) < linkedOddsInfo.Odds2a
             || decimal.Parse(getLinkedLogModel.FromOddsNotVoidAwayUnder) > linkedOddsInfo.Odds1a || decimal.Parse(getLinkedLogModel.ToOddsNotVoidAwayUnder) < linkedOddsInfo.Odds2a;
     }
 
-    public static bool CheckHdpWrongOddsByFavoriteType(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    private static bool CheckHdpWrongOddsByFavoriteType(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
         return getLinkedLogModel.FilterFavoriteType switch
         {
@@ -171,7 +170,7 @@ public class LinkedLogValidationServiceImp : LinkedLogValidationService
         };
     }
 
-    public static bool CheckHdpWrongOddsByWrongOu(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    private static bool CheckHdpWrongOddsByWrongOu(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
         return decimal.Parse(getLinkedLogModel.WrongOU) == linkedOddsInfo.Odds1a;
     }

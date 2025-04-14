@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -19,6 +18,7 @@ public class AddRequestHandler(ResultCacheService resultCacheService, AddRequest
         }
 
         var result = new Result();
+
         await resultCacheService.SetSimpleResultCache(request.Guid, result);
         result = await addRequestService.Execute(request);
         await resultCacheService.SetSimpleResultCache(request.Guid, result);

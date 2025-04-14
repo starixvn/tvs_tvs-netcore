@@ -1,23 +1,15 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
-
-namespace TicketVoidingSystem.ManageRequest.ViewModels;
+﻿namespace TicketVoidingSystem.ManageRequest.ViewModels;
 
 public class CheckValidUsernamesViewModel
 {
     public TransInfoAddRequestModel TransInfoAddRequestModel { get; set; }
-    public CheckUsernamesModel Validation { get; set; }
+    public ValidationInfo Validation { get; set; }
     public IEnumerable<AccountWinlostModel> AccountWinlostModels { get; set; }
 }
 
-public class CheckUsernamesModel
+public class ValidationInfo
 {
-    public bool IsBeingMoveBetDate { get; set; }
-
     public bool IsExistedInOtherRequest { get; set; }
-
-    public bool IsInvalidTotalTicket { get; set; }
-
-    public bool IsExceededTotalUsernames { get; set; }
 
     public string InvalidUserName { get; set; }
 
@@ -25,16 +17,20 @@ public class CheckUsernamesModel
 
     public int NumberOfTickets { get; set; }
 
+    public bool IsInvalidTotalTicket { get; set; }
+
+    public bool IsBeingMoveBetDate { get; set; }
+
     public string UnMarkTransIds { get; set; }
 
-    public bool IsTicketLimitExceeded { get; set; }
+    public string MarkTransIds { get; set; }
 }
 
 public class CheckUsernamesInDatabaseResult
 {
-    public CheckUsernamesModel ValidationResult { get; set; }
-    public TransInfoAddRequestModel TransInfoValidation { get; set; }
-    public string TransInfoJsonCompress { get; set; }
+    public ValidationInfo ValidationResult { get; set; }
+
     public IEnumerable<TicketCalculateWinLostAccount> TicketCalculateWinLostAccount { get; set; }
+
     public IEnumerable<AccountWinlostModel> AccountWinlost { get; set; }
 }

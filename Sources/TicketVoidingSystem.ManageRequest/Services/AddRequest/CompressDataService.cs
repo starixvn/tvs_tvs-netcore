@@ -1,7 +1,8 @@
-﻿using System.IO.Compression;
+﻿using Fanex.Logging;
+using System.Buffers;
+using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
-using Fanex.Logging;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
@@ -15,29 +16,43 @@ public interface CompressDataService
 
 public class CompressDataAddRequestServiceImp : CompressDataService
 {
+    private const int BufferSize = 81920; // 80KB for optimal performance
+
+    private static readonly JsonSerializerOptions SerializerOptions = new()
+    {
+        WriteIndented = false,
+        DefaultBufferSize = BufferSize,
+        AllowTrailingCommas = false,
+        MaxDepth = 64
+    };
+
     public string CompressTicket<T>(IEnumerable<T> tickets)
     {
         var ticketZipped = CompressJson(tickets);
-        var hexString = $"0x{Convert.ToHexString(ticketZipped)}";
-        return hexString;
+        return $"0x{Convert.ToHexString(ticketZipped)}";
     }
 
     private static byte[] CompressJson<T>(IEnumerable<T> groups)
     {
-        var json = JsonSerializer.Serialize(groups);
-
+        var json = JsonSerializer.Serialize(groups, SerializerOptions);
         var bytes = Encoding.Unicode.GetBytes(json);
-        using var memoryStream = new MemoryStream();
-        using (var gs = new GZipStream(memoryStream, CompressionMode.Compress))
+
+        using var outputStream = new MemoryStream(BufferSize);
+        using (var compressionStream = new GZipStream(outputStream, CompressionLevel.Fastest))
         {
-            gs.Write(bytes, 0, bytes.Length);
+            compressionStream.Write(bytes, 0, bytes.Length);
         }
 
-        return memoryStream.ToArray();
+        return outputStream.ToArray();
     }
 
     public IEnumerable<T> DecompressTickets<T>(string logInfoTicketsJson)
     {
+        if (string.IsNullOrEmpty(logInfoTicketsJson))
+        {
+            return [];
+        }
+
         try
         {
             var compressedBytes = Convert.FromHexString(logInfoTicketsJson.TrimStart('0', 'x'));
@@ -52,13 +67,27 @@ public class CompressDataAddRequestServiceImp : CompressDataService
 
     private static IEnumerable<T> DecompressJson<T>(byte[] compressedBytes)
     {
-        using var memoryStream = new MemoryStream(compressedBytes);
-        using var gs = new GZipStream(memoryStream, CompressionMode.Decompress);
-        using var resultStream = new MemoryStream();
-        gs.CopyTo(resultStream);
+        var buffer = ArrayPool<byte>.Shared.Rent(BufferSize);
+        try
+        {
+            using var inputStream = new MemoryStream(compressedBytes);
+            using var decompressionStream = new GZipStream(inputStream, CompressionMode.Decompress);
+            using var outputStream = new MemoryStream(BufferSize);
 
-        var json = Encoding.Unicode.GetString(resultStream.ToArray());
+            int bytesRead;
+            while ((bytesRead = decompressionStream.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                outputStream.Write(buffer, 0, bytesRead);
+            }
 
-        return Helper.DeserializeObjectIgnoreNullValue<IEnumerable<T>>(json);
+            var jsonBytes = outputStream.ToArray();
+            var json = Encoding.Unicode.GetString(jsonBytes);
+
+            return Helper.DeserializeObjectIgnoreNullValue<IEnumerable<T>>(json);
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(buffer);
+        }
     }
 }

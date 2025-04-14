@@ -1,5 +1,5 @@
-﻿using System.Text;
-using Fanex.Data.Repository;
+﻿using Fanex.Data.Repository;
+using System.Text;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 
@@ -28,7 +28,7 @@ public class AccountWinLostServiceImp(IDynamicRepository repository) : AccountWi
         await repository.ExecuteAsync(command);
     }
 
-    public static string GetAccountWinLostXml(IEnumerable<AccountWinlostModel> accountModels)
+    private static string GetAccountWinLostXml(IEnumerable<AccountWinlostModel> accountModels)
     {
         if (accountModels == null)
         {
