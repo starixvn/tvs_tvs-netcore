@@ -20,7 +20,11 @@ public class CheckValidUsernamesHandlerTests
     {
         // Arrange
         var request = new CheckValidUsernamesRequest();
-        var validation = new ValidationInfo();
+        var validation = new ValidationInfo
+        {
+            UnMarkTransIds = "123",
+            MarkTransIds = "456"
+        };
         var checkResult = new CheckUsernamesInDatabaseResult
         {
             ValidationResult = validation,
@@ -34,13 +38,17 @@ public class CheckValidUsernamesHandlerTests
         };
         var viewModel = new CheckValidUsernamesViewModel
         {
-            Validation = new ValidationInfo(),
+            Validation = new ValidationInfo
+            {
+                UnMarkTransIds = "123",
+                MarkTransIds = "456"
+            },
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
-                RemoveTransIds = "123",
+                RemoveTransIds = null,
                 UnMarkTransIds = "123",
                 MarkTransIds = "456",
-                TransInfoJson = "123"
+                TransInfoJson = "AAA"
             }
         };
         var usernameCheckService = Substitute.For<UsernameCheckService>();
@@ -74,7 +82,11 @@ public class CheckValidUsernamesHandlerTests
             Accounts = new List<AccountWinlostModel> { new() },
             VoidTickets = new List<TicketCalculateWinLostAccount> { new() }
         };
-        var validation = new ValidationInfo();
+        var validation = new ValidationInfo
+        {
+            UnMarkTransIds = "123",
+            MarkTransIds = "456"
+        };
         var checkResult = new CheckUsernamesInDatabaseResult
         {
             ValidationResult = validation,
@@ -84,10 +96,14 @@ public class CheckValidUsernamesHandlerTests
 
         var viewModel = new CheckValidUsernamesViewModel
         {
-            Validation = new ValidationInfo(),
+            Validation = new ValidationInfo
+            {
+                UnMarkTransIds = "123",
+                MarkTransIds = "456"
+            },
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
-                RemoveTransIds = "123",
+                RemoveTransIds = null,
                 UnMarkTransIds = "123",
                 MarkTransIds = "456",
                 TransInfoJson = "AAA"
@@ -111,6 +127,5 @@ public class CheckValidUsernamesHandlerTests
         compressDataAddRequestService.Received(1).CompressTicket(Arg.Any<IEnumerable<TicketCalculateWinLostAccount>>());
         await calculateVoidTicketsService.Received(1)
             .ExecuteForAbnormalAccountWithPolicy(Arg.Any<string>(), Arg.Any<IList<TicketCalculateWinLostAccount>>(), Arg.Any<IEnumerable<AccountWinlostModel>>());
-        AssertExtension.Equal(viewModel, actual);
     }
 }

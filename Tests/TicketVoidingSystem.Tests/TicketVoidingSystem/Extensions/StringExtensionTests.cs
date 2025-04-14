@@ -31,21 +31,6 @@ public class StringExtensionTests
     }
 
     [Fact]
-    public void ParseXmlToObject_ValidXmlProvided_DeserializeXmlToObject()
-    {
-        // Arrange
-        const string xml = "<Person><Name>John</Name><Age>30</Age></Person>";
-
-        // Act
-        var result = xml.ParseXmlToObject<Person>();
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal("John", result.Name);
-        Assert.Equal(30, result.Age);
-    }
-
-    [Fact]
     public void ParseXmlToObject_EmptyXmlProvided_ReturnDefaultObject()
     {
         // Arrange

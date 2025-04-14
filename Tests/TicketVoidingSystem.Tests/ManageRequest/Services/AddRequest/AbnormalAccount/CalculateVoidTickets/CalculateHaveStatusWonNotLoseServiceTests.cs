@@ -34,8 +34,8 @@ public class CalculateHaveStatusWonNotLoseServiceTests : IClassFixture<AppSettin
                 {
                     TotalWinLost = 150, Descending = new List<TicketCalculateWinLostAccount>
                     {
-                        new() { WinLost = 100, BetId = 1 },
-                        new() { WinLost = 50, BetId = 2 }
+                        new() { WinLost = 100, BetId = 3, IsChecked = true, CustId = 1, MatchId = 1 },
+                        new() { WinLost = 50, BetId = 2, IsChecked = false, CustId = 1, MatchId = 1 }
                     }
                 }
             },
@@ -45,14 +45,14 @@ public class CalculateHaveStatusWonNotLoseServiceTests : IClassFixture<AppSettin
                     TotalWinLost = 100,
                     Descending = new List<TicketCalculateWinLostAccount>
                     {
-                        new() { WinLost = 100, BetId = 3 }
+                        new() { WinLost = 100, BetId = 3, IsChecked = true, CustId = 1, MatchId = 1 }
                     }
                 }
             }
         };
-        var voidWonTickets = new List<TicketCalculateWinLostAccount> { new() { WinLost = 100, CustId = 1, BetId = 1 } };
+        var voidWonTickets = new List<TicketCalculateWinLostAccount> { new() { WinLost = 100, CustId = 1, BetId = 3, IsChecked = true, MatchId = 1 } };
         var othersVoidTickets = new List<TicketCalculateWinLostAccount>
-            { new() { WinLost = 100, CustId = 1, BetId = 3 } };
+            { new() { WinLost = 100, CustId = 1, BetId = 3, IsChecked = true, MatchId = 1 } };
         combineVoidTicketsService.Execute(1, Arg.Any<IEnumerable<int>>(),
             Arg.Any<Dictionary<(int CustId, int StatusId), OrderedTickets>>()).Returns(othersVoidTickets);
         var voidTicketsWithCustId2 = new List<TicketCalculateWinLostAccount>();
@@ -64,15 +64,16 @@ public class CalculateHaveStatusWonNotLoseServiceTests : IClassFixture<AppSettin
         {
             VoidTickets = new List<TicketCalculateWinLostAccount>
             {
-                new() { WinLost = 100, CustId = 1, BetId = 1 },
-                new() { WinLost = 100, CustId = 1, BetId = 3 }
+                new() { WinLost = 100, CustId = 1, BetId = 3, IsChecked = true, MatchId = 1 },
+                new() { WinLost = 100, CustId = 1, BetId = 3, IsChecked = true, MatchId = 1 }
             },
             Accounts = new List<AccountWinlostModel>
             {
                 new()
                 {
                     IsHighlight = true, CurrentLosing = -100, CurrentWinning = 150, AdjustVoidLimit = 40,
-                    EstimateVoidAmount = 100, EstimateVoidAmountUnEditableTickets = 100, WinLostAfterVoid = -50, VoidTickets = voidTickets, CustId = 1
+                    EstimateVoidAmount = 100, EstimateVoidAmountUnEditableTickets = 0, WinLostAfterVoid = -50, VoidTickets = voidTickets, CustId = 1,
+                    IsCanEditTicket = true
                 },
                 new()
                 {
@@ -83,7 +84,8 @@ public class CalculateHaveStatusWonNotLoseServiceTests : IClassFixture<AppSettin
                     EstimateVoidAmount = 0,
                     EstimateVoidAmountUnEditableTickets = 0,
                     WinLostAfterVoid = 0,
-                    VoidTickets = voidTicketsWithCustId2
+                    VoidTickets = voidTicketsWithCustId2,
+                    IsCanEditTicket = false
                 }
             }
         };
