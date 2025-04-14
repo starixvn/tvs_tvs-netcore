@@ -1,5 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.Models;
+﻿using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
@@ -44,6 +43,8 @@ public class GetLinkedLogServiceImp(
         await loggingService.ErrorAsync("TicketVoidingSystem.ManageRequest.Services.LinkedLog.CallGetLinkedLog", exception);
         return new LinkedLogDataViewModel
         {
+            IsLinkGroup1X2 = true,
+            IsLinkGroupAIO = true,
             Result = new Result
             {
                 ErrorCode = 1,
