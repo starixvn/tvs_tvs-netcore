@@ -84,6 +84,10 @@ public class RequestInfoForCopy
     public string? ActualMarket { get; set; }
     public string? FilterFavoriteType { get; set; }
     public string? FavoriteValue { get; set; }
+    public string? HdpValue { get; set; }
+    public string? HomeName { get; set; }
+    public string? AwayName { get; set; }
+    public int SportType { get; set; }
 
     //Wrong Odds
 

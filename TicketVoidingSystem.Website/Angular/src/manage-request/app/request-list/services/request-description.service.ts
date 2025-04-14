@@ -8,11 +8,12 @@ import { BetTypeTicketsInfo, CopyRequestInfoQuery, CopyRequestInfoResponse, Requ
 import { CommonService } from '../../../../utility/services/common.service';
 import { TvDetectionService } from './tv-detection.service';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
+import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
 
 export class RequestDescriptionService {
   commonService = inject(CommonService);
   clipboardService = inject(ClipboardService);
-  
+
   public async copyToClipboard(requestId: number, matchId: number, requestDetailId?: number): Promise<void> {
     const query: CopyRequestInfoQuery = {
       requestId: requestId,
@@ -81,7 +82,11 @@ export class RequestDescriptionService {
   }
 
   private createWrongHdpContent(copyInfoResponse: CopyRequestInfoResponse): string {
-    const oddsContent = this.generateOddsContentWrongHdp(copyInfoResponse.requestInfo);
+    const mainSubTypeHdp = [SubIssueTypeConstant.WRONG_HDP, SubIssueTypeConstant.WRONG_1ST_HDP];
+    const oddsContent = mainSubTypeHdp.includes(copyInfoResponse.requestInfo.subIssueTypeId)
+      ? this.generateOddsContentWrongHdp(copyInfoResponse.requestInfo)
+      : this.generateOddsContentHdpVirtualHeadReverse(copyInfoResponse.requestInfo);
+
     return this.createCommonContent(copyInfoResponse, '', oddsContent, false, true);
   }
 
@@ -135,6 +140,14 @@ export class RequestDescriptionService {
     return `Wrong Away: ${requestInfo.favoriteValue}\nCorrect Away: ${requestInfo.actualMarket}\n`;
   }
 
+  private generateOddsContentHdpVirtualHeadReverse(requestInfo: RequestInfoForCopy): string {
+    const subTypeHdpAway = [SubIssueTypeConstant.AWAY_VIRTUAL_HEAD_REVERSED_HDP, SubIssueTypeConstant.AWAY_VIRTUAL_HEAD_REVERSED_1ST_HDP];
+
+    const firstTeamName = subTypeHdpAway.includes(requestInfo.subIssueTypeId) ? requestInfo.awayName : requestInfo.homeName;
+    const secondTeamName = subTypeHdpAway.includes(requestInfo.subIssueTypeId) ? requestInfo.homeName : requestInfo.awayName;
+    return `Wrong: ${firstTeamName} ${requestInfo.hdpValue}\nCorrect: ${secondTeamName} ${requestInfo.hdpValue}\n`;
+  }
+
   private generateOddsContentWrongOu(requestInfo: RequestInfoForCopy): string {
     return `Wrong: ${requestInfo.wrongMarket}\nCorrect: ${requestInfo.actualMarket}\n`;
   }
@@ -153,18 +166,24 @@ export class RequestDescriptionService {
       + `Correct Odds: Over ${requestInfo.correctOddsHomeOver}, Under ${requestInfo.correctOddsAwayUnder}\n`;
   }
 
+  private iddShowOnlyIssueTypeName(copyInfoResponse: CopyRequestInfoResponse){
+    return !copyInfoResponse.requestInfo.subIssueTypeName
+      || copyInfoResponse.requestInfo.subIssueTypeName === copyInfoResponse.requestInfo.issueTypeName
+  }
 
   private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string, oddsContent: string, isShowCancelCOCount: boolean, isShowMistakenBy: boolean): string {
     const cancelCashOutCount = isShowCancelCOCount ? `, Cancel Cash Out: ${copyInfoResponse.requestInfo.totalCancelCashOutCount}` : '';
     const momentGlobalShowTime = moment(copyInfoResponse.requestInfo.globalShowTime);
-
+    const issueTypeName = this.iddShowOnlyIssueTypeName(copyInfoResponse)
+      ? copyInfoResponse.requestInfo.issueTypeName
+      : `${copyInfoResponse.requestInfo.issueTypeName} - ${copyInfoResponse.requestInfo.subIssueTypeName}`;
     const content = `Hi CSD, please void${copyInfoResponse.requestInfo.liveStatus}tickets for us\n`
       + `K.O Time: ${momentGlobalShowTime.format(DateTimeFormat.SHORT_TIME_FORMAT)}\n`
       + `League: ${copyInfoResponse.requestInfo.leagueName}\n`
       + `Match: ${copyInfoResponse.requestInfo.matchEvent}\n`
       + `Match ID: ${copyInfoResponse.requestInfo.matchId}\n`
       + `Request No: ${copyInfoResponse.requestInfo.requestId}\n`
-      + `Issue Type: ${copyInfoResponse.requestInfo.issueTypeName}\n`
+      + `Issue Type: ${issueTypeName}\n`
       + this.generateMistakenBy(copyInfoResponse.requestInfo, isShowMistakenBy)
       + betTypeContent
       + oddsContent
