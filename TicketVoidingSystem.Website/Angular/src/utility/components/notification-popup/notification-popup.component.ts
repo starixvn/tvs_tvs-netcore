@@ -3,7 +3,15 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SignalRService } from 'src/utility/services/signal-r.service.native';
+import { StaticService } from 'src/utility/services/static.service';
 import { NotificationPopupService } from './notification-popup.service';
+
+export interface NotificationItem {
+  message: string;
+  timestamp: string; // formatted like "2025-04-11 13:50:19"
+  unread: boolean;
+  isError: boolean;
+}
 
 @Component({
   selector: 'notification-popup',
@@ -26,20 +34,20 @@ import { NotificationPopupService } from './notification-popup.service';
 })
 export class NotificationPopupComponent {
   notificationChange: string[] = [];
-  notifications = [
-    { message: "Request 12345 is added successfully", time: "07:33 AM", createdDate: "2024-04-04", unread: true, isError: false },
-    { message: "Request 12346 is edited successfully", time: "08:00 AM", createdDate: "2024-04-04", unread: false, isError: false },
-    { message: "Request 12347 is added successfully", time: "09:15 AM", createdDate: "2024-04-03", unread: true, isError: false },
-    { message: "Request 12348 is edited successfully", time: "10:30 AM", createdDate: "2024-04-03", unread: false, isError: false },
-    { message: "Request 12349 is added successfully", time: "11:45 AM", createdDate: "2024-04-02", unread: true, isError: false },
-    { message: "Request 12349 is added successfully", time: "11:45 AM", createdDate: "2024-04-02", unread: true, isError: false },
-    { message: "Request 12349 is added successfully", time: "11:45 AM", createdDate: "2024-04-02", unread: false, isError: true },
-    { message: "Request 12349 is added successfully", time: "11:45 AM", createdDate: "2024-04-02", unread: true, isError: true },
-    { message: "Request 12349 is added successfully", time: "11:45 AM", createdDate: "2024-04-02", unread: true, isError: true },
-    { message: "Request 12349 is added successfully", time: "11:45 AM", createdDate: "2024-04-02", unread: false, isError: true },
-    { message: "Request 12349 is added successfully", time: "11:45 AM", createdDate: "2024-04-02", unread: false, isError: true },
-    { message: "Request 12349 is added successfully", time: "11:45 AM", createdDate: "2024-04-02", unread: false, isError: false },
-    { message: "Request 12349 is added successfully", time: "11:45 AM", createdDate: "2024-04-02", unread: false, isError: false },
+  notifications: NotificationItem[] = [
+    { message: "Request 12345 is added successfully", timestamp: "2024-04-04 07:33:00", unread: true, isError: false },
+    { message: "Request 12346 is edited successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: false },
+    { message: "Request 12347 is added successfully", timestamp: "2024-04-04 07:33:00", unread: true, isError: false },
+    { message: "Request 12348 is edited successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: false },
+    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: true, isError: false },
+    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: true, isError: false },
+    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: true },
+    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: true, isError: true },
+    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: true, isError: true },
+    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: true },
+    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: true },
+    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: false },
+    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: false },
 
   ];
 
@@ -67,7 +75,7 @@ export class NotificationPopupComponent {
   async ngOnInit() {
     this.notificationChangeSubscription = this.signalRService.notificationChange.subscribe((notification: string[]) => {
       console.log("notificationChangeSubscription");
-      const messsage = {message: notification[0], time: "07:33 AM", createdDate: "2024-04-04", unread: true, isError: false};
+      const messsage = {message: notification[0], timestamp: new Date().toLocaleString(), unread: true, isError: false};
       this.notifications.push(messsage);
       this.activeTab = messsage.isError ? 'error' : 'notification';
       this.cdr.markForCheck();
@@ -132,8 +140,9 @@ export class NotificationPopupComponent {
     }
     console.log("groupedNotificationsArray");
 
+    filtered.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     const grouped = filtered.reduce((groups, notification) => {
-      const date = notification.createdDate;
+      const date = StaticService.formatFullEnglishDate(notification.timestamp);
       if (!groups[date]) {
         groups[date] = [];
       }

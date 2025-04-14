@@ -6,7 +6,7 @@ import { ModalType } from '../components/modal/modal.model';
 import { ModalService } from '../components/modal/modal.service';
 import { MultipleSelection } from '../components/multiple-selection/multiple-selection';
 import { Tooltip } from '../components/tooltip/tooltip.model';
-import { AbnormalFilterBy, DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType} from '../constants/config';
+import { AbnormalFilterBy, DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType } from '../constants/config';
 import { IssueTypeConstant } from '../constants/issue-type.constant';
 import { LABELS } from '../constants/labels';
 import { RegexConstant } from '../constants/regex';
@@ -434,4 +434,10 @@ export class StaticService {
       ? baseTitle
       : `Void Time: ${strFromTime} - ${strToTime} ${baseTitle}`;
   }
+
+  static formatFullEnglishDate(timestamp: string | Date): string {
+    const date = new Date(timestamp);
+    return new Intl.DateTimeFormat('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(date);
+  }
+
 }

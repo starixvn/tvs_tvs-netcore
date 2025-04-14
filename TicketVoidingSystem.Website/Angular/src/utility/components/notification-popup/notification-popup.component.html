@@ -37,7 +37,7 @@
     <div class="notification" [class.unread]="notification.unread" [class.last-item]="isLast"
       (click)="clickNotification($event, notification)">
       <p>{{ notification.message }}</p>
-      <span class="time">{{ notification.time }}</span>
+      <span class="time">{{ notification.timestamp | date:'hh:mm:ss a' }}</span>
       @if (notification.unread) {
       <div class="unread-dot"></div>
       }
