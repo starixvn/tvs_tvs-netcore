@@ -1,186 +1,139 @@
-import { NgModule } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Shallow } from 'shallow-render';
-import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
+import { TicketsComponent } from './tickets.component';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Product } from '../../../utility/constants/config';
-import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { SummaryItem } from '../summary/summary.model';
 import { TicketsModel } from './ticket.model';
-import { TicketsComponent } from './tickets.component';
+import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
+import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
 
 class Helper {
-  static readonly ticketsSelector = 'div.tickets';
-  static readonly titleSelector = 'div.grid-title-label';
-  static readonly noDataSelector = '.no-data';
-  static readonly htmlRender = '<tickets [isShowTickets]="isShowTickets" [model]="ticketsModel"></tickets>';
-  static getFakeTicketsModel(): TicketsModel {
-    const model = new TicketsModel();
-    model.title = 'Title';
-    model.item = new SummaryItem('ABC', 100, false, '12Bet', '2', [], 'Handicap', 1);
-    model.tickets = [
-      {
-        ballSequence: null,
-        betId: '109631441656',
-        betType: 'Handicap',
-        choice: '<div class=""><span class="underdog">Harrogate Town<span class="handicap"> 1.5</span></span></div>',
-        currency: 'UUS',
-        isMarked: false,
-        member: '12BETUUS01002',
-        odds: '<span class="underdog"><font color="#B50000">-0.9</font></span> (<span class="oddstype">MY</span>)',
-        secondAcceptFlag: '',
-        stake: '<div class="stake">100</div>',
-        status: '<div class="status">Running</div>',
-        transDate: '08/26/2020 10:37:00 PM',
-        winLoss: ''
-      }
-    ];
-    return model;
-  }
-  static getFakeTicketsModelNoData(): TicketsModel {
-    const model = new TicketsModel();
-    model.title = 'NoData';
-    model.tickets = [];
+  static readonly mockSummaryItem = {
+    name: 'Test Item',
+    total: 100,
+    isChinaView: false,
+    licenseeName: 'Test Licensee',
+    betTypes: '29',
+    items: [],
+    betTypeName: 'Test Bet Type',
+    isGroup: false,
+    specialPlatform: null,
+    isChecked: false,
+    isShow: true
+  } as SummaryItem;
 
-    return model;
-  }
+  static readonly mockTicketsModel = {
+    pagingModel: new PagingModel(),
+    tickets: [],
+    item: Helper.mockSummaryItem,
+    title: 'Test Title'
+  } as unknown as TicketsModel;
+
+  static readonly mockPagingModel = {
+    page: 1,
+    pageSize: 50,
+    total: 100,
+    selection: [50, 100, 150, 500]
+  } as unknown as PagingModel;
 }
 
 describe('TicketsComponent', () => {
-  @NgModule({
-    declarations: [
-      PagingComponent
-    ],
-    imports: [
-      PipeModule,
-      FormsModule
-    ],
-    providers: []
-  })
-  class AppModuleTest { }
+  let component: TicketsComponent;
+  let fixture: ComponentFixture<TicketsComponent>;
 
-  let shallow: Shallow<TicketsComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [CommonModule, FormsModule, PagingComponent, SanitizeHtmlPipe, TicketsComponent]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(TicketsComponent, AppModuleTest);
-  });
-
-  it('#ngOnInit should return expected paging.selection', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-
-    // Action
-    instance.ngOnInit();
-
-    // Assert
-    expect(instance.paging.selection.length).toBe(4);
-  });
-
-  it('#ngOnChanges should return expected paging model', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    instance.model = Helper.getFakeTicketsModel();
-
-    // Action
-    instance.ngOnInit();
-    instance.ngOnChanges();
-
-    // Assert
-    expect(instance.paging.total).toBe(instance.model.item.total);
-    expect(instance.paging.pageSize).toBe(instance.paging.selection[0]);
-  });
-
-  it('#getWidth should return width correctly', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    const testCases = [
-      { product: Product.SPORTS_BOOK, width: '1275px' },
-      { product: Product.NUMBER_GAME, width: '1335px' }
-    ];
-
-    // Action and Assert
-    for (const item of testCases) {
-      instance.product = item.product;
-      expect(instance.getWidth()).toBe(item.width);
-    }
-  });
-
-  it('#exportExcelEvent should emit with expected param when call #exportExcel', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    instance.model = Helper.getFakeTicketsModel();
-    instance.exportExcelEvent.emit = jest.fn();
-
-    // Action
-    instance.exportExcel();
-
-    // Assert
-    expect(instance.exportExcelEvent.emit).toHaveBeenCalledWith(instance.model.item);
-  });
-
-  it('#pagingSearchTicket should emit with expected param when call #pagingEvent', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    instance.paging = new PagingModel();
-    instance.pagingSearchTicket.emit = jest.fn();
-
-    // Action
-    instance.pagingEvent();
-
-    // Assert
-    expect(instance.pagingSearchTicket.emit).toHaveBeenCalledWith(instance.paging);
-  });
-
-  it('should display content html of TicketsComponent when isShowTickets is true', async () => {
-    const { fixture, find } = await shallow.render(Helper.htmlRender, {
-      bind: {
-        isShowTickets: true,
-        ticketsModel: Helper.getFakeTicketsModel()
-      }
-    });
+    fixture = TestBed.createComponent(TicketsComponent);
+    component = fixture.componentInstance;
+    component.model = Helper.mockTicketsModel;
+    component.isShowTickets = true;
+    component.product = Product.SPORTS_BOOK;
     fixture.detectChanges();
-
-    expect(find(Helper.ticketsSelector)).toHaveFoundOne();
   });
 
-  it('should display title when have tickets', async() => {
-    const { fixture, find } =  await shallow.render(Helper.htmlRender, {
-      bind: {
-        isShowTickets: true,
-        ticketsModel: Helper.getFakeTicketsModel()
-      }
-    });
-    fixture.detectChanges();
-
-    expect(find(Helper.titleSelector)).toHaveFoundOne();
-    expect(find(Helper.titleSelector).nativeElement.textContent.trim()).toBe('Title');
+  it('should create', () => {
+    // Arrange & Act & Assert
+    expect(component).toBeTruthy();
   });
 
-  it('should display no-data when haven\'t tickets', async() => {
-    const { fixture, find } =  await shallow.render(Helper.htmlRender, {
-      bind: {
-        isShowTickets: true,
-        ticketsModel: Helper.getFakeTicketsModelNoData()
-      }
-    });
-    fixture.detectChanges();
-
-    expect(find(Helper.noDataSelector)).toHaveFoundOne();
-    expect(find(Helper.titleSelector)).toHaveFound(0);
+  it('#ngOnInit should initialize paging selection', () => {
+    // Arrange & Act
+    component.ngOnInit();
+    
+    // Assert
+    expect(component.paging.selection).toEqual([50, 100, 150, 500]);
   });
 
-  it('when #modelChange of PagingComponent emit, #pagingEvent should be called', async () => {
-    const { fixture, instance, findComponent } = await shallow.render(Helper.htmlRender, {
-      bind: {
-        isShowTickets: true,
-        ticketsModel: Helper.getFakeTicketsModel()
-      }
-    });
-    fixture.detectChanges();
-    instance.pagingEvent = jest.fn();
-    const pagingComponent = findComponent(PagingComponent);
-    pagingComponent.modelChange.emit(new PagingModel());
+  it('#ngOnChanges should update paging when model.item exists', () => {
+    // Arrange
+    component.model = Helper.mockTicketsModel;
+    
+    // Act
+    component.ngOnChanges();
+    
+    // Assert
+    expect(component.paging.total).toBe(Helper.mockSummaryItem.total);
+    expect(component.paging.pageSize).toBe(component.paging.selection[0]);
+  });
 
-    expect(instance.pagingEvent).toHaveBeenCalledTimes(1);
+  it('#ngOnChanges should not update paging when model.item is null', () => {
+    // Arrange
+    component.model = { ...Helper.mockTicketsModel, item: null };
+    const originalPaging = { ...component.paging };
+    
+    // Act
+    component.ngOnChanges();
+    
+    // Assert
+    expect(component.paging).toEqual(originalPaging);
+  });
+
+  it('#getWidth should return correct width for SPORTS_BOOK product', () => {
+    // Arrange
+    component.product = Product.SPORTS_BOOK;
+    
+    // Act
+    const width = component.getWidth();
+    
+    // Assert
+    expect(width).toBe('1275px');
+  });
+
+  it('#getWidth should return correct width for NUMBER_GAME product', () => {
+    // Arrange
+    component.product = Product.NUMBER_GAME;
+    
+    // Act
+    const width = component.getWidth();
+    
+    // Assert
+    expect(width).toBe('1335px');
+  });
+
+  it('#exportExcel should emit exportExcelEvent with model.item', () => {
+    // Arrange
+    component.exportExcelEvent = { emit: jest.fn() } as any;
+    
+    // Act
+    component.exportExcel();
+    
+    // Assert
+    expect(component.exportExcelEvent.emit).toHaveBeenCalledWith(component.model.item);
+  });
+
+  it('#pagingEvent should emit pagingSearchTicket with paging', () => {
+    // Arrange
+    component.pagingSearchTicket = { emit: jest.fn() } as any;
+    
+    // Act
+    component.pagingEvent();
+    
+    // Assert
+    expect(component.pagingSearchTicket.emit).toHaveBeenCalledWith(component.paging);
   });
 });

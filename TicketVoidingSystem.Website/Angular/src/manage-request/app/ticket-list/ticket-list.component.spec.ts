@@ -1,4 +1,3 @@
-
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { IssueInfo } from '../../../utility/models/issue-type.model';
 import { CommonService } from '../../../utility/services/common.service';
@@ -27,14 +26,11 @@ describe('TicketListComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('#ngOnChanges should getRequestById & IssueInfo when model is open', async () => {
+  it('#ngOnChanges should getRequestById when model is open', async () => {
     // Arrange
     const requestDetail = { requestId: 7586, request: { issueTypeId: 1 }, dangerAcceptedModels: [{ isMainMatch: true, subIssueTypeId: 3 }] } as RequestDetailViewModel;
     commonService.getRequestById = jest.fn().mockResolvedValue(requestDetail);
     component.modal = { open: true } as TicketListModal;
-
-    // Action
-    component.ngOnChanges();
 
     // Action
     await component.ngOnChanges();
@@ -42,6 +38,7 @@ describe('TicketListComponent', () => {
     // Assert
     expect(component.isBlock).toBeFalsy();
     expect(component.requestDetail).toEqual(requestDetail);
+    expect(component.isShowRequestInfo).toBeTruthy();
   });
 
   it('#ngOnChanges should not getRequestById & IssueInfo when model not open', async () => {

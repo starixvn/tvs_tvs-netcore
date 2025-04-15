@@ -1,51 +1,137 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Shallow } from 'shallow-render';
-import { PipeModule } from '../../../utility/pipes/pipe.module';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MessagesResponseComponent } from './messages-response.component';
-import { MessagesResponse } from './messages-response.model';
+import { CommonModule } from '@angular/common';
+import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
 import { AmendmentReponse } from '../models/query.model';
+import { By } from '@angular/platform-browser';
+
+class Helper {
+  static readonly mockAmendmentResponse = {
+    code: 0,
+    message: 'Success',
+    isChinaView: false,
+    isCanReSend: false,
+    specialPlatform: null,
+    isSuccessful: true
+  } as AmendmentReponse;
+
+  static readonly mockAmendmentResponseWithResend = {
+    code: 1,
+    message: 'Warning',
+    isChinaView: false,
+    isCanReSend: true,
+    specialPlatform: null,
+    isSuccessful: false
+  } as AmendmentReponse;
+
+  static readonly mockMessagesResponse = {
+    header: 'Test Header',
+    body: 'Test Body',
+    isShow: true,
+    results: [Helper.mockAmendmentResponse],
+    open: jest.fn(),
+    close: jest.fn()
+  };
+
+  static readonly mockMessagesResponseWithResend = {
+    header: 'Test Header',
+    body: 'Test Body',
+    isShow: true,
+    results: [Helper.mockAmendmentResponseWithResend],
+    open: jest.fn(),
+    close: jest.fn()
+  };
+}
 
 describe('MessagesResponseComponent', () => {
-  @NgModule({
-    declarations: [
-    ],
-    imports: [
-      FormsModule,
-      PipeModule
-    ],
-    providers: []
-  })
-  class AppModuleTest { }
+  let component: MessagesResponseComponent;
+  let fixture: ComponentFixture<MessagesResponseComponent>;
 
-  let shallow: Shallow<MessagesResponseComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [CommonModule, SanitizeHtmlPipe, MessagesResponseComponent],
+      providers: []
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(MessagesResponseComponent, AppModuleTest);
+    fixture = TestBed.createComponent(MessagesResponseComponent);
+    component = fixture.componentInstance;
+    component.messagesResponse = Helper.mockMessagesResponse;
+    fixture.detectChanges();
   });
-  
-  it('MessagesResponseComponent init should match snapshot', async () => {
-    const { fixture } = await shallow
-    .render({
-      bind: {
-        messagesResponse: new MessagesResponse()
-      }
-    });
 
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
-  
-  it('onClickResendData should emit resendDataEvent', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        messagesResponse: new MessagesResponse()
-      }
-    });
-    instance.resendDataEvent.emit = jest.fn();
 
-    instance.onClickResendData(new AmendmentReponse());
+  it('#onClickResendData should emit resendDataEvent with result', () => {
+    // Arrange
+    component.resendDataEvent.emit = jest.fn();
+    const result = Helper.mockAmendmentResponse;
 
-    expect(instance.resendDataEvent.emit).toHaveBeenCalledTimes(1);
+    // Act
+    component.onClickResendData(result);
+
+    // Assert
+    expect(component.resendDataEvent.emit).toHaveBeenCalledWith(result);
+  });
+
+  it('should display header correctly', () => {
+    // Arrange
+    component.messagesResponse = Helper.mockMessagesResponse;
+    fixture.detectChanges();
+
+    // Act
+    const headerElement = fixture.debugElement.query(By.css('.messages-results-header'));
+
+    // Assert
+    expect(headerElement.nativeElement.textContent).toContain('Test Header');
+  });
+
+  it('should show resend button when isCanReSend is true', () => {
+    // Arrange
+    component.messagesResponse = Helper.mockMessagesResponseWithResend;
+    fixture.detectChanges();
+
+    // Act
+    const resendButton = fixture.debugElement.query(By.css('.btn-resend'));
+
+    // Assert
+    expect(resendButton).toBeTruthy();
+  });
+
+  it('should not show resend button when isCanReSend is false', () => {
+    // Arrange
+    component.messagesResponse = Helper.mockMessagesResponse;
+    fixture.detectChanges();
+
+    // Act
+    const resendButton = fixture.debugElement.query(By.css('.btn-resend'));
+
+    // Assert
+    expect(resendButton).toBeFalsy();
+  });
+
+  it('should display success message correctly', () => {
+    // Arrange
+    component.messagesResponse = Helper.mockMessagesResponse;
+    fixture.detectChanges();
+
+    // Act
+    const successElement = fixture.debugElement.query(By.css('.success'));
+
+    // Assert
+    expect(successElement.nativeElement.textContent).toContain('Success');
+  });
+
+  it('should display fail message correctly', () => {
+    // Arrange
+    component.messagesResponse = Helper.mockMessagesResponseWithResend;
+    fixture.detectChanges();
+
+    // Act
+    const failElement = fixture.debugElement.query(By.css('.fail'));
+
+    // Assert
+    expect(failElement.nativeElement.textContent).toContain('Warning');
   });
 });
