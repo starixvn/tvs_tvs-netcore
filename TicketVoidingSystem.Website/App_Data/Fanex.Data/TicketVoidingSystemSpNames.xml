@@ -260,7 +260,6 @@
         <Setting Key="TicketVoiding_ScoreInfo_Select" SpName="TicketVoiding_ScoreInfo_Select" DbName="DBPRO.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_CheckTickets14" SpName="TicketVoiding_CheckTickets14" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_VoidBetAutomation_Service_Upd" SpName="TicketVoiding_VoidBetAutomation_Service_Upd" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
-        <Setting Key="TicketVoiding_PoolHouseTicket_Select" SpName="TicketVoiding_PoolHouseTicket_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_VoidBetAutomation_Service_Sel" SpName="TicketVoiding_VoidBetAutomation_Service_Sel" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_GeneralInfo_Select" SpName="TicketVoiding_GeneralInfo_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_LastModifiedDate_Select" SpName="TicketVoiding_LastModifiedDate_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
