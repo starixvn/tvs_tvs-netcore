@@ -9,6 +9,7 @@ import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-a
 import { AddRelatedEventArg } from '../../models/add-related-event.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
+import { EventDangerAcceptedService } from './event-danger-accepted.service';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
@@ -17,6 +18,7 @@ export class RelatedEventService {
   private readonly addRequestApiService = inject(AddRequestApiService);
   private readonly validationService = inject(ValidationService);
   private readonly logInfoService = inject(LogInfoService);
+  private readonly eventDangerAcceptedService = inject(EventDangerAcceptedService);
 
   async getChildMatches(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
     return this.addRequestApiService.getChildMatches(query);
@@ -72,6 +74,7 @@ export class RelatedEventService {
         return;
       }
       const newEvents = this.assignChildMatchToLogInfoModel(models, arg.defaultFilterTimeWithAllowance, arg.mainEvent.subIssueTypeId);
+      await this.eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime(newEvents, arg.mainEvent, arg.originalRelatedEvents, arg.defaultFilterTimeWithAllowance);
       await this.logInfoService.getLogInfo(newEvents, arg.primitiveProps, arg.isEdit, arg.requestId, arg.filter, arg.defaultFilterTimeWithAllowance);
       this.logInfoService.updateIsCheckedVar(newEvents, arg.mainEvent.isCheckedVar);
 
@@ -93,6 +96,7 @@ export class RelatedEventService {
     const newEvents = this.assignChildMatchToLogInfoModel(newChildEvents, arg.defaultFilterTimeWithAllowance, arg.mainEvent.subIssueTypeId);
     const eventsGetLogInfo = _.cloneDeep(arg.allEvents);
     eventsGetLogInfo.push(...newEvents);
+    await this.eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime(eventsGetLogInfo, arg.mainEvent, relatedEvents, arg.defaultFilterTimeWithAllowance);
 
     return eventsGetLogInfo;
   }

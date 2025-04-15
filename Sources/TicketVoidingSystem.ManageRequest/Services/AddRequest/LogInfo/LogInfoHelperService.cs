@@ -85,9 +85,9 @@ public class LogInfoHelperServiceImp(BetListService betListService, CopyRequestI
             MatchId = selectedItems[0].MatchId,
             Id = selectedItems[0].Id,
             ScoreId = selectedItems[0].ScoreId,
-            LiveScores = JoinStringValue("|", selectedItems.Select(x => x.LiveScores).Distinct()),
+            LiveScores = GetLiveScore("|", selectedItems),
             ScoreOfMatch = selectedItems[0].ScoreOfMatch,
-            ScoreNormalTicket = JoinStringValue("|", selectedItems.Select(x => x.ScoreNormalTicket)),
+            ScoreNormalTicket = GetScoreNormalTicket("|", selectedItems),
             SingleCount = selectedItems.Sum(x => x.SingleCount),
             MainParlayCount = selectedItems.Sum(x => x.MainParlayCount),
             CashOutCount = selectedItems.Sum(x => x.CashOutCount),
@@ -150,6 +150,22 @@ public class LogInfoHelperServiceImp(BetListService betListService, CopyRequestI
     {
         return items.Where(x => x.TransVoidToTime != null)
             .Max(x => x.TransVoidToTime);
+    }
+
+    private static string GetScoreNormalTicket(string? separator, List<LogInfoDetail> selectedItems)
+    {
+        var scores = selectedItems.SelectMany(x => (x.ScoreNormalTicket ?? "")
+                .Split("|", StringSplitOptions.RemoveEmptyEntries)).Distinct();
+
+        return string.Join(separator, scores);
+    }
+
+    private static string GetLiveScore(string? separator, List<LogInfoDetail> selectedItems)
+    {
+        var scores = selectedItems.SelectMany(x => (x.LiveScores ?? "")
+            .Split("|", StringSplitOptions.RemoveEmptyEntries)).Distinct();
+
+        return string.Join(separator, scores);
     }
 
     private static string JoinStringValue(string? separator, IEnumerable<string> items)
