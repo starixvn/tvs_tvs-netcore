@@ -3,7 +3,7 @@
     <div class="line-1">
       <div class="d-flex me-3">
         <label class="col-form-label col-form-label-sm me-2">Match ID</label>
-        <input maxlength="10" class="form-control form-control-sm input-match-id" style="width: 140px" type="text" only-number 
+        <input maxlength="10" class="form-control form-control-sm match-id" style="width: 140px" type="text" only-number 
             [(ngModel)]="matchId" (change)="unCheckAffectedTickets()" (blur)="blurMatchId()" autofocus />
       </div>
       <div class="d-flex me-3 selection-licensee">
@@ -98,23 +98,24 @@
             <em class="icon-filter"></em>Optional Filters
           </legend>
           <div class="optional-filters">
-            <div class="score">
+            <div class="score me-3">
               <span class="bold d-flex align-items-center">Score:</span>
               <label>Home<input type="text" class="form-control" only-number maxlength="3"
               [(ngModel)]="query.liveHomeScore" /></label>
               <label>Away<input type="text" class="form-control" only-number maxlength="3"
               [(ngModel)]="query.liveAwayScore" /></label>
             </div>
-            <label><span class="bold me-1">Trans Date (GMT+ 8):</span> <input type="checkbox"
-          (change)="setDateTime();disabledTransDate=!disabledTransDate" /></label>
+            <label><span class="bold me-1">Trans Date (GMT+ 8):</span> 
+              <input type="checkbox" (change)="setDateTime(); updateDisabledTransDate();"/>
+            </label>
           <div class="date-time">
-            <label class="mg-right-10">From</label>
-            <date-full-time-new #fromDateTime class="from-date-time me-2" [isDisabled]="disabledTransDate"
-              [(dateTime)]="fromDate">
+            <label>From</label>
+            <date-full-time-new class="from-date-time" [isDisabled]="disabledTransDate"
+            [(ngModel)]="fromDate">
             </date-full-time-new>
-            <label class="mg-10-20">To</label>
-            <date-full-time-new #fromDateTime class="to-date-time me-2" [isDisabled]="disabledTransDate"
-              [(dateTime)]="toDate">
+            <label class="ms-3">To</label>
+            <date-full-time-new class="to-date-time" [isDisabled]="disabledTransDate"
+              [(ngModel)]="toDate">
             </date-full-time-new>
           </div>
         </div>

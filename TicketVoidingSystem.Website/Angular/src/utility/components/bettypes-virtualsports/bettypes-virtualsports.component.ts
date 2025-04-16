@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef, Input, OnChanges, SimpleChange } from '@angular/core';
+﻿import { Component, ElementRef, inject, Input, OnChanges, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
 import { Product } from '../../constants/config';
 import { TEXT } from '../../constants/text';
@@ -6,14 +6,14 @@ import { Tooltip } from '../tooltip/tooltip.model';
 import { GroupBetTypeVirtualSport } from './bettypes-virtualsports.model';
 import { FormsModule } from '@angular/forms';
 import { TooltipComponent } from '../tooltip/tooltip.component';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
     standalone: true,
     selector: 'bettypes-virtualsports',
     templateUrl: './bettypes-virtualsports.component.html',
     styleUrls: ['./bettypes-virtualsports.component.scss'],
-    imports: [FormsModule, TooltipComponent, CommonModule]
+    imports: [FormsModule, TooltipComponent]
 })
 export class BetTypesVirtualSportComponent implements OnChanges {
     @Input() group = new GroupBetTypeVirtualSport([]);
@@ -28,8 +28,9 @@ export class BetTypesVirtualSportComponent implements OnChanges {
         Product.BITCOIN
     ];
     isDisabledAllBetTypes: boolean;
-
-    constructor(private readonly element: ElementRef) {
+    
+    element = inject(ElementRef);
+    constructor() {
         this.tooltip.element = this.element;
     }
 

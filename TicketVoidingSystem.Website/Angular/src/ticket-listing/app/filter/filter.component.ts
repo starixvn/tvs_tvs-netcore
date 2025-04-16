@@ -26,6 +26,7 @@ import { DateTimeFormat, ModeType, Product } from '../../../utility/constants/co
 import { TEXT } from '../../../utility/constants/text';
 import { BallSequences } from '../../../utility/models/ball-sequences';
 import { MatchModel } from '../../../utility/models/match.model';
+import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
 
 @Component({
   standalone: true,
@@ -33,7 +34,7 @@ import { MatchModel } from '../../../utility/models/match.model';
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
   imports: [CommonModule, FormsModule, NgSelectModule, AdvancedModeComponent, GroupBetTypesComponent,
-    BetTypesComponent, BetTypesVirtualSportComponent, DateFullTimeNewComponent, TooltipComponent],
+    BetTypesComponent, BetTypesVirtualSportComponent, DateFullTimeNewComponent, TooltipComponent, OnlyNumberDirective],
 })
 export class FilterComponent implements OnInit {
   @Output() searchEvent = new EventEmitter<FilterEvent>();
@@ -117,8 +118,8 @@ export class FilterComponent implements OnInit {
     this.licensees = await this.appService.getLicensees();
 
     this.licenseeSelectList = [
-      { id: 0, name: 'All'},
-      { id: -1, name: 'Credit'}
+      { id: 0, name: 'All' },
+      { id: -1, name: 'Credit' }
     ];
 
     if (this.licensees && this.licensees.length > 0) {
@@ -245,8 +246,7 @@ export class FilterComponent implements OnInit {
       || this.isInvalidProduct1(product, this.sportType)
       || this.isInvalidProduct2(product, this.sportType)
       || this.isInvalidProduct9(product, this.sportType)
-      || this.isInvalidOtherProducts(this.sportType))
-      {
+      || this.isInvalidOtherProducts(this.sportType)) {
       this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
       return false;
     }
@@ -254,17 +254,17 @@ export class FilterComponent implements OnInit {
     return true;
   }
 
-  private inValidSportTypeVirtualSport(sportType: number){
+  private inValidSportTypeVirtualSport(sportType: number) {
     return (sportType < 180 || sportType > 186)                         //sportTypes invalid in  Virtual Sports
-    && ((sportType < 190 || sportType > 199) && sportType !== 177)      //sportTypes invalid in  Virtual Sports 2
-    && (sportType !== 178 && sportType !== 179)                         //sportTypes invalid in  Virtual Sports 3
-    && (sportType !== 188)                                              //sportTypes invalid in  Virtual Sports 4
-    && (sportType !== 147)                                              //sportTypes invalid in  Virtual Sports 5
-    && (sportType !== 134);                                             //sportTypes invalid in  Virtual Sports 6
+      && ((sportType < 190 || sportType > 199) && sportType !== 177)      //sportTypes invalid in  Virtual Sports 2
+      && (sportType !== 178 && sportType !== 179)                         //sportTypes invalid in  Virtual Sports 3
+      && (sportType !== 188)                                              //sportTypes invalid in  Virtual Sports 4
+      && (sportType !== 147)                                              //sportTypes invalid in  Virtual Sports 5
+      && (sportType !== 134);                                             //sportTypes invalid in  Virtual Sports 6
   }
 
   private isInvalidProduct0(product: number, sportType: number): boolean {
-    return ((product === 0 ) && sportType > 99 && sportType !== 154);
+    return ((product === 0) && sportType > 99 && sportType !== 154);
   }
 
   private isInvalidProduct1(product: number, sportType: number): boolean {
@@ -375,7 +375,7 @@ export class FilterComponent implements OnInit {
 
     const betTypes: BetTypeModel[] = [];
     data.forEach(item => {
-      betTypes.push(new BetTypeModel(item.selectionType.toString(), item.selectionName, false, 8, true));
+      betTypes.push(new BetTypeModel(item.selectionType.toString(), item.selectionName, false, Product.BET_BUILDER, true));
     });
     this.betTypes = new BetTypesModel(betTypes, true);
   }
@@ -396,7 +396,7 @@ export class FilterComponent implements OnInit {
     }
     this.groupsBetTypesVS = new GroupBetTypeVirtualSport(data.betTypes);
   }
-  
+
   async getBetTypesVS(query: GetBetTypesQuery) {
     this.blockUIService.start();
     const groupsBetTypes = await this.commonService.getBetTypesVirtualSports(query);
@@ -438,7 +438,7 @@ export class FilterComponent implements OnInit {
     return true;
   }
 
-  isSelectionNotValid(){
+  isSelectionNotValid() {
     const selectionSubParlays = this.getSelectionSubParlays(this.singleOrSubParlay)
     return this.singleOrSubParlay === "SubParlay" && selectionSubParlays === "";
   }
@@ -454,8 +454,11 @@ export class FilterComponent implements OnInit {
     } else if (this.query.product === Product.VIRTUAL_SPORTS && this.groupsBetTypesVS.betTypes.length > 0) {
       return this.betTypesVSComponent.validate();
     } else {
-      return this.betTypesComponent.validate();
-    }
+      return this.betTypesComponent.validate();    }
+  }
+
+  updateDisabledTransDate() {
+    this.disabledTransDate = !this.disabledTransDate;
   }
 
   getParams(): GetSummaryQuery {
@@ -479,7 +482,7 @@ export class FilterComponent implements OnInit {
       const betTeams = this.advancedModeComponent.getBetTypeModels(checkedBetTypes);
       this.query.betTeams = betTeams;
     }
-    else{
+    else {
       this.query.betTeams = undefined;
     }
     return this.query;
@@ -508,10 +511,10 @@ export class FilterComponent implements OnInit {
   }
 
   isShowCheckboxAffected(): boolean {
-    if(this.query.product === Product.SPORTS_BOOK){
-        return this.groupBetTypes && this.groupBetTypes.groupBetTypes.length > 0;
+    if (this.query.product === Product.SPORTS_BOOK) {
+      return this.groupBetTypes && this.groupBetTypes.groupBetTypes.length > 0;
     }
-    if(this.query.product === Product.BET_BUILDER){
+    if (this.query.product === Product.BET_BUILDER) {
       return this.betTypes && this.betTypes.betTypes.length > 0;
     }
 
@@ -525,17 +528,23 @@ export class FilterComponent implements OnInit {
   }
 
   private enableGroupBetTypesAndAdvancedMode(): void {
-    this.groupBetTypesComponent.isDisabledAllBetTypes = false;
+    if (this.groupBetTypesComponent) {
+      this.groupBetTypesComponent.isDisabledAllBetTypes = false;
+    }
   }
 
   private enableBetTypesAndAdvancedMode(): void {
-    this.betTypesComponent.isDisabledAllBetTypes = false;
+    if (this.betTypesComponent) {
+      this.betTypesComponent.isDisabledAllBetTypes = false;
+    }
   }
 
   private checkAndDisabledAllBetTypes(): void {
-    if(this.query.product === Product.BET_BUILDER){
+    if (this.query.product === Product.BET_BUILDER) {
       if (this.isReSettled) {
-        this.betTypesComponent.isDisabledAllBetTypes = true;
+        if (this.betTypesComponent) {
+          this.betTypesComponent.isDisabledAllBetTypes = true;
+        }
         this.betTypes.isChecked = true;
         this.betTypes.betTypes.forEach(x => {
           x.isChecked = true;
@@ -547,9 +556,11 @@ export class FilterComponent implements OnInit {
   }
 
   private checkAndDisabledAllGroupBetTypes(): void {
-    if(this.query.product === Product.SPORTS_BOOK){
+    if (this.query.product === Product.SPORTS_BOOK) {
       if (this.isReSettled) {
-        this.groupBetTypesComponent.isDisabledAllBetTypes = true;
+        if (this.groupBetTypesComponent) {
+          this.groupBetTypesComponent.isDisabledAllBetTypes = true;
+        }
         this.groupBetTypes.isChecked = true;
         this.groupBetTypes.groupBetTypes.forEach(x => {
           x.isChecked = true;
@@ -560,14 +571,14 @@ export class FilterComponent implements OnInit {
       }
     }
   }
-  
+
   public handleBetTypesAndAdvancedMode(): void {
     this.checkAndDisabledAllBetTypes();
     this.checkAndDisabledAllGroupBetTypes();
   }
 
   isShowAdvancedMode(): boolean {
-    return this.query.product === Product.SPORTS_BOOK;
+    return this.isInvalidProduct0(this.query?.product, this.sportType);
   }
 
   isShowFilterTime(): boolean {

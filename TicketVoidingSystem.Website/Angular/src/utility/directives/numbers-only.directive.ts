@@ -17,6 +17,7 @@ export class NumbersOnlyDirective {
 }
 
 @Directive({
+  standalone: true,
   selector: 'input[decimalOnly]'
 })
 export class DecimalOnlyDirective {
@@ -31,6 +32,7 @@ export class DecimalOnlyDirective {
 }
 
 @Directive({
+  standalone: true,
   selector: 'input[multipleDecimal]'
 })
 export class MultipleDecimalDirective {

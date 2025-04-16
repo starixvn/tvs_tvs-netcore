@@ -52,6 +52,7 @@ class CheckKeyboardEvent {
 
 @Directive({
     selector: '[only-number]',
+    standalone: true,
     host: {
         '(keydown)': 'keydownOnlyNumber($event)',
         '(keyup)': 'keyupOnlyNumber()'
@@ -83,6 +84,7 @@ export class OnlyNumberDirective {
 
 @Directive({
     selector: '[decimal]',
+    standalone: true,
     host: {
         '(keydown)': 'keyDownDecimal($event)',
         '(keyup)': 'keyUpDecimal()'
@@ -113,8 +115,10 @@ export class DecimalDirective {
 
 @Directive({
     selector: '[number-range]',
+    standalone: true,
     host: {
-        '(keyup)': 'numberRange()'
+        '(keydown)': 'keyDownNumberRange($event)',
+        '(keyup)': 'keyUpNumberRange()'
     }
 })
 
@@ -122,12 +126,16 @@ export class NumberRangeDirective {
     constructor(private readonly element: ElementRef) {
     }
 
-    numberRange() {
+    keyDownNumberRange(event: KeyboardEvent) {
         const value = parseInt(this.element.nativeElement.value.replace(/(?!^)-/g, ''), 10);
         const min = parseInt(this.element.nativeElement.min, 10);
         const max = parseInt(this.element.nativeElement.max, 10);
         this.element.nativeElement.value = isNaN(value) ? min :
             value < min ? min :
                 value > max ? max : value;
+    }
+
+    keyUpNumberRange() {
+        CheckKeyboardEvent.handleKeyUpEvent(this.element);
     }
 }

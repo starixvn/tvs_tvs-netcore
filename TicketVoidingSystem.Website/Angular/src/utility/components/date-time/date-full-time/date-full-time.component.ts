@@ -1,10 +1,8 @@
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { Tooltip } from '../../tooltip/tooltip.model';
-import { Component, OnInit, Input, ElementRef, Output, EventEmitter } from '@angular/core';
-
 import { FullTime } from './full-time.model';
-
-import * as _ from 'lodash';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'date-full-time',
@@ -19,7 +17,9 @@ export class DateFullTimeComponent implements OnInit {
   @Output() modelChange = new EventEmitter<FullTime>();
   tooltip = new Tooltip();
 
-  constructor(private readonly element: ElementRef) {
+  private readonly element = inject(ElementRef);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 

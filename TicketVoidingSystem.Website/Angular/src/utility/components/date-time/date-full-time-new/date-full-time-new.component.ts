@@ -1,26 +1,33 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
-import { NgbDate, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, inject, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { CommonStaticService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
-import { Tooltip } from '../../tooltip/tooltip.model';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TooltipComponent } from '../../tooltip/tooltip.component';
+import { Tooltip } from '../../tooltip/tooltip.model';
+import { DatePickerComponent } from '../date-picker/date-picker.component';
 
 @Component({
   standalone: true,
   selector: 'date-full-time-new',
   templateUrl: './date-full-time-new.component.html',
   styleUrls: ['./date-full-time-new.component.scss'],
-  imports: [FormsModule, NgbModule, TooltipComponent]
+  imports: [DatePickerComponent, FormsModule, CommonModule, TooltipComponent, NgbModule],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: DateFullTimeNewComponent,
+      multi: true
+    }
+  ]
 })
-export class DateFullTimeNewComponent implements OnInit, OnChanges {
+export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValueAccessor {
   @Input() index: number = null;
   @Input() timeZone: string;
-  @Input() dateTime: string;
-  @Input() isDisabled: boolean;
+  @Input() isDisabled: boolean = false;
   @Input() maxDate: NgbDate;
   @Input() minDate: NgbDate;
   @Input() allowedHideDate = false;
@@ -28,9 +35,6 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
   @Input() readonly = true;
   @Input() timeClass = '';
   @Input() timeFormat = DateTimeFormat.TIME_FORMAT;
-  @Output() dateTimeChange = new EventEmitter<string>();
-  @Output() changeEvent = new EventEmitter();
-  @ViewChild('datePicker') datePicker: NgbInputDatepicker;
 
   tooltip = new Tooltip();
   date: NgbDate;
@@ -39,13 +43,18 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
   isPasteTimeEvent: boolean;
   dateTimeFormat: string;
 
+  private _inputDisabled: boolean = false;
+  private _dateTime: string;
+  private _onChange: (value: string) => void = () => { };
+  private _onTouched: () => void = () => { };
   private readonly ALLOWED_TIME_FORMATS = [
     'h:mm:ss.SSS A',
     'h:mm:ss A',
     'HH:mm:ss'
   ];
+  private readonly element = inject(ElementRef);
 
-  constructor(private readonly element: ElementRef) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -53,72 +62,85 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
     if (changes['dateTime']) {
       this.updateData();
     }
-  }
-
-  ngOnInit(): void {
-    this.updateData();
-  }
-
-  public onClickIconCalendar(): void {
-    if (this.allowedHideDate) {
-      this.isShowInputDate = !this.isShowInputDate;
-    } else {
-      this.datePicker.toggle();
+    if (changes['isDisabled']) {
+      this._inputDisabled = this.isDisabled;
     }
   }
 
-  public updateData(): void {
+  ngOnInit() {
+    this.updateData();
+    this._inputDisabled = this.isDisabled;
+  }
+
+  updateData() {
     this.timeZone = 'America/Caracas';
     this.dateTimeFormat = `YYYY/MM/DD ${this.timeFormat}`;
-    const momentDateTime = moment(this.dateTime, this.dateTimeFormat);
+    const momentDateTime = moment(this._dateTime, this.dateTimeFormat);
     this.date = new NgbDate(momentDateTime.year(), momentDateTime.month() + 1, momentDateTime.date());
     this.time = momentDateTime.format(this.timeFormat);
   }
 
-  public validateWithTooltip(): boolean {
+  onChangeModel() {
+    this.time = CommonStaticService.convertToStrictTimeFormat(this.time, this.timeFormat);
+    this._dateTime = moment(`${StaticService.convertToFullDate(this.date)} ${this.time}`, this.dateTimeFormat, true).format(this.dateTimeFormat);
+    this._onChange(this._dateTime);
+  }
+
+  validateWithTooltip(): boolean {
     if (!this.isTimeValid()) {
       this.tooltip.display(`time-input${this.index}`, `Invalid Date Time format. The correct format is "${this.dateTimeFormat}"`);
       return false;
     }
-    this.getDateTime();
-
     return true;
   }
 
-  public getDateTime(): string {
-    this.time = CommonStaticService.convertToStrictTimeFormat(this.time, this.timeFormat);
-    this.dateTime = moment(`${StaticService.convertToFullDate(this.date)} ${this.time}`,this.dateTimeFormat, true).format(this.dateTimeFormat);
-    this.dateTimeChange.emit(this.dateTime);
-
-    return this.dateTime;
+  getDateTime() {
+    return this._dateTime;
   }
 
-  public isTimeValid(): boolean {
+  isTimeValid() {
     const timeMoment = moment(this.time.trim(), this.timeFormat, true);
     if (!timeMoment.isValid()) {
       return false;
     }
-
     return true;
   }
 
-  public changeModel(): void {
-    this.changeEvent.emit();
-  }
-
-  public onChangeTime(newTime: string): void {
+  onChangeTime(newTime: string) {
     if (this.isPasteTimeEvent && this.isPasteCorrectTime(newTime)) {
       this.time = moment(newTime.trim(), this.ALLOWED_TIME_FORMATS, true).format(this.timeFormat);
     }
-
     this.isPasteTimeEvent = false;
   }
 
-  public onPasteTime(): void {
+  onPasteTime() {
     this.isPasteTimeEvent = true;
   }
 
-  private isPasteCorrectTime(time: string): boolean {
+  isPasteCorrectTime(time: string) {
     return moment(time.trim(), this.ALLOWED_TIME_FORMATS, true).isValid();
+  }
+
+  onBlur() {
+    this._onTouched();
+  }
+
+  writeValue(value: string): void {
+    this._dateTime = value;
+    this.updateData();
+  }
+
+  registerOnChange(fn: (value: string) => void): void {
+    this._onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this._onTouched = fn;
+  }
+
+  setDisabledState(state: boolean): void {
+    if (!this._inputDisabled) {
+      this.isDisabled = state;
+    }
   }
 }

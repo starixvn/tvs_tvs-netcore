@@ -29,9 +29,7 @@ import { TicketsComponent } from './tickets/tickets.component';
         FilterComponent,
         TicketsComponent,
         ModalComponent,
-        ConfirmationComponent,
-        NumberRangeDirective,
-        DecimalDirective
+        ConfirmationComponent
     ],
     imports: [
         BrowserModule,
@@ -47,7 +45,9 @@ import { TicketsComponent } from './tickets/tickets.component';
         TemplateMessageModule,
         ToastrModule.forRoot(),
         PipeModule,
-        ClipboardModule
+        ClipboardModule,
+        NumberRangeDirective,
+        DecimalDirective
     ],
     providers: [
         BlockUiService,

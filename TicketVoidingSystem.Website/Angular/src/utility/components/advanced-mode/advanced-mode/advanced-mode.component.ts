@@ -15,6 +15,7 @@ import { AdvancedModeService } from './advanced-mode.service';
 import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { DecimalOnlyDirective, MultipleDecimalDirective,  } from '../../../../utility/directives/numbers-only.directive';
 import { MultipleSelectComponent } from '../multiple-selection/multiple-select.component';
 
 @Component({
@@ -22,7 +23,7 @@ import { MultipleSelectComponent } from '../multiple-selection/multiple-select.c
   selector: 'advanced-mode',
   templateUrl: './advanced-mode.component.html',
   styleUrls: ['./advanced-mode.component.scss'],
-  imports: [TooltipComponent, FormsModule, CommonModule, MultipleSelectComponent],
+  imports: [TooltipComponent, FormsModule, CommonModule, DecimalOnlyDirective, MultipleDecimalDirective, MultipleSelectComponent],
   encapsulation: ViewEncapsulation.None
 })
 export class AdvancedModeComponent implements OnChanges {
@@ -231,12 +232,18 @@ export class AdvancedModeComponent implements OnChanges {
   }
 
   onChangeInputMultipleDecimal(betTypeId: string, value: string, className: string) {
-    if (!this.validateInputMultipleDecimal(betTypeId, value, className)) {
-      return false;
+    const isValid = this.validateInputMultipleDecimal(betTypeId, value, className);
+    if (!isValid) {
+      const elements = this.element.nativeElement.getElementsByClassName(className);
+      for (let i = 0; i < elements.length; i++) {
+        if (elements[i].contains(document.activeElement)) {
+          this.tooltip.display(className, TEXT.INVALID_INPUT);
+          break;
+        }
+      }
+    } else {
+      this.tooltip.hide();
     }
-    this.tooltip.hide();
-
-    return true;
   }
 
   private validateInputMultipleDecimal(betTypeId: string, value: string, className: string): boolean {

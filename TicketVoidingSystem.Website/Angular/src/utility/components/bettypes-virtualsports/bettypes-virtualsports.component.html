@@ -1,17 +1,19 @@
-﻿<div class="bettypes" *ngIf="isShowCheckedBetTypes()">
+﻿@if (isShowCheckedBetTypes()) {
+  <div class="bettypes">
     <div class="header">
-        <label>
-            <input type="checkbox" class="checkbox-all-bettypes" [(ngModel)]="group.checked" (ngModelChange)="group.changeAll()" />
-            All Bet types
-        </label>
+      <label>
+        <input type="checkbox" class="checkbox-all-bettypes" [(ngModel)]="group.checked" (ngModelChange)="group.changeAll()" />
+        All Bet types
+      </label>
     </div>
     <div class="content">
-        <ng-container *ngFor="let bettype of group.betTypes">
-            <label>
-                <input type="checkbox" [(ngModel)]="bettype.checked" />
-                {{bettype.name}}
-            </label>
-        </ng-container>
+      @for (bettype of group.betTypes; track bettype) {
+        <label>
+          <input type="checkbox" [(ngModel)]="bettype.checked" />
+          {{bettype.name}}
+        </label>
+      }
     </div>
-</div>
+  </div>
+}
 <tooltip [tooltip]="tooltip"></tooltip>

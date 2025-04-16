@@ -109,9 +109,9 @@
               <div class="d-flex" *ngIf="checkBetTypesMoreHDP(betTeam)">
                 <div class="input-item-adv" *ngFor="let item of betTeam.items">
                   <span class="me-1">{{item.name}}</span>
-                  <input class="bet-type-more-hdp" type="text" [(ngModel)]="item.value"
-                    (ngModelChange)="onChangeInputMultipleDecimal(betTeam.checkedBetTypes[0],$event,'bet-type-more-hdp')"
-                    triggers="manual" multipleDecimal />
+                  <input class="bet-type-more-hdp-{{index}}" type="text" [(ngModel)]="item.value"
+                    (ngModelChange)="onChangeInputMultipleDecimal(betTeam.checkedBetTypes[0],$event,'bet-type-more-hdp-' + index)"
+                    triggers="manual" multipleDecimal>
                 </div>
                 <div>
                   Ex: 0.75&1&1.25
@@ -327,8 +327,8 @@
              <div class="d-flex">
               <div class="input-item-adv" *ngFor="let input of betTeam.inputs">
                 <label class="me-1">{{input.name}}</label>
-                <input type="text" class="mg-right-10" [ngClass]="'bet-type-saba' + betTeam.checkedBetTypes[0]" [(ngModel)]="input.value" multipleDecimal
-                  (ngModelChange)="onChangeInputMultipleDecimal(betTeam.checkedBetTypes[0],$event,'bet-type-saba' + betTeam.checkedBetTypes[0])" triggers="manual" />
+                <input type="text" class="mg-right-10 bet-type-saba-{{index}}" [ngClass]="'bet-type-saba' + betTeam.checkedBetTypes[0]" [(ngModel)]="input.value" multipleDecimal
+                  (ngModelChange)="onChangeInputMultipleDecimal(betTeam.checkedBetTypes[0],$event,'bet-type-saba-' + index)" triggers="manual">
               </div>
               <div>Ex: 0.75&1&1.25</div>
              </div>

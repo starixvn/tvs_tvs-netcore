@@ -64,12 +64,12 @@ import { HttpService } from './services/http.service';
     BetTypesComponent,
     BetTypesVirtualSportComponent,
     MatchDetailComponent,
-    NotificationComponent
+    NotificationComponent,
+    OnlyNumberDirective
   ],
   declarations: [
     MessagesResultComponent,
     NumbersOnlyDirective,
-    OnlyNumberDirective,
     BetIdsComponent,
     EventLeagueComponent,
     LogInfoMessageComponent,
