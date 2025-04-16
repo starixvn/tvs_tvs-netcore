@@ -13,7 +13,6 @@ public static class AddRequestCommon
     {
         services.AddTransient<GetTransInfoService, GetTransInfoServiceImp>();
         services.AddTransient<LogInfoService, LogInfoServiceImp>();
-        services.AddTransient<LogInfoHelperService, LogInfoHelperServiceImp>();
         services.AddTransient<AddRequestService, AddRequestServiceImp>();
         services.AddTransient<AddRequestProcessStage, AddRequestProcessStageImp>();
         services.AddTransient<GetUpdateResultService, GetUpdateResultServiceImp>();

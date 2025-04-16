@@ -2,7 +2,6 @@
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
@@ -16,7 +15,7 @@ public class GetTicketsServiceImp(IMapper mapper, IDynamicRepository repository)
 {
     public async Task<IEnumerable<GetTicketModel>> GetTickets(GetTicketsQuery query)
     {
-        return query.IssueTypeId switch
+        var tickets = query.IssueTypeId switch
         {
             IssueTypeConstant.ArchivedTicket
                 => await GetBetTrans14Ticket(query),
@@ -24,6 +23,8 @@ public class GetTicketsServiceImp(IMapper mapper, IDynamicRepository repository)
                 => await GetTicketsRangeActiveAndBackup(query),
             _ => await GetBetTransTicket(query)
         };
+
+        return tickets.OrderBy(x => x.GroupId).ThenBy(x => x.TransId);
     }
 
     private async Task<IEnumerable<GetTicketModel>> GetTicketsRangeActiveAndBackup(GetTicketsQuery query)

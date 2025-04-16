@@ -52,6 +52,8 @@ public class GetTicketModel
 
     public string GroupName { get; set; }
 
+    public int GroupId { get; set; }
+
     public string ExtraInfo { get; set; }
 
     public long BetdaqId { get; set; }
@@ -133,6 +135,6 @@ public class GetTicketModel
     public bool IsOtherTicket { get; set; }
 
     public bool IsChecked { get; set; }
-    
+
     public short GroupBetTypeId { get; set; }
 }

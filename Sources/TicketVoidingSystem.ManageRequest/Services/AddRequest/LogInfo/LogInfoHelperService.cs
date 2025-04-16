@@ -1,29 +1,8 @@
-﻿using Fanex.BetList.Core.Entities;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
-using TicketVoidingSystem.Services.BetList;
+﻿namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
-
-public interface LogInfoHelperService
+public static class LogInfoHelper
 {
-    Task UpdateBetTypeTicketsInfo(int matchId, IEnumerable<BetTypeTicketsInfo> betTypeTickets);
-
-    TransInfoAddRequestModel CombineTransInfoAddRequest(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests);
-
-    LogInfoDetail CombineLogInfoDetail(IEnumerable<LogInfoDetail> logInfoDetails, Func<LogInfoDetail, bool> filter);
-
-    Validation CombineValidations(IEnumerable<Validation> validations, Func<Validation, bool> filter);
-
-    IEnumerable<TicketRequest> CombineTicketRequest(IEnumerable<TicketRequest> ticketRequests, Func<TicketRequest, bool> filter);
-
-    IEnumerable<BetTypeTicketsInfo> CombineBetTypeTickets(IEnumerable<BetTypeTicketsInfo> betTypeTickets,
-        Func<BetTypeTicketsInfo, bool> filter);
-}
-
-public class LogInfoHelperServiceImp(BetListService betListService, CopyRequestInfoService copyRequestInfoService) : LogInfoHelperService
-{
-    public Validation CombineValidations(IEnumerable<Validation> validations, Func<Validation, bool> filter)
+    public static Validation CombineValidations(IEnumerable<Validation> validations, Func<Validation, bool> filter)
     {
         var selectedItems = validations.Where(filter).ToList();
         if (selectedItems.Count == 0)
@@ -36,21 +15,33 @@ public class LogInfoHelperServiceImp(BetListService betListService, CopyRequestI
             MatchId = selectedItems[0].MatchId,
             Id = selectedItems[0].Id,
             ScoreId = selectedItems[0].ScoreId,
-            IsExistedInOtherRequest = selectedItems.TrueForAll(x => x.IsExistedInOtherRequest),
-            IsExistsSecondAccept = selectedItems.TrueForAll(x => x.IsExistsSecondAccept),
-            IsHasInstantlySettledTicket = selectedItems.TrueForAll(x => x.IsHasInstantlySettledTicket),
-            IsHasSettledTicket = selectedItems.TrueForAll(x => x.IsHasSettledTicket),
+            IsExistedInOtherRequest = selectedItems.Exists(x => x.IsExistedInOtherRequest),
+            IsExistsSecondAccept = selectedItems.Exists(x => x.IsExistsSecondAccept),
+            IsHasInstantlySettledTicket = selectedItems.Exists(x => x.IsHasInstantlySettledTicket),
+            IsHasSettledTicket = selectedItems.Exists(x => x.IsHasSettledTicket),
             IsInvalidTotalTickets = selectedItems.TrueForAll(x => x.IsInvalidTotalTickets),
-            IsPoolHouseAffected = selectedItems.TrueForAll(x => x.IsPoolHouseAffected)
+            IsPoolHouseAffected = selectedItems.Exists(x => x.IsPoolHouseAffected)
         };
     }
 
-    public IEnumerable<TicketRequest> CombineTicketRequest(IEnumerable<TicketRequest> ticketRequests, Func<TicketRequest, bool> filter)
+    public static IEnumerable<TicketRequest> CombineTicketRequest(IEnumerable<TicketRequest> ticketRequests, Func<TicketRequest, bool> filter)
     {
-        return ticketRequests.Where(filter);
+        return ticketRequests.Where(filter).GroupBy(x => x.RequestId).Select(group =>
+        {
+            var firstItem = group.First();
+            return new TicketRequest
+            {
+                RequestId = group.Key,
+                MatchId = firstItem.MatchId,
+                Id = firstItem.Id,
+                ScoreId = firstItem.ScoreId,
+                CreatedBy = firstItem.CreatedBy,
+                TransIds = group.Select(item => item.TransIds).Aggregate((a, b) => a + ", " + b)
+            };
+        });
     }
 
-    public TransInfoAddRequestModel CombineTransInfoAddRequest(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
+    public static TransInfoAddRequestModel CombineTransInfoAddRequest(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
     {
         return new TransInfoAddRequestModel
         {
@@ -61,18 +52,12 @@ public class LogInfoHelperServiceImp(BetListService betListService, CopyRequestI
         };
     }
 
-    public IEnumerable<BetTypeTicketsInfo> CombineBetTypeTickets(IEnumerable<BetTypeTicketsInfo> betTypeTickets, Func<BetTypeTicketsInfo, bool> filter)
+    public static IEnumerable<BetTypeTicketsInfo> CombineBetTypeTickets(IEnumerable<BetTypeTicketsInfo> betTypeTickets, Func<BetTypeTicketsInfo, bool> filter)
     {
         return betTypeTickets.Where(filter);
     }
 
-    public async Task UpdateBetTypeTicketsInfo(int matchId, IEnumerable<BetTypeTicketsInfo> betTypeTickets)
-    {
-        UpdateBetTypeName(betTypeTickets);
-        await UpdatePlayerNameForBetTypeNextManOut(matchId, betTypeTickets);
-    }
-
-    public LogInfoDetail CombineLogInfoDetail(IEnumerable<LogInfoDetail> logInfoDetails, Func<LogInfoDetail, bool> filter)
+    public static LogInfoDetail CombineLogInfoDetail(IEnumerable<LogInfoDetail> logInfoDetails, Func<LogInfoDetail, bool> filter)
     {
         var selectedItems = logInfoDetails.Where(filter).ToList();
         if (selectedItems.Count == 0)
@@ -171,22 +156,5 @@ public class LogInfoHelperServiceImp(BetListService betListService, CopyRequestI
     private static string JoinStringValue(string? separator, IEnumerable<string> items)
     {
         return string.Join(separator, items.Where(x => !string.IsNullOrWhiteSpace(x)));
-    }
-
-    private void UpdateBetTypeName(IEnumerable<BetTypeTicketsInfo> betTypeTickets)
-    {
-        foreach (var item in betTypeTickets)
-        {
-            item.BetTypeName = betListService.GetBetTypeName(new Ticket
-            {
-                BetTypeId = item.BetTypeId,
-                BetId = item.BetId
-            });
-        }
-    }
-
-    private async Task UpdatePlayerNameForBetTypeNextManOut(int matchId, IEnumerable<BetTypeTicketsInfo> betTypeTickets)
-    {
-        await copyRequestInfoService.UpdatePlayerNameForBetTypeNextManOut(matchId, betTypeTickets);
     }
 }

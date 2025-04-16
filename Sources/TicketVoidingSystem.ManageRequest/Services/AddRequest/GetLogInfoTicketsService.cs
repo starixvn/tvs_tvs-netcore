@@ -139,7 +139,9 @@ public class GetLogInfoTicketsServiceImp(
             results.Add(decompressed);
         });
 
-        return results.SelectMany(x => x);
+        return results.SelectMany(x => x)
+            .OrderBy(x => x.GroupId)
+            .ThenBy(x => x.TransId);
     }
 
     private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels,
