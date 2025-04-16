@@ -7,7 +7,7 @@
     </div>
     <div class="list-group-item flex-column align-items-start" [hidden]="isCollapse">
       <div class="no-gutters">
-        <label class="col-form-label-sm text-right">Decided By</label>
+        <label class="col-form-label-sm">Decided By</label>
         <div class="col-sm-3">
           <input type="text" class="form-control form-control-sm" [(ngModel)]="model.decidedBy" maxlength="200">
         </div>
@@ -15,7 +15,7 @@
       </div>
 
       <div class="no-gutters">
-        <label class="col-form-label-sm text-right pd-right-25">Remark</label>
+        <label class="col-form-label-sm pd-right-25">Remark</label>
         <div class="col-sm-7">
           <textarea [(ngModel)]="model.remark" class="remark form-control form-control-sm"
             placeholder="Enter text here..." rows="3"></textarea>

@@ -102,10 +102,10 @@
                 (click)="item.isCanEditTicket && openPopupAdjustTicket(item.custId)">{{item.username}}</span>
             </div>
           </td>
-          <td class="col-tb-3 text-right">
+          <td class="col-tb-3 text-end">
             <div>{{showDecimalWithComma(item.givenCredit)}}</div>
           </td>
-          <td class="col-tb-4 text-right adjust-gv">
+          <td class="col-tb-4 text-end adjust-gv">
             @if (!item.isShowInput || viewOnly) {
             <div class="adjust-string" (mousedown)="mouseDownEventAdjustGV(item)">{{item.adjustVoidLimitString ??
               showDecimalWithComma(item.adjustVoidLimit)}}</div>
@@ -118,13 +118,13 @@
               }
             </div>
           </td>
-          <td class="col-tb-5 text-right">
+          <td class="col-tb-5 text-end">
             <div>{{showDecimalWithComma(item.currentLosing)}}</div>
           </td>
-          <td class="col-tb-6 text-right">
+          <td class="col-tb-6 text-end">
             <div>{{showDecimalWithComma(item.currentWinning)}}</div>
           </td>
-          <td class="col-tb-7 text-right highlight-amount">
+          <td class="col-tb-7 text-end highlight-amount">
             <div class="title-void-amount">
               <div>@if (item.isEditedTicket && !viewOnly) {
                 <span class="editted-account">Edited</span>
@@ -133,7 +133,7 @@
               <div>{{showDecimalWithComma(item.estimateVoidAmount)}}</div>
             </div>
           </td>
-          <td class="text-right highlight-amount">
+          <td class="text-end highlight-amount">
             <div>{{showDecimalWithComma(item.winLostAfterVoid)}}</div>
           </td>
         </tr>

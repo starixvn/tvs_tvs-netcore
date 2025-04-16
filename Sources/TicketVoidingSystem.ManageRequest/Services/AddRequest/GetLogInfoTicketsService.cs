@@ -3,52 +3,134 @@ using Fanex.BetList.Core.Entities;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
 public interface GetLogInfoTicketsService
 {
-    public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request);
+    TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request);
 }
 
-public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, CompressDataService compressDataService, BetListService betListService)
+public class GetLogInfoTicketsServiceImp(
+    MapTicketsService mapTicketsService,
+    CompressDataService compressDataService,
+    BetListService betListService,
+    PagingService pagingService)
     : GetLogInfoTicketsService
 {
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request)
     {
         var getTicketModels = DecompressTickets(request.LogInfoTicketsJson);
-        var voidTickets = getTicketModels?.Where(x => !x.IsCancelCashOut);
+        var voidTickets = getTicketModels?.Where(x => !x.IsCancelCashOut).ToList();
 
-        if (!voidTickets.Any())
+        if (voidTickets == null || voidTickets.Count == 0)
         {
             return new TicketsViewModel();
         }
 
-        var affectedTickets = voidTickets.Where(x => !x.IsOtherTicket);
-        var otherTickets = voidTickets.Where(x => x.IsOtherTicket);
-        var groupTicket = MapToGroupTicketViewModel(affectedTickets, request.IssueTypeId);
-        var groupOtherTickets = MapToGroupTicketViewModel(otherTickets, request.IssueTypeId);
+        var stats = CalculateStats(voidTickets);
+        var (affectedTickets, otherTickets, affectedGroupCounts, otherGroupCount) = GetCategoryTickets(voidTickets, request);
+        var groupTicket = MapToGroupTicketViewModel(affectedTickets, request, affectedGroupCounts);
+        var groupOtherTickets = MapToGroupTicketViewModel(otherTickets, request, otherGroupCount);
 
-        var viewModel = new TicketsViewModel
+        return new TicketsViewModel
         {
-            TotalSingle = voidTickets.Count(ticket => !ticket.IsMixParlay),
-            TotalParlay = voidTickets.Count(ticket => ticket.IsMixParlay),
+            Total = stats.Total,
+            TotalSingle = stats.TotalSingle,
+            TotalParlay = stats.TotalParlay,
             Groups = groupTicket,
-            IsHasSettledTicket = voidTickets.Any(ticket => ticket.IsSettledTicket()),
-            FromTime = voidTickets.Min(ticket => ticket.TransDate),
-            ToTime = voidTickets.Max(ticket => ticket.TransDate),
+            IsHasSettledTicket = stats.HasSettled,
+            FromTime = stats.FromTime,
+            ToTime = stats.ToTime,
             GroupOtherTickets = groupOtherTickets
         };
-        return viewModel;
+    }
+
+    private static (int Total, int TotalSingle, int TotalParlay, bool HasSettled, DateTime? FromTime, DateTime? ToTime)
+        CalculateStats(List<GetTicketModel> tickets)
+    {
+        var total = 0;
+        var totalSingle = 0;
+        var totalParlay = 0;
+        var hasSettled = false;
+        DateTime? fromTime = null;
+        DateTime? toTime = null;
+
+        foreach (var ticket in tickets)
+        {
+            total++;
+            if (ticket.IsMixParlay)
+            {
+                totalParlay++;
+            }
+            else
+            {
+                totalSingle++;
+            }
+
+            if (!hasSettled && ticket.IsSettledTicket())
+            {
+                hasSettled = true;
+            }
+
+            if (fromTime == null || ticket.TransDate < fromTime)
+            {
+                fromTime = ticket.TransDate;
+            }
+
+            if (toTime == null || ticket.TransDate > toTime)
+            {
+                toTime = ticket.TransDate;
+            }
+        }
+
+        return (total, totalSingle, totalParlay, hasSettled, fromTime, toTime);
+    }
+
+    public (IEnumerable<GetTicketModel>, IEnumerable<GetTicketModel>, Dictionary<string, int> affectedGroupCounts, Dictionary<string, int> otherGroupCounts)
+        GetCategoryTickets(List<GetTicketModel> voidTickets, GetLogInfoTicketsRequest request)
+    {
+        var normalTickets = new List<GetTicketModel>();
+        var otherTickets = new List<GetTicketModel>();
+        var normalGroupCounts = new Dictionary<string, int>();
+        var otherGroupCounts = new Dictionary<string, int>();
+
+        foreach (var ticket in voidTickets)
+        {
+            if (ticket.IsOtherTicket)
+            {
+                otherTickets.Add(ticket);
+                otherGroupCounts.TryAdd(ticket.GroupName, 0);
+                otherGroupCounts[ticket.GroupName]++;
+            }
+            else
+            {
+                normalTickets.Add(ticket);
+                normalGroupCounts.TryAdd(ticket.GroupName, 0);
+                normalGroupCounts[ticket.GroupName]++;
+            }
+        }
+
+        if (!request.IssueTypeId.IsEarlyKickOffOrWrongKickOff())
+        {
+            return (normalTickets, otherTickets, normalGroupCounts, otherGroupCounts);
+        }
+
+        return (
+            pagingService.Paging(normalTickets, request.PageIndex, request.PageSize),
+            pagingService.Paging(otherTickets, request.PageIndex, request.PageSize),
+            normalGroupCounts,
+            otherGroupCounts
+        );
     }
 
     public IEnumerable<GetTicketModel> DecompressTickets(string logInfoTicketsJsons)
     {
-        var jsonItems = logInfoTicketsJsons.Split(",");
+        var jsonItems = logInfoTicketsJsons.Split(',');
         var results = new ConcurrentBag<IEnumerable<GetTicketModel>>();
 
         Parallel.ForEach(jsonItems, json =>
@@ -60,17 +142,25 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
         return results.SelectMany(x => x);
     }
 
-    private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels, int issueTypeId)
+    private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels,
+        GetLogInfoTicketsRequest request, Dictionary<string, int> groupCounts)
     {
         if (!getTicketModels.Any())
         {
             return [];
         }
 
-        return getTicketModels.GroupBy(b => b.GroupName)
-            .Select(x => ToGroupTicket(x, issueTypeId))
-            .OrderBy(group => group.Name == "Parlay")
-            .ThenBy(group => group.Name);
+        var grouped = getTicketModels.GroupBy(b => b.GroupName).ToList();
+
+        var startIndex = request.PageIndex * request.PageSize + 1;
+        var orderedGroups = grouped
+            .OrderBy(g => g.Key == "Parlay")
+            .ThenBy(g => g.Key)
+            .ToList();
+
+        return orderedGroups
+            .Select(group => ToGroupTicket(group, request.IssueTypeId, groupCounts[group.Key], ref startIndex))
+            .ToList();
     }
 
     private string GetSubBetType(GetTicketModel item)
@@ -84,27 +174,28 @@ public class GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, Co
         return betListService.GetBetTypeName(newTicket);
     }
 
-    private Group<TicketViewModel> ToGroupTicket(IGrouping<string, GetTicketModel> group, int issueTypeId)
+    private Group<TicketViewModel> ToGroupTicket(IGrouping<string, GetTicketModel> group, int issueTypeId, int groupCount, ref int startIndex)
     {
         return new Group<TicketViewModel>
         {
             Name = group.Key,
-            Tickets = UpdateTicketVideModel(group.ToList(), issueTypeId),
-            DisplayTotalTickets = group.Count()
+            Tickets = UpdateTicketViewModel(group, issueTypeId, ref startIndex),
+            DisplayTotalTickets = groupCount
         };
     }
 
-    private IEnumerable<TicketViewModel> UpdateTicketVideModel(IEnumerable<GetTicketModel> tickets, int issueTypeId)
+    private List<TicketViewModel> UpdateTicketViewModel(IEnumerable<GetTicketModel> tickets, int issueTypeId, ref int startIndex)
     {
-        var index = 1;
-        return tickets.Select(ticket =>
+        var results = new List<TicketViewModel>();
+        foreach (var ticket in tickets)
         {
-            var ticketViewModel = mapTicketsService.MapFromGetTicketModelToTicketViewModel(ticket, null, ChoiceType.None, issueTypeId);
-            ticketViewModel.SubBetTypeId = (short)ticket.SubBetType;
-            ticketViewModel.SubBetType = ticket.IsMixParlay ? GetSubBetType(ticket) : string.Empty;
-            ticketViewModel.No = index++;
+            var viewModel = mapTicketsService.MapFromGetTicketModelToTicketViewModel(ticket, null, ChoiceType.None, issueTypeId);
+            viewModel.SubBetTypeId = (short)ticket.SubBetType;
+            viewModel.SubBetType = ticket.IsMixParlay ? GetSubBetType(ticket) : string.Empty;
+            viewModel.No = startIndex++;
+            results.Add(viewModel);
+        }
 
-            return ticketViewModel;
-        });
+        return results;
     }
 }

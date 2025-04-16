@@ -16,7 +16,7 @@ import { TicketsListComponent } from '../tickets-list/tickets-list.component';
   templateUrl: './log-info-eko.component.html',
   styleUrls: ['./log-info-eko.component.scss'],
   standalone: true,
-  imports: [TemplateMessageComponent, CommonModule, TicketsListComponent, BlockUiModule],
+  imports: [TemplateMessageComponent, CommonModule, TicketsListComponent, BlockUiModule]
 })
 export class LogInfoEkoComponent {
   @Input() isMainMatch: boolean;
@@ -42,6 +42,13 @@ export class LogInfoEkoComponent {
       this.logInfoService.assignTemplateMessageValueToEvent(this.logInfo);
       this.isBlock = false;
     }
+  }
+
+  async pagingEvent() {
+    this.isBlock = true;
+    this.logInfo.isRenderedTickets = false;
+    await this.logInfoService.getTickets(this.logInfo, this.isEdit, this.requestId, this.filter);
+    this.isBlock = false;
   }
 
   public isShowMessage(): boolean {

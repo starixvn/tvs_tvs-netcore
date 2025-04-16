@@ -7,8 +7,9 @@ namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 public class GetLogInfoTicketsRequest : IRequest<TicketsViewModel>
 {
     public string LogInfoTicketsJson { get; init; }
-
     public int IssueTypeId { get; set; }
+    public int PageIndex { get; set; }
+    public int PageSize { get; set; }
 }
 
 public class GetLogInfoTicketsHandler(GetLogInfoTicketsService getLogInfoTicketsService)

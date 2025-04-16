@@ -6,6 +6,7 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { GetLogInfoQuery } from '../../models/add-request.query';
 import { GetLogInfoModel, GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { EventEarlyKickOffService } from './event-eko.service';
@@ -18,16 +19,21 @@ export class LogInfoService {
   private readonly templateService = inject(TemplateService);
 
   public async getTickets(logInfo: LogInfoEarlyKickOff, isEdit: boolean, requestId: number, filter: FilterModel): Promise<void> {
-    this.resetLogInfoOfEvent([logInfo]);
-    const getLogInfoResult = await this.getLogInfo([logInfo], isEdit, requestId, filter);
-    this.assignResultLogInfoToEvents([logInfo], getLogInfoResult.getLogInfoModels);
-    const result = await this.httpService.postJson<{}, TableTicketsModel>({
-      issueTypeId: 8,
-      logInfoTicketsJson: logInfo.logInfoDetail.logInfoTicketsJson
-    }, 'api/AddRequest/GetLogInfoTickets');
-    logInfo.tableTicketsModel.initData(result);
-    logInfo.isShowValidation = true;
-    logInfo.isCollapse = false;
+    if (!logInfo.logInfoDetail.logInfoTicketsJson) {
+      const getLogInfoResult = await this.getLogInfo([logInfo], isEdit, requestId, filter);
+      this.assignResultLogInfoToEvents([logInfo], getLogInfoResult.getLogInfoModels);
+    }
+
+    await this.getLogInfoTickets(logInfo, filter);
+  }
+
+  public initQueryGetTickets(pageIndex: number, pageSize: number, logInfo: LogInfoEarlyKickOff, filter: FilterModel): LogInfoTicketsQuery {
+    return {
+      logInfoTicketsJson: logInfo.logInfoDetail.logInfoTicketsJson,
+      issueTypeId: Number(filter.issueTypeId),
+      pageIndex: pageIndex,
+      pageSize: pageSize
+    };
   }
 
   public assignTemplateMessageValueToEvent(eventLogInfo: LogInfoEarlyKickOff): void {
@@ -42,7 +48,7 @@ export class LogInfoService {
     return this.commonService.getLogInfo(getLogInfoQuery);
   }
 
-  private initGetLogInfoEarlyKickOffQuery(isEdit: boolean, requestId: number, filter: FilterModel, events: LogInfoEarlyKickOff[]): GetLogInfoQuery {
+  public initGetLogInfoEarlyKickOffQuery(isEdit: boolean, requestId: number, filter: FilterModel, events: LogInfoEarlyKickOff[]): GetLogInfoQuery {
     const query = new GetLogInfoQuery();
     query.requestId = isEdit ? requestId : null;
     query.actionId = Number(filter.action);
@@ -71,7 +77,22 @@ export class LogInfoService {
 
   public resetLogInfoOfEvent(allSelectedEvents: LogInfoEarlyKickOff[]): void {
     allSelectedEvents.forEach(event => {
+      event.isRenderedTickets = false;
       event.messageValidationLogInfo = null;
     });
+  }
+
+  private async getLogInfoTickets(logInfo: LogInfoEarlyKickOff, filter: FilterModel): Promise<void> {
+    if (logInfo.isRenderedTickets) {
+      return;
+    }
+
+    const query = this.initQueryGetTickets(logInfo.pagingModel.page - 1, logInfo.pagingModel.pageSize, logInfo, filter);
+    const result = await this.httpService.postJson<{}, TableTicketsModel>(query, 'api/AddRequest/GetLogInfoTickets');
+    logInfo.tableTicketsModel.initData(result);
+    logInfo.isRenderedTickets = true;
+    logInfo.isShowValidation = true;
+    logInfo.pagingModel.total = result.total;
+    logInfo.isCollapse = false;
   }
 }

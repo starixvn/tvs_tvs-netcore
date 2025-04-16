@@ -12,7 +12,7 @@
 
     @if (isShowSubType()) {
     <div class="filter-sub-issue-type me-4" [style.width.px]="widthSubIssueTypeControl">
-      <label class="col-form-label-sm text-right">Sub Type</label>
+      <label class="col-form-label-sm">Sub Type</label>
       @if (!isShowButtonSelectSubType()) {
       <div class="input-sub-issue-type">
         <ng-select class="custom-sm" [items]="issueTypes.selectedSubIssueTypes" bindLabel="subIssueTypeName"
