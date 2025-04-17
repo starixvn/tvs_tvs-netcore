@@ -93,7 +93,7 @@ export class SaveRequestService {
   /* istanbul ignore next */
   private getWrongScoreInfoForSaveRequest(args: SaveRequestArg): WrongScoreModel[] {
     const allMatchSelectedEvents = args.allSelectedEvents.map(x => x.matchId);
-    const mainWrongScoreModels = args.wrongScoreModels.filter(x => !allMatchSelectedEvents.includes(x.matchId));
+    const mainWrongScoreModels = args.wrongScoreModels.filter(x => !allMatchSelectedEvents.includes(x.matchId) && x.logInfoDetail);
     mainWrongScoreModels.forEach(x => {
       x.actualScore = args.primitiveProps.actualScore;
       x.filterBy = args.primitiveProps.filterBy;

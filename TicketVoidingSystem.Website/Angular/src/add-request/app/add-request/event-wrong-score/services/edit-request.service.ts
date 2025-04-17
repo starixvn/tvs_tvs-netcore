@@ -49,7 +49,6 @@ export class EditRequestService {
       }
     });
 
-    wrongScoreModels = _.orderBy(_.uniqBy(wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
-    return modelScores
+    return modelScores;
   }
 }

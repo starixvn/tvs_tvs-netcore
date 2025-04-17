@@ -129,6 +129,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       }
       else {
         this.originWrongScoreModels = await this.editRequestService.getScoreWrongScoreModels(this.wrongScoreModels, this.matchId);
+        this.wrongScoreModels = _.orderBy(_.uniqBy(this.wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
       }
       this.defaultFilterTimeWithAllowance = this.wrongScoreService.getFilterWrongScore(this.mainEvent);
       this.tvDetectionModel = this.eventWrongScoreService.getTvDetectionModel(this.mainEvent);
