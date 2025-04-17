@@ -26,13 +26,15 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 
 @Component({
   selector: 'event-wrong-hdp',
   templateUrl: './event-wrong-hdp.component.html',
   styleUrls: ['./event-wrong-hdp.component.scss'],
   standalone: true,
-  imports: [EventLeagueComponent, LogInfoWrongHdpComponent, AddChildMatchComponent, FormsModule, TooltipComponent, BlockUiDirective],
+  imports: [EventLeagueComponent, LogInfoWrongHdpComponent, AddChildMatchComponent, FormsModule, TooltipComponent, 
+    BlockUiDirective, OnlyNumberDirective],
   providers: [
     EventWrongHdpService,
     LogInfoService,

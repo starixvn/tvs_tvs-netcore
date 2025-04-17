@@ -44,6 +44,7 @@ import { ValidationBusinessRuleArgs } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
+import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 
 @Component({
   standalone: true,
@@ -51,7 +52,7 @@ import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.com
   templateUrl: './event-wrong-score.component.html',
   styleUrls: ['./event-wrong-score.component.scss'],
   imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, PipeModule, ConfirmWrongScoreComponent,
-    LogInfoRelatedEventComponent, AddChildMatchComponent, CommonModule, FormsModule, TooltipComponent, BlockUiDirective],
+    LogInfoRelatedEventComponent, AddChildMatchComponent, CommonModule, FormsModule, TooltipComponent, BlockUiDirective, OnlyNumberDirective],
   providers: [EventWrongScoreService, LogInfoService, SaveRequestService, ValidationService, WrongScoreService,
     RelatedEventService, EditRequestService, TvDetectionService]
 })

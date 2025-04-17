@@ -13,13 +13,14 @@ import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 import { FilterReducedOverService } from '../services/filter-reduced-over.service';
 import { ValidationService } from '../services/validation.service';
 import { PrimitivePropertyItem } from './filter-reduced-over-item.model';
+import { NumbersOnlyDirective } from '../../../../../utility/directives/numbers-only.directive';
 
 @Component({
   selector: 'filter-reduced-over-item',
   templateUrl: './filter-reduced-over-item.component.html',
   styleUrls: ['./filter-reduced-over-item.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NgSelectModule, TooltipComponent, NgSelectMixtureComponent, MultipleSelectionComponent]
+  imports: [FormsModule, CommonModule, NgSelectModule, TooltipComponent, NgSelectMixtureComponent, MultipleSelectionComponent, NumbersOnlyDirective]
 })
 export class FilterReducedOverItemComponent implements OnInit {
   @Input() isEdit: boolean;

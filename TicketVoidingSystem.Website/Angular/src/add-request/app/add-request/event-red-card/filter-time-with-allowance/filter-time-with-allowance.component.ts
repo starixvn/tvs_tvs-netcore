@@ -11,13 +11,14 @@ import { LABELS } from '../../../../../utility/constants/labels';
 import { CommonStaticService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance.model';
+import { OnlyNumberDirective } from '../../../../../utility/directives/number.directive';
 
 @Component({
   standalone: true,
   selector: 'filter-time-with-allowance',
   templateUrl: './filter-time-with-allowance.component.html',
   styleUrls: ['./filter-time-with-allowance.component.scss'],
-  imports: [FormsModule, CommonModule, TooltipComponent, NgbModule]
+  imports: [FormsModule, CommonModule, TooltipComponent, NgbModule, OnlyNumberDirective]
 })
 export class FilterTimeWithAllowanceComponent implements OnInit {
   @Input() isDisabled: boolean;

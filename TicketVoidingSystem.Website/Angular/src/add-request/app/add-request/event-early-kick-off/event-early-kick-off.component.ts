@@ -41,6 +41,7 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { SearchEventService } from './services/search-event.service';
 import { ValidationService } from './services/validation.service';
+import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 
 @Component({
   selector: 'event-early-kick-off',
@@ -48,7 +49,7 @@ import { ValidationService } from './services/validation.service';
   styleUrls: ['./event-early-kick-off.component.scss'],
   standalone: true,
   imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, DateFullTimeNewComponent,
-    LogInfoEkoComponent, AddChildMatchComponent, ConfirmEkoComponent],
+    LogInfoEkoComponent, AddChildMatchComponent, ConfirmEkoComponent, OnlyNumberDirective],
   providers: [EventEarlyKickOffService, LogInfoService, SaveRequestService,
     ValidationService, RelatedEventService, SearchEventService, CheckAddPermissionService]
 })

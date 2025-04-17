@@ -27,13 +27,15 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 
 @Component({
   selector: 'event-wrong-ou',
   templateUrl: './event-wrong-ou.component.html',
   styleUrls: ['./event-wrong-ou.component.scss'],
   standalone: true,
-  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiModule, AddChildMatchComponent, LogInfoWrongOuComponent],
+  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiModule, AddChildMatchComponent, 
+    LogInfoWrongOuComponent, OnlyNumberDirective],
   providers: [
     EventWrongOuService,
     LogInfoService,

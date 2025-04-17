@@ -29,9 +29,9 @@ import { RedCardModel } from '../models/event-red-card.model';
 import { GetChildMatchQuery } from '../models/get-child-match.query';
 import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
-import { EventLeagueComponent } from './../../../../utility/components/event-league/event-league.component';
-import { LABELS } from './../../../../utility/constants/labels';
-import { StaticService } from './../../../../utility/services/static.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { LABELS } from '../../../../utility/constants/labels';
+import { StaticService } from '../../../../utility/services/static.service';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
 import { EventRedCardService } from './services/event-red-card.service';
@@ -40,6 +40,7 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 
 @Component({
   selector: 'event-red-card',
@@ -47,8 +48,7 @@ import { ValidationService } from './services/validation.service';
   styleUrls: ['./event-red-card.component.scss'],
   standalone: true,
   imports: [FormsModule, CommonModule, EventLeagueComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent,
-    NgSelectModule, NgbModule, TooltipComponent, BlockUiModule, ConfirmAddRequestComponent,
-    TvDetectionComponent],
+    NgSelectModule, NgbModule, TooltipComponent, BlockUiModule, ConfirmAddRequestComponent, TvDetectionComponent, OnlyNumberDirective],
   providers: [EventRedCardService, LogInfoService, SaveRequestService, ValidationService, RelatedEventService, TvDetectionService]
 })
 export class EventRedCardComponent implements OnInit, OnChanges {

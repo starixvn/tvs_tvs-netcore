@@ -21,13 +21,14 @@ import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
+import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
 
 @Component({
   standalone: true,
   selector: 'filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
-  imports: [TooltipComponent, FormsModule, AutoRefreshComponent, CommonModule, NgbModule, NgSelectModule, MultipleSelectionComponent]
+  imports: [TooltipComponent, FormsModule, AutoRefreshComponent, CommonModule, NgbModule, NgSelectModule, MultipleSelectionComponent, OnlyNumberDirective]
 })
 export class FilterComponent implements OnInit {
   @Input() model = new FilterModel();

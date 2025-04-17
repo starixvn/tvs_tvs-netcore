@@ -20,7 +20,7 @@ import { MultipleSelectAdvancedModeModule } from './multiple-selection/multiple-
     AdvancedModeComponent,
     GroupBetTypesComponent,
     DecimalOnlyDirective,
-    MultipleDecimalDirective,
+    MultipleDecimalDirective
   ],
   exports: [
     AdvancedModeComponent,
