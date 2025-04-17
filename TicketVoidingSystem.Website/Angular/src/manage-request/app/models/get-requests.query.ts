@@ -5,7 +5,7 @@ export class GetRequestsQuery {
   toDate: string;
   issueTypeId: string;
   subIssueType?: string;
-  status: string;
+  statusIds: string;
   isExcludeTest: boolean;
   isFromDateBeforeBUDay?: boolean;
   isToDateBeforeBUDay?: boolean;

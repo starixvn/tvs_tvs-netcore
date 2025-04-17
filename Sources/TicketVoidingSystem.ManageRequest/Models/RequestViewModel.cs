@@ -21,6 +21,7 @@ public class RequestViewModel
     public DateTime? CalcHalfTime { get; set; }
     public DateTime? CalcFullTime { get; set; }
     public int? FilterBy { get; set; }
+    public bool IsStored { get; set; }
 }
 
 public class RequestEventViewModel

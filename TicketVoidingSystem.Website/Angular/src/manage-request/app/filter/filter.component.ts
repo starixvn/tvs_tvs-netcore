@@ -58,7 +58,7 @@ export class FilterComponent implements OnInit {
   markedTicketsCount = 0;
   userId: string;
   products: MultipleSelection;
-  
+  selectedStatus: string[];
   element = inject(ElementRef);
   commonService = inject(CommonService);
 
@@ -72,6 +72,7 @@ export class FilterComponent implements OnInit {
     this.userId = document.getElementById('body').getAttribute('user-id');
     this.createdBySelectList = [{ name: 'All', value: '0' }, { name: '<<<< Me >>>>', value: this.userId }];
     this.statusSelectList = ManageRequestStatus.MULTIPLE_OPTIONS;
+    this.selectedStatus = ManageRequestStatus.DEFAULT_STATUS;
     this.products = FilterService.initMultiSelectProduct();
     await this.setIssueTypeSelectList();
     this.initDefaultFilter();
@@ -89,11 +90,11 @@ export class FilterComponent implements OnInit {
     if (this.filterByMatch) {
       this.model.requestId = null;
       this.updateSubByIssue();
+      this.model.statusIds = this.selectedStatus.join(',');
     } else {
       this.model.matchId = null;
       this.model.ngbFromDate = this.minDate;
     }
-    this.model.status = ManageRequestStatus.ALL_ID.toString();
     this.model.issueTypeId = this.selectedIssueTypes.join(',');
     this.model.isExcludeTest = true;
   }
@@ -112,7 +113,7 @@ export class FilterComponent implements OnInit {
     const date = new Date(moment.utc().tz('America/Caracas').format('YYYY-MM-DD HH:mm:ss.SSS'));
     this.model.ngbFromDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     this.model.ngbToDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
-    this.model.status = '-1';
+    this.model.statusIds = ManageRequestStatus.DEFAULT_STATUS.join(',');
     this.model.isExcludeTest = true;
     this.model.createdBy = this.createdBySelectList[0].value;
     this.model.isDisplayMissingInfo = localStorage.getItem(LocalStorageCacheConstant.IS_DISPLAY_REQUEST_MISSING_INFO + this.userId) === 'true';
@@ -151,6 +152,9 @@ export class FilterComponent implements OnInit {
   }
 
   async clickSearch() {
+    if(!this.filterByMatch){
+      this.model.statusIds = ManageRequestStatus.MULTIPLE_OPTIONS.map(x => x.value).join(',');
+    }
     if (this.validate()) {
       localStorage.setItem(
         LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_MANAGE_REQUEST + this.userId
@@ -187,6 +191,11 @@ export class FilterComponent implements OnInit {
 
     if (!this.model.productTypeIds) {
       this.tooltip.display('product-dropdown', TEXT.REQUIRED_FIELD);
+      return false;
+    }
+
+    if (!this.model.statusIds) {
+      this.tooltip.display('status-dropdown', TEXT.REQUIRED_FIELD);
       return false;
     }
 
@@ -240,6 +249,10 @@ export class FilterComponent implements OnInit {
         group: 'All'
       }
     );
+  }
+
+  updateSelectedStatus(){
+    this.model.statusIds = this.selectedStatus.join(',');
   }
 
   setNoneSubType() {

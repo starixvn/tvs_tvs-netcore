@@ -19,6 +19,7 @@ export class RequestModel {
   details: DetailRequestModel[];
   processingCopyDescriptionClass?: string;
   filterBy?: number;
+  isStored: boolean;
 }
 
 export class DetailRequestModel {

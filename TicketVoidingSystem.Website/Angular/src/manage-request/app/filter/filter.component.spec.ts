@@ -55,7 +55,7 @@ class Helper {
     ngbToDate: new NgbDate(2020, 8, 21),
     issueTypeId: '11',
     subIssueType: '27',
-    status: '0',
+    statusIds: '0',
     isExcludeTest: true,
     createdBy: '',
     isDisplayMissingInfo: false
@@ -169,7 +169,7 @@ describe('UserListComponent', () => {
     expect(component.initDefaultFilter).toHaveBeenCalledTimes(1);
     expect(component.updateSubByIssue).toHaveBeenCalledTimes(1);
     expect(component.model.requestId).toBeNull();
-    expect(component.model.status).toBe(ManageRequestStatus.ALL_ID.toString());
+    expect(component.model.statusIds).toBe(ManageRequestStatus.ALL_ID.toString());
     expect(component.model.issueTypeId).toBe('1');
     expect(component.model.isExcludeTest).toBe(true);
   });
@@ -198,7 +198,7 @@ describe('UserListComponent', () => {
     // Assert
     expect(component.initDefaultFilter).toHaveBeenCalledTimes(1);
     expect(component.model.matchId).toBeNull();
-    expect(component.model.status).toBe(ManageRequestStatus.ALL_ID.toString());
+    expect(component.model.statusIds).toBe(ManageRequestStatus.ALL_ID.toString());
     expect(component.model.issueTypeId).toBe('1');
     expect(component.model.isExcludeTest).toBe(true);
   });
@@ -215,7 +215,7 @@ describe('UserListComponent', () => {
     // Assert
     expect(component.model.ngbFromDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
     expect(component.model.ngbToDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
-    expect(component.model.status).toBe(ManageRequestStatus.ALL_ID.toString());
+    expect(component.model.statusIds).toBe(ManageRequestStatus.ALL_ID.toString());
     expect(component.model.issueTypeId).toBe('11,1,8,9');
     expect(component.model.isExcludeTest).toBe(true);
   });

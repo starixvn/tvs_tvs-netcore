@@ -44,6 +44,7 @@ public class RequestModel
     public DateTime? CalcHalfTime { get; set; }
     public DateTime? CalcFullTime { get; set; }
     public string Products { get; set; }
+    public bool IsStored { get; set; }
 
     public bool IsCheckedVar
     {

@@ -41,11 +41,15 @@ export class AppService {
     return this.httpService.postJson(query, `api/ManageRequest/GetGeneralInfo`);
   }
 
-  async GetBriefInfo(query: GetGeneralInfoQuery): Promise<BriefInfo[]> {
+  async getBriefInfo(query: GetGeneralInfoQuery): Promise<BriefInfo[]> {
     return this.httpService.postJson(query, `api/ManageRequest/GetBriefInfo`);
   }
 
-  async SaveBriefInfoNote(requestId: number, briefInfoNote: string): Promise<BriefInfo[]> {
+  async saveBriefInfoNote(requestId: number, briefInfoNote: string): Promise<BriefInfo[]> {
     return this.httpService.postJson({requestId, briefInfoNote, isVoided: true}, `api/ManageRequest/UpdateRequest`);
+  }
+
+  async updateStatusRequest(requestId: number, isStored: boolean) {
+    return this.httpService.postJson({requestId, isStored}, `api/ManageRequest/UpdateStatusRequest`);
   }
 }

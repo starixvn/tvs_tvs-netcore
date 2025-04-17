@@ -7,7 +7,7 @@ export class FilterModel {
   ngbToDate: NgbDate;
   issueTypeId: string;
   subIssueType: string;
-  status: string;
+  statusIds: string;
   createdBy: string;
   isExcludeTest = true;
   isDisplayMissingInfo = false;
