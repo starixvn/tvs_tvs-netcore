@@ -1,20 +1,30 @@
 // notification.service.ts
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { HttpService } from '../../services/http.service';
+import { NotificationModel } from './notification-popup.model';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationPopupService {
   private readonly _open = new BehaviorSubject<boolean>(false);
   isOpen$ = this._open.asObservable();
 
+  httpService = inject(HttpService);
+
   toggle() {
     const currentValue = this._open.value;
-    console.log('Notification service toggle called, current value:', currentValue);
     this._open.next(!currentValue);
   }
 
   close() {
-    console.log('Notification service close called');
     this._open.next(false);
+  }
+
+  async get() {
+    return this.httpService.getJson<NotificationModel[]>('api/Notification/Get');
+  }
+
+  async update(id: number, isRead: boolean) {
+    return this.httpService.postJson({ id, isRead }, 'api/Notification/Update');
   }
 }

@@ -1,6 +1,7 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
+﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.Notification;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
@@ -13,7 +14,8 @@ public class AddRequestServiceImp(
     AddRequestProcessStage addRequestProcessStage,
     MarkTicketsWhenAddEditService marketTicketsWhenEditService,
     GetUpdateResultService getUpdateResultService,
-    LoggingService loggingService)
+    LoggingService loggingService,
+    NotificationService notificationService)
     : AddRequestService
 {
     public async Task<Result> Execute(AddRequestQuery query)
@@ -25,14 +27,15 @@ public class AddRequestServiceImp(
             return markTicketError;
         }
 
-
         try
         {
             return await addRequestProcessStage.Execute(query, markTicketResult.MarkedTickets);
         }
         catch (Exception exception)
         {
-            await loggingService.ErrorAsync(exception);
+            notificationService.ExecuteBackground(()
+                => notificationService.InsertUpdateRequest(NotificationType.Notification, MessageHelper.CreateAddRequestFailed(markTicketResult.MarkedTickets.Count())));
+            _ = loggingService.ErrorAsync(exception);
             return getUpdateResultService.CreateErrorResult(exception, markTicketResult.MarkedTickets);
         }
     }

@@ -4,10 +4,10 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.Notification;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
@@ -24,7 +24,8 @@ public class AddRequestProcessStageImp(
     InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
     SendLetstalkAfterAddService sendLetstalkAfterAddService,
     GetUpdateResultService getUpdateResultService,
-    CompressDataService compressDataService)
+    CompressDataService compressDataService,
+    NotificationService notificationService)
     : AddRequestProcessStage
 {
     // NOSONAR
@@ -35,6 +36,8 @@ public class AddRequestProcessStageImp(
         var matchIdsAutoVoidRequestQueue = insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
         await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, matchIdsAutoVoidRequestQueue);
         await sendLetstalkAfterAddService.Execute(query.AbnormalBetInfo, requestId);
+        notificationService.ExecuteBackground(()
+            => notificationService.InsertUpdateRequest(NotificationType.Notification, MessageHelper.CreateAddRequestSuccessfully(requestId, markedTicketsSuccessful.Count())));
 
         return getUpdateResultService.CreateSuccessResult(requestId, GetMatchIdAfterAddRequest(query), markedTicketsSuccessful);
     }

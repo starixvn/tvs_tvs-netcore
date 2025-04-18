@@ -1,13 +1,13 @@
 @if (isOpen) {
 <div class="notification-container">
   <div class="tabs d-flex">
-    <div class="tab" [class.active]="activeTab === 'notification'" (click)="selectTab('notification')">
+    <div class="tab" [class.active]="activeTab === 'Notification'" (click)="selectTab('Notification')">
       Notification
       @if(unreadNotificationCount != '0') {
         <span class="badge rounded-pill bg-primary">{{ unreadNotificationCount }}</span>
       }
     </div>
-    <div class="tab" [class.active]="activeTab === 'error'" (click)="selectTab('error')">
+    <div class="tab" [class.active]="activeTab === 'Error'" (click)="selectTab('Error')">
       Error
       @if(unreadErrorCount != '0') {
         <span class="badge rounded-pill bg-danger">{{ unreadErrorCount }}</span>
@@ -18,13 +18,13 @@
   <div class="filter-options">
     <div class="filter-tabs">
       <span class="badge rounded-pill text-bg-primary" [ngClass]="{
-          'text-bg-light': filterTab !== 'all',
-          'text-bg-primary': filterTab === 'all'
-        }" (click)="selectFilterTab('all')">All</span>
+          'text-bg-light': filterTab !== 'All',
+          'text-bg-primary': filterTab === 'All'
+        }" (click)="selectFilterTab('All')">All</span>
       <span class="badge rounded-pill" [ngClass]="{
-          'text-bg-light': filterTab !== 'unread',
-          'text-bg-primary': filterTab === 'unread'
-        }" (click)="selectFilterTab('unread')">Unread</span>
+          'text-bg-light': filterTab !== 'Unread',
+          'text-bg-primary': filterTab === 'Unread'
+        }" (click)="selectFilterTab('Unread')">Unread</span>
     </div>
 
     <span class="mark-all" (click)="markAllAsRead()">Mark all as read</span>
@@ -33,12 +33,12 @@
   <div class="notification-list" [ngStyle]="{ 'max-height.px': notificationHeight }" [@fadeSlide]>
     @for (group of groupedNotificationsArray(); track group[0]) {
     <div class="notification-date">{{ group[0] }}</div>
-    @for (notification of group[1]; track notification.message; let isLast = $last) {
-    <div class="notification" [class.unread]="notification.unread" [class.last-item]="isLast"
+    @for (notification of group[1]; track notification.content; let isLast = $last) {
+    <div class="notification" [class.unread]="!notification.isRead" [class.last-item]="isLast"
       (click)="clickNotification($event, notification)">
-      <p>{{ notification.message }}</p>
-      <span class="time">{{ notification.timestamp | date:'hh:mm:ss a' }}</span>
-      @if (notification.unread) {
+      <p>{{ notification.content }}</p>
+      <span class="time">{{ notification.createdDate | date:'hh:mm:ss a' }}</span>
+      @if (!notification.isRead) {
       <div class="unread-dot"></div>
       }
     </div>

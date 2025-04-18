@@ -1,30 +1,22 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Fanex.Data.Repository;
 using MediatR;
-using TicketVoidingSystem.Services;
-using TicketVoidingSystem.SharedApi.Criteria.Notification;
+using TicketVoidingSystem.Services.Notification;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.Notification;
 
-public class UpdateNotificationRequest : IRequest
+public class UpdateNotificationRequest : IRequest<Unit>
 {
     public bool IsRead { get; set; }
     public int Id { get; set; }
 };
 
-public class UpdateNotificationHandler(IDynamicRepository repository, SessionService sessionService)
-    : IRequestHandler<UpdateNotificationRequest>
+public class UpdateNotificationHandler(NotificationService notificationService)
+    : IRequestHandler<UpdateNotificationRequest, Unit>
 {
-    public async Task Handle(UpdateNotificationRequest request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateNotificationRequest request, CancellationToken cancellationToken)
     {
-        var command = new UpdateNotificationCommand
-        {
-            UserId = sessionService.UserId,
-            IsRead = request.IsRead,
-            Id = request.Id
-        };
-
-        await repository.ExecuteAsync(command);
+        await notificationService.UpdateNotification(request.Id, request.IsRead);
+        return Unit.Value;
     }
 }

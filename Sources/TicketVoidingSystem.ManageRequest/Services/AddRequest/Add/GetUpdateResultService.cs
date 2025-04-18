@@ -1,5 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.Models;
+﻿using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
@@ -39,8 +38,6 @@ public class GetUpdateResultServiceImp : GetUpdateResultService
     {
         return new Result
         {
-            ErrorCode = 0,
-            ErrorMsg = $"<strong>Request {requestId} is added successfully",
             Data = new AddRequestResultData
             {
                 RequestId = requestId,

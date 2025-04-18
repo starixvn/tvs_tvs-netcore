@@ -2,16 +2,11 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { NotificationFilterTabName, NotificationTabName, NotificationType } from 'src/utility/constants/notification.constant';
 import { SignalRService } from 'src/utility/services/signal-r.service.native';
 import { StaticService } from 'src/utility/services/static.service';
+import { NotificationModel } from './notification-popup.model';
 import { NotificationPopupService } from './notification-popup.service';
-
-export interface NotificationItem {
-  message: string;
-  timestamp: string; // formatted like "2025-04-11 13:50:19"
-  unread: boolean;
-  isError: boolean;
-}
 
 @Component({
   selector: 'notification-popup',
@@ -34,50 +29,148 @@ export interface NotificationItem {
 })
 export class NotificationPopupComponent {
   notificationChange: string[] = [];
-  notifications: NotificationItem[] = [
-    { message: "Request 12345 is added successfully", timestamp: "2024-04-04 07:33:00", unread: true, isError: false },
-    { message: "Request 12346 is edited successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: false },
-    { message: "Request 12347 is added successfully", timestamp: "2024-04-04 07:33:00", unread: true, isError: false },
-    { message: "Request 12348 is edited successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: false },
-    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: true, isError: false },
-    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: true, isError: false },
-    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: true },
-    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: true, isError: true },
-    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: true, isError: true },
-    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: true },
-    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: true },
-    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: false },
-    { message: "Request 12349 is added successfully", timestamp: "2024-04-04 07:33:00", unread: false, isError: false },
-
+  notifications: NotificationModel[] = [
+    {
+      content: "Request 12345 is added successfully",
+      type: "N",
+      id: 1,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: false
+    },
+    {
+      content: "Request 12346 is edited successfully",
+      type: "N",
+      id: 2,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: true
+    },
+    {
+      content: "Request 12347 is added successfully",
+      type: "N",
+      id: 3,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: false
+    },
+    {
+      content: "Request 12348 is edited successfully",
+      type: "N",
+      id: 4,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: true
+    },
+    {
+      content: "Request 12349 is added successfully",
+      type: "N",
+      id: 5,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: false
+    },
+    {
+      content: "Request 12349 is added successfully",
+      type: "N",
+      id: 6,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: false
+    },
+    {
+      content: "Request 12349 is added successfully",
+      type: "E",
+      id: 7,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: true
+    },
+    {
+      content: "Request 12349 is added successfully",
+      type: "E",
+      id: 8,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: false
+    },
+    {
+      content: "Request 12349 is added successfully",
+      type: "E",
+      id: 9,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: false
+    },
+    {
+      content: "Request 12349 is added successfully",
+      type: "E",
+      id: 10,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: true
+    },
+    {
+      content: "Request 12349 is added successfully",
+      type: "E",
+      id: 11,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: true
+    },
+    {
+      content: "Request 12349 is added successfully",
+      type: "N",
+      id: 12,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: true
+    },
+    {
+      content: "Request 12349 is added successfully",
+      type: "N",
+      id: 13,
+      username: 1,
+      createdDate: new Date("2024-04-04T07:33:00"),
+      isRead: true
+    }
   ];
 
-  activeTab: 'notification' | 'error' = 'notification';
-  filterTab: 'all' | 'unread' = 'all';
+
+  activeTab = NotificationTabName.NOTIFICATION;
+  filterTab = NotificationFilterTabName.ALL;
   notificationHeight = 250;
   maximumOfUnread = 99;
   isOpen = false;
   isExpanded = false;
-
   openNotificationSubscription: Subscription;
   notificationChangeSubscription: Subscription;
-
   notificationService = inject(NotificationPopupService);
   signalRService = inject(SignalRService);
   cdr = inject(ChangeDetectorRef);
 
-  constructor() {
-    this.openNotificationSubscription = this.notificationService.isOpen$.subscribe(open => {
+  async ngOnInit() {
+    this.subscribeOpenEvent();
+    this.subscribeNotificationEvent();
+  }
+
+  subscribeOpenEvent() {
+    this.openNotificationSubscription = this.notificationService.isOpen$.subscribe(async open => {
       this.cdr.markForCheck();
       this.isOpen = open;
+      if (open) {
+        this.notifications = await this.notificationService.get();
+      }
     });
   }
 
-  async ngOnInit() {
-    this.notificationChangeSubscription = this.signalRService.notificationChange.subscribe((notification: string[]) => {
-      console.log("notificationChangeSubscription");
-      const messsage = {message: notification[0], timestamp: new Date().toLocaleString(), unread: true, isError: false};
-      this.notifications.push(messsage);
-      this.activeTab = messsage.isError ? 'error' : 'notification';
+  subscribeNotificationEvent() {
+    this.notificationChangeSubscription = this.signalRService.notificationChange.subscribe((notification: NotificationModel) => {
+      if (this.notifications.some(n => n.content === notification.content)) {
+        return;
+      }
+      this.notifications.push(notification);
+      this.activeTab = notification.type === NotificationType.ERROR ? NotificationTabName.ERROR : NotificationTabName.NOTIFICATION;
       this.cdr.markForCheck();
     });
   }
@@ -88,28 +181,27 @@ export class NotificationPopupComponent {
   }
 
   get unreadNotificationCount(): string {
-    console.log("unreadNotificationCount");
-    const count = this.notifications.filter(n => n.unread && !n.isError).length;
-    return count <= this.maximumOfUnread ? `${count}` : '99+';
+    const count = this.notifications?.filter(n => !n.isRead && n.type !== NotificationType.ERROR).length;
+    return count > 0 ? (count <= this.maximumOfUnread ? `${count}` : '99+') : '';
   }
 
   get unreadErrorCount(): string {
-    console.log("unreadErrorCount");
-    const count = this.notifications.filter(n => n.unread && n.isError).length;
-    return count <= this.maximumOfUnread ? `${count}` : '99+';
+    const count = this.notifications?.filter(n => !n.isRead && n.type === NotificationType.ERROR).length;
+    return count > 0 ? (count <= this.maximumOfUnread ? `${count}` : '99+') : '';
   }
 
-  selectTab(tab: 'notification' | 'error') {
+  selectTab(tab: string) {
     this.activeTab = tab;
   }
 
-  selectFilterTab(tab: 'all' | 'unread') {
-    this.filterTab = tab;
+  selectFilterTab(filterTab: string) {
+    this.filterTab = filterTab;
   }
 
-  clickNotification(event: Event, notification: any) {
+  clickNotification(event: Event, notification: NotificationModel) {
     event.stopPropagation();
-    notification.unread = false;
+    notification.isRead = true;
+    void this.notificationService.update(notification.id, notification.isRead);
   }
 
   toggleNotifications() {
@@ -118,8 +210,8 @@ export class NotificationPopupComponent {
   }
 
   markAllAsRead() {
-    this.notifications.filter(n => n.isError === (this.activeTab === 'error'))
-    .forEach(n => n.unread = false);
+    this.notifications?.filter(n => n.type === NotificationType.ERROR === (this.activeTab === NotificationTabName.ERROR))
+    .forEach(n => n.isRead = true);
   }
 
   @HostListener('document:click', ['$event'])
@@ -131,18 +223,22 @@ export class NotificationPopupComponent {
   }
 
   groupedNotificationsArray() {
+    if (!this.notifications) {
+      return [];
+    }
+
     let filtered = this.notifications.filter(n =>
-      this.activeTab === 'notification' ? !n.isError : n.isError
+      this.activeTab === NotificationTabName.NOTIFICATION ? n.type !== NotificationType.ERROR : n.type === NotificationType.ERROR
     );
 
-    if (this.filterTab === 'unread') {
-      filtered = filtered.filter(n => n.unread);
+    if (this.filterTab === NotificationFilterTabName.UNREAD) {
+      filtered = filtered.filter(n => !n.isRead);
     }
     console.log("groupedNotificationsArray");
 
-    filtered.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    filtered.sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime());
     const grouped = filtered.reduce((groups, notification) => {
-      const date = StaticService.formatFullEnglishDate(notification.timestamp);
+      const date = StaticService.formatFullEnglishDate(notification.createdDate);
       if (!groups[date]) {
         groups[date] = [];
       }

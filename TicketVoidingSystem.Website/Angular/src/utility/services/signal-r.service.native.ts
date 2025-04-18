@@ -1,6 +1,7 @@
 import { EventEmitter, inject, Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { ToastrService } from 'ngx-toastr';
+import { NotificationModel } from '../components/notification-popup/notification-popup.model';
 import { VoidBetResultCode } from '../constants/void-bet-result-code';
 import { RequestStatus, Result } from '../models/signal-r.model';
 
@@ -10,7 +11,7 @@ import { RequestStatus, Result } from '../models/signal-r.model';
 export class SignalRService {
   public hubConnection: signalR.HubConnection;
   public requestStatusChange = new EventEmitter<RequestStatus[]>();
-  public notificationChange = new EventEmitter<string[]>();
+  public notificationChange = new EventEmitter<NotificationModel>();
   public notificationIconClass = new EventEmitter<string>();
   toastr = inject(ToastrService);
 
@@ -27,23 +28,23 @@ export class SignalRService {
   }
 
   private registerEvent() {
-    this.registerShowVoidResultEvent();
-    this.registerShowErrorMessage();
+    //this.registerShowVoidResultEvent();
+    //this.registerShowErrorMessage();
     this.registerReceiveRequestStatusModelEvent();
     this.registerReceiveNotification()
   }
 
-  private registerShowVoidResultEvent() {
-    this.hubConnection.on('showVoidResult', (results: Result[]) => {
-      this.showMessageForVoidResult(results);
-    });
-  }
+  // private registerShowVoidResultEvent() {
+  //   this.hubConnection.on('showVoidResult', (results: Result[]) => {
+  //     this.showMessageForVoidResult(results);
+  //   });
+  // }
 
-  private registerShowErrorMessage() {
-    this.hubConnection.on('showErrorMessage', (message: string) => {
-      this.toastr.error(message);
-    });
-  }
+  // private registerShowErrorMessage() {
+  //   this.hubConnection.on('showErrorMessage', (message: string) => {
+  //     this.toastr.error(message);
+  //   });
+  // }
 
   private registerReceiveRequestStatusModelEvent() {
     this.hubConnection.on('updateRequestStatus', (model: RequestStatus[]) => {
@@ -52,10 +53,10 @@ export class SignalRService {
   }
 
   private registerReceiveNotification() {
-    this.hubConnection.on('notifyMessage', (message: string[]) => {
-      this.notificationChange.emit(message);
+    this.hubConnection.on('pushNotification', (notification: NotificationModel) => {
+      this.notificationChange.emit(notification);
       this.notificationIconClass.emit('fa-bell-ring fa-bell-unread');
-      console.log("notificationChange.emit(message)");
+      console.log("notificationChange.emit(message)" + notification);
     });
   }
 

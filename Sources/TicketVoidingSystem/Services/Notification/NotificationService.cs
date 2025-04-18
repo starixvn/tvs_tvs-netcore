@@ -1,0 +1,87 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Fanex.Data.Repository;
+using Fanex.Logging;
+using TicketVoidingSystem.Criteria.Notification;
+using TicketVoidingSystem.Models.Notification;
+using TicketVoidingSystem.SignalR;
+
+namespace TicketVoidingSystem.Services.Notification;
+
+public interface NotificationService
+{
+    Task<IEnumerable<NotificationModel>> Get();
+
+    void ExecuteBackground(Func<Task> action);
+
+    Task UpdateNotification(int id, bool isRead);
+
+    Task InsertUpdateRequest(string type, string content, int? requestId = null);
+}
+
+public class NotificationServiceImp(
+    IDynamicRepository repository,
+    SessionService sessionService,
+    NotificationSignalRService signalRService)
+    : NotificationService
+{
+    public async Task<IEnumerable<NotificationModel>> Get()
+    {
+        var criteria = new GetNotificationCriteria
+        {
+            Username = sessionService.UserName
+        };
+
+        return await repository.FetchAsync<NotificationModel>(criteria);
+    }
+
+    public void ExecuteBackground(Func<Task> action)
+    {
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await action();
+            }
+            catch (Exception ex)
+            {
+                _ = LogService.ErrorAsync($"Notification background execution error: {ex.Message}");
+            }
+        });
+    }
+
+    public async Task UpdateNotification(int id, bool isRead)
+    {
+        var criteria = new UpdateNotificationCriteria
+        {
+            Id = id,
+            Username = sessionService.UserName,
+            IsRead = isRead,
+        };
+
+        await SaveAndPushNotificationToClient(criteria);
+    }
+
+    public async Task InsertUpdateRequest(string type, string content, int? requestId = null)
+    {
+        var criteria = new UpdateNotificationCriteria
+        {
+            RequestId = requestId,
+            Username = sessionService.UserName,
+            Content = content,
+            Type = type
+        };
+
+        await SaveAndPushNotificationToClient(criteria);
+    }
+
+    private async Task SaveAndPushNotificationToClient(UpdateNotificationCriteria criteria)
+    {
+        var (notifications, targetUsers) = await repository.FetchMultipleAsync<NotificationModel, string>(criteria);
+
+        var tasks = targetUsers.Select(username => signalRService.PushNotification(username, notifications.First()));
+        _ = Task.WhenAll(tasks);
+    }
+}

@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 using Fanex.Data.Repository;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.Notification;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 
@@ -24,7 +25,8 @@ public class UpdateRequestProcessStageImp(
     SessionService sessionService,
     InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
     GetUpdateResultService getUpdateResultService,
-    CompressDataService compressDataService)
+    CompressDataService compressDataService,
+    NotificationService notificationService)
     : UpdateRequestProcessStage
 {
     public async Task<Result> Execute(EditRequestQuery query, IEnumerable<long> markedTicketsSuccessful)
@@ -37,6 +39,9 @@ public class UpdateRequestProcessStageImp(
         {
             await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
         }
+        notificationService.ExecuteBackground(()
+            => notificationService.InsertUpdateRequest(NotificationType.Notification,
+                MessageHelper.CreateEditRequestSuccessfully(query.RequestId, sessionService.UserName, markedTicketsSuccessful.Count())));
 
         return getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString(), markedTicketsSuccessful);
     }
