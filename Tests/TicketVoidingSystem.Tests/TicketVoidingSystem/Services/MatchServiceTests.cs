@@ -245,8 +245,8 @@ public class MatchServiceTests
         // Arrange
         var match = new Match
         {
-            VendorMatchId = 123,
-            RaceId = 456,
+            VendorMatchId = "123",
+            RaceId = "456",
             SportType = sportType
         };
         const string expectedEvent = "Event 123 - ID 456";
@@ -268,8 +268,8 @@ public class MatchServiceTests
         // Arrange
         var match = new Match
         {
-            VendorMatchId = 123,
-            RaceId = 456,
+            VendorMatchId = "123",
+            RaceId = "456",
             SportType = sportType,
             MatchCode = "123",
             HomeId = 1,

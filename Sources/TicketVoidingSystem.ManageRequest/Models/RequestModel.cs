@@ -65,8 +65,8 @@ public class RequestModel
     public string TVAndIPTV { get; set; }
     public string Message { get; set; }
     public int? ParentMatchId { get; set; }
-    public int VendorMatchId { get; set; }
-    public int RaceId { get; set; }
+    public string VendorMatchId { get; set; }
+    public string RaceId { get; set; }
 }
 
 public class IgnoreDuplicateAbnormalAccountEqualityComparer : IEqualityComparer<RequestModel>

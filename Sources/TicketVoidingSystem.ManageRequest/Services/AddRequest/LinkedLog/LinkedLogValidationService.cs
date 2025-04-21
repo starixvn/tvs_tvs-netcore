@@ -1,6 +1,5 @@
 ﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
@@ -130,7 +129,7 @@ public class LinkedLogValidationServiceImp : LinkedLogValidationService
         return linkedOddsInfoDic.Values.Any(y => IsValidBetTypeWrongOdds(y.BetType, getLinkedLogModel));
     }
 
-    private static bool IsValidBetTypeWrongOdds(int betType, GetLinkedLogModel getLinkedLogModel)
+    internal static bool IsValidBetTypeWrongOdds(int betType, GetLinkedLogModel getLinkedLogModel)
     {
         return getLinkedLogModel.SubIssueTypeId switch
         {
@@ -142,7 +141,7 @@ public class LinkedLogValidationServiceImp : LinkedLogValidationService
         };
     }
 
-    private static bool IsValidHdpWrongOdds(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    internal static bool IsValidHdpWrongOdds(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
         return getLinkedLogModel.SubIssueTypeId switch
         {
@@ -154,13 +153,13 @@ public class LinkedLogValidationServiceImp : LinkedLogValidationService
         };
     }
 
-    private static bool IsValidOddsWrongOdds(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    internal static bool IsValidOddsWrongOdds(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
         return decimal.Parse(getLinkedLogModel.FromOddsNotVoidHomeOver) > linkedOddsInfo.Odds1a || decimal.Parse(getLinkedLogModel.ToOddsNotVoidHomeOver) < linkedOddsInfo.Odds2a
             || decimal.Parse(getLinkedLogModel.FromOddsNotVoidAwayUnder) > linkedOddsInfo.Odds1a || decimal.Parse(getLinkedLogModel.ToOddsNotVoidAwayUnder) < linkedOddsInfo.Odds2a;
     }
 
-    private static bool CheckHdpWrongOddsByFavoriteType(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    internal static bool CheckHdpWrongOddsByFavoriteType(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
         return getLinkedLogModel.FilterFavoriteType switch
         {
@@ -170,7 +169,7 @@ public class LinkedLogValidationServiceImp : LinkedLogValidationService
         };
     }
 
-    private static bool CheckHdpWrongOddsByWrongOu(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    internal static bool CheckHdpWrongOddsByWrongOu(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
         return decimal.Parse(getLinkedLogModel.WrongOU) == linkedOddsInfo.Odds1a;
     }

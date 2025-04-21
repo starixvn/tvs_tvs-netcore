@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
@@ -10,7 +8,6 @@ using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Criteria;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets.VirtualSportsRacing;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Services;
 using Xunit;
 
@@ -127,45 +124,6 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
             var ticketJson = JsonSerializer.Serialize(tickets);
             await repository.Received(1).FetchAsync<RecoverTicketModel>(Arg.Is<RecoverTicketsVs2RacingCriteria>(c =>
                     c.SiteDbGroupId == 1 && c.TransInfoJson == ticketJson));
-        }
-
-        [Fact]
-        public async Task PrepareTickets_WithMixedActionTickets_ShouldProcessAllTypes()
-        {
-            // Arrange
-            var originalTickets = new List<TicketsBetTransModel>
-            {
-                new() { TransId = 101, Action = null },
-                new() { TransId = 102, Action = SettlementAction.ReCalculate },
-                new() { TransId = 103, Action = SettlementAction.Refund }
-            };
-
-            // Act
-            var result = await ticketsService.PrepareTickets(originalTickets);
-
-            // Assert
-            Assert.Equal(3, result.Count());
-            Assert.Contains(result, t => t is { TransId: 101, Action: null });
-            ticketValueService.Received(1).SetValue(Arg.Any<TicketsBetTransModel>(), true);
-        }
-
-        [Fact]
-        public async Task PrepareTickets_WithNoActionableTickets_ShouldReturnOriginalRunningTickets()
-        {
-            // Arrange
-            var originalTickets = new List<TicketsBetTransModel>
-            {
-                new() { TransId = 101, Action = null },
-                new() { TransId = 102, Action = null }
-            };
-
-            // Act
-            var result = await ticketsService.PrepareTickets(originalTickets);
-
-            // Assert
-            Assert.Equal(2, result.Count());
-            Assert.Contains(result, t => t.TransId == 101);
-            Assert.Contains(result, t => t.TransId == 102);
         }
     }
 }

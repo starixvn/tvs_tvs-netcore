@@ -95,7 +95,7 @@ public class Match
 
     public int Subtype { get; set; }
 
-    public int VendorMatchId { get; set; }
+    public string VendorMatchId { get; set; }
 
-    public int RaceId { get; set; }
+    public string RaceId { get; set; }
 }
