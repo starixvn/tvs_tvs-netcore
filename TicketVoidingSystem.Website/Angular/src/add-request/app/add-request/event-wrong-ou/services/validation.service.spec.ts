@@ -1,254 +1,304 @@
-import * as _ from 'lodash';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { FilterModel } from '../../filter/filter.model';
-import { WrongOuModel } from '../../models/event-wrong-ou.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
-import { FilterWrongOuComponent } from '../filter-wrong-ou/filter-wrong-ou.component';
-import { LogInfoWrongOuComponent } from '../log-info-wrong-ou/log-info-wrong-ou.component';
-import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
-import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
+import { TestBed } from '@angular/core/testing';
 import { ValidationService } from './validation.service';
-
-class Helper {
-  static readonly fakeMatchId = 12345;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.362 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.363 PM';
-  static readonly fakeLogInfoWrongOu: LogInfoWrongOu = {
-    matchId: 12345,
-    leagueName: '',
-    isMainMatch: true,
-    eventName: '',
-    filterWrongOu: new FilterWrongOuModel(),
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
-    isPoolHouseAffected: true,
-    linkedLogsViewModel: null,
-    poolHouseCheckedBetTypes: '',
-    isShowValidation: false,
-    sportType: 0
-  };
-  static readonly fakeWrongOuModel = {
-    matchId: 122,
-    subIssueTypeId: 12,
-    isMainMatch: true,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeFromDateTime,
-    actualMarket: '',
-    wrongMarket: '',
-    logInfoDetail: null,
-    isLinkGroup1X2: true,
-    isLinkGroupAIO: true,
-    isPoolHouseAffected: true,
-    liveIndicator: 1,
-    poolHouseCheckedBetTypes: '',
-    sportType: 0
-  } as WrongOuModel;
-}
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { LogInfoWrongOuComponent } from '../log-info-wrong-ou/log-info-wrong-ou.component';
+import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
+import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
+import { FilterModel } from '../../filter/filter.model';
 
 describe('ValidationService', () => {
   let service: ValidationService;
+  let mockBodyElement: HTMLElement;
 
   beforeEach(() => {
-    service = new ValidationService();
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [ValidationService]
+    });
+
+    service = TestBed.inject(ValidationService);
+
+    // Mock document.getElementById
+    mockBodyElement = document.createElement('div');
+    mockBodyElement.setAttribute('user-id', '2');
+    document.body.appendChild(mockBodyElement);
+    jest.spyOn(document, 'getElementById').mockImplementation((id) => {
+      if (id === 'body') {
+        return mockBodyElement;
+      }
+      return null;
+    });
   });
 
-  it('#validateCommonData should return false when invalid match', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
-
-    const actual = service.validateCommonData(eventLeagueComponent, null);
-
-    expect(actual).toBeFalsy();
+  afterEach(() => {
+    document.body.removeChild(mockBodyElement);
+    jest.restoreAllMocks();
   });
 
-  it('#validateCommonData should return false when invalid match', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
+  it('should be created', () => {
+    // Arrange & Act
+    const service = TestBed.inject(ValidationService);
 
-
-    const logInfoComponent = new LogInfoWrongOuComponent(null, null, null, null, null, null);
-    logInfoComponent.filterWrongOuComponent = new FilterWrongOuComponent(null, null);
-    logInfoComponent.filterWrongOuComponent.isValid = jest.fn().mockImplementation(() => false);
-
-    const actual = service.validateCommonData(eventLeagueComponent, [logInfoComponent]);
-
-    expect(actual).toBeFalsy();
+    // Assert
+    expect(service).toBeTruthy();
   });
 
-  it('#validateCommonData should return true', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
+  describe('validateCommonData', () => {
+    it('should return true when all validations pass', () => {
+      // Arrange
+      const mockEventLeagueComponent = {
+        isMatchIdValid: () => true
+      } as EventLeagueComponent;
 
-    const logInfoComponent = new LogInfoWrongOuComponent(null, null, null, null, null, null);
-    logInfoComponent.filterWrongOuComponent = new FilterWrongOuComponent(null, null);
-    logInfoComponent.filterWrongOuComponent.isValid = jest.fn().mockImplementation(() => true);
+      const mockLogInfoComponent = {
+        filterWrongOuComponent: {
+          isValid: () => true
+        }
+      } as LogInfoWrongOuComponent;
 
-    const actual = service.validateCommonData(eventLeagueComponent, [logInfoComponent]);
+      // Act
+      const result = service.validateCommonData(mockEventLeagueComponent, [mockLogInfoComponent]);
 
-    expect(actual).toBeTruthy();
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return false when matchId is invalid', () => {
+      // Arrange
+      const mockEventLeagueComponent = {
+        isMatchIdValid: () => false
+      } as EventLeagueComponent;
+
+      const mockLogInfoComponent = {
+        filterWrongOuComponent: {
+          isValid: () => true
+        }
+      } as LogInfoWrongOuComponent;
+
+      // Act
+      const result = service.validateCommonData(mockEventLeagueComponent, [mockLogInfoComponent]);
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it('should return false when filterWrongOu is invalid', () => {
+      // Arrange
+      const mockEventLeagueComponent = {
+        isMatchIdValid: () => true
+      } as EventLeagueComponent;
+
+      const mockLogInfoComponent = {
+        filterWrongOuComponent: {
+          isValid: () => false
+        }
+      } as LogInfoWrongOuComponent;
+
+      // Act
+      const result = service.validateCommonData(mockEventLeagueComponent, [mockLogInfoComponent]);
+
+      // Assert
+      expect(result).toBe(false);
+    });
   });
 
-  it('#isFromTimeSameOrBeforeToTime should return false', async () => {
-    const fakeFromDateTime = '2020-10-10 09:44:46.361 PM';
-    const fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
+  describe('isFromTimeSameOrBeforeToTime', () => {
+    it('should return true when fromTime is before toTime', () => {
+      // Arrange
+      const fromTime = '2024-03-20T10:00:00';
+      const toTime = '2024-03-20T11:00:00';
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
 
-    const actual = service.isFromTimeSameOrBeforeToTime(fakeFromDateTime, fakeToDateTime, tooltip);
+      // Act
+      const result = service.isFromTimeSameOrBeforeToTime(fromTime, toTime, mockTooltip);
 
-    expect(actual).toBeFalsy();
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result).toBe(true);
+      expect(mockTooltip.display).not.toHaveBeenCalled();
+    });
+
+    it('should return false when fromTime is after toTime', () => {
+      // Arrange
+      const fromTime = '2024-03-20T12:00:00';
+      const toTime = '2024-03-20T11:00:00';
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
+
+      // Act
+      const result = service.isFromTimeSameOrBeforeToTime(fromTime, toTime, mockTooltip);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalled();
+    });
   });
 
-  it('#isFromTimeSameOrBeforeToTime should return true', async () => {
-    const fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-    const fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-    const tooltip = new Tooltip();
+  describe('isValidInputRelatedEvent', () => {
+    it('should return false when input matchId is same as main match', () => {
+      // Arrange
+      const inputMatchId = 123;
+      const matchIdInputClass = 'input-match-id';
+      const allEvents = [
+        { matchId: 123, isMainMatch: true },
+        { matchId: 456, isMainMatch: false }
+      ] as LogInfoWrongOu[];
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
 
-    const actual = service.isFromTimeSameOrBeforeToTime(fakeFromDateTime, fakeToDateTime, tooltip);
+      // Act
+      const result = service.isValidInputRelatedEvent(inputMatchId, matchIdInputClass, allEvents, mockTooltip);
 
-    expect(actual).toBeTruthy();
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalledWith(matchIdInputClass, LABELS.INVALID_MATCHID);
+    });
+
+    it('should return false when input matchId already exists in related events', () => {
+      // Arrange
+      const inputMatchId = 456;
+      const matchIdInputClass = 'input-match-id';
+      const allEvents = [
+        { matchId: 123, isMainMatch: true },
+        { matchId: 456, isMainMatch: false }
+      ] as LogInfoWrongOu[];
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
+
+      // Act
+      const result = service.isValidInputRelatedEvent(inputMatchId, matchIdInputClass, allEvents, mockTooltip);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalledWith(matchIdInputClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+    });
+
+    it('should return true when input matchId is valid', () => {
+      // Arrange
+      const inputMatchId = 789;
+      const matchIdInputClass = 'input-match-id';
+      const allEvents = [
+        { matchId: 123, isMainMatch: true },
+        { matchId: 456, isMainMatch: false }
+      ] as LogInfoWrongOu[];
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
+
+      // Act
+      const result = service.isValidInputRelatedEvent(inputMatchId, matchIdInputClass, allEvents, mockTooltip);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(mockTooltip.display).not.toHaveBeenCalled();
+    });
   });
 
-  it('#isValidInputRelatedEvent should return false', async () => {
-    const matchId = Helper.fakeLogInfoWrongOu.matchId;
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
+  describe('isAllEventsValid', () => {
+    it('should return true when all events have no error messages', () => {
+      // Arrange
+      const events = [
+        { messageValidationLogInfo: [{ isError: false }] },
+        { messageValidationLogInfo: [{ isError: false }] }
+      ] as LogInfoWrongOu[];
 
-    const actual = service.isValidInputRelatedEvent(matchId, '', [Helper.fakeLogInfoWrongOu], tooltip);
+      // Act
+      const result = service.isAllEventsValid(events);
 
-    expect(actual).toBeFalsy();
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return false when any event has error messages', () => {
+      // Arrange
+      const events = [
+        { messageValidationLogInfo: [{ isError: false }] },
+        { messageValidationLogInfo: [{ isError: true }] }
+      ] as LogInfoWrongOu[];
+
+      // Act
+      const result = service.isAllEventsValid(events);
+
+      // Assert
+      expect(result).toBe(false);
+    });
   });
 
-  it('#isValidInputRelatedEvent should return false', async () => {
-    const matchId = 100000;
-    const event = new LogInfoWrongOu();
-    event.matchId = matchId;
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
+  describe('isValidHdp', () => {
+    it('should return false when wrongMarket is missing', () => {
+      // Arrange
+      const filterWrongOuModel = new FilterWrongOuModel();
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
 
-    const actual = service.isValidInputRelatedEvent(matchId, '', [Helper.fakeLogInfoWrongOu, event], tooltip);
+      // Act
+      const result = service.isValidHdp(filterWrongOuModel, mockTooltip)
 
-    expect(actual).toBeFalsy();
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalled();
+    });
+
+    it('should return false when actualMarket is missing', () => {
+      // Arrange
+      const filterWrongOuModel = new FilterWrongOuModel();
+      filterWrongOuModel.wrongMarket = '1.5';
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
+
+      // Act
+      const result = service.isValidHdp(filterWrongOuModel, mockTooltip);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalled();
+    });
   });
 
-  it('#isValidInputRelatedEvent should return true', async () => {
-    const actual = service.isValidInputRelatedEvent(10000, '', [Helper.fakeLogInfoWrongOu], null);
+  describe('checkCanShowConfirmationWrongOu', () => {
+    it('should return true when there are warning tickets', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.allEvents = [
+        { messageValidationLogInfo: [{ isError: false }] }
+      ] as LogInfoWrongOu[];
 
-    expect(actual).toBeTruthy();
-  });
+      // Act
+      const result = service.checkCanShowConfirmationWrongOu(saveRequestArg);
 
-  it('#isAllEventsValid should return false', async () => {
-    const events = _.cloneDeep(Helper.fakeLogInfoWrongOu);
-    events.messageValidationLogInfo.push({isError: true, reason: ''});
-    const actual = service.isAllEventsValid([events]);
+      // Assert
+      expect(result).toBe(true);
+    });
 
-    expect(actual).toBeFalsy();
-  });
+    it('should return true when editing by another user', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.isEdit = true;
+      saveRequestArg.userId = 1;
+      saveRequestArg.allEvents = [];
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
 
-  it('#isAllEventsValid should return true', async () => {
-    const events = _.cloneDeep(Helper.fakeLogInfoWrongOu);
-    events.messageValidationLogInfo = [];
-    const actual = service.isAllEventsValid([events]);
+      // Act
+      const result = service.checkCanShowConfirmationWrongOu(saveRequestArg);
 
-    expect(actual).toBeTruthy();
-  });
+      // Assert
+      expect(result).toBe(true);
+      expect(document.getElementById).toHaveBeenCalledWith('body');
+    });
 
-  it('#checkCanShowConfirmation should return true', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    const event = _.cloneDeep(Helper.fakeLogInfoWrongOu);
-    const validation: ValidationMessage = {
-      isError: false,
-      reason: ''
-    };
-    event.messageValidationLogInfo = [validation];
-    arg.allEvents = [event];
+    it('should return true when has warning taken note', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.isEdit = true;
+      saveRequestArg.allEvents = [];
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
 
-    const actual = service.checkCanShowConfirmationWrongOu(arg);
+      // Act
+      const result = service.checkCanShowConfirmationWrongOu(saveRequestArg);
 
-    expect(actual).toBeTruthy();
-  });
-
-  it('#checkCanShowConfirmation should return false', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    arg.isEdit = false;
-    arg.userId = 1;
-    arg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    arg.actionIdOfFirstTimeAccess = "1";
-    const event = _.cloneDeep(Helper.fakeLogInfoWrongOu);
-    event.logInfoDetail.settleCount = 0;
-    event.messageValidationLogInfo.push({isError: true, reason: ''});
-    arg.allEvents = [event];
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-
-    const actual = service.checkCanShowConfirmationWrongOu(arg);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidHdp should return false when wrongMarket null', async () => {
-    const model = new FilterWrongOuModel();
-    model.wrongMarket = null;
-
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-
-    const actual = service.isValidHdp(model, tooltip);
-
-    expect(actual).toBeFalsy();
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
-  });
-
-  it('#isValidHdp should return false when actualMarket null', async () => {
-    const model = new FilterWrongOuModel();
-    model.wrongMarket = '123';
-    model.actualMarket = null;
-
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-
-    const actual = service.isValidHdp(model, tooltip);
-
-    expect(actual).toBeFalsy();
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
-  });
-
-  it('#isValidHdp should return false when wrongMarket is not not number', async () => {
-    const model = new FilterWrongOuModel();
-    model.wrongMarket = 'aaa';
-    model.actualMarket = '123123';
-
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-
-    const actual = service.isValidHdp(model, tooltip);
-
-    expect(actual).toBeFalsy();
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
-  });
-
-  it('#isValidHdp should return true', async () => {
-    const model = new FilterWrongOuModel();
-    model.wrongMarket = '12312';
-    model.actualMarket = '12312';
-
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-
-    const actual = service.isValidHdp(model, tooltip);
-
-    expect(actual).toBeTruthy();
+      // Assert
+      expect(result).toBe(true);
+      expect(document.getElementById).toHaveBeenCalledWith('body');
+    });
   });
 });

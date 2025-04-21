@@ -1,366 +1,491 @@
-import * as _ from 'lodash';
-import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { AddRequestService } from '../../add-request.service';
-import { AddRequestStore } from '../../add-request.store';
-import { FilterModel } from '../../filter/filter.model';
-import { WrongOuModel } from '../../models/event-wrong-ou.model';
-import { OthersModel } from '../../others/others.model';
-import { PopupService } from '../../services/popup.service';
-import { LogInfoWrongOuComponent } from '../log-info-wrong-ou/log-info-wrong-ou.component';
-import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
-import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
-import { EventWrongOuService } from './event-wrong-ou.service';
-import { LogInfoService } from './log-info.service';
-import { SaveRequestService } from './save-request.service';
+import { TestBed } from '@angular/core/testing';
 import { ValidationService } from './validation.service';
+import { LogInfoService } from './log-info.service';
+import { PopupService } from '../../services/popup.service';
+import { SaveRequestService } from './save-request.service';
+import { AddRequestStore } from '../../add-request.store';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
+import { FilterModel } from '../../filter/filter.model';
+import { OthersModel } from '../../others/others.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { jest } from '@jest/globals';
+import { CommonService } from '../../../../../utility/services/common.service';
+import { HttpService } from '../../../../../utility/services/http.service';
+import { EventWrongOuService } from './event-wrong-ou.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { LogInfoWrongOuComponent } from '../log-info-wrong-ou/log-info-wrong-ou.component';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { AddRequestService } from '../../add-request.service';
+import { WrongOuModel } from '../../models/event-wrong-ou.model';
 import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
-
-class Helper {
-  static readonly fakeMatchId = 12345;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeLogInfoWrongOu: LogInfoWrongOu = {
-    matchId: 12345,
-    leagueName: '',
-    isMainMatch: true,
-    eventName: '',
-    filterWrongOu: new FilterWrongOuModel(),
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
-    isPoolHouseAffected: true,
-    linkedLogsViewModel: null,
-    poolHouseCheckedBetTypes: '',
-    isShowValidation: false,
-    sportType: 0,
-  };
-  static readonly fakeWrongOuModel = {
-    matchId: 122,
-    subIssueTypeId: 12,
-    isMainMatch: true,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeFromDateTime,
-    actualMarket: '',
-    wrongMarket: '',
-    logInfoDetail: null,
-    isLinkGroup1X2: true,
-    isLinkGroupAIO: true,
-    isPoolHouseAffected: true,
-    liveIndicator: 1,
-    poolHouseCheckedBetTypes: '',
-    sportType: 0
-  } as WrongOuModel;
-}
+import { GetLogInfoViewModel } from '../../models/get-log-info.model';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
+  let validationService: ValidationService;
+  let logInfoService: LogInfoService;
+  let popupService: PopupService;
+  let addRequestStore: AddRequestStore;
+  let eventWrongOuService: EventWrongOuService;
+  let addRequestService: AddRequestService;
+  let staticService: StaticService;
+  let commonService: CommonService;
+
+  const mockEventLeagueComponent = {
+    isMatchIdValid: () => true
+  };
+
+  const mockLogInfoWrongOuComponent = {
+    filterWrongOuComponent: {
+      isValid: () => true
+    },
+    logInfo: new LogInfoWrongOu()
+  };
 
   beforeEach(() => {
-    service = new SaveRequestService(null, null, null, null, null);
+    TestBed.configureTestingModule({
+      imports: [
+        TestingModule
+      ],
+      providers: [
+        SaveRequestService,
+        ValidationService,
+        LogInfoService,
+        PopupService,
+        AddRequestStore,
+        CommonService,
+        HttpService,
+        EventWrongOuService,
+        AddRequestService,
+        StaticService
+      ]
+    });
+
+    service = TestBed.inject(SaveRequestService);
+    validationService = TestBed.inject(ValidationService);
+    logInfoService = TestBed.inject(LogInfoService);
+    popupService = TestBed.inject(PopupService);
+    addRequestStore = TestBed.inject(AddRequestStore);
+    eventWrongOuService = TestBed.inject(EventWrongOuService);
+    addRequestService = TestBed.inject(AddRequestService);
+    staticService = TestBed.inject(StaticService);
+    commonService = TestBed.inject(CommonService);
+
+    staticService['isWrongOU'] = jest.fn().mockReturnValue(true);
+    jest.spyOn(addRequestStore, 'changeSavingRequestStatus');
+    jest.spyOn(addRequestStore, 'changeBlockingUiStatus');
+    jest.spyOn(validationService, 'validateCommonData').mockReturnValue(true);
+    jest.spyOn(validationService, 'isAllEventsValid').mockReturnValue(true);
+    jest.spyOn(validationService, 'checkCanShowConfirmationWrongOu').mockReturnValue(true);
+    jest.spyOn(commonService, 'getLogInfo').mockResolvedValue({
+      transInfoAddRequestModel: {},
+      getLogInfoModels: []
+    } as GetLogInfoViewModel);
   });
 
-  it('#recheckLogInfoBeforeSaveRequest should return false when does not pass validation', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    const logInfoWrongHdpComponents = new LogInfoWrongOuComponent(null, null, null, null, null, null);
-    logInfoWrongHdpComponents.isMainMatch = true;
-    saveRequestArg.logInfoComponents = [logInfoWrongHdpComponents];
-    const logInfoService = new LogInfoService(null, null);
-    logInfoService.resetLogInfoOfEvent = jest.fn();
+  it('should be created', () => {
+    // Arrange & Act
+    const service = TestBed.inject(SaveRequestService);
 
-    const validationService = new ValidationService();
-    validationService.validateCommonData = jest.fn().mockImplementation(() => false);
-
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
-
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
-
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(actual).toBeFalsy();
+    // Assert
+    expect(service).toBeTruthy();
   });
 
-  it('#recheckLogInfoBeforeSaveRequest should return false when have event invalid', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.primitiveProps = new PrimitiveProperty();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestArg.mainEvent = new LogInfoWrongOu();
-    saveRequestArg.logInfoComponents = [{logInfo:{isShowValidation: true}} as LogInfoWrongOuComponent];
+  describe('recheckLogInfoBeforeSaveRequest', () => {
+    it('should recheck log info before save request', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoWrongOu();
+      event.messageValidationLogInfo = [];
+      event.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoWrongOu();
+      mainEvent.messageValidationLogInfo = [];
+      mainEvent.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.logInfoComponents = [mockLogInfoWrongOuComponent as LogInfoWrongOuComponent];
+      saveRequestArg.addRequestStore = addRequestStore;
 
-    const logInfoService = new LogInfoService(null, null);
-    logInfoService.resetLogInfoOfEvent = jest.fn();
-    logInfoService.getLogInfo = jest.fn();
+      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
+      jest.spyOn(eventWrongOuService, 'getLinkedLog').mockResolvedValue({} as LinkedLogsViewModel);
 
-    const validationService = new ValidationService();
-    validationService.validateCommonData = jest.fn().mockImplementation(() => true);
-    validationService.isAllEventsValid = jest.fn().mockImplementation(() => false);
+      // Act
+      await service.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
-    const eventWrongOuService = new EventWrongOuService(null);
-    eventWrongOuService.getLinkedLog = jest.fn();
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, eventWrongOuService);
+      // Assert
+      expect(validationService.validateCommonData).toHaveBeenCalled();
+      expect(validationService.isAllEventsValid).toHaveBeenCalled();
+      expect(logInfoService.getLogInfo).toHaveBeenCalled();
+      expect(eventWrongOuService.getLinkedLog).toHaveBeenCalled();
+    });
 
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+    it('should return false when common data validation fails', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoWrongOu();
+      event.messageValidationLogInfo = [];
+      event.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoWrongOu();
+      mainEvent.messageValidationLogInfo = [];
+      mainEvent.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.logInfoComponents = [mockLogInfoWrongOuComponent as LogInfoWrongOuComponent];
+      saveRequestArg.addRequestStore = addRequestStore;
 
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(validationService.isAllEventsValid).toHaveBeenCalledTimes(1);
-    expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(actual).toBeFalsy();
+      jest.spyOn(validationService, 'validateCommonData').mockReturnValue(false);
+
+      // Act
+      const result = await service.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(validationService.validateCommonData).toHaveBeenCalled();
+    });
+
+    it('should return false when events validation fails', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoWrongOu();
+      event.messageValidationLogInfo = [];
+      event.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoWrongOu();
+      mainEvent.messageValidationLogInfo = [];
+      mainEvent.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.logInfoComponents = [mockLogInfoWrongOuComponent as LogInfoWrongOuComponent];
+      saveRequestArg.addRequestStore = addRequestStore;
+
+      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
+      jest.spyOn(eventWrongOuService, 'getLinkedLog').mockResolvedValue({} as LinkedLogsViewModel);
+      jest.spyOn(validationService, 'isAllEventsValid').mockReturnValue(false);
+
+      // Act
+      const result = await service.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(validationService.isAllEventsValid).toHaveBeenCalled();
+    });
   });
 
-  it('#recheckLogInfoBeforeSaveRequest should return true', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.primitiveProps = new PrimitiveProperty();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestArg.mainEvent = new LogInfoWrongOu();
-    saveRequestArg.logInfoComponents = [{logInfo:{isShowValidation: true}} as LogInfoWrongOuComponent];
-    const logInfoService = new LogInfoService(null, null);
-    logInfoService.resetLogInfoOfEvent = jest.fn();
-    logInfoService.getLogInfo = jest.fn();
+  describe('saveRequest', () => {
+    it('should save request when data is valid', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoWrongOu();
+      event.messageValidationLogInfo = [];
+      event.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoWrongOu();
+      mainEvent.messageValidationLogInfo = [];
+      mainEvent.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.logInfoComponents = [mockLogInfoWrongOuComponent as LogInfoWrongOuComponent];
+      saveRequestArg.addRequestStore = addRequestStore;
 
-    const validationService = new ValidationService();
-    validationService.validateCommonData = jest.fn().mockImplementation(() => true);
-    validationService.isAllEventsValid = jest.fn().mockImplementation(() => true);
+      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
+      jest.spyOn(eventWrongOuService, 'getLinkedLog').mockResolvedValue({} as LinkedLogsViewModel);
+      jest.spyOn(popupService, 'showConfirm');
+      jest.spyOn(addRequestService, 'executeSaveRequest').mockResolvedValue();
 
-    const eventWrongOuService = new EventWrongOuService(null);
-    eventWrongOuService.getLinkedLog = jest.fn();
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, eventWrongOuService);
+      // Act
+      await service.saveRequest(saveRequestArg);
 
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+      // Assert
+      expect(validationService.validateCommonData).toHaveBeenCalled();
+      expect(validationService.isAllEventsValid).toHaveBeenCalled();
+      expect(validationService.checkCanShowConfirmationWrongOu).toHaveBeenCalled();
+      expect(logInfoService.getLogInfo).toHaveBeenCalled();
+      expect(popupService.showConfirm).toHaveBeenCalled();
+    });
 
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(validationService.isAllEventsValid).toHaveBeenCalledTimes(1);
-    expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(actual).toBeTruthy();
+    it('should not save request when data is invalid', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoWrongOu();
+      event.messageValidationLogInfo = [];
+      event.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoWrongOu();
+      mainEvent.messageValidationLogInfo = [];
+      mainEvent.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.logInfoComponents = [mockLogInfoWrongOuComponent as LogInfoWrongOuComponent];
+      saveRequestArg.addRequestStore = addRequestStore;
+
+      jest.spyOn(validationService, 'isAllEventsValid').mockReturnValue(false);
+      jest.spyOn(addRequestService, 'executeSaveRequest');
+
+      // Act
+      await service.saveRequest(saveRequestArg);
+
+      // Assert
+      expect(addRequestService.executeSaveRequest).not.toHaveBeenCalled();
+      expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
+    });
+
+    it('should save request directly when confirmation is not needed', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoWrongOu();
+      event.messageValidationLogInfo = [];
+      event.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoWrongOu();
+      mainEvent.messageValidationLogInfo = [];
+      mainEvent.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.logInfoComponents = [mockLogInfoWrongOuComponent as LogInfoWrongOuComponent];
+      saveRequestArg.addRequestStore = addRequestStore;
+
+      jest.spyOn(validationService, 'checkCanShowConfirmationWrongOu').mockReturnValue(false);
+      jest.spyOn(addRequestService, 'executeSaveRequest').mockResolvedValue();
+      jest.spyOn(popupService, 'showConfirm');
+
+      // Act
+      await service.saveRequest(saveRequestArg);
+
+      // Assert
+      expect(addRequestService.executeSaveRequest).toHaveBeenCalled();
+      expect(popupService.showConfirm).not.toHaveBeenCalled();
+    });
   });
 
-  it('#saveRequest should not called #proceedSaveRequest', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.isVoided = false;
-    service['proceedSaveRequest'] = jest.fn();
-    service['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
+  describe('getWrongOuInfo', () => {
+    it('should create WrongOuModel with correct data', () => {
+      // Arrange
+      const logInfoWrongOu = new LogInfoWrongOu();
+      logInfoWrongOu.matchId = 123;
+      logInfoWrongOu.isMainMatch = true;
+      logInfoWrongOu.logInfoDetail = { matchId: 123 } as LogInfoDetail;
+      logInfoWrongOu.poolHouseCheckedBetTypes = 'All';
+      logInfoWrongOu.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      logInfoWrongOu.linkedLogsViewModel = {
+        isLinkGroup1X2: true,
+        isLinkGroupAIO: false
+      } as LinkedLogsViewModel;
 
-    await service.saveRequest(saveRequestArg);
+      const subIssueTypeId = '1';
 
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(saveRequestArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-    expect(service['proceedSaveRequest']).toHaveBeenCalledTimes(0);
+      // Act
+      const result = service.getWrongOuInfo(logInfoWrongOu, subIssueTypeId);
 
-  });
+      // Assert
+      expect(result).toBeInstanceOf(WrongOuModel);
+      expect(result.matchId).toBe(123);
+      expect(result.isMainMatch).toBe(true);
+      expect(result.logInfoDetail).toEqual({ matchId: 123 });
+      expect(result.subIssueTypeId).toBe(1);
+      expect(result.poolHouseCheckedBetTypes).toBe('All');
+      expect(result.filterFromTransTime).toBe('2024-03-20T00:00:00');
+      expect(result.filterToTransTime).toBe('2024-03-20T23:59:59');
+      expect(result.liveIndicator).toBe(1);
+      expect(result.wrongMarket).toBe('1');
+      expect(result.actualMarket).toBe('2');
+      expect(result.filterBetIdX).toBe('X');
+      expect(result.filterBetIdY).toBe('Y');
+      expect(result.filterBetTypeId).toBe('1');
+      expect(result.isLinkGroup1X2).toBe(true);
+      expect(result.isLinkGroupAIO).toBe(false);
+    });
 
-  it('#saveRequest should called #proceedSaveRequest', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.isVoided = true;
-    service['proceedSaveRequest'] = jest.fn();
+    it('should not set link group properties for non-main match', () => {
+      // Arrange
+      const logInfoWrongOu = new LogInfoWrongOu();
+      logInfoWrongOu.matchId = 123;
+      logInfoWrongOu.isMainMatch = false;
+      logInfoWrongOu.logInfoDetail = { matchId: 123 } as LogInfoDetail;
+      logInfoWrongOu.poolHouseCheckedBetTypes = 'All';
+      logInfoWrongOu.filterWrongOu = {
+        filterFromTransTime: '2024-03-20T00:00:00',
+        filterToTransTime: '2024-03-20T23:59:59',
+        liveIndicator: 1,
+        wrongMarket: '1',
+        actualMarket: '2',
+        filterBetType: new FilterBetType('X', 'Y', '1')
+      };
+      logInfoWrongOu.linkedLogsViewModel = {
+        isLinkGroup1X2: true,
+        isLinkGroupAIO: false
+      } as LinkedLogsViewModel;
 
-    await service.saveRequest(saveRequestArg);
+      const subIssueTypeId = '1';
 
-    expect(saveRequestArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-    expect(service['proceedSaveRequest']).toHaveBeenCalledTimes(1);
-  });
+      // Act
+      const result = service.getWrongOuInfo(logInfoWrongOu, subIssueTypeId);
 
-  it('#proceedSaveRequest should showConfirm', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    service['proceedSaveRequest'] = jest.fn();
-
-    const validationService = new ValidationService();
-    validationService.checkCanShowConfirmationWrongOu = jest.fn().mockImplementation(() => true);
-
-    const popupService = new PopupService(null);
-    const spyShowConfirm = jest.spyOn(popupService, 'showConfirm').mockImplementation(() => {});
-
-    const saveRequestService = new SaveRequestService(validationService, null, popupService, null, null);
-    saveRequestService['getMessageConfirmationWrongOu'] = jest.fn().mockImplementation(() => 'aaa');
-    saveRequestService['onClickConfirmSave'] = jest.fn();
-
-
-    saveRequestService['proceedSaveRequest'](saveRequestArg);
-
-    expect(validationService.checkCanShowConfirmationWrongOu).toHaveBeenCalledTimes(1);
-    expect(saveRequestService['getMessageConfirmationWrongOu']).toHaveBeenCalledTimes(1);
-
-    expect(spyShowConfirm.mock.calls[0][0]).toEqual('aaa');
-    expect(spyShowConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
-    expect(spyShowConfirm.mock.calls[0][2]).toBeInstanceOf(Function);
-
-    spyShowConfirm.mock.calls[0][1]();
-    expect(saveRequestService['onClickConfirmSave']).toHaveBeenCalledTimes(1);
-
-    spyShowConfirm.mock.calls[0][2]();
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-  });
-
-  it('#proceedSaveRequest should called #executeSaveRequestApi', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    const validationService = new ValidationService();
-    validationService.checkCanShowConfirmationWrongOu = jest.fn().mockImplementation(() => false);
-
-    const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
-    saveRequestService['executeSaveRequestApi'] = jest.fn();
-
-    saveRequestService['proceedSaveRequest'](saveRequestArg);
-
-    expect(validationService.checkCanShowConfirmationWrongOu).toHaveBeenCalledTimes(1);
-    expect(saveRequestService['executeSaveRequestApi']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getMessageConfirmationWrongOu should return expected msg', async () => {
-    const expected = '<div>There are some warnings in this request.'
-    + '</div><div>Ticket(s) on request will be unmarked.</div>'
-    + '<div style=\"color:red\">Please remind this request undefined is confirmed by undefined.</div><div class=\'mg-top-10\'><i class="fa fa-question-circle text-confirm">'
-    + '</i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>';
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.isEdit = true;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = '2';
-    saveRequestArg.actionIdOfFirstTimeAccess = '5';
-    saveRequestArg.allEvents = [Helper.fakeLogInfoWrongOu];
-    saveRequestArg.allEvents[0].logInfoDetail.settleCount = 1;
-    saveRequestArg.allEvents[0].messageValidationLogInfo.push({ isError: false, reason: 'aaa'});
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-
-    const actual = service['getMessageConfirmationWrongOu'](saveRequestArg);
-
-    expect(actual).toBe(expected);
-  });
-
-  it('#getMessageConfirmationWrongOu should return expected msg', async () => {
-    const expected = '<div class=\'mg-top-10\'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>';
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.isEdit = false;
-    saveRequestArg.allEvents = [];
-
-    const actual = service['getMessageConfirmationWrongOu'](saveRequestArg);
-
-    expect(actual).toBe(expected);
-  });
-
-  it('#executeSaveRequestApi should called #executeSaveRequest', async () => {
-    const addRequestService = new AddRequestService(null, null, null);
-    const spyExecuteSaveRequest = jest.spyOn(addRequestService, 'executeSaveRequest').mockImplementation();
-    const saveRequestService = new SaveRequestService(null, null, null, addRequestService, null);
-    saveRequestService['initAddRequestQuery'] = jest.fn();
-
-    await saveRequestService['executeSaveRequestApi'](new SaveRequestArg());
-
-    expect(spyExecuteSaveRequest).toHaveBeenCalledTimes(1);
-  });
-
-  it('#onClickConfirmSave should not called #executeSaveRequestApi', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-
-    const popupService = new PopupService(null);
-    const spyShowError = jest.spyOn(popupService, 'showError').mockImplementation(() => {});
-
-    const saveRequestService = new SaveRequestService(null, null, popupService, null, null);
-    saveRequestService['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
-
-    await saveRequestService['onClickConfirmSave'](arg);
-
-    expect(spyShowError).toHaveBeenCalledTimes(1);
-    expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-  });
-
-  it('#onClickConfirmSave should called #executeSaveRequestApi', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = true;
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    service['executeSaveRequestApi'] = jest.fn();
-
-    await service['onClickConfirmSave'](arg);
-
-    expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-  });
-
-  it('#initAddRequestQuery should return expected model when request is voided', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.others = new OthersModel();
-    arg.filter.isVoided = true;
-    arg.allEvents = [Helper.fakeLogInfoWrongOu];
-    arg.primitiveProps = new PrimitiveProperty();
-    service['getWrongOuInfo'] = jest.fn();
-
-    const actual = service['initAddRequestQuery'](arg);
-
-    expect(actual).toBeDefined();
-    expect(service['getWrongOuInfo']).toHaveBeenCalledTimes(0);
-  });
-
-  it('#initAddRequestQuery should return expected model when is WrongOU issueType', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.others = new OthersModel();
-    arg.filter.issueTypeId = IssueTypeConstant.WRONG_OU;
-    arg.allEvents = [Helper.fakeLogInfoWrongOu];
-    arg.primitiveProps = new PrimitiveProperty();
-    service['getWrongOuInfo'] = jest.fn();
-
-    const actual = service['initAddRequestQuery'](arg);
-
-    expect(actual).toBeDefined();
-    expect(service['getWrongOuInfo']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#initAddRequestQuery should return expected model when is Wrong1stOU issueType', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.others = new OthersModel();
-    arg.filter.issueTypeId = IssueTypeConstant.WRONG_1ST_OU;
-    arg.allEvents = [Helper.fakeLogInfoWrongOu];
-    arg.primitiveProps = new PrimitiveProperty();
-    service['getWrongOuInfo'] = jest.fn();
-
-    const actual = service['initAddRequestQuery'](arg);
-
-    expect(actual).toBeDefined();
-    expect(service['getWrongOuInfo']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getWrongOuInfo should return expected', async () => {
-    const fakeLogInfoWrongOu = _.cloneDeep(Helper.fakeLogInfoWrongOu);
-    fakeLogInfoWrongOu.linkedLogsViewModel = new LinkedLogsViewModel();
-    fakeLogInfoWrongOu.filterWrongOu.filterBetType = new FilterBetType('', '', '1')
-
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.others = new OthersModel();
-    arg.filter.issueTypeId = IssueTypeConstant.WRONG_1ST_OU;
-    arg.allEvents = [fakeLogInfoWrongOu];
-
-    const validationService = new ValidationService();
-    const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
-
-    const actual = saveRequestService['getWrongOuInfo'](fakeLogInfoWrongOu, '1');
-
-    expect(actual).toBeDefined();
+      // Assert
+      expect(result.isLinkGroup1X2).toBeUndefined();
+      expect(result.isLinkGroupAIO).toBeUndefined();
+    });
   });
 });
