@@ -77,6 +77,7 @@ public class RequestInfoForCopy
     public string ServiceAcceptTime { get; set; }
     public int MinAllowanceTime { get; set; }
     public string MinAcceptType { get; set; }
+    public string LiveScores { get; set; }
 
     //Wrong HDP/Wrong 1st HDP/Wrong OU / Wrong 1st OU
 

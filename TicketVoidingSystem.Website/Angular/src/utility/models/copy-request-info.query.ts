@@ -50,6 +50,8 @@ export class RequestInfoForCopy {
   serviceAcceptTime: string;
   minAllowanceTime: number;
   minAcceptType: string;
+  liveScores: string;
+  sportType: number;
 
   //Wrong HDP/Wrong 1st HDP/Wrong OU / Wrong 1st OU
   wrongMarket?: string;

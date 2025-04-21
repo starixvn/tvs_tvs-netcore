@@ -9,6 +9,7 @@ import { CommonService } from '../../../../utility/services/common.service';
 import { TvDetectionService } from './tv-detection.service';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
+import { SportType } from '../../../../utility/constants/sport.constant';
 
 export class RequestDescriptionService {
   commonService = inject(CommonService);
@@ -152,6 +153,22 @@ export class RequestDescriptionService {
     return `Wrong: ${requestInfo.wrongMarket}\nCorrect: ${requestInfo.actualMarket}\n`;
   }
 
+  private isShowLiveScores(requestInfo: RequestInfoForCopy): boolean {
+    const handicapSubIssueTypeId = 6;
+    const _1hHandicapSubIssueTypeId = 119;
+    const isWrongOddsShowLiveScores = requestInfo.issueTypeId.toString() === IssueTypeConstant.WRONG_ODDS
+    && (requestInfo.subIssueTypeId === handicapSubIssueTypeId || requestInfo.subIssueTypeId === _1hHandicapSubIssueTypeId);
+    const isHandicapShowLiveScores = [IssueTypeConstant.WRONG_HDP, IssueTypeConstant.WRONG_1ST_HDP].includes(requestInfo.issueTypeId.toString());
+    const isWrongOuShowLiveScores = [IssueTypeConstant.WRONG_OU, IssueTypeConstant.WRONG_1ST_OU].includes(requestInfo.issueTypeId.toString());
+
+    return SportType.SOCCER === requestInfo.sportType  &&
+     (isHandicapShowLiveScores || isWrongOuShowLiveScores || isWrongOddsShowLiveScores);
+  }
+
+  private generateLiveScores(requestInfo: RequestInfoForCopy): string {
+    return this.isShowLiveScores(requestInfo) ? `Live Scores: ${requestInfo.liveScores}\n` : '';
+  }
+
   private generateOddsContentWrongOdds(requestInfo: RequestInfoForCopy): string {
     const handicapSubIssueTypeId = 6;
     const _1hHandicapSubIssueTypeId = 119;
@@ -190,6 +207,7 @@ export class RequestDescriptionService {
       + `Void Time: ${moment(copyInfoResponse.requestInfo.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} - ${moment(copyInfoResponse.requestInfo.voidToTime).format(DateTimeFormat.TIME_FORMAT)} `
       + `(Single Count: ${copyInfoResponse.requestInfo.totalSingleCount}, Parlay Count: ${copyInfoResponse.requestInfo.totalParlayCount}${cancelCashOutCount})\n`
       + `${copyInfoResponse.requestInfo.remark}`
+      + this.generateLiveScores(copyInfoResponse.requestInfo);
 
     return content;
   }
