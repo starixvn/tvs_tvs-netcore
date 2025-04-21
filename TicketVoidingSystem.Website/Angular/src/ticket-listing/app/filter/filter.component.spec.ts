@@ -236,12 +236,19 @@ describe('FilterComponent', () => {
     // Arrange
     component.matchId = '';
     jest.spyOn(component.searchEvent, 'emit');
+    
+    // Mock tooltip
+    component.tooltip = {
+      display: jest.fn(),
+      hide: jest.fn()
+    } as any;
 
     // Act
     component.search();
 
     // Assert
     expect(component.searchEvent.emit).not.toHaveBeenCalled();
+    expect(component.tooltip.display).toHaveBeenCalled();
   });
 
   it('#changeProduct should handle product change correctly', async () => {
@@ -249,6 +256,7 @@ describe('FilterComponent', () => {
     const newProduct = Product.SPORTS_BOOK;
     component.query.product = 0;
     component.changeMatchEvent.emit = jest.fn();
+    component.sportType = 98;
 
     // Act
     await component.changeProduct(newProduct);
