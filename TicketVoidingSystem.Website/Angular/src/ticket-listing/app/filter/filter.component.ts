@@ -578,7 +578,7 @@ export class FilterComponent implements OnInit {
   }
 
   isShowAdvancedMode(): boolean {
-    return this.isInvalidProduct0(this.query?.product, this.sportType);
+    return !this.isInvalidProduct0(this.query?.product, this.sportType);
   }
 
   isShowFilterTime(): boolean {
