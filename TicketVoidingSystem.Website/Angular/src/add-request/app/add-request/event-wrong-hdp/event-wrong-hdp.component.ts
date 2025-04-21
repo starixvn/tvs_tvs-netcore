@@ -102,11 +102,11 @@ export class EventWrongHdpComponent implements OnInit {
 
   private createGetChildMatchesQuery(): GetChildMatchQuery {
     const query = new GetChildMatchQuery();
-    query.issueTypeId = Number(this.filter.issueTypeId);
-    query.eventDate = this.mainEvent.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
-    query.matchId = this.mainEvent.matchId;
+    query.issueTypeId = Number(this.filter?.issueTypeId);
+    query.eventDate = this.mainEvent?.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+    query.matchId = this.mainEvent?.matchId;
     query.isMainMatch = true;
-    query.sportType = this.mainEvent.sportType;
+    query.sportType = this.mainEvent?.sportType;
 
     return query;
   }

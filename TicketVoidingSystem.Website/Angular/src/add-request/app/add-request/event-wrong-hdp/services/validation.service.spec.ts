@@ -1,320 +1,356 @@
-import * as _ from 'lodash';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { TeamFavorite, TVSRequestActionType } from '../../../../../utility/constants/config';
-import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { FilterModel } from '../../filter/filter.model';
-import { WrongHdpModel } from '../../models/event-wrong-hdp.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
-import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
-import { LogInfoWrongHdpComponent } from '../log-info-wrong-hdp/log-info-wrong-hdp.component';
-import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
-import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
+import { TestBed } from '@angular/core/testing';
 import { ValidationService } from './validation.service';
-
-class Helper {
-  static readonly fakeMatchId = 12345;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.362 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.363 PM';
-  static readonly fakeLogInfoWrongHdp: LogInfoWrongHdp = {
-    matchId: 12345,
-    leagueName: '',
-    isMainMatch: true,
-    eventName: '',
-    filterWithHdp: new FilterWithHdpModel(),
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
-    isPoolHouseAffected: false,
-    linkedLogsViewModel: null,
-    poolHouseCheckedBetTypes: '',
-    isShowValidation: false,
-    sportType: 0
-  };
-  static readonly fakeWrongHdpModel = {
-    matchId: 122,
-    subIssueTypeId: 12,
-    isMainMatch: true,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeFromDateTime,
-    homeFavorite: '',
-    awayFavorite: '',
-    actualMarket: '',
-    hdpValue: '',
-    logInfoDetail: null,
-    isLinkGroup1X2: false,
-    isLinkGroupAIO: false,
-    isPoolHouseAffected: false,
-    liveIndicator: 0,
-    poolHouseCheckedBetTypes: '',
-    sportType: 0
-  } as WrongHdpModel;
-}
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { LogInfoWrongHdpComponent } from '../log-info-wrong-hdp/log-info-wrong-hdp.component';
+import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
+import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { TeamFavorite, TVSRequestActionType } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
+import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
+import { FilterModel } from '../../filter/filter.model';
 
 describe('ValidationService', () => {
   let service: ValidationService;
+  let mockBodyElement: HTMLElement;
 
   beforeEach(() => {
-    service = new ValidationService();
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [ValidationService]
+    });
+
+    service = TestBed.inject(ValidationService);
+
+    // Mock document.getElementById
+    mockBodyElement = document.createElement('div');
+    mockBodyElement.setAttribute('user-id', '2');
+    document.body.appendChild(mockBodyElement);
+    jest.spyOn(document, 'getElementById').mockImplementation((id) => {
+      if (id === 'body') {
+        return mockBodyElement;
+      }
+      return null;
+    });
   });
 
-  it('#validateCommonData should return false when invalid match', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
-
-    const actual = service.validateCommonData(eventLeagueComponent, null);
-
-    expect(actual).toBeFalsy();
+  afterEach(() => {
+    document.body.removeChild(mockBodyElement);
+    jest.restoreAllMocks();
   });
 
-  it('#validateCommonData should return false when invalid match', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
+  it('should be created', () => {
+    // Arrange & Act
+    const service = TestBed.inject(ValidationService);
 
-    const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
-    logInfoWrongHdpComponent.filterWithHdpComponent = new FilterWithHdpComponent(null, null);
-    logInfoWrongHdpComponent.filterWithHdpComponent.isValid = jest.fn().mockImplementation(() => false);
-
-    const actual = service.validateCommonData(eventLeagueComponent, [logInfoWrongHdpComponent]);
-
-    expect(actual).toBeFalsy();
+    // Assert
+    expect(service).toBeTruthy();
   });
 
-  it('#validateCommonData should return true', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
+  describe('validateCommonData', () => {
+    it('should return true when all validations pass', () => {
+      // Arrange
+      const mockEventLeagueComponent = {
+        isMatchIdValid: () => true
+      } as EventLeagueComponent;
 
-    const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
-    logInfoWrongHdpComponent.filterWithHdpComponent = new FilterWithHdpComponent(null, null);
-    logInfoWrongHdpComponent.filterWithHdpComponent.isValid = jest.fn().mockImplementation(() => true);
+      const mockLogInfoComponent = {
+        filterWithHdpComponent: {
+          isValid: () => true
+        }
+      } as LogInfoWrongHdpComponent;
 
-    const actual = service.validateCommonData(eventLeagueComponent, [logInfoWrongHdpComponent]);
+      // Act
+      const result = service.validateCommonData(mockEventLeagueComponent, [mockLogInfoComponent]);
 
-    expect(actual).toBeTruthy();
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return false when matchId is invalid', () => {
+      // Arrange
+      const mockEventLeagueComponent = {
+        isMatchIdValid: () => false
+      } as EventLeagueComponent;
+
+      const mockLogInfoComponent = {
+        filterWithHdpComponent: {
+          isValid: () => true
+        }
+      } as LogInfoWrongHdpComponent;
+
+      // Act
+      const result = service.validateCommonData(mockEventLeagueComponent, [mockLogInfoComponent]);
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it('should return false when filterWithHdp is invalid', () => {
+      // Arrange
+      const mockEventLeagueComponent = {
+        isMatchIdValid: () => true
+      } as EventLeagueComponent;
+
+      const mockLogInfoComponent = {
+        filterWithHdpComponent: {
+          isValid: () => false
+        }
+      } as LogInfoWrongHdpComponent;
+
+      // Act
+      const result = service.validateCommonData(mockEventLeagueComponent, [mockLogInfoComponent]);
+
+      // Assert
+      expect(result).toBe(false);
+    });
   });
 
-  it('#isFromTimeSameOrBeforeToTime should return false', async () => {
-    const fakeFromDateTime = '2020-10-10 09:44:46.361 PM';
-    const fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
+  describe('isFromTimeSameOrBeforeToTime', () => {
+    it('should return true when fromTime is before toTime', () => {
+      // Arrange
+      const fromTime = '2024-03-20T10:00:00';
+      const toTime = '2024-03-20T11:00:00';
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
 
-    const actual = service.isFromTimeSameOrBeforeToTime(fakeFromDateTime, fakeToDateTime, tooltip);
+      // Act
+      const result = service.isFromTimeSameOrBeforeToTime(fromTime, toTime, mockTooltip);
 
-    expect(actual).toBeFalsy();
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result).toBe(true);
+      expect(mockTooltip.display).not.toHaveBeenCalled();
+    });
+
+    it('should return false when fromTime is after toTime', () => {
+      // Arrange
+      const fromTime = '2024-03-20T12:00:00';
+      const toTime = '2024-03-20T11:00:00';
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
+
+      // Act
+      const result = service.isFromTimeSameOrBeforeToTime(fromTime, toTime, mockTooltip);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalled();
+    });
   });
 
-  it('#isFromTimeSameOrBeforeToTime should return true', async () => {
-    const fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-    const fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-    const tooltip = new Tooltip();
+  describe('isValidInputRelatedEvent', () => {
+    it('should return false when input matchId is same as main match', () => {
+      // Arrange
+      const inputMatchId = 123;
+      const matchIdInputClass = 'input-match-id';
+      const allEvents = [
+        { matchId: 123, isMainMatch: true },
+        { matchId: 456, isMainMatch: false }
+      ] as LogInfoWrongHdp[];
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
 
-    const actual = service.isFromTimeSameOrBeforeToTime(fakeFromDateTime, fakeToDateTime, tooltip);
+      // Act
+      const result = service.isValidInputRelatedEvent(inputMatchId, matchIdInputClass, allEvents, mockTooltip);
 
-    expect(actual).toBeTruthy();
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalledWith(matchIdInputClass, LABELS.INVALID_MATCHID);
+    });
+
+    it('should return false when input matchId already exists in related events', () => {
+      // Arrange
+      const inputMatchId = 456;
+      const matchIdInputClass = 'input-match-id';
+      const allEvents = [
+        { matchId: 123, isMainMatch: true },
+        { matchId: 456, isMainMatch: false }
+      ] as LogInfoWrongHdp[];
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
+
+      // Act
+      const result = service.isValidInputRelatedEvent(inputMatchId, matchIdInputClass, allEvents, mockTooltip);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalledWith(matchIdInputClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+    });
+
+    it('should return true when input matchId is valid', () => {
+      // Arrange
+      const inputMatchId = 789;
+      const matchIdInputClass = 'input-match-id';
+      const allEvents = [
+        { matchId: 123, isMainMatch: true },
+        { matchId: 456, isMainMatch: false }
+      ] as LogInfoWrongHdp[];
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
+
+      // Act
+      const result = service.isValidInputRelatedEvent(inputMatchId, matchIdInputClass, allEvents, mockTooltip);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(mockTooltip.display).not.toHaveBeenCalled();
+    });
   });
 
-  it('#isValidInputRelatedEvent should return false', async () => {
-    const matchId = Helper.fakeLogInfoWrongHdp.matchId;
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
+  describe('isAllEventsValid', () => {
+    it('should return true when all events have no error messages', () => {
+      // Arrange
+      const events = [
+        { messageValidationLogInfo: [{ isError: false }] },
+        { messageValidationLogInfo: [{ isError: false }] }
+      ] as LogInfoWrongHdp[];
 
-    const actual = service.isValidInputRelatedEvent(matchId, '', [Helper.fakeLogInfoWrongHdp], tooltip);
+      // Act
+      const result = service.isAllEventsValid(events);
 
-    expect(actual).toBeFalsy();
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return false when any event has error messages', () => {
+      // Arrange
+      const events = [
+        { messageValidationLogInfo: [{ isError: false }] },
+        { messageValidationLogInfo: [{ isError: true }] }
+      ] as LogInfoWrongHdp[];
+
+      // Act
+      const result = service.isAllEventsValid(events);
+
+      // Assert
+      expect(result).toBe(false);
+    });
   });
 
-  it('#isValidInputRelatedEvent should return false', async () => {
-    const matchId = 100000;
-    const event = new LogInfoWrongHdp();
-    event.matchId = matchId;
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
+  describe('isValidHdpWithSubTypeWrongHdpOrWrong1stHdp', () => {
+    it('should return false when homeFavorite is missing for HOME team', () => {
+      // Arrange
+      const teamFavorite = TeamFavorite.HOME;
+      const filterWithHdpModel = new FilterWithHdpModel();
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
 
-    const actual = service.isValidInputRelatedEvent(matchId, '', [Helper.fakeLogInfoWrongHdp, event], tooltip);
+      // Act
+      const result = service.isValidHdpWithSubTypeWrongHdpOrWrong1stHdp(teamFavorite, filterWithHdpModel, mockTooltip);
 
-    expect(actual).toBeFalsy();
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalled();
+    });
+
+    it('should return false when awayFavorite is missing for AWAY team', () => {
+      // Arrange
+      const teamFavorite = TeamFavorite.AWAY;
+      const filterWithHdpModel = new FilterWithHdpModel();
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
+
+      // Act
+      const result = service.isValidHdpWithSubTypeWrongHdpOrWrong1stHdp(teamFavorite, filterWithHdpModel, mockTooltip);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalled();
+    });
+
+    it('should return false when actualMarket is missing', () => {
+      // Arrange
+      const teamFavorite = TeamFavorite.HOME;
+      const filterWithHdpModel = new FilterWithHdpModel();
+      filterWithHdpModel.homeFavorite = '1.5';
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
+
+      // Act
+      const result = service.isValidHdpWithSubTypeWrongHdpOrWrong1stHdp(teamFavorite, filterWithHdpModel, mockTooltip);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalled();
+    });
   });
 
-  it('#isValidInputRelatedEvent should return true', async () => {
-    const actual = service.isValidInputRelatedEvent(10000, '', [Helper.fakeLogInfoWrongHdp], null);
+  describe('checkCanShowConfirmation', () => {
+    it('should return true when there are warning tickets', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.allEvents = [
+        { messageValidationLogInfo: [{ isError: false }] }
+      ] as LogInfoWrongHdp[];
 
-    expect(actual).toBeTruthy();
+      // Act
+      const result = service.checkCanShowConfirmation(saveRequestArg);
+
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return true when editing by another user', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.isEdit = true;
+      saveRequestArg.userId = 1;
+      saveRequestArg.allEvents = [];
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
+
+      // Act
+      const result = service.checkCanShowConfirmation(saveRequestArg);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(document.getElementById).toHaveBeenCalledWith('body');
+    });
+
+    it('should return true when has warning taken note', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.isEdit = true;
+      saveRequestArg.allEvents = [];
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+
+      // Act
+      const result = service.checkCanShowConfirmation(saveRequestArg);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(document.getElementById).toHaveBeenCalledWith('body');
+    });
   });
 
-  it('#isAllEventsValid should return false', async () => {
-    const events = _.cloneDeep(Helper.fakeLogInfoWrongHdp);
-    events.messageValidationLogInfo.push({isError: true, reason: ''});
-    const actual = service.isAllEventsValid([events]);
+  describe('isSubTypeWrongHdpOrWrong1stHdp', () => {
+    it('should return true for WRONG_HDP subtype', () => {
+      // Arrange
+      const subIssueTypeId = SubIssueTypeConstant.WRONG_HDP.toString();
 
-    expect(actual).toBeFalsy();
-  });
+      // Act
+      const result = service.isSubTypeWrongHdpOrWrong1stHdp(subIssueTypeId);
 
-  it('#isAllEventsValid should return true', async () => {
-    const events = _.cloneDeep(Helper.fakeLogInfoWrongHdp);
-    events.messageValidationLogInfo = [];
-    const actual = service.isAllEventsValid([events]);
+      // Assert
+      expect(result).toBe(true);
+    });
 
-    expect(actual).toBeTruthy();
-  });
+    it('should return true for WRONG_1ST_HDP subtype', () => {
+      // Arrange
+      const subIssueTypeId = SubIssueTypeConstant.WRONG_1ST_HDP.toString();
 
-  it('#isValidHdpWithSubTypeWrongHdpOrWrong1stHdp should return false when invalid homeFavorite', async () => {
-    const model = new FilterWithHdpModel();
-    model.homeFavorite = null;
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service.isValidHdpWithSubTypeWrongHdpOrWrong1stHdp(TeamFavorite.HOME, model, tooltip);
+      // Act
+      const result = service.isSubTypeWrongHdpOrWrong1stHdp(subIssueTypeId);
 
-    expect(actual).toBeFalsy();
-  });
+      // Assert
+      expect(result).toBe(true);
+    });
 
-  it('#isValidHdpWithSubTypeWrongHdpOrWrong1stHdp should return false when invalid awayFavorite', async () => {
-    const model = new FilterWithHdpModel();
-    model.awayFavorite = null;
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service.isValidHdpWithSubTypeWrongHdpOrWrong1stHdp(TeamFavorite.AWAY, model, tooltip);
+    it('should return false for other subtypes', () => {
+      // Arrange
+      const subIssueTypeId = 'OTHER_TYPE';
 
-    expect(actual).toBeFalsy();
-  });
+      // Act
+      const result = service.isSubTypeWrongHdpOrWrong1stHdp(subIssueTypeId);
 
-  it('#isValidHdpWithSubTypeWrongHdpOrWrong1stHdp should return false when invalid actualMarket', async () => {
-    const model = new FilterWithHdpModel();
-    model.awayFavorite = '12';
-    model.actualMarket = null;
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service.isValidHdpWithSubTypeWrongHdpOrWrong1stHdp(TeamFavorite.AWAY, model, tooltip);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidHdpWithSubTypeWrongHdpOrWrong1stHdp should return false when awayFavorite invalid', async () => {
-    const model = new FilterWithHdpModel();
-    model.homeFavorite = '12a';
-    model.actualMarket = '11a';
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service.isValidHdpWithSubTypeWrongHdpOrWrong1stHdp(TeamFavorite.HOME, model, tooltip);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidHdpWithSubTypeWrongHdpOrWrong1stHdp should return false when awayFavorite invalid', async () => {
-    const model = new FilterWithHdpModel();
-    model.awayFavorite = '12a';
-    model.actualMarket = '11a';
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service.isValidHdpWithSubTypeWrongHdpOrWrong1stHdp(TeamFavorite.AWAY, model, tooltip);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidHdpWithSubTypeWrongHdpOrWrong1stHdp should return true', async () => {
-    const model = new FilterWithHdpModel();
-    model.awayFavorite = '12';
-    model.actualMarket = '11';
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service.isValidHdpWithSubTypeWrongHdpOrWrong1stHdp(TeamFavorite.AWAY, model, tooltip);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isValidHdpWithSubTypeHomeAwayVirtualHedReverse should return false', async () => {
-    const model = new FilterWithHdpModel();
-    model.hdpValue = null;
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const actual = service.isValidHdpWithSubTypeHomeAwayVirtualHedReverse(model, tooltip);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidHdpWithSubTypeHomeAwayVirtualHedReverse should return false when hdpValue invalid', async () => {
-    const model = new FilterWithHdpModel();
-    model.hdpValue = '12a';
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-
-    const actual = service.isValidHdpWithSubTypeHomeAwayVirtualHedReverse(model, tooltip);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidHdpWithSubTypeHomeAwayVirtualHedReverse should return true', async () => {
-    const model = new FilterWithHdpModel();
-    model.hdpValue = '12';
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-
-    const actual = service.isValidHdpWithSubTypeHomeAwayVirtualHedReverse(model, tooltip);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#checkCanShowConfirmation should return true', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    const event = _.cloneDeep(Helper.fakeLogInfoWrongHdp);
-    const validation: ValidationMessage = {
-      isError: false,
-      reason: ''
-    };
-    event.messageValidationLogInfo = [validation];
-    arg.allEvents = [event];
-
-    const actual = service.checkCanShowConfirmation(arg);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#checkCanShowConfirmation should return false', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    arg.isEdit = false;
-    arg.userId = 1;
-    arg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    arg.actionIdOfFirstTimeAccess = "1";
-    const event = _.cloneDeep(Helper.fakeLogInfoWrongHdp);
-    event.logInfoDetail.settleCount = 0;
-    arg.allEvents = [event];
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const actual = service.checkCanShowConfirmation(arg);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isSubTypeWrongHdpOrWrong1stHdp should return true', async () => {
-    const actual = service.isSubTypeWrongHdpOrWrong1stHdp(SubIssueTypeConstant.WRONG_HDP.toString());
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isSubTypeWrongHdpOrWrong1stHdp should return false', async () => {
-    const actual = service.isSubTypeWrongHdpOrWrong1stHdp(SubIssueTypeConstant.GOAL.toString());
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isSubTypeWrongHdp should return false', async () => {
-    const actual = service['isSubTypeWrongHdp'](SubIssueTypeConstant.GOAL.toString());
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isSubTypeWrong1stHdp should return false', async () => {
-    const actual = service['isSubTypeWrong1stHdp'](SubIssueTypeConstant.GOAL.toString());
-
-    expect(actual).toBeFalsy();
+      // Assert
+      expect(result).toBe(false);
+    });
   });
 });

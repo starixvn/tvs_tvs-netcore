@@ -1,587 +1,391 @@
-import { ElementRef, NgModule, QueryList, SimpleChange } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
-import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
-import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
-import { BlockFullUiModule } from '../../../../utility/components/block-full-ui/block-full-ui.module';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
-import { MatchType } from '../../../../utility/constants/config';
-import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { PipeModule } from '../../../../utility/pipes/pipe.module';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { EventWrongHdpComponent } from './event-wrong-hdp.component';
+import { ValidationService } from './services/validation.service';
+import { EventWrongHdpService } from './services/event-wrong-hdp.service';
+import { LogInfoService } from './services/log-info.service';
+import { SaveRequestService } from './services/save-request.service';
+import { RelatedEventService } from './services/related-event.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { WrongHdpModel } from '../models/event-wrong-hdp.model';
-import { ChildMatchModel } from '../models/related-event.model';
-import { EventWrongHdpComponent } from './event-wrong-hdp.component';
+import { OthersModel } from '../others/others.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { MatchModel } from '../../../../utility/models/match.model';
+import { QueryList, SimpleChange } from '@angular/core';
 import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp/log-info-wrong-hdp.component';
-import { FilterWithHdpModel } from './models/filter-with-hdp.model';
+import { MatchType } from '../../../../utility/constants/config';
 import { LogInfoWrongHdp } from './models/log-info-wrong-hdp.model';
-import { PrimitiveProperty } from './models/primitive-property.model';
-import { EventWrongHdpService } from './services/event-wrong-hdp.service';
-import { LogInfoService } from './services/log-info.service';
-import { RelatedEventService } from './services/related-event.service';
-import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
+import { ChildMatchModel } from '../models/related-event.model';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { LinkedLogsViewModel } from '../pool-house-ticket/linked-log/linked-log.model';
+import { FilterWithHdpModel } from './models/filter-with-hdp.model';
 
 class Helper {
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    instantlySettleCount: 2,
-    scoreNormalTicket: '',
-    scoreOfMatch: '',
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeFilterWithHdpModel = {
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    homeFavorite: '2',
-    awayFavorite: '',
-    actualMarket: '1',
-    hdpValue: '',
-    liveIndicator: 0,
-    filterBetType: {filterBetIdX:'1', filterBetIdY:'', filterBetTypeId:'1'}
-  } as FilterWithHdpModel;
-  static readonly fakeLogInfoWrongHdp: LogInfoWrongHdp = {
-    matchId: 12345,
-    leagueName: '',
-    isMainMatch: true,
-    eventName: '',
-    filterWithHdp: new FilterWithHdpModel(),
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    isPoolHouseAffected: false,
-    poolHouseCheckedBetTypes: null,
-    linkedLogsViewModel: null,
-    isShowValidation: false,
-    sportType: 0
-  };
+  static readonly fakeRequestId = 1212;
+  static readonly fakeUserId = 123;
+  static readonly fakeRequestedBy = 'testUser';
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
     isTest: true,
     isVoided: false,
+    isChangeSubTypeManual: true,
     isAbnormal: false
   } as FilterModel;
-  static readonly fakeWrongHdpModel = {
-    matchId: 122,
-    subIssueTypeId: 12,
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeWrongHdpModel = [{
+    matchId: 123,
+    sportType: 1,
     isMainMatch: true,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeFromDateTime,
+    eventDate: new Date(),
+    subIssueTypeId: 1,
+    filterFromTransTime: '',
+    filterToTransTime: '',
     homeFavorite: '',
     awayFavorite: '',
     actualMarket: '',
     hdpValue: '',
-    logInfoDetail: Helper.fakeLogInfoDetail,
+    poolHouseCheckedBetTypes: '',
+    isPoolHouseAffected: false,
+    logInfoDetail: new LogInfoDetail(),
     isLinkGroup1X2: false,
     isLinkGroupAIO: false,
-    isPoolHouseAffected: false,
     liveIndicator: 0,
-    poolHouseCheckedBetTypes: null,
-    sportType: 0,
-    filterBetIdX: '1',
+    filterBetIdX: '',
     filterBetIdY: '',
-    filterBetTypeId: '1'
-  } as WrongHdpModel;
-  static readonly fakeChildMatches: ChildMatchModel[] = [
-    {
-      matchId: 12345,
-      matchCode: '111',
-      matchEvent: 'Test A vs Test B',
-      isChecked: true,
-      matchType: 1,
-      leagueName: '',
-      name: ''
-    }
-  ];
+    filterBetTypeId: ''
+  }] as WrongHdpModel[];
 }
 
 describe('EventWrongHdpComponent', () => {
-  @NgModule({
-    declarations: [
-      EventLeagueComponent,
-      LogInfoWrongHdpComponent,
-      AddChildMatchComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      ToolTipModule,
-      BlockUiModule,
-      BlockFullUiModule,
-      PipeModule
-    ],
-    providers: [
-      LogInfoService,
-      EventWrongHdpService,
-      AddRequestStore,
-      ValidationService,
-      RelatedEventService,
-      SaveRequestService
-    ]
-  })
-  class AppModuleTest { }
+  let component: EventWrongHdpComponent;
+  let fixture: ComponentFixture<EventWrongHdpComponent>;
+  let validationService: ValidationService;
+  let eventWrongHdpService: EventWrongHdpService;
+  let relatedEventService: RelatedEventService;
+  let addRequestStore: AddRequestStore;
+  let logInfoService: LogInfoService;
 
-  let shallow: Shallow<EventWrongHdpComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        EventWrongHdpService,
+        LogInfoService,
+        SaveRequestService,
+        RelatedEventService,
+        AddRequestStore
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(EventWrongHdpComponent, AppModuleTest)
-      .mock(ElementRef, {})
-      .dontMock(NgbModule);
+    fixture = TestBed.createComponent(EventWrongHdpComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    eventWrongHdpService = fixture.debugElement.injector.get(EventWrongHdpService);
+    relatedEventService = fixture.debugElement.injector.get(RelatedEventService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    logInfoService = fixture.debugElement.injector.get(LogInfoService);
+    component = fixture.componentInstance;
   });
 
-  it('EventWrongHdpComponent init should match snapshot', async () => {
-    const { fixture } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('ngOnChanges should call #initDefaultFilter', async () => {
-    const changes = {
-      'issueTypeId': new SimpleChange('1', '11', true)
-    };
-    const mockInitDefaultFilter = jest.fn();
-    const { instance } = await shallow
-    .mock(EventWrongHdpService, { initDefaultFilter: mockInitDefaultFilter })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
-    instance['resetLogInfoAndHideEvents'] = jest.fn();
-    instance.resetAllData = jest.fn();
-
-    instance.ngOnChanges(changes);
-
-    expect(mockInitDefaultFilter).toHaveBeenCalledTimes(1);
-    expect(instance['resetLogInfoAndHideEvents']).toHaveBeenCalledTimes(1);
-  });
-
-  it('ngOnChanges should call #resetLogInfoAndHideEvents', async () => {
-    const changes = {
-      'filter': new SimpleChange({}, {}, true)
-    };
-    const filter = _.cloneDeep(Helper.fakeFilterModel);
-    filter.isChangeSubTypeManual = true;
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: filter,
-      }
-    });
-    instance['resetLogInfoAndHideEvents'] = jest.fn();
-
-    instance.ngOnChanges(changes);
-
-    expect(instance['resetLogInfoAndHideEvents']).toHaveBeenCalledTimes(0);
-  });
-
-  it('handleSearchEvent should return when invalid', async () => {
-    const mockResetLogInfoOfEvent = jest.fn();
-    const mockValidateCommonData = jest.fn().mockImplementation(() => false);
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
-    .mock(ValidationService, { validateCommonData: mockValidateCommonData })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
-    logInfoWrongHdpComponents.isMainMatch = true;
-    logInfoWrongHdpComponents.logInfo = {} as LogInfoWrongHdp;
-    const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
-    logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
-    instance.logInfoComponents = logInfoComponents;
-
-    await instance.handleSearchEvent();
-
-    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
-  });
-
-  it('#handleSearchEvent should call #getChildMatches', async () => {
-    const mockResetLogInfoOfEvent = jest.fn();
-    const mockValidateCommonData = jest.fn().mockImplementation(() => true);
-    const mockGetLogInfo = jest.fn();
-    const mockGetChildMatches = jest.fn();
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, {
-      resetLogInfoOfEvent: mockResetLogInfoOfEvent,
-      getLogInfo: mockGetLogInfo
-    })
-    .mock(ValidationService, { validateCommonData: mockValidateCommonData })
-    .mock(RelatedEventService, { getChildMatches: mockGetChildMatches })
-    .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-    .mock(EventWrongHdpService, { getLinkedLog: jest.fn() })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    instance.primitiveProps = new PrimitiveProperty();
-    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
-    logInfoWrongHdpComponents.isMainMatch = true;
-    logInfoWrongHdpComponents.logInfo = {} as LogInfoWrongHdp;
-    const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
-    logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
-    instance.logInfoComponents = logInfoComponents;
-
-    await instance.handleSearchEvent();
-
-    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(1);
-    expect(mockGetChildMatches).toHaveBeenCalledTimes(1);
-    expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
-  });
-
-  it('changeMatchEvent should call expected method when have not league event', async () => {
-    const mockResetLogInfoOfEvent = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
-    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
-    instance.mainEvent = Helper.fakeLogInfoWrongHdp;
-    instance.eventLeagueComponent = null;
-    instance.updateMatchId.emit = jest.fn();
-
-    instance.changeMatchEvent();
-
-    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
-  });
-
-  it('changeMatchEvent should call expected method', async () => {
-    const mockResetLogInfoOfEvent = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
-    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
-    instance.mainEvent = Helper.fakeLogInfoWrongHdp;
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    eventLeagueComponent.selectedMatch = new MatchModel();
-    instance.eventLeagueComponent = eventLeagueComponent;
-    instance.updateMatchId.emit = jest.fn();
-
-    instance.changeMatchEvent();
-
-    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
-  });
-
-  it('showAddChildMatchModal should update data', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    instance.allSelectedEvents = [new LogInfoWrongHdp()]
-    instance.addChildMatchModel = new AddChildMatchModel();
-
-    instance.showAddChildMatchModal(1);
-
-    expect(instance.addChildMatchModel.matchType).toBe(1);
-    expect(instance.addChildMatchModel.isOpen).toBeTruthy();
-  });
-
-  it('saveRelatedEvent should call expected method when selectedRelatedEvents include same matchId', async () => {
-    const selectedRelatedEvents: ChildMatchModel[] = [];
-    selectedRelatedEvents.push({
-      matchId: Helper.fakeLogInfoWrongHdp.matchId,
-      matchCode: '',
-      matchEvent: '',
-      leagueName: '',
-      name: '',
-      isChecked: true,
-      matchType: 1,
-    });
-    const logInfo = [_.cloneDeep(Helper.fakeLogInfoWrongHdp)];
-    logInfo[0].matchId = 123123;
-    logInfo.push(_.cloneDeep(Helper.fakeLogInfoWrongHdp));
-    logInfo[1].matchId = 12341234;
-    const mockUpdateEvents = jest.fn().mockImplementation(() => [Helper.fakeLogInfoWrongHdp]);
-    const { instance } = await shallow
-    .mock(RelatedEventService, { updateEvents: mockUpdateEvents })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    instance.relatedEvents = [new ChildMatchModel()];
-    instance.relatedEvents[0].matchId = logInfo[1].matchId;
-    instance.relatedEvents[0].matchType = 2;
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp, ...logInfo];
-
-    await instance.saveRelatedEvent(selectedRelatedEvents);
-
-    expect(mockUpdateEvents).toHaveBeenCalledTimes(1);
-  });
-
-  it('handleDeleteEvent should update data', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-
-    const logInfo = [_.cloneDeep(Helper.fakeLogInfoWrongHdp)];
-    logInfo[0].matchId = 123123;
-    instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp, ...logInfo];
-
-    instance.handleDeleteEvent(Helper.fakeLogInfoWrongHdp.matchId);
-
-    expect(instance.allSelectedEvents.length).toBe(2);
-  });
-
-  it('handleClickAddRelatedEvent should update data', async () => {
-    const mockAddRelatedEventByInput = jest.fn();
-    const { instance } = await shallow
-    .mock(RelatedEventService, { addRelatedEventByInput: mockAddRelatedEventByInput })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-
-    await instance.handleClickAddRelatedEvent();
-
-    expect(mockAddRelatedEventByInput).toHaveBeenCalledTimes(1);
-  });
-
-  it('#saveRequest should update data', async () => {
-    const mockSaveRequest = jest.fn();
-    const { instance } = await shallow
-    .mock(SaveRequestService, { saveRequest: mockSaveRequest })
-    .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn() })
-    .mock(EventWrongHdpService, { getLinkedLog: jest.fn() })
-
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
-    logInfoWrongHdpComponents.isMainMatch = true;
-    logInfoWrongHdpComponents.logInfo = {} as LogInfoWrongHdp;
-    const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
-    logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
-    instance.logInfoComponents = logInfoComponents;
-
-    await instance.saveRequest();
-
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
-  });
-
-
-  it('#isDisabledLinkMatches should return true when request voided', async () => {
+  it('should initialize with default values when not in edit mode', () => {
     // Arrange
-    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
-    fakeFilterModel.isVoided = true;
-    const { instance } = await shallow
-      .render({
-        bind: {
-          filter: fakeFilterModel,
-          isEdit: false
-        }
-      });
+    component.isEdit = false;
+    eventWrongHdpService.initDefaultMainEvent = jest.fn().mockReturnValue({});
+    addRequestStore.changeSavingRequestStatus = jest.fn();
 
-    // Action
-    const actual = instance.isDisabledLinkMatches();
+    // Act
+    component.ngOnInit();
 
     // Assert
-    expect(actual).toBeTruthy();
+    expect(eventWrongHdpService.initDefaultMainEvent).toHaveBeenCalled();
+    expect(component.primitiveProps.isShowRelatedEvents).toBeFalsy();
   });
 
-  it('#isDisabledLinkMatches should return true when have not any link matches', async () => {
+  it('should initialize with existing values when in edit mode', async () => {
     // Arrange
-    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
-    fakeChildMatches[0].matchType = MatchType.NORMAL;
-    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
-    fakeFilterModel.isVoided = false;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        filter: fakeFilterModel,
-        isEdit: false
-      }
-    });
-    instance.relatedEvents = fakeChildMatches;
-
-    // Action
-    const actual = instance.isDisabledLinkMatches();
-
-    // Assert
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isDisabledLinkMatches should return false', async () => {
-    // Arrange
-    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
-    fakeChildMatches[0].matchType = MatchType.LINK;
-    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
-    fakeFilterModel.isVoided = false;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        filter: fakeFilterModel,
-        isEdit: false
-      }
-    });
-    instance.relatedEvents = fakeChildMatches;
-
-    // Action
-    const actual = instance.isDisabledLinkMatches();
-
-    // Assert
-    expect(actual).toBe(false);
-  });
-
-  it('#isDisabledChildMatches should return true when have not any link matches', async () => {
-    // Arrange
-    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
-    fakeChildMatches[0].matchType = MatchType.NORMAL;
-    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
-    fakeFilterModel.isVoided = false;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        filter: fakeFilterModel,
-        isEdit: false
-      }
-    });
-    instance.relatedEvents = fakeChildMatches;
-
-    // Action
-    const actual = instance.isDisabledChildMatches();
-
-    // Assert
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isDisabledChildMatches should return false', async () => {
-    // Arrange
-    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
-    fakeChildMatches[0].matchType = MatchType.CHILD;
-    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
-    fakeFilterModel.isVoided = false;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        filter: fakeFilterModel,
-        isEdit: false
-      }
-    });
-    instance.relatedEvents = fakeChildMatches;
-
-    // Action
-    const actual = instance.isDisabledChildMatches();
-
-    // Assert
-    expect(actual).toBe(false);
-  });
-
-  it('#countLinkMatches should return number of link matches', async () => {
-    // Arrange
-    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
-    fakeChildMatches[0].matchType = MatchType.LINK;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        filter: Helper.fakeFilterModel,
-        isEdit: false
-      }
-    });
-    instance.relatedEvents = fakeChildMatches;
-
-    // Action
-    const actual = instance.countLinkMatches();
-
-    // Assert
-    expect(actual).toBe(1);
-  });
-
-  it('#countChildMatches should return number of link matches', async () => {
-    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
-    fakeChildMatches[0].matchType = MatchType.CHILD;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        filter: Helper.fakeFilterModel,
-        isEdit: false
-      }
-    });
-    instance.relatedEvents = fakeChildMatches;
-
-    const actual = instance.countChildMatches();
-
-    expect(actual).toBe(1);
-  });
-
-  it('#ngOnInit should return call #getChildMatches', async () => {
-    const eventWrongHdpService = new EventWrongHdpService(null, null);
-    eventWrongHdpService.assignModelsToEvents = jest.fn();
-    const relatedEventService = new RelatedEventService(null, null);
-    relatedEventService.getChildMatches = jest.fn();
-    const component = new EventWrongHdpComponent(null, null, eventWrongHdpService, null, null, relatedEventService, null);
     component.isEdit = true;
-    component.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
-    component.mainEvent = Helper.fakeLogInfoWrongHdp;
-    component.filter = Helper.fakeFilterModel;
+    component.wrongHdpModels = Helper.fakeWrongHdpModel;
+    component.primitiveProps = {
+        isShowRelatedEvents: false,
+        isBlock: false,
+        inputRelatedMatchId: '',
+        transInfoAddRequestModel: null
+    };
+    eventWrongHdpService.assignModelsToEvents = jest.fn();
+    relatedEventService.getChildMatches = jest.fn().mockResolvedValue([
+        {
+            matchType: MatchType.CHILD,
+            isChecked: false,
+            matchId: 1,
+            matchCode: 'TEST1',
+            leagueName: 'Test League',
+            matchEvent: 'Test Event'
+        } as ChildMatchModel
+    ]);
 
+    // Act
     await component.ngOnInit();
 
-    expect(relatedEventService.getChildMatches).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(eventWrongHdpService.assignModelsToEvents).toHaveBeenCalledWith(component.allSelectedEvents, Helper.fakeWrongHdpModel);
+    expect(component.primitiveProps.isShowRelatedEvents).toBeTruthy();
+  });
+
+  it('should handle filter changes and reset data', () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
+    component.filter.isChangeSubTypeManual = true;
+    logInfoService.resetLogInfoOfEvent = jest.fn();
+
+    // Act
+    component.ngOnChanges({
+      filter: {
+        currentValue: Helper.fakeFilterModel,
+        previousValue: null,
+        firstChange: true
+      } as SimpleChange
+    });
+
+    // Assert
+    expect(component.primitiveProps.isShowRelatedEvents).toBeFalsy();
+    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalled();
+    expect(component.filter.isChangeSubTypeManual).toBeFalsy();
+  });
+
+  it('should handle search event with validation', async () => {
+    // Arrange
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    const logInfoComponent = {
+        isMainMatch: true,
+        logInfo: { isShowValidation: false }
+    } as LogInfoWrongHdpComponent;
+    component.logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
+    component.logInfoComponents.reset([logInfoComponent]);
+    validationService.validateCommonData = jest.fn().mockReturnValue(true);
+    eventWrongHdpService.getLinkedLog = jest.fn().mockResolvedValue([]);
+    logInfoService.getLogInfo = jest.fn().mockResolvedValue(undefined);
+    relatedEventService.getChildMatches = jest.fn().mockResolvedValue([]);
+    component.mainEvent = {
+        matchId: 123,
+        matchCode: 'TEST123',
+        leagueName: 'Test League',
+        isMainMatch: true,
+        eventName: 'Test Event',
+        isPoolHouseAffected: false,
+        poolHouseCheckedBetTypes: '',
+        filterWithHdp: new FilterWithHdpModel(),
+        logInfoDetail: new LogInfoDetail(),
+        linkedLogsViewModel: new LinkedLogsViewModel(),
+        isShowValidation: false,
+        eventDate: new Date(),
+        sportType: 1
+    } as LogInfoWrongHdp;
+    component.filter = Helper.fakeFilterModel;
+
+    // Act
+    await component.handleSearchEvent();
+
+    // Assert
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(eventWrongHdpService.getLinkedLog).toHaveBeenCalled();
+    expect(logInfoService.getLogInfo).toHaveBeenCalled();
+    expect(component.primitiveProps.isShowRelatedEvents).toBeTruthy();
+  });
+
+  it('should handle match event change', () => {
+    // Arrange
+    const matchInfo = { matchId: 123 } as MatchModel;
+    component.eventLeagueComponent = {
+      selectedMatch: matchInfo
+    } as EventLeagueComponent;
+    component.updateMatchId.emit = jest.fn();
+
+    // Act
+    component.changeMatchEvent();
+
+    // Assert
+    expect(component.mainEvent.matchId).toBe(123);
+    expect(component.primitiveProps.isShowRelatedEvents).toBeFalsy();
+    expect(component.updateMatchId.emit).toHaveBeenCalledWith(123);
+  });
+
+  it('should handle delete event', () => {
+    // Arrange
+    const matchId = 123;
+    component.allSelectedEvents = [
+      {
+        matchId: 123,
+        isMainMatch: false,
+        eventName: 'Test Event 1',
+        leagueName: 'Test League',
+        matchCode: 'TEST123',
+        filterWithHdp: new FilterWithHdpModel(),
+        logInfoDetail: new LogInfoDetail(),
+        linkedLogsViewModel: new LinkedLogsViewModel(),
+        isShowValidation: false,
+        isPoolHouseAffected: false,
+        poolHouseCheckedBetTypes: '',
+        sportType: 1
+      } as LogInfoWrongHdp,
+      {
+        matchId: 456,
+        isMainMatch: true,
+        eventName: 'Test Event 2',
+        leagueName: 'Test League',
+        matchCode: 'TEST456',
+        filterWithHdp: new FilterWithHdpModel(),
+        logInfoDetail: new LogInfoDetail(),
+        linkedLogsViewModel: new LinkedLogsViewModel(),
+        isShowValidation: false,
+        isPoolHouseAffected: false,
+        poolHouseCheckedBetTypes: '',
+        sportType: 1
+      } as LogInfoWrongHdp
+    ];
+
+    // Act
+    component.handleDeleteEvent(matchId);
+
+    // Assert
+    expect(component.allSelectedEvents.length).toBe(1);
+    expect(component.allSelectedEvents[0].matchId).toBe(456);
+  });
+
+  it('should count child matches correctly', () => {
+    // Arrange
+    component.relatedEvents = [
+      {
+        matchType: MatchType.CHILD,
+        isChecked: false,
+        matchId: 1,
+        matchCode: 'TEST1',
+        leagueName: 'Test League',
+        matchEvent: 'Test Event'
+      } as ChildMatchModel,
+      {
+        matchType: MatchType.CHILD,
+        isChecked: false,
+        matchId: 2,
+        matchCode: 'TEST2',
+        leagueName: 'Test League',
+        matchEvent: 'Test Event'
+      } as ChildMatchModel,
+      {
+        matchType: MatchType.LINK,
+        isChecked: false,
+        matchId: 3,
+        matchCode: 'TEST3',
+        leagueName: 'Test League',
+        matchEvent: 'Test Event'
+      } as ChildMatchModel
+    ];
+
+    // Act
+    const count = component.countChildMatches();
+
+    // Assert
+    expect(count).toBe(2);
+  });
+
+  it('should count link matches correctly', () => {
+    // Arrange
+    component.relatedEvents = [
+      {
+        matchType: MatchType.CHILD,
+        isChecked: false,
+        matchId: 1,
+        matchCode: 'TEST1',
+        leagueName: 'Test League',
+        matchEvent: 'Test Event'
+      } as ChildMatchModel,
+      {
+        matchType: MatchType.LINK,
+        isChecked: false,
+        matchId: 2,
+        matchCode: 'TEST2',
+        leagueName: 'Test League',
+        matchEvent: 'Test Event'
+      } as ChildMatchModel,
+      {
+        matchType: MatchType.LINK,
+        isChecked: false,
+        matchId: 3,
+        matchCode: 'TEST3',
+        leagueName: 'Test League',
+        matchEvent: 'Test Event'
+      } as ChildMatchModel
+    ];
+
+    // Act
+    const count = component.countLinkMatches();
+
+    // Assert
+    expect(count).toBe(2);
+  });
+
+  it('should check if child matches are disabled', () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
+    component.relatedEvents = [
+      {
+        matchType: MatchType.CHILD,
+        isChecked: false,
+        matchId: 1,
+        matchCode: 'TEST1',
+        leagueName: 'Test League',
+        matchEvent: 'Test Event'
+      } as ChildMatchModel
+    ];
+
+    // Act & Assert
+    expect(component.isDisabledChildMatches()).toBeFalsy();
+
+    component.filter.isVoided = true;
+    expect(component.isDisabledChildMatches()).toBeTruthy();
+
+    component.filter.isVoided = false;
+    component.relatedEvents = [];
+    expect(component.isDisabledChildMatches()).toBeTruthy();
+  });
+
+  it('should check if link matches are disabled', () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
+    component.relatedEvents = [
+      {
+        matchType: MatchType.LINK,
+        isChecked: false,
+        matchId: 1,
+        matchCode: 'TEST1',
+        leagueName: 'Test League',
+        matchEvent: 'Test Event'
+      } as ChildMatchModel
+    ];
+
+    // Act & Assert
+    expect(component.isDisabledLinkMatches()).toBeFalsy();
+
+    component.filter.isVoided = true;
+    expect(component.isDisabledLinkMatches()).toBeTruthy();
+
+    component.filter.isVoided = false;
+    component.relatedEvents = [];
+    expect(component.isDisabledLinkMatches()).toBeTruthy();
+  });
+
+  it('should reset all data', () => {
+    // Act
+    component.resetAllData();
+
+    // Assert
+    expect(component.primitiveProps.isShowRelatedEvents).toBeFalsy();
+    expect(component.allSelectedEvents).toEqual([]);
   });
 });

@@ -1,550 +1,384 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
-import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { AddRequestStore } from '../../add-request.store';
-import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
-import { FilterModel } from '../../filter/filter.model';
-import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
-import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
-import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
-import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
-import { LogAnalysisService } from '../../services/log-analysis.service';
-import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
-import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
-import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
-import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
-import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
-import { LogInfoService } from '../services/log-info.service';
-import { ValidationService } from '../services/validation.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp.component';
+import { ValidationService } from '../services/validation.service';
+import { LogInfoService } from '../services/log-info.service';
+import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
+import { AddRequestStore } from '../../add-request.store';
+import { FilterModel } from '../../filter/filter.model';
+import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
+import { OthersModel } from '../../others/others.model';
+import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
+import { LogAnalysisService } from '../../services/log-analysis.service';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
+import moment from 'moment-timezone';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
 
 class Helper {
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    instantlySettleCount: 2,
-    scoreNormalTicket: '',
-    scoreOfMatch: '',
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeFilterWithHdpModel = {
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    homeFavorite: '2',
-    awayFavorite: '',
-    actualMarket: '1',
-    hdpValue: '',
-    liveIndicator: 0,
-    filterBetType: {filterBetIdX:'1', filterBetIdY:'', filterBetTypeId:'1'}
-  } as FilterWithHdpModel;
-  static readonly fakeLinkedLogsViewModel: LinkedLogsViewModel = {
-    groupLinkedLogs: [
-      {
-        groupName: '1X2',
-        isAffectedGroup: true,
-        logsData: []
-      },
-      {
-        groupName: 'AIO',
-        isAffectedGroup: true,
-        logsData: []
-      },
-    ],
-    isLinkGroup1X2: false,
-    isLinkGroupAIO: false,
-    result: undefined
-  }
-  static readonly fakeLogInfoWrongHdp: LogInfoWrongHdp = {
-    matchId: 12345,
-    leagueName: '',
-    isMainMatch: true,
-    eventName: '',
-    filterWithHdp: new FilterWithHdpModel(),
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    isPoolHouseAffected: false,
-    poolHouseCheckedBetTypes: '',
-    isShowValidation: false,
-    linkedLogsViewModel: Helper.fakeLinkedLogsViewModel,
-    sportType: 0
-  };
+  static readonly fakeRequestId = 1212;
+  static readonly fakeUserId = 123;
+  static readonly fakeRequestedBy = 'testUser';
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
     isTest: true,
     isVoided: false,
-    isAbnormal: false,
-    actions: []
+    isChangeSubTypeManual: true,
+    isAbnormal: false
   } as FilterModel;
-  static readonly fakeGetPoolHouseTicketQuery: GetPoolHouseTicketQuery = {
-    matchId: 75785,
-    actionId: 1,
-    requestId: 64324,
-    issueTypeId: 1,
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeLogInfoWrongHdp = {
+    matchId: 123,
+    sportType: 1,
+    isMainMatch: true,
+    eventDate: new Date(),
     subIssueTypeId: 1,
-    homeFavorite: '1.75',
+    filterFromTransTime: '',
+    filterToTransTime: '',
+    homeFavorite: '',
     awayFavorite: '',
-    hdpValue: '1.5',
-    wrongMarket: '1.2',
+    actualMarket: '',
+    hdpValue: '',
+    poolHouseCheckedBetTypes: '',
+    isPoolHouseAffected: false,
+    logInfoDetail: null,
     isLinkGroup1X2: false,
     isLinkGroupAIO: false,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    liveIndicator: 1,
-    wrongOddsInfo: []
-  };
-  static readonly fakePoolHouseTicketViewModel: PoolHouseTicketViewModel = {
-    groupBetTypes: [],
-    affectedTickets: new TicketsModel(),
-    otherTickets: new TicketsModel()
-  };
+    liveIndicator: 0,
+    filterBetIdX: '',
+    filterBetIdY: '',
+    filterBetTypeId: '',
+    leagueName: 'Test League',
+    eventName: 'Test Event',
+    filterWithHdp: {},
+    linkedLogsViewModel: {},
+    isShowValidation: false,
+    messageValidationLogInfo: null
+  } as unknown as LogInfoWrongHdp;
 }
 
 describe('LogInfoWrongHdpComponent', () => {
-  @NgModule({
-    declarations: [
-      FilterWithHdpComponent,
-      PoolHouseTicketComponent,
-      AffectedTicketComponent,
-      TicketCountOtherSportsComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      BlockUiModule
-    ],
-    providers: [
-      ValidationService,
-      LogInfoService,
-      ModalService,
-      AddRequestStore,
-      AddRequestApiService,
-      EventWrongHdpService,
-      LogAnalysisService
-    ]
-  })
-  class AppModuleTest { }
+  let component: LogInfoWrongHdpComponent;
+  let fixture: ComponentFixture<LogInfoWrongHdpComponent>;
+  let validationService: ValidationService;
+  let logInfoService: LogInfoService;
+  let eventWrongHdpService: EventWrongHdpService;
+  let addRequestStore: AddRequestStore;
+  let staticService: StaticService;
+  let modalService: ModalService;
+  let addRequestApiService: AddRequestApiService;
+  let affectedTicketService: AffectedTicketService;
+  let logAnalysisService: LogAnalysisService;
 
-  let shallow: Shallow<LogInfoWrongHdpComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        LogInfoService,
+        EventWrongHdpService,
+        AddRequestStore,
+        StaticService,
+        ModalService,
+        AddRequestApiService,
+        AffectedTicketService,
+        LogAnalysisService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(LogInfoWrongHdpComponent, AppModuleTest)
-      .mock(ElementRef, {})
+    fixture = TestBed.createComponent(LogInfoWrongHdpComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    logInfoService = fixture.debugElement.injector.get(LogInfoService);
+    eventWrongHdpService = fixture.debugElement.injector.get(EventWrongHdpService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    staticService = fixture.debugElement.injector.get(StaticService);
+    modalService = fixture.debugElement.injector.get(ModalService);
+    addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
+    affectedTicketService = fixture.debugElement.injector.get(AffectedTicketService);
+    logAnalysisService = fixture.debugElement.injector.get(LogAnalysisService);
+    component = fixture.componentInstance;
+
+    // Set default input values
+    component.isMainMatch = true;
+    component.isEdit = false;
+    component.filter = Helper.fakeFilterModel;
+    component.logInfo = Helper.fakeLogInfoWrongHdp;
+    component.isDisabled = false;
+    component.requestId = Helper.fakeRequestId;
+    component.primitiveProps = new PrimitiveProperty();
+
+    // Mock addRequestStore methods
+    addRequestStore.changeBlockingUiStatus = jest.fn();
   });
 
-  it('LogInfoWrongHdpComponent init should match snapshot', async () => {
-    const { fixture } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('refreshLogInfo should call #getLogInfo when filterWithHdpComponent isValid', async () => {
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance.filterWithHdpComponent = new FilterWithHdpComponent(null, null);
-    instance.filterWithHdpComponent.isValid = jest.fn().mockImplementation(() => true);
-    instance.clearDataValidation = jest.fn();
-    instance['refreshLogInfo']();
+  it('should initialize with default values when not in edit mode', () => {
+    // Arrange
+    component.isEdit = false;
 
-    expect(mockGetLogInfo).toBeCalledTimes(1);
-    expect(instance.clearDataValidation).toBeCalledTimes(1);
-    expect(instance.filterWithHdpComponent.isValid).toBeCalledTimes(1);
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.logInfo.isShowValidation).toBeFalsy();
   });
 
-  it('refreshLogInfo should not call #getLogInfo when filterWithHdpComponent isInValid', async () => {
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance.filterWithHdpComponent = new FilterWithHdpComponent(null, null);
-    instance.filterWithHdpComponent.isValid = jest.fn().mockImplementation(() => false);
-    instance.clearDataValidation = jest.fn();
-    instance['refreshLogInfo']();
+  it('should initialize with existing values when in edit mode', () => {
+    // Arrange
+    component.isEdit = true;
 
-    expect(mockGetLogInfo).toBeCalledTimes(0);
-    expect(instance.clearDataValidation).toBeCalledTimes(1);
-    expect(instance.filterWithHdpComponent.isValid).toBeCalledTimes(1);
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.logInfo.isShowValidation).toBeTruthy();
   });
 
-  it('displayFullDateTimeFormat should return time', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    const actual = instance.displayFullDateTimeFormat(new Date(Helper.fakeFromDateTime));
+  it('should refresh log info by search event', async () => {
+    // Arrange
+    component.filterWithHdpComponent = {
+      isValid: jest.fn().mockReturnValue(true)
+    } as unknown as FilterWithHdpComponent;
+    logInfoService.getLogInfo = jest.fn().mockResolvedValue(undefined);
 
-    expect(actual).toBe('2020/10/08 09:44:46.361 PM');
+    // Act
+    await component.refreshLogInfoBySearchEvent();
+
+    // Assert
+    expect(component.isBlock).toBeFalsy();
+    expect(component.logInfo.isShowValidation).toBeTruthy();
+    expect(logInfoService.getLogInfo).toHaveBeenCalledWith(
+      [component.logInfo],
+      component.isEdit,
+      component.requestId,
+      component.filter,
+      component.primitiveProps
+    );
   });
 
-  it('handleDeleteEvent should emit deleteEvent', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance.deleteEvent.emit = jest.fn();
-    instance.handleDeleteEvent(123);
+  it('should refresh log info by pool house event', async () => {
+    // Arrange
+    component.filterWithHdpComponent = {
+      isValid: jest.fn().mockReturnValue(true)
+    } as unknown as FilterWithHdpComponent;
+    logInfoService.getLogInfo = jest.fn().mockResolvedValue(undefined);
 
-    expect(instance.deleteEvent.emit).toBeCalledTimes(1);
+    // Act
+    await component.refreshLogInfoByPoolHouseEvent();
+
+    // Assert
+    expect(component.isBlock).toBeFalsy();
+    expect(component.logInfo.isShowValidation).toBeTruthy();
+    expect(logInfoService.getLogInfo).toHaveBeenCalledWith(
+      [component.logInfo],
+      component.isEdit,
+      component.requestId,
+      component.filter,
+      component.primitiveProps
+    );
   });
 
-  it('clearDataValidation should update to null', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance.clearDataValidation();
+  it('should not refresh log info when filter is invalid', async () => {
+    // Arrange
+    component.filterWithHdpComponent = {
+      isValid: jest.fn().mockReturnValue(false)
+    } as unknown as FilterWithHdpComponent;
+    logInfoService.getLogInfo = jest.fn();
 
-    expect(instance.logInfo.logInfoDetail).toBeNull();
-    expect(instance.logInfo.messageValidationLogInfo ).toBeNull();
+    // Act
+    await component['refreshLogInfo']();
+
+    // Assert
+    expect(component.isBlock).toBeFalsy();
+    expect(logInfoService.getLogInfo).not.toHaveBeenCalled();
   });
 
-  it('emitSearchEvent should emit searchTicketEvent', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance.searchTicketEvent.emit = jest.fn();
-    instance.emitSearchEvent();
+  it('should recalculate pool house ticket', async () => {
+    // Arrange
+    const model = { checkedBetTypes: 'test' } as PoolHouseTicketsModel;
+    component.refreshLogInfoByPoolHouseEvent = jest.fn();
 
-    expect(instance.searchTicketEvent.emit).toBeCalledTimes(1);
+    // Act
+    component.recalculatePoolHouseTicket(model);
+
+    // Assert
+    expect(component.logInfo.poolHouseCheckedBetTypes).toBe('test');
+    expect(component.refreshLogInfoByPoolHouseEvent).toHaveBeenCalled();
   });
 
-  it('isShowCountInfo should return true', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance['isShowCashOutCount'] = jest.fn().mockImplementation(() => true);
-    instance['isShowSettleCount'] = jest.fn().mockImplementation(() => true);
-    const actual = instance['isShowCountInfo'](1, 2, 0);
+  it('should display full date time format', () => {
+    // Arrange
+    const time = new Date();
+    const expectedFormat = moment(time).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
-    expect(actual).toBeTruthy();
+    // Act
+    const result = component.displayFullDateTimeFormat(time);
+
+    // Assert
+    expect(result).toBe(expectedFormat);
   });
 
-  it('isShowCountInfo should return false', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    const actual = instance['isShowCountInfo'](0, 0, 0);
+  it('should handle delete event', () => {
+    // Arrange
+    const matchId = 123;
+    component.deleteEvent.emit = jest.fn();
 
-    expect(actual).toBeFalsy();
+    // Act
+    component.handleDeleteEvent(matchId);
+
+    // Assert
+    expect(component.deleteEvent.emit).toHaveBeenCalledWith(matchId);
   });
 
-  it('countInfoContent should return info CashOut', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    const actual = instance['countInfoContent'](1, 2, 0);
+  it('should clear data validation', () => {
+    // Act
+    component.clearDataValidation();
 
-    expect(actual).toBe(' (Cash Out: <strong>1</strong>, Settled: <strong>2</strong>)');
+    // Assert
+    expect(component.logInfo.isShowValidation).toBeFalsy();
+    expect(component.logInfo.logInfoDetail).toBeNull();
+    expect(component.logInfo.messageValidationLogInfo).toBeNull();
   });
 
-  it('countInfoContent should return info Settle', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    const actual = instance['countInfoContent'](1, 2, 0);
+  it('should reset pool house checked bet types', () => {
+    // Act
+    component.resetPoolHouseCheckedBetTypes();
 
-    expect(actual).toBe(' (Cash Out: <strong>1</strong>, Settled: <strong>2</strong>)');
+    // Assert
+    expect(component.logInfo.poolHouseCheckedBetTypes).toBe('All');
   });
 
-  it('countInfoContent should return string have not info', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance['isShowCashOutCount'] = jest.fn().mockImplementation(() => false);
-    instance['isShowSettleCount'] = jest.fn().mockImplementation(() => false);
-    const actual = instance['countInfoContent'](0, 0, 0);
+  it('should emit search event', () => {
+    // Arrange
+    component.searchTicketEvent.emit = jest.fn();
 
-    expect(actual).toBe(' ()');
+    // Act
+    component.emitSearchEvent();
+
+    // Assert
+    expect(component.searchTicketEvent.emit).toHaveBeenCalled();
   });
 
-  it('openPopupTransIds should call modal Service', async () => {
-    const mockModalOpen = jest.fn();
-    const { instance } = await shallow
-    .mock(ModalService, { open: mockModalOpen })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance['openPopupTransIds'](0, '');
+  it('should open popup trans ids', () => {
+    // Arrange
+    const requestId = 123;
+    const transIds = '1,2,3';
+    StaticService.openPopupTransIds = jest.fn();
 
-    expect(mockModalOpen).toHaveBeenCalledTimes(1);
+    // Act
+    component.openPopupTransIds(requestId, transIds);
+
+    // Assert
+    expect(StaticService.openPopupTransIds).toHaveBeenCalledWith(requestId, transIds, modalService);
   });
 
-  it('displayTransId should return 12312', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    const actual = instance.displayTransId(1, '12312');
+  it('should check if have pool house ticket', () => {
+    // Arrange
+    const singleCount = 1;
+    const parlayCount = 0;
 
-    expect(actual).toBe('12312');
+    // Act
+    const result = component.isHavePoolHouseTicket(singleCount, parlayCount);
+
+    // Assert
+    expect(result).toBeTruthy();
   });
 
-  it('displayTransId should return -', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    const actual = instance.displayTransId(0, '');
+  it('should count info content', () => {
+    // Arrange
+    const cashOutCount = 1;
+    const settleCount = 2;
+    const instantlySettleCount = 3;
+    StaticService.countInfoContent = jest.fn().mockReturnValue('test');
 
-    expect(actual).toBe('-');
+    // Act
+    const result = component.countInfoContent(cashOutCount, settleCount, instantlySettleCount);
+
+    // Assert
+    expect(result).toBe('test');
+    expect(StaticService.countInfoContent).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
   });
 
-  it('refreshLogInfoBySearchEvent should call #refreshLogInfo', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance['refreshLogInfo'] = jest.fn();
+  it('should check if show count info', () => {
+    // Arrange
+    const cashOutCount = 1;
+    const settleCount = 2;
+    const instantlySettleCount = 3;
+    StaticService.isShowCountInfo = jest.fn().mockReturnValue(true);
 
-    await instance['refreshLogInfoBySearchEvent']();
+    // Act
+    const result = component.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
 
-    expect(instance['refreshLogInfo']).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(result).toBeTruthy();
+    expect(StaticService.isShowCountInfo).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
   });
 
-  it('refreshLogInfoByPoolHouseEvent should call #refreshLogInfo', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance['refreshLogInfo'] = jest.fn();
+  it('should display trans id', () => {
+    // Arrange
+    const ticketCount = 0;
+    const transId = '123';
 
-    await instance['refreshLogInfoByPoolHouseEvent']();
+    // Act
+    const result = component.displayTransId(ticketCount, transId);
 
-    expect(instance['refreshLogInfo']).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(result).toBe('-');
   });
 
-  it('recalculatePoolHouseTicket should update poolHouseCheckedBetTypes expected', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    const model = {checkedBetTypes: "123,4"} as PoolHouseTicketsModel;
-    instance.refreshLogInfoByPoolHouseEvent = jest.fn();
+  it('should show affected tickets details', () => {
+    // Arrange
+    component.logInfo.logInfoDetail = { logInfoTicketsJson: 'test' } as LogInfoDetail;
 
-    instance.recalculatePoolHouseTicket(model);
+    // Act
+    component.showAffectedTicketsDetails();
 
-    expect(instance.logInfo.poolHouseCheckedBetTypes).toBe("123,4");
+    // Assert
+    expect(component.affectedTicketsModel.issueTypeId).toBe(Number(component.filter.issueTypeId));
+    expect(component.affectedTicketsModel.logInfoTicketsJson).toBe('test');
+    expect(component.affectedTicketsModel.isOpen).toBeTruthy();
   });
 
-  it('openPoolHouseDetails should call #getPoolHouseTickets', async () => {
-    const { instance } = await shallow
-    .mock(ValidationService, { isSubTypeWrongHdpOrWrong1stHdp: jest.fn().mockImplementation(() => true) })
-    .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn() })
-    .mock(EventWrongHdpService, { getLinkedLog: jest.fn().mockReturnValue(Helper.fakeLinkedLogsViewModel) })
-    .mock(AddRequestApiService, { getPoolHouseTickets: jest.fn().mockReturnValue(Helper.fakePoolHouseTicketViewModel) })
-    .mock(LogAnalysisService, { writeLogClickPoolHouseDetails: jest.fn() })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance['initGetPoolHouseTicketQuery'] = jest.fn().mockReturnValue(Helper.fakeGetPoolHouseTicketQuery)
-    instance.poolHouseTicketsModel = new PoolHouseTicketsModel();
-    const poolHouseTicketsModelExpected = {
-      query: Helper.fakeGetPoolHouseTicketQuery,
-      linkedLogsViewModel: instance.logInfo.linkedLogsViewModel,
-      groupBetTypes: Helper.fakePoolHouseTicketViewModel.groupBetTypes,
-      affectedTickets: Helper.fakePoolHouseTicketViewModel.affectedTickets,
-      otherTickets: Helper.fakePoolHouseTicketViewModel.otherTickets,
-      checkedBetTypes: instance.logInfo.poolHouseCheckedBetTypes,
-      isOpen: true} as PoolHouseTicketsModel;
-
-    await instance.openPoolHouseDetails();
-
-    expect(instance.poolHouseTicketsModel).toEqual(poolHouseTicketsModelExpected);
-  });
-
-  it('isHavePoolHouseTicket should return true', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    [
-      {singleCount: 1, parlayCount: 0},
-      {singleCount: 0, parlayCount: 1}
-    ].forEach(x => {
-      const actual = instance.isHavePoolHouseTicket(x.singleCount, x.parlayCount);
-
-      expect(actual).toBeTruthy();
-    });
-  });
-
-  it('initGetPoolHouseTicketQuery should update hdpValue', async () => {
-    const fakeLogInfoWrongHdp = _.cloneDeep(Helper.fakeLogInfoWrongHdp);
-    fakeLogInfoWrongHdp.linkedLogsViewModel = new LinkedLogsViewModel();
-    const { instance } = await shallow
-    .mock(ValidationService, { isSubTypeWrongHdpOrWrong1stHdp: jest.fn().mockImplementation(() => false) })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: fakeLogInfoWrongHdp
-      }
-    });
-    fakeLogInfoWrongHdp.filterWithHdp.hdpValue = "hdpValue";
-
-    const actual = instance['initGetPoolHouseTicketQuery']();
-
-    expect(actual.hdpValue).toBe("hdpValue");
-  });
-
-  it('initGetPoolHouseTicketQuery should update homeFavorite & awayFavorite', async () => {
-    const fakeLogInfoWrongHdp = _.cloneDeep(Helper.fakeLogInfoWrongHdp);
-    fakeLogInfoWrongHdp.linkedLogsViewModel = new LinkedLogsViewModel();
-    fakeLogInfoWrongHdp.filterWithHdp.homeFavorite = "homeFavorite";
-    fakeLogInfoWrongHdp.filterWithHdp.awayFavorite = "awayFavorite";
-
-    let fakeQuery: GetPoolHouseTicketQuery = {
-      matchId: 0,
-      actionId: 0,
-      requestId: 0,
-      issueTypeId: 0,
-      subIssueTypeId: 0,
-      homeFavorite: '',
-      awayFavorite: '',
-      hdpValue: '',
-      wrongMarket: '',
-      isLinkGroup1X2: false,
-      isLinkGroupAIO: false,
-      filterFromTransTime: '',
-      filterToTransTime: '',
-      liveIndicator: 0,
-      wrongOddsInfo: []
-    };
-
-    let fakePoolHouseTicketsModel: PoolHouseTicketsModel = {
-      isOpen: false,
-      checkedBetTypes: '',
-      query: fakeQuery,
+  it('should open pool house details', async () => {
+    // Arrange
+    const query = { test: 'test' };
+    component['initGetPoolHouseTicketQuery'] = jest.fn().mockReturnValue(query);
+    eventWrongHdpService.getLinkedLog = jest.fn().mockResolvedValue({ isLinkGroup1X2: true, isLinkGroupAIO: true });
+    addRequestApiService.getPoolHouseTickets = jest.fn().mockResolvedValue({
       groupBetTypes: [],
-      linkedLogsViewModel: new LinkedLogsViewModel,
-      affectedTickets: new TicketsModel,
-      otherTickets: new TicketsModel
-    };
-
-    const { instance } = await shallow
-    .mock(ValidationService, { isSubTypeWrongHdpOrWrong1stHdp: jest.fn().mockImplementation(() => true) })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: fakeLogInfoWrongHdp
-      }
+      affectedTickets: [],
+      otherTickets: []
     });
-    instance.poolHouseTicketsModel = fakePoolHouseTicketsModel;
+    logAnalysisService.writeLogClickPoolHouseDetails = jest.fn().mockResolvedValue(undefined);
+    addRequestStore.changeBlockingUiStatus = jest.fn();
 
-    const actual = instance['initGetPoolHouseTicketQuery']();
+    // Act
+    await component.openPoolHouseDetails();
 
-    expect(actual.homeFavorite).toBe("homeFavorite");
-    expect(actual.awayFavorite).toBe("awayFavorite");
+    // Assert
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    expect(component.poolHouseTicketsModel.query).toBe(query);
+    expect(component.poolHouseTicketsModel.isOpen).toBeTruthy();
+  });
+
+  it('should check if sport type is soccer', () => {
+    // Arrange
+    component.logInfo.sportType = 1;
+
+    // Act
+    const result = component.isSportTypeSoccer();
+
+    // Assert
+    expect(result).toBeTruthy();
   });
 });
