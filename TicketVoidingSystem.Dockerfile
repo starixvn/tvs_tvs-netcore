@@ -30,7 +30,8 @@ COPY ./TicketVoidingSystem.Website/*.csproj ./TicketVoidingSystem.Website/
 
 # restore
 RUN dotnet nuget add source https://nuget.nexdev.net/api/v2
-RUN dotnet restore -v n -r linux-x64 TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj
+RUN --mount=type=cache,target=/root/.nuget/packages \
+    dotnet restore -v n -r linux-x64 TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj
 
  # publish
 COPY ./Sources/. ./Sources
