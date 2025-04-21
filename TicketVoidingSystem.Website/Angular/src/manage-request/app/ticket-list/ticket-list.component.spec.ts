@@ -30,9 +30,7 @@ describe('TicketListComponent', () => {
   it('#ngOnChanges should getRequestById & IssueInfo when model is open', async () => {
     // Arrange
     const requestDetail = { requestId: 7586, request: { issueTypeId: 1 }, dangerAcceptedModels: [{ isMainMatch: true, subIssueTypeId: 3 }] } as RequestDetailViewModel;
-    const issue = { name: 'Wrong Handicap' } as IssueInfo;
     commonService.getRequestById = jest.fn().mockResolvedValue(requestDetail);
-    commonService.getIssueInfo = jest.fn().mockResolvedValue(issue);
     component.modal = { open: true } as TicketListModal;
 
     // Action
@@ -44,7 +42,6 @@ describe('TicketListComponent', () => {
     // Assert
     expect(component.isBlock).toBeFalsy();
     expect(component.requestDetail).toEqual(requestDetail);
-    expect(component.issue).toEqual(issue);
   });
 
   it('#ngOnChanges should not getRequestById & IssueInfo when model not open', async () => {

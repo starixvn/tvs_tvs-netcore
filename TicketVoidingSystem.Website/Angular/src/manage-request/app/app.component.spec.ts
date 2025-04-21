@@ -33,7 +33,7 @@ class Helper {
 
   static readonly fakeNowDate = new Date('2020-08-04');
 
-  static readonly fakeRequestsModel: RequestModel[] = [
+  static readonly fakeRequestsModel = [
     {
       requestId: 12345,
       issueTypeId: 11,
@@ -79,7 +79,7 @@ class Helper {
       status: 'Completed',
       details: []
     }
-  ];
+  ] as RequestModel[];
 
   static readonly fakeFilterModel = {
     requestId: 54321,

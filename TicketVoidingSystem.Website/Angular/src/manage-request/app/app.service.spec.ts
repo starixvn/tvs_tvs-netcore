@@ -28,7 +28,7 @@ describe('AppService', () => {
   
   it('#getRequests should return expected data', async () => {
     // Arrange
-    const requestModel: RequestModel = {
+    const requestModel = {
       requestId: 47243,
       issueTypeId: 8,
       actionId: 1,
@@ -42,7 +42,7 @@ describe('AppService', () => {
       eventDate: new Date('2020-01-14 00:00:00.000'),
       details: [],
       status: 'Completed',
-    };
+    } as RequestModel;
     const expectedData: RequestModel[] = [requestModel];
     mockHttpService.postJson.mockResolvedValue(expectedData);
 
