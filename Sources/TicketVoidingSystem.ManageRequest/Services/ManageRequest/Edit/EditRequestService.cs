@@ -43,7 +43,8 @@ public class EditRequestServiceImp(
         catch (Exception exception)
         {
             notificationService.ExecuteBackground(()
-                => notificationService.InsertUpdateRequest(NotificationType.Notification, MessageHelper.CreateEditRequestFailed(query.RequestId, markTicketResult.MarkedTickets.Count())));
+                => notificationService.InsertUpdateRequest(NotificationType.Notification,
+                    MessageHelper.CreateEditRequestFailed(query.RequestId, markTicketResult.MarkedTickets.Count()), null));
             _ = loggingService.ErrorAsync(exception);
             return getUpdateResultService.CreateErrorResult(exception, markTicketResult.MarkedTickets);
         }

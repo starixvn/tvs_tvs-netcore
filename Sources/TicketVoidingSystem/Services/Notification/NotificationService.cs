@@ -16,9 +16,9 @@ public interface NotificationService
 
     void ExecuteBackground(Func<Task> action);
 
-    Task UpdateNotification(int id, bool isRead);
+    Task UpdateNotification(string idList, bool isRead);
 
-    Task InsertUpdateRequest(string type, string content, int? requestId = null);
+    Task InsertUpdateRequest(string type, string content, int? requestId);
 }
 
 public class NotificationServiceImp(
@@ -52,19 +52,19 @@ public class NotificationServiceImp(
         });
     }
 
-    public async Task UpdateNotification(int id, bool isRead)
+    public async Task UpdateNotification(string idList, bool isRead)
     {
         var criteria = new UpdateNotificationCriteria
         {
-            Id = id,
+            IdList = idList,
             Username = sessionService.UserName,
             IsRead = isRead,
         };
 
-        await SaveAndPushNotificationToClient(criteria);
+        _ = await repository.FetchMultipleAsync<NotificationModel, string>(criteria);
     }
 
-    public async Task InsertUpdateRequest(string type, string content, int? requestId = null)
+    public async Task InsertUpdateRequest(string type, string content, int? requestId)
     {
         var criteria = new UpdateNotificationCriteria
         {
@@ -73,14 +73,7 @@ public class NotificationServiceImp(
             Content = content,
             Type = type
         };
-
-        await SaveAndPushNotificationToClient(criteria);
-    }
-
-    private async Task SaveAndPushNotificationToClient(UpdateNotificationCriteria criteria)
-    {
         var (notifications, targetUsers) = await repository.FetchMultipleAsync<NotificationModel, string>(criteria);
-
         var tasks = targetUsers.Select(username => signalRService.PushNotification(username, notifications.First()));
         _ = Task.WhenAll(tasks);
     }

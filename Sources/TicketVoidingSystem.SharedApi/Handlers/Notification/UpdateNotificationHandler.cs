@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.SharedApi.Handlers.Notification;
 public class UpdateNotificationRequest : IRequest<Unit>
 {
     public bool IsRead { get; set; }
-    public int Id { get; set; }
+    public string IdList { get; set; }
 };
 
 public class UpdateNotificationHandler(NotificationService notificationService)
@@ -16,7 +16,7 @@ public class UpdateNotificationHandler(NotificationService notificationService)
 {
     public async Task<Unit> Handle(UpdateNotificationRequest request, CancellationToken cancellationToken)
     {
-        await notificationService.UpdateNotification(request.Id, request.IsRead);
+        await notificationService.UpdateNotification(request.IdList, request.IsRead);
         return Unit.Value;
     }
 }

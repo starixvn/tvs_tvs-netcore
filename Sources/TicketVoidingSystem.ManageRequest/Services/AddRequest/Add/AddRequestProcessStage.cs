@@ -37,7 +37,8 @@ public class AddRequestProcessStageImp(
         await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, matchIdsAutoVoidRequestQueue);
         await sendLetstalkAfterAddService.Execute(query.AbnormalBetInfo, requestId);
         notificationService.ExecuteBackground(()
-            => notificationService.InsertUpdateRequest(NotificationType.Notification, MessageHelper.CreateAddRequestSuccessfully(requestId, markedTicketsSuccessful.Count())));
+            => notificationService.InsertUpdateRequest(NotificationType.Notification,
+                MessageHelper.CreateAddRequestSuccessfully(requestId, markedTicketsSuccessful.Count()), requestId));
 
         return getUpdateResultService.CreateSuccessResult(requestId, GetMatchIdAfterAddRequest(query), markedTicketsSuccessful);
     }

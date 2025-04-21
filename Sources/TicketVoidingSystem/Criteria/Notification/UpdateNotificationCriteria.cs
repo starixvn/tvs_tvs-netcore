@@ -4,7 +4,7 @@ namespace TicketVoidingSystem.Criteria.Notification;
 
 public class UpdateNotificationCriteria : CriteriaBase
 {
-    public int? Id { get; set; }
+    public string IdList { get; set; }
 
     public int? RequestId { get; set; }
 

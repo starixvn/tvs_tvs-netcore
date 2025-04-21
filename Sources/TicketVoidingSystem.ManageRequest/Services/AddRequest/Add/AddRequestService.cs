@@ -34,7 +34,7 @@ public class AddRequestServiceImp(
         catch (Exception exception)
         {
             notificationService.ExecuteBackground(()
-                => notificationService.InsertUpdateRequest(NotificationType.Notification, MessageHelper.CreateAddRequestFailed(markTicketResult.MarkedTickets.Count())));
+                => notificationService.InsertUpdateRequest(NotificationType.Notification, MessageHelper.CreateAddRequestFailed(markTicketResult.MarkedTickets.Count()), null));
             _ = loggingService.ErrorAsync(exception);
             return getUpdateResultService.CreateErrorResult(exception, markTicketResult.MarkedTickets);
         }

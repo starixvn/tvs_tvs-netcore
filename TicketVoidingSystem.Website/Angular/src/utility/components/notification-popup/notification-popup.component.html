@@ -31,12 +31,12 @@
   </div>
 
   <div class="notification-list" [ngStyle]="{ 'max-height.px': notificationHeight }" [@fadeSlide]>
-    @for (group of groupedNotificationsArray(); track group[0]) {
+    @for (group of groupedNotifications; track group[0]) {
     <div class="notification-date">{{ group[0] }}</div>
     @for (notification of group[1]; track notification.content; let isLast = $last) {
     <div class="notification" [class.unread]="!notification.isRead" [class.last-item]="isLast"
       (click)="clickNotification($event, notification)">
-      <p>{{ notification.content }}</p>
+      <p [innerHTML]="notification.content"></p>
       <span class="time">{{ notification.createdDate | date:'hh:mm:ss a' }}</span>
       @if (!notification.isRead) {
       <div class="unread-dot"></div>

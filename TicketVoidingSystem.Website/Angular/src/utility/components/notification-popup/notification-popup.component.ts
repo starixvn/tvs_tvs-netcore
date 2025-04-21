@@ -29,114 +29,8 @@ import { NotificationPopupService } from './notification-popup.service';
 })
 export class NotificationPopupComponent {
   notificationChange: string[] = [];
-  notifications: NotificationModel[] = [
-    {
-      content: "Request 12345 is added successfully",
-      type: "N",
-      id: 1,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: false
-    },
-    {
-      content: "Request 12346 is edited successfully",
-      type: "N",
-      id: 2,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: true
-    },
-    {
-      content: "Request 12347 is added successfully",
-      type: "N",
-      id: 3,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: false
-    },
-    {
-      content: "Request 12348 is edited successfully",
-      type: "N",
-      id: 4,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: true
-    },
-    {
-      content: "Request 12349 is added successfully",
-      type: "N",
-      id: 5,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: false
-    },
-    {
-      content: "Request 12349 is added successfully",
-      type: "N",
-      id: 6,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: false
-    },
-    {
-      content: "Request 12349 is added successfully",
-      type: "E",
-      id: 7,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: true
-    },
-    {
-      content: "Request 12349 is added successfully",
-      type: "E",
-      id: 8,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: false
-    },
-    {
-      content: "Request 12349 is added successfully",
-      type: "E",
-      id: 9,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: false
-    },
-    {
-      content: "Request 12349 is added successfully",
-      type: "E",
-      id: 10,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: true
-    },
-    {
-      content: "Request 12349 is added successfully",
-      type: "E",
-      id: 11,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: true
-    },
-    {
-      content: "Request 12349 is added successfully",
-      type: "N",
-      id: 12,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: true
-    },
-    {
-      content: "Request 12349 is added successfully",
-      type: "N",
-      id: 13,
-      username: 1,
-      createdDate: new Date("2024-04-04T07:33:00"),
-      isRead: true
-    }
-  ];
-
-
+  notifications: NotificationModel[] = [];
+  groupedNotifications: [string, NotificationModel[]][] = [];
   activeTab = NotificationTabName.NOTIFICATION;
   filterTab = NotificationFilterTabName.ALL;
   notificationHeight = 250;
@@ -145,6 +39,7 @@ export class NotificationPopupComponent {
   isExpanded = false;
   openNotificationSubscription: Subscription;
   notificationChangeSubscription: Subscription;
+
   notificationService = inject(NotificationPopupService);
   signalRService = inject(SignalRService);
   cdr = inject(ChangeDetectorRef);
@@ -160,18 +55,14 @@ export class NotificationPopupComponent {
       this.isOpen = open;
       if (open) {
         this.notifications = await this.notificationService.get();
+        this.updateGroupedNotifications();
       }
     });
   }
 
   subscribeNotificationEvent() {
     this.notificationChangeSubscription = this.signalRService.notificationChange.subscribe((notification: NotificationModel) => {
-      if (this.notifications.some(n => n.content === notification.content)) {
-        return;
-      }
-      this.notifications.push(notification);
-      this.activeTab = notification.type === NotificationType.ERROR ? NotificationTabName.ERROR : NotificationTabName.NOTIFICATION;
-      this.cdr.markForCheck();
+      this.addNewNotification(notification);
     });
   }
 
@@ -192,16 +83,18 @@ export class NotificationPopupComponent {
 
   selectTab(tab: string) {
     this.activeTab = tab;
+    this.updateGroupedNotifications();
   }
 
   selectFilterTab(filterTab: string) {
     this.filterTab = filterTab;
+    this.updateGroupedNotifications();
   }
 
   clickNotification(event: Event, notification: NotificationModel) {
     event.stopPropagation();
     notification.isRead = true;
-    void this.notificationService.update(notification.id, notification.isRead);
+    void this.notificationService.update(notification.id.toString(), notification.isRead);
   }
 
   toggleNotifications() {
@@ -210,8 +103,12 @@ export class NotificationPopupComponent {
   }
 
   markAllAsRead() {
-    this.notifications?.filter(n => n.type === NotificationType.ERROR === (this.activeTab === NotificationTabName.ERROR))
-    .forEach(n => n.isRead = true);
+    const affectedNotifications = this.notifications?.filter(n => !n.isRead
+      && n.type === (this.activeTab === NotificationTabName.ERROR ? NotificationType.ERROR : NotificationType.NOTIFICATION));
+    if (affectedNotifications.length > 0) {
+      affectedNotifications.forEach(n => n.isRead = true);
+      void this.notificationService.update(affectedNotifications.map(n => n.id.toString()).join(','), true);
+    }
   }
 
   @HostListener('document:click', ['$event'])
@@ -222,11 +119,34 @@ export class NotificationPopupComponent {
     }
   }
 
-  groupedNotificationsArray() {
-    if (!this.notifications) {
-      return [];
-    }
+  // groupedNotificationsArray() {
+  //   if (!this.notifications) {
+  //     return [];
+  //   }
 
+  //   let filtered = this.notifications.filter(n =>
+  //     this.activeTab === NotificationTabName.NOTIFICATION ? n.type !== NotificationType.ERROR : n.type === NotificationType.ERROR
+  //   );
+
+  //   if (this.filterTab === NotificationFilterTabName.UNREAD) {
+  //     filtered = filtered.filter(n => !n.isRead);
+  //   }
+  //   console.log("groupedNotificationsArray");
+
+  //   filtered.sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime());
+  //   const grouped = filtered.reduce((groups, notification) => {
+  //     const date = StaticService.formatFullEnglishDate(notification.createdDate);
+  //     if (!groups[date]) {
+  //       groups[date] = [];
+  //     }
+  //     groups[date].push(notification);
+  //     return groups;
+  //   }, {} as Record<string, typeof this.notifications>);
+
+  //   return Object.entries(grouped);
+  // }
+
+  updateGroupedNotifications() {
     let filtered = this.notifications.filter(n =>
       this.activeTab === NotificationTabName.NOTIFICATION ? n.type !== NotificationType.ERROR : n.type === NotificationType.ERROR
     );
@@ -234,7 +154,6 @@ export class NotificationPopupComponent {
     if (this.filterTab === NotificationFilterTabName.UNREAD) {
       filtered = filtered.filter(n => !n.isRead);
     }
-    console.log("groupedNotificationsArray");
 
     filtered.sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime());
     const grouped = filtered.reduce((groups, notification) => {
@@ -244,8 +163,27 @@ export class NotificationPopupComponent {
       }
       groups[date].push(notification);
       return groups;
-    }, {} as Record<string, typeof this.notifications>);
+    }, {} as Record<string, NotificationModel[]>);
 
-    return Object.entries(grouped);
+    this.groupedNotifications = Object.entries(grouped);
+    this.cdr.markForCheck();
+  }
+
+  addNewNotification(notification: NotificationModel) {
+    if (this.notifications.some(n => n.content === notification.content)) {
+      return;
+    }
+
+    this.notifications.unshift(notification);
+    this.activeTab = notification.type === NotificationType.ERROR ? NotificationTabName.ERROR : NotificationTabName.NOTIFICATION;
+
+    const formattedDate = StaticService.formatFullEnglishDate(notification.createdDate);
+    if (this.groupedNotifications.length > 0 && this.groupedNotifications[0][0] === formattedDate) {
+      this.groupedNotifications[0][1].unshift(notification);
+    } else {
+      this.groupedNotifications.unshift([formattedDate, [notification]]);
+    }
+
+    this.cdr.markForCheck();
   }
 }

@@ -2,8 +2,7 @@ import { EventEmitter, inject, Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { ToastrService } from 'ngx-toastr';
 import { NotificationModel } from '../components/notification-popup/notification-popup.model';
-import { VoidBetResultCode } from '../constants/void-bet-result-code';
-import { RequestStatus, Result } from '../models/signal-r.model';
+import { RequestStatus } from '../models/signal-r.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,23 +27,9 @@ export class SignalRService {
   }
 
   private registerEvent() {
-    //this.registerShowVoidResultEvent();
-    //this.registerShowErrorMessage();
     this.registerReceiveRequestStatusModelEvent();
     this.registerReceiveNotification()
   }
-
-  // private registerShowVoidResultEvent() {
-  //   this.hubConnection.on('showVoidResult', (results: Result[]) => {
-  //     this.showMessageForVoidResult(results);
-  //   });
-  // }
-
-  // private registerShowErrorMessage() {
-  //   this.hubConnection.on('showErrorMessage', (message: string) => {
-  //     this.toastr.error(message);
-  //   });
-  // }
 
   private registerReceiveRequestStatusModelEvent() {
     this.hubConnection.on('updateRequestStatus', (model: RequestStatus[]) => {
@@ -67,39 +52,5 @@ export class SignalRService {
     this.toastr.toastrConfig.toastClass = 'custom-toastr ngx-toastr';
     this.toastr.toastrConfig.positionClass = 'toast-bottom-right';
     this.toastr.toastrConfig.easeTime = 200;
-  }
-
-  private showMessageForVoidResult(results: Result[]): void {
-    const exceptionResult = results.find(x => x.errorCode === VoidBetResultCode.EXCEPTION_RUN_AFTER_VOID);
-    if (exceptionResult) {
-      this.toastr.error(`<i class="fa-solid fa-triangle-exclamation icon"></i> ${exceptionResult.errorMsg}`);
-      return;
-    }
-
-    let succeedLicenseeMsg = '';
-    let failedLicenseeMsg = '';
-    let failedSentLetsTalkMsg = '';
-    const voidRequestMsg = results.find(x => x.errorCode === VoidBetResultCode.VOID_REQUEST_SUCCESS)?.errorMsg;
-    const succeedLicenseeResult = results.find(x => x.errorCode === VoidBetResultCode.LICENSEE_SUCCESS);
-    const failedLicenseeResult = results.find(x => x.errorCode === VoidBetResultCode.LICENSEE_FAIL);
-    const failedSentLetsTalkResult = results.find(x => x.errorCode === VoidBetResultCode.SEND_LETSTALK_FAIL);
-
-    if (succeedLicenseeResult?.errorMsg) {
-      succeedLicenseeMsg = `<div><span>- ${succeedLicenseeResult.errorMsg}</span></div>`;
-    }
-    if (failedLicenseeResult?.errorMsg) {
-      failedLicenseeMsg = `<div class="failed-msg"><i class="fa-solid fa-triangle-exclamation icon"></i><span class="msg"> ${failedLicenseeResult.errorMsg}</span></div>`;
-    }
-    if (failedSentLetsTalkResult?.errorMsg) {
-      failedSentLetsTalkMsg = `<div class="failed-msg"><i class="fa-solid fa-triangle-exclamation icon"></i><span class="msg"> ${failedSentLetsTalkResult.errorMsg}</span></div>`;
-    }
-
-    const finalMessage = `<div class="void-bet-notification"><div><span>- ${voidRequestMsg}</span></div>${succeedLicenseeMsg}${failedLicenseeMsg}${failedSentLetsTalkMsg}</div>`;
-    if (failedLicenseeMsg || failedSentLetsTalkMsg) {
-      this.toastr.warning(finalMessage);
-      return;
-    }
-
-    this.toastr.success(finalMessage);
   }
 }

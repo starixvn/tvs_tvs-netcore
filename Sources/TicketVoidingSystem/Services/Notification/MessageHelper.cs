@@ -18,7 +18,7 @@ public static class MessageHelper
 
     public static string CreateEditRequestSuccessfully(int requestId, string editedBy, int markedCount)
     {
-        return $"<strong>Request {requestId}</strong> is edited by {editedBy} successfully"
+        return $"<strong>Request {requestId}</strong> is edited by <strong>{editedBy}</strong> successfully"
                + $"{Environment.NewLine}Marked ticket: {markedCount}/@@";
     }
 

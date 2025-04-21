@@ -21,7 +21,6 @@
             "outputPath": "dist",
             "index": "src/home-page/index.html",
             "main": "src/home-page/main.ts",
-            "main": "src/edit-request/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],

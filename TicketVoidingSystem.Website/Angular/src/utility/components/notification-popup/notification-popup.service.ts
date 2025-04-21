@@ -24,7 +24,7 @@ export class NotificationPopupService {
     return this.httpService.getJson<NotificationModel[]>('api/Notification/Get');
   }
 
-  async update(id: number, isRead: boolean) {
-    return this.httpService.postJson({ id, isRead }, 'api/Notification/Update');
+  async update(idList: string, isRead: boolean) {
+    return this.httpService.postJson({ idList: idList, isRead }, 'api/Notification/Update');
   }
 }
