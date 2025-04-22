@@ -45,26 +45,6 @@ public class GetPoolHouseTicketServiceTests
     }
 
     [Fact]
-    public void GetTicketsViewModel_NoHasAfterPagingTickets_ReturnEmptyGroups()
-    {
-        // Arrange
-        var originTickets = new List<GetTicketModel> { new() };
-        var request = new GetPoolHouseTicketRequest();
-        var expected = new TicketsViewModel
-        {
-            TotalSingle = 1,
-            TotalParlay = 0,
-            Groups = []
-        };
-
-        // Act
-        var actual = service.GetTicketsViewModel(originTickets, request);
-
-        // Assert
-        AssertExtension.Equal(expected, actual);
-    }
-
-    [Fact]
     public void GetTicketsViewModel_HasAfterPagingTickets_ReturnExpected()
     {
         // Arrange

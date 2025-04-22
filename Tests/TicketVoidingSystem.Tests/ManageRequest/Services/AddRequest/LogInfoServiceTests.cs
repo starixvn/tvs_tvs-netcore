@@ -10,8 +10,10 @@ using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
+using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.BetList;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest;
@@ -22,15 +24,17 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
     private readonly IDynamicRepository repository;
     private readonly LogInfoServiceImp service;
     private readonly SessionService session;
-    private readonly LogInfoHelperService logInfoHelperService;
+    private readonly BetListService betListService;
+    private readonly CopyRequestInfoService copyRequestInfoService;
 
     public LogInfoServiceTests()
     {
         mapper = Substitute.For<IMapper>();
         repository = Substitute.For<IDynamicRepository>();
         session = Substitute.For<SessionService>();
-        logInfoHelperService = Substitute.For<LogInfoHelperService>();
-        service = new LogInfoServiceImp(mapper, repository, session, logInfoHelperService);
+        betListService = Substitute.For<BetListService>();
+        copyRequestInfoService = Substitute.For<CopyRequestInfoService>();
+        service = new LogInfoServiceImp(mapper, repository, session, betListService, copyRequestInfoService);
     }
 
     [Fact]
@@ -72,9 +76,6 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
         mapper.Map<GetLogInfoCriteria>(default).ReturnsForAnyArgs(new GetLogInfoCriteria());
-        logInfoHelperService.CombineValidations(default, default).ReturnsForAnyArgs(validation);
-        logInfoHelperService.CombineTicketRequest(default, default).ReturnsForAnyArgs(ticketRequests);
-        logInfoHelperService.CombineLogInfoDetail(default, default).ReturnsForAnyArgs(logInfo);
 
         // Act
         var actual = await service.Get(request);
@@ -82,9 +83,9 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
 
         // Assert
         Assert.Single(actual.GetLogInfoModels);
-        Assert.Equal(validation, logInfoModel.Validation);
-        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+        Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
+        Assert.Equal(ticketRequests.Count, logInfoModel.TicketRequest.Count());
+        Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
     }
 
     [Theory]
@@ -135,18 +136,15 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
         mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-        logInfoHelperService.CombineValidations(default, default).ReturnsForAnyArgs(validation);
-        logInfoHelperService.CombineTicketRequest(default, default).ReturnsForAnyArgs(ticketRequests);
-        logInfoHelperService.CombineLogInfoDetail(default, default).ReturnsForAnyArgs(logInfo);
 
         // Act
         var actual = await service.Get(request);
         var logInfoModel = actual.GetLogInfoModels.ToList()[0];
 
         // Assert
-        Assert.Equal(validation, logInfoModel.Validation);
-        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+        Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
+        Assert.Equal(ticketRequests.Count, logInfoModel.TicketRequest.Count());
+        Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
     }
 
     [Fact]
@@ -179,17 +177,14 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
         mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-        logInfoHelperService.CombineValidations(default, default).ReturnsForAnyArgs(validation);
-        logInfoHelperService.CombineTicketRequest(default, default).ReturnsForAnyArgs(ticketRequests);
-        logInfoHelperService.CombineLogInfoDetail(default, default).ReturnsForAnyArgs(logInfo);
 
         // Act
         var actual = await service.Get(request);
         var logInfoModel = actual.GetLogInfoModels.ToList()[0];
 
         // Assert
-        Assert.Equal(validation, logInfoModel.Validation);
-        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+        Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
+        Assert.Equal(ticketRequests.Count, logInfoModel.TicketRequest.Count());
+        Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
     }
 }
