@@ -66,6 +66,7 @@ public class NotificationServiceImp(
 
     public async Task InsertUpdateRequest(string type, string content, int? requestId)
     {
+        var username = sessionService.UserName;
         var criteria = new UpdateNotificationCriteria
         {
             RequestId = requestId,
@@ -74,7 +75,8 @@ public class NotificationServiceImp(
             Type = type
         };
         var (notifications, targetUsers) = await repository.FetchMultipleAsync<NotificationModel, string>(criteria);
-        var tasks = targetUsers.Select(username => signalRService.PushNotification(username, notifications.First()));
+        var preparedUsers = targetUsers.Where(x => x != username);
+        var tasks = preparedUsers.Select(x => signalRService.PushNotification(x, notifications.First()));
         _ = Task.WhenAll(tasks);
     }
 }

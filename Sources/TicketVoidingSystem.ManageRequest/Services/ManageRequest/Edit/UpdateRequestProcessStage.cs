@@ -41,7 +41,7 @@ public class UpdateRequestProcessStageImp(
         }
         notificationService.ExecuteBackground(()
             => notificationService.InsertUpdateRequest(NotificationType.Notification,
-                MessageHelper.CreateEditRequestSuccessfully(query.RequestId, sessionService.UserName, markedTicketsSuccessful.Count()), query.RequestId));
+                MessageHelper.CreateEditRequestSuccessfully(query.RequestId, sessionService.UserName), query.RequestId));
 
         return getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString(), markedTicketsSuccessful);
     }

@@ -22,7 +22,6 @@ export class MenuBarComponent implements OnInit {
   isBlock: boolean;
   rootUrl = '/';
   notificationIconClass = '';
-
   notificationIconClassSubscription: Subscription;
   private notificationTimer: any;
 
@@ -51,7 +50,7 @@ export class MenuBarComponent implements OnInit {
         if (this.notificationTimer) {
           clearTimeout(this.notificationTimer);
         }
-        // Set new timer to remove class after 3 seconds
+        // Set new timer to remove class after 5 seconds
         this.notificationTimer = setTimeout(() => {
           this.notificationIconClass = 'fa-bell-unread';
         }, 5000);

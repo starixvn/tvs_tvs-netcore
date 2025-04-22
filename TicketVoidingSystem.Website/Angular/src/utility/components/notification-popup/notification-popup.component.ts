@@ -1,7 +1,7 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, inject } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, HostListener, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { fadeSlide } from 'src/utility/constants/animations.constant';
 import { NotificationFilterTabName, NotificationTabName, NotificationType } from 'src/utility/constants/notification.constant';
 import { SignalRService } from 'src/utility/services/signal-r.service.native';
 import { StaticService } from 'src/utility/services/static.service';
@@ -15,17 +15,7 @@ import { NotificationPopupService } from './notification-popup.service';
   templateUrl: './notification-popup.component.html',
   styleUrls: ['./notification-popup.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('fadeSlide', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(10px)' }),
-        animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-      ]),
-      transition(':leave', [
-        animate('150ms ease-in', style({ opacity: 0, transform: 'translateY(10px)' }))
-      ])
-    ])
-  ]
+  animations: [fadeSlide]
 })
 export class NotificationPopupComponent {
   notificationChange: string[] = [];
@@ -37,9 +27,8 @@ export class NotificationPopupComponent {
   maximumOfUnread = 99;
   isOpen = false;
   isExpanded = false;
-  openNotificationSubscription: Subscription;
-  notificationChangeSubscription: Subscription;
 
+  destroyRef = inject(DestroyRef);
   notificationService = inject(NotificationPopupService);
   signalRService = inject(SignalRService);
   cdr = inject(ChangeDetectorRef);
@@ -50,25 +39,24 @@ export class NotificationPopupComponent {
   }
 
   subscribeOpenEvent() {
-    this.openNotificationSubscription = this.notificationService.isOpen$.subscribe(async open => {
-      this.cdr.markForCheck();
-      this.isOpen = open;
-      if (open) {
-        this.notifications = await this.notificationService.get();
-        this.updateGroupedNotifications();
-      }
-    });
+    this.notificationService.isOpen$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(async open => {
+        this.cdr.markForCheck();
+        this.isOpen = open;
+        if (open) {
+          this.notifications = await this.notificationService.get();
+          this.updateGroupedNotifications();
+        }
+      });
   }
 
   subscribeNotificationEvent() {
-    this.notificationChangeSubscription = this.signalRService.notificationChange.subscribe((notification: NotificationModel) => {
-      this.addNewNotification(notification);
-    });
-  }
-
-  ngOnDestroy() {
-    this.openNotificationSubscription?.unsubscribe();
-    this.notificationChangeSubscription?.unsubscribe();
+    this.signalRService.notificationChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((notification: NotificationModel) => {
+        this.addNewNotification(notification);
+      });
   }
 
   get unreadNotificationCount(): string {
@@ -118,33 +106,6 @@ export class NotificationPopupComponent {
       this.isOpen = false;
     }
   }
-
-  // groupedNotificationsArray() {
-  //   if (!this.notifications) {
-  //     return [];
-  //   }
-
-  //   let filtered = this.notifications.filter(n =>
-  //     this.activeTab === NotificationTabName.NOTIFICATION ? n.type !== NotificationType.ERROR : n.type === NotificationType.ERROR
-  //   );
-
-  //   if (this.filterTab === NotificationFilterTabName.UNREAD) {
-  //     filtered = filtered.filter(n => !n.isRead);
-  //   }
-  //   console.log("groupedNotificationsArray");
-
-  //   filtered.sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime());
-  //   const grouped = filtered.reduce((groups, notification) => {
-  //     const date = StaticService.formatFullEnglishDate(notification.createdDate);
-  //     if (!groups[date]) {
-  //       groups[date] = [];
-  //     }
-  //     groups[date].push(notification);
-  //     return groups;
-  //   }, {} as Record<string, typeof this.notifications>);
-
-  //   return Object.entries(grouped);
-  // }
 
   updateGroupedNotifications() {
     let filtered = this.notifications.filter(n =>

@@ -44,7 +44,7 @@ public class EditRequestServiceImp(
         {
             notificationService.ExecuteBackground(()
                 => notificationService.InsertUpdateRequest(NotificationType.Notification,
-                    MessageHelper.CreateEditRequestFailed(query.RequestId, markTicketResult.MarkedTickets.Count()), null));
+                    MessageHelper.CreateEditRequestFailed(query.RequestId), null));
             _ = loggingService.ErrorAsync(exception);
             return getUpdateResultService.CreateErrorResult(exception, markTicketResult.MarkedTickets);
         }
