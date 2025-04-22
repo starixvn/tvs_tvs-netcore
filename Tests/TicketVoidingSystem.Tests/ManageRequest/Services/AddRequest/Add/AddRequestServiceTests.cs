@@ -19,7 +19,7 @@ public class AddRequestServiceTests
         addRequestProcessStage = Substitute.For<AddRequestProcessStage>();
         marketTicketsWhenEditService = Substitute.For<MarkTicketsWhenAddEditService>();
         getUpdateResultService = Substitute.For<GetUpdateResultService>();
-        service = new AddRequestServiceImp(addRequestProcessStage, marketTicketsWhenEditService, getUpdateResultService);
+        service = new AddRequestServiceImp(addRequestProcessStage, marketTicketsWhenEditService, getUpdateResultService, null, null);
     }
 
     [Fact]

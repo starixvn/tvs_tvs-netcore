@@ -25,7 +25,7 @@ public class EditRequestServiceTests
         var resultMarkTicket = new Result { ErrorMsg = "Has Error Mark Tickets", ErrorCode = 1 };
         marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds).Returns(markTicketResult);
         getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService), markTicketResult.MarkedTickets).Returns(resultMarkTicket);
-        var service = new EditRequestServiceImp(marketTicketsWhenEditService, null, null, getUpdateResultService);
+        var service = new EditRequestServiceImp(marketTicketsWhenEditService, null, null, getUpdateResultService, null, null);
 
         // Act
         var result = await service.UpdateRequest(query);
@@ -47,7 +47,7 @@ public class EditRequestServiceTests
         getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService), markTicketResult.MarkedTickets).Returns((Result)null);
         reCalculateTicketsService.Execute(query.AbnormalBetInfo, query.IssueTypeId, query.RemoveTransIds).Returns(reCalcTicketsAbnormalResults);
         getUpdateResultService.GetFirstError(reCalcTicketsAbnormalResults, nameof(ReCalculateTicketsService), markTicketResult.MarkedTickets).Returns(reCalcTicketError);
-        var service = new EditRequestServiceImp(marketTicketsWhenEditService, reCalculateTicketsService, null, getUpdateResultService);
+        var service = new EditRequestServiceImp(marketTicketsWhenEditService, reCalculateTicketsService, null, getUpdateResultService, null, null);
 
         // Act
         var result = await service.UpdateRequest(query);
@@ -67,7 +67,7 @@ public class EditRequestServiceTests
         getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService), markTicketResult.MarkedTickets).Returns((Result)null);
         reCalculateTicketsService.Execute(query.AbnormalBetInfo, query.IssueTypeId, query.RemoveTransIds).Returns(reCalcTicketsAbnormalResults);
         getUpdateResultService.GetFirstError(reCalcTicketsAbnormalResults, nameof(ReCalculateTicketsService), markTicketResult.MarkedTickets).Returns((Result)null);
-        var service = new EditRequestServiceImp(marketTicketsWhenEditService, reCalculateTicketsService, updateRequestProcessStage, getUpdateResultService);
+        var service = new EditRequestServiceImp(marketTicketsWhenEditService, reCalculateTicketsService, updateRequestProcessStage, getUpdateResultService, null, null);
 
         // Act
         _ = await service.UpdateRequest(query);

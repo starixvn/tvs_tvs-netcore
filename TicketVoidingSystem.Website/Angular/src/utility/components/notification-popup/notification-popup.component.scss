@@ -30,10 +30,6 @@
       &:hover {
         background: #f9f9f9;
       }
-
-      .badge {
-        font-size: 11px;
-      }
     }
   }
 
@@ -53,6 +49,7 @@
         cursor: pointer;
         width: 61px;
         font-size: 13px;
+        font-weight: normal;
       }
     }
 
