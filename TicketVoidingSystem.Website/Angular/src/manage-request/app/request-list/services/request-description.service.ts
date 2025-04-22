@@ -1,3 +1,4 @@
+import { IssueType } from './../../../../utility/components/template-message/template-message/template-setting.model';
 import { inject } from '@angular/core';
 import _ from 'lodash';
 import moment from 'moment';
@@ -166,7 +167,10 @@ export class RequestDescriptionService {
   }
 
   private generateLiveScores(requestInfo: RequestInfoForCopy): string {
-    return this.isShowLiveScores(requestInfo) ? `Live Scores: ${requestInfo.liveScores}\n` : '';
+    if(!this.isShowLiveScores(requestInfo)){
+      return '';
+    }
+    return requestInfo.liveScores ? `Live Score: ${requestInfo.liveScores}\n` : 'Live Score: \n';
   }
 
   private generateOddsContentWrongOdds(requestInfo: RequestInfoForCopy): string {
@@ -206,10 +210,20 @@ export class RequestDescriptionService {
       + oddsContent
       + `Void Time: ${moment(copyInfoResponse.requestInfo.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} - ${moment(copyInfoResponse.requestInfo.voidToTime).format(DateTimeFormat.TIME_FORMAT)} `
       + `(Single Count: ${copyInfoResponse.requestInfo.totalSingleCount}, Parlay Count: ${copyInfoResponse.requestInfo.totalParlayCount}${cancelCashOutCount})\n`
-      + `${copyInfoResponse.requestInfo.remark}`
+      + this.generateRemark(copyInfoResponse.requestInfo)
       + this.generateLiveScores(copyInfoResponse.requestInfo);
 
     return content;
+  }
+
+  private generateRemark(requestInfo: RequestInfoForCopy): string {
+    const IssueTypesShowRemark = [IssueTypeConstant.WRONG_KICK_OFF, IssueTypeConstant.TECHNICAL_ERROR, 
+      IssueTypeConstant.REDUCED_OVER, IssueTypeConstant.ABANDONED, IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK,
+      IssueTypeConstant.NOT_PARTICIPATE];
+    if(requestInfo.remark && IssueTypesShowRemark.includes(requestInfo.issueTypeId.toString())){
+      return `${requestInfo.remark}\n`;
+    }
+    return '';
   }
 
   private createOthersIssueTypeContent(copyInfoResponse: CopyRequestInfoResponse): string {
