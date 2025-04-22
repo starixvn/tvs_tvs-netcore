@@ -1,174 +1,257 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgSelectModule } from '@ng-select/ng-select';
-import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
-import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
-import { MatchModel } from '../../../../../utility/models/match.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { LogInfoEkoComponent } from './log-info-eko.component';
+import { LogInfoService } from '../services/log-info.service';
+import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
-import { LogInfoService } from '../services/log-info.service';
-import { TableTicketsModel } from '../tickets-list/table-tickets.model';
-import { TicketsListComponent } from '../tickets-list/tickets-list.component';
-import { LogInfoEkoComponent } from './log-info-eko.component';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { IssueTypes } from '../../filter/issue-types.model';
+import { GroupModel } from '../tickets-list/group-tickets.model';
+import { EventEarlyKickOffService } from '../services/event-eko.service';
 
 class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
-    matchId: 1,
-    messageValidationLogInfo: [],
-    eventName: '',
-    isCollapse: false,
+  static readonly fakeRequestId = 1212;
+  static readonly fakeFilterModel: FilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
+    isVoided: false,
+    isChangeSubTypeManual: true,
+    isAbnormal: false
+  } as FilterModel;
+  static readonly fakeLogInfoEko = {
+    matchId: 123,
+    sportType: 1,
     isMainMatch: true,
-    isShowValidation: false,
-    kickOffTime: '',
-    leagueName: '',
-    matchModel: new MatchModel(),
-    pagingModel: new PagingModel(),
-    isInvalidTotalTickets: false,
-    tableTicketsModel: new TableTicketsModel(),
-    isHasSettledTicket: false,
-    isHasInstantlySettledTicket: false,
-    sportType: 0
-  };
+    eventDate: new Date(),
+    subIssueTypeId: 1,
+    filterFromTransTime: '',
+    filterToTransTime: '',
+    isCollapse: false,
+    isRenderedTickets: false,
+    messageValidationLogInfo: [],
+    tableTicketsModel: {
+      groups: []
+    }
+  } as unknown as LogInfoEarlyKickOff;
 }
 
 describe('LogInfoEkoComponent', () => {
-  @NgModule({
-    declarations: [
-      TicketsListComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      NgSelectModule,
-      BlockUiModule
-    ],
-    providers: [
-      ModalService,
-      LogInfoService
-    ]
-  })
-  class AppModuleTest { }
+  let component: LogInfoEkoComponent;
+  let fixture: ComponentFixture<LogInfoEkoComponent>;
+  let logInfoService: LogInfoService;
+  let addRequestStore: AddRequestStore;
+  let staticService: StaticService;
+  let modalService: ModalService;
 
-  let shallow: Shallow<LogInfoEkoComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        LogInfoService,
+        AddRequestStore,
+        StaticService,
+        ModalService,
+        EventEarlyKickOffService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(LogInfoEkoComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(LogInfoEkoComponent);
+    logInfoService = fixture.debugElement.injector.get(LogInfoService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    staticService = fixture.debugElement.injector.get(StaticService);
+    modalService = fixture.debugElement.injector.get(ModalService);
+    component = fixture.componentInstance;
+
+    // Set default input values
+    component.isMainMatch = true;
+    component.isEdit = false;
+    component.filter = Helper.fakeFilterModel;
+    component.logInfo = Helper.fakeLogInfoEko;
+    component.requestId = Helper.fakeRequestId;
+    component.issueTypes = new IssueTypes();
+    component.primitiveProps = new PrimitiveProperty();
+
+    // Mock addRequestStore methods
+    addRequestStore.changeBlockingUiStatus = jest.fn();
   });
 
-  it('LogInfoEkoComponent init should match snapshot', async () => {
-    const component = new LogInfoEkoComponent(null, null);
-    expect(component).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('pagingEvent should call logInfoService.getTickets', async () => {
-    const mockGetTickets = jest.fn();
-    const mockInitQuery = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { getTickets: mockGetTickets })
-    .mock(LogInfoService, { initQuery: mockInitQuery })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        logInfo: Helper.fakeLogInfoEarlyKickOff
-      }
-    });
-    instance.pagingEvent();
+  it('should handle click header when collapsing', async () => {
+    // Arrange
+    component.logInfo.isCollapse = true;
+    logInfoService.getTickets = jest.fn().mockResolvedValue(undefined);
+    logInfoService.assignTemplateMessageValueToEvent = jest.fn();
 
-    expect(mockGetTickets).toHaveBeenCalledTimes(1);
-    expect(mockInitQuery).toHaveBeenCalledTimes(1);
+    // Act
+    await component.clickHeader();
+
+    // Assert
+    expect(component.logInfo.isCollapse).toBeFalsy();
+    expect(component.isBlock).toBeFalsy();
+    expect(logInfoService.getTickets).toHaveBeenCalledWith(
+      component.logInfo,
+      component.isEdit,
+      component.requestId,
+      component.filter
+    );
+    expect(logInfoService.assignTemplateMessageValueToEvent).toHaveBeenCalledWith(component.logInfo);
   });
 
-  it('clickHeader should call logInfoService.getTickets', async () => {
-    const logInfo = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    logInfo.isCollapse = true;
-    const mockGetTickets = jest.fn();
-    const mockInitQuery = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { getTickets: mockGetTickets })
-    .mock(LogInfoService, { initQuery: mockInitQuery })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        logInfo: Helper.fakeLogInfoEarlyKickOff
-      }
-    });
-    instance.pagingEvent();
+  it('should handle click header when expanding', async () => {
+    // Arrange
+    component.logInfo.isCollapse = false;
+    logInfoService.getTickets = jest.fn().mockResolvedValue(undefined);
 
-    expect(mockGetTickets).toHaveBeenCalledTimes(1);
-    expect(mockInitQuery).toHaveBeenCalledTimes(1);
+    // Act
+    await component.clickHeader();
+
+    // Assert
+    expect(component.logInfo.isCollapse).toBeTruthy();
+    expect(component.isBlock).toBeFalsy();
+    expect(logInfoService.getTickets).not.toHaveBeenCalled();
   });
 
-  it('clickHeader should not call logInfoService.getTickets & logInfo.isCollapse false', async () => {
-    const logInfo = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    logInfo.isCollapse = false;
-    const mockGetTickets = jest.fn();
-    const mockInitQuery = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { getTickets: mockGetTickets })
-    .mock(LogInfoService, { initQuery: mockInitQuery })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        logInfo: Helper.fakeLogInfoEarlyKickOff
-      }
-    });
-    instance.clickHeader();
+  it('should handle paging event', async () => {
+    // Arrange
+    logInfoService.getTickets = jest.fn().mockResolvedValue(undefined);
 
-    expect(mockGetTickets).toHaveBeenCalledTimes(0);
-    expect(mockInitQuery).toHaveBeenCalledTimes(0);
+    // Act
+    await component.pagingEvent();
+
+    // Assert
+    expect(component.isBlock).toBeFalsy();
+    expect(component.logInfo.isRenderedTickets).toBeFalsy();
+    expect(logInfoService.getTickets).toHaveBeenCalledWith(
+      component.logInfo,
+      component.isEdit,
+      component.requestId,
+      component.filter
+    );
   });
 
-  it('#handleDeleteEvent should emit deleteEvent', async () => {
-    const fakeLogInfoRedCard = Helper.fakeLogInfoEarlyKickOff;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        logInfo: fakeLogInfoRedCard
-      }
-    });
-    instance.deleteEvent.emit = jest.fn();
-    instance.handleDeleteEvent(1);
+  it('should check if show message', () => {
+    // Arrange
+    component.logInfo.messageValidationLogInfo = [
+      { isError: false, reason: 'Test message 1' },
+      { isError: true, reason: 'Test message 2' }
+    ];
 
-    expect(instance.deleteEvent.emit).toHaveBeenCalledWith(1);
+    // Act
+    const result = component.isShowMessage();
+
+    // Assert
+    expect(result).toBeTruthy();
   });
 
-  it('#emitSearchEvent should emit emitSearchEvent', async () => {
-    const fakeLogInfoRedCard = Helper.fakeLogInfoEarlyKickOff;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        logInfo: fakeLogInfoRedCard
-      }
-    });
-    instance.searchTicketEvent.emit = jest.fn();
-    instance.emitSearchEvent();
+  it('should handle delete event', () => {
+    // Arrange
+    const matchId = 123;
+    component.deleteEvent.emit = jest.fn();
 
-    expect(instance.searchTicketEvent.emit).toHaveBeenCalledTimes(1);
+    // Act
+    component.handleDeleteEvent(matchId);
+
+    // Assert
+    expect(component.deleteEvent.emit).toHaveBeenCalledWith(matchId);
   });
 
-  it('#openPopupTransIds should call #modalService.open', async () => {
-    const fakeLogInfoRedCard = Helper.fakeLogInfoEarlyKickOff;
-    const mockModalOpen = jest.fn();
-    const { instance } = await shallow
-    .mock(ModalService, { open: mockModalOpen })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        logInfo: fakeLogInfoRedCard
-      }
-    });
-    instance.openPopupTransIds(1092, '');
+  it('should emit search event', () => {
+    // Arrange
+    component.searchTicketEvent.emit = jest.fn();
 
-    expect(mockModalOpen).toHaveBeenCalledTimes(1);
+    // Act
+    component.emitSearchEvent();
+
+    // Assert
+    expect(component.searchTicketEvent.emit).toHaveBeenCalled();
+  });
+
+  it('should open popup trans ids', () => {
+    // Arrange
+    const requestId = 123;
+    const transIds = '1,2,3';
+    StaticService.openPopupTransIds = jest.fn();
+
+    // Act
+    component.openPopupTransIds(requestId, transIds);
+
+    // Assert
+    expect(StaticService.openPopupTransIds).toHaveBeenCalledWith(requestId, transIds, modalService);
+  });
+
+  it('should get issue type id', () => {
+    // Act
+    const result = component.getIssueTypeId();
+
+    // Assert
+    expect(result).toBe(Number(component.filter.issueTypeId));
+  });
+
+  it('should get sub issue type id', () => {
+    // Act
+    const result = component.getSubIssueTypeId();
+
+    // Assert
+    expect(result).toBe(Number(component.filter.subIssueTypeId));
+  });
+
+  it('should check if not show template message when groups is undefined', () => {
+    // Arrange
+    component.logInfo.tableTicketsModel.groups = undefined;
+
+    // Act
+    const result = component.isNotShowTemplateMessage();
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('should check if not show template message when groups is empty', () => {
+    // Arrange
+    component.logInfo.tableTicketsModel.groups = [];
+
+    // Act
+    const result = component.isNotShowTemplateMessage();
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('should check if not show template message when groups is null', () => {
+    // Arrange
+    component.logInfo.tableTicketsModel.groups = null;
+
+    // Act
+    const result = component.isNotShowTemplateMessage();
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('should show template message when groups has items', () => {
+    // Arrange
+    const mockGroup = {
+      name: 'Test Group',
+      isExpanded: true,
+      tickets: [],
+      displayTotalTickets: 0,
+      setCommonValue: jest.fn(),
+      mapTickets: jest.fn()
+    } as unknown as GroupModel;
+    component.logInfo.tableTicketsModel.groups = [mockGroup];
+
+    // Act
+    const result = component.isNotShowTemplateMessage();
+
+    // Assert
+    expect(result).toBeFalsy();
   });
 });

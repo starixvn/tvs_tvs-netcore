@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { PagingModel } from 'src/utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
 import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { PagingModule } from '../../../../../utility/components/paging/paging.module';
 import { PipeModule } from '../../../../../utility/pipes/pipe.module';

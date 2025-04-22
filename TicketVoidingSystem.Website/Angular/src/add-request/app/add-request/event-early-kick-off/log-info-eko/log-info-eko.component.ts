@@ -76,7 +76,6 @@ export class LogInfoEkoComponent {
   }
 
   public isNotShowTemplateMessage() {
-    return this.logInfo.tableTicketsModel.groups === undefined || this.logInfo.tableTicketsModel.groups.length === 0
-      || this.logInfo.tableTicketsModel.groups == null
+    return !this.logInfo?.tableTicketsModel?.groups || this.logInfo.tableTicketsModel.groups.length === 0;
   }
 }

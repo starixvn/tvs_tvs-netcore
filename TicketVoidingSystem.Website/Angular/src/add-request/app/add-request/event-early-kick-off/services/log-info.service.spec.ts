@@ -1,201 +1,394 @@
-import * as _ from 'lodash';
-import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
-import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { MatchModel } from '../../../../../utility/models/match.model';
-import { CommonService } from '../../../../../utility/services/common.service';
-import { HttpService } from '../../../../../utility/services/http.service';
-import { FilterModel } from '../../filter/filter.model';
-import { EarlyKickOffModel } from '../../models/event-eko.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
-import { GetTicketsQuery } from '../../models/get-tickets.query';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { TableTicketsModel } from '../tickets-list/table-tickets.model';
-import { EventEarlyKickOffService } from './event-eko.service';
+import { TestBed } from '@angular/core/testing';
 import { LogInfoService } from './log-info.service';
+import { CommonService } from '../../../../../utility/services/common.service';
+import { EventEarlyKickOffService } from './event-eko.service';
+import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
+import { FilterModel } from '../../filter/filter.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { GetLogInfoModel } from '../../models/get-log-info.model';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { Validation } from '../../models/get-log-info.model';
+import { EarlyKickOffGetLogInfoQuery } from '../models/get-log-info.query';
+import { ValidationMessage } from '../../models/get-log-info.model';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { TemplateService } from '../../../../../utility/components/template-message/template-message/services/template.service';
+import { HttpService } from '../../../../../utility/services/http.service';
+import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
-    matchId: 1,
-    eventName: '',
-    isCollapse: false,
-    isMainMatch: true,
-    isShowValidation: false,
-    kickOffTime: '',
-    leagueName: '',
-    matchModel: new MatchModel(),
-    pagingModel: new PagingModel(),
-    isInvalidTotalTickets: false,
-    tableTicketsModel: new TableTicketsModel(),
-    isHasSettledTicket: false,
-    isHasInstantlySettledTicket: false,
-    sportType: 0
-  };
-  static readonly fakeEarlyKickOffModel: EarlyKickOffModel = {
-    eventDate: new Date(),
-    isMainMatch: true,
-    kickOffTime: '',
-    matchId: 1,
-    subIssueTypeId: 1,
-    sportType: 0
-  }
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 123,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    scoreOfMatch: '',
+  static readonly fakeKickOffTime = '2020-10-08 09:44:46.361 PM';
+  static readonly fakeLogInfoDetail = {
+    matchId: Helper.fakeMatchId,
+    liveScores: '',
+    transVoidToTime: null,
+    singleCount: 0,
+    cashOutCount: 0,
+    settleCount: 0,
+    instantlySettleCount: 0,
+    mainParlayCount: 0,
+    cancelCashOutCount: 0,
+    voidFromTime: new Date('2024-03-20T10:00:00'),
+    voidToTime: new Date('2024-03-20T11:00:00'),
+    highlightMinTime: null,
+    highlightAcceptType: null,
     scoreNormalTicket: '',
-    instantlySettleCount: 2,
-    cancelCashOutCount: 1
+    scoreOfMatch: '',
+    minTransId: '',
+    actionType: '',
+    isHasWarningRangeTime: false,
+    logInfoTicketsJson: null
   } as LogInfoDetail;
-  static readonly fakeGetLogInfoModel: GetLogInfoModel = {
-    matchId: 123,
-    validation: {
-      isInvalidTotalTickets: false,
-      isExistedInOtherRequest: true,
-      isPoolHouseAffected: true,
-    } as Validation,
-    ticketRequest: [{
-      transIds: '123456789',
-      requestId: 123
-    } as TicketRequest],
-    logInfoDetail: Helper.fakeLogInfoDetail
-  };
-  static readonly fakeTicketRequest: TicketRequest = {
-    transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
-    requestId: 123,
-  } as TicketRequest;
+
+  static readonly fakeValidation = {
+    isInvalidTotalTickets: false,
+    isExistedInOtherRequest: false,
+    isExistsSecondAccept: false,
+    isHasSettledTicket: false,
+    isHasInstantlySettledTicket: false
+  } as Validation;
+
+  static readonly fakeGetLogInfoModel = {
+    matchId: Helper.fakeMatchId,
+    logInfoDetail: Helper.fakeLogInfoDetail,
+    validation: Helper.fakeValidation,
+    ticketRequest: [],
+    betTypeCount: []
+  } as GetLogInfoModel;
+
+  static readonly fakeFilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '11',
+    action: '1'
+  } as FilterModel;
+
+  static readonly fakeTransInfoAddRequestModel = {
+    transInfoJson: null,
+    unMarkTransIds: '',
+    markTransIds: '',
+    removeTransIds: ''
+  } as TransInfoAddRequestModel;
+
+  static readonly fakeEarlyKickOffGetLogInfoQuery = {
+    matchId: Helper.fakeMatchId,
+    isMainMatch: true,
+    subIssueTypeId: 11,
+    kickOffTime: Helper.fakeKickOffTime
+  } as EarlyKickOffGetLogInfoQuery;
+
+  static readonly fakeValidationMessage = {
+    isError: true,
+    reason: 'Test error message',
+    isShowPopup: false,
+    transIds: '',
+    requestId: 1
+  } as ValidationMessage;
+
+  static readonly fakeTableTicketsModel = {
+    id: 1,
+    groups: [],
+    total: 10,
+    totalSingle: 5,
+    totalParlay: 5,
+    groupPHAffected: true,
+    isHasSettledTicket: true,
+    isHasInstantlySettledTicket: false,
+    isInvalidTotalTickets: false,
+    isExistedInOtherRequest: false,
+    isExistsSecondAccept: false,
+    initData: jest.fn()
+  } as unknown as TableTicketsModel;
 }
 
 describe('LogInfoService', () => {
   let service: LogInfoService;
+  let commonService: jest.Mocked<CommonService>;
+  let eventEarlyKickOffService: jest.Mocked<EventEarlyKickOffService>;
+  let httpService: jest.Mocked<HttpService>;
+  let templateService: jest.Mocked<TemplateService>;
 
   beforeEach(() => {
-    service = new LogInfoService(null, null, null, null);
+    TestBed.configureTestingModule({
+      providers: [
+        LogInfoService,
+        { provide: CommonService, useValue: {
+          getLogInfo: jest.fn()
+        } },
+        { provide: EventEarlyKickOffService, useValue: {
+          getEarlyKickOffModel: jest.fn()
+        } },
+        { provide: StaticService, useValue: {
+          getValidationMessageList: jest.fn().mockReturnValue([Helper.fakeValidationMessage])
+        } },
+        { provide: HttpService, useValue: {
+          postJson: jest.fn()
+        } },
+        { provide: TemplateService, useValue: {
+          initializeTemplateValue: jest.fn().mockReturnValue({})
+        } }
+      ]
+    });
+
+    service = TestBed.inject(LogInfoService);
+    commonService = TestBed.inject(CommonService) as jest.Mocked<CommonService>;
+    eventEarlyKickOffService = TestBed.inject(EventEarlyKickOffService) as jest.Mocked<EventEarlyKickOffService>;
+    httpService = TestBed.inject(HttpService) as jest.Mocked<HttpService>;
+    templateService = TestBed.inject(TemplateService) as jest.Mocked<TemplateService>;
   });
 
-  it('#getLogInfo should call expected method', async () => {
-    const commonService = new CommonService(null);
-    commonService.getLogInfo = jest.fn().mockImplementation(() => Promise.resolve(new GetLogInfoViewModel()));
-    const eventEarlyKickOffService = new EventEarlyKickOffService();
-    eventEarlyKickOffService.getEarlyKickOffModel = jest.fn();
-    const logInfoService = new LogInfoService(null, commonService, eventEarlyKickOffService, null);
-    logInfoService['initGetLogInfoEarlyKickOffQuery'] = jest.fn();
-
-    await logInfoService.getLogInfo(null, null, null, null);
-
-    expect(logInfoService['initGetLogInfoEarlyKickOffQuery']).toHaveBeenCalledTimes(1);
-    expect(commonService.getLogInfo).toHaveBeenCalledTimes(1);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
+  describe('getTickets', () => {
+    it('should get tickets when logInfoDetail.logInfoTicketsJson is null', async () => {
+      // Arrange
+      const logInfo = {
+        matchId: Helper.fakeMatchId,
+        isMainMatch: true,
+        logInfoDetail: { logInfoTicketsJson: null },
+        pagingModel: { page: 1, pageSize: 10 },
+        tableTicketsModel: Helper.fakeTableTicketsModel
+      } as LogInfoEarlyKickOff;
+      const isEdit = false;
+      const requestId = 1;
+      const filter = Helper.fakeFilterModel;
 
-  it('#initGetLogInfoEarlyKickOffQuery should return expected', async () => {
-    const filter = new FilterModel();
-    filter.issueTypeId = IssueTypeConstant.WRONG_HDP;
-    const eventEarlyKickOffService = new EventEarlyKickOffService();
-    eventEarlyKickOffService.getEarlyKickOffModel = jest.fn();
-    const logInfoService = new LogInfoService(null, null, eventEarlyKickOffService, null);
-    logInfoService['getTransInfo'] = jest.fn();
+      const mockResponse = {
+        transInfoAddRequestModel: Helper.fakeTransInfoAddRequestModel,
+        getLogInfoModels: [Helper.fakeGetLogInfoModel]
+      } as GetLogInfoViewModel;
 
-    const actual = logInfoService['initGetLogInfoEarlyKickOffQuery'](true, 123, filter, [Helper.fakeLogInfoEarlyKickOff]);
+      commonService.getLogInfo.mockResolvedValue(mockResponse);
+      httpService.postJson.mockResolvedValue(Helper.fakeTableTicketsModel);
 
-    expect(actual).toBeDefined();
+      // Act
+      await service.getTickets(logInfo, isEdit, requestId, filter);
+
+      // Assert
+      expect(commonService.getLogInfo).toHaveBeenCalled();
+      expect(httpService.postJson).toHaveBeenCalled();
+      expect(logInfo.tableTicketsModel.initData).toHaveBeenCalled();
+      expect(logInfo.isRenderedTickets).toBe(true);
+      expect(logInfo.isShowValidation).toBe(true);
+      expect(logInfo.isCollapse).toBe(false);
+    });
+
+    it('should not get tickets when logInfoDetail.logInfoTicketsJson exists', async () => {
+      // Arrange
+      const logInfo = {
+        matchId: Helper.fakeMatchId,
+        isMainMatch: true,
+        logInfoDetail: { logInfoTicketsJson: 'some data' },
+        pagingModel: { page: 1, pageSize: 10 },
+        tableTicketsModel: Helper.fakeTableTicketsModel,
+        isRenderedTickets: false
+      } as LogInfoEarlyKickOff;
+      const isEdit = false;
+      const requestId = 1;
+      const filter = Helper.fakeFilterModel;
+
+      // Mock the getLogInfoTickets method to avoid the error
+      jest.spyOn(service as any, 'getLogInfoTickets').mockImplementation(async () => {
+        // Do nothing
+      });
+
+      // Act
+      await service.getTickets(logInfo, isEdit, requestId, filter);
+
+      // Assert
+      expect(commonService.getLogInfo).not.toHaveBeenCalled();
+      expect(httpService.postJson).not.toHaveBeenCalled();
+      expect(logInfo.isRenderedTickets).toBe(false);
+    });
   });
 
-  it('#initGetLogInfoEarlyKickOffQuery should return expected', async () => {
-    const filter = new FilterModel();
-    filter.issueTypeId = IssueTypeConstant.WRONG_1ST_HDP;
-    const eventEarlyKickOffService = new EventEarlyKickOffService();
-    eventEarlyKickOffService.getEarlyKickOffModel = jest.fn();
-    const logInfoService = new LogInfoService(null, null, eventEarlyKickOffService, null);
-    logInfoService['getTransInfo'] = jest.fn();
+  describe('initQueryGetTickets', () => {
+    it('should initialize query with correct values', () => {
+      // Arrange
+      const pageIndex = 0;
+      const pageSize = 10;
+      const logInfo = {
+        logInfoDetail: { logInfoTicketsJson: 'some data' }
+      } as LogInfoEarlyKickOff;
+      const filter = Helper.fakeFilterModel;
 
-    const actual = logInfoService['initGetLogInfoEarlyKickOffQuery'](false, 123, filter, [Helper.fakeLogInfoEarlyKickOff]);
+      // Act
+      const result = service.initQueryGetTickets(pageIndex, pageSize, logInfo, filter);
 
-    expect(actual).toBeDefined();
+      // Assert
+      expect(result.logInfoTicketsJson).toBe('some data');
+      expect(result.issueTypeId).toBe(Number(filter.issueTypeId));
+      expect(result.pageIndex).toBe(pageIndex);
+      expect(result.pageSize).toBe(pageSize);
+    });
   });
 
-  it('#assignResultLogInfoToEvents should not update messageValidationLogInfo', async () => {
-    const matchId = 1234;
-    const events = _.cloneDeep([Helper.fakeLogInfoEarlyKickOff]);
-    events[0].matchId = matchId;
-    const logInfoModels = _.cloneDeep([Helper.fakeGetLogInfoModel]);
-    logInfoModels[0].matchId = 11111;
-    logInfoModels[0].logInfoDetail.matchId = 11111;
-    const logInfoService = new LogInfoService(null, null, null, null);
+  describe('assignTemplateMessageValueToEvent', () => {
+    it('should assign template message values correctly', () => {
+      // Arrange
+      const eventLogInfo = {
+        matchModel: {},
+        tableTicketsModel: Helper.fakeTableTicketsModel,
+        kickOffTime: Helper.fakeKickOffTime
+      } as LogInfoEarlyKickOff;
 
-    logInfoService['assignResultLogInfoToEvents'](events, logInfoModels);
+      // Act
+      service.assignTemplateMessageValueToEvent(eventLogInfo);
 
-    expect(events.every(x => x.messageValidationLogInfo === undefined)).toBeTruthy();
+      // Assert
+      expect(templateService.initializeTemplateValue).toHaveBeenCalledWith(eventLogInfo.matchModel);
+      expect(eventLogInfo.templateValue.groupPHAffected).toBe(Helper.fakeTableTicketsModel.groupPHAffected);
+      expect(eventLogInfo.templateValue.checkSettled).toBe(Helper.fakeTableTicketsModel.isHasSettledTicket);
+      expect(eventLogInfo.templateValue.kickOffTime).toBe(Helper.fakeKickOffTime);
+    });
   });
 
-  it('#assignResultLogInfoToEvents should update messageValidationLogInfo when have log', async () => {
-    const mainMatchId = 1234;
-    const childMatchId = 1235;
-    const childEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    childEvent.matchId = childMatchId;
-    childEvent.isMainMatch = false;
-    const mainEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    mainEvent.matchId = mainMatchId;
-    mainEvent.isMainMatch = true;
-    const events = [childEvent, mainEvent];
-    const logInfoModelsMain = _.cloneDeep(Helper.fakeGetLogInfoModel);
-    logInfoModelsMain.matchId = mainMatchId;
-    logInfoModelsMain.logInfoDetail.matchId = mainMatchId;
-    const logInfoModelsChild = _.cloneDeep(Helper.fakeGetLogInfoModel);
-    logInfoModelsChild.matchId = childMatchId;
-    logInfoModelsChild.logInfoDetail.matchId = childMatchId;
-    logInfoModelsChild.validation.isInvalidTotalTickets = true
-    const logInfoService = new LogInfoService(null, null, null, null);
+  describe('getLogInfo', () => {
+    it('should get log info and assign results', async () => {
+      // Arrange
+      const selectedEvents = [{
+        matchId: Helper.fakeMatchId,
+        isMainMatch: true,
+        isCollapse: true,
+        isShowValidation: false
+      } as LogInfoEarlyKickOff];
+      const isEdit = false;
+      const requestId = 1;
+      const filter = Helper.fakeFilterModel;
 
-    logInfoService['assignResultLogInfoToEvents'](events, [logInfoModelsMain, logInfoModelsChild]);
+      const mockResponse = {
+        transInfoAddRequestModel: Helper.fakeTransInfoAddRequestModel,
+        getLogInfoModels: [Helper.fakeGetLogInfoModel]
+      } as GetLogInfoViewModel;
 
-    expect(events.every(x => x.messageValidationLogInfo !== undefined)).toBeTruthy();
+      commonService.getLogInfo.mockResolvedValue(mockResponse);
+      eventEarlyKickOffService.getEarlyKickOffModel.mockReturnValue([Helper.fakeEarlyKickOffGetLogInfoQuery]);
+
+      // Act
+      const result = await service.getLogInfo(selectedEvents, isEdit, requestId, filter);
+      service.assignResultLogInfoToEvents(selectedEvents, result.getLogInfoModels);
+
+      // Assert
+      expect(commonService.getLogInfo).toHaveBeenCalled();
+      expect(result).toBe(mockResponse);
+      expect(selectedEvents[0].logInfoDetail).toBeDefined();
+      expect(selectedEvents[0].messageValidationLogInfo).toBeDefined();
+    });
   });
 
-  it('#resetLogInfoOfEvent should update model to null', async () => {
-    const events = _.cloneDeep([Helper.fakeLogInfoEarlyKickOff]);
-    service['resetLogInfoOfEvent'](events);
+  describe('initGetLogInfoEarlyKickOffQuery', () => {
+    it('should initialize query with correct values for new request', () => {
+      // Arrange
+      const isEdit = false;
+      const requestId = 1;
+      const filter = Helper.fakeFilterModel;
+      const events = [{
+        matchId: Helper.fakeMatchId,
+        isMainMatch: true,
+        kickOffTime: Helper.fakeKickOffTime
+      } as LogInfoEarlyKickOff];
 
-    expect(events[0].messageValidationLogInfo).toBeNull();
+      eventEarlyKickOffService.getEarlyKickOffModel.mockReturnValue([Helper.fakeEarlyKickOffGetLogInfoQuery]);
+
+      // Act
+      const result = service.initGetLogInfoEarlyKickOffQuery(isEdit, requestId, filter, events);
+
+      // Assert
+      expect(result.requestId).toBeNull();
+      expect(result.actionId).toBe(Number(filter.action));
+      expect(result.issueTypeId).toBe(Number(filter.issueTypeId));
+      expect(result.earlyKickOffModels).toBeDefined();
+    });
+
+    it('should initialize query with correct values for edit request', () => {
+      // Arrange
+      const isEdit = true;
+      const requestId = 1;
+      const filter = Helper.fakeFilterModel;
+      const events = [{
+        matchId: Helper.fakeMatchId,
+        isMainMatch: true,
+        kickOffTime: Helper.fakeKickOffTime
+      } as LogInfoEarlyKickOff];
+
+      eventEarlyKickOffService.getEarlyKickOffModel.mockReturnValue([Helper.fakeEarlyKickOffGetLogInfoQuery]);
+
+      // Act
+      const result = service.initGetLogInfoEarlyKickOffQuery(isEdit, requestId, filter, events);
+
+      // Assert
+      expect(result.requestId).toBe(requestId);
+      expect(result.actionId).toBe(Number(filter.action));
+      expect(result.issueTypeId).toBe(Number(filter.issueTypeId));
+      expect(result.earlyKickOffModels).toBeDefined();
+    });
   });
 
-  it('#getTickets should call mockService.getLogInfo', async () => {
-    const gtLogInfoViewModel = new GetLogInfoViewModel();
-    gtLogInfoViewModel.transInfoAddRequestModel = new TransInfoAddRequestModel();
-    const event = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    const primitiveProperty = new PrimitiveProperty();
-    primitiveProperty.transInfoAddRequestModel = new TransInfoAddRequestModel();
-    const httpService = new HttpService(null);
-    httpService.postJson = jest.fn().mockReturnValue(new TableTicketsModel());
-    const mockService = new LogInfoService(httpService, null, null, null);
-    mockService.getLogInfo = jest.fn().mockReturnValue(gtLogInfoViewModel);
-    mockService.assignResultLogInfoToEvents = jest.fn();
+  describe('assignResultLogInfoToEvents', () => {
+    it('should assign log info results to events correctly', () => {
+      // Arrange
+      const selectedEvents = [{
+        matchId: Helper.fakeMatchId,
+        isCollapse: true,
+        isShowValidation: false
+      } as LogInfoEarlyKickOff];
+      const logInfoModels = [Helper.fakeGetLogInfoModel];
 
-    await mockService.getTickets(new GetTicketsQuery(), event, true, 1, new FilterModel());
+      // Act
+      service.assignResultLogInfoToEvents(selectedEvents, logInfoModels);
 
-    expect(mockService.assignResultLogInfoToEvents).toHaveBeenCalledTimes(1);
-    expect(mockService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(event.isCollapse).toBeFalsy();
+      // Assert
+      expect(selectedEvents[0].isInvalidTotalTickets).toBe(Helper.fakeValidation.isInvalidTotalTickets);
+      expect(selectedEvents[0].isHasSettledTicket).toBe(Helper.fakeValidation.isHasSettledTicket);
+      expect(selectedEvents[0].isHasInstantlySettledTicket).toBe(Helper.fakeValidation.isHasInstantlySettledTicket);
+      expect(selectedEvents[0].messageValidationLogInfo).toBeDefined();
+      expect(selectedEvents[0].logInfoDetail).toBe(Helper.fakeLogInfoDetail);
+      expect(selectedEvents[0].isCollapse).toBe(true);
+      expect(selectedEvents[0].isShowValidation).toBe(false);
+    });
+
+    it('should set isShowValidation to true when isInvalidTotalTickets is true', () => {
+      // Arrange
+      const selectedEvents = [{
+        matchId: Helper.fakeMatchId,
+        isCollapse: true,
+        isShowValidation: false
+      } as LogInfoEarlyKickOff];
+      const logInfoModels = [{
+        ...Helper.fakeGetLogInfoModel,
+        validation: {
+          ...Helper.fakeValidation,
+          isInvalidTotalTickets: true
+        }
+      }];
+
+      // Act
+      service.assignResultLogInfoToEvents(selectedEvents, logInfoModels);
+
+      // Assert
+      expect(selectedEvents[0].isShowValidation).toBe(true);
+      expect(selectedEvents[0].isCollapse).toBe(false);
+    });
   });
 
-  it('#initQuery should return GetTicketsQuery', async () => {
-    const actual = service.initQuery(1, 1, Helper.fakeLogInfoEarlyKickOff, new FilterModel());
+  describe('resetLogInfoOfEvent', () => {
+    it('should reset log info of events', () => {
+      // Arrange
+      const events = [{
+        matchId: Helper.fakeMatchId,
+        isRenderedTickets: true,
+        messageValidationLogInfo: [Helper.fakeValidationMessage]
+      } as LogInfoEarlyKickOff];
 
-    expect(actual.pageIndex).toBe(1);
-    expect(actual.pageSize).toBe(1);
-    expect(actual.match).toEqual(Helper.fakeLogInfoEarlyKickOff.matchModel);
-    expect(actual.requestId ).toBeNull();
+      // Act
+      service.resetLogInfoOfEvent(events);
+
+      // Assert
+      expect(events[0].isRenderedTickets).toBe(false);
+      expect(events[0].messageValidationLogInfo).toBeNull();
+    });
   });
 });
