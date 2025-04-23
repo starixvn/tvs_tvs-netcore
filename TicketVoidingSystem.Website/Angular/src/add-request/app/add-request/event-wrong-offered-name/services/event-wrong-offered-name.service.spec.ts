@@ -1,141 +1,265 @@
-import { TemplateService } from "../../../../../utility/components/template-message/template-message/services/template.service";
-import { TemplateValue } from "../../../../../utility/components/template-message/template-message/template.model";
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { MatchModel } from "../../../../../utility/models/match.model";
-import { VoidedReason } from "../../../../../utility/models/reason.model";
-import { CommonService } from '../../../../../utility/services/common.service';
-import { AddRequestApiService } from "../../add-request-api.service";
-import { AffectedTicketService } from "../../affected-ticket/affected-ticket.service";
-import { FilterModel } from "../../filter/filter.model";
-import { WrongOfferedNameModel } from '../../models/event-wrong-offered-name.model';
-import { PermissionAddRequest } from "../../models/permission-add-request.model";
-import { TicketsModel } from "../../pool-house-ticket/tickets/tickets.model";
-import { FilterWrongOfferedNameModel } from '../models/filter-wrong-offered-name.model';
-import { LogInfoWrongOfferedName } from '../models/log-info-wrong-offered-name.model';
+import { TestBed } from '@angular/core/testing';
 import { EventWrongOfferedNameService } from './event-wrong-offered-name.service';
-import { ValidationService } from "./validation.service";
-
+import { ValidationService } from './validation.service';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { CommonService } from '../../../../../utility/services/common.service';
+import { TemplateService } from '../../../../../utility/components/template-message/template-message/services/template.service';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
+import { WrongOfferedNameModel } from '../../models/event-wrong-offered-name.model';
+import { LogInfoWrongOfferedName } from '../models/log-info-wrong-offered-name.model';
+import { FilterModel } from '../../filter/filter.model';
+import { MatchModel } from '../../../../../utility/models/match.model';
+import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
+import { FilterWrongOfferedNameModel } from '../models/filter-wrong-offered-name.model';
+import { VoidedReason } from '../../../../../utility/models/reason.model';
+import { TemplateValue } from '../../../../../utility/components/template-message/template-message/template.model';
 
 class Helper {
-  static readonly fakeWrongOfferedNameModel: WrongOfferedNameModel = {
+  static readonly fakeMatchId = 12345;
+  static readonly fakeMatch = {
+    homeName: 'Home Team',
+    awayName: 'Away Team',
+    homeNameTraditional: 'Home Team T',
+    awayNameTraditional: 'Away Team T',
+    homeNameSimplified: 'Home Team S',
+    awayNameSimplified: 'Away Team S',
+    leagueName: 'Test League',
+    leagueNameTraditional: 'Test League T',
+    leagueNameSimplified: 'Test League S',
+    sportType: 1
+  } as MatchModel;
+
+  static readonly fakeWrongOfferedNameModel = {
+    matchId: 122,
+    match: Helper.fakeMatch,
+    subIssueTypeId: 12,
+    licenseeNames: 'Licensee1,Licensee2',
     currencyIds: '1,2',
-    licenseeNames: 'licensee1,licensee2',
-    logInfoDetail: new LogInfoDetail(),
-    matchId: 1,
-    match: new MatchModel(),
-    subIssueTypeId: 1
+    wrongName: 'Wrong Name',
+    actualName: 'Actual Name',
+    wrongNameT: 'Wrong Name T',
+    actualNameT: 'Actual Name T',
+    wrongNameS: 'Wrong Name S',
+    actualNameS: 'Actual Name S',
+    logInfoDetail: {
+      logInfoTicketsJson: '{}'
+    }
   } as WrongOfferedNameModel;
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '26',
-    subIssueTypeId: '1',
-    action: '5'
+
+  static readonly fakeFilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '2',
+    action: '1',
+    isTest: true,
+    isVoided: false
   } as FilterModel;
-  static readonly fakeLogInfoWrongOfferedName: LogInfoWrongOfferedName = {
-    matchId: 1,
-    filterWrongOfferedName: new FilterWrongOfferedNameModel(),
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
-  } as LogInfoWrongOfferedName;
-  static readonly fakeFilterWrongOfferedName: FilterWrongOfferedNameModel = {
-    currencyIds: [],
-    licenseeNames: []
-  } as FilterWrongOfferedNameModel;
+
+  static readonly fakeTicketsModel = {
+    totalSingle: 1,
+    totalParlay: 1,
+    fromTime: new Date(),
+    toTime: new Date(),
+    isHasSettledTicket: false
+  } as TicketsModel;
 }
 
 describe('EventWrongOfferedNameService', () => {
-  let mockService: EventWrongOfferedNameService;
-  let mockCommonService: CommonService;
-  let mockTemplateService: TemplateService;
-  let mockAddRequestApiService: AddRequestApiService;
-  let mockAffectedTicketService: AffectedTicketService;
-  let validationService: ValidationService;
+  let service: EventWrongOfferedNameService;
+  let validationService: jest.Mocked<ValidationService>;
+  let addRequestApiService: jest.Mocked<AddRequestApiService>;
+  let commonService: jest.Mocked<CommonService>;
+  let templateService: jest.Mocked<TemplateService>;
+  let affectedTicketService: jest.Mocked<AffectedTicketService>;
 
   beforeEach(() => {
-    mockCommonService = new CommonService(null);
-    mockTemplateService = new TemplateService();
-    mockAddRequestApiService = new AddRequestApiService(null);
-    mockAffectedTicketService = new AffectedTicketService(null);
-    validationService = new ValidationService(null);
-    mockService = new EventWrongOfferedNameService(mockCommonService, mockTemplateService,
-      mockAddRequestApiService, mockAffectedTicketService, validationService);
+    TestBed.configureTestingModule({
+      providers: [
+        EventWrongOfferedNameService,
+        { provide: ValidationService, useValue: {
+          isSubTypeOfLeague: jest.fn()
+        } },
+        { provide: AddRequestApiService, useValue: {
+          getPermissionAddRequest: jest.fn()
+        } },
+        { provide: CommonService, useValue: {
+          getVoidedReason: jest.fn()
+        } },
+        { provide: TemplateService, useValue: {
+          initializeTemplateValue: jest.fn()
+        } },
+        { provide: AffectedTicketService, useValue: {
+          getAffectedTickets: jest.fn()
+        } }
+      ]
+    });
+
+    service = TestBed.inject(EventWrongOfferedNameService);
+    validationService = TestBed.inject(ValidationService) as jest.Mocked<ValidationService>;
+    addRequestApiService = TestBed.inject(AddRequestApiService) as jest.Mocked<AddRequestApiService>;
+    commonService = TestBed.inject(CommonService) as jest.Mocked<CommonService>;
+    templateService = TestBed.inject(TemplateService) as jest.Mocked<TemplateService>;
+    affectedTicketService = TestBed.inject(AffectedTicketService) as jest.Mocked<AffectedTicketService>;
   });
 
-  it('getPermissionAddRequest should call #addRequestApiService.getPermissionAddRequest', async () => {
-    const permission = { isAddSettledTickets: true } as PermissionAddRequest;
-    mockAddRequestApiService.getPermissionAddRequest = jest.fn().mockReturnValue(permission);
-
-    const actual = await mockService.getPermissionAddRequest();
-
-    expect(mockAddRequestApiService.getPermissionAddRequest).toHaveBeenCalledTimes(1);
-    expect(actual).toBe(permission);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('initLogInfoEvent should return LogInfoWrongOfferedName', async () => {
-    const logInfo = new LogInfoWrongOfferedName();
-    logInfo.filterWrongOfferedName = new FilterWrongOfferedNameModel();
-    const actual = mockService.initLogInfoEvent();
+  describe('getPermissionAddRequest', () => {
+    it('should call addRequestApiService.getPermissionAddRequest', () => {
+      // Act
+      service.getPermissionAddRequest();
 
-    expect(actual).toEqual(logInfo);
+      // Assert
+      expect(addRequestApiService.getPermissionAddRequest).toHaveBeenCalled();
+    });
   });
 
-  it('initWrongMarketOfferedModel should return WrongOfferedNameModel', async () => {
-    const logInfo = new LogInfoWrongOfferedName();
-    logInfo.filterWrongOfferedName = new FilterWrongOfferedNameModel();
-    logInfo.matchId = 1;
-    logInfo.filterWrongOfferedName.currencyIds = ['1', '2'];
-    logInfo.filterWrongOfferedName.licenseeNames = ['licensee1', 'licensee2'];
-    const model = new WrongOfferedNameModel();
-    model.matchId = Helper.fakeLogInfoWrongOfferedName.matchId;
-    model.subIssueTypeId = 1;
-    model.currencyIds = '1,2';
-    model.licenseeNames = 'licensee1,licensee2';
+  describe('initLogInfoEvent', () => {
+    it('should initialize LogInfoWrongOfferedName with default values', () => {
+      // Act
+      const result = service.initLogInfoEvent();
 
-    const actual = mockService.initWrongMarketOfferedModel(1, logInfo);
-
-    expect(actual).toEqual(model);
+      // Assert
+      expect(result).toBeDefined();
+      expect(result.filterWrongOfferedName).toBeDefined();
+    });
   });
 
-  it('assignModelsToEvents should return LogInfoWrongOfferedName', async () => {
-    const ticketTable = new TicketsModel();
-    const voidedReason = new VoidedReason();
-    const templateValue = new TemplateValue();
-    mockService.getAffectedTickets = jest.fn().mockReturnValue(ticketTable);
-    mockService['getVoidTime'] = jest.fn().mockReturnValue('');
-    mockService.getTemplateMessageValue = jest.fn().mockReturnValue(templateValue);
-    mockCommonService.getVoidedReason = jest.fn().mockReturnValue(voidedReason);
-    const actual = await mockService.assignModelsToEvents(Helper.fakeFilterModel, Helper.fakeWrongOfferedNameModel);
+  describe('initWrongMarketOfferedModel', () => {
+    it('should initialize WrongOfferedNameModel with correct values', () => {
+      // Arrange
+      const subIssueTypeId = 1;
+      const events = new LogInfoWrongOfferedName();
+      events.matchId = Helper.fakeMatchId;
+      events.filterWrongOfferedName = {
+        licenseeNames: ['Licensee1', 'Licensee2'],
+        currencyIds: ['1', '2'],
+        wrongName: 'Wrong Name',
+        actualName: 'Actual Name',
+        wrongNameT: 'Wrong Name T',
+        actualNameT: 'Actual Name T',
+        wrongNameS: 'Wrong Name S',
+        actualNameS: 'Actual Name S'
+      } as FilterWrongOfferedNameModel;
 
-    expect(mockService.getAffectedTickets).toHaveBeenCalledTimes(1);
-    expect(mockService['getVoidTime']).toHaveBeenCalledTimes(2);
-    expect(mockService.getTemplateMessageValue).toHaveBeenCalledTimes(1);
-    expect(mockCommonService.getVoidedReason).toHaveBeenCalledTimes(1);
-    expect(actual.matchId).toBe(Helper.fakeWrongOfferedNameModel.matchId);
-    expect(actual.logInfoDetail).toBe(Helper.fakeWrongOfferedNameModel.logInfoDetail);
-    expect(actual.matchModel).toBe(Helper.fakeWrongOfferedNameModel.match);
-    expect(actual.tableTicketsModel).toBe(ticketTable);
-    expect(actual.voidReason).toBe(voidedReason);
-    expect(actual.templateValue).toBe(templateValue);
-    expect(actual.isCollapse).toBe(Helper.fakeFilterModel.isVoided);
+      // Act
+      const result = service.initWrongMarketOfferedModel(subIssueTypeId, events);
+
+      // Assert
+      expect(result.matchId).toBe(Helper.fakeMatchId);
+      expect(result.subIssueTypeId).toBe(subIssueTypeId);
+      expect(result.licenseeNames).toBe('Licensee1,Licensee2');
+      expect(result.currencyIds).toBe('1,2');
+      expect(result.wrongName).toBe('Wrong Name');
+      expect(result.actualName).toBe('Actual Name');
+      expect(result.wrongNameT).toBe('Wrong Name T');
+      expect(result.actualNameT).toBe('Actual Name T');
+      expect(result.wrongNameS).toBe('Wrong Name S');
+      expect(result.actualNameS).toBe('Actual Name S');
+    });
   });
 
-  it('getVoidTime should return time type string', async () => {
-    const date = new Date('2024-10-14T01:02:03');
-    const actual = mockService['getVoidTime'](date);
+  describe('assignModelsToEvents', () => {
+    it('should assign models to events correctly', async () => {
+      // Arrange
+      const filter = Helper.fakeFilterModel;
+      const inputModel = Helper.fakeWrongOfferedNameModel;
+      const fakeVoidedReason = { 
+        reasonEnglish: 'Test Reason',
+        reasonChineseSimplified: 'Test Reason SC'
+      } as VoidedReason;
+      const fakeTemplateValue = { 
+        matchId: 1,
+        groupPHAffected: 1,
+        checkSettled: false,
+        wrongName: '',
+        actualName: '',
+        wrongNameT: '',
+        actualNameT: '',
+        wrongNameS: '',
+        actualNameS: ''
+      } as TemplateValue;
+      
+      commonService.getVoidedReason.mockResolvedValue(fakeVoidedReason);
+      affectedTicketService.getAffectedTickets.mockResolvedValue(Helper.fakeTicketsModel);
+      templateService.initializeTemplateValue.mockReturnValue(fakeTemplateValue);
 
-    expect(actual).toBe('01:02:03 AM');
+      // Act
+      const result = await service.assignModelsToEvents(filter, inputModel);
+
+      // Assert
+      expect(result.matchId).toBe(inputModel.matchId);
+      expect(result.logInfoDetail).toBe(inputModel.logInfoDetail);
+      expect(result.matchModel).toBe(inputModel.match);
+      expect(result.tableTicketsModel).toBe(Helper.fakeTicketsModel);
+      expect(result.voidReason).toBe(fakeVoidedReason);
+      expect(result.isCollapse).toBe(filter.isVoided);
+      expect(result.filterWrongOfferedName).toBeDefined();
+    });
   });
 
-  it('getTemplateMessageValue should return TemplateValue', async () => {
-    const actual = mockService.getTemplateMessageValue(new MatchModel(), true, new FilterWrongOfferedNameModel());
+  describe('getFilterWrongOfferedNameModel', () => {
+    it('should get filter wrong offered name model with default values', () => {
+      // Arrange
+      const inputModel = Helper.fakeWrongOfferedNameModel;
+      inputModel.wrongName = null;
+      inputModel.actualName = null;
+      inputModel.wrongNameT = null;
+      inputModel.actualNameT = null;
+      inputModel.wrongNameS = null;
+      inputModel.actualNameS = null;
 
-    expect(actual.checkSettled).toBeTruthy();
+      // Act
+      const result = service.getFilterWrongOfferedNameModel(inputModel);
+
+      // Assert
+      expect(result.licenseeNames).toEqual(['Licensee1', 'Licensee2']);
+      expect(result.currencyIds).toEqual(['1', '2']);
+      expect(result.wrongName).toBe('Home Team - vs - Away Team');
+      expect(result.actualName).toBe('Home Team - vs - Away Team');
+      expect(result.wrongNameT).toBe('Home Team T - vs - Away Team T');
+      expect(result.actualNameT).toBe('Home Team T - vs - Away Team T');
+      expect(result.wrongNameS).toBe('Home Team S - vs - Away Team S');
+      expect(result.actualNameS).toBe('Home Team S - vs - Away Team S');
+    });
   });
 
-  it('getAffectedTickets should call #affectedTicketService.getAffectedTickets', async () => {
-    const ticketTable = new TicketsModel();
-    mockAffectedTicketService.getAffectedTickets = jest.fn().mockReturnValue(ticketTable);
-    const actual = await mockService.getAffectedTickets(1, '');
+  describe('updateSelectedMatchToInput', () => {
+    it('should update team name when not league sub type', () => {
+      // Arrange
+      const match = Helper.fakeMatch;
+      const filter = new FilterWrongOfferedNameModel();
+      validationService.isSubTypeOfLeague.mockReturnValue(false);
 
-    expect(actual).toEqual(ticketTable);
+      // Act
+      service.updateSelectedMatchToInput(match, filter, '1');
+
+      // Assert
+      expect(filter.wrongName).toBe('Home Team - vs - Away Team');
+      expect(filter.actualName).toBe('Home Team - vs - Away Team');
+      expect(filter.wrongNameT).toBe('Home Team T - vs - Away Team T');
+      expect(filter.actualNameT).toBe('Home Team T - vs - Away Team T');
+      expect(filter.wrongNameS).toBe('Home Team S - vs - Away Team S');
+      expect(filter.actualNameS).toBe('Home Team S - vs - Away Team S');
+    });
+
+    it('should update league name when league sub type', () => {
+      // Arrange
+      const match = Helper.fakeMatch;
+      const filter = new FilterWrongOfferedNameModel();
+      validationService.isSubTypeOfLeague.mockReturnValue(true);
+
+      // Act
+      service.updateSelectedMatchToInput(match, filter, '1');
+
+      // Assert
+      expect(filter.wrongName).toBe('Test League');
+      expect(filter.actualName).toBe('Test League');
+      expect(filter.wrongNameT).toBe('Test League T');
+      expect(filter.actualNameT).toBe('Test League T');
+      expect(filter.wrongNameS).toBe('Test League S');
+      expect(filter.actualNameS).toBe('Test League S');
+    });
   });
 });

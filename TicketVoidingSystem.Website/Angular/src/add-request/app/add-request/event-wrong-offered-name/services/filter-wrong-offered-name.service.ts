@@ -37,17 +37,19 @@ export class FilterWrongOfferedNameService {
   }
 
   autoCheckLicensees(groups: GroupLicensee[], filterWrongOfferedName: FilterWrongOfferedNameModel, filterRequest: FilterModel): GroupLicenseeModel {
-    let groupLicenseesModel = new GroupLicenseeModel(groups, true);
+    let groupLicenseesModel: GroupLicenseeModel;
+    
     if (this.validationService.isSubTypeChinese(filterRequest.subIssueTypeId)) {
-      const model = new GroupLicenseeModel(groups, false);
-      const groupChinaRules = model.groupLicensees.find(x => x.groupName === 'China rules');
+      groupLicenseesModel = new GroupLicenseeModel(groups, false);
+      const groupChinaRules = groupLicenseesModel.groupLicensees.find(x => x.groupName === 'China rules');
       if (groupChinaRules) {
         groupChinaRules.isChecked = true;
         groupChinaRules.checkedGroup();
       }
-
-      groupLicenseesModel = model;
+    } else {
+      groupLicenseesModel = new GroupLicenseeModel(groups, true);
     }
+    
     filterWrongOfferedName.licenseeNames = groupLicenseesModel.getCheckedLicensees().map(x => x.name);
 
     return groupLicenseesModel;

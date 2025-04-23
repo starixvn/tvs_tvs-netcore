@@ -1,4 +1,3 @@
-
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -77,7 +76,7 @@ export class EventWrongOfferedNameComponent implements OnInit {
     this.primitiveProps.isShowLogInfo = false;
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
-    if (this.eventLeagueComponent?.selectedMatch.matchId) {
+    if (this.eventLeagueComponent?.selectedMatch?.matchId) {
       this.logInfoEvent.matchId = this.eventLeagueComponent.selectedMatch.matchId;
       this.logInfoEvent.matchModel = this.eventLeagueComponent.selectedMatch;
       this.eventWrongOfferedNameService.updateSelectedMatchToInput(this.eventLeagueComponent.selectedMatch, this.logInfoEvent.filterWrongOfferedName, this.filter.subIssueTypeId);
