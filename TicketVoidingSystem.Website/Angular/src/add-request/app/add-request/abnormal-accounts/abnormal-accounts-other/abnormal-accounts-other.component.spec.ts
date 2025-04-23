@@ -1,33 +1,65 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AbnormalAccountOtherComponent } from './abnormal-accounts-other.component';
+import { OthersModel } from '../../others/others.model';
 
 describe('AbnormalAccountOtherComponent', () => {
-  @NgModule({
-    declarations: [
-    ],
-    imports: [
-      NgbModule,
-      FormsModule
-    ],
-    providers: [
-    ]
-  })
-  class AppModuleTest { }
+  let component: AbnormalAccountOtherComponent;
+  let fixture: ComponentFixture<AbnormalAccountOtherComponent>;
 
-  let shallow: Shallow<AbnormalAccountOtherComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: []
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(AbnormalAccountOtherComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(AbnormalAccountOtherComponent);
+    component = fixture.componentInstance;
   });
 
-  it('#AbnormalAccountOtherComponent init should match snapshot', async () => {
-    const { fixture } = await shallow.render();
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-    expect(fixture).toMatchSnapshot();
+  it('should initialize with default values', () => {
+    // Arrange
+    component.isEdit = false;
+    component.model = new OthersModel();
+    component.isCollapse = false;
+
+    // Act
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.isEdit).toBeFalsy();
+    expect(component.model).toBeInstanceOf(OthersModel);
+    expect(component.isCollapse).toBeFalsy();
+  });
+
+  it('should initialize with provided values', () => {
+    // Arrange
+    const testModel = new OthersModel();
+    component.isEdit = true;
+    component.model = testModel;
+    component.isCollapse = true;
+
+    // Act
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.isEdit).toBeTruthy();
+    expect(component.model).toBe(testModel);
+    expect(component.isCollapse).toBeTruthy();
+  });
+
+  it('should toggle collapse state', () => {
+    // Arrange
+    component.isCollapse = false;
+
+    // Act
+    component.isCollapse = true;
+
+    // Assert
+    expect(component.isCollapse).toBeTruthy();
   });
 });

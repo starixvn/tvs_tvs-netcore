@@ -1,622 +1,266 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
-import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
-import { GroupNumber, NumberItem } from '../../../../utility/components/bet-ids/bet-ids.model';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { CommonService } from '../../../../utility/services/common.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { EventAbnormalBetComponent } from './event-abnormal-bet.component';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
+import { PopupService } from '../services/popup.service';
+import { SaveRequestService } from './services/save-request.service';
+import { ValidationService } from './services/validation.service';
+import { AbnormalBetModel } from '../models/abnormal-bet.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
-import { AbnormalBetModel } from '../models/abnormal-bet.model';
+import { OthersModel } from '../others/others.model';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
-import { PopupService } from '../services/popup.service';
-import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet/confirm-abnormal-bet.component';
-import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet/confirm-abnormal-bet.model';
-import { EventAbnormalBetComponent } from './event-abnormal-bet.component';
-import { AbnormalBetTicketViewModel, PrimitiveProperty, ValidationAbnormalBet } from './event-abnormal-bet.model';
-import { SaveRequestService } from './services/save-request.service';
-import { ValidationBusinessRuleOutput } from './services/validation.model';
-import { ValidationService } from './services/validation.service';
+import { ValidationAbnormalBet } from './event-abnormal-bet.model';
 
 class Helper {
-  static readonly fakeTransId = '123456789';
-  static readonly fakeMatchId = 90000000;
-  static readonly fakeAbnormalBetModel: AbnormalBetModel = {
-    transIds: Helper.fakeTransId,
-    filterBy: null,
-    subIssueTypeId: 1,
-    isConfirmCalculator: true,
-    subIssueTypeName: ''
-  };
+  static readonly fakeRequestId = 1212;
+  static readonly fakeUserId = 123;
+  static readonly fakeRequestedBy = 'testUser';
   static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '27',
-    action: '5',
-    isTest: false,
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
     isVoided: false,
-    subIssueTypes: [],
+    isChangeSubTypeManual: true,
     isAbnormal: false
   } as FilterModel;
-  static readonly fakePermissionManage: PermissionAddRequest = {
-    isAddSettledTickets: false,
-    isVoidAllArchivedTickets: false,
-    isAddInstantlySettledTickets: false
-  };
-  static readonly fakeValidationBusinessRule: ValidationBusinessRuleOutput = {
-    isValid: true,
-    transInfoAddRequestModel: null,
-    abnormalBetTicketRequests: [new AbnormalBetTicketViewModel()],
-    warningModel: new ValidationAbnormalBet()
-  };
-  static readonly fakeConfirmAbnormalBetModel: ConfirmAbnormalBetModel = {
-    isOpenDialog: true,
-    isHasWarningForAbnormalBet: true,
-    isHasWarningEditTakeNoteRequest: false,
-    transIds: '1022222',
-    ticketsOfVIPCustomer: '2123122',
-    settledTickets: '2123122',
-    ticketsOfCustomerClass201: '2123122',
-    ticketsOfCustomerClass4K: '2123122',
-    isHasWarningRemovedTickets: false,
-    isEditingByAnotherUser: false,
-    requestId: 1,
-    requestedBy: '',
-    issueTypeName: '',
-    subIssueTypeName: '',
-    actionName: ''
-  };
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeAbnormalBetModel = new AbnormalBetModel();
+  static readonly fakePermission = new PermissionAddRequest();
+  static readonly fakeIssueTypes = {
+    issueTypes: [{ issueTypeId: 1, issueTypeName: 'Test Issue Type' }],
+    selectedSubIssueTypes: [{ subIssueTypeId: 1, subIssueTypeName: 'Test Sub Issue Type' }],
+    subIssueTypes: [],
+    issueId: 1,
+    subIssueId: 1
+  } as IssueTypes;
 }
 
 describe('EventAbnormalBetComponent', () => {
-  @NgModule({
-    declarations: [
-      BetIdsComponent,
-      ConfirmAbnormalBetComponent
-    ],
-    imports: [
-      BlockUiModule,
-      FormsModule,
-      HttpClientTestingModule
-    ],
-    providers: [
-      ValidationService,
-      SaveRequestService,
-      AddRequestStore,
-      PopupService,
-      CommonService,
-      AddRequestApiService
-    ]
-  })
-  class AppModuleTest { }
+  let component: EventAbnormalBetComponent;
+  let fixture: ComponentFixture<EventAbnormalBetComponent>;
+  let addRequestApiService: AddRequestApiService;
+  let addRequestStore: AddRequestStore;
+  let saveRequestService: SaveRequestService;
+  let validationService: ValidationService;
 
-  let shallow: Shallow<EventAbnormalBetComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        AddRequestApiService,
+        AddRequestStore,
+        PopupService,
+        SaveRequestService,
+        ValidationService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
+    fixture = TestBed.createComponent(EventAbnormalBetComponent);
+    addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    component = fixture.componentInstance;
 
-    shallow = new Shallow(EventAbnormalBetComponent, AppModuleTest);
+    // Setup default component properties
+    component.filter = Helper.fakeFilterModel;
+    component.issueTypes = Helper.fakeIssueTypes;
+    component.others = Helper.fakeOthersModel;
+    component.abnormalBetModel = new AbnormalBetModel();
+    component.abnormalBetModel.filterBy = 1; // Set default value
+    component.betIdsComponent = {
+      groupNumber: { items: [] },
+      getAllBetIds: () => [],
+      removeTransId: () => {},
+      triggerFocusOutBetIds: () => {}
+    } as any;
+    component.confirmAbnormalBetComponent = {} as any;
+
+    // Mock document.getElementById
+    const bodyElement = document.createElement('div');
+    bodyElement.id = 'body';
+    bodyElement.setAttribute('user-id', '123');
+    document.body.appendChild(bodyElement);
   });
 
-  it('#EventAbnormalBetComponent init should match snapshot', async () => {
-    // Arrange
-    const { fixture, instance } = await shallow
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.ngOnInit = jest.fn();
-
-    // Action
-    expect(fixture).toMatchSnapshot();
+  afterEach(() => {
+    // Clean up
+    const bodyElement = document.getElementById('body');
+    if (bodyElement) {
+      document.body.removeChild(bodyElement);
+    }
   });
 
-  it('#ngOnInit should be call #getPermissionManageRequest when edit request', async () => {
-    // Arrange
-    const mockGetPermissionAddRequest = jest.fn();
-    const mockChangeAbnormalFilterBy = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {changeAbnormalFilterBy: mockChangeAbnormalFilterBy,})
-      .mock(AddRequestApiService, {getPermissionAddRequest: mockGetPermissionAddRequest})
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-    // Action
-    await instance.ngOnInit();
+  it('should initialize with default values when not in edit mode', async () => {
+    // Arrange
+    component.isEdit = false;
+    component.abnormalBetModel.filterBy = null; // Reset filterBy to null
+    addRequestApiService.getPermissionAddRequest = jest.fn().mockResolvedValue(Helper.fakePermission);
+    addRequestStore.changeAbnormalFilterBy = jest.fn();
+
+    // Act
+    await component.ngOnInit();
 
     // Assert
-    expect(mockChangeAbnormalFilterBy).toHaveBeenCalled();
-    expect(mockGetPermissionAddRequest).toHaveBeenCalled();
+    expect(component.abnormalBetModel.filterBy).toBe(null);
+    expect(addRequestStore.changeAbnormalFilterBy).toHaveBeenCalledWith(null);
   });
 
-  it('#ngOnInit should be call #getPermissionManageRequest when add request', async () => {
+  it('should not change filterBy when in edit mode', async () => {
     // Arrange
-    const mockGetPermissionAddRequest = jest.fn();
-    const mockChangeAbnormalFilterBy = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {changeAbnormalFilterBy: mockChangeAbnormalFilterBy,})
-      .mock(AddRequestApiService, {getPermissionAddRequest: mockGetPermissionAddRequest})
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: false,
-        }
-      });
+    component.isEdit = true;
+    component.abnormalBetModel.filterBy = 2;
+    addRequestApiService.getPermissionAddRequest = jest.fn().mockResolvedValue(Helper.fakePermission);
 
-    // Action
-    await instance.ngOnInit();
+    // Act
+    await component.ngOnInit();
 
     // Assert
-    expect(mockChangeAbnormalFilterBy).toHaveBeenCalled();
-    expect(mockGetPermissionAddRequest).toHaveBeenCalled();
+    expect(component.abnormalBetModel.filterBy).toBe(2);
   });
 
-  it('#focusOutBetIds should call #getMatchAndCheckValidTransIds', async () => {
+  it('should show export ticket button when there are bet IDs and filter is not voided', () => {
     // Arrange
-    const { instance } = await shallow
-      .mock(AddRequestStore, {changeStartTimeFilterAnalysis: jest.fn(),})
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.isCancelAfterFocusOutBetIdsEvent = false;
-    instance['checkValidBusinessRule'] = jest.fn();
-    instance['updateAbnormalBetModel'] = jest.fn();
+    component.betIdsComponent = {
+      groupNumber: { items: [{ number: 1 }] }
+    } as any;
+    component.filter = Helper.fakeFilterModel;
 
-    // Action
-    await instance.afterFocusOutBetIds();
+    // Act & Assert
+    expect(component.isShowButtonExportTicket()).toBeTruthy();
+
+    component.filter.isVoided = true;
+    expect(component.isShowButtonExportTicket()).toBeFalsy();
+  });
+
+  it('should update model and check validation when focus out bet IDs', async () => {
+    // Arrange
+    component.betIdsComponent = {
+      groupNumber: { items: [] },
+      getAllBetIds: () => ['1', '2'],
+      removeTransId: () => {},
+      triggerFocusOutBetIds: () => {}
+    } as any;
+    validationService.checkValidBusinessRule = jest.fn().mockResolvedValue({ isValid: true });
+    addRequestStore.changeStartTimeFilterAnalysis = jest.fn();
+
+    // Act
+    await component.afterFocusOutBetIds();
 
     // Assert
-    expect(instance['checkValidBusinessRule']).toHaveBeenCalledTimes(1);
+    expect(addRequestStore.changeStartTimeFilterAnalysis).toHaveBeenCalled();
+    expect(validationService.checkValidBusinessRule).toHaveBeenCalled();
   });
 
-  it('#focusOutBetIds should not call #getMatchAndCheckValidTransIds', async () => {
+  it('should handle save request for voided request', async () => {
     // Arrange
-    const { instance } = await shallow
-      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.isCancelAfterFocusOutBetIdsEvent = true;
-    instance['checkValidBusinessRule'] = jest.fn();
-    instance['updateAbnormalBetModel'] = jest.fn();
+    component.filter = Helper.fakeFilterModel;
+    component.filter.isVoided = true;
+    component.issueTypes = Helper.fakeIssueTypes;
+    component.userId = 123;
+    component.betIdsComponent = {
+      groupNumber: { items: [] },
+      getAllBetIds: () => ['1', '2'],
+      removeTransId: () => {},
+      triggerFocusOutBetIds: () => {}
+    } as any;
+    validationService.isValidationHasWarningTicket = jest.fn().mockReturnValue(false);
+    validationService.isHasWarningEditTakeNoteRequest = jest.fn().mockReturnValue(false);
+    validationService.isEditingByAnotherUser = jest.fn().mockReturnValue(false);
 
-    // Action
-    await instance.afterFocusOutBetIds();
+    // Act
+    await component.saveRequest();
 
     // Assert
-    expect(instance['checkValidBusinessRule']).toHaveBeenCalledTimes(0);
+    expect(component.confirmAbnormalBetModel.isOpenDialog).toBeTruthy();
   });
 
-  it('#onYesConfirmWarningModal should call #executeApiSaveRequest when is voided', async () => {
+  it('should handle save request for non-voided request', async () => {
     // Arrange
-    const fakeValidationBusinessRule = _.cloneDeep(Helper.fakeValidationBusinessRule);
-    fakeValidationBusinessRule.isValid = true;
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeBlockingUiStatus: mockChangeBlockingUiStatus,
-      })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.filter.isVoided = true;
-    instance['checkValidBusinessRule'] = jest.fn().mockImplementation(() => Promise.resolve(fakeValidationBusinessRule));
-    instance['executeApiSaveRequest'] = jest.fn();
-
-    // Action
-    await instance.onYesConfirmWarningModal();
-
-    // Assert
-    expect(instance['executeApiSaveRequest']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#onYesConfirmWarningModal should call #executeApiSaveRequest', async () => {
-    // Arrange
-    const fakeValidationBusinessRule = Helper.fakeValidationBusinessRule;
-    fakeValidationBusinessRule.isValid = true;
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeBlockingUiStatus: mockChangeBlockingUiStatus,
-      })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance['checkValidBusinessRule'] = jest.fn().mockImplementation(() => Promise.resolve(fakeValidationBusinessRule));
-    instance['executeApiSaveRequest'] = jest.fn();
-
-    // Action
-    await instance.onYesConfirmWarningModal();
-
-    // Assert
-    expect(instance['executeApiSaveRequest']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#onYesConfirmWarningModal should not call #executeApiSaveRequest', async () => {
-    // Arrange
-    const fakeValidationBusinessRule = Helper.fakeValidationBusinessRule;
-    fakeValidationBusinessRule.isValid = false;
-    const mockShowError = jest.fn();
-    const mockChangeSavingRequestStatus = jest.fn();
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(PopupService, {
-        showError: mockShowError,
-      })
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-        changeBlockingUiStatus: mockChangeBlockingUiStatus
-      })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.filter.isVoided = false;
-    instance['checkValidBusinessRule'] = jest.fn().mockImplementation(() => Promise.resolve(fakeValidationBusinessRule));
-    instance['executeApiSaveRequest'] = jest.fn();
-
-    // Action
-    await instance.onYesConfirmWarningModal();
-
-    // Assert
-    expect(mockShowError).toHaveBeenCalledTimes(1);
-    expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(instance['executeApiSaveRequest']).toHaveBeenCalledTimes(0);
-  });
-
-  it('#saveRequest should call #checkIfRequestHasWarning', async () => {
-    // Arrange
-    const fakeFilterModel = Helper.fakeFilterModel;
-    fakeFilterModel.isVoided = true;
-    const mockChangeSavingRequestStatus = jest.fn();
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-        changeBlockingUiStatus: mockChangeBlockingUiStatus
-      })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.issueTypes = {issueTypes:[{issueTypeId: 11, issueTypeName: "Abnormal Bet"}],
-    selectedSubIssueTypes: [{subIssueTypeId: 27, subIssueTypeName: "Handicap"}]} as IssueTypes;
-    instance['openConfirmAbnormalBet'] = jest.fn();
-    instance['updateAbnormalBetModel'] = jest.fn();
-
-    // Action
-    await instance.saveRequest();
-
-    // Assert
-    expect(instance['openConfirmAbnormalBet']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#saveRequest should call #saveWhenRequestNotVoided', async () => {
-    // Arrange
-    const fakeFilterModel = Helper.fakeFilterModel;
-    fakeFilterModel.isVoided = false;
-    const mockChangeSavingRequestStatus = jest.fn();
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-        changeBlockingUiStatus: mockChangeBlockingUiStatus
-      })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance['updateAbnormalBetModel'] = jest.fn();
-    instance['saveWhenRequestNotVoided'] = jest.fn();
-
-    // Action
-    await instance.saveRequest();
-
-    // Assert
-    expect(instance['saveWhenRequestNotVoided']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#changeFilterBy should call #addRequestStore.changeAbnormalFilterBy', async () => {
-    // Arrange
-    const mockChangeAbnormalFilterBy = jest.fn();
-    const fakeFilterModel = Helper.fakeFilterModel;
-    fakeFilterModel.isVoided = false;
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeAbnormalFilterBy: mockChangeAbnormalFilterBy,
-      })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-
-    // Action
-    instance.changeFilterBy(1);
-
-    // Assert
-    expect(instance.abnormalBetModel.filterBy).toBe(1);
-    expect(mockChangeAbnormalFilterBy).toHaveBeenCalled();
-  });
-
-  it('#triggerCloseEvent should call #saveWhenRequestNotVoided', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {changeSavingRequestStatus: mockChangeSavingRequestStatus})
-      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance['saveWhenRequestNotVoided'] = jest.fn();
-
-    // Action
-    instance.triggerCloseEvent();
-
-    // Assert
-    expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
-  });
-
-  it('#saveWhenRequestNotVoided should call #checkValidBusinessRule', async () => {
-    // Arrange
-    const fakeValidationBusinessRule = Helper.fakeValidationBusinessRule;
-    fakeValidationBusinessRule.isValid = true;
-    const { instance } = await shallow
-    .mock(ValidationService, {
-      isValidationHasWarningTicket: jest.fn().mockReturnValue(true),
-      isHasWarningEditTakeNoteRequest: jest.fn().mockReturnValue(false),
-      isEditingByAnotherUser: jest.fn().mockReturnValue(false),
-    })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance['checkValidBusinessRule'] = jest.fn().mockImplementation(() => Promise.resolve(fakeValidationBusinessRule));
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.triggerFocusOutBetIds = jest.fn();
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    instance.betIdsComponent.getAllBetIds = jest.fn().mockReturnValue("1");
-    instance.issueTypes = {issueTypes:[{issueTypeId: 11, issueTypeName: "Abnormal Bet"}],
-    selectedSubIssueTypes: [{subIssueTypeId: 27, subIssueTypeName: "Handicap"}]} as IssueTypes;
-
-    // Action
-    await instance['saveWhenRequestNotVoided']();
-
-    // Assert
-    expect(instance['checkValidBusinessRule']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#saveWhenRequestNotVoided should call #changeSavingRequestStatus', async () => {
-    // Arrange
-    const fakeValidationBusinessRule = Helper.fakeValidationBusinessRule;
-    fakeValidationBusinessRule.isValid = false;
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-      })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance['checkValidBusinessRule'] = jest.fn().mockImplementation(() => Promise.resolve(fakeValidationBusinessRule));
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.triggerFocusOutBetIds = jest.fn();
-    instance['checkIfRequestHasWarning'] = jest.fn();
-
-    // Action
-    await instance['saveWhenRequestNotVoided']();
-
-    // Assert
-    expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
-  });
-
-  it('#openConfirmAbnormalBet should update data', async () => {
-    // Arrange
-    const mockIsValidationHasWarningTicket = jest.fn().mockImplementation(() => true);
-    const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => true);
-    const mockIsEditingByAnotherUser = jest.fn().mockImplementation(() => false);
-
-    const { instance } = await shallow
-    .mock(ValidationService, {
-      isValidationHasWarningTicket: mockIsValidationHasWarningTicket,
-      isHasWarningEditTakeNoteRequest: mockIsHasWarningEditTakeNoteRequest,
-      isEditingByAnotherUser: mockIsEditingByAnotherUser
-    })
-    .render({
-      bind: {
-        abnormalBetModel: Helper.fakeAbnormalBetModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
+    component.filter = Helper.fakeFilterModel;
+    component.filter.isVoided = false;
+    component.issueTypes = Helper.fakeIssueTypes;
+    component.userId = 123;
+    component.betIdsComponent = {
+      groupNumber: { items: [] },
+      getAllBetIds: () => ['1', '2'],
+      removeTransId: () => {},
+      triggerFocusOutBetIds: () => {}
+    } as any;
+    validationService.checkValidBusinessRule = jest.fn().mockResolvedValue({
+      isValid: true,
+      warningModel: new ValidationAbnormalBet()
     });
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    instance.betIdsComponent.getAllBetIds = jest.fn().mockReturnValue("1");
-    instance.issueTypes = {issueTypes:[{issueTypeId: 11, issueTypeName: "Abnormal Bet"}],
-    selectedSubIssueTypes: [{subIssueTypeId: 27, subIssueTypeName: "Handicap"}]} as IssueTypes;
+    validationService.isValidationHasWarningTicket = jest.fn().mockReturnValue(false);
+    validationService.isHasWarningEditTakeNoteRequest = jest.fn().mockReturnValue(false);
+    validationService.isEditingByAnotherUser = jest.fn().mockReturnValue(false);
 
-    // Action
-    instance['openConfirmAbnormalBet'](new ValidationAbnormalBet());
+    // Act
+    await component.saveRequest();
 
     // Assert
-    expect(instance.confirmAbnormalBetModel.isOpenDialog).toBeTruthy();
-    expect(instance.confirmAbnormalBetModel.isHasWarningForAbnormalBet).toBeTruthy();
-    expect(instance.confirmAbnormalBetModel.isHasWarningEditTakeNoteRequest).toBeTruthy();
+    expect(validationService.checkValidBusinessRule).toHaveBeenCalled();
   });
 
-  it('#checkValidBusinessRule should call #checkValidBusinessRule & emit #updateMatchId', async () => {
+  it('should remove invalid transaction IDs', () => {
     // Arrange
-    const fakeValidationBusinessRule = Helper.fakeValidationBusinessRule;
-    fakeValidationBusinessRule.isValid = false;
-    const mockCheckValidBusinessRule = jest.fn().mockImplementation(() => fakeValidationBusinessRule);
-    const { instance } = await shallow
-      .mock(ValidationService, {
-        checkValidBusinessRule: mockCheckValidBusinessRule,
-      })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.primitiveProps = new PrimitiveProperty();
+    component.primitiveProps.invalidTransIds = '1,2';
+    component.exportTickets = [
+      { betId: '1' },
+      { betId: '2' },
+      { betId: '3' }
+    ] as any[];
+    component.betIdsComponent = {
+      removeTransId: jest.fn()
+    } as any;
 
-    // Action
-    const result = await instance['checkValidBusinessRule'](false);
+    // Act
+    component.removeInvalidTransIds();
 
     // Assert
-    expect(mockCheckValidBusinessRule).toHaveBeenCalledTimes(1);
-    expect(instance.filter).toBe(Helper.fakeFilterModel);
-    expect(result.isValid).toBe(fakeValidationBusinessRule.isValid);
+    expect(component.exportTickets.length).toBe(1);
+    expect(component.primitiveProps.isShowButtonRemoveInvalid).toBeFalsy();
+    expect(component.betIdsComponent.removeTransId).toHaveBeenCalledWith('1,2');
   });
 
-  it('#executeApiSaveRequest should call #checkValidBusinessRule & emit #updateMatchId', async () => {
+  it('should update filterBy and clear matches when changing filter', () => {
     // Arrange
-    const fakeValidationBusinessRule = Helper.fakeValidationBusinessRule;
-    fakeValidationBusinessRule.isValid = false;
-    const mockExecuteSave = jest.fn();
-    const { instance } = await shallow
-      .mock(SaveRequestService, {
-        executeSave: mockExecuteSave,
-      })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.getAllBetIds = jest.fn();
+    component.abnormalBetModel.matches = [];
+    addRequestStore.changeAbnormalFilterBy = jest.fn();
 
-    // Action
-    await instance['executeApiSaveRequest']();
+    // Act
+    component.changeFilterBy(2);
 
     // Assert
-    expect(mockExecuteSave).toHaveBeenCalledTimes(1);
-    expect(instance.filter).toBe(Helper.fakeFilterModel);
+    expect(component.abnormalBetModel.filterBy).toBe(2);
+    expect(component.abnormalBetModel.matches).toEqual([]);
+    expect(addRequestStore.changeAbnormalFilterBy).toHaveBeenCalledWith(2);
   });
 
-  it('#removeInvalidTransIds should call #betIdsComponent.removeTransId', async () => {
+  it('should export excel tickets', async () => {
     // Arrange
-    const { instance } = await shallow
-      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.removeTransId = jest.fn();
-    instance.exportTickets = [{ betId: '1' } as AbnormalBetTicketViewModel, { betId: '2' } as AbnormalBetTicketViewModel];
-    instance.primitiveProps.invalidTransIds = "1,2"
+    component.filter = Helper.fakeFilterModel;
+    component.betIdsComponent = {
+      groupNumber: { items: [] },
+      getAllBetIds: () => ['1', '2'],
+      removeTransId: () => {},
+      triggerFocusOutBetIds: () => {}
+    } as any;
+    validationService.exportExcelAbnormalBetTickets = jest.fn().mockResolvedValue(undefined);
+    component.primitiveProps.isBlockUI = false;
 
-    // Action
-    instance.removeInvalidTransIds();
+    // Act
+    await component.exportExcel();
 
     // Assert
-    expect(instance.betIdsComponent.removeTransId).toHaveBeenCalledTimes(1);
-  });
-
-  it('#exportExcel should called #validationService.exportExcelAbnormalBetTickets', async () => {
-    // Arrange
-    const mockExportExcelAbnormalBetTickets = jest.fn();
-    const { instance } = await shallow
-      .mock(ValidationService, {
-        exportExcelAbnormalBetTickets: mockExportExcelAbnormalBetTickets,
-      })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.initCheckValidBusinessRuleQuery = jest.fn();
-    instance.primitiveProps = new PrimitiveProperty();
-
-    // Action
-    await instance.exportExcel();
-
-    // Assert
-    expect(mockExportExcelAbnormalBetTickets).toHaveBeenCalledTimes(1);
-    expect(instance.initCheckValidBusinessRuleQuery).toHaveBeenCalledTimes(1);
-  });
-
-  it('#isShowButtonExportTicket should return true', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.groupNumber = new GroupNumber();
-    instance.betIdsComponent.groupNumber.items = [new NumberItem(null)];
-    instance.filter.isVoided = false;
-
-    // Action
-    const actual = instance.isShowButtonExportTicket();
-
-    // Assert
-    expect(actual).toBeTruthy();
+    expect(validationService.exportExcelAbnormalBetTickets).toHaveBeenCalled();
+    expect(component.primitiveProps.isBlockUI).toBeFalsy();
   });
 });

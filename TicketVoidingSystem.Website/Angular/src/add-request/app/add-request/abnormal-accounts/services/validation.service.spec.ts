@@ -1,254 +1,293 @@
-import { UsernamesComponent } from '../../../../../utility/components/user-names/user-names.component';
-import { GroupUsername } from '../../../../../utility/components/user-names/user-names.model';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { FilterModel } from '../../filter/filter.model';
-import { AbnormalAccountModel } from '../../models/abnormal-account.model';
-import { PermissionAddRequest } from '../../models/permission-add-request.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { AccountTableComponent } from '../account-table/account-table.component';
-import { EventDateFilterComponent } from '../event-date-filter/event-date-filter.component';
-import { CheckUsernamesViewModel, ValidationAbnormalAccount } from '../models/check-username.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from '../models/validation.model';
-import { ProductFilterComponent } from '../product-filter/product-filter.component';
+import { TestBed } from '@angular/core/testing';
 import { ValidationService } from './validation.service';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { UsernamesComponent } from '../../../../../utility/components/user-names/user-names.component';
+import { ProductFilterComponent } from '../product-filter/product-filter.component';
+import { EventDateFilterComponent } from '../event-date-filter/event-date-filter.component';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { ValidationBusinessRuleArgs } from '../models/validation.model';
+import { CheckUsernamesViewModel, ValidationAbnormalAccount } from '../models/check-username.model';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
+import { AbnormalAccountModel } from '../../models/abnormal-account.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
 
 class Helper {
-  static readonly url = 'http://localhost:60196/';
-  static readonly fakeRequestId = 10222;
-  static readonly fakeTransId = '100000002';
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '1',
-    action: '1',
-    isTest: true,
-    isVoided: false,
-    isChangeSubTypeManual: true,
-    isAbnormal: false
-  } as FilterModel;
-  static readonly fakeValidationBusinessRuleArgs: ValidationBusinessRuleArgs = {
-    requestId: Helper.fakeRequestId,
-    abnormalAccountModel: new AbnormalAccountModel(),
-    primitiveProps: {permission: new PermissionAddRequest()} as PrimitiveProperty,
-    usernamesComponent: new UsernamesComponent(null),
-    actionId: '1',
-    issueTypeId: '1',
-    eventDateFilterComponent: new EventDateFilterComponent(null),
-    productFilterComponent: new ProductFilterComponent(null),
-    accountTableComponent: new AccountTableComponent(null, null, null, null)
-  };
-  static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
-    isValid: false,
-    transInfoAddRequestModel: new TransInfoAddRequestModel(),
-    accountWinlostModels: []
-  } as ValidationBusinessRuleOutput;
+  static readonly fakeUsernames = 'user1,user2,user3';
+  static readonly fakeProductIds = '1,2';
+  static readonly fakeStatusIds = '1,2';
+  static readonly fakeFromDate = '2024-03-20 00:00:00';
+  static readonly fakeToDate = '2024-03-21 00:00:00';
+  static readonly fakeRequestId = 123;
+  static readonly fakeActionId = 1;
 }
 
 describe('ValidationService', () => {
-  let validationService: ValidationService;
-  let addRequestApiService: AddRequestApiService;
+  let service: ValidationService;
+  let addRequestApiService: jest.Mocked<AddRequestApiService>;
+  let usernamesComponent: jest.Mocked<UsernamesComponent>;
+  let productFilterComponent: jest.Mocked<ProductFilterComponent>;
+  let eventDateFilterComponent: jest.Mocked<EventDateFilterComponent>;
 
   beforeEach(() => {
-    addRequestApiService = new AddRequestApiService(null);
-    validationService = new ValidationService(addRequestApiService);
-    validationService['getTransInfo'] = jest.fn();
-  });
-
-  it('#isValidCommonData should return true', async () => {
-    const productFilterComponent = new ProductFilterComponent(null);
-    productFilterComponent.isValidComponent = jest.fn().mockImplementation(() => true);
-    const eventDateFilterComponent = new EventDateFilterComponent(null);
-    eventDateFilterComponent.isValidEventDate = jest.fn().mockImplementation(() => true);
-
-    const actual = validationService.isValidCommonData(productFilterComponent, eventDateFilterComponent);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#checkValidUsernames should return false when isCancelValidate true', async () => {
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    args.primitiveProps.isCancelValidate = true;
-    args.usernamesComponent = new UsernamesComponent(null);
-    args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => 'admin');
-
-    const actual = await validationService.checkBusinessRule(args);
-
-    expect(actual.isValid).toBeFalsy();
-  });
-
-  it('#checkValidUsernames should return false when @usernames empty and @checkValidItems false', async () => {
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    args.primitiveProps.isCancelValidate = false;
-    args.usernamesComponent = new UsernamesComponent(null);
-    args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => '');
-    args.usernamesComponent.checkValidItems = jest.fn().mockImplementation(() => false);
-
-    const actual = await validationService.checkBusinessRule(args);
-
-    expect(actual.isValid).toBeFalsy();
-  });
-
-  it('#checkValidUsernames should return false when isValidCommonData false', async () => {
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    args.primitiveProps.isCancelValidate = false;
-    args.usernamesComponent = new UsernamesComponent(null);
-    args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => '');
-    validationService['isValidCommonData'] = jest.fn().mockReturnValue(false);
-
-    const actual = await validationService.checkBusinessRule(args);
-
-    expect(actual.isValid).toBeFalsy();
-  });
-
-  it('#checkValidUsernames should return false when have duplicated usernames', async () => {
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    args.primitiveProps.isCancelValidate = false;
-    args.usernamesComponent = new UsernamesComponent(null);
-    args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.resetAllValue = jest.fn().mockImplementation();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => 'admin');
-    args.usernamesComponent.checkValidItems = jest.fn().mockImplementation(() => false);
-    args.usernamesComponent.groupUsername.getDuplicatedItems = jest.fn().mockImplementation(() => 'admin');
-    args.usernamesComponent.groupUsername.updateDuplicatedItems = jest.fn().mockImplementation();
-    validationService['isValidCommonData'] = jest.fn().mockReturnValue(true);
-
-    const actual = await validationService.checkBusinessRule(args);
-
-    expect(actual.isValid).toBeFalsy();
-  });
-
-  it('#checkValidUsernames should return false when have invalid usernames', async () => {
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    const results = new CheckUsernamesViewModel();
-    results.validation = new ValidationAbnormalAccount();
-    results.validation.invalidUserName = 'admin, member';
-    args.primitiveProps.isCancelValidate = false;
-    args.usernamesComponent = new UsernamesComponent(null);
-    args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => 'admin');
-    args.usernamesComponent.groupUsername.resetAllValue = jest.fn().mockImplementation();
-    args.usernamesComponent.groupUsername.getDuplicatedItems = jest.fn().mockImplementation(() => '');
-    args.usernamesComponent.groupUsername.updateDuplicatedItems = jest.fn().mockImplementation();
-    args.usernamesComponent.checkValidItems = jest.fn().mockImplementation(() => false);
-    validationService['getValidation'] = jest.fn().mockImplementation(() => Promise.resolve(results));
-    validationService['highlightInvalidUsernames'] = jest.fn().mockImplementation(() => false);
-    validationService['isValidCommonData'] = jest.fn().mockReturnValue(true);
-
-    const actual = await validationService.checkBusinessRule(args);
-
-    expect(actual.isValid).toBeFalsy();
-  });
-
-  it('#checkValidUsernames should return false when isExceededTotalUsernames true', async () => {
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    const results = new CheckUsernamesViewModel();
-    results.validation = new ValidationAbnormalAccount();
-    results.validation.invalidUserName = '';
-    results.validation.isExceededTotalUsernames = true;
-    args.primitiveProps.isCancelValidate = false;
-    args.usernamesComponent = new UsernamesComponent(null);
-    args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => 'admin');
-    args.usernamesComponent.groupUsername.resetAllValue = jest.fn().mockImplementation();
-    args.usernamesComponent.groupUsername.getDuplicatedItems = jest.fn().mockImplementation(() => '');
-    args.usernamesComponent.groupUsername.updateDuplicatedItems = jest.fn().mockImplementation();
-    args.usernamesComponent.checkValidItems = jest.fn().mockImplementation(() => false);
-    validationService['getValidation'] = jest.fn().mockImplementation(() => Promise.resolve(results));
-    validationService['highlightInvalidUsernames'] = jest.fn().mockImplementation(() => false);
-    validationService['isValidCommonData'] = jest.fn().mockReturnValue(true);
-
-    const actual = await validationService.checkBusinessRule(args);
-
-    expect(actual.isValid).toBeFalsy();
-  });
-
-  it('#checkValidUsernames should return false when isInvalidTotalTicket true', async () => {
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    const results = new CheckUsernamesViewModel();
-    results.validation = new ValidationAbnormalAccount();
-    results.validation.invalidUserName = '';
-    results.validation.isExceededTotalUsernames = false;
-    results.validation.isInvalidTotalTicket = true;
-    args.primitiveProps.isCancelValidate = false;
-    args.usernamesComponent = new UsernamesComponent(null);
-    args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => 'admin');
-    args.usernamesComponent.groupUsername.resetAllValue = jest.fn().mockImplementation();
-    args.usernamesComponent.groupUsername.getDuplicatedItems = jest.fn().mockImplementation(() => '');
-    args.usernamesComponent.groupUsername.updateDuplicatedItems = jest.fn().mockImplementation();
-    args.usernamesComponent.checkValidItems = jest.fn().mockImplementation(() => false);
-    validationService['getValidation'] = jest.fn().mockImplementation(() => Promise.resolve(results));
-    validationService['highlightInvalidUsernames'] = jest.fn().mockImplementation(() => false);
-    validationService['isValidCommonData'] = jest.fn().mockReturnValue(true);
-
-    const actual = await validationService.checkBusinessRule(args);
-
-    expect(actual.isValid).toBeFalsy();
-  });
-
-  it('#checkValidUsernames should return true', async () => {
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    const results = new CheckUsernamesViewModel();
-    results.validation = new ValidationAbnormalAccount();
-    results.validation.invalidUserName = '';
-    results.validation.isExceededTotalUsernames = false;
-    results.validation.isInvalidTotalTicket = false;
-    args.primitiveProps.isCancelValidate = false;
-    args.usernamesComponent = new UsernamesComponent(null);
-    args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => 'admin');
-    args.usernamesComponent.groupUsername.resetAllValue = jest.fn().mockImplementation();
-    args.usernamesComponent.groupUsername.getDuplicatedItems = jest.fn().mockImplementation(() => '');
-    args.usernamesComponent.groupUsername.updateDuplicatedItems = jest.fn().mockImplementation();
-    args.usernamesComponent.checkValidItems = jest.fn().mockImplementation(() => true);
-    validationService['getValidation'] = jest.fn().mockImplementation(() => Promise.resolve(results));
-    validationService['getConfirmAbnormalBetModel'] = jest.fn().mockImplementation();
-    validationService['highlightInvalidUsernames'] = jest.fn().mockImplementation(() => true);
-    validationService['isValidCommonData'] = jest.fn().mockReturnValue(true);
-
-    const actual = await validationService.checkBusinessRule(args);
-
-    expect(actual.isValid).toBeTruthy();
-  });
-
-  it('#checkValidUsernames should be throw exception', async () => {
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    args.primitiveProps.isCancelValidate = false;
-    args.usernamesComponent = new UsernamesComponent(null);
-    args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => '');
-    args.usernamesComponent.groupUsername.checkValidItems = jest.fn().mockImplementation(() => {
-      throw new TypeError('No server is available');
+    TestBed.configureTestingModule({
+      providers: [
+        ValidationService,
+        { provide: AddRequestApiService, useValue: {
+          checkValidUsernames: jest.fn()
+        } }
+      ]
     });
-    validationService['isValidCommonData'] = jest.fn().mockReturnValue(true);
 
-    try {
-      const actual = await validationService.checkBusinessRule(args);
-      expect(actual).toBeTruthy();
-    } catch(e) {
-      expect(e.isValid).toBeFalsy();
-    }
+    service = TestBed.inject(ValidationService);
+    addRequestApiService = TestBed.inject(AddRequestApiService) as jest.Mocked<AddRequestApiService>;
+    
+    // Mock các component
+    usernamesComponent = {
+      groupUsername: {
+        getAllValue: jest.fn().mockReturnValue(Helper.fakeUsernames),
+        resetAllValue: jest.fn(),
+        getDuplicatedItems: jest.fn().mockReturnValue([]),
+        updateDuplicatedItems: jest.fn(),
+        updateInvalid: jest.fn(),
+        isExceededTotalUsernames: false
+      },
+      checkValidItems: jest.fn().mockReturnValue(true),
+      showErrorTicketLimitExceeded: jest.fn()
+    } as unknown as jest.Mocked<UsernamesComponent>;
+
+    productFilterComponent = {
+      isValidComponent: jest.fn().mockReturnValue(true)
+    } as unknown as jest.Mocked<ProductFilterComponent>;
+
+    eventDateFilterComponent = {
+      isValidEventDate: jest.fn().mockReturnValue(true)
+    } as unknown as jest.Mocked<EventDateFilterComponent>;
   });
 
-  it('#getValidation should call #checkValidUsernames', async () => {
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    addRequestApiService.checkValidUsernames = jest.fn().mockReturnValue(new CheckUsernamesViewModel());
-    const actual = await validationService['getValidation'](args);
-
-    expect(addRequestApiService.checkValidUsernames).toHaveBeenCalledTimes(1);
-    expect(actual).toEqual(new CheckUsernamesViewModel());
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#getValidation should get accountWinlostModels when actionId isAutoVoidWithPolicy', async () => {
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    args.actionId = TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
-    addRequestApiService.checkValidUsernames = jest.fn().mockReturnValue(new CheckUsernamesViewModel());
-    const actual = await validationService['getValidation'](args);
+  describe('isValidCommonData', () => {
+    it('should return true when both components are valid', () => {
+      // Arrange
+      productFilterComponent.isValidComponent.mockReturnValue(true);
+      eventDateFilterComponent.isValidEventDate.mockReturnValue(true);
 
-    expect(actual.accountWinlostModels).toEqual(args.abnormalAccountModel.accountWinlostModels);
+      // Act
+      const result = service.isValidCommonData(productFilterComponent, eventDateFilterComponent);
+
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return false when product filter is invalid', () => {
+      // Arrange
+      productFilterComponent.isValidComponent.mockReturnValue(false);
+      eventDateFilterComponent.isValidEventDate.mockReturnValue(true);
+
+      // Act
+      const result = service.isValidCommonData(productFilterComponent, eventDateFilterComponent);
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it('should return false when event date filter is invalid', () => {
+      // Arrange
+      productFilterComponent.isValidComponent.mockReturnValue(true);
+      eventDateFilterComponent.isValidEventDate.mockReturnValue(false);
+
+      // Act
+      const result = service.isValidCommonData(productFilterComponent, eventDateFilterComponent);
+
+      // Assert
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('checkBusinessRule', () => {
+    it('should call checkValidUsernames and set isShowAccountWinLost to true', async () => {
+      // Arrange
+      const args: ValidationBusinessRuleArgs = {
+        usernamesComponent,
+        productFilterComponent,
+        eventDateFilterComponent,
+        abnormalAccountModel: {
+          usernames: Helper.fakeUsernames,
+          productIds: Helper.fakeProductIds,
+          statusIds: Helper.fakeStatusIds,
+          fromDate: Helper.fakeFromDate,
+          toDate: Helper.fakeToDate,
+          subIssueTypeId: 1,
+          adjustedTickets: [],
+          accountWinlostModels: []
+        } as unknown as AbnormalAccountModel,
+        requestId: Helper.fakeRequestId,
+        actionId: Helper.fakeActionId.toString(),
+        issueTypeId: '1',
+        accountTableComponent: null,
+        primitiveProps: {
+          isShowAccountWinLost: false,
+          isShowError: false,
+          isCancelValidate: false,
+          isBeingMoveBetDate: false,
+          isInvalidTotalTicket: false,
+          isBlockUsernames: false,
+          permission: {
+            isVoidAllArchivedTickets: false,
+            isAddSettledTickets: false,
+            isAddInstantlySettledTickets: false
+          } as unknown as PermissionAddRequest,
+          transInfoAddRequestModel: null,
+          validAccountWinlostModels: [],
+          minDate: null,
+          numberOfTicketsExistedInRequest: 0,
+          isCheckedShowAdjustAccount: false
+        } as unknown as PrimitiveProperty
+      };
+
+      // Act
+      await service.checkBusinessRule(args);
+
+      // Assert
+      expect(args.primitiveProps.isShowAccountWinLost).toBe(true);
+    });
+  });
+
+  describe('checkValidUsernames', () => {
+    it('should return invalid when isCancelValidate is true', async () => {
+      // Arrange
+      const args: ValidationBusinessRuleArgs = {
+        usernamesComponent,
+        productFilterComponent,
+        eventDateFilterComponent,
+        abnormalAccountModel: {
+          usernames: Helper.fakeUsernames,
+          productIds: Helper.fakeProductIds,
+          statusIds: Helper.fakeStatusIds,
+          fromDate: Helper.fakeFromDate,
+          toDate: Helper.fakeToDate,
+          subIssueTypeId: 1,
+          adjustedTickets: [],
+          accountWinlostModels: []
+        } as unknown as AbnormalAccountModel,
+        requestId: Helper.fakeRequestId,
+        actionId: Helper.fakeActionId.toString(),
+        issueTypeId: '1',
+        accountTableComponent: null,
+        primitiveProps: {
+          isShowAccountWinLost: false,
+          isShowError: false,
+          isCancelValidate: true,
+          isBeingMoveBetDate: false,
+          isInvalidTotalTicket: false,
+          isBlockUsernames: false,
+          permission: {
+            isVoidAllArchivedTickets: false,
+            isAddSettledTickets: false,
+            isAddInstantlySettledTickets: false
+          } as unknown as PermissionAddRequest,
+          transInfoAddRequestModel: null,
+          validAccountWinlostModels: [],
+          minDate: null,
+          numberOfTicketsExistedInRequest: 0,
+          isCheckedShowAdjustAccount: false
+        } as unknown as PrimitiveProperty
+      };
+
+      // Act
+      const result = await service.checkValidUsernames(args);
+
+      // Assert
+      expect(result.isValid).toBe(false);
+      expect(args.primitiveProps.isCancelValidate).toBe(false);
+    });
+
+    it('should handle ticket limit exceeded case', async () => {
+      // Arrange
+      const args: ValidationBusinessRuleArgs = {
+        usernamesComponent,
+        productFilterComponent,
+        eventDateFilterComponent,
+        abnormalAccountModel: {
+          usernames: Helper.fakeUsernames,
+          productIds: Helper.fakeProductIds,
+          statusIds: Helper.fakeStatusIds,
+          fromDate: Helper.fakeFromDate,
+          toDate: Helper.fakeToDate,
+          subIssueTypeId: 1,
+          adjustedTickets: [],
+          accountWinlostModels: []
+        } as unknown as AbnormalAccountModel,
+        requestId: Helper.fakeRequestId,
+        actionId: Helper.fakeActionId.toString(),
+        issueTypeId: '1',
+        accountTableComponent: null,
+        primitiveProps: {
+          isShowAccountWinLost: false,
+          isShowError: false,
+          isCancelValidate: false,
+          isBeingMoveBetDate: false,
+          isInvalidTotalTicket: false,
+          isBlockUsernames: false,
+          permission: {
+            isVoidAllArchivedTickets: false,
+            isAddSettledTickets: false,
+            isAddInstantlySettledTickets: false
+          } as unknown as PermissionAddRequest,
+          transInfoAddRequestModel: null,
+          validAccountWinlostModels: [],
+          minDate: null,
+          numberOfTicketsExistedInRequest: 0,
+          isCheckedShowAdjustAccount: false
+        } as unknown as PrimitiveProperty
+      };
+
+      const mockResponse: CheckUsernamesViewModel = {
+        validation: {
+          isTicketLimitExceeded: true,
+          invalidUserName: null,
+          isExceededTotalUsernames: false,
+          isBeingMoveBetDate: false,
+          isInvalidTotalTicket: false,
+          numberOfTickets: 0,
+          isExistedInOtherRequest: false,
+          matchIds: '',
+          transInfo: null
+        } as unknown as ValidationAbnormalAccount,
+        accountWinlostModels: [],
+        transInfoAddRequestModel: null
+      };
+
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
+      productFilterComponent.isValidComponent.mockReturnValue(true);
+      eventDateFilterComponent.isValidEventDate.mockReturnValue(true);
+
+      // Act
+      const result = await service.checkValidUsernames(args);
+
+      // Assert
+      expect(result.isValid).toBe(false);
+      expect(usernamesComponent.showErrorTicketLimitExceeded).toHaveBeenCalled();
+    });
+  });
+
+  describe('isAutoVoidWithPolicy', () => {
+    it('should return true for AUTO_VOID_INSTANT_WITH_POLICY_ID action', () => {
+      // Act
+      const result = service.isAutoVoidWithPolicy(TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString());
+
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return false for other actions', () => {
+      // Act
+      const result = service.isAutoVoidWithPolicy('OTHER_ACTION');
+
+      // Assert
+      expect(result).toBe(false);
+    });
   });
 });

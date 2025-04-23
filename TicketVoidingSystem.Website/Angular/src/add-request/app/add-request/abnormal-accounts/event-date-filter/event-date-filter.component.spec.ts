@@ -1,130 +1,129 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
-import { BalanceUp } from '../../../../../utility/models/balance-up.model';
-import { CommonService } from '../../../../../utility/services/common.service';
-import { AbnormalAccountModel } from '../../models/abnormal-account.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { EventDateFilterComponent } from './event-date-filter.component';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { LABELS } from '../../../../../utility/constants/labels';
+import { AbnormalAccountModel } from '../../models/abnormal-account.model';
+import moment from 'moment-timezone';
+
 class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeBalanceUp: BalanceUp = {
-    balanceUpDay: new Date('2021-12-16'),
-    moveBetsDay: new Date('2021-12-26')
-  };
+  static readonly fakeAbnormalAccountModel = {
+    fromDate: '2024-03-20',
+    toDate: '2024-03-21'
+  } as AbnormalAccountModel;
 }
 
-describe('EventDateFilterComponent', () => { 
-  @NgModule({
-    declarations: [
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      ToolTipModule
-    ],
-    providers: [
-      CommonService
-    ]
-  })
-  class AppModuleTest { }
+describe('EventDateFilterComponent', () => {
+  let component: EventDateFilterComponent;
+  let fixture: ComponentFixture<EventDateFilterComponent>;
 
-  let shallow: Shallow<EventDateFilterComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [StaticService]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(EventDateFilterComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(EventDateFilterComponent);
+    component = fixture.componentInstance;
   });
 
-  it('#EventDateFilterComponent init should match snapshot', async () => {
-    const { fixture } = await shallow.render();
-
-    expect(fixture).toMatchSnapshot();
-  });
-  
-  it('#ngOnInit should call #initEventDate', async () => {
-    const { instance } = await shallow.render();
-    instance.initEventDate = jest.fn();
-    instance.ngOnInit();
-    
-    expect(instance.initEventDate).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#initEventDate should update correct data when isEdit', async () => {
-    const mockGetBalanceUp = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeBalanceUp));
-    const { instance } = await shallow
-    .mock(CommonService, { getBalanceUp: mockGetBalanceUp})
-    .render();
-    instance.isEdit = true;
-    instance.abnormalAccountModel = new AbnormalAccountModel();
-    instance.abnormalAccountModel.fromDate = Helper.fromDate;
-    instance.abnormalAccountModel.toDate = Helper.toDate;
-    
-    await instance.initEventDate();
-    
-    expect(instance.fromDate).toStrictEqual(new NgbDate(2021, 12, 18));
-    expect(instance.toDate).toStrictEqual(new NgbDate(2021, 12, 21));
-  });
-  
-  it('#initEventDate should update correct data when add request', async () => {
-    const mockGetBalanceUp = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeBalanceUp));
-    const { instance } = await shallow
-    .mock(CommonService, { getBalanceUp: mockGetBalanceUp})
-    .render();
-    instance.isEdit = false;
-    instance.abnormalAccountModel = new AbnormalAccountModel();
-    
-    await instance.initEventDate();
-    
-    expect(instance.fromDate).toBeDefined();
-    expect(instance.toDate).toBeDefined();
-  });
-  
-  it('#isValidEventDate should return true', async () => {
-    const { instance } = await shallow.render();
-    instance.fromDate = new NgbDate(2021, 12, 18);
-    instance.toDate = new NgbDate(2021, 12, 21);
-    instance.abnormalAccountModel = new AbnormalAccountModel();
-    
-    const actual = instance.isValidEventDate();
-    
-    expect(actual).toBe(true);
-  });
-  
-  it('#isValidEventDate should return false', async () => {
-    const { instance } = await shallow.render();
-    instance.fromDate = new NgbDate(2021, 12, 29);
-    instance.toDate = new NgbDate(2021, 12, 21);
-    instance.tooltip = new Tooltip();
-    instance.tooltip.display = jest.fn();
-    instance.toDate.year = NaN;
-    const actual = instance.isValidEventDate();
-    
-    expect(actual).toBe(false);
-    expect(instance.tooltip.display).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#isValidEventDate should return true', async () => {
-    const { instance } = await shallow.render();
-    instance.fromDate = new NgbDate(2021, 12, 29);
-    instance.toDate = null;
-    instance.abnormalAccountModel = new AbnormalAccountModel();
-
-    const actual = instance.isValidEventDate();
-    
-    expect(actual).toBe(true);
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#changeFilter should emit changeFilterEvent', async () => {
-    const { instance } = await shallow.render();
-    instance.changeFilterEvent.emit = jest.fn();
+  it('should initialize with default values when not in edit mode', () => {
+    // Arrange
+    component.isEdit = false;
+    const currentMoment = moment.utc().tz('America/Caracas');
 
-    instance.changeFilter();
+    // Act
+    component.ngOnInit();
 
-    expect(instance.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.fromDate).toEqual(new NgbDate(currentMoment.year(), currentMoment.month() + 1, currentMoment.date()));
+    expect(component.toDate).toEqual(new NgbDate(currentMoment.year(), currentMoment.month() + 1, currentMoment.date()));
+  });
+
+  it('should initialize with existing values when in edit mode', () => {
+    // Arrange
+    component.isEdit = true;
+    component.abnormalAccountModel = Helper.fakeAbnormalAccountModel;
+
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.fromDate).toEqual(new NgbDate(2024, 3, 20));
+    expect(component.toDate).toEqual(new NgbDate(2024, 3, 21));
+  });
+
+  it('should validate event date when fromDate is before toDate', () => {
+    // Arrange
+    component.fromDate = new NgbDate(2024, 3, 20);
+    component.toDate = new NgbDate(2024, 3, 21);
+    component.abnormalAccountModel = new AbnormalAccountModel();
+
+    // Act
+    const result = component.isValidEventDate();
+
+    // Assert
+    expect(result).toBeTruthy();
+    expect(component.abnormalAccountModel.fromDate).toBe('2024/03/20');
+    expect(component.abnormalAccountModel.toDate).toBe('2024/03/21');
+  });
+
+  it('should validate event date when fromDate is same as toDate', () => {
+    // Arrange
+    component.fromDate = new NgbDate(2024, 3, 20);
+    component.toDate = new NgbDate(2024, 3, 20);
+    component.abnormalAccountModel = new AbnormalAccountModel();
+
+    // Act
+    const result = component.isValidEventDate();
+
+    // Assert
+    expect(result).toBeTruthy();
+    expect(component.abnormalAccountModel.fromDate).toBe('2024/03/20');
+    expect(component.abnormalAccountModel.toDate).toBe('2024/03/20');
+  });
+
+  it('should validate event date when toDate is not set', () => {
+    // Arrange
+    component.fromDate = new NgbDate(2024, 3, 20);
+    component.toDate = null;
+    component.abnormalAccountModel = new AbnormalAccountModel();
+
+    // Act
+    const result = component.isValidEventDate();
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('should show tooltip when fromDate is after toDate', () => {
+    // Arrange
+    component.fromDate = new NgbDate(2024, 3, 21);
+    component.toDate = new NgbDate(2024, 3, 20);
+    component.abnormalAccountModel = new AbnormalAccountModel();
+    component.tooltip.display = jest.fn();
+
+    // Act
+    const result = component.isValidEventDate();
+
+    // Assert
+    expect(result).toBeFalsy();
+    expect(component.tooltip.display).toHaveBeenCalledWith('to-date', LABELS.INVALID_TO_DATE);
+  });
+
+  it('should emit change filter event', () => {
+    // Arrange
+    component.changeFilterEvent = { emit: jest.fn() } as any;
+
+    // Act
+    component.changeFilter();
+
+    // Assert
+    expect(component.changeFilterEvent.emit).toHaveBeenCalled();
   });
 });

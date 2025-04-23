@@ -1,187 +1,290 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
-import { AdvancedModeComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.component';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { CommonService } from '../../../../utility/services/common.service';
-import { AddRequestStore } from '../add-request.store';
-import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
-import { FilterModel } from '../filter/filter.model';
-import { WrongMarketOfferedModel } from '../models/event-wrong-market-offered.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered.component';
-import { FilterTimeComponent } from './filter-time/filter-time.component';
-import { LogInfoWrongMarketOfferedComponent } from './log-info-wrong-market-offered/log-info-wrong-market-offered.component';
-import { FilterWrongMarketOfferedModel } from './models/filter-wrong-market-offered.model';
-import { LogInfoWrongMarketOffered } from './models/log-info-wrong-market-offered.model';
-import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
+import { ValidationService } from './services/validation.service';
 import { EventWrongMarketOfferedService } from './services/event-wrong-market-offfered.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
+import { AddRequestStore } from '../add-request.store';
+import { FilterModel } from '../filter/filter.model';
+import { WrongMarketOfferedModel } from '../models/event-wrong-market-offered.model';
+import { OthersModel } from '../others/others.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { CommonService } from '../../../../utility/services/common.service';
+import { ModeType } from '../../../../utility/constants/config';
+
 class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterWrongMarketOfferedModel: FilterWrongMarketOfferedModel[] = [{
-    fromDateTime: Helper.fromDate,
-    toDateTime: Helper.toDate
-  }] as FilterWrongMarketOfferedModel[];
-  static readonly fakeWrongMarketOfferedModel: WrongMarketOfferedModel = {
-    betTypeCount: [],
-    filterFromTransTime: Helper.fromDate,
-    filterToTransTime: Helper.toDate,
+  static readonly fakeRequestId = 1212;
+  static readonly fakeUserId = 123;
+  static readonly fakeRequestedBy = 'testUser';
+  static readonly fakeFilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
+    isVoided: false,
+    isChangeSubTypeManual: true,
+    isAbnormal: false
+  } as FilterModel;
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeWrongMarketOfferedModel = [{
+    id: 1,
+    requestDetailId: 1,
+    matchId: 123,
     subIssueTypeId: 1,
-    logInfoDetail: new LogInfoDetail(),
-    matchId: 1,
-  } as WrongMarketOfferedModel;
-  static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
-    matchId: 1,
-    filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
-    betTeamsResult: []
-  } as LogInfoWrongMarketOffered;
+    filterFromTransTime: '2024-01-01',
+    filterToTransTime: '2024-01-02',
+    groupBetTypes: [{
+      betTypes: [{
+        id: 1,
+        name: 'Test Bet Type',
+        isChecked: false
+      }]
+    }],
+    betTeamsResult: [{
+      id: 1,
+      name: 'Test Bet Team',
+      isDisabled: false
+    }],
+    allBetTypesSelection: true,
+    logInfoDetail: {},
+    betTypeCount: 1
+  }] as unknown as WrongMarketOfferedModel[];
 }
 
 describe('EventWrongMarketOfferedComponent', () => {
-  @NgModule({
-    declarations: [
-      FilterTimeComponent,
-      EventLeagueComponent,
-      LogInfoWrongMarketOfferedComponent,
-      AdvancedModeAddRequestComponent,
-      EventLeagueComponent,
-      ConfirmAddRequestComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule
-    ],
-    providers: [
-      AddRequestStore,
-      ValidationService,
-      LogInfoService,
-      SaveRequestService,
-      CommonService,
-      EventWrongMarketOfferedService
-    ]
-  })
-  class AppModuleTest { }
+  let component: EventWrongMarketOfferedComponent;
+  let fixture: ComponentFixture<EventWrongMarketOfferedComponent>;
+  let validationService: ValidationService;
+  let eventWrongMarketOfferedService: EventWrongMarketOfferedService;
+  let addRequestStore: AddRequestStore;
+  let logInfoService: LogInfoService;
+  let commonService: CommonService;
+  let saveRequestService: SaveRequestService;
 
-  let shallow: Shallow<EventWrongMarketOfferedComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        EventWrongMarketOfferedService,
+        LogInfoService,
+        SaveRequestService,
+        AddRequestStore,
+        CommonService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(EventWrongMarketOfferedComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(EventWrongMarketOfferedComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    eventWrongMarketOfferedService = fixture.debugElement.injector.get(EventWrongMarketOfferedService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    logInfoService = fixture.debugElement.injector.get(LogInfoService);
+    commonService = fixture.debugElement.injector.get(CommonService);
+    saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
+    component = fixture.componentInstance;
   });
 
-  it('EventWrongMarketOfferedComponent init should match snapshot', async () => {
-    const component = new EventWrongMarketOfferedComponent(null, null, null, null, null, null);
-    component.wrongMarketOfferedModels = [Helper.fakeWrongMarketOfferedModel];
-
-    expect(component).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('clickSearch should call #logInfoService.getLogInfo', async () => {
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(true) })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-      changeSavingRequestStatus: jest.fn()
-     })
-    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        wrongMarketOfferedModels: [Helper.fakeWrongMarketOfferedModel],
-      }
+  it('should initialize with default values when not in edit mode', () => {
+    // Arrange
+    component.isEdit = false;
+    eventWrongMarketOfferedService.initDefaultTime = jest.fn().mockReturnValue({});
+
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(eventWrongMarketOfferedService.initDefaultTime).toHaveBeenCalledWith(1);
+    expect(component.logInfoEvent.filterWrongMarketOfferedModels).toBeDefined();
+  });
+
+  it('should initialize with existing values when in edit mode', () => {
+    // Arrange
+    component.isEdit = true;
+    component.wrongMarketOfferedModels = Helper.fakeWrongMarketOfferedModel;
+    component.filter = Helper.fakeFilterModel;
+    eventWrongMarketOfferedService.assignModelsToEvents = jest.fn();
+
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(eventWrongMarketOfferedService.assignModelsToEvents).toHaveBeenCalledWith(Helper.fakeWrongMarketOfferedModel);
+    expect(component.primitivePropertyEvent.isShowValidation).toBeTruthy();
+  });
+
+  it('should get group bet types successfully', async () => {
+    // Arrange
+    component.eventLeague = {
+      selectedMatch: { matchId: 123 }
+    } as EventLeagueComponent;
+    const mockGroupBetTypes = {
+      groupBetTypes: [{
+        betTypes: [{
+          id: 1,
+          name: 'Test Bet Type'
+        }]
+      }]
+    };
+    commonService.getGroupBetTypesTvs = jest.fn().mockResolvedValue(mockGroupBetTypes);
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+
+    // Act
+    await component.getGroupBetTypes();
+
+    // Assert
+    expect(commonService.getGroupBetTypesTvs).toHaveBeenCalledWith({
+      mode: ModeType.SPORT_BOOK,
+      matchId: 123,
+      timeRanges: expect.any(Array),
+      isGetCancelCashOut: true
     });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.advancedMode = new AdvancedModeAddRequestComponent();
-    instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
-
-    await instance.clickSearch();
-
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(1);
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
   });
 
-  it('clickSearch should not call #logInfoService.getLogInfo when not valid', async () => {
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(false) })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-      changeSavingRequestStatus: jest.fn()
-     })
-    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        wrongMarketOfferedModels: [Helper.fakeWrongMarketOfferedModel],
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.advancedMode = new AdvancedModeAddRequestComponent();
-    instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
+  it('should handle refresh event with validation', async () => {
+    // Arrange
+    validationService.validateCommonData = jest.fn().mockReturnValue(true);
+    component.getGroupBetTypes = jest.fn().mockResolvedValue(undefined);
+    component.advancedMode = {
+      changeBetTypes: jest.fn(),
+      resetAllBetTeams: jest.fn()
+    } as any;
+    addRequestStore.changeSavingRequestStatus = jest.fn();
 
-    await instance.clickSearch();
+    // Act
+    await component.refreshEvent();
 
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(0);
+    // Assert
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(component.getGroupBetTypes).toHaveBeenCalled();
+    expect(component.advancedMode.changeBetTypes).toHaveBeenCalled();
+    expect(component.advancedMode.resetAllBetTeams).toHaveBeenCalled();
+    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
   });
 
-  it('saveRequest should call #saveRequestService.saveRequest', async () => {
-    const mockSaveRequest = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(false) })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-     })
-    .mock(SaveRequestService, { saveRequest: mockSaveRequest })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        wrongMarketOfferedModels: [Helper.fakeWrongMarketOfferedModel],
-      }
-    });
-    instance.advancedMode = new AdvancedModeAddRequestComponent();
-    instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
-    instance.advancedMode.advancedModeComponent = new AdvancedModeComponent(null, null, null);
-    instance.advancedMode.advancedModeComponent.getAllBetTypesSelection = jest.fn().mockReturnValue([]);
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
+  it('should handle click search with validation', async () => {
+    // Arrange
+    component.advancedMode = {
+      getCheckedBetTypes: jest.fn().mockReturnValue([])
+    } as any;
+    validationService.validateCommonData = jest.fn().mockReturnValue(true);
+    logInfoService.getLogInfo = jest.fn().mockResolvedValue(undefined);
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+    addRequestStore.changeSavingRequestStatus = jest.fn();
 
-    await instance.saveRequest();
+    // Act
+    await component.clickSearch();
 
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(logInfoService.getLogInfo).toHaveBeenCalled();
+    expect(component.primitivePropertyEvent.isShowValidation).toBeTruthy();
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
   });
 
-  it('#changeMatchEvent should emit updateMatchId when leagueEventWrongOddsComponent not null', async () => {
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-      changeSavingRequestStatus: jest.fn(),
-      changeStartTimeFilterAnalysis: jest.fn()
-     })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
+  it('should handle save request', async () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
+    component.advancedMode = {
+      getCheckedBetTypes: jest.fn().mockReturnValue([]),
+      advancedModeComponent: {
+        getAllBetTypesSelection: jest.fn().mockReturnValue(true)
       }
-    });
-    instance.eventLeague = new EventLeagueComponent(null, null, null);
-    instance.eventLeague.selectedMatch = new MatchModel();
-    instance.eventLeague.selectedMatch.matchId = 1;
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.logInfoEvent = Helper.fakeLogInfoWrongMarketOffered;
-    instance.advancedMode = new AdvancedModeAddRequestComponent();
-    instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
-    instance.advancedMode.clearBetTeam = jest.fn();
+    } as any;
+    saveRequestService.saveRequest = jest.fn().mockResolvedValue(undefined);
+    addRequestStore.changeBlockingUiStatus = jest.fn();
 
-    await instance.changeMatchEvent();
+    // Act
+    await component.saveRequest();
 
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(saveRequestService.saveRequest).toHaveBeenCalled();
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
+  });
+
+  it('should handle change match event', () => {
+    // Arrange
+    component.eventLeague = {
+      selectedMatch: { matchId: 123 }
+    } as EventLeagueComponent;
+    component.updateMatchId.emit = jest.fn();
+    logInfoService.resetLogInfoOfEvent = jest.fn();
+    addRequestStore.changeSavingRequestStatus = jest.fn();
+
+    // Act
+    component.changeMatchEvent();
+
+    // Assert
+    expect(component.updateMatchId.emit).toHaveBeenCalled();
+    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalled();
+    expect(component.logInfoEvent.matchId).toBe(123);
+    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+  });
+
+  it('should handle check exist bet type event', () => {
+    // Act
+    component.checkExistBetTypeEvent(true);
+
+    // Assert
+    expect(component.primitivePropertyEvent.isShowErrorNoBetType).toBeFalsy();
+  });
+
+  it('should handle checking load data advanced mode', () => {
+    // Arrange
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+
+    // Act
+    component.checkingLoadDataAdvancedMode(true);
+
+    // Assert
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+  });
+
+  it('should handle change filter time', () => {
+    // Arrange
+    addRequestStore.changeSavingRequestStatus = jest.fn();
+
+    // Act
+    component.changeFilterTime();
+
+    // Assert
+    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+    expect(component.primitivePropertyEvent.isShowErrorNoBetType).toBeFalsy();
+    expect(component.primitivePropertyEvent.isShowValidation).toBeFalsy();
+  });
+
+  it('should handle confirm save request', async () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
+    component.advancedMode = {
+      getCheckedBetTypes: jest.fn().mockReturnValue([]),
+      advancedModeComponent: {
+        getAllBetTypesSelection: jest.fn().mockReturnValue(true)
+      }
+    } as any;
+    saveRequestService.onClickConfirmSave = jest.fn().mockResolvedValue(undefined);
+
+    // Act
+    await component.onClickConfirmSaveRequest();
+
+    // Assert
+    expect(saveRequestService.onClickConfirmSave).toHaveBeenCalled();
+  });
+
+  it('should handle cancel save request', () => {
+    // Arrange
+    addRequestStore.changeSavingRequestStatus = jest.fn();
+
+    // Act
+    component.onClickCancelSaveRequest();
+
+    // Assert
+    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
   });
 });

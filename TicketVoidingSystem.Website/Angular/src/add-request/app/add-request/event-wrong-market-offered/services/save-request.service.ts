@@ -3,7 +3,6 @@ import * as _ from 'lodash';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
-import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { PopupService } from '../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
@@ -76,7 +75,6 @@ export class SaveRequestService {
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
     arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
-    arg.confirmAddRequest =  new ConfirmAddRequestModel();
   }
 
   private initAddRequestQuery(argWrongMarketOffered: SaveRequestArg): AddRequestQuery {
