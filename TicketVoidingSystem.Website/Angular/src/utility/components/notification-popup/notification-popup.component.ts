@@ -36,6 +36,7 @@ export class NotificationPopupComponent {
   async ngOnInit() {
     this.subscribeOpenEvent();
     this.subscribeNotificationEvent();
+    await this.getNotifications();
   }
 
   subscribeOpenEvent() {
@@ -45,8 +46,7 @@ export class NotificationPopupComponent {
         this.cdr.markForCheck();
         this.isOpen = open;
         if (open) {
-          this.notifications = await this.notificationService.get();
-          this.updateGroupedNotifications();
+          await this.getNotifications();
         }
       });
   }
@@ -81,8 +81,10 @@ export class NotificationPopupComponent {
 
   clickNotification(event: Event, notification: NotificationModel) {
     event.stopPropagation();
-    notification.isRead = true;
-    void this.notificationService.update(notification.id.toString(), notification.isRead);
+    if (!notification.isRead) {
+      notification.isRead = true;
+      void this.notificationService.update(notification.id.toString(), notification.isRead);
+    }
   }
 
   toggleNotifications() {
@@ -107,7 +109,7 @@ export class NotificationPopupComponent {
     }
   }
 
-  updateGroupedNotifications() {
+  private updateGroupedNotifications() {
     let filtered = this.notifications.filter(n =>
       this.activeTab === NotificationTabName.NOTIFICATION ? n.type !== NotificationType.ERROR : n.type === NotificationType.ERROR
     );
@@ -130,7 +132,7 @@ export class NotificationPopupComponent {
     this.cdr.markForCheck();
   }
 
-  addNewNotification(notification: NotificationModel) {
+  private addNewNotification(notification: NotificationModel) {
     if (this.notifications.some(n => n.content === notification.content)) {
       return;
     }
@@ -146,5 +148,10 @@ export class NotificationPopupComponent {
     }
 
     this.cdr.markForCheck();
+  }
+
+  private async getNotifications() {
+    this.notifications = await this.notificationService.get();
+    this.updateGroupedNotifications();
   }
 }
