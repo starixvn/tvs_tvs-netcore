@@ -10,7 +10,7 @@
         <label class="col-form-label col-form-label-sm me-2">LicenseeId</label>
         <div>
           <ng-select [items]="licenseeSelectList" bindLabel="name" bindValue="id" [(ngModel)]="query.licenseeId"
-            [clearable]="false" groupBy="group" style="width: 150px">
+            [clearable]="false" groupBy="group" style="width: 140px">
           </ng-select>
         </div>
       </div>
@@ -23,7 +23,7 @@
       <div class="d-flex me-3">
         <label class="col-form-label col-form-label-sm me-2">Ticket Type</label>
         <ng-select [items]="ticketType.items" bindLabel="name" bindValue="value" [(ngModel)]="query.ticketType" 
-        [clearable]="false" style="width: 120px">
+        [clearable]="false" style="width: 140px">
         </ng-select>
       </div>
     </div>
@@ -70,7 +70,7 @@
               <span class="col-form-label-sm me-2">Selection</span>
               <ng-select class="selection-dropdown-sub-parlay" [items]="comboParlay" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
                 [clearable]="false" [(ngModel)]="selectedComboParlay" bindValue="value"
-                [disabled]="false" groupBy="group" [selectableGroup]="true" style="width: 130px"
+                [disabled]="false" groupBy="group" [selectableGroup]="true" style="width: 120px"
                 [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
                 <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                   <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
