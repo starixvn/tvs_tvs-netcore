@@ -88,6 +88,5 @@ export class AddRequestResultModel {
 
   logResults: Result<null>[];
   logStageName: string;
-  markedTicketsSuccessful: number[];
 }
 

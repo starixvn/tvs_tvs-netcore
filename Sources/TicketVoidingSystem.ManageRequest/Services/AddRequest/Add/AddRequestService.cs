@@ -21,7 +21,7 @@ public class AddRequestServiceImp(
     public async Task<Result> Execute(AddRequestQuery query)
     {
         var markTicketResult = await marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds);
-        var markTicketError = getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService), markTicketResult.MarkedTickets);
+        var markTicketError = getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService));
         if (markTicketError != null)
         {
             return markTicketError;
@@ -29,14 +29,14 @@ public class AddRequestServiceImp(
 
         try
         {
-            return await addRequestProcessStage.Execute(query, markTicketResult.MarkedTickets);
+            return await addRequestProcessStage.Execute(query);
         }
         catch (Exception exception)
         {
             notificationService.ExecuteBackground(()
                 => notificationService.InsertUpdateRequest(NotificationType.Notification, MessageHelper.CreateAddRequestFailed(), null));
             _ = loggingService.ErrorAsync(exception);
-            return getUpdateResultService.CreateErrorResult(exception, markTicketResult.MarkedTickets);
+            return getUpdateResultService.CreateErrorResult(exception);
         }
     }
 }

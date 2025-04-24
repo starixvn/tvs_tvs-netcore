@@ -13,7 +13,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
 public interface AddRequestProcessStage
 {
-    Task<Result> Execute(AddRequestQuery query, IEnumerable<long> markedTicketsSuccessful);
+    Task<Result> Execute(AddRequestQuery query);
 }
 
 public class AddRequestProcessStageImp(
@@ -30,7 +30,7 @@ public class AddRequestProcessStageImp(
 {
     // NOSONAR
 
-    public async Task<Result> Execute(AddRequestQuery query, IEnumerable<long> markedTicketsSuccessful)
+    public async Task<Result> Execute(AddRequestQuery query)
     {
         var requestId = await ExecuteAddRequest(query);
         var matchIdsAutoVoidRequestQueue = insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
@@ -40,7 +40,7 @@ public class AddRequestProcessStageImp(
             => notificationService.InsertUpdateRequest(NotificationType.Notification,
                 MessageHelper.CreateAddRequestSuccessfully(requestId), requestId));
 
-        return getUpdateResultService.CreateSuccessResult(requestId, GetMatchIdAfterAddRequest(query), markedTicketsSuccessful);
+        return getUpdateResultService.CreateSuccessResult(requestId, GetMatchIdAfterAddRequest(query));
     }
 
     private async Task<int> ExecuteAddRequest(AddRequestQuery query)  // NOSONAR

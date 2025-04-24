@@ -23,14 +23,14 @@ public class EditRequestServiceImp(
     public async Task<Result> UpdateRequest(EditRequestQuery query)
     {
         var markTicketResult = await marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds);
-        var markTicketError = getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService), markTicketResult.MarkedTickets);
+        var markTicketError = getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService));
         if (markTicketError != null)
         {
             return markTicketError;
         }
 
         var reCalcTicketsAbnormalResults = await reCalculateTicketsService.Execute(query.AbnormalBetInfo, query.IssueTypeId, query.RemoveTransIds);
-        var reCalcTicketError = getUpdateResultService.GetFirstError(reCalcTicketsAbnormalResults, nameof(ReCalculateTicketsService), markTicketResult.MarkedTickets);
+        var reCalcTicketError = getUpdateResultService.GetFirstError(reCalcTicketsAbnormalResults, nameof(ReCalculateTicketsService));
         if (reCalcTicketError != null)
         {
             return reCalcTicketError;
@@ -38,7 +38,7 @@ public class EditRequestServiceImp(
 
         try
         {
-            return await updateRequestProcessStage.Execute(query, markTicketResult.MarkedTickets);
+            return await updateRequestProcessStage.Execute(query);
         }
         catch (Exception exception)
         {
@@ -46,7 +46,7 @@ public class EditRequestServiceImp(
                 => notificationService.InsertUpdateRequest(NotificationType.Notification,
                     MessageHelper.CreateEditRequestFailed(query.RequestId), null));
             _ = loggingService.ErrorAsync(exception);
-            return getUpdateResultService.CreateErrorResult(exception, markTicketResult.MarkedTickets);
+            return getUpdateResultService.CreateErrorResult(exception);
         }
     }
 }

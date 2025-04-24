@@ -39,7 +39,7 @@ public class AddRequestServiceTests
         };
         marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds).Returns(markTicketsResult);
         var result = new Result { ErrorCode = 1, ErrorMsg = "has error" };
-        getUpdateResultService.GetFirstError(markTicketsResult.MarkedResults, nameof(MarkTicketsWhenAddEditService), markTicketsResult.MarkedTickets).Returns(result);
+        getUpdateResultService.GetFirstError(markTicketsResult.MarkedResults, nameof(MarkTicketsWhenAddEditService)).Returns(result);
 
         // Act
         var actual = await service.Execute(query);
@@ -65,14 +65,14 @@ public class AddRequestServiceTests
         };
         marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds).Returns(markTicketsResult);
         var result = new Result { ErrorCode = 1, ErrorMsg = "has error" };
-        getUpdateResultService.GetFirstError(markTicketsResult.MarkedResults, nameof(MarkTicketsWhenAddEditService), markTicketsResult.MarkedTickets).Returns((Result)null);
-        addRequestProcessStage.Execute(query, markTicketsResult.MarkedTickets).Returns(result);
+        getUpdateResultService.GetFirstError(markTicketsResult.MarkedResults, nameof(MarkTicketsWhenAddEditService)).Returns((Result)null);
+        addRequestProcessStage.Execute(query).Returns(result);
 
         // Act
         var actual = await service.Execute(query);
 
         // Assert
         AssertExtension.Equal(result, actual);
-        await addRequestProcessStage.Received(1).Execute(query, markTicketsResult.MarkedTickets);
+        await addRequestProcessStage.Received(1).Execute(query);
     }
 }

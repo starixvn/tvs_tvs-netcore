@@ -59,14 +59,14 @@ public class UpdateRequestProcessStageTests
         var markedTicketsSuccessful = new List<long> { 1, 2 };
         mapper.Map<EditRequestCommand>(query).Returns(new EditRequestCommand());
         sessionService.GetClientIp().Returns("127:00:42");
-        getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString(), markedTicketsSuccessful)
+        getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString())
             .Returns(new Result());
 
         // Act
-        await service.Execute(query, markedTicketsSuccessful);
+        await service.Execute(query);
 
         // Assert
         await accountWinLostService.Received(1).SaveAccountWinLost(Arg.Any<int>(), query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
-        getUpdateResultService.Received(1).CreateSuccessResult(query.RequestId, query.MatchId.ToString(), markedTicketsSuccessful);
+        getUpdateResultService.Received(1).CreateSuccessResult(query.RequestId, query.MatchId.ToString());
     }
 }

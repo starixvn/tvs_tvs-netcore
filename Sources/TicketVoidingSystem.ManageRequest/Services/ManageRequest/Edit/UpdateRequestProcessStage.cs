@@ -15,7 +15,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 
 public interface UpdateRequestProcessStage
 {
-    Task<Result> Execute(EditRequestQuery query, IEnumerable<long> markedTicketsSuccessful);
+    Task<Result> Execute(EditRequestQuery query);
 }
 
 public class UpdateRequestProcessStageImp(
@@ -29,7 +29,7 @@ public class UpdateRequestProcessStageImp(
     NotificationService notificationService)
     : UpdateRequestProcessStage
 {
-    public async Task<Result> Execute(EditRequestQuery query, IEnumerable<long> markedTicketsSuccessful)
+    public async Task<Result> Execute(EditRequestQuery query)
     {
         var command = CreateEditRequestCommand(query);
         var matchIdsAutoVoidRequestQueue = insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
@@ -43,7 +43,7 @@ public class UpdateRequestProcessStageImp(
             => notificationService.InsertUpdateRequest(NotificationType.Notification,
                 MessageHelper.CreateEditRequestSuccessfully(query.RequestId, sessionService.UserName), query.RequestId));
 
-        return getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString(), markedTicketsSuccessful);
+        return getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString());
     }
 
     private EditRequestCommand CreateEditRequestCommand(EditRequestQuery query)  // NOSONAR

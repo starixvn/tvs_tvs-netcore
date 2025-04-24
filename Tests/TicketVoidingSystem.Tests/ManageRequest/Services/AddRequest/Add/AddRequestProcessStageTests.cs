@@ -68,10 +68,10 @@ public class AddRequestProcessStageTests
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
         sessionService.GetClientIp().Returns("127.00.17");
         insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-        getUpdateResultService.CreateSuccessResult(1, "456", markedTicketsSuccessful).Returns(new Result());
+        getUpdateResultService.CreateSuccessResult(1, "456").Returns(new Result());
 
         // Act
-        var result = await service.Execute(query, markedTicketsSuccessful);
+        var result = await service.Execute(query);
 
         // Assert
         Assert.True(result.IsSuccessful);
@@ -100,10 +100,10 @@ public class AddRequestProcessStageTests
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
         sessionService.GetClientIp().Returns("127.00.17");
         insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-        getUpdateResultService.CreateSuccessResult(1, "456", markedTicketsSuccessful).Returns(new Result());
+        getUpdateResultService.CreateSuccessResult(1, "456").Returns(new Result());
 
         // Act
-        var result = await service.Execute(query, markedTicketsSuccessful);
+        var result = await service.Execute(query);
 
         // Assert
         Assert.True(result.IsSuccessful);
@@ -131,10 +131,10 @@ public class AddRequestProcessStageTests
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
         sessionService.GetClientIp().Returns("127.00.17");
         insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-        getUpdateResultService.CreateSuccessResult(1, "", markedTicketsSuccessful).Returns(new Result());
+        getUpdateResultService.CreateSuccessResult(1, "").Returns(new Result());
 
         // Act
-        var result = await service.Execute(query, markedTicketsSuccessful);
+        var result = await service.Execute(query);
 
         // Assert
         Assert.True(result.IsSuccessful);
@@ -166,10 +166,10 @@ public class AddRequestProcessStageTests
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
         sessionService.GetClientIp().Returns("127.00.17");
         insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-        getUpdateResultService.CreateSuccessResult(1, "456", markedTicketsSuccessful).Returns(new Result());
+        getUpdateResultService.CreateSuccessResult(1, "456").Returns(new Result());
 
         // Act
-        var result = await service.Execute(query, markedTicketsSuccessful);
+        var result = await service.Execute(query);
 
         // Assert
         Assert.True(result.IsSuccessful);
@@ -237,10 +237,10 @@ public class AddRequestProcessStageTests
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
         sessionService.GetClientIp().Returns("127.00.17");
         insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-        getUpdateResultService.CreateSuccessResult(1, "456", markedTicketsSuccessful).ReturnsForAnyArgs(new Result());
+        getUpdateResultService.CreateSuccessResult(1, "456").ReturnsForAnyArgs(new Result());
 
         // Act
-        var result = await service.Execute(query, markedTicketsSuccessful);
+        var result = await service.Execute(query);
 
         // Assert
         Assert.True(result.IsSuccessful);
