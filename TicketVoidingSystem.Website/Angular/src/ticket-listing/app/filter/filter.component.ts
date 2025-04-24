@@ -1,31 +1,40 @@
-﻿import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+﻿import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
-import { default as moment, default as momenttimezone } from 'moment-timezone';
+import { default as moment } from 'moment-timezone';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
-import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
-import { BetTypesVirtualSportComponent } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.component';
-import { GroupBetTypeVirtualSport } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.model';
 import { BetTypesComponent } from '../../../utility/components/bettypes/bettypes.component';
+import { BetTypesVirtualSportComponent } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.component';
+import { DateFullTimeNewComponent } from '../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { GroupBetTypeVirtualSport } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.model';
 import { BetTypeModel, BetTypesModel } from '../../../utility/components/bettypes/bettypes.model';
-import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
-import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { Selection } from '../../../utility/models/selection.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { FilterEvent, Item, Licensee, Type } from './filter.model';
+import { GetSummaryQuery } from '../models/query.model';
+import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
+import { CommonService } from '../../../utility/services/common.service';
+import { StaticService } from '../../../utility/services/static.service';
+import { AppService } from '../app.service';
 import { ComboParlayConstants } from '../../../utility/constants/combo-parlay.constant';
 import { DateTimeFormat, ModeType, Product } from '../../../utility/constants/config';
 import { TEXT } from '../../../utility/constants/text';
 import { BallSequences } from '../../../utility/models/ball-sequences';
 import { MatchModel } from '../../../utility/models/match.model';
-import { CommonService } from '../../../utility/services/common.service';
-import { StaticService } from '../../../utility/services/static.service';
-import { AppService } from '../app.service';
-import { GetSummaryQuery } from '../models/query.model';
-import { FilterEvent, Item, Licensee, Type } from './filter.model';
+import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
 
 @Component({
+  standalone: true,
   selector: 'filter',
   templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.scss']
+  styleUrls: ['./filter.component.scss'],
+  imports: [CommonModule, FormsModule, NgSelectModule, AdvancedModeComponent, GroupBetTypesComponent,
+    BetTypesComponent, BetTypesVirtualSportComponent, DateFullTimeNewComponent, TooltipComponent, OnlyNumberDirective],
 })
 export class FilterComponent implements OnInit {
   @Output() searchEvent = new EventEmitter<FilterEvent>();
@@ -45,6 +54,7 @@ export class FilterComponent implements OnInit {
   singleOrSubParlay = 'All';
   isReSettled = false;
   licensees: Licensee[];
+  licenseeSelectList: { id: number, name: string }[] = [];
   groupBy = new Type();
   ticketType = new Type();
   product = new Type();
@@ -60,18 +70,16 @@ export class FilterComponent implements OnInit {
   isMatch3rd: boolean;
   switchMatch3rd: boolean;
   allBetTypes: BetType[];
-  comboParlay: MultipleSelection;
+  comboParlay: Selection[] = [];
+  selectedComboParlay: string[] = [];
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly appService: AppService,
-    private readonly commonService: CommonService,
-    private readonly blockUIService: BlockUiService
-  ) {
-    this.tooltip.element = this.element;
-  }
+  element = inject(ElementRef);
+  appService = inject(AppService);
+  commonService = inject(CommonService);
+  blockUIService = inject(BlockUiService);
 
   async ngOnInit() {
+    this.tooltip.element = this.element;
     await this.initFilter();
     this.setDateTime();
     this.groupBetTypes = new GroupBetTypesModel([], false);
@@ -79,21 +87,17 @@ export class FilterComponent implements OnInit {
   }
 
   renderComboParlay() {
-    this.comboParlay = new MultipleSelection();
-    this.comboParlay.checkAllCheckBoxText = 'All';
-    this.comboParlay.allItemsCheckedText = 'All';
-    this.comboParlay.noneItemCheckedText = 'Select options';
-    this.comboParlay.maxWidth = '115px';
-    this.comboParlay.items = ComboParlayConstants.ComboParlay;
+    this.comboParlay = ComboParlayConstants.ComboParlay;
+    this.selectedComboParlay = [];
   }
 
-  resetCheckedComboParlay(){
-    this.comboParlay.items.forEach(x => x.checked = true);
+  resetCheckedComboParlay() {
+    this.selectedComboParlay = this.comboParlay.map(item => item.value);
   }
 
   setDateTime() {
     const date = new Date(
-      momenttimezone()
+      moment()
         .tz('Etc/GMT-8')
         .format('YYYY-MM-DD HH:mm:ss.SSS')
     );
@@ -111,23 +115,41 @@ export class FilterComponent implements OnInit {
   }
 
   async getLicensees() {
-    this.query.licenseeId = 0;
     this.licensees = await this.appService.getLicensees();
+
+    this.licenseeSelectList = [
+      { id: 0, name: 'All' },
+      { id: -1, name: 'Credit' }
+    ];
+
+    if (this.licensees && this.licensees.length > 0) {
+      const licenseeItems = this.licensees.map(l => ({
+        id: l.id,
+        name: l.name,
+        group: 'Licensee'
+      }));
+
+      this.licenseeSelectList = [...this.licenseeSelectList, ...licenseeItems];
+    }
+
+    this.query.licenseeId = 0;
   }
 
   renderGroupBy() {
-    this.groupBy.items = [];
-    this.groupBy.items.push(new Item(0, 'Licensee and Bet type'));
-    this.groupBy.items.push(new Item(1, 'Bet type and Licensee'));
-    this.query.groupBy = 0;
+    this.groupBy.items = [
+      new Item(0, 'Licensee and Bet type'),
+      new Item(1, 'Bet type and Licensee')
+    ];
+    this.query.groupBy = this.groupBy.items[0].value;
   }
 
   renderTicketType() {
-    this.ticketType.items = [];
-    this.ticketType.items.push(new Item(0, 'All'));
-    this.ticketType.items.push(new Item(1, 'Normal Tickets'));
-    this.ticketType.items.push(new Item(2, 'SA Tickets'));
-    this.query.ticketType = 0;
+    this.ticketType.items = [
+      new Item(0, 'All'),
+      new Item(1, 'Normal Tickets'),
+      new Item(2, 'SA Tickets')
+    ];
+    this.query.ticketType = this.ticketType.items[0].value;
   }
 
   renderProduct() {
@@ -224,8 +246,7 @@ export class FilterComponent implements OnInit {
       || this.isInvalidProduct1(product, this.sportType)
       || this.isInvalidProduct2(product, this.sportType)
       || this.isInvalidProduct9(product, this.sportType)
-      || this.isInvalidOtherProducts(this.sportType))
-      {
+      || this.isInvalidOtherProducts(this.sportType)) {
       this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
       return false;
     }
@@ -233,17 +254,17 @@ export class FilterComponent implements OnInit {
     return true;
   }
 
-  private inValidSportTypeVirtualSport(sportType: number){
+  private inValidSportTypeVirtualSport(sportType: number) {
     return (sportType < 180 || sportType > 186)                         //sportTypes invalid in  Virtual Sports
-    && ((sportType < 190 || sportType > 199) && sportType !== 177)      //sportTypes invalid in  Virtual Sports 2
-    && (sportType !== 178 && sportType !== 179)                         //sportTypes invalid in  Virtual Sports 3
-    && (sportType !== 188)                                              //sportTypes invalid in  Virtual Sports 4
-    && (sportType !== 147)                                              //sportTypes invalid in  Virtual Sports 5
-    && (sportType !== 134);                                             //sportTypes invalid in  Virtual Sports 6
+      && ((sportType < 190 || sportType > 199) && sportType !== 177)      //sportTypes invalid in  Virtual Sports 2
+      && (sportType !== 178 && sportType !== 179)                         //sportTypes invalid in  Virtual Sports 3
+      && (sportType !== 188)                                              //sportTypes invalid in  Virtual Sports 4
+      && (sportType !== 147)                                              //sportTypes invalid in  Virtual Sports 5
+      && (sportType !== 134);                                             //sportTypes invalid in  Virtual Sports 6
   }
 
   private isInvalidProduct0(product: number, sportType: number): boolean {
-    return ((product === 0 ) && sportType > 99 && sportType !== 154);
+    return ((product === 0) && sportType > 99 && sportType !== 154);
   }
 
   private isInvalidProduct1(product: number, sportType: number): boolean {
@@ -354,7 +375,7 @@ export class FilterComponent implements OnInit {
 
     const betTypes: BetTypeModel[] = [];
     data.forEach(item => {
-      betTypes.push(new BetTypeModel(item.selectionType.toString(), item.selectionName, false, 8, true));
+      betTypes.push(new BetTypeModel(item.selectionType.toString(), item.selectionName, false, Product.BET_BUILDER, true));
     });
     this.betTypes = new BetTypesModel(betTypes, true);
   }
@@ -375,7 +396,7 @@ export class FilterComponent implements OnInit {
     }
     this.groupsBetTypesVS = new GroupBetTypeVirtualSport(data.betTypes);
   }
-  
+
   async getBetTypesVS(query: GetBetTypesQuery) {
     this.blockUIService.start();
     const groupsBetTypes = await this.commonService.getBetTypesVirtualSports(query);
@@ -407,7 +428,7 @@ export class FilterComponent implements OnInit {
       return false;
     }
     if (this.isSelectionNotValid()) {
-      this.tooltip.display('multiple-selection', TEXT.INVALID_SELECTION);
+      this.tooltip.display('selection-dropdown-sub-parlay', TEXT.INVALID_SELECTION);
       return false;
     }
     if (this.isShowAdvancedMode()) {
@@ -417,8 +438,8 @@ export class FilterComponent implements OnInit {
     return true;
   }
 
-  isSelectionNotValid(){
-    const selectionSubParlays = this.getSelectionSubParlays(this.singleOrSubParlay, this.comboParlay)
+  isSelectionNotValid() {
+    const selectionSubParlays = this.getSelectionSubParlays(this.singleOrSubParlay)
     return this.singleOrSubParlay === "SubParlay" && selectionSubParlays === "";
   }
 
@@ -433,8 +454,11 @@ export class FilterComponent implements OnInit {
     } else if (this.query.product === Product.VIRTUAL_SPORTS && this.groupsBetTypesVS.betTypes.length > 0) {
       return this.betTypesVSComponent.validate();
     } else {
-      return this.betTypesComponent.validate();
-    }
+      return this.betTypesComponent.validate();    }
+  }
+
+  updateDisabledTransDate() {
+    this.disabledTransDate = !this.disabledTransDate;
   }
 
   getParams(): GetSummaryQuery {
@@ -444,7 +468,7 @@ export class FilterComponent implements OnInit {
     this.query.toTransDate = this.disabledTransDate ? null : this.toDate;
     this.query.singleOrSubParlay = this.singleOrSubParlay;
     this.query.isReSettled = this.isReSettled;
-    this.query.selectionSubParlays = this.getSelectionSubParlays(this.singleOrSubParlay, this.comboParlay);
+    this.query.selectionSubParlays = this.getSelectionSubParlays(this.singleOrSubParlay);
 
     if (this.query.product === Product.BET_BUILDER) {
       this.query.betTypes = '38';
@@ -458,22 +482,18 @@ export class FilterComponent implements OnInit {
       const betTeams = this.advancedModeComponent.getBetTypeModels(checkedBetTypes);
       this.query.betTeams = betTeams;
     }
-    else{
+    else {
       this.query.betTeams = undefined;
     }
     return this.query;
   }
 
-  getSelectionSubParlays(bet: string, comboParlay: MultipleSelection) {
+  getSelectionSubParlays(bet: string) {
     if (bet !== "SubParlay") {
       return "";
     }
 
-    const selectedItems = comboParlay.items
-      .filter(item => item.checked)
-      .map(item => item.value);
-
-    return selectedItems.join(",");
+    return this.selectedComboParlay.join(',');
   }
 
   getCheckedBetTypes(): string {
@@ -491,10 +511,10 @@ export class FilterComponent implements OnInit {
   }
 
   isShowCheckboxAffected(): boolean {
-    if(this.query.product === Product.SPORTS_BOOK){
-        return this.groupBetTypes && this.groupBetTypes.groupBetTypes.length > 0;
+    if (this.query.product === Product.SPORTS_BOOK) {
+      return this.groupBetTypes && this.groupBetTypes.groupBetTypes.length > 0;
     }
-    if(this.query.product === Product.BET_BUILDER){
+    if (this.query.product === Product.BET_BUILDER) {
       return this.betTypes && this.betTypes.betTypes.length > 0;
     }
 
@@ -508,17 +528,23 @@ export class FilterComponent implements OnInit {
   }
 
   private enableGroupBetTypesAndAdvancedMode(): void {
-    this.groupBetTypesComponent.isDisabledAllBetTypes = false;
+    if (this.groupBetTypesComponent) {
+      this.groupBetTypesComponent.isDisabledAllBetTypes = false;
+    }
   }
 
   private enableBetTypesAndAdvancedMode(): void {
-    this.betTypesComponent.isDisabledAllBetTypes = false;
+    if (this.betTypesComponent) {
+      this.betTypesComponent.isDisabledAllBetTypes = false;
+    }
   }
 
   private checkAndDisabledAllBetTypes(): void {
-    if(this.query.product === Product.BET_BUILDER){
+    if (this.query.product === Product.BET_BUILDER) {
       if (this.isReSettled) {
-        this.betTypesComponent.isDisabledAllBetTypes = true;
+        if (this.betTypesComponent) {
+          this.betTypesComponent.isDisabledAllBetTypes = true;
+        }
         this.betTypes.isChecked = true;
         this.betTypes.betTypes.forEach(x => {
           x.isChecked = true;
@@ -530,9 +556,11 @@ export class FilterComponent implements OnInit {
   }
 
   private checkAndDisabledAllGroupBetTypes(): void {
-    if(this.query.product === Product.SPORTS_BOOK){
+    if (this.query.product === Product.SPORTS_BOOK) {
       if (this.isReSettled) {
-        this.groupBetTypesComponent.isDisabledAllBetTypes = true;
+        if (this.groupBetTypesComponent) {
+          this.groupBetTypesComponent.isDisabledAllBetTypes = true;
+        }
         this.groupBetTypes.isChecked = true;
         this.groupBetTypes.groupBetTypes.forEach(x => {
           x.isChecked = true;
@@ -543,14 +571,14 @@ export class FilterComponent implements OnInit {
       }
     }
   }
-  
+
   public handleBetTypesAndAdvancedMode(): void {
     this.checkAndDisabledAllBetTypes();
     this.checkAndDisabledAllGroupBetTypes();
   }
 
   isShowAdvancedMode(): boolean {
-    return this.query.product === Product.SPORTS_BOOK;
+    return !this.isInvalidProduct0(this.query?.product, this.sportType);
   }
 
   isShowFilterTime(): boolean {
@@ -561,3 +589,4 @@ export class FilterComponent implements OnInit {
     return this.singleOrSubParlay === "SubParlay";
   }
 }
+

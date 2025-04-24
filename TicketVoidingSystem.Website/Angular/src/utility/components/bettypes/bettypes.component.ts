@@ -1,14 +1,18 @@
-﻿import { Component, ElementRef, Input, OnChanges, SimpleChange } from '@angular/core';
+﻿import { Component, ElementRef, inject, Input, OnChanges, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
 import { Product } from '../../constants/config';
 import { TEXT } from '../../constants/text';
 import { Tooltip } from '../tooltip/tooltip.model';
 import { BetTypesModel } from './bettypes.model';
+import { FormsModule } from '@angular/forms';
+import { TooltipComponent } from '../tooltip/tooltip.component';
 
 @Component({
+    standalone: true,
     selector: 'bettypes',
     templateUrl: './bettypes.component.html',
-    styleUrls: ['./bettypes.component.scss']
+    styleUrls: ['./bettypes.component.scss'],
+    imports: [FormsModule, TooltipComponent]
 })
 
 export class BetTypesComponent implements OnChanges {
@@ -25,7 +29,8 @@ export class BetTypesComponent implements OnChanges {
     ];
     isDisabledAllBetTypes: boolean;
 
-    constructor(private readonly element: ElementRef) {
+    element = inject(ElementRef);
+    constructor() {
         this.tooltip.element = this.element;
     }
 

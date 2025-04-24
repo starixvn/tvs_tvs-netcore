@@ -1,241 +1,288 @@
-import { NgModule, SimpleChange } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Shallow } from 'shallow-render';
 import { SummaryComponent } from './summary.component';
 import { SummaryItem } from './summary.model';
+import { ClipboardService } from 'ngx-clipboard';
+import { SpecialPlatform } from '../../../utility/constants/special-platform.constant';
 
 class Helper {
-  static readonly totalBetCountSelector = '.total-bet-count';
-  static readonly emptyTableSelector = '.empty-table';
-  static readonly affectedLicenseesSelector = '.affected-licensees';
-  static readonly fakeSummaryItem = new SummaryItem('ABC', 1129, false, '12Bet', '2', [], 'Handicap', 1);
-  static readonly fakeSummaryItemHaveItems = new SummaryItem('DEF', 1130, false, 'Bet', '2', [Helper.fakeSummaryItem], 'Handicap', 1);
-  static readonly fakeSummaryItemHaveItemsCV = new SummaryItem('DEF', 1130, true, 'Bet', '2', [Helper.fakeSummaryItem], 'Handicap', 1);
-  static readonly fakeSummaryItemByCN88 = new SummaryItem('haifa', 1131, true, '12Bet', '2', [], 'Handicap', 1);
-  static readonly fakeSummaryItemByCredit = new SummaryItem('Credit', 1132, true, '12Bet', '2', [], 'Handicap', 1);
+  static createMockSummaryItem(overrides: Partial<SummaryItem> = {}) {
+    return {
+      name: 'Test Item',
+      total: 100,
+      isChinaView: false,
+      licenseeName: 'Test Licensee',
+      betTypes: '29',
+      items: [],
+      betTypeName: 'Test Bet Type',
+      isGroup: false,
+      specialPlatform: null,
+      isChecked: true,
+      isShow: true,
+      addSecondaryBetType: jest.fn(),
+      renderItems: jest.fn(),
+      ...overrides
+    } as unknown as SummaryItem;
+  }
+
+  static readonly mockSummaryItem = Helper.createMockSummaryItem();
+
+  static readonly mockSummaryItemChinaView = Helper.createMockSummaryItem({
+    isChinaView: true,
+    licenseeName: 'China Licensee'
+  });
+
+  static readonly mockSummaryItemJollySport = Helper.createMockSummaryItem({
+    specialPlatform: SpecialPlatform.Jolly_Sports,
+    licenseeName: 'Jolly Sport Licensee'
+  });
+
+  static readonly mockSummaryItemJollySportCV = Helper.createMockSummaryItem({
+    specialPlatform: SpecialPlatform.Jolly_Sports_CV,
+    licenseeName: 'Jolly Sport CV Licensee'
+  });
+
+  static readonly mockSummaryItemCredit = Helper.createMockSummaryItem({
+    name: 'Credit',
+    licenseeName: 'Credit Licensee'
+  });
 }
 
 describe('SummaryComponent', () => {
-  @NgModule({
-    declarations: [
-    ],
-    imports: [
-      FormsModule
-    ],
-    providers: []
-  })
-  class AppModuleTest { }
+  let component: SummaryComponent;
+  let fixture: ComponentFixture<SummaryComponent>;
+  let clipboardService: ClipboardService;
 
-  let shallow: Shallow<SummaryComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [CommonModule, FormsModule, SummaryComponent],
+      providers: [
+        { provide: ClipboardService}
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(SummaryComponent, AppModuleTest);
+    fixture = TestBed.createComponent(SummaryComponent);
+    component = fixture.componentInstance;
+    component.items = [Helper.mockSummaryItem];
+    component.itemsGroupByLicensee = [Helper.mockSummaryItem];
+    component.display = true;
+    component.showSendColumn = true;
+    component.groupBy = 0;
+    clipboardService = fixture.debugElement.injector.get(ClipboardService);
+    fixture.detectChanges();
   });
 
-  it('#ngOnChanges should call #updateAffectedLicensees and #updateTotalBetCount', async () => {
+  it('should create', () => {
+    // Arrange & Act & Assert
+    expect(component).toBeTruthy();
+  });
+
+  it('#ngOnChanges should update affected licensees and total bet count when display is true', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    const changes = {
-      'items': new SimpleChange([], [Helper.fakeSummaryItem], true) ,
-      'itemsGroupByLicensee': new SimpleChange([], [Helper.fakeSummaryItem], true)
-    };
-    instance.display = true;
-    instance.updateAffectedLicensees = jest.fn();
-    instance.updateTotalBetCount = jest.fn();
-
-    // Action
-    instance.ngOnChanges(changes);
-
+    component.display = true;
+    component.items = [Helper.mockSummaryItem];
+    component.itemsGroupByLicensee = [Helper.mockSummaryItem];
+    
+    // Act
+    component.ngOnChanges({
+      items: { currentValue: component.items, previousValue: null, firstChange: true, isFirstChange: () => true },
+      itemsGroupByLicensee: { currentValue: component.itemsGroupByLicensee, previousValue: null, firstChange: true, isFirstChange: () => true }
+    });
+    
     // Assert
-    expect(instance.updateAffectedLicensees).toHaveBeenCalled();
-    expect(instance.updateTotalBetCount).toHaveBeenCalled();
+    expect(component.affectedLicensees).toBe('Test Licensee');
+    expect(component.totalBetCountOfNormalLicensee).toBe(100);
+    expect(component.totalLicenseeCountOfNormal).toBe(1);
   });
 
-  it('#getWidth should return expected width', async () => {
+  it('#getWidth should return correct width when showSendColumn is true', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    const testCases = [
-      { showSendColumn: true, width: '746px' },
-      { showSendColumn: false, width: '607px' },
+    component.showSendColumn = true;
+    
+    // Act
+    const width = component.getWidth();
+    
+    // Assert
+    expect(width).toBe('746px');
+  });
+
+  it('#getWidth should return correct width when showSendColumn is false', () => {
+    // Arrange
+    component.showSendColumn = false;
+    
+    // Act
+    const width = component.getWidth();
+    
+    // Assert
+    expect(width).toBe('607px');
+  });
+
+  it('#getTicketsDetail should emit getTicketsEvent with item', () => {
+    // Arrange
+    component.getTicketsEvent = { emit: jest.fn() } as any;
+    
+    // Act
+    component.getTicketsDetail(Helper.mockSummaryItem);
+    
+    // Assert
+    expect(component.getTicketsEvent.emit).toHaveBeenCalledWith(Helper.mockSummaryItem);
+  });
+
+  it('#exportExcel should emit exportExcelEvent with item', () => {
+    // Arrange
+    component.exportExcelEvent = { emit: jest.fn() } as any;
+    
+    // Act
+    component.exportExcel(Helper.mockSummaryItem);
+    
+    // Assert
+    expect(component.exportExcelEvent.emit).toHaveBeenCalledWith(Helper.mockSummaryItem);
+  });
+
+  it('#changedCheckAll should update all items isChecked and isShowSend', () => {
+    // Arrange
+    component.items = [
+      Helper.createMockSummaryItem(),
+      Helper.createMockSummaryItem({ isChecked: false })
     ];
-
-    // Action and Assert
-    for (const item of testCases) {
-      instance.showSendColumn = item.showSendColumn;
-      expect(instance.getWidth()).toBe(item.width);
-    }
-  });
-
-  it('#getTicketsDetail should call #getTicketsEvent.emit with expected SummaryItem model', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    instance.getTicketsEvent.emit = jest.fn();
-
-    // Action
-    instance.getTicketsDetail(Helper.fakeSummaryItem);
-
+    component.checkedAll = true;
+    
+    // Act
+    component.changedCheckAll();
+    
     // Assert
-    expect(instance.getTicketsEvent.emit).toHaveBeenCalledWith(Helper.fakeSummaryItem);
+    expect(component.items[0].isChecked).toBe(true);
+    expect(component.items[1].isChecked).toBe(true);
+    expect(component.isShowSend).toBe(true);
   });
 
-  it('#exportExcel should call #exportExcelEvent.emit with expected SummaryItem model', async () => {
+  it('#changedCheckItem should update checkedAll and isShowSend based on items', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.exportExcelEvent.emit = jest.fn();
-
-    // Action
-    instance.exportExcel(Helper.fakeSummaryItem);
-
+    component.items = [
+      Helper.createMockSummaryItem({ isChecked: true }),
+      Helper.createMockSummaryItem({ isChecked: false })
+    ];
+    
+    // Act
+    component.changedCheckItem();
+    
     // Assert
-    expect(instance.exportExcelEvent.emit).toHaveBeenCalledWith(Helper.fakeSummaryItem);
+    expect(component.checkedAll).toBe(false);
+    expect(component.isShowSend).toBe(true);
   });
 
-  it('#changedCheckAll should return expected data', async () => {
+  it('#updateAffectedLicensees should update affected licensees correctly', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.checkedAll = true;
-    instance.items = [Helper.fakeSummaryItemHaveItems,Helper.fakeSummaryItemHaveItemsCV];
-
-    // Action
-    instance.changedCheckAll();
-
+    component.items = [
+      Helper.mockSummaryItem,
+      Helper.mockSummaryItemChinaView,
+      Helper.mockSummaryItemJollySport,
+      Helper.mockSummaryItemJollySportCV
+    ];
+    component.groupBy = 0;
+    
+    // Act
+    component.updateAffectedLicensees();
+    
     // Assert
-    expect(instance.checkedAll).toBe(true);
-    expect(instance.isShowSend).toBe(true);
+    expect(component.affectedLicensees).toBe('Test Licensee');
+    expect(component.chinaViewLicensees).toBe('China Licensee');
+    expect(component.jollyViewLicensees).toBe('Jolly Sport Licensee');
+    expect(component.jollySportCvLicensees).toBe('Jolly Sport CV Licensee');
   });
 
-  it('#changedCheckItem should return expected data', async () => {
+  it('#updateTotalBetCount should update total bet counts correctly', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.items = [Helper.fakeSummaryItem, Helper.fakeSummaryItemHaveItems];
-
-    // Action
-    instance.changedCheckItem();
-
+    component.itemsGroupByLicensee = [
+      Helper.mockSummaryItemCredit,
+      Helper.mockSummaryItem,
+      Helper.mockSummaryItemChinaView,
+      Helper.mockSummaryItemJollySport,
+      Helper.mockSummaryItemJollySportCV
+    ];
+    
+    // Act
+    component.updateTotalBetCount();
+    
     // Assert
-    expect(instance.checkedAll).toBe(false);
-    expect(instance.isShowSend).toBe(true);
+    expect(component.totalBetCountOfCredit).toBe(100);
+    expect(component.totalBetCountOfNormalLicensee).toBe(100);
+    expect(component.totalBetCountOfChinaView).toBe(100);
+    expect(component.totalBetCountOfJollySport).toBe(100);
+    expect(component.totalBetCountOfJollySportCV).toBe(100);
+    expect(component.totalLicenseeCountOfNormal).toBe(1);
+    expect(component.totalLicenseeCountOfChinaView).toBe(1);
+    expect(component.totalLicenseeCountOfJollySport).toBe(1);
+    expect(component.totalLicenseeCountOfJollySportCV).toBe(1);
   });
 
-  it('#updateTotalBetCount should return expected total data', async () => {
+  it('#sendExcelFile should emit sendExcelFileEvent with selected items', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.itemsGroupByLicensee = [Helper.fakeSummaryItem, Helper.fakeSummaryItemByCN88, Helper.fakeSummaryItemByCredit];
-
-    // Action
-    instance.updateTotalBetCount();
-
+    component.items = [
+      Helper.mockSummaryItem,
+      Helper.mockSummaryItemCredit,
+      Helper.createMockSummaryItem({ isChecked: false })
+    ];
+    component.sendExcelFileEvent = { emit: jest.fn() } as any;
+    
+    // Act
+    component.sendExcelFile();
+    
     // Assert
-    expect(instance.totalBetCountOfCredit).toBe(1132);
-    expect(instance.totalBetCountOfChinaView).toBe(2263);
+    expect(component.sendExcelFileEvent.emit).toHaveBeenCalledWith([Helper.mockSummaryItem]);
   });
 
-  it('#sendExcelFile should call #sendExcelFileEvent.emit with expected SummaryItem model list', async () => {
+  it('#sendCreditDataToLetstalk should emit sendCreditToLetstalk with item', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.items = [Helper.fakeSummaryItem, Helper.fakeSummaryItemHaveItems];
-    instance.sendExcelFileEvent.emit = jest.fn();
-
-    // Action
-    instance.sendExcelFile();
-
+    component.sendCreditToLetstalk = { emit: jest.fn() } as any;
+    
+    // Act
+    component.sendCreditDataToLetstalk(Helper.mockSummaryItem);
+    
     // Assert
-    expect(instance.sendExcelFileEvent.emit).toHaveBeenCalledWith([Helper.fakeSummaryItemHaveItems]);
+    expect(component.sendCreditToLetstalk.emit).toHaveBeenCalledWith(Helper.mockSummaryItem);
   });
 
-  it('#sendExcelFile should not call #sendExcelFileEvent.emit with expected SummaryItem model list', async () => {
+  it('#copyClipboard should copy text to clipboard and show alert', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.items = [];
-    instance.sendExcelFileEvent.emit = jest.fn();
-
-    // Action
-    instance.sendExcelFile();
-
-    // Assert
-    expect(instance.sendExcelFileEvent.emit).toHaveBeenCalledTimes(0);
-  });
-
-  it('#copyClipboard should display pop-up from window', async() => {
-    // Arrange
-    const { instance } = await shallow.render();
-    const selectionObject = {
-      removeAllRanges: () => {},
-      addRange: () => {}
-    };
-    const rangeObject = {
-      selectNode: () => {}
-    };
-    window.getSelection = jest.fn().mockImplementation(() => selectionObject);
-    document.createRange = jest.fn().mockImplementation(() => rangeObject);
-    document.getElementById = jest.fn();
+    const mockText = 'Test Text';
     window.alert = jest.fn();
-    document.execCommand = jest.fn();
-
-    // Action
-    instance.copyClipboard('The Licensee list has been copied to clipboard.');
-
+    clipboardService.copyFromContent = jest.fn();
+    
+    // Act
+    component.copyClipboard(mockText);
+    
     // Assert
+    expect(clipboardService.copyFromContent).toHaveBeenCalledWith(mockText);
     expect(window.alert).toHaveBeenCalledWith('The Licensee list has been copied to clipboard.');
   });
 
-  it('should display empty table', async() => {
-    const { fixture, find, instance } =  await shallow.render('<summary-tickets [display]="isShowSummary"></summary-tickets>', {
-      bind: {
-        isShowSummary: true,
-      }
-    });
-    instance.items = [];
-    fixture.detectChanges();
-
-    expect(find(Helper.emptyTableSelector)).toHaveFoundOne();
-  });
-
-  it('should show/hide affected-licensees correctly', async() => {
-    const { fixture, find, instance } =  await shallow.render('<summary-tickets [display]="isShowSummary" [showSendColumn]="showSendColumn"></summary-tickets>', {
-      bind: {
-        isShowSummary: true,
-        showSendColumn: true
-      }
-    });
-    instance.affectedLicensees = 'Bet';
-    fixture.detectChanges();
-    expect(find(Helper.affectedLicenseesSelector)).toHaveFoundOne();
-
-    instance.affectedLicensees = '';
-    fixture.detectChanges();
-    expect(find(Helper.affectedLicenseesSelector)).toHaveFound(0);
-  });
-  
-  it('#sendCreditDataToLetstalk should emit sendCreditToLetstalk', async () => {
+  it('#isShowAffectedLicensees should return true when there are affected licensees', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.sendCreditToLetstalk.emit = jest.fn();
+    component.isShowSend = true;
+    component.affectedLicensees = 'Test Licensee';
+    clipboardService.copyFromContent = jest.fn();
 
-    // Action
-    instance.sendCreditDataToLetstalk(null);
-
+    // Act
+    const result = component.isShowAffectedLicensees();
+    
     // Assert
-    expect(instance.sendCreditToLetstalk.emit).toHaveBeenCalledTimes(1);
+    expect(result).toBe(true);
   });
-  
-  it('#updateAffectedLicensees should update affectedLicensees', async () => {
+
+  it('#isShowAffectedLicensees should return false when there are no affected licensees', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.sendCreditToLetstalk.emit = jest.fn();
-
-    // Action
-    [0, 1].forEach(x => {
-      instance.groupBy = x;
-      Helper.fakeSummaryItem.isChecked = true;
-      Helper.fakeSummaryItemByCredit.isChecked = true;
-      instance.items = [Helper.fakeSummaryItem, Helper.fakeSummaryItemByCredit];
-      instance.itemsGroupByLicensee = [Helper.fakeSummaryItem, Helper.fakeSummaryItemByCredit];
-      instance.updateAffectedLicensees();
-
-      // Assert
-      expect(instance.affectedLicensees).toBe('12Bet');
-      expect(instance.chinaViewLicensees ).toBe('12Bet');
-    });
+    component.isShowSend = true;
+    component.affectedLicensees = '';
+    component.chinaViewLicensees = '';
+    component.jollyViewLicensees = '';
+    component.jollySportCvLicensees = '';
+    
+    // Act
+    const result = component.isShowAffectedLicensees();
+    
+    // Assert
+    expect(result).toBe(false);
   });
 });

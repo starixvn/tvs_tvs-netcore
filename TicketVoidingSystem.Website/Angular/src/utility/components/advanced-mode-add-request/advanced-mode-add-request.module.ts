@@ -16,8 +16,6 @@ import { ControlsAllBetTypesComponent } from './controls-all-bet-types/controls-
     NgbModule,
     ToolTipModule,
     MultipleSelectAdvancedModeModule,
-  ],
-  declarations: [
     AdvancedModeAddRequestComponent,
     GroupBetTypesComponent,
     AdvancedModeComponent,

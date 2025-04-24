@@ -1,13 +1,16 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, ViewContainerRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ItemsSelect } from './items-select';
 import { MultipleSelection } from './multiple-selection';
 import { TreeViewComponent } from './tree-view/tree-view.component';
 
 @Component({
+  standalone: true,
   selector: 'multiple-selection',
   templateUrl: './multiple-selection.component.html',
   styleUrls: ['./multiple-selection.component.scss'],
-  viewProviders: [TreeViewComponent]
+  imports: [CommonModule, FormsModule, TreeViewComponent]
 })
 
 export class MultipleSelectionComponent implements OnInit, OnChanges {

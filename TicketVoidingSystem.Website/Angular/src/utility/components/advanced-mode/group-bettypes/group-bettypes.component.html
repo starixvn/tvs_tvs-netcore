@@ -1,48 +1,60 @@
-﻿<div class="group-bettypes area-filter" *ngIf="model.groupBetTypes.length > 0 && display">
-  <table>
-    <thead>
-      <tr>
-        <th scope="col" colspan="2">
-          <div>
-            <label>
-              <input type="checkbox" class="group-bettypes-all-checkbox me-1" [(ngModel)]="model.isChecked" [disabled]="isDisabledAllBetTypes"
-                (ngModelChange)="model.changeCheckedModelToGroup(); changedBetTypes()" />
-              All Bet types
-            </label>
-            <label *ngIf="scroll" (click)="collapse = !collapse">
-              <em [ngClass]="{'icon-plus-bettypes': collapse, 'icon-minus-bettypes': !collapse}"></em>
-              Show All Bet types
-            </label>
-          </div>
-        </th>
-      </tr>
-    </thead>
-    <tbody [ngClass]="{'collapse': collapse && scroll}">
-      <tr *ngFor="let group of model.groupBetTypes">
-        <td *ngIf="group.isShow && group.betTypes.length > 0">
-          <label>
+﻿@if (model.groupBetTypes.length > 0 && display) {
+  <div class="group-bettypes area-filter">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col" colspan="2">
+            <div>
+              <label>
+                <input type="checkbox" class="group-bettypes-all-checkbox me-1" [(ngModel)]="model.isChecked" [disabled]="isDisabledAllBetTypes"
+                  (ngModelChange)="model.changeCheckedModelToGroup(); changedBetTypes()" />
+                  All Bet types
+                </label>
+                @if (scroll) {
+                  <label (click)="collapse = !collapse">
+                    <em [ngClass]="{'icon-plus-bettypes': collapse, 'icon-minus-bettypes': !collapse}"></em>
+                    Show All Bet types
+                  </label>
+                }
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody [ngClass]="{'collapse': collapse && scroll}">
+          @for (group of model.groupBetTypes; track group) {
+            <tr>
+              @if (group.isShow && group.betTypes.length > 0) {
+                <td>
+                  <label>
             <input class="me-1" type="checkbox" [(ngModel)]="group.isChecked" (ngModelChange)="group.changeCheckedGroupToBetType();
                                                 model.changeCheckedGroupToModel();
                                                 changedBetTypes()" [disabled]="isDisabledAllBetTypes" />
-            {{group.groupName}}
-          </label>
-        </td>
-        <td *ngIf="group.isShow">
-          <div class="display-flex">
-            <div class="bet-type" *ngFor="let betType of group.betTypes">
-              <label
+                      {{group.groupName}}
+                    </label>
+                  </td>
+                }
+                @if (group.isShow) {
+                  <td>
+                    <div class="display-flex">
+                      @for (betType of group.betTypes; track betType) {
+                        <div class="bet-type">
+                          <label
                 [ngClass]="{'red-highlight-bettype':betType.redHighlight,
                   'blue-highlight-bettype': betType.blueHighlight}">
-                <input class="me-1" type="checkbox" [(ngModel)]="betType.isChecked" [disabled]="isDisabledAllBetTypes"
+                            <input class="me-1" type="checkbox" [(ngModel)]="betType.isChecked" [disabled]="isDisabledAllBetTypes"
                 (ngModelChange)="group.changeCheckedBetTypeToGroup(); 
                                   model.changeCheckedGroupToModel(); changedBetTypes()" />
-                {{betType.name}}
-              </label>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<tooltip [tooltip]="tooltip"></tooltip>
+                              {{betType.name}}
+                            </label>
+                          </div>
+                        }
+                      </div>
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+      <tooltip [tooltip]="tooltip"></tooltip>

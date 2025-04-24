@@ -19,14 +19,15 @@
           "options": {
             "aot": true,
             "outputPath": "dist",
-            "index": "src/void-request/index.html",
-            "main": "src/void-request/main.ts",
+            "index": "src/ticket-listing/index.html",
+            "main": "src/ticket-listing/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],
             "styles": [
               "src/assets/styles/styles.scss",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css"
             ],
             "allowedCommonJsDependencies": [
               "lodash",

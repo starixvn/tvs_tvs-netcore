@@ -1,25 +1,34 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
-import * as _ from 'lodash';
+import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { TooltipComponent } from '../../tooltip/tooltip.component';
+import { Product } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { BetTypeAddRequest, GroupBetTypeAddRequest, GroupBetTypesAddRequestModel } from './group-bet-types.model';
 
 @Component({
+  standalone: true,
   selector: 'group-bet-types',
   templateUrl: './group-bet-types.component.html',
-  styleUrls: ['./group-bet-types.component.scss']
+  styleUrls: ['./group-bet-types.component.scss'],
+  imports: [CommonModule, FormsModule, TooltipComponent]
 })
 export class GroupBetTypesComponent {
   @Input() model: GroupBetTypesAddRequestModel;
+  @Input() product: number = Product.SPORTS_BOOK;
+  @Input() scroll: boolean;
   @Output() betTypesEvent = new EventEmitter<BetTypeAddRequest[]>();
   @Output() checkExistBetTypeEvent = new EventEmitter<boolean>();
   @Output() changeFilterEvent = new EventEmitter();
   tooltip = new Tooltip();
-
-  @Input() scroll: boolean;
+  isDisabledAllBetTypes: boolean;
+  display: boolean;
   collapse = true;
 
-  constructor(private readonly element: ElementRef) {
+  element = inject(ElementRef);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -30,9 +39,8 @@ export class GroupBetTypesComponent {
 
   changeGroupBetTypes(group: GroupBetTypeAddRequest) {
     this.changeFilterEvent.emit();
-    this.betTypesEvent.emit(_.cloneDeep(group.betTypes));
+    this.betTypesEvent.emit(group.betTypes);
   }
-
 
   changeBetTypeItem(item: BetTypeAddRequest) {
     this.changeFilterEvent.emit();

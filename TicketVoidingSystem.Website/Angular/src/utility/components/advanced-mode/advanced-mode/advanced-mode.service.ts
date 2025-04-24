@@ -3,9 +3,9 @@ import { HttpService } from '../../../../utility/services/http.service';
 import { BetTeamAddRequest } from '../../advanced-mode-add-request/advanced-mode/advanced-mode.model';
 import { BetTeam, GetPlayersQuery, Player } from './advanced-mode.model';
 
-
-@Injectable()
-
+@Injectable({
+  providedIn: 'root'
+})
 export class AdvancedModeService {
   constructor(private readonly httpService: HttpService) { }
 

@@ -19,8 +19,6 @@ import { MultipleSelectAdvancedModeModule } from './multiple-selection/multiple-
     ToolTipModule,
     AdvancedModeComponent,
     GroupBetTypesComponent,
-  ],
-  declarations: [
     DecimalOnlyDirective,
     MultipleDecimalDirective,
   ],

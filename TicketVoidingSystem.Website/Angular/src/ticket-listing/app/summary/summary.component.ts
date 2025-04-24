@@ -1,12 +1,18 @@
-﻿import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange } from '@angular/core';
+﻿import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange, inject } from '@angular/core';
 import * as _ from 'lodash';
 import { ClipboardService } from 'ngx-clipboard';
 import { SpecialPlatform } from '../../../utility/constants/special-platform.constant';
 import { SummaryItem } from './summary.model';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
 @Component({
+  standalone: true,
   selector: 'summary-tickets',
   templateUrl: './summary.component.html',
-  styleUrls: ['./summary.component.scss']
+  styleUrls: ['./summary.component.scss'],
+  imports: [CommonModule, FormsModule],
+  providers: [ClipboardService]
 })
 export class SummaryComponent implements OnChanges {
   @Input() items: SummaryItem[] = [];
@@ -25,18 +31,17 @@ export class SummaryComponent implements OnChanges {
   jollyViewLicensees = '';
   jollySportCvLicensees = '';
   negativeBalanceUsers = '';
-
   totalBetCountOfCredit = 0;
   totalBetCountOfNormalLicensee = 0;
   totalBetCountOfChinaView = 0;
   totalBetCountOfJollySport = 0;
   totalBetCountOfJollySportCV = 0;
-  totalLicenseeCountOfNormal = 0;  
+  totalLicenseeCountOfNormal = 0;
   totalLicenseeCountOfChinaView = 0
   totalLicenseeCountOfJollySport = 0;
   totalLicenseeCountOfJollySportCV = 0;
 
-  constructor(private readonly clipboardService: ClipboardService) { }
+  clipboardService = inject(ClipboardService);
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (this.display && changes['items'] && changes['itemsGroupByLicensee']) {
@@ -66,16 +71,8 @@ export class SummaryComponent implements OnChanges {
   }
 
   changedCheckItem() {
-    this.checkedAll = true;
-    this.isShowSend = false;
-    for (const item of this.items) {
-      if (item.isChecked) {
-        this.isShowSend = true;
-      } else {
-        this.checkedAll = false;
-      }
-    }
-
+    this.checkedAll = this.items.every(item => item.isChecked);
+    this.isShowSend = this.items.some(item => item.isChecked);
     this.updateAffectedLicensees();
   }
 
@@ -126,15 +123,10 @@ export class SummaryComponent implements OnChanges {
   }
 
   sendExcelFile() {
-    const temp = [];
-    this.items.forEach(item => {
-      if (item.isChecked && item.name !== 'Credit') {
-        temp.push(item);
-      }
-    });
+    const selectedItems = this.items.filter(item => item.isChecked && item.name !== 'Credit');
 
-    if (temp.length > 0) {
-      this.sendExcelFileEvent.emit(temp);
+    if (selectedItems.length > 0) {
+      this.sendExcelFileEvent.emit(selectedItems);
     }
   }
 
@@ -148,6 +140,9 @@ export class SummaryComponent implements OnChanges {
   }
 
   isShowAffectedLicensees(): boolean {
-    return this.isShowSend && (this.affectedLicensees.length > 0 || this.chinaViewLicensees.length > 0 || this.jollyViewLicensees.length > 0 || this.jollySportCvLicensees.length > 0);
+    return this.isShowSend && (this.affectedLicensees.length > 0 
+      || this.chinaViewLicensees.length > 0 
+      || this.jollyViewLicensees.length > 0 
+      || this.jollySportCvLicensees.length > 0);
   }
 }

@@ -3,11 +3,17 @@ import { PagingModel } from '../../../utility/components/paging/paging/paging.mo
 import { Product } from '../../../utility/constants/config';
 import { SummaryItem } from '../summary/summary.model';
 import { TicketsModel } from './ticket.model';
+import { CommonModule } from '@angular/common';
+import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
+import { FormsModule } from '@angular/forms';
+import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
 
 @Component({
+  standalone: true,
   selector: 'tickets',
   templateUrl: './tickets.component.html',
-  styleUrls: ['./tickets.component.scss']
+  styleUrls: ['./tickets.component.scss'],
+  imports: [CommonModule, FormsModule, PagingComponent, SanitizeHtmlPipe]
 })
 export class TicketsComponent implements OnInit, OnChanges {
   @Input() model: TicketsModel;

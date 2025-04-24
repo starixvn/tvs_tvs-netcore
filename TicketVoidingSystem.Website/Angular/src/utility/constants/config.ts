@@ -23,15 +23,15 @@ export class Product {
   static readonly SPORTS_BOOK = 0;
   static readonly NUMBER_GAME = 1;
   static readonly VIRTUAL_SPORTS = 2;
-  static readonly BET_BUILDER = 8;
-  static readonly BITCOIN = 9;
+  static readonly BET_BUILDER = 3;
+  static readonly BITCOIN = 4;
 
   static readonly DISPLAY = {
     'Sportsbook': 0,
     'Number Game': 1,
     'Virtual Sports': 2,
-    'Bet Builder': 8,
-    'Bitcoin': 9
+    'Bet Builder': 3,
+    'Bitcoin': 4
   };
 
   static readonly IS_MATCH_3RD = [Product.BITCOIN];

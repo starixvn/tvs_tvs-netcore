@@ -18,20 +18,17 @@ import { TooltipComponent } from '../../tooltip/tooltip.component';
 export class GroupBetTypesComponent implements OnInit, OnChanges {
   @Input() model: GroupBetTypesModel;
   @Input() product: number = Product.SPORTS_BOOK;
+  @Input() scroll: boolean;
   @Output() betTypesEvent = new EventEmitter<BetType[]>();
   tooltip = new Tooltip();
   isDisabledAllBetTypes: boolean;
-
-  @Input() scroll: boolean;
   display: boolean;
   collapse = true;
+
   element = inject(ElementRef);
 
-  constructor() {
-    this.tooltip.element = this.element;
-  }
-
   ngOnInit() {
+    this.tooltip.element = this.element;
     this.model = new GroupBetTypesModel(new Array<GroupBetType>(), false);
   }
 

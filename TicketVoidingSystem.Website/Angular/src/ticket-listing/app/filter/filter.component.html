@@ -1,106 +1,129 @@
 ﻿<div class="filter">
   <div class="display-flex-between">
     <div class="line-1">
-      <label class="match">
-        Match ID
-        <input maxlength="10" class="match-id form-control" type="text" only-number [(ngModel)]="matchId"
-          (change)="unCheckAffectedTickets()" (blur)="blurMatchId()" autofocus />
-      </label>
-      <label class="licensees">
-        LicenseeId
-        <select [(ngModel)]="query.licenseeId">
-          <option selected="selected" value="0">All</option>
-          <option value="-1">Credit</option>
-          <optgroup label="Licensee">
-            <option *ngFor="let item of licensees" [attr.value]="item.id">{{item.name}}</option>
-          </optgroup>
-        </select>
-      </label>
-      <label class="group-by">
-        Group by
-        <select [(ngModel)]="query.groupBy">
-          <option *ngFor="let item of groupBy.items" [attr.value]="item.value">{{item.name}}</option>
-        </select>
-      </label>
-      <label class="ticket-type">
-        Ticket Type
-        <select [(ngModel)]="query.ticketType">
-          <option *ngFor="let item of ticketType.items" [attr.value]="item.value">{{item.name}}</option>
-        </select>
-      </label>
+      <div class="d-flex me-3">
+        <label class="col-form-label col-form-label-sm me-2">Match ID</label>
+        <input maxlength="10" class="form-control form-control-sm match-id" style="width: 140px" type="text" only-number 
+            [(ngModel)]="matchId" (change)="unCheckAffectedTickets()" (blur)="blurMatchId()" autofocus />
+      </div>
+      <div class="d-flex me-3 selection-licensee">
+        <label class="col-form-label col-form-label-sm me-2">LicenseeId</label>
+        <div>
+          <ng-select [items]="licenseeSelectList" bindLabel="name" bindValue="id" [(ngModel)]="query.licenseeId"
+            [clearable]="false" groupBy="group" style="width: 140px">
+          </ng-select>
+        </div>
+      </div>
+      <div class="d-flex me-3">
+        <label class="col-form-label col-form-label-sm me-2">Group by</label>
+        <ng-select [items]="groupBy.items" bindLabel="name" bindValue="value" [(ngModel)]="query.groupBy" 
+        [clearable]="false" style="width: auto">
+        </ng-select>
+      </div>
+      <div class="d-flex me-3">
+        <label class="col-form-label col-form-label-sm me-2">Ticket Type</label>
+        <ng-select [items]="ticketType.items" bindLabel="name" bindValue="value" [(ngModel)]="query.ticketType" 
+        [clearable]="false" style="width: 140px">
+        </ng-select>
+      </div>
     </div>
     <div class="scroll-filter" (click)="isShowFilter = !isShowFilter">
       <em [ngClass]="{'icon-scroll-down':isShowFilter, 'icon-scroll-up':!isShowFilter}"></em>
     </div>
   </div>
   <div class="content-filter" [hidden]="!isShowFilter">
-    <div class="line-2">
-      <div class="product-type">
-        <label *ngFor="let item of product.items">
-          <input class="mr-1" type="radio" name="product" [attr.value]="item.value" [checked]="item.value === 0"
-            (change)="changeProduct(item.value)" />
-          {{item.name}}
-        </label>
+    <div class="line-2 d-flex align-items-center">
+      <div class="product-type d-flex align-items-center me-4">
+        @for (item of product.items; track item) {
+          <label class="form-check-label me-2">
+            <input type="radio" class="form-check-input" name="product" [attr.value]="item.value" [checked]="item.value === 0"
+              (change)="changeProduct(item.value)" />
+            {{item.name}}
+          </label>
+        }
       </div>
-      <div class="event-type" *ngIf="query.product === 0">
-        <label>
-          Event Type
-          <select [(ngModel)]="query.eventType">
-            <option *ngFor="let item of eventType.items" [attr.value]="item.value">{{item.name}}</option>
-          </select>
-        </label>
-      </div>
-      <div class="single-or-sub-parlay" *ngIf="query.product === 0">
-        <label>Bet</label>
-        <label>
-          <input class="mr-1" type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="All">
-          All
-        </label>
-        <label>
-          <input class="mr-1" type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="Single">
-          Single
-        </label>
-        <label>
-          <input class="mr-1" type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="SubParlay" (change)="resetCheckedComboParlay()">
-          Sub Parlay
-        </label>
-
-        <label class="group-bettypes-handler" *ngIf="isShowSelectionSubParlay()">
-          Selection
-          <multiple-select class="multiple-selection ml-1" style="border-color: black"
-            [multipleSelect]="comboParlay"></multiple-select>
-        </label>
-      </div>
+      @if (query.product === 0) {
+        <div class="d-flex align-items-center me-4">
+          <label class="col-form-label col-form-label-sm me-2">Event Type</label>
+          <ng-select [items]="eventType.items" bindLabel="name" bindValue="value" [(ngModel)]="query.eventType"
+            [clearable]="false" style="width: 120px">
+          </ng-select>
+        </div>
+      }
+      @if (query.product === 0) {
+        <div class="single-or-sub-parlay d-flex align-items-center">
+          <label class="col-form-label col-form-label-sm me-2">Bet</label>
+          <label class="form-check-label me-2">
+            <input type="radio" class="form-check-input" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="All">
+            All
+          </label>
+          <label class="form-check-label me-2">
+            <input type="radio" class="form-check-input" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="Single">
+            Single
+          </label>
+          <label class="form-check-label me-4">
+            <input type="radio" class="form-check-input" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="SubParlay" (change)="resetCheckedComboParlay()">
+            Sub Parlay
+          </label>
+          @if (isShowSelectionSubParlay()) {
+            <label class="d-flex filter-selection-sub-parlay">
+              <span class="col-form-label-sm me-2">Selection</span>
+              <ng-select class="selection-dropdown-sub-parlay" [items]="comboParlay" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
+                [clearable]="false" [(ngModel)]="selectedComboParlay" bindValue="value"
+                [disabled]="false" groupBy="group" [selectableGroup]="true" style="width: 120px"
+                [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
+                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+                </ng-template>
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value">
+                    <span class="ng-value-label">
+                      {{items.length === 1 ? items[0].name : items.length === comboParlay.length ? 'All' : items.length + ' selected'}}
+                    </span>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </label>
+          }
+        </div>
+      }
     </div>
-    <div class="line-3" *ngIf="isShowFilterTime()">
-      <fieldset>
-        <legend>
-          <em class="icon-filter"></em>Optional Filters
-        </legend>
-        <div class="optional-filters">
-          <div class="score">
-            <span class="bold d-flex align-items-center">Score:</span>
-            <label>Home<input type="text" class="form-control" only-number maxlength="3"
-                [(ngModel)]="query.liveHomeScore" /></label>
-            <label>Away<input type="text" class="form-control" only-number maxlength="3"
-                [(ngModel)]="query.liveAwayScore" /></label>
-          </div>
-          <label><span class="bold mr-1">Trans Date (GMT+ 8):</span> <input type="checkbox"
-              (change)="setDateTime();disabledTransDate=!disabledTransDate" /></label>
+    @if (isShowFilterTime()) {
+      <div class="line-3">
+        <fieldset>
+          <legend>
+            <em class="icon-filter"></em>Optional Filters
+          </legend>
+          <div class="optional-filters">
+            <div class="score me-3">
+              <span class="bold d-flex align-items-center">Score:</span>
+              <label>Home<input type="text" class="form-control" only-number maxlength="3"
+              [(ngModel)]="query.liveHomeScore" /></label>
+              <label>Away<input type="text" class="form-control" only-number maxlength="3"
+              [(ngModel)]="query.liveAwayScore" /></label>
+            </div>
+            <label><span class="bold me-1">Trans Date (GMT+ 8):</span> 
+              <input type="checkbox" (change)="setDateTime(); updateDisabledTransDate();"/>
+            </label>
           <div class="date-time">
-            <label class="mg-right-10">From</label>
-            <date-full-time-new #fromDateTime class="from-date-time mr-2" [isDisabled]="disabledTransDate"
-              [(dateTime)]="fromDate">
+            <label>From</label>
+            <date-full-time-new class="from-date-time" [isDisabled]="disabledTransDate"
+            [(ngModel)]="fromDate">
             </date-full-time-new>
-            <label class="mg-10-20">To</label>
-            <date-full-time-new #fromDateTime class="to-date-time mr-2" [isDisabled]="disabledTransDate"
-              [(dateTime)]="toDate">
+            <label class="ms-3">To</label>
+            <date-full-time-new class="to-date-time" [isDisabled]="disabledTransDate"
+              [(ngModel)]="toDate">
             </date-full-time-new>
           </div>
         </div>
       </fieldset>
     </div>
-    <div class="line-3" *ngIf="query.product === 1 && sportType === 161">
+  }
+  @if (query.product === 1 && sportType === 161) {
+    <div class="line-3">
       <fieldset>
         <legend>
           <em class="icon-filter"></em>Optional Filters
@@ -111,28 +134,37 @@
             <input type="checkbox" [(ngModel)]="ballSequences.isChecked" (ngModelChange)="ballSequences.changeAll()" />
             {{ballSequences.name}}
           </label>
-          <label *ngFor="let item of ballSequences.items">
-            <input type="checkbox" [(ngModel)]="item.isChecked" (ngModelChange)="ballSequences.changeItem()" />
-            {{item.name}}
-          </label>
+          @for (item of ballSequences.items; track item) {
+            <label>
+              <input type="checkbox" [(ngModel)]="item.isChecked" (ngModelChange)="ballSequences.changeItem()" />
+              {{item.name}}
+            </label>
+          }
         </div>
       </fieldset>
     </div>
-    <group-bettypes #groupBetTypesComponent [model]="groupBetTypes" [product]="query.product"
-      (betTypesEvent)="changeBetTypes($event)"></group-bettypes>
-    <bettypes #bettypesComponent [model]="betTypes" [product]="query.product" [sportType]="sportType"
-      [ballSequence]="ballSequences.value"></bettypes>
-    <bettypes-virtualsport *ngIf="!isInvalidProduct2(query.product, sportType)" #betTypesVSComponent [group]="groupsBetTypesVS"
-      [product]="query.product"></bettypes-virtualsport>
-      <div *ngIf="isShowCheckboxAffected()" class="mg-bottom-10 d-flex align-items-center">
-        <input type="checkbox" id="checkbox-resettle" [(ngModel)]="isReSettled"
-          (change)="handleBetTypesAndAdvancedMode()" />
-        <label for="checkbox-resettle" class="ml-1">Get affected tickets of Result Amendment</label>
+  }
+  <group-bettypes #groupBetTypesComponent [model]="groupBetTypes" [product]="query.product"
+  (betTypesEvent)="changeBetTypes($event)"></group-bettypes>
+  <bettypes #bettypesComponent [model]="betTypes" [product]="query.product" [sportType]="sportType"
+  [ballSequence]="ballSequences.value"></bettypes>
+  @if (!isInvalidProduct2(query.product, sportType)) {
+    <bettypes-virtualsports #betTypesVSComponent [group]="groupsBetTypesVS"
+    [product]="query.product"></bettypes-virtualsports>
+  }
+  @if (isShowCheckboxAffected()) {
+    <div class="mg-bottom-10 d-flex align-items-center">
+      <input type="checkbox" id="checkbox-resettle" [(ngModel)]="isReSettled"
+        (change)="handleBetTypesAndAdvancedMode()" />
+        <label for="checkbox-resettle" class="ms-1">Get affected tickets of Result Amendment</label>
       </div>
-    <div *ngIf="isShowAdvancedMode()">
-      <advanced-mode #advancedMode [matchId]="matchId" [isShowMultiSelectionList]="true"
+    }
+    @if (isShowAdvancedMode()) {
+      <div>
+        <advanced-mode #advancedMode [matchId]="matchId" [isShowMultiSelectionList]="true"
         [allBetTypes]="allBetTypes"></advanced-mode>
-    </div>
+      </div>
+    }
     <div class="search mt-2">
       <input type="button" class="submit" value="Search" (click)="search()" />
     </div>

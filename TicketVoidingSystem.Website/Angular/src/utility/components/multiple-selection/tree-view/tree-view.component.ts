@@ -1,10 +1,14 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ItemsSelect } from '../items-select';
 
 @Component({
+  standalone: true,
   selector: 'tree-view',
+  templateUrl: './tree-view.component.html',
   styleUrls: ['./tree-view.component.scss'],
-  templateUrl: './tree-view.component.html'
+  imports: [CommonModule, FormsModule]
 })
 
 export class TreeViewComponent {

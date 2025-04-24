@@ -7,11 +7,7 @@ import { MultipleSelectionComponent } from './multiple-selection.component';
 import { TreeViewComponent } from './tree-view/tree-view.component';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, NgbModule, ToolTipModule],
-  declarations: [
-    MultipleSelectionComponent,
-    TreeViewComponent,
-  ],
+  imports: [CommonModule, FormsModule, NgbModule, ToolTipModule, MultipleSelectionComponent, TreeViewComponent],
   exports: [
     MultipleSelectionComponent,
     TreeViewComponent

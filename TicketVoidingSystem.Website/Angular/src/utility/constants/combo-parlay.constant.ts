@@ -1,15 +1,15 @@
-import { ItemsSelect } from "../components/multiple-selection/items-select";
+import { Selection } from "../models/selection.model";
 
 export class ComboParlayConstants {   
-    static readonly ComboParlay = [
-        new ItemsSelect(0, '2', '2', true, true, true, []),
-        new ItemsSelect(0, '3', '3', true, true, true, []),
-        new ItemsSelect(0, '4', '4', true, true, true, []),
-        new ItemsSelect(0, '5', '5', true, true, true, []),
-        new ItemsSelect(0, '6', '6', true, true, true, []),
-        new ItemsSelect(0, '7', '7', true, true, true, []),
-        new ItemsSelect(0, '8', '8', true, true, true, []),
-        new ItemsSelect(0, '9', '9', true, true, true, []),
-        new ItemsSelect(0, '10 UP', '10 UP', true, true, true, [])
+    static readonly ComboParlay: Selection[] = [
+        { name: '2', value: '2', group: 'All' },
+        { name: '3', value: '3', group: 'All' },
+        { name: '4', value: '4', group: 'All' },
+        { name: '5', value: '5', group: 'All' },
+        { name: '6', value: '6', group: 'All' },
+        { name: '7', value: '7', group: 'All' },
+        { name: '8', value: '8', group: 'All' },
+        { name: '9', value: '9', group: 'All' },
+        { name: '10 UP', value: '10 UP', group: 'All' }
     ];
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { NgbAccordionConfig, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
@@ -29,7 +29,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./request-info.component.scss'],
   imports: [BlockUiModule, MatchInfoComponent, IssueTypeModule, TicketsComponent, FormsModule, NgbNavModule, CommonModule ]
 })
-export class RequestInfoComponent implements OnInit {
+export class RequestInfoComponent implements OnInit, OnChanges {
   @Input() ticketListModal: TicketListModal;
   @Input() model = new RequestDetailViewModel();
   @Input() isShowVar = false;
@@ -65,6 +65,12 @@ export class RequestInfoComponent implements OnInit {
     this.paging.pageSize = 500;
     this.activeTab = this.tabInfoRequest.find(x => x.isActive).id;
     await this.getDataCurrentTab(this.tabInfoRequest.find(x => x.isActive));
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['issue']) {
+      this.updateIssue();
+    }
   }
 
   private async getIssue(matchId: number) {

@@ -1,17 +1,19 @@
-﻿<div *ngIf="notification.isShow">
+﻿@if (notification.isShow) {
+  <div>
     <div class="overlay"></div>
     <div class="notification">
-        <div class="notification-content">
-            <div class="notification-header">
-                <span [innerHTML]="notification.header | sanitizeHtml"></span>
-                <span class="notification-cancel" (click)="closeNotification()">&times;</span>
-            </div>
-            <div class="notification-body">
-                <div [innerHTML]="notification.body | sanitizeHtml"></div>
-            </div>
-            <div class="notification-footer">
-                <input type="button" class="notification-confirm" value="OK" (click)="nextStep()" />
-            </div>
+      <div class="notification-content">
+        <div class="notification-header">
+          <span [innerHTML]="notification.header | sanitizeHtml"></span>
+          <span class="notification-cancel" (click)="closeNotification()">&times;</span>
         </div>
+        <div class="notification-body">
+          <div [innerHTML]="notification.body | sanitizeHtml"></div>
+        </div>
+        <div class="notification-footer">
+          <input type="button" class="notification-confirm" value="OK" (click)="nextStep()" />
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+}

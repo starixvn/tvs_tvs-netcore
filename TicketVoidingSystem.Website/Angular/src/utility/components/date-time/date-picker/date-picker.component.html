@@ -1,0 +1,12 @@
+<form class="row row-cols-sm-auto">
+  <div class="col-12">
+    <div class="input-group">
+      @if (showInput) {
+      <input class="date-input form-control form-control-sm" placeholder="yyyy-mm-dd" [(ngModel)]="date" name="dp"
+        [maxDate]="maxDate" [minDate]="minDate" [disabled]="disabled" [readonly]="readonly" (click)="datePicker.toggle()"
+        ngbDatepicker #datePicker="ngbDatepicker"/>
+      }
+      <button class="btn btn-sm btn-outline-secondary bi bi-calendar3" (click)="onClickIconCalendar()" type="button"></button>
+    </div>
+  </div>
+</form>

@@ -1,27 +1,39 @@
-<div class="messages-results" *ngIf="messagesResponse.isShow">
-  <div class="overlay"></div>
-  <div class="messages-results-content">
-    <div class="messages-results-header">
-      <span [innerHTML]="messagesResponse.header | sanitizeHtml"></span>
-      <span class="messages-results-cancel" (click)="messagesResponse.isShow = false">&times;</span>
-    </div>
-    <div class="messages-results-body">
-      <div class="message" *ngFor="let result of messagesResponse.results">
-        <div *ngIf="result.code == -9999" class="detail-text">
-          <label>For more details:</label>
-        </div>
-        <div *ngIf="result.code == 0 && result.message !=''" class="success">
-          <span class="icon-success"></span>
-          <div [innerHTML]="result.message | sanitizeHtml"></div>
-        </div>
-        <div *ngIf="result.code > 0 && result.message !=''" class="fail d-flex">
-          <span class="icon-warning"></span>
-          <div [innerHTML]="result.message | sanitizeHtml"></div>
-          <div class="flex-grow-1"></div>
-          <button *ngIf="result.isCanReSend" class="btn-resend" (click)="onClickResendData(result)">RESEND
-            DATA</button>
-        </div>
+@if (messagesResponse.isShow) {
+  <div class="messages-results">
+    <div class="overlay"></div>
+    <div class="messages-results-content">
+      <div class="messages-results-header">
+        <span [innerHTML]="messagesResponse.header | sanitizeHtml"></span>
+        <span class="messages-results-cancel" (click)="messagesResponse.isShow = false">&times;</span>
+      </div>
+      <div class="messages-results-body">
+        @for (result of messagesResponse.results; track result) {
+          <div class="message">
+            @if (result.code == -9999) {
+              <div class="detail-text">
+                <label>For more details:</label>
+              </div>
+            }
+            @if (result.code == 0 && result.message !='') {
+              <div class="success">
+                <span class="icon-success"></span>
+                <div [innerHTML]="result.message | sanitizeHtml"></div>
+              </div>
+            }
+            @if (result.code > 0 && result.message !='') {
+              <div class="fail d-flex">
+                <span class="icon-warning"></span>
+                <div [innerHTML]="result.message | sanitizeHtml"></div>
+                <div class="flex-grow-1"></div>
+                @if (result.isCanReSend) {
+                  <button class="btn-resend" (click)="onClickResendData(result)">RESEND
+                  DATA</button>
+                }
+              </div>
+            }
+          </div>
+        }
       </div>
     </div>
   </div>
-</div>
+}
