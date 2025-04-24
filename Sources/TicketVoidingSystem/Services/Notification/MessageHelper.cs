@@ -27,4 +27,14 @@ public static class MessageHelper
         return $"Edit request {requestId} has error"
                + $"{Environment.NewLine}Marked ticket: @marked/@total";
     }
+
+    public static string CreateStoredRequestSuccessfully(int requestId)
+    {
+        return $"<strong>Request {requestId}</strong> is stored successfully";
+    }
+
+    public static string CreateStoredRequestFailed(int requestId)
+    {
+        return $"<strong>Request {requestId}</strong> has failed to store";
+    }
 }

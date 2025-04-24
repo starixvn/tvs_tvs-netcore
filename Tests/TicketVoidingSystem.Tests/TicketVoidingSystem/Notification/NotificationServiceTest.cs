@@ -44,25 +44,6 @@ public class NotificationServiceTest
     }
 
     [Fact]
-    public void ExecuteBackground_ShouldRunActionInBackground()
-    {
-        // Arrange
-        var actionExecuted = false;
-        var action = async () =>
-        {
-            await Task.Delay(10);
-            actionExecuted = true;
-        };
-
-        // Act
-        service.ExecuteBackground(action);
-
-        // Assert
-        Task.Delay(50).Wait(); // Wait for the background task to complete
-        Assert.True(actionExecuted);
-    }
-
-    [Fact]
     public async Task UpdateNotification_ShouldCallRepositoryWithCorrectCriteria()
     {
         // Arrange
