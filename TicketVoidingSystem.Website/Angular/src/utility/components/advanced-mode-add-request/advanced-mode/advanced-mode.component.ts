@@ -19,11 +19,6 @@ import { ControlsAllBetTypesComponent } from '../controls-all-bet-types/controls
 import { ControlsAllBetTypesLists } from '../controls-all-bet-types/controls-all-bet-types.model';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advanced-mode.model';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { TooltipComponent } from '../../tooltip/tooltip.component';
-import { MultipleSelectComponent } from '../../advanced-mode/multiple-selection/multiple-select.component';
-import { ControlsAllBetTypesComponent } from '../controls-all-bet-types/controls-all-bet-types.component';
 
 @Component({
   standalone: true,

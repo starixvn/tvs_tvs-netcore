@@ -1,5 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
-import * as _ from 'lodash';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, Input, Output, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { Tooltip } from '../../tooltip/tooltip.model';
@@ -24,9 +25,10 @@ export class GroupBetTypesComponent {
 
   @Input() scroll: boolean;
   collapse = true;
-  private readonly element = inject(ElementRef);
 
-  constructor(private readonly element: ElementRef) {
+  element = inject(ElementRef);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 

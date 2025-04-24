@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MultipleSelectComponent } from '../../advanced-mode/multiple-selection/multiple-select.component';
-import { ControlsAllBetTypes } from './controls-all-bet-types.model';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MultipleSelectComponent } from '../../advanced-mode/multiple-selection/multiple-select.component';
+import { ControlsAllBetTypes } from './controls-all-bet-types.model';
 
 @Component({
   standalone: true,

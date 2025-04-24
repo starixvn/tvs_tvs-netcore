@@ -11,7 +11,6 @@ import { TreeViewComponent } from './tree-view/tree-view.component';
   templateUrl: './multiple-selection.component.html',
   styleUrls: ['./multiple-selection.component.scss'],
   imports: [CommonModule, FormsModule, TreeViewComponent]
-  imports: [TreeViewComponent, FormsModule, CommonModule]
 })
 
 export class MultipleSelectionComponent implements OnInit, OnChanges {
