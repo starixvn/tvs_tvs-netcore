@@ -48,6 +48,6 @@ public class CheckDuplicateTicketsHandlerTests
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        Assert.Equal(viewModel, actual);
+        AssertExtension.Equal(viewModel, actual);
     }
 }

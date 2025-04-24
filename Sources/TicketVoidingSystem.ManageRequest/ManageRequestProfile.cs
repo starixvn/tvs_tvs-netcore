@@ -4,8 +4,6 @@ using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest;
@@ -43,6 +41,7 @@ public class ManageRequestProfile : Profile
         CreateMap<SubIssueType, IssueInfo>();
         CreateMap<GetLogInfoQuery, GetLogInfoCriteria>();
         CreateMap<MatchInfoAddRequest, Match>();
+        CreateMap<Match, MatchInfoAddRequest>();
         CreateMap<RequestEventModel, Match>();
     }
 }
