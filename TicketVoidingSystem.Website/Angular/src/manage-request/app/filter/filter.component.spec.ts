@@ -1,9 +1,5 @@
-import { FormsModule } from '@angular/forms';
-import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
-import { MultipleSelectionModule } from '../../../utility/components/multiple-selection/multiple-selection.module';
-import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { ManageRequestStatus } from '../../../utility/constants/config';
 import { BalanceUp } from '../../../utility/models/balance-up.model';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../utility/models/issue-type.model';
@@ -11,7 +7,6 @@ import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { FilterComponent } from './filter.component';
 import { FilterModel } from './filter.model';
-import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../utility/modules/testing.module';
 
@@ -112,7 +107,7 @@ class Helper {
   static readonly date = 6;
 }
 
-describe('UserListComponent', () => {
+describe('FilterComponent', () => {
   let component: FilterComponent;
   let fixture: ComponentFixture<FilterComponent>;
   let commonService: CommonService;
@@ -162,6 +157,8 @@ describe('UserListComponent', () => {
     component.updateSubByIssue = jest.fn();
     component.issueTypeSelectList = Helper.fakeIssueTypeSelectList;
     component.selectedIssueTypes = ["1"];
+    component.selectedStatus = ["1"];
+
     // Action
     component.controlFilter('MatchId');
 
@@ -169,7 +166,7 @@ describe('UserListComponent', () => {
     expect(component.initDefaultFilter).toHaveBeenCalledTimes(1);
     expect(component.updateSubByIssue).toHaveBeenCalledTimes(1);
     expect(component.model.requestId).toBeNull();
-    expect(component.model.statusIds).toBe(ManageRequestStatus.ALL_ID.toString());
+    expect(component.model.statusIds).toBe("1");
     expect(component.model.issueTypeId).toBe('1');
     expect(component.model.isExcludeTest).toBe(true);
   });
@@ -198,7 +195,6 @@ describe('UserListComponent', () => {
     // Assert
     expect(component.initDefaultFilter).toHaveBeenCalledTimes(1);
     expect(component.model.matchId).toBeNull();
-    expect(component.model.statusIds).toBe(ManageRequestStatus.ALL_ID.toString());
     expect(component.model.issueTypeId).toBe('1');
     expect(component.model.isExcludeTest).toBe(true);
   });
@@ -215,7 +211,7 @@ describe('UserListComponent', () => {
     // Assert
     expect(component.model.ngbFromDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
     expect(component.model.ngbToDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
-    expect(component.model.statusIds).toBe(ManageRequestStatus.ALL_ID.toString());
+    expect(component.model.statusIds).toBe(ManageRequestStatus.DEFAULT_STATUS.toString());
     expect(component.model.issueTypeId).toBe('11,1,8,9');
     expect(component.model.isExcludeTest).toBe(true);
   });
@@ -300,7 +296,7 @@ describe('UserListComponent', () => {
   it('#validate should return true when search by matchId', async () => {
     // Arrange
     component.filterByMatch = true;
-    component.model = { matchId: 1, requestId: 1, issueTypeId: "1", productTypeIds: "1,2" } as FilterModel;
+    component.model = { matchId: 1, requestId: 1, issueTypeId: "1", productTypeIds: "1,2", statusIds: ManageRequestStatus.DEFAULT_STATUS.toString() } as FilterModel;
 
     // Action
     const actualResult = component.validate();

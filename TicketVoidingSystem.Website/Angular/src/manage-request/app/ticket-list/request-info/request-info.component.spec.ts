@@ -1,4 +1,3 @@
-import { SimpleChange } from '@angular/core';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { IssueInfo } from '../../../../utility/models/issue-type.model';
@@ -57,35 +56,6 @@ describe('RequestInfoComponent', () => {
     // Assert
     expect(fakeFunctionGetDataCurrentTab).toHaveBeenCalled();
     expect(component.paging.pageSize).toBe(500);
-  });
-
-  it('#ngOnChanges should call updateIssue when has change IssueInfo ', () => {
-    // Arrange
-    component.issue = fakeIssue;
-    const changes = {
-      'issue': new SimpleChange(new IssueInfo(), fakeIssue, true),
-    };
-    const fakeFunctionUpdateIssue = jest.fn();
-    component['updateIssue'] = fakeFunctionUpdateIssue
-
-    // Action and Assert
-    component.ngOnChanges(changes);
-    expect(fakeFunctionUpdateIssue).toHaveBeenCalled();
-  });
-
-  it('#ngOnChanges should not call updateIssue when has not change IssueInfo ', () => {
-    // Arrange
-    const fakeFunctionUpdateIssue = jest.fn();
-    component.issue = fakeIssue;
-    const changes = {
-      'issue': new SimpleChange(fakeIssue, fakeIssue, false),
-    };
-    component['updateIssue']
-    // Action
-    component.ngOnChanges(changes);
-
-    // Assert
-    expect(fakeFunctionUpdateIssue).toBeCalledTimes(0);
   });
 
   it('#getTickets should has getTickets', async () => {

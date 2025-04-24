@@ -77,7 +77,7 @@ class Helper {
       totalResettleProcessed: 0
     },
   ] as DetailRequestModel[];
-  static readonly fakeRequestModelList: RequestModel[] = [
+  static readonly fakeRequestModelList = [
     {
       requestId: 1112,
       issueTypeId: 11,
@@ -108,7 +108,7 @@ class Helper {
       status: 'Completed',
       details: Helper.fakeDetailRequestModelList,
     }
-  ];
+  ] as RequestModel[];
   static readonly fakePermissionManage: PermissionManage = {
     manageRequestHost: true,
     verifyRead: true,
