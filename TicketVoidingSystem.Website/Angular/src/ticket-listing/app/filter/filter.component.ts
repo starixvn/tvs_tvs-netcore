@@ -261,9 +261,14 @@ export class FilterComponent implements OnInit {
       && (sportType !== 188)                                              //sportTypes invalid in  Virtual Sports 4
       && (sportType !== 147)                                              //sportTypes invalid in  Virtual Sports 5
       && (sportType !== 134)                                              //sportTypes invalid in  Virtual Sports 6
-      && (sportType !== 125 && sportType !== 126 && sportType !== 127);   //sportTypes invalid in  Virtual Sports 7                                    
+      && !this.isSportTypeVs7(sportType);                                 //sportTypes invalid in  Virtual Sports 7                                    
   }
 
+  private isSportTypeVs7(sportType: number){
+    const sportTypeVs7 = [125, 126, 127];
+
+    return sportTypeVs7.includes(sportType);
+  }
   private isInvalidProduct0(product: number, sportType: number): boolean {
     return ((product === 0) && sportType > 99 && sportType !== 154);
   }
@@ -297,7 +302,7 @@ export class FilterComponent implements OnInit {
       ((sportType < 190 || sportType > 199) && sportType !== 177) &&
       sportType !== 178 && sportType !== 179 &&
       sportType !== 188 && sportType !== 147 && sportType !== 134 &&
-      sportType !== 125 && sportType !== 126 && sportType !== 127
+      !this.isSportTypeVs7(sportType)
     );
   }
 
