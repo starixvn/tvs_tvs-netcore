@@ -1,56 +1,112 @@
+import { TestBed } from '@angular/core/testing';
+import { EventNotParticipateService } from './event-not-participate.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { NotParticipateModel } from '../../models/event-not-participate.model';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
-import { EventNotParticipateService } from './event-not-participate.service';
-
-class Helper {
-  static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
-    playerId: 1,
-    betTypeIds: [],
-    betTypeMultipleSelection: null
-  };
-  static readonly fakeLogInfoNotParticipate: LogInfoNotParticipate = {
-    matchId: 1,
-    filterNotParticipates: [Helper.fakeFilterNotParticipateModel],
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: []
-  };
-  static readonly fakeNotParticipateModels: NotParticipateModel[] = [
-    {
-      betTypeIds: '1',
-      playerId: 1,
-      subIssueTypeId: 1,
-      logInfoDetail: new LogInfoDetail(),
-      matchId: 1,
-      playerNames: ''
-    }
-  ];
-}
 
 describe('EventNotParticipateService', () => {
   let service: EventNotParticipateService;
 
   beforeEach(() => {
-    service = new EventNotParticipateService();
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [EventNotParticipateService]
+    });
+
+    service = TestBed.inject(EventNotParticipateService);
   });
 
-  it('#getNotParticipateGetLogInfoModel should return list objects NotParticipateGetLogInfoQuery with correct length', async () => {
-    const actual = service.getNotParticipateGetLogInfoModel(1, 1, [Helper.fakeFilterNotParticipateModel]);
-
-    expect(actual.length).toBe(1);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#getNotParticipateModel should return list objects NotParticipateModel with correct length', async () => {
-    const actual = service.getNotParticipateModel(1, Helper.fakeLogInfoNotParticipate);
+  describe('getNotParticipateGetLogInfoModel', () => {
+    it('should return correct NotParticipateGetLogInfoQuery array', () => {
+      // Arrange
+      const subIssueTypeId = 1;
+      const matchId = 123;
+      const filterModels = [
+        {
+          playerId: 'player1',
+          betTypeIds: ['1', '2']
+        }
+      ] as unknown as FilterNotParticipateModel[];
 
-    expect(actual.length).toBe(1);
+      // Act
+      const result = service.getNotParticipateGetLogInfoModel(subIssueTypeId, matchId, filterModels);
+
+      // Assert
+      expect(result).toEqual([
+        {
+          matchId: 123,
+          subIssueTypeId: 1,
+          betTypeIds: '1,2',
+          playerId: 'player1'
+        }
+      ]);
+    });
   });
 
-  it('#assignModelsToEvents should return LogInfoNotParticipate with correct props', async () => {
-    const actual = service.assignModelsToEvents(Helper.fakeNotParticipateModels);
+  describe('getNotParticipateModel', () => {
+    it('should return correct NotParticipateModel array', () => {
+      // Arrange
+      const subIssueTypeId = 1;
+      const logInfoEvent = {
+        matchId: 123,
+        logInfoDetail: {} as LogInfoDetail,
+        filterNotParticipates: [
+          {
+            playerId: 'player1',
+            betTypeIds: ['1', '2']
+          }
+        ]
+      } as unknown as LogInfoNotParticipate;
 
-    expect(actual.matchId).toBe(Helper.fakeNotParticipateModels[0].matchId);
-    expect(actual.logInfoDetail).toEqual(Helper.fakeNotParticipateModels[0].logInfoDetail);
+      // Act
+      const result = service.getNotParticipateModel(subIssueTypeId, logInfoEvent);
+
+      // Assert
+      expect(result).toEqual([
+        {
+          betTypeIds: '1,2',
+          playerId: 'player1',
+          matchId: 123,
+          subIssueTypeId: 1,
+          logInfoDetail: {}
+        }
+      ]);
+    });
+  });
+
+  describe('assignModelsToEvents', () => {
+    it('should return correct LogInfoNotParticipate', () => {
+      // Arrange
+      const inputModels = [
+        {
+          betTypeIds: '1,2',
+          playerId: 'player1',
+          matchId: 123,
+          subIssueTypeId: 1,
+          logInfoDetail: {} as LogInfoDetail
+        }
+      ] as unknown as NotParticipateModel[];
+
+      // Act
+      const result = service.assignModelsToEvents(inputModels);
+
+      // Assert
+      expect(result).toEqual({
+        matchId: 123,
+        logInfoDetail: {},
+        filterNotParticipates: [
+          {
+            playerId: 'player1',
+            betTypeIds: ['1', '2']
+          }
+        ]
+      });
+    });
   });
 });

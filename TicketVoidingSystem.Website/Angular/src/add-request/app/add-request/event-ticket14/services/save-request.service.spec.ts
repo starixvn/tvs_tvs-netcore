@@ -1,66 +1,166 @@
-import { AddRequestService } from '../../add-request.service';
-import { AddRequestStore } from '../../add-request.store';
-import { FilterModel } from '../../filter/filter.model';
-import { AddRequestQuery } from '../../models/add-request.query';
-import { EventTicket14Model } from '../../models/event-ticket-14.model';
-import { OthersModel } from '../../others/others.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
+import { TestBed } from '@angular/core/testing';
 import { SaveRequestService } from './save-request.service';
-
-class Helper {
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '1',
-    action: '1',
-    isTest: true,
-    isVoided: false,
-    isChangeSubTypeManual: true,
-    isAbnormal: false
-  } as FilterModel;
-  static readonly fakeSaveRequestArg: SaveRequestArg = {
-    requestId: 1111,
-    isEdit: false,
-    transIds: '',
-    filter: Helper.fakeFilterModel,
-    eventTicket14Model: new EventTicket14Model(),
-    others: new OthersModel(),
-    addRequestStore: new AddRequestStore(),
-    filterBy: null,
-    primitiveProps: new PrimitiveProperty
-  };
-}
+import { AddRequestService } from '../../add-request.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { AddRequestQuery } from '../../models/add-request.query';
 
 describe('SaveRequestService', () => {
-  let mockSaveRequestService: SaveRequestService;
-  let mockAddRequestService: AddRequestService;
+  let service: SaveRequestService;
+  let addRequestService: AddRequestService;
 
   beforeEach(() => {
-    mockAddRequestService = new AddRequestService(null, null, null);
-    mockAddRequestService.executeSaveRequest = jest.fn();
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [SaveRequestService]
+    });
+
+    service = TestBed.inject(SaveRequestService);
+    addRequestService = TestBed.inject(AddRequestService);
   });
 
-  it('#executeSaveRequestApi should call #executeSaveRequest', async () => {
-    const args = Helper.fakeSaveRequestArg;
-    const spyExecuteSaveRequest = jest.spyOn(mockAddRequestService, 'executeSaveRequest').mockImplementation();
-    mockSaveRequestService = new SaveRequestService(mockAddRequestService);
-    mockSaveRequestService['initAddRequestQuery'] = jest.fn().mockImplementation(() => new AddRequestQuery());
-    await mockSaveRequestService.executeSave(args);
-
-    expect(spyExecuteSaveRequest).toHaveBeenCalledTimes(1);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#initAddRequestQuery should return expected model', async () => {
-    const args = Helper.fakeSaveRequestArg;
-    args.filter.isVoided = false;
-    args.eventTicket14Model = new EventTicket14Model();
-    mockSaveRequestService = new SaveRequestService(null);
-    const result = mockSaveRequestService['initAddRequestQuery'](args);
+  describe('executeSave', () => {
+    it('should call addRequestService.executeSaveRequest with correct parameters', async () => {
+      // Arrange
+      const mockArgs: SaveRequestArg = {
+        isEdit: true,
+        requestId: 123,
+        transIds: '123,456',
+        primitiveProps: {
+          transInfoJson: '{"key": "value"}',
+          isBlockBetIds: false,
+          permission: {} as any
+        } as any,
+        filter: {
+          issueTypeId: 1,
+          subIssueTypeId: 2,
+          action: 1,
+          isTest: true,
+          isVoided: false,
+          isAbnormal: false,
+          actions: []
+        } as any,
+        filterBy: 1,
+        others: {
+          decidedBy: 'user1',
+          remark: 'test remark'
+        },
+        addRequestStore: {} as any,
+        eventTicket14Model: {} as any
+      };
 
-    expect(result.issueTypeId).toEqual(args.filter.issueTypeId);
-    expect(result.actionId).toEqual(args.filter.action);
-    expect(result.isTest).toEqual(args.filter.isTest);
-    expect(result.isVoided).toEqual(args.filter.isVoided);
-    expect(result.mistakenBy).toEqual(args.others.mistakenBy);
+      addRequestService.executeSaveRequest = jest.fn().mockResolvedValue(Promise.resolve());
+
+      // Act
+      await service.executeSave(mockArgs);
+
+      // Assert
+      expect(addRequestService.executeSaveRequest).toHaveBeenCalledWith(
+        mockArgs.isEdit,
+        mockArgs.requestId,
+        expect.any(AddRequestQuery),
+        mockArgs.addRequestStore
+      );
+    });
+  });
+
+  describe('initAddRequestQuery', () => {
+    it('should initialize query with correct values', () => {
+      // Arrange
+      const mockArgs: SaveRequestArg = {
+        isEdit: true,
+        requestId: 123,
+        transIds: '123,456',
+        primitiveProps: {
+          transInfoJson: '{"key": "value"}',
+          isBlockBetIds: false,
+          permission: {} as any
+        } as any,
+        filter: {
+          issueTypeId: 1,
+          subIssueTypeId: 2,
+          action: 1,
+          isTest: true,
+          isVoided: false,
+          isAbnormal: false,
+          actions: []
+        } as any,
+        filterBy: 1,
+        others: {
+          decidedBy: 'user1',
+          remark: 'test remark'
+        },
+        addRequestStore: {} as any,
+        eventTicket14Model: {} as any
+      };
+
+      // Act
+      const result = (service as any).initAddRequestQuery(mockArgs);
+
+      // Assert
+      expect(result).toEqual({
+        transInfoJson: mockArgs.primitiveProps.transInfoJson,
+        transIds: mockArgs.transIds,
+        issueTypeId: mockArgs.filter.issueTypeId,
+        subIssueTypeId: mockArgs.filter.subIssueTypeId,
+        actionId: mockArgs.filter.action,
+        isTest: mockArgs.filter.isTest,
+        isVoided: mockArgs.filter.isVoided,
+        filterBy: mockArgs.filterBy,
+        decidedBy: mockArgs.others.decidedBy,
+        remark: mockArgs.others.remark
+      });
+    });
+
+    it('should handle empty or undefined values', () => {
+      // Arrange
+      const mockArgs: SaveRequestArg = {
+        isEdit: true,
+        requestId: 0,
+        transIds: '',
+        primitiveProps: {
+          transInfoJson: '',
+          isBlockBetIds: false,
+          permission: {} as any
+        } as any,
+        filter: {
+          issueTypeId: 0,
+          subIssueTypeId: 0,
+          action: 0,
+          isTest: false,
+          isVoided: false,
+          isAbnormal: false,
+          actions: []
+        } as any,
+        filterBy: 0,
+        others: {
+          decidedBy: '',
+          remark: ''
+        },
+        addRequestStore: {} as any,
+        eventTicket14Model: {} as any
+      };
+
+      // Act
+      const result = (service as any).initAddRequestQuery(mockArgs);
+
+      // Assert
+      expect(result).toEqual({
+        transInfoJson: '',
+        transIds: '',
+        issueTypeId: 0,
+        subIssueTypeId: 0,
+        actionId: 0,
+        isTest: false,
+        isVoided: false,
+        filterBy: 0,
+        decidedBy: '',
+        remark: ''
+      });
+    });
   });
 });

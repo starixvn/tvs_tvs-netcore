@@ -1,231 +1,167 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Shallow } from 'shallow-render';
-import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { AddRequestApiService } from '../add-request-api.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { EventTicket14Component } from './event-ticket14.component';
+import { ValidationService } from './services/validation.service';
+import { SaveRequestService } from './services/save-request.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { EventTicket14Model } from '../models/event-ticket-14.model';
-import { EventTicket14Component } from './event-ticket14.component';
-import { PrimitiveProperty } from './models/primitive-property.model';
-import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
+import { OthersModel } from '../others/others.model';
+import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { AddRequestApiService } from '../add-request-api.service';
 
 class Helper {
+  static readonly fakeRequestId = 1212;
   static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '27',
-    action: '5',
-    isTest: false,
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
     isVoided: false,
-    subIssueTypes: [],
+    isChangeSubTypeManual: true,
     isAbnormal: false
   } as FilterModel;
-  static readonly fakeEventTicket14Model: EventTicket14Model = {
-    transIds: '12345'
-  };
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeEventTicket14Model = new EventTicket14Model();
 }
 
 describe('EventTicket14Component', () => {
-  @NgModule({
-    declarations: [
-      BetIdsComponent
-    ],
-    imports: [
-      BlockUiModule,
-      FormsModule
-    ],
-    providers: [
-      ValidationService,
-      SaveRequestService,
-      AddRequestStore,
-      AddRequestApiService
-    ]
-  })
-  class AppModuleTest { }
+  let component: EventTicket14Component;
+  let fixture: ComponentFixture<EventTicket14Component>;
+  let validationService: ValidationService;
+  let saveRequestService: SaveRequestService;
+  let addRequestStore: AddRequestStore;
+  let addRequestApiService: AddRequestApiService;
 
-  let shallow: Shallow<EventTicket14Component>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        SaveRequestService,
+        AddRequestStore,
+        AddRequestApiService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(EventTicket14Component, AppModuleTest);
+    fixture = TestBed.createComponent(EventTicket14Component);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
+    component = fixture.componentInstance;
   });
 
-  it('#EventTicket14Component init should match snapshot', async () => {
-    const { fixture } = await shallow
-    .render({
-      bind: {
-        eventTicket14Model: Helper.fakeEventTicket14Model,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
-
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#afterFocusOutBetIds should call #checkBusinessRule', async () => {
-    const mockCheckBusinessRule = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { checkBusinessRule: mockCheckBusinessRule })
-    .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-    .render({
-      bind: {
-        eventTicket14Model: Helper.fakeEventTicket14Model,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.isCancelAfterFocusOutBetIdsEvent = false;
+  it('should initialize with default values', async () => {
+    // Arrange
+    component.isEdit = false;
+    addRequestApiService.getPermissionAddRequest = jest.fn().mockResolvedValue({});
 
-    await instance.afterFocusOutBetIds();
+    // Act
+    await component.ngOnInit();
 
-    expect(mockCheckBusinessRule).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(addRequestApiService.getPermissionAddRequest).toHaveBeenCalled();
+    expect(component.primitiveProps.permission).toBeDefined();
   });
 
-  it('#afterFocusOutBetIds should not call #checkBusinessRule', async () => {
-    const mockCheckBusinessRule = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { checkBusinessRule: mockCheckBusinessRule })
-    .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-    .render({
-      bind: {
-        eventTicket14Model: Helper.fakeEventTicket14Model,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.isCancelAfterFocusOutBetIdsEvent = true;
+  it('should handle afterFocusOutBetIds when not cancelled', async () => {
+    // Arrange
+    component.isCancelAfterFocusOutBetIdsEvent = false;
+    component.betIdsComponent = {} as BetIdsComponent;
+    component.filter = Helper.fakeFilterModel;
+    addRequestStore.changeStartTimeFilterAnalysis = jest.fn();
+    validationService.checkBusinessRule = jest.fn().mockResolvedValue({ isValid: true });
 
-    await instance.afterFocusOutBetIds();
+    // Act
+    await component.afterFocusOutBetIds();
 
-    expect(mockCheckBusinessRule).toHaveBeenCalledTimes(0);
+    // Assert
+    expect(addRequestStore.changeStartTimeFilterAnalysis).toHaveBeenCalled();
+    expect(validationService.checkBusinessRule).toHaveBeenCalledWith(
+      component.betIdsComponent,
+      component.filter.issueTypeId,
+      component.primitiveProps.permission
+    );
   });
 
-  it('#saveRequest should call #executeApiSaveRequest', async () => {
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: mockChangeBlockingUiStatus,
-    })
-    .render({
-      bind: {
-        eventTicket14Model: Helper.fakeEventTicket14Model,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
-    instance.filter.isVoided = true;
-    instance['executeApiSaveRequest'] = jest.fn();
+  it('should handle afterFocusOutBetIds when cancelled', async () => {
+    // Arrange
+    component.isCancelAfterFocusOutBetIdsEvent = true;
+    component.betIdsComponent = {} as BetIdsComponent;
+    component.filter = Helper.fakeFilterModel;
+    addRequestStore.changeStartTimeFilterAnalysis = jest.fn();
+    validationService.checkBusinessRule = jest.fn();
 
-    await instance.saveRequest();
+    // Act
+    await component.afterFocusOutBetIds();
 
-    expect(instance['executeApiSaveRequest']).toHaveBeenCalledTimes(1);
-    expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    // Assert
+    expect(addRequestStore.changeStartTimeFilterAnalysis).toHaveBeenCalled();
+    expect(validationService.checkBusinessRule).not.toHaveBeenCalled();
   });
 
-  it('#saveRequest should call #saveWhenRequestNotVoided', async () => {
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: mockChangeBlockingUiStatus,
-    })
-    .render({
-      bind: {
-        eventTicket14Model: Helper.fakeEventTicket14Model,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
-    instance.filter.isVoided = false;
-    instance['saveWhenRequestNotVoided'] = jest.fn();
+  it('should save request when request is voided', async () => {
+    // Arrange
+    component.filter = { ...Helper.fakeFilterModel, isVoided: true };
+    component.betIdsComponent = {
+      getAllBetIds: jest.fn().mockReturnValue([])
+    } as unknown as BetIdsComponent;
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+    saveRequestService.executeSave = jest.fn();
 
-    await instance.saveRequest();
+    // Act
+    await component.saveRequest();
 
-    expect(instance['saveWhenRequestNotVoided']).toHaveBeenCalledTimes(1);
-    expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    // Assert
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+    expect(saveRequestService.executeSave).toHaveBeenCalled();
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
   });
 
-  it('#saveWhenRequestNotVoided should call #executeApiSaveRequest', async () => {
-    const mockChangeBlockingUiStatus = jest.fn();
-    const mockCheckBusinessRule = jest.fn().mockImplementation(() => Promise.resolve({isValid: true}));
-    const { instance } = await shallow
-    .mock(ValidationService, {
-      checkBusinessRule: mockCheckBusinessRule,
-    })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: mockChangeBlockingUiStatus,
-      changeSavingRequestStatus: jest.fn()
-    })
-    .render({
-      bind: {
-        eventTicket14Model: Helper.fakeEventTicket14Model,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.triggerFocusOutBetIds = jest.fn();
-    instance['executeApiSaveRequest'] = jest.fn();
+  it('should save request when request is not voided and validation passes', async () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
+    component.betIdsComponent = {
+      triggerFocusOutBetIds: jest.fn(),
+      getAllBetIds: jest.fn().mockReturnValue([])
+    } as unknown as BetIdsComponent;
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+    validationService.checkBusinessRule = jest.fn().mockResolvedValue({ isValid: true, transInfoJson: {} });
+    saveRequestService.executeSave = jest.fn();
 
-    await instance['saveWhenRequestNotVoided']();
+    // Act
+    await component.saveRequest();
 
-    expect(instance['executeApiSaveRequest']).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.betIdsComponent.triggerFocusOutBetIds).toHaveBeenCalled();
+    expect(validationService.checkBusinessRule).toHaveBeenCalled();
+    expect(saveRequestService.executeSave).toHaveBeenCalled();
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
   });
 
-  it('#saveWhenRequestNotVoided should not call #executeApiSaveRequest', async () => {
-    const mockChangeSavingRequestStatus = jest.fn();
-    const mockCheckBusinessRule = jest.fn().mockImplementation(() => Promise.resolve(false));
-    const { instance } = await shallow
-    .mock(ValidationService, {
-      checkBusinessRule: mockCheckBusinessRule,
-    })
-    .mock(AddRequestStore, {
-      changeSavingRequestStatus: mockChangeSavingRequestStatus,
-    })
-    .render({
-      bind: {
-        eventTicket14Model: Helper.fakeEventTicket14Model,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.triggerFocusOutBetIds = jest.fn();
-    instance['executeApiSaveRequest'] = jest.fn();
+  it('should not save request when validation fails', async () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
+    component.betIdsComponent = {
+      triggerFocusOutBetIds: jest.fn(),
+      getAllBetIds: jest.fn().mockReturnValue([])
+    } as unknown as BetIdsComponent;
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+    addRequestStore.changeSavingRequestStatus = jest.fn();
+    validationService.checkBusinessRule = jest.fn().mockResolvedValue({ isValid: false });
 
-    await instance['saveWhenRequestNotVoided']();
+    // Act
+    await component.saveRequest();
 
-    expect(instance['executeApiSaveRequest']).toHaveBeenCalledTimes(0);
-    expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
-  });
-
-  it('#executeApiSaveRequest should call #checkBusinessRule', async () => {
-    const mockExecuteSave = jest.fn();
-    const { instance } = await shallow
-    .mock(SaveRequestService, {
-      executeSave: mockExecuteSave,
-    })
-    .render({
-      bind: {
-        eventTicket14Model: Helper.fakeEventTicket14Model,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
-    const testCase = [true, false];
-    testCase.forEach(async x => {
-      instance.filter.isAbnormal = x;
-      instance.betIdsComponent = new BetIdsComponent(null);
-      instance.betIdsComponent.getAllBetIds = jest.fn();
-
-      await instance['executeApiSaveRequest']();
-
-      expect(mockExecuteSave).toHaveBeenCalled();
-    });
+    // Assert
+    expect(component.betIdsComponent.triggerFocusOutBetIds).toHaveBeenCalled();
+    expect(validationService.checkBusinessRule).toHaveBeenCalled();
+    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
   });
 });

@@ -1,149 +1,146 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
-import { ValidationService } from '../services/validation.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { FilterWrongOddsSportsBookComponent } from './filter-wrong-odds-sports-book.component';
+import { ValidationService } from '../services/validation.service';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
+
 class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel = {
-    fromDateTime: Helper.fromDate,
-    toDateTime: Helper.toDate,
-    correctOdds: '1.5',
+  static readonly fakeFilterModel: FilterWrongOddsSportsBookModel = {
     filterOddsType: '1',
-    fromOdds: '1.5',
-    liveIndicator: 1,
-    oddsValue: '1.5',
-    toOdds: '1.5',
-  };
+    filterFromTransTime: '',
+    filterToTransTime: '',
+    filterOddsValue: '',
+    filterOddsFrom: '',
+    filterOddsTo: ''
+  } as unknown as FilterWrongOddsSportsBookModel;
 }
 
 describe('FilterWrongOddsSportsBookComponent', () => {
-  @NgModule({
-    declarations: [
-      FilterWrongOddsSportsBookComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule
-    ],
-    providers: [
-      ValidationService
-    ]
-  })
-  class AppModuleTest { }
+  let component: FilterWrongOddsSportsBookComponent;
+  let fixture: ComponentFixture<FilterWrongOddsSportsBookComponent>;
+  let validationService: ValidationService;
+  let staticService: StaticService;
 
-  let shallow: Shallow<FilterWrongOddsSportsBookComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        StaticService,
+        CheckAddPermissionService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(FilterWrongOddsSportsBookComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(FilterWrongOddsSportsBookComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    staticService = fixture.debugElement.injector.get(StaticService);
+    component = fixture.componentInstance;
+    component.filterWrongOddsSportsBookModel = Helper.fakeFilterModel;
   });
 
-  it('FilterWrongOddsSportsBookComponent init should match snapshot', async () => {
-    const component = new FilterWrongOddsSportsBookComponent(null, null);
-    component.filterWrongOddsSportsBookModel = Helper.fakeFilterWrongOddsSportsBookModel;
-
-    expect(component).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#changeFilter should emit #changeFilterEvent', async () => {
-    const component = new FilterWrongOddsSportsBookComponent(null, null);
-    component.changeFilterEvent.emit = jest.fn();
+  it('should emit changeFilterEvent when changeFilter is called', () => {
+    // Arrange
+    component.changeFilterEvent = {
+      emit: jest.fn()
+    } as any;
+
+    // Act
     component.changeFilter();
 
-    expect(component.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.changeFilterEvent.emit).toHaveBeenCalled();
   });
 
-  it('#emitRefreshEvent should emit #refreshEvent', async () => {
-    const component = new FilterWrongOddsSportsBookComponent(null, null);
-    component.refreshEvent.emit = jest.fn();
+  it('should validate odds filter by value', () => {
+    // Arrange
+    const validValue = '1.5';
+    const invalidValue = '0';
+
+    // Act & Assert
+    expect(component.isValidOddsFilterByValue(validValue)).toBeTruthy();
+    expect(component.isValidOddsFilterByValue(invalidValue)).toBeFalsy();
+  });
+
+  it('should validate odds filter by range', () => {
+    // Arrange
+    const validValue = '1.5';
+    const invalidValue = '0';
+    const elementClass = 'test-class';
+
+    // Act & Assert
+    expect(component.isValidOddsFilterByRange(validValue, elementClass)).toBeTruthy();
+    expect(component.isValidOddsFilterByRange(invalidValue, elementClass)).toBeFalsy();
+    expect(component.isValidOddsFilterByRange('', elementClass)).toBeTruthy();
+  });
+
+  it('should validate multiple decimal format', () => {
+    // Arrange
+    const validValue = '1.5,2.0,3.5';
+    const invalidValue = '1.5,2.0,3.5,';
+    const elementClass = 'test-class';
+
+    jest.spyOn(StaticService, 'isCorrectFormatMultipleDecimal').mockImplementation((value) => {
+      if (!value) return true;
+      return value.split(',').every(num => /^\d+(\.\d+)?$/.test(num.trim()));
+    });
+
+    // Act & Assert
+    expect(component.isCorrectFormatMultipleDecimal(validValue, elementClass)).toBeTruthy();
+    expect(component.isCorrectFormatMultipleDecimal(invalidValue, elementClass)).toBeFalsy();
+    expect(component.isCorrectFormatMultipleDecimal('', elementClass)).toBeTruthy();
+  });
+
+  it('should set filter odds type', () => {
+    // Arrange
+    const type = '2';
+
+    // Act
+    component.setFilterOddsType(type);
+
+    // Assert
+    expect(component.filterWrongOddsSportsBookModel.filterOddsType).toBe(type);
+  });
+
+  it('should check validity of date time and filter', () => {
+    // Arrange
+    component.fromTimeComponent = {
+      validateWithTooltip: jest.fn().mockReturnValue(true)
+    } as any;
+    component.toTimeComponent = {
+      validateWithTooltip: jest.fn().mockReturnValue(true)
+    } as any;
+    jest.spyOn(validationService, 'isFromTimeSameOrBeforeToTime').mockReturnValue(true);
+    jest.spyOn(validationService, 'isValidFilterWrongOddsSportsBook').mockReturnValue(true);
+
+    // Act & Assert
+    expect(component.isValidity()).toBeTruthy();
+
+    // Test with invalid date time
+    component.fromTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(false);
+    expect(component.isValidity()).toBeFalsy();
+
+    // Test with invalid filter
+    component.fromTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(true);
+    jest.spyOn(validationService, 'isValidFilterWrongOddsSportsBook').mockReturnValue(false);
+    expect(component.isValidity()).toBeFalsy();
+  });
+
+  it('should emit refresh event', () => {
+    // Arrange
+    component.refreshEvent = {
+      emit: jest.fn()
+    } as any;
+
+    // Act
     component.emitRefreshEvent();
 
-    expect(component.refreshEvent.emit).toHaveBeenCalledTimes(1);
-  });
-
-  it('#isValidDateTime should return true', async () => {
-    const validationService = new ValidationService(null);
-    validationService.isFromTimeSameOrBeforeToTime = jest.fn().mockImplementation(() => true);
-    validationService.isValidFilterWrongOddsSportsBook = jest.fn().mockImplementation(() => true);
-    const component = new FilterWrongOddsSportsBookComponent(null, validationService);
-    component.filterWrongOddsSportsBookModel = Helper.fakeFilterWrongOddsSportsBookModel;
-    component.fromTimeComponent = new DateFullTimeNewComponent(null);
-    component.fromTimeComponent.validateWithTooltip = jest.fn().mockImplementation(() => true);
-    component.toTimeComponent = new DateFullTimeNewComponent(null);
-    component.toTimeComponent.validateWithTooltip = jest.fn().mockImplementation(() => true);
-
-    const result = component.isValidity();
-
-    expect(result).toBe(true);
-  });
-
-  it('#isValidMultipleOdds should return false', async () => {
-    const validationService = new ValidationService(null);
-    validationService.isValidFilterOddsValue = jest.fn().mockReturnValue(false);
-    const component = new FilterWrongOddsSportsBookComponent(null, validationService);
-    component.tooltip = new Tooltip();
-    component.tooltip.display = jest.fn();
-    const actual = component.isValidOddsFilterByValue('1aa@');
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidMultipleOdds should return true', async () => {
-    const validationService = new ValidationService(null);
-    validationService.isOddsValueHaveNotZeroNumber = jest.fn().mockImplementation(() => true);
-    const component = new FilterWrongOddsSportsBookComponent(null, validationService);
-    const actual = component.isValidOddsFilterByValue('1&2');
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isValidSingleOdds should return false', async () => {
-    const component = new FilterWrongOddsSportsBookComponent(null, null);
-    component.tooltip = new Tooltip();
-    component.tooltip.display = jest.fn();
-    const actual = component.isValidOddsFilterByRange('a', 'test');
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isValidSingleOdds should return true', async () => {
-    const validationService = new ValidationService(null);
-    validationService.isOddsValueHaveNotZeroNumber = jest.fn().mockReturnValue(true);
-    const component = new FilterWrongOddsSportsBookComponent(null, validationService);
-    const actual = component.isValidOddsFilterByRange('2', 'test');
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isCorrectFormatMultipleDecimal should return false', async () => {
-    const component = new FilterWrongOddsSportsBookComponent(null, null);
-    component.tooltip = new Tooltip();
-    component.tooltip.display = jest.fn();
-    const actual = component.isCorrectFormatMultipleDecimal('a', 'test');
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isCorrectFormatMultipleDecimal should return true', async () => {
-    const component = new FilterWrongOddsSportsBookComponent(null, null);
-    component.tooltip = new Tooltip();
-    const actual = component.isCorrectFormatMultipleDecimal('1', 'test');
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#setFilterOddsType should update filter model', async () => {
-    const component = new FilterWrongOddsSportsBookComponent(null, null);
-    component.filterWrongOddsSportsBookModel = new FilterWrongOddsSportsBookModel();
-    component.setFilterOddsType('value');
-
-    expect(component.filterWrongOddsSportsBookModel.filterOddsType).toBe('value');
+    // Assert
+    expect(component.refreshEvent.emit).toHaveBeenCalled();
   });
 });

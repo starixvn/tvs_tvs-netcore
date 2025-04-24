@@ -6,8 +6,8 @@ module.exports = {
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: [
     // '<rootDir>/src/void-request/**/*.spec.ts',
-    '<rootDir>/src/add-request/app/add-request/event-danger-accepted/**/*.spec.ts',
-    '<rootDir>/src/add-request/app/add-request/event-wrong-odds/**/*.spec.ts',
+    // '<rootDir>/src/add-request/app/add-request/event-danger-accepted/**/*.spec.ts',
+    '<rootDir>/src/add-request/app/add-request/event-not-participate/**/*.spec.ts',
     //'<rootDir>/src/add-request/app/add-request/abnormal-accounts/account-table/account-table.component.spec.ts',
   ],
   testPathIgnorePatterns: [

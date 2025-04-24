@@ -26,7 +26,7 @@ export class FilterNotParticipateService {
     const groupBetTypes = _.groupBy(models, 'parentId');
     for (const parentId in groupBetTypes) {
       const model = groupBetTypes[parentId].map(x => new ItemsSelect(0, x.betTypeId.toString(), x.betTypeName, false, true, true, []));
-      items = items.concat(new ItemsSelect(0, parentId, groupBetTypes[parentId][0].parentName, false, true, true, model));
+      items = items.concat(new ItemsSelect(parseInt(parentId), parentId, groupBetTypes[parentId][0].parentName, false, true, true, model));
     }
 
     return items;

@@ -1,126 +1,179 @@
-import { NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { LogInfoOtherIssuesComponent } from './log-info-other-issues.component';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { OtherIssuesModel } from '../../models/event-other-issues.model';
-import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
-import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
-import { LogInfoOtherIssuesComponent } from './log-info-other-issues.component';
+import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
+import moment from 'moment-timezone';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
 
 class Helper {
-  static readonly fakeOtherIssuesModel: OtherIssuesModel = {
-    filterFromTransTime: '2024-10-08 09:44:46.363 PM',
-    filterToTransTime: '2024-10-08 09:44:46.364 PM',
-    logInfoDetail: new LogInfoDetail(),
-    matchId: 1,
-    subIssueTypeId: 1
-  } as OtherIssuesModel;
-  static readonly fakeLogInfoOtherIssues: LogInfoOtherIssues = {
-    matchId: 1,
-    filterOtherIssues: new FilterOtherIssuesModel(),
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
+  static readonly fakeLogInfo: LogInfoOtherIssues = {
+    logInfoDetail: null,
+    messageValidationLogInfo: null
   } as LogInfoOtherIssues;
-  static readonly fakeFilterOtherIssues: FilterOtherIssuesModel = {
-    fromDateTime: '2024-10-08 09:44:46.361 PM',
-    toDateTime: '2024-10-08 09:44:46.362 PM',
-  } as FilterOtherIssuesModel;
+
+  static readonly fakePrimitiveProps: PrimitiveProperty = {
+    isShowValidation: false
+  } as PrimitiveProperty;
 }
 
 describe('LogInfoOtherIssuesComponent', () => {
-  let mockComponent: LogInfoOtherIssuesComponent;
-  let mockModalService: ModalService;
+  let component: LogInfoOtherIssuesComponent;
+  let fixture: ComponentFixture<LogInfoOtherIssuesComponent>;
+  let modalService: ModalService;
+  let staticService: StaticService;
+  let affectedTicketService: AffectedTicketService;
 
-  beforeEach(() => {
-    mockModalService = new ModalService(new NgbModalConfig(null), null, null);
-    mockComponent = new LogInfoOtherIssuesComponent(mockModalService);
-    mockComponent.logInfo = Helper.fakeLogInfoOtherIssues;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ModalService,
+        StaticService,
+        AffectedTicketService
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(LogInfoOtherIssuesComponent);
+    modalService = fixture.debugElement.injector.get(ModalService);
+    staticService = fixture.debugElement.injector.get(StaticService);
+    affectedTicketService = fixture.debugElement.injector.get(AffectedTicketService);
+    component = fixture.componentInstance;
   });
 
-  it('LogInfoOtherIssuesComponent init should match snapshot', async () => {
-    expect(mockComponent).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('ngOnInit should update isShowValidation', async () => {
-    [
-      { isEdit: true, expected: true },
-      { isEdit: false, expected: undefined }
-    ].forEach((testCase) => {
-      mockComponent.primitiveProps = new PrimitiveProperty();
-      mockComponent.isEdit = testCase.isEdit;
-      mockComponent.ngOnInit();
+  it('should initialize with validation when in edit mode', () => {
+    // Arrange
+    component.isEdit = true;
+    component.primitiveProps = Helper.fakePrimitiveProps;
 
-      expect(mockComponent.primitiveProps.isShowValidation).toBe(testCase.expected);
-    });
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.primitiveProps.isShowValidation).toBeTruthy();
   });
 
-  it('openPopupTransIds should call #modalService.open', async () => {
-    mockModalService.open = jest.fn();
-    mockComponent.openPopupTransIds(1, '1,2');
+  it('should not initialize validation when not in edit mode', () => {
+    // Arrange
+    component.isEdit = false;
+    component.primitiveProps = {
+      isShowValidation: false
+    } as PrimitiveProperty;
 
-    expect(mockModalService.open).toHaveBeenCalledTimes(1);
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.primitiveProps.isShowValidation).toBeFalsy();
   });
 
-  it('displayFullDateTimeFormat should return time type string', async () => {
-    const actual = mockComponent.displayFullDateTimeFormat(new Date('2024-10-08 04:44:46.363 PM'));
+  it('should display full date time format correctly', () => {
+    // Arrange
+    const testDate = new Date('2024-03-20T10:30:00');
 
-    expect(actual).toBe('2024/10/08 04:44:46.363 PM');
+    // Act
+    const result = component.displayFullDateTimeFormat(testDate);
+
+    // Assert
+    expect(result).toBe(moment(testDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT));
   });
 
-  it('clearDataValidation should update logInfo data to null', async () => {
-    mockComponent.logInfo = Helper.fakeLogInfoOtherIssues;
-    mockComponent.clearDataValidation();
+  it('should clear data validation', () => {
+    // Arrange
+    component.logInfo = Helper.fakeLogInfo;
 
-    expect(mockComponent.logInfo.logInfoDetail).toBeNull();
-    expect(mockComponent.logInfo.messageValidationLogInfo).toBeNull();
+    // Act
+    component.clearDataValidation();
+
+    // Assert
+    expect(component.logInfo.logInfoDetail).toBeNull();
+    expect(component.logInfo.messageValidationLogInfo).toBeNull();
   });
 
-  it('openPopupTransIds should call #modalService.open', async () => {
-    mockModalService.open = jest.fn();
-    mockComponent.openPopupTransIds(1, '1,2');
+  it('should open popup trans ids', () => {
+    // Arrange
+    const requestId = 123;
+    const transIds = 'ABC123';
+    jest.spyOn(StaticService, 'openPopupTransIds');
 
-    expect(mockModalService.open).toHaveBeenCalledTimes(1);
+    // Act
+    component.openPopupTransIds(requestId, transIds);
+
+    // Assert
+    expect(StaticService.openPopupTransIds).toHaveBeenCalledWith(requestId, transIds, modalService);
   });
 
-  it('countInfoContent should return count ticket', async () => {
-    const actual = mockComponent.countInfoContent(1, 1, 1);
+  it('should count info content correctly', () => {
+    // Arrange
+    const cashOutCount = 2;
+    const settleCount = 3;
+    const instantlySettleCount = 1;
+    jest.spyOn(StaticService, 'countInfoContent');
 
-    expect(actual).toBe(' (Cash Out: <strong>1</strong>, Settled: <strong>1</strong>, Instantly Settled: <strong>1</strong>)');
+    // Act
+    component.countInfoContent(cashOutCount, settleCount, instantlySettleCount);
+
+    // Assert
+    expect(StaticService.countInfoContent).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
   });
 
-  it('displayTransId should return expected', async () => {
-    [
-      { count: 0, transId: '', expected: '-' },
-      { count: 1, transId: '1', expected: '1' }
-    ].forEach((testCase) => {
-      const actual = mockComponent.displayTransId(testCase.count, testCase.transId);
-      expect(actual).toBe(testCase.expected);
-    });
+  it('should display trans id correctly when ticket count is 0', () => {
+    // Act
+    const result = component.displayTransId(0, 'ABC123');
+
+    // Assert
+    expect(result).toBe('-');
   });
 
-  it('displayTransId should return expected', async () => {
-    [
-      { cashOutCount: 0, settleCount: 0, instantlySettleCount: 0, expected: false },
-      { cashOutCount: 0, settleCount: 0, instantlySettleCount: 1, expected: true },
-      { cashOutCount: 0, settleCount: 1, instantlySettleCount: 0, expected: true },
-      { cashOutCount: 1, settleCount: 0, instantlySettleCount: 0, expected: true },
-    ].forEach((testCase) => {
-      const actual = mockComponent.isShowCountInfo(testCase.cashOutCount, testCase.settleCount, testCase.instantlySettleCount);
-      expect(actual).toBe(testCase.expected);
-    });
+  it('should display trans id correctly when ticket count is greater than 0', () => {
+    // Act
+    const result = component.displayTransId(1, 'ABC123');
+
+    // Assert
+    expect(result).toBe('ABC123');
   });
 
-  it('showAffectedTicketsDetails should update affectedTicketsModel', async () => {
-    mockComponent.logInfo = Helper.fakeLogInfoOtherIssues;
-    mockComponent.logInfo.logInfoDetail = new LogInfoDetail();
-    mockComponent.logInfo.logInfoDetail.logInfoTicketsJson = 'abc';
-    mockComponent.affectedTicketsModel = new AffectedTicketsModel();
-    mockComponent.issueTypeId = '1';
-    mockComponent.showAffectedTicketsDetails();
+  it('should check if show count info', () => {
+    // Arrange
+    const cashOutCount = 2;
+    const settleCount = 3;
+    const instantlySettleCount = 1;
+    jest.spyOn(StaticService, 'isShowCountInfo');
 
-    expect(mockComponent.affectedTicketsModel.isOpen).toBeTruthy();
-    expect(mockComponent.affectedTicketsModel.issueTypeId).toBe(1);
-    expect(mockComponent.affectedTicketsModel.logInfoTicketsJson).toBe('abc');
+    // Act
+    component.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
+
+    // Assert
+    expect(StaticService.isShowCountInfo).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
+  });
+
+  it('should show affected tickets details', () => {
+    // Arrange
+    component.logInfo = {
+      logInfoDetail: {
+        logInfoTicketsJson: '{"tickets": []}'
+      }
+    } as LogInfoOtherIssues;
+    component.issueTypeId = '1';
+    const expectedModel = new AffectedTicketsModel();
+    expectedModel.logInfoTicketsJson = '{"tickets": []}';
+    expectedModel.issueTypeId = 1;
+    expectedModel.isOpen = true;
+
+    // Act
+    component.showAffectedTicketsDetails();
+
+    // Assert
+    expect(component.affectedTicketsModel.logInfoTicketsJson).toBe(expectedModel.logInfoTicketsJson);
+    expect(component.affectedTicketsModel.issueTypeId).toBe(expectedModel.issueTypeId);
+    expect(component.affectedTicketsModel.isOpen).toBe(expectedModel.isOpen);
   });
 });

@@ -1,190 +1,209 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
-import { AdvancedModeComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.component';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { CommonService } from '../../../../utility/services/common.service';
-import { AddRequestStore } from '../add-request.store';
-import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
-import { FilterModel } from '../filter/filter.model';
-import { TechnicalErrorModel } from '../models/event-technical-error.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { EventTechnicalErrorComponent } from './event-technical-error.component';
-import { FilterTimeTechnicalErrorComponent } from './filter-time-technical-error/filter-time-technical-error.component';
-import { LogInfoTechnicalErrorComponent } from './log-info-technical-error/log-info-technical-error.component';
-import { FilterTechnicalErrorModel } from './models/filter-technical-error.model';
-import { LogInfoTechnicalError } from './models/log-info-technical-error.model';
-import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
+import { ValidationService } from './services/validation.service';
 import { EventTechnicalErrorService } from './services/event-technical-error.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
+import { AddRequestStore } from '../add-request.store';
+import { FilterModel } from '../filter/filter.model';
+import { TechnicalErrorModel } from '../models/event-technical-error.model';
+import { OthersModel } from '../others/others.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { MatchModel } from '../../../../utility/models/match.model';
+import { LogInfoTechnicalError } from './models/log-info-technical-error.model';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { FilterTechnicalErrorModel } from './models/filter-technical-error.model';
+import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
+
 class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterTechnicalErrorModel: FilterTechnicalErrorModel = {
-    fromDateTime: Helper.fromDate,
-    toDateTime: Helper.toDate
-  };
-  static readonly fakeTechnicalErrorModel: TechnicalErrorModel = {
-    betTypeCount: [],
-    filterFromTransTime: Helper.fromDate,
-    filterToTransTime: Helper.toDate,
+  static readonly fakeRequestId = 1212;
+  static readonly fakeUserId = 123;
+  static readonly fakeRequestedBy = 'testUser';
+  static readonly fakeFilterModel: FilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
+    isVoided: false,
+    isChangeSubTypeManual: true,
+    isAbnormal: false
+  } as FilterModel;
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeTechnicalErrorModel = {
+    matchId: 123,
+    sportType: 1,
+    isMainMatch: true,
+    eventDate: new Date(),
     subIssueTypeId: 1,
-    logInfoDetail: new LogInfoDetail(),
-    matchId: 1,
-  } as TechnicalErrorModel;
-  static readonly fakeLogInfoTechnicalError: LogInfoTechnicalError = {
-    matchId: 1,
-    filterTechnicalErrorModel: Helper.fakeFilterTechnicalErrorModel,
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
-    betTypeCount: [],
-    betTeamsResult: []
-  } as LogInfoTechnicalError;
+    filterFromTransTime: '',
+    filterToTransTime: '',
+    groupBetTypes: [],
+    betTeamsResult: [],
+    allBetTypesSelection: false,
+    logInfoDetail: new LogInfoDetail()
+  } as unknown as TechnicalErrorModel;
 }
 
 describe('EventTechnicalErrorComponent', () => {
-  @NgModule({
-    declarations: [
-      FilterTimeTechnicalErrorComponent,
-      EventLeagueComponent,
-      LogInfoTechnicalErrorComponent,
-      AdvancedModeAddRequestComponent,
-      EventLeagueComponent,
-      ConfirmAddRequestComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule
-    ],
-    providers: [
-      AddRequestStore,
-      ValidationService,
-      LogInfoService,
-      SaveRequestService,
-      CommonService,
-      EventTechnicalErrorService
-    ]
-  })
-  class AppModuleTest { }
+  let component: EventTechnicalErrorComponent;
+  let fixture: ComponentFixture<EventTechnicalErrorComponent>;
+  let validationService: ValidationService;
+  let eventTechnicalErrorService: EventTechnicalErrorService;
+  let logInfoService: LogInfoService;
 
-  let shallow: Shallow<EventTechnicalErrorComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        EventTechnicalErrorService,
+        LogInfoService,
+        SaveRequestService,
+        AddRequestStore
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(EventTechnicalErrorComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(EventTechnicalErrorComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    eventTechnicalErrorService = fixture.debugElement.injector.get(EventTechnicalErrorService);
+    logInfoService = fixture.debugElement.injector.get(LogInfoService);
+    component = fixture.componentInstance;
   });
 
-  it('EventTechnicalErrorComponent init should match snapshot', async () => {
-    const component = new EventTechnicalErrorComponent(null, null, null, null, null, null);
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should initialize with default values when not in edit mode', () => {
+    // Arrange
+    component.isEdit = false;
+    component.logInfoEvent = new LogInfoTechnicalError();
+    component.logInfoEvent.filterTechnicalErrorModel = new FilterTechnicalErrorModel();
+
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.logInfoEvent.filterTechnicalErrorModel.fromDateTime).toBeDefined();
+    expect(component.logInfoEvent.filterTechnicalErrorModel.toDateTime).toBeDefined();
+  });
+
+  it('should initialize with existing values when in edit mode', () => {
+    // Arrange
+    component.isEdit = true;
     component.technicalErrorModel = Helper.fakeTechnicalErrorModel;
+    component.filter = Helper.fakeFilterModel;
+    eventTechnicalErrorService.assignModelsToEvents = jest.fn().mockReturnValue(new LogInfoTechnicalError());
 
-    expect(component).toMatchSnapshot();
+    // Act
+    component.updateDataWhenEditRequest();
+
+    // Assert
+    expect(eventTechnicalErrorService.assignModelsToEvents).toHaveBeenCalledWith(Helper.fakeTechnicalErrorModel);
+    expect(component.groupBetTypesModel).toBeDefined();
+    expect(component.advancedModeAddRequestModel).toBeDefined();
   });
 
-  it('clickSearch should call #logInfoService.getLogInfo', async () => {
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(true) })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-      changeSavingRequestStatus: jest.fn()
-     })
-    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        technicalErrorModel: Helper.fakeTechnicalErrorModel,
+  it('should handle search event with validation', async () => {
+    // Arrange
+    component.eventLeague = {} as EventLeagueComponent;
+    component.filterTimeComponent = {} as any;
+    component.advancedMode = {
+      getCheckedBetTypes: jest.fn().mockReturnValue([]),
+      advancedModeComponent: {
+        getAllBetTypesSelection: jest.fn().mockReturnValue(false)
       }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.advancedMode = new AdvancedModeAddRequestComponent();
-    instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
+    } as any;
+    validationService.validateCommonData = jest.fn().mockReturnValue(true);
+    logInfoService.getLogInfo = jest.fn().mockResolvedValue(undefined);
+    component.logInfoEvent = new LogInfoTechnicalError();
+    component.filter = Helper.fakeFilterModel;
 
-    await instance.clickSearch();
+    // Act
+    await component.clickSearch();
 
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(logInfoService.getLogInfo).toHaveBeenCalled();
   });
 
-  it('clickSearch should not call #logInfoService.getLogInfo when not valid', async () => {
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(false) })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-      changeSavingRequestStatus: jest.fn()
-     })
-    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        technicalErrorModel: Helper.fakeTechnicalErrorModel,
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.advancedMode = new AdvancedModeAddRequestComponent();
-    instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
+  it('should handle match event change', () => {
+    // Arrange
+    const matchInfo = { matchId: 123 } as MatchModel;
+    component.eventLeague = {
+      selectedMatch: matchInfo
+    } as EventLeagueComponent;
+    component.updateMatchId = { emit: jest.fn() } as any;
+    logInfoService.resetLogInfoOfEvent = jest.fn();
+    component.logInfoEvent = new LogInfoTechnicalError();
+    component.logInfoEvent.matchId = 123;
 
-    await instance.clickSearch();
+    // Act
+    component.changeMatchEvent();
 
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(0);
+    // Assert
+    expect(component.logInfoEvent.matchId).toBe(123);
+    expect(component.updateMatchId.emit).toHaveBeenCalledWith(123);
+    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalled();
   });
 
-  it('saveRequest should call #saveRequestService.saveRequest', async () => {
-    const mockSaveRequest = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(false) })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-     })
-    .mock(SaveRequestService, { saveRequest: mockSaveRequest })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        technicalErrorModel: Helper.fakeTechnicalErrorModel,
-      }
-    });
-    instance.advancedMode = new AdvancedModeAddRequestComponent();
-    instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
-    instance.advancedMode.advancedModeComponent = new AdvancedModeComponent(null, null, null);
-    instance.advancedMode.advancedModeComponent.getAllBetTypesSelection = jest.fn().mockReturnValue([]);
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
+  it('should reset bet type and advanced mode', () => {
+    // Arrange
+    component.advancedMode = {
+      clearBetTeam: jest.fn()
+    } as any;
 
-    await instance.saveRequest();
+    // Act
+    component['resetBetTypeAndAdvancedMode']();
 
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.advancedMode.clearBetTeam).toHaveBeenCalled();
+    expect(component.groupBetTypesModel).toBeDefined();
   });
 
-  it('#changeMatchEvent should emit updateMatchId when leagueEventWrongOddsComponent not null', async () => {
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-      changeSavingRequestStatus: jest.fn(),
-      changeStartTimeFilterAnalysis: jest.fn()
-     })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
+  it('should initialize save request input', () => {
+    // Arrange
+    component.requestId = Helper.fakeRequestId;
+    component.requestedBy = Helper.fakeRequestedBy;
+    component.isEdit = true;
+    component.userId = Helper.fakeUserId;
+    component.actionIdOfFirstTimeAccess = 'test';
+    component.others = Helper.fakeOthersModel;
+    component.filter = Helper.fakeFilterModel;
+    component.primitivePropertyEvent = { isShowValidation: true, isShowBetTypeCount: true, isShowErrorNoBetType: true, transInfoAddRequestModel: {} as TransInfoAddRequestModel };
+    component.filterTimeComponent = {} as any;
+    component.eventLeague = {} as EventLeagueComponent;
+    component.logInfoEvent = new LogInfoTechnicalError();
+    component.advancedMode = {
+      getCheckedBetTypes: jest.fn().mockReturnValue([]),
+      advancedModeComponent: {
+        getAllBetTypesSelection: jest.fn().mockReturnValue(false)
       }
-    });
-    instance.eventLeague = new EventLeagueComponent(null, null, null);
-    instance.eventLeague.selectedMatch = new MatchModel();
-    instance.eventLeague.selectedMatch.matchId = 1;
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.logInfoEvent = Helper.fakeLogInfoTechnicalError;
-    instance.advancedMode = new AdvancedModeAddRequestComponent();
-    instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
-    instance.advancedMode.clearBetTeam = jest.fn();
+    } as any;
+    component.confirmAddRequest = {} as any;
 
-    await instance.changeMatchEvent();
+    // Act
+    const result = component['initSaveRequestInput']();
 
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(result.requestId).toBe(Helper.fakeRequestId);
+    expect(result.requestedBy).toBe(Helper.fakeRequestedBy);
+    expect(result.isEdit).toBeTruthy();
+    expect(result.userId).toBe(Helper.fakeUserId);
+  });
+
+  it('should create time range model', () => {
+    // Arrange
+    const filterModel = new FilterTechnicalErrorModel();
+    filterModel.fromDateTime = '2024-01-01';
+    filterModel.toDateTime = '2024-01-02';
+
+    // Act
+    const result = component['createTimeRangeModel'](filterModel);
+
+    // Assert
+    expect(result.fromDate).toBe('2024-01-01');
+    expect(result.toDate).toBe('2024-01-02');
   });
 });

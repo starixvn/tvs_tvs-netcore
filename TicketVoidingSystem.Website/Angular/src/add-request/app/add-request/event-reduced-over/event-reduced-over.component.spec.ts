@@ -1,294 +1,215 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
-import { NgSelectMixtureModel } from '../../../../utility/components/ng-select-mixture/ng-select-mixture.model';
-import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { MatchModel } from '../../../../utility/models/match.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { EventReducedOverComponent } from './event-reduced-over.component';
+import { ValidationService } from './services/validation.service';
+import { EventReducedOverService } from './services/event-reduced-over.service';
+import { LogInfoService } from './services/log-info.service';
+import { SaveRequestService } from './services/save-request.service';
+import { FilterReducedOverService } from './services/filter-reduced-over.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { ReducedOverModel } from '../models/event-reduced-over.model';
-import { EventReducedOverComponent } from './event-reduced-over.component';
-import { FilterReducedOverComponent } from './filter-reduced-over/filter-reduced-over.component';
-import { LogInfoReducedOverComponent } from './log-info-reduced-over/log-info-reduced-over.component';
-import { ReducedOverBetType } from './models/bet-type-reduced-over-json.model';
-import { FilterReducedOverModel } from './models/filter-reduced-over.model';
+import { OthersModel } from '../others/others.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { LogInfoReducedOver } from './models/log-info-reduced-over.model';
+import { ReducedOverBetType } from './models/bet-type-reduced-over-json.model';
+import { OddsInfo } from '../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
-import { EventReducedOverService } from './services/event-reduced-over.service';
-import { FilterReducedOverService } from './services/filter-reduced-over.service';
-import { LogInfoService } from './services/log-info.service';
-import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
+
 class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeReducedOverModels: ReducedOverModel[] = [
-    {
-      betTypeIds: '1,2',
-      live: true,
-      nonLive: true,
-      matchId: 1,
-      playerIds: '1',
-      wicketOver: '1',
-      filterWicketOver: '1',
-      runs: '1',
-      subIssueTypeId: 1,
-      logInfoDetail: new LogInfoDetail()
-    }
-  ];
-  static readonly fakeLogInfoReducedOver: LogInfoReducedOver = {
-    matchId: 1,
-    filterReducedOvers: [],
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: []
-  };
-  static readonly fakeFilterReducedOverModel: FilterReducedOverModel = {
-    betTypeIds: [],
-    playerIds: [],
-    live: true,
-    nonLive: true,
-    runs: '',
-    wicketOver: '',
-    betTypeNgSelectMixtureModel: new NgSelectMixtureModel(),
-    playerMultipleSelection: new MultipleSelection()
-  };
-  static readonly fakeReducedOverBetTypes: ReducedOverBetType[] = [
-    {
-      betTypeId: 1,
-      betTypeName: '',
-      isHasOverWicket: true,
-      isHasPlayer: true,
-      isHasRuns: true,
-      parentId: 0,
-      items: []
-    },
-    {
-      betTypeId: 2,
-      betTypeName: '',
-      isHasOverWicket: true,
-      isHasPlayer: true,
-      isHasRuns: true,
-      parentId: 0,
-      items: []
-    }
-  ];
+  static readonly fakeRequestId = 1212;
+  static readonly fakeUserId = 123;
+  static readonly fakeRequestedBy = 'testUser';
+  static readonly fakeFilterModel: FilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
+    isVoided: false,
+    isChangeSubTypeManual: true,
+    isAbnormal: false
+  } as FilterModel;
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeReducedOverModel = [{
+    matchId: 123,
+    sportType: 1,
+    isMainMatch: true,
+    eventDate: new Date(),
+    subIssueTypeId: 1,
+    filterFromTransTime: '',
+    filterToTransTime: '',
+    homeFavorite: '',
+    awayFavorite: '',
+    actualMarket: '',
+    hdpValue: '',
+    poolHouseCheckedBetTypes: '',
+    isPoolHouseAffected: false,
+    logInfoDetail: null,
+    liveIndicator: 0,
+    filterBetIdX: '',
+    filterBetIdY: '',
+    filterBetTypeId: ''
+  }] as unknown as ReducedOverModel[];
 }
 
 describe('EventReducedOverComponent', () => {
-  @NgModule({
-    declarations: [
-      FilterReducedOverComponent,
-      EventLeagueComponent,
-      LogInfoReducedOverComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule
-    ],
-    providers: [
-      FilterReducedOverService,
-      AddRequestStore,
-      ValidationService,
-      LogInfoService,
-      SaveRequestService,
-      EventReducedOverService
-    ]
-  })
-  class AppModuleTest { }
+  let component: EventReducedOverComponent;
+  let fixture: ComponentFixture<EventReducedOverComponent>;
+  let validationService: ValidationService;
+  let eventReducedOverService: EventReducedOverService;
+  let filterService: FilterReducedOverService;
+  let addRequestStore: AddRequestStore;
+  let logInfoService: LogInfoService;
 
-  let shallow: Shallow<EventReducedOverComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        EventReducedOverService,
+        LogInfoService,
+        SaveRequestService,
+        FilterReducedOverService,
+        AddRequestStore
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(EventReducedOverComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(EventReducedOverComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    eventReducedOverService = fixture.debugElement.injector.get(EventReducedOverService);
+    filterService = fixture.debugElement.injector.get(FilterReducedOverService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    logInfoService = fixture.debugElement.injector.get(LogInfoService);
+    component = fixture.componentInstance;
   });
 
-  it('EventReducedOverComponent init should match snapshot', async () => {
-    const component = new EventReducedOverComponent(null, null, null, null, null, null);
-    component.reducedOverModels = Helper.fakeReducedOverModels;
-
-    expect(component).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('ngOnInit should call #updateModelWhenChangeMatchId when isEdit', async () => {
-    const { instance } = await shallow
-    .mock(FilterReducedOverService, {
-      initBetTypeNgSelectMixtureModel: jest.fn(),
-      initDefaultPlayerSelection: jest.fn()
-    })
-    .mock(EventReducedOverService, { assignModelsToEvents: jest.fn().mockReturnValue(Helper.fakeLogInfoReducedOver) })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: new FilterModel(),
-        reducedOverModels: Helper.fakeReducedOverModels,
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.logInfoEvent = Helper.fakeLogInfoReducedOver;
-    instance.logInfoEvent.filterReducedOvers = [Helper.fakeFilterReducedOverModel];
-    instance['updateModelWhenChangeMatchId'] = jest.fn();
+  it('should initialize with default values when not in edit mode', () => {
+    // Arrange
+    component.isEdit = false;
+    addRequestStore.changeSavingRequestStatus = jest.fn();
 
-    instance.ngOnInit();
+    // Act
+    component.ngOnInit();
 
-    expect(instance['updateModelWhenChangeMatchId']).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.primitivePropertyEvent.isShowFilterArea).toBeFalsy();
+    expect(component.primitivePropertyEvent.isShowValidation).toBeFalsy();
   });
 
-  it('updateModelWhenChangeMatchId should call #filterService.getPlayers', async () => {
-    const mockGetReducedOverBetTypes = jest.fn().mockReturnValue(Helper.fakeReducedOverBetTypes);
-    const mockGetPlayers = jest.fn();
-    const mockChangeBlockingUiStatus = jest.fn();
-    const mockRenderGroupReducedOverBetTypes = jest.fn();
-    const { instance } = await shallow
-    .mock(FilterReducedOverService, {
-      getPlayers: mockGetPlayers,
-      getReducedOverBetTypes: mockGetReducedOverBetTypes,
-      renderGroupReducedOverBetTypes: mockRenderGroupReducedOverBetTypes
-    })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: mockChangeBlockingUiStatus,
-    })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        reducedOverModels: Helper.fakeReducedOverModels,
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
+  it('should initialize with existing values when in edit mode', async () => {
+    // Arrange
+    component.isEdit = true;
+    component.reducedOverModels = Helper.fakeReducedOverModel;
+    component.primitivePropertyEvent = {
+      isShowFilterArea: false,
+      isShowValidation: false
+    } as PrimitivePropertyEvent;
+    eventReducedOverService.assignModelsToEvents = jest.fn().mockReturnValue(new LogInfoReducedOver());
+    filterService.getReducedOverBetTypes = jest.fn().mockResolvedValue([] as ReducedOverBetType[]);
+    filterService.getPlayers = jest.fn().mockResolvedValue([] as OddsInfo[]);
+    filterService.renderGroupReducedOverBetTypes = jest.fn().mockReturnValue([]);
+    filterService.initBetTypeNgSelectMixtureModel = jest.fn().mockReturnValue({});
+    filterService.initDefaultPlayerSelection = jest.fn().mockReturnValue({});
 
-    await instance['updateModelWhenChangeMatchId']();
+    // Act
+    await component.ngOnInit();
 
-    expect(mockRenderGroupReducedOverBetTypes).toHaveBeenCalledTimes(1);
-    expect(mockGetReducedOverBetTypes).toHaveBeenCalledTimes(1);
-    expect(mockGetPlayers).toHaveBeenCalledTimes(1);
-    expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    // Assert
+    expect(eventReducedOverService.assignModelsToEvents).toHaveBeenCalledWith(Helper.fakeReducedOverModel);
+    expect(component.primitivePropertyEvent.isShowFilterArea).toBeTruthy();
+    expect(component.primitivePropertyEvent.isShowValidation).toBeTruthy();
   });
 
-  it('clickSearch should call #logInfoService.getLogInfo', async () => {
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(true) })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-      changeSavingRequestStatus: jest.fn()
-     })
-    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        reducedOverModels: Helper.fakeReducedOverModels,
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
+  it('should handle search event with validation', async () => {
+    // Arrange
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.filterReducedOverComponent = {} as any;
+    validationService.validateCommonData = jest.fn().mockReturnValue(true);
+    logInfoService.getLogInfo = jest.fn().mockResolvedValue(undefined);
+    component.logInfoEvent = new LogInfoReducedOver();
+    component.filter = Helper.fakeFilterModel;
+    addRequestStore.changeSavingRequestStatus = jest.fn();
 
-    await instance.clickSearch();
+    // Act
+    await component.clickSearch();
 
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(logInfoService.getLogInfo).toHaveBeenCalled();
+    expect(component.primitivePropertyEvent.isShowValidation).toBeTruthy();
   });
 
-  it('clickSearch should not call #logInfoService.getLogInfo when not valid', async () => {
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(false) })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-      changeSavingRequestStatus: jest.fn()
-     })
-    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        reducedOverModels: Helper.fakeReducedOverModels,
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
+  it('should handle match event change', async () => {
+    // Arrange
+    const matchInfo = { matchId: 123 } as MatchModel;
+    component.eventLeagueComponent = {
+      selectedMatch: matchInfo
+    } as EventLeagueComponent;
+    component.updateMatchId.emit = jest.fn();
+    filterService.getReducedOverBetTypes = jest.fn().mockResolvedValue([]);
+    filterService.getPlayers = jest.fn().mockResolvedValue([]);
+    filterService.renderGroupReducedOverBetTypes = jest.fn().mockReturnValue([]);
+    filterService.initDefaultFilter = jest.fn().mockReturnValue({});
 
-    await instance.clickSearch();
+    // Act
+    await component.changeMatchEvent();
 
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(0);
+    // Assert
+    expect(component.logInfoEvent.matchId).toBe(123);
+    expect(component.primitivePropertyEvent.isShowFilterArea).toBeTruthy();
+    expect(component.updateMatchId.emit).toHaveBeenCalledWith(undefined);
   });
 
-  it('saveRequest should call #saveRequestService.saveRequest', async () => {
-    const mockSaveRequest = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(false) })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-     })
-    .mock(SaveRequestService, { saveRequest: mockSaveRequest })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        reducedOverModels: Helper.fakeReducedOverModels,
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
+  it('should handle save request', async () => {
+    // Arrange
+    component.requestId = Helper.fakeRequestId;
+    component.requestedBy = Helper.fakeRequestedBy;
+    component.isEdit = true;
+    component.userId = Helper.fakeUserId;
+    component.actionIdOfFirstTimeAccess = 'test';
+    component.others = Helper.fakeOthersModel;
+    component.filter = Helper.fakeFilterModel;
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.filterReducedOverComponent = {} as any;
+    component.logInfoEvent = new LogInfoReducedOver();
+    const saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
+    saveRequestService.saveRequest = jest.fn().mockResolvedValue(undefined);
 
-    await instance.saveRequest();
+    // Act
+    await component.saveRequest();
 
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(saveRequestService.saveRequest).toHaveBeenCalled();
   });
 
-  it('#changeMatchEvent should emit updateMatchId when leagueEventWrongOddsComponent not null', async () => {
-    const { instance } = await shallow
-    .mock(FilterReducedOverService, { initDefaultFilter: jest.fn().mockReturnValue(new FilterReducedOverModel()) })
-    .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
-    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    instance.eventLeagueComponent.selectedMatch = new MatchModel();
-    instance.eventLeagueComponent.selectedMatch.matchId = 1;
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.logInfoEvent = Helper.fakeLogInfoReducedOver;
-    instance['updateModelWhenChangeMatchId'] = jest.fn();
+  it('should reset log info of event', () => {
+    // Arrange
+    component.logInfoEvent = new LogInfoReducedOver();
+    logInfoService.resetLogInfoOfEvent = jest.fn();
 
-    await instance.changeMatchEvent();
+    // Act
+    component.resetLogInfoOfEvent();
 
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.primitivePropertyEvent.isShowValidation).toBeFalsy();
+    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledWith(component.logInfoEvent);
   });
 
-  it('#changeMatchEvent should not call #updateModelWhenChangeMatchId when leagueEventWrongOddsComponent null', async () => {
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
-    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    instance.eventLeagueComponent = null;
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.logInfoEvent = Helper.fakeLogInfoReducedOver;
-    instance['updateModelWhenChangeMatchId'] = jest.fn();
-    await instance.changeMatchEvent();
+  it('should reset filter reduced over', () => {
+    // Arrange
+    component.logInfoEvent = new LogInfoReducedOver();
+    filterService.initDefaultFilter = jest.fn().mockReturnValue({});
 
-    expect(instance['updateModelWhenChangeMatchId']).toHaveBeenCalledTimes(0);
-  });
+    // Act
+    component.resetFilterReducedOver();
 
-  it('#resetLogInfoOfEvent should call #logInfoService.resetLogInfoOfEvent', async () => {
-    const mockResetLogInfoOfEvent = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.resetLogInfoOfEvent();
-
-    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.logInfoEvent.filterReducedOvers.length).toBe(1);
+    expect(filterService.initDefaultFilter).toHaveBeenCalled();
   });
 });

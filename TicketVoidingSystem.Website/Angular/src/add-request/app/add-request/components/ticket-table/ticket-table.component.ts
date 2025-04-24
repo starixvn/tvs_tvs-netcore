@@ -20,12 +20,12 @@ export class TicketTableComponent {
 
   isShowNoData(): boolean {
     return this.model.groups === undefined ||
-      this.model.groups.length === 0 ||
       this.model.groups === null ||
+      this.model.groups.length === 0 ||
       this.model.groups.every(group => group.displayTotalTickets === 0);
   }
 
-  changeWinlostCheckedTicket() {
+  changeWinLostCheckedTicket() {
     const checkedTickets = this.model.getAllCheckedTickets();
     this.changeWinlost.emit(checkedTickets.reduce((sum, current) => new bigDecimal(this.convertStringWithCommaToNumber(current.winLoss)).add(sum), new bigDecimal(0)));
   }

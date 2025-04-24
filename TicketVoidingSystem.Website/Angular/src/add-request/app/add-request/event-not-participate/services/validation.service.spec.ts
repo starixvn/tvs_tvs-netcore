@@ -1,129 +1,279 @@
+import { TestBed } from '@angular/core/testing';
+import { ValidationService } from './validation.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { FilterNotParticipateComponent } from '../filter-not-participate/filter-not-participate.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { FilterModel } from '../../filter/filter.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
-import { FilterNotParticipateComponent } from '../filter-not-participate/filter-not-participate.component';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
-import { ValidationService } from './validation.service';
 
 describe('ValidationService', () => {
   let service: ValidationService;
 
   beforeEach(() => {
-    service = new ValidationService();
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [ValidationService]
+    });
+
+    service = TestBed.inject(ValidationService);
+    
+    // Mock document.getElementById
+    let mockBodyElement: HTMLElement;
+    mockBodyElement = document.createElement('div');
+    mockBodyElement.setAttribute('user-id', '2');
+    document.body.appendChild(mockBodyElement);
+    jest.spyOn(document, 'getElementById').mockImplementation((id) => {
+      if (id === 'body') {
+        return mockBodyElement;
+      }
+      return null;
+    });
   });
 
-  it('#validateCommonData should return false when match invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null, null);
-    leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => false);
-    const actual = service.validateCommonData(leagueEvent, null);
-
-    expect(actual).toBeFalsy();
+  afterEach(() => {
+    // Cleanup
+    document.body = document.createElement('body');
   });
 
-  it('#validateCommonData should return false when filterNotParticipateComponent invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null, null);
-    leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
-    const filterNotParticipateComponent = new FilterNotParticipateComponent(null);
-    filterNotParticipateComponent.isValid = jest.fn().mockReturnValue(false);
-
-    const actual = service.validateCommonData(leagueEvent, filterNotParticipateComponent);
-
-    expect(actual).toBeFalsy();
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#validateCommonData should return true', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null, null);
-    leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
-    const filterNotParticipateComponent = new FilterNotParticipateComponent(null);
-    filterNotParticipateComponent.isValid = jest.fn().mockReturnValue(true);
+  describe('validateCommonData', () => {
+    it('should return true when all validations pass', () => {
+      // Arrange
+      const mockEventLeagueComponent = {
+        isMatchIdValid: () => true
+      } as unknown as EventLeagueComponent;
 
-    const actual = service.validateCommonData(leagueEvent, filterNotParticipateComponent);
+      const mockFilterNotParticipateComponent = {
+        isValid: () => true
+      } as unknown as FilterNotParticipateComponent;
 
-    expect(actual).toBeTruthy();
+      // Act
+      const result = service.validateCommonData(mockEventLeagueComponent, mockFilterNotParticipateComponent);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false when matchId is invalid', () => {
+      // Arrange
+      const mockEventLeagueComponent = {
+        isMatchIdValid: () => false
+      } as unknown as EventLeagueComponent;
+
+      const mockFilterNotParticipateComponent = {
+        isValid: () => true
+      } as unknown as FilterNotParticipateComponent;
+
+      // Act
+      const result = service.validateCommonData(mockEventLeagueComponent, mockFilterNotParticipateComponent);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
+
+    it('should return false when filter is invalid', () => {
+      // Arrange
+      const mockEventLeagueComponent = {
+        isMatchIdValid: () => true
+      } as unknown as EventLeagueComponent;
+
+      const mockFilterNotParticipateComponent = {
+        isValid: () => false
+      } as unknown as FilterNotParticipateComponent;
+
+      // Act
+      const result = service.validateCommonData(mockEventLeagueComponent, mockFilterNotParticipateComponent);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
   });
 
-  it('#isAllFieldsHaveValue should return false when have not betTypeId', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const filterModel = new FilterNotParticipateModel();
-    filterModel.playerId = null;
-    const actual = service.isAllFieldsHaveValue(filterModel, 1, tooltip);
+  describe('isAllFieldsHaveValue', () => {
+    it('should return true when all fields have values', () => {
+      // Arrange
+      const model = {
+        playerId: 123,
+        betTypeIds: ['1', '2'],
+        betTypeMultipleSelection: true
+      } as unknown as FilterNotParticipateModel;
 
-    expect(actual).toBeFalsy();
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
+      const tooltip = {
+        display: jest.fn()
+      } as unknown as Tooltip;
+
+      // Act
+      const result = service.isAllFieldsHaveValue(model, 1, tooltip);
+
+      // Assert
+      expect(result).toBeTruthy();
+      expect(tooltip.display).not.toHaveBeenCalled();
+    });
+
+    it('should return false and show tooltip when playerId is missing', () => {
+      // Arrange
+      const model = {
+        playerId: 0,
+        betTypeIds: ['1', '2'],
+        betTypeMultipleSelection: true
+      } as unknown as FilterNotParticipateModel;
+
+      const tooltip = {
+        display: jest.fn()
+      } as unknown as Tooltip;
+
+      // Act
+      const result = service.isAllFieldsHaveValue(model, 1, tooltip);
+
+      // Assert
+      expect(result).toBeFalsy();
+      expect(tooltip.display).toHaveBeenCalledWith('player-dropdown1', 'Required field.');
+    });
+
+    it('should return false and show tooltip when betTypeIds is empty', () => {
+      // Arrange
+      const model = {
+        playerId: 123,
+        betTypeIds: [],
+        betTypeMultipleSelection: true
+      } as unknown as FilterNotParticipateModel;
+
+      const tooltip = {
+        display: jest.fn()
+      } as unknown as Tooltip;
+
+      // Act
+      const result = service.isAllFieldsHaveValue(model, 1, tooltip);
+
+      // Assert
+      expect(result).toBeFalsy();
+      expect(tooltip.display).toHaveBeenCalledWith('bet-type-dropdown1', 'Required field.');
+    });
   });
 
-  it('#isAllFieldsHaveValue should return false when playerIds invalid', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const filterModel = new FilterNotParticipateModel();
-    filterModel.playerId = 1;
-    filterModel.betTypeIds = [];
-    const actual = service.isAllFieldsHaveValue(filterModel, 1, tooltip);
+  describe('isValidLogInfoEvent', () => {
+    it('should return true when no error messages', () => {
+      // Arrange
+      const logInfo: LogInfoNotParticipate = {
+        messageValidationLogInfo: [
+          { isError: false },
+          { isError: false }
+        ]
+      } as LogInfoNotParticipate;
 
-    expect(actual).toBeFalsy();
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
+      // Act
+      const result = service.isValidLogInfoEvent(logInfo);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false when has error messages', () => {
+      // Arrange
+      const logInfo: LogInfoNotParticipate = {
+        messageValidationLogInfo: [
+          { isError: false },
+          { isError: true }
+        ]
+      } as LogInfoNotParticipate;
+
+      // Act
+      const result = service.isValidLogInfoEvent(logInfo);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
   });
 
-  it('#isAllFieldsHaveValue should return true', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const filterModel = new FilterNotParticipateModel();
-    filterModel.playerId = 1;
-    filterModel.betTypeIds = ['1'];
-    const actual = service.isAllFieldsHaveValue(filterModel, 1, tooltip);
+  describe('checkCanShowConfirmationNotParticipate', () => {
+    it('should return true when has settled tickets', () => {
+      // Arrange
+      const arg: SaveRequestArg = {
+        logInfoEvent: {
+          logInfoDetail: {
+            settleCount: 1
+          },
+          messageValidationLogInfo: []
+        },
+        isEdit: false
+      } as SaveRequestArg;
 
-    expect(actual).toBeTruthy();
-  })
+      // Act
+      const result = service.checkCanShowConfirmationNotParticipate(arg);
 
-  it('#checkCanShowConfirmationWrongOdds should return false', async () => {
-    const element = document.createElement('body');
-    element.setAttribute("user-id", "2");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.logInfoEvent = new LogInfoNotParticipate();
-    saveRequestArg.logInfoEvent.messageValidationLogInfo = null;
-    saveRequestArg.isEdit = true;
-    saveRequestArg.userId = 2;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    saveRequestArg.actionIdOfFirstTimeAccess = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    const actual = service.checkCanShowConfirmationNotParticipate(saveRequestArg);
+      // Assert
+      expect(result).toBeTruthy();
+    });
 
-    expect(actual).toBeFalsy();
-  });
+    it('should return true when has warning tickets', () => {
+      // Arrange
+      const arg: SaveRequestArg = {
+        logInfoEvent: {
+          logInfoDetail: {
+            settleCount: 0
+          },
+          messageValidationLogInfo: [
+            { isError: false }
+          ]
+        },
+        isEdit: false
+      } as SaveRequestArg;
 
-  it('#checkCanShowConfirmationWrongOdds should return true', async () => {
-    const errorMsg = new ValidationMessage();
-    errorMsg.isError = false;
+      // Act
+      const result = service.checkCanShowConfirmationNotParticipate(arg);
 
-    const element = document.createElement('body');
-    element.setAttribute("user-id", "2");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.logInfoEvent = new LogInfoNotParticipate();
-    saveRequestArg.logInfoEvent.messageValidationLogInfo = [errorMsg];
-    saveRequestArg.isEdit = true;
-    saveRequestArg.userId = 2;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    saveRequestArg.actionIdOfFirstTimeAccess = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    const actual = service.checkCanShowConfirmationNotParticipate(saveRequestArg);
+      // Assert
+      expect(result).toBeTruthy();
+    });
 
-    expect(actual).toBeTruthy();
-  });
+    it('should return true when has warning taken note', () => {
+      // Arrange
+      document.body = document.createElement('body');
+      document.body.setAttribute('user-id', '1');
+      const arg: SaveRequestArg = {
+        logInfoEvent: {
+          logInfoDetail: {
+            settleCount: 0
+          },
+          messageValidationLogInfo: []
+        },
+        isEdit: true,
+        filter: {
+          action: TVSRequestActionType.TAKE_NOTE_ID.toString()
+        },
+        actionIdOfFirstTimeAccess: 'different_action'
+      } as SaveRequestArg;
 
-  it('#isValidLogInfoEvent should return false', async () => {
-    const errorMsg = new ValidationMessage();
-    errorMsg.isError = true;
-    const logInfoEvent = new LogInfoNotParticipate();
-    logInfoEvent.messageValidationLogInfo = [errorMsg];
-    const actual = service.isValidLogInfoEvent(logInfoEvent);
+      // Act
+      const result = service.checkCanShowConfirmationNotParticipate(arg);
 
-    expect(actual).toBeFalsy();
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false when no conditions are met', () => {
+      // Arrange
+      const arg: SaveRequestArg = {
+        logInfoEvent: {
+          logInfoDetail: {
+            settleCount: 0
+          },
+          messageValidationLogInfo: []
+        },
+        isEdit: false
+      } as SaveRequestArg;
+
+      // Act
+      const result = service.checkCanShowConfirmationNotParticipate(arg);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
   });
 });

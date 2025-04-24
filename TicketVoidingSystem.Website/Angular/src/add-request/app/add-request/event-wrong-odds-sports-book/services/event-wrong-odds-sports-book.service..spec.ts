@@ -1,85 +1,174 @@
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { FilterModel } from '../../filter/filter.model';
-import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
-import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
-import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
+import { TestBed } from '@angular/core/testing';
 import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
-
-class Helper {
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeWrongOddsSportsBookModel = new WrongOddsSportsBookModel();
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '1',
-    action: '1',
-    isTest: true,
-    isVoided: false,
-    isAbnormal: false,
-    actions: []
-  } as FilterModel;
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    instantlySettleCount: 2,
-    scoreNormalTicket: '',
-    scoreOfMatch: '',
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeFilterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel = {
-    fromDateTime: Helper.fakeFromDateTime,
-    toDateTime: Helper.fakeToDateTime,
-    correctOdds: '1',
-    filterOddsType: 'value',
-    fromOdds: '1',
-    oddsValue: '1',
-    liveIndicator: 0,
-    toOdds: '1'
-  };
-  static readonly fakeLogInfoWrongOddsSportsBook: LogInfoWrongOddsSportsBook = {
-    matchId: 12345,
-    filterWrongOddsSportsBook: new FilterWrongOddsSportsBookModel(),
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    betTeamsResult: []
-  } as LogInfoWrongOddsSportsBook;
-}
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { FilterOddsTypeConstant } from '../models/filter-wrong-odds-sports-book.model';
+import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
+import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
+import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
 
 describe('EventWrongOddsSportsBookService', () => {
   let service: EventWrongOddsSportsBookService;
 
   beforeEach(() => {
-    service = new EventWrongOddsSportsBookService();
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [EventWrongOddsSportsBookService]
+    });
+
+    service = TestBed.inject(EventWrongOddsSportsBookService);
   });
 
-  it('#assignModelsToEvents should return expected model', async () => {
-    const actual = service.assignModelsToEvents(Helper.fakeWrongOddsSportsBookModel);
-
-    expect(actual.matchId).toBe(Helper.fakeWrongOddsSportsBookModel.matchId);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#getWrongOddsSportsBookModel should return expected model when filter by range', async () => {
-    const model = Helper.fakeLogInfoWrongOddsSportsBook;
-    model.filterWrongOddsSportsBook.filterOddsType = 'range';
-    const actual = service.getWrongOddsSportsBookModel(model, '1');
+  describe('initDefaultFilter', () => {
+    it('should initialize filter with default values', () => {
+      // Arrange
+      const logInfoEvent = new LogInfoWrongOddsSportsBook();
 
-    expect(actual.matchId).toBe(Helper.fakeLogInfoWrongOddsSportsBook.matchId);
-    expect(actual.subIssueTypeId ).toBe(Number(Helper.fakeFilterModel.subIssueTypeId));
+      // Act
+      service.initDefaultFilter(logInfoEvent);
+
+      // Assert
+      expect(logInfoEvent.filterWrongOddsSportsBook).toBeDefined();
+      expect(logInfoEvent.filterWrongOddsSportsBook.filterOddsType).toBe(FilterOddsTypeConstant.VALUE);
+      expect(logInfoEvent.filterWrongOddsSportsBook.fromDateTime).toBeDefined();
+      expect(logInfoEvent.filterWrongOddsSportsBook.toDateTime).toBeDefined();
+    });
   });
 
-  it('#getWrongOddsSportsBookModel should return expected model when filter by value', async () => {
-    const model = Helper.fakeLogInfoWrongOddsSportsBook;
-    model.filterWrongOddsSportsBook.filterOddsType = 'value';
-    const actual = service.getWrongOddsSportsBookModel(model, '1');
+  describe('initDefaultLogInfoWrongOddsSportsBook', () => {
+    it('should create new LogInfoWrongOddsSportsBook with default filter', () => {
+      // Act
+      const result = service.initDefaultLogInfoWrongOddsSportsBook();
 
-    expect(actual.matchId).toBe(Helper.fakeLogInfoWrongOddsSportsBook.matchId);
-    expect(actual.subIssueTypeId ).toBe(Number(Helper.fakeFilterModel.subIssueTypeId));
+      // Assert
+      expect(result).toBeDefined();
+      expect(result.filterWrongOddsSportsBook).toBeDefined();
+      expect(result.filterWrongOddsSportsBook.filterOddsType).toBe(FilterOddsTypeConstant.VALUE);
+    });
+  });
+
+  describe('getWrongOddsSportsBookModel', () => {
+    it('should return correct model when filterOddsType is VALUE', () => {
+      // Arrange
+      const logInfo = new LogInfoWrongOddsSportsBook();
+      logInfo.matchId = 123;
+      logInfo.filterWrongOddsSportsBook = new FilterWrongOddsSportsBookModel();
+      logInfo.filterWrongOddsSportsBook.filterOddsType = FilterOddsTypeConstant.VALUE;
+      logInfo.filterWrongOddsSportsBook.oddsValue = '1.5';
+
+      // Act
+      const result = service.getWrongOddsSportsBookModel(logInfo, '1');
+
+      // Assert
+      expect(result.matchId).toBe(123);
+      expect(result.subIssueTypeId).toBe(1);
+      expect(result.filterOddsType).toBe(FilterOddsTypeConstant.VALUE);
+      expect(result.oddsValue).toBe('1.5');
+    });
+
+    it('should return correct model when filterOddsType is RANGE', () => {
+      // Arrange
+      const logInfo = new LogInfoWrongOddsSportsBook();
+      logInfo.matchId = 123;
+      logInfo.filterWrongOddsSportsBook = new FilterWrongOddsSportsBookModel();
+      logInfo.filterWrongOddsSportsBook.filterOddsType = FilterOddsTypeConstant.RANGE;
+      logInfo.filterWrongOddsSportsBook.fromOdds = '1.5';
+      logInfo.filterWrongOddsSportsBook.toOdds = '2.5';
+
+      // Act
+      const result = service.getWrongOddsSportsBookModel(logInfo, '1');
+
+      // Assert
+      expect(result.matchId).toBe(123);
+      expect(result.subIssueTypeId).toBe(1);
+      expect(result.filterOddsType).toBe(FilterOddsTypeConstant.RANGE);
+      expect(result.fromOdds).toBe('1.5');
+      expect(result.toOdds).toBe('2.5');
+    });
+  });
+
+  describe('assignModelsToEvents', () => {
+    it('should correctly assign model properties to event', () => {
+      // Arrange
+      const inputModel = new WrongOddsSportsBookModel();
+      inputModel.matchId = 123;
+      inputModel.filterFromTransTime = '2024-01-01';
+      inputModel.filterToTransTime = '2024-01-02';
+      inputModel.filterOddsType = FilterOddsTypeConstant.VALUE;
+      inputModel.oddsValue = '1.5';
+      inputModel.correctOdds = '2.0';
+      inputModel.liveIndicator = 1;
+
+      // Act
+      const result = service.assignModelsToEvents(inputModel);
+
+      // Assert
+      expect(result.matchId).toBe(123);
+      expect(result.filterWrongOddsSportsBook.fromDateTime).toBe('2024-01-01');
+      expect(result.filterWrongOddsSportsBook.toDateTime).toBe('2024-01-02');
+      expect(result.filterWrongOddsSportsBook.filterOddsType).toBe(FilterOddsTypeConstant.VALUE);
+      expect(result.filterWrongOddsSportsBook.oddsValue).toBe('1.5');
+      expect(result.filterWrongOddsSportsBook.correctOdds).toBe('2.0');
+      expect(result.filterWrongOddsSportsBook.liveIndicator).toBe(1);
+    });
+  });
+
+  describe('getWrongOddsSportsBookGetLogInfoModel', () => {
+    it('should return correct query model when filterOddsType is VALUE', () => {
+      // Arrange
+      const logInfo = new LogInfoWrongOddsSportsBook();
+      logInfo.matchId = 123;
+      logInfo.filterWrongOddsSportsBook = new FilterWrongOddsSportsBookModel();
+      logInfo.filterWrongOddsSportsBook.filterOddsType = FilterOddsTypeConstant.VALUE;
+      logInfo.filterWrongOddsSportsBook.oddsValue = '1.5';
+      logInfo.filterWrongOddsSportsBook.fromDateTime = '2024-01-01';
+      logInfo.filterWrongOddsSportsBook.toDateTime = '2024-01-02';
+      logInfo.filterWrongOddsSportsBook.correctOdds = '2.0';
+      logInfo.filterWrongOddsSportsBook.liveIndicator = 1;
+
+      // Act
+      const result = service.getWrongOddsSportsBookGetLogInfoModel(1, logInfo);
+
+      // Assert
+      expect(result.matchId).toBe(123);
+      expect(result.subIssueTypeId).toBe(1);
+      expect(result.filterFromTransTime).toBe('2024-01-01');
+      expect(result.filterToTransTime).toBe('2024-01-02');
+      expect(result.filterOddsType).toBe(FilterOddsTypeConstant.VALUE);
+      expect(result.oddsValue).toBe('1.5');
+      expect(result.correctOdds).toBe('2.0');
+      expect(result.liveIndicator).toBe(1);
+    });
+
+    it('should return correct query model when filterOddsType is RANGE', () => {
+      // Arrange
+      const logInfo = new LogInfoWrongOddsSportsBook();
+      logInfo.matchId = 123;
+      logInfo.filterWrongOddsSportsBook = new FilterWrongOddsSportsBookModel();
+      logInfo.filterWrongOddsSportsBook.filterOddsType = FilterOddsTypeConstant.RANGE;
+      logInfo.filterWrongOddsSportsBook.fromOdds = '1.5';
+      logInfo.filterWrongOddsSportsBook.toOdds = '2.5';
+      logInfo.filterWrongOddsSportsBook.fromDateTime = '2024-01-01';
+      logInfo.filterWrongOddsSportsBook.toDateTime = '2024-01-02';
+      logInfo.filterWrongOddsSportsBook.correctOdds = '2.0';
+      logInfo.filterWrongOddsSportsBook.liveIndicator = 1;
+
+      // Act
+      const result = service.getWrongOddsSportsBookGetLogInfoModel(1, logInfo);
+
+      // Assert
+      expect(result.matchId).toBe(123);
+      expect(result.subIssueTypeId).toBe(1);
+      expect(result.filterFromTransTime).toBe('2024-01-01');
+      expect(result.filterToTransTime).toBe('2024-01-02');
+      expect(result.filterOddsType).toBe(FilterOddsTypeConstant.RANGE);
+      expect(result.fromOdds).toBe('1.5');
+      expect(result.toOdds).toBe('2.5');
+      expect(result.correctOdds).toBe('2.0');
+      expect(result.liveIndicator).toBe(1);
+    });
   });
 });

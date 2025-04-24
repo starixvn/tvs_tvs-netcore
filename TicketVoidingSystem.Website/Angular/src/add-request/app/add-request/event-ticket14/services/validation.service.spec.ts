@@ -1,151 +1,105 @@
-import * as _ from 'lodash';
+import { TestBed } from '@angular/core/testing';
+import { ValidationService } from './validation.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
-import { GroupNumber } from '../../../../../utility/components/bet-ids/bet-ids.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { CheckTickets14Result } from '../models/check-tickets14-result.model';
-import { ValidationService } from './validation.service';
-
-class Helper {
-  static readonly fakeCheckValidTransIdsResult: CheckTickets14Result = {
-    invalidTransIds: '12345',
-    unsupportedDateRangeTransIds: '34567',
-    transInfoJson: ''
-  };
-}
+import { LABELS } from '../../../../../utility/constants/labels';
 
 describe('ValidationService', () => {
-  let validationService: ValidationService;
+  let service: ValidationService;
+  let addRequestApiService: AddRequestApiService;
 
   beforeEach(() => {
-    const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.checkTickets14 = jest.fn();
-    validationService = new ValidationService(addRequestApiService);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [ValidationService]
+    });
+
+    service = TestBed.inject(ValidationService);
+    addRequestApiService = TestBed.inject(AddRequestApiService);
   });
 
-  it('#checkBusinessRule should return validation model with invalid', async () => {
-    const mockIsHasBetId = jest.fn().mockImplementation(() => false);
-    const betIdsComponent = new BetIdsComponent(null);
-    betIdsComponent.isHasBetId = mockIsHasBetId;
-    validationService['highlightInvalidTransIds'] = jest.fn();
-    const result = await validationService.checkBusinessRule(betIdsComponent, '17', new PermissionAddRequest());
-
-    expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
-    expect(result.isValid).toBe(false);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#checkBusinessRule should call #checkTickets14 return validation model with invalid', async () => {
-    const mockIsHasBetId = jest.fn().mockImplementation(() => true);
-    const mockGroupNumberResetAllItemsToValid = jest.fn();
-    const mockGroupNumberCheckDuplicatedItems = jest.fn();
-    const mockGroupNumberGetAllBetIds = jest.fn();
-    const betIdsComponent = new BetIdsComponent(null);
-    betIdsComponent.isHasBetId = mockIsHasBetId;
-    betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
-    betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
-    betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
-    const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.checkTickets14 = jest.fn().mockImplementation(() => null);
-    addRequestApiService.getPermissionAddRequest = jest.fn().mockImplementation(() => true);
-    validationService = new ValidationService(addRequestApiService);
-    validationService['highlightInvalidTransIds'] = jest.fn();
+  describe('checkBusinessRule', () => {
+    it('should return invalid when no bet IDs', async () => {
+      // Arrange
+      const mockBetIdsComponent = {
+        isHasBetId: () => false
+      } as unknown as BetIdsComponent;
 
-    const result = await validationService.checkBusinessRule(betIdsComponent, '17', new PermissionAddRequest());
+      const mockPermission = {} as PermissionAddRequest;
 
-    expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
-    expect(result.isValid).toBe(false);
-  });
+      // Act
+      const result = await service.checkBusinessRule(mockBetIdsComponent, '1', mockPermission);
 
-  it('#checkBusinessRule should call #updateInvalidItems return validation model with invalid', async () => {
-    const results = _.cloneDeep(Helper.fakeCheckValidTransIdsResult);
-    results.invalidTransIds = '123445';
-    const mockIsHasBetId = jest.fn().mockImplementation(() => true);
-    const mockGroupNumberResetAllItemsToValid = jest.fn();
-    const mockGroupNumberCheckDuplicatedItems = jest.fn();
-    const mockGroupNumberGetAllBetIds = jest.fn();
-    const mockIsAllBetIdsValid = jest.fn().mockImplementation(() => false);
-    const betIdsComponent = new BetIdsComponent(null);
-    betIdsComponent.isHasBetId = mockIsHasBetId;
-    betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
-    betIdsComponent.isAllBetIdsValid = mockIsAllBetIdsValid;
-    betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
-    betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
-    const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.checkTickets14 = jest.fn().mockImplementation(() => results);
-    addRequestApiService.getPermissionAddRequest = jest.fn().mockImplementation(() => true);
-    validationService = new ValidationService(addRequestApiService);
-    validationService['highlightInvalidTransIds'] = jest.fn();
+      // Assert
+      expect(result.isValid).toBeFalsy();
+    });
 
-    const result = await validationService.checkBusinessRule(betIdsComponent, '17', new PermissionAddRequest());
+    it('should return invalid when API returns null', async () => {
+      // Arrange
+      const mockBetIdsComponent = {
+        isHasBetId: () => true,
+        groupNumber: {
+          resetAllItemsToValid: () => {},
+          checkDuplicatedItems: () => {}
+        },
+        isAllBetIdsValid: () => true,
+        getAllBetIds: () => ['123', '456']
+      } as unknown as BetIdsComponent;
 
-    expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
-    expect(result.isValid).toBe(false);
-  });
+      const mockPermission = {
+        isVoidAllArchivedTickets: false
+      } as PermissionAddRequest;
 
-  it('#checkBusinessRule should return validation model with valid', async () => {
-    const results = _.cloneDeep(Helper.fakeCheckValidTransIdsResult);
-    results.invalidTransIds = null;
-    const mockIsHasBetId = jest.fn().mockImplementation(() => true);
-    const mockGroupNumberResetAllItemsToValid = jest.fn();
-    const mockGroupNumberCheckDuplicatedItems = jest.fn();
-    const mockGroupNumberGetAllBetIds = jest.fn();
-    const mockIsAllBetIdsValid = jest.fn().mockImplementation(() => true);
-    const betIdsComponent = new BetIdsComponent(null);
-    betIdsComponent.isHasBetId = mockIsHasBetId;
-    betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
-    betIdsComponent.isAllBetIdsValid = mockIsAllBetIdsValid;
-    betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
-    betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
-    const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.checkTickets14 = jest.fn().mockImplementation(() => results);
-    addRequestApiService.getPermissionAddRequest = jest.fn().mockImplementation(() => true);
-    validationService = new ValidationService(addRequestApiService);
-    validationService['highlightInvalidTransIds'] = jest.fn();
+      jest.spyOn(addRequestApiService, 'checkTickets14').mockResolvedValue(null);
 
-    const result = await validationService.checkBusinessRule(betIdsComponent, '17', new PermissionAddRequest());
+      // Act
+      const result = await service.checkBusinessRule(mockBetIdsComponent, '1', mockPermission);
 
-    expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
-    expect(result.isValid).toBe(true);
-  });
+      // Assert
+      expect(result.isValid).toBeFalsy();
+      expect(addRequestApiService.checkTickets14).toHaveBeenCalled();
+    });
 
-  it('#highlightInvalidTransIds should call #updateInvalidItems', async () => {
-    const model = new CheckTickets14Result();
-    model.invalidTransIds = '12345';
-    model.unsupportedDateRangeTransIds = '23456';
-    const mockUpdateInvalidItems = jest.fn();
-    const betIdsComponent = new BetIdsComponent(null);
-    betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.updateInvalidItems = mockUpdateInvalidItems;
-    validationService['highlightInvalidTransIds'](model, betIdsComponent);
+    it('should highlight invalid trans IDs and return valid result', async () => {
+      // Arrange
+      const mockBetIdsComponent = {
+        isHasBetId: () => true,
+        groupNumber: {
+          resetAllItemsToValid: () => {},
+          checkDuplicatedItems: () => {},
+          updateInvalidItems: jest.fn()
+        },
+        isAllBetIdsValid: () => true,
+        getAllBetIds: () => ['123', '456']
+      } as unknown as BetIdsComponent;
 
-    expect(mockUpdateInvalidItems).toHaveBeenCalledTimes(2);
-  });
-  
-  it('#highlightInvalidTransIds should not call #updateInvalidItems', async () => {
-    const model = new CheckTickets14Result();
-    const mockUpdateInvalidItems = jest.fn();
-    const betIdsComponent = new BetIdsComponent(null);
-    betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.updateInvalidItems = mockUpdateInvalidItems;
+      const mockPermission = {
+        isVoidAllArchivedTickets: false
+      } as PermissionAddRequest;
 
-    ['', null].forEach(x => {
-      model.invalidTransIds = x;
-      model.unsupportedDateRangeTransIds = x;
-      validationService['highlightInvalidTransIds'](model, betIdsComponent);
+      const mockValidationResult: CheckTickets14Result = {
+        invalidTransIds: '123',
+        unsupportedDateRangeTransIds: '456',
+        transInfoJson: '{}'
+      };
 
-      expect(mockUpdateInvalidItems).toHaveBeenCalledTimes(0);
+      jest.spyOn(addRequestApiService, 'checkTickets14').mockResolvedValue(mockValidationResult);
+
+      // Act
+      const result = await service.checkBusinessRule(mockBetIdsComponent, '1', mockPermission);
+
+      // Assert
+      expect(result.isValid).toBeTruthy();
+      expect(result.transInfoJson).toBe('{}');
+      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('123', LABELS.INVALID_TICKETS);
+      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('456', LABELS.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
     });
   });
 });

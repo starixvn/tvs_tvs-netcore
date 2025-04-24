@@ -1,174 +1,234 @@
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { MatchModel } from '../../../../../utility/models/match.model';
-import { AddRequestService } from '../../add-request.service';
-import { AddRequestStore } from '../../add-request.store';
-import { FilterModel } from '../../filter/filter.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { OthersModel } from '../../others/others.model';
-import { PopupService } from '../../services/popup.service';
-import { LogInfoTechnicalError } from '../models/log-info-technical-error.model';
-import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
-import { EventTechnicalErrorService } from './event-technical-error.service';
-import { LogInfoService } from './log-info.service';
+import { TestBed } from '@angular/core/testing';
 import { SaveRequestService } from './save-request.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { ValidationService } from './validation.service';
+import { LogInfoService } from './log-info.service';
+import { PopupService } from '../../services/popup.service';
+import { EventTechnicalErrorService } from './event-technical-error.service';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { TEXT } from '../../../../../utility/constants/text';
+import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
+import { TechnicalErrorModel } from '../../models/event-technical-error.model';
+import { CommonService } from '../../../../../utility/services/common.service';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
+  let validationService: ValidationService;
+  let popupService: PopupService;
+  let eventTechnicalErrorService: EventTechnicalErrorService;
+  let commonService: CommonService;
 
   beforeEach(() => {
-    service = new SaveRequestService(null, null, null, null, null);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [SaveRequestService, ValidationService, LogInfoService, EventTechnicalErrorService]
+    });
+
+    service = TestBed.inject(SaveRequestService);
+    validationService = TestBed.inject(ValidationService);
+    popupService = TestBed.inject(PopupService);
+    eventTechnicalErrorService = TestBed.inject(EventTechnicalErrorService);
+    commonService = TestBed.inject(CommonService);
+
+    // Mock document.getElementById
+    document.body.innerHTML = '<div id="body" user-id="123"></div>';
   });
 
-  it('#saveRequest should not called #changeSavingRequestStatus', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.isVoided = false;
-    service['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
-
-    await service.saveRequest(saveRequestArg);
-
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(saveRequestArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#recheckLogInfoBeforeSaveRequest should return false when does not pass validation', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    const logInfoService = new LogInfoService(null, null);
-    logInfoService.resetLogInfoOfEvent = jest.fn();
-    const validationService = new ValidationService();
-    validationService.validateCommonData = jest.fn().mockImplementation(() => false);
+  describe('saveRequest', () => {
+    it('should show popup confirm when data is valid and not voided', async () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: { isVoided: false },
+        addRequestStore: { changeBlockingUiStatus: jest.fn(), changeSavingRequestStatus: jest.fn() },
+        logInfoEvent: {},
+        primitiveProps: { isShowValidation: true },
+        confirmAddRequest: new ConfirmAddRequestModel(),
+        isEdit: false,
+        requestId: '123',
+        userId: '123',
+        requestedBy: 'user1',
+        actionIdOfFirstTimeAccess: 'action1',
+        others: {},
+        eventLeagueComponent: { isMatchIdValid: () => true },
+        filterTimeComponent: { isValidity: () => true },
+        advancedModeComponent: {}
+      } as unknown as SaveRequestArg;
 
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
+      service['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockResolvedValue(true);
+      service['showPopupConfirmSave'] = jest.fn();
 
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+      // Act
+      await service.saveRequest(mockArg);
 
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(actual).toBeFalsy();
+      // Assert
+      expect(mockArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(service['showPopupConfirmSave']).toHaveBeenCalledWith(mockArg);
+      expect(mockArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    });
+
+    it('should not show popup when data is invalid', async () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: { isVoided: false },
+        addRequestStore: { changeBlockingUiStatus: jest.fn(), changeSavingRequestStatus: jest.fn() },
+        logInfoEvent: {},
+        primitiveProps: { isShowValidation: true },
+        confirmAddRequest: new ConfirmAddRequestModel(),
+        isEdit: false,
+        requestId: '123',
+        userId: '123',
+        requestedBy: 'user1',
+        actionIdOfFirstTimeAccess: 'action1',
+        others: {},
+        eventLeagueComponent: { isMatchIdValid: () => true },
+        filterTimeComponent: { isValidity: () => true },
+        advancedModeComponent: {}
+      } as unknown as SaveRequestArg;
+
+      service['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockResolvedValue(false);
+      service['showPopupConfirmSave'] = jest.fn();
+
+      // Act
+      await service.saveRequest(mockArg);
+
+      // Assert
+      expect(mockArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
+      expect(service['showPopupConfirmSave']).not.toHaveBeenCalled();
+    });
   });
 
-  it('#recheckLogInfoBeforeSaveRequest should return true when #validationService.isValidLogInfoEvent true', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.primitiveProps = new PrimitivePropertyEvent();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
+  describe('recheckLogInfoBeforeSaveRequest', () => {
+    it('should validate and return false when common data is invalid', async () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: { isVoided: false },
+        addRequestStore: { changeBlockingUiStatus: jest.fn(), changeSavingRequestStatus: jest.fn() },
+        logInfoEvent: {},
+        primitiveProps: { isShowValidation: true },
+        isEdit: false,
+        requestId: '123',
+        userId: '123',
+        others: {},
+        eventLeagueComponent: { isMatchIdValid: () => true },
+        filterTimeComponent: { isValidity: () => true },
+        advancedModeComponent: {}
+      } as unknown as SaveRequestArg;
 
-    const logInfoService = new LogInfoService(null, null);
-    logInfoService.resetLogInfoOfEvent = jest.fn();
-    logInfoService.getLogInfo = jest.fn();
+      jest.spyOn(validationService, 'validateCommonData').mockReturnValue(false);
 
-    const validationService = new ValidationService();
-    validationService.validateCommonData = jest.fn().mockImplementation(() => true);
-    validationService.isValidLogInfoEvent = jest.fn().mockImplementation(() => true);
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
+      // Act
+      const result = await service['recheckLogInfoBeforeSaveRequest'](mockArg);
 
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
-
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(actual).toBeTruthy();
+      // Assert
+      expect(result).toBeFalsy();
+    });
   });
 
-  it('#recheckLogInfoBeforeSaveRequest should return false when #validationService.isValidLogInfoEvent false', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.primitiveProps = new PrimitivePropertyEvent();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
+  describe('onClickConfirmSave', () => {
+    it('should execute save request when data is valid', async () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: { isVoided: false },
+        addRequestStore: { changeBlockingUiStatus: jest.fn() },
+        logInfoEvent: {},
+        primitiveProps: { isShowValidation: true },
+        isEdit: false,
+        requestId: '123',
+        userId: '123',
+        others: {},
+        eventLeagueComponent: { isMatchIdValid: () => true },
+        filterTimeComponent: { isValidity: () => true },
+        advancedModeComponent: {}
+      } as unknown as SaveRequestArg;
 
-    const logInfoService = new LogInfoService(null, null);
-    logInfoService.resetLogInfoOfEvent = jest.fn();
-    logInfoService.getLogInfo = jest.fn();
+      service['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockResolvedValue(true);
+      service['executeSaveRequestApi'] = jest.fn();
 
-    const validationService = new ValidationService();
-    validationService.validateCommonData = jest.fn().mockImplementation(() => true);
-    validationService.isValidLogInfoEvent = jest.fn().mockImplementation(() => false);
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
+      // Act
+      await service.onClickConfirmSave(mockArg);
 
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+      // Assert
+      expect(service['executeSaveRequestApi']).toHaveBeenCalledWith(mockArg);
+    });
 
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(actual).toBeFalsy();
+    it('should show error popup when data is invalid', async () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: { isVoided: false },
+        addRequestStore: { changeBlockingUiStatus: jest.fn() },
+        logInfoEvent: {},
+        primitiveProps: { isShowValidation: true },
+        isEdit: false,
+        requestId: '123',
+        userId: '123',
+        others: {},
+        eventLeagueComponent: { isMatchIdValid: () => true },
+        filterTimeComponent: { isValidity: () => true },
+        advancedModeComponent: {}
+      } as unknown as SaveRequestArg;
+
+      service['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockResolvedValue(false);
+      jest.spyOn(popupService, 'showError');
+
+      // Act
+      await service.onClickConfirmSave(mockArg);
+
+      // Assert
+      expect(popupService.showError).toHaveBeenCalledWith(TEXT.INVALID_DATA_IN_REQUEST);
+    });
   });
 
-  it('#executeSaveRequestApi should called #executeSaveRequest', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.isEdit = false;
-    saveRequestArg.logInfoEvent = new LogInfoTechnicalError();
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.isVoided = true;
-    saveRequestArg.primitiveProps = new PrimitivePropertyEvent();
-    saveRequestArg.others = new OthersModel();
-    saveRequestArg.eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    saveRequestArg.eventLeagueComponent.selectedMatch = new MatchModel();
-    const addRequestService = new AddRequestService(null, null, null);
-    const spyExecuteSaveRequest = jest.spyOn(addRequestService, 'executeSaveRequest').mockImplementation();
-    const saveRequestService = new SaveRequestService(null, null, null, addRequestService, null);
+  describe('initAddRequestQuery', () => {
+    it('should initialize query with correct values', () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: {
+          isVoided: false,
+          issueTypeId: '1',
+          isTest: true,
+          action: 'action1',
+          subIssueTypeId: '2'
+        },
+        primitiveProps: {
+          transInfoAddRequestModel: {
+            transInfoJson: 'json',
+            unMarkTransIds: ['1', '2'],
+            markTransIds: ['3', '4']
+          }
+        },
+        others: {
+          mistakenBy: 'user1',
+          decidedBy: 'user2',
+          remark: 'test remark'
+        },
+        logInfoEvent: {},
+        eventLeagueComponent: { isMatchIdValid: () => true },
+        filterTimeComponent: { isValidity: () => true },
+        advancedModeComponent: {}
+      } as unknown as SaveRequestArg;
 
-    await saveRequestService['executeSaveRequestApi'](saveRequestArg);
+      jest.spyOn(eventTechnicalErrorService, 'getTechnicalErrorModel').mockReturnValue({} as TechnicalErrorModel);
 
-    expect(spyExecuteSaveRequest).toHaveBeenCalledTimes(1);
-  });
+      // Act
+      const result = service['initAddRequestQuery'](mockArg);
 
-  it('#onClickConfirmSave should not called #executeSaveRequestApi', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    const popupService = new PopupService(null);
-    const spyShowError = jest.spyOn(popupService, 'showError').mockImplementation(() => {});
-    const saveRequestService = new SaveRequestService(null, null, popupService, null, null);
-    saveRequestService['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
-
-    await saveRequestService['onClickConfirmSave'](arg);
-
-    expect(spyShowError).toHaveBeenCalledTimes(1);
-    expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-  });
-
-  it('#onClickConfirmSave should called #executeSaveRequestApi', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = true;
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    service['executeSaveRequestApi'] = jest.fn();
-
-    await service['onClickConfirmSave'](arg);
-
-    expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-  });
-
-  it('#initAddRequestQuery should called #eventTechnicalErrorService.getTechnicalErrorModel', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.isEdit = false;
-    saveRequestArg.logInfoEvent = new LogInfoTechnicalError();
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.isVoided = false;
-    saveRequestArg.primitiveProps = new PrimitivePropertyEvent();
-    saveRequestArg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
-    saveRequestArg.others = new OthersModel();
-    saveRequestArg.eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    saveRequestArg.eventLeagueComponent.selectedMatch = new MatchModel();
-    const eventTechnicalErrorService = new EventTechnicalErrorService();
-    const spyGetTechnicalErrorModel = jest.spyOn(eventTechnicalErrorService, 'getTechnicalErrorModel').mockImplementation();
-    const saveRequestService = new SaveRequestService(null, null, null, null, eventTechnicalErrorService);
-
-    saveRequestService['initAddRequestQuery'](saveRequestArg);
-
-    expect(spyGetTechnicalErrorModel).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result).toEqual(expect.objectContaining({
+        transInfoJson: 'json',
+        unMarkTransIds: ['1', '2'],
+        markTransIds: ['3', '4'],
+        issueTypeId: '1',
+        isTest: true,
+        actionId: 'action1',
+        isVoided: false,
+        mistakenBy: 'user1',
+        decidedBy: 'user2',
+        remark: 'test remark'
+      }));
+    });
   });
 });

@@ -1,160 +1,150 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { Shallow } from 'shallow-render';
-import { PermissionManage } from '../../../../manage-request/app/models/permission-manage.model';
-import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
-import { CommonService } from '../../../../utility/services/common.service';
-import { AddRequestApiService } from '../add-request-api.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { EventRecoverTicketComponent } from './event-recover-ticket.component';
+import { ValidationService } from './services/validation.service';
+import { SaveRequestService } from './services/save-request.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { RecoverTicketModel } from '../models/recover-ticket.model';
-import { PopupService } from '../services/popup.service';
+import { OthersModel } from '../others/others.model';
+import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { AddRequestApiService } from '../add-request-api.service';
 import { ProductFilterRecoverTicket } from './constants/product.constant';
-import { EventRecoverTicketComponent } from './event-recover-ticket.component';
-import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
 
 class Helper {
-  static readonly fakeTransId = '123456789';
-  static readonly fakeMatchId = 90000000;
-
-  static readonly fakeRecoverTicketModel: RecoverTicketModel = {
-    transIds: Helper.fakeTransId,
-    filterBy: null,
-    subIssueTypeId: 1,
-    productIds: '1'
-  };
+  static readonly fakeRequestId = 1212;
   static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '27',
-    action: '5',
-    isTest: false,
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
     isVoided: false,
-    subIssueTypes: [],
+    isChangeSubTypeManual: true,
     isAbnormal: false
   } as FilterModel;
-  static readonly fakePermissionManage: PermissionManage = {
-    manageRequestHost: true,
-    verifyRead: true,
-    verifyHost: true,
-    voidRead: true,
-    isReadMarkTickets: true,
-  };
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeRecoverTicketModel = new RecoverTicketModel();
 }
 
 describe('EventRecoverTicketComponent', () => {
-  @NgModule({
-    declarations: [
-      BetIdsComponent
-    ],
-    imports: [
-      BlockUiModule,
-      FormsModule,
-      ToolTipModule,
-      NgSelectModule
-    ],
-    providers: [
-      ValidationService,
-      SaveRequestService,
-      AddRequestStore,
-      PopupService,
-      CommonService,
-      AddRequestApiService
-    ]
-  })
-  class AppModuleTest { }
+  let component: EventRecoverTicketComponent;
+  let fixture: ComponentFixture<EventRecoverTicketComponent>;
+  let validationService: ValidationService;
+  let saveRequestService: SaveRequestService;
+  let addRequestStore: AddRequestStore;
+  let addRequestApiService: AddRequestApiService;
 
-  let shallow: Shallow<EventRecoverTicketComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        SaveRequestService,
+        AddRequestStore,
+        AddRequestApiService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(EventRecoverTicketComponent, AppModuleTest);
+    fixture = TestBed.createComponent(EventRecoverTicketComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
+    component = fixture.componentInstance;
   });
 
-  it('#EventRecoverTicketComponent init should match snapshot', async () => {
-    const { fixture, instance } = await shallow
-      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-      .render({
-        bind: {
-          recoverTicketModel: Helper.fakeRecoverTicketModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.ngOnInit = jest.fn();
-
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#ngOnInit should update productIds to default', async () => {
-    const { instance } = await shallow
-      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-      .render({
-        bind: {
-          recoverTicketModel: Helper.fakeRecoverTicketModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.ngOnInit();
-    expect(instance.recoverTicketModel.productIds).toBe(ProductFilterRecoverTicket.SELECTION_ITEMS[0].value);
+  it('should initialize with default values', async () => {
+    // Arrange
+    component.recoverTicketModel = Helper.fakeRecoverTicketModel;
+    addRequestApiService.getPermissionAddRequest = jest.fn().mockResolvedValue({});
+
+    // Act
+    await component.ngOnInit();
+
+    // Assert
+    expect(component.recoverTicketModel.productIds).toBe(ProductFilterRecoverTicket.SELECTION_ITEMS[0].value);
+    expect(component.primitiveProps.permission).toBeDefined();
   });
 
-  it('#afterFocusOutBetIds should call #checkBusinessRule', async () => {
-    const mockCheckBusinessRule = jest.fn();
-    const { instance } = await shallow
-      .mock(ValidationService, { checkBusinessRule: mockCheckBusinessRule })
-      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-      .render({
-        bind: {
-          recoverTicketModel: Helper.fakeRecoverTicketModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.isCancelAfterFocusOutBetIdsEvent = false;
-    await instance.afterFocusOutBetIds();
+  it('should handle afterFocusOutBetIds with validation', async () => {
+    // Arrange
+    component.betIdsComponent = {} as BetIdsComponent;
+    component.recoverTicketModel = Helper.fakeRecoverTicketModel;
+    component.filter = Helper.fakeFilterModel;
+    component.isCancelAfterFocusOutBetIdsEvent = false;
+    addRequestStore.changeStartTimeFilterAnalysis = jest.fn();
+    validationService.checkBusinessRule = jest.fn().mockResolvedValue(undefined);
 
-    expect(mockCheckBusinessRule).toHaveBeenCalledTimes(1);
+    // Act
+    await component.afterFocusOutBetIds();
+
+    // Assert
+    expect(addRequestStore.changeStartTimeFilterAnalysis).toHaveBeenCalled();
+    expect(validationService.checkBusinessRule).toHaveBeenCalledWith(
+      component.betIdsComponent,
+      component.recoverTicketModel,
+      component.filter,
+      component.requestId,
+      component.primitiveProps.permission
+    );
   });
 
-  it('#afterFocusOutBetIds should not call #checkBusinessRule', async () => {
-    const mockCheckBusinessRule = jest.fn();
-    const { instance } = await shallow
-      .mock(ValidationService, { checkBusinessRule: mockCheckBusinessRule })
-      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-      .render({
-        bind: {
-          recoverTicketModel: Helper.fakeRecoverTicketModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.isCancelAfterFocusOutBetIdsEvent = true;
-    await instance.afterFocusOutBetIds();
+  it('should not validate when isCancelAfterFocusOutBetIdsEvent is true', async () => {
+    // Arrange
+    component.isCancelAfterFocusOutBetIdsEvent = true;
+    validationService.checkBusinessRule = jest.fn();
 
-    expect(mockCheckBusinessRule).toHaveBeenCalledTimes(0);
+    // Act
+    await component.afterFocusOutBetIds();
+
+    // Assert
+    expect(validationService.checkBusinessRule).not.toHaveBeenCalled();
   });
 
-  it('#saveRequest should not call #saveRequestService.saveRequest', async () => {
-    const mockSaveRequest = jest.fn();
-    const { instance } = await shallow
-      .mock(SaveRequestService, { saveRequest: mockSaveRequest })
-      .render({
-        bind: {
-          recoverTicketModel: Helper.fakeRecoverTicketModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.triggerFocusOutBetIds = jest.fn();
-    instance.betIdsComponent.getAllBetIds = jest.fn();
-    instance.isCancelAfterFocusOutBetIdsEvent = true;
-    instance['checkBusinessRule'] = jest.fn();
-    await instance.saveRequest();
+  it('should save request with correct arguments', async () => {
+    // Arrange
+    component.betIdsComponent = {
+      getAllBetIds: jest.fn().mockReturnValue(['123', '456']),
+      triggerFocusOutBetIds: jest.fn()
+    } as unknown as BetIdsComponent;
+    component.recoverTicketModel = Helper.fakeRecoverTicketModel;
+    component.filter = Helper.fakeFilterModel;
+    component.isEdit = true;
+    component.requestId = Helper.fakeRequestId;
+    component.others = Helper.fakeOthersModel;
+    saveRequestService.saveRequest = jest.fn();
 
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
+    // Act
+    await component.saveRequest();
+
+    // Assert
+    expect(component.betIdsComponent.triggerFocusOutBetIds).toHaveBeenCalled();
+    expect(saveRequestService.saveRequest).toHaveBeenCalled();
+    const saveRequestArg = (saveRequestService.saveRequest as jest.Mock).mock.calls[0][0];
+    expect(saveRequestArg.requestId).toBe(Helper.fakeRequestId);
+    expect(saveRequestArg.isEdit).toBe(true);
+    expect(saveRequestArg.filter).toBe(Helper.fakeFilterModel);
+    expect(saveRequestArg.others).toBe(Helper.fakeOthersModel);
+  });
+
+  it('should create recover ticket model with correct data', () => {
+    // Arrange
+    component.betIdsComponent = {
+      getAllBetIds: jest.fn().mockReturnValue(['123', '456'])
+    } as unknown as BetIdsComponent;
+    component.recoverTicketModel = Helper.fakeRecoverTicketModel;
+    component.filter = Helper.fakeFilterModel;
+
+    // Act
+    const result = component['createRecoverTicketModel']();
+
+    // Assert
+    expect(result.transIds).toEqual(['123', '456']);
+    expect(result.productIds).toBe(component.recoverTicketModel.productIds);
+    expect(result.subIssueTypeId).toBe(Number(component.filter.subIssueTypeId));
   });
 });

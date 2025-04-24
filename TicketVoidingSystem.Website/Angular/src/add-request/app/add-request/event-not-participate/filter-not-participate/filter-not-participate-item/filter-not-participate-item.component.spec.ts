@@ -1,134 +1,232 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { Shallow } from 'shallow-render';
-import { OddsInfo } from '../../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
-import { ItemsSelect } from '../../../../../../utility/components/multiple-selection/items-select';
-import { MultipleSelectionModule } from '../../../../../../utility/components/multiple-selection/multiple-selection.module';
-import { ToolTipModule } from '../../../../../../utility/components/tooltip/tooltip.module';
-import { FilterNotParticipateModel } from '../../models/filter-not-participate.model';
-import { FilterNotParticipateService } from '../../services/filter-not-participate.service';
-import { ValidationService } from '../../services/validation.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { FilterNotParticipateItemComponent } from './filter-not-participate-item.component';
+import { ValidationService } from '../../services/validation.service';
+import { FilterNotParticipateService } from '../../services/filter-not-participate.service';
+import { FilterNotParticipateModel } from '../../models/filter-not-participate.model';
+import { NotParticipateBetTypeModel, Player } from '../../models/not-participate-bet-type.model';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MultipleSelectionComponent } from '../../../../../../utility/components/multiple-selection/multiple-selection.component';
+import { TooltipComponent } from '../../../../../../utility/components/tooltip/tooltip.component';
+import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection';
 
 class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
+  static readonly fakePlayer: Player = {
     playerId: 1,
-    betTypeIds: ['1', '2'],
-    betTypeMultipleSelection: null
+    playerName: 'Test Player',
+    disabled: false,
+    betTypeId: 1,
+    oddsId: '1',
+    betChoice: '1',
+    playNamesChineseSimplified: '',
+    playNamesChineseTraditional: ''
   };
-  static readonly fakePlayers: OddsInfo[] = [
-    {
-      betChoice: '',
-      betTypeId: 1,
-      oddsId: '1',
-      playerId: 1,
-      playerName: '',
-      playNamesChineseSimplified: '',
-      playNamesChineseTraditional: ''
-    }
-  ];
-  static readonly fakeItemsSelect: ItemsSelect[] = [
-    {
-      checked: true,
-      countChilds: 1,
-      enable: true,
-      expanded: false,
-      id: 1,
-      items: [],
-      text: '',
-      value: ''
-    } as ItemsSelect
-  ];
+
+  static readonly fakeBetType: NotParticipateBetTypeModel = {
+    playerId: 1,
+    betTypeId: 1,
+    betTypeName: 'Test Bet Type',
+    parentId: 1,
+    parentName: 'Test Parent'
+  };
+
+  static readonly fakeFilterModel: FilterNotParticipateModel = {
+    playerId: 1,
+    betTypeIds: ['1'],
+    betTypeMultipleSelection: new MultipleSelection()
+  };
 }
 
 describe('FilterNotParticipateItemComponent', () => {
-  @NgModule({
-    declarations: [
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      NgSelectModule,
-      MultipleSelectionModule,
-      ToolTipModule
-    ],
-    providers: [
-      ValidationService,
-      FilterNotParticipateService
-    ]
-  })
-  class AppModuleTest { }
+  let component: FilterNotParticipateItemComponent;
+  let fixture: ComponentFixture<FilterNotParticipateItemComponent>;
+  let validationService: ValidationService;
+  let filterService: FilterNotParticipateService;
 
-  let shallow: Shallow<FilterNotParticipateItemComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        NgSelectModule,
+        FormsModule,
+        CommonModule,
+        MultipleSelectionComponent,
+        TooltipComponent
+      ],
+      providers: [
+        ValidationService,
+        FilterNotParticipateService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(FilterNotParticipateItemComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(FilterNotParticipateItemComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    filterService = fixture.debugElement.injector.get(FilterNotParticipateService);
+    component = fixture.componentInstance;
   });
 
-  it('FilterNotParticipateItemComponent init should match snapshot', async () => {
-    const component = new FilterNotParticipateItemComponent(null, null, null);
-    component.model = Helper.fakeFilterNotParticipateModel;
-
-    expect(component).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('changeFilter should emit #changeFilterEvent', async () => {
-    const component = new FilterNotParticipateItemComponent(null, null, null);
-    component.changeFilterEvent.emit = jest.fn();
+  it('should initialize with default values', () => {
+    // Arrange
+    component.originalPlayers = [Helper.fakePlayer];
+    component.originalBetTypes = [Helper.fakeBetType];
+    component.model = Helper.fakeFilterModel;
+
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.distincedPlayers).toContain(Helper.fakePlayer);
+  });
+
+  it('should update checked player and reset bet types', () => {
+    // Arrange
+    const selectedPlayer = Helper.fakePlayer;
+    component.changeBetTypeEvent = { emit: jest.fn() } as any;
+    component.model = Helper.fakeFilterModel;
+    component.originalBetTypes = [Helper.fakeBetType];
+    component.model.betTypeMultipleSelection = new MultipleSelection();
+    jest.spyOn(filterService, 'renderBetTypes').mockReturnValue([]);
+
+    // Act
+    component.updateCheckedPlayer(selectedPlayer);
+
+    // Assert
+    expect(component.changeBetTypeEvent.emit).toHaveBeenCalled();
+    expect(component.model.betTypeIds).toEqual([]);
+    expect(filterService.renderBetTypes).toHaveBeenCalled();
+  });
+
+  it('should render players correctly', () => {
+    // Arrange
+    component.originalPlayers = [Helper.fakePlayer];
+    component.originalBetTypes = [Helper.fakeBetType];
+
+    // Act
+    component['renderPlayer']();
+
+    // Assert
+    expect(component.distincedPlayers).toContain(Helper.fakePlayer);
+  });
+
+  it('should render bet types by player', () => {
+    // Arrange
+    const playerId = 1;
+    component.originalBetTypes = [Helper.fakeBetType];
+    component.model = Helper.fakeFilterModel;
+    component.model.betTypeMultipleSelection = new MultipleSelection();
+    jest.spyOn(filterService, 'renderBetTypes').mockReturnValue([]);
+
+    // Act
+    component['renderBetTypesByPlayer'](playerId);
+
+    // Assert
+    expect(filterService.renderBetTypes).toHaveBeenCalled();
+  });
+
+  it('should emit change filter event', () => {
+    // Arrange
+    component.changeBetTypeEvent = { emit: jest.fn() } as any;
+    component.changeFilterEvent = { emit: jest.fn() } as any;
+
+    // Act
     component.changeFilter();
 
-    expect(component.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.changeBetTypeEvent.emit).toHaveBeenCalled();
+    expect(component.changeFilterEvent.emit).toHaveBeenCalled();
   });
 
-  it('isValid should returen true', async () => {
-    const validationService = new ValidationService();
-    validationService.isAllFieldsHaveValue = jest.fn().mockReturnValue(true);
-    const component = new FilterNotParticipateItemComponent(null, validationService, null);
+  it('should validate fields correctly', () => {
+    // Arrange
+    component.model = Helper.fakeFilterModel;
+    component.index = 0;
+    jest.spyOn(validationService, 'isAllFieldsHaveValue').mockReturnValue(true);
 
-    const actual = component.isValid();
+    // Act
+    const result = component.isValid();
 
-    expect(actual).toBeTruthy();
+    // Assert
+    expect(result).toBeTruthy();
+    expect(validationService.isAllFieldsHaveValue).toHaveBeenCalled();
   });
 
-  it('addBetTypeItem should emit #addItemEvent', async () => {
-    const component = new FilterNotParticipateItemComponent(null, null, null);
+  it('should add bet type item when not voided', () => {
+    // Arrange
     component.isVoided = false;
-    component.addItemEvent.emit = jest.fn();
+    component.addItemEvent = { emit: jest.fn() } as any;
+
+    // Act
     component.addBetTypeItem();
 
-    expect(component.addItemEvent.emit).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.addItemEvent.emit).toHaveBeenCalled();
   });
 
-  it('addBetTypeItem should not emit #addItemEvent', async () => {
-    const component = new FilterNotParticipateItemComponent(null, null, null);
+  it('should not add bet type item when voided', () => {
+    // Arrange
     component.isVoided = true;
-    component.addItemEvent.emit = jest.fn();
+    component.addItemEvent = { emit: jest.fn() } as any;
+
+    // Act
     component.addBetTypeItem();
 
-    expect(component.addItemEvent.emit).toHaveBeenCalledTimes(0);
+    // Assert
+    expect(component.addItemEvent.emit).not.toHaveBeenCalled();
   });
 
-  it('removeBetTypeItem should emit #removeItemEvent', async () => {
-    const component = new FilterNotParticipateItemComponent(null, null, null);
+  it('should update checked bet types', () => {
+    // Arrange
+    const checkedPlayerIds = ['1', '2'];
+    component.model = Helper.fakeFilterModel;
+
+    // Act
+    component.updateCheckedBetTypes(checkedPlayerIds);
+
+    // Assert
+    expect(component.model.betTypeIds).toEqual(checkedPlayerIds);
+  });
+
+  it('should remove bet type item when not voided', () => {
+    // Arrange
     component.isVoided = false;
-    component.removeItemEvent.emit = jest.fn();
-    component.removeBetTypeItem(1);
+    component.removeItemEvent = { emit: jest.fn() } as any;
+    const index = 0;
 
-    expect(component.removeItemEvent.emit).toHaveBeenCalledTimes(1);
+    // Act
+    component.removeBetTypeItem(index);
+
+    // Assert
+    expect(component.removeItemEvent.emit).toHaveBeenCalledWith(index);
   });
 
-  it('removeBetTypeItem should not emit #removeItemEvent', async () => {
-    const component = new FilterNotParticipateItemComponent(null, null, null);
+  it('should not remove bet type item when voided', () => {
+    // Arrange
     component.isVoided = true;
-    component.removeItemEvent.emit = jest.fn();
-    component.removeBetTypeItem(1);
+    component.removeItemEvent = { emit: jest.fn() } as any;
+    const index = 0;
 
-    expect(component.removeItemEvent.emit).toHaveBeenCalledTimes(0);
+    // Act
+    component.removeBetTypeItem(index);
+
+    // Assert
+    expect(component.removeItemEvent.emit).not.toHaveBeenCalled();
+  });
+
+  it('should reset bet types value', () => {
+    // Arrange
+    component.model = Helper.fakeFilterModel;
+    component.model.betTypeIds = ['1', '2'];
+
+    // Act
+    component['resetBetTypesValue']();
+
+    // Assert
+    expect(component.model.betTypeIds).toEqual([]);
   });
 });

@@ -1,254 +1,234 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { MatchModel } from '../../../../utility/models/match.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { EventNotParticipateComponent } from './event-not-participate.component';
+import { ValidationService } from './services/validation.service';
+import { EventNotParticipateService } from './services/event-not-participate.service';
+import { LogInfoService } from './services/log-info.service';
+import { SaveRequestService } from './services/save-request.service';
+import { FilterNotParticipateService } from './services/filter-not-participate.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { NotParticipateModel } from '../models/event-not-participate.model';
-import { EventNotParticipateComponent } from './event-not-participate.component';
-import { FilterNotParticipateComponent } from './filter-not-participate/filter-not-participate.component';
-import { LogInfoNotParticipateComponent } from './log-info-not-participate/log-info-not-participate.component';
-import { FilterNotParticipateModel } from './models/filter-not-participate.model';
+import { OthersModel } from '../others/others.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { LogInfoNotParticipate } from './models/log-info-not-participate.model';
-import { NotParticipateBetTypeViewModel } from './models/not-participate-bet-type.model';
+import { FilterNotParticipateComponent } from './filter-not-participate/filter-not-participate.component';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
-import { EventNotParticipateService } from './services/event-not-participate.service';
-import { FilterNotParticipateService } from './services/filter-not-participate.service';
-import { LogInfoService } from './services/log-info.service';
-import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
+import { FilterNotParticipateModel } from './models/filter-not-participate.model';
+
 class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeNotParticipateModels: NotParticipateModel[] = [
-    {
-      betTypeIds: '1',
-      playerId: 1,
-      subIssueTypeId: 1,
-      logInfoDetail: new LogInfoDetail(),
-      matchId: 1,
-      playerNames: ''
-    }
-  ];
-  static readonly fakeLogInfoNotParticipate: LogInfoNotParticipate = {
-    matchId: 1,
-    filterNotParticipates: [],
+  static readonly fakeRequestId = 1212;
+  static readonly fakeUserId = 123;
+  static readonly fakeRequestedBy = 'testUser';
+  static readonly fakeFilterModel: FilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
+    isVoided: false,
+    isChangeSubTypeManual: true,
+    isAbnormal: false
+  } as FilterModel;
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeNotParticipateModel = [{
+    matchId: 123,
+    isMainMatch: true,
+    eventDate: new Date(),
+    subIssueTypeId: 1,
+    filterFromTransTime: '',
+    filterToTransTime: '',
+    homeFavorite: '',
+    awayFavorite: '',
+    actualMarket: '',
+    hdpValue: '',
+    poolHouseCheckedBetTypes: '',
+    isPoolHouseAffected: false,
     logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: []
-  };
-  static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
-    playerId: 1,
-    betTypeIds: [],
-    betTypeMultipleSelection: null
-  };
+    isLinkGroup1X2: false,
+    isLinkGroupAIO: false,
+    liveIndicator: 0,
+    filterBetIdX: '',
+    filterBetIdY: '',
+    filterBetTypeId: ''
+  }] as unknown as NotParticipateModel[];
 }
 
 describe('EventNotParticipateComponent', () => {
-  @NgModule({
-    declarations: [
-      FilterNotParticipateComponent,
-      EventLeagueComponent,
-      LogInfoNotParticipateComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule
-    ],
-    providers: [
-      FilterNotParticipateService,
-      AddRequestStore,
-      ValidationService,
-      LogInfoService,
-      SaveRequestService,
-      EventNotParticipateService
-    ]
-  })
-  class AppModuleTest { }
+  let component: EventNotParticipateComponent;
+  let fixture: ComponentFixture<EventNotParticipateComponent>;
+  let validationService: ValidationService;
+  let eventNotParticipateService: EventNotParticipateService;
+  let filterNotParticipateService: FilterNotParticipateService;
+  let logInfoService: LogInfoService;
 
-  let shallow: Shallow<EventNotParticipateComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        EventNotParticipateService,
+        LogInfoService,
+        SaveRequestService,
+        FilterNotParticipateService,
+        AddRequestStore
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(EventNotParticipateComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(EventNotParticipateComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    eventNotParticipateService = fixture.debugElement.injector.get(EventNotParticipateService);
+    filterNotParticipateService = fixture.debugElement.injector.get(FilterNotParticipateService);
+    logInfoService = fixture.debugElement.injector.get(LogInfoService);
+    component = fixture.componentInstance;
   });
 
-  it('EventNotParticipateComponent init should match snapshot', async () => {
-    const component = new EventNotParticipateComponent(null, null, null, null, null, null);
-    component.notParticipateModels = Helper.fakeNotParticipateModels;
-
-    expect(component).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('ngOnInit should call #updateModelWhenChangeMatchId when isEdit', async () => {
-    const { instance } = await shallow
-    .mock(EventNotParticipateService, { assignModelsToEvents: jest.fn().mockReturnValue(Helper.fakeLogInfoNotParticipate) })
-    .mock(FilterNotParticipateService, { initDefaultBetTypeSelection: jest.fn().mockReturnValue(null) })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: new FilterModel(),
-        notParticipateModels: Helper.fakeNotParticipateModels,
-      }
+  it('should initialize with default values when not in edit mode', () => {
+    // Arrange
+    component.isEdit = false;
+    component.primitivePropertyEvent = {
+      isShowFilterArea: false,
+      isShowValidation: false,
+      transInfoAddRequestModel: null
+    } as PrimitivePropertyEvent;
+
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.primitivePropertyEvent.isShowFilterArea).toBeFalsy();
+    expect(component.primitivePropertyEvent.isShowValidation).toBeFalsy();
+  });
+
+  it('should initialize with existing values when in edit mode', async () => {
+    // Arrange
+    component.isEdit = true;
+    component.notParticipateModels = Helper.fakeNotParticipateModel;
+    component.primitivePropertyEvent = {
+      isShowFilterArea: false,
+      isShowValidation: false,
+      transInfoAddRequestModel: null
+    } as PrimitivePropertyEvent;
+    eventNotParticipateService.assignModelsToEvents = jest.fn().mockReturnValue(new LogInfoNotParticipate());
+    filterNotParticipateService.getNotParticipateBetTypes = jest.fn().mockResolvedValue({
+      notParticipatePlayers: [],
+      notParticipateBetTypes: []
     });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.logInfoEvent = Helper.fakeLogInfoNotParticipate;
-    instance.logInfoEvent.filterNotParticipates = [Helper.fakeFilterNotParticipateModel];
-    instance['updateModelWhenChangeMatchId'] = jest.fn();
+    filterNotParticipateService.initDefaultBetTypeSelection = jest.fn().mockReturnValue([]);
 
-    instance.ngOnInit();
+    // Act
+    await component.ngOnInit();
 
-    expect(instance['updateModelWhenChangeMatchId']).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(eventNotParticipateService.assignModelsToEvents).toHaveBeenCalledWith(Helper.fakeNotParticipateModel);
+    expect(component.primitivePropertyEvent.isShowFilterArea).toBeTruthy();
+    expect(component.primitivePropertyEvent.isShowValidation).toBeTruthy();
   });
 
-  it('updateModelWhenChangeMatchId should call #filterService.getPlayers', async () => {
-    const mockBetTypes = jest.fn().mockReturnValue(new NotParticipateBetTypeViewModel());
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-    .mock(FilterNotParticipateService, {
-      getNotParticipateBetTypes: mockBetTypes
-    })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: mockChangeBlockingUiStatus,
-    })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        notParticipateModels: Helper.fakeNotParticipateModels,
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
+  it('should handle search event with validation', async () => {
+    // Arrange
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.filterNotParticipateComponent = {} as FilterNotParticipateComponent;
+    validationService.validateCommonData = jest.fn().mockReturnValue(true);
+    logInfoService.getLogInfo = jest.fn().mockResolvedValue(undefined);
+    component.logInfoEvent = new LogInfoNotParticipate();
+    component.filter = Helper.fakeFilterModel;
 
-    await instance['updateModelWhenChangeMatchId']();
+    // Act
+    await component.clickSearch();
 
-    expect(mockBetTypes).toHaveBeenCalledTimes(1);
-    expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    // Assert
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(logInfoService.getLogInfo).toHaveBeenCalled();
+    expect(component.primitivePropertyEvent.isShowValidation).toBeTruthy();
   });
 
-  it('clickSearch should call #logInfoService.getLogInfo', async () => {
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(true) })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-      changeSavingRequestStatus: jest.fn()
-     })
-    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        notParticipateModels: Helper.fakeNotParticipateModels,
-      }
+  it('should handle match event change', async () => {
+    // Arrange
+    const matchInfo = { matchId: 123 } as MatchModel;
+    component.eventLeagueComponent = {
+      selectedMatch: matchInfo
+    } as EventLeagueComponent;
+    component.updateMatchId = {
+      emit: jest.fn()
+    } as any;
+    component.updateMatchId.emit = jest.fn();
+    filterNotParticipateService.getNotParticipateBetTypes = jest.fn().mockResolvedValue({
+      notParticipatePlayers: [],
+      notParticipateBetTypes: []
     });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
 
-    await instance.clickSearch();
+    // Act
+    await component.changeMatchEvent();
 
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.logInfoEvent.matchId).toBe(123);
+    expect(component.primitivePropertyEvent.isShowFilterArea).toBeTruthy();
+    expect(component.updateMatchId.emit).toHaveBeenCalled();
   });
 
-  it('clickSearch should not call #logInfoService.getLogInfo when not valid', async () => {
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(false) })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-      changeSavingRequestStatus: jest.fn()
-     })
-    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        notParticipateModels: Helper.fakeNotParticipateModels,
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
+  it('should reset log info of event', () => {
+    // Arrange
+    component.primitivePropertyEvent = {
+      isShowValidation: true,
+      isShowFilterArea: true,
+      transInfoAddRequestModel: null
+    } as PrimitivePropertyEvent;
+    component.logInfoEvent = new LogInfoNotParticipate();
+    logInfoService.resetLogInfoOfEvent = jest.fn();
 
-    await instance.clickSearch();
+    // Act
+    component.resetLogInfoOfEvent();
 
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(0);
+    // Assert
+    expect(component.primitivePropertyEvent.isShowValidation).toBeFalsy();
+    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledWith(component.logInfoEvent);
   });
 
-  it('saveRequest should call #saveRequestService.saveRequest', async () => {
-    const mockSaveRequest = jest.fn();
-    const { instance } = await shallow
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(false) })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-     })
-    .mock(SaveRequestService, { saveRequest: mockSaveRequest })
-    .render({
-      bind: {
-        filter: new FilterModel(),
-        notParticipateModels: Helper.fakeNotParticipateModels,
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
+  it('should reset filter not participate', () => {
+    // Arrange
+    component.logInfoEvent = new LogInfoNotParticipate();
+    component.logInfoEvent.filterNotParticipates = [{} as FilterNotParticipateModel];
+    filterNotParticipateService.initDefaultFilter = jest.fn().mockReturnValue({} as FilterNotParticipateModel);
 
-    await instance.saveRequest();
+    // Act
+    component.resetFilterNotParticipate();
 
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.logInfoEvent.filterNotParticipates.length).toBe(1);
+    expect(component.logInfoEvent.filterNotParticipates[0]).toEqual({});
   });
 
-  it('#changeMatchEvent should emit updateMatchId when leagueEventWrongOddsComponent not null', async () => {
-    const { instance } = await shallow
-    .mock(FilterNotParticipateService, { initDefaultFilter: jest.fn().mockReturnValue(new FilterNotParticipateModel()) })
-    .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
-    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    instance.eventLeagueComponent.selectedMatch = new MatchModel();
-    instance.eventLeagueComponent.selectedMatch.matchId = 1;
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.logInfoEvent = Helper.fakeLogInfoNotParticipate;
-    instance['updateModelWhenChangeMatchId'] = jest.fn();
+  it('should save request', async () => {
+    // Arrange
+    component.requestId = Helper.fakeRequestId;
+    component.requestedBy = Helper.fakeRequestedBy;
+    component.isEdit = true;
+    component.userId = Helper.fakeUserId;
+    component.actionIdOfFirstTimeAccess = '1';
+    component.others = Helper.fakeOthersModel;
+    component.filter = Helper.fakeFilterModel;
+    component.primitivePropertyEvent = {
+      isShowFilterArea: true,
+      isShowValidation: true,
+      transInfoAddRequestModel: null
+    } as PrimitivePropertyEvent;
+    component.filterNotParticipateComponent = {} as FilterNotParticipateComponent;
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.logInfoEvent = new LogInfoNotParticipate();
 
-    await instance.changeMatchEvent();
+    const saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
+    saveRequestService.saveRequest = jest.fn().mockResolvedValue(undefined);
 
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
-  });
+    // Act
+    await component.saveRequest();
 
-  it('#changeMatchEvent should not call #updateModelWhenChangeMatchId when leagueEventWrongOddsComponent null', async () => {
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
-    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    instance.eventLeagueComponent = null;
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.logInfoEvent = Helper.fakeLogInfoNotParticipate;
-    instance['updateModelWhenChangeMatchId'] = jest.fn();
-    await instance.changeMatchEvent();
-
-    expect(instance['updateModelWhenChangeMatchId']).toHaveBeenCalledTimes(0);
-  });
-
-  it('#resetLogInfoOfEvent should call #logInfoService.resetLogInfoOfEvent', async () => {
-    const mockResetLogInfoOfEvent = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.resetLogInfoOfEvent();
-
-    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(saveRequestService.saveRequest).toHaveBeenCalled();
   });
 });

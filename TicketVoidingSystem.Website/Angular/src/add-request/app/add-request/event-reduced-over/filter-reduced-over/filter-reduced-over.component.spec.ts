@@ -1,113 +1,145 @@
-import { ElementRef, NgModule, QueryList } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
-import { NgSelectMixtureModel } from '../../../../../utility/components/ng-select-mixture/ng-select-mixture.model';
-import { FilterReducedOverItemComponent } from '../filter-reduced-over-item/filter-reduced-over-item.component';
-import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
-import { FilterReducedOverService } from '../services/filter-reduced-over.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { FilterReducedOverComponent } from './filter-reduced-over.component';
+import { FilterReducedOverService } from '../services/filter-reduced-over.service';
+import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
+import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
+import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { FilterReducedOverItemComponent } from '../filter-reduced-over-item/filter-reduced-over-item.component';
+
 class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterReducedOverModel: FilterReducedOverModel = {
-    betTypeIds: [],
-    playerIds: [],
-    live: true,
-    nonLive: true,
-    runs: '',
+  static readonly fakeFilterModel: FilterReducedOverModel = {
+    betTypeIds: ['1'],
+    betTypeName: 'Test Bet Type',
+    isChecked: true,
+    isValid: true,
     wicketOver: '',
-    betTypeNgSelectMixtureModel: new NgSelectMixtureModel(),
-    playerMultipleSelection: new MultipleSelection()
-  };
+    playerIds: [],
+    runs: '',
+    over: '',
+    wicket: '',
+    player: '',
+    run: '',
+    live: false,
+    nonLive: false,
+    betTypeNgSelectMixtureModel: null,
+    playerMultipleSelection: false
+  } as unknown as FilterReducedOverModel;
+
+  static readonly fakeReducedOverBetType: ReducedOverBetType = {
+    betTypeId: 1,
+    betTypeName: 'Test Bet Type',
+    isChecked: true,
+    isHasOverWicket: true,
+    isHasPlayer: true,
+    isHasRuns: true,
+    parentId: 1,
+    items: []
+  } as ReducedOverBetType;
+
+  static readonly fakeOddsInfo: OddsInfo = {
+    playerId: '1',
+    playerName: 'Test Player',
+    odds: 1.5,
+    betTypeId: 1,
+    oddsId: 1,
+    betChoice: '1',
+    playNamesChineseTraditional: '',
+    playNamesChineseSimplified: ''
+  } as unknown as OddsInfo;
 }
 
 describe('FilterReducedOverComponent', () => {
-  @NgModule({
-    declarations: [
-      FilterReducedOverItemComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule
-    ],
-    providers: [
-      FilterReducedOverService
-    ]
-  })
-  class AppModuleTest { }
+  let component: FilterReducedOverComponent;
+  let fixture: ComponentFixture<FilterReducedOverComponent>;
+  let filterService: FilterReducedOverService;
 
-  let shallow: Shallow<FilterReducedOverComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        FilterReducedOverService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(FilterReducedOverComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(FilterReducedOverComponent);
+    filterService = fixture.debugElement.injector.get(FilterReducedOverService);
+    component = fixture.componentInstance;
   });
 
-  it('FilterReducedOverComponent init should match snapshot', async () => {
-    const component = new FilterReducedOverComponent(null);
-    component.models = [Helper.fakeFilterReducedOverModel];
-
-    expect(component).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('changeFilter should emit #changeFilterEvent', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        models: [Helper.fakeFilterReducedOverModel]
-      }
-    });
-    instance.changeFilterEvent.emit = jest.fn();
-    instance.changeFilter();
+  it('should emit change filter event', () => {
+    // Arrange
+    component.changeFilterEvent = { emit: jest.fn() } as any;
 
-    expect(instance.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+    // Act
+    component.changeFilter();
+
+    // Assert
+    expect(component.changeFilterEvent.emit).toHaveBeenCalled();
   });
 
-  it('isValid should returen true', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        models: [Helper.fakeFilterReducedOverModel]
-      }
-    });
+  it('should validate all filter items', () => {
+    // Arrange
+    const mockFilterItem1 = { isValid: () => true } as FilterReducedOverItemComponent;
+    const mockFilterItem2 = { isValid: () => true } as FilterReducedOverItemComponent;
+    component.filterItemComponents = {
+      toArray: () => [mockFilterItem1, mockFilterItem2]
+    } as any;
 
-    const filterItemComponent = new FilterReducedOverItemComponent(null, null, null);
-    filterItemComponent.isValid = jest.fn().mockReturnValue(true);
-    const filterItemComponents = new QueryList<FilterReducedOverItemComponent>();
-    filterItemComponents.reset([...filterItemComponents.toArray(), filterItemComponent]);
-    instance.filterItemComponents = filterItemComponents;
-    const actual = instance.isValid();
+    // Act
+    const result = component.isValid();
 
-    expect(actual).toBeTruthy();
+    // Assert
+    expect(result).toBeTruthy();
   });
 
-  it('addBetTypeItem should add new item to #models', async () => {
-    const { instance } = await shallow
-    .mock(FilterReducedOverService, { initDefaultFilter: jest.fn().mockReturnValue(new FilterReducedOverModel()) })
-    .render({
-      bind: {
-        models: [Helper.fakeFilterReducedOverModel]
-      }
-    });
-    instance.addBetTypeItem();
+  it('should return false when any filter item is invalid', () => {
+    // Arrange
+    const mockFilterItem1 = { isValid: () => true } as FilterReducedOverItemComponent;
+    const mockFilterItem2 = { isValid: () => false } as FilterReducedOverItemComponent;
+    component.filterItemComponents = {
+      toArray: () => [mockFilterItem1, mockFilterItem2]
+    } as any;
 
-    expect(instance.models.length).toBe(2);
+    // Act
+    const result = component.isValid();
+
+    // Assert
+    expect(result).toBeFalsy();
   });
 
-  it('removeBetTypeItem should slice 1 item of #models', async () => {
-    const { instance } = await shallow
-    .mock(FilterReducedOverService, { initDefaultFilter: jest.fn().mockReturnValue(new FilterReducedOverModel()) })
-    .render({
-      bind: {
-        models: [Helper.fakeFilterReducedOverModel]
-      }
-    });
-    instance.models.push(new FilterReducedOverModel());
-    instance.removeBetTypeItem(1);
+  it('should add new bet type item', () => {
+    // Arrange
+    component.models = [];
+    component.groupReducedOverBetTypes = [Helper.fakeReducedOverBetType];
+    filterService.initDefaultFilter = jest.fn().mockReturnValue(Helper.fakeFilterModel);
 
-    expect(instance.models.length).toBe(1);
+    // Act
+    component.addBetTypeItem();
+
+    // Assert
+    expect(filterService.initDefaultFilter).toHaveBeenCalledWith([Helper.fakeReducedOverBetType]);
+    expect(component.models.length).toBe(1);
+    expect(component.models[0]).toEqual(Helper.fakeFilterModel);
+  });
+
+  it('should remove bet type item at specified index', () => {
+    // Arrange
+    const secondModel = { ...Helper.fakeFilterModel, betTypeIds: ['2'] };
+    component.models = [
+      Helper.fakeFilterModel,
+      secondModel
+    ];
+
+    // Act
+    component.removeBetTypeItem(0);
+
+    // Assert
+    expect(component.models.length).toBe(1);
+    expect(component.models[0]).toEqual(secondModel);
   });
 });
