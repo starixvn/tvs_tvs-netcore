@@ -27,6 +27,7 @@ import { TEXT } from '../../../utility/constants/text';
 import { BallSequences } from '../../../utility/models/ball-sequences';
 import { MatchModel } from '../../../utility/models/match.model';
 import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
+import { AppComponent } from '../app.component';
 
 @Component({
   standalone: true,
@@ -77,6 +78,7 @@ export class FilterComponent implements OnInit {
   appService = inject(AppService);
   commonService = inject(CommonService);
   blockUIService = inject(BlockUiService);
+  appComponent = inject(AppComponent);
 
   async ngOnInit() {
     this.tooltip.element = this.element;
@@ -154,9 +156,9 @@ export class FilterComponent implements OnInit {
 
   renderProduct() {
     this.product.items = [];
-    for (const key of Object.keys(Product.DISPLAY)) {
-      this.product.items.push(new Item(Product.DISPLAY[key], key));
-    }
+    Product.PRODUCT_LIST.forEach(p => {
+      this.product.items.push(new Item(p.id, p.name));
+    });
 
     this.query.product = 0;
   }
@@ -419,7 +421,13 @@ export class FilterComponent implements OnInit {
         query: this.getParams()
       };
       this.searchEvent.emit(event);
+      this.writeSearchLog();
     }
+  }
+
+  writeSearchLog() {
+    const productName = Product.PRODUCT_LIST.find(p => p.id === this.query.product)?.note;
+    this.appComponent.logAccessAction(productName);
   }
 
   checkFilterParams(): boolean {

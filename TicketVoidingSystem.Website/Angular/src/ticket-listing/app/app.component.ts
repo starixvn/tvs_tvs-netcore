@@ -30,6 +30,7 @@ import { NotificationComponent } from '../../utility/components/notification/not
 import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
 import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
+import { CommonService } from '../../utility/services/common.service';
 
 @Component({
   standalone: true,
@@ -75,7 +76,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   clipboardService = inject(ClipboardService);
   signalRService = inject(SignalRService);
   blockUIService = inject(BlockUiService);
-
+  commonService = inject(CommonService);
   public async ngOnInit() {
     this.tooltip.element = this.element;
     await this.signalRService.initializeConnection();
@@ -255,6 +256,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
     const result = await this.appService.sendDataToOic(this.sendFileQueries);
     this.showResultAmendmentOic(result);
+    this.logAccessAction('SendData');
   }
 
   private createSendFileQuery(item: SummaryItem, titleAmendmentOic: string){
@@ -329,5 +331,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   copyClipboard(text: string) {
     this.clipboardService.copyFromContent(text);
     alert('The bet type list has been copied to clipboard.');
+  }
+
+  
+  async logAccessAction(actionName: string): Promise<void> {
+    await this.commonService.logAccessFunction(`TicketListing/${actionName}`);
   }
 }
