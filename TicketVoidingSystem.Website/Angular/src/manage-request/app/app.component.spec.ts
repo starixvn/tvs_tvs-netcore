@@ -15,6 +15,9 @@ import { TestingModule } from '../../utility/modules/testing.module';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { ChangeDetectorRef } from '@angular/core';
 import { RequestDescriptionService } from './request-list/services/request-description.service';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
+import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
+import { RequestListComponent } from './request-list/request-list.component';
 
 jest.mock('../../utility/services/signal-r.service.native');
 class Helper {
@@ -107,10 +110,14 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        TestingModule, FilterComponent
+        TestingModule, FilterComponent, MenuBarComponent, BlockUiModule, RequestListComponent
       ],
       providers: [
-        ModalService, CommonService, AppService, SignalRService, RequestDescriptionService, ChangeDetectorRef
+        ModalService, CommonService, AppService, SignalRService, RequestDescriptionService, ChangeDetectorRef,
+        { provide: CommonService, useValue: { logAccessFunction: jest.fn() } },
+        { provide: SignalRService, useValue: { initializeConnection: jest.fn() } },
+        { provide: ModalService, useValue: { open: jest.fn(), confirm: jest.fn() } },
+        { provide: AppService, useValue: { getRequests: jest.fn() } }
       ]
     }).compileComponents();
 
@@ -260,5 +267,46 @@ describe('AppComponent', () => {
     // Assert
     expect(component.bUDay).toEqual(Helper.fakeBalanceUp.balanceUpDay);
     expect(component.moveBetDay).toEqual(new Date(Helper.fakeBalanceUp.moveBetsDay));
+  });
+
+  describe('logAccessAction', () => {
+    it('should call logAccessFunction with correct path', async () => {
+      // Arrange
+      const actionName = 'testAction';
+      const expectedPath = `ManageRequest/${actionName}`;
+      const logAccessFunctionSpy = jest.spyOn(commonService, 'logAccessFunction');
+
+      // Act
+      await component.logAccessAction(actionName);
+
+      // Assert
+      expect(logAccessFunctionSpy).toHaveBeenCalledWith(expectedPath);
+    });
+
+    it('should handle empty action name', async () => {
+      // Arrange
+      const actionName = '';
+      const expectedPath = 'ManageRequest/';
+      const logAccessFunctionSpy = jest.spyOn(commonService, 'logAccessFunction');
+
+      // Act
+      await component.logAccessAction(actionName);
+
+      // Assert
+      expect(logAccessFunctionSpy).toHaveBeenCalledWith(expectedPath);
+    });
+
+    it('should handle special characters in action name', async () => {
+      // Arrange
+      const actionName = 'test-action/with/special/chars';
+      const expectedPath = `ManageRequest/${actionName}`;
+      const logAccessFunctionSpy = jest.spyOn(commonService, 'logAccessFunction');
+
+      // Act
+      await component.logAccessAction(actionName);
+
+      // Assert
+      expect(logAccessFunctionSpy).toHaveBeenCalledWith(expectedPath);
+    });
   });
 });

@@ -201,6 +201,7 @@ describe('AppComponent', () => {
   let appService: AppService;
   let clipboardService: ClipboardService;
   let signalRService: SignalRService;
+  let commonService: CommonService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -222,7 +223,8 @@ describe('AppComponent', () => {
         { provide: ElementRef, useValue: { nativeElement: document.createElement('div') } },
         { provide: CommonService, useValue: {
           getNapUserInfo: jest.fn().mockResolvedValue(Helper.mockMenuItems),
-          getBetTypes: jest.fn().mockResolvedValue(Helper.mockBetTypes)
+          getBetTypes: jest.fn().mockResolvedValue(Helper.mockBetTypes),
+          logAccessFunction: jest.fn()
         } }
       ]
     }).compileComponents();
@@ -236,6 +238,7 @@ describe('AppComponent', () => {
     appService = fixture.debugElement.injector.get(AppService);
     clipboardService = fixture.debugElement.injector.get(ClipboardService);
     signalRService = fixture.debugElement.injector.get(SignalRService);
+    commonService = fixture.debugElement.injector.get(CommonService);
 
     fixture.detectChanges();
   });
@@ -362,5 +365,16 @@ describe('AppComponent', () => {
     } as AmendmentReponse;
 
     expect(component.messagesResponse.open).toHaveBeenCalledWith('Send Data Result', [amendmentResponse]);
+  });
+
+  it('#logAccessAction should call CommonService.logAccessFunction with correct parameter', async () => {
+    // Arrange
+    const actionName = 'TestAction';
+
+    // Act
+    await component.logAccessAction(actionName);
+
+    // Assert
+    expect(commonService.logAccessFunction).toHaveBeenCalledWith(`TicketListing/${actionName}`);
   });
 });
