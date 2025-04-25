@@ -56,7 +56,7 @@ describe('FilterNotParticipateComponent', () => {
 
   it('should emit change filter event', () => {
     // Arrange
-    component.changeFilterEvent = { emit: jest.fn() } as any;
+    component.changeFilterEvent.emit = jest.fn();
 
     // Act
     component.changeFilter();

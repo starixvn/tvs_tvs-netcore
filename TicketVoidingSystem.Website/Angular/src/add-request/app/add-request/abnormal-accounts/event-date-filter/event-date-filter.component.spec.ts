@@ -6,6 +6,7 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 import moment from 'moment-timezone';
+import { EventEmitter } from '@angular/core';
 
 class Helper {
   static readonly fakeAbnormalAccountModel = {
@@ -118,7 +119,7 @@ describe('EventDateFilterComponent', () => {
 
   it('should emit change filter event', () => {
     // Arrange
-    component.changeFilterEvent = { emit: jest.fn() } as any;
+    component.changeFilterEvent = { emit: jest.fn() } as unknown as EventEmitter<void>;
 
     // Act
     component.changeFilter();

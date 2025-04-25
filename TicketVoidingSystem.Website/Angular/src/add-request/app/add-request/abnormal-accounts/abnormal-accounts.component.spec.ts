@@ -12,6 +12,7 @@ import { OthersModel } from '../others/others.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
+import { AccountTableComponent } from './account-table/account-table.component';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -120,7 +121,7 @@ describe('AbnormalAccountsComponent', () => {
     // Arrange
     component.accountTableComponent = {
       isValid: () => false
-    } as any;
+    } as AccountTableComponent;
     addRequestStore.changeSavingRequestStatus = jest.fn();
     saveRequestService.saveRequest = jest.fn();
 
@@ -136,7 +137,7 @@ describe('AbnormalAccountsComponent', () => {
     // Arrange
     component.accountTableComponent = {
       isValid: () => true
-    } as any;
+    } as AccountTableComponent;
     saveRequestService.saveRequest = jest.fn().mockResolvedValue(undefined);
     validationService.isAutoVoidWithPolicy = jest.fn().mockReturnValue(true);
 
@@ -152,7 +153,7 @@ describe('AbnormalAccountsComponent', () => {
     component.accountTableComponent = {
       isValid: () => false,
       isCancelRecalculateAmount: false
-    } as any;
+    } as AccountTableComponent;
     addRequestStore.changeBlockingUiStatus = jest.fn();
     validationService.checkBusinessRule = jest.fn();
 
@@ -169,7 +170,7 @@ describe('AbnormalAccountsComponent', () => {
     component.accountTableComponent = {
       isValid: () => true,
       isCancelRecalculateAmount: false
-    } as any;
+    } as AccountTableComponent;
     validationService.checkBusinessRule = jest.fn().mockResolvedValue({
       accountWinlostModels: [],
       transInfoAddRequestModel: {}

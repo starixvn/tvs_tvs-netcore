@@ -13,6 +13,7 @@ import { LABELS } from '../../../../../utility/constants/labels';
 import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import moment from 'moment-timezone';
+import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -99,7 +100,7 @@ describe('LogInfoRelatedEventComponent', () => {
     component.filterTimeWithAllowanceComponent = {
       isValid: jest.fn().mockReturnValue(true),
       updateData: jest.fn()
-    } as any;
+    } as unknown as FilterTimeWithAllowanceComponent;
     logInfoRelatedEventService.refreshLogInfoForRelatedEvent = jest.fn().mockResolvedValue(undefined);
 
     // Act

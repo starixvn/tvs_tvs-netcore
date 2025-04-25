@@ -86,10 +86,9 @@ describe('TicketTableComponent', () => {
   });
 
   it('should correctly convert string with comma to number', () => {
-    // Using any to access private method for testing
-    const componentAny = component as any;
-    expect(componentAny.convertStringWithCommaToNumber('1,000')).toBe(1000);
-    expect(componentAny.convertStringWithCommaToNumber('1,234,567')).toBe(1234567);
-    expect(componentAny.convertStringWithCommaToNumber('0')).toBe(0);
+    const componentAny = component as unknown as TicketTableComponent;
+    expect(componentAny['convertStringWithCommaToNumber']('1,000')).toBe(1000);
+    expect(componentAny['convertStringWithCommaToNumber']('1,234,567')).toBe(1234567);
+    expect(componentAny['convertStringWithCommaToNumber']('0')).toBe(0);
   });
 }); 

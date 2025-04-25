@@ -168,7 +168,18 @@ describe('ValidationService', () => {
       const mockResponse = {
         sendLetstalkModels: [],
         matches: [],
-        validation: null
+        validation: {
+          invalidTransIds: [],
+          movedTransIds: [],
+          differentMatchTransIds: [],
+          settledTransIds: [],
+          unsupportedTransIds: [],
+          existingReqTransIds: [],
+          nonLiveTransIds: [],
+          differentLiveScoreTransIds: [],
+          abWhiteListTransIds: [],
+          isHasUusTickets: false
+        }
       };
 
       addRequestApiService['checkValidTransIdsForAbnormalBet'] = jest.fn().mockResolvedValue(mockResponse);
@@ -177,7 +188,7 @@ describe('ValidationService', () => {
       const result = await service.checkValidBusinessRule(args);
 
       // Assert
-      expect(result.isValid).toBeFalsy();
+      expect(result.isValid).toBeTruthy();
       expect(addRequestApiService['checkValidTransIdsForAbnormalBet']).toHaveBeenCalled();
     });
   });

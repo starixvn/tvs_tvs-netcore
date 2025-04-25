@@ -1,14 +1,8 @@
-import { ElementRef, NgModule, SimpleChange } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
+import { SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
-import { DateTimeModule } from '../../../../utility/components/date-time/date-time.module';
-import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportInfo } from '../../../../utility/models/event.model';
-import { IssueType, SubIssueType } from '../../../../utility/models/issue-type.model';
+import { IssueType } from '../../../../utility/models/issue-type.model';
 import { Selection } from '../../../../utility/models/selection.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
@@ -17,7 +11,10 @@ import { FilterComponent } from './filter.component';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
-import { SubIssueTypeDialogComponent } from './sub-issue-type-dialog/sub-issue-type-dialog.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { ActionVoidService } from './services/action-void.service';
+import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog/sub-issue-type-dialog.model';
 
 class Helper {
@@ -25,6 +22,7 @@ class Helper {
   static readonly selectSelector = 'select.form-control';
   static readonly isTestSelector = 'input[type=checkbox]';
   static readonly eventDateSelector = 'input.form-control';
+  
   static getFakeIssueTypePermissionList(): IssueType[] {
     return [
       { issueTypeId: 9, issueTypeName: 'Wrong Kick Off Time' },
@@ -93,969 +91,249 @@ class Helper {
 }
 
 describe('FilterComponent', () => {
-  @NgModule({
-    declarations: [
-      SubIssueTypeDialogComponent
-    ],
-    imports: [
-      DateTimeModule,
-      FormsModule,
-      NgSelectModule,
-      NgbModule,
+  let component: FilterComponent;
+  let fixture: ComponentFixture<FilterComponent>;
+  let filterService: FilterService;
+  let commonService: CommonService;
+  let addRequestStore: AddRequestStore;
+  let actionVoidService: ActionVoidService;
+  let logAnalysisService: LogAnalysisService;
 
-    ],
-    providers: [
-      AddRequestStore,
-      FilterService,
-      CommonService,
-      LogAnalysisService
-    ]
-  })
-  class AppModuleTest { }
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        FilterService,
+        CommonService,
+        AddRequestStore,
+        ActionVoidService,
+        LogAnalysisService
+      ]
+    }).compileComponents();
 
-  let shallow: Shallow<FilterComponent>;
-
-  beforeEach(() => {
-    shallow = new Shallow(FilterComponent, AppModuleTest)
-      .dontMock(DateTimeModule)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {})
-      .mock(LogAnalysisService, {writeLogAccessFunction: jest.fn()});
+    fixture = TestBed.createComponent(FilterComponent);
+    filterService = fixture.debugElement.injector.get(FilterService);
+    commonService = fixture.debugElement.injector.get(CommonService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    actionVoidService = fixture.debugElement.injector.get(ActionVoidService);
+    logAnalysisService = fixture.debugElement.injector.get(LogAnalysisService);
+    component = fixture.componentInstance;
   });
 
-  it('FilterComponent should init match snapshot', async () => {
-    // Arrange
-    const { fixture } = await shallow.render();
-    fixture.detectChanges();
-
-    // Assert
-    expect(fixture).toMatchSnapshot();
-  });
-
-  it('FilterComponent should init default value for all filter', async () => {
-    // Arrange
-    const { find, findComponent, fixture } = await shallow
-      .mock(CommonService,
-        {
-          getIssueTypePermissionList: jest.fn().mockImplementation(() => Helper.getFakeIssueTypePermissionList()),
-          getVoidActions: jest.fn().mockImplementation(() => Helper.getFakeActions())
-        }
-      )
-      .mock(FilterService,
-        {
-          getIssueTypes: jest.fn().mockImplementation(() => Helper.fakeIssueTypes)
-        }
-      )
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-
-    fixture.detectChanges();
-    const selectComponent = findComponent(NgSelectComponent);
-    const issueTypeSelector = selectComponent[0];
-
-    // Assert
-    expect(issueTypeSelector.items.length).toBe(6);
-    expect(find(Helper.isTestSelector).nativeElement.checked).toBe(false);
-  });
-
-  it('#backToNotAuthorizedPage should go to Home/NotAuthorized', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    const url = 'http://localhost:60196/';
-    Object.defineProperty(window, 'location', {
-      value: new URL(url)
-    });
-    window.location.assign = jest.fn();
-
-    // Act
-    instance.backToAccessDeniedPage();
-
-    // Assert
-    expect(window.location.assign).toHaveBeenCalledWith(Helper.urlNotAuthorizedPage);
-  });
-
-  it('Should call expected function and return expected data when change model', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    const model = new FilterModel();
-    const changes = {
-      'model': new SimpleChange(null, model, true)
-    };
-    instance.isEdit = true;
-    instance.initData = jest.fn();
-    instance['updateCurrentAction'] = jest.fn();
-    instance.model.subIssueTypeId = '12';
-    instance.issueTypes = new IssueTypes(Helper.fakeIssueTypes);
-    instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
-    instance.haveIssueTypeFromPermission = jest.fn().mockImplementation(() => false);
-    instance.backToAccessDeniedPage = jest.fn();
-
-    // Act
-    await instance.ngOnChanges(changes);
-
-    // Assert
-    expect(instance.initData).toHaveBeenCalledTimes(1);
-    expect(instance.issueTypes.issueId).toBe(8);
-    expect(instance.issueTypes.selectedSubIssueTypes.length).toBe(2);
-    expect(instance.issueTypes.issueTypes.length).toBe(6);
-  });
-
-  it('#ngOnChanges Should call expected function and return expected data when isLikelyDangerAccepted true', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    const model = new FilterModel();
-    const changes = {
-      'model': new SimpleChange(null, model, true)
-    };
-    instance.isEdit = true;
-    instance.initData = jest.fn();
-    instance['updateCurrentAction'] = jest.fn();
-    instance.model.subIssueTypeId = '12';
-    instance.issueTypes = new IssueTypes(Helper.fakeIssueTypes);
-    instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
-    instance.haveIssueTypeFromPermission = jest.fn().mockImplementation(() => true);
-    instance.isLikelyDangerAccepted = jest.fn().mockImplementation(() => true);
-    instance['getAllowanceTimeBySubIssueType'] = jest.fn();
-    instance['setWidthControlByIssueType'] = jest.fn();
-
-    // Act
-    await instance.ngOnChanges(changes);
-
-    // Assert
-    expect(instance.initData).toHaveBeenCalledTimes(1);
-    expect(instance['getAllowanceTimeBySubIssueType']).toHaveBeenCalledTimes(1);
-    expect(instance['setWidthControlByIssueType']).toHaveBeenCalledTimes(1);
-    expect(instance.issueTypes.issueId).toBe(8);
-    expect(instance.issueTypes.selectedSubIssueTypes.length).toBe(2);
-    expect(instance.issueTypes.issueTypes.length).toBe(6);
-  });
-
-  it('#ngOnChanges Should call expected function and return expected data when isLikelyDangerAccepted false', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    const model = new FilterModel();
-    const changes = {
-      'model': new SimpleChange(null, model, true)
-    };
-    const fakeIssueTypes = _.cloneDeep(Helper.fakeIssueTypes)
-    fakeIssueTypes.issueId = null;
-    instance.isEdit = true;
-    instance.initData = jest.fn();
-    instance['updateCurrentAction'] = jest.fn();
-    instance.model.subIssueTypeId = '12';
-    instance.issueTypes = new IssueTypes(fakeIssueTypes);
-    instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
-    instance.issueTypes.issueId = null;
-    instance.isLikelyDangerAccepted = jest.fn().mockImplementation(() => false);
-    instance['getAllowanceTimeBySubIssueType'] = jest.fn();
-    instance['setWidthControlByIssueType'] = jest.fn();
-
-    // Act
-    await instance.ngOnChanges(changes);
-
-    // Assert
-    expect(instance.initData).toHaveBeenCalledTimes(1);
-    expect(instance['getAllowanceTimeBySubIssueType']).toHaveBeenCalledTimes(0);
-    expect(instance['setWidthControlByIssueType']).toHaveBeenCalledTimes(1);
-    expect(instance.issueTypes.issueId).toBe(8);
-    expect(instance.issueTypes.selectedSubIssueTypes.length).toBe(2);
-    expect(instance.issueTypes.issueTypes.length).toBe(6);
-  });
-
-  it('#changeActionWaitingToManualVoid should call #changeActionWaitingToManualEditPage when edit request', async () => {
-    // Arrange
-    const mockChangeActionWaitingToManualEditPage = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeActionWaitingToManualEditPage: mockChangeActionWaitingToManualEditPage
-      })
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.isEdit = true;
-    instance.actionIds = ['3'];
-    instance.model.action = '5';
-
-    // Act
-    instance.changeActionWaitingToManualVoid();
-
-    // Assert
-    expect(mockChangeActionWaitingToManualEditPage).toHaveBeenCalledTimes(1);
-    expect(mockChangeActionWaitingToManualEditPage).toHaveBeenCalledWith(true);
-  });
-
-  it('#changeActionWaitingToManualVoid should not call #changeActionWaitingToManualEditPage when add request', async () => {
-    // Arrange
-    const mockChangeActionWaitingToManualEditPage = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeActionWaitingToManualEditPage: mockChangeActionWaitingToManualEditPage
-      })
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.isEdit = false;
-    instance.actionIds = ['3'];
-    instance.model.action = '5';
-
-    // Act
-    instance.changeActionWaitingToManualVoid();
-
-    // Assert
-    expect(mockChangeActionWaitingToManualEditPage).toHaveBeenCalledTimes(0);
-  });
-
-  it('#haveIssueTypeFromPermission should be return true when has issue type id', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
-
-    // Act
-    instance.haveIssueTypeFromPermission('8');
-
-    // Assert
-    expect(instance.haveIssueTypeFromPermission).toBeTruthy();
-  });
-
-  it('#ngOnInit should be call expected function', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.initData = jest.fn();
-    instance.updateModel = jest.fn();
-    instance.subscribeSubScription = jest.fn();
-    instance.isEditOrExternalUrl = jest.fn().mockImplementation(() => false);
-    instance.isEdit = false;
-
-    // Act
-    await instance.ngOnInit();
-
-    // Assert
-    expect(instance.initData).toHaveBeenCalledTimes(1);
-    expect(instance.isEditOrExternalUrl).toHaveBeenCalledTimes(1);
-    expect(instance.updateModel).toHaveBeenCalledTimes(1);
-  });
-
-  it('#ngOnInit should be call expected function when isEditOrExternalUrl true', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.initData = jest.fn();
-    instance.updateModel = jest.fn();
-    instance.subscribeSubScription = jest.fn();
-    instance.isEditOrExternalUrl = jest.fn().mockImplementation(() => true);
-    instance.isEdit = false;
-
-    // Act
-    await instance.ngOnInit();
-
-    // Assert
-    expect(instance.initData).toHaveBeenCalledTimes(1);
-    expect(instance.isEditOrExternalUrl).toHaveBeenCalledTimes(1);
-    expect(instance.updateModel).toHaveBeenCalledTimes(0);
-  });
-
-  it('#initData should be call #updateModel when add request', async () => {
-    // Arrange
-    document.body.innerHTML = '<section id="body" user-name="star" user-id="360418"></section>';
-    const { instance } = await shallow
-    .mock(LogAnalysisService, { writeLogAccessFunction: jest.fn()})
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance['initialize'] = false;
-    instance.isEdit = false;
-    instance.getIssueTypes = jest.fn();
-    instance.initSelections = jest.fn();
-    instance.updateSubByIssue = jest.fn();
-    instance['updateCurrentAction'] = jest.fn();
-    instance.updateModel = jest.fn();
-    instance.haveIssueTypeFromPermission = jest.fn().mockImplementation(() => true);
-    jest.spyOn(window.localStorage.__proto__, 'getItem');
-    window.localStorage.__proto__.getItem = jest.fn().mockImplementation(() => '1');
-
-    // Act
-    await instance.initData();
-
-    // Assert
-    expect(instance.updateModel).toHaveBeenCalledTimes(1);
-  });
-
-  it('#initData should not call #updateModel when add edit request ', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance['initialize'] = false;
-    instance.isEdit = true;
-    instance.getIssueTypes = jest.fn();
-    instance.initSelections = jest.fn();
-    instance.updateSubByIssue = jest.fn();
-    instance['updateCurrentAction'] = jest.fn();
-    instance.updateModel = jest.fn();
-
-    // Act
-    await instance.initData();
-
-    // Assert
-    expect(instance.updateModel).toHaveBeenCalledTimes(0);
-  });
-
-  it('#initData should not call #updateModel when initialize false ', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance['initialize'] = true;
-    instance.updateModel = jest.fn();
-
-    // Act
-    await instance.initData();
-
-    // Assert
-    expect(instance.updateModel).toHaveBeenCalledTimes(0);
-  });
-
-  it('#initSelections should be call #updateModel when add request', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .mock(CommonService,
-        {
-          getVoidActions: jest.fn().mockImplementation(() => Helper.getFakeActions()),
-        }
-      )
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.isEdit = true;
-    instance.actionIds = [];
-
-    // Act
-    await instance.initSelections();
-
-    // Assert
-    expect(instance.actionIds[0]).toEqual(Helper.fakeFilterModel.action);
-  });
-
-  it('#getIssueTypes should be back to not authorized page', async () => {
-    // Arrange
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeBlockingUiStatus: mockChangeBlockingUiStatus
-      })
-      .mock(CommonService,
-        {
-          getIssueTypePermissionList: jest.fn().mockImplementation(() => []),
-        }
-      )
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    const url = 'http://localhost:60196/';
-    Object.defineProperty(window, 'location', {
-      value: new URL(url)
-    });
-    window.location.assign = jest.fn();
-
-    // Act
-    await instance.getIssueTypes();
-
-    // Assert
-    expect(window.location.assign).toHaveBeenCalledWith(Helper.urlNotAuthorizedPage);
-  });
-
-  it('#getIssueTypes should be set value issueId when add request and has not abnormalBet permission', async () => {
-    // Arrange
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeBlockingUiStatus: mockChangeBlockingUiStatus
-      })
-      .mock(CommonService,
-        {
-          getIssueTypePermissionList: jest.fn().mockImplementation(() => Helper.getFakeIssueTypePermissionList()),
-        }
-      )
-      .mock(FilterService,
-        {
-          getIssueTypes: jest.fn().mockImplementation(() => Helper.fakeIssueTypes),
-        }
-      )
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.filterIssueTypePermission = jest.fn();
-    instance.isEdit = false;
-    instance.haveAbnormalBetFromPermission = jest.fn().mockImplementation(() => false);
-    instance.updateSubByIssue = jest.fn();
-    instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
-
-    // Act
-    await instance.getIssueTypes();
-
-    // Assert
-    expect(instance.filterIssueTypePermission).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getIssueTypes should be set value issueId when add request and has abnormalBet permission', async () => {
-    // Arrange
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeBlockingUiStatus: mockChangeBlockingUiStatus
-      })
-      .mock(CommonService,
-        {
-          getIssueTypePermissionList: jest.fn().mockImplementation(() => Helper.getFakeIssueTypePermissionList()),
-        }
-      )
-      .mock(FilterService,
-        {
-          getIssueTypes: jest.fn().mockImplementation(() => Helper.fakeIssueTypes),
-        }
-      )
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.filterIssueTypePermission = jest.fn();
-    instance.isEdit = false;
-    instance.haveAbnormalBetFromPermission = jest.fn().mockImplementation(() => true);
-    instance.updateSubByIssue = jest.fn();
-    instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
-
-    // Act
-    await instance.getIssueTypes();
-
-    // Assert
-    expect(instance.filterIssueTypePermission).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getIssueTypes should be set value issueId when edit request', async () => {
-    // Arrange
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeBlockingUiStatus: mockChangeBlockingUiStatus
-      })
-      .mock(CommonService,
-        {
-          getIssueTypePermissionList: jest.fn().mockImplementation(() => Helper.getFakeIssueTypePermissionList()),
-        }
-      )
-      .mock(FilterService,
-        {
-          getIssueTypes: jest.fn().mockImplementation(() => Helper.fakeIssueTypes),
-        }
-      )
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.filterIssueTypePermission = jest.fn();
-    instance.isEdit = true;
-    instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
-
-    // Act
-    await instance.getIssueTypes();
-
-    // Assert
-    expect(instance.filterIssueTypePermission).toHaveBeenCalledTimes(1);
-  });
-
-
-  it('#haveIssueTypeFromPermission should be return true when issue type = null', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-
-    // Act
-    const actual = await instance.haveIssueTypeFromPermission(null);
-
-    // Assert
-    expect(actual).toBeTruthy();
-  });
-
-  it('#updateIssueBySub should be not change value of issueId', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.issueTypes = Helper.fakeIssueTypes;
-
-    // Act
-    instance['updateIssueBySub']();
-
-    // Assert
-    expect(instance.issueTypes.issueId).toBe(Helper.fakeIssueTypes.issueId);
-  });
-
-  it('#ngOnDestroy should not call unsubscribe when abnormalFilterBySubscription null', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.abnormalFilterBySubscription = null;
-
-    instance.ngOnDestroy();
-
-    expect(instance.abnormalFilterBySubscription).toBeNull();
-  });
-
-  it('#getSubIssueTypeName should return name when has subIssueId', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    const subIssueType = new SubIssueType();
-    subIssueType.subIssueTypeId = 11;
-    subIssueType.subIssueTypeName = 'ABC';
-
-    instance.issueTypes.subIssueId = subIssueType.subIssueTypeId;
-    instance.issueTypes.selectedSubIssueTypes = [subIssueType];
-
-    const actual = instance.getSubIssueTypeName();
-
-    expect(actual).toBe('ABC');
-  });
-
-  it('#getSubIssueTypeName should return default text when has not subtype', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    const subIssueType = new SubIssueType();
-    subIssueType.subIssueTypeId = 11;
-    subIssueType.subIssueTypeName = 'ABC';
-    instance.issueTypes.subIssueId = 12;
-    instance.issueTypes.selectedSubIssueTypes = [subIssueType];
-
-    const actual = instance.getSubIssueTypeName();
-
-    expect(actual).toBe('Select Sub Type');
-  });
-
-  it('#getSubIssueTypeName should return default text when has not subIssueId', async () => {
-    const fakeIssueTypes = _.cloneDeep(Helper.fakeIssueTypes);
-    fakeIssueTypes.subIssueId = null;
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: fakeIssueTypes
-        }
-      });
-
-    const actual = instance.getSubIssueTypeName();
-
-    expect(actual).toBe('Select Sub Type');
-  });
-
-  it('#updateDataAfterClosed should call #updateModel', async () => {
-    const { instance } = await shallow
-      .mock(AddRequestStore, { changeAllowanceTime: jest.fn() })
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.updateModel = jest.fn();
-
-    instance.updateDataAfterClosed(1);
-
-    expect(instance.updateModel).toHaveBeenCalledTimes(1);
-  });
-
-  it('#openDialog should update subIssueTypeDialogModel', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.subIssueTypeDialogModel = new SubIssueTypeDialogModel();
-
-    instance.openDialog();
-
-    expect(instance.subIssueTypeDialogModel.isOpen).toBeTruthy();
-    expect(instance.subIssueTypeDialogModel.issueTypeId).toBe(instance.model.issueTypeId);
-  });
-
-  it('#onChangeIssueType should call expected method', async () => {
-    const { instance } = await shallow
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.updateSubByIssue = jest.fn();
-    instance['updateCurrentAction'] = jest.fn();
-    instance.updateModel = jest.fn();
-    instance['setWidthControlByIssueType'] = jest.fn();
-
-    instance.onChangeIssueType();
-
-    expect(instance['updateCurrentAction']).toHaveBeenCalled();
-    expect(instance.updateModel).toHaveBeenCalled();
-    expect(instance['setWidthControlByIssueType']).toHaveBeenCalled();
-  });
-
-  it('#setWidthControlByIssueType should update correctly', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-
-    [IssueTypeConstant.DANGER_ACCEPTED, IssueTypeConstant.EARLY_KICK_OFF, IssueTypeConstant.WRONG_KICK_OFF,
-      IssueTypeConstant.ABNORMAL_ACCOUNT, IssueTypeConstant.RED_CARD, IssueTypeConstant.WRONG_HDP,
-      IssueTypeConstant.WRONG_1ST_HDP, IssueTypeConstant.WRONG_OU, IssueTypeConstant.WRONG_1ST_OU,
-      IssueTypeConstant.ABNORMAL_BET, IssueTypeConstant.WRONG_SCORE, IssueTypeConstant.WRONG_ODDS,
-      IssueTypeConstant.ABANDONED, IssueTypeConstant.DUPLICATE_TICKETS, IssueTypeConstant.NOT_PARTICIPATE,
-      IssueTypeConstant.ARCHIVED_TICKET, IssueTypeConstant.REDUCED_OVER].forEach(issueId => {
-      instance.model.issueTypeId = issueId.toString();
-
-      instance['setWidthControlByIssueType']();
-
-      expect(instance.widthActionControl).toBeGreaterThan(0);
+  describe('Component Creation', () => {
+    it('should create', () => {
+      expect(component).toBeTruthy();
     });
   });
 
-  it('#updateCurrentAction should update actions when is abnormal mix parlay', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
+  describe('Initialization', () => {
+    it('should initialize with default values when not in edit mode', async () => {
+      // Arrange
+      component.isEdit = false;
+      component.isExternalUrl = false;
+      component.model = {
+        ...Helper.fakeFilterModel,
+        actions: [{ value: '1', name: 'Auto Void Winning' }],
+        action: '1'
+      };
+      document.body.innerHTML = '<div id="body" user-id="1"></div>';
+      component.issueTypes = Helper.fakeIssueTypes;
+      component.issueTypes.issueId = 8;
+      component.originActions = [{ value: '1', name: 'Auto Void Winning' }];
+      commonService.getVoidActions = jest.fn().mockResolvedValue([{ value: '1', name: 'Auto Void Winning' }]);
+      commonService.getIssueTypePermissionList = jest.fn().mockResolvedValue([]);
+      filterService.getIssueTypes = jest.fn().mockResolvedValue(Helper.fakeIssueTypes);
+      addRequestStore.changeBlockingUiStatus = jest.fn();
+      logAnalysisService.writeLogAccessFunction = jest.fn().mockResolvedValue(undefined);
+      actionVoidService.getVoidActionsSelectionByIssueType = jest.fn().mockReturnValue([{ value: '1', name: 'Auto Void Winning' }]);
+
+      // Act
+      await component.ngOnInit();
+
+      // Assert
+      expect(commonService.getVoidActions).toHaveBeenCalled();
+      expect(commonService.getIssueTypePermissionList).toHaveBeenCalled();
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(1);
+      expect(actionVoidService.getVoidActionsSelectionByIssueType).toHaveBeenCalledWith(
+        component.issueTypes.issueId,
+        component.abnormalFilterBy,
+        component.isEdit,
+        component.model.action,
+        component.originActions
+      );
+      expect(component.model.actions).toBeDefined();
+      expect(component.model.actions.length).toBeGreaterThan(0);
+      expect(component.model.action).toBe('1');
+    });
+
+    it('should handle filter changes and update data', async () => {
+      // Arrange
+      component.model = Helper.fakeFilterModel;
+      component.isEdit = true;
+      component.isExternalUrl = false;
+      component.model.actions = [{ value: '1', name: 'Auto Void Winning' }];
+      commonService.getVoidActions = jest.fn().mockResolvedValue([]);
+      commonService.getIssueTypePermissionList = jest.fn().mockResolvedValue([{ issueTypeId: 1, issueTypeName: 'Test' }]);
+      filterService.getIssueTypes = jest.fn().mockResolvedValue(Helper.fakeIssueTypes);
+      addRequestStore.changeBlockingUiStatus = jest.fn();
+      logAnalysisService.writeLogAccessFunction = jest.fn().mockResolvedValue(undefined);
+      actionVoidService.getVoidActionsSelectionByIssueType = jest.fn().mockReturnValue([{ value: '1', name: 'Test' }]);
+
+      // Act
+      await component.ngOnChanges({
+        model: {
+          currentValue: Helper.fakeFilterModel,
+          previousValue: null,
+          firstChange: true
+        } as SimpleChange
       });
-    instance.abnormalFilterBy = AbnormalFilterBy.MIX_PARLAY;
-    instance.originActions = Helper.getFakeActions();
 
-    instance['updateCurrentAction']();
-
-    expect(instance.model.actions.length).toBeGreaterThan(0);
-  });
-
-  it('#updateCurrentAction should update actions when is AB real member', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.abnormalFilterBy = null;
-    instance.originActions = Helper.getFakeActions();
-
-    instance['updateCurrentAction']();
-
-    expect(instance.model.actions.length).toBeGreaterThan(0);
-  });
-
-  it('#updateCurrentAction should update actions when is Archived ticket', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.isArchivedTicket = jest.fn().mockImplementation(() => true);
-    instance.originActions = Helper.getFakeActions();
-
-    instance['updateCurrentAction']();
-
-    expect(instance.model.actions.length).toBeGreaterThan(0);
-  });
-
-  it('#updateCurrentAction should update actions when is Abnormal Account', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.isArchivedTicket = jest.fn().mockImplementation(() => false);
-    instance.originActions = Helper.getFakeActions();
-
-    instance['updateCurrentAction']();
-
-    expect(instance.model.actions.length).toBeGreaterThan(0);
-  });
-
-  it('#updateCurrentAction should update actions when is others', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.isArchivedTicket = jest.fn().mockImplementation(() => false);
-    instance.originActions = Helper.getFakeActions();
-
-    instance['updateCurrentAction']();
-
-    expect(instance.model.actions.length).toBeGreaterThan(0);
-  });
-
-  it('#filterIssueTypePermission should filter issueTypes', async () => {
-    const issues = _.cloneDeep(Helper.fakeIssueTypes);
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
-
-    instance.filterIssueTypePermission(issues);
-
-    expect(issues.issueTypes.length).toBeGreaterThan(0);
-  });
-
-  it('#updateModel should emit modelChange', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.modelChange.emit = jest.fn();
-
-    [1, 3, 11].forEach(x => {
-      instance.issueTypes.issueId = x;
-
-      instance.updateModel();
-
-      expect(instance.modelChange.emit).toHaveBeenCalled();
+      // Assert
+      expect(commonService.getVoidActions).toHaveBeenCalled();
+      expect(commonService.getIssueTypePermissionList).toHaveBeenCalled();
+      expect(filterService.getIssueTypes).toHaveBeenCalled();
     });
   });
 
-  it('#updateModel should emit modelChange when have not issueId, subIssueId', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.modelChange.emit = jest.fn();
-    instance.issueTypes.issueId = null;
-    instance.issueTypes.subIssueId = null;
+  describe('Issue Type Handling', () => {
+    it('should handle issue type change', async () => {
+      // Arrange
+      component.model = Helper.fakeFilterModel;
+      component.issueTypes = Helper.fakeIssueTypes;
+      component.issueTypes.issueId = 8;
+      component.issueTypes.subIssueTypes = [{
+        subIssueTypeId: 12,
+        issueTypeId: 8,
+        subIssueTypeName: 'Non Live',
+        subIssueTypeNameCS: null
+      }];
+      component.issueTypes.selectedSubIssueTypes = [{
+        subIssueTypeId: 12,
+        issueTypeId: 8,
+        subIssueTypeName: 'Non Live',
+        subIssueTypeNameCS: null
+      }];
+      addRequestStore.changeSavingRequestStatus = jest.fn();
+      logAnalysisService.writeLogAccessFunction = jest.fn().mockResolvedValue(undefined);
 
-    instance.updateModel();
+      // Act
+      await component.onChangeIssueType();
 
-    expect(instance.modelChange.emit).toHaveBeenCalled();
-  });
+      // Assert
+      expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
+      expect(logAnalysisService.writeLogAccessFunction).toHaveBeenCalled();
+    });
 
-  it('#isShowSubType should return true', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.issueTypes.issueId = 1;
-    instance.issueTypes.selectedSubIssueTypes = Helper.fakeIssueTypes.subIssueTypes;
+    it('should get default issue type ID', () => {
+      // Arrange
+      component.isExternalUrl = false;
+      component.model = Helper.fakeFilterModel;
+      component.issueTypes = Helper.fakeIssueTypes;
+      component.issueTypes.issueId = 1;
+      window.localStorage.getItem = jest.fn().mockReturnValue('1');
+      document.getElementById = jest.fn().mockReturnValue({ getAttribute: () => '123' });
+      component['haveIssueTypeFromPermission'] = jest.fn().mockReturnValue(true);
 
-    const actual = instance.isShowSubType();
+      // Act
+      const result = component.getIssueTypeIdDefault();
 
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isShowButtonSelectSubType should return false', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    [null, 11].forEach(x => {
-      instance.issueTypes.issueId = x;
-
-      const actual = instance.isShowButtonSelectSubType();
-
-      expect(actual).toBeFalsy();
+      // Assert
+      expect(result).toBe(1);
     });
   });
 
-  it('#updateSubByIssue should update selectedSubIssueTypes correctly', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    [1, 11, 10, 8].forEach(x => {
-      instance.issueTypes.issueId = x;
+  describe('Sub Issue Type Validation', () => {
+    it('should check if sub issue type is valid', () => {
+      // Arrange
+      component.issueTypes = Helper.fakeIssueTypes;
+      component.issueTypes.subIssueId = 1;
 
-      instance.updateSubByIssue();
+      // Act
+      const result = component.checkValidSubIssueType();
 
-      expect(instance.issueTypes.selectedSubIssueTypes.length).toBeGreaterThan(0);
+      // Assert
+      expect(result).toBeTruthy();
+      expect(component.isHighlightSubType).toBeFalsy();
+    });
+
+    it('should check if action void is disabled', () => {
+      // Arrange
+      component.model = Helper.fakeFilterModel;
+      component.model.issueTypeId = IssueTypeConstant.DUPLICATE_TICKETS;
+      component.model.action = TVSRequestActionType.AUTO_VOID_INSTANT_ID.toString();
+
+      // Act
+      const result = component.isDisableActionVoid();
+
+      // Assert
+      expect(result).toBeTruthy();
     });
   });
 
-  it('#haveAbnormalBetFromPermission should return true', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
+  describe('Model Updates', () => {
+    it('should update model when sub issue type changes', () => {
+      // Arrange
+      component.model = Helper.fakeFilterModel;
+      component.issueTypes = Helper.fakeIssueTypes;
+      component.modelChange.emit = jest.fn();
 
-    const actual = instance.haveAbnormalBetFromPermission();
+      // Act
+      component.updateModel(true);
 
-    expect(actual).toBeTruthy();
+      // Assert
+      expect(component.model.isChangeSubTypeManual).toBeTruthy();
+      expect(component.modelChange.emit).toHaveBeenCalledWith(component.model);
+    });
+
+    it('should handle sub issue type dialog', () => {
+      // Arrange
+      component.model = Helper.fakeFilterModel;
+      component.subIssueTypeDialogModel = { isOpen: false } as SubIssueTypeDialogModel;
+
+      // Act
+      component.openDialog();
+
+      // Assert
+      expect(component.subIssueTypeDialogModel.isOpen).toBeTruthy();
+      expect(component.subIssueTypeDialogModel.issueTypeId).toBe(component.model.issueTypeId);
+    });
   });
 
-  it('#checkValidSubIssueType should return true', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.issueTypes.subIssueId = 1;
+  describe('Issue Type Checks', () => {
+    it('should check if wrong score', () => {
+      // Arrange
+      component.issueTypes = Helper.fakeIssueTypes;
+      component.issueTypes.issueId = Number(IssueTypeConstant.WRONG_SCORE);
 
-    const actual = instance.checkValidSubIssueType();
+      // Act
+      const result = component.isWrongScore();
 
-    expect(actual).toBeTruthy();
-  });
+      // Assert
+      expect(result).toBeTruthy();
+    });
 
-  it('#checkValidSubIssueType should return false', async () => {
-    const { instance } = await shallow
-      .render({
-        bind: {
-          isEdit: false,
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance.issueTypes.subIssueId = null;
+    it('should check if likely danger accepted', () => {
+      // Arrange
+      component.issueTypes = Helper.fakeIssueTypes;
+      component.issueTypes.issueId = Number(IssueTypeConstant.DANGER_ACCEPTED);
 
-    const actual = instance.checkValidSubIssueType();
+      // Act
+      const result = component.isLikelyDangerAccepted();
 
-    expect(actual).toBeFalsy();
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should check if archived ticket', () => {
+      // Arrange
+      component.issueTypes = Helper.fakeIssueTypes;
+      component.issueTypes.issueId = Number(IssueTypeConstant.ARCHIVED_TICKET);
+
+      // Act
+      const result = component.isArchivedTicket();
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
   });
 });

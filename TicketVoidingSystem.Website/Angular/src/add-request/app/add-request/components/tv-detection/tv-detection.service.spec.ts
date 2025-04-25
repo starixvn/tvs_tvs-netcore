@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { TvDetectionService } from './tv-detection.service';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { TvDetectionType, DateTimeFormat } from '../../../../../utility/constants/config';
+import { TvDetectionType } from '../../../../../utility/constants/config';
 import { TvDetectionModel } from './tv-detection.model';
 import { ElementRef } from '@angular/core';
 

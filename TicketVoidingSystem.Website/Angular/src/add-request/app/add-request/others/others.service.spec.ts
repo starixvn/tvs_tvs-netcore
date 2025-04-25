@@ -1,46 +1,121 @@
-import { HttpService } from '../../../../utility/services/http.service';
-import { Provider } from './others.model';
+import { TestBed } from '@angular/core/testing';
 import { OthersService } from './others.service';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { HttpService } from '../../../../utility/services/http.service';
+import { OperatorInfo, Provider } from './others.model';
 
-jest.mock('../../../../utility/services/http.service');
 describe('OthersService', () => {
-    let mockHttpService: jest.Mocked<HttpService>;
-    let othersService: OthersService;
+  let service: OthersService;
+  let httpService: HttpService;
 
-    beforeEach(() => {
-        mockHttpService = new HttpService(null) as jest.Mocked<HttpService>;
-        othersService = new OthersService(mockHttpService);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [OthersService]
     });
 
-  it('#getOperators should return expected data', async() => {
-    // Arrange
-    const expectedOperatorInfo = [
-      { matchId: 0, userName: 'UserA', groupName: 'Trader', operatorId: 1, operatorType: 1 },
-      { matchId: 0, userName: 'UserB', groupName: 'Trader', operatorId: 1, operatorType: 1 },
-      { matchId: 0, userName: 'UserC', groupName: 'Suspender', operatorId: 2, operatorType: 2 },
-      { matchId: 0, userName: 'UserD', groupName: 'Suspender', operatorId: 2, operatorType: 2 },
-    ];
-    mockHttpService.postJson.mockResolvedValue(expectedOperatorInfo);
-
-    // Action
-    const actualResult = await othersService.getOperators('0');
-
-    // Assert
-    expect(actualResult).toBe(expectedOperatorInfo);
+    service = TestBed.inject(OthersService);
+    httpService = TestBed.inject(HttpService);
   });
 
-  it('#getProvider should return expected data', async() => {
-    // Arrange
-    const expectedProvider: Provider[] = [
-      { matchId: 0, providerName: 'UserA'},
-      { matchId: 1, providerName: 'UserB'},
-    ];
-    mockHttpService.postJson.mockResolvedValue(expectedProvider);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
 
-    // Action
-    const actualResult = await othersService.getProvider(0);
+  describe('getOperators', () => {
+    it('should call httpService.postJson with correct parameters', async () => {
+      // Arrange
+      const matchIds = '123,456';
+      const mockOperators: OperatorInfo[] = [
+        { 
+          matchId: 123,
+          operatorId: 1,
+          operatorType: 1,
+          userName: 'Operator 1',
+          groupName: 'Group 1'
+        },
+        { 
+          matchId: 456,
+          operatorId: 2,
+          operatorType: 2,
+          userName: 'Operator 2',
+          groupName: 'Group 2'
+        }
+      ];
 
-    // Assert
-    expect(actualResult).toBe(expectedProvider);
+      jest.spyOn(httpService, 'postJson').mockResolvedValue(mockOperators);
+
+      // Act
+      const result = await service.getOperators(matchIds);
+
+      // Assert
+      expect(httpService.postJson).toHaveBeenCalledWith(
+        { matchIds },
+        'api/AddRequest/GetOperators'
+      );
+      expect(result).toEqual(mockOperators);
+    });
+
+    it('should handle empty matchIds', async () => {
+      // Arrange
+      const matchIds = '';
+      const mockOperators: OperatorInfo[] = [];
+
+      jest.spyOn(httpService, 'postJson').mockResolvedValue(mockOperators);
+
+      // Act
+      const result = await service.getOperators(matchIds);
+
+      // Assert
+      expect(httpService.postJson).toHaveBeenCalledWith(
+        { matchIds },
+        'api/AddRequest/GetOperators'
+      );
+      expect(result).toEqual(mockOperators);
+    });
+  });
+
+  describe('getProvider', () => {
+    it('should call httpService.postJson with correct parameters', async () => {
+      // Arrange
+      const matchId = 123;
+      const mockProvider: Provider = {
+        matchId: 123,
+        providerName: 'Provider 1'
+      };
+
+      jest.spyOn(httpService, 'postJson').mockResolvedValue(mockProvider);
+
+      // Act
+      const result = await service.getProvider(matchId);
+
+      // Assert
+      expect(httpService.postJson).toHaveBeenCalledWith(
+        { matchId },
+        'api/AddRequest/GetProvider'
+      );
+      expect(result).toEqual(mockProvider);
+    });
+
+    it('should handle invalid matchId', async () => {
+      // Arrange
+      const matchId = 0;
+      const mockProvider: Provider = {
+        matchId: 0,
+        providerName: ''
+      };
+
+      jest.spyOn(httpService, 'postJson').mockResolvedValue(mockProvider);
+
+      // Act
+      const result = await service.getProvider(matchId);
+
+      // Assert
+      expect(httpService.postJson).toHaveBeenCalledWith(
+        { matchId },
+        'api/AddRequest/GetProvider'
+      );
+      expect(result).toEqual(mockProvider);
+    });
   });
 });

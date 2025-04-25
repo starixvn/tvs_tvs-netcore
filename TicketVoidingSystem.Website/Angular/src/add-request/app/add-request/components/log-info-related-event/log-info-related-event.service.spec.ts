@@ -167,7 +167,7 @@ describe('LogInfoRelatedEventService', () => {
       const toDateTime = new Date('2024-03-20 10:02:00');
 
       // Act
-      const result = (service as any).isHasWarningRangeTime(fromDateTime, toDateTime);
+      const result = service['isHasWarningRangeTime'](fromDateTime, toDateTime);
 
       // Assert
       expect(result).toBeTruthy();
@@ -179,7 +179,7 @@ describe('LogInfoRelatedEventService', () => {
       const toDateTime = new Date('2024-03-20 10:00:30');
 
       // Act
-      const result = (service as any).isHasWarningRangeTime(fromDateTime, toDateTime);
+      const result = service['isHasWarningRangeTime'](fromDateTime, toDateTime);
 
       // Assert
       expect(result).toBeFalsy();
@@ -191,7 +191,7 @@ describe('LogInfoRelatedEventService', () => {
       const toDateTime = new Date('2024-03-20 10:00:00');
 
       // Act
-      const result = (service as any).isHasWarningRangeTime(fromDateTime, toDateTime);
+      const result = service['isHasWarningRangeTime'](fromDateTime, toDateTime);
 
       // Assert
       expect(result).toBeFalsy();
@@ -212,7 +212,7 @@ describe('LogInfoRelatedEventService', () => {
       } as LogInfoRelatedEvent;
 
       // Act
-      const result = (service as any).isHasAllowanceTime(event);
+      const result = service['isHasAllowanceTime'](event);
 
       // Assert
       expect(result).toBeTruthy();
@@ -231,7 +231,7 @@ describe('LogInfoRelatedEventService', () => {
       } as LogInfoRelatedEvent;
 
       // Act
-      const result = (service as any).isHasAllowanceTime(event);
+      const result = service['isHasAllowanceTime'](event);
 
       // Assert
       expect(result).toBeTruthy();
@@ -250,7 +250,7 @@ describe('LogInfoRelatedEventService', () => {
       } as LogInfoRelatedEvent;
 
       // Act
-      const result = (service as any).isHasAllowanceTime(event);
+      const result = service['isHasAllowanceTime'](event);
 
       // Assert
       expect(result).toBeFalsy();

@@ -17,6 +17,7 @@ import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.mod
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { EventDangerAcceptedService } from './event-danger-accepted.service';
 
 describe('RelatedEventService', () => {
   let service: RelatedEventService;
@@ -51,6 +52,9 @@ describe('RelatedEventService', () => {
           useValue: {
             getChildMatches: jest.fn()
           }
+        },
+        {
+          provide: EventDangerAcceptedService,
         }
       ]
     });
@@ -492,7 +496,7 @@ describe('RelatedEventService', () => {
         originalRelatedEvents: [],
         subIssueTypeId: '1'
       } as AddRelatedEventArg;
-
+      addRequestApiService.getSubIssueTypeLinkMatch = jest.fn().mockResolvedValue(relatedEvents);
       const result = await service['preparingModelGetLogInfo'](relatedEvents, arg);
 
       expect(result.length).toBe(2);

@@ -1,4 +1,3 @@
-
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -24,8 +23,8 @@ export class TicketsComponent extends BaseTicketsListComponent<TicketsModel> imp
 
   isShowNoData(): boolean {
     return this.model.groups === undefined ||
-      this.model.groups.length === 0 ||
       this.model.groups === null ||
+      this.model.groups.length === 0 ||
       this.model.groups.every(group => group.displayTotalTickets === 0);
   }
 }

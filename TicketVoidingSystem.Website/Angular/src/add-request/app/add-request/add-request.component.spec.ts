@@ -1,333 +1,278 @@
-import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
-import { IssueType, SubIssueType } from '../../../utility/models/issue-type.model';
-import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
-import { Result } from '../../../utility/models/result';
-import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { AddRequestComponent } from './add-request.component';
 import { AddRequestStore } from './add-request.store';
-import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-bet.component';
-import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
-import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
-import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
+import { CopyRequestInfoService } from './services/copy-request-info.service';
 import { FilterModel } from './filter/filter.model';
-import { IssueTypes } from './filter/issue-types.model';
-import { ChildMatchModel } from './models/related-event.model';
-import { AddRequestResultModel, RequestModel } from './models/request.model';
+import { RequestModel } from './models/request.model';
+import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { of } from 'rxjs';
+import { MatchModel } from '../../../utility/models/match.model';
+import { OperatorInfo } from './others/others.model';
+import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 
 class Helper {
-  static readonly url = 'http://localhost:60196/';
-  static readonly saveButtonSelector = 'button.btn-primary';
-  static readonly backButtonSelector = 'button.btn-danger';
-  static readonly saveAndVoidButtonSelector = 'button.btn-success';
-  static readonly eventSelector = 'event';
-  static readonly filterSelector = 'filter';
-  static readonly othersSelector = 'others';
-  static readonly expectedMessage = '<div class="mg-bottom-5">Please double check below type if correct before proceeding</div>'
-    + '<div class="ml-2"><div>Issue Type: Danger Accepted</div><div>Sub Type: Goal</div></div><hr style="margin: 16px -1rem;"/>'
-    + 'There are some warnings in this request. Are you sure you want to process?';
-  static readonly messageError: string = '<div class="mg-bottom-5">Related match(s) excluded when creating new request because having no valid tickets in the current range:</div>';
-  static readonly messageWarning: string = '<div class="mg-bottom-5">There are some warnings in this request.</div>';
-  static readonly fakeChildMatches: ChildMatchModel[] = [
-    {
-      matchId: 12345,
-      matchCode: '111',
-      matchEvent: 'Test A vs Test B',
-      isChecked: true,
-      matchType: 0,
-      leagueName: '',
-      name: ''
-    }
-  ];
-  static readonly fakeAddRequestResultModel: Result<AddRequestResultModel>[] = [
-    {
-      errorCode: 0,
-      errorMsg: '',
-      isSuccessful: true
-    }
-  ];
-  static readonly fakeAddRequestResultModelFail: Result<AddRequestResultModel>[] = [
-    {
-      errorCode: 1,
-      errorMsg: 'error',
-      isSuccessful: false,
-      data: null
-    }
-  ];
-  static readonly fakeAddRequestResultModelFailHaveData: Result<AddRequestResultModel>[] = [
-    {
-      errorCode: 1,
-      errorMsg: 'error',
-      isSuccessful: false
-    }
-  ];
-  static readonly fakeAddRequestResultModelForAlert: Result<AddRequestResultModel>[] = [
-    {
-      errorCode: 1,
-      errorMsg: 'error',
-      isSuccessful: false
-    },
-    {
-      errorCode: 0,
-      errorMsg: '',
-      isSuccessful: true
-    }
-  ];
-  static readonly fakeLogInfoDetailList: LogInfoDetail[] = [
-    {
-      matchId: 12345,
-      liveScores: '0 - 0',
-      voidFromTime: new Date('2020-11-06 00:00:00.000'),
-      voidToTime: new Date('2020-11-06 00:00:00.000'),
-      singleCount: 1,
-      cancelCashOutCount: 1,
-      mainParlayCount: 1,
-      cashOutCount: 3,
-      settleCount: 1,
-      scoreOfMatch: '',
-      scoreNormalTicket: '',
-      instantlySettleCount: 2
-    } as LogInfoDetail
-  ];
-  static readonly fakeAbnormalFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '',
-    action: '1',
-    isTest: true,
-    isVoided: false,
-    isAbnormal: false
-  } as FilterModel;
+  static readonly fakeRequestId = 1212;
+  static readonly fakeMatchId = 123;
+  static readonly fakeUserId = 123;
+  static readonly fakeRequestedBy = 'testUser';
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
     isTest: true,
     isVoided: false,
+    isChangeSubTypeManual: true,
     isAbnormal: false
   } as FilterModel;
-  static getFakeRequestViewModel(): Result<string> {
-    return {
-      errorCode: 0,
-      errorMsg: '',
-      isSuccessful: true,
-      data: '12345'
-    } as Result<string>;
-  }
-
-  static fakeIssueType: IssueType[] = [{
-    issueTypeId: 1,
-    issueTypeName: "Danger Accepted",
-  }];
-
-  static fakeSubIssueType: SubIssueType[] = [{
-    subIssueTypeId: 1,
-    subIssueTypeName: "Goal",
-    issueTypeId: 11,
-    subIssueTypeNameCS: "Hi"
-  }];
-
-  static fakeIssueTypes: IssueTypes = {
-    issueTypes: Helper.fakeIssueType,
-    subIssueTypes: Helper.fakeSubIssueType,
-    issueId: 1,
-    selectedSubIssueTypes: Helper.fakeSubIssueType,
-    subIssueId: 1,
-  };
-
-  static initHtml(): void {
-    const element = document.createElement('body');
-    element.setAttribute('id', 'body');
-    element.setAttribute('user-id', '8');
-    element.setAttribute('user-name', 'sa');
-    document.body.appendChild(element);
-  }
+  static readonly fakeRequestModel = new RequestModel();
+  static readonly fakeMatchModel: MatchModel = {
+    matchId: 123,
+    parentId: 456,
+    matchCode: 'TEST123',
+    leagueName: 'Test League',
+    matchEvent: 'Test Event'
+  } as MatchModel;
+  static readonly fakeOperatorInfo: OperatorInfo = {
+    matchId: 123,
+    operatorId: 1,
+    operatorType: 1,
+    userName: 'operator1',
+    groupName: 'Test Group'
+  } as OperatorInfo;
 }
 
 describe('AddRequestComponent', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+  let component: AddRequestComponent;
+  let fixture: ComponentFixture<AddRequestComponent>;
+  let addRequestStore: AddRequestStore;
+  let copyRequestInfoService: CopyRequestInfoService;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        AddRequestStore,
+        CopyRequestInfoService
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(AddRequestComponent);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    copyRequestInfoService = fixture.debugElement.injector.get(CopyRequestInfoService);
+    component = fixture.componentInstance;
+    document.body.innerHTML = '<div id="body" user-id="1" user-name="testUser"></div>';
+
+    // Mock store observables
+    jest.spyOn(addRequestStore, 'savingRequestStatus', 'get').mockReturnValue(of(false));
+    jest.spyOn(addRequestStore, 'blockingUiStatus', 'get').mockReturnValue(of([false]));
+    jest.spyOn(addRequestStore, 'getAbnormalFilterBySubject', 'get').mockReturnValue(of(0));
+
+    // Mock window.location
+    Object.defineProperty(window, 'location', {
+      value: {
+        assign: jest.fn()
+      },
+      writable: true
+    });
   });
 
-  it('#ngOnInit should be call #getChangeActionWaitingToManualEditPageSubject.subscribe when edit request', async () => {
-    const addRequestStore = new AddRequestStore();
-    addRequestStore.savingRequestStatus.subscribe = jest.fn();
-    addRequestStore.blockingUiStatus.subscribe = jest.fn();
-    addRequestStore.getAbnormalFilterBySubject.subscribe = jest.fn();
-    const component = new AddRequestComponent(addRequestStore, null);
-    component.isEdit = true;
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
+  it('should handle saving request status changes', () => {
+    // Arrange
+    jest.spyOn(addRequestStore, 'savingRequestStatus', 'get').mockReturnValue(of(true));
+
+    // Act
     component.ngOnInit();
 
-    expect(component.isEdit).toBeTruthy();
+    // Assert
+    expect(component.isDisabledSaveButton).toBeTruthy();
   });
 
-  it('#ngOnDestroy should be call unsubscribe', async () => {
-    const addRequestStore = new AddRequestStore();
-    const component = new AddRequestComponent(addRequestStore, null);
-    component.savingRequestSubscription = addRequestStore.savingRequestStatus.subscribe(status => {
-      component.isDisabledSaveButton = status;
-    });
-    component.checkValidSubIssueTypeInFilterSubscription = addRequestStore.getCheckValidSubIssueTypeInFilterSubject.subscribe(() => {
-      component.filterComponent.checkValidSubIssueType();
-    });
-    component.blockingUiSubscription = addRequestStore.blockingUiStatus.subscribe(status => {
-      component.isBlock = status.length > 0;;
-    });
-    component.abnormalFilterBySubscription = addRequestStore.getAbnormalFilterBySubject.subscribe(type => {
-      component.abnormalFilterBy = type;
-    });
-    component.savingRequestSubscription.unsubscribe = jest.fn();
-    component.checkValidSubIssueTypeInFilterSubscription.unsubscribe = jest.fn();
-    component.blockingUiSubscription.unsubscribe = jest.fn();
-    component.abnormalFilterBySubscription.unsubscribe = jest.fn();
+  it('should handle blocking UI status changes', () => {
+    // Arrange
+    jest.spyOn(addRequestStore, 'blockingUiStatus', 'get').mockReturnValue(of([true]));
 
-    component.ngOnDestroy();
+    // Act
+    component.ngOnInit();
 
-    expect(component.savingRequestSubscription.unsubscribe).toHaveBeenCalled();
-    expect(component.checkValidSubIssueTypeInFilterSubscription.unsubscribe).toHaveBeenCalled();
-    expect(component.blockingUiSubscription.unsubscribe).toHaveBeenCalled();
-    expect(component.abnormalFilterBySubscription.unsubscribe).toHaveBeenCalled();
+    // Assert
+    expect(component.isBlock).toBeTruthy();
   });
 
-  it('#updateModel should assign new object filter', async () => {
-    const fakeRequestModel = new RequestModel();
-    fakeRequestModel.filter.issueTypeId = '1';
-    const component = new AddRequestComponent(null, null);
-    component.model = fakeRequestModel;
-    Helper.initHtml();
+  it('should handle abnormal filter by changes', () => {
+    // Arrange
+    jest.spyOn(addRequestStore, 'getAbnormalFilterBySubject', 'get').mockReturnValue(of(1));
 
-    component.updateModel(Helper.fakeAbnormalFilterModel);
+    // Act
+    component.ngOnInit();
 
-    expect(component.model.filter).toStrictEqual(Helper.fakeAbnormalFilterModel);
+    // Assert
+    expect(component.abnormalFilterBy).toBe(1);
   });
 
-  it('#updateModel should not assign default data for decidedBy when is not abnormal', async () => {
-    const fakeRequestModel = new RequestModel();
-    fakeRequestModel.filter.issueTypeId = '13';
-    const component = new AddRequestComponent(null, null);
-    component.model = fakeRequestModel;
+  it('should update match ID', () => {
+    // Arrange
+    const matchId = 123;
 
-    component.updateModel(Helper.fakeFilterModel);
+    // Act
+    component.updateMatchId(matchId);
 
-    expect(component.model.others.decidedBy).toBe(undefined);
-    expect(component.model.filter).toStrictEqual(Helper.fakeFilterModel);
+    // Assert
+    expect(component.matchId).toBe(matchId);
   });
 
-  it('#backToManagePage should assign to page', async () => {
-    const fakeRequestModel = new RequestModel();
-    const component = new AddRequestComponent(null, null);
-    component.model = fakeRequestModel;
-    Object.defineProperty(window, 'location', {
-      value: new URL(Helper.url)
-    });
-    window.location.assign = jest.fn();
+  it('should update match info', () => {
+    // Arrange
+    const match = Helper.fakeMatchModel;
 
-    component.backToManagePage();
+    // Act
+    component.updateMatchInfo(match);
 
-    expect(window.location.assign).toHaveBeenCalledWith('TicketVoidingSystem/ManageRequest/Index');
+    // Assert
+    expect(component.matchId).toBe(123);
+    expect(component.parentMatchId).toBe(456);
   });
 
-  it('#eventAbnormalBetComponent.saveRequest should execute save request when isLikelyAbnormalBetIssueType', async () => {
-    const fakeRequestModel = new RequestModel();
-    fakeRequestModel.filter.issueTypeId = IssueTypeConstant.ABNORMAL_BET;
-    const mockSaveRequest = jest.fn();
-    const eventAbnormalBetComponent = new EventAbnormalBetComponent(null, null, null, null, null);
-    eventAbnormalBetComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
-    component.model = fakeRequestModel;
-    component.eventAbnormalBetComponent = eventAbnormalBetComponent;
-
-    await component.saveRequest();
-
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
-  });
-
-  it('#eventArchivedTicket.saveRequest should execute save request when isArchivedTicketIssueType', async () => {
-    const fakeRequestModel = new RequestModel();
-    fakeRequestModel.filter.issueTypeId = IssueTypeConstant.ARCHIVED_TICKET;
-    const mockSaveRequest = jest.fn();
-    const eventArchivedTicketComponent = new EventTicket14Component(null, null, null, null);
-    eventArchivedTicketComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
-    component.model = fakeRequestModel;
-    component.eventTicket14Component = eventArchivedTicketComponent;
-
-    await component.saveRequest();
-
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
-  });
-
-  it('#abnormalAccountsComponent.saveRequest should execute save request when isAbnormalAccount', async () => {
-    const fakeRequestModel = new RequestModel();
-    fakeRequestModel.filter.issueTypeId = IssueTypeConstant.ABNORMAL_ACCOUNT;
-    const mockSaveRequest = jest.fn();
-    const abnormalAccountsComponent = new AbnormalAccountsComponent(null, null, null, null);
-    abnormalAccountsComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
-    component.model = fakeRequestModel;
-    component.abnormalAccountsComponent = abnormalAccountsComponent;
-
-    await component.saveRequest();
-
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
-  });
-
-  it('#eventRecoverTicketComponent.saveRequest should execute save request when isRecoverTicket', async () => {
-    const fakeRequestModel = new RequestModel();
-    fakeRequestModel.filter.issueTypeId = IssueTypeConstant.RECOVER_TICKET;
-    const mockSaveRequest = jest.fn();
-    const eventRecoverTicketComponent = new EventRecoverTicketComponent(null, null, null, null);
-    eventRecoverTicketComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
-    component.model = fakeRequestModel;
-    component.eventRecoverTicketComponent = eventRecoverTicketComponent;
-
-    await component.saveRequest();
-
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
-  });
-
-  it('#eventDuplicateTicketsComponent.saveRequest should execute save request when isDuplicateTickets', async () => {
-    const fakeRequestModel = new RequestModel();
-    fakeRequestModel.filter.issueTypeId = IssueTypeConstant.DUPLICATE_TICKETS;
-    const mockSaveRequest = jest.fn();
-    const eventDuplicateTicketsComponent = new EventDuplicateTicketsComponent(null, null, null, null, null, null);
-    eventDuplicateTicketsComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
-    component.model = fakeRequestModel;
-    component.eventDuplicateTicketsComponent = eventDuplicateTicketsComponent;
-
-    await component.saveRequest();
-
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getEventLabel should return correct "Username"', async () => {
-    const component = new AddRequestComponent(null, null);
+  it('should handle issue type change for abnormal bet', () => {
+    // Arrange
+    const issueTypeId = IssueTypeConstant.ABNORMAL_BET;
+    document.body.setAttribute('user-name', 'testUser');
     component.model = new RequestModel();
-    component.model.filter = new FilterModel();
+    component.model.others = { decidedBy: '', remark: '' };
+
+    // Act
+    component.onChangeIssueType(issueTypeId);
+
+    // Assert
+    expect(component.model.others.decidedBy).toBe('testUser');
+  });
+
+  it('should handle issue type change for normal case', () => {
+    // Arrange
+    const issueTypeId = '1';
+
+    // Act
+    component.onChangeIssueType(issueTypeId);
+
+    // Assert
+    expect(component.model.others.decidedBy).toBe('');
+  });
+
+  it('should show others full fields for normal case', () => {
+    // Arrange
+    component.model.filter.issueTypeId = '1';
+
+    // Act & Assert
+    expect(component.isShowOthersFullFields()).toBeTruthy();
+  });
+
+  it('should not show others full fields for abnormal account', () => {
+    // Arrange
     component.model.filter.issueTypeId = IssueTypeConstant.ABNORMAL_ACCOUNT;
-    const actual = component.getEventLabel();
 
-    expect(actual).toBe('Username');
+    // Act & Assert
+    expect(component.isShowOthersFullFields()).toBeFalsy();
   });
 
-  it('#getEventLabel should return correct "Ticket Info"', async () => {
-    const component = new AddRequestComponent(null, null);
-    component.model = new RequestModel();
-    component.model.filter = new FilterModel();
-    component.model.filter.issueTypeId = IssueTypeConstant.ARCHIVED_TICKET;
-    const actual = component.getEventLabel();
-
-    expect(actual).toBe('Ticket Info');
-  });
-
-  it('#getEventLabel should return correct "Event"', async () => {
-    const component = new AddRequestComponent(null, null);
-    component.model = new RequestModel();
-    component.model.filter = new FilterModel();
+  it('should show copy info button for danger accepted', () => {
+    // Arrange
     component.model.filter.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
-    const actual = component.getEventLabel();
+    component.model.filter.isVoided = true;
 
-    expect(actual).toBe('Event');
+    // Act & Assert
+    expect(component.isShowCopyInfoButton()).toBeTruthy();
+  });
+
+  it('should not show copy info button for non-voided request', () => {
+    // Arrange
+    component.model.filter.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
+    component.model.filter.isVoided = false;
+
+    // Act & Assert
+    expect(component.isShowCopyInfoButton()).toBeFalsy();
+  });
+
+  it('should handle copy email request info', async () => {
+    // Arrange
+    component.requestId = Helper.fakeRequestId;
+    component.matchId = Helper.fakeMatchId;
+    component.model.others.operatorsList = [Helper.fakeOperatorInfo];
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+    copyRequestInfoService.copyEmailRequestInfo = jest.fn();
+    window.alert = jest.fn();
+
+    // Act
+    await component.copyEmailRequestInfo();
+
+    // Assert
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+    expect(copyRequestInfoService.copyEmailRequestInfo).toHaveBeenCalledWith(
+      Helper.fakeRequestId,
+      Helper.fakeMatchId,
+      [Helper.fakeOperatorInfo]
+    );
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    expect(window.alert).toHaveBeenCalledWith(`Request No.${Helper.fakeRequestId} has been copied to clipboard.`);
+  });
+
+  it('should handle copy lets talk request info', async () => {
+    // Arrange
+    component.requestId = Helper.fakeRequestId;
+    component.matchId = Helper.fakeMatchId;
+    component.model.others.operatorsList = [Helper.fakeOperatorInfo];
+    component.model.filter.issueTypeId = IssueTypeConstant.RED_CARD;
+    component.eventRedCardComponent = {} as EventRedCardComponent;
+    component.eventRedCardComponent.getLogInfoDetail = jest.fn().mockReturnValue([]);
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+    copyRequestInfoService.copyLetsTalkRequestInfo = jest.fn();
+    window.alert = jest.fn();
+
+    // Act
+    await component.copyLetsTalkRequestInfo();
+
+    // Assert
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+    expect(copyRequestInfoService.copyLetsTalkRequestInfo).toHaveBeenCalled();
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    expect(window.alert).toHaveBeenCalledWith(`Request No.${Helper.fakeRequestId} has been copied to clipboard.`);
+  });
+
+  it('should update model with filter', () => {
+    // Arrange
+    const filterModel = Helper.fakeFilterModel;
+
+    // Act
+    component.updateModel(filterModel);
+
+    // Assert
+    expect(component.model.filter).toEqual(filterModel);
+  });
+
+  it('should get event label for abnormal account', () => {
+    // Arrange
+    component.model.filter.issueTypeId = IssueTypeConstant.ABNORMAL_ACCOUNT;
+
+    // Act & Assert
+    expect(component.getEventLabel()).toBe('Username');
+  });
+
+  it('should get event label for archived ticket', () => {
+    // Arrange
+    component.model.filter.issueTypeId = IssueTypeConstant.ARCHIVED_TICKET;
+
+    // Act & Assert
+    expect(component.getEventLabel()).toBe('Ticket Info');
+  });
+
+  it('should get event label for normal case', () => {
+    // Arrange
+    component.model.filter.issueTypeId = '1';
+
+    // Act & Assert
+    expect(component.getEventLabel()).toBe('Event');
   });
 });

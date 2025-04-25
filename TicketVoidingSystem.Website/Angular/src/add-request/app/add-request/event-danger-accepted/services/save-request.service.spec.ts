@@ -404,14 +404,14 @@ describe('SaveRequestService', () => {
             filterTimeWithAllowanceComponent: { isValid: () => true }
           }]
         } as unknown as QueryList<LogInfoRelatedEventComponent>,
-        primitiveProps: {} as any,
+        primitiveProps: {} as PrimitiveProperty,
         isEdit: false,
         requestId: 1,
         userId: 1,
         requestedBy: 'test',
-        issueTypes: {} as any,
-        defaultFilterTimeWithAllowance: {} as any,
-        others: {} as any,
+        issueTypes: {} as IssueTypes,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
+        others: {} as OthersModel,
         actionIdOfFirstTimeAccess: '0',
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
@@ -464,13 +464,13 @@ describe('SaveRequestService', () => {
             filterTimeWithAllowanceComponent: { isValid: () => true }
           }]
         } as unknown as QueryList<LogInfoRelatedEventComponent>,
-        primitiveProps: {} as any,
+        primitiveProps: {} as PrimitiveProperty,
         isEdit: false,
         requestId: 1,
         userId: 1,
         requestedBy: 'test',
-        issueTypes: {} as any,
-        defaultFilterTimeWithAllowance: {} as any,
+        issueTypes: {} as IssueTypes,
+        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
         others: {} as any,
         actionIdOfFirstTimeAccess: '0',
         tvDetectionComponent: {} as TvDetectionComponent,
@@ -487,16 +487,16 @@ describe('SaveRequestService', () => {
   });
 
   describe('showPopupConfirmSave', () => {
-    let mockDocument: any;
-    let mockBody: any;
+    let mockDocument: Document;
+    let mockBody: HTMLElement;
 
     beforeEach(() => {
       mockBody = {
         getAttribute: jest.fn().mockReturnValue('123')
-      };
+      } as unknown as HTMLElement;
       mockDocument = {
         getElementById: jest.fn().mockReturnValue(mockBody)
-      };
+      } as unknown as Document;
       (global as any).document = mockDocument;
     });
 

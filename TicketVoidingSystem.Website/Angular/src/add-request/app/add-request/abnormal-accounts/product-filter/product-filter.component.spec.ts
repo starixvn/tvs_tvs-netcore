@@ -4,7 +4,8 @@ import { ProductFilterComponent } from './product-filter.component';
 import { ProductFilter, TicketStatus, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
-import { SimpleChange } from '@angular/core';
+import { EventEmitter, SimpleChange } from '@angular/core';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 
 class Helper {
   static readonly fakeAbnormalAccountModel = new AbnormalAccountModel();
@@ -34,7 +35,7 @@ describe('ProductFilterComponent', () => {
           getBoundingClientRect: jest.fn().mockReturnValue({})
         }])
       }
-    } as any;
+    } as unknown as Tooltip;
   });
 
   it('should create', () => {
@@ -72,7 +73,7 @@ describe('ProductFilterComponent', () => {
   it('should handle actionId changes', () => {
     // Arrange
     component.actionId = TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
-    component.changeFilterEvent = { emit: jest.fn() } as any;
+    component.changeFilterEvent = { emit: jest.fn() } as unknown as EventEmitter<void>;
 
     // Act
     component.ngOnChanges({
@@ -135,7 +136,7 @@ describe('ProductFilterComponent', () => {
 
   it('should handle filter changes', () => {
     // Arrange
-    component.changeFilterEvent = { emit: jest.fn() } as any;
+    component.changeFilterEvent = { emit: jest.fn() } as unknown as EventEmitter<void>;
 
     // Act
     component.changeFilter();

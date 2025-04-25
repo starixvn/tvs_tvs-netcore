@@ -154,9 +154,6 @@ describe('EventNotParticipateComponent', () => {
     component.eventLeagueComponent = {
       selectedMatch: matchInfo
     } as EventLeagueComponent;
-    component.updateMatchId = {
-      emit: jest.fn()
-    } as any;
     component.updateMatchId.emit = jest.fn();
     filterNotParticipateService.getNotParticipateBetTypes = jest.fn().mockResolvedValue({
       notParticipatePlayers: [],

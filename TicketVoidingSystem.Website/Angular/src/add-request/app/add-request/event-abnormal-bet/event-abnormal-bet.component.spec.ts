@@ -11,7 +11,9 @@ import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { OthersModel } from '../others/others.model';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
-import { ValidationAbnormalBet } from './event-abnormal-bet.model';
+import { AbnormalBetTicketViewModel, ValidationAbnormalBet } from './event-abnormal-bet.model';
+import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet/confirm-abnormal-bet.component';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -76,8 +78,8 @@ describe('EventAbnormalBetComponent', () => {
       getAllBetIds: () => [],
       removeTransId: () => {},
       triggerFocusOutBetIds: () => {}
-    } as any;
-    component.confirmAbnormalBetComponent = {} as any;
+    } as unknown as BetIdsComponent;
+    component.confirmAbnormalBetComponent = {} as unknown as ConfirmAbnormalBetComponent;
 
     // Mock document.getElementById
     const bodyElement = document.createElement('div');
@@ -130,7 +132,7 @@ describe('EventAbnormalBetComponent', () => {
     // Arrange
     component.betIdsComponent = {
       groupNumber: { items: [{ number: 1 }] }
-    } as any;
+    } as unknown as BetIdsComponent;
     component.filter = Helper.fakeFilterModel;
 
     // Act & Assert
@@ -147,7 +149,7 @@ describe('EventAbnormalBetComponent', () => {
       getAllBetIds: () => ['1', '2'],
       removeTransId: () => {},
       triggerFocusOutBetIds: () => {}
-    } as any;
+    } as unknown as BetIdsComponent;
     validationService.checkValidBusinessRule = jest.fn().mockResolvedValue({ isValid: true });
     addRequestStore.changeStartTimeFilterAnalysis = jest.fn();
 
@@ -170,7 +172,7 @@ describe('EventAbnormalBetComponent', () => {
       getAllBetIds: () => ['1', '2'],
       removeTransId: () => {},
       triggerFocusOutBetIds: () => {}
-    } as any;
+    } as unknown as BetIdsComponent;
     validationService.isValidationHasWarningTicket = jest.fn().mockReturnValue(false);
     validationService.isHasWarningEditTakeNoteRequest = jest.fn().mockReturnValue(false);
     validationService.isEditingByAnotherUser = jest.fn().mockReturnValue(false);
@@ -193,7 +195,7 @@ describe('EventAbnormalBetComponent', () => {
       getAllBetIds: () => ['1', '2'],
       removeTransId: () => {},
       triggerFocusOutBetIds: () => {}
-    } as any;
+    } as unknown as BetIdsComponent;
     validationService.checkValidBusinessRule = jest.fn().mockResolvedValue({
       isValid: true,
       warningModel: new ValidationAbnormalBet()
@@ -213,13 +215,13 @@ describe('EventAbnormalBetComponent', () => {
     // Arrange
     component.primitiveProps.invalidTransIds = '1,2';
     component.exportTickets = [
-      { betId: '1' },
-      { betId: '2' },
-      { betId: '3' }
-    ] as any[];
+      { betId: '1' } as AbnormalBetTicketViewModel,
+      { betId: '2' } as AbnormalBetTicketViewModel,
+      { betId: '3' } as AbnormalBetTicketViewModel
+    ];
     component.betIdsComponent = {
       removeTransId: jest.fn()
-    } as any;
+    } as unknown as BetIdsComponent;
 
     // Act
     component.removeInvalidTransIds();
@@ -252,7 +254,7 @@ describe('EventAbnormalBetComponent', () => {
       getAllBetIds: () => ['1', '2'],
       removeTransId: () => {},
       triggerFocusOutBetIds: () => {}
-    } as any;
+    } as unknown as BetIdsComponent;
     validationService.exportExcelAbnormalBetTickets = jest.fn().mockResolvedValue(undefined);
     component.primitiveProps.isBlockUI = false;
 

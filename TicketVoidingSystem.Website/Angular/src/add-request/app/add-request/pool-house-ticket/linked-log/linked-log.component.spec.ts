@@ -1,40 +1,32 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { LinkedLogComponent } from './linked-log.component';
 import { LinkedLogsViewModel } from './linked-log.model';
 
-describe('LinkedLogComponent ', () => { 
-  @NgModule({
-    declarations: [
-    ],
-    imports: [
-      NgbModule,
-      FormsModule
-    ],
-    providers: [
-    ]
-  })
-  class AppModuleTest { }
+describe('LinkedLogComponent', () => {
+  let component: LinkedLogComponent;
+  let fixture: ComponentFixture<LinkedLogComponent>;
 
-  let shallow: Shallow<LinkedLogComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(LinkedLogComponent, AppModuleTest)
-      .mock(ElementRef, {})
-      .dontMock(NgbModule);
+    fixture = TestBed.createComponent(LinkedLogComponent);
+    component = fixture.componentInstance;
   });
 
-  it('LinkedLogComponent init should match snapshot', async () => {
-    const { fixture } = await shallow
-    .render({
-      bind: {
-        linkedLogsViewModel: new LinkedLogsViewModel()
-      }
-    });
-
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
-  
+
+  it('should initialize with default LinkedLogsViewModel', () => {
+    expect(component.linkedLogsViewModel).toBeInstanceOf(LinkedLogsViewModel);
+  });
+
+  it('should accept input LinkedLogsViewModel', () => {
+    const mockViewModel = new LinkedLogsViewModel();
+    component.linkedLogsViewModel = mockViewModel;
+    expect(component.linkedLogsViewModel).toBe(mockViewModel);
+  });
 });

@@ -101,6 +101,9 @@ export class PopupService {
   }
 
   private getMarkTicketsContent(query: AddRequestQuery, addRequestResult: AddRequestResultModel): string {
+    if (!addRequestResult?.markedTicketsSuccessful) {
+      return '';
+    }
     const totalTicketsMarked = addRequestResult.markedTicketsSuccessful.length;
     if (StaticService.isAbnormalBet(query.issueTypeId) && totalTicketsMarked) {
       const totalTicketsInputted = query.abnormalBetInfo.transIds.split(',').length;

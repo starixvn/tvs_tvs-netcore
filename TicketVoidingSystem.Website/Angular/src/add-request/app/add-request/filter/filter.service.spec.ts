@@ -1,40 +1,66 @@
-import { HttpService } from '../../../../utility/services/http.service';
+import { TestBed } from '@angular/core/testing';
 import { FilterService } from './filter.service';
+import { HttpService } from '../../../../utility/services/http.service';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { IssueTypes } from './issue-types.model';
+import { IssueType, SubIssueType } from '../../../../utility/models/issue-type.model';
 
-jest.mock('../../../../utility/services/http.service');
 describe('FilterService', () => {
-  let mockHttpService: jest.Mocked<HttpService>;
-  let filterService: FilterService;
+  let service: FilterService;
+  let httpService: HttpService;
 
   beforeEach(() => {
-      mockHttpService = new HttpService(null) as jest.Mocked<HttpService>;
-      filterService = new FilterService(mockHttpService);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [FilterService]
+    });
+
+    service = TestBed.inject(FilterService);
+    httpService = TestBed.inject(HttpService);
   });
 
-  it('#getIssueTypes should return expected data', async() => {
-    // Arrange
-    const expectedIssueTypes = {
-      issueTypes: [
-        {
-          issueTypeId: 1,
-          issueTypeName: 'Danger Accepted',
-        },
-        {
-          issueTypeId: 11,
-          issueTypeName: 'Abnormal Bet',
-        }
-      ],
-      subIssueTypes: [],
-      issueId: '',
-      selectedSubIssueTypes: [],
-      subIssueId: ''
-    };
-    mockHttpService.getJson.mockResolvedValue(expectedIssueTypes);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
 
-    // Action
-    const actualResult = await filterService.getIssueTypes();
+  describe('getIssueTypes', () => {
+    it('should call HttpService.getJson with correct endpoint', async () => {
+      // Arrange
+      const mockIssueTypes: IssueTypes = {
+        issueTypes: [
+          { issueTypeId: 1, issueTypeName: 'Issue Type 1' },
+          { issueTypeId: 2, issueTypeName: 'Issue Type 2' }
+        ],
+        subIssueTypes: [
+          { 
+            subIssueTypeId: 1, 
+            issueTypeId: 1, 
+            subIssueTypeName: 'Sub Issue 1',
+            subIssueTypeNameCS: 'Sub Issue 1 CS'
+          }
+        ],
+        issueId: 1,
+        selectedSubIssueTypes: [],
+        subIssueId: 1
+      };
 
-    // Assert
-    expect(actualResult).toStrictEqual(expectedIssueTypes);
+      jest.spyOn(httpService, 'getJson').mockResolvedValue(mockIssueTypes);
+
+      // Act
+      const result = await service.getIssueTypes();
+
+      // Assert
+      expect(httpService.getJson).toHaveBeenCalledWith('api/SharedApi/GetIssueTypes');
+      expect(result).toEqual(mockIssueTypes);
+    });
+
+    it('should handle error when API call fails', async () => {
+      // Arrange
+      const mockError = new Error('API Error');
+      jest.spyOn(httpService, 'getJson').mockRejectedValue(mockError);
+
+      // Act & Assert
+      await expect(service.getIssueTypes()).rejects.toThrow('API Error');
+    });
   });
 });

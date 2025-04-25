@@ -11,7 +11,7 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { TicketStatus } from '../../../../../utility/constants/config';
 import { SortingComponent } from '../../../../../utility/components/sorting/sorting/sorting.component';
-import { QueryList } from '@angular/core';
+import { EventEmitter, QueryList } from '@angular/core';
 import * as _ from 'lodash';
 import { CheckUsernamesViewModel } from '../models/check-username.model';
 
@@ -116,7 +116,7 @@ describe('AccountTableComponent', () => {
     component.abnormalAccountModel = Helper.fakeAbnormalAccountModel;
     component.primitiveProps = Helper.fakePrimitiveProperty;
     component.permission = {} as PermissionAddRequest;
-    component.reCalculateByAccountEvent = { emit: jest.fn() } as any;
+    component.reCalculateByAccountEvent = { emit: jest.fn() } as unknown as EventEmitter<number>;
 
     const updatedAccount = {
       ...account,

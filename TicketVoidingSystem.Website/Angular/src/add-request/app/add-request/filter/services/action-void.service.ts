@@ -4,7 +4,6 @@ import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.c
 import { Selection } from '../../../../../utility/models/selection.model';
 @Injectable()
 export class ActionVoidService {
-
   public getVoidActionsSelectionByIssueType(issueTypeId: number, filterBy: number, isEdit: boolean, currentActionId: string, originActions: Selection[]): Selection[] {
     if (!issueTypeId) {
       return originActions;

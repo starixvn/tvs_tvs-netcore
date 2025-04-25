@@ -23,7 +23,6 @@ describe('SaveRequestService', () => {
   let addRequestService: AddRequestService;
   let validationService: ValidationService;
   let abnormalAccountService: AbnormalAccountService;
-  let addRequestStore: AddRequestStore;
 
   const mockSaveRequestArg: SaveRequestArg = {
     addRequestStore: {
@@ -93,7 +92,6 @@ describe('SaveRequestService', () => {
     addRequestService = TestBed.inject(AddRequestService);
     validationService = TestBed.inject(ValidationService);
     abnormalAccountService = TestBed.inject(AbnormalAccountService);
-    addRequestStore = TestBed.inject(AddRequestStore);
 
     jest.spyOn(popupService, 'showError');
     jest.spyOn(StaticService, 'isHasWarningTakenNote');
@@ -108,8 +106,9 @@ describe('SaveRequestService', () => {
 
   describe('saveRequest', () => {
     it('should show popup confirm when data is valid', async () => {
-      jest.spyOn(service as any, 'recheckValidationBeforeSaveRequest').mockResolvedValue(true);
-      jest.spyOn(service as any, 'showPopupConfirmSave');
+      service['recheckValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue(true);
+      service['showPopupConfirmSave'] = jest.fn();
+
 
       await service.saveRequest(mockSaveRequestArg);
 
@@ -119,8 +118,8 @@ describe('SaveRequestService', () => {
     });
 
     it('should not show popup when data is invalid', async () => {
-      jest.spyOn(service as any, 'recheckValidationBeforeSaveRequest').mockResolvedValue(false);
-      jest.spyOn(service as any, 'showPopupConfirmSave');
+      service['recheckValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue(false);
+      service['showPopupConfirmSave'] = jest.fn();
 
       await service.saveRequest(mockSaveRequestArg);
 
@@ -154,8 +153,8 @@ describe('SaveRequestService', () => {
 
   describe('onClickConfirmSave', () => {
     it('should execute save request when data is valid', async () => {
-      jest.spyOn(service as any, 'recheckValidationBeforeSaveRequest').mockResolvedValue(true);
-      jest.spyOn(service as any, 'executeSaveRequestApi');
+      service['recheckValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue(true);
+      service['executeSaveRequestApi'] = jest.fn();
 
       await service.onClickConfirmSave(mockSaveRequestArg);
 
@@ -163,7 +162,7 @@ describe('SaveRequestService', () => {
     });
 
     it('should show error when data is invalid', async () => {
-      jest.spyOn(service as any, 'recheckValidationBeforeSaveRequest').mockResolvedValue(false);
+      service['recheckValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue(false);
 
       await service.onClickConfirmSave(mockSaveRequestArg);
 
