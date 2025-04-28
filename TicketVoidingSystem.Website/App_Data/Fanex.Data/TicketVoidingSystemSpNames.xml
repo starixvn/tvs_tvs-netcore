@@ -290,10 +290,6 @@
 		<Setting Key="DBSITE02.NAP_SpecialDelete_RecoverVSBetRadar_Upd" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Upd" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.NAP_SpecialDelete_RecoverVSBetRadar_Upd" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Upd" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBCTG.TicketVoiding_RecoverVSRacing_Validation" SpName="TicketVoiding_RecoverVSRacing_Validation" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
-		<Setting Key="DBCTG.TicketVoiding_RecoverVSRacing_Validation" SpName="TicketVoiding_RecoverVSRacing_Validation" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
-		<Setting Key="DBCTG.TicketVoiding_RecoverVSRacing_Validation" SpName="TicketVoiding_RecoverVSRacing_Validation" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
-		<Setting Key="DBCTG.TicketVoiding_RecoverVSRacing_Validation" SpName="TicketVoiding_RecoverVSRacing_Validation" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
-		<Setting Key="DBSITE01.TicketVoiding_RecoverVSRacing_Validation" SpName="TicketVoiding_RecoverVSRacing_Validation" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE01.TicketVoiding_RecoverVSRacing_Validation" SpName="TicketVoiding_RecoverVSRacing_Validation" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE02.TicketVoiding_RecoverVSRacing_Validation" SpName="TicketVoiding_RecoverVSRacing_Validation" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
 		<Setting Key="DBSITE03.TicketVoiding_RecoverVSRacing_Validation" SpName="TicketVoiding_RecoverVSRacing_Validation" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
