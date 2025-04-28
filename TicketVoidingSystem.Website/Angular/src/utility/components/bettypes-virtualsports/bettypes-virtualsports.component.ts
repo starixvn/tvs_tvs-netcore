@@ -1,12 +1,10 @@
 ﻿import { Component, ElementRef, inject, Input, OnChanges, SimpleChange } from '@angular/core';
-import * as _ from 'lodash';
-import { Product } from '../../constants/config';
 import { TEXT } from '../../constants/text';
 import { Tooltip } from '../tooltip/tooltip.model';
 import { GroupBetTypeVirtualSport } from './bettypes-virtualsports.model';
 import { FormsModule } from '@angular/forms';
 import { TooltipComponent } from '../tooltip/tooltip.component';
-
+import { Product } from '../../constants/config';
 
 @Component({
     standalone: true,
@@ -15,55 +13,50 @@ import { TooltipComponent } from '../tooltip/tooltip.component';
     styleUrls: ['./bettypes-virtualsports.component.scss'],
     imports: [FormsModule, TooltipComponent]
 })
+
 export class BetTypesVirtualSportComponent implements OnChanges {
-    @Input() group = new GroupBetTypeVirtualSport([]);
+    @Input() group: GroupBetTypeVirtualSport;
     @Input() product: number;
-    @Input() ballSequence: number[];
-    @Input() sportType: number;
     display: boolean;
     tooltip = new Tooltip();
-    productDisplay: number[] = [
-        Product.NUMBER_GAME,
-        Product.BET_BUILDER,
-        Product.BITCOIN
-    ];
-    isDisabledAllBetTypes: boolean;
-    
+    checkAll = true;
     element = inject(ElementRef);
+
     constructor() {
         this.tooltip.element = this.element;
     }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-        this.changeIsShow();
-        this.display = _.isUndefined(this.group) ? false :
-            this.group.betTypes.length > 0 && this.productDisplay.indexOf(this.product) > -1;
-    }
-
-    changeIsShow() {
-        if (this.group !== undefined) {
-            this.group.checked = true;
-            this.group.betTypes.forEach(item => {
-                item.checked = true;
-            });
+        if (changes['group']) {
+            this.display = this.changeDisplay();
         }
     }
 
-    isShowCheckedBetTypes(): boolean {
-        return this.display;
-    }
-
-    getCheckedBetTypes(): string[] {
-        return this.group.betTypes
-            .filter(item => item.checked)
-            .map(item => item.id.toString());
+    changeDisplay() {
+        return this.group?.betTypes.length > 0;
     }
 
     validate(): boolean {
-        const result = this.group.betTypes.filter(item => item.checked).length > 0;
+        const result = this.getCheckedBetTypes().length > 0;
         if (!result) {
             this.tooltip.display('checkbox-all-bettypes', TEXT.NO_CHECKED_BETTYPE);
         }
+
         return result;
+    }
+
+    getCheckedBetTypes(): string[] {
+        let value = [];
+        this.group.betTypes.forEach(item => {
+            if (item.checked) {
+                value.push(item.id);
+            }
+        });
+
+        return value;
+    }
+
+    isShowCheckedBetTypes(): boolean {
+        return this.product === Product.VIRTUAL_SPORTS && this.display;
     }
 }
