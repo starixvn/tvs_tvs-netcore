@@ -3,13 +3,14 @@ using MediatR;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.Notification;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
 public class UpdateStatusRequest : UpdateStatusRequestCommand, IRequest<Result>;
 
-public class UpdateStatusRequestHandler(IDynamicRepository repository, NotificationService notificationService)
+public class UpdateStatusRequestHandler(IDynamicRepository repository, NotificationService notificationService, SessionService sessionService)
     : IRequestHandler<UpdateStatusRequest, Result>
 {
     public async Task<Result> Handle(UpdateStatusRequest request, CancellationToken cancellationToken)
@@ -17,12 +18,12 @@ public class UpdateStatusRequestHandler(IDynamicRepository repository, Notificat
         try
         {
             await repository.ExecuteAsync(request);
-            SendNotification(request.RequestId, true);
+            SendNotification(request.RequestId, request.IsStored, true);
             return new Result();
         }
         catch (Exception exception)
         {
-            SendNotification(request.RequestId, false);
+            SendNotification(request.RequestId, request.IsStored, false);
             return new Result
             {
                 ErrorCode = 1,
@@ -31,11 +32,11 @@ public class UpdateStatusRequestHandler(IDynamicRepository repository, Notificat
         }
     }
 
-    private void SendNotification(int requestId, bool isSuccessful)
+    private void SendNotification(int requestId, bool iStore, bool isSuccessful)
     {
         var content = isSuccessful
-            ? MessageHelper.CreateStoredRequestSuccessfully(requestId)
-            : MessageHelper.CreateStoredRequestFailed(requestId);
-        notificationService.ExecuteBackground(() => notificationService.InsertUpdateRequest(NotificationType.Notification, content, requestId));
+            ? MessageHelper.CreateStoredRequestSuccessfully(requestId, iStore, sessionService.UserName)
+            : MessageHelper.CreateStoredRequestFailed(requestId, iStore);
+        notificationService.ExecuteBackground(() => notificationService.InsertNotification(NotificationType.Notification, content, true, requestId));
     }
 }

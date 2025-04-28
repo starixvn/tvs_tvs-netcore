@@ -82,7 +82,7 @@ public class NotificationServiceTest
             .Returns((notifications, targetUsers));
 
         // Act
-        await service.InsertUpdateRequest(type, content, requestId);
+        await service.InsertNotification(type, content, true, requestId);
 
         // Assert
         await notificationSignalRService.Received(1).PushNotification("user1", notifications[0]);

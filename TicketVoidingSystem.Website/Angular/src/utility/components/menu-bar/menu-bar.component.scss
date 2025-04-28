@@ -13,8 +13,17 @@
 .notification-icon {
   font-size: 1.2em;
   color: #fff;
-  margin-right: 10px;
   position: relative;
+  cursor: pointer;
+}
+.notification-wrapper {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #4e71bb;
   cursor: pointer;
 }
 

@@ -40,8 +40,8 @@ public class UpdateRequestProcessStageImp(
             await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
         }
         notificationService.ExecuteBackground(()
-            => notificationService.InsertUpdateRequest(NotificationType.Notification,
-                MessageHelper.CreateEditRequestSuccessfully(query.RequestId, sessionService.UserName), query.RequestId));
+            => notificationService.InsertNotification(NotificationType.Notification,
+                MessageHelper.CreateEditRequestSuccessfully(query.RequestId, sessionService.UserName), true, query.RequestId));
 
         return getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString());
     }

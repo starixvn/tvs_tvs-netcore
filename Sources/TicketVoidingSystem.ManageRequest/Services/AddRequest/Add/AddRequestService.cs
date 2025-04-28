@@ -34,7 +34,7 @@ public class AddRequestServiceImp(
         catch (Exception exception)
         {
             notificationService.ExecuteBackground(()
-                => notificationService.InsertUpdateRequest(NotificationType.Notification, MessageHelper.CreateAddRequestFailed(), null));
+                => notificationService.InsertNotification(NotificationType.Notification, MessageHelper.CreateAddRequestFailed(), true, null));
             _ = loggingService.ErrorAsync(exception);
             return getUpdateResultService.CreateErrorResult(exception);
         }

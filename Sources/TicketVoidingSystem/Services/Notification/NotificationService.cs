@@ -18,7 +18,7 @@ public interface NotificationService
 
     Task UpdateNotification(string idList, bool isRead);
 
-    Task InsertUpdateRequest(string type, string content, int? requestId);
+    Task InsertNotification(string type, string content, bool isIgnoreCurrentUser, int? requestId);
 }
 
 public class NotificationServiceImp(
@@ -64,7 +64,7 @@ public class NotificationServiceImp(
         _ = await repository.FetchMultipleAsync<NotificationModel, string>(criteria);
     }
 
-    public async Task InsertUpdateRequest(string type, string content, int? requestId)
+    public async Task InsertNotification(string type, string content, bool isIgnoreCurrentUser, int? requestId)
     {
         var username = sessionService.UserName;
         var criteria = new UpdateNotificationCriteria
@@ -75,7 +75,7 @@ public class NotificationServiceImp(
             Type = type
         };
         var (notifications, targetUsers) = await repository.FetchMultipleAsync<NotificationModel, string>(criteria);
-        var preparedUsers = targetUsers.Where(x => x != username);
+        var preparedUsers = isIgnoreCurrentUser ? targetUsers.Where(x => x != username) : targetUsers;
         var tasks = preparedUsers.Select(x => signalRService.PushNotification(x, notifications.First()));
         _ = Task.WhenAll(tasks);
     }

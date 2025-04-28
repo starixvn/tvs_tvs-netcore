@@ -28,13 +28,15 @@ public static class MessageHelper
                + $"{Environment.NewLine}Marked ticket: @marked/@total";
     }
 
-    public static string CreateStoredRequestSuccessfully(int requestId)
+    public static string CreateStoredRequestSuccessfully(int requestId, bool isStore, string username)
     {
-        return $"<strong>Request {requestId}</strong> is stored successfully";
+        var action = isStore ? "stored" : "un-stored";
+        return $"<strong>Request {requestId}</strong> is {action} by <strong>{username}</strong> successfully";
     }
 
-    public static string CreateStoredRequestFailed(int requestId)
+    public static string CreateStoredRequestFailed(int requestId, bool isStore)
     {
-        return $"<strong>Request {requestId}</strong> has failed to store";
+        var action = isStore ? "store" : "un-store";
+        return $"<strong>Request {requestId}</strong> has failed to {action}";
     }
 }

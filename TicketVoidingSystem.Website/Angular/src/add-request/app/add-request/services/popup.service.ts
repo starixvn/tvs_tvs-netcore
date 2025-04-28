@@ -93,7 +93,4 @@ export class PopupService {
 
     return `<div class="ms-2 mt-1">- Match(es): <strong>${addRequestResult.matchId}</strong></div>`;
   }
-    if (!addRequestResult?.markedTicketsSuccessful) {
-      return '';
-    }
 }

@@ -46,6 +46,8 @@ export class NotificationPopupComponent {
         this.cdr.markForCheck();
         this.isOpen = open;
         if (open) {
+          this.isExpanded = false;
+          this.notificationHeight = 250;
           await this.getNotifications();
         }
       });
@@ -105,7 +107,9 @@ export class NotificationPopupComponent {
   closeOnClickOutside(event: Event) {
     const target = event.target as HTMLElement;
     if (!target.closest('.notification-container')) {
-      this.isOpen = false;
+      if (this.isOpen) {
+        this.notificationService.toggle();
+      }
     }
   }
 
@@ -133,7 +137,7 @@ export class NotificationPopupComponent {
   }
 
   private addNewNotification(notification: NotificationModel) {
-    if (this.notifications.some(n => n.content === notification.content)) {
+    if (this.notifications.some(n => n.content === notification.content && !notification.content.includes('stored'))) {
       return;
     }
 

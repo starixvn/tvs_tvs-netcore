@@ -90,10 +90,15 @@
       }
     }
 
+    .notification:not(.unread):hover {
+      background: #f8fbff !important;
+    }
+
     .notification {
       padding: 0 10px;
       border-bottom: 1px solid #ddd;
       position: relative;
+      cursor: pointer;
 
       &.unread {
         background: #f0f8ff;
