@@ -148,10 +148,8 @@
   (betTypesEvent)="changeBetTypes($event)"></group-bettypes>
   <bettypes #bettypesComponent [model]="betTypes" [product]="query.product" [sportType]="sportType"
   [ballSequence]="ballSequences.value"></bettypes>
-  @if (!isInvalidProduct2(query.product, sportType)) {
-    <bettypes-virtualsports #betTypesVSComponent [group]="groupsBetTypesVS"
+  <bettypes-virtualsports #betTypesVSComponent [group]="groupsBetTypesVS"
     [product]="query.product"></bettypes-virtualsports>
-  }
   @if (isShowCheckboxAffected()) {
     <div class="mg-bottom-10 d-flex align-items-center">
       <input type="checkbox" id="checkbox-resettle" [(ngModel)]="isReSettled"
