@@ -12,9 +12,6 @@ public class TicketsBetTransModel : Ticket
     public int Creator { get; set; }
 
     [JsonIgnore]
-    public int CreatorBackUp { get; set; }
-
-    [JsonIgnore]
     public string? Action { get; set; }
 
     [JsonIgnore]

@@ -1,5 +1,4 @@
 ﻿using Fanex.Data.Repository;
-using Settlement.Business.Core.Models;
 using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Criteria;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
@@ -14,8 +13,6 @@ public interface Repository
     Task<GetTicketsModel> GetTickets(Query query);
 
     Task<(IEnumerable<RecoverTicketsValidation>, IEnumerable<RecoverTicketModel>)[]> RecoverNotRacingSports(Query query, IEnumerable<BetIdRecover> tickets);
-
-    Task<RacingInfoModel> GetRacingInfo(int matchId);
 }
 
 public class RepositoryImp(IDynamicRepository repository, SessionService sessionService)
@@ -54,19 +51,6 @@ public class RepositoryImp(IDynamicRepository repository, SessionService session
         var results = await Task.WhenAll(tasks);
 
         return results;
-    }
-
-    public async Task<RacingInfoModel> GetRacingInfo(int matchId)
-    {
-        var criteria = new GetRacingResultCriteria { EventId = matchId };
-        var (raceInfo, outright, resources) = await repository.FetchMultipleAsync<RaceInfo, Outright, Resources>(criteria);
-
-        return new RacingInfoModel
-        {
-            RaceInfo = raceInfo?.FirstOrDefault(),
-            Outright = outright.ToList(),
-            Resources = resources.ToList()
-        };
     }
 
     private static GetTicketsCriteria CreateGetTicketsCriteria(Query query)

@@ -1,6 +1,7 @@
 ﻿using System;
 using Fanex.RemotingRef;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 
 namespace TicketVoidingSystem.Services;
 
@@ -98,7 +99,7 @@ public class RemotingRefWrapperServiceImp(IRemotingRefService remotingRefService
 
     public string GetLeagueName(int sportTypeId, object leagueId, string language)
     {
-        return IsSportTypeOfVirtualSports5(sportTypeId) || IsSportTypeOfVirtualSports2Betradar(sportTypeId) || IsSportTypeOfVirtualSports6(sportTypeId)
+        return IsSportTypeOfVirtualSports5(sportTypeId) || sportTypeId.IsRacingVirtualSports() || IsSportTypeOfVirtualSports6(sportTypeId)
             ? remotingRefService.GetLeagueName3rd(ToString(leagueId), language, string.Empty)
             : remotingRefService.GetLeagueName(ToString(leagueId), language, string.Empty);
     }
@@ -118,10 +119,5 @@ public class RemotingRefWrapperServiceImp(IRemotingRefService remotingRefService
     private static bool IsSportTypeOfVirtualSports6(int sportType)
     {
         return sportType is SportTypeConstant.VirtualBetByBasketball;
-    }
-
-    private static bool IsSportTypeOfVirtualSports2Betradar(int sportType)
-    {
-        return sportType is SportTypeConstant.VirtualHorseRacing or SportTypeConstant.VirtualDogRacing;
     }
 }

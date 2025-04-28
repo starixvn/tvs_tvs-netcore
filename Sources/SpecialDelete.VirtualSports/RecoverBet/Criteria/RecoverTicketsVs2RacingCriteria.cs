@@ -23,7 +23,7 @@ public class RecoverTicketsVs2RacingCriteria : NonQueryCommand
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 
-    public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_RecoverVS2_Update");
+    public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_RecoverVSRacing_Update");
 
     public override bool IsValid() => !string.IsNullOrWhiteSpace(TransInfoJson);
 }

@@ -1,4 +1,5 @@
 ﻿using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
 
@@ -39,14 +40,17 @@ public class MatchInfoAddRequestServiceImp(RemotingRefWrapperService remotingRef
 
     private string GetMatchEvent(MatchInfoAddRequest match)
     {
+        if (match.SportType.IsRacingVirtualSports())
+        {
+            return $"Event {match.VendorMatchId} - ID {match.RaceId}";
+        }
+
         return match.SportType switch
         {
             SportTypeConstant.Lucky3Game => $"Lucky 3 Game No.{match.MatchCode}",
             SportTypeConstant.NumberGame => $"Number Game No.{match.MatchCode}",
             SportTypeConstant.Happy5 => $"Happy 5 No.{match.MatchCode}",
             SportTypeConstant.Bullfighting => $"{remotingRefWrapperService.GetBFName(match.HomeId)} - vs - {remotingRefWrapperService.GetBFName(match.AwayId)}",
-            SportTypeConstant.VirtualHorseRacing => $"Event {match.VendorMatchId} - ID {match.RaceId}",
-            SportTypeConstant.VirtualDogRacing => $"Event {match.VendorMatchId} - ID {match.RaceId}",
             _ => match.IsOutright ? $"{match.HomeName} - {match.LeagueName}" : $"{match.HomeName} - vs - {match.AwayName}"
         };
     }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
-using SpecialDelete.VirtualSports.RecoverBet.Repositories;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Services;
 
@@ -12,8 +11,7 @@ public interface RecoverRacingService
     Task<(IEnumerable<RecoverTicketsValidation>, IEnumerable<RecoverTicketModel>)[]> Execute(IEnumerable<BetIdRecover> vs2RacingBetIds);
 }
 
-public class RecoverRacingServiceImp(TicketsService ticketsService, Repository repository,
-    MatchService matchService, IMapper mapper) : RecoverRacingService
+public class RecoverRacingServiceImp(TicketsService ticketsService, MatchService matchService, IMapper mapper) : RecoverRacingService
 {
     public async Task<(IEnumerable<RecoverTicketsValidation>, IEnumerable<RecoverTicketModel>)[]> Execute(IEnumerable<BetIdRecover> vs2RacingBetIds)
     {
@@ -28,9 +26,8 @@ public class RecoverRacingServiceImp(TicketsService ticketsService, Repository r
     {
         try
         {
-            var racingInfo = await repository.GetRacingInfo(group.Key.MatchId);
-            var ticketsAfterValidation = await ticketsService.GetTicketVs2Racing(group, racingInfo.Resources, group.Key.SiteDbGroupId);
-            var preparedTickets = await ticketsService.PrepareTickets(ticketsAfterValidation, racingInfo);
+            var ticketsAfterValidation = await ticketsService.GetTicketVs2Racing(group, group.Key.SiteDbGroupId);
+            var preparedTickets = await ticketsService.PrepareTickets(ticketsAfterValidation);
             var completedMatchIds = GetCompletedMatches(ticketsAfterValidation);
             var lockMatchResult = await matchService.LockMatch(group.Key.MatchId, LockMatchType.VirtualRacing, LockMatchStatus.Lock, group.Key.SiteDbGroupId);
             var validation = mapper.Map<RecoverTicketsValidation>(lockMatchResult);

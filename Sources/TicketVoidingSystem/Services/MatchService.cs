@@ -4,6 +4,7 @@ using Fanex.Data.Repository;
 using Polly;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.ViewModels;
@@ -117,14 +118,17 @@ public class MatchServiceImp(IDynamicRepository repository, RemotingRefWrapperSe
 
     public string GetMatchEvent(Match match)
     {
+        if (match.SportType.IsRacingVirtualSports())
+        {
+            return $"Event {match.VendorMatchId} - ID {match.RaceId}";
+        }
+
         return match.SportType switch
         {
             SportType160 => $"Lucky 3 Game No.{match.MatchCode}",
             SportType161 => StringResource.NumberGameNo + match.MatchCode,
             SportType164 => $"Happy 5 No .{match.MatchCode}",
             SportType207 => $"{remotingRefWrapperService.GetBFName(match.HomeId)} - vs - {remotingRefWrapperService.GetBFName(match.AwayId)}",
-            SportTypeConstant.VirtualHorseRacing => $"Event {match.VendorMatchId} - ID {match.RaceId}",
-            SportTypeConstant.VirtualDogRacing => $"Event {match.VendorMatchId} - ID {match.RaceId}",
             _ => match.IsOutright ? $"{match.HomeName} - {match.LeagueName}" : $"{match.HomeName} - vs - {match.AwayName}"
         };
     }

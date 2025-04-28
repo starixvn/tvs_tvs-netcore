@@ -257,7 +257,7 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
 
     public string GetVirtualSportMatchCode(int sportType, string matchCode)
     {
-        if (sportType.IsVirtualSports2Betradar() || sportType is SportTypeConstant.VirtualBetByBasketball)
+        if (sportType.IsRacingVirtualSports() || sportType is SportTypeConstant.VirtualBetByBasketball)
         {
             return "-";
         }

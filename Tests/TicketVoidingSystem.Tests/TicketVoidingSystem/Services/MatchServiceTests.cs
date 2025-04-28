@@ -23,7 +23,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatch_HasRequestIsGetMatchInfoCriteria_RepositoryHasGetAsync()
+    public void GetMatch_HasRequestIsGetMatchInfoCriteriarepositoryHasGetAsync()
     {
         // Arrange
         var query = new GetMatchInfoCriteria();
@@ -36,7 +36,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatchVoidByCurrency_RepositoryHasGetAsync()
+    public void GetMatchVoidByCurrencyrepositoryHasGetAsync()
     {
         // Arrange
         // Act
@@ -47,7 +47,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatchVoidByCurrency_HasInputIsGetMatchId_RepositoryHasGetAsync()
+    public void GetMatchVoidByCurrency_HasInputIsGetMatchIdrepositoryHasGetAsync()
     {
         // Arrange
         // Act
@@ -58,7 +58,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatch_HasRequestIsId_RepositoryHasGetAsync()
+    public void GetMatch_HasRequestIsIdrepositoryHasGetAsync()
     {
         // Arrange
         const int query = 1;
@@ -71,7 +71,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatchVoidByCurrency_HasRequestIsCriteria_RepositoryHasGetAsync()
+    public void GetMatchVoidByCurrency_HasRequestIsCriteriarepositoryHasGetAsync()
     {
         // Arrange
         var query = new GetMatchInfoVoidByCurrencyCriteria();
@@ -232,5 +232,100 @@ public class MatchServiceTests
         AssertExtension.Equal(matchEvent, actual.MatchEvent);
         AssertExtension.Equal(matchEventSimplified, actual.MatchEventSimplified);
         AssertExtension.Equal(matchEventNewSimplified, actual.MatchEventNewSimplified);
+    }
+
+    [Theory]
+    [InlineData(198)] // VirtualHorseRacing
+    [InlineData(177)] // VirtualDogRacing
+    [InlineData(125)] // VirtualSteepleChase
+    [InlineData(126)] // VirtualHarnessRacing
+    [InlineData(127)] // VirtualMotorRacing
+    public void GetMatchEvent_SportRacingVirtualSports_ReturnExpected(int sportType)
+    {
+        // Arrange
+        var match = new Match
+        {
+            VendorMatchId = "123",
+            RaceId = "456",
+            SportType = sportType
+        };
+        const string expectedEvent = "Event 123 - ID 456";
+        // Act
+        var result = service.GetMatchEvent(match);
+
+        // Assert
+        Assert.Equal(expectedEvent, result);
+    }
+
+    [Theory]
+    [InlineData(160, false, "Lucky 3 Game No.123")]
+    [InlineData(164, false, "Happy 5 No .123")]
+    [InlineData(207, false, "Home - vs - Away")]
+    [InlineData(1, false, "HomeName - vs - AwayName")]
+    [InlineData(1, true, "HomeName - LeagueName")]
+    public void GetMatchEvent_SportNotRacingVirtualSports_ReturnExpected(int sportType, bool isOutright, string expectedEvent)
+    {
+        // Arrange
+        var match = new Match
+        {
+            VendorMatchId = "123",
+            RaceId = "456",
+            SportType = sportType,
+            MatchCode = "123",
+            HomeId = 1,
+            AwayId = 2,
+            HomeName = "HomeName",
+            AwayName = "AwayName",
+            IsOutright = isOutright,
+            LeagueName = "LeagueName"
+        };
+
+        remotingRefWrapperService.GetBFName(match.HomeId).Returns("Home");
+        remotingRefWrapperService.GetBFName(match.AwayId).Returns("Away");
+
+        // Act
+        var result = service.GetMatchEvent(match);
+
+        // Assert
+        Assert.Equal(expectedEvent, result);
+    }
+
+    [Fact]
+    public async Task LockMatch_WhenSuccessful_ShouldReturnSuccessResult()
+    {
+        // Arrange
+        var expectedResult = new Result();
+        repository.GetAsync<Result>(Arg.Any<LockMatchCriteria>()).Returns(expectedResult);
+
+        // Act
+        var result = await service.LockMatch(1, 1, 1, 1);
+
+        // Assert
+        Assert.True(result.IsSuccessful);
+        await repository.Received(1).GetAsync<Result>(Arg.Is<LockMatchCriteria>(c =>
+            c.MatchId == 1 &&
+            c.Type == 1 &&
+            c.Lock == 1 &&
+            c.SiteDbGroupId == 1));
+    }
+
+    [Fact]
+    public async Task LockMatch_WhenFailed_ShouldReturnErrorResult()
+    {
+        // Arrange
+        var expectedResult = new Result
+        {
+            ErrorCode = 100,
+            ErrorMsg = "Match already locked"
+        };
+        repository.GetAsync<Result>(Arg.Any<LockMatchCriteria>()).Returns(expectedResult);
+
+        // Act
+        var result = await service.LockMatch(1, 1, 1, 1);
+
+        // Assert
+        Assert.False(result.IsSuccessful);
+        Assert.Equal(100, result.ErrorCode);
+        Assert.Equal("Match already locked", result.ErrorMsg);
     }
 }

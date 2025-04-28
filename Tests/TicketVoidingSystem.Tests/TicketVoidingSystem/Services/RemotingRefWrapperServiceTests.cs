@@ -78,12 +78,23 @@ public class RemotingRefWrapperServiceTests
         remotingRefService.Received(1).GetLeagueName("1", "1", string.Empty);
     }
 
+    [Theory]
+    [InlineData(SportTypeConstant.VirtuallySoccer)]
+    [InlineData(SportTypeConstant.VirtualHorseRacing)]
+    [InlineData(SportTypeConstant.VirtualDogRacing)]
+    [InlineData(SportTypeConstant.VirtualBetByBasketball)]
+    public void GetLeagueName_HasCallGetLeagueName3rd(int sportTypeId)
+    {
+        // Arrange Act
+        _ = service.GetLeagueName(sportTypeId, 1, "En");
+
+        // Assert
+        remotingRefService.Received(1).GetLeagueName3rd("1", "En", string.Empty);
+    }
     [Fact]
     public void GetBFName_RemotingRefServiceCalledGetLeagueName()
     {
-        // Arrange
-
-        // Act
+        // Arrange Act
         _ = service.GetBFName(1);
 
         // Assert
@@ -112,6 +123,20 @@ public class RemotingRefWrapperServiceTests
 
         // Assert
         remotingRefService.Received(1).GetTeamName(string.Empty, "1", string.Empty);
+    }
+
+    [Theory]
+    [InlineData(SportTypeConstant.VirtuallySoccer)]
+    [InlineData(SportTypeConstant.VirtualBetByBasketball)]
+    public void GetTeamName_HasCallGetTeamName3rd(int sportTypeId)
+    {
+        // Arrange
+
+        // Act
+        _ = service.GetTeamName(sportTypeId, DBNull.Value, "1");
+
+        // Assert
+        remotingRefService.Received(1).GetTeamName3rd(string.Empty, "1", string.Empty);
     }
 
     [Fact]
@@ -151,7 +176,7 @@ public class RemotingRefWrapperServiceTests
     }
 
     [Fact]
-        public void GetMatchCodeVS3456_RemotingRefServiceCalledGetVirtualSportMatchCodeFormat()
+    public void GetMatchCodeVS3456_RemotingRefServiceCalledGetVirtualSportMatchCodeFormat()
     {
         // Arrange
         remotingRefService.GetVirtualSportMatchCodeFormat("1", "VYVS_MatchCode", LanguageCode.English).Returns("abc");
@@ -161,5 +186,19 @@ public class RemotingRefWrapperServiceTests
 
         // Assert
         remotingRefService.Received(1).GetVirtualSportMatchCodeFormat("1", "VYVS_MatchCode", LanguageCode.English);
+    }
+
+    [Fact]
+    public void GetDisplayedBetTypeName_ReturnExpected()
+    {
+        // Arrange
+        remotingRefService.GetDisplayedBetTypeName("1", LanguageCode.English).Returns("Handicap");
+
+        // Act
+        var result = service.GetDisplayedBetTypeName("1");
+
+        // Assert
+        Assert.Equal("Handicap", result);
+        remotingRefService.Received(1).GetDisplayedBetTypeName("1", LanguageCode.English);
     }
 }

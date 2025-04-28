@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Fanex.Data.Repository;
-using Settlement.Business.Core.Models;
+using Fanex.Logging;
+using Settlement.Business.Services;
 using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Criteria;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
@@ -11,19 +12,18 @@ namespace SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets.Virtual
 
 public interface TicketsService
 {
-    Task<IEnumerable<TicketsBetTransModel>> GetTicketVs2Racing(IEnumerable<BetIdRecover> vs2RacingTickets, IEnumerable<Resources> resources, int siteDbGroupId);
+    Task<IEnumerable<TicketsBetTransModel>> GetTicketVs2Racing(IEnumerable<BetIdRecover> vs2RacingTickets, int siteDbGroupId);
 
     Task<(RecoverTicketsValidation, IEnumerable<RecoverTicketModel>)> RecoverTicketVs2Racing(IEnumerable<TicketsBetTransModel> tickets, int siteDbGroupId);
 
-    Task<IEnumerable<TicketsBetTransModel>> PrepareTickets(IEnumerable<TicketsBetTransModel> originalTickets, RacingInfoModel racingInfo);
+    Task<IEnumerable<TicketsBetTransModel>> PrepareTickets(IEnumerable<TicketsBetTransModel> originalTickets);
 }
 
-public class TicketsServicesImp(IDynamicRepository repository, CalculateService calculateService,
-    SessionService sessionService, HistoryDataService historyDataService) : TicketsService
+public class TicketsServicesImp(IDynamicRepository repository, TicketValueService ticketValueService,
+    WinLimitService winLimitService, SessionService sessionService, HistoryDataService historyDataService) : TicketsService
 {
-    public async Task<IEnumerable<TicketsBetTransModel>> GetTicketVs2Racing(IEnumerable<BetIdRecover> vs2RacingTickets, IEnumerable<Resources> resources, int siteDbGroupId)
+    public async Task<IEnumerable<TicketsBetTransModel>> GetTicketVs2Racing(IEnumerable<BetIdRecover> vs2RacingTickets, int siteDbGroupId)
     {
-        var resourceIds = string.Join(',', resources.Select(x => x.ResourceId).Distinct());
         var ticketsInSiteDb = vs2RacingTickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
         if (!ticketsInSiteDb.Any())
         {
@@ -32,7 +32,6 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
 
         var criteria = new GetTicketsVs2RacingCriteria
         {
-            Resources = resourceIds,
             TransIds = string.Join(",", vs2RacingTickets.Select(x => x.TransId)),
             SiteDbGroupId = siteDbGroupId
         };
@@ -62,23 +61,31 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
         return (validation, recoveredTickets);
     }
 
-    public async Task<IEnumerable<TicketsBetTransModel>> PrepareTickets(IEnumerable<TicketsBetTransModel> originalTickets, RacingInfoModel racingInfo)
+    public async Task<IEnumerable<TicketsBetTransModel>> PrepareTickets(IEnumerable<TicketsBetTransModel> originalTickets)
     {
         var runningTickets = ProcessRunningTickets(originalTickets);
         var updatedRefundTickets = ProcessRefundTickets(originalTickets);
-        var updatedCalculateTickets = await ProcessSettleTickets(originalTickets, racingInfo);
+        var updatedCalculateTickets = await ProcessSettleTickets(originalTickets);
 
         return runningTickets.Concat(updatedCalculateTickets).Concat(updatedRefundTickets);
     }
 
-    private List<TicketsBetTransModel> ProcessRunningTickets(IEnumerable<TicketsBetTransModel> tickets)
+    private static List<TicketsBetTransModel> ProcessRunningTickets(IEnumerable<TicketsBetTransModel> tickets)
     {
         var runningTickets = tickets.Where(x => x.Action is null).ToList();
+        foreach (var ticket in runningTickets)
+        {
+            ticket.StatusWinLost = null;
+            ticket.WinLost = 0;
+            ticket.Status = TicketStatus.Running;
+            ticket.StatusId = TicketStatus.RunningId;
+            ticket.Ruben = 0;
+        }
 
-        return runningTickets.Count == 0 ? [] : calculateService.ResetToRunning(runningTickets);
+        return runningTickets;
     }
 
-    private async Task<IEnumerable<TicketsBetTransModel>> ProcessSettleTickets(IEnumerable<TicketsBetTransModel> tickets, RacingInfoModel racingInfo)
+    private async Task<IEnumerable<TicketsBetTransModel>> ProcessSettleTickets(IEnumerable<TicketsBetTransModel> tickets)
     {
         var settledTickets = tickets.Where(x => string.Equals(x.Action, SettlementAction.ReCalculate, StringComparison.OrdinalIgnoreCase)).ToList();
         if (settledTickets.Count == 0)
@@ -86,22 +93,27 @@ public class TicketsServicesImp(IDynamicRepository repository, CalculateService 
             return [];
         }
 
-        var preparedTickets = calculateService.ResetToRunning(settledTickets);
-        var ticketsAfterCalculate = await calculateService.Settle(preparedTickets, racingInfo);
-        await historyDataService.Insert(ticketsAfterCalculate);
+        var maxWinLimit = (await winLimitService.GetMaxWinLimit(settledTickets)).ToList();
 
-        return ticketsAfterCalculate;
+        LogService.Info($"INPUT -- RECOVER VS: Settle tickets" +
+                        $"{Environment.NewLine}{Newtonsoft.Json.JsonConvert.SerializeObject(settledTickets)}" +
+                        $"{Environment.NewLine}maxWinLimit: {Environment.NewLine}{Newtonsoft.Json.JsonConvert.SerializeObject(maxWinLimit)}");
+
+        settledTickets.ForEach(item => ticketValueService.RecoverSetValue(item, maxWinLimit));
+        await historyDataService.Insert(settledTickets);
+        LogService.Info($"OUTPUT -- RECOVER VS: Settle tickets" +
+                        $"{Environment.NewLine}{Newtonsoft.Json.JsonConvert.SerializeObject(settledTickets)}");
+        return settledTickets;
     }
 
     public IEnumerable<TicketsBetTransModel> ProcessRefundTickets(IEnumerable<TicketsBetTransModel> tickets)
     {
         var refundTickets = tickets.Where(x => string.Equals(x.Action, SettlementAction.Refund, StringComparison.OrdinalIgnoreCase)).ToList();
-        if (refundTickets.Count == 0)
-        {
-            return [];
-        }
-
-        var preparedTickets = calculateService.ResetToRunning(refundTickets);
-        return calculateService.Refund(preparedTickets);
+        LogService.Info($"INPUT -- RECOVER VS: Refund tickets" +
+                        $"{Environment.NewLine}{Newtonsoft.Json.JsonConvert.SerializeObject(refundTickets)}");
+        refundTickets.ForEach(ticket => ticketValueService.SetValue(ticket, true));
+        LogService.Info($"OUTPUT -- RECOVER VS: Refund tickets" +
+                        $"{Environment.NewLine}{Newtonsoft.Json.JsonConvert.SerializeObject(refundTickets)}");
+        return refundTickets;
     }
 }

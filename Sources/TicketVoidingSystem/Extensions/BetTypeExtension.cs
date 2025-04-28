@@ -82,7 +82,7 @@ public static class BetTypeExtension
 
     public static bool IsVirtualSport6BetType(this int id)
     {
-        List<int> betTypesVirtualSport6 = new() { 13000, 13001, 13002, 13003, 13004, 13005, 13006, 13007, 13008, 13009, 13010, 13011 };
+        List<int> betTypesVirtualSport6 = [13000, 13001, 13002, 13003, 13004, 13005, 13006, 13007, 13008, 13009, 13010, 13011];
         return betTypesVirtualSport6.Contains(id);
     }
 
@@ -92,9 +92,14 @@ public static class BetTypeExtension
         return VirtualSportsSportTypeIds.Contains(sportTypeId);
     }
 
-    public static bool IsVirtualSports2Betradar(this int sportTypeId)
+    public static bool IsRacingVirtualSports(this int sportTypeId)
     {
-        return sportTypeId is SportTypeConstant.VirtualHorseRacing or SportTypeConstant.VirtualDogRacing;
+        List<int> virtualSportsNotSupportMatchCode =
+        [
+            SportTypeConstant.VirtualHorseRacing, SportTypeConstant.VirtualDogRacing, // VS2 Racing
+            SportTypeConstant.VirtualSteepleChase, SportTypeConstant.VirtualHarnessRacing, SportTypeConstant.VirtualMotorRacing // VS7
+        ];
+        return virtualSportsNotSupportMatchCode.Contains(sportTypeId);
     }
 
     public static bool IsVirtualSport345(this int sportTypeId) // Sport Type of VS3-VS4-VS5
