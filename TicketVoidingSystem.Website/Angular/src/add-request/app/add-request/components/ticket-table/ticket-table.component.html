@@ -6,7 +6,7 @@
           <th scope="col" class="col-tb-0">
             <div>
               <input type="checkbox" [(ngModel)]="model.isChecked"
-                (change)="model.changeModelToGroups();changeWinlostCheckedTicket()" />
+                (change)="model.changeModelToGroups();changeWinLostCheckedTicket()" />
             </div>
           </th>
           <th scope="col" class="col-tb-1">
@@ -61,7 +61,7 @@
           <td class="col-tb-0">
             <div>
               <input type="checkbox" [(ngModel)]="group.isChecked"
-                (ngModelChange)="group.changeGroupToTickets();model.changeGroupToModel();changeWinlostCheckedTicket()" />
+                (ngModelChange)="group.changeGroupToTickets();model.changeGroupToModel();changeWinLostCheckedTicket()" />
             </div>
           </td>
           <td [attr.colspan]="13" class="group-ticket" (click)="group.isExpanded = !group.isExpanded">
@@ -76,7 +76,7 @@
           <td class="col-tb-0">
             <div>
               <input type="checkbox" [(ngModel)]="ticket.isChecked"
-                (change)="group.changeTicketToGroup();model.changeGroupToModel();changeWinlostCheckedTicket()" />
+                (change)="group.changeTicketToGroup();model.changeGroupToModel();changeWinLostCheckedTicket()" />
             </div>
           </td>
           <td class="col-tb-1">{{ticket.no}}</td>
