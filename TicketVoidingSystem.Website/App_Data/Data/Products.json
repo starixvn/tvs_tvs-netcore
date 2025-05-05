@@ -113,6 +113,10 @@
         {
           "Name": "Microgaming Live",
           "Value": "107"
+        },
+        {
+          "Name": "Playtech Live",
+          "Value": "101"
         }
       ]
     },
@@ -234,6 +238,10 @@
         {
           "Name": "HOTDOG",
           "Value": "95"
+        },
+        {
+          "Name": "RichGaming",
+          "Value": "108"
         }
       ]
     },
