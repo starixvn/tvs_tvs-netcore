@@ -1,59 +1,81 @@
+import { TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../utility/modules/testing.module';
 import { HttpService } from '../../utility/services/http.service';
 import { AppService } from './app.service';
-import { RequestDetailModel, RequestDetailViewModel } from './request.model';
+import { RequestDetailViewModel, RequestDetailModel, RequestEventModel } from './request.model';
 
 jest.mock('../../utility/services/http.service');
+
 describe('AppService', () => {
-  let mockHttpService: jest.Mocked<HttpService>;
+  let httpService: jest.Mocked<HttpService>;
   let appService: AppService;
 
   beforeEach(() => {
-      mockHttpService = new HttpService(null) as jest.Mocked<HttpService>;
-      appService = new AppService(mockHttpService);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [AppService, HttpService]
+    });
+    httpService = TestBed.inject(HttpService) as jest.Mocked<HttpService>;
+    appService = TestBed.inject(AppService);
   });
 
   it('#getRequestById should return expected data', async () => {
     // Arrange
-    const fakeRequestDetailModel: RequestDetailModel = {
-      actionId: 1,
-      decidedBy: null,
-      isTest: false,
-      isVoided: false,
-      issueTypeId: 11,
-      mistakenBy: null,
-      operators: [],
-      provider: null,
-      remark: 'test',
-      requestedBy: "sa",
-      source: null,
-      sportType: 2,
-      voidedBy: null,
-      userId: 0,
+    const id = 1;
+    const expectedData = {
       requestId: 1,
-      briefInfoNote: ''
-    };
-    const fakeRequestDetailViewModel: RequestDetailViewModel = {
-      requestId: 111,
-      lastModifiedDate: null,
-      request: fakeRequestDetailModel,
-      event: null,
       playerNames: [],
-      wrongScoreModels: [],
-      dangerAcceptedModels: [],
-      redCardModels: [],
-      wrongHdpModels: [],
-      wrongOuModels: [],
-      wrongOddsModels: [],
-      reducedOverModels: [],
-      duplicateTicketsModel: null,
-      notParticipateModels: []
-    };
-    mockHttpService.getJson.mockResolvedValue(fakeRequestDetailViewModel);
+      lastModifiedDate: new Date(),
+      request: {
+        requestId: 1,
+        sportType: 1,
+        issueTypeId: 1,
+        actionId: 1,
+        mistakenBy: 'Test User',
+        decidedBy: 'Test Admin',
+        operators: [],
+        provider: 'Test Provider',
+        source: 'Test Source',
+        remark: 'Test Remark',
+        isTest: false,
+        isVoided: false,
+        requestedBy: 'Test User',
+        userId: 1,
+        voidedBy: '',
+        briefInfoNote: 'Test Note'
+      } as RequestDetailModel,
+      event: {
+        matchId: 1,
+        subIssueTypeId: 1,
+        eventDate: new Date(),
+        parentId: 1,
+        leagueId: 1,
+        homeId: 1,
+        awayId: 1,
+        kickOffTime: new Date(),
+        transIds: '1,2,3',
+        voidFromTime: new Date(),
+        voidToTime: new Date()
+      } as RequestEventModel
+    } as RequestDetailViewModel;
+    httpService.getJson.mockResolvedValue(expectedData);
 
     // Action
-    const actualData = await appService.getRequestById(12345);
+    const actualData = await appService.getRequestById(id);
 
     // Assert
-    expect(actualData).toStrictEqual(fakeRequestDetailViewModel);
+    expect(actualData).toStrictEqual(expectedData);
+    expect(httpService.getJson).toHaveBeenCalledWith(`api/ManageRequest/GetRequest/${id}`);
+  });
+
+  it('#getRequestById should handle error case', async () => {
+    // Arrange
+    const id = 1;
+    const error = new Error('API Error');
+    httpService.getJson.mockRejectedValue(error);
+
+    // Action & Assert
+    await expect(appService.getRequestById(id)).rejects.toThrow('API Error');
+    expect(httpService.getJson).toHaveBeenCalledWith(`api/ManageRequest/GetRequest/${id}`);
   });
 });

@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AddRequestComponent } from 'src/add-request/app/add-request/add-request.component';
+import { AddRequestComponent } from '../../add-request/app/add-request/add-request.component';
 import { RequestModel } from '../../add-request/app/add-request/models/request.model';
 import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';

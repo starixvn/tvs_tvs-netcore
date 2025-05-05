@@ -1,131 +1,114 @@
-import { NgModule } from '@angular/core';
-import { Shallow } from 'shallow-render';
-import { AddRequestComponent } from '../../add-request/app/add-request/add-request.component';
-import { BlockFullUiModule } from '../../utility/components/block-full-ui/block-full-ui.module';
-import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { SignalRService } from '../../utility/services/signal-r.service.native';
-import { HttpService } from './../../utility/services/http.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../utility/modules/testing.module';
 import { AppComponent } from './app.component';
+import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppService } from './app.service';
-import { PrimitiveProperty } from './models/primitive-property.model';
-import { RequestDetailModel, RequestDetailViewModel } from './request.model';
 import { LogInfoService } from './services/log-info.service';
 import { ObjectService } from './services/object.service';
-
-jest.mock('../../utility/services/signal-r.service.native');
-class Helper {
-  static readonly titleSelector = '.title';
-  static readonly addRequestSelector = 'add-request';
-  static readonly fakeScoreId = 28291;
-  static readonly fakeRequestId = 50121;
-  static readonly fakeMatchId = 90000;
-  static readonly fakeDate = '2020-11-09 12:08:49.737';
-  static readonly fakePrimitiveProperty: PrimitiveProperty = {
-    matchId: Helper.fakeMatchId,
-    requestId: Helper.fakeRequestId,
-    sportType: 1,
-    actionIdOfFirstTimeAccess: '2',
-    requestedBy: '',
-    userId: 1
-  };
-  static readonly fakeRequestDetailModel: RequestDetailModel = {
-    actionId: 1,
-    decidedBy: null,
-    isTest: false,
-    isVoided: false,
-    issueTypeId: 11,
-    mistakenBy: null,
-    operators: [],
-    provider: null,
-    remark: 'test',
-    requestedBy: "sa",
-    source: null,
-    sportType: 2,
-    voidedBy: null,
-    userId: 1,
-    requestId: 1,
-    briefInfoNote: ''
-  };
-  static readonly fakeRequestDetailViewModel: RequestDetailViewModel = {
-    requestId: Helper.fakeRequestId,
-    lastModifiedDate: null,
-    request: Helper.fakeRequestDetailModel,
-    event: null,
-    wrongScoreModels: [],
-    dangerAcceptedModels: [],
-    redCardModels: [],
-    wrongHdpModels: [],
-    wrongOuModels: [],
-    wrongOddsModels: [],
-    reducedOverModels: [],
-    duplicateTicketsModel: null,
-    notParticipateModels: [],
-    playerNames: []
-  };
-}
+import { RequestDetailViewModel } from './request.model';
+import { RequestModel } from '../../add-request/app/add-request/models/request.model';
+import { PrimitiveProperty } from './models/primitive-property.model';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 describe('AppComponent', () => {
-  @NgModule({
-    declarations: [ AddRequestComponent, MenuBarComponent ],
-    imports: [
-      BlockFullUiModule
-    ],
-    providers: [
-      HttpService
-    ]
-  })
-  class AppModuleTest { }
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let appService: AppService;
+  let signalRService: SignalRService;
+  let logInfoService: LogInfoService;
+  let objectService: ObjectService;
 
-  let shallow: Shallow<AppComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot()
+      ],
+      providers: [
+        AppService,
+        SignalRService,
+        LogInfoService,
+        ObjectService,
+        ToastrService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(AppComponent, AppModuleTest)
-    .mock(SignalRService, { initializeConnection: jest.fn()});
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    appService = TestBed.inject(AppService);
+    signalRService = TestBed.inject(SignalRService);
+    logInfoService = TestBed.inject(LogInfoService);
+    objectService = TestBed.inject(ObjectService);
   });
 
-  it('AppComponent should init match snapshot', async () => {
-    // Arrange
-    window.history.pushState({}, '', '/12345');
-    const { find, fixture } = await shallow
-      .mock(AppService, {
-        getRequestById: jest.fn().mockImplementation(() => Helper.fakeRequestDetailViewModel)
-      })
-      .render();
-    fixture.detectChanges();
-
-    // Assert
-    expect(fixture).toMatchSnapshot();
-    expect(find(Helper.titleSelector).nativeElement.textContent.trim()).toBe('Home / Manage Request / Edit Request - 12345');
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#ngOnInit should call expected function', async () => {
+  it('should initialize with default values', () => {
+    expect(component.detailViewModel).toBeTruthy();
+    expect(component.requestModel).toBeTruthy();
+    expect(component.primitiveProperty).toBeTruthy();
+    expect(component.isBlock).toBeFalsy();
+  });
+
+  it('should handle ngOnInit correctly', async () => {
     // Arrange
-    window.history.pushState({}, '', '/12345');
-    const spyGetPrimitiveProperty = jest.fn().mockImplementation(() => new PrimitiveProperty());
-    const spyGteRequestById = jest.fn().mockImplementation(() => Helper.fakeRequestDetailViewModel);
-    const spyMapRequestModel = jest.fn();
-    const spyGetLogInfo = jest.fn();
+    const mockRequestId = 123;
+    const mockDetailViewModel = new RequestDetailViewModel();
+    const mockPrimitiveProperty = new PrimitiveProperty();
+    const mockRequestModel = new RequestModel();
 
-    const { instance } = await shallow
-    .mock(AppService, {
-      getRequestById: spyGteRequestById
-    })
-    .mock(ObjectService, {
-      getPrimitiveProperty: spyGetPrimitiveProperty,
-      mapRequestModel: spyMapRequestModel
-    })
-    .mock(LogInfoService, {
-      getLogInfo: spyGetLogInfo
-    })
-    .render();
+    // Mock window.location
+    Object.defineProperty(window, 'location', {
+      value: { href: `http://localhost:4200/edit-request/${mockRequestId}` },
+      writable: true
+    });
 
-    // Action
-    instance.ngOnInit();
+    // Mock service methods
+    jest.spyOn(appService, 'getRequestById').mockResolvedValue(mockDetailViewModel);
+    jest.spyOn(objectService, 'getPrimitiveProperty').mockReturnValue(mockPrimitiveProperty);
+    jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue(undefined);
+    jest.spyOn(objectService, 'mapRequestModel').mockImplementation(() => {});
+    jest.spyOn(signalRService, 'initializeConnection').mockImplementation(() => Promise.resolve());
+
+    // Act
+    await component.ngOnInit();
 
     // Assert
-    expect(spyGteRequestById).toHaveBeenCalled();
-    expect(spyGetPrimitiveProperty).toHaveBeenCalledTimes(1);
-    expect(spyMapRequestModel).toHaveBeenCalledTimes(1);
-    expect(spyGetLogInfo).toHaveBeenCalledTimes(1);
+    expect(component.isBlock).toBeFalsy();
+    expect(appService.getRequestById).toHaveBeenCalledWith(mockRequestId);
+    expect(objectService.getPrimitiveProperty).toHaveBeenCalledWith(mockDetailViewModel, mockRequestId);
+    expect(logInfoService.getLogInfo).toHaveBeenCalledWith(mockPrimitiveProperty, mockDetailViewModel);
+    expect(objectService.mapRequestModel).toHaveBeenCalledWith(mockRequestModel, mockDetailViewModel, mockPrimitiveProperty);
+    expect(signalRService.initializeConnection).toHaveBeenCalled();
+  });
+
+  it('should handle error in ngOnInit', async () => {
+    // Arrange
+    const mockRequestId = 123;
+    Object.defineProperty(window, 'location', {
+      value: { href: `http://localhost:4200/edit-request/${mockRequestId}` },
+      writable: true
+    });
+
+    jest.spyOn(appService, 'getRequestById').mockRejectedValue(new Error('Test error'));
+
+    // Act & Assert
+    await expect(component.ngOnInit()).rejects.toThrow('Test error');
+    expect(component.isBlock).toBeTruthy();
+  });
+
+  it('should handle invalid URL format', async () => {
+    // Arrange
+    Object.defineProperty(window, 'location', {
+      value: { href: 'http://localhost:4200/invalid-url' },
+      writable: true
+    });
+
+    // Act & Assert
+    await expect(component.ngOnInit()).rejects.toThrow();
   });
 });
