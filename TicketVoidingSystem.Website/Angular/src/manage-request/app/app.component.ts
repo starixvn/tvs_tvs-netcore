@@ -184,4 +184,8 @@ export class AppComponent implements OnInit {
   updateMissingInfo(isChecked: boolean) {
     this.isShowMissingInfo = isChecked;
   }
+
+  async logAccessAction(actionName: string): Promise<void> {
+    await this.commonService.logAccessFunction(`ManageRequest/${actionName}`);
+  }
 }

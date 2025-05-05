@@ -1,4 +1,3 @@
-import { IssueType } from './../../../../utility/components/template-message/template-message/template-setting.model';
 import { inject } from '@angular/core';
 import _ from 'lodash';
 import moment from 'moment';
@@ -11,10 +10,12 @@ import { TvDetectionService } from './tv-detection.service';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';
+import { AppComponent } from '../../app.component';
 
 export class RequestDescriptionService {
   commonService = inject(CommonService);
   clipboardService = inject(ClipboardService);
+  appComponent = inject(AppComponent);
 
   public async copyToClipboard(requestId: number, matchId: number, requestDetailId?: number): Promise<void> {
     const query: CopyRequestInfoQuery = {
@@ -25,6 +26,7 @@ export class RequestDescriptionService {
     const copyInfoResponse = await this.commonService.copyRequestInfo(query);
     this.clipboardService.copyFromContent(this.createContentCopy(copyInfoResponse));
     alert(`Request No.${requestId} has been copied to clipboard.`);
+    this.appComponent.logAccessAction('CopyRequestInfo');
   }
 
   private createContentCopy(copyInfoResponse: CopyRequestInfoResponse): string {

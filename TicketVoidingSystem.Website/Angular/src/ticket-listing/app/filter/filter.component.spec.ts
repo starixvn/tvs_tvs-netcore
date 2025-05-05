@@ -20,6 +20,8 @@ import { Selection } from '../../../utility/models/selection.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { FilterEvent } from './filter.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { AppComponent } from '../app.component';
+import { TestingModule } from '../../../utility/modules/testing.module';
 
 class Helper {
   static readonly mockLicensees = [
@@ -135,7 +137,8 @@ describe('FilterComponent', () => {
         BetTypesComponent,
         BetTypesVirtualSportComponent,
         DateFullTimeNewComponent,
-        TooltipComponent
+        TooltipComponent,
+        TestingModule
       ],
       providers: [
         { provide: AppService, useValue: { 
@@ -149,7 +152,8 @@ describe('FilterComponent', () => {
           getBetTypesVirtualSports: jest.fn().mockResolvedValue(Helper.mockGroupBetTypes)
         }},
         { provide: BlockUiService, useValue: { start: jest.fn(), stop: jest.fn() }},
-        { provide: ElementRef, useValue: { nativeElement: document.createElement('div') }}
+        { provide: ElementRef, useValue: { nativeElement: document.createElement('div') }},
+        { provide: AppComponent, useValue: { logAccessAction: jest.fn() }},
       ]
     }).compileComponents();
 
@@ -248,7 +252,124 @@ describe('FilterComponent', () => {
 
     // Assert
     expect(component.searchEvent.emit).not.toHaveBeenCalled();
-    expect(component.tooltip.display).toHaveBeenCalled();
+  });
+
+  it('#search should not emit search event when matchId is invalid', () => {
+    // Arrange
+    component.matchId = 'abc';
+    component.match = null;
+    jest.spyOn(component.searchEvent, 'emit');
+    
+    // Mock tooltip
+    component.tooltip = {
+      display: jest.fn(),
+      hide: jest.fn()
+    } as any;
+
+    // Act
+    component.search();
+
+    // Assert
+    expect(component.searchEvent.emit).not.toHaveBeenCalled();
+    expect(component.tooltip.display).toHaveBeenCalledWith('match-id', 'Invalid MatchId.');
+  });
+
+  it('#search should not emit search event when fromDate is after toDate', () => {
+    // Arrange
+    component.matchId = '123';
+    component.match = Helper.mockMatch;
+    component.disabledTransDate = false;
+    component.fromDate = '2024-03-21 10:00:00';
+    component.toDate = '2024-03-20 10:00:00';
+    component.query.eventType = 1;
+    component.query.product = Product.SPORTS_BOOK;
+    jest.spyOn(component.searchEvent, 'emit');
+    
+    // Mock tooltip
+    component.tooltip = {
+      display: jest.fn(),
+      hide: jest.fn()
+    } as any;
+
+    // Act
+    component.search();
+
+    // Assert
+    expect(component.searchEvent.emit).not.toHaveBeenCalled();
+    expect(component.tooltip.display).toHaveBeenCalledWith('from-date-time', 'From Time must be smaller than To Time');
+  });
+
+  it('#search should not emit search event when selectionSubParlays is empty for SubParlay', () => {
+    // Arrange
+    component.matchId = '123';
+    component.match = Helper.mockMatch;
+    component.singleOrSubParlay = 'SubParlay';
+    component.selectedComboParlay = [];
+    jest.spyOn(component.searchEvent, 'emit');
+    
+    // Mock tooltip
+    component.tooltip = {
+      display: jest.fn(),
+      hide: jest.fn()
+    } as any;
+
+    // Act
+    component.search();
+
+    // Assert
+    expect(component.searchEvent.emit).not.toHaveBeenCalled();
+    expect(component.tooltip.display).toHaveBeenCalledWith('selection-dropdown-sub-parlay', 'Please select at least one option!');
+  });
+
+  it('#search should not emit search event when advanced mode validation fails', () => {
+    // Arrange
+    component.matchId = '123';
+    component.match = Helper.mockMatch;
+    component.query.product = Product.SPORTS_BOOK;
+    component.advancedModeComponent = {
+      validate: jest.fn().mockReturnValue(false)
+    } as unknown as AdvancedModeComponent;
+    jest.spyOn(component.searchEvent, 'emit');
+    
+    // Mock tooltip
+    component.tooltip = {
+      display: jest.fn(),
+      hide: jest.fn()
+    } as any;
+
+    // Act
+    component.search();
+
+    // Assert
+    expect(component.searchEvent.emit).not.toHaveBeenCalled();
+  });
+
+  it('#writeSearchLog should call logAccessAction with correct product name', () => {
+    // Arrange
+    component.query.product = Product.SPORTS_BOOK;
+    component.appComponent = {
+      logAccessAction: jest.fn()
+    } as any;
+
+    // Act
+    component.writeSearchLog();
+
+    // Assert
+    expect(component.appComponent.logAccessAction).toHaveBeenCalledWith('SPORTS_BOOK');
+  });
+
+  it('#writeSearchLog should call logAccessAction with empty string when product not found', () => {
+    // Arrange
+    component.query.product = 999; // Invalid product ID
+    component.appComponent = {
+      logAccessAction: jest.fn()
+    } as any;
+
+    // Act
+    component.writeSearchLog();
+
+    // Assert
+    expect(component.appComponent.logAccessAction).toHaveBeenCalledWith(undefined);
   });
 
   it('#changeProduct should handle product change correctly', async () => {

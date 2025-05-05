@@ -26,13 +26,13 @@ export class Product {
   static readonly BET_BUILDER = 3;
   static readonly BITCOIN = 4;
 
-  static readonly DISPLAY = {
-    'Sportsbook': 0,
-    'Number Game': 1,
-    'Virtual Sports': 2,
-    'Bet Builder': 3,
-    'Bitcoin': 4
-  };
+  static readonly PRODUCT_LIST = [
+    { id: Product.SPORTS_BOOK, name: 'Sportsbook', note: 'SPORTS_BOOK' },
+    { id: Product.NUMBER_GAME, name: 'Number Game', note: 'NUMBER_GAME' },
+    { id: Product.VIRTUAL_SPORTS, name: 'Virtual Sports', note: 'VIRTUAL_SPORTS' },
+    { id: Product.BET_BUILDER, name: 'Bet Builder', note: 'BET_BUILDER' },
+    { id: Product.BITCOIN, name: 'Bitcoin', note: 'BITCOIN' }
+  ];
 
   static readonly IS_MATCH_3RD = [Product.BITCOIN];
   static readonly SHOW_SEND_COLUMN = [Product.SPORTS_BOOK, Product.NUMBER_GAME, Product.BET_BUILDER];
