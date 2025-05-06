@@ -1,25 +1,36 @@
-import { Component, EventEmitter, Input, Output, ViewChild, ElementRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AcceptType, DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { SubIssueType } from '../../../../../utility/models/issue-type.model';
+import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
-import { FilterModel } from '../../filter/filter.model';
-import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';
 import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRelatedEvent } from './log-info-related-event.model';
-import { PrimitiveProperty } from './primitive-property.model';
+import { FilterModel } from '../../filter/filter.model';
+import { SubIssueTypeDialogComponent } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.component';
+import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { LogInfoRelatedEvent } from './log-info-related-event.model';
 import { LogInfoRelatedEventService } from './log-info-related-event.service';
+import { PrimitiveProperty } from './primitive-property.model';
 
 @Component({
+  standalone: true,
   selector: 'log-info-related-event',
   templateUrl: './log-info-related-event.component.html',
-  styleUrls: ['./log-info-related-event.component.scss']
+  styleUrls: ['./log-info-related-event.component.scss'],
+  imports: [CommonModule, FormsModule, TooltipComponent, NgbModule, SubIssueTypeDialogComponent,
+    FilterTimeWithAllowanceComponent, BlockUiDirective, PipeModule],
+  providers: [LogInfoRelatedEventService]
 })
 export class LogInfoRelatedEventComponent {
   @Input() isEdit: boolean;
@@ -43,11 +54,11 @@ export class LogInfoRelatedEventComponent {
   acceptTypeName = "";
   tooltip = new Tooltip();
 
-  constructor(
-    private readonly modalService: ModalService,
-    private readonly element: ElementRef,
-    private readonly logInfoRelatedEventService: LogInfoRelatedEventService
-  ) {
+  private readonly element = inject(ElementRef);
+  private readonly modalService = inject(ModalService);
+  private readonly logInfoRelatedEventService = inject(LogInfoRelatedEventService);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 

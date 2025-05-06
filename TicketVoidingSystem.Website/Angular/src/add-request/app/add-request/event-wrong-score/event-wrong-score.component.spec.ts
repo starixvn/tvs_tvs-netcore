@@ -1,1735 +1,277 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { ModalService } from '../../../../utility/components/modal/modal.service';
-import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
-import { AcceptType, TVSRequestFilterBy } from '../../../../utility/constants/config';
-import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
-import { IssueType, SubIssueType } from '../../../../utility/models/issue-type.model';
-import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { PipeModule } from '../../../../utility/pipes/pipe.module';
-import { AddRequestApiService } from '../add-request-api.service';
-import { AddRequestStore } from '../add-request.store';
-import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
-import { ValidationAbnormalBet } from '../event-abnormal-bet/event-abnormal-bet.model';
-import { ValidationBusinessRuleOutput } from '../event-abnormal-bet/services/validation.model';
-import { FilterModel } from '../filter/filter.model';
-import { IssueTypes } from '../filter/issue-types.model';
-import { WrongScoreModel } from '../models/event-wrong-score.model';
-import { ValidationMessage } from '../models/get-log-info.model';
-import { ConfirmWrongScoreComponent } from './confirm-wrong-score/confirm-wrong-score.component';
-import { ConfirmWrongScoreModel } from './confirm-wrong-score/confirm-wrong-score.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { EventWrongScoreComponent } from './event-wrong-score.component';
-import { PrimitiveProperty } from './event-wrong-score.model';
-import { FilterWrongScoreComponent } from './filter-wrong-score/filter-wrong-score.component';
+import { ValidationService } from './services/validation.service';
+import { EventWrongScoreService } from './services/event-wrong-score.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
+import { RelatedEventService } from './services/related-event.service';
+import { EditRequestService } from './services/edit-request.service';
+import { TvDetectionService } from '../components/tv-detection/tv-detection.service';
+import { AddRequestStore } from '../add-request.store';
+import { FilterModel } from '../filter/filter.model';
+import { WrongScoreModel } from '../models/event-wrong-score.model';
+import { OthersModel } from '../others/others.model';
+import { IssueTypes } from '../filter/issue-types.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { MatchModel } from '../../../../utility/models/match.model';
+import { FilterWrongScoreComponent } from './filter-wrong-score/filter-wrong-score.component';
+import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
+import { QueryList, SimpleChange } from '@angular/core';
+import { TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
+import { FilterTimeWithAllowanceComponent } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
 
 class Helper {
-  static readonly fakeTransId = '111102';
   static readonly fakeRequestId = 1212;
-  static readonly fakeFromDateTime = '2020-10-09 09:43:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeAllowanceTime: AllowanceTime = {
-    aaTime: 1,
-    paTime: 1,
-    saTime: 1,
-  };
+  static readonly fakeUserId = 123;
+  static readonly fakeRequestedBy = 'testUser';
   static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '3',
-    subIssueTypeId: '33',
+    issueTypeId: '1',
+    subIssueTypeId: '1',
     action: '1',
     isTest: true,
     isVoided: false,
-    isChangeSubTypeManual: false,
+    isChangeSubTypeManual: true,
     isAbnormal: false
   } as FilterModel;
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-    {
-      matchId: 12345,
-      liveScores: '0 - 0',
-      voidFromTime: new Date(Helper.fakeFromDateTime),
-      voidToTime: new Date(Helper.fakeToDateTime),
-      singleCount: 1,
-      mainParlayCount: 1,
-      cancelCashOutCount: 1,
-      cashOutCount: 3,
-      settleCount: 1,
-      scoreOfMatch: '',
-      scoreNormalTicket: '',
-      instantlySettleCount: 2,
-      highlightAcceptType: AcceptType.AUTO_ACCEPT,
-      highlightMinTime: new Date(Helper.fakeToDateTime)
-    } as LogInfoDetail;
-  static readonly fakeValidationMessage: ValidationMessage[] = [
-    {
-      isError: false,
-      reason: '',
-    }
-  ];
-  static readonly fakeWrongScoreModel: WrongScoreModel[] = [{
-    scoreId: 5464,
-    isActive: true,
-    wrongScore: '0-1',
-    subIssueTypeId: 5,
-    filterBy: 1,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    actualScore: '',
-    matchId: 900000,
-    isChecked: true,
-    eventDate: null,
-    voidFromTime: Helper.fakeFromDateTime,
-    voidToTime: Helper.fakeToDateTime,
-  } as WrongScoreModel,
-  {
-    scoreId: 5465,
-    isActive: false,
-    wrongScore: '2-1',
-    subIssueTypeId: 5,
-    filterBy: 1,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    actualScore: '',
-    matchId: 900000,
-    isChecked: true,
-    eventDate: null,
-    voidFromTime: Helper.fakeFromDateTime,
-    voidToTime: Helper.fakeToDateTime,
-  } as WrongScoreModel];
-  static readonly fakeValidationBusinessRuleOutputSuccessful: ValidationBusinessRuleOutput = {
-    isValid: true,
-    transInfoAddRequestModel: null,
-    abnormalBetTicketRequests: [],
-    warningModel: new ValidationAbnormalBet
-  };
-  static readonly fakeValidationBusinessRuleOutputError: ValidationBusinessRuleOutput = {
-    isValid: false,
-    transInfoAddRequestModel: null,
-    abnormalBetTicketRequests: [],
-    warningModel: new ValidationAbnormalBet
-  };
-
-  static initHtml(): void {
-    const element = document.createElement('body');
-    element.setAttribute('id', 'body');
-    element.setAttribute('user-id', '8');
-    element.setAttribute('user-name', 'sa');
-    document.body.appendChild(element);
-  };
-  static fakeIssueType: IssueType[] = [{
-    issueTypeId: 3,
-    issueTypeName: "Wrong Score",
-  }];
-  static fakeSubIssueType: SubIssueType[] = [{
-    subIssueTypeId: 33,
-    subIssueTypeName: "Goal",
-    issueTypeId: 3,
-    subIssueTypeNameCS: "Hi"
-  }];
-  static fakeIssueTypes: IssueTypes = {
-    issueTypes: Helper.fakeIssueType,
-    subIssueTypes: Helper.fakeSubIssueType,
-    issueId: 3,
-    selectedSubIssueTypes: Helper.fakeSubIssueType,
-    subIssueId: 33,
-  };
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeWrongScoreModel = [{
+    matchId: 123,
+    sportType: 1,
+    isMainMatch: true,
+    eventDate: new Date()
+  }] as WrongScoreModel[];
+  static readonly fakeIssueTypes = new IssueTypes();
 }
 
 describe('EventWrongScoreComponent', () => {
-  @NgModule({
-    declarations: [
-      EventLeagueComponent,
-      ConfirmWrongScoreComponent,
-      WrongScoreInfoComponent,
-      FilterWrongScoreComponent,
-      EventLeagueComponent,
-      TvDetectionComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      ToolTipModule,
-      BlockUiModule,
-      PipeModule
-    ],
-    providers: [
-      ValidationService,
-      SaveRequestService,
-      AddRequestStore,
-      AddRequestApiService,
-      WrongScoreService,
-      LogInfoService,
-      ModalService
-    ]
-  })
-  class AppModuleTest { }
+  let component: EventWrongScoreComponent;
+  let fixture: ComponentFixture<EventWrongScoreComponent>;
+  let validationService: ValidationService;
+  let eventWrongScoreService: EventWrongScoreService;
+  let wrongScoreService: WrongScoreService;
+  let relatedEventService: RelatedEventService;
+  let editRequestService: EditRequestService;
+  let addRequestStore: AddRequestStore;
 
-  let shallow: Shallow<EventWrongScoreComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        EventWrongScoreService,
+        LogInfoService,
+        SaveRequestService,
+        WrongScoreService,
+        RelatedEventService,
+        EditRequestService,
+        TvDetectionService,
+        AddRequestStore
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(EventWrongScoreComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(EventWrongScoreComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    eventWrongScoreService = fixture.debugElement.injector.get(EventWrongScoreService);
+    wrongScoreService = fixture.debugElement.injector.get(WrongScoreService);
+    relatedEventService = fixture.debugElement.injector.get(RelatedEventService);
+    editRequestService = fixture.debugElement.injector.get(EditRequestService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    component = fixture.componentInstance;
   });
 
-  it('#EventWrongScoreComponent init should match snapshot', async () => {
-    // Arrange
-    const { fixture, instance } = await shallow
-      .mock(LogInfoService, { getLogInfo: jest.fn() })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: false,
-        }
-      });
-    instance.ngOnInit = jest.fn();
-
-    // Action
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#updateWrongScoreModels should update correct data', async () => {
+  it('should initialize with default values when not in edit mode', () => {
     // Arrange
-    const originWrongScoreModels = _.clone(Helper.fakeWrongScoreModel);
-    originWrongScoreModels.push(new WrongScoreModel());
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: false
-        }
-      });
-    instance['callApiGetWrongScores'] = jest.fn().mockImplementation(() => Promise.resolve(originWrongScoreModels));
+    component.isEdit = false;
+    wrongScoreService.initDefaultFilterWrongScore = jest.fn().mockReturnValue({});
+    addRequestStore.changeSavingRequestStatus = jest.fn();
 
-    // Action
-    await instance.updateWrongScoreModels();
+    // Act
+    component.ngOnInit();
 
     // Assert
-    expect(instance.wrongScoreModels.length).toEqual(3);
+    expect(wrongScoreService.initDefaultFilterWrongScore).toHaveBeenCalled();
+    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
   });
 
-  it('#updateByOriginWrongScoreModel should update correct data', async () => {
+  it('should initialize with existing values when in edit mode', () => {
     // Arrange
-    const originWrongScoreModels = _.clone(Helper.fakeWrongScoreModel);
-    originWrongScoreModels.push(new WrongScoreModel());
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: false
-        }
-      });
-    instance['callApiGetWrongScores'] = jest.fn().mockImplementation(() => Promise.resolve(originWrongScoreModels));
-
-    // Action
-    instance.updateByOriginWrongScoreModel(originWrongScoreModels);
-
-    // Assert
-    expect(instance.wrongScoreModels.length).toEqual(3);
-  });
-
-  it('#updateByOriginWrongScoreModel should update correct data when #originWrongScoreModels have new score', async () => {
-    // Arrange
-    const originWrongScoreModels = _.clone(Helper.fakeWrongScoreModel);
-    originWrongScoreModels.push(new WrongScoreModel());
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: false
-        }
-      });
-    instance.wrongScoreModels = [];
-
-    // Action
-    instance.updateByOriginWrongScoreModel(originWrongScoreModels);
-
-    // Assert
-    expect(instance.wrongScoreModels.length).toEqual(3);
-  });
-
-  it('#resetData should set wrongScoreModels to be empty', async () => {
-    // Arrange
-    const fakeShallow = new Shallow(EventWrongScoreComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
-    const { instance } = await fakeShallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-
-    // Action
-    instance.resetData();
-
-    // Assert
-    expect(instance.wrongScoreModels.length).toBe(0);
-  });
-
-  it('#getWrongScores should call #callApiGetWrongScores', async () => {
-    // Arrange
-    const fakeShallow = new Shallow(EventWrongScoreComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
-    const { instance } = await fakeShallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-    instance['callApiGetWrongScores'] = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeWrongScoreModel));
-
-    // Action
-    await instance.getWrongScores(1);
-
-    // Assert
-    expect(instance.wrongScoreModels.length).toBeGreaterThan(0);
-    expect(instance['callApiGetWrongScores']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getWrongScores should call #callApiGetWrongScores but return no score', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-    instance['callApiGetWrongScores'] = jest.fn().mockImplementation(() => Promise.resolve([]));
-
-    // Action
-    await instance.getWrongScores(1);
-
-    // Assert
-    expect(instance['callApiGetWrongScores']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getWrongScores should call #callApiGetWrongScores', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-    instance['callApiGetWrongScores'] = jest.fn().mockImplementation(() => Promise.resolve([]));
-    instance.updateMatchId.emit = jest.fn();
-
-    // Action
-    await instance.getWrongScores(null);
-
-    // Assert
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(0);
-    expect(instance['callApiGetWrongScores']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#callApiGetWrongScores should call #getWrongScores', async () => {
-    // Arrange
-    const mockGetWrongScores = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeWrongScoreModel));
-    const { instance } = await shallow
-      .mock(AddRequestApiService, { getWrongScores: mockGetWrongScores, })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-
-    // Action
-    const result = await instance['callApiGetWrongScores'](111);
-
-    // Assert
-    expect(mockGetWrongScores).toHaveBeenCalled();
-    expect(result).toEqual(Helper.fakeWrongScoreModel);
-  });
-
-  it('#triggerCloseEvent should call #changeSavingRequestStatus', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus, })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-
-    // Action
-    instance.triggerCloseEvent();
-
-    // Assert
-    expect(mockChangeSavingRequestStatus).toHaveBeenCalled();
-  });
-
-  it('#saveRequest should call #openConfirmWrongScore when request was voided', async () => {
-    // Arrange
-    const mockSaveRequest = jest.fn();
-    const mockIsValidationHasWarningTicket = jest.fn().mockImplementation(() => true);
-    const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => false);
-    const mockIsHasWarningSettledTicket = jest.fn().mockImplementation(() => true);
-    const filter = Helper.fakeFilterModel;
-    filter.isVoided = true;
-    const { instance } = await shallow
-      .mock(SaveRequestService, { saveRequest: mockSaveRequest, })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(ValidationService, {
-        isValidationHasWarningTicket: mockIsValidationHasWarningTicket,
-        isHasWarningEditTakeNoteRequest: mockIsHasWarningEditTakeNoteRequest,
-        isHasWarningSettledTicket: mockIsHasWarningSettledTicket,
-        isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false)
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: filter,
-          isEdit: true
-        }
-      });
-    instance['openConfirmWrongScore'] = jest.fn();
-    instance['validateVarCheck'] = jest.fn().mockImplementation(() => true);
-
-    // Action
-    await instance.saveRequest();
-
-    // Assert
-    expect(instance['openConfirmWrongScore']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#saveRequest should call #saveWhenRequestNotVoided when request was not voided', async () => {
-    // Arrange
-    const mockSaveRequest = jest.fn();
-    const filter = Helper.fakeFilterModel;
-    filter.isVoided = false;
-    const { instance } = await shallow
-      .mock(SaveRequestService, { saveRequest: mockSaveRequest, })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: filter,
-          isEdit: true
-        }
-      });
-    instance['saveWhenRequestNotVoided'] = jest.fn();
-    instance['validateVarCheck'] = jest.fn().mockImplementation(() => true);
-
-    // Action
-    await instance.saveRequest();
-
-    // Assert
-    expect(instance['saveWhenRequestNotVoided']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#saveRequest should return when validateVarCheck false', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-    instance['validateVarCheck'] = jest.fn().mockImplementation(() => false);
-
-    // Action
-    await instance.saveRequest();
-
-    // Assert
-    expect(instance['validateVarCheck']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#onYesConfirmAddRequest should call #saveWhenRequestNotVoided when request was not voided', async () => {
-    // Arrange
-    const mockOnYesConfirmAddRequest = jest.fn();
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(SaveRequestService, { onYesConfirmAddRequest: mockOnYesConfirmAddRequest, })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-    instance['createSaveRequestArg'] = jest.fn();
-
-    // Action
-    await instance.onYesConfirmAddRequest();
-
-    // Assert
-    expect(mockOnYesConfirmAddRequest).toHaveBeenCalledTimes(1);
-  });
-
-  it('#openConfirmWrongScore should call update correct #confirmWrongScoreModel', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-    const mockIsValidationHasWarningTicket = jest.fn().mockImplementation(() => true);
-    const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => true);
-    const mockIsHasWarningSettledTicket = jest.fn().mockImplementation(() => true);
-    const mockIsEditingByAnotherUser = jest.fn().mockImplementation(() => true);
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(ValidationService,
-        {
-          isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false),
-          isValidationHasWarningTicket: mockIsValidationHasWarningTicket,
-          isHasWarningEditTakeNoteRequest: mockIsHasWarningEditTakeNoteRequest,
-          isHasWarningSettledTicket: mockIsHasWarningSettledTicket,
-          isEditingByAnotherUser: mockIsEditingByAnotherUser
-        })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes,
-          isEdit: true
-        }
-      });
-    const element = document.createElement('body');
-    element.setAttribute('id', 'body');
-    element.setAttribute('user-id', '8');
-    document.body.appendChild(element);
-    instance['createValidationBusinessRuleArgs'] = jest.fn();
-    instance.confirmWrongScoreModel = new ConfirmWrongScoreModel();
-
-    // Action
-    instance['openConfirmWrongScore']();
-
-    // Assert
-    expect(instance.confirmWrongScoreModel.isOpenDialog).toBeTruthy();
-    expect(instance.confirmWrongScoreModel.isHasWarningForWrongScore).toBeTruthy();
-    expect(instance.confirmWrongScoreModel.isHasWarningEditTakeNoteRequest).toBeTruthy();
-  });
-
-  it('#saveWhenRequestNotVoided should call #openConfirmWrongScore', async () => {
-    // Arrange
-    const mockOpenConfirmWrongScore = jest.fn();
-    const mockCheckValidationBeforeSaveRequest = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeValidationBusinessRuleOutputSuccessful));
-    const { instance } = await shallow
-      .mock(SaveRequestService, { checkValidationBeforeSaveRequest: mockCheckValidationBeforeSaveRequest, })
-      .mock(ValidationService, {
-        isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false),
-        isEditingByAnotherUser: jest.fn().mockImplementation(() => false)
-      })
-      .mock(WrongScoreService, { getSelectedWrongScores: jest.fn() })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-    instance['createValidationBusinessRuleArgs'] = jest.fn();
-    instance['openConfirmWrongScore'] = mockOpenConfirmWrongScore;
-
-    // Action
-    await instance['saveWhenRequestNotVoided']();
-
-    // Assert
-    expect(mockOpenConfirmWrongScore).toHaveBeenCalledTimes(1);
-    expect(mockCheckValidationBeforeSaveRequest).toHaveBeenCalledTimes(1);
-    expect(instance['createValidationBusinessRuleArgs']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#saveWhenRequestNotVoided should call #addRequestStore.changeSavingRequestStatus', async () => {
-    // Arrange
-    const mockSaveRequest = jest.fn();
-    const mockCheckValidationBeforeSaveRequest = jest.fn().mockReturnValue({isValid: false} as ValidationBusinessRuleOutput);
-    const mockChangeSavingRequestStatus = jest.fn();
-
-    const { instance } = await shallow
-      .mock(SaveRequestService, {
-        checkValidationBeforeSaveRequest: mockCheckValidationBeforeSaveRequest,
-        saveRequest: mockSaveRequest,
-      })
-      .mock(WrongScoreService, { getSelectedWrongScores: jest.fn() })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-    instance['createValidationBusinessRuleArgs'] = jest.fn();
-
-    // Action
-    await instance['saveWhenRequestNotVoided']();
-
-    // Assert
-    expect(mockCheckValidationBeforeSaveRequest).toHaveBeenCalledTimes(1);
-    expect(mockChangeSavingRequestStatus).toHaveBeenCalled();
-    expect(instance['createValidationBusinessRuleArgs']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#createSaveRequestArg should call update correct data', async () => {
-    // Arrange
-    const mockGetSelectedWrongScores = jest.fn();
-    const mockGetSelectedWrongScoreComponents = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: mockGetSelectedWrongScoreComponents,
-        getSelectedWrongScores: mockGetSelectedWrongScores
-      })
-      .mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-
-    // Action
-    instance['createSaveRequestArg']();
-
-    // Assert
-    expect(mockGetSelectedWrongScores).toHaveBeenCalled();
-    expect(mockGetSelectedWrongScoreComponents).toHaveBeenCalledTimes(1);
-  });
-
-  it('#createValidationBusinessRuleArgs should call update correct data', async () => {
-    // Arrange
-    const mockGetSelectedWrongScores = jest.fn();
-    const mockGetSelectedWrongScoreComponents = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: mockGetSelectedWrongScoreComponents,
-        getSelectedWrongScores: mockGetSelectedWrongScores,
-      })
-      .mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-
-    // Action
-    instance['createValidationBusinessRuleArgs']();
-
-    // Assert
-    expect(mockGetSelectedWrongScores).toHaveBeenCalled();
-    expect(mockGetSelectedWrongScoreComponents).toHaveBeenCalledTimes(1);
-  });
-
-  it('#ngOnInit should call #getFilterWrongScore', async () => {
-    const addRequestStore = new AddRequestStore();
-    addRequestStore.getAllowanceTimeSubject.subscribe = jest.fn();
-    const wrongScoreService = new WrongScoreService(null, null);
-    wrongScoreService.getFilterWrongScore = jest.fn();
-
-    const component = new EventWrongScoreComponent(null, null, addRequestStore, null, null, wrongScoreService, null, null);
     component.isEdit = true;
     component.wrongScoreModels = Helper.fakeWrongScoreModel;
+    component.mainEvent = Helper.fakeWrongScoreModel[0];
+    editRequestService.getMainWrongScoreModel = jest.fn().mockReturnValue(Helper.fakeWrongScoreModel[0]);
+    editRequestService.assignPrimitivePropsEditRequest = jest.fn();
+    wrongScoreService.getFilterWrongScore = jest.fn().mockReturnValue({});
+    eventWrongScoreService.getTvDetectionModel = jest.fn().mockReturnValue({});
     component.filter = Helper.fakeFilterModel;
-    component.primitiveProps = new PrimitiveProperty();
-    component.updateWrongScoreModels = jest.fn();
 
-    await component.ngOnInit();
+    // Act
+    component.ngOnInit();
 
-    expect(wrongScoreService.getFilterWrongScore).toHaveBeenCalledTimes(1);
-    expect(component.updateWrongScoreModels).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(editRequestService.getMainWrongScoreModel).toHaveBeenCalledWith(Helper.fakeWrongScoreModel);
+    expect(editRequestService.assignPrimitivePropsEditRequest).toHaveBeenCalledWith(Helper.fakeWrongScoreModel[0], component.primitiveProps);
   });
 
-  it('#ngOnInit should call #initDefaultFilterWrongScore', async () => {
-    const addRequestStore = new AddRequestStore();
-    addRequestStore.changeAllowanceTime(new AllowanceTime());
-    addRequestStore.changeSavingRequestStatus = jest.fn();
-    const wrongScoreService = new WrongScoreService(null, null);
-    wrongScoreService.initDefaultFilterWrongScore = jest.fn();
-
-    const component = new EventWrongScoreComponent(null, null, addRequestStore, null, null, wrongScoreService, null, null);
-    component.isEdit = false;
-    component.wrongScoreModels = Helper.fakeWrongScoreModel;
+  it('should handle filter changes and reset data', () => {
+    // Arrange
     component.filter = Helper.fakeFilterModel;
-    component.primitiveProps = new PrimitiveProperty();
-
-    await component.ngOnInit();
-
-    expect(wrongScoreService.initDefaultFilterWrongScore).toHaveBeenCalledTimes(1);
-    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-  });
-
-  it('isShowCountInfo should return true', async () => {
-    const mockChangeSavingRequestStatus = jest.fn();
-
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    const actual = instance['isShowCountInfo'](1, 2, 1);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('isShowCountInfo should return false', async () => {
-    const mockChangeSavingRequestStatus = jest.fn();
-
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    const actual = instance['isShowCountInfo'](0, 0, 0);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('countInfoContent should return info CashOut', async () => {
-    const mockChangeSavingRequestStatus = jest.fn();
-
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance['isShowCashOutCount'] = jest.fn().mockImplementation(() => true);
-    instance['isShowSettleCount'] = jest.fn().mockImplementation(() => false);
-    const actual = instance['countInfoContent'](1, 0, 2);
-
-    expect(actual).toBe(' (Cash Out: <strong>1</strong>, Instantly Settled: <strong>2</strong>)');
-  });
-
-  it('countInfoContent should return info Settle', async () => {
-    const mockChangeSavingRequestStatus = jest.fn();
-
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    const actual = instance['countInfoContent'](1, 0, 2);
-
-    expect(actual).toBe(' (Cash Out: <strong>1</strong>, Instantly Settled: <strong>2</strong>)');
-  });
-
-  it('countInfoContent should return string have not info', async () => {
-    const mockChangeSavingRequestStatus = jest.fn();
-
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    const actual = instance['countInfoContent'](0, 0, 0);
-
-    expect(actual).toBe(' ()');
-  });
-
-  it('displayFullDateTimeFormat should return time', async () => {
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    const actual = instance.displayFullDateTimeFormat(new Date(Helper.fakeFromDateTime));
-
-    expect(actual).toBe('2020/10/09 09:43:46.361 PM');
-  });
-
-  it('#isShowLogInfoFilterByAcceptedTime should return true when logInfoDetail not null', async () => {
-    const mockChangeSavingRequestStatus = jest.fn();
-
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-        createMainWrongScoreModel: jest.fn().mockReturnValue(Helper.fakeWrongScoreModel[0])
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.primitiveProps.filterBy = 2;
-
-    const actual = instance.isShowLogInfoFilterByAcceptedTime();
-
-    expect(actual).toBe(true);
-  });
-
-  it('#isShowLogInfoFilterByAcceptedTime should return true when messageValidationLogInfo.length > 0', async () => {
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-        createMainWrongScoreModel: jest.fn().mockReturnValue(Helper.fakeWrongScoreModel[0])
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail = null;
-    instance.wrongScoreModels[0].messageValidationLogInfo = [new ValidationMessage()];
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.primitiveProps.filterBy = 2;
-
-    const actual = instance.isShowLogInfoFilterByAcceptedTime();
-
-    expect(actual).toBe(true);
-  });
-
-  it('#isShowLogInfoFilterByAcceptedTime should return false when messageValidationLogInfo no has', async () => {
-    const mockChangeSavingRequestStatus = jest.fn();
-
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail = null;
-    instance.wrongScoreModels[0].messageValidationLogInfo = null;
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.primitiveProps.filterBy = 2;
-
-    const actual = instance.isShowLogInfoFilterByAcceptedTime();
-
-    expect(actual).toBe(false);
-  });
-
-  it('#isShowLogInfoFilterByAcceptedTime should return false when wrongScoreModels is null', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-
-    instance.wrongScoreModels = null;
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.primitiveProps.filterBy = 3;
-
-    const actual = instance.isShowLogInfoFilterByAcceptedTime();
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#isShowLogInfoFilterByAcceptedTime should return false when filterBy != 2', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-
-    instance.wrongScoreModels = null;
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.primitiveProps.filterBy = 3;
-
-    const actual = instance.isShowLogInfoFilterByAcceptedTime();
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#changeMatchEvent should emit updateMatchId', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-        changeStartTimeFilterAnalysis: jest.fn()
-      })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.resetData = jest.fn();
-    instance.updateMatchId.emit = jest.fn();
-
-    instance.changeMatchEvent(new MatchModel());
-
-    expect(instance.resetData).toHaveBeenCalledTimes(1);
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
-  });
-
-  it('#changeMatchEvent should not emit updateMatchId', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-        changeStartTimeFilterAnalysis: jest.fn()
-      })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.resetData = jest.fn();
-    instance.updateMatchId.emit = jest.fn();
-
-    instance.changeMatchEvent(null);
-
-    expect(instance.resetData).toHaveBeenCalledTimes(0);
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(0);
-  });
-
-  it('#handleSearchEvent should return since validateCommonData false', async () => {
-    // Arrange
-    const mockClearDataValidation = jest.fn();
-    const mockValidateCommonData = jest.fn().mockImplementation(() => false);
-    const mockChangeSavingRequestStatus = jest.fn();
-
-    const { instance } = await shallow
-      .mock(LogInfoService, { clearDataValidation: mockClearDataValidation })
-      .mock(ValidationService, { validateCommonData: mockValidateCommonData })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-
-    instance.handleSearchEvent();
-
-    expect(mockClearDataValidation).toHaveBeenCalledTimes(1);
-    expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
-  });
-
-  it('#handleSearchEvent should called #getLogInfo', async () => {
-    // Arrange
-    const mockClearDataValidation = jest.fn();
-    const mockValidateCommonData = jest.fn().mockImplementation(() => false);
-    const mockGetLogInfo = jest.fn();
-
-    const { instance } = await shallow
-      .mock(LogInfoService, {
-        clearDataValidation: mockClearDataValidation,
-        getLogInfo: mockGetLogInfo
-      })
-      .mock(ValidationService, { validateCommonData: mockValidateCommonData })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-        createMainWrongScoreModel: jest.fn().mockReturnValue(Helper.fakeWrongScoreModel[0])
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.primitiveProps.filterBy = TVSRequestFilterBy.CHECK_TIME;
-
-    instance.handleSearchEvent();
-
-    expect(mockClearDataValidation).toHaveBeenCalled();
-  });
-
-  it('#handleSearchEvent should called #getWrongScores', async () => {
-    // Arrange
-    const mockClearDataValidation = jest.fn();
-    const mockValidateCommonData = jest.fn().mockImplementation(() => true);
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-        createMainWrongScoreModel: jest.fn().mockReturnValue(Helper.fakeWrongScoreModel[0])
-      })
-      .mock(ValidationService, { validateCommonData: mockValidateCommonData })
-      .mock(LogInfoService, {
-        clearDataValidation: mockClearDataValidation,
-        getLogInfo: mockGetLogInfo
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.primitiveProps.filterBy = TVSRequestFilterBy.TRANS_TIME;
-    instance.getWrongScores = jest.fn();
-
-    instance.handleSearchEvent();
-
-    expect(mockClearDataValidation).toHaveBeenCalled();
-    expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
-    expect(instance.getWrongScores).toHaveBeenCalledTimes(1);
-  });
-
-  it('#handleSearchEvent should not called #clearDataValidation', async () => {
-    const mockClearDataValidation = jest.fn();
-
-    const { instance } = await shallow
-      .mock(LogInfoService, {
-        clearDataValidation: mockClearDataValidation,
-        getLogInfo: jest.fn()
-      })
-      .mock(ValidationService, {
-        validateCommonData: jest.fn(),
-      })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-        createMainWrongScoreModel: jest.fn()
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-
-    instance.wrongScoreModels = null;
-
-    instance.handleSearchEvent();
-
-    expect(mockClearDataValidation).toHaveBeenCalledTimes(0);
-  });
-
-  it('#handleSearchEvent should called #clearDataValidation', async () => {
-    const mockClearDataValidation = jest.fn();
-
-    const { instance } = await shallow
-      .mock(LogInfoService, {
-        clearDataValidation: mockClearDataValidation,
-        getLogInfo: jest.fn()
-      })
-      .mock(ValidationService, {
-        validateCommonData: jest.fn().mockReturnValue(true),
-      })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-        createMainWrongScoreModel: jest.fn().mockReturnValue(Helper.fakeWrongScoreModel[0])
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-
-    instance.primitiveProps.filterBy = TVSRequestFilterBy.CHECK_TIME
-    instance.wrongScoreModels = null;
-
-    instance.handleSearchEvent();
-
-    expect(mockClearDataValidation).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getHighlightMinTimeClass should return highlight-min-aa', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
-
-    // Action
-    const actual = instance.getHighlightMinTimeClass(new Date());
-
-    // Assert
-    expect(actual).toBe('highlight-min-aa');
-    expect(instance.acceptTypeName).toBe('AA');
-  });
-
-  it('#getHighlightMinTimeClass should return highlight-min-sa', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
-    instance.wrongScoreModels[0].logInfoDetail.highlightAcceptType = 2;
-
-    // Action
-    const actual = instance.getHighlightMinTimeClass(new Date());
-
-    // Assert
-    expect(actual).toBe('highlight-min-sa');
-    expect(instance.acceptTypeName).toBe('SA');
-  });
-
-  it('#getHighlightMinTimeClass should return highlight-min-pa', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
-    instance.wrongScoreModels[0].logInfoDetail.highlightAcceptType = 3;
-
-    // Action
-    const actual = instance.getHighlightMinTimeClass(new Date());
-
-    // Assert
-    expect(actual).toBe('highlight-min-pa');
-    expect(instance.acceptTypeName).toBe('PA');
-  });
-
-  it('#getHighlightMinTimeClass should return -', async () => {
-    // Arrange
-    const fakeWrongScoreModel = Helper.fakeWrongScoreModel[0];
-    fakeWrongScoreModel.logInfoDetail.highlightAcceptType = AcceptType.PENDING_ACCEPT;
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: [fakeWrongScoreModel],
-          filter: Helper.fakeFilterModel,
-        }
-      });
-
-    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
-
-    // Action
-    const actual = instance.getHighlightMinTimeClass(null);
-
-    // Assert
-    expect(actual).toBe('');
-  });
-
-  it('#displayMinTime should return -', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = null;
-
-    // Action
-    const actual = instance.displayMinTime(null);
-
-    // Assert
-    expect(actual).toBe('-');
-  });
-
-  it('#displayMinTime should return expected time when has acceptTypeName', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
-    instance.getHighlightMinTimeClass(new Date("2020-10-08 09:44:46.361 PM"));
-
-    // Action
-    const actual = instance.displayMinTime(new Date("2020-10-08 09:44:46.361 PM"));
-
-    // Assert
-    expect(actual).toBe('09:44:46.361 PM - PA');
-  });
-
-  it('#displayMinTime should return expected time when no has acceptTypeName', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
-    instance.getHighlightMinTimeClass(new Date("2020-10-08 09:44:46.361 PM"));
-    instance.acceptTypeName = null;
-
-    // Action
-    const actual = instance.displayMinTime(new Date("2020-10-08 09:44:46.361 PM"));
-
-    // Assert
-    expect(actual).toBe('09:44:46.361 PM');
-  });
-
-  it('#changeVarCheckValue should update isCheckedVar', async () => {
-    // Arrange
-    const fakeWrongScoreModel = Helper.fakeWrongScoreModel[0];
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: [fakeWrongScoreModel],
-          filter: Helper.fakeFilterModel,
-        }
-      });
-
-    instance.primitiveProps = new PrimitiveProperty();
-
-    // Action
-    instance.changeVarCheckValue(true);
-
-    // Assert
-    expect(instance.primitiveProps.isCheckedVar).toBeTruthy();
-    expect(instance.primitiveProps.isHighLightVarCheck).toEqual(false);
-
-  });
-
-  it('#validateVarCheck should return false', async () => {
-    // Arrange
-    const fakeWrongScoreModel = Helper.fakeWrongScoreModel[0];
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: [fakeWrongScoreModel],
-          filter: Helper.fakeFilterModel,
-        }
-      });
-
-    instance.isShowVarCheck = jest.fn().mockImplementation(() => true);
-    instance.tooltip.display = jest.fn();
-
-    [null, undefined].forEach(x => {
-      instance.primitiveProps = new PrimitiveProperty();
-      instance.primitiveProps.isCheckedVar = x;
-
-      // Action
-      const actual = instance.validateVarCheck();
-
-      // Assert
-      expect(actual).toEqual(false);
+    component.filter.isChangeSubTypeManual = true;
+    eventWrongScoreService.resetPrimitiveProperty = jest.fn();
+    component.tvDetectionComponent = {} as TvDetectionComponent;
+    component.tvDetectionComponent.initDefaultValues = jest.fn();
+
+    // Act
+    component.ngOnChanges({
+      filter: {
+        currentValue: Helper.fakeFilterModel,
+        previousValue: null,
+        firstChange: true
+      } as SimpleChange
     });
-  });
-
-  it('#validateVarCheck should return true', async () => {
-    // Arrange
-    const fakeWrongScoreModel = Helper.fakeWrongScoreModel[0];
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: [fakeWrongScoreModel],
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.isShowVarCheck = jest.fn().mockImplementation(() => false);
-    instance.tooltip.display = jest.fn();
-
-    // Action
-    const actual = instance.validateVarCheck();
 
     // Assert
-    expect(actual).toEqual(true);
+    expect(eventWrongScoreService.resetPrimitiveProperty).toHaveBeenCalled();
+    expect(component.tvDetectionComponent.initDefaultValues).toHaveBeenCalled();
+    expect(component.filter.isChangeSubTypeManual).toBeFalsy();
   });
 
-  it('#updateStatusButtonSaveRequest should have call changeSavingRequestStatus from AddRequestStore', async () => {
+  it('should handle search event with validation', async () => {
     // Arrange
-    const fakeWrongScoreModel = Helper.fakeWrongScoreModel[0];
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: [fakeWrongScoreModel],
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.primitiveProps = new PrimitiveProperty();
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.filterWrongScoreComponent = {} as FilterWrongScoreComponent;
+    component.tvDetectionComponent = {} as TvDetectionComponent;
+    const logInfoRelatedEventComponent = {
+      filterTimeWithAllowanceComponent: {} as FilterTimeWithAllowanceComponent
+    } as LogInfoRelatedEventComponent;
+    logInfoRelatedEventComponent.filterTimeWithAllowanceComponent.updateData = jest.fn();
+    logInfoRelatedEventComponent.showValidationDetail = jest.fn();
+    component.logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
+    component.logInfoComponents.reset([logInfoRelatedEventComponent]);
+    const wrongScoreInfoComponent = {
+      filter: Helper.fakeFilterModel,
+      wrongScoreModel: Helper.fakeWrongScoreModel[0]
+    } as WrongScoreInfoComponent;
+    component.wrongScoreInfoComponents = new QueryList<WrongScoreInfoComponent>();
+    component.wrongScoreInfoComponents.reset([wrongScoreInfoComponent]);
+    validationService.validateCommonData = jest.fn().mockReturnValue(true);
+    validationService.isValidAllSubIssueType = jest.fn().mockReturnValue(true);
+    component.primitiveProps.filterBy = TVSRequestFilterBy.CHECK_TIME;
+    component.wrongScoreModels = [];
+    wrongScoreService.createMainWrongScoreModel = jest.fn().mockReturnValue({});
+    relatedEventService.getGetInfoChildMatch = jest.fn().mockResolvedValue([]);
+    relatedEventService.getDataRelatedEventWhenSearch = jest.fn().mockResolvedValue(undefined);
+    eventWrongScoreService.isHasRelatedEvent = jest.fn().mockReturnValue(true);
+    component.mainEvent = Helper.fakeWrongScoreModel[0];
+    component.filter = Helper.fakeFilterModel;
 
-    // Action
-    instance.updateStatusButtonSaveRequest();
+    // Act
+    await component.handleSearchEvent();
 
     // Assert
-    expect(mockChangeSavingRequestStatus).toHaveBeenCalled();
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(wrongScoreService.createMainWrongScoreModel).toHaveBeenCalled();
+    expect(relatedEventService.getGetInfoChildMatch).toHaveBeenCalled();
+    expect(relatedEventService.getDataRelatedEventWhenSearch).toHaveBeenCalled();
+    expect(component.primitiveProps.isShowRelatedEvents).toBeTruthy();
   });
 
-  it('#getTimeSelectedScore should return expected time', async () => {
+  it('should handle save request with validation', async () => {
     // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
+    component.filter = Helper.fakeFilterModel;
+    component.filter.isVoided = true;
+    validationService.isValidAllSubIssueType = jest.fn().mockReturnValue(true);
+    component.validateVarCheck = jest.fn().mockReturnValue(true);
+    component['openConfirmWrongScore'] = jest.fn();
 
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
-    instance.getHighlightMinTimeClass(new Date("2020-10-08 09:44:46.361 PM"));
-    // Action
-    const actual = instance.getTimeSelectedScore(Helper.fakeWrongScoreModel);
+    // Act
+    await component.saveRequest();
+
     // Assert
-    expect(actual).toBe('2020/10/09 09:43:46.361 PM - 2020/10/09 09:44:46.361 PM');
+    expect(validationService.isValidAllSubIssueType).toHaveBeenCalled();
+    expect(component.validateVarCheck).toHaveBeenCalled();
+    expect(component['openConfirmWrongScore']).toHaveBeenCalled();
   });
 
-  it('#getParlayCountSelectedScore should return expected ParlayCount', async () => {
+  it('should handle match event change', () => {
     // Arrange
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail = null;
+    const matchInfo = { matchId: 123 } as MatchModel;
+    eventWrongScoreService.updateMainMatch = jest.fn();
+    component.updateMatchId.emit = jest.fn();
 
-    // Action
-    const actual = instance.getParlayCountSelectedScore(Helper.fakeWrongScoreModel);
+    // Act
+    component.changeMatchEvent(matchInfo);
 
     // Assert
-    expect(actual).toBe(1);
+    expect(component.matchId).toBe(123);
+    expect(eventWrongScoreService.updateMainMatch).toHaveBeenCalled();
+    expect(component.updateMatchId.emit).toHaveBeenCalledWith(matchInfo);
   });
 
-  it('#getSingleCountSelectedScore should return expected SingleCount', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail = null;
-
-    // Action
-    const actual = instance.getSingleCountSelectedScore(Helper.fakeWrongScoreModel);
+  it('should reset data', () => {
+    // Act
+    component.resetData();
 
     // Assert
-    expect(actual).toBe(1);
+    expect(component.wrongScoreModels).toEqual([]);
+    expect(component.primitiveProps.isShowActualScore).toBeFalsy();
+    expect(component.primitiveProps.actualScore).toBe('');
+    expect(component.allRelatedEvents).toEqual([]);
+    expect(component.relatedEvents).toEqual([]);
   });
 
-  it('#getCancelCashOutCountSelectedScore should return expected CancelCashOutCount', async () => {
+  it('should validate var check', () => {
     // Arrange
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail = null;
+    component.filter = Helper.fakeFilterModel;
+    component.filter.subIssueTypeId = '1';
+    component.primitiveProps.isCheckedVar = null;
+    component.tooltip.display = jest.fn();
 
-    // Action
-    const actual = instance.getCancelCashOutCountSelectedScore(Helper.fakeWrongScoreModel);
+    // Act
+    const result = component.validateVarCheck();
 
     // Assert
-    expect(actual).toBe(1);
+    expect(result).toBeFalsy();
+    expect(component.primitiveProps.isHighLightVarCheck).toBeTruthy();
+    expect(component.tooltip.display).toHaveBeenCalled();
   });
 
-  it('#isShowLogInfoSelectedScores should return false', async () => {
+  it('should get selected wrong scores', () => {
     // Arrange
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].isChecked = false;
-    instance.wrongScoreModels[1].isChecked = false;
+    const wrongScoreModels = [
+      { isChecked: true },
+      { isChecked: false, isMainMatch: true }
+    ] as WrongScoreModel[];
 
-    // Action
-    const actual = instance.isShowLogInfoSelectedScores(instance.wrongScoreModels);
+    // Act
+    const result = component.getSelectedWrongScores(wrongScoreModels);
 
     // Assert
-    expect(actual).toBeFalsy();
+    expect(result.length).toBe(2);
+    expect(result[0].isChecked).toBeTruthy();
+    expect(result[1].isMainMatch).toBeTruthy();
   });
 
-  it('#isShowLogInfoSelectedScores should return true', async () => {
+  it('should update status button save request', () => {
     // Arrange
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].isChecked = true;
-    instance.wrongScoreModels[1].isChecked = true;
+    component.wrongScoreModels = [
+      { isChecked: false },
+      { isChecked: false }
+    ] as WrongScoreModel[];
+    addRequestStore.changeSavingRequestStatus = jest.fn();
 
-    // Action
-    const actual = instance.isShowLogInfoSelectedScores(instance.wrongScoreModels);
+    // Act
+    component.updateStatusButtonSaveRequest();
 
     // Assert
-    expect(actual).toBe(true);
-  });
-
-  it('#getLogInfoDetail should return LogInfoDetail[]', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-
-    // Action
-    const actual = instance.getLogInfoDetail();
-
-    // Assert
-    expect(actual.length).toBe(2);
+    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
   });
 });
+

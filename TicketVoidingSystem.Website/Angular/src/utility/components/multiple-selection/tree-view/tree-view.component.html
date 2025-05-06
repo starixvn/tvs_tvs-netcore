@@ -1,24 +1,24 @@
 <ul class="multiple-select">
   @for (item of items; track item) {
-    <li>
-      <div class="multiple-select-item"
-        [ngClass]="{'margin-left-13': item.items.length === 0, 'item-selected': item.checked, 'cursor-not-allowed': isDisabled }">
-        @if (item.items.length > 0) {
-          <i class="fa" [ngClass]="{'fa-angle-up': item.expanded, 'fa-angle-down': !item.expanded}"
-          (click)="item.expanded = !item.expanded"></i>
-        }
-        <label [ngClass]="{'cursor-not-allowed': isDisabled}">
-          <input type="checkbox" [(ngModel)]="item.checked" class="me-1" [ngClass]="{'cursor-not-allowed': isDisabled}"
-            (ngModelChange)="item.checkChilds();handleClick(item)"
-            [disabled]="!item.enable || isDisabled" (keyup.shift)="keyUpEvent()" (keydown.shift)="keyDownEvent()" />
-            {{ item.text }}
-          </label>
-        </div>
-        @if (item.expanded) {
-          <div>
-            <tree-view [items]="item.items" [isDisabled]="isDisabled"></tree-view>
-          </div>
-        }
-      </li>
+  <li>
+    <div class="multiple-select-item"
+      [ngClass]="{'margin-left-13': item.items.length === 0, 'item-selected': item.checked, 'cursor-not-allowed': isDisabled }">
+      @if (item.items.length > 0) {
+      <i class="fa" [ngClass]="{'fa-angle-up': item.expanded, 'fa-angle-down': !item.expanded}"
+        (click)="item.expanded = !item.expanded"></i>
+      }
+      <label [ngClass]="{'cursor-not-allowed': isDisabled}">
+        <input type="checkbox" [(ngModel)]="item.checked" class="me-1" [ngClass]="{'cursor-not-allowed': isDisabled}"
+          (ngModelChange)="item.checkChilds();handleClick(item)" [disabled]="!item.enable || isDisabled"
+          (keyup.shift)="keyUpEvent()" (keydown.shift)="keyDownEvent()" />
+        {{ item.text }}
+      </label>
+    </div>
+    @if (item.expanded) {
+    <div>
+      <tree-view [items]="item.items" [isDisabled]="isDisabled"></tree-view>
+    </div>
     }
-  </ul>
+  </li>
+  }
+</ul>

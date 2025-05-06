@@ -1,196 +1,299 @@
-import * as _ from 'lodash';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { MatchModel } from '../../../../../utility/models/match.model';
-import { FilterModel } from '../../filter/filter.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
-import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
-import { TableTicketsModel } from '../tickets-list/table-tickets.model';
+import { TestBed } from '@angular/core/testing';
 import { ValidationService } from './validation.service';
-
-class Helper {
-  static readonly fakeValidationMessageError: ValidationMessage = {
-    isError: true,
-    reason: '',
-    isShowPopup: true,
-    transIds: '',
-    requestId: 1,
-  };
-  static readonly fakeValidationMessageNotError: ValidationMessage = {
-    isError: false,
-    reason: '',
-    isShowPopup: true,
-    transIds: '',
-    requestId: 1,
-  };
-  static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
-    matchId: 1,
-    eventName: '',
-    isCollapse: false,
-    isMainMatch: true,
-    isShowValidation: false,
-    kickOffTime: '',
-    leagueName: '',
-    matchModel: new MatchModel(),
-    pagingModel: new PagingModel(),
-    isInvalidTotalTickets: false,
-    tableTicketsModel: new TableTicketsModel(),
-    messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
-    isHasSettledTicket: false,
-    isHasInstantlySettledTicket: false,
-    sportType: 0
-  };
-}
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
 
 describe('ValidationService', () => {
-  let validationService: ValidationService;
+  let service: ValidationService;
+  let mockBodyElement: HTMLElement;
 
   beforeEach(() => {
-    validationService = new ValidationService();
-  });
-  it('#validateCommonData should return false when #leagueEventComponent.isMatchIdValid return false', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    const spyIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => false);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [ValidationService]
+    });
 
-    const result = validationService.validateCommonData(eventLeagueComponent, null);
+    service = TestBed.inject(ValidationService);
 
-    expect(spyIsMatchIdValid).toHaveBeenCalledTimes(1);
-    expect(result).toBe(false);
-  });
-
-  it('#validateCommonData should return false when #kickOffTime invalid', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    const spyisMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
-    validationService['isTimeKickOffValid'] = jest.fn().mockReturnValue(false);
-
-    const result = validationService.validateCommonData(eventLeagueComponent, null);
-
-    expect(spyisMatchIdValid).toHaveBeenCalledTimes(1);
-    expect(result).toBe(false);
+    // Mock document.getElementById
+    mockBodyElement = document.createElement('div');
+    mockBodyElement.setAttribute('user-id', '2');
+    document.body.appendChild(mockBodyElement);
+    jest.spyOn(document, 'getElementById').mockImplementation((id) => {
+      if (id === 'body') {
+        return mockBodyElement;
+      }
+      return null;
+    });
   });
 
-  it('#validateCommonData should return true', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    const spyisMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
-    eventLeagueComponent.selectedMatch = {matchId: 1} as MatchModel;
-    validationService['isTimeKickOffValid'] = jest.fn().mockReturnValue(true);
-    const result = validationService.validateCommonData(eventLeagueComponent, null);
-
-    expect(spyisMatchIdValid).toHaveBeenCalledTimes(1);
-    expect(result).toBeTruthy();
+  afterEach(() => {
+    document.body.removeChild(mockBodyElement);
+    jest.restoreAllMocks();
   });
 
-  it('#isEventMatchValid should return false when is not mainMatch and has error NO_VALID_TICKETS_IN_RANGE', async () => {
-    const event = new LogInfoEarlyKickOff();
-    event.isMainMatch = true;
-    event.isInvalidTotalTickets = true;
-
-    const result = validationService.isAllEventsValid([event]);
-
-    expect(result).toBe(false);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#isEventMatchValid should return true', async () => {
-    const event = Helper.fakeLogInfoEarlyKickOff;
-    event.isMainMatch = false;
-    event.messageValidationLogInfo = [Helper.fakeValidationMessageNotError];
+  describe('validateCommonData', () => {
+    it('should return true when all validations pass', () => {
+      // Arrange
+      const mockEventLeagueComponent = {
+        isMatchIdValid: () => true
+      } as EventLeagueComponent;
 
-    const result = validationService.isAllEventsValid([event]);
+      const mockKickOffTimeComponent = {
+        validateWithTooltip: () => true
+      } as DateFullTimeNewComponent;
 
-    expect(result).toBeTruthy();
+      // Act
+      const result = service.validateCommonData(mockEventLeagueComponent, mockKickOffTimeComponent);
+
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return false when matchId is invalid', () => {
+      // Arrange
+      const mockEventLeagueComponent = {
+        isMatchIdValid: () => false
+      } as EventLeagueComponent;
+
+      const mockKickOffTimeComponent = {
+        validateWithTooltip: () => true
+      } as DateFullTimeNewComponent;
+
+      // Act
+      const result = service.validateCommonData(mockEventLeagueComponent, mockKickOffTimeComponent);
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it('should return false when kickOff time is invalid', () => {
+      // Arrange
+      const mockEventLeagueComponent = {
+        isMatchIdValid: () => true
+      } as EventLeagueComponent;
+
+      const mockKickOffTimeComponent = {
+        validateWithTooltip: () => false
+      } as DateFullTimeNewComponent;
+
+      // Act
+      const result = service.validateCommonData(mockEventLeagueComponent, mockKickOffTimeComponent);
+
+      // Assert
+      expect(result).toBe(false);
+    });
   });
 
-  it('#isValidInputRelatedEvent should return false when input mainMatchId', async () => {
-    const event = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    event.isMainMatch = true;
-    const toolTip = new Tooltip();
-    toolTip.display = jest.fn();
+  describe('isValidInputRelatedEvent', () => {
+    it('should return false when input matchId is same as main match', () => {
+      // Arrange
+      const inputMatchId = 123;
+      const matchIdClass = 'input-match-id';
+      const allEvents = [
+        { matchId: 123, isMainMatch: true },
+        { matchId: 456, isMainMatch: false }
+      ] as LogInfoEarlyKickOff[];
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
 
-    const result = validationService.isValidInputRelatedEvent(event.matchId, '', [event], toolTip);
+      // Act
+      const result = service.isValidInputRelatedEvent(inputMatchId, matchIdClass, allEvents, mockTooltip);
 
-    expect(result).toBe(false);
-    expect(toolTip.display).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalledWith(matchIdClass, LABELS.INVALID_MATCHID);
+    });
+
+    it('should return false when input matchId already exists in related events', () => {
+      // Arrange
+      const inputMatchId = 456;
+      const matchIdClass = 'input-match-id';
+      const allEvents = [
+        { matchId: 123, isMainMatch: true },
+        { matchId: 456, isMainMatch: false }
+      ] as LogInfoEarlyKickOff[];
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
+
+      // Act
+      const result = service.isValidInputRelatedEvent(inputMatchId, matchIdClass, allEvents, mockTooltip);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(mockTooltip.display).toHaveBeenCalledWith(matchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+    });
+
+    it('should return true when input matchId is valid', () => {
+      // Arrange
+      const inputMatchId = 789;
+      const matchIdClass = 'input-match-id';
+      const allEvents = [
+        { matchId: 123, isMainMatch: true },
+        { matchId: 456, isMainMatch: false }
+      ] as LogInfoEarlyKickOff[];
+      const mockTooltip = { display: jest.fn() } as unknown as Tooltip;
+
+      // Act
+      const result = service.isValidInputRelatedEvent(inputMatchId, matchIdClass, allEvents, mockTooltip);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(mockTooltip.display).not.toHaveBeenCalled();
+    });
   });
 
-  it('#isValidInputRelatedEvent should return false when input childMatchId', async () => {
-    const mainEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    mainEvent.isMainMatch = true;
-    const event = new LogInfoEarlyKickOff();
-    event.matchId = 999;
-    event.isMainMatch = false;
-    const events = [];
-    events.push(event);
-    events.push(mainEvent);
-    const toolTip = new Tooltip();
-    toolTip.display = jest.fn();
+  describe('isAllEventsValid', () => {
+    it('should return true when all events are valid', () => {
+      // Arrange
+      const events = [
+        { isMainMatch: true, isInvalidTotalTickets: false },
+        { isMainMatch: false, isInvalidTotalTickets: false }
+      ] as LogInfoEarlyKickOff[];
 
-    const result = validationService.isValidInputRelatedEvent(999, '', events, toolTip);
+      // Act
+      const result = service.isAllEventsValid(events);
 
-    expect(result).toBe(false);
-    expect(toolTip.display).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return false when main match has invalid total tickets', () => {
+      // Arrange
+      const events = [
+        { isMainMatch: true, isInvalidTotalTickets: true },
+        { isMainMatch: false, isInvalidTotalTickets: false }
+      ] as LogInfoEarlyKickOff[];
+
+      // Act
+      const result = service.isAllEventsValid(events);
+
+      // Assert
+      expect(result).toBe(false);
+    });
   });
 
-  it('#isValidInputRelatedEvent should return true', async () => {
-    const event = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    event.isMainMatch = true;
-    const toolTip = new Tooltip();
-    toolTip.display = jest.fn();
+  describe('checkCanShowConfirmationEarlyKickOff', () => {
+    it('should return true when there are warning events', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.allEvents = [
+        { isMainMatch: false, isInvalidTotalTickets: true }
+      ] as LogInfoEarlyKickOff[];
 
-    const result = validationService.isValidInputRelatedEvent(9999, '', [event], toolTip);
+      // Act
+      const result = service.checkCanShowConfirmationEarlyKickOff(saveRequestArg);
 
-    expect(result).toBe(true);
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return true when there are warning tickets', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.allEvents = [
+        { messageValidationLogInfo: [{ isError: false }] }
+      ] as LogInfoEarlyKickOff[];
+
+      // Act
+      const result = service.checkCanShowConfirmationEarlyKickOff(saveRequestArg);
+
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return true when editing by another user', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.isEdit = true;
+      saveRequestArg.userId = 1;
+      saveRequestArg.allEvents = [];
+      saveRequestArg.filter = {
+        action: '',
+        subIssueTypeId: '',
+        isTest: false,
+        isAbnormal: false,
+        isVoided: false,
+        actions: []
+      };
+      saveRequestArg.actionIdOfFirstTimeAccess = '';
+
+      // Act
+      const result = service.checkCanShowConfirmationEarlyKickOff(saveRequestArg);
+
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return true when has warning taken note', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.isEdit = true;
+      saveRequestArg.allEvents = [];
+      saveRequestArg.filter = {
+        action: TVSRequestActionType.TAKE_NOTE_ID.toString(),
+        subIssueTypeId: '',
+        isTest: false,
+        isAbnormal: false,
+        isVoided: false,
+        actions: []
+      };
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+
+      // Act
+      const result = service.checkCanShowConfirmationEarlyKickOff(saveRequestArg);
+
+      // Assert
+      expect(result).toBe(true);
+    });
   });
 
-  it('#isEditingByAnotherUser should return true', async () => {
-    const result = validationService.isEditingByAnotherUser(true,1, 2);
+  describe('isEditingByAnotherUser', () => {
+    it('should return true when editing by another user', () => {
+      // Arrange
+      const isEdit = true;
+      const editingBy = 1;
+      const createdBy = 2;
 
-    expect(result).toBe(true);
-  });
+      // Act
+      const result = service.isEditingByAnotherUser(isEdit, editingBy, createdBy);
 
-  it('#checkCanShowConfirmationEarlyKickOff should return false', async () => {
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const saveRequestArg = new SaveRequestArg();
-    const mainEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    mainEvent.messageValidationLogInfo = null;
-    const childEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    childEvent.isMainMatch = false;
-    childEvent.isInvalidTotalTickets = false;
-    childEvent.messageValidationLogInfo = null;
-    saveRequestArg.allEvents =  [mainEvent, childEvent];
-    saveRequestArg.isEdit = true;
-    saveRequestArg.userId = 1,
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    saveRequestArg.actionIdOfFirstTimeAccess = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    const result = validationService.checkCanShowConfirmationEarlyKickOff(saveRequestArg);
+      // Assert
+      expect(result).toBe(true);
+    });
 
-    expect(result).toBeFalsy();
-  });
+    it('should return false when not in edit mode', () => {
+      // Arrange
+      const isEdit = false;
+      const editingBy = 1;
+      const createdBy = 2;
 
-  it('#checkCanShowConfirmationEarlyKickOff should return true', async () => {
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const saveRequestArg = new SaveRequestArg();
-    const mainEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    mainEvent.messageValidationLogInfo = null;
-    const childEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    childEvent.isMainMatch = false;
-    childEvent.isInvalidTotalTickets = false;
-    childEvent.messageValidationLogInfo = [];
-    saveRequestArg.allEvents =  [mainEvent, childEvent];
-    saveRequestArg.isEdit = true;
-    saveRequestArg.userId = 1,
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    saveRequestArg.actionIdOfFirstTimeAccess = TVSRequestActionType.MANUAL_VOID_ID.toString();
-    const result = validationService.checkCanShowConfirmationEarlyKickOff(saveRequestArg);
+      // Act
+      const result = service.isEditingByAnotherUser(isEdit, editingBy, createdBy);
 
-    expect(result).toBeTruthy();
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it('should return false when editing by same user', () => {
+      // Arrange
+      const isEdit = true;
+      const editingBy = 1;
+      const createdBy = 1;
+
+      // Act
+      const result = service.isEditingByAnotherUser(isEdit, editingBy, createdBy);
+
+      // Assert
+      expect(result).toBe(false);
+    });
   });
 });

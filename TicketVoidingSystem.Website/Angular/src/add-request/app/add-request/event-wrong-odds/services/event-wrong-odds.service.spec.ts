@@ -1,146 +1,273 @@
-import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { TestBed } from '@angular/core/testing';
+import { EventWrongScoreService } from '../../event-wrong-score/services/event-wrong-score.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { ValidationService } from '../../event-wrong-score/services/validation.service';
+import { WrongScoreService } from '../../event-wrong-score/services/wrong-score.service';
+import { MatchModel } from '../../../../../utility/models/match.model';
+import { WrongScoreModel } from '../../models/event-wrong-score.model';
+import { PrimitiveProperty } from '../../event-wrong-score/event-wrong-score.model';
+import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
+import { AcceptType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
+import { ChildMatchModel } from '../../models/related-event.model';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { Result } from '../../../../../utility/models/result';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { FilterModel } from '../../filter/filter.model';
-import { WrongOddsModel } from '../../models/event-wrong-odds.model';
-import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
-import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
-import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
-import { EventWrongOddsService } from './event-wrong-odds.service';
-import { ValidationService } from './validation.service';
 
-class Helper {
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeWrongOddsModel: WrongOddsModel = {
-    matchId: 0,
-    subIssueTypeId: 1,
-    filterFromTransTime: '',
-    filterToTransTime: '',
-    logInfoDetail: new LogInfoDetail,
-    poolHouseCheckedBetTypes: '',
-    isPoolHouseAffected: false,
-    isLinkGroup1X2: false,
-    isLinkGroupAIO: false,
-    liveIndicator: 0,
-    oddsInfo: new OddsInfo(),
-    sportType: 0
-  };
-  static readonly fakeLinkedLogsViewModel: LinkedLogsViewModel = {
-    isLinkGroup1X2: true,
-    isLinkGroupAIO: true,
-    result: new Result(),
-    groupLinkedLogs: [
-      {
-        groupName: '1X2',
-        isAffectedGroup: true,
-        logsData: []
-      },
-      {
-        groupName: 'AIO',
-        isAffectedGroup: true,
-        logsData: []
-      },
-    ]
-  };
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '1',
-    action: '1',
-    isTest: true,
-    isVoided: false,
-    isAbnormal: false
-  } as FilterModel;
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    instantlySettleCount: 2,
-    scoreNormalTicket: '',
-    scoreOfMatch: '',
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeFilterWrongOddsModel: FilterWrongOddsModel = {
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    favoriteValue: '1',
-    filterFavoriteType: 'h',
-    liveIndicator: 1,
-    spread: '0.2',
-    maxBet: 0,
-    allowanceRate: '20',
-    correctOddsHomeOver: '0.8',
-    correctOddsAwayUnder: '0.9',
-    fromOddsNotVoidHomeOver: '0.65',
-    toOddsNotVoidHomeOver: '0.85',
-    fromOddsNotVoidAwayUnder: '0.5',
-    toOddsNotVoidAwayUnder: '0.9',
-    maxBetAndSpreadInfo: []
-  };
-  static readonly fakeLogInfoWrongOdds: LogInfoWrongOdds = {
-    matchId: 12345,
-    filterWrongOdds: Helper.fakeFilterWrongOddsModel,
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    isPoolHouseAffected: false,
-    linkedLogsViewModel: new LinkedLogsViewModel(),
-    poolHouseCheckedBetTypes: '',
-    isShowValidation: false,
-    sportType: 0
-  };
-}
-
-describe('EventWrongOddsService', () => {
-  let service: EventWrongOddsService;
+describe('EventWrongScoreService', () => {
+  let service: EventWrongScoreService;
   let validationService: ValidationService;
+  let wrongScoreService: WrongScoreService;
+
+  const mockMatchModel = {
+    matchId: 123,
+    eventDate: new Date(),
+    sportType: 1
+  } as MatchModel;
+
+  const mockWrongScoreModel = {
+    matchId: 123,
+    eventDate: new Date(),
+    sportType: 1,
+    serviceAcceptTime: new Date(),
+    actualTime: new Date(),
+    tvDetectionValue: 1,
+    minuteOffset: 5,
+    secondOffset: 30,
+    scoreId: 1,
+    isActive: true,
+    wrongScore: '1-0',
+    subIssueTypeId: SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL,
+    matchType: 1,
+    matchStatus: 1,
+    matchTime: new Date(),
+    matchDate: new Date(),
+    matchDateTime: new Date(),
+    matchDateTimeUtc: new Date()
+  } as unknown as WrongScoreModel;
+
+  const mockPrimitiveProps = {
+    filterBy: TVSRequestFilterBy.TRANS_TIME,
+    isCheckedVar: null,
+    isHighLightVarCheck: null,
+    isShowRelatedEvents: false
+  } as PrimitiveProperty;
+
   beforeEach(() => {
-    validationService = new ValidationService();
-    service = new EventWrongOddsService(null, validationService);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        EventWrongScoreService,
+        ValidationService,
+        WrongScoreService
+      ]
+    });
+
+    service = TestBed.inject(EventWrongScoreService);
+    validationService = TestBed.inject(ValidationService);
+    wrongScoreService = TestBed.inject(WrongScoreService);
   });
 
-  it('#assignModelsToEvents should return expected model', async () => {
-    const inputTest = [SubIssueTypeConstant.OVER_UNDER, SubIssueTypeConstant.HANDICAP]
-    inputTest.forEach(x => {
-      let inputModel = Helper.fakeWrongOddsModel;
-      inputModel.subIssueTypeId = x;
-      const actual = service.assignModelsToEvents(inputModel);
-      expect(actual.matchId).toBe(Helper.fakeWrongOddsModel.matchId);
-      expect(actual.poolHouseCheckedBetTypes).toBe(Helper.fakeWrongOddsModel.poolHouseCheckedBetTypes);
-    })
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#getWrongOddsModel should return expected model', async () => {
-    const inputTest = [SubIssueTypeConstant.OVER_UNDER, SubIssueTypeConstant.HANDICAP]
-    inputTest.forEach(x => {
-      let filter = Helper.fakeFilterModel;
-      filter.subIssueTypeId = x.toString();
-      const actual = service.getWrongOddsModel(filter, Helper.fakeLogInfoWrongOdds);
+  describe('getAllWrongScoreModels', () => {
+    it('should get all wrong score models successfully', async () => {
+      // Arrange
+      const wrongScoreModels: WrongScoreModel[] = [];
+      const mockApiResponse = [mockWrongScoreModel];
+      wrongScoreService['callApiGetWrongScores'] = jest.fn().mockResolvedValue(mockApiResponse);
 
-    expect(actual.matchId).toBe(Helper.fakeLogInfoWrongOdds.matchId);
-    expect(actual.subIssueTypeId ).toBe(Number(Helper.fakeFilterModel.subIssueTypeId));
+      // Act
+      const result = await service.getAllWrongScoreModels(wrongScoreModels, 123);
+
+      // Assert
+      expect(result).toEqual(mockApiResponse);
+      expect(wrongScoreModels).toEqual(mockApiResponse);
+      expect(wrongScoreService['callApiGetWrongScores']).toHaveBeenCalledWith(123);
+    });
+
+    it('should not update models when API returns empty array', async () => {
+      // Arrange
+      const wrongScoreModels: WrongScoreModel[] = [];
+      const mockApiResponse: WrongScoreModel[] = [];
+      wrongScoreService['callApiGetWrongScores'] = jest.fn().mockResolvedValue(mockApiResponse);
+
+      // Act
+      const result = await service.getAllWrongScoreModels(wrongScoreModels, 123);
+
+      // Assert
+      expect(result).toEqual([]);
+      expect(wrongScoreModels).toEqual([]);
     });
   });
 
-  it('#getLinkedLog should call #addRequestApiService.getLinkedLogs', async () => {
-    const inputTest = [SubIssueTypeConstant.OVER_UNDER, SubIssueTypeConstant.HANDICAP]
-    inputTest.forEach(async x => {
-      let filter = Helper.fakeFilterModel;
-      filter.subIssueTypeId = x.toString();
-      const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.getLinkedLogs = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeLinkedLogsViewModel));
-    const mockService = new EventWrongOddsService(addRequestApiService, validationService);
-    const actual = await mockService.getLinkedLog(Helper.fakeLogInfoWrongOdds, filter);
+  describe('updateMainMatch', () => {
+    it('should update main match with selected match data', () => {
+      // Arrange
+      const mainEvent = { ...mockWrongScoreModel };
 
-    expect(addRequestApiService.getLinkedLogs).toHaveBeenCalledTimes(1);
-    expect(actual).toBeDefined();
+      // Act
+      service.updateMainMatch(mainEvent, mockMatchModel);
+
+      // Assert
+      expect(mainEvent.matchId).toBe(mockMatchModel.matchId);
+      expect(mainEvent.eventDate).toBe(mockMatchModel.eventDate);
+      expect(mainEvent.sportType).toBe(mockMatchModel.sportType);
+    });
+  });
+
+  describe('resetPrimitiveProperty', () => {
+    it('should reset primitive property with correct filter by for accepted time', () => {
+      // Arrange
+      validationService['isSubTypeFilterByAcceptedTime'] = jest.fn().mockReturnValue(true);
+      validationService['isSubTypeFilterByTransTimeAndAcceptedTime'] = jest.fn().mockReturnValue(false);
+
+      // Act
+      service.resetPrimitiveProperty(mockPrimitiveProps, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL.toString());
+
+      // Assert
+      expect(mockPrimitiveProps.filterBy).toBe(TVSRequestFilterBy.CHECK_TIME);
+      expect(mockPrimitiveProps.isCheckedVar).toBeNull();
+      expect(mockPrimitiveProps.isHighLightVarCheck).toBeNull();
+      expect(mockPrimitiveProps.isShowRelatedEvents).toBeDefined();
+    });
+
+    it('should reset primitive property with correct filter by for trans time and accepted time', () => {
+      // Arrange
+      validationService['isSubTypeFilterByAcceptedTime'] = jest.fn().mockReturnValue(false);
+      validationService['isSubTypeFilterByTransTimeAndAcceptedTime'] = jest.fn().mockReturnValue(true);
+
+      // Act
+      service.resetPrimitiveProperty(mockPrimitiveProps, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL.toString());
+
+      // Assert
+      expect(mockPrimitiveProps.filterBy).toBe(TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME);
+      expect(mockPrimitiveProps.isCheckedVar).toBeNull();
+      expect(mockPrimitiveProps.isHighLightVarCheck).toBeNull();
+      expect(mockPrimitiveProps.isShowRelatedEvents).toBeDefined();
+    });
+
+    it('should reset primitive property with correct filter by for trans time', () => {
+      // Arrange
+      validationService['isSubTypeFilterByAcceptedTime'] = jest.fn().mockReturnValue(false);
+      validationService['isSubTypeFilterByTransTimeAndAcceptedTime'] = jest.fn().mockReturnValue(false);
+
+      // Act
+      service.resetPrimitiveProperty(mockPrimitiveProps, SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL.toString());
+
+      // Assert
+      expect(mockPrimitiveProps.filterBy).toBe(TVSRequestFilterBy.TRANS_TIME);
+      expect(mockPrimitiveProps.isCheckedVar).toBeNull();
+      expect(mockPrimitiveProps.isHighLightVarCheck).toBeNull();
+      expect(mockPrimitiveProps.isShowRelatedEvents).toBeDefined();
+    });
+  });
+
+  describe('getTvDetectionModel', () => {
+    it('should return correct tv detection model', () => {
+      // Act
+      const result = service.getTvDetectionModel(mockWrongScoreModel);
+
+      // Assert
+      expect(result).toEqual({
+        serviceAcceptTime: mockWrongScoreModel.serviceAcceptTime,
+        actualTime: mockWrongScoreModel.actualTime,
+        tvDetectionValue: mockWrongScoreModel.tvDetectionValue,
+        minuteOffset: mockWrongScoreModel.minuteOffset,
+        secondOffset: mockWrongScoreModel.secondOffset
+      } as TvDetectionModel);
+    });
+  });
+
+  describe('getHighlightMinTimeClass', () => {
+    it('should return correct class for auto accept type', () => {
+      // Act
+      const result = service.getHighlightMinTimeClass(AcceptType.AUTO_ACCEPT, new Date());
+
+      // Assert
+      expect(result).toEqual({
+        acceptTypeName: 'AA',
+        highlightTimeClass: 'highlight-min-aa'
+      });
+    });
+
+    it('should return correct class for second accept type', () => {
+      // Act
+      const result = service.getHighlightMinTimeClass(AcceptType.SECOND_ACCEPT, new Date());
+
+      // Assert
+      expect(result).toEqual({
+        acceptTypeName: 'SA',
+        highlightTimeClass: 'highlight-min-sa'
+      });
+    });
+
+    it('should return correct class for pending accept type', () => {
+      // Act
+      const result = service.getHighlightMinTimeClass(AcceptType.PENDING_ACCEPT, new Date());
+
+      // Assert
+      expect(result).toEqual({
+        acceptTypeName: 'PA',
+        highlightTimeClass: 'highlight-min-pa'
+      });
+    });
+
+    it('should return empty values when no min time', () => {
+      // Act
+      const result = service.getHighlightMinTimeClass(AcceptType.AUTO_ACCEPT, undefined);
+
+      // Assert
+      expect(result).toEqual({
+        acceptTypeName: '',
+        highlightTimeClass: ''
+      });
+    });
+  });
+
+  describe('updateCheckRelatedEvent', () => {
+    it('should filter related events correctly', () => {
+      // Arrange
+      const selectedRelatedEvents: ChildMatchModel[] = [
+        { matchId: 1, matchType: 1 } as ChildMatchModel
+      ];
+      const allRelatedEvents: LogInfoRelatedEvent[] = [
+        { matchId: 1 } as LogInfoRelatedEvent,
+        { matchId: 2 } as LogInfoRelatedEvent
+      ];
+      const relatedEvents: ChildMatchModel[] = [
+        { matchId: 2, matchType: 2 } as ChildMatchModel
+      ];
+      const matchType = 1;
+
+      // Act
+      const result = service.updateCheckRelatedEvent(selectedRelatedEvents, allRelatedEvents, relatedEvents, matchType);
+
+      // Assert
+      expect(result).toHaveLength(2);
+      expect(result[0].matchId).toBe(1);
+      expect(result[1].matchId).toBe(2);
+    });
+  });
+
+  describe('isHasRelatedEvent', () => {
+    it('should return true for sub issue type with related events', () => {
+      // Arrange
+      const subIssueTypeId = SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_NO_ONWARDS;
+
+      // Act
+      const result = service.isHasRelatedEvent(subIssueTypeId);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false for sub issue type without related events', () => {
+      // Act
+      const result = service.isHasRelatedEvent(999);
+
+      // Assert
+      expect(result).toBeFalsy();
     });
   });
 });

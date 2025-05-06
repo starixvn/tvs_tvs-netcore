@@ -1,78 +1,136 @@
-import * as _ from 'lodash';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { TestBed } from '@angular/core/testing';
+import { LogInfoService } from './log-info.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../../utility/services/common.service';
+import { EventNotParticipateService } from './event-not-participate.service';
 import { FilterModel } from '../../filter/filter.model';
-import { RedCardGetLogInfoQuery } from '../../models/event-red-card.model';
-import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { GetLogInfoViewModel, ValidationMessage } from '../../models/get-log-info.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
-import { EventNotParticipateService } from './event-not-participate.service';
-import { LogInfoService } from './log-info.service';
-
-class Helper {
-  static readonly fakeLogInfoNotParticipate: LogInfoNotParticipate = {
-    matchId: 1,
-    filterNotParticipates: [],
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: []
-  };
-
-  static readonly fakeGetLogInfoModel: GetLogInfoModel = {
-    matchId: 1,
-    validation: {
-      isInvalidTotalTickets: true,
-      isExistedInOtherRequest: true,
-      isPoolHouseAffected: false
-    } as Validation,
-    ticketRequest: [],
-    logInfoDetail: new LogInfoDetail()
-  };
-  static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {
-    transInfoAddRequestModel: new TransInfoAddRequestModel(),
-    getLogInfoModels: [Helper.fakeGetLogInfoModel],
-  };
-}
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 
 describe('LogInfoService', () => {
   let service: LogInfoService;
+  let commonService: CommonService;
+  let eventNotParticipateService: EventNotParticipateService;
 
   beforeEach(() => {
-    service = new LogInfoService(null, null);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [LogInfoService, EventNotParticipateService]
+    });
+
+    service = TestBed.inject(LogInfoService);
+    commonService = TestBed.inject(CommonService);
+    eventNotParticipateService = TestBed.inject(EventNotParticipateService);
   });
 
-  it('#resetLogInfoOfEvent should update logInfoDetail to null', async () => {
-    const logInfo = _.cloneDeep(Helper.fakeLogInfoNotParticipate);
-    service.resetLogInfoOfEvent(logInfo);
-
-    expect(logInfo.logInfoDetail).toBe(null);
-    expect(logInfo.messageValidationLogInfo).toBe(null);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#getLogInfo should call #eventNotParticipateService.getNotParticipateGetLogInfoModel', async () => {
-    const eventWrongOddsService = new EventNotParticipateService();
-    eventWrongOddsService.getNotParticipateGetLogInfoModel = jest.fn().mockReturnValue(new RedCardGetLogInfoQuery());
-    const commonService = new CommonService(null);
-    commonService.getLogInfo = jest.fn().mockReturnValue(Helper.fakeGetLogInfoViewModel);
+  describe('getLogInfo', () => {
+    it('should get log info and assign to events', async () => {
+      // Arrange
+      const mockLogInfoEvent = {
+        matchId: 123,
+        logInfoDetail: new LogInfoDetail(),
+        messageValidationLogInfo: null,
+        filterNotParticipates: []
+      } as LogInfoNotParticipate;
 
-    const mockService = new LogInfoService(commonService, eventWrongOddsService);
-    await mockService.getLogInfo(Helper.fakeLogInfoNotParticipate, false, 1, new FilterModel(), new PrimitivePropertyEvent());
+      const mockFilter = {
+        subIssueTypeId: '1',
+        action: '1',
+        issueTypeId: '1'
+      } as FilterModel;
 
-    expect(eventWrongOddsService.getNotParticipateGetLogInfoModel).toHaveBeenCalledTimes(1);
-    expect(commonService.getLogInfo).toHaveBeenCalledTimes(1);
+      const mockPrimitiveProps = {
+        transInfoAddRequestModel: null
+      } as PrimitivePropertyEvent;
+
+      const mockLogInfoDetail = new LogInfoDetail();
+      mockLogInfoDetail.matchId = 123;
+      mockLogInfoDetail.liveScores = '1-0';
+      mockLogInfoDetail.voidFromTime = new Date();
+      mockLogInfoDetail.voidToTime = new Date();
+      mockLogInfoDetail.transVoidToTime = new Date();
+      mockLogInfoDetail.singleCount = 1;
+      mockLogInfoDetail.cashOutCount = 0;
+      mockLogInfoDetail.settleCount = 0;
+      mockLogInfoDetail.instantlySettleCount = 0;
+      mockLogInfoDetail.mainParlayCount = 0;
+      mockLogInfoDetail.cancelCashOutCount = 0;
+      mockLogInfoDetail.scoreNormalTicket = '1-0';
+      mockLogInfoDetail.scoreOfMatch = '1-0';
+      mockLogInfoDetail.minTransId = '123';
+      mockLogInfoDetail.actionType = 'test';
+      mockLogInfoDetail.isHasWarningRangeTime = false;
+
+      const mockTransInfoAddRequestModel = new TransInfoAddRequestModel();
+      mockTransInfoAddRequestModel.transInfoJson = '{}';
+      mockTransInfoAddRequestModel.unMarkTransIds = '';
+      mockTransInfoAddRequestModel.markTransIds = '';
+      mockTransInfoAddRequestModel.removeTransIds = '';
+
+      const mockValidationMessage: ValidationMessage = {
+        isError: false,
+        reason: 'test message',
+        isShowPopup: false
+      };
+
+      const mockViewModel: GetLogInfoViewModel = {
+        transInfoAddRequestModel: mockTransInfoAddRequestModel,
+        getLogInfoModels: [{
+          matchId: 123,
+          logInfoDetail: mockLogInfoDetail,
+          validation: {
+            wrongScore: null,
+            isPoolHouseAffected: false,
+            isInvalidTotalTickets: false,
+            isExistedInOtherRequest: false,
+            isExistsSecondAccept: false,
+            isHasSettledTicket: false,
+            isHasInstantlySettledTicket: false
+          },
+          ticketRequest: null
+        }]
+      };
+
+      jest.spyOn(commonService, 'getLogInfo').mockResolvedValue(mockViewModel);
+      jest.spyOn(eventNotParticipateService, 'getNotParticipateGetLogInfoModel').mockReturnValue([]);
+
+      // Act
+      await service.getLogInfo(mockLogInfoEvent, false, 0, mockFilter, mockPrimitiveProps);
+
+      // Assert
+      expect(commonService.getLogInfo).toHaveBeenCalled();
+      expect(mockPrimitiveProps.transInfoAddRequestModel).toEqual(mockViewModel.transInfoAddRequestModel);
+      expect(mockLogInfoEvent.logInfoDetail).toEqual(mockViewModel.getLogInfoModels[0].logInfoDetail);
+    });
   });
 
-  it('#getLogInfo should call #eventNotParticipateService.getNotParticipateGetLogInfoModel when isEdit', async () => {
-    const eventWrongOddsService = new EventNotParticipateService();
-    eventWrongOddsService.getNotParticipateGetLogInfoModel = jest.fn().mockReturnValue(new RedCardGetLogInfoQuery());
-    const commonService = new CommonService(null);
-    commonService.getLogInfo = jest.fn().mockReturnValue(Helper.fakeGetLogInfoViewModel);
+  describe('resetLogInfoOfEvent', () => {
+    it('should reset log info of event', () => {
+      // Arrange
+      const mockLogInfoEvent = {
+        matchId: 123,
+        logInfoDetail: new LogInfoDetail(),
+        messageValidationLogInfo: [{
+          isError: false,
+          reason: 'test message',
+          isShowPopup: false
+        }],
+        filterNotParticipates: []
+      } as LogInfoNotParticipate;
 
-    const mockService = new LogInfoService(commonService, eventWrongOddsService);
-    await mockService.getLogInfo(Helper.fakeLogInfoNotParticipate, true, 1, new FilterModel(), new PrimitivePropertyEvent());
+      // Act
+      service.resetLogInfoOfEvent(mockLogInfoEvent);
 
-    expect(eventWrongOddsService.getNotParticipateGetLogInfoModel).toHaveBeenCalledTimes(1);
-    expect(commonService.getLogInfo).toHaveBeenCalledTimes(1);
-
+      // Assert
+      expect(mockLogInfoEvent.logInfoDetail).toBeNull();
+      expect(mockLogInfoEvent.messageValidationLogInfo).toBeNull();
+    });
   });
 });

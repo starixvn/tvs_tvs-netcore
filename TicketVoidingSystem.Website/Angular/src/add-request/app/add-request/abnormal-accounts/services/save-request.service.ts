@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { UsernamesComponent } from '../../../../../utility/components/user-names/user-names.component';
 import { TEXT } from '../../../../../utility/constants/text';
@@ -13,16 +13,12 @@ import { ValidationBusinessRuleArgs } from '../models/validation.model';
 import { AbnormalAccountService } from './abnormal-account.service';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SaveRequestService {
-  constructor(
-    private readonly popupService: PopupService,
-    private readonly addRequestService: AddRequestService,
-    private readonly validationService: ValidationService,
-    private readonly abnormalAccountService: AbnormalAccountService
-    ) { }
+  private readonly popupService = inject(PopupService);
+  private readonly addRequestService = inject(AddRequestService);
+  private readonly validationService = inject(ValidationService);
+  private readonly abnormalAccountService = inject(AbnormalAccountService);
 
   async saveRequest(args: SaveRequestArg): Promise<void> {
     args.addRequestStore.changeBlockingUiStatus(true);

@@ -6,25 +6,23 @@
       <strong>&nbsp;Others</strong>
     </div>
     <div class="list-group-item flex-column align-items-start" [hidden]="isCollapse">
-      <div class="other-container d-flex flex-wrap">
-        <div class="col-6 col-sm-6 col-md-4">         
-          <label class="col-form-label text-right">Mistaken By</label>
+      <div class="other-container d-flex flex-wrap row">
+        <div class="col-6 col-sm-6 col-md-4">
+          <label class="col-form-label-sm">Mistaken By</label>
           <div>
-            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.mistakenBy"
-              maxlength="200">
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.mistakenBy" maxlength="200">
           </div>
           <div class="col-sm-4"></div>
         </div>
-        <div class="col-6 col-sm-6 col-md-4">         
-          <label class="col-form-label text-right">Decided By</label>
+        <div class="col-6 col-sm-6 col-md-4">
+          <label class="col-form-label-sm">Decided By</label>
           <div>
-            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.decidedBy"
-              maxlength="200">
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.decidedBy" maxlength="200">
           </div>
           <div class="col-sm-4"></div>
         </div>
         <div class="col-12">
-          <label class="col-form-label text-right pd-right-25">Remark</label>
+          <label class="col-form-label-sm pd-right-25">Remark</label>
           <div>
             <textarea [(ngModel)]="model.remark" class="remark form-control form-control-sm"
               placeholder='Enter text here...' rows="3"></textarea>

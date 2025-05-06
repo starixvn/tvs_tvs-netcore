@@ -1,8 +1,13 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType } from '../../../../utility/constants/config';
 import { AddRequestStore } from '../add-request.store';
@@ -21,11 +26,22 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 
 @Component({
   selector: 'event-wrong-hdp',
   templateUrl: './event-wrong-hdp.component.html',
-  styleUrls: ['./event-wrong-hdp.component.scss']
+  styleUrls: ['./event-wrong-hdp.component.scss'],
+  standalone: true,
+  imports: [EventLeagueComponent, LogInfoWrongHdpComponent, AddChildMatchComponent, FormsModule, TooltipComponent, 
+    BlockUiDirective, OnlyNumberDirective],
+  providers: [
+    EventWrongHdpService,
+    LogInfoService,
+    RelatedEventService,
+    SaveRequestService,
+    ValidationService
+  ]
 })
 export class EventWrongHdpComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -48,17 +64,16 @@ export class EventWrongHdpComponent implements OnInit {
   primitiveProps = new PrimitiveProperty();
   tooltip = new Tooltip();
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
+  private readonly element = inject(ElementRef);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly eventWrongHdpService = inject(EventWrongHdpService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly validationService = inject(ValidationService);
+  private readonly relatedEventService = inject(RelatedEventService);
+  private readonly saveRequestService = inject(SaveRequestService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly logInfoService: LogInfoService,
-    private readonly eventWrongHdpService: EventWrongHdpService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly validationService: ValidationService,
-    private readonly relatedEventService: RelatedEventService,
-    private readonly saveRequestService: SaveRequestService
-  ) {
-      this.tooltip.element = this.element;
+  constructor() {
+    this.tooltip.element = this.element;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -85,13 +100,13 @@ export class EventWrongHdpComponent implements OnInit {
     }
   }
 
-  private createGetChildMatchesQuery(): GetChildMatchQuery{
+  private createGetChildMatchesQuery(): GetChildMatchQuery {
     const query = new GetChildMatchQuery();
-    query.issueTypeId = Number(this.filter.issueTypeId);
-    query.eventDate = this.mainEvent.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
-    query.matchId = this.mainEvent.matchId;
+    query.issueTypeId = Number(this.filter?.issueTypeId);
+    query.eventDate = this.mainEvent?.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+    query.matchId = this.mainEvent?.matchId;
     query.isMainMatch = true;
-    query.sportType = this.mainEvent.sportType;
+    query.sportType = this.mainEvent?.sportType;
 
     return query;
   }
@@ -124,7 +139,7 @@ export class EventWrongHdpComponent implements OnInit {
     this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
     this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
     this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
-    this.mainEvent.eventDate =  this.eventLeagueComponent?.selectedMatch.eventDate;
+    this.mainEvent.eventDate = this.eventLeagueComponent?.selectedMatch.eventDate;
     this.mainEvent.sportType = this.eventLeagueComponent?.selectedMatch.sportType;
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
@@ -140,7 +155,7 @@ export class EventWrongHdpComponent implements OnInit {
     this.primitiveProps.isBlock = true;
     this.allSelectedEvents = this.allSelectedEvents.filter(x =>
       (selectedRelatedEvents.some(y => y.matchId === x.matchId)
-      || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
+        || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
       || x.isMainMatch);
     const newChildEvents = selectedRelatedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
     const newEvents = this.relatedEventService.updateEvents(newChildEvents, this.mainEvent.filterWithHdp);

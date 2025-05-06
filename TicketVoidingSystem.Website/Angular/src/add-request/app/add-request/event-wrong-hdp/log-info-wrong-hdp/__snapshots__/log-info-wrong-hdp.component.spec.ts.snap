@@ -15,10 +15,10 @@ exports[`LogInfoWrongHdpComponent LogInfoWrongHdpComponent init should match sna
           class="list-group-item list-group-item-header pointer header-log-info-child"
         >
           <div
-            class="mr-1 d-flex"
+            class="me-1 d-flex"
           >
             <div
-              class="mr-1"
+              class="me-1"
             >
               <em
                 class="fa fa-angle-up"
@@ -32,7 +32,7 @@ exports[`LogInfoWrongHdpComponent LogInfoWrongHdpComponent init should match sna
             </div>
           </div>
           <div
-            class="float-right d-flex"
+            class="float-end d-flex"
           >
             <i
               aria-hidden="true"

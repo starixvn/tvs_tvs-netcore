@@ -9,7 +9,7 @@ exports[`EventDateFilterComponent #EventDateFilterComponent init should match sn
       class="event-date-filter"
     >
       <label
-        class="col-form-label col-form-label-sm"
+        class="col-form-label-sm col-form-label-sm"
       >
         Event Date
       </label>
@@ -39,7 +39,7 @@ exports[`EventDateFilterComponent #EventDateFilterComponent init should match sn
           </div>
         </div>
         <label
-          class="col-form-label col-form-label-sm to-time-label"
+          class="col-form-label-sm to-time-label"
         >
           To
         </label>

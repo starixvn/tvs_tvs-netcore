@@ -1,80 +1,69 @@
-<event-league #leagueEvent
-  [isEdit]="isEdit"
-  [matchId]="mainEvent.matchId"
-  (changeEvent)="changeMatchEvent()">
+<event-league #leagueEvent [isEdit]="isEdit" [matchId]="mainEvent.matchId" (changeEvent)="changeMatchEvent()">
 </event-league>
-<div class="form-group">
-  <label class="col-form-label">KO Time</label>
+<div class="mb-3">
+  <label class="col-form-label-sm">KO Time</label>
   <div class="d-flex">
-    <date-full-time-new #kickOffTime
-        class="kick-off-time mr-1"
-        [isDisabled]="filter.isVoided"
-        [timeFormat]="'HH:mm:ss'"
-        [withOfTime]="80"
-        (changeEvent)="changeKickOffTime()"
-        [(dateTime)]="mainEvent.kickOffTime">
-      </date-full-time-new>
-    <label class="col-form-label col-form-label-sm">(GMT+8)</label>
+    <date-full-time-new #kickOffTime class="kick-off-time me-1" [isDisabled]="filter.isVoided" [timeFormat]="'HH:mm:ss'"
+      [withOfTime]="80" (change)="changeKickOffTime()" [(ngModel)]="mainEvent.kickOffTime">
+    </date-full-time-new>
+    <label class="col-form-label-sm">(GMT+8)</label>
   </div>
 </div>
 <div class="mb-3">
-  <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm" (click)="handleSearchEvent()">Search</button>
+  <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
+    (click)="handleSearchEvent()">Search</button>
 </div>
-<div *ngIf="primitiveProps.isShowLogInfoEvents">
+@if (primitiveProps.isShowLogInfoEvents) {
+<div>
   <div class="main-match-log-info mb-3">
-    <label><strong>Main Event - Log Info</strong></label>
-    <log-info-eko #logInfo
-      [isMainMatch]="true"
-      [isEdit]="isEdit"
-      [requestId]="requestId"
-      [primitiveProps]="primitiveProps"
-      [logInfo]="mainEvent"
-      [issueTypes]="issueTypes"
-      (deleteEvent)="handleDeleteEvent($event)"
-      [filter]="filter">
+    <label class="col-form-label-sm"><strong>Main Event - Log Info</strong></label>
+    <log-info-eko #logInfo [isMainMatch]="true" [isEdit]="isEdit" [requestId]="requestId"
+      [primitiveProps]="primitiveProps" [logInfo]="mainEvent" [issueTypes]="issueTypes"
+      (deleteEvent)="handleDeleteEvent($event)" [filter]="filter">
     </log-info-eko>
   </div>
   <div class="related-event-log-info mb-3">
-    <label><strong>Related Event(s) - Log Info</strong></label>
+    <label class="col-form-label-sm"><strong>Related Event(s) - Log Info</strong></label>
     <div class="d-flex mb-3">
-      <div class="input-group input-related-match-id-area align-items-center justify-content-center mr-2">
-        <input [(ngModel)]="primitiveProps.inputRelatedMatchId" [disabled]="filter.isVoided" class="input-related-match-id form-control form-control-sm" placeholder="Input MatchID" type="text" only-number/>
-        <button (click)="handleClickAddRelatedEvent()" [disabled]="filter.isVoided" class="btn btn-primary btn-sm btn-add-event" type="submit">Add Related Event</button>
+      <div class="input-group input-related-match-id-area align-items-center justify-content-center me-2">
+        <input [(ngModel)]="primitiveProps.inputRelatedMatchId" [disabled]="filter.isVoided"
+          class="input-related-match-id form-control form-control-sm" placeholder="Input MatchID" type="text"
+          only-number />
+        <button (click)="handleClickAddRelatedEvent()" [disabled]="filter.isVoided"
+          class="btn btn-primary btn-sm btn-add-event" type="submit">Add Related Event</button>
       </div>
       <div class="d-flex">
-        <button type="submit" class="btn btn-success btn-sm btn-open-modal-related-event mr-2"
-          (click)="showAddChildMatchModal(1)"
-          [disabled]="isDisabledChildMatches()">
+        <button type="submit" class="btn btn-success btn-sm btn-open-modal-related-event me-2"
+          (click)="showAddChildMatchModal(1)" [disabled]="isDisabledChildMatches()">
           Child Match ({{countChildMatches()}})
         </button>
         <button type="submit" class="btn btn-danger btn-open-modal-related-event btn-sm"
-          (click)="showAddChildMatchModal(2)"
-          [disabled]="isDisabledLinkMatches()">
+          (click)="showAddChildMatchModal(2)" [disabled]="isDisabledLinkMatches()">
           Link Match ({{countLinkMatches()}})
         </button>
       </div>
     </div>
-    <div *ngIf="allSelectedEvents.length > 1">
-      <div class="mb-2" *ngFor="let event of allSelectedEvents; index as i">
-        <log-info-eko #logInfo *ngIf="!event.isMainMatch"
-          [isMainMatch]="false"
-          [isEdit]="isEdit"
-          [requestId]="requestId"
-          [primitiveProps]="primitiveProps"
-          [logInfo]="allSelectedEvents[i]"
-          [issueTypes]="issueTypes"
-          (deleteEvent)="handleDeleteEvent($event)"
-          [filter]="filter">
+    @if (allSelectedEvents.length > 1) {
+    <div>
+      @for (event of allSelectedEvents; track event; let i = $index) {
+      <div class="mb-2">
+        @if (!event.isMainMatch) {
+        <log-info-eko #logInfo [isMainMatch]="false" [isEdit]="isEdit" [requestId]="requestId"
+          [primitiveProps]="primitiveProps" [logInfo]="allSelectedEvents[i]" [issueTypes]="issueTypes"
+          (deleteEvent)="handleDeleteEvent($event)" [filter]="filter">
         </log-info-eko>
+        }
       </div>
+      }
     </div>
+    }
   </div>
 </div>
+}
 
-<add-child-match
-  [relatedEvents]="relatedEvents"
-  (selectedEventsChange)="saveRelatedEvent($event)"
+<add-child-match [relatedEvents]="relatedEvents" (selectedEventsChange)="saveRelatedEvent($event)"
   [model]="addChildMatchModel">
 </add-child-match>
-<confirm-eko [model]="confirmEarlyKickOff" (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()"></confirm-eko>
+<confirm-eko [model]="confirmEarlyKickOff" (clickOk)="onClickConfirmSaveRequest()"
+  (clickCancel)="onClickCancelSaveRequest()"></confirm-eko>
 <tooltip [tooltip]="tooltip"></tooltip>

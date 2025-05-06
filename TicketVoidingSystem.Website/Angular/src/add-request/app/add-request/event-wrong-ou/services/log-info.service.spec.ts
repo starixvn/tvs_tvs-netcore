@@ -1,179 +1,260 @@
-import * as _ from 'lodash';
-import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { CommonService } from '../../../../../utility/services/common.service';
-import { FilterModel } from '../../filter/filter.model';
-import { WrongOuModel } from '../../models/event-wrong-ou.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
-import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
-import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { EventWrongOuService } from './event-wrong-ou.service';
+import { TestBed } from '@angular/core/testing';
 import { LogInfoService } from './log-info.service';
+import { CommonService } from '../../../../../utility/services/common.service';
+import { EventWrongOuService } from './event-wrong-ou.service';
+import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
+import { FilterModel } from '../../filter/filter.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { GetLogInfoModel } from '../../models/get-log-info.model';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
+import { GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { Validation } from '../../models/get-log-info.model';
+import { ValidationMessage } from '../../models/get-log-info.model';
+import { StaticService } from '../../../../../utility/services/static.service';
 
 class Helper {
   static readonly fakeMatchId = 12345;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeLogInfoWrongOu = {
-    matchId: 12345,
-    leagueName: '',
-    isMainMatch: true,
-    eventName: '',
-    filterWrongOu: new FilterWrongOuModel(),
-    logInfoDetail: null,
-    messageValidationLogInfo: [],
-    isPoolHouseAffected: true,
-    linkedLogsViewModel: null,
-    poolHouseCheckedBetTypes: '',
-    isShowValidation: false,
-    sportType: 0
-  } as LogInfoWrongOu;
-  static readonly fakeWrongOuModel: WrongOuModel = {
-    matchId: 122,
-    subIssueTypeId: 12,
-    isMainMatch: true,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeFromDateTime,
-    actualMarket: '',
-    wrongMarket: '',
-    logInfoDetail: null,
-    isLinkGroup1X2: true,
-    isLinkGroupAIO: true,
-    isPoolHouseAffected: true,
-    liveIndicator: 1,
-    poolHouseCheckedBetTypes: '',
-    sportType: 0
-  } as WrongOuModel;
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 123,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    scoreOfMatch: '',
+  static readonly fakeLogInfoDetail = {
+    matchId: Helper.fakeMatchId,
+    liveScores: '',
+    transVoidToTime: null,
+    singleCount: 0,
+    cashOutCount: 0,
+    settleCount: 0,
+    instantlySettleCount: 0,
+    mainParlayCount: 0,
+    cancelCashOutCount: 0,
+    voidFromTime: new Date('2024-03-20T10:00:00'),
+    voidToTime: new Date('2024-03-20T11:00:00'),
+    highlightMinTime: null,
+    highlightAcceptType: null,
     scoreNormalTicket: '',
-    instantlySettleCount: 2,
-    cancelCashOutCount: 1
+    scoreOfMatch: '',
+    poolHouseSingleCount: 0,
+    poolHouseCashOutCount: 0,
+    poolHouseSettleCount: 0,
+    poolHouseMainParlayCount: 0,
+    poolHouseInstantlySettleCount: 0,
+    minTransId: '',
+    actionType: '',
+    isHasWarningRangeTime: false,
+    logInfoTicketsJson: null
   } as LogInfoDetail;
-  static readonly fakeGetLogInfoModel: GetLogInfoModel = {
-    matchId: 123,
-    validation: {
-      isInvalidTotalTickets: false,
-      isExistedInOtherRequest: true,
-      isPoolHouseAffected: false
-    } as Validation,
-    ticketRequest: [{
-      transIds: '123456789',
-      requestId: 123
-    } as TicketRequest],
-    logInfoDetail: Helper.fakeLogInfoDetail
-  };
-  static readonly fakeTicketRequest: TicketRequest = {
-    transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
-    requestId: 123,
-  } as TicketRequest;
-  static readonly fakeValidation: Validation = {
-    isInvalidTotalTickets: true,
-    isExistedInOtherRequest: true,
-    isPoolHouseAffected: false
+
+  static readonly fakeValidation = {
+    isInvalidTotalTickets: false,
+    isExistedInOtherRequest: false,
+    isExistsSecondAccept: false,
+    isHasSettledTicket: false,
+    isHasInstantlySettledTicket: false,
+    isPoolHouseAffected: true
   } as Validation;
+
+  static readonly fakeGetLogInfoModel = {
+    matchId: Helper.fakeMatchId,
+    logInfoDetail: Helper.fakeLogInfoDetail,
+    validation: Helper.fakeValidation,
+    ticketRequest: [],
+    betTypeCount: []
+  } as GetLogInfoModel;
+
+  static readonly fakeFilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1'
+  } as FilterModel;
+
+  static readonly fakeTransInfoAddRequestModel = {
+    transInfoJson: null,
+    unMarkTransIds: '',
+    markTransIds: '',
+    removeTransIds: ''
+  } as TransInfoAddRequestModel;
+
+  static readonly fakeValidationMessage = {
+    isError: true,
+    reason: 'Test error message',
+    isShowPopup: false,
+    transIds: '',
+    requestId: 1
+  } as ValidationMessage;
 }
 
 describe('LogInfoService', () => {
   let service: LogInfoService;
+  let commonService: jest.Mocked<CommonService>;
+  let eventWrongOuService: jest.Mocked<EventWrongOuService>;
 
   beforeEach(() => {
-    service = new LogInfoService(null, null);
+    TestBed.configureTestingModule({
+      providers: [
+        LogInfoService,
+        { provide: CommonService, useValue: {
+          getLogInfo: jest.fn()
+        } },
+        { provide: EventWrongOuService, useValue: {
+          getWrongOuModel: jest.fn()
+        } },
+        { provide: StaticService, useValue: {
+          getValidationMessageList: jest.fn().mockReturnValue([Helper.fakeValidationMessage]),
+          isWrongOU: jest.fn().mockReturnValue(true)
+        } }
+      ]
+    });
+
+    service = TestBed.inject(LogInfoService);
+    commonService = TestBed.inject(CommonService) as jest.Mocked<CommonService>;
+    eventWrongOuService = TestBed.inject(EventWrongOuService) as jest.Mocked<EventWrongOuService>;
   });
 
-  it('#getLogInfo should call expected method', async () => {
-    const commonService = new CommonService(null);
-    commonService.getLogInfo = jest.fn().mockImplementation(() => Promise.resolve(new GetLogInfoViewModel()));
-    const eventWrongOuService = new EventWrongOuService(null);
-    eventWrongOuService.getWrongOuModel = jest.fn();
-    const logInfoService = new LogInfoService(commonService, eventWrongOuService);
-    logInfoService['initGetLogInfoWrongOuQuery'] = jest.fn();
-    logInfoService['assignResultLogInfoToEvents'] = jest.fn();
-
-    await logInfoService.getLogInfo(null, null, null, null, new PrimitiveProperty());
-
-    expect(logInfoService['initGetLogInfoWrongOuQuery']).toHaveBeenCalledTimes(1);
-    expect(logInfoService['assignResultLogInfoToEvents']).toHaveBeenCalledTimes(1);
-    expect(commonService.getLogInfo).toHaveBeenCalledTimes(1);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
+  describe('getLogInfo', () => {
+    it('should get log info and assign results for wrong OU', async () => {
+      // Arrange
+      const allEvents: LogInfoWrongOu[] = [{
+        matchId: Helper.fakeMatchId,
+        isMainMatch: true,
+        leagueName: 'Test League',
+        eventName: 'Test Event',
+        isPoolHouseAffected: false,
+        poolHouseCheckedBetTypes: PoolHouseTicketValue.SELECT_ALL_BETTYPE,
+        logInfoDetail: null,
+        messageValidationLogInfo: null,
+        isShowValidation: false,
+        filterWrongOu: null,
+        linkedLogsViewModel: null,
+        eventDate: null,
+        sportType: 1
+      } as LogInfoWrongOu];
+      const isEdit = false;
+      const requestId = 1;
+      const filter = Helper.fakeFilterModel;
+      const primitiveProps = new PrimitiveProperty();
 
-  it('#initGetLogInfoWrongOuQuery should return expected', async () => {
-    const filter = new FilterModel();
-    filter.issueTypeId = IssueTypeConstant.WRONG_OU;
-    const eventWrongOuService = new EventWrongOuService(null);
-    eventWrongOuService.getWrongOuModel = jest.fn();
-    const logInfoService = new LogInfoService(null, eventWrongOuService);
-    logInfoService['getTransInfo'] = jest.fn();
+      const mockResponse = {
+        transInfoAddRequestModel: Helper.fakeTransInfoAddRequestModel,
+        getLogInfoModels: [Helper.fakeGetLogInfoModel]
+      } as GetLogInfoViewModel;
 
-    const actual = logInfoService['initGetLogInfoWrongOuQuery'](true, 123, filter, [Helper.fakeLogInfoWrongOu]);
+      commonService.getLogInfo.mockResolvedValue(mockResponse);
+      eventWrongOuService.getWrongOuModel.mockReturnValue([{
+        matchId: Helper.fakeMatchId,
+        subIssueTypeId: 1,
+        poolHouseCheckedBetTypes: PoolHouseTicketValue.SELECT_ALL_BETTYPE,
+        isMainMatch: true,
+        wrongMarket: '1',
+        filterFromTransTime: '2024-03-20T10:00:00',
+        filterToTransTime: '2024-03-20T11:00:00',
+        liveIndicator: 1,
+        filterBetTypeId: '1',
+        filterBetIdX: 'X',
+        filterBetIdY: 'Y',
+        isLinkGroup1X2: true,
+        isLinkGroupAIO: false
+      }]);
 
-    expect(actual).toBeDefined();
+      // Act
+      await service.getLogInfo(allEvents, isEdit, requestId, filter, primitiveProps);
+
+      // Assert
+      expect(commonService.getLogInfo).toHaveBeenCalled();
+      expect(primitiveProps.transInfoAddRequestModel).toBeDefined();
+      expect(allEvents[0].logInfoDetail).toBeDefined();
+      expect(allEvents[0].messageValidationLogInfo).toBeDefined();
+      expect(allEvents[0].isPoolHouseAffected).toBe(true);
+      expect(allEvents[0].poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.SELECT_ALL_BETTYPE);
+    });
+
+    it('should get log info and assign results for non-pool house affected event', async () => {
+      // Arrange
+      const allEvents: LogInfoWrongOu[] = [{
+        matchId: Helper.fakeMatchId,
+        isMainMatch: true,
+        leagueName: 'Test League',
+        eventName: 'Test Event',
+        isPoolHouseAffected: false,
+        poolHouseCheckedBetTypes: '',
+        logInfoDetail: null,
+        messageValidationLogInfo: null,
+        isShowValidation: false,
+        filterWrongOu: null,
+        linkedLogsViewModel: null,
+        eventDate: null,
+        sportType: 1
+      } as LogInfoWrongOu];
+      const isEdit = false;
+      const requestId = 1;
+      const filter = Helper.fakeFilterModel;
+      const primitiveProps = new PrimitiveProperty();
+
+      const mockResponse = {
+        transInfoAddRequestModel: Helper.fakeTransInfoAddRequestModel,
+        getLogInfoModels: [{
+          ...Helper.fakeGetLogInfoModel,
+          validation: {
+            ...Helper.fakeValidation,
+            isPoolHouseAffected: false
+          }
+        }]
+      } as GetLogInfoViewModel;
+
+      commonService.getLogInfo.mockResolvedValue(mockResponse);
+      eventWrongOuService.getWrongOuModel.mockReturnValue([{
+        matchId: Helper.fakeMatchId,
+        subIssueTypeId: 1,
+        poolHouseCheckedBetTypes: '',
+        isMainMatch: true,
+        wrongMarket: '1',
+        filterFromTransTime: '2024-03-20T10:00:00',
+        filterToTransTime: '2024-03-20T11:00:00',
+        liveIndicator: 1,
+        filterBetTypeId: '1',
+        filterBetIdX: 'X',
+        filterBetIdY: 'Y',
+        isLinkGroup1X2: true,
+        isLinkGroupAIO: false
+      }]);
+
+      // Act
+      await service.getLogInfo(allEvents, isEdit, requestId, filter, primitiveProps);
+
+      // Assert
+      expect(allEvents[0].isPoolHouseAffected).toBe(false);
+      expect(allEvents[0].poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.NOT_AFFECTED);
+    });
   });
 
-  it('#initGetLogInfoWrongOuQuery should return expected', async () => {
-    const filter = new FilterModel();
-    filter.issueTypeId = IssueTypeConstant.WRONG_1ST_OU;
-    const eventWrongOuService = new EventWrongOuService(null);
-    eventWrongOuService.getWrongOuModel = jest.fn();
-    const logInfoService = new LogInfoService(null, eventWrongOuService);
-    logInfoService['getTransInfo'] = jest.fn();
+  describe('resetLogInfoOfEvent', () => {
+    it('should reset log info of events', () => {
+      // Arrange
+      const events: LogInfoWrongOu[] = [{
+        matchId: Helper.fakeMatchId,
+        isMainMatch: true,
+        leagueName: 'Test League',
+        eventName: 'Test Event',
+        isPoolHouseAffected: false,
+        poolHouseCheckedBetTypes: '',
+        logInfoDetail: Helper.fakeLogInfoDetail,
+        messageValidationLogInfo: [Helper.fakeValidationMessage],
+        isShowValidation: true,
+        filterWrongOu: null,
+        linkedLogsViewModel: null,
+        eventDate: null,
+        sportType: 1
+      } as LogInfoWrongOu];
 
-    const actual = logInfoService['initGetLogInfoWrongOuQuery'](false, 123, filter, [Helper.fakeLogInfoWrongOu]);
+      // Act
+      service.resetLogInfoOfEvent(events);
 
-    expect(actual).toBeDefined();
-  });
-
-  it('#assignResultLogInfoToEvents should update model', async () => {
-    const matchId = 1234;
-    const events = _.cloneDeep([Helper.fakeLogInfoWrongOu]);
-    events[0].matchId = matchId;
-    const logInfoModels = _.cloneDeep([Helper.fakeGetLogInfoModel]);
-    logInfoModels[0].matchId = matchId;
-    logInfoModels[0].logInfoDetail.matchId = matchId;
-    const eventWrongOuService = new EventWrongOuService(null);
-    eventWrongOuService.getWrongOuModel = jest.fn();
-    const logInfoService = new LogInfoService(null, eventWrongOuService);
-
-    logInfoService['assignResultLogInfoToEvents'](events, logInfoModels);
-
-    expect(events.every(x => x.poolHouseCheckedBetTypes === PoolHouseTicketValue.NOT_AFFECTED)).toBeTruthy();
-  });
-
-  it('#assignResultLogInfoToEvents should not update model', async () => {
-    const matchId = 1234;
-    const events = _.cloneDeep([Helper.fakeLogInfoWrongOu]);
-    events[0].matchId = matchId;
-    const logInfoModels = _.cloneDeep([Helper.fakeGetLogInfoModel]);
-    logInfoModels[0].matchId = 11111;
-    logInfoModels[0].logInfoDetail.matchId = 11111;
-    const eventWrongOuService = new EventWrongOuService(null);
-    eventWrongOuService.getWrongOuModel = jest.fn();
-    const logInfoService = new LogInfoService(null, eventWrongOuService);
-    logInfoService['getValidationMessageList'] = jest.fn();
-
-    logInfoService['assignResultLogInfoToEvents'](events, logInfoModels);
-
-    expect(logInfoService['getValidationMessageList']).toHaveBeenCalledTimes(0);
-  });
-
-  it('#resetLogInfoOfEvent should update model to null', async () => {
-    const events = _.cloneDeep([Helper.fakeLogInfoWrongOu]);
-
-    service['resetLogInfoOfEvent'](events);
-
-    expect(events[0].logInfoDetail).toBeNull();
-    expect(events[0].messageValidationLogInfo).toBeNull();
+      // Assert
+      expect(events[0].isShowValidation).toBe(false);
+      expect(events[0].logInfoDetail).toBeNull();
+      expect(events[0].messageValidationLogInfo).toBeNull();
+    });
   });
 });

@@ -1,14 +1,18 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { ChildMatchModel } from '../../../add-request/app/add-request/models/related-event.model';
+import { BlockUiDirective } from '../block-ui/block-ui.directive';
 import { AddChildMatchModel } from './add-child-match.model';
 
 @Component({
+  standalone: true,
   selector: 'add-child-match',
   templateUrl: './add-child-match.component.html',
-  styleUrls: ['./add-child-match.component.scss']
+  styleUrls: ['./add-child-match.component.scss'],
+  imports: [FormsModule, BlockUiDirective]
 })
-export class AddChildMatchComponent implements OnInit, OnChanges {
+export class AddChildMatchComponent implements OnChanges {
   @Input() relatedEvents: ChildMatchModel[] = [];
   @Input() model = new AddChildMatchModel();
   @Output() selectedEventsChange = new EventEmitter<ChildMatchModel[]>();
@@ -18,10 +22,6 @@ export class AddChildMatchComponent implements OnInit, OnChanges {
   isBlock = false;
   tempRelatedEvents: ChildMatchModel[] = [];
   isCheckedAll: boolean;
-
-  constructor() {}
-
-  ngOnInit() { }
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['model']) {

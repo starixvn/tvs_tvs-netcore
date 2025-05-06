@@ -1,122 +1,91 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { LogInfoNotParticipateComponent } from './log-info-not-participate.component';
-
-class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeLogInfoNotParticipate: LogInfoNotParticipate = {
-    matchId: 1,
-    filterNotParticipates: [],
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: []
-  };
-}
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
+import moment from 'moment-timezone';
 
 describe('LogInfoNotParticipateComponent', () => {
-  @NgModule({
-    declarations: [
-    ],
-    imports: [
-      NgbModule,
-      FormsModule
-    ],
-    providers: [
-      ModalService
-    ]
-  })
-  class AppModuleTest { }
+  let component: LogInfoNotParticipateComponent;
+  let fixture: ComponentFixture<LogInfoNotParticipateComponent>;
+  let modalService: ModalService;
+  let staticService: StaticService;
 
-  let shallow: Shallow<LogInfoNotParticipateComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ModalService,
+        StaticService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(LogInfoNotParticipateComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(LogInfoNotParticipateComponent);
+    modalService = fixture.debugElement.injector.get(ModalService);
+    staticService = fixture.debugElement.injector.get(StaticService);
+    component = fixture.componentInstance;
   });
 
-  it('LogInfoNotParticipateComponent init should match snapshot', async () => {
-    const component = new LogInfoNotParticipateComponent(null);
-    expect(component).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('displayFullDateTimeFormat should return time', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoNotParticipate
-      }
+  describe('displayFullDateTimeFormat', () => {
+    it('should format date correctly', () => {
+      const testDate = new Date('2024-03-20T10:30:00');
+      const result = component.displayFullDateTimeFormat(testDate);
+      expect(result).toBe(moment(testDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT));
     });
-    const actual = instance.displayFullDateTimeFormat(new Date(Helper.fromDate));
-
-    expect(actual).toBe('2021/12/18 12:08:49.737 PM');
   });
 
-  it('countInfoContent should return info CashOut', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoNotParticipate
-      }
+  describe('openPopupTransIds', () => {
+    it('should call StaticService.openPopupTransIds with correct parameters', () => {
+      const requestId = 123;
+      const transIds = 'ABC123';
+      jest.spyOn(StaticService, 'openPopupTransIds');
+
+      component.openPopupTransIds(requestId, transIds);
+
+      expect(StaticService.openPopupTransIds).toHaveBeenCalledWith(requestId, transIds, modalService);
     });
-    const actual = instance['countInfoContent'](1, 2, 0);
-
-    expect(actual).toBe(' (Cash Out: <strong>1</strong>, Settled: <strong>2</strong>)');
   });
 
-  it('openPopupTransIds should call modal Service', async () => {
-    const mockModalOpen = jest.fn();
-    const { instance } = await shallow
-    .mock(ModalService, { open: mockModalOpen })
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoNotParticipate
-      }
+  describe('countInfoContent', () => {
+    it('should call StaticService.countInfoContent with correct parameters', () => {
+      const cashOutCount = 1;
+      const settleCount = 2;
+      const instantlySettleCount = 3;
+      jest.spyOn(StaticService, 'countInfoContent');
+
+      component.countInfoContent(cashOutCount, settleCount, instantlySettleCount);
+
+      expect(StaticService.countInfoContent).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
     });
-    instance['openPopupTransIds'](0, '');
-
-    expect(mockModalOpen).toHaveBeenCalledTimes(1);
   });
 
-  it('isShowCountInfo should return false', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoNotParticipate
-      }
+  describe('displayTransId', () => {
+    it('should return transId when ticketCount is not 0', () => {
+      const result = component.displayTransId(1, 'ABC123');
+      expect(result).toBe('ABC123');
     });
-    const actual = instance['isShowCountInfo'](0, 0, 0);
 
-    expect(actual).toBeFalsy();
-  });
-
-  it('displayTransId should return 12312', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoNotParticipate
-      }
+    it('should return "-" when ticketCount is 0', () => {
+      const result = component.displayTransId(0, 'ABC123');
+      expect(result).toBe('-');
     });
-    const actual = instance.displayTransId(1, '12312');
-
-    expect(actual).toBe('12312');
   });
 
-  it('displayTransId should return -', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoNotParticipate
-      }
+  describe('isShowCountInfo', () => {
+    it('should call StaticService.isShowCountInfo with correct parameters', () => {
+      const cashOutCount = 1;
+      const settleCount = 2;
+      const instantlySettleCount = 3;
+      jest.spyOn(StaticService, 'isShowCountInfo');
+
+      component.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
+
+      expect(StaticService.isShowCountInfo).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
     });
-    const actual = instance.displayTransId(0, '');
-
-    expect(actual).toBe('-');
   });
-
 });

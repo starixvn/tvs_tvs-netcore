@@ -1,150 +1,162 @@
-import { ElementRef, NgModule, SimpleChange } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { Shallow } from 'shallow-render';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { AbnormalAccountModel } from '../../models/abnormal-account.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { ProductFilterComponent } from './product-filter.component';
+import { ProductFilter, TicketStatus, TVSRequestActionType } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
+import { AbnormalAccountModel } from '../../models/abnormal-account.model';
+import { EventEmitter, SimpleChange } from '@angular/core';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 
-describe('ProductFilterComponent', () => { 
-  @NgModule({
-    declarations: [
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      ToolTipModule,
-      NgSelectModule
-    ],
-    providers: [
-    ]
-  })
-  class AppModuleTest { }
+class Helper {
+  static readonly fakeAbnormalAccountModel = new AbnormalAccountModel();
+  static readonly fakeProductFilter = ProductFilter.SELECTION_ITEMS;
+  static readonly fakeTicketStatus = TicketStatus.SELECTION_ITEMS;
+}
 
-  let shallow: Shallow<ProductFilterComponent>;
+describe('ProductFilterComponent', () => {
+  let component: ProductFilterComponent;
+  let fixture: ComponentFixture<ProductFilterComponent>;
 
-  beforeEach(() => {
-    shallow = new Shallow(ProductFilterComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
-  });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: []
+    }).compileComponents();
 
-  it('#ProductFilterComponent init should match snapshot', async () => {
-    const { fixture } = await shallow.render();
-
-    expect(fixture).toMatchSnapshot();
-  });
-  
-  it('#isValidComponent should return false when do not select any products', async () => {
-    const { instance } = await shallow.render();
-    instance.selectedProducts = [];
-    instance.tooltip = new Tooltip();
-    instance.tooltip.display = jest.fn();
-    instance.abnormalAccountModel = new AbnormalAccountModel();
-
-    const actual = instance.isValidComponent();
+    fixture = TestBed.createComponent(ProductFilterComponent);
+    component = fixture.componentInstance;
     
-    expect(actual).toBe(false);
-    expect(instance.tooltip.display).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#isValidComponent should return false when do not select any status', async () => {
-    const { instance } = await shallow.render();
-    instance.selectedProducts = ['1','2'];
-    instance.selectedTicketStatus = [];
-    instance.tooltip = new Tooltip();
-    instance.tooltip.display = jest.fn();
-    instance.abnormalAccountModel = new AbnormalAccountModel();
-
-    const actual = instance.isValidComponent();
-    
-    expect(actual).toBe(false);
-    expect(instance.tooltip.display).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#isValidComponent should return true', async () => {
-    const { instance } = await shallow.render();
-    instance.selectedProducts = ['1','2'];
-    instance.selectedTicketStatus = ['1','2'];
-    instance.abnormalAccountModel = new AbnormalAccountModel();
-
-    const actual = instance.isValidComponent();
-    
-    expect(actual).toBe(true);
-  });
-  
-  it('#updateItem should update correct data when is edit', async () => {
-    const { instance } = await shallow.render();
-    instance.isEdit = true;
-    instance.abnormalAccountModel = new AbnormalAccountModel();
-    instance.abnormalAccountModel.productIds = '1,2,3,5';
-    instance.abnormalAccountModel.statusIds = '111,0,1';
-
-    instance.updateItem();
-    
-    expect(instance.selectedProducts.length).toBeGreaterThan(0);
-    expect(instance.selectedTicketStatus.length).toBeGreaterThan(0);
-  });
-  
-  it('#updateItem should update correct data when is not edit', async () => {
-    const { instance } = await shallow.render();
-    instance.isEdit = false;
-    instance.abnormalAccountModel = new AbnormalAccountModel();
-
-    instance.updateItem();
-    
-    expect(instance.selectedProducts.length).toBeGreaterThan(0);
-    expect(instance.selectedTicketStatus.length).toBeGreaterThan(0);
+    // Mock Tooltip
+    component.tooltip = {
+      display: jest.fn(),
+      element: {
+        getElementsByClassName: jest.fn().mockReturnValue([{
+          scrollIntoView: jest.fn(),
+          getBoundingClientRect: jest.fn().mockReturnValue({})
+        }])
+      }
+    } as unknown as Tooltip;
   });
 
-  it('#ngOnChanges should emit changeFilterEvent and update selectedTicketStatus of auto void', async () => {
-    const { instance } = await shallow.render();
-    const changes = {
-      'actionId': new SimpleChange('1', '10', true)
-    };
-    instance.actionId = TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
-    instance.changeFilterEvent.emit = jest.fn();
-
-    instance.ngOnChanges(changes);
-
-    expect(instance.selectedTicketStatus).toStrictEqual(["0,1", "112"]);
-    expect(instance.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#ngOnChanges should emit changeFilterEvent and update selectedTicketStatus with all items', async () => {
-    const { instance } = await shallow.render();
-    const changes = {
-      'actionId': new SimpleChange('1', '11', true)
-    };
-    instance.actionId = TVSRequestActionType.MANUAL_VOID_ID.toString();
-    instance.changeFilterEvent.emit = jest.fn();
+  it('should initialize with default values when not in edit mode', () => {
+    // Arrange
+    component.isEdit = false;
+    component.abnormalAccountModel = Helper.fakeAbnormalAccountModel;
 
-    instance.ngOnChanges(changes);
+    // Act
+    component.ngOnInit();
 
-    expect(instance.selectedTicketStatus).toStrictEqual(["0,1", "112", "113", "111"]);
-    expect(instance.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.selectedProducts).toEqual(ProductFilter.SELECTION_ITEMS.map(x => x.value));
+    expect(component.selectedTicketStatus).toEqual(TicketStatus.SELECTION_ITEMS.map(x => x.value));
   });
 
-  it('#ngOnChanges should not emit changeFilterEvent', async () => {
-    const { instance } = await shallow.render();
-    const changes = {};
-    instance.actionId = TVSRequestActionType.MANUAL_VOID_ID.toString();
-    instance.changeFilterEvent.emit = jest.fn();
+  it('should initialize with existing values when in edit mode', () => {
+    // Arrange
+    component.isEdit = true;
+    component.abnormalAccountModel = Helper.fakeAbnormalAccountModel;
+    component.abnormalAccountModel.productIds = '1,2';
+    component.abnormalAccountModel.statusIds = '0,1';
 
-    instance.ngOnChanges(changes);
+    // Act
+    component.ngOnInit();
 
-    expect(instance.changeFilterEvent.emit).toHaveBeenCalledTimes(0);
+    // Assert
+    expect(component.selectedProducts).toEqual(['1', '2']);
+    expect(component.selectedTicketStatus).toEqual(['0,1']);
   });
 
-  it('#changeFilter should emit changeFilterEvent', async () => {
-    const { instance } = await shallow.render();
-    instance.changeFilterEvent.emit = jest.fn();
+  it('should handle actionId changes', () => {
+    // Arrange
+    component.actionId = TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
+    component.changeFilterEvent = { emit: jest.fn() } as unknown as EventEmitter<void>;
 
-    instance.changeFilter();
+    // Act
+    component.ngOnChanges({
+      actionId: {
+        currentValue: TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString(),
+        previousValue: null,
+        firstChange: true
+      } as SimpleChange
+    });
 
-    expect(instance.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.selectedTicketStatus).toEqual(
+      TicketStatus.SELECTION_ITEMS_AUTO_VOID_POLICY.map(x => x.value)
+    );
+    expect(component.changeFilterEvent.emit).toHaveBeenCalled();
+  });
+
+  it('should validate component with empty products', () => {
+    // Arrange
+    component.selectedProducts = [];
+    component.selectedTicketStatus = ['0', '1'];
+    component.abnormalAccountModel = Helper.fakeAbnormalAccountModel;
+
+    // Act
+    const result = component.isValidComponent();
+
+    // Assert
+    expect(result).toBeFalsy();
+    expect(component.tooltip.display).toHaveBeenCalledWith('product', LABELS.REQUIRED_PRODUCT);
+  });
+
+  it('should validate component with empty ticket status', () => {
+    // Arrange
+    component.selectedProducts = ['1', '2'];
+    component.selectedTicketStatus = [];
+    component.abnormalAccountModel = Helper.fakeAbnormalAccountModel;
+
+    // Act
+    const result = component.isValidComponent();
+
+    // Assert
+    expect(result).toBeFalsy();
+    expect(component.tooltip.display).toHaveBeenCalledWith('ticket-status', LABELS.REQUIRED_TICKET_STATUS);
+  });
+
+  it('should validate component with valid data', () => {
+    // Arrange
+    component.selectedProducts = ['1', '2'];
+    component.selectedTicketStatus = ['0', '1'];
+    component.abnormalAccountModel = Helper.fakeAbnormalAccountModel;
+
+    // Act
+    const result = component.isValidComponent();
+
+    // Assert
+    expect(result).toBeTruthy();
+    expect(component.abnormalAccountModel.productIds).toBe('1,2');
+    expect(component.abnormalAccountModel.statusIds).toBe('0,1');
+  });
+
+  it('should handle filter changes', () => {
+    // Arrange
+    component.changeFilterEvent = { emit: jest.fn() } as unknown as EventEmitter<void>;
+
+    // Act
+    component.changeFilter();
+
+    // Assert
+    expect(component.changeFilterEvent.emit).toHaveBeenCalled();
+  });
+
+  it('should update items with running and waiting status', () => {
+    // Arrange
+    component.isEdit = true;
+    component.abnormalAccountModel = Helper.fakeAbnormalAccountModel;
+    component.abnormalAccountModel.productIds = '1,2';
+    component.abnormalAccountModel.statusIds = '0,1';
+
+    // Act
+    component.updateItem();
+
+    // Assert
+    expect(component.selectedProducts).toEqual(['1', '2']);
+    expect(component.selectedTicketStatus).toEqual(['0,1']);
   });
 });

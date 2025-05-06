@@ -1,24 +1,60 @@
-import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
-import { CommonService } from '../../../../../utility/services/common.service';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
+import { TestBed } from '@angular/core/testing';
 import { FilterReducedOverService } from './filter-reduced-over.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { CommonService } from '../../../../../utility/services/common.service';
+import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
+import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { GroupReducedOverConstant } from '../constants/bet-type-reduced-over.constant';
 
 class Helper {
-  static readonly fakeReducedOverBetType: ReducedOverBetType =  { betTypeId: 0, betTypeName: '', isHasOverWicket: true, isHasPlayer: true, isHasRuns: true, parentId: 0, items: [] };
+  static readonly fakeReducedOverBetType: ReducedOverBetType = {
+    betTypeId: 1,
+    betTypeName: 'Test Bet Type',
+    isHasOverWicket: true,
+    isHasPlayer: true,
+    isHasRuns: true,
+    parentId: 0,
+    items: []
+  };
+
   static readonly fakeReducedOverBetTypes: ReducedOverBetType[] = [
-    { betTypeId: 1, betTypeName: '', isHasOverWicket: true, isHasPlayer: true, isHasRuns: true, parentId: 0, items: null },
-    { betTypeId: 2, betTypeName: '', isHasOverWicket: true, isHasPlayer: true, isHasRuns: true, parentId: -1, items: null },
-    { betTypeId: 3, betTypeName: '', isHasOverWicket: true, isHasPlayer: true, isHasRuns: true, parentId: -2, items: null },
-    { betTypeId: 4, betTypeName: '', isHasOverWicket: true, isHasPlayer: true, isHasRuns: true, parentId: -3, items: [Helper.fakeReducedOverBetType] },
+    {
+      betTypeId: 1,
+      betTypeName: 'Home OE',
+      isHasOverWicket: true,
+      isHasPlayer: true,
+      isHasRuns: true,
+      parentId: GroupReducedOverConstant.ALL_HOME_OE,
+      items: []
+    },
+    {
+      betTypeId: 2,
+      betTypeName: 'Away OE',
+      isHasOverWicket: true,
+      isHasPlayer: true,
+      isHasRuns: true,
+      parentId: GroupReducedOverConstant.ALL_AWAY_OE,
+      items: []
+    },
+    {
+      betTypeId: 3,
+      betTypeName: 'Others OE',
+      isHasOverWicket: true,
+      isHasPlayer: true,
+      isHasRuns: true,
+      parentId: GroupReducedOverConstant.OTHERS_OE_BET_TYPE,
+      items: []
+    }
   ];
+
   static readonly fakePlayers: OddsInfo[] = [
     {
-      betChoice: '',
+      betChoice: 'Test Choice',
       betTypeId: 1,
       oddsId: '1',
       playerId: 1,
-      playerName: '',
+      playerName: 'Player 1',
       playNamesChineseSimplified: '',
       playNamesChineseTraditional: ''
     }
@@ -27,77 +63,115 @@ class Helper {
 
 describe('FilterReducedOverService', () => {
   let service: FilterReducedOverService;
+  let addRequestApiService: AddRequestApiService;
+  let commonService: CommonService;
 
   beforeEach(() => {
-    service = new FilterReducedOverService(null, null);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [FilterReducedOverService]
+    });
+
+    service = TestBed.inject(FilterReducedOverService);
+    addRequestApiService = TestBed.inject(AddRequestApiService);
+    commonService = TestBed.inject(CommonService);
   });
 
-  it('#initDefaultFilter should call #initBetTypeNgSelectMixtureModel', async () => {
-    service.initBetTypeNgSelectMixtureModel = jest.fn();
-    service.initDefaultPlayerSelection = jest.fn();
-    const actual = service.initDefaultFilter(Helper.fakeReducedOverBetTypes);
-
-    expect(service.initBetTypeNgSelectMixtureModel).toHaveBeenCalledTimes(1);
-    expect(service.initDefaultPlayerSelection).toHaveBeenCalledTimes(1);
-    expect(actual).toBeDefined();
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#getReducedOverBetTypes should return ReducedOverBetType', async () => {
-    const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.getReducedOverBetTypes = jest.fn().mockReturnValue(Helper.fakeReducedOverBetTypes);
-    const service = new FilterReducedOverService(addRequestApiService, null);
-    const actual = await service.getReducedOverBetTypes(1);
+  describe('initDefaultFilter', () => {
+    it('should initialize default filter with bet types and player selection', () => {
+      const result = service.initDefaultFilter(Helper.fakeReducedOverBetTypes);
 
-    expect(actual).toEqual(Helper.fakeReducedOverBetTypes)
-    expect(addRequestApiService.getReducedOverBetTypes).toHaveBeenCalledTimes(1);
+      expect(result).toBeDefined();
+      expect(result.betTypeNgSelectMixtureModel).toBeDefined();
+      expect(result.playerMultipleSelection).toBeDefined();
+    });
   });
 
-  it('#renderGroupReducedOverBetTypes should return list of GroupReducedOverBetType', async () => {
-    const actual = service.renderGroupReducedOverBetTypes(Helper.fakeReducedOverBetTypes);
+  describe('getReducedOverBetTypes', () => {
+    it('should get reduced over bet types from API', async () => {
+      addRequestApiService.getReducedOverBetTypes = jest.fn().mockResolvedValue(Helper.fakeReducedOverBetTypes);
 
-    expect(actual.length).toBe(4);
+      const result = await service.getReducedOverBetTypes(1);
+
+      expect(result).toEqual(Helper.fakeReducedOverBetTypes);
+      expect(addRequestApiService.getReducedOverBetTypes).toHaveBeenCalledWith(1);
+    });
   });
 
-  it('#getGroupName should return empty', async () => {
-    const actual = service['getGroupName'](1212);
+  describe('renderGroupReducedOverBetTypes', () => {
+    it('should render group reduced over bet types correctly', () => {
+      const result = service.renderGroupReducedOverBetTypes(Helper.fakeReducedOverBetTypes);
 
-    expect(actual).toBe('');
+      expect(result.length).toBe(3);
+      expect(result[0].betTypeId).toBe(GroupReducedOverConstant.ALL_HOME_OE);
+      expect(result[1].betTypeId).toBe(GroupReducedOverConstant.ALL_AWAY_OE);
+      expect(result[2].betTypeId).toBe(GroupReducedOverConstant.OTHERS_OE_BET_TYPE);
+    });
   });
 
-  it('#initDefaultBetTypeNgSelectMixtureModel should return model with items empty', async () => {
-    const actual = service.initDefaultBetTypeNgSelectMixtureModel();
+  describe('initDefaultBetTypeNgSelectMixtureModel', () => {
+    it('should initialize default bet type ng select mixture model', () => {
+      const result = service.initDefaultBetTypeNgSelectMixtureModel();
 
-    expect(actual.items).toEqual([]);
+      expect(result).toBeDefined();
+      expect(result.items).toEqual([]);
+      expect(result.allItemsCheckedText).toBe('All');
+      expect(result.noneItemCheckedText).toBe('Select bet type');
+      expect(result.maxWidth).toBe('300px');
+      expect(result.numberItemsDisplay).toBe(1);
+    });
   });
 
-  it('#initDefaultPlayerSelection should return model with items empty', async () => {
-    const actual = service.initDefaultPlayerSelection();
+  describe('initBetTypeNgSelectMixtureModel', () => {
+    it('should initialize bet type ng select mixture model with items', () => {
+      const result = service.initBetTypeNgSelectMixtureModel(Helper.fakeReducedOverBetTypes);
 
-    expect(actual.items).toEqual([]);
+      expect(result).toBeDefined();
+      expect(result.items.length).toBe(3);
+    });
   });
 
-  it('#initBetTypeNgSelectMixtureModel should call #initDefaultBetTypeProperties', async () => {
-    service['initDefaultBetTypeProperties'] = jest.fn();
-    service.initBetTypeNgSelectMixtureModel(Helper.fakeReducedOverBetTypes);
+  describe('initDefaultPlayerSelection', () => {
+    it('should initialize default player selection', () => {
+      const result = service.initDefaultPlayerSelection();
 
-    expect(service['initDefaultBetTypeProperties']).toHaveBeenCalledTimes(1);
+      expect(result).toBeDefined();
+      expect(result.items).toEqual([]);
+      expect(result.checkAllCheckBoxText).toBe('All');
+      expect(result.allItemsCheckedText).toBe('All');
+      expect(result.noneItemCheckedText).toBe('Select player');
+      expect(result.maxWidth).toBe('200px');
+      expect(result.numberItemsDisplay).toBe(1);
+      expect(result.buttonHeight).toBe('29.5px');
+      expect(result.isDefaultSelectAll).toBe(false);
+    });
   });
 
-  it('#getPlayers should return ReducedOverBetType', async () => {
-    const commonService = new CommonService(null);
-    commonService.getOddsInfoSpecialBetTypes = jest.fn().mockReturnValue(Helper.fakePlayers);
-    const mockService = new FilterReducedOverService(null, commonService);
-    [1, null].forEach(async x => {
-      const actual = await mockService.getPlayers(x, '');
+  describe('getPlayers', () => {
+    it('should get players from common service', async () => {
+      commonService.getOddsInfoSpecialBetTypes = jest.fn().mockResolvedValue(Helper.fakePlayers);
 
-      expect(actual).toEqual(Helper.fakePlayers)
-      expect(commonService.getOddsInfoSpecialBetTypes).toHaveBeenCalled();
-    })
+      const result = await service.getPlayers(1, '1,2,3');
+
+      expect(result).toEqual(Helper.fakePlayers);
+      expect(commonService.getOddsInfoSpecialBetTypes).toHaveBeenCalledWith({
+        matchId: '1',
+        betTypes: '1,2,3'
+      });
+    });
   });
 
-  it('#renderPlayer should return ItemsSelect', async () => {
-    const actual = service.renderPlayer(Helper.fakePlayers);
+  describe('renderPlayer', () => {
+    it('should render player items correctly', () => {
+      const result = service.renderPlayer(Helper.fakePlayers);
 
-    expect(actual).toBeDefined();
+      expect(result.length).toBe(1);
+      expect(result[0].id).toBe(0);
+      expect(result[0].text).toBe('Player 1');
+    });
   });
 });

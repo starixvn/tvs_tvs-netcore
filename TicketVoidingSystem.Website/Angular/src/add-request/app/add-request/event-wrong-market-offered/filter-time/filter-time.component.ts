@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
@@ -9,7 +9,9 @@ import { FilterTimeItemComponent } from './filter-time-item/filter-time-item.com
 @Component({
   selector: 'filter-time',
   templateUrl: './filter-time.component.html',
-  styleUrls: ['./filter-time.component.scss']
+  styleUrls: ['./filter-time.component.scss'],
+  standalone: true,
+  imports: [FilterTimeItemComponent]
 })
 
 export class FilterTimeComponent {
@@ -19,9 +21,7 @@ export class FilterTimeComponent {
   @Output() refreshEvent = new EventEmitter();
   @ViewChildren('filterItem') filterItemComponents: QueryList<FilterTimeItemComponent>;
 
-  constructor(
-    private readonly eventWrongMarketOfferedService: EventWrongMarketOfferedService
-  ) { }
+  private readonly eventWrongMarketOfferedService = inject(EventWrongMarketOfferedService);
 
   changeFilter(): void {
     this.changeFilterEvent.emit();

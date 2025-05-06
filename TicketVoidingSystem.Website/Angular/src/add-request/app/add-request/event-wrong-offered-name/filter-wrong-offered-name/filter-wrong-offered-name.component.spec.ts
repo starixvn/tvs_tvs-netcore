@@ -1,129 +1,207 @@
-import { Licensee } from '../../../../../utility/components/licensees/licensees.model';
-import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
-import { Currency } from '../../../../../utility/models/currency.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { FilterWrongOfferedNameComponent } from './filter-wrong-offered-name.component';
+import { ValidationService } from '../services/validation.service';
+import { FilterWrongOfferedNameService } from '../services/filter-wrong-offered-name.service';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { AddRequestStore } from '../../add-request.store';
-import { WrongOfferedNameModel } from '../../models/event-wrong-offered-name.model';
+import { FilterModel } from '../../filter/filter.model';
 import { FilterWrongOfferedNameModel } from '../models/filter-wrong-offered-name.model';
-import { LogInfoWrongOfferedName } from '../models/log-info-wrong-offered-name.model';
+import { MatchModel } from '../../../../../utility/models/match.model';
+import { SimpleChange } from '@angular/core';
+import { GroupLicensee, GroupLicenseeModel, Licensee } from '../../../../../utility/components/licensees/licensees.model';
+import { Currency } from '../../../../../utility/models/currency.model';
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
 import { EventWrongOfferedNameService } from '../services/event-wrong-offered-name.service';
-import { FilterWrongOfferedNameService } from '../services/filter-wrong-offered-name.service';
-import { ValidationService } from '../services/validation.service';
-import { FilterWrongOfferedNameComponent } from './filter-wrong-offered-name.component';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
+
 class Helper {
-  static readonly fakeWrongOfferedNameModel: WrongOfferedNameModel = {
-    currencyIds: '1,2',
-    licenseeNames: 'licensee1,licensee2',
-    logInfoDetail: new LogInfoDetail(),
-    matchId: 1,
-    subIssueTypeId: 1
-  } as WrongOfferedNameModel;
-  static readonly fakeLogInfoWrongOfferedName: LogInfoWrongOfferedName = {
-    matchId: 1,
-    filterWrongOfferedName: new FilterWrongOfferedNameModel(),
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
-  } as LogInfoWrongOfferedName;
-  static readonly fakeFilterWrongOfferedName: FilterWrongOfferedNameModel = {
-    currencyIds: [],
-    licenseeNames: []
-  } as FilterWrongOfferedNameModel;
+  static readonly fakeFilterModel: FilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
+    isVoided: false,
+    isChangeSubTypeManual: true,
+    isAbnormal: false
+  } as FilterModel;
+
+  static readonly fakeFilterWrongOfferedNameModel = new FilterWrongOfferedNameModel();
+  
+  static readonly fakeMatchModel = new MatchModel();
+
+  static readonly fakeGroupLicensees: GroupLicensee[] = [
+    {
+      name: 'Test Licensee 1',
+      isChecked: false
+    },
+    {
+      name: 'Test Licensee 2',
+      isChecked: false
+    }
+  ] as unknown as GroupLicensee[];
+
+  static readonly fakeCurrencies: Currency[] = [
+    {
+      id: '1',
+      name: 'USD',
+      isChecked: false
+    },
+    {
+      id: '2',
+      name: 'EUR',
+      isChecked: false
+    }
+  ] as unknown as Currency[];
 }
 
 describe('FilterWrongOfferedNameComponent', () => {
-  let mockComponent: FilterWrongOfferedNameComponent;
-  let mockCommonService: CommonService;
-  let mockAddRequestStore: AddRequestStore;
-  let mockFilterService: FilterWrongOfferedNameService;
+  let component: FilterWrongOfferedNameComponent;
+  let fixture: ComponentFixture<FilterWrongOfferedNameComponent>;
   let validationService: ValidationService;
-  let eventWrongOfferedNameService: EventWrongOfferedNameService;
+  let filterService: FilterWrongOfferedNameService;
+  let commonService: CommonService;
+  let addRequestStore: AddRequestStore;
 
-  beforeEach(() => {
-    mockCommonService = new CommonService(null);
-    mockAddRequestStore = new AddRequestStore();
-    mockFilterService = new FilterWrongOfferedNameService(null);
-    validationService = new ValidationService(null);
-    eventWrongOfferedNameService = new EventWrongOfferedNameService(null, null, null, null, null);
-    mockAddRequestStore.changeBlockingUiStatus = jest.fn();
-    mockComponent = new FilterWrongOfferedNameComponent(null, mockCommonService, mockAddRequestStore,
-      mockFilterService, validationService, eventWrongOfferedNameService);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        FilterWrongOfferedNameService,
+        CommonService,
+        AddRequestStore,
+        CheckAddPermissionService,
+        EventWrongOfferedNameService,
+        AffectedTicketService
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(FilterWrongOfferedNameComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    filterService = fixture.debugElement.injector.get(FilterWrongOfferedNameService);
+    commonService = fixture.debugElement.injector.get(CommonService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    component = fixture.componentInstance;
   });
 
-  it('FilterWrongOfferedNameComponent init should match snapshot', async () => {
-    expect(mockComponent).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('ngOnInit should call #renderGroupLicensees and #renderCurrency', async () => {
-    mockComponent.renderCurrency = jest.fn();
-    mockComponent.renderGroupLicensees = jest.fn();
-
-    await mockComponent.ngOnInit();
-
-    expect(mockComponent.renderCurrency).toHaveBeenCalledTimes(1);
-    expect(mockComponent.renderGroupLicensees).toHaveBeenCalledTimes(1);
+  it('should initialize with default values', () => {
+    expect(component.model).toBeInstanceOf(FilterWrongOfferedNameModel);
+    expect(component.filterModel).toBeInstanceOf(FilterModel);
+    expect(component.groupLicenseeModel).toBeInstanceOf(GroupLicenseeModel);
+    expect(component.multipleSelectCurrency).toBeInstanceOf(MultipleSelection);
+    expect(component.tooltip).toBeInstanceOf(Tooltip);
   });
 
-  it('renderGroupLicensees should call #commonService.getGroupLicensees and #filterService.renderGroupLicensees', async () => {
-    const groupLicensees = [{ name: 'licensee1' }, { name: 'licensee2' }];
-    const groupLicenseeModel = { name: 'licensee1' };
-    mockCommonService.getGroupLicensees = jest.fn().mockReturnValue(groupLicensees);
-    mockFilterService.renderGroupLicensees = jest.fn().mockReturnValue(groupLicenseeModel);
+  it('should handle filter model changes', () => {
+    // Arrange
+    component.filterModel = Helper.fakeFilterModel;
+    component.originalGroupLicensees = Helper.fakeGroupLicensees;
+    component.originalCurrencies = Helper.fakeCurrencies;
+    filterService.autoCheckLicensees = jest.fn().mockReturnValue(new GroupLicenseeModel([], false));
+    filterService.autoCheckCurrency = jest.fn().mockReturnValue(new MultipleSelection());
+    component.changeFilterEvent.emit = jest.fn();
 
-    await mockComponent.renderGroupLicensees();
-
-    expect(mockComponent.originalGroupLicensees).toBe(groupLicensees);
-    expect(mockComponent.groupLicenseeModel).toBe(groupLicenseeModel);
-    expect(mockCommonService.getGroupLicensees).toHaveBeenCalledTimes(1);
-    expect(mockFilterService.renderGroupLicensees).toHaveBeenCalledTimes(1);
-  });
-
-  it('renderCurrency should call #commonService.getCurrencies and #filterService.renderCurrency', async () => {
-    const currencies = [{ currencyCode: 'currency1' }, { currencyCode: 'currency2' }] as Currency[];
-    const multipleSelectCurrency = { isCheckAll: true, items: [] } as MultipleSelection;
-    mockCommonService.getCurrencies = jest.fn().mockReturnValue(currencies);
-    mockFilterService.renderCurrency = jest.fn().mockReturnValue(multipleSelectCurrency);
-
-    await mockComponent.renderCurrency();
-
-    expect(mockComponent.originalCurrencies).toBe(currencies);
-    expect(mockComponent.multipleSelectCurrency).toBe(multipleSelectCurrency);
-    expect(mockCommonService.getCurrencies).toHaveBeenCalledTimes(1);
-    expect(mockFilterService.renderCurrency).toHaveBeenCalledTimes(1);
-  });
-
-  it('isValidity should return result from #filterService.isValidity', async () => {
-    [true, false].forEach((expected) => {
-      mockFilterService.isValidity = jest.fn().mockReturnValue(expected);
-
-      const actual = mockComponent.isValidity();
-
-      expect(actual).toBe(expected);
+    // Act
+    component.ngOnChanges({
+      filterModel: {
+        currentValue: Helper.fakeFilterModel,
+        previousValue: null,
+        firstChange: true
+      } as SimpleChange
     });
+
+    // Assert
+    expect(filterService.autoCheckLicensees).toHaveBeenCalled();
+    expect(filterService.autoCheckCurrency).toHaveBeenCalled();
+    expect(component.changeFilterEvent.emit).toHaveBeenCalled();
   });
 
-  it('updateSelectedCurrency should update currencyIds', async () => {
+  it('should initialize data on ngOnInit', async () => {
+    // Arrange
+    component.isEdit = false;
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+    commonService.getGroupLicensees = jest.fn().mockResolvedValue(Helper.fakeGroupLicensees);
+    commonService.getCurrencies = jest.fn().mockResolvedValue(Helper.fakeCurrencies);
+    filterService.renderGroupLicensees = jest.fn().mockReturnValue(new GroupLicenseeModel([], false));
+    filterService.renderCurrency = jest.fn().mockReturnValue(new MultipleSelection());
+
+    // Act
+    await component.ngOnInit();
+
+    // Assert
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+    expect(commonService.getGroupLicensees).toHaveBeenCalled();
+    expect(commonService.getCurrencies).toHaveBeenCalled();
+    expect(filterService.renderGroupLicensees).toHaveBeenCalled();
+    expect(filterService.renderCurrency).toHaveBeenCalled();
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+  });
+
+  it('should update selected currency', () => {
+    // Arrange
     const selectedItems = ['1', '2'];
 
-    mockComponent.updateSelectedCurrency(selectedItems);
+    // Act
+    component.updateSelectedCurrency(selectedItems);
 
-    expect(mockComponent.model.currencyIds).toBe(selectedItems);
+    // Assert
+    expect(component.model.currencyIds).toEqual(selectedItems);
   });
 
-  it('updateLicense should update currencyIds', async () => {
-    const licensees = [{ name: 'Licensee1' }, { name: 'Licensee2' }] as Licensee[];
+  it('should update license', () => {
+    // Arrange
+    const licensees = [
+      { name: 'Licensee 1' },
+      { name: 'Licensee 2' }
+    ] as Licensee[];
 
-    mockComponent.updateLicense(licensees);
+    // Act
+    component.updateLicense(licensees);
 
-    expect(mockComponent.model.licenseeNames[0]).toBe(licensees.map(x => x.name)[0]);
-    expect(mockComponent.model.licenseeNames[1]).toBe(licensees.map(x => x.name)[1]);
-    expect(mockComponent.model.licenseeNames.length).toBe(licensees.length);
+    // Assert
+    expect(component.model.licenseeNames).toEqual(['Licensee 1', 'Licensee 2']);
   });
 
-  it('changeFilter should emit changeFilterEvent', async () => {
-    mockComponent.changeFilterEvent.emit = jest.fn();
-    mockComponent.changeFilter();
+  it('should emit change filter event', () => {
+    // Arrange
+    component.changeFilterEvent.emit = jest.fn();
 
-    expect(mockComponent.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+    // Act
+    component.changeFilter();
+
+    // Assert
+    expect(component.changeFilterEvent.emit).toHaveBeenCalled();
+  });
+
+  it('should check if sub type is Chinese', () => {
+    // Arrange
+    component.filterModel = Helper.fakeFilterModel;
+    validationService.isSubTypeChinese = jest.fn().mockReturnValue(true);
+
+    // Act
+    const result = component.isSubTypeChinese();
+
+    // Assert
+    expect(validationService.isSubTypeChinese).toHaveBeenCalledWith(Helper.fakeFilterModel.subIssueTypeId);
+    expect(result).toBeTruthy();
+  });
+
+  it('should check validity', () => {
+    // Arrange
+    filterService.isValidity = jest.fn().mockReturnValue(true);
+
+    // Act
+    const result = component.isValidity();
+
+    // Assert
+    expect(filterService.isValidity).toHaveBeenCalledWith(component.model, component.tooltip);
+    expect(result).toBeTruthy();
   });
 });

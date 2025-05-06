@@ -5,16 +5,14 @@ import { DateTimeFormat, TvDetectionType } from '../../../../../utility/constant
 import { StaticService } from '../../../../../utility/services/static.service';
 import { TvDetectionModel } from './tv-detection.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class TvDetectionService {
   private readonly SERVICE_ACCEPT_TIME = 'service-accept-time';
   private readonly ACTUAL_TIME = 'actual-time';
   private readonly MINUTE_INPUT = 'minute-input';
   private readonly SECOND_INPUT = 'second-input';
 
-  isValidality(model: TvDetectionModel, tooltip: Tooltip): boolean {
+  isValid(model: TvDetectionModel, tooltip: Tooltip): boolean {
     return model.tvDetectionValue === TvDetectionType.NONE
       || (this.isValidityTime(model.serviceAcceptTime, this.SERVICE_ACCEPT_TIME, tooltip)
       && this.isValidityTime(model.actualTime, this.ACTUAL_TIME, tooltip)

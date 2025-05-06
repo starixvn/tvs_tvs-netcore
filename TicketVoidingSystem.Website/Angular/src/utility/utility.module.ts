@@ -61,19 +61,20 @@ import { HttpService } from './services/http.service';
     LicenseeAffectedListComponent,
     VoidReasonComponent,
     AutoRefreshComponent,
-    BetTypesComponent,
-    BetTypesVirtualSportComponent,
-    MatchDetailComponent,
-    NotificationComponent,
-    OnlyNumberDirective
-  ],
-  declarations: [
-    MessagesResultComponent,
-    NumbersOnlyDirective,
+    OnlyNumberDirective,
     BetIdsComponent,
     EventLeagueComponent,
     LogInfoMessageComponent,
     LicenseesComponent,
+    NumbersOnlyDirective
+    BetTypesComponent,
+    BetTypesVirtualSportComponent,
+    MatchDetailComponent,
+    NotificationComponent,   
+    OnlyNumberDirective
+  ],
+  declarations: [
+    MessagesResultComponent,
   ],
   exports: [
     BaseTicketsListComponent,

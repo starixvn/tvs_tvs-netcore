@@ -1,4 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { Subscription, timer } from 'rxjs';
 import { LABELS } from '../../../../utility/constants/labels';
@@ -9,16 +11,14 @@ import { StaticService } from '../../../../utility/services/static.service';
 import { AdvancedModeConstants } from '../../advanced-mode/advanced-mode.constants';
 import { OddsInfo } from '../../advanced-mode/advanced-mode/advanced-mode.model';
 import { AdvancedModeService } from '../../advanced-mode/advanced-mode/advanced-mode.service';
+import { MultipleSelectComponent } from '../../advanced-mode/multiple-selection/multiple-select.component';
+import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model';
+import { ControlsAllBetTypesComponent } from '../controls-all-bet-types/controls-all-bet-types.component';
 import { ControlsAllBetTypesLists } from '../controls-all-bet-types/controls-all-bet-types.model';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advanced-mode.model';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { TooltipComponent } from '../../tooltip/tooltip.component';
-import { MultipleSelectComponent } from '../../advanced-mode/multiple-selection/multiple-select.component';
-import { ControlsAllBetTypesComponent } from '../controls-all-bet-types/controls-all-bet-types.component';
 
 @Component({
   standalone: true,
@@ -45,10 +45,10 @@ export class AdvancedModeComponent {
   controlsAllBetTypesLists = ControlsAllBetTypesLists.MultipleSelectionList;
   private delayForSearchSubscription: Subscription;
   private readonly observableTimer = timer(500);
+  private readonly element = inject(ElementRef);
+  private readonly commonService = inject(CommonService);
+  private readonly service = inject(AdvancedModeService);
   
-  commonService = inject(CommonService);
-  service = inject(AdvancedModeService);
-  element = inject(ElementRef);
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -71,7 +71,7 @@ export class AdvancedModeComponent {
       this.isLoadingData.emit(false);
     }
   }
-  
+
   public async getBetTeamAndRenderValue(matchId: number): Promise<void> {
     await this.getBetTeam();
     this.baseBetTeams.forEach(x => {
@@ -79,7 +79,6 @@ export class AdvancedModeComponent {
     })
     await this.getSpecialBetTeamCricket(matchId);
     this.renderBetTeams(this.baseBetTeams);
-    this.isLoadingData.emit(false);
   }
 
   expandAndValidate() {
@@ -321,7 +320,7 @@ export class AdvancedModeComponent {
   }
 
   private showTooltipWhenCollapsed() {
-      this.tooltip.display('advanced-mode-header-label', TEXT.THERE_ARE_INVALID_FIELDS);
+    this.tooltip.display('advanced-mode-header-label', TEXT.THERE_ARE_INVALID_FIELDS);
   }
 
   private isValidInputDecimalValue(isMultiple: boolean, value: string): boolean {
@@ -334,13 +333,13 @@ export class AdvancedModeComponent {
     return selection.isMultiple
       ? selection.multiSelection.multipleSelect.getValueItems() !== ''
       : selection.value !== '';
-  } 
+  }
 
-  public updateControlsAllBetTypes(){
-    if(this.advancedModeAddRequestModel?.selectedAllBetTypes.length > 0){
+  public updateControlsAllBetTypes() {
+    if (this.advancedModeAddRequestModel?.selectedAllBetTypes.length > 0) {
       this.advancedModeAddRequestModel.selectedAllBetTypes.forEach(x => {
         const selectedAllBetTypes = this.controlsAllBetTypesLists.find(item => item.type === x.name);
-        if(selectedAllBetTypes){
+        if (selectedAllBetTypes) {
           selectedAllBetTypes.items.updateItemChecked(x.value.split(','));
           selectedAllBetTypes.isShow = true;
         }
@@ -353,7 +352,7 @@ export class AdvancedModeComponent {
     }
   }
 
-  private updateShowControlsAllBetTypes(){
+  private updateShowControlsAllBetTypes() {
     this.controlsAllBetTypesLists.forEach(x => {
       x.isShow = this.checkShowAllBetType(x.type);
     })
@@ -362,22 +361,22 @@ export class AdvancedModeComponent {
   public changeByControlAllBetType(event: { itemList: string[], type: string }) {
     this.betTeams.forEach(betTeam => {
       const selection = betTeam.selections.find(x => x.name === event.type);
-      if(selection) {
+      if (selection) {
         this.updateBetTeam(betTeam, event.type, event.itemList)
-      } 
+      }
     });
   }
 
-  private updateBetTeam(betTeam: BetTeamAddRequest, type: string, itemList: string[]){
+  private updateBetTeam(betTeam: BetTeamAddRequest, type: string, itemList: string[]) {
     betTeam.selections.find(x => x.name === type).multiSelection.updateItemChecked(itemList);
   }
 
-  private checkShowAllBetType(type: string): boolean{
+  private checkShowAllBetType(type: string): boolean {
     return this.betTeams.filter(betTeam => betTeam.isShow && betTeam.selections.find(y => y.name === type)).length > 0;
   }
 
-  public getAllBetTypesSelection(): AllBetTypesSelection[]{
-    return this.controlsAllBetTypesLists.filter(x => x.isShow).map(y => { return {name: y.type, value: y.items.getValueItems()} as AllBetTypesSelection });;
+  public getAllBetTypesSelection(): AllBetTypesSelection[] {
+    return this.controlsAllBetTypesLists.filter(x => x.isShow).map(y => { return { name: y.type, value: y.items.getValueItems() } as AllBetTypesSelection });;
   }
 
   public resetControlsAllBetTypes() {

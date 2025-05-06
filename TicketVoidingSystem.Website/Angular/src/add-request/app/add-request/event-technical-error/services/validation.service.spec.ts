@@ -1,107 +1,263 @@
-import { AdvancedModeAddRequestComponent } from '../../../../..//utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
+import { TestBed } from '@angular/core/testing';
+import { ValidationService } from './validation.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { FilterModel } from '../../filter/filter.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
 import { FilterTimeTechnicalErrorComponent } from '../filter-time-technical-error/filter-time-technical-error.component';
+import { AdvancedModeAddRequestComponent } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LogInfoTechnicalError } from '../models/log-info-technical-error.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
-import { ValidationService } from './validation.service';
 
 describe('ValidationService', () => {
   let service: ValidationService;
 
   beforeEach(() => {
-    service = new ValidationService();
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [ValidationService]
+    });
+
+    service = TestBed.inject(ValidationService);
   });
 
-  it('#validateCommonData should return false when match invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null, null);
-    leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => false);
-    const actual = service.validateCommonData(leagueEvent, null, null);
-
-    expect(actual).toBeFalsy();
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#validateCommonData should return false when filterTechnicalErrorComponent invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null, null);
-    leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
-    const filterTime = new FilterTimeTechnicalErrorComponent(null);
-    filterTime.isValidity = jest.fn().mockReturnValue(false);
+  describe('validateCommonData', () => {
+    it('should return false when match ID is invalid', () => {
+      // Arrange
+      const mockEventLeague = {
+        isMatchIdValid: () => false
+      } as unknown as EventLeagueComponent;
 
-    const actual = service.validateCommonData(leagueEvent, filterTime, null);
+      const mockFilterTime = {
+        isValidity: () => true
+      } as unknown as FilterTimeTechnicalErrorComponent;
 
-    expect(actual).toBeFalsy();
+      // Act
+      const result = service.validateCommonData(mockEventLeague, mockFilterTime);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
+
+    it('should return false when filter time is invalid', () => {
+      // Arrange
+      const mockEventLeague = {
+        isMatchIdValid: () => true
+      } as unknown as EventLeagueComponent;
+
+      const mockFilterTime = {
+        isValidity: () => false
+      } as unknown as FilterTimeTechnicalErrorComponent;
+
+      // Act
+      const result = service.validateCommonData(mockEventLeague, mockFilterTime);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
+
+    it('should return false when advanced mode is invalid', () => {
+      // Arrange
+      const mockEventLeague = {
+        isMatchIdValid: () => true
+      } as unknown as EventLeagueComponent;
+
+      const mockFilterTime = {
+        isValidity: () => true
+      } as unknown as FilterTimeTechnicalErrorComponent;
+
+      const mockAdvancedMode = {
+        isValidity: () => false
+      } as unknown as AdvancedModeAddRequestComponent;
+
+      // Act
+      const result = service.validateCommonData(mockEventLeague, mockFilterTime, mockAdvancedMode);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
+
+    it('should return true when all validations pass', () => {
+      // Arrange
+      const mockEventLeague = {
+        isMatchIdValid: () => true
+      } as unknown as EventLeagueComponent;
+
+      const mockFilterTime = {
+        isValidity: () => true
+      } as unknown as FilterTimeTechnicalErrorComponent;
+
+      const mockAdvancedMode = {
+        isValidity: () => true
+      } as unknown as AdvancedModeAddRequestComponent;
+
+      // Act
+      const result = service.validateCommonData(mockEventLeague, mockFilterTime, mockAdvancedMode);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
   });
 
-  it('#validateCommonData should return false when filterTechnicalErrorComponent invalid', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null, null);
-    leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
-    const filterTime = new FilterTimeTechnicalErrorComponent(null);
-    filterTime.isValidity = jest.fn().mockReturnValue(true);
-    const advancedMode = new AdvancedModeAddRequestComponent();
-    advancedMode.isValidity = jest.fn().mockReturnValue(false);
-    const actual = service.validateCommonData(leagueEvent, filterTime, advancedMode);
+  describe('isValidLogInfoEvent', () => {
+    it('should return false when there are error messages', () => {
+      // Arrange
+      const mockLogInfo: LogInfoTechnicalError = {
+        messageValidationLogInfo: [
+          { isError: true },
+          { isError: false }
+        ]
+      } as LogInfoTechnicalError;
 
-    expect(actual).toBeFalsy();
+      // Act
+      const result = service.isValidLogInfoEvent(mockLogInfo);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
+
+    it('should return true when there are no error messages', () => {
+      // Arrange
+      const mockLogInfo: LogInfoTechnicalError = {
+        messageValidationLogInfo: [
+          { isError: false },
+          { isError: false }
+        ]
+      } as LogInfoTechnicalError;
+
+      // Act
+      const result = service.isValidLogInfoEvent(mockLogInfo);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
   });
 
-  it('#validateCommonData should return true', async () => {
-    const leagueEvent = new EventLeagueComponent(null, null, null);
-    leagueEvent.isMatchIdValid = jest.fn().mockImplementation(() => true);
-    const filterTime = new FilterTimeTechnicalErrorComponent(null);
-    filterTime.isValidity = jest.fn().mockReturnValue(true);
-    const advancedMode = new AdvancedModeAddRequestComponent();
-    advancedMode.isValidity = jest.fn().mockReturnValue(true);
-    const actual = service.validateCommonData(leagueEvent, filterTime, advancedMode);
+  describe('checkCanShowConfirmationTechnicalError', () => {
+    beforeEach(() => {
+      // Mock document.getElementById
+      document.getElementById = jest.fn().mockReturnValue({
+        getAttribute: () => '2'
+      });
+    });
 
-    expect(actual).toBeTruthy();
-  });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
 
-  it('#checkCanShowConfirmationWrongOdds should return false', async () => {
-    const element = document.createElement('body');
-    element.setAttribute("user-id", "2");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.logInfoEvent = new LogInfoTechnicalError();
-    saveRequestArg.logInfoEvent.messageValidationLogInfo = null;
-    saveRequestArg.isEdit = true;
-    saveRequestArg.userId = 2;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    saveRequestArg.actionIdOfFirstTimeAccess = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    const actual = service.checkCanShowConfirmationTechnicalError(saveRequestArg);
+    it('should return true when has settled tickets', () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        logInfoEvent: {
+          logInfoDetail: {
+            settleCount: 1
+          }
+        },
+        isEdit: false,
+        filter: {
+          action: TVSRequestActionType.TAKE_NOTE_ID.toString()
+        }
+      } as SaveRequestArg;
 
-    expect(actual).toBeFalsy();
-  });
+      // Act
+      const result = service.checkCanShowConfirmationTechnicalError(mockArg);
 
-  it('#checkCanShowConfirmationWrongOdds should return true', async () => {
-    const errorMsg = new ValidationMessage();
-    errorMsg.isError = false;
+      // Assert
+      expect(result).toBeTruthy();
+    });
 
-    const element = document.createElement('body');
-    element.setAttribute("user-id", "2");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.logInfoEvent = new LogInfoTechnicalError();
-    saveRequestArg.logInfoEvent.messageValidationLogInfo = [errorMsg];
-    saveRequestArg.isEdit = true;
-    saveRequestArg.userId = 2;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    saveRequestArg.actionIdOfFirstTimeAccess = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    const actual = service.checkCanShowConfirmationTechnicalError(saveRequestArg);
+    it('should return true when has warning tickets', () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        logInfoEvent: {
+          messageValidationLogInfo: [
+            { isError: false }
+          ]
+        },
+        isEdit: false,
+        filter: {
+          action: TVSRequestActionType.TAKE_NOTE_ID.toString()
+        }
+      } as SaveRequestArg;
 
-    expect(actual).toBeTruthy();
-  });
+      // Act
+      const result = service.checkCanShowConfirmationTechnicalError(mockArg);
 
-  it('#isValidLogInfoEvent should return false', async () => {
-    const errorMsg = new ValidationMessage();
-    errorMsg.isError = true;
-    const logInfoEvent = new LogInfoTechnicalError();
-    logInfoEvent.messageValidationLogInfo = [errorMsg];
-    const actual = service.isValidLogInfoEvent(logInfoEvent);
+      // Assert
+      expect(result).toBeTruthy();
+    });
 
-    expect(actual).toBeFalsy();
+    it('should return true when editing by another user', () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        isEdit: true,
+        userId: 1,
+        filter: {
+          action: TVSRequestActionType.TAKE_NOTE_ID.toString()
+        },
+        logInfoEvent: {
+          logInfoDetail: {
+            settleCount: 0
+          },
+          messageValidationLogInfo: []
+        }
+      } as SaveRequestArg;
+
+      // Act
+      const result = service.checkCanShowConfirmationTechnicalError(mockArg);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should return true when has warning taken note', () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        isEdit: true,
+        filter: {
+          action: TVSRequestActionType.TAKE_NOTE_ID.toString()
+        },
+        actionIdOfFirstTimeAccess: 'different_action',
+        logInfoEvent: {
+          logInfoDetail: {
+            settleCount: 0
+          },
+          messageValidationLogInfo: []
+        }
+      } as SaveRequestArg;
+
+      // Act
+      const result = service.checkCanShowConfirmationTechnicalError(mockArg);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false when no warning conditions are met', () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        isEdit: false,
+        filter: {
+          action: TVSRequestActionType.TAKE_NOTE_ID.toString()
+        },
+        logInfoEvent: {
+          logInfoDetail: {
+            settleCount: 0
+          },
+          messageValidationLogInfo: [
+            { isError: true }
+          ]
+        }
+      } as SaveRequestArg;
+
+      // Act
+      const result = service.checkCanShowConfirmationTechnicalError(mockArg);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
   });
 });

@@ -1,292 +1,220 @@
-import { QueryList } from '@angular/core';
-import * as _ from 'lodash';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { AddRequestStore } from '../../add-request.store';
-import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
-import { FilterTimeAreaComponent } from '../../event-red-card/filter-time-area/filter-time-area.component';
-import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
-import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { FilterModel } from '../../filter/filter.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
+import { TestBed } from '@angular/core/testing';
 import { ValidationService } from './validation.service';
-
-class Helper {
-  static readonly fakeValidationMessageError: ValidationMessage = {
-    isError: true,
-    reason: '',
-    isShowPopup: true,
-    transIds: '',
-    requestId: 1,
-  };
-  static readonly fakeValidationMessageNotError: ValidationMessage = {
-    isError: false,
-    reason: '',
-    isShowPopup: true,
-    transIds: '',
-    requestId: 1,
-  };
-  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
-    matchId: 1111,
-    isMainMatch: true,
-    eventName: '',
-    leagueName: '',
-    subIssueTypeId: 7,
-    voidTimeArea: null,
-    logInfoDetail: null,
-    messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
-    sportType: 0
-  } as LogInfoRelatedEvent;
-}
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { FilterTimeAreaComponent } from '../../event-red-card/filter-time-area/filter-time-area.component';
+import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
+import { AddRequestStore } from '../../add-request.store';
+import { FilterModel } from '../../filter/filter.model';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { LABELS } from '../../../../../utility/constants/labels';
+import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
+import { QueryList } from '@angular/core';
 
 describe('ValidationService', () => {
-  let validationService: ValidationService;
-  let mockAddRequestStore: AddRequestStore;
+  let service: ValidationService;
+  let eventLeagueComponent: EventLeagueComponent;
+  let filterTimeAreaComponent: FilterTimeAreaComponent;
+  let tvDetectionComponent: TvDetectionComponent;
+  let addRequestStore: AddRequestStore;
 
   beforeEach(() => {
-    validationService = new ValidationService();
-    mockAddRequestStore = new AddRequestStore() as jest.Mocked<AddRequestStore>;
-    mockAddRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
+    TestBed.configureTestingModule({
+      providers: [
+        ValidationService,
+        {
+          provide: EventLeagueComponent,
+          useValue: { isMatchIdValid: jest.fn().mockReturnValue(true) }
+        },
+        {
+          provide: FilterTimeAreaComponent,
+          useValue: { isValid: jest.fn().mockReturnValue(true) }
+        },
+        {
+          provide: TvDetectionComponent,
+          useValue: { isValid: jest.fn().mockReturnValue(true) }
+        },
+        {
+          provide: AddRequestStore,
+          useValue: { checkValidSubIssueTypeInFilter: jest.fn() }
+        }
+      ]
+    });
+
+    service = TestBed.inject(ValidationService);
+    eventLeagueComponent = TestBed.inject(EventLeagueComponent);
+    filterTimeAreaComponent = TestBed.inject(FilterTimeAreaComponent);
+    tvDetectionComponent = TestBed.inject(TvDetectionComponent);
+    addRequestStore = TestBed.inject(AddRequestStore);
   });
 
-  it('#isHasAllowanceTime should return true when has allowance time and is not zero', async () => {
-    // Arrange
-    const logInfoRedCard = new LogInfoRelatedEvent();
-    logInfoRedCard.voidTimeArea.aaTime = 1;
-    logInfoRedCard.voidTimeArea.paTime = 1;
-    logInfoRedCard.voidTimeArea.saTime = 1;
+  describe('isHasAllowanceTime', () => {
+    it('should return true when all time values are 0', () => {
+      const event: LogInfoRelatedEvent = {
+        voidTimeArea: { paTime: 0, aaTime: 0, saTime: 0 }
+      } as LogInfoRelatedEvent;
 
-    // Action
-    const result = validationService.isHasAllowanceTime(logInfoRedCard);
+      expect(service.isHasAllowanceTime(event)).toBe(true);
+    });
 
-    // Assert
-    expect(result).toBeTruthy();
+    it('should return true when any time value is set', () => {
+      const event: LogInfoRelatedEvent = {
+        voidTimeArea: { paTime: 5, aaTime: 0, saTime: 0 }
+      } as LogInfoRelatedEvent;
+
+      expect(service.isHasAllowanceTime(event)).toBe(true);
+    });
+
+    it('should return false when all time values are null', () => {
+      const event: LogInfoRelatedEvent = {
+        voidTimeArea: { paTime: null, aaTime: null, saTime: null }
+      } as LogInfoRelatedEvent;
+
+      expect(service.isHasAllowanceTime(event)).toBe(false);
+    });
   });
 
-  it('#isHasAllowanceTime should return true when allowance time and is zero', async () => {
-    // Arrange
-    const logInfoRedCard = new LogInfoRelatedEvent();
-    logInfoRedCard.voidTimeArea.aaTime = 0;
-    logInfoRedCard.voidTimeArea.paTime = 0;
-    logInfoRedCard.voidTimeArea.saTime = 0;
+  describe('validateCommonData', () => {
+    it('should return true when all validations pass', () => {
+      const filter = {
+        subIssueTypeId: '1',
+        action: '',
+        isTest: false,
+        isAbnormal: false,
+        isVoided: false,
+        actions: []
+      } as FilterModel;
+      const logInfoComponents = {
+        toArray: () => [{
+          filterTimeWithAllowanceComponent: { isValid: () => true }
+        }]
+      } as QueryList<LogInfoRelatedEventComponent>;
+      const result = service.validateCommonData(
+        filter,
+        eventLeagueComponent,
+        filterTimeAreaComponent,
+        logInfoComponents,
+        addRequestStore,
+        tvDetectionComponent
+      );
 
-    // Action
-    const result = validationService.isHasAllowanceTime(logInfoRedCard);
+      expect(result).toBe(true);
+    });
 
-    // Assert
-    expect(result).toBeTruthy();
+    it('should return false when subIssueTypeId is missing', () => {
+      const filter = {
+        subIssueTypeId: undefined,
+        action: '',
+        isTest: false,
+        isAbnormal: false,
+        isVoided: false,
+        actions: []
+      } as FilterModel;
+      const logInfoComponents = {
+        toArray: () => [{
+          filterTimeWithAllowanceComponent: { isValid: () => true }
+        }]
+      } as QueryList<LogInfoRelatedEventComponent>;
+
+      const result = service.validateCommonData(
+        filter,
+        eventLeagueComponent,
+        filterTimeAreaComponent,
+        logInfoComponents,
+        addRequestStore,
+        tvDetectionComponent
+      );
+
+      expect(!result).toBe(true);
+    });
   });
 
-  it('#isHasAllowanceTime should return true when allowance time is null', async () => {
-    // Arrange
-    const logInfoRedCard = new LogInfoRelatedEvent();
-    logInfoRedCard.voidTimeArea.aaTime = null;
-    logInfoRedCard.voidTimeArea.paTime = null;
-    logInfoRedCard.voidTimeArea.saTime = null;
+  describe('isAllEventsValid', () => {
+    it('should return true when all events are valid', () => {
+      const events: LogInfoRelatedEvent[] = [
+        {
+          isMainMatch: true,
+          messageValidationLogInfo: [{ isError: false }]
+        } as LogInfoRelatedEvent,
+        {
+          isMainMatch: false,
+          messageValidationLogInfo: [{ isError: false }]
+        } as LogInfoRelatedEvent
+      ];
 
-    // Action
-    const result = validationService.isHasAllowanceTime(logInfoRedCard);
+      expect(service.isAllEventsValid(events)).toBe(true);
+    });
 
-    // Assert
-    expect(result).toBe(false);
+    it('should return false when main match has errors', () => {
+      const events: LogInfoRelatedEvent[] = [
+        {
+          isMainMatch: true,
+          messageValidationLogInfo: [{ isError: true }]
+        } as LogInfoRelatedEvent
+      ];
+
+      expect(service.isAllEventsValid(events)).toBe(false);
+    });
   });
 
-  it('#validateCommonData should return undefined when has not subIssueTypeId', async () => {
-    // Arrange
-    const filterModel = new FilterModel();
-    filterModel.subIssueTypeId = undefined;
-    const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
+  describe('isValidInputRelatedEvent', () => {
+    it('should return false when input matchId equals main match', () => {
+      const allEvents: LogInfoRelatedEvent[] = [
+        { isMainMatch: true, matchId: 1 } as LogInfoRelatedEvent
+      ];
+      const tooltip = { display: jest.fn() } as unknown as Tooltip;
+      const result = service.isValidInputRelatedEvent(1, 'test-class', allEvents, tooltip);
 
-    // Action
-    const result = validationService.validateCommonData(filterModel, null, null, null, mockAddRequestStore, mockTvDetection);
+      expect(result).toBe(false);
+      expect(tooltip.display).toHaveBeenCalledWith('test-class', LABELS.INVALID_MATCHID);
+    });
 
-    // Assert
-    expect(result).toBeUndefined();
+    it('should return false when matchId exists in non-main matches', () => {
+      const allEvents: LogInfoRelatedEvent[] = [
+        { isMainMatch: true, matchId: 1 } as LogInfoRelatedEvent,
+        { isMainMatch: false, matchId: 2 } as LogInfoRelatedEvent
+      ];
+      const tooltip = { display: jest.fn() } as unknown as Tooltip;
+      const result = service.isValidInputRelatedEvent(2, 'test-class', allEvents, tooltip);
+
+      expect(result).toBe(false);
+      expect(tooltip.display).toHaveBeenCalledWith('test-class', LABELS.MATCH_ID_EXISTS_IN_LIST);
+    });
   });
 
-  it('#validateCommonData should return false when #eventLeagueComponent.isMatchIdValid return false', async () => {
-    // Arrange
-    const filterModel = new FilterModel();
-    filterModel.subIssueTypeId = '1';
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    const spyIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => false);
-    const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
+  describe('isEditingByAnotherUser', () => {
+    it('should return true when editing by different user', () => {
+      expect(service.isEditingByAnotherUser(true, 1, 2)).toBe(true);
+    });
 
-    // Action
-    const result = validationService.validateCommonData(filterModel, eventLeagueComponent, null, null, mockAddRequestStore, mockTvDetection);
+    it('should return false when editing by same user', () => {
+      expect(service.isEditingByAnotherUser(true, 1, 1)).toBe(false);
+    });
 
-    // Assert
-    expect(spyIsMatchIdValid).toHaveBeenCalledTimes(1);
-    expect(result).toBe(false);
+    it('should return false when not editing', () => {
+      expect(service.isEditingByAnotherUser(false, 1, 2)).toBe(false);
+    });
   });
 
-  it('#validateCommonData should return false when #filterTimeAreaComponent.isValid return false', async () => {
-    // Arrange
-    const filterModel = new FilterModel();
-    filterModel.subIssueTypeId = '1';
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    const spyeventLeagueComponentIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
-    const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
-    const spyFilterTimeAreaComponentIsValid = jest.spyOn(filterTimeAreaComponent, 'isValid').mockImplementation(() => false);
-    const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
+  describe('isHasWarningRangeTime', () => {
+    it('should return false when inputs are null or empty', () => {
+      expect(service.isHasWarningRangeTime(null, null)).toBe(false);
+      expect(service.isHasWarningRangeTime('', null)).toBe(false);
+      expect(service.isHasWarningRangeTime(null, new Date())).toBe(false);
+    });
 
-    // Action
-    const result = validationService.validateCommonData(filterModel, eventLeagueComponent, filterTimeAreaComponent, null, mockAddRequestStore, mockTvDetection);
+    it('should return true when time difference is more than 1 minute', () => {
+      const fromDateTime = '2024-01-01 10:00:00';
+      const toDateTime = new Date('2024-01-01 10:02:00');
 
-    // Assert
-    expect(spyeventLeagueComponentIsMatchIdValid).toHaveBeenCalledTimes(1);
-    expect(spyFilterTimeAreaComponentIsValid).toHaveBeenCalledTimes(1);
-    expect(result).toBe(false);
-  });
+      expect(service.isHasWarningRangeTime(fromDateTime, toDateTime)).toBe(true);
+    });
 
-  it('#validateCommonData should return false when #filterTimeWithAllowanceComponent.isValid() return false', async () => {
-    // Arrange
-    const filterModel = new FilterModel();
-    filterModel.subIssueTypeId = '1';
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    const spyeventLeagueComponentIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
-    const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
-    const spyFilterTimeAreaComponentIsValid = jest.spyOn(filterTimeAreaComponent, 'isValid').mockImplementation(() => true);
-    const LogInfoRelatedEventComponent = new LogInfoRelatedEventComponent(null, null);
-    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
-    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent.isValid = jest.fn();
-    LogInfoRelatedEventComponent.showValidationDetail = jest.fn();
-    const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
-    logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
-    const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
+    it('should return false when time difference is less than 1 minute', () => {
+      const fromDateTime = '2024-01-01 10:00:00';
+      const toDateTime = new Date('2024-01-01 10:00:30');
 
-    // Action
-    const result = validationService.validateCommonData(filterModel, eventLeagueComponent, filterTimeAreaComponent, logInfoComponents, mockAddRequestStore, mockTvDetection);
-
-    // Assert
-    expect(spyeventLeagueComponentIsMatchIdValid).toHaveBeenCalledTimes(1);
-    expect(spyFilterTimeAreaComponentIsValid).toHaveBeenCalledTimes(1);
-    expect(result).toBe(false);
-  });
-
-  it('#validateCommonData should return true', async () => {
-    // Arrange
-    const filterModel = new FilterModel();
-    filterModel.subIssueTypeId = '1';
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    const spyeventLeagueComponentIsMatchIdValid = jest.spyOn(eventLeagueComponent, 'isMatchIdValid').mockImplementation(() => true);
-    const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
-    const spyFilterTimeAreaComponentIsValid = jest.spyOn(filterTimeAreaComponent, 'isValid').mockImplementation(() => true);
-    const LogInfoRelatedEventComponent = new LogInfoRelatedEventComponent(null, null);
-    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
-    LogInfoRelatedEventComponent.filterTimeWithAllowanceComponent.isValid = jest.fn().mockImplementation(() => true);
-    LogInfoRelatedEventComponent.showValidationDetail = jest.fn();
-    const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
-    logInfoComponents.reset([...logInfoComponents.toArray(), LogInfoRelatedEventComponent]);
-    const mockTvDetection = new TvDetectionComponent(null, null);
-    mockTvDetection.isValidality = jest.fn().mockReturnValue(true);
-
-    // Action
-    const result = validationService.validateCommonData(filterModel, eventLeagueComponent, filterTimeAreaComponent, logInfoComponents, mockAddRequestStore, mockTvDetection);
-
-    // Assert
-    expect(spyeventLeagueComponentIsMatchIdValid).toHaveBeenCalledTimes(1);
-    expect(spyFilterTimeAreaComponentIsValid).toHaveBeenCalledTimes(1);
-    expect(result).toBeTruthy();
-  });
-
-  it('#isEventMatchValid should return false when mainMatch has error', async () => {
-    // Arrange
-    const event = Helper.fakeLogInfoRedCard;
-    event.isMainMatch = true;
-    event.messageValidationLogInfo = [Helper.fakeValidationMessageError];
-
-    // Action
-    const result = validationService.isAllEventsValid([event]);
-
-    // Assert
-    expect(result).toBe(false);
-  });
-
-  it('#isEventMatchValid should return false when is not mainMatch and has error NO_VALID_TICKETS_IN_RANGE', async () => {
-    // Arrange
-    const event = Helper.fakeLogInfoRedCard;
-    event.isMainMatch = false;
-    event.messageValidationLogInfo = [Helper.fakeValidationMessageError];
-    event.messageValidationLogInfo[0].reason = '';
-
-    // Action
-    const result = validationService.isAllEventsValid([event]);
-
-    // Assert
-    expect(result).toBe(false);
-  });
-
-  it('#isEventMatchValid should return true', async () => {
-    // Arrange
-    const event = Helper.fakeLogInfoRedCard;
-    event.isMainMatch = false;
-    event.messageValidationLogInfo = [Helper.fakeValidationMessageNotError];
-
-    // Action
-    const result = validationService.isAllEventsValid([event]);
-
-    // Assert
-    expect(result).toBeTruthy();
-  });
-
-  it('#isValidInputRelatedEvent should return false', async () => {
-    // Arrange
-    const event = _.cloneDeep(Helper.fakeLogInfoRedCard);
-    event.isMainMatch = true;
-    const toolTip = new Tooltip();
-    toolTip.display = jest.fn();
-
-    // Action
-    const result = validationService.isValidInputRelatedEvent(1111, '', [event], toolTip);
-
-    // Assert
-    expect(result).toBe(false);
-    expect(toolTip.display).toHaveBeenCalledTimes(1);
-  });
-
-  it('#isValidInputRelatedEvent should return false', async () => {
-    // Arrange
-    const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
-    mainEvent.isMainMatch = true;
-    const event = new LogInfoRelatedEvent();
-    event.matchId = 999;
-    const events = [];
-    events.push(event);
-    events.push(mainEvent);
-    const toolTip = new Tooltip();
-    toolTip.display = jest.fn();
-
-    // Action
-    const result = validationService.isValidInputRelatedEvent(999, '', events, toolTip);
-
-    // Assert
-    expect(result).toBe(false);
-    expect(toolTip.display).toHaveBeenCalledTimes(1);
-  });
-
-  it('#isValidInputRelatedEvent should return true', async () => {
-    // Arrange
-    const event = _.cloneDeep(Helper.fakeLogInfoRedCard);
-    event.isMainMatch = true;
-    const toolTip = new Tooltip();
-    toolTip.display = jest.fn();
-
-    // Action
-    const result = validationService.isValidInputRelatedEvent(9999, '', [event], toolTip);
-
-    // Assert
-    expect(result).toBe(true);
-  });
-
-  it('#isEditingByAnotherUser should return true', async () => {
-    const result = validationService.isEditingByAnotherUser(true, 1, 2);
-
-    expect(result).toBe(true);
+      expect(service.isHasWarningRangeTime(fromDateTime, toDateTime)).toBe(false);
+    });
   });
 });

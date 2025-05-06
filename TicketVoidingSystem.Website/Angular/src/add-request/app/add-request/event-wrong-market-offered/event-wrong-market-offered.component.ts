@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { AdvancedModeAddRequestModel } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
@@ -8,12 +10,14 @@ import { EventLeagueComponent } from '../../../../utility/components/event-leagu
 import { ModeType } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { WrongMarketOfferedModel } from '../models/event-wrong-market-offered.model';
 import { OthersModel } from '../others/others.model';
 import { FilterTimeComponent } from './filter-time/filter-time.component';
+import { LogInfoWrongMarketOfferedComponent } from './log-info-wrong-market-offered/log-info-wrong-market-offered.component';
 import { FilterWrongMarketOfferedModel } from './models/filter-wrong-market-offered.model';
 import { LogInfoWrongMarketOffered } from './models/log-info-wrong-market-offered.model';
 import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
@@ -26,7 +30,11 @@ import { ValidationService } from './services/validation.service';
 @Component({
   selector: 'event-wrong-market-offered',
   templateUrl: './event-wrong-market-offered.component.html',
-  styleUrls: ['./event-wrong-market-offered.component.scss']
+  styleUrls: ['./event-wrong-market-offered.component.scss'],
+  standalone: true,
+  imports: [EventLeagueComponent, FilterTimeComponent, AdvancedModeAddRequestComponent, FormsModule,
+    LogInfoWrongMarketOfferedComponent, ConfirmAddRequestComponent],
+  providers: [LogInfoService, SaveRequestService, ValidationService, EventWrongMarketOfferedService]
 })
 export class EventWrongMarketOfferedComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -42,19 +50,18 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   @ViewChild('eventLeague') eventLeague: EventLeagueComponent;
   @ViewChild('advancedMode') advancedMode: AdvancedModeAddRequestComponent;
   @ViewChild('filterTime') filterTimeComponent: FilterTimeComponent;
-  constructor(
-    private readonly logInfoService: LogInfoService,
-    private readonly commonService: CommonService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly validationService: ValidationService,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly eventWrongMarketOfferedService: EventWrongMarketOfferedService,
-  ) { }
+
   logInfoEvent = new LogInfoWrongMarketOffered();
   groupBetTypesModel = new GroupBetTypesAddRequestModel([], false, '', false);
   primitivePropertyEvent = new PrimitivePropertyEvent();
   advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   confirmAddRequest = new ConfirmAddRequestModel();
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly commonService = inject(CommonService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly validationService = inject(ValidationService);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly eventWrongMarketOfferedService = inject(EventWrongMarketOfferedService);
 
   async ngOnInit(): Promise<void> {
     if (this.isEdit) {

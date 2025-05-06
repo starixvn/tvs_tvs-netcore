@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
@@ -7,8 +6,9 @@ namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 public class GetLogInfoTicketsRequest : IRequest<TicketsViewModel>
 {
     public string LogInfoTicketsJson { get; init; }
-
     public int IssueTypeId { get; set; }
+    public int PageIndex { get; set; }
+    public int PageSize { get; set; }
 }
 
 public class GetLogInfoTicketsHandler(GetLogInfoTicketsService getLogInfoTicketsService)

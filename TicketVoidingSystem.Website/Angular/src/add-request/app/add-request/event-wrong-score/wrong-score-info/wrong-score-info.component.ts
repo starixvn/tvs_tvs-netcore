@@ -1,10 +1,15 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
+import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
@@ -14,9 +19,11 @@ import { ValidationService } from '../services/validation.service';
 import { WrongScoreService } from '../services/wrong-score.service';
 
 @Component({
+  standalone: true,
   selector: 'wrong-score-info',
   templateUrl: './wrong-score-info.component.html',
-  styleUrls: ['./wrong-score-info.component.scss']
+  styleUrls: ['./wrong-score-info.component.scss'],
+  imports: [DateFullTimeNewComponent, NgbModule, FormsModule, CommonModule, TooltipComponent, PipeModule, BlockUiDirective]
 })
 export class WrongScoreInfoComponent implements OnInit {
   @Input() index: number;
@@ -40,14 +47,13 @@ export class WrongScoreInfoComponent implements OnInit {
   maxDate: NgbDate;
   isBlock: boolean;
   tooltip = new Tooltip();
+  private readonly element = inject(ElementRef);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly validationService = inject(ValidationService);
+  private readonly wrongScoreService = inject(WrongScoreService);
+  private readonly modalService = inject(ModalService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly logInfoService: LogInfoService,
-    private readonly validationService: ValidationService,
-    private readonly wrongScoreService: WrongScoreService,
-    private readonly modalService: ModalService
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 

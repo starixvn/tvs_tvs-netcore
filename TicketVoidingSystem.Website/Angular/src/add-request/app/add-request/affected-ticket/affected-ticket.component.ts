@@ -1,9 +1,12 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelectionComponent } from '../../../../utility/components/multiple-selection/multiple-selection.component';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AffectedTicketsModel } from '../models/live-game-early-ticket.model';
+import { TicketsComponent } from '../pool-house-ticket/tickets/tickets.component';
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
 import { LogAnalysisService } from '../services/log-analysis.service';
 import { AffectedTicketService } from './affected-ticket.service';
@@ -11,7 +14,9 @@ import { AffectedTicketService } from './affected-ticket.service';
 @Component({
   selector: 'affected-ticket',
   templateUrl: './affected-ticket.component.html',
-  styleUrls: ['./affected-ticket.component.scss']
+  styleUrls: ['./affected-ticket.component.scss'],
+  standalone: true,
+  imports: [MultipleSelectionComponent, TicketsComponent, BlockUiModule]
 })
 export class AffectedTicketComponent implements OnChanges {
   @Input() model = new AffectedTicketsModel();
@@ -22,10 +27,8 @@ export class AffectedTicketComponent implements OnChanges {
   isShowOtherTickets = true;
   isShowAffectedTickets = true;
   isShowGroupBetTypesCount = true;
-  constructor(
-    private readonly logAnalysisService: LogAnalysisService,
-    private readonly affectedTicketService: AffectedTicketService
-  ) { }
+  private readonly logAnalysisService = inject(LogAnalysisService);
+  private readonly affectedTicketService = inject(AffectedTicketService);
 
   public async ngOnChanges(changes: SimpleChanges) {
     if (changes['model'] && this.model.isOpen) {

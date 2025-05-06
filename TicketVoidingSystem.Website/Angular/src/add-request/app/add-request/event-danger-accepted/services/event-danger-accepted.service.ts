@@ -1,28 +1,24 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import moment from 'moment-timezone';
 import { DateTimeFormat, MatchType } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { Category, GroupButton } from '../../filter/sub-issue-type-dialog/sub-issue-type-json.model';
 import SubIssueTypeDangerAcceptedConfig from '../../filter/sub-issue-type-dialog/sub-type-danger-accepted.json';
 import { RedCardModel } from '../../models/event-red-card.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../models/sub-type-link-match.model';
 import { ValidationService } from './validation.service';
-import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class EventDangerAcceptedService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly validationService: ValidationService
-  ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly validationService = inject(ValidationService);
 
   private readonly SUB_TYPE_AUTO_SELECT_LIST = [
     SubIssueTypeConstant.MAIN_CORNER,

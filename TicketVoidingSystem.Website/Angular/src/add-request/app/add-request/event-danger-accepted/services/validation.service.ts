@@ -5,19 +5,14 @@ import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestStore } from '../../add-request.store';
-import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
-import { FilterTimeAreaComponent } from '../../event-red-card/filter-time-area/filter-time-area.component';
 import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
+import { FilterTimeAreaComponent } from '../../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterModel } from '../../filter/filter.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
-  constructor() {
-  }
-
   isHasAllowanceTime(event: LogInfoRelatedEvent): boolean {
     if (event.voidTimeArea.paTime || event.voidTimeArea.aaTime || event.voidTimeArea.saTime ||
       (event.voidTimeArea.paTime === 0 && event.voidTimeArea.aaTime === 0 && event.voidTimeArea.saTime === 0)) {
@@ -33,7 +28,7 @@ export class ValidationService {
 
     return filter.subIssueTypeId
       && eventLeagueComponent.isMatchIdValid()
-      && tvDetectionComponent.isValidality()
+      && tvDetectionComponent.isValid()
       && filterTimeAreaComponent.isValid()
       && logInfoComponents.toArray().every(x => x.filterTimeWithAllowanceComponent.isValid());
   }

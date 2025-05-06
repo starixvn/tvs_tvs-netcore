@@ -1,18 +1,17 @@
-<div class="log-info" *ngIf="primitiveProps.isShowValidation">
+@if (primitiveProps.isShowValidation) {
+<div class="log-info">
   <strong>Main Event - Log Info</strong>
-  <ng-container *ngFor="let logInfo of logInfo.logInfoItems">
-    <div class="log-info-item mb-1">
-      <div class="log-info-id">{{logInfo.id}}</div>
-      <div class="log-info-detail ">
-        <log-info-ticket-count
-          [isShowDetailsButton]="!isVoided"
-          [isShowCancelCashOut]="true"
-          [model]="logInfo.logInfoDetail"
-          (openAffectedDetails)="showAffectedTicketsDetails(logInfo)">
-        </log-info-ticket-count>
-        <log-info-message [messages]="logInfo.messageValidationLogInfo"></log-info-message>
-      </div>
+  @for (logInfo of logInfo.logInfoItems; track logInfo) {
+  <div class="log-info-item mb-1">
+    <div class="log-info-id">{{logInfo.id}}</div>
+    <div class="log-info-detail ">
+      <log-info-ticket-count [isShowDetailsButton]="!isVoided" [isShowCancelCashOut]="true"
+        [model]="logInfo.logInfoDetail" (openAffectedDetails)="showAffectedTicketsDetails(logInfo)">
+      </log-info-ticket-count>
+      <log-info-message [messages]="logInfo.messageValidationLogInfo"></log-info-message>
     </div>
-  </ng-container>
+  </div>
+  }
 </div>
+}
 <affected-ticket [blockUi]="isBlock" [model]="affectedTicketsModel"></affected-ticket>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpService } from '../../../../utility/services/http.service';
 import { OperatorInfo, Provider } from './others.model';
 
@@ -6,9 +6,7 @@ import { OperatorInfo, Provider } from './others.model';
   providedIn: 'root'
 })
 export class OthersService {
-  constructor(
-    private readonly httpService: HttpService
-  ) { }
+  private readonly httpService = inject(HttpService);
 
   async getOperators(matchIds: string): Promise<OperatorInfo[]> {
     return this.httpService.postJson({ matchIds }, 'api/AddRequest/GetOperators');

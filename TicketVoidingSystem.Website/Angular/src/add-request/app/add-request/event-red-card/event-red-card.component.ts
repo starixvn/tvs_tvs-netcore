@@ -1,14 +1,26 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
+import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
+import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
+import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
+import { TvDetectionService } from '../components/tv-detection/tv-detection.service';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
@@ -17,25 +29,27 @@ import { RedCardModel } from '../models/event-red-card.model';
 import { GetChildMatchQuery } from '../models/get-child-match.query';
 import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
-import { EventLeagueComponent } from './../../../../utility/components/event-league/event-league.component';
-import { LABELS } from './../../../../utility/constants/labels';
-import { StaticService } from './../../../../utility/services/static.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { LABELS } from '../../../../utility/constants/labels';
+import { StaticService } from '../../../../utility/services/static.service';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
-import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
 import { EventRedCardService } from './services/event-red-card.service';
 import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
+import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 
 @Component({
   selector: 'event-red-card',
   templateUrl: './event-red-card.component.html',
-  styleUrls: ['./event-red-card.component.scss']
+  styleUrls: ['./event-red-card.component.scss'],
+  standalone: true,
+  imports: [FormsModule, CommonModule, EventLeagueComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent,
+    NgSelectModule, NgbModule, TooltipComponent, BlockUiModule, ConfirmAddRequestComponent, TvDetectionComponent, OnlyNumberDirective],
+  providers: [EventRedCardService, LogInfoService, SaveRequestService, ValidationService, RelatedEventService, TvDetectionService]
 })
 export class EventRedCardComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;
@@ -64,18 +78,16 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   addChildMatchModel = new AddChildMatchModel();
   tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
   getAllowanceTimeSubscription: Subscription;
-
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
+  private readonly element = inject(ElementRef);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly validationService = inject(ValidationService);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly relatedEventService = inject(RelatedEventService);
+  private readonly eventRedCardService = inject(EventRedCardService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly logInfoService: LogInfoService,
-    private readonly validationService: ValidationService,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly relatedEventService: RelatedEventService,
-    private readonly eventRedCardService: EventRedCardService,
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -113,13 +125,13 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     this.getAllowanceTimeSubscription?.unsubscribe();
   }
 
-  private createGetChildMatchesQuery(): GetChildMatchQuery{
+  private createGetChildMatchesQuery(): GetChildMatchQuery {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(this.filter.issueTypeId);
-    query.eventDate = this.mainEvent.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
-    query.matchId = this.mainEvent.matchId;
+    query.eventDate = this.mainEvent?.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+    query.matchId = this.mainEvent?.matchId;
     query.isMainMatch = true;
-    query.sportType = this.mainEvent.sportType;
+    query.sportType = this.mainEvent?.sportType;
 
     return query;
   }

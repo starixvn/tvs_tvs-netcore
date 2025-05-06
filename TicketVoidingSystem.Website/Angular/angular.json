@@ -19,8 +19,9 @@
           "options": {
             "aot": true,
             "outputPath": "dist",
-            "index": "src/ticket-listing/index.html",
-            "main": "src/ticket-listing/main.ts",
+            "sourceMap": true,
+            "index": "src/edit-request/index.html",
+            "main": "src/edit-request/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],
@@ -55,7 +56,7 @@
                 },
                 "fonts": true
               },
-              "sourceMap": false,
+              "sourceMap": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,

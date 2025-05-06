@@ -1,35 +1,91 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { OthersModel } from '../../others/others.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { OthersAbnormalBetComponent } from './others-abnormal-bet.component';
+import { OthersModel } from '../../others/others.model';
 
-describe('OthersAbnormalMixParlayComponent', () => {
-  @NgModule({
-    declarations: [],
-    imports: [
-      FormsModule,
-      NgbModule,
-    ],
-    providers: [
-    ]
-  })
-  class AppModuleTest { }
+describe('OthersAbnormalBetComponent', () => {
+  let component: OthersAbnormalBetComponent;
+  let fixture: ComponentFixture<OthersAbnormalBetComponent>;
 
-  let shallow: Shallow<OthersAbnormalBetComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: []
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(OthersAbnormalBetComponent, AppModuleTest).dontMock(NgbModule);
+    fixture = TestBed.createComponent(OthersAbnormalBetComponent);
+    component = fixture.componentInstance;
   });
 
-  it('OthersAbnormalMixParlayComponent should init match snapshot', async () => {
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should initialize with default values', () => {
     // Arrange
-    const { instance, fixture } = await shallow.render();
-    instance.model = new OthersModel();
+    component.isEdit = false;
+    component.model = new OthersModel();
+
+    // Act
     fixture.detectChanges();
 
     // Assert
-    expect(fixture).toMatchSnapshot();
+    expect(component.isEdit).toBeFalsy();
+    expect(component.model).toBeTruthy();
+    expect(component.isCollapse).toBeUndefined();
+  });
+
+  it('should initialize with provided model', () => {
+    // Arrange
+    const testModel = new OthersModel();
+    testModel.mistakenBy = 'Test Mistaken By';
+    testModel.decidedBy = 'Test Decided By';
+    testModel.provider = 'Test Provider';
+    testModel.source = 'Test Source';
+    testModel.remark = 'Test Remark';
+
+    // Act
+    component.model = testModel;
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.model).toBe(testModel);
+    expect(component.model.mistakenBy).toBe('Test Mistaken By');
+    expect(component.model.decidedBy).toBe('Test Decided By');
+    expect(component.model.provider).toBe('Test Provider');
+    expect(component.model.source).toBe('Test Source');
+    expect(component.model.remark).toBe('Test Remark');
+  });
+
+  it('should handle isEdit input', () => {
+    // Arrange & Act
+    component.isEdit = true;
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.isEdit).toBeTruthy();
+
+    // Arrange & Act
+    component.isEdit = false;
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.isEdit).toBeFalsy();
+  });
+
+  it('should handle isCollapse property', () => {
+    // Arrange & Act
+    component.isCollapse = true;
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.isCollapse).toBeTruthy();
+
+    // Arrange & Act
+    component.isCollapse = false;
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.isCollapse).toBeFalsy();
   });
 });

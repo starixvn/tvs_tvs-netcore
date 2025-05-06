@@ -1,5 +1,9 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
@@ -14,7 +18,10 @@ import { ValidationService } from './services/validation.service';
 @Component({
   selector: 'event-recover-ticket',
   templateUrl: './event-recover-ticket.component.html',
-  styleUrls: ['./event-recover-ticket.component.scss']
+  styleUrls: ['./event-recover-ticket.component.scss'],
+  standalone: true,
+  imports: [BetIdsComponent, NgSelectModule, FormsModule, CommonModule, BlockUiModule],
+  providers: [SaveRequestService, ValidationService]
 })
 export class EventRecoverTicketComponent implements OnInit {
   @Input() recoverTicketModel = new RecoverTicketModel();
@@ -27,13 +34,10 @@ export class EventRecoverTicketComponent implements OnInit {
   primitiveProps = new PrimitiveProperty();
   isCancelAfterFocusOutBetIdsEvent = false;
   products = ProductFilterRecoverTicket.SELECTION_ITEMS;
-
-  constructor(
-    private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly validationService: ValidationService,
-    private readonly addRequestApiService: AddRequestApiService
-  ) { }
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly validationService = inject(ValidationService);
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   async ngOnInit(): Promise<void> {
     this.recoverTicketModel.productIds = ProductFilterRecoverTicket.SELECTION_ITEMS[0].value;

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
@@ -8,20 +9,14 @@ import { FilterReducedOverComponent } from '../filter-reduced-over/filter-reduce
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
   private readonly BET_TYPE_CLASS = 'bet-type-dropdown';
   private readonly WICKET_OVER_CLASS = 'wicket-over-input';
   private readonly PLAYER_CLASS = 'player-dropdown';
   private readonly RUNS_CLASS = 'runs-input';
   private readonly LIVE_INDICATOR_CLASS = 'live-indicator';
-
-  constructor() {
-  }
 
   public validateCommonData(eventLeagueComponent: EventLeagueComponent, filterReducedOverComponent: FilterReducedOverComponent): boolean {
     if (!eventLeagueComponent.isMatchIdValid()) {

@@ -1,14 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import bigDecimal from 'js-big-decimal';
 import * as _ from 'lodash';
 import { AddRequestApiService } from '../../add-request-api.service';
+import { TicketTableComponent } from '../../components/ticket-table/ticket-table.component';
 import { TicketTableViewModel } from '../../components/ticket-table/ticket-table.model';
+import { AccountTableComponent } from '../account-table/account-table.component';
 import { AccountAffectedTicketModel, AdjustedAccountModel, TicketAdjustedAccountModel } from './account-affected-ticket.model';
 
 @Component({
   selector: 'account-affected-ticket',
   templateUrl: './account-affected-ticket.component.html',
-  styleUrls: ['./account-affected-ticket.component.scss']
+  styleUrls: ['./account-affected-ticket.component.scss'],
+  standalone: true,
+  imports: [AccountTableComponent, TicketTableComponent]
 })
 export class AccountAffectedTicketComponent implements OnInit {
   @Input() model = new AccountAffectedTicketModel();
@@ -17,7 +21,7 @@ export class AccountAffectedTicketComponent implements OnInit {
   isBlock: boolean;
   isEdittedTicket: boolean;
   tempAdjustedAccounts = new AdjustedAccountModel();
-  constructor(private readonly addRequestApiService: AddRequestApiService) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   async ngOnInit() {
     this.isEdittedTicket = false;
@@ -74,7 +78,7 @@ export class AccountAffectedTicketComponent implements OnInit {
     currentAccount.estimateVoidAmount = this.tempAdjustedAccounts.accountWinlostTables[0].estimateVoidAmount;
     currentAccount.winLostAfterVoid = this.tempAdjustedAccounts.accountWinlostTables[0].winLostAfterVoid;
     currentAccount.isEditedTicket = this.tempAdjustedAccounts.accountWinlostTables[0].isEditedTicket;
-}
+  }
 
   private async getTicketsAbnormalAccount() {
     this.isBlock = true;

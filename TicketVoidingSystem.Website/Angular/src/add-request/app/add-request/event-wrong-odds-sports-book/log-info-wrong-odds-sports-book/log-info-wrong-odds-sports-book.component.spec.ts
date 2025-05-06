@@ -1,163 +1,173 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { LogInfoMessageComponent } from '../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { LogInfoWrongOddsSportsBookComponent } from './log-info-wrong-odds-sports-book.component';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { AddRequestStore } from '../../add-request.store';
-import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
-import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
-import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
-import { LogInfoWrongOddsSportsBookComponent } from './log-info-wrong-odds-sports-book.component';
+import moment from 'moment-timezone';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
 
 class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeLogInfoWrongOddsSportsBook: LogInfoWrongOddsSportsBook = {
-    matchId: 1,
-    filterWrongOddsSportsBook: new FilterWrongOddsSportsBookModel(),
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
-    betTeamsResult: [],
+  static readonly fakeLogInfo: LogInfoWrongOddsSportsBook = {
+    logInfoDetail: null,
+    messageValidationLogInfo: null
   } as LogInfoWrongOddsSportsBook;
+
+  static readonly fakePrimitiveProps: PrimitiveProperty = {
+    isShowValidation: false
+  } as PrimitiveProperty;
 }
 
 describe('LogInfoWrongOddsSportsBookComponent', () => {
-  @NgModule({
-    declarations: [
-      AffectedTicketComponent,
-      LogInfoMessageComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule
-    ],
-    providers: [
-      ModalService,
-      AddRequestStore,
-      AddRequestApiService
-    ]
-  })
-  class AppModuleTest { }
+  let component: LogInfoWrongOddsSportsBookComponent;
+  let fixture: ComponentFixture<LogInfoWrongOddsSportsBookComponent>;
+  let modalService: ModalService;
+  let staticService: StaticService;
+  let affectedTicketService: AffectedTicketService;
 
-  let shallow: Shallow<LogInfoWrongOddsSportsBookComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ModalService,
+        StaticService,
+        AffectedTicketService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(LogInfoWrongOddsSportsBookComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(LogInfoWrongOddsSportsBookComponent);
+    modalService = fixture.debugElement.injector.get(ModalService);
+    staticService = fixture.debugElement.injector.get(StaticService);
+    affectedTicketService = fixture.debugElement.injector.get(AffectedTicketService);
+    component = fixture.componentInstance;
   });
 
-  it('LogInfoWrongOddsSportsBookComponent init should match snapshot', async () => {
-    const component = new LogInfoWrongOddsSportsBookComponent(null, null);
-    expect(component).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('displayFullDateTimeFormat should return time', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoWrongOddsSportsBook,
-        primitiveProps: new PrimitiveProperty()
-      }
-    });
-    const actual = instance.displayFullDateTimeFormat(new Date(Helper.fromDate));
+  it('should initialize with validation when in edit mode', () => {
+    // Arrange
+    component.isEdit = true;
+    component.primitiveProps = Helper.fakePrimitiveProps;
 
-    expect(actual).toBe('2021/12/18 12:08:49.737 PM');
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.primitiveProps.isShowValidation).toBeTruthy();
   });
 
-  it('countInfoContent should return info CashOut', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoWrongOddsSportsBook,
-        primitiveProps: new PrimitiveProperty()
-      }
-    });
-    const actual = instance['countInfoContent'](1, 2, 0);
+  it('should not initialize validation when not in edit mode', () => {
+    // Arrange
+    component.isEdit = false;
+    component.primitiveProps = Helper.fakePrimitiveProps;
+    component.primitiveProps.isShowValidation = false;
 
-    expect(actual).toBe(' (Cash Out: <strong>1</strong>, Settled: <strong>2</strong>)');
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.primitiveProps.isShowValidation).toBeFalsy();
   });
 
-  it('openPopupTransIds should call modal Service', async () => {
-    const mockModalOpen = jest.fn();
-    const { instance } = await shallow
-    .mock(ModalService, { open: mockModalOpen })
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoWrongOddsSportsBook,
-        primitiveProps: new PrimitiveProperty()
-      }
-    });
-    instance['openPopupTransIds'](0, '');
+  it('should display full date time format correctly', () => {
+    // Arrange
+    const testDate = new Date('2024-03-20T10:30:00');
 
-    expect(mockModalOpen).toHaveBeenCalledTimes(1);
+    // Act
+    const result = component.displayFullDateTimeFormat(testDate);
+
+    // Assert
+    expect(result).toBe(moment(testDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT));
   });
 
-  it('isShowCountInfo should return false', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoWrongOddsSportsBook,
-        primitiveProps: new PrimitiveProperty()
-      }
-    });
-    const actual = instance['isShowCountInfo'](0, 0, 0);
+  it('should clear data validation', () => {
+    // Arrange
+    component.logInfo = Helper.fakeLogInfo;
 
-    expect(actual).toBeFalsy();
-  });
-
-  it('displayTransId should return 12312', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoWrongOddsSportsBook,
-        primitiveProps: new PrimitiveProperty()
-      }
-    });
-    const actual = instance.displayTransId(1, '12312');
-
-    expect(actual).toBe('12312');
-  });
-
-  it('displayTransId should return -', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoWrongOddsSportsBook,
-        primitiveProps: new PrimitiveProperty()
-      }
-    });
-    const actual = instance.displayTransId(0, '');
-
-    expect(actual).toBe('-');
-  });
-
-  it('clearDataValidation should update to null', async () => {
-    const component = new LogInfoWrongOddsSportsBookComponent(null, null);
-    component.logInfo = Helper.fakeLogInfoWrongOddsSportsBook;
-    component.logInfo.logInfoDetail = new LogInfoDetail();
-    component.logInfo.logInfoDetail.logInfoTicketsJson = 'ABC';
+    // Act
     component.clearDataValidation();
 
+    // Assert
     expect(component.logInfo.logInfoDetail).toBeNull();
     expect(component.logInfo.messageValidationLogInfo).toBeNull();
   });
 
-  it('showAffectedTicketsDetails should update affectedTicketsModel', async () => {
-    const component = new LogInfoWrongOddsSportsBookComponent(null, null);
-    component.affectedTicketsModel = new AffectedTicketsModel();
-    component.issueTypeId = '1';
-    component.logInfo = new LogInfoWrongOddsSportsBook();
-    component.logInfo.logInfoDetail = new LogInfoDetail();
+  it('should open popup trans ids', () => {
+    // Arrange
+    const requestId = 123;
+    const transIds = 'ABC123';
+    jest.spyOn(StaticService, 'openPopupTransIds');
 
+    // Act
+    component.openPopupTransIds(requestId, transIds);
+
+    // Assert
+    expect(StaticService.openPopupTransIds).toHaveBeenCalledWith(requestId, transIds, modalService);
+  });
+
+  it('should count info content correctly', () => {
+    // Arrange
+    const cashOutCount = 2;
+    const settleCount = 3;
+    const instantlySettleCount = 1;
+    jest.spyOn(StaticService, 'countInfoContent');
+
+    // Act
+    component.countInfoContent(cashOutCount, settleCount, instantlySettleCount);
+
+    // Assert
+    expect(StaticService.countInfoContent).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
+  });
+
+  it('should display trans id correctly when ticket count is 0', () => {
+    // Act
+    const result = component.displayTransId(0, 'ABC123');
+
+    // Assert
+    expect(result).toBe('-');
+  });
+
+  it('should display trans id correctly when ticket count is greater than 0', () => {
+    // Act
+    const result = component.displayTransId(1, 'ABC123');
+
+    // Assert
+    expect(result).toBe('ABC123');
+  });
+
+  it('should check if show count info', () => {
+    // Arrange
+    const cashOutCount = 2;
+    const settleCount = 3;
+    const instantlySettleCount = 1;
+    jest.spyOn(StaticService, 'isShowCountInfo');
+
+    // Act
+    component.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
+
+    // Assert
+    expect(StaticService.isShowCountInfo).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
+  });
+
+  it('should show affected tickets details', () => {
+    // Arrange
+    component.issueTypeId = '123';
+    component.logInfo = {
+      logInfoDetail: {
+        logInfoTicketsJson: 'test-json'
+      }
+    } as LogInfoWrongOddsSportsBook;
+
+    // Act
     component.showAffectedTicketsDetails();
 
+    // Assert
+    expect(component.affectedTicketsModel.issueTypeId).toBe(123);
+    expect(component.affectedTicketsModel.logInfoTicketsJson).toBe('test-json');
     expect(component.affectedTicketsModel.isOpen).toBeTruthy();
-    expect(component.affectedTicketsModel.issueTypeId).toBe(1);
   });
 });

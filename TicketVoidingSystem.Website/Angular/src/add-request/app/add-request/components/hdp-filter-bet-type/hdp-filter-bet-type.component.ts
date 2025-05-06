@@ -1,13 +1,17 @@
-import { Component, Input, OnChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
-import { HdpFilterBetType } from '../../models/hdp-filter-betType.model';
-import { HdpFilterBetTypeService } from './hdp-filter-bet-type.service';
+import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChange } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
+import { HdpFilterBetType } from '../../models/hdp-filter-betType.model';
+import { HdpFilterBetTypeService } from './hdp-filter-bet-type.service';
 
 @Component({
   selector: 'hdp-filter-bet-type',
   templateUrl: './hdp-filter-bet-type.component.html',
-  styleUrls: ['./hdp-filter-bet-type.component.scss']
+  styleUrls: ['./hdp-filter-bet-type.component.scss'],
+  standalone: true,
+  imports: [FormsModule, NgSelectModule]
 })
 export class HdpFilterBetTypeComponent implements OnChanges {
   @Input() sportTypeId: number;
@@ -19,15 +23,12 @@ export class HdpFilterBetTypeComponent implements OnChanges {
   allFilterBetType: HdpFilterBetType[];
   filterBetTypeId: string;
   betTypeSelected: HdpFilterBetType;
-
-  constructor(
-    private readonly hdpFilterBetTypeService: HdpFilterBetTypeService
-  ) { }
+  private readonly hdpFilterBetTypeService = inject(HdpFilterBetTypeService);
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['sportTypeId']) {
       this.allFilterBetType = await this.hdpFilterBetTypeService.GetHdpFilterBetTypes(this.sportTypeId, this.issueTypeId);
-      if(this.filterBetType.filterBetTypeId) {
+      if (this.filterBetType.filterBetTypeId) {
         this.hdpFilterBetTypeService.loadDataEditPage(this.allFilterBetType, this.filterBetType);
         this.filterBetTypeId = this.filterBetType.filterBetTypeId;
         this.betTypeSelected = this.allFilterBetType.find(x => x.betType === this.filterBetType.filterBetTypeId);

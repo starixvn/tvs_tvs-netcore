@@ -1,24 +1,14 @@
-<event-league #leagueEvent
-  [isEdit]="isEdit"
-  [matchId]="logInfoEvent.matchId"
-  (changeEvent)="changeMatchEvent()">
+<event-league #leagueEvent [isEdit]="isEdit" [matchId]="logInfoEvent.matchId" (changeEvent)="changeMatchEvent()">
 </event-league>
-<filter-not-participate #filterNotParticipate
-  *ngIf="primitivePropertyEvent.isShowFilterArea"
-  [isEdit]="isEdit"
-  [isVoided]="filter.isVoided"
-  [models]="logInfoEvent.filterNotParticipates"
-  [originalPlayers]="originalPlayers"
-  [originalBetTypes]="originalBetTypes"
-  [matchId]="logInfoEvent.matchId"
-  (changeFilterEvent)="resetLogInfoOfEvent()">
+@if (primitivePropertyEvent.isShowFilterArea) {
+<filter-not-participate #filterNotParticipate [isEdit]="isEdit" [isVoided]="filter.isVoided"
+  [models]="logInfoEvent.filterNotParticipates" [originalPlayers]="originalPlayers"
+  [originalBetTypes]="originalBetTypes" [matchId]="logInfoEvent.matchId" (changeFilterEvent)="resetLogInfoOfEvent()">
 </filter-not-participate>
+}
 <div class="mb-3 mt-3 d-flex">
-  <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
-    (click)="clickSearch()"> Search
+  <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm" (click)="clickSearch()"> Search
   </button>
 </div>
-<log-info-not-participate #logInfo
-  [primitiveProps]="primitivePropertyEvent"
-  [logInfo]="logInfoEvent">
+<log-info-not-participate #logInfo [primitiveProps]="primitivePropertyEvent" [logInfo]="logInfoEvent">
 </log-info-not-participate>

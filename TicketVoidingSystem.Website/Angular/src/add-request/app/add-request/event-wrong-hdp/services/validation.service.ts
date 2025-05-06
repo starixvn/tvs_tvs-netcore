@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment-timezone';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TeamFavorite, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
@@ -10,20 +11,14 @@ import { LogInfoWrongHdpComponent } from '../log-info-wrong-hdp/log-info-wrong-h
 import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
   private readonly INPUT_HOME_FAVORITE_CLASS = 'home-favorite-input';
   private readonly INPUT_AWAY_FAVORITE_CLASS = 'away-favorite-input';
   private readonly INPUT_ACTUAL_MARKET_CLASS = 'actual-market-input';
   private readonly INPUT_HDP_VALUE_CLASS = 'hdp-value-input';
-
-  constructor() {
-  }
 
   public validateCommonData(eventLeagueComponent: EventLeagueComponent, logInfoComponents: LogInfoWrongHdpComponent[]): boolean {
     if (!eventLeagueComponent.isMatchIdValid()) {

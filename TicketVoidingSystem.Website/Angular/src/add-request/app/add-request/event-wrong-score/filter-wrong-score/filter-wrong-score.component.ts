@@ -1,17 +1,22 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { TvDetectionService } from '../../../../../manage-request/app/request-list/services/tv-detection.service';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AddRequestStore } from '../../add-request.store';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { AllowanceTimeComponent } from '../allowance-time/allowance-time.component';
 import { ValidationService } from '../services/validation.service';
 import { WrongScoreService } from '../services/wrong-score.service';
-import { TvDetectionService } from '../../../../../manage-request/app/request-list/services/tv-detection.service';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 
 @Component({
+  standalone: true,
   selector: 'filter-wrong-score',
   templateUrl: './filter-wrong-score.component.html',
-  styleUrls: ['./filter-wrong-score.component.scss']
+  styleUrls: ['./filter-wrong-score.component.scss'],
+  imports: [DateFullTimeNewComponent, AllowanceTimeComponent, FormsModule, CommonModule, TooltipComponent]
 })
 export class FilterWrongScoreComponent {
   @Input() filterWrongScoreModel: FilterTimeWithAllowance;
@@ -22,13 +27,12 @@ export class FilterWrongScoreComponent {
   @ViewChild('fromTimeComponent') fromTimeComponent: DateFullTimeNewComponent;
   @ViewChild('toTimeComponent') toTimeComponent: DateFullTimeNewComponent;
   tooltip = new Tooltip();
+  private readonly element = inject(ElementRef);
+  private readonly validationService = inject(ValidationService);
+  private readonly wrongScoreService = inject(WrongScoreService);
+  private readonly addRequestStore = inject(AddRequestStore);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly validationService: ValidationService,
-    private readonly wrongScoreService: WrongScoreService,
-    private readonly addRequestStore: AddRequestStore
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 

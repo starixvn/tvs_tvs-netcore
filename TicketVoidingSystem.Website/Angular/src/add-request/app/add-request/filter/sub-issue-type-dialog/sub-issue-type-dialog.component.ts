@@ -1,5 +1,8 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
+import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { SubIssueTypeGroup } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
@@ -11,9 +14,11 @@ import SubIssueTypeRedCardConfig from './sub-type-red-card.json';
 import SubIssueTypeWrongScoreConfig from './sub-type-wrong-score.json';
 
 @Component({
+  standalone: true,
   selector: 'sub-issue-type-dialog',
   templateUrl: './sub-issue-type-dialog.component.html',
-  styleUrls: ['./sub-issue-type-dialog.component.scss']
+  styleUrls: ['./sub-issue-type-dialog.component.scss'],
+  imports: [FormsModule, CommonModule, BlockUiModule]
 })
 export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
   @Input() model = new SubIssueTypeDialogModel();
@@ -25,8 +30,7 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
   isCheckedWrongScoreOnwards = false;
   userId: string;
   isBlockUi: boolean;
-
-  constructor(private readonly apiService: AddRequestApiService) { }
+  private readonly apiService = inject(AddRequestApiService);
 
   public async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['model'] && this.model.isOpen) {
@@ -87,18 +91,18 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
   private getSubIssueTypeWrongScoreConfig(): Category[] {
     const subIssueTypeWrongScoreConfig = _.cloneDeep(SubIssueTypeWrongScoreConfig);
     const mainCategoryName = "Main Event";
-    if(this.isMainEvent){
+    if (this.isMainEvent) {
       const mainEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName === mainCategoryName);
-      mainEventSubIssueTypes[0].groups = this.isCheckedWrongScoreOnwards 
-      ? SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeOnWards(x)) 
-      : SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeNoOnWards(x))
+      mainEventSubIssueTypes[0].groups = this.isCheckedWrongScoreOnwards
+        ? SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeOnWards(x))
+        : SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeNoOnWards(x))
 
       return mainEventSubIssueTypes;
     }
 
     const relatedEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName !== mainCategoryName);
     relatedEventSubIssueTypes[0].isCollapse = false;
-    
+
     return relatedEventSubIssueTypes;
   }
 
@@ -106,7 +110,7 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
     return StaticService.isDangerAccepted(this.model.issueTypeId);
   }
 
-  public isMainEventWrongScore(): boolean{
+  public isMainEventWrongScore(): boolean {
     return this.isWrongScore() && this.isMainEvent;
   }
 

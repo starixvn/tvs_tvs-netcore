@@ -1,9 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { NotParticipateModel } from '../models/event-not-participate.model';
 import { OthersModel } from '../others/others.model';
 import { FilterNotParticipateComponent } from './filter-not-participate/filter-not-participate.component';
+import { LogInfoNotParticipateComponent } from './log-info-not-participate/log-info-not-participate.component';
 import { LogInfoNotParticipate } from './models/log-info-not-participate.model';
 import { NotParticipateBetTypeModel, Player } from './models/not-participate-bet-type.model';
 import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
@@ -13,12 +17,14 @@ import { FilterNotParticipateService } from './services/filter-not-participate.s
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-not-participate',
   templateUrl: './event-not-participate.component.html',
-  styleUrls: ['./event-not-participate.component.scss']
+  styleUrls: ['./event-not-participate.component.scss'],
+  standalone: true,
+  imports: [FormsModule, EventLeagueComponent, FilterNotParticipateComponent, LogInfoNotParticipateComponent],
+  providers: [ValidationService, SaveRequestService, EventNotParticipateService, FilterNotParticipateService, LogInfoService]
 })
 export class EventNotParticipateComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -39,14 +45,12 @@ export class EventNotParticipateComponent implements OnInit {
   originalPlayers: Player[];
   originalBetTypes: NotParticipateBetTypeModel[];
 
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly logInfoService: LogInfoService,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly eventNotParticipateService: EventNotParticipateService,
-    private readonly filterService: FilterNotParticipateService
-    ) { }
+  private readonly validationService = inject(ValidationService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly eventNotParticipateService = inject(EventNotParticipateService);
+  private readonly filterService = inject(FilterNotParticipateService);
 
   async ngOnInit(): Promise<void> {
     if (this.isEdit) {

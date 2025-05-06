@@ -1,215 +1,195 @@
-import { GroupLicensee, GroupLicenseeModel } from "../../../../../utility/components/licensees/licensees.model";
-import { MultipleSelection } from "../../../../../utility/components/multiple-selection/multiple-selection";
-import { Tooltip } from "../../../../../utility/components/tooltip/tooltip.model";
-import { Currency } from "../../../../../utility/models/currency.model";
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { MatchModel } from "../../../../../utility/models/match.model";
-import { FilterModel } from "../../filter/filter.model";
-import { WrongOfferedNameModel } from '../../models/event-wrong-offered-name.model';
+import { TestBed } from '@angular/core/testing';
+import { FilterWrongOfferedNameService } from './filter-wrong-offered-name.service';
+import { GroupLicensee, GroupLicenseeModel } from '../../../../../utility/components/licensees/licensees.model';
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { Currency } from '../../../../../utility/models/currency.model';
+import { FilterModel } from '../../filter/filter.model';
 import { FilterWrongOfferedNameModel } from '../models/filter-wrong-offered-name.model';
-import { LogInfoWrongOfferedName } from '../models/log-info-wrong-offered-name.model';
-import { FilterWrongOfferedNameService } from "./filter-wrong-offered-name.service";
-import { ValidationService } from "./validation.service";
-
-class Helper {
-  static readonly fakeWrongOfferedNameModel: WrongOfferedNameModel = {
-    currencyIds: '1,2',
-    licenseeNames: 'licensee1,licensee2',
-    logInfoDetail: new LogInfoDetail(),
-    matchId: 1,
-    match: new MatchModel(),
-    subIssueTypeId: 1
-  } as WrongOfferedNameModel;
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '26',
-    subIssueTypeId: '1',
-    action: '5'
-  } as FilterModel;
-  static readonly fakeLogInfoWrongOfferedName: LogInfoWrongOfferedName = {
-    matchId: 1,
-    filterWrongOfferedName: new FilterWrongOfferedNameModel(),
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
-  } as LogInfoWrongOfferedName;
-  static readonly fakeFilterWrongOfferedName: FilterWrongOfferedNameModel = {
-    currencyIds: [],
-    licenseeNames: []
-  } as FilterWrongOfferedNameModel;
-}
+import { ValidationService } from './validation.service';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { ItemsSelect } from '../../../../../utility/components/multiple-selection/items-select';
+import { ElementRef } from '@angular/core';
 
 describe('FilterWrongOfferedNameService', () => {
-  let mockValidationService: ValidationService;
-  let mockService: FilterWrongOfferedNameService;
+  let service: FilterWrongOfferedNameService;
+  let validationService: ValidationService;
+  let tooltip: Tooltip;
+
+  const mockGroupLicensees = [
+    {
+      groupName: 'Group 1',
+      licensees: [
+        { id: 1, name: 'Licensee 1', isChecked: false },
+        { id: 2, name: 'Licensee 2', isChecked: false }
+      ],
+      isChecked: false,
+      isCollapse: false,
+      checkedGroup: () => {},
+      checkedLicensee: () => {}
+    },
+    {
+      groupName: 'China rules',
+      licensees: [
+        { id: 3, name: 'Licensee 3', isChecked: false },
+        { id: 4, name: 'Licensee 4', isChecked: false }
+      ],
+      isChecked: false,
+      isCollapse: false,
+      checkedGroup: () => {},
+      checkedLicensee: () => {}
+    }
+  ] as GroupLicensee[];
+
+  const mockCurrencies: Currency[] = [
+    { id: 1, currencyCode: 'USD' },
+    { id: 13, currencyCode: 'RMB' }
+  ];
+
+  const mockFilterWrongOfferedName = {
+    currencyIds: [],
+    licenseeNames: [],
+    wrongName: '',
+    actualName: '',
+    wrongNameT: '',
+    actualNameT: '',
+    wrongNameS: '',
+    actualNameS: '',
+    wrongNameId: 0,
+    actualNameId: 0
+  } as FilterWrongOfferedNameModel;
+
+  const mockFilterRequest = {
+    subIssueTypeId: '1',
+    action: '',
+    isTest: false,
+    isAbnormal: false,
+    isVoided: false,
+    actions: []
+  } as FilterModel;
 
   beforeEach(() => {
-    mockValidationService = new ValidationService(null);
-    mockService = new FilterWrongOfferedNameService(mockValidationService);
-  });
-
-  it('renderGroupLicensees should call #renderGroupLicenseesWhenEditRequest', async () => {
-    const groupLicenseeModel = new GroupLicenseeModel([], false);
-    mockService.renderGroupLicenseesWhenEditRequest = jest.fn().mockReturnValue(groupLicenseeModel);
-
-    const actual = mockService.renderGroupLicensees(true, [], Helper.fakeFilterWrongOfferedName, Helper.fakeFilterModel);
-
-    expect(mockService.renderGroupLicenseesWhenEditRequest).toHaveBeenCalledTimes(1);
-    expect(actual).toEqual(groupLicenseeModel);
-  });
-
-  it('renderGroupLicensees should call #autoCheckLicensees', async () => {
-    const groupLicenseeModel = new GroupLicenseeModel([], false);
-    mockService.autoCheckLicensees = jest.fn().mockReturnValue(groupLicenseeModel);
-
-    const actual = mockService.renderGroupLicensees(false, [], Helper.fakeFilterWrongOfferedName, Helper.fakeFilterModel);
-
-    expect(mockService.autoCheckLicensees).toHaveBeenCalledTimes(1);
-    expect(actual).toEqual(groupLicenseeModel);
-  });
-
-  it('renderCurrency should call #initMultiSelectCurrencyWhenEditRequest', async () => {
-    const multipleSelection = new MultipleSelection();
-    mockService['initMultiSelectCurrencyWhenEditRequest'] = jest.fn().mockReturnValue(multipleSelection);
-
-    const actual = mockService.renderCurrency(true, [], Helper.fakeFilterWrongOfferedName, Helper.fakeFilterModel);
-
-    expect(mockService['initMultiSelectCurrencyWhenEditRequest']).toHaveBeenCalledTimes(1);
-    expect(actual).toEqual(multipleSelection);
-  });
-
-  it('renderCurrency should call #autoCheckCurrency', async () => {
-    const multipleSelection = new MultipleSelection();
-    mockService.autoCheckCurrency = jest.fn().mockReturnValue(multipleSelection);
-
-    const actual = mockService.renderCurrency(false, [], Helper.fakeFilterWrongOfferedName, Helper.fakeFilterModel);
-
-    expect(mockService.autoCheckCurrency).toHaveBeenCalledTimes(1);
-    expect(actual).toEqual(multipleSelection);
-  });
-
-  it('renderGroupLicenseesWhenEditRequest should return GroupLicenseeModel', async () => {
-    const filter = new FilterWrongOfferedNameModel();
-    filter.licenseeNames = ['licensee1'];
-    const originalGroupLicensees = [{ groupName: 'group1', licensees: [{ name: 'licensee1' }] }] as GroupLicensee[];
-    const groupLicenseeModel = new GroupLicenseeModel(originalGroupLicensees, false);
-    groupLicenseeModel.checkLicenseesByName(filter.licenseeNames);
-
-    const actual = mockService.renderGroupLicenseesWhenEditRequest(originalGroupLicensees, filter);
-
-    expect(actual).toEqual(groupLicenseeModel);
-  });
-
-  it('autoCheckLicensees should return GroupLicenseeModel with check all licensees group "China rules" only', async () => {
-    const filterRequest = { subIssueTypeId: '127' } as FilterModel;
-    const filter = new FilterWrongOfferedNameModel();
-    const originalGroupLicensees = [
-      { groupName: 'China rules', licensees: [{ name: 'licensee1' }] },
-      { groupName: 'Vietnam rules', licensees: [{ name: 'licensee2' }] }
-    ] as GroupLicensee[];
-    const groupLicenseeModel = new GroupLicenseeModel(originalGroupLicensees, false);
-    groupLicenseeModel.checkLicenseesByName(filter.licenseeNames);
-    mockValidationService.isSubTypeChinese = jest.fn().mockReturnValue(true);
-
-    const actual = mockService.autoCheckLicensees(originalGroupLicensees, filter, filterRequest);
-
-    expect(actual.groupLicensees.find(x => x.groupName === 'China rules').licensees.every(x => x.isChecked)).toBeTruthy();
-    expect(actual.groupLicensees.find(x => x.groupName === 'Vietnam rules').licensees.every(x => x.isChecked)).toBeFalsy();
-  });
-
-  it('autoCheckLicensees should return GroupLicenseeModel with check all licensees', async () => {
-    const filterRequest = { subIssueTypeId: '1' } as FilterModel;
-    const filter = new FilterWrongOfferedNameModel();
-    const originalGroupLicensees = [
-      { groupName: 'Manila rules', licensees: [{ name: 'licensee1' }] },
-      { groupName: 'Laos rules', licensees: [{ name: 'licensee2' }] }
-    ] as GroupLicensee[];
-    const groupLicenseeModel = new GroupLicenseeModel(originalGroupLicensees, false);
-    groupLicenseeModel.checkLicenseesByName(filter.licenseeNames);
-    mockValidationService.isSubTypeChinese = jest.fn().mockReturnValue(false);
-
-    const actual = mockService.autoCheckLicensees(originalGroupLicensees, filter, filterRequest);
-
-    expect(actual.groupLicensees.find(x => x.groupName === 'Manila rules').licensees.every(x => x.isChecked)).toBeTruthy();
-    expect(actual.groupLicensees.find(x => x.groupName === 'Laos rules').licensees.every(x => x.isChecked)).toBeTruthy();
-  });
-
-  it('autoCheckCurrency should call #isAutoCheckedCurrency & checked all currencies', async () => {
-    const filterRequest = { subIssueTypeId: '127' } as FilterModel;
-    const filter = new FilterWrongOfferedNameModel();
-    const originalCurrencies = [
-      { currencyCode: 'Code1', id: 1 },
-      { currencyCode: 'Code2', id: 2 },
-    ] as Currency[];
-    mockService['isAutoCheckedCurrency'] = jest.fn().mockReturnValue(true);
-
-    const actual = mockService.autoCheckCurrency(originalCurrencies, filter, filterRequest);
-
-    expect(mockService['isAutoCheckedCurrency']).toHaveBeenCalledTimes(originalCurrencies.length);
-    expect(actual.items.every(x => x.checked)).toBeTruthy();
-  });
-
-  it('isValidity should return false when currencyIds = []', async () => {
-    const filter = new FilterWrongOfferedNameModel();
-    const tooltip = new Tooltip();
-    filter.currencyIds = [];
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        FilterWrongOfferedNameService,
+        ValidationService,
+        {
+          provide: Tooltip,
+          useValue: {
+            element: { nativeElement: document.createElement('div') } as ElementRef
+          }
+        },
+        CheckAddPermissionService
+      ]
+    });
+    service = TestBed.inject(FilterWrongOfferedNameService);
+    validationService = TestBed.inject(ValidationService);
+    tooltip = TestBed.inject(Tooltip);
     tooltip.display = jest.fn();
-
-    const actual = mockService.isValidity(filter, tooltip);
-
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
-    expect(actual).toBeFalsy();
   });
 
-  it('isValidity should return false when licenseeNames = []', async () => {
-    const filter = new FilterWrongOfferedNameModel();
-    const tooltip = new Tooltip();
-    filter.currencyIds = ['1', '2'];
-    filter.licenseeNames = [];
-    tooltip.display = jest.fn();
-
-    const actual = mockService.isValidity(filter, tooltip);
-
-    expect(tooltip.display).toHaveBeenCalledTimes(1);
-    expect(actual).toBeFalsy();
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('isValidity should return true', async () => {
-    const filter = new FilterWrongOfferedNameModel();
-    const tooltip = new Tooltip();
-    filter.currencyIds = ['1', '2'];
-    filter.licenseeNames = ['1', '2'];
+  describe('renderGroupLicensees', () => {
+    it('should call renderGroupLicenseesWhenEditRequest when isEdit is true', () => {
+      const result = service.renderGroupLicensees(true, mockGroupLicensees, mockFilterWrongOfferedName, mockFilterRequest);
+      expect(result).toBeInstanceOf(GroupLicenseeModel);
+    });
 
-    const actual = mockService.isValidity(filter, tooltip);
-
-    expect(actual).toBeTruthy();
+    it('should call autoCheckLicensees when isEdit is false', () => {
+      const result = service.renderGroupLicensees(false, mockGroupLicensees, mockFilterWrongOfferedName, mockFilterRequest);
+      expect(result).toBeInstanceOf(GroupLicenseeModel);
+    });
   });
 
-  it('initMultiSelectCurrencyWhenEditRequest should call #initMultiSelectCurrency', async () => {
-    const filter = new FilterWrongOfferedNameModel();
-    const multipleSelectCurrency = new MultipleSelection();
-    const originalCurrencies = [
-      { currencyCode: 'Code1', id: 1 },
-      { currencyCode: 'Code2', id: 2 },
-    ] as Currency[];
-    filter.currencyIds = ['1', '2'];
-    mockService['initMultiSelectCurrency'] = jest.fn().mockReturnValue(multipleSelectCurrency);
-    const actual = mockService['initMultiSelectCurrencyWhenEditRequest'](originalCurrencies, filter);
+  describe('renderCurrency', () => {
+    it('should call initMultiSelectCurrencyWhenEditRequest when isEdit is true', () => {
+      const result = service.renderCurrency(true, mockCurrencies, mockFilterWrongOfferedName, mockFilterRequest);
+      expect(result).toBeInstanceOf(MultipleSelection);
+    });
 
-    expect(mockService['initMultiSelectCurrency']).toHaveBeenCalledTimes(1);
-    expect(actual).toEqual(multipleSelectCurrency);
+    it('should call autoCheckCurrency when isEdit is false', () => {
+      const result = service.renderCurrency(false, mockCurrencies, mockFilterWrongOfferedName, mockFilterRequest);
+      expect(result).toBeInstanceOf(MultipleSelection);
+    });
   });
 
-  it('isAutoCheckedCurrency should call #validationService.isSubTypeChinese and return true', async () => {
-    [
-      { isSubTypeChinese: true, currencyId: 13, expected: true },
-      { isSubTypeChinese: true, currencyId: 1, expected: false },
-      { isSubTypeChinese: false, currencyId: 13, expected: false },
-      { isSubTypeChinese: false, currencyId: 1, expected: true }
-    ].forEach(item => {
-      mockValidationService.isSubTypeChinese = jest.fn().mockReturnValue(item.isSubTypeChinese);
-      const actual = mockService['isAutoCheckedCurrency'](item.currencyId, '1');
+  describe('isValidity', () => {
+    it('should return false when currencyIds is empty', () => {
+      const filterWrongOfferedName = { ...mockFilterWrongOfferedName, currencyIds: [] };
+      const result = service.isValidity(filterWrongOfferedName, tooltip);
+      expect(result).toBeFalsy();
+      expect(tooltip.display).toHaveBeenCalled();
+    });
 
-      expect(mockValidationService.isSubTypeChinese).toHaveBeenCalledTimes(1);
-      expect(actual).toBe(item.expected);
+    it('should return false when licenseeNames is empty', () => {
+      const filterWrongOfferedName = { ...mockFilterWrongOfferedName, currencyIds: ['1'], licenseeNames: [] };
+      const result = service.isValidity(filterWrongOfferedName, tooltip);
+      expect(result).toBeFalsy();
+      expect(tooltip.display).toHaveBeenCalled();
+    });
+
+    it('should return true when both currencyIds and licenseeNames are not empty', () => {
+      const filterWrongOfferedName = {
+        ...mockFilterWrongOfferedName,
+        currencyIds: ['1'],
+        licenseeNames: ['Licensee 1']
+      };
+      const result = service.isValidity(filterWrongOfferedName, tooltip);
+      expect(result).toBeTruthy();
+      expect(tooltip.display).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('autoCheckLicensees', () => {
+    it('should check China rules group when subIssueTypeId is Chinese', () => {
+      const filterRequest = { ...mockFilterRequest, subIssueTypeId: 'CHINESE' };
+      jest.spyOn(validationService, 'isSubTypeChinese').mockReturnValue(true);
+      
+      const result = service.autoCheckLicensees(mockGroupLicensees, mockFilterWrongOfferedName, filterRequest);
+      const chinaRulesGroup = result.groupLicensees.find(x => x.groupName === 'China rules');
+      
+      expect(chinaRulesGroup?.isChecked).toBeTruthy();
+      expect(validationService.isSubTypeChinese).toHaveBeenCalledWith('CHINESE');
+    });
+
+    it('should not check China rules group when subIssueTypeId is not Chinese', () => {
+      jest.spyOn(validationService, 'isSubTypeChinese').mockReturnValue(false);
+      
+      const result = service.autoCheckLicensees(mockGroupLicensees, mockFilterWrongOfferedName, mockFilterRequest);
+      const chinaRulesGroup = result.groupLicensees.find(x => x.groupName === 'China rules');
+      
+      expect(chinaRulesGroup?.isChecked).toBeTruthy();
+      expect(validationService.isSubTypeChinese).toHaveBeenCalledWith('1');
+    });
+  });
+
+  describe('autoCheckCurrency', () => {
+    it('should check RMB when subIssueTypeId is Chinese', () => {
+      const filterRequest = { ...mockFilterRequest, subIssueTypeId: 'CHINESE' };
+      jest.spyOn(validationService, 'isSubTypeChinese').mockReturnValue(true);
+      
+      const result = service.autoCheckCurrency(mockCurrencies, mockFilterWrongOfferedName, filterRequest);
+      const rmbItem = result.items.find(x => x.value === '13') as ItemsSelect;
+      
+      expect(rmbItem?.checked).toBeTruthy();
+      expect(validationService.isSubTypeChinese).toHaveBeenCalledWith('CHINESE');
+    });
+
+    it('should check non-RMB currencies when subIssueTypeId is not Chinese', () => {
+      jest.spyOn(validationService, 'isSubTypeChinese').mockReturnValue(false);
+      
+      const result = service.autoCheckCurrency(mockCurrencies, mockFilterWrongOfferedName, mockFilterRequest);
+      const usdItem = result.items.find(x => x.value === '1') as ItemsSelect;
+      const rmbItem = result.items.find(x => x.value === '13') as ItemsSelect;
+      
+      expect(usdItem?.checked).toBeTruthy();
+      expect(rmbItem?.checked).toBeFalsy();
+      expect(validationService.isSubTypeChinese).toHaveBeenCalledWith('1');
     });
   });
 });

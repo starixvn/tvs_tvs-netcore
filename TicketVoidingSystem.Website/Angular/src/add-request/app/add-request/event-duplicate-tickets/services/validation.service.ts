@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { AbnormalFilterBy, MatchIdConstant, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
@@ -8,13 +8,9 @@ import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel, ValidationD
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService
-  ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   public isFilterMixParlay(filterBy: number): boolean {
     return filterBy === AbnormalFilterBy.MIX_PARLAY;
@@ -66,7 +62,7 @@ export class ValidationService {
   private updateModelAfterCallApi(args: SaveRequestArg, validationViewModel: CheckDuplicateTicketsViewModel): void {
     args.primitiveProps.transInfoAddRequestModel = validationViewModel.transInfoAddRequestModel;
     args.duplicateTicketsModel.matchId = validationViewModel.match?.matchId;
-    
+
     if (!this.isFilterMixParlay(args.duplicateTicketsModel.filterBy)) {
       args.duplicateTicketsModel.name = validationViewModel.match?.name;
       args.duplicateTicketsModel.leagueName = validationViewModel.match?.leagueName;

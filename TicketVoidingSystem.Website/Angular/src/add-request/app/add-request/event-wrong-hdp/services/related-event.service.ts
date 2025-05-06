@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
@@ -7,18 +7,14 @@ import { AddRequestApiService } from '../../add-request-api.service';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { AddRelatedEventArg } from '../models/add-related-event-arg.model';
-import { FilterWithHdpModel, FilterBetType } from '../models/filter-with-hdp.model';
+import { FilterBetType, FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class RelatedEventService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly validationService: ValidationService,
-  ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly validationService = inject(ValidationService);
 
   async getChildMatches(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
     return this.addRequestApiService.getChildMatches(query);

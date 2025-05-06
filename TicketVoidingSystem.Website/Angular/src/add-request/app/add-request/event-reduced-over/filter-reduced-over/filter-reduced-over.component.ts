@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { FilterReducedOverItemComponent } from '../filter-reduced-over-item/filter-reduced-over-item.component';
 import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
@@ -8,7 +9,9 @@ import { FilterReducedOverService } from '../services/filter-reduced-over.servic
 @Component({
   selector: 'filter-reduced-over',
   templateUrl: './filter-reduced-over.component.html',
-  styleUrls: ['./filter-reduced-over.component.scss']
+  styleUrls: ['./filter-reduced-over.component.scss'],
+  standalone: true,
+  imports: [FilterReducedOverItemComponent, FormsModule]
 })
 export class FilterReducedOverComponent {
   @Input() isEdit: boolean;
@@ -20,8 +23,7 @@ export class FilterReducedOverComponent {
   @Input() originalPlayers: OddsInfo[];
   @Output() changeFilterEvent = new EventEmitter();
   @ViewChildren('filterItem') filterItemComponents: QueryList<FilterReducedOverItemComponent>;
-
-  constructor(private readonly filterService: FilterReducedOverService) { }
+  private readonly filterService = inject(FilterReducedOverService);
 
   public changeFilter(): void {
     this.changeFilterEvent.emit();

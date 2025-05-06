@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import moment from 'moment-timezone';
 import { TemplateService } from "../../../../../utility/components/template-message/template-message/services/template.service";
 import { MatchModel } from "../../../../../utility/models/match.model";
@@ -13,18 +13,13 @@ import { FilterWrongOfferedNameModel } from "../models/filter-wrong-offered-name
 import { LogInfoWrongOfferedName } from "../models/log-info-wrong-offered-name.model";
 import { ValidationService } from "./validation.service";
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class EventWrongOfferedNameService {
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly templateService: TemplateService,
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly affectedTicketService: AffectedTicketService,
-    private readonly validationService: ValidationService
-  ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly commonService = inject(CommonService);
+  private readonly templateService = inject(TemplateService);
+  private readonly affectedTicketService = inject(AffectedTicketService);
+  private readonly validationService = inject(ValidationService);
 
   getPermissionAddRequest() {
     return this.addRequestApiService.getPermissionAddRequest();

@@ -28,7 +28,7 @@ exports[`OthersAbnormalMixParlayComponent OthersAbnormalMixParlayComponent shoul
             class="no-gutters"
           >
             <label
-              class="col-form-label text-right"
+              class="col-form-label-sm text-right"
             >
               Decided By
             </label>
@@ -49,7 +49,7 @@ exports[`OthersAbnormalMixParlayComponent OthersAbnormalMixParlayComponent shoul
             class="no-gutters"
           >
             <label
-              class="col-form-label text-right pd-right-25"
+              class="col-form-label-sm text-right pd-right-25"
             >
               Remark
             </label>

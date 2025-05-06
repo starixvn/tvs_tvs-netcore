@@ -1,213 +1,334 @@
-import { EventEmitter, QueryList } from '@angular/core';
-import * as _ from 'lodash';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { WrongScoreModel } from '../../models/event-wrong-score.model';
-import { LastTimeScore } from '../../models/last-time-score.model';
-import { FilterWrongScoreModel } from '../models/filter-wrong-score.model';
-import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
-import { ValidationService } from './validation.service';
+import { TestBed } from '@angular/core/testing';
 import { WrongScoreService } from './wrong-score.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { DateTimeFormat, TimeZone } from '../../../../../utility/constants/config';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { WrongScoreModel } from '../../models/event-wrong-score.model';
+import moment from 'moment-timezone';
+import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
+import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
+import { EventEmitter, QueryList } from '@angular/core';
 
-
-class Helper {
-  static readonly fakeRequestId = 1001;
-  static readonly fakeFirstMatchId = 1111;
-  static readonly fakeSecondMatchId = 2222;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeAllowanceTime: AllowanceTime = {
-    aaTime: 1,
-    paTime: 1,
-    saTime: 1,
-  };
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    scoreOfMatch: '',
-    scoreNormalTicket: '',
-    instantlySettleCount: 2,
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeWrongScoreModels: WrongScoreModel[] = [{
-    scoreId: 5464,
-    isActive: true,
-    wrongScore: '0-1',
-    subIssueTypeId: 5,
-    filterBy: 1,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    actualScore: '',
-    matchId: 900000,
-    isChecked: true,
-    eventDate: null,
-    voidFromTime: Helper.fakeFromDateTime,
-    voidToTime: Helper.fakeToDateTime,
-  },
-  {
-    scoreId: 5465,
-    isActive: false,
-    wrongScore: '2-1',
-    subIssueTypeId: 5,
-    filterBy: 1,
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    actualScore: '',
-    matchId: 900000,
-    isChecked: false,
-    eventDate: null,
-    voidFromTime: Helper.fakeFromDateTime,
-    voidToTime: Helper.fakeToDateTime,
-  }] as WrongScoreModel[];
-}
 describe('WrongScoreService', () => {
+  let service: WrongScoreService;
 
-  let wrongScoreService: WrongScoreService;
+  const mockAddRequestApiService = {
+    getWrongScores: jest.fn(),
+    getLastTimeScore: jest.fn()
+  };
 
   beforeEach(() => {
-    wrongScoreService = new WrongScoreService(null, null);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        WrongScoreService,
+        { provide: AddRequestApiService, useValue: mockAddRequestApiService }
+      ]
+    });
+
+    service = TestBed.inject(WrongScoreService);
   });
 
-  it('#handleCheckedLastScore should call #getWrongScores when have new score', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
-
-    const newModels = _.cloneDeep(Helper.fakeWrongScoreModels);
-    newModels.push(new WrongScoreModel());
-    const updateByOriginWrongScoreModelEvent = new EventEmitter<WrongScoreModel[]>();
-    wrongScoreService['getWrongScores'] = jest.fn().mockImplementation(() => Promise.resolve(newModels));
-    await wrongScoreService.handleCheckedLastScore(Helper.fakeWrongScoreModels, Helper.fakeWrongScoreModels[0],
-      updateByOriginWrongScoreModelEvent, null, null, null);
-
-    expect(wrongScoreService['getWrongScores']).toBeCalledTimes(1);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#handleCheckedLastScore should call #getWrongScores when have not new score', async () => {
-    const eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
+  describe('initDefaultFilterWrongScore', () => {
+    it('should initialize filter with current time', () => {
+      // Arrange
+      const currentMoment = moment.utc().tz(TimeZone.AMERICA_CARACAS).startOf('second');
+      const expectedFromTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
-    const newModels = _.cloneDeep(Helper.fakeWrongScoreModels);
-    newModels.push(new WrongScoreModel());
-    const updateByOriginWrongScoreModelEvent = new EventEmitter<WrongScoreModel[]>();
-    wrongScoreService['getWrongScores'] = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeWrongScoreModels));
-    wrongScoreService['getLastTimeTicket'] = jest.fn().mockImplementation();
-    await wrongScoreService.handleCheckedLastScore(Helper.fakeWrongScoreModels, Helper.fakeWrongScoreModels[0],
-      updateByOriginWrongScoreModelEvent, null, null, null);
+      // Act
+      const result = service.initDefaultFilterWrongScore();
 
-    expect(wrongScoreService['getWrongScores']).toBeCalledTimes(1);
-    expect(wrongScoreService['getLastTimeTicket']).toBeCalledTimes(1);
+      // Assert
+      expect(result).toBeInstanceOf(FilterTimeWithAllowance);
+      expect(result.fromDateTime).toBe(expectedFromTime);
+    });
   });
 
-  it('#getSelectedWrongScores should return model', async () => {
-    const actual = wrongScoreService.getSelectedWrongScores(Helper.fakeWrongScoreModels);
+  describe('getFilterWrongScore', () => {
+    it('should return filter model from wrong score model', () => {
+      // Arrange
+      const wrongScoreModel = new WrongScoreModel();
+      wrongScoreModel.filterFromTransTime = '2024-01-01 00:00:00';
+      wrongScoreModel.filterToTransTime = '2024-01-01 01:00:00';
+      wrongScoreModel.aaTime = 1;
+      wrongScoreModel.paTime = 2;
+      wrongScoreModel.saTime = 3;
 
-    expect(actual.length).toBe(1);
+      // Act
+      const result = service.getFilterWrongScore(wrongScoreModel);
+
+      // Assert
+      expect(result).toBeInstanceOf(FilterTimeWithAllowance);
+      expect(result.fromDateTime).toBe(wrongScoreModel.filterFromTransTime);
+      expect(result.toDateTime).toBe(wrongScoreModel.filterToTransTime);
+      expect(result.aaTime).toBe(wrongScoreModel.aaTime);
+      expect(result.paTime).toBe(wrongScoreModel.paTime);
+      expect(result.saTime).toBe(wrongScoreModel.saTime);
+    });
   });
 
-  it('#getSelectedWrongScoreComponents should return components', async () => {
-    const component = new WrongScoreInfoComponent(null, null, null, null, null);
-    component.wrongScoreModel = new WrongScoreModel();
-    component.wrongScoreModel.isChecked = true;
-    const components = new QueryList<WrongScoreInfoComponent>();
-    components.reset([...components.toArray(), component]);
-    const actual = wrongScoreService.getSelectedWrongScoreComponents(components);
+  describe('createMainWrongScoreModel', () => {
+    it('should create wrong score model from filter', () => {
+      // Arrange
+      const filterWrongScore = new FilterTimeWithAllowance();
+      filterWrongScore.fromDateTime = '2024-01-01 00:00:00';
+      filterWrongScore.toDateTime = '2024-01-01 01:00:00';
+      filterWrongScore.aaTime = 1;
+      filterWrongScore.paTime = 2;
+      filterWrongScore.saTime = 3;
 
-    expect(actual.length).toBe(1);
+      // Act
+      const result = service.createMainWrongScoreModel(filterWrongScore);
+
+      // Assert
+      expect(result).toBeInstanceOf(WrongScoreModel);
+      expect(result.filterFromTransTime).toBe(filterWrongScore.fromDateTime);
+      expect(result.filterToTransTime).toBe(filterWrongScore.toDateTime);
+      expect(result.aaTime).toBe(filterWrongScore.aaTime);
+      expect(result.paTime).toBe(filterWrongScore.paTime);
+      expect(result.saTime).toBe(filterWrongScore.saTime);
+      expect(result.isChecked).toBeTruthy();
+    });
   });
 
-  it('#getLastTimeTicket should update correct data', async () => {
-    const model = new WrongScoreModel();
-    const lastTimeScore = new LastTimeScore();
-    wrongScoreService['getLastTimeScore'] = jest.fn().mockImplementation(() => Promise.resolve(lastTimeScore));
-    await wrongScoreService['getLastTimeTicket'](model, null, null, null);
+  describe('handleCheckedLastScore', () => {
+    it('should update wrong score models when API returns new data', async () => {
+      // Arrange
+      const originWrongScoreModels = [new WrongScoreModel()];
+      originWrongScoreModels[0].scoreId = 1;
+      const wrongScoreModel = new WrongScoreModel();
+      wrongScoreModel.scoreId = 1;
+      const updateByOriginWrongScoreModelEvent = { emit: jest.fn() } as unknown as EventEmitter<WrongScoreModel[]>;
+      const matchId = 1;
+      const actionId = 1;
+      const filterBy = 1;
 
-    expect(model.filterToTransTime).toBe(lastTimeScore.lastTime);
+      const mockWrongScores = [
+        { scoreId: 1, filterToTransTime: '2024-01-01 02:00:00' },
+        { scoreId: 2, filterToTransTime: '2024-01-01 03:00:00' }
+      ];
+
+      mockAddRequestApiService.getWrongScores.mockResolvedValue(mockWrongScores);
+
+      // Act
+      await service.handleCheckedLastScore(
+        originWrongScoreModels,
+        wrongScoreModel,
+        updateByOriginWrongScoreModelEvent,
+        matchId,
+        actionId,
+        filterBy
+      );
+
+      // Assert
+      expect(updateByOriginWrongScoreModelEvent.emit).toHaveBeenCalled();
+      expect(originWrongScoreModels.length).toBe(2);
+    });
+
+    it('should get last time ticket when no new data', async () => {
+      // Arrange
+      const originWrongScoreModels = [new WrongScoreModel()];
+      originWrongScoreModels[0].scoreId = 1;
+      const wrongScoreModel = new WrongScoreModel();
+      wrongScoreModel.scoreId = 1;
+      const updateByOriginWrongScoreModelEvent = { emit: jest.fn() } as unknown as EventEmitter<WrongScoreModel[]>;
+      const matchId = 1;
+      const actionId = 1;
+      const filterBy = 1;
+
+      const mockWrongScores = [{ scoreId: 1, filterToTransTime: '2024-01-01 02:00:00' }];
+      mockAddRequestApiService.getWrongScores.mockResolvedValue(mockWrongScores);
+      
+      const mockLastTimeScore = { lastTime: '2024-01-01 02:00:00' };
+      mockAddRequestApiService.getLastTimeScore.mockResolvedValue(mockLastTimeScore);
+
+      // Act
+      await service.handleCheckedLastScore(
+        originWrongScoreModels,
+        wrongScoreModel,
+        updateByOriginWrongScoreModelEvent,
+        matchId,
+        actionId,
+        filterBy
+      );
+
+      // Assert
+      expect(mockAddRequestApiService.getLastTimeScore).toHaveBeenCalled();
+      expect(wrongScoreModel.filterToTransTime).toBe(mockLastTimeScore.lastTime);
+    });
   });
 
-  it('#getWrongScores should update correct data', async () => {
-    const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.getWrongScores = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeWrongScoreModels));
-    const mockWrongScoreService = new WrongScoreService(addRequestApiService, null);
-    const actual = await mockWrongScoreService['getWrongScores'](null);
+  describe('setNullAllowanceTime', () => {
+    it('should set all allowance times to null', () => {
+      // Arrange
+      const wrongScoreModel = new WrongScoreModel();
+      wrongScoreModel.aaTime = 1;
+      wrongScoreModel.paTime = 2;
+      wrongScoreModel.saTime = 3;
 
-    expect(actual).toStrictEqual(Helper.fakeWrongScoreModels);
+      // Act
+      service.setNullAllowanceTime(wrongScoreModel);
+
+      // Assert
+      expect(wrongScoreModel.aaTime).toBeNull();
+      expect(wrongScoreModel.paTime).toBeNull();
+      expect(wrongScoreModel.saTime).toBeNull();
+    });
   });
 
-  it('#getLastTimeScore should update correct data', async () => {
-    const lastTimeScore = new LastTimeScore();
-    const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.getLastTimeScore = jest.fn().mockImplementation(() => Promise.resolve(lastTimeScore));
-    const mockWrongScoreService = new WrongScoreService(addRequestApiService, null);
-    const actual = await mockWrongScoreService['getLastTimeScore'](Helper.fakeWrongScoreModels[0], null, null, null);
+  describe('getSelectedWrongScoreComponents', () => {
+    it('should return only checked components', () => {
+      // Arrange
+      const components = new QueryList<WrongScoreInfoComponent>();
+      components.reset([
+        { wrongScoreModel: { isChecked: true } } as WrongScoreInfoComponent,
+        { wrongScoreModel: { isChecked: false } } as WrongScoreInfoComponent,
+        { wrongScoreModel: { isChecked: true } } as WrongScoreInfoComponent
+      ]);
 
-    expect(actual).toStrictEqual(lastTimeScore);
+      // Act
+      const result = service.getSelectedWrongScoreComponents(components);
+
+      // Assert
+      expect(result.length).toBe(2);
+      expect(result.every(x => x.wrongScoreModel.isChecked)).toBeTruthy();
+    });
   });
 
-  it('#initDefaultFilterWrongScore should return model', async () => {
-    const actual = wrongScoreService.initDefaultFilterWrongScore();
+  describe('getDurationTime', () => {
+    it('should return formatted duration between two times', () => {
+      // Arrange
+      const fromTime = '2024-01-01 00:00:00';
+      const toTime = '2024-01-01 01:00:00';
 
-    expect(actual).toBeDefined();
+      // Act
+      const result = service.getDurationTime(fromTime, toTime);
+
+      // Assert
+      expect(result).toBe('60m0s');
+    });
   });
 
-  it('#getFilterWrongScore should return model', async () => {
-    const actual = wrongScoreService.getFilterWrongScore(Helper.fakeWrongScoreModels[0]);
+  describe('callApiGetWrongScores', () => {
+    it('should call API and return wrong scores', async () => {
+      // Arrange
+      const matchId = 1;
+      const mockWrongScores = [new WrongScoreModel()];
+      mockAddRequestApiService.getWrongScores.mockResolvedValue(mockWrongScores);
 
-    expect(actual).toBeDefined();
+      // Act
+      const result = await service.callApiGetWrongScores(matchId);
+
+      // Assert
+      expect(mockAddRequestApiService.getWrongScores).toHaveBeenCalledWith(matchId);
+      expect(result).toEqual(mockWrongScores);
+    });
   });
 
-  it('#createMainWrongScoreModel should return model', async () => {
-    const actual = wrongScoreService.createMainWrongScoreModel(new FilterWrongScoreModel());
+  describe('mapWrongScoreModel', () => {
+    it('should map and update wrong score models', () => {
+      // Arrange
+      const originWrongScoreModels = [
+        new WrongScoreModel(),
+        new WrongScoreModel()
+      ];
+      originWrongScoreModels[0].scoreId = 1;
+      originWrongScoreModels[0].isActive = true;
+      originWrongScoreModels[1].scoreId = 2;
+      originWrongScoreModels[1].isActive = false;
 
-    expect(actual).toBeDefined();
-    expect(actual.isChecked).toBeTruthy();
+      const wrongScoreModels = [
+        new WrongScoreModel(),
+        new WrongScoreModel()
+      ];
+      wrongScoreModels[0].scoreId = 1;
+      wrongScoreModels[0].isActive = false;
+      wrongScoreModels[1].scoreId = 3;
+      wrongScoreModels[1].isActive = true;
+
+      // Act
+      service.mapWrongScoreModel(originWrongScoreModels, wrongScoreModels);
+
+      // Assert
+      expect(wrongScoreModels.length).toBe(3);
+      expect(wrongScoreModels.find(x => x.scoreId === 1).isActive).toBeTruthy();
+    });
   });
 
-  it('#getFilterByBaseOnSubIssueType should return 2', async () => {
-    const validation = new ValidationService();
-    validation.isSubTypeFilterByAcceptedTime = jest.fn().mockImplementation(() => true);
-    const service = new WrongScoreService(null, validation);
-    const actual = service.getFilterByBaseOnSubIssueType('1');
+  describe('updateByOriginWrongScoreModel', () => {
+    it('should update wrong score models with new models from origin', () => {
+      // Arrange
+      const originWrongScoreModels = [
+        new WrongScoreModel(),
+        new WrongScoreModel()
+      ];
+      originWrongScoreModels[0].scoreId = 1;
+      originWrongScoreModels[0].isActive = true;
+      originWrongScoreModels[1].scoreId = 2;
+      originWrongScoreModels[1].isActive = false;
 
-    expect(actual).toBe(2);
+      const wrongScoreModels = [
+        new WrongScoreModel()
+      ];
+      wrongScoreModels[0].scoreId = 1;
+      wrongScoreModels[0].isActive = false;
+
+      // Act
+      service.updateByOriginWrongScoreModel(originWrongScoreModels, wrongScoreModels);
+
+      // Assert
+      expect(wrongScoreModels.length).toBe(2);
+      expect(wrongScoreModels.find(x => x.scoreId === 2)).toBeDefined();
+    });
   });
 
-  it('#getFilterByBaseOnSubIssueType should return 4', async () => {
-    const validation = new ValidationService();
-    validation.isSubTypeFilterByAcceptedTime = jest.fn().mockImplementation(() => false);
-    validation.isSubTypeFilterByTransTimeAndAcceptedTime = jest.fn().mockImplementation(() => true);
-    const service = new WrongScoreService(null, validation);
-    const actual = service.getFilterByBaseOnSubIssueType('1');
+  describe('getTimeSelectedScore', () => {
+    it('should return formatted time range for selected scores', () => {
+      // Arrange
+      const wrongScoreModels = [
+        new WrongScoreModel(),
+        new WrongScoreModel()
+      ];
+      wrongScoreModels[0].isChecked = true;
+      wrongScoreModels[0].logInfoDetail = {
+        matchId: 1,
+        liveScores: '',
+        voidFromTime: new Date('2024-01-01 00:00:00'),
+        voidToTime: new Date('2024-01-01 00:00:00'),
+        transVoidToTime: new Date('2024-01-01 00:00:00')
+      } as LogInfoDetail;
+      wrongScoreModels[1].isChecked = true;
+      wrongScoreModels[1].logInfoDetail = {
+        matchId: 1,
+        liveScores: '',
+        voidFromTime: new Date('2024-01-01 00:00:00'),
+        voidToTime: new Date('2024-01-01 01:00:00'),
+        transVoidToTime: new Date('2024-01-01 00:00:00')
+      } as LogInfoDetail;
 
-    expect(actual).toBe(4);
+      // Act
+      const result = service.getTimeSelectedScore(wrongScoreModels);
+
+      // Assert
+      expect(result).toBe('2024/01/01 12:00:00.000 AM - 2024/01/01 01:00:00.000 AM');
+    });
   });
 
-  it('#getFilterByBaseOnSubIssueType should return 1', async () => {
-    const validation = new ValidationService();
-    validation.isSubTypeFilterByAcceptedTime = jest.fn().mockImplementation(() => false);
-    validation.isSubTypeFilterByTransTimeAndAcceptedTime = jest.fn().mockImplementation(() => false);
-    const service = new WrongScoreService(null, validation);
-    const actual = service.getFilterByBaseOnSubIssueType('1');
+  describe('displayFullDateTimeFormat', () => {
+    it('should format date to full date time format', () => {
+      // Arrange
+      const date = new Date('2024-01-01 00:00:00');
 
-    expect(actual).toBe(1);
-  });
+      // Act
+      const result = service.displayFullDateTimeFormat(date);
 
-  it('#getDurationTime should return 1', async () => {
-    const service = new WrongScoreService(null, null);
-    const actual = service.getDurationTime('2020-10-09 09:44:41.000 PM', '2020-10-09 09:44:46.000 PM');
-
-    expect(actual).toBe('0m5s');
+      // Assert
+      expect(result).toBe('2024/01/01 12:00:00.000 AM');
+    });
   });
 });

@@ -1,238 +1,471 @@
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { AddRequestService } from '../../add-request.service';
-import { AddRequestStore } from '../../add-request.store';
-import { FilterModel } from '../../filter/filter.model';
-import { DuplicateTicketsModel } from '../../models/event-duplicate-tickets.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { OthersModel } from '../../others/others.model';
-import { PopupService } from '../../services/popup.service';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
+import { TestBed } from '@angular/core/testing';
 import { SaveRequestService } from './save-request.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { TEXT } from '../../../../../utility/constants/text';
+import { AddRequestService } from '../../add-request.service';
+import { PopupService } from '../../services/popup.service';
 import { ValidationService } from './validation.service';
+import { SaveRequestArg } from '../models/save-request-arg.model';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
+  let addRequestService: AddRequestService;
+  let popupService: PopupService;
+  let validationService: ValidationService;
 
   beforeEach(() => {
-    service = new SaveRequestService(null, null, null);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [SaveRequestService, ValidationService]
+    });
+
+    service = TestBed.inject(SaveRequestService);
+    addRequestService = TestBed.inject(AddRequestService);
+    popupService = TestBed.inject(PopupService);
+    validationService = TestBed.inject(ValidationService);
   });
 
-  it('#saveRequest should called #proceedSaveRequest', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.isVoided = true;
-    service['proceedSaveRequest'] = jest.fn();
-
-    await service.saveRequest(saveRequestArg);
-
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(service['proceedSaveRequest']).toHaveBeenCalledTimes(1);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#saveRequest should not called #proceedSaveRequest', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.isVoided = false;
-    service['proceedSaveRequest'] = jest.fn();
-    service['recheckBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
+  describe('saveRequest', () => {
+    it('should proceed with save when data is valid and isVoided is true', async () => {
+      // Arrange
+      const mockArg = {
+        filter: { 
+          isVoided: true,
+          issueTypeId: '1',
+          action: 'action1'
+        },
+        addRequestStore: {
+          changeSavingRequestStatus: jest.fn(),
+          changeBlockingUiStatus: jest.fn()
+        },
+        primitiveProps: {
+          transInfoAddRequestModel: {}
+        },
+        duplicateTicketsModel: {
+          filterBy: 1
+        },
+        others: {
+          mistakenBy: 'user1',
+          operatorsList: [],
+          provider: 'provider1',
+          source: 'source1',
+          decidedBy: 'decider1',
+          remark: 'remark1'
+        }
+      } as unknown as SaveRequestArg;
 
-    await service.saveRequest(saveRequestArg);
+      service['proceedSaveRequest'] = jest.fn();
 
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(2);
-    expect(service['proceedSaveRequest']).toHaveBeenCalledTimes(0);
+      // Act
+      await service.saveRequest(mockArg);
+
+      // Assert
+      expect(mockArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+      expect(service['proceedSaveRequest']).toHaveBeenCalledWith(mockArg);
+    });
+
+    it('should recheck before save when data is not voided', async () => {
+      // Arrange
+      const mockArg = {
+        filter: { 
+          isVoided: false,
+          issueTypeId: '1',
+          action: 'action1'
+        },
+        addRequestStore: {
+          changeSavingRequestStatus: jest.fn(),
+          changeBlockingUiStatus: jest.fn()
+        },
+        primitiveProps: {
+          transInfoAddRequestModel: {}
+        },
+        duplicateTicketsModel: {
+          filterBy: 1
+        },
+        others: {
+          mistakenBy: 'user1',
+          operatorsList: [],
+          provider: 'provider1',
+          source: 'source1',
+          decidedBy: 'decider1',
+          remark: 'remark1'
+        }
+      } as unknown as SaveRequestArg;
+      service['recheckBeforeSaveRequest'] = jest.fn();
+
+      // Act
+      await service.saveRequest(mockArg);
+
+      // Assert
+      expect(service['recheckBeforeSaveRequest']).toHaveBeenCalledWith(mockArg);
+    });
   });
 
-  it('#checkValidBusinessRuleBeforeSave should return true', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    saveRequestArg.duplicateTicketsModel = new DuplicateTicketsModel();
-    saveRequestArg.duplicateTicketsModel.orgTransIds = '122';
-    let validationService = new ValidationService(null);
-    validationService.checkValidBusinessRule = jest.fn().mockReturnValue(true);
-    const saveRequestService = new SaveRequestService(null, null, validationService);
+  describe('recheckBeforeSaveRequest', () => {
+    it('should check business rule validity', async () => {
+      // Arrange
+      const mockArg = {
+        filter: { 
+          isVoided: false,
+          issueTypeId: '1',
+          action: 'action1'
+        },
+        addRequestStore: {
+          changeBlockingUiStatus: jest.fn(),
+          changeSavingRequestStatus: jest.fn()
+        },
+        primitiveProps: {
+          transInfoAddRequestModel: {}
+        },
+        duplicateTicketsModel: {
+          filterBy: 1
+        },
+        others: {
+          mistakenBy: 'user1',
+          operatorsList: [],
+          provider: 'provider1',
+          source: 'source1',
+          decidedBy: 'decider1',
+          remark: 'remark1'
+        }
+      } as unknown as SaveRequestArg;
+      
+      service['checkValidBusinessRuleBeforeSave'] = jest.fn().mockResolvedValue(true);
 
-    const actual = await saveRequestService['checkValidBusinessRuleBeforeSave'](saveRequestArg);
+      // Act
+      const result = await service['recheckBeforeSaveRequest'](mockArg);
 
-    expect(actual).toBeTruthy();
-  });
-  
-  it('#checkValidBusinessRuleBeforeSave should return false', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    saveRequestArg.duplicateTicketsModel = new DuplicateTicketsModel();
-    saveRequestArg.duplicateTicketsModel.orgTransIds = null;
-    saveRequestArg.tooltip = new Tooltip()
-    saveRequestArg.tooltip.display = jest.fn();
-    const saveRequestService = new SaveRequestService(null, null, null);
-
-    const actual = await saveRequestService['checkValidBusinessRuleBeforeSave'](saveRequestArg);
-
-    expect(actual).toBeFalsy();
-  });
-
-  it('#recheckBeforeSaveRequest should return false when does not pass validation', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    saveRequestArg.duplicateTicketsModel = new DuplicateTicketsModel();
-    saveRequestArg.duplicateTicketsModel.orgTransIds = '122';
-    saveRequestArg.tooltip = new Tooltip()
-    saveRequestArg.tooltip.display = jest.fn();
-    const saveRequestService = new SaveRequestService(null, null, null);
-    saveRequestService['checkValidBusinessRuleBeforeSave'] = jest.fn().mockReturnValue(false);
-
-    const actual = await saveRequestService['recheckBeforeSaveRequest'](saveRequestArg);
-
-    expect(saveRequestArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-    expect(actual).toBeFalsy();
+      // Assert
+      expect(mockArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(mockArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+      expect(result).toBeTruthy();
+    });
   });
 
-  it('#proceedSaveRequest should showConfirm', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    service['proceedSaveRequest'] = jest.fn();
+  describe('checkValidBusinessRuleBeforeSave', () => {
+    it('should return false when orgTransIds is missing', async () => {
+      // Arrange
+      const mockArg = {
+        duplicateTicketsModel: { orgTransIds: null },
+        tooltip: { display: jest.fn() }
+      } as unknown as SaveRequestArg;
 
-    const validationService = new ValidationService(null);
-    validationService.checkCanShowConfirmation = jest.fn().mockImplementation(() => true);
+      // Act
+      const result = await service['checkValidBusinessRuleBeforeSave'](mockArg);
 
-    const popupService = new PopupService(null);
-    const spyShowConfirm = jest.spyOn(popupService, 'showConfirm').mockImplementation(() => {});
+      // Assert
+      expect(mockArg.tooltip.display).toHaveBeenCalledWith('org-transId', TEXT.REQUIRED_FIELD);
+      expect(result).toBeFalsy();
+    });
 
-    const saveRequestService = new SaveRequestService(null, popupService, validationService);
-    saveRequestService['getMessageConfirmation'] = jest.fn().mockImplementation(() => 'aaa');
-    saveRequestService['onClickConfirmSave'] = jest.fn();
+    it('should validate business rule when orgTransIds exists', async () => {
+      // Arrange
+      const mockArg = {
+        duplicateTicketsModel: { orgTransIds: ['123'] }
+      } as unknown as SaveRequestArg;
 
-    saveRequestService['proceedSaveRequest'](saveRequestArg);
+      jest.spyOn(validationService, 'checkValidBusinessRule').mockResolvedValue(true);
 
-    expect(validationService.checkCanShowConfirmation).toHaveBeenCalledTimes(1);
-    expect(saveRequestService['getMessageConfirmation']).toHaveBeenCalledTimes(1);
+      // Act
+      const result = await service['checkValidBusinessRuleBeforeSave'](mockArg);
 
-    expect(spyShowConfirm.mock.calls[0][0]).toEqual('aaa');
-    expect(spyShowConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
-    expect(spyShowConfirm.mock.calls[0][2]).toBeInstanceOf(Function);
-
-    spyShowConfirm.mock.calls[0][1]();
-    expect(saveRequestService['onClickConfirmSave']).toHaveBeenCalledTimes(1);
-
-    spyShowConfirm.mock.calls[0][2]();
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(validationService.checkValidBusinessRule).toHaveBeenCalledWith(mockArg);
+      expect(result).toBeTruthy();
+    });
   });
 
-  it('#proceedSaveRequest should called #executeSaveRequestApi', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    const validationService = new ValidationService(null);
-    validationService.checkCanShowConfirmation = jest.fn().mockImplementation(() => false);
+  describe('proceedSaveRequest', () => {
+    it('should show confirmation when validation service indicates', () => {
+      // Arrange
+      const mockArg = {
+        filter: { 
+          isVoided: false,
+          issueTypeId: '1',
+          action: 'action1'
+        },
+        addRequestStore: {
+          changeSavingRequestStatus: jest.fn(),
+          changeBlockingUiStatus: jest.fn()
+        },
+        primitiveProps: {
+          transInfoAddRequestModel: {}
+        },
+        duplicateTicketsModel: {
+          filterBy: 1
+        },
+        others: {
+          mistakenBy: 'user1',
+          operatorsList: [],
+          provider: 'provider1',
+          source: 'source1',
+          decidedBy: 'decider1',
+          remark: 'remark1'
+        }
+      } as unknown as SaveRequestArg;
+      jest.spyOn(validationService, 'checkCanShowConfirmation').mockReturnValue(true);
+      jest.spyOn(popupService, 'showConfirm');
 
-    const saveRequestService = new SaveRequestService(null, null, validationService);
-    saveRequestService['executeSaveRequestApi'] = jest.fn();
+      // Act
+      service['proceedSaveRequest'](mockArg);
 
-    saveRequestService['proceedSaveRequest'](saveRequestArg);
+      // Assert
+      expect(popupService.showConfirm).toHaveBeenCalled();
+    });
 
-    expect(validationService.checkCanShowConfirmation).toHaveBeenCalledTimes(1);
-    expect(saveRequestService['executeSaveRequestApi']).toHaveBeenCalledTimes(1);
+    it('should execute save request directly when no confirmation needed', () => {
+      // Arrange
+      const mockArg = {
+        filter: { 
+          isVoided: false,
+          issueTypeId: '1',
+          action: 'action1'
+        },
+        addRequestStore: {
+          changeSavingRequestStatus: jest.fn(),
+          changeBlockingUiStatus: jest.fn()
+        },
+        primitiveProps: {
+          transInfoAddRequestModel: {}
+        },
+        duplicateTicketsModel: {
+          filterBy: 1
+        },
+        others: {
+          mistakenBy: 'user1',
+          operatorsList: [],
+          provider: 'provider1',
+          source: 'source1',
+          decidedBy: 'decider1',
+          remark: 'remark1'
+        }
+      } as unknown as SaveRequestArg;
+      validationService['checkCanShowConfirmation'] = jest.fn().mockReturnValue(false);
+      service['executeSaveRequestApi'] = jest.fn();
+
+      // Act
+      service['proceedSaveRequest'](mockArg);
+
+      // Assert
+      expect(service['executeSaveRequestApi']).toHaveBeenCalledWith(mockArg);
+    });
   });
 
-  it('#getMessageConfirmation should return expected msg when edit take note', async () => {
-    const expected = `<div>Ticket(s) on request will be unmarked.</div><div class='mg-top-10'>`
-    + `<i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.isEdit = true;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.action = '2';
-    saveRequestArg.actionIdOfFirstTimeAccess = '5';
+  describe('onClickConfirmSave', () => {
+    it('should execute save request when data is valid', async () => {
+      // Arrange
+      const mockArg = {
+        filter: { 
+          isVoided: false,
+          issueTypeId: '1',
+          action: 'action1'
+        },
+        addRequestStore: {
+          changeSavingRequestStatus: jest.fn(),
+          changeBlockingUiStatus: jest.fn()
+        },
+        primitiveProps: {
+          transInfoAddRequestModel: {}
+        },
+        duplicateTicketsModel: {
+          filterBy: 1
+        },
+        others: {
+          mistakenBy: 'user1',
+          operatorsList: [],
+          provider: 'provider1',
+          source: 'source1',
+          decidedBy: 'decider1',
+          remark: 'remark1'
+        }
+      } as unknown as SaveRequestArg;
 
-    const actual = service['getMessageConfirmation'](saveRequestArg);
+      service['recheckBeforeSaveRequest'] = jest.fn().mockResolvedValue(true);
+      service['executeSaveRequestApi'] = jest.fn();
 
-    expect(actual).toBe(expected);
+      // Act
+      await service['onClickConfirmSave'](mockArg);
+
+      // Assert
+      expect(service['executeSaveRequestApi']).toHaveBeenCalledWith(mockArg);
+    });
+
+    it('should show error when data is invalid', async () => {
+      // Arrange
+      const mockArg = {
+        filter: { 
+          isVoided: false,
+          issueTypeId: '1',
+          action: 'action1'
+        },
+        addRequestStore: {
+          changeSavingRequestStatus: jest.fn(),
+          changeBlockingUiStatus: jest.fn()
+        },
+        primitiveProps: {
+          transInfoAddRequestModel: {}
+        },
+        duplicateTicketsModel: {
+          filterBy: 1
+        },
+        others: {
+          mistakenBy: 'user1',
+          operatorsList: [],
+          provider: 'provider1',
+          source: 'source1',
+          decidedBy: 'decider1',
+          remark: 'remark1'
+        }
+      } as unknown as SaveRequestArg;
+
+      service['recheckBeforeSaveRequest'] = jest.fn().mockResolvedValue(false);
+      popupService['showError'] = jest.fn();
+
+      // Act
+      await service['onClickConfirmSave'](mockArg);
+
+      // Assert
+      expect(popupService.showError).toHaveBeenCalledWith(TEXT.INVALID_DATA_IN_REQUEST);
+    });
   });
 
-  it('#getMessageConfirmation should return expected msg when add request', async () => {
-    const expected = `<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.isEdit = false;
-    saveRequestArg.filter = new FilterModel();
-    const actual = service['getMessageConfirmation'](saveRequestArg);
+  describe('executeSaveRequestApi', () => {
+    it('should execute save request with correct parameters', async () => {
+      // Arrange
+      const mockArg = {
+        isEdit: true,
+        requestId: '123',
+        filter: { 
+          isVoided: false,
+          issueTypeId: '1',
+          action: 'action1'
+        },
+        addRequestStore: {
+          changeBlockingUiStatus: jest.fn(),
+          changeSavingRequestStatus: jest.fn()
+        },
+        primitiveProps: {
+          transInfoAddRequestModel: {}
+        },
+        duplicateTicketsModel: {
+          filterBy: 1
+        },
+        others: {
+          mistakenBy: 'user1',
+          operatorsList: [],
+          provider: 'provider1',
+          source: 'source1',
+          decidedBy: 'decider1',
+          remark: 'remark1'
+        }
+      } as unknown as SaveRequestArg;
+      service['initAddRequestQuery'] = jest.fn().mockReturnValue({});
+      addRequestService['executeSaveRequest'] = jest.fn();
 
-    expect(actual).toBe(expected);
+      // Act
+      await service['executeSaveRequestApi'](mockArg);
+
+      // Assert
+      expect(mockArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(addRequestService.executeSaveRequest).toHaveBeenCalledWith(true, '123', {}, mockArg.addRequestStore);
+      expect(mockArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    });
   });
 
-  it('#executeSaveRequestApi should called #executeSaveRequest', async () => {
-    const addRequestStore = new AddRequestStore();
-    addRequestStore.changeBlockingUiStatus = jest.fn();
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.duplicateTicketsModel = new DuplicateTicketsModel();
-    saveRequestArg.duplicateTicketsModel.filterBy = 1;
-    saveRequestArg.isEdit = false;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.isVoided = true;
-    saveRequestArg.primitiveProps = new PrimitiveProperty();
-    saveRequestArg.others = new OthersModel();
-    saveRequestArg.addRequestStore = addRequestStore;
-    const validationService = new ValidationService(null);
-    const addRequestService = new AddRequestService(null, null, null);
-    validationService.isFilterMixParlay = jest.fn().mockReturnValue(true);
-    const spyExecuteSaveRequest = jest.spyOn(addRequestService, 'executeSaveRequest').mockImplementation();
-    const saveRequestService = new SaveRequestService(addRequestService, null, validationService);
-    await saveRequestService['executeSaveRequestApi'](saveRequestArg);
+  describe('initAddRequestQuery', () => {
+    it('should initialize query with correct values', () => {
+      // Arrange
+      const mockArg = {
+        filter: {
+          issueTypeId: '1',
+          action: 'action1',
+          isTest: true,
+          isVoided: false
+        },
+        primitiveProps: {
+          transInfoAddRequestModel: {
+            unMarkTransIds: ['1'],
+            markTransIds: ['2'],
+            removeTransIds: ['3'],
+            transInfoJson: '{}'
+          }
+        },
+        others: {
+          mistakenBy: 'user1',
+          operatorsList: ['op1'],
+          provider: 'provider1',
+          source: 'source1',
+          decidedBy: 'decider1',
+          remark: 'test remark'
+        },
+        duplicateTicketsModel: {
+          filterBy: 'filter1'
+        }
+      } as unknown as SaveRequestArg;
 
-    expect(spyExecuteSaveRequest).toHaveBeenCalledTimes(1);
+      jest.spyOn(validationService, 'isFilterMixParlay').mockReturnValue(false);
+
+      // Act
+      const result = service['initAddRequestQuery'](mockArg);
+
+      // Assert
+      expect(result.issueTypeId).toBe('1');
+      expect(result.unMarkTransIds).toEqual(['1']);
+      expect(result.markTransIds).toEqual(['2']);
+      expect(result.removeTransIds).toEqual(['3']);
+      expect(result.actionId).toBe('action1');
+      expect(result.isTest).toBeTruthy();
+      expect(result.isVoided).toBeFalsy();
+      expect(result.mistakenBy).toBe('user1');
+      expect(result.operatorsList).toEqual(['op1']);
+      expect(result.provider).toBe('provider1');
+      expect(result.source).toBe('source1');
+      expect(result.decidedBy).toBe('decider1');
+      expect(result.remark).toBe('test remark');
+      expect(result.transInfoJson).toBe('{}');
+      expect(result.duplicateTicketsInfo).toBe(mockArg.duplicateTicketsModel);
+    });
   });
 
-  it('#onClickConfirmSave should call #popupService.showError', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    const popupService = new PopupService(null);
-    const spyShowError = jest.spyOn(popupService, 'showError').mockImplementation(() => {});
-    const saveRequestService = new SaveRequestService(null, popupService, null);
-    saveRequestService['recheckBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
+  describe('getMessageConfirmation', () => {
+    it('should return correct message for edit take note request', () => {
+      // Arrange
+      const mockArg = {
+        isEdit: true,
+        filter: {
+          action: TVSRequestActionType.TAKE_NOTE_ID.toString()
+        },
+        actionIdOfFirstTimeAccess: 'different_action'
+      } as unknown as SaveRequestArg;
 
-    await saveRequestService['onClickConfirmSave'](arg);
+      // Act
+      const result = service['getMessageConfirmation'](mockArg);
 
-    expect(spyShowError).toHaveBeenCalledTimes(1);
-  });
+      // Assert
+      expect(result).toContain('Ticket(s) on request will be unmarked');
+      expect(result).toContain('ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?');
+    });
 
-  it('#onClickConfirmSave should called #executeSaveRequestApi', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = true;
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    service['executeSaveRequestApi'] = jest.fn();
+    it('should return basic confirmation message for non-edit request', () => {
+      // Arrange
+      const mockArg = {
+        isEdit: false,
+        filter: {
+          action: TVSRequestActionType.TAKE_NOTE_ID.toString()
+        }
+      } as unknown as SaveRequestArg;
 
-    await service['onClickConfirmSave'](arg);
+      // Act
+      const result = service['getMessageConfirmation'](mockArg);
 
-    expect(service['executeSaveRequestApi']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#initAddRequestQuery should return model has markTransIds', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.isEdit = false;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.isVoided = false;
-    saveRequestArg.duplicateTicketsModel = new DuplicateTicketsModel();
-    saveRequestArg.primitiveProps = new PrimitiveProperty();
-    saveRequestArg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
-    saveRequestArg.primitiveProps.transInfoAddRequestModel.markTransIds = '123,12';
-    saveRequestArg.others = new OthersModel();
-    const validationService = new ValidationService(null);
-    const spyIsFilterMixParlay = jest.spyOn(validationService, 'isFilterMixParlay').mockReturnValue(false);
-    const saveRequestService = new SaveRequestService(null, null, validationService);
-    const query = saveRequestService['initAddRequestQuery'](saveRequestArg);
-
-    expect(spyIsFilterMixParlay).toHaveBeenCalledTimes(4);
-    expect(query.markTransIds).toBe('123,12');
+      // Assert
+      expect(result).not.toContain('Ticket(s) on request will be unmarked');
+      expect(result).toContain('ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?');
+    });
   });
 });

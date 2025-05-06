@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { AdvancedModeAddRequestModel } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
@@ -6,13 +7,16 @@ import { GroupBetTypesAddRequestModel } from '../../../../utility/components/adv
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { OtherIssuesModel } from '../models/event-other-issues.model';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { OthersModel } from '../others/others.model';
+import { CheckAddPermissionService } from '../services/check-permission.service';
 import { FilterOtherIssuesComponent } from './filter-other-issues/filter-other-issues.component';
+import { LogInfoOtherIssuesComponent } from './log-info-other-issues/log-info-other-issues.component';
 import { LogInfoOtherIssues } from './models/log-info-other-issues.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
@@ -24,7 +28,13 @@ import { ValidationService } from './services/validation.service';
 @Component({
   selector: 'event-other-issues',
   templateUrl: './event-other-issues.component.html',
-  styleUrls: ['./event-other-issues.component.scss']
+  styleUrls: ['./event-other-issues.component.scss'],
+  standalone: true,
+  imports: [EventLeagueComponent, FilterOtherIssuesComponent, AdvancedModeAddRequestComponent,
+    LogInfoOtherIssuesComponent, ConfirmAddRequestComponent],
+  providers: [ValidationService, EventOtherIssuesService, LogInfoService, SaveRequestService,
+    CheckAddPermissionService
+  ]
 })
 export class EventOtherIssuesComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;
@@ -48,14 +58,12 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   confirmAddRequest = new ConfirmAddRequestModel();
   primitiveProps = new PrimitiveProperty();
   permission = new PermissionAddRequest();
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly eventOtherIssuesService: EventOtherIssuesService,
-    private readonly logInfoService: LogInfoService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestApiService: AddRequestApiService
-  ) { }
+  private readonly validationService = inject(ValidationService);
+  private readonly eventOtherIssuesService = inject(EventOtherIssuesService);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   async ngOnChanges(changes: SimpleChanges) {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
@@ -189,11 +197,13 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   }
 
   resetLogInfoOfEvent(): void {
+    this.primitiveProps.isShowErrorNoBetType = false;
     this.primitiveProps.isShowValidation = false;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
   }
 
   checkingLoadDataAdvancedMode(isLoading: boolean): void {
+    console.log("checkingLoadDataAdvancedMode" + isLoading);
     this.addRequestStore.changeBlockingUiStatus(isLoading);
   }
 
@@ -206,7 +216,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
     const arg = new SaveRequestArg();
     if (!this.filter.isVoided) {
       this.logInfoEvent.betTeamsResult = this.advancedMode?.getCheckedBetTypes();
-      this.logInfoEvent.allBetTypesSelection = this.advancedMode.advancedModeComponent.getAllBetTypesSelection();
+      this.logInfoEvent.allBetTypesSelection = this.advancedMode?.advancedModeComponent.getAllBetTypesSelection();
     }
     arg.requestId = this.requestId;
     arg.requestedBy = this.requestedBy;

@@ -1,19 +1,27 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
+import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
-import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
-import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
-import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
+import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
+import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
+import { TvDetectionService } from '../components/tv-detection/tv-detection.service';
+import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
+import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { AddRelatedEventArg } from '../models/add-related-event.model';
@@ -23,6 +31,7 @@ import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
 import { LABELS } from './../../../../utility/constants/labels';
 import { StaticService } from './../../../../utility/services/static.service';
+import { ConfirmDangerAcceptedComponent } from './confirm-danger-accepted/confirm-danger-accepted.component';
 import { ConfirmDangerAcceptedModel } from './confirm-danger-accepted/confirm-danger-accepted.model';
 import { EventDangerAcceptedService } from './services/event-danger-accepted.service';
 import { LogInfoService } from './services/log-info.service';
@@ -30,12 +39,23 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
-
+import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 @Component({
+  standalone: true,
   selector: 'event-danger-accepted',
   templateUrl: './event-danger-accepted.component.html',
-  styleUrls: ['./event-danger-accepted.component.scss']
+  styleUrls: ['./event-danger-accepted.component.scss'],
+  imports: [FormsModule, CommonModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiModule,
+    TvDetectionComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent, 
+    ConfirmDangerAcceptedComponent, OnlyNumberDirective],
+  providers: [
+    LogInfoService,
+    ValidationService,
+    SaveRequestService,
+    RelatedEventService,
+    EventDangerAcceptedService,
+    TvDetectionService
+  ]
 })
 export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;
@@ -66,16 +86,15 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   getAllowanceTimeSubscription: Subscription;
 
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
+  private readonly element = inject(ElementRef);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly validationService = inject(ValidationService);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly relatedEventService = inject(RelatedEventService);
+  private readonly eventDangerAcceptedService = inject(EventDangerAcceptedService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly logInfoService: LogInfoService,
-    private readonly validationService: ValidationService,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly relatedEventService: RelatedEventService,
-    private readonly eventDangerAcceptedService: EventDangerAcceptedService,
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 

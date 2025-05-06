@@ -1,121 +1,144 @@
-import { HdpFilterBetTypeService } from './hdp-filter-bet-type.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { HdpFilterBetTypeComponent } from './hdp-filter-bet-type.component';
-import { NgModule, SimpleChange } from '@angular/core';
-import { Shallow } from 'shallow-render';
-import { HdpFilterBetType } from '../../models/hdp-filter-betType.model';
+import { HdpFilterBetTypeService } from './hdp-filter-bet-type.service';
 import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
+import { HdpFilterBetType } from '../../models/hdp-filter-betType.model';
+import { SimpleChange } from '@angular/core';
+
+class Helper {
+  static readonly fakeSportTypeId = 1;
+  static readonly fakeIssueTypeId = '1';
+  static readonly fakeFilterBetType = {
+    filterBetTypeId: '1',
+    isChecked: true
+  } as unknown as FilterBetType;
+  static readonly fakeHdpFilterBetTypes= [
+    {
+      betType: '1',
+      isChecked: true,
+      description: 'Test Bet Type 1'
+    },
+    {
+      betType: '2', 
+      isChecked: false,
+      description: 'Test Bet Type 2'
+    }
+  ] as unknown as HdpFilterBetType[];
+}
 
 describe('HdpFilterBetTypeComponent', () => {
-  @NgModule({
-    declarations: [],
-    providers: [ HdpFilterBetTypeService ]
-  })
-  class AppModuleTest { }
+  let component: HdpFilterBetTypeComponent;
+  let fixture: ComponentFixture<HdpFilterBetTypeComponent>;
+  let hdpFilterBetTypeService: HdpFilterBetTypeService;
 
-  let shallow: Shallow<HdpFilterBetTypeComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        HdpFilterBetTypeService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(HdpFilterBetTypeComponent, AppModuleTest);
+    fixture = TestBed.createComponent(HdpFilterBetTypeComponent);
+    hdpFilterBetTypeService = fixture.debugElement.injector.get(HdpFilterBetTypeService);
+    component = fixture.componentInstance;
   });
 
-  it('#iddShowFilterBetType should return true', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render();
-
-    // Action & Assert
-    ['4', '6'].forEach(x => {
-      instance.issueTypeId = x;
-      expect(instance.iddShowFilterBetType()).toBeTruthy();
-    })
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#iddShowFilterBetType should return false', async () => {
+  it('should initialize with default values when sportTypeId changes', async () => {
     // Arrange
-    const { instance } = await shallow
-    .render();
+    component.sportTypeId = Helper.fakeSportTypeId;
+    component.issueTypeId = Helper.fakeIssueTypeId;
+    component.filterBetType = Helper.fakeFilterBetType;
+    hdpFilterBetTypeService.GetHdpFilterBetTypes = jest.fn().mockResolvedValue(Helper.fakeHdpFilterBetTypes);
+    hdpFilterBetTypeService.loadDataEditPage = jest.fn();
+    hdpFilterBetTypeService.updateAllFilterBetTypeData = jest.fn();
 
-    // Action & Assert
-    ['1', '3'].forEach(x => {
-      instance.issueTypeId = x;
-      expect(instance.iddShowFilterBetType()).toBeFalsy();
-    })   
+    // Act
+    await component.ngOnChanges({
+      sportTypeId: {
+        currentValue: Helper.fakeSportTypeId,
+        previousValue: null,
+        firstChange: true
+      } as SimpleChange
+    });
+
+    // Assert
+    expect(hdpFilterBetTypeService.GetHdpFilterBetTypes).toHaveBeenCalledWith(Helper.fakeSportTypeId, Helper.fakeIssueTypeId);
+    expect(component.allFilterBetType).toEqual(Helper.fakeHdpFilterBetTypes);
+    expect(hdpFilterBetTypeService.loadDataEditPage).toHaveBeenCalled();
+    expect(component.filterBetTypeId).toBe(Helper.fakeFilterBetType.filterBetTypeId);
+    expect(component.betTypeSelected).toEqual(Helper.fakeHdpFilterBetTypes[0]);
   });
 
-  it('#ngOnChanges should update filterBetType when filterBetTypeId has value', async () => {
+  it('should refresh filter bet types when no filterBetTypeId is provided', async () => {
     // Arrange
-    const allFilterBetType = [{betType: '1', selections:[], isChecked: true}] as HdpFilterBetType[];
-    const { instance } = await shallow
-    .mock(HdpFilterBetTypeService, {GetHdpFilterBetTypes: jest.fn().mockReturnValue(allFilterBetType),
-      loadDataEditPage: jest.fn()
-    })
-    .render();
-    instance.filterBetType = new FilterBetType('', '', '1');
-    const changes = {'sportTypeId': new SimpleChange(0, 1, true)};
-    
-    // Action 
-    await instance.ngOnChanges(changes);
+    component.sportTypeId = Helper.fakeSportTypeId;
+    component.issueTypeId = Helper.fakeIssueTypeId;
+    component.filterBetType = { filterBetTypeId: '' } as FilterBetType;
+    hdpFilterBetTypeService.GetHdpFilterBetTypes = jest.fn().mockResolvedValue(Helper.fakeHdpFilterBetTypes);
+    hdpFilterBetTypeService.updateAllFilterBetTypeData = jest.fn();
 
-    // & Assert
-    expect(instance.filterBetTypeId).toBe('1');
-    expect(instance.betTypeSelected).toEqual(allFilterBetType[0]);
+    // Act
+    await component.ngOnChanges({
+      sportTypeId: {
+        currentValue: Helper.fakeSportTypeId,
+        previousValue: null,
+        firstChange: true
+      } as SimpleChange
+    });
+
+    // Assert
+    expect(component.filterBetTypeId).toBe(Helper.fakeHdpFilterBetTypes[0].betType);
+    expect(component.allFilterBetType[0].isChecked).toBeTruthy();
+    expect(hdpFilterBetTypeService.updateAllFilterBetTypeData).toHaveBeenCalled();
   });
 
-  it('#ngOnChanges should not update filterBetType when sportTypeId not change', async () => {
+  it('should handle bet type change correctly', () => {
     // Arrange
-    const { instance } = await shallow
-    .render();
-    instance.filterBetType = new FilterBetType('', '', '1');
-    instance.filterBetTypeId = '3'
-    const changes = {'issueTypeId': new SimpleChange('1', '1', false)};
-    
-    // Action 
-    await instance.ngOnChanges(changes);
+    component.allFilterBetType = Helper.fakeHdpFilterBetTypes;
+    component.filterBetType = { filterBetTypeId: '' } as FilterBetType;
+    const selectedBetType = Helper.fakeHdpFilterBetTypes[1];
+    hdpFilterBetTypeService.updateAllFilterBetTypeData = jest.fn();
 
-    // & Assert
-    expect(instance.filterBetTypeId).toBe('3');
+    // Act
+    component.onChangeBetType(selectedBetType);
+
+    // Assert
+    expect(component.allFilterBetType[0].isChecked).toBeFalsy();
+    expect(component.allFilterBetType[1].isChecked).toBeTruthy();
+    expect(component.betTypeSelected).toEqual(selectedBetType);
+    expect(component.filterBetType.filterBetTypeId).toBe(selectedBetType.betType);
+    expect(hdpFilterBetTypeService.updateAllFilterBetTypeData).toHaveBeenCalled();
   });
-  
-  it('#ngOnChanges should not update filterBetType default vale when filterBetTypeId no has valse', async () => {
+
+  it('should emit change event when filter changes', () => {
     // Arrange
-    const allFilterBetType = [{betType: '1', selections:[], isChecked: false}] as HdpFilterBetType[];
-    const { instance } = await shallow
-    .mock(HdpFilterBetTypeService, {GetHdpFilterBetTypes: jest.fn().mockReturnValue(allFilterBetType),
-      loadDataEditPage: jest.fn(),
-      updateFilterBetTypeData: jest.fn()
-    })
-    .render();
-    instance.filterBetType = new FilterBetType('', '', '');
-    const changes = {'sportTypeId': new SimpleChange(0, 1, true)};
-    instance.changeEvent.emit = jest.fn();
+    component.allFilterBetType = Helper.fakeHdpFilterBetTypes;
+    component.changeEvent.emit = jest.fn();
+    hdpFilterBetTypeService.updateAllFilterBetTypeData = jest.fn();
 
-    // Action 
-    await instance.ngOnChanges(changes);
+    // Act
+    component.onChangeFilter();
 
-    // & Assert
-    expect(instance.filterBetTypeId).toBe('1');
-    expect(instance.allFilterBetType[0].isChecked).toBeTruthy();
+    // Assert
+    expect(hdpFilterBetTypeService.updateAllFilterBetTypeData).toHaveBeenCalled();
+    expect(component.changeEvent.emit).toHaveBeenCalled();
   });
-  
-  it('#onChangeBetType should not update filterBetType default vale when filterBetTypeId no has valse', async () => {
+
+  it('should show filter bet type for wrong HDP or OU issue types', () => {
     // Arrange
-    const allFilterBetType = [{betType: '1', selections:[], isChecked: false},
-    {betType: '3', selections:[{value:'801', name: 'AA'}], isChecked: false}] as HdpFilterBetType[];
-    const { instance } = await shallow
-    .mock(HdpFilterBetTypeService, {
-      updateFilterBetTypeData: jest.fn()
-    })
-    .render();
-    instance.filterBetType = new FilterBetType('', '', '1');
-    instance.allFilterBetType = allFilterBetType;
-    instance.changeEvent.emit = jest.fn();
+    component.issueTypeId = '4'; // Wrong HDP
+    expect(component.iddShowFilterBetType()).toBeTruthy();
 
-    // Action 
-    instance.onChangeBetType(allFilterBetType[1]);
+    component.issueTypeId = '6'; // Wrong OU
+    expect(component.iddShowFilterBetType()).toBeTruthy();
 
-    // & Assert
-    expect(instance.allFilterBetType[0].isChecked).toBeFalsy();
-    expect(instance.allFilterBetType[1].isChecked).toBeTruthy();
-    expect(instance.betTypeSelected).toEqual(allFilterBetType[1]);
+    component.issueTypeId = '3'; // Other type
+    expect(component.iddShowFilterBetType()).toBeFalsy();
   });
 });

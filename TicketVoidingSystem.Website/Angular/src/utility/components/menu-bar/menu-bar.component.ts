@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { CommonService } from '../../../utility/services/common.service';
@@ -17,8 +17,7 @@ export class MenuBarComponent implements OnInit {
   username: string;
   isBlock: boolean;
   rootUrl = '/';
-  
-  constructor(private readonly commonService: CommonService) { }
+  private readonly commonService = inject(CommonService);
 
   async ngOnInit(): Promise<void> {
     this.isBlock = true;

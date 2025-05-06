@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { AddRequestComponent } from '../../add-request/app/add-request/add-request.component';
 import { RequestModel } from '../../add-request/app/add-request/models/request.model';
+import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppService } from './app.service';
 import { PrimitiveProperty } from './models/primitive-property.model';
@@ -8,8 +11,10 @@ import { LogInfoService } from './services/log-info.service';
 import { ObjectService } from './services/object.service';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  imports: [MenuBarComponent, AddRequestComponent, BlockFullUiComponent]
 })
 export class AppComponent implements OnInit {
   detailViewModel = new RequestDetailViewModel();
@@ -17,13 +22,10 @@ export class AppComponent implements OnInit {
   primitiveProperty = new PrimitiveProperty();
   actionIdOfFirstTimeAccess: string;
   isBlock = false;
-
-  constructor(
-    private readonly appService: AppService,
-    private readonly signalRService: SignalRService,
-    private readonly logInfoService: LogInfoService,
-    private readonly objectService: ObjectService,
-  ) { }
+  appService = inject(AppService);
+  signalRService = inject(SignalRService);
+  logInfoService = inject(LogInfoService);
+  objectService = inject(ObjectService);
 
   async ngOnInit() {
     const url = window.location.href;

@@ -1,6 +1,10 @@
-import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { SortingComponent } from '../../../../../utility/components/sorting/sorting/sorting.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { RegexConstant } from '../../../../../utility/constants/regex';
 import { AddRequestApiService } from '../../add-request-api.service';
@@ -13,11 +17,15 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { ValidationBusinessRuleArgs } from '../models/validation.model';
 import { ValidationService } from '../services/validation.service';
 import DescriptionTableAdjustVoidConfig from './describe-table-adjust-void.json';
+import { TicketStatus } from '../../../../../utility/constants/config';
+import { SanitizeHtmlPipe } from '../../../../../utility/pipes/sanitize-html.pipe';
 
 @Component({
-  selector: 'account-table',
-  templateUrl: './account-table.component.html',
-  styleUrls: ['./account-table.component.scss']
+    selector: 'account-table',
+    templateUrl: './account-table.component.html',
+    styleUrls: ['./account-table.component.scss'],
+    standalone: true,
+    imports: [SortingComponent, TooltipComponent, NgbTooltipModule, FormsModule, CommonModule, SanitizeHtmlPipe]
 })
 export class AccountTableComponent {
   @Input() filter: FilterModel;
@@ -27,27 +35,31 @@ export class AccountTableComponent {
   @Input() accountWinlostModels: AccountWinlostModel[];
   @Input() permission: PermissionAddRequest;
   @Input() primitiveProps: PrimitiveProperty;
+  @Input() isShowTooltip: boolean = false;
   @Output() reCalculateByAccountEvent = new EventEmitter<number>();
   @Output() openPopupAdjustTicketEvent = new EventEmitter<number>();
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;
   tooltip = new Tooltip();
   isCancelRecalculateAmount: boolean;
   isCheckedShowAdjustAccount: boolean;
+  previousAdjustVoidLimit : number = null;
   message = `Current Losing (L)\n
   Sum winlost (without actual stake) of all LOSE tickets\n
   Display L as negative number`;
-  constructor(
-    private readonly element: ElementRef,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly appService: AddRequestApiService,
-    private readonly validationService: ValidationService
-  ) {
+  private readonly element = inject(ElementRef);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly appService = inject(AddRequestApiService);
+  private readonly validationService = inject(ValidationService);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 
-  async reCalculate(account: AccountWinlostModel, index: number) {
+  async reCalculate(account: AccountWinlostModel, previousAdjustVoid: number, index: number) {
     account.isShowInput = false;
-    if (this.isCancelRecalculateAmount) {
+    this.previousAdjustVoidLimit = account.adjustVoidLimit;
+
+    if (this.isCancelRecalculateAmount || this.isWrongAdjustVoidLimit(account, previousAdjustVoid)) {
       this.isCancelRecalculateAmount = false;
       return;
     }
@@ -77,6 +89,10 @@ export class AccountTableComponent {
     }
     this.reCalculateByAccountEvent.emit(account.custId);
     this.addRequestStore.changeBlockingUiStatus(false);
+  }
+
+  isWrongAdjustVoidLimit(account: AccountWinlostModel, previousAdjustVoid: number) {
+    return Number(previousAdjustVoid) === Number(account.adjustVoidLimit);
   }
 
   async exportExcel() {
@@ -132,7 +148,8 @@ export class AccountTableComponent {
 
   mouseDownEventAdjustGV(account: AccountWinlostModel) {
     this.isCancelRecalculateAmount = false;
-    if (!this.filter.isVoided) {
+    const isLose = this.abnormalAccountModel.statusIds.split(',').includes(TicketStatus.LOSE.toString())
+    if (!this.filter.isVoided && !isLose) {
       account.isShowInput = true;
     }
   }

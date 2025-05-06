@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
@@ -12,17 +12,13 @@ import { SaveRequestArg } from '../models/save-request-arg.model';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SaveRequestService {
-  constructor(
-    private readonly popupService: PopupService,
-    private readonly logInfoService: LogInfoService,
-    private readonly validationService: ValidationService,
-    private readonly addRequestApiService: AddRequestService,
-    private readonly checkPermissionService: CheckAddPermissionService
-  ) { }
+  private readonly popupService = inject(PopupService);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly validationService = inject(ValidationService);
+  private readonly addRequestApiService = inject(AddRequestService);
+  private readonly checkPermissionService = inject(CheckAddPermissionService);
 
   async saveRequest(arg: SaveRequestArg): Promise<void> {
     arg.addRequestStore.changeSavingRequestStatus(true);

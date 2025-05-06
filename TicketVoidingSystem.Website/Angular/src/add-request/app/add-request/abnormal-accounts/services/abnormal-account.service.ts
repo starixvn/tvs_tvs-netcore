@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ExtraWarningModel } from '../../confirm-add-request/confirm-add-request.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AbnormalAccountService {
   getExtraWarningModel(numberOfTicketsExistedInRequest: number) {
     if (numberOfTicketsExistedInRequest > 0) {

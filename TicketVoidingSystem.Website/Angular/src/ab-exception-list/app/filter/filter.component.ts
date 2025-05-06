@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
-import { MultipleSelectionModule } from '../../../utility/components/multiple-selection/multiple-selection.module';
+import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { ABExceptionListLevel, ABExceptionListVoidVIP } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
 import { AppStore } from '../app.store';
@@ -20,7 +20,7 @@ import { FilterModel } from './filter.model';
   selector: 'filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
-  imports: [MultipleSelectionModule, NgSelectModule, CommonModule, FormsModule, ToolTipModule],
+  imports: [MultipleSelectionComponent, NgSelectModule, CommonModule, FormsModule, TooltipComponent],
   providers: [FilterService]
 })
 export class FilterComponent implements OnInit {

@@ -10,10 +10,10 @@ import { RedCardModel } from '../../models/event-red-card.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch } from '../../models/sub-type-link-match.model';
-import { PrimitiveProperty } from '../event-red-card.model';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { EventRedCardService } from './event-red-card.service';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;

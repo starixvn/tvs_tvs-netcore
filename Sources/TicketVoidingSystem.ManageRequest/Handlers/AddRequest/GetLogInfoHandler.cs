@@ -10,6 +10,6 @@ public class GetLogInfoHandler(LogInfoService logInfoService) : IRequestHandler<
 {
     public async Task<GetLogInfoViewModel> Handle(GetLogInfoRequest request, CancellationToken cancellationToken)
     {
-        return await logInfoService.GetLogInfo(request);
+        return await logInfoService.Get(request);
     }
 }

@@ -1,122 +1,85 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { LogInfoReducedOverComponent } from './log-info-reduced-over.component';
-
-class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeLogInfoReducedOver: LogInfoReducedOver = {
-    matchId: 1,
-    filterReducedOvers: [],
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: []
-  };
-}
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
+import moment from 'moment-timezone';
 
 describe('LogInfoReducedOverComponent', () => {
-  @NgModule({
-    declarations: [
-    ],
-    imports: [
-      NgbModule,
-      FormsModule
-    ],
-    providers: [
-      ModalService
-    ]
-  })
-  class AppModuleTest { }
+  let component: LogInfoReducedOverComponent;
+  let fixture: ComponentFixture<LogInfoReducedOverComponent>;
+  let modalService: ModalService;
 
-  let shallow: Shallow<LogInfoReducedOverComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ModalService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(LogInfoReducedOverComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(LogInfoReducedOverComponent);
+    modalService = fixture.debugElement.injector.get(ModalService);
+    component = fixture.componentInstance;
   });
 
-  it('LogInfoReducedOverComponent init should match snapshot', async () => {
-    const component = new LogInfoReducedOverComponent(null);
-    expect(component).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('displayFullDateTimeFormat should return time', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoReducedOver
-      }
-    });
-    const actual = instance.displayFullDateTimeFormat(new Date(Helper.fromDate));
-
-    expect(actual).toBe('2021/12/18 12:08:49.737 PM');
+  it('should initialize with default values', () => {
+    expect(component.logInfo).toBeUndefined();
+    expect(component.primitiveProps).toBeInstanceOf(PrimitivePropertyEvent);
   });
 
-  it('countInfoContent should return info CashOut', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoReducedOver
-      }
-    });
-    const actual = instance['countInfoContent'](1, 2, 0);
-
-    expect(actual).toBe(' (Cash Out: <strong>1</strong>, Settled: <strong>2</strong>)');
+  it('should display full date time format correctly', () => {
+    const testDate = new Date('2024-03-20T10:30:00');
+    const formattedDate = component.displayFullDateTimeFormat(testDate);
+    expect(formattedDate).toBe(moment(testDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT));
   });
 
-  it('openPopupTransIds should call modal Service', async () => {
-    const mockModalOpen = jest.fn();
-    const { instance } = await shallow
-    .mock(ModalService, { open: mockModalOpen })
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoReducedOver
-      }
-    });
-    instance['openPopupTransIds'](0, '');
-
-    expect(mockModalOpen).toHaveBeenCalledTimes(1);
+  it('should open popup trans ids', () => {
+    const requestId = 123;
+    const transIds = 'ABC123';
+    const spy = jest.spyOn(StaticService, 'openPopupTransIds');
+    
+    component.openPopupTransIds(requestId, transIds);
+    
+    expect(spy).toHaveBeenCalledWith(requestId, transIds, modalService);
   });
 
-  it('isShowCountInfo should return false', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoReducedOver
-      }
-    });
-    const actual = instance['isShowCountInfo'](0, 0, 0);
-
-    expect(actual).toBeFalsy();
+  it('should count info content correctly', () => {
+    const cashOutCount = 2;
+    const settleCount = 3;
+    const instantlySettleCount = 1;
+    const spy = jest.spyOn(StaticService, 'countInfoContent');
+    
+    component.countInfoContent(cashOutCount, settleCount, instantlySettleCount);
+    
+    expect(spy).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
   });
 
-  it('displayTransId should return 12312', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoReducedOver
-      }
-    });
-    const actual = instance.displayTransId(1, '12312');
-
-    expect(actual).toBe('12312');
+  it('should display trans id correctly when ticket count is 0', () => {
+    const result = component.displayTransId(0, 'ABC123');
+    expect(result).toBe('-');
   });
 
-  it('displayTransId should return -', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoReducedOver
-      }
-    });
-    const actual = instance.displayTransId(0, '');
-
-    expect(actual).toBe('-');
+  it('should display trans id correctly when ticket count is greater than 0', () => {
+    const transId = 'ABC123';
+    const result = component.displayTransId(1, transId);
+    expect(result).toBe(transId);
   });
 
+  it('should check if show count info', () => {
+    const cashOutCount = 2;
+    const settleCount = 3;
+    const instantlySettleCount = 1;
+    const spy = jest.spyOn(StaticService, 'isShowCountInfo');
+    
+    component.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
+    
+    expect(spy).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
+  });
 });

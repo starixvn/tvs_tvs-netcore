@@ -1,29 +1,17 @@
 <div>
   <div class="filter-product mb-3">
-    <label class="col-form-label">Product</label>
+    <label class="col-form-label-sm">Product</label>
     <div class="product-selection">
-      <ng-select class="custom-sm"
-        [disabled]="true"
-        [items]="products"
-        bindLabel="name"
-        bindValue="value"
-        [(ngModel)]="recoverTicketModel.productIds"
-        [clearable]="false"
-        [searchable]="false">
+      <ng-select class="custom-sm" [disabled]="true" [items]="products" bindLabel="name" bindValue="value"
+        [(ngModel)]="recoverTicketModel.productIds" [clearable]="false" [searchable]="false">
       </ng-select>
     </div>
   </div>
-
-
-  <div class="d-flex mb-2 header-bet-id" [ngStyle]="{'max-width.px': 1065}">
-    <div class="mr-4">Bet ID(s)</div>
-  </div>
+  <label class="col-form-label-sm">Bet ID(s)</label>
   <div [blockUi]="primitiveProps.isBlockBetIds">
-    <bet-ids #betIds [leftBetIdCss]="'col-form-label'" [rightBetIdCss]="'col-sm-8'"
-      [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false"
+    <bet-ids #betIds [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false"
       [hideDifferentMatch]="true" [disabled]="filter.isVoided" [initBetIds]="recoverTicketModel.transIds"
-      (afterFocusOutBetIds)="afterFocusOutBetIds()"
-      [isShowLabel]="false"
+      (afterFocusOutBetIds)="afterFocusOutBetIds()" [isShowLabel]="false"
       [warningMoveText]="'(*) Moved or Duplicated tickets are highlighted in ORANGE.'">
     </bet-ids>
   </div>

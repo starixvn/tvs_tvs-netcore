@@ -11,8 +11,6 @@ import { RequestDetailViewModel } from '../request.model';
   providedIn: 'root'
 })
 export class ObjectService {
-  constructor() { }
-
   mapRequestModel(requestModel: RequestModel, detailViewModel: RequestDetailViewModel, primitiveProperty: PrimitiveProperty) {
     this.mapFilter(requestModel, detailViewModel);
     this.mapEvent(this.createMapEventArg(requestModel, detailViewModel, primitiveProperty));

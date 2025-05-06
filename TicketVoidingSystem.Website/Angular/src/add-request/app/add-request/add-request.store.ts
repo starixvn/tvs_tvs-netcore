@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AllowanceTime } from '../../../utility/models/allowance-time.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AddRequestStore {
   private readonly savingRequestStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private readonly checkValidSubIssueTypeInFilterSubject: Subject<null> = new Subject();
@@ -11,9 +13,6 @@ export class AddRequestStore {
   private readonly changeActionWaitingToManualEditPageSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private readonly abnormalFilterBySubject: Subject<number> = new Subject();
   private startTimeFilterTicket: Date;
-
-  constructor() {
-  }
 
   get getStartTimeFilterTicket(): Date {
     return this.startTimeFilterTicket;
@@ -57,7 +56,7 @@ export class AddRequestStore {
     newValue ? value.push(newValue) : value.pop();
     this.blockingUiStatusSubject.next(value);
   }
-  
+
   get getChangeActionWaitingToManualEditPageSubject(): Observable<boolean> {
     return this.changeActionWaitingToManualEditPageSubject.asObservable();
   }

@@ -7,31 +7,31 @@
     {
         "column": 2,
         "name": "Given Credit",
-        "description": "Given Credit (G)\nGiven Credit of member"
+        "description": "<strong>Given Credit (G)</strong>\nGiven Credit of member"
     },
     {
         "column": 3,
         "name": "Adjust Void Limit",
-        "description": "Adjust Void Limit (A)\nSubstitute amount for Given Credit"
+        "description": "<strong>Adjust Void Limit (A)</strong>\nSubstitute amount for Given Credit"
     },
     {
         "column": 4,
         "name": "Current Losing",
-        "description": "Current Losing (L)\nSum winlost (without actual stake) of all LOSE tickets\nDisplay L as negative number"
+        "description": "<strong>Current Losing (L)</strong>\nSum winlost (without actual stake) of all LOSE tickets\nDisplay L as negative number"
     },
     {
         "column": 5,
         "name": "Current Winning",
-        "description": "Current Winning (CW)\nSum winlost (without actual stake) of all WON tickets"
+        "description": "<strong>Current Winning (CW)</strong>\nSum winlost (without actual stake) of all WON tickets"
     },
     {
         "column": 6,
         "name": "Estimate Void Amount",
-        "description": "Estimated Void Amount (E)\nSum winlost (without actual stake) of all or some (abs(L) > G/A) WON tickets"
+        "description": "<strong>Estimated Void Amount (E)</strong>\nSum winlost (without actual stake) of all or some (abs(L) > G/A) WON tickets"
     },
     {
         "column": 7,
         "name": "WinLost After Void",
-        "description": "WinLost After Void (WL)\nWL = L + (CW - E)"
+        "description": "<strong>WinLost After Void (WL)</strong>\nWL = L + (CW - E)"
     }
 ]

@@ -2,6 +2,7 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 import { NumbersOnlyService } from './numbers-only.service';
 
 @Directive({
+  standalone: true,
   selector: 'input[numbersOnly]'
 })
 export class NumbersOnlyDirective {

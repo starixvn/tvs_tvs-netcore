@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -10,18 +10,13 @@ import { EventOtherIssuesService } from './event-other-issues.service';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class SaveRequestService {
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly logInfoOtherIssuesService: LogInfoService,
-    private readonly popupService: PopupService,
-    private readonly addRequestService: AddRequestService,
-    private readonly eventOtherIssuesService: EventOtherIssuesService
-  ) { }
+  private readonly validationService = inject(ValidationService);
+  private readonly logInfoOtherIssuesService = inject(LogInfoService);
+  private readonly popupService = inject(PopupService);
+  private readonly addRequestService = inject(AddRequestService);
+  private readonly eventOtherIssuesService = inject(EventOtherIssuesService);
 
   async saveRequest(argOtherIssues: SaveRequestArg): Promise<void> {
     const isDataValid = argOtherIssues.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argOtherIssues);

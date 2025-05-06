@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -10,18 +10,13 @@ import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class SaveRequestService {
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly logInfoWrongOddsSportsBookService: LogInfoService,
-    private readonly popupService: PopupService,
-    private readonly addRequestService: AddRequestService,
-    private readonly eventWrongOddsSportsBookService: EventWrongOddsSportsBookService
-  ) { }
+  private readonly validationService = inject(ValidationService);
+  private readonly logInfoWrongOddsSportsBookService = inject(LogInfoService);
+  private readonly popupService = inject(PopupService);
+  private readonly addRequestService = inject(AddRequestService);
+  private readonly eventWrongOddsSportsBookService = inject(EventWrongOddsSportsBookService);
 
   async saveRequest(argWrongOddsSportsBook: SaveRequestArg): Promise<void> {
     const isDataValid = argWrongOddsSportsBook.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argWrongOddsSportsBook);

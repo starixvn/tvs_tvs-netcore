@@ -6,7 +6,6 @@ import { CommonService } from '../../services/common.service';
 import { ModalContentComponent } from './modal-content/modal-content.component';
 import { IModal, ModalType } from './modal.model';
 
-
 @Injectable({
   providedIn: 'root'
 })

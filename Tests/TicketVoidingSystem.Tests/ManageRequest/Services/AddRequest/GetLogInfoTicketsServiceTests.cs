@@ -7,6 +7,7 @@ using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
+using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 using Xunit;
 
@@ -17,6 +18,7 @@ public class GetLogInfoTicketServiceTests
     public MapTicketsService mapTicketsService = Substitute.For<MapTicketsService>();
     public CompressDataService compressDataService = Substitute.For<CompressDataService>();
     public BetListService betListService = Substitute.For<BetListService>();
+    public PagingService pagingService = Substitute.For<PagingService>();
     public GetLogInfoTicketsService service;
 
     [Fact]
@@ -32,7 +34,7 @@ public class GetLogInfoTicketServiceTests
         };
         compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson).ReturnsForAnyArgs(getTicketModels);
 
-        service = new GetLogInfoTicketsServiceImp(null, compressDataService, null);
+        service = new GetLogInfoTicketsServiceImp(null, compressDataService, betListService, pagingService);
 
         // Act
         var result = service.GetTicketsViewModel(request);
@@ -56,7 +58,7 @@ public class GetLogInfoTicketServiceTests
         var getTicketModels = new List<GetTicketModel>
         {
             new() { SubBetType = 2, IsMixParlay = true, Status = "Won", SubStatus = "won", GroupName = "Parlay"},
-            new() { SubBetType = 3, Status = "Won", SubStatus = "won", GroupName = "Parlay" }
+            new() { SubBetType = 3, Status = "Won", SubStatus = "won", GroupName = "Credit" }
         };
         var ticketParlay = new TicketViewModel { BetType = "Handicap", IsParlay = true, Status = "Won", GroupName = "Parlay" };
         var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Credit" };
@@ -66,7 +68,7 @@ public class GetLogInfoTicketServiceTests
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => !x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketSingle);
         betListService.GetBetTypeName(Arg.Any<Ticket>()).Returns("Handicap");
 
-        service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService, betListService);
+        service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService, betListService, pagingService);
 
         // Act
         var result = service.GetTicketsViewModel(request);
@@ -91,7 +93,7 @@ public class GetLogInfoTicketServiceTests
         var getTicketModels = new List<GetTicketModel>
         {
             new() { SubBetType = 2, IsMixParlay = true, Status = "Won", SubStatus = "won", GroupName = "Parlay" },
-            new() { SubBetType = 3, IsMixParlay = false, Status = "Won", SubStatus = "won", GroupName = "Parlay" }
+            new() { SubBetType = 3, IsMixParlay = false, Status = "Won", SubStatus = "won", GroupName = "Credit" }
         };
         var ticketParlay = new TicketViewModel { BetType = "Handicap", IsParlay = true, Status = "Won", GroupName = "Parlay" };
         var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Credit" };
@@ -101,7 +103,7 @@ public class GetLogInfoTicketServiceTests
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => !x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketSingle);
         betListService.GetBetTypeName(Arg.Any<Ticket>()).Returns("Handicap");
 
-        service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService, betListService);
+        service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService, betListService, pagingService);
 
         // Act
         var result = service.GetTicketsViewModel(request);
@@ -127,12 +129,12 @@ public class GetLogInfoTicketServiceTests
         {
             new() { SubBetType = 2, Status = "Won", SubStatus = "won", GroupName = "Parlay", IsMixParlay = false }
         };
-        var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Credit" };
+        var ticketSingle = new TicketViewModel { BetType = "Handicap", Status = "Won", GroupName = "Parlay" };
 
         compressDataService.DecompressTickets<GetTicketModel>(request.LogInfoTicketsJson).ReturnsForAnyArgs(getTicketModels);
         mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Is<GetTicketModel>(x => !x.IsMixParlay), null, ChoiceType.None, 1).Returns(ticketSingle);
 
-        service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService, null);
+        service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService, betListService, pagingService);
 
         // Act
         var result = service.GetTicketsViewModel(request);
@@ -141,6 +143,6 @@ public class GetLogInfoTicketServiceTests
         Assert.Equal(1, result.TotalSingle);
         Assert.Equal(0, result.TotalParlay);
         Assert.Single(result.Groups);
-        Assert.Equal("Credit", result.Groups.First().Name);
+        Assert.Equal("Parlay", result.Groups.First().Name);
     }
 }

@@ -3,14 +3,15 @@
   [matchId]="logInfoEvent.matchId"
   (changeEvent)="changeMatchEvent()">
 </event-league>
-<filter-wrong-offered-name #filterWrongOfferedName
-  *ngIf="logInfoEvent.filterWrongOfferedName"
-  [isEdit]="isEdit"
-  [filterModel]="filter"
-  (changeFilterEvent)="resetLogInfo()"
-  [matchModel]="logInfoEvent.matchModel"
-  [model]="logInfoEvent.filterWrongOfferedName">
-</filter-wrong-offered-name>
+@if (logInfoEvent.filterWrongOfferedName) {
+  <filter-wrong-offered-name #filterWrongOfferedName
+    [isEdit]="isEdit"
+    [filterModel]="filter"
+    (changeFilterEvent)="resetLogInfo()"
+    [matchModel]="logInfoEvent.matchModel"
+    [model]="logInfoEvent.filterWrongOfferedName">
+  </filter-wrong-offered-name>
+}
 <div class="mb-3 d-flex mt-1">
   <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
     (click)="handleSearchEvent()">

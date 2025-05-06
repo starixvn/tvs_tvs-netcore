@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
@@ -6,11 +7,8 @@ import { FilterNotParticipateComponent } from '../filter-not-participate/filter-
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
   private readonly PLAYER_CLASS = 'player-dropdown';
   private readonly GROUP_BET_TYPE_CLASS = 'bet-type-dropdown';

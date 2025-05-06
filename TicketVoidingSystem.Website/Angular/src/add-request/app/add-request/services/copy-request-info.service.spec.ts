@@ -1,99 +1,364 @@
-import { AcceptType } from "../../../../utility/constants/config";
-import { CopyRequestInfoResponse, RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';
-import { LogInfoDetail } from "../../../../utility/models/log-info-detail.model";
-import { CommonService } from "../../../../utility/services/common.service";
-import { OperatorInfo, OperatorType } from "../others/others.model";
-import { CopyRequestInfoService } from "./copy-request-info.service";
-
-class Helper {
-  static readonly url = 'http://localhost:60196/';
-  static readonly fakeOperatorInfo: OperatorInfo[] = [
-    {
-      matchId: 1,
-      groupName: 'name',
-      operatorId: 1,
-      operatorType: OperatorType.SUSPENDER,
-      userName: ''
-    },
-    {
-      matchId: 2,
-      groupName: 'name',
-      operatorId: 2,
-      operatorType: OperatorType.TRADER,
-      userName: ''
-    }
-  ];
-  static readonly fakeLogInfoDetail: LogInfoDetail[] = [
-    {
-      highlightAcceptType: AcceptType.AUTO_ACCEPT,
-      highlightMinTime: new Date('2020-11-06 00:00:00.000')
-    } as LogInfoDetail,
-    {
-      highlightAcceptType: AcceptType.SECOND_ACCEPT,
-      highlightMinTime: new Date('2020-11-07 00:00:00.000')
-    } as LogInfoDetail,
-    {
-      highlightAcceptType: AcceptType.PENDING_ACCEPT,
-      highlightMinTime: new Date('2020-11-08 00:00:00.000')
-    } as LogInfoDetail,
-    {
-      highlightAcceptType: 100,
-      highlightMinTime: new Date('2020-11-09 00:00:00.000')
-    } as LogInfoDetail,
-    {
-      highlightAcceptType: null,
-      highlightMinTime: new Date('2020-11-09 00:00:00.000')
-    } as LogInfoDetail
-  ]
-}
+import { TestBed } from '@angular/core/testing';
+import { CopyRequestInfoService } from './copy-request-info.service';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { CommonService } from '../../../../utility/services/common.service';
+import { AcceptType } from '../../../../utility/constants/config';
+import { CopyRequestInfoResponse } from '../../../../utility/models/copy-request-info.query';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { OperatorInfo, OperatorType } from '../others/others.model';
 
 describe('CopyRequestInfoService', () => {
-  let copyRequestInfoService: CopyRequestInfoService;
+  let service: CopyRequestInfoService;
+  let commonService: CommonService;
 
   beforeEach(() => {
-    copyRequestInfoService = new CopyRequestInfoService(null);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [CopyRequestInfoService]
+    });
+
+    service = TestBed.inject(CopyRequestInfoService);
+    commonService = TestBed.inject(CommonService);
+
+    // Mock navigator.clipboard
+    Object.defineProperty(navigator, 'clipboard', {
+      value: {
+        write: jest.fn(),
+        writeText: jest.fn()
+      },
+      writable: true
+    });
+
+    // Mock ClipboardItem
+    (global as any).ClipboardItem = class ClipboardItem {
+      constructor(data: { [key: string]: Blob }) {
+        return data;
+      }
+    };
   });
 
-  it('#copyLetsTalkRequestInfo should call #commonService.copyRequestInfo', async () => {
-    const requestInfo : RequestInfoForCopy = {
-      requestId: 0,
-      matchId: 0,
-      globalShowTime: undefined,
-      filterBy: 0,
-      issueTypeName: "",
-      subIssueTypeName: "",
-      isCheckedVar: false,
-      provider: "",
-      requestedBy: "",
-      isHasSettledTicket: false,
-      remark: "",
-      matchEvent: "",
-      leagueName: "",
-      operators: [],
-      issueTypeId: 0,
-      voidFromTime: undefined,
-      voidToTime: undefined,
-      liveStatus: "",
-      totalSingleCount: 0,
-      totalParlayCount: 0,
-      totalCancelCashOutCount: 0
-    } as RequestInfoForCopy;
-    const copyRequestInfoResponse : CopyRequestInfoResponse = {
-      requestInfo: requestInfo,
-      betTypeTickets: []
-    } ;
-    const mockClipboard = jest.fn();
-    const mockWriteText = jest.fn();
-    Object.defineProperty(navigator, 'clipboard', {value: mockClipboard});
-    Object.defineProperty(navigator.clipboard, 'writeText', {value: mockWriteText});
-    [true, false].forEach(async x => {
-      copyRequestInfoResponse.requestInfo.isHasSettledTicket = x;
-      const commonService = new CommonService(null);
-      commonService.copyRequestInfo = jest.fn().mockReturnValue(copyRequestInfoResponse);
-      copyRequestInfoService = new CopyRequestInfoService(commonService);
-      await copyRequestInfoService.copyLetsTalkRequestInfo(1, 1, Helper.fakeLogInfoDetail, Helper.fakeOperatorInfo);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
 
-      expect(commonService.copyRequestInfo).toHaveBeenCalledTimes(1);
-    })
+  describe('copyEmailRequestInfo', () => {
+    it('should copy email request info to clipboard', async () => {
+      // Arrange
+      const requestId = 123;
+      const matchId = 456;
+      const operatorsList: OperatorInfo[] = [
+        { 
+          operatorId: 1, 
+          userName: 'Trader1', 
+          operatorType: OperatorType.TRADER,
+          matchId: matchId,
+          groupName: 'Group A'
+        },
+        { 
+          operatorId: 2, 
+          userName: 'Suspender1', 
+          operatorType: OperatorType.SUSPENDER,
+          matchId: matchId,
+          groupName: 'Group A'
+        }
+      ];
+
+      const mockResponse: CopyRequestInfoResponse = {
+        requestInfo: {
+          requestId: requestId,
+          matchId: matchId,
+          globalShowTime: new Date('2024-03-20T10:00:00'),
+          leagueName: 'Premier League',
+          matchEvent: 'Team A vs Team B',
+          operators: operatorsList,
+          provider: 'Provider A',
+          issueTypeName: 'Issue Type',
+          subIssueTypeName: 'Sub Issue Type',
+          requestedBy: 'User A',
+          isHasSettledTicket: true,
+          remark: 'Test remark',
+          filterBy: 'filter1',
+          subIssueTypeId: 1,
+          issueTypeId: 1,
+          actionId: 'action1',
+          actionName: 'Action 1',
+          actionType: 1,
+          actionTypeName: 'Action Type 1',
+          actionStatus: 1,
+          actionStatusName: 'Action Status 1',
+          actionCreatedBy: 1,
+          actionCreatedByName: 'Creator 1',
+          actionCreatedDate: new Date('2024-03-20T10:00:00'),
+          actionUpdatedBy: 1,
+          actionUpdatedByName: 'Updater 1',
+          actionUpdatedDate: new Date('2024-03-20T10:00:00')
+        }
+      } as unknown as CopyRequestInfoResponse;
+
+      jest.spyOn(commonService, 'copyRequestInfo').mockResolvedValue(mockResponse);
+      jest.spyOn(navigator.clipboard, 'write');
+
+      // Act
+      await service.copyEmailRequestInfo(requestId, matchId, operatorsList);
+
+      // Assert
+      expect(commonService.copyRequestInfo).toHaveBeenCalledWith({
+        requestId,
+        matchId
+      });
+      expect(navigator.clipboard.write).toHaveBeenCalled();
+    });
+  });
+
+  describe('copyLetsTalkRequestInfo', () => {
+    it('should copy LetsTalk request info to clipboard', async () => {
+      // Arrange
+      const requestId = 123;
+      const matchId = 456;
+      const operatorsList: OperatorInfo[] = [
+        { 
+          operatorId: 1, 
+          userName: 'Trader1', 
+          operatorType: OperatorType.TRADER,
+          matchId: matchId,
+          groupName: 'Group A'
+        },
+        { 
+          operatorId: 2, 
+          userName: 'Suspender1', 
+          operatorType: OperatorType.SUSPENDER,
+          matchId: matchId,
+          groupName: 'Group A'
+        }
+      ];
+
+      const logInfoDetails: LogInfoDetail[] = [{
+        matchId: matchId,
+        voidFromTime: new Date('2024-03-20T10:00:00'),
+        voidToTime: new Date('2024-03-20T11:00:00'),
+        transVoidToTime: new Date('2024-03-20T11:00:00'),
+        liveScores: '1-0',
+        singleCount: 5,
+        mainParlayCount: 2,
+        cancelCashOutCount: 1,
+        cashOutCount: 0,
+        settleCount: 0,
+        highlightAcceptType: AcceptType.AUTO_ACCEPT,
+        highlightMinTime: new Date('2024-03-20T10:30:00'),
+        highlightMaxTime: new Date('2024-03-20T11:00:00'),
+        highlightMinTimeValue: 0,
+        highlightMaxTimeValue: 0
+      } as unknown as LogInfoDetail];
+
+      const mockResponse: CopyRequestInfoResponse = {
+        requestInfo: {
+          requestId: requestId,
+          matchId: matchId,
+          globalShowTime: new Date('2024-03-20T10:00:00'),
+          leagueName: 'Premier League',
+          matchEvent: 'Team A vs Team B',
+          operators: operatorsList,
+          provider: 'Provider A',
+          issueTypeName: 'Issue Type',
+          subIssueTypeName: 'Sub Issue Type',
+          requestedBy: 'User A',
+          isHasSettledTicket: true,
+          remark: 'Test remark',
+          filterBy: 'filter1',
+          subIssueTypeId: 1,
+          issueTypeId: 1,
+          actionId: 'action1',
+          actionName: 'Action 1',
+          actionType: 1,
+          actionTypeName: 'Action Type 1',
+          actionStatus: 1,
+          actionStatusName: 'Action Status 1',
+          actionCreatedBy: 1,
+          actionCreatedByName: 'Creator 1',
+          actionCreatedDate: new Date('2024-03-20T10:00:00'),
+          actionUpdatedBy: 1,
+          actionUpdatedByName: 'Updater 1',
+          actionUpdatedDate: new Date('2024-03-20T10:00:00')
+        }
+      } as unknown as CopyRequestInfoResponse;
+
+      jest.spyOn(commonService, 'copyRequestInfo').mockResolvedValue(mockResponse);
+      jest.spyOn(navigator.clipboard, 'writeText');
+
+      // Act
+      await service.copyLetsTalkRequestInfo(requestId, matchId, logInfoDetails, operatorsList);
+
+      // Assert
+      expect(commonService.copyRequestInfo).toHaveBeenCalledWith({
+        requestId,
+        matchId,
+        logInfoDetails
+      });
+      expect(navigator.clipboard.writeText).toHaveBeenCalled();
+    });
+  });
+
+  describe('getOperatorName', () => {
+    it('should return correct operator name for TRADER type', () => {
+      // Arrange
+      const matchId = 456;
+      const selectedOperator: OperatorInfo[] = [
+        { 
+          operatorId: 1, 
+          userName: 'Trader1', 
+          operatorType: OperatorType.TRADER,
+          matchId: matchId,
+          groupName: 'Group A'
+        }
+      ];
+      const operatorsList: OperatorInfo[] = [
+        { 
+          operatorId: 1, 
+          userName: 'Trader1', 
+          operatorType: OperatorType.TRADER,
+          matchId: matchId,
+          groupName: 'Group A'
+        },
+        { 
+          operatorId: 2, 
+          userName: 'Suspender1', 
+          operatorType: OperatorType.SUSPENDER,
+          matchId: matchId,
+          groupName: 'Group A'
+        }
+      ];
+
+      // Act
+      const result = (service as any).getOperatorName(selectedOperator, operatorsList, OperatorType.TRADER);
+
+      // Assert
+      expect(result).toBe('Trader1');
+    });
+
+    it('should return empty string when no matching operator found', () => {
+      // Arrange
+      const matchId = 456;
+      const selectedOperator: OperatorInfo[] = [
+        { 
+          operatorId: 3, 
+          userName: 'Trader2', 
+          operatorType: OperatorType.TRADER,
+          matchId: matchId,
+          groupName: 'Group A'
+        }
+      ];
+      const operatorsList: OperatorInfo[] = [
+        { 
+          operatorId: 1, 
+          userName: 'Trader1', 
+          operatorType: OperatorType.TRADER,
+          matchId: matchId,
+          groupName: 'Group A'
+        },
+        { 
+          operatorId: 2, 
+          userName: 'Suspender1', 
+          operatorType: OperatorType.SUSPENDER,
+          matchId: matchId,
+          groupName: 'Group A'
+        }
+      ];
+
+      // Act
+      const result = (service as any).getOperatorName(selectedOperator, operatorsList, OperatorType.TRADER);
+
+      // Assert
+      expect(result).toBe('');
+    });
+  });
+
+  describe('getAcceptType', () => {
+    it('should return AA for AUTO_ACCEPT', () => {
+      // Act
+      const result = (service as any).getAcceptType(AcceptType.AUTO_ACCEPT);
+
+      // Assert
+      expect(result).toBe('AA');
+    });
+
+    it('should return SA for SECOND_ACCEPT', () => {
+      // Act
+      const result = (service as any).getAcceptType(AcceptType.SECOND_ACCEPT);
+
+      // Assert
+      expect(result).toBe('SA');
+    });
+
+    it('should return PA for PENDING_ACCEPT', () => {
+      // Act
+      const result = (service as any).getAcceptType(AcceptType.PENDING_ACCEPT);
+
+      // Assert
+      expect(result).toBe('PA');
+    });
+
+    it('should return empty string for unknown accept type', () => {
+      // Act
+      const result = (service as any).getAcceptType(999);
+
+      // Assert
+      expect(result).toBe('');
+    });
+  });
+
+  describe('getMinTime', () => {
+    it('should return formatted time with accept type when both highlightAcceptType and highlightMinTime exist', () => {
+      // Arrange
+      const logInfoDetail: LogInfoDetail = {
+        matchId: 456,
+        highlightAcceptType: AcceptType.AUTO_ACCEPT,
+        highlightMinTime: new Date('2024-03-20T10:30:00'),
+        voidFromTime: new Date('2024-03-20T10:00:00'),
+        voidToTime: new Date('2024-03-20T11:00:00'),
+        transVoidToTime: new Date('2024-03-20T11:00:00'),
+        liveScores: '1-0',
+        singleCount: 5,
+        mainParlayCount: 2,
+        cancelCashOutCount: 1,
+        cashOutCount: 0,
+        settleCount: 0,
+        highlightMaxTime: new Date('2024-03-20T11:00:00'),
+        highlightMinTimeValue: 0,
+        highlightMaxTimeValue: 0
+      } as unknown as LogInfoDetail;
+
+      // Act
+      const result = (service as any).getMinTime(logInfoDetail);
+
+      // Assert
+      expect(result).toBe('10:30:00.000 AM - AA');
+    });
+
+    it('should return dash when highlightAcceptType or highlightMinTime is missing', () => {
+      // Arrange
+      const logInfoDetail: LogInfoDetail = {
+        matchId: 456,
+        highlightAcceptType: null,
+        highlightMinTime: null,
+        voidFromTime: new Date('2024-03-20T10:00:00'),
+        voidToTime: new Date('2024-03-20T11:00:00'),
+        transVoidToTime: new Date('2024-03-20T11:00:00'),
+        liveScores: '1-0',
+        singleCount: 5,
+        mainParlayCount: 2,
+        cancelCashOutCount: 1,
+        cashOutCount: 0,
+        settleCount: 0,
+        highlightMaxTime: new Date('2024-03-20T11:00:00'),
+        highlightMinTimeValue: 0,
+        highlightMaxTimeValue: 0
+      } as unknown as LogInfoDetail;
+
+      // Act
+      const result = (service as any).getMinTime(logInfoDetail);
+
+      // Assert
+      expect(result).toBe('-');
+    });
   });
 });

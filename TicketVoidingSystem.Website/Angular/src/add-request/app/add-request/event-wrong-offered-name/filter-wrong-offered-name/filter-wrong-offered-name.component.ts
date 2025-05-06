@@ -1,6 +1,11 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { LicenseesComponent } from '../../../../../utility/components/licensees/licensees.component';
 import { GroupLicensee, GroupLicenseeModel, Licensee } from '../../../../../utility/components/licensees/licensees.model';
 import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelectionComponent } from '../../../../../utility/components/multiple-selection/multiple-selection.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { Currency } from '../../../../../utility/models/currency.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
@@ -13,9 +18,12 @@ import { FilterWrongOfferedNameService } from '../services/filter-wrong-offered-
 import { ValidationService } from '../services/validation.service';
 
 @Component({
-  selector: 'filter-wrong-offered-name',
-  templateUrl: './filter-wrong-offered-name.component.html',
-  styleUrls: ['./filter-wrong-offered-name.component.scss']
+    selector: 'filter-wrong-offered-name',
+    templateUrl: './filter-wrong-offered-name.component.html',
+    styleUrls: ['./filter-wrong-offered-name.component.scss'],
+    standalone: true,
+    imports: [LicenseesComponent, FormsModule, TooltipComponent, MultipleSelectionComponent],
+    providers: [FilterWrongOfferedNameService]
 })
 export class FilterWrongOfferedNameComponent implements OnInit, OnChanges {
   @Input() model = new FilterWrongOfferedNameModel();
@@ -29,14 +37,14 @@ export class FilterWrongOfferedNameComponent implements OnInit, OnChanges {
   multipleSelectCurrency = new MultipleSelection();
   tooltip = new Tooltip();
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly commonService: CommonService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly filterService: FilterWrongOfferedNameService,
-    private readonly validationService: ValidationService,
-    private readonly eventWrongOfferedNameService: EventWrongOfferedNameService,
-  ) {
+  private readonly element = inject(ElementRef);
+  private readonly commonService = inject(CommonService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly filterService = inject(FilterWrongOfferedNameService);
+  private readonly validationService = inject(ValidationService);
+  private readonly eventWrongOfferedNameService = inject(EventWrongOfferedNameService);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 

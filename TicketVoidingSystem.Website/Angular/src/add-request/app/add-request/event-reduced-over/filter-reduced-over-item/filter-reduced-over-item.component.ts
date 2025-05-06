@@ -1,17 +1,26 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { MultipleSelectionComponent } from '../../../../../utility/components/multiple-selection/multiple-selection.component';
+import { NgSelectMixtureComponent } from '../../../../../utility/components/ng-select-mixture/ng-select-mixture.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 import { FilterReducedOverService } from '../services/filter-reduced-over.service';
 import { ValidationService } from '../services/validation.service';
 import { PrimitivePropertyItem } from './filter-reduced-over-item.model';
+import { NumbersOnlyDirective } from '../../../../../utility/directives/numbers-only.directive';
 
 @Component({
   selector: 'filter-reduced-over-item',
   templateUrl: './filter-reduced-over-item.component.html',
-  styleUrls: ['./filter-reduced-over-item.component.scss']
+  styleUrls: ['./filter-reduced-over-item.component.scss'],
+  standalone: true,
+  imports: [FormsModule, CommonModule, NgSelectModule, TooltipComponent, NgSelectMixtureComponent, MultipleSelectionComponent, NumbersOnlyDirective]
 })
 export class FilterReducedOverItemComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -28,11 +37,11 @@ export class FilterReducedOverItemComponent implements OnInit {
   tooltip = new Tooltip();
 
   primitivePropertyItem = new PrimitivePropertyItem();
+  private readonly element = inject(ElementRef);
+  private readonly validationService = inject(ValidationService);
+  private readonly filterService = inject(FilterReducedOverService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly validationService: ValidationService,
-    private readonly filterService: FilterReducedOverService) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -60,7 +69,7 @@ export class FilterReducedOverItemComponent implements OnInit {
     return this.validationService.isValidOnlyNumberWicketOver(value, `${elementClass}${this.index}`, this.tooltip);
   }
 
-  public updateCheckedBetTypes(checkedBetTypeIds: string[]){
+  public updateCheckedBetTypes(checkedBetTypeIds: string[]) {
     this.resetValue(checkedBetTypeIds);
     if (checkedBetTypeIds.length > 0) {
       this.updateStatusControlByCheckedBetTypes(checkedBetTypeIds);

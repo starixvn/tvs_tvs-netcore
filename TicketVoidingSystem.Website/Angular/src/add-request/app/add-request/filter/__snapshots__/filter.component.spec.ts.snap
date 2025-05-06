@@ -12,10 +12,10 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
         class="d-flex flex-wrap"
       >
         <div
-          class="filter-issue-type mr-4"
+          class="filter-issue-type me-4"
         >
           <label
-            class="col-form-label"
+            class="col-form-label-sm"
           >
             Issue Type
           </label>
@@ -30,10 +30,10 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
           </div>
         </div>
         <div
-          class="filter-action mr-4"
+          class="filter-action me-4"
         >
           <label
-            class="col-form-label"
+            class="col-form-label-sm"
           >
             Action
           </label>
@@ -58,7 +58,7 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
             >
               <input
                 aria-label="Checkbox for following text input"
-                class="mr-1 ng-untouched ng-pristine ng-valid"
+                class="me-1 ng-untouched ng-pristine ng-valid"
                 id="chk-is-test"
                 name="checkbox-test"
                 type="checkbox"

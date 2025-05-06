@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
@@ -7,13 +7,9 @@ import { PermissionAddRequest } from '../../models/permission-add-request.model'
 import { CheckTransIdsQuery, ValidationAbnormalBet } from '../event-abnormal-bet.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   initCheckAbnormalBetTransIdsQuery(args: ValidationBusinessRuleArgs): CheckTransIdsQuery{
     const transIds = args.betIdsComponent.getAllBetIds();
@@ -49,11 +45,13 @@ export class ValidationService {
 
     const query = this.initCheckAbnormalBetTransIdsQuery(args);
     const checkTransIdViewModel = await this.addRequestApiService.checkValidTransIdsForAbnormalBet(query);
-    args.abnormalBetModel.sendLetstalkModels = checkTransIdViewModel.sendLetstalkModels;
-    if (checkTransIdViewModel === null) {
-      return { isValid: false} as ValidationBusinessRuleOutput;
+
+    if (!checkTransIdViewModel) {
+      return { isValid: false } as ValidationBusinessRuleOutput;
     }
+    args.abnormalBetModel.sendLetstalkModels = checkTransIdViewModel.sendLetstalkModels;
     args.abnormalBetModel.matches = checkTransIdViewModel.matches;
+    
     const isHasPermissionAddSettledTicket = this.checkCanAddSettledTickets(args.permission, args.actionId);
     this.highlightInvalidTransIds(checkTransIdViewModel.validation, args.betIdsComponent, isHasPermissionAddSettledTicket, args.actionId);
     this.updateValidation(args, checkTransIdViewModel.validation, isHasPermissionAddSettledTicket);

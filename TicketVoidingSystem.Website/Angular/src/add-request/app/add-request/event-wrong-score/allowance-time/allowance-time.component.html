@@ -1,15 +1,15 @@
 <div class="d-flex">
-  <label class="col-form-label mr-2 label-width-60">AA/PA/SA</label>
+  <label class="col-form-label-sm me-2 label-width-60">AA/PA/SA</label>
   <div class="d-flex allowance-time">
-    <input type="text" class="form-control form-control-sm mr-1 aa-time" [(ngModel)]="aaTime"
+    <input type="text" class="form-control form-control-sm me-1 aa-time" [(ngModel)]="aaTime"
       (ngModelChange)="emitModelChange()" [disabled]="isDisabled" maxlength="2" only-number />
-    <label class="col-form-label mr-1">/</label>
-    <input type="text" class="form-control form-control-sm mr-1 pa-time" [(ngModel)]="paTime"
+    <label class="col-form-label-sm me-1">/</label>
+    <input type="text" class="form-control form-control-sm me-1 pa-time" [(ngModel)]="paTime"
       (ngModelChange)="emitModelChange()" [disabled]="isDisabled" maxlength="2" only-number />
-    <label class="col-form-label mr-1">/</label>
-    <input type="text" class="form-control form-control-sm mr-1 sa-time" [(ngModel)]="saTime"
+    <label class="col-form-label-sm me-1">/</label>
+    <input type="text" class="form-control form-control-sm me-1 sa-time" [(ngModel)]="saTime"
       (ngModelChange)="emitModelChange()" [disabled]="isDisabled" maxlength="2" only-number />
   </div>
-  <label class="col-form-label">(s)</label>
+  <label class="col-form-label-sm">(s)</label>
 </div>
 <tooltip [tooltip]="tooltip"></tooltip>

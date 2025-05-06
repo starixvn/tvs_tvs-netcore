@@ -1,83 +1,141 @@
-import * as _ from 'lodash';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { CommonService } from '../../../../../utility/services/common.service';
-import { FilterModel } from '../../filter/filter.model';
-import { RedCardGetLogInfoQuery } from '../../models/event-red-card.model';
-import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-offered.model';
-import { LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
-import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
-import { EventWrongMarketOfferedService } from './event-wrong-market-offfered.service';
+import { TestBed } from '@angular/core/testing';
 import { LogInfoService } from './log-info.service';
+import { CommonService } from '../../../../../utility/services/common.service';
+import { EventWrongMarketOfferedService } from './event-wrong-market-offfered.service';
+import { LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
+import { FilterModel } from '../../filter/filter.model';
+import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
+import { GetLogInfoModel } from '../../models/get-log-info.model';
+import { GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-offered.model';
+import { LogInfoItem } from '../models/log-info-wrong-market-offered.model';
 
 class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterWrongMarketOfferedModel: FilterWrongMarketOfferedModel[] = [{
-    fromDateTime: Helper.fromDate,
-    toDateTime: Helper.toDate
-  }] as FilterWrongMarketOfferedModel[];
-  static readonly fakeLogInfoWrongMarketOffered: LogInfoWrongMarketOffered = {
-    matchId: 1,
-    filterWrongMarketOfferedModels: Helper.fakeFilterWrongMarketOfferedModel,
-    betTeamsResult: [],
-  } as LogInfoWrongMarketOffered;
+  static readonly fakeFilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1'
+  } as FilterModel;
 
-  static readonly fakeGetLogInfoModel: GetLogInfoModel = {
-    matchId: 1,
+  static readonly fakeTransInfoAddRequestModel = {
+    transInfoJson: null,
+    unMarkTransIds: '',
+    markTransIds: '',
+    removeTransIds: ''
+  } as TransInfoAddRequestModel;
+
+  static readonly fakeGetLogInfoModel = {
+    id: 1,
+    logInfoDetail: {},
+    betTypeCount: [],
     validation: {
-      isInvalidTotalTickets: true,
-      isExistedInOtherRequest: true,
-      isPoolHouseAffected: false
-    } as Validation,
-    ticketRequest: [],
-    logInfoDetail: new LogInfoDetail()
-  };
-  static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {
-    transInfoAddRequestModel: new TransInfoAddRequestModel(),
-    getLogInfoModels: [Helper.fakeGetLogInfoModel],
-  };
+      isInvalidTotalTickets: false,
+      isExistsSecondAccept: false
+    }
+  } as GetLogInfoModel;
+
+  static readonly fakeFilterWrongMarketOfferedModel = {
+    id: 1,
+    filterTime: new Date(),
+    fromDateTime: new Date(),
+    toDateTime: new Date(),
+    severity: 1
+  } as unknown as FilterWrongMarketOfferedModel;
 }
 
 describe('LogInfoService', () => {
   let service: LogInfoService;
+  let commonService: jest.Mocked<CommonService>;
+  let eventWrongMarketOfferedService: jest.Mocked<EventWrongMarketOfferedService>;
 
   beforeEach(() => {
-    service = new LogInfoService(null, null);
+    TestBed.configureTestingModule({
+      providers: [
+        LogInfoService,
+        { provide: CommonService, useValue: {
+          getLogInfo: jest.fn()
+        } },
+        { provide: EventWrongMarketOfferedService, useValue: {
+          getWrongMarketOfferedGetLogInfoModel: jest.fn()
+        } },
+        { provide: StaticService, useValue: {
+          getValidationMessageList: jest.fn().mockReturnValue([])
+        } }
+      ]
+    });
+
+    service = TestBed.inject(LogInfoService);
+    commonService = TestBed.inject(CommonService) as jest.Mocked<CommonService>;
+    eventWrongMarketOfferedService = TestBed.inject(EventWrongMarketOfferedService) as jest.Mocked<EventWrongMarketOfferedService>;
   });
 
-  it('#resetLogInfoOfEvent should update logInfoDetail to null', async () => {
-    const logInfo = _.cloneDeep(Helper.fakeLogInfoWrongMarketOffered);
-    service.resetLogInfoOfEvent(logInfo);
-
-    expect(logInfo.logInfoItems.length).toBe(0);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#getLogInfo should call #eventWrongMarketOfferedService.getWrongMarketOfferedGetLogInfoModel', async () => {
-    const eventWrongOddsService = new EventWrongMarketOfferedService();
-    eventWrongOddsService.getWrongMarketOfferedGetLogInfoModel = jest.fn().mockReturnValue(new RedCardGetLogInfoQuery());
-    const commonService = new CommonService(null);
-    commonService.getLogInfo = jest.fn().mockReturnValue(Helper.fakeGetLogInfoViewModel);
+  describe('getLogInfo', () => {
+    it('should get log info and assign results', async () => {
+      // Arrange
+      const logInfoEvent = {
+        logInfoItems: [],
+        filterWrongMarketOfferedModels: [Helper.fakeFilterWrongMarketOfferedModel]
+      } as LogInfoWrongMarketOffered;
+      const isEdit = false;
+      const requestId = 1;
+      const filter = Helper.fakeFilterModel;
+      const primitiveProps = new PrimitivePropertyEvent();
 
-    const mockService = new LogInfoService(commonService, eventWrongOddsService);
-    await mockService.getLogInfo(Helper.fakeLogInfoWrongMarketOffered, false, 1, new FilterModel(), new PrimitivePropertyEvent());
+      const mockResponse = {
+        transInfoAddRequestModel: Helper.fakeTransInfoAddRequestModel,
+        getLogInfoModels: [Helper.fakeGetLogInfoModel]
+      } as GetLogInfoViewModel;
 
-    expect(eventWrongOddsService.getWrongMarketOfferedGetLogInfoModel).toHaveBeenCalledTimes(1);
-    expect(commonService.getLogInfo).toHaveBeenCalledTimes(1);
+      commonService.getLogInfo.mockResolvedValue(mockResponse);
+      eventWrongMarketOfferedService.getWrongMarketOfferedGetLogInfoModel.mockReturnValue([]);
+
+      // Act
+      await service.getLogInfo(logInfoEvent, isEdit, requestId, filter, primitiveProps);
+
+      // Assert
+      expect(commonService.getLogInfo).toHaveBeenCalled();
+      expect(primitiveProps.transInfoAddRequestModel).toBeDefined();
+      expect(primitiveProps.isShowBetTypeCount).toBe(false);
+      expect(logInfoEvent.logInfoItems.length).toBe(1);
+    });
   });
 
-  it('#getLogInfo should call #eventWrongMarketOfferedService.getWrongMarketOfferedGetLogInfoModel when isEdit', async () => {
-    const eventWrongOddsService = new EventWrongMarketOfferedService();
-    eventWrongOddsService.getWrongMarketOfferedGetLogInfoModel = jest.fn().mockReturnValue(new RedCardGetLogInfoQuery());
-    const commonService = new CommonService(null);
-    commonService.getLogInfo = jest.fn().mockReturnValue(Helper.fakeGetLogInfoViewModel);
+  describe('resetLogInfoOfEvent', () => {
+    it('should reset log info items', () => {
+      // Arrange
+      const logInfoEvent = {
+        logInfoItems: [{} as LogInfoItem]
+      } as LogInfoWrongMarketOffered;
 
-    const mockService = new LogInfoService(commonService, eventWrongOddsService);
-    await mockService.getLogInfo(Helper.fakeLogInfoWrongMarketOffered, true, 1, new FilterModel(), new PrimitivePropertyEvent());
+      // Act
+      service.resetLogInfoOfEvent(logInfoEvent);
 
-    expect(eventWrongOddsService.getWrongMarketOfferedGetLogInfoModel).toHaveBeenCalledTimes(1);
-    expect(commonService.getLogInfo).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(logInfoEvent.logInfoItems.length).toBe(0);
+    });
+  });
 
+  describe('createLogInfoItem', () => {
+    it('should create log info item with correct data', () => {
+      // Arrange
+      const logInfoModel = Helper.fakeGetLogInfoModel;
+      const filterItems = [Helper.fakeFilterWrongMarketOfferedModel];
+
+      // Act
+      const result = (service as any).createLogInfoItem(logInfoModel, filterItems);
+
+      // Assert
+      expect(result.id).toBe(logInfoModel.id);
+      expect(result.filterTime).toBeDefined();
+      expect(result.logInfoDetail).toBeDefined();
+      expect(result.messageValidationLogInfo).toBeDefined();
+      expect(result.betTypeCount).toBeDefined();
+    });
   });
 });

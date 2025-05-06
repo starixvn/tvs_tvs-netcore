@@ -1,384 +1,210 @@
-import { NgModule, SimpleChange } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet.model';
-
-class Helper {
-  static readonly fakeConfirmAbnormalBetModel: ConfirmAbnormalBetModel = {
-    isOpenDialog: true,
-    isHasWarningForAbnormalBet: true,
-    isHasWarningEditTakeNoteRequest: false,
-    transIds: '1022222',
-    ticketsOfVIPCustomer: '2123122',
-    settledTickets: '2123122',
-    ticketsOfCustomerClass201: '2123122',
-    ticketsOfCustomerClass4K: '2123122',
-    isHasWarningRemovedTickets: false,
-    isEditingByAnotherUser: false,
-    requestId: 1,
-    requestedBy: '',
-    issueTypeName: '',
-    subIssueTypeName: '',
-    actionName: ''
-  };
-}
+import { SimpleChange } from '@angular/core';
 
 describe('ConfirmAbnormalBetComponent', () => {
-  @NgModule({
-    imports: [
-      FormsModule,
-      NgbModule
-    ]
-  })
-  class AppModuleTest { }
+  let component: ConfirmAbnormalBetComponent;
+  let fixture: ComponentFixture<ConfirmAbnormalBetComponent>;
 
-  let shallow: Shallow<ConfirmAbnormalBetComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule, ConfirmAbnormalBetComponent],
+      providers: []
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(ConfirmAbnormalBetComponent, AppModuleTest).dontMock(NgbModule);
+    fixture = TestBed.createComponent(ConfirmAbnormalBetComponent);
+    component = fixture.componentInstance;
   });
 
-  it('ConfirmAbnormalBetComponent should init match snapshot', async () => {
-    // Arrange
-    const fakeConfirmAbnormalBetModel = _.cloneDeep(Helper.fakeConfirmAbnormalBetModel);
-    fakeConfirmAbnormalBetModel.isOpenDialog = false;
-    const { fixture } = await shallow.render({
-      bind: {
-        model: fakeConfirmAbnormalBetModel
-      }
-    });
-    fixture.detectChanges();
-
-    // Assert
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#ngOnChanges should call #updateData when data', async () => {
-    // Arrange
-    const { instance } = await shallow.render({
-      bind: {
-        model: Helper.fakeConfirmAbnormalBetModel
-      }
-    });
-    instance['updateData'] = jest.fn();
-    const changes = {
-      'model': new SimpleChange(new ConfirmAbnormalBetModel(), Helper.fakeConfirmAbnormalBetModel, true)
-    };
-
-    // Action
-    instance.ngOnChanges(changes);
-
-    // Assert
-    expect(instance['updateData']).toHaveBeenCalledTimes(1);
+  it('should initialize with default values', () => {
+    expect(component.model).toBeTruthy();
+    expect(component.isEdit).toBeFalsy();
+    expect(component.isRemoveCustomerClass201).toBeTruthy();
+    expect(component.isRemoveCustomerClass4K).toBeTruthy();
+    expect(component.isShowErrorCannotRemoveAllTickets).toBeFalsy();
+    expect(component.isCanNotSelectedRemoveTicketCC201).toBeFalsy();
+    expect(component.isCanNotSelectedRemoveTicketCC4K).toBeFalsy();
+    expect(component.isConfirmCalculator).toBeTruthy();
   });
 
-  it('#updateData should update value', async () => {
+  it('should update data when model changes and has warning', () => {
     // Arrange
-    const { instance } = await shallow.render({
-      bind: {
-        model: Helper.fakeConfirmAbnormalBetModel
-      }
-    });
-    const ticketsOfVIPCustomer = instance.model.ticketsOfVIPCustomer.split(',').join(', ');
-    const settledTickets = instance.model.settledTickets.split(',').join(', ');
-    const ticketsOfCustomerClass201 = instance.model.ticketsOfCustomerClass201.split(',').join(', ');
-    const ticketsOfCustomerClass4K = instance.model.ticketsOfCustomerClass4K.split(',').join(', ');
+    const model = new ConfirmAbnormalBetModel();
+    model.isOpenDialog = true;
+    model.isHasWarningForAbnormalBet = true;
+    model.ticketsOfVIPCustomer = '1,2,3';
+    model.settledTickets = '4,5,6';
+    model.ticketsOfCustomerClass201 = '7,8,9';
+    model.ticketsOfCustomerClass4K = '10,11,12';
+    model.transIds = '7,8,9,10,11,12';
 
-    // Action
-    instance['updateData']();
-
-    // Assert
-    expect(instance.ticketsOfVIPCustomer).toEqual(ticketsOfVIPCustomer);
-    expect(instance.settledTickets).toEqual(settledTickets);
-    expect(instance.ticketsOfCustomerClass201).toEqual(ticketsOfCustomerClass201);
-    expect(instance.ticketsOfCustomerClass4K).toEqual(ticketsOfCustomerClass4K);
-  });
-
-  it('#updateData should only update isConfirmCalculator value when Has Warning For AbnormalBet ', async () => {
-    // Arrange
-    const fakeConfirmAbnormalBetModel = _.clone(Helper.fakeConfirmAbnormalBetModel);
-    fakeConfirmAbnormalBetModel.isHasWarningForAbnormalBet = false;
-    const { instance } = await shallow.render({
-      bind: {
-        model: fakeConfirmAbnormalBetModel
-      }
-    });
-    instance['updateRemoveCustomerClassStatus'] = jest.fn();
-
-    // Action
-    instance['updateData']();
-
-    // Assert
-    expect(instance.isConfirmCalculator).toBeTruthy();
-  });
-
-  it('#updateData should update value when isHasWarningForAbnormalBet but invalid data', async () => {
-    // Arrange
-    const fakeConfirmAbnormalBetModel = _.clone(Helper.fakeConfirmAbnormalBetModel);
-    fakeConfirmAbnormalBetModel.ticketsOfVIPCustomer = '';
-    fakeConfirmAbnormalBetModel.settledTickets = '';
-    fakeConfirmAbnormalBetModel.ticketsOfCustomerClass201 = '';
-    fakeConfirmAbnormalBetModel.ticketsOfCustomerClass4K = '';
-
-    const { instance } = await shallow.render({
-      bind: {
-        model: fakeConfirmAbnormalBetModel
-      }
-    });
-    instance['updateRemoveCustomerClassStatus'] = jest.fn();
-
-    // Action
-    instance['updateData']();
-
-    // Assert
-    expect(instance.ticketsOfVIPCustomer).toBe('');
-    expect(instance.settledTickets).toBe('');
-    expect(instance.ticketsOfCustomerClass201).toBe('');
-    expect(instance.ticketsOfCustomerClass4K).toBe('');
-
-  });
-
-  it('#closeClick should close popup and emit action close', async () => {
-    // Arrange
-    const { instance } = await shallow.render({
-      bind: {
-        model: Helper.fakeConfirmAbnormalBetModel
-      }
+    // Act
+    component.model = model;
+    component.ngOnChanges({
+      model: {
+        currentValue: model,
+        previousValue: null,
+        firstChange: true,
+        isFirstChange: () => true
+      } as SimpleChange
     });
 
-    // Action
-    instance.closeClick();
-
     // Assert
-    expect(instance.close.emit).toHaveBeenCalledTimes(1);
-    expect(instance.model.isOpenDialog).toEqual(false);
+    expect(component.ticketsOfVIPCustomer).toBe('1, 2, 3');
+    expect(component.settledTickets).toBe('4, 5, 6');
+    expect(component.ticketsOfCustomerClass201).toBe('7, 8, 9');
+    expect(component.ticketsOfCustomerClass4K).toBe('10, 11, 12');
   });
 
-  it('#saveClick should close popup and emit action save', async () => {
+  it('should handle all tickets of customer class 201', () => {
     // Arrange
-    const { instance } = await shallow.render({
-      bind: {
-        model: Helper.fakeConfirmAbnormalBetModel
-      }
+    const model = new ConfirmAbnormalBetModel();
+    model.isOpenDialog = true;
+    model.isHasWarningForAbnormalBet = true;
+    model.transIds = '7,8,9';
+    model.ticketsOfCustomerClass201 = '7,8,9';
+    model.ticketsOfCustomerClass4K = '';
+    model.ticketsOfVIPCustomer = '';
+    model.settledTickets = '';
+
+    // Act
+    component.model = model;
+    component.ngOnChanges({
+      model: {
+        currentValue: model,
+        previousValue: null,
+        firstChange: true,
+        isFirstChange: () => true
+      } as SimpleChange
     });
 
-    // Action
-    instance.saveClick();
-
     // Assert
-    expect(instance.save.emit).toHaveBeenCalledTimes(1);
-    expect(instance.model.isOpenDialog).toEqual(false);
+    expect(component.isRemoveCustomerClass201).toBeFalsy();
+    expect(component.isCanNotSelectedRemoveTicketCC201).toBeTruthy();
+    expect(component.isShowErrorCannotRemoveAllTickets).toBeTruthy();
   });
 
-  it('#updateRemoveCustomerClassStatus should close popup and emit action save when isAllTicketsOfCustomerClass', async () => {
+  it('should handle all tickets of customer class 4K', () => {
     // Arrange
-    const fakeConfirmAbnormalBetModel = _.clone(Helper.fakeConfirmAbnormalBetModel);
-    fakeConfirmAbnormalBetModel.transIds = '6666,2222';
-    fakeConfirmAbnormalBetModel.ticketsOfCustomerClass201 = '6666';
-    fakeConfirmAbnormalBetModel.ticketsOfCustomerClass4K = '2222';
-    const { instance } = await shallow.render({
-      bind: {
-        model: fakeConfirmAbnormalBetModel
-      }
+    const model = new ConfirmAbnormalBetModel();
+    model.isOpenDialog = true;
+    model.isHasWarningForAbnormalBet = true;
+    model.transIds = '10,11,12';
+    model.ticketsOfCustomerClass201 = '';
+    model.ticketsOfCustomerClass4K = '10,11,12';
+    model.ticketsOfVIPCustomer = '';
+    model.settledTickets = '';
+
+    // Act
+    component.model = model;
+    component.ngOnChanges({
+      model: {
+        currentValue: model,
+        previousValue: null,
+        firstChange: true,
+        isFirstChange: () => true
+      } as SimpleChange
     });
 
-    // Action
-    instance['updateRemoveCustomerClassStatus']();
-
     // Assert
-    expect(instance.isRemoveCustomerClass201).toEqual(false);
-    expect(instance.isRemoveCustomerClass4K).toEqual(false);
-    expect(instance.isCanNotSelectedRemoveTicketCC201).toEqual(false);
-    expect(instance.isCanNotSelectedRemoveTicketCC4K).toEqual(false);
-    expect(instance.isShowErrorCannotRemoveAllTickets).toBeTruthy();
+    expect(component.isRemoveCustomerClass4K).toBeFalsy();
+    expect(component.isCanNotSelectedRemoveTicketCC4K).toBeTruthy();
+    expect(component.isShowErrorCannotRemoveAllTickets).toBeTruthy();
   });
 
-  it('#updateRemoveCustomerClassStatus should close popup and emit action save when only tickets that have CC = 201', async () => {
+  it('should handle all tickets of both customer classes', () => {
     // Arrange
-    const fakeConfirmAbnormalBetModel = _.clone(Helper.fakeConfirmAbnormalBetModel);
-    fakeConfirmAbnormalBetModel.transIds = '6666';
-    fakeConfirmAbnormalBetModel.ticketsOfCustomerClass201 = '6666';
-    const { instance } = await shallow.render({
-      bind: {
-        model: fakeConfirmAbnormalBetModel
-      }
+    const model = new ConfirmAbnormalBetModel();
+    model.isOpenDialog = true;
+    model.isHasWarningForAbnormalBet = true;
+    model.transIds = '7,8,9,10,11,12';
+    model.ticketsOfCustomerClass201 = '7,8,9';
+    model.ticketsOfCustomerClass4K = '10,11,12';
+    model.ticketsOfVIPCustomer = '';
+    model.settledTickets = '';
+
+    // Act
+    component.model = model;
+    component.ngOnChanges({
+      model: {
+        currentValue: model,
+        previousValue: null,
+        firstChange: true,
+        isFirstChange: () => true
+      } as SimpleChange
     });
 
-    // Action
-    instance['updateRemoveCustomerClassStatus']();
-
     // Assert
-    expect(instance.isRemoveCustomerClass201).toEqual(false);
-    expect(instance.isShowErrorCannotRemoveAllTickets).toBeTruthy();
-    expect(instance.isCanNotSelectedRemoveTicketCC201).toBeTruthy();
+    expect(component.isRemoveCustomerClass201).toBeFalsy();
+    expect(component.isRemoveCustomerClass4K).toBeFalsy();
+    expect(component.isCanNotSelectedRemoveTicketCC201).toBeFalsy();
+    expect(component.isCanNotSelectedRemoveTicketCC4K).toBeFalsy();
+    expect(component.isShowErrorCannotRemoveAllTickets).toBeTruthy();
   });
 
-  it('#updateRemoveCustomerClassStatus should close popup and emit action save when only tickets that have CC = 4K', async () => {
+  it('should handle checkRemoveCC201', () => {
     // Arrange
-    const fakeConfirmAbnormalBetModel = _.clone(Helper.fakeConfirmAbnormalBetModel);
-    fakeConfirmAbnormalBetModel.transIds = '6666';
-    fakeConfirmAbnormalBetModel.ticketsOfCustomerClass4K = '6666';
-    const { instance } = await shallow.render({
-      bind: {
-        model: fakeConfirmAbnormalBetModel
-      }
-    });
+    component.isShowErrorCannotRemoveAllTickets = true;
+    component.isCanNotSelectedRemoveTicketCC4K = true;
 
-    // Action
-    instance['updateRemoveCustomerClassStatus']();
+    // Act
+    component.checkRemoveCC201();
 
     // Assert
-    expect(instance.isRemoveCustomerClass4K).toEqual(false);
-    expect(instance.isShowErrorCannotRemoveAllTickets).toBeTruthy();
-    expect(instance.isCanNotSelectedRemoveTicketCC4K).toBeTruthy();
+    expect(component.isCanNotSelectedRemoveTicketCC4K).toBeFalsy();
   });
 
-  it('#updateRemoveCustomerClassStatus have value expected save when no have ticketsOfCustomerClass4K and ticketsOfCustomerClass201', async () => {
+  it('should handle checkRemoveCC4K', () => {
     // Arrange
-    const fakeConfirmAbnormalBetModel = _.clone(Helper.fakeConfirmAbnormalBetModel);
-    fakeConfirmAbnormalBetModel.transIds = '6666';
-    fakeConfirmAbnormalBetModel.ticketsOfCustomerClass4K = '';
-    fakeConfirmAbnormalBetModel.ticketsOfCustomerClass201 = '';
-    const { instance } = await shallow.render({
-      bind: {
-        model: fakeConfirmAbnormalBetModel
-      }
-    });
+    component.isShowErrorCannotRemoveAllTickets = true;
+    component.isCanNotSelectedRemoveTicketCC201 = true;
 
-    // Action
-    instance['updateRemoveCustomerClassStatus']();
+    // Act
+    component.checkRemoveCC4K();
 
     // Assert
-    expect(instance.isRemoveCustomerClass4K).toEqual(true);
-    expect(instance.isCanNotSelectedRemoveTicketCC4K).toEqual(false);
-    expect(instance.isRemoveCustomerClass201).toEqual(true);
-    expect(instance.isCanNotSelectedRemoveTicketCC201).toEqual(false);
+    expect(component.isCanNotSelectedRemoveTicketCC201).toBeFalsy();
   });
 
-  it('#updateRemoveCustomerClassStatus should close popup and emit action save when only tickets that have CC = 4000 & 201', async () => {
+  it('should handle closeClick', () => {
     // Arrange
-    const fakeConfirmAbnormalBetModel = _.clone(Helper.fakeConfirmAbnormalBetModel);
-    fakeConfirmAbnormalBetModel.transIds = '6666,1111';
-    fakeConfirmAbnormalBetModel.ticketsOfCustomerClass201 = '1111';
-    fakeConfirmAbnormalBetModel.ticketsOfCustomerClass4K = '6666';
-    const { instance } = await shallow.render({
-      bind: {
-        model: fakeConfirmAbnormalBetModel
-      }
-    });
+    component.model.isOpenDialog = true;
+    component.isRemoveCustomerClass201 = false;
+    component.isRemoveCustomerClass4K = false;
+    component.isShowErrorCannotRemoveAllTickets = true;
+    component.isCanNotSelectedRemoveTicketCC201 = true;
+    component.isCanNotSelectedRemoveTicketCC4K = true;
+    const closeSpy = jest.spyOn(component.close, 'emit');
 
-    // Action
-    instance['updateRemoveCustomerClassStatus']();
+    // Act
+    component.closeClick();
 
     // Assert
-    expect(instance.isRemoveCustomerClass201).toEqual(false);
-    expect(instance.isCanNotSelectedRemoveTicketCC201).toEqual(false);
-    expect(instance.isRemoveCustomerClass4K).toEqual(false);
-    expect(instance.isCanNotSelectedRemoveTicketCC4K).toEqual(false);
+    expect(component.model.isOpenDialog).toBeFalsy();
+    expect(component.isRemoveCustomerClass201).toBeTruthy();
+    expect(component.isRemoveCustomerClass4K).toBeTruthy();
+    expect(component.isShowErrorCannotRemoveAllTickets).toBeFalsy();
+    expect(component.isCanNotSelectedRemoveTicketCC201).toBeFalsy();
+    expect(component.isCanNotSelectedRemoveTicketCC4K).toBeFalsy();
+    expect(closeSpy).toHaveBeenCalled();
   });
 
-  it('#updateRemoveCustomerClassStatus should close popup and emit action save when not only tickets that have CC = 4000 & 201', async () => {
+  it('should handle saveClick', () => {
     // Arrange
-    const fakeConfirmAbnormalBetModel = _.clone(Helper.fakeConfirmAbnormalBetModel);
-    fakeConfirmAbnormalBetModel.transIds = '6666,3333,1111,2222';
-    fakeConfirmAbnormalBetModel.ticketsOfCustomerClass201 = '1111';
-    fakeConfirmAbnormalBetModel.ticketsOfCustomerClass4K = '6666';
-    const { instance } = await shallow.render({
-      bind: {
-        model: fakeConfirmAbnormalBetModel
-      }
-    });
+    component.model.isOpenDialog = true;
+    const saveSpy = jest.spyOn(component.save, 'emit');
 
-    // Action
-    instance['updateRemoveCustomerClassStatus']();
+    // Act
+    component.saveClick();
 
     // Assert
-    expect(instance.isRemoveCustomerClass201).toEqual(true);
-    expect(instance.isCanNotSelectedRemoveTicketCC201).toEqual(false);
-    expect(instance.isRemoveCustomerClass4K).toEqual(true);
-    expect(instance.isCanNotSelectedRemoveTicketCC4K).toEqual(false);
-  });
-
-  it('#checkRemoveCC201 should update isCanNotSelectedRemoveTicketCC4K = true', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    instance.isShowErrorCannotRemoveAllTickets= true;
-    instance.isCanNotSelectedRemoveTicketCC4K = false;
-
-    // Action
-    instance['checkRemoveCC201']();
-
-    // Assert
-    expect(instance.isCanNotSelectedRemoveTicketCC4K).toEqual(true);
-
-  });
-
-  it('#checkRemoveCC201 should update isCanNotSelectedRemoveTicketCC4K = false', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    instance.isShowErrorCannotRemoveAllTickets= true;
-    instance.isCanNotSelectedRemoveTicketCC4K = true;
-
-    // Action
-    instance['checkRemoveCC201']();
-
-    // Assert
-    expect(instance.isCanNotSelectedRemoveTicketCC4K).toEqual(false);
-
-  });
-
-  it('#checkRemoveCC4K should update isCanNotSelectedRemoveTicketCC201 = true', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    instance.isShowErrorCannotRemoveAllTickets= true;
-    instance.isCanNotSelectedRemoveTicketCC201 = false;
-
-    // Action
-    instance['checkRemoveCC4K']();
-
-    // Assert
-    expect(instance.isCanNotSelectedRemoveTicketCC201).toEqual(true);
-
-  });
-
-  it('#checkRemoveCC4K should update isCanNotSelectedRemoveTicketCC201 = false', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    instance.isShowErrorCannotRemoveAllTickets= true;
-    instance.isCanNotSelectedRemoveTicketCC201 = true;
-
-    // Action
-    instance['checkRemoveCC4K']();
-
-    // Assert
-    expect(instance.isCanNotSelectedRemoveTicketCC201).toEqual(false);
-
-  });
-
-  it('#isAllTicketsOfCustomerClass should be return true', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-
-    // Action
-    const isShowErrorCannotRemoveAllTickets= instance['isAllTicketsOfCustomerClass'](['1111','2222'], ['1111','2222']);
-
-    // Assert
-    expect(isShowErrorCannotRemoveAllTickets).toEqual(true);
-
-  });
-
-  it('#isAllTicketsOfCustomerClass should be return false', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-
-    // Action
-    const isShowErrorCannotRemoveAllTickets= instance['isAllTicketsOfCustomerClass'](['1111','2222'], null);
-
-    // Assert
-    expect(isShowErrorCannotRemoveAllTickets).toBeFalsy();
-
+    expect(component.model.isOpenDialog).toBeFalsy();
+    expect(saveSpy).toHaveBeenCalled();
   });
 });

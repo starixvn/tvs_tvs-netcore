@@ -1,4 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectComponent } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
@@ -16,6 +19,7 @@ import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
 import { ActionVoidService } from './services/action-void.service';
+import { SubIssueTypeDialogComponent } from './sub-issue-type-dialog/sub-issue-type-dialog.component';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog/sub-issue-type-dialog.model';
 import { Category } from './sub-issue-type-dialog/sub-issue-type-json.model';
 import SubIssueTypeDangerAcceptedConfig from './sub-issue-type-dialog/sub-type-danger-accepted.json';
@@ -23,7 +27,10 @@ import SubIssueTypeDangerAcceptedConfig from './sub-issue-type-dialog/sub-type-d
 @Component({
   selector: 'filter',
   templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.scss']
+  styleUrls: ['./filter.component.scss'],
+  standalone: true,
+  imports: [FormsModule, CommonModule, NgSelectComponent, SubIssueTypeDialogComponent],
+  providers: [FilterService, ActionVoidService]
 })
 export class FilterComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;
@@ -43,20 +50,17 @@ export class FilterComponent implements OnInit, OnChanges {
   subIssueTypeDialogModel = new SubIssueTypeDialogModel();
   abnormalFilterBySubscription = new Subscription();
   abnormalFilterBy: number;
-  accessIssueTypeCount = new Map<string,number>();
+  accessIssueTypeCount = new Map<string, number>();
 
   private initialize: boolean;
   private readonly SELECT_SUB_TYPE_TEXT = 'Select Sub Type';
-  private readonly ignoreSubIssueType = [ SubIssueTypeConstant.GAME_CRASHED_VOID_LIVE ];
+  private readonly ignoreSubIssueType = [SubIssueTypeConstant.GAME_CRASHED_VOID_LIVE];
 
-  constructor(
-    private readonly filterService: FilterService,
-    private readonly commonService: CommonService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly actionVoidService: ActionVoidService,
-    private readonly logAnalysisService: LogAnalysisService
-  ) {
-  }
+  private readonly filterService = inject(FilterService);
+  private readonly commonService = inject(CommonService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly actionVoidService = inject(ActionVoidService);
+  private readonly logAnalysisService = inject(LogAnalysisService);
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['model'] && this.isEditOrExternalUrl()) {
@@ -64,7 +68,7 @@ export class FilterComponent implements OnInit, OnChanges {
       this.updateIssueBySub();
       this.updateCurrentAction();
       if (!this.haveIssueTypeFromPermission(this.issueTypes.issueId?.toString())) {
-        this.backToNotAuthorizedPage();
+        this.backToAccessDeniedPage();
         return;
       }
       if (this.isLikelyDangerAccepted()) {
@@ -192,28 +196,28 @@ export class FilterComponent implements OnInit, OnChanges {
 
   private setWidthControlByIssueType(): void {
     const widthMapping: { [key: number]: { [key: string]: number } } = {
-      [IssueTypeConstant.DANGER_ACCEPTED]: {subIssueType: 300, action: 150, sport: 150 },
-      [IssueTypeConstant.EARLY_KICK_OFF]: {subIssueType: 150, action: 170, sport: 220 },
-      [IssueTypeConstant.WRONG_KICK_OFF]: {subIssueType: 150, action: 170, sport: 220 },
-      [IssueTypeConstant.ABNORMAL_ACCOUNT]: {subIssueType: 170, action: 210 },
-      [IssueTypeConstant.RED_CARD]: {subIssueType: 285, action: 150, sport: 150 },
-      [IssueTypeConstant.WRONG_HDP]: {subIssueType: 220, action: 150, sport: 150 },
-      [IssueTypeConstant.WRONG_1ST_HDP]: {subIssueType: 220, action: 150, sport: 150 },
-      [IssueTypeConstant.WRONG_OU]: {subIssueType: 220, action: 150, sport: 150 },
-      [IssueTypeConstant.WRONG_1ST_OU]: {subIssueType: 220, action: 150, sport: 150 },
-      [IssueTypeConstant.ABNORMAL_BET]: {subIssueType: 170, action: 250, sport: 150 },
-      [IssueTypeConstant.WRONG_SCORE]: {subIssueType: 380, action: 150, sport: 150 },
-      [IssueTypeConstant.WRONG_ODDS]: {subIssueType: 150, action: 150 },
-      [IssueTypeConstant.ARCHIVED_TICKET]: {action: 150 },
-      [IssueTypeConstant.REDUCED_OVER]: {action: 200, sport: 150 },
-      [IssueTypeConstant.ABANDONED]: {action: 200, sport: 150 },
-      [IssueTypeConstant.DUPLICATE_TICKETS]: {action: 170, sport: 150 },
-      [IssueTypeConstant.NOT_PARTICIPATE]: {action: 200, sport: 150 },
-      [IssueTypeConstant.WRONG_MARKET_OFFERED]: {action: 170 },
-      [IssueTypeConstant.TECHNICAL_ERROR]: {action: 170 },
-      [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: {action: 170 },
-      [IssueTypeConstant.WRONG_OFFERED_NAME]: {subIssueType: 175, action: 165 },
-      [IssueTypeConstant.OTHER_ISSUES]: {subIssueType: 175, action: 165 }
+      [IssueTypeConstant.DANGER_ACCEPTED]: { subIssueType: 300, action: 150, sport: 150 },
+      [IssueTypeConstant.EARLY_KICK_OFF]: { subIssueType: 150, action: 170, sport: 220 },
+      [IssueTypeConstant.WRONG_KICK_OFF]: { subIssueType: 150, action: 170, sport: 220 },
+      [IssueTypeConstant.ABNORMAL_ACCOUNT]: { subIssueType: 170, action: 210 },
+      [IssueTypeConstant.RED_CARD]: { subIssueType: 285, action: 150, sport: 150 },
+      [IssueTypeConstant.WRONG_HDP]: { subIssueType: 220, action: 150, sport: 150 },
+      [IssueTypeConstant.WRONG_1ST_HDP]: { subIssueType: 220, action: 150, sport: 150 },
+      [IssueTypeConstant.WRONG_OU]: { subIssueType: 220, action: 150, sport: 150 },
+      [IssueTypeConstant.WRONG_1ST_OU]: { subIssueType: 220, action: 150, sport: 150 },
+      [IssueTypeConstant.ABNORMAL_BET]: { subIssueType: 170, action: 250, sport: 150 },
+      [IssueTypeConstant.WRONG_SCORE]: { subIssueType: 380, action: 150, sport: 150 },
+      [IssueTypeConstant.WRONG_ODDS]: { subIssueType: 150, action: 150 },
+      [IssueTypeConstant.ARCHIVED_TICKET]: { action: 150 },
+      [IssueTypeConstant.REDUCED_OVER]: { action: 200, sport: 150 },
+      [IssueTypeConstant.ABANDONED]: { action: 200, sport: 150 },
+      [IssueTypeConstant.DUPLICATE_TICKETS]: { action: 170, sport: 150 },
+      [IssueTypeConstant.NOT_PARTICIPATE]: { action: 200, sport: 150 },
+      [IssueTypeConstant.WRONG_MARKET_OFFERED]: { action: 170 },
+      [IssueTypeConstant.TECHNICAL_ERROR]: { action: 170 },
+      [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: { action: 170 },
+      [IssueTypeConstant.WRONG_OFFERED_NAME]: { subIssueType: 175, action: 165 },
+      [IssueTypeConstant.OTHER_ISSUES]: { subIssueType: 175, action: 165 }
     };
 
     const widthValues = widthMapping[this.model.issueTypeId] || {};
@@ -230,7 +234,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.issueTypesPermission = await this.commonService.getIssueTypePermissionList();
     if (_.isNil(this.issueTypesPermission) || this.issueTypesPermission.length === 0) {
-      this.backToNotAuthorizedPage();
+      this.backToAccessDeniedPage();
       return;
     }
 
@@ -292,8 +296,8 @@ export class FilterComponent implements OnInit, OnChanges {
     }) > -1;
   }
 
-  backToNotAuthorizedPage() {
-    window.location.assign(`Home/NotAuthorized`);
+  backToAccessDeniedPage() {
+    window.location.assign(`Home/AccessDenied`);
   }
 
   isEditOrExternalUrl(): boolean {

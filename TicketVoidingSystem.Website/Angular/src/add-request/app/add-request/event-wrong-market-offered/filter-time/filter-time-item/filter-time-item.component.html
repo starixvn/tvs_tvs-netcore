@@ -1,27 +1,27 @@
 <div class="d-flex">
-  <label class="col-form-label col-form-label-sm filter-id">{{index + 1}}</label>
-  <div class="mr-3">
-    <date-full-time-new #fromTimeComponent
-      class="from-date-time"
-      [isDisabled]="isVoided"
-      (changeEvent)="changeFilter()"
-      [(dateTime)]="model.fromDateTime">
+  <label class="col-form-label-sm filter-id">{{index + 1}}</label>
+  <div class="me-3">
+    <date-full-time-new #fromTimeComponent class="from-date-time" [isDisabled]="isVoided" (ngModelChange)="changeFilter()"
+      [(ngModel)]="model.fromDateTime">
     </date-full-time-new>
   </div>
-  <div class="d-flex align-items-center mr-2">
-    <span class="mr-2">To</span>
-    <date-full-time-new #toTimeComponent
-      class="to-date-time-{{index + 1}}"
-      [isDisabled]="isVoided"
-      (changeEvent)="changeFilter()"
-      [(dateTime)]="model.toDateTime">
+  <div class="d-flex align-items-center me-2">
+    <span class="me-2">To</span>
+    <date-full-time-new #toTimeComponent class="to-date-time-{{index + 1}}" [isDisabled]="isVoided"
+      (ngModelChange)="changeFilter()" [(ngModel)]="model.toDateTime">
     </date-full-time-new>
   </div>
-  <div *ngIf="!(isFirst && isLast)"class="d-flex align-items-center mr-2">
-    <em class="pointer fa fa-minus-circle fa-icon-remove" (click)="removeBetTypeItem(index)" [ngClass]="{'cursor-not-allowed': isVoided}"></em>
-  </div>
-  <div *ngIf="isLast" class="d-flex align-items-center">
-    <em class="pointer fa fa-plus-circle fa-icon-add" (click)="addBetTypeItem()" [ngClass]="{'cursor-not-allowed': isVoided}"></em>
-  </div>
+  @if (!(isFirst && isLast)) {
+    <div class="d-flex align-items-center me-2">
+      <em class="pointer fa fa-minus-circle fa-icon-remove" (click)="removeBetTypeItem(index)"
+      [ngClass]="{'cursor-not-allowed': isVoided}"></em>
+    </div>
+  }
+  @if (isLast) {
+    <div class="d-flex align-items-center">
+      <em class="pointer fa fa-plus-circle fa-icon-add" (click)="addBetTypeItem()"
+      [ngClass]="{'cursor-not-allowed': isVoided}"></em>
+    </div>
+  }
 </div>
 <tooltip [tooltip]="tooltip"></tooltip>

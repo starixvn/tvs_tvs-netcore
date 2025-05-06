@@ -2,13 +2,8 @@ import { Injectable } from '@angular/core';
 import { AbnormalFilterBy, ActionVoidByIssueTypeConst, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { Selection } from '../../../../../utility/models/selection.model';
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ActionVoidService {
-  constructor(
-  ) { }
-
   public getVoidActionsSelectionByIssueType(issueTypeId: number, filterBy: number, isEdit: boolean, currentActionId: string, originActions: Selection[]): Selection[] {
     if (!issueTypeId) {
       return originActions;

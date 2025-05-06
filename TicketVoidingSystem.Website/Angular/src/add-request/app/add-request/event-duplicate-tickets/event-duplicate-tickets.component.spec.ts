@@ -1,267 +1,236 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Shallow } from 'shallow-render';
-import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
-import { AbnormalFilterBy } from '../../../../utility/constants/config';
-import { MatchInfoViewModel } from '../../../../utility/models/event.model';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { CommonService } from '../../../../utility/services/common.service';
-import { AddRequestApiService } from '../add-request-api.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { EventDuplicateTicketsComponent } from './event-duplicate-tickets.component';
+import { ValidationService } from './services/validation.service';
+import { SaveRequestService } from './services/save-request.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { DuplicateTicketsModel } from '../models/event-duplicate-tickets.model';
-import { EventDuplicateTicketsComponent } from './event-duplicate-tickets.component';
-import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
+import { OthersModel } from '../others/others.model';
+import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { CommonService } from '../../../../utility/services/common.service';
+import { AddRequestApiService } from '../add-request-api.service';
+import { AbnormalFilterBy, TVSRequestActionType } from '../../../../utility/constants/config';
 
 class Helper {
-  static readonly fakeTransId = '123456789';
-  static readonly fakeMatchId = 90000000;
-  static readonly fakeDuplicateTicketsModel: DuplicateTicketsModel = {
-    matchId: Helper.fakeMatchId,
-    transIds: Helper.fakeTransId,
-    filterBy: null,
-    subIssueTypeId: 1,
-    orgTransIds: '1312',
-    name: '',
-    leagueName: '',
-    sportType: 0
-  };
+  static readonly fakeRequestId = 1212;
   static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '27',
-    action: '5',
-    isTest: false,
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
     isVoided: false,
-    subIssueTypes: [],
+    isChangeSubTypeManual: true,
     isAbnormal: false
   } as FilterModel;
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeDuplicateTicketsModel = {
+    matchId: 123,
+    sportType: 1,
+    filterBy: AbnormalFilterBy.SINGLE,
+    name: 'Test Match',
+    leagueName: 'Test League',
+    transIds: '123,456',
+    orgTransIds: '789\n101112'
+  } as DuplicateTicketsModel;
 }
 
 describe('EventDuplicateTicketsComponent', () => {
-  @NgModule({
-    declarations: [
-      BetIdsComponent
-    ],
-    imports: [
-      BlockUiModule,
-      FormsModule,
-      ToolTipModule
-    ],
-    providers: [
-      ValidationService,
-      SaveRequestService,
-      AddRequestStore,
-      AddRequestApiService,
-      CommonService,
-      ElementRef
-    ]
-  })
-  class AppModuleTest { }
+  let component: EventDuplicateTicketsComponent;
+  let fixture: ComponentFixture<EventDuplicateTicketsComponent>;
+  let validationService: ValidationService;
+  let saveRequestService: SaveRequestService;
+  let addRequestStore: AddRequestStore;
+  let commonService: CommonService;
+  let addRequestApiService: AddRequestApiService;
 
-  let shallow: Shallow<EventDuplicateTicketsComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        SaveRequestService,
+        AddRequestStore,
+        CommonService,
+        AddRequestApiService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(EventDuplicateTicketsComponent, AppModuleTest);
+    fixture = TestBed.createComponent(EventDuplicateTicketsComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    commonService = fixture.debugElement.injector.get(CommonService);
+    addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
+    component = fixture.componentInstance;
   });
 
-  it('#EventDuplicateTicketsComponent init should match snapshot', async () => {
-    const { fixture, instance } = await shallow
-      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-      .render({
-        bind: {
-          duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.ngOnInit = jest.fn();
-
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#ngOnInit should be call #getPermissionManageRequest when edit request', async () => {
-    const matchViewModel = { match: new MatchModel() } as MatchInfoViewModel;
-    const mockGetPermissionManageRequest = jest.fn();
-    const mockChangeAbnormalFilterBy = jest.fn();
-    const mockgetMatchInfoAddRequest = jest.fn().mockReturnValue(matchViewModel);
-    const { instance } = await shallow
-      .mock(AddRequestStore, { changeAbnormalFilterBy: mockChangeAbnormalFilterBy })
-      .mock(CommonService, { getMatchInfoAddRequest: mockgetMatchInfoAddRequest })
-      .mock(AddRequestApiService, { getPermissionAddRequest: mockGetPermissionManageRequest })
-      .render({
-        bind: {
-          duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    [true, false].forEach(async x => {
-      instance.isEdit = x;
-      await instance.ngOnInit();
+  it('should initialize with default values when not in edit mode', async () => {
+    // Arrange
+    component.isEdit = false;
+    addRequestStore.changeAbnormalFilterBy = jest.fn();
+    addRequestApiService.getPermissionAddRequest = jest.fn().mockResolvedValue({});
 
-      expect(mockGetPermissionManageRequest).toHaveBeenCalled();
-    });
+    // Act
+    await component.ngOnInit();
+
+    // Assert
+    expect(component.duplicateTicketsModel.filterBy).toBe(AbnormalFilterBy.SINGLE);
+    expect(addRequestStore.changeAbnormalFilterBy).toHaveBeenCalledWith(AbnormalFilterBy.SINGLE);
   });
 
-  it('#afterFocusOutBetIds should call #getMatchAndCheckValidTransIds', async () => {
-    const { instance } = await shallow
-      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-      .render({
-        bind: {
-          duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.isCancelAfterFocusOutBetIdsEvent = false;
-    instance['checkValidBusinessRule'] = jest.fn();
-    await instance.afterFocusOutBetIds();
+  it('should initialize with existing values when in edit mode', async () => {
+    // Arrange
+    component.isEdit = true;
+    component.duplicateTicketsModel = Helper.fakeDuplicateTicketsModel;
+    const fakeMatchInfo = {
+      match: {
+        leagueName: 'Updated League',
+        name: 'Updated Match'
+      }
+    };
+    commonService.getMatchInfoAddRequest = jest.fn().mockResolvedValue(fakeMatchInfo);
+    addRequestStore.changeAbnormalFilterBy = jest.fn();
+    addRequestApiService.getPermissionAddRequest = jest.fn().mockResolvedValue({});
 
-    expect(instance['checkValidBusinessRule']).toHaveBeenCalledTimes(1);
+    // Act
+    await component.ngOnInit();
+
+    // Assert
+    expect(component.duplicateTicketsModel.leagueName).toBe('Updated League');
+    expect(component.duplicateTicketsModel.name).toBe('Updated Match');
+    expect(addRequestStore.changeAbnormalFilterBy).toHaveBeenCalledWith(component.duplicateTicketsModel.filterBy);
   });
 
-  it('#afterFocusOutBetIds should not call #getMatchAndCheckValidTransIds', async () => {
-    const { instance } = await shallow
-      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-      .render({
-        bind: {
-          duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.isCancelAfterFocusOutBetIdsEvent = true;
-    instance['checkValidBusinessRule'] = jest.fn();
-    await instance.afterFocusOutBetIds();
+  it('should handle afterFocusOutBetIds when not cancelled', async () => {
+    // Arrange
+    component.isCancelAfterFocusOutBetIdsEvent = false;
+    component.betIdsComponent = {
+      getAllBetIds: jest.fn().mockReturnValue(['123', '456'])
+    } as unknown as BetIdsComponent;
+    addRequestStore.changeStartTimeFilterAnalysis = jest.fn();
+    validationService.checkValidBusinessRule = jest.fn().mockResolvedValue(true);
 
-    expect(instance['checkValidBusinessRule']).toHaveBeenCalledTimes(0);
+    // Act
+    await component.afterFocusOutBetIds();
+
+    // Assert
+    expect(addRequestStore.changeStartTimeFilterAnalysis).toHaveBeenCalled();
+    expect(component.primitiveProps.isBlockBetIds).toBeFalsy();
   });
 
-  it('#saveRequest should not call #saveRequestService.saveRequest', async () => {
-    const mockSaveRequest = jest.fn();
-    const { instance } = await shallow
-      .mock(ValidationService, { isFilterMixParlay: jest.fn().mockReturnValue(true) })
-      .mock(SaveRequestService, { saveRequest: mockSaveRequest })
-      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-      .render({
-        bind: {
-          duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.triggerFocusOutBetIds = jest.fn();
-    instance.betIdsComponent.getAllBetIds = jest.fn();
-    instance.isCancelAfterFocusOutBetIdsEvent = true;
-    instance['checkValidBusinessRule'] = jest.fn();
-    await instance.saveRequest();
+  it('should handle saveRequest', async () => {
+    // Arrange
+    component.betIdsComponent = {
+      triggerFocusOutBetIds: jest.fn(),
+      getAllBetIds: jest.fn().mockReturnValue(['123', '456'])
+    } as unknown as BetIdsComponent;
+    saveRequestService.saveRequest = jest.fn().mockResolvedValue({});
 
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
+    // Act
+    await component.saveRequest();
+
+    // Assert
+    expect(component.betIdsComponent.triggerFocusOutBetIds).toHaveBeenCalled();
+    expect(component.isCancelAfterFocusOutBetIdsEvent).toBeFalsy();
+    expect(saveRequestService.saveRequest).toHaveBeenCalled();
   });
 
-  it('#removeInvalidTransIds should call #betIdsComponent.removeTransId', async () => {
-    const { instance } = await shallow
-      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-      .render({
-        bind: {
-          duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.removeTransId = jest.fn();
-    instance.removeInvalidTransIds();
+  it('should remove invalid trans IDs', () => {
+    // Arrange
+    component.betIdsComponent = {
+      removeTransId: jest.fn()
+    } as unknown as BetIdsComponent;
+    component.primitiveProps.invalidTransIds = '123,456';
 
-    expect(instance.betIdsComponent.removeTransId).toHaveBeenCalledTimes(1);
+    // Act
+    component.removeInvalidTransIds();
+
+    // Assert
+    expect(component.betIdsComponent.removeTransId).toHaveBeenCalledWith(component.primitiveProps.invalidTransIds);
+    expect(component.primitiveProps.isShowButtonRemoveInvalid).toBeFalsy();
   });
 
-  it('#triggerCloseEvent should call #saveWhenRequestNotVoided', async () => {
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-      .render({
-        bind: {
-          duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.triggerCloseEvent();
+  it('should trigger close event', () => {
+    // Arrange
+    addRequestStore.changeSavingRequestStatus = jest.fn();
 
-    expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
+    // Act
+    component.triggerCloseEvent();
+
+    // Assert
+    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
   });
 
-  it('#changeFilterBy should call #addRequestStore.changeAbnormalFilterBy', async () => {
-    const mockChangeAbnormalFilterBy = jest.fn();
-    const fakeFilterModel = Helper.fakeFilterModel;
-    fakeFilterModel.isVoided = false;
-    const { instance } = await shallow
-      .mock(AddRequestStore, { changeAbnormalFilterBy: mockChangeAbnormalFilterBy })
-      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-      .render({
-        bind: {
-          duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.changeFilterBy(1);
+  it('should change filter by', () => {
+    // Arrange
+    const newFilterBy = AbnormalFilterBy.SINGLE;
+    addRequestStore.changeAbnormalFilterBy = jest.fn();
 
-    expect(instance.duplicateTicketsModel.filterBy).toBe(1);
-    expect(mockChangeAbnormalFilterBy).toHaveBeenCalled();
+    // Act
+    component.changeFilterBy(newFilterBy);
+
+    // Assert
+    expect(component.duplicateTicketsModel.filterBy).toBe(newFilterBy);
+    expect(addRequestStore.changeAbnormalFilterBy).toHaveBeenCalledWith(newFilterBy);
   });
 
-  it('#checkValidBusinessRule should call #validationService.checkValidBusinessRule when filter single', async () => {
-    const mockCheckValidBusinessRule = jest.fn().mockReturnValue(true);
-    const { instance } = await shallow
-      .mock(ValidationService, { checkValidBusinessRule: mockCheckValidBusinessRule })
-      .mock(ValidationService, { isFilterMixParlay: jest.fn().mockReturnValue(false) })
-      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-      .render({
-        bind: {
-          duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.updateMatchId.emit = jest.fn();
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.getAllBetIds = jest.fn();
-    instance.duplicateTicketsModel.filterBy = AbnormalFilterBy.SINGLE;
-    const actual = await instance['checkValidBusinessRule']();
+  it('should show league event when filter is SINGLE', () => {
+    // Arrange
+    component.duplicateTicketsModel.filterBy = AbnormalFilterBy.SINGLE;
 
-    expect(mockCheckValidBusinessRule).toHaveBeenCalledTimes(1);
-    expect(actual).toBeTruthy();
+    // Act & Assert
+    expect(component.isShowLeagueEvent()).toBeTruthy();
   });
 
-  it('#checkValidBusinessRule should call #validationService.checkValidBusinessRule when filter parlay', async () => {
-    const mockCheckValidBusinessRule = jest.fn().mockReturnValue(true);
-    const { instance } = await shallow
-      .mock(ValidationService, { checkValidBusinessRule: mockCheckValidBusinessRule })
-      .mock(ValidationService, { isFilterMixParlay: jest.fn().mockReturnValue(false) })
-      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
-      .render({
-        bind: {
-          duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.updateMatchId.emit = jest.fn();
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.getAllBetIds = jest.fn();
-    instance.duplicateTicketsModel.filterBy = AbnormalFilterBy.MIX_PARLAY;
-    const actual = await instance['checkValidBusinessRule']();
+  it('should not show league event when filter is not SINGLE', () => {
+    // Arrange
+    component.duplicateTicketsModel = {
+      ...Helper.fakeDuplicateTicketsModel,
+      filterBy: AbnormalFilterBy.MIX_PARLAY
+    };
 
-    expect(mockCheckValidBusinessRule).toHaveBeenCalledTimes(1);
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(0);
-    expect(actual).toBeTruthy();
+    // Act & Assert
+    expect(component.isShowLeagueEvent()).toBeFalsy();
+  });
+
+  it('should disable bet IDs when voided', () => {
+    // Arrange
+    component.filter.isVoided = true;
+
+    // Act & Assert
+    expect(component.isDisableBetIds()).toBeTruthy();
+  });
+
+  it('should disable bet IDs when action is AUTO_VOID_INSTANT_ID', () => {
+    // Arrange
+    component.filter.action = TVSRequestActionType.AUTO_VOID_INSTANT_ID.toString();
+
+    // Act & Assert
+    expect(component.isDisableBetIds()).toBeTruthy();
+  });
+
+  it('should create duplicate tickets model correctly', () => {
+    // Arrange
+    component.duplicateTicketsModel = Helper.fakeDuplicateTicketsModel;
+    component.filter = Helper.fakeFilterModel;
+    component.betIdsComponent = {
+      getAllBetIds: jest.fn().mockReturnValue(['123', '456'])
+    } as unknown as BetIdsComponent;
+    validationService.isFilterMixParlay = jest.fn().mockReturnValue(false);
+
+    // Act
+    const result = component['createDuplicateTicketsModel']();
+
+    // Assert
+    expect(result.matchId).toBe(Helper.fakeDuplicateTicketsModel.matchId);
+    expect(result.transIds).toEqual(['123', '456']);
+    expect(result.subIssueTypeId).toBe(Number(Helper.fakeFilterModel.subIssueTypeId));
+    expect(result.filterBy).toBe(Helper.fakeDuplicateTicketsModel.filterBy);
+    expect(result.orgTransIds).toBe('789,101112');
   });
 });

@@ -1,19 +1,27 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TeamFavorite } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
+import { HdpFilterBetTypeComponent } from '../../components/hdp-filter-bet-type/hdp-filter-bet-type.component';
+import { HdpFilterBetTypeService } from '../../components/hdp-filter-bet-type/hdp-filter-bet-type.service';
+import { FilterModel } from '../../filter/filter.model';
 import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { ValidationService } from '../services/validation.service';
-import { FilterModel } from '../../filter/filter.model';
 
 @Component({
   selector: 'filter-with-hdp',
   templateUrl: './filter-with-hdp.component.html',
-  styleUrls: ['./filter-with-hdp.component.scss']
+  styleUrls: ['./filter-with-hdp.component.scss'],
+  standalone: true,
+  imports: [FormsModule, CommonModule, TooltipComponent, DateFullTimeNewComponent, HdpFilterBetTypeComponent],
+  providers: [HdpFilterBetTypeService]
 })
 export class FilterWithHdpComponent implements OnInit {
   @Input() filterWithHdpModel: FilterWithHdpModel;
@@ -26,18 +34,16 @@ export class FilterWithHdpComponent implements OnInit {
   @Output() searchTicketEvent = new EventEmitter();
   @Output() refreshEvent = new EventEmitter();
   @Output() changeFilterEvent = new EventEmitter();
-
   @ViewChild('fromTimeComponent') fromTimeComponent: DateFullTimeNewComponent;
   @ViewChild('toTimeComponent') toTimeComponent: DateFullTimeNewComponent;
 
   teamFavorite: number;
   tooltip = new Tooltip();
+  private readonly element = inject(ElementRef);
+  private readonly validationService = inject(ValidationService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly validationService: ValidationService
-  ) {
-      this.tooltip.element = this.element;
+  constructor() {
+    this.tooltip.element = this.element;
   }
 
   public ngOnInit(): void {
@@ -46,10 +52,10 @@ export class FilterWithHdpComponent implements OnInit {
 
   public changeFilterBy(): void {
     if (!this.filterWithHdpModel.filterFromTransTime || !this.filterWithHdpModel.filterToTransTime) {
-        const currentMoment = moment.utc().tz('America/Caracas');
-        this.filterWithHdpModel.filterFromTransTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-        this.filterWithHdpModel.filterToTransTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-      }
+      const currentMoment = moment.utc().tz('America/Caracas');
+      this.filterWithHdpModel.filterFromTransTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+      this.filterWithHdpModel.filterToTransTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    }
   }
 
   private initTeamFavorite(): void {

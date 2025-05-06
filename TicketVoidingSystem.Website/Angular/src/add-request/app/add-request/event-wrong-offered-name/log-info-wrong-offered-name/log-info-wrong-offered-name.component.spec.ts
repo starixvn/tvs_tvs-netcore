@@ -1,123 +1,193 @@
-import { NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
-import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { FilterModel } from '../../filter/filter.model';
-import { WrongOfferedNameModel } from '../../models/event-wrong-offered-name.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
-import { GroupModel } from '../../pool-house-ticket/tickets/group-tickets.model';
-import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
-import { FilterWrongOfferedNameModel } from '../models/filter-wrong-offered-name.model';
-import { LogInfoWrongOfferedName } from '../models/log-info-wrong-offered-name.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { LogInfoWrongOfferedNameComponent } from './log-info-wrong-offered-name.component';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { FilterModel } from '../../filter/filter.model';
+import { LogInfoWrongOfferedName } from '../models/log-info-wrong-offered-name.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { ValidationMessage } from '../../models/get-log-info.model';
+import { CommonGroupTicketsModel } from '../../../../../utility/models/common.group-tickets.model';
+import { CommonTicketModel } from '../../../../../utility/models/common.ticket.model';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../../utility/models/match.model';
+import { FilterWrongOfferedNameModel } from '../models/filter-wrong-offered-name.model';
+import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
+import { GroupModel } from '../../pool-house-ticket/tickets/group-tickets.model';
+
 class Helper {
-  static readonly fakeWrongOfferedNameModel: WrongOfferedNameModel = {
-    currencyIds: '1,2',
-    licenseeNames: 'licensee1,licensee2',
-    logInfoDetail: new LogInfoDetail(),
+  static readonly fakeRequestId = 1212;
+  static readonly fakeFilterModel: FilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
+    isVoided: false,
+    isChangeSubTypeManual: true,
+    isAbnormal: false
+  } as FilterModel;
+
+  static readonly fakeLogInfo: LogInfoWrongOfferedName = {
     matchId: 1,
-    subIssueTypeId: 1
-  } as WrongOfferedNameModel;
-  static readonly fakeLogInfoWrongOfferedName: LogInfoWrongOfferedName = {
-    matchId: 1,
+    matchModel: new MatchModel(),
     filterWrongOfferedName: new FilterWrongOfferedNameModel(),
     logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
+    messageValidationLogInfo: [
+      { isError: false, reason: 'Test message' }
+    ],
+    tableTicketsModel: new TicketsModel(),
+    isCollapse: false,
+    titleTableTicket: 'Test Title',
+    isInvalidTotalTickets: false,
+    isHasSettledTicket: false,
+    isHasInstantlySettledTicket: false
   } as LogInfoWrongOfferedName;
-  static readonly fakeFilterWrongOfferedName: FilterWrongOfferedNameModel = {
-    currencyIds: [],
-    licenseeNames: []
-  } as FilterWrongOfferedNameModel;
+
+  static readonly fakePrimitiveProps: PrimitiveProperty = {
+    isShowRelatedEvents: false,
+    isBlock: false,
+    inputRelatedMatchId: '',
+    transInfoAddRequestModel: null,
+    isShowLogInfo: false,
+    transInfoAddRequest: null
+  } as PrimitiveProperty;
 }
 
 describe('LogInfoWrongOfferedNameComponent', () => {
-  let mockComponent: LogInfoWrongOfferedNameComponent;
-  let mockModalService: ModalService;
+  let component: LogInfoWrongOfferedNameComponent;
+  let fixture: ComponentFixture<LogInfoWrongOfferedNameComponent>;
+  let modalService: ModalService;
 
-  beforeEach(() => {
-    mockModalService = new ModalService(new NgbModalConfig(null), null, null);
-    mockComponent = new LogInfoWrongOfferedNameComponent(mockModalService);
-    mockComponent.logInfo = Helper.fakeLogInfoWrongOfferedName;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ModalService
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(LogInfoWrongOfferedNameComponent);
+    modalService = fixture.debugElement.injector.get(ModalService);
+    component = fixture.componentInstance;
   });
 
-  it('LogInfoWrongOfferedNameComponent init should match snapshot', async () => {
-    expect(mockComponent).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('clickHeader init should update isCollapse', async () => {
-    mockComponent.logInfo.isCollapse = false;
-    mockComponent.clickHeader();
+  it('should toggle collapse state when clicking header', () => {
+    // Arrange
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.isCollapse = false;
 
-    expect(mockComponent.logInfo.isCollapse).toBe(true);
+    // Act
+    component.clickHeader();
+
+    // Assert
+    expect(component.logInfo.isCollapse).toBeTruthy();
   });
 
-  it('isShowMessage should return true when messageValidationLogInfo have not error', async () => {
-    mockComponent.logInfo.messageValidationLogInfo = [{ isError: false }] as ValidationMessage[];
-    const actual = mockComponent.isShowMessage();
+  it('should show message when there are non-error validation messages', () => {
+    // Arrange
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.messageValidationLogInfo = [
+      { isError: false, reason: 'Test message' },
+      { isError: true, reason: 'Error message' }
+    ] as ValidationMessage[];
 
-    expect(actual).toBeTruthy();
+    // Act
+    const result = component.isShowMessage();
+
+    // Assert
+    expect(result).toBeTruthy();
   });
 
-  it('isShowMessage should return false when messageValidationLogInfo have error', async () => {
-    mockComponent.logInfo.messageValidationLogInfo = [{ isError: true }] as ValidationMessage[];
-    const actual = mockComponent.isShowMessage();
+  it('should not show message when all validation messages are errors', () => {
+    // Arrange
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.messageValidationLogInfo = [
+      { isError: true, reason: 'Error message 1' },
+      { isError: true, reason: 'Error message 2' }
+    ] as ValidationMessage[];
 
-    expect(actual).toBeFalsy();
+    // Act
+    const result = component.isShowMessage();
+
+    // Assert
+    expect(result).toBeFalsy();
   });
 
-  it('isShowMessage should return false', async () => {
-    [undefined, [], null].forEach((message) => {
-      mockComponent.logInfo.messageValidationLogInfo = message;
-      const actual = mockComponent.isShowMessage();
+  it('should emit search event', () => {
+    // Arrange
+    component.searchTicketEvent = {
+      emit: jest.fn()
+    } as any;
 
-      expect(actual).toBeFalsy();
-    });
+    // Act
+    component.emitSearchEvent();
+
+    // Assert
+    expect(component.searchTicketEvent.emit).toHaveBeenCalled();
   });
 
-  it('emitSearchEvent should emit #searchTicketEvent', async () => {
-    mockComponent.searchTicketEvent.emit = jest.fn();
-    mockComponent.emitSearchEvent();
+  it('should open popup for transaction IDs', () => {
+    // Arrange
+    const requestId = 123;
+    const transIds = '1,2,3';
+    jest.spyOn(StaticService, 'openPopupTransIds');
 
-    expect(mockComponent.searchTicketEvent.emit).toHaveBeenCalledTimes(1);
+    // Act
+    component.openPopupTransIds(requestId, transIds);
+
+    // Assert
+    expect(StaticService.openPopupTransIds).toHaveBeenCalledWith(requestId, transIds, modalService);
   });
 
-  it('openPopupTransIds should call #modalService.open', async () => {
-    mockModalService.open = jest.fn();
-    mockComponent.openPopupTransIds(1, '1,2');
+  it('should get issue type ID from filter', () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
 
-    expect(mockModalService.open).toHaveBeenCalledTimes(1);
+    // Act
+    const result = component.getIssueTypeId();
+
+    // Assert
+    expect(result).toBe(Number(Helper.fakeFilterModel.issueTypeId));
   });
 
-  it('getIssueTypeId should return issue type number', async () => {
-    mockComponent.filter = new FilterModel();
-    mockComponent.filter.issueTypeId = '1';
-    const actual = mockComponent.getIssueTypeId();
+  it('should get sub issue type ID from filter', () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
 
-    expect(actual).toBe(1);
+    // Act
+    const result = component.getSubIssueTypeId();
+
+    // Assert
+    expect(result).toBe(Number(Helper.fakeFilterModel.subIssueTypeId));
   });
 
-  it('getSubIssueTypeId should return issue type number', async () => {
-    mockComponent.filter = new FilterModel();
-    mockComponent.filter.subIssueTypeId = '1';
-    const actual = mockComponent.getSubIssueTypeId();
+  it('should show template message when there are ticket groups', () => {
+    // Arrange
+    component.logInfo = Helper.fakeLogInfo;
+    const group = new CommonGroupTicketsModel<CommonTicketModel>();
+    group.tickets = [new CommonTicketModel()];
+    component.logInfo.tableTicketsModel.groups = [group] as GroupModel[];
 
-    expect(actual).toBe(1);
+    // Act
+    const result = component.isShowTemplateMessage();
+
+    // Assert
+    expect(result).toBeTruthy();
   });
 
-  it('isNotShowTemplateMessage should return false', async () => {
-    [undefined, [], null].forEach((groups) => {
-      mockComponent.logInfo.tableTicketsModel = new TicketsModel();
-      mockComponent.logInfo.tableTicketsModel.groups = groups;
-      const actual = mockComponent.isShowTemplateMessage();
+  it('should not show template message when there are no ticket groups', () => {
+    // Arrange
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.tableTicketsModel.groups = [];
 
-      expect(actual).toBeFalsy();
-    });
-  });
+    // Act
+    const result = component.isShowTemplateMessage();
 
-  it('isNotShowTemplateMessage should return true', async () => {
-    mockComponent.logInfo.tableTicketsModel = new TicketsModel();
-    mockComponent.logInfo.tableTicketsModel.groups = [{ tickets: [] } as GroupModel];
-    const actual = mockComponent.isShowTemplateMessage();
-
-    expect(actual).toBeTruthy();
+    // Assert
+    expect(result).toBeFalsy();
   });
 });

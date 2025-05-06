@@ -6,7 +6,7 @@
     background-color: #e9ecef !important;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 130px;
+    width: 149px;
 
     div {
         width: 100%;
@@ -51,6 +51,7 @@
 .btn-reload {
     justify-content: center;
     align-items: center;
+
     button {
         width: 30px;
         height: 30px;
@@ -67,16 +68,17 @@
     div.log-info {
         width: 100%;
     }
-  }
+}
 
-  @media only screen and (min-width: 880px) and (max-width: 927px) {
+@media only screen and (min-width: 880px) and (max-width: 927px) {
     .wrong-score-container {
         width: 791px;
     }
+
     div.log-info {
         width: 778px;
     }
-  }
+}
 
 .icon-warning-message {
     color: #cfb107;
@@ -111,7 +113,7 @@
 
 .score-coverage-item {
     .tooltip {
-      margin-left: 10px;
+        margin-left: 10px;
     }
 }
 
@@ -124,7 +126,7 @@
 }
 
 .time-last-ticket-label {
-    width: 300px;
+    width: 274px;
     display: flex;
     align-items: center;
     padding-left: 5px;

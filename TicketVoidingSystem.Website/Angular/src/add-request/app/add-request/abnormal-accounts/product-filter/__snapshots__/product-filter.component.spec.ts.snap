@@ -9,10 +9,10 @@ exports[`ProductFilterComponent #ProductFilterComponent init should match snapsh
       class="product-filter flex-wrap"
     >
       <div
-        class="mr-4"
+        class="me-4"
       >
         <label
-          class="col-form-label col-form-label-sm text-right"
+          class="col-form-label-sm text-right"
         >
           Product
         </label>
@@ -35,7 +35,7 @@ exports[`ProductFilterComponent #ProductFilterComponent init should match snapsh
       </div>
       <div>
         <label
-          class="col-form-label col-form-label-sm"
+          class="col-form-label-sm col-form-label-sm"
         >
           Ticket Status
         </label>

@@ -1,3 +1,4 @@
+import { inject, Injectable } from '@angular/core';
 import _ from 'lodash';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
@@ -9,9 +10,10 @@ import { CommonService } from '../../../../utility/services/common.service';
 import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidPageDuplicateTicketsModel } from '../models/void-page-duplicate-tickets.model';
-import { inject, Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class VoidPageService {
   commonService = inject(CommonService);
   ticketsService = inject(TicketsService);

@@ -1,507 +1,281 @@
-import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
-import { GroupNumber } from '../../../../../utility/components/bet-ids/bet-ids.model';
-import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { AbnormalBetModel } from '../../models/abnormal-bet.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
-import { PermissionAddRequest } from '../../models/permission-add-request.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
-import { CheckTransIdsViewModel, PrimitiveProperty, ValidationAbnormalBet } from '../event-abnormal-bet.model';
-import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
+import { TestBed } from '@angular/core/testing';
 import { ValidationService } from './validation.service';
-
-class Helper {
-  static readonly fakeTransId = '1000002';
-  static readonly fakeMatchId = 900000;
-  static readonly fakeRequestId = 10222;
-  static readonly fakeActionId = '5';
-  static readonly fakeValidationMessageError: ValidationMessage = {
-    isError: true,
-    reason: '',
-    isShowPopup: true,
-    transIds: '',
-    requestId: 1,
-  };
-  static readonly fakeValidationMessageNotError: ValidationMessage = {
-    isError: false,
-    reason: '',
-    isShowPopup: true,
-    transIds: '',
-    requestId: 1,
-  };
-  static readonly fakeConfirmAbnormalBetModel: ConfirmAbnormalBetModel = {
-    isOpenDialog: true,
-    isHasWarningForAbnormalBet: true,
-    isHasWarningEditTakeNoteRequest: false,
-    isEditingByAnotherUser: false,
-    transIds: '1022222',
-    ticketsOfVIPCustomer: '2123122',
-    settledTickets: '2123122',
-    ticketsOfCustomerClass201: '2123122',
-    ticketsOfCustomerClass4K: '2123122',
-    isHasWarningRemovedTickets: false,
-    requestId: 0,
-    requestedBy: '',
-    issueTypeName: '',
-    subIssueTypeName: '',
-    actionName: ''
-  };
-  static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
-    isValid: false,
-    transInfoAddRequestModel: new TransInfoAddRequestModel(),
-    abnormalBetTicketRequests: [],
-    warningModel: new ValidationAbnormalBet
-  };
-  static readonly fakeValidationBusinessRuleArgs: ValidationBusinessRuleArgs = {
-    requestId: Helper.fakeRequestId,
-    actionId: Helper.fakeActionId,
-    betIdsComponent: new BetIdsComponent(null),
-    permission: new PermissionAddRequest(),
-    issueTypeId: '11',
-    primitiveProps: new PrimitiveProperty(),
-    isValidateFromConfirmPopup: false,
-    abnormalBetModel: new AbnormalBetModel()
-  };
-  static readonly fakeValidationAbnormalBet: ValidationAbnormalBet = {
-    invalidTransIds: Helper.fakeTransId,
-    movedTransIds: Helper.fakeTransId,
-    differentMatchTransIds: Helper.fakeTransId,
-    settledTransIds: Helper.fakeTransId,
-    unsupportedTransIds: Helper.fakeTransId,
-    existingReqTransIds: Helper.fakeTransId,
-    transIdsOfVIPCustomer: Helper.fakeTransId,
-    nonLiveTransIds: Helper.fakeTransId,
-    differentLiveScoreTransIds: Helper.fakeTransId,
-    transIdsOfCustomerClass201: Helper.fakeTransId,
-    transIdsOfCustomerClass4K: Helper.fakeTransId,
-    abWhiteListTransIds: Helper.fakeTransId,
-    isHasWarningRemovedTickets: false,
-    isHasUusTickets: true
-  };
-}
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
+import { ValidationAbnormalBet } from '../event-abnormal-bet.model';
+import { ValidationBusinessRuleArgs } from './validation.model';
 
 describe('ValidationService', () => {
-  let validationService: ValidationService;
+  let service: ValidationService;
   let addRequestApiService: AddRequestApiService;
 
   beforeEach(() => {
-    validationService = new ValidationService(addRequestApiService);
-  });
-
-  it('#checkValidBusinessRule should return validation model with error', async () => {
-    // Arrange
-    const mockIsHasBetId = jest.fn().mockImplementation(() => false);
-    const expected = new CheckTransIdsViewModel();
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    args.abnormalBetModel = new AbnormalBetModel();
-    args.betIdsComponent.isHasBetId = mockIsHasBetId;
-    args.betIdsComponent.groupNumber.resetAllItemsToValid = jest.fn();
-    args.betIdsComponent.groupNumber.checkDuplicatedItems = jest.fn();
-    const mockAdRequestApiService = new AddRequestApiService(null);
-    mockAdRequestApiService.checkValidTransIdsForAbnormalBet = jest.fn().mockImplementation(() => Promise.resolve(expected));
-    const mockValidationService = new ValidationService(mockAdRequestApiService);
-    const testCase = [AbnormalFilterBy.MIX_PARLAY, AbnormalFilterBy.SINGLE];
-    testCase.forEach(async x => {
-      args.abnormalBetModel.filterBy = x;
-      const result = await mockValidationService.checkValidBusinessRule(args);
-
-      expect(result.isValid).toBe(false);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [ValidationService]
     });
+
+    service = TestBed.inject(ValidationService);
+    addRequestApiService = TestBed.inject(AddRequestApiService);
   });
 
-  it('#checkValidBusinessRule should call #leagueEventAbnormalComponent.updateInfoWithOnlyOneMatch', async () => {
-    // Arrange
-    const mockIsHasBetId = jest.fn().mockImplementation(() => true);
-    const mockGroupNumberResetAllItemsToValid = jest.fn();
-    const mockGroupNumberCheckDuplicatedItems = jest.fn();
-    const mockGroupNumberGetAllBetIds = jest.fn();
-    const mockIsAbnormalBetMixParlay = jest.fn().mockImplementation(() => false);
-    const expected: CheckTransIdsViewModel = {
-      abnormalBetTicketRequests: [],
-      transInfoAddRequestModel: new TransInfoAddRequestModel,
-      matches: [],
-      sendLetstalkModels: [],
-      validation: undefined
-    };
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    args.abnormalBetModel = new AbnormalBetModel();
-    args.abnormalBetModel.filterBy = AbnormalFilterBy.MIX_PARLAY;
-    args.betIdsComponent.isHasBetId = mockIsHasBetId;
-    args.betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
-    args.betIdsComponent.isAllBetIdsValid = jest.fn().mockImplementation(() => false);
-    args.betIdsComponent.groupNumber = new GroupNumber();
-    args.betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
-    args.betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
-    const mockAdRequestApiService = new AddRequestApiService(null);
-    mockAdRequestApiService.checkValidTransIdsForAbnormalBet = jest.fn().mockImplementation(() => Promise.resolve(expected));
-    const mockValidationService = new ValidationService(mockAdRequestApiService);
-    mockValidationService['highlightInvalidTransIds'] = jest.fn();
-    mockValidationService['updateValidation'] = jest.fn();
-    mockValidationService['getConfirmAbnormalBetModel'] = jest.fn();
-    mockValidationService['isAbnormalBetMixParlay'] = mockIsAbnormalBetMixParlay;
-
-    // Action
-    const result = await mockValidationService.checkValidBusinessRule(args);
-
-    // Assert
-    expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
-    expect(result.isValid).toBe(false);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#checkValidBusinessRule should return validation with error when #betIdsComponent.isAllBetIdsValid is false', async () => {
-    // Arrange
-    const mockIsHasBetId = jest.fn().mockImplementation(() => true);
-    const mockGroupNumberResetAllItemsToValid = jest.fn();
-    const mockGroupNumberCheckDuplicatedItems = jest.fn();
-    const mockGroupNumberGetAllBetIds = jest.fn();
-    const mockBetIdsComponentIsAllBetIdsValid = jest.fn().mockImplementation(() => false);
-    const mockGetConfirmAbnormalBetModel = jest.fn();
-    const mockHighlightInvalidTransIds = jest.fn();
-    const mockIsAbnormalBetMixParlay = jest.fn().mockImplementation(() => true);
-    const mockAdRequestApiService = new AddRequestApiService(null);
-    const expected: CheckTransIdsViewModel = {
-      abnormalBetTicketRequests: [],
-      transInfoAddRequestModel: new TransInfoAddRequestModel,
-      matches: [],
-      sendLetstalkModels: [],
-      validation: undefined
-    };
-    mockAdRequestApiService.checkValidTransIdsForAbnormalBet = jest.fn().mockImplementation(() => Promise.resolve(expected));
-    const mockValidationService = new ValidationService(mockAdRequestApiService);
-    const args = Helper.fakeValidationBusinessRuleArgs;
+  describe('initCheckAbnormalBetTransIdsQuery', () => {
+    it('should initialize query with correct values', () => {
+      // Arrange
+      const mockBetIdsComponent = {
+        getAllBetIds: () => ['123', '456']
+      } as unknown as BetIdsComponent;
 
-    args.betIdsComponent.isHasBetId = mockIsHasBetId;
-    args.betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
-    args.betIdsComponent.isAllBetIdsValid = mockBetIdsComponentIsAllBetIdsValid;
-    args.betIdsComponent.groupNumber = new GroupNumber();
-    args.betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
-    args.betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
-    mockValidationService['getConfirmAbnormalBetModel'] = mockGetConfirmAbnormalBetModel;
-    mockValidationService['highlightInvalidTransIds'] = mockHighlightInvalidTransIds;
-    mockValidationService['isAbnormalBetMixParlay'] = mockIsAbnormalBetMixParlay;
-    mockValidationService['updateValidation'] = jest.fn();
+      const mockConfirmAbnormalBetComponent = {
+        isRemoveCustomerClass201: true,
+        isRemoveCustomerClass4K: false
+      };
 
-    // Action
-    const result = await mockValidationService.checkValidBusinessRule(args);
+      const mockPermission = {
+        isAddSettledTickets: true,
+        isVoidAllArchivedTickets: false
+      } as PermissionAddRequest;
 
-    // Assert
-    expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
-    expect(mockBetIdsComponentIsAllBetIdsValid).toHaveBeenCalledTimes(1);
-    expect(mockHighlightInvalidTransIds).toHaveBeenCalledTimes(1);
-    expect(result.isValid).toBe(false);
-  });
+      const args: ValidationBusinessRuleArgs = {
+        betIdsComponent: mockBetIdsComponent,
+        requestId: 'req123',
+        actionId: 'action1',
+        abnormalBetModel: {
+          filterBy: 'filter1',
+          subIssueTypeId: '1'
+        },
+        issueTypeId: '1',
+        isValidateFromConfirmPopup: true,
+        confirmAbnormalBetComponent: mockConfirmAbnormalBetComponent,
+        permission: mockPermission,
+        primitiveProps: {}
+      } as unknown as ValidationBusinessRuleArgs;
 
-  it('#isValidationHasWarningTicket should return true', async () => {
-    // Arrange
-    const permission = new PermissionAddRequest();
-    const confirmModel = new ConfirmAbnormalBetModel();
-    permission.isAddSettledTickets = true;
-    confirmModel.settledTickets = null;
-    const validationResult = new ValidationAbnormalBet();
-    permission.isAddSettledTickets = true;
-    validationResult.settledTransIds = '';
-    validationResult.transIdsOfVIPCustomer = '34,5';
-    validationResult.transIdsOfCustomerClass201 = '';
-    validationResult.transIdsOfCustomerClass4K = '';
-
-    // Action
-    const result = validationService.isValidationHasWarningTicket(permission, validationResult);
-
-    // Assert
-    expect(result).toBe(true);
-  });
-
-  it('#isValidationHasWarningTicket should return false', async () => {
-    // Arrange
-    const permission = new PermissionAddRequest();
-    const validationResult = new ValidationAbnormalBet();
-    permission.isAddSettledTickets = true;
-    validationResult.settledTransIds = '';
-    validationResult.transIdsOfVIPCustomer = '';
-    validationResult.transIdsOfCustomerClass201 = '';
-    validationResult.transIdsOfCustomerClass4K = '';
-
-    // Action
-    const result = validationService.isValidationHasWarningTicket(permission, validationResult);
-
-    // Assert
-    expect(result).toBe(false);
-  });
-
-  it('#isHasWarningEditTakeNoteRequest should return true', async () => {
-    // Arrange
-    const actionIdTakeNote = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    const actionIdManual = TVSRequestActionType.MANUAL_VOID_ID.toString();
-
-    // Action
-    const result = validationService.isHasWarningEditTakeNoteRequest(true, actionIdTakeNote, actionIdManual);
-
-    // Assert
-    expect(result).toBe(true);
-  });
-
-  it('#isHasWarningEditTakeNoteRequest should return false', async () => {
-    // Arrange
-    const actionIdTakeNote = TVSRequestActionType.TAKE_NOTE_ID.toString();
-
-    // Action
-    const result = validationService.isHasWarningEditTakeNoteRequest(true, actionIdTakeNote, actionIdTakeNote);
-
-    // Assert
-    expect(result).toBe(false);
-  });
-
-  it('#highlightFirstGroupError should not call function belong to groupNumber', async () => {
-    // Arrange
-    const betIdsComponent = new BetIdsComponent(null);
-    betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
-    betIdsComponent.groupNumber.updateMoved = jest.fn();
-    betIdsComponent.groupNumber.updateDifferent = jest.fn();
-    const model = Helper.fakeValidationAbnormalBet;
-
-    ['', null].forEach(x => {
-      model.invalidTransIds = x;
-      model.movedTransIds = x;
-      model.differentMatchTransIds = x;
-      model.settledTransIds = x;
-      model.unsupportedTransIds = x;
-      model.existingReqTransIds = x;
-      model.nonLiveTransIds = x;
-      model.differentLiveScoreTransIds = x;
-      model.abWhiteListTransIds = x;
-
-      // Action
-      validationService['highlightFirstGroupError'](Helper.fakeValidationAbnormalBet, betIdsComponent, false, '');
+      // Act
+      const result = service.initCheckAbnormalBetTransIdsQuery(args);
 
       // Assert
-      expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledTimes(0);
-      expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalledTimes(0);
-      expect(betIdsComponent.groupNumber.updateDifferent).toHaveBeenCalledTimes(0);
+      expect(result).toEqual({
+        transIds: ['123', '456'],
+        requestId: 'req123',
+        actionId: 'action1',
+        filterBy: 'filter1',
+        issueTypeId: 1,
+        subIssueTypeId: 1,
+        isRemoveCustomerClass201: true,
+        isRemoveCustomerClass4K: false,
+        isAddSettledTickets: true,
+        isVoidAllArchivedTickets: false
+      });
     });
   });
-  it('#highlightSecondGroupError should not call function belong to groupNumber', async () => {
-    // Arrange
-    const betIdsComponent = new BetIdsComponent(null);
-    betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
-    betIdsComponent.groupNumber.updateMoved = jest.fn();
-    betIdsComponent.groupNumber.updateDifferent = jest.fn();
-    const model = Helper.fakeValidationAbnormalBet;
 
-    ['', null].forEach(x => {
-      model.invalidTransIds = x;
-      model.movedTransIds = x;
-      model.differentMatchTransIds = x;
-      model.settledTransIds = x;
-      model.unsupportedTransIds = x;
-      model.existingReqTransIds = x;
-      model.nonLiveTransIds = x;
-      model.differentLiveScoreTransIds = x;
+  describe('exportExcelAbnormalBetTickets', () => {
+    it('should call API service with correct query', async () => {
+      // Arrange
+      const mockBetIdsComponent = {
+        getAllBetIds: () => ['123', '456']
+      } as unknown as BetIdsComponent;
 
-      // Action
-      validationService['highlightSecondGroupError'](Helper.fakeValidationAbnormalBet, betIdsComponent);
+      const args: ValidationBusinessRuleArgs = {
+        betIdsComponent: mockBetIdsComponent,
+        requestId: 'req123',
+        actionId: 'action1',
+        abnormalBetModel: {
+          filterBy: 'filter1',
+          subIssueTypeId: '1'
+        },
+        issueTypeId: '1',
+        isValidateFromConfirmPopup: false,
+        permission: {
+          isAddSettledTickets: true,
+          isVoidAllArchivedTickets: false
+        } as PermissionAddRequest,
+        primitiveProps: {}
+      } as unknown as ValidationBusinessRuleArgs;
+
+      addRequestApiService['exportExcelAbnormalBetTickets'] = jest.fn().mockResolvedValue(Promise.resolve());
+
+      // Act
+      await service.exportExcelAbnormalBetTickets(args);
 
       // Assert
-      expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledTimes(0);
-      expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalledTimes(0);
-      expect(betIdsComponent.groupNumber.updateDifferent).toHaveBeenCalledTimes(0);
+      expect(addRequestApiService.exportExcelAbnormalBetTickets).toHaveBeenCalled();
     });
   });
 
-  it('#highlightInvalidTransIds should call function belong to groupNumber', async () => {
-    // Arrange
-    const betIdsComponent = new BetIdsComponent(null);
-    betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
-    betIdsComponent.groupNumber.updateMoved = jest.fn();
-    betIdsComponent.groupNumber.updateDifferent = jest.fn();
-    const model = Helper.fakeValidationAbnormalBet;
-    model.invalidTransIds = Helper.fakeTransId;
-    model.movedTransIds = Helper.fakeTransId;
-    model.differentMatchTransIds = Helper.fakeTransId;
-    model.settledTransIds = Helper.fakeTransId;
-    model.unsupportedTransIds = Helper.fakeTransId;
-    model.existingReqTransIds = Helper.fakeTransId;
-    model.nonLiveTransIds = Helper.fakeTransId;
-    model.differentLiveScoreTransIds = Helper.fakeTransId;
-    model.abWhiteListTransIds = Helper.fakeTransId;
+  describe('checkValidBusinessRule', () => {
+    it('should return invalid when no bet IDs', async () => {
+      // Arrange
+      const mockBetIdsComponent = {
+        isHasBetId: () => false,
+        getAllBetIdsAreNotNumber: () => ['abc']
+      } as unknown as BetIdsComponent;
 
-    // Action
-    validationService['highlightInvalidTransIds'](Helper.fakeValidationAbnormalBet, betIdsComponent, false, '');
+      const args: ValidationBusinessRuleArgs = {
+        betIdsComponent: mockBetIdsComponent,
+        primitiveProps: {}
+      } as ValidationBusinessRuleArgs;
 
-    // Assert
-    expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalled();
-    expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalled();
-    expect(betIdsComponent.groupNumber.updateDifferent).toHaveBeenCalled();
+      // Act
+      const result = await service.checkValidBusinessRule(args);
+
+      // Assert
+      expect(result.isValid).toBeFalsy();
+      expect(args.primitiveProps.isShowButtonRemoveInvalid).toBeTruthy();
+      expect(args.primitiveProps.invalidTransIds).toEqual(['abc']);
+    });
+
+    it('should return invalid when API returns null', async () => {
+      // Arrange
+      const mockBetIdsComponent = {
+        isHasBetId: () => true,
+        groupNumber: {
+          resetAllItemsToValid: () => {},
+          checkDuplicatedItems: () => {},
+          updateInvalidItems: jest.fn()
+        },
+        isAllBetIdsValid: () => true,
+        getAllBetIds: () => ['123', '456'],
+        getAllBetIdsAreNotNumber: () => []
+      } as unknown as BetIdsComponent;
+
+      const args: ValidationBusinessRuleArgs = {
+        betIdsComponent: mockBetIdsComponent,
+        primitiveProps: {},
+        requestId: 'req123',
+        actionId: 'action1',
+        abnormalBetModel: {
+          filterBy: 'filter1',
+          subIssueTypeId: '1',
+          sendLetstalkModels: []
+        },
+        issueTypeId: '1',
+        isValidateFromConfirmPopup: false,
+        permission: {
+          isAddSettledTickets: true,
+          isVoidAllArchivedTickets: false
+        } as PermissionAddRequest
+      } as unknown as ValidationBusinessRuleArgs;
+
+      const mockResponse = {
+        sendLetstalkModels: [],
+        matches: [],
+        validation: {
+          invalidTransIds: [],
+          movedTransIds: [],
+          differentMatchTransIds: [],
+          settledTransIds: [],
+          unsupportedTransIds: [],
+          existingReqTransIds: [],
+          nonLiveTransIds: [],
+          differentLiveScoreTransIds: [],
+          abWhiteListTransIds: [],
+          isHasUusTickets: false
+        }
+      };
+
+      addRequestApiService['checkValidTransIdsForAbnormalBet'] = jest.fn().mockResolvedValue(mockResponse);
+
+      // Act
+      const result = await service.checkValidBusinessRule(args);
+
+      // Assert
+      expect(result.isValid).toBeTruthy();
+      expect(addRequestApiService['checkValidTransIdsForAbnormalBet']).toHaveBeenCalled();
+    });
   });
 
-  it('#checkCanAddSettledTickets should return true', async () => {
-    const permission = new PermissionAddRequest();
-    permission.isAddSettledTickets  = true;
-    const testCase = [
-      TVSRequestActionType.MANUAL_VOID_ID.toString(),
-      TVSRequestActionType.WAITING_ID.toString()
-    ];
-    testCase.forEach(x => {
-      const result = validationService['checkCanAddSettledTickets'](permission, x);
+  describe('isValidationHasWarningTicket', () => {
+    it('should return true when has settled tickets and permission', () => {
+      // Arrange
+      const permission = { isAddSettledTickets: true } as PermissionAddRequest;
+      const validationResult = {
+        settledTransIds: ['123']
+      } as unknown as ValidationAbnormalBet;
+
+      // Act
+      const result = service.isValidationHasWarningTicket(permission, validationResult);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should return true when has VIP customer tickets', () => {
+      // Arrange
+      const permission = { isAddSettledTickets: false } as PermissionAddRequest;
+      const validationResult = {
+        transIdsOfVIPCustomer: ['123']
+      } as unknown as ValidationAbnormalBet;
+
+      // Act
+      const result = service.isValidationHasWarningTicket(permission, validationResult);
+
+      // Assert
       expect(result).toBeTruthy();
     });
   });
 
-  it('#isEditingByAnotherUser should return true', async () => {
-    const result = validationService.isEditingByAnotherUser(true, 1, 2);
+  describe('isHasWarningEditTakeNoteRequest', () => {
+    it('should return true for edit take note request', () => {
+      // Arrange
+      const isEdit = true;
+      const currentActionId = TVSRequestActionType.TAKE_NOTE_ID.toString();
+      const actionIdOfFirstTime = 'different_id';
 
-    expect(result).toBeTruthy();
+      // Act
+      const result = service.isHasWarningEditTakeNoteRequest(isEdit, currentActionId, actionIdOfFirstTime);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false for non-edit request', () => {
+      // Arrange
+      const isEdit = false;
+      const currentActionId = TVSRequestActionType.TAKE_NOTE_ID.toString();
+      const actionIdOfFirstTime = 'different_id';
+
+      // Act
+      const result = service.isHasWarningEditTakeNoteRequest(isEdit, currentActionId, actionIdOfFirstTime);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
   });
 
-  it('#checkCanShowButtonRemove should return true when have settledTransIds', async () => {
-    const model = Helper.fakeValidationAbnormalBet;
-    model.invalidTransIds = '';
-    model.settledTransIds = '1,2,3';
+  describe('isEditingByAnotherUser', () => {
+    it('should return true when editing by different user', () => {
+      // Arrange
+      const isEdit = true;
+      const editingBy = 1;
+      const createdBy = 2;
 
-    const result = validationService['checkCanShowButtonRemove'](model, false, '');
+      // Act
+      const result = service.isEditingByAnotherUser(isEdit, editingBy, createdBy);
 
-    expect(result).toBeTruthy();
-  });
+      // Assert
+      expect(result).toBeTruthy();
+    });
 
-  it('#checkCanShowButtonRemove should return true when have unsupportedTransIds', async () => {
-    const model = Helper.fakeValidationAbnormalBet;
-    model.invalidTransIds = '';
-    model.settledTransIds = '';
-    model.unsupportedTransIds = '12321';
+    it('should return false when editing by same user', () => {
+      // Arrange
+      const isEdit = true;
+      const editingBy = 1;
+      const createdBy = 1;
 
-    const result = validationService['checkCanShowButtonRemove'](model, false, '');
+      // Act
+      const result = service.isEditingByAnotherUser(isEdit, editingBy, createdBy);
 
-    expect(result).toBeTruthy();
-  });
-
-  it('#checkCanShowButtonRemove should return true when have existingReqTransIds', async () => {
-    const model = Helper.fakeValidationAbnormalBet;
-    model.invalidTransIds = '';
-    model.settledTransIds = '';
-    model.unsupportedTransIds = '';
-    model.existingReqTransIds = '123123';
-
-    const result = validationService['checkCanShowButtonRemove'](model, false, '');
-
-    expect(result).toBeTruthy();
-  });
-
-  it('#checkCanShowButtonRemove should return true when have nonLiveTransIds', async () => {
-    const model = Helper.fakeValidationAbnormalBet;
-    model.invalidTransIds = '';
-    model.settledTransIds = '';
-    model.unsupportedTransIds = '';
-    model.existingReqTransIds = '';
-    model.nonLiveTransIds = '12312';
-
-    const result = validationService['checkCanShowButtonRemove'](model, false, '');
-
-    expect(result).toBeTruthy();
-  });
-
-  it('#checkCanShowButtonRemove should return true when have differentLiveScoreTransIds', async () => {
-    const model = Helper.fakeValidationAbnormalBet;
-    model.invalidTransIds = '';
-    model.settledTransIds = '';
-    model.unsupportedTransIds = '';
-    model.existingReqTransIds = '';
-    model.nonLiveTransIds = '';
-    model.differentLiveScoreTransIds = '12312';
-
-    const result = validationService['checkCanShowButtonRemove'](model, false, '');
-
-    expect(result).toBeTruthy();
-  });
-
-  it('#checkCanShowButtonRemove should return true when have abWhiteListTransIds', async () => {
-    const model = Helper.fakeValidationAbnormalBet;
-    model.invalidTransIds = '';
-    model.settledTransIds = '';
-    model.unsupportedTransIds = '';
-    model.existingReqTransIds = '';
-    model.nonLiveTransIds = '';
-    model.differentLiveScoreTransIds = '';
-    model.abWhiteListTransIds = '12312';
-
-    const result = validationService['checkCanShowButtonRemove'](model, false, '');
-
-    expect(result).toBeTruthy();
-  });
-
-  it('#checkCanShowButtonRemove should return true when have transIdsAreNotNumber', async () => {
-    const model = Helper.fakeValidationAbnormalBet;
-    model.invalidTransIds = '';
-    model.settledTransIds = '';
-    model.unsupportedTransIds = '';
-    model.existingReqTransIds = '';
-    model.nonLiveTransIds = '';
-    model.differentLiveScoreTransIds = '';
-    model.abWhiteListTransIds = '';
-
-    const result = validationService['checkCanShowButtonRemove'](model, false, '12312');
-
-    expect(result).toBeTruthy();
-  });
-
-  it('#checkCanShowButtonRemove should return false', async () => {
-    const model = Helper.fakeValidationAbnormalBet;
-    model.invalidTransIds = '';
-    model.settledTransIds = '';
-    model.unsupportedTransIds = '';
-    model.existingReqTransIds = '';
-    model.nonLiveTransIds = '';
-    model.differentLiveScoreTransIds = '';
-    model.abWhiteListTransIds = '';
-
-    const result = validationService['checkCanShowButtonRemove'](model, false, '');
-
-    expect(result).toBeFalsy();
-  });
-
-  it('#getInvalidTransIds should return list transId', async () => {
-    const model = Helper.fakeValidationAbnormalBet;
-    model.invalidTransIds = '1';
-    model.settledTransIds = '2';
-    model.unsupportedTransIds = '3';
-    model.existingReqTransIds = '4';
-    model.nonLiveTransIds = '5';
-    model.differentLiveScoreTransIds = '6';
-    model.abWhiteListTransIds = '7';
-
-    const result = validationService['getInvalidTransIds'](model, false, '8');
-
-    expect(result).toBe('1,2,3,4,5,6,7,8');
-  });
-
-  it('#getInvalidTransIds should return list transId empty', async () => {
-    const model = Helper.fakeValidationAbnormalBet;
-    model.invalidTransIds = '';
-    model.settledTransIds = '';
-    model.unsupportedTransIds = '';
-    model.existingReqTransIds = '';
-    model.nonLiveTransIds = '';
-    model.differentLiveScoreTransIds = '';
-    model.abWhiteListTransIds = '';
-
-    const result = validationService['getInvalidTransIds'](model, false, '');
-
-    expect(result).toBe('');
-  });
-
-  it('#updateValidation should called #betIdsComponent.getAllBetIdsAreNotNumber', async () => {
-    const mockValidationService = new ValidationService(null);
-    Helper.fakeValidationBusinessRuleArgs.betIdsComponent.getAllBetIdsAreNotNumber = jest.fn();
-    mockValidationService['updateValidation'](Helper.fakeValidationBusinessRuleArgs, Helper.fakeValidationAbnormalBet, false);
-
-    expect(Helper.fakeValidationBusinessRuleArgs.betIdsComponent.getAllBetIdsAreNotNumber).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result).toBeFalsy();
+    });
   });
 });

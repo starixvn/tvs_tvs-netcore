@@ -1,572 +1,294 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
-import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
-import { AcceptType } from '../../../../../utility/constants/config';
-import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
-import { SubIssueType } from '../../../../../utility/models/issue-type.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { FilterModel } from '../../filter/filter.model';
-import { SubIssueTypeDialogComponent } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.component';
-import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
-import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoService } from '../../event-red-card/services/log-info.service';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { LogInfoRelatedEventComponent } from './log-info-related-event.component';
+import { LogInfoRelatedEventService } from './log-info-related-event.service';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { FilterModel } from '../../filter/filter.model';
 import { LogInfoRelatedEvent } from './log-info-related-event.model';
+import { SubIssueType } from '../../../../../utility/models/issue-type.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { AcceptType, DateTimeFormat } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
+import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import moment from 'moment-timezone';
+import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
 
 class Helper {
-  static readonly fakeTransId = '111102';
-  static readonly fakeMatchId = 111;
-  static readonly fakeEventDate = '2020-11-06 09:44:46.361 PM';
-  static readonly fakeSubIssueType: SubIssueType[] = [{
-    subIssueTypeId: 1,
-    subIssueTypeName: "Goal",
-    issueTypeId: 11,
-    subIssueTypeNameCS: "Hi"
-  }];
-  static readonly fakeValidationMessageError: ValidationMessage = {
-    isError: true,
-    reason: '',
-    isShowPopup: true,
-    transIds: '',
-    requestId: 1,
-  };
-  static readonly fakeValidationMessageNotError: ValidationMessage = {
-    isError: false,
-    reason: '',
-    isShowPopup: true,
-    transIds: '',
-    requestId: 1,
-  };
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeEventDate),
-    voidToTime: new Date(Helper.fakeEventDate),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    scoreOfMatch: '',
-    scoreNormalTicket: '',
-    instantlySettleCount: 2,
-    highlightMinTime: new Date(Helper.fakeEventDate),
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeValidationMessage: ValidationMessage[] = [
-    {
-      isError: false,
-      reason: '',
-    }
-  ];
-  static readonly fakeVoidTimeArea: FilterTimeWithAllowance = {
-    fromDateTime: Helper.fakeEventDate,
-    toDateTime: Helper.fakeEventDate,
-    aaTime: 1,
-    paTime: 1,
-    saTime: 1,
-  }
-  static readonly fakeLogInfoRedCard: LogInfoRelatedEvent = {
-    matchId: 111,
-    isMainMatch: false,
-    leagueName: '',
-    eventName: 'AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS',
-    subIssueTypeId: 1,
-    voidTimeArea: Helper.fakeVoidTimeArea,
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: Helper.fakeValidationMessage,
-    sportType: 0
-  } as LogInfoRelatedEvent;
+  static readonly fakeRequestId = 1212;
   static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '27',
-    action: '5',
-    isTest: false,
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
     isVoided: false,
-    subIssueTypes: [],
+    isChangeSubTypeManual: true,
     isAbnormal: false
   } as FilterModel;
-  static readonly fakeSubIssueTypeDialogModel: SubIssueTypeDialogModel = {
-    isOpen: true,
-    issueTypeId: '1',
-    allowanceTime: new AllowanceTime()
-  };
+
+  static readonly fakeLogInfo: LogInfoRelatedEvent = {
+    subIssueTypeId: 1,
+    isCheckedVar: null,
+    isHighLightVarCheck: null,
+    voidTimeArea: {
+      aaTime: 0,
+      paTime: 0,
+      saTime: 0
+    },
+    logInfoDetail: new LogInfoDetail(),
+    messageValidationLogInfo: null
+  } as LogInfoRelatedEvent;
+
+  static readonly fakeSubIssueTypes: SubIssueType[] = [
+    {
+      subIssueTypeId: 1,
+      subIssueTypeName: 'Test Sub Type 1'
+    },
+    {
+      subIssueTypeId: 2,
+      subIssueTypeName: 'Test Sub Type 2'
+    }
+  ] as SubIssueType[];
 }
 
 describe('LogInfoRelatedEventComponent', () => {
-  @NgModule({
-    declarations: [
-      FilterTimeWithAllowanceComponent,
-      SubIssueTypeDialogComponent
-    ],
-    imports: [
-      ToolTipModule,
-      BlockUiModule,
-      PipeModule
-    ],
-    providers: [
-      ModalService,
-      LogInfoService,
-    ]
-  })
-  class AppModuleTest { }
+  let component: LogInfoRelatedEventComponent;
+  let fixture: ComponentFixture<LogInfoRelatedEventComponent>;
+  let logInfoRelatedEventService: LogInfoRelatedEventService;
 
-  let shallow: Shallow<LogInfoRelatedEventComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        LogInfoRelatedEventService,
+        ModalService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(LogInfoRelatedEventComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(LogInfoRelatedEventComponent);
+    logInfoRelatedEventService = fixture.debugElement.injector.get(LogInfoRelatedEventService);
+    component = fixture.componentInstance;
   });
 
-  it('LogInfoRelatedEventComponent init should match snapshot', async () => {
-    const { fixture, instance } = await shallow.render({
-      bind: {
-        isEdit: false,
-        logInfo: Helper.fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-
-    expect(fixture).toMatchSnapshot();
-    expect(instance.isEdit).toBe(false);
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#refreshLogInfo should call #getLogInfo', async () => {
+  it('should initialize with default values', () => {
+    expect(component.isBlock).toBeFalsy();
+    expect(component.isShowValidation).toBeTruthy();
+    expect(component.tooltipVarMessage).toBe(LABELS.SELECTED_VAR_OPTIONS);
+    expect(component.acceptTypeName).toBe('');
+  });
+
+  it('should show tooltip for sub type when required', () => {
     // Arrange
-    const { instance } = await shallow
-    .mock(LogInfoService, {
-      getLogInfo: jest.fn()
-    })
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    instance.getSubIssueTypeName = jest.fn();
-    instance.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
-    instance.filterTimeWithAllowanceComponent.updateData = jest.fn();
-    instance.filterTimeWithAllowanceComponent.isValid = jest.fn().mockImplementation(() => true);
-    instance.hideValidationDetail = jest.fn();
-    instance.showValidationDetail = jest.fn();
-    instance['clearDataValidation'] = jest.fn();
+    component.tooltip.display = jest.fn();
 
-    // Action
-    await instance.refreshLogInfo();
+    // Act
+    component.showTooltipSubType();
 
     // Assert
-    expect(instance.isBlock).toBe(false);
-    expect(instance.hideValidationDetail).toBeCalledTimes(1);
-    expect(instance.showValidationDetail).toBeCalledTimes(1);
-    expect(instance['clearDataValidation']).toBeCalledTimes(1);
-    expect(instance.filterTimeWithAllowanceComponent.isValid).toBeCalledTimes(1);
-    expect(instance.filterTimeWithAllowanceComponent.updateData).toBeCalledTimes(1);
+    expect(component.tooltip.display).toHaveBeenCalledWith('btn-select-sub-type', LABELS.REQUIRED_SUB_TYPE);
   });
 
-  it('#refreshLogInfo should not call #getLogInfo', async () => {
+  it('should refresh log info when sub issue type is selected', async () => {
     // Arrange
-    const { instance } = await shallow
-    .mock(LogInfoService, {
-      getLogInfo: jest.fn()
-    })
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    instance.getSubIssueTypeName = jest.fn();
-    instance.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
-    instance.filterTimeWithAllowanceComponent.updateData = jest.fn();
-    instance.filterTimeWithAllowanceComponent.isValid = jest.fn().mockImplementation(() => false);
-    instance.hideValidationDetail = jest.fn();
-    instance.showValidationDetail = jest.fn();
-    instance['clearDataValidation'] = jest.fn();
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.subIssueTypeId = 1;
+    component.filterTimeWithAllowanceComponent = {
+      isValid: jest.fn().mockReturnValue(true),
+      updateData: jest.fn()
+    } as unknown as FilterTimeWithAllowanceComponent;
+    logInfoRelatedEventService.refreshLogInfoForRelatedEvent = jest.fn().mockResolvedValue(undefined);
 
-    // Action
-    await instance.refreshLogInfo();
+    // Act
+    await component.refreshLogInfo();
 
     // Assert
-    expect(instance.isBlock).toBe(false);
-    expect(instance.hideValidationDetail).toBeCalledTimes(1);
-    expect(instance.showValidationDetail).toBeCalledTimes(0);
-    expect(instance['clearDataValidation']).toBeCalledTimes(1);
-    expect(instance.filterTimeWithAllowanceComponent.isValid).toBeCalledTimes(1);
-    expect(instance.filterTimeWithAllowanceComponent.updateData).toBeCalledTimes(0);
+    expect(component.isBlock).toBeFalsy();
+    expect(logInfoRelatedEventService.refreshLogInfoForRelatedEvent).toHaveBeenCalled();
+    expect(component.filterTimeWithAllowanceComponent.updateData).toHaveBeenCalled();
   });
 
-  it('#clearDataValidation should update data', async () => {
+  it('should not refresh log info when sub issue type is not selected', async () => {
     // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    instance.getSubIssueTypeName = jest.fn();
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.subIssueTypeId = null;
+    component.tooltip.display = jest.fn();
 
-    // Action
-    instance['clearDataValidation']();
+    // Act
+    await component.refreshLogInfo();
 
     // Assert
-    expect(instance.logInfo.logInfoDetail).toBeNull();
-    expect(instance.logInfo.messageValidationLogInfo).toBeNull();
+    expect(component.tooltip.display).toHaveBeenCalledWith('btn-select-sub-type', LABELS.REQUIRED_SUB_TYPE);
+    expect(component.isBlock).toBeFalsy();
   });
 
-  it('#hideValidationDetail should update isShowValidation to false', async () => {
+  it('should clear data validation', () => {
     // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    instance.getSubIssueTypeName = jest.fn();
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.logInfoDetail = new LogInfoDetail();
+    component.logInfo.messageValidationLogInfo = [{
+      isError: true,
+      reason: 'Test message'
+    }];
 
-    // Action
-    instance.hideValidationDetail();
+    // Act
+    component['clearDataValidation']();
 
     // Assert
-    expect(instance.isShowValidation).toBe(false);
+    expect(component.logInfo.logInfoDetail).toBeNull();
+    expect(component.logInfo.messageValidationLogInfo).toBeNull();
   });
 
-  it('#showValidationDetail should update isShowValidation to true', async () => {
+  it('should update data after sub issue type dialog is closed', () => {
     // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
+    component.logInfo = Helper.fakeLogInfo;
+    component.subIssueTypeDialogModel = new SubIssueTypeDialogModel();
+    component.subIssueTypeDialogModel.allowanceTime = {
+      aaTime: 10,
+      paTime: 20,
+      saTime: 30
+    };
 
-    // Action
-    instance.showValidationDetail();
+    // Act
+    component.updateDataAfterClosed(1);
 
     // Assert
-    expect(instance.isShowValidation).toBe(true);
+    expect(component.logInfo.subIssueTypeId).toBe(1);
+    expect(component.logInfo.isCheckedVar).toBeNull();
+    expect(component.logInfo.isHighLightVarCheck).toBeNull();
+    expect(component.logInfo.voidTimeArea.aaTime).toBe(10);
+    expect(component.logInfo.voidTimeArea.paTime).toBe(20);
+    expect(component.logInfo.voidTimeArea.saTime).toBe(30);
   });
 
-  it('#isLogInfoHasError should return true', async () => {
+  it('should get sub issue type name correctly', () => {
     // Arrange
-    const fakeLogInfoRedCard = Helper.fakeLogInfoRedCard;
-    fakeLogInfoRedCard.messageValidationLogInfo = [Helper.fakeValidationMessageError];
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    instance.getSubIssueTypeName = jest.fn();
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.subIssueTypeId = 1;
+    component.subIssueTypes = Helper.fakeSubIssueTypes;
 
-    // Action
-    const actual = instance.isLogInfoHasError();
+    // Act
+    const result = component.getSubIssueTypeName();
 
     // Assert
-    expect(actual).toBeTruthy();
+    expect(result).toBe('Test Sub Type 1');
   });
 
-  it('#isLogInfoHasError should return false', async () => {
+  it('should return default text when sub issue type is not selected', () => {
     // Arrange
-    const fakeLogInfoRedCard = Helper.fakeLogInfoRedCard;
-    fakeLogInfoRedCard.messageValidationLogInfo = [Helper.fakeValidationMessageNotError];
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    instance.getSubIssueTypeName = jest.fn();
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.subIssueTypeId = null;
 
-    // Action
-    const actual = instance.isLogInfoHasError();
+    // Act
+    const result = component.getSubIssueTypeName();
 
     // Assert
-    expect(actual).toBe(false);
+    expect(result).toBe('Select Sub Type');
   });
 
-  it('#isLogInfoHasError should return true', async () => {
+  it('should get highlight min time class correctly', () => {
     // Arrange
-    const fakeLogInfoRedCard = Helper.fakeLogInfoRedCard;
-    fakeLogInfoRedCard.messageValidationLogInfo = [Helper.fakeValidationMessageError];
-    fakeLogInfoRedCard.logInfoDetail = Helper.fakeLogInfoDetail;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    instance.getSubIssueTypeName = jest.fn();
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.logInfoDetail = new LogInfoDetail();
+    const minTime = new Date();
 
-    // Action
-    const actual = instance.isLogInfoHasError();
+    // Test AA case
+    component.logInfo.logInfoDetail.highlightAcceptType = AcceptType.AUTO_ACCEPT;
+    expect(component.getHighlightMinTimeClass(minTime)).toBe('highlight-min-aa');
+    expect(component.acceptTypeName).toBe('AA');
+
+    // Test SA case
+    component.logInfo.logInfoDetail.highlightAcceptType = AcceptType.SECOND_ACCEPT;
+    expect(component.getHighlightMinTimeClass(minTime)).toBe('highlight-min-sa');
+    expect(component.acceptTypeName).toBe('SA');
+
+    // Test PA case
+    component.logInfo.logInfoDetail.highlightAcceptType = AcceptType.PENDING_ACCEPT;
+    expect(component.getHighlightMinTimeClass(minTime)).toBe('highlight-min-pa');
+    expect(component.acceptTypeName).toBe('PA');
+  });
+
+  it('should display min time correctly', () => {
+    // Arrange
+    const minTime = new Date();
+    component.acceptTypeName = 'AA';
+
+    // Act
+    const result = component.displayMinTime(minTime);
 
     // Assert
-    expect(actual).toBe(true);
+    expect(result).toBe(`${moment(minTime).format(DateTimeFormat.TIME_FORMAT)} - AA`);
   });
 
-  it('#handleDeleteEvent should emit deleteEvent', async () => {
-    // Arrange
-    const fakeLogInfoRedCard = Helper.fakeLogInfoRedCard;
-    fakeLogInfoRedCard.messageValidationLogInfo = [Helper.fakeValidationMessageNotError];
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    instance.getSubIssueTypeName = jest.fn();
-    instance.deleteEvent.emit = jest.fn();
-
-    // Action
-    instance.handleDeleteEvent(Helper.fakeMatchId);
+  it('should return dash when min time is null', () => {
+    // Act
+    const result = component.displayMinTime(null);
 
     // Assert
-    expect(instance.deleteEvent.emit).toHaveBeenCalledWith(Helper.fakeMatchId);
+    expect(result).toBe('-');
   });
 
-  it('#getSubIssueTypeName should return expected sub type name', async () => {
+  it('should check if var check should be shown', () => {
     // Arrange
-    const fakeLogInfoRedCard = Helper.fakeLogInfoRedCard;
-    fakeLogInfoRedCard.messageValidationLogInfo = [Helper.fakeValidationMessageNotError];
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    instance.subIssueTypes = Helper.fakeSubIssueType;
-    instance.logInfo.subIssueTypeId = Helper.fakeSubIssueType[0].subIssueTypeId;
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.subIssueTypeId = 1;
+    component.logInfo.isMainMatch = false;
+    jest.spyOn(StaticService, 'isShowVarCheck').mockReturnValue(true);
 
-    // Action
-    const actual = instance.getSubIssueTypeName();
+    // Act
+    const result = component.isShowVarCheck();
 
     // Assert
-    expect(actual).toBe(Helper.fakeSubIssueType[0].subIssueTypeName);
+    expect(result).toBeTruthy();
+    expect(StaticService.isShowVarCheck).toHaveBeenCalledWith(1);
   });
 
-  it('#getSubIssueTypeName should return default text', async () => {
+  it('should change var check value', () => {
     // Arrange
-    const fakeLogInfoRedCard = Helper.fakeLogInfoRedCard;
-    fakeLogInfoRedCard.messageValidationLogInfo = [Helper.fakeValidationMessageNotError];
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    const expected = 'Select Sub Type';
-    instance.logInfo.subIssueTypeId = null;
-    instance.subIssueTypes = Helper.fakeSubIssueType;
+    component.logInfo = Helper.fakeLogInfo;
 
-    // Action
-    const actual = instance.getSubIssueTypeName();
+    // Act
+    component.changeVarCheckValue(true);
 
     // Assert
-    expect(actual).toBe(expected);
+    expect(component.logInfo.isCheckedVar).toBeTruthy();
+    expect(component.logInfo.isHighLightVarCheck).toBeFalsy();
   });
 
-  it('#openPopupTransIds should call #modalService.open', async () => {
+  it('should get duration time correctly', () => {
     // Arrange
-    const fakeLogInfoRedCard = Helper.fakeLogInfoRedCard;
-    fakeLogInfoRedCard.messageValidationLogInfo = [Helper.fakeValidationMessageNotError];
-    const mockModalOpen = jest.fn();
-    const { instance } = await shallow
-    .mock(ModalService, { open: mockModalOpen })
-    .render({
-      bind: {
-        logInfo: fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    instance.getSubIssueTypeName = jest.fn();
+    component.defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
+    component.defaultFilterTimeWithAllowance.fromDateTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.logInfoDetail = new LogInfoDetail();
+    component.logInfo.logInfoDetail.transVoidToTime = new Date();
+    jest.spyOn(StaticService, 'getDurations').mockReturnValue('1 hour');
 
-    // Action
-    instance.openPopupTransIds(1092, '');
+    // Act
+    const result = component.getDurationTime();
 
     // Assert
-    expect(mockModalOpen).toHaveBeenCalledTimes(1);
+    expect(result).toBe('1 hour');
+    expect(StaticService.getDurations).toHaveBeenCalled();
   });
 
-  it('#updateDataAfterClosed should update correct data', async () => {
+  it('should check if message range void time should be shown', () => {
     // Arrange
-    const fakeLogInfoRedCard = Helper.fakeLogInfoRedCard;
-    fakeLogInfoRedCard.messageValidationLogInfo = [Helper.fakeValidationMessageNotError];
-    const mockModalOpen = jest.fn();
-    const { instance } = await shallow
-    .mock(ModalService, { open: mockModalOpen })
-    .render({
-      bind: {
-        logInfo: fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    instance.subIssueTypeDialogModel = Helper.fakeSubIssueTypeDialogModel;
-    instance.hideValidationDetail = jest.fn();
+    component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.logInfoDetail = new LogInfoDetail();
+    component.logInfo.logInfoDetail.isHasWarningRangeTime = true;
+    component.filter = Helper.fakeFilterModel;
+    jest.spyOn(StaticService, 'isDangerAccepted').mockReturnValue(true);
 
-    // Action
-    instance.updateDataAfterClosed(1);
+    // Act
+    const result = component.isShowMessageRangeVoidTime();
 
     // Assert
-    expect(instance.hideValidationDetail).toHaveBeenCalledTimes(1);
-    expect(instance.logInfo.subIssueTypeId).toBe(1);
+    expect(result).toBeTruthy();
+    expect(StaticService.isDangerAccepted).toHaveBeenCalledWith(component.filter.issueTypeId);
   });
-
-  it('#openDialog should update correct data', async () => {
-    // Arrange
-    const fakeLogInfoRedCard = Helper.fakeLogInfoRedCard;
-    fakeLogInfoRedCard.messageValidationLogInfo = [Helper.fakeValidationMessageNotError];
-    const mockModalOpen = jest.fn();
-    const { instance } = await shallow
-    .mock(ModalService, { open: mockModalOpen })
-    .render({
-      bind: {
-        logInfo: Helper.fakeLogInfoRedCard,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-    instance.logInfo = fakeLogInfoRedCard;
-    instance.subIssueTypeDialogModel = Helper.fakeSubIssueTypeDialogModel;
-    instance.filter = Helper.fakeFilterModel;
-
-    // Action
-    instance.openDialog();
-
-    // Assert
-    expect(instance.subIssueTypeDialogModel.isOpen).toBeTruthy();
-    expect(instance.subIssueTypeDialogModel.issueTypeId).toBe(Helper.fakeFilterModel.issueTypeId);
-  });
-
-  it('#getHighlightMinTimeClass should return highlight-min-aa', async () => {
-    // Arrange
-    const logInfo = Helper.fakeLogInfoRedCard;
-    logInfo.logInfoDetail.highlightAcceptType = AcceptType.AUTO_ACCEPT;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: logInfo,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-
-    // Action
-    const actual = instance.getHighlightMinTimeClass(new Date());
-
-    // Assert
-    expect(actual).toBe('highlight-min-aa');
-    expect(instance.acceptTypeName).toBe('AA');
-  });
-
-  it('#getHighlightMinTimeClass should return highlight-min-sa', async () => {
-    // Arrange
-    const logInfo = Helper.fakeLogInfoRedCard;
-    logInfo.logInfoDetail.highlightAcceptType = AcceptType.SECOND_ACCEPT;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: logInfo,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-
-    // Action
-    const actual = instance.getHighlightMinTimeClass(new Date());
-
-    // Assert
-    expect(actual).toBe('highlight-min-sa');
-    expect(instance.acceptTypeName).toBe('SA');
-  });
-
-  it('#getHighlightMinTimeClass should return highlight-min-pa', async () => {
-    // Arrange
-    const logInfo = Helper.fakeLogInfoRedCard;
-    logInfo.logInfoDetail.highlightAcceptType = AcceptType.PENDING_ACCEPT;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: logInfo,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-
-    // Action
-    const actual = instance.getHighlightMinTimeClass(new Date());
-
-    // Assert
-    expect(actual).toBe('highlight-min-pa');
-    expect(instance.acceptTypeName).toBe('PA');
-  });
-
-  it('#displayMinTime should return expected', async () => {
-    // Arrange
-    const logInfo = Helper.fakeLogInfoRedCard;
-    logInfo.logInfoDetail.highlightAcceptType = AcceptType.PENDING_ACCEPT;
-    const expected = '09:44:46.361 PM - PA';
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: logInfo,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-
-    // Action
-    const actual = instance.displayMinTime(logInfo.logInfoDetail.highlightMinTime);
-
-    // Assert
-    expect(actual).toBe(expected);
-  });
-
-  it('#displayMinTime should return - when minTime is null', async () => {
-    // Arrange
-    const logInfo = Helper.fakeLogInfoRedCard;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: logInfo,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-
-    // Action
-    const actual = instance.displayMinTime(null);
-
-    // Assert
-    expect(actual).toBe('-');
-  });
-
-  it('#changeVarCheckValue should update isCheckedVar', async () => {
-    // Arrange
-    const logInfo = Helper.fakeLogInfoRedCard;
-    logInfo.logInfoDetail.highlightAcceptType = AcceptType.PENDING_ACCEPT;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        logInfo: logInfo,
-        subIssueTypes: Helper.fakeSubIssueType
-      }
-    });
-
-    // Action
-    instance.changeVarCheckValue(true);
-
-    // Assert
-    expect(instance.logInfo.isCheckedVar).toBeTruthy();
-  });
-
 });

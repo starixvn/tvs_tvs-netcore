@@ -1,16 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SaveRequestService {
-
-  constructor(
-    private readonly addRequestService: AddRequestService,
-  ) { }
+  private readonly addRequestService = inject(AddRequestService);
 
   async executeSave(args: SaveRequestArg): Promise<void> {
     const query = this.initAddRequestQuery(args);

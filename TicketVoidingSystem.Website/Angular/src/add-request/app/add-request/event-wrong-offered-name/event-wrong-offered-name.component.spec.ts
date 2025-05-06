@@ -1,223 +1,368 @@
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { AddRequestStore } from '../add-request.store';
-import { FilterModel } from '../filter/filter.model';
-import { WrongOfferedNameModel } from '../models/event-wrong-offered-name.model';
-import { PermissionAddRequest } from '../models/permission-add-request.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { EventWrongOfferedNameComponent } from './event-wrong-offered-name.component';
-import { FilterWrongOfferedNameModel } from './models/filter-wrong-offered-name.model';
-import { LogInfoWrongOfferedName } from './models/log-info-wrong-offered-name.model';
-import { PrimitiveProperty } from './models/primitive-property.model';
+import { ValidationService } from './services/validation.service';
 import { EventWrongOfferedNameService } from './services/event-wrong-offered-name.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
+import { AddRequestStore } from '../add-request.store';
+import { FilterModel } from '../filter/filter.model';
+import { WrongOfferedNameModel } from '../models/event-wrong-offered-name.model';
+import { OthersModel } from '../others/others.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { MatchModel } from '../../../../utility/models/match.model';
+import { LogInfoWrongOfferedName } from './models/log-info-wrong-offered-name.model';
+import { PermissionAddRequest } from '../models/permission-add-request.model';
+import { IssueTypes } from '../filter/issue-types.model';
+import { PrimitiveProperty } from './models/primitive-property.model';
+import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
+import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { CheckAddPermissionService } from '../services/check-permission.service';
+import { FilterWrongOfferedNameComponent } from './filter-wrong-offered-name/filter-wrong-offered-name.component';
+
 class Helper {
-  static readonly fakeWrongOfferedNameModel: WrongOfferedNameModel = {
-    currencyIds: '1,2',
-    licenseeNames: 'licensee1,licensee2',
-    logInfoDetail: new LogInfoDetail(),
-    matchId: 1,
-    subIssueTypeId: 1
-  } as WrongOfferedNameModel;
+  static readonly fakeRequestId = 1212;
+  static readonly fakeUserId = 123;
+  static readonly fakeRequestedBy = 'testUser';
   static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '26',
+    issueTypeId: '1',
     subIssueTypeId: '1',
-    action: '5'
+    action: '1',
+    isTest: true,
+    isVoided: false,
+    isChangeSubTypeManual: true,
+    isAbnormal: false
   } as FilterModel;
-  static readonly fakeLogInfoWrongOfferedName: LogInfoWrongOfferedName = {
-    matchId: 1,
-    filterWrongOfferedName: new FilterWrongOfferedNameModel(),
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeWrongOfferedNameModel = {
+    matchId: 123,
+    subIssueTypeId: 1,
     logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
-  } as LogInfoWrongOfferedName;
-  static readonly fakeFilterWrongOfferedName: FilterWrongOfferedNameModel = {
-    currencyIds: [],
-    licenseeNames: []
-  } as FilterWrongOfferedNameModel;
+    licenseeNames: '',
+    currencyIds: '',
+    wrongName: '',
+    actualName: '',
+    wrongNameT: '',
+    actualNameT: '',
+    wrongNameS: '',
+    actualNameS: ''
+  } as WrongOfferedNameModel;
+  static readonly fakeIssueTypes = new IssueTypes();
+  static readonly fakePermission = new PermissionAddRequest();
+  static readonly fakePrimitiveProperty = {
+    isBlock: false,
+    isShowLogInfo: false,
+    transInfoAddRequest: new TransInfoAddRequestModel()
+  } as PrimitiveProperty;
+  static readonly fakeConfirmAddRequestModel = {
+    isOpen: false,
+    requestId: 0,
+    userId: 0,
+    requestedBy: '',
+    extraWarningModel: { title: '', messages: [] },
+    isHasSettledTicket: false,
+    isHasWarningTicket: false,
+    isHasWarningTakenNote: false,
+    isEditingByAnotherUser: false,
+    isShowSubIssueType: false
+  } as ConfirmAddRequestModel;
 }
 
 describe('EventWrongOfferedNameComponent', () => {
-  let mockComponent: EventWrongOfferedNameComponent;
-  let mockLogInfoService: LogInfoService;
-  let mockAddRequestStore: AddRequestStore;
-  let mockValidationService: ValidationService;
-  let mockSaveRequestService: SaveRequestService;
-  let mockEventWrongOfferedNameService: EventWrongOfferedNameService;
+  let component: EventWrongOfferedNameComponent;
+  let fixture: ComponentFixture<EventWrongOfferedNameComponent>;
+  let validationService: ValidationService;
+  let eventWrongOfferedNameService: EventWrongOfferedNameService;
+  let addRequestStore: AddRequestStore;
+  let logInfoService: LogInfoService;
+  let saveRequestService: SaveRequestService;
 
-  beforeEach(() => {
-    mockLogInfoService = new LogInfoService(null, null);
-    mockAddRequestStore = new AddRequestStore();
-    mockValidationService = new ValidationService(null,);
-    mockSaveRequestService = new SaveRequestService(null, null, null, null, null);
-    mockEventWrongOfferedNameService = new EventWrongOfferedNameService(null, null, null, null, null);
-    mockComponent = new EventWrongOfferedNameComponent(
-      mockLogInfoService, mockAddRequestStore, mockValidationService, mockSaveRequestService, mockEventWrongOfferedNameService
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        EventWrongOfferedNameService,
+        LogInfoService,
+        SaveRequestService,
+        AddRequestStore,
+        CheckAddPermissionService
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(EventWrongOfferedNameComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    eventWrongOfferedNameService = fixture.debugElement.injector.get(EventWrongOfferedNameService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    logInfoService = fixture.debugElement.injector.get(LogInfoService);
+    saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
+    component = fixture.componentInstance;
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should initialize with default values when not in edit mode', async () => {
+    // Arrange
+    component.isEdit = false;
+    eventWrongOfferedNameService.getPermissionAddRequest = jest.fn().mockResolvedValue(Helper.fakePermission);
+    eventWrongOfferedNameService.initLogInfoEvent = jest.fn().mockReturnValue(new LogInfoWrongOfferedName());
+
+    // Act
+    await component.ngOnInit();
+
+    // Assert
+    expect(eventWrongOfferedNameService.getPermissionAddRequest).toHaveBeenCalled();
+    expect(eventWrongOfferedNameService.initLogInfoEvent).toHaveBeenCalled();
+    expect(component.permission).toEqual(Helper.fakePermission);
+  });
+
+  it('should initialize with existing values when in edit mode', async () => {
+    // Arrange
+    component.isEdit = true;
+    component.wrongOfferedNameModel = Helper.fakeWrongOfferedNameModel;
+    component.filter = Helper.fakeFilterModel;
+    component.primitiveProps = Helper.fakePrimitiveProperty;
+    eventWrongOfferedNameService.getPermissionAddRequest = jest.fn().mockResolvedValue(Helper.fakePermission);
+    eventWrongOfferedNameService.assignModelsToEvents = jest.fn().mockResolvedValue(new LogInfoWrongOfferedName());
+
+    // Act
+    await component.ngOnInit();
+
+    // Assert
+    expect(eventWrongOfferedNameService.getPermissionAddRequest).toHaveBeenCalled();
+    expect(eventWrongOfferedNameService.assignModelsToEvents).toHaveBeenCalledWith(component.filter, Helper.fakeWrongOfferedNameModel);
+    expect(component.primitiveProps.isShowLogInfo).toBeTruthy();
+  });
+
+  it('should handle search event with validation', async () => {
+    // Arrange
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.filterWrongOfferedNameComponent = {} as FilterWrongOfferedNameComponent;
+    component.filter = Helper.fakeFilterModel;
+    component.logInfoEvent = new LogInfoWrongOfferedName();
+    component.logInfoEvent.isHasInstantlySettledTicket = false;
+    component.logInfoEvent.isHasSettledTicket = false;
+    component.permission = Helper.fakePermission;
+    
+    validationService.validateCommonData = jest.fn().mockReturnValue(true);
+    validationService.isAccountHasAddRequestPermission = jest.fn().mockReturnValue(true);
+    logInfoService.getLogInfo = jest.fn().mockResolvedValue(undefined);
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+    addRequestStore.changeSavingRequestStatus = jest.fn();
+
+    // Act
+    await component.handleSearchEvent();
+
+    // Assert
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(logInfoService.getLogInfo).toHaveBeenCalled();
+    expect(validationService.isAccountHasAddRequestPermission).toHaveBeenCalled();
+    expect(component.primitiveProps.isShowLogInfo).toBeTruthy();
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
+  });
+
+  it('should not proceed with search event if validation fails', async () => {
+    // Arrange
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.filterWrongOfferedNameComponent = {} as FilterWrongOfferedNameComponent;
+    validationService.validateCommonData = jest.fn().mockReturnValue(false);
+    logInfoService.getLogInfo = jest.fn();
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+
+    // Act
+    await component.handleSearchEvent();
+
+    // Assert
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(logInfoService.getLogInfo).not.toHaveBeenCalled();
+    expect(addRequestStore.changeBlockingUiStatus).not.toHaveBeenCalled();
+  });
+
+  it('should not proceed with search event if user lacks permission', async () => {
+    // Arrange
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.filterWrongOfferedNameComponent = {} as FilterWrongOfferedNameComponent;
+    component.filter = Helper.fakeFilterModel;
+    component.logInfoEvent = new LogInfoWrongOfferedName();
+    component.logInfoEvent.isHasInstantlySettledTicket = false;
+    component.logInfoEvent.isHasSettledTicket = false;
+    component.permission = Helper.fakePermission;
+    
+    validationService.validateCommonData = jest.fn().mockReturnValue(true);
+    validationService.isAccountHasAddRequestPermission = jest.fn().mockReturnValue(false);
+    logInfoService.getLogInfo = jest.fn().mockResolvedValue(undefined);
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+
+    // Act
+    await component.handleSearchEvent();
+
+    // Assert
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(logInfoService.getLogInfo).toHaveBeenCalled();
+    expect(validationService.isAccountHasAddRequestPermission).toHaveBeenCalled();
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    expect(component.primitiveProps.isShowLogInfo).toBeFalsy();
+  });
+
+  it('should handle match event change', async () => {
+    // Arrange
+    const matchInfo = { matchId: 123 } as MatchModel;
+    component.eventLeagueComponent = {
+      selectedMatch: matchInfo
+    } as EventLeagueComponent;
+    component.logInfoEvent = new LogInfoWrongOfferedName();
+    component.logInfoEvent.matchId = 123; // Khởi tạo matchId trước khi gọi changeMatchEvent
+    component.updateMatchId.emit = jest.fn();
+    component.filter = Helper.fakeFilterModel;
+    logInfoService.resetLogInfoOfEvent = jest.fn();
+    eventWrongOfferedNameService.updateSelectedMatchToInput = jest.fn();
+
+    // Act
+    await component.changeMatchEvent();
+
+    // Assert
+    expect(component.primitiveProps.isShowLogInfo).toBeFalsy();
+    expect(component.updateMatchId.emit).toHaveBeenCalledWith(123);
+    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledWith(component.logInfoEvent);
+    expect(component.logInfoEvent.matchId).toBe(123);
+    expect(component.logInfoEvent.matchModel).toEqual(matchInfo);
+    expect(eventWrongOfferedNameService.updateSelectedMatchToInput).toHaveBeenCalledWith(
+      matchInfo, 
+      component.logInfoEvent.filterWrongOfferedName, 
+      component.filter.subIssueTypeId
     );
-    mockComponent.logInfoEvent = Helper.fakeLogInfoWrongOfferedName;
-    mockComponent.filter = Helper.fakeFilterModel;
-    mockComponent.primitiveProps = new PrimitiveProperty();
   });
 
-  it('EventWrongOfferedNameComponent init should match snapshot', async () => {
-    expect(mockComponent).toMatchSnapshot();
+  it('should not update match info if no match is selected', async () => {
+    // Arrange
+    component.eventLeagueComponent = {
+      selectedMatch: null
+    } as EventLeagueComponent;
+    component.logInfoEvent = new LogInfoWrongOfferedName();
+    component.logInfoEvent.matchId = 0; // Khởi tạo matchId trước khi gọi changeMatchEvent
+    component.updateMatchId.emit = jest.fn();
+    logInfoService.resetLogInfoOfEvent = jest.fn();
+    eventWrongOfferedNameService.updateSelectedMatchToInput = jest.fn();
+
+    // Act
+    await component.changeMatchEvent();
+
+    // Assert
+    expect(component.primitiveProps.isShowLogInfo).toBeFalsy();
+    expect(component.updateMatchId.emit).toHaveBeenCalledWith(0);
+    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledWith(component.logInfoEvent);
+    expect(eventWrongOfferedNameService.updateSelectedMatchToInput).not.toHaveBeenCalled();
   });
 
-  it('ngOnInit should call #updateDataWhenEditRequest', async () => {
-    const permission = { isAddSettledTickets: true } as PermissionAddRequest;
-    mockComponent.isEdit = true;
-    mockComponent.updateDataWhenEditRequest = jest.fn();
-    mockEventWrongOfferedNameService.getPermissionAddRequest = jest.fn().mockReturnValue(permission);
+  it('should save request', async () => {
+    // Arrange
+    component.requestId = Helper.fakeRequestId;
+    component.requestedBy = Helper.fakeRequestedBy;
+    component.isEdit = false;
+    component.userId = Helper.fakeUserId;
+    component.actionIdOfFirstTimeAccess = 'action1';
+    component.others = Helper.fakeOthersModel;
+    component.filter = Helper.fakeFilterModel;
+    component.primitiveProps = Helper.fakePrimitiveProperty;
+    component.filterWrongOfferedNameComponent = {} as FilterWrongOfferedNameComponent;
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.logInfoEvent = new LogInfoWrongOfferedName();
+    component.confirmAddRequest = Helper.fakeConfirmAddRequestModel;
+    component.permission = Helper.fakePermission;
+    
+    saveRequestService.saveRequest = jest.fn().mockResolvedValue(undefined);
 
-    await mockComponent.ngOnInit();
+    // Act
+    await component.saveRequest();
 
-    expect(mockComponent.updateDataWhenEditRequest).toHaveBeenCalledTimes(1);
-    expect(mockEventWrongOfferedNameService.getPermissionAddRequest).toHaveBeenCalledTimes(1);
-    expect(mockComponent.permission).toBe(permission);
+    // Assert
+    expect(saveRequestService.saveRequest).toHaveBeenCalled();
   });
 
-  it('ngOnInit should call #eventWrongOfferedNameService.initLogInfoEvent', async () => {
-    const permission = { isAddSettledTickets: true } as PermissionAddRequest;
-    mockComponent.isEdit = false;
-    mockEventWrongOfferedNameService.initLogInfoEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoWrongOfferedName);
-    mockEventWrongOfferedNameService.getPermissionAddRequest = jest.fn().mockReturnValue(permission);
+  it('should confirm save request', async () => {
+    // Arrange
+    component.requestId = Helper.fakeRequestId;
+    component.requestedBy = Helper.fakeRequestedBy;
+    component.isEdit = false;
+    component.userId = Helper.fakeUserId;
+    component.actionIdOfFirstTimeAccess = 'action1';
+    component.others = Helper.fakeOthersModel;
+    component.filter = Helper.fakeFilterModel;
+    component.primitiveProps = Helper.fakePrimitiveProperty;
+    component.filterWrongOfferedNameComponent = {} as FilterWrongOfferedNameComponent;
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.logInfoEvent = new LogInfoWrongOfferedName();
+    component.confirmAddRequest = Helper.fakeConfirmAddRequestModel;
+    component.permission = Helper.fakePermission;
+    
+    saveRequestService.onClickConfirmSave = jest.fn().mockResolvedValue(undefined);
 
-    await mockComponent.ngOnInit();
+    // Act
+    await component.onClickConfirmSaveRequest();
 
-    expect(mockEventWrongOfferedNameService.initLogInfoEvent).toHaveBeenCalledTimes(1);
-    expect(mockEventWrongOfferedNameService.getPermissionAddRequest).toHaveBeenCalledTimes(1);
-    expect(mockComponent.permission).toBe(permission);
-    expect(mockComponent.logInfoEvent).toBe(Helper.fakeLogInfoWrongOfferedName);
+    // Assert
+    expect(saveRequestService.onClickConfirmSave).toHaveBeenCalled();
   });
 
-  it('updateDataWhenEditRequest should call #eventWrongOfferedNameService.assignModelsToEvents', async () => {
-    mockEventWrongOfferedNameService.assignModelsToEvents = jest.fn().mockReturnValue(Helper.fakeLogInfoWrongOfferedName);
+  it('should cancel save request', () => {
+    // Arrange
+    addRequestStore.changeSavingRequestStatus = jest.fn();
 
-    await mockComponent.updateDataWhenEditRequest();
+    // Act
+    component.onClickCancelSaveRequest();
 
-    expect(mockEventWrongOfferedNameService.assignModelsToEvents).toHaveBeenCalledTimes(1);
-    expect(mockComponent.primitiveProps.isShowLogInfo).toBeTruthy();
+    // Assert
+    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
   });
 
-  it('changeMatchEvent should call #logInfoService.resetLogInfoOfEvent & emit #updateMatchId & update matchModel', async () => {
-    const matchModel = new MatchModel();
-    mockLogInfoService.resetLogInfoOfEvent = jest.fn();
-    mockComponent.updateMatchId.emit = jest.fn();
-    mockEventWrongOfferedNameService.updateSelectedMatchToInput = jest.fn();
-    mockComponent.eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    mockComponent.eventLeagueComponent.selectedMatch = matchModel;
-    mockComponent.eventLeagueComponent.selectedMatch.matchId = 1;
+  it('should reset log info', () => {
+    // Arrange
+    component.primitiveProps = Helper.fakePrimitiveProperty;
+    component.primitiveProps.isShowLogInfo = true;
 
-    await mockComponent.changeMatchEvent();
+    // Act
+    component.resetLogInfo();
 
-    expect(mockLogInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(mockComponent.updateMatchId.emit).toHaveBeenCalledTimes(1);
-    expect(mockEventWrongOfferedNameService.updateSelectedMatchToInput).toHaveBeenCalledTimes(1);
-    expect(mockComponent.logInfoEvent.matchModel).toBe(matchModel);
-    expect(mockComponent.logInfoEvent.matchId).toBe(1);
+    // Assert
+    expect(component.primitiveProps.isShowLogInfo).toBeFalsy();
   });
 
-  it('changeMatchEvent should call #logInfoService.resetLogInfoOfEvent & emit #updateMatchId', async () => {
-    mockLogInfoService.resetLogInfoOfEvent = jest.fn();
-    mockComponent.updateMatchId.emit = jest.fn();
-    mockComponent.eventLeagueComponent = null;
+  it('should initialize save request input correctly', () => {
+    // Arrange
+    component.requestId = Helper.fakeRequestId;
+    component.requestedBy = Helper.fakeRequestedBy;
+    component.isEdit = false;
+    component.userId = Helper.fakeUserId;
+    component.actionIdOfFirstTimeAccess = 'action1';
+    component.others = Helper.fakeOthersModel;
+    component.filter = Helper.fakeFilterModel;
+    component.primitiveProps = Helper.fakePrimitiveProperty;
+    component.filterWrongOfferedNameComponent = {} as FilterWrongOfferedNameComponent;
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.logInfoEvent = new LogInfoWrongOfferedName();
+    component.confirmAddRequest = Helper.fakeConfirmAddRequestModel;
+    component.permission = Helper.fakePermission;
 
-    await mockComponent.changeMatchEvent();
+    // Act
+    const result = component.initSaveRequestInput();
 
-    expect(mockLogInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(mockComponent.updateMatchId.emit).toHaveBeenCalledTimes(1);
-  });
-
-  it('handleSearchEvent should call #validationService.validateCommonData & return when validateCommonData false', async () => {
-    mockLogInfoService.resetLogInfoOfEvent = jest.fn();
-    mockValidationService.validateCommonData = jest.fn().mockReturnValue(false);
-
-    await mockComponent.handleSearchEvent();
-
-    expect(mockLogInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(mockValidationService.validateCommonData).toHaveBeenCalledTimes(1);
-  });
-
-  it('handleSearchEvent should call #validationService.validateCommonData & return when validateCommonData false', async () => {
-    mockLogInfoService.resetLogInfoOfEvent = jest.fn();
-    mockLogInfoService.getLogInfo = jest.fn();
-    mockAddRequestStore.changeBlockingUiStatus = jest.fn();
-    mockValidationService.validateCommonData = jest.fn().mockReturnValue(true);
-    mockValidationService.isAccountHasAddRequestPermission = jest.fn().mockReturnValue(false);
-
-    await mockComponent.handleSearchEvent();
-
-    expect(mockLogInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(mockValidationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(mockAddRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-    expect(mockValidationService.isAccountHasAddRequestPermission).toHaveBeenCalledTimes(1);
-  });
-
-  it('handleSearchEvent should call all method successfully & set isShowLogInfo to true', async () => {
-    mockLogInfoService.resetLogInfoOfEvent = jest.fn();
-    mockLogInfoService.getLogInfo = jest.fn();
-    mockAddRequestStore.changeBlockingUiStatus = jest.fn();
-    mockValidationService.validateCommonData = jest.fn().mockReturnValue(true);
-    mockValidationService.isAccountHasAddRequestPermission = jest.fn().mockReturnValue(true);
-
-    await mockComponent.handleSearchEvent();
-
-    expect(mockLogInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(mockValidationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(mockAddRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-    expect(mockValidationService.isAccountHasAddRequestPermission).toHaveBeenCalledTimes(1);
-    expect(mockComponent.primitiveProps.isShowLogInfo).toBeTruthy();
-  });
-
-  it('saveRequest should call #saveRequestService.saveRequest', async () => {
-    mockSaveRequestService.saveRequest = jest.fn();
-    mockComponent.initSaveRequestInput = jest.fn();
-
-    await mockComponent.saveRequest();
-
-    expect(mockSaveRequestService.saveRequest).toHaveBeenCalledTimes(1);
-    expect(mockComponent.initSaveRequestInput).toHaveBeenCalledTimes(1);
-  });
-
-  it('onClickConfirmSaveRequest should call #saveRequestService.onClickConfirmSave', async () => {
-    mockSaveRequestService.onClickConfirmSave = jest.fn();
-    mockComponent.initSaveRequestInput = jest.fn();
-
-    await mockComponent.onClickConfirmSaveRequest();
-
-    expect(mockSaveRequestService.onClickConfirmSave).toHaveBeenCalledTimes(1);
-    expect(mockComponent.initSaveRequestInput).toHaveBeenCalledTimes(1);
-  });
-
-  it('onClickCancelSaveRequest should call #mockAddRequestStore.changeSavingRequestStatus', async () => {
-    mockAddRequestStore.changeSavingRequestStatus = jest.fn();
-    mockComponent.onClickCancelSaveRequest();
-
-    expect(mockAddRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-  });
-
-  it('resetLogInfo should update isShowLogInfo false', async () => {
-    mockComponent.resetLogInfo();
-
-    expect(mockComponent.primitiveProps.isShowLogInfo).toBeFalsy();
-  });
-
-  it('initSaveRequestInput should return object', async () => {
-    const actual = mockComponent.initSaveRequestInput();
-
-    expect(actual.requestId).toBe(mockComponent.requestId);
-    expect(actual.requestedBy).toBe(mockComponent.requestedBy);
-    expect(actual.isEdit).toBe(mockComponent.isEdit);
-    expect(actual.userId).toBe(mockComponent.userId);
-    expect(actual.actionIdOfFirstTimeAccess).toBe(mockComponent.actionIdOfFirstTimeAccess);
-    expect(actual.others).toBe(mockComponent.others);
-    expect(actual.filter).toBe(mockComponent.filter);
-    expect(actual.primitiveProps).toBe(mockComponent.primitiveProps);
-    expect(actual.filterWrongOfferedNameComponent).toBe(mockComponent.filterWrongOfferedNameComponent);
-    expect(actual.eventLeagueComponent).toBe(mockComponent.eventLeagueComponent);
-    expect(actual.logInfoEvent).toBe(mockComponent.logInfoEvent);
-    expect(actual.confirmAddRequest).toBe(mockComponent.confirmAddRequest);
-    expect(actual.permission).toBe(mockComponent.permission);
+    // Assert
+    expect(result.requestId).toBe(Helper.fakeRequestId);
+    expect(result.requestedBy).toBe(Helper.fakeRequestedBy);
+    expect(result.isEdit).toBeFalsy();
+    expect(result.userId).toBe(Helper.fakeUserId);
+    expect(result.actionIdOfFirstTimeAccess).toBe('action1');
+    expect(result.others).toBe(Helper.fakeOthersModel);
+    expect(result.filter).toBe(Helper.fakeFilterModel);
+    expect(result.primitiveProps).toBe(component.primitiveProps);
+    expect(result.filterWrongOfferedNameComponent).toBe(component.filterWrongOfferedNameComponent);
+    expect(result.eventLeagueComponent).toBe(component.eventLeagueComponent);
+    expect(result.logInfoEvent).toBe(component.logInfoEvent);
+    expect(result.confirmAddRequest).toBe(component.confirmAddRequest);
+    expect(result.permission).toBe(component.permission);
   });
 });

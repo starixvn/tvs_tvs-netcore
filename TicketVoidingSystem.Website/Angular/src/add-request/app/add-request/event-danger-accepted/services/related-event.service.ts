@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment';
 import { DateTimeFormat, MatchType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { AddRelatedEventArg } from '../../models/add-related-event.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
@@ -13,16 +13,12 @@ import { EventDangerAcceptedService } from './event-danger-accepted.service';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class RelatedEventService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly validationService: ValidationService,
-    private readonly logInfoService: LogInfoService,
-    private readonly eventDangerAcceptedService: EventDangerAcceptedService,
-  ) {}
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly validationService = inject(ValidationService);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly eventDangerAcceptedService = inject(EventDangerAcceptedService);
 
   async getChildMatches(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
     return this.addRequestApiService.getChildMatches(query);
@@ -70,7 +66,7 @@ export class RelatedEventService {
       query.matchId = matchId
       query.isMainMatch = false;
       query.sportType = arg.mainEvent.sportType;
-      
+
       const models = await this.getChildMatches(query);
       if (!models ||models.length === 0) {
         arg.tooltip.display(arg.inputMatchIdClass, LABELS.INVALID_MATCHID);

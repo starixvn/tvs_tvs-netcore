@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AdvancedModeAddRequestComponent } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
@@ -10,15 +10,10 @@ import { FilterOtherIssuesComponent } from '../filter-other-issues/filter-other-
 import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
-
-  constructor(
-    private readonly checkPermissionService: CheckAddPermissionService
-  ) { }
+  private readonly checkPermissionService = inject(CheckAddPermissionService);
 
   isAccountHasAddRequestPermission(action: string, isHasInstantlySettledTicket: boolean, isHasSettledTicket: boolean, permission: PermissionAddRequest): boolean {
     return this.checkPermissionService.isAccountHasAddRequestPermission(action, isHasInstantlySettledTicket, isHasSettledTicket, permission);

@@ -1,27 +1,39 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { SportType } from '../../../../../utility/constants/sport.constant';
+import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
 import { FilterModel } from '../../filter/filter.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
+import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
+import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
 import { LogAnalysisService } from '../../services/log-analysis.service';
+import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
 import { FilterWrongOuComponent } from '../filter-wrong-ou/filter-wrong-ou.component';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
-import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 
 @Component({
   selector: 'log-info-wrong-ou',
   templateUrl: './log-info-wrong-ou.component.html',
-  styleUrls: ['./log-info-wrong-ou.component.scss']
+  styleUrls: ['./log-info-wrong-ou.component.scss'],
+  standalone: true,
+  imports: [AffectedTicketComponent, PoolHouseTicketComponent, TicketCountOtherSportsComponent,
+    FormsModule, CommonModule, PipeModule, FilterWrongOuComponent, BlockUiModule],
+  providers: [AffectedTicketService]
 })
 export class LogInfoWrongOuComponent implements OnInit {
   @Input() isMainMatch: boolean;
@@ -33,22 +45,17 @@ export class LogInfoWrongOuComponent implements OnInit {
   @Input() primitiveProps: PrimitiveProperty;
   @Output() searchTicketEvent = new EventEmitter();
   @Output() deleteEvent = new EventEmitter();
-
   @ViewChild('filterWrongOu') filterWrongOuComponent: FilterWrongOuComponent;
-
   isCollapse: boolean;
   isBlock = false;
-
   poolHouseTicketsModel = new PoolHouseTicketsModel();
   affectedTicketsModel = new AffectedTicketsModel();
-  constructor(
-    private readonly modalService: ModalService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly logInfoWrongOuService: LogInfoService,
-    private readonly eventWrongOuService: EventWrongOuService,
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly logAnalysisService: LogAnalysisService
-  ) { }
+  private readonly modalService = inject(ModalService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly logInfoWrongOuService = inject(LogInfoService);
+  private readonly eventWrongOuService = inject(EventWrongOuService);
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly logAnalysisService = inject(LogAnalysisService);
 
   public ngOnInit(): void {
     if (this.isEdit) {
@@ -164,7 +171,7 @@ export class LogInfoWrongOuComponent implements OnInit {
     return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
   }
 
-  public isSportTypeSoccer(): boolean{
+  public isSportTypeSoccer(): boolean {
     return this.logInfo.sportType === SportType.SOCCER;
   }
 }

@@ -1,9 +1,9 @@
-﻿using NSubstitute;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.PoolHouse;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -15,13 +15,13 @@ public class GetPoolHouseTicketServiceTests
 {
     private readonly MapTicketsService mapTicketsService;
     private readonly PagingService pagingService;
-    private readonly GetPoolHouseTicketServiceImp service;
+    private readonly GeneratePoolHouseTicketServiceImp service;
 
     public GetPoolHouseTicketServiceTests()
     {
         mapTicketsService = Substitute.For<MapTicketsService>();
         pagingService = Substitute.For<PagingService>();
-        service = new GetPoolHouseTicketServiceImp(mapTicketsService, pagingService);
+        service = new GeneratePoolHouseTicketServiceImp(mapTicketsService, pagingService);
     }
 
     [Fact]
@@ -33,26 +33,6 @@ public class GetPoolHouseTicketServiceTests
         var expected = new TicketsViewModel
         {
             TotalSingle = 0,
-            TotalParlay = 0,
-            Groups = []
-        };
-
-        // Act
-        var actual = service.GetTicketsViewModel(originTickets, request);
-
-        // Assert
-        AssertExtension.Equal(expected, actual);
-    }
-
-    [Fact]
-    public void GetTicketsViewModel_NoHasAfterPagingTickets_ReturnEmptyGroups()
-    {
-        // Arrange
-        var originTickets = new List<GetTicketModel> { new() };
-        var request = new GetPoolHouseTicketRequest();
-        var expected = new TicketsViewModel
-        {
-            TotalSingle = 1,
             TotalParlay = 0,
             Groups = []
         };

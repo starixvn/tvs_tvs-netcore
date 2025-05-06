@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
@@ -8,15 +8,10 @@ import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { EventReducedOverService } from './event-reduced-over.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class LogInfoService {
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly eventReducedOverService: EventReducedOverService) {
-  }
+  private readonly commonService = inject(CommonService);
+  private readonly eventReducedOverService = inject(EventReducedOverService);
 
   async getLogInfo(logInfoEvent: LogInfoReducedOver, isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitivePropertyEvent): Promise<void> {
     const getLogInfoQuery = this.initReducedOverGetLogInfoQuery(isEdit, requestId, filter, logInfoEvent);

@@ -1,19 +1,27 @@
-import { FilterModel } from './../../filter/filter.model';
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+
+import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
+import { HdpFilterBetTypeComponent } from '../../components/hdp-filter-bet-type/hdp-filter-bet-type.component';
+import { HdpFilterBetTypeService } from '../../components/hdp-filter-bet-type/hdp-filter-bet-type.service';
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { ValidationService } from '../services/validation.service';
+import { FilterModel } from './../../filter/filter.model';
 
 @Component({
   selector: 'filter-wrong-ou',
   templateUrl: './filter-wrong-ou.component.html',
-  styleUrls: ['./filter-wrong-ou.component.scss']
+  styleUrls: ['./filter-wrong-ou.component.scss'],
+  standalone: true,
+  imports: [DateFullTimeNewComponent, FormsModule, TooltipComponent, HdpFilterBetTypeComponent],
+  providers: [HdpFilterBetTypeService]
 })
 export class FilterWrongOuComponent {
   @Input() filterWrongOuModel: FilterWrongOuModel;
@@ -29,22 +37,20 @@ export class FilterWrongOuComponent {
 
   @ViewChild('fromTimeComponent') fromTimeComponent: DateFullTimeNewComponent;
   @ViewChild('toTimeComponent') toTimeComponent: DateFullTimeNewComponent;
-
   tooltip = new Tooltip();
+  private readonly element = inject(ElementRef);
+  private readonly validationService = inject(ValidationService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly validationService: ValidationService
-  ) {
-      this.tooltip.element = this.element;
+  constructor() {
+    this.tooltip.element = this.element;
   }
 
   public changeFilterBy(): void {
     if (!this.filterWrongOuModel.filterFromTransTime || !this.filterWrongOuModel.filterToTransTime) {
-        const currentMoment = moment.utc().tz('America/Caracas');
-        this.filterWrongOuModel.filterFromTransTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-        this.filterWrongOuModel.filterToTransTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-      }
+      const currentMoment = moment.utc().tz('America/Caracas');
+      this.filterWrongOuModel.filterFromTransTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+      this.filterWrongOuModel.filterToTransTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    }
   }
 
   public changeFilter(): void {

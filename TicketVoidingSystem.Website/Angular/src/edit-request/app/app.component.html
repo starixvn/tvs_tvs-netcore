@@ -3,17 +3,21 @@
 <div class="title">
   Home / Manage Request / Edit Request - {{primitiveProperty.requestId}}
 </div>
-<div *ngIf="requestModel">
-  <add-request [isEdit]="true"
-    [requestId]="primitiveProperty.requestId"
-    [model]="requestModel"
-    [matchId]="primitiveProperty.matchId"
-    [userId]="primitiveProperty.userId"
-    [requestedBy]="primitiveProperty.requestedBy"
-    [actionIdOfFirstTimeAccess]="primitiveProperty.actionIdOfFirstTimeAccess">
-  </add-request>
-</div>
-<div *ngIf="!requestModel">
-  Invalid Request
-</div>
+@if (requestModel) {
+  <div>
+    <add-request [isEdit]="true"
+      [requestId]="primitiveProperty.requestId"
+      [model]="requestModel"
+      [matchId]="primitiveProperty.matchId"
+      [userId]="primitiveProperty.userId"
+      [requestedBy]="primitiveProperty.requestedBy"
+      [actionIdOfFirstTimeAccess]="primitiveProperty.actionIdOfFirstTimeAccess">
+    </add-request>
+  </div>
+}
+@if (!requestModel) {
+  <div>
+    Invalid Request
+  </div>
+}
 <block-full-ui [isBlock]="isBlock"></block-full-ui>

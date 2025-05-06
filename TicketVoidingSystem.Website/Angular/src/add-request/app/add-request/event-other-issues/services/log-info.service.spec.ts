@@ -1,104 +1,175 @@
-import * as _ from 'lodash';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { CommonService } from "../../../../../utility/services/common.service";
-import { FilterModel } from "../../filter/filter.model";
-import { OtherIssuesModel } from '../../models/event-other-issues.model';
-import { GetLogInfoModel, Validation } from '../../models/get-log-info.model';
-import { TransInfoAddRequestModel } from "../../models/trans-info-add-request.model";
-import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
-import { OtherIssuesGetLogInfoQuery } from '../models/get-log-info.query';
-import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
-import { PrimitiveProperty } from "../models/primitive-property.model";
+import { TestBed } from '@angular/core/testing';
+import { LogInfoService } from './log-info.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { CommonService } from '../../../../../utility/services/common.service';
 import { EventOtherIssuesService } from './event-other-issues.service';
-import { LogInfoService } from "./log-info.service";
-
-class Helper {
-  static readonly fakeOtherIssuesModel: OtherIssuesModel = {
-    logInfoDetail: new LogInfoDetail(),
-    matchId: 1,
-    subIssueTypeId: 1
-  } as OtherIssuesModel;
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '26',
-    subIssueTypeId: '1',
-    action: '5'
-  } as FilterModel;
-  static readonly fakeLogInfoOtherIssues: LogInfoOtherIssues = {
-    matchId: 1,
-    filterOtherIssues: new FilterOtherIssuesModel(),
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: []
-  } as LogInfoOtherIssues;
-  static readonly fakeFilterOtherIssues: FilterOtherIssuesModel = {
-    fromDateTime: '2024-10-08 09:44:46.361 PM',
-    toDateTime: '2024-10-08 09:44:46.362 PM',
-  } as FilterOtherIssuesModel;
-  static readonly fakeGetLogInfoModels: GetLogInfoModel[] = [
-    {
-      matchId: 1,
-      validation: new Validation(),
-      logInfoDetail: new LogInfoDetail()
-    } as GetLogInfoModel
-  ]
-}
+import { FilterModel } from '../../filter/filter.model';
+import { GetLogInfoModel, GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { OtherIssuesGetLogInfoQuery } from '../models/get-log-info.query';
+import { ValidationService } from './validation.service';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
 
 describe('LogInfoService', () => {
-  let mockService: LogInfoService;
-  let mockCommonService: CommonService;
-  let mockEventOtherIssuesService: EventOtherIssuesService;
+  let service: LogInfoService;
+  let commonService: CommonService;
+  let eventOtherIssuesService: EventOtherIssuesService;
 
   beforeEach(() => {
-    mockCommonService = new CommonService(null);
-    mockEventOtherIssuesService = new EventOtherIssuesService(null, null);
-    mockService = new LogInfoService(mockCommonService, mockEventOtherIssuesService);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [LogInfoService, EventOtherIssuesService, ValidationService, CheckAddPermissionService]
+    });
+
+    service = TestBed.inject(LogInfoService);
+    commonService = TestBed.inject(CommonService);
+    eventOtherIssuesService = TestBed.inject(EventOtherIssuesService);
   });
 
-  it('getLogInfo should call #commonService.getLogInfo', async () => {
-    const transInfoAddRequest = new TransInfoAddRequestModel();
-    const primitiveProps = new PrimitiveProperty();
-    mockService['assignResultLogInfoToEvents'] = jest.fn();
-    mockService['initGetLogInfoOtherIssuesQuery'] = jest.fn().mockReturnValue(new OtherIssuesGetLogInfoQuery());
-    mockCommonService.getLogInfo = jest.fn().mockReturnValue({ transInfoAddRequestModel: transInfoAddRequest, getLogInfoModels: [] });
-
-    await mockService.getLogInfo(Helper.fakeLogInfoOtherIssues, 1, Helper.fakeFilterModel, primitiveProps);
-
-    expect(mockService['initGetLogInfoOtherIssuesQuery']).toHaveBeenCalledTimes(1);
-    expect(mockService['assignResultLogInfoToEvents']).toHaveBeenCalledTimes(1);
-    expect(mockCommonService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(primitiveProps.transInfoAddRequestModel).toEqual(transInfoAddRequest);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('assignResultLogInfoToEvents should call #commonService.getLogInfo', async () => {
-    const logInfoEvent = Helper.fakeLogInfoOtherIssues;
-    const logInfoModels = Helper.fakeGetLogInfoModels;
-    logInfoEvent.matchId = 1;
-    logInfoModels[0].matchId = 1;
+  describe('resetLogInfoOfEvent', () => {
+    it('should reset logInfoDetail and messageValidationLogInfo to null', () => {
+      // Arrange
+      const logInfoEvent = {
+        logInfoDetail: 'some detail',
+        messageValidationLogInfo: 'some message'
+      } as unknown as LogInfoOtherIssues;
 
-    mockService['assignResultLogInfoToEvents'](logInfoEvent, logInfoModels);
+      // Act
+      service.resetLogInfoOfEvent(logInfoEvent);
 
-    expect(logInfoEvent.isHasSettledTicket).toEqual(logInfoModels[0].validation.isHasSettledTicket);
-    expect(logInfoEvent.isHasInstantlySettledTicket).toEqual(logInfoModels[0].validation.isHasInstantlySettledTicket);
-    expect(logInfoEvent.logInfoDetail).toEqual(logInfoModels[0].logInfoDetail);
+      // Assert
+      expect(logInfoEvent.logInfoDetail).toBeNull();
+      expect(logInfoEvent.messageValidationLogInfo).toBeNull();
+    });
   });
 
-  it('initGetLogInfoOtherIssuesQuery should return GetLogInfoQuery', async () => {
-    const logInfoEvent = Helper.fakeLogInfoOtherIssues;
-    logInfoEvent.messageValidationLogInfo = [];
-    mockEventOtherIssuesService.initOtherIssuesGetLogInfoModel = jest.fn().mockReturnValue(new OtherIssuesGetLogInfoQuery());
+  describe('getLogInfo', () => {
+    it('should get log info and assign results correctly', async () => {
+      // Arrange
+      const logInfoEvent = {
+        matchId: 'testMatchId'
+      } as unknown as LogInfoOtherIssues;
+      const requestId = 123;
+      const filter = {
+        action: '1',
+        issueTypeId: '2',
+        subIssueTypeId: '3'
+      } as FilterModel;
+      const primitiveProps = {} as PrimitiveProperty;
 
-    const actual = mockService['initGetLogInfoOtherIssuesQuery'](1, Helper.fakeFilterModel, logInfoEvent);
+      const mockViewModel = {
+        transInfoAddRequestModel: { someData: 'test' },
+        getLogInfoModels: [{
+          matchId: 'testMatchId',
+          validation: {
+            isHasSettledTicket: true,
+            isHasInstantlySettledTicket: false
+          },
+          logInfoDetail: 'test detail',
+          ticketRequest: {} // Thêm ticketRequest để đáp ứng yêu cầu của GetLogInfoModel
+        }]
+      } as unknown as GetLogInfoViewModel;
 
-    expect(actual.actionId).toBe(Number(Helper.fakeFilterModel.action));
-    expect(actual.issueTypeId).toBe(Number(Helper.fakeFilterModel.issueTypeId));
-    expect(mockEventOtherIssuesService.initOtherIssuesGetLogInfoModel).toHaveBeenCalledTimes(1);
+      jest.spyOn(commonService, 'getLogInfo').mockResolvedValue(mockViewModel);
+      jest.spyOn(eventOtherIssuesService, 'initOtherIssuesGetLogInfoModel').mockReturnValue({
+        matchId: 123,
+        subIssueTypeId: 3,
+        filterFromTransTime: null,
+        filterToTransTime: null,
+        betTeamsResult: null
+      } as unknown as OtherIssuesGetLogInfoQuery);
+
+      // Act
+      await service.getLogInfo(logInfoEvent, requestId, filter, primitiveProps);
+
+      // Assert
+      expect(commonService.getLogInfo).toHaveBeenCalled();
+      expect(primitiveProps.transInfoAddRequestModel).toEqual(mockViewModel.transInfoAddRequestModel);
+      expect(logInfoEvent.isHasSettledTicket).toBeTruthy();
+      expect(logInfoEvent.isHasInstantlySettledTicket).toBeFalsy();
+      expect(logInfoEvent.logInfoDetail).toBe('test detail');
+    });
   });
 
-  it('#resetLogInfoOfEvent should update model to null', async () => {
-    const events = _.cloneDeep(Helper.fakeLogInfoOtherIssues);
+  describe('initGetLogInfoOtherIssuesQuery', () => {
+    it('should initialize query with correct values', () => {
+      // Arrange
+      const requestId = 123;
+      const filter = {
+        action: '1',
+        issueTypeId: '2',
+        subIssueTypeId: '3'
+      } as FilterModel;
+      const events = {} as LogInfoOtherIssues;
 
-    mockService['resetLogInfoOfEvent'](events);
+      jest.spyOn(eventOtherIssuesService, 'initOtherIssuesGetLogInfoModel').mockReturnValue({} as OtherIssuesGetLogInfoQuery);
 
-    expect(events.logInfoDetail).toBeNull();
-    expect(events.messageValidationLogInfo).toBeNull();
+      // Act
+      const result = service['initGetLogInfoOtherIssuesQuery'](requestId, filter, events);
+
+      // Assert
+      expect(result.requestId).toBe(requestId);
+      expect(result.actionId).toBe(Number(filter.action));
+      expect(result.issueTypeId).toBe(Number(filter.issueTypeId));
+      expect(eventOtherIssuesService.initOtherIssuesGetLogInfoModel).toHaveBeenCalledWith(
+        Number(filter.subIssueTypeId),
+        events
+      );
+    });
+  });
+
+  describe('assignResultLogInfoToEvents', () => {
+    it('should assign log info to events when match is found', () => {
+      // Arrange
+      const logInfoEvent = {
+        matchId: 'testMatchId'
+      } as unknown as LogInfoOtherIssues;
+
+      const logInfoModels = [{
+        matchId: 'testMatchId',
+        validation: {
+          isHasSettledTicket: true,
+          isHasInstantlySettledTicket: false
+        },
+        logInfoDetail: 'test detail'
+      }] as unknown as GetLogInfoModel[];
+
+      // Act
+      service['assignResultLogInfoToEvents'](logInfoEvent, logInfoModels);
+
+      // Assert
+      expect(logInfoEvent.isHasSettledTicket).toBeTruthy();
+      expect(logInfoEvent.isHasInstantlySettledTicket).toBeFalsy();
+      expect(logInfoEvent.logInfoDetail).toBe('test detail');
+    });
+
+    it('should not assign log info when no match is found', () => {
+      // Arrange
+      const logInfoEvent = {
+        matchId: 'testMatchId'
+      } as unknown as LogInfoOtherIssues;
+
+      const logInfoModels = [{
+        matchId: 'differentMatchId',
+        validation: {
+          isHasSettledTicket: true,
+          isHasInstantlySettledTicket: false
+        },
+        logInfoDetail: 'test detail'
+      }] as unknown as GetLogInfoModel[];
+
+      // Act
+      service['assignResultLogInfoToEvents'](logInfoEvent, logInfoModels);
+
+      // Assert
+      expect(logInfoEvent.isHasSettledTicket).toBeUndefined();
+      expect(logInfoEvent.isHasInstantlySettledTicket).toBeUndefined();
+      expect(logInfoEvent.logInfoDetail).toBeUndefined();
+    });
   });
 });

@@ -1,4 +1,5 @@
-<div *ngIf="model.isOpen">
+@if (model.isOpen) {
+<div>
   <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
   <div role="dialog" class="fade modal show d-block wrapper-tooltip">
     <div role="document" class="modal-dialog-custom modal-dialog-centered modal-dialog-scrollable">
@@ -7,38 +8,42 @@
           <div class="modal-title">
             <strong>Affected Pool House Ticket</strong>
           </div>
-          <button class="close" (click)="closeClick()">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="closeClick()"></button>
         </div>
         <div class="modal-body" [blockUi]="isBlock">
-          <linked-log [linkedLogsViewModel]="model.linkedLogsViewModel" ></linked-log>
+          <linked-log [linkedLogsViewModel]="model.linkedLogsViewModel"></linked-log>
           <div class="bettype-ticket-section">
-            <ng-container *ngFor="let section of poolHouseTicketsSections">
-              <div *ngIf="section.tickets.groups.length > 0">
-                <div class="section-header" (click)="section.isCollapsed = !section.isCollapsed"
-                  [attr.aria-expanded]="!section.isCollapsed">
-                  <strong>{{section.name}}</strong>
-                </div>
-                <div class="section-body" [(ngbCollapse)]="section.isCollapsed">
-                  <group-bettypes-pool-house
-                    [affectedGroupBetTypesModel]="section.groupBetTypesModel" (changedBetTypesEvent)="changedBetTypes($event)">                  
-                  </group-bettypes-pool-house>
-                  <ng-container *ngIf="!section.isAffected && section.filterBetTypes">
-                    <multiple-selection class="multiple-selection filter-site-dropdown mb-1 mt-2" [multipleSelect]="section.filterBetTypes" (checkedItems)="updateSelectedBetTypes($event)">
-                    </multiple-selection>
-                  </ng-container>
-                  <tickets [model]="section.tickets" [isBlock]="blockBetList"></tickets>
-                </div>
+            @for (section of poolHouseTicketsSections; track section) {
+            @if (section.tickets.groups.length > 0) {
+            <div>
+              <div class="section-header" (click)="section.isCollapsed = !section.isCollapsed"
+                [attr.aria-expanded]="!section.isCollapsed">
+                <strong>{{section.name}}</strong>
               </div>
-            </ng-container>
+              <div class="section-body" [(ngbCollapse)]="section.isCollapsed">
+                <group-bettypes-pool-house [affectedGroupBetTypesModel]="section.groupBetTypesModel"
+                  (changedBetTypesEvent)="changedBetTypes($event)">
+                </group-bettypes-pool-house>
+                @if (!section.isAffected && section.filterBetTypes) {
+                <multiple-selection class="multiple-selection filter-site-dropdown mb-1 mt-2"
+                  [multipleSelect]="section.filterBetTypes" (checkedItems)="updateSelectedBetTypes($event)">
+                </multiple-selection>
+                }
+                <tickets [model]="section.tickets" [isBlock]="blockBetList"></tickets>
+              </div>
+            </div>
+            }
+            }
           </div>
         </div>
-        <div class="modal-footer" *ngIf="affectedSection.tickets.groups.length > 0">
+        @if (affectedSection.tickets.groups.length > 0) {
+        <div class="modal-footer">
           <button type="button" class="btn btn-primary btn-sm" (click)="saveClick()">Save</button>
           <button type="button" class="btn btn-danger btn-sm" (click)="closeClick()">Cancel</button>
         </div>
+        }
       </div>
     </div>
   </div>
 </div>
+}

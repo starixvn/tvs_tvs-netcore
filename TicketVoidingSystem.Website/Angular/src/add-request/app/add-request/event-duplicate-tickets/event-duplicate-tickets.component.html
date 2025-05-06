@@ -1,43 +1,50 @@
-<div [blockUi]="primitiveProps.isBlockBetIds">
-  <div class="d-flex mb-2 header-bet-id" [ngStyle]="{'max-width.px': 1065}">
-    <div class="form-check form-check-inline" *ngFor="let item of abnormalFilterBy.duplicateTicketsFilterItems">
-      <input class="form-check-input" type="radio" name="inlineRadioOptions" [attr.value]="item.value"
-        [checked]="item.value === duplicateTicketsModel.filterBy" id="inlineRadio-{{item.value}}"
-        (change)="changeFilterBy(item.value)" [disabled]="filter.isVoided || isEdit"/>
-      <label *ngIf="!item.hidden" class="form-check-label" for="inlineRadio-{{item.value}}">{{item.name}}</label>
-    </div>
-    <div class="flex-grow-1"></div>
-    <button type="submit" class="btn btn-danger btn-sm" *ngIf="primitiveProps.isShowButtonRemoveInvalid" (click)="removeInvalidTransIds()">Remove Invalid</button>
-  </div>
-  <div class="mb-3">
-    <div class="mr-4 mb-1">Original BetID(s)</div>
-    <textarea rows="3" class="form-control form-control-sm org-transId"
-      [ngStyle]="{'max-width.px': 1065}"
-      [(ngModel)]="duplicateTicketsModel.orgTransIds"
-      [disabled]="isDisableBetIds()">
-    </textarea>
-  </div>
-  <div>
-    <div class="mr-4 mb-1">Duplicated BetID(s)</div>
-    <bet-ids #betIds [leftBetIdCss]="'col-form-label'" [rightBetIdCss]="'col-sdm-8'"
-      [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false"
-      [hideDifferentMatch]="duplicateTicketsModel.filterBy === 1" [disabled]="isDisableBetIds()" [initBetIds]="duplicateTicketsModel.transIds"
-      (afterFocusOutBetIds)="afterFocusOutBetIds()"
-      [isShowLabel]="false"
-      [warningMoveText]="'(*) Moved or Duplicated tickets are highlighted in ORANGE.'">
-    </bet-ids>
-  </div>
-</div>
+<div class="main-container col-12 col-sm-8">
 
-<div *ngIf="isShowLeagueEvent()" class="d-flex event-league">
-  <div class="event col-md-6 col-sm-6 col-12">
-    <label class="col-form-label">Event</label>
-    <input type="text" class="form-control form-control-sm" disabled [(ngModel)]="duplicateTicketsModel.name">
+  <div [blockUi]="primitiveProps.isBlockBetIds">
+    <div class="d-flex mb-2 header-bet-id" [ngStyle]="{'max-width.px': 1065}">
+      @for (item of abnormalFilterBy.duplicateTicketsFilterItems; track item) {
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" [attr.value]="item.value"
+          [checked]="item.value === duplicateTicketsModel.filterBy" id="inlineRadio-{{item.value}}"
+          (change)="changeFilterBy(item.value)" [disabled]="filter.isVoided || isEdit" />
+        @if (!item.hidden) {
+        <label class="form-check-label" for="inlineRadio-{{item.value}}">{{item.name}}</label>
+        }
+      </div>
+      }
+      <div class="flex-grow-1"></div>
+      @if (primitiveProps.isShowButtonRemoveInvalid) {
+      <button type="submit" class="btn btn-danger btn-sm" (click)="removeInvalidTransIds()">Remove Invalid</button>
+      }
+    </div>
+    <div class="mb-3">
+      <label class="col-form-label-sm">Original BetID(s)</label>
+      <textarea rows="3" class="form-control form-control-sm org-transId" [ngStyle]="{'max-width.px': 1065}"
+        [(ngModel)]="duplicateTicketsModel.orgTransIds" [disabled]="isDisableBetIds()">
+        </textarea>
+    </div>
+    <div>
+      <label class="col-form-label-sm">Duplicated BetID(s)</label>
+      <bet-ids #betIds [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false"
+        [hideDifferentMatch]="duplicateTicketsModel.filterBy === 1" [disabled]="isDisableBetIds()"
+        [initBetIds]="duplicateTicketsModel.transIds" (afterFocusOutBetIds)="afterFocusOutBetIds()"
+        [isShowLabel]="false" [warningMoveText]="'(*) Moved or Duplicated tickets are highlighted in ORANGE.'">
+      </bet-ids>
+    </div>
   </div>
-  <div class="league col-md-6 col-sm-6 col-12">
-    <label class="col-form-label">League</label>
-    <input type="text" class="form-control form-control-sm" disabled [(ngModel)]="duplicateTicketsModel.leagueName">
+
+  @if (isShowLeagueEvent()) {
+  <div class="d-flex match">
+    <div class="event col-md-6 col-sm-6 col-12">
+      <label class="col-form-label-sm">Event</label>
+      <input type="text" class="form-control form-control-sm" disabled [(ngModel)]="duplicateTicketsModel.name">
+    </div>
+    <div class="league col-md-6 col-sm-6 col-12">
+      <label class="col-form-label-sm">League</label>
+      <input type="text" class="form-control form-control-sm" disabled [(ngModel)]="duplicateTicketsModel.leagueName">
+    </div>
   </div>
+  }
 </div>
 
 <tooltip [tooltip]="tooltip"></tooltip>

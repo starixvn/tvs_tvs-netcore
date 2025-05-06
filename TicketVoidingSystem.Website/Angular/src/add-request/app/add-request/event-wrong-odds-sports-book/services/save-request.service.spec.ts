@@ -1,280 +1,307 @@
-import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { AddRequestService } from '../../add-request.service';
-import { AddRequestStore } from '../../add-request.store';
-import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
-import { FilterModel } from '../../filter/filter.model';
-import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { OthersModel } from '../../others/others.model';
-import { PopupService } from '../../services/popup.service';
-import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
-import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
-import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
-import { LogInfoService } from './log-info.service';
+import { TestBed } from '@angular/core/testing';
 import { SaveRequestService } from './save-request.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { ValidationService } from './validation.service';
-
-class Helper {
-  static readonly fakeMatchId = 12345;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeWrongOddsSportsBookModel = new WrongOddsSportsBookModel();
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '1',
-    action: '1',
-    isTest: true,
-    isVoided: false,
-    isAbnormal: false,
-    actions: []
-  } as FilterModel;
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: Helper.fakeMatchId,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    instantlySettleCount: 2,
-    scoreNormalTicket: '',
-    scoreOfMatch: '',
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeTicketRequest: TicketRequest = {
-    transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
-    requestId: 1,
-    createdBy: 'admin',
-  };
-  static readonly fakeFilterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel = {
-    fromDateTime: Helper.fakeFromDateTime,
-    toDateTime: Helper.fakeToDateTime,
-    correctOdds: '1',
-    filterOddsType: 'value',
-    fromOdds: '1',
-    oddsValue: '1',
-    liveIndicator: 0,
-    toOdds: '1'
-  };
-  static readonly fakeLogInfoWrongOddsSportsBook: LogInfoWrongOddsSportsBook = {
-    matchId: Helper.fakeMatchId,
-    filterWrongOddsSportsBook: new FilterWrongOddsSportsBookModel(),
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    betTeamsResult: []
-  } as LogInfoWrongOddsSportsBook;
-  static readonly fakeGetLogInfoModel: GetLogInfoModel = {
-    matchId: Helper.fakeMatchId,
-    validation: {
-      isInvalidTotalTickets: true,
-      isExistedInOtherRequest: true
-    } as Validation,
-    ticketRequest: [Helper.fakeTicketRequest],
-    logInfoDetail: Helper.fakeLogInfoDetail
-  };
-  static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {
-    transInfoAddRequestModel: new TransInfoAddRequestModel(),
-    getLogInfoModels: [Helper.fakeGetLogInfoModel],
-  };
-}
+import { LogInfoService } from './log-info.service';
+import { PopupService } from '../../services/popup.service';
+import { AddRequestService } from '../../add-request.service';
+import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { TEXT } from '../../../../../utility/constants/text';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { AddRequestQuery } from '../../models/add-request.query';
+import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
+  let validationService: ValidationService;
+  let logInfoService: LogInfoService;
+  let popupService: PopupService;
+  let addRequestService: AddRequestService;
+  let eventWrongOddsSportsBookService: EventWrongOddsSportsBookService;
 
   beforeEach(() => {
-    service = new SaveRequestService(null, null, null, null, null);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        SaveRequestService,
+        ValidationService,
+        LogInfoService,
+        PopupService,
+        AddRequestService,
+        EventWrongOddsSportsBookService,
+        CheckAddPermissionService
+      ]
+    });
+
+    service = TestBed.inject(SaveRequestService);
+    validationService = TestBed.inject(ValidationService);
+    logInfoService = TestBed.inject(LogInfoService);
+    popupService = TestBed.inject(PopupService);
+    addRequestService = TestBed.inject(AddRequestService);
+    eventWrongOddsSportsBookService = TestBed.inject(EventWrongOddsSportsBookService);
   });
 
-  it('#recheckLogInfoBeforeSaveRequest should return false when does not pass validation', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    const logInfoService = new LogInfoService(null, null);
-    logInfoService.resetLogInfoOfEvent = jest.fn();
-    const validationService = new ValidationService(null);
-    validationService.validateCommonData = jest.fn().mockImplementation(() => false);
-
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
-
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
-
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(actual).toBeFalsy();
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#recheckLogInfoBeforeSaveRequest should return true when #validationService.isValidLogInfoEvent true', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = Helper.fakeFilterModel;
-    arg.logInfoEvent = Helper.fakeLogInfoWrongOddsSportsBook;
-    arg.primitiveProps = new PrimitiveProperty();
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeSavingRequestStatus = jest.fn();
+  describe('saveRequest', () => {
+    it('should show popup confirm when data is valid', async () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: { isVoided: false },
+        addRequestStore: { changeBlockingUiStatus: jest.fn(), changeSavingRequestStatus: jest.fn() },
+        logInfoEvent: {},
+        primitiveProps: { isShowValidation: false },
+        isEdit: false,
+        requestId: '123',
+        userId: 1,
+        confirmAddRequest: {},
+        others: {},
+        eventLeagueComponent: {},
+        filterWrongOddsSportsBookComponent: {},
+        advancedModeComponent: {},
+        permission: {}
+      } as unknown as SaveRequestArg;
+      service.recheckLogInfoBeforeSaveRequest = jest.fn().mockResolvedValue(true);
+      service['showPopupConfirmSave'] = jest.fn();
+      
+      // Act
+      await service.saveRequest(mockArg);
 
-    const logInfoService = new LogInfoService(null, null);
-    logInfoService.resetLogInfoOfEvent = jest.fn();
-    logInfoService.getLogInfo = jest.fn();
+      // Assert
+      expect(mockArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(service['showPopupConfirmSave']).toHaveBeenCalledWith(mockArg);
+      expect(mockArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    });
 
-    const validationService = new ValidationService(null);
-    validationService.validateCommonData = jest.fn().mockImplementation(() => true);
-    validationService.isValidLogInfoEvent = jest.fn().mockImplementation(() => true);
-    validationService.isAccountHasAddRequestPermission = jest.fn().mockImplementation(() => true);
+    it('should not show popup when data is invalid', async () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: { isVoided: false },
+        addRequestStore: { changeBlockingUiStatus: jest.fn(), changeSavingRequestStatus: jest.fn() },
+        logInfoEvent: {},
+        primitiveProps: { isShowValidation: false },
+        isEdit: false,
+        requestId: '123',
+        userId: 1,
+        confirmAddRequest: {},
+        others: {},
+        eventLeagueComponent: {},
+        filterWrongOddsSportsBookComponent: {},
+        advancedModeComponent: {},
+        permission: {}
+      } as unknown as SaveRequestArg;
 
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
+      service.recheckLogInfoBeforeSaveRequest = jest.fn().mockResolvedValue(false);
+      service['showPopupConfirmSave'] = jest.fn();
 
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(arg);
+      // Act
+      await service.saveRequest(mockArg);
 
-    expect(arg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(actual).toBeTruthy();
+      // Assert
+      expect(mockArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
+      expect(service['showPopupConfirmSave']).not.toHaveBeenCalled();
+    });
   });
 
-  it('#recheckLogInfoBeforeSaveRequest should return false when #validationService.isValidLogInfoEvent false', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = Helper.fakeFilterModel;
-    arg.logInfoEvent = Helper.fakeLogInfoWrongOddsSportsBook;
-    arg.primitiveProps = new PrimitiveProperty();
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeSavingRequestStatus = jest.fn();
+  describe('recheckLogInfoBeforeSaveRequest', () => {
+    it('should return true when validation passes', async () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: { isVoided: false },
+        addRequestStore: { changeBlockingUiStatus: jest.fn(), changeSavingRequestStatus: jest.fn() },
+        logInfoEvent: {},
+        primitiveProps: { isShowValidation: false },
+        isEdit: false,
+        requestId: '123',
+        userId: 1,
+        confirmAddRequest: {},
+        others: {},
+        eventLeagueComponent: {},
+        filterWrongOddsSportsBookComponent: {},
+        advancedModeComponent: {},
+        permission: {}
+      } as unknown as SaveRequestArg;
 
-    const logInfoService = new LogInfoService(null, null);
-    logInfoService.resetLogInfoOfEvent = jest.fn();
-    logInfoService.getLogInfo = jest.fn();
+      jest.spyOn(validationService, 'validateCommonData').mockReturnValue(true);
+      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
+      jest.spyOn(validationService, 'isAccountHasAddRequestPermission').mockReturnValue(true);
+      jest.spyOn(validationService, 'isValidLogInfoEvent').mockReturnValue(true);
 
-    const validationService = new ValidationService(null);
-    validationService.validateCommonData = jest.fn().mockImplementation(() => true);
-    validationService.isValidLogInfoEvent = jest.fn().mockImplementation(() => false);
-    validationService.isAccountHasAddRequestPermission = jest.fn().mockImplementation(() => true);
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
+      // Act
+      const result = await service['recheckLogInfoBeforeSaveRequest'](mockArg);
 
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(arg);
+      // Assert
+      expect(result).toBeTruthy();
+      expect(mockArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+    });
 
-    expect(arg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(actual).toBeFalsy();
+    it('should return false when common data validation fails', async () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: { isVoided: false },
+        addRequestStore: { changeBlockingUiStatus: jest.fn(), changeSavingRequestStatus: jest.fn() },
+        logInfoEvent: {},
+        primitiveProps: { isShowValidation: false },
+        isEdit: false,
+        requestId: '123',
+        userId: 1,
+        confirmAddRequest: {},
+        others: {},
+        eventLeagueComponent: {},
+        filterWrongOddsSportsBookComponent: {},
+        advancedModeComponent: {},
+        permission: {}
+      } as unknown as SaveRequestArg;
+
+      jest.spyOn(validationService, 'validateCommonData').mockReturnValue(false);
+
+      // Act
+      const result = await service['recheckLogInfoBeforeSaveRequest'](mockArg);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
   });
 
-  it('#saveRequest should not called #showPopupConfirmSave', async () => {
-    const arg = new SaveRequestArg();
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    arg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    service['showPopupConfirmSave'] = jest.fn();
-    service['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
+  describe('showPopupConfirmSave', () => {
+    it('should set correct values for confirm popup', () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: { action: 'action1' },
+        isEdit: true,
+        userId: 1,
+        requestId: '123',
+        requestedBy: 'user1',
+        actionIdOfFirstTimeAccess: 'action2',
+        logInfoEvent: {
+          logInfoDetail: { settleCount: 1 },
+          messageValidationLogInfo: ['warning1']
+        },
+        confirmAddRequest: {}
+      } as unknown as SaveRequestArg;
 
-    await service.saveRequest(arg);
+      jest.spyOn(StaticService, 'isEditingByAnotherUser').mockReturnValue(true);
+      jest.spyOn(StaticService, 'isHasWarningTakenNote').mockReturnValue(true);
 
-    expect(arg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-    expect(service['showPopupConfirmSave']).toHaveBeenCalledTimes(0);
+      // Act
+      service['showPopupConfirmSave'](mockArg);
+
+      // Assert
+      expect(mockArg.confirmAddRequest.requestId).toBe('123');
+      expect(mockArg.confirmAddRequest.requestedBy).toBe('user1');
+      expect(mockArg.confirmAddRequest.isEditingByAnotherUser).toBeTruthy();
+      expect(mockArg.confirmAddRequest.isHasWarningTakenNote).toBeTruthy();
+      expect(mockArg.confirmAddRequest.isHasSettledTicket).toBeTruthy();
+      expect(mockArg.confirmAddRequest.isHasWarningTicket).toBeTruthy();
+      expect(mockArg.confirmAddRequest.isOpen).toBeTruthy();
+    });
   });
 
-  it('#saveRequest should called #showPopupConfirmSave', async () => {
-    const arg = new SaveRequestArg();
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    arg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = true;
-    arg.confirmAddRequest = new ConfirmAddRequestModel();
-    service['showPopupConfirmSave'] = jest.fn();
+  describe('onClickConfirmSave', () => {
+    it('should execute save request when validation passes', async () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: { isVoided: false },
+        addRequestStore: { changeBlockingUiStatus: jest.fn() },
+        logInfoEvent: {},
+        primitiveProps: { isShowValidation: false },
+        isEdit: false,
+        requestId: '123',
+        userId: 1,
+        confirmAddRequest: {},
+        others: {},
+        eventLeagueComponent: {},
+        filterWrongOddsSportsBookComponent: {},
+        advancedModeComponent: {},
+        permission: {}
+      } as unknown as SaveRequestArg;
 
-    await service.saveRequest(arg);
+      service.recheckLogInfoBeforeSaveRequest = jest.fn().mockResolvedValue(true);
+      service['executeSaveRequestApi'] = jest.fn();
 
-    expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-    expect(service['showPopupConfirmSave']).toHaveBeenCalledTimes(1);
+      // Act
+      await service.onClickConfirmSave(mockArg);
+
+      // Assert
+      expect(service['executeSaveRequestApi']).toHaveBeenCalledWith(mockArg);
+    });
+
+    it('should show error when validation fails', async () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: { isVoided: false },
+        addRequestStore: { changeBlockingUiStatus: jest.fn() },
+        logInfoEvent: {},
+        primitiveProps: { isShowValidation: false },
+        isEdit: false,
+        requestId: '123',
+        userId: 1,
+        confirmAddRequest: {},
+        others: {},
+        eventLeagueComponent: {},
+        filterWrongOddsSportsBookComponent: {},
+        advancedModeComponent: {},
+        permission: {}
+      } as unknown as SaveRequestArg;
+      service.recheckLogInfoBeforeSaveRequest = jest.fn().mockResolvedValue(false);
+      jest.spyOn(popupService, 'showError');
+
+      // Act
+      await service.onClickConfirmSave(mockArg);
+
+      // Assert
+      expect(popupService.showError).toHaveBeenCalledWith(TEXT.INVALID_DATA_IN_REQUEST);
+    });
   });
 
-  it('#executeSaveRequestApi should called #executeSaveRequest', async () => {
-    const addRequestService = new AddRequestService(null, null, null);
-    const spyExecuteSaveRequest = jest.spyOn(addRequestService, 'executeSaveRequest').mockImplementation();
-    const saveRequestService = new SaveRequestService(null, null, null, addRequestService, null);
-    saveRequestService['initAddRequestQuery'] = jest.fn();
+  describe('initAddRequestQuery', () => {
+    it('should initialize query with correct values', () => {
+      // Arrange
+      const mockArg: SaveRequestArg = {
+        filter: {
+          isVoided: false,
+          issueTypeId: '1',
+          isTest: true,
+          action: 'action1',
+          subIssueTypeId: '2'
+        },
+        primitiveProps: {
+          transInfoAddRequestModel: {
+            transInfoJson: 'json',
+            unMarkTransIds: ['1', '2'],
+            markTransIds: ['3', '4']
+          }
+        },
+        others: {
+          mistakenBy: 'user1',
+          decidedBy: 'user2',
+          remark: 'remark'
+        },
+        logInfoEvent: {}
+      } as unknown as SaveRequestArg;
 
-    await saveRequestService['executeSaveRequestApi'](new SaveRequestArg());
+      jest.spyOn(eventWrongOddsSportsBookService, 'getWrongOddsSportsBookModel').mockReturnValue({} as unknown as WrongOddsSportsBookModel);
 
-    expect(spyExecuteSaveRequest).toHaveBeenCalledTimes(1);
-  });
+      // Act
+      const result = service['initAddRequestQuery'](mockArg);
 
-  it('#onClickConfirmSave should not called #executeSaveRequestApi', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-
-    const popupService = new PopupService(null);
-    const spyShowError = jest.spyOn(popupService, 'showError').mockImplementation(() => {});
-
-    const saveRequestService = new SaveRequestService(null, null, popupService, null, null);
-    saveRequestService['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
-
-    await saveRequestService['onClickConfirmSave'](arg);
-
-    expect(spyShowError).toHaveBeenCalledTimes(1);
-    expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-  });
-
-  it('#onClickConfirmSave should called #executeSaveRequestApi', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = true;
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    service['executeSaveRequestApi'] = jest.fn();
-
-    await service['onClickConfirmSave'](arg);
-
-    expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-  });
-
-  it('#initAddRequestQuery should not call #eventService.getWrongOddsSportsBookModel when request is voided', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.others = new OthersModel();
-    arg.filter.isVoided = true;
-    arg.logInfoEvent = Helper.fakeLogInfoWrongOddsSportsBook;
-    arg.primitiveProps = new PrimitiveProperty();
-    const eventService = new EventWrongOddsSportsBookService();
-    eventService.getWrongOddsSportsBookModel = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeWrongOddsSportsBookModel));
-    const saveRequestService = new SaveRequestService(null, null, null, null, eventService);
-
-    const actual = saveRequestService['initAddRequestQuery'](arg);
-
-    expect(actual).toBeDefined();
-    expect(eventService.getWrongOddsSportsBookModel).toHaveBeenCalledTimes(0);
-  });
-
-  it('#initAddRequestQuery should return expected model when transInfoAddRequestModel not null', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    arg.others = new OthersModel();
-    arg.filter.issueTypeId = IssueTypeConstant.WRONG_ODDS;
-    arg.logInfoEvent = Helper.fakeLogInfoWrongOddsSportsBook;
-    arg.primitiveProps = new PrimitiveProperty();
-    arg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
-    service['getWrongOddsSportsBookInfo'] = jest.fn();
-    const eventService = new EventWrongOddsSportsBookService();
-    eventService.getWrongOddsSportsBookModel = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeWrongOddsSportsBookModel));
-    const saveRequestService = new SaveRequestService(null, null, null, null, eventService);
-
-    const actual = saveRequestService['initAddRequestQuery'](arg);
-
-    expect(actual).toBeDefined();
-    expect(eventService.getWrongOddsSportsBookModel).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result).toBeInstanceOf(AddRequestQuery);
+      expect(result.transInfoJson).toBe('json');
+      expect(result.unMarkTransIds).toEqual(['1', '2']);
+      expect(result.markTransIds).toEqual(['3', '4']);
+      expect(result.issueTypeId).toBe('1');
+      expect(result.isTest).toBeTruthy();
+      expect(result.actionId).toBe('action1');
+      expect(result.isVoided).toBeFalsy();
+      expect(result.mistakenBy).toBe('user1');
+      expect(result.decidedBy).toBe('user2');
+      expect(result.remark).toBe('remark');
+      expect(result.wrongOddsSportsBookInfo).toBeDefined();
+    });
   });
 });

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { GetLogInfoQuery } from '../../../add-request/app/add-request/models/add-request.query';
 import { CommonService } from '../../../utility/services/common.service';
 import { MappingModelStaticService } from '../../../utility/services/mapping-model-static.service';
@@ -12,9 +12,7 @@ import { RequestDetailViewModel } from '../request.model';
 })
 
 export class LogInfoService {
-  constructor(
-    private readonly commonService: CommonService
-  ) { }
+  commonService = inject(CommonService);
 
   async getLogInfo(primitiveProperty: PrimitiveProperty, detailViewModel: RequestDetailViewModel): Promise<void> {
     const args = this.createLogInfoArg(primitiveProperty, detailViewModel);

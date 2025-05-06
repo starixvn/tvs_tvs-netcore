@@ -7,308 +7,319 @@
     (issueTypeChange)="onChangeIssueType($event)"
     (modelChange)="updateModel($event)">
   </filter>
-  <div *ngIf="model.filter.issueTypeId">
-    <div class="event">
-      <div class="list-group">
-        <div class="list-group-item list-group-item-primary flex-column align-items-start pointer"
-          [ngClass]="{'border-bottom-radius':isCollapse}" (click)="isCollapse=!isCollapse">
-          <em class="fa" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
-          <strong>&nbsp;{{getEventLabel()}}</strong>
+  @if (model.filter.issueTypeId) {
+    <div>
+      <div class="event">
+        <div class="list-group">
+          <div class="list-group-item list-group-item-primary flex-column align-items-start pointer"
+            [ngClass]="{'border-bottom-radius':isCollapse}" (click)="isCollapse=!isCollapse">
+            <em class="fa" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
+            <strong>&nbsp;{{getEventLabel()}}</strong>
+          </div>
+          <div class="list-group-item flex-column align-items-start wrapper-tooltip" [hidden]="isCollapse">
+            @if (checkAllIssueTypes().isEarlyKickOff || checkAllIssueTypes().isWrongKickOff) {
+              <event-early-kick-off #eventEarlyKickOff
+                [filter]="model.filter"
+                [isEdit]="isEdit"
+                [issueTypes]="issueTypes"
+                [requestId]="requestId"
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [earlyKickOffModels]="model.earlyKickOffModels"
+                [others]="model.others"
+                [issueTypeId]="model.filter.issueTypeId"
+                (updateMatchId)="updateMatchId($event)">
+              </event-early-kick-off>
+            }
+            @if (checkAllIssueTypes().isAbnormalBet) {
+              <event-abnormal-bet #eventAbnormalBet
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [isEdit]="isEdit"
+                [issueTypes]="issueTypes"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [abnormalBetModel]="model.abnormalBetModel"
+                [others]="model.others">
+              </event-abnormal-bet>
+            }
+            @if (checkAllIssueTypes().isDangerAccepted) {
+              <event-danger-accepted #eventDangerAccepted
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [isEdit]="isEdit"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [issueTypes]="issueTypes"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [(dangerAcceptedModels)]="model.dangerAcceptedModels"
+                [others]="model.others"
+                (updateMatchId)="updateMatchInfo($event)">
+              </event-danger-accepted>
+            }
+            @if (checkAllIssueTypes().isRedCard) {
+              <event-red-card #eventRedCard
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [filter]="model.filter"
+                [issueTypes]="issueTypes"
+                [others]="model.others"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [isEdit]="isEdit"
+                [requestId]="requestId"
+                [(redCardModels)]="model.redCardModel"
+                (updateMatchId)="updateMatchInfo($event)">
+              </event-red-card>
+            }
+            @if (checkAllIssueTypes().isWrongHDP || checkAllIssueTypes().isWrong1stHDP) {
+              <event-wrong-hdp #eventWrongHDP
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [isEdit]="isEdit"
+                [others]="model.others"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [issueTypeId]="model.filter.issueTypeId"
+                [wrongHdpModels]="model.wrongHdpModels"
+                (updateMatchId)="updateMatchId($event)">
+              </event-wrong-hdp>
+            }
+            @if (checkAllIssueTypes().isWrongOU || checkAllIssueTypes().isWrong1stOU) {
+              <event-wrong-ou #eventWrongOU
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [isEdit]="isEdit"
+                [others]="model.others"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [issueTypeId]="model.filter.issueTypeId"
+                [wrongOuModels]="model.wrongOuModels"
+                (updateMatchId)="updateMatchId($event)">
+              </event-wrong-ou>
+            }
+            @if (checkAllIssueTypes().isAbnormalAccount) {
+              <abnormal-accounts #abnormalAccount
+                [issueTypes]="issueTypes"
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [filter]="model.filter"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [others]="model.others"
+                [abnormalAccountModel]="model.abnormalAccountModel"
+                [isVoided]="model.filter.isVoided"
+                [isEdit]="isEdit"
+                [requestId]="requestId">
+              </abnormal-accounts>
+            }
+            @if (checkAllIssueTypes().isWrongScore) {
+              <event-wrong-score #wrongScore
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [filter]="model.filter"
+                [isVoided]="model.filter.isVoided"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [wrongScoreModels]="model.wrongScoreModels"
+                [isEdit]="isEdit"
+                [issueTypes]="issueTypes"
+                [requestId]="requestId"
+                [others]="model.others"
+                [matchId]="matchId"
+                (updateMatchId)="updateMatchInfo($event)">
+              </event-wrong-score>
+            }
+            @if (checkAllIssueTypes().isArchivedTicket) {
+              <event-ticket14 #eventTicket14
+                [isEdit]="isEdit"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [eventTicket14Model]="model.eventTicket14Model"
+                [others]="model.others">
+              </event-ticket14>
+            }
+            @if (checkAllIssueTypes().isWrongOdds) {
+              <event-wrong-odds #eventWrongOdds
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [isEdit]="isEdit"
+                [others]="model.others"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [wrongOddsModels]="model.wrongOddsModels"
+                (updateMatchId)="updateMatchId($event)">
+              </event-wrong-odds>
+            }
+            @if (checkAllIssueTypes().isReducedOver || checkAllIssueTypes().isAbandoned) {
+              <event-reduced-over #eventReducedOver
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [isEdit]="isEdit"
+                [others]="model.others"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [reducedOverModels]="model.reducedOverModels"
+                (updateMatchId)="updateMatchId($event)">
+              </event-reduced-over>
+            }
+            @if (checkAllIssueTypes().isDuplicateTickets) {
+              <event-duplicate-tickets #eventDuplicateTickets
+                [isEdit]="isEdit"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [duplicateTicketsModel]="model.duplicateTicketsModel"
+                [others]="model.others"
+                (updateMatchId)="updateMatchId($event)">
+              </event-duplicate-tickets>
+            }
+            @if (checkAllIssueTypes().isNotParticipate) {
+              <event-not-participate #eventNotParticipate
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [isEdit]="isEdit"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [notParticipateModels]="model.notParticipateModels"
+                [others]="model.others"
+                (updateMatchId)="updateMatchId($event)">
+              </event-not-participate>
+            }
+            @if (checkAllIssueTypes().isRecoverTicket) {
+              <event-recover-ticket #eventRecoverTicket
+                [isEdit]="isEdit"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [recoverTicketModel]="model.recoverTicketModel"
+                [others]="model.others">
+              </event-recover-ticket>
+            }
+            @if (checkAllIssueTypes().isWrongMarketOffered) {
+              <event-wrong-market-offered #eventWrongMarketOffered
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [isEdit]="isEdit"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [issueTypes]="issueTypes"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [wrongMarketOfferedModels]="model.wrongMarketOfferedModels"
+                [others]="model.others"
+                (updateMatchId)="updateMatchId($event)">
+              </event-wrong-market-offered>
+            }
+            @if (checkAllIssueTypes().isWrongOddsSportsBook) {
+              <event-wrong-odds-sports-book #eventWrongOddsSportsBook
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [isEdit]="isEdit"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [issueTypes]="issueTypes"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [wrongOddsSportsBookModel]="model.wrongOddsSportsBookModel"
+                [others]="model.others"
+                (updateMatchId)="updateMatchId($event)">
+              </event-wrong-odds-sports-book>
+            }
+            @if (checkAllIssueTypes().isWrongOfferedName) {
+              <event-wrong-offered-name #eventWrongOfferedName
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [isEdit]="isEdit"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [issueTypes]="issueTypes"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [wrongOfferedNameModel]="model.wrongOfferedNameModel"
+                [others]="model.others"
+                (updateMatchId)="updateMatchId($event)">
+              </event-wrong-offered-name>
+            }
+            @if (checkAllIssueTypes().isOtherIssues) {
+              <event-other-issues #eventOtherIssues
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [isEdit]="isEdit"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [issueTypes]="issueTypes"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [otherIssuesModel]="model.otherIssuesModel"
+                [others]="model.others"
+                (updateMatchId)="updateMatchId($event)">
+              </event-other-issues>
+            }
+            @if (checkAllIssueTypes().isTechnicalError) {
+              <event-technical-error #technicalError
+                [userId]="userId"
+                [requestedBy]="requestedBy"
+                [isEdit]="isEdit"
+                [requestId]="requestId"
+                [filter]="model.filter"
+                [issueTypes]="issueTypes"
+                [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+                [technicalErrorModel]="model.technicalErrorModel"
+                [others]="model.others"
+                (updateMatchId)="updateMatchId($event)">
+              </event-technical-error>
+            }
+          </div>
         </div>
-        <div class="list-group-item flex-column align-items-start wrapper-tooltip" [hidden]="isCollapse">
-          <event-early-kick-off #eventEarlyKickOff
-            *ngIf="checkAllIssueTypes().isEarlyKickOff || checkAllIssueTypes().isWrongKickOff"
-            [filter]="model.filter"
-            [isEdit]="isEdit"
-            [issueTypes]="issueTypes"
-            [requestId]="requestId"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [earlyKickOffModels]="model.earlyKickOffModels"
-            [others]="model.others"
-            [issueTypeId]="model.filter.issueTypeId"
-            (updateMatchId)="updateMatchId($event)">
-          </event-early-kick-off>
-
-          <event-abnormal-bet #eventAbnormalBet
-            *ngIf="checkAllIssueTypes().isAbnormalBet"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [isEdit]="isEdit"
-            [issueTypes]="issueTypes"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [abnormalBetModel]="model.abnormalBetModel"
-            [others]="model.others">
-          </event-abnormal-bet>
-
-          <event-danger-accepted #eventDangerAccepted
-            *ngIf="checkAllIssueTypes().isDangerAccepted"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [isEdit]="isEdit"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [issueTypes]="issueTypes"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [(dangerAcceptedModels)]="model.dangerAcceptedModels"
-            [others]="model.others"
-            (updateMatchId)="updateMatchInfo($event)">
-          </event-danger-accepted>
-
-          <event-red-card #eventRedCard
-            *ngIf="checkAllIssueTypes().isRedCard"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [filter]="model.filter"
-            [issueTypes]="issueTypes"
-            [others]="model.others"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [isEdit]="isEdit"
-            [requestId]="requestId"
-            [(redCardModels)]="model.redCardModel"
-            (updateMatchId)="updateMatchInfo($event)">
-          </event-red-card>
-
-          <event-wrong-hdp #eventWrongHDP
-            *ngIf="checkAllIssueTypes().isWrongHDP || checkAllIssueTypes().isWrong1stHDP"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [isEdit]="isEdit"
-            [others]="model.others"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [issueTypeId]="model.filter.issueTypeId"
-            [wrongHdpModels]="model.wrongHdpModels"
-            (updateMatchId)="updateMatchId($event)">
-          </event-wrong-hdp>
-
-          <event-wrong-ou #eventWrongOU
-            *ngIf="checkAllIssueTypes().isWrongOU || checkAllIssueTypes().isWrong1stOU"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [isEdit]="isEdit"
-            [others]="model.others"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [issueTypeId]="model.filter.issueTypeId"
-            [wrongOuModels]="model.wrongOuModels"
-            (updateMatchId)="updateMatchId($event)">
-          </event-wrong-ou>
-
-          <abnormal-accounts #abnormalAccount
-            *ngIf="checkAllIssueTypes().isAbnormalAccount"
-            [issueTypes]="issueTypes"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [filter]="model.filter"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [others]="model.others"
-            [abnormalAccountModel]="model.abnormalAccountModel"
-            [isVoided]="model.filter.isVoided"
-            [isEdit]="isEdit"
-            [requestId]="requestId">
-          </abnormal-accounts>
-
-          <event-wrong-score #wrongScore
-            *ngIf="checkAllIssueTypes().isWrongScore"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [filter]="model.filter"
-            [isVoided]="model.filter.isVoided"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [wrongScoreModels]="model.wrongScoreModels"
-            [isEdit]="isEdit"
-            [issueTypes]="issueTypes"
-            [requestId]="requestId"
-            [others]="model.others"
-            [matchId]="matchId"
-            (updateMatchId)="updateMatchInfo($event)">
-          </event-wrong-score>
-
-          <event-ticket14 #eventTicket14
-            *ngIf="checkAllIssueTypes().isArchivedTicket"
-            [isEdit]="isEdit"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [eventTicket14Model]="model.eventTicket14Model"
-            [others]="model.others">
-          </event-ticket14>
-
-          <event-wrong-odds #eventWrongOdds
-            *ngIf="checkAllIssueTypes().isWrongOdds"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [isEdit]="isEdit"
-            [others]="model.others"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [wrongOddsModels]="model.wrongOddsModels"
-            (updateMatchId)="updateMatchId($event)">
-          </event-wrong-odds>
-
-          <event-reduced-over #eventReducedOver
-            *ngIf="checkAllIssueTypes().isReducedOver || checkAllIssueTypes().isAbandoned"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [isEdit]="isEdit"
-            [others]="model.others"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [reducedOverModels]="model.reducedOverModels"
-            (updateMatchId)="updateMatchId($event)">
-          </event-reduced-over>
-
-          <event-duplicate-tickets #eventDuplicateTickets
-            *ngIf="checkAllIssueTypes().isDuplicateTickets"
-            [isEdit]="isEdit"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [duplicateTicketsModel]="model.duplicateTicketsModel"
-            [others]="model.others"
-            (updateMatchId)="updateMatchId($event)">
-          </event-duplicate-tickets>
-
-          <event-not-participate #eventNotParticipate
-            *ngIf="checkAllIssueTypes().isNotParticipate"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [isEdit]="isEdit"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [notParticipateModels]="model.notParticipateModels"
-            [others]="model.others"
-            (updateMatchId)="updateMatchId($event)">
-          </event-not-participate>
-
-          <event-recover-ticket #eventRecoverTicket
-            *ngIf="checkAllIssueTypes().isRecoverTicket"
-            [isEdit]="isEdit"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [recoverTicketModel]="model.recoverTicketModel"
-            [others]="model.others">
-          </event-recover-ticket>
-
-          <event-wrong-market-offered #eventWrongMarketOffered
-            *ngIf="checkAllIssueTypes().isWrongMarketOffered"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [isEdit]="isEdit"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [issueTypes]="issueTypes"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [wrongMarketOfferedModels]="model.wrongMarketOfferedModels"
-            [others]="model.others"
-            (updateMatchId)="updateMatchId($event)">
-          </event-wrong-market-offered>
-
-          <event-wrong-odds-sports-book #eventWrongOddsSportsBook
-            *ngIf="checkAllIssueTypes().isWrongOddsSportsBook"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [isEdit]="isEdit"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [issueTypes]="issueTypes"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [wrongOddsSportsBookModel]="model.wrongOddsSportsBookModel"
-            [others]="model.others"
-            (updateMatchId)="updateMatchId($event)">
-          </event-wrong-odds-sports-book>
-
-          <event-wrong-offered-name #eventWrongOfferedName
-            *ngIf="checkAllIssueTypes().isWrongOfferedName"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [isEdit]="isEdit"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [issueTypes]="issueTypes"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [wrongOfferedNameModel]="model.wrongOfferedNameModel"
-            [others]="model.others"
-            (updateMatchId)="updateMatchId($event)">
-          </event-wrong-offered-name>
-
-          <event-other-issues #eventOtherIssues
-            *ngIf="checkAllIssueTypes().isOtherIssues"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [isEdit]="isEdit"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [issueTypes]="issueTypes"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [otherIssuesModel]="model.otherIssuesModel"
-            [others]="model.others"
-            (updateMatchId)="updateMatchId($event)">
-          </event-other-issues>
-
-          <event-technical-error #technicalError
-            *ngIf="checkAllIssueTypes().isTechnicalError"
-            [userId]="userId"
-            [requestedBy]="requestedBy"
-            [isEdit]="isEdit"
-            [requestId]="requestId"
-            [filter]="model.filter"
-            [issueTypes]="issueTypes"
-            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [technicalErrorModel]="model.technicalErrorModel"
-            [others]="model.others"
-            (updateMatchId)="updateMatchId($event)">
-          </event-technical-error>
+      </div>
+      @if (isShowOthersFullFields()) {
+        <others
+          [isEdit]="isEdit"
+          [(model)]="model.others"
+          [matchId]="matchId"
+          [parentMatchId]="parentMatchId"
+          [issueTypeId]="model.filter.issueTypeId">
+        </others>
+      }
+      @if (isShowOthersLikeAbnormalAccount()) {
+        <abnormal-accounts-other
+          [isEdit]="isEdit"
+          [model]="model.others">
+        </abnormal-accounts-other>
+      }
+      @if (isShowOthersLikeAbnormalBet()) {
+        <others-abnormal-bet
+          [isEdit]="isEdit"
+          [model]="model.others">
+        </others-abnormal-bet>
+      }
+      @if (isShowOthersLikeWrongHDP()) {
+        <others-wrong-hdp
+          [isEdit]="isEdit"
+          [model]="model.others">
+        </others-wrong-hdp>
+      }
+      <div class="search mg-top-10 d-flex justify-content-between">
+        <div class="d-flex">
+          <button type="submit" class="btn btn-primary btn-sm mg-right-10"
+            (mousedown)="$event.preventDefault()"
+            [disabled]="isDisabledSaveButton"
+            (click)="!isDisabledSaveButton && saveRequest()">
+            Save
+          </button>
+          <button type="submit" class="btn btn-danger btn-sm"
+            [disabled]="isDisabledSaveButton"
+            (click)="backToManagePage()">Back
+          </button>
         </div>
+        @if (isShowCopyInfoButton()) {
+          <div class="d-flex align-content-end">
+            <div class="icon-letstalk icon-copy-info" (click)="copyLetsTalkRequestInfo()"></div>
+            <div class="icon-mail icon-copy-info" (click)="copyEmailRequestInfo()"></div>
+          </div>
+        }
       </div>
     </div>
-
-    <others *ngIf="isShowOthersFullFields()"
-      [isEdit]="isEdit"
-      [(model)]="model.others"
-      [matchId]="matchId"
-      [parentMatchId]="parentMatchId"
-      [issueTypeId]="model.filter.issueTypeId">
-    </others>
-    <abnormal-accounts-other *ngIf="isShowOthersLikeAbnormalAccount()"
-      [isEdit]="isEdit"
-      [model]="model.others">
-    </abnormal-accounts-other>
-    <others-abnormal-bet *ngIf="isShowOthersLikeAbnormalBet()"
-      [isEdit]="isEdit"
-      [model]="model.others">
-    </others-abnormal-bet>
-    <others-wrong-hdp *ngIf="isShowOthersLikeWrongHDP()"
-      [isEdit]="isEdit"
-      [model]="model.others">
-    </others-wrong-hdp>
-
-    <div class="search mg-top-10 d-flex justify-content-between">
-      <div class="d-flex">
-        <button type="submit" class="btn btn-primary btn-sm mg-right-10"
-          (mousedown)="$event.preventDefault()"
-          [disabled]="isDisabledSaveButton"
-          (click)="!isDisabledSaveButton && saveRequest()">
-          Save
-        </button>
-        <button type="submit" class="btn btn-danger btn-sm"
-          [disabled]="isDisabledSaveButton"
-          (click)="backToManagePage()">Back
-        </button>
-      </div>
-      <div class="d-flex align-content-end" *ngIf="isShowCopyInfoButton()">
-        <div class="icon-letstalk icon-copy-info" (click)="copyLetsTalkRequestInfo()"></div>
-        <div class="icon-mail icon-copy-info" (click)="copyEmailRequestInfo()"></div>
-      </div>
-    </div>
-  </div>
+  }
 </div>
 <block-full-ui [isBlock]="isBlock"></block-full-ui>

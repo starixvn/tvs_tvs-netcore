@@ -1,15 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CommonService } from '../../../../../utility/services/common.service';
-import { HdpFilterBetType } from '../../models/hdp-filter-betType.model';
 import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
+import { HdpFilterBetType } from '../../models/hdp-filter-betType.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class HdpFilterBetTypeService {
-  constructor(
-    private readonly commonService: CommonService
-  ) { }
+  private readonly commonService = inject(CommonService);
 
   async GetHdpFilterBetTypes(sportId: number, issueTypeId: string) {
     const allFilterBetTypes = await this.commonService.getHdpFilterBetTypes(sportId.toString(), Number(issueTypeId));
@@ -87,10 +83,10 @@ export class HdpFilterBetTypeService {
       case 'betidx':
         return filterBetType.filterBetIdX;
       case 'betidy':
-        return filterBetType.filterBetIdY;      
+        return filterBetType.filterBetIdY;
       case '_xxx':
         let valueInputX = filterBetType.filterBetIdX;
-        valueInputX.replaceAll('_', '');
+        valueInputX = valueInputX.replaceAll('_', '');
         return isNaN(parseInt(valueInputX, 10)) ? "" : parseInt(valueInputX, 10).toString();
       case 'yy':
         let valueInputY = filterBetType.filterBetIdY;

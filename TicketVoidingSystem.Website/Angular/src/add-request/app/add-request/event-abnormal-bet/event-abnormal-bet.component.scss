@@ -53,6 +53,7 @@
 .match {
   display: flex;
   flex-wrap: wrap;
+  gap: 15px;
 
   input {
     text-overflow: ellipsis;
@@ -60,34 +61,20 @@
 }
 
 @media only screen and (max-width: 1134px) {
-  .match {
-    margin-left: -15px;
-    margin-right: -15px;
-
-    .event {
-      width: 50%;
-    }
-
-    .league {
-      width: 50%;
-    }
+  .main-container {
+    width: 100%;
   }
 }
 
 @media only screen and (min-width: 1134px) {
-  .match {
-    width: 1095px;
-    margin-left: -15px;
-
-    .event {
-      width: 520px;
-      padding: 0 15px;
-    }
-
-    .league {
-      width: 520px;
-      padding: 0 15px;
-    }
+  .main-container {
+    width: 1065px;
   }
 }
 
+@media only screen and (min-width: 540px) {
+  .event,
+  .league {
+    flex: 1;
+  }
+}

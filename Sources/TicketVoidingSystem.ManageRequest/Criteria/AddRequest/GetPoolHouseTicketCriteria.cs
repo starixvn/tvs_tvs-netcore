@@ -1,4 +1,6 @@
-﻿using Fanex.Data.Repository;
+﻿using Fanex.Data;
+using Fanex.Data.Repository;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
@@ -32,11 +34,12 @@ public class GetPoolHouseTicketCriteria : CriteriaBase
 
     public int LiveIndicator { get; set; }
 
-    public string? TransInfoJson { get; set; }
-
     public string? WrongOddsInfo { get; set; }
 
-    public override string GetSettingKey() => "TicketVoiding_PoolHouseTicket_Select";
+    [SpParam(Ignored = true)]
+    public int SiteDbGroupId { get; set; }
+
+    public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_PoolHouseTicket_Select");
 
     public override bool IsValid() => true;
 }

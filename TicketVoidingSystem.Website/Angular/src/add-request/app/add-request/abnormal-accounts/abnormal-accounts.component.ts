@@ -1,15 +1,19 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
 import { OthersModel } from '../others/others.model';
+import { AccountAffectedTicketComponent } from './account-affected-ticket/account-affected-ticket.component';
 import { AccountAffectedTicketModel } from './account-affected-ticket/account-affected-ticket.model';
 import { AccountTableComponent } from './account-table/account-table.component';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
@@ -17,13 +21,22 @@ import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request.model';
 import { ValidationBusinessRuleArgs } from './models/validation.model';
 import { ProductFilterComponent } from './product-filter/product-filter.component';
+import { AbnormalAccountService } from './services/abnormal-account.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
   selector: 'abnormal-accounts',
   templateUrl: './abnormal-accounts.component.html',
-  styleUrls: ['./abnormal-accounts.component.scss']
+  styleUrls: ['./abnormal-accounts.component.scss'],
+  standalone: true,
+  imports: [NgbModule, FormsModule, ConfirmAddRequestComponent, UsernamesComponent, ProductFilterComponent,
+    EventDateFilterComponent, AccountTableComponent, AccountAffectedTicketComponent, BlockUiModule],
+  providers: [
+    SaveRequestService,
+    ValidationService,
+    AbnormalAccountService
+  ]
 })
 export class AbnormalAccountsComponent implements OnInit {
   @Input() isVoided: boolean;
@@ -44,13 +57,10 @@ export class AbnormalAccountsComponent implements OnInit {
   primitiveProps = new PrimitiveProperty();
   confirmAddRequest = new ConfirmAddRequestModel();
   accountAffectedTicketModel = new AccountAffectedTicketModel();
-
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestApiService: AddRequestApiService
-  ) { }
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly validationService = inject(ValidationService);
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   async ngOnInit() {
     if (this.isEdit && this.validationService.isAutoVoidWithPolicy(this.filter.action)) {
@@ -139,7 +149,7 @@ export class AbnormalAccountsComponent implements OnInit {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
   }
 
-  private getMinDateByPermission(isVoidAllArchivedTickets: boolean): NgbDateStruct {
+  private getMinDateByPermission(isVoidAllArchivedTickets: boolean): NgbDate {
     if (isVoidAllArchivedTickets) {
       return null;
     }
@@ -147,7 +157,7 @@ export class AbnormalAccountsComponent implements OnInit {
     const currentMoment = moment.utc().tz('America/Caracas');
     const momentMinDate = currentMoment.subtract(7, "days");
 
-    return { year: momentMinDate.year(), month: momentMinDate.month() + 1, day: momentMinDate.date() };
+    return new NgbDate(momentMinDate.year(), momentMinDate.month() + 1, momentMinDate.date());
   }
 
   private initSaveRequestInput() {

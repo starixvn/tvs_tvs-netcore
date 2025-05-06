@@ -4,7 +4,8 @@
     <div class="user-info">
       <div class="dropdown">
         <div class="dropdown-user-info">
-          <i class="fa-solid fa-user"></i>&nbsp; Welcome,&nbsp; <span class="user-name">{{username}}</span> &nbsp;<i class="fa-solid fa-sort-down"></i>
+          <i class="fa-solid fa-user"></i>&nbsp; Welcome,&nbsp; <span class="user-name">{{username}}</span> &nbsp;<i
+            class="fa-solid fa-sort-down"></i>
         </div>
         <div class="dropdown-content">
           <li>
@@ -22,29 +23,29 @@
       <div class="collapse navbar-collapse" id="main_nav">
         <ul class="navbar-nav">
           @for (menuItem of menuItems; track menuItem) {
+          <div>
+            @if (menuItem.items.length === 0) {
             <div>
-              @if (menuItem.items.length === 0) {
-                <div>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{menuItem.url}}">{{menuItem.name}}</a>
-                  </li>
-                </div>
-              }
-              @if (menuItem.items.length > 0) {
-                <div>
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{menuItem.name}}</a>
-                    <ul class="dropdown-menu">
-                      @for (item of menuItem.items; track item; let i = $index) {
-                        <li>
-                          <a class="dropdown-item" href="{{item.url}}">{{item.name}}</a>
-                        </li>
-                      }
-                    </ul>
-                  </li>
-                </div>
-              }
+              <li class="nav-item">
+                <a class="nav-link" href="{{menuItem.url}}">{{menuItem.name}}</a>
+              </li>
             </div>
+            }
+            @if (menuItem.items.length > 0) {
+            <div>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{menuItem.name}}</a>
+                <ul class="dropdown-menu">
+                  @for (item of menuItem.items; track item; let i = $index) {
+                  <li>
+                    <a class="dropdown-item" href="{{item.url}}">{{item.name}}</a>
+                  </li>
+                  }
+                </ul>
+              </li>
+            </div>
+            }
+          </div>
           }
         </ul>
       </div>

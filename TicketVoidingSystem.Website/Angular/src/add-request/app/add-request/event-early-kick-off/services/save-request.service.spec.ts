@@ -1,326 +1,969 @@
-import * as _ from 'lodash';
-import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
-import { LABELS } from '../../../../../utility/constants/labels';
-import { MatchModel } from '../../../../../utility/models/match.model';
-import { AddRequestService } from '../../add-request.service';
-import { AddRequestStore } from '../../add-request.store';
-import { FilterModel } from '../../filter/filter.model';
-import { IssueTypes } from '../../filter/issue-types.model';
-import { EarlyKickOffModel } from '../../models/event-eko.model';
-import { GetLogInfoViewModel, ValidationMessage } from '../../models/get-log-info.model';
-import { PermissionAddRequest } from '../../models/permission-add-request.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { OthersModel } from '../../others/others.model';
-import { CheckAddPermissionService } from '../../services/check-permission.service';
-import { PopupService } from '../../services/popup.service';
-import { ConfirmEarlyKickOffModel } from '../confirm-eko/confirm-eko.model';
-import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
-import { TableTicketsModel } from '../tickets-list/table-tickets.model';
-import { LogInfoService } from './log-info.service';
-import { SaveRequestService } from './save-request.service';
+import { TestBed } from '@angular/core/testing';
 import { ValidationService } from './validation.service';
-
-class Helper {
-  static readonly fakeMatchId = 12345;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeValidationMessageError: ValidationMessage = {
-    isError: true,
-    reason: '',
-    isShowPopup: true,
-    transIds: '',
-    requestId: 1,
-  };
-  static readonly fakeValidationMessageNotError: ValidationMessage = {
-    isError: false,
-    reason: '',
-    isShowPopup: true,
-    transIds: '',
-    requestId: 1,
-  };
-  static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
-    matchId: 1,
-    eventName: '',
-    isCollapse: false,
-    isMainMatch: true,
-    isShowValidation: false,
-    kickOffTime: '',
-    leagueName: '',
-    matchModel: new MatchModel(),
-    pagingModel: new PagingModel(),
-    isInvalidTotalTickets: false,
-    tableTicketsModel: new TableTicketsModel(),
-    isHasSettledTicket: false,
-    isHasInstantlySettledTicket: false,
-    sportType: 0
-  };
-  static readonly fakeEarlyKickOffModel: EarlyKickOffModel = {
-    eventDate: new Date(),
-    isMainMatch: true,
-    kickOffTime: '',
-    matchId: 1,
-    subIssueTypeId: 1,
-    sportType: 0
-  }
-
-  static readonly fakeSaveRequestArg: SaveRequestArg = {
-    requestId: 1,
-    requestedBy: '',
-    userId: 0,
-    isEdit: false,
-    actionIdOfFirstTimeAccess: '',
-    filter: new FilterModel,
-    others: new OthersModel,
-    primitiveProps: new PrimitiveProperty,
-    allEvents: [],
-    eventLeagueComponent: undefined,
-    addRequestStore: new AddRequestStore,
-    confirmEarlyKickOff: new ConfirmEarlyKickOffModel(),
-    kickOffTimeComponent: new DateFullTimeNewComponent(null),
-    mainEvent: Helper.fakeLogInfoEarlyKickOff,
-    tooltip: new Tooltip(),
-    permission: new PermissionAddRequest,
-    issueTypes: undefined
-  }
-}
+import { LogInfoService } from './log-info.service';
+import { PopupService } from '../../services/popup.service';
+import { SaveRequestService } from './save-request.service';
+import { AddRequestStore } from '../../add-request.store';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
+import { FilterModel } from '../../filter/filter.model';
+import { OthersModel } from '../../others/others.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { jest } from '@jest/globals';
+import { CommonService } from '../../../../../utility/services/common.service';
+import { HttpService } from '../../../../../utility/services/http.service';
+import { EventEarlyKickOffService } from './event-eko.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { AddRequestService } from '../../add-request.service';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
+import { GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { GetLogInfoModel } from '../../models/get-log-info.model';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { Validation } from '../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { TEXT } from '../../../../../utility/constants/text';
+import { OperatorType } from '../../others/others.model';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
   let validationService: ValidationService;
   let logInfoService: LogInfoService;
   let popupService: PopupService;
+  let addRequestStore: AddRequestStore;
   let addRequestService: AddRequestService;
-  let checkAddPermissionService: CheckAddPermissionService;
+  let checkPermissionService: CheckAddPermissionService;
+
+  const mockEventLeagueComponent = {
+    isMatchIdValid: () => true
+  };
+
+  const mockConfirmEarlyKickOff = {
+    isOpenDialog: false,
+    issueTypeName: 'Test Issue',
+    actionName: 'Test Action',
+    requestId: 0,
+    requestedBy: '',
+    isHasWarningEvent: false,
+    isHasWarningEditTakeNoteRequest: false,
+    isEditingByAnotherUser: false,
+    isHasSettledTicket: false,
+    warningRelatedEvents: []
+  };
+
+  const mockIssueTypes = {
+    issueTypes: [
+      { issueTypeId: 1, issueTypeName: 'Test Issue' }
+    ],
+    subIssueTypes: [],
+    issueId: 1,
+    selectedSubIssueTypes: [],
+    subIssueId: 1
+  };
+
+  const mockDateFullTimeNewComponent = {
+    date: new Date(),
+    dateFormat: 'yyyy-MM-dd',
+    timeFormat: 'HH:mm:ss'
+  } as any;
 
   beforeEach(() => {
-    validationService = new ValidationService();
-    logInfoService = new LogInfoService(null, null, null, null);
-    popupService = new PopupService(null);
-    addRequestService = new AddRequestService(null, null, null);
-    checkAddPermissionService = new CheckAddPermissionService(null);
-    service = new SaveRequestService(popupService, logInfoService, validationService, addRequestService, checkAddPermissionService);
+    TestBed.configureTestingModule({
+      imports: [
+        TestingModule
+      ],
+      providers: [
+        SaveRequestService,
+        ValidationService,
+        LogInfoService,
+        PopupService,
+        AddRequestStore,
+        CommonService,
+        HttpService,
+        EventEarlyKickOffService,
+        AddRequestService,
+        CheckAddPermissionService
+      ]
+    });
+
+    service = TestBed.inject(SaveRequestService);
+    validationService = TestBed.inject(ValidationService);
+    logInfoService = TestBed.inject(LogInfoService);
+    popupService = TestBed.inject(PopupService);
+    addRequestStore = TestBed.inject(AddRequestStore);
+    addRequestService = TestBed.inject(AddRequestService);
+    checkPermissionService = TestBed.inject(CheckAddPermissionService);
+
+    jest.spyOn(addRequestStore, 'changeSavingRequestStatus');
+    jest.spyOn(addRequestStore, 'changeBlockingUiStatus');
+    jest.spyOn(validationService, 'validateCommonData').mockReturnValue(true);
+    jest.spyOn(validationService, 'isAllEventsValid').mockReturnValue(true);
+    validationService['checkCanShowConfirmation'] = jest.fn().mockReturnValue(true);
+    jest.spyOn(validationService, 'isEditingByAnotherUser').mockReturnValue(false);
+    jest.spyOn(checkPermissionService, 'isAccountHasAddRequestPermission').mockReturnValue(true);
+    jest.spyOn(popupService, 'showConfirm');
+    jest.spyOn(popupService, 'showError');
+    jest.spyOn(addRequestService, 'executeSaveRequest').mockResolvedValue();
+
+    // Mock document.getElementById
+    const mockElement = document.createElement('div');
+    mockElement.setAttribute('user-id', '100');
+    jest.spyOn(document, 'getElementById').mockImplementation((id) => {
+      if (id === 'body') {
+        return mockElement;
+      }
+      return null;
+    });
   });
 
-  it('#recheckLogInfoBeforeSaveRequest should return false when does not pass validation', async () => {
-    logInfoService.resetLogInfoOfEvent = jest.fn();
-    const arg = Helper.fakeSaveRequestArg;
-    validationService.validateCommonData = jest.fn().mockReturnValue(false);
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    const actual = await service.recheckLogInfoBeforeSaveRequest(arg);
+  it('should be created', () => {
+    // Arrange & Act
+    const service = TestBed.inject(SaveRequestService);
 
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(actual).toBeFalsy();
+    // Assert
+    expect(service).toBeTruthy();
   });
 
-  it('#recheckLogInfoBeforeSaveRequest should return false when have event invalid', async () => {
-    const arg = new SaveRequestArg();
-    arg.allEvents = [Helper.fakeLogInfoEarlyKickOff];
-    arg.primitiveProps = new PrimitiveProperty();
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    arg.mainEvent = Helper.fakeLogInfoEarlyKickOff;
-    arg.filter = new FilterModel();
-    arg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
-    logInfoService.resetLogInfoOfEvent = jest.fn();
-    logInfoService.getLogInfo = jest.fn().mockReturnValue({getLogInfoModels: null} as GetLogInfoViewModel);
-    logInfoService.getTickets = jest.fn();
-    logInfoService.assignResultLogInfoToEvents = jest.fn();
-    validationService.validateCommonData = jest.fn().mockImplementation(() => true);
-    validationService.isAllEventsValid = jest.fn().mockImplementation(() => false);
-    checkAddPermissionService.isAccountHasAddRequestPermission = jest.fn().mockImplementation(() => true);
+  describe('saveRequest', () => {
+    it('should call recheckLogInfoBeforeSaveRequest and show popup when data is valid', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.issueTypeId = '1';
+      saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
+      saveRequestArg.filter.isVoided = false;
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      saveRequestArg.confirmEarlyKickOff = mockConfirmEarlyKickOff;
+      saveRequestArg.issueTypes = mockIssueTypes;
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
 
-    const saveRequestService = new SaveRequestService(null, logInfoService, validationService, null, checkAddPermissionService);
+      jest.spyOn(service, 'recheckLogInfoBeforeSaveRequest').mockResolvedValue(true);
+      jest.spyOn(service as any, 'showPopupConfirmSave');
 
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(arg);
+      // Act
+      await service.saveRequest(saveRequestArg);
 
-    expect(arg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(validationService.isAllEventsValid).toHaveBeenCalledTimes(1);
-    expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(actual).toBeFalsy();
+      // Assert
+      expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+      expect(service.recheckLogInfoBeforeSaveRequest).toHaveBeenCalledWith(saveRequestArg);
+      expect(service['showPopupConfirmSave']).toHaveBeenCalledWith(saveRequestArg);
+    });
+
+    it('should not show popup when data is invalid', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.issueTypeId = '1';
+      saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
+      saveRequestArg.filter.isVoided = false;
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      saveRequestArg.confirmEarlyKickOff = mockConfirmEarlyKickOff;
+      saveRequestArg.issueTypes = mockIssueTypes;
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: true, reason: 'test reason' }];
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: true, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
+
+      jest.spyOn(service, 'recheckLogInfoBeforeSaveRequest').mockResolvedValue(false);
+      jest.spyOn(service as any, 'showPopupConfirmSave');
+
+      // Act
+      await service.saveRequest(saveRequestArg);
+
+      // Assert
+      expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+      expect(service.recheckLogInfoBeforeSaveRequest).toHaveBeenCalledWith(saveRequestArg);
+      expect(service['showPopupConfirmSave']).not.toHaveBeenCalled();
+      expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
+    });
+
+    it('should skip validation when filter.isVoided is true', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.issueTypeId = '1';
+      saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
+      saveRequestArg.filter.isVoided = true;
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      saveRequestArg.confirmEarlyKickOff = mockConfirmEarlyKickOff;
+      saveRequestArg.issueTypes = mockIssueTypes;
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
+
+      jest.spyOn(service, 'recheckLogInfoBeforeSaveRequest').mockResolvedValue(false);
+      jest.spyOn(service as any, 'showPopupConfirmSave');
+
+      // Act
+      await service.saveRequest(saveRequestArg);
+
+      // Assert
+      expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+      expect(service['showPopupConfirmSave']).toHaveBeenCalledWith(saveRequestArg);
+    });
   });
 
-  it('#recheckLogInfoBeforeSaveRequest should return true', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.primitiveProps = new PrimitiveProperty();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestArg.mainEvent = Helper.fakeLogInfoEarlyKickOff;
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.allEvents = [];
-    saveRequestArg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
-    logInfoService.resetLogInfoOfEvent = jest.fn();
-    logInfoService.getLogInfo = jest.fn().mockReturnValue({getLogInfoModels: null} as GetLogInfoViewModel);
-    logInfoService.assignResultLogInfoToEvents = jest.fn();
-    validationService.validateCommonData = jest.fn().mockImplementation(() => true);
-    validationService.isAllEventsValid = jest.fn().mockImplementation(() => true);
-    checkAddPermissionService.isAccountHasAddRequestPermission = jest.fn().mockImplementation(() => true);
-    const saveRequestService = new SaveRequestService(null, logInfoService, validationService, null, checkAddPermissionService);
+  describe('recheckLogInfoBeforeSaveRequest', () => {
+    it('should recheck log info before save request', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
+      saveRequestArg.kickOffTimeComponent = mockDateFullTimeNewComponent;
 
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+      const mockLogInfoResponse = {
+        getLogInfoModels: [{
+          matchId: 123,
+          logInfoDetail: {} as LogInfoDetail,
+          validation: {} as Validation
+        } as GetLogInfoModel],
+        transInfoAddRequestModel: {} as TransInfoAddRequestModel
+      } as GetLogInfoViewModel;
 
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
-    expect(validationService.isAllEventsValid).toHaveBeenCalledTimes(1);
-    expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(actual).toBeTruthy();
+      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue(mockLogInfoResponse);
+      jest.spyOn(logInfoService, 'assignResultLogInfoToEvents');
+      jest.spyOn(logInfoService, 'resetLogInfoOfEvent');
+
+      // Act
+      const result = await service.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+
+      // Assert
+      expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+      expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledWith(saveRequestArg.allEvents);
+      expect(validationService.validateCommonData).toHaveBeenCalledWith(
+        saveRequestArg.eventLeagueComponent,
+        saveRequestArg.kickOffTimeComponent
+      );
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(logInfoService.getLogInfo).toHaveBeenCalled();
+      expect(logInfoService.assignResultLogInfoToEvents).toHaveBeenCalled();
+      expect(checkPermissionService.isAccountHasAddRequestPermission).toHaveBeenCalled();
+      expect(saveRequestArg.primitiveProps.isShowLogInfoEvents).toBe(true);
+      expect(validationService.isAllEventsValid).toHaveBeenCalledWith(saveRequestArg.allEvents);
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+      expect(result).toBe(true);
+    });
+
+    it('should return false when common data validation fails', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: true, reason: 'test reason' }];
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: true, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
+      saveRequestArg.kickOffTimeComponent = mockDateFullTimeNewComponent;
+
+      jest.spyOn(validationService, 'validateCommonData').mockReturnValue(false);
+
+      // Act
+      const result = await service.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+
+      // Assert
+      expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+      expect(validationService.validateCommonData).toHaveBeenCalledWith(
+        saveRequestArg.eventLeagueComponent,
+        saveRequestArg.kickOffTimeComponent
+      );
+      expect(result).toBe(false);
+    });
+
+    it('should return false when permission check fails', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
+      saveRequestArg.kickOffTimeComponent = mockDateFullTimeNewComponent;
+
+      const mockLogInfoResponse = {
+        getLogInfoModels: [{
+          matchId: 123,
+          logInfoDetail: {} as LogInfoDetail,
+          validation: {} as Validation
+        } as GetLogInfoModel],
+        transInfoAddRequestModel: {} as TransInfoAddRequestModel
+      } as GetLogInfoViewModel;
+
+      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue(mockLogInfoResponse);
+      jest.spyOn(logInfoService, 'assignResultLogInfoToEvents');
+      jest.spyOn(logInfoService, 'resetLogInfoOfEvent');
+      jest.spyOn(checkPermissionService, 'isAccountHasAddRequestPermission').mockReturnValue(false);
+
+      // Act
+      const result = await service.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+
+      // Assert
+      expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+      expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledWith(saveRequestArg.allEvents);
+      expect(validationService.validateCommonData).toHaveBeenCalledWith(
+        saveRequestArg.eventLeagueComponent,
+        saveRequestArg.kickOffTimeComponent
+      );
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(logInfoService.getLogInfo).toHaveBeenCalled();
+      expect(logInfoService.assignResultLogInfoToEvents).toHaveBeenCalled();
+      expect(checkPermissionService.isAccountHasAddRequestPermission).toHaveBeenCalled();
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+      expect(result).toBe(false);
+    });
+
+    it('should return false when events validation fails', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: true, reason: 'test reason' }];
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: true, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
+      saveRequestArg.kickOffTimeComponent = mockDateFullTimeNewComponent;
+
+      const mockLogInfoResponse = {
+        getLogInfoModels: [{
+          matchId: 123,
+          logInfoDetail: {} as LogInfoDetail,
+          validation: {} as Validation
+        } as GetLogInfoModel],
+        transInfoAddRequestModel: {} as TransInfoAddRequestModel
+      } as GetLogInfoViewModel;
+
+      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue(mockLogInfoResponse);
+      jest.spyOn(logInfoService, 'assignResultLogInfoToEvents');
+      jest.spyOn(logInfoService, 'resetLogInfoOfEvent');
+      jest.spyOn(validationService, 'isAllEventsValid').mockReturnValue(false);
+
+      // Act
+      const result = await service.recheckLogInfoBeforeSaveRequest(saveRequestArg);
+
+      // Assert
+      expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+      expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledWith(saveRequestArg.allEvents);
+      expect(validationService.validateCommonData).toHaveBeenCalledWith(
+        saveRequestArg.eventLeagueComponent,
+        saveRequestArg.kickOffTimeComponent
+      );
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(logInfoService.getLogInfo).toHaveBeenCalled();
+      expect(logInfoService.assignResultLogInfoToEvents).toHaveBeenCalled();
+      expect(checkPermissionService.isAccountHasAddRequestPermission).toHaveBeenCalled();
+      expect(saveRequestArg.primitiveProps.isShowLogInfoEvents).toBe(true);
+      expect(validationService.isAllEventsValid).toHaveBeenCalledWith(saveRequestArg.allEvents);
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+      expect(result).toBe(false);
+    });
   });
 
-  it('#saveRequest should not called #proceedSaveRequest', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestArg.filter = new FilterModel();
-    saveRequestArg.filter.isVoided = false;
-    service['proceedSaveRequest'] = jest.fn();
-    service['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
+  describe('onClickConfirmSave', () => {
+    it('should execute save request when data is valid', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
 
-    await service.saveRequest(saveRequestArg);
+      jest.spyOn(service, 'recheckLogInfoBeforeSaveRequest').mockResolvedValue(true);
+      jest.spyOn(service as any, 'executeSaveRequestApi');
 
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(2);
-    expect(service['proceedSaveRequest']).toHaveBeenCalledTimes(0);
+      // Act
+      await service.onClickConfirmSave(saveRequestArg);
 
+      // Assert
+      expect(service.recheckLogInfoBeforeSaveRequest).toHaveBeenCalledWith(saveRequestArg);
+      expect(service['executeSaveRequestApi']).toHaveBeenCalledWith(saveRequestArg);
+    });
+
+    it('should show error when data is invalid', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: true, reason: 'test reason' }];
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: true, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
+
+      jest.spyOn(service, 'recheckLogInfoBeforeSaveRequest').mockResolvedValue(false);
+      jest.spyOn(service as any, 'executeSaveRequestApi');
+
+      // Act
+      await service.onClickConfirmSave(saveRequestArg);
+
+      // Assert
+      expect(service.recheckLogInfoBeforeSaveRequest).toHaveBeenCalledWith(saveRequestArg);
+      expect(service['executeSaveRequestApi']).not.toHaveBeenCalled();
+      expect(popupService.showError).toHaveBeenCalledWith(TEXT.INVALID_DATA_IN_REQUEST);
+    });
+
+    it('should skip validation when filter.isVoided is true', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.isVoided = true;
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
+
+      jest.spyOn(service, 'recheckLogInfoBeforeSaveRequest').mockResolvedValue(false);
+      jest.spyOn(service as any, 'executeSaveRequestApi');
+
+      // Act
+      await service.onClickConfirmSave(saveRequestArg);
+
+      // Assert
+      expect(service['executeSaveRequestApi']).toHaveBeenCalledWith(saveRequestArg);
+    });
   });
 
-  it('#executeSaveRequestApi should called #executeSaveRequest', async () => {
-    const spyExecuteSaveRequest = jest.spyOn(addRequestService, 'executeSaveRequest').mockImplementation();
-    const saveRequestService = new SaveRequestService(null, null, null, addRequestService, checkAddPermissionService);
-    saveRequestService['initAddRequestQuery'] = jest.fn();
-    const arg = new SaveRequestArg();
-    arg.addRequestStore = new AddRequestStore();
+  describe('executeSaveRequestApi', () => {
+    it('should execute save request API', async () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
 
-    await saveRequestService['executeSaveRequestApi'](arg);
+      jest.spyOn(service as any, 'initAddRequestQuery').mockReturnValue({});
 
-    expect(spyExecuteSaveRequest).toHaveBeenCalledTimes(1);
+      // Act
+      await service['executeSaveRequestApi'](saveRequestArg);
+
+      // Assert
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(service['initAddRequestQuery']).toHaveBeenCalledWith(saveRequestArg);
+      expect(addRequestService.executeSaveRequest).toHaveBeenCalledWith(
+        saveRequestArg.isEdit,
+        saveRequestArg.requestId,
+        {},
+        saveRequestArg.addRequestStore
+      );
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    });
   });
 
-  it('#onClickConfirmSave should not called #executeSaveRequestApi', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = false;
-    arg.addRequestStore = new AddRequestStore();
-    const spyShowError = jest.spyOn(popupService, 'showError').mockImplementation(() => { });
-    const saveRequestService = new SaveRequestService(popupService, null, null, null, checkAddPermissionService);
-    saveRequestService['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
+  describe('initAddRequestQuery', () => {
+    it('should initialize add request query with correct values', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.issueTypeId = '1';
+      saveRequestArg.filter.action = '2';
+      saveRequestArg.filter.isTest = true;
+      saveRequestArg.filter.isVoided = false;
+      saveRequestArg.filter.subIssueTypeId = '11';
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.others.mistakenBy = 'user1';
+      saveRequestArg.others.operatorsList = [
+        { matchId: 1, operatorId: 1, operatorType: OperatorType.TRADER, userName: 'Operator 1', groupName: 'Trader' },
+        { matchId: 2, operatorId: 2, operatorType: OperatorType.SUSPENDER, userName: 'Operator 2', groupName: 'Suspender' }
+      ];
+      saveRequestArg.others.provider = 'provider1';
+      saveRequestArg.others.source = 'source1';
+      saveRequestArg.others.decidedBy = 'user2';
+      saveRequestArg.others.remark = 'test remark';
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      saveRequestArg.primitiveProps.transInfoAddRequestModel = {
+        unMarkTransIds: '1,2,3',
+        markTransIds: '4,5,6',
+        removeTransIds: '7,8,9',
+        transInfoJson: '{"key": "value"}'
+      } as TransInfoAddRequestModel;
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      event.isInvalidTotalTickets = false;
+      event.matchId = 123;
+      event.isMainMatch = true;
+      event.kickOffTime = '2024-03-20T10:00:00';
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
 
-    await saveRequestService['onClickConfirmSave'](arg);
+      // Act
+      const result = service['initAddRequestQuery'](saveRequestArg);
 
-    expect(spyShowError).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result.issueTypeId).toBe('1');
+      expect(result.unMarkTransIds).toBe('1,2,3');
+      expect(result.markTransIds).toBe('4,5,6');
+      expect(result.removeTransIds).toBe('7,8,9');
+      expect(result.actionId).toBe('2');
+      expect(result.isTest).toBe(true);
+      expect(result.isVoided).toBe(false);
+      expect(result.mistakenBy).toBe('user1');
+      expect(result.operatorsList).toEqual([
+        { matchId: 1, operatorId: 1, operatorType: OperatorType.TRADER, userName: 'Operator 1', groupName: 'Trader' },
+        { matchId: 2, operatorId: 2, operatorType: OperatorType.SUSPENDER, userName: 'Operator 2', groupName: 'Suspender' }
+      ]);
+      expect(result.provider).toBe('provider1');
+      expect(result.source).toBe('source1');
+      expect(result.decidedBy).toBe('user2');
+      expect(result.remark).toBe('test remark');
+      expect(result.transInfoJson).toBe('{"key": "value"}');
+      expect(result.earlyKickOffInfo).toHaveLength(1);
+      expect(result.earlyKickOffInfo[0].matchId).toBe(123);
+      expect(result.earlyKickOffInfo[0].isMainMatch).toBe(true);
+      expect(result.earlyKickOffInfo[0].subIssueTypeId).toBe(11);
+      expect(result.earlyKickOffInfo[0].kickOffTime).toBe('2024-03-20T10:00:00');
+    });
+
+    it('should not include earlyKickOffInfo when filter.isVoided is true', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.issueTypeId = '1';
+      saveRequestArg.filter.action = '2';
+      saveRequestArg.filter.isTest = true;
+      saveRequestArg.filter.isVoided = true;
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      saveRequestArg.primitiveProps.transInfoAddRequestModel = {
+        unMarkTransIds: '1,2,3',
+        markTransIds: '4,5,6',
+        removeTransIds: '7,8,9',
+        transInfoJson: '{"key": "value"}'
+      } as TransInfoAddRequestModel;
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      event.isInvalidTotalTickets = false;
+      event.matchId = 123;
+      event.isMainMatch = true;
+      event.kickOffTime = '2024-03-20T10:00:00';
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
+
+      // Act
+      const result = service['initAddRequestQuery'](saveRequestArg);
+
+      // Assert
+      expect(result.issueTypeId).toBe('1');
+      expect(result.unMarkTransIds).toBe('1,2,3');
+      expect(result.markTransIds).toBe('4,5,6');
+      expect(result.removeTransIds).toBe('7,8,9');
+      expect(result.actionId).toBe('2');
+      expect(result.isTest).toBe(true);
+      expect(result.isVoided).toBe(true);
+      expect(result.earlyKickOffInfo).toBeUndefined();
+    });
+
+    it('should filter out events with isInvalidTotalTickets', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.issueTypeId = '1';
+      saveRequestArg.filter.action = '2';
+      saveRequestArg.filter.isTest = true;
+      saveRequestArg.filter.isVoided = false;
+      saveRequestArg.filter.subIssueTypeId = '11';
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      saveRequestArg.primitiveProps.transInfoAddRequestModel = {
+        unMarkTransIds: '1,2,3',
+        markTransIds: '4,5,6',
+        removeTransIds: '7,8,9',
+        transInfoJson: '{"key": "value"}'
+      } as TransInfoAddRequestModel;
+      
+      const event1 = new LogInfoEarlyKickOff();
+      event1.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      event1.isInvalidTotalTickets = false;
+      event1.matchId = 123;
+      event1.isMainMatch = true;
+      event1.kickOffTime = '2024-03-20T10:00:00';
+      
+      const event2 = new LogInfoEarlyKickOff();
+      event2.messageValidationLogInfo = [{ isError: true, reason: 'test reason' }];
+      event2.isInvalidTotalTickets = true;
+      event2.matchId = 456;
+      event2.isMainMatch = false;
+      event2.kickOffTime = '2024-03-20T11:00:00';
+      
+      saveRequestArg.allEvents = [event1, event2];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
+
+      // Act
+      const result = service['initAddRequestQuery'](saveRequestArg);
+
+      // Assert
+      expect(result.earlyKickOffInfo).toHaveLength(1);
+      expect(result.earlyKickOffInfo[0].matchId).toBe(123);
+      expect(result.earlyKickOffInfo[0].isMainMatch).toBe(true);
+      expect(result.earlyKickOffInfo[0].subIssueTypeId).toBe(11);
+      expect(result.earlyKickOffInfo[0].kickOffTime).toBe('2024-03-20T10:00:00');
+    });
   });
 
-  it('#onClickConfirmSave should called #executeSaveRequestApi', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.filter.isVoided = true;
-    arg.addRequestStore = new AddRequestStore();
-    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    service['executeSaveRequestApi'] = jest.fn();
+  describe('getEarlyKickOffModel', () => {
+    it('should create early kick off model with correct values', () => {
+      // Arrange
+      const event = new LogInfoEarlyKickOff();
+      event.matchId = 123;
+      event.isMainMatch = true;
+      event.kickOffTime = '2024-03-20T10:00:00';
+      const subIssueTypeId = '11';
 
-    await service['onClickConfirmSave'](arg);
+      // Act
+      const result = service.getEarlyKickOffModel(event, subIssueTypeId);
 
-    expect(service['executeSaveRequestApi']).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(result.matchId).toBe(123);
+      expect(result.isMainMatch).toBe(true);
+      expect(result.subIssueTypeId).toBe(11);
+      expect(result.kickOffTime).toBe('2024-03-20T10:00:00');
+    });
   });
 
-  it('#initAddRequestQuery should return expected model when request is voided', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.others = new OthersModel();
-    arg.filter.isVoided = true;
-    arg.allEvents = [Helper.fakeLogInfoEarlyKickOff];
-    arg.primitiveProps = new PrimitiveProperty();
-    service['getEarlyKickOffModel'] = jest.fn();
+  describe('showPopupConfirmSave', () => {
+    it('should show popup confirm save with correct values', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
+      saveRequestArg.filter.isVoided = false;
+      saveRequestArg.filter.issueTypeId = '1';
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      saveRequestArg.confirmEarlyKickOff = mockConfirmEarlyKickOff;
+      saveRequestArg.issueTypes = mockIssueTypes;
+      
+      const event1 = new LogInfoEarlyKickOff();
+      event1.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      event1.isInvalidTotalTickets = false;
+      event1.matchId = 123;
+      event1.isMainMatch = true;
+      event1.kickOffTime = '2024-03-20T10:00:00';
+      event1.eventName = 'Event 1';
+      event1.isHasSettledTicket = false;
+      
+      const event2 = new LogInfoEarlyKickOff();
+      event2.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      event2.isInvalidTotalTickets = true;
+      event2.matchId = 456;
+      event2.isMainMatch = false;
+      event2.kickOffTime = '2024-03-20T11:00:00';
+      event2.eventName = 'Event 2';
+      event2.isHasSettledTicket = true;
+      
+      saveRequestArg.allEvents = [event1, event2];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      mainEvent.isInvalidTotalTickets = false;
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
 
-    const actual = service['initAddRequestQuery'](arg);
+      // Mock document.getElementById
+      document.body.setAttribute('user-id', '100');
 
-    expect(actual).toBeDefined();
-    expect(service['getEarlyKickOffModel']).toHaveBeenCalledTimes(0);
-  });
+      // Act
+      service['showPopupConfirmSave'](saveRequestArg);
 
-  it('#initAddRequestQuery should return query', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.others = new OthersModel();
-    arg.filter.issueTypeId = IssueTypeConstant.EARLY_KICK_OFF;
-    arg.allEvents = [Helper.fakeLogInfoEarlyKickOff];
-    arg.primitiveProps = new PrimitiveProperty();
-    service['getEarlyKickOffModel'] = jest.fn();
+      // Assert
+      expect(saveRequestArg.confirmEarlyKickOff.warningRelatedEvents).toContain('Event 2');
+      expect(saveRequestArg.confirmEarlyKickOff.isHasWarningEvent).toBe(true);
+      expect(saveRequestArg.confirmEarlyKickOff.issueTypeName).toBe('Test Issue');
+      expect(saveRequestArg.confirmEarlyKickOff.actionName).toBe('Take note');
+      expect(saveRequestArg.confirmEarlyKickOff.requestId).toBe(1);
+      expect(saveRequestArg.confirmEarlyKickOff.requestedBy).toBe('test');
+      expect(saveRequestArg.confirmEarlyKickOff.isEditingByAnotherUser).toBe(false);
+      expect(saveRequestArg.confirmEarlyKickOff.isHasSettledTicket).toBe(true);
+      expect(saveRequestArg.confirmEarlyKickOff.isOpenDialog).toBe(true);
+    });
 
-    const actual = service['initAddRequestQuery'](arg);
+    it('should set isHasWarningEditTakeNoteRequest to true when action is TAKE_NOTE_ID and different from actionIdOfFirstTimeAccess', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
+      saveRequestArg.filter.isVoided = false;
+      saveRequestArg.filter.issueTypeId = '1';
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      saveRequestArg.confirmEarlyKickOff = mockConfirmEarlyKickOff;
+      saveRequestArg.issueTypes = mockIssueTypes;
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      event.isInvalidTotalTickets = false;
+      event.matchId = 123;
+      event.isMainMatch = true;
+      event.kickOffTime = '2024-03-20T10:00:00';
+      event.eventName = 'Event 1';
+      event.isHasSettledTicket = false;
+      
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      mainEvent.isInvalidTotalTickets = false;
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
 
-    expect(actual).toBeDefined();
-    expect(service['getEarlyKickOffModel']).toHaveBeenCalledTimes(1);
-  });
+      // Mock document.getElementById
+      document.body.setAttribute('user-id', '100');
 
-  it('#getEarlyKickOffModel should return EarlyKickOffModel', async () => {
-    const arg = new SaveRequestArg();
-    arg.filter = new FilterModel();
-    arg.others = new OthersModel();
-    arg.allEvents = [Helper.fakeLogInfoEarlyKickOff];
-    const saveRequestService = new SaveRequestService(null, null, validationService, null, checkAddPermissionService);
+      // Act
+      service['showPopupConfirmSave'](saveRequestArg);
 
-    const actual = saveRequestService['getEarlyKickOffModel'](Helper.fakeLogInfoEarlyKickOff, "1");
+      // Assert
+      expect(saveRequestArg.confirmEarlyKickOff.isHasWarningEditTakeNoteRequest).toBe(true);
+    });
 
-    expect(actual).toBeDefined();
-  });
+    it('should not set warningRelatedEvents when filter.isVoided is true', () => {
+      // Arrange
+      const saveRequestArg = new SaveRequestArg();
+      saveRequestArg.requestId = 1;
+      saveRequestArg.userId = 1;
+      saveRequestArg.requestedBy = 'test';
+      saveRequestArg.isEdit = false;
+      saveRequestArg.actionIdOfFirstTimeAccess = '1';
+      saveRequestArg.filter = new FilterModel();
+      saveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
+      saveRequestArg.filter.isVoided = true;
+      saveRequestArg.filter.issueTypeId = '1';
+      saveRequestArg.others = new OthersModel();
+      saveRequestArg.primitiveProps = new PrimitiveProperty();
+      saveRequestArg.confirmEarlyKickOff = mockConfirmEarlyKickOff;
+      saveRequestArg.issueTypes = mockIssueTypes;
+      
+      const event = new LogInfoEarlyKickOff();
+      event.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      event.isInvalidTotalTickets = true;
+      event.matchId = 123;
+      event.isMainMatch = false;
+      event.kickOffTime = '2024-03-20T10:00:00';
+      event.eventName = 'Event 1';
+      event.isHasSettledTicket = false;
+      
+      saveRequestArg.allEvents = [event];
+      
+      const mainEvent = new LogInfoEarlyKickOff();
+      mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
+      mainEvent.isInvalidTotalTickets = false;
+      saveRequestArg.mainEvent = mainEvent;
+      
+      saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
+      saveRequestArg.addRequestStore = addRequestStore;
 
-  it('#showPopupConfirmSave should update data to show popup', async () => {
-    const issueTypeId = 8;
-    const subIssueTypeId = 1;
-    const args = Helper.fakeSaveRequestArg;
-    args.filter.issueTypeId = issueTypeId.toString();
-    args.filter.subIssueTypeId = subIssueTypeId.toString();
-    args.issueTypes = {issueTypes: [{issueTypeId: 8, issueTypeName: ""}]} as IssueTypes;
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const spyIsEditingByAnotherUser = jest.spyOn(validationService, 'isEditingByAnotherUser').mockImplementation(() => false);
+      // Mock document.getElementById
+      document.body.setAttribute('user-id', '100');
 
-    service = new SaveRequestService(null, null, validationService, null, checkAddPermissionService);
+      // Act
+      service['showPopupConfirmSave'](saveRequestArg);
 
-    service['showPopupConfirmSave'](args);
-
-    expect(args.confirmEarlyKickOff.isOpenDialog).toBeTruthy();
-    expect(spyIsEditingByAnotherUser).toHaveBeenCalledTimes(1);
-  });
-
-  it('#showPopupConfirmSave should update data when edit request to action TAKE_NOTE', async () => {
-    const issueTypeId = 8;
-    const subIssueTypeId = 1;
-    const args = Helper.fakeSaveRequestArg;
-    const childEvent = new LogInfoEarlyKickOff();
-    childEvent.messageValidationLogInfo = [_.cloneDeep(Helper.fakeValidationMessageError)];
-    childEvent.messageValidationLogInfo[0].reason = LABELS.NO_VALID_TICKETS_IN_RANGE;
-    const linkEvent = new LogInfoEarlyKickOff();
-    linkEvent.messageValidationLogInfo = [_.cloneDeep(Helper.fakeValidationMessageNotError)];
-
-    args.allEvents = [Helper.fakeLogInfoEarlyKickOff];
-    args.allEvents[0].messageValidationLogInfo = [Helper.fakeValidationMessageError];
-    args.allEvents.push(childEvent);
-    args.allEvents.push(linkEvent);
-    args.filter.issueTypeId = issueTypeId.toString();
-    args.filter.subIssueTypeId = subIssueTypeId.toString();
-    args.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-    args.actionIdOfFirstTimeAccess = TVSRequestActionType.MANUAL_VOID_ID.toString();
-    args.issueTypes = {issueTypes: [{issueTypeId: 8, issueTypeName: ""}]} as IssueTypes;
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    const spyIsEditingByAnotherUser = jest.spyOn(validationService, 'isEditingByAnotherUser').mockImplementation(() => false);
-    service = new SaveRequestService(null, null, validationService, null, checkAddPermissionService);
-
-    service['showPopupConfirmSave'](args);
-
-    expect(args.confirmEarlyKickOff.isOpenDialog).toBeTruthy();
-    expect(spyIsEditingByAnotherUser).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(saveRequestArg.confirmEarlyKickOff.warningRelatedEvents).toHaveLength(0);
+    });
   });
 });

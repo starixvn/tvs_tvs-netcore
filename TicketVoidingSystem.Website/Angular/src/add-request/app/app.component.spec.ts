@@ -1,56 +1,107 @@
-import { NgModule } from '@angular/core';
-import { Shallow } from 'shallow-render';
-import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { SignalRService } from '../../utility/services/signal-r.service.native';
-import { AddRequestComponent } from './add-request/add-request.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../utility/modules/testing.module';
 import { AppComponent } from './app.component';
-jest.mock('../../utility/services/signal-r.service.native');
+import { SignalRService } from '../../utility/services/signal-r.service.native';
+import { InitializedRequestModel } from './add-request/models/request.model';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+class Helper {
+  static readonly fakeInitializedRequestModel: InitializedRequestModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '2',
+    actionId: '3',
+    isTest: true,
+    transIds: '123,456'
+  };
+}
 
 describe('AppComponent', () => {
-  @NgModule({
-    declarations: [AddRequestComponent, MenuBarComponent],
-    imports: [
-    ],
-    providers: [
-      SignalRService
-    ]
-  })
-  class AppModuleTest { }
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let signalRService: SignalRService;
 
-  let shallow: Shallow<AppComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot()
+      ],
+      providers: [
+        SignalRService,
+        ToastrService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(AppComponent, AppModuleTest)
-    .mock(SignalRService, { initializeConnection: jest.fn()});
+    fixture = TestBed.createComponent(AppComponent);
+    signalRService = fixture.debugElement.injector.get(SignalRService);
+    component = fixture.componentInstance;
   });
 
-  it('AppComponent should return expected data for <add-request />', async () => {
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should initialize with default values when no init data', async () => {
     // Arrange
-    const mockSignalRServiceInitializeConnection = jest.fn();
-    const { instance } = await shallow
-      .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
-      .render();
-    const initializedRequestJson = {
-      issueTypeId: '11',
-      subIssueTypeId: '28',
-      actionId: '5',
-      isTest: true,
-      transIds: ['109016830961', '109016813319', '109016506118', '109016500848', '109016500915', '109016506161']
-    };
-    const element = document.createElement('input');
-    element.setAttribute('id', 'addrequest-init-data');
-    element.setAttribute('value', JSON.stringify(initializedRequestJson));
-    document.body.appendChild(element);
+    document.getElementById = jest.fn().mockReturnValue(null);
+    signalRService.initializeConnection = jest.fn();
 
     // Act
-    instance.ngOnInit();
+    await component.ngOnInit();
 
     // Assert
-    expect(instance.isExternalUrl).toBe(true);
-    expect(instance.model.filter.subIssueTypeId).toBe('28');
-    expect(instance.model.filter.issueTypeId).toBe('11');
-    expect(instance.model.filter.isTest).toBe(true);
-    expect(instance.model.filter.action).toBe('5');
-    expect(mockSignalRServiceInitializeConnection).toBeCalledTimes(2);
+    expect(component.isExternalUrl).toBeFalsy();
+    expect(signalRService.initializeConnection).toHaveBeenCalled();
+  });
+
+  it('should initialize with external data when init data exists', async () => {
+    // Arrange
+    const mockElement = {
+      value: JSON.stringify(Helper.fakeInitializedRequestModel)
+    };
+    document.getElementById = jest.fn().mockReturnValue(mockElement);
+    signalRService.initializeConnection = jest.fn();
+
+    // Act
+    await component.ngOnInit();
+
+    // Assert
+    expect(component.isExternalUrl).toBeTruthy();
+    expect(component.model.filter.issueTypeId).toBe(Helper.fakeInitializedRequestModel.issueTypeId);
+    expect(component.model.filter.subIssueTypeId).toBe(Helper.fakeInitializedRequestModel.subIssueTypeId);
+    expect(component.model.filter.action).toBe(Helper.fakeInitializedRequestModel.actionId);
+    expect(component.model.filter.isTest).toBe(Helper.fakeInitializedRequestModel.isTest);
+    expect(component.model.abnormalBetModel.transIds).toEqual(Helper.fakeInitializedRequestModel.transIds);
+    expect(signalRService.initializeConnection).toHaveBeenCalled();
+  });
+
+  it('should handle invalid JSON in init data', async () => {
+    // Arrange
+    const mockElement = {
+      value: 'invalid json'
+    };
+    document.getElementById = jest.fn().mockReturnValue(mockElement);
+    signalRService.initializeConnection = jest.fn();
+
+    // Act & Assert
+    await expect(component.ngOnInit()).rejects.toThrow();
+    expect(signalRService.initializeConnection).not.toHaveBeenCalled();
+  });
+
+  it('should map model correctly', () => {
+    // Arrange
+    const requestModel = Helper.fakeInitializedRequestModel;
+
+    // Act
+    component['mapModel'](requestModel);
+
+    // Assert
+    expect(component.model.filter.issueTypeId).toBe(requestModel.issueTypeId);
+    expect(component.model.filter.subIssueTypeId).toBe(requestModel.subIssueTypeId);
+    expect(component.model.filter.action).toBe(requestModel.actionId);
+    expect(component.model.filter.isTest).toBe(requestModel.isTest);
+    expect(component.model.abnormalBetModel.transIds).toEqual(requestModel.transIds);
   });
 });

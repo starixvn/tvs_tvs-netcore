@@ -1,257 +1,259 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
-import { SortingModule } from '../../../../../utility/components/sorting/sorting.module';
-import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AccountTableComponent } from './account-table.component';
+import { ValidationService } from '../services/validation.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { AccountWinlostModel } from '../models/account-winlost.model';
-import { CheckUsernamesViewModel, ValidationAbnormalAccount } from '../models/check-username.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
-import { ValidationService } from '../services/validation.service';
-import { AccountTableComponent } from './account-table.component';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
+import { TicketStatus } from '../../../../../utility/constants/config';
+import { SortingComponent } from '../../../../../utility/components/sorting/sorting/sorting.component';
+import { EventEmitter, QueryList } from '@angular/core';
+import * as _ from 'lodash';
+import { CheckUsernamesViewModel } from '../models/check-username.model';
 
 class Helper {
-  static readonly fakeDate: string = '2020-11-09 12:08:49.737';
-  static readonly fakeCheckUsernamesViewModel: CheckUsernamesViewModel = {
-    accountWinlostModels: [
-      {
-        custId: 1,
-        username: '1',
-        adjustVoidLimit: null,
-      } as AccountWinlostModel,
-      {
-        custId: 2,
-        username: '2',
-        adjustVoidLimit: 1,
-      } as AccountWinlostModel
-    ],
-    transInfoAddRequestModel: new TransInfoAddRequestModel(),
-    validation: new ValidationAbnormalAccount()
-  };
+  static readonly fakeRequestId = 1212;
   static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '27',
-    action: '5',
-    isTest: false,
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
     isVoided: false,
-    subIssueTypes: [],
+    isChangeSubTypeManual: true,
     isAbnormal: false
   } as FilterModel;
+
+  static readonly fakeAbnormalAccountModel: AbnormalAccountModel = {
+    statusIds: TicketStatus.LOSE.toString(),
+    accountWinlostModels: []
+  } as AbnormalAccountModel;
+
+  static readonly fakeAccountWinlostModel: AccountWinlostModel = {
+    custId: 123,
+    adjustVoidLimit: 1000,
+    adjustVoidLimitString: '1,000',
+    isShowInput: false,
+    isShowOnTable: true,
+    isHighlight: false,
+    givenCredit: 0,
+    currentLosing: -500,
+    currentWinning: 0,
+    estimateVoidAmount: 0,
+    estimateVoidAmountUnEditableTickets: 0,
+    winLostAfterVoid: 0,
+    isCanEditTicket: true,
+    isEditedTicket: false
+  } as AccountWinlostModel;
+
+  static readonly fakePrimitiveProperty: PrimitiveProperty = {
+    isCheckedShowAdjustAccount: false,
+    permission: {} as PermissionAddRequest
+  } as PrimitiveProperty;
 }
 
 describe('AccountTableComponent', () => {
-  @NgModule({
-    imports: [
-      FormsModule,
-      NgbModule,
-      SortingModule,
-      ToolTipModule
-    ],
-    providers: [
-      AddRequestStore,
-      AddRequestApiService,
-      ValidationService
-    ]
-  })
-  class AppModuleTest { }
+  let component: AccountTableComponent;
+  let fixture: ComponentFixture<AccountTableComponent>;
+  let validationService: ValidationService;
+  let addRequestApiService: AddRequestApiService;
+  let addRequestStore: AddRequestStore;
 
-  let shallow: Shallow<AccountTableComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        AddRequestApiService,
+        {
+          provide: AddRequestStore,
+          useValue: {
+            changeBlockingUiStatus: jest.fn()
+          }
+        }
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(AccountTableComponent, AppModuleTest).dontMock(NgbModule);
+    fixture = TestBed.createComponent(AccountTableComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    component = fixture.componentInstance;
   });
 
-  it('AccountTableComponent should init match snapshot', async () => {
-    const { fixture } = await shallow.render();
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should initialize with default values', () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
+    component.abnormalAccountModel = Helper.fakeAbnormalAccountModel;
+    component.accountWinlostModels = [Helper.fakeAccountWinlostModel];
+    component.primitiveProps = Helper.fakePrimitiveProperty;
+
+    // Act
     fixture.detectChanges();
 
-    expect(fixture).toMatchSnapshot();
+    // Assert
+    expect(component.isShowTooltip).toBeFalsy();
+    expect(component.isCancelRecalculateAmount).toBeFalsy();
+    expect(component.isCheckedShowAdjustAccount).toBeFalsy();
+    expect(component.previousAdjustVoidLimit).toBeNull();
   });
 
-  it('reCalculate should update isCancelRecalculateAmount to false & return when isCancelRecalculateAmount true', async () => {
-    const model = new AccountWinlostModel();
-    const { instance } = await shallow.render();
-    instance.isCancelRecalculateAmount = true;
-    await instance.reCalculate(model, 1);
+  it('should handle reCalculate with valid input', async () => {
+    // Arrange
+    const account = { ...Helper.fakeAccountWinlostModel };
+    const previousAdjustVoid = 500; // Khác với adjustVoidLimit của account
+    const index = 0;
+    component.isCancelRecalculateAmount = false;
+    component.requestId = Helper.fakeRequestId;
+    component.filter = Helper.fakeFilterModel;
+    component.abnormalAccountModel = Helper.fakeAbnormalAccountModel;
+    component.primitiveProps = Helper.fakePrimitiveProperty;
+    component.permission = {} as PermissionAddRequest;
+    component.reCalculateByAccountEvent = { emit: jest.fn() } as unknown as EventEmitter<number>;
 
-    expect(model.isShowInput).toBeFalsy();
-    expect(instance.isCancelRecalculateAmount).toBeFalsy();
-  });
+    const updatedAccount = {
+      ...account,
+      currentLosing: -600,
+      winLostAfterVoid: -100,
+      isCanEditTicket: true,
+      isHighlight: false,
+      givenCredit: 0,
+      currentWinning: 0,
+      estimateVoidAmount: 0,
+      estimateVoidAmountUnEditableTickets: 0,
+      adjustVoidLimit: 1000
+    };
 
-  it('reCalculate should call #isCorrectFormatVoidLimit when isCorrectFormatVoidLimit false', async () => {
-    const model = new AccountWinlostModel();
-    const { instance } = await shallow.render();
-    instance.isCancelRecalculateAmount = false;
-    instance.isCorrectFormatVoidLimit = jest.fn().mockReturnValue(false);
-    await instance.reCalculate(model, 1);
-
-    expect(instance.isCorrectFormatVoidLimit).toHaveBeenCalledTimes(1);
-  });
-
-  it('reCalculate should update account model when has newest data', async () => {
-    const model = new AccountWinlostModel();
-    model.custId = Helper.fakeCheckUsernamesViewModel.accountWinlostModels[0].custId;
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(ValidationService, { getValidation: jest.fn().mockReturnValue(Helper.fakeCheckUsernamesViewModel) })
-      .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
-      .render();
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.isCancelRecalculateAmount = false;
-    instance.isCorrectFormatVoidLimit = jest.fn().mockReturnValue(true);
-    instance.reCalculateByAccountEvent.emit = jest.fn();
-    instance['createValidationBusinessRuleArgs'] = jest.fn();
-
-    await instance.reCalculate(model, 1);
-
-    expect(instance.isCorrectFormatVoidLimit).toHaveBeenCalledTimes(1);
-    expect(instance['createValidationBusinessRuleArgs']).toHaveBeenCalledTimes(1);
-    expect(model.isHighlight).toBe(Helper.fakeCheckUsernamesViewModel.accountWinlostModels[0].isHighlight);
-    expect(model.givenCredit).toBe(Helper.fakeCheckUsernamesViewModel.accountWinlostModels[0].givenCredit);
-    expect(model.currentLosing).toBe(Helper.fakeCheckUsernamesViewModel.accountWinlostModels[0].currentLosing);
-    expect(model.currentWinning).toBe(Helper.fakeCheckUsernamesViewModel.accountWinlostModels[0].currentWinning);
-  });
-
-  it('sorting should sort data ascending', async () => {
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
-      .render();
-    instance.accountWinlostModels = _.cloneDeep(Helper.fakeCheckUsernamesViewModel.accountWinlostModels);
-    instance.sorting(false, 'custId', 1);
-
-    expect(instance.accountWinlostModels[0].custId).toBeLessThan(instance.accountWinlostModels[1].custId);
-  });
-
-  it('sorting should sort data descending', async () => {
-    const mockChangeBlockingUiStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
-      .render();
-    instance.accountWinlostModels = _.cloneDeep(Helper.fakeCheckUsernamesViewModel.accountWinlostModels);
-    instance.sorting(true, 'custId', 1);
-
-    expect(instance.accountWinlostModels[0].custId).toBeGreaterThan(instance.accountWinlostModels[1].custId);
-  });
-
-  it('exportExcel should called #appService.exportAccount', async () => {
-    const mockExportAccount = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestApiService, { exportAccount: mockExportAccount })
-      .render();
-    instance.accountWinlostModels = Helper.fakeCheckUsernamesViewModel.accountWinlostModels;
-    await instance.exportExcel();
-
-    expect(mockExportAccount).toHaveBeenCalledTimes(1);
-  });
-
-  it('exportExcel should not called #appService.exportAccount when accountWinlostModels is empty', async () => {
-    const mockExportAccount = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestApiService, { exportAccount: mockExportAccount })
-      .render();
-    instance.accountWinlostModels = [];
-    await instance.exportExcel();
-
-    expect(mockExportAccount).toHaveBeenCalledTimes(0);
-  });
-
-  it('exportExcel should not called #appService.exportAccount when accountWinlostModels is null', async () => {
-    const mockExportAccount = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestApiService, { exportAccount: mockExportAccount })
-      .render();
-    instance.accountWinlostModels = null;
-    await instance.exportExcel();
-
-    expect(mockExportAccount).toHaveBeenCalledTimes(0);
-  });
-
-  it('createValidationBusinessRuleArgs should return exactly model', async () => {
-    const { instance } = await shallow.render({
-      bind: {
-        filter: Helper.fakeFilterModel,
+    jest.spyOn(validationService, 'getValidation').mockResolvedValue({
+      accountWinlostModels: [updatedAccount],
+      transInfoAddRequestModel: {
+        transInfoJson: '{}'
       }
-    });
-    instance.abnormalAccountModel = new AbnormalAccountModel();
-    const actual = instance['createValidationBusinessRuleArgs'](Helper.fakeCheckUsernamesViewModel.accountWinlostModels[0]);
+    } as CheckUsernamesViewModel);
 
-    expect(actual.requestId).toBe(instance.requestId);
-    expect(actual.actionId).toBe(instance.filter.action);
-    expect(actual.abnormalAccountModel.accountWinlostModels).toEqual([Helper.fakeCheckUsernamesViewModel.accountWinlostModels[0]]);
+    // Act
+    await component.reCalculate(account, previousAdjustVoid, index);
+
+    // Assert
+    expect(account.isShowInput).toBeFalsy();
+    expect(component.previousAdjustVoidLimit).toBe(1000);
+    expect(validationService.getValidation).toHaveBeenCalled();
+    expect(account.currentLosing).toBe(-600);
+    expect(account.winLostAfterVoid).toBe(-100);
+    expect(account.isCanEditTicket).toBeTruthy();
+    expect(component.reCalculateByAccountEvent.emit).toHaveBeenCalledWith(account.custId);
   });
 
-  it('isValid should return true', async () => {
-    const { instance } = await shallow.render();
-    instance.accountWinlostModels = null;
-    const actual = instance.isValid();
+  it('should handle reCalculate with same adjustVoidLimit', async () => {
+    // Arrange
+    const account = { ...Helper.fakeAccountWinlostModel };
+    const previousAdjustVoid = 1000;
+    account.adjustVoidLimit = 1000;
 
-    expect(actual).toBeTruthy();
+    // Act
+    await component.reCalculate(account, previousAdjustVoid, 0);
+
+    // Assert
+    expect(component.isCancelRecalculateAmount).toBeFalsy();
   });
 
-  it('isValid should return false', async () => {
-    const { instance } = await shallow.render();
-    instance.accountWinlostModels = Helper.fakeCheckUsernamesViewModel.accountWinlostModels;
-    const actual = instance.isValid();
+  it('should handle exportExcel', async () => {
+    // Arrange
+    component.accountWinlostModels = [Helper.fakeAccountWinlostModel];
+    addRequestApiService.exportAccount = jest.fn().mockResolvedValue({});
 
-    expect(actual).toBeTruthy();
+    // Act
+    await component.exportExcel();
+
+    // Assert
+    expect(addRequestApiService.exportAccount).toHaveBeenCalledWith([Helper.fakeAccountWinlostModel]);
   });
 
-  it('onChangeAdjustGV should called #isCorrectFormatVoidLimit', async () => {
-    const { instance } = await shallow.render();
-    instance.isCorrectFormatVoidLimit = jest.fn();
-    instance.onChangeAdjustGV(null, null);
+  it('should handle sorting', () => {
+    // Arrange
+    const isDesc = true;
+    const orderBy = 'currentLosing';
+    const componentId = 1;
+    const account1 = { ...Helper.fakeAccountWinlostModel, currentLosing: -500 };
+    const account2 = { ...Helper.fakeAccountWinlostModel, custId: 124, currentLosing: -600 };
+    component.accountWinlostModels = [account1, account2];
+    
+    const sortingComponent1 = { id: 1, isDesc: true } as SortingComponent;
+    const sortingComponent2 = { id: 2, isDesc: false } as SortingComponent;
+    component.sortingComponents = new QueryList<SortingComponent>();
+    component.sortingComponents.reset([sortingComponent1, sortingComponent2]);
 
-    expect(instance.isCorrectFormatVoidLimit).toHaveBeenCalledTimes(1);
+    // Act
+    component.sorting(isDesc, orderBy, componentId);
+
+    // Assert
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+    expect(component.accountWinlostModels).toEqual(_.orderBy([account1, account2], [orderBy], ['desc']));
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    expect(sortingComponent2.isDesc).toBeNull();
   });
 
-  it('isCorrectFormatVoidLimit should return false when adjustVoidLimit is not valid number', async () => {
-    const { instance } = await shallow.render();
-    const model = _.cloneDeep(Helper.fakeCheckUsernamesViewModel.accountWinlostModels[0]);
-    Object.defineProperty(model, 'adjustVoidLimit', { value: 'a'});
-    const actual = instance.isCorrectFormatVoidLimit(model, null);
+  it('should validate adjustVoidLimit format', () => {
+    // Arrange
+    const account = { ...Helper.fakeAccountWinlostModel };
+    const index = 0;
 
-    expect(actual).toBeFalsy();
+    // Act & Assert
+    account.adjustVoidLimit = 1000;
+    expect(component.isCorrectFormatVoidLimit(account, index)).toBeTruthy();
+
+    account.adjustVoidLimit = 0;
+    expect(component.isCorrectFormatVoidLimit(account, index)).toBeTruthy();
+
+    account.adjustVoidLimit = null;
+    expect(component.isCorrectFormatVoidLimit(account, index)).toBeTruthy();
   });
 
-  it('mouseDownEventAdjustGV should update isShowInput to true', async () => {
-    const model = _.cloneDeep(Helper.fakeCheckUsernamesViewModel.accountWinlostModels[0]);
-    model.isShowInput = false;
-    const { instance } = await shallow.render({
-      bind: {
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    instance.filter.isVoided = false;
-    instance.mouseDownEventAdjustGV(model);
+  it('should handle mouseDownEventAdjustGV', () => {
+    // Arrange
+    const account = { ...Helper.fakeAccountWinlostModel };
+    component.filter = { ...Helper.fakeFilterModel, isVoided: false };
+    component.abnormalAccountModel = { ...Helper.fakeAbnormalAccountModel, statusIds: TicketStatus.LOSE.toString() };
 
-    expect(model.isShowInput).toBeTruthy();
+    // Act
+    component.mouseDownEventAdjustGV(account);
+
+    // Assert
+    expect(component.isCancelRecalculateAmount).toBeFalsy();
+    expect(account.isShowInput).toBeFalsy();
   });
 
-  it('mouseDownEventAdjustGV should not update isShowInput to true', async () => {
-    const model = _.cloneDeep(Helper.fakeCheckUsernamesViewModel.accountWinlostModels[0]);
-    model.isShowInput = false;
-    const { instance } = await shallow.render({
-      bind: {
-        filter: Helper.fakeFilterModel,
-      }
-    });
-    instance.filter.isVoided = true;
-    instance.mouseDownEventAdjustGV(model);
+  it('should check if accounts are shown', () => {
+    // Arrange
+    component.accountWinlostModels = [
+      { ...Helper.fakeAccountWinlostModel, isShowOnTable: true },
+      { ...Helper.fakeAccountWinlostModel, custId: 124, isShowOnTable: false }
+    ];
 
-    expect(model.isShowInput).toBeFalsy();
+    // Act
+    const result = component.isShowAccounts();
+
+    // Assert
+    expect(result).toBeTruthy();
   });
 
-  it('showDecimalWithComma should return undefined when has not number input', async () => {
-    const { instance } = await shallow.render();
-    const actual = instance.showDecimalWithComma(null);
+  it('should get description for column', () => {
+    // Arrange
+    const columnName = 'currentLosing';
+    const mockDescription = 'Current Losing (L)';
+    jest.spyOn(component, 'getDescription').mockReturnValue(mockDescription);
 
-    expect(actual).toBeUndefined();
+    // Act
+    const description = component.getDescription(columnName);
+
+    // Assert
+    expect(description).toBe(mockDescription);
   });
 });

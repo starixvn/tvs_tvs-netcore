@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { GroupLicensee, GroupLicenseeModel } from "../../../../../utility/components/licensees/licensees.model";
 import { ItemsSelect } from "../../../../../utility/components/multiple-selection/items-select";
 import { MultipleSelection } from "../../../../../utility/components/multiple-selection/multiple-selection";
@@ -10,15 +10,12 @@ import { FilterModel } from "../../filter/filter.model";
 import { FilterWrongOfferedNameModel } from "../models/filter-wrong-offered-name.model";
 import { ValidationService } from "./validation.service";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FilterWrongOfferedNameService {
-  constructor(private readonly validationService: ValidationService) {
-  }
   private readonly FILTER_CURRENCY_DROPDOWN = 'filter-currency-dropdown';
   private readonly GROUP_LICENSEE = 'check-group-licensee';
   private readonly CURRENCY_RMB_ID = 13;
+  private readonly validationService = inject(ValidationService);
 
   renderGroupLicensees(isEdit: boolean, originalGroupLicensees: GroupLicensee[], filterWrongOfferedName: FilterWrongOfferedNameModel, filterRequest: FilterModel): GroupLicenseeModel {
     return isEdit
@@ -40,17 +37,19 @@ export class FilterWrongOfferedNameService {
   }
 
   autoCheckLicensees(groups: GroupLicensee[], filterWrongOfferedName: FilterWrongOfferedNameModel, filterRequest: FilterModel): GroupLicenseeModel {
-    let groupLicenseesModel = new GroupLicenseeModel(groups, true);
+    let groupLicenseesModel: GroupLicenseeModel;
+    
     if (this.validationService.isSubTypeChinese(filterRequest.subIssueTypeId)) {
-      const model = new GroupLicenseeModel(groups, false);
-      const groupChinaRules = model.groupLicensees.find(x => x.groupName === 'China rules');
+      groupLicenseesModel = new GroupLicenseeModel(groups, false);
+      const groupChinaRules = groupLicenseesModel.groupLicensees.find(x => x.groupName === 'China rules');
       if (groupChinaRules) {
         groupChinaRules.isChecked = true;
         groupChinaRules.checkedGroup();
       }
-
-      groupLicenseesModel = model;
+    } else {
+      groupLicenseesModel = new GroupLicenseeModel(groups, true);
     }
+    
     filterWrongOfferedName.licenseeNames = groupLicenseesModel.getCheckedLicensees().map(x => x.name);
 
     return groupLicenseesModel;

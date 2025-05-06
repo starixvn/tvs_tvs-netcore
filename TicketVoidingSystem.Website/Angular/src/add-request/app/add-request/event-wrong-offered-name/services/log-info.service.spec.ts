@@ -1,149 +1,200 @@
-import { TemplateValue } from '../../../../../utility/components/template-message/template-message/template.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { MatchModel } from "../../../../../utility/models/match.model";
-import { VoidedReason } from '../../../../../utility/models/reason.model';
-import { CommonService } from "../../../../../utility/services/common.service";
-import { FilterModel } from "../../filter/filter.model";
-import { WrongOfferedNameModel } from '../../models/event-wrong-offered-name.model';
-import { GetLogInfoModel, Validation } from '../../models/get-log-info.model';
-import { TransInfoAddRequestModel } from "../../models/trans-info-add-request.model";
-import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
-import { FilterWrongOfferedNameModel } from '../models/filter-wrong-offered-name.model';
-import { WrongOfferedNameGetLogInfoQuery } from '../models/get-log-info.query';
+import { TestBed } from '@angular/core/testing';
+import { LogInfoService } from './log-info.service';
+import { CommonService } from '../../../../../utility/services/common.service';
+import { EventWrongOfferedNameService } from './event-wrong-offered-name.service';
 import { LogInfoWrongOfferedName } from '../models/log-info-wrong-offered-name.model';
-import { PrimitiveProperty } from "../models/primitive-property.model";
-import { EventWrongOfferedNameService } from "./event-wrong-offered-name.service";
-import { LogInfoService } from "./log-info.service";
-
+import { FilterModel } from '../../filter/filter.model';
+import { GetLogInfoModel } from '../../models/get-log-info.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { VoidedReason } from '../../../../../utility/models/reason.model';
+import { TemplateValue } from '../../../../../utility/components/template-message/template-message/template.model';
+import { ValidationMessage } from '../../models/get-log-info.model';
+import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
 
 class Helper {
-  static readonly fakeWrongOfferedNameModel: WrongOfferedNameModel = {
-    currencyIds: '1,2',
-    licenseeNames: 'licensee1,licensee2',
-    logInfoDetail: new LogInfoDetail(),
-    matchId: 1,
-    match: new MatchModel(),
-    subIssueTypeId: 1
-  } as WrongOfferedNameModel;
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '26',
+  static readonly fakeMatchId = 12345;
+  static readonly fakeFilterModel = {
+    issueTypeId: '1',
     subIssueTypeId: '1',
-    action: '5'
+    action: '1',
+    isTest: true,
+    isVoided: false
   } as FilterModel;
-  static readonly fakeLogInfoWrongOfferedName: LogInfoWrongOfferedName = {
-    matchId: 1,
-    matchModel: new MatchModel(),
-    filterWrongOfferedName: new FilterWrongOfferedNameModel(),
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: [],
+
+  static readonly fakeLogInfoWrongOfferedName = {
+    matchId: 12345,
+    matchModel: {
+      sportType: 1
+    },
+    filterWrongOfferedName: {
+      licenseeNames: ['Test Licensee'],
+      currencyIds: ['1', '2']
+    }
   } as LogInfoWrongOfferedName;
-  static readonly fakeFilterWrongOfferedName: FilterWrongOfferedNameModel = {
-    currencyIds: [],
-    licenseeNames: []
-  } as FilterWrongOfferedNameModel;
-  static readonly fakeGetLogInfoModels: GetLogInfoModel[] = [
-    {
-      matchId: 1,
-      validation: new Validation(),
-      logInfoDetail: new LogInfoDetail()
-    } as GetLogInfoModel
-  ]
+
+  static readonly fakeGetLogInfoModel = {
+    matchId: 12345,
+    logInfoDetail: {
+      logInfoTicketsJson: '{}'
+    },
+    validation: {
+      isInvalidTotalTickets: false,
+      isHasSettledTicket: false,
+      isHasInstantlySettledTicket: false
+    }
+  } as GetLogInfoModel;
+
+  static readonly fakeTransInfoAddRequestModel = {
+    transInfoJson: '{}',
+    unMarkTransIds: '',
+    markTransIds: '',
+    removeTransIds: ''
+  } as TransInfoAddRequestModel;
+
+  static readonly fakeVoidedReason = {
+    reasonEnglish: 'Test Reason',
+    reasonChineseSimplified: 'Test Reason CN'
+  } as VoidedReason;
+
+  static readonly fakeTemplateValue = {
+    matchId: 12345,
+    groupPHAffected: 0
+  } as TemplateValue;
+
+  static readonly fakeValidationMessage = [{
+    isError: false,
+    reason: 'Test Message'
+  }] as ValidationMessage[];
 }
 
 describe('LogInfoService', () => {
-  let mockService: LogInfoService;
-  let mockCommonService: CommonService;
-  let mockEventWrongOfferedNameService: EventWrongOfferedNameService;
+  let service: LogInfoService;
+  let commonService: jest.Mocked<CommonService>;
+  let eventWrongOfferedNameService: jest.Mocked<EventWrongOfferedNameService>;
 
   beforeEach(() => {
-    mockCommonService = new CommonService(null);
-    mockEventWrongOfferedNameService = new EventWrongOfferedNameService(null, null, null, null, null);
-    mockService = new LogInfoService(mockCommonService, mockEventWrongOfferedNameService);
+    TestBed.configureTestingModule({
+      providers: [
+        LogInfoService,
+        { provide: CommonService, useValue: {
+          getLogInfo: jest.fn(),
+          getVoidedReason: jest.fn()
+        } },
+        { provide: EventWrongOfferedNameService, useValue: {
+          getAffectedTickets: jest.fn(),
+          getTemplateMessageValue: jest.fn(),
+          getTitleTableTicket: jest.fn()
+        } }
+      ]
+    });
+
+    service = TestBed.inject(LogInfoService);
+    commonService = TestBed.inject(CommonService) as jest.Mocked<CommonService>;
+    eventWrongOfferedNameService = TestBed.inject(EventWrongOfferedNameService) as jest.Mocked<EventWrongOfferedNameService>;
   });
 
-  it('getLogInfo should call #commonService.getLogInfo', async () => {
-    const transInfoAddRequest = new TransInfoAddRequestModel();
-    const primitiveProps = new PrimitiveProperty();
-    mockService['initGetLogInfoWrongOfferedName'] = jest.fn();
-    mockService.assignResultLogInfoToEvents = jest.fn();
-    mockCommonService.getLogInfo = jest.fn().mockReturnValue({ transInfoAddRequestModel: transInfoAddRequest, getLogInfoModels: [] });
-
-    await mockService.getLogInfo(Helper.fakeLogInfoWrongOfferedName, true, 1, Helper.fakeFilterModel, primitiveProps);
-
-    expect(mockService['initGetLogInfoWrongOfferedName']).toHaveBeenCalledTimes(1);
-    expect(mockService.assignResultLogInfoToEvents).toHaveBeenCalledTimes(1);
-    expect(mockCommonService.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(primitiveProps.transInfoAddRequest).toEqual(transInfoAddRequest);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('assignResultLogInfoToEvents should call #commonService.getLogInfo', async () => {
-    const logInfoEvent = Helper.fakeLogInfoWrongOfferedName;
-    const logInfoModels = Helper.fakeGetLogInfoModels;
-    logInfoEvent.matchId = 1;
-    logInfoModels[0].matchId = 1;
-    mockEventWrongOfferedNameService.getAffectedTickets = jest.fn().mockReturnValue(new TicketsModel());
-    mockEventWrongOfferedNameService.getTemplateMessageValue = jest.fn().mockReturnValue(new TemplateValue());
-    mockEventWrongOfferedNameService.getTitleTableTicket = jest.fn().mockReturnValue('title');
-    mockService.getVoidedReason = jest.fn().mockReturnValue(new VoidedReason());
-
-    await mockService.assignResultLogInfoToEvents(Helper.fakeFilterModel, logInfoEvent, logInfoModels);
-
-    expect(mockEventWrongOfferedNameService.getAffectedTickets).toHaveBeenCalledTimes(1);
-    expect(mockEventWrongOfferedNameService.getTemplateMessageValue).toHaveBeenCalledTimes(1);
-    expect(mockEventWrongOfferedNameService.getTitleTableTicket).toHaveBeenCalledTimes(1);
-    expect(mockService.getVoidedReason).toHaveBeenCalledTimes(1);
-    expect(logInfoEvent.tableTicketsModel).toEqual(new TicketsModel());
-    expect(logInfoEvent.titleTableTicket ).toEqual('title');
-    expect(logInfoEvent.voidReason).toEqual(new VoidedReason());
-    expect(logInfoEvent.templateValue).toEqual(new TemplateValue());
-  });
-
-  it('getVoidedReason should return null', async () => {
-    const actual = await mockService.getVoidedReason(true, 1, 1);
-
-    expect(actual).toBeNull();
-  });
-
-  it('getVoidedReason should return voidedReason', async () => {
-    mockCommonService.getVoidedReason = jest.fn().mockReturnValue(new VoidedReason());
-    const actual = await mockService.getVoidedReason(false, 1, 1);
-
-    expect(actual).toEqual(new VoidedReason())
-  });
-
-  it('resetLogInfoOfEvent should update messageValidationLogInfo to null', async () => {
-    const logInfoEvent = Helper.fakeLogInfoWrongOfferedName;
-    logInfoEvent.messageValidationLogInfo = [];
-    mockService.resetLogInfoOfEvent(logInfoEvent);
-
-    expect(logInfoEvent.messageValidationLogInfo).toBeNull();
-  });
-
-  it('initGetLogInfoWrongOfferedName should return GetLogInfoQuery', async () => {
-    [true, false].forEach(isEdit => {
+  describe('getLogInfo', () => {
+    it('should get log info and assign to primitive properties', async () => {
+      // Arrange
       const logInfoEvent = Helper.fakeLogInfoWrongOfferedName;
-      logInfoEvent.messageValidationLogInfo = [];
-      mockService['initWrongMarketOfferedModelGetLogInfoQuery'] = jest.fn().mockReturnValue(new WrongOfferedNameGetLogInfoQuery());
+      const isEdit = false;
+      const requestId = 123;
+      const filter = Helper.fakeFilterModel;
+      const primitiveProps = new PrimitiveProperty();
+      const mockViewModel = {
+        transInfoAddRequestModel: Helper.fakeTransInfoAddRequestModel,
+        getLogInfoModels: [Helper.fakeGetLogInfoModel]
+      } as GetLogInfoViewModel;
 
-      const actual = mockService['initGetLogInfoWrongOfferedName'](isEdit, 1, Helper.fakeFilterModel, logInfoEvent);
+      commonService.getLogInfo.mockResolvedValue(mockViewModel);
+      eventWrongOfferedNameService.getAffectedTickets.mockResolvedValue({ isHasSettledTicket: false } as TicketsModel);
+      commonService.getVoidedReason.mockResolvedValue(Helper.fakeVoidedReason);
+      eventWrongOfferedNameService.getTemplateMessageValue.mockReturnValue(Helper.fakeTemplateValue);
+      eventWrongOfferedNameService.getTitleTableTicket.mockReturnValue('Test Title');
 
-      expect(actual.actionId).toBe(Number(Helper.fakeFilterModel.action));
-      expect(actual.issueTypeId).toBe(Number(Helper.fakeFilterModel.issueTypeId));
-      expect(mockService['initWrongMarketOfferedModelGetLogInfoQuery']).toHaveBeenCalledTimes(1);
+      // Act
+      await service.getLogInfo(logInfoEvent, isEdit, requestId, filter, primitiveProps);
+
+      // Assert
+      expect(commonService.getLogInfo).toHaveBeenCalled();
+      expect(primitiveProps.transInfoAddRequest).toBe(mockViewModel.transInfoAddRequestModel);
+      expect(eventWrongOfferedNameService.getAffectedTickets).toHaveBeenCalled();
+      expect(commonService.getVoidedReason).toHaveBeenCalled();
+      expect(eventWrongOfferedNameService.getTemplateMessageValue).toHaveBeenCalled();
+      expect(eventWrongOfferedNameService.getTitleTableTicket).toHaveBeenCalled();
     });
   });
 
-  it('initWrongMarketOfferedModelGetLogInfoQuery should return WrongOfferedNameGetLogInfoQuery', async () => {
-    const logInfoEvent = Helper.fakeLogInfoWrongOfferedName;
-    logInfoEvent.matchId = 1;
-    logInfoEvent.filterWrongOfferedName.currencyIds = ['1', '2'];
-    logInfoEvent.filterWrongOfferedName.licenseeNames = ['licensee1', 'licensee2'];
+  describe('assignResultLogInfoToEvents', () => {
+    it('should assign log info to events correctly', async () => {
+      // Arrange
+      const filter = Helper.fakeFilterModel;
+      const logInfoEvent = Helper.fakeLogInfoWrongOfferedName;
+      const logInfoModels = [Helper.fakeGetLogInfoModel];
+      const mockTicketTable = { isHasSettledTicket: false };
+      const mockVoidReason = Helper.fakeVoidedReason;
+      const mockTemplateValue = Helper.fakeTemplateValue;
+      const mockTitle = 'Test Title';
 
-    const actual = mockService['initWrongMarketOfferedModelGetLogInfoQuery'](1, logInfoEvent);
+      eventWrongOfferedNameService.getAffectedTickets.mockResolvedValue(mockTicketTable as TicketsModel);
+      commonService.getVoidedReason.mockResolvedValue(mockVoidReason);
+      eventWrongOfferedNameService.getTemplateMessageValue.mockReturnValue(mockTemplateValue);
+      eventWrongOfferedNameService.getTitleTableTicket.mockReturnValue(mockTitle);
 
-    expect(actual.matchId).toBe(1);
-    expect(actual.subIssueTypeId).toBe(1);
-    expect(actual.licenseeNames).toBe('licensee1,licensee2');
-    expect(actual.currencyIds).toBe('1,2');
+      // Act
+      await service.assignResultLogInfoToEvents(filter, logInfoEvent, logInfoModels);
+
+      // Assert
+      expect(logInfoEvent.tableTicketsModel).toBe(mockTicketTable);
+      expect(logInfoEvent.titleTableTicket).toBe(mockTitle);
+      expect(logInfoEvent.voidReason).toBe(mockVoidReason);
+      expect(logInfoEvent.templateValue).toBe(mockTemplateValue);
+      expect(logInfoEvent.isHasSettledTicket).toBe(Helper.fakeGetLogInfoModel.validation.isHasSettledTicket);
+      expect(logInfoEvent.isHasInstantlySettledTicket).toBe(Helper.fakeGetLogInfoModel.validation.isHasInstantlySettledTicket);
+      expect(logInfoEvent.isInvalidTotalTickets).toBe(Helper.fakeGetLogInfoModel.validation.isInvalidTotalTickets);
+    });
+  });
+
+  describe('getVoidedReason', () => {
+    it('should return null when isInvalidTotalTickets is true', async () => {
+      // Act
+      const result = await service.getVoidedReason(true, 1, 1);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it('should call getVoidedReason when isInvalidTotalTickets is false', async () => {
+      // Arrange
+      const mockReason = Helper.fakeVoidedReason;
+      commonService.getVoidedReason.mockResolvedValue(mockReason);
+
+      // Act
+      const result = await service.getVoidedReason(false, 1, 1);
+
+      // Assert
+      expect(commonService.getVoidedReason).toHaveBeenCalledWith(1, 1);
+      expect(result).toBe(mockReason);
+    });
+  });
+
+  describe('resetLogInfoOfEvent', () => {
+    it('should reset messageValidationLogInfo to null', () => {
+      // Arrange
+      const logInfoEvent = Helper.fakeLogInfoWrongOfferedName;
+      logInfoEvent.messageValidationLogInfo = Helper.fakeValidationMessage;
+
+      // Act
+      service.resetLogInfoOfEvent(logInfoEvent);
+
+      // Assert
+      expect(logInfoEvent.messageValidationLogInfo).toBeNull();
+    });
   });
 });

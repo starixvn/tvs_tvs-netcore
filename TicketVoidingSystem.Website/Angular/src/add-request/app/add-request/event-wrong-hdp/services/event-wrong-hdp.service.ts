@@ -1,26 +1,21 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import moment from 'moment-timezone';
 import { DateTimeFormat } from "../../../../../utility/constants/config";
+import { SportType } from '../../../../../utility/constants/sport.constant';
 import { AddRequestApiService } from "../../add-request-api.service";
 import { FilterModel } from "../../filter/filter.model";
 import { WrongHdpModel } from "../../models/event-wrong-hdp.model";
 import { GetLinkedLogQuery, LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
-import { FilterWithHdpModel, FilterBetType } from '../models/filter-with-hdp.model';
+import { FilterBetType, FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { WrongHdpGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongHdp } from "../models/log-info-wrong-hdp.model";
 import { ValidationService } from "./validation.service";
-import { SportType } from '../../../../../utility/constants/sport.constant';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class EventWrongHdpService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly validationService: ValidationService
-  ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly validationService = inject(ValidationService);
 
   public async getLinkedLog(logInfoWrongHdp: LogInfoWrongHdp, filter: FilterModel): Promise<LinkedLogsViewModel> {
     if(logInfoWrongHdp.sportType !== SportType.SOCCER)

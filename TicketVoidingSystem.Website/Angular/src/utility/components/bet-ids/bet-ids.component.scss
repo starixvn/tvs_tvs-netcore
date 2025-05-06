@@ -55,7 +55,7 @@
 
   .invalid-item-toolTip .tooltip-inner {
     background-color: yellow;
-      color:red;
+    color: red;
   }
 
   .invalid-item-toolTip .arrow::before {
@@ -85,16 +85,14 @@
   display: flex;
   justify-content: space-between;
 
-  .example, .number-item {
+  .example,
+  .number-item {
     font-size: 12px;
   }
+
   .red {
     color: red;
   }
-}
-
-.width-170 {
-  width:170px;
 }
 
 .point-event-none {
@@ -102,10 +100,11 @@
 }
 
 .disabled-input {
+  background-color: #e9ecef !important;
+  opacity: 1;
+
+  .trans-id {
     background-color: #e9ecef !important;
     opacity: 1;
-    .trans-id {
-      background-color: #e9ecef !important;
-      opacity: 1;
-    }
   }
+}

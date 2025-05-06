@@ -1,9 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
+  standalone: true,
   selector: 'sorting',
   templateUrl: './sorting.component.html',
-  styleUrls: ['./sorting.component.scss']
+  styleUrls: ['./sorting.component.scss'],
+  imports: [CommonModule]
 })
 export class SortingComponent {
   @Input() id: number;

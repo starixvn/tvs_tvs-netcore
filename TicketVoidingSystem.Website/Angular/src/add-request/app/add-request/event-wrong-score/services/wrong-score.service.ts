@@ -1,20 +1,17 @@
-import { EventEmitter, Injectable, QueryList } from '@angular/core';
+import { EventEmitter, inject, Injectable, QueryList } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateTimeFormat, TimeZone } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { LastTimeScore, LastTimeScoreQuery } from '../../models/last-time-score.model';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class WrongScoreService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   public initDefaultFilterWrongScore(): FilterTimeWithAllowance {
     const filterWrongScoreModel = new FilterTimeWithAllowance();
@@ -72,10 +69,6 @@ export class WrongScoreService {
     wrongScoreModel.aaTime = null;
     wrongScoreModel.paTime = null;
     wrongScoreModel.saTime = null;
-  }
-
-  public getSelectedWrongScores(wrongScoreModels: WrongScoreModel[]): WrongScoreModel[] {
-    return wrongScoreModels.filter(x => x.isChecked || x.isMainMatch);
   }
 
   public getSelectedWrongScoreComponents(wrongScoreInfoComponents: QueryList<WrongScoreInfoComponent>): WrongScoreInfoComponent[] {

@@ -1,176 +1,311 @@
-import { UsernamesComponent } from '../../../../../utility/components/user-names/user-names.component';
-import { GroupUsername } from '../../../../../utility/components/user-names/user-names.model';
-import { AddRequestService } from '../../add-request.service';
-import { AddRequestStore } from '../../add-request.store';
-import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
-import { FilterModel } from '../../filter/filter.model';
-import { AbnormalAccountModel } from '../../models/abnormal-account.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { OthersModel } from '../../others/others.model';
-import { PopupService } from '../../services/popup.service';
-import { AccountTableComponent } from '../account-table/account-table.component';
-import { EventDateFilterComponent } from '../event-date-filter/event-date-filter.component';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { SaveRequestArg } from '../models/save-request.model';
-import { ValidationBusinessRuleOutput } from '../models/validation.model';
-import { ProductFilterComponent } from '../product-filter/product-filter.component';
-import { AbnormalAccountService } from './abnormal-account.service';
+import { TestBed } from '@angular/core/testing';
 import { SaveRequestService } from './save-request.service';
+import { PopupService } from '../../services/popup.service';
+import { AddRequestService } from '../../add-request.service';
 import { ValidationService } from './validation.service';
-;
-
-class Helper {
-  static readonly url = 'http://localhost:60196/';
-  static readonly fakeRequestId = 10222;
-  static readonly fakeTransId = '100000002';
-  static readonly fakeFilterModel: FilterModel = {
-    issueTypeId: '11',
-    subIssueTypeId: '1',
-    action: '1',
-    isTest: true,
-    isVoided: false,
-    isChangeSubTypeManual: true,
-    isAbnormal: false
-  } as FilterModel;
-  static readonly fakeSaveRequestArg: SaveRequestArg = {
-    requestId: Helper.fakeRequestId,
-    isEdit: false,
-    filter: Helper.fakeFilterModel,
-    abnormalAccountModel: new AbnormalAccountModel(),
-    others: new OthersModel(),
-    confirmAddRequest: new ConfirmAddRequestModel(),
-    addRequestStore: new AddRequestStore(),
-    userId: 8,
-    requestedBy: 'AA',
-    actionIdOfFirstTimeAccess: '5',
-    primitiveProps: new PrimitiveProperty(),
-    usernamesComponent: new UsernamesComponent(null),
-    productFilterComponent: new ProductFilterComponent(null),
-    eventDateFilterComponent: new EventDateFilterComponent(null),
-    accountTableComponent: new AccountTableComponent(null, null, null, null)
-  } as SaveRequestArg;
-  static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
-    isValid: false,
-    numberOfTicketsExistedInRequest: 0,
-    transInfoAddRequestModel: new TransInfoAddRequestModel(),
-    accountWinlostModels: []
-  };
-}
+import { AbnormalAccountService } from './abnormal-account.service';
+import { TEXT } from '../../../../../utility/constants/text';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { AddRequestStore } from '../../add-request.store';
+import { UsernamesComponent } from '../../../../../utility/components/user-names/user-names.component';
+import { SaveRequestArg } from '../models/save-request.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { AccountWinlostModel } from '../models/account-winlost.model';
+import { AddRequestQuery } from '../../models/add-request.query';
+import { ValidationBusinessRuleOutput } from '../models/validation.model';
+import { FilterModel } from '../../filter/filter.model';
+import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 
 describe('SaveRequestService', () => {
-  let saveRequestService: SaveRequestService;
+  let service: SaveRequestService;
+  let popupService: PopupService;
   let addRequestService: AddRequestService;
   let validationService: ValidationService;
   let abnormalAccountService: AbnormalAccountService;
-  let popupService: PopupService;
+
+  const mockSaveRequestArg: SaveRequestArg = {
+    addRequestStore: {
+      changeBlockingUiStatus: jest.fn(),
+      changeSavingRequestStatus: jest.fn()
+    } as unknown as AddRequestStore,
+    primitiveProps: {
+      validAccountWinlostModels: [],
+      transInfoAddRequestModel: null,
+      numberOfTicketsExistedInRequest: 0,
+      isCancelValidate: false
+    } as PrimitiveProperty,
+    filter: {
+      isVoided: false,
+      action: '1',
+      issueTypeId: '1',
+      subIssueTypeId: '1',
+      isTest: false,
+      isAbnormal: false,
+      actions: []
+    } as FilterModel,
+    usernamesComponent: {
+      triggerFocusOutUsernames: jest.fn()
+    } as unknown as UsernamesComponent,
+    confirmAddRequest: {
+      isOpen: false,
+      requestId: 0,
+      requestedBy: '',
+      isEditingByAnotherUser: false,
+      isHasWarningTakenNote: false,
+      extraWarningModel: null,
+      userId: 0,
+      isHasSettledTicket: false,
+      isHasWarningTicket: false,
+      isShowSubIssueType: false
+    } as ConfirmAddRequestModel,
+    isEdit: false,
+    requestId: 0,
+    userId: 0,
+    requestedBy: '',
+    actionIdOfFirstTimeAccess: '',
+    abnormalAccountModel: null,
+    productFilterComponent: null,
+    eventDateFilterComponent: null,
+    others: {
+      decidedBy: '',
+      remark: ''
+    },
+    accountTableComponent: null
+  };
 
   beforeEach(() => {
-    addRequestService = new AddRequestService(null, null, null);
-    addRequestService.executeSaveRequest = jest.fn();
-    saveRequestService = new SaveRequestService(popupService, addRequestService, validationService, abnormalAccountService);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        SaveRequestService,
+        PopupService,
+        AddRequestService,
+        ValidationService,
+        AbnormalAccountService,
+        AddRequestStore
+      ]
+    });
+
+    service = TestBed.inject(SaveRequestService);
+    popupService = TestBed.inject(PopupService);
+    addRequestService = TestBed.inject(AddRequestService);
+    validationService = TestBed.inject(ValidationService);
+    abnormalAccountService = TestBed.inject(AbnormalAccountService);
+
+    jest.spyOn(popupService, 'showError');
+    jest.spyOn(StaticService, 'isHasWarningTakenNote');
+    jest.spyOn(StaticService, 'isEditingByAnotherUser').mockReturnValue(false);
+    jest.spyOn(abnormalAccountService, 'getExtraWarningModel');
+    jest.spyOn(addRequestService, 'executeSaveRequest');
   });
 
-  it('#saveRequest should not call #showPopupConfirmSave', async () => {
-    const args = Helper.fakeSaveRequestArg;
-    args.filter.isVoided = false;
-    args.addRequestStore = new AddRequestStore();
-    args.addRequestStore.changeBlockingUiStatus = jest.fn();
-    args.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestService = new SaveRequestService(null, addRequestService, validationService, null);
-    saveRequestService['showPopupConfirmSave'] = jest.fn();
-    saveRequestService.recheckValidationBeforeSaveRequest = jest.fn().mockReturnValue(false);
-    saveRequestService['cancelValidateUsernamesWhenFocusOut'] = jest.fn().mockImplementation();
-
-    await saveRequestService.saveRequest(args);
-
-    expect(saveRequestService['showPopupConfirmSave']).toHaveBeenCalledTimes(0);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#saveRequest should call #showPopupConfirmSave', async () => {
-    const args = Helper.fakeSaveRequestArg;
-    args.filter.isVoided = true;
-    args.addRequestStore = new AddRequestStore();
-    args.addRequestStore.changeBlockingUiStatus = jest.fn();
-    args.addRequestStore.changeSavingRequestStatus = jest.fn();
-    saveRequestService = new SaveRequestService(null, addRequestService, validationService, null);
-    saveRequestService['showPopupConfirmSave'] = jest.fn();
-    saveRequestService['cancelValidateUsernamesWhenFocusOut'] = jest.fn();
+  describe('saveRequest', () => {
+    it('should show popup confirm when data is valid', async () => {
+      service['recheckValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue(true);
+      service['showPopupConfirmSave'] = jest.fn();
 
-    await saveRequestService.saveRequest(args);
 
-    expect(saveRequestService['showPopupConfirmSave']).toHaveBeenCalledTimes(1);
+      await service.saveRequest(mockSaveRequestArg);
+
+      expect(mockSaveRequestArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(service['showPopupConfirmSave']).toHaveBeenCalledWith(mockSaveRequestArg);
+      expect(mockSaveRequestArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    });
+
+    it('should not show popup when data is invalid', async () => {
+      service['recheckValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue(false);
+      service['showPopupConfirmSave'] = jest.fn();
+
+      await service.saveRequest(mockSaveRequestArg);
+
+      expect(mockSaveRequestArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(service['showPopupConfirmSave']).not.toHaveBeenCalled();
+      expect(mockSaveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
+      expect(mockSaveRequestArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    });
   });
 
-  it('#onClickConfirmSave should call #executeSaveRequestApi', async () => {
-    const args = Helper.fakeSaveRequestArg;
-    args.filter.isVoided = true;
-    args.addRequestStore = new AddRequestStore();
-    args.addRequestStore.changeBlockingUiStatus = jest.fn();
-    saveRequestService = new SaveRequestService(null, addRequestService, null, null);
-    saveRequestService['executeSaveRequestApi'] = jest.fn().mockImplementation();
+  describe('recheckValidationBeforeSaveRequest', () => {
+    it('should validate and update primitive props', async () => {
+      const mockValidation: ValidationBusinessRuleOutput = {
+        isValid: true,
+        accountWinlostModels: [],
+        transInfoAddRequestModel: null,
+        numberOfTicketsExistedInRequest: 0,
+        isWarringTooHighTickets: false
+      };
 
-    await saveRequestService.onClickConfirmSave(args);
+      jest.spyOn(validationService, 'checkBusinessRule').mockResolvedValue(mockValidation);
 
-    expect(saveRequestService['executeSaveRequestApi']).toHaveBeenCalledTimes(1);
+      const result = await service['recheckValidationBeforeSaveRequest'](mockSaveRequestArg);
+
+      expect(result).toBe(true);
+      expect(mockSaveRequestArg.primitiveProps.validAccountWinlostModels).toEqual([]);
+      expect(mockSaveRequestArg.primitiveProps.transInfoAddRequestModel).toBeNull();
+      expect(mockSaveRequestArg.primitiveProps.numberOfTicketsExistedInRequest).toBe(0);
+    });
   });
 
-  it('#onClickConfirmSave should call #showError', async () => {
-    const args = Helper.fakeSaveRequestArg;
-    const output = Helper.fakeValidationBusinessRuleOutput;
-    output.isValid = false;
-    args.filter.isVoided = false;
-    args.addRequestStore = new AddRequestStore();
-    args.addRequestStore.changeBlockingUiStatus = jest.fn();
-    const mockPopupService = new PopupService(null);
-    mockPopupService.showError = jest.fn();
-    saveRequestService = new SaveRequestService(mockPopupService, addRequestService, null, null);
-    saveRequestService.recheckValidationBeforeSaveRequest = jest.fn().mockReturnValue(false);
+  describe('onClickConfirmSave', () => {
+    it('should execute save request when data is valid', async () => {
+      service['recheckValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue(true);
+      service['executeSaveRequestApi'] = jest.fn();
 
-    await saveRequestService.onClickConfirmSave(args);
+      await service.onClickConfirmSave(mockSaveRequestArg);
 
-    expect(mockPopupService.showError).toHaveBeenCalledTimes(1);
+      expect(service['executeSaveRequestApi']).toHaveBeenCalledWith(mockSaveRequestArg);
+    });
+
+    it('should show error when data is invalid', async () => {
+      service['recheckValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue(false);
+
+      await service.onClickConfirmSave(mockSaveRequestArg);
+
+      expect(popupService.showError).toHaveBeenCalledWith(TEXT.INVALID_DATA_IN_REQUEST);
+    });
   });
 
-  it('#initAddRequestQuery should return model', async () => {
-    const args = Helper.fakeSaveRequestArg;
-    args.usernamesComponent = new UsernamesComponent(null);
-    args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue(['AB'])
-    args.filter.isVoided = false;
-    args.primitiveProps = new PrimitiveProperty();
-    args.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
-    saveRequestService = new SaveRequestService(null, null, null, null);
+  describe('showPopupConfirmSave', () => {
+    it('should set up confirm popup with correct values', () => {
+      service['showPopupConfirmSave'](mockSaveRequestArg);
 
-    const actual = saveRequestService['initAddRequestQuery'](args);
-
-    expect(actual.actionId).toBe(args.filter.action);
-    expect(actual.issueTypeId).toBe(args.filter.issueTypeId);
+      expect(StaticService.isHasWarningTakenNote).toHaveBeenCalled();
+      expect(StaticService.isEditingByAnotherUser).toHaveBeenCalled();
+      expect(abnormalAccountService.getExtraWarningModel).toHaveBeenCalled();
+      expect(mockSaveRequestArg.confirmAddRequest.isOpen).toBe(true);
+    });
   });
 
-  it('#initAddRequestQuery should return expected model when transInfoAddRequestModel is null', async () => {
-    const args = Helper.fakeSaveRequestArg;
-    args.usernamesComponent = new UsernamesComponent(null);
-    args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => 'AB');
-    args.filter.isVoided = false;
-    args.primitiveProps = new PrimitiveProperty();
-    args.primitiveProps.transInfoAddRequestModel = null;
-    saveRequestService = new SaveRequestService(null, null, null, null);
+  describe('executeSaveRequestApi', () => {
+    it('should call addRequestService.executeSaveRequest with correct parameters', async () => {
+      await service['executeSaveRequestApi'](mockSaveRequestArg);
 
-    const actual = saveRequestService['initAddRequestQuery'](args);
-
-    expect(actual.actionId).toBe(args.filter.action);
-    expect(actual.issueTypeId).toBe(args.filter.issueTypeId);
+      expect(addRequestService.executeSaveRequest).toHaveBeenCalledWith(
+        mockSaveRequestArg.isEdit,
+        mockSaveRequestArg.requestId,
+        expect.any(AddRequestQuery),
+        mockSaveRequestArg.addRequestStore
+      );
+    });
   });
 
-  it('#cancelValidateUsernamesWhenFocusOut should call #triggerFocusOutUsernames', async () => {
-    const primitiveProps = new PrimitiveProperty();
-    const usernamesComponent = new UsernamesComponent(null);
-    usernamesComponent.triggerFocusOutUsernames = jest.fn();
-    saveRequestService = new SaveRequestService(null, null, null, null);
+  describe('initValidationBusinessRuleArgs', () => {
+    it('should initialize validation business rule args correctly', () => {
+      const result = service['initValidationBusinessRuleArgs'](mockSaveRequestArg);
 
-    saveRequestService['cancelValidateUsernamesWhenFocusOut'](primitiveProps, usernamesComponent);
+      expect(result.actionId).toBe(mockSaveRequestArg.filter.action);
+      expect(result.requestId).toBe(mockSaveRequestArg.requestId);
+      expect(result.usernamesComponent).toBe(mockSaveRequestArg.usernamesComponent);
+      expect(result.abnormalAccountModel).toBe(mockSaveRequestArg.abnormalAccountModel);
+      expect(result.primitiveProps).toBe(mockSaveRequestArg.primitiveProps);
+      expect(result.issueTypeId).toBe(mockSaveRequestArg.filter.issueTypeId);
+    });
+  });
 
-    expect(usernamesComponent.triggerFocusOutUsernames).toHaveBeenCalledTimes(1);
+  describe('initAddRequestQuery', () => {
+    it('should initialize add request query with correct values', () => {
+      const result = service['initAddRequestQuery'](mockSaveRequestArg);
+
+      expect(result.transInfoJson).toBe(mockSaveRequestArg.primitiveProps.transInfoAddRequestModel?.transInfoJson);
+      expect(result.unMarkTransIds).toBe(mockSaveRequestArg.primitiveProps.transInfoAddRequestModel?.unMarkTransIds);
+      expect(result.markTransIds).toBe(mockSaveRequestArg.primitiveProps.transInfoAddRequestModel?.markTransIds);
+      expect(result.issueTypeId).toBe(mockSaveRequestArg.filter.issueTypeId);
+      expect(result.subIssueTypeId).toBe(mockSaveRequestArg.filter.subIssueTypeId);
+      expect(result.actionId).toBe(mockSaveRequestArg.filter.action);
+      expect(result.isTest).toBe(mockSaveRequestArg.filter.isTest);
+      expect(result.isVoided).toBe(mockSaveRequestArg.filter.isVoided);
+      expect(result.abnormalAccountInfo).toBe(mockSaveRequestArg.abnormalAccountModel);
+      expect(result.decidedBy).toBe(mockSaveRequestArg.others.decidedBy);
+      expect(result.remark).toBe(mockSaveRequestArg.others.remark);
+    });
+  });
+
+  describe('cancelValidateUsernamesWhenFocusOut', () => {
+    it('should cancel validation and trigger focus out', () => {
+      service['cancelValidateUsernamesWhenFocusOut'](
+        mockSaveRequestArg.primitiveProps,
+        mockSaveRequestArg.usernamesComponent
+      );
+
+      expect(mockSaveRequestArg.primitiveProps.isCancelValidate).toBe(true);
+      expect(mockSaveRequestArg.usernamesComponent.triggerFocusOutUsernames).toHaveBeenCalled();
+    });
+  });
+
+  describe('getAccountWinlostWhenSaveRequest', () => {
+    it('should preserve original account values when merging with new accounts', () => {
+      const originalAccounts: AccountWinlostModel[] = [{
+        custId: 1,
+        username: 'test',
+        givenCredit: 0,
+        adjustVoidLimit: 0,
+        currentWinning: 0,
+        currentLosing: 0,
+        estimateVoidAmount: 100,
+        estimateVoidAmountUnEditableTickets: 0,
+        winLostAfterVoid: 50,
+        isHighlight: false,
+        adjustVoidLimitString: '',
+        isShowInput: false,
+        isEditedTicket: false,
+        isCanEditTicket: false,
+        isShowOnTable: false,
+        transInfoAccountJson: ''
+      }];
+
+      const newAccounts: AccountWinlostModel[] = [{
+        custId: 1,
+        username: 'test',
+        givenCredit: 0,
+        adjustVoidLimit: 0,
+        currentWinning: 0,
+        currentLosing: 0,
+        estimateVoidAmount: 200,
+        estimateVoidAmountUnEditableTickets: 0,
+        winLostAfterVoid: 150,
+        isHighlight: false,
+        adjustVoidLimitString: '',
+        isShowInput: false,
+        isEditedTicket: false,
+        isCanEditTicket: false,
+        isShowOnTable: false,
+        transInfoAccountJson: ''
+      }];
+
+      const result = service['getAccountWinlostWhenSaveRequest'](originalAccounts, newAccounts);
+
+      expect(result[0].estimateVoidAmount).toBe(100);
+      expect(result[0].winLostAfterVoid).toBe(50);
+    });
+
+    it('should return new accounts when no original accounts exist', () => {
+      const newAccounts: AccountWinlostModel[] = [{
+        custId: 1,
+        username: 'test',
+        givenCredit: 0,
+        adjustVoidLimit: 0,
+        currentWinning: 0,
+        currentLosing: 0,
+        estimateVoidAmount: 200,
+        estimateVoidAmountUnEditableTickets: 0,
+        winLostAfterVoid: 150,
+        isHighlight: false,
+        adjustVoidLimitString: '',
+        isShowInput: false,
+        isEditedTicket: false,
+        isCanEditTicket: false,
+        isShowOnTable: false,
+        transInfoAccountJson: ''
+      }];
+
+      const result = service['getAccountWinlostWhenSaveRequest']([], newAccounts);
+
+      expect(result).toEqual(newAccounts);
+    });
   });
 });

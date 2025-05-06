@@ -1,11 +1,11 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, Input, Output, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { LABELS } from '../../../../utility/constants/labels';
+import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { BetTypeAddRequest, GroupBetTypeAddRequest, GroupBetTypesAddRequestModel } from './group-bet-types.model';
-import { CommonModule } from '@angular/common';
-import { TooltipComponent } from '../../tooltip/tooltip.component';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
@@ -19,12 +19,14 @@ export class GroupBetTypesComponent {
   @Output() betTypesEvent = new EventEmitter<BetTypeAddRequest[]>();
   @Output() checkExistBetTypeEvent = new EventEmitter<boolean>();
   @Output() changeFilterEvent = new EventEmitter();
-  tooltip = new Tooltip();
 
   @Input() scroll: boolean;
   collapse = true;
+  tooltip = new Tooltip();
 
-  constructor(private readonly element: ElementRef) {
+  element = inject(ElementRef);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -37,7 +39,6 @@ export class GroupBetTypesComponent {
     this.changeFilterEvent.emit();
     this.betTypesEvent.emit(_.cloneDeep(group.betTypes));
   }
-
 
   changeBetTypeItem(item: BetTypeAddRequest) {
     this.changeFilterEvent.emit();
@@ -53,7 +54,7 @@ export class GroupBetTypesComponent {
     this.checkExistBetTypeEvent.emit(this.model.groupBetTypes.length > 0);
     if (this.model.groupBetTypes.length === 0) {
       return false;
-    } else if(this.model.groupBetTypes.every(x => x.betTypes.every(y => !y.isChecked))) {
+    } else if (this.model.groupBetTypes.every(x => x.betTypes.every(y => !y.isChecked))) {
       this.tooltip.display('group-bettypes-all-checkbox', LABELS.NO_CHECKED_BETTYPE);
       return false;
     }

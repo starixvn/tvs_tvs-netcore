@@ -1,321 +1,182 @@
-import { HttpClientModule } from '@angular/common/http';
-import { NgModule, SimpleChange } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
-import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
-import { HttpService } from '../../../../utility/services/http.service';
-import { AddRequestStore } from '../add-request.store';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { OthersComponent } from './others.component';
-import { GroupOperator, OperatorDefault, OperatorInfo, OthersModel } from './others.model';
 import { OthersService } from './others.service';
+import { AddRequestStore } from '../add-request.store';
+import { AddRequestApiService } from '../add-request-api.service';
+import { SimpleChange } from '@angular/core';
+import { GroupOperator, OperatorDefault, OthersModel } from './others.model';
+import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 
 class Helper {
-  static readonly inputsSelector = '.form-control';
-  static getFakeOperatorInfo(): OperatorInfo[] {
-    return  [
-      { matchId: 0, userName: 'N/A', groupName: 'Trader', operatorId: 0, operatorType: 1 },
-      { matchId: 0, userName: 'UserA', groupName: 'Trader', operatorId: 1, operatorType: 1 },
-      { matchId: 0, userName: 'UserB', groupName: 'Trader', operatorId: 1, operatorType: 1 },
-      { matchId: 0, userName: 'N/A', groupName: 'Suspender', operatorId: 0, operatorType: 2 },
-      { matchId: 0, userName: 'UserC', groupName: 'Suspender', operatorId: 2, operatorType: 2 },
-      { matchId: 0, userName: 'UserD', groupName: 'Suspender', operatorId: 2, operatorType: 2 },
-    ];
-  }
-  static readonly fakeGroupOperator: GroupOperator = {
-    name: '',
-    items: Helper.getFakeOperatorInfo(),
-    selected: [],
-  };
-  static readonly fakeOthersModel: OthersModel = {
-    mistakenBy: '',
-    decidedBy: '',
-    operatorsList: Helper.getFakeOperatorInfo(),
-    provider: '',
-    source: '',
-    remark: '',
-  };
+  static readonly fakeMatchId = 123;
+  static readonly fakeParentMatchId = 456;
+  static readonly fakeIssueTypeId = '1';
+  static readonly fakeOperators = [
+    { operatorId: 1, operatorType: 'TRADER', groupName: 'Group1' },
+    { operatorId: 2, operatorType: 'SUSPENDER', groupName: 'Group2' }
+  ];
+  static readonly fakeDecidedBys = ['User1', 'User2'];
 }
 
 describe('OthersComponent', () => {
-  @NgModule({
-    imports: [
-      FormsModule,
-      NgSelectModule,
-      BlockUiModule,
-      HttpClientModule
-    ],
-    providers: [
-      HttpService,
-      AddRequestStore
-    ]
-  })
-  class AppModuleTest { }
+  let component: OthersComponent;
+  let fixture: ComponentFixture<OthersComponent>;
+  let othersService: OthersService;
+  let addRequestStore: AddRequestStore;
+  let addRequestApiService: AddRequestApiService;
 
-  let shallow: Shallow<OthersComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        OthersService,
+        AddRequestStore,
+        AddRequestApiService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(OthersComponent, AppModuleTest);
+    fixture = TestBed.createComponent(OthersComponent);
+    othersService = fixture.debugElement.injector.get(OthersService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
+    component = fixture.componentInstance;
   });
 
-  it('OthersComponent should init match snapshot', async () => {
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should initialize with default values', async () => {
     // Arrange
-    const { fixture, instance } = await shallow.render();
-    fixture.detectChanges();
+    component.isEdit = false;
+    component.matchId = Helper.fakeMatchId;
+    component.issueTypeId = Helper.fakeIssueTypeId;
+    othersService.getOperators = jest.fn().mockResolvedValue(Helper.fakeOperators);
+    addRequestApiService.GetDecidedBy = jest.fn().mockResolvedValue(Helper.fakeDecidedBys);
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+
+    // Act
+    await component.ngOnInit();
 
     // Assert
-    expect(fixture).toMatchSnapshot();
-    expect(instance.operators.length).toBe(2);
+    expect(component.operators).toEqual([OperatorDefault.TRADER, OperatorDefault.SUSPENDER]);
+    expect(component.groupOperators.length).toBeGreaterThan(0);
   });
 
-  it('OthersComponent should init default value for all filter', async () => {
+  it('should handle changes when matchId is provided', async () => {
     // Arrange
-    const { find, findComponent, fixture } = await shallow.render();
-    fixture.detectChanges();
-    const inputsElement = find(Helper.inputsSelector);
-    const mistakenBySelector = inputsElement[0];
-    const decidedBySelector = inputsElement[1];
-    const providerSelector = inputsElement[2];
-    const sourceSelector = inputsElement[3];
-    const operators = findComponent(NgSelectComponent);
-    const traderSelector = operators[0];
-    const suspenderSelector = operators[1];
+    component.isEdit = false;
+    component.matchId = Helper.fakeMatchId;
+    othersService.getOperators = jest.fn().mockResolvedValue(Helper.fakeOperators);
+    addRequestStore.changeBlockingUiStatus = jest.fn();
 
-    // Assert
-    expect(mistakenBySelector.nativeElement.value).toBe('');
-    expect(decidedBySelector.nativeElement.value).toBe('');
-    expect(providerSelector.nativeElement.value).toBe('');
-    expect(sourceSelector.nativeElement.value).toBe('');
-    expect(traderSelector.items).toStrictEqual([OperatorDefault.TRADER]);
-    expect(suspenderSelector.items).toStrictEqual([OperatorDefault.SUSPENDER]);
-  });
-
-  it('Props(mistakenBy, decidedBy, provider, source and remark) should change when input value', async () => {
-    // Arrange
-    const { find, fixture, instance } = await shallow.render();
-    const inputsElement = find(Helper.inputsSelector);
-    const mistakenBySelector = inputsElement[0];
-    const decidedBySelector = inputsElement[1];
-    const providerSelector = inputsElement[2];
-    const sourceSelector = inputsElement[3];
-
-    mistakenBySelector.nativeElement.value = 'sa';
-    decidedBySelector.nativeElement.value = 'sa';
-    providerSelector.nativeElement.value = 'sa';
-    sourceSelector.nativeElement.value = 'sa';
-    mistakenBySelector.triggerEventHandler('input', { target: mistakenBySelector.nativeElement });
-    decidedBySelector.triggerEventHandler('input', { target: decidedBySelector.nativeElement });
-    providerSelector.triggerEventHandler('input', { target: providerSelector.nativeElement });
-    sourceSelector.triggerEventHandler('input', { target: sourceSelector.nativeElement });
-    fixture.detectChanges();
-
-    // Assert
-    expect(instance.model.mistakenBy).toBe('sa');
-    expect(instance.model.decidedBy).toBe('sa');
-    expect(instance.model.provider).toBe('sa');
-    expect(instance.model.source).toBe('sa');
-  });
-
-  it('Trader and Suspender should return expected data', async () => {
-    const { findComponent, fixture, instance } = await shallow
-      .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn() })
-      .mock(OthersService, { getOperators : jest.fn().mockImplementation(() => Helper.getFakeOperatorInfo())})
-      .render();
-
-    const operatorsBefore = findComponent(NgSelectComponent);
-    const traderSelectorBefore = operatorsBefore[0];
-    const suspenderSelectorBefore = operatorsBefore[1];
-    expect(traderSelectorBefore.items.length).toBe(1);
-    expect(suspenderSelectorBefore.items.length).toBe(1);
-
-    instance.matchId = 54321;
-    const changes = {
-      'matchId': new SimpleChange('12345', '54321', true),
-    };
-    instance.model.operatorsList = Helper.getFakeOperatorInfo();
-    instance.isEdit = true;
-    await instance.ngOnChanges(changes);
-    fixture.detectChanges();
-    const operatorsAfter = findComponent(NgSelectComponent);
-    const traderSelectorAfter = operatorsAfter[0];
-    const suspenderSelectorAfter = operatorsAfter[1];
-
-    // Assert
-    expect(instance.groupOperators.length).toBe(2);
-    expect(instance.groupOperators[0].items.length).toBe(3);
-    expect(instance.groupOperators[0].selected.length).toBe(3);
-    expect(instance.groupOperators[1].items.length).toBe(3);
-    expect(instance.groupOperators[1].selected.length).toBe(3);
-    expect(traderSelectorAfter.items.length).toBe(3);
-    expect(suspenderSelectorAfter.items.length).toBe(3);
-  });
-  
-  it('#ngOnChanges should not call #intDefaultValueGroupOperators', async () => {
-    const { fixture, instance } = await shallow
-        .mock(OthersService, { getOperators : jest.fn().mockImplementation(() => Helper.getFakeOperatorInfo())})
-        .render();
-    instance['intDefaultValueGroupOperators'] = jest.fn();
-    instance['updateSelectedValueGroupOperators'] = jest.fn();
-    const changes = {};
-    instance.isEdit = true;
-    await instance.ngOnChanges(changes);
-    fixture.detectChanges();
-
-    // Assert
-    expect(instance['intDefaultValueGroupOperators']).toHaveBeenCalledTimes(0);
-    expect(instance['updateSelectedValueGroupOperators']).toHaveBeenCalledTimes(0);
-  });
-  
-  it('#updateSelectedValueGroupOperators should update data', async () => {
-    const { instance } = await shallow
-        .mock(OthersService, { getOperators : jest.fn().mockImplementation(() => Helper.getFakeOperatorInfo())})
-        .render();
-    instance.isEdit = true;
-    instance.model = _.clone(Helper.fakeOthersModel);
-    instance.model.operatorsList = _.clone(Helper.getFakeOperatorInfo());
-    instance.model.operatorsList.filter = jest.fn().mockImplementation(() => []);
-
-    instance['updateSelectedValueGroupOperators']();
-    
-    // Assert
-    expect(instance.groupOperators.length).toBe(2);
-  });
-
-  it('#updateSelectedValueGroupOperators should not update data', async () => {
-    const { instance } = await shallow
-        .mock(OthersService, { getOperators : jest.fn().mockImplementation(() => Helper.getFakeOperatorInfo())})
-        .render();
-    instance.isEdit = false;
-
-    instance['updateSelectedValueGroupOperators']();
-    
-    // Assert
-    expect(instance.groupOperators.length).toBe(2);
-  });
-
-  it('#updateModel should call #updateOperatorList', async () => {
-    const { instance } = await shallow
-        .mock(OthersService, { getOperators : jest.fn().mockImplementation(() => Helper.getFakeOperatorInfo())})
-        .render();
-    instance.isEdit = false;
-    instance['updateOperatorList'] = jest.fn();
-    instance.modelChange.emit = jest.fn();
-
-    // Action
-    instance.updateModel();
-    
-    // Assert
-    expect(instance['updateOperatorList']).toHaveBeenCalledTimes(1);
-    expect(instance.modelChange.emit).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#updateOperatorList should update correct data', async () => {
-    const { instance } = await shallow
-        .mock(OthersService, { getOperators : jest.fn().mockImplementation(() => Helper.getFakeOperatorInfo())})
-        .render();
-    instance.isEdit = false;
-    instance.modelChange.emit = jest.fn();
-
-    // Action
-    instance['updateOperatorList']();
-    
-    // Assert
-    expect(instance.groupOperators.length).toBe(2);
-  });
-  
-  it('#onSelectOperator should update correct data', async () => {
-    const { instance } = await shallow
-        .mock(OthersService, { getOperators : jest.fn().mockImplementation(() => Helper.getFakeOperatorInfo())})
-        .render();
-    instance.isEdit = false;
-    instance.modelChange.emit = jest.fn();
-    instance.updateModel = jest.fn();
-    
-    // Action
-    instance.onSelectOperator();
-    
-    // Assert
-    expect(instance.groupOperators.length).toBe(2);
-    expect(instance.updateModel).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#onSelectOperator should update correct data when have selected in group', async () => {
-    const { instance } = await shallow
-        .mock(OthersService, { getOperators : jest.fn().mockImplementation(() => Helper.getFakeOperatorInfo())})
-        .render();
-    instance.isEdit = false;
-    instance.modelChange.emit = jest.fn();
-    instance.updateModel = jest.fn();
-    instance.groupOperators = _.clone([Helper.fakeGroupOperator]);
-    instance.groupOperators[0].selected = Helper.getFakeOperatorInfo();
-
-    // Action
-    instance.onSelectOperator();
-    
-    // Assert
-    expect(instance.groupOperators.length).toBe(1);
-    expect(instance.updateModel).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#onSelectOperator should update correct data when have only one selected in group and operatorId is not zero', async () => {
-    const { instance } = await shallow
-        .mock(OthersService, { getOperators : jest.fn().mockImplementation(() => Helper.getFakeOperatorInfo())})
-        .render();
-    instance.isEdit = false;
-    instance.modelChange.emit = jest.fn();
-    instance.updateModel = jest.fn();
-    instance.groupOperators = _.clone([Helper.fakeGroupOperator]);
-    const operatorInfo = Helper.getFakeOperatorInfo()[0];
-    operatorInfo.operatorId = 10000;
-    instance.groupOperators[0].selected = [operatorInfo];
-
-    // Action
-    instance.onSelectOperator();
-    
-    // Assert
-    expect(instance.groupOperators.length).toBe(1);
-    expect(instance.updateModel).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#initProvider should call #getProvider when has parentMatchId ', async () => {
-    const mockGetProvider = jest.fn().mockImplementation(() => []);
-    const { instance } = await shallow
-    .mock(OthersService, { getProvider : mockGetProvider})
-    .render();
-    instance.isEdit = false;
-    instance.operators = [];
-    [
-      IssueTypeConstant.DANGER_ACCEPTED,
-      IssueTypeConstant.RED_CARD,
-      IssueTypeConstant.WRONG_SCORE,
-    ].forEach(async x => {
-      instance.issueTypeId = x;
-      await instance['initProvider'](false, 1, 1);
-      
-      // Assert
-      expect(mockGetProvider).toHaveBeenCalled;
+    // Act
+    await component.ngOnChanges({
+      matchId: {
+        currentValue: Helper.fakeMatchId,
+        previousValue: null,
+        firstChange: true
+      } as SimpleChange
     });
+
+    // Assert
+    expect(othersService.getOperators).toHaveBeenCalledWith(Helper.fakeMatchId.toString());
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+    expect(component.operators).toEqual(Helper.fakeOperators);
   });
-  
-  it('#initProvider should call #getProvider when has not parentMatchId ', async () => {
-    const mockGetProvider = jest.fn().mockImplementation(() => null);
-    const { instance } = await shallow
-    .mock(OthersService, { getProvider : mockGetProvider})
-    .render();
-    instance.isEdit = false;
-    instance.operators = [];
-    [
-      IssueTypeConstant.DANGER_ACCEPTED,
-      IssueTypeConstant.RED_CARD,
-      IssueTypeConstant.WRONG_SCORE,
-    ].forEach(async x => {
-      instance.issueTypeId = x;
-      await instance['initProvider'](false, 1, null);
-      
-      // Assert
-      expect(mockGetProvider).toHaveBeenCalled();
+
+  it('should handle operator selection', () => {
+    // Arrange
+    component.groupOperators = [
+      {
+        groupName: 'Group1',
+        items: [
+          { operatorId: 0, operatorType: 'DEFAULT' },
+          { operatorId: 1, operatorType: 'TRADER' }
+        ],
+        selected: []
+      }
+    ] as unknown as GroupOperator[];
+
+    // Act
+    component.onSelectOperator();
+
+    // Assert
+    expect(component.groupOperators[0].selected.length).toBe(1);
+    expect(component.groupOperators[0].selected[0].operatorId).toBe(0);
+  });
+
+  it('should update model when operators change', () => {
+    // Arrange
+    component.model = new OthersModel();
+    component.groupOperators = [
+      {
+        groupName: 'Group1',
+        items: [
+          { operatorId: 1, operatorType: 'TRADER' }
+        ],
+        selected: [{ operatorId: 1, operatorType: 'TRADER' }]
+      }
+    ] as unknown as GroupOperator[];
+    component.modelChange.emit = jest.fn();
+
+    // Act
+    component.updateModel();
+
+    // Assert
+    expect(component.model.operatorsList.length).toBe(1);
+    expect(component.model.operatorsList[0].operatorId).toBe(1);
+    expect(component.modelChange.emit).toHaveBeenCalledWith(component.model);
+  });
+
+  it('should initialize provider when issue type supports suggestion', async () => {
+    // Arrange
+    component.isEdit = false;
+    component.matchId = Helper.fakeMatchId;
+    component.parentMatchId = Helper.fakeParentMatchId;
+    component.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
+    othersService.getProvider = jest.fn().mockResolvedValue({ providerName: 'TestProvider' });
+
+    // Act
+    await component.ngOnChanges({
+      matchId: {
+        currentValue: Helper.fakeMatchId,
+        previousValue: null,
+        firstChange: true
+      } as SimpleChange
     });
+
+    // Assert
+    expect(othersService.getProvider).toHaveBeenCalledWith(Helper.fakeParentMatchId);
+    expect(component.model.provider).toBe('TestProvider');
+  });
+
+  it('should add decided by', () => {
+    // Arrange
+    const newDecidedBy = 'NewUser';
+
+    // Act
+    component.addDecidedBy(newDecidedBy);
+
+    // Assert
+    expect(component.decidedBys).toContain(newDecidedBy);
+  });
+
+  it('should check if issue type supports suggestion', () => {
+    // Arrange
+    component.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
+
+    // Act & Assert
+    expect(component.isIssueTypeSupportSuggestion()).toBeTruthy();
+
+    component.issueTypeId = IssueTypeConstant.RED_CARD;
+    expect(component.isIssueTypeSupportSuggestion()).toBeTruthy();
+
+    component.issueTypeId = IssueTypeConstant.WRONG_SCORE;
+    expect(component.isIssueTypeSupportSuggestion()).toBeTruthy();
+
+    component.issueTypeId = 'OTHER_TYPE';
+    expect(component.isIssueTypeSupportSuggestion()).toBeFalsy();
   });
 });

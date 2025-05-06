@@ -1,24 +1,35 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { SportType } from '../../../../../utility/constants/sport.constant';
+import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
 import { FilterModel } from '../../filter/filter.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
+import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
 import { LogAnalysisService } from '../../services/log-analysis.service';
+import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOddsService } from '../services/event-wrong-odds.service';
 
 @Component({
-  selector: 'log-info-wrong-odds',
-  templateUrl: './log-info-wrong-odds.component.html',
-  styleUrls: ['./log-info-wrong-odds.component.scss']
+    selector: 'log-info-wrong-odds',
+    templateUrl: './log-info-wrong-odds.component.html',
+    styleUrls: ['./log-info-wrong-odds.component.scss'],
+    standalone: true,
+    imports: [AffectedTicketComponent, PoolHouseTicketComponent, TicketCountOtherSportsComponent,
+      FormsModule, CommonModule, PipeModule],
+    providers: [AffectedTicketService]
 })
 export class LogInfoWrongOddsComponent implements OnInit {
   @Input() logInfo: LogInfoWrongOdds;
@@ -30,12 +41,11 @@ export class LogInfoWrongOddsComponent implements OnInit {
   poolHouseTicketsModel = new PoolHouseTicketsModel();
   affectedTicketsModel = new AffectedTicketsModel();
 
-  constructor(private readonly modalService: ModalService,
-    private readonly eventWrongOddsService: EventWrongOddsService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly logAnalysisService: LogAnalysisService
-  ) { }
+  private readonly modalService = inject(ModalService);
+  private readonly eventWrongOddsService = inject(EventWrongOddsService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly logAnalysisService = inject(LogAnalysisService);
 
   public ngOnInit(): void {
     if (this.isEdit) {

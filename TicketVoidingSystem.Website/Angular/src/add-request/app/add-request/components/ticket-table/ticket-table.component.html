@@ -5,68 +5,130 @@
         <tr>
           <th scope="col" class="col-tb-0">
             <div>
-              <input type="checkbox" [(ngModel)]="model.isChecked" (change)="model.changeModelToGroups();changeWinlostCheckedTicket()"/>
+              <input type="checkbox" [(ngModel)]="model.isChecked"
+                (change)="model.changeModelToGroups();changeWinLostCheckedTicket()" />
             </div>
           </th>
-          <th scope="col" class="col-tb-1"><div>No</div></th>
-          <th scope="col" class="col-tb-3"><div>BetID</div></th>
-          <th scope="col" class="col-tb-4"><div>Trans.Date</div></th>
-          <th scope="col" class="col-tb-5"><div>Member</div></th>
-          <th scope="col" class="col-tb-6"><div>Bettype</div></th>
-          <th scope="col" class="col-tb-7"><div>Odds</div></th>
-          <th scope="col" class="col-tb-8"><div>Stake</div></th>
-          <th scope="col" class="col-tb-9"><div>Win Loss</div></th>
-          <th scope="col" class="col-tb-10"><div>Currency</div></th>
-          <th scope="col" class="col-tb-11"><div>Status</div></th>
-          <th scope="col" class="col-tb-13"><div>Score</div></th>
-          <th scope="col" class="col-tb-14"><div>HDP</div></th>
-          <th scope="col" class="col-tb-15"><div>Choice</div></th>
+          <th scope="col" class="col-tb-1">
+            <div>No</div>
+          </th>
+          <th scope="col" class="col-tb-3">
+            <div>BetID</div>
+          </th>
+          <th scope="col" class="col-tb-4">
+            <div>Trans.Date</div>
+          </th>
+          <th scope="col" class="col-tb-5">
+            <div>Member</div>
+          </th>
+          <th scope="col" class="col-tb-6">
+            <div>Bettype</div>
+          </th>
+          <th scope="col" class="col-tb-7">
+            <div>Odds</div>
+          </th>
+          <th scope="col" class="col-tb-8">
+            <div>Stake</div>
+          </th>
+          <th scope="col" class="col-tb-9">
+            <div>Win Loss</div>
+          </th>
+          <th scope="col" class="col-tb-10">
+            <div>Currency</div>
+          </th>
+          <th scope="col" class="col-tb-11">
+            <div>Status</div>
+          </th>
+          <th scope="col" class="col-tb-13">
+            <div>Score</div>
+          </th>
+          <th scope="col" class="col-tb-14">
+            <div>HDP</div>
+          </th>
+          <th scope="col" class="col-tb-15">
+            <div>Choice</div>
+          </th>
         </tr>
       </thead>
     </table>
   </div>
   <div class="ticket-content">
     <table>
-      <tbody *ngFor="let group of model.groups">
-        <tr *ngIf="group.name && group.displayTotalTickets > 0">
+      @for (group of model.groups; track group) {
+      <tbody>
+        @if (group.name && group.displayTotalTickets > 0) {
+        <tr>
           <td class="col-tb-0">
             <div>
-              <input type="checkbox" [(ngModel)]="group.isChecked" (ngModelChange)="group.changeGroupToTickets();model.changeGroupToModel();changeWinlostCheckedTicket()" />
+              <input type="checkbox" [(ngModel)]="group.isChecked"
+                (ngModelChange)="group.changeGroupToTickets();model.changeGroupToModel();changeWinLostCheckedTicket()" />
             </div>
           </td>
           <td [attr.colspan]="13" class="group-ticket" (click)="group.isExpanded = !group.isExpanded">
-            <i class="fa" aria-hidden="true" [ngClass]="{'fa-caret-down':group.isExpanded, 'fa-caret-right':!group.isExpanded}"></i>
+            <i class="fa" aria-hidden="true"
+              [ngClass]="{'fa-caret-down':group.isExpanded, 'fa-caret-right':!group.isExpanded}"></i>
             {{group.name}} ({{group.displayTotalTickets}})
           </td>
         </tr>
-        <tr *ngFor="let ticket of group.tickets" [ngClass]="{'display-none':!group.isExpanded}">
+        }
+        @for (ticket of group.tickets; track ticket) {
+        <tr [ngClass]="{'display-none':!group.isExpanded}">
           <td class="col-tb-0">
             <div>
-                <input type="checkbox" [(ngModel)]="ticket.isChecked" (change)="group.changeTicketToGroup();model.changeGroupToModel();changeWinlostCheckedTicket()"/>
+              <input type="checkbox" [(ngModel)]="ticket.isChecked"
+                (change)="group.changeTicketToGroup();model.changeGroupToModel();changeWinLostCheckedTicket()" />
             </div>
           </td>
           <td class="col-tb-1">{{ticket.no}}</td>
-          <td class="col-tb-3"><div [innerHTML]="ticket.betId | sanitizeHtml"></div></td>
-          <td class="col-tb-4"><div>{{ticket.transDate}}</div></td>
-          <td class="col-tb-5"><div [innerHTML]="ticket.member | sanitizeHtml" title="{{ticket.member}}"></div></td>
-          <td class="col-tb-6"><div [innerHTML]="ticket.betType | sanitizeHtml"></div></td>
-          <td class="col-tb-7"><div [innerHTML]="ticket.odds | sanitizeHtml"></div></td>
-          <td class="col-tb-8"><div [innerHTML]="ticket.stake | sanitizeHtml"></div></td>
-          <td class="col-tb-9"><div>{{ticket.winLoss}}</div></td>
-          <td class="col-tb-10"><div>{{ticket.currency}}</div></td>
-          <td class="col-tb-11"><div [innerHTML]="ticket.status | sanitizeHtml"></div></td>
-          <td class="col-tb-13"><div [innerHTML]="ticket.score | sanitizeHtml"></div></td>
-          <td class="col-tb-14"><div [innerHTML]="ticket.handicap | sanitizeHtml"></div></td>
-          <td class="col-tb-15"><div [innerHTML]="ticket.choice | sanitizeHtml"></div></td>
+          <td class="col-tb-3">
+            <div [innerHTML]="ticket.betId | sanitizeHtml"></div>
+          </td>
+          <td class="col-tb-4">
+            <div>{{ticket.transDate}}</div>
+          </td>
+          <td class="col-tb-5">
+            <div [innerHTML]="ticket.member | sanitizeHtml" title="{{ticket.member}}"></div>
+          </td>
+          <td class="col-tb-6">
+            <div [innerHTML]="ticket.betType | sanitizeHtml"></div>
+          </td>
+          <td class="col-tb-7">
+            <div [innerHTML]="ticket.odds | sanitizeHtml"></div>
+          </td>
+          <td class="col-tb-8">
+            <div [innerHTML]="ticket.stake | sanitizeHtml"></div>
+          </td>
+          <td class="col-tb-9">
+            <div>{{ticket.winLoss}}</div>
+          </td>
+          <td class="col-tb-10">
+            <div>{{ticket.currency}}</div>
+          </td>
+          <td class="col-tb-11">
+            <div [innerHTML]="ticket.status | sanitizeHtml"></div>
+          </td>
+          <td class="col-tb-13">
+            <div [innerHTML]="ticket.score | sanitizeHtml"></div>
+          </td>
+          <td class="col-tb-14">
+            <div [innerHTML]="ticket.handicap | sanitizeHtml"></div>
+          </td>
+          <td class="col-tb-15">
+            <div [innerHTML]="ticket.choice | sanitizeHtml"></div>
+          </td>
         </tr>
+        }
       </tbody>
+      }
     </table>
-    <table *ngIf="isShowNoData()">
+    @if (isShowNoData()) {
+    <table>
       <tbody>
         <tr>
           <td class="no-data">There is no data</td>
         </tr>
       </tbody>
     </table>
+    }
   </div>
 </div>

@@ -1,15 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AddRequestApiService } from '../add-request-api.service';
 import { LogInfoTicketsQuery } from '../models/live-game-early-ticket.model';
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AffectedTicketService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService
-  ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   public async getAffectedTickets(issueTypeId: number, logInfoTicketsJson: string) {
     const ticketsLogInfo = new TicketsModel();

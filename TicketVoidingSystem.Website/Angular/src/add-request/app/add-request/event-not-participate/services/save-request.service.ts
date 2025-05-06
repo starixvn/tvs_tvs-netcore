@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { AddRequestService } from '../../add-request.service';
@@ -9,18 +9,13 @@ import { EventNotParticipateService } from './event-not-participate.service';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class SaveRequestService {
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly logInfoNotParticipateService: LogInfoService,
-    private readonly popupService: PopupService,
-    private readonly addRequestService: AddRequestService,
-    private readonly eventNotParticipateService: EventNotParticipateService
-  ) { }
+  private readonly validationService = inject(ValidationService);
+  private readonly logInfoNotParticipateService = inject(LogInfoService);
+  private readonly popupService = inject(PopupService);
+  private readonly addRequestService = inject(AddRequestService);
+  private readonly eventNotParticipateService = inject(EventNotParticipateService);
 
   async saveRequest(argNotParticipate: SaveRequestArg): Promise<void> {
     const isDataValid = argNotParticipate.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argNotParticipate);

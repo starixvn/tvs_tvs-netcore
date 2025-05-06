@@ -1,19 +1,15 @@
-<label class="col-form-label mt-2">Filter</label>
+<label class="col-form-label-sm mt-2">Filter</label>
 <div class="filter">
   <div class="mb-2">
-    <label class="col-form-label col-form-label-sm">Transaction Time</label>
-    <div class="mb-1" *ngFor="let model of models; index as index; last as isLast; first as isFirst">
-      <filter-time-item #filterItem
-        [model]="model"
-        [isVoided]="isVoided"
-        [isLast]="isLast"
-        [isFirst]="isFirst"
-        [index]="index"
-        (addItemEvent)="addItem($event)"
-        (removeItemEvent)="removeItem($event)"
+    <label class="col-form-label-sm col-form-label-sm">Transaction Time</label>
+    @for (model of models; track model; let index = $index; let isLast = $last; let isFirst = $first) {
+    <div class="mb-1">
+      <filter-time-item #filterItem [model]="model" [isVoided]="isVoided" [isLast]="isLast" [isFirst]="isFirst"
+        [index]="index" (addItemEvent)="addItem($event)" (removeItemEvent)="removeItem($event)"
         (changeFilterEvent)="changeFilter()">
       </filter-time-item>
     </div>
+    }
     <div class="btn-reload">
       <button [disabled]="isVoided" type="button" class="btn btn-default btn-sm" (click)="emitRefreshEvent()">
         <span><i class="fa fa-refresh" aria-hidden="true"></i></span>

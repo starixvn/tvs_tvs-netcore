@@ -1,8 +1,14 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType } from '../../../../utility/constants/config';
 import { AddRequestStore } from '../add-request.store';
@@ -21,11 +27,22 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 
 @Component({
   selector: 'event-wrong-ou',
   templateUrl: './event-wrong-ou.component.html',
-  styleUrls: ['./event-wrong-ou.component.scss']
+  styleUrls: ['./event-wrong-ou.component.scss'],
+  standalone: true,
+  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiModule, AddChildMatchComponent, 
+    LogInfoWrongOuComponent, OnlyNumberDirective],
+  providers: [
+    EventWrongOuService,
+    LogInfoService,
+    RelatedEventService,
+    SaveRequestService,
+    ValidationService
+  ]
 })
 export class EventWrongOuComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -48,16 +65,15 @@ export class EventWrongOuComponent implements OnInit {
   primitiveProps = new PrimitiveProperty();
   tooltip = new Tooltip();
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
+  private readonly element = inject(ElementRef);
+  private readonly logInfoWrongOuService = inject(LogInfoService);
+  private readonly eventWrongOuService = inject(EventWrongOuService);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly validationService = inject(ValidationService);
+  private readonly relatedEventService = inject(RelatedEventService);
+  private readonly saveRequestService = inject(SaveRequestService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly logInfoWrongOuService: LogInfoService,
-    private readonly eventWrongOuService: EventWrongOuService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly validationService: ValidationService,
-    private readonly relatedEventService: RelatedEventService,
-    private readonly saveRequestService: SaveRequestService
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -85,13 +101,13 @@ export class EventWrongOuComponent implements OnInit {
     }
   }
 
-  private createGetChildMatchesQuery(): GetChildMatchQuery{
+  private createGetChildMatchesQuery(): GetChildMatchQuery {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(this.filter.issueTypeId);
-    query.eventDate = this.mainEvent.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
-    query.matchId = this.mainEvent.matchId;
+    query.eventDate = this.mainEvent?.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+    query.matchId = this.mainEvent?.matchId;
     query.isMainMatch = true;
-    query.sportType = this.mainEvent.sportType;
+    query.sportType = this.mainEvent?.sportType;
 
     return query;
   }

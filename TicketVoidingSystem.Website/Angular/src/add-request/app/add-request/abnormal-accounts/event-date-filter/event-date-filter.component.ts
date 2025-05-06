@@ -1,6 +1,9 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
+import { DatePickerComponent } from '../../../../../utility/components/date-time/date-picker/date-picker.component';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
@@ -10,26 +13,26 @@ import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 @Component({
   selector: 'event-date-filter',
   templateUrl: './event-date-filter.component.html',
-  styleUrls: ['./event-date-filter.component.scss']
+  styleUrls: ['./event-date-filter.component.scss'],
+  standalone: true,
+  imports: [NgbModule, FormsModule, TooltipComponent, DatePickerComponent]
 })
 export class EventDateFilterComponent implements OnInit {
   @Input() isDisabled: boolean;
   @Input() abnormalAccountModel: AbnormalAccountModel;
   @Input() isEdit: boolean;
-  @Input() minDate: NgbDateStruct;
+  @Input() minDate: NgbDate;
   @Output() changeFilterEvent = new EventEmitter();
 
   fromDate: NgbDate;
   toDate: NgbDate;
   tooltip = new Tooltip();
-
   private readonly TO_DATE_CLASS = 'to-date';
+  private readonly element = inject(ElementRef);
 
-  constructor(
-    private readonly element: ElementRef
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
-   }
+  }
 
   ngOnInit(): void {
     this.initEventDate();

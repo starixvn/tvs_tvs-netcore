@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { AddRequestService } from '../../add-request.service';
@@ -7,16 +7,11 @@ import { PopupService } from '../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SaveRequestService {
-  constructor(
-    private readonly addRequestApiService: AddRequestService,
-    private readonly popupService: PopupService,
-    private readonly validationService: ValidationService,
-  ) { }
-
+  private readonly addRequestApiService = inject(AddRequestService);
+  private readonly popupService = inject(PopupService);
+  private readonly validationService = inject(ValidationService);
   private readonly ORG_TRANS_ID_CLASS = 'org-transId';
 
   async saveRequest(arg: SaveRequestArg): Promise<void> {

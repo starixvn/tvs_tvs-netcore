@@ -16,10 +16,10 @@ public class TicketsViewModel
     public string BetTypes { get; set; }
     public string BetTeam { get; set; }
     public string HdpValues { get; set; }
-    public DateTime FromTime { get; set; }
-    public DateTime ToTime { get; set; }
-    public DateTime FromDate { get; set; }
-    public DateTime ToDate { get; set; }
+    public DateTime? FromTime { get; set; }
+    public DateTime? ToTime { get; set; }
+    public DateTime? FromDate { get; set; }
+    public DateTime? ToDate { get; set; }
     public List<BetId> SingleTickets { get; set; }
     public List<BetId> ParlayTickets { get; set; }
     public List<BetId> CancelCashOutTickets { get; set; }

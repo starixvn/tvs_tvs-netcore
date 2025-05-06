@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
@@ -8,15 +8,10 @@ import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventOtherIssuesService } from './event-other-issues.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class LogInfoService {
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly eventOtherIssuesService: EventOtherIssuesService) {
-  }
+  private readonly commonService = inject(CommonService);
+  private readonly eventOtherIssuesService = inject(EventOtherIssuesService);
 
   resetLogInfoOfEvent(logInfoEvent: LogInfoOtherIssues): void {
     logInfoEvent.logInfoDetail = null;

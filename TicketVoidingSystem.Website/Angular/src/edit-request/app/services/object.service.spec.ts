@@ -1,359 +1,257 @@
-import * as _ from 'lodash';
-import { FilterModel } from '../../../add-request/app/add-request/filter/filter.model';
-import { AbnormalAccountModel } from '../../../add-request/app/add-request/models/abnormal-account.model';
-import { AbnormalBetModel } from '../../../add-request/app/add-request/models/abnormal-bet.model';
-import { EventDetailModel } from '../../../add-request/app/add-request/models/event-detail.model';
-import { DuplicateTicketsModel } from '../../../add-request/app/add-request/models/event-duplicate-tickets.model';
-import { NotParticipateModel } from '../../../add-request/app/add-request/models/event-not-participate.model';
-import { RedCardModel } from '../../../add-request/app/add-request/models/event-red-card.model';
-import { ReducedOverModel } from '../../../add-request/app/add-request/models/event-reduced-over.model';
-import { WrongHdpModel } from '../../../add-request/app/add-request/models/event-wrong-hdp.model';
-import { WrongOddsModel } from '../../../add-request/app/add-request/models/event-wrong-odds.model';
-import { WrongOuModel } from '../../../add-request/app/add-request/models/event-wrong-ou.model';
-import { WrongScoreModel } from '../../../add-request/app/add-request/models/event-wrong-score.model';
-import { GetLogInfoModel, TicketRequest, Validation } from '../../../add-request/app/add-request/models/get-log-info.model';
-import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
-import { OthersModel } from '../../../add-request/app/add-request/others/others.model';
-import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
-import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
-import { LogInfoArg } from '../models/log-info.model';
-import { MapEventArg } from '../models/map-event.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../request.model';
+import { TestBed } from '@angular/core/testing';
 import { ObjectService } from './object.service';
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { StaticService } from '../../../utility/services/static.service';
+import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
+import { RequestDetailViewModel } from '../request.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { FilterModel } from '../../../add-request/app/add-request/filter/filter.model';
+import { TVSRequestFilterBy } from '../../../utility/constants/config';
 
-class Helper {
-  static readonly fakeScoreId = 28291;
-  static readonly fakeRequestId = 50121;
-  static readonly fakeMatchId = 90000;
-  static readonly fakeDate = '2020-11-09 12:08:49.737';
-  static readonly fakePrimitiveProperty: PrimitiveProperty = {
-    matchId: Helper.fakeMatchId,
-    requestId: Helper.fakeRequestId,
-    sportType: 1,
-    actionIdOfFirstTimeAccess: '2',
-    requestedBy: '',
-    userId: 0
-  };
-  static readonly fakeRequestDetailModel: RequestDetailModel = {
-    actionId: 1,
-    decidedBy: null,
-    isTest: false,
-    isVoided: false,
-    issueTypeId: 11,
-    mistakenBy: null,
-    operators: [],
-    provider: null,
-    remark: 'test',
-    requestedBy: "sa",
-    source: null,
-    sportType: 2,
-    voidedBy: null,
-    userId: 0,
-    requestId: 1,
-    briefInfoNote: ''
-  };
-  static readonly fakeRequestDetailViewModel: RequestDetailViewModel = {
-    requestId: Helper.fakeRequestId,
-    lastModifiedDate: null,
-    request: Helper.fakeRequestDetailModel,
-    event: null,
-    playerNames: [],
-    wrongScoreModels: [],
-    dangerAcceptedModels: [],
-    redCardModels: [],
-    wrongHdpModels: [],
-    wrongOuModels: [],
-    wrongOddsModels: [],
-    reducedOverModels: [],
-    duplicateTicketsModel: null,
-    notParticipateModels: []
-  };
-  static readonly fakeLogInfoArg: LogInfoArg = {
-    primitiveProperty: Helper.fakePrimitiveProperty,
-    detailViewModel: Helper.fakeRequestDetailViewModel,
-  };
-  static readonly fakeLogInfoDetail: LogInfoDetail = {
-    matchId: Helper.fakeMatchId,
-    liveScores: '0 - 0',
-    voidFromTime: new Date('2020-11-06 00:00:00.000'),
-    voidToTime: new Date('2020-11-06 00:00:00.000'),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    scoreOfMatch: '',
-    scoreNormalTicket: '',
-    instantlySettleCount: 2,
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeGetLogInfoModel: GetLogInfoModel = {
-    scoreId: Helper.fakeScoreId,
-    matchId: Helper.fakeMatchId,
-    validation: new Validation(),
-    ticketRequest: [ { transIds: '123456789', requestId: 11111 } as TicketRequest],
-    logInfoDetail: Helper.fakeLogInfoDetail
-  };
-  static readonly fakeRequestModel: RequestModel = {
-    filter: new FilterModel(),
-    eventDetail: new EventDetailModel(),
-    abnormalAccountModel: null,
-    abnormalBetModel: null,
-    eventTicket14Model: null,
-    redCardModel: [],
-    wrongScoreModels: [],
-    dangerAcceptedModels: [],
-    wrongHdpModels: [],
-    wrongOuModels: [],
-    wrongOddsModels: [],
-    reducedOverModels: [],
-    others: new OthersModel(),
-    duplicateTicketsModel: null,
-    notParticipateModels: [],
-    earlyKickOffModels: [],
-    recoverTicketModel: null,
-    wrongMarketOfferedModels: null
-  } as RequestModel;
-  static readonly fakeMapEventArg: MapEventArg = {
-    primitiveProperty: Helper.fakePrimitiveProperty,
-    requestModel: Helper.fakeRequestModel,
-    detailViewModel: Helper.fakeRequestDetailViewModel,
-  };
-}
+jest.mock('../../../utility/services/static.service', () => ({
+  StaticService: {
+    getSubIssueTypeId: jest.fn(),
+    isArchivedTicket: jest.fn(),
+    checkAllIssueTypes: jest.fn()
+  }
+}));
 
 describe('ObjectService', () => {
-  let objectService: ObjectService;
+  let service: ObjectService;
 
   beforeEach(() => {
-    objectService = new ObjectService();
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [ObjectService]
+    });
+
+    service = TestBed.inject(ObjectService);
   });
 
-  it('#mapRequestModel should call expected methods', async () => {
-    objectService['createMapEventArg'] = jest.fn();
-    objectService['mapFilter'] = jest.fn();
-    objectService['mapEvent'] = jest.fn();
-    objectService['mapOthers'] = jest.fn();
-
-    objectService.mapRequestModel(null, null, null);
-
-    expect(objectService['createMapEventArg']).toHaveBeenCalledTimes(1);
-    expect(objectService['mapFilter']).toHaveBeenCalledTimes(1);
-    expect(objectService['mapEvent']).toHaveBeenCalledTimes(1);
-    expect(objectService['mapOthers']).toHaveBeenCalledTimes(1);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  it('#getPrimitiveProperty should return correct model', async () => {
-    const results = objectService.getPrimitiveProperty(Helper.fakeRequestDetailViewModel, Helper.fakeRequestId);
+  describe('mapRequestModel', () => {
+    it('should map request model correctly', () => {
+      // Arrange
+      const requestModel = new RequestModel();
+      const detailViewModel = {
+        request: {
+          actionId: 1,
+          userId: 123,
+          requestedBy: 'testUser',
+          sportType: 'football',
+          isTest: false,
+          isVoided: false,
+          issueTypeId: 1,
+          mistakenBy: 'user1',
+          decidedBy: 'user2',
+          operators: ['op1', 'op2'],
+          provider: 'provider1',
+          source: 'source1',
+          remark: 'test remark'
+        },
+        event: {
+          filterBy: TVSRequestFilterBy.ABNORMAL,
+          transIds: ['123', '456']
+        }
+      } as unknown as RequestDetailViewModel;
 
-    expect(results.sportType).toEqual(Helper.fakeRequestDetailViewModel.request.sportType);
-    expect(results.requestId).toEqual(Helper.fakeRequestId);
-    expect(results.actionIdOfFirstTimeAccess).toEqual(Helper.fakeRequestDetailViewModel.request.actionId.toString());
-  });
+      const primitiveProperty = new PrimitiveProperty();
+      primitiveProperty.requestId = 1;
 
-  it('#mapFilter should update correct model', async () => {
-    const requestModel = _.clone(Helper.fakeRequestModel);
-    const eventDate = [null, new Date()];
+      // Mock StaticService methods
+      (StaticService.getSubIssueTypeId as jest.Mock).mockReturnValue(2);
+      (StaticService.isArchivedTicket as jest.Mock).mockReturnValue(true);
+      (StaticService.checkAllIssueTypes as jest.Mock).mockReturnValue({
+        isArchivedTicket: true
+      });
 
-    eventDate.forEach(item => {
-      const fakeRequestDetailViewModel = _.clone(Helper.fakeRequestDetailViewModel);
-      fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
-      fakeRequestDetailViewModel.event = new RequestEventModel();
-      fakeRequestDetailViewModel.event.subIssueTypeId = 11;
-      fakeRequestDetailViewModel.event.eventDate = item;
-      fakeRequestDetailViewModel.abnormalBetModel = new AbnormalBetModel();
-      fakeRequestDetailViewModel.abnormalBetModel.subIssueTypeId = 1;
-      objectService['mapFilter'](requestModel, fakeRequestDetailViewModel);
+      // Act
+      service.mapRequestModel(requestModel, detailViewModel, primitiveProperty);
 
-      expect(requestModel.filter.action).toEqual(Helper.fakeRequestDetailViewModel.request.actionId.toString());
-      expect(requestModel.filter.isTest).toEqual(Helper.fakeRequestDetailViewModel.request.isTest);
-      expect(requestModel.filter.isVoided).toEqual(Helper.fakeRequestDetailViewModel.request.isVoided);
+      // Assert
+      expect(requestModel.filter).toEqual({
+        action: '1',
+        subIssueTypeId: '2',
+        isTest: false,
+        isVoided: false,
+        issueTypeId: '1',
+        isAbnormal: true
+      } as FilterModel);
+
+      expect(requestModel.others).toEqual({
+        mistakenBy: 'user1',
+        decidedBy: 'user2',
+        operatorsList: ['op1', 'op2'],
+        provider: 'provider1',
+        source: 'source1',
+        remark: 'test remark'
+      });
+
+      expect(requestModel.eventTicket14Model).toEqual({
+        transIds: ['123', '456']
+      });
     });
   });
 
-  it('#mapEvent should update correct model when isWrongScore', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.WRONG_SCORE);
-    args.detailViewModel.wrongScoreModels = [new WrongScoreModel()];
-    objectService['mapEvent'](args);
+  describe('getPrimitiveProperty', () => {
+    it('should return primitive property with correct values', () => {
+      // Arrange
+      const detailViewModel = {
+        request: {
+          userId: 123,
+          requestedBy: 'testUser',
+          sportType: 'football',
+          actionId: 1
+        }
+      } as unknown as RequestDetailViewModel;
 
-    expect(args.requestModel.wrongScoreModels).toStrictEqual(args.detailViewModel.wrongScoreModels);
-    expect(args.primitiveProperty.matchId).toBe(args.detailViewModel.wrongScoreModels[0].matchId);
-  });
+      const requestId = 456;
 
-  it('#mapEvent should update correct model when isDangerAccepted', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    const dangerAcceptedModel = new RedCardModel();
-    dangerAcceptedModel.isMainMatch = true;
-    dangerAcceptedModel.matchId = Helper.fakeMatchId;
-    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
-    args.detailViewModel.dangerAcceptedModels = [dangerAcceptedModel];
-    objectService['mapEvent'](args);
+      // Act
+      const result = service.getPrimitiveProperty(detailViewModel, requestId);
 
-    expect(args.requestModel.dangerAcceptedModels).toStrictEqual(args.detailViewModel.dangerAcceptedModels);
-    expect(args.primitiveProperty.matchId).toBe(Helper.fakeMatchId);
-  });
-
-  it('#mapEvent should update correct model when isRedCard', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    const redCardModel = new RedCardModel();
-    redCardModel.isMainMatch = true;
-    redCardModel.matchId = Helper.fakeMatchId;
-    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.RED_CARD);
-    args.detailViewModel.redCardModels = [redCardModel];
-    objectService['mapEvent'](args);
-
-    expect(args.requestModel.redCardModel).toStrictEqual(args.detailViewModel.redCardModels);
-    expect(args.primitiveProperty.matchId).toBe(Helper.fakeMatchId);
-  });
-
-  it('#mapEvent should update correct model when isLikelyAbnormalBet', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    const abnormalBetModel = new AbnormalBetModel();
-    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
-    args.detailViewModel.abnormalBetModel = abnormalBetModel;
-    objectService['mapEvent'](args);
-
-    expect(args.requestModel.abnormalBetModel).toStrictEqual(abnormalBetModel);
-  });
-
-  it('#mapEvent should update correct model when isArchivedTicket', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    args.detailViewModel.event = new RequestEventModel();
-    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.ARCHIVED_TICKET);
-
-    objectService['mapEvent'](args);
-
-    expect(args.requestModel.eventTicket14Model.transIds).toBe(args.detailViewModel.event.transIds);
-  });
-
-  it('#mapEvent should update correct model when isLikelyAbnormalBet', async () => {
-    const dates = [new Date('2021-09-29 00:00:00.000'), new Date('1752-09-29 00:00:00.000'), null];
-    dates.forEach(item => {
-      const args = _.clone(Helper.fakeMapEventArg);
-      const event = new RequestEventModel();
-      event.matchId = Helper.fakeMatchId;
-      event.kickOffTime = item;
-      args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
-      args.detailViewModel.event = event;
-      objectService['mapEventDetailModel'] = jest.fn();
-
-      objectService['mapEvent'](args);
-
-      expect(args.primitiveProperty.matchId).toBe(Helper.fakeMatchId);
+      // Assert
+      expect(result).toEqual({
+        userId: 123,
+        requestedBy: 'testUser',
+        sportType: 'football',
+        requestId: 456,
+        actionIdOfFirstTimeAccess: '1'
+      } as unknown as PrimitiveProperty);
     });
   });
 
-  it('#mapEvent should update correct model when isWrongHdp', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    const wrongHdpModel = new WrongHdpModel();
-    wrongHdpModel.isMainMatch = true;
-    wrongHdpModel.matchId = Helper.fakeMatchId;
-    args.detailViewModel.wrongHdpModels = [wrongHdpModel];
-    [
-      IssueTypeConstant.WRONG_HDP,
-      IssueTypeConstant.WRONG_1ST_HDP
-    ].forEach(x => {
-      args.detailViewModel.request.issueTypeId = Number(x);
-      objectService['mapEvent'](args);
+  describe('isAbnormalArchivedTicket', () => {
+    it('should return true for abnormal archived ticket', () => {
+      // Arrange
+      const detailViewModel = {
+        request: {
+          issueTypeId: 1
+        },
+        event: {
+          filterBy: TVSRequestFilterBy.ABNORMAL
+        }
+      } as RequestDetailViewModel;
 
-      expect(args.requestModel.wrongHdpModels).toStrictEqual(args.detailViewModel.wrongHdpModels);
-      expect(args.primitiveProperty.matchId).toBe(Helper.fakeMatchId);
+      (StaticService.isArchivedTicket as jest.Mock).mockReturnValue(true);
+
+      // Act
+      const result = service['isAbnormalArchivedTicket'](detailViewModel);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false for non-archived ticket', () => {
+      // Arrange
+      const detailViewModel = {
+        request: {
+          issueTypeId: 1
+        },
+        event: {
+          filterBy: TVSRequestFilterBy.ABNORMAL
+        }
+      } as RequestDetailViewModel;
+
+      (StaticService.isArchivedTicket as jest.Mock).mockReturnValue(false);
+
+      // Act
+      const result = service['isAbnormalArchivedTicket'](detailViewModel);
+
+      // Assert
+      expect(result).toBeFalsy();
     });
   });
 
-  it('#mapEvent should update correct model when isWrongOu', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    const wrongOuModel = new WrongOuModel();
-    wrongOuModel.isMainMatch = true;
-    wrongOuModel.matchId = Helper.fakeMatchId;
-    args.detailViewModel.wrongOuModels = [wrongOuModel];
-    [
-      IssueTypeConstant.WRONG_OU,
-      IssueTypeConstant.WRONG_1ST_OU
-    ].forEach(x => {
-      args.detailViewModel.request.issueTypeId = Number(x);
-      objectService['mapEvent'](args);
+  describe('mapEvent', () => {
+    it('should map event for archived ticket', () => {
+      // Arrange
+      const args = {
+        requestModel: new RequestModel(),
+        detailViewModel: {
+          request: {
+            issueTypeId: 1
+          },
+          event: {
+            transIds: ['123', '456']
+          }
+        } as unknown as RequestDetailViewModel,
+        primitiveProperty: new PrimitiveProperty()
+      };
 
-      expect(args.requestModel.wrongOuModels).toStrictEqual(args.detailViewModel.wrongOuModels);
-      expect(args.primitiveProperty.matchId).toBe(Helper.fakeMatchId);
+      (StaticService.checkAllIssueTypes as jest.Mock).mockReturnValue({
+        isArchivedTicket: true
+      });
+
+      // Act
+      service['mapEvent'](args);
+
+      // Assert
+      expect(args.requestModel.eventTicket14Model).toEqual({
+        transIds: ['123', '456']
+      });
+    });
+
+    it('should map event for wrong score', () => {
+      // Arrange
+      const args = {
+        requestModel: new RequestModel(),
+        detailViewModel: {
+          request: {
+            issueTypeId: 1
+          },
+          wrongScoreModels: [{
+            matchId: 123
+          }]
+        } as RequestDetailViewModel,
+        primitiveProperty: new PrimitiveProperty()
+      };
+
+      (StaticService.checkAllIssueTypes as jest.Mock).mockReturnValue({
+        isWrongScore: true
+      });
+
+      // Act
+      service['mapEvent'](args);
+
+      // Assert
+      expect(args.requestModel.wrongScoreModels).toEqual([{
+        matchId: 123
+      }]);
+      expect(args.primitiveProperty.matchId).toBe(123);
     });
   });
 
-  it('#mapEvent should update correct model when isAbnormalAccount', async () => {
-    const abnormalAccountModel = new AbnormalAccountModel();
-    const args = _.clone(Helper.fakeMapEventArg);
-    args.detailViewModel.event = new RequestEventModel();
-    args.detailViewModel.abnormalAccountModel = abnormalAccountModel;
-    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_ACCOUNT);
+  describe('mapOthers', () => {
+    it('should map others correctly', () => {
+      // Arrange
+      const requestModel = new RequestModel();
+      const detailViewModel = {
+        request: {
+          mistakenBy: 'user1',
+          decidedBy: 'user2',
+          operators: ['op1', 'op2'],
+          provider: 'provider1',
+          source: 'source1',
+          remark: 'test remark'
+        }
+      } as unknown as RequestDetailViewModel;
 
-    objectService['mapEvent'](args);
+      // Act
+      service['mapOthers'](requestModel, detailViewModel);
 
-    expect(args.requestModel.abnormalAccountModel).toBe(abnormalAccountModel);
+      // Assert
+      expect(requestModel.others).toEqual({
+        mistakenBy: 'user1',
+        decidedBy: 'user2',
+        operatorsList: ['op1', 'op2'],
+        provider: 'provider1',
+        source: 'source1',
+        remark: 'test remark'
+      });
+    });
   });
-
-  it('#mapEvent should update correct model when isWrongOdds', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    args.detailViewModel.event = new RequestEventModel();
-    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.WRONG_ODDS);
-    args.detailViewModel.wrongOddsModels = [new WrongOddsModel()];
-
-    objectService['mapEvent'](args);
-
-    expect(args.requestModel.wrongOddsModels).toBe(args.detailViewModel.wrongOddsModels);
-  });
-
-  it('#mapEvent should update correct model when isReducedOver', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    args.detailViewModel.event = new RequestEventModel();
-    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.REDUCED_OVER);
-    args.detailViewModel.reducedOverModels = [new ReducedOverModel()];
-
-    objectService['mapEvent'](args);
-
-    expect(args.requestModel.reducedOverModels).toBe(args.detailViewModel.reducedOverModels);
-  });
-
-  it('#mapEvent should update correct model when isNotParticipate', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    args.detailViewModel.event = new RequestEventModel();
-    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
-    args.detailViewModel.notParticipateModels = [new NotParticipateModel()];
-
-    objectService['mapEvent'](args);
-
-    expect(args.requestModel.notParticipateModels).toBe(args.detailViewModel.notParticipateModels);
-  });
-
-  it('#mapEvent should update correct model when isDuplicateTickets', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    args.detailViewModel.event = new RequestEventModel();
-    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.DUPLICATE_TICKETS);
-    args.detailViewModel.duplicateTicketsModel = new DuplicateTicketsModel();
-
-    objectService['mapEvent'](args);
-
-    expect(args.requestModel.duplicateTicketsModel).toBe(args.detailViewModel.duplicateTicketsModel);
-  });
-
-  it('#mapOthers should update correct model', async () => {
-    const requestModel = _.clone(Helper.fakeRequestModel);
-
-    objectService['mapOthers'](requestModel, Helper.fakeRequestDetailViewModel);
-
-    expect(requestModel.others.mistakenBy).toBe(Helper.fakeRequestDetailViewModel.request.mistakenBy);
-    expect(requestModel.others.decidedBy).toBe(Helper.fakeRequestDetailViewModel.request.decidedBy);
-    expect(requestModel.others.operatorsList).toBe(Helper.fakeRequestDetailViewModel.request.operators);
-    expect(requestModel.others.provider).toBe(Helper.fakeRequestDetailViewModel.request.provider);
-    expect(requestModel.others.source).toBe(Helper.fakeRequestDetailViewModel.request.source);
-    expect(requestModel.others.remark).toBe(Helper.fakeRequestDetailViewModel.request.remark);
-  });
-
-  it('#createMapEventArg should return correct model', async () => {
-    const results = objectService['createMapEventArg'](Helper.fakeRequestModel, Helper.fakeRequestDetailViewModel, Helper.fakePrimitiveProperty);
-
-    expect(results.primitiveProperty).toStrictEqual(Helper.fakePrimitiveProperty);
-    expect(results.requestModel).toStrictEqual(Helper.fakeRequestModel);
-    expect(results.detailViewModel).toStrictEqual(Helper.fakeRequestDetailViewModel);
-  });
-
 });

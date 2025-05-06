@@ -1,5 +1,7 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, inject, Input, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
@@ -12,10 +14,16 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-  selector: 'event-ticket14',
-  templateUrl: './event-ticket14.component.html',
-  styleUrls: ['./event-ticket14.component.scss']
-})
+    selector: 'event-ticket14',
+    templateUrl: './event-ticket14.component.html',
+    styleUrls: ['./event-ticket14.component.scss'],
+    standalone: true,
+    imports: [BetIdsComponent, FormsModule, BlockUiModule],
+    providers: [
+      SaveRequestService,
+      ValidationService
+    ]
+  })
 export class EventTicket14Component {
   @Input() isEdit: boolean;
   @Input() requestId?: number;
@@ -26,13 +34,10 @@ export class EventTicket14Component {
 
   primitiveProps = new PrimitiveProperty();
   isCancelAfterFocusOutBetIdsEvent = false;
-
-  constructor(
-    private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly validationService: ValidationService,
-    private readonly addRequestApiService: AddRequestApiService
-  ) { }
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly validationService = inject(ValidationService);
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   public async ngOnInit(): Promise<void> {
     this.primitiveProps.permission = await this.addRequestApiService.getPermissionAddRequest();

@@ -1,71 +1,134 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { FilterTechnicalErrorModel } from '../models/filter-technical-error.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { FilterTimeTechnicalErrorComponent } from './filter-time-technical-error.component';
-class Helper {
-  static readonly fromDate = '2021-12-18 12:08:49.737';
-  static readonly toDate = '2021-12-21 12:08:49.737';
-  static readonly fakeFilterTechnicalErrorModel: FilterTechnicalErrorModel = {
-    fromDateTime: Helper.fromDate,
-    toDateTime: Helper.toDate
-  };
-}
+import { StaticService } from '../../../../../utility/services/static.service';
+import { FilterTechnicalErrorModel } from '../models/filter-technical-error.model';
+import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 
-describe('FilterTimeComponent', () => {
-  @NgModule({
-    declarations: [
-      FilterTimeTechnicalErrorComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule
-    ],
-  })
-  class AppModuleTest { }
+describe('FilterTimeTechnicalErrorComponent', () => {
+  let component: FilterTimeTechnicalErrorComponent;
+  let fixture: ComponentFixture<FilterTimeTechnicalErrorComponent>;
+  let staticService: StaticService;
 
-  let shallow: Shallow<FilterTimeTechnicalErrorComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [StaticService]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(FilterTimeTechnicalErrorComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(FilterTimeTechnicalErrorComponent);
+    staticService = fixture.debugElement.injector.get(StaticService);
+    component = fixture.componentInstance;
   });
 
-  it('FilterTimeComponent init should match snapshot', async () => {
-    const component = new FilterTimeTechnicalErrorComponent(null);
-    component.filterTechnicalErrorModel = Helper.fakeFilterTechnicalErrorModel;
-
-    expect(component).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#changeFilter should emit #changeFilterEvent', async () => {
-    const component = new FilterTimeTechnicalErrorComponent(null);
+  it('should initialize with default values', () => {
+    expect(component.filterTechnicalErrorModel).toBeInstanceOf(FilterTechnicalErrorModel);
+    expect(component.isVoided).toBeUndefined();
+  });
+
+  it('should emit changeFilterEvent when changeFilter is called', () => {
+    // Arrange
     component.changeFilterEvent.emit = jest.fn();
+
+    // Act
     component.changeFilter();
 
-    expect(component.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.changeFilterEvent.emit).toHaveBeenCalled();
   });
-  it('#emitRefreshEvent should emit #refreshEvent', async () => {
-    const component = new FilterTimeTechnicalErrorComponent(null);
+
+  it('should emit refreshEvent when emitRefreshEvent is called', () => {
+    // Arrange
     component.refreshEvent.emit = jest.fn();
+
+    // Act
     component.emitRefreshEvent();
 
-    expect(component.refreshEvent.emit).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.refreshEvent.emit).toHaveBeenCalled();
   });
 
-  it('#isValidDateTime should return true', async () => {
-    const component = new FilterTimeTechnicalErrorComponent(null);
-    component.filterTechnicalErrorModel = Helper.fakeFilterTechnicalErrorModel;
-    component.fromTimeComponent = new DateFullTimeNewComponent(null);
-    component.fromTimeComponent.validateWithTooltip = jest.fn().mockImplementation(() => true);
-    component.toTimeComponent = new DateFullTimeNewComponent(null);
-    component.toTimeComponent.validateWithTooltip = jest.fn().mockImplementation(() => true);
+  it('should validate time range correctly', () => {
+    // Arrange
+    const fromTime = '2024-01-01T10:00:00';
+    const toTime = '2024-01-01T11:00:00';
+    component.filterTechnicalErrorModel.fromDateTime = fromTime;
+    component.filterTechnicalErrorModel.toDateTime = toTime;
+    component.fromTimeComponent = {
+      validateWithTooltip: () => true
+    } as DateFullTimeNewComponent;
+    component.toTimeComponent = {
+      validateWithTooltip: () => true
+    } as DateFullTimeNewComponent;
+    StaticService.isFromTimeSameOrBeforeToTime = jest.fn().mockReturnValue(true);
 
+    // Act
     const result = component.isValidity();
 
-    expect(result).toBe(true);
+    // Assert
+    expect(result).toBeTruthy();
+    expect(StaticService.isFromTimeSameOrBeforeToTime).toHaveBeenCalledWith(
+      fromTime,
+      toTime,
+      component.tooltip,
+      'from-date-time'
+    );
+  });
+
+  it('should return false when from time validation fails', () => {
+    // Arrange
+    component.fromTimeComponent = {
+      validateWithTooltip: () => false
+    } as DateFullTimeNewComponent;
+    component.toTimeComponent = {
+      validateWithTooltip: () => true
+    } as DateFullTimeNewComponent;
+
+    // Act
+    const result = component.isValidity();
+
+    // Assert
+    expect(result).toBeFalsy();
+  });
+
+  it('should return false when to time validation fails', () => {
+    // Arrange
+    component.fromTimeComponent = {
+      validateWithTooltip: () => true
+    } as DateFullTimeNewComponent;
+    component.toTimeComponent = {
+      validateWithTooltip: () => false
+    } as DateFullTimeNewComponent;
+
+    // Act
+    const result = component.isValidity();
+
+    // Assert
+    expect(result).toBeFalsy();
+  });
+
+  it('should return false when time range is invalid', () => {
+    // Arrange
+    const fromTime = '2024-01-01T12:00:00';
+    const toTime = '2024-01-01T11:00:00';
+    component.filterTechnicalErrorModel.fromDateTime = fromTime;
+    component.filterTechnicalErrorModel.toDateTime = toTime;
+    component.fromTimeComponent = {
+      validateWithTooltip: () => true
+    } as DateFullTimeNewComponent;
+    component.toTimeComponent = {
+      validateWithTooltip: () => true
+    } as DateFullTimeNewComponent;
+    StaticService.isFromTimeSameOrBeforeToTime = jest.fn().mockReturnValue(false);
+
+    // Act
+    const result = component.isValidity();
+
+    // Assert
+    expect(result).toBeFalsy();
   });
 });

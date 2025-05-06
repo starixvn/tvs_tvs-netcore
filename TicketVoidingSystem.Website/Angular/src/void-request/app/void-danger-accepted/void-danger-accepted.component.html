@@ -18,7 +18,7 @@
             <strong class="match-text">{{item.matchModel.matchCode}}/{{item.matchModel.matchId}}</strong></span><br />
           <span>Match Event: <strong class="match-text">{{item.matchModel.matchEvent}}</strong></span><br />
           <span>League: <strong class="match-text">{{item.matchModel.leagueName}}</strong></span><br />
-          @if (isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu()) {
+          @if (isShowEarlyEventCheckBoxMessage(item)) {
           <span class="d-flex align-items-center">
             <input type="checkbox" id="chk-early-event-{{item.id}}" class="me-1"
               [disabled]="item.isAllLiveTickets || item.voidTicketsMini?.total === 0"

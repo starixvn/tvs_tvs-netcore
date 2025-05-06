@@ -1,7 +1,9 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import moment from 'moment-timezone';
 import { DateTimeFormat } from "../../../../../utility/constants/config";
+import { SportType } from '../../../../../utility/constants/sport.constant';
 import { AddRequestApiService } from "../../add-request-api.service";
+import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 import { FilterModel } from "../../filter/filter.model";
 import { WrongOuModel } from "../../models/event-wrong-ou.model";
 import { GetLinkedLogQuery, LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
@@ -9,23 +11,16 @@ import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.
 import { FilterWrongOuModel } from "../models/filter-wrong-ou.model";
 import { WrongOuGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongOu } from "../models/log-info-wrong-ou.model";
-import { SportType } from '../../../../../utility/constants/sport.constant';
-import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class EventWrongOuService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-  ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   public async getLinkedLog(logInfoWrongOu: LogInfoWrongOu, filter: FilterModel): Promise<LinkedLogsViewModel> {
     if(logInfoWrongOu.sportType !== SportType.SOCCER)
     {
         return new LinkedLogsViewModel();
-    }  
+    }
 
     const query = {
       matchId: logInfoWrongOu.matchId,
@@ -66,7 +61,7 @@ export class EventWrongOuService {
       } as FilterWrongOuModel;
       event.eventDate = x.eventDate;
       event.sportType = x.sportType;
-      
+
       allEvents.push(event);
     });
   }

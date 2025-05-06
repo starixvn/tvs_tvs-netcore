@@ -1,28 +1,24 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TvDetectionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { RedCardModel } from '../../models/event-red-card.model';
 import { PopupService } from '../../services/popup.service';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestArg } from './save-request.model';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SaveRequestService {
-  constructor(
-    private readonly logInfoService: LogInfoService,
-    private readonly validationService: ValidationService,
-    private readonly addRequestService: AddRequestService,
-    private readonly popupService: PopupService) {
-  }
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly validationService = inject(ValidationService);
+  private readonly addRequestService = inject(AddRequestService);
+  private readonly popupService = inject(PopupService);
 
   async recheckLogInfoBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
     arg.addRequestStore.changeSavingRequestStatus(true);

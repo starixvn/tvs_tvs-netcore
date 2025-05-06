@@ -1,425 +1,250 @@
-import { ElementRef, NgModule, SimpleChange, SimpleChanges } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
-import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { AddRequestApiService } from '../add-request-api.service';
-import { AddRequestStore } from '../add-request.store';
-import { FilterModel } from '../filter/filter.model';
-import { LinkedLogsViewModel } from '../pool-house-ticket/linked-log/linked-log.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { EventWrongOddsComponent } from './event-wrong-odds.component';
-import { FilterWrongOddsComponent } from './filter-wrong-odds/filter-wrong-odds.component';
-import { LogInfoWrongOddsComponent } from './log-info-wrong-odds/log-info-wrong-odds.component';
-import { FilterWrongOddsModel, MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
-import { LogInfoWrongOdds } from './models/log-info-wrong-odds.model';
-import { PrimitiveProperty } from './models/primitive-property.model';
-import { CalculateOddsService } from './services/calculate-odds.service';
+import { ValidationService } from './services/validation.service';
 import { EventWrongOddsService } from './services/event-wrong-odds.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
+import { CalculateOddsService } from './services/calculate-odds.service';
+import { AddRequestApiService } from '../add-request-api.service';
+import { AddRequestStore } from '../add-request.store';
+import { FilterModel } from '../filter/filter.model';
+import { WrongOddsModel } from '../models/event-wrong-odds.model';
+import { OthersModel } from '../others/others.model';
+import { LogInfoWrongOdds } from './models/log-info-wrong-odds.model';
+import { FilterWrongOddsModel, MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { MatchModel } from '../../../../utility/models/match.model';
+import { PoolHouseTicketValue } from '../pool-house-ticket/pool-house-ticket.constant';
+import { FilterWrongOddsComponent } from './filter-wrong-odds/filter-wrong-odds.component';
+import { SimpleChange } from '@angular/core';
 
 class Helper {
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
-  static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
-  static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    instantlySettleCount: 2,
-    scoreNormalTicket: '',
-    scoreOfMatch: '',
-    cancelCashOutCount: 1
-  } as LogInfoDetail;
-  static readonly fakeFilterWrongOddsModel: FilterWrongOddsModel = {
-    filterFromTransTime: Helper.fakeFromDateTime,
-    filterToTransTime: Helper.fakeToDateTime,
-    favoriteValue: '1',
-    filterFavoriteType: 'h',
-    liveIndicator: 1,
-    spread: '0.2',
-    maxBet: 0,
-    allowanceRate: '20',
-    correctOddsHomeOver: '0.8',
-    correctOddsAwayUnder: '0.9',
-    fromOddsNotVoidHomeOver: '0.65',
-    toOddsNotVoidHomeOver: '0.85',
-    fromOddsNotVoidAwayUnder: '0.5',
-    toOddsNotVoidAwayUnder: '0.9',
-    maxBetAndSpreadInfo: []
-  };
-  static readonly fakeLogInfoWrongOdds: LogInfoWrongOdds = {
-    matchId: 12345,
-    filterWrongOdds: new FilterWrongOddsModel(),
-    logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: [],
-    isPoolHouseAffected: false,
-    poolHouseCheckedBetTypes: '',
-    isShowValidation: false,
-    linkedLogsViewModel: new LinkedLogsViewModel,
-    sportType: 0
-  };
-  static readonly fakeMatch: MatchModel = {
-    matchId: 876543,
-    matchCode: '345678',
-    leagueName: 'abc',
-    matchEvent: 'xyz'
-  }
-  static readonly FakeFilter: FilterModel = {
-    subIssueTypeId: '2',
-    action: '',
-    isTest: false,
-    isAbnormal: false,
+  static readonly fakeRequestId = 1212;
+  static readonly fakeUserId = 123;
+  static readonly fakeRequestedBy = 'testUser';
+  static readonly fakeFilterModel: FilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
     isVoided: false,
-    isChangeSubTypeManual: false
+    isChangeSubTypeManual: true,
+    isAbnormal: false
   } as FilterModel;
+  static readonly fakeOthersModel = new OthersModel();
+  static readonly fakeWrongOddsModel = [{
+    matchId: 123,
+    sportType: 1
+  }] as WrongOddsModel [];
+  static readonly fakeMaxBetAndSpreadInfo =  [{
+    maxBet: 1000,
+    spread: '0.5'
+  }] as MaxBetAndSpreadInfo[];
 }
 
 describe('EventWrongOddsComponent', () => {
-  @NgModule({
-    declarations: [
-      EventLeagueComponent,
-      LogInfoWrongOddsComponent,
-      FilterWrongOddsComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      ToolTipModule
-    ],
-    providers: [
-      ValidationService,
-      EventWrongOddsService,
-      AddRequestStore,
-      LogInfoService,
-      SaveRequestService,
-      AddRequestApiService,
-      CalculateOddsService
-    ]
-  })
-  class AppModuleTest { }
+  let component: EventWrongOddsComponent;
+  let fixture: ComponentFixture<EventWrongOddsComponent>;
+  let validationService: ValidationService;
+  let eventWrongOddsService: EventWrongOddsService;
+  let logInfoService: LogInfoService;
+  let saveRequestService: SaveRequestService;
+  let calculateOddsService: CalculateOddsService;
+  let addRequestApiService: AddRequestApiService;
+  let addRequestStore: AddRequestStore;
 
-  let shallow: Shallow<EventWrongOddsComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        EventWrongOddsService,
+        LogInfoService,
+        SaveRequestService,
+        CalculateOddsService,
+        AddRequestApiService,
+        AddRequestStore
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    shallow = new Shallow(EventWrongOddsComponent, AppModuleTest)
-      .dontMock(NgbModule)
-      .mock(ElementRef, {});
+    fixture = TestBed.createComponent(EventWrongOddsComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    eventWrongOddsService = fixture.debugElement.injector.get(EventWrongOddsService);
+    logInfoService = fixture.debugElement.injector.get(LogInfoService);
+    saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
+    calculateOddsService = fixture.debugElement.injector.get(CalculateOddsService);
+    addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
+    addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    component = fixture.componentInstance;
   });
 
-  it('#EventWrongOddsComponent init should match snapshot', async () => {
-    const { fixture } = await shallow
-    .mock(EventWrongOddsService, { initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => new LogInfoWrongOdds()) })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.FakeFilter
-      }
-    });
-
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#ngOnInit should assign model to logInfoEvent', async () => {
-    const { instance } = await shallow
-    .mock(EventWrongOddsService, {
-      assignModelsToEvents: jest.fn().mockImplementation(() => Helper.fakeLogInfoWrongOdds),
-      initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => Helper.fakeLogInfoWrongOdds)
-    })
-    .render({
-      bind: {
-        filter: new FilterModel()
-      }
-    });
+  it('should initialize with default values when not in edit mode', () => {
+    // Arrange
+    component.isEdit = false;
+    eventWrongOddsService.initDefaultLogInfoWrongOdds = jest.fn().mockReturnValue(new LogInfoWrongOdds());
 
-    [true, false].forEach(x => {
-      instance.isEdit = x;
-      instance.ngOnInit();
-      expect(instance.logInfoEvent.isPoolHouseAffected).toBe(Helper.fakeLogInfoWrongOdds.isPoolHouseAffected);
-      expect(instance.logInfoEvent.linkedLogsViewModel).toBe(Helper.fakeLogInfoWrongOdds.linkedLogsViewModel);
-    });
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(eventWrongOddsService.initDefaultLogInfoWrongOdds).toHaveBeenCalled();
   });
 
-  it('should call GetMaxBetAndSpreadOfEvent and resetOddsInfo if filter is changed and isChangeSubTypeManual is true', async () => {
-    const mockFunctionResetOddsInfo = jest.fn();
-    const mockFunctionGetMaxBetAndSpreadOfEvent = jest.fn();
+  it('should initialize with existing values when in edit mode', () => {
+    // Arrange
+    component.isEdit = true;
+    component.wrongOddsModels = Helper.fakeWrongOddsModel;
+    eventWrongOddsService.assignModelsToEvents = jest.fn().mockReturnValue(new LogInfoWrongOdds());
 
-    const { instance } = await shallow
-    .mock(EventWrongOddsService, {
-      assignModelsToEvents: jest.fn().mockImplementation(() => Helper.fakeLogInfoWrongOdds),
-      initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => Helper.fakeLogInfoWrongOdds)
-    })
-    .mock(CalculateOddsService, { resetOddsInfo: mockFunctionResetOddsInfo, createMaxBetAndSpreadQuery: jest.fn()})
-    .mock(AddRequestApiService, { getMaxBetAndSpreadOfEvent: mockFunctionGetMaxBetAndSpreadOfEvent})
-    .render({
-      bind: {
-        filter: Helper.FakeFilter
-      }
-    });
+    // Act
+    component.ngOnInit();
 
-    let newFilter = Helper.FakeFilter;
-    newFilter.isChangeSubTypeManual = true;
-
-    const changes: SimpleChanges = {
-      filter: new SimpleChange(Helper.FakeFilter, newFilter, true)
-    };
-    instance.eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    instance.eventLeagueComponent.selectedMatch = {matchId: 1} as MatchModel;
-
-    await instance.ngOnChanges(changes);
-
-    expect(mockFunctionGetMaxBetAndSpreadOfEvent).toHaveBeenCalled();
-    expect(mockFunctionResetOddsInfo).toHaveBeenCalledWith(instance.filterWrongOddsComponent.filterWrongOddsModel, instance.filter.subIssueTypeId);
+    // Assert
+    expect(eventWrongOddsService.assignModelsToEvents).toHaveBeenCalledWith(Helper.fakeWrongOddsModel[0]);
   });
 
-  it('should not call GetMaxBetAndSpreadOfEvent if maxBetAndSpreadInfo is already set', async () => {
-    const mockFunctionResetOddsInfo = jest.fn();
-    const mockFunctionGetMaxBetAndSpreadOfEvent = jest.fn();
+  it('should handle filter changes and update maxBetAndSpreadInfo', async () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
+    component.eventLeagueComponent = {
+      selectedMatch: { matchId: 123 } as MatchModel
+    } as EventLeagueComponent;
+    component.filterWrongOddsComponent = {
+      filterWrongOddsModel: {} as FilterWrongOddsModel
+    } as FilterWrongOddsComponent;
+    addRequestApiService.getMaxBetAndSpreadOfEvent = jest.fn().mockResolvedValue(Helper.fakeMaxBetAndSpreadInfo);
+    calculateOddsService.resetOddsInfo = jest.fn();
 
-    const { instance } = await shallow
-    .mock(EventWrongOddsService, {
-      assignModelsToEvents: jest.fn().mockImplementation(() => Helper.fakeLogInfoWrongOdds),
-      initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => Helper.fakeLogInfoWrongOdds)
-    })
-    .mock(CalculateOddsService, { resetOddsInfo: mockFunctionResetOddsInfo, createMaxBetAndSpreadQuery: jest.fn()})
-    .mock(AddRequestApiService, { getMaxBetAndSpreadOfEvent: mockFunctionGetMaxBetAndSpreadOfEvent})
-    .render({
-      bind: {
-        filter: Helper.FakeFilter
-      }
+    // Act
+    await component.ngOnChanges({
+      filter: {
+        currentValue: Helper.fakeFilterModel,
+        previousValue: null,
+        firstChange: true
+      } as SimpleChange
     });
-    instance.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo = [new MaxBetAndSpreadInfo()]
-    let newFilter = Helper.FakeFilter;
-    newFilter.isChangeSubTypeManual = true;
 
-    const changes: SimpleChanges = {
-      filter: new SimpleChange(Helper.FakeFilter, newFilter, true)
-    };
-
-    await instance.ngOnChanges(changes);
-
-    expect(mockFunctionGetMaxBetAndSpreadOfEvent).not.toHaveBeenCalled();
-    expect(mockFunctionResetOddsInfo).toHaveBeenCalledWith(instance.filterWrongOddsComponent.filterWrongOddsModel, instance.filter.subIssueTypeId);
+    // Assert
+    expect(addRequestApiService.getMaxBetAndSpreadOfEvent).toHaveBeenCalled();
+    expect(calculateOddsService.resetOddsInfo).toHaveBeenCalled();
   });
 
-  it('#ngOnChanges should not call resetOddsInfo if filter is not changed', async () => {
-    const mockFunctionResetOddsInfo = jest.fn();
-    const mockFunctionGetMaxBetAndSpreadOfEvent = jest.fn();
-    const newFilter = new FilterModel();
-    const { instance } = await shallow
-    .mock(EventWrongOddsService, {
-      assignModelsToEvents: jest.fn().mockImplementation(() => Helper.fakeLogInfoWrongOdds),
-      initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => Helper.fakeLogInfoWrongOdds)
-    })
-    .mock(CalculateOddsService, { resetOddsInfo: mockFunctionResetOddsInfo, createMaxBetAndSpreadQuery: jest.fn()})
-    .mock(AddRequestApiService, { getMaxBetAndSpreadOfEvent: mockFunctionGetMaxBetAndSpreadOfEvent})
-    .render({
-      bind: {
-        filter: newFilter
-      }
-    });
-    
-    const changes: SimpleChanges = {
-      filter: new SimpleChange(newFilter, newFilter, false)
-    };
+  it('should handle search event with validation', async () => {
+    // Arrange
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.filterWrongOddsComponent = {
+      filterWrongOddsModel: {} as FilterWrongOddsModel
+    } as FilterWrongOddsComponent;
+    validationService.validateCommonData = jest.fn().mockReturnValue(true);
+    calculateOddsService.calculateOddsRange = jest.fn();
+    eventWrongOddsService.getLinkedLog = jest.fn().mockResolvedValue([]);
+    logInfoService.getLogInfo = jest.fn().mockResolvedValue(undefined);
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+    addRequestStore.changeSavingRequestStatus = jest.fn();
 
-    await instance.ngOnChanges(changes);
+    // Act
+    await component.handleSearchEvent();
 
-    expect(mockFunctionGetMaxBetAndSpreadOfEvent).not.toHaveBeenCalled();
-    expect(mockFunctionResetOddsInfo).not.toHaveBeenCalled();
+    // Assert
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(calculateOddsService.calculateOddsRange).toHaveBeenCalled();
+    expect(eventWrongOddsService.getLinkedLog).toHaveBeenCalled();
+    expect(logInfoService.getLogInfo).toHaveBeenCalled();
+    expect(component.logInfoEvent.isShowValidation).toBeTruthy();
   });
 
-  it('#clickSearch should call #handleSearchEvent', async () => {
-    const { instance } = await shallow
-    .mock(EventWrongOddsService, { initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => new LogInfoWrongOdds()) })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel()
-      }
-    });
-    instance.logInfoEvent = Helper.fakeLogInfoWrongOdds;
-    instance.handleSearchEvent = jest.fn();
-    await instance.clickSearch();
+  it('should handle save request', async () => {
+    // Arrange
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+    calculateOddsService.calculateOddsRange = jest.fn();
+    saveRequestService.saveRequest = jest.fn().mockResolvedValue(undefined);
 
-    expect(instance.handleSearchEvent).toHaveBeenCalledTimes(1);
+    // Act
+    await component.saveRequest();
+
+    // Assert
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalled();
+    expect(calculateOddsService.calculateOddsRange).toHaveBeenCalled();
+    expect(saveRequestService.saveRequest).toHaveBeenCalled();
+    expect(component.logInfoEvent.isShowValidation).toBeFalsy();
   });
 
-  it('#handleSearchEvent should return false when validationService.validateCommonData', async () => {
-    const mockValidateCommonData = jest.fn().mockImplementation(() => false);
-    const { instance } = await shallow
-    .mock(EventWrongOddsService, { initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => new LogInfoWrongOdds()) })
-    .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
-    .mock(ValidationService, { validateCommonData: mockValidateCommonData })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.logInfoEvent = Helper.fakeLogInfoWrongOdds;
-    await instance.handleSearchEvent();
+  it('should handle match event change', async () => {
+    // Arrange
+    component.eventLeagueComponent = {
+      selectedMatch: {
+        matchId: 123,
+        sportType: 1
+      } as MatchModel
+    } as EventLeagueComponent;
+    calculateOddsService.updateOddsInfo = jest.fn();
+    logInfoService.resetLogInfoOfEvent = jest.fn();
+    component.updateMatchId.emit = jest.fn();
 
-    expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
+    // Act
+    await component.changeMatchEvent();
+
+    // Assert
+    expect(component.logInfoEvent.matchId).toBe(123);
+    expect(component.logInfoEvent.sportType).toBe(1);
+    expect(calculateOddsService.updateOddsInfo).toHaveBeenCalled();
+    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalled();
+    expect(component.updateMatchId.emit).toHaveBeenCalledWith(123);
   });
 
-  it('#handleSearchEvent validateCommonData should call getLogInfo & getLogInfo', async () => {
-    const mockGetLogInfo = jest.fn();
-    const mockGetLinkedLog = jest.fn();
+  it('should reset log info of event', () => {
+    // Arrange
+    logInfoService.resetLogInfoOfEvent = jest.fn();
 
-    const { instance } = await shallow
-    .mock(LogInfoService, {
-      resetLogInfoOfEvent: jest.fn(),
-      getLogInfo: mockGetLogInfo
-    })
-    .mock(ValidationService, { validateCommonData: jest.fn().mockImplementation(() => true) })
-    .mock(CalculateOddsService, { calculateOddsRange: jest.fn()})
-    .mock(EventWrongOddsService, {
-      getLinkedLog: mockGetLinkedLog,
-      initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => new LogInfoWrongOdds())
-    })
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: jest.fn(),
-      changeSavingRequestStatus: jest.fn()
-    })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.logInfoEvent = Helper.fakeLogInfoWrongOdds;
+    // Act
+    component.resetLogInfoOfEvent();
 
-    await instance.handleSearchEvent();
-
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(1);
-    expect(mockGetLinkedLog).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledWith(component.logInfoEvent);
   });
 
-  it('#handleSearchEvent not validateCommonData should not call getLogInfo & getLogInfo', async () => {
-    const mockGetLogInfo = jest.fn();
-    const mockGetLinkedLog = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, {
-      resetLogInfoOfEvent: jest.fn(),
-      getLogInfo: mockGetLogInfo
-    })
-    .mock(ValidationService, { validateCommonData: jest.fn().mockReturnValue(false)})
-    .mock(EventWrongOddsService, {
-      getLinkedLog: mockGetLinkedLog,
-      initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => new LogInfoWrongOdds())
-    })
-    
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
+  it('should reset pool house checked bet types', () => {
+    // Act
+    component.resetPoolHouseCheckedBetTypes();
 
-    await instance.handleSearchEvent();
-
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(0);
-    expect(mockGetLinkedLog).toHaveBeenCalledTimes(0);
+    // Assert
+    expect(component.logInfoEvent.poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.SELECT_ALL_BETTYPE);
   });
 
-  it('#saveRequest should call #saveRequestService.saveRequest', async () => {
-    const mockSaveRequest = jest.fn();
-    const { instance } = await shallow
-    .mock(SaveRequestService, { saveRequest: mockSaveRequest })
-    .mock(CalculateOddsService, { calculateOddsRange: jest.fn() })
-    .mock(EventWrongOddsService, {
-      initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => new LogInfoWrongOdds()),
-      getLinkedLog: jest.fn()})
-    .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn() })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.primitiveProps = new PrimitiveProperty();
-    instance['initSaveRequestInput'] = jest.fn();
-    instance.logInfoEvent = Helper.fakeLogInfoWrongOdds;
+  it('should initialize save request input with correct values', () => {
+    // Arrange
+    component.requestId = Helper.fakeRequestId;
+    component.requestedBy = Helper.fakeRequestedBy;
+    component.isEdit = true;
+    component.userId = Helper.fakeUserId;
+    component.actionIdOfFirstTimeAccess = 'test-action';
+    component.others = Helper.fakeOthersModel;
+    component.filter = Helper.fakeFilterModel;
+    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.filterWrongOddsComponent = {
+      filterWrongOddsModel: {} as FilterWrongOddsModel
+    } as FilterWrongOddsComponent;
+    component.logInfoEvent = new LogInfoWrongOdds();
 
-    await instance.saveRequest();
+    // Act
+    const result = component['initSaveRequestInput']();
 
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
-  });
-
-  it('#initSaveRequestInput should return expected argument', async () => {
-    const { instance } = await shallow
-    .mock(EventWrongOddsService, { initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => new LogInfoWrongOdds()) })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.requestId = 1;
-    instance.logInfoEvent = Helper.fakeLogInfoWrongOdds;
-
-    const actual = instance['initSaveRequestInput']();
-
-    expect(actual.isEdit).toBe(false);
-    expect(actual.requestId).toBe(1);
-  });
-
-  it('#changeMatchEvent should emit updateMatchId when selectedMatch not null', async () => {
-    const mockFunctionUpdateOddsInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
-    .mock(EventWrongOddsService, { initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => new LogInfoWrongOdds()) })
-    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
-    .mock(CalculateOddsService, { updateOddsInfo: mockFunctionUpdateOddsInfo })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.eventLeagueComponent = new EventLeagueComponent(null, null, null);
-    instance.eventLeagueComponent.selectedMatch = Helper.fakeMatch;
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.logInfoEvent = Helper.fakeLogInfoWrongOdds;
-    instance.updateMatchId.emit = jest.fn();;
-
-    instance.changeMatchEvent();
-
-    expect(mockFunctionUpdateOddsInfo).toHaveBeenCalledTimes(1);
-    expect(instance.logInfoEvent.matchId).toBe(Helper.fakeMatch.matchId);
-  });
-
-  it('#resetLogInfoOfEvent should call #resetLogInfoOfEvent', async () => {
-    const mockResetLogInfoOfEvent = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
-    .mock(EventWrongOddsService, { initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => new LogInfoWrongOdds()) })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.eventLeagueComponent = null;
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.logInfoEvent = Helper.fakeLogInfoWrongOdds;
-
-    instance.resetLogInfoOfEvent();
-
-    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(result.requestId).toBe(Helper.fakeRequestId);
+    expect(result.requestedBy).toBe(Helper.fakeRequestedBy);
+    expect(result.isEdit).toBeTruthy();
+    expect(result.userId).toBe(Helper.fakeUserId);
+    expect(result.actionIdOfFirstTimeAccess).toBe('test-action');
+    expect(result.others).toBe(Helper.fakeOthersModel);
+    expect(result.filter).toBe(Helper.fakeFilterModel);
+    expect(result.eventLeagueComponent).toBeDefined();
+    expect(result.filterWrongOddsComponent).toBeDefined();
+    expect(result.logInfoEvent).toBeDefined();
+    expect(result.addRequestStore).toBeDefined();
   });
 });

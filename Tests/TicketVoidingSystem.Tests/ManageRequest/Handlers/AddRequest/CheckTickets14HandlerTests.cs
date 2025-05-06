@@ -43,6 +43,6 @@ public class CheckTickets14HandlerTests
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        AssertExtension.Equal(viewModel, actual);
+        Assert.Equal(viewModel, actual);
     }
 }

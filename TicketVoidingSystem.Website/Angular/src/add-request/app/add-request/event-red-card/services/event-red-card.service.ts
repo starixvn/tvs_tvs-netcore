@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { AddRequestStore } from '../../add-request.store';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { Category, GroupButton } from '../../filter/sub-issue-type-dialog/sub-issue-type-json.model';
 import SubIssueTypeRedCardConfig from '../../filter/sub-issue-type-dialog/sub-type-red-card.json';
@@ -9,15 +11,9 @@ import { RedCardModel } from '../../models/event-red-card.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch } from '../../models/sub-type-link-match.model';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class EventRedCardService {
-  constructor(
-  ) { }
 
   assignModelsToEvents(allEvents: LogInfoRelatedEvent[], inputModels: RedCardModel[], primitiveProps: PrimitiveProperty, addRequestStore: AddRequestStore): void {
     inputModels.forEach(x => {
@@ -34,7 +30,7 @@ export class EventRedCardService {
       event.tvDetectionModel = this.getTvDetectionModel(x);
       event.eventDate = x.eventDate;
       event.sportType = x.sportType;
-      
+
       allEvents.push(event);
     });
 

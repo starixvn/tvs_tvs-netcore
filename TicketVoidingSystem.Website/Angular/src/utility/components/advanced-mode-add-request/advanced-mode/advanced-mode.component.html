@@ -1,52 +1,78 @@
-<div class="advanced-mode" *ngIf="isShowAdvancedModeFilter">
+@if (isShowAdvancedModeFilter) {
+<div class="advanced-mode">
   <div class="advanced-mode-header border-top-radius" [ngClass]="{'border-bottom-radius':isCollapse}"
     (click)="expandAndValidate()">
     <em class="fa me-1" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
     <strong class="advanced-mode-header-label">Advanced Mode</strong>
   </div>
-  <div class="advanced-mode-body border-bottom-radius" *ngIf="!isCollapse">
+  @if (!isCollapse) {
+  <div class="advanced-mode-body border-bottom-radius">
     <controls-all-bet-types [controlsAllBetTypesLists]="controlsAllBetTypesLists"
-    (changeControlsAll)="changeByControlAllBetType($event)">
+      (changeControlsAll)="changeByControlAllBetType($event)">
     </controls-all-bet-types>
-    <div *ngFor="let betTeam of betTeams">
-      <div [ngSwitch]="betTeam.type" *ngIf="betTeam.isShow">
-        <div *ngSwitchCase="1" class="bet-team">
+    @for (betTeam of betTeams; track betTeam) {
+    <div>
+      @if (betTeam.isShow) {
+      <div>
+        @switch (betTeam.type) {
+        @case (1) {
+        <div class="bet-team">
           <div class="bet-team-1">
             <div class="left mg-right-10">
               {{betTeam.name}}
             </div>
             <div class="right">
-              <ng-container *ngFor="let selection of betTeam.selections">
-                <div class="dropdown-item-adv" *ngIf="!selection.isMultiple">
-                  <span class="me-1" *ngIf="selection.name !== ''">{{selection.name}}:</span>
-                  <select [(ngModel)]="selection.value" (ngModelChange)="changeFilter()" [disabled]="selection.isDisabled"
-                    class="bet-team-{{betTeam.index}}-selection-{{selection.index}}">
-                    <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
-                  </select>
-                </div>
-                <div class="dropdown-item-adv" *ngIf="selection.isMultiple">
-                  <span class="me-1" *ngIf="selection.name !== ''">{{selection.multiSelection.name}}:</span>
-                  <multiple-select class="multiple-selection bet-team-{{betTeam.index}}-selection-{{selection.index}}"
-                    [multipleSelect]="selection.multiSelection.multipleSelect" (checkedItems)="changeFilter()">
-                  </multiple-select>
-                </div>
-              </ng-container>
-              <ng-container class="d-flex" *ngIf="betTeam.inputs?.length > 0">
-                <div class="input-item-adv" *ngFor="let item of betTeam.inputs">
-                  <span class="me-1" *ngIf="item.name !== ''">{{item.name}}:</span>
+              @for (selection of betTeam.selections; track selection) {
+              @if (!selection.isMultiple) {
+              <div class="dropdown-item-adv">
+                @if (selection.name !== '') {
+                <span class="me-1">{{selection.name}}:</span>
+                }
+                <select [(ngModel)]="selection.value" (ngModelChange)="changeFilter()" [disabled]="selection.isDisabled"
+                  class="bet-team-{{betTeam.index}}-selection-{{selection.index}}">
+                  @for (item of selection.items; track item) {
+                  <option [attr.value]="item.value">{{item.name}}</option>
+                  }
+                </select>
+              </div>
+              }
+              @if (selection.isMultiple) {
+              <div class="dropdown-item-adv">
+                @if (selection.name !== '') {
+                <span class="me-1">{{selection.multiSelection.name}}:</span>
+                }
+                <multiple-select class="multiple-selection bet-team-{{betTeam.index}}-selection-{{selection.index}}"
+                  [multipleSelect]="selection.multiSelection.multipleSelect" (checkedItems)="changeFilter()">
+                </multiple-select>
+              </div>
+              }
+              }
+              @if (betTeam.inputs?.length > 0) {
+              <ng-container class="d-flex">
+                @for (item of betTeam.inputs; track item) {
+                <div class="input-item-adv">
+                  @if (item.name !== '') {
+                  <span class="me-1">{{item.name}}:</span>
+                  }
                   <input class="bet-team-{{betTeam.index}}-input-{{item.index}}" type="text" [(ngModel)]="item.value"
-                    [disabled]="item.isDisabled"
-                    [placeholder]="item.isMultiple ? 'Ex: 0.75&1&1.25' : ''"
+                    [disabled]="item.isDisabled" [placeholder]="item.isMultiple ? 'Ex: 0.75&1&1.25' : ''"
                     (ngModelChange)="onChangeInputMultipleDecimal(betTeam.index, item.index,
-                      item.isMultiple, $event); changeFilter()"
-                    triggers="manual" multipleDecimal />
+                      item.isMultiple, $event); changeFilter()" triggers="manual" multipleDecimal />
                 </div>
+                }
               </ng-container>
+              }
             </div>
           </div>
         </div>
+        }
+        }
       </div>
+      }
     </div>
+    }
   </div>
+  }
 </div>
+}
 <tooltip [tooltip]="tooltip"></tooltip>

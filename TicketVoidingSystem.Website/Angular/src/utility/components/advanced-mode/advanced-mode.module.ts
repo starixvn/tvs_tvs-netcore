@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DecimalOnlyDirective, MultipleDecimalDirective } from '../../directives/numbers-only.directive';
-import { ToolTipModule } from './../tooltip/tooltip.module';
+import { TooltipComponent } from '../tooltip/tooltip.component';
 import { AdvancedModeComponent } from './advanced-mode/advanced-mode.component';
 import { AdvancedModeService } from './advanced-mode/advanced-mode.service';
 import { GroupBetTypesComponent } from './group-bettypes/group-bettypes.component';
@@ -16,11 +16,11 @@ import { MultipleSelectAdvancedModeModule } from './multiple-selection/multiple-
     CommonModule,
     FormsModule,
     NgbModule,
-    ToolTipModule,
+    TooltipComponent,
     AdvancedModeComponent,
     GroupBetTypesComponent,
     DecimalOnlyDirective,
-    MultipleDecimalDirective,
+    MultipleDecimalDirective
   ],
   exports: [
     AdvancedModeComponent,

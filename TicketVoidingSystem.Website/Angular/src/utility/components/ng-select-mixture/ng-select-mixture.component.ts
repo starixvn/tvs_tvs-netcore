@@ -1,4 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { NgSelectMixtureItem } from './ng-select-mixture-item.model';
 import { NgSelectMixtureModel } from './ng-select-mixture.model';
 import { NgSelectTreeViewComponent } from './ng-select-tree-view/ng-select-tree-view.component';
@@ -7,7 +10,9 @@ import { NgSelectTreeViewComponent } from './ng-select-tree-view/ng-select-tree-
   selector: 'ng-select-mixture',
   templateUrl: './ng-select-mixture.component.html',
   styleUrls: ['./ng-select-mixture.component.scss'],
-  viewProviders: [NgSelectTreeViewComponent]
+  viewProviders: [NgSelectTreeViewComponent],
+  standalone: true,
+  imports: [FormsModule, CommonModule, NgSelectModule, NgSelectTreeViewComponent]
 })
 export class NgSelectMixtureComponent implements OnInit {
   @Input() selectedItems: string[];

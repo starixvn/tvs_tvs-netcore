@@ -1,15 +1,21 @@
-<ngb-alert class="warning-msg" type="warning" [dismissible]="false" *ngIf="primitiveProps.isShowError">
-  <div class="message">
-    <div class="error-text" *ngIf="primitiveProps.isInvalidTotalTicket">
-      <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
-      There is no ticket in this request
+@if (primitiveProps.isShowError) {
+  <ngb-alert class="warning-msg" type="warning" [dismissible]="false">
+    <div class="message">
+      @if (primitiveProps.isInvalidTotalTicket) {
+        <div class="error-text">
+          <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
+          There is no ticket in this request
+        </div>
+      }
+      @if (primitiveProps.isBeingMoveBetDate) {
+        <div class="error-text">
+          <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
+          The system is running the Movebet process, please wait and try again.
+        </div>
+      }
     </div>
-    <div class="error-text" *ngIf="primitiveProps.isBeingMoveBetDate">
-      <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
-      The system is running the Movebet process, please wait and try again.
-    </div>
-  </div>
-</ngb-alert>
+  </ngb-alert>
+}
 
 <div [blockUi]="primitiveProps.isBlockUsernames">
   <user-names #usernames [(model)]="abnormalAccountModel.usernames" [disabled]="isVoided" [maxUsername]="2050"
@@ -19,46 +25,52 @@
 </div>
 
 <product-filter #products [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit"
-  (changeFilterEvent)="changeFilter()" [actionId]="filter.action"></product-filter>
+(changeFilterEvent)="changeFilter()" [actionId]="filter.action"></product-filter>
 <event-date-filter #eventDate [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit"
-  (changeFilterEvent)="changeFilter()" [minDate]="primitiveProps.minDate"></event-date-filter>
+(changeFilterEvent)="changeFilter()" [minDate]="primitiveProps.minDate"></event-date-filter>
 
-<div *ngIf="isShowUserInfo()" class="mt-3">
-  <div class="mb-3">
-    <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
+@if (isShowUserInfo()) {
+  <div class="mt-3">
+    <div class="mb-3">
+      <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
       (click)="handleSearchEvent()" (mousedown)="$event.preventDefault()">Search</button><br/>
-  </div>
-  <div *ngIf="primitiveProps.isShowAccountWinLost">
-    <div class="d-flex align-items-center">
-      <label class="col-form-label col-form-label-sm d-flex align-items-center">
-        <input type="checkbox" [(ngModel)]="primitiveProps.isCheckedShowAdjustAccount" class="mr-1"
-        (ngModelChange)="changeShowAdjustAccount()" [disabled]="isVoided"/>Adjust Estimated Void Amount
-      </label>
     </div>
-    <account-table #accountTable
-      [filter]="filter"
-      [requestId]="requestId"
-      (reCalculateByAccountEvent)="reCalculateByAccount($event)"
-      (openPopupAdjustTicketEvent)="openPopupAdjustTicket($event)"
-      [abnormalAccountModel]="abnormalAccountModel"
-      [primitiveProps]="primitiveProps"
-      [accountWinlostModels]="primitiveProps.validAccountWinlostModels"
-      [permission]="primitiveProps.permission">
-    </account-table>
-  </div>
-</div>
-<account-affected-ticket
-  *ngIf="accountAffectedTicketModel.isOpen"
-  [(tickets)]="abnormalAccountModel.adjustedTickets"
-  [model]="accountAffectedTicketModel">
-</account-affected-ticket>
+    @if (primitiveProps.isShowAccountWinLost) {
+      <div>
+        <div class="d-flex align-items-center">
+          <label class="col-form-label-sm d-flex align-items-center">
+            <input type="checkbox" [(ngModel)]="primitiveProps.isCheckedShowAdjustAccount" class="me-1"
+              (ngModelChange)="changeShowAdjustAccount()" [disabled]="isVoided"/>Adjust Estimated Void Amount
+            </label>
+          </div>
+          <account-table #accountTable
+            [filter]="filter"
+            [requestId]="requestId"
+            (reCalculateByAccountEvent)="reCalculateByAccount($event)"
+            (openPopupAdjustTicketEvent)="openPopupAdjustTicket($event)"
+            [abnormalAccountModel]="abnormalAccountModel"
+            [primitiveProps]="primitiveProps"
+            [accountWinlostModels]="primitiveProps.validAccountWinlostModels"
+            [permission]="primitiveProps.permission"
+            [isShowTooltip]="true">
+          </account-table>
+        </div>
+      }
+    </div>
+  }
+  @if (accountAffectedTicketModel.isOpen) {
+    <account-affected-ticket
+      [(tickets)]="abnormalAccountModel.adjustedTickets"
+      [model]="accountAffectedTicketModel">
+    </account-affected-ticket>
+  }
 
-<confirm-add-request
-  [model]="confirmAddRequest"
-  [issueTypes]="issueTypes"
-  [voidActions]="filter.actions"
-  [selectedVoidAction]="filter.action"
-  [selectedSubIssueType]="issueTypes.subIssueId"
-  (clickOk)="onClickConfirmSaveRequest()"
-  (clickCancel)="onClickCancelSaveRequest()">
-</confirm-add-request>
+  <confirm-add-request
+    [model]="confirmAddRequest"
+    [issueTypes]="issueTypes"
+    [voidActions]="filter.actions"
+    [selectedVoidAction]="filter.action"
+    [selectedSubIssueType]="issueTypes.subIssueId"
+    (clickOk)="onClickConfirmSaveRequest()"
+    (clickCancel)="onClickCancelSaveRequest()">
+  </confirm-add-request>

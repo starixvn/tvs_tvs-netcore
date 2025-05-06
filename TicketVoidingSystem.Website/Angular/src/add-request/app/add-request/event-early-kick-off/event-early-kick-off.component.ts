@@ -1,15 +1,19 @@
+
 import {
-  Component, ElementRef, EventEmitter, Input,
+  Component, ElementRef, EventEmitter, inject, Input,
   OnChanges,
   OnInit, Output,
   QueryList, SimpleChanges, ViewChild, ViewChildren
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
+import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType } from '../../../../utility/constants/config';
 import { MatchModel } from '../../../../utility/models/match.model';
@@ -23,6 +27,8 @@ import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { ChildMatchModel } from '../models/related-event.model';
 import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
 import { OthersModel } from '../others/others.model';
+import { CheckAddPermissionService } from '../services/check-permission.service';
+import { ConfirmEkoComponent } from './confirm-eko/confirm-eko.component';
 import { ConfirmEarlyKickOffModel } from './confirm-eko/confirm-eko.model';
 import { LogInfoEkoComponent } from './log-info-eko/log-info-eko.component';
 import { AddRelatedEventArg } from './models/add-related-event.model';
@@ -34,11 +40,18 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { SearchEventService } from './services/search-event.service';
+import { ValidationService } from './services/validation.service';
+import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 
 @Component({
   selector: 'event-early-kick-off',
   templateUrl: './event-early-kick-off.component.html',
-  styleUrls: ['./event-early-kick-off.component.scss']
+  styleUrls: ['./event-early-kick-off.component.scss'],
+  standalone: true,
+  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, DateFullTimeNewComponent,
+    LogInfoEkoComponent, AddChildMatchComponent, ConfirmEkoComponent, OnlyNumberDirective],
+  providers: [EventEarlyKickOffService, LogInfoService, SaveRequestService,
+    ValidationService, RelatedEventService, SearchEventService, CheckAddPermissionService]
 })
 export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   @Input() filter: FilterModel;
@@ -55,8 +68,6 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChild('kickOffTime') kickOffTimeComponent: DateFullTimeNewComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoEkoComponent>;
-  private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
-
   permission = new PermissionAddRequest();
   transInfoAddRequestModel: TransInfoAddRequestModel;
   mainEvent = new LogInfoEarlyKickOff();
@@ -66,16 +77,17 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   confirmEarlyKickOff = new ConfirmEarlyKickOffModel();
   primitiveProps = new PrimitiveProperty();
   tooltip = new Tooltip();
-  constructor(
-    private readonly element: ElementRef,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly logInfoService: LogInfoService,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly relatedEventService: RelatedEventService,
-    private readonly eventEarlyKickOffService: EventEarlyKickOffService,
-    private readonly searchEventService: SearchEventService,
-    private readonly addRequestApiService: AddRequestApiService
-  ) {
+  private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
+  private readonly element = inject(ElementRef);
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly relatedEventService = inject(RelatedEventService);
+  private readonly eventEarlyKickOffService = inject(EventEarlyKickOffService);
+  private readonly searchEventService = inject(SearchEventService);
+  private readonly addRequestApiService = inject(AddRequestApiService);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -106,10 +118,10 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     }
   }
 
-  private createGetChildMatchesQuery(): GetChildMatchQuery{
+  private createGetChildMatchesQuery(): GetChildMatchQuery {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(this.filter.issueTypeId);
-    query.eventDate = this.mainEvent.matchModel.eventDate ? moment(this.mainEvent.matchModel.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+    query.eventDate = this.mainEvent.matchModel?.eventDate ? moment(this.mainEvent.matchModel.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
     query.matchId = this.mainEvent.matchId;
     query.isMainMatch = true;
     query.sportType = this.mainEvent.sportType;
@@ -155,8 +167,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   }
 
   public async getTicketsMainEvent(): Promise<void> {
-    const query = this.logInfoService.initQuery(PagingConstant.INDEX_ZERO, PagingConstant.SIZE_ONE, this.mainEvent, this.filter);
-    await this.logInfoService.getTickets(query, this.mainEvent, this.isEdit, this.requestId, this.filter);
+    await this.logInfoService.getTickets(this.mainEvent, this.isEdit, this.requestId, this.filter);
     this.logInfoService.assignTemplateMessageValueToEvent(this.mainEvent);
   }
 

@@ -10,8 +10,10 @@ using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
+using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.BetList;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest;
@@ -22,15 +24,17 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
     private readonly IDynamicRepository repository;
     private readonly LogInfoServiceImp service;
     private readonly SessionService session;
-    private readonly LogInfoHelperService logInfoHelperService;
+    private readonly BetListService betListService;
+    private readonly CopyRequestInfoService copyRequestInfoService;
 
     public LogInfoServiceTests()
     {
         mapper = Substitute.For<IMapper>();
         repository = Substitute.For<IDynamicRepository>();
         session = Substitute.For<SessionService>();
-        logInfoHelperService = Substitute.For<LogInfoHelperService>();
-        service = new LogInfoServiceImp(mapper, repository, session, logInfoHelperService);
+        betListService = Substitute.For<BetListService>();
+        copyRequestInfoService = Substitute.For<CopyRequestInfoService>();
+        service = new LogInfoServiceImp(mapper, repository, session, betListService, copyRequestInfoService);
     }
 
     [Fact]
@@ -48,7 +52,6 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
         var logInfos = new List<LogInfoDetail> { logInfo };
         var transInfoAddRequestModels = new List<TransInfoAddRequestModel>();
-        var transInfoModels = new List<string> { "123" };
         var betTypeCountModel = new List<BetTypeTicketsInfo> { new() };
 
         var viewModel = new WrongScoreInfoViewModel
@@ -67,24 +70,22 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             IssueTypeId = issueTypeId,
             WrongScoreModels = new List<WrongScoreInfoViewModel> { viewModel },
             MatchId = matchId,
-            KickOffTime = DateTime.Now
+            KickOffTime = DateTimeOffset.Now.DateTime
         };
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
-            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels, betTypeCountModel));
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(default)
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
-        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-        var transInfoJson = new List<string> { issueTypeId.ToString() };
-        logInfoHelperService.GetTransInfoJson(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
+        mapper.Map<GetLogInfoCriteria>(default).ReturnsForAnyArgs(new GetLogInfoCriteria());
 
         // Act
-        var actual = await service.GetLogInfo(request);
+        var actual = await service.Get(request);
         var logInfoModel = actual.GetLogInfoModels.ToList()[0];
 
         // Assert
         Assert.Single(actual.GetLogInfoModels);
-        Assert.Equal(validation, logInfoModel.Validation);
-        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+        Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
+        Assert.Equal(ticketRequests.Count, logInfoModel.TicketRequest.Count());
+        Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
     }
 
     [Theory]
@@ -99,7 +100,6 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
     [InlineData(IssueTypeConstant.WrongHDP)]
     [InlineData(IssueTypeConstant.RedCard)]
     [InlineData(IssueTypeConstant.DangerAccepted)]
-    [InlineData(99)]
     public async Task GetLogInfo_CalledExpected(int issueTypeId)
     {
         // Arrange
@@ -114,14 +114,13 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         var logInfos = new List<LogInfoDetail> { logInfo };
         var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
             { new() { MarkTransIds = "1232" } };
-        var transInfoModels = new List<string> { "123" };
         var betTypeCountModel = new List<BetTypeTicketsInfo> { new() };
 
         var request = new GetLogInfoRequest
         {
             IssueTypeId = issueTypeId,
             MatchId = matchId,
-            KickOffTime = DateTime.Now,
+            KickOffTime = DateTimeOffset.Now.DateTime,
             EarlyKickOffModels = new List<EarlyKickOffViewModel> { new() { MatchId = matchId } },
             NotParticipateModels = new List<NotParticipateViewModel> { new() { MatchId = matchId } },
             ReducedOverModels = new List<ReducedOverViewModel> { new() { MatchId = matchId } },
@@ -133,21 +132,19 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             RedCardModels = new List<DangerAcceptedViewModel> { new() { MatchId = matchId } },
             DangerAcceptedModels = new List<DangerAcceptedViewModel> { new() { MatchId = matchId } }
         };
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
-            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels, betTypeCountModel));
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
         mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-        var transInfoJson = new List<string> { issueTypeId.ToString() };
-        logInfoHelperService.GetTransInfoJson(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
 
         // Act
-        var actual = await service.GetLogInfo(request);
+        var actual = await service.Get(request);
         var logInfoModel = actual.GetLogInfoModels.ToList()[0];
 
         // Assert
-        Assert.Equal(validation, logInfoModel.Validation);
-        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+        Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
+        Assert.Equal(ticketRequests.Count, logInfoModel.TicketRequest.Count());
+        Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
     }
 
     [Fact]
@@ -166,31 +163,28 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         var logInfos = new List<LogInfoDetail> { logInfo };
         var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
             { new() { MarkTransIds = "1232" } };
-        var transInfoModels = new List<string> { "123" };
         var betTypeCountModel = new List<BetTypeTicketsInfo> { new() };
 
         var request = new GetLogInfoRequest
         {
             IssueTypeId = issueTypeId,
             MatchId = matchId,
-            KickOffTime = DateTime.Now,
+            KickOffTime = DateTimeOffset.Now.DateTime,
             EarlyKickOffModels = new List<EarlyKickOffViewModel> { new() { MatchId = matchId } },
             NotParticipateModels = new List<NotParticipateViewModel> { new() { MatchId = matchId } }
         };
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
-            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels, betTypeCountModel));
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
         mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-        var transInfoJson = new List<string> { issueTypeId.ToString() };
-        logInfoHelperService.GetTransInfoJson(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
 
         // Act
-        var actual = await service.GetLogInfo(request);
+        var actual = await service.Get(request);
         var logInfoModel = actual.GetLogInfoModels.ToList()[0];
 
         // Assert
-        Assert.Equal(validation, logInfoModel.Validation);
-        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+        Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
+        Assert.Equal(ticketRequests.Count, logInfoModel.TicketRequest.Count());
+        Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
     }
 }

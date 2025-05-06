@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { TvDetectionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestService } from '../../add-request.service';
@@ -10,18 +10,13 @@ import { SaveRequestArg } from './save-request.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SaveRequestService {
   private readonly ACTUAL_SCORE_CLASS = 'input-actual-score';
-
-  constructor(
-    private readonly validationService: ValidationService,
-    private readonly addRequestService: AddRequestService,
-    private readonly logInfoService: LogInfoService,
-    private readonly popupService: PopupService,
-  ) { }
+  private readonly validationService = inject(ValidationService);
+  private readonly addRequestService = inject(AddRequestService);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly popupService = inject(PopupService);
 
   async onYesConfirmAddRequest(args: SaveRequestArg): Promise<void> {
     // validate again
@@ -98,7 +93,7 @@ export class SaveRequestService {
   /* istanbul ignore next */
   private getWrongScoreInfoForSaveRequest(args: SaveRequestArg): WrongScoreModel[] {
     const allMatchSelectedEvents = args.allSelectedEvents.map(x => x.matchId);
-    const mainWrongScoreModels = args.wrongScoreModels.filter(x => !allMatchSelectedEvents.includes(x.matchId));
+    const mainWrongScoreModels = args.wrongScoreModels.filter(x => !allMatchSelectedEvents.includes(x.matchId) && x.logInfoDetail);
     mainWrongScoreModels.forEach(x => {
       x.actualScore = args.primitiveProps.actualScore;
       x.filterBy = args.primitiveProps.filterBy;

@@ -1,113 +1,77 @@
 <div class="d-flex flex-wrap">
-  <div class="d-flex flex-wrap mr-2">
-      <div class="full-time from-date-time mr-3">
-          <label class="col-form-label col-form-label-sm mr-2">From</label>
-          <div class="input-group mr-2">
-              <input *ngIf="isShowInputFromDate"
-                  class="input-date form-control form-control-sm {{isDisabled ? '' : 'bg-white'}}"
-                  placeholder="yyyy-mm-dd"
-                  [(ngModel)]="fromDate"
-                  [maxDate]="maxDate"
-                  ngbDatepicker #fd="ngbDatepicker"
-                  (click)="fd.toggle()"
-                  (ngModelChange)="isFromTimeValid();changeFilterDateTime()"
-                  [disabled]="isDisabled"
-                  [readOnly]="true"
-              />
-              <div class="input-group-append pointer">
-                  <span class="input-group-text" (click)="isShowInputFromDate = !isShowInputFromDate" >
-                      <em class="fa fa-calendar"></em>
-                  </span>
-              </div>
-          </div>
-          <div class="time-filter">
-              <input type="text" class="form-control form-control-sm from-time" placeholder="HH:mm:ss.SSS AM/PM"
-                  [ngClass]="getTvDetectionClass()"
-                  [(ngModel)]="fromTime"
-                  [disabled]="isDisabled"
-                  (blur)="isFromTimeValid()"
-                  (ngModelChange)="changeFilterDateTime()"
-              />
-          </div>
+  <div class="d-flex flex-wrap me-2">
+    <div class="full-time from-date-time me-3">
+      <label class="col-form-label-sm me-2">From</label>
+      <div class="input-group me-2">
+        @if (isShowInputFromDate) {
+        <input class="input-date form-control form-control-sm {{isDisabled ? '' : 'bg-white'}}" placeholder="yyyy-mm-dd"
+          [(ngModel)]="fromDate" [maxDate]="maxDate" ngbDatepicker #fd="ngbDatepicker" (click)="fd.toggle()"
+          (ngModelChange)="isFromTimeValid();changeFilterDateTime()" [disabled]="isDisabled" [readOnly]="true" />
+        }
+        <button class="btn btn-sm btn-outline-secondary bi bi-calendar3"
+          (click)="isShowInputFromDate = !isShowInputFromDate" type="button"></button>
       </div>
+      <div class="time-filter">
+        <input type="text" class="form-control form-control-sm from-time" placeholder="HH:mm:ss.SSS AM/PM"
+          [ngClass]="getTvDetectionClass()" [(ngModel)]="fromTime" [disabled]="isDisabled" (blur)="isFromTimeValid()"
+          (ngModelChange)="changeFilterDateTime()" />
+      </div>
+    </div>
 
-      <div class="full-time to-date-time">
-          <label class="col-form-label col-form-label-sm mr-2">To</label>
-          <div class="input-group input-group-to-date mr-2">
-              <input *ngIf="isShowInputToDate"
-                  class="input-date form-control form-control-sm {{isDisabled ? '' : 'bg-white'}}" 
-                  placeholder="yyyy-mm-dd"
-                  [(ngModel)]="toDate"
-                  [maxDate]="maxDate"
-                  ngbDatepicker #td="ngbDatepicker"
-                  (click)="td.toggle()"
-                  (ngModelChange)="isToTimeValid();changeFilterDateTime()"
-                  [disabled]="isDisabled"
-                  [readOnly]="true"
-              />
-              <div class="input-group-append pointer">
-                  <span class="input-group-text" (click)="isShowInputToDate = !isShowInputToDate">
-                      <em class="fa fa-calendar"></em>
-                  </span>
-              </div>
-          </div>
-          <div class="time-filter">
-              <input type="text" class="form-control form-control-sm to-time"
-                  placeholder="HH:mm:ss.SSS AM/PM"
-                  [(ngModel)]="toTime"
-                  [disabled]="isDisabled"
-                  (blur)="isToTimeValid()"
-                  (ngModelChange)="changeFilterDateTime()"
-              />
-          </div>
+    <div class="full-time to-date-time">
+      <label class="col-form-label-sm me-2">To</label>
+      <div class="input-group input-group-to-date me-2">
+        @if (isShowInputToDate) {
+        <input class="input-date form-control form-control-sm {{isDisabled ? '' : 'bg-white'}}" placeholder="yyyy-mm-dd"
+          [(ngModel)]="toDate" [maxDate]="maxDate" ngbDatepicker #td="ngbDatepicker" (click)="td.toggle()"
+          (ngModelChange)="isToTimeValid();changeFilterDateTime()" [disabled]="isDisabled" [readOnly]="true" />
+        }
+        <button class="btn btn-sm btn-outline-secondary bi bi-calendar3"
+          (click)="isShowInputToDate = !isShowInputToDate" type="button"></button>
       </div>
+      <div class="time-filter">
+        <input type="text" class="form-control form-control-sm to-time" placeholder="HH:mm:ss.SSS AM/PM"
+          [(ngModel)]="toTime" [disabled]="isDisabled" (blur)="isToTimeValid()"
+          (ngModelChange)="changeFilterDateTime()" />
+      </div>
+    </div>
   </div>
-  <div class="mr-3 align-items-center d-flex">
-      (Duration:  &nbsp;<span class="bold">{{getDurationTime()}}</span>)
+  <div class="me-3 align-items-center d-flex">
+    (Duration: &nbsp;<span class="bold">{{getDurationTime()}}</span>)
   </div>
 
   <div class="d-flex flex-wrap">
-      <div class="d-flex setting-void-time mr-2">
+    <div class="d-flex setting-void-time me-2">
+      <div class="d-flex">
+        <label class="col-form-label-sm me-2 label-width-60">AA/PA/SA</label>
+        <div class="d-flex">
           <div class="d-flex">
-              <label class="col-form-label col-form-label-sm mr-2 label-width-60">AA/PA/SA</label>
-                  <div class="d-flex">
-                      <div class="d-flex">
-                          <input type="text" class="form-control form-control-sm mr-1 aa-time"
-                              [(ngModel)]="filterTimeWithAllowanceModel.aaTime"
-                              (ngModelChange)="emitChangeAllowanceSettingTimeEvent()"
-                              [disabled]="!isUseInLogInfo || isDisabled"
-                              maxlength="2"
-                              only-number
-                          />
-                          <label class="col-form-label col-form-label-sm mr-1">/</label>
-                          <input type="text" class="form-control form-control-sm mr-1 pa-time"
-                              [(ngModel)]="filterTimeWithAllowanceModel.paTime"
-                              (ngModelChange)="emitChangeAllowanceSettingTimeEvent()"
-                              [disabled]="!isUseInLogInfo || isDisabled"
-                              maxlength="2"
-                              only-number
-                          />
-                          <label class="col-form-label col-form-label-sm mr-1">/</label>
-                          <input type="text" class="form-control form-control-sm mr-1 sa-time" 
-                              [(ngModel)]="filterTimeWithAllowanceModel.saTime"
-                              (ngModelChange)="emitChangeAllowanceSettingTimeEvent()"
-                              [disabled]="!isUseInLogInfo || isDisabled"
-                              maxlength="2"
-                              only-number
-                          />
-                      </div>                             
-                  </div>
-              <label class="col-form-label col-form-label-sm">(s)</label>
+            <input type="text" class="form-control form-control-sm me-1 aa-time"
+              [(ngModel)]="filterTimeWithAllowanceModel.aaTime" (ngModelChange)="emitChangeAllowanceSettingTimeEvent()"
+              [disabled]="!isUseInLogInfo || isDisabled" maxlength="2" only-number />
+            <label class="col-form-label-sm me-1">/</label>
+            <input type="text" class="form-control form-control-sm me-1 pa-time"
+              [(ngModel)]="filterTimeWithAllowanceModel.paTime" (ngModelChange)="emitChangeAllowanceSettingTimeEvent()"
+              [disabled]="!isUseInLogInfo || isDisabled" maxlength="2" only-number />
+            <label class="col-form-label-sm me-1">/</label>
+            <input type="text" class="form-control form-control-sm me-1 sa-time"
+              [(ngModel)]="filterTimeWithAllowanceModel.saTime" (ngModelChange)="emitChangeAllowanceSettingTimeEvent()"
+              [disabled]="!isUseInLogInfo || isDisabled" maxlength="2" only-number />
           </div>
+        </div>
+        <label class="col-form-label-sm col-form-label-sm">(s)</label>
       </div>
-  
-      <div *ngIf="isUseInLogInfo"  class="d-flex flex-wrap">
-          <div class="btn-reload ml-2">
-              <button type="button" class="btn btn-default btn-sm" [disabled]="isDisabled" (click)="refreshLogInfo()">
-                  <span><i class="fa fa-refresh" aria-hidden="true" ></i></span>
-              </button>
-          </div>
-      </div>   
-  </div> 
+    </div>
+
+    @if (isUseInLogInfo) {
+    <div class="d-flex flex-wrap">
+      <div class="btn-reload ms-2">
+        <button type="button" class="btn btn-default btn-sm" [disabled]="isDisabled" (click)="refreshLogInfo()">
+          <span><i class="fa fa-refresh" aria-hidden="true"></i></span>
+        </button>
+      </div>
+    </div>
+    }
+  </div>
 </div>
 <tooltip [tooltip]="tooltip"></tooltip>

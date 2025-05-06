@@ -9,7 +9,7 @@ exports[`EventRedCardComponent WrongScoreInfoComponent init should match snapsho
       class="d-flex mt-3 wrong-score-container"
     >
       <div
-        class="mr-4 d-flex chk-score-container"
+        class="me-4 d-flex chk-score-container"
       >
         <input
           class="chk-score ng-untouched ng-pristine ng-valid"
@@ -21,7 +21,7 @@ exports[`EventRedCardComponent WrongScoreInfoComponent init should match snapsho
           class="d-flex"
         >
           <div
-            class="mr-5"
+            class="me-5"
           >
             <div
               class="score d-flex align-items-center position-relative form-control form-control-sm"
@@ -36,19 +36,19 @@ exports[`EventRedCardComponent WrongScoreInfoComponent init should match snapsho
             </div>
           </div>
           <div
-            class="mr-4"
+            class="me-4"
           >
             <date-full-time-new
               class="from-date-time"
             />
           </div>
           <div
-            class="mr-2"
+            class="me-2"
           >
             <div
               class="time-last-ticket-label form-control form-control-sm"
             >
-               Time of Last Ticket 
+               Time of Last Ticket
             </div>
           </div>
         </div>

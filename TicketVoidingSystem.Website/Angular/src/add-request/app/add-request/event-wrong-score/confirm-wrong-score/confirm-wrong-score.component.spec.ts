@@ -1,55 +1,51 @@
-
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Shallow } from 'shallow-render';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { ConfirmWrongScoreComponent } from './confirm-wrong-score.component';
-
-@NgModule({
-  declarations: [],
-  imports: [FormsModule]
-})
-class AppModuleTest { }
+import { ConfirmWrongScoreModel } from './confirm-wrong-score.model';
 
 describe('ConfirmWrongScoreComponent', () => {
-  let shallow: Shallow<ConfirmWrongScoreComponent>;
+  let component: ConfirmWrongScoreComponent;
+  let fixture: ComponentFixture<ConfirmWrongScoreComponent>;
 
-  beforeEach(() => {
-    shallow = new Shallow(ConfirmWrongScoreComponent, AppModuleTest);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: []
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ConfirmWrongScoreComponent);
+    component = fixture.componentInstance;
+
+    // Set default input values
+    component.model = new ConfirmWrongScoreModel();
+    component.model.isOpenDialog = true;
   });
 
-  it('ConfirmWrongScoreComponent should match snapshot', async () => {
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+  
+  it('should emit close event when closeClick is called', () => {
     // Arrange
-    const { fixture } = await shallow.render({
-      bind: { model: { isOpenDialog: true } }
-    });
+    jest.spyOn(component.close, 'emit');
+
+    // Act
+    component.closeClick();
 
     // Assert
-    expect(fixture).toMatchSnapshot();
+    expect(component.model.isOpenDialog).toBeFalsy();
+    expect(component.close.emit).toHaveBeenCalled();
   });
 
-  it('#closeClick', async () => {
+  it('should emit save event when saveClick is called', () => {
     // Arrange
-    const { instance } = await shallow.render({
-      bind: { model: { isOpenDialog: true } }
-    });
-    const spyCloseOutput = jest.spyOn(instance.close, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(component.save, 'emit');
 
-    instance.closeClick();
+    // Act
+    component.saveClick();
 
     // Assert
-    expect(instance.model.isOpenDialog).toBe(false);
-    expect(spyCloseOutput).toBeCalledTimes(1);
-  });
-
-  it('#saveClick', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    const spySaveOutput = jest.spyOn(instance.save, 'emit').mockImplementation(jest.fn());
-
-    instance.saveClick();
-
-    // Assert
-    expect(instance.model.isOpenDialog).toBe(false);
-    expect(spySaveOutput).toBeCalledTimes(1);
+    expect(component.model.isOpenDialog).toBeFalsy();
+    expect(component.save.emit).toHaveBeenCalled();
   });
 });

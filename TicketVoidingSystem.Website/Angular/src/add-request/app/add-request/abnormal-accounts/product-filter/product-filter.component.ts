@@ -1,13 +1,19 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { SlicePipe } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { ProductFilter, TVSRequestActionType, TicketStatus } from '../../../../../utility/constants/config';
+import { ProductFilter, TicketStatus, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 
 @Component({
   selector: 'product-filter',
   templateUrl: './product-filter.component.html',
-  styleUrls: ['./product-filter.component.scss']
+  styleUrls: ['./product-filter.component.scss'],
+  standalone: true,
+  imports: [NgSelectModule, FormsModule, TooltipComponent, SlicePipe]
 })
 export class ProductFilterComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -21,13 +27,11 @@ export class ProductFilterComponent implements OnInit {
   tooltip = new Tooltip();
   selectedProducts: string[] = [];
   selectedTicketStatus: string[] = [];
-
   private readonly PRODUCT_CLASS = 'product';
   private readonly TICKET_STATUS_CLASS = 'ticket-status';
+  private readonly element = inject(ElementRef);
 
-  constructor(
-    private readonly element: ElementRef,
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -45,21 +49,21 @@ export class ProductFilterComponent implements OnInit {
   }
 
   isValidComponent(): boolean {
-    if (this.selectedProducts.length === 0 ) {
+    if (this.selectedProducts.length === 0) {
       this.tooltip.display(this.PRODUCT_CLASS, LABELS.REQUIRED_PRODUCT);
       return false;
     } else {
       this.abnormalAccountModel.productIds = this.selectedProducts.join(',');
     }
 
-    if (this.selectedTicketStatus.length === 0 ) {
+    if (this.selectedTicketStatus.length === 0) {
       this.tooltip.display(this.TICKET_STATUS_CLASS, LABELS.REQUIRED_TICKET_STATUS);
       return false;
     } else {
       this.abnormalAccountModel.statusIds = this.selectedTicketStatus.join(',');
     }
 
-    return true ;
+    return true;
   }
 
   updateItem() {
@@ -73,7 +77,7 @@ export class ProductFilterComponent implements OnInit {
       ticketStatusValues.push(`${STATUS_RUNNING},${STATUS_WAITING}`);
     }
 
-    this.selectedProducts = ProductFilter.SELECTION_ITEMS.filter( x => productValues.includes(x.value.toString())).map(x => x.value);
+    this.selectedProducts = ProductFilter.SELECTION_ITEMS.filter(x => productValues.includes(x.value.toString())).map(x => x.value);
     this.selectedTicketStatus = TicketStatus.SELECTION_ITEMS.filter(x => ticketStatusValues.includes(x.value.toString())).map(x => x.value);
   }
 

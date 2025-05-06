@@ -8,18 +8,16 @@ import { DateTimeFormat, TVSRequestActionType } from '../../../../../utility/con
 import { LABELS } from '../../../../../utility/constants/labels';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { AddRequestStore } from '../../add-request.store';
+import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { FilterWrongScoreComponent } from '../filter-wrong-score/filter-wrong-score.component';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
 import { RelatedEventService } from './related-event.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
   private readonly TO_DATE_TIME_CLASS = 'to-date-time';
@@ -35,7 +33,7 @@ export class ValidationService {
   }
 
   public isValidityTvDetection(tvDetectionComponent?: TvDetectionComponent): boolean {
-    return tvDetectionComponent ? tvDetectionComponent.isValidality() : true;
+    return tvDetectionComponent ? tvDetectionComponent.isValid() : true;
   }
 
   public isValidityWhenFilter(filter: FilterModel, filterWrongScoreComponent: FilterWrongScoreComponent, wrongScoreInfoComponents: WrongScoreInfoComponent[]): boolean {
@@ -138,7 +136,7 @@ export class ValidationService {
   }
 
   public isSubTypeFilterByAcceptedTime(subIssueTypeId: string): boolean {
-    const allSubIssueType = [...RelatedEventService.SubIssueTypeMapHasRelatedEvent.values(), 
+    const allSubIssueType = [...RelatedEventService.SubIssueTypeMapHasRelatedEvent.values(),
       ...RelatedEventService.SubIssueTypeMapHasRelatedEvent.keys()];
 
     return allSubIssueType.includes(Number(subIssueTypeId));

@@ -1,52 +1,160 @@
-import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { ValidationService } from '../services/validation.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { FilterOtherIssuesComponent } from './filter-other-issues.component';
+import { ValidationService } from '../services/validation.service';
+import { FilterModel } from '../../filter/filter.model';
+import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
+
+class Helper {
+  static readonly fakeFilterModel: FilterModel = {
+    issueTypeId: '1',
+    subIssueTypeId: '1',
+    action: '1',
+    isTest: true,
+    isVoided: false,
+    isChangeSubTypeManual: true,
+    isAbnormal: false
+  } as FilterModel;
+
+  static readonly fakeFilterOtherIssuesModel = {
+    fromDateTime: new Date(),
+    toDateTime: new Date(),
+    matchId: 123,
+    severity: 1
+  } as unknown as FilterOtherIssuesModel;
+}
 
 describe('FilterOtherIssuesComponent', () => {
-  let mockComponent: FilterOtherIssuesComponent;
+  let component: FilterOtherIssuesComponent;
+  let fixture: ComponentFixture<FilterOtherIssuesComponent>;
   let validationService: ValidationService;
 
-  beforeEach(() => {
-    validationService = new ValidationService(null);
-    mockComponent = new FilterOtherIssuesComponent(null, validationService);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        ValidationService,
+        CheckAddPermissionService
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(FilterOtherIssuesComponent);
+    validationService = fixture.debugElement.injector.get(ValidationService);
+    component = fixture.componentInstance;
   });
 
-  it('FilterOtherIssuesComponent init should match snapshot', async () => {
-    expect(mockComponent).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('isValidity should return result from #filterService.isValidity', async () => {
-    [
-      { isValidFromTime: true, isValidToTime: true, isFromBeforeToTime: true, expected: true },
-      { isValidFromTime: true, isValidToTime: true, isFromBeforeToTime: false, expected: false },
-      { isValidFromTime: true, isValidToTime: false, isFromBeforeToTime: true, expected: false },
-      { isValidFromTime: true, isValidToTime: false, isFromBeforeToTime: false, expected: false },
-      { isValidFromTime: false, isValidToTime: true, isFromBeforeToTime: true, expected: false },
-      { isValidFromTime: false, isValidToTime: false, isFromBeforeToTime: false, expected: false }
-    ].forEach((testCase) => {
-      mockComponent.fromTimeComponent = new DateFullTimeNewComponent(null);
-      mockComponent.toTimeComponent = new DateFullTimeNewComponent(null);
-      mockComponent.fromTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(testCase.isValidFromTime);
-      mockComponent.toTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(testCase.isValidToTime);
-      validationService.isFromTimeSameOrBeforeToTime = jest.fn().mockReturnValue(testCase.isFromBeforeToTime);
+  it('should initialize with default values', () => {
+    // Arrange
+    component.model = Helper.fakeFilterOtherIssuesModel;
+    component.filterModel = Helper.fakeFilterModel;
+    component.isEdit = false;
+    component.matchId = 123;
 
-      const actual = mockComponent.isValidity();
+    // Act
+    fixture.detectChanges();
 
-      expect(actual).toBe(testCase.expected);
-    });
+    // Assert
+    expect(component.model).toBeDefined();
+    expect(component.filterModel).toBeDefined();
+    expect(component.isEdit).toBeFalsy();
+    expect(component.matchId).toBe(123);
   });
 
-  it('changeFilter should emit changeFilterEvent', async () => {
-    mockComponent.changeFilterEvent.emit = jest.fn();
-    mockComponent.changeFilter();
+  it('should emit change filter event', () => {
+    // Arrange
+    const spy = jest.spyOn(component.changeFilterEvent, 'emit');
 
-    expect(mockComponent.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+    // Act
+    component.changeFilter();
+
+    // Assert
+    expect(spy).toHaveBeenCalled();
   });
 
-  it('emitRefreshEvent should emit refreshEvent', async () => {
-    mockComponent.refreshEvent.emit = jest.fn();
-    mockComponent.emitRefreshEvent();
+  it('should validate time range correctly', () => {
+    // Arrange
+    component.fromTimeComponent = {
+      validateWithTooltip: jest.fn().mockReturnValue(true)
+    } as any;
+    component.toTimeComponent = {
+      validateWithTooltip: jest.fn().mockReturnValue(true)
+    } as any;
+    component.model = Helper.fakeFilterOtherIssuesModel;
+    jest.spyOn(validationService, 'isFromTimeSameOrBeforeToTime').mockReturnValue(true);
 
-    expect(mockComponent.refreshEvent.emit).toHaveBeenCalledTimes(1);
+    // Act
+    const result = component.isValidity();
+
+    // Assert
+    expect(result).toBeTruthy();
+    expect(component.fromTimeComponent.validateWithTooltip).toHaveBeenCalled();
+    expect(component.toTimeComponent.validateWithTooltip).toHaveBeenCalled();
+    expect(validationService.isFromTimeSameOrBeforeToTime).toHaveBeenCalledWith(component.model, component.tooltip);
+  });
+
+  it('should return false when from time validation fails', () => {
+    // Arrange
+    component.fromTimeComponent = {
+      validateWithTooltip: jest.fn().mockReturnValue(false)
+    } as any;
+    component.toTimeComponent = {
+      validateWithTooltip: jest.fn().mockReturnValue(true)
+    } as any;
+
+    // Act
+    const result = component.isValidity();
+
+    // Assert
+    expect(result).toBeFalsy();
+  });
+
+  it('should return false when to time validation fails', () => {
+    // Arrange
+    component.fromTimeComponent = {
+      validateWithTooltip: jest.fn().mockReturnValue(true)
+    } as any;
+    component.toTimeComponent = {
+      validateWithTooltip: jest.fn().mockReturnValue(false)
+    } as any;
+
+    // Act
+    const result = component.isValidity();
+
+    // Assert
+    expect(result).toBeFalsy();
+  });
+
+  it('should return false when time range validation fails', () => {
+    // Arrange
+    component.fromTimeComponent = {
+      validateWithTooltip: jest.fn().mockReturnValue(true)
+    } as any;
+    component.toTimeComponent = {
+      validateWithTooltip: jest.fn().mockReturnValue(true)
+    } as any;
+    component.model = Helper.fakeFilterOtherIssuesModel;
+    jest.spyOn(validationService, 'isFromTimeSameOrBeforeToTime').mockReturnValue(false);
+
+    // Act
+    const result = component.isValidity();
+
+    // Assert
+    expect(result).toBeFalsy();
+  });
+
+  it('should emit refresh event', () => {
+    // Arrange
+    const spy = jest.spyOn(component.refreshEvent, 'emit');
+
+    // Act
+    component.emitRefreshEvent();
+
+    // Assert
+    expect(spy).toHaveBeenCalled();
   });
 });

@@ -1,103 +1,97 @@
 <div [blockUi]="primitiveProps.isBlock">
-  <event-league #leagueEvent
-    [isEdit]="isEdit"
-    [matchId]="mainEvent.matchId"
-    (changeEvent)="changeMatchEvent()">
+  <event-league #leagueEvent [isEdit]="isEdit" [matchId]="mainEvent.matchId" (changeEvent)="changeMatchEvent()">
   </event-league>
 
-  <div *ngIf="isShowVarCheck()">
-		<div class="var-check-selection mt-2" [ngClass]="{'highlight': mainEvent.isHighLightVarCheck}">
-			<label class="border-radius-left" (click)="!filter.isVoided && changeVarCheckValue(false)"
-			[ngClass]="{'bg-success':mainEvent.isCheckedVar === false, 'bg-not-choose':mainEvent.isCheckedVar !== false}">NO VAR
-			</label>
-			<label class="border-radius-right" (click)="!filter.isVoided && changeVarCheckValue(true)"
-			[ngClass]="{'bg-danger':mainEvent.isCheckedVar === true, 'bg-not-choose':mainEvent.isCheckedVar !== true}">VAR
-			</label>
-		</div>
-    <div class="tooltip-var-check" *ngIf="mainEvent.isHighLightVarCheck">
+  @if (isShowVarCheck()) {
+  <div>
+    <div class="var-check-selection mt-2" [ngClass]="{'highlight': mainEvent.isHighLightVarCheck}">
+      <label class="border-radius-left" (click)="!filter.isVoided && changeVarCheckValue(false)"
+        [ngClass]="{'bg-success':mainEvent.isCheckedVar === false, 'bg-not-choose':mainEvent.isCheckedVar !== false}">NO
+        VAR
+      </label>
+      <label class="border-radius-right" (click)="!filter.isVoided && changeVarCheckValue(true)"
+        [ngClass]="{'bg-danger':mainEvent.isCheckedVar === true, 'bg-not-choose':mainEvent.isCheckedVar !== true}">VAR
+      </label>
+    </div>
+    @if (mainEvent.isHighLightVarCheck) {
+    <div class="tooltip-var-check">
       <em></em>
       <span>{{tooltipVarMessage}}</span>
     </div>
-	</div>
+    }
+  </div>
+  }
   <tv-detection #tvDetection [isEdit]="isEdit" [model]="mainEvent.tvDetectionModel"
     (actualTimeChange)="actualTimeChange($event)" [disabled]="filter.isVoided">
   </tv-detection>
-  <filter-time-area #filterTimeArea
-    [isDisabled]="!isExistMatchEvent() || filter.isVoided"
-    [isEdit]="isEdit"
-    [tvDetectionValue]="mainEvent.tvDetectionModel.tvDetectionValue"
-    [isVoided]="filter.isVoided"
-    [(filterBy)]="primitiveProps.filterBy"
-    [filterTimeWithAllowanceModel]="defaultFilterTimeWithAllowance"
+  <filter-time-area #filterTimeArea [isDisabled]="!isExistMatchEvent() || filter.isVoided" [isEdit]="isEdit"
+    [tvDetectionValue]="mainEvent.tvDetectionModel.tvDetectionValue" [isVoided]="filter.isVoided"
+    [(filterBy)]="primitiveProps.filterBy" [filterTimeWithAllowanceModel]="defaultFilterTimeWithAllowance"
     (changeFilterEvent)="resetLogInfoAndHideAllEvents()">
   </filter-time-area>
 
   <div class="mb-3">
     <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
-    (click)="handleSearchEvent()">Search</button>
+      (click)="handleSearchEvent()">Search</button>
   </div>
 
-  <div *ngIf="primitiveProps.isShowLogInfoMainMatch" class="main-match-log-info mb-3">
-    <label><strong>Main Event - Log Info</strong></label>
-    <log-info-related-event #logInfo
-      [isMainMatch]="true"
-      [isEdit]="isEdit"
-      [filterBy]="primitiveProps.filterBy"
-      [transInfoAddRequestModel]="primitiveProps.transInfoAddRequestModel"
-      [requestId]="requestId"
-      [isDisabled]="filter.isVoided"
-      [subIssueTypes]="issueTypes.subIssueTypes"
-      [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance"
-      [logInfo]="mainEvent"
-      [filter]="filter">
+  @if (primitiveProps.isShowLogInfoMainMatch) {
+  <div class="main-match-log-info mb-3">
+    <label class="col-form-label-sm"><strong>Main Event - Log Info</strong></label>
+    <log-info-related-event #logInfo [isMainMatch]="true" [isEdit]="isEdit" [filterBy]="primitiveProps.filterBy"
+      [transInfoAddRequestModel]="primitiveProps.transInfoAddRequestModel" [requestId]="requestId"
+      [isDisabled]="filter.isVoided" [subIssueTypes]="issueTypes.subIssueTypes"
+      [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance" [logInfo]="mainEvent" [filter]="filter">
     </log-info-related-event>
   </div>
+  }
 
-  <div class="related-event-log-info mb-3" *ngIf="primitiveProps.isShowRelatedEvents">
-    <label><strong>Related Event(s) - Log Info</strong></label>
+  @if (primitiveProps.isShowRelatedEvents) {
+  <div class="related-event-log-info mb-3">
+    <label class="col-form-label-sm"><strong>Related Event(s) - Log Info</strong></label>
     <div class="d-flex mb-3">
-      <div class="input-group input-related-match-id-area align-items-center justify-content-center mr-2">
-        <input [(ngModel)]="primitiveProps.inputRelatedMatchId" [disabled]="filter.isVoided" class="input-related-match-id form-control form-control-sm" placeholder="Input MatchID" type="text" only-number/>
-        <button (click)="handleClickAddRelatedEvent()" [disabled]="filter.isVoided" class="btn btn-primary btn-sm btn-add-event" type="submit">Add Related Event</button>
+      <div class="input-group input-related-match-id-area align-items-center justify-content-center me-2">
+        <input [(ngModel)]="primitiveProps.inputRelatedMatchId" [disabled]="filter.isVoided"
+          class="input-related-match-id form-control form-control-sm" placeholder="Input MatchID" type="text"
+          only-number />
+        <button (click)="handleClickAddRelatedEvent()" [disabled]="filter.isVoided"
+          class="btn btn-primary btn-sm btn-add-event" type="submit">Add Related Event</button>
       </div>
       <div class="d-flex">
-        <button type="submit" class="btn btn-success btn-sm btn-open-modal-related-event mr-2"
-          (click)="showAddChildMatchModal(1)"
-          [disabled]="isDisabledChildMatches()">
+        <button type="submit" class="btn btn-success btn-sm btn-open-modal-related-event me-2"
+          (click)="showAddChildMatchModal(1)" [disabled]="isDisabledChildMatches()">
           Child Match ({{countChildMatches()}})
         </button>
         <button type="submit" class="btn btn-danger btn-open-modal-related-event btn-sm"
-          (click)="showAddChildMatchModal(2)"
-          [disabled]="isDisabledLinkMatches()">
+          (click)="showAddChildMatchModal(2)" [disabled]="isDisabledLinkMatches()">
           Link Match ({{countLinkMatches()}})
         </button>
       </div>
     </div>
-    <div *ngIf="allSelectedEvents.length > 1">
-      <div class="mb-2" *ngFor="let event of allSelectedEvents; index as i">
-        <log-info-related-event #logInfo *ngIf="!event.isMainMatch"
-          [isMainMatch]="false"
-          [isEdit]="isEdit"
-          [filterBy]="primitiveProps.filterBy"
-          [transInfoAddRequestModel]="primitiveProps.transInfoAddRequestModel"
-          [requestId]="requestId"
-          [isDisabled]="filter.isVoided"
-          [subIssueTypes]="issueTypes.subIssueTypes"
-          [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance"
-          [logInfo]="allSelectedEvents[i]"
-          [filter]="filter"
-          (deleteEvent)="handleDeleteEvent($event)">
+    @if (allSelectedEvents.length > 1) {
+    <div>
+      @for (event of allSelectedEvents; track event; let i = $index) {
+      <div class="mb-2">
+        @if (!event.isMainMatch) {
+        <log-info-related-event #logInfo [isMainMatch]="false" [isEdit]="isEdit" [filterBy]="primitiveProps.filterBy"
+          [transInfoAddRequestModel]="primitiveProps.transInfoAddRequestModel" [requestId]="requestId"
+          [isDisabled]="filter.isVoided" [subIssueTypes]="issueTypes.subIssueTypes"
+          [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance" [logInfo]="allSelectedEvents[i]"
+          [filter]="filter" (deleteEvent)="handleDeleteEvent($event)">
         </log-info-related-event>
+        }
       </div>
+      }
     </div>
+    }
   </div>
+  }
 </div>
 
-<add-child-match
-  [relatedEvents]="relatedEvents"
-  (selectedEventsChange)="saveRelatedEvent($event)"
+<add-child-match [relatedEvents]="relatedEvents" (selectedEventsChange)="saveRelatedEvent($event)"
   [model]="addChildMatchModel">
 </add-child-match>
 
-<confirm-danger-accepted [model]="confirmDangerAccepted" (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()"></confirm-danger-accepted>
+<confirm-danger-accepted [model]="confirmDangerAccepted" (clickOk)="onClickConfirmSaveRequest()"
+  (clickCancel)="onClickCancelSaveRequest()"></confirm-danger-accepted>
 <tooltip [tooltip]="tooltip"></tooltip>

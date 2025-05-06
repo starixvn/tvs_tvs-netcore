@@ -7,10 +7,7 @@ import { FilterWrongMarketOfferedModel } from "../models/filter-wrong-market-off
 import { WrongMarketOfferedGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoItem, LogInfoWrongMarketOffered } from "../models/log-info-wrong-market-offered.model";
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class EventWrongMarketOfferedService {
 
   initDefaultTime(id: number = null): FilterWrongMarketOfferedModel {

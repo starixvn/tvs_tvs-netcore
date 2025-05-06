@@ -1,71 +1,156 @@
-import { NgModule, SimpleChange } from '@angular/core';
-import { Shallow } from 'shallow-render';
-import { MultipleSelectionComponent } from '../../../../utility/components/multiple-selection/multiple-selection.component';
-import { TicketsComponent } from '../pool-house-ticket/tickets/tickets.component';
-import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
-import { LogAnalysisService } from '../services/log-analysis.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { AffectedTicketComponent } from './affected-ticket.component';
 import { AffectedTicketService } from './affected-ticket.service';
+import { LogAnalysisService } from '../services/log-analysis.service';
 import { AffectedTicketsModel } from '../models/live-game-early-ticket.model';
+import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
+import { SimpleChange } from '@angular/core';
 import { GroupModel } from '../pool-house-ticket/tickets/group-tickets.model';
 
+class Helper {
+  static readonly fakeIssueTypeId = '123';
+  static readonly fakeLogInfoTicketsJson = '{"someData": "test"}';
+  static readonly fakeAffectedTicketsModel = {
+    issueTypeId: '123',
+    logInfoTicketsJson: '{"someData": "test"}',
+    isOpen: true
+  } as unknown as AffectedTicketsModel;
+}
+
 describe('AffectedTicketComponent', () => {
-  @NgModule({
-    declarations: [
-      MultipleSelectionComponent,
-      TicketsComponent
-    ],
-    providers: [
-      LogAnalysisService,
-      AffectedTicketService
-    ]
-  })
-  class AppModuleTest { }
+  let component: AffectedTicketComponent;
+  let fixture: ComponentFixture<AffectedTicketComponent>;
+  let affectedTicketService: AffectedTicketService;
+  let logAnalysisService: LogAnalysisService;
 
-  let shallow: Shallow<AffectedTicketComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        AffectedTicketService,
+        LogAnalysisService
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(AffectedTicketComponent, AppModuleTest);
+    fixture = TestBed.createComponent(AffectedTicketComponent);
+    affectedTicketService = fixture.debugElement.injector.get(AffectedTicketService);
+    logAnalysisService = fixture.debugElement.injector.get(LogAnalysisService);
+    component = fixture.componentInstance;
   });
 
-  it('#ngOnChanges should call getAffectedTickets when has change model', async () => {
-      // Arrange
-      const groupTickets = [{name: 'Single', tickets: []}] as GroupModel[];
-      const otherGroupTickets = [{name: 'Other', tickets: []}] as GroupModel[];
-      const tickets = {groups: groupTickets, groupOtherTickets: otherGroupTickets} as TicketsModel;
-      const { instance } = await shallow
-      .mock(LogAnalysisService, {writeLogClickLiveGameDetails: jest.fn()})
-      .mock(AffectedTicketService, {getAffectedTickets: jest.fn().mockReturnValue(tickets)})
-      .render();
-      instance.model.isOpen = true;
-      const model = {issueTypeId: 23, logInfoTicketsJson: '', isOpen: true} as AffectedTicketsModel;
-      const changes = {'model': new SimpleChange(null, model, true)};
-  
-      // Action
-      await instance.ngOnChanges(changes);
-  
-      // Assert
-      expect(instance.tickets.groups).toEqual(tickets.groups);
-      expect(instance.otherTickets.groups).toEqual(tickets.groupOtherTickets);
-      expect(instance.blockBetList).toBeFalsy();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#closeClick update data expected', async () => {
-    const { instance } = await shallow.render();
-    instance.closeClick();
-    expect(instance.isShowAffectedTickets).toBeTruthy();
-    expect(instance.isShowGroupBetTypesCount).toBeTruthy();
-    expect(instance.isShowOtherTickets).toBeTruthy();
-    expect(instance.model.isOpen).toBeFalsy();
+  it('should initialize with default values', () => {
+    expect(component.model).toBeDefined();
+    expect(component.blockBetList).toBeFalsy();
+    expect(component.isShowOtherTickets).toBeTruthy();
+    expect(component.isShowAffectedTickets).toBeTruthy();
+    expect(component.isShowGroupBetTypesCount).toBeTruthy();
   });
 
-  it('#updateSelectedBetTypes call #checkTicketByBetTypesForLGEarlyPopup', async () => {
-    const { instance } = await shallow.render();
-    instance.tickets = new TicketsModel();
-    instance.tickets.checkTicketByBetTypesForLGEarlyPopup = jest.fn();
+  it('should handle model changes when isOpen is true', async () => {
+    // Arrange
+    const mockTickets = new TicketsModel();
+    affectedTicketService.getAffectedTickets = jest.fn().mockResolvedValue(mockTickets);
+    logAnalysisService.writeLogClickLiveGameDetails = jest.fn().mockResolvedValue(undefined);
+    component.model = Helper.fakeAffectedTicketsModel;
 
-    instance.updateSelectedBetTypes(["1"]);
+    // Act
+    await component.ngOnChanges({
+      model: {
+        currentValue: Helper.fakeAffectedTicketsModel,
+        previousValue: null,
+        firstChange: true
+      } as SimpleChange
+    });
 
-    expect(instance.tickets.checkTicketByBetTypesForLGEarlyPopup).toHaveBeenCalledTimes(1);
+    // Assert
+    expect(component.blockBetList).toBeFalsy();
+    expect(affectedTicketService.getAffectedTickets).toHaveBeenCalledWith(
+      Helper.fakeIssueTypeId,
+      Helper.fakeLogInfoTicketsJson
+    );
+    expect(logAnalysisService.writeLogClickLiveGameDetails).toHaveBeenCalledWith(Helper.fakeIssueTypeId);
+  });
+
+  it('should not process changes when isOpen is false', async () => {
+    // Arrange
+    component.model = { ...Helper.fakeAffectedTicketsModel, isOpen: false };
+    affectedTicketService.getAffectedTickets = jest.fn();
+
+    // Act
+    await component.ngOnChanges({
+      model: {
+        currentValue: component.model,
+        previousValue: null,
+        firstChange: true
+      } as SimpleChange
+    });
+
+    // Assert
+    expect(affectedTicketService.getAffectedTickets).not.toHaveBeenCalled();
+  });
+
+  it('should handle close click correctly', () => {
+    // Arrange
+    component.isShowOtherTickets = false;
+    component.isShowAffectedTickets = false;
+    component.isShowGroupBetTypesCount = false;
+    component.model.isOpen = true;
+
+    // Act
+    component.closeClick();
+
+    // Assert
+    expect(component.isShowOtherTickets).toBeTruthy();
+    expect(component.isShowAffectedTickets).toBeTruthy();
+    expect(component.isShowGroupBetTypesCount).toBeTruthy();
+    expect(component.model.isOpen).toBeFalsy();
+  });
+
+  it('should update selected bet types correctly', () => {
+    // Arrange
+    const betTypes = ['type1', 'type2'];
+    component.tickets = new TicketsModel();
+    component.tickets.checkTicketByBetTypesForLGEarlyPopup = jest.fn();
+
+    // Act
+    component.updateSelectedBetTypes(betTypes);
+
+    // Assert
+    expect(component.tickets.checkTicketByBetTypesForLGEarlyPopup).toHaveBeenCalledWith(betTypes);
+  });
+
+  it('should initialize filter bet types when tickets groups exist', () => {
+    // Arrange
+    component.tickets = new TicketsModel();
+    component.tickets.groups = [{
+      tickets: [
+        { betType: 'type1', isParlay: false },
+        { betType: 'type2', isParlay: true, subBetType: 'subType1' }
+      ]
+    } as unknown as GroupModel];
+
+    // Act
+    component['initFilterBetTypes']();
+
+    // Assert
+    expect(component.filterBetTypes).toBeDefined();
+    expect(component.filterBetTypes.items.length).toBe(2);
+  });
+
+  it('should not initialize filter bet types when no tickets groups exist', () => {
+    // Arrange
+    component.tickets = new TicketsModel();
+    component.tickets.groups = [];
+
+    // Act
+    component['initFilterBetTypes']();
+
+    // Assert
+    expect(component.filterBetTypes).toBeUndefined();
   });
 });

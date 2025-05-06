@@ -1,4 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
@@ -9,7 +11,9 @@ import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-ti
 @Component({
   selector: 'filter-time-area',
   templateUrl: './filter-time-area.component.html',
-  styleUrls: ['./filter-time-area.component.scss']
+  styleUrls: ['./filter-time-area.component.scss'],
+  standalone: true,
+  imports: [FilterTimeWithAllowanceComponent, FormsModule]
 })
 export class FilterTimeAreaComponent implements OnInit {
   @Input() filterTimeWithAllowanceModel = new FilterTimeWithAllowance();
@@ -29,19 +33,17 @@ export class FilterTimeAreaComponent implements OnInit {
   maxDate: NgbDate;
   tooltip = new Tooltip();
   isMainMatch = true;
-
   changeActionWaitingToManualSubscription: Subscription;
+  private readonly element = inject(ElementRef);
+  private readonly addRequestStore = inject(AddRequestStore);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly addRequestStore: AddRequestStore
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
   ngOnInit() {
     this.changeActionWaitingToManualSubscription = this.addRequestStore.getChangeActionWaitingToManualEditPageSubject.subscribe(status => {
-      if(status) {
+      if (status) {
         this.filterTimeWithAllowanceComponent.clearTimeWhenChangeActionWaitingToManualVoid();
       }
     });

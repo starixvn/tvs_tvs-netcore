@@ -44,10 +44,6 @@
       }
     }
 
-    .div-input {
-      width: 152px !important;
-    }
-
     .favorite-input {
       margin-left: -1px;
 
@@ -58,12 +54,13 @@
     }
   }
 
+  .div-input {
+    width: 145px !important;
+  }
+
   .malay-odds,
   .spread,
   .allowance-rate {
-    .div-input {
-      width: 152px !important;
-    }
 
     .input-correct-odds {
       padding: 2px 0px;
@@ -80,17 +77,15 @@
   }
 
   .filter-right {
-    margin-left: 50px;
+    margin-left: 31px !important;
   }
 
   .filter-spread {
     padding-top: 3px;
   }
 
-
-
-  .filter-live-indicator,
-  .filter-bet-team {
+  .filter-live-indicator {
+    width: 132px;
     padding: 0 5px;
     border: 1px solid #ced4da;
     border-radius: 4px;

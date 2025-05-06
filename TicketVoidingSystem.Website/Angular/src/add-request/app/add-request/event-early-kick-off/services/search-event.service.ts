@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import _ from 'lodash';
 import { MatchType } from '../../../../../utility/constants/config';
 import { ChildMatchModel } from '../../models/related-event.model';
@@ -8,16 +8,12 @@ import { LogInfoService } from './log-info.service';
 import { RelatedEventService } from './related-event.service';
 import { ValidationService } from './validation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SearchEventService {
-  constructor(
-    private readonly logInfoService: LogInfoService,
-    private readonly relatedEventService: RelatedEventService,
-    private readonly validationService: ValidationService,
-    private readonly checkPermissionService: CheckAddPermissionService
-  ) { }
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly relatedEventService = inject(RelatedEventService);
+  private readonly validationService = inject(ValidationService);
+  private readonly checkPermissionService = inject(CheckAddPermissionService);
 
   public async searchEvents(arg: SaveRequestArg, newestRelatedEvents: ChildMatchModel[]): Promise<boolean> {
     this.logInfoService.resetLogInfoOfEvent(arg.allEvents);

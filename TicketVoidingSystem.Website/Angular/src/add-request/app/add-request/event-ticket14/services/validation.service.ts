@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { BetIdsComponent } from "../../../../../utility/components/bet-ids/bet-ids.component";
 import { LABELS } from "../../../../../utility/constants/labels";
 import { AddRequestApiService } from "../../add-request-api.service";
@@ -7,13 +7,9 @@ import { CheckTicket14Query } from "../models/check-ticket14.query";
 import { CheckTickets14Result } from "../models/check-tickets14-result.model";
 import { ValidationBusinessRuleOutput } from "../models/validation.model";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ValidationService {
-  constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-  ) { }
+  private readonly addRequestApiService = inject(AddRequestApiService);
 
   public async checkBusinessRule(betIdsComponent: BetIdsComponent, issueTypeId: string, permission: PermissionAddRequest): Promise<ValidationBusinessRuleOutput> {
     if (!betIdsComponent.isHasBetId()) {

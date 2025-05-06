@@ -1,136 +1,163 @@
 <div class="mb-4" [blockUi]="primitiveProps.isBlock">
-	<event-league #eventLeague
-		[isEdit]="isEdit"
-		[matchId]="matchId"
-		(changeEvent)="changeMatchEvent($event)"
-		[subIssueTypeId]="filter.subIssueTypeId">
-	</event-league>
+  <event-league #eventLeague [isEdit]="isEdit" [matchId]="matchId" (changeEvent)="changeMatchEvent($event)"
+    [subIssueTypeId]="filter.subIssueTypeId">
+  </event-league>
 
-	<div *ngIf="isShowVarCheck()">
-		<div class="var-check-selection mt-2" [ngClass]="{'highlight': primitiveProps.isHighLightVarCheck}">
-			<label class="border-radius-left" (click)="!filter.isVoided && changeVarCheckValue(false)"
-			[ngClass]="{'bg-success':primitiveProps.isCheckedVar === false, 'bg-not-choose':primitiveProps.isCheckedVar !== false}">NO VAR
-			</label>
-			<label class="border-radius-right" (click)="!filter.isVoided && changeVarCheckValue(true)"
-			[ngClass]="{'bg-danger':primitiveProps.isCheckedVar === true, 'bg-not-choose':primitiveProps.isCheckedVar !== true}">VAR
-			</label>
-		</div>
-	</div>
-	<tv-detection #tvDetection [isEdit]="isEdit" [model]="tvDetectionModel"
-		*ngIf="primitiveProps.filterBy === 2" [disabled]="filter.isVoided"
-		(actualTimeChange)="actualTimeChange($event)">
-	</tv-detection>
-	<filter-wrong-score #filterWrongScore
-		[tvDetectionValue]="tvDetectionModel.tvDetectionValue"
-		[isVoided]="isVoided"
-		*ngIf="primitiveProps.filterBy === 2"
-		[filterWrongScoreModel]="defaultFilterTimeWithAllowance"
-		(changeFilterEvent)="resetData()">
-	</filter-wrong-score>
-	<div class="mb-3 mt-3 d-flex">
-		<button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
-			(click)="handleSearchEvent()">
-			Search
-		</button>
-	</div>
-	<div class="main-log-info mb-3" *ngIf="isShowLogInfoFilterByAcceptedTime()">
-		<label><strong>Main Event - Log Info</strong></label>
-		<div class="log-info">
-			<div *ngIf="wrongScoreModels[0].logInfoDetail">
-				<span>Live Score: </span><strong>{{wrongScoreModels[0].logInfoDetail.liveScores}}</strong>.
-				Void Accept Time: <strong>{{displayFullDateTimeFormat(wrongScoreModels[0].logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(wrongScoreModels[0].logInfoDetail.voidToTime)}}</strong><br />
-				Affected Single Count: <strong>{{wrongScoreModels[0].logInfoDetail.singleCount}}</strong>
-				<span *ngIf="isShowCountInfo(wrongScoreModels[0].logInfoDetail.cashOutCount, wrongScoreModels[0].logInfoDetail.settleCount, wrongScoreModels[0].logInfoDetail.instantlySettleCount)" class="text-red"
-				[innerHTML]="countInfoContent(wrongScoreModels[0].logInfoDetail.cashOutCount, wrongScoreModels[0].logInfoDetail.settleCount, wrongScoreModels[0].logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>,
-				Parlay Count: <strong>{{wrongScoreModels[0].logInfoDetail.mainParlayCount}}</strong>,
-				Min Time: <strong [ngClass]="getHighlightMinTimeClass(wrongScoreModels[0].logInfoDetail.highlightMinTime)">{{displayMinTime(wrongScoreModels[0].logInfoDetail.highlightMinTime)}}</strong>,
-				TransId: <strong [ngClass]="getHighlightMinTimeClass(wrongScoreModels[0].logInfoDetail.highlightMinTime)">{{wrongScoreModels[0].logInfoDetail.minTransId}}</strong> {{wrongScoreModels[0].logInfoDetail.actionType}}<br/>
-				Cancel Cash Out: <strong>{{wrongScoreModels[0].logInfoDetail.cancelCashOutCount}}</strong>
-			</div>
-			<div *ngIf="wrongScoreModels[0].messageValidationLogInfo" class="message">
-				<span *ngFor="let msg of wrongScoreModels[0].messageValidationLogInfo">
-					<div *ngIf="msg.isError" class="error-text">
-							<i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>{{msg.reason}}
-					</div>
-					<div *ngIf="!msg.isError" [ngClass]="msg.isShowPopup ? 'warning-text-shorten' : 'warning-text'" (click)="msg.isShowPopup && openPopupTransIds(msg.requestId, msg.transIds)">
-						<i class="fa fa-exclamation-triangle icon-warning-message" aria-hidden="true"></i>{{msg.reason}}
-					</div>
-				</span>
-			</div>
-		</div>
-	</div>
-	<div *ngIf="primitiveProps.filterBy !== 2">
-		<div *ngFor="let wrongScoreModel of wrongScoreModels; index as i">
-			<wrong-score-info #wrongScoreInfo [index]="i" [isEdit]="isEdit" [requestId]="requestId" [isVoided]="isVoided"
-				[wrongScoreModel]="wrongScoreModel" [originWrongScoreModels]="originWrongScoreModels" [filterBy]="primitiveProps.filterBy"
-				(updateByOriginWrongScoreModelEvent)="updateByOriginWrongScoreModel($event)" [matchId]="matchId" (checkScoreEvent)="updateStatusButtonSaveRequest()"
-				[filter]="filter" [primitiveProps]="primitiveProps" [selectedWrongScores]="wrongScoreService.getSelectedWrongScores(wrongScoreModels)">
-			</wrong-score-info>
-		</div>
-	</div>
-	<div class="mt-3" [ngClass]="{'margin-left-37':primitiveProps.filterBy !== 2}" *ngIf="primitiveProps.isShowActualScore">
-		<label class="col-form-label">Actual Score</label>
-		<div>
-			<input class="input-actual-score form-control form-control-sm" type="text" [(ngModel)]="primitiveProps.actualScore"
-				[disabled]="isVoided" />
-		</div>
-	</div>
-  <div class="even-log-info mb-3"[ngClass]="{'margin-left-37':primitiveProps.filterBy !== 2}" *ngIf="isShowLogInfoSelectedScores(wrongScoreModels)"><br />
+  @if (isShowVarCheck()) {
+  <div>
+    <div class="var-check-selection mt-2" [ngClass]="{'highlight': primitiveProps.isHighLightVarCheck}">
+      <label class="border-radius-left" (click)="!filter.isVoided && changeVarCheckValue(false)"
+        [ngClass]="{'bg-success':primitiveProps.isCheckedVar === false, 'bg-not-choose':primitiveProps.isCheckedVar !== false}">NO
+        VAR
+      </label>
+      <label class="border-radius-right" (click)="!filter.isVoided && changeVarCheckValue(true)"
+        [ngClass]="{'bg-danger':primitiveProps.isCheckedVar === true, 'bg-not-choose':primitiveProps.isCheckedVar !== true}">VAR
+      </label>
+    </div>
+  </div>
+  }
+  @if (primitiveProps.filterBy === 2) {
+  <tv-detection #tvDetection [isEdit]="isEdit" [model]="tvDetectionModel" [disabled]="filter.isVoided"
+    (actualTimeChange)="actualTimeChange($event)">
+  </tv-detection>
+  }
+  @if (primitiveProps.filterBy === 2) {
+  <filter-wrong-score #filterWrongScore [tvDetectionValue]="tvDetectionModel.tvDetectionValue" [isVoided]="isVoided"
+    [filterWrongScoreModel]="defaultFilterTimeWithAllowance" (changeFilterEvent)="resetData()">
+  </filter-wrong-score>
+  }
+  <div class="mb-3 mt-3 d-flex">
+    <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm" (click)="handleSearchEvent()">
+      Search
+    </button>
+  </div>
+  @if (isShowLogInfoFilterByAcceptedTime()) {
+  <div class="main-log-info mb-3">
+    <label class="col-form-label-sm"><strong>Main Event - Log Info</strong></label>
+    <div class="log-info">
+      @if (wrongScoreModels[0].logInfoDetail) {
+      <div>
+        <span>Live Score: </span><strong>{{wrongScoreModels[0].logInfoDetail.liveScores}}</strong>.
+        Void Accept Time: <strong>{{displayFullDateTimeFormat(wrongScoreModels[0].logInfoDetail.voidFromTime)}} -
+          {{displayFullDateTimeFormat(wrongScoreModels[0].logInfoDetail.voidToTime)}}</strong><br />
+        Affected Single Count: <strong>{{wrongScoreModels[0].logInfoDetail.singleCount}}</strong>
+        @if (isShowCountInfo(wrongScoreModels[0].logInfoDetail.cashOutCount,
+        wrongScoreModels[0].logInfoDetail.settleCount, wrongScoreModels[0].logInfoDetail.instantlySettleCount)) {
+        <span class="text-red"
+          [innerHTML]="countInfoContent(wrongScoreModels[0].logInfoDetail.cashOutCount, wrongScoreModels[0].logInfoDetail.settleCount, wrongScoreModels[0].logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>
+        },
+        Parlay Count: <strong>{{wrongScoreModels[0].logInfoDetail.mainParlayCount}}</strong>,
+        Min Time: <strong
+          [ngClass]="getHighlightMinTimeClass(wrongScoreModels[0].logInfoDetail.highlightMinTime)">{{displayMinTime(wrongScoreModels[0].logInfoDetail.highlightMinTime)}}</strong>,
+        TransId: <strong
+          [ngClass]="getHighlightMinTimeClass(wrongScoreModels[0].logInfoDetail.highlightMinTime)">{{wrongScoreModels[0].logInfoDetail.minTransId}}</strong>
+        {{wrongScoreModels[0].logInfoDetail.actionType}}<br />
+        Cancel Cash Out: <strong>{{wrongScoreModels[0].logInfoDetail.cancelCashOutCount}}</strong>
+      </div>
+      }
+      @if (wrongScoreModels[0].messageValidationLogInfo) {
+      <div class="message">
+        @for (msg of wrongScoreModels[0].messageValidationLogInfo; track msg) {
+        <span>
+          @if (msg.isError) {
+          <div class="error-text">
+            <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>{{msg.reason}}
+          </div>
+          }
+          @if (!msg.isError) {
+          <div [ngClass]="msg.isShowPopup ? 'warning-text-shorten' : 'warning-text'"
+            (click)="msg.isShowPopup && openPopupTransIds(msg.requestId, msg.transIds)">
+            <i class="fa fa-exclamation-triangle icon-warning-message" aria-hidden="true"></i>{{msg.reason}}
+          </div>
+          }
+        </span>
+        }
+      </div>
+      }
+    </div>
+  </div>
+  }
+  @if (primitiveProps.filterBy !== 2) {
+  <div>
+    @for (wrongScoreModel of wrongScoreModels; track wrongScoreModel; let i = $index) {
+    <div>
+      <wrong-score-info #wrongScoreInfo [index]="i" [isEdit]="isEdit" [requestId]="requestId" [isVoided]="isVoided"
+        [wrongScoreModel]="wrongScoreModel" [originWrongScoreModels]="originWrongScoreModels"
+        [filterBy]="primitiveProps.filterBy"
+        (updateByOriginWrongScoreModelEvent)="updateByOriginWrongScoreModel($event)" [matchId]="matchId"
+        (checkScoreEvent)="updateStatusButtonSaveRequest()" [filter]="filter" [primitiveProps]="primitiveProps"
+        [selectedWrongScores]="getSelectedWrongScores(wrongScoreModels)">
+      </wrong-score-info>
+    </div>
+    }
+  </div>
+  }
+  @if (primitiveProps.isShowActualScore) {
+  <div class="mt-3" [ngClass]="{'margin-left-37':primitiveProps.filterBy !== 2}">
+    <label class="col-form-label-sm">Actual Score</label>
+    <div>
+      <input class="input-actual-score form-control form-control-sm" type="text"
+        [(ngModel)]="primitiveProps.actualScore" [disabled]="isVoided" />
+    </div>
+  </div>
+  }
+  @if (isShowLogInfoSelectedScores(wrongScoreModels)) {
+  <div class="even-log-info mb-3" [ngClass]="{'margin-left-37':primitiveProps.filterBy !== 2}"><br />
     <label><strong>Log Info</strong></label>
     <div class="Log-info-selected-Scores p-2">
       Void Trans Time: <strong>{{getTimeSelectedScore(wrongScoreModels)}}</strong><br />
       Affected Single Count: <strong>{{getSingleCountSelectedScore(wrongScoreModels)}}</strong>,
-      Parlay Count: <strong>{{getParlayCountSelectedScore(wrongScoreModels)}}</strong><br/>
+      Parlay Count: <strong>{{getParlayCountSelectedScore(wrongScoreModels)}}</strong><br />
       Cancel Cash Out: <strong>{{getCancelCashOutCountSelectedScore(wrongScoreModels)}}</strong>
     </div>
   </div>
+  }
 
 
-  <div class="related-event-log-info" *ngIf="primitiveProps.isShowRelatedEvents">
-    <label><strong>Related Event(s) - Log Info</strong></label>
+  @if (primitiveProps.isShowRelatedEvents) {
+  <div class="related-event-log-info">
+    <label class="col-form-label-sm"><strong>Related Event(s) - Log Info</strong></label>
     <div class="d-flex mb-3">
-      <div class="input-group input-related-match-id-area align-items-center justify-content-center mr-2">
-        <input [(ngModel)]="primitiveProps.inputRelatedMatchId" [disabled]="filter.isVoided" class="input-related-match-id form-control form-control-sm" placeholder="Input MatchID" type="text" only-number/>
-        <button (click)="handleClickAddRelatedEvent()" [disabled]="filter.isVoided" class="btn btn-primary btn-sm btn-add-event" type="submit">Add Related Event</button>
+      <div class="input-group input-related-match-id-area align-items-center justify-content-center me-2">
+        <input [(ngModel)]="primitiveProps.inputRelatedMatchId" [disabled]="filter.isVoided"
+          class="input-related-match-id form-control form-control-sm" placeholder="Input MatchID" type="text"
+          only-number />
+        <button (click)="handleClickAddRelatedEvent()" [disabled]="filter.isVoided"
+          class="btn btn-primary btn-sm btn-add-event" type="submit">Add Related Event</button>
       </div>
       <div class="d-flex">
-        <button type="submit" class="btn btn-success btn-sm btn-open-modal-related-event mr-2"
-          (click)="showAddChildMatchModal(1)"
-          [disabled]="isDisabledChildMatches()">
+        <button type="submit" class="btn btn-success btn-sm btn-open-modal-related-event me-2"
+          (click)="showAddChildMatchModal(1)" [disabled]="isDisabledChildMatches()">
           Child Match ({{countChildMatches()}})
         </button>
         <button type="submit" class="btn btn-danger btn-open-modal-related-event btn-sm"
-          (click)="showAddChildMatchModal(2)"
-          [disabled]="isDisabledLinkMatches()">
+          (click)="showAddChildMatchModal(2)" [disabled]="isDisabledLinkMatches()">
           Link Match ({{countLinkMatches()}})
         </button>
       </div>
     </div>
-    <div *ngIf="allRelatedEvents.length > 0">
-      <div class="mb-2" *ngFor="let event of allRelatedEvents; index as i">
-        <log-info-related-event #logInfo
-          [isMainMatch]="false"
-          [isEdit]="isEdit"
-          [filterBy]="primitiveProps.filterBy"
-          [transInfoAddRequestModel]="primitiveProps.transInfoAddRequestModel"
-          [requestId]="requestId"
-          [isDisabled]="filter.isVoided"
-          [subIssueTypes]="issueTypes.subIssueTypes"
-          [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance"
-          [logInfo]="allRelatedEvents[i]"
-          [filter]="filter"
-          (deleteEvent)="handleDeleteEvent($event)">
+    @if (allRelatedEvents.length > 0) {
+    <div>
+      @for (event of allRelatedEvents; track event; let i = $index) {
+      <div class="mb-2">
+        <log-info-related-event #logInfo [isMainMatch]="false" [isEdit]="isEdit" [filterBy]="primitiveProps.filterBy"
+          [transInfoAddRequestModel]="primitiveProps.transInfoAddRequestModel" [requestId]="requestId"
+          [isDisabled]="filter.isVoided" [subIssueTypes]="issueTypes.subIssueTypes"
+          [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance" [logInfo]="allRelatedEvents[i]"
+          [filter]="filter" (deleteEvent)="handleDeleteEvent($event)">
         </log-info-related-event>
       </div>
+      }
     </div>
+    }
   </div>
+  }
 </div>
 
-<add-child-match
-  [relatedEvents]="relatedEvents"
-  (selectedEventsChange)="saveRelatedEvent($event)"
+<add-child-match [relatedEvents]="relatedEvents" (selectedEventsChange)="saveRelatedEvent($event)"
   [model]="addChildMatchModel">
 </add-child-match>
 
-<confirm-wrong-score [model]="confirmWrongScoreModel" (close)="triggerCloseEvent()" (save)="onYesConfirmAddRequest()"></confirm-wrong-score>
+<confirm-wrong-score [model]="confirmWrongScoreModel" (close)="triggerCloseEvent()"
+  (save)="onYesConfirmAddRequest()"></confirm-wrong-score>
 <tooltip [tooltip]="tooltip"></tooltip>

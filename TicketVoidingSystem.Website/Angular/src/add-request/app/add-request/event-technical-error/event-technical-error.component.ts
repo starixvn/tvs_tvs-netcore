@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
@@ -9,12 +9,14 @@ import { EventLeagueComponent } from '../../../../utility/components/event-leagu
 import { DateTimeFormat, ModeType } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { TechnicalErrorModel } from '../models/event-technical-error.model';
 import { OthersModel } from '../others/others.model';
 import { FilterTimeTechnicalErrorComponent } from './filter-time-technical-error/filter-time-technical-error.component';
+import { LogInfoTechnicalErrorComponent } from './log-info-technical-error/log-info-technical-error.component';
 import { FilterTechnicalErrorModel } from './models/filter-technical-error.model';
 import { LogInfoTechnicalError } from './models/log-info-technical-error.model';
 import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
@@ -27,7 +29,11 @@ import { ValidationService } from './services/validation.service';
 @Component({
   selector: 'event-technical-error',
   templateUrl: './event-technical-error.component.html',
-  styleUrls: ['./event-technical-error.component.scss']
+  styleUrls: ['./event-technical-error.component.scss'],
+  standalone: true,
+  imports: [EventLeagueComponent, AdvancedModeAddRequestComponent, FilterTimeTechnicalErrorComponent,
+    LogInfoTechnicalErrorComponent, ConfirmAddRequestComponent],
+  providers: [SaveRequestService, ValidationService, LogInfoService, EventTechnicalErrorService]
 })
 export class EventTechnicalErrorComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -43,22 +49,21 @@ export class EventTechnicalErrorComponent implements OnInit {
   @ViewChild('eventLeague') eventLeague: EventLeagueComponent;
   @ViewChild('advancedMode') advancedMode: AdvancedModeAddRequestComponent;
   @ViewChild('filterTime') filterTimeComponent: FilterTimeTechnicalErrorComponent;
-  constructor(
-    private readonly logInfoService: LogInfoService,
-    private readonly commonService: CommonService,
-    private readonly addRequestStore: AddRequestStore,
-    private readonly validationService: ValidationService,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly eventTechnicalErrorService: EventTechnicalErrorService,
-  ) {}
+
   logInfoEvent = new LogInfoTechnicalError();
   groupBetTypesModel = new GroupBetTypesAddRequestModel([], false, '', false);
   primitivePropertyEvent = new PrimitivePropertyEvent();
   advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   confirmAddRequest = new ConfirmAddRequestModel();
+  private readonly addRequestStore = inject(AddRequestStore);
+  private readonly logInfoService = inject(LogInfoService);
+  private readonly commonService = inject(CommonService);
+  private readonly validationService = inject(ValidationService);
+  private readonly saveRequestService = inject(SaveRequestService);
+  private readonly eventTechnicalErrorService = inject(EventTechnicalErrorService);
 
   async ngOnInit(): Promise<void> {
-    if (this.isEdit)  {
+    if (this.isEdit) {
       this.updateDataWhenEditRequest();
     } else {
       this.initDefaultTime(this.logInfoEvent.filterTechnicalErrorModel);

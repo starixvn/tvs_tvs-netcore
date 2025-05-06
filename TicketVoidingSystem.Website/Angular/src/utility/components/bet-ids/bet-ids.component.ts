@@ -1,5 +1,9 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LABELS } from '../../constants/labels';
+import { TooltipComponent } from '../tooltip/tooltip.component';
 import { Tooltip } from '../tooltip/tooltip.model';
 import { GroupNumber, NumberItem } from './bet-ids.model';
 
@@ -8,6 +12,8 @@ import { GroupNumber, NumberItem } from './bet-ids.model';
   templateUrl: './bet-ids.component.html',
   styleUrls: ['./bet-ids.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [FormsModule, TooltipComponent, CommonModule, NgbModule]
 })
 export class BetIdsComponent implements OnInit {
   private readonly errorTooltipClassName = 'invalid-data';
@@ -19,22 +25,19 @@ export class BetIdsComponent implements OnInit {
   @Input() warningMoveText = '(*) Moved tickets are highlighted in ORANGE.';
   @Input() hideInvalid = false;
   @Input() hideDifferentMatch = true;
-  @Input() leftBetIdCss = '';
-  @Input() rightBetIdCss = '';
   @Input() betIdComponentCss = '';
   @Input() betIdInputCss: {};
   @Input() disabled = false;
   @Input() isShowLabel = true;
-
   @Output() afterFocusOutBetIds = new EventEmitter<string>();
-
   groupNumber = new GroupNumber();
   transId: string;
   lastItem: NumberItem;
   shiftKey: boolean;
   tooltip = new Tooltip();
+  private readonly element = inject(ElementRef);
 
-  constructor(private readonly element: ElementRef) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
