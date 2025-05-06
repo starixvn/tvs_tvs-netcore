@@ -1,10 +1,14 @@
 ﻿import { Component, Input, SimpleChange } from '@angular/core';
 import { MessagesResult } from './messages-result';
+import { CommonModule } from '@angular/common';
+import { SanitizeHtmlPipe } from '../../pipes/sanitize-html.pipe';
 
 @Component({
+    standalone: true,
     selector: 'messages-result',
     templateUrl: './messages-result.component.html',
-    styleUrls: ['messages-result.component.scss']
+    styleUrls: ['messages-result.component.scss'],
+    imports: [CommonModule, SanitizeHtmlPipe]
 })
 
 export class MessagesResultComponent {

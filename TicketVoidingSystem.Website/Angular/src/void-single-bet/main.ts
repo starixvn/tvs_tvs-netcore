@@ -1,11 +1,22 @@
-﻿import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+﻿import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { environment } from '../environments/environment';
-import { AppModule } from './app/app.module';
+import { AppComponent } from './app/app.component';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideHttpClient } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 if (environment.production) {
     enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-    .catch(err => alert(err));
+bootstrapApplication(AppComponent, {
+    providers: [
+        provideHttpClient(),
+        importProvidersFrom(
+            BrowserAnimationsModule,
+            ToastrModule.forRoot()
+          ),
+
+    ]
+}).catch((err) => console.error(err));

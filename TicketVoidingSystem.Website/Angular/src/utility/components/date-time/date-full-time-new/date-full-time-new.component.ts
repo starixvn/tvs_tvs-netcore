@@ -27,7 +27,7 @@ import { DatePickerComponent } from '../date-picker/date-picker.component';
 export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValueAccessor {
   @Input() index: number = null;
   @Input() timeZone: string;
-  @Input() isDisabled: boolean = false;
+  @Input() isDisabled = false;
   @Input() maxDate: NgbDate;
   @Input() minDate: NgbDate;
   @Input() allowedHideDate = false;

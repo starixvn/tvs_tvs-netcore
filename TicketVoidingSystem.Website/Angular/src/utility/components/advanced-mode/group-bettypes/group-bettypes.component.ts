@@ -15,7 +15,7 @@ import { TooltipComponent } from '../../tooltip/tooltip.component';
   imports: [CommonModule, FormsModule, TooltipComponent]
 })
 
-export class GroupBetTypesComponent implements OnInit, OnChanges {
+export class GroupBetTypesComponent implements OnInit, OnChanges { 
   @Input() model: GroupBetTypesModel;
   @Input() product: number = Product.SPORTS_BOOK;
   @Input() scroll: boolean;
@@ -33,7 +33,7 @@ export class GroupBetTypesComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['product']) {
+    if (changes['product'] || changes['model']) {
       this.display = this.product === Product.SPORTS_BOOK;
     }
   }

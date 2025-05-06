@@ -70,7 +70,7 @@
               <span class="col-form-label-sm me-2">Selection</span>
               <ng-select class="selection-dropdown-sub-parlay" [items]="comboParlay" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
                 [clearable]="false" [(ngModel)]="selectedComboParlay" bindValue="value"
-                [disabled]="false" groupBy="group" [selectableGroup]="true" style="width: 120px"
+                [disabled]="false" groupBy="group" [selectableGroup]="true" style="width: 130px"
                 [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
                 <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                   <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}

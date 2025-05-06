@@ -1,10 +1,14 @@
 ﻿import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Modal } from './modal.model';
+import { CommonModule } from '@angular/common';
+import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
 
 @Component({
+    standalone: true,
     selector: 'modal',
     templateUrl: './modal.component.html',
-    styleUrls: ['./modal.component.scss']
+    styleUrls: ['./modal.component.scss'],
+    imports: [CommonModule, SanitizeHtmlPipe]
 })
 export class ModalComponent {
     @Input() modal: Modal;

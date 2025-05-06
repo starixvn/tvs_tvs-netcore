@@ -20,14 +20,7 @@
   border: 1px solid transparent;
   border-radius: 4px;
 
-  label {
-    .form-control {
-      display: inline;
-    }
-  }
-
   .display-flex-between {
-    display: flex;
     justify-content: space-between;
 
     .remark {
@@ -55,20 +48,11 @@
   }
   
   .line-1 {
-    display: flex;
-    flex-wrap: wrap;
-
-    label {
-      margin-bottom: 0;
-    }
-    
     .star {
       height: 20px;
     }
 
     .input-match {
-      margin-right: 20px;
-
       .match-id {
         @include InputText(102px);
       }
@@ -81,120 +65,22 @@
         color: limegreen;
       }
     }
-
-    .odds {
-      margin-right: 20px;
-
-      .odds-input {
-        @include InputText(110px);
-      }
-
-      select {
-        margin: 0 !important;
-        border: 1px solid #ced4da;
-        border-left: 0;
-        @include InputText(52px);
-      }
-    }
   }
 
   .line-2 {
-    display: flex;
     .trans-time {
       color: #9c000d;
-      margin-left: 10px;
     }
 
     .check-time {
       color: #005ec2;
-      margin-left: 10px;
-      margin-right: 20px;
-    }
-
-    label {
-      input[type="checkbox"] {
-        margin-bottom: 2px;
-      }
-    }
-
-    .date-time {
-      display: flex;
-      .from-date-time-text,
-      .to-date-time-text {
-        display: flex;
-        align-items: center;
-      }
     }
   }
 
-  .control-bet {
-    display: flex;
-
-    label {
-      margin: 5px 5px 5px 10px;
-
-      input {
-        margin: 0;
-
-        &:disabled {
-          cursor: not-allowed;
-        }
-      }
-    }
+  .flex-sm-wrap {
+    gap: 0.25rem;
   }
-
-  .line-3 {
-    display: flex;
-
-    .ticket-type,
-    .event-type,
-    .settled-type,
-    .group-bettypes-handler,
-    .issue-type,
-    .sub-issue-type {
-      margin: -2px 20px 0 0px;
-    }
-
-    .event-type {
-      margin-left: 20px;
-    }
-
-    .settled-type {
-      margin-left: 5px;
-    }
-
-    .issue-type select {
-      min-width: 150px
-    }
-
-    .sub-issue-type select {
-      min-width: 200px
-    }
-
-    select {
-      padding: 1px 2px;
-      width: 100px;
-      height: 22px;
-      border-radius: 0;
-
-      &:disabled {
-        background-color: #eee;
-        cursor: not-allowed;
-        opacity: 1;
-      }
-    }
-
-    .multiple-selection {
-      ::ng-deep button {
-        width: 100%;
-        margin-bottom: 0px;
-        padding: 1px 2px;
-        height: 22px;
-        border-radius: 0;
-      }
-    }
-  }
-
+  
   .line-4 {
     .optional-filters {
       display: flex;
@@ -271,9 +157,19 @@
   }
 }
 
-::ng-deep date-full-time-new {
-  input[type="text"] {
-    height: 30px;
-    margin: 0;
+::ng-deep .selection-dropdown-sub-parlay {
+  .ng-select-container {
+    .ng-value-container {
+      .ng-value {
+        background-color: transparent !important;
+      }
+    }
+  }
+}
+
+::ng-deep .input-group-append {
+  .ng-select .ng-select-container {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
   }
 }

@@ -1,9 +1,11 @@
 ﻿<div class="filter">
-  <div class="display-flex-between">
+  <div class="display-flex-between d-flex">
     <div class="remark">
-      <span *ngFor="let item of remark">
+      @for (item of remark; track item) {
+      <span>
         <em class="icon-warning"></em>{{item}}
       </span>
+      }
     </div>
     <div class="scroll-filter" (click)="isShowFilter = !isShowFilter">
       <em [ngClass]="{'icon-scroll-down':isShowFilter, 'icon-scroll-up':!isShowFilter}"></em>
@@ -12,109 +14,140 @@
   <div class="content-filter" [hidden]="!isShowFilter">
     <div class="display-flex">
       <div>
-        <div class="line-1">
-          <label class="input-match d-flex">
-            Match ID
-            <input maxlength="10" class="match-id form-control" type="text" only-number [(ngModel)]="matchId"
-              (blur)="blurMatchId()" autofocus />
-            <span class="star red" *ngIf="!isSuccessMatch">(&#10041;)</span>
-            <span class="star green" *ngIf="isSuccessMatch">(&#10003;)</span>
-          </label>
-          <label class="odds d-flex">
+        <div class="line-1 d-flex">
+          <div class="d-flex me-3">
+            <label class="col-form-label col-form-label-sm me-2 d-flex input-match align-items-center">Match ID
+              <input maxlength="10" class="form-control form-control-sm match-id" style="width: 140px" type="text" only-number 
+              [(ngModel)]="matchId" (blur)="blurMatchId()" autofocus />
+              @if (!isSuccessMatch) {
+              <span class="star red">(&#10041;)</span>
+              }
+              @if (isSuccessMatch) {
+              <span class="star green">(&#10003;)</span>
+              }
+            </label>
+          </div>
+          <div class="d-flex input-group align-items-center" style="width: unset">
             Odds
-            <input class="odds-input form-control" type="text" [(ngModel)]="oddsValue" placeholder="Ex: 0.75&1&1.25"
-              (ngModelChange)="isCorrectFormatOdds($event, 'odds-input')" />
-            <select [(ngModel)]="oddsType.value">
-              <option *ngFor="let item of oddsType.items" [attr.value]="item.value">{{item.name}}
-              </option>
-            </select>
-            <span class="text-red ml-1" *ngIf="oddsValue">(You should select 1 bet type only when filtering tickets by
-              odds)</span>
-          </label>
+            <input class="odds-input form-control form-control-sm ms-1" style="width: 120px" type="text" [(ngModel)]="oddsValue" placeholder="Ex: 0.75&1&1.25"
+                (ngModelChange)="isCorrectFormatOdds($event, 'odds-input')"/>
+            <div class="input-group-append">
+              <ng-select [items]="oddsType.items" bindLabel="name" bindValue="value" [(ngModel)]="oddsType.value"
+              [clearable]="false" style="width: 61px">
+            </ng-select>
+            </div>
+            @if (oddsValue) {
+              <span class="text-red ms-1">(You should select 1 bet type only when filtering tickets by
+                odds)</span>
+              }
+          </div>
         </div>
-        <div class="line-2 mt-2">
-          <div class="time-type d-flex">
-            <div class="d-flex align-items-center">
-              <label class="col-form-label col-form-label-sm font-weight-bold">
-                <input class="checkbox-exclude-test mr-1" type="checkbox" [(ngModel)]="isCheckTime" />(GMT + 8)
+        <div class="d-flex flex-sm-wrap line-2 mt-1">
+          <div class="time-type align-items-center d-flex me-3 mt-2">
+            <div class="form-check me-3">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckTime" [(ngModel)]="isCheckTime">
+              <label class="form-check-label fw-bold" for="flexCheckTime">
+                (GMT + 8)
               </label>
             </div>
-            <label class="col-form-label font-weight-bold col-form-label-sm trans-time d-flex">
-              <input class="mr-1" type="radio" [(ngModel)]="timeType" [value]="0" />
-              Trans Time
-            </label>
-
-            <label class="col-form-label col-form-label-sm check-time font-weight-bold d-flex">
-              <input class="mr-1" type="radio" [(ngModel)]="timeType" [value]="1" />
-              Accept Time
-            </label>
+            <div class="form-check me-2">
+              <label class="form-check-label trans-time fw-bold" name="transTime">
+                Trans Time
+                <input class="form-check-input" id="transTime" type="radio" [(ngModel)]="timeType" [value]="0" />
+              </label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label check-time fw-bold" name="acceptTime">
+                Accept Time
+                <input class="form-check-input" id="acceptTime" type="radio" [(ngModel)]="timeType" [value]="1" />
+              </label>
+            </div>
           </div>
-          <div class="date-time">
-            <span class="from-date-time-text mr-1">From</span>
-            <date-full-time-new #fromTimeComponent class="from-date-time mr-2" [(dateTime)]="fromDateTime" [isDisabled]="!isCheckTime">
+          <div class="date-time d-flex align-items-center me-1">
+            <span class="from-date-time-text me-1">From</span>
+            <date-full-time-new #fromTimeComponent class="from-date-time" [isDisabled]="!isCheckTime"
+            [(ngModel)]="fromDateTime">
             </date-full-time-new>
-            <span class="to-date-time-text mr-1">To</span>
-            <date-full-time-new #toTimeComponent class="to-date-time mr-2" [(dateTime)]="toDateTime" [isDisabled]="!isCheckTime">
+            <span class="to-date-time-text me-1 ms-3">To</span>
+            <date-full-time-new #toTimeComponent class="from-date-time me-2" [isDisabled]="!isCheckTime"
+            [(ngModel)]="toDateTime">
             </date-full-time-new>
           </div>
-          <div class="control-bet">
-            <label>{{bet.name}}</label>
-            <label *ngFor="let item of bet.items">
-              <input type="radio" name="bet" [attr.value]="item" [attr.disabled]="null" [checked]="item === bet.value"
-                (change)="changeControlBet(item)" />
-              {{item}}
+          <div class="d-flex align-items-center">
+            <label class="me-2">{{bet.name}}</label>
+            @for (item of bet.items; track item) {
+              <div class="form-check align-items-center me-2 mt-2">
+                <input type="radio" class="form-check-input" name="bet" [attr.value]="item" [attr.disabled]="null" [checked]="item === bet.value"
+                (change)="changeControlBet(item)">
+                <label class="form-check-label" name="bet">{{item}}</label>
+              </div>
+            }
+            @if (isShowSelectionSubParlay()) {
+              <label class="d-flex filter-selection-sub-parlay m-0">
+                <span class="col-form-label-sm mx-2">Selection</span>
+              <ng-select class="selection-dropdown-sub-parlay ms-1" [items]="comboParlay" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
+                [clearable]="false" [(ngModel)]="selectedComboParlay" bindValue="value"
+                [disabled]="false" groupBy="group" [selectableGroup]="true" style="width: 130px"
+                [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
+                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+                </ng-template>
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value">
+                    <span class="ng-value-label">
+                      {{items.length === 1 ? items[0].name : items.length === comboParlay.length ? 'All' : items.length + ' selected'}}
+                    </span>
+                  </div>
+                </ng-template>
+              </ng-select>
             </label>
-            <label class="group-bettypes-handler" *ngIf="isShowSelectionSubParlay()">
-              Selection
-              <multiple-select class="multiple-selection ml-1" style="border-color: black"
-                [multipleSelect]="comboParlay"></multiple-select>
-            </label>
+            }
           </div>
         </div>
-        <div class="line-3 mt-2">
-          <label class="ticket-type">
-            Ticket Type
-            <select [(ngModel)]="ticketType.value" [attr.disabled]="!searchParlay ? null : ''">
-              <option *ngFor="let item of ticketType.items" [attr.value]="item.value">{{item.name}}
-              </option>
-            </select>
-          </label>
-          <label class="event-type">
-            Event Type
-            <select [(ngModel)]="eventType.value" (ngModelChange)="changeEventType()">
-              <option *ngFor="let item of eventType.items" [attr.value]="item.value">{{item.name}}
-              </option>
-            </select>
-          </label>
-          <label class="settled-type">
-            Settled Type
-            <select [(ngModel)]="settledType.value" [attr.disabled]="!searchParlay ? null : ''">
-              <option *ngFor="let item of settledType.items" [attr.value]="item.value">{{item.name}}
-              </option>
-            </select>
-          </label>
-          <label class="group-bettypes-handler"
-            *ngIf="groupBetTypes !== undefined && groupBetTypes.groupBetTypes.length > 0">
-            Bet Type
-            <multiple-select class="multiple-selection" [multipleSelect]="groupBetTypesHandler"
-              (checkedItems)="displayGroupBetTypes($event)"></multiple-select>
-          </label>
-          <label class="issue-type">
-            Issue Type
-            <select [(ngModel)]="issueType.value" (ngModelChange)="changeIssueTypeEvent()">
-              <option *ngFor="let item of issueType.items" [attr.value]="item.value">{{item.name}}
-              </option>
-            </select>
-          </label>
-          <label class="sub-issue-type">
-            Sub Type
-            <select [(ngModel)]="subIssueType.value" (ngModelChange)="changeSubIssueTypeEvent()">
-              <option *ngFor="let item of subIssueType.items" [attr.value]="item.value">{{item.name}}
-              </option>
-            </select>
-          </label>
+        <div class="d-flex flex-sm-wrap line-3 mt-2">
+          <div class="d-flex me-3">
+            <label class="col-form-label col-form-label-sm me-2">Ticket Type</label>
+            <ng-select [items]="ticketType.items" bindLabel="name" bindValue="value" [(ngModel)]="ticketType.value" 
+            [clearable]="false" style="width: 130px" [disabled]="searchParlay">
+            </ng-select>
+          </div>
+          <div class="d-flex align-items-center me-3">
+            <label class="col-form-label col-form-label-sm me-2">Event Type</label>
+            <ng-select [items]="eventType.items" bindLabel="name" bindValue="value" [(ngModel)]="eventType.value"
+              [clearable]="false" style="width: 95px" (ngModelChange)="changeEventType()">
+            </ng-select>
+          </div>
+          <div class="d-flex align-items-center me-3">
+            <label class="col-form-label col-form-label-sm me-2">Settled Type</label>
+            <ng-select [items]="settledType.items" bindLabel="name" bindValue="value" [(ngModel)]="settledType.value"
+              [clearable]="false" style="width: 130px" [disabled]="searchParlay">
+            </ng-select>
+          </div>
+          @if (groupBetTypes !== undefined && groupBetTypes.groupBetTypes.length > 0) {
+            <div class="d-flex align-items-center me-3">
+              <label class="col-form-label col-form-label-sm me-2">Bet Type</label>
+              <multiple-selection class="multiple-selection" [multipleSelect]="groupBetTypesHandler"
+              (checkedItems)="displayGroupBetTypes($event)"></multiple-selection>
+            </div>
+          }
+          <div class="d-flex align-items-center me-3">
+            <label class="col-form-label col-form-label-sm me-2">Issue Type</label>
+            <ng-select [items]="issueType.items" bindLabel="name" bindValue="value" [(ngModel)]="issueType.value"
+              [clearable]="false" style="width: 200px" (ngModelChange)="changeIssueTypeEvent()">
+            </ng-select>
+          </div>
+          <div class="d-flex align-items-center me-3">
+            <label class="col-form-label col-form-label-sm me-2">Sub Type</label>
+            <ng-select [items]="subIssueType.items" bindLabel="name" bindValue="value" [(ngModel)]="subIssueType.value"
+              [clearable]="false" style="width: 240px" (ngModelChange)="changeSubIssueTypeEvent()">
+            </ng-select>
+          </div>
         </div>
-        <div class="line-4" *ngIf="eventType.value === '1'">
+        @if (eventType.value === '1') {
+        <div class="line-4 mt-1">
           <fieldset>
             <legend>
               <em class="icon-filter"></em>Optional Filters
@@ -130,6 +163,7 @@
             </div>
           </fieldset>
         </div>
+        }
       </div>
       <licensee-affected-list [licenseeAffectedList]="licenseeAffectedList"></licensee-affected-list>
     </div>
@@ -139,7 +173,7 @@
     <advanced-mode #advancedMode [matchId]="matchId" [allBetTypes]="allBetTypes" [isShowMultiSelectionList]="true"
       [getPlayerQuery]="getPlayerQuery"></advanced-mode>
     <div class="search d-flex">
-      <input type="button" class="submit search-only mr-2" value="Search" (click)="search()" />
+      <input type="button" class="submit search-only me-2" value="Search" (click)="search()" />
       <input type="button" class="submit view-log-only" value="View Log Info" (click)="viewLogInfo()" />
     </div>
   </div>
