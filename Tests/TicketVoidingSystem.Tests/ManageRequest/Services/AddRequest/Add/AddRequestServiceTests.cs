@@ -3,6 +3,7 @@ using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services.Notification;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.Add;
@@ -19,7 +20,8 @@ public class AddRequestServiceTests
         addRequestProcessStage = Substitute.For<AddRequestProcessStage>();
         marketTicketsWhenEditService = Substitute.For<MarkTicketsWhenAddEditService>();
         getUpdateResultService = Substitute.For<GetUpdateResultService>();
-        service = new AddRequestServiceImp(addRequestProcessStage, marketTicketsWhenEditService, getUpdateResultService, null, null);
+        var notificationService = Substitute.For<NotificationService>();
+        service = new AddRequestServiceImp(addRequestProcessStage, marketTicketsWhenEditService, getUpdateResultService, null, notificationService);
     }
 
     [Fact]

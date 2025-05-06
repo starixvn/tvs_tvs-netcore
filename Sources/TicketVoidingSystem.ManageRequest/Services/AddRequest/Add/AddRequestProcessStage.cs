@@ -38,7 +38,7 @@ public class AddRequestProcessStageImp(
         await sendLetstalkAfterAddService.Execute(query.AbnormalBetInfo, requestId);
         notificationService.ExecuteBackground(()
             => notificationService.InsertNotification(NotificationType.Notification,
-                MessageHelper.CreateAddRequestSuccessfully(requestId), true, requestId));
+                MessageHelper.CreateAddRequestSuccessfully(requestId), NotificationTargetType.IgnoreCurrentUser, requestId));
 
         return getUpdateResultService.CreateSuccessResult(requestId, GetMatchIdAfterAddRequest(query));
     }

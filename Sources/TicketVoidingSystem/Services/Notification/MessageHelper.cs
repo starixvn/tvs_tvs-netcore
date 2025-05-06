@@ -10,10 +10,10 @@ public static class MessageHelper
             + $"{Environment.NewLine}Marked ticket: @marked/@total";
     }
 
-    public static string CreateAddRequestFailed()
+    public static string CreateAddRequestFailed(int markedTotal)
     {
         return $"Add request has error"
-               + $"{Environment.NewLine}Marked ticket: @marked/@total";
+               + $"{Environment.NewLine}Marked ticket: {markedTotal}";
     }
 
     public static string CreateEditRequestSuccessfully(int requestId, string editedBy)
@@ -22,10 +22,10 @@ public static class MessageHelper
                + $"{Environment.NewLine}Marked ticket: @marked/@total";
     }
 
-    public static string CreateEditRequestFailed(int requestId)
+    public static string CreateEditRequestFailed(int requestId, int markedTotal)
     {
         return $"Edit request {requestId} has error"
-               + $"{Environment.NewLine}Marked ticket: @marked/@total";
+               + $"{Environment.NewLine}Marked ticket: {markedTotal}/@total";
     }
 
     public static string CreateStoredRequestSuccessfully(int requestId, bool isStore, string username)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using Fanex.Logging;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria.Notification;
 using TicketVoidingSystem.Models.Notification;
 using TicketVoidingSystem.SignalR;
@@ -18,7 +19,7 @@ public interface NotificationService
 
     Task UpdateNotification(string idList, bool isRead);
 
-    Task InsertNotification(string type, string content, bool isIgnoreCurrentUser, int? requestId);
+    Task InsertNotification(string type, string content, NotificationTargetType targetType, int? requestId);
 }
 
 public class NotificationServiceImp(
@@ -64,7 +65,7 @@ public class NotificationServiceImp(
         _ = await repository.FetchMultipleAsync<NotificationModel, string>(criteria);
     }
 
-    public async Task InsertNotification(string type, string content, bool isIgnoreCurrentUser, int? requestId)
+    public async Task InsertNotification(string type, string content, NotificationTargetType targetType, int? requestId)
     {
         var username = sessionService.UserName;
         var criteria = new UpdateNotificationCriteria
@@ -75,8 +76,18 @@ public class NotificationServiceImp(
             Type = type
         };
         var (notifications, targetUsers) = await repository.FetchMultipleAsync<NotificationModel, string>(criteria);
-        var preparedUsers = isIgnoreCurrentUser ? targetUsers.Where(x => x != username) : targetUsers;
+        var preparedUsers = GetReceivedUsers(targetUsers, username, targetType);
         var tasks = preparedUsers.Select(x => signalRService.PushNotification(x, notifications.First()));
         _ = Task.WhenAll(tasks);
+    }
+
+    private static IEnumerable<string> GetReceivedUsers(IEnumerable<string> usernames, string currentUser, NotificationTargetType targetType)
+    {
+        if (targetType == NotificationTargetType.OnlyCurrentUser)
+        {
+            return [currentUser];
+        }
+
+        return targetType == NotificationTargetType.IgnoreCurrentUser ? usernames.Where(x => x != currentUser) : usernames;
     }
 }

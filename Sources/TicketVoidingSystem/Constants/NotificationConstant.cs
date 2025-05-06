@@ -12,3 +12,10 @@ public static class NotificationType
     public const string Notification = "N";
     public const string Error = "E";
 }
+
+public enum NotificationTargetType
+{
+    IgnoreCurrentUser,
+    OnlyCurrentUser,
+    All
+}

@@ -26,6 +26,7 @@ public class EditRequestServiceImp(
         var markTicketError = getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService));
         if (markTicketError != null)
         {
+            NotifyEditRequestError(query.RequestId, markTicketResult);
             return markTicketError;
         }
 
@@ -33,6 +34,7 @@ public class EditRequestServiceImp(
         var reCalcTicketError = getUpdateResultService.GetFirstError(reCalcTicketsAbnormalResults, nameof(ReCalculateTicketsService));
         if (reCalcTicketError != null)
         {
+            NotifyEditRequestError(query.RequestId, markTicketResult);
             return reCalcTicketError;
         }
 
@@ -42,11 +44,15 @@ public class EditRequestServiceImp(
         }
         catch (Exception exception)
         {
-            notificationService.ExecuteBackground(()
-                => notificationService.InsertNotification(NotificationType.Notification,
-                    MessageHelper.CreateEditRequestFailed(query.RequestId), true, null));
+            NotifyEditRequestError(query.RequestId, markTicketResult);
             _ = loggingService.ErrorAsync(exception);
             return getUpdateResultService.CreateErrorResult(exception);
         }
+    }
+
+    private void NotifyEditRequestError(int requestId, MarkTicketsResult markTicketResult)
+    {
+        var content = MessageHelper.CreateEditRequestFailed(requestId, markTicketResult.MarkedTickets.Count());
+        notificationService.ExecuteBackground(() => notificationService.InsertNotification(NotificationType.Error, content, NotificationTargetType.IgnoreCurrentUser, requestId));
     }
 }

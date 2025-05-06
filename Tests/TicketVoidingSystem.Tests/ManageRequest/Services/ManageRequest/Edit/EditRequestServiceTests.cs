@@ -5,6 +5,8 @@ using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.Notification;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.Edit;
@@ -15,6 +17,8 @@ public class EditRequestServiceTests
     private readonly GetUpdateResultService getUpdateResultService = Substitute.For<GetUpdateResultService>();
     private readonly ReCalculateTicketsService reCalculateTicketsService = Substitute.For<ReCalculateTicketsService>();
     private readonly UpdateRequestProcessStage updateRequestProcessStage = Substitute.For<UpdateRequestProcessStage>();
+    private readonly LoggingService loggingService = Substitute.For<LoggingService>();
+    private readonly NotificationService notificationService = Substitute.For<NotificationService>();
 
     [Fact]
     public async Task UpdateRequest_HasErrorMarkTicket_ReturnMarkTicketError()
@@ -25,7 +29,8 @@ public class EditRequestServiceTests
         var resultMarkTicket = new Result { ErrorMsg = "Has Error Mark Tickets", ErrorCode = 1 };
         marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds).Returns(markTicketResult);
         getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService)).Returns(resultMarkTicket);
-        var service = new EditRequestServiceImp(marketTicketsWhenEditService, null, null, getUpdateResultService, null, null);
+        var service = new EditRequestServiceImp(marketTicketsWhenEditService, null, null,
+            getUpdateResultService, loggingService, notificationService);
 
         // Act
         var result = await service.UpdateRequest(query);
@@ -47,7 +52,8 @@ public class EditRequestServiceTests
         getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService)).Returns((Result)null);
         reCalculateTicketsService.Execute(query.AbnormalBetInfo, query.IssueTypeId, query.RemoveTransIds).Returns(reCalcTicketsAbnormalResults);
         getUpdateResultService.GetFirstError(reCalcTicketsAbnormalResults, nameof(ReCalculateTicketsService)).Returns(reCalcTicketError);
-        var service = new EditRequestServiceImp(marketTicketsWhenEditService, reCalculateTicketsService, null, getUpdateResultService, null, null);
+        var service = new EditRequestServiceImp(marketTicketsWhenEditService, reCalculateTicketsService, null,
+            getUpdateResultService, loggingService, notificationService);
 
         // Act
         var result = await service.UpdateRequest(query);
@@ -67,7 +73,8 @@ public class EditRequestServiceTests
         getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService)).Returns((Result)null);
         reCalculateTicketsService.Execute(query.AbnormalBetInfo, query.IssueTypeId, query.RemoveTransIds).Returns(reCalcTicketsAbnormalResults);
         getUpdateResultService.GetFirstError(reCalcTicketsAbnormalResults, nameof(ReCalculateTicketsService)).Returns((Result)null);
-        var service = new EditRequestServiceImp(marketTicketsWhenEditService, reCalculateTicketsService, updateRequestProcessStage, getUpdateResultService, null, null);
+        var service = new EditRequestServiceImp(marketTicketsWhenEditService, reCalculateTicketsService,
+            updateRequestProcessStage, getUpdateResultService, loggingService, notificationService);
 
         // Act
         _ = await service.UpdateRequest(query);

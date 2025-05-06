@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria.Notification;
 using TicketVoidingSystem.Models.Notification;
 using TicketVoidingSystem.Services;
@@ -82,7 +83,7 @@ public class NotificationServiceTest
             .Returns((notifications, targetUsers));
 
         // Act
-        await service.InsertNotification(type, content, true, requestId);
+        await service.InsertNotification(type, content, NotificationTargetType.IgnoreCurrentUser, requestId);
 
         // Assert
         await notificationSignalRService.Received(1).PushNotification("user1", notifications[0]);
