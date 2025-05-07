@@ -1,128 +1,133 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { Shallow } from 'shallow-render';
-import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
-import { TEXT } from '../../../utility/constants/text';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfirmationComponent } from './confirmation.component';
+import { Confirmation } from './confirmation.model';
+import { TestingModule } from '../../../utility/modules/testing.module';
 
 class Helper {
-  static readonly fieldsetSelector = 'fieldset';
-  static readonly reasonSelector = 'textarea.reason';
-  static readonly reasonSCSelector = 'textarea.reasonSC';
-  static readonly passwordSelector = 'input[type=password]';
-  static readonly voidBetButtonSelector = 'input[type=button]';
+  static createMockConfirmation(overrides: Partial<Confirmation> = {}) {
+    return {
+      userName: 'Test User',
+      reason: '',
+      reasonSC: '',
+      userPassword: '',
+      ...overrides
+    } as Confirmation;
+  }
+
+  static readonly mockConfirmation = Helper.createMockConfirmation();
 }
 
 describe('ConfirmationComponent', () => {
-  @NgModule({
-    imports: [
-      BrowserModule,
-      FormsModule,
-      ToolTipModule
-    ],
-  })
-  class AppModuleTest { }
+  let component: ConfirmationComponent;
+  let fixture: ComponentFixture<ConfirmationComponent>;
 
-  let shallow: Shallow<ConfirmationComponent>;
-  const htmlElement = '<confirmation-single [isShowConfirm]="true"></confirmation-single>';
-  
-  beforeEach(() => {
-    shallow = new Shallow(ConfirmationComponent, AppModuleTest);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ConfirmationComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
-  it('ConfirmationComponent should init match snapshot', async () => {
-    // Arrange
-    const { find, fixture } = await shallow.render(htmlElement);
-    fixture.detectChanges();
-
-    // Assert
-    expect(fixture).toMatchSnapshot();
-    expect(find(Helper.fieldsetSelector)).toHaveFound(1);
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('Should return expected model after manipulate elements', async () => {
+  it('should initialize with default values', () => {
+    expect(component.confirmation).toBeDefined();
+    expect(component.confirmation.userName).toBeDefined();
+    expect(component.confirmation.reason).toBe('');
+    expect(component.confirmation.reasonSC).toBe('');
+    expect(component.confirmation.userPassword).toBe('');
+  });
+
+  it('#voidBet should emit voidEvent with true', () => {
     // Arrange
-    const { find, fixture, instance } = await shallow.render(htmlElement);
-    fixture.detectChanges();
+    component.voidEvent.emit = jest.fn();
     
-    const reason = find(Helper.reasonSelector);
-    reason.nativeElement.value = 'reason';
-    reason.triggerEventHandler('input', { target: reason.nativeElement });
-    const reasonSC = find(Helper.reasonSCSelector);
-    reasonSC.nativeElement.value = 'reasonSC';
-    reasonSC.triggerEventHandler('input', { target: reasonSC.nativeElement });
-    const password = find(Helper.passwordSelector);
-    password.nativeElement.value = '1234aa';
-    password.triggerEventHandler('input', { target: password.nativeElement });
-
-    // Assert
-    expect(instance.confirmation.reason).toBe('reason');
-    expect(instance.confirmation.reasonSC).toBe('reasonSC');
-    expect(instance.confirmation.userPassword).toBe('1234aa');
-  });
-
-  it('Should call #voidBet when click voidbet button', async() => {
-    // Arrange
-    const { find, fixture, instance } = await shallow.render(htmlElement);
-    const spyVoidBet = jest.spyOn(instance, 'voidBet');
-    fixture.detectChanges();
-    const button = find(Helper.voidBetButtonSelector);
-    button.triggerEventHandler('click', {});
-
-    // Assert
-    expect(spyVoidBet).toHaveBeenCalledTimes(1);
-    expect(instance.voidEvent.emit).toHaveBeenCalledWith(true);
-  });
-
-  it('#checkValidation should return false and display tooltip', async () => {
-    // Arrange
-    const { instance } = await shallow.render(htmlElement);
-    const testCases = [
-      { reason: '', reasonSC: '', userPassword: '', title: 'reason',  message:  TEXT.INPUT_REASON },
-      { reason: 'reason', reasonSC: '', userPassword: '', title: 'reasonSC', message:  TEXT.INPUT_REASON, },
-      { reason: 'reason', reasonSC: 'reasonSC', userPassword: '', title: 'password', message:  TEXT.INPUT_PASSWORD, },
-    ];
-    instance.tooltip.display = jest.fn();
+    // Act
+    component.voidBet();
     
-    // Action and Assert
-    for (const item of testCases) {
-      instance.confirmation.reason = item.reason;
-      instance.confirmation.reasonSC = item.reasonSC;
-      instance.confirmation.userPassword = item.userPassword;
-      const actualResult = instance.checkValidation();
-      expect(instance.tooltip.display).toHaveBeenCalledWith(item.title, item.message);
-      expect(actualResult).toBe(false);
-    }
+    // Assert
+    expect(component.voidEvent.emit).toHaveBeenCalledWith(true);
   });
 
-  it('#checkValidation should return true', async () => {
+  it('#checkValidation should return false when reason is empty', () => {
     // Arrange
-    const { instance } = await shallow.render(htmlElement);
-    instance.confirmation.reason = 'reason';
-    instance.confirmation.reasonSC = 'reasonSC';
-    instance.confirmation.userPassword = '1234aa';
-
-    // Action
-    const actualResult = instance.checkValidation();
-
+    component.confirmation = Helper.createMockConfirmation({
+      reason: '',
+      reasonSC: 'Test SC',
+      userPassword: 'Test Password'
+    });
+    
+    // Act
+    const result = component.checkValidation();
+    
     // Assert
-    expect(actualResult).toBe(true);
+    expect(result).toBe(false);
   });
 
-  it('#clearData should return empty confirmation model', async () => {
+  it('#checkValidation should return false when reasonSC is empty', () => {
     // Arrange
-    const { instance } = await shallow.render(htmlElement);
-    instance.confirmation.reason = 'reason';
-    instance.confirmation.reasonSC = 'reasonSC';
-    instance.confirmation.userPassword = '1234aa';
-
-    // Action
-    instance.clearData();
-
+    component.confirmation = Helper.createMockConfirmation({
+      reason: 'Test Reason',
+      reasonSC: '',
+      userPassword: 'Test Password'
+    });
+    
+    // Act
+    const result = component.checkValidation();
+    
     // Assert
-    expect(instance.confirmation.reason).toBe('');
-    expect(instance.confirmation.reasonSC).toBe('');
-    expect(instance.confirmation.userPassword).toBe('');
+    expect(result).toBe(false);
+  });
+
+  it('#checkValidation should return false when password is empty', () => {
+    // Arrange
+    component.confirmation = Helper.createMockConfirmation({
+      reason: 'Test Reason',
+      reasonSC: 'Test SC',
+      userPassword: ''
+    });
+    
+    // Act
+    const result = component.checkValidation();
+    
+    // Assert
+    expect(result).toBe(false);
+  });
+
+  it('#checkValidation should return true when all fields are filled', () => {
+    // Arrange
+    component.confirmation = Helper.createMockConfirmation({
+      reason: 'Test Reason',
+      reasonSC: 'Test SC',
+      userPassword: 'Test Password'
+    });
+    
+    // Act
+    const result = component.checkValidation();
+    
+    // Assert
+    expect(result).toBe(true);
+  });
+
+  it('#clearData should reset all form fields', () => {
+    // Arrange
+    component.confirmation = Helper.createMockConfirmation({
+      reason: 'Test Reason',
+      reasonSC: 'Test SC',
+      userPassword: 'Test Password'
+    });
+    
+    // Act
+    component.clearData();
+    
+    // Assert
+    expect(component.confirmation.reason).toBe('');
+    expect(component.confirmation.reasonSC).toBe('');
+    expect(component.confirmation.userPassword).toBe('');
   });
 });

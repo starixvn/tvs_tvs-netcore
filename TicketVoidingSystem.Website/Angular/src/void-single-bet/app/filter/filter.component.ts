@@ -226,7 +226,7 @@ export class FilterComponent implements OnInit {
     this.subIssueType.items = this.subIssueType.items.filter(x => x.value !== '27' && x.value !== '39' && x.value !== '41');
     //END
 
-    this.subIssueType.value = this.subIssueType.items[0].value;
+    this.subIssueType.value = this.subIssueType.items[0]?.value;
     this.updateIssueTypeEvent.emit(Number(this.issueType.value));
     this.changeSubIssueTypeEvent();
 
