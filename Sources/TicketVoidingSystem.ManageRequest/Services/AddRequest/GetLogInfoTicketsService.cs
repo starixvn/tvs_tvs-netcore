@@ -101,17 +101,18 @@ public class GetLogInfoTicketsServiceImp(
 
         foreach (var ticket in voidTickets)
         {
+            var groupName = ticket.GroupName ?? "";
             if (ticket.IsOtherTicket)
             {
                 otherTickets.Add(ticket);
-                otherGroupCounts.TryAdd(ticket.GroupName, 0);
-                otherGroupCounts[ticket.GroupName]++;
+                otherGroupCounts.TryAdd(groupName, 0);
+                otherGroupCounts[groupName]++;
             }
             else
             {
                 normalTickets.Add(ticket);
-                normalGroupCounts.TryAdd(ticket.GroupName, 0);
-                normalGroupCounts[ticket.GroupName]++;
+                normalGroupCounts.TryAdd(groupName, 0);
+                normalGroupCounts[groupName]++;
             }
         }
 
@@ -161,8 +162,8 @@ public class GetLogInfoTicketsServiceImp(
             .ToList();
 
         return orderedGroups
-            .Select(group => ToGroupTicket(group, request.IssueTypeId, groupCounts[group.Key], ref startIndex))
-            .ToList();
+            .Select(group =>
+                ToGroupTicket(group, request.IssueTypeId, groupCounts[group.Key ?? string.Empty], ref startIndex));
     }
 
     private string GetSubBetType(GetTicketModel item)

@@ -1,4 +1,5 @@
 import { Component, inject, Input, OnChanges, SimpleChange, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { AbnormalFilterBy, FunctionConst } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
@@ -6,6 +7,7 @@ import { EventType } from '../../../../utility/constants/sport.constant';
 import { HttpService } from '../../../../utility/services/http.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { Message } from '../messages/message';
+import { MessagesComponent } from '../messages/messages.component';
 import { ReplaceAIOMessageService } from './services/replace-aio-message.serivce';
 import { ReplaceCommonValuesService } from './services/replace-common-values.service';
 import { ReplaceEventTypeService } from './services/replace-event-type.service';
@@ -16,8 +18,6 @@ import { TemplateInputsForTVSService } from './services/template-inputs-for-tvs.
 import { TemplateInputsService } from './services/template-inputs.service';
 import { TemplateSetting, TemplateSettings } from './template-setting.model';
 import { InputText, TemplateModel, TemplateValue } from './template.model';
-import { FormsModule } from '@angular/forms';
-import { MessagesComponent } from '../messages/messages.component';
 
 const MESSAGE_TEMPLATE_ID_8 = 8;
 const MESSAGE_TEMPLATE_ID_9 = 9;
@@ -217,6 +217,7 @@ export class TemplateMessageComponent implements OnChanges {
     return this.isTVSVoidPage() && (StaticService.isOtherIssues(this.issueTypeId)
       || StaticService.isWrongMarketOffered(this.issueTypeId)
       || StaticService.isTechnicalError(this.issueTypeId)
+      || StaticService.isWrongOddsSportsBook(this.issueTypeId)
       || StaticService.isWrongHDP(this.issueTypeId)
       || StaticService.isWrongOU(this.issueTypeId)
     );

@@ -134,10 +134,10 @@ const configPages = [
   //markTickets,
   //ticketListing,
   //voidSingleBet,
-  //voidRequest,
-  manageRequest,
-  addRequest,
-  editRequest
+  voidRequest,
+  //manageRequest,
+  //addRequest,
+  //editRequest
 ];
 
 module.exports = configPages;
