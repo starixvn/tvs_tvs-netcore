@@ -3,7 +3,6 @@ using HtmlAgilityPack;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions.TN;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.SharedApi.Criteria.SharedApi;
 
@@ -90,7 +89,8 @@ public class ConvertRequestsServiceImp(IDynamicRepository repository) : ConvertR
                 {IssueTypeConstant.AbnormalAccount, BuildVoidTimeAndTotalAccount},
                 {IssueTypeConstant.DuplicateTickets, BuildDuplicateTickets},
                 {IssueTypeConstant.RecoverTicket, BuildProducts},
-                {IssueTypeConstant.WrongOddsSportsBook, BuildVoidTime}
+                {IssueTypeConstant.WrongOddsSportsBook, BuildVoidTime},
+                {IssueTypeConstant.WrongMarketOffered, BuildVoidTime},
             };
 
         matchingFunctions.TryGetValue(issueId, out var function);
