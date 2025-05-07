@@ -157,4 +157,27 @@ public static class LogInfoHelper
     {
         return string.Join(separator, items.Where(x => !string.IsNullOrWhiteSpace(x)));
     }
+
+    public static IEnumerable<BetTypeTicketsInfo> CombineBetTypes(IEnumerable<BetTypeTicketsInfo> models)
+    {
+        return models
+            .GroupBy(x => new { x.Id, x.BetTypeId, x.BetId, x.PlayerAndOdds })
+            .Select(g =>
+            {
+                var first = g.First();
+
+                return new BetTypeTicketsInfo
+                {
+                    Id = first.Id,
+                    BetTypeId = first.BetTypeId,
+                    BetId = first.BetId,
+                    BetTypeName = first.BetTypeName,
+                    OriginalBetTypeName = first.OriginalBetTypeName,
+                    InputtedRuns = first.InputtedRuns,
+                    PlayerAndOdds = first.PlayerAndOdds,
+                    PlayerName = first.PlayerName,
+                    TicketsCount = g.Sum(x => x.TicketsCount)
+                };
+            });
+    }
 }
