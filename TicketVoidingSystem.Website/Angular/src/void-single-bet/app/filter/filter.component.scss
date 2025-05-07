@@ -173,3 +173,7 @@
     border-bottom-left-radius: 0 !important;
   }
 }
+
+::ng-deep .affected-licensees {
+  margin-left: unset !important;
+}

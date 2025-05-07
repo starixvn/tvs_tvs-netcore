@@ -13,7 +13,7 @@
   </div>
   <div class="content-filter" [hidden]="!isShowFilter">
     <div class="display-flex">
-      <div>
+      <div class="me-2">
         <div class="line-1 d-flex">
           <div class="d-flex me-3">
             <label class="col-form-label col-form-label-sm me-2 d-flex input-match align-items-center">Match ID
@@ -142,7 +142,7 @@
           <div class="d-flex align-items-center me-3">
             <label class="col-form-label col-form-label-sm me-2">Sub Type</label>
             <ng-select [items]="subIssueType.items" bindLabel="name" bindValue="value" [(ngModel)]="subIssueType.value"
-              [clearable]="false" style="width: 240px" (ngModelChange)="changeSubIssueTypeEvent()">
+              [clearable]="false" style="width: 200px" (ngModelChange)="changeSubIssueTypeEvent()">
             </ng-select>
           </div>
         </div>
