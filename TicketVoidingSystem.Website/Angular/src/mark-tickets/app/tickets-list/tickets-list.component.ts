@@ -1,15 +1,23 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { BaseTicketsListComponent } from '../../../utility/components/base-tickets-list/base-tickets-list.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
 import { LABELS } from '../../../utility/constants/labels';
 import { MarkedTicketQuery } from '../models/query.model';
 import { DataPermission } from '../models/result.model';
 import { TicketsModel } from './tickets.model';
+import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
+import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
+  standalone: true,
   selector: 'tickets-list',
   templateUrl: './tickets-list.component.html',
-  styleUrls: ['./tickets-list.component.scss']
+  styleUrls: ['./tickets-list.component.scss'],
+  imports: [CommonModule, FormsModule, TooltipComponent, PagingComponent, BlockUiDirective, SanitizeHtmlPipe]
 })
 export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel> implements OnInit {
   @Input() isShowTickets: boolean;
@@ -20,12 +28,11 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
   @Output() updateMarkedTickets = new EventEmitter<MarkedTicketQuery>();
   markedTicketsQuery = new MarkedTicketQuery();
   tooltip = new Tooltip();
-
   constructor(readonly element: ElementRef) {
     super(element);
     this.tooltip.element = this.element;
   }
-
+  
   ngOnInit() {
     this.clickBody();
   }

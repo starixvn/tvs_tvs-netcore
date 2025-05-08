@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, inject } from '@angular/core';
 import * as _ from 'lodash';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
 import { ModalType } from '../../../utility/components/modal/modal.model';
@@ -16,17 +16,30 @@ import { TicketsModel } from '../tickets-list/tickets.model';
 import { AllMarkedTicketModel } from './all-marked-ticket-list/all-marked-ticket.model';
 import { FilterTicketsComponent } from './filter-tickets/filter-tickets.component';
 import { FilterSearchBy } from './filter-tickets/filter.model';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AllMarkedTicketListComponent } from './all-marked-ticket-list/all-marked-ticket-list.component';
+import { TicketsListComponent } from '../tickets-list/tickets-list.component';
+import { ClipboardModule } from 'ngx-clipboard';
+import { MatchDetailComponent } from '../../../utility/components/match-detail/match-detail.component';
 
 @Component({
+  standalone: true,
   selector: 'mark-unmark-ticket',
   templateUrl: './mark-unmark-ticket.component.html',
-  styleUrls: ['./mark-unmark-ticket.component.scss']
+  styleUrls: ['./mark-unmark-ticket.component.scss'],
+  imports: [CommonModule, FormsModule, FilterTicketsComponent, AllMarkedTicketListComponent,
+    TicketsListComponent, ClipboardModule, MatchDetailComponent],
 })
 export class MarkUnmarkTicketComponent {
   @ViewChild('filterTickets') filterTickets: FilterTicketsComponent;
   @Input() currentTab: string;
   @Input() isExternalUrl: boolean;
   @Input() dataPermission = new DataPermission();
+
+  private readonly appService = inject(AppService);
+  private readonly commonService = inject(CommonService);
+  private readonly modalService = inject(ModalService);
 
   getStatus: string;
   paging = new PagingModel();
@@ -47,12 +60,6 @@ export class MarkUnmarkTicketComponent {
   ticketsModel = new TicketsModel();
   allMarkedTicketsModel = new Array<AllMarkedTicketModel>();
   queryTicket = new TicketDetailQuery();
-
-  constructor(
-    private readonly appService: AppService,
-    private readonly commonService: CommonService,
-    private readonly modalService: ModalService
-  ) { }
 
   async searchEvent(query: GetTicketsQuery) {
     this.getStatus = query.status === '0' ? 'Mark' : 'Unmark';

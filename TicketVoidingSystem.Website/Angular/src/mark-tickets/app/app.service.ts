@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
 import { ConfirmAutoUnmarkQuery, GetDataForConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark } from './confirm-auto-unmark/confirm-auto-unmark.model';
@@ -12,7 +12,7 @@ import { LogsModel } from './user-log/logs-list/logs-list.model';
   providedIn: 'root'
 })
 export class AppService {
-  constructor(private readonly httpService: HttpService) { }
+  private readonly httpService = inject(HttpService);
 
   async getTickets(query: GetTicketsQuery): Promise<TicketsModel> {
     return this.httpService.postJson(query, `api/MarkTickets/GetTickets`);

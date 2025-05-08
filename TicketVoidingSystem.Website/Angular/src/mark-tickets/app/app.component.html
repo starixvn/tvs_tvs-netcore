@@ -5,13 +5,21 @@
 
 <div class="mg-10">
   <div>
-    <tab-mark-ticket (changeTab)="changeTab($event)" [isExternalUrl]="isExternalUrl" [dataPermission]="dataPermission"></tab-mark-ticket>
+    <tab-mark-ticket (changeTab)="changeTab($event)" [isExternalUrl]="isExternalUrl" 
+    [dataPermission]="dataPermission"></tab-mark-ticket>
   </div>
   <div class="position-relative wrapper-tooltip">
-    <mark-unmark-ticket *ngIf="isMarkOrUnmarkTab()" [currentTab]="currentTab" [isExternalUrl]="isExternalUrl" [dataPermission]="dataPermission"></mark-unmark-ticket>
+    @if (isMarkOrUnmarkTab()) {
+      <mark-unmark-ticket [currentTab]="currentTab" [isExternalUrl]="isExternalUrl"
+      [dataPermission]="dataPermission"> </mark-unmark-ticket>
+    }
 
-    <user-log *ngIf="isLogTab()"></user-log>
+    @if (isLogTab()) {
+      <user-log></user-log>
+    }
 
-    <confirm-auto-unmark *ngIf="isConfirmAutoUnmarkTab()"></confirm-auto-unmark>
+    @if (isConfirmAutoUnmarkTab()) {
+      <confirm-auto-unmark></confirm-auto-unmark>
+    }
   </div>
 </div>

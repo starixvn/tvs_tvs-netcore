@@ -1,4 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
@@ -8,6 +10,11 @@ import { DataPermission } from '../../models/result.model';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { TicketDetailId } from './../../models/query.model';
 import { AllMarkedTicketModel } from './all-marked-ticket.model';
+import { AutoRefreshComponent } from '../../../../utility/components/auto-refresh/auto-refresh.component';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
+import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
+import { PagingComponent } from '../../../../utility/components/paging/paging/paging.component';
+import { SanitizeHtmlPipe } from '../../../../utility/pipes/sanitize-html.pipe';
 
 enum IconCheckBox {
   none = 0,
@@ -16,11 +23,14 @@ enum IconCheckBox {
 }
 
 @Component({
+  standalone: true,
   selector: 'all-marked-ticket-list',
   templateUrl: './all-marked-ticket-list.component.html',
-  styleUrls: ['./all-marked-ticket-list.component.scss']
+  styleUrls: ['./all-marked-ticket-list.component.scss'],
+  imports: [CommonModule, FormsModule, AutoRefreshComponent, BlockUiDirective,
+    TooltipComponent, PagingComponent, SanitizeHtmlPipe ]
 })
-export class AllMarkedTicketListComponent implements OnInit {
+export class AllMarkedTicketListComponent {
   @Input() isShowAllTickets: boolean;
   @Input() isBlock: boolean;
   @Input() model = Array<AllMarkedTicketModel>();
@@ -41,11 +51,10 @@ export class AllMarkedTicketListComponent implements OnInit {
   tempUncheckedList = new Array<string>();
   tooltip = new Tooltip();
 
-  constructor(private readonly element: ElementRef) {
-    this.tooltip.element = this.element;
-  }
+  private readonly element = inject(ElementRef);
 
-  ngOnInit() {
+  constructor() {
+    this.tooltip.element = this.element;
   }
 
   pagingEvent() {

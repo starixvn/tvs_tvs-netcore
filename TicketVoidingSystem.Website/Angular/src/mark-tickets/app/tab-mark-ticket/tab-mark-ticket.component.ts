@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { DataPermission } from '../models/result.model';
 
 @Component({
+  standalone: true,
   selector: 'tab-mark-ticket',
   templateUrl: './tab-mark-ticket.component.html',
-  styleUrls: ['./tab-mark-ticket.component.scss']
+  styleUrls: ['./tab-mark-ticket.component.scss'],
+  imports: [CommonModule]
 })
 export class TabMarkTicketComponent implements OnChanges {
   @Input() isExternalUrl: boolean;
