@@ -134,8 +134,8 @@ const configPages = [
   //markTickets,
   //ticketListing,
   //voidSingleBet,
-  voidRequest,
-  //manageRequest,
+  //voidRequest,
+  manageRequest,
   //addRequest,
   //editRequest
 ];
