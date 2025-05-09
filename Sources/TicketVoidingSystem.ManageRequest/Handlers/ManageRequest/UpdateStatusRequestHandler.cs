@@ -38,7 +38,6 @@ public class UpdateStatusRequestHandler(IDynamicRepository repository, Notificat
         var content = isSuccessful
             ? MessageHelper.CreateStoredRequestSuccessfully(requestId, iStore, sessionService.UserName)
             : MessageHelper.CreateStoredRequestFailed(requestId, iStore);
-        var targetType = isSuccessful ? NotificationTargetType.IgnoreCurrentUser : NotificationTargetType.OnlyCurrentUser;
-        notificationService.ExecuteBackground(() => notificationService.InsertNotification(type, content, targetType, requestId));
+        notificationService.ExecuteBackground(() => notificationService.InsertNotification(type, content, NotificationTargetType.All, requestId));
     }
 }
