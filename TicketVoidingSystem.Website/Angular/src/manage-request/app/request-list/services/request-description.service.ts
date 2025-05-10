@@ -4,13 +4,13 @@ import moment from 'moment';
 import { ClipboardService } from 'ngx-clipboard';
 import { FilterOddsTypeConstant } from '../../../../add-request/app/add-request/event-wrong-odds-sports-book/models/filter-wrong-odds-sports-book.model';
 import { DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
+import { SportType } from '../../../../utility/constants/sport.constant';
+import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
 import { BetTypeTicketsInfo, CopyRequestInfoQuery, CopyRequestInfoResponse, RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';
 import { CommonService } from '../../../../utility/services/common.service';
-import { TvDetectionService } from './tv-detection.service';
-import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
-import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
-import { SportType } from '../../../../utility/constants/sport.constant';
 import { AppComponent } from '../../app.component';
+import { TvDetectionService } from './tv-detection.service';
 
 export class RequestDescriptionService {
   commonService = inject(CommonService);
@@ -49,7 +49,7 @@ export class RequestDescriptionService {
   }
 
   private createReducedOversOrAbandonedContent(copyInfoResponse: CopyRequestInfoResponse): string {
-    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, "betTypeId");
+    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
     let outputContent = '';
 
     for (const key in groupBetTypes) {
