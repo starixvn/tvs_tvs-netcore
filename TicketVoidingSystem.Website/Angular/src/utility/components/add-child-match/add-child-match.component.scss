@@ -33,7 +33,8 @@
 
 .modal-body-content {
   border: 1px solid #ccc;
-  height: calc(100% - 40px);
+  height: auto;
+  max-height: calc(80vh - 120px);
   width: 100%;
   overflow: auto;
   @include scroll-style();
@@ -106,7 +107,7 @@ table {
         border-width: 1px 1px 0 1px;
         padding: 3px 0px !important;
       }
-  
+
       .col-1 {
         background: white;
         width: 46px;
@@ -127,9 +128,9 @@ table {
     }
 
     tbody:hover, tr:hover td {
-      background: #aebad4; 
+      background: #aebad4;
     }
-    
+
     tbody {
       td {
         border-color: #888888;
