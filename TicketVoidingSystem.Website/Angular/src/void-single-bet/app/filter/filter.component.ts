@@ -629,6 +629,7 @@ export class FilterComponent implements OnInit {
     this.setDateTime();
     this.groupBetTypes = new GroupBetTypesModel([], false);
     this.advancedModeComponent.resetBetTeam();
+    this.licenseeAffectedList = [];
   }
 
   changeBetTypes(betTypes: BetType[]) {

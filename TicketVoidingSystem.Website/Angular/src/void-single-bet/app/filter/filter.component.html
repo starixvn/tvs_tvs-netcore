@@ -17,7 +17,7 @@
         <div class="line-1 d-flex">
           <div class="d-flex me-3">
             <label class="col-form-label col-form-label-sm me-2 d-flex input-match align-items-center">Match ID
-              <input maxlength="10" class="form-control form-control-sm match-id" style="width: 140px" type="text" only-number 
+              <input maxlength="10" class="form-control form-control-sm match-id mx-1" style="width: 140px" type="text" only-number 
               [(ngModel)]="matchId" (blur)="blurMatchId()" autofocus />
               @if (!isSuccessMatch) {
               <span class="star red">(&#10041;)</span>
@@ -153,12 +153,12 @@
               <em class="icon-filter"></em>Optional Filters
             </legend>
             <div class="optional-filters">
-              <div class="score">
+              <div class="score d-flex align-items-center">
                 <span class="bold">Score:</span>
-                <label>Live Home Score <input type="text" only-number maxlength="2"
-                    [(ngModel)]="liveHomeScore" /></label>
-                <label>Live Away Score <input type="text" only-number maxlength="2"
-                    [(ngModel)]="liveAwayScore" /></label>
+                <label for="live-home-score">Live Home Score</label>
+                <input [(ngModel)]="liveHomeScore" type="text" class="form-control me-2" id="live-home-score" only-number maxlength="2">
+                <label for="live-away-score">Live Away Score</label>
+                <input [(ngModel)]="liveAwayScore" type="text" class="form-control" id="live-away-score" only-number maxlength="2">
               </div>
             </div>
           </fieldset>
