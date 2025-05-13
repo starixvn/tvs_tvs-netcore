@@ -666,7 +666,7 @@ public class ObjectToXmlExtensionFacts
         // Arrange
         var models = new List<DangerAcceptedViewModel> { new() { MatchId = 1 } };
         const string expected = "<root><r MatchId='1' FilterFromTransTime='' "
-                                + "FilterToTransTime='' SubIssueTypeId='0' AATime='' PATime='' SATime='' FilterBy=''/></root>";
+                                + "FilterToTransTime='' VoidFromTime='' VoidToTime='' SubIssueTypeId='0' AATime='' PATime='' SATime='' FilterBy=''/></root>";
 
         // Act
         var actual = models.ToDangerAcceptedInfoXml();
@@ -693,8 +693,8 @@ public class ObjectToXmlExtensionFacts
         // Arrange
         var models = new List<WrongScoreInfoViewModel> { new() { MatchId = 1, WrongScore = "123-456" } };
         const string expected =
-            "<root><r LiveHomeScore='123' LiveAwayScore='456' FilterFromTransTime='' "
-            + "ScoreId='0' FilterToTransTime='' SubIssueTypeId='0' MatchId='1' AATime='' PATime='' SATime='' FilterBy=''/></root>";
+            "<root><r LiveHomeScore='123' LiveAwayScore='456' FilterFromTransTime='' FilterToTransTime='' "
+            + "VoidFromTime='' VoidToTime='' ScoreId='0' SubIssueTypeId='0' MatchId='1' AATime='' PATime='' SATime='' FilterBy=''/></root>";
 
         // Act
         var actual = models.ToWrongScoreInfoXml();
@@ -709,8 +709,8 @@ public class ObjectToXmlExtensionFacts
         // Arrange
         var models = new List<WrongScoreInfoViewModel> { new() { MatchId = 1, WrongScore = null } };
         const string expected =
-            "<root><r LiveHomeScore='' LiveAwayScore='' FilterFromTransTime='' "
-            + "ScoreId='0' FilterToTransTime='' SubIssueTypeId='0' MatchId='1' AATime='' PATime='' SATime='' FilterBy=''/></root>";
+            "<root><r LiveHomeScore='' LiveAwayScore='' FilterFromTransTime='' FilterToTransTime='' "
+            + "VoidFromTime='' VoidToTime='' ScoreId='0' SubIssueTypeId='0' MatchId='1' AATime='' PATime='' SATime='' FilterBy=''/></root>";
 
         // Act
         var actual = models.ToWrongScoreInfoXml();
@@ -725,8 +725,8 @@ public class ObjectToXmlExtensionFacts
         // Arrange
         var models = new List<WrongScoreInfoViewModel> { new() { FilterBy = 2, MatchId = 1, WrongScore = null } };
         const string expected =
-            "<root><r LiveHomeScore='' LiveAwayScore='' FilterFromTransTime='' "
-            + "ScoreId='0' FilterToTransTime='' SubIssueTypeId='0' MatchId='1' AATime='' PATime='' SATime='' FilterBy='2'/></root>";
+            "<root><r LiveHomeScore='' LiveAwayScore='' FilterFromTransTime='' FilterToTransTime='' "
+            + "VoidFromTime='' VoidToTime='' ScoreId='0' SubIssueTypeId='0' MatchId='1' AATime='' PATime='' SATime='' FilterBy='2'/></root>";
 
         // Act
         var actual = models.ToWrongScoreInfoXml();

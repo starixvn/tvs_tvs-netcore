@@ -98,4 +98,9 @@ public static class IssueTypeExtension
     {
         return id is IssueTypeConstant.TechnicalError;
     }
+
+    public static bool IsIssueTypeHasAllowanceSetting(this int id)
+    {
+        return id.IsDangerAccepted() || id.IsRedCard() || id.IsWrongScore();
+    }
 }

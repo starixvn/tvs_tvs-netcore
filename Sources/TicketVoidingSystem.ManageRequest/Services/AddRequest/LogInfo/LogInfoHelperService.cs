@@ -1,4 +1,6 @@
-﻿namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
+﻿using TicketVoidingSystem.Constants;
+
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 
 public static class LogInfoHelper
 {
@@ -64,6 +66,7 @@ public static class LogInfoHelper
         {
             return null;
         }
+        var minObject = GetMinObjectByPriority(selectedItems);
 
         return new LogInfoDetail
         {
@@ -87,10 +90,10 @@ public static class LogInfoHelper
             LogInfoTicketsJson = JoinStringValue(",", selectedItems.Select(x => x.LogInfoTicketsJson)),
             VoidFromTime = CombineVoidFromTime(selectedItems),
             VoidToTime = CombineVoidToTime(selectedItems),
-            MinTransId = CombineMinTransId(selectedItems),
-            HighlightAcceptType = CombineHighlightAcceptType(selectedItems),
-            HighlightMinTime = CombineHighlightMinTime(selectedItems),
-            ActionType = CombineActionType(selectedItems),
+            MinTransId = minObject?.MinTransId,
+            HighlightAcceptType = minObject?.HighlightAcceptType,
+            HighlightMinTime = minObject?.HighlightMinTime,
+            ActionType = minObject?.ActionType,
             TransVoidToTime = CombineTransVoidToTime(selectedItems)
         };
     }
@@ -107,28 +110,13 @@ public static class LogInfoHelper
             .Where(x => x != null).Max(x => x);
     }
 
-    private static string CombineMinTransId(IEnumerable<LogInfoDetail> items)
+    private static LogInfoDetail? GetMinObjectByPriority(IEnumerable<LogInfoDetail> items)
     {
-        return items.Select(x => x.MinTransId)
-            .Where(x => !string.IsNullOrWhiteSpace(x)).Min(x => x);
-    }
-
-    private static int? CombineHighlightAcceptType(IEnumerable<LogInfoDetail> items)
-    {
-        return items.Where(x => x.MinTransId != null)
-            .MinBy(x => x.MinTransId)?.HighlightAcceptType;
-    }
-
-    private static DateTime? CombineHighlightMinTime(IEnumerable<LogInfoDetail> items)
-    {
-        return items.Where(x => x.MinTransId != null)
-            .MinBy(x => x.MinTransId)?.HighlightMinTime;
-    }
-
-    private static string CombineActionType(IEnumerable<LogInfoDetail> items)
-    {
-        return items.Where(x => !string.IsNullOrWhiteSpace(x.MinTransId))
-            .MinBy(x => x.MinTransId)?.ActionType;
+        return items.Where(x => x.HighlightMinTime != null)
+            .OrderBy(x => x.HighlightMinTime)
+            .ThenBy(x => x.CancelCashOutCount) // Prefer Normal over CancelCashOut
+            .ThenBy(x => long.TryParse(x.MinTransId, out var id) ? id : long.MaxValue)
+            .FirstOrDefault();
     }
 
     private static DateTime? CombineTransVoidToTime(IEnumerable<LogInfoDetail> items)
@@ -180,5 +168,49 @@ public static class LogInfoHelper
                 };
             })
             .OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetTypeId);
+    }
+
+    public static GetLogInfoQuery UpdateVoidTimeIssueTypeHasAllowanceSetting(GetLogInfoQuery query, IEnumerable<VoidTimeByAllowanceSetting> models)
+    {
+        return query.IssueTypeId switch
+        {
+            IssueTypeConstant.DangerAccepted => UpdateVoidTimeDangerAccepted(query, models),
+            IssueTypeConstant.RedCard => UpdateVoidTimeRedCard(query, models),
+            IssueTypeConstant.WrongScore => UpdateVoidTimeWrongScore(query, models),
+            _ => query
+        };
+    }
+
+    public static GetLogInfoQuery UpdateVoidTimeDangerAccepted(GetLogInfoQuery query, IEnumerable<VoidTimeByAllowanceSetting> models)
+    {
+        foreach (var item in query.DangerAcceptedModels)
+        {
+            item.VoidFromTime = models.FirstOrDefault(x => x.MatchId == item.MatchId)?.VoidFromTime;
+            item.VoidToTime = models.FirstOrDefault(x => x.MatchId == item.MatchId)?.VoidToTime;
+        }
+
+        return query;
+    }
+
+    public static GetLogInfoQuery UpdateVoidTimeRedCard(GetLogInfoQuery query, IEnumerable<VoidTimeByAllowanceSetting> models)
+    {
+        foreach (var item in query.RedCardModels)
+        {
+            item.VoidFromTime = models.FirstOrDefault(x => x.MatchId == item.MatchId)?.VoidFromTime;
+            item.VoidToTime = models.FirstOrDefault(x => x.MatchId == item.MatchId)?.VoidToTime;
+        }
+
+        return query;
+    }
+
+    public static GetLogInfoQuery UpdateVoidTimeWrongScore(GetLogInfoQuery query, IEnumerable<VoidTimeByAllowanceSetting> models)
+    {
+        foreach (var item in query.WrongScoreModels)
+        {
+            item.VoidFromTime = models.FirstOrDefault(x => x.ScoreId == item.ScoreId)?.VoidFromTime;
+            item.VoidToTime = models.FirstOrDefault(x => x.ScoreId == item.ScoreId)?.VoidToTime;
+        }
+
+        return query;
     }
 }

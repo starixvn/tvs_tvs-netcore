@@ -20,7 +20,8 @@ public class LogInfoServiceImp(
     IDynamicRepository repository,
     SessionService session,
     BetListService betListService,
-    CopyRequestInfoService copyRequestInfoService) : LogInfoService
+    CopyRequestInfoService copyRequestInfoService,
+    GetVoidTimeByAllowanceSettingService getFilterTimeByAllowanceService) : LogInfoService
 {
     public async Task<GetLogInfoViewModel> Get(GetLogInfoQuery query)
     {
@@ -35,6 +36,12 @@ public class LogInfoServiceImp(
 
     public async Task<LogInfoResult> GetLogInfoAllServer(GetLogInfoQuery query)
     {
+        if (query.IssueTypeId.IsIssueTypeHasAllowanceSetting())
+        {
+            var models = await getFilterTimeByAllowanceService.Get(query);
+            query = LogInfoHelper.UpdateVoidTimeIssueTypeHasAllowanceSetting(query, models);
+        }
+
         var criteria = GetLogInfoCriteria(query);
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {

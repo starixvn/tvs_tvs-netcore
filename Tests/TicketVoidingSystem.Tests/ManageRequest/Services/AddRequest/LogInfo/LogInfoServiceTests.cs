@@ -16,7 +16,7 @@ using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest;
+namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LogInfo;
 
 public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
 {
@@ -24,17 +24,17 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
     private readonly IDynamicRepository repository;
     private readonly LogInfoServiceImp service;
     private readonly SessionService session;
-    private readonly BetListService betListService;
-    private readonly CopyRequestInfoService copyRequestInfoService;
+    private readonly GetVoidTimeByAllowanceSettingService getVoidTimeByAllowanceSettingService;
 
     public LogInfoServiceTests()
     {
         mapper = Substitute.For<IMapper>();
         repository = Substitute.For<IDynamicRepository>();
         session = Substitute.For<SessionService>();
-        betListService = Substitute.For<BetListService>();
-        copyRequestInfoService = Substitute.For<CopyRequestInfoService>();
-        service = new LogInfoServiceImp(mapper, repository, session, betListService, copyRequestInfoService);
+        getVoidTimeByAllowanceSettingService = Substitute.For<GetVoidTimeByAllowanceSettingService>();
+        var betListService = Substitute.For<BetListService>();
+        var copyRequestInfoService = Substitute.For<CopyRequestInfoService>();
+        service = new LogInfoServiceImp(mapper, repository, session, betListService, copyRequestInfoService, getVoidTimeByAllowanceSettingService);
     }
 
     [Fact]
@@ -53,6 +53,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         var logInfos = new List<LogInfoDetail> { logInfo };
         var transInfoAddRequestModels = new List<TransInfoAddRequestModel>();
         var betTypeCountModel = new List<BetTypeTicketsInfo> { new() };
+        var dateTime = DateTimeOffset.Now.DateTime;
 
         var viewModel = new WrongScoreInfoViewModel
         {
@@ -72,6 +73,16 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             MatchId = matchId,
             KickOffTime = DateTimeOffset.Now.DateTime
         };
+        var voidTimeByAllowanceSetting = new List<VoidTimeByAllowanceSetting>
+        {
+            new()
+            {
+                ScoreId = scoreId,
+                VoidFromTime = dateTime,
+                VoidToTime = dateTime
+            },
+        };
+        getVoidTimeByAllowanceSettingService.Get(default).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
         repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(default)
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
