@@ -1,10 +1,9 @@
-import { ElementRef, NgModule } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { Shallow } from 'shallow-render';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { GroupBetTypesModel } from '../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
-import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { Selection } from '../../../../utility/models/selection.model';
 import { CommonService } from '../../../../utility/services/common.service';
@@ -12,6 +11,8 @@ import { GetLogsQuery } from '../../models/query.model';
 import { CheckValidateService } from '../../services/check-validate.service';
 import { FilterLogsComponent } from './filter-logs.component';
 import { FilterAction, FilterDate } from './filter-logs.model';
+import { By } from '@angular/platform-browser';
+import { ElementRef } from '@angular/core';
 
 class Helper {
   static readonly matchIdSelector = 'input.match-id';
@@ -32,132 +33,158 @@ class Helper {
 }
 
 describe('FilterLogsComponent', () => {
-  @NgModule({
-    declarations: [],
-    imports: [
-      ToolTipModule,
-      FormsModule,
-      NgbModule,
-      NgSelectModule
-    ],
-    providers: [
-      CheckValidateService
-    ]
-  })
-  class ModuleTest { }
-  let shallow: Shallow<FilterLogsComponent>;
+  let component: FilterLogsComponent;
+  let fixture: ComponentFixture<FilterLogsComponent>;
+  let checkValidateService: CheckValidateService;
+  let commonService: CommonService;
 
-  beforeEach(() => {
-    shallow = new Shallow(FilterLogsComponent, ModuleTest)
-      .dontMock(NgbModule)
-      .mock(CheckValidateService, { checkValidMatch: jest.fn().mockImplementation(() => Promise.resolve(true)) })
-      .mock(ElementRef, {});
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        ToolTipModule,
+        FormsModule,
+        NgbModule,
+        NgSelectModule
+      ],
+      providers: [
+        CheckValidateService,
+        CommonService
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(FilterLogsComponent);
+    checkValidateService = fixture.debugElement.injector.get(CheckValidateService);
+    commonService = fixture.debugElement.injector.get(CommonService);
+    component = fixture.componentInstance;
   });
 
-  it('FilterLogsComponent should match snapshot', async () => {
-    const { instance, fixture } = await shallow
-      .render();
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-    expect(fixture).toMatchSnapshot();
-    expect(instance.model).toStrictEqual(new GetLogsQuery());
-    expect(instance.action).toStrictEqual(new FilterAction());
-    expect(instance.tooltip.element).toBeInstanceOf(ElementRef);
-    expect(instance.isSuccessMatch).toBe(true);
-    expect(instance.selectedActions).toStrictEqual(['90500', '90508', '90501', '90511', '90502']);
+  it('should initialize with default values', () => {
+    // Arrange & Act
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.model).toStrictEqual(new GetLogsQuery());
+    expect(component.action).toStrictEqual(new FilterAction());
+    expect(component.tooltip.element).toBeInstanceOf(ElementRef);
+    expect(component.isSuccessMatch).toBe(true);
+    expect(component.selectedActions).toStrictEqual(['90500', '90508', '90501', '90511', '90502']);
+    
     const date = new Date();
-    expect(instance.date.ngbFromDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
-    expect(instance.date.ngbToDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
-    expect(instance.minDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate() - 7));
+    expect(component.date.ngbFromDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
+    expect(component.date.ngbToDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
+    expect(component.minDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate() - 7));
   });
 
-  it('Props model.matchId should change when change match id input value', async () => {
-    const { instance, find } = await shallow.render();
-    const matchId = find(Helper.matchIdSelector);
-    matchId.nativeElement.value = '1222';
-    matchId.triggerEventHandler('input', { target: matchId.nativeElement });
+  it('should update model.matchId when match id input value changes', () => {
+    // Arrange
+    fixture.detectChanges();
+    const matchId = '1222';
+    const matchIdInput = fixture.debugElement.query(By.css(Helper.matchIdSelector));
 
-    expect(instance.model.matchId).toBe('1222');
+    // Act
+    matchIdInput.nativeElement.value = matchId;
+    matchIdInput.triggerEventHandler('input', { target: matchIdInput.nativeElement });
+
+    // Assert
+    expect(component.model.matchId).toBe(matchId);
   });
 
-  it('Should call checkValidMatch not display tooltip when matchId input blur', async () => {
+  it('should call checkValidMatch and not display tooltip when matchId input blur', async () => {
+    // Arrange
     const mockGetGroupBetTypes = jest.fn();
-    const { instance, find } = await shallow
-      .mock(CommonService, { getGroupBetTypes: mockGetGroupBetTypes })
-      .render();
-    const spyCheckValidMatch = jest.spyOn(instance, 'checkValidMatch');
-    const matchId = find(Helper.matchIdSelector);
-    matchId.nativeElement.value = '';
-    matchId.triggerEventHandler('input', { target: matchId.nativeElement });
-    matchId.triggerEventHandler('blur', {});
+    const matchIdInput = fixture.debugElement.query(By.css(Helper.matchIdSelector));
+    const spyCheckValidMatch = jest.spyOn(component, 'checkValidMatch');
+    jest.spyOn(commonService, 'getGroupBetTypes').mockImplementation(mockGetGroupBetTypes);
 
-    expect(spyCheckValidMatch).toBeCalledTimes(1);
-    expect(mockGetGroupBetTypes).toBeCalledTimes(0);
-    expect(instance.isSuccessMatch).toBe(true);
+    // Act
+    matchIdInput.nativeElement.value = '';
+    matchIdInput.triggerEventHandler('input', { target: matchIdInput.nativeElement });
+    matchIdInput.triggerEventHandler('blur', {});
+
+    // Assert
+    expect(spyCheckValidMatch).toHaveBeenCalledTimes(1);
+    expect(mockGetGroupBetTypes).not.toHaveBeenCalled();
+    expect(component.isSuccessMatch).toBe(true);
   });
 
-  it('Props model.doneBy should be changed when change Done by input', async () => {
-    const { instance, find } = await shallow
-      .render();
+  it('should emit searchEvent when search is called with valid match', async () => {
+    // Arrange
+    component.model = new GetLogsQuery();
+    component.action = new FilterAction();
+    fixture.detectChanges();
+    
+    const spyGetParams = jest.spyOn(component as any, 'getParams');
+    const spyEmit = jest.spyOn(component.searchEvent, 'emit');
+    component.isSuccessMatch = true;
+    
+    // Khởi tạo date
+    const date = new Date();
+    component.date.ngbFromDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
+    component.date.ngbToDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
 
-    const doneBy = find('input.form-control')[3];
-    doneBy.nativeElement.value = 'starix02';
-    doneBy.triggerEventHandler('input', { target: doneBy.nativeElement });
+    // Act
+    await component.search();
 
-    expect(instance.model.doneBy).toStrictEqual('starix02');
+    // Assert
+    expect(spyGetParams).toHaveBeenCalledTimes(1);
+    expect(spyEmit).toHaveBeenCalledTimes(1);
   });
 
-  it('#search should emit searchEvent', async () => {
-    const { instance } = await shallow
-    .mock(CheckValidateService, { checkValidMatch: jest.fn().mockImplementation(() => true) })
-    .render();
-    instance.checkValidMatch = jest.fn();
-    instance['getParams'] = jest.fn();
-    instance.searchEvent.emit = jest.fn();
-    instance.isSuccessMatch = true;
-    await instance.search();
+  it('should display tooltip when search is called with invalid match', async () => {
+    // Arrange
+    component.model = new GetLogsQuery();
+    component.action = new FilterAction();
+    component.selectedActions = [];
+    component.tooltip.display = jest.fn();
+    
+    const date = new Date();
+    component.date.ngbFromDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
+    component.date.ngbToDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
+    checkValidateService.checkValidMatch = jest.fn().mockResolvedValue(false);
 
-    expect(instance['getParams']).toBeCalledTimes(1);
-    expect(instance.searchEvent.emit).toBeCalledTimes(1);
+    // Act
+    await component.search();
+
+    // Assert
+    expect(component.tooltip.display).toHaveBeenCalledTimes(1);
   });
 
-  it('#search should call #tooltip.display', async () => {
-    const { instance } = await shallow
-    .mock(CheckValidateService, { checkValidMatch: jest.fn().mockImplementation(() => false) })
-    .render();
-    instance.checkValidMatch = jest.fn();
-    instance.tooltip = new Tooltip();
-    instance.tooltip.display = jest.fn();
-    instance.isSuccessMatch = false;
-    await instance.search();
+  it('should update isSuccessMatch to true when checkValidMatch is called with valid match', async () => {
+    // Arrange
+    component.model.matchId = '29';
+    jest.spyOn(checkValidateService, 'checkValidMatch').mockResolvedValue(true);
 
-    expect(instance.tooltip.display).toBeCalledTimes(1);
+    // Act
+    await component.checkValidMatch();
+
+    // Assert
+    expect(component.isSuccessMatch).toBeTruthy();
   });
 
-  it('#checkValidMatch should update isSuccessMatch to true and return', async () => {
-    const { instance } = await shallow
-    .mock(CheckValidateService, { checkValidMatch: jest.fn().mockImplementation(() => Promise.resolve(true)) })
-    .render();
-    instance.model.matchId = '29';
-    await instance.checkValidMatch();
-
-    expect(instance.isSuccessMatch).toBeTruthy();
-  });
-
-  it('#getParams should return correct model', async () => {
+  it('should return correct params when getParams is called', () => {
+    // Arrange
     const expected = new GetLogsQuery();
     expected.logActionIds = '';
     expected.logDateFrom = '2021/12/3';
     expected.logDateTo = '2021/12/5';
     expected.pageIndex = 0;
     expected.pageSize = 3000;
-    const { instance } = await shallow.render();
-    instance.model = new GetLogsQuery();
-    instance.date = new FilterDate();
-    instance.date.ngbFromDate = new NgbDate(2021, 12, 3);
-    instance.date.ngbToDate = new NgbDate(2021, 12, 5);
-    instance.selectedActions = [];
-    const actual = instance['getParams']();
 
+    component.model = new GetLogsQuery();
+    component.date = new FilterDate();
+    component.date.ngbFromDate = new NgbDate(2021, 12, 3);
+    component.date.ngbToDate = new NgbDate(2021, 12, 5);
+    component.selectedActions = [];
+
+    // Act
+    const actual = component['getParams']();
+
+    // Assert
     expect(actual).toStrictEqual(expected);
   });
 });

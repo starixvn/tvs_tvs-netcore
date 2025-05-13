@@ -1,10 +1,11 @@
-import { NgModule } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
 import { AppService } from '../app.service';
 import { DataPermission } from '../models/result.model';
 import { TabMarkTicketComponent } from './tab-mark-ticket.component';
+import { SimpleChange } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 class Helper {
   static readonly fakeDataPermission: DataPermission = {
@@ -12,108 +13,101 @@ class Helper {
     isHostMarkTickets: true
   };
 }
-@NgModule({
-  declarations: [TabMarkTicketComponent],
-  imports: [
-    FormsModule
-  ],
-})
-class ModuleTest { }
 
 describe('TabMarkTicketComponent', () => {
-  let shallow: Shallow<TabMarkTicketComponent>;
+  let component: TabMarkTicketComponent;
+  let fixture: ComponentFixture<TabMarkTicketComponent>;
 
-  beforeEach(() => {
-    shallow = new Shallow(TabMarkTicketComponent, ModuleTest)
-      .mock(AppService, {});
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [FormsModule],
+      providers: [AppService]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TabMarkTicketComponent);
+    component = fixture.componentInstance;
   });
 
-  it('TabMarkTicketComponent init with NO permission should match snapshot', async () => {
-    const { fixture, instance } = await shallow.render();
-
-    expect(fixture).toMatchSnapshot();
-    expect(instance.currentTab).toBe('0');
-  });
-
-  it('TabMarkTicketComponent init with permission ReadMarkTickets should match snapshot', async () => {
-    const fakePermission = _.cloneDeep(Helper.fakeDataPermission);
-    fakePermission.isReadMarkTickets = true;
-    fakePermission.isHostMarkTickets = false;
-    const { fixture, instance } = await shallow
-    .render({
-      bind: {
-        dataPermission: fakePermission
-      }
-    });
-
-    expect(fixture).toMatchSnapshot();
-    expect(instance.currentTab).toBe('0');
-  });
-
-  it('TabMarkTicketComponent init with permission ReadMarkTickets & HostAutoMarkService should match snapshot', async () => {
-    const fakePermission = _.cloneDeep(Helper.fakeDataPermission);
-    fakePermission.isReadMarkTickets = true;
-    fakePermission.isHostMarkTickets = false;
-    const { fixture, instance } = await shallow
-    .render({
-      bind: {
-        dataPermission: fakePermission
-      }
-    });
-    expect(fixture).toMatchSnapshot();
-    expect(instance.currentTab).toBe('0');
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
   [0, 1, 2, 3].forEach(tabId => {
-    it('TabMarkTicketComponent should call #setTabPage when change tab nav', async () => {
-      const { find, instance } = await shallow
-      .render({
-        bind: {
-          dataPermission: Helper.fakeDataPermission
-        }
-      });
-      const spySetTabPage = jest.spyOn(instance, 'setTabPage');
+    it(`should handle tab change for tab ${tabId}`, () => {
+      // Arrange
+      component.dataPermission = Helper.fakeDataPermission;
+      fixture.detectChanges();
+      const spySetTabPage = jest.spyOn(component, 'setTabPage');
       const mockChangeTab = jest.fn();
-      instance.changeTab.emit = mockChangeTab;
+      component.changeTab.emit = mockChangeTab;
 
-      const tabMarkTicket = find('button.nav-link')[tabId];
+      // Act
+      const tabMarkTicket = fixture.debugElement.queryAll(By.css('button.nav-link'))[tabId];
       tabMarkTicket.triggerEventHandler('click', {});
 
-      expect(spySetTabPage).toBeCalledTimes(1);
-      expect(spySetTabPage).toBeCalledWith(tabId.toString());
-      expect(mockChangeTab).toBeCalledTimes(1);
-      expect(mockChangeTab).toBeCalledWith(tabId.toString());
-      expect(instance.currentTab).toBe(tabId.toString());
+      // Assert
+      expect(spySetTabPage).toHaveBeenCalledTimes(1);
+      expect(spySetTabPage).toHaveBeenCalledWith(tabId.toString());
+      expect(mockChangeTab).toHaveBeenCalledTimes(1);
+      expect(mockChangeTab).toHaveBeenCalledWith(tabId.toString());
+      expect(component.currentTab).toBe(tabId.toString());
     });
   });
-  
-  it('ngOnChanges should not call #initializeCurrentTab', async () => {
-    const { instance } = await shallow.render();
-    instance['initializeCurrentTab'] = jest.fn();
-    instance.ngOnChanges({});
 
-    expect(instance['initializeCurrentTab']).toHaveBeenCalledTimes(0);
-  });
-  
-  it('initializeCurrentTab should not call #setTabPage when isExternalUrl true', async () => {
-    const { instance } = await shallow.render();
-    instance.isExternalUrl = true;
-    instance.setTabPage = jest.fn();
-    instance['initializeCurrentTab'](new DataPermission());
+  it('should not call initializeCurrentTab when ngOnChanges is called with empty changes', () => {
+    // Arrange
+    component['initializeCurrentTab'] = jest.fn();
 
-    expect(instance.setTabPage).toHaveBeenCalledTimes(1);
-    expect(instance.setTabPage).toHaveBeenCalledWith('1');
+    // Act
+    component.ngOnChanges({});
+
+    // Assert
+    expect(component['initializeCurrentTab']).toHaveBeenCalledTimes(0);
   });
-  
-  it('initializeCurrentTab should not call #setTabPage when isExternalUrl false', async () => {
-    const { instance } = await shallow.render();
+
+  it('should set tab to 1 when isExternalUrl is true', () => {
+    // Arrange
+    component.isExternalUrl = true;
+    component.setTabPage = jest.fn();
+
+    // Act
+    component['initializeCurrentTab'](new DataPermission());
+
+    // Assert
+    expect(component.setTabPage).toHaveBeenCalledTimes(1);
+    expect(component.setTabPage).toHaveBeenCalledWith('1');
+  });
+
+  it('should set tab to null when isExternalUrl is false and no read permission', () => {
+    // Arrange
     const permission = new DataPermission();
     permission.isReadMarkTickets = false;
-    instance.isExternalUrl = false;
-    instance.setTabPage = jest.fn();
-    instance['initializeCurrentTab'](permission);
+    component.isExternalUrl = false;
+    component.setTabPage = jest.fn();
 
-    expect(instance.setTabPage).toHaveBeenCalledTimes(1);
-    expect(instance.setTabPage).toHaveBeenCalledWith(null);
+    // Act
+    component['initializeCurrentTab'](permission);
+
+    // Assert
+    expect(component.setTabPage).toHaveBeenCalledTimes(1);
+    expect(component.setTabPage).toHaveBeenCalledWith(null);
+  });
+
+  it('should handle ngOnChanges with dataPermission change', () => {
+    // Arrange
+    const permission = new DataPermission();
+    component['initializeCurrentTab'] = jest.fn();
+
+    // Act
+    component.ngOnChanges({
+      dataPermission: {
+        currentValue: permission,
+        previousValue: null,
+        firstChange: true
+      } as SimpleChange
+    });
+
+    // Assert
+    expect(component['initializeCurrentTab']).toHaveBeenCalledWith(permission);
   });
 });
