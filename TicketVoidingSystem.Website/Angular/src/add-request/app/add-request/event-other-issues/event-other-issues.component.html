@@ -3,7 +3,7 @@
   [matchId]="logInfoEvent.matchId"
   (changeEvent)="changeMatchEvent()">
 </event-league>
-@if (isSubTypeRestart()) {
+@if (isShowFilterTime()) {
   <filter-other-issues #filterOtherIssues
     [isEdit]="isEdit"
     [filterModel]="filter"
@@ -12,7 +12,7 @@
     [model]="logInfoEvent.filterOtherIssues">
   </filter-other-issues>
 }
-@if (!isSubTypeRestart()) {
+@if (!isShowFilterTime()) {
   <div class="btn-reload pt-2">
     <button [disabled]="filter.isVoided" type="button" class="btn btn-default btn-sm ms-0" (click)="refreshEvent()">
       <span><i class="fa fa-refresh" aria-hidden="true"></i></span>

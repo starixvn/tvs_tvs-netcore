@@ -179,7 +179,7 @@ describe('ValidationService', () => {
   describe('isSubTypeRestart', () => {
     it('should return true when subIssueTypeId matches RESTART constant', () => {
       // Act
-      const result = service.isSubTypeRestart(SubIssueTypeConstant.RESTART.toString());
+      const result = service.isOtherIssueSubTypeRestart(SubIssueTypeConstant.RESTART.toString());
 
       // Assert
       expect(result).toBeTruthy();
@@ -187,7 +187,7 @@ describe('ValidationService', () => {
 
     it('should return false when subIssueTypeId does not match RESTART constant', () => {
       // Act
-      const result = service.isSubTypeRestart('different-id');
+      const result = service.isOtherIssueSubTypeRestart('different-id');
 
       // Assert
       expect(result).toBeFalsy();

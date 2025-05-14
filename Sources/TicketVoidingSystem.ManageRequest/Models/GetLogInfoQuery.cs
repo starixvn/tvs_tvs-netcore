@@ -1,6 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.ViewModels;
-
-namespace TicketVoidingSystem.ManageRequest.Models;
+﻿namespace TicketVoidingSystem.ManageRequest.Models;
 
 public class GetLogInfoQuery
 {
@@ -25,6 +23,7 @@ public class GetLogInfoQuery
     public WrongOfferedNameViewModel? WrongOfferedNameModel { get; set; }
     public TechnicalErrorViewModel? TechnicalErrorModel { get; set; }
     public OtherIssuesViewModel? OtherIssuesModel { get; set; }
+    public OtherIssuesViewModel? MatchEarlyCompletedModel { get; set; }
     public bool? IsShowLogOnly { get; set; }
     public DateTime? KickOffTime { get; set; }
 }

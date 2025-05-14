@@ -99,8 +99,13 @@ export class SaveRequestService {
     query.decidedBy = argOtherIssues.others.decidedBy;
     query.remark = argOtherIssues.others.remark;
     if (!argOtherIssues.filter.isVoided) {
-      query.otherIssuesInfo = this.eventOtherIssuesService.getOtherIssuesModel(
-        argOtherIssues.logInfoEvent, argOtherIssues.filter.subIssueTypeId);
+      const otherIssuesInfo = this.eventOtherIssuesService.getOtherIssuesModel(
+        argOtherIssues.logInfoEvent, argOtherIssues.filter.subIssueTypeId, argOtherIssues.filter.issueTypeId);
+      if(StaticService.isOtherIssues(argOtherIssues.filter.issueTypeId)){
+        query.otherIssuesInfo = otherIssuesInfo;
+      } else {
+        query.matchEarlyCompletedInfo = otherIssuesInfo;
+      }
     }
 
     return query;

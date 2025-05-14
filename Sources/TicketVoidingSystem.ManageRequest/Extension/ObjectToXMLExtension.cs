@@ -3,8 +3,6 @@ using System.Security;
 using System.Text;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Utilities;
 
@@ -392,13 +390,7 @@ public static class ObjectToXMLExtension
         var stringBuilder = new StringBuilder();
         foreach (var model in models)
         {
-            var betTypeCountJson = model.BetTypeCount.Select(x => new BetTypeCountJsonModel
-            {
-                BetTypeId = x.BetTypeId,
-                TicketsCount = x.TicketsCount,
-                BetId = x.BetId,
-                PlayerName = x.PlayerName
-            });
+            var betTypeCountJson = GetBetTypeCountJsonModel(model.BetTypeCount);
             var line = $"<r MatchId='{model.MatchId}' "
                        + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                        + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
@@ -471,15 +463,38 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.Trim()}</root>";
     }
 
-    public static string ToEventTechnicalErrorXml(this TechnicalErrorViewModel model)
+    public static string ToEventMatchEarlyCompletedXml(this OtherIssuesViewModel model)
     {
-        var betTypeCountJson = model.BetTypeCount.Select(x => new BetTypeCountJsonModel
+        var betTypeCountJson = GetBetTypeCountJsonModel(model.BetTypeCount);
+        var stringBuilder = $"<r MatchId = '{model.MatchId}' "
+                            + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                            + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
+                            + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
+                            + $"VoidToTime='{model.LogInfoDetail.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                            + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                            + $"BetTypeCount='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(betTypeCountJson))}' "
+                            + $"AdvancedExtraInfo='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.BetTeamsResult))}' "
+                            + $"AllBetTypesSelectionJson='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(model.AllBetTypesSelection))}' />";
+
+        return $"<root>{stringBuilder.Trim()}</root>";
+    }
+
+    private static IEnumerable<BetTypeCountJsonModel> GetBetTypeCountJsonModel(IEnumerable<BetTypeTicketsInfo> betTypeCount)
+    {
+        var betTypeCountJsonModelList = betTypeCount.Select(x => new BetTypeCountJsonModel
         {
             BetTypeId = x.BetTypeId,
             TicketsCount = x.TicketsCount,
             BetId = x.BetId,
             PlayerName = x.PlayerName
         });
+
+        return betTypeCountJsonModelList;
+    }
+
+    public static string ToEventTechnicalErrorXml(this TechnicalErrorViewModel model)
+    {
+        var betTypeCountJson = GetBetTypeCountJsonModel(model.BetTypeCount);
         var stringBuilder = $"<r MatchId = '{model.MatchId}' "
                             + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                             + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "

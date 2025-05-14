@@ -50,6 +50,8 @@ public class GetLogInfoCriteria : CriteriaBase
 
     public string OtherIssuesInfo { get; set; }
 
+    public string? MatchEarlyCompletedInfo { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

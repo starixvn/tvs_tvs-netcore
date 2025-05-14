@@ -2,9 +2,7 @@
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
@@ -111,6 +109,7 @@ public class GetRequestServiceImp(
                 break;
 
             case IssueTypeConstant.OtherIssues:
+            case IssueTypeConstant.MatchEarlyCompleted:
                 viewModel.OtherIssuesModel = await MapEventOtherIssues(secondResultSet);
                 break;
 

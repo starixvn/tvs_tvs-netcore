@@ -194,7 +194,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       { condition: checkIssueType.isRecoverTicket, component: this.eventRecoverTicketComponent },
       { condition: checkIssueType.isWrongMarketOffered, component: this.eventWrongMarketOfferedComponent },
       { condition: checkIssueType.isWrongOfferedName, component: this.eventWrongOfferedNameComponent },
-      { condition: checkIssueType.isOtherIssues, component: this.eventOtherIssuesComponent },
+      { condition: checkIssueType.isOtherIssues || checkIssueType.isMatchEarlyCompleted, component: this.eventOtherIssuesComponent },
       { condition: checkIssueType.isTechnicalError, component: this.eventTechnicalErrorComponent }
     ];
 

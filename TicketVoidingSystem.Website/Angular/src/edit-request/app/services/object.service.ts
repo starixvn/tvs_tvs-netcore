@@ -89,7 +89,7 @@ export class ObjectService {
       args.requestModel.wrongOddsSportsBookModel = args.detailViewModel.wrongOddsSportsBookModel;
     } else if (checkIssueType.isWrongOfferedName) {
       args.requestModel.wrongOfferedNameModel = args.detailViewModel.wrongOfferedNameModel;
-    } else if (checkIssueType.isOtherIssues) {
+    } else if (checkIssueType.isOtherIssues || checkIssueType.isMatchEarlyCompleted) {
       args.requestModel.otherIssuesModel = args.detailViewModel.otherIssuesModel;
     } else if (checkIssueType.isTechnicalError) {
       args.requestModel.technicalErrorModel = args.detailViewModel.technicalErrorModel;

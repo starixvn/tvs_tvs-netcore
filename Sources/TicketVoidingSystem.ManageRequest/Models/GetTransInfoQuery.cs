@@ -1,6 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.ViewModels;
-
-namespace TicketVoidingSystem.ManageRequest.Models;
+﻿namespace TicketVoidingSystem.ManageRequest.Models;
 
 public class GetTransInfoQuery
 {
@@ -27,4 +25,5 @@ public class GetTransInfoQuery
     public TechnicalErrorViewModel? TechnicalErrorModel { get; set; }
     public WrongOfferedNameViewModel? WrongOfferedNameModel { get; set; }
     public OtherIssuesViewModel? OtherIssuesModel { get; set; }
+    public OtherIssuesViewModel? MatchEarlyCompletedModel { get; set; }
 }

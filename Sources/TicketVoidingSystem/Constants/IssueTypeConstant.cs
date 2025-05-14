@@ -25,4 +25,5 @@ public static class IssueTypeConstant
     public const int WrongOddsSportsBook = 25;
     public const int WrongOfferedName = 26;
     public const int OtherIssues = 18;
+    public const int MatchEarlyCompleted = 27;
 }

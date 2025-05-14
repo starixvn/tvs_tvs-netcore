@@ -68,7 +68,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   async ngOnChanges(changes: SimpleChanges) {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
       this.primitiveProps.isShowValidation = false;
-      if (this.isSubTypeRestart()) {
+      if (this.isShowFilterTime()) {
         this.addRequestStore.changeSavingRequestStatus(true);
         this.advancedModeAddRequestModel.checkedBetTypes = [];
         this.resetBetTypeAndAdvancedMode();
@@ -134,7 +134,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
 
   async getGroupBetTypes() {
     this.groupBetTypesModel = await this.eventOtherIssuesService.getGroupBetTypes(
-      this.eventLeagueComponent?.selectedMatch.matchId, this.logInfoEvent.filterOtherIssues, this.filter.subIssueTypeId);
+      this.eventLeagueComponent?.selectedMatch.matchId, this.logInfoEvent.filterOtherIssues, this.filter.subIssueTypeId, this.filter.issueTypeId);
   }
 
   async saveRequest(): Promise<void> {
@@ -151,7 +151,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
       this.logInfoEvent.matchId = this.eventLeagueComponent.selectedMatch.matchId;
       this.addRequestStore.changeSavingRequestStatus(true);
       this.resetBetTypeAndAdvancedMode();
-      if (!this.isSubTypeRestart()) {
+      if (!this.isShowFilterTime()) {
         await this.renderDataBetTypesAdvancedMode();
       }
       this.primitiveProps.isShowErrorNoBetType = false;
@@ -179,10 +179,10 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
     this.primitiveProps.isShowAdvancedModeBetTypes = true;
   }
 
-  isSubTypeRestart() {
-    return this.validationService.isSubTypeRestart(this.filter.subIssueTypeId);
+  isShowFilterTime(){
+    return this.validationService.isShowFilterTime(this.filter.issueTypeId, this.filter.subIssueTypeId);
   }
-
+  
   resetLogInfo(): void {
     this.primitiveProps.isShowErrorNoBetType = false;
     this.primitiveProps.isShowValidation = false;
@@ -203,7 +203,6 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   }
 
   checkingLoadDataAdvancedMode(isLoading: boolean): void {
-    console.log("checkingLoadDataAdvancedMode" + isLoading);
     this.addRequestStore.changeBlockingUiStatus(isLoading);
   }
 

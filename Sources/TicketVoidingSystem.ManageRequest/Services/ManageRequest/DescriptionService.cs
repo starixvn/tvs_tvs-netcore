@@ -1,6 +1,5 @@
 ﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
@@ -37,7 +36,8 @@ public class DescriptionServiceImp(DescriptionElementService elementService) : D
                 {IssueTypeConstant.TechnicalError, BuildMatchLeague},
                 {IssueTypeConstant.WrongOddsSportsBook, BuildVoidTimeMatchLeague},
                 {IssueTypeConstant.WrongOfferedName, BuildMatchLeague},
-                {IssueTypeConstant.OtherIssues, BuildMatchLeague}
+                {IssueTypeConstant.OtherIssues, BuildMatchLeague},
+                {IssueTypeConstant.MatchEarlyCompleted, BuildMatchLeague}
             };
 
         matchingFunctions.TryGetValue(item.IssueTypeId, out var function);

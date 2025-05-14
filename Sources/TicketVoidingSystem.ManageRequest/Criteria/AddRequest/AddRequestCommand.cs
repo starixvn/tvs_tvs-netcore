@@ -42,6 +42,7 @@ public class AddRequestCommand : NonQueryCommand
     public string TechnicalErrorInfo { get; set; }
     public string WrongOfferedNameInfo { get; set; }
     public string OtherIssuesInfo { get; set; }
+    public string? MatchEarlyCompletedInfo { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_Request_Insert";
 

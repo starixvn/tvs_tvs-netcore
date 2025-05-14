@@ -1,6 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.ViewModels;
-
-namespace TicketVoidingSystem.ManageRequest.Models;
+﻿namespace TicketVoidingSystem.ManageRequest.Models;
 
 public class AddRequestQuery
 {
@@ -81,4 +79,6 @@ public class AddRequestQuery
     public TechnicalErrorViewModel? TechnicalErrorInfo { get; set; }
 
     public OtherIssuesViewModel? OtherIssuesInfo { get; set; }
+
+    public OtherIssuesViewModel? MatchEarlyCompletedInfo { get; set; }
 }

@@ -123,6 +123,10 @@ public class GetTransInfoServiceImp(IDynamicRepository repository) : GetTransInf
                 criteria.OtherIssuesInfo = issueInfo;
                 break;
 
+            case IssueTypeConstant.MatchEarlyCompleted:
+                criteria.MatchEarlyCompletedInfo = issueInfo;
+                break;
+
             default:
                 criteria.IssueTypeId = query.IssueTypeId;
                 break;
@@ -200,6 +204,7 @@ public class GetTransInfoServiceImp(IDynamicRepository repository) : GetTransInf
             IssueTypeConstant.WrongOddsSportsBook => query.WrongOddsSportsBookModels.ToWrongOddsSportsBookInfoXml(),
             IssueTypeConstant.WrongOfferedName => query.WrongOfferedNameModel.ToWrongOfferedNameInfoXml(),
             IssueTypeConstant.OtherIssues => query.OtherIssuesModel.ToOtherIssuesInfoXml(),
+            IssueTypeConstant.MatchEarlyCompleted => query.MatchEarlyCompletedModel.ToMatchEarlyCompletedInfoXml(),
             _ => ""
         };
     }

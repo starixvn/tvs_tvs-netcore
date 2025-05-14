@@ -12,6 +12,7 @@ import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model'
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 
+import { GroupBetTypeCountModel } from '../../models/get-log-info.model';
 @Component({
     selector: 'log-info-other-issues',
     templateUrl: './log-info-other-issues.component.html',
@@ -28,8 +29,10 @@ export class LogInfoOtherIssuesComponent implements OnInit {
   @Input() issueTypeId: string;
   @Output() searchEvent = new EventEmitter<string>();
   affectedTicketsModel = new AffectedTicketsModel();
-  private readonly modalService = inject(ModalService);
+  groupBetTypesCount: GroupBetTypeCountModel[] = [];
 
+  private readonly modalService = inject(ModalService);
+  private readonly affectedTicketService = inject(AffectedTicketService);
   ngOnInit(): void {
     if (this.isEdit) {
       this.primitiveProps.isShowValidation = true;
@@ -62,9 +65,19 @@ export class LogInfoOtherIssuesComponent implements OnInit {
   }
 
   public showAffectedTicketsDetails() {
+    this.updateBetTypeCountModel();
     this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
     this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
     this.affectedTicketsModel.isOpen = true;
     this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
+  }
+
+  private updateBetTypeCountModel() {
+    if(StaticService.isOtherIssues(this.issueTypeId)){
+      return;
+    }
+
+    this.affectedTicketsModel.groupBetTypesCount = this.affectedTicketService.updateBetTypeCountModel(this.logInfo.betTypeCount);
+    this.affectedTicketsModel.isShowDetailBetTypeCount = true;
   }
 }

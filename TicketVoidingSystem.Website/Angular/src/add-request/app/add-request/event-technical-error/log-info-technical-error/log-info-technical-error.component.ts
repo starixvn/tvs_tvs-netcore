@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
@@ -29,6 +29,8 @@ export class LogInfoTechnicalErrorComponent {
   @Input() primitiveProps = new PrimitivePropertyEvent();
   @Input() issueTypeId: string;
 
+  private readonly affectedTicketService = inject(AffectedTicketService);
+  
   groupBetTypesCount: GroupBetTypeCountModel[] = [];
   affectedTicketsModel = new AffectedTicketsModel();
   isBlock: boolean;
@@ -46,27 +48,7 @@ export class LogInfoTechnicalErrorComponent {
   }
 
   private updateBetTypeCountModel() {
-    this.groupBetTypesCount = [];
-    const groupBetTypes = _.groupBy(this.logInfo.betTypeCount, item => `"${item.betTypeId}+${item.betId}"`);
-    for (const key in groupBetTypes) {
-      const values = groupBetTypes[key];
-
-      const childBetTypes = values
-        .filter(item => item.playerName)
-        .map(item => {
-          return {
-            name: `${item.playerName} - ${item.ticketsCount} ticket(s)`
-          } as Item;
-        });
-      const group: GroupBetTypeCountModel = {
-        name: values[0].playerName ? `${values[0].betTypeName}:` : `${values[0].betTypeName} - ${values[0].ticketsCount} ticket(s)`,
-        items: childBetTypes
-      };
-
-      this.groupBetTypesCount.push(group);
-    };
-
-    this.affectedTicketsModel.groupBetTypesCount = this.groupBetTypesCount;
+    this.affectedTicketsModel.groupBetTypesCount = this.affectedTicketService.updateBetTypeCountModel(this.logInfo.betTypeCount);
     this.affectedTicketsModel.isShowDetailBetTypeCount = true;
   }
 
