@@ -140,7 +140,7 @@ public static class LogInfoHelper
     private static string GetScoreNormalTicket(string? separator, List<LogInfoDetail> selectedItems)
     {
         var scores = selectedItems.SelectMany(x => (x.ScoreNormalTicket ?? "")
-                .Split("|", StringSplitOptions.RemoveEmptyEntries)).Distinct();
+                .Split("|", StringSplitOptions.RemoveEmptyEntries)).Distinct().OrderBy(x => x);
 
         return string.Join(separator, scores);
     }
@@ -161,7 +161,7 @@ public static class LogInfoHelper
     public static IEnumerable<BetTypeTicketsInfo> CombineBetTypes(IEnumerable<BetTypeTicketsInfo> models)
     {
         return models
-            .GroupBy(x => new { x.Id, x.BetTypeId, x.BetId, x.PlayerAndOdds })
+            .GroupBy(x => new { x.Id, x.BetTypeId, x.BetId, x.PlayerAndOdds, x.PlayerName })
             .Select(g =>
             {
                 var first = g.First();
@@ -178,6 +178,7 @@ public static class LogInfoHelper
                     PlayerName = first.PlayerName,
                     TicketsCount = g.Sum(x => x.TicketsCount)
                 };
-            });
+            })
+            .OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetTypeId);
     }
 }

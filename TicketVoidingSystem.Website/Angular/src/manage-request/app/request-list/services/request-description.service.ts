@@ -49,7 +49,7 @@ export class RequestDescriptionService {
   }
 
   private createReducedOversOrAbandonedContent(copyInfoResponse: CopyRequestInfoResponse): string {
-    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
+    const groupBetTypes = this.cloneGroupBetTypes(copyInfoResponse.betTypeTickets);
     let outputContent = '';
 
     for (const key in groupBetTypes) {
@@ -66,8 +66,12 @@ export class RequestDescriptionService {
     return this.createCommonContent(copyInfoResponse, outputContent, '', false, false);
   }
 
+  cloneGroupBetTypes(betTypeTickets: BetTypeTicketsInfo[]) {
+    return _.groupBy(betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
+  }
+
   private createNotParticipateContent(copyInfoResponse: CopyRequestInfoResponse): string {
-    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, "betTypeId");
+    const groupBetTypes = this.cloneGroupBetTypes(copyInfoResponse.betTypeTickets);
     let betTypeContent = '';
 
     for (const key in groupBetTypes) {
@@ -117,7 +121,7 @@ export class RequestDescriptionService {
   }
 
   private generateBetTypeContent(betTypeTickets: BetTypeTicketsInfo[]): string {
-    const groupBetTypes = _.groupBy(betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
+    const groupBetTypes = this.cloneGroupBetTypes(betTypeTickets);
     let betTypeContent = '';
 
     for (const key in groupBetTypes) {
