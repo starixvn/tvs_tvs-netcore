@@ -95,7 +95,7 @@ public class LogInfoServiceImp(
             ScoreId = item.ScoreId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId),
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId),
             MatchId = item.MatchId
         }).ToList();
     }
@@ -108,7 +108,7 @@ public class LogInfoServiceImp(
             MatchId = item.MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId)
         }).ToList();
     }
 
@@ -120,7 +120,7 @@ public class LogInfoServiceImp(
             MatchId = item.MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId)
         }).ToList();
     }
 
@@ -132,7 +132,7 @@ public class LogInfoServiceImp(
             MatchId = item.MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId)
         }).ToList();
     }
 
@@ -144,7 +144,7 @@ public class LogInfoServiceImp(
             MatchId = item.MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId)
         }).ToList();
     }
 
@@ -156,7 +156,7 @@ public class LogInfoServiceImp(
             MatchId = item.MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId)
         }).ToList();
     }
 
@@ -168,7 +168,7 @@ public class LogInfoServiceImp(
             MatchId = item.MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId)
         }).ToList();
     }
 
@@ -180,7 +180,7 @@ public class LogInfoServiceImp(
             MatchId = item.MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId)
         }).ToList();
     }
 
@@ -192,7 +192,7 @@ public class LogInfoServiceImp(
             MatchId = item.MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId)
         }).ToList();
     }
 
@@ -204,7 +204,7 @@ public class LogInfoServiceImp(
             MatchId = item.MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId)
         }).ToList();
     }
 
@@ -216,7 +216,7 @@ public class LogInfoServiceImp(
             MatchId = item.MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => x.MatchId == item.MatchId)
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId)
         }).ToList();
     }
 
@@ -231,7 +231,7 @@ public class LogInfoServiceImp(
             MatchId = query.WrongMarketOfferedModels.First().MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.Id == item.Id),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.Id == item.Id),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => x.Id == item.Id),
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.Id == item.Id),
             BetTypeCount = preparedBetTypeCount.Where(x => x.Id == item.Id)
                 .OrderBy(x => x.OriginalBetTypeName)
                 .ThenBy(x => x.BetId)
@@ -248,7 +248,7 @@ public class LogInfoServiceImp(
                 MatchId = query.WrongOddsSportsBookModel.MatchId,
                 Validation = LogInfoHelper.CombineValidations(validations, x => true),
                 TicketRequest = ticketRequests,
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => true)
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true)
             }
         ];
     }
@@ -263,7 +263,7 @@ public class LogInfoServiceImp(
                 MatchId = query.WrongOfferedNameModel.MatchId,
                 Validation = LogInfoHelper.CombineValidations(validations, x => true),
                 TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => true)
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true)
             }
         ];
     }
@@ -278,7 +278,7 @@ public class LogInfoServiceImp(
                 MatchId = query.OtherIssuesModel.MatchId,
                 Validation = LogInfoHelper.CombineValidations(validations, x => true),
                 TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => true),
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true),
             }
         ];
     }
@@ -294,7 +294,7 @@ public class LogInfoServiceImp(
                 MatchId = query.TechnicalErrorModel.MatchId,
                 Validation = LogInfoHelper.CombineValidations(validations, x => true),
                 TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => true),
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true),
                 BetTypeCount = preparedBetTypeCount.OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetId)
             }
         ];
@@ -309,7 +309,7 @@ public class LogInfoServiceImp(
             {
                 Validation = LogInfoHelper.CombineValidations(validations, x => true),
                 TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => true)
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true)
             }
         ];
     }

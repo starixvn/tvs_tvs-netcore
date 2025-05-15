@@ -59,13 +59,14 @@ public static class LogInfoHelper
         return betTypeTickets.Where(filter);
     }
 
-    public static LogInfoDetail CombineLogInfoDetail(IEnumerable<LogInfoDetail> logInfoDetails, Func<LogInfoDetail, bool> filter)
+    public static LogInfoDetail CombineLogInfoDetail(IEnumerable<Validation> validations, IEnumerable<LogInfoDetail> logInfoDetails, Func<LogInfoDetail, bool> filter)
     {
         var selectedItems = logInfoDetails.Where(filter).ToList();
-        if (selectedItems.Count == 0)
+        if (validations.All(x => x.IsInvalidTotalTickets) || selectedItems.Count == 0)
         {
             return null;
         }
+
         var minObject = GetMinObjectByPriority(selectedItems);
 
         return new LogInfoDetail
