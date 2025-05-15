@@ -22,7 +22,7 @@ import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.mo
 import { LogInfoRelatedEvent } from './log-info-related-event.model';
 import { LogInfoRelatedEventService } from './log-info-related-event.service';
 import { PrimitiveProperty } from './primitive-property.model';
-
+ 
 @Component({
   standalone: true,
   selector: 'log-info-related-event',
@@ -91,6 +91,7 @@ export class LogInfoRelatedEventComponent {
   }
 
   hideValidationDetail() {
+    this.logInfo.logInfoDetail.isHasWarningRangeTime = false;
     this.isShowValidation = false;
   }
 
