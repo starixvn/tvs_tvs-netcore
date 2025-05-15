@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -14,6 +13,7 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.Notification;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.Add;
@@ -26,7 +26,6 @@ public class AddRequestProcessStageTests
     private readonly AccountWinLostService accountWinLostService;
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
     private readonly GetUpdateResultService getUpdateResultService;
-    private readonly CompressDataService compressDataService;
     private readonly AddRequestProcessStageImp service;
 
     public AddRequestProcessStageTests()
@@ -39,42 +38,10 @@ public class AddRequestProcessStageTests
         insertAutoVoidRequestQueueService = Substitute.For<InsertAutoVoidRequestQueueService>();
         var sendLetstalkAfterAddService = Substitute.For<SendLetstalkAfterAddService>();
         getUpdateResultService = Substitute.For<GetUpdateResultService>();
-        compressDataService = Substitute.For<CompressDataService>();
-        service = new AddRequestProcessStageImp(mapper, repository, sessionService, loggingService,
-            accountWinLostService, insertAutoVoidRequestQueueService, sendLetstalkAfterAddService, getUpdateResultService, compressDataService);
-    }
-
-    [Fact]
-    public async Task Execute_HasErrorInsertAutoVoidRequest_WriteLogError()
-    {
-        // Arrange
-        List<long> markedTicketsSuccessful = [1, 2];
-        var query = new AddRequestQuery
-        {
-            IssueTypeId = 13,
-            MatchId = 456,
-            OperatorsList = [new OperatorQuery { OperatorId = 1 }],
-            AbnormalAccountInfo = new AbnormalAccountViewModel
-            {
-                FromDate = DateTime.MinValue,
-                ToDate = DateTime.MinValue,
-                AccountWinlostModels = []
-            },
-            ActionId = ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
-        };
-        var exception = new Exception("Has error when insertAutoVoidRequestQueue");
-        mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
-        sessionService.GetClientIp().Returns("127.00.17");
-        insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo).Throws(exception);
-        getUpdateResultService.CreateErrorResult(exception, markedTicketsSuccessful).Returns(new Result { ErrorCode = 1, ErrorMsg = "Has error when insertAutoVoidRequestQueue" });
-
-        // Act
-        var result = await service.Execute(query, markedTicketsSuccessful);
-
-        // Assert
-        Assert.False(result.IsSuccessful);
-        await loggingService.Received(1).ErrorAsync(exception);
-        getUpdateResultService.Received(1).CreateErrorResult(exception, markedTicketsSuccessful);
+        var compressDataService = Substitute.For<CompressDataService>();
+        var notificationService = Substitute.For<NotificationService>();
+        service = new AddRequestProcessStageImp(mapper, repository, sessionService, accountWinLostService, insertAutoVoidRequestQueueService,
+            sendLetstalkAfterAddService, getUpdateResultService, compressDataService, notificationService);
     }
 
     [Fact]
@@ -89,11 +56,11 @@ public class AddRequestProcessStageTests
             OperatorsList = [new OperatorQuery { OperatorId = 1 }],
             WrongScoreInfo = [new WrongScoreInfoViewModel
             {
-                LogInfoDetail = new LogInfoDetail{HighlightMinTime = DateTime.MinValue},
-                FilterFromTransTime = DateTime.MinValue,
-                FilterToTransTime = DateTime.MinValue,
-                VoidFromTime = DateTime.MinValue,
-                VoidToTime = DateTime.MinValue,
+                LogInfoDetail = new LogInfoDetail{HighlightMinTime = DateTimeOffset.MinValue.DateTime},
+                FilterFromTransTime = DateTimeOffset.MinValue.DateTime,
+                FilterToTransTime = DateTimeOffset.MinValue.DateTime,
+                VoidFromTime = DateTimeOffset.MinValue.DateTime,
+                VoidToTime = DateTimeOffset.MinValue.DateTime,
                 MatchId = 456
             }]
         };
@@ -101,10 +68,10 @@ public class AddRequestProcessStageTests
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
         sessionService.GetClientIp().Returns("127.00.17");
         insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-        getUpdateResultService.CreateSuccessResult(1, "456", markedTicketsSuccessful).Returns(new Result());
+        getUpdateResultService.CreateSuccessResult(1, "456").Returns(new Result());
 
         // Act
-        var result = await service.Execute(query, markedTicketsSuccessful);
+        var result = await service.Execute(query);
 
         // Assert
         Assert.True(result.IsSuccessful);
@@ -122,9 +89,9 @@ public class AddRequestProcessStageTests
             OperatorsList = [new OperatorQuery { OperatorId = 1 }],
             WrongHdpInfo = [new WrongHdpViewModel
             {
-                LogInfoDetail = new LogInfoDetail{VoidFromTime = DateTime.MinValue, VoidToTime = DateTime.MinValue,},
-                FilterFromTransTime = DateTime.MinValue,
-                FilterToTransTime = DateTime.MinValue,
+                LogInfoDetail = new LogInfoDetail{VoidFromTime = DateTimeOffset.MinValue.DateTime, VoidToTime = DateTimeOffset.MinValue.DateTime,},
+                FilterFromTransTime = DateTimeOffset.MinValue.DateTime,
+                FilterToTransTime = DateTimeOffset.MinValue.DateTime,
                 MatchId = 456,
                 IsMainMatch = true
             }]
@@ -133,10 +100,10 @@ public class AddRequestProcessStageTests
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
         sessionService.GetClientIp().Returns("127.00.17");
         insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-        getUpdateResultService.CreateSuccessResult(1, "456", markedTicketsSuccessful).Returns(new Result());
+        getUpdateResultService.CreateSuccessResult(1, "456").Returns(new Result());
 
         // Act
-        var result = await service.Execute(query, markedTicketsSuccessful);
+        var result = await service.Execute(query);
 
         // Assert
         Assert.True(result.IsSuccessful);
@@ -154,8 +121,8 @@ public class AddRequestProcessStageTests
             OperatorsList = [new OperatorQuery { OperatorId = 1 }],
             AbnormalAccountInfo = new AbnormalAccountViewModel
             {
-                FromDate = DateTime.MinValue,
-                ToDate = DateTime.MinValue,
+                FromDate = DateTimeOffset.MinValue.DateTime,
+                ToDate = DateTimeOffset.MinValue.DateTime,
                 AccountWinlostModels = []
             },
             ActionId = ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
@@ -164,10 +131,10 @@ public class AddRequestProcessStageTests
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
         sessionService.GetClientIp().Returns("127.00.17");
         insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-        getUpdateResultService.CreateSuccessResult(1, "", markedTicketsSuccessful).Returns(new Result());
+        getUpdateResultService.CreateSuccessResult(1, "").Returns(new Result());
 
         // Act
-        var result = await service.Execute(query, markedTicketsSuccessful);
+        var result = await service.Execute(query);
 
         // Assert
         Assert.True(result.IsSuccessful);
@@ -186,11 +153,11 @@ public class AddRequestProcessStageTests
             OperatorsList = [new OperatorQuery { OperatorId = 1 }],
             DangerAcceptedInfo = [new DangerAcceptedViewModel
             {
-                LogInfoDetail = new LogInfoDetail{TransVoidToTime = DateTime.MinValue, HighlightMinTime = DateTime.MinValue},
-                FilterFromTransTime = DateTime.MinValue,
-                FilterToTransTime = DateTime.MinValue,
-                VoidFromTime = DateTime.MinValue,
-                VoidToTime = DateTime.MinValue,
+                LogInfoDetail = new LogInfoDetail{TransVoidToTime = DateTimeOffset.MinValue.DateTime, HighlightMinTime = DateTimeOffset.MinValue.DateTime},
+                FilterFromTransTime = DateTimeOffset.MinValue.DateTime,
+                FilterToTransTime = DateTimeOffset.MinValue.DateTime,
+                VoidFromTime = DateTimeOffset.MinValue.DateTime,
+                VoidToTime = DateTimeOffset.MinValue.DateTime,
                 MatchId = 456,
                 IsMainMatch = true
             }]
@@ -199,10 +166,10 @@ public class AddRequestProcessStageTests
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
         sessionService.GetClientIp().Returns("127.00.17");
         insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-        getUpdateResultService.CreateSuccessResult(1, "456", markedTicketsSuccessful).Returns(new Result());
+        getUpdateResultService.CreateSuccessResult(1, "456").Returns(new Result());
 
         // Act
-        var result = await service.Execute(query, markedTicketsSuccessful);
+        var result = await service.Execute(query);
 
         // Assert
         Assert.True(result.IsSuccessful);
@@ -238,10 +205,10 @@ public class AddRequestProcessStageTests
             WrongOuInfo = [new WrongOuViewModel { MatchId = 456, LogInfoDetail = new LogInfoDetail() }],
             Wrong1stOuInfo = [new WrongOuViewModel { MatchId = 456, LogInfoDetail = new LogInfoDetail() }],
             RedCardInfo = [new DangerAcceptedViewModel { MatchId = 456, LogInfoDetail = new LogInfoDetail(),
-                FilterFromTransTime = DateTime.MinValue, FilterToTransTime = DateTime.MinValue,
-                VoidFromTime = DateTime.MinValue, VoidToTime = DateTime.MinValue}],
+                FilterFromTransTime = DateTimeOffset.MinValue.DateTime, FilterToTransTime = DateTimeOffset.MinValue.DateTime,
+                VoidFromTime = DateTimeOffset.MinValue.DateTime, VoidToTime = DateTimeOffset.MinValue.DateTime}],
             WrongOddsInfo = [new WrongOddsViewModel { MatchId = 456, LogInfoDetail = new LogInfoDetail(),
-                FilterFromTransTime = DateTime.MinValue, FilterToTransTime = DateTime.MinValue}],
+                FilterFromTransTime = DateTimeOffset.MinValue.DateTime, FilterToTransTime = DateTimeOffset.MinValue.DateTime}],
             ReducedOverInfo = [new ReducedOverViewModel { MatchId = 456, LogInfoDetail = new LogInfoDetail() }],
             NotParticipateInfo = [new NotParticipateViewModel { MatchId = 456, LogInfoDetail = new LogInfoDetail() }],
             EarlyKickOffInfo = [new EarlyKickOffViewModel { MatchId = 456, KickOffTime = DateTime.Now, IsMainMatch = true }],
@@ -250,17 +217,17 @@ public class AddRequestProcessStageTests
             WrongMarketOfferedInfo = [new WrongMarketOfferedViewModel
             {
                 MatchId = 456,
-                FilterFromTransTime = DateTime.MinValue,
-                FilterToTransTime = DateTime.MinValue,
-                LogInfoDetail = new LogInfoDetail { VoidFromTime = DateTime.MinValue, VoidToTime = DateTime.MinValue },
+                FilterFromTransTime = DateTimeOffset.MinValue.DateTime,
+                FilterToTransTime = DateTimeOffset.MinValue.DateTime,
+                LogInfoDetail = new LogInfoDetail { VoidFromTime = DateTimeOffset.MinValue.DateTime, VoidToTime = DateTimeOffset.MinValue.DateTime },
                 BetTypeCount = new List<BetTypeTicketsInfo> { new() },
                 AllBetTypesSelection = []
             }],
             WrongOddsSportsBookInfo = new WrongOddsSportsBookViewModel
             {
                 MatchId = 456,
-                FilterFromTransTime = DateTime.MinValue,
-                FilterToTransTime = DateTime.MinValue,
+                FilterFromTransTime = DateTimeOffset.MinValue.DateTime,
+                FilterToTransTime = DateTimeOffset.MinValue.DateTime,
                 LogInfoDetail = new LogInfoDetail()
             },
             WrongOfferedNameInfo = new WrongOfferedNameViewModel { MatchId = 456 },
@@ -270,10 +237,10 @@ public class AddRequestProcessStageTests
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
         sessionService.GetClientIp().Returns("127.00.17");
         insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-        getUpdateResultService.CreateSuccessResult(1, "456", markedTicketsSuccessful).ReturnsForAnyArgs(new Result());
+        getUpdateResultService.CreateSuccessResult(1, "456").ReturnsForAnyArgs(new Result());
 
         // Act
-        var result = await service.Execute(query, markedTicketsSuccessful);
+        var result = await service.Execute(query);
 
         // Assert
         Assert.True(result.IsSuccessful);

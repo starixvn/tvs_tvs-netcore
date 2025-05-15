@@ -1,0 +1,59 @@
+@if (isOpen) {
+<div class="notification-container">
+  <div class="tabs d-flex">
+    <div class="tab" [class.active]="activeTab === 'Notification'" (click)="selectTab('Notification')">
+      Notification
+      @if(unreadNotificationCount != '0') {
+        <span class="badge rounded-pill bg-primary">{{ unreadNotificationCount }}</span>
+      }
+    </div>
+    <div class="tab" [class.active]="activeTab === 'Error'" (click)="selectTab('Error')">
+      Error
+      @if(unreadErrorCount != '0') {
+        <span class="badge rounded-pill bg-danger">{{ unreadErrorCount }}</span>
+      }
+    </div>
+  </div>
+
+  <div class="filter-options">
+    <div class="filter-tabs">
+      <span class="badge rounded-pill text-bg-primary" [ngClass]="{
+          'text-bg-light': filterTab !== 'All',
+          'text-bg-primary': filterTab === 'All'
+        }" (click)="selectFilterTab('All')">All</span>
+      <span class="badge rounded-pill" [ngClass]="{
+          'text-bg-light': filterTab !== 'Unread',
+          'text-bg-primary': filterTab === 'Unread'
+        }" (click)="selectFilterTab('Unread')">Unread</span>
+    </div>
+
+    <span class="mark-all" (click)="markAllAsRead()">Mark all as read</span>
+  </div>
+
+  <div class="notification-list" [ngStyle]="{ 'max-height.px': notificationHeight }" [@fadeSlide]>
+    @for (group of groupedNotifications; track group[0]) {
+    <div class="notification-date">{{ group[0] }}</div>
+    @for (notification of group[1]; track notification.content; let isLast = $last) {
+    <div class="notification" [class.unread]="!notification.isRead" [class.last-item]="isLast"
+      (click)="clickNotification($event, notification)">
+      <p [innerHTML]="notification.content"></p>
+      <span class="time">{{ notification.createdDate | date:'hh:mm:ss a' }}</span>
+      @if (!notification.isRead) {
+      <div class="unread-dot"></div>
+      }
+    </div>
+    }
+    }
+  </div>
+
+  <div class="show-toggle" (click)="toggleNotifications()">
+    <span>
+      {{ isExpanded ? 'Show less' : 'Show more' }}
+      <i class="ml-1 fa-solid" [ngClass]="{
+          'fa-angle-up': isExpanded,
+          'fa-angle-down': !isExpanded
+        }"></i>
+    </span>
+  </div>
+</div>
+}

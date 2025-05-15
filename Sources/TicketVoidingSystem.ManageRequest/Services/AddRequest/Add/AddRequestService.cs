@@ -1,5 +1,7 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
+﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.Notification;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
@@ -11,19 +13,36 @@ public interface AddRequestService
 public class AddRequestServiceImp(
     AddRequestProcessStage addRequestProcessStage,
     MarkTicketsWhenAddEditService marketTicketsWhenEditService,
-    GetUpdateResultService getUpdateResultService)
+    GetUpdateResultService getUpdateResultService,
+    LoggingService loggingService,
+    NotificationService notificationService)
     : AddRequestService
 {
     public async Task<Result> Execute(AddRequestQuery query)
     {
         var markTicketResult = await marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds);
-
-        var markTicketError = getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService), markTicketResult.MarkedTickets);
+        var markTicketError = getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService));
         if (markTicketError != null)
         {
+            NotifyAddRequestError(markTicketResult);
             return markTicketError;
         }
 
-        return await addRequestProcessStage.Execute(query, markTicketResult.MarkedTickets);
+        try
+        {
+            return await addRequestProcessStage.Execute(query);
+        }
+        catch (Exception exception)
+        {
+            NotifyAddRequestError(markTicketResult);
+            _ = loggingService.ErrorAsync(exception);
+            return getUpdateResultService.CreateErrorResult(exception);
+        }
+    }
+
+    private void NotifyAddRequestError(MarkTicketsResult markTicketResult)
+    {
+        var content = MessageHelper.CreateAddRequestFailed(markTicketResult.MarkedTickets.Count());
+        notificationService.ExecuteBackground(() => notificationService.InsertNotification(NotificationType.Error, content, NotificationTargetType.IgnoreCurrentUser, null));
     }
 }

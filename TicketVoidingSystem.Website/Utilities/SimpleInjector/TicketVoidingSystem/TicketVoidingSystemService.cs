@@ -9,6 +9,7 @@ using TicketVoidingSystem.Services.Letstalk.GroupAbnormalBetRequest;
 using TicketVoidingSystem.Services.Letstalk.GroupTicketListing;
 using TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
 using TicketVoidingSystem.Services.NetPosition;
+using TicketVoidingSystem.Services.Notification;
 using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Subject;
 using TicketVoidingSystem.Services.SendEmail.Void;
@@ -33,6 +34,7 @@ public static class TicketVoidingSystemService
         services.AddTransient<MatchService, MatchServiceImp>();
         services.AddSingleton<LogActionFilterAttribute>();
         services.AddSingleton<ResultCacheService, ResultCacheServiceImp>();
+        services.AddTransient<NotificationService, NotificationServiceImp>();
 
         //Letstalk
         services.AddSingleton<LetstalkClientService, LetstalkClientServiceImp>();

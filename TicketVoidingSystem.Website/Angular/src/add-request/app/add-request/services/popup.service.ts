@@ -26,12 +26,10 @@ export class PopupService {
 
   showAddedRequestSuccessful(query: AddRequestQuery, addRequestResult: AddRequestResultModel, onOkCallback: () => void) {
     const matchIdsContent = this.getMatchIdsContent(query, addRequestResult);
-    const markTicketsContent = this.getMarkTicketsContent(query, addRequestResult);
-
     this.modalService.open(
       {
         title: LABELS.ADD_REQUEST_RESULT_TITLE,
-        message: `<div>Request No.<strong>${addRequestResult.requestId}</strong> added successfully!</div>${matchIdsContent}${markTicketsContent}`,
+        message: `<div>Request No.<strong>${addRequestResult.requestId}</strong> added successfully</div>${matchIdsContent}`,
         type: ModalType.Alert
       },
       onOkCallback
@@ -39,12 +37,10 @@ export class PopupService {
   }
 
   showEditedRequestSuccessful(query: AddRequestQuery, addRequestResult: AddRequestResultModel, onOkCallback: () => void) {
-    const markTicketsContent = this.getMarkTicketsContent(query, addRequestResult);
-
     this.modalService.open(
       {
         title: LABELS.EDIT_REQUEST_RESULT_TITLE,
-        message: `Request No.<strong>${addRequestResult.requestId}</strong> edited successfully!${markTicketsContent}`,
+        message: `Request No.<strong>${addRequestResult.requestId}</strong> edited successfully`,
         type: ModalType.Alert
       },
       onOkCallback
@@ -52,12 +48,10 @@ export class PopupService {
   }
 
   showSaveRequestError(query: AddRequestQuery, addResult: Result<AddRequestResultModel>, titleMessage: string) {
-    const markTicketsContent = this.getMarkTicketsContent(query, addResult.data);
-
     this.modalService.open(
       {
         title: titleMessage,
-        message: `Error: ${addResult.errorMsg}${markTicketsContent}`,
+        message: `Error: ${addResult.errorMsg}`,
         type: ModalType.Error
       },
       () => { }
@@ -98,18 +92,5 @@ export class PopupService {
     }
 
     return `<div class="ms-2 mt-1">- Match(es): <strong>${addRequestResult.matchId}</strong></div>`;
-  }
-
-  private getMarkTicketsContent(query: AddRequestQuery, addRequestResult: AddRequestResultModel): string {
-    if (!addRequestResult?.markedTicketsSuccessful) {
-      return '';
-    }
-    const totalTicketsMarked = addRequestResult.markedTicketsSuccessful.length;
-    if (StaticService.isAbnormalBet(query.issueTypeId) && totalTicketsMarked) {
-      const totalTicketsInputted = query.abnormalBetInfo.transIds.split(',').length;
-      return `<div class="mt-1">Marked Ticket(s): <strong>${totalTicketsMarked}/${totalTicketsInputted}</strong></div>`;
-    }
-
-    return '';
   }
 }

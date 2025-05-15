@@ -1,53 +1,49 @@
 ﻿using AutoMapper;
 using Fanex.Data.Repository;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.Notification;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 
 public interface UpdateRequestProcessStage
 {
-    Task<Result> Execute(EditRequestQuery query, IEnumerable<long> markedTicketsSuccessful);
+    Task<Result> Execute(EditRequestQuery query);
 }
 
 public class UpdateRequestProcessStageImp(
     IMapper mapper,
     IDynamicRepository repository,
-    LoggingService loggingService,
     AccountWinLostService accountWinLostService,
     SessionService sessionService,
     InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
     GetUpdateResultService getUpdateResultService,
-    CompressDataService compressDataService)
+    CompressDataService compressDataService,
+    NotificationService notificationService)
     : UpdateRequestProcessStage
 {
-    public async Task<Result> Execute(EditRequestQuery query, IEnumerable<long> markedTicketsSuccessful)
+    public async Task<Result> Execute(EditRequestQuery query)
     {
-        try
+        var command = CreateEditRequestCommand(query);
+        var matchIdsAutoVoidRequestQueue = insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
+        await repository.ExecuteAsync(command);
+        await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, matchIdsAutoVoidRequestQueue);
+        if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
         {
-            var command = CreateEditRequestCommand(query);
-            var matchIdsAutoVoidRequestQueue = insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
-            await repository.ExecuteAsync(command);
-            await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, matchIdsAutoVoidRequestQueue);
-            if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
-            {
-                await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
-            }
+            await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
+        }
+        notificationService.ExecuteBackground(()
+            => notificationService.InsertNotification(NotificationType.Notification,
+                MessageHelper.CreateEditRequestSuccessfully(query.RequestId, sessionService.UserName), NotificationTargetType.IgnoreCurrentUser, query.RequestId));
 
-            return getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString(), markedTicketsSuccessful);
-        }
-        catch (Exception exception)
-        {
-            await loggingService.ErrorAsync(exception);
-            return getUpdateResultService.CreateErrorResult(exception, markedTicketsSuccessful);
-        }
+        return getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString());
     }
 
     private EditRequestCommand CreateEditRequestCommand(EditRequestQuery query)  // NOSONAR

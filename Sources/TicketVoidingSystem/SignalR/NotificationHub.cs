@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Models.Notification;
 
 namespace TicketVoidingSystem.SignalR;
 
@@ -14,4 +15,6 @@ public interface ClientEvent
     Task updateRequestStatus(IEnumerable<RequestStatus> status);
 
     Task showErrorMessage(string message);
+
+    Task pushNotification(NotificationModel notification);
 }

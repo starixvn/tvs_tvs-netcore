@@ -282,6 +282,8 @@
         <Setting Key="TicketVoiding_DecidedBy_Select" SpName="TicketVoiding_DecidedBy_Select" DbName="DBCUST.CustDB.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_Currency_Select" SpName="TicketVoiding_Currency_Select" DbName="DBCUST.CustDB.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_Licensees_Select" SpName="TicketVoiding_Licensees_Select" DbName="DBOIC.bodb_OIC.wsv_nap" TimeOut="600" />
+        <Setting Key="TicketVoiding_Notification_Select" SpName="TicketVoiding_Notification_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="TicketVoiding_Notification_Update" SpName="TicketVoiding_Notification_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
     </Function>
     <Function Name="AbnormalAccount">
         <Setting Key="DBCTG.TicketVoiding_CheckUserName" SpName="TicketVoiding_CheckUserName" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />

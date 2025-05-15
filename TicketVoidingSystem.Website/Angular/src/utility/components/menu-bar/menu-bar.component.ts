@@ -1,8 +1,12 @@
-
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
+import { SignalRService } from 'src/utility/services/signal-r.service.native';
 import { CommonService } from '../../../utility/services/common.service';
+import { NotificationPopupComponent } from '../notification-popup/notification-popup.component';
+import { NotificationPopupService } from '../notification-popup/notification-popup.service';
 import { MenuItem } from './menu-bar.model';
 
 @Component({
@@ -10,14 +14,20 @@ import { MenuItem } from './menu-bar.model';
   selector: 'menu-bar',
   templateUrl: './menu-bar.component.html',
   styleUrls: ['./menu-bar.component.scss'],
-  imports: [FormsModule]
+  imports: [CommonModule, FormsModule, NotificationPopupComponent]
 })
 export class MenuBarComponent implements OnInit {
   menuItems: MenuItem[] = [];
   username: string;
   isBlock: boolean;
   rootUrl = '/';
-  private readonly commonService = inject(CommonService);
+  notificationIconClass = '';
+  notificationIconClassSubscription: Subscription;
+  private notificationTimer: any;
+
+  notificationService = inject(NotificationPopupService);
+  commonService = inject(CommonService);
+  signalRService = inject(SignalRService);
 
   async ngOnInit(): Promise<void> {
     this.isBlock = true;
@@ -31,6 +41,35 @@ export class MenuBarComponent implements OnInit {
         t.items = _.orderBy(_.uniqBy(t.items, x => x.id), ['displayOrder'], ['asc']);
       });
       this.isBlock = false;
+    }
+
+    this.notificationIconClassSubscription = this.signalRService.notificationIconClass.subscribe((value: string) => {
+      this.notificationIconClass = value;
+      if (value) {
+        // Clear any existing timer
+        if (this.notificationTimer) {
+          clearTimeout(this.notificationTimer);
+        }
+        // Set new timer to remove class after 5 seconds
+        this.notificationTimer = setTimeout(() => {
+          this.notificationIconClass = 'fa-bell-unread';
+        }, 5000);
+      }
+    });
+  }
+
+  toggleNotification(event: Event) {
+    event.stopPropagation();
+    this.notificationIconClass = '';
+    this.notificationService.toggle();
+  }
+
+  ngOnDestroy() {
+    if (this.notificationTimer) {
+      clearTimeout(this.notificationTimer);
+    }
+    if (this.notificationIconClassSubscription) {
+      this.notificationIconClassSubscription.unsubscribe();
     }
   }
 }
