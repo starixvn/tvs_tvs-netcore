@@ -1,21 +1,21 @@
 @if(isShowMessages) {
-  <div class="message-handler">
+  <div class="d-flex message-handler">
     @if(isShowDynamicInputs()){
       <ng-container>
-        @for  (item of selectedTemplated.inputTexts; track item) {
-          <div>
+        @for (item of selectedTemplated.inputTexts; track item) {
+          <div class="me-3">
             <label>{{item.msgEnglish}}</label>
             <input type="text" class="form-control form-control-sm" [(ngModel)]="item.msgEnglishValue" (ngModelChange)="setChineseInput(item);updateMessage()">
           </div>
-          <div [hidden]="item.hideChinese">
+          <div class="me-3" [hidden]="item.hideChinese">
             <label>{{item.msgChineseTraditional}}</label>
             <input type="text" class="form-control form-control-sm" [(ngModel)]="item.msgChineseTraditionalValue" (ngModelChange)="updateMessage()">
           </div>
-          <div [hidden]="item.hideChinese">
+          <div class="me-3" [hidden]="item.hideChinese">
             <label>{{item.msgChineseSimplified}}</label>
             <input type="text" class="form-control form-control-sm" [(ngModel)]="item.msgChineseSimplifiedValue" (ngModelChange)="updateMessage()">
           </div>
-          <div [hidden]="item.hideChinese">
+          <div class="me-3" [hidden]="item.hideChinese">
             <label>{{item.msgChineseNewSimplified}}</label>
             <input type="text" class="form-control form-control-sm" [(ngModel)]="item.msgChineseNewSimplifiedValue" (ngModelChange)="updateMessage()">
           </div>
