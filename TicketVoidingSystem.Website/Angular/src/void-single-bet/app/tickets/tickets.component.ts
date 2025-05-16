@@ -1,11 +1,17 @@
-﻿import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+﻿import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { TicketsModel } from './tickets.model';
+import { CommonModule } from '@angular/common';
+import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
+import { FormsModule } from '@angular/forms';
+import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
 
 @Component({
+    standalone: true,
     selector: 'tickets',
     templateUrl: './tickets.component.html',
-    styleUrls: ['./tickets.component.scss']
+    styleUrls: ['./tickets.component.scss'],
+    imports: [CommonModule, SanitizeHtmlPipe, FormsModule, PagingComponent]
 })
 
 export class TicketsComponent implements OnInit {
@@ -16,8 +22,7 @@ export class TicketsComponent implements OnInit {
     @Output() ticketsChange = new EventEmitter<number>();
     isShowListCheckGroup: boolean;
     showMessageBetTrade: boolean;
-
-    constructor(private readonly element: ElementRef) { }
+    element = inject(ElementRef);
 
     ngOnInit() {
         this.clickBody();

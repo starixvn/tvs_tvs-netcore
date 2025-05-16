@@ -1,12 +1,16 @@
-﻿import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+﻿import { Component, ElementRef, EventEmitter, Input, Output, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../utility/constants/text';
 import { Confirmation } from './confirmation.model';
-
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 @Component({
+    standalone: true,
     selector: 'confirmation-single',
     templateUrl: './confirmation.component.html',
-    styleUrls: ['./confirmation.component.scss']
+    styleUrls: ['./confirmation.component.scss'],
+    imports: [CommonModule, FormsModule, TooltipComponent]
 })
 export class ConfirmationComponent {
     @Output() voidEvent = new EventEmitter<boolean>();
@@ -19,7 +23,9 @@ export class ConfirmationComponent {
         userPassword: ''
     };
 
-    constructor(private readonly element: ElementRef) {
+    element = inject(ElementRef);
+
+    constructor() {
         this.tooltip.element = this.element;
     }
 

@@ -1,4 +1,6 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
@@ -29,12 +31,22 @@ import { Modal } from './modal/modal.model';
 import { FilterParams, GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
 import { GroupModel } from './tickets/group.model';
 import { TicketsModel } from './tickets/tickets.model';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
+import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
+import { TicketsComponent } from './tickets/tickets.component';
+import { NotificationComponent } from '../../utility/components/notification/notification.component';
+import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';
+import { MessagesResultComponent } from '../../utility/components/messages-result/messages-result.component';
+import { ModalComponent } from './modal/modal.component';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: []
+  imports: [CommonModule, FormsModule, FilterComponent, ConfirmationComponent, TemplateMessageComponent, MenuBarComponent,
+    MatchDetailComponent, TicketsComponent, NotificationComponent, TooltipComponent, MessagesResultComponent, ModalComponent
+  ]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'Home / Void Single Bet';
@@ -70,15 +82,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   private toCheckTime: Date = null;
   private readonly TIME_FORMAT = 'hh:mm:ss A';
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly blockUIService: BlockUiService,
-    private readonly appService: AppService,
-    private readonly templateService: TemplateService,
-    private readonly modalService: ModalService,
-    private readonly signalRService: SignalRService,
-    private readonly passwordService: PasswordService
-  ) { }
+  element = inject(ElementRef);
+  blockUIService = inject(BlockUiService);
+  appService = inject(AppService);
+  templateService = inject(TemplateService);
+  modalService = inject(ModalService);
+  signalRService = inject(SignalRService);
+  passwordService = inject(PasswordService);
 
   public async ngOnInit() {
     this.tooltip.element = this.element;

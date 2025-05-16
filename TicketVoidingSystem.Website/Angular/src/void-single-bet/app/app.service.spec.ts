@@ -1,3 +1,5 @@
+import { TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../utility/modules/testing.module';
 import { BetType, GetBetTypesQuery, GroupBetType, GroupBetTypesModel } from '../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 import { MatchModel } from '../../utility/models/match.model';
@@ -11,20 +13,18 @@ import { TicketModel } from './tickets/ticket.model';
 import { TicketsModel } from './tickets/tickets.model';
 
 jest.mock('../../utility/services/http.service');
+
 describe('AppService', () => {
-  let mockHttpService: jest.Mocked<HttpService>;
+  let httpService: jest.Mocked<HttpService>;
   let appService: AppService;
-  let mockCommonService: CommonService;
-  let mockBlockUiService: BlockUiService;
 
   beforeEach(() => {
-    mockHttpService = new HttpService(null) as jest.Mocked<HttpService>;
-    mockBlockUiService = new BlockUiService();
-    mockCommonService = new CommonService(mockHttpService);
-    mockBlockUiService.start = jest.fn();
-    mockBlockUiService.stop = jest.fn();
-    
-    appService = new AppService(mockHttpService, mockCommonService, mockBlockUiService);
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [AppService, HttpService, CommonService, BlockUiService]
+    });
+    httpService = TestBed.inject(HttpService) as jest.Mocked<HttpService>;
+    appService = TestBed.inject(AppService);
   });
 
   it('#getRemark should return expected data', async () => {
@@ -33,13 +33,13 @@ describe('AppService', () => {
       'You can void "Settled" or "Unsettled" tickets.',
       'You can void "Instantly Settled" tickets settled by Instant Settlement during live time.'
     ];
-    mockHttpService.getJson.mockResolvedValue(expectedValue);
+    httpService.getJson.mockResolvedValue(expectedValue);
 
-   // Action
-   const actualResult = await appService.getRemark();
+    // Action
+    const actualResult = await appService.getRemark();
 
-   // Assert
-   expect(actualResult).toStrictEqual(expectedValue);
+    // Assert
+    expect(actualResult).toStrictEqual(expectedValue);
   });
 
   it('#getGroupBetTypes should return expected data', async() => {
@@ -49,10 +49,10 @@ describe('AppService', () => {
       new GroupBetType('FT', [new BetType(4, 'Correct Score', false, 0, true)], true),
     ];
     const expectedGroupBettypesModel = new GroupBetTypesModel(groupBettype, true);
-    mockHttpService.postJson.mockResolvedValue(expectedGroupBettypesModel);
+    httpService.postJson.mockResolvedValue(expectedGroupBettypesModel);
     
     // Action
-   const actualResult = await appService.getGroupBetTypes(new GetBetTypesQuery());
+    const actualResult = await appService.getGroupBetTypes(new GetBetTypesQuery());
 
     // Assert
     expect(actualResult).toStrictEqual(expectedGroupBettypesModel);
@@ -93,10 +93,10 @@ describe('AppService', () => {
       endTime: new Date(),
       leagueGroupId: 0
     };
-    mockHttpService.postJson.mockResolvedValue(expectedMatchInfo);
+    httpService.postJson.mockResolvedValue(expectedMatchInfo);
     
     // Action
-   const actualResult = await appService.getMatchInfo(28321695);
+    const actualResult = await appService.getMatchInfo(28321695);
 
     // Assert
     expect(actualResult).toStrictEqual(expectedMatchInfo);
@@ -107,10 +107,10 @@ describe('AppService', () => {
     const expectedTicketsModel = new TicketsModel();
     expectedTicketsModel.groups = [new GroupModel('MBC Group', [{mainTransId: '12312'} as TicketModel])];
     expectedTicketsModel.totalItems = 1;
-    mockHttpService.postJson.mockResolvedValue(expectedTicketsModel);
+    httpService.postJson.mockResolvedValue(expectedTicketsModel);
     
     // Action
-   const actualResult = await appService.getTickets(new GetTicketsQuery());
+    const actualResult = await appService.getTickets(new GetTicketsQuery());
 
     // Assert
     expect(actualResult).toStrictEqual(expectedTicketsModel);
@@ -120,13 +120,13 @@ describe('AppService', () => {
     // Arrange
     const query = new GetTicketsQuery();
     const url = `api/VoidSingleBet/ExportExcel`;
-    mockHttpService.downloadFile = jest.fn();
+    httpService.downloadFile = jest.fn();
 
     // Action
-   await appService.exportExcel(query);
+    await appService.exportExcel(query);
 
     // Assert
-    expect(mockHttpService.downloadFile).toHaveBeenCalledWith(query, url);
+    expect(httpService.downloadFile).toHaveBeenCalledWith(query, url);
   });
 
   it('#voidTickets should return expected data', async() => {
@@ -136,10 +136,10 @@ describe('AppService', () => {
       errorCode: 0,
       errorMsg: ''
     }];
-    mockHttpService.postJson.mockResolvedValue(expectedValue);
+    httpService.postJson.mockResolvedValue(expectedValue);
     
     // Action
-   const actualResult = await appService.voidTickets(new VoidTicketsQuery());
+    const actualResult = await appService.voidTickets(new VoidTicketsQuery());
 
     // Assert
     expect(actualResult).toStrictEqual(expectedValue);
@@ -150,27 +150,27 @@ describe('AppService', () => {
     const expectedValue = new TicketsModel();
     const query = new GetTicketsQuery();
     const url = 'api/VoidSingleBet/GetLogInfo';
-    mockHttpService.postJson.mockResolvedValue(expectedValue);
+    httpService.postJson.mockResolvedValue(expectedValue);
     
     // Action
-   const actualResult = await appService.GetLogInfo(query);
+    const actualResult = await appService.GetLogInfo(query);
 
     // Assert
     expect(actualResult).toStrictEqual(expectedValue);
-    expect(mockHttpService.postJson).toHaveBeenCalledWith(query, url);
+    expect(httpService.postJson).toHaveBeenCalledWith(query, url);
   });
   
   it('#getVoidResultCache should return expected data', async() => {
     // Arrange
     const expectedValue = [new Result<null>()];
     const url = 'api/SharedApi/GetVoidResultCache';
-    mockHttpService.postJson.mockResolvedValue(expectedValue);
+    httpService.postJson.mockResolvedValue(expectedValue);
     
     // Action
-   const actualResult = await appService.getVoidResultCache('');
+    const actualResult = await appService.getVoidResultCache('');
 
     // Assert
     expect(actualResult).toStrictEqual(expectedValue);
-    expect(mockHttpService.postJson).toHaveBeenCalledWith({guid: ''}, url);
+    expect(httpService.postJson).toHaveBeenCalledWith({guid: ''}, url);
   });
 });

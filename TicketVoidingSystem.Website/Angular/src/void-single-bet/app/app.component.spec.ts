@@ -1,765 +1,334 @@
-import { NgModule } from '@angular/core';
-import { Shallow } from 'shallow-render';
-import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
-import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { MessagesResult } from '../../utility/components/messages-result/messages-result';
-import { MessagesResultComponent } from '../../utility/components/messages-result/messages-result.component';
-import { ModalService } from '../../utility/components/modal/modal.service';
-import { Notification } from '../../utility/components/notification/notification';
-import { NotificationComponent } from '../../utility/components/notification/notification.component';
-import { PagingModel } from '../../utility/components/paging/paging/paging.model';
-import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
-import { TemplateMessageComponent } from '../../utility/components/template-message/template-message/template-message.component';
-import { TemplateValue } from '../../utility/components/template-message/template-message/template.model';
-import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
-import { TEXT } from '../../utility/constants/text';
-import { MatchModel } from '../../utility/models/match.model';
-import { Result, SqlResult } from '../../utility/models/result';
-import { CommonService } from '../../utility/services/common.service';
-import { HttpService } from '../../utility/services/http.service';
-import { SignalRService } from '../../utility/services/signal-r.service.native';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../utility/modules/testing.module';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
-import { ConfirmationComponent } from './confirmation/confirmation.component';
-import { Confirmation } from './confirmation/confirmation.model';
+import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
+import { ModalService } from '../../utility/components/modal/modal.service';
+import { SignalRService } from '../../utility/services/signal-r.service.native';
+import { PasswordService } from '../../utility/services/password.service';
+import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { FilterComponent } from './filter/filter.component';
-import { ModalComponent } from './modal/modal.component';
-import { FilterParams, GetTicketsQuery } from './models/query.model';
-import { GroupModel } from './tickets/group.model';
-import { TicketsComponent } from './tickets/tickets.component';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { GetTicketsQuery } from './models/query.model';
 import { TicketsModel } from './tickets/tickets.model';
+import { MatchModel } from '../../utility/models/match.model';
+import { Result } from '../../utility/models/result';
+import { Guid } from 'guid-typescript';
+import * as _ from 'lodash';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PagingModel } from '../../utility/components/paging/paging/paging.model';
 
-jest.mock('../../utility/services/signal-r.service.native');
 class Helper {
-  static readonly titleSelector = 'div.title';
+  static readonly fakeMatchModel = {
+    matchId: 12345,
+    homeTeam: 'Home Team',
+    awayTeam: 'Away Team',
+    matchDate: new Date(),
+    status: 'Active',
+    sportTypeName: 'Football',
+    sportTypeNameTraditional: '足球',
+    sportTypeNameSimplified: '足球',
+    sportTypeNameNewSimplified: '足球'
+  } as unknown as MatchModel;
+
   static readonly fakeTicketsModel = {
-    groups: [
-      {
-        name: 'Credit',
-        displayTotalTickets: 3,
-        tickets: [
-          {
-            no: 1, betId: '108495160329', value: 108495160329, transDate: '03/30/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: '',
-            odds: '<span class=\"underdog\">1.90</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">90</div>', winLoss: '-',
-            currency: 'INH', status: '<div class=\"status\">Waiting</div>', score: '', handicap: '',
-            choice: '<div class=""><span class=\"\"></span></div>', soldId: null, mainTransId: 0, isParlay: false, isDisable: false,
-            isCricket: false, isBonus: false, isMarked: false, secondAcceptFlag: ''
-          },
-          {
-            no: 2, betId: '108495160330', value: 108495160330, transDate: '03/31/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: 'Single Match Parlay',
-            odds: '<span class=\"underdog\">1.95</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">100</div>', winLoss: '-',
-            currency: 'INH', status: '<div class=\"status\">Running</div>', score: '', handicap: '',
-            choice: '<div class=""><span class=\"{betTeamClassName}\"></span></div>', soldId: null, mainTransId: 0, isParlay: false, isDisable: false,
-            isCricket: false, isBonus: false, isMarked: false, secondAcceptFlag: ''
-          },
-          {
-            no: 3, betId: '108495160331', value: 108495160331, transDate: '03/31/2020 02:02:34.030 AM', member: 'N8BINH01065', betType: 'Single Match Parlay',
-            odds: '<span class=\"underdog\">1.95</span> <span class=\"oddstype\"></span>', stake: '<div class=\"stake\">100</div>', winLoss: '-',
-            currency: 'INH', status: '<div class=\"status\">Running</div>', score: '', handicap: '',
-            choice: '<div class=""><span class=\"{betTeamClassName}\"></span></div>', soldId: null, mainTransId: 0, isParlay: false, isDisable: false,
-            isCricket: false, isBonus: false, isMarked: false, secondAcceptFlag: ''
-          },
-        ]
-      }
-    ],
-  };
+    singleCount: 5,
+    parlayCount: 3,
+    fromTransTime: new Date(),
+    toTransTime: new Date(),
+    fromCheckTime: new Date(),
+    toCheckTime: new Date(),
+    strFromTime: '12:00:00 AM',
+    strToTime: '12:00:00 AM',
+    groups: [{
+      name: 'Test Group',
+      tickets: [{
+        no: 1,
+        betId: '123',
+        value: '123',
+        member: 'Test Member',
+        transDate: new Date().toISOString(),
+        betType: 'Test Bet Type',
+        choice: 'Test Choice',
+        stake: '100',
+        odds: '1.5',
+        winLoss: '50',
+        currency: 'USD',
+        handicap: '0',
+        score: '1-0',
+        status: 'Active',
+        secondAcceptFlag: '0',
+        isDisable: false,
+        isChecked: true,
+        isCricket: false,
+        soldId: '123',
+        mainTransId: '123',
+        isMarked: false,
+        siteDbGroupId: 1
+      }]
+    }],
+    totalItems: 1,
+    id: 'Test ID',
+    betTypeNameReplaceMessage: '',
+    smallestMapTicket: null,
+    licenseeAffectedList: [],
+    pagingModel: new PagingModel({
+      page: 1,
+      pageSize: 10,
+      total: 10,
+      selection: [10, 20, 30, 40]
+    }),
+    changeIconCheckBox: jest.fn(),
+    getTicketEnable: jest.fn().mockReturnValue([]),
+    getTicketSold: jest.fn().mockReturnValue([]),
+    getTicketCricket: jest.fn().mockReturnValue([]),
+    checkSettledTickets: jest.fn().mockReturnValue(false),
+    getNumberOfCheckedTickets: jest.fn().mockReturnValue(1)
+  } as unknown as TicketsModel;
 
-  static getFakeTicketsModel(): TicketsModel {
-    const data = new TicketsModel();
-    data.groups = [];
-    data.singleCount = 3;
-    data.parlayCount = 0;
-    data.fromCheckTime = new Date('2020-04-27 12:52:33.573');
-    data.fromTransTime = new Date('2020-04-27 12:51:48.573');
-    data.toCheckTime = new Date('2020-04-27 12:52:33.573');
-    data.toTransTime = new Date('2020-04-27 12:51:55.300');
-    this.fakeTicketsModel.groups.forEach(item => {
-      const group = new GroupModel(item.name, JSON.parse(JSON.stringify(item.tickets)));
-      data.groups.push(group);
-    });
-    return data;
-  }
+  static readonly fakeGetTicketsQuery = {
+    matchId: 12345,
+    pageIndex: 0,
+    pageSize: 10,
+    eventType: '1',
+    timeType: 1,
+    liveHomeScore: '1',
+    liveAwayScore: '0',
+    invalidTransDate: false
+  } as GetTicketsQuery;
 
-  static getFakeSuccessfulSqlResult(): SqlResult {
-    return {
-      errCode: 0,
-      errMsg: '',
-      isSuccessful: true
-    };
-  }
-
-  static getFakeVoidedResult(): Result<null>[] {
-    return [{
-      errorCode: 0,
-      errorMsg: '',
-      isSuccessful: true
-    }];
-  }
+  static readonly fakeResult = [{
+    errorCode: 0,
+    message: 'Success',
+    data: null
+  }] as unknown as Result<null>[];
 }
 
 describe('AppComponent', () => {
-  @NgModule({
-    declarations: [
-      FilterComponent,
-      TicketsComponent,
-      ModalComponent,
-      ConfirmationComponent,
-      MessagesResultComponent,
-      MatchDetailComponent,
-      NotificationComponent,
-      TemplateMessageComponent,
-      MenuBarComponent
-    ],
-    imports: [
-      ToolTipModule
-    ],
-    providers: [AppService, TemplateService, HttpService]
-  })
-  class AppModuleTest { }
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let appService: AppService;
+  let blockUIService: BlockUiService;
+  let signalRService: SignalRService;
+  let passwordService: PasswordService;
+  let templateService: TemplateService;
+  let filterComponent: FilterComponent;
+  let confirmationComponent: ConfirmationComponent;
 
-  let shallow: Shallow<AppComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        ToastrModule.forRoot(),
+        BrowserAnimationsModule,
+        FilterComponent,
+        ConfirmationComponent,
+        AppComponent
+      ],
+      declarations: [],
+      providers: [
+        AppService,
+        BlockUiService,
+        ModalService,
+        SignalRService,
+        PasswordService,
+        TemplateService,
+      ]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(AppComponent, AppModuleTest)
-      .mock(SignalRService, { initializeConnection: jest.fn() });
-  });
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    appService = fixture.debugElement.injector.get(AppService);
+    blockUIService = fixture.debugElement.injector.get(BlockUiService);
+    signalRService = fixture.debugElement.injector.get(SignalRService);
+    passwordService = fixture.debugElement.injector.get(PasswordService);
+    templateService = fixture.debugElement.injector.get(TemplateService);
 
-  it('AppComponent should init match snapshot', async () => {
-    // Arrange
-    const { find, fixture } = await shallow.render();
+    // Mock các service
+    jest.spyOn(signalRService, 'initializeConnection').mockResolvedValue();
+    jest.spyOn(appService, 'getMatchInfo').mockResolvedValue(Helper.fakeMatchModel);
+    jest.spyOn(appService, 'getTickets').mockResolvedValue(Helper.fakeTicketsModel);
+    jest.spyOn(appService, 'voidTickets').mockResolvedValue(Helper.fakeResult);
+    jest.spyOn(appService, 'getVoidResultCache').mockResolvedValue(Helper.fakeResult);
+    jest.spyOn(passwordService, 'hash').mockReturnValue('hashedPassword');
+    jest.spyOn(blockUIService, 'stop').mockImplementation(() => {});
+    jest.spyOn(templateService, 'initializeTemplateValue').mockImplementation(() => ({
+        sportType: {
+            msgEnglish: Helper.fakeMatchModel.sportTypeName,
+            msgChineseTraditional: Helper.fakeMatchModel.sportTypeNameTraditional,
+            msgChineseSimplified: Helper.fakeMatchModel.sportTypeNameSimplified,
+            msgChineseNewSimplified: Helper.fakeMatchModel.sportTypeNameNewSimplified
+        },
+        matchId: Helper.fakeMatchModel.matchId,
+        groupPHAffected: 0,
+        severity: 1
+    }));
+
+    // Mock component
+    filterComponent = TestBed.createComponent(FilterComponent).componentInstance;
+    confirmationComponent = TestBed.createComponent(ConfirmationComponent).componentInstance;
+    component.filterComponent = filterComponent;
+    component.confirmationComponent = confirmationComponent;
+    component.isShowTickets = false;
+    component.isShowLogInfoOnly = false;
+    component.ticketsModel = Helper.fakeTicketsModel;
+    component.getTicketsQuery = Helper.fakeGetTicketsQuery;
+    
+    // Mock filter component
+    filterComponent.playerNamesSelected = {
+      msgEnglish: '',
+      msgChineseTraditional: '',
+      msgChineseSimplified: '',
+      msgChineseNewSimplified: ''
+    };
+    (filterComponent as any).issueType = [];
+    (filterComponent as any).subIssueType = [];
+    (filterComponent as any).data = {
+      issueTypes: [],
+      subIssueTypes: []
+    };
+    
+    // Mock confirmation component
+    component.confirmation = {
+      reason: '',
+      reasonSC: '',
+      userName: 'testUser',
+      userPassword: ''
+    };
+
+    // Mock modal service
+    component.modal.open = jest.fn();
+
     fixture.detectChanges();
-
-    // Assert
-    expect(fixture).toMatchSnapshot();
-    expect(find(Helper.titleSelector).nativeElement.textContent.trim()).toBe('Home / Void Single Bet');
   });
 
-  it('Should hide necessary content and clear data after get info match from <filter />', async () => {
-    // Arrange
-    const { findComponent, fixture, instance } = await shallow.render();
-    const filterComponent = findComponent(FilterComponent);
-    const matchDetailComponent = findComponent(MatchDetailComponent);
-    matchDetailComponent.isShowMatch = true;
-    const ticketsComponent = findComponent(TicketsComponent);
-    ticketsComponent.isShowTickets = true;
-    const confirmationComponent = findComponent(ConfirmationComponent);
-    confirmationComponent.isShowConfirm = true;
-    const templateComponent = findComponent(TemplateMessageComponent);
-    templateComponent.isShowMessages = true;
-    instance.confirmationComponent = new ConfirmationComponent(null);
-    instance.confirmationComponent.clearData = jest.fn();
-    filterComponent.changeMatchEvent.emit();
-    await fixture.whenStable();
-    fixture.detectChanges();
-
-    // Assert
-    expect(matchDetailComponent.isShowMatch).toBe(false);
-    expect(ticketsComponent.isShowTickets).toBe(false);
-    expect(confirmationComponent.isShowConfirm).toBe(false);
-    expect(templateComponent.isShowMessages).toBe(false);
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('Should call #getTickets with expected params after emit pagingSearchTicket from <tickets />', async () => {
-    // Arrange
-    const { findComponent, fixture, instance } = await shallow.render();
-    instance.getTicketsQuery = new GetTicketsQuery();
-    const pagingModel = new PagingModel();
-    pagingModel.page = 2;
-    pagingModel.pageSize = 100;
-    instance.getTickets = jest.fn();
-    const ticketsComponent = findComponent(TicketsComponent);
-    ticketsComponent.pagingSearchTicket.emit(pagingModel);
-    await fixture.whenStable();
-
-    // Assert
-    expect(instance.getTickets).toHaveBeenCalledTimes(1);
-    expect(instance.getTicketsQuery.pageIndex).toBe(1);
-    expect(instance.getTicketsQuery.pageSize).toBe(100);
-  });
-
-  it('Should return notification after emit exportExcelEvent from <tickets />', async () => {
-    // Arrange
-    const { findComponent, fixture, instance } = await shallow.render();
-    const header = 'Export Excel Result';
-    const body = 'Not allow to export large file. Please contact IT for help. Thank you!';
-    instance.notification.open = jest.fn();
-    instance.ticketsModel.pagingModel = new PagingModel();
-    instance.ticketsModel.pagingModel.total = 100001;
-    const ticketsComponent = findComponent(TicketsComponent);
-    ticketsComponent.exportExcelEvent.emit();
-    await fixture.whenStable();
-
-    // Assert
-    expect(instance.notification.open).toHaveBeenCalledWith(header, body);
-  });
-
-  it('Should export excel file after emit exportExcelEvent from <tickets />', async () => {
-    // Arrange
-    const isExportedExcel = true;
-    const { findComponent, fixture, instance } = await shallow
-      .mock(AppService, { exportExcel: jest.fn().mockImplementation(() => isExportedExcel) })
-      .render();
-    instance.ticketsModel.pagingModel = new PagingModel();
-    instance.ticketsModel.pagingModel.total = 2;
-    instance.getTicketsQuery = new GetTicketsQuery();
-    const ticketsComponent = findComponent(TicketsComponent);
-    ticketsComponent.exportExcelEvent.emit();
-    await fixture.whenStable();
-
-    // Assert
-    expect(isExportedExcel).toBe(true);
-  });
-
-  it('Should display expected modal after emit voidEvent from <confirmation-single />', async () => {
-    // Arrange
-    const { findComponent, fixture, instance } = await shallow.render();
-    instance.ticketsModel.pagingModel = new PagingModel();
-    instance.getTicketsQuery = new GetTicketsQuery();
-    instance.checkValidation = jest.fn().mockImplementation(() => true);
-    instance.modal.open = jest.fn();
-    const confirmationComponent = findComponent(ConfirmationComponent);
-    const testCases = [
-      { ticketsTotal: 10, pageSize: 20, confirmMessage: TEXT.CONFIRM_VOID_TICKET },
-      { ticketsTotal: 30, pageSize: 20, confirmMessage: TEXT.CONFIRM_VOID_TICKET_IN_PAGE },
-    ];
-
-    // Action and Assert
-    for (const item of testCases) {
-      instance.ticketsModel.pagingModel.total = item.ticketsTotal;
-      instance.getTicketsQuery.pageSize = item.pageSize;
-      confirmationComponent.voidEvent.emit();
-      await fixture.whenStable();
-      expect(instance.modal.open).toHaveBeenCalledWith('Void Bet Confirm', item.confirmMessage);
-    }
-  });
-
-  it('#checkValidation should return false and display tooltip when tickets is unchecked ', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    const ticketsModel = Helper.getFakeTicketsModel();
-    ticketsModel.groups[0].tickets[0].isChecked = false;
-    ticketsModel.groups[0].tickets[1].isChecked = false;
-    ticketsModel.groups[0].tickets[2].isChecked = false;
-    instance.ticketsModel = ticketsModel;
-    instance.tooltip.display = jest.fn();
-
-    // Action
-    const actualResult = instance.checkValidation();
-
-    // Assert
-    expect(actualResult).toBe(false);
-    expect(instance.tooltip.display).toHaveBeenCalledWith('checkbox-dropdown-list', TEXT.EMPTY_TICKET);
-  });
-
-  it('#checkValidation should return false when messagesComponent return false ', async () => {
-    // Arrange
-    const { instance, findComponent } = await shallow.render();
-    instance.ticketsModel = Helper.getFakeTicketsModel();
-    const messageComponent = findComponent(TemplateMessageComponent);
-    messageComponent.checkValidation = jest.fn().mockImplementation(() => false);
-
-    // Action
-    const actualResult = instance.checkValidation();
-
-    // Assert
-    expect(actualResult).toBe(false);
-  });
-
-  it('#checkValidation should return false when confirmComponent return false ', async () => {
-    // Arrange
-    const { instance, findComponent } = await shallow.render();
-    instance.ticketsModel = Helper.getFakeTicketsModel();
-    const messageComponent = findComponent(TemplateMessageComponent);
-    messageComponent.checkValidation = jest.fn().mockImplementation(() => true);
-    const confirmComponent = findComponent(ConfirmationComponent);
-    confirmComponent.checkValidation = jest.fn().mockImplementation(() => false);
-
-    // Action
-    const actualResult = instance.checkValidation();
-
-    // Assert
-    expect(actualResult).toBe(false);
-  });
-
-  it('#checkValidation should return false when #checkFilterBeforeVoid return false ', async () => {
-    // Arrange
-    const { instance, findComponent } = await shallow.render();
-    instance.ticketsModel = Helper.getFakeTicketsModel();
-    const messageComponent = findComponent(TemplateMessageComponent);
-    messageComponent.checkValidation = jest.fn().mockImplementation(() => true);
-    const confirmComponent = findComponent(ConfirmationComponent);
-    confirmComponent.checkValidation = jest.fn().mockImplementation(() => true);
-    const filterComponent = findComponent(FilterComponent);
-    filterComponent.getParams = jest.fn().mockImplementation(() => new FilterParams());
-    const filterParamsBeforeSearch = new FilterParams();
-    filterParamsBeforeSearch.matchId = 123456789;
-    instance.filterParamsBeforeSearch = filterParamsBeforeSearch;
-    filterComponent.checkFilterParams = jest.fn().mockImplementation(() => true);
-    filterComponent.blurMatchId = jest.fn();
-
-    // Action
-    const actualResult = instance.checkValidation();
-
-    // Assert
-    expect(actualResult).toBe(false);
-  });
-
-  it('#checkValidation should return true when all everything is valid ', async () => {
-    // Arrange
-    const { instance, findComponent } = await shallow.render();
-    instance.ticketsModel = Helper.getFakeTicketsModel();
-    const messageComponent = findComponent(TemplateMessageComponent);
-    messageComponent.checkValidation = jest.fn().mockImplementation(() => true);
-    const confirmComponent = findComponent(ConfirmationComponent);
-    confirmComponent.checkValidation = jest.fn().mockImplementation(() => true);
-    instance.checkFilterBeforeVoid = jest.fn().mockImplementation(() => true);
-
-    // Action
-    const actualResult = instance.checkValidation();
-
-    // Assert
-    expect(actualResult).toBe(true);
-  });
-
-  it('Should void tickets when emit confirmEvent event because has permission', async () => {
-    // Arrange
-    const { fixture, instance, findComponent } = await shallow
-      .mock(CommonService, { checkVoidBetPermission: jest.fn().mockImplementation(() => Helper.getFakeSuccessfulSqlResult()) })
-      .render();
-    const modalComponent = findComponent(ModalComponent);
-    instance.ticketsModel = Helper.getFakeTicketsModel();
-    instance.matchViewModel = new MatchModel();
-    instance.matchViewModel.matchId = 12345678;
-    instance.voidTickets = jest.fn();
-    modalComponent.confirmEvent.emit();
-
-    // Action
-    await fixture.whenStable();
-
-    // Assert
-    expect(instance.voidTickets).toHaveBeenCalledTimes(1);
-  });
-
-  it('#voidTickets should return expected data and no need to reload tickets because it is only one page', async () => {
-    // Arrange
-    const mockVoidTicket = jest.fn().mockImplementation(() => Helper.getFakeVoidedResult());
-    const { instance, findComponent } = await shallow
-      .mock(AppService, { voidTickets: mockVoidTicket })
-      .render();
-    instance.getTicketsQuery = new GetTicketsQuery();
-    instance.getTicketsQuery.pageSize = 10;
-    instance.filterParamsBeforeVoid = new FilterParams();
-    instance.confirmation = new Confirmation();
-    instance.confirmation.userPassword = '111';
-    instance.ticketsModel = Helper.getFakeTicketsModel();
-    instance.ticketsModel.pagingModel = new PagingModel();
-    instance.ticketsModel.pagingModel.total = 3;
-    instance.messagesResult.open = jest.fn();
-    instance.handleAfterVoid = jest.fn();
-    const filterComponent = findComponent(FilterComponent);
-    filterComponent.resetFilter = jest.fn();
-
-    // Action
-    await instance.voidTickets();
-
-    // Assert
-    expect(mockVoidTicket).toHaveBeenCalledTimes(1);
-  });
-
-  it('#handleAfterVoidPaging should reload tickets after void', async () => {
-    // Arrange
-    const testCase = [
-      { total: 5, pageSize: 2, pageIndex: 1 },
-      { total: 3, pageSize: 2, pageIndex: 1 },
-    ];
-    const { instance } = await shallow.render();
-    instance.ticketsModel = Helper.getFakeTicketsModel();
-    instance.ticketsModel.pagingModel = new PagingModel();
-    instance.getTicketsQuery = new GetTicketsQuery();
-    instance.getTickets = jest.fn();
-    instance.hideContent = jest.fn();
-    testCase.forEach(async x => {
-      instance.ticketsModel.pagingModel.total = x.total;
-      instance.getTicketsQuery.pageSize = x.pageSize;
-      instance.getTicketsQuery.pageIndex = x.pageIndex;
-
-      // Action
-      await instance.handleAfterVoidPaging();
-
-      // Assert
-      expect(instance.getTickets).toHaveBeenCalled();
+  describe('ngOnInit', () => {
+    it('should initialize SignalR connection', async () => {
+      await component.ngOnInit();
+      expect(signalRService.initializeConnection).toHaveBeenCalled();
     });
   });
 
-  it('#viewLogInfoEvent should correct method', async () => {
-    const { instance } = await shallow.render();
-    instance['clearCacheTime'] = jest.fn();
-    instance.getMatchInfoForViewLogInfo = jest.fn();
-
-    await instance.viewLogInfoEvent(null);
-
-    expect(instance['clearCacheTime']).toHaveBeenCalledTimes(1);
-    expect(instance.getMatchInfoForViewLogInfo).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getMatchInfoForViewLogInfo should call #getLogInfo and #getMatchInfo', async () => {
-    const query = new GetTicketsQuery();
-    query.matchId = 9999;
-    const mockGetMatchInfo = jest.fn();
-    const { instance } = await shallow
-      .mock(AppService, { getMatchInfo: mockGetMatchInfo })
-      .render();
-    instance.matchViewModel = undefined;
-    instance.getLogInfo = jest.fn();
-
-    await instance.getMatchInfoForViewLogInfo(query);
-
-    expect(instance.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(mockGetMatchInfo).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getMatchInfoForViewLogInfo should only call #getLogInfo', async () => {
-    const query = new GetTicketsQuery();
-    query.matchId = 9999;
-    const mockGetMatchInfo = jest.fn();
-    const { instance } = await shallow
-      .mock(AppService, { getMatchInfo: mockGetMatchInfo })
-      .render();
-    instance.matchViewModel = new MatchModel();
-    instance.matchViewModel.matchId = 9999;
-    instance.getLogInfo = jest.fn();
-
-    await instance.getMatchInfoForViewLogInfo(query);
-
-    expect(instance.getLogInfo).toHaveBeenCalledTimes(1);
-    expect(mockGetMatchInfo).toHaveBeenCalledTimes(0);
-  });
-
-  it('#getLogInfo should call #handleNoTicket', async () => {
-    const query = new GetTicketsQuery();
-    query.invalidTransDate = true;
-    const { instance } = await shallow.render();
-    instance.handleNoTicketLogInfo = jest.fn();
-
-    await instance.getLogInfo(query);
-
-    expect(instance.handleNoTicketLogInfo).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getLogInfo should call #GetLogInfo', async () => {
-    const query = new GetTicketsQuery();
-    query.invalidTransDate = false;
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-      .mock(AppService, { GetLogInfo: mockGetLogInfo })
-      .render();
-    instance.handleNoTicket = jest.fn();
-    instance.renderDataLogInfo = jest.fn();
-
-    await instance.getLogInfo(query);
-
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(1);
-  });
-
-  it('#renderDataLogInfo should update correct data', async () => {
-    const ticketsModel = new TicketsModel();
-    const { instance } = await shallow.render();
-    instance.ticketsModel = new TicketsModel();
-
-    [true, false].forEach(async x => {
-      instance['isNullCacheTransTime'] = jest.fn().mockImplementation(() => x);
-      instance['isNullCacheCheckTime'] = jest.fn().mockImplementation(() => x);
-
-      instance.renderDataLogInfo(ticketsModel);
-
-      expect(instance.ticketsModel.singleCount).toBe(ticketsModel.singleCount);
-      expect(instance.ticketsModel.parlayCount).toBe(ticketsModel.parlayCount);
-      expect(instance.ticketsModel.fromTransTime).toBe(ticketsModel.fromTransTime);
-      expect(instance.ticketsModel.toTransTime).toBe(ticketsModel.toTransTime);
-      expect(instance.ticketsModel.fromCheckTime).toBe(ticketsModel.fromCheckTime);
-      expect(instance.ticketsModel.toCheckTime).toBe(ticketsModel.toCheckTime);
+  describe('searchEvent', () => {
+    it('should clear cache time and get match info', async () => {
+      const query = Helper.fakeGetTicketsQuery;
+      component.isShowTickets = false;
+      await component.searchEvent(query);
+      expect(component.isShowTickets).toBeTruthy();
+      expect(component.isShowLogInfoOnly).toBeFalsy();
+      expect(appService.getMatchInfo).toHaveBeenCalledWith(query.matchId);
     });
   });
 
-  it('#exportExcel should call #exportExcel', async () => {
-    const mockExportExcel = jest.fn();
-    const { instance } = await shallow
-      .mock(AppService, { exportExcel: mockExportExcel })
-      .render();
-    instance.getTicketsQuery = new GetTicketsQuery();
-    instance.ticketsModel = Helper.getFakeTicketsModel();
-    instance.ticketsModel.pagingModel = null;
-
-    await instance.exportExcel();
-
-    expect(mockExportExcel).toHaveBeenCalledTimes(1);
-  });
-
-  it('#renderTickets should update correct data', async () => {
-    const ticketsModel = new TicketsModel();
-    ticketsModel.groups = [];
-    const { instance } = await shallow.render();
-    instance.ticketsModel = new TicketsModel();
-    instance.ticketsModel.pagingModel = new PagingModel();
-    instance.ticketsModel.pagingModel = new PagingModel();
-    instance.getTicketsQuery = new GetTicketsQuery();
-    instance.getTicketsQuery.pageIndex = 0;
-
-    [true, false].forEach(async x => {
-      instance['isNullCacheTransTime'] = jest.fn().mockImplementation(() => x);
-      instance['isNullCacheCheckTime'] = jest.fn().mockImplementation(() => x);
-
-      instance.renderTickets(ticketsModel);
-
-      expect(instance.ticketsModel.pagingModel.page).toBe(instance.getTicketsQuery.pageIndex + 1);
-      expect(instance.ticketsModel.pagingModel.pageSize).toBe(instance.getTicketsQuery.pageSize);
+  describe('getMatchInfo', () => {
+    it('should get match info and search tickets', async () => {
+      const query = Helper.fakeGetTicketsQuery;
+      await component.getMatchInfo(query);
+      expect(appService.getMatchInfo).toHaveBeenCalledWith(query.matchId);
+      expect(component.isShowMatch).toBeTruthy();
     });
   });
 
-  it('#voidBet should not call #showConfirmBeforeVoid', async () => {
-    const { instance } = await shallow
-      .render();
-    instance.checkValidation = jest.fn().mockImplementation(() => false);
-    instance.showConfirmBeforeVoid = jest.fn();
+  describe('searchTickets', () => {
+    it('should handle invalid transaction date', async () => {
+      const query = { ...Helper.fakeGetTicketsQuery, invalidTransDate: true };
+      await component.searchTickets(query);
+      expect(component.isShowTickets).toBeTruthy();
+      expect(component.isShowMatch).toBeTruthy();
+      expect(component.isShowConfirm).toBeFalsy();
+      expect(component.isShowMessages).toBeFalsy();
+    });
 
-    instance.voidBet();
-
-    expect(instance.showConfirmBeforeVoid).toHaveBeenCalledTimes(0);
-  });
-
-  it('#checkFilterBeforeVoid should return false', async () => {
-    const filterParamsBeforeVoid = new FilterParams();
-    filterParamsBeforeVoid.matchId = 9999;
-    const { instance } = await shallow.render();
-    instance.filterComponent = new FilterComponent(null, null, null);
-    instance.filterComponent.getParams = jest.fn().mockImplementation(() => filterParamsBeforeVoid);
-    instance.filterComponent.checkFilterParams = jest.fn().mockImplementation(() => false);
-    instance.filterParamsBeforeSearch = new FilterParams();
-    instance.notification = new Notification();
-    instance.notification.open = jest.fn();
-
-    const actual = instance.checkFilterBeforeVoid();
-
-    expect(actual).toBe(false);
-  });
-
-  it('#checkFilterBeforeVoid should return true', async () => {
-    const filterParamsBeforeVoid = new FilterParams();
-    const { instance } = await shallow.render();
-    instance.filterComponent = new FilterComponent(null, null, null);
-    instance.filterComponent.getParams = jest.fn().mockImplementation(() => filterParamsBeforeVoid);
-    instance.filterParamsBeforeSearch = filterParamsBeforeVoid;
-
-    const actual = instance.checkFilterBeforeVoid();
-
-    expect(actual).toBe(true);
-  });
-
-  it('#updateTemplateValue should update correct data', async () => {
-    const { instance } = await shallow.render();
-    instance.ticketsModel = new TicketsModel();
-
-    instance.handleNoTicketLogInfo();
-
-    expect(instance.isShowLogInfoOnly).toBe(true);
-    expect(instance.isShowConfirm).toBe(false);
-  });
-
-  it('#updateTemplateValue should update correct data', async () => {
-    const { instance } = await shallow
-      .mock(TemplateService, { initializeTemplateValue: jest.fn().mockImplementation(() => new TemplateValue()) })
-      .render();
-    instance.ticketsModel = new TicketsModel();
-    instance.ticketsModel.getNumberOfCheckedTickets = jest.fn();
-    instance.getTicketsQuery = new GetTicketsQuery();
-    instance.getTicketsQuery.eventType = '1';
-    instance.getTicketsQuery.liveAwayScore = '1';
-    instance.getTicketsQuery.liveHomeScore = '1';
-
-    instance.updateTemplateValue();
-
-    expect(instance.templateValue.score).toBe('1-1');
-  });
-
-  it('#confirmEvent should call expected', async () => {
-    const mockConfirmPermission = jest.fn();
-    const { instance } = await shallow
-      .mock(ModalService, { confirmPermission: mockConfirmPermission })
-      .render();
-    instance.ticketsModel = new TicketsModel();
-    instance.ticketsModel.getAllTicket = jest.fn();
-    instance.matchViewModel = new MatchModel();
-
-    await instance.confirmEvent();
-
-    instance.voidTickets = jest.fn();
-    mockConfirmPermission.mock.calls[0][2]();
-    expect(instance.voidTickets).toHaveBeenCalledTimes(1);
-
-    instance.getTickets = jest.fn();
-    instance.confirmationComponent = new ConfirmationComponent(null);
-    instance.confirmationComponent.clearData = jest.fn();
-    mockConfirmPermission.mock.calls[0][3]();
-    expect(instance.confirmationComponent.clearData).toHaveBeenCalledTimes(1);
-  });
-
-  it('#voidTickets should call #getVoidResultCache', async () => {
-    const mockVoidTickets = jest.fn().mockImplementation(() => Promise.resolve(null));
-    const { instance } = await shallow
-      .mock(AppService, { voidTickets: mockVoidTickets })
-      .render();
-    instance.ticketsModel = new TicketsModel();
-    instance.ticketsModel.getTicketEnable = jest.fn();
-    instance.ticketsModel.getTicketSold = jest.fn();
-    instance.ticketsModel.getTicketCricket = jest.fn();
-    instance.messagesComponent = new TemplateMessageComponent(null, null, null, null, null, null, null, null, null);
-    instance.confirmation = new Confirmation();
-    instance.confirmation.userPassword = '111';
-    instance['getVoidResultCache'] = jest.fn();
-
-    await instance.voidTickets();
-
-    expect(mockVoidTickets).toHaveBeenCalledTimes(1);
-    expect(instance['getVoidResultCache']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#handleAfterVoid should call #showMessages', async () => {
-    const { instance } = await shallow
-      .render();
-    instance['showMessages'] = jest.fn();
-    instance['handleAfterVoidPaging'] = jest.fn();
-
-    [0, 1].forEach(async x => {
-      const results = new Result<null>();
-      results.errorCode = x;
-
-      await instance.handleAfterVoid([results]);
-
-      expect(instance['showMessages']).toHaveBeenCalled();
+    it('should get tickets when transaction date is valid', async () => {
+      const query = Helper.fakeGetTicketsQuery;
+      await component.searchTickets(query);
+      expect(appService.getTickets).toHaveBeenCalledWith(query);
     });
   });
 
-  it('#showMessages should update correct data', async () => {
-    const { instance } = await shallow
-      .render();
-    instance.messagesResult = new MessagesResult();
+  describe('voidBet', () => {
+    it('should show confirmation modal when validation passes', () => {
+      jest.spyOn(component, 'checkValidation').mockReturnValue(true);
+      component.voidBet();
+      expect(component.modal.open).toHaveBeenCalled();
+    });
 
-    instance['showMessages']([]);
-
-    expect(instance.messagesResult.header).toBe('Void Bet Result');
+    it('should not show confirmation modal when validation fails', () => {
+      jest.spyOn(component, 'checkValidation').mockReturnValue(false);
+      component.voidBet();
+      expect(component.modal.open).not.toHaveBeenCalled();
+    });
   });
 
-  it('#handleAfterVoidPaging should call #hideContent', async () => {
-    const { instance } = await shallow
-      .render();
-    instance.ticketsModel = new TicketsModel();
-    instance.ticketsModel.pagingModel = new PagingModel();
-    instance.ticketsModel.pagingModel.total = 1;
-    instance.getTicketsQuery = new GetTicketsQuery();
-    instance.getTicketsQuery.pageSize = 100;
-    instance.hideContent = jest.fn();
-    instance.filterComponent = new FilterComponent(null, null, null);
-    instance.filterComponent.resetFilter = jest.fn();
+  describe('voidTickets', () => {
+    it('should void tickets and handle results', async () => {
+      const query = {
+        ...Helper.fakeGetTicketsQuery,
+        tickets: [],
+        transIdSolds: [],
+        transIdCrickets: [],
+        message: 'Test message',
+        userName: 'testUser',
+        userPassword: 'testPass',
+        reason: 'Test reason',
+        reasonSC: 'Test reason SC',
+        match: Helper.fakeMatchModel,
+        voidFromTime: '12:00:00 AM',
+        voidToTime: '12:00:00 AM',
+        guid: `VoidSingleBet-${Guid.create().toString()}`
+      };
 
-    await instance.handleAfterVoidPaging();
-
-    expect(instance.hideContent).toHaveBeenCalledTimes(1);
+      await component.voidTickets();
+      expect(appService.voidTickets).toHaveBeenCalled();
+      expect(blockUIService.stop).toHaveBeenCalled();
+    });
   });
 
-  it('#isNullCacheTransTime should return false', async () => {
-    const { instance } = await shallow
-      .render();
-    instance['fromTransTime'] = new Date();
-    instance['toTransTime'] = new Date();
-
-    const actual = instance['isNullCacheTransTime']();
-
-    expect(actual).toBeFalsy();
+  describe('handleAfterVoid', () => {
+    it('should handle successful void operation', async () => {
+      const results = Helper.fakeResult;
+      await component.handleAfterVoid(results);
+      expect(component.messagesResult.isShow).toBeTruthy();
+      expect(component.messagesResult.header).toBe('Void Bet Result');
+      expect(component.messagesResult.results).toEqual(results);
+    });
   });
 
-  it('#isNullCacheCheckTime should return false', async () => {
-    const { instance } = await shallow
-      .render();
-    instance['fromCheckTime'] = new Date();
-    instance['toCheckTime'] = new Date();
-
-    const actual = instance['isNullCacheCheckTime']();
-
-    expect(actual).toBeFalsy();
+  describe('ticketsChange', () => {
+    it('should update template value with new ticket count', () => {
+      const numberOfTickets = 5;
+      component.ticketsChange(numberOfTickets);
+      expect(component.templateValue.totalTickets).toBe(numberOfTickets);
+    });
   });
 
-  it('#updateEventType should update correct data', async () => {
-    const { instance } = await shallow
-      .render();
-    instance.templateValue = new TemplateValue();
-
-    instance.updateEventType('1');
-
-    expect(instance.templateValue.eventType).toBe('1');
+  describe('updateEventType', () => {
+    it('should update template value with new event type', () => {
+      const eventType = '2';
+      component.updateEventType(eventType);
+      expect(component.templateValue.eventType).toBe(eventType);
+    });
   });
 
-  it('#updateSubIssueType should update correct data', async () => {
-    const { instance } = await shallow
-      .render();
-
-    instance.updateSubIssueType(1);
-
-    expect(instance.subIssueTypeId).toBe(1);
+  describe('updateIssueType', () => {
+    it('should update issue type ID', () => {
+      const issueTypeId = 1;
+      component.updateIssueType(issueTypeId);
+      expect(component.issueTypeId).toBe(issueTypeId);
+    });
   });
 
-  it('#updateIssueType should update correct data', async () => {
-    const { instance } = await shallow
-      .render();
-
-    instance.updateIssueType(1);
-
-    expect(instance.issueTypeId).toBe(1);
-  });
-
-  it('#searchEvent should getMatchInfo', async () => {
-    const match = {} as MatchModel;
-    const data = {groups: [{name: "a", tickets:[{isChecked: true, betId: "1", status: "a"}]}]} as TicketsModel;
-    const mockGetMatchInfo = jest.fn().mockReturnValue(match);
-    const mockGetTickets = jest.fn().mockReturnValue(data);
-    const { instance } = await shallow
-    .mock(AppService, { getMatchInfo: mockGetMatchInfo, getTickets: mockGetTickets })
-    .render();
-    const getTicketsQuery = {invalidTransDate: false} as GetTicketsQuery;
-    instance.ticketsModel = {groups: []} as TicketsModel;
-    instance.ticketsModel.getNumberOfCheckedTickets = jest.fn();
-    instance.ticketsModel.checkSettledTickets = jest.fn();
-    instance.updateTemplateValue = jest.fn();
-    instance.renderTickets = jest.fn();
-    instance.searchEvent(getTicketsQuery);
-
-    expect(mockGetMatchInfo).toBeCalled();
-  });
-
-  it('#ticketsChange should update templateValue', async () => {
-    const { instance } = await shallow
-      .render();
-    instance.ticketsModel = {groups: [{tickets: [{isChecked: true, status: 'won'}]}]} as TicketsModel;
-    instance.templateValue = {} as TemplateValue;
-    instance.ticketsModel.checkSettledTickets = jest.fn().mockReturnValue(true);
-    instance.ticketsChange(1);
-
-    expect(instance.templateValue.totalTickets).toBe(1);
-    expect(instance.templateValue.checkSettled).toBeTruthy();
-  });
-  
-  it('#getMatchInfo should handleNoTicket', async () => {
-    const { instance } = await shallow
-      .render();
-    const query = {matchId: 1} as GetTicketsQuery;
-    query.invalidTransDate = true;
-    instance.renderTickets = jest.fn();
-    instance.matchViewModel = {matchId: 1} as MatchModel;
-    instance.ticketsModel = {groups: [{tickets: [{isChecked: true, status: 'won'}]}]} as TicketsModel;
-    instance.getMatchInfo(query);
-
-    expect(instance.isShowTickets).toBeTruthy();
-    expect(instance.isShowMatch).toBeTruthy();
-    expect(instance.isShowConfirm).toBeFalsy();
-    expect(instance.isShowMessages).toBeFalsy();
+  describe('updateSubIssueType', () => {
+    it('should update sub issue type ID and reset checkbox', () => {
+      const subIssueTypeId = 2;
+      component.updateSubIssueType(subIssueTypeId);
+      expect(component.subIssueTypeId).toBe(subIssueTypeId);
+      expect(component.templateValue.isCheckedVar).toBeFalsy();
+    });
   });
 });

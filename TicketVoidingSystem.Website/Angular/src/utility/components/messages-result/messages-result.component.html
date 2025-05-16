@@ -1,24 +1,34 @@
-﻿<div class="messages-results" *ngIf="messagesResult.isShow">
+﻿@if (messagesResult.isShow) {
+  <div class="messages-results">
     <div class="overlay"></div>
     <div class="messages-results-content">
-        <div class="messages-results-header">
-            <span [innerHTML]="messagesResult.header | sanitizeHtml"></span>
-            <span class="messages-results-cancel" (click)="messagesResult.isShow = false">&times;</span>
-        </div>
-        <div class="messages-results-body">
-            <div class="message" *ngFor="let result of messagesResult.results">
-                <div *ngIf="result.errorCode == -9999" class="detail-text">
-                    <label>For more details:</label>
-                </div>
-                <div *ngIf="result.errorCode == 0 && result.errorMsg !=''" class="success">
-                    <span class="icon-success"></span>
-                    <div [innerHTML]="result.errorMsg | sanitizeHtml"></div>
-                </div>
-                <div *ngIf="result.errorCode > 0 && result.errorMsg !=''" class="fail">
-                    <span class="icon-warning"></span>
-                    <div [innerHTML]="result.errorMsg | sanitizeHtml"></div>
-                </div>
-            </div>
-        </div>
+      <div class="messages-results-header">
+        <span [innerHTML]="messagesResult.header | sanitizeHtml"></span>
+        <span class="messages-results-cancel" (click)="messagesResult.isShow = false">&times;</span>
+      </div>
+      <div class="messages-results-body">
+        @for (result of messagesResult.results; track result) {
+          <div class="message">
+            @if (result.errorCode == -9999) {
+              <div class="detail-text">
+                <label>For more details:</label>
+              </div>
+            }
+            @if (result.errorCode == 0 && result.errorMsg !='') {
+              <div class="success">
+                <span class="icon-success"></span>
+                <div [innerHTML]="result.errorMsg | sanitizeHtml"></div>
+              </div>
+            }
+            @if (result.errorCode > 0 && result.errorMsg !='') {
+              <div class="fail">
+                <span class="icon-warning"></span>
+                <div [innerHTML]="result.errorMsg | sanitizeHtml"></div>
+              </div>
+            }
+          </div>
+        }
+      </div>
     </div>
-</div>
+  </div>
+}

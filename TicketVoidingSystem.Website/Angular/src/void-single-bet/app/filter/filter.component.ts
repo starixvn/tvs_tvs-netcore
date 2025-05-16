@@ -1,4 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import moment from "moment";
 import { AdvancedModeConstants } from '../../../utility/components/advanced-mode/advanced-mode.constants';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
@@ -26,13 +28,22 @@ import { StaticService } from '../../../utility/services/static.service';
 import { AppService } from '../app.service';
 import { GetTicketsQuery } from '../models/query.model';
 import { Bet, Item, Type } from './filter.model';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { Selection } from '../../../utility/models/selection.model';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
+import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
 
 @Component({
+  standalone: true,
   selector: 'filter',
   templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.scss']
+  styleUrls: ['./filter.component.scss'],
+  imports: [CommonModule, FormsModule, AdvancedModeComponent, GroupBetTypesComponent, DateFullTimeNewComponent,
+    MultipleSelectionComponent, LicenseeAffectedListComponent, TooltipComponent, NgSelectModule, OnlyNumberDirective  ]
 })
-export class FilterComponent implements OnInit{
+export class FilterComponent implements OnInit {
   @Input() licenseeAffectedList: AffectedLicensee[] = [];
   @Output() searchEvent = new EventEmitter<GetTicketsQuery>();
   @Output() viewLogInfoEvent = new EventEmitter<GetTicketsQuery>();
@@ -77,15 +88,17 @@ export class FilterComponent implements OnInit{
   getPlayerQuery: GetPlayersQuery;
   timeType = 0;
   playerNamesSelected: TemplateContent;
-  comboParlay: MultipleSelection;
+  comboParlay: Selection[] = [];
+  selectedComboParlay: string[] = [];
   isCheckTime = true;
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
+  private readonly BET_ITEM_SUB_PARLAY = 'Sub Parlay';
+  
+  element = inject(ElementRef);
+  appService = inject(AppService);
+  commonService = inject(CommonService);
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly appService: AppService,
-    private readonly commonService: CommonService
-    ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -94,16 +107,12 @@ export class FilterComponent implements OnInit{
   }
   
   renderComboParlay() {
-    this.comboParlay = new MultipleSelection();
-    this.comboParlay.checkAllCheckBoxText = 'All';
-    this.comboParlay.allItemsCheckedText = 'All';
-    this.comboParlay.noneItemCheckedText = 'Select options';
-    this.comboParlay.maxWidth = '115px';
-    this.comboParlay.items = ComboParlayConstants.ComboParlay;
+    this.comboParlay = ComboParlayConstants.ComboParlay;
+    this.selectedComboParlay = [];
   }
 
   resetCheckedComboParlay() {
-    this.comboParlay.items.forEach(x => x.checked = true);
+    this.selectedComboParlay = this.comboParlay.map(item => item.value);
   }
 
   setDateTime() {
@@ -217,7 +226,7 @@ export class FilterComponent implements OnInit{
     this.subIssueType.items = this.subIssueType.items.filter(x => x.value !== '27' && x.value !== '39' && x.value !== '41');
     //END
 
-    this.subIssueType.value = this.subIssueType.items[0].value;
+    this.subIssueType.value = this.subIssueType.items[0]?.value;
     this.updateIssueTypeEvent.emit(Number(this.issueType.value));
     this.changeSubIssueTypeEvent();
 
@@ -546,8 +555,8 @@ export class FilterComponent implements OnInit{
   }
 
   isSelectionNotValid() {
-    const selectionSubParlays = this.getSelectionSubParlays(this.bet.value, this.comboParlay)
-    return this.bet.value === "Sub Parlay" && selectionSubParlays === "";
+    const selectionSubParlays = this.getSelectionSubParlays(this.bet.value);
+    return this.bet.value === this.BET_ITEM_SUB_PARLAY && (!selectionSubParlays || selectionSubParlays === "");
   }
 
   checkFilterParams(): boolean {
@@ -566,22 +575,18 @@ export class FilterComponent implements OnInit{
       return false;
     }
     if (this.isSelectionNotValid()) {
-      this.tooltip.display('multiple-selection', TEXT.INVALID_SELECTION);
+      this.tooltip.display('selection-dropdown-sub-parlay', TEXT.INVALID_SELECTION);
       return false;
     }
     return this.groupBetTypesComponent.validate() && this.advancedModeComponent.validate();
   }
 
-  getSelectionSubParlays(bet: string, comboParlay: MultipleSelection) {
-    if (bet !== "Sub Parlay") {
+  getSelectionSubParlays(bet: string) {
+    if (bet !== this.BET_ITEM_SUB_PARLAY) {
       return "";
     }
 
-    const selectedItems = comboParlay.items
-      .filter(item => item.checked)
-      .map(item => item.value);
-
-    return selectedItems.join(",");
+    return this.selectedComboParlay.join(',');
   }
 
   getParams(): GetTicketsQuery {
@@ -607,7 +612,7 @@ export class FilterComponent implements OnInit{
       pageSize: PagingConstant.SIZE_DEFAULT,
       invalidTransDate: invalidTransDate,
       timeType: this.timeType,
-      selectionSubParlays: this.getSelectionSubParlays(this.bet.value, this.comboParlay),
+      selectionSubParlays: this.getSelectionSubParlays(this.bet.value),
       isCheckTime: this.isCheckTime
     };
 
@@ -624,6 +629,7 @@ export class FilterComponent implements OnInit{
     this.setDateTime();
     this.groupBetTypes = new GroupBetTypesModel([], false);
     this.advancedModeComponent.resetBetTeam();
+    this.licenseeAffectedList = [];
   }
 
   changeBetTypes(betTypes: BetType[]) {
@@ -640,6 +646,6 @@ export class FilterComponent implements OnInit{
   }
 
   isShowSelectionSubParlay(): boolean {
-    return this.bet.value === "Sub Parlay";
+    return this.bet.value === this.BET_ITEM_SUB_PARLAY;
   }
 }

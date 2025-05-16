@@ -1,4 +1,4 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { inject, Injectable } from '@angular/core';
 import { GetBetTypesQuery, GroupBetTypesModel } from '../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 import { MatchModel } from '../../utility/models/match.model';
@@ -8,12 +8,14 @@ import { HttpService } from '../../utility/services/http.service';
 import { GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
 import { TicketsModel } from './tickets/tickets.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AppService {
-  constructor(private readonly httpService: HttpService,
-    private readonly commonService: CommonService,
-    private readonly blockUIService: BlockUiService) { }
-
+  httpService = inject(HttpService);
+  commonService = inject(CommonService);
+  blockUIService = inject(BlockUiService);
+  
   async getRemark(): Promise<string[]> {
     const url = 'api/VoidSingleBet/GetRemark';
     this.blockUIService.start();

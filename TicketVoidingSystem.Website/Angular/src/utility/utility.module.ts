@@ -61,20 +61,17 @@ import { HttpService } from './services/http.service';
     LicenseeAffectedListComponent,
     VoidReasonComponent,
     AutoRefreshComponent,
-    OnlyNumberDirective,
-    BetIdsComponent,
-    EventLeagueComponent,
-    LogInfoMessageComponent,
-    LicenseesComponent,
-    NumbersOnlyDirective
     BetTypesComponent,
     BetTypesVirtualSportComponent,
     MatchDetailComponent,
-    NotificationComponent,   
-    OnlyNumberDirective
-  ],
-  declarations: [
+    NotificationComponent,
+    OnlyNumberDirective,
     MessagesResultComponent,
+    NumbersOnlyDirective,
+    BetIdsComponent,
+    EventLeagueComponent,
+    LogInfoMessageComponent,
+    LicenseesComponent
   ],
   exports: [
     BaseTicketsListComponent,
@@ -82,7 +79,6 @@ import { HttpService } from './services/http.service';
     BetTypesVirtualSportComponent,
     ConfirmationComponent,
     MatchDetailComponent,
-    MessagesResultComponent,
     NotificationComponent,
     NumbersOnlyDirective,
     OnlyNumberDirective,
@@ -94,9 +90,6 @@ import { HttpService } from './services/http.service';
     LogInfoTicketCountComponent,
     SortingModule,
     LicenseeAffectedListComponent,
-    EventLeagueComponent,
-    LogInfoMessageComponent,
-    LicenseesComponent,
     VoidReasonComponent
   ],
   providers: [HttpService, CommonService]

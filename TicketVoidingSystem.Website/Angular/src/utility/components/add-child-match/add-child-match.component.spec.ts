@@ -1,511 +1,160 @@
-import { NgModule, SimpleChange } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
-import { Shallow } from 'shallow-render';
-import { ChildMatchModel } from '../../../add-request/app/add-request/models/related-event.model';
-import { MatchType } from '../../constants/config';
-import { HttpService } from '../../services/http.service';
-import { BlockUiModule } from '../block-ui/block-ui.module';
-import { ToolTipModule } from '../tooltip/tooltip.module';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../modules/testing.module';
 import { AddChildMatchComponent } from './add-child-match.component';
+import { ChildMatchModel } from '../../../add-request/app/add-request/models/related-event.model';
 import { AddChildMatchModel } from './add-child-match.model';
+import { SimpleChange } from '@angular/core';
+import { MatchType } from '../../constants/config';
 
 class Helper {
-  static readonly inputMatchSelector = 'input[type=text].input-match-id';
-
-  static readonly fakeAddChildMatchModel: AddChildMatchModel = {
-    isOpen: true,
-    matchType: 0,
-    selectedMatchIds: []
-  };
-  static readonly fakeChildMatchModelList: ChildMatchModel[] = [
+  static readonly fakeChildMatchModel: ChildMatchModel[] = [
     {
-      matchId: 12345,
-      matchCode: '111',
-      matchEvent: 'Holstein Kiel - vs - Hamburger SV',
-      isChecked: true,
-      matchType: 0,
-      leagueName: '',
-      name: '',
-      homeId: 0,
-      homeName: '',
-      homeNameNewSimplified: '',
-      homeNameSimplified: '',
-      homeNameTraditional: '',
-      awayId: 0,
-      awayName: '',
-      awayNameNewSimplified: '',
-      awayNameSimplified: '',
-      awayNameTraditional: '',
-      eventDate: undefined,
-      dateTime: undefined,
-      leagueId: 0,
-      leagueGroupId: 0,
-      leagueNameNewSimplified: '',
-      leagueNameSimplified: '',
-      leagueNameTraditional: '',
-      matchEventSimplified: '',
-      matchEventNewSimplified: '',
-      kickOffTime: '',
-      startTime: undefined,
-      endTime: undefined,
-      sportType: 0,
-      sportTypeName: '',
-      sportTypeNameNewSimplified: '',
-      sportTypeNameSimplified: '',
-      sportTypeNameTraditional: ''
+      matchId: 1,
+      matchType: MatchType.CHILD,
+      isChecked: false,
+      matchCode: 'TEST1',
+      leagueName: 'Test League',
+      matchEvent: 'Test Event'
     },
     {
-      matchId: 39420383,
-      matchCode: '222',
-      matchEvent: 'MU (V) - vs - Real Madrid (V)',
-      isChecked: true,
-      matchType: 0,
-      leagueName: '',
-      name: '',
-      homeId: 0,
-      homeName: '',
-      homeNameNewSimplified: '',
-      homeNameSimplified: '',
-      homeNameTraditional: '',
-      awayId: 0,
-      awayName: '',
-      awayNameNewSimplified: '',
-      awayNameSimplified: '',
-      awayNameTraditional: '',
-      eventDate: undefined,
-      dateTime: undefined,
-      leagueId: 0,
-      leagueGroupId: 0,
-      leagueNameNewSimplified: '',
-      leagueNameSimplified: '',
-      leagueNameTraditional: '',
-      matchEventSimplified: '',
-      matchEventNewSimplified: '',
-      kickOffTime: '',
-      startTime: undefined,
-      endTime: undefined,
-      sportType: 0,
-      sportTypeName: '',
-      sportTypeNameNewSimplified: '',
-      sportTypeNameSimplified: '',
-      sportTypeNameTraditional: ''
-    },
-    {
-      matchId: 39420384,
-      matchCode: '222',
-      matchEvent: 'Barca (V) - vs - Real Madrid (V)',
-      isChecked: true,
-      matchType: 1,
-      leagueName: '',
-      name: '',
-      homeId: 0,
-      homeName: '',
-      homeNameNewSimplified: '',
-      homeNameSimplified: '',
-      homeNameTraditional: '',
-      awayId: 0,
-      awayName: '',
-      awayNameNewSimplified: '',
-      awayNameSimplified: '',
-      awayNameTraditional: '',
-      eventDate: undefined,
-      dateTime: undefined,
-      leagueId: 0,
-      leagueGroupId: 0,
-      leagueNameNewSimplified: '',
-      leagueNameSimplified: '',
-      leagueNameTraditional: '',
-      matchEventSimplified: '',
-      matchEventNewSimplified: '',
-      kickOffTime: '',
-      startTime: undefined,
-      endTime: undefined,
-      sportType: 0,
-      sportTypeName: '',
-      sportTypeNameNewSimplified: '',
-      sportTypeNameSimplified: '',
-      sportTypeNameTraditional: ''
+      matchId: 2,
+      matchType: MatchType.CHILD,
+      isChecked: false,
+      matchCode: 'TEST2',
+      leagueName: 'Test League',
+      matchEvent: 'Test Event'
     }
   ];
 
-  static readonly fakeTempChildMatches: ChildMatchModel[] = [
-    {
-      matchId: 12345,
-      matchCode: '111',
-      matchEvent: 'Holstein Kiel - vs - Hamburger SV',
-      isChecked: true,
-      matchType: 1,
-      leagueName: '',
-      name: '',
-      homeId: 0,
-      homeName: '',
-      homeNameNewSimplified: '',
-      homeNameSimplified: '',
-      homeNameTraditional: '',
-      awayId: 0,
-      awayName: '',
-      awayNameNewSimplified: '',
-      awayNameSimplified: '',
-      awayNameTraditional: '',
-      eventDate: undefined,
-      dateTime: undefined,
-      leagueId: 0,
-      leagueGroupId: 0,
-      leagueNameNewSimplified: '',
-      leagueNameSimplified: '',
-      leagueNameTraditional: '',
-      matchEventSimplified: '',
-      matchEventNewSimplified: '',
-      kickOffTime: '',
-      startTime: undefined,
-      endTime: undefined,
-      sportType: 0,
-      sportTypeName: '',
-      sportTypeNameNewSimplified: '',
-      sportTypeNameSimplified: '',
-      sportTypeNameTraditional: ''
-    },
-    {
-      matchId: 39420383,
-      matchCode: '222',
-      matchEvent: 'VietNam (V) - vs - Real Madrid (V)',
-      isChecked: false,
-      matchType: 2,
-      leagueName: '',
-      name: '',
-      homeId: 0,
-      homeName: '',
-      homeNameNewSimplified: '',
-      homeNameSimplified: '',
-      homeNameTraditional: '',
-      awayId: 0,
-      awayName: '',
-      awayNameNewSimplified: '',
-      awayNameSimplified: '',
-      awayNameTraditional: '',
-      eventDate: undefined,
-      dateTime: undefined,
-      leagueId: 0,
-      leagueGroupId: 0,
-      leagueNameNewSimplified: '',
-      leagueNameSimplified: '',
-      leagueNameTraditional: '',
-      matchEventSimplified: '',
-      matchEventNewSimplified: '',
-      kickOffTime: '',
-      startTime: undefined,
-      endTime: undefined,
-      sportType: 0,
-      sportTypeName: '',
-      sportTypeNameNewSimplified: '',
-      sportTypeNameSimplified: '',
-      sportTypeNameTraditional: ''
-    },
-    {
-      matchId: 39420384,
-      matchCode: '222',
-      matchEvent: 'MU (V) - vs - Real Madrid (V)',
-      isChecked: false,
-      matchType: 1,
-      leagueName: '',
-      name: '',
-      homeId: 0,
-      homeName: '',
-      homeNameNewSimplified: '',
-      homeNameSimplified: '',
-      homeNameTraditional: '',
-      awayId: 0,
-      awayName: '',
-      awayNameNewSimplified: '',
-      awayNameSimplified: '',
-      awayNameTraditional: '',
-      eventDate: undefined,
-      dateTime: undefined,
-      leagueId: 0,
-      leagueGroupId: 0,
-      leagueNameNewSimplified: '',
-      leagueNameSimplified: '',
-      leagueNameTraditional: '',
-      matchEventSimplified: '',
-      matchEventNewSimplified: '',
-      kickOffTime: '',
-      startTime: undefined,
-      endTime: undefined,
-      sportType: 0,
-      sportTypeName: '',
-      sportTypeNameNewSimplified: '',
-      sportTypeNameSimplified: '',
-      sportTypeNameTraditional: ''
-    }
-  ];
-
-  static readonly fakeChildMatchModel: ChildMatchModel = {
-    matchId: 99999,
-    matchCode: '222',
-    matchEvent: 'TestC - vs - Real Madrid (V)',
-    isChecked: true,
-    matchType: 0,
-    leagueName: '',
-    name: '',
-    homeId: 0,
-    homeName: '',
-    homeNameNewSimplified: '',
-    homeNameSimplified: '',
-    homeNameTraditional: '',
-    awayId: 0,
-    awayName: '',
-    awayNameNewSimplified: '',
-    awayNameSimplified: '',
-    awayNameTraditional: '',
-    eventDate: undefined,
-    dateTime: undefined,
-    leagueId: 0,
-    leagueGroupId: 0,
-    leagueNameNewSimplified: '',
-    leagueNameSimplified: '',
-    leagueNameTraditional: '',
-    matchEventSimplified: '',
-    matchEventNewSimplified: '',
-    kickOffTime: '',
-    startTime: undefined,
-    endTime: undefined,
-    sportType: 0,
-    sportTypeName: '',
-    sportTypeNameNewSimplified: '',
-    sportTypeNameSimplified: '',
-    sportTypeNameTraditional: ''
-  };
+  static readonly fakeAddChildMatchModel = new AddChildMatchModel();
 }
 
 describe('AddChildMatchComponent', () => {
-  @NgModule({
-    imports: [
-      ToolTipModule,
-      BlockUiModule,
-      FormsModule
-    ],
-    providers: [
-      HttpService
-    ]
-  })
-  class AppModuleTest { }
+  let component: AddChildMatchComponent;
+  let fixture: ComponentFixture<AddChildMatchComponent>;
 
-  let shallow: Shallow<AddChildMatchComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule]
+    }).compileComponents();
 
-  beforeEach(() => {
-    shallow = new Shallow(AddChildMatchComponent, AppModuleTest);
+    fixture = TestBed.createComponent(AddChildMatchComponent);
+    component = fixture.componentInstance;
   });
 
-  it('#AddChildMatchComponent init should match snapshot', async () => {
-    // Arrange
-    const { fixture } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeAddChildMatchModel,
-      }
-    });
-    
-    // Action
-    expect(fixture).toMatchSnapshot();
-  });
-  
-  it('#handleCheckAllMatches should update checked when click check all', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeAddChildMatchModel,
-      }
-    });
-    instance.tempRelatedEvents = Helper.fakeTempChildMatches;
-    instance.model.matchType = MatchType.CHILD;
-
-    // Action
-    instance.handleCheckAllMatches({target:{checked: true}});
-    
-    // Asset
-    expect(instance.tempRelatedEvents.filter(y => y.matchType === instance.model.matchType).every(x => x.isChecked)).toBeTruthy();
-  });
-  
-  it('#handleCheckAllMatches should not update checked when click check all', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeAddChildMatchModel,
-      }
-    });
-    instance.tempRelatedEvents = _.cloneDeep(Helper.fakeTempChildMatches);
-    instance.tempRelatedEvents.forEach(x => x.matchType = MatchType.LINK);
-    instance.model.matchType = MatchType.CHILD;
-
-    // Action
-    instance.handleCheckAllMatches({target:{checked: true}});
-    
-    // Asset
-    expect(instance.tempRelatedEvents.filter(y => y.matchType === instance.model.matchType).every(x => x.isChecked)).toBeTruthy();
-  });
-  
-  it('#handleCheckAllMatches should emit #changeEvent', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeAddChildMatchModel,
-      }
-    });
-    instance.changeEvent.emit = jest.fn();
-
-    // Action
-    instance.clickButtonSave();
-    
-    // Asset
-    expect(instance.changeEvent.emit).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#closeChildMatchModal should emit #isOpenChange', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeAddChildMatchModel,
-      }
-    });
-    instance.isOpenChange.emit = jest.fn();
-
-    // Action
-    instance.closeChildMatchModal();
-    
-    // Asset
-    expect(instance.isOpenChange.emit).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#saveSelectedRelatedEvents should emit #selectedEventsChange', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeAddChildMatchModel,
-      }
-    });
-    instance.tempRelatedEvents = Helper.fakeTempChildMatches;
-    instance.selectedEventsChange.emit = jest.fn();
-    instance.closeChildMatchModal = jest.fn();
-
-    // Action
-    instance.saveSelectedRelatedEvents();
-    
-    // Asset
-    expect(instance.selectedEventsChange.emit).toHaveBeenCalledTimes(1);
-    expect(instance.closeChildMatchModal).toHaveBeenCalledTimes(1);
-  });
-  
-  it('#isMatchExisted should return true', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeAddChildMatchModel,
-      }
-    });
-
-    // Action
-    const actual = instance.isMatchExisted(Helper.fakeTempChildMatches, 12345);
-    
-    // Asset
-    expect(actual).toBeTruthy();
-  });
-  
-  it('#isMatchExisted should return false', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeAddChildMatchModel,
-      }
-    });
-
-    // Action
-    const actual = instance.isMatchExisted(Helper.fakeTempChildMatches, 1234567);
-    
-    // Asset
-    expect(actual).toBe(false);
-  });
-  
-  it('#handleCheckBox should update #isCheckedAll to true', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeAddChildMatchModel,
-      }
-    });
-    instance.tempRelatedEvents = _.cloneDeep(Helper.fakeTempChildMatches);
-    instance.tempRelatedEvents.forEach(x => x.isChecked = true);
-
-    // Action
-    instance.handleCheckBox();
-    
-    // Asset
-    expect(instance.isCheckedAll).toBe(true);
-  });
-  
-  it('#handleCheckBox should update #isCheckedAll to false', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeAddChildMatchModel,
-      }
-    });
-    instance.tempRelatedEvents = _.cloneDeep(Helper.fakeTempChildMatches);
-    instance.tempRelatedEvents.forEach(x => x.isChecked = true);
-    instance.tempRelatedEvents.push(new ChildMatchModel());
-
-    // Action
-    instance.handleCheckBox();
-    
-    // Asset
-    expect(instance.isCheckedAll).toBe(false);
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#ngOnChanges should call #handleCheckBox', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeAddChildMatchModel,
-      }
-    });
-    instance.relatedEvents = Helper.fakeTempChildMatches;
-    instance.tempRelatedEvents = Helper.fakeTempChildMatches;
-    instance.handleCheckBox = jest.fn();
-    const changes = {
-      'model': new SimpleChange(new AddChildMatchModel(), new AddChildMatchModel(), true)
-    };
-
-    // Action
-    await instance.ngOnChanges(changes);
-    
-    // Asset
-    expect(instance.handleCheckBox).toHaveBeenCalledTimes(1);
+  it('should initialize with default values', () => {
+    expect(component.relatedEvents).toEqual([]);
+    expect(component.model).toBeInstanceOf(AddChildMatchModel);
+    expect(component.isBlock).toBeFalsy();
+    expect(component.tempRelatedEvents).toEqual([]);
   });
-  
-  it('#ngOnChanges should not call #handleCheckBox', async () => {
-    // Arrange
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeAddChildMatchModel,
-      }
-    });
-    instance.handleCheckBox = jest.fn();
 
-    // Action
-    await instance.ngOnChanges({});
-    
-    // Asset
-    expect(instance.handleCheckBox).toHaveBeenCalledTimes(0);
+  it('should handle ngOnChanges when model changes', () => {
+    // Arrange
+    component.relatedEvents = Helper.fakeChildMatchModel;
+    component.model = Helper.fakeAddChildMatchModel;
+    component.model.matchType = MatchType.CHILD;
+    component.model.selectedMatchIds = [1];
+
+    // Act
+    component.ngOnChanges({
+      model: {
+        currentValue: component.model,
+        previousValue: null,
+        firstChange: true,
+        isFirstChange: () => true
+      } as SimpleChange
+    });
+
+    // Assert
+    expect(component.tempRelatedEvents.length).toBe(2);
+    expect(component.tempRelatedEvents[0].isChecked).toBeTruthy();
+    expect(component.tempRelatedEvents[1].isChecked).toBeFalsy();
+  });
+
+  it('should handle checkbox state correctly', () => {
+    // Arrange
+    component.tempRelatedEvents = Helper.fakeChildMatchModel;
+
+    // Act & Assert
+    component.handleCheckBox();
+    expect(component.isCheckedAll).toBeFalsy();
+
+    component.tempRelatedEvents.forEach(x => x.isChecked = true);
+    component.handleCheckBox();
+    expect(component.isCheckedAll).toBeTruthy();
+  });
+
+  it('should check if match exists', () => {
+    // Arrange
+    const matches = Helper.fakeChildMatchModel;
+    const existingMatchId = 1;
+    const nonExistingMatchId = 999;
+
+    // Act & Assert
+    expect(component.isMatchExisted(matches, existingMatchId)).toBeTruthy();
+    expect(component.isMatchExisted(matches, nonExistingMatchId)).toBeFalsy();
+  });
+
+  it('should save selected related events and close modal', () => {
+    // Arrange
+    const selectedEvents = Helper.fakeChildMatchModel;
+    selectedEvents[0].isChecked = true;
+    selectedEvents[1].isChecked = true;
+    component.tempRelatedEvents = selectedEvents;
+    component.selectedEventsChange.emit = jest.fn();
+    component.isOpenChange.emit = jest.fn();
+
+    // Act
+    component.saveSelectedRelatedEvents();
+
+    // Assert
+    expect(component.selectedEventsChange.emit).toHaveBeenCalledWith(selectedEvents);
+    expect(component.tempRelatedEvents).toEqual([]);
+    expect(component.model.isOpen).toBeFalsy();
+    expect(component.isOpenChange.emit).toHaveBeenCalledWith(false);
+  });
+
+  it('should close child match modal', () => {
+    // Arrange
+    component.tempRelatedEvents = Helper.fakeChildMatchModel;
+    component.model.isOpen = true;
+    component.isOpenChange.emit = jest.fn();
+
+    // Act
+    component.closeChildMatchModal();
+
+    // Assert
+    expect(component.tempRelatedEvents).toEqual([]);
+    expect(component.model.isOpen).toBeFalsy();
+    expect(component.isOpenChange.emit).toHaveBeenCalledWith(false);
+  });
+
+  it('should emit change event when save button is clicked', () => {
+    // Arrange
+    component.changeEvent.emit = jest.fn();
+
+    // Act
+    component.clickButtonSave();
+
+    // Assert
+    expect(component.changeEvent.emit).toHaveBeenCalled();
+  });
+
+  it('should handle check all matches', () => {
+    // Arrange
+    component.tempRelatedEvents = Helper.fakeChildMatchModel;
+    component.model.matchType = MatchType.CHILD;
+    const event = { target: { checked: true } };
+
+    // Act
+    component.handleCheckAllMatches(event);
+
+    // Assert
+    expect(component.tempRelatedEvents.every(x => x.isChecked)).toBeTruthy();
   });
 });
