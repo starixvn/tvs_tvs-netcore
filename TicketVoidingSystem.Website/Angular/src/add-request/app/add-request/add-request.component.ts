@@ -296,7 +296,8 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       IssueTypeConstant.TECHNICAL_ERROR,
       IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK,
       IssueTypeConstant.WRONG_OFFERED_NAME,
-      IssueTypeConstant.OTHER_ISSUES
+      IssueTypeConstant.OTHER_ISSUES,
+      IssueTypeConstant.MATCH_EARLY_COMPLETED
     ]
 
     return issueTypesHasSimpleFields.includes(this.model.filter.issueTypeId);

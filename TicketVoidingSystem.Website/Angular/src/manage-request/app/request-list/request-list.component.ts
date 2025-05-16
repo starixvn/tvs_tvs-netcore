@@ -289,7 +289,7 @@ export class RequestListComponent implements OnInit, OnChanges {
   };
 
   private isDifferenceByRequestDetailId(request: RequestModel): boolean {
-    return [IssueTypeConstant.WRONG_MARKET_OFFERED, IssueTypeConstant.TECHNICAL_ERROR].includes(request.issueTypeId.toString());
+    return [IssueTypeConstant.WRONG_MARKET_OFFERED].includes(request.issueTypeId.toString());
   }
 
   private isDifferenceByMatchId(request: RequestModel): boolean {

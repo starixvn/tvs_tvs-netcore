@@ -283,7 +283,8 @@ export class StaticService {
       issueTypeId?.toString() === IssueTypeConstant.RED_CARD ||
       issueTypeId?.toString() === IssueTypeConstant.WRONG_SCORE ||
       issueTypeId?.toString() === IssueTypeConstant.WRONG_MARKET_OFFERED ||
-      issueTypeId?.toString() === IssueTypeConstant.TECHNICAL_ERROR;
+      issueTypeId?.toString() === IssueTypeConstant.TECHNICAL_ERROR ||
+      issueTypeId?.toString() === IssueTypeConstant.MATCH_EARLY_COMPLETED;
   }
 
   static isCorrectFormatMultipleDecimal(value: string, element: string, tooltip: Tooltip, errorText: string): boolean {

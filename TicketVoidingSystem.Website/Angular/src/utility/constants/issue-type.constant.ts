@@ -53,6 +53,7 @@ export class IssueTypeConstant {
     [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK, 'WRONG_ODDS_SPORTS_BOOK'],
     [IssueTypeConstant.WRONG_OFFERED_NAME, 'WRONG_OFFERED_NAME'],
     [IssueTypeConstant.MATCH_COMPLETED, 'MATCH_COMPLETED'],
+    [IssueTypeConstant.MATCH_EARLY_COMPLETED, 'MATCH_EARLY_COMPLETED']
   ]);
 }
 
