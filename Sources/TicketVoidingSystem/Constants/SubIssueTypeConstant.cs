@@ -22,5 +22,6 @@ public static class SubIssueTypeConstant
     public const int AbnormalBet_ABBet = 32;
     public const int AbnormalAccount_Abnormal = 39;
     public const int AbnormalAccount_ABBet = 104;
+    public const int TechnicalError_ProviderMistake = 149;
     public static readonly ImmutableArray<int> RemovedList = [AbnormalBet_Abnormal, AbnormalBet_ABBet, AbnormalAccount_Abnormal, AbnormalAccount_ABBet];
 }

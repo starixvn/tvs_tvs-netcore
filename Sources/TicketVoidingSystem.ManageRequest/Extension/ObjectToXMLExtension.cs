@@ -495,6 +495,14 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.Trim()}</root>";
     }
 
+    public static string ToEventTechnicalErrorProviderMistakeXml(this TechnicalErrorViewModel model)
+    {
+        var stringBuilder = $"<r MatchId = '{model.MatchId}' "
+                            + $"SubIssueTypeId='{model.SubIssueTypeId}' />";
+
+        return $"<root>{stringBuilder.Trim()}</root>";
+    }
+
     public static string OperatorToXml(this List<OperatorQuery>? operators)
     {
         if (operators is null || operators.Count <= 0)
