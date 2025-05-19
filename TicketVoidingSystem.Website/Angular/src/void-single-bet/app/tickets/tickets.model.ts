@@ -25,6 +25,7 @@ export class TicketsModel {
     licenseeAffectedList: AffectedLicensee[];
     betTypeNameReplaceMessage: Message;
     smallestMapTicket: string;
+    inning: string;
     groups: Array<GroupModel>;
     pagingModel: PagingModel;
     iconCheckBox: IconCheckBox;

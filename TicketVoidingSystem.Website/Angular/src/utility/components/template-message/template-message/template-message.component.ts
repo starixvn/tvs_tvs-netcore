@@ -211,6 +211,7 @@ export class TemplateMessageComponent implements OnChanges {
     this.replaceScoreService.execute(this.value, this.message);
     this.replaceAIOMessageService.execute(this.isVoidSinglePage(), this.value, this.message);
     this.replaceSpecialBetTypeService.execute(this.issueTypeUpdateSpecialBetTypeTvs(), this.issueTypeUpdateSpecialBetTypeVoidSingleBet(), this.value, this.message);
+    this.replaceCommonValuesService.replaceInning(this.value, this.message);
   }
 
   issueTypeUpdateSpecialBetTypeTvs(): boolean {

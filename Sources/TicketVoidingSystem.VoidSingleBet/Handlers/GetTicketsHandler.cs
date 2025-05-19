@@ -25,7 +25,7 @@ public class GetTicketsHandler(
             Groups = await CreateGroups(request, getTicketsResult)
         };
 
-        await updateListTicketsViewModelService.Update(model, getTicketsResult, request.MatchId);
+        await updateListTicketsViewModelService.Update(model, getTicketsResult, request.MatchId, 27);
 
         return model;
     }

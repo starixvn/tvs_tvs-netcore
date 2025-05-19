@@ -14,7 +14,7 @@ namespace TicketVoidingSystem.VoidSingleBet.Services.GetTickets;
 
 public interface UpdateListTicketsViewModelService
 {
-    Task Update(ListTicketsViewModel model, IList<GetTicketModel> data, int matchId);
+    Task Update(ListTicketsViewModel model, IList<GetTicketModel> data, int matchId, int issueTypeId);
 }
 
 public class UpdateListTicketsViewModelServiceImp(IMapper mapper,
@@ -22,7 +22,7 @@ public class UpdateListTicketsViewModelServiceImp(IMapper mapper,
     BetTypesRepository betTypesRepository)
     : UpdateListTicketsViewModelService
 {
-    public async Task Update(ListTicketsViewModel model, IList<GetTicketModel> data, int matchId)
+    public async Task Update(ListTicketsViewModel model, IList<GetTicketModel> data, int matchId, int issueTypeId)
     {
         if (!data.Any())
         {
@@ -36,6 +36,7 @@ public class UpdateListTicketsViewModelServiceImp(IMapper mapper,
         UpdateTimeViewModel(model, data);
         UpdateBetTypeName(model, data);
         await UpdateSmallestMapTicket(model, data, matchId);
+        model.Inning = await GetAllNumberInnings(data, matchId);
     }
 
     private static List<AffectedLicensee> GetLicenseeAffectedList(IList<GetTicketModel> data)
@@ -125,5 +126,24 @@ public class UpdateListTicketsViewModelServiceImp(IMapper mapper,
         var minValueMap = minBetId.SubstringBypassLength(1, 2);
 
         model.SmallestMapTicket = int.TryParse(minValueMap, out var value) ? value.ToString() : "";
+    }
+
+    private async Task<string> GetAllNumberInnings(IEnumerable<GetTicketModel> voidTickets, int? matchId)
+    {
+        var betTypesModel = await betTypesRepository.GetBetTypes(new GetBetTypesCriteria
+        {
+            MatchId = matchId ?? 0,
+            BetTypes = string.Join(",", voidTickets.Select(x => x.BetType).Distinct())
+        });
+        var allBetTypesInning = betTypesModel.BetTypes.Where(y => y.Name.Contains("X Inning")).Select(x => int.Parse(x.Id));
+        var betIdStrings = voidTickets
+            .Where(x => allBetTypesInning.Contains(x.BetType))
+            .Select(x => x.IsMixParlay ? x.SubBetCheck?.ToString() : x.BetId.ToString())
+            .ToList();
+        var inningValues = betIdStrings.Select(x => x.SubstringBypassLength(1, 2));
+
+        return string.Join(",", inningValues
+            .Select(x => int.TryParse(x, out var value) ? value.ToString() : null).Distinct()
+            .Where(x => x != null));
     }
 }

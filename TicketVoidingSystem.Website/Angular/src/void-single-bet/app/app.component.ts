@@ -38,6 +38,7 @@ import { NotificationComponent } from '../../utility/components/notification/not
 import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';
 import { MessagesResultComponent } from '../../utility/components/messages-result/messages-result.component';
 import { ModalComponent } from './modal/modal.component';
+import { SportType } from '../../utility/constants/sport.constant';
 
 @Component({
   standalone: true,
@@ -267,6 +268,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.templateValue.betTypeNameReplaceMessage = this.ticketsModel.betTypeNameReplaceMessage;
     this.templateValue.playerName = this.filterComponent.playerNamesSelected;
     this.templateValue.smallestMapTicket = this.ticketsModel.smallestMapTicket;
+    this.templateValue.inning = this.isHasInningContent(this.matchViewModel.sportType) ? this.ticketsModel.inning : '';
+  }
+
+  private isHasInningContent(sportType: number, ): boolean {
+    return sportType === SportType.BASEBALL && StaticService.isMatchEarlyCompleted(this.issueTypeId);
   }
 
   renderTickets(data: TicketsModel) {
@@ -280,7 +286,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.ticketsModel.parlayCount = data.parlayCount;
     this.ticketsModel.betTypeNameReplaceMessage = data.betTypeNameReplaceMessage;
     this.ticketsModel.smallestMapTicket = data.smallestMapTicket;
-
+    this.ticketsModel.inning = data.inning;
     if (this.isNullCacheTransTime()) {
       this.fromTransTime = data.fromTransTime;
       this.toTransTime = data.toTransTime;

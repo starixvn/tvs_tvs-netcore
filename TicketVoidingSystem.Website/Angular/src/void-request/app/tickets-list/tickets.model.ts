@@ -41,6 +41,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
   betTypeNameReplaceMessage: Message;
   smallestMapTicket: string;
   groupBetTypeId: number;
+  inning?: string;
 
   initData(data: TicketsModel) {
     this.total = data.total;

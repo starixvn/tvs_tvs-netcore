@@ -76,7 +76,8 @@ export class AppComponent implements OnInit {
       || StaticService.isTechnicalError(this.issueTypeId)
       || StaticService.isReducedOver(this.issueTypeId)
       || StaticService.isAbandoned(this.issueTypeId)
-      || StaticService.isOtherIssues(this.issueTypeId);
+      || StaticService.isOtherIssues(this.issueTypeId)
+      || StaticService.isMatchEarlyCompleted(this.issueTypeId);
   }
 
   isLikelyVoidEarlyKickOff(): boolean {

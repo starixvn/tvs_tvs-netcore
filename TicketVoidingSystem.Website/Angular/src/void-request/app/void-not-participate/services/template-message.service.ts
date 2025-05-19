@@ -17,16 +17,26 @@ export class TemplateMessageService {
     templateValue.groupPHAffected = voidPageItem.voidTicketsMini.groupPHAffected;
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;
     templateValue.eventType = voidPageItem.voidTicketsMini.isAllLiveTickets ? EventType.LIVE : null;
+    templateValue.score = this.getScore(requestDetail, voidPageItem.logInfoDetail);
+    templateValue.isAllNonLiveTickets = voidPageItem.voidTicketsMini.isAllNonLiveTickets;
+    templateValue.totalTickets = voidPageItem.voidTicketsMini.total;
+    templateValue.fromTransTime = voidPageItem.voidTicketsMini.fromTime;
+    templateValue.toTransTime = voidPageItem.voidTicketsMini.toTime;
+    
     if (StaticService.isNotParticipate(requestDetail.request.issueTypeId)) {
       templateValue.playerName = this.getPlayerName(requestDetail.playerNames[0]);
     }
 
     if (this.isSpecialBetType(requestDetail.request.issueTypeId)) {
-      this.setSpecialBetTypeProperties(templateValue, voidPageItem.voidTicketsMini, requestDetail, voidPageItem.logInfoDetail);
+      this.setSpecialBetTypeProperties(templateValue, voidPageItem.voidTicketsMini, requestDetail);
     }
 
     if (StaticService.isOtherIssues(requestDetail.request.issueTypeId)) {
       templateValue.smallestMapTicket = voidPageItem.voidTicketsMini.smallestMapTicket;
+    }
+    
+    if (this.isSportTypeBaseball(requestDetail.request.sportType) && StaticService.isMatchEarlyCompleted(requestDetail.request.issueTypeId)) {
+      templateValue.inning = voidPageItem.voidTicketsMini.inning;
     }
 
     return templateValue;
@@ -39,13 +49,9 @@ export class TemplateMessageService {
       || StaticService.isOtherIssues(issueTypeId);
   }
 
-  private setSpecialBetTypeProperties(templateValue: TemplateValue, voidTicketsMini: TicketsModel, requestDetail: RequestDetailViewModel,
-    logInfoDetail: LogInfoDetail) {
+  private setSpecialBetTypeProperties(templateValue: TemplateValue, voidTicketsMini: TicketsModel, requestDetail: RequestDetailViewModel) {
     templateValue.isCheckedSpecialBetType = true;
     templateValue.betTypeNameReplaceMessage = voidTicketsMini.betTypeNameReplaceMessage;
-    templateValue.totalTickets = voidTicketsMini.total;
-    templateValue.fromTransTime = voidTicketsMini.fromTime;
-    templateValue.toTransTime = voidTicketsMini.toTime;
 
     if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
       templateValue.correctOdds = requestDetail.wrongOddsSportsBookModel.correctOdds;
@@ -54,10 +60,6 @@ export class TemplateMessageService {
         templateValue.betTeam = voidTicketsMini.betTeam;
         templateValue.hdpValues = voidTicketsMini.hdpValues;
         templateValue.groupBetTypeId = voidTicketsMini.groupBetTypeId;
-      }
-
-      if (this.isSportTypeSoccer(requestDetail.request.sportType)) {
-        templateValue.score = this.getLiveScoreForTemplateMessage(logInfoDetail.scoreNormalTicket, logInfoDetail.scoreOfMatch);
       }
     }
   }
@@ -71,8 +73,23 @@ export class TemplateMessageService {
     } as TemplateContent;
   }
 
+  private getScore(requestDetail: RequestDetailViewModel, logInfoDetail: LogInfoDetail): string {
+    if(!this.isSportTypeSoccer(requestDetail.request.sportType)) {
+      return '';
+    }
+    if(StaticService.isMatchEarlyCompleted(requestDetail.request.issueTypeId) || StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId)) {
+      return this.getLiveScoreForTemplateMessage(logInfoDetail.scoreNormalTicket, logInfoDetail.scoreOfMatch);
+    }
+    return '';
+  }
+  
+
   private isSportTypeSoccer(sportType: number): boolean {
     return sportType === SportType.SOCCER;
+  }
+
+  private isSportTypeBaseball(sportType: number): boolean {
+    return sportType === SportType.BASEBALL;
   }
 
   private getLiveScoreForTemplateMessage(scoreNormalTicket: string, scoreOfMatch: string): string {
