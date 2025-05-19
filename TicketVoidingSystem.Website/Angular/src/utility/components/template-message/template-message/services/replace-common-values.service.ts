@@ -84,7 +84,7 @@ export class ReplaceCommonValuesService {
 
   private getTemplateInningContent(inning: string): TemplateContent {
     return {
-      msgEnglish:  `${TemplateContentConst.AT_INNING.msgEnglish} ${this.getEnglishInning(inning)} ${TemplateContentConst.INNING.msgEnglish}`,
+      msgEnglish:  ` ${TemplateContentConst.AT_INNING.msgEnglish} ${this.getEnglishInning(inning)} ${TemplateContentConst.INNING.msgEnglish}`,
       msgChineseTraditional: ` ${TemplateContentConst.AT_INNING.msgChineseTraditional} ${this.getChineseTraditionalInning(inning)} ${TemplateContentConst.INNING.msgChineseTraditional}`,
       msgChineseSimplified: ` ${TemplateContentConst.AT_INNING.msgChineseSimplified} ${this.getChineseSimplifiedInning(inning)} ${TemplateContentConst.INNING.msgChineseSimplified}`,
       msgChineseNewSimplified: ` ${TemplateContentConst.AT_INNING.msgChineseNewSimplified} ${this.getChineseSimplifiedInning(inning)} ${TemplateContentConst.INNING.msgChineseNewSimplified}`
