@@ -1,14 +1,12 @@
 <div class="search-by-match">
-  <div class="d-flex mb-2">
-    <div class="width-170"><label class="col-form-label col-form-label-sm">Match ID</label></div>
-    <div class="col-1">
-      <input class="match-id form-control form-control-sm" type="text" numbersOnly [(ngModel)]="model.matchId"
+  <div class="d-flex mb-2 filter-row">
+    <label class="col-form-label col-form-label-sm width-170">Match ID</label>
+    <input class="match-id form-control form-control-sm width-170" type="text" numbersOnly [(ngModel)]="model.matchId"
         (blur)="blurMatchId()">
-      </div>
     </div>
 
-    <div class="d-flex mb-2">
-      <div class="width-170"><label class="col-form-label col-form-label-sm">Trans Date (GMT +8)</label></div>
+    <div class="d-flex mb-2 filter-row">
+      <label class="col-form-label col-form-label-sm width-170">Trans Date (GMT +8)</label>
       <div class="col-auto wrapper-tooltip">
         @for (item of rangeTimes; track item; let isFirst = $first; let isLast = $last; let index = $index) {
           <div class="d-flex mb-0">
@@ -32,9 +30,9 @@
     </div>
   </div>
 
-  <div class="d-flex mb-2">
-    <div class="width-170"><label class="col-form-label col-form-label-sm">Currency</label></div>
-    <div class="currency-filter me-4">
+  <div class="d-flex flex-sm-wrap align-items-center filter-row">
+    <label class="col-form-label col-form-label-sm width-170">Currency</label>
+    <div class="align-items-center currency-filter me-4">
       <ng-select class="currencies-id" [items]="currencies.items" [multiple]="true" bindLabel="currencyCode"
         groupBy="group" [selectableGroup]="true" [selectableGroupAsModel]="false" [closeOnSelect]="false" bindValue="id"
         [(ngModel)]="currencies.selected" placeholder="Select currency..." (change)="updateSelectedCurrency()"
@@ -92,7 +90,7 @@
         </div>
       </div>
 
-      <div class="d-flex">
+      <div class="d-flex filter-row">
         <licensees [model]="groupLicenseeModel"></licensees>
       </div>
 

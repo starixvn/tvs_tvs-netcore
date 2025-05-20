@@ -36,8 +36,8 @@
     align-items: center;
 
     input {
+      height: 27.5px !important;
       display: block;
-      height: 26px !important;
       border-radius: 0.2rem;
       padding: 0.25rem 0.5rem;
       background-color: #fff;
@@ -56,7 +56,9 @@
   }
 
   .currency-filter {
-    width: 360px;
+    .currencies-id {
+      width: 360px;
+    }
     ::ng-deep ng-select {
       .ng-option-selected,
       .ng-value {
