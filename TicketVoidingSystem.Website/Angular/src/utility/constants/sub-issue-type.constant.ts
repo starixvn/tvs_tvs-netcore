@@ -76,4 +76,6 @@ export class SubIssueTypeConstant {
   static readonly WRONG_SCORE_NEXT_CORNER = 147;
   static readonly WRONG_SCORE_NEXT_BOOKING = 144;
   static readonly WRONG_SCORE_NEXT_GOAL_KICK = 146;
+  static readonly TECHNICAL_ERROR_TECHNICAL_ERROR = 108;
+  static readonly TECHNICAL_ERROR_PROVIDER_MISTAKE = 149;
 }

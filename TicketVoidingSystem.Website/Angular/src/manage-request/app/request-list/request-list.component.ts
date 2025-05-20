@@ -22,6 +22,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PagingModule } from '../../../utility/components/paging/paging.module';
 import { TicketListComponent } from '../ticket-list/ticket-list.component';
+import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 
 @Component({
   standalone: true,
@@ -98,23 +99,42 @@ export class RequestListComponent implements OnInit, OnChanges {
     return total > 0;
   }
 
-  checkCanEdit(eventDate: Date, issueTypeId: number, createdDate: Date): boolean {
-    if (issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET
-      || issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT
-      || issueTypeId.toString() === IssueTypeConstant.ABNORMAL_BET
-      || issueTypeId.toString() === IssueTypeConstant.RECOVER_TICKET) {
+  private isTechnicalErrorProviderMistake(issueTypeId: number, details?: DetailRequestModel[]): boolean {
+    return (
+      issueTypeId.toString() === IssueTypeConstant.TECHNICAL_ERROR &&
+      details?.some(d => d.subIssueTypeId === SubIssueTypeConstant.TECHNICAL_ERROR_PROVIDER_MISTAKE)
+    );
+  }
+
+  checkCanEdit(eventDate: Date, issueTypeId: number, createdDate: Date, details?: DetailRequestModel[]): boolean {
+    if (this.isTechnicalErrorProviderMistake(issueTypeId, details)) {
+      return false;
+    }
+    
+    if (
+      issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET ||
+      issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT ||
+      issueTypeId.toString() === IssueTypeConstant.ABNORMAL_BET ||
+      issueTypeId.toString() === IssueTypeConstant.RECOVER_TICKET
+    ) {
       return this.permission.manageRequestHost && this.isCreatedDateLessThanToday(createdDate);
     } else {
       return this.permission.manageRequestHost && new Date(eventDate) > new Date(this.moveBetDay);
     }
   }
 
-  checkCanVoid(actionId: number, eventDate: Date, issueTypeId: number, createdDate: Date): boolean {
+  checkCanVoid(actionId: number, eventDate: Date, issueTypeId: number, createdDate: Date, details?: DetailRequestModel[]): boolean {
     const isHasPermission = this.permission.voidRead && StaticService.isVoidAction(actionId);
 
-    if (issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET
-      || issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT
-      || issueTypeId.toString() === IssueTypeConstant.ABNORMAL_BET) {
+    if (this.isTechnicalErrorProviderMistake(issueTypeId, details)) {
+      return false;
+    }
+
+    if (
+      issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET ||
+      issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT ||
+      issueTypeId.toString() === IssueTypeConstant.ABNORMAL_BET
+    ) {
       return isHasPermission && this.isCreatedDateLessThanToday(createdDate);
     } else {
       return isHasPermission && new Date(eventDate) > new Date(this.moveBetDay);
@@ -213,8 +233,8 @@ export class RequestListComponent implements OnInit, OnChanges {
     }
   }
 
-  openRequestDetails(requestId: number, eventDate: Date, issueTypeId: number, createdDate: Date) {
-    if (this.checkCanEdit(eventDate, issueTypeId, createdDate)) {
+  openRequestDetails(requestId: number, eventDate: Date, issueTypeId: number, createdDate: Date, details?: DetailRequestModel[]) {
+    if (this.checkCanEdit(eventDate, issueTypeId, createdDate, details)) {
       window.open(`${document.body.getAttribute('root-url')}TicketVoidingSystem/EditRequest/Index/${requestId}`, '_blank');
     }
   }

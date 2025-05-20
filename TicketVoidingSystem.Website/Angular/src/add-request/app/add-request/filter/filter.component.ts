@@ -313,6 +313,11 @@ export class FilterComponent implements OnInit, OnChanges {
     this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes
       .filter(x => x.issueTypeId === this.issueTypes.issueId && !this.ignoreSubIssueType.includes(x.subIssueTypeId));
     this.issueTypes.subIssueId = this.isShowButtonSelectSubType() ? null : this.issueTypes.selectedSubIssueTypes[0].subIssueTypeId;
+
+    // TODO: temporay hardcode in this phase, will remove after implement new sub issue type in UI
+    if (this.issueTypes.issueId?.toString() === IssueTypeConstant.TECHNICAL_ERROR) {
+      this.issueTypes.subIssueId = SubIssueTypeConstant.TECHNICAL_ERROR_TECHNICAL_ERROR;
+    }
   }
 
   private updateIssueBySub() {
