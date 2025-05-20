@@ -9,48 +9,67 @@ public interface CheckProviderMistakeTicketsService
     Task<CheckProviderMistakeTicketsResultModel> ValidateTickets(string transIds);
 }
 
-public class CheckProviderMistakeTicketsServiceImp(IDynamicRepository repository, GetTransInfoService getTransInfoService) : CheckProviderMistakeTicketsService
+public class CheckProviderMistakeTicketsServiceImp(IDynamicRepository repository) : CheckProviderMistakeTicketsService
 {
     public async Task<CheckProviderMistakeTicketsResultModel> ValidateTickets(string transIds)
     {
-        var transInfoJsonList = await GetTransInfoJson(transIds);
-        var criteria = GetCriteria(transIds, transInfoJsonList);
-        var (validationProviderMistake, transInfoAddRequestModels) =
-            await repository.FetchMultipleAsync<ValidationProviderMistake, TransInfoAddRequestModel>(criteria);
-
-        var validation = validationProviderMistake.FirstOrDefault();
-        var transInfoAddRequest = transInfoAddRequestModels.FirstOrDefault();
-
-        var viewModel = new CheckProviderMistakeTicketsResultModel
+        var criteria = new CheckProviderMistakeTicketsCriteria
         {
-            Validation = validation,
-            TransInfoAddRequestModel = transInfoAddRequest
+            TransIds = transIds
         };
 
-        return viewModel;
-    }
+        var allResults = new List<CheckProviderMistakeTicketsResultModel>();
 
-    private static CheckProviderMistakeTicketsCriteria GetCriteria(string transIds, IEnumerable<string> transInfoJsonList)
-    {
-        return new CheckProviderMistakeTicketsCriteria
+        foreach (var db in SiteDbGroupConstant.ServerList)
         {
-            TransIds = transIds,
-            TransInfoJson = string.Join(",", transInfoJsonList)
-        };
-    }
+            criteria.SiteDbGroupId = db.Id;
+            var (validationProviderMistake, transInfoAddRequestModels) =
+                await repository.FetchMultipleAsync<ValidationProviderMistake, TransInfoAddRequestModel>(criteria);
 
-    private async Task<IEnumerable<string>> GetTransInfoJson(string transIds)
-    {
-        var getTransInfoQuery = new GetTransInfoQuery
-        {
-            IssueTypeId = IssueTypeConstant.TechnicalError,
-            TechnicalErrorModel = new TechnicalErrorViewModel
+            allResults.Add(new CheckProviderMistakeTicketsResultModel
             {
-                SubIssueTypeId = SubIssueTypeConstant.TechnicalError_ProviderMistake,
-                TransIds = transIds
-            }
+                Validation = validationProviderMistake.FirstOrDefault(),
+                TransInfoAddRequest = transInfoAddRequestModels.FirstOrDefault()
+            });
+        }
+
+        return AggregateValidationInMultipleDbServers(allResults);
+    }
+
+    private static CheckProviderMistakeTicketsResultModel AggregateValidationInMultipleDbServers(
+        IEnumerable<CheckProviderMistakeTicketsResultModel> resultInMultipleDbServers)
+    {
+        var validations = resultInMultipleDbServers.Select(r => r.Validation).Where(v => v != null);
+        var validTransId = validations.Where(x => !string.IsNullOrWhiteSpace(x.ValidTransIds)).SelectMany(v => v.ValidTransIds.Split(',', StringSplitOptions.RemoveEmptyEntries)).Distinct();
+        var existingReqTransId = validations.Where(x => !string.IsNullOrWhiteSpace(x.ExistingReqTransIds)).SelectMany(v => v.ExistingReqTransIds.Split(',', StringSplitOptions.RemoveEmptyEntries)).Distinct()
+            .Except(validTransId);
+        var unsupportedTransId = validations.Where(x => !string.IsNullOrWhiteSpace(x.UnsupportedTransIds)).SelectMany(v => v.UnsupportedTransIds.Split(',', StringSplitOptions.RemoveEmptyEntries)).Distinct()
+            .Except(validTransId);
+        var invalidTransId = validations.Where(x => !string.IsNullOrWhiteSpace(x.InvalidTransIds)).SelectMany(v => v.InvalidTransIds.Split(',', StringSplitOptions.RemoveEmptyEntries)).Distinct()
+            .Except(validTransId).Except(existingReqTransId).Except(unsupportedTransId);
+
+        var transInfoAddRequestModels =
+            resultInMultipleDbServers.Select(x => x.TransInfoAddRequest).Where(m => m != null);
+        var markTransIds = transInfoAddRequestModels.Where(x => !string.IsNullOrWhiteSpace(x.MarkTransIds)).Select(x => x.MarkTransIds);
+        var transInfoAddRequests = transInfoAddRequestModels.Where(x => !string.IsNullOrWhiteSpace(x.TransInfoJson)).Select(x => x.TransInfoJson);
+
+        var aggregatedValidation = new ValidationProviderMistake
+        {
+            ValidTransIds = string.Join(",", validTransId),
+            InvalidTransIds = string.Join(",", invalidTransId),
+            ExistingReqTransIds = string.Join(",", existingReqTransId),
+            UnsupportedTransIds = string.Join(",", unsupportedTransId),
         };
-        var transInfoJsonList = await getTransInfoService.GetTransInfoJson(getTransInfoQuery);
-        return transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x));
+        var aggregatedTransInfo = new TransInfoAddRequestModel
+        {
+            MarkTransIds = string.Join(",", markTransIds),
+            TransInfoJson = string.Join(",", transInfoAddRequests),
+        };
+
+        return new CheckProviderMistakeTicketsResultModel
+        {
+            Validation = aggregatedValidation,
+            TransInfoAddRequest = aggregatedTransInfo
+        };
     }
 }

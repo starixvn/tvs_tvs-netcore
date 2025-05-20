@@ -329,7 +329,7 @@ export class RequestListComponent implements OnInit, OnChanges {
     detail.processingCopyDescriptionClass = 'fa fa-paste copy-request-info';
   }
 
-  public isCanCopyRequestDescription(issueTypeId: number): boolean {
+  public isCanCopyRequestDescription(issueTypeId: number, details?: DetailRequestModel[]): boolean {
     const issueTypeStr = issueTypeId.toString();
     return [
       StaticService.isDangerAccepted,
@@ -349,7 +349,7 @@ export class RequestListComponent implements OnInit, OnChanges {
       StaticService.isWrongMarketOffered,
       StaticService.isTechnicalError,
       StaticService.isWrongOddsSportsBook
-    ].some(fn => fn(issueTypeStr));
+    ].some(fn => fn(issueTypeStr)) && !this.isTechnicalErrorProviderMistake(issueTypeId, details);
   }
 
   public getDetailTotalTickets(issueTypeId: number, detail: DetailRequestModel): string {

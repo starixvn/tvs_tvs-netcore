@@ -1,6 +1,7 @@
 ﻿using Fanex.NAP.Client.Attributes;
 using Fanex.NAP.Client.Helpers.Business;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
@@ -116,5 +117,6 @@ public class AddRequestController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetTicketsAbnormalAccount(GetTicketsAbnormalAccountRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> AddTechnicalErrorAutoVoidRequest(AddTechnicalErrorAutoVoidRequest request) => Ok(await mediator.Send(request));
 }

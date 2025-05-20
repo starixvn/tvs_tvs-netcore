@@ -196,9 +196,7 @@ public class GetTransInfoServiceImp(IDynamicRepository repository) : GetTransInf
             IssueTypeConstant.NotParticipate => query.NotParticipateModels.ToNotParticipateInfoXml(),
             IssueTypeConstant.RecoverTicket => query.RecoverTicketModel.ToEventRecoverTicketXml(),
             IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedModels.ToWrongMarketOfferedInfoXml(),
-            IssueTypeConstant.TechnicalError => query.TechnicalErrorModel.SubIssueTypeId == SubIssueTypeConstant.TechnicalError_ProviderMistake
-            ? query.TechnicalErrorModel.TransIds
-            : query.TechnicalErrorModel.ToTechnicalErrorInfoXml(),
+            IssueTypeConstant.TechnicalError => query.TechnicalErrorModel.ToTechnicalErrorInfoXml(),
             IssueTypeConstant.WrongOddsSportsBook => query.WrongOddsSportsBookModels.ToWrongOddsSportsBookInfoXml(),
             IssueTypeConstant.WrongOfferedName => query.WrongOfferedNameModel.ToWrongOfferedNameInfoXml(),
             IssueTypeConstant.OtherIssues => query.OtherIssuesModel.ToOtherIssuesInfoXml(),

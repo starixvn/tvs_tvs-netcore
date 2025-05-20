@@ -11,7 +11,7 @@ public interface AddRequestAutoVoidProviderMistakeService
 {
     Task<(CheckProviderMistakeTicketsResultModel Result, Result Error)> ValidateTickets(string transId);
 
-    Task<Result> MarkTickets(TransInfoAddRequestModel transInfo);
+    Task<Result> MarkTickets(string markTransIds);
 
     Task<(int RequestId, Result Result)> ExecuteAddRequest(int matchId, CheckProviderMistakeTicketsResultModel validationResult);
 }
@@ -26,17 +26,22 @@ public class AddRequestAutoVoidProviderMistakeServiceImp(
     {
         var validationResult = await checkProviderMistakeTicketsService.ValidateTickets(transId);
 
-        if (!string.IsNullOrEmpty(validationResult.Validation.InvalidTransIds))
-        {
-            return (null, new Result { ErrorCode = 1, ErrorMsg = $"Invalid transaction IDs: {validationResult.Validation.InvalidTransIds}" });
-        }
-
         if (!string.IsNullOrEmpty(validationResult.Validation.ExistingReqTransIds))
         {
             return (null, new Result { ErrorCode = 1, ErrorMsg = $"Existing in other request transaction IDs: {validationResult.Validation.ExistingReqTransIds}" });
         }
 
-        if (validationResult.TransInfoAddRequestModel == null)
+        if (!string.IsNullOrEmpty(validationResult.Validation.UnsupportedTransIds))
+        {
+            return (null, new Result { ErrorCode = 1, ErrorMsg = $"Unsupported transaction IDs: {validationResult.Validation.UnsupportedTransIds}" });
+        }
+
+        if (!string.IsNullOrEmpty(validationResult.Validation.InvalidTransIds))
+        {
+            return (null, new Result { ErrorCode = 1, ErrorMsg = $"Invalid transaction IDs: {validationResult.Validation.InvalidTransIds}" });
+        }
+
+        if (string.IsNullOrEmpty(validationResult.TransInfoAddRequest.TransInfoJson))
         {
             return (null, new Result { ErrorCode = 1, ErrorMsg = "Failed to select tickets" });
         }
@@ -44,11 +49,11 @@ public class AddRequestAutoVoidProviderMistakeServiceImp(
         return (validationResult, null);
     }
 
-    public async Task<Result> MarkTickets(TransInfoAddRequestModel transInfo)
+    public async Task<Result> MarkTickets(string markTransIds)
     {
         var markTicketResult = await markTicketsWhenAddEditService.Execute(
             IssueTypeConstant.TechnicalError,
-            transInfo.MarkTransIds,
+            markTransIds,
             string.Empty);
 
         var markTicketError = getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService));
@@ -78,7 +83,7 @@ public class AddRequestAutoVoidProviderMistakeServiceImp(
             UserId = AutoVoidConstant.ActorId,
             IP = AutoVoidConstant.IPAddress,
             IsTest = false,
-            TransInfoJson = validationResult.TransInfoAddRequestModel.TransInfoJson,
+            TransInfoJson = validationResult.TransInfoAddRequest.TransInfoJson,
             TechnicalErrorInfo = new TechnicalErrorViewModel
             {
                 MatchId = matchId,

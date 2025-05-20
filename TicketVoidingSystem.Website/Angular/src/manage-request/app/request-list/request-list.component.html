@@ -90,7 +90,7 @@
               </div>
             </td>
             <td class="col-tb-5">
-              <i [hidden]="!isCanCopyRequestDescription(item.issueTypeId)" [ngClass]="item.processingCopyDescriptionClass ?? 'fa fa-paste copy-request-info'" (click)="copyRequestDescriptionSingleMatch(item, item.details[0].matchId, item.details[0].requestDetailId)" aria-hidden="true"></i>
+              <i [hidden]="!isCanCopyRequestDescription(item.issueTypeId, item.details)" [ngClass]="item.processingCopyDescriptionClass ?? 'fa fa-paste copy-request-info'" (click)="copyRequestDescriptionSingleMatch(item, item.details[0].matchId, item.details[0].requestDetailId)" aria-hidden="true"></i>
               <div class="text-end" [innerHtml]="item.details[0].description | sanitizeHtml"></div>
             </td>
             <td class="col-tb-6" [attr.rowspan]="item.details.length">
@@ -152,7 +152,7 @@
                 </div>
               </td>
               <td *ngIf="index>0" class="text-end">
-                <i *ngIf="isCanCopyRequestDescription(item.issueTypeId)"  [ngClass]="detail.processingCopyDescriptionClass ?? 'fa fa-paste copy-request-info'" (click)="copyRequestDescriptionMultiMatches(item, detail.matchId, detail)" aria-hidden="true"></i>
+                <i *ngIf="isCanCopyRequestDescription(item.issueTypeId, item.details)"  [ngClass]="detail.processingCopyDescriptionClass ?? 'fa fa-paste copy-request-info'" (click)="copyRequestDescriptionMultiMatches(item, detail.matchId, detail)" aria-hidden="true"></i>
                 <div [innerHtml]="detail.description | sanitizeHtml"></div>
               </td>
               <td *ngIf="index>0" class="col-tb-13">

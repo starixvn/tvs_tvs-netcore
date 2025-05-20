@@ -478,7 +478,17 @@ public class GetRequestServiceImp(
 
     private async Task<TechnicalErrorViewModel> MapEventTechnicalError(IEnumerable<RequestEventModel> requestEventModels)
     {
+  
         var model = requestEventModels.First();
+        if (model.SubIssueTypeId == SubIssueTypeConstant.TechnicalError_ProviderMistake)
+        {
+            return new TechnicalErrorViewModel
+            {
+                MatchId = model.MatchId,
+                SubIssueTypeId = model.SubIssueTypeId
+            };
+        }
+        
         var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
         var groupBetTypes = await advancedModeService.GetGroupBetTypes(model.MatchId,
             string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));

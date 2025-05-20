@@ -60,3 +60,4 @@ typings
 .angular/
 /TicketVoidingSystem.Website/Angular/reports/**
 */Logs/*
+/.idea/
