@@ -793,4 +793,270 @@ public class GetRequestServiceTests
         // Assert
         AssertExtension.Equal(expectedResult, actualResult);
     }
+
+    [Fact]
+    public async Task GetRequest_MapEventWrongScores_ReturnExpectedViewModel()
+    {
+        // Arrange
+        var request = new GetRequestRequest { RequestId = 1 };
+        var fakeData = new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
+            new List<RequestDetailModel>
+            {
+                new()
+                {
+                    IssueTypeId = IssueTypeConstant.WrongScore,
+                    SportType = 0,
+                    OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+                }
+            },
+            new List<RequestEventModel>
+            {
+                new()
+                {
+                    MatchId = 12345,
+                    ScoreId = 1,
+                    SubIssueTypeId = 1,
+                    EventDate = new DateTime(2024, 1, 1),
+                    FilterBy = 1,
+                    WrongScore = "1-0",
+                    ActualScore = "2-0",
+                    FilterFromTransTime = new DateTime(2024, 1, 1, 10, 0, 0),
+                    FilterToTransTime = new DateTime(2024, 1, 1, 11, 0, 0),
+                    VoidFromTime = new DateTime(2024, 1, 1, 10, 30, 0),
+                    VoidToTime = new DateTime(2024, 1, 1, 11, 30, 0),
+                    AATime = 3,
+                    PATime = 3,
+                    SATime = 9,
+                    IsCheckedVar = true,
+                    TvDetectionValue = 1,
+                    ServiceAcceptTime = "10:15",
+                    ActualTime = "10:45",
+                    MinuteOffset = 3,
+                    SecondOffset = 2,
+                    IsMainMatch = true
+                }
+            },
+            new List<PlayerName> { new() }
+        );
+
+        var expectedResult = new RequestDetailViewModel
+        {
+            Request = new RequestDetailModel
+            {
+                IssueTypeId = IssueTypeConstant.WrongScore,
+                SportType = 0,
+                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>",
+                Operators = new List<OperatorInfo>()
+            },
+            PlayerNames = new List<PlayerName> { new() },
+            WrongScoreModels = new List<WrongScoreInfoViewModel>
+            {
+                new()
+                {
+                    IsChecked = true,
+                    MatchId = 12345,
+                    ScoreId = 1,
+                    SubIssueTypeId = 1,
+                    EventDate = new DateTime(2024, 1, 1),
+                    FilterBy = 1,
+                    WrongScore = "1-0",
+                    ActualScore = "2-0",
+                    FilterFromTransTime = new DateTime(2024, 1, 1, 10, 0, 0),
+                    FilterToTransTime = new DateTime(2024, 1, 1, 11, 0, 0),
+                    VoidFromTime = new DateTime(2024, 1, 1, 10, 30, 0),
+                    VoidToTime = new DateTime(2024, 1, 1, 11, 30, 0),
+                    AATime = 3,
+                    PATime = 3,
+                    SATime = 9,
+                    IsCheckedVar = true,
+                    TvDetectionValue = 1,
+                    ServiceAcceptTime = "10:15",
+                    ActualTime = "10:45",
+                    MinuteOffset = 3,
+                    SecondOffset = 2,
+                    IsMainMatch = true
+                }
+            }
+        };
+
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request).ReturnsForAnyArgs(fakeData);
+
+        // Act
+        var actualResult = await service.GetRequest(request);
+
+        // Assert
+        await repository.Received(1).FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
+            Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
+        AssertExtension.Equal(expectedResult, actualResult);
+    }
+
+    [Fact]
+    public async Task GetRequest_MapEventWrongOdds_ReturnExpectedViewModel()
+    {
+        // Arrange
+        var request = new GetRequestRequest { RequestId = 1 };
+        var fakeData = new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
+            new List<RequestDetailModel>
+            {
+                new()
+                {
+                    IssueTypeId = IssueTypeConstant.WrongOdds,
+                    SportType = 1,
+                    OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+                }
+            },
+            new List<RequestEventModel>
+            {
+                new()
+                {
+                    MatchId = 12345,
+                    PoolHouseCheckedBetTypes = "1,2",
+                    IsLinkGroup1X2 = true,
+                    IsLinkGroupAIO = false,
+                    SubIssueTypeId = 1,
+                    EventDate = new DateTime(2024, 1, 1),
+                    FilterFromTransTime = new DateTime(2024, 1, 1, 10, 0, 0),
+                    FilterToTransTime = new DateTime(2024, 1, 1, 11, 0, 0),
+                    VoidFromTime = new DateTime(2024, 1, 1, 10, 30, 0),
+                    VoidToTime = new DateTime(2024, 1, 1, 11, 30, 0),
+                    LiveIndicator = 1,
+                    FilterFavoriteType = "h",
+                    FavoriteValue = "1",
+                    WrongOU = "2.5",
+                    Spread = "0.5",
+                    AllowanceRate = "25",
+                    CorrectOddsHomeOver = "0.8",
+                    CorrectOddsAwayUnder = "-0.9",
+                    FromOddsNotVoidHomeOver = "0.65",
+                    ToOddsNotVoidHomeOver = "0.9",
+                    FromOddsNotVoidAwayUnder = "0.45",
+                    ToOddsNotVoidAwayUnder = "0.8",
+                    SportType = 1
+                }
+            },
+            new List<PlayerName> { new() }
+        );
+
+        var expectedResult = new RequestDetailViewModel
+        {
+            Request = new RequestDetailModel
+            {
+                IssueTypeId = IssueTypeConstant.WrongOdds,
+                SportType = 1,
+                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>",
+                Operators = new List<OperatorInfo>()
+            },
+            PlayerNames = new List<PlayerName> { new() },
+            WrongOddsModels = new List<WrongOddsViewModel>
+            {
+                new()
+                {
+                    MatchId = 12345,
+                    PoolHouseCheckedBetTypes = "1,2",
+                    IsLinkGroup1X2 = true,
+                    IsLinkGroupAIO = false,
+                    SubIssueTypeId = 1,
+                    EventDate = new DateTime(2024, 1, 1),
+                    FilterFromTransTime = new DateTime(2024, 1, 1, 10, 0, 0),
+                    FilterToTransTime = new DateTime(2024, 1, 1, 11, 0, 0),
+                    VoidFromTime = new DateTime(2024, 1, 1, 10, 30, 0),
+                    VoidToTime = new DateTime(2024, 1, 1, 11, 30, 0),
+                    LiveIndicator = 1,
+                    FilterFavoriteType = "h",
+                    FavoriteValue = "1",
+                    WrongOU = "2.5",
+                    Spread = "0.5",
+                    AllowanceRate = "25",
+                    CorrectOddsHomeOver = "0.8",
+                    CorrectOddsAwayUnder = "-0.9",
+                    FromOddsNotVoidHomeOver = "0.65",
+                    ToOddsNotVoidHomeOver = "0.9",
+                    FromOddsNotVoidAwayUnder = "0.45",
+                    ToOddsNotVoidAwayUnder = "0.8",
+                    SportType = 1
+                }
+            }
+        };
+
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request).ReturnsForAnyArgs(fakeData);
+
+        // Act
+        var actualResult = await service.GetRequest(request);
+
+        // Assert
+        await repository.Received(1).FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
+            Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
+        AssertExtension.Equal(expectedResult, actualResult);
+    }
+
+    [Fact]
+    public async Task GetRequest_MapEventReducedOver_ReturnExpectedViewModel()
+    {
+        // Arrange
+        var request = new GetRequestRequest { RequestId = 1 };
+        var fakeData = new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
+            new List<RequestDetailModel>
+            {
+                new()
+                {
+                    IssueTypeId = IssueTypeConstant.ReducedOver,
+                    SportType = 0,
+                    OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+                }
+            },
+            new List<RequestEventModel>
+            {
+                new()
+                {
+                    EventDate = new DateTime(2024, 1, 1),
+                    MatchId = 12345,
+                    SubIssueTypeId = 1,
+                    BetTypeIds = "1,2",
+                    WicketOver = "2.5",
+                    PlayerIds = "1,2",
+                    Runs = "100",
+                    Live = true,
+                    NonLive = false
+                }
+            },
+            new List<PlayerName> { new() }
+        );
+
+        var expectedResult = new RequestDetailViewModel
+        {
+            Request = new RequestDetailModel
+            {
+                IssueTypeId = IssueTypeConstant.ReducedOver,
+                SportType = 0,
+                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>",
+                Operators = new List<OperatorInfo>()
+            },
+            PlayerNames = new List<PlayerName> { new() },
+            ReducedOverModels = new List<ReducedOverViewModel>
+            {
+                new()
+                {
+                    EventDate = new DateTime(2024, 1, 1),
+                    MatchId = 12345,
+                    SubIssueTypeId = 1,
+                    BetTypeIds = "1,2",
+                    WicketOver = "2.5",
+                    PlayerIds = "1,2",
+                    Runs = "100",
+                    Live = true,
+                    NonLive = false
+                }
+            }
+        };
+
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request).ReturnsForAnyArgs(fakeData);
+
+        // Act
+        var actualResult = await service.GetRequest(request);
+
+        // Assert
+        await repository.Received(1).FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
+            Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
+        AssertExtension.Equal(expectedResult, actualResult);
+    }
 }

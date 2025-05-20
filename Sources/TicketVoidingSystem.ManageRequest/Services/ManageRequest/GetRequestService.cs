@@ -239,9 +239,6 @@ public class GetRequestServiceImp(
             FilterBetIdX = model.FilterBetIdX,
             FilterBetIdY = model.FilterBetIdY,
             FilterBetTypeId = model.FilterBetTypeId
-            //FilterBetIdX = "802",
-            //FilterBetIdY = "03",
-            //FilterBetTypeId = "9070"
         });
     }
 

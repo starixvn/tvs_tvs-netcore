@@ -1179,4 +1179,64 @@ public class ObjectToXmlExtensionFacts
         // Assert
         Assert.Equal(string.Empty, result);
     }
+
+    [Fact]
+    public void ToEventMatchEarlyCompletedXml_HasFilterData_ReturnExpected()
+    {
+        // Arrange
+        var model = new OtherIssuesViewModel
+        {
+            MatchId = 846742,
+            SubIssueTypeId = 1,
+            FilterFromTransTime = new DateTime(2025, 2, 2),
+            FilterToTransTime = new DateTime(2025, 2, 2),
+            LogInfoDetail = new LogInfoDetail
+            {
+                SingleCount = 1,
+                MainParlayCount = 0,
+                VoidToTime = new DateTime(2025, 2, 2, 2, 2, 2),
+                VoidFromTime = new DateTime(2025, 2, 2, 2, 2, 35),
+            },
+            BetTypeCount = [new BetTypeTicketsInfo { BetTypeId = 1, TicketsCount = 2, BetId = 3, PlayerName = "abc" }]
+        };
+        const string expected = "<root><r MatchId = '846742' SubIssueTypeId='1' SingleCount ='1' MainParlayCount='0' " +
+                                "VoidToTime='2025-02-02 02:02:02.000' VoidFromTime='2025-02-02 02:02:35.000' " +
+                                "BetTypeCount='[{&quot;TicketsCount&quot;:2,&quot;BetTypeId&quot;:1,&quot;BetId&quot;:3,&quot;PlayerName&quot;:&quot;abc&quot;}]' " +
+                                "AdvancedExtraInfo='null' AllBetTypesSelectionJson='null' /></root>";
+
+        // Act
+        var actual = model.ToEventMatchEarlyCompletedXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToEventMatchEarlyCompletedXml_NoHasFilterData_ReturnExpected()
+    {
+        // Arrange
+        var model = new OtherIssuesViewModel
+        {
+            MatchId = 846742,
+            SubIssueTypeId = 1,
+            LogInfoDetail = new LogInfoDetail
+            {
+                SingleCount = 1,
+                MainParlayCount = 0,
+                VoidToTime = new DateTime(2025, 2, 2, 2, 2, 2),
+                VoidFromTime = new DateTime(2025, 2, 2, 2, 2, 35),
+            },
+            BetTypeCount = [new BetTypeTicketsInfo { BetTypeId = 1, TicketsCount = 2, BetId = 3, PlayerName = "abc" }]
+        };
+        const string expected = "<root><r MatchId = '846742' SubIssueTypeId='1' SingleCount ='1' MainParlayCount='0' " +
+                                "VoidToTime='2025-02-02 02:02:02.000' VoidFromTime='2025-02-02 02:02:35.000' " +
+                                "BetTypeCount='[{&quot;TicketsCount&quot;:2,&quot;BetTypeId&quot;:1,&quot;BetId&quot;:3,&quot;PlayerName&quot;:&quot;abc&quot;}]' " +
+                                "AdvancedExtraInfo='null' AllBetTypesSelectionJson='null' /></root>";
+
+        // Act
+        var actual = model.ToEventMatchEarlyCompletedXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
 }

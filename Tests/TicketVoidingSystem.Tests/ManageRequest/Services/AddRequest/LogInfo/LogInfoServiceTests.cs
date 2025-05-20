@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Fanex.BetList.Core.Entities;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
@@ -25,6 +26,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
     private readonly LogInfoServiceImp service;
     private readonly SessionService session;
     private readonly GetVoidTimeByAllowanceSettingService getVoidTimeByAllowanceSettingService;
+    private readonly BetListService betListService;
 
     public LogInfoServiceTests()
     {
@@ -32,7 +34,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         repository = Substitute.For<IDynamicRepository>();
         session = Substitute.For<SessionService>();
         getVoidTimeByAllowanceSettingService = Substitute.For<GetVoidTimeByAllowanceSettingService>();
-        var betListService = Substitute.For<BetListService>();
+        betListService = Substitute.For<BetListService>();
         var copyRequestInfoService = Substitute.For<CopyRequestInfoService>();
         service = new LogInfoServiceImp(mapper, repository, session, betListService, copyRequestInfoService, getVoidTimeByAllowanceSettingService);
     }
@@ -197,5 +199,322 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
         Assert.Equal(ticketRequests.Count, logInfoModel.TicketRequest.Count());
         Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
+    }
+
+    [Fact]
+    public async Task GetLogInfoViewModelWrongMarketOffered_ReturnExpected()
+    {
+        // Arrange
+        const int issueTypeId = IssueTypeConstant.WrongMarketOffered;
+        const int userId = 1234;
+        const int matchId = 996063;
+        var validation = new Validation { MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>();
+        var betTypeCountModel = new List<BetTypeTicketsInfo> { new() { Id = 1, BetTypeId = 1, BetId = 1 } };
+
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            WrongMarketOfferedModels = new List<WrongMarketOfferedViewModel>
+            {
+                new()
+                {
+                    MatchId = matchId,
+                    Id = 1,
+                    SubIssueTypeId = 3
+                }
+            }
+        };
+
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("Test Bet Type");
+
+        // Act
+        var actual = await service.Get(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Single(logInfoModel.BetTypeCount);
+    }
+
+    [Fact]
+    public async Task GetLogInfoViewModelWrongOddsSportsBook_ReturnExpected()
+    {
+        // Arrange
+        const int issueTypeId = IssueTypeConstant.WrongOddsSportsBook;
+        const int userId = 1234;
+        const int matchId = 996063;
+        var validation = new Validation { MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>();
+        var betTypeCountModel = new List<BetTypeTicketsInfo> { new() };
+
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            WrongOddsSportsBookModel = new WrongOddsSportsBookViewModel
+            {
+                MatchId = matchId,
+                SubIssueTypeId = 3
+            }
+        };
+
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+
+        // Act
+        var actual = await service.Get(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
+        Assert.Equal(4, logInfoModel.TicketRequest.Count());
+        Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
+    }
+
+    [Fact]
+    public async Task GetLogInfoViewModelWrongOfferedName_ReturnExpected()
+    {
+        // Arrange
+        const int issueTypeId = IssueTypeConstant.WrongOfferedName;
+        const int userId = 1234;
+        const int matchId = 996063;
+        var validation = new Validation { MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>();
+        var betTypeCountModel = new List<BetTypeTicketsInfo> { new() };
+
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            WrongOfferedNameModel = new WrongOfferedNameViewModel
+            {
+                MatchId = matchId,
+                SubIssueTypeId = 3
+            }
+        };
+
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+
+        // Act
+        var actual = await service.Get(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
+        Assert.Equal(ticketRequests.Count, logInfoModel.TicketRequest.Count());
+        Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
+    }
+
+    [Fact]
+    public async Task GetLogInfoViewModelOtherIssues_ReturnExpected()
+    {
+        // Arrange
+        const int issueTypeId = IssueTypeConstant.OtherIssues;
+        const int userId = 1234;
+        const int matchId = 996063;
+        var validation = new Validation { MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>();
+        var betTypeCountModel = new List<BetTypeTicketsInfo> { new() };
+
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            OtherIssuesModel = new OtherIssuesViewModel
+            {
+                MatchId = matchId,
+                SubIssueTypeId = 3
+            }
+        };
+
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+
+        // Act
+        var actual = await service.Get(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
+        Assert.Equal(ticketRequests.Count, logInfoModel.TicketRequest.Count());
+        Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
+    }
+
+    [Fact]
+    public async Task GetLogInfoViewModelMatchEarlyCompleted_ReturnExpected()
+    {
+        // Arrange
+        const int issueTypeId = IssueTypeConstant.MatchEarlyCompleted;
+        const int userId = 1234;
+        const int matchId = 996063;
+        var validation = new Validation { MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>();
+        var betTypeCountModel = new List<BetTypeTicketsInfo> { new() { Id = 1, BetTypeId = 1, BetId = 1 } };
+
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            MatchEarlyCompletedModel = new OtherIssuesViewModel
+            {
+                MatchId = matchId,
+                SubIssueTypeId = 3
+            }
+        };
+
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("Test Bet Type");
+
+        // Act
+        var actual = await service.Get(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
+        Assert.Equal(ticketRequests.Count, logInfoModel.TicketRequest.Count());
+        Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
+        Assert.Single(logInfoModel.BetTypeCount);
+    }
+
+    [Fact]
+    public async Task GetLogInfoViewModelTechnicalError_ReturnExpected()
+    {
+        // Arrange
+        const int issueTypeId = IssueTypeConstant.TechnicalError;
+        const int userId = 1234;
+        const int matchId = 996063;
+        var validation = new Validation { MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>();
+        var betTypeCountModel = new List<BetTypeTicketsInfo> { new() { Id = 1, BetTypeId = 1, BetId = 1 } };
+
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            TechnicalErrorModel = new TechnicalErrorViewModel
+            {
+                MatchId = matchId,
+                SubIssueTypeId = 3
+            }
+        };
+
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("Test Bet Type");
+
+        // Act
+        var actual = await service.Get(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
+        Assert.Equal(ticketRequests.Count, logInfoModel.TicketRequest.Count());
+        Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
+        Assert.Single(logInfoModel.BetTypeCount);
+    }
+
+    [Fact]
+    public async Task GetLogInfoViewModelDefault_ReturnExpected()
+    {
+        // Arrange
+        const int issueTypeId = 999; // Invalid issue type
+        const int userId = 1234;
+        const int matchId = 996063;
+        var validation = new Validation { MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>();
+        var betTypeCountModel = new List<BetTypeTicketsInfo> { new() };
+
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            MatchId = matchId
+        };
+
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+
+        // Act
+        var actual = await service.Get(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
+        Assert.Equal(ticketRequests.Count, logInfoModel.TicketRequest.Count());
+        Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
+    }
+
+    [Fact]
+    public async Task UpdateBetTypeName_ReturnExpected()
+    {
+        // Arrange
+        const int matchId = 996063;
+        var betTypeTickets = new List<BetTypeTicketsInfo>
+        {
+            new() { Id = 1, BetTypeId = 1, BetId = 1 }
+        };
+
+        betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("Test Bet Type");
+
+        // Act
+        var actual = await service.UpdateBetTypeTicketsInfo(matchId, betTypeTickets);
+
+        // Assert
+        Assert.Single(actual);
+        Assert.Equal("Test Bet Type", actual.First().BetTypeName);
     }
 }
