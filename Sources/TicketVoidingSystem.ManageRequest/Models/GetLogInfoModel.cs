@@ -73,3 +73,11 @@ public class LogInfoResult
     public IEnumerable<TransInfoAddRequestModel> TransInfoAddRequests { get; set; }
     public IEnumerable<BetTypeTicketsInfo> BetTypeTickets { get; set; }
 }
+
+public class VoidTimeByAllowanceSetting
+{
+    public int MatchId { get; set; }
+    public int ScoreId { get; set; }
+    public DateTime? VoidFromTime { get; set; }
+    public DateTime? VoidToTime { get; set; }
+}

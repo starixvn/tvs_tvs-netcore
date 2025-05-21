@@ -3,7 +3,6 @@ using System.Security;
 using System.Text;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Extension;
@@ -26,8 +25,10 @@ public static class LogInfoExtension
             var line = $"<r LiveHomeScore='{liveHomeScore}' "
                 + $"LiveAwayScore='{liveAwayScore}' "
                 + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"ScoreId='{model.ScoreId}' "
                 + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"VoidFromTime='{model.VoidFromTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"VoidToTime='{model.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"ScoreId='{model.ScoreId}' "
                 + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                 + $"MatchId='{model.MatchId}' "
                 + $"AATime='{model.AATime}' "
@@ -54,6 +55,8 @@ public static class LogInfoExtension
             var line = $"<r MatchId='{model.MatchId}' "
                 + $"FilterFromTransTime='{model.FilterFromTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"VoidFromTime='{model.VoidFromTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"VoidToTime='{model.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                 + $"AATime='{model.AATime}' "
                 + $"PATime='{model.PATime}' "

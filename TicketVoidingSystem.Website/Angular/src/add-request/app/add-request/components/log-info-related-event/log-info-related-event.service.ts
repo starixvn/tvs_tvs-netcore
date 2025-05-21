@@ -27,7 +27,9 @@ export class LogInfoRelatedEventService {
     if (this.isHasAllowanceTime(logInfoRelatedEvent) && evenLogInfo.logInfoDetail) {
       logInfoRelatedEvent.voidTimeArea.fromDateTime = moment(evenLogInfo.logInfoDetail.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
       logInfoRelatedEvent.voidTimeArea.toDateTime = moment(evenLogInfo.logInfoDetail.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-      logInfoRelatedEvent.logInfoDetail.isHasWarningRangeTime = this.isHasWarningRangeTime(defaultFilterTimeWithAllowance.fromDateTime, logInfoRelatedEvent.logInfoDetail?.transVoidToTime);
+    } 
+    if(StaticService.isDangerAccepted(filter.issueTypeId.toString()) && evenLogInfo.logInfoDetail){
+      logInfoRelatedEvent.logInfoDetail.isHasWarningRangeTime = this.isHasWarningRangeTime(defaultFilterTimeWithAllowance.fromDateTime, logInfoRelatedEvent.logInfoDetail.transVoidToTime);
     }
   }
 
