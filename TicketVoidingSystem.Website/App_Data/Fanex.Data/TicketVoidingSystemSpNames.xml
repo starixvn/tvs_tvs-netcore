@@ -173,14 +173,6 @@
         <Setting Key="DBSITE01.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSITE02.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSITE03.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-        <Setting Key="DBCTG.TicketVoiding_TransInfo_Void_Select" SpName="TicketVoiding_TransInfo_Void_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
-        <Setting Key="DBSITE01.TicketVoiding_TransInfo_Void_Select" SpName="TicketVoiding_TransInfo_Void_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
-        <Setting Key="DBSITE02.TicketVoiding_TransInfo_Void_Select" SpName="TicketVoiding_TransInfo_Void_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
-        <Setting Key="DBSITE03.TicketVoiding_TransInfo_Void_Select" SpName="TicketVoiding_TransInfo_Void_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-        <Setting Key="DBCTG.TicketVoiding_TransInfo_VoidARC_Select" SpName="TicketVoiding_TransInfo_VoidARC_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
-        <Setting Key="DBSITE01.TicketVoiding_TransInfo_VoidARC_Select" SpName="TicketVoiding_TransInfo_VoidARC_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
-        <Setting Key="DBSITE02.TicketVoiding_TransInfo_VoidARC_Select" SpName="TicketVoiding_TransInfo_VoidARC_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
-        <Setting Key="DBSITE03.TicketVoiding_TransInfo_VoidARC_Select" SpName="TicketVoiding_TransInfo_VoidARC_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBCTG.TicketVoiding_ReCalculate_Single_PreUpdate" SpName="TicketVoiding_ReCalculate_Single_PreUpdate" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSITE01.TicketVoiding_ReCalculate_Single_PreUpdate" SpName="TicketVoiding_ReCalculate_Single_PreUpdate" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSITE01.TicketVoiding_ReCalculate_Single_PreUpdate" SpName="TicketVoiding_ReCalculate_Single_PreUpdate" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
@@ -284,7 +276,6 @@
         <Setting Key="TicketVoiding_RequestInfo_Copy" SpName="TicketVoiding_RequestInfo_Copy" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="OWP_TVSSupport_GetProviderByMatchId" SpName="OWP_TVSSupport_GetProviderByMatchId" DbName="DBOWP.bodb_OWP.wsv_owp" TimeOut="600" />
         <Setting Key="OWP_TVSSupport_GetIptvInfo" SpName="OWP_TVSSupport_GetIptvInfo" DbName="DBOWP.bodb_OWP.wsv_owp" TimeOut="600" />
-        <Setting Key="TicketVoiding_TicketRequest_Void_Select" SpName="TicketVoiding_TicketRequest_Void_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_TicketProcess_Update" SpName="TicketVoiding_TicketProcess_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_SubIssueTypeNote_Update" SpName="TicketVoiding_SubIssueTypeNote_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_SubIssueTypeNote_Select" SpName="TicketVoiding_SubIssueTypeNote_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
