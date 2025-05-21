@@ -1,13 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonService } from '../../utility/services/common.service';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppService } from './app.service';
 import { DataPermission } from './models/result.model';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MarkUnmarkTicketComponent } from './mark-unmark-ticket/mark-unmark-ticket.component';
+import { ConfirmAutoUnmarkComponent } from './confirm-auto-unmark/confirm-auto-unmark.component';
+import { UserLogComponent } from './user-log/user-log.component';
+import { TabMarkTicketComponent } from './tab-mark-ticket/tab-mark-ticket.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  imports: [CommonModule, RouterModule, MarkUnmarkTicketComponent, ConfirmAutoUnmarkComponent,
+    UserLogComponent, TabMarkTicketComponent, MenuBarComponent
+  ]
 })
 export class AppComponent implements OnInit {
   title = 'Mark Ticket';
@@ -16,11 +27,9 @@ export class AppComponent implements OnInit {
   dataPermission = new DataPermission();
   accessTabCount = new Map<string, number>();
 
-  constructor(
-    private readonly signalRService: SignalRService,
-    private readonly appService: AppService,
-    private readonly commonService: CommonService
-  ) { }
+  private readonly signalRService = inject(SignalRService);
+  private readonly appService = inject(AppService);
+  private readonly commonService = inject(CommonService);
 
   async ngOnInit() {
     const paramIsExternalUrl = new URLSearchParams(window.location.search).get('isExternalUrl');

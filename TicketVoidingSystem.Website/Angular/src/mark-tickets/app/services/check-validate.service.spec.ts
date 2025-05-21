@@ -1,98 +1,157 @@
+import { TestBed } from '@angular/core/testing';
 import { GroupBetType, GroupBetTypesModel, Result } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { HttpService } from '../../../utility/services/http.service';
 import { CheckValidateService } from './check-validate.service';
+import { TestingModule } from '../../../utility/modules/testing.module';
 
 describe('CheckValidateService', () => {
-    let mockCommonService: CommonService;
-    let mockHttpService: jest.Mocked<HttpService>;
-    let service: CheckValidateService
-    beforeEach(() => {
-      mockHttpService = new HttpService(null) as jest.Mocked<HttpService>;
-      mockCommonService = new CommonService(mockHttpService);
-      service = new CheckValidateService(mockCommonService);
+  let service: CheckValidateService;
+  let mockCommonService: CommonService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        CheckValidateService,
+        CommonService,
+        HttpService
+      ]
     });
 
-  it('should be created', () => {
+    mockCommonService = TestBed.inject(CommonService);
+    service = TestBed.inject(CheckValidateService);
+  });
 
+  it('should be created', () => {
+    // Arrange & Act
+    service = TestBed.inject(CheckValidateService);
+
+    // Assert
     expect(service).toBeTruthy();
   });
 
-  it('#checkValidMatch return true when MatchId is Null', async () => {
-    // Arrange
-    const matchId = null;
-    const tooltip = new Tooltip();
+  describe('checkValidMatch', () => {
+    it('should return true when MatchId is Null', async () => {
+      // Arrange
+      const matchId = null;
+      const tooltip = new Tooltip();
 
-    // Action
-    const result = await service.checkValidMatch(matchId, tooltip);
+      // Act
+      const result = await service.checkValidMatch(matchId, tooltip);
 
-    // Assert
-    expect(result).toBe(true);
-  });
+      // Assert
+      expect(result).toBe(true);
+    });
 
-  it('#checkValidMatch return true when MatchId = 29', async () => {
-    // Arrange
-    const matchId = '29';
-    const tooltip = new Tooltip();
+    it('should return true when MatchId = 29', async () => {
+      // Arrange
+      const matchId = '29';
+      const tooltip = new Tooltip();
 
-    // Action
-    const result = await service.checkValidMatch(matchId, tooltip);
+      // Act
+      const result = await service.checkValidMatch(matchId, tooltip);
 
-    // Assert
-    expect(result).toBe(true);
-  });
+      // Assert
+      expect(result).toBe(true);
+    });
 
-  it('#checkValidMatch return true when MatchId is Valid', async () => {
-    // Arrange
-    const matchId = '1';
-    const tooltip = new Tooltip();
-    const groups = [new GroupBetType('a',[],true)];
-    const fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
-    fakeGroupBetTypesModel.result = new Result();
-    fakeGroupBetTypesModel.result.errorCode = 0;
-    mockCommonService.getGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(fakeGroupBetTypesModel));
-    tooltip.display = jest.fn();
+    it('should return true when MatchId is Valid', async () => {
+      // Arrange
+      const matchId = '1';
+      const tooltip = new Tooltip();
+      const groups = [new GroupBetType('a', [], true)];
+      const fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
+      fakeGroupBetTypesModel.result = new Result();
+      fakeGroupBetTypesModel.result.errorCode = 0;
+      mockCommonService.getGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(fakeGroupBetTypesModel));
+      tooltip.display = jest.fn();
 
-    // Action
-    const result = await service.checkValidMatch(matchId, tooltip);
+      // Act
+      const result = await service.checkValidMatch(matchId, tooltip);
 
-    // Assert
-    expect(result).toBe(true);
-  });
+      // Assert
+      expect(result).toBe(true);
+      expect(mockCommonService.getGroupBetTypes).toHaveBeenCalledWith({ matchId: 1, mode: 9 });
+    });
 
-  it('#checkValidMatch return false when MatchId is Valid & groupBetTypes empty', async () => {
-    // Arrange
-    const tooltip = new Tooltip();
-    const fakeGroupBetTypesModel = new GroupBetTypesModel([], true);
-    fakeGroupBetTypesModel.result = new Result();
-    fakeGroupBetTypesModel.result.errorCode = 0;
-    mockCommonService.getGroupBetTypes = jest.fn().mockReturnValue(fakeGroupBetTypesModel);
-    tooltip.display = jest.fn();
+    it('should return false when MatchId is Valid & groupBetTypes empty', async () => {
+      // Arrange
+      const matchId = '1';
+      const tooltip = new Tooltip();
+      const fakeGroupBetTypesModel = new GroupBetTypesModel([], true);
+      fakeGroupBetTypesModel.result = new Result();
+      fakeGroupBetTypesModel.result.errorCode = 0;
+      mockCommonService.getGroupBetTypes = jest.fn().mockReturnValue(Promise.resolve(fakeGroupBetTypesModel));
+      tooltip.display = jest.fn();
 
-    // Action
-    const result = await service.checkValidMatch('1', tooltip);
+      // Act
+      const result = await service.checkValidMatch(matchId, tooltip);
 
-    // Assert
-    expect(result).toBeFalsy();
-  });
+      // Assert
+      expect(result).toBeFalsy();
+      expect(mockCommonService.getGroupBetTypes).toHaveBeenCalledWith({ matchId: 1, mode: 9 });
+      expect(tooltip.display).toHaveBeenCalled();
+    });
 
-  it('#checkValidMatch return false when MatchId is inValid', async () => {
-    // Arrange
-    const matchId = '1';
-    const tooltip = new Tooltip();
-    const groups = [new GroupBetType('a',[],true)];
-    const fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
-    fakeGroupBetTypesModel.result = new Result();
-    fakeGroupBetTypesModel.result.errorCode = 1;
-    fakeGroupBetTypesModel.result.errorMsg = 'errorMsg' ;
-    mockCommonService.getGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(fakeGroupBetTypesModel));
-    tooltip.display = jest.fn();
+    it('should return false when MatchId is inValid', async () => {
+      // Arrange
+      const matchId = '1';
+      const tooltip = new Tooltip();
+      const groups = [new GroupBetType('a', [], true)];
+      const fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
+      fakeGroupBetTypesModel.result = new Result();
+      fakeGroupBetTypesModel.result.errorCode = 1;
+      fakeGroupBetTypesModel.result.errorMsg = 'errorMsg';
+      mockCommonService.getGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(fakeGroupBetTypesModel));
+      tooltip.display = jest.fn();
 
-    // Action
-    const result = await service.checkValidMatch(matchId, tooltip);
+      // Act
+      const result = await service.checkValidMatch(matchId, tooltip);
 
-    // Assert
-    expect(result).toBe(false);
+      // Assert
+      expect(result).toBe(false);
+      expect(mockCommonService.getGroupBetTypes).toHaveBeenCalledWith({ matchId: 1, mode: 9 });
+      expect(tooltip.display).toHaveBeenCalled();
+    });
+
+    it('should handle error when getGroupBetTypes throws exception', async () => {
+      // Arrange
+      const matchId = '1';
+      const tooltip = new Tooltip();
+      const groups = [new GroupBetType('a', [], true)];
+      const fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
+      fakeGroupBetTypesModel.result = new Result();
+      fakeGroupBetTypesModel.result.errorCode = 1;
+      fakeGroupBetTypesModel.result.errorMsg = 'Network error';
+      mockCommonService.getGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(fakeGroupBetTypesModel));
+      tooltip.display = jest.fn();
+
+      // Act
+      const result = await service.checkValidMatch(matchId, tooltip);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(mockCommonService.getGroupBetTypes).toHaveBeenCalledWith({ matchId: 1, mode: 9 });
+      expect(tooltip.display).toHaveBeenCalled();
+    });
+
+    it('should return false when tooltip is null', async () => {
+      // Arrange
+      const matchId = '1';
+      const tooltip = null;
+      const groups = [new GroupBetType('a', [], true)];
+      const fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
+      fakeGroupBetTypesModel.result = new Result();
+      fakeGroupBetTypesModel.result.errorCode = 0;
+      mockCommonService.getGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(fakeGroupBetTypesModel));
+
+      // Act
+      const result = await service.checkValidMatch(matchId, tooltip);
+
+      // Assert
+      expect(result).toBe(true);
+    });
   });
 });

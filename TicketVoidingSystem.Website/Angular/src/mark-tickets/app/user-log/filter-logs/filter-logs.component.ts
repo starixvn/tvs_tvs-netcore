@@ -1,16 +1,26 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output } from '@angular/core';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { Component, ElementRef, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
+import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { LABELS } from '../../../../utility/constants/labels';
 import { GetLogsQuery } from '../../models/query.model';
 import { CheckValidateService } from '../../services/check-validate.service';
 import { FilterAction, FilterDate } from './filter-logs.model';
+import { NumbersOnlyDirective } from '../../../../utility/directives/numbers-only.directive';
+import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { DatePickerComponent } from '../../../../utility/components/date-time/date-picker/date-picker.component';
 
 @Component({
+  standalone: true,
   selector: 'filter-logs',
   templateUrl: './filter-logs.component.html',
-  styleUrls: ['./filter-logs.component.scss']
+  styleUrls: ['./filter-logs.component.scss'],
+  imports: [CommonModule, FormsModule, NgbModule, NgSelectModule, TooltipComponent, DatePickerComponent],
+  providers: [CheckValidateService, NumbersOnlyDirective]
 })
 export class FilterLogsComponent implements OnInit {
   model = new GetLogsQuery();
@@ -23,9 +33,10 @@ export class FilterLogsComponent implements OnInit {
 
   @Output() searchEvent = new EventEmitter<GetLogsQuery>();
 
-  constructor(
-    private readonly element: ElementRef,
-    private readonly checkValidateService: CheckValidateService) {
+  private readonly element = inject(ElementRef);
+  private readonly checkValidateService = inject(CheckValidateService);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 

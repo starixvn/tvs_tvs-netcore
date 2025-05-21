@@ -1,18 +1,14 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Shallow } from 'shallow-render';
-import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
-import { PagingModule } from '../../../utility/components/paging/paging.module';
-import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LABELS } from '../../../utility/constants/labels';
 import { BetID } from '../../../utility/models/bet-id.model';
-import { PipeModule } from '../../../utility/pipes/pipe.module';
-import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
-import { MarkedTicketQuery } from '../models/query.model';
 import { GroupModel } from './group-tickets.model';
 import { TicketModel } from './ticket.model';
 import { TicketsListComponent } from './tickets-list.component';
 import { TicketsModel } from './tickets.model';
+import { By } from '@angular/platform-browser';
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { EventEmitter } from '@angular/core';
+import { MarkedTicketQuery } from '../models/query.model';
 
 class Helper {
   public static getFakeTicketsModel(): TicketsModel {
@@ -65,8 +61,8 @@ class Helper {
     const model = new TicketsModel();
     model.groups = [groups];
     model.totalItemsList = [
-      { transId :'108936575088' } as BetID,
-      { transId :'108936575089' } as BetID
+      { transId: '108936575088' } as BetID,
+      { transId: '108936575089' } as BetID
     ];
     model.tempUncheckedList = ['108936575089'];
 
@@ -74,195 +70,239 @@ class Helper {
   }
 }
 
-@NgModule({
-  declarations: [TicketsListComponent],
-  imports: [
-    BlockUiModule,
-    FormsModule,
-    PagingModule,
-    PipeModule,
-    ToolTipModule
-  ],
-})
-class ModuleTest { }
-
 describe('TicketsListComponent', () => {
-  let shallow: Shallow<TicketsListComponent>;
+  let component: TicketsListComponent;
+  let fixture: ComponentFixture<TicketsListComponent>;
 
-  beforeEach(() => {
-    shallow = new Shallow(TicketsListComponent, ModuleTest)
-      .mock(ElementRef, {});
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TicketsListComponent);
+    component = fixture.componentInstance;
+    
+    // Mock event emitters
+    component.ticketsChange = new EventEmitter<number>();
+    component.updateMarkedTickets = new EventEmitter<MarkedTicketQuery>();
+    
+    // Mock functions
+    component.clickBody = jest.fn();
+    component.exportExcel = jest.fn();
+    component.showListCheckGroup = jest.fn();
   });
 
-  it('TicketsListComponent init with empty model groups should match snapshot', async () => {
-    const mockClickBody = jest.fn();
-    const { fixture, instance } = await shallow.render();
-    instance.isShowTickets = true;
-    instance.model = new TicketsModel();
-    instance.model.groups = [];
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-    fixture.detectChanges();
+  it('should initialize with empty model groups', () => {
+    // Arrange
+    component.isShowTickets = true;
+    component.model = new TicketsModel();
+    component.model.groups = [];
+    component.clickBody = jest.fn();
+
+    // Act
+    component.ngOnInit();
+
+    // Assert
     expect(fixture).toMatchSnapshot();
-    instance.clickBody = mockClickBody;
-    instance.ngOnInit();
-    expect(mockClickBody).toBeCalledTimes(1);
-    expect(mockClickBody).toBeCalledWith();
+    expect(component.clickBody).toHaveBeenCalled();
   });
 
-  it('TicketsListComponent init with expected model groups should match snapshot', async () => {
-    const mockClickBody = jest.fn();
-    const { fixture, instance } = await shallow
-    .dontMock(SanitizeHtmlPipe)
-    .render();
-    instance.isShowTickets = true;
-    instance.model = Helper.getFakeTicketsModel();
+  it('should initialize with expected model groups', () => {
+    // Arrange
+    component.isShowTickets = true;
+    component.model = Helper.getFakeTicketsModel();
+    component.clickBody = jest.fn();
 
-    fixture.detectChanges();
+    // Act
+    component.ngOnInit();
+
+    // Assert
     expect(fixture).toMatchSnapshot();
-    instance.clickBody = mockClickBody;
-    instance.ngOnInit();
-    expect(mockClickBody).toBeCalledTimes(1);
-    expect(mockClickBody).toBeCalledWith();
+    expect(component.clickBody).toHaveBeenCalled();
   });
 
-  it('Should checked/unchecked correctly and ticketsChange event emit with expected tickets when click Check box select all tickets',
-    async () => {
-    const { fixture, instance, find } = await shallow
-    .dontMock(SanitizeHtmlPipe)
-    .render();
-    instance.isShowTickets = true;
-    instance.model = Helper.getFakeTicketsModel();
+  it('should handle checkbox select all tickets correctly', () => {
+    // Arrange
+    component.isShowTickets = true;
+    component.model = Helper.getFakeTicketsModel();
+    const mockEmit = jest.fn();
+    component.ticketsChange.emit = mockEmit;
     fixture.detectChanges();
 
-    const checkboxAll = find('span.checkbox-dropdown-list');
+    // Act & Assert - First click (uncheck all)
+    const checkboxAll = fixture.debugElement.query(By.css('span.checkbox-dropdown-list'));
     checkboxAll.triggerEventHandler('click', {});
-    expect(checkboxAll).toHaveFound(1);
-    expect(instance.ticketsChange.emit).toHaveBeenCalledWith(0);
-    expect(instance.model.groups[0].tickets[0].isChecked).toBe(false);
-    expect(instance.model.groups[0].tickets[1].isChecked).toBe(false);
+    expect(checkboxAll).toBeTruthy();
+    expect(mockEmit).toHaveBeenCalledWith(0);
+    expect(component.model.groups[0].tickets[0].isChecked).toBe(false);
+    expect(component.model.groups[0].tickets[1].isChecked).toBe(false);
 
+    // Act & Assert - Second click (check all)
     checkboxAll.triggerEventHandler('click', {});
-    expect(instance.ticketsChange.emit).toHaveBeenCalledWith(2);
-    expect(instance.model.groups[0].tickets[0].isChecked).toBe(true);
-    expect(instance.model.groups[0].tickets[1].isChecked).toBe(true);
+    expect(mockEmit).toHaveBeenCalledWith(2);
+    expect(component.model.groups[0].tickets[0].isChecked).toBe(true);
+    expect(component.model.groups[0].tickets[1].isChecked).toBe(true);
   });
 
-  it('Should call #exportExcel when click button export excel', async () => {
-    const mockExportExcel = jest.fn();
-    const { fixture, instance, find } = await shallow
-    .dontMock(SanitizeHtmlPipe)
-    .render();
-    instance.isShowTickets = true;
-    instance.model = Helper.getFakeTicketsModel();
-    instance.exportExcel = mockExportExcel;
+  it('should call exportExcel when clicking export excel button', () => {
+    // Arrange
+    component.isShowTickets = true;
+    component.model = Helper.getFakeTicketsModel();
+    component.exportExcel = jest.fn();
     fixture.detectChanges();
-    const buttonExportExcel = find('input.title-tickets-list-toolbox-excel');
+
+    // Act
+    const buttonExportExcel = fixture.debugElement.query(By.css('input.title-tickets-list-toolbox-excel'));
     buttonExportExcel.triggerEventHandler('click', {});
 
-    expect(buttonExportExcel).toHaveFound(1);
-    expect(mockExportExcel).toBeCalledTimes(1);
-    expect(mockExportExcel).toBeCalledWith();
+    // Assert
+    expect(buttonExportExcel).toBeTruthy();
+    expect(component.exportExcel).toHaveBeenCalled();
   });
 
-  it('Should call #showListCheckGroup when click icon show list group', async () => {
-    const mockShowListCheckGroup = jest.fn();
-    const { fixture, instance, find } = await shallow
-    .dontMock(SanitizeHtmlPipe)
-    .render();
-    instance.isShowTickets = true;
-    instance.model = Helper.getFakeTicketsModel();
-    instance.showListCheckGroup = mockShowListCheckGroup;
+  it('should call showListCheckGroup when clicking show list group icon', () => {
+    // Arrange
+    component.isShowTickets = true;
+    component.model = Helper.getFakeTicketsModel();
+    component.showListCheckGroup = jest.fn();
     fixture.detectChanges();
-    const iconShowListGroup = find('span.icon-arrow-white-down');
+
+    // Act
+    const iconShowListGroup = fixture.debugElement.query(By.css('span.icon-arrow-white-down'));
     iconShowListGroup.triggerEventHandler('click', {});
 
-    expect(iconShowListGroup).toHaveFound(1);
-    expect(mockShowListCheckGroup).toBeCalledTimes(1);
-    expect(mockShowListCheckGroup).toBeCalledWith();
+    // Assert
+    expect(iconShowListGroup).toBeTruthy();
+    expect(component.showListCheckGroup).toHaveBeenCalled();
   });
 
-  it('#markSelectedTicketsOnPage should display tooltip when do not any transid ', async () => {
-    const { instance } = await shallow.render();
-    instance.model = new TicketsModel();
-    instance.model.groups = [];
-    instance.tooltip.display = jest.fn();
-    instance.markSelectedTicketsOnPage();
+  it('should display tooltip when marking selected tickets on page with no transid', () => {
+    // Arrange
+    component.model = new TicketsModel();
+    component.model.groups = [];
+    component.tooltip.display = jest.fn();
 
-    expect(instance.tooltip.display).toHaveBeenCalledWith('invalid-data', LABELS.EMPTY_TICKET);
+    // Act
+    component.markSelectedTicketsOnPage();
+
+    // Assert
+    expect(component.tooltip.display).toHaveBeenCalledWith('invalid-data', LABELS.EMPTY_TICKET);
   });
 
-  it('#markSelectedTicketsOnPage should emit updateMarkedTickets event with expected param  ', async () => {
-    const { instance } = await shallow.render();
-    instance.model = Helper.getFakeTicketsModel();
-    const query = new MarkedTicketQuery();
-    query.tickets = [];
-    instance.markSelectedTicketsOnPage();
+  it('should emit updateMarkedTickets event when marking selected tickets on page', () => {
+    // Arrange
+    component.model = Helper.getFakeTicketsModel();
+    const mockEmit = jest.fn();
+    component.updateMarkedTickets.emit = mockEmit;
 
-    expect(instance.updateMarkedTickets.emit).toBeCalledTimes(1);
+    // Act
+    component.markSelectedTicketsOnPage();
+
+    // Assert
+    expect(mockEmit).toHaveBeenCalledWith({
+      tickets: component.model.getTicketsParam(),
+      checkPermissionTickets: component.model.getAllTickets()
+    } as MarkedTicketQuery);
   });
 
-  it('#markSelectedTicketsAllPage should display tooltip when do not any transid ', async () => {
-    const { instance } = await shallow.render();
-    instance.model = new TicketsModel();
-    instance.model.totalItemsList = [];
-    instance.tooltip.display = jest.fn();
-    instance.markSelectedTicketsAllPage();
+  it('should display tooltip when marking selected tickets on all pages with no transid', () => {
+    // Arrange
+    component.model = new TicketsModel();
+    component.model.totalItemsList = [];
+    component.tooltip.display = jest.fn();
 
-    expect(instance.tooltip.display).toHaveBeenCalledWith('invalid-data', LABELS.EMPTY_TICKET);
+    // Act
+    component.markSelectedTicketsAllPage();
+
+    // Assert
+    expect(component.tooltip.display).toHaveBeenCalledWith('invalid-data', LABELS.EMPTY_TICKET);
   });
 
-  it('#markSelectedTicketsAllPage should emit updateMarkedTickets event with expected param  ', async () => {
-    const { instance } = await shallow.render();
-    instance.model = Helper.getFakeTicketsModel();
-    const query = new MarkedTicketQuery();
-    query.tickets = [];
+  it('should emit updateMarkedTickets event when marking selected tickets on all pages', () => {
+    // Arrange
+    component.model = Helper.getFakeTicketsModel();
+    const mockEmit = jest.fn();
+    component.updateMarkedTickets.emit = mockEmit;
 
-    instance.markSelectedTicketsAllPage();
+    // Act
+    component.markSelectedTicketsAllPage();
 
-    expect(instance.updateMarkedTickets.emit).toBeCalledTimes(1);
+    // Assert
+    expect(mockEmit).toHaveBeenCalledWith({
+      tickets: component.model.getTicketsParamWithAllPage(),
+      checkPermissionTickets: component.model.getAllTickets()
+    } as MarkedTicketQuery);
   });
-  
-  it('#GroupModel should call mapTickets', async () => {
-    const groupModel = new GroupModel('', [], []);
-    const ticket = new TicketModel();
-    ticket.value = '111';
-    groupModel.uncheckedTicketList = ['111'];
-    groupModel.mapTickets([ticket]);
 
-    expect(ticket.isChecked).toBe(true);
-  });
-  
-  it('#GroupModel should call defaultSpecialGroup', async () => {
-    const ticket = new TicketModel();
-    const groupModel = new GroupModel('', [], []);
-    groupModel.tickets = [ticket];
-    groupModel.name = 'phone betting';
-    groupModel.defaultSpecialGroup();
+  describe('GroupModel', () => {
+    it('should map tickets correctly', () => {
+      // Arrange
+      const groupModel = new GroupModel('', [], []);
+      const ticket = new TicketModel();
+      ticket.value = '111';
+      groupModel.uncheckedTicketList = ['111'];
 
-    expect(groupModel.isCheckAll).toBe(false);
-  });
-  
-  it('#GroupModel should call getEnableSingleTickets', async () => {
-    const groupModel = new GroupModel('', [], []);
-    groupModel.isCheckAll = false;
-    groupModel.getEnableSingleTickets();
-    
-    expect(groupModel.isCheckAll).toBe(false);
-  });
-  
-  it('#GroupModel should call getDisableBonusTickets', async () => {
-    const groupModel = new GroupModel('', [], []);
-    groupModel.isCheckAll = false;
-    groupModel.getDisableBonusTickets();
-    
-    expect(groupModel.isCheckAll).toBe(false);
-  });
-  
-  it('#GroupModel should call getEnableParlayTickets', async () => {
-    const groupModel = new GroupModel('', [], []);
-    groupModel.isCheckAll = false;
-    groupModel.getEnableParlayTickets();
-    
-    expect(groupModel.isCheckAll).toBe(false);
+      // Act
+      groupModel.mapTickets([ticket]);
+
+      // Assert
+      expect(ticket.isChecked).toBe(true);
+    });
+
+    it('should handle defaultSpecialGroup correctly', () => {
+      // Arrange
+      const ticket = new TicketModel();
+      const groupModel = new GroupModel('', [], []);
+      groupModel.tickets = [ticket];
+      groupModel.name = 'phone betting';
+
+      // Act
+      groupModel.defaultSpecialGroup();
+
+      // Assert
+      expect(groupModel.isCheckAll).toBe(false);
+    });
+
+    it('should handle getEnableSingleTickets correctly', () => {
+      // Arrange
+      const groupModel = new GroupModel('', [], []);
+      groupModel.isCheckAll = false;
+
+      // Act
+      groupModel.getEnableSingleTickets();
+
+      // Assert
+      expect(groupModel.isCheckAll).toBe(false);
+    });
+
+    it('should handle getDisableBonusTickets correctly', () => {
+      // Arrange
+      const groupModel = new GroupModel('', [], []);
+      groupModel.isCheckAll = false;
+
+      // Act
+      groupModel.getDisableBonusTickets();
+
+      // Assert
+      expect(groupModel.isCheckAll).toBe(false);
+    });
+
+    it('should handle getEnableParlayTickets correctly', () => {
+      // Arrange
+      const groupModel = new GroupModel('', [], []);
+      groupModel.isCheckAll = false;
+
+      // Act
+      groupModel.getEnableParlayTickets();
+
+      // Assert
+      expect(groupModel.isCheckAll).toBe(false);
+    });
   });
 });

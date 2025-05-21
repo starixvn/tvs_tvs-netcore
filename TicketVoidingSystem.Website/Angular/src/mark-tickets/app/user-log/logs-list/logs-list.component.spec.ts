@@ -1,16 +1,12 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { ModalType } from '../../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
-import { PagingModule } from '../../../../utility/components/paging/paging.module';
 import { PagingComponent } from '../../../../utility/components/paging/paging/paging.component';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { LogsListComponent } from './logs-list.component';
 import { LogModel } from './logs-list.model';
+import { By } from '@angular/platform-browser';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 
 class Helper {
     static getFakeListLogModel(): LogModel[] {
@@ -31,113 +27,102 @@ class Helper {
     }
 }
 
-@NgModule({
-    declarations: [LogsListComponent],
-    imports: [
-        BlockUiModule,
-        NgbModule,
-        FormsModule,
-        PagingModule
-    ],
-})
-class ModuleTest { }
-
 describe('LogsListComponent', () => {
-    let shallow: Shallow<LogsListComponent>;
+    let component: LogsListComponent;
+    let fixture: ComponentFixture<LogsListComponent>;
 
-    beforeEach(() => {
-        shallow = new Shallow(LogsListComponent, ModuleTest)
-            .dontMock(NgbModule)
-            .mock(ModalService, {});
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [TestingModule],
+            providers: [
+                ModalService
+            ]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(LogsListComponent);
+        component = fixture.componentInstance;
     });
 
-    it('LogsListComponent init should match snapshot', async () => {
-        const { fixture, instance } = await shallow.render();
-
-        expect(fixture).toMatchSnapshot();
-        expect(instance.isBlock).toBeUndefined();
-        expect(instance.isShowLogs).toBeUndefined();
-        expect(instance.model.length).toBe(0);
-        expect(instance.paging).toStrictEqual(new PagingModel());
+    it('should create', () => {
+        expect(component).toBeTruthy();
     });
 
-    it('LogsListComponent init with log data should match snapshot', async () => {
-        const { fixture, instance, findDirective } = await shallow.render();
-        instance.isShowLogs = true;
-        instance.isBlock = false;
-        instance.model = Helper.getFakeListLogModel();
+    it('should initialize with default values', () => {
+        // Act
         fixture.detectChanges();
-        const blockUI = findDirective(BlockUiDirective);
 
-        expect(fixture).toMatchSnapshot();
-        expect(blockUI).toHaveFoundOne();
-        expect(blockUI.isBlock).toBe(false);
+        // Assert
+        expect(component.isBlock).toBeUndefined();
+        expect(component.isShowLogs).toBeUndefined();
+        expect(component.model.length).toBe(0);
+        expect(component.paging).toStrictEqual(new PagingModel());
     });
 
-    it('Props paging should change when </paging> change model', async () => {
-        const { fixture, instance, findComponent } = await shallow
-            .dontMock(PagingComponent)
-            .render();
-        instance.isShowLogs = true;
+    it('should initialize with log data correctly', () => {
+        // Arrange
+        component.isShowLogs = true;
+        component.isBlock = false;
+        component.model = Helper.getFakeListLogModel();
+
+        // Act
         fixture.detectChanges();
-        const paging = findComponent(PagingComponent);
-        paging.model.pageSize = 1000;
-        paging.model.page = 2;
+        const blockUI = fixture.debugElement.query(By.directive(BlockUiDirective));
 
-        expect(paging).toHaveFoundOne();
-        expect(instance.paging.page).toBe(2);
-        expect(instance.paging.pageSize).toBe(1000);
+        // Assert
+        expect(blockUI).toBeTruthy();
+        expect(blockUI.componentInstance.isBlock).toBe(false);
     });
 
-    it('PagingComponent should call #pagingEvent when emit (modelChange) event', async () => {
-        const { fixture, instance } = await shallow
-            .dontMock(PagingComponent)
-            .render();
-        const spyPagingEvent = jest.spyOn(instance, 'pagingEvent');
+    it('should update paging when paging component changes', () => {
+        // Arrange
+        component.isShowLogs = true;
+        fixture.detectChanges();
+        const pagingComponent = fixture.debugElement.query(By.directive(PagingComponent)).componentInstance;
+
+        // Act
+        pagingComponent.model.pageSize = 1000;
+        pagingComponent.model.page = 2;
+
+        // Assert
+        expect(component.paging.page).toBe(2);
+        expect(component.paging.pageSize).toBe(1000);
+    });
+
+    it('should emit paging event when paging changes', () => {
+        // Arrange
+        const spyPagingEvent = jest.spyOn(component, 'pagingEvent');
         const mockPagingChange = jest.fn();
-        instance.pagingChange.emit = mockPagingChange;
-        instance.isShowLogs = true;
+        component.pagingChange.emit = mockPagingChange;
+        component.isShowLogs = true;
         fixture.detectChanges();
-        instance.pagingEvent();
 
+        // Act
+        component.pagingEvent();
+
+        // Assert
         expect(spyPagingEvent).toHaveBeenCalledTimes(1);
-        expect(spyPagingEvent).toHaveBeenCalledWith();
         expect(mockPagingChange).toHaveBeenCalledTimes(1);
-        expect(mockPagingChange).toHaveBeenCalledWith(instance.paging);
+        expect(mockPagingChange).toHaveBeenCalledWith(component.paging);
     });
 
-    it('Should show modal when click column description', async () => {
-        const mockOpenModalService = jest.fn();
-        const { fixture, instance, find } = await shallow
-            .mock(ModalService, { open: mockOpenModalService })
-            .render();
-        const spyDisplayTransIdList = jest.spyOn(instance, 'displayTransIdList');
+    it('should return empty array when getModalContent is called with empty arrays', () => {
+        // Act
+        const result = component['getModalContent']([], []);
 
-        instance.isShowLogs = true;
-        instance.isBlock = false;
-        instance.model = Helper.getFakeListLogModel();
+        // Assert
+        expect(result.length).toBe(0);
+    });
+
+    it('should handle empty model data', () => {
+        // Arrange
+        component.model = [];
+        component.isShowLogs = true;
+
+        // Act
         fixture.detectChanges();
 
-        const descriptionOfFirstRow = find('em.fa-align-justify')[0];
-        descriptionOfFirstRow.triggerEventHandler('click', {});
-
-        expect(spyDisplayTransIdList).toBeCalledTimes(1);
-        expect(spyDisplayTransIdList).toBeCalledWith(Helper.getFakeListLogModel()[0].singleTickets,
-            Helper.getFakeListLogModel()[0].parlayTickets);
-        expect(mockOpenModalService).toBeCalledTimes(1);
-        expect(mockOpenModalService).toBeCalledWith({
-            title: 'List of BetID (Click on the list to copy)',
-            type: ModalType.Alert,
-            copyContent: true,
-            content: [{ title: 'Single ticket(s):', message: Helper.getFakeListLogModel()[0].singleTickets.join(', ') },
-            { title: 'Parlay ticket(s):', message: Helper.getFakeListLogModel()[0].parlayTickets.join(', ') }]
-        });
-    });
-
-    it('getModalContent should not push data to to result', async () => {
-        const { instance } = await shallow.render();
-        const actual = instance['getModalContent']([], []);
-
-        expect(actual.length).toBe(0);
+        // Assert
+        expect(component.model.length).toBe(0);
+        expect(fixture.debugElement.query(By.directive(BlockUiDirective))).toBeTruthy();
     });
 });

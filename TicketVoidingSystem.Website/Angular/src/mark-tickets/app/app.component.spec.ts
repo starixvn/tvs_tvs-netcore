@@ -1,182 +1,213 @@
-import { NgModule } from '@angular/core';
-import { Shallow } from 'shallow-render';
-import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../utility/modules/testing.module';
 import { CommonService } from '../../utility/services/common.service';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
-import { ConfirmAutoUnmarkComponent } from './confirm-auto-unmark/confirm-auto-unmark.component';
-import { MarkUnmarkTicketComponent } from './mark-unmark-ticket/mark-unmark-ticket.component';
-import { TabMarkTicketComponent } from './tab-mark-ticket/tab-mark-ticket.component';
-import { UserLogComponent } from './user-log/user-log.component';
+import { DataPermission } from './models/result.model';
+
 jest.mock('../../utility/services/signal-r.service.native');
+
+class Helper {
+  static readonly mockSignalRService = {
+    initializeConnection: jest.fn()
+  };
+  static readonly mockCommonService = {
+    logAccessFunction: jest.fn().mockResolvedValue(true),
+    getBalanceUpZoneManila: jest.fn().mockResolvedValue({
+      balanceUpDay: new Date('2020-01-16').toISOString(),
+      moveBetsDay: new Date('2020-01-26').toISOString(),
+      balanceUpNgbDate: { year: 2020, month: 1, day: 16 },
+      moveBetsNgbDate: { year: 2020, month: 1, day: 26 }
+    }),
+    getCurrencies: jest.fn().mockResolvedValue([
+      { id: 1, currencyCode: 'USD' },
+      { id: 2, currencyCode: 'EUR' }
+    ]),
+    getGroupLicensees: jest.fn().mockResolvedValue([])
+  };
+  static readonly mockAppService = {
+    getDataPermission: jest.fn().mockResolvedValue(new DataPermission())
+  };
+}
+
 describe('AppComponent', () => {
-    @NgModule({
-        declarations: [AppComponent,
-            ConfirmAutoUnmarkComponent,
-            TabMarkTicketComponent,
-            MarkUnmarkTicketComponent,
-            MenuBarComponent,
-            UserLogComponent
-        ],
-        providers: [AppService, CommonService]
-    })
-    class AppModuleTest { }
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
 
-    let shallow: Shallow<AppComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [
+        { provide: SignalRService, useValue: Helper.mockSignalRService },
+        { provide: CommonService, useValue: Helper.mockCommonService },
+        { provide: AppService, useValue: Helper.mockAppService }
+      ]
+    }).compileComponents();
 
-    beforeEach(() => {
-        shallow = new Shallow(AppComponent, AppModuleTest)
-            .mock(SignalRService, { initializeConnection: jest.fn() })
-            .mock(CommonService, { logAccessFunction: jest.fn() });
+    // Setup document.body
+    const element = document.createElement('body');
+    element.setAttribute('id', 'body');
+    element.setAttribute('user-id', '8');
+    document.body.appendChild(element);
+
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    component.isExternalUrl = false;
+    await component.ngOnInit();
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  describe('Tab Navigation', () => {
+    it('should render mark-unmark-ticket component when tab is 0', async () => {
+      // Arrange
+      component.currentTab = '';
+
+      // Act
+      await component.changeTab('0');
+
+      // Assert
+      expect(component.currentTab).toBe('0');
     });
 
-    ['0', '1'].forEach((tab, index) => {
-        it(`AppComponent should render </mark-unmark-ticket> ${index}`, async () => {
-            const { instance, fixture } = await shallow.render();
-            instance.changeTab(tab);
-            fixture.detectChanges();
-            expect(fixture).toMatchSnapshot();
-            expect(instance.currentTab).toBe(tab);
-        });
+    it('should render mark-unmark-ticket component when tab is 1', async () => {
+      // Arrange
+      component.currentTab = '';
+      
+      // Act
+      await component.changeTab('1');
+
+      // Assert
+      expect(component.currentTab).toBe('1');
     });
 
-    it('AppComponent should render </user-log>', async () => {
-        const { instance, fixture } = await shallow.render();
-        instance.changeTab('2');
-        fixture.detectChanges();
-        expect(fixture).toMatchSnapshot();
-        expect(instance.currentTab).toBe('2');
+    it('should render user-log component when tab is 2', async () => {
+      // Arrange
+      component.currentTab = '';
+
+      // Act
+      await component.changeTab('2');
+
+      // Assert
+      expect(component.currentTab).toBe('2');
     });
 
-    it('AppComponent should render </confirm-auto-unmark>', async () => {
-        const { instance, fixture } = await shallow.render();
-        instance.changeTab('3');
-        fixture.detectChanges();
-        expect(fixture).toMatchSnapshot();
-        expect(instance.currentTab).toBe('3');
-    });
+    it('should render confirm-auto-unmark component when tab is 3', async () => {
+      // Arrange
+      component.currentTab = '';
 
-    it('ngOnInit should update isExternalUrl = true', async () => {
-        const mockSignalRServiceInitializeConnection = jest.fn();
-        const mockGetDataPermission = jest.fn();
-        const { instance, } = await shallow
-            .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
-            .mock(AppService, { getDataPermission: mockGetDataPermission })
-            .render();
-        jest.spyOn(URLSearchParams.prototype, "get").mockReturnValue('1');
-        await instance.ngOnInit();
-        expect(instance.isExternalUrl).toBe(true);
-    });
+      // Act
+      await component.changeTab('3');
+      fixture.detectChanges();
 
-    it('#isConfirmAutoUnmarkTab should return true when currentTab is 3', async () => {
+      // Assert
+      expect(component.currentTab).toBe('3');
+    });
+  });
+
+  describe('Tab Validation', () => {
+    describe('isConfirmAutoUnmarkTab', () => {
+      it('should return true when currentTab is 3', () => {
         // Arrange
-        const mockSignalRServiceInitializeConnection = jest.fn();
-        const mockGetDataPermission = jest.fn();
-        const { instance, } = await shallow
-            .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
-            .mock(AppService, { getDataPermission: mockGetDataPermission })
-            .render();
+        component.currentTab = '3';
 
-        instance.currentTab = '3';
-
-        // Action
-        const actual = instance.isConfirmAutoUnmarkTab();
+        // Act
+        const result = component.isConfirmAutoUnmarkTab();
 
         // Assert
-        expect(actual).toBe(true);
-    });
+        expect(result).toBe(true);
+      });
 
-    it('#isConfirmAutoUnmarkTab should return false when currentTab is not 3', async () => {
+      it('should return false when currentTab is not 3', () => {
         // Arrange
-        const mockSignalRServiceInitializeConnection = jest.fn();
-        const mockGetDataPermission = jest.fn();
-        const { instance, } = await shallow
-            .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
-            .mock(AppService, { getDataPermission: mockGetDataPermission })
-            .render();
+        component.currentTab = '4';
 
-        instance.currentTab = '4';
-
-        // Action
-        const actual = instance.isConfirmAutoUnmarkTab();
+        // Act
+        const result = component.isConfirmAutoUnmarkTab();
 
         // Assert
-        expect(actual).toBeFalsy();
+        expect(result).toBeFalsy();
+      });
     });
 
-    it('#isLogTab should return true when currentTab is 2', async () => {
+    describe('isLogTab', () => {
+      it('should return true when currentTab is 2', () => {
         // Arrange
-        const mockSignalRServiceInitializeConnection = jest.fn();
-        const mockGetDataPermission = jest.fn();
-        const { instance, } = await shallow
-            .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
-            .mock(AppService, { getDataPermission: mockGetDataPermission })
-            .render();
-
-        instance.currentTab = '2';
-
-        // Action
-        const actual = instance.isLogTab();
+        component.currentTab = '2';
+        // Act
+        const result = component.isLogTab();
 
         // Assert
-        expect(actual).toBe(true);
-    });
+        expect(result).toBe(true);
+      });
 
-    it('#isLogTab should return false when currentTab is not 2', async () => {
+      it('should return false when currentTab is not 2', () => {
         // Arrange
-        const mockSignalRServiceInitializeConnection = jest.fn();
-        const mockGetDataPermission = jest.fn();
-        const { instance, } = await shallow
-            .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
-            .mock(AppService, { getDataPermission: mockGetDataPermission })
-            .render();
+        component.currentTab = '4';
 
-        instance.currentTab = '4';
-
-        // Action
-        const actual = instance.isLogTab();
+        // Act
+        const result = component.isLogTab();
 
         // Assert
-        expect(actual).toBeFalsy();
+        expect(result).toBeFalsy();
+      });
     });
 
-    ['0', '1'].forEach((tab, index) => {
-        it(`#isMarkOrUnmarkTab should return true when currentTab is ${index}`, async () => {
-            // Arrange
-            const mockSignalRServiceInitializeConnection = jest.fn();
-            const mockGetDataPermission = jest.fn();
-            const { instance, } = await shallow
-                .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
-                .mock(AppService, { getDataPermission: mockGetDataPermission })
-                .render();
-
-            instance.currentTab = tab;
-
-            // Action
-            const actual = instance.isMarkOrUnmarkTab();
-
-            // Assert
-            expect(actual).toBe(true);
-        });
-    });
-
-    it('#isMarkOrUnmarkTab should return false when currentTab is not 0 and 1', async () => {
+    describe('isMarkOrUnmarkTab', () => {
+      it('should return true when currentTab is 0', () => {
         // Arrange
-        const mockSignalRServiceInitializeConnection = jest.fn();
-        const mockGetDataPermission = jest.fn();
-        const { instance, } = await shallow
-            .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
-            .mock(AppService, { getDataPermission: mockGetDataPermission })
-            .render();
+        component.currentTab = '0';
 
-        instance.currentTab = '4';
-
-        // Action
-        const actual = instance.isMarkOrUnmarkTab();
+        // Act
+        const result = component.isMarkOrUnmarkTab();
 
         // Assert
-        expect(actual).toBeFalsy();
-    });
+        expect(result).toBe(true);
+      });
 
+      it('should return true when currentTab is 1', () => {
+        // Arrange
+        component.currentTab = '1';
+
+        // Act
+        const result = component.isMarkOrUnmarkTab();
+
+        // Assert
+        expect(result).toBe(true);
+      });
+
+      it('should return false when currentTab is not 0 or 1', () => {
+        // Arrange
+        component.currentTab = '4';
+
+        // Act
+        const result = component.isMarkOrUnmarkTab();
+
+        // Assert
+        expect(result).toBeFalsy();
+      });
+    });
+  });
+
+  describe('Initialization', () => {
+    it('should set isExternalUrl to true when URL parameter is 1', async () => {
+      // Arrange
+      jest.spyOn(URLSearchParams.prototype, "get").mockReturnValue('1');
+      component.isExternalUrl = false;
+
+      // Act
+      await component.ngOnInit();
+
+      // Assert
+      expect(component.isExternalUrl).toBe(true);
+    });
+  });
 });

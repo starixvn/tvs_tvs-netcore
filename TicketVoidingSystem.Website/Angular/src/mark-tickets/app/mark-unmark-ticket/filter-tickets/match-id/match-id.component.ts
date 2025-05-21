@@ -1,8 +1,5 @@
-import {
-  Component,
-  ElementRef, EventEmitter, Input,
-  OnInit, Output, QueryList, ViewChild, ViewChildren
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, 
+  ViewChild, ViewChildren, inject } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment';
 import { AdvancedModeComponent } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
@@ -11,7 +8,9 @@ import { GroupBetTypesComponent } from '../../../../../utility/components/advanc
 import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { GroupLicenseeModel } from '../../../../../utility/components/licensees/licensees.model';
+import { LicenseesComponent } from '../../../../../utility/components/licensees/licensees.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { DateTimeFormat, ModeType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { CommonService } from '../../../../../utility/services/common.service';
@@ -20,11 +19,20 @@ import { GetTicketsQuery, RangeTime } from '../../../models/query.model';
 import { EventType } from '../filter.model';
 import { Duration } from './../../../models/query.model';
 import { Currencies } from './../filter.model';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { UtilityModule } from '../../../../../utility/utility.module';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NumbersOnlyDirective } from '../../../../../utility/directives/numbers-only.directive';
 
 @Component({
+  standalone: true,
   selector: 'match-id',
   templateUrl: './match-id.component.html',
-  styleUrls: ['./match-id.component.scss']
+  styleUrls: ['./match-id.component.scss'],
+  imports: [CommonModule, FormsModule, UtilityModule, NgSelectModule, DateFullTimeNewComponent,
+    LicenseesComponent, GroupBetTypesComponent, AdvancedModeComponent,TooltipComponent],
+  providers: [NumbersOnlyDirective]
 })
 export class MatchIdComponent implements OnInit {
   @Input() currencies = new Currencies();
@@ -36,21 +44,27 @@ export class MatchIdComponent implements OnInit {
   @ViewChild('groupBetTypesComponent') groupBetTypesComponent: GroupBetTypesComponent;
   @ViewChild('advancedMode') advancedModelComponent: AdvancedModeComponent;
   @ViewChildren('dateTimeComponent') dateTimeComponents: QueryList<DateFullTimeNewComponent>;
+
+  private readonly commonService = inject(CommonService);
+  private readonly element = inject(ElementRef);
+
   groupBetTypes: GroupBetTypesModel;
   allBetTypes: BetType[];
   getPlayerQuery: GetPlayersQuery;
-
   rangeTimes: RangeTime[] = [new RangeTime()];
   eventType = new EventType();
   preMatchId: string;
   isSuccessMatch: boolean;
   titleSelectedCurrency = 'Select All';
   tooltip = new Tooltip();
+  betSelections = {
+    name: 'Bet',
+    items: [{name: 'All', value: 'All'},
+      {name: 'Single', value: 'Single'},
+      {name: 'Sub Parlay', value: 'Parlay'}]
+  };
 
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly element: ElementRef
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 

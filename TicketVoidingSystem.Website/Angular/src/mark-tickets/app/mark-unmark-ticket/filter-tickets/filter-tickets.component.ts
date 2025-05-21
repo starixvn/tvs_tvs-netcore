@@ -1,5 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, 
+  ViewChild, inject } from '@angular/core';
+import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupLicenseeModel } from '../../../../utility/components/licensees/licensees.model';
 import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
@@ -8,11 +9,18 @@ import { CommonService } from '../../../../utility/services/common.service';
 import { GetTicketsQuery } from '../../models/query.model';
 import { Currencies, FilterSearchBy } from './filter.model';
 import { MatchIdComponent } from './match-id/match-id.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { UtilityModule } from '../../../../utility/utility.module';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
+  standalone: true,
   selector: 'filter-tickets',
   templateUrl: './filter-tickets.component.html',
-  styleUrls: ['./filter-tickets.component.scss']
+  styleUrls: ['./filter-tickets.component.scss'],
+  imports: [CommonModule, FormsModule, NgbModule, UtilityModule, MatchIdComponent, NgSelectModule, BlockUiDirective],
 })
 export class FilterTicketsComponent implements OnInit, OnChanges {
   @ViewChild('matchId') matchIdComponent: MatchIdComponent;
@@ -24,6 +32,9 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
   @Output() changeMatchInfo = new EventEmitter();
   @Input() isExternalUrl: boolean;
 
+  private readonly commonService = inject(CommonService);
+  private readonly elementRef = inject(ElementRef);
+
   model = new GetTicketsQuery();
   searchBy = new FilterSearchBy();
   currencies = new Currencies();
@@ -31,11 +42,6 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
   isBlock: boolean;
   markedByOptions: Selection[];
   moveBetNgbDate: NgbDate;
-
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly elementRef: ElementRef
-  ) { }
 
   async ngOnInit() {
     await this.initData();

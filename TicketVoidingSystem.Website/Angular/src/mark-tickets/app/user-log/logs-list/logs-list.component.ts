@@ -1,26 +1,29 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import moment from 'moment-timezone';
 import { Content, ModalType } from '../../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { LogModel } from './logs-list.model';
+import { PagingModule } from '../../../../utility/components/paging/paging.module';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
+  standalone: true,
   selector: 'logs-list',
   templateUrl: './logs-list.component.html',
-  styleUrls: ['./logs-list.component.scss']
+  styleUrls: ['./logs-list.component.scss'],
+  imports: [CommonModule, PagingModule, BlockUiDirective],
+  providers: [ModalService]
 })
-export class LogsListComponent implements OnInit {
+export class LogsListComponent {
   @Input() isShowLogs: boolean;
   @Input() isBlock: boolean;
   @Input() model = Array<LogModel>();
   @Input() paging = new PagingModel();
   @Output() pagingChange = new EventEmitter<PagingModel>();
 
-  constructor(private readonly modalService: ModalService) { }
-
-  ngOnInit() {
-  }
+  private readonly modalService = inject(ModalService);
 
   pagingEvent(): void {
     this.pagingChange.emit(this.paging);

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
 import { Product } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
 import { Tooltip } from '../../tooltip/tooltip.model';
@@ -32,10 +32,8 @@ export class GroupBetTypesComponent implements OnInit, OnChanges {
     this.model = new GroupBetTypesModel(new Array<GroupBetType>(), false);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['product'] || changes['model']) {
-      this.display = this.product === Product.SPORTS_BOOK;
-    }
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    this.display = this.product === Product.SPORTS_BOOK;
   }
 
   displayGroup(groups: string[]) {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit } from '@angular/core';
 import moment from 'moment-timezone';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
 import { ModalType } from '../../../utility/components/modal/modal.model';
@@ -14,11 +14,22 @@ import { CommonService } from '../../../utility/services/common.service';
 import { AppService } from '../app.service';
 import { CheckValidateService } from '../services/check-validate.service';
 import { ConfirmAutoUnmarkQuery, ConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark } from './confirm-auto-unmark.model';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
+import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
+import { NumbersOnlyDirective } from '../../../utility/directives/numbers-only.directive';
 
 @Component({
+  standalone: true,
   selector: 'confirm-auto-unmark',
   templateUrl: './confirm-auto-unmark.component.html',
-  styleUrls: ['./confirm-auto-unmark.component.scss']
+  styleUrls: ['./confirm-auto-unmark.component.scss'],
+  imports: [CommonModule, FormsModule, NgSelectModule, AutoRefreshComponent, PagingComponent, TooltipComponent, BlockUiDirective],
+  providers: [CheckValidateService, NumbersOnlyDirective]
 })
 export class ConfirmAutoUnmarkComponent implements OnInit {
   query = new ConfirmAutoUnmarkQuery();
@@ -31,12 +42,13 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   models: ConfirmAutoUnmarkViewModel[] = [];
   autoRefreshMode: number;
 
-  constructor(
-    private readonly commonService: CommonService,
-    private readonly appService: AppService,
-    private readonly modalService: ModalService,
-    private readonly element: ElementRef,
-    private readonly checkValidateService: CheckValidateService) {
+  private readonly commonService = inject(CommonService);
+  private readonly appService = inject(AppService);
+  private readonly modalService = inject(ModalService);
+  private readonly element = inject(ElementRef);
+  private readonly checkValidateService = inject(CheckValidateService);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 

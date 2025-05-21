@@ -1,18 +1,10 @@
-import { NgModule, QueryList } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { Shallow } from 'shallow-render';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { QueryList, EventEmitter } from '@angular/core';
 import { RangeTime } from '../../../../../mark-tickets/app/models/query.model';
-import { AdvancedModeModule } from '../../../../../utility/components/advanced-mode/advanced-mode.module';
 import { CheckedBetType } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { BetType, GroupBetType, GroupBetTypesModel } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
-import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { DateTimeModule } from '../../../../../utility/components/date-time/date-time.module';
-import { LicenseesComponent } from '../../../../../utility/components/licensees/licensees.component';
 import { GroupLicensee, GroupLicenseeModel, Licensee } from '../../../../../utility/components/licensees/licensees.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LABELS } from '../../../../../utility/constants/labels';
 import '../../../../../utility/extensions/string.extension';
 import { Currency } from '../../../../../utility/models/currency.model';
@@ -21,6 +13,10 @@ import { CommonService } from '../../../../../utility/services/common.service';
 import { HttpService } from '../../../../../utility/services/http.service';
 import { Currencies } from '../filter.model';
 import { MatchIdComponent } from './match-id.component';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AdvancedModeComponent } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
+import { GroupBetTypesComponent } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
+
 class Helper {
   static readonly fakeFirstTicketTime: FirstTicketTime = {
     kickOffTime: '2020-03-12 06:59:59.000',
@@ -56,21 +52,7 @@ class Helper {
 
   static readonly fakeSelectedCurrency: number[] = [20,90,86,9];
 
-  static readonly fakeCheckedBetType: CheckedBetType = {
-    id: 7,
-    betTeam: '',
-    set: '',
-    game: '',
-    betOption: '',
-    value: '',
-    valueHdp1: '',
-    valueHdp2: '',
-    goal: '',
-    oddsSpread: '',
-    oddsId: '',
-    transdesc: '',
-    virtualHead: ''
-  };
+  static readonly fakeCheckedBetType = { id: 7 } as CheckedBetType;
 
   static getGroupLicensee(): GroupLicensee[] {
     return [new GroupLicensee('China rules', [new Licensee(14, '368Cash', true)], true)];
@@ -87,494 +69,599 @@ class Helper {
   }
 }
 
-@NgModule({
-  declarations: [MatchIdComponent, LicenseesComponent],
-  imports: [
-    FormsModule,
-    ToolTipModule,
-    AdvancedModeModule,
-    DateTimeModule,
-    NgSelectModule
-  ],
-  providers: [
-    HttpService
-  ]
-})
-class ModuleTest { }
-
 describe('MatchIdComponent', () => {
-  let shallow: Shallow<MatchIdComponent>;
+  let component: MatchIdComponent;
+  let fixture: ComponentFixture<MatchIdComponent>;
+  let commonService: CommonService;
 
-  beforeEach(() => {
-    shallow = new Shallow(MatchIdComponent, ModuleTest)
-      .dontMock(DateTimeModule)
-      .dontMock(NgbModule);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule
+      ],
+      providers: [
+        HttpService,
+        CommonService
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(MatchIdComponent);
+    commonService = fixture.debugElement.injector.get(CommonService);
+    component = fixture.componentInstance;
+    
+    component.advancedModelComponent = {
+      resetBetTeam: jest.fn(),
+      validate: jest.fn(),
+      getBetTypeModels: jest.fn()
+    } as unknown as AdvancedModeComponent;
+    
+    component.groupBetTypesComponent = {
+      validate: jest.fn()
+    } as unknown as GroupBetTypesComponent;
+    
+    component.changeMatch = new EventEmitter<number>();
+    jest.spyOn(component.changeMatch, 'emit');
+    
+    component.tooltip = {
+      display: jest.fn()
+    } as unknown as Tooltip;
   });
 
-  it('#ngOnInit should return matchid is empty', async () => {
-    const { instance } = await shallow.render();
-    instance.ngOnInit();
-
-    expect(instance.model.matchId).toBe('');
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('#addRangeTimes should return rangeTimes(2 items) correctly', async () => {
-    const { instance } = await shallow.render();
-    instance.addRangeTimes();
+  describe('ngOnInit', () => {
+    it('should initialize matchId as empty string', () => {
+      // Act
+      component.ngOnInit();
 
-    expect(instance.rangeTimes.length).toBe(2);
+      // Assert
+      expect(component.model.matchId).toBe('');
+    });
   });
 
-  it('#addRangeTimes should return rangeTimes(1 items) correctly', async () => {
-    const { instance } = await shallow.render();
-    instance.addRangeTimes();
+  describe('addRangeTimes', () => {
+    it('should add new range time and return 2 items', () => {
+      // Act
+      component.addRangeTimes();
 
-    expect(instance.rangeTimes.length).toBe(2);
+      // Assert
+      expect(component.rangeTimes.length).toBe(2);
+    });
+
+    it('should not add new range time when range time is invalid', () => {
+      // Arrange
+      component.rangeTimes = [new RangeTime()];
+      component.rangeTimes[0].from = '';
+      component.rangeTimes[0].to = '';
+
+      // Act
+      component.addRangeTimes();
+
+      // Assert
+      expect(component.rangeTimes.length).toBe(2);
+    });
   });
 
-  it('#removeRangeTimes should return rangeTimes(1 items) correctly', async () => {
-    const { instance } = await shallow.render();
-    instance.addRangeTimes();
-    instance.removeRangeTimes(1);
+  describe('removeRangeTimes', () => {
+    it('should remove range time and return 1 item', () => {
+      // Arrange
+      component.addRangeTimes();
 
-    expect(instance.rangeTimes.length).toBe(1);
+      // Act
+      component.removeRangeTimes(1);
+
+      // Assert
+      expect(component.rangeTimes.length).toBe(1);
+    });
   });
 
-  it('#removeRangeTimes should return rangeTimes(1 items) correctly when searchByBetId true', async () => {
-    const { instance } = await shallow.render();
-    instance.addRangeTimes();
-    instance.removeRangeTimes(1);
+  describe('blurMatchId', () => {
+    it('should call expected functions when matchId is valid', async () => {
+      // Arrange
+      component.model.matchId = '123456';
+      component.preMatchId = '';
+      component.getGroupBetTypes = jest.fn();
+      component.setFromDate = jest.fn();
 
-    expect(instance.rangeTimes.length).toBe(1);
+      // Act
+      await component.blurMatchId();
+
+      // Assert
+      expect(component.getGroupBetTypes).toHaveBeenCalledTimes(1);
+      expect(component.setFromDate).toHaveBeenCalledTimes(1);
+      expect(component.advancedModelComponent.resetBetTeam).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not call functions when matchId is invalid', async () => {
+      // Arrange
+      component.model.matchId = undefined;
+      component.preMatchId = '';
+      component.getGroupBetTypes = jest.fn();
+      component.setFromDate = jest.fn();
+
+      // Act
+      await component.blurMatchId();
+
+      // Assert
+      expect(component.getGroupBetTypes).toHaveBeenCalledTimes(0);
+      expect(component.setFromDate).toHaveBeenCalledTimes(0);
+      expect(component.advancedModelComponent.resetBetTeam).toHaveBeenCalledTimes(0);
+    });
   });
 
-  it('#blurMatchId should return call expected function', async () => {
-    const { instance } = await shallow.render();
-    instance.model.matchId = '123456';
-    instance.preMatchId = '';
-    instance.getGroupBetTypes = jest.fn();
-    instance.setFromDate = jest.fn();
-    instance.advancedModelComponent.resetBetTeam = jest.fn();
+  describe('setFromDate', () => {
+    it('should set correct from date', async () => {
+      // Arrange
+      commonService.getFirstTimeAndKickOffTime = jest.fn().mockImplementation(() => Helper.fakeFirstTicketTime);
+      component.model.matchId = '123456';
 
-    await instance.blurMatchId();
+      // Act
+      await component.setFromDate();
 
-    expect(instance.getGroupBetTypes).toHaveBeenCalledTimes(1);
-    expect(instance.setFromDate).toHaveBeenCalledTimes(1);
-    expect(instance.advancedModelComponent.resetBetTeam).toHaveBeenCalledTimes(1);
+      // Assert
+      expect(component.rangeTimes[0].from).toBe('2019/08/12 09:35:06.980 AM');
+    });
+
+    it('should handle invalid date format', async () => {
+      // Arrange
+      const firstTicketTime = new FirstTicketTime();
+      firstTicketTime.minTransDate = '0050/8/12 09:35:06.970 AM';
+      firstTicketTime.kickOffTime = '0050/8/12 09:35:06.980 AM';
+      commonService.getFirstTimeAndKickOffTime = jest.fn().mockImplementation(() => firstTicketTime);
+      component.eventType.value = '1';
+      component.model.matchId = '123456';
+
+      // Act
+      await component.setFromDate();
+
+      // Assert
+      expect(component.rangeTimes[0].from).toBe('0050/08/12 09:35:06.980 AM');
+    });
+
+    it('should handle null currentDate', async () => {
+      // Arrange
+      const firstTicketTime = new FirstTicketTime();
+      firstTicketTime.minTransDate = null;
+      firstTicketTime.kickOffTime = null;
+      commonService.getFirstTimeAndKickOffTime = jest.fn().mockImplementation(() => firstTicketTime);
+      component.eventType.value = '1';
+      component.model.matchId = '123456';
+
+      // Act
+      await component.setFromDate();
+
+      // Assert
+      expect(component.rangeTimes[0].from).toBeDefined();
+    });
+
+    it('should handle null firstTime', async () => {
+      // Arrange
+      commonService.getFirstTimeAndKickOffTime = jest.fn().mockImplementation(() => null);
+      component.eventType.value = '1';
+      component.model.matchId = '123456';
+
+      // Act
+      await component.setFromDate();
+
+      // Assert
+      expect(component.rangeTimes[0].from).toBeDefined();
+    });
+
+    it('should handle empty matchId', async () => {
+      // Arrange
+      commonService.getFirstTimeAndKickOffTime = jest.fn().mockImplementation(() => null);
+      component.eventType.value = '1';
+      component.model.matchId = '';
+
+      // Act
+      await component.setFromDate();
+
+      // Assert
+      expect(component.rangeTimes[0].from).toBeDefined();
+    });
   });
 
-  it('#blurMatchId should not call function', async () => {
-    const { instance } = await shallow.render();
-    instance.model.matchId = undefined;
-    instance.preMatchId = '';
-    instance.getGroupBetTypes = jest.fn();
-    instance.setFromDate = jest.fn();
-    instance.advancedModelComponent.resetBetTeam = jest.fn();
+  describe('getGroupBetTypes', () => {
+    it('should call handleGroupBetTypes with expected param', async () => {
+      // Arrange
+      const groupBetTypesModel = new GroupBetTypesModel([Helper.getGroupBetType()], true);
+      commonService.getGroupBetTypes = jest.fn().mockImplementation(() => groupBetTypesModel);
+      component.model.matchId = '123456';
+      component.handleGroupBetTypes = jest.fn();
 
-    await instance.blurMatchId();
+      // Act
+      await component.getGroupBetTypes();
 
-    expect(instance.getGroupBetTypes).toHaveBeenCalledTimes(0);
-    expect(instance.setFromDate).toHaveBeenCalledTimes(0);
-    expect(instance.advancedModelComponent.resetBetTeam).toHaveBeenCalledTimes(0);
+      // Assert
+      expect(component.handleGroupBetTypes).toHaveBeenCalledWith(groupBetTypesModel);
+    });
   });
 
-  it('#setFromDate should return expected rangeTimes', async () => {
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getFirstTimeAndKickOffTime: jest.fn().mockImplementation(() => Helper.fakeFirstTicketTime)
-      })
-      .render();
-    instance.model.matchId = '123456';
+  describe('handleGroupBetTypes', () => {
+    it('should display tooltip for invalid match when no groupBetTypes', () => {
+      // Arrange
+      component.handleBetType216 = jest.fn();
+      const groupBetTypesModel = new GroupBetTypesModel([], true);
+      groupBetTypesModel.result = {
+        errorCode: 0,
+        errorMsg: ''
+      };
 
-    await instance.setFromDate();
+      // Act
+      component.handleGroupBetTypes(groupBetTypesModel);
 
-    expect(instance.rangeTimes[0].from).toBe('2019/08/12 09:35:06.980 AM');
+      // Assert
+      expect(component.tooltip.display).toHaveBeenCalledWith('match-id', LABELS.INVALID_MATCH);
+      expect(component.isSuccessMatch).toBe(false);
+      expect(component.changeMatch.emit).toHaveBeenCalledTimes(1);
+      expect(component.handleBetType216).toHaveBeenCalledTimes(1);
+      expect(component.allBetTypes.length).toBe(0);
+    });
+
+    it('should display tooltip for invalid match when data has error', () => {
+      // Arrange
+      component.handleBetType216 = jest.fn();
+      const groupBetTypesModel = new GroupBetTypesModel([], true);
+      groupBetTypesModel.result = {
+        errorCode: 1,
+        errorMsg: 'Error!'
+      };
+
+      // Act
+      component.handleGroupBetTypes(groupBetTypesModel);
+
+      // Assert
+      expect(component.tooltip.display).toHaveBeenCalledWith('match-id', 'Error!');
+      expect(component.isSuccessMatch).toBe(false);
+      expect(component.changeMatch.emit).toHaveBeenCalledTimes(1);
+      expect(component.handleBetType216).toHaveBeenCalledTimes(1);
+      expect(component.allBetTypes.length).toBe(0);
+    });
+
+    it('should handle successful match', () => {
+      // Arrange
+      component.handleBetType216 = jest.fn();
+      const groupBetTypesModel = new GroupBetTypesModel([Helper.getGroupBetType()], true);
+      groupBetTypesModel.result = {
+        errorCode: 0,
+        errorMsg: ''
+      };
+
+      // Act
+      component.handleGroupBetTypes(groupBetTypesModel);
+
+      // Assert
+      expect(component.isSuccessMatch).toBe(true);
+      expect(component.changeMatch.emit).toHaveBeenCalledTimes(1);
+      expect(component.handleBetType216).toHaveBeenCalledTimes(1);
+      expect(component.allBetTypes.length).toBe(1);
+    });
   });
 
-  it('#setFromDate should call #data.setFullYear', async () => {
-    const firstTicketTime = new FirstTicketTime();
-    firstTicketTime.minTransDate = '0050/8/12 09:35:06.970 AM';
-    firstTicketTime.kickOffTime = '0050/8/12 09:35:06.980 AM';
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getFirstTimeAndKickOffTime: jest.fn().mockImplementation(() => firstTicketTime)
-      })
-      .render();
-    instance.eventType.value = '1';
-    instance.model.matchId = '123456';
+  describe('handleBetType216', () => {
+    it('should set getPlayerQuery data when betType216 exists', () => {
+      // Arrange
+      const groupBetTypesModel = new GroupBetTypesModel([Helper.getGroupBetType216()], true);
+      component.groupBetTypes = groupBetTypesModel;
+      component.model.matchId = '12345';
 
-    await instance.setFromDate();
+      // Act
+      component.handleBetType216();
 
-    expect(instance.rangeTimes[0].from).toBe('0050/08/12 09:35:06.980 AM');
+      // Assert
+      expect(component.getPlayerQuery.matchId).toBe('12345');
+      expect(component.getPlayerQuery.betType).toBe('216');
+    });
+
+    it('should not set getPlayerQuery data when betType216 does not exist', () => {
+      // Arrange
+      const groupBetTypesModel = new GroupBetTypesModel([], true);
+      component.groupBetTypes = groupBetTypesModel;
+      component.model.matchId = '12345';
+
+      // Act
+      component.handleBetType216();
+
+      // Assert
+      expect(component.getPlayerQuery).toBeUndefined();
+    });
   });
 
-  it('#setFromDate should update data when currentDate null', async () => {
-    const firstTicketTime = new FirstTicketTime();
-    firstTicketTime.minTransDate = null;
-    firstTicketTime.kickOffTime = null;
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getFirstTimeAndKickOffTime: jest.fn().mockImplementation(() => firstTicketTime)
-      })
-      .render();
-    instance.eventType.value = '1';
-    instance.model.matchId = '123456';
+  describe('changeBetTypes', () => {
+    it('should update allBetTypes correctly', () => {
+      // Arrange
+      const betType = new BetType(1, 'Handicap', false, 0, true);
 
-    await instance.setFromDate();
+      // Act
+      component.changeBetTypes([betType]);
 
-    expect(instance.rangeTimes[0].from).toBeDefined();
+      // Assert
+      expect(component.allBetTypes.length).toBe(1);
+      expect(component.allBetTypes[0]).toEqual(betType);
+    });
   });
 
-  it('#setFromDate should update data when firstTime null', async () => {
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getFirstTimeAndKickOffTime: jest.fn().mockImplementation(() => null)
-      })
-      .render();
-    instance.eventType.value = '1';
-    instance.model.matchId = '123456';
+  describe('changeEventType', () => {
+    it('should reset scores data', () => {
+      // Arrange
+      component.model.liveHomeScore = 1;
+      component.model.liveAwayScore = 1;
+      component.setFromDate = jest.fn();
 
-    await instance.setFromDate();
+      // Act
+      component.changeEventType();
 
-    expect(instance.rangeTimes[0].from).toBeDefined();
+      // Assert
+      expect(component.setFromDate).toHaveBeenCalledTimes(1);
+    });
   });
 
-  it('#setFromDate should update data when matchId has not value', async () => {
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getFirstTimeAndKickOffTime: jest.fn().mockImplementation(() => null)
-      })
-      .render();
-    instance.eventType.value = '1';
-    instance.model.matchId = '';
+  describe('getCheckedLicensees', () => {
+    it('should return expected licensees', () => {
+      // Arrange
+      component.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
+      component.groupLicenseeModel.getCheckedLicensees = jest.fn().mockReturnValue([{ name: '368Cash' }]);
 
-    await instance.setFromDate();
+      // Act
+      const actual = component.getCheckedLicensees();
 
-    expect(instance.rangeTimes[0].from).toBeDefined();
+      // Assert
+      expect(actual.length).toBe(1);
+      expect(actual[0]).toBe('368Cash');
+    });
   });
 
-  it('#getGroupBetTypes should call #handleGroupBetTypes with expected param', async () => {
-    const groupBetTypesModel = new GroupBetTypesModel([Helper.getGroupBetType()], true);
-    const { instance } = await shallow
-      .mock(CommonService, {
-        getGroupBetTypes: jest.fn().mockImplementation(() => groupBetTypesModel)
-      })
-      .render();
-    instance.model.matchId = '123456';
-    instance.handleGroupBetTypes = jest.fn();
+  describe('checkValidationOfMatch', () => {
+    it('should return false and display tooltip when matchid is empty or undefined', () => {
+      // Arrange
+      component.tooltip.display = jest.fn();
+      const testCases = ['', undefined];
 
-    await instance.getGroupBetTypes();
+      // Act & Assert
+      for (const item of testCases) {
+        component.model.matchId = item;
+        const actual = component.checkValidationOfMatch();
+        expect(actual).toBe(false);
+        expect(component.tooltip.display).toHaveBeenCalledWith('match-id', LABELS.REQUIRED_MATCHID);
+      }
+    });
 
-    expect(instance.handleGroupBetTypes).toHaveBeenCalledWith(groupBetTypesModel);
-  });
+    it('should return false and display tooltip when isSuccessMatch is false', () => {
+      // Arrange
+      component.model.matchId = '12345';
+      component.isSuccessMatch = false;
+      component.tooltip.display = jest.fn();
 
-  it('#handleGroupBetTypes should display tooltip for invalid match when don\'t have any groupBetTypes', async () => {
-    const { instance } = await shallow.render();
-    instance.tooltip.display = jest.fn();
-    instance.handleBetType216 = jest.fn();
-    const groupBetTypesModel = new GroupBetTypesModel([], true);
-    groupBetTypesModel.result = {
-      errorCode: 0,
-      errorMsg: ''
-    };
+      // Act
+      const actual = component.checkValidationOfMatch();
 
-    instance.handleGroupBetTypes(groupBetTypesModel);
-
-    expect(instance.tooltip.display).toHaveBeenCalledWith('match-id', LABELS.INVALID_MATCH);
-    expect(instance.isSuccessMatch).toBe(false);
-    expect(instance.changeMatch.emit).toHaveBeenCalledTimes(1);
-    expect(instance.handleBetType216).toHaveBeenCalledTimes(1);
-    expect(instance.allBetTypes.length).toBe(0);
-  });
-
-  it('#handleGroupBetTypes should display tooltip for invalid match when data have error', async () => {
-    const { instance } = await shallow.render();
-    instance.tooltip.display = jest.fn();
-    instance.handleBetType216 = jest.fn();
-    const groupBetTypesModel = new GroupBetTypesModel([], true);
-    groupBetTypesModel.result = {
-      errorCode: 1,
-      errorMsg: 'Error!'
-    };
-
-    instance.handleGroupBetTypes(groupBetTypesModel);
-
-    expect(instance.tooltip.display).toHaveBeenCalledWith('match-id', 'Error!');
-    expect(instance.isSuccessMatch).toBe(false);
-    expect(instance.changeMatch.emit).toHaveBeenCalledTimes(1);
-    expect(instance.handleBetType216).toHaveBeenCalledTimes(1);
-    expect(instance.allBetTypes.length).toBe(0);
-  });
-
-  it('#handleGroupBetTypes should return match successfully', async () => {
-    const { instance } = await shallow.render();
-    instance.handleBetType216 = jest.fn();
-    const groupBetTypesModel = new GroupBetTypesModel([Helper.getGroupBetType()], true);
-    groupBetTypesModel.result = {
-      errorCode: 0,
-      errorMsg: ''
-    };
-
-    instance.handleGroupBetTypes(groupBetTypesModel);
-
-    expect(instance.isSuccessMatch).toBe(true);
-    expect(instance.changeMatch.emit).toHaveBeenCalledTimes(1);
-    expect(instance.handleBetType216).toHaveBeenCalledTimes(1);
-    expect(instance.allBetTypes.length).toBe(1);
-  });
-
-  it('#handleBetType216 should return getPlayerQuery has data', async () => {
-    const { instance } = await shallow.render();
-    const groupBetTypesModel = new GroupBetTypesModel([Helper.getGroupBetType216()], true);
-    instance.groupBetTypes = groupBetTypesModel;
-    instance.model.matchId = '12345';
-
-    instance.handleBetType216();
-
-    expect(instance.getPlayerQuery.matchId).toBe('12345');
-    expect(instance.getPlayerQuery.betType).toBe('216');
-  });
-
-  it('#handleBetType216 should return getPlayerQuery has not data', async () => {
-    const { instance } = await shallow.render();
-    const groupBetTypesModel = new GroupBetTypesModel([], true);
-    instance.groupBetTypes = groupBetTypesModel;
-    instance.model.matchId = '12345';
-    instance.handleBetType216();
-
-    expect(instance.getPlayerQuery).toBeUndefined();
-  });
-
-  it('#changeBetTypes should return expected allBetTypes', async () => {
-    const { instance } = await shallow.render();
-    const betType = new BetType(1, 'Handicap', false, 0, true);
-    instance.changeBetTypes([betType]);
-
-    expect(instance.allBetTypes.length).toBe(1);
-    expect(instance.allBetTypes[0]).toEqual(betType);
-  });
-
-  it('#changeEventType should return reset data for scores', async () => {
-    const { instance } = await shallow.render();
-    instance.model.liveHomeScore = 1;
-    instance.model.liveAwayScore = 1;
-    instance.setFromDate = jest.fn();
-    instance.changeEventType();
-
-    expect(instance.setFromDate).toHaveBeenCalledTimes(1);
-  });
-
-  it('#getCheckedLicensees should return expected licensees', async () => {
-    const { instance } = await shallow.render();
-    instance.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
-    instance.groupLicenseeModel.getCheckedLicensees = jest.fn().mockReturnValue([{ name: '368Cash' }]);
-    const actual = instance.getCheckedLicensees();
-
-    expect(actual.length).toBe(1);
-    expect(actual[0]).toBe('368Cash');
-  });
-
-  it('#checkValidationOfMatch should return false and display tooltip when matchid is empty or undefined', async () => {
-    const { instance } = await shallow.render();
-    instance.tooltip.display = jest.fn();
-    const testCases = ['', undefined];
-
-    for (const item of testCases) {
-      instance.model.matchId = item;
-      const actual = instance.checkValidationOfMatch();
+      // Assert
       expect(actual).toBe(false);
-      expect(instance.tooltip.display).toHaveBeenCalledWith('match-id', LABELS.REQUIRED_MATCHID);
-    }
+      expect(component.tooltip.display).toHaveBeenCalledWith('match-id', LABELS.INVALID_MATCHID);
+    });
+
+    it('should return true when validation passes', () => {
+      // Arrange
+      component.model.matchId = '12345';
+      component.isSuccessMatch = true;
+
+      // Act
+      const actual = component.checkValidationOfMatch();
+
+      // Assert
+      expect(actual).toBe(true);
+    });
   });
 
-  it('#checkValidationOfMatch should return false and display tooltip when isSuccessMatch is false', async () => {
-    const { instance } = await shallow.render();
-    instance.model.matchId = '12345';
-    instance.isSuccessMatch = false;
-    instance.tooltip.display = jest.fn();
-    const actual = instance.checkValidationOfMatch();
+  describe('checkValidate', () => {
+    it('should return false when invalid match', () => {
+      // Arrange
+      component.checkValidationOfMatch = jest.fn().mockImplementation(() => false);
 
-    expect(actual).toBe(false);
-    expect(instance.tooltip.display).toHaveBeenCalledWith('match-id', LABELS.INVALID_MATCHID);
+      // Act
+      const actual = component.checkValidate();
+
+      // Assert
+      expect(actual).toBe(false);
+    });
+
+    it('should return false when invalid betid', () => {
+      // Arrange
+      component.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
+      component.getCheckedLicensees = jest.fn().mockImplementation(() => []);
+      component.dateTimeComponents = new QueryList();
+      component.tooltip = new Tooltip();
+      component.tooltip.display = jest.fn();
+
+      // Act
+      const actual = component.checkValidate();
+
+      // Assert
+      expect(actual).toBe(false);
+    });
+
+    it('should return false when invalid rangeTimes', () => {
+      // Arrange
+      component.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
+      component.checkValidateRangeTime = jest.fn().mockImplementation(() => false);
+
+      // Act
+      const actual = component.checkValidate();
+
+      // Assert
+      expect(actual).toBe(false);
+    });
+
+    it('should return false and display tooltip when no licensees', () => {
+      // Arrange
+      component.tooltip.display = jest.fn();
+      component.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
+      component.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
+      component.groupLicenseeModel = new GroupLicenseeModel([], true);
+
+      // Act
+      const actual = component.checkValidate();
+
+      // Assert
+      expect(actual).toBe(false);
+      expect(component.tooltip.display).toHaveBeenCalledWith('check-group-licensee', LABELS.EMPTY_LICENSEE);
+    });
+
+    it('should return false and display tooltip when no currencies', () => {
+      // Arrange
+      component.tooltip.display = jest.fn();
+      component.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
+      component.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
+      component.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
+      component.model.currencyIds = '';
+
+      // Act
+      const actual = component.checkValidate();
+
+      // Assert
+      expect(actual).toBe(false);
+      expect(component.tooltip.display).toHaveBeenCalledWith('currencies-id', LABELS.EMPTY_CURRENCY);
+    });
+
+    it('should return false when groupBetTypesComponent and advancedModelComponent are invalid', () => {
+      // Arrange
+      component.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
+      component.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
+      component.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
+      component.model.currencyIds = '13';
+      (component.groupBetTypesComponent.validate as jest.Mock).mockImplementation(() => false);
+      (component.advancedModelComponent.validate as jest.Mock).mockImplementation(() => false);
+
+      // Act
+      const actual = component.checkValidate();
+
+      // Assert
+      expect(actual).toBe(false);
+    });
+
+    it('should return true when all validations pass', () => {
+      // Arrange
+      component.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
+      component.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
+      component.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
+      component.model.currencyIds = '13';
+      (component.groupBetTypesComponent.validate as jest.Mock).mockImplementation(() => true);
+      (component.advancedModelComponent.validate as jest.Mock).mockImplementation(() => true);
+
+      // Act
+      const actual = component.checkValidate();
+
+      // Assert
+      expect(actual).toBe(true);
+    });
   });
 
-  it('#checkValidationOfMatch should return true', async () => {
-    const { instance } = await shallow.render();
-    instance.model.matchId = '12345';
-    instance.isSuccessMatch = true;
-    const actual = instance.checkValidationOfMatch();
+  describe('getParams', () => {
+    it('should return expected GetTicketsQuery', () => {
+      // Arrange
+      component.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
+      component.eventType.value = '2';
+      component.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
+      component.model.liveHomeScore = 2;
+      component.model.liveAwayScore = 1;
+      component.rangeTimes = [new RangeTime()];
+      (component.advancedModelComponent.getBetTypeModels as jest.Mock).mockImplementation(() => [Helper.fakeCheckedBetType]);
+      component.getCheckedLicensees = jest.fn().mockReturnValue(['368Cash']);
 
-    expect(actual).toBe(true);
+      // Act
+      component.getParams();
+
+      // Assert
+      expect(component.model.licenseeNames).toBe('368Cash');
+      expect(component.model.liveIndicator).toBe(2);
+      expect(component.model.betTypes.length).toBe(1);
+      expect(component.model.durations.length).toBe(1);
+    });
+
+    it('should handle invalid input values', () => {
+      // Arrange
+      component.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
+      component.eventType.value = 'a';
+      component.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
+      component.rangeTimes = [new RangeTime()];
+      component.model.liveHomeScore = null;
+      component.model.liveAwayScore = null;
+      (component.advancedModelComponent.getBetTypeModels as jest.Mock).mockImplementation(() => [Helper.fakeCheckedBetType]);
+      component.getCheckedLicensees = jest.fn().mockReturnValue(['368Cash']);
+
+      // Act
+      component.getParams();
+
+      // Assert
+      expect(component.model.licenseeNames).toBe('368Cash');
+      expect(component.model.liveIndicator).toBeNull();
+      expect(component.model.liveHomeScore).toBeNull();
+      expect(component.model.liveAwayScore).toBeNull();
+    });
   });
 
-  it('#checkValidate should return false when invalid match', async () => {
-    const { instance } = await shallow.render();
-    instance.checkValidationOfMatch = jest.fn().mockImplementation(() => false);
-    const actual = instance.checkValidate();
+  describe('checkValidateRangeTime', () => {
+    it('should return false and display tooltip when invalid datetime', () => {
+      // Arrange
+      component.tooltip.display = jest.fn();
+      const rangeTime1 = new RangeTime();
+      rangeTime1.from = '2023/08/12 09:35:06.980 AM';
+      rangeTime1.to = '2023/08/11 09:35:06.980 AM';
+      const rangeTime2 = new RangeTime();
+      component.rangeTimes = [rangeTime1, rangeTime2];
+      component.dateTimeComponents = new QueryList();
 
-    expect(actual).toBe(false);
+      // Act
+      const actual = component.checkValidateRangeTime();
+
+      // Assert
+      expect(actual).toBe(false);
+      expect(component.tooltip.display).toBeCalledTimes(1);
+      expect(component.tooltip.display).toHaveBeenCalledWith('from-date-time0', LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
+    });
+
+    it('should return true when validation passes', () => {
+      // Arrange
+      component.rangeTimes = [new RangeTime()];
+      component.dateTimeComponents = new QueryList();
+
+      // Act
+      const actual = component.checkValidateRangeTime();
+
+      // Assert
+      expect(actual).toBe(true);
+    });
+
+    it('should return false when dateTimeComponents invalid', () => {
+      // Arrange
+      component.rangeTimes = [new RangeTime()];
+      const dateTimeComponent = {
+        validateWithTooltip: jest.fn().mockImplementation(() => false)
+      } as any;
+      component.dateTimeComponents = new QueryList();
+      component.dateTimeComponents.reset([dateTimeComponent]);
+
+      // Act
+      const actual = component.checkValidateRangeTime();
+
+      // Assert
+      expect(actual).toBe(false);
+    });
   });
 
-  it('#checkValidate should return false when invalid betid', async () => {
-    const { instance } = await shallow.render();
-    instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
-    instance.getCheckedLicensees = jest.fn().mockImplementation(() => []);
-    instance.dateTimeComponents = new QueryList();
-    instance.tooltip = new Tooltip();
-    instance.tooltip.display = jest.fn();
-    const actual = instance.checkValidate();
+  describe('updateSelectedCurrency', () => {
+    it('should update currencyIds correctly', () => {
+      // Arrange
+      component.currencies = new Currencies();
+      component.currencies.selected = [1,2,3];
 
-    expect(actual).toBe(false);
-  });
+      // Act
+      component.updateSelectedCurrency();
 
-  it('#checkValidate should return false when invalid rangeTimes', async () => {
-    const { instance } = await shallow.render();
-    instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
-    instance.checkValidateRangeTime = jest.fn().mockImplementation(() => false);
-    const actual = instance.checkValidate();
-
-    expect(actual).toBe(false);
-  });
-
-  it('#checkValidate should return false and display tooltip when not any licensees', async () => {
-    const { instance } = await shallow.render();
-    instance.tooltip.display = jest.fn();
-    instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
-    instance.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
-    instance.groupLicenseeModel = new GroupLicenseeModel([], true);
-    const actual = instance.checkValidate();
-
-    expect(actual).toBe(false);
-    expect(instance.tooltip.display).toHaveBeenCalledWith('check-group-licensee', LABELS.EMPTY_LICENSEE);
-  });
-
-  it('#checkValidate should return false and display tooltip when not any currencies', async () => {
-    const { instance } = await shallow.render();
-    instance.tooltip.display = jest.fn();
-    instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
-    instance.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
-    instance.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
-    instance.model.currencyIds = '';
-
-    const actual = instance.checkValidate();
-
-    expect(actual).toBe(false);
-    expect(instance.tooltip.display).toHaveBeenCalledWith('currencies-id', LABELS.EMPTY_CURRENCY);
-  });
-
-  it('#checkValidate should return false when groupBetTypesComponent and advancedModelComponent is invalid ', async () => {
-    const { instance } = await shallow.render();
-    instance.tooltip.display = jest.fn();
-    instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
-    instance.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
-    instance.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
-    instance.model.currencyIds = '13';
-    instance.groupBetTypesComponent.validate = jest.fn().mockImplementation(() => false);
-    instance.advancedModelComponent.validate = jest.fn().mockImplementation(() => false);
-
-    const actual = instance.checkValidate();
-
-    expect(actual).toBe(false);
-  });
-
-  it('#checkValidate should return true ', async () => {
-    const { instance } = await shallow.render();
-    instance.tooltip.display = jest.fn();
-    instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
-    instance.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
-    instance.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
-    instance.model.currencyIds = '13';
-    instance.groupBetTypesComponent.validate = jest.fn().mockImplementation(() => true);
-    instance.advancedModelComponent.validate = jest.fn().mockImplementation(() => true);
-
-    const actual = instance.checkValidate();
-
-    expect(actual).toBe(true);
-  });
-
-  it('#getParams should return expected GetTicketsQuery ', async () => {
-    const { instance } = await shallow.render();
-    instance.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
-    instance.eventType.value = '2';
-    instance.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
-    instance.model.liveHomeScore = 2;
-    instance.model.liveAwayScore = 1;
-    instance.rangeTimes = [new RangeTime()];
-    instance.advancedModelComponent.getBetTypeModels = jest.fn().mockImplementation(() => [Helper.fakeCheckedBetType]);
-    instance.getCheckedLicensees = jest.fn().mockReturnValue(['368Cash']);
-
-    instance.getParams();
-
-    expect(instance.model.licenseeNames).toBe('368Cash');
-    expect(instance.model.liveIndicator).toBe(2);
-    expect(instance.model.betTypes.length).toBe(1);
-    expect(instance.model.durations.length).toBe(1);
-  });
-
-  it('#getParams should return expected GetTicketsQuery when input wrong', async () => {
-    const { instance } = await shallow.render();
-    instance.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
-    instance.eventType.value = 'a';
-    instance.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
-    instance.rangeTimes = [new RangeTime()];
-    instance.model.liveHomeScore = null;
-    instance.model.liveAwayScore = null;
-    instance.advancedModelComponent.getBetTypeModels = jest.fn().mockImplementation(() => [Helper.fakeCheckedBetType]);
-    instance.getCheckedLicensees = jest.fn().mockReturnValue(['368Cash']);
-    instance.getParams();
-
-    expect(instance.model.licenseeNames).toBe('368Cash');
-    expect(instance.model.liveIndicator).toBeNull();
-    expect(instance.model.liveHomeScore).toBeNull();
-    expect(instance.model.liveAwayScore).toBeNull();
-  });
-
-  it('#checkValidateRangeTime should return false and display tooltip when invalid datetime', async () => {
-    const { instance } = await shallow.render();
-    instance.tooltip.display = jest.fn();
-    const rangeTime1 = new RangeTime();
-    rangeTime1.from = '2023/08/12 09:35:06.980 AM';
-    rangeTime1.to = '2023/08/11 09:35:06.980 AM';
-    const rangeTime2 = new RangeTime();
-    instance.rangeTimes = [rangeTime1, rangeTime2];
-    instance.dateTimeComponents = new QueryList();
-
-    const actual = instance.checkValidateRangeTime();
-
-    expect(actual).toBe(false);
-    expect(instance.tooltip.display).toBeCalledTimes(1);
-    expect(instance.tooltip.display).toHaveBeenCalledWith('from-date-time0', LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
-  });
-
-  it('#checkValidateRangeTime should return true', async () => {
-    const { instance } = await shallow.render();
-    instance.rangeTimes = [new RangeTime()];
-    instance.dateTimeComponents = new QueryList();
-    const actual = instance.checkValidateRangeTime();
-
-    expect(actual).toBe(true);
-  });
-
-  it('#checkValidateRangeTime should return false when dateTimeComponents invalid', async () => {
-    const { instance } = await shallow.render();
-    instance.rangeTimes = [new RangeTime()];
-
-    const dateTimeComponent = new DateFullTimeNewComponent(null);
-    dateTimeComponent.validateWithTooltip = jest.fn().mockImplementation(() => false);
-    instance.dateTimeComponents = new QueryList();
-    instance.dateTimeComponents.reset([...instance.dateTimeComponents.toArray(), dateTimeComponent]);
-    const actual = instance.checkValidateRangeTime();
-
-    expect(actual).toBe(false);
-  });
-
-  it('#updateSelectedCurrency should update currencyIds', async () => {
-    const { instance } = await shallow.render();
-    instance.currencies = new Currencies();
-    instance.currencies.selected = [1,2,3];
-
-    instance.updateSelectedCurrency();
-
-    expect(instance.model.currencyIds).toBe('1,2,3');
+      // Assert
+      expect(component.model.currencyIds).toBe('1,2,3');
+    });
   });
 });

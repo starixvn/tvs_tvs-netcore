@@ -1,14 +1,8 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import moment from 'moment-timezone';
-import { Shallow } from 'shallow-render';
-import { AutoRefreshComponent } from '../../../../utility/components/auto-refresh/auto-refresh.component';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { PagingModule } from '../../../../utility/components/paging/paging.module';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
-import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { LABELS } from '../../../../utility/constants/labels';
-import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { TicketDetailId } from '../../models/query.model';
 import { AllMarkedTicketListComponent } from './all-marked-ticket-list.component';
 import { AllMarkedTicketModel } from './all-marked-ticket.model';
@@ -18,10 +12,8 @@ enum IconCheckBox {
   any = 1,
   all = 2
 }
-class Helper {
-  static readonly noDataSelector = '.no-data';
-  static readonly htmlRender = '<all-marked-ticket-list [isShowAllTickets]="isShowAllTickets" [model]="ticketsModel"></all-marked-ticket-list>';
 
+class Helper {
   static readonly fakeAllMarkedTicketModel: AllMarkedTicketModel = {
     createdDate: new Date('2020-08-14 03:42:02.737'),
     event: 'Eastern Conference- vs -Western Conference',
@@ -71,240 +63,227 @@ class Helper {
   }
 }
 
-@NgModule({
-  declarations: [AllMarkedTicketListComponent, AutoRefreshComponent],
-  imports: [
-    FormsModule,
-    PagingModule,
-    BlockUiModule,
-    PipeModule,
-    ToolTipModule
-  ],
-})
-class ModuleTest { }
-
 describe('AllMarkedTicketListComponent', () => {
-  let shallow: Shallow<AllMarkedTicketListComponent>;
+  let component: AllMarkedTicketListComponent;
+  let fixture: ComponentFixture<AllMarkedTicketListComponent>;
 
-  beforeEach(() => {
-    shallow = new Shallow(AllMarkedTicketListComponent, ModuleTest);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(AllMarkedTicketListComponent);
+    component = fixture.componentInstance;
   });
 
-  it('pagingChange event should emit with expected paging when call #pagingEvent', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    instance.paging = Helper.getFakePagingModel();
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-    // Action
-    instance.pagingEvent();
+  it('should emit pagingChange event with expected paging when call pagingEvent', () => {
+    // Arrange
+    component.paging = Helper.getFakePagingModel();
+    component.pagingChange.emit = jest.fn();
+
+    // Act
+    component.pagingEvent();
 
     // Assert
-    expect(instance.pagingChange.emit).toHaveBeenCalledWith(Helper.getFakePagingModel());
+    expect(component.pagingChange.emit).toHaveBeenCalledWith(Helper.getFakePagingModel());
   });
 
-  it('getDetailTickets event should emit with expected TicketDetailId model when call #getMarkedTicketDetail', async () => {
+  it('should emit getDetailTickets event with expected TicketDetailId when call getMarkedTicketDetail', () => {
     // Arrange
-    const { instance } = await shallow.render();
     const ticketDetailId: TicketDetailId = {
       matchId: '31757960',
       userId: 8,
       createdDate: new Date('2020-08-14 03:42:02.737')
     };
+    component.getDetailTickets.emit = jest.fn();
 
-    // Action
-    instance.getMarkedTicketDetail(Helper.fakeAllMarkedTicketModel);
-
-    // Assert
-    expect(instance.getDetailTickets.emit).toHaveBeenCalledWith(ticketDetailId);
-  });
-
-  it('#checkGroups should return iconCheckBox is none and all ticket is unchecked', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    instance.iconCheckBox = IconCheckBox.all;
-    instance.model = [Helper.fakeAllMarkedTicketModel, Helper.fakeOTherAllMarkedTicketModel];
-
-    // Action
-    instance.checkGroups();
+    // Act
+    component.getMarkedTicketDetail(Helper.fakeAllMarkedTicketModel);
 
     // Assert
-    expect(instance.iconCheckBox).toBe(IconCheckBox.none);
-    expect(instance.model[0].isChecked).toBe(false);
-    expect(instance.model[1].isChecked).toBe(false);
+    expect(component.getDetailTickets.emit).toHaveBeenCalledWith(ticketDetailId);
   });
 
-  it('#checkGroups should return iconCheckBox is all and all ticket is checked', async () => {
+  it('should set iconCheckBox to none and uncheck all tickets when call checkGroups with all tickets checked', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.iconCheckBox = IconCheckBox.none;
-    instance.model = [Helper.fakeAllMarkedTicketModel, Helper.fakeOTherAllMarkedTicketModel];
+    component.iconCheckBox = IconCheckBox.all;
+    component.model = [Helper.fakeAllMarkedTicketModel, Helper.fakeOTherAllMarkedTicketModel];
 
-    // Action
-    instance.checkGroups();
+    // Act
+    component.checkGroups();
 
     // Assert
-    expect(instance.iconCheckBox).toBe(IconCheckBox.all);
-    expect(instance.model[0].isChecked).toBe(true);
-    expect(instance.model[1].isChecked).toBe(true);
+    expect(component.iconCheckBox).toBe(IconCheckBox.none);
+    expect(component.model[0].isChecked).toBe(false);
+    expect(component.model[1].isChecked).toBe(false);
   });
 
-  it('#getTotalMarkedTickets should return expected total', async () => {
+  it('should set iconCheckBox to all and check all tickets when call checkGroups with no tickets checked', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.model = [Helper.fakeAllMarkedTicketModel, Helper.fakeOTherAllMarkedTicketModel];
+    component.iconCheckBox = IconCheckBox.none;
+    component.model = [Helper.fakeAllMarkedTicketModel, Helper.fakeOTherAllMarkedTicketModel];
 
-    // Action
-    const actual = instance.getTotalMarkedTickets();
+    // Act
+    component.checkGroups();
+
+    // Assert
+    expect(component.iconCheckBox).toBe(IconCheckBox.all);
+    expect(component.model[0].isChecked).toBe(true);
+    expect(component.model[1].isChecked).toBe(true);
+  });
+
+  it('should return correct total when call getTotalMarkedTickets', () => {
+    // Arrange
+    component.model = [Helper.fakeAllMarkedTicketModel, Helper.fakeOTherAllMarkedTicketModel];
+
+    // Act
+    const actual = component.getTotalMarkedTickets();
 
     // Assert
     expect(actual).toBe(2);
   });
 
-  it('#getUncheckedTicketList should return tempUncheckedList(2 items) correctly when ticket param is unchecked', async () => {
+  it('should add ticket to tempUncheckedList when ticket is unchecked', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.tempUncheckedList = ['31757960'];
+    component.tempUncheckedList = ['31757960'];
 
-    // Action
-    instance.getUncheckedTicketList(Helper.fakeUncheckedAllMarkedTicketModel);
+    // Act
+    component.getUncheckedTicketList(Helper.fakeUncheckedAllMarkedTicketModel);
 
     // Assert
-    expect(instance.tempUncheckedList.length).toBe(2);
+    expect(component.tempUncheckedList.length).toBe(2);
   });
 
-  it('#getUncheckedTicketList should return tempUncheckedList(1 items) correctly when ticket param is checked', async () => {
+  it('should remove ticket from tempUncheckedList when ticket is checked', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.tempUncheckedList = ['31757960'];
+    component.tempUncheckedList = ['31757960'];
 
-    // Action
-    instance.getUncheckedTicketList(Helper.fakeOTherAllMarkedTicketModel);
+    // Act
+    component.getUncheckedTicketList(Helper.fakeOTherAllMarkedTicketModel);
 
     // Assert
-    expect(instance.tempUncheckedList.length).toBe(1);
+    expect(component.tempUncheckedList.length).toBe(1);
   });
 
-  it('#changeIconCheckBox should return iconCheckBox is none (0)', async () => {
+  it('should set iconCheckBox to none when model is empty', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.model = [];
+    component.model = [];
 
-    // Action
-    instance.changeIconCheckBox();
+    // Act
+    component.changeIconCheckBox();
 
     // Assert
-    expect(instance.iconCheckBox).toBe(IconCheckBox.none);
+    expect(component.iconCheckBox).toBe(IconCheckBox.none);
   });
 
-  it('#changeIconCheckBox should return iconCheckBox is all (2)', async () => {
+  it('should set iconCheckBox to all when all tickets are checked', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.model = [Helper.fakeAllMarkedTicketModel];
+    component.model = [Helper.fakeAllMarkedTicketModel];
 
-    // Action
-    instance.changeIconCheckBox();
+    // Act
+    component.changeIconCheckBox();
 
     // Assert
-    expect(instance.iconCheckBox).toBe(IconCheckBox.all);
+    expect(component.iconCheckBox).toBe(IconCheckBox.all);
   });
 
-  it('#changeIconCheckBox should return iconCheckBox is any (1)', async () => {
+  it('should set iconCheckBox to any when some tickets are checked', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.model = [Helper.fakeAllMarkedTicketModel, Helper.fakeUncheckedAllMarkedTicketModel];
+    component.model = [Helper.fakeAllMarkedTicketModel, Helper.fakeUncheckedAllMarkedTicketModel];
 
-    // Action
-    instance.changeIconCheckBox();
+    // Act
+    component.changeIconCheckBox();
 
     // Assert
-    expect(instance.iconCheckBox).toBe(IconCheckBox.any);
+    expect(component.iconCheckBox).toBe(IconCheckBox.any);
   });
 
-  it('#unmarkAllCheckedMarkedTickets should display tooltip when all is unchecked', async () => {
+  it('should display tooltip when all tickets are unchecked', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.model = [Helper.fakeUncheckedAllMarkedTicketModel];
-    instance.tooltip.display = jest.fn();
+    component.model = [Helper.fakeUncheckedAllMarkedTicketModel];
+    component.tooltip.display = jest.fn();
 
-    // Action
-    instance.unmarkAllCheckedMarkedTickets();
+    // Act
+    component.unmarkAllCheckedMarkedTickets();
 
     // Assert
-    expect(instance.tooltip.display).toHaveBeenCalledWith('invalid-data', LABELS.EMPTY_MATCH);
+    expect(component.tooltip.display).toHaveBeenCalledWith('invalid-data', LABELS.EMPTY_MATCH);
   });
 
-  it('updateAllMarkedTickets event should emit with expected param after call #unmarkAllCheckedMarkedTickets', async () => {
+  it('should emit updateAllMarkedTickets event with checked tickets', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.model = [Helper.fakeAllMarkedTicketModel];
+    component.model = [Helper.fakeAllMarkedTicketModel];
+    component.updateAllMarkedTickets.emit = jest.fn();
 
-    // Action
-    instance.unmarkAllCheckedMarkedTickets();
+    // Act
+    component.unmarkAllCheckedMarkedTickets();
 
     // Assert
-    expect(instance.updateAllMarkedTickets.emit).toHaveBeenCalledWith([Helper.fakeAllMarkedTicketModel]);
+    expect(component.updateAllMarkedTickets.emit).toHaveBeenCalledWith([Helper.fakeAllMarkedTicketModel]);
   });
 
-  it('#convertToGMT8 should return expected date (GMT8)', async () => {
+  it('should convert date to GMT8 correctly', () => {
     // Arrange
-    const { instance } = await shallow.render();
     const date = new Date('2020-03-11 18:59:59.000');
 
-    // Action
-    const actual = instance.convertToGMT8(date);
+    // Act
+    const actual = component.convertToGMT8(date);
 
     // Assert
     expect(moment(actual).format('YYYY-MM-DD HH:mm:ss')).toBe('2020-03-12 06:59:59');
   });
 
-  it('refreshData event should emit and set iconCheckBox is all after call #refreshTickets', async () => {
+  it('should emit refreshData event and set iconCheckBox to all when call refreshTickets', () => {
     // Arrange
-    const { instance } = await shallow.render();
+    component.refreshData.emit = jest.fn();
 
-    // Action
-    instance.refreshTickets();
+    // Act
+    component.refreshTickets();
 
     // Assert
-    expect(instance.refreshData.emit).toHaveBeenCalledTimes(1);
-    expect(instance.iconCheckBox).toBe(IconCheckBox.all);
+    expect(component.refreshData.emit).toHaveBeenCalledTimes(1);
+    expect(component.iconCheckBox).toBe(IconCheckBox.all);
   });
 
-  it('#getMatchsParam should return AllMarkedTicketModel is selected', async () => {
+  it('should return all selected tickets when call getMatchsParam', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    instance.model = [Helper.fakeAllMarkedTicketModel, Helper.fakeOTherAllMarkedTicketModel];
-    // Action
-    const actual = instance.getMatchsParam();
+    component.model = [Helper.fakeAllMarkedTicketModel, Helper.fakeOTherAllMarkedTicketModel];
+
+    // Act
+    const actual = component.getMatchsParam();
 
     // Assert
     expect(actual.length).toBe(2);
-    expect(instance.iconCheckBox).toBe(IconCheckBox.all);
+    expect(component.iconCheckBox).toBe(IconCheckBox.all);
   });
 
-  it('#getShowMatchId display MatchId when ChildMatchId is Null', async() => {
+  it('should display only matchId when childMatchId is null', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    let matchId = '111';
-    let childMatchId = null;
+    const matchId = '111';
+    const childMatchId = null;
 
-    // Action
-    const actual = instance.getShowMatchId(matchId, childMatchId);
+    // Act
+    const actual = component.getShowMatchId(matchId, childMatchId);
 
     // Assert
-    expect(actual).toBe(`111`);
+    expect(actual).toBe('111');
   });
 
-  it('#getShowMatchId display MatchId and ChildMatchId when ChildMatchId not Null', async() => {
+  it('should display both matchId and childMatchId when childMatchId is not null', () => {
     // Arrange
-    const { instance } = await shallow.render();
-    let matchId = '111';
-    let childMatchId = '222';
+    const matchId = '111';
+    const childMatchId = '222';
 
-    // Action
-    const actual = instance.getShowMatchId(matchId, childMatchId);
+    // Act
+    const actual = component.getShowMatchId(matchId, childMatchId);
 
     // Assert
-    expect(actual).toBe(`111\n(222)`);
+    expect(actual).toBe('111\n(222)');
   });
-
 });
