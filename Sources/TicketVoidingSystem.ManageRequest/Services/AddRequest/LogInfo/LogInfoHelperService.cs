@@ -62,7 +62,7 @@ public static class LogInfoHelper
     public static LogInfoDetail CombineLogInfoDetail(IEnumerable<Validation> validations, IEnumerable<LogInfoDetail> logInfoDetails, Func<LogInfoDetail, bool> filter)
     {
         var selectedItems = logInfoDetails.Where(filter).ToList();
-        if (validations.All(x => x.IsInvalidTotalTickets) || selectedItems.Count == 0)
+        if (selectedItems.Count == 0)
         {
             return null;
         }
