@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Web;
 
@@ -76,6 +77,7 @@ public class LogActionFilterAttribute(ILogger logger) : ActionFilterAttribute
         stringBuilder.AppendLine($"End Time: {DateTimeOffset.Now:MM/dd/yyyy HH:mm:ss}");
         stringBuilder.AppendLine($"Execution Time: {sw?.ElapsedMilliseconds} ms");
         stringBuilder.AppendLine($"Response: {responseData}");
+        stringBuilder.AppendLine($"ExTraInfo: {HttpContextHelper.GetExtraLog()}");
         stringBuilder.AppendLine($"GUID: {Guid.NewGuid()}");
         await logger.InfoAsync(stringBuilder.ToString());
 

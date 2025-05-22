@@ -2,6 +2,7 @@
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 
@@ -21,6 +22,7 @@ public class GetVoidTimeByAllowanceSettingServiceImp(IDynamicRepository reposito
             return repository.FetchAsync<VoidTimeByAllowanceSetting>(criteria);
         });
         var models = (await Task.WhenAll(tasks)).SelectMany(x => x);
+        HttpContextHelper.SetExtraLog("GetVoidTimeByAllowanceSetting", models);
 
         return GetResults(query, models);
     }
