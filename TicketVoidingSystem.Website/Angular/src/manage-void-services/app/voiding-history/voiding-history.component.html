@@ -1,128 +1,136 @@
-<ngb-accordion #acc="ngbAccordion" activeIds="panel-1,panel-2,panel-3">
-  <ngb-panel id="panel-1" title="First panel">
-    <ng-template ngbPanelHeader>
-      <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">Find voiding history</h5>
-        <div>
-          <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="clearInput()">Clear input</button>
-          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
+<div ngbAccordion #acc="ngbAccordion" activeIds="panel-1,panel-2,panel-3">
+  <div ngbAccordionItem id="panel-1" [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>
+        <div class="d-flex align-items-center w-100">
+          <h5 class="m-0">Find voiding history</h5>
+          <div class="ms-auto me-2">
+            <button type="button" class="btn btn-sm btn-outline-danger ms-2" (click)="$event.stopPropagation(); clearInput()">Clear input</button>
+          </div>
+        </div>
+      </button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div class="accordion-body">
+        <div class="filter action-area d-flex">
+          <label class="col-form-label col-form-label-sm me-2">RequestId </label>
+          <input maxlength="150" class="request-id form-control form-control-sm" type="text" row="1"
+            [(ngModel)]="inputRequestId" />
+          <div class="btn-search ms-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"
+              value="Search" (click)="searchVoidingHistory()" /></div>
+        </div>
+        <div class="table-scrollable mt-3">
+          <table class="table table-sm table-hover table-striped table-bordered">
+            <thead class="thead-light bg-light bg-secondary">
+              <tr>
+                <th scope="col" class="table-header">SiteDbGroupId</th>
+                <th scope="col" class="table-header">VoidingHistoryId</th>
+                <th scope="col" class="table-header">StatusId</th>
+                <th scope="col" class="table-header">RequestId</th>
+                <th scope="col" class="table-header">MessageId</th>
+                <th scope="col" class="table-header">MessageIdSpecial</th>
+                <th scope="col" class="table-header">ReasonId</th>
+                <th scope="col" class="table-header">UserId</th>
+                <th scope="col" class="table-header">CreatedDate</th>
+                <th scope="col" class="table-header">ModifiedDate</th>
+                <th scope="col" class="table-header void-data">VoidData</th>
+                <th scope="col" class="table-header trans-id">TransIds</th>
+                <th scope="col" class="table-header">BroadcastSessionId</th>
+              </tr>
+            </thead>
+
+            @if (voidingHistoryViewModel.length > 0) {
+            <tbody>
+              @for (item of voidingHistoryViewModel; track item; let i = $index) {
+              <tr>
+                <td class="text-center">{{item.siteDbGroupId}}-{{item.siteDbName}}</td>
+                <td class="text-center">{{ item.voidingHistoryId }}</td>
+                <td class="text-center">{{ item.statusId }}</td>
+                <td class="text-center">{{ item.requestId }}</td>
+                <td class="text-center">{{ item.messageId }}</td>
+                <td class="text-center">{{ item.messageIdSpecial }}</td>
+                <td class="text-center">{{ item.reasonId }}</td>
+                <td class="text-center">{{ item.userId }}</td>
+                <td class="text-center">{{ item.createdDate }}</td>
+                <td class="text-center">{{ item.modifiedDate }}</td>
+                <td class="text-center void-data" title="{{ item.voidData }}">{{ item.voidData }}</td>
+                <td class="text-center trans-id" title="{{ item.transIds }}">{{ item.transIds }}</td>
+                <td class="text-center">{{ item.broadcastSessionId }}</td>
+              </tr>
+              }
+              <tr>
+                <td colspan="13" class="text-start"><strong>Count: {{voidingHistoryViewModel.length}}</strong></td>
+              </tr>
+            </tbody>
+            }
+
+            @if (voidingHistoryViewModel.length === 0) {
+            <tbody>
+              <tr>
+                <td colspan="13" class="fw-bold text-red text-center">There is no data</td>
+              </tr>
+            </tbody>
+            }
+          </table>
         </div>
       </div>
-    </ng-template>
-    <ng-template ngbPanelContent>
-      <div class="filter action-area d-flex">
-        <label class="col-form-label mr-2">RequestId </label>
-        <input maxlength="150" class="request-id form-control form-control-sm" type="text" row="1"
-          [(ngModel)]="inputRequestId" />
-        <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"
-            value="Search" (click)="searchVoidingHistory()" /></div>
-      </div>
-      <div class="table-scrollable">
-        <table class="table table-sm table-hover table-striped table-bordered">
-          <thead class="thead-light">
-            <tr>
-              <th scope="col">SiteDbGroupId</th>
-              <th scope="col">VoidingHistoryId</th>
-              <th scope="col">StatusId</th>
-              <th scope="col">RequestId</th>
-              <th scope="col">MessageId</th>
-              <th scope="col">MessageIdSpecial</th>
-              <th scope="col">ReasonId</th>
-              <th scope="col">UserId</th>
-              <th scope="col">CreatedDate</th>
-              <th scope="col">ModifiedDate</th>
-              <th scope="col" class="void-data">VoidData</th>
-              <th scope="col" class="trans-id">TransIds</th>
-              <th scope="col">BroadcastSessionId</th>
-            </tr>
-          </thead>
+    </div>
+  </div>
 
-          <tbody *ngIf="voidingHistoryViewModel.length > 0">
-            <tr *ngFor="let item of voidingHistoryViewModel; index as i">
-              <th scope="row">{{item.siteDbGroupId}}-{{item.siteDbName}}</th>
-              <td>{{ item.voidingHistoryId }}</td>
-              <td>{{ item.statusId }}</td>
-              <td>{{ item.requestId }}</td>
-              <td>{{ item.messageId }}</td>
-              <td>{{ item.messageIdSpecial }}</td>
-              <td>{{ item.reasonId }}</td>
-              <td>{{ item.userId }}</td>
-              <td>{{ item.createdDate }}</td>
-              <td>{{ item.modifiedDate }}</td>
-              <td class="void-data">{{ item.voidData }}</td>
-              <td class="trans-id">{{ item.transIds }}</td>
-              <td>{{ item.broadcastSessionId }}</td>
-            </tr>
-            <tr>
-              <td colspan="14"><strong>Count: {{voidingHistoryViewModel.length}}</strong></td>
-            </tr>
-          </tbody>
-
-          <tbody *ngIf="voidingHistoryViewModel.length === 0">
-            <tr>
-              <td colspan="12" class="no-data">There is no data</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </ng-template>
-  </ngb-panel>
-  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-  <ngb-panel id="panel-2" title="Second">
-    <ng-template ngbPanelHeader>
-      <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">Update voiding history status</h5>
-        <div>
-          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
+  <div ngbAccordionItem id="panel-2" [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>
+        <div class="d-flex align-items-center w-100">
+          <h5 class="m-0">Update voiding history status</h5>
         </div>
-      </div>
-    </ng-template>
-    <ng-template ngbPanelContent *ngIf="voidingHistoryViewModel.length > 0">
-      <ng-container *ngFor="let item of voidingHistoryViewModel; index as i">
+      </button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div class="accordion-body">
+        @if (voidingHistoryViewModel.length > 0) {
+        @for (item of voidingHistoryViewModel; track item; let i = $index) {
         <div class="d-flex voiding-history-row">
-          <label class="col-form-label mr-2"><strong>VoidingHistoryId </strong></label>
+          <label class="col-form-label col-form-label-sm me-2"><strong>VoidingHistoryId </strong></label>
           <input maxlength="150" class="form-control form-control-sm voiding-history-id" type="text" row="1" disabled
             [(ngModel)]="item.voidingHistoryId" />
-
-          <label class="col-form-label ml-4 mr-2"><strong>StatusId</strong></label>
-          <select class="form-control status-select" [(ngModel)]="item.statusIdSelected">
-            <option *ngFor="let item of voidingHistorySelection" [attr.value]="item.value">{{item.name}}</option>
-          </select>
-
-          <div class="ml-4"><input type="button" class="btn btn-success btn-sm font-weight-bold" value="Save"
+          <label class="col-form-label col-form-label-sm ms-4 me-2"><strong>StatusId</strong></label>
+          <ng-select class="status-select" [items]="voidingHistorySelection" [bindLabel]="'name'"
+            [bindValue]="'value'" [clearable]="false" [(ngModel)]="item.statusIdSelected">
+          </ng-select>
+          <div class="ms-4"><input type="button" class="btn btn-success btn-sm font-weight-bold" value="Save"
               (click)="confirmUpdateStatus(item.voidingHistoryId, item.statusIdSelected)" /></div>
         </div>
-      </ng-container>
-    </ng-template>
-
-    <ng-template ngbPanelContent *ngIf="voidingHistoryViewModel.length === 0">
-      <tbody>
-        <tr>
-          <td class="no-data">There is no data</td>
-        </tr>
-      </tbody>
-    </ng-template>
-  </ngb-panel>
-
-  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-  <ngb-panel id="panel-3" title="Third">
-    <ng-template ngbPanelHeader>
-      <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">*** Guideline</h5>
+        }
+        }
+        @if (voidingHistoryViewModel.length === 0) {
+        <div class="fw-bold text-red text-center">There is no data</div>
+        }
       </div>
-    </ng-template>
-    <ng-template ngbPanelContent>
-      Case: Void queue failed (by lockmatch) -> Request status show <strong class="text-red">Failed</strong> -> User
-      void tickets by another functions<br /><br />
-      <div class="ml-3">
-        => ​Action: <br />
-        <div class="ml-5">
-          Change StatusId to 2 - Done & Click "Save" -> Request status will be updated to Completed
+    </div>
+  </div>
+
+  <div ngbAccordionItem id="panel-3" [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>
+        <div class="d-flex align-items-center w-100">
+          <h5 class="m-0">*** Guideline</h5>
+        </div>
+      </button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div class="accordion-body">
+        Case: Void queue failed (by lockmatch) -> Request status show <strong class="text-red">Failed</strong> -> User
+        void tickets by another functions<br /><br />
+        <div class="ms-3">
+          => ​Action: <br />
+          <div class="ms-5">
+            Change StatusId to 2 - Done & Click "Save" -> Request status will be updated to Completed
+          </div>
         </div>
       </div>
-    </ng-template>
-  </ngb-panel>
-</ngb-accordion>
+    </div>
+  </div>
+</div>
 
 <tooltip [tooltip]="tooltip"></tooltip>
 <block-full-ui [isBlock]="isBlock"></block-full-ui>

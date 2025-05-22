@@ -28,6 +28,10 @@ public class ManageRequestController(IMediator mediator) : ControllerBase
     [Route("{id}")]
     public async Task<IActionResult> GetRequest(int id) => Ok(await mediator.Send(new GetRequestRequest { RequestId = id }));
 
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<IActionResult> GetRequestNoAuth(int id) => Ok(await mediator.Send(new GetRequestRequest { RequestId = id }));
+
     [HttpPost]
     [SkipLogging]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingRequest)]

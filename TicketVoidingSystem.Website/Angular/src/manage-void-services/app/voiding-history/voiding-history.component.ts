@@ -1,4 +1,7 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -7,28 +10,30 @@ import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
 import { ServiceStatusConstant } from '../app.model';
 import { UpdateVoidingHistory, VoidingHistoryModel, VoidingHistoryViewModel } from './voiding-history.model';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { BlockFullUiComponent } from '../../../utility/components/block-full-ui/block-full-ui.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
+  standalone: true,
   selector: 'voiding-history',
   templateUrl: './voiding-history.component.html',
-  styleUrls: ['./voiding-history.component.scss']
+  styleUrls: ['./voiding-history.component.scss'],
+  imports: [CommonModule, FormsModule, NgbAccordionModule, TooltipComponent, BlockFullUiComponent, NgSelectModule]
 })
-export class VoidingHistoryComponent implements OnInit {
-
+export class VoidingHistoryComponent {
   voidingHistoryOrigin: VoidingHistoryModel[] = [];
   voidingHistoryViewModel: VoidingHistoryViewModel[] = [];
   voidingHistorySelection = ServiceStatusConstant.VoidingHistorySelection;
   tooltip = new Tooltip();
   isBlock: boolean;
   inputRequestId: number;
+  private readonly element = inject(ElementRef);
+  private readonly appApiService = inject(AppApiService);
+  private readonly modalService = inject(ModalService);
 
-  constructor(private readonly element: ElementRef,
-    private readonly appApiService: AppApiService,
-    private readonly modalService: ModalService) {
+  constructor() {
     this.tooltip.element = this.element;
-  }
-
-  ngOnInit(): void {
   }
 
   async searchVoidingHistory(): Promise<void> {

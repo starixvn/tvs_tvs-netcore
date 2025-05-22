@@ -1,4 +1,6 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -7,27 +9,31 @@ import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
 import { ServiceStatusConstant } from '../app.model';
 import { TicketVoidingQueueModel, TicketVoidingQueueViewModel, UpdateTicketVoidingQueueModel } from './void.model';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { BlockFullUiComponent } from '../../../utility/components/block-full-ui/block-full-ui.component';
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
+  standalone: true,
   selector: 'void',
   templateUrl: './void.component.html',
-  styleUrls: ['./void.component.scss']
+  styleUrls: ['./void.component.scss'],
+  imports: [CommonModule, FormsModule, TooltipComponent, BlockFullUiComponent, NgbAccordionModule, NgSelectModule]
 })
-export class VoidComponent implements OnInit {
+export class VoidComponent {
   voidingQueueStatusSelection = ServiceStatusConstant.TicketVoidingQueueSelection;
   inputVoidingHistoryId: number;
   isBlock: boolean;
   voidingQueuesOrigin: TicketVoidingQueueModel[] = [];
   voidingQueuesViewModel: TicketVoidingQueueViewModel[] = [];
   tooltip = new Tooltip();
+  private readonly element = inject(ElementRef);
+  private readonly appApiService = inject(AppApiService);
+  private readonly modalService = inject(ModalService);
 
-  constructor(private readonly element: ElementRef,
-    private readonly appApiService: AppApiService,
-    private readonly modalService: ModalService) {
+  constructor() {
     this.tooltip.element = this.element;
-  }
-
-  ngOnInit(): void {
   }
 
   async searchVoidingQueue(): Promise<void> {

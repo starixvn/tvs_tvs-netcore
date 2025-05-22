@@ -1,108 +1,81 @@
 <div class="void-history">
-  <div class="container-area d-flex flex-wrap">
-    <div class="col-sm-3">
-      <div class="d-flex">
-        <label class="col-form-label">MatchId: </label>
-        <input type="text" maxlength="150" class="input-control form-control form-control-sm"
-          [(ngModel)]="tmpModel.matchId" disabled />
-      </div>
+  <div class="container-area d-flex flex-wrap mx-3">
+    <div class="d-flex col-sm-3 mb-2">
+      <label class="col-form-label col-form-label-sm">MatchId: </label>
+      <input type="text" maxlength="150" class="form-control form-control-sm" [(ngModel)]="tmpModel.matchId" disabled />
     </div>
-    <div class="col-sm-3">
-      <div class="d-flex" [ngClass]="{'blur-content' : isRecoverTicket}">
-        <label class="col-form-label">MessageId</label>
-        <input type="text" maxlength="150" class="input-control form-control form-control-sm"
-          [(ngModel)]="tmpModel.messageId" numbersOnly [disabled]="isRecoverTicket"/>
-      </div>
+    <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : isRecoverTicket}">
+      <label class="col-form-label col-form-label-sm">MessageId</label>
+      <input type="text" maxlength="150" class="input-control form-control form-control-sm"
+        [(ngModel)]="tmpModel.messageId" numbersOnly [disabled]="isRecoverTicket" />
     </div>
-    <div class="col-sm-3">
-      <div class="d-flex" [ngClass]="{'blur-content' : isRecoverTicket}">
-        <label class="col-form-label">MessageIdSpecial</label>
-        <input type="text" maxlength="150" class="input-control form-control form-control-sm"
-          [(ngModel)]="tmpModel.messageIdSpecial" numbersOnly [disabled]="isRecoverTicket"/>
-      </div>
+    <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : isRecoverTicket}">
+      <label class="col-form-label col-form-label-sm">MessageIdSpecial</label>
+      <input type="text" maxlength="150" class="input-control form-control form-control-sm"
+        [(ngModel)]="tmpModel.messageIdSpecial" numbersOnly [disabled]="isRecoverTicket" />
     </div>
-    <div class="col-sm-3">
-      <div class="d-flex" [ngClass]="{'blur-content' : isRecoverTicket}">
-        <label class="col-form-label">ReasonId</label>
-        <input type="text" maxlength="150" class="input-control form-control form-control-sm"
-          [(ngModel)]="tmpModel.reasonId" numbersOnly [disabled]="isRecoverTicket"/>
-      </div>
+    <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : isRecoverTicket}">
+      <label class="col-form-label col-form-label-sm">ReasonId</label>
+      <input type="text" maxlength="150" class="input-control form-control form-control-sm"
+        [(ngModel)]="tmpModel.reasonId" numbersOnly [disabled]="isRecoverTicket" />
     </div>
-    <div class="col-sm-3">
-      <div class="d-flex" [ngClass]="{'blur-content' : isRecoverTicket}">
-        <label class="col-form-label">IsSentBatchMessage</label>
-        <select [(ngModel)]="tmpModel.isSentBatchMessage" [disabled]="isRecoverTicket">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
+    <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : isRecoverTicket}">
+      <label class="form-label form-label-sm">IsSentBatchMessage</label>
+      <ng-select [items]="selectionItem" bindLabel="name" bindValue="value" [(ngModel)]="tmpModel.isSentBatchMessage"
+        [clearable]="false" style="width: 100px">
+      </ng-select>
     </div>
-    <div class="col-sm-3">
-      <div class="d-flex" [ngClass]="{'blur-content' : isRecoverTicket || isAbnormalBet}">
-        <label class="col-form-label">IsSentMessageToAdminSite</label>
-        <select [(ngModel)]="tmpModel.isSentMessageToAdminSite" [disabled]="isRecoverTicket || isAbnormalBet">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
+    <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : isRecoverTicket || isAbnormalBet}">
+      <label class="form-label form-label-sm">IsSentMessageToAdminSite</label>
+      <ng-select [items]="selectionItem" bindLabel="name" bindValue="value"
+        [(ngModel)]="tmpModel.isSentMessageToAdminSite" [clearable]="false" style="width: 100px">
+      </ng-select>
     </div>
-    <div class="col-sm-3">
-      <div class="d-flex" [ngClass]="{'blur-content' : isRecoverTicket}">
-        <label class="col-form-label">IsInsertedVoidedTransaction</label>
-        <select [(ngModel)]="tmpModel.isInsertedVoidedTransaction" [disabled]="isRecoverTicket">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
+    <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : isRecoverTicket}">
+      <label class="form-label form-label-sm">IsInsertedVoidedTransaction</label>
+      <ng-select [items]="selectionItem" bindLabel="name" bindValue="value"
+        [(ngModel)]="tmpModel.isInsertedVoidedTransaction" [clearable]="false" style="width: 100px">
+      </ng-select>
     </div>
-    <div class="col-sm-3">
-      <div class="d-flex" [ngClass]="{'blur-content' : !isRecoverTicket}">
-        <label class="col-form-label">IsDeletedZzzBetTrans</label>
-        <select [(ngModel)]="tmpModel.isDeletedZzzBetTrans" [disabled]="!isRecoverTicket">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
+    <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : !isRecoverTicket}">
+      <label class="form-label form-label-sm">IsDeletedZzzBetTrans</label>
+      <ng-select [items]="selectionItem" bindLabel="name" bindValue="value" [(ngModel)]="tmpModel.isDeletedZzzBetTrans"
+        [clearable]="false" style="width: 100px">
+      </ng-select>
     </div>
-    <div class="col-sm-3">
-      <div class="d-flex" [ngClass]="{'blur-content' : !isRecoverTicket}">
-        <label class="col-form-label">IsDeletedMessage</label>
-        <select [(ngModel)]="tmpModel.isDeletedMessage" [disabled]="!isRecoverTicket">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
+    <div class="d-flex col-sm-3 mb-2">
+      <label class="form-label form-label-sm">IsDeletedMessage</label>
+      <ng-select [items]="selectionItem" bindLabel="name" bindValue="value" [(ngModel)]="tmpModel.isDeletedMessage"
+        [clearable]="false" style="width: 100px">
+      </ng-select>
     </div>
-    <div class="col-sm-3">
-      <div class="d-flex" [ngClass]="{'blur-content' : !isRecoverTicket}">
-        <label class="col-form-label">IsDeletedVoidedTransaction </label>
-        <select [(ngModel)]="tmpModel.isDeletedVoidedTransaction" [disabled]="!isRecoverTicket">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
+    <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : !isRecoverTicket}">
+      <label class="form-label form-label-sm">IsDeletedVoidedTransaction</label>
+      <ng-select [items]="selectionItem" bindLabel="name" bindValue="value"
+        [(ngModel)]="tmpModel.isDeletedVoidedTransaction" [clearable]="false" style="width: 100px">
+      </ng-select>
     </div>
-    <div class="col-sm-3">
-      <div class="d-flex">
-        <label class="col-form-label">IsUpdatedVoidingHistory</label>
-        <select [(ngModel)]="tmpModel.isUpdatedVoidingHistory">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
+    <div class="d-flex col-sm-3 mb-2">
+      <label class="form-label form-label-sm">IsUpdatedVoidingHistory</label>
+      <ng-select [items]="selectionItem" bindLabel="name" bindValue="value"
+        [(ngModel)]="tmpModel.isUpdatedVoidingHistory" [clearable]="false" style="width: 100px">
+      </ng-select>
     </div>
-    <div class="col-sm-3">
-      <div class="d-flex">
-        <label class="col-form-label">IsSentEmail</label>
-        <select [(ngModel)]="tmpModel.isSentEmail">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
+    <div class="d-flex col-sm-3 mb-2">
+      <label class="form-label form-label-sm">IsSentEmail</label>
+      <ng-select [items]="selectionItem" bindLabel="name" bindValue="value" [(ngModel)]="tmpModel.isSentEmail"
+        [clearable]="false" style="width: 100px">
+      </ng-select>
     </div>
-    <div class="col-sm-3">
-      <div class="d-flex">
-        <label class="col-form-label">JackTimeCashOutApi</label>
-        <select [(ngModel)]="tmpModel.isRunExternalService">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
+    <div class="d-flex col-sm-3 mb-2">
+      <label class="form-label form-label-sm">JackTimeCashOutApi</label>
+      <ng-select [items]="selectionItem" bindLabel="name" bindValue="value" [(ngModel)]="tmpModel.isRunExternalService"
+        [clearable]="false" style="width: 100px">
+      </ng-select>
     </div>
   </div>
-  <div class="save-history-status mg-top-10">
-    <input type="button" class="btn btn-primary btn-sm font-weight-bold" value="Save"
+  <div class="save-history-status mg-top-10 ms-4">
+    <input type="button" class="btn btn-primary btn-sm fw-bold" value="Save"
       (click)="confirmUpdateAfterVoidData()" />
   </div>
 </div>

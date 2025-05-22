@@ -23,7 +23,12 @@ export class VoidBetAutomationModel {
     isDeletedVoidedTransaction?: boolean;
 }
 
-export const SELECTION_ITEM = [
+export interface Item {
+    name: string;
+    value: boolean | string | number;
+}
+
+export const SELECTION_ITEM: Item[] = [
     {
         name: 'True',
         value: true
@@ -72,7 +77,7 @@ export class ServiceStatusConstant {
         { name: '3 - Failed', value: ServiceStatusConstant.Failed }
     ];
     
-    static readonly LetstalkSelection = [
+    static readonly LetsTalkSelection = [
         { name: '1 - Running', value: ServiceStatusConstant.Running },
         { name: '2 - Done', value: ServiceStatusConstant.Done },
         { name: '3 - Failed', value: ServiceStatusConstant.Failed }

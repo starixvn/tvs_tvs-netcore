@@ -5,14 +5,6 @@
 .table-scrollable {
   overflow: auto;
   max-height: 600px;
-
-  table {
-    margin-top: 15px;
-
-    .no-data {
-      text-align: center;
-    }
-  }
 }
 
 .queue-id {
@@ -23,13 +15,11 @@
   width: 80px;
 }
 
-.server-row {
-  margin-bottom: 10px;
+.text-red {
+  color: red;
 }
 
-.status-select {
-  width: 100px;
-  height: 31px;
-  font-size: 13px;
-  padding: 5px 5px;
+.table-header {
+  background-color: #e9ecef !important;
+  text-align: center;
 }

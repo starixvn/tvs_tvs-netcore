@@ -8,10 +8,6 @@
 
   table {
     margin-top: 15px;
-
-    .no-data {
-      text-align: center;
-    }
   }
 }
 
@@ -20,7 +16,10 @@
 }
 
 .status-select {
-  width: 110px;
-  font-size: 13px;
-  padding: 5px 5px;
+  width: 140px;
+}
+
+.table-header {
+  background-color: #e9ecef !important;
+  text-align: center;
 }

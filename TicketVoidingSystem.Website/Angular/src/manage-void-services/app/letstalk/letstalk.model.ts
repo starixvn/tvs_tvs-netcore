@@ -1,4 +1,4 @@
-export class LetstalkModel {
+export class LetsTalkModel {
   requestId: number;
   broadcastSessionId: string;
   statusId: number;
@@ -6,16 +6,16 @@ export class LetstalkModel {
   modifiedDate: Date;
 }
 
-export class LetstalkViewModel extends LetstalkModel {
+export class LetsTalkViewModel extends LetsTalkModel {
   statusIdSelected: number;
 }
 
-export class GetLetstalkModel {
+export class GetLetsTalkModel {
   requestId: number;
   broadcastSessionId: string;
 }
 
-export class UpdateLetstalkModel {
+export class UpdateLetsTalkModel {
   requestId: number;
   broadcastSessionId: string;
   statusId: number;
