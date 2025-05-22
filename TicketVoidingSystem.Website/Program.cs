@@ -45,6 +45,7 @@ services.AddFanexMailService();
 services.AddMediatR();
 services.AddAutoMapper();
 services.AddTvsSignalR();
+services.AddHttpContextAccessor();
 services.AddResponseCompression(options => { options.MimeTypes = ["text/html", "text/css", "application/javascript", "application/json"]; });
 services.AddRazorPages();
 services.AddControllersWithViews(options =>
@@ -81,5 +82,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapHub<NotificationHub>("/SignalR/NotificationHub");
+app.UseHttpContextAccessor();
 
 await app.RunAsync();

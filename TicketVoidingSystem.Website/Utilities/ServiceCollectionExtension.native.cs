@@ -9,6 +9,7 @@ using Fanex.Logging.Extensions.AspNetCore;
 using Fanex.MailDeliver.MailClient;
 using Fanex.RemotingRef;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
@@ -46,6 +47,7 @@ using TicketVoidingSystem.SharedApi.Controllers;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.TicketListing;
 using TicketVoidingSystem.TicketListing.Controllers;
+using TicketVoidingSystem.Utilities;
 using TicketVoidingSystem.VoidSingleBet;
 using TicketVoidingSystem.VoidSingleBet.Controllers;
 using TicketVoidingSystem.Website.Utilities.CustomServices;
@@ -223,5 +225,10 @@ public static class ServiceCollectionExtension
         services.AddAutoMapper(typeof(CashOutTransactionProfile));
         services.AddAutoMapper(typeof(RecoverBetProfile));
         services.AddAutoMapper(typeof(RecoverParlayBetProfile));
+    }
+
+    public static void UseHttpContextAccessor(this WebApplication app)
+    {
+        HttpContextHelper.Configure(app.Services.GetRequiredService<IHttpContextAccessor>());
     }
 }
