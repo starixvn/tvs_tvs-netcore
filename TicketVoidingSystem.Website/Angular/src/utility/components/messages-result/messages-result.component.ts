@@ -1,7 +1,7 @@
 ﻿import { Component, Input, SimpleChange } from '@angular/core';
 import { MessagesResult } from './messages-result';
 import { CommonModule } from '@angular/common';
-import { SanitizeHtmlPipe } from '../../pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../modules/sanitize-html.pipe';
 
 @Component({
     standalone: true,
@@ -24,7 +24,7 @@ export class MessagesResultComponent {
         if (!result || !result.results || result.results.length === 0) {
             return;
         }
-        
+
         const ERROR_CODE_LOCK_MATCH = [1000000, 101, 100, 103, 102];
         result.results.forEach(x => {
             if (ERROR_CODE_LOCK_MATCH.includes(x.errorCode)) {

@@ -17,7 +17,7 @@ import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PagingModel } from '../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../utility/components/paging/paging.model';
 
 class Helper {
   static readonly fakeMatchModel = {

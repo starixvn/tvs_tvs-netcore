@@ -5,7 +5,7 @@ import { WrongOuModel } from '../../../../add-request/app/add-request/models/eve
 import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
 import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
-import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';

@@ -6,7 +6,7 @@ import { AcceptType, DateTimeFormat } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../utility/constants/sport.constant';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
-import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 import { StaticService } from '../../../utility/services/static.service';
 import { TicketCountOtherSportsComponent } from './../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
 

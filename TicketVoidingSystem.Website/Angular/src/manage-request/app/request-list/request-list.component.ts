@@ -1,10 +1,10 @@
-import { SanitizeHtmlPipe } from './../../../utility/pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
-import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../utility/constants/labels';
@@ -20,7 +20,7 @@ import { DetailRequestModel, RequestModel } from './request.model';
 import { RequestDescriptionService } from './services/request-description.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PagingModule } from '../../../utility/components/paging/paging.module';
+import { PagingComponent } from '../../../utility/components/paging/paging.component';
 import { TicketListComponent } from '../ticket-list/ticket-list.component';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 
@@ -29,7 +29,7 @@ import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.
   selector: 'request-list',
   templateUrl: './request-list.component.html',
   styleUrls: ['./request-list.component.scss'],
-  imports: [CommonModule, FormsModule, PagingModule, TicketListComponent, SanitizeHtmlPipe],
+  imports: [CommonModule, FormsModule, PagingComponent, TicketListComponent, SanitizeHtmlPipe],
   providers: [RequestDescriptionService]
 })
 export class RequestListComponent implements OnInit, OnChanges {

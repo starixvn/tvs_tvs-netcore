@@ -4,7 +4,6 @@ import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TestingModule } from '../../../../utility/modules/testing.module';
 import { GroupBetTypesModel } from '../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
-import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { Selection } from '../../../../utility/models/selection.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { GetLogsQuery } from '../../models/query.model';
@@ -42,7 +41,6 @@ describe('FilterLogsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         TestingModule,
-        ToolTipModule,
         FormsModule,
         NgbModule,
         NgSelectModule

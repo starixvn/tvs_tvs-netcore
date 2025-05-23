@@ -10,7 +10,7 @@ import { MessagesResult } from '../../utility/components/messages-result/message
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { Notification } from '../../utility/components/notification/notification';
-import { PagingModel } from '../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../utility/components/paging/paging.model';
 import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { TemplateMessageComponent } from '../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../utility/components/template-message/template-message/template.model';

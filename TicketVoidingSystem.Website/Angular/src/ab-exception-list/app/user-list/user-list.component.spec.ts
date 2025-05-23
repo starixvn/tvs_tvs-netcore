@@ -1,6 +1,6 @@
 import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PagingModule } from '../../../utility/components/paging/paging.module';
+import { PagingComponent } from '../../../utility/components/paging/paging.component';
 import { ABExceptionListLevel, ABExceptionListVoidVIP } from '../../../utility/constants/config';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { AppStore } from '../app.store';
@@ -19,7 +19,7 @@ describe('UserListComponent', () => {
       imports: [
         TestingModule,
         UserListComponent,
-        PagingModule,
+        PagingComponent,
       ],
       providers: [
         UserService,

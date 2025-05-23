@@ -6,7 +6,6 @@ import moment from 'moment-timezone';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { SportType } from '../../../../../utility/constants/sport.constant';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
@@ -21,6 +20,7 @@ import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOddsService } from '../services/event-wrong-odds.service';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
     selector: 'log-info-wrong-odds',
@@ -28,7 +28,7 @@ import { EventWrongOddsService } from '../services/event-wrong-odds.service';
     styleUrls: ['./log-info-wrong-odds.component.scss'],
     standalone: true,
     imports: [AffectedTicketComponent, PoolHouseTicketComponent, TicketCountOtherSportsComponent,
-      FormsModule, CommonModule, PipeModule],
+      FormsModule, CommonModule, SanitizeHtmlPipe],
     providers: [AffectedTicketService]
 })
 export class LogInfoWrongOddsComponent implements OnInit {

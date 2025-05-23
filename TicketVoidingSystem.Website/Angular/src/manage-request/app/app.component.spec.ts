@@ -16,7 +16,7 @@ import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { ChangeDetectorRef } from '@angular/core';
 import { RequestDescriptionService } from './request-list/services/request-description.service';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../utility/components/block-ui/block-ui.directive';
 import { RequestListComponent } from './request-list/request-list.component';
 
 jest.mock('../../utility/services/signal-r.service.native');
@@ -110,7 +110,7 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        TestingModule, FilterComponent, MenuBarComponent, BlockUiModule, RequestListComponent
+        TestingModule, FilterComponent, MenuBarComponent, BlockUiDirective, RequestListComponent
       ],
       providers: [
         ModalService, CommonService, AppService, SignalRService, RequestDescriptionService, ChangeDetectorRef,

@@ -4,7 +4,7 @@ import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../utility/components/block-ui/block-ui.directive';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.component';
 import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
@@ -60,7 +60,7 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [VoidDangerAcceptedComponent, VoidDuplicateTicketsComponent,
         VoidNotParticipateComponent, VoidEarlyKickOffComponent, VoidAbnormalBetComponent,
-        VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiModule],
+        VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiDirective],
       providers: [AppService, SignalRService]
     }).compileComponents();
 

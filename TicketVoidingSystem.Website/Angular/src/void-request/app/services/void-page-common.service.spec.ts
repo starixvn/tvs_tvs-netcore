@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription } from 'rxjs';
-import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';

@@ -2,7 +2,6 @@ import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
-import { ToolTipModule } from '../tooltip/tooltip.module';
 import { BetIdsComponent } from './bet-ids.component';
 
 describe('BetIdsComponent', () => {
@@ -10,7 +9,6 @@ describe('BetIdsComponent', () => {
     declarations: [
     ],
     imports: [
-      ToolTipModule,
       NgbModule,
       FormsModule
     ]

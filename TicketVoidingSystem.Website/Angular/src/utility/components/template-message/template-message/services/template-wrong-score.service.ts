@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { SubIssueTypeGroup } from '../../../../../utility/constants/config';
 import { Message } from '../../messages/message';
 import { TemplateReplace } from '../template.const';
@@ -10,10 +10,9 @@ import { TemplateInputsService } from './template-inputs.service';
   { providedIn: 'root' }
 )
 export class TemplateWrongScoreService {
-  constructor(
-    private readonly replaceMessageService: ReplaceMessageService,
-    private readonly templateInputsService: TemplateInputsService,
-  ) { }
+  private readonly replaceMessageService = inject(ReplaceMessageService);
+  private readonly templateInputsService = inject(TemplateInputsService);
+
 
   public replaceActualScore(subIssueTypeId: number, templateValue: TemplateValue, outputMessage: Message, selectedTemplated: TemplateModel): void {
     if (SubIssueTypeGroup.SUBTYPE_ONWARDS.includes(subIssueTypeId) && !SubIssueTypeGroup.SUBTYPE_WRONG_SCORE_RELATED_EVENT.includes(subIssueTypeId)) {

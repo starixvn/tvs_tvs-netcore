@@ -21,7 +21,6 @@ import { Duration } from './../../../models/query.model';
 import { Currencies } from './../filter.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UtilityModule } from '../../../../../utility/utility.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NumbersOnlyDirective } from '../../../../../utility/directives/numbers-only.directive';
 
@@ -30,7 +29,7 @@ import { NumbersOnlyDirective } from '../../../../../utility/directives/numbers-
   selector: 'match-id',
   templateUrl: './match-id.component.html',
   styleUrls: ['./match-id.component.scss'],
-  imports: [CommonModule, FormsModule, UtilityModule, NgSelectModule, DateFullTimeNewComponent,
+  imports: [CommonModule, FormsModule, NgSelectModule, DateFullTimeNewComponent,
     LicenseesComponent, GroupBetTypesComponent, AdvancedModeComponent,TooltipComponent],
   providers: [NumbersOnlyDirective]
 })

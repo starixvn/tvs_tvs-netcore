@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Message } from '../../messages/message';
 import { TemplateReplace } from '../template.const';
 import { TemplateValue } from '../template.model';
@@ -8,10 +8,7 @@ import { ReplaceMessageService } from './replace-message.service';
   { providedIn: 'root' }
 )
 export class TemplateWrongOfferedService {
-
-  constructor(
-    private readonly replaceMessageService: ReplaceMessageService
-  ) { }
+  private readonly replaceMessageService = inject(ReplaceMessageService);
 
   public replaceWrongNameTVS(templateValue: TemplateValue, message: Message): void {
     this.replaceMessageService.replaceAll(message, TemplateReplace.WRONG_NAME, templateValue.wrongName);

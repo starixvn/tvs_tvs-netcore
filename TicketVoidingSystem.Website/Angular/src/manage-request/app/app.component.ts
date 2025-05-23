@@ -18,7 +18,7 @@ import { GetRequestsQuery } from './models/get-requests.query';
 import { PermissionManage } from './models/permission-manage.model';
 import { RequestModel } from './request-list/request.model';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../utility/components/block-ui/block-ui.directive';
 import { RequestListComponent } from './request-list/request-list.component';
 
 const DATETIME_FORMAT = 'YYYY/M/D hh:mm:ss.SSS A';
@@ -26,7 +26,7 @@ const DATETIME_FORMAT = 'YYYY/M/D hh:mm:ss.SSS A';
   standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
-  imports: [MenuBarComponent, FilterComponent, BlockUiModule, RequestListComponent]
+  imports: [MenuBarComponent, FilterComponent, BlockUiDirective, RequestListComponent]
 })
 export class AppComponent implements OnInit {
   @ViewChild('filterComponent') filterComponent: FilterComponent;

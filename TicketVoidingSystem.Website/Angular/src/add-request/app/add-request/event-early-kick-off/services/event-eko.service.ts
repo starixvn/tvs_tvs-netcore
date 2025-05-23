@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import moment from 'moment-timezone';
-import { PagingConstant, PagingModel } from "../../../../../utility/components/paging/paging/paging.model";
+import { PagingConstant, PagingModel } from "../../../../../utility/components/paging/paging.model";
 import { FilterModel } from "../../filter/filter.model";
 import { EarlyKickOffModel } from "../../models/event-eko.model";
 import { EarlyKickOffGetLogInfoQuery } from "../models/get-log-info.query";

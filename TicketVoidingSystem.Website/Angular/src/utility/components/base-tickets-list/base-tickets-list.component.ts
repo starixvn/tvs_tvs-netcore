@@ -1,8 +1,8 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { CommonGroupTicketsModel } from '../../../utility/models/common.group-tickets.model';
 import { CommonTicketModel } from '../../../utility/models/common.ticket.model';
 import { CommonTicketsModel } from '../../models/common.tickets.model';
-import { PagingModel } from '../paging/paging/paging.model';
+import { PagingModel } from '../paging/paging.model';
 
 @Component({
   standalone: true,
@@ -24,8 +24,7 @@ export class BaseTicketsListComponent<T extends CommonTicketsModel<CommonGroupTi
   @Output() ticketsChange = new EventEmitter<number>();
   isShowListCheckGroup: boolean;
   showMessageBetTrade: boolean;
-
-  constructor(readonly element: ElementRef) { }
+  readonly element = inject(ElementRef);
 
   ngOnInit() {
     this.clickBody();

@@ -2,21 +2,20 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectMixtureItem } from '../ng-select-mixture-item.model';
-import { NgSelectMixtureComponent } from '../ng-select-mixture.component';
 
 @Component({
+  standalone: true,
   selector: 'ng-select-tree-view',
   templateUrl: './ng-select-tree-view.component.html',
   styleUrls: ['./ng-select-tree-view.component.scss'],
-  standalone: true,
-  imports: [FormsModule, CommonModule, NgSelectMixtureComponent]
+  imports: [FormsModule, CommonModule]
 })
 export class NgSelectTreeViewComponent {
   @Input() items: NgSelectMixtureItem[];
   @Input() isDisabled: boolean;
   @Input() paddingLeft = 10;
   @Output() emitSingleEvent = new EventEmitter<NgSelectMixtureItem>();
-  @Output() emitchildEvent = new EventEmitter<string>();
+  @Output() emitChildEvent = new EventEmitter<string>();
 
   public handleClickSingleItem(item: NgSelectMixtureItem) {
     item.checked = true;
@@ -29,12 +28,12 @@ export class NgSelectTreeViewComponent {
   }
 
   public handleClickChildItem() {
-    this.emitchildEvent.emit();
+    this.emitChildEvent.emit();
     this.items.filter(x => x.isSingleSelect()).forEach(x => x.checked = false);
   }
 
   public checkFromChildEvent(item: NgSelectMixtureItem) {
-    item.checkFromChilds();
+    item.checkFromChild();
   }
 
   public isHaveCheckBox(item: NgSelectMixtureItem) {

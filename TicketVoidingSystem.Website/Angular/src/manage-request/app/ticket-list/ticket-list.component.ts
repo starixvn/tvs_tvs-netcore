@@ -3,14 +3,14 @@ import { RequestDetailViewModel } from '../../../edit-request/app/request.model'
 import { CommonService } from '../../../utility/services/common.service';
 import { TicketListModal } from './ticket-list.modal';
 import { RequestInfoComponent } from './request-info/request-info.component';
-import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
   standalone: true,
   selector: 'ticket-list',
   templateUrl: './ticket-list.component.html',
   styleUrls: ['./ticket-list.component.scss'],
-  imports: [RequestInfoComponent, BlockUiModule]
+  imports: [RequestInfoComponent, BlockUiDirective]
 })
 export class TicketListComponent implements OnChanges {
   @Input() modal: TicketListModal;

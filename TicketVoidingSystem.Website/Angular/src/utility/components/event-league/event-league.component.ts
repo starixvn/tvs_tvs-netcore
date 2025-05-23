@@ -13,10 +13,10 @@ import { Tooltip } from '../tooltip/tooltip.model';
 import { ValidationService } from './validation.service';
 
 @Component({
+  standalone: true,
   selector: 'event-league',
   templateUrl: './event-league.component.html',
   styleUrls: ['./event-league.component.scss'],
-  standalone: true,
   imports: [FormsModule, NgSelectModule, TooltipComponent],
   providers: [ValidationService]
 })

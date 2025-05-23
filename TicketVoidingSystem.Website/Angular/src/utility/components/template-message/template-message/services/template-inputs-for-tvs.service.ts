@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { Message } from '../../messages/message';
 import { TemplateReplace } from '../template.const';
@@ -14,15 +14,12 @@ import { TemplateInputsService } from './template-inputs.service';
   { providedIn: 'root' }
 )
 export class TemplateInputsForTVSService {
-
-  constructor(
-    private readonly replaceMessageService: ReplaceMessageService,
-    private readonly templateWrongScoreService: TemplateWrongScoreService,
-    private readonly templateWrongOddsService: TemplateWrongOddsService,
-    private readonly templateWrongOddsSportBookService: TemplateWrongOddsSportBookService,
-    private readonly templateWrongOfferedService: TemplateWrongOfferedService,
-    private readonly templateInputsService: TemplateInputsService,
-  ) { }
+  private readonly replaceMessageService = inject(ReplaceMessageService);
+  private readonly templateWrongScoreService = inject(TemplateWrongScoreService);
+  private readonly templateWrongOddsService = inject(TemplateWrongOddsService);
+  private readonly templateWrongOddsSportBookService = inject(TemplateWrongOddsSportBookService);
+  private readonly templateWrongOfferedService = inject(TemplateWrongOfferedService);
+  private readonly templateInputsService = inject(TemplateInputsService);
 
   public replaceInputsByIssueType(issueTypeId: number, subIssueTypeId: number, templateValue: TemplateValue, outputMessage: Message, selectedTemplated: TemplateModel): void {
     if (StaticService.isWrongScore(issueTypeId)) {

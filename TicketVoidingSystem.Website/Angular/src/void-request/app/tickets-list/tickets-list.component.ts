@@ -3,26 +3,25 @@ import { BaseTicketsListComponent } from '../../../utility/components/base-ticke
 import { StaticService } from '../../../utility/services/static.service';
 import { TicketsModel } from './tickets.model';
 import { CommonModule } from '@angular/common';
-import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
 import { FormsModule } from '@angular/forms';
-import { PagingModule } from '../../../utility/components/paging/paging.module';
-import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
+import { PagingComponent } from '../../../utility/components/paging/paging.component';
+import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   standalone: true,
   selector: 'tickets-list',
   templateUrl: './tickets-list.component.html',
   styleUrls: ['./tickets-list.component.scss'],
-  imports: [CommonModule, BlockUiModule, FormsModule, PagingModule, SanitizeHtmlPipe]
+  imports: [CommonModule, BlockUiDirective, FormsModule, PagingComponent, SanitizeHtmlPipe]
 })
 export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel> implements OnInit, OnChanges {
   @Input() issueTypeId = 0;
   @Input() isDisableCheckbox = false;
   title = '';
-  readonly element: ElementRef;
   
-  constructor() {
-    super(inject(ElementRef));
+  constructor(readonly element: ElementRef) {
+    super(element);
     this.element = inject(ElementRef);
   }
 

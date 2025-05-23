@@ -9,7 +9,6 @@ import { IssueTypeConstant } from '../../../utility/constants/issue-type.constan
 import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
 import { CheckIssueTypeObjectType } from '../../../utility/models/check-issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
-import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../utility/services/static.service';
 import { AbnormalAccountOtherComponent } from './abnormal-accounts/abnormal-accounts-other/abnormal-accounts-other.component';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
@@ -49,7 +48,6 @@ import { CopyRequestInfoService } from './services/copy-request-info.service';
   standalone: true,
   imports: [FormsModule,
     CommonModule,
-    PipeModule,
     NgbModule,
     FilterComponent,
     BlockFullUiComponent,

@@ -4,9 +4,6 @@ import { Injectable, ElementRef } from '@angular/core';
   providedIn: 'root'
 })
 export class NumbersOnlyService {
-
-  constructor() { }
-
   executeDirective(element: ElementRef, event: KeyboardEvent, regex: RegExp, specialKeys: Array<string>) {
     if (specialKeys.indexOf(event.key) !== -1) {
       return;

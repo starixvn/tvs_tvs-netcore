@@ -1,16 +1,16 @@
 import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { BlockFullUiModule } from 'src/utility/components/block-full-ui/block-full-ui.module';
 import { MenuBarComponent } from 'src/utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppStore } from './app.store';
+import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
 
 @Component({
   standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [MenuBarComponent, BlockFullUiModule]
+  imports: [MenuBarComponent, BlockFullUiComponent]
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   isBlockingUi = true;

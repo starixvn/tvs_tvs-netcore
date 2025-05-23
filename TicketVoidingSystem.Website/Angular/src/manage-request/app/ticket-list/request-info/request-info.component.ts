@@ -2,7 +2,7 @@ import { Component, EventEmitter, inject, Input, OnInit, Output, OnChanges, Simp
 import { NgbAccordionConfig, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
-import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { IssueInfo } from '../../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../../utility/models/match.model';
@@ -15,19 +15,19 @@ import { TabInfoRequest, TicketListModal } from '../ticket-list.modal';
 import { TicketsModel } from '../tickets/tickets.model';
 import { TicketsQuery } from '../tickets/tickets.query';
 import { GeneralInfoViewModel } from './request-info.model';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { MatchInfoComponent } from '../match-info/match-info.component';
-import { IssueTypeModule } from '../../../../utility/components/issue-type/issue-type.module';
 import { TicketsComponent } from '../tickets/tickets.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { IssueTypeComponent } from '../../../../utility/components/issue-type/issue-type.component';
 
 @Component({
   standalone: true,
   selector: 'request-info',
   templateUrl: './request-info.component.html',
   styleUrls: ['./request-info.component.scss'],
-  imports: [BlockUiModule, MatchInfoComponent, IssueTypeModule, TicketsComponent, FormsModule, NgbNavModule, CommonModule ]
+  imports: [BlockUiDirective, MatchInfoComponent, IssueTypeComponent, TicketsComponent, FormsModule, NgbNavModule, CommonModule ]
 })
 export class RequestInfoComponent implements OnInit, OnChanges {
   @Input() ticketListModal: TicketListModal;

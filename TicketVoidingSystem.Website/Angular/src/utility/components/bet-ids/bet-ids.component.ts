@@ -8,11 +8,11 @@ import { Tooltip } from '../tooltip/tooltip.model';
 import { GroupNumber, NumberItem } from './bet-ids.model';
 
 @Component({
+  standalone: true,
   selector: 'bet-ids',
   templateUrl: './bet-ids.component.html',
   styleUrls: ['./bet-ids.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [FormsModule, TooltipComponent, CommonModule, NgbModule]
 })
 export class BetIdsComponent implements OnInit {

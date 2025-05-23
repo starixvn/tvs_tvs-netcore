@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import moment from 'moment-timezone';
 import { TestingModule } from '../../../../utility/modules/testing.module';
-import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TicketDetailId } from '../../models/query.model';
 import { AllMarkedTicketListComponent } from './all-marked-ticket-list.component';

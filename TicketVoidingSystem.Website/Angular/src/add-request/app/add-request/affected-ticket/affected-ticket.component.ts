@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
 import { MultipleSelectionComponent } from '../../../../utility/components/multiple-selection/multiple-selection.component';
@@ -16,7 +16,7 @@ import { AffectedTicketService } from './affected-ticket.service';
   templateUrl: './affected-ticket.component.html',
   styleUrls: ['./affected-ticket.component.scss'],
   standalone: true,
-  imports: [MultipleSelectionComponent, TicketsComponent, BlockUiModule]
+  imports: [MultipleSelectionComponent, TicketsComponent, BlockUiDirective]
 })
 export class AffectedTicketComponent implements OnChanges {
   @Input() model = new AffectedTicketsModel();

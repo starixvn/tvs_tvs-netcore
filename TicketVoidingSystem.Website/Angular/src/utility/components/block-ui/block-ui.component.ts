@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   standalone: true,
@@ -6,10 +6,5 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './block-ui.component.html',
   styleUrls: ['./block-ui.component.scss']
 })
-export class BlockUiComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
+export class BlockUiComponent {
 }

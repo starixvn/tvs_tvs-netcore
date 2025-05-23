@@ -9,7 +9,6 @@ import { ModalService } from '../../../../../utility/components/modal/modal.serv
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
@@ -17,13 +16,14 @@ import { PrimitiveProperty } from '../event-wrong-score.model';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
 import { WrongScoreService } from '../services/wrong-score.service';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   standalone: true,
   selector: 'wrong-score-info',
   templateUrl: './wrong-score-info.component.html',
   styleUrls: ['./wrong-score-info.component.scss'],
-  imports: [DateFullTimeNewComponent, NgbModule, FormsModule, CommonModule, TooltipComponent, PipeModule, BlockUiDirective]
+  imports: [DateFullTimeNewComponent, NgbModule, FormsModule, CommonModule, TooltipComponent, SanitizeHtmlPipe, BlockUiDirective]
 })
 export class WrongScoreInfoComponent implements OnInit {
   @Input() index: number;

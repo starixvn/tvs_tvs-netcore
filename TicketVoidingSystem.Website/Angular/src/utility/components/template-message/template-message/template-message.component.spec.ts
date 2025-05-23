@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
 import { HttpService } from '../../../../utility/services/http.service';
-import { ToolTipModule } from '../../tooltip/tooltip.module';
 import { MessagesComponent } from '../messages/messages.component';
 import { ReplaceAIOMessageService } from './services/replace-aio-message.serivce';
 import { ReplaceCommonValuesService } from './services/replace-common-values.service';
@@ -19,9 +18,6 @@ describe('FilterComponent', () => {
     declarations: [
       MessagesComponent,
       TemplateMessageComponent
-    ],
-    imports: [
-      ToolTipModule
     ],
     providers: [
       HttpService,

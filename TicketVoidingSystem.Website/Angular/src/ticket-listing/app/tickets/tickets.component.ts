@@ -1,12 +1,12 @@
 ﻿import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { Product } from '../../../utility/constants/config';
 import { SummaryItem } from '../summary/summary.model';
 import { TicketsModel } from './ticket.model';
 import { CommonModule } from '@angular/common';
-import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
+import { PagingComponent } from '../../../utility/components/paging/paging.component';
 import { FormsModule } from '@angular/forms';
-import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   standalone: true,

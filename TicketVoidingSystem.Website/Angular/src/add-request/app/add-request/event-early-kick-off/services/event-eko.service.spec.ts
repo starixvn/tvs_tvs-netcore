@@ -4,7 +4,7 @@ import { AddRequestApiService } from '../../add-request-api.service';
 import { EarlyKickOffModel } from '../../models/event-eko.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { FilterModel } from '../../filter/filter.model';
-import { PagingConstant } from '../../../../../utility/components/paging/paging/paging.model';
+import { PagingConstant } from '../../../../../utility/components/paging/paging.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;

@@ -3,11 +3,10 @@ import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } fro
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { SportType } from '../../../../../utility/constants/sport.constant';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
@@ -25,6 +24,7 @@ import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
+import { SanitizeHtmlPipe } from 'src/utility/modules/sanitize-html.pipe';
 
 @Component({
   selector: 'log-info-wrong-ou',
@@ -32,7 +32,7 @@ import { LogInfoService } from '../services/log-info.service';
   styleUrls: ['./log-info-wrong-ou.component.scss'],
   standalone: true,
   imports: [AffectedTicketComponent, PoolHouseTicketComponent, TicketCountOtherSportsComponent,
-    FormsModule, CommonModule, PipeModule, FilterWrongOuComponent, BlockUiModule],
+    FormsModule, CommonModule, SanitizeHtmlPipe, FilterWrongOuComponent, BlockUiDirective],
   providers: [AffectedTicketService]
 })
 export class LogInfoWrongOuComponent implements OnInit {

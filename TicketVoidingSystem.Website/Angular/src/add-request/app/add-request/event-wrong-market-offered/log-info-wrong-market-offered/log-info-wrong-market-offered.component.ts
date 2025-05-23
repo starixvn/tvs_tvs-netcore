@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
 import { LogInfoMessageComponent } from '../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';
 import { LogInfoTicketCountComponent } from '../../../../../utility/components/log-info-detail/log-info-ticket-count/log-info-ticket-count.component';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
@@ -18,7 +18,7 @@ import { PrimitivePropertyEvent } from '../models/primitive-property-event.model
   templateUrl: './log-info-wrong-market-offered.component.html',
   styleUrls: ['./log-info-wrong-market-offered.component.scss'],
   standalone: true,
-  imports: [AffectedTicketComponent, LogInfoTicketCountComponent, LogInfoMessageComponent, BlockUiModule],
+  imports: [AffectedTicketComponent, LogInfoTicketCountComponent, LogInfoMessageComponent, BlockUiDirective],
   providers: [AffectedTicketService]
 })
 

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../utility/modules/testing.module';
-import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { AppService } from '../app.service';
 import { GetLogsQuery } from '../models/query.model';
 import { FilterLogsComponent } from './filter-logs/filter-logs.component';

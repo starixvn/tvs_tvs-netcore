@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { TemplateMessageComponent } from '../../../../../utility/components/template-message/template-message/template-message.component';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -10,13 +9,13 @@ import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { LogInfoService } from '../services/log-info.service';
 import { TicketsListComponent } from '../tickets-list/tickets-list.component';
-
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
 @Component({
   selector: 'log-info-eko',
   templateUrl: './log-info-eko.component.html',
   styleUrls: ['./log-info-eko.component.scss'],
   standalone: true,
-  imports: [TemplateMessageComponent, CommonModule, TicketsListComponent, BlockUiModule]
+  imports: [TemplateMessageComponent, CommonModule, TicketsListComponent, BlockUiDirective]
 })
 export class LogInfoEkoComponent {
   @Input() isMainMatch: boolean;

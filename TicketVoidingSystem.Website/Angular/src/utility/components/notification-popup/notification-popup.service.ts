@@ -1,4 +1,3 @@
-// notification.service.ts
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpService } from '../../services/http.service';

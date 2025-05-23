@@ -1,4 +1,4 @@
-import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../../../utility/components/paging/paging.model';
 import { TemplateValue } from '../../../../../utility/components/template-message/template-message/template.model';
 import { LogInfoDetail } from "../../../../../utility/models/log-info-detail.model";
 import { MatchModel } from "../../../../../utility/models/match.model";

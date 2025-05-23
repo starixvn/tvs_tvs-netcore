@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { AppService } from '../app.service';
 import { GetLogsQuery } from '../models/query.model';
 import { LogModel } from './logs-list/logs-list.model';

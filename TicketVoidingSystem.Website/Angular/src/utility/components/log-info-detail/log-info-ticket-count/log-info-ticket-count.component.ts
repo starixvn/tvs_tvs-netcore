@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../../utility/services/static.service';
-import { SanitizeHtmlPipe } from '../../../pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../modules/sanitize-html.pipe';
 
 @Component({
   standalone: true,

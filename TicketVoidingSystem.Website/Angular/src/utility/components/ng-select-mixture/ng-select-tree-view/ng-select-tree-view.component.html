@@ -23,8 +23,8 @@
     }
     @if (item.expanded) {
     <div (click)="$event.stopPropagation()">
-      <ng-select-tree-view [isDisabled]="isDisabled" (emitchildEvent)="handleClickChildItem()" [items]="item.items"
-        (emitchildEvent)="checkFromChildEvent(item)" [paddingLeft]="paddingLeft+25">
+      <ng-select-tree-view [isDisabled]="isDisabled" [items]="item.items"
+        (emitChildEvent)="checkFromChildEvent(item); handleClickChildItem()" [paddingLeft]="paddingLeft+25">
       </ng-select-tree-view>
     </div>
     }

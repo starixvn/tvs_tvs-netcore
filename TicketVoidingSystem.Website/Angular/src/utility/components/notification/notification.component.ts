@@ -1,6 +1,6 @@
 ﻿import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Notification } from './notification';
-import { SanitizeHtmlPipe } from '../../pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../modules/sanitize-html.pipe';
 
 @Component({
     standalone: true,

@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { Shallow } from 'shallow-render';
-import { BlockFullUiModule } from '../../utility/components/block-full-ui/block-full-ui.module';
+import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
@@ -21,7 +21,7 @@ describe('AppComponent', () => {
     imports: [
       NgbModule,
       FormsModule,
-      BlockFullUiModule
+      BlockFullUiComponent
     ],
     providers: [
       SignalRService,

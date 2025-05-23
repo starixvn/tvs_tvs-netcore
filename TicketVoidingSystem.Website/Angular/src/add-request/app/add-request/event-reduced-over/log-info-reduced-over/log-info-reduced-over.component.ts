@@ -5,17 +5,17 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
+  standalone: true,
   selector: 'log-info-reduced-over',
   templateUrl: './log-info-reduced-over.component.html',
   styleUrls: ['./log-info-reduced-over.component.scss'],
-  standalone: true,
-  imports: [FormsModule, CommonModule, NgbModule, PipeModule]
+  imports: [FormsModule, CommonModule, NgbModule, SanitizeHtmlPipe]
 })
 export class LogInfoReducedOverComponent {
   @Input() logInfo: LogInfoReducedOver;

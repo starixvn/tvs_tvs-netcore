@@ -1,15 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
-import { ToolTipModule } from '../tooltip/tooltip.module';
 import { BetTypesComponent } from './bettypes.component';
 
 describe('FilterComponent', () => {
   @NgModule({
     declarations: [
       BetTypesComponent
-    ],
-    imports: [
-      ToolTipModule
     ]
   })
   class AppModuleTest { }

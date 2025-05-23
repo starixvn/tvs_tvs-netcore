@@ -7,7 +7,7 @@ import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { SportType } from '../../../utility/constants/sport.constant';
 import { CommonModule } from '@angular/common';
-import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 import { TicketCountOtherSportsComponent } from '../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
 
 @Component({

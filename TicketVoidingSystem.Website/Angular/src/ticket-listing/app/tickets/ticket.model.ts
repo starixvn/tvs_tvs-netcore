@@ -1,4 +1,4 @@
-﻿import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+﻿import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { SummaryItem } from '../summary/summary.model';
 
 export class TicketModel {

@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
-import { ToolTipModule } from '../tooltip/tooltip.module';
 import { AutoRefreshComponent } from './auto-refresh.component';
 
 describe('AutoRefreshComponent', () => {
@@ -11,7 +10,6 @@ describe('AutoRefreshComponent', () => {
     declarations: [
     ],
     imports: [
-      ToolTipModule,
       NgSelectModule,
       FormsModule,
       NgbModule

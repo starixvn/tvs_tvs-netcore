@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
 import { HttpService } from '../../utility/services/http.service';
 import { AppApiService } from './app-api.service';
 
@@ -8,9 +7,6 @@ class Helper {}
 describe('AppComponent', () => {
   @NgModule({
     declarations: [
-    ],
-    imports: [
-      ToolTipModule
     ],
     providers: [HttpService, AppApiService]
   })

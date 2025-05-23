@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { LABELS } from '../../constants/labels';
 import { Tooltip } from '../tooltip/tooltip.model';
-import { ToolTipModule } from '../tooltip/tooltip.module';
 import { ConfirmationComponent } from './confirmation.component';
 
 describe('ConfirmationComponent', () => {
@@ -10,10 +9,7 @@ describe('ConfirmationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ConfirmationComponent ],
-      imports: [
-        ToolTipModule
-      ]
+      declarations: [ ConfirmationComponent ]
     })
     .compileComponents();
   }));
@@ -21,13 +17,7 @@ describe('ConfirmationComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ConfirmationComponent);
     component = fixture.componentInstance;
-  });
-
-  it('ngOnInit', () => {
-    // Arrange
-    // Action and Asert
-    component.ngOnInit();
-  });
+  })
 
   it('Void all page', () => {
     // Arrange

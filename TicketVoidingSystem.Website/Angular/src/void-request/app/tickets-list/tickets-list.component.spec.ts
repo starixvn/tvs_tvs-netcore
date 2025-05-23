@@ -3,8 +3,8 @@ import { GroupModel } from './group-tickets.model';
 import { TicketsListComponent } from './tickets-list.component';
 import { TicketsModel } from './tickets.model';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
-import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { PagingComponent } from '../../../utility/components/paging/paging.component';
+import { PagingModel } from '../../../utility/components/paging/paging.model';
 
 class Helper {
   static readonly titleSelector = 'div.title-tickets-list-label';

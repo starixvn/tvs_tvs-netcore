@@ -1,7 +1,7 @@
 import { Component, inject, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
@@ -18,7 +18,7 @@ import { ValidationService } from './services/validation.service';
     templateUrl: './event-ticket14.component.html',
     styleUrls: ['./event-ticket14.component.scss'],
     standalone: true,
-    imports: [BetIdsComponent, FormsModule, BlockUiModule],
+    imports: [BetIdsComponent, FormsModule, BlockUiDirective],
     providers: [
       SaveRequestService,
       ValidationService

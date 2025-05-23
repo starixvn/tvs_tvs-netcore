@@ -1,4 +1,4 @@
-import { ComponentRef, Directive, ElementRef, Input, OnChanges, SimpleChange, ViewContainerRef } from '@angular/core';
+import { ComponentRef, Directive, ElementRef, inject, Input, OnChanges, SimpleChange, ViewContainerRef } from '@angular/core';
 import { BlockUiComponent } from './block-ui.component';
 
 @Directive({
@@ -6,13 +6,10 @@ import { BlockUiComponent } from './block-ui.component';
   standalone: true
 })
 export class BlockUiDirective implements OnChanges {
-  constructor(
-    private readonly viewContainerRef: ViewContainerRef,
-    private readonly elRef: ElementRef
-  ) { }
-
   @Input('blockUi') isBlock: boolean;
-
+  
+  private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly elRef = inject(ElementRef);
   private blockUiComponent: ComponentRef<BlockUiComponent>;
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {

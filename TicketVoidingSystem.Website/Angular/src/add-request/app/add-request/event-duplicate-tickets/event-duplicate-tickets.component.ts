@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { AbnormalFilterBy, MatchIdConstant, TVSRequestActionType } from '../../../../utility/constants/config';
@@ -17,13 +16,13 @@ import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 @Component({
   selector: 'event-duplicate-tickets',
   templateUrl: './event-duplicate-tickets.component.html',
   styleUrls: ['./event-duplicate-tickets.component.scss'],
   standalone: true,
-  imports: [FormsModule, BlockUiModule, CommonModule, BetIdsComponent, TooltipComponent],
+  imports: [FormsModule, BlockUiDirective, CommonModule, BetIdsComponent, TooltipComponent],
   providers: [ValidationService, SaveRequestService]
 })
 export class EventDuplicateTicketsComponent implements OnInit {

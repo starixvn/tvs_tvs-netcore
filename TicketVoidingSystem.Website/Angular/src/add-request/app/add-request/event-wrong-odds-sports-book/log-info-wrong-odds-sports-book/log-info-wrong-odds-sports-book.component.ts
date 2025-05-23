@@ -4,20 +4,20 @@ import moment from 'moment-timezone';
 import { LogInfoMessageComponent } from '../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   selector: 'log-info-wrong-odds-sports-book',
   templateUrl: './log-info-wrong-odds-sports-book.component.html',
   styleUrls: ['./log-info-wrong-odds-sports-book.component.scss'],
   standalone: true,
-  imports: [AffectedTicketComponent, LogInfoMessageComponent, PipeModule],
+  imports: [AffectedTicketComponent, LogInfoMessageComponent, SanitizeHtmlPipe],
   providers: [AffectedTicketService]
 })
 export class LogInfoWrongOddsSportsBookComponent implements OnInit {

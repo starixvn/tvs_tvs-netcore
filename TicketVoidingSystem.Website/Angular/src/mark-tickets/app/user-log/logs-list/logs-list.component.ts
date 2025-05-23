@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import moment from 'moment-timezone';
 import { Content, ModalType } from '../../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
-import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { LogModel } from './logs-list.model';
-import { PagingModule } from '../../../../utility/components/paging/paging.module';
+import { PagingComponent } from '../../../../utility/components/paging/paging.component';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
@@ -13,7 +13,7 @@ import { BlockUiDirective } from '../../../../utility/components/block-ui/block-
   selector: 'logs-list',
   templateUrl: './logs-list.component.html',
   styleUrls: ['./logs-list.component.scss'],
-  imports: [CommonModule, PagingModule, BlockUiDirective],
+  imports: [CommonModule, PagingComponent, BlockUiDirective],
   providers: [ModalService]
 })
 export class LogsListComponent {

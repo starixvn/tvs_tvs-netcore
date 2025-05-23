@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
 import { MultipleSelectionComponent } from '../../../../utility/components/multiple-selection/multiple-selection.component';
@@ -21,7 +21,7 @@ import { TicketsModel } from './tickets/tickets.model';
     templateUrl: './pool-house-ticket.component.html',
     styleUrls: ['./pool-house-ticket.component.scss'],
     standalone: true,
-    imports: [FormsModule, LinkedLogComponent, GroupBettypesPoolHouseComponent, MultipleSelectionComponent, NgbModule, TicketsComponent, BlockUiModule]
+    imports: [FormsModule, LinkedLogComponent, GroupBettypesPoolHouseComponent, MultipleSelectionComponent, NgbModule, TicketsComponent, BlockUiDirective]
 })
 export class PoolHouseTicketComponent implements OnChanges {
   @Input() model = new PoolHouseTicketsModel();

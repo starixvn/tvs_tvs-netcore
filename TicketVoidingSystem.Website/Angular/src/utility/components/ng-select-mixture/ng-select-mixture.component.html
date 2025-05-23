@@ -11,7 +11,7 @@
   <div [ngClass]="{'style-container-collapse': isCollapse}" class="ng-select-mixture-containter">
     <ng-container>
       <div class="tree-view-content" [style.max-height]="model.maxHeight">
-        <ng-select-tree-view [isDisabled]="isDisabled" [items]="model.items" (emitchildEvent)="emitchildEvent()"
+        <ng-select-tree-view [isDisabled]="isDisabled" [items]="model.items" (emitChildEvent)="emitChildEvent()"
           (emitSingleEvent)="emitSingleEvent($event)">
         </ng-select-tree-view>
       </div>

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MessagesResponseComponent } from './messages-response.component';
 import { CommonModule } from '@angular/common';
-import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 import { AmendmentReponse } from '../models/query.model';
 import { By } from '@angular/platform-browser';
 

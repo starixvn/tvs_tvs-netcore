@@ -3,11 +3,10 @@ import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angu
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { SportType } from '../../../../../utility/constants/sport.constant';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
@@ -26,14 +25,15 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   selector: 'log-info-wrong-hdp',
   templateUrl: './log-info-wrong-hdp.component.html',
   styleUrls: ['./log-info-wrong-hdp.component.scss'],
   standalone: true,
-  imports: [AffectedTicketComponent, BlockUiModule, PipeModule, FilterWithHdpComponent, FormsModule, CommonModule,
-    TicketCountOtherSportsComponent, PoolHouseTicketComponent],
+  imports: [AffectedTicketComponent, BlockUiDirective, FilterWithHdpComponent, FormsModule, CommonModule,
+    TicketCountOtherSportsComponent, PoolHouseTicketComponent, SanitizeHtmlPipe],
   providers: [ModalService, AddRequestApiService, AffectedTicketService]
 })
 export class LogInfoWrongHdpComponent {

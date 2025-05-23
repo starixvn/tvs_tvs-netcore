@@ -3,7 +3,6 @@ import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../utility/constants/config';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestApiService } from '../add-request-api.service';
@@ -21,13 +20,14 @@ import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
   selector: 'event-abnormal-bet',
   templateUrl: './event-abnormal-bet.component.html',
   styleUrls: ['./event-abnormal-bet.component.scss'],
   standalone: true,
-  imports: [FormsModule, BetIdsComponent, ConfirmAbnormalBetComponent, BlockUiModule, CommonModule],
+  imports: [FormsModule, BetIdsComponent, ConfirmAbnormalBetComponent, BlockUiDirective, CommonModule],
   providers: [SaveRequestService, ValidationService]
 })
 export class EventAbnormalBetComponent implements OnInit {

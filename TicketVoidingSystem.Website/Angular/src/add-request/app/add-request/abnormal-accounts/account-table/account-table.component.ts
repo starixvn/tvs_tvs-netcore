@@ -3,7 +3,7 @@ import { Component, ElementRef, EventEmitter, inject, Input, Output, QueryList, 
 import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { SortingComponent } from '../../../../../utility/components/sorting/sorting/sorting.component';
+import { SortingComponent } from '../../../../../utility/components/sorting/sorting.component';
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { RegexConstant } from '../../../../../utility/constants/regex';
@@ -18,7 +18,7 @@ import { ValidationBusinessRuleArgs } from '../models/validation.model';
 import { ValidationService } from '../services/validation.service';
 import DescriptionTableAdjustVoidConfig from './describe-table-adjust-void.json';
 import { TicketStatus } from '../../../../../utility/constants/config';
-import { SanitizeHtmlPipe } from '../../../../../utility/pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
     selector: 'account-table',

@@ -2,7 +2,6 @@ import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
-import { ToolTipModule } from '../tooltip/tooltip.module';
 import { UsernamesComponent } from './user-names.component';
 
 describe('UsernamesComponent', () => {
@@ -10,7 +9,6 @@ describe('UsernamesComponent', () => {
     declarations: [
     ],
     imports: [
-      ToolTipModule,
       NgbModule,
       FormsModule
     ]
