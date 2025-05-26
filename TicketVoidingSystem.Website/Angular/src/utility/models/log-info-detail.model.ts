@@ -21,6 +21,6 @@ export class LogInfoDetail {
     poolHouseInstantlySettleCount?: number;
     minTransId: string;
     actionType: string;
-    isHasWarningRangeTime: boolean;
+    isHasWarningRangeTime?: boolean;
     logInfoTicketsJson?: string;
 }
