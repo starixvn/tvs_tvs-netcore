@@ -30,7 +30,7 @@ public class ManageRequestController(IMediator mediator) : ControllerBase
 
     [HttpGet]
     [AllowAnonymous]
-    [Route("NoAuth/{id}")]
+    [Route("{id}")]
     public async Task<IActionResult> GetRequestNoAuth(int id) => Ok(await mediator.Send(new GetRequestRequest { RequestId = id }));
 
     [HttpPost]

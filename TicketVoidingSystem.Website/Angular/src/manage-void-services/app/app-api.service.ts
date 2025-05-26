@@ -1,11 +1,11 @@
 ﻿import { inject, Injectable } from '@angular/core';
+import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { HttpService } from '../../utility/services/http.service';
 import { SelectVoidBetAutomationInfoQuery, VoidBetAutomationModel } from './app.model';
 import { GetLetsTalkModel, LetsTalkModel, UpdateLetsTalkModel } from './letstalk/letstalk.model';
 import { AutoVoidRequestQueueModel, GetAutoVoidRequestQueueModel, UpdateAutoVoidRequestQueueModel } from './scanning-auto-void/scanning-auto-void.model';
 import { TicketVoidingQueueModel, UpdateTicketVoidingQueueModel } from './void/void.model';
 import { UpdateVoidingHistory, VoidingHistoryModel } from './voiding-history/voiding-history.model';
-import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +54,6 @@ export class AppApiService {
   }
 
   async getRequestNoAuth(id: number): Promise<RequestDetailViewModel> {
-    return this.httpService.getJson(`api/ManageRequest/GetRequestNoAuth/NoAuth/${id}`);
+    return this.httpService.getJson(`api/ManageRequest/GetRequestNoAuth/${id}`);
   }
 }
