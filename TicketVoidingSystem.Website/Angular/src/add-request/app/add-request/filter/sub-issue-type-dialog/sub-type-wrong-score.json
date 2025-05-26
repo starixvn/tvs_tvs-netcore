@@ -85,7 +85,7 @@
         "buttonSelectAll": [],
         "aa": "3",
         "pa": "3",
-        "sa": "5",
+        "sa": "9",
         "description": [
           "Provider missed or delayed Score show by more than one (1) minute.",
           "=> Missed update Home/Away score -> But there is happened score awarded.",
@@ -116,7 +116,7 @@
         "buttonSelectAll": [],
         "aa": "3",
         "pa": "3",
-        "sa": "5",
+        "sa": "9",
         "description": [
           "Provider missed or delayed Score show by more than one (1) minute.",
           "=> Missed update Home/Away score -> But there is happened score awarded.",
@@ -147,7 +147,7 @@
         "buttonSelectAll": [],
         "aa": "3",
         "pa": "3",
-        "sa": "5",
+        "sa": "9",
         "description": [
           "Provider missed or delayed Score show by more than one (1) minute.",
           "=> Missed update Home/Away score -> But there is happened score awarded.",
@@ -178,7 +178,7 @@
         "buttonSelectAll": [],
         "aa": "3",
         "pa": "3",
-        "sa": "5",
+        "sa": "9",
         "description": [
           "Provider missed or delayed Score show by more than one (1) minute.",
           "=> Missed update Home/Away score -> But there is happened score awarded.",
