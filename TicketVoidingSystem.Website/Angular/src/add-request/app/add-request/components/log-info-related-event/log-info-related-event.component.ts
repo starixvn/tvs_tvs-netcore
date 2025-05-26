@@ -91,7 +91,10 @@ export class LogInfoRelatedEventComponent {
   }
 
   hideValidationDetail() {
-    this.logInfo.logInfoDetail.isHasWarningRangeTime = false;
+    if (this.logInfo?.logInfoDetail) {
+      this.logInfo.logInfoDetail.isHasWarningRangeTime = false;
+    }
+
     this.isShowValidation = false;
   }
 
