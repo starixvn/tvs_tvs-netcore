@@ -54,6 +54,6 @@ export class AppApiService {
   }
 
   async getRequestNoAuth(id: number): Promise<RequestDetailViewModel> {
-    return this.httpService.getJson(`api/ManageRequest/GetRequest/${id}`);
+    return this.httpService.getJson(`api/ManageRequest/GetRequestNoAuth/NoAuth/${id}`);
   }
 }
