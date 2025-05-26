@@ -17,7 +17,7 @@ import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.
   selector: 'tickets-list',
   templateUrl: './tickets-list.component.html',
   styleUrls: ['./tickets-list.component.scss'],
-  imports: [CommonModule, FormsModule, TooltipComponent, P, BlockUiDirective, SanitizeHtmlPipe]
+  imports: [CommonModule, FormsModule, TooltipComponent, PagingComponent, BlockUiDirective, SanitizeHtmlPipe]
 })
 export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel> implements OnInit {
   @Input() isShowTickets: boolean;
@@ -28,11 +28,12 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
   @Output() updateMarkedTickets = new EventEmitter<MarkedTicketQuery>();
   markedTicketsQuery = new MarkedTicketQuery();
   tooltip = new Tooltip();
+
   constructor(readonly element: ElementRef) {
-    super(element);
+    super();
     this.tooltip.element = this.element;
   }
-  
+
   ngOnInit() {
     this.clickBody();
   }

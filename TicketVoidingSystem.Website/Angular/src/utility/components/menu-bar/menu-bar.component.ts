@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { SignalRService } from 'src/utility/services/signal-r.service.native';
+import { SignalRService } from '../../../utility/services/signal-r.service.native';
 import { CommonService } from '../../../utility/services/common.service';
 import { NotificationPopupComponent } from '../notification-popup/notification-popup.component';
 import { NotificationPopupService } from '../notification-popup/notification-popup.service';

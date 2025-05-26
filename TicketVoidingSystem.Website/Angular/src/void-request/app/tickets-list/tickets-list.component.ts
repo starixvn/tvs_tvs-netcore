@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { BaseTicketsListComponent } from '../../../utility/components/base-tickets-list/base-tickets-list.component';
 import { StaticService } from '../../../utility/services/static.service';
 import { TicketsModel } from './tickets.model';
@@ -19,11 +19,6 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
   @Input() issueTypeId = 0;
   @Input() isDisableCheckbox = false;
   title = '';
-  
-  constructor(readonly element: ElementRef) {
-    super(element);
-    this.element = inject(ElementRef);
-  }
 
   ngOnChanges() {
     this.title = StaticService.getTitleVoidTicket(this.issueTypeId?.toString(), this.model.totalSingle, this.model.totalParlay,

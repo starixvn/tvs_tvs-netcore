@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, HostListener, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { fadeSlide } from 'src/utility/constants/animations.constant';
+import { fadeSlide } from '../../constants/animations.constant';
 import { NotificationFilterTabName, NotificationTabName, NotificationType } from '../../constants/notification.constant';
 import { SignalRService } from '../../services/signal-r.service.native';
 import { StaticService } from '../../services/static.service';

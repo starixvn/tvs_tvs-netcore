@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MenuBarComponent } from 'src/utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppStore } from './app.store';
 import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 
 @Component({
   standalone: true,
