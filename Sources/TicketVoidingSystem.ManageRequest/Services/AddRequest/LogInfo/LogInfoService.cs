@@ -295,7 +295,7 @@ public class LogInfoServiceImp(
                 MatchId = query.MatchEarlyCompletedModel.MatchId,
                 Validation = LogInfoHelper.CombineValidations(validations, x => true),
                 TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(logInfoDetails, x => true),
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true),
                 BetTypeCount = preparedBetTypeCount.OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetId)
             }
         ];
