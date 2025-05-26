@@ -38,6 +38,8 @@ public class UpdateVoidBetAutomationInfoCriteria : NonQueryCommand
 
     public bool? IsDeletedVoidedTransaction { get; set; }
 
+    public bool? IsSentToMTS { get; set; }
+
     public override string GetSettingKey() => "TicketVoiding_VoidBetAutomation_Service_Upd";
 
     public override bool IsValid() => true;

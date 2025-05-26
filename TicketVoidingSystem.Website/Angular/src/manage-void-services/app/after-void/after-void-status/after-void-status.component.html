@@ -20,56 +20,62 @@
         [(ngModel)]="tmpModel.reasonId" numbersOnly [disabled]="isRecoverTicket" />
     </div>
     <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : isRecoverTicket}">
-      <label class="form-label form-label-sm">IsSentBatchMessage</label>
+      <label class="col-form-label col-form-label-sm">IsSentBatchMessage</label>
       <ng-select [items]="selectionItem" bindLabel="name" bindValue="value" [(ngModel)]="tmpModel.isSentBatchMessage"
         [clearable]="false" style="width: 100px">
       </ng-select>
     </div>
     <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : isRecoverTicket || isAbnormalBet}">
-      <label class="form-label form-label-sm">IsSentMessageToAdminSite</label>
+      <label class="col-form-label col-form-label-sm">IsSentMessageToAdminSite</label>
       <ng-select [items]="selectionItem" bindLabel="name" bindValue="value"
         [(ngModel)]="tmpModel.isSentMessageToAdminSite" [clearable]="false" style="width: 100px">
       </ng-select>
     </div>
     <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : isRecoverTicket}">
-      <label class="form-label form-label-sm">IsInsertedVoidedTransaction</label>
+      <label class="col-form-label col-form-label-sm">IsInsertedVoidedTransaction</label>
       <ng-select [items]="selectionItem" bindLabel="name" bindValue="value"
         [(ngModel)]="tmpModel.isInsertedVoidedTransaction" [clearable]="false" style="width: 100px">
       </ng-select>
     </div>
     <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : !isRecoverTicket}">
-      <label class="form-label form-label-sm">IsDeletedZzzBetTrans</label>
+      <label class="col-form-label col-form-label-sm">IsDeletedZzzBetTrans</label>
       <ng-select [items]="selectionItem" bindLabel="name" bindValue="value" [(ngModel)]="tmpModel.isDeletedZzzBetTrans"
         [clearable]="false" style="width: 100px">
       </ng-select>
     </div>
     <div class="d-flex col-sm-3 mb-2">
-      <label class="form-label form-label-sm">IsDeletedMessage</label>
+      <label class="col-form-label col-form-label-sm">IsDeletedMessage</label>
       <ng-select [items]="selectionItem" bindLabel="name" bindValue="value" [(ngModel)]="tmpModel.isDeletedMessage"
         [clearable]="false" style="width: 100px">
       </ng-select>
     </div>
     <div class="d-flex col-sm-3 mb-2" [ngClass]="{'blur-content' : !isRecoverTicket}">
-      <label class="form-label form-label-sm">IsDeletedVoidedTransaction</label>
+      <label class="col-form-label col-form-label-sm">IsDeletedVoidedTransaction</label>
       <ng-select [items]="selectionItem" bindLabel="name" bindValue="value"
         [(ngModel)]="tmpModel.isDeletedVoidedTransaction" [clearable]="false" style="width: 100px">
       </ng-select>
     </div>
     <div class="d-flex col-sm-3 mb-2">
-      <label class="form-label form-label-sm">IsUpdatedVoidingHistory</label>
+      <label class="col-form-label col-form-label-sm">IsUpdatedVoidingHistory</label>
       <ng-select [items]="selectionItem" bindLabel="name" bindValue="value"
         [(ngModel)]="tmpModel.isUpdatedVoidingHistory" [clearable]="false" style="width: 100px">
       </ng-select>
     </div>
     <div class="d-flex col-sm-3 mb-2">
-      <label class="form-label form-label-sm">IsSentEmail</label>
+      <label class="col-form-label col-form-label-sm">IsSentEmail</label>
       <ng-select [items]="selectionItem" bindLabel="name" bindValue="value" [(ngModel)]="tmpModel.isSentEmail"
         [clearable]="false" style="width: 100px">
       </ng-select>
     </div>
     <div class="d-flex col-sm-3 mb-2">
-      <label class="form-label form-label-sm">JackTimeCashOutApi</label>
+      <label class="col-form-label col-form-label-sm">JackTimeCashOutApi</label>
       <ng-select [items]="selectionItem" bindLabel="name" bindValue="value" [(ngModel)]="tmpModel.isRunExternalService"
+        [clearable]="false" style="width: 100px">
+      </ng-select>
+    </div>
+    <div class="d-flex col-sm-3 mb-2">
+      <label class="col-form-label col-form-label-sm">IsSentToMTS</label>
+      <ng-select [items]="selectionItem" bindLabel="name" bindValue="value" [(ngModel)]="tmpModel.isSentToMTS"
         [clearable]="false" style="width: 100px">
       </ng-select>
     </div>

@@ -21,6 +21,7 @@ export class VoidBetAutomationModel {
     isDeletedZzzBetTrans?: boolean;
     isDeletedMessage?: boolean;
     isDeletedVoidedTransaction?: boolean;
+    isSentToMTS?: boolean;
 }
 
 export interface Item {

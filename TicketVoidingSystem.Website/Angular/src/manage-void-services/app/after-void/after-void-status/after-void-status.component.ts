@@ -37,7 +37,7 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
     this.assignData();
   }
 
-  assignData() {
+  private assignData(): void {
     this.tmpModel = _.clone(this.model);
     this.tmpModel.isRunExternalService = this.tmpModel.isRunExternalService ? this.tmpModel.isRunExternalService : 'null';
     this.tmpModel.isSentBatchMessage = this.tmpModel.isSentBatchMessage ? this.tmpModel.isSentBatchMessage : 'null';
@@ -48,6 +48,7 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
     this.tmpModel.isDeletedZzzBetTrans = this.tmpModel.isDeletedZzzBetTrans ? this.tmpModel.isDeletedZzzBetTrans : 'null';
     this.tmpModel.isDeletedMessage = this.tmpModel.isDeletedMessage ? this.tmpModel.isDeletedMessage : 'null';
     this.tmpModel.isDeletedVoidedTransaction = this.tmpModel.isDeletedVoidedTransaction ? this.tmpModel.isDeletedVoidedTransaction : 'null';
+    this.tmpModel.isSentToMTS = this.tmpModel.isSentToMTS ? this.tmpModel.isSentToMTS : 'null';
   }
 
   async confirmUpdateAfterVoidData() {
@@ -89,6 +90,7 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
     model.isDeletedZzzBetTrans = this.tmpModel.isDeletedZzzBetTrans === 'null' ? null : this.tmpModel.isDeletedZzzBetTrans;
     model.isDeletedMessage = this.tmpModel.isDeletedMessage === 'null' ? null : this.tmpModel.isDeletedMessage;
     model.isDeletedVoidedTransaction = this.tmpModel.isDeletedVoidedTransaction === 'null' ? null : this.tmpModel.isDeletedVoidedTransaction;
+    model.isSentToMTS = this.tmpModel.isSentToMTS === 'null' ? null : this.tmpModel.isSentToMTS;
 
     return model;
   }
