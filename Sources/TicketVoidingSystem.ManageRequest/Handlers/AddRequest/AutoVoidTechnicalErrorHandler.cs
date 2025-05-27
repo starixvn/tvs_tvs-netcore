@@ -9,7 +9,6 @@ namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 public class AddTechnicalErrorAutoVoidRequest : IRequest<Result>
 {
     public long TransId { get; set; }
-    public int MatchId { get; set; }
 }
 
 public class AutoVoidTechnicalErrorHandler(
@@ -31,13 +30,14 @@ public class AutoVoidTechnicalErrorHandler(
             return markTicketResult;
         }
 
-        var (requestId, addRequestResult) = await addRequestAutoVoidProviderMistakeService.ExecuteAddRequest(request.MatchId, validationResult);
+        var matchId = validationResult.Validation.MatchId;
+        var (requestId, addRequestResult) = await addRequestAutoVoidProviderMistakeService.ExecuteAddRequest(matchId, validationResult);
         if (addRequestResult.ErrorCode != 0)
         {
             return addRequestResult;
         }
 
-        await insertAutoVoidRequestQueueService.Execute(requestId, VoidActionTypeConstant.AutoVoidInstantId, [request.MatchId]);
+        await insertAutoVoidRequestQueueService.Execute(requestId, VoidActionTypeConstant.AutoVoidInstantId, [matchId]);
         return addRequestResult;
     }
 }

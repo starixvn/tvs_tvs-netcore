@@ -47,7 +47,8 @@ public class CheckProviderMistakeTicketsServiceImp(IDynamicRepository repository
             .Except(validTransId);
         var invalidTransId = validations.Where(x => !string.IsNullOrWhiteSpace(x.InvalidTransIds)).SelectMany(v => v.InvalidTransIds.Split(',', StringSplitOptions.RemoveEmptyEntries)).Distinct()
             .Except(validTransId).Except(existingReqTransId).Except(unsupportedTransId);
-
+        var validMatchId = validations.Where(x => x.MatchId > 0).Select(x => x.MatchId).FirstOrDefault();
+        
         var transInfoAddRequestModels =
             resultInMultipleDbServers.Select(x => x.TransInfoAddRequest).Where(m => m != null);
         var markTransIds = transInfoAddRequestModels.Where(x => !string.IsNullOrWhiteSpace(x.MarkTransIds)).Select(x => x.MarkTransIds);
@@ -59,6 +60,7 @@ public class CheckProviderMistakeTicketsServiceImp(IDynamicRepository repository
             InvalidTransIds = string.Join(",", invalidTransId),
             ExistingReqTransIds = string.Join(",", existingReqTransId),
             UnsupportedTransIds = string.Join(",", unsupportedTransId),
+            MatchId = validMatchId,
         };
         var aggregatedTransInfo = new TransInfoAddRequestModel
         {
