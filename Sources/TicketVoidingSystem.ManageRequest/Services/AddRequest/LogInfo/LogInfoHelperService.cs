@@ -208,8 +208,8 @@ public static class LogInfoHelper
     {
         foreach (var item in query.WrongScoreModels)
         {
-            item.VoidFromTime = models.FirstOrDefault(x => x.ScoreId == item.ScoreId)?.VoidFromTime;
-            item.VoidToTime = models.FirstOrDefault(x => x.ScoreId == item.ScoreId)?.VoidToTime;
+            item.VoidFromTime = models.FirstOrDefault(x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId)?.VoidFromTime;
+            item.VoidToTime = models.FirstOrDefault(x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId)?.VoidToTime;
         }
 
         return query;
