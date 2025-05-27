@@ -76,9 +76,10 @@ public class GetVoidTimeByAllowanceSettingServiceImp(IDynamicRepository reposito
     {
         return query.WrongScoreModels.Select(item => new VoidTimeByAllowanceSetting
         {
+            MatchId = item.MatchId,
             ScoreId = item.ScoreId,
-            VoidFromTime = CombineVoidFromTime(models.Where(x => x.ScoreId == item.ScoreId)),
-            VoidToTime = CombineVoidToTime(models.Where(x => x.ScoreId == item.ScoreId)),
+            VoidFromTime = CombineVoidFromTime(models.Where(x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId)),
+            VoidToTime = CombineVoidToTime(models.Where(x => x.ScoreId == item.ScoreId && x.MatchId == item.MatchId)),
         }).ToList();
     }
 
