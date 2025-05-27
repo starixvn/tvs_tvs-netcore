@@ -35,4 +35,6 @@ public class VoidBetAutomationModel
     public bool? IsDeletedMessage { get; set; }
 
     public bool? IsDeletedVoidedTransaction { get; set; }
+
+    public bool? IsSentToMTS { get; set; }
 }

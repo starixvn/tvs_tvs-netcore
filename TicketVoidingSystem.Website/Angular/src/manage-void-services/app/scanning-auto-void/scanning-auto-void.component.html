@@ -1,111 +1,126 @@
-<ngb-accordion #acc="ngbAccordion" activeIds="toggle-1,toggle-2">
-  <ngb-panel id="toggle-1" title="First panel">
-    <ng-template ngbPanelHeader>
-      <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">Find auto void request queue</h5>
-        <div>
-          <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="clearInput()">Clear input</button>
-          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
+<div ngbAccordion #acc="ngbAccordion" activeIds="toggle-1,toggle-2">
+  <div ngbAccordionItem id="toggle-1" [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>
+        <div class="d-flex align-items-center w-100">
+          <h5 class="m-0">Find auto void request queue</h5>
+          <div class="ms-auto me-2">
+            <button type="button" class="btn btn-sm btn-outline-danger ms-2" (click)="$event.stopPropagation(); clearInput()">Clear input</button>
+          </div>
+        </div>
+      </button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div class="accordion-body">
+        <div class="filter action-area d-flex">
+          <div class="form-check form-check-inline me-4 d-flex">
+            <input class="form-check-input mt-2 me-1" type="radio" name="filterBy" id="filterBy0" [value]="0"
+              [(ngModel)]="filterBy" (change)="clearInput()">
+            <label class="col-form-label col-form-label-sm me-2" for="filterBy0">BroadcastSessionId </label>
+            <input maxlength="150" class="broadcast-session-id form-control form-control-sm" type="text" row="1"
+              [disabled]="filterBy === 1" [(ngModel)]="filterBroadcastSessionIdValue" />
+          </div>
+          <div class="form-check form-check-inline d-flex">
+            <input class="form-check-input mt-2 me-1" type="radio" name="filterBy" id="filterBy1" [value]="1"
+              [(ngModel)]="filterBy" (change)="clearInput()">
+            <label class="col-form-label col-form-label-sm me-2" for="filterBy1">StatusId </label>
+            <ng-select class="status-select" style="width: 140px;" [items]="autoVoidRequestQueueStatusSelection" [bindLabel]="'name'"
+              [bindValue]="'value'" [clearable]="false" [(ngModel)]="filterStatusIdValue" [disabled]="filterBy === 0">
+            </ng-select>
+          </div>
+
+          <div class="btn-search ms-3"> <input type="button" class="btn btn-success btn-sm font-weight-bold"
+              value="Search" (click)="searchAutoVoidRequestQueue()" /></div>
+        </div>
+        <div class="table-scrollable mt-3">
+          <table class="table table-sm table-hover table-striped table-bordered">
+            <thead class="thead-light bg-light bg-secondary">
+              <tr>
+                <th scope="col" class="table-header">SiteDbGroupId</th>
+                <th scope="col" class="table-header">QueueId</th>
+                <th scope="col" class="table-header">RequestIds</th>
+                <th scope="col" class="table-header">MatchId</th>
+                <th scope="col" class="table-header">Action</th>
+                <th scope="col" class="table-header">StatusId</th>
+                <th scope="col" class="table-header">ErrMsg</th>
+                <th scope="col" class="table-header">CreatedDate</th>
+                <th scope="col" class="table-header">ModifiedDate</th>
+                <th scope="col" class="table-header">BroadcastSessionId</th>
+              </tr>
+            </thead>
+            @if (autoVoidRequestQueuesViewModel.length > 0) {
+            <tbody>
+              @for (queue of autoVoidRequestQueuesViewModel; track queue; let i = $index) {
+              <tr>
+                <td class="text-center"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></td>
+                <td class="text-center">{{ queue.queueId }}</td>
+                <td class="text-center">{{ queue.requestIds }}</td>
+                <td class="text-center">{{ queue.matchId }}</td>
+                <td class="text-center">{{ queue.action }}</td>
+                <td class="text-center">{{ queue.statusId }}</td>
+                <td class="text-center">{{ queue.errMsg }}</td>
+                <td class="text-center">{{ queue.createdDate }}</td>
+                <td class="text-center">{{ queue.modifiedDate }}</td>
+                <td class="text-center">{{ queue.broadcastSessionId }}</td>
+              </tr>
+              }
+              <tr>
+                <td colspan="10" class="text-start"><strong>Count: {{autoVoidRequestQueuesViewModel.length}}</strong></td>
+              </tr>
+            </tbody>
+            }
+
+            @if (autoVoidRequestQueuesViewModel.length === 0) {
+            <tbody>
+              <tr>
+                <td colspan="10" class="fw-bold text-red text-center">There is no data</td>
+              </tr>
+            </tbody>
+            }
+          </table>
         </div>
       </div>
-    </ng-template>
-    <ng-template ngbPanelContent>
-      <div class="filter action-area d-flex">
-        <div class="form-check form-check-inline mr-4">
-          <input class="form-check-input" type="radio" name="filterBy" id="filterBy0" [value]="0" [(ngModel)]="filterBy" (change)="clearInput()">
-          <label class="form-check-label mr-2" for="filterBy0">BroadcastSessionId </label>
-          <input maxlength="150" class="broadcast-session-id form-control form-control-sm" type="text" row="1" [disabled]="filterBy === 1" [(ngModel)]="filterBroadcastSessionIdValue" />
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="filterBy" id="filterBy1" [value]="1" [(ngModel)]="filterBy" (change)="clearInput()">
-          <label class="form-check-label mr-2" for="filterBy1">StatusId </label>
-          <select class="form-control status-select" [(ngModel)]="filterStatusIdValue" [disabled]="filterBy === 0">
-            <option *ngFor="let item of autoVoidRequestQueueStatusSelection" [attr.value]="item.value">{{item.name}}</option>
-          </select>
-        </div>
+    </div>
+  </div>
 
-        <div class="btn-search ml-3"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Search" (click)="searchAutoVoidRequestQueue()" /></div>
+  @if (filterBy === 0) {
+  <div ngbAccordionItem id="toggle-2" [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>
+        <div class="d-flex align-items-center justify-content-between">
+          <h5 class="m-0">Update auto request queue status</h5>
+          <div class="ms-auto me-2">
+          </div>
+        </div>
+      </button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div class="accordion-body">
+        @if (autoVoidRequestQueuesViewModel.length > 0) {
+        @for (queue of autoVoidRequestQueuesViewModel; track queue; let i = $index) {
+        <div class="d-flex mb-2">
+          <label
+            class="col-form-label col-form-label-sm me-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
+          <label class="col-form-label col-form-label-sm me-2"><strong>QueueId </strong></label>
+          <input maxlength="150" class="form-control form-control-sm queue-id" type="text" row="1" disabled
+            [(ngModel)]="queue.queueId" />
+          <label class="col-form-label col-form-label-sm ms-4 me-2"><strong>StatusId</strong></label>
+          <ng-select class="status-select" style="width: 140px;" [items]="autoVoidRequestQueueStatusSelection" [bindLabel]="'name'"
+            [bindValue]="'value'" [clearable]="false" [(ngModel)]="queue.statusIdSelected">
+          </ng-select>
+          <div class="ms-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold" value="Save"
+              (click)="confirmUpdateStatus(queue.siteDbGroupId, queue.queueId, queue.statusIdSelected)" /></div>
+        </div>
+        }
+        }
+        @if (autoVoidRequestQueuesViewModel.length === 0) {
+        <div class="fw-bold text-red text-center">There is no data</div>
+        }
       </div>
-      <div class="table-scrollable">
-        <table class="table table-sm table-hover table-striped table-bordered">
-          <thead class="thead-light">
-          <tr>
-            <th scope="col">SiteDbGroupId</th>
-            <th scope="col">QueueId</th>
-            <th scope="col">RequestIds</th>
-            <th scope="col">MatchId</th>
-            <th scope="col">Action</th>
-            <th scope="col">StatusId</th>
-            <th scope="col">ErrMsg</th>
-            <th scope="col">CreatedDate</th>
-            <th scope="col">ModifiedDate</th>
-            <th scope="col">BroadcastSessionId</th>
-          </tr>
-          </thead>
-          <tbody *ngIf="autoVoidRequestQueuesViewModel.length > 0">
-          <tr *ngFor="let queue of autoVoidRequestQueuesViewModel; index as i">
-            <th scope="row">{{queue.siteDbGroupId}}-{{queue.siteDbName}}</th>
-            <td>{{ queue.queueId }}</td>
-            <td>{{ queue.requestIds }}</td>
-            <td>{{ queue.matchId }}</td>
-            <td>{{ queue.action }}</td>
-            <td>{{ queue.statusId }}</td>
-            <td>{{ queue.errMsg }}</td>
-            <td>{{ queue.createdDate }}</td>
-            <td>{{ queue.modifiedDate }}</td>
-            <td>{{ queue.broadcastSessionId }}</td>
-          </tr>
-          <tr>
-            <td colspan="11"><strong>Count: {{autoVoidRequestQueuesViewModel.length}}</strong></td>
-          </tr>
-          </tbody>
-
-          <tbody *ngIf="autoVoidRequestQueuesViewModel.length === 0">
-            <tr>
-              <td colspan="11" class="no-data">There is no data</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </ng-template>
-  </ngb-panel>
-  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-  <ngb-panel *ngIf="filterBy === 0" id="toggle-2" title="Second">
-    <ng-template ngbPanelHeader>
-      <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">Update auto request queue status</h5>
-        <div>
-          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
-        </div>
-      </div>
-    </ng-template>
-
-    <ng-template ngbPanelContent *ngIf="autoVoidRequestQueuesViewModel.length > 0">
-      <ng-container *ngFor="let queue of autoVoidRequestQueuesViewModel; index as i">
-        <div class="d-flex server-row">
-          <label class="col-form-label mr-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
-          <label class="col-form-label mr-2"><strong>QueueId </strong></label>
-          <input maxlength="150" class="form-control form-control-sm queue-id" type="text" row="1" disabled [(ngModel)]="queue.queueId" />
-
-          <label class="col-form-label ml-4 mr-2"><strong>StatusId</strong></label>
-          <select class="form-control status-select" [(ngModel)]="queue.statusIdSelected">
-            <option *ngFor="let item of autoVoidRequestQueueStatusSelection" [attr.value]="item.value">{{item.name}}</option>
-          </select>
-
-          <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Save" (click)="confirmUpdateStatus(queue.siteDbGroupId, queue.queueId, queue.statusIdSelected)" /></div>
-        </div>
-      </ng-container>
-    </ng-template>
-
-    <ng-template ngbPanelContent *ngIf="autoVoidRequestQueuesViewModel.length === 0">
-      <tbody>
-        <tr>
-          <td class="no-data">There is no data</td>
-        </tr>
-      </tbody>
-    </ng-template>
-  </ngb-panel>
-</ngb-accordion>
+    </div>
+  </div>
+  }
+</div>
 
 <tooltip [tooltip]="tooltip"></tooltip>
 <block-full-ui [isBlock]="isBlock"></block-full-ui>

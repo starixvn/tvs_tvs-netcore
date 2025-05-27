@@ -1,75 +1,82 @@
 <div>
   <div class="filter">
     <div class="action-area d-flex">
-      <label class="col-form-label mr-2">Request ID </label>
+      <label class="col-form-label col-form-label-sm me-2">Request ID </label>
       <input maxlength="150" id="request-id" class="request-id form-control form-control-sm" type="text" row="1"
         [(ngModel)]="requestId" numbersOnly />
-
-      <label class="col-form-label ml-4 mr-2"> Voiding History ID </label>
-      <input maxlength="150" id="voiding-history-id" class="voiding-history-id form-control form-control-sm" type="text"
+      <label class="col-form-label col-form-label-sm ms-4 me-2"> Voiding History ID </label>
+      <input maxlength="150" id="voiding-history-id" class="voiding-history-id form-control form-control-sm me-4" type="text"
         row="1" [(ngModel)]="voidingHistoryId" numbersOnly />
-
-      <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"
-          value="Search" (click)="search()" /></div>
+      <input type="button" class="btn btn-success btn-sm fw-bold" value="Search" (click)="search()" />
     </div>
   </div>
 
   <div>
-    <after-void-status *ngIf="isShow()" [model]="model" [isAutoVoid]="model.isAutoVoid" [isAbnormalBet]="isAbnormalBet" [isRecoverTicket]="isRecoverTicket"></after-void-status>
-    <div *ngIf="isShow()" class="void-bet-auto">
-      <div class="row udp-status">
+    @if (isShow()) {
+    <after-void-status [model]="model" [isAutoVoid]="model.isAutoVoid" [isAbnormalBet]="isAbnormalBet"
+      [isRecoverTicket]="isRecoverTicket">
+    </after-void-status>
+    }
+    @if (isShow()) {
+    <div class="void-bet-auto">
+      <div class="d-flex udp-status">
         <div class="d-flex">
-          <label class="col-form-label font-weight-bold text-primary">After Void Status</label>
-          <select [(ngModel)]="tmpStatusId">
-            <option *ngFor="let item of selectionItem" [attr.value]="item.value">{{item.name}}</option>
-          </select>
+          <label class="col-form-label col-form-label-sm fw-bold text-primary">After Void Status</label>
+          <ng-select [items]="selectionItem" bindLabel="name" bindValue="value" 
+            [(ngModel)]="tmpStatusId" [clearable]="false" style="width: 140px">
+          </ng-select>
         </div>
       </div>
       <div class="btn-save mg-top-10">
-        <input type="button" class="btn btn-primary btn-sm font-weight-bold" value="Save"
+        <input type="button" class="btn btn-primary btn-sm fw-bold" value="Save"
           (click)="confirmUpdateStatus()" />
       </div>
     </div>
+    }
   </div>
 
-  <div *ngIf="isNoData" class="no-data text-center">
+  @if (isNoData) {
+  <div class="no-data text-center">
     <span> There is no data! </span>
   </div>
+  }
 </div>
 
-<ngb-accordion #acc="ngbAccordion" activeIds="panel-1">
-  <ngb-panel id="panel-1" title="First">
-    <ng-template ngbPanelHeader>
-      <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">*** Guideline</h5>
-      </div>
-    </ng-template>
-    <ng-template ngbPanelContent>
-      Case: After Void Status = 3 - Failed -> Request status show <strong class="text-red">Failed</strong><br /><br />
-      <div class="ml-3">
-        1. User want to execute all after void steps<br />
-        => ​Action: <br/>
-        Change After Void Status = 1 - Running & Click "Save" -> The after void service is executed again
-      </div><br/>
-      <div class="ml-3">
-        2. User has manually sent email/Letstalk, and all after void steps are failed or Done<br />
-        => ​Action: <br/>
-        <div class="ml-5">
-            2.1. Change IsSentEmail & IsSentLetstalk from Null to True<br/>
-            2.2. Change After Void Status = 1 - Running & Click "Save" -> The after void service is executed again, except sent email/Letstalk
+<div ngbAccordion #acc="ngbAccordion" activeIds="panel-1">
+  <div ngbAccordionItem id="panel-1" [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton><h5 class="mb-0">*** Guideline</h5></button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div class="accordion-body">
+        Case: After Void Status = 3 - Failed -> Request status show <strong class="text-red">Failed</strong><br /><br />
+        <div class="ms-3">
+          1. User want to execute all after void steps<br />
+          => ​Action: <br />
+          Change After Void Status = 1 - Running & Click "Save" -> The after void service is executed again
+        </div><br />
+        <div class="ms-3">
+          2. User has manually sent email/Letstalk, and all after void steps are failed or Done<br />
+          => ​Action: <br />
+          <div class="ms-5">
+            2.1. Change IsSentEmail & IsSentLetstalk from Null to True<br />
+            2.2. Change After Void Status = 1 - Running & Click "Save" -> The after void service is executed again, except
+            sent email/Letstalk
+          </div>
+        </div><br />
+        <div class="ms-3">
+          3. All after void steps are completed, except send email/Letstalk failed, and user NOT manually send
+          email/letstalk<br />
+          => ​Action: <br />
+          <div class="ms-5">
+            Change After Void Status = 1 - Running & Click "Save" -> The after void service is executed send
+            email/Letstalk again
+          </div>
         </div>
-      </div><br/>
-      <div class="ml-3">
-        3. All after void steps are completed, except send email/Letstalk failed, and user NOT manually send email/letstalk<br />
-        => ​Action: <br/>
-        <div class="ml-5">
-          Change After Void Status = 1 - Running & Click "Save" -> The after void service is executed send email/Letstalk again
-        </div>
       </div>
-    </ng-template>
-  </ngb-panel>
-</ngb-accordion>
-
+    </div>
+  </div>
+</div>
 
 <tooltip [tooltip]="tooltip"></tooltip>
 <block-full-ui [isBlock]="isBlock"></block-full-ui>

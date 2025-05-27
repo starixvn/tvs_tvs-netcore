@@ -1,17 +1,27 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../utility/constants/text';
-import { CommonService } from '../../../utility/services/common.service';
 import { AppApiService } from '../app-api.service';
 import { SelectVoidBetAutomationInfoQuery, ServiceStatusConstant, VoidBetAutomationModel } from '../app.model';
+import { AfterVoidStatusComponent } from './after-void-status/after-void-status.component';
+import { BlockFullUiComponent } from '../../../utility/components/block-full-ui/block-full-ui.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { NumbersOnlyDirective } from '../../../utility/directives/numbers-only.directive';
 
 @Component({
+  standalone: true,
   selector: 'after-void',
   templateUrl: './after-void.component.html',
-  styleUrls: ['./after-void.component.scss']
+  styleUrls: ['./after-void.component.scss'],
+  imports: [CommonModule, FormsModule, NgSelectModule, NgbAccordionModule, AfterVoidStatusComponent,
+    TooltipComponent, BlockFullUiComponent, NumbersOnlyDirective]
 })
 export class AfterVoidComponent {
   selectionItem = ServiceStatusConstant.AfterVoidSelection;
@@ -25,13 +35,11 @@ export class AfterVoidComponent {
   isRecoverTicket: boolean;
   isAbnormalBet: boolean;
   tooltip = new Tooltip();
+  private readonly element = inject(ElementRef);
+  private readonly appApiService = inject(AppApiService);
+  private readonly modalService = inject(ModalService);
 
-  constructor(
-    readonly element: ElementRef,
-    private readonly appApiService: AppApiService,
-    private readonly modalService: ModalService,
-    private readonly commonService: CommonService
-  ) {
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -56,7 +64,7 @@ export class AfterVoidComponent {
   }
 
   async updateInfoRequest() {
-    const requestDetailViewModel = await this.commonService.getRequestById(this.model.requestId);
+    const requestDetailViewModel = await this.appApiService.getRequestNoAuth(this.model.requestId);
     this.isRecoverTicket = requestDetailViewModel.request.issueTypeId.toString() === IssueTypeConstant.RECOVER_TICKET;
     this.isAbnormalBet = requestDetailViewModel.request.issueTypeId.toString() === IssueTypeConstant.ABNORMAL_BET;
   }
@@ -66,14 +74,14 @@ export class AfterVoidComponent {
       requestId: this.requestId,
       voidingHistoryId: this.voidingHistoryId
     };
-
     return query;
   }
 
   isValidSearchQuery(): boolean {
     if (this.requestId && this.voidingHistoryId) {
       return true;
-    } else if (!this.requestId) {
+    }
+    if (!this.requestId) {
       this.tooltip.display('request-id', TEXT.REQUIRED_REQUEST_ID);
     } else if (!this.voidingHistoryId) {
       this.tooltip.display('voiding-history-id', TEXT.REQUIRED_VOIDING_HISTORY_ID);

@@ -1,14 +1,19 @@
-import { Component, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import { ModalType } from '../../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { AppApiService } from '../../app-api.service';
-import { SELECTION_ITEM, VoidBetAutomationModel } from '../../app.model';
+import { Item, SELECTION_ITEM, VoidBetAutomationModel } from '../../app.model';
 
 @Component({
+  standalone: true,
   selector: 'after-void-status',
   templateUrl: './after-void-status.component.html',
-  styleUrls: ['./after-void-status.component.scss']
+  styleUrls: ['./after-void-status.component.scss'],
+  imports: [CommonModule, FormsModule, NgSelectModule]
 })
 export class AfterVoidStatusComponent implements OnInit, OnChanges {
   @Input() model = new VoidBetAutomationModel();
@@ -16,13 +21,11 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
   @Input() isRecoverTicket: boolean;
   @Input() isAbnormalBet: boolean;
 
-  selectionItem = SELECTION_ITEM;
+  selectionItem: Item[] = SELECTION_ITEM;
   tmpModel;
 
-  constructor(
-    private readonly modalService: ModalService,
-    private readonly appApiService: AppApiService,
-  ) { }
+  private readonly modalService = inject(ModalService);
+  private readonly appApiService = inject(AppApiService);
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['model'] && this.model.requestId) {
@@ -34,7 +37,7 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
     this.assignData();
   }
 
-  assignData() {
+  private assignData(): void {
     this.tmpModel = _.clone(this.model);
     this.tmpModel.isRunExternalService = this.tmpModel.isRunExternalService ? this.tmpModel.isRunExternalService : 'null';
     this.tmpModel.isSentBatchMessage = this.tmpModel.isSentBatchMessage ? this.tmpModel.isSentBatchMessage : 'null';
@@ -45,6 +48,7 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
     this.tmpModel.isDeletedZzzBetTrans = this.tmpModel.isDeletedZzzBetTrans ? this.tmpModel.isDeletedZzzBetTrans : 'null';
     this.tmpModel.isDeletedMessage = this.tmpModel.isDeletedMessage ? this.tmpModel.isDeletedMessage : 'null';
     this.tmpModel.isDeletedVoidedTransaction = this.tmpModel.isDeletedVoidedTransaction ? this.tmpModel.isDeletedVoidedTransaction : 'null';
+    this.tmpModel.isSentToMTS = this.tmpModel.isSentToMTS ? this.tmpModel.isSentToMTS : 'null';
   }
 
   async confirmUpdateAfterVoidData() {
@@ -86,6 +90,7 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
     model.isDeletedZzzBetTrans = this.tmpModel.isDeletedZzzBetTrans === 'null' ? null : this.tmpModel.isDeletedZzzBetTrans;
     model.isDeletedMessage = this.tmpModel.isDeletedMessage === 'null' ? null : this.tmpModel.isDeletedMessage;
     model.isDeletedVoidedTransaction = this.tmpModel.isDeletedVoidedTransaction === 'null' ? null : this.tmpModel.isDeletedVoidedTransaction;
+    model.isSentToMTS = this.tmpModel.isSentToMTS === 'null' ? null : this.tmpModel.isSentToMTS;
 
     return model;
   }

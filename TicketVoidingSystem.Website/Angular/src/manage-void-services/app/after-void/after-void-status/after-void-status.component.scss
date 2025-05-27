@@ -1,40 +1,21 @@
+.void-history {
+    padding: 10px 0px;
+    border: 1px solid #ccc;
+    
+    .container-area {
+        max-width: 100% !important;
+        padding: 0px 10px;
 
-    @mixin select-style {
-        width: 100px;
-        padding: 1px 2px;
-        height: 22px;
-        border-radius: 0;
-        margin-top: 3px;
-        margin-left: 3px;
-    }
-
-    .void-history {
-        padding: 10px 0px;
-        border: 1px solid #ccc;
-
-        .container-area {
-            max-width: 100% !important;
-            padding: 0px 10px;
-
-            input[type="text"] {
-                @include select-style;
-                width: 100px;
-            }
-
-            select {
-                @include select-style;
-            }
-
-            label {
-                width: 165px;
-            }
+        input[type="text"] {
+            width: 100px;
         }
 
-        .save-history-status {
-            margin-left: 25px;
+        label {
+            width: 165px;
         }
     }
+}
 
-    .blur-content {
-        opacity: 0.25;
-    }
+.blur-content {
+    opacity: 0.25;
+}

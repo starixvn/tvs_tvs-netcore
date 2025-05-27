@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 })
 
 export class PasswordService {
-
   private readonly SuggestedLength = 30;
 
   public hash(password: string): string {

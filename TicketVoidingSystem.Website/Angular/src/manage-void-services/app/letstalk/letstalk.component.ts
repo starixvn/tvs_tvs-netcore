@@ -1,29 +1,39 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
 import { ServiceStatusConstant } from '../app.model';
-import { GetLetstalkModel, LetstalkModel, LetstalkViewModel, UpdateLetstalkModel } from './letstalk.model';
+import { GetLetsTalkModel, LetsTalkModel, LetsTalkViewModel, UpdateLetsTalkModel } from './letstalk.model';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { BlockFullUiComponent } from '../../../utility/components/block-full-ui/block-full-ui.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
+  standalone: true,
   selector: 'letstalk',
   templateUrl: './letstalk.component.html',
-  styleUrls: ['./letstalk.component.scss']
+  styleUrls: ['./letstalk.component.scss'],
+  imports: [CommonModule, FormsModule, NgbAccordionModule, BlockFullUiComponent, TooltipComponent, NgSelectModule]
 })
-export class LetstalkComponent {
+export class LetsTalkComponent {
   tooltip = new Tooltip();
   isBlock: boolean;
   requestId: number;
   broadcastSessionId: string;
-  letstalkModels: LetstalkModel[] = [];
-  letstalkViewModels: LetstalkViewModel[] = [];
-  letstalkSelection = ServiceStatusConstant.LetstalkSelection;
+  letsTalkModels: LetsTalkModel[] = [];
+  letsTalkViewModels: LetsTalkViewModel[] = [];
+  letsTalkSelection = ServiceStatusConstant.LetsTalkSelection;
 
-  constructor(private readonly element: ElementRef,
-    private readonly appApiService: AppApiService,
-    private readonly modalService: ModalService) {
+  private readonly element = inject(ElementRef);
+  private readonly appApiService = inject(AppApiService);
+  private readonly modalService = inject(ModalService);
+
+  constructor() {
     this.tooltip.element = this.element;
   }
 
@@ -33,8 +43,8 @@ export class LetstalkComponent {
       return;
     }
     this.isBlock = true;
-    this.letstalkModels = await this.appApiService.getLetstalk(this.initGetQuery());
-    this.letstalkViewModels = this.convertToVoidServiceViewModel(this.letstalkModels);
+    this.letsTalkModels = await this.appApiService.getLetsTalk(this.initGetQuery());
+    this.letsTalkViewModels = this.convertToVoidServiceViewModel(this.letsTalkModels);
     this.isBlock = false;
   }
 
@@ -43,7 +53,6 @@ export class LetstalkComponent {
     this.requestId = null;
     this.broadcastSessionId = null;
   }
-
 
   public confirmUpdateStatus(requestId: number, broadcastSessionId: string, statusIdSelected: number) {
     this.modalService.confirm({
@@ -73,12 +82,12 @@ export class LetstalkComponent {
     return true;
   }
 
-  private convertToVoidServiceViewModel(letstalkData: LetstalkModel[]): LetstalkViewModel[] {
-    return letstalkData.map(x => {
+  private convertToVoidServiceViewModel(letsTalkData: LetsTalkModel[]): LetsTalkViewModel[] {
+    return letsTalkData.map(x => {
       return {
         ...x,
         statusIdSelected: x.statusId
-      } as LetstalkViewModel;
+      } as LetsTalkViewModel;
     });
   }
 
@@ -87,7 +96,7 @@ export class LetstalkComponent {
       requestId: requestId,
       broadcastSessionId: broadcastSessionId,
       statusId: statusIdSelected
-    } as UpdateLetstalkModel;
+    } as UpdateLetsTalkModel;
   }
 
   private openModelResult(isSuccess: boolean) {
@@ -100,11 +109,11 @@ export class LetstalkComponent {
   }
 
   private resetOldResult(): void {
-    this.letstalkModels = [];
-    this.letstalkViewModels = [];
+    this.letsTalkModels = [];
+    this.letsTalkViewModels = [];
   }
 
-  private initGetQuery(): GetLetstalkModel {
+  private initGetQuery(): GetLetsTalkModel {
     return {
       broadcastSessionId: this.broadcastSessionId,
       requestId: this.requestId

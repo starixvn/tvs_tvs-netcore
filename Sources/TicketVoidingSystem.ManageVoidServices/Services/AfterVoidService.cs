@@ -69,7 +69,8 @@ public class AfterVoidServiceImp(IDynamicRepository repository) : AfterVoidServi
             IsSentEmail = model.IsSentEmail,
             IsDeletedZzzBetTrans = model.IsDeletedZzzBetTrans,
             IsDeletedMessage = model.IsDeletedMessage,
-            IsDeletedVoidedTransaction = model.IsDeletedVoidedTransaction
+            IsDeletedVoidedTransaction = model.IsDeletedVoidedTransaction,
+            IsSentToMTS = model.IsSentToMTS
         };
 
         await repository.ExecuteAsync(criteria);

@@ -1,16 +1,17 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { inject, Injectable } from '@angular/core';
+import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { HttpService } from '../../utility/services/http.service';
 import { SelectVoidBetAutomationInfoQuery, VoidBetAutomationModel } from './app.model';
-import { GetLetstalkModel, LetstalkModel, UpdateLetstalkModel } from './letstalk/letstalk.model';
+import { GetLetsTalkModel, LetsTalkModel, UpdateLetsTalkModel } from './letstalk/letstalk.model';
 import { AutoVoidRequestQueueModel, GetAutoVoidRequestQueueModel, UpdateAutoVoidRequestQueueModel } from './scanning-auto-void/scanning-auto-void.model';
 import { TicketVoidingQueueModel, UpdateTicketVoidingQueueModel } from './void/void.model';
 import { UpdateVoidingHistory, VoidingHistoryModel } from './voiding-history/voiding-history.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AppApiService {
-  constructor(
-    private readonly httpService: HttpService
-  ) { }
+  private readonly httpService = inject(HttpService);
 
   async getVoidBetAutomationInfo(query: SelectVoidBetAutomationInfoQuery): Promise<VoidBetAutomationModel> {
     return this.httpService.postJson(query, `api/ManageVoidServices/GetVoidBetAutomationServiceInfo`);
@@ -44,11 +45,15 @@ export class AppApiService {
     return this.httpService.postJson(model, `api/ManageVoidServices/UpdateVoidingHistory`);
   }
   
-  async getLetstalk(model: GetLetstalkModel): Promise<LetstalkModel[]> {
+  async getLetsTalk(model: GetLetsTalkModel): Promise<LetsTalkModel[]> {
     return this.httpService.postJson(model, `api/ManageVoidServices/GetLetstalk`);
   }
 
-  async updateLetstalk(model: UpdateLetstalkModel): Promise<boolean> {
+  async updateLetstalk(model: UpdateLetsTalkModel): Promise<boolean> {
     return this.httpService.postJson(model, `api/ManageVoidServices/UpdateLetstalk`);
+  }
+
+  async getRequestNoAuth(id: number): Promise<RequestDetailViewModel> {
+    return this.httpService.getJson(`api/ManageRequest/GetRequestNoAuth/${id}`);
   }
 }

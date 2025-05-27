@@ -1,145 +1,154 @@
-<ngb-accordion #acc="ngbAccordion" activeIds="panel-1,panel-2,panel-3">
-  <ngb-panel id="panel-1" title="First panel">
-    <ng-template ngbPanelHeader>
-      <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">Find voiding queue</h5>
-        <div>
-          <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="clearInput()">Clear input</button>
-          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
+<div ngbAccordion #acc="ngbAccordion" activeIds="panel-1,panel-2,panel-3">
+  <div ngbAccordionItem id="panel-1" [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>
+        <div class="d-flex align-items-center w-100">
+          <h5 class="m-0">Find voiding queue</h5>
+          <div class="ms-auto me-2">
+            <button type="button" class="btn btn-sm btn-outline-danger ms-2" (click)="$event.stopPropagation(); clearInput()">Clear input</button>
+          </div>
+        </div>
+      </button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div class="accordion-body">
+        <div class="filter action-area d-flex">
+          <label class="col-form-label col-form-label-sm me-2">VoidingHistoryId</label>
+          <input maxlength="150" class="voiding-history-id form-control form-control-sm" type="text" row="1"
+            [(ngModel)]="inputVoidingHistoryId" />
+          <div class="btn-search ms-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"
+              value="Search" (click)="searchVoidingQueue()" /></div>
+        </div>
+        <div class="table-scrollable">
+          <table class="table table-sm table-hover table-striped table-bordered">
+            <thead class="thead-light bg-light bg-secondary">
+              <tr>
+                <th scope="col" class="table-header">SiteDbGroupId</th>
+                <th scope="col" class="table-header">QueueId</th>
+                <th scope="col" class="table-header">RequestId</th>
+                <th scope="col" class="table-header">MatchId</th>
+                <th scope="col" class="table-header">VoidingHistoryId</th>
+                <th scope="col" class="table-header">StatusId</th>
+                <th scope="col" class="table-header trans-id">TransIds</th>
+                <th scope="col" class="table-header">UserId</th>
+                <th scope="col" class="table-header">StartTime</th>
+                <th scope="col" class="table-header">ExecTime</th>
+                <th scope="col" class="table-header">Duration</th>
+                <th scope="col" class="table-header">VoidingTypeId</th>
+                <th scope="col" class="table-header">TotalTicket</th>
+                <th scope="col" class="table-header">ErrMsg</th>
+                <th scope="col" class="table-header">NegativeBalanceUsers</th>
+                <th scope="col" class="table-header">FailedTransIds</th>
+                <th scope="col" class="table-header">IssueTypeId</th>
+              </tr>
+            </thead>
+
+            @if (voidingQueuesViewModel.length > 0) {
+            <tbody>
+              @for (queue of voidingQueuesViewModel; track queue; let i = $index) {
+              <tr>
+                <td class="text-center">{{queue.siteDbGroupId}}-{{queue.siteDbName}}</td>
+                <td class="text-center">{{ queue.queueId }}</td>
+                <td class="text-center">{{ queue.requestId }}</td>
+                <td class="text-center">{{ queue.matchId }}</td>
+                <td class="text-center">{{ queue.voidingHistoryId }}</td>
+                <td class="text-center">{{ queue.statusId }}</td>
+                <td class="text-center trans-id" title="{{ queue.transIds }}">{{ queue.transIds }}</td>
+                <td class="text-center">{{ queue.userId }}</td>
+                <td class="text-center">{{ queue.startTime }}</td>
+                <td class="text-center">{{ queue.execTime }}</td>
+                <td class="text-center">{{ queue.duration }}</td>
+                <td class="text-center">{{ queue.voidingTypeId }}</td>
+                <td class="text-center">{{ queue.totalTicket }}</td>
+                <td class="text-center">{{ queue.errMsg }}</td>
+                <td class="text-center">{{ queue.negativeBalanceUsers }}</td>
+                <td class="text-center">{{ queue.failedTransIds }}</td>
+                <td class="text-center">{{ queue.issueTypeId }}</td>
+              </tr>
+              }
+              <tr>
+                <td colspan="17" class="text-start"><strong>Count: {{voidingQueuesViewModel.length}}</strong></td>
+              </tr>
+            </tbody>
+            }
+
+            @if (voidingQueuesViewModel.length === 0) {
+            <tbody>
+              <tr>
+                <td colspan="17" class="fw-bold text-red text-center">There is no data</td>
+              </tr>
+            </tbody>
+            }
+          </table>
         </div>
       </div>
-    </ng-template>
-    <ng-template ngbPanelContent>
-      <div class="filter action-area d-flex">
-        <label class="col-form-label mr-2">VoidingHistoryId</label>
-        <input maxlength="150" class="voiding-history-id form-control form-control-sm" type="text" row="1"
-          [(ngModel)]="inputVoidingHistoryId" />
-        <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"
-            value="Search" (click)="searchVoidingQueue()" /></div>
-      </div>
-      <div class="table-scrollable">
-        <table class="table table-sm table-hover table-striped table-bordered">
-          <thead class="thead-light">
-            <tr>
-              <th scope="col">SiteDbGroupId</th>
-              <th scope="col">QueueId</th>
-              <th scope="col">RequestId</th>
-              <th scope="col">MatchId</th>
-              <th scope="col">VoidingHistoryId</th>
-              <th scope="col">StatusId</th>
-              <th scope="col" class="trans-id">TransIds</th>
-              <th scope="col">UserId</th>
-              <th scope="col">StartTime</th>
-              <th scope="col">ExecTime</th>
-              <th scope="col">Duration</th>
-              <th scope="col">VoidingTypeId</th>
-              <th scope="col">TotalTicket</th>
-              <th scope="col">ErrMsg</th>
-              <th scope="col">NegativeBalanceUsers</th>
-              <th scope="col">FailedTransIds</th>
-              <th scope="col">IssueTypeId</th>
-            </tr>
-          </thead>
+    </div>
+  </div>
 
-          <tbody *ngIf="voidingQueuesViewModel.length > 0">
-            <tr *ngFor="let queue of voidingQueuesViewModel; index as i">
-              <th scope="row">{{queue.siteDbGroupId}}-{{queue.siteDbName}}</th>
-              <td>{{ queue.queueId }}</td>
-              <td>{{ queue.requestId }}</td>
-              <td>{{ queue.matchId }}</td>
-              <td>{{ queue.voidingHistoryId }}</td>
-              <td>{{ queue.statusId }}</td>
-              <td class="trans-id">{{ queue.transIds }}</td>
-              <td>{{ queue.userId }}</td>
-              <td>{{ queue.startTime }}</td>
-              <td>{{ queue.execTime }}</td>
-              <td>{{ queue.duration }}</td>
-              <td>{{ queue.voidingTypeId }}</td>
-              <td>{{ queue.totalTicket }}</td>
-              <td>{{ queue.errMsg }}</td>
-              <td>{{ queue.negativeBalanceUsers }}</td>
-              <td>{{ queue.failedTransIds }}</td>
-              <td>{{ queue.issueTypeId }}</td>
-            </tr>
-            <tr>
-              <td colspan="17"><strong>Count: {{voidingQueuesViewModel.length}}</strong></td>
-            </tr>
-          </tbody>
-
-          <tbody *ngIf="voidingQueuesViewModel.length === 0">
-            <tr>
-              <td colspan="17" class="no-data">There is no data</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </ng-template>
-  </ngb-panel>
-
-  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-  <ngb-panel id="panel-2" title="Second">
-    <ng-template ngbPanelHeader>
-      <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">Update voiding queue status</h5>
-        <div>
-          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
+  <div ngbAccordionItem id="panel-2" [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>
+        <div class="d-flex align-items-center w-100">
+          <h5 class="m-0">Update voiding queue status</h5>
         </div>
-      </div>
-    </ng-template>
-    <ng-template ngbPanelContent *ngIf="voidingQueuesViewModel.length > 0">
-      <ng-container *ngFor="let queue of voidingQueuesViewModel; index as i">
+      </button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div class="accordion-body">
+        @if (voidingQueuesViewModel.length > 0) {
+        @for (queue of voidingQueuesViewModel; track queue; let i = $index) {
         <div class="d-flex server-row">
           <label
-            class="col-form-label mr-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
-          <label class="col-form-label mr-2"><strong>QueueId </strong></label>
+            class="col-form-label col-form-label-sm me-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
+          <label class="col-form-label col-form-label-sm me-2"><strong>QueueId </strong></label>
           <input maxlength="150" class="form-control form-control-sm queue-id" type="text" row="1" disabled
             [(ngModel)]="queue.queueId" />
-
-          <label class="col-form-label ml-4 mr-2"><strong>StatusId</strong></label>
-          <select class="form-control status-select" [(ngModel)]="queue.statusIdSelected">
-            <option *ngFor="let item of voidingQueueStatusSelection" [attr.value]="item.value">{{item.name}}</option>
-          </select>
-
-          <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold" value="Save"
+          <label class="col-form-label col-form-label-sm ms-4 me-2"><strong>StatusId</strong></label>
+          <ng-select class="status-select" [items]="voidingQueueStatusSelection" [bindLabel]="'name'"
+            [bindValue]="'value'" [clearable]="false" [(ngModel)]="queue.statusIdSelected">
+          </ng-select>
+          <div class="ms-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold" value="Save"
               (click)="confirmUpdateStatus(queue.siteDbGroupId, queue.queueId, queue.statusIdSelected)" /></div>
         </div>
-      </ng-container>
-    </ng-template>
-    <ng-template ngbPanelContent *ngIf="voidingQueuesViewModel.length === 0">
-      <tbody>
-        <tr>
-          <td class="no-data">There is no data</td>
-        </tr>
-      </tbody>
-    </ng-template>
-  </ngb-panel>
+        }
+        }
+        @if (voidingQueuesViewModel.length === 0) {
+        <div class="fw-bold text-red text-center">There is no data</div>
+        }
+      </div>
+    </div>
+  </div>
 
-  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-  <ngb-panel id="panel-3" title="Third">
-    <ng-template ngbPanelHeader>
-      <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">*** Guideline</h5>
-      </div>
-    </ng-template>
-    <ng-template ngbPanelContent>
-      Case: Void queue failed (by lockmatch) -> Request status show <strong class="text-red">Failed</strong><br /><br />
-      <div class="ml-3">
-        1. ​​​​​​​User void tickets by another functions<br />
-        => ​Action: <br />
-        <div class="ml-5">
-          Update Voiding History
+  <div ngbAccordionItem id="panel-3" [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>
+        <div class="d-flex align-items-center w-100">
+          <h5 class="m-0">*** Guideline</h5>
+        </div>
+      </button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div class="accordion-body">
+        Case: Void queue failed (by lockmatch) -> Request status show <strong
+          class="text-red">Failed</strong><br /><br />
+        <div class="ms-3">
+          1. ​​​​​​​User void tickets by another functions<br />
+          => ​Action: <br />
+          <div class="ms-5">
+            Update Voiding History
+          </div>
+        </div>
+        ​​​​​​<div class="ms-3">
+          2. User still not void tickets -> ​​​​​​​Match is unlocked<br />
+          => Action: <br />
+          <div class="ms-5">
+            Change StatusId to 1 - Running & Click "Save" -> The void queue is executed again
+          </div>
         </div>
       </div>
-      ​​​​​​<div class="ml-3">
-        2. User still not void tickets -> ​​​​​​​Match is unlocked<br />
-        => Action: <br />
-        <div class="ml-5">
-          Change StatusId to 1 - Running & Click "Save" -> The void queue is executed again
-        </div>
-      </div>
-    </ng-template>
-  </ngb-panel>
-</ngb-accordion>
+    </div>
+  </div>
+</div>
 
 <tooltip [tooltip]="tooltip"></tooltip>
 <block-full-ui [isBlock]="isBlock"></block-full-ui>
