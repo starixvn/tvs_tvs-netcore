@@ -99,7 +99,7 @@ public class AddRequestProcessStageImp(
             IssueTypeConstant.ReducedOver => query.ReducedOverInfo.First().MatchId.ToString(),
             IssueTypeConstant.Abandoned => query.ReducedOverInfo.First().MatchId.ToString(),
             IssueTypeConstant.NotParticipate => query.NotParticipateInfo.First().MatchId.ToString(),
-            IssueTypeConstant.WrongScore => query.WrongScoreInfo.First().MatchId.ToString(),
+            IssueTypeConstant.WrongScore => string.Join(", ", query.WrongScoreInfo.Select(x => x.MatchId).Distinct()),
             IssueTypeConstant.EarlyKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
             IssueTypeConstant.WrongKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
             IssueTypeConstant.AbnormalBet => query.AbnormalBetInfo?.Matches?.Count() > 0
