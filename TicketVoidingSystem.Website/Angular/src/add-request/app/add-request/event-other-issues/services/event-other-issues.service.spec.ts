@@ -41,13 +41,28 @@ describe('EventOtherIssuesService', () => {
         toDateTime: '2024-03-20T11:00:00'
       };
       const subIssueTypeId = '1';
-      const mockResponse = { groupBetTypes: [] } as GroupBetTypesModel;
+      const mockResponse = { 
+        groupBetTypes: [],
+        timeRanges: [{
+          fromDate: '2024-03-20T10:00:00',
+          toDate: '2024-03-20T11:00:00'
+        }],
+        isChecked: false,
+        isDisable: false,
+        isCollapsed: false,
+        changeCheckGroupByBetTypes: () => {},
+        betTypes: [],
+        name: '',
+        id: 0,
+        isShow: true,
+        isShowBetTypes: true
+      } as unknown as GroupBetTypesModel;
       
-      jest.spyOn(validationService, 'isSubTypeRestart').mockReturnValue(true);
       commonService.getGroupBetTypesTvs = jest.fn().mockResolvedValue(mockResponse);
-
+      validationService.isShowFilterTime = jest.fn().mockReturnValue(true);
+      
       // Act
-      const result = await service.getGroupBetTypes(matchId, filterModel, subIssueTypeId);
+      const result = await service.getGroupBetTypes(matchId, filterModel, subIssueTypeId, "1");
 
       // Assert
       expect(commonService.getGroupBetTypesTvs).toHaveBeenCalledWith({
@@ -70,11 +85,10 @@ describe('EventOtherIssuesService', () => {
       };
       const subIssueTypeId = '2';
       const mockResponse = { groupBetTypes: [] } as GroupBetTypesModel;
-      jest.spyOn(validationService, 'isSubTypeRestart').mockReturnValue(false);
       commonService.getGroupBetTypesTvs = jest.fn().mockResolvedValue(mockResponse);
 
       // Act
-      const result = await service.getGroupBetTypes(matchId, filterModel, subIssueTypeId);
+      const result = await service.getGroupBetTypes(matchId, filterModel, subIssueTypeId, "1");
 
       // Assert
       expect(commonService.getGroupBetTypesTvs).toHaveBeenCalledWith({
@@ -124,14 +138,15 @@ describe('EventOtherIssuesService', () => {
         filterOtherIssues: {
           fromDateTime: '2024-03-20T10:00:00',
           toDateTime: '2024-03-20T11:00:00'
-        }
+        },
+        betTypeCount: undefined,
+        isHasSettledTicket: false,
+        isHasInstantlySettledTicket: false
       } as unknown as LogInfoOtherIssues;
       const subIssueTypeId = '1';
-
-      jest.spyOn(validationService, 'isSubTypeRestart').mockReturnValue(true);
-
+      validationService.isShowFilterTime = jest.fn().mockReturnValue(true);
       // Act
-      const result = service.getOtherIssuesModel(logInfo, subIssueTypeId);
+      const result = service.getOtherIssuesModel(logInfo, subIssueTypeId, "1");
 
       // Assert
       expect(result).toEqual({
@@ -141,7 +156,8 @@ describe('EventOtherIssuesService', () => {
         subIssueTypeId: 1,
         allBetTypesSelection: true,
         filterFromTransTime: '2024-03-20T10:00:00',
-        filterToTransTime: '2024-03-20T11:00:00'
+        filterToTransTime: '2024-03-20T11:00:00',
+        betTypeCount: undefined
       });
     });
   });
@@ -183,13 +199,15 @@ describe('EventOtherIssuesService', () => {
         filterOtherIssues: {
           fromDateTime: '2024-03-20T10:00:00',
           toDateTime: '2024-03-20T11:00:00'
-        }
+        },
+        logInfoDetail: '',
+        isHasSettledTicket: false,
+        isHasInstantlySettledTicket: false,
+        allBetTypesSelection: false
       } as unknown as LogInfoOtherIssues;
-
-      jest.spyOn(validationService, 'isSubTypeRestart').mockReturnValue(true);
-
+      validationService.isShowFilterTime = jest.fn().mockReturnValue(true);
       // Act
-      const result = service.initOtherIssuesGetLogInfoModel(subIssueTypeId, logInfo);
+      const result = service.initOtherIssuesGetLogInfoModel("1", subIssueTypeId, logInfo);
 
       // Assert
       expect(result).toEqual({

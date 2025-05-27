@@ -10,7 +10,7 @@ import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
-import { EventLeagueComponent } from 'src/utility/components/event-league/event-league.component';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { FilterWrongOddsComponent } from '../filter-wrong-odds/filter-wrong-odds.component';
 
 describe('ValidationService', () => {

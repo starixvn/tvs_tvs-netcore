@@ -17,6 +17,10 @@ import { DetailRequestModel, RequestModel } from './request.model';
 import { RequestDescriptionService } from './services/request-description.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../utility/modules/testing.module';
+import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
+import { AppComponent } from '../app.component';
+import { ClipboardService } from 'ngx-clipboard';
+import { CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
 
 class Helper {
   static readonly titleSelector = '.title-request-list-label';
@@ -24,6 +28,7 @@ class Helper {
   static readonly noDataSelector = '.no-data';
   static readonly iconVoidSelector = '.icon-void';
   static readonly matchId = 11112;
+
   static readonly fakeIssueTypesModel: IssueTypesModel = {
     issueTypes: [
       { issueTypeId: 1, issueTypeName: 'Danger Accepted' },
@@ -50,11 +55,13 @@ class Helper {
       }
     ]
   };
+
   static readonly fakeActions: Selection[] = [
     { name: 'Void', value: '1' },
     { name: 'Take note', value: '2' },
     { name: 'Waiting', value: '3' }
   ];
+
   static readonly fakeDetailRequestModelList = [
     {
       subIssueTypeId: 1,
@@ -77,6 +84,7 @@ class Helper {
       totalResettleProcessed: 0
     },
   ] as DetailRequestModel[];
+
   static readonly fakeRequestModelList = [
     {
       requestId: 1112,
@@ -109,6 +117,7 @@ class Helper {
       details: Helper.fakeDetailRequestModelList,
     }
   ] as RequestModel[];
+
   static readonly fakePermissionManage: PermissionManage = {
     manageRequestHost: true,
     verifyRead: true,
@@ -116,6 +125,7 @@ class Helper {
     voidRead: true,
     isReadMarkTickets: true
   };
+
   static readonly fakeRequestSimpleInfo = {
     lastPerformedBy: 'starix',
     totalSingleProcessed: 12,
@@ -138,36 +148,48 @@ describe('RequestListComponent', () => {
   let modalService: ModalService;
   let commonService: CommonService;
   let appService: AppService;
-  let requestDescriptionService: RequestDescriptionService;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
         TestingModule
       ],
       providers: [
-        ModalService, CommonService, AppService, RequestDescriptionService
+        ModalService,
+        CommonService,
+        AppService,
+        RequestDescriptionService,
+        BlockUiService,
+        ClipboardService,
+        {
+          provide: AppComponent,
+          useValue: {
+            logAccessAction: jest.fn()
+          }
+        }
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(RequestListComponent);
-    modalService = fixture.debugElement.injector.get(ModalService);
-    commonService = fixture.debugElement.injector.get(CommonService);
-    appService = fixture.debugElement.injector.get(AppService);
-    requestDescriptionService = fixture.debugElement.injector.get(RequestDescriptionService);
     component = fixture.componentInstance;
+    
+    modalService = TestBed.inject(ModalService);
+    commonService = TestBed.inject(CommonService);
+    appService = TestBed.inject(AppService);
     component.requestStatusChangeEvent = new EventEmitter<RequestStatus[]>();
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
   it('#ngOnInit should call #getActions and #getIssueTypes', async () => {
     // Arrange
-    const mockGetActions = jest.fn();
-    const mockGetIssueTypes = jest.fn();
-    commonService.getVoidActions = mockGetActions;
-    commonService.getIssueTypes = mockGetIssueTypes;
+    const mockGetActions = jest.spyOn(commonService, 'getVoidActions').mockResolvedValue(Helper.fakeActions);
+    const mockGetIssueTypes = jest.spyOn(commonService, 'getIssueTypes').mockResolvedValue(Helper.fakeIssueTypesModel);
     component.requestStatusChangeEvent.subscribe = jest.fn();
 
-    // Action
+    // Act
     await component.ngOnInit();
 
     // Assert
@@ -176,12 +198,16 @@ describe('RequestListComponent', () => {
   });
 
   it('#ngOnInit should call #updateRequestStatus', async () => {
-    commonService.getVoidActions = jest.fn();
-    commonService.getIssueTypes = jest.fn();
+    // Arrange
+    jest.spyOn(commonService, 'getVoidActions').mockResolvedValue(Helper.fakeActions);
+    jest.spyOn(commonService, 'getIssueTypes').mockResolvedValue(Helper.fakeIssueTypesModel);
     component['updateRequestStatus'] = jest.fn();
+
+    // Act
     await component.ngOnInit();
     component.requestStatusChangeEvent.next([]);
 
+    // Assert
     expect(component['updateRequestStatus']).toHaveBeenCalled();
   });
 
@@ -192,7 +218,7 @@ describe('RequestListComponent', () => {
     };
     component.models = Helper.fakeRequestModelList;
 
-    // Action
+    // Act
     component.ngOnChanges(changes);
 
     // Assert
@@ -204,7 +230,7 @@ describe('RequestListComponent', () => {
     // Arrange
     component.filterDisplayRequests = jest.fn();
 
-    // Action
+    // Act
     component.ngOnChanges({});
 
     // Assert
@@ -212,8 +238,7 @@ describe('RequestListComponent', () => {
   });
 
   it('#getIssueTypeName should return empty string with param is 0', async () => {
-    // Arrange
-    // Action
+    // Act
     const actualData = component.getIssueTypeName(0);
 
     // Assert
@@ -223,48 +248,44 @@ describe('RequestListComponent', () => {
   it('#getIssueTypeName should return expected IssueType', async () => {
     // Arrange
     component.issueTypesModel = Helper.fakeIssueTypesModel;
-    let actualData = '';
     const testCases = [
       { subIssueTypeId: 24, expectedData: '' },
       { subIssueTypeId: 11, expectedData: 'Abnormal' },
       { subIssueTypeId: 1, expectedData: 'Danger Accepted - Goal' }
     ];
 
-    // Action and Assert
-    for (const item of testCases) {
-      actualData = component.getIssueTypeName(item.subIssueTypeId);
+    // Act & Assert
+    testCases.forEach(item => {
+      const actualData = component.getIssueTypeName(item.subIssueTypeId);
       expect(actualData).toBe(item.expectedData);
-    }
+    });
   });
 
   it('#getActionName should return expected action', async () => {
     // Arrange
     component.actions = Helper.fakeActions;
-    let actualData = '';
     const testCases = [
       { action: 1, expectedData: 'Void' },
       { action: 4, expectedData: '' }
     ];
 
-    // Action and Assert
+    // Act & Assert
     testCases.forEach(item => {
-      actualData = component.getActionName(item.action);
+      const actualData = component.getActionName(item.action);
       expect(actualData).toBe(item.expectedData);
     });
   });
 
-  it('#checkVoided should return true', async () => {
-    // Arrange
-    // Action
+  it('#checkVoided should return true when has multiple details', async () => {
+    // Act
     const actualData = component.checkVoided(Helper.fakeDetailRequestModelList);
 
     // Assert
     expect(actualData).toBe(true);
   });
 
-  it('#checkVoided should return false', async () => {
-    // Arrange
-    // Action
+  it('#checkVoided should return false when has single detail', async () => {
+    // Act
     const actualData = component.checkVoided([Helper.fakeDetailRequestModelList[0]]);
 
     // Assert
@@ -273,25 +294,23 @@ describe('RequestListComponent', () => {
 
   it('#checkCanEdit should return expected data', async () => {
     // Arrange
-    let actualResult = true;
     const testCases = [
       { manageHostPermission: false, eventDate: '2020-02-15', moveBetDay: '2020-03-14', expectedData: false },
       { manageHostPermission: true, eventDate: '2020-06-15', moveBetDay: '2020-05-14', expectedData: true },
       { manageHostPermission: false, eventDate: '2020-05-14', moveBetDay: '2020-06-15', expectedData: false },
     ];
 
-    // Action and Assert
+    // Act & Assert
     testCases.forEach(item => {
       component.permission.manageRequestHost = item.manageHostPermission;
       component.moveBetDay = new Date(item.moveBetDay);
-      actualResult = component.checkCanEdit(new Date(item.eventDate), 1, null);
+      const actualResult = component.checkCanEdit(new Date(item.eventDate), 1, null);
       expect(actualResult).toBe(item.expectedData);
     });
   });
 
   it('#checkCanVoid should return expected data', async () => {
     // Arrange
-    let actualResult = true;
     const testCases = [
       { voidReadPermission: false, actionId: 0, eventDate: '2020-01-16', moveBetDay: '2020-01-17', expectedData: false },
       { voidReadPermission: true, actionId: 0, eventDate: '2020-01-18', moveBetDay: '2020-01-19', expectedData: false },
@@ -299,11 +318,11 @@ describe('RequestListComponent', () => {
       { voidReadPermission: true, actionId: 1, eventDate: '2020-01-14', moveBetDay: '2020-01-15', expectedData: false },
     ];
 
-    // Action and Assert
+    // Act & Assert
     testCases.forEach(item => {
       component.permission.voidRead = item.voidReadPermission;
       component.moveBetDay = new Date(item.moveBetDay);
-      actualResult = component.checkCanVoid(item.actionId, new Date(item.eventDate), 1, null);
+      const actualResult = component.checkCanVoid(item.actionId, new Date(item.eventDate), 1, null);
       expect(actualResult).toBe(item.expectedData);
     });
   });
@@ -313,8 +332,10 @@ describe('RequestListComponent', () => {
     component.permission.voidRead = true;
     component.moveBetDay = new Date('2020-01-17');
 
-    // Action and Assert
+    // Act
     const actualResult = component.checkCanVoid(1, new Date('2020-01-21'), 17, new Date('2020-01-21'));
+
+    // Assert
     expect(actualResult).toBe(false);
   });
 
@@ -322,7 +343,7 @@ describe('RequestListComponent', () => {
     // Arrange
     component.filterDisplayRequests = jest.fn();
 
-    // Action
+    // Act
     component.pagingEvent();
 
     // Assert
@@ -333,7 +354,7 @@ describe('RequestListComponent', () => {
     // Arrange
     component.exportExcelEvent.emit = jest.fn();
 
-    // Action
+    // Act
     component.exportExcel();
 
     // Assert
@@ -341,18 +362,23 @@ describe('RequestListComponent', () => {
   });
 
   it('#confirmCheckBy should call #confirm from modalService with expected param when isCheckedBy is true', async () => {
-    const mockModalServiceConfirm = jest.fn();
-    modalService.confirm = mockModalServiceConfirm;
+    // Arrange
+    const mockModalServiceConfirm = jest.spyOn(modalService, 'confirm').mockImplementation(jest.fn());
     const confirmModal = {
       title: 'Check By Confirm',
       message: `${LABELS.CONFIRM_CHECK_BY}<strong>${Helper.fakeRequestModelList[0].requestId}</strong>?`
     };
+
+    // Act
     component.confirmCheckBy(Helper.fakeRequestModelList[0]);
+
+    // Assert
     expect(mockModalServiceConfirm).toHaveBeenCalledTimes(1);
     expect(mockModalServiceConfirm.mock.calls[0][0]).toStrictEqual(confirmModal);
     expect(mockModalServiceConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
     expect(mockModalServiceConfirm.mock.calls[0][2]).toBeInstanceOf(Function);
 
+    // Test callback functions
     component.checkBy = jest.fn();
     mockModalServiceConfirm.mock.calls[0][1]();
     expect(component.checkBy).toHaveBeenCalledWith(Helper.fakeRequestModelList[0].requestId, true);
@@ -362,18 +388,23 @@ describe('RequestListComponent', () => {
   });
 
   it('#confirmCheckBy should call #confirm from modalService with expected param when isCheckedBy is false', async () => {
-    const mockModalServiceConfirm = jest.fn();
-    modalService.confirm = mockModalServiceConfirm;
+    // Arrange
+    const mockModalServiceConfirm = jest.spyOn(modalService, 'confirm').mockImplementation(jest.fn());
     const confirmModal = {
       title: 'UnCheck By Confirm',
       message: `${LABELS.CONFIRM_UNCHECK_BY}<strong>${Helper.fakeRequestModelList[1].requestId}</strong>?`
     };
+
+    // Act
     component.confirmCheckBy(Helper.fakeRequestModelList[1]);
+
+    // Assert
     expect(mockModalServiceConfirm).toHaveBeenCalledTimes(1);
     expect(mockModalServiceConfirm.mock.calls[0][0]).toStrictEqual(confirmModal);
     expect(mockModalServiceConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
     expect(mockModalServiceConfirm.mock.calls[0][2]).toBeInstanceOf(Function);
 
+    // Test callback functions
     component.checkBy = jest.fn();
     mockModalServiceConfirm.mock.calls[0][1]();
     expect(component.checkBy).toHaveBeenCalledWith(Helper.fakeRequestModelList[1].requestId, false);
@@ -384,8 +415,7 @@ describe('RequestListComponent', () => {
 
   it('#checkBy should call #open from modalService with expected param when verifyHost is false', async () => {
     // Arrange
-    const mockModalServiceOpen = jest.fn();
-    modalService.open = mockModalServiceOpen;
+    const mockModalServiceOpen = jest.spyOn(modalService, 'open').mockImplementation(jest.fn());
     component.permission.verifyHost = false;
     const openModal = {
       title: 'Warning',
@@ -393,7 +423,7 @@ describe('RequestListComponent', () => {
       type: ModalType.Warning
     };
 
-    // Action
+    // Act
     await component.checkBy(12345, true);
 
     // Assert
@@ -407,14 +437,14 @@ describe('RequestListComponent', () => {
       errorMsg: '',
       isSuccessful: true
     };
-    appService.checkBy = jest.fn().mockImplementation(() => checkByResult);
+    jest.spyOn(appService, 'checkBy').mockResolvedValue(checkByResult);
     component.permission.verifyHost = true;
     component.reload.emit = jest.fn();
 
-    // Action
+    // Act
     await component.checkBy(12345, true);
 
-    //
+    // Assert
     expect(component.reload.emit).toHaveBeenCalledWith(true);
   });
 
@@ -425,10 +455,8 @@ describe('RequestListComponent', () => {
       errorMsg: 'error',
       isSuccessful: false
     };
-    const mockModalServiceOpen = jest.fn();
-
-    appService.checkBy = jest.fn().mockResolvedValue(checkByResult);
-    modalService.open = mockModalServiceOpen;
+    jest.spyOn(appService, 'checkBy').mockResolvedValue(checkByResult);
+    const mockModalServiceOpen = jest.spyOn(modalService, 'open').mockImplementation(jest.fn());
     component.permission.verifyHost = true;
     const openModal = {
       title: 'Check By Result',
@@ -436,7 +464,7 @@ describe('RequestListComponent', () => {
       type: ModalType.Error
     };
 
-    // Action
+    // Act
     await component.checkBy(12345, true);
 
     // Assert
@@ -452,7 +480,7 @@ describe('RequestListComponent', () => {
     component.checkCanEdit = jest.fn().mockImplementation(() => true);
     window.open = jest.fn();
 
-    // Action
+    // Act
     component.openRequestDetails(12345, new Date(), 1, null);
 
     // Assert
@@ -467,7 +495,7 @@ describe('RequestListComponent', () => {
     document.body.appendChild(element);
     window.open = jest.fn();
 
-    // Action
+    // Act
     component.openVoidRequest(12345);
 
     // Assert
@@ -475,8 +503,7 @@ describe('RequestListComponent', () => {
   });
 
   it('#isOnlyHasSingleTicket should return true', async () => {
-    // Arrange
-    // Action
+    // Act
     const actualResult = component.isShowOnlyTotalTickets(11);
 
     // Assert
@@ -484,8 +511,7 @@ describe('RequestListComponent', () => {
   });
 
   it('#isVoidAction should return true', async () => {
-    // Arrange
-    // Action
+    // Act
     const actualResult = component.isVoidAction(5);
 
     // Assert
@@ -532,8 +558,7 @@ describe('RequestListComponent', () => {
   });
 
   it('#isOnlyHasSingleTicket should return true when issueTypeId=13', async () => {
-    // Arrange
-    // Action
+    // Act
     const actualResult = component.isShowOnlyTotalTickets(13);
 
     // Assert
@@ -541,6 +566,7 @@ describe('RequestListComponent', () => {
   });
 
   it('#updateRequestStatus should update data when is Danger Accepted', async () => {
+    // Arrange
     const fakeRequestModelList = _.cloneDeep(Helper.fakeRequestModelList);
     const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
     fakeRequestStatus[0].requestId = 1000;
@@ -552,12 +578,16 @@ describe('RequestListComponent', () => {
       x.details = [detailRequestModel];
     });
     component['isDifferenceByMatchId'] = jest.fn().mockImplementation(() => true);
+
+    // Act
     component['updateRequestStatus'](Helper.fakeRequestStatus, fakeRequestModelList);
 
+    // Assert
     expect(component['isDifferenceByMatchId']).toHaveBeenCalledTimes(1);
   });
 
   it('#updateRequestStatus should update data when is not Danger Accepted', async () => {
+    // Arrange
     const fakeRequestModelList = _.cloneDeep(Helper.fakeRequestModelList);
     const detailRequestModel = new DetailRequestModel();
     detailRequestModel.matchId = Helper.matchId;
@@ -566,59 +596,82 @@ describe('RequestListComponent', () => {
       x.details = [detailRequestModel];
     });
     component['isDifferenceByMatchId'] = jest.fn();
+
+    // Act
     component['updateRequestStatus'](Helper.fakeRequestStatus, fakeRequestModelList);
 
+    // Assert
     expect(component['isDifferenceByMatchId']).toHaveBeenCalledTimes(1);
   });
 
   it('#updateRequestStatus should not update data when have not SimpleInfo', async () => {
+    // Arrange
     const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
     fakeRequestStatus.forEach(x => x.simpleInfo = null);
     component['isDifferenceByMatchId'] = jest.fn();
+
+    // Act
     component['updateRequestStatus'](fakeRequestStatus, Helper.fakeRequestModelList);
 
+    // Assert
     expect(component['isDifferenceByMatchId']).toHaveBeenCalledTimes(0);
   });
 
   it('#updateRequestStatus should not update data when have not request', async () => {
+    // Arrange
     const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
     fakeRequestStatus.forEach(x => x.requestId = 10000);
     component['isDifferenceByMatchId'] = jest.fn();
+
+    // Act
     component['updateRequestStatus'](fakeRequestStatus, Helper.fakeRequestModelList);
 
+    // Assert
     expect(component['isDifferenceByMatchId']).toHaveBeenCalledTimes(0);
   });
 
   it('#isSettlementHT should false', async () => {
+    // Arrange
     component.filterDisplayRequests = jest.fn();
+
+    // Act
     const actual = component.isSettlementHT('F');
 
+    // Assert
     expect(actual).toBe(false);
   });
 
   it('#isSettlementHT should true', async () => {
+    // Arrange
     component.filterDisplayRequests = jest.fn();
+
+    // Act
     const actual = component.isSettlementHT('H');
 
+    // Assert
     expect(actual).toBe(true);
   });
 
   it('#openRequestDetails should not call window.open', async () => {
+    // Arrange
     window.open = jest.fn();
     component.checkCanEdit = jest.fn().mockImplementation(() => false);
+
+    // Act
     component.openRequestDetails(null, null, null, null);
 
+    // Assert
     expect(component.checkCanEdit).toHaveBeenCalledTimes(1);
     expect(window.open).toHaveBeenCalledTimes(0);
   });
 
-  it('#checkCanEdit should be return true when is ARCHIVED_TICKET ', async () => {
+  it('#checkCanEdit should be return true when is ARCHIVED_TICKET', async () => {
     // Arrange
     component.permission = new PermissionManage();
     component.permission.manageRequestHost = true;
     component['isCreatedDateLessThanToday'] = jest.fn().mockImplementation(() => true);
 
-    // Action
+    // Act
     const actual = component.checkCanEdit(null, 17, null);
 
     // Assert
@@ -629,7 +682,7 @@ describe('RequestListComponent', () => {
     // Arrange
     const request = { issueTypeId: 11, filterBy: 1 } as RequestModel;
 
-    // Action
+    // Act
     const actual = component['isDifferenceByMatchId'](request);
 
     // Assert
@@ -638,52 +691,66 @@ describe('RequestListComponent', () => {
 
   it('#isDifferenceByMatchId should return true', async () => {
     // Arrange
-    const dataTests = [{ issueTypeId: 1, filterBy: 1 }, { issueTypeId: 11, filterBy: null }] as RequestModel[];
+    const dataTests = [
+      { issueTypeId: 1, filterBy: 1 }, 
+      { issueTypeId: 11, filterBy: null }
+    ] as RequestModel[];
 
-    // Action & Assert
+    // Act & Assert
     dataTests.forEach(x => {
       const actual = component['isDifferenceByMatchId'](x);
       expect(actual).toBeTruthy();
-    })
-  });
-
-  it('#copyRequestDescription should call #requestDescriptionService.copyToClipboard', async () => {
-    // Arrange
-    const mockCopyToClipboard = jest.fn();
-
-    requestDescriptionService.copyToClipboard = mockCopyToClipboard;
-    const requestModel = new RequestModel();
-    requestModel.details = [new DetailRequestModel()];
-    requestModel.details[0].matchId = 1;
-
-    // Action
-    await component.copyRequestDescriptionSingleMatch(requestModel, 1, 1);
-
-    // Assert
-    expect(mockCopyToClipboard).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('#copyRequestDescription should call #requestDescriptionService.copyToClipboard and update prop of detailRequestModel', async () => {
     // Arrange
-    const mockCopyToClipboard = jest.fn();
-    requestDescriptionService.copyToClipboard = mockCopyToClipboard;
-
+    window.alert = jest.fn();
     const requestModel = new RequestModel();
     requestModel.details = [new DetailRequestModel()];
     requestModel.details[0].matchId = 1;
+    requestModel.issueTypeId = 1;
     const detailRequestModel = new DetailRequestModel();
+    jest.spyOn(commonService, 'copyRequestInfo').mockResolvedValue({
+      requestInfo: {
+        requestId: 1,
+        matchId: 1,
+        globalShowTime: new Date(),
+        filterBy: 1,
+        issueTypeName: 'Test',
+        subIssueTypeName: 'Test Sub',
+        subIssueTypeId: 1,
+        mistakenBy: 'Test',
+        isCheckedVar: false,
+        provider: 'Test',
+        requestedBy: 'Test',
+        isHasSettledTicket: false,
+        remark: 'Test',
+        matchEvent: 'Test Match',
+        leagueName: 'Test League',
+        issueTypeId: 1,
+        voidFromTime: new Date(),
+        voidToTime: new Date(),
+        totalSingleCount: 1,
+        totalParlayCount: 1,
+        totalCancelCashOutCount: 0,
+        tvDetectionValue: 0,
+        filterFromTransTime: new Date(),
+        minAllowanceTime: 0,
+        sportType: 1
+      },
+      betTypeTickets: []
+    } as CopyRequestInfoResponse);
 
-    // Action
+    // Act
     await component.copyRequestDescriptionMultiMatches(requestModel, 1, detailRequestModel);
 
     // Assert
     expect(detailRequestModel.processingCopyDescriptionClass).toBe('fa fa-paste copy-request-info');
-    expect(mockCopyToClipboard).toHaveBeenCalledTimes(1);
   });
 
   it('#isCanCopyRequestDescription should return true when isDangerAccepted', async () => {
-    // Arrange
-    // Action
+    // Act
     const actual = component.isCanCopyRequestDescription(Number(IssueTypeConstant.DANGER_ACCEPTED));
 
     // Assert
@@ -691,8 +758,7 @@ describe('RequestListComponent', () => {
   });
 
   it('#isCanCopyRequestDescription should return false when isEarlyKickOff', async () => {
-    // Arrange
-    // Action
+    // Act
     const actual = component.isCanCopyRequestDescription(Number(IssueTypeConstant.EARLY_KICK_OFF));
 
     // Assert

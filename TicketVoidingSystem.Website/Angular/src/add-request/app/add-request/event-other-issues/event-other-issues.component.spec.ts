@@ -131,7 +131,7 @@ describe('EventOtherIssuesComponent', () => {
     eventOtherIssuesService.initDefaultFilter = jest.fn().mockReturnValue({});
     addRequestStore.changeSavingRequestStatus = jest.fn();
     eventOtherIssuesService.getGroupBetTypes = jest.fn().mockResolvedValue(new GroupBetTypesAddRequestModel([], false, '', false));
-    validationService.isOtherIssueSubTypeRestart = jest.fn().mockReturnValue(true);
+    validationService.isShowFilterTime = jest.fn().mockReturnValue(true);
 
     // Act
     await component.ngOnChanges({
@@ -176,7 +176,7 @@ describe('EventOtherIssuesComponent', () => {
     component.filter = Helper.fakeFilterModel;
     component.filter.subIssueTypeId = '1';
     eventOtherIssuesService.getGroupBetTypes = jest.fn().mockResolvedValue(new GroupBetTypesAddRequestModel([], false, '', false));
-    validationService.isOtherIssueSubTypeRestart = jest.fn().mockReturnValue(false);
+    validationService.isShowFilterTime = jest.fn().mockReturnValue(false);
 
     // Act
     await component.changeMatchEvent();
@@ -198,14 +198,14 @@ describe('EventOtherIssuesComponent', () => {
   it('should check if sub type is restart', () => {
     // Arrange
     component.filter = Helper.fakeFilterModel;
-    validationService.isOtherIssueSubTypeRestart = jest.fn().mockReturnValue(true);
+    validationService.isShowFilterTime = jest.fn().mockReturnValue(true);
 
     // Act
-    const result = component.isOtherIssueSubTypeRestart();
+    const result = component.isShowFilterTime();
 
     // Assert
     expect(result).toBeTruthy();
-    expect(validationService.isOtherIssueSubTypeRestart).toHaveBeenCalledWith(component.filter.subIssueTypeId);
+    expect(validationService.isShowFilterTime).toHaveBeenCalledWith("1", component.filter.subIssueTypeId);
   });
 
   it('should handle checking load data advanced mode', () => {

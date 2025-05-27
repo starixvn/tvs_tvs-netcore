@@ -112,7 +112,7 @@ describe('RequestDescriptionService', () => {
   });
 
   describe('copyToClipboard', () => {
-    it('should copy request info to clipboard', async () => {
+    it('should copy request info to clipboard successfully', async () => {
       // Arrange
       (commonService.copyRequestInfo as jest.Mock).mockResolvedValue(Helper.fakeCopyRequestInfoResponse);
       window.alert = jest.fn();
@@ -139,11 +139,13 @@ describe('RequestDescriptionService', () => {
       response.requestInfo.issueTypeId = Number(IssueTypeConstant.REDUCED_OVER);
 
       // Act
-      const result = (service as any).createContentCopy(response);
+      const result = service['createContentCopy'](response);
 
       // Assert
       expect(result).toContain('Hi CSD, please void livetickets for us');
       expect(result).toContain('Request No: 123');
+      expect(result).toContain('Premier League');
+      expect(result).toContain('Arsenal vs Chelsea');
     });
 
     it('should create content for WRONG_ODDS_SPORTS_BOOK issue type', () => {
@@ -152,7 +154,7 @@ describe('RequestDescriptionService', () => {
       response.requestInfo.issueTypeId = Number(IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK);
 
       // Act
-      const result = (service as any).createContentCopy(response);
+      const result = service['createContentCopy'](response);
 
       // Assert
       expect(result).toContain('Wrong Odds: 1.5 -> 2.0');
@@ -165,11 +167,37 @@ describe('RequestDescriptionService', () => {
       response.requestInfo.issueTypeId = Number(IssueTypeConstant.WRONG_HDP);
 
       // Act
-      const result = (service as any).createContentCopy(response);
+      const result = service['createContentCopy'](response);
 
       // Assert
       expect(result).toContain('Wrong: Arsenal -1.5');
       expect(result).toContain('Correct: Chelsea -1.5');
+      expect(result).toContain('Live Score: 2-1');
+    });
+
+    it('should handle empty response data', () => {
+      // Arrange
+      const response = {
+        requestInfo: {
+          issueTypeId: Number(IssueTypeConstant.REDUCED_OVER),
+          leagueName: '',
+          matchEvent: '',
+          globalShowTime: new Date(),
+          voidFromTime: new Date(),
+          voidToTime: new Date(),
+          totalSingleCount: 2,
+          totalParlayCount: 3,
+          totalCancelCashOutCount: 0,
+          liveStatus: ' '
+        }
+      } as CopyRequestInfoResponse;
+
+      // Act
+      const result = service['createContentCopy'](response);
+
+      // Assert
+      expect(result).toContain('Hi CSD, please void tickets for us');
+      expect(result).toContain('Request No:');
     });
   });
 
@@ -178,11 +206,11 @@ describe('RequestDescriptionService', () => {
       // Arrange
       const requestInfo = { ...Helper.fakeCopyRequestInfoResponse.requestInfo };
       requestInfo.issueTypeId = Number(IssueTypeConstant.WRONG_ODDS);
-      requestInfo.subIssueTypeId = 6; // handicapSubIssueTypeId
+      requestInfo.subIssueTypeId = 6;
       requestInfo.sportType = SportType.SOCCER;
 
       // Act
-      const result = (service as any).isShowLiveScores(requestInfo);
+      const result = service['isShowLiveScores'](requestInfo);
 
       // Assert
       expect(result).toBeTruthy();
@@ -194,10 +222,24 @@ describe('RequestDescriptionService', () => {
       requestInfo.sportType = SportType.BASKETBALL;
 
       // Act
-      const result = (service as any).isShowLiveScores(requestInfo);
+      const result = service['isShowLiveScores'](requestInfo);
 
       // Assert
       expect(result).toBeFalsy();
+    });
+
+    it('should return false for non-handicap sub issue type', () => {
+      // Arrange
+      const requestInfo = { ...Helper.fakeCopyRequestInfoResponse.requestInfo };
+      requestInfo.issueTypeId = Number(IssueTypeConstant.WRONG_ODDS);
+      requestInfo.subIssueTypeId = 1; // Non-handicap sub issue type
+      requestInfo.sportType = SportType.SOCCER;
+
+      // Act
+      const result = service['isShowLiveScores'](requestInfo);
+
+      // Assert
+      expect(result).toBe(false);
     });
   });
 
@@ -208,7 +250,7 @@ describe('RequestDescriptionService', () => {
       requestInfo.liveScores = '2-1';
 
       // Act
-      const result = (service as any).generateLiveScores(requestInfo);
+      const result = service['generateLiveScores'](requestInfo);
 
       // Assert
       expect(result).toContain('Live Score: 2-1');
@@ -220,7 +262,19 @@ describe('RequestDescriptionService', () => {
       requestInfo.liveScores = null;
 
       // Act
-      const result = (service as any).generateLiveScores(requestInfo);
+      const result = service['generateLiveScores'](requestInfo);
+
+      // Assert
+      expect(result).toBe('Live Score: \n');
+    });
+
+    it('should handle empty live scores string', () => {
+      // Arrange
+      const requestInfo = { ...Helper.fakeCopyRequestInfoResponse.requestInfo };
+      requestInfo.liveScores = '';
+
+      // Act
+      const result = service['generateLiveScores'](requestInfo);
 
       // Assert
       expect(result).toBe('Live Score: \n');
@@ -235,7 +289,7 @@ describe('RequestDescriptionService', () => {
       requestInfo.remark = 'Test remark';
 
       // Act
-      const result = (service as any).generateRemark(requestInfo);
+      const result = service['generateRemark'](requestInfo);
 
       // Assert
       expect(result).toContain('Test remark');
@@ -244,11 +298,24 @@ describe('RequestDescriptionService', () => {
     it('should return empty string for unsupported issue types', () => {
       // Arrange
       const requestInfo = { ...Helper.fakeCopyRequestInfoResponse.requestInfo };
-      requestInfo.issueTypeId = 999; // Unsupported issue type
+      requestInfo.issueTypeId = 999;
       requestInfo.remark = 'Test remark';
 
       // Act
-      const result = (service as any).generateRemark(requestInfo);
+      const result = service['generateRemark'](requestInfo);
+
+      // Assert
+      expect(result).toBe('');
+    });
+
+    it('should handle empty remark', () => {
+      // Arrange
+      const requestInfo = { ...Helper.fakeCopyRequestInfoResponse.requestInfo };
+      requestInfo.issueTypeId = Number(IssueTypeConstant.TECHNICAL_ERROR);
+      requestInfo.remark = '';
+
+      // Act
+      const result = service['generateRemark'](requestInfo);
 
       // Assert
       expect(result).toBe('');
@@ -262,7 +329,7 @@ describe('RequestDescriptionService', () => {
       response.requestInfo.subIssueTypeName = '';
 
       // Act
-      const result = (service as any).iddShowOnlyIssueTypeName(response);
+      const result = service['iddShowOnlyIssueTypeName'](response);
 
       // Assert
       expect(result).toBeTruthy();
@@ -274,7 +341,7 @@ describe('RequestDescriptionService', () => {
       response.requestInfo.subIssueTypeName = response.requestInfo.issueTypeName;
 
       // Act
-      const result = (service as any).iddShowOnlyIssueTypeName(response);
+      const result = service['iddShowOnlyIssueTypeName'](response);
 
       // Assert
       expect(result).toBeTruthy();
@@ -286,10 +353,22 @@ describe('RequestDescriptionService', () => {
       response.requestInfo.subIssueTypeName = 'Different Name';
 
       // Act
-      const result = (service as any).iddShowOnlyIssueTypeName(response);
+      const result = service['iddShowOnlyIssueTypeName'](response);
 
       // Assert
       expect(result).toBeFalsy();
+    });
+
+    it('should handle null subIssueTypeName', () => {
+      // Arrange
+      const response = { ...Helper.fakeCopyRequestInfoResponse };
+      response.requestInfo.subIssueTypeName = null;
+
+      // Act
+      const result = service['iddShowOnlyIssueTypeName'](response);
+
+      // Assert
+      expect(result).toBeTruthy();
     });
   });
 }); 

@@ -17,7 +17,7 @@ import { EventWrongScoreService } from '../services/event-wrong-score.service';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { GetLogInfoViewModel, GetLogInfoModel, Validation } from '../../models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { DateFullTimeNewComponent } from 'src/utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 
 class Helper {
   static readonly fakeRequestId = 1212;

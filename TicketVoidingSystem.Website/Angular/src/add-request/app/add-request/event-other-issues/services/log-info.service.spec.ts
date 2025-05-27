@@ -116,7 +116,7 @@ describe('LogInfoService', () => {
       expect(result.requestId).toBe(requestId);
       expect(result.actionId).toBe(Number(filter.action));
       expect(result.issueTypeId).toBe(Number(filter.issueTypeId));
-      expect(eventOtherIssuesService.initOtherIssuesGetLogInfoModel).toHaveBeenCalledWith(
+      expect(eventOtherIssuesService.initOtherIssuesGetLogInfoModel).toHaveBeenCalledWith(filter.issueTypeId,
         Number(filter.subIssueTypeId),
         events
       );

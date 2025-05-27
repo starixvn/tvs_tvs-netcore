@@ -116,6 +116,7 @@ describe('LogInfoRelatedEventComponent', () => {
     // Arrange
     component.logInfo = Helper.fakeLogInfo;
     component.logInfo.subIssueTypeId = null;
+    component.logInfo.logInfoDetail = new LogInfoDetail();
     component.tooltip.display = jest.fn();
 
     // Act
@@ -146,6 +147,7 @@ describe('LogInfoRelatedEventComponent', () => {
   it('should update data after sub issue type dialog is closed', () => {
     // Arrange
     component.logInfo = Helper.fakeLogInfo;
+    component.logInfo.logInfoDetail = new LogInfoDetail();
     component.subIssueTypeDialogModel = new SubIssueTypeDialogModel();
     component.subIssueTypeDialogModel.allowanceTime = {
       aaTime: 10,

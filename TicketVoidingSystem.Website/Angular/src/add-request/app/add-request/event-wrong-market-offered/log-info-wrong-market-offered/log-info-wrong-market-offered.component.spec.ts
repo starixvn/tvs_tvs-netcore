@@ -28,7 +28,6 @@ class Helper {
 describe('LogInfoWrongMarketOfferedComponent', () => {
   let component: LogInfoWrongMarketOfferedComponent;
   let fixture: ComponentFixture<LogInfoWrongMarketOfferedComponent>;
-  let affectedTicketService: AffectedTicketService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -39,7 +38,6 @@ describe('LogInfoWrongMarketOfferedComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(LogInfoWrongMarketOfferedComponent);
-    affectedTicketService = fixture.debugElement.injector.get(AffectedTicketService);
     component = fixture.componentInstance;
   });
 
@@ -110,9 +108,9 @@ describe('LogInfoWrongMarketOfferedComponent', () => {
     component['updateBetTypeCountModel'](logInfo);
 
     // Assert
-    expect(component.groupBetTypesCount.length).toBeGreaterThan(0);
-    expect(component.groupBetTypesCount[0].name).toContain('Test Bet Type');
-    expect(component.groupBetTypesCount[0].items[0].name).toContain('Test Player');
+    expect(component.affectedTicketsModel.groupBetTypesCount.length).toBeGreaterThan(0);
+    expect(component.affectedTicketsModel.groupBetTypesCount[0].name).toContain('Test Bet Type');
+    expect(component.affectedTicketsModel.groupBetTypesCount[0].items[0].name).toContain('Test Player');
   });
 
   it('should handle empty bet type count', () => {
@@ -128,7 +126,7 @@ describe('LogInfoWrongMarketOfferedComponent', () => {
     component['updateBetTypeCountModel'](logInfo);
 
     // Assert
-    expect(component.groupBetTypesCount.length).toBe(0);
+    expect(component.affectedTicketsModel.groupBetTypesCount.length).toBe(0);
   });
 
   it('should handle multiple bet types correctly', () => {
@@ -159,8 +157,8 @@ describe('LogInfoWrongMarketOfferedComponent', () => {
     component['updateBetTypeCountModel'](logInfo);
 
     // Assert
-    expect(component.groupBetTypesCount.length).toBe(2);
-    expect(component.groupBetTypesCount[0].name).toContain('Bet Type 1');
-    expect(component.groupBetTypesCount[1].name).toContain('Bet Type 2');
+    expect(component.affectedTicketsModel.groupBetTypesCount.length).toBe(2);
+    expect(component.affectedTicketsModel.groupBetTypesCount[0].name).toContain('Bet Type 1');
+    expect(component.affectedTicketsModel.groupBetTypesCount[1].name).toContain('Bet Type 2');
   });
 }); 

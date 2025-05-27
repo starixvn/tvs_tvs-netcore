@@ -9,7 +9,6 @@ import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { CheckAddPermissionService } from '../../services/check-permission.service';
-import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 
 describe('ValidationService', () => {
   let service: ValidationService;
@@ -170,24 +169,6 @@ describe('ValidationService', () => {
 
       // Act
       const result = service.isValidLogInfoEvent(logInfoOtherIssues);
-
-      // Assert
-      expect(result).toBeFalsy();
-    });
-  });
-
-  describe('isSubTypeRestart', () => {
-    it('should return true when subIssueTypeId matches RESTART constant', () => {
-      // Act
-      const result = service.isOtherIssueSubTypeRestart(SubIssueTypeConstant.RESTART.toString());
-
-      // Assert
-      expect(result).toBeTruthy();
-    });
-
-    it('should return false when subIssueTypeId does not match RESTART constant', () => {
-      // Act
-      const result = service.isOtherIssueSubTypeRestart('different-id');
 
       // Assert
       expect(result).toBeFalsy();
