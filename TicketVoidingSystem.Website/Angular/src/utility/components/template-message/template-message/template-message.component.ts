@@ -161,9 +161,6 @@ export class TemplateMessageComponent implements OnChanges {
     return (defaultTemplateWhenSportNull ? defaultTemplateWhenSportNull.templateId : 9999);
   }
 
-  /**
-   * Because Check VAR has other template, so we need to update Template again
-   */
   updateCheckBoxVarMessage() {
     this.updateTemplate();
     this.initialMessage = _.cloneDeep(this.message);

@@ -33,6 +33,14 @@ class Helper {
     isRead: false,
     createdDate: new Date('2024-03-20T12:00:00')
   } as NotificationModel;
+
+  static readonly mockDuplicateNotification = {
+    id: 4,
+    content: 'Test notification 1',
+    type: NotificationType.NOTIFICATION,
+    isRead: false,
+    createdDate: new Date('2024-03-20T13:00:00')
+  } as NotificationModel;
 }
 
 describe('NotificationPopupComponent', () => {
@@ -205,5 +213,99 @@ describe('NotificationPopupComponent', () => {
 
     // Assert
     expect(component.notifications[0]).toBe(Helper.mockNewNotification);
+  });
+
+  it('should not add duplicate notification', () => {
+    // Arrange
+    component.notifications = Helper.mockNotifications;
+    component.activeTab = NotificationTabName.NOTIFICATION;
+
+    // Act
+    component['addNewNotification'](Helper.mockDuplicateNotification);
+
+    // Assert
+    expect(component.notifications.length).toBe(Helper.mockNotifications.length);
+  });
+
+  it('should handle notification with stored content', () => {
+    // Arrange
+    const storedNotification = {
+      ...Helper.mockNewNotification,
+      content: 'stored notification content'
+    };
+    component.notifications = Helper.mockNotifications;
+
+    // Act
+    component['addNewNotification'](storedNotification);
+
+    // Assert
+    expect(component.notifications).toContain(storedNotification);
+  });
+
+  it('should update grouped notifications when filter changes', () => {
+    // Arrange
+    component.notifications = Helper.mockNotifications;
+    component.activeTab = NotificationTabName.NOTIFICATION;
+    component.filterTab = NotificationFilterTabName.ALL;
+
+    // Act
+    component.selectFilterTab(NotificationFilterTabName.UNREAD);
+
+    // Assert
+    expect(component.groupedNotifications.length).toBeGreaterThan(0);
+  });
+
+  it('should handle notification open event with existing notifications', async () => {
+    // Arrange
+    component.notifications = Helper.mockNotifications;
+
+    // Act
+    await component.ngOnInit();
+
+    // Assert
+    expect(component.notifications).toEqual(Helper.mockNotifications);
+  });
+
+  it('should handle notification click with already read notification', () => {
+    // Arrange
+    const readNotification = { ...Helper.mockNotifications[0], isRead: true };
+    const event = { stopPropagation: jest.fn() } as unknown as Event;
+    jest.spyOn(notificationService, 'update');
+
+    // Act
+    component.clickNotification(event, readNotification);
+
+    // Assert
+    expect(notificationService.update).not.toHaveBeenCalled();
+  });
+
+  it('should handle mark all as read with no unread notifications', () => {
+    // Arrange
+    const allReadNotifications = Helper.mockNotifications.map(n => ({ ...n, isRead: true }));
+    component.notifications = allReadNotifications;
+    component.activeTab = NotificationTabName.NOTIFICATION;
+    jest.spyOn(notificationService, 'update');
+
+    // Act
+    component.markAllAsRead();
+
+    // Assert
+    expect(notificationService.update).not.toHaveBeenCalled();
+  });
+
+  it('should handle click inside notification container', () => {
+    // Arrange
+    component.isOpen = true;
+    const event = { 
+      target: document.createElement('div'),
+      closest: jest.fn().mockReturnValue(true)
+    } as unknown as Event;
+    jest.spyOn(notificationService, 'toggle');
+
+    // Act
+    component.closeOnClickOutside(event);
+
+    // Assert
+    expect(notificationService.toggle).toHaveBeenCalled();
   });
 });

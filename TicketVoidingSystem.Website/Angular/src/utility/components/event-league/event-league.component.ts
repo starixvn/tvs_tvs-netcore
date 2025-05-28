@@ -38,7 +38,6 @@ export class EventLeagueComponent implements OnChanges {
   
   private delayForSearchSubscription: Subscription;
   private readonly observableTimer = timer(300);
-
   private readonly addRequestStore = inject(AddRequestStore);
   private readonly commonService = inject(CommonService);
   private readonly element = inject(ElementRef);

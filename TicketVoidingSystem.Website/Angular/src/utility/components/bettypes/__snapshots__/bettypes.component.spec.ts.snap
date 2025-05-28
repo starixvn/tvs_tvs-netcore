@@ -1,5 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`BetTypesComponent should match snapshot 1`] = `
+<bettypes
+  ballSequence={[Function Array]}
+  element={[Function _ElementRef]}
+  model={[Function BetTypesModel]}
+  product={[Function Number]}
+  productDisplay={[Function Array]}
+  sportType={[Function Number]}
+  tooltip={[Function Tooltip]}
+>
+  <tooltip>
+  </tooltip>
+</bettypes>
+`;
+
 exports[`FilterComponent BetTypesComponent should init match snapshot 1`] = `
 <ng-component
   __ngContext__={[Function LRootView]}

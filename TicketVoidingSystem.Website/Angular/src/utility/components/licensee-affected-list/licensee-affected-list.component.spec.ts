@@ -1,92 +1,123 @@
-import { NgModule, SimpleChange } from '@angular/core';
-import { ClipboardService } from 'ngx-clipboard';
-import { Shallow } from 'shallow-render';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { LicenseeAffectedListComponent } from './licensee-affected-list.component';
+import { ClipboardService } from 'ngx-clipboard';
 import { AffectedLicensee } from './licensee-affected-list.model';
 
-class Helper {
-  static readonly fakeAffectedLicenseeNormal: AffectedLicensee = {
+describe('LicenseeAffectedListComponent', () => {
+  let component: LicenseeAffectedListComponent;
+  let fixture: ComponentFixture<LicenseeAffectedListComponent>;
+  let clipboardService: ClipboardService;
+
+  const mockAffectedLicenseeNormal: AffectedLicensee = {
     group: "normal",
     licenseesName: "123",
     message: '',
     show: false,
     color: ''
   };
-  static readonly fakeAffectedLicenseeJollyView: AffectedLicensee = {
+
+  const mockAffectedLicenseeJollyView: AffectedLicensee = {
     group: "jollyView",
     licenseesName: "456",
     message: '',
     show: false,
     color: ''
   };
-  static readonly licenseeAffectedList: AffectedLicensee[] = [Helper.fakeAffectedLicenseeNormal, Helper.fakeAffectedLicenseeJollyView];
-}
 
-describe('LicenseeAffectedListComponent', () => {
-    @NgModule({
-      imports: [],
-      providers: [
-        ClipboardService
-      ]
-    })
-    class AppModuleTest { }
-  
-    let shallow: Shallow<LicenseeAffectedListComponent>;
-  
-    beforeEach(() => {
-      shallow = new Shallow(LicenseeAffectedListComponent, AppModuleTest);
-    });
+  const mockLicenseeAffectedList: AffectedLicensee[] = [
+    mockAffectedLicenseeNormal,
+    mockAffectedLicenseeJollyView
+  ];
 
-  it('ngOnChanges should updateDisplayAffectedLicensee when has change licenseeAffectedList', async () => {
-    // Arrange
-    const { instance } = await shallow.render({
-      bind: {
-        licenseeAffectedList: Helper.licenseeAffectedList
-      }
-    });
-    const changes = {
-      'licenseeAffectedList': new SimpleChange([], Helper.licenseeAffectedList, true)
-    };
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [ClipboardService]
+    }).compileComponents();
 
-    // Action
-    instance.ngOnChanges(changes);
-
-    // Assert
-    expect(instance.licenseeAffectedList[1].show).toBeTruthy();
-    expect(instance.affectedLicenseeNormal).toBe('123');
+    fixture = TestBed.createComponent(LicenseeAffectedListComponent);
+    clipboardService = fixture.debugElement.injector.get(ClipboardService);
+    component = fixture.componentInstance;
   });
 
-  it('isShowAffectedLicenseeArea should return true', async () => {
-    // Arrange
-    const { instance } = await shallow.render({
-      bind: {
-        licenseeAffectedList: Helper.licenseeAffectedList
-      }
-    });
-
-    // Action
-    const actual = instance.isShowAffectedLicenseeArea();
-
-    // Assert
-    expect(actual).toBeTruthy();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('copyClipboard should return true', async () => {
+  it('should initialize with default values', () => {
+    expect(component.licenseeAffectedList).toEqual([]);
+    expect(component.isDisplay).toBeTruthy();
+    expect(component.affectedLicenseeNormal).toBe('');
+  });
+
+  it('should update display when licenseeAffectedList changes', () => {
     // Arrange
-    const mockcopyFromContent = jest.fn();
-    const { instance } = await shallow
-    .mock(ClipboardService, { copyFromContent: mockcopyFromContent })
-    .render({
-      bind: {
-        licenseeAffectedList: Helper.licenseeAffectedList
+    component.licenseeAffectedList = mockLicenseeAffectedList;
+    component.isDisplay = true;
+
+    // Act
+    component.ngOnChanges({
+      'licenseeAffectedList': {
+        currentValue: mockLicenseeAffectedList,
+        previousValue: [],
+        firstChange: true,
+        isFirstChange: () => true
       }
     });
-    window.alert = jest.fn();
-
-    // Action
-    instance.copyClipboard('124');
 
     // Assert
-    expect(mockcopyFromContent).toHaveBeenCalled();
+    expect(component.licenseeAffectedList[1].show).toBeTruthy();
+    expect(component.affectedLicenseeNormal).toBe('123');
+  });
+
+  it('should show affected licensee area when there are licensees and isDisplay is true', () => {
+    // Arrange
+    component.licenseeAffectedList = mockLicenseeAffectedList;
+    component.isDisplay = true;
+
+    // Act
+    const result = component.isShowAffectedLicenseeArea();
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('should not show affected licensee area when isDisplay is false', () => {
+    // Arrange
+    component.licenseeAffectedList = mockLicenseeAffectedList;
+    component.isDisplay = false;
+
+    // Act
+    const result = component.isShowAffectedLicenseeArea();
+
+    // Assert
+    expect(result).toBeFalsy();
+  });
+
+  it('should not show affected licensee area when there are no licensees', () => {
+    // Arrange
+    component.licenseeAffectedList = [];
+    component.isDisplay = true;
+
+    // Act
+    const result = component.isShowAffectedLicenseeArea();
+
+    // Assert
+    expect(result).toBeFalsy();
+  });
+
+  it('should copy text to clipboard and show alert', () => {
+    // Arrange
+    const mockCopyFromContent = jest.spyOn(clipboardService, 'copyFromContent');
+    const mockAlert = jest.spyOn(window, 'alert');
+    const testText = 'test text';
+
+    // Act
+    component.copyClipboard(testText);
+
+    // Assert
+    expect(mockCopyFromContent).toHaveBeenCalledWith(testText);
+    expect(mockAlert).toHaveBeenCalledWith('The Licensee list has been copied to clipboard.');
   });
 });

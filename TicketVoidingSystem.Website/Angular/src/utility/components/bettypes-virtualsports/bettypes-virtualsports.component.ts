@@ -46,7 +46,7 @@ export class BetTypesVirtualSportComponent implements OnChanges {
     }
 
     getCheckedBetTypes(): string[] {
-        let value = [];
+        const value = [];
         this.group.betTypes.forEach(item => {
             if (item.checked) {
                 value.push(item.id);
