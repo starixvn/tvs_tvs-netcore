@@ -35,7 +35,8 @@ public static class TicketVoidingSystemService
         services.AddSingleton<LogActionFilterAttribute>();
         services.AddSingleton<ResultCacheService, ResultCacheServiceImp>();
         services.AddTransient<NotificationService, NotificationServiceImp>();
-
+        services.AddSingleton<OperatorKeyEncryptionService, OperatorKeyEncryptionServiceImp>();
+        
         //Letstalk
         services.AddSingleton<LetstalkClientService, LetstalkClientServiceImp>();
         services.AddSingleton<LetstalkSingleMessageService, LetstalkSingleMessageServiceImp>();
@@ -86,5 +87,6 @@ public static class TicketVoidingSystemService
 
         // SignalR
         services.AddSingleton<NotificationSignalRService, NotificationSignalRServiceImp>();
+
     }
 }
