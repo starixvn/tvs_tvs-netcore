@@ -9,6 +9,7 @@ import { LogInfoService } from './log-info.service';
 import { SaveRequestArg } from './save-request.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 import { ValidationService } from './validation.service';
+import { RelatedEventService } from './related-event.service';
 
 @Injectable()
 export class SaveRequestService {
@@ -17,7 +18,8 @@ export class SaveRequestService {
   private readonly addRequestService = inject(AddRequestService);
   private readonly logInfoService = inject(LogInfoService);
   private readonly popupService = inject(PopupService);
-
+  private readonly relatedEventService = inject(RelatedEventService);
+  
   async onYesConfirmAddRequest(args: SaveRequestArg): Promise<void> {
     // validate again
     const validation = args.isVoided ? { isValid: true } as ValidationBusinessRuleOutput : await this.checkValidationBeforeSaveRequest(args as ValidationBusinessRuleArgs);
@@ -53,7 +55,7 @@ export class SaveRequestService {
     const relatedEvents = args.allSelectedEvents.map(x => this.logInfoService.mapRelatedEventToWrongScoreModel(x, args.defaultFilterTimeWithAllowance));
     args.wrongScoreModels = [...args.wrongScoreModels, ...relatedEvents];
     await this.logInfoService.getLogInfo(args.isEdit, args.requestId, args.filter, args.primitiveProps, args.wrongScoreModels, args.wrongScoreModels[0].matchId, args.defaultFilterTimeWithAllowance);
-
+    this.relatedEventService.updateLogInfoRelatedEvent(args.wrongScoreModels, args.allSelectedEvents, []);
     args.addRequestStore.changeBlockingUiStatus(false);
 
     if (!this.validationService.isValidAllScores(args.wrongScoreModels)) {

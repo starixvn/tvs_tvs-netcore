@@ -308,6 +308,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   private async saveWhenRequestNotVoided(): Promise<void> {
     const validation = await this.saveRequestService.checkValidationBeforeSaveRequest(this.createValidationBusinessRuleArgs());
     if (validation.isValid) {
+      this.allRelatedEvents = this.allRelatedEvents.map(event => _.cloneDeep(event));
       this.openConfirmWrongScore();
     } else {
       this.addRequestStore.changeSavingRequestStatus(false);
