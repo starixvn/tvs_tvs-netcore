@@ -12,7 +12,5 @@ public class ValidationProviderMistake
     public string InvalidTransIds { get; set; }
     public string ExistingReqTransIds { get; set; }
     public string UnsupportedTransIds { get; set; }
-    
     public int MatchId { get; set; }
 }
-

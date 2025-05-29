@@ -41,14 +41,17 @@ public class CheckProviderMistakeTicketsServiceImp(IDynamicRepository repository
     {
         var validations = resultInMultipleDbServers.Select(r => r.Validation).Where(v => v != null);
         var validTransId = validations.Where(x => !string.IsNullOrWhiteSpace(x.ValidTransIds)).SelectMany(v => v.ValidTransIds.Split(',', StringSplitOptions.RemoveEmptyEntries)).Distinct();
-        var existingReqTransId = validations.Where(x => !string.IsNullOrWhiteSpace(x.ExistingReqTransIds)).SelectMany(v => v.ExistingReqTransIds.Split(',', StringSplitOptions.RemoveEmptyEntries)).Distinct()
+        var existingReqTransId = validations.Where(x => !string.IsNullOrWhiteSpace(x.ExistingReqTransIds))
+            .SelectMany(v => v.ExistingReqTransIds.Split(',', StringSplitOptions.RemoveEmptyEntries)).Distinct()
             .Except(validTransId);
-        var unsupportedTransId = validations.Where(x => !string.IsNullOrWhiteSpace(x.UnsupportedTransIds)).SelectMany(v => v.UnsupportedTransIds.Split(',', StringSplitOptions.RemoveEmptyEntries)).Distinct()
+        var unsupportedTransId = validations.Where(x => !string.IsNullOrWhiteSpace(x.UnsupportedTransIds))
+            .SelectMany(v => v.UnsupportedTransIds.Split(',', StringSplitOptions.RemoveEmptyEntries)).Distinct()
             .Except(validTransId);
-        var invalidTransId = validations.Where(x => !string.IsNullOrWhiteSpace(x.InvalidTransIds)).SelectMany(v => v.InvalidTransIds.Split(',', StringSplitOptions.RemoveEmptyEntries)).Distinct()
+        var invalidTransId = validations.Where(x => !string.IsNullOrWhiteSpace(x.InvalidTransIds))
+            .SelectMany(v => v.InvalidTransIds.Split(',', StringSplitOptions.RemoveEmptyEntries)).Distinct()
             .Except(validTransId).Except(existingReqTransId).Except(unsupportedTransId);
         var validMatchId = validations.Where(x => x.MatchId > 0).Select(x => x.MatchId).FirstOrDefault();
-        
+
         var transInfoAddRequestModels =
             resultInMultipleDbServers.Select(x => x.TransInfoAddRequest).Where(m => m != null);
         var markTransIds = transInfoAddRequestModels.Where(x => !string.IsNullOrWhiteSpace(x.MarkTransIds)).Select(x => x.MarkTransIds);
