@@ -7,24 +7,26 @@ namespace TicketVoidingSystem.Services;
 public interface OperatorKeyEncryptionService
 {
     string EncryptOperatorKey(string operatorKey);
+
     string DecryptOperatorKey(string encryptedKey);
+
     Result ValidateOperatorKey(string encryptedKey);
 }
 
 public class OperatorKeyEncryptionServiceImp : OperatorKeyEncryptionService
-{       
-    private const string TVS_SecretKey = "TVS_2025_7x9k#mP2$vL5nQ8@jR3"; 
+{
+    private const string TVS_SecretKey = "TVS_2025_7x9k#mP2$vL5nQ8@jR3";
     private const string OriginOperatorKey = "aB3$kL9#mN2@pQ5";
 
-    public string EncryptOperatorKey(string normalKey)
+    public string EncryptOperatorKey(string operatorKey)
     {
-        if (string.IsNullOrEmpty(normalKey))
+        if (string.IsNullOrEmpty(operatorKey))
         {
-            throw new ArgumentNullException(nameof(normalKey));
+            throw new ArgumentNullException(nameof(operatorKey));
         }
 
         var keyBytes = Encoding.UTF8.GetBytes(TVS_SecretKey);
-        var textBytes = Encoding.UTF8.GetBytes(normalKey);
+        var textBytes = Encoding.UTF8.GetBytes(operatorKey);
         var result = new byte[textBytes.Length];
 
         for (var i = 0; i < textBytes.Length; i++)
@@ -85,4 +87,4 @@ public class OperatorKeyEncryptionServiceImp : OperatorKeyEncryptionService
 
         return new Result { ErrorCode = 0 }; // Success
     }
-} 
+}
