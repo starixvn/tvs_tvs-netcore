@@ -346,10 +346,7 @@ export class RequestListComponent implements OnInit, OnChanges {
       StaticService.isWrongOdds,
       StaticService.isWrong1stHDP,
       StaticService.isWrong1stOU,
-      StaticService.isWrongMarketOffered,
-      StaticService.isTechnicalError,
-      StaticService.isWrongOddsSportsBook,
-       StaticService.isMatchEarlyCompleted
+      StaticService.isMatchEarlyCompleted
     ].some(fn => fn(issueTypeStr)) && !this.isTechnicalErrorProviderMistake(issueTypeId, details);
   }
 
