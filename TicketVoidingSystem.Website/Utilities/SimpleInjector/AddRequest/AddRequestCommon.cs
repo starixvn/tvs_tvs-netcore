@@ -4,6 +4,7 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.PoolHouse;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.TechnicalError;
 
 namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.AddRequest;
 
@@ -34,6 +35,8 @@ public static class AddRequestCommon
         services.AddTransient<AdvancedModeService, AdvancedModeServiceImp>();
         services.AddTransient<GetLogInfoTicketsService, GetLogInfoTicketsServiceImp>();
         services.AddTransient<GetDecidedByService, GetDecidedByServiceImp>();
+        services.AddTransient<CheckProviderMistakeTicketsService, CheckProviderMistakeTicketsServiceImp>();
+        services.AddTransient<AddRequestAutoVoidProviderMistakeService, AddRequestAutoVoidProviderMistakeServiceImp>();
         services.RegisterAbnormalBetServices();
         services.RegisterAbnormalAccountServices();
     }

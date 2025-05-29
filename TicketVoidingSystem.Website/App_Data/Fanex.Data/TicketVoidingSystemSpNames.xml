@@ -241,6 +241,11 @@
         <Setting Key="DBSITE02.TicketVoiding_Void14_Select" SpName="TicketVoiding_Void14_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSITE03.TicketVoiding_Void14_Select" SpName="TicketVoiding_Void14_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
 
+        <Setting Key="DBCTG.TicketVoiding_TechnicalError_CheckProviderMistakeTickets" SpName="TicketVoiding_TechnicalError_CheckProviderMistakeTickets" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE01.TicketVoiding_TechnicalError_CheckProviderMistakeTickets" SpName="TicketVoiding_TechnicalError_CheckProviderMistakeTickets" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE02.TicketVoiding_TechnicalError_CheckProviderMistakeTickets" SpName="TicketVoiding_TechnicalError_CheckProviderMistakeTickets" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE03.TicketVoiding_TechnicalError_CheckProviderMistakeTickets" SpName="TicketVoiding_TechnicalError_CheckProviderMistakeTickets" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
+
         <Setting Key="TicketVoiding_Request_CheckDuplicateTickets" SpName="TicketVoiding_Request_CheckDuplicateTickets" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_DuplicateTickets_TransIds_Select" SpName="TicketVoiding_DuplicateTickets_TransIds_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_DuplicateTickets_Select" SpName="TicketVoiding_DuplicateTickets_Select" DbName="DBRPT.bodb_Report.wsv_nap" TimeOut="600" />

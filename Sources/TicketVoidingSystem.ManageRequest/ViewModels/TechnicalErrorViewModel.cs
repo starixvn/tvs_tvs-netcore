@@ -1,5 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.SharedApi.Models.BetTypes;
+﻿using TicketVoidingSystem.SharedApi.Models.BetTypes;
 
 namespace TicketVoidingSystem.ManageRequest.ViewModels;
 
@@ -17,4 +16,5 @@ public class TechnicalErrorViewModel
     public LogInfoDetail? LogInfoDetail { get; set; }
     public IEnumerable<BetTypeTicketsInfo>? BetTypeCount { get; set; }
     public IEnumerable<AllBetTypesSelection> AllBetTypesSelection { get; set; }
+    public string? TransIds { get; set; } //For provider mistake
 }

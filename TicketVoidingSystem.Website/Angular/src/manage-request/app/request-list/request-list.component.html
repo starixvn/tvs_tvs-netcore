@@ -67,8 +67,8 @@
             </td>
             <td class="col-tb-2" [attr.rowspan]="item.details.length">
               <div class="d-flex align-items-center justify-content-center">
-                <span class="request-no" [ngClass]="{'link':checkCanEdit(item.eventDate, item.issueTypeId, item.createdDate)}"
-                  (click)="openRequestDetails(item.requestId, item.eventDate, item.issueTypeId, item.createdDate)">{{item.requestId}}
+                <span class="request-no" [ngClass]="{'link':checkCanEdit(item.eventDate, item.issueTypeId, item.createdDate, item.details)}"
+                  (click)="openRequestDetails(item.requestId, item.eventDate, item.issueTypeId, item.createdDate, item.details)">{{item.requestId}}
                 </span>
               </div>
               <div class="mb-1 mt-1">
@@ -90,7 +90,7 @@
               </div>
             </td>
             <td class="col-tb-5">
-              <i [hidden]="!isCanCopyRequestDescription(item.issueTypeId)" [ngClass]="item.processingCopyDescriptionClass ?? 'fa fa-paste copy-request-info'" (click)="copyRequestDescriptionSingleMatch(item, item.details[0].matchId, item.details[0].requestDetailId)" aria-hidden="true"></i>
+              <i [hidden]="!isCanCopyRequestDescription(item.issueTypeId, item.details)" [ngClass]="item.processingCopyDescriptionClass ?? 'fa fa-paste copy-request-info'" (click)="copyRequestDescriptionSingleMatch(item, item.details[0].matchId, item.details[0].requestDetailId)" aria-hidden="true"></i>
               <div class="text-end" [innerHtml]="item.details[0].description | sanitizeHtml"></div>
             </td>
             <td class="col-tb-6" [attr.rowspan]="item.details.length">
@@ -138,7 +138,7 @@
               </div>
             </td>
             <td class="col-tb-14" [attr.rowspan]="item.details.length">
-              <div><em *ngIf="checkCanVoid(item.actionId, item.eventDate, item.issueTypeId, item.createdDate)" class="icon-void"
+              <div><em *ngIf="checkCanVoid(item.actionId, item.eventDate, item.issueTypeId, item.createdDate, item.details)" class="icon-void"
                   (click)="openVoidRequest(item.requestId)"></em></div>
             </td>
           </tr>
@@ -152,7 +152,7 @@
                 </div>
               </td>
               <td *ngIf="index>0" class="text-end">
-                <i *ngIf="isCanCopyRequestDescription(item.issueTypeId)"  [ngClass]="detail.processingCopyDescriptionClass ?? 'fa fa-paste copy-request-info'" (click)="copyRequestDescriptionMultiMatches(item, detail.matchId, detail)" aria-hidden="true"></i>
+                <i *ngIf="isCanCopyRequestDescription(item.issueTypeId, item.details)"  [ngClass]="detail.processingCopyDescriptionClass ?? 'fa fa-paste copy-request-info'" (click)="copyRequestDescriptionMultiMatches(item, detail.matchId, detail)" aria-hidden="true"></i>
                 <div [innerHtml]="detail.description | sanitizeHtml"></div>
               </td>
               <td *ngIf="index>0" class="col-tb-13">
