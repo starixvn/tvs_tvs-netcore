@@ -57,8 +57,7 @@ export class SaveRequestService {
     await this.logInfoService.getLogInfo(args.isEdit, args.requestId, args.filter, args.primitiveProps, args.wrongScoreModels, args.wrongScoreModels[0].matchId, args.defaultFilterTimeWithAllowance);
     this.relatedEventService.updateLogInfoRelatedEvent(args.wrongScoreModels, args.allSelectedEvents, []);
     args.addRequestStore.changeBlockingUiStatus(false);
-
-    if (!this.validationService.isValidAllScores(args.wrongScoreModels)) {
+    if (!this.validationService.isAllWrongScoreModelsValid(args.wrongScoreModels, args.primitiveProps.filterBy)) {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
 
