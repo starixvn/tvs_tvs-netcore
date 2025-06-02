@@ -76,7 +76,7 @@ export class SaveRequestService {
     arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
     arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoDetail?.settleCount > 0;
     arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.messageValidationLogInfo?.length > 0;
-    arg.confirmAddRequest.isShowSubIssueType = true;
+    arg.confirmAddRequest.isShowSubIssueType = !StaticService.isMatchEarlyCompleted(arg.filter.issueTypeId);
     arg.confirmAddRequest.isOpen = true;
     arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
   }

@@ -96,12 +96,11 @@ public class GetInfoTicketsForMessageImp(SpecialBetTypeContentService specialBet
         var allBetTypesInning = betTypesModel.BetTypes.Where(y => y.Name.Contains("X Inning")).Select(x => int.Parse(x.Id));
         var betIdStrings = voidTickets
             .Where(x => allBetTypesInning.Contains(x.BetType))
-            .Select(x => x.IsMixParlay ? x.SubBetCheck?.ToString() : x.BetId.ToString())
-            .ToList();
+            .Select(x => x.IsMixParlay ? x.SubBetCheck?.ToString() : x.BetId.ToString());
         var inningValues = betIdStrings.Select(x => x.SubstringBypassLength(1, 2));
 
         return string.Join(",", inningValues
             .Select(x => int.TryParse(x, out var value) ? value.ToString() : null).Distinct()
-            .Where(x => x != null));
+            .Where(x => x != null).OrderBy(x => x));
     }
 }
