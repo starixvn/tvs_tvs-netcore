@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { DateTimeFormat, TVSRequestActionType } from '../../../../../utility/constants/config';
+import { DateTimeFormat, TVSRequestActionType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { AddRequestStore } from '../../add-request.store';
@@ -91,6 +91,28 @@ export class ValidationService {
     return true;
   }
 
+  isAllWrongScoreModelsValid(wrongScores: WrongScoreModel[], filterBy: number): boolean {
+    if(filterBy === TVSRequestFilterBy.CHECK_TIME){
+      return this.isValidAllEventCheckTime(wrongScores);
+    }
+    return this.isValidAllScores(wrongScores);
+  }
+
+  private isValidAllEventCheckTime(wrongScores: WrongScoreModel[]): boolean {
+    const mainEvent = wrongScores.find(x => x.isMainMatch);
+    if (mainEvent.messageValidationLogInfo.some(x => x.isError)) {
+      return false;
+      }
+
+      wrongScores.filter(x => !x.isMainMatch).forEach(x => {
+        if (x.messageValidationLogInfo.some(y => y.isError && !y.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE))) {
+          return false;
+        }
+      });
+
+      return true;
+  }
+  
   public isValidAllScores(wrongScores: WrongScoreModel[]): boolean {
     return wrongScores.some(x => x.messageValidationLogInfo?.every(y => !y.isError));
   }

@@ -186,8 +186,9 @@ export class RelatedEventService {
   public async getDataRelatedEventWhenSearch(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<void> {
     const eventsGetLogInfo = await this.preparingModelGetLogInfo(relatedEvents, arg);
     await this.logInfoService.getLogInfo(arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps, eventsGetLogInfo, arg.mainEvent.matchId, arg.defaultFilterTimeWithAllowance);
-    this.addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo, arg.mainEvent, arg.allEvents, relatedEvents);
-    arg.allEvents = _.orderBy(_.uniqBy(arg.allEvents, x => x.matchId), ['matchCode'], ['asc']); 
+    this.updateLogInfoMainEvent(eventsGetLogInfo, arg.mainEvent);
+    this.updateLogInfoRelatedEvent(eventsGetLogInfo, arg.allEvents, relatedEvents);
+    arg.allEvents = _.orderBy(_.uniqBy(arg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
   }
 
   private async preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<WrongScoreModel[]> {
@@ -200,17 +201,18 @@ export class RelatedEventService {
     return eventsGetLogInfo;
   }
 
-  private async addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: WrongScoreModel[], mainEvent: WrongScoreModel,
-    allEvents: LogInfoRelatedEvent[], relatedEvents: ChildMatchModel[]) {
+  updateLogInfoMainEvent(eventsGetLogInfo: WrongScoreModel[], mainEvent: WrongScoreModel){
     const mainEventLogInfo = eventsGetLogInfo.find(x => x.isMainMatch);
     mainEvent.logInfoDetail = mainEventLogInfo.logInfoDetail;
     mainEvent.messageValidationLogInfo = mainEventLogInfo.messageValidationLogInfo;
     mainEvent.voidFromTime = mainEventLogInfo.voidFromTime;
     mainEvent.voidFromTime = mainEventLogInfo.voidToTime;
+  }
 
+  async updateLogInfoRelatedEvent(eventsGetLogInfo: WrongScoreModel[], allOldEvents: LogInfoRelatedEvent[], relatedEvents: ChildMatchModel[]) {
     const allRelatedEventLogInfo = eventsGetLogInfo.filter(x => !x.isMainMatch);
     for (const event of allRelatedEventLogInfo) {
-      const relatedEvent = allEvents.find(y => y.matchId === event.matchId);
+      const relatedEvent = allOldEvents.find(y => y.matchId === event.matchId);
       if (relatedEvent) {
         relatedEvent.logInfoDetail = event.logInfoDetail;
         relatedEvent.messageValidationLogInfo = event.messageValidationLogInfo;
@@ -221,7 +223,7 @@ export class RelatedEventService {
       }
       else if (event.logInfoDetail) {
         const relatedEventModel = await this.getLogInfoRelatedEvent(event, relatedEvents);
-        allEvents.push(relatedEventModel);
+        allOldEvents.push(relatedEventModel);
       }
     }
   }
