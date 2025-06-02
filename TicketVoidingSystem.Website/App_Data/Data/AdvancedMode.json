@@ -26,7 +26,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -83,7 +84,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -115,7 +117,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -147,7 +150,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -204,7 +208,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -311,7 +316,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -399,7 +405,6 @@
       "Type": 1,
       "BetTypes": "183"
     },
-
     {
       "Selections": [
         {
@@ -425,7 +430,6 @@
       "Type": 1,
       "BetTypes": "185"
     },
-
     {
       "Selections": [
         {
@@ -826,7 +830,6 @@
       "Type": 1,
       "BetTypes": "603"
     },
-
     {
       "Selections": [
         {
@@ -978,7 +981,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -1035,7 +1039,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -1067,7 +1072,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -1270,7 +1276,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -1377,7 +1384,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -1463,7 +1471,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -1499,7 +1508,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -1531,7 +1541,8 @@
         {
           "Name": "Time:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -1563,7 +1574,8 @@
         {
           "Name": "Time:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -1599,7 +1611,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -1635,7 +1648,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -1735,7 +1749,6 @@
       "Type": 1,
       "BetTypes": "160"
     },
-
     {
       "Selections": [
         {
@@ -2513,7 +2526,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -2705,7 +2719,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -2737,7 +2752,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -2769,7 +2785,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -2801,7 +2818,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -2858,7 +2876,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -2890,7 +2909,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -2922,7 +2942,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -2954,7 +2975,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -2986,7 +3008,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3018,7 +3041,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3050,7 +3074,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3082,7 +3107,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3114,7 +3140,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3146,7 +3173,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3178,7 +3206,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3210,7 +3239,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3242,7 +3272,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3274,7 +3305,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3306,7 +3338,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3338,7 +3371,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3370,7 +3404,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3402,7 +3437,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -3434,7 +3470,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -5548,7 +5585,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -5812,7 +5850,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -5869,7 +5908,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -5926,7 +5966,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -11921,7 +11962,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -12165,7 +12207,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -12226,7 +12269,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -12348,7 +12392,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -12409,7 +12454,8 @@
         {
           "Name": "O/U Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -20982,7 +21028,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21059,7 +21106,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21136,7 +21184,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21213,7 +21262,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21290,7 +21340,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21367,7 +21418,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21444,7 +21496,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21521,7 +21574,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21598,7 +21652,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21675,7 +21730,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21752,7 +21808,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21829,7 +21886,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21906,7 +21964,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -21983,7 +22042,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22060,7 +22120,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22137,7 +22198,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22214,7 +22276,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22291,7 +22354,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22368,7 +22432,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22445,7 +22510,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22522,7 +22588,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22599,7 +22666,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22676,7 +22744,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22753,7 +22822,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22830,7 +22900,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22907,7 +22978,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -22984,7 +23056,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23061,7 +23134,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23138,7 +23212,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23215,7 +23290,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23292,7 +23368,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23369,7 +23446,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23446,7 +23524,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23523,7 +23602,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23600,7 +23680,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23677,7 +23758,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23754,7 +23836,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23831,7 +23914,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23908,7 +23992,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -23985,7 +24070,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -24062,7 +24148,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -24139,7 +24226,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -24216,7 +24304,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -24293,7 +24382,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -24370,7 +24460,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -24447,7 +24538,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -24524,7 +24616,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -24601,7 +24694,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -24678,7 +24772,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -24755,7 +24850,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -24832,7 +24928,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -24909,7 +25006,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -26952,7 +27050,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -27165,7 +27264,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -28299,7 +28399,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -28360,7 +28461,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -28421,7 +28523,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -28482,7 +28585,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -30785,7 +30889,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -31707,7 +31812,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -34321,7 +34427,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -34728,7 +34835,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -34802,7 +34910,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -34876,7 +34985,8 @@
         {
           "Name": "HDP:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -34950,7 +35060,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -35024,7 +35135,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -35098,7 +35210,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -35172,7 +35285,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,
@@ -35246,7 +35360,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Type": 8,

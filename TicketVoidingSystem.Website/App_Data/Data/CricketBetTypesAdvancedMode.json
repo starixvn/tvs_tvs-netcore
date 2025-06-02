@@ -49,7 +49,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-
       "Name": "",
       "Value": "",
       "Type": 1,
@@ -81,7 +80,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -122,7 +122,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -163,7 +164,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -204,7 +206,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -245,7 +248,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -286,7 +290,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -327,7 +332,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -371,7 +377,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -415,7 +422,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -459,7 +467,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -503,7 +512,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -547,7 +557,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -591,7 +602,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -630,7 +642,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -669,7 +682,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -708,7 +722,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -747,7 +762,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -786,7 +802,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -825,7 +842,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over:",
@@ -869,7 +887,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over:",
@@ -913,7 +932,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -957,7 +977,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -1001,7 +1022,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -1045,7 +1067,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -1089,7 +1112,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -1133,7 +1157,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -1185,7 +1210,6 @@
       "Type": 1,
       "BetTypes": "9434"
     },
-
     {
       "Selections": [
         {
@@ -1254,7 +1278,6 @@
       "Type": 1,
       "BetTypes": "9436"
     },
-
     {
       "Selections": [
         {
@@ -1289,7 +1312,6 @@
       "Type": 1,
       "BetTypes": "9437"
     },
-
     {
       "Selections": [
         {
@@ -1500,7 +1522,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -1541,7 +1564,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -1582,7 +1606,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -1623,7 +1648,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -1664,7 +1690,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -1705,7 +1732,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -1746,7 +1774,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -1787,7 +1816,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -1828,7 +1858,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -1869,7 +1900,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -1910,7 +1942,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -1951,7 +1984,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -1992,7 +2026,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -2033,7 +2068,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -2074,7 +2110,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -2115,7 +2152,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -2156,7 +2194,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -2197,7 +2236,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -2238,7 +2278,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -2279,7 +2320,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -4275,7 +4317,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4315,7 +4358,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4355,7 +4399,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4395,7 +4440,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4435,7 +4481,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4475,7 +4522,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4520,7 +4568,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4565,7 +4614,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4610,7 +4660,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4655,7 +4706,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4700,7 +4752,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4745,7 +4798,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4790,7 +4844,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4835,7 +4890,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4880,7 +4936,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4925,7 +4982,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -4970,7 +5028,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5015,7 +5074,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5055,7 +5115,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5095,7 +5156,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5135,7 +5197,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5175,7 +5238,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5215,7 +5279,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5255,7 +5320,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5295,7 +5361,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5335,7 +5402,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5375,7 +5443,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5415,7 +5484,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5455,7 +5525,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5495,7 +5566,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5535,7 +5607,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5575,7 +5648,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5615,7 +5689,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5655,7 +5730,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5695,7 +5771,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5735,7 +5812,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -5774,7 +5852,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Name": "",
@@ -5835,7 +5914,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -5879,7 +5959,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -5923,7 +6004,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -5967,7 +6049,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -6011,7 +6094,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -6055,7 +6139,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over/Wicket:",
@@ -6099,7 +6184,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over:",
@@ -6143,7 +6229,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over:",
@@ -6218,7 +6305,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over:",
@@ -6262,7 +6350,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Over:",
@@ -7561,7 +7650,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -7637,7 +7727,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -7713,7 +7804,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -7789,7 +7881,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -7865,7 +7958,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -7941,7 +8035,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8017,7 +8112,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8093,7 +8189,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8169,7 +8266,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8245,7 +8343,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8321,7 +8420,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8365,7 +8465,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8409,7 +8510,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8453,7 +8555,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8497,7 +8600,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8541,7 +8645,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8585,7 +8690,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8629,7 +8735,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8668,7 +8775,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -8709,7 +8817,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         }
       ],
       "Inputs": [
@@ -8810,7 +8919,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8855,7 +8965,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8900,7 +9011,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8945,7 +9057,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -8990,7 +9103,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9035,7 +9149,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9080,7 +9195,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9125,7 +9241,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9170,7 +9287,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9215,7 +9333,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9260,7 +9379,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9305,7 +9425,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9350,7 +9471,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9395,7 +9517,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9440,7 +9563,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9485,7 +9609,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9525,7 +9650,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9565,7 +9691,8 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9609,7 +9736,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9653,7 +9781,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9697,7 +9826,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9741,7 +9871,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9785,7 +9916,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9829,7 +9961,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9873,7 +10006,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9917,7 +10051,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -9961,7 +10096,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
@@ -10005,7 +10141,8 @@
         {
           "Name": "Value:",
           "Value": "",
-          "XmlAttribute": "ValueHdp1"
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",
