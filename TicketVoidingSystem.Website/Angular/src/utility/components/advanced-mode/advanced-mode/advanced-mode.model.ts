@@ -8,13 +8,15 @@ export class Item {
   flag: boolean;
   isChecked: boolean;
   xmlAttribute: string;
+  isMultiple: boolean;
 
-  constructor(name: string, value: string, flag: boolean, xmlAttribute: string) {
+  constructor(name: string, value: string, flag: boolean, xmlAttribute: string, isMultiple: boolean) {
     this.name = name;
     this.value = value;
     this.flag = flag;
     this.isChecked = false;
     this.xmlAttribute = xmlAttribute;
+    this.isMultiple = isMultiple;
   }
 }
 
@@ -150,7 +152,7 @@ export class BetTeam {
     this.items = [];
     if (items !== null) {
       items.forEach(item => {
-        const temp = new Item(item.name, item.value, item.flag, item.xmlAttribute);
+        const temp = new Item(item.name, item.value, item.flag, item.xmlAttribute, item.isMultiple);
         this.items.push(temp);
       });
     }
@@ -160,7 +162,7 @@ export class BetTeam {
     this.inputs = [];
     if (inputs !== null) {
       inputs.forEach(input => {
-        const temp = new Item(input.name, input.value, input.flag, input.xmlAttribute);
+        const temp = new Item(input.name, input.value, input.flag, input.xmlAttribute, input.isMultiple);
         this.inputs.push(temp);
       });
     }
@@ -271,7 +273,7 @@ export class BetTeam {
     if (item.name === 'All') {
       return true;
     }
-    
+
     return name === 'HT:' ? this.handler416WithNameIsHT(item) : this.handler416WithNameIsNotHT(item);
   }
 
@@ -437,7 +439,7 @@ export class BetTeam {
         .map(item => item.value)
         .join(',');
   }
-  
+
   updateResult(result: BetTeamResult, attribute: string, value: string) { // NOSONAR
     switch (attribute) {
       case 'BetTeam':
@@ -551,7 +553,7 @@ export class BetTeam {
     }
 
     return ballValue.length === 0 ? `_${overValue}__`: `_${overValue}${ballValue}`
-    
+
   }
 
   private updateForBetType9089(result: BetTeamResult, betTypeId: string): void { // format "Set" attribute: 8XXYY

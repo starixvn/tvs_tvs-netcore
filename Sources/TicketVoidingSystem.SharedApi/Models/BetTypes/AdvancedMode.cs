@@ -8,6 +8,7 @@ public class Item
     public string Value { get; set; }
     public bool Flag { get; set; }
     public string XmlAttribute { get; set; }
+    public bool IsMultiple { get; set; }
 }
 
 public class Selection

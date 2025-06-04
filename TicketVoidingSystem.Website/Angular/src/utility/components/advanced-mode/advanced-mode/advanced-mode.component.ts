@@ -1,22 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject, Input, OnChanges, SimpleChange, ViewEncapsulation } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TEXT } from '../../../../utility/constants/text';
+import { DecimalOnlyDirective, MultipleDecimalDirective, } from '../../../../utility/directives/numbers-only.directive';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
+import { ControlsAllBetTypes } from '../../advanced-mode-add-request/controls-all-bet-types/controls-all-bet-types.model';
 import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection';
+import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { AdvancedModeConstants } from '../advanced-mode.constants';
 import { BetType } from '../group-bettypes/group-bettypes.model';
-import { BetTeam, CheckedBetType, GetPlayersQuery, OddsInfo, Player, Selection } from './advanced-mode.model';
-import { ControlsAllBetTypes } from '../../advanced-mode-add-request/controls-all-bet-types/controls-all-bet-types.model';
-import { AdvancedModeService } from './advanced-mode.service';
-import { TooltipComponent } from '../../tooltip/tooltip.component';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { DecimalOnlyDirective, MultipleDecimalDirective,  } from '../../../../utility/directives/numbers-only.directive';
 import { MultipleSelectComponent } from '../multiple-selection/multiple-select.component';
+import { BetTeam, CheckedBetType, GetPlayersQuery, OddsInfo, Player, Selection } from './advanced-mode.model';
+import { AdvancedModeService } from './advanced-mode.service';
 
 @Component({
   standalone: true,
@@ -360,7 +360,7 @@ export class AdvancedModeComponent implements OnChanges {
   }
 
   checkBetTypesMoreHDP(betTeam: BetTeam) {
-    return betTeam.items.length > 0 && this.betTypesMoreHDP.split(',').includes(betTeam.betTypes);
+    return betTeam.items.length > 0 && betTeam.items[0].value !== '' && this.betTypesMoreHDP.split(',').includes(betTeam.betTypes);
   }
 
   isShowTextBox(betTeam: BetTeam) {
