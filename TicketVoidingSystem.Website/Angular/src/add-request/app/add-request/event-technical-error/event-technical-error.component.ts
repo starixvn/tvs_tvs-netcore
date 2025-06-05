@@ -90,7 +90,8 @@ export class EventTechnicalErrorComponent implements OnInit {
     const query: GetBetTypesQuery = {
       mode: ModeType.SPORT_BOOK,
       matchId: this.eventLeague?.selectedMatch.matchId,
-      timeRanges: [this.createTimeRangeModel(this.logInfoEvent.filterTechnicalErrorModel)]
+      timeRanges: [this.createTimeRangeModel(this.logInfoEvent.filterTechnicalErrorModel)],
+      isGetCancelCashOut: true
     };
     this.addRequestStore.changeBlockingUiStatus(true);
     const data = await this.commonService.getGroupBetTypesTvs(query);

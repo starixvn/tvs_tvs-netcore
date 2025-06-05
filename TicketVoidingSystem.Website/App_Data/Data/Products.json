@@ -246,6 +246,10 @@
         {
           "Name": "RichGaming",
           "Value": "108"
+        },
+        {
+          "Name": "ClotPlay",
+          "Value": "109"
         }
       ]
     },
