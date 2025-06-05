@@ -76,15 +76,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -118,15 +116,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -160,15 +156,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -202,15 +196,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -244,15 +236,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -286,15 +276,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -1518,15 +1506,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -1560,15 +1546,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -1602,15 +1586,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -1644,15 +1626,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -1686,15 +1666,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -1728,15 +1706,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -1770,15 +1746,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -1812,15 +1786,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -1854,15 +1826,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -1896,15 +1866,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -1938,15 +1906,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -1980,15 +1946,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -2022,15 +1986,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -2064,15 +2026,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -2106,15 +2066,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -2148,15 +2106,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -2190,15 +2146,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -2232,15 +2186,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -2274,15 +2226,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -2316,15 +2266,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -4844,8 +4792,7 @@
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value",
-          "IsMultiple": true
+          "XmlAttribute": "Value"
         },
         {
           "Name": "Virtual Head:",
@@ -5848,7 +5795,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -8771,15 +8718,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
@@ -8813,15 +8758,13 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value",
           "IsMultiple": true
-        }
-      ],
-      "Inputs": [
+        },
         {
           "Name": "Virtual Head:",
           "Value": "",
