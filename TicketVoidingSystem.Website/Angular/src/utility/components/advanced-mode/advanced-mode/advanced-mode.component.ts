@@ -62,11 +62,11 @@ export class AdvancedModeComponent implements OnChanges {
 
   renderBetTeams(data: BetTeam[]) {
     this.betTeams = [];
-    data.forEach(item => {
-      const betTeam = new BetTeam([item.name, item.value, item.type, item.betTypes],
+    for (const [index, item] of data.entries()) {
+      const betTeam = new BetTeam([index, item.name, item.value, item.type, item.betTypes],
         item.selections, item.items, item.inputs, this.isShowMultiSelectionList);
       this.betTeams.push(betTeam);
-    });
+    }
   }
 
   renderMapAndRound() {
@@ -205,22 +205,11 @@ export class AdvancedModeComponent implements OnChanges {
   }
 
   validate(): boolean {
-    const result = this.betTeams.every((_, index) => this.checkEmptyCheckbox(true, index));
-    let isValidOddsSpread = true;
-    let isValidHDP = true;
+    return this.betTeams.every(x => this.validateBetTeam(x));
+  }
 
-    this.allBetTypes?.filter(x => x.isChecked && (x.id === 228 || x.id === 229 || this.betTypesMoreHDP.includes(x.id.toString()))).forEach(y => {
-      const betTeam = this.betTeams.find(x => x.checkedBetTypes.some(t => t.split(',').includes(y.id.toString())));
-      if (betTeam) {
-        if (this.isBetTypeSabaTimeMachine(y.id) && !this.validateInputMultipleDecimal(y.id.toString(), betTeam.inputs[0].value, 'bet-type-saba' + y.id.toString())) {
-          isValidOddsSpread = false;
-        } else if (this.isBetTypeMoreHDP(y.id) && !this.validateInputMultipleDecimal(y.id.toString(), betTeam.items[0].value, 'bet-type-more-hdp')) {
-          isValidHDP = false;
-        }
-      }
-    });
-
-    return result && isValidHDP && isValidOddsSpread;
+  isValidInputs(betTeam: BetTeam): boolean {
+    return betTeam.inputs.every(x => this.isValidInputWithToolTip(betTeam.index, x.index, x.isMultiple, x.value));
   }
 
   private isBetTypeSabaTimeMachine(id: number): boolean {
@@ -231,19 +220,30 @@ export class AdvancedModeComponent implements OnChanges {
     return AdvancedModeConstants.BETTYPES_MORE_HDP.split(',').includes(id.toString());
   }
 
-  onChangeInputMultipleDecimal(betTypeId: string, value: string, className: string) {
-    const isValid = this.validateInputMultipleDecimal(betTypeId, value, className);
-    if (!isValid) {
-      const elements = this.element.nativeElement.getElementsByClassName(className);
-      for (let i = 0; i < elements.length; i++) {
-        if (elements[i].contains(document.activeElement)) {
-          this.tooltip.display(className, TEXT.INVALID_INPUT);
-          break;
-        }
-      }
-    } else {
-      this.tooltip.hide();
+  onChangeInputMultipleDecimal(betTeamIndex: number, inputIndex: number, isMultiple: boolean, value: string) {
+    if (!this.isValidInputWithToolTip(betTeamIndex, inputIndex, isMultiple, value)) {
+      return false;
     }
+    this.tooltip.hide();
+    return true;
+  }
+
+  private isValidInputWithToolTip(betTeamIndex: number, inputIndex: number, isMultiple: boolean, value: string): boolean {
+    if (value && !this.isValidInputDecimalValue(isMultiple, value)) {
+      if (!this.isShowContent) {
+        this.showTooltipWhenCollapsed();
+      } else {
+        const className = `bet-team-${betTeamIndex}-input-${inputIndex}`;
+        this.tooltip.display(className, LABELS.INVALID_VALUE);
+      }
+      return false;
+    }
+
+    return true;
+  }
+
+  private showTooltipWhenCollapsed() {
+    this.tooltip.display('advanced-mode-collapsed', TEXT.THERE_ARE_INVALID_FIELDS);
   }
 
   private validateInputMultipleDecimal(betTypeId: string, value: string, className: string): boolean {
@@ -254,6 +254,12 @@ export class AdvancedModeComponent implements OnChanges {
     }
 
     return true;
+  }
+
+  private isValidInputDecimalValue(isMultiple: boolean, value: string): boolean {
+    return isMultiple
+      ? StaticService.isCorrectRegexMultipleDecimal(value)
+      : StaticService.isCorrectRegexSingleDecimal(value);
   }
 
   private checkMultiSelectionListBetTeam(betTeam: BetTeam): boolean {
@@ -272,35 +278,37 @@ export class AdvancedModeComponent implements OnChanges {
     return betTeam.checkedBetTypes.length > 0 && betTeam.type === 1;
   }
 
-  private checkEmptyCheckbox(result: boolean, i: number): boolean { //NOSONAR
-    const betTeam = this.betTeams[i];
+  private validateBetTeam(betTeam: BetTeam): boolean { //NOSONAR
+    let result = true;
     if (betTeam.checkedBetTypes.length > 0) {
       if (betTeam.getItemsValue() === '' && betTeam.type !== AdvancedModeConstants.BETTEAM_TYPE_4) {
         result = false;
         this.isShowContent = true;
-        this.tooltip.display(`bet-team-${i}`, LABELS.SELECT_AT_LEAST_ONE_OPTION);
+        this.tooltip.display(`bet-team-${betTeam.index}`, LABELS.SELECT_AT_LEAST_ONE_OPTION);
       } else if (this.checkMultiSelectionListBetTeam(betTeam) && result) {
         const invalidSelection = betTeam.multiSelectionList.find(x => x.multipleSelect.getValueItems() === '')
         result = false;
         this.isShowContent = true;
-        this.tooltip.display(`multiple-selection-${i}-selection-${betTeam.multiSelectionList.indexOf(invalidSelection)}`, LABELS.SELECT_AT_LEAST_ONE_OPTION);
+        this.tooltip.display(`multiple-selection-${betTeam.index}-selection-${betTeam.multiSelectionList.indexOf(invalidSelection)}`, LABELS.SELECT_AT_LEAST_ONE_OPTION);
       } else if (this.checkMultiSelectionInSelection(betTeam) && result) {
         const invalidSelection = betTeam.selections.find(x => x.multiSelection.multipleSelect.getValueItems() === '')
         result = false;
         this.isShowContent = true;
-        this.tooltip.display(`multiple-selection-${i}-selection-${betTeam.selections.indexOf(invalidSelection)}`, LABELS.SELECT_AT_LEAST_ONE_OPTION);
+        this.tooltip.display(`multiple-selection-${betTeam.index}-selection-${betTeam.selections.indexOf(invalidSelection)}`, LABELS.SELECT_AT_LEAST_ONE_OPTION);
+      } else if (!this.isValidInputs(betTeam) && result) {
+        result = false;
+        this.isShowContent = true;
       }
     }
 
     if (this.checkCheckedBetTypesWithHDPBetType(betTeam) && this.isShowMultiSelectionList && result) {
-      return this.checkEmptyCheckboxWithTicketListing(result, i);
+      return this.checkEmptyCheckboxWithTicketListing(result, betTeam);
     }
 
     return result;
   }
 
-  private checkEmptyCheckboxWithTicketListing(result: boolean, i: number) {
-    const betTeam = this.betTeams[i];
+  private checkEmptyCheckboxWithTicketListing(result: boolean, betTeam: BetTeam) {
     if (betTeam.multiSelectionList?.length > 0) {
       for (let i = 0; i < betTeam.multiSelectionList.length && result; i++) {
         if (betTeam.multiSelectionList[i].multipleSelect !== undefined && betTeam.multiSelectionList[i].multipleSelect.getValueItems() === '' && result) {

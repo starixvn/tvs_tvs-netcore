@@ -1,7 +1,7 @@
 ﻿@if (isShowAdvancedMode) {
   <div class="advanced-mode">
     <fieldset [ngClass]="{'fieldset-collapse': !isShowContent}">
-      <legend title="Collapse advanced mode" (click)="isShowContent = !isShowContent">
+      <legend title="Collapse advanced-mode-collapsed" (click)="isShowContent = !isShowContent">
         <em class="font-small fa"
         [ngClass]="{'fa-minus-circle': isShowContent, 'fa-plus-circle': !isShowContent}"></em>Advanced mode
       </legend>
@@ -69,7 +69,7 @@
         </div>
       }
       @for (betTeam of betTeams; track betTeam; let index = $index) {
-        <div [hidden]="!isShowContent">
+        <div class="bet-team-item" [hidden]="!isShowContent">
           @if (betTeam.checkedBetTypes.length > 0) {
             <div>
               @switch (betTeam.type) {
@@ -146,8 +146,7 @@
                             @for (item of betTeam.items; track item) {
                               <div class="input-item-adv">
                                 <span class="me-1">{{item.name}}</span>
-                                <input class="bet-type-more-hdp-{{index}}" type="text" [(ngModel)]="item.value" [placeholder]="item.isMultiple ? 'Ex: 0.75&1&1.25' : ''"
-                                  (ngModelChange)="onChangeInputMultipleDecimal(betTeam.checkedBetTypes[0],$event,'bet-type-more-hdp-' + index)"
+                                <input class="bet-type-more-hdp-{{index}}" type="text" [(ngModel)]="item.value"
                                   triggers="manual" multipleDecimal>
                                 </div>
                               }
@@ -158,7 +157,9 @@
                               @for (input of betTeam.inputs; track input) {
                                 <div class="input-item-adv">
                                   <span class="me-1">{{input.name}}</span>
-                                  <input type="text" [(ngModel)]="input.value" [disabled]="input.flag" decimalOnly [placeholder]="input.isMultiple ? 'Ex: 0.75&1&1.25' : ''"/>
+                                  <input class="bet-team-{{betTeam.index}}-input-{{input.index}}" type="text" [(ngModel)]="input.value" [disabled]="input.flag" multipleDecimal
+                                  (ngModelChange)="onChangeInputMultipleDecimal(betTeam.index, input.index, input.isMultiple, $event)"
+                                  [placeholder]="input.isMultiple ? 'Ex: 0.75&1&1.25' : ''"/>
                                 </div>
                               }
                             </div>
@@ -415,9 +416,9 @@
                                         @for (input of betTeam.inputs; track input) {
                                           <div class="input-item-adv">
                                             <label class="me-1">{{input.name}}</label>
-                                            <input type="text" class="mg-right-10 bet-type-saba-{{index}}" [ngClass]="'bet-type-saba' + betTeam.checkedBetTypes[0]" [(ngModel)]="input.value"
+                                            <input type="text" class="mg-right-10 bet-team-{{betTeam.index}}-input-{{input.index}}" [ngClass]="'bet-type-saba' + betTeam.checkedBetTypes[0]" [(ngModel)]="input.value"
                                               [placeholder]="input.isMultiple ? 'Ex: 0.75&1&1.25' : ''" multipleDecimal
-                                              (ngModelChange)="onChangeInputMultipleDecimal(betTeam.checkedBetTypes[0],$event,'bet-type-saba-' + index)" triggers="manual">
+                                              (ngModelChange)="onChangeInputMultipleDecimal(betTeam.index, input.index, input.isMultiple, $event)" triggers="manual">
                                             </div>
                                           }
                                         </div>
@@ -493,7 +494,9 @@
                                             @for (input of betTeam.inputs; track input) {
                                               <div class="input-item-adv">
                                                 <span class="me-1">{{input.name}}</span>
-                                                <input type="text" [(ngModel)]="input.value" [disabled]="input.flag" decimalOnly />
+                                                <input class="bet-team-{{betTeam.index}}-input-{{input.index}}" type="text" [(ngModel)]="input.value" [disabled]="input.flag" multipleDecimal
+                                                  (ngModelChange)="onChangeInputMultipleDecimal(betTeam.index, input.index, input.isMultiple, $event)"
+                                                  [placeholder]="input.isMultiple ? 'Ex: 0.75&1&1.25' : ''"/>
                                               </div>
                                             }
                                           </div>
