@@ -22,7 +22,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -80,7 +80,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -113,7 +113,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -146,7 +146,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -204,7 +204,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -312,7 +312,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -977,7 +977,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -1035,7 +1035,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -1068,7 +1068,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -1272,7 +1272,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -1380,7 +1380,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -1467,7 +1467,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -1504,7 +1504,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -1537,7 +1537,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Time:",
           "Value": "",
@@ -1570,7 +1570,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Time:",
           "Value": "",
@@ -1607,7 +1607,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -1644,7 +1644,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -2115,11 +2115,12 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Goal:",
           "Value": "",
-          "XmlAttribute": "Goal"
+          "XmlAttribute": "Goal",
+          "IsMultiple": true
         }
       ],
       "Type": 1,
@@ -2522,7 +2523,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -2715,7 +2716,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -2748,7 +2749,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -2781,7 +2782,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -2814,7 +2815,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -2872,7 +2873,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -2905,7 +2906,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -2938,7 +2939,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -2971,7 +2972,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3004,7 +3005,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3037,7 +3038,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3070,7 +3071,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3103,7 +3104,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3136,7 +3137,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3169,7 +3170,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3202,7 +3203,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3235,7 +3236,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3268,7 +3269,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3301,7 +3302,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3334,7 +3335,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3367,7 +3368,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3400,7 +3401,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3433,7 +3434,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -3466,7 +3467,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -5581,7 +5582,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -5846,7 +5847,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -5904,7 +5905,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -5962,7 +5963,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -9802,6 +9803,7 @@
         {
           "Name": "Value: ",
           "Value": "",
+          "IsMultiple": true,
           "XmlAttribute": "OddsSpread"
         }
       ],
@@ -10206,6 +10208,7 @@
         {
           "Name": "HDP: ",
           "Value": "",
+          "IsMultiple": true,
           "XmlAttribute": "OddsSpread"
         }
       ],
@@ -11958,7 +11961,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -12203,7 +12206,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -12265,7 +12268,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -12388,7 +12391,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -12450,7 +12453,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "O/U Value:",
           "Value": "",
@@ -21024,7 +21027,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -21102,7 +21105,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -21180,7 +21183,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -21258,7 +21261,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -21336,7 +21339,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -21414,7 +21417,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -21492,7 +21495,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -21570,7 +21573,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -21648,7 +21651,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -21726,7 +21729,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -21804,7 +21807,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -21882,7 +21885,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -21960,7 +21963,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -22038,7 +22041,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -22116,7 +22119,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -22194,7 +22197,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -22272,7 +22275,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -22350,7 +22353,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -22428,7 +22431,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -22506,7 +22509,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -22584,7 +22587,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -22662,7 +22665,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -22740,7 +22743,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -22818,7 +22821,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -22896,7 +22899,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -22974,7 +22977,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23052,7 +23055,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23130,7 +23133,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23208,7 +23211,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23286,7 +23289,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23364,7 +23367,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23442,7 +23445,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23520,7 +23523,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23598,7 +23601,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23676,7 +23679,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23754,7 +23757,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23832,7 +23835,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23910,7 +23913,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -23988,7 +23991,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -24066,7 +24069,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -24144,7 +24147,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -24222,7 +24225,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -24300,7 +24303,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -24378,7 +24381,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -24456,7 +24459,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -24534,7 +24537,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -24612,7 +24615,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -24690,7 +24693,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -24768,7 +24771,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -24846,7 +24849,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -24924,7 +24927,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -25002,7 +25005,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -27046,7 +27049,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -27260,7 +27263,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -27928,6 +27931,14 @@
           "XmlAttribute": "BetTeam"
         }
       ],
+      "Inputs": [
+        {
+          "Name": "Value",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp"
+        }
+      ],
       "Type": 8,
       "BetTypes": "708"
     },
@@ -28395,7 +28406,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -28457,7 +28468,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -28519,7 +28530,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -28581,7 +28592,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -30885,7 +30896,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -31808,7 +31819,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -34423,7 +34434,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -34831,7 +34842,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -34906,7 +34917,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -34981,7 +34992,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "HDP:",
           "Value": "",
@@ -35056,7 +35067,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -35131,7 +35142,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -35206,7 +35217,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -35281,7 +35292,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
@@ -35356,7 +35367,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
+      "Inputs": [
         {
           "Name": "Value:",
           "Value": "",
