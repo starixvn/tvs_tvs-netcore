@@ -1,6 +1,5 @@
 ﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
@@ -87,7 +86,7 @@ public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
 
     private bool IsIssueTypesHaveExtraInfoJsonFormat(int issueTypeId)
     {
-        var issueTypesHasJsonFormat = new[] { IssueTypeConstant.WrongMarketOffered, IssueTypeConstant.TechnicalError };
+        var issueTypesHasJsonFormat = new[] { IssueTypeConstant.WrongMarketOffered, IssueTypeConstant.TechnicalError, IssueTypeConstant.MatchEarlyCompleted };
         return issueTypesHasJsonFormat.Contains(issueTypeId);
     }
 
@@ -97,7 +96,6 @@ public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
         {
             return;
         }
-
         var root = requestInfoForCopy.RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
         requestInfoForCopy.IsCheckedVar = root.IsCheckedVar;
         requestInfoForCopy.FilterOddsType = root.FilterOddsType;
