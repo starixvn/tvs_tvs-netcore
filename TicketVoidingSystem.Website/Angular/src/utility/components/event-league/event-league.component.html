@@ -20,10 +20,12 @@
     </div>
   </div>
   <div class="d-flex flex-wrap">
+    @if (isShowLeague) {
     <div class="league col-md-7 col-sm-7 me-4">
       <label class="col-form-label-sm">League</label>
       <span type="text" class="form-control form-control-sm disabled">{{selectedMatch.leagueName}}</span>
     </div>
+    }
     @if (isShowSportType) {
     <div class="sport-name col-md-2 col-sm-2">
       <label class="col-form-label-sm">Sport</label>

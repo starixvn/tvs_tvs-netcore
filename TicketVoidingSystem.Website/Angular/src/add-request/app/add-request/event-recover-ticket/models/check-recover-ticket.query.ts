@@ -4,5 +4,7 @@ export interface CheckRecoverTicketQuery {
   filterBy?: number;
   productIds: string;
   subIssueTypeId: number;
+  isSubParlay: boolean;
+  matchId: number;
   isVoidAllArchivedTickets: boolean;
 }

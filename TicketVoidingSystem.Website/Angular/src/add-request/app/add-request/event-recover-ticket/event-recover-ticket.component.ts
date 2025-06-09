@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { EventLeagueComponent } from 'src/utility/components/event-league/event-league.component';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
@@ -20,7 +21,7 @@ import { BlockUiDirective } from '../../../../utility/components/block-ui/block-
   templateUrl: './event-recover-ticket.component.html',
   styleUrls: ['./event-recover-ticket.component.scss'],
   standalone: true,
-  imports: [BetIdsComponent, NgSelectModule, FormsModule, CommonModule, BlockUiDirective],
+  imports: [BetIdsComponent, NgSelectModule, FormsModule, CommonModule, BlockUiDirective, EventLeagueComponent],
   providers: [SaveRequestService, ValidationService]
 })
 export class EventRecoverTicketComponent implements OnInit {
@@ -53,12 +54,23 @@ export class EventRecoverTicketComponent implements OnInit {
     }
   }
 
-  public async saveRequest(): Promise<void> {
+  async saveRequest(): Promise<void> {
     this.isCancelAfterFocusOutBetIdsEvent = true;
     this.betIdsComponent.triggerFocusOutBetIds();
     this.isCancelAfterFocusOutBetIdsEvent = false;
     this.saveRequestService.saveRequest(this.createSaveRequestArg());
   }
+
+
+  async changeMatchEvent(): Promise<void> {
+    // if (this.eventLeagueComponent?.selectedMatch.matchId) {
+    //   this.logInfoEvent.matchId = this.eventLeagueComponent.selectedMatch.matchId;
+    //   await this.updateModelWhenChangeMatchId();
+    //   this.resetFilterNotParticipate();
+    //   this.primitivePropertyEvent.isShowFilterArea = true;
+    // }
+  }
+
 
   private createSaveRequestArg(): SaveRequestArg {
     const args = new SaveRequestArg();

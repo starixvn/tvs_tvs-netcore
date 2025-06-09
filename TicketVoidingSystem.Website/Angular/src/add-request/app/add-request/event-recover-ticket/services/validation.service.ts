@@ -42,6 +42,8 @@ export class ValidationService {
       filterBy: recoverTicketModel.filterBy,
       productIds: recoverTicketModel.productIds,
       subIssueTypeId: Number(filter.subIssueTypeId),
+      isSubParlay: recoverTicketModel.isSubParlay,
+      matchId: recoverTicketModel.matchId,
       isVoidAllArchivedTickets: permission.isVoidAllArchivedTickets
     };
 
