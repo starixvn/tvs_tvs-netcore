@@ -114,7 +114,7 @@ public class DescriptionElementServiceImp : DescriptionElementService
         var voidType = filterBy == FILTER_BY_ACCEPTED_TIME ? "Void Accept Time" : "Void Trans Time";
         var textColor = filterBy == FILTER_BY_ACCEPTED_TIME ? "text-primary" : "text-success";
 
-        return $"<div class=\"{textColor}\"><div class=\"void-wrong-score\">{voidType} - Void Wrong Score: <span class=\"wrong-score\">{wrongScores}<span></div></div>";
+        return $"<div class=\"{textColor}\"><div class=\"void-wrong-score\">{voidType} - Wrong Score: <span class=\"wrong-score\">{wrongScores}<span></div></div>";
     }
 
     public string BuildMixParlay(int totalTickets)
