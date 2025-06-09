@@ -241,7 +241,7 @@
                 (updateMatchId)="updateMatchId($event)">
               </event-wrong-offered-name>
             }
-            @if (checkAllIssueTypes().isOtherIssues) {
+            @if (checkAllIssueTypes().isOtherIssues || checkAllIssueTypes().isMatchEarlyCompleted) {
               <event-other-issues #eventOtherIssues
                 [userId]="userId"
                 [requestedBy]="requestedBy"

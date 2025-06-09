@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Message } from '../../messages/message';
 import { TemplateContentConst, TemplateReplace } from '../template.const';
 import { TemplateContent, TemplateValue } from '../template.model';
@@ -8,7 +8,7 @@ import { ReplaceMessageService } from './replace-message.service';
   { providedIn: 'root' }
 )
 export class ReplaceScoreService {
-  constructor(private readonly replaceMessageService: ReplaceMessageService) { }
+  private readonly replaceMessageService = inject(ReplaceMessageService);
 
   public execute(templateValue: TemplateValue, outputMessage: Message): void {
     templateValue.isUpdateScoreHaveText ? this.updateScoreHaveText(templateValue, outputMessage) : this.updateScore(templateValue, outputMessage);

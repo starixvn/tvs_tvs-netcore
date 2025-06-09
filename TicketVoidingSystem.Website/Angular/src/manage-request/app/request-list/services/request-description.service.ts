@@ -41,7 +41,8 @@ export class RequestDescriptionService {
       [IssueTypeConstant.WRONG_1ST_HDP]: this.createWrongHdpContent,
       [IssueTypeConstant.WRONG_OU]: this.createWrongOuContent,
       [IssueTypeConstant.WRONG_1ST_OU]: this.createWrongOuContent,
-      [IssueTypeConstant.WRONG_ODDS]: this.createWrongOddsContent
+      [IssueTypeConstant.WRONG_ODDS]: this.createWrongOddsContent,
+      [IssueTypeConstant.MATCH_EARLY_COMPLETED]: this.createMatchEarlyCompletedContent
     };
     const handler = ISSUE_TYPE_HANDLERS[copyInfoResponse.requestInfo.issueTypeId.toString()];
 
@@ -109,6 +110,11 @@ export class RequestDescriptionService {
   }
 
   private createTechnicalErrorContent(copyInfoResponse: CopyRequestInfoResponse): string {
+    const betTypeContent = this.generateBetTypeContent(copyInfoResponse.betTypeTickets);
+    return this.createCommonContent(copyInfoResponse, betTypeContent, '', false, false);
+  }
+
+  private createMatchEarlyCompletedContent(copyInfoResponse: CopyRequestInfoResponse): string {
     const betTypeContent = this.generateBetTypeContent(copyInfoResponse.betTypeTickets);
     return this.createCommonContent(copyInfoResponse, betTypeContent, '', false, false);
   }
@@ -225,7 +231,7 @@ export class RequestDescriptionService {
   private generateRemark(requestInfo: RequestInfoForCopy): string {
     const IssueTypesShowRemark = [IssueTypeConstant.WRONG_KICK_OFF, IssueTypeConstant.TECHNICAL_ERROR, 
       IssueTypeConstant.REDUCED_OVER, IssueTypeConstant.ABANDONED, IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK,
-      IssueTypeConstant.NOT_PARTICIPATE];
+      IssueTypeConstant.NOT_PARTICIPATE, IssueTypeConstant.MATCH_EARLY_COMPLETED];
     if(requestInfo.remark && IssueTypesShowRemark.includes(requestInfo.issueTypeId.toString())){
       return `${requestInfo.remark}\n`;
     }

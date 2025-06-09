@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { GroupLicenseeModel, Licensee } from './licensees.model';
 
 @Component({
+  standalone: true,
   selector: 'licensees',
   templateUrl: './licensees.component.html',
   styleUrls: ['./licensees.component.scss'],
-  standalone: true,
   imports: [FormsModule, CommonModule]
 })
 export class LicenseesComponent {
@@ -15,7 +15,6 @@ export class LicenseesComponent {
   @Input() disabled: boolean;
   @Output() groupLicenseesChange = new EventEmitter<Licensee[]>();
   checkAllLicensee = true;
-  constructor() { }
 
   changeLicensees() {
     this.groupLicenseesChange.emit(this.model.getCheckedLicensees());

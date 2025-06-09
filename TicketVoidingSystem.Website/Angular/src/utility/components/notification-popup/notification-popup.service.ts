@@ -1,4 +1,3 @@
-// notification.service.ts
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpService } from '../../services/http.service';
@@ -8,7 +7,6 @@ import { NotificationModel } from './notification-popup.model';
 export class NotificationPopupService {
   private readonly _open = new BehaviorSubject<boolean>(false);
   isOpen$ = this._open.asObservable();
-
   httpService = inject(HttpService);
 
   toggle() {

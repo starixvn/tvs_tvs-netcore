@@ -15,7 +15,6 @@ import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utili
 import { LABELS } from '../../../../utility/constants/labels';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
-import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestStore } from '../add-request.store';
 import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
@@ -45,13 +44,14 @@ import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
 import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
+import { SanitizeHtmlPipe } from '../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   standalone: true,
   selector: 'event-wrong-score',
   templateUrl: './event-wrong-score.component.html',
   styleUrls: ['./event-wrong-score.component.scss'],
-  imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, PipeModule, ConfirmWrongScoreComponent,
+  imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, SanitizeHtmlPipe, ConfirmWrongScoreComponent,
     LogInfoRelatedEventComponent, AddChildMatchComponent, CommonModule, FormsModule, TooltipComponent, BlockUiDirective, OnlyNumberDirective],
   providers: [EventWrongScoreService, LogInfoService, SaveRequestService, ValidationService, WrongScoreService,
     RelatedEventService, EditRequestService, TvDetectionService]

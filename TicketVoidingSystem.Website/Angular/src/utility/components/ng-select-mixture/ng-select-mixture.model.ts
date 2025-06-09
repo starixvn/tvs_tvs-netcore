@@ -26,7 +26,7 @@ export class NgSelectMixtureModel {
   getValueItems(): string[] {
     const values: string[] = [];
     this.items.forEach(item => {
-      const valueItems = item.getValueChildsChecked();
+      const valueItems = item.getValueChildChecked();
       values.push(...valueItems);
     });
 
@@ -70,9 +70,9 @@ export class NgSelectMixtureModel {
     let text = '';
 
     itemHasChild.forEach(item => {
-      countChecked += item.countChildsChecked();
-      count += item.countChilds;
-      const textItems = item.getTextChildsChecked();
+      countChecked += item.countChildChecked();
+      count += item.countChild;
+      const textItems = item.getTextChildChecked();
 
       if (textItems !== '') {
         text = text === '' ?
@@ -93,7 +93,7 @@ export class NgSelectMixtureModel {
   checkAllItems(isChecked: boolean): void {
     this.items.forEach(item => {
       item.checked = isChecked;
-      item.checkChilds();
+      item.checkChild();
     });
   }
 }

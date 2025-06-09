@@ -1,11 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { LogInfoMessageComponent } from '../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { Item } from '../../../../../utility/models/item.model';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
@@ -13,13 +11,15 @@ import { GroupBetTypeCountModel } from '../../models/get-log-info.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogInfoTechnicalError } from '../models/log-info-technical-error.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   selector: 'log-info-technical-error',
   templateUrl: './log-info-technical-error.component.html',
   styleUrls: ['./log-info-technical-error.component.scss'],
   standalone: true,
-  imports: [AffectedTicketComponent, LogInfoMessageComponent, BlockUiModule, PipeModule],
+  imports: [AffectedTicketComponent, LogInfoMessageComponent, BlockUiDirective, SanitizeHtmlPipe],
   providers: [AffectedTicketService]
 })
 
@@ -29,6 +29,8 @@ export class LogInfoTechnicalErrorComponent {
   @Input() primitiveProps = new PrimitivePropertyEvent();
   @Input() issueTypeId: string;
 
+  private readonly affectedTicketService = inject(AffectedTicketService);
+  
   groupBetTypesCount: GroupBetTypeCountModel[] = [];
   affectedTicketsModel = new AffectedTicketsModel();
   isBlock: boolean;
@@ -46,27 +48,7 @@ export class LogInfoTechnicalErrorComponent {
   }
 
   private updateBetTypeCountModel() {
-    this.groupBetTypesCount = [];
-    const groupBetTypes = _.groupBy(this.logInfo.betTypeCount, item => `"${item.betTypeId}+${item.betId}"`);
-    for (const key in groupBetTypes) {
-      const values = groupBetTypes[key];
-
-      const childBetTypes = values
-        .filter(item => item.playerName)
-        .map(item => {
-          return {
-            name: `${item.playerName} - ${item.ticketsCount} ticket(s)`
-          } as Item;
-        });
-      const group: GroupBetTypeCountModel = {
-        name: values[0].playerName ? `${values[0].betTypeName}:` : `${values[0].betTypeName} - ${values[0].ticketsCount} ticket(s)`,
-        items: childBetTypes
-      };
-
-      this.groupBetTypesCount.push(group);
-    };
-
-    this.affectedTicketsModel.groupBetTypesCount = this.groupBetTypesCount;
+    this.affectedTicketsModel.groupBetTypesCount = this.affectedTicketService.updateBetTypeCountModel(this.logInfo.betTypeCount);
     this.affectedTicketsModel.isShowDetailBetTypeCount = true;
   }
 

@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
-import { PagingComponent } from '../../../../utility/components/paging/paging/paging.component';
-import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { PagingComponent } from '../../../../utility/components/paging/paging.component';
+import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { LogsListComponent } from './logs-list.component';
 import { LogModel } from './logs-list.model';
 import { By } from '@angular/platform-browser';

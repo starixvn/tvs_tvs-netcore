@@ -10,7 +10,7 @@ import { AccountWinlostModel } from '../models/account-winlost.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { TicketStatus } from '../../../../../utility/constants/config';
-import { SortingComponent } from '../../../../../utility/components/sorting/sorting/sorting.component';
+import { SortingComponent } from '../../../../../utility/components/sorting/sorting.component';
 import { EventEmitter, QueryList } from '@angular/core';
 import * as _ from 'lodash';
 import { CheckUsernamesViewModel } from '../models/check-username.model';

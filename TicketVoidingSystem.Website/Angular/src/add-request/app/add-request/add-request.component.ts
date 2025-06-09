@@ -9,7 +9,6 @@ import { IssueTypeConstant } from '../../../utility/constants/issue-type.constan
 import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
 import { CheckIssueTypeObjectType } from '../../../utility/models/check-issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
-import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../utility/services/static.service';
 import { AbnormalAccountOtherComponent } from './abnormal-accounts/abnormal-accounts-other/abnormal-accounts-other.component';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
@@ -49,7 +48,6 @@ import { CopyRequestInfoService } from './services/copy-request-info.service';
   standalone: true,
   imports: [FormsModule,
     CommonModule,
-    PipeModule,
     NgbModule,
     FilterComponent,
     BlockFullUiComponent,
@@ -194,7 +192,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       { condition: checkIssueType.isRecoverTicket, component: this.eventRecoverTicketComponent },
       { condition: checkIssueType.isWrongMarketOffered, component: this.eventWrongMarketOfferedComponent },
       { condition: checkIssueType.isWrongOfferedName, component: this.eventWrongOfferedNameComponent },
-      { condition: checkIssueType.isOtherIssues, component: this.eventOtherIssuesComponent },
+      { condition: checkIssueType.isOtherIssues || checkIssueType.isMatchEarlyCompleted, component: this.eventOtherIssuesComponent },
       { condition: checkIssueType.isTechnicalError, component: this.eventTechnicalErrorComponent }
     ];
 
@@ -296,7 +294,8 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       IssueTypeConstant.TECHNICAL_ERROR,
       IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK,
       IssueTypeConstant.WRONG_OFFERED_NAME,
-      IssueTypeConstant.OTHER_ISSUES
+      IssueTypeConstant.OTHER_ISSUES,
+      IssueTypeConstant.MATCH_EARLY_COMPLETED
     ]
 
     return issueTypesHasSimpleFields.includes(this.model.filter.issueTypeId);

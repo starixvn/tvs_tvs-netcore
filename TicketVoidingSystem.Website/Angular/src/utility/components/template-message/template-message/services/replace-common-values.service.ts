@@ -4,6 +4,7 @@ import { Message } from '../../messages/message';
 import { FormatDateTime, TemplateContentConst, TemplateReplace } from '../template.const';
 import { TemplateContent, TemplateValue } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
+import { OrdinalNumberConstant } from '../../../../constants/ordinal-number.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -32,9 +33,9 @@ export class ReplaceCommonValuesService {
   }
 
   public replaceEventDate(templateValue: TemplateValue, outputMessage: Message): void {
-    let kickOffTimeDateGMT8 = new Date(templateValue.match?.kickOffTime);
+    const kickOffTimeDateGMT8 = new Date(templateValue.match?.kickOffTime);
     kickOffTimeDateGMT8.setHours(kickOffTimeDateGMT8.getHours() - 12);
-    let eventDate = moment(kickOffTimeDateGMT8).format(FormatDateTime.EVENT_DATE);
+    const eventDate = moment(kickOffTimeDateGMT8).format(FormatDateTime.EVENT_DATE);
     this.replaceMessageService.replaceAll(outputMessage, TemplateReplace.EVENT_DATE, eventDate);
   }
 
@@ -69,5 +70,39 @@ export class ReplaceCommonValuesService {
 
   public replaceMap(templateValue: TemplateValue, outputMessage: Message): void {
     this.replaceMessageService.replaceAll(outputMessage, TemplateReplace.MAP, templateValue.smallestMapTicket ? `${templateValue.smallestMapTicket} ` : '');
+  }
+
+  public replaceInning(templateValue: TemplateValue, outputMessage: Message): void {
+    if(templateValue.inning) {
+      const templateInningContent = this.getTemplateInningContent(templateValue.inning);
+      this.replaceMessageService.replaceEachLanguage(outputMessage, TemplateReplace.INNING, templateInningContent);
+    }
+    else {
+      this.replaceMessageService.replaceAll(outputMessage, TemplateReplace.INNING, '');
+    }
+  }
+
+  private getTemplateInningContent(inning: string): TemplateContent {
+    return {
+      msgEnglish:  ` ${TemplateContentConst.AT_INNING.msgEnglish} ${this.getEnglishInning(inning)} ${TemplateContentConst.INNING.msgEnglish}`,
+      msgChineseTraditional: ` ${TemplateContentConst.AT_INNING.msgChineseTraditional} ${this.getChineseTraditionalInning(inning)} ${TemplateContentConst.INNING.msgChineseTraditional}`,
+      msgChineseSimplified: ` ${TemplateContentConst.AT_INNING.msgChineseSimplified} ${this.getChineseSimplifiedInning(inning)} ${TemplateContentConst.INNING.msgChineseSimplified}`,
+      msgChineseNewSimplified: ` ${TemplateContentConst.AT_INNING.msgChineseNewSimplified} ${this.getChineseSimplifiedInning(inning)} ${TemplateContentConst.INNING.msgChineseNewSimplified}`
+    };
+  }
+
+  private getEnglishInning(inning: string): string {
+    const innings = inning.split(',').map(x => OrdinalNumberConstant.ORDINAL_NUMBER.find(y => y.value === x)?.englishValue).join(', ');
+    return innings;
+  }
+
+  private getChineseTraditionalInning(inning: string): string {
+    const innings = inning.split(',').map(x => OrdinalNumberConstant.ORDINAL_NUMBER.find(y => y.value === x)?.chineseTraditionalValue).join(', ');
+    return innings;
+  }
+
+  private getChineseSimplifiedInning(inning: string): string {
+    const innings = inning.split(',').map(x => OrdinalNumberConstant.ORDINAL_NUMBER.find(y => y.value === x)?.chineseSimplifiedValue).join(', ');
+    return innings;
   }
 }

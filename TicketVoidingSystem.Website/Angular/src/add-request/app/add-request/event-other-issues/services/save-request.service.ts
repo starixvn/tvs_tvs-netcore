@@ -76,7 +76,7 @@ export class SaveRequestService {
     arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
     arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoDetail?.settleCount > 0;
     arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.messageValidationLogInfo?.length > 0;
-    arg.confirmAddRequest.isShowSubIssueType = true;
+    arg.confirmAddRequest.isShowSubIssueType = !StaticService.isMatchEarlyCompleted(arg.filter.issueTypeId);
     arg.confirmAddRequest.isOpen = true;
     arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
   }
@@ -99,8 +99,13 @@ export class SaveRequestService {
     query.decidedBy = argOtherIssues.others.decidedBy;
     query.remark = argOtherIssues.others.remark;
     if (!argOtherIssues.filter.isVoided) {
-      query.otherIssuesInfo = this.eventOtherIssuesService.getOtherIssuesModel(
-        argOtherIssues.logInfoEvent, argOtherIssues.filter.subIssueTypeId);
+      const otherIssuesInfo = this.eventOtherIssuesService.getOtherIssuesModel(
+        argOtherIssues.logInfoEvent, argOtherIssues.filter.subIssueTypeId, argOtherIssues.filter.issueTypeId);
+      if(StaticService.isOtherIssues(argOtherIssues.filter.issueTypeId)){
+        query.otherIssuesInfo = otherIssuesInfo;
+      } else {
+        query.matchEarlyCompletedInfo = otherIssuesInfo;
+      }
     }
 
     return query;

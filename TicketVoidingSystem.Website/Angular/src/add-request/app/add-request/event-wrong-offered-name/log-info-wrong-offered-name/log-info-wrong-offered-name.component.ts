@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { TemplateMessageComponent } from '../../../../../utility/components/template-message/template-message/template-message.component';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -17,7 +17,7 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
   templateUrl: './log-info-wrong-offered-name.component.html',
   styleUrls: ['./log-info-wrong-offered-name.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NgbModule, BlockUiModule, TemplateMessageComponent,
+  imports: [FormsModule, CommonModule, NgbModule, BlockUiDirective, TemplateMessageComponent,
     VoidReasonComponent, TicketsComponent]
 })
 export class LogInfoWrongOfferedNameComponent {

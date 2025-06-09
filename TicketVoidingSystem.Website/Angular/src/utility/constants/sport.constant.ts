@@ -6,6 +6,7 @@ export class SportType {
     static readonly BASKETBALL = 2;
     static readonly E_SPORTS = 43;
     static readonly VOLEYBALL = 6;
+    static readonly BASEBALL = 8;
     static readonly BADMINTON = 9;
 }
 

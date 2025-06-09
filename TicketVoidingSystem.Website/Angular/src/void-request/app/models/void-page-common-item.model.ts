@@ -1,7 +1,7 @@
 
 import { RequestDetailViewModel } from "../../../edit-request/app/request.model";
 import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
-import { PagingModel } from "../../../utility/components/paging/paging/paging.model";
+import { PagingModel } from "../../../utility/components/paging/paging.model";
 import { Message } from "../../../utility/components/template-message/messages/message";
 import { TemplateValue } from "../../../utility/components/template-message/template-message/template.model";
 import { SubIssueType } from "../../../utility/models/issue-type.model";

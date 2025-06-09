@@ -1,17 +1,17 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { TicketsModel } from './tickets.model';
 import { NgClass } from '@angular/common';
-import { PagingModule } from '../../../../utility/components/paging/paging.module';
-import { SanitizeHtmlPipe } from '../../../../utility/pipes/sanitize-html.pipe';
+import { PagingComponent } from '../../../../utility/components/paging/paging.component';
+import { SanitizeHtmlPipe } from '../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   standalone: true,
   selector: 'tickets',
   templateUrl: './tickets.component.html',
   styleUrls: ['./tickets.component.scss'],
-  imports: [NgClass, PagingModule, SanitizeHtmlPipe]
+  imports: [NgClass, PagingComponent, SanitizeHtmlPipe]
 })
 export class TicketsComponent {
   @Input() model = new TicketsModel();

@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { MultipleSelectionModule } from '../../../utility/components/multiple-selection/multiple-selection.module';
-import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { Selection } from '../../../utility/models/selection.model';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { AppStore } from '../app.store';
@@ -32,9 +30,7 @@ describe('FilterComponent', () => {
       imports: [
         TestingModule,
         FilterComponent,
-        NgSelectModule,
-        ToolTipModule,
-        MultipleSelectionModule,
+        NgSelectModule
       ],
       providers: [
         FilterService,

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Message } from '../../messages/message';
 import { TemplateContentConst, TemplateReplace } from '../template.const';
 import { TemplateContent, TemplateValue } from '../template.model';
@@ -8,7 +8,7 @@ import { ReplaceMessageService } from './replace-message.service';
   { providedIn: 'root' }
 )
 export class ReplaceAIOMessageService {
-  constructor(private readonly replaceMessageService: ReplaceMessageService) { }
+  private readonly replaceMessageService = inject(ReplaceMessageService);
 
   public execute(isVoidSingleBetPage: boolean, templateValue: TemplateValue, outputMessage: Message): void {
     if ((isVoidSingleBetPage && templateValue.checkAIOMessage) || templateValue.groupPHAffected !== 0) {

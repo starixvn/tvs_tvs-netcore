@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../../utility/constants/labels';
 import { DataPermission } from '../../models/result.model';
@@ -13,8 +13,8 @@ import { AllMarkedTicketModel } from './all-marked-ticket.model';
 import { AutoRefreshComponent } from '../../../../utility/components/auto-refresh/auto-refresh.component';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
-import { PagingComponent } from '../../../../utility/components/paging/paging/paging.component';
-import { SanitizeHtmlPipe } from '../../../../utility/pipes/sanitize-html.pipe';
+import { PagingComponent } from '../../../../utility/components/paging/paging.component';
+import { SanitizeHtmlPipe } from '../../../../utility/modules/sanitize-html.pipe';
 
 enum IconCheckBox {
   none = 0,

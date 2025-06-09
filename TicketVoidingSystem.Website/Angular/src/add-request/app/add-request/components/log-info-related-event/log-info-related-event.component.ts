@@ -11,7 +11,6 @@ import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model
 import { AcceptType, DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { SubIssueType } from '../../../../../utility/models/issue-type.model';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
@@ -22,14 +21,15 @@ import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.mo
 import { LogInfoRelatedEvent } from './log-info-related-event.model';
 import { LogInfoRelatedEventService } from './log-info-related-event.service';
 import { PrimitiveProperty } from './primitive-property.model';
- 
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
+
 @Component({
   standalone: true,
   selector: 'log-info-related-event',
   templateUrl: './log-info-related-event.component.html',
   styleUrls: ['./log-info-related-event.component.scss'],
   imports: [CommonModule, FormsModule, TooltipComponent, NgbModule, SubIssueTypeDialogComponent,
-    FilterTimeWithAllowanceComponent, BlockUiDirective, PipeModule],
+    FilterTimeWithAllowanceComponent, BlockUiDirective, SanitizeHtmlPipe],
   providers: [LogInfoRelatedEventService]
 })
 export class LogInfoRelatedEventComponent {

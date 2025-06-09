@@ -70,6 +70,7 @@ export class AddRequestQuery {
   wrongOfferedNameInfo: WrongOfferedNameModel;
   otherIssuesInfo: OtherIssuesModel;
   technicalErrorInfo: TechnicalErrorModel;
+  matchEarlyCompletedInfo: OtherIssuesModel;
 
   transInfoJson: string;
   unMarkTransIds: string;
@@ -105,4 +106,5 @@ export class GetLogInfoQuery {
   wrongOfferedNameModel?: WrongOfferedNameGetLogInfoQuery;
   otherIssuesModel?: OtherIssuesGetLogInfoQuery;
   technicalErrorModel?: TechnicalErrorGetLogInfoQuery;
+  matchEarlyCompletedModel?: OtherIssuesGetLogInfoQuery;
 }

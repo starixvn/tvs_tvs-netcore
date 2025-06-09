@@ -43,7 +43,7 @@ export class ValidationService {
     return !logInfoOtherIssues.messageValidationLogInfo.some(y => y.isError);
   }
 
-  isSubTypeRestart(subIssueTypeId: string) {
-    return subIssueTypeId === SubIssueTypeConstant.RESTART.toString();
+  isShowFilterTime(issueTypeId: string, subIssueTypeId: string){
+    return !StaticService.isMatchEarlyCompleted(issueTypeId) && subIssueTypeId === SubIssueTypeConstant.RESTART.toString();
   }
 }

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { TicketsListComponent } from './tickets-list.component';
 import { TableTicketsModel } from './table-tickets.model';
-import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../../../utility/components/paging/paging.model';
 import { GroupModel } from './group-tickets.model';
 
 class Helper {

@@ -16,12 +16,12 @@ export class EventOtherIssuesService {
   private readonly commonService = inject(CommonService);
   private readonly validationService = inject(ValidationService);
 
-  async getGroupBetTypes(matchId: number, filterOtherIssuesModel: FilterOtherIssuesModel, subIssueTypeId: string): Promise<GroupBetTypesAddRequestModel> {
+  async getGroupBetTypes(matchId: number, filterOtherIssuesModel: FilterOtherIssuesModel, subIssueTypeId: string, issueTypeId: string): Promise<GroupBetTypesAddRequestModel> {
     const query: GetBetTypesQuery = {
       mode: ModeType.SPORT_BOOK,
       matchId: matchId
     };
-    if (this.validationService.isSubTypeRestart(subIssueTypeId)) {
+    if (this.validationService.isShowFilterTime(issueTypeId, subIssueTypeId)) {
       query.timeRanges = [this.createTimeRangeModel(filterOtherIssuesModel)];
     }
     const data = await this.commonService.getGroupBetTypesTvs(query);
@@ -45,17 +45,18 @@ export class EventOtherIssuesService {
     return event;
   }
 
-  getOtherIssuesModel(logInfoOtherIssues: LogInfoOtherIssues, subIssueTypeId: string): OtherIssuesModel {
+  getOtherIssuesModel(logInfoOtherIssues: LogInfoOtherIssues, subIssueTypeId: string, issueTypeId: string): OtherIssuesModel {
     const model = new OtherIssuesModel();
     model.matchId = logInfoOtherIssues.matchId;
     model.betTeamsResult = logInfoOtherIssues.betTeamsResult;
     model.logInfoDetail = logInfoOtherIssues.logInfoDetail;
     model.subIssueTypeId = Number(subIssueTypeId);
     model.allBetTypesSelection = logInfoOtherIssues.allBetTypesSelection;
-    if (this.validationService.isSubTypeRestart(subIssueTypeId.toString())) {
+    if (this.validationService.isShowFilterTime(issueTypeId, subIssueTypeId.toString())) {
       model.filterFromTransTime = logInfoOtherIssues.filterOtherIssues.fromDateTime;
       model.filterToTransTime = logInfoOtherIssues.filterOtherIssues.toDateTime;
     }
+    model.betTypeCount = logInfoOtherIssues.betTypeCount;
 
     return model;
   }
@@ -69,16 +70,17 @@ export class EventOtherIssuesService {
       fromDateTime: inputModels.filterFromTransTime,
       toDateTime: inputModels.filterToTransTime
     } as FilterOtherIssuesModel;
+    event.betTypeCount = inputModels.betTypeCount;
 
     return event;
   }
 
-  initOtherIssuesGetLogInfoModel(subIssueTypeId: number, logInfo: LogInfoOtherIssues): OtherIssuesGetLogInfoQuery {
+  initOtherIssuesGetLogInfoModel(issueTypeId: string, subIssueTypeId: number, logInfo: LogInfoOtherIssues): OtherIssuesGetLogInfoQuery {
     const model = new OtherIssuesGetLogInfoQuery();
     model.matchId = logInfo.matchId;
     model.subIssueTypeId = subIssueTypeId;
     model.betTeamsResult = logInfo.betTeamsResult;
-    if (this.validationService.isSubTypeRestart(subIssueTypeId.toString())) {
+    if (this.validationService.isShowFilterTime(issueTypeId, subIssueTypeId.toString())) {
       model.filterFromTransTime = logInfo.filterOtherIssues.fromDateTime;
       model.filterToTransTime = logInfo.filterOtherIssues.toDateTime;
     }

@@ -32,6 +32,7 @@ public class TicketsViewModel
     public ContentByLanguageModel BetTypeNameReplaceMessage { get; set; }
     public string SmallestMapTicket { get; set; }
     public short GroupBetTypeId { get; set; }
+    public string Inning { get; set; }
 }
 
 public class TicketViewModel

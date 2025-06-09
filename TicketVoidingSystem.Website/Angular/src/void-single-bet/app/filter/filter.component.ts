@@ -11,7 +11,7 @@ import { DateFullTimeNewComponent } from '../../../utility/components/date-time/
 import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
-import { PagingConstant } from '../../../utility/components/paging/paging/paging.model';
+import { PagingConstant } from '../../../utility/components/paging/paging.model';
 import { TemplateContent } from '../../../utility/components/template-message/template-message/template.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { BetTypeAutoCheckByIssue, BetTypeAutoCheckBySubIssue, BetTypeAutoUnCheckByIssue } from '../../../utility/constants/bettype-auto-check-list.constant';

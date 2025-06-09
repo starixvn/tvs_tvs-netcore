@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../../utility/services/static.service';
-import { SanitizeHtmlPipe } from '../../../../utility/pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   standalone: true,

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { Message } from '../../messages/message';
 import { TemplateContentConst, TemplateReplace } from '../template.const';
@@ -10,11 +10,8 @@ import { TemplateInputsService } from './template-inputs.service';
   { providedIn: 'root' }
 )
 export class TemplateWrongOddsService {
-
-  constructor(
-    private readonly replaceMessageService: ReplaceMessageService,
-    private readonly templateInputsService: TemplateInputsService
-  ) { }
+  private readonly replaceMessageService = inject(ReplaceMessageService);
+  private readonly templateInputsService = inject(TemplateInputsService);
 
   public replaceActualMarketTVS(subIssueTypeId: number, templateValue: TemplateValue, message: Message): void {
     if (subIssueTypeId === SubIssueTypeConstant.HANDICAP || subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_HANDICAP) {

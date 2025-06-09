@@ -49,7 +49,8 @@ public class UpdateListTicketsViewModelServiceTests
             ToTransTime = new DateTime(2023, 5, 9, 2, 2, 2).ZoneManila(),
             FromCheckTime = new DateTime(2023, 5, 7, 2, 2, 2).ZoneManila(),
             ToCheckTime = new DateTime(2023, 5, 9, 2, 2, 2).ZoneManila(),
-            LicenseeAffectedList = licenseeAffectedList.LicenseeAffectedList
+            LicenseeAffectedList = licenseeAffectedList.LicenseeAffectedList,
+            Inning = ""
         };
         var listTicketsViewModel = new ListTicketsViewModel();
         var tickets = new List<GetTicketModel>
@@ -101,7 +102,7 @@ public class UpdateListTicketsViewModelServiceTests
         var service = new UpdateListTicketsViewModelServiceImp(TestSetup.CreateMapper(), betListService, betTypesRepository);
 
         // Act
-        await service.Update(listTicketsViewModel, tickets, 1);
+        await service.Update(listTicketsViewModel, tickets, 1, 1);
 
         // Assert
         AssertExtension.Equal(expected, listTicketsViewModel);
@@ -117,10 +118,78 @@ public class UpdateListTicketsViewModelServiceTests
         var service = new UpdateListTicketsViewModelServiceImp(TestSetup.CreateMapper(), betListService, null);
 
         // Act
-        await service.Update(listTicketsViewModel, new List<GetTicketModel>(), 1);
+        await service.Update(listTicketsViewModel, new List<GetTicketModel>(), 1, 1);
 
         // Assert
         Assert.NotNull(listTicketsViewModel);
         betListService.Received(0).GetBetTypeName(Arg.Any<Ticket>());
+    }
+
+    [Fact]
+    public async Task Update_WithTimeMachineBetType_ShouldIncludeTimeMachineLicensee()
+    {
+        // Arrange
+        var listTicketsViewModel = new ListTicketsViewModel();
+        var tickets = new List<GetTicketModel>
+        {
+            new()
+            {
+                LicenseeName = "TimeMachine1",
+                IsDeposit = true,
+                BetType = 228,
+                TransDate = DateTime.Now,
+                CheckTime = DateTime.Now
+            }
+        };
+        var betTypesViewModel = new BetTypesViewModel
+        {
+            BetTypes = new List<BetTypeModel> { new() { Name = "Map X", Id = "228" } }
+        };
+        var betListService = Substitute.For<BetListService>();
+        var betTypesRepository = Substitute.For<BetTypesRepository>();
+        betTypesRepository.GetBetTypes(Arg.Any<GetBetTypesCriteria>()).ReturnsForAnyArgs(betTypesViewModel);
+        betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("ContentEnglish");
+
+        var service = new UpdateListTicketsViewModelServiceImp(TestSetup.CreateMapper(), betListService, betTypesRepository);
+
+        // Act
+        await service.Update(listTicketsViewModel, tickets, 1, 1);
+
+        // Assert
+        Assert.Equal("TimeMachine1", listTicketsViewModel.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.TimeMachine].LicenseesName);
+    }
+
+    [Fact]
+    public async Task Update_WithJollySportsCv_ShouldIncludeJollySportsCvLicensee()
+    {
+        // Arrange
+        var listTicketsViewModel = new ListTicketsViewModel();
+        var tickets = new List<GetTicketModel>
+        {
+            new()
+            {
+                LicenseeName = "JollyCv1",
+                IsDeposit = true,
+                SpecialPlatform = SpecialPlatformConstant.JollySportsCv,
+                TransDate = DateTime.Now,
+                CheckTime = DateTime.Now
+            }
+        };
+        var betTypesViewModel = new BetTypesViewModel
+        {
+            BetTypes = new List<BetTypeModel> { new() { Name = "Map X", Id = "1001" } }
+        };
+        var betListService = Substitute.For<BetListService>();
+        var betTypesRepository = Substitute.For<BetTypesRepository>();
+        betTypesRepository.GetBetTypes(Arg.Any<GetBetTypesCriteria>()).ReturnsForAnyArgs(betTypesViewModel);
+        betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("ContentEnglish");
+
+        var service = new UpdateListTicketsViewModelServiceImp(TestSetup.CreateMapper(), betListService, betTypesRepository);
+
+        // Act
+        await service.Update(listTicketsViewModel, tickets, 1, 1);
+
+        // Assert
+        Assert.Equal("JollyCv1", listTicketsViewModel.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.JollySportCv].LicenseesName);
     }
 }

@@ -16,15 +16,15 @@
       }
       <label [ngClass]="{'cursor-not-allowed': isDisabled}">
         <input type="checkbox" [(ngModel)]="item.checked" [ngClass]="{'cursor-not-allowed': isDisabled}" class="me-1"
-          (ngModelChange)="item.checkChilds();handleClickChildItem()" [disabled]="!item.enabled || isDisabled" />
+          (ngModelChange)="item.checkChild();handleClickChildItem()" [disabled]="!item.enabled || isDisabled" />
         {{ item.name }}
       </label>
     </div>
     }
     @if (item.expanded) {
     <div (click)="$event.stopPropagation()">
-      <ng-select-tree-view [isDisabled]="isDisabled" (emitchildEvent)="handleClickChildItem()" [items]="item.items"
-        (emitchildEvent)="checkFromChildEvent(item)" [paddingLeft]="paddingLeft+25">
+      <ng-select-tree-view [isDisabled]="isDisabled" [items]="item.items"
+        (emitChildEvent)="checkFromChildEvent(item); handleClickChildItem()" [paddingLeft]="paddingLeft+25">
       </ng-select-tree-view>
     </div>
     }

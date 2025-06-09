@@ -2,16 +2,16 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BaseTicketsListComponent } from '../../../../../utility/components/base-tickets-list/base-tickets-list.component';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
 import { TicketsModel } from './tickets.model';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
     selector: 'tickets',
     templateUrl: './tickets.component.html',
     styleUrls: ['./tickets.component.scss'],
     standalone: true,
-    imports: [FormsModule, BlockUiModule, PipeModule, CommonModule]
+    imports: [FormsModule, BlockUiDirective, CommonModule, SanitizeHtmlPipe]
 })
 export class TicketsComponent extends BaseTicketsListComponent<TicketsModel> implements OnInit {
   @Input() model = new TicketsModel();

@@ -41,7 +41,6 @@ export class SignalRService {
     this.hubConnection.on('pushNotification', (notification: NotificationModel) => {
       this.notificationChange.emit(notification);
       this.notificationIconClass.emit('fa-bell-ring fa-bell-unread');
-      console.log("notificationChange.emit(message)" + notification);
     });
   }
 

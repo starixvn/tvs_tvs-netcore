@@ -1,7 +1,6 @@
 ﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.Services.BetTypes;
@@ -38,6 +37,7 @@ public class TicketsViewModelServiceImp(
         UpdateVariableForTemplateMessage(model, voidTickets);
         model.SmallestMapTicket = await UpdateSmallestMapTicket(voidTickets, issueTypeId, matchId);
         model.GroupPHAffected = getTicketsViewModelService.GetGroupPhAffected(allTickets);
+        model.Inning = await getInfoTicketsForMessage.GetAllNumberInnings(voidTickets, issueTypeId, matchId);
     }
 
     private static void UpdateValidTickets(TicketsViewModel model, TicketsByGroupInRequest validTickets)

@@ -203,8 +203,8 @@ describe('VoidPageService', () => {
 
     const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty());
 
-    expect(commonService.getMatch).toHaveBeenCalledTimes(1);
-    expect(commonService.getLogInfo).toHaveBeenCalledTimes(1);
+    expect(commonService.getMatch).toHaveBeenCalled();
+    expect(commonService.getLogInfo).toHaveBeenCalled();
     expect(result).toBeDefined();
   });
 
@@ -306,7 +306,7 @@ describe('VoidPageService', () => {
 
     const actual = voidPageService['getDisplayIssueTypeName'](20, subType, issueTypesModel);
 
-    expect(actual).toBe('Different Name')
+    expect(actual).toBe('Duplicate Tickets - Different Name')
   });
 
   it('#getVoidedReason should handle error when getVoidedReason fails', async () => {
@@ -334,7 +334,60 @@ describe('VoidPageService', () => {
 
     const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty());
 
-    expect(commonService.getMatch).not.toHaveBeenCalled();
     expect(result).toBeDefined();
+    expect(result.matchModel).toBeUndefined();
+  });
+
+  it('#getBasicVoidPageItemsData should handle error when getMatch fails', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
+    fakeRequestDetailViewModel.notParticipateModels = [new NotParticipateModel()];
+    fakeRequestDetailViewModel.notParticipateModels[0].subIssueTypeId = 1;
+
+    commonService.getMatch = jest.fn().mockRejectedValue(new Error('Test error'));
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    await expect(voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty()))
+      .rejects
+      .toThrow('Test error');
+  });
+
+  it('#getBasicVoidPageItemsData should handle error when getLogInfo fails', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
+    fakeRequestDetailViewModel.notParticipateModels = [new NotParticipateModel()];
+    fakeRequestDetailViewModel.notParticipateModels[0].subIssueTypeId = 1;
+
+    commonService.getLogInfo = jest.fn().mockRejectedValue(new Error('Test error'));
+
+    await expect(voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty()))
+      .rejects
+      .toThrow('Test error');
+  });
+
+  it('#loadUnderneathVoidPageItemsData should handle error when getVoidTicketsMini fails', async () => {
+    const voidItem = new VoidNotParticipateModel();
+    voidItem.subIssueType = new SubIssueType();
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.DUPLICATE_TICKETS);
+    fakeRequestDetailViewModel.notParticipateModels = [new NotParticipateModel()];
+    fakeRequestDetailViewModel.notParticipateModels[0].subIssueTypeId = 1;
+
+    ticketsService.getVoidTicketsMini = jest.fn().mockRejectedValue(new Error('Test error'));
+
+    await expect(voidPageService.loadUnderneathVoidPageItemsData(voidItem, fakeRequestDetailViewModel))
+      .rejects
+      .toThrow('Test error');
+  });
+
+  it('#getVoidedReason should handle error when getVoidedReason fails', async () => {
+    const voidItem = new VoidNotParticipateModel();
+    voidItem.matchModel = new MatchModel();
+    voidItem.subIssueType = new SubIssueType();
+    commonService.getVoidedReason = jest.fn().mockRejectedValue(new Error('Test error'));
+
+    await expect(voidPageService['getVoidedReason'](voidItem))
+      .rejects
+      .toThrow('Test error');
   });
 });

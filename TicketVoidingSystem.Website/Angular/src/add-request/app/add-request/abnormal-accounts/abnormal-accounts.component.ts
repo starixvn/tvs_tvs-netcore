@@ -2,7 +2,6 @@ import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
@@ -24,6 +23,7 @@ import { ProductFilterComponent } from './product-filter/product-filter.componen
 import { AbnormalAccountService } from './services/abnormal-account.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
   selector: 'abnormal-accounts',
@@ -31,7 +31,7 @@ import { ValidationService } from './services/validation.service';
   styleUrls: ['./abnormal-accounts.component.scss'],
   standalone: true,
   imports: [NgbModule, FormsModule, ConfirmAddRequestComponent, UsernamesComponent, ProductFilterComponent,
-    EventDateFilterComponent, AccountTableComponent, AccountAffectedTicketComponent, BlockUiModule],
+    EventDateFilterComponent, AccountTableComponent, AccountAffectedTicketComponent, BlockUiDirective],
   providers: [
     SaveRequestService,
     ValidationService,

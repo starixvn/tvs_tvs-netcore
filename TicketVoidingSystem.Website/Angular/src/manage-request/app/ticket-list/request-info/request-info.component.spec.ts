@@ -1,5 +1,5 @@
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
-import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { IssueInfo } from '../../../../utility/models/issue-type.model';
 import { AppService } from '../../app.service';
 import { TabInfoRequest, TicketListModal } from '../ticket-list.modal';

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
+import { PagingConstant } from '../../../../utility/components/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { LABELS } from '../../../../utility/constants/labels';

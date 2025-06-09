@@ -1,6 +1,6 @@
 ﻿import { ElementRef } from '@angular/core';
 import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
-import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { Message } from '../../../utility/components/template-message/messages/message';
 import { BetID } from '../../../utility/models/bet-id.model';
 import { GroupModel } from './group.model';
@@ -25,6 +25,7 @@ export class TicketsModel {
     licenseeAffectedList: AffectedLicensee[];
     betTypeNameReplaceMessage: Message;
     smallestMapTicket: string;
+    inning: string;
     groups: Array<GroupModel>;
     pagingModel: PagingModel;
     iconCheckBox: IconCheckBox;

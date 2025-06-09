@@ -79,6 +79,7 @@ public class UpdateRequestProcessStageImp(
         command.TechnicalErrorInfo = query.TechnicalErrorInfo?.ToEventTechnicalErrorXml();
         command.WrongOfferedNameInfo = query.WrongOfferedNameInfo?.ToEventWrongOfferedNameXml();
         command.OtherIssuesInfo = query.OtherIssuesInfo?.ToEventOtherIssuesXml();
+        command.MatchEarlyCompletedInfo = query.MatchEarlyCompletedInfo?.ToEventMatchEarlyCompletedXml();
 
         return command;
     }

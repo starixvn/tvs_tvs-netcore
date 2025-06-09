@@ -5,7 +5,7 @@ import { ClipboardService } from 'ngx-clipboard';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { Notification } from '../../utility/components/notification/notification';
-import { PagingModel } from '../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../utility/components/paging/paging.model';
 import { Tooltip } from '../../utility/components/tooltip/tooltip.model';
 import { Product } from '../../utility/constants/config';
 import { SpecialPlatform } from '../../utility/constants/special-platform.constant';

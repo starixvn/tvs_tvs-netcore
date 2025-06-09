@@ -45,7 +45,7 @@ public class GetTicketsHandlerTests
 
         // Assert
         await groupTicketService.ReceivedWithAnyArgs(0).CreateGroupTicketViewModel(default, default);
-        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default, default);
+        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default, default, 27);
         Assert.Empty(actual.Groups);
     }
 
@@ -66,7 +66,66 @@ public class GetTicketsHandlerTests
 
         // Assert
         await groupTicketService.ReceivedWithAnyArgs(2).CreateGroupTicketViewModel(default, default);
-        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default, default);
+        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default, default, 27);
         Assert.Equal(2, actual.Groups.Count());
+    }
+
+    [Fact]
+    public async Task Handler_WhenMatchNotFound_ShouldNotCreateGroups()
+    {
+        // Arrange
+        InitGetTicketsHandlerTests();
+        var request = new GetTicketsRequest { MatchId = 1 };
+        var getTicketsResult = new List<GetTicketModel> { new() };
+        getTicketsService.GetTickets(request).ReturnsForAnyArgs(getTicketsResult);
+        matchService.GetMatch(request.MatchId).ReturnsForAnyArgs(Task.FromResult<Match>(null));
+        var handler = new GetTicketsHandler(getTicketsService, matchService, groupTicketService, updateListTicketsViewModelService);
+
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        await groupTicketService.ReceivedWithAnyArgs(0).CreateGroupTicketViewModel(default, default);
+        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default, default, 27);
+        Assert.Empty(actual.Groups);
+    }
+
+    [Fact]
+    public async Task Handler_WhenGetTicketsThrowsException_ShouldPropagateException()
+    {
+        // Arrange
+        InitGetTicketsHandlerTests();
+        var request = new GetTicketsRequest { MatchId = 1 };
+        getTicketsService.GetTickets(request).ReturnsForAnyArgs(x => Task.FromException<IList<GetTicketModel>>(new System.Exception("Test exception")));
+        var handler = new GetTicketsHandler(getTicketsService, matchService, groupTicketService, updateListTicketsViewModelService);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<System.Exception>(() => handler.Handle(request, CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task Handler_WhenCreateGroupsGetTicketModelHaveEmptyTickets_ShouldSkipEmptyGroups()
+    {
+        // Arrange
+        InitGetTicketsHandlerTests();
+        var request = new GetTicketsRequest { MatchId = 1 };
+        var listGroup = new List<Group<GetTicketModel>> 
+        { 
+            new() { Tickets = new List<GetTicketModel>() },
+            new() { Tickets = new List<GetTicketModel> { new() } },
+            new() { Tickets = new List<GetTicketModel>() }
+        };
+        var getTicketsResult = new List<GetTicketModel>();
+        getTicketsService.GetTickets(request).ReturnsForAnyArgs(getTicketsResult);
+        groupTicketService.CreateGroupsGetTicketModel(default, default).ReturnsForAnyArgs(listGroup);
+        var handler = new GetTicketsHandler(getTicketsService, matchService, groupTicketService, updateListTicketsViewModelService);
+
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        await groupTicketService.ReceivedWithAnyArgs(1).CreateGroupTicketViewModel(default, default);
+        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default, default, 27);
+        Assert.Single(actual.Groups);
     }
 }

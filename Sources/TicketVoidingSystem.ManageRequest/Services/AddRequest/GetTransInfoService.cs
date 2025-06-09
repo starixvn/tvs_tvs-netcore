@@ -2,18 +2,12 @@
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
 public interface GetTransInfoService
 {
     Task<IEnumerable<string>> GetTransInfoJson(GetTransInfoQuery query);
-
-    Task<IEnumerable<string>> GetTransInfoJsonForVoid(IEnumerable<BetId> singleTickets, IEnumerable<BetId> parlayTickets, IEnumerable<BetId> cancelCashOutTickets, int? matchId);
-
-    Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets, int? matchId);
 }
 
 public class GetTransInfoServiceImp(IDynamicRepository repository) : GetTransInfoService
@@ -123,56 +117,16 @@ public class GetTransInfoServiceImp(IDynamicRepository repository) : GetTransInf
                 criteria.OtherIssuesInfo = issueInfo;
                 break;
 
+            case IssueTypeConstant.MatchEarlyCompleted:
+                criteria.MatchEarlyCompletedInfo = issueInfo;
+                break;
+
             default:
                 criteria.IssueTypeId = query.IssueTypeId;
                 break;
         }
 
         return criteria;
-    }
-
-    public async Task<IEnumerable<string>> GetTransInfoJsonForVoid(IEnumerable<BetId> singleTickets, IEnumerable<BetId> parlayTickets, IEnumerable<BetId> cancelCashOutTickets, int? matchId)
-    {
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
-        {
-            var singleTicketsInSite = singleTickets.Where(x => x.SiteDbGroupId == server.Id);
-            var parlayTicketsInSite = parlayTickets.Where(x => x.SiteDbGroupId == server.Id);
-            var cancelCashOutTicketsInSite = cancelCashOutTickets.Where(x => x.SiteDbGroupId == server.Id);
-
-            var criteria = new GetTransInfoForVoidCriteria
-            {
-                SiteDbGroupId = server.Id,
-                MatchId = matchId,
-                SingleTransIds = Helper.JoinBetIdList(singleTicketsInSite),
-                ParlayTransIds = Helper.JoinBetIdList(parlayTicketsInSite),
-                CancelCashOutTransIds = Helper.JoinBetIdList(cancelCashOutTicketsInSite)
-            };
-
-            return repository.GetAsync<string>(criteria);
-        });
-
-        var transInfoJsonInAllServers = await Task.WhenAll(tasks);
-        return transInfoJsonInAllServers;
-    }
-
-    public async Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets, int? matchId)
-    {
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
-        {
-            var singleTicketsInSite = singleTickets.Where(x => x.SiteDbGroupId == server.Id);
-
-            var criteria = new GetTransInfoForVoid14Criteria
-            {
-                SiteDbGroupId = server.Id,
-                MatchId = matchId,
-                SingleTransIds = Helper.JoinBetIdList(singleTicketsInSite)
-            };
-
-            return repository.GetAsync<string>(criteria);
-        });
-
-        var transInfoJsonInAllServers = await Task.WhenAll(tasks);
-        return transInfoJsonInAllServers;
     }
 
     private static string BuildIssueInfo(GetTransInfoQuery query) // NOSONAR
@@ -200,6 +154,7 @@ public class GetTransInfoServiceImp(IDynamicRepository repository) : GetTransInf
             IssueTypeConstant.WrongOddsSportsBook => query.WrongOddsSportsBookModels.ToWrongOddsSportsBookInfoXml(),
             IssueTypeConstant.WrongOfferedName => query.WrongOfferedNameModel.ToWrongOfferedNameInfoXml(),
             IssueTypeConstant.OtherIssues => query.OtherIssuesModel.ToOtherIssuesInfoXml(),
+            IssueTypeConstant.MatchEarlyCompleted => query.MatchEarlyCompletedModel.ToMatchEarlyCompletedInfoXml(),
             _ => ""
         };
     }

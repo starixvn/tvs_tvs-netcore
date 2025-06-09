@@ -46,7 +46,8 @@ export class StaticService {
       isWrongOfferedName: StaticService.isWrongOfferedName(issueTypeId),
       isWrongMarketOffered: StaticService.isWrongMarketOffered(issueTypeId),
       isOtherIssues: StaticService.isOtherIssues(issueTypeId),
-      isTechnicalError: StaticService.isTechnicalError(issueTypeId)
+      isTechnicalError: StaticService.isTechnicalError(issueTypeId),
+      isMatchEarlyCompleted: StaticService.isMatchEarlyCompleted(issueTypeId)
     }
 
     return result;
@@ -147,6 +148,10 @@ export class StaticService {
     return issueTypeId?.toString() === IssueTypeConstant.TECHNICAL_ERROR;
   }
 
+  static isMatchEarlyCompleted(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.MATCH_EARLY_COMPLETED;
+  }
+
   static isFilterByMixOrSystemParlay(filterBy: number): boolean {
     return filterBy === AbnormalFilterBy.MIX_PARLAY || filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
   }
@@ -201,7 +206,7 @@ export class StaticService {
       return requestDetail.wrongOddsSportsBookModel.subIssueTypeId;
     } else if (this.isWrongOfferedName(requestDetail.request.issueTypeId)) {
       return requestDetail.wrongOfferedNameModel.subIssueTypeId;
-    } else if (this.isOtherIssues(requestDetail.request.issueTypeId)) {
+    } else if (this.isOtherIssues(requestDetail.request.issueTypeId) || this.isMatchEarlyCompleted(requestDetail.request.issueTypeId)) {
       return requestDetail.otherIssuesModel.subIssueTypeId;
     } else if (this.isTechnicalError(requestDetail.request.issueTypeId)) {
       return requestDetail.technicalErrorModel.subIssueTypeId;
@@ -278,7 +283,8 @@ export class StaticService {
       issueTypeId?.toString() === IssueTypeConstant.RED_CARD ||
       issueTypeId?.toString() === IssueTypeConstant.WRONG_SCORE ||
       issueTypeId?.toString() === IssueTypeConstant.WRONG_MARKET_OFFERED ||
-      issueTypeId?.toString() === IssueTypeConstant.TECHNICAL_ERROR;
+      issueTypeId?.toString() === IssueTypeConstant.TECHNICAL_ERROR ||
+      issueTypeId?.toString() === IssueTypeConstant.MATCH_EARLY_COMPLETED;
   }
 
   static isCorrectFormatMultipleDecimal(value: string, element: string, tooltip: Tooltip, errorText: string): boolean {

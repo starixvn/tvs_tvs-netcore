@@ -3,7 +3,6 @@ import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
@@ -14,13 +13,14 @@ import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
   selector: 'event-recover-ticket',
   templateUrl: './event-recover-ticket.component.html',
   styleUrls: ['./event-recover-ticket.component.scss'],
   standalone: true,
-  imports: [BetIdsComponent, NgSelectModule, FormsModule, CommonModule, BlockUiModule],
+  imports: [BetIdsComponent, NgSelectModule, FormsModule, CommonModule, BlockUiDirective],
   providers: [SaveRequestService, ValidationService]
 })
 export class EventRecoverTicketComponent implements OnInit {

@@ -7,7 +7,6 @@ using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
-using TicketVoidingSystem.Models;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest;
@@ -73,37 +72,5 @@ public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>, IClass
         // Assert
         Assert.NotNull(result);
         await repository.Received().GetAsync<string>(Arg.Any<GetTicketSiteDbCriteria>());
-    }
-
-    [Fact]
-    public async Task GetTransInfoJsonForVoid_ValidData_ReturnTransInfo()
-    {
-        // Arrange
-        var singleTickets = new List<BetId> { new() };
-        var parlayTickets = new List<BetId> { new() };
-        var cancelCashOutTickets = new List<BetId> { new() };
-        repository.GetAsync<string>(Arg.Compat.Any<GetTransInfoForVoidCriteria>()).ReturnsForAnyArgs("");
-
-        // Act
-        var actual = await service.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, null);
-
-        // Assert
-        Assert.NotNull(actual);
-        await repository.Received().GetAsync<string>(Arg.Compat.Any<GetTransInfoForVoidCriteria>());
-    }
-
-    [Fact]
-    public async Task GetTransInfoJsonForVoid14_ValidData_ReturnTransInfo()
-    {
-        // Arrange
-        var singleTickets = new List<BetId> { new() };
-        repository.GetAsync<string>(Arg.Compat.Any<GetTransInfoForVoid14Criteria>()).ReturnsForAnyArgs("");
-
-        // Act
-        var actual = await service.GetTransInfoJsonForVoid14(singleTickets, null);
-
-        // Assert
-        Assert.NotNull(actual);
-        await repository.Received().GetAsync<string>(Arg.Compat.Any<GetTransInfoForVoid14Criteria>());
     }
 }

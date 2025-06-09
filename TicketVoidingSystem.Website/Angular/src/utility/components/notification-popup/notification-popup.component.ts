@@ -1,19 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, HostListener, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { fadeSlide } from 'src/utility/constants/animations.constant';
-import { NotificationFilterTabName, NotificationTabName, NotificationType } from 'src/utility/constants/notification.constant';
-import { SignalRService } from 'src/utility/services/signal-r.service.native';
-import { StaticService } from 'src/utility/services/static.service';
+import { fadeSlide } from '../../constants/animations.constant';
+import { NotificationFilterTabName, NotificationTabName, NotificationType } from '../../constants/notification.constant';
+import { SignalRService } from '../../services/signal-r.service.native';
+import { StaticService } from '../../services/static.service';
 import { NotificationModel } from './notification-popup.model';
 import { NotificationPopupService } from './notification-popup.service';
 
 @Component({
-  selector: 'notification-popup',
   standalone: true,
-  imports: [CommonModule],
+  selector: 'notification-popup',
   templateUrl: './notification-popup.component.html',
   styleUrls: ['./notification-popup.component.scss'],
+  imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [fadeSlide]
 })
@@ -106,10 +106,12 @@ export class NotificationPopupComponent {
   @HostListener('document:click', ['$event'])
   closeOnClickOutside(event: Event) {
     const target = event.target as HTMLElement;
-    if (!target.closest('.notification-container')) {
-      if (this.isOpen) {
-        this.notificationService.toggle();
-      }
+    if (target.closest('.notification-container')) {
+      return;
+    }
+
+    if (this.isOpen) {
+      this.notificationService.toggle();
     }
   }
 

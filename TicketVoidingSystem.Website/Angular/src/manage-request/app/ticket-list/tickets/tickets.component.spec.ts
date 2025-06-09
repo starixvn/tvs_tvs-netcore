@@ -1,4 +1,4 @@
-import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { TicketsComponent } from './tickets.component';
 import { TicketModel, TicketsModel } from './tickets.model';
 import { ComponentFixture, TestBed } from '@angular/core/testing';

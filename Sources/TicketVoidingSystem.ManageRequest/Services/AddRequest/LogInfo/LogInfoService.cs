@@ -83,6 +83,7 @@ public class LogInfoServiceImp(
             IssueTypeConstant.TechnicalError => await GetLogInfoViewModelTechnicalError(query, validations, ticketRequests, logInfoDetails, betTypeCount),
             IssueTypeConstant.WrongOfferedName => GetLogInfoViewModelWrongOfferedName(query, validations, ticketRequests, logInfoDetails),
             IssueTypeConstant.OtherIssues => GetLogInfoViewModelOtherIssues(query, validations, ticketRequests, logInfoDetails),
+            IssueTypeConstant.MatchEarlyCompleted => await GetLogInfoViewModelMatchEarlyCompleted(query, validations, ticketRequests, logInfoDetails, betTypeCount),
             _ => GetLogInfoViewModelDefault(validations, ticketRequests, logInfoDetails)
         };
     }
@@ -283,6 +284,23 @@ public class LogInfoServiceImp(
         ];
     }
 
+    private async Task<List<GetLogInfoModel>> GetLogInfoViewModelMatchEarlyCompleted(GetLogInfoQuery query, IEnumerable<Validation> validations,
+        IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails, IEnumerable<BetTypeTicketsInfo> betTypeCount)
+    {
+        var preparedBetTypeCount = await UpdateBetTypeTicketsInfo(query.MatchEarlyCompletedModel.MatchId, betTypeCount);
+        return
+        [
+            new GetLogInfoModel
+            {
+                MatchId = query.MatchEarlyCompletedModel.MatchId,
+                Validation = LogInfoHelper.CombineValidations(validations, x => true),
+                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true),
+                BetTypeCount = preparedBetTypeCount.OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetId)
+            }
+        ];
+    }
+
     private async Task<List<GetLogInfoModel>> GetLogInfoViewModelTechnicalError(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
@@ -334,6 +352,7 @@ public class LogInfoServiceImp(
         criteria.TechnicalErrorInfo = query.TechnicalErrorModel?.ToTechnicalErrorInfoXml();
         criteria.WrongOfferedNameInfo = query.WrongOfferedNameModel?.ToWrongOfferedNameInfoXml();
         criteria.OtherIssuesInfo = query.OtherIssuesModel?.ToOtherIssuesInfoXml();
+        criteria.MatchEarlyCompletedInfo = query.MatchEarlyCompletedModel?.ToMatchEarlyCompletedInfoXml();
 
         return criteria;
     }

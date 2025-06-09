@@ -34,6 +34,7 @@ export class LogInfoService {
       { check: checkIssueType.isWrongOfferedName, handler: this.getLogInfoWrongOfferedName },
       { check: checkIssueType.isOtherIssues, handler: this.getLogInfoOtherIssues },
       { check: checkIssueType.isTechnicalError, handler: this.getLogInfoTechnicalError },
+      { check: checkIssueType.isMatchEarlyCompleted, handler: this.getLogInfoOtherIssues },
     ];
 
     for (const { check, handler } of logInfoHandlers) {
@@ -240,11 +241,15 @@ export class LogInfoService {
     query.isShowLogOnly = true;
     query.issueTypeId = args.detailViewModel.request.issueTypeId;
     query.actionId = args.detailViewModel.request.actionId;
+    if(StaticService.isOtherIssues(args.detailViewModel.request.issueTypeId)){
     query.otherIssuesModel = models;
-
+    } else {
+      query.matchEarlyCompletedModel = models;
+    }
     const data = await this.commonService.getLogInfo(query);
     data.getLogInfoModels.forEach(x => {
       args.detailViewModel.otherIssuesModel.logInfoDetail = x.logInfoDetail;
+      args.detailViewModel.otherIssuesModel.betTypeCount = x.betTypeCount;
     });
   }
 

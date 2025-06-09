@@ -4,14 +4,7 @@ import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
-import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.component';
-import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
-import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
-import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
-import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
-import { VoidWrongMarketOfferedComponent } from './void-wrong-market-offered/void-wrong-market-offered.component';
+import { TestingModule } from '../../utility/modules/testing.module';
 
 jest.mock('../../utility/services/signal-r.service.native');
 class Helper {
@@ -58,9 +51,9 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VoidDangerAcceptedComponent, VoidDuplicateTicketsComponent,
-        VoidNotParticipateComponent, VoidEarlyKickOffComponent, VoidAbnormalBetComponent,
-        VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiModule],
+      imports: [
+        TestingModule
+      ],
       providers: [AppService, SignalRService]
     }).compileComponents();
 
@@ -70,11 +63,10 @@ describe('AppComponent', () => {
 
   it('AppComponent should init match snapshot', async () => {
     fixture.detectChanges();
-
     expect(fixture).toMatchSnapshot();
   });
 
-  it('isApplyVoidNewDesign should be return false', async () => {
+  it('isLikelyVoidDangerAccepted should return false for abnormal bet', async () => {
     component.requestDetail = Helper.fakeRequestDetailViewModel;
     component.requestDetail.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
 
@@ -83,7 +75,7 @@ describe('AppComponent', () => {
     expect(actual).toBeFalsy();
   });
 
-  it('isApplyVoidNewDesign should be return false', async () => {
+  it('isLikelyVoidDangerAccepted should return false when request is null', async () => {
     component.requestDetail = Helper.fakeRequestDetailViewModel;
     component.requestDetail.request = null;
 
@@ -92,9 +84,26 @@ describe('AppComponent', () => {
     expect(actual).toBeFalsy();
   });
 
-  it('updateBlockUI should update #isBlockUI ', async () => {
-    component.updateBlockUI(false);
+  it('isLikelyVoidDangerAccepted should return true for danger accepted', async () => {
+    component.requestDetail = Helper.fakeRequestDetailViewModel;
+    component.requestDetail.request.issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
 
+    const actual = component.isLikelyVoidDangerAccepted();
+
+    expect(actual).toBeTruthy();
+  });
+
+  it('updateBlockUI should update #isBlockUI', async () => {
+    component.updateBlockUI(false);
     expect(component.isBlockUI).toBeFalsy();
+
+    component.updateBlockUI(true);
+    expect(component.isBlockUI).toBeTruthy();
+  });
+
+  it('should handle null requestDetail', async () => {
+    component.requestDetail = null;
+    const actual = component.isLikelyVoidDangerAccepted();
+    expect(actual).toBeFalsy();
   });
 });

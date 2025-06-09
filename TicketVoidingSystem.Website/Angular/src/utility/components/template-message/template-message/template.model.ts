@@ -79,4 +79,6 @@ export class TemplateValue {
   favoriteValue?: string;
   // other issues
   smallestMapTicket?: string;
+  // match early completed
+  inning?: string;
 }

@@ -29,6 +29,7 @@ describe('LogInfoTechnicalErrorComponent', () => {
   let component: LogInfoTechnicalErrorComponent;
   let fixture: ComponentFixture<LogInfoTechnicalErrorComponent>;
   let staticService: StaticService;
+  let affectedTicketService: AffectedTicketService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -41,6 +42,7 @@ describe('LogInfoTechnicalErrorComponent', () => {
 
     fixture = TestBed.createComponent(LogInfoTechnicalErrorComponent);
     staticService = fixture.debugElement.injector.get(StaticService);
+    affectedTicketService = fixture.debugElement.injector.get(AffectedTicketService);
     component = fixture.componentInstance;
   });
 
@@ -90,27 +92,41 @@ describe('LogInfoTechnicalErrorComponent', () => {
   it('should update bet type count model correctly', () => {
     // Arrange
     component.logInfo = Helper.fakeLogInfo;
+    affectedTicketService.updateBetTypeCountModel = jest.fn().mockReturnValue([{
+      betTypeId: '1',
+      betTypeName: 'Test Bet Type',
+      ticketsCount: 5
+    }]);
+    
 
     // Act
     component['updateBetTypeCountModel']();
 
     // Assert
-    expect(component.groupBetTypesCount).toBeTruthy();
-    expect(Array.isArray(component.groupBetTypesCount)).toBeTruthy();
-    expect(component.groupBetTypesCount.length).toBeGreaterThan(0);
+    expect(component.affectedTicketsModel.groupBetTypesCount).toBeTruthy();
+    expect(Array.isArray(component.affectedTicketsModel.groupBetTypesCount)).toBeTruthy();
+    expect(component.affectedTicketsModel.groupBetTypesCount.length).toBe(1);
+    expect(component.affectedTicketsModel.isShowDetailBetTypeCount).toBe(true);
   });
 
   it('should show affected tickets details correctly', () => {
     // Arrange
     component.logInfo = Helper.fakeLogInfo;
     component.issueTypeId = '1';
+    affectedTicketService.updateBetTypeCountModel = jest.fn().mockReturnValue([{
+      betTypeId: '1',
+      betTypeName: 'Test Bet Type',
+      ticketsCount: 5
+    }]);
 
     // Act
     component.showAffectedTicketsDetails();
 
     // Assert
-    expect(component.affectedTicketsModel.isOpen).toBeTruthy();
+    expect(component.affectedTicketsModel.isOpen).toBe(true);
     expect(component.affectedTicketsModel.issueTypeId).toBe(1);
+    expect(component.affectedTicketsModel.logInfoTicketsJson).toBe(component.logInfo.logInfoDetail.logInfoTicketsJson);
+    expect(component.affectedTicketsModel.isShowDetailBetTypeCount).toBe(true);
   });
 
   it('should handle empty bet type count', () => {
@@ -119,12 +135,13 @@ describe('LogInfoTechnicalErrorComponent', () => {
       ...Helper.fakeLogInfo,
       betTypeCount: []
     };
+    affectedTicketService.updateBetTypeCountModel = jest.fn().mockReturnValue([]);
 
     // Act
     component['updateBetTypeCountModel']();
 
     // Assert
-    expect(component.groupBetTypesCount).toEqual([]);
+    expect(component.affectedTicketsModel.groupBetTypesCount).toEqual([]);
   });
 
   it('should handle multiple bet types correctly', () => {
@@ -148,11 +165,73 @@ describe('LogInfoTechnicalErrorComponent', () => {
         }
       ]
     } as unknown as LogInfoTechnicalError;
+    affectedTicketService.updateBetTypeCountModel = jest.fn().mockReturnValue([
+      {
+        betTypeId: '1',
+        betTypeName: 'Test Bet Type 1',
+        ticketsCount: 5
+      },
+      {
+        betTypeId: '2',
+        betTypeName: 'Test Bet Type 2',
+        ticketsCount: 3
+      }
+    ]);
 
     // Act
     component['updateBetTypeCountModel']();
 
     // Assert
-    expect(component.groupBetTypesCount.length).toBe(2);
+    expect(component.affectedTicketsModel.groupBetTypesCount.length).toBe(2);
+  });
+
+  it('should handle null bet type count', () => {
+    // Arrange
+    component.logInfo = {
+      ...Helper.fakeLogInfo,
+      betTypeCount: null
+    };
+    affectedTicketService.updateBetTypeCountModel = jest.fn().mockReturnValue([]);
+
+    // Act
+    component['updateBetTypeCountModel']();
+
+    // Assert
+    expect(component.affectedTicketsModel.groupBetTypesCount).toEqual([]);
+  });
+
+  it('should handle undefined bet type count', () => {
+    // Arrange
+    component.logInfo = {
+      ...Helper.fakeLogInfo,
+      betTypeCount: undefined
+    };
+    affectedTicketService.updateBetTypeCountModel = jest.fn().mockReturnValue([]);
+
+    // Act
+    component['updateBetTypeCountModel']();
+
+    // Assert
+    expect(component.affectedTicketsModel.groupBetTypesCount).toEqual([]);
+  });
+
+  it('should update affected tickets model correctly', () => {
+    // Arrange
+    component.logInfo = Helper.fakeLogInfo;
+    component.issueTypeId = '1';
+    affectedTicketService.updateBetTypeCountModel = jest.fn().mockReturnValue([{
+      betTypeId: '1',
+      betTypeName: 'Test Bet Type',
+      ticketsCount: 5
+    }]);
+
+    // Act
+    component.showAffectedTicketsDetails();
+
+    // Assert
+    expect(component.affectedTicketsModel.isOpen).toBe(true);
+    expect(component.affectedTicketsModel.issueTypeId).toBe(1);
+    expect(component.affectedTicketsModel.logInfoTicketsJson).toBe(component.logInfo.logInfoDetail.logInfoTicketsJson);
+    expect(component.affectedTicketsModel.isShowDetailBetTypeCount).toBe(true);
   });
 }); 

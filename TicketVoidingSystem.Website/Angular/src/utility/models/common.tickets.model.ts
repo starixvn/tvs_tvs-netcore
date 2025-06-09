@@ -1,5 +1,4 @@
 import { ElementRef } from '@angular/core';
-
 import { CommonGroupTicketsModel } from './common.group-tickets.model';
 import { CommonTicketModel } from './common.ticket.model';
 

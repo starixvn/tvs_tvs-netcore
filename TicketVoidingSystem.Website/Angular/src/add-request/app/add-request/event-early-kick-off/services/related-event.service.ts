@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment';
-import { PagingConstant, PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
+import { PagingConstant, PagingModel } from '../../../../../utility/components/paging/paging.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { MatchModel } from '../../../../../utility/models/match.model';

@@ -70,6 +70,7 @@ export class TemplateReplace {
   static readonly WRONG_NAMES = '{{Wrong NameS}}';
   static readonly ACTUAL_NAMES = '{{Actual NameS}}';
   static readonly MAP = '{{Map}}';
+  static readonly INNING = '{{Inning}}';
 }
 
 export class TemplateContentConst {
@@ -203,5 +204,19 @@ export class TemplateContentConst {
     msgChineseTraditional: '賠率',
     msgChineseSimplified: '赔率',
     msgChineseNewSimplified: '赔率'
+  };
+
+  static readonly INNING: TemplateContent = {
+    msgEnglish: 'innings',
+    msgChineseTraditional: '局',
+    msgChineseSimplified: '局',
+    msgChineseNewSimplified: '局'
+  };
+
+  static readonly AT_INNING: TemplateContent = {
+    msgEnglish: 'at',
+    msgChineseTraditional: '於',
+    msgChineseSimplified: '于',
+    msgChineseNewSimplified: '于'
   };
 }

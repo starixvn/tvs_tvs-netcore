@@ -5,10 +5,10 @@ import { StaticService } from '../../../../utility/services/static.service';
 import { ModalService } from '../../modal/modal.service';
 
 @Component({
+  standalone: true,
   selector: 'log-info-message',
   templateUrl: './log-info-message.component.html',
   styleUrls: ['./log-info-message.component.scss'],
-  standalone: true,
   imports: [CommonModule]
 })
 export class LogInfoMessageComponent {

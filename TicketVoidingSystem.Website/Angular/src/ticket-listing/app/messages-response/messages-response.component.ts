@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MessagesResponse } from './messages-response.model';
 import { AmendmentReponse } from '../models/query.model';
 import { CommonModule } from '@angular/common';
-import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   standalone: true,

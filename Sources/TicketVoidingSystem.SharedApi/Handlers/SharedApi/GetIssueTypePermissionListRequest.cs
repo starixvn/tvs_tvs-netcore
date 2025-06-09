@@ -24,6 +24,6 @@ public class GetIssueTypePermissionListHandler(SessionService sessionService)
 
         return IssueTypeFunctionKeysConstant.IssueTypeFunctionKeyList
             .Where(x => issueTypeHasPermission.Any(y => string.Equals(y.Key, x.FunctionKey, StringComparison.OrdinalIgnoreCase)))
-            .Select(x => x.IssueType);
+            .Select(x => x.IssueType).OrderBy(x => x.IssueTypeName);
     }
 }

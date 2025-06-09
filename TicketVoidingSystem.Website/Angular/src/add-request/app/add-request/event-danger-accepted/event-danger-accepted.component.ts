@@ -7,7 +7,6 @@ import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
 import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
@@ -40,12 +39,13 @@ import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 @Component({
   standalone: true,
   selector: 'event-danger-accepted',
   templateUrl: './event-danger-accepted.component.html',
   styleUrls: ['./event-danger-accepted.component.scss'],
-  imports: [FormsModule, CommonModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiModule,
+  imports: [FormsModule, CommonModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiDirective,
     TvDetectionComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent, 
     ConfirmDangerAcceptedComponent, OnlyNumberDirective],
   providers: [

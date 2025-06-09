@@ -8,7 +8,7 @@ import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
 import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
@@ -48,7 +48,7 @@ import { OnlyNumberDirective } from '../../../../utility/directives/number.direc
   styleUrls: ['./event-red-card.component.scss'],
   standalone: true,
   imports: [FormsModule, CommonModule, EventLeagueComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent,
-    NgSelectModule, NgbModule, TooltipComponent, BlockUiModule, ConfirmAddRequestComponent, TvDetectionComponent, OnlyNumberDirective],
+    NgSelectModule, NgbModule, TooltipComponent, BlockUiDirective, ConfirmAddRequestComponent, TvDetectionComponent, OnlyNumberDirective],
   providers: [EventRedCardService, LogInfoService, SaveRequestService, ValidationService, RelatedEventService, TvDetectionService]
 })
 export class EventRedCardComponent implements OnInit, OnChanges {

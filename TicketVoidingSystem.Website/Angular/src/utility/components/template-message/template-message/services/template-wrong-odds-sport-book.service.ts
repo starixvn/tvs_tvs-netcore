@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Message } from '../../messages/message';
 import { TemplateContentConst, TemplateReplace } from '../template.const';
 import { TemplateContent, TemplateValue } from '../template.model';
@@ -16,11 +16,8 @@ export class SpecialSportsBookBetTypes {
   { providedIn: 'root' }
 )
 export class TemplateWrongOddsSportBookService {
-
-  constructor(
-    private readonly replaceMessageService: ReplaceMessageService,
-    private readonly templateInputsService: TemplateInputsService,
-  ) { }
+  private readonly replaceMessageService = inject(ReplaceMessageService);
+  private readonly templateInputsService = inject(TemplateInputsService);
 
   public replaceActualMarketSportsBook(templateValue: TemplateValue, outputMessage: Message): void {
     const actualMarket = this.createActualMarketContent(templateValue);

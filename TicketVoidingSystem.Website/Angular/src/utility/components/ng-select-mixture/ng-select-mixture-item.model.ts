@@ -7,7 +7,7 @@ export class NgSelectMixtureItem {
   checked: boolean;
   expanded: boolean;
   items: NgSelectMixtureItem[];
-  countChilds: number;
+  countChild: number;
   enabled: boolean;
 
   constructor(
@@ -25,26 +25,26 @@ export class NgSelectMixtureItem {
     this.expanded = expanded;
     this.items = items;
     this.enabled = enabled;
-    this.countChilds = 0;
-    this.countChilds = this.getCountChilds();
+    this.countChild = 0;
+    this.countChild = this.getCountChild();
   }
 
-  getCountChilds(): number {
+  getCountChild(): number {
     if (this.items.length === 0) {
-      this.countChilds = 1;
+      this.countChild = 1;
     }
 
     this.items.forEach(item => {
-      this.countChilds += item.countChilds;
+      this.countChild += item.countChild;
     });
 
-    return this.countChilds;
+    return this.countChild;
   }
 
-  checkChilds(): void {
+  checkChild(): void {
     this.items.forEach(item => {
       item.checked = item.enabled ? this.checked : item.checked;
-      item.checkChilds();
+      item.checkChild();
     });
   }
 
@@ -56,19 +56,19 @@ export class NgSelectMixtureItem {
     this.checked = this.isItemGroup() ? this.items.every(x => x.checked) : selectedItems.includes(this.value);
   }
 
-  unCheckChilds(): void {
+  unCheckChild(): void {
     this.items.forEach(item => {
       item.checked = false;
-      item.unCheckChilds();
+      item.unCheckChild();
     });
   }
 
-  checkFromChilds(): void {
+  checkFromChild(): void {
     this.checked = this.allChildIsChecked();
   }
 
   allChildIsChecked(): boolean {
-    return this.countChilds === this.countChildsChecked();
+    return this.countChild === this.countChildChecked();
   }
 
   expandedAllItems(): void {
@@ -78,41 +78,41 @@ export class NgSelectMixtureItem {
     });
   }
 
-  countChildsChecked(): number {
+  countChildChecked(): number {
     let count = 0;
     if (this.items.length === 0) {
       count = this.checked ? 1 : 0;
     }
     this.items.forEach(item => {
-      count += item.countChildsChecked();
+      count += item.countChildChecked();
     });
 
     return count;
   }
 
 
-  getValueChildsChecked(): string[] {
+  getValueChildChecked(): string[] {
     const values: string[] = [];
     if (this.items.length === 0 && this.checked) {
       values.push(this.value);
     }
 
     this.items.forEach(item => {
-      const value = item.getValueChildsChecked();
+      const value = item.getValueChildChecked();
       values.push(...value);
     });
 
     return values;
   }
 
-  getTextChildsChecked(): string {
+  getTextChildChecked(): string {
     let text = '';
     if (this.items.length === 0) {
       text = this.checked ? this.name : '';
     }
 
     this.items.forEach(item => {
-      const textItem = item.getTextChildsChecked();
+      const textItem = item.getTextChildChecked();
       if (textItem !== '') {
         text = text === '' ? textItem : text + ',' + textItem;
       }

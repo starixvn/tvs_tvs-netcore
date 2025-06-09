@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { SubIssueTypeGroup } from '../../../../../utility/constants/config';
 import { OrdinalNumberConstant } from '../../../../../utility/constants/ordinal-number.constant';
 import { Message } from '../../messages/message';
@@ -10,7 +10,7 @@ import { ReplaceMessageService } from './replace-message.service';
   { providedIn: 'root' }
 )
 export class TemplateInputsService {
-  constructor(private readonly replaceMessageService: ReplaceMessageService) { }
+  private readonly replaceMessageService = inject(ReplaceMessageService);
 
   public replaceInputs(subIssueTypeId: number, selectedTemplated: TemplateModel, outputMessage: Message): void {
     if (selectedTemplated.inputTexts?.length > 0) {

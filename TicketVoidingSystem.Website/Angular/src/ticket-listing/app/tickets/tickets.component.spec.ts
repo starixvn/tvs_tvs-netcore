@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TicketsComponent } from './tickets.component';
-import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { Product } from '../../../utility/constants/config';
 import { SummaryItem } from '../summary/summary.model';
 import { TicketsModel } from './ticket.model';
-import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
-import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
+import { PagingComponent } from '../../../utility/components/paging/paging.component';
+import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 
 class Helper {
   static readonly mockSummaryItem = {

@@ -6,7 +6,7 @@ import { DateTimeFormat, TimeZone } from '../../../../../utility/constants/confi
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import moment from 'moment-timezone';
-import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
 import { EventEmitter, QueryList } from '@angular/core';
 

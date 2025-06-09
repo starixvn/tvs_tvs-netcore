@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
@@ -117,5 +118,120 @@ public class SelectRequestsHandlerTests
         // Assert
         Assert.NotNull(actualResult);
         await getRequestService.Received(1).GetRequests(Arg.Any<SelectRequestsRequest>());
+    }
+
+    [Fact]
+    public async Task Handler_WithInvalidMatchId_ReturnEmptyViewModel()
+    {
+        // Arrange
+        var getRequestService = Substitute.For<GetRequestsService>();
+        var renderRequestService = Substitute.For<RenderRequestService>();
+        var checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
+        var expectedViewModel = new List<RequestViewModel>();
+        var request = new SelectRequestsRequest
+        {
+            MatchId = "abc",
+            IssueTypeId = "1",
+            SubIssueType = "1"
+        };
+        var handler =
+            new SelectRequestsHandler(getRequestService, renderRequestService, checkPermissionOnRequestService);
+
+        // Act
+        var actualResult = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(expectedViewModel, actualResult);
+    }
+
+    [Fact]
+    public async Task Handler_WithInvalidRequestId_ReturnEmptyViewModel()
+    {
+        // Arrange
+        var getRequestService = Substitute.For<GetRequestsService>();
+        var renderRequestService = Substitute.For<RenderRequestService>();
+        var checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
+        var expectedViewModel = new List<RequestViewModel>();
+        var request = new SelectRequestsRequest
+        {
+            RequestId = "abc",
+            IssueTypeId = "1",
+            SubIssueType = "1"
+        };
+        var handler =
+            new SelectRequestsHandler(getRequestService, renderRequestService, checkPermissionOnRequestService);
+
+        // Act
+        var actualResult = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(expectedViewModel, actualResult);
+    }
+
+    [Fact]
+    public async Task Handler_WithMultipleViewModels_ReturnAllViewModels()
+    {
+        // Arrange
+        var getRequestService = Substitute.For<GetRequestsService>();
+        var renderRequestService = Substitute.For<RenderRequestService>();
+        var checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
+        checkPermissionOnRequestService.IsHasPermissionOnRequest(default).ReturnsForAnyArgs(true);
+
+        var viewModel1 = new RequestViewModel { RequestId = 1 };
+        var viewModel2 = new RequestViewModel { RequestId = 2 };
+        renderRequestService.Render(Arg.Is<GroupRequestModel>(x => x.RequestId == 1)).Returns(viewModel1);
+        renderRequestService.Render(Arg.Is<GroupRequestModel>(x => x.RequestId == 2)).Returns(viewModel2);
+
+        var models = new List<RequestModel>
+        {
+            new() { RequestId = 1, SubIssueTypeId = 1 },
+            new() { RequestId = 2, SubIssueTypeId = 1 }
+        };
+        getRequestService.GetRequests(Arg.Any<SelectRequestsRequest>()).ReturnsForAnyArgs((models, new List<string>()));
+
+        var request = new SelectRequestsRequest
+        {
+            RequestId = "1",
+            IssueTypeId = "1",
+            SubIssueType = "1"
+        };
+        var handler =
+            new SelectRequestsHandler(getRequestService, renderRequestService, checkPermissionOnRequestService);
+
+        // Act
+        var actualResult = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(2, actualResult.Count());
+        Assert.Contains(viewModel1, actualResult);
+        Assert.Contains(viewModel2, actualResult);
+    }
+
+    [Fact]
+    public async Task Handler_WithErrorMessages_ReturnEmptyViewModel()
+    {
+        // Arrange
+        var getRequestService = Substitute.For<GetRequestsService>();
+        var renderRequestService = Substitute.For<RenderRequestService>();
+        var checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
+        checkPermissionOnRequestService.IsHasPermissionOnRequest(default).ReturnsForAnyArgs(true);
+
+        var errorMessages = new List<string> { "Error 1", "Error 2" };
+        getRequestService.GetRequests(Arg.Any<SelectRequestsRequest>()).ReturnsForAnyArgs((new List<RequestModel>(), errorMessages));
+
+        var request = new SelectRequestsRequest
+        {
+            RequestId = "1",
+            IssueTypeId = "1",
+            SubIssueType = "1"
+        };
+        var handler =
+            new SelectRequestsHandler(getRequestService, renderRequestService, checkPermissionOnRequestService);
+
+        // Act
+        var actualResult = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        Assert.Empty(actualResult);
     }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import moment from 'moment';
 import { EventType } from '../../../../../utility/constants/sport.constant';
 import { Message } from '../../messages/message';
@@ -21,7 +21,7 @@ const MESSAGE_TEMPLATE_IDS_HAVE_TIME_RANGE_NC = [
   { providedIn: 'root' }
 )
 export class ReplacePlacedFromTimeRangeService {
-  constructor(private readonly replaceMessageService: ReplaceMessageService) { }
+  private readonly replaceMessageService = inject(ReplaceMessageService);
 
   public execute(templateValue: TemplateValue, outputMessage: Message, messageTemplateId: number): void {
     const isTheSameDay = moment(new Date(templateValue.fromTransTime)).format('DD/MM') === moment(new Date(templateValue.toTransTime)).format('DD/MM');

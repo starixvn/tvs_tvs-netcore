@@ -161,9 +161,6 @@ export class TemplateMessageComponent implements OnChanges {
     return (defaultTemplateWhenSportNull ? defaultTemplateWhenSportNull.templateId : 9999);
   }
 
-  /**
-   * Because Check VAR has other template, so we need to update Template again
-   */
   updateCheckBoxVarMessage() {
     this.updateTemplate();
     this.initialMessage = _.cloneDeep(this.message);
@@ -211,6 +208,7 @@ export class TemplateMessageComponent implements OnChanges {
     this.replaceScoreService.execute(this.value, this.message);
     this.replaceAIOMessageService.execute(this.isVoidSinglePage(), this.value, this.message);
     this.replaceSpecialBetTypeService.execute(this.issueTypeUpdateSpecialBetTypeTvs(), this.issueTypeUpdateSpecialBetTypeVoidSingleBet(), this.value, this.message);
+    this.replaceCommonValuesService.replaceInning(this.value, this.message);
   }
 
   issueTypeUpdateSpecialBetTypeTvs(): boolean {

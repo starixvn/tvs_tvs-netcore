@@ -4,12 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { BaseTicketsListComponent } from '../../../utility/components/base-tickets-list/base-tickets-list.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
-import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 import { LABELS } from '../../../utility/constants/labels';
 import { MarkedTicketQuery } from '../models/query.model';
 import { DataPermission } from '../models/result.model';
 import { TicketsModel } from './tickets.model';
-import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
+import { PagingComponent } from '../../../utility/components/paging/paging.component';
 import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
@@ -28,11 +28,12 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
   @Output() updateMarkedTickets = new EventEmitter<MarkedTicketQuery>();
   markedTicketsQuery = new MarkedTicketQuery();
   tooltip = new Tooltip();
+
   constructor(readonly element: ElementRef) {
-    super(element);
+    super();
     this.tooltip.element = this.element;
   }
-  
+
   ngOnInit() {
     this.clickBody();
   }

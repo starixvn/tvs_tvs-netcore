@@ -21,5 +21,6 @@ export type CheckIssueTypeObjectType = {
   isWrongOfferedName: boolean,
   isOtherIssues: boolean,
   isWrongMarketOffered: boolean
-  isTechnicalError: boolean
+  isTechnicalError: boolean,
+  isMatchEarlyCompleted: boolean
 }

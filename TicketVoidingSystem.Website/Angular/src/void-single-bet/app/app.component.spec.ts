@@ -9,15 +9,17 @@ import { PasswordService } from '../../utility/services/password.service';
 import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { FilterComponent } from './filter/filter.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
-import { GetTicketsQuery } from './models/query.model';
+import { GetTicketsQuery, FilterParams } from './models/query.model';
 import { TicketsModel } from './tickets/tickets.model';
 import { MatchModel } from '../../utility/models/match.model';
 import { Result } from '../../utility/models/result';
-import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PagingModel } from '../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../utility/components/paging/paging.model';
+import { SportType } from '../../utility/constants/sport.constant';
+import { BetID } from '../../utility/models/bet-id.model';
+import { GroupModel } from './tickets/group.model';
 
 class Helper {
   static readonly fakeMatchModel = {
@@ -174,6 +176,7 @@ describe('AppComponent', () => {
     component.isShowLogInfoOnly = false;
     component.ticketsModel = Helper.fakeTicketsModel;
     component.getTicketsQuery = Helper.fakeGetTicketsQuery;
+    component.matchViewModel = Helper.fakeMatchModel;
     
     // Mock filter component
     filterComponent.playerNamesSelected = {
@@ -218,6 +221,7 @@ describe('AppComponent', () => {
     it('should clear cache time and get match info', async () => {
       const query = Helper.fakeGetTicketsQuery;
       component.isShowTickets = false;
+      component.matchViewModel = undefined;
       await component.searchEvent(query);
       expect(component.isShowTickets).toBeTruthy();
       expect(component.isShowLogInfoOnly).toBeFalsy();
@@ -228,6 +232,7 @@ describe('AppComponent', () => {
   describe('getMatchInfo', () => {
     it('should get match info and search tickets', async () => {
       const query = Helper.fakeGetTicketsQuery;
+      component.matchViewModel = undefined;
       await component.getMatchInfo(query);
       expect(appService.getMatchInfo).toHaveBeenCalledWith(query.matchId);
       expect(component.isShowMatch).toBeTruthy();
@@ -246,8 +251,37 @@ describe('AppComponent', () => {
 
     it('should get tickets when transaction date is valid', async () => {
       const query = Helper.fakeGetTicketsQuery;
+      component.matchViewModel = Helper.fakeMatchModel;
+      component.ticketsModel = Helper.fakeTicketsModel;
+      const groupModel = new GroupModel('Test Group', [{
+        no: 1,
+        betId: '123',
+        value: '123',
+        member: 'Test Member',
+        transDate: new Date().toISOString(),
+        betType: 'Test Bet Type',
+        choice: 'Test Choice',
+        stake: '100',
+        odds: '1.5',
+        winLoss: '50',
+        currency: 'USD',
+        handicap: '0',
+        score: '1-0',
+        status: 'Active',
+        secondAcceptFlag: '0',
+        isDisable: false,
+        isChecked: true,
+        isCricket: false,
+        soldId: '123',
+        mainTransId: '123',
+        isMarked: false,
+        siteDbGroupId: 1
+      }]);
+      component.ticketsModel.groups = [groupModel];
       await component.searchTickets(query);
       expect(appService.getTickets).toHaveBeenCalledWith(query);
+      expect(component.isShowTickets).toBeTruthy();
+      expect(component.isShowMatch).toBeTruthy();
     });
   });
 
@@ -267,22 +301,6 @@ describe('AppComponent', () => {
 
   describe('voidTickets', () => {
     it('should void tickets and handle results', async () => {
-      const query = {
-        ...Helper.fakeGetTicketsQuery,
-        tickets: [],
-        transIdSolds: [],
-        transIdCrickets: [],
-        message: 'Test message',
-        userName: 'testUser',
-        userPassword: 'testPass',
-        reason: 'Test reason',
-        reasonSC: 'Test reason SC',
-        match: Helper.fakeMatchModel,
-        voidFromTime: '12:00:00 AM',
-        voidToTime: '12:00:00 AM',
-        guid: `VoidSingleBet-${Guid.create().toString()}`
-      };
-
       await component.voidTickets();
       expect(appService.voidTickets).toHaveBeenCalled();
       expect(blockUIService.stop).toHaveBeenCalled();
@@ -292,9 +310,26 @@ describe('AppComponent', () => {
   describe('handleAfterVoid', () => {
     it('should handle successful void operation', async () => {
       const results = Helper.fakeResult;
+      component.ticketsModel = Helper.fakeTicketsModel;
+      component.getTicketsQuery = Helper.fakeGetTicketsQuery;
+
       await component.handleAfterVoid(results);
+
       expect(component.messagesResult.isShow).toBeTruthy();
       expect(component.messagesResult.header).toBe('Void Bet Result');
+      expect(component.messagesResult.results).toEqual(results);
+    });
+
+    it('should handle failed void operation', async () => {
+      const results = [{
+        errorCode: 1,
+        message: 'Failed',
+        data: null
+      }] as unknown as Result<null>[];
+
+      await component.handleAfterVoid(results);
+
+      expect(component.messagesResult.isShow).toBeTruthy();
       expect(component.messagesResult.results).toEqual(results);
     });
   });
@@ -329,6 +364,172 @@ describe('AppComponent', () => {
       component.updateSubIssueType(subIssueTypeId);
       expect(component.subIssueTypeId).toBe(subIssueTypeId);
       expect(component.templateValue.isCheckedVar).toBeFalsy();
+    });
+  });
+
+  describe('updateTemplateValue', () => {
+    it('should update template value with correct data', () => {
+      component.matchViewModel = Helper.fakeMatchModel;
+      component.ticketsModel = Helper.fakeTicketsModel;
+      component.getTicketsQuery = Helper.fakeGetTicketsQuery;
+      component.filterComponent = {
+        playerNamesSelected: {
+          msgEnglish: 'Test Player',
+          msgChineseTraditional: '測試球員',
+          msgChineseSimplified: '测试球员',
+          msgChineseNewSimplified: '测试球员'
+        }
+      } as any;
+
+      component.updateTemplateValue();
+
+      expect(component.templateValue.sportType).toBeDefined();
+      expect(component.templateValue.matchId).toBe(Helper.fakeMatchModel.matchId);
+      expect(component.templateValue.eventType).toBe(Helper.fakeGetTicketsQuery.eventType);
+      expect(component.templateValue.playerName).toBeDefined();
+    });
+  });
+
+  describe('isHasInningContent', () => {
+    it('should return true for baseball sport type and early completed match', () => {
+      component.issueTypeId = 27;
+      component.matchViewModel = {
+        ...Helper.fakeMatchModel,
+        sportType: SportType.BASEBALL,
+        sportTypeName: 'Baseball'
+      };
+      const result = component['isHasInningContent'](SportType.BASEBALL);
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false for non-baseball sport type', () => {
+      const result = component['isHasInningContent'](1);
+      expect(result).toBeFalsy();
+    });
+  });
+
+  describe('checkValidation', () => {
+    it('should return false when no tickets are selected', () => {
+      jest.spyOn(component.ticketsModel, 'getTicketEnable').mockReturnValue([]);
+      const result = component.checkValidation();
+      expect(result).toBeFalsy();
+    });
+
+    it('should return false when messages validation fails', () => {
+      const mockTicket = { betId: '123' } as unknown as BetID;
+      jest.spyOn(component.ticketsModel, 'getTicketEnable').mockReturnValue([mockTicket]);
+      jest.spyOn(component.messagesComponent, 'checkValidation').mockReturnValue(false);
+      const result = component.checkValidation();
+      expect(result).toBeFalsy();
+    });
+
+    it('should return false when confirmation validation fails', () => {
+      const mockTicket = { betId: '123' } as unknown as BetID;
+      jest.spyOn(component.ticketsModel, 'getTicketEnable').mockReturnValue([mockTicket]);
+      jest.spyOn(component.messagesComponent, 'checkValidation').mockReturnValue(true);
+      jest.spyOn(component.confirmationComponent, 'checkValidation').mockReturnValue(false);
+      const result = component.checkValidation();
+      expect(result).toBeFalsy();
+    });
+
+    it('should return true when all validations pass', () => {
+      const mockTicket = { betId: '123' } as unknown as BetID;
+      jest.spyOn(component.ticketsModel, 'getTicketEnable').mockReturnValue([mockTicket]);
+      jest.spyOn(component.messagesComponent, 'checkValidation').mockReturnValue(true);
+      jest.spyOn(component.confirmationComponent, 'checkValidation').mockReturnValue(true);
+      jest.spyOn(component, 'checkFilterBeforeVoid').mockReturnValue(true);
+      const result = component.checkValidation();
+      expect(result).toBeTruthy();
+    });
+  });
+
+  describe('checkFilterBeforeVoid', () => {
+    it('should return false when filter params changed', () => {
+      const mockMatch: MatchModel = {
+        matchId: 1,
+        matchCode: 'TEST001',
+        leagueName: 'Test League',
+        matchEvent: 'Test Event',
+        homeName: 'Home Team',
+        awayName: 'Away Team',
+        sportTypeName: 'Football',
+        sportTypeNameTraditional: '足球',
+        sportTypeNameSimplified: '足球',
+        sportTypeNameNewSimplified: '足球'
+      };
+      const mockFilterParams = {
+        match: mockMatch,
+        ticketType: '1',
+        eventType: '1',
+        oddsType: '1',
+        timeType: 1,
+        fromTransDate: '2024-01-01',
+        toTransDate: '2024-01-01',
+        liveHomeScore: '',
+        liveAwayScore: ''
+      } as FilterParams;
+      component.filterParamsBeforeSearch = mockFilterParams;
+      component.filterComponent = {
+        getParams: () => ({ ...mockFilterParams, match: { ...mockMatch, matchId: 2 } }),
+        checkFilterParams: () => true,
+        blurMatchId: jest.fn()
+      } as unknown as FilterComponent;
+
+      const result = component.checkFilterBeforeVoid();
+      
+      expect(result).toBeFalsy();
+      expect(component.filterComponent.blurMatchId).toHaveBeenCalled();
+    });
+
+    it('should return true when filter params unchanged', () => {
+      const mockMatch: MatchModel = {
+        matchId: 1,
+        matchCode: 'TEST001',
+        leagueName: 'Test League',
+        matchEvent: 'Test Event',
+        homeName: 'Home Team',
+        awayName: 'Away Team',
+        sportTypeName: 'Football',
+        sportTypeNameTraditional: '足球',
+        sportTypeNameSimplified: '足球',
+        sportTypeNameNewSimplified: '足球'
+      };
+      const mockFilterParams = {
+        match: mockMatch,
+        ticketType: '1',
+        eventType: '1',
+        oddsType: '1',
+        timeType: 1,
+        fromTransDate: '2024-01-01',
+        toTransDate: '2024-01-01',
+        liveHomeScore: '',
+        liveAwayScore: ''
+      } as FilterParams;
+      component.filterParamsBeforeSearch = mockFilterParams;
+      component.filterComponent = {
+        getParams: () => mockFilterParams,
+        checkFilterParams: () => true
+      } as FilterComponent;
+
+      const result = component.checkFilterBeforeVoid();
+      
+      expect(result).toBeTruthy();
+    });
+  });
+
+  describe('clearCacheTime', () => {
+    it('should clear all time cache variables', () => {
+      component['fromTransTime'] = new Date();
+      component['toTransTime'] = new Date();
+      component['fromCheckTime'] = new Date();
+      component['toCheckTime'] = new Date();
+
+      component['clearCacheTime']();
+
+      expect(component['fromTransTime']).toBeNull();
+      expect(component['toTransTime']).toBeNull();
+      expect(component['fromCheckTime']).toBeNull();
+      expect(component['toCheckTime']).toBeNull();
     });
   });
 });

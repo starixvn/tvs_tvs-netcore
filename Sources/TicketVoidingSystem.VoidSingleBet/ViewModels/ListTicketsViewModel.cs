@@ -26,4 +26,5 @@ public class ListTicketsViewModel
 
     public List<AffectedLicensee> LicenseeAffectedList { get; set; }
     public string SmallestMapTicket { get; set; }
+    public string? Inning { get; set; }
 }

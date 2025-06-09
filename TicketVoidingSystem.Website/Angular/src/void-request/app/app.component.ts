@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RequestDetailViewModel } from '../../edit-request/app/request.model';
-import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../utility/components/block-ui/block-ui.directive';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { StaticService } from '../../utility/services/static.service';
@@ -20,7 +20,7 @@ import { VoidWrongMarketOfferedComponent } from './void-wrong-market-offered/voi
   styleUrls: ['./app.component.scss'],
   imports: [VoidDangerAcceptedComponent, VoidDuplicateTicketsComponent,
     VoidNotParticipateComponent, VoidEarlyKickOffComponent, VoidAbnormalBetComponent,
-    VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiModule, VoidArchivedTicketComponent]
+    VoidWrongMarketOfferedComponent, MenuBarComponent, BlockUiDirective, VoidArchivedTicketComponent]
 })
 export class AppComponent implements OnInit {
   requestId: number;
@@ -76,7 +76,8 @@ export class AppComponent implements OnInit {
       || StaticService.isTechnicalError(this.issueTypeId)
       || StaticService.isReducedOver(this.issueTypeId)
       || StaticService.isAbandoned(this.issueTypeId)
-      || StaticService.isOtherIssues(this.issueTypeId);
+      || StaticService.isOtherIssues(this.issueTypeId)
+      || StaticService.isMatchEarlyCompleted(this.issueTypeId);
   }
 
   isLikelyVoidEarlyKickOff(): boolean {

@@ -1,10 +1,10 @@
 ﻿import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { TicketsModel } from './tickets.model';
 import { CommonModule } from '@angular/common';
-import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 import { FormsModule } from '@angular/forms';
-import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
+import { PagingComponent } from '../../../utility/components/paging/paging.component';
 
 @Component({
     standalone: true,

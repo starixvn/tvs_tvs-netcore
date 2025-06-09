@@ -2,16 +2,16 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import bigDecimal from 'js-big-decimal';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
-import { SanitizeHtmlPipe } from '../../../../../utility/pipes/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 import { TicketTableViewModel } from './ticket-table.model';
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
   selector: 'ticket-table',
   templateUrl: './ticket-table.component.html',
   styleUrls: ['./ticket-table.component.scss'],
   standalone: true,
-  imports: [BlockUiModule, FormsModule, SanitizeHtmlPipe, CommonModule]
+  imports: [BlockUiDirective, FormsModule, SanitizeHtmlPipe, CommonModule]
 })
 export class TicketTableComponent {
   @Input() model = new TicketTableViewModel();

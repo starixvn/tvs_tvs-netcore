@@ -31,8 +31,11 @@ export class LogInfoService {
     query.requestId = requestId;
     query.actionId = Number(filter.action);
     query.issueTypeId = Number(filter.issueTypeId);
-    query.otherIssuesModel = this.eventOtherIssuesService.initOtherIssuesGetLogInfoModel(Number(filter.subIssueTypeId), events);
-
+    if (StaticService.isOtherIssues(filter.issueTypeId)) {
+      query.otherIssuesModel = this.eventOtherIssuesService.initOtherIssuesGetLogInfoModel(filter.issueTypeId, Number(filter.subIssueTypeId), events);
+    } else {
+      query.matchEarlyCompletedModel = this.eventOtherIssuesService.initOtherIssuesGetLogInfoModel(filter.issueTypeId, Number(filter.subIssueTypeId), events);
+    }
     return query;
   }
 
@@ -43,6 +46,7 @@ export class LogInfoService {
       logInfoEvent.isHasInstantlySettledTicket = logInfoModel.validation.isHasInstantlySettledTicket;
       logInfoEvent.logInfoDetail = logInfoModel.logInfoDetail;
       logInfoEvent.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel);
+      logInfoEvent.betTypeCount = logInfoModel.betTypeCount;
     }
   }
 }

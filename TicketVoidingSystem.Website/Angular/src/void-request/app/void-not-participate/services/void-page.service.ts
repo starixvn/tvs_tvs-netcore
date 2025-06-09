@@ -71,7 +71,7 @@ export class VoidPageService {
       } as BasicRequestInfo;
     }
 
-    if (StaticService.isOtherIssues(requestDetail.request.issueTypeId)) {
+    if (StaticService.isOtherIssues(requestDetail.request.issueTypeId) || StaticService.isMatchEarlyCompleted(requestDetail.request.issueTypeId)) {
       return {
         id: 1,
         matchId: requestDetail.otherIssuesModel.matchId,
@@ -135,6 +135,10 @@ export class VoidPageService {
 
     if (StaticService.isOtherIssues(requestDetail.request.issueTypeId)) {
       query.otherIssuesModel = MappingModelStaticService.buildOtherIssuesGetLogInfoModel(requestDetail.otherIssuesModel);
+    }
+
+    if(StaticService.isMatchEarlyCompleted(requestDetail.request.issueTypeId)) {
+      query.matchEarlyCompletedModel = MappingModelStaticService.buildOtherIssuesGetLogInfoModel(requestDetail.otherIssuesModel);
     }
 
     if (StaticService.isReducedOver(requestDetail.request.issueTypeId) ||

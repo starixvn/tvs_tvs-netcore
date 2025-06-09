@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgSelectMixtureItem } from './ng-select-mixture-item.model';
@@ -7,11 +7,11 @@ import { NgSelectMixtureModel } from './ng-select-mixture.model';
 import { NgSelectTreeViewComponent } from './ng-select-tree-view/ng-select-tree-view.component';
 
 @Component({
+  standalone: true,
   selector: 'ng-select-mixture',
   templateUrl: './ng-select-mixture.component.html',
   styleUrls: ['./ng-select-mixture.component.scss'],
   viewProviders: [NgSelectTreeViewComponent],
-  standalone: true,
   imports: [FormsModule, CommonModule, NgSelectModule, NgSelectTreeViewComponent]
 })
 export class NgSelectMixtureComponent implements OnInit {
@@ -20,16 +20,13 @@ export class NgSelectMixtureComponent implements OnInit {
   @Input() model = new NgSelectMixtureModel();
   @Output() checkedItems = new EventEmitter<string[]>();
   isCollapse: boolean;
-
-  constructor(
-    private readonly elementRef: ElementRef,
-    private readonly renderer: Renderer2) {
-  }
+  
+  private readonly elementRef = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
 
   ngOnInit(): void {
     this.checkBySelectedItem();
     this.getTitle();
-
   }
 
   ngAfterViewInit(): void {
@@ -51,15 +48,15 @@ export class NgSelectMixtureComponent implements OnInit {
   public emitSingleEvent(item: NgSelectMixtureItem): void {
     this.isCollapse = false;
     this.model.items.forEach(x => {
-      x.unCheckChilds();
-      x.checkFromChilds();
+      x.unCheckChild();
+      x.checkFromChild();
     });
     this.model.title = item.name;
     this.model.isShowPlaceHolder = false;
     this.checkedItems.emit([item.value]);
   }
 
-  public emitchildEvent(): void {
+  public emitChildEvent(): void {
     this.model.title = this.model.getDisplayedAllChildItems();
   }
 

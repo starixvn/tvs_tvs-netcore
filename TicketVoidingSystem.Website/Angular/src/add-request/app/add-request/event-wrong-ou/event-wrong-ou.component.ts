@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
@@ -34,7 +34,7 @@ import { OnlyNumberDirective } from '../../../../utility/directives/number.direc
   templateUrl: './event-wrong-ou.component.html',
   styleUrls: ['./event-wrong-ou.component.scss'],
   standalone: true,
-  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiModule, AddChildMatchComponent, 
+  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiDirective, AddChildMatchComponent, 
     LogInfoWrongOuComponent, OnlyNumberDirective],
   providers: [
     EventWrongOuService,

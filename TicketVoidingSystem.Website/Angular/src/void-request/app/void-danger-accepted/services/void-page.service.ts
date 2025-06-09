@@ -241,8 +241,10 @@ export class VoidPageService {
           id: index + 1,
           matchId: x.matchId,
           subIssueTypeId: x.subIssueTypeId,
+          isMainMatch: x.isMainMatch,
           filterBy: x.filterBy,
           actualScore: x.actualScore,
+          wrongScore: x.wrongScore,
           isCheckedVar: x.isCheckedVar
         };
         return info;
