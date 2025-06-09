@@ -297,7 +297,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   }
 
   public getSelectedWrongScores(wrongScoreModels: WrongScoreModel[]): WrongScoreModel[] {
-    return wrongScoreModels.filter(x => x.isChecked || x.isMainMatch);
+    return wrongScoreModels.filter(x => x.isChecked);
   }
 
   /* istanbul ignore next */
