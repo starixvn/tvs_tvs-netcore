@@ -1,15 +1,15 @@
+import { TestBed } from '@angular/core/testing';
 import * as _ from 'lodash';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupNumber } from '../../../../../utility/components/bet-ids/bet-ids.model';
+import { LABELS } from '../../../../../utility/constants/labels';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { RecoverTicketModel } from '../../models/recover-ticket.model';
 import { CheckRecoverTicketResult } from '../models/check-recover-ticket-result.model';
 import { ValidationService } from './validation.service';
-import { PermissionAddRequest } from '../../models/permission-add-request.model';
-import { TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { LABELS } from '../../../../../utility/constants/labels';
 
 class Helper {
   static readonly fakeCheckRecoverTicketResult: CheckRecoverTicketResult = {
@@ -60,7 +60,6 @@ describe('ValidationService', () => {
       const result = await service.checkBusinessRule(
         mockBetIdsComponent,
         mockRecoverTicketModel,
-        mockFilter,
         123,
         mockPermission
       );
@@ -102,7 +101,6 @@ describe('ValidationService', () => {
       const result = await service.checkBusinessRule(
         mockBetIdsComponent,
         mockRecoverTicketModel,
-        mockFilter,
         123,
         mockPermission
       );
@@ -156,7 +154,6 @@ describe('ValidationService', () => {
       const result = await service.checkBusinessRule(
         mockBetIdsComponent,
         mockRecoverTicketModel,
-        mockFilter,
         123,
         mockPermission
       );
@@ -176,7 +173,7 @@ describe('ValidationService', () => {
     const betIdsComponent = {} as BetIdsComponent;
     betIdsComponent.isHasBetId = mockIsHasBetId;
     service['highlightInvalidTransIds'] = jest.fn();
-    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), new FilterModel(), 1, new PermissionAddRequest());
+    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, new PermissionAddRequest());
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(result.isValid).toBe(false);
@@ -197,7 +194,7 @@ describe('ValidationService', () => {
     addRequestApiService.checkRecoverTicket = jest.fn().mockImplementation(() => null);
     service['highlightInvalidTransIds'] = jest.fn();
 
-    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), new FilterModel(), 1, new PermissionAddRequest());
+    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, new PermissionAddRequest());
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
@@ -225,7 +222,7 @@ describe('ValidationService', () => {
     addRequestApiService.checkRecoverTicket = jest.fn().mockImplementation(() => results);
     service['highlightInvalidTransIds'] = jest.fn();
 
-    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), new FilterModel(), 1, new PermissionAddRequest());
+    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, new PermissionAddRequest());
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
@@ -254,7 +251,7 @@ describe('ValidationService', () => {
 
     jest.spyOn(addRequestApiService, 'checkRecoverTicket').mockResolvedValue(results);
 
-    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), new FilterModel(), 1, new PermissionAddRequest());
+    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, new PermissionAddRequest());
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);

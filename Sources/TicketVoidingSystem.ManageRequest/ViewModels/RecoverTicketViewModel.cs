@@ -9,4 +9,8 @@ public class RecoverTicketViewModel
     public string ProductIds { get; set; }
 
     public int SubIssueTypeId { get; set; }
+
+    public bool IsSubParlay { get; set; }
+
+    public int MatchId { get; set; }
 }

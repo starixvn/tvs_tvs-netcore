@@ -1,8 +1,8 @@
 import { inject, Injectable } from "@angular/core";
+import { EventLeagueComponent } from "src/utility/components/event-league/event-league.component";
 import { BetIdsComponent } from "../../../../../utility/components/bet-ids/bet-ids.component";
 import { LABELS } from "../../../../../utility/constants/labels";
 import { AddRequestApiService } from "../../add-request-api.service";
-import { FilterModel } from "../../filter/filter.model";
 import { PermissionAddRequest } from "../../models/permission-add-request.model";
 import { RecoverTicketModel } from "../../models/recover-ticket.model";
 import { CheckRecoverTicketResult } from "../models/check-recover-ticket-result.model";
@@ -14,14 +14,18 @@ export class ValidationService {
   private readonly addRequestApiService = inject(AddRequestApiService);
 
   public async checkBusinessRule(betIdsComponent: BetIdsComponent, recoverTicketModel: RecoverTicketModel,
-    filter: FilterModel, requestId: number, permission: PermissionAddRequest): Promise<ValidationBusinessRuleOutput> {
+    requestId: number, permission: PermissionAddRequest, eventLeagueComponent: EventLeagueComponent): Promise<ValidationBusinessRuleOutput> {
     if (!betIdsComponent.isHasBetId()) {
+      return { isValid: false } as ValidationBusinessRuleOutput;
+    }
+
+    if (recoverTicketModel.filterBy === 1 &&  !eventLeagueComponent?.isMatchIdValid()) {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
 
     betIdsComponent.groupNumber.resetAllItemsToValid();
     betIdsComponent.groupNumber.checkDuplicatedItems();
-    const validationResult = await this.checkRecoverTicket(betIdsComponent, recoverTicketModel, filter, requestId, permission);
+    const validationResult = await this.checkRecoverTicket(betIdsComponent, recoverTicketModel, requestId, permission);
     if (validationResult === null) {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
@@ -35,14 +39,12 @@ export class ValidationService {
   }
 
   private async checkRecoverTicket(betIdsComponent: BetIdsComponent, recoverTicketModel: RecoverTicketModel,
-    filter: FilterModel, requestId: number, permission: PermissionAddRequest): Promise<CheckRecoverTicketResult>{
+     requestId: number, permission: PermissionAddRequest): Promise<CheckRecoverTicketResult>{
     const query: CheckRecoverTicketQuery = {
       requestId: requestId,
       transIds: betIdsComponent.getAllBetIds(),
       filterBy: recoverTicketModel.filterBy,
       productIds: recoverTicketModel.productIds,
-      subIssueTypeId: Number(filter.subIssueTypeId),
-      isSubParlay: recoverTicketModel.isSubParlay,
       matchId: recoverTicketModel.matchId,
       isVoidAllArchivedTickets: permission.isVoidAllArchivedTickets
     };

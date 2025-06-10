@@ -1,4 +1,6 @@
-﻿using Fanex.Data.Repository;
+﻿using Fanex.Data;
+using Fanex.Data.Repository;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
@@ -12,11 +14,14 @@ public class CheckRecoverTicketCriteria : CriteriaBase
 
     public string ProductIds { get; set; }
 
-    public string TransInfoJson { get; set; }
+    public int MatchId { get; set; }
 
     public bool IsVoidAllArchivedTickets { get; set; }
 
-    public override string GetSettingKey() => "TicketVoiding_Request_CheckRecoverTicket";
+    [SpParam(Ignored = true)]
+    public int SiteDbGroupId { get; set; }
+
+    public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_Request_CheckRecoverTicket");
 
     public override bool IsValid() => true;
 }

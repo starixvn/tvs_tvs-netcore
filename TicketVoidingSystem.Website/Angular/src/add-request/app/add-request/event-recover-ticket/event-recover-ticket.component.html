@@ -9,12 +9,13 @@
   </div>
   <div class="filter-sub-parlay mb-3">
     <div class="form-check align-self-end">
-      <input class="form-check-input" type="checkbox" [(ngModel)]="recoverTicketModel.isSubParlay" id="isSubParlay">
+      <input class="form-check-input" type="checkbox" [(ngModel)]="isSubParlay" id="isSubParlay"
+        (change)="changeSubParlay()">
       <label class="form-check-label" for="isSubParlay">
         Sub Parlay
       </label>
     </div>
-    <event-league  #leagueEvent [hidden]="!recoverTicketModel.isSubParlay" [isEdit]="isEdit" (changeEvent)="changeMatchEvent()"
+    <event-league  #leagueEvent [hidden]="!isSubParlay" [isEdit]="isEdit" (changeEvent)="changeMatchEvent()"
       [matchId]="recoverTicketModel.matchId" [isShowLeague]="false" [isShowSportType]="false">
     </event-league>
   </div>

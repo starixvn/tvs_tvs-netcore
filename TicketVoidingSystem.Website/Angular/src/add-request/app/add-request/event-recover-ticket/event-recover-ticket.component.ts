@@ -31,9 +31,11 @@ export class EventRecoverTicketComponent implements OnInit {
   @Input() requestId?: number;
   @Input() others = new OthersModel();
   @ViewChild('betIds') betIdsComponent: BetIdsComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
 
   primitiveProps = new PrimitiveProperty();
   isCancelAfterFocusOutBetIdsEvent = false;
+  isSubParlay = false;
   products = ProductFilterRecoverTicket.SELECTION_ITEMS;
   private readonly addRequestStore = inject(AddRequestStore);
   private readonly saveRequestService = inject(SaveRequestService);
@@ -49,9 +51,14 @@ export class EventRecoverTicketComponent implements OnInit {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     if (!this.isCancelAfterFocusOutBetIdsEvent) {
       this.primitiveProps.isBlockBetIds = true;
-      await this.validationService.checkBusinessRule(this.betIdsComponent, this.recoverTicketModel, this.filter, this.requestId, this.primitiveProps.permission);
+      await this.validationService.checkBusinessRule(this.betIdsComponent, this.recoverTicketModel, this.requestId,
+        this.primitiveProps.permission, this.eventLeagueComponent);
       this.primitiveProps.isBlockBetIds = false;
     }
+  }
+
+  changeSubParlay(): void {
+    this.recoverTicketModel.filterBy = this.isSubParlay ? 1 : null;
   }
 
   async saveRequest(): Promise<void> {
@@ -63,18 +70,16 @@ export class EventRecoverTicketComponent implements OnInit {
 
 
   async changeMatchEvent(): Promise<void> {
-    // if (this.eventLeagueComponent?.selectedMatch.matchId) {
-    //   this.logInfoEvent.matchId = this.eventLeagueComponent.selectedMatch.matchId;
-    //   await this.updateModelWhenChangeMatchId();
-    //   this.resetFilterNotParticipate();
-    //   this.primitivePropertyEvent.isShowFilterArea = true;
-    // }
+    if (this.eventLeagueComponent?.selectedMatch.matchId) {
+      this.recoverTicketModel.matchId = this.eventLeagueComponent.selectedMatch.matchId;
+    }
   }
 
 
   private createSaveRequestArg(): SaveRequestArg {
     const args = new SaveRequestArg();
     args.primitiveProps = this.primitiveProps;
+    args.eventLeague = this.eventLeagueComponent;
     args.requestId = this.requestId;
     args.isEdit = this.isEdit;
     args.filter = this.filter;
@@ -90,7 +95,8 @@ export class EventRecoverTicketComponent implements OnInit {
     return {
       transIds: this.betIdsComponent.getAllBetIds(),
       productIds: this.recoverTicketModel.productIds,
-      filterBy: null,
+      filterBy: this.recoverTicketModel.filterBy,
+      matchId: this.recoverTicketModel.matchId,
       subIssueTypeId: Number(this.filter.subIssueTypeId)
     } as RecoverTicketModel;
   }
