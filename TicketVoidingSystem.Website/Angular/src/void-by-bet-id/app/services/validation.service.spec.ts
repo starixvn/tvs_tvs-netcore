@@ -1,0 +1,167 @@
+import { TestBed } from '@angular/core/testing';
+import { ValidationService } from './validation.service';
+import { BetIdsComponent } from '../../../utility/components/bet-ids/bet-ids.component';
+import { ConfirmationComponent } from '../../../utility/components/confirmation/confirmation.component';
+import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
+import { LABELS } from '../../../utility/constants/labels';
+import { TestingModule } from '../../../utility/modules/testing.module';
+
+describe('ValidationService', () => {
+  let service: ValidationService;
+  let betIdsComponent: BetIdsComponent;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [TestingModule],
+      providers: [ValidationService]
+    });
+
+    service = TestBed.inject(ValidationService);
+    betIdsComponent = {
+        groupNumber: {
+            updateInvalidItems: jest.fn(),
+            updateMoved: jest.fn()
+        }
+    } as unknown as BetIdsComponent;
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  describe('highlightInvalidTransIds', () => {
+    it('should update invalid items when invalidTransIds is provided', () => {
+      // Arrange
+      const invalidTransIds = '123,456';
+      const movedTransIds = '';
+      betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
+      betIdsComponent.groupNumber.updateMoved = jest.fn();
+
+      // Act
+      service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
+
+      // Assert
+      expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith(invalidTransIds, LABELS.INVALID_TICKETS);
+      expect(betIdsComponent.groupNumber.updateMoved).not.toHaveBeenCalled();
+    });
+
+    it('should update moved items when movedTransIds is provided', () => {
+      // Arrange
+      const invalidTransIds = '';
+      const movedTransIds = '789,012';
+      betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
+      betIdsComponent.groupNumber.updateMoved = jest.fn();
+
+      // Act
+      service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
+
+      // Assert
+      expect(betIdsComponent.groupNumber.updateInvalidItems).not.toHaveBeenCalled();
+      expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalledWith(movedTransIds);
+    });
+
+    it('should handle both invalid and moved items when both are provided', () => {
+      // Arrange
+      const invalidTransIds = '123,456';
+      const movedTransIds = '789,012';
+      betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
+      betIdsComponent.groupNumber.updateMoved = jest.fn();
+
+      // Act
+      service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
+
+      // Assert
+      expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith(invalidTransIds, LABELS.INVALID_TICKETS);
+      expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalledWith(movedTransIds);
+    });
+
+    it('should not call any update methods when both parameters are empty', () => {
+      // Arrange
+      const invalidTransIds = '';
+      const movedTransIds = '';
+      betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
+      betIdsComponent.groupNumber.updateMoved = jest.fn();
+
+      // Act
+      service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
+
+      // Assert
+      expect(betIdsComponent.groupNumber.updateInvalidItems).not.toHaveBeenCalled();
+      expect(betIdsComponent.groupNumber.updateMoved).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('checkValidation', () => {
+    it('should return true when both components pass validation', () => {
+      // Arrange
+      const messagesComponent = {
+        checkValidation: jest.fn().mockReturnValue(true)
+      } as unknown as TemplateMessageComponent;
+      const confirmationComponent = {
+        checkValidation: jest.fn().mockReturnValue(true)
+      } as unknown as ConfirmationComponent;
+
+      // Act
+      const result = service.checkValidation(messagesComponent, confirmationComponent);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(messagesComponent.checkValidation).toHaveBeenCalled();
+      expect(confirmationComponent.checkValidation).toHaveBeenCalled();
+    });
+
+    it('should return false when messagesComponent validation fails', () => {
+      // Arrange
+      const messagesComponent = {
+        checkValidation: jest.fn().mockReturnValue(false)
+      } as unknown as TemplateMessageComponent;
+      const confirmationComponent = {
+        checkValidation: jest.fn().mockReturnValue(true)
+      } as unknown as ConfirmationComponent;
+
+      // Act
+      const result = service.checkValidation(messagesComponent, confirmationComponent);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(messagesComponent.checkValidation).toHaveBeenCalled();
+      expect(confirmationComponent.checkValidation).not.toHaveBeenCalled();
+    });
+
+    it('should return false when confirmationComponent validation fails', () => {
+      // Arrange
+      const messagesComponent = {
+        checkValidation: jest.fn().mockReturnValue(true)
+      } as unknown as TemplateMessageComponent;
+      const confirmationComponent = {
+        checkValidation: jest.fn().mockReturnValue(false)
+      } as unknown as ConfirmationComponent;
+
+      // Act
+      const result = service.checkValidation(messagesComponent, confirmationComponent);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(messagesComponent.checkValidation).toHaveBeenCalled();
+      expect(confirmationComponent.checkValidation).toHaveBeenCalled();
+    });
+
+    it('should return false when both components fail validation', () => {
+      // Arrange
+      const messagesComponent = {
+        checkValidation: jest.fn().mockReturnValue(false)
+      } as unknown as TemplateMessageComponent;
+      const confirmationComponent = {
+        checkValidation: jest.fn().mockReturnValue(false)
+      } as unknown as ConfirmationComponent;
+
+      // Act
+      const result = service.checkValidation(messagesComponent, confirmationComponent);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(messagesComponent.checkValidation).toHaveBeenCalled();
+      expect(confirmationComponent.checkValidation).not.toHaveBeenCalled();
+    });
+  });
+}); 

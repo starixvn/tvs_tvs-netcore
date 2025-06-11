@@ -59,4 +59,35 @@ public class GetTicketsServiceTest
             .DidNotReceive()
             .GetTicket(Arg.Any<GetTicketModel>(), Arg.Any<UserPermission>());
     }
+
+    [Fact]
+    public async Task GetTickets_ShouldCallRepositoryAndReturnCorrectData()
+    {
+        // Arrange
+        var query = new GetTicketsQuery();
+        var expectedTickets = new List<GetTicketModel>();
+        const string expectedInvalidTransIds = "123,456";
+        const string expectedMovedTransIds = "789";
+        const int expectedMatchId = 1;
+
+        var repository = Substitute.For<VoidByBetIdRepository>();
+        var sessionService = Substitute.For<SessionService>();
+        var ticketHtmlService = Substitute.For<TicketService>();
+
+        repository
+            .GetTickets(query)
+            .Returns((expectedTickets, expectedInvalidTransIds, expectedMovedTransIds, expectedMatchId));
+
+        var service = new GetTicketsServiceImp(repository, sessionService, ticketHtmlService);
+
+        // Act
+        var result = await service.GetTickets(query);
+
+        // Assert
+        await repository.Received(1).GetTickets(query);
+        Assert.Equal(expectedTickets, result.Tickets);
+        Assert.Equal(expectedInvalidTransIds, result.InvalidTransIds);
+        Assert.Equal(expectedMovedTransIds, result.MovedTransIds);
+        Assert.Equal(expectedMatchId, result.matchId);
+    }
 }

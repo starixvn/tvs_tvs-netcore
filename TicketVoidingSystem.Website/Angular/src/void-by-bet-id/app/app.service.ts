@@ -1,9 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpService } from '../../utility/services/http.service';
 import { GetTicketsQuery, TicketsViewModel } from './model/get-tickets.query';
-import { MatchModel } from 'src/utility/models/match.model';
-import { CommonService } from 'src/utility/services/common.service';
-import { SubIssueType } from 'src/utility/components/template-message/template-message/template-setting.model';
+import { CommonService } from '../../utility/services/common.service';
+import { SubIssueType } from '../../utility/components/template-message/template-message/template-setting.model';
 import { Result } from '../../utility/models/result';
 import { VoidTicketsRequest } from './model/void-by-bet-id.model';
 

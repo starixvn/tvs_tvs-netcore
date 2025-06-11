@@ -118,8 +118,6 @@ describe('LogInfoWrongOddsComponent', () => {
   let addRequestStore: AddRequestStore;
   let addRequestApiService: AddRequestApiService;
   let logAnalysisService: LogAnalysisService;
-  let affectedTicketService: AffectedTicketService;
-  let validationService: ValidationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -141,8 +139,6 @@ describe('LogInfoWrongOddsComponent', () => {
     addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
     addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
     logAnalysisService = fixture.debugElement.injector.get(LogAnalysisService);
-    affectedTicketService = fixture.debugElement.injector.get(AffectedTicketService);
-    validationService = fixture.debugElement.injector.get(ValidationService);
     component = fixture.componentInstance;
   });
 

@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { TemplateValue } from "../../../utility/components/template-message/template-message/template.model";
 import { MatchModel } from "../../../utility/models/match.model";
-import { AbnormalFilterBy } from "src/utility/constants/config";
+import { AbnormalFilterBy } from "../../../utility/constants/config";
 import { TicketsViewModel } from "../model/get-tickets.query";
 import { TemplateService } from "../../../utility/components/template-message/template-message/services/template.service";
 import { MessagesResult } from "../../../utility/components/messages-result/messages-result";
