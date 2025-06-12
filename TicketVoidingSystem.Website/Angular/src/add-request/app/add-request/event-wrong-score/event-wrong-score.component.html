@@ -32,7 +32,8 @@
     </button>
   </div>
   @if (isShowLogInfoFilterByAcceptedTime()) {
-  <div class="main-log-info mb-3">
+    <main-log-info [logInfo]="newMainEvent"></main-log-info>
+  <!-- <div class="main-log-info mb-3">
     <label class="col-form-label-sm"><strong>Main Event - Log Info</strong></label>
     <div class="log-info">
       @if (wrongScoreModels[0].logInfoDetail) {
@@ -75,7 +76,7 @@
       </div>
       }
     </div>
-  </div>
+  </div> -->
   }
   @if (primitiveProps.filterBy !== 2) {
   <div>

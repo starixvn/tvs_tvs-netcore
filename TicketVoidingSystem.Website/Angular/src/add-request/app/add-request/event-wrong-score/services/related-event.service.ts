@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, model } from '@angular/core';
 import _ from 'lodash';
 import moment from 'moment';
 import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
@@ -270,5 +270,24 @@ export class RelatedEventService {
       const relatedEventModel = await this.getLogInfoRelatedEvent(wrongScoreModel, allChildEvent, eventDateQuery);
       allEvents.push(relatedEventModel);
     }
+  }
+
+  assignMainEvent(event: WrongScoreModel): LogInfoRelatedEvent {
+    const voidTimeArea = new FilterTimeWithAllowance();
+    voidTimeArea.fromDateTime = event.filterFromTransTime;
+    voidTimeArea.toDateTime = event.filterToTransTime;
+    voidTimeArea.aaTime = event.aaTime;
+    voidTimeArea.paTime = event.paTime;
+    voidTimeArea.saTime = event.saTime;
+
+    const logInfoRelatedEventModel = {
+      logInfoDetail: event.logInfoDetail,
+      messageValidationLogInfo: event.messageValidationLogInfo,
+      voidTimeArea: voidTimeArea,
+      matchId: event.matchId,
+      subIssueTypeId: event.subIssueTypeId
+    } as LogInfoRelatedEvent;
+
+    return logInfoRelatedEventModel;
   }
 }

@@ -45,6 +45,7 @@ import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
 import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 import { SanitizeHtmlPipe } from '../../../../utility/modules/sanitize-html.pipe';
+import { MainLogInfoComponent } from './main-log-info/main-log-info.component';
 
 @Component({
   standalone: true,
@@ -52,7 +53,7 @@ import { SanitizeHtmlPipe } from '../../../../utility/modules/sanitize-html.pipe
   templateUrl: './event-wrong-score.component.html',
   styleUrls: ['./event-wrong-score.component.scss'],
   imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, SanitizeHtmlPipe, ConfirmWrongScoreComponent,
-    LogInfoRelatedEventComponent, AddChildMatchComponent, CommonModule, FormsModule, TooltipComponent, BlockUiDirective, OnlyNumberDirective],
+    LogInfoRelatedEventComponent, AddChildMatchComponent, CommonModule, FormsModule, TooltipComponent, BlockUiDirective, OnlyNumberDirective, MainLogInfoComponent],
   providers: [EventWrongScoreService, LogInfoService, SaveRequestService, ValidationService, WrongScoreService,
     RelatedEventService, EditRequestService, TvDetectionService]
 })
@@ -90,6 +91,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   relatedEvents: ChildMatchModel[] = [];
   defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
   mainEvent = new WrongScoreModel();
+  newMainEvent = new LogInfoRelatedEvent();
   private readonly element = inject(ElementRef);
   private readonly addRequestStore = inject(AddRequestStore);
   private readonly validationService = inject(ValidationService);
@@ -122,6 +124,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     });
     if (this.isEdit) {
       this.mainEvent = this.editRequestService.getMainWrongScoreModel(this.wrongScoreModels);
+      this.newMainEvent = this.relatedEventService.assignMainEvent(this.mainEvent);
       this.matchId = this.mainEvent.matchId;
       this.editRequestService.assignPrimitivePropsEditRequest(this.mainEvent, this.primitiveProps);
       if (this.mainEvent.filterBy === TVSRequestFilterBy.CHECK_TIME) {
