@@ -220,14 +220,6 @@ export class AdvancedModeComponent implements OnChanges {
     return AdvancedModeConstants.BETTYPES_MORE_HDP.split(',').includes(id.toString());
   }
 
-  onChangeInputMultipleDecimal(betTeamIndex: number, inputIndex: number, isMultiple: boolean, value: string) {
-    if (!this.isValidInputWithToolTip(betTeamIndex, inputIndex, isMultiple, value)) {
-      return false;
-    }
-    this.tooltip.hide();
-    return true;
-  }
-
   private isValidInputWithToolTip(betTeamIndex: number, inputIndex: number, isMultiple: boolean, value: string): boolean {
     if (value && !this.isValidInputDecimalValue(isMultiple, value)) {
       if (!this.isShowContent) {
