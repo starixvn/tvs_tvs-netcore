@@ -20,64 +20,20 @@
   <tv-detection #tvDetection [isEdit]="isEdit" [model]="tvDetectionModel" [disabled]="filter.isVoided"
     (actualTimeChange)="actualTimeChange($event)">
   </tv-detection>
-  }
-  @if (primitiveProps.filterBy === 2) {
+
   <filter-wrong-score #filterWrongScore [tvDetectionValue]="tvDetectionModel.tvDetectionValue" [isVoided]="isVoided"
     [filterWrongScoreModel]="defaultFilterTimeWithAllowance" (changeFilterEvent)="resetData()">
   </filter-wrong-score>
   }
+
   <div class="mb-3 mt-3 d-flex">
     <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm" (click)="handleSearchEvent()">
       Search
     </button>
   </div>
-  @if (isShowLogInfoFilterByAcceptedTime()) {
-    <main-log-info [logInfo]="newMainEvent"></main-log-info>
-  <!-- <div class="main-log-info mb-3">
-    <label class="col-form-label-sm"><strong>Main Event - Log Info</strong></label>
-    <div class="log-info">
-      @if (wrongScoreModels[0].logInfoDetail) {
-      <div>
-        <span>Live Score: </span><strong>{{wrongScoreModels[0].logInfoDetail.liveScores}}</strong>.
-        Void Accept Time: <strong>{{displayFullDateTimeFormat(wrongScoreModels[0].logInfoDetail.voidFromTime)}} -
-          {{displayFullDateTimeFormat(wrongScoreModels[0].logInfoDetail.voidToTime)}}</strong><br />
-        Affected Single Count: <strong>{{wrongScoreModels[0].logInfoDetail.singleCount}}</strong>
-        @if (isShowCountInfo(wrongScoreModels[0].logInfoDetail.cashOutCount,
-        wrongScoreModels[0].logInfoDetail.settleCount, wrongScoreModels[0].logInfoDetail.instantlySettleCount)) {
-        <span class="text-red"
-          [innerHTML]="countInfoContent(wrongScoreModels[0].logInfoDetail.cashOutCount, wrongScoreModels[0].logInfoDetail.settleCount, wrongScoreModels[0].logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>
-        },
-        Parlay Count: <strong>{{wrongScoreModels[0].logInfoDetail.mainParlayCount}}</strong>,
-        Min Time: <strong
-          [ngClass]="getHighlightMinTimeClass(wrongScoreModels[0].logInfoDetail.highlightMinTime)">{{displayMinTime(wrongScoreModels[0].logInfoDetail.highlightMinTime)}}</strong>,
-        TransId: <strong
-          [ngClass]="getHighlightMinTimeClass(wrongScoreModels[0].logInfoDetail.highlightMinTime)">{{wrongScoreModels[0].logInfoDetail.minTransId}}</strong>
-        {{wrongScoreModels[0].logInfoDetail.actionType}}<br />
-        Cancel Cash Out: <strong>{{wrongScoreModels[0].logInfoDetail.cancelCashOutCount}}</strong>
-      </div>
-      }
-      @if (wrongScoreModels[0].messageValidationLogInfo) {
-      <div class="message">
-        @for (msg of wrongScoreModels[0].messageValidationLogInfo; track msg) {
-        <span>
-          @if (msg.isError) {
-          <div class="error-text">
-            <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>{{msg.reason}}
-          </div>
-          }
-          @if (!msg.isError) {
-          <div [ngClass]="msg.isShowPopup ? 'warning-text-shorten' : 'warning-text'"
-            (click)="msg.isShowPopup && openPopupTransIds(msg.requestId, msg.transIds)">
-            <i class="fa fa-exclamation-triangle icon-warning-message" aria-hidden="true"></i>{{msg.reason}}
-          </div>
-          }
-        </span>
-        }
-      </div>
-      }
-    </div>
-  </div> -->
-  }
+
+  <main-log-info [logInfo]="mainEvent"></main-log-info>
+
   @if (primitiveProps.filterBy !== 2) {
   <div>
     @for (wrongScoreModel of wrongScoreModels; track wrongScoreModel; let i = $index) {
@@ -114,50 +70,15 @@
   </div>
   }
 
-
-  @if (primitiveProps.isShowRelatedEvents) {
-  <div class="related-event-log-info">
-    <label class="col-form-label-sm"><strong>Related Event(s) - Log Info</strong></label>
-    <div class="d-flex mb-3">
-      <div class="input-group input-related-match-id-area align-items-center justify-content-center me-2">
-        <input [(ngModel)]="primitiveProps.inputRelatedMatchId" [disabled]="filter.isVoided"
-          class="input-related-match-id form-control form-control-sm" placeholder="Input MatchID" type="text"
-          only-number />
-        <button (click)="handleClickAddRelatedEvent()" [disabled]="filter.isVoided"
-          class="btn btn-primary btn-sm btn-add-event" type="submit">Add Related Event</button>
-      </div>
-      <div class="d-flex">
-        <button type="submit" class="btn btn-success btn-sm btn-open-modal-related-event me-2"
-          (click)="showAddChildMatchModal(1)" [disabled]="isDisabledChildMatches()">
-          Child Match ({{countChildMatches()}})
-        </button>
-        <button type="submit" class="btn btn-danger btn-open-modal-related-event btn-sm"
-          (click)="showAddChildMatchModal(2)" [disabled]="isDisabledLinkMatches()">
-          Link Match ({{countLinkMatches()}})
-        </button>
-      </div>
-    </div>
-    @if (allRelatedEvents.length > 0) {
-    <div>
-      @for (event of allRelatedEvents; track event; let i = $index) {
-      <div class="mb-2">
-        <log-info-related-event #logInfo [isMainMatch]="false" [isEdit]="isEdit" [filterBy]="primitiveProps.filterBy"
-          [transInfoAddRequestModel]="primitiveProps.transInfoAddRequestModel" [requestId]="requestId"
-          [isDisabled]="filter.isVoided" [subIssueTypes]="issueTypes.subIssueTypes"
-          [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance" [logInfo]="allRelatedEvents[i]"
-          [filter]="filter" (deleteEvent)="handleDeleteEvent($event)">
-        </log-info-related-event>
-      </div>
-      }
-    </div>
-    }
-  </div>
-  }
+  <related-events #relatedEvent [relatedEvents]="relatedEvents" [filter]="filter" [isEdit]="isEdit"
+    [primitiveProps]="primitiveProps" [issueTypes]="issueTypes"
+    [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance" [requestId]="requestId"
+    [mainEvent]="mainEvent"></related-events>
 </div>
 
-<add-child-match [relatedEvents]="relatedEvents" (selectedEventsChange)="saveRelatedEvent($event)"
+<!-- <add-child-match [relatedEvents]="childEvents" (selectedEventsChange)="saveRelatedEvent($event)"
   [model]="addChildMatchModel">
-</add-child-match>
+</add-child-match> -->
 
 <confirm-wrong-score [model]="confirmWrongScoreModel" (close)="triggerCloseEvent()"
   (save)="onYesConfirmAddRequest()"></confirm-wrong-score>

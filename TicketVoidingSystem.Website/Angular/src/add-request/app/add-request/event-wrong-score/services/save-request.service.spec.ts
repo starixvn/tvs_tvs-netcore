@@ -5,13 +5,13 @@ import { AddRequestService } from '../../add-request.service';
 import { LogInfoService } from './log-info.service';
 import { PopupService } from '../../services/popup.service';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { SaveRequestArg } from './save-request.model';
+import { SaveRequestArg } from '../models/save-request.model';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { TvDetectionType } from '../../../../../utility/constants/config';
-import { ValidationBusinessRuleArgs } from './validation.model';
+import { ValidationBusinessRuleArgs } from '../models/validation.model';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;

@@ -490,7 +490,7 @@ describe('RelatedEventService', () => {
         123,
         arg.inputMatchIdClass,
         arg.mainEvent.matchId,
-        arg.allEvents,
+        arg.relatedEvents,
         arg.tooltip
       );
     });
@@ -539,7 +539,7 @@ describe('RelatedEventService', () => {
       // Assert
       expect(arg.primitiveProps.isBlock).toBe(false);
       expect(arg.primitiveProps.inputRelatedMatchId).toBeNull();
-      expect(arg.allEvents.length).toBe(1);
+      expect(arg.relatedEvents.length).toBe(1);
     });
   });
 

@@ -1,15 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { TvDetectionType } from '../../../../../utility/constants/config';
+import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
-import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { PopupService } from '../../services/popup.service';
 import { LogInfoService } from './log-info.service';
-import { SaveRequestArg } from './save-request.model';
-import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
+import { SaveRequestArg } from '../models/save-request.model';
+import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from '../models/validation.model';
 import { ValidationService } from './validation.service';
-import { RelatedEventService } from './related-event.service';
+import { CreateMapService } from './create-map.service';
 
 @Injectable()
 export class SaveRequestService {
@@ -18,7 +17,7 @@ export class SaveRequestService {
   private readonly addRequestService = inject(AddRequestService);
   private readonly logInfoService = inject(LogInfoService);
   private readonly popupService = inject(PopupService);
-  private readonly relatedEventService = inject(RelatedEventService);
+  private readonly createMapService = inject(CreateMapService);
   
   async onYesConfirmAddRequest(args: SaveRequestArg): Promise<void> {
     // validate again
@@ -51,13 +50,10 @@ export class SaveRequestService {
     }
 
     args.addRequestStore.changeBlockingUiStatus(true);
-    this.logInfoService.clearDataValidation(args.wrongScoreModels);
-    const relatedEvents = args.allSelectedEvents.map(x => this.logInfoService.mapRelatedEventToWrongScoreModel(x, args.defaultFilterTimeWithAllowance));
-    args.wrongScoreModels = [...args.wrongScoreModels, ...relatedEvents];
-    await this.logInfoService.getLogInfo(args.isEdit, args.requestId, args.filter, args.primitiveProps, args.wrongScoreModels, args.wrongScoreModels[0].matchId, args.defaultFilterTimeWithAllowance);
-    this.relatedEventService.updateLogInfoRelatedEvent(args.wrongScoreModels, args.allSelectedEvents, []);
+    this.logInfoService.clearDataValidation(args.wrongScoreModels, args.relatedEvents, args.mainEvent);
+    await this.logInfoService.getLogInfo(this.createMapService.createGetLogInfoParams(args));
     args.addRequestStore.changeBlockingUiStatus(false);
-    if (!this.validationService.isAllWrongScoreModelsValid(args.wrongScoreModels, args.primitiveProps.filterBy)) {
+    if (!this.validationService.isAllWrongScoreModelsValid(args)) {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
 
@@ -86,31 +82,21 @@ export class SaveRequestService {
     query.remark = args.others.remark;
 
     if (!args.filter.isVoided) {
-      query.wrongScoreInfo = this.getWrongScoreInfoForSaveRequest(args);
+      query.wrongScoreInfo = args.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME 
+        ? this.getWrongScoresHasRelatedEvent(args) : this.getWrongScoresHasManyScores(args);
     }
+
     return query;
   }
 
-  /* istanbul ignore next */
-  private getWrongScoreInfoForSaveRequest(args: SaveRequestArg): WrongScoreModel[] {
-    const allMatchSelectedEvents = args.allSelectedEvents.map(x => x.matchId);
-    const mainWrongScoreModels = args.wrongScoreModels.filter(x => !allMatchSelectedEvents.includes(x.matchId) && x.logInfoDetail);
-    mainWrongScoreModels.forEach(x => {
-      x.actualScore = args.primitiveProps.actualScore;
-      x.filterBy = args.primitiveProps.filterBy;
-      x.subIssueTypeId = Number(args.filter.subIssueTypeId);
-      x.matchId = args.leagueEventWrongScoreComponent.selectedMatch.matchId;
-      x.isCheckedVar = args.primitiveProps.isCheckedVar;
-      x.tvDetectionValue = args.tvDetectionModel.tvDetectionValue;
-      if (x.tvDetectionValue !== TvDetectionType.NONE) {
-        x.serviceAcceptTime = args.tvDetectionModel.serviceAcceptTime;
-        x.actualTime = args.tvDetectionModel.actualTime;
-        x.minuteOffset = args.tvDetectionModel.minuteOffset;
-        x.secondOffset = args.tvDetectionModel.secondOffset;
-      }
-      x.isMainMatch = true;
-    });
-    const relatedEvents = args.wrongScoreModels.filter(x => allMatchSelectedEvents.includes(x.matchId) && x.logInfoDetail);
-    return [...mainWrongScoreModels, ...relatedEvents];
+  getWrongScoresHasRelatedEvent(args: SaveRequestArg){
+    const allEvents = [args.mainEvent, ...args.relatedEvents]
+      .map(x => this.createMapService.mapRelatedEventToWrongScoreModel(x, args)).filter(x => x.logInfoDetail);
+
+    return allEvents;
+  }
+
+  getWrongScoresHasManyScores(args: SaveRequestArg){
+    return args.wrongScoreModels.filter(x => x.logInfoDetail).map(x => this.createMapService.mapWrongScoreSaveRequestModel(x, args));
   }
 }

@@ -223,8 +223,8 @@ describe('EventWrongScoreComponent', () => {
     expect(component.wrongScoreModels).toEqual([]);
     expect(component.primitiveProps.isShowActualScore).toBeFalsy();
     expect(component.primitiveProps.actualScore).toBe('');
-    expect(component.allRelatedEvents).toEqual([]);
     expect(component.relatedEvents).toEqual([]);
+    expect(component.childEvents).toEqual([]);
   });
 
   it('should validate var check', () => {

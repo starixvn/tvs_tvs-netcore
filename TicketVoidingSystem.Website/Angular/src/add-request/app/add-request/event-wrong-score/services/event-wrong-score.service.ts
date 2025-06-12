@@ -7,9 +7,12 @@ import { TvDetectionModel } from '../../components/tv-detection/tv-detection.mod
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { PrimitiveProperty } from '../event-wrong-score.model';
-import { RelatedEventService } from './related-event.service';
 import { ValidationService } from './validation.service';
 import { WrongScoreService } from './wrong-score.service';
+import { SubIssueTypeRelatedEvent } from '../models/subIssue-type-related-event.model';
+import { ConfirmWrongScoreModel } from '../confirm-wrong-score/confirm-wrong-score.model';
+import { LABELS } from 'src/utility/constants/labels';
+import { UpdateConfirmInfoArgs } from '../models/confirm-wrong-score.model';
 
 @Injectable()
 export class EventWrongScoreService {
@@ -26,7 +29,7 @@ export class EventWrongScoreService {
     return allWrongScoreModels;
   }
 
-  updateMainMatch(mainEvent: WrongScoreModel, selectedMatch: MatchModel) {
+  updateMainMatch(mainEvent: LogInfoRelatedEvent, selectedMatch: MatchModel) {
     mainEvent.matchId = selectedMatch.matchId;
     mainEvent.eventDate = selectedMatch.eventDate;
     mainEvent.sportType = selectedMatch.sportType;
@@ -50,7 +53,7 @@ export class EventWrongScoreService {
   }
 
   public getFilterByBaseOnSubIssueType(subIssueTypeId: string): number {
-    if (this.validationService.isSubTypeFilterByAcceptedTime(subIssueTypeId)) {
+    if (SubIssueTypeRelatedEvent.isSubTypeFilterByAcceptedTime(subIssueTypeId)) {
       return TVSRequestFilterBy.CHECK_TIME;
     } else if (this.validationService.isSubTypeFilterByTransTimeAndAcceptedTime(subIssueTypeId)) {
       return TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME;
@@ -83,7 +86,39 @@ export class EventWrongScoreService {
       || relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== matchType));
   }
 
-  isHasRelatedEvent(filterSubTypeId: number): boolean {
-    return RelatedEventService.SubIssueTypeMapHasRelatedEvent.has(filterSubTypeId);
+  private updateWarningConfirm(confirmWrongScoreModel: ConfirmWrongScoreModel, args: UpdateConfirmInfoArgs, actionIdOfFirstTimeAccess: string): void {
+    const selectedScores = args.wrongScoreModels.filter(x => x.isChecked);
+
+    confirmWrongScoreModel.warningExcludedScores = [];
+    confirmWrongScoreModel.warningRelatedEvents = [];
+    if (!args.filter.isVoided) {
+      args.relatedEvents.forEach(x => {
+        x.messageValidationLogInfo?.forEach(t => {
+          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+            confirmWrongScoreModel.warningRelatedEvents.push(x.eventName);
+          }
+        });
+      });
+      args.wrongScoreModels.forEach(y => {
+        y.messageValidationLogInfo?.forEach(t => {
+          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+            confirmWrongScoreModel.warningExcludedScores.push(y.wrongScore);
+          }
+        });
+      });
+      confirmWrongScoreModel.isHasSettledTicket = this.validationService.isHasWarningSettledTicket(selectedScores, [args.mainEvent, ...args.relatedEvents]);
+      confirmWrongScoreModel.isHasWarningForWrongScore = this.validationService.isValidationHasWarningTicket(selectedScores, [args.mainEvent, ...args.relatedEvents]);
+      confirmWrongScoreModel.isHasWarningEditTakeNoteRequest = this.validationService.isHasWarningEditTakeNoteRequest(args.isEdit, args.filter.action, actionIdOfFirstTimeAccess);
+    }
+  }
+
+  updateInfoConfirm(confirmWrongScoreModel: ConfirmWrongScoreModel, args: UpdateConfirmInfoArgs): void {
+    this.updateWarningConfirm(confirmWrongScoreModel, args, args.actionIdOfFirstTimeAccess);
+    confirmWrongScoreModel.isEditingByAnotherUser = this.validationService.isEditingByAnotherUser(args.isEdit, Number(document.getElementById('body').getAttribute('user-id')), args.userId);
+    confirmWrongScoreModel.requestId = args.requestId;
+    confirmWrongScoreModel.requestedBy = args.requestedBy;
+    confirmWrongScoreModel.issueTypeName = args.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === args.filter.issueTypeId).issueTypeName;
+    confirmWrongScoreModel.subIssueTypeName = args.issueTypes.selectedSubIssueTypes.find(x => x.subIssueTypeId.toString() === args.filter.subIssueTypeId).subIssueTypeName;
+    confirmWrongScoreModel.isOpenDialog = true;
   }
 }

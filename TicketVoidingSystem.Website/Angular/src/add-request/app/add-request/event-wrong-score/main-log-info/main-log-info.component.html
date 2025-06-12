@@ -1,4 +1,5 @@
-<div class="main-log-info mb-3">
+@if(isShowLogInfo()) {
+  <div class="main-log-info mb-3">
     <label class="col-form-label-sm"><strong>Main Event - Log Info</strong></label>
     <div class="log-info">
       @if (logInfo.logInfoDetail) {
@@ -42,3 +43,5 @@
       }
     </div>
   </div>
+}
+

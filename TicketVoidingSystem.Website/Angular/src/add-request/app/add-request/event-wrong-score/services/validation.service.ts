@@ -15,7 +15,8 @@ import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { FilterWrongScoreComponent } from '../filter-wrong-score/filter-wrong-score.component';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
-import { RelatedEventService } from './related-event.service';
+import { ValidationBusinessRuleArgs } from '../models/validation.model';
+import { SubIssueTypeRelatedEvent } from '../models/subIssue-type-related-event.model';
 
 @Injectable()
 export class ValidationService {
@@ -37,7 +38,7 @@ export class ValidationService {
   }
 
   public isValidityWhenFilter(filter: FilterModel, filterWrongScoreComponent: FilterWrongScoreComponent, wrongScoreInfoComponents: WrongScoreInfoComponent[]): boolean {
-    if (this.isSubTypeFilterByAcceptedTime(filter.subIssueTypeId)) {
+    if (SubIssueTypeRelatedEvent.isSubTypeFilterByAcceptedTime(filter.subIssueTypeId)) {
       return filterWrongScoreComponent.isValid();
     }
 
@@ -91,21 +92,21 @@ export class ValidationService {
     return true;
   }
 
-  isAllWrongScoreModelsValid(wrongScores: WrongScoreModel[], filterBy: number): boolean {
-    if(filterBy === TVSRequestFilterBy.CHECK_TIME){
-      return this.isValidAllEventCheckTime(wrongScores);
+  isAllWrongScoreModelsValid(args: ValidationBusinessRuleArgs): boolean {
+    if(args.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME){
+      return this.isValidAllEventCheckTime([args.mainEvent, ...args.relatedEvents]);
     }
-    return this.isValidAllScores(wrongScores);
+    return this.isValidAllScores(args.wrongScoreModels);
   }
 
-  private isValidAllEventCheckTime(wrongScores: WrongScoreModel[]): boolean {
-    const mainEvent = wrongScores.find(x => x.isMainMatch);
-    if (mainEvent.messageValidationLogInfo.some(x => x.isError)) {
+  private isValidAllEventCheckTime(events: LogInfoRelatedEvent[]): boolean {
+    const mainEvent = events.find(x => x.isMainMatch);
+    if (mainEvent.messageValidationLogInfo?.some(x => x.isError)) {
       return false;
       }
 
-      wrongScores.filter(x => !x.isMainMatch).forEach(x => {
-        if (x.messageValidationLogInfo.some(y => y.isError && !y.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE))) {
+      events.filter(x => !x.isMainMatch).forEach(x => {
+        if (x.messageValidationLogInfo?.some(y => y.isError && !y.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE))) {
           return false;
         }
       });
@@ -121,12 +122,12 @@ export class ValidationService {
     return isEdit && currentActionId === TVSRequestActionType.TAKE_NOTE_ID.toString() && currentActionId !== actionIdOfFirstTime;
   }
 
-  public isValidationHasWarningTicket(wrongScoreModels: WrongScoreModel[]): boolean {
-    return wrongScoreModels.some(x => x.messageValidationLogInfo?.length > 0);
+  public isValidationHasWarningTicket(wrongScoreModels: WrongScoreModel[], relatedEvents: LogInfoRelatedEvent[]): boolean {
+    return wrongScoreModels.some(x => x.messageValidationLogInfo?.length > 0) || relatedEvents.some(x => x.messageValidationLogInfo?.length > 0);
   }
 
-  public isHasWarningSettledTicket(wrongScoreModels: WrongScoreModel[]): boolean {
-    return wrongScoreModels.some(x => x.logInfoDetail?.settleCount > 0);
+  public isHasWarningSettledTicket(wrongScoreModels: WrongScoreModel[], relatedEvents: LogInfoRelatedEvent[]): boolean {
+    return wrongScoreModels.some(x => x.logInfoDetail?.settleCount > 0) || relatedEvents.some(x => x.logInfoDetail?.settleCount > 0);
   }
 
   isHasAllowanceTime(event: LogInfoRelatedEvent): boolean {
@@ -155,13 +156,6 @@ export class ValidationService {
       }
       return true;
     });
-  }
-
-  public isSubTypeFilterByAcceptedTime(subIssueTypeId: string): boolean {
-    const allSubIssueType = [...RelatedEventService.SubIssueTypeMapHasRelatedEvent.values(),
-      ...RelatedEventService.SubIssueTypeMapHasRelatedEvent.keys()];
-
-    return allSubIssueType.includes(Number(subIssueTypeId));
   }
 
   public isSubTypeFilterByTransTimeAndAcceptedTime(subIssueTypeId: string): boolean {

@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { CommonModule } from '@angular/common';
-import { DateTimeFormat } from 'src/utility/constants/config';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
 import moment from 'moment';
 import { StaticService } from 'src/utility/services/static.service';
 import { EventWrongScoreService } from '../services/event-wrong-score.service';
@@ -52,5 +52,9 @@ export class MainLogInfoComponent {
 
   public openPopupTransIds(requestId: number, transIds: string): void {
     StaticService.openPopupTransIds(requestId, transIds, this.modalService);
+  }
+
+  isShowLogInfo(): boolean {
+    return this.logInfo.logInfoDetail?.matchId > 0 || this.logInfo.messageValidationLogInfo?.length > 0;
   }
 }

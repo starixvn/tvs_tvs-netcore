@@ -10,8 +10,8 @@ export class GetLogInfoParams {
   filter: FilterModel;
   primitiveProps: PrimitiveProperty;
   wrongScoreModels?: WrongScoreModel[];
-  mainEvent?: WrongScoreModel;
+  mainEvent?: LogInfoRelatedEvent;
   relatedEvents?: LogInfoRelatedEvent[];
-  mainMatchId: number;
+  // mainMatchId: number;
   defaultFilterTimeWithAllowance?: FilterTimeWithAllowance;
 }

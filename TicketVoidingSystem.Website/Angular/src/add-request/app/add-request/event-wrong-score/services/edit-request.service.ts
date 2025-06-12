@@ -4,15 +4,15 @@ import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { PrimitiveProperty } from '../event-wrong-score.model';
-import { EventWrongScoreService } from './event-wrong-score.service';
 import { RelatedEventService } from './related-event.service';
 import { WrongScoreService } from './wrong-score.service';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { SubIssueTypeRelatedEvent } from '../models/subIssue-type-related-event.model';
 
 @Injectable()
 export class EditRequestService {
   private readonly relatedEventService = inject(RelatedEventService);
   private readonly wrongScoreService = inject(WrongScoreService);
-  private readonly eventWrongScoreService = inject(EventWrongScoreService);
 
   assignPrimitivePropsEditRequest(mainEvent: WrongScoreModel, primitiveProps: PrimitiveProperty) {
     primitiveProps.actualScore = mainEvent.actualScore;
@@ -20,7 +20,7 @@ export class EditRequestService {
     primitiveProps.isShowActualScore = true;
     primitiveProps.isCheckedVar = mainEvent.isCheckedVar;
     primitiveProps.isHighLightVarCheck = !mainEvent.isCheckedVar;
-    primitiveProps.isShowRelatedEvents = this.eventWrongScoreService.isHasRelatedEvent(Number(mainEvent.subIssueTypeId));
+    primitiveProps.isShowRelatedEvents = SubIssueTypeRelatedEvent.isHasRelatedEvent(Number(mainEvent.subIssueTypeId));
   }
 
   getMainWrongScoreModel(wrongScoreModels: WrongScoreModel[]): WrongScoreModel {
@@ -28,14 +28,14 @@ export class EditRequestService {
       ? wrongScoreModels[0] : wrongScoreModels.find(x => x.isMainMatch);
   }
 
-  async getAllRelatedEvents(wrongScoreModels: WrongScoreModel[], mainEvent: WrongScoreModel, relatedEvents: ChildMatchModel[],) {
-    let allRelatedEvents = [];
+  async getAllRelatedEvents(wrongScoreModels: WrongScoreModel[], mainEvent: LogInfoRelatedEvent, childEvents: ChildMatchModel[]) {
+    let relatedEvents = [];
     const allChildMatches = await this.relatedEventService.getGetInfoChildMatch(mainEvent.matchId, true, mainEvent.sportType, mainEvent.eventDate.toString());
-    relatedEvents.push(...allChildMatches);
-    await this.relatedEventService.assignModelsToEvents(allRelatedEvents, wrongScoreModels, relatedEvents);
-    allRelatedEvents = _.orderBy(_.uniqBy(allRelatedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    childEvents.push(...allChildMatches);
+    await this.relatedEventService.assignModelsToEvents(relatedEvents, wrongScoreModels, childEvents, mainEvent.eventDate);
+    relatedEvents = _.orderBy(_.uniqBy(relatedEvents, x => x.matchId), ['matchCode'], ['asc']);
 
-    return allRelatedEvents;
+    return relatedEvents;
   }
 
   async getScoreWrongScoreModels(wrongScoreModels: WrongScoreModel[], matchId: number): Promise<WrongScoreModel[]> {
