@@ -10,7 +10,7 @@ public interface CheckRecoverTicketService
     Task<CheckRecoverTicketViewModel> CheckRecoverTicket(CheckRecoverTicketCriteria criteria);
 }
 
-public class CheckRecoverTicketServiceImp(IDynamicRepository repository, GetTransInfoService getTransInfoService)
+public class CheckRecoverTicketServiceImp(IDynamicRepository repository)
     : CheckRecoverTicketService
 {
     public async Task<CheckRecoverTicketViewModel> CheckRecoverTicket(CheckRecoverTicketCriteria criteria)

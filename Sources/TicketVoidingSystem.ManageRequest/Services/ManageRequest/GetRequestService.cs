@@ -353,7 +353,8 @@ public class GetRequestServiceImp(
             TransIds = model.TransIds,
             FilterBy = model.FilterBy,
             ProductIds = model.ProductIds,
-            SubIssueTypeId = model.SubIssueTypeId
+            SubIssueTypeId = model.SubIssueTypeId,
+            MatchId = model.MatchId
         };
     }
 
@@ -474,7 +475,7 @@ public class GetRequestServiceImp(
 
     private async Task<TechnicalErrorViewModel> MapEventTechnicalError(IEnumerable<RequestEventModel> requestEventModels)
     {
-  
+
         var model = requestEventModels.First();
         if (model.SubIssueTypeId == SubIssueTypeConstant.TechnicalError_ProviderMistake)
         {
@@ -484,7 +485,7 @@ public class GetRequestServiceImp(
                 SubIssueTypeId = model.SubIssueTypeId
             };
         }
-        
+
         var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
         var groupBetTypes = await advancedModeService.GetGroupBetTypes(model.MatchId,
             string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));

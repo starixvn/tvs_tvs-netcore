@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { TestingModule } from '../../../../utility/modules/testing.module';
-import { EventRecoverTicketComponent } from './event-recover-ticket.component';
-import { ValidationService } from './services/validation.service';
-import { SaveRequestService } from './services/save-request.service';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { RecoverTicketModel } from '../models/recover-ticket.model';
 import { OthersModel } from '../others/others.model';
-import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
-import { AddRequestApiService } from '../add-request-api.service';
 import { ProductFilterRecoverTicket } from './constants/product.constant';
+import { EventRecoverTicketComponent } from './event-recover-ticket.component';
+import { SaveRequestService } from './services/save-request.service';
+import { ValidationService } from './services/validation.service';
 
 class Helper {
   static readonly fakeRequestId = 1212;

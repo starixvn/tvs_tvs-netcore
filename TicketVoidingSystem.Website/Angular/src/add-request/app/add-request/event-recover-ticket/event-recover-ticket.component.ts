@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { EventLeagueComponent } from 'src/utility/components/event-league/event-league.component';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
@@ -14,7 +15,6 @@ import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
   selector: 'event-recover-ticket',
@@ -43,6 +43,7 @@ export class EventRecoverTicketComponent implements OnInit {
   private readonly addRequestApiService = inject(AddRequestApiService);
 
   async ngOnInit(): Promise<void> {
+    this.isSubParlay = this.recoverTicketModel.filterBy === 1;
     this.recoverTicketModel.productIds = ProductFilterRecoverTicket.SELECTION_ITEMS[0].value;
     this.primitiveProps.permission = await this.addRequestApiService.getPermissionAddRequest();
   }
