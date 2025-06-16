@@ -11900,13 +11900,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
-        {
-          "Name": "HDP:",
-          "Value": "",
-          "XmlAttribute": "Value"
-        }
-      ],
       "Type": 1,
       "BetTypes": "154"
     },
@@ -27933,10 +27926,10 @@
       ],
       "Inputs": [
         {
-          "Name": "Value",
+          "Name": "Value:",
           "Value": "",
           "IsMultiple": true,
-          "XmlAttribute": "Hdp"
+          "XmlAttribute": "Value"
         }
       ],
       "Type": 8,
