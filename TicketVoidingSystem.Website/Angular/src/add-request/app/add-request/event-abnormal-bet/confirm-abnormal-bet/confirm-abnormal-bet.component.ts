@@ -3,11 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet.model';
 
 @Component({
-    selector: 'confirm-abnormal-bet',
-    templateUrl: './confirm-abnormal-bet.component.html',
-    styleUrls: ['./confirm-abnormal-bet.component.scss'],
-    standalone: true,
-    imports: [FormsModule]
+  selector: 'confirm-abnormal-bet',
+  templateUrl: './confirm-abnormal-bet.component.html',
+  styleUrls: ['./confirm-abnormal-bet.component.scss'],
+  standalone: true,
+  imports: [FormsModule]
 })
 export class ConfirmAbnormalBetComponent implements OnChanges {
   @Input() model = new ConfirmAbnormalBetModel();
@@ -19,11 +19,14 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
   settledTickets: string;
   ticketsOfCustomerClass201: string;
   ticketsOfCustomerClass4K: string;
+  ticketsCreditCashService: string;
   isRemoveCustomerClass201 = true;
   isRemoveCustomerClass4K = true;
+  isRemoveCreditCashService = true;
   isShowErrorCannotRemoveAllTickets = false;
   isCanNotSelectedRemoveTicketCC201 = false;
   isCanNotSelectedRemoveTicketCC4K = false;
+  isCanNotSelectedRemoveTicketCreditCashService = false;
   isConfirmCalculator = true;
 
   ngOnChanges(changes: SimpleChanges) {
@@ -38,6 +41,7 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
       this.settledTickets = this.model.settledTickets.replaceAll(',', ', ');
       this.ticketsOfCustomerClass201 = this.model.ticketsOfCustomerClass201.replaceAll(',', ', ');
       this.ticketsOfCustomerClass4K = this.model.ticketsOfCustomerClass4K.replaceAll(',', ', ');
+      this.ticketsCreditCashService = this.model.ticketsCreditCashService.replaceAll(',', ', ');
 
       this.updateRemoveCustomerClassStatus();
     }
@@ -84,6 +88,12 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
     }
   }
 
+  checkCreditCashService() {
+    if (this.isShowErrorCannotRemoveAllTickets) {
+      this.isCanNotSelectedRemoveTicketCreditCashService = !this.isCanNotSelectedRemoveTicketCreditCashService;
+    }
+  }
+
   private isAllTicketsOfCustomerClass(transIdList: string[], ticketsList: string[]): boolean {
     if (transIdList.filter(x => !ticketsList?.includes(x)).length > 0) {
       return false;
@@ -95,9 +105,11 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
     this.model.isOpenDialog = false;
     this.isRemoveCustomerClass201 = true;
     this.isRemoveCustomerClass4K = true;
+    this.isRemoveCreditCashService = true;
     this.isShowErrorCannotRemoveAllTickets = false;
     this.isCanNotSelectedRemoveTicketCC201 = false;
     this.isCanNotSelectedRemoveTicketCC4K = false;
+    this.isCanNotSelectedRemoveTicketCreditCashService = false;
     this.close.emit();
   }
 

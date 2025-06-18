@@ -53,6 +53,17 @@
             </div>
           </div>
           }
+          @if (ticketsCreditCashService) {
+            <div>
+              <div class="mg-left-17 mg-top-10">- CREDIT (CASH SERVICE): <b>{{ticketsCreditCashService}}</b>
+              </div>
+              <div class="mg-left-17 mg-top-10">
+                <label><input type="checkbox" [disabled]="isRemoveCreditCashService"
+                    [(ngModel)]="isRemoveCreditCashService" (change)="checkRemoveCC4K()" /> Remove ticket(s) of Credit (cash service)
+                  </label><br />
+              </div>
+            </div>
+          }
           @if (isShowErrorCannotRemoveAllTickets) {
           <span class="text-error">Cannot remove all tickets from request</span>
           }
