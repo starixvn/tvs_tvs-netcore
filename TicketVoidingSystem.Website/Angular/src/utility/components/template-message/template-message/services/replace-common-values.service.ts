@@ -32,9 +32,11 @@ export class ReplaceCommonValuesService {
     this.replaceMessageService.replaceEachLanguage(outputMessage, TemplateReplace.PLAYER_NAME, templateValue.playerName);
   }
 
-  public replaceEventDate(templateValue: TemplateValue, outputMessage: Message): void {
+  public replaceEventDate(templateValue: TemplateValue, outputMessage: Message, issueTypeId: number): void {
     const kickOffTimeDateGMT8 = new Date(templateValue.match?.kickOffTime);
-    kickOffTimeDateGMT8.setHours(kickOffTimeDateGMT8.getHours() - 12);
+    if(!templateValue.isVoidByBetId) {
+      kickOffTimeDateGMT8.setHours(kickOffTimeDateGMT8.getHours() - 12);
+    }
     const eventDate = moment(kickOffTimeDateGMT8).format(FormatDateTime.EVENT_DATE);
     this.replaceMessageService.replaceAll(outputMessage, TemplateReplace.EVENT_DATE, eventDate);
   }

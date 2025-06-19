@@ -52,6 +52,6 @@ public class GetTicketsHandlerTest
         await service.Handle(request, CancellationToken.None);
 
         // Assert
-        await getTicketsService.Received().AssignData(groupTickets[0], true);
+        await getTicketsService.Received().AssignData(groupTickets[0]);
     }
 }

@@ -198,6 +198,8 @@ export class AbnormalFilterBy {
   static readonly SINGLE = null;
   static readonly MIX_PARLAY = 1;
   static readonly SYSTEM_PARLAY = 2;
+  static readonly MANY_MATCH = 3;
+
 
   items: Item[] = [
     { name: 'Single ticket', value: AbnormalFilterBy.SINGLE },

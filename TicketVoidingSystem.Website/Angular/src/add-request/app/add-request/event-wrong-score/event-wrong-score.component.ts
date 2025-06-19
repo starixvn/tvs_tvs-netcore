@@ -194,11 +194,6 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     this.updateStatusButtonSaveRequest();
   }
 
-  public async updateWrongScoreModels(): Promise<void> {
-    this.originWrongScoreModels = await this.wrongScoreService.callApiGetWrongScores(this.matchId);
-    this.wrongScoreService.mapWrongScoreModel(this.originWrongScoreModels, this.wrongScoreModels);
-  }
-
   actualTimeChange(actualTime: string) {
     this.filterWrongScoreComponent.fromTimeComponent.time = moment(actualTime, DateTimeFormat.SIMPLE_TIME_FORMAT).format(DateTimeFormat.TIME_FORMAT);
     this.resetData();

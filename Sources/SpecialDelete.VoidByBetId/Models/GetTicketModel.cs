@@ -19,10 +19,10 @@ public class GetTicketModel
     public decimal Stake { get; set; }
     public DateTime TransDate { get; set; }
     public string BetTeam { get; set; }
-    public bool Liveindicator { get; set; }
+    public bool LiveIndicator { get; set; }
     public string UserName { get; set; }
-    public int LiveHomeScore { get; set; }
-    public int LiveAwayScore { get; set; }
+    public short LiveHomeScore { get; set; }
+    public short LiveAwayScore { get; set; }
     public int LeagueId { get; set; }
     public int SportType { get; set; }
     public bool IsNeutral { get; set; }
@@ -51,6 +51,7 @@ public class GetTicketModel
     public DateTime WinLostDate { get; set; }
     public DateTime EndTime { get; set; }
     public int SiteDbGroupId { get; set; }
+    public bool SecAcceptFlag { get; set; }
 }
 
 public class GetTicketValidation

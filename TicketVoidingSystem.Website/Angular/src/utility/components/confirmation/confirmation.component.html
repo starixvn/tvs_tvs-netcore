@@ -1,58 +1,56 @@
-﻿<fieldset class="confirm-delete">
-  <legend>Confirmation</legend>
-  <table>
-    <tr>
-      <td>
-        <label for="reason">Reason (EN)</label>
-      </td>
-      <td>
-        <textarea maxlength="150" class="reason form-control form-control-sm"
-          [(ngModel)]="confirmation.voidReason.reasonEnglish" rows="1"></textarea>
-      </td>
-      <td>
-        <span class="required">&nbsp;&nbsp;(*)</span> <span>Max {{150 - confirmation.voidReason.reasonEnglish.length}}
-          characters</span>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label for="reasonSC">Reason (SC)</label>
-      </td>
-      <td>
-        <textarea maxlength="150" class="reasonSC form-control form-control-sm"
-          [(ngModel)]="confirmation.voidReason.reasonChineseSimplified" rows="1"></textarea>
-      </td>
-      <td>
-        <span class="required">&nbsp;&nbsp;(*)</span> <span>Max {{150 -
-          confirmation.voidReason.reasonChineseSimplified.length}} characters</span>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label>Username</label>
-      </td>
-      <td>
-        <input class="form-control form-control-sm" type="text" disabled value="{{confirmation.userName}}" />
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <label>Password</label>
-      </td>
-      <td>
-        <input autocomplete="new-password" type="password" class="password form-control form-control-sm"
-          [(ngModel)]="confirmation.userPassword" />
-      </td>
-      <td><span>&nbsp;&nbsp;(*)</span></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        <input [disabled]="isDisabledButton" type="button" class="btn btn-success btn-sm font-weight-bold"
-          value="Void All" (click)="voidAllPage()" />
-      </td>
-    </tr>
-  </table>
-</fieldset>
+﻿@if (isShowConfirm) {
+  <fieldset class="confirm-delete">
+    <legend>Confirmation</legend>
+    <table>
+      <tr>
+        <td>
+          <label for="reason">Reason (EN)</label>
+        </td>
+        <td>
+          <textarea maxlength="150" class="reason form-control form-control-sm"
+          [(ngModel)]="confirmation.reason"></textarea>
+        </td>
+        <td>
+          <span class="required">&nbsp;&nbsp;(*) </span> <span>Max {{150 - confirmation.reason.length}} characters</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="reasonSC">Reason (SC)</label>
+        </td>
+        <td>
+          <textarea maxlength="150" class="reasonSC form-control form-control-sm"
+          [(ngModel)]="confirmation.reasonSC"></textarea>
+        </td>
+        <td>
+          <span class="required">&nbsp;&nbsp;(*) </span> <span>Max {{150 - confirmation.reasonSC.length}} characters</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>Username</label>
+        </td>
+        <td>
+          <input type="text" class="form-control form-control-sm" disabled value="{{confirmation.userName}}" />
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <label>Password</label>
+        </td>
+        <td class="d-flex">
+          <input autocomplete="new-password" type="password" class="password form-control form-control-sm" [(ngModel)]="confirmation.userPassword" />
+          <span class="required">&nbsp;&nbsp;(*)</span>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <input type="button" class="void-bet btn btn-primary btn-sm mg-right-10 font-weight-bold" value="Void Bet" (click)="voidBet()" />
+        </td>
+      </tr>
+    </table>
+  </fieldset>
+}
 <tooltip [tooltip]="tooltip"></tooltip>

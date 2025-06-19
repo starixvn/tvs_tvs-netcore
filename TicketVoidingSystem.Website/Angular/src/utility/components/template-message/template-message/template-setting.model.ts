@@ -8,6 +8,7 @@ export class SubIssueType {
     subIssueTypeId: number;
     issueTypeId: number;
     subIssueTypeName: string;
+    subIssueTypeNameCS: string;
 }
 
 export class TemplateSetting {

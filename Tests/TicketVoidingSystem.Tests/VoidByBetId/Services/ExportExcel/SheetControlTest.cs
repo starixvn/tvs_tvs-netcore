@@ -16,7 +16,7 @@ public class SheetControlTest
     {
         // Arrange
         var worksheet = SetupTestingSheet.CreateTestingSheet();
-        var model = new GetTicketsQuery { TransIds = "132", InvalidTransIds = "", MovedTransIds = "" };
+        var model = new GetTicketsQuery { TransIds = "132" };
         var sheetService = Substitute.For<SheetService>();
         sheetService.GetTickets(model).Returns(new List<ExcelTicketModel>());
         var control = new SheetControlImp(sheetService);

@@ -1,0 +1,1 @@
+worksheet.HighlightBackground($"A6:M{lastRow}", "MOD(ROW(A6),2)<1", Color.LemonChiffon); 

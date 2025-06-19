@@ -81,4 +81,5 @@ export class TemplateValue {
   smallestMapTicket?: string;
   // match early completed
   inning?: string;
+  isVoidByBetId?: boolean;
 }

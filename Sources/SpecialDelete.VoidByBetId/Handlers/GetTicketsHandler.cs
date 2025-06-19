@@ -18,13 +18,12 @@ public class GetTicketsHandler(
 {
     public async Task<TicketsViewModel> Handle(GetTicketsRequest request, CancellationToken cancellationToken)
     {
-        var isVoidByBetId = string.IsNullOrWhiteSpace(request.CustId);
         var viewModel = new TicketsViewModel();
         var (tickets, invalidTransIds, movedTransIds, matchId) = await getTicketsService.GetTickets(request);
         var groups = GenerateGroup(tickets.ToList());
         foreach (var item in groups)
         {
-            viewModel.Groups.Add(await getTicketsService.AssignData(item, isVoidByBetId));
+            viewModel.Groups.Add(await getTicketsService.AssignData(item));
         }
         UpdateViewModel(viewModel, tickets, invalidTransIds, movedTransIds);
         viewModel.MatchId = matchId;
@@ -61,7 +60,7 @@ public class GetTicketsHandler(
     {
         viewModel.InvalidTransIds = invalidTransIds;
         viewModel.MovedTransIds = movedTransIds;
-        viewModel.TotalItem = tickets.Count();
+        viewModel.TotalItems = tickets.Count();
 
         UpdateTicketsInfo(viewModel, tickets);
     }
@@ -87,9 +86,7 @@ public class GetTicketsHandler(
             return;
         }
 
-        viewModel.FromTime = tickets.Min(item => item.TransDate).ZoneManila().ToString("hh:mm:ss tt");
-        viewModel.ToTime = tickets.Max(item => item.TransDate).ZoneManila().ToString("hh:mm:ss tt");
-        viewModel.FromDate = tickets.Min(item => item.WinLostDate).ZoneManila().ToString("MM/dd/yyyy");
-        viewModel.ToDate = tickets.Max(item => item.WinLostDate).ZoneManila().ToString("MM/dd/yyyy");
+        viewModel.FromTransTime = tickets.Min(item => item.TransDate).ZoneManila();
+        viewModel.ToTransTime = tickets.Max(item => item.TransDate).ZoneManila();
     }
 }

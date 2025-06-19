@@ -32,7 +32,7 @@ public class AfterVoidServiceImp(
             MatchId = 0,
             Match = query.Match,
             Message = query.Message,
-            IsMessageContentAbnormal = query.AbnormalBetType != null || !query.IsFilterByBetId,
+            IsMessageContentAbnormal = query.AbnormalBetType != null,
             Reason = query.Reason,
             ReasonSC = query.ReasonSC,
             IssueTypeId = query.IssueTypeId,
@@ -45,7 +45,6 @@ public class AfterVoidServiceImp(
     public async Task<IEnumerable<Result>> SendEmail(VoidTicketsQuery query, IEnumerable<TicketEmailModel> tickets)
     {
         var emailModel = mapper.Map<EmailVoidModel>(query);
-        emailModel.IsFilterByUsername = !query.IsFilterByBetId;
         if (!IsAbnormalBet(query.AbnormalBetType))
         {
             return await sendEmailService.SendEmail(emailModel, tickets);

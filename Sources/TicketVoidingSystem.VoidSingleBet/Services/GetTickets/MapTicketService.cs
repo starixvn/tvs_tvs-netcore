@@ -49,7 +49,7 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
         viewModel.Status = betListService.GetStatus(ticketBetList, ticketHelper, null, false);
         viewModel.Handicap = betListService.GetHandicap(ticketBetList, ticketHelper, null, false);
         viewModel.Score = betListService.GetScoreBetListUi(item.SportType, item.IsLiveIndicator, item.LiveHomeScore, item.LiveAwayScore);
-        viewModel.SecondAcceptFlag = item.SecAcceptFlag ? "<span class='icon-tick'></span>" : string.Empty;
+        viewModel.SecondAcceptFlag = item.SecAcceptFlag ? "<i class=\"fa-solid fa-check\"></i>" : string.Empty;
         viewModel.TransDate = item.TransDate.ToString(FormatKey.DateTimeWithMillisecondAndSlash);
         viewModel.Member = string.IsNullOrEmpty(item.FollowedUsername) ? item.UserName : $"{item.UserName}<br>(Follow: {item.FollowedUsername})";
         viewModel.BetId = item.FollowedId > 0 ? $"{item.TransId}<br>(Follow: {item.FollowedId})" : item.TransId.ToString();

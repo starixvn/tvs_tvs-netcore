@@ -47,7 +47,7 @@ public class SendEmailServiceImp(
             SpecialMessageAfterVoidService = model.SpecialMessageAfterVoidService,
             NegativeBalanceUsers = model.NegativeBalanceUsers,
             IssueTypeId = model.IssueTypeId,
-            IsFilterByUserName = model.IsFilterByUsername
+            IsFilterByUserName = false
         };
     }
 }

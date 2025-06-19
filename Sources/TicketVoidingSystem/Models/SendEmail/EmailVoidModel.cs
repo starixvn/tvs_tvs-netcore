@@ -11,7 +11,6 @@ public class EmailVoidModel
     public Message Message { get; set; }
     public Message SpecialMessageAfterVoidService { get; set; }
     public int IssueTypeId { get; set; }
-    public bool IsFilterByUsername { get; set; }
     public int RequestId { get; set; }
     public int? FilterBy { get; set; }
     public int SportType { get; set; }

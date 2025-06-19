@@ -210,6 +210,9 @@ export class RelatedEventService {
   }
 
   async updateLogInfoRelatedEvent(eventsGetLogInfo: WrongScoreModel[], allOldEvents: LogInfoRelatedEvent[], relatedEvents: ChildMatchModel[]) {
+    if(!allOldEvents || allOldEvents.length === 0){
+      return;
+    }
     const allRelatedEventLogInfo = eventsGetLogInfo.filter(x => !x.isMainMatch);
     for (const event of allRelatedEventLogInfo) {
       const relatedEvent = allOldEvents.find(y => y.matchId === event.matchId);

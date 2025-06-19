@@ -1,0 +1,35 @@
+<menu-bar></menu-bar>
+
+<div class="title">
+  Home / Void By Bet Id
+</div>
+
+<div [blockUi]="primitiveProps.isBlockUI" class="body">
+  <filter #filter (searchEvent)="search($event)" [invalidTransIds]="this.ticketsViewModel.invalidTransIds"
+   [movedTransIds]="this.ticketsViewModel.movedTransIds" [affectedLicensees]="this.ticketsViewModel.licenseesName"
+  (removeInvalidTransIdsEvent)="removeInvalidTransIds()" (changeEvent)="resetData()"></filter>
+  <match-detail [matchDetail]="matchViewModel" [isShowMatch]="primitiveProps.isShowMatch"></match-detail>
+  <tickets #ticket [ticketsModel]="ticketsViewModel" [isShowTickets]="primitiveProps.isShowTickets" [isHasPaging]="false" (ticketsChange)="ticketsChange($event)" (exportExcelEvent)="exportExcel()">
+  </tickets>
+</div>
+
+@if(primitiveProps.isShowReason){
+  <fieldset class="abnormal-bet-reason">
+    <legend><strong>Abnormal Bet - Reason</strong></legend>
+    <ng-select [items]="subIssueTypes" bindLabel="subIssueTypeName" bindValue="subIssueTypeId" 
+      [clearable]="false" style="width: 200px" [(ngModel)]="selectedSubIssueTypeId">
+    </ng-select>
+  </fieldset>
+}
+
+<template-message #messages [isShowMessages]="primitiveProps.isShowMessages" [voidFunction]="0" 
+  [value]="templateValue" [subIssueTypeId]="selectedSubIssueTypeId" [issueTypeId]="ISSUE_TYPE_ID_ABNORMAL_BET">
+</template-message>
+
+<modal [modal]="modal" (confirmEvent)="confirmEvent()"></modal>
+<confirmation-single #confirmation [isShowConfirm]="primitiveProps.isShowMessages" (voidEvent)="voidBet()">
+</confirmation-single>
+<messages-result [messagesResult]="messagesResult"></messages-result>
+<notification [notification]="notification"></notification>
+
+<tooltip [tooltip]="tooltip"></tooltip>

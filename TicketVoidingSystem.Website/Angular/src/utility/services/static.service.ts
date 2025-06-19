@@ -72,6 +72,10 @@ export class StaticService {
     return issueTypeId?.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT;
   }
 
+  static isAbnormalBetManyMatch(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT;
+  }
+
   static isEarlyKickOff(issueTypeId: string | number): boolean {
     return issueTypeId?.toString() === IssueTypeConstant.EARLY_KICK_OFF;
   }
@@ -154,6 +158,10 @@ export class StaticService {
 
   static isFilterByMixOrSystemParlay(filterBy: number): boolean {
     return filterBy === AbnormalFilterBy.MIX_PARLAY || filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
+  }
+
+  static isFilterByManyMatch(filterBy: number): boolean {
+    return filterBy === AbnormalFilterBy.MANY_MATCH;
   }
 
   static isFilterBySingle(filterBy: number): boolean {

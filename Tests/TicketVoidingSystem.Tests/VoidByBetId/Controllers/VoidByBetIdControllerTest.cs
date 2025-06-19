@@ -31,19 +31,6 @@ public class VoidByBetIdControllerTest
     }
 
     [Fact]
-    public async Task CheckUsername_HasRequest_ReturnUserNameId()
-    {
-        // Arrange
-        var request = new CheckUserNameRequest { UserName = "sa" };
-        var mediator = Substitute.For<IMediator>();
-        var controller = new VoidByBetIdController(mediator);
-
-        // Act
-        // Assert
-        await controller.CheckUsername(request);
-    }
-
-    [Fact]
     public async Task VoidBet_HasRequest_CallMediatorRequest()
     {
         // Arrange

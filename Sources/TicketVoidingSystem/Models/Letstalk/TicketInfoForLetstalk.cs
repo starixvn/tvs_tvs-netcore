@@ -18,5 +18,5 @@ public class TicketInfoForLetstalk
 
     public bool IsMemberTemplate { get; set; }
 
-    public bool IsCheckMainParlay { get; set; }
+    public bool IsCheckMainParlay { get; set; } // review
 }

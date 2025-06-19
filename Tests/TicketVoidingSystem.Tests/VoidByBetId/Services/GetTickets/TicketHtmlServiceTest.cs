@@ -31,7 +31,7 @@ public class TicketHtmlServiceTest
         var service = CreateService();
 
         // Act
-        var ticket = service.GetTicket(item, permission, false);
+        var ticket = service.GetTicket(item, permission);
 
         // Assert
         Assert.Equal(expected, ticket.TransDate);
@@ -62,7 +62,7 @@ public class TicketHtmlServiceTest
         var ticket = service.GetTicket(item, ChoiceType.None);
 
         // Assert
-        Assert.Equal(expected, ticket.WinLost);
+        Assert.Equal(expected, ticket.WinLoss);
     }
 
     [Theory]
@@ -82,7 +82,7 @@ public class TicketHtmlServiceTest
         var actual = service.GetTicket(ticket, ChoiceType.Html);
 
         // Assert
-        Assert.Equal(expected, actual.Player);
+        Assert.Equal(expected, actual.Member);
     }
 
     [Theory]

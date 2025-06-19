@@ -28,10 +28,13 @@ public class BetListCoreServiceImp(IMapper mapper, BetListService betListService
         var ticket = SetValue(item);
         ticketDetail.Odds = betListService.GetOdds(ticket, item.BetType.IsParlay());
         ticketDetail.Stake = betListService.BuildStake(ticket, ticketHelper);
-        ticketDetail.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
+        ticketDetail.BetType = betListService.GetBetTypeName(ticket);
         ticketDetail.Choice = choiceType == ChoiceType.Excel ?
             betListService.BuildChoiceExcel(ticket, ticketHelper, null, false) :
             GetChoiceHtml(ticket, ticketHelper, item);
+        ticketDetail.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
+        ticketDetail.Handicap = betListService.GetHandicap(ticket, ticketHelper, null, false);
+        ticketDetail.Score = betListService.GetScoreBetListUi(item.SportType, item.LiveIndicator, item.LiveHomeScore, item.LiveAwayScore);
 
         return ticketDetail;
     }
@@ -51,7 +54,7 @@ public class BetListCoreServiceImp(IMapper mapper, BetListService betListService
         ticket.OddsType = item.OddsType.ToString(CultureInfo.InvariantCulture);
         ticket.Handicap1 = item.Hdp1;
         ticket.Handicap2 = item.Hdp2;
-        ticket.IsLive = item.Liveindicator;
+        ticket.IsLive = item.LiveIndicator;
         ticket.SportTypeId = item.SportType;
         ticket.RefNo = item.RefNo.ToString(CultureInfo.InvariantCulture);
         ticket.Currency = item.CurrencyName;

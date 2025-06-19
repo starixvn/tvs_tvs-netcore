@@ -49,9 +49,7 @@ public class SportBookController(SessionService sessionService, UserActionLogSer
     public async Task<IActionResult> VoidByBetId()
     {
         await userActionLogService.LogAccessFunction(nameof(VoidByBetId));
-        ViewBag.UserName = sessionService.UserName;
-        ViewBag.IsPageUsingJquery = true;
-        return View("~/Views/VoidByBetId/Index.cshtml");
+        return View("~/wwwroot/dist/void-by-bet-id/index.cshtml");
     }
 
     [HttpGet]

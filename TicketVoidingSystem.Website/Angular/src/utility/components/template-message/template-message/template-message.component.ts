@@ -133,7 +133,7 @@ export class TemplateMessageComponent implements OnChanges {
 
   updateTemplate() {
     let templateId = 0;
-    if (StaticService.isAbnormalAccount(this.issueTypeId) || this.isAbnormalBetMixOrSystemParlay()) {
+    if (StaticService.isAbnormalAccount(this.issueTypeId) || this.isAbnormalBetMixOrSystemParlay() || this.isAbnormalBetManyMatch()) {
       templateId = MESSAGE_TEMPLATE_ID_37;
     } else if (this.isDuplicateTicketsMixParlay()) {
       templateId = MESSAGE_TEMPLATE_ID_65;
@@ -187,7 +187,7 @@ export class TemplateMessageComponent implements OnChanges {
     this.replaceCommonValuesService.replaceHomeTeamName(this.value, this.message);
     this.replaceCommonValuesService.replaceAwayTeamName(this.value, this.message);
     this.replaceCommonValuesService.replaceLeagueName(this.value, this.message);
-    this.replaceCommonValuesService.replaceEventDate(this.value, this.message);
+    this.replaceCommonValuesService.replaceEventDate(this.value, this.message, this.issueTypeId);
     this.replaceCommonValuesService.replaceKickOffTime(this.value, this.message);
     this.replaceCommonValuesService.replacePlayerName(this.value, this.message);
     this.replaceCommonValuesService.replaceParlay(this.isAbnormalBetMixOrSystemParlay(), this.message);
@@ -281,6 +281,10 @@ export class TemplateMessageComponent implements OnChanges {
 
   isAbnormalBetMixOrSystemParlay(): boolean {
     return StaticService.isAbnormalBet(this.issueTypeId) && StaticService.isFilterByMixOrSystemParlay(this.value.filterBy);
+  }
+
+  isAbnormalBetManyMatch(): boolean {
+    return StaticService.isAbnormalBet(this.issueTypeId) && this.value.filterBy === AbnormalFilterBy.MANY_MATCH;
   }
 
   isDuplicateTicketsMixParlay(): boolean {

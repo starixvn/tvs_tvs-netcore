@@ -6,7 +6,8 @@ interface String {
 String.prototype.isSettled = function (this: string): boolean {
   return this.toLowerCase().indexOf('won') > -1
     || this.toLowerCase().indexOf('lose') > -1
-    || this.toLowerCase().indexOf('draw') > -1;
+    || this.toLowerCase().indexOf('draw') > -1
+    || this.toLowerCase().indexOf('lost') > -1;
 };
 
 String.prototype.isNumber = function (this: string): boolean {

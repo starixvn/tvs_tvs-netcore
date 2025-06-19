@@ -14,11 +14,8 @@ export class TEXT {
     static readonly REQUIRED_CORRECT_ODDS = 'Invalid Correct Odds.';
     static readonly REQUIRED_SPREAD = 'Invalid Spread.';
 
-    static readonly INVALID_FROMBETID = 'Invalid From BetID.';
-    static readonly INVALID_TOBETID = 'Invalid To BetID.';
     static readonly INVALID_BETIDS = 'Invalid BetID(s) are highlighted in RED.';
     static readonly REQUIRED_MATCHID = 'MatchId is required.';
-    static readonly REQUIRED_BETIDS = 'Bet ID is required.';
     static readonly REQUIRED_FROMBETID = 'From BetID is required.';
     static readonly REQUIRED_TOBETID = 'To BetID is required.';
     static readonly REQUIRED_REQUEST_ID = 'Request ID is required.';

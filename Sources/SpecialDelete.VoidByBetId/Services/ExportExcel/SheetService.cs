@@ -33,13 +33,18 @@ public class SheetServiceImp(
             {
                 No = index++,
                 BetId = ticketDetail.BetId.LineBreak(),
-                Member = ticketDetail.Player.LineBreak(),
-                Date = ticketDetail.TransDate,
-                Choice = ticketDetail.Choice,
+                TransDate = ticketDetail.TransDate,
+                Member = ticketDetail.Member.LineBreak(),
+                BetType = ticketDetail.BetType.LineBreak(),
                 Odds = ticketDetail.Odds.DefaultText(),
                 Stake = ticketDetail.Stake.StakeText(),
+                WinLoss = ticketDetail.WinLoss.DefaultText(),
+                Currency = ticketDetail.Currency.DefaultText(),
                 Status = ticketDetail.Status.DefaultText(),
-                WinLoss = ticketDetail.WinLost.LineBreak()
+                Sa = item.SecAcceptFlag ? "√" : string.Empty,
+                Score = ticketDetail.Score.DefaultText(),
+                Handicap = ticketDetail.Handicap.DefaultText(),
+                Choice = ticketDetail.Choice
             };
 
             excelTickets.Add(ticket);
@@ -50,20 +55,20 @@ public class SheetServiceImp(
 
     public void SetStyle(ExcelWorksheet worksheet)
     {
-        var lastRow = worksheet.Dimension.End.Row;
+        const int startRow = 5;
+        var lastRow = worksheet.Cells["A:A"].Where(c => c.Value != null).Max(c => c.Start.Row);
         worksheet.HighlightFont($"H5:H{lastRow}", "LEFT(H5,1)=\"-\"", Color.Red);
         worksheet.HighlightFont($"F5:F{lastRow}", "LEFT(F5,1)=\"-\"", Color.Red);
         worksheet.Cells.Style.WrapText = true;
-        HighlightBackground(worksheet, lastRow);
+        HighlightBackground(worksheet, startRow, lastRow);
     }
 
-    private static void HighlightBackground(ExcelWorksheet worksheet, int lastRow)
+    private static void HighlightBackground(ExcelWorksheet worksheet, int startRow, int lastRow)
     {
         const int two = 2;
-        const int startRow = 5;
-        for (var row = startRow; row <= lastRow; row += two)
+        for (var row = startRow + 1; row <= lastRow; row += two)
         {
-            var range = worksheet.Cells[$"A{row}:I{row}"];
+            var range = worksheet.Cells[$"A{row}:N{row}"];
             range.Style.Fill.PatternType = ExcelFillStyle.Solid;
             range.Style.Fill.BackgroundColor.SetColor(Color.LemonChiffon);
         }

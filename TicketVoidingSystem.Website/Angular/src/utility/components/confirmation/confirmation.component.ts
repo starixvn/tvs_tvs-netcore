@@ -1,63 +1,58 @@
-import { Component, ElementRef, EventEmitter, inject, Input, Output } from '@angular/core';
-import { LABELS } from '../../../utility/constants/labels';
-import { VoidedReason } from '../../../utility/models/reason.model';
-import { Tooltip } from '../../components/tooltip/tooltip.model';
-import { Confirmation } from './confirmation';
+﻿import { Component, ElementRef, EventEmitter, Input, Output, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Tooltip } from '../tooltip/tooltip.model';
+import { TEXT } from '../../constants/text';
+import { Confirmation } from './confirmation.model';
 import { TooltipComponent } from '../tooltip/tooltip.component';
-
 @Component({
-  standalone: true,
-  selector: 'confirmation',
-  templateUrl: './confirmation.component.html',
-  styleUrls: ['./confirmation.component.scss'],
-  imports: [FormsModule, TooltipComponent]
+    standalone: true,
+    selector: 'confirmation-single',
+    templateUrl: './confirmation.component.html',
+    styleUrls: ['./confirmation.component.scss'],
+    imports: [CommonModule, FormsModule, TooltipComponent]
 })
-
 export class ConfirmationComponent {
-  @Output() voidAll = new EventEmitter<boolean>();
-  @Input() isDisabledButton = false;
-  tooltip = new Tooltip();
-  initialVoidReason = new VoidedReason();
-  confirmation: Confirmation = {
-    userName: document.body.getAttribute('user-name'),
-    userPassword: '',
-    voidReason: {
-      reasonEnglish: '',
-      reasonChineseSimplified: ''
-    } as VoidedReason,
-  };
+    @Output() voidEvent = new EventEmitter<boolean>();
+    @Input() isShowConfirm: boolean;
+    tooltip = new Tooltip;
+    confirmation: Confirmation = {
+        userName: document.body.getAttribute('user-name'),
+        reason: '',
+        reasonSC: '',
+        userPassword: ''
+    };
 
-  element = inject(ElementRef);
+    element = inject(ElementRef);
 
-  constructor() {
-    this.tooltip.element = this.element;
-  }
-
-  voidAllPage() {
-    this.voidAll.emit(true);
-  }
-
-  checkValidation(): boolean {
-    if (this.confirmation.voidReason.reasonEnglish === '') {
-      this.tooltip.display('reason', LABELS.INPUT_REASON);
-      return false;
-    }
-    if (this.confirmation.voidReason.reasonChineseSimplified === '') {
-      this.tooltip.display('reasonSC', LABELS.INPUT_REASON);
-      return false;
-    }
-    if (this.confirmation.userPassword === '') {
-      this.tooltip.display('password', LABELS.INPUT_PASSWORD);
-      return false;
+    constructor() {
+        this.tooltip.element = this.element;
     }
 
-    return true;
-  }
+    voidBet() {
+        this.voidEvent.emit(true);
+    }
 
-  clearData() {
-    this.confirmation.voidReason.reasonEnglish = '';
-    this.confirmation.voidReason.reasonChineseSimplified = '';
-    this.confirmation.userPassword = '';
-  }
+    checkValidation(): boolean {
+        if (this.confirmation.reason === '') {
+            this.tooltip.display('reason', TEXT.INPUT_REASON);
+            return false;
+        }
+        if (this.confirmation.reasonSC === '') {
+            this.tooltip.display('reasonSC', TEXT.INPUT_REASON);
+            return false;
+        }
+        if (this.confirmation.userPassword === '') {
+            this.tooltip.display('password', TEXT.INPUT_PASSWORD);
+            return false;
+        }
+
+        return true;
+    }
+
+    clearData() {
+        this.confirmation.reason = '';
+        this.confirmation.reasonSC = '';
+        this.confirmation.userPassword = '';
+    }
 }
