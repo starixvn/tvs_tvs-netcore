@@ -18,6 +18,7 @@ export interface CheckTransIdsQuery {
   subIssueTypeId: number;
   isRemoveCustomerClass201: boolean;
   isRemoveCustomerClass4K: boolean;
+  isRemoveCreditCashService: boolean;
   isAddSettledTickets: boolean;
   isVoidAllArchivedTickets: boolean;
 }
@@ -40,6 +41,7 @@ export class ValidationAbnormalBet {
   transIdsOfVIPCustomer: string;
   transIdsOfCustomerClass201: string;
   transIdsOfCustomerClass4K: string;
+  transIdsOfCreditCashService: string;
   nonLiveTransIds: string;
   differentLiveScoreTransIds: string;
   abWhiteListTransIds: string;

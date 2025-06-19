@@ -3,6 +3,7 @@ import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../utility/constants/config';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestApiService } from '../add-request-api.service';
@@ -20,7 +21,6 @@ import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
-import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
   selector: 'event-abnormal-bet',
@@ -148,6 +148,7 @@ export class EventAbnormalBetComponent implements OnInit {
     this.confirmAbnormalBetModel.ticketsOfVIPCustomer = validationResult.transIdsOfVIPCustomer;
     this.confirmAbnormalBetModel.ticketsOfCustomerClass201 = validationResult.transIdsOfCustomerClass201;
     this.confirmAbnormalBetModel.ticketsOfCustomerClass4K = validationResult.transIdsOfCustomerClass4K;
+    this.confirmAbnormalBetModel.ticketsOfCreditCashService = validationResult.transIdsOfCreditCashService;
     this.confirmAbnormalBetModel.isHasWarningRemovedTickets = validationResult.isHasWarningRemovedTickets;
     this.confirmAbnormalBetModel.isEditingByAnotherUser = this.validationService.isEditingByAnotherUser(this.isEdit, Number(document.getElementById('body').getAttribute('user-id')), this.userId);
     this.confirmAbnormalBetModel.transIds = this.betIdsComponent.getAllBetIds();

@@ -50,6 +50,9 @@ export class SaveRequestService {
     if (confirmAbnormalBetModel.ticketsOfCustomerClass201 && confirmAbnormalBetComponent.isRemoveCustomerClass201) {
       transIdsList = transIdsList.filter(x => !(confirmAbnormalBetModel.ticketsOfCustomerClass201).split(',').includes(x));
     }
+    if (confirmAbnormalBetModel.ticketsOfCreditCashService && confirmAbnormalBetComponent.isRemoveCreditCashService) {
+      transIdsList = transIdsList.filter(x => !(confirmAbnormalBetModel.ticketsOfCreditCashService).split(',').includes(x));
+    }
     return transIdsList.join(',');
   }
 

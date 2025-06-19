@@ -22,6 +22,7 @@ export class ValidationService {
       subIssueTypeId: Number(args.abnormalBetModel.subIssueTypeId),
       isRemoveCustomerClass201: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCustomerClass201 : false,
       isRemoveCustomerClass4K: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCustomerClass4K : false,
+      isRemoveCreditCashService: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCreditCashService : false,
       isAddSettledTickets: args.permission.isAddSettledTickets,
       isVoidAllArchivedTickets: args.permission.isVoidAllArchivedTickets
     } as CheckTransIdsQuery;
@@ -51,7 +52,7 @@ export class ValidationService {
     }
     args.abnormalBetModel.sendLetstalkModels = checkTransIdViewModel.sendLetstalkModels;
     args.abnormalBetModel.matches = checkTransIdViewModel.matches;
-    
+
     const isHasPermissionAddSettledTicket = this.checkCanAddSettledTickets(args.permission, args.actionId);
     this.highlightInvalidTransIds(checkTransIdViewModel.validation, args.betIdsComponent, isHasPermissionAddSettledTicket, args.actionId);
     this.updateValidation(args, checkTransIdViewModel.validation, isHasPermissionAddSettledTicket);
@@ -68,7 +69,8 @@ export class ValidationService {
     return (permission.isAddSettledTickets && validationResult.settledTransIds?.length > 0)
       || (validationResult.transIdsOfVIPCustomer?.length > 0)
       || (validationResult.transIdsOfCustomerClass201?.length > 0)
-      || (validationResult.transIdsOfCustomerClass4K?.length > 0);
+      || (validationResult.transIdsOfCustomerClass4K?.length > 0)
+      || (validationResult.transIdsOfCreditCashService?.length > 0);
   }
 
   public isHasWarningEditTakeNoteRequest(isEdit: boolean, currentActionId: string, actionIdOfFirstTime: string) {

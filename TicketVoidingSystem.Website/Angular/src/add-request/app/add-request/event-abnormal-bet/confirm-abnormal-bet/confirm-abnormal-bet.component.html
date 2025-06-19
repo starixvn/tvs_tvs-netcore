@@ -37,7 +37,7 @@
             </div>
             <div class="mg-left-17 mg-top-10">
               <label><input type="checkbox" [disabled]="isCanNotSelectedRemoveTicketCC201"
-                  [(ngModel)]="isRemoveCustomerClass201" (change)="checkRemoveCC201()" /> Remove ticket(s) of Customer
+                  [(ngModel)]="isRemoveCustomerClass201" (change)="onCheckboxChange()" /> Remove ticket(s) of Customer
                 Class = 201</label><br />
             </div>
           </div>
@@ -48,18 +48,18 @@
             </div>
             <div class="mg-left-17 mg-top-10">
               <label><input type="checkbox" [disabled]="isCanNotSelectedRemoveTicketCC4K"
-                  [(ngModel)]="isRemoveCustomerClass4K" (change)="checkRemoveCC4K()" /> Remove ticket(s) of Customer
+                  [(ngModel)]="isRemoveCustomerClass4K" (change)="onCheckboxChange()" /> Remove ticket(s) of Customer
                 Class = 4000</label><br />
             </div>
           </div>
           }
-          @if (ticketsCreditCashService) {
+          @if (ticketsOfCreditCashService) {
             <div>
-              <div class="mg-left-17 mg-top-10">- CREDIT (CASH SERVICE): <b>{{ticketsCreditCashService}}</b>
+              <div class="mg-left-17 mg-top-10">- CREDIT (CASH SERVICE): <b>{{ticketsOfCreditCashService}}</b>
               </div>
               <div class="mg-left-17 mg-top-10">
-                <label><input type="checkbox" [disabled]="isRemoveCreditCashService"
-                    [(ngModel)]="isRemoveCreditCashService" (change)="checkRemoveCC4K()" /> Remove ticket(s) of Credit (cash service)
+                <label><input type="checkbox" [disabled]="isCanNotSelectedRemoveTicketCreditCashService"
+                    [(ngModel)]="isRemoveCreditCashService" (change)="onCheckboxChange()" /> Remove ticket(s) of Credit (cash service)
                   </label><br />
               </div>
             </div>

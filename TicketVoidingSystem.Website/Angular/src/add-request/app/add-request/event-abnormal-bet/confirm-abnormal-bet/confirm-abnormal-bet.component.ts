@@ -19,7 +19,7 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
   settledTickets: string;
   ticketsOfCustomerClass201: string;
   ticketsOfCustomerClass4K: string;
-  ticketsCreditCashService: string;
+  ticketsOfCreditCashService: string;
   isRemoveCustomerClass201 = true;
   isRemoveCustomerClass4K = true;
   isRemoveCreditCashService = true;
@@ -41,7 +41,7 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
       this.settledTickets = this.model.settledTickets.replaceAll(',', ', ');
       this.ticketsOfCustomerClass201 = this.model.ticketsOfCustomerClass201.replaceAll(',', ', ');
       this.ticketsOfCustomerClass4K = this.model.ticketsOfCustomerClass4K.replaceAll(',', ', ');
-      this.ticketsCreditCashService = this.model.ticketsCreditCashService.replaceAll(',', ', ');
+      this.ticketsOfCreditCashService = this.model.ticketsOfCreditCashService.replaceAll(',', ', ');
 
       this.updateRemoveCustomerClassStatus();
     }
@@ -49,53 +49,81 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
 
   private updateRemoveCustomerClassStatus() {
     const transIdList = this.model.transIds.split(',');
+    const ticketsOfCreditCashServiceList = this.model.ticketsOfCreditCashService.split(',');
     const ticketsOfCustomerClass201List = this.model.ticketsOfCustomerClass201.split(',');
     const ticketsOfCustomerClass4KList = this.model.ticketsOfCustomerClass4K.split(',');
-    const ticketsOfCustomerClass201And4KList = [...ticketsOfCustomerClass201List, ...ticketsOfCustomerClass4KList].filter(x => x !== '');
+    const ticketsCanRemove = [...ticketsOfCreditCashServiceList, ...ticketsOfCustomerClass201List, ...ticketsOfCustomerClass4KList]
+      .filter(x => x !== '');
 
-    if (this.isAllTicketsOfCustomerClass(transIdList, ticketsOfCustomerClass201List)) {
+    if (this.isAllTicketsCanRemove(transIdList, ticketsOfCreditCashServiceList)) {
+      this.isRemoveCreditCashService = false;
+      this.isCanNotSelectedRemoveTicketCreditCashService = true;
+      this.isShowErrorCannotRemoveAllTickets = true;
+      return;
+    }
+
+    if (this.isAllTicketsCanRemove(transIdList, ticketsOfCustomerClass201List)) {
       this.isRemoveCustomerClass201 = false;
       this.isCanNotSelectedRemoveTicketCC201 = true;
       this.isShowErrorCannotRemoveAllTickets = true;
       return;
     }
 
-    if (this.isAllTicketsOfCustomerClass(transIdList, ticketsOfCustomerClass4KList)) {
+    if (this.isAllTicketsCanRemove(transIdList, ticketsOfCustomerClass4KList)) {
       this.isRemoveCustomerClass4K = false;
       this.isCanNotSelectedRemoveTicketCC4K = true;
       this.isShowErrorCannotRemoveAllTickets = true;
       return;
     }
 
-    if (this.isAllTicketsOfCustomerClass(transIdList, ticketsOfCustomerClass201And4KList)) {
+    if (this.isAllTicketsCanRemove(transIdList, ticketsCanRemove)) {
       this.isRemoveCustomerClass201 = false;
       this.isRemoveCustomerClass4K = false;
+      this.isRemoveCreditCashService = false;
       this.isCanNotSelectedRemoveTicketCC201 = false;
       this.isCanNotSelectedRemoveTicketCC4K = false;
+      this.isCanNotSelectedRemoveTicketCreditCashService = false;
       this.isShowErrorCannotRemoveAllTickets = true;
     }
+  }
+
+  onCheckboxChange() {
+    const checkboxStates = [
+      { checked: this.isRemoveCreditCashService, setDisabled: (v: boolean) => this.isCanNotSelectedRemoveTicketCreditCashService = v },
+      { checked: this.isRemoveCustomerClass201, setDisabled: (v: boolean) => this.isCanNotSelectedRemoveTicketCC201 = v },
+      { checked: this.isRemoveCustomerClass4K, setDisabled: (v: boolean) => this.isCanNotSelectedRemoveTicketCC4K = v }
+    ];
+
+    const checkedCount = checkboxStates.filter(cb => cb.checked).length;
+
+    checkboxStates.forEach(cb => {
+      cb.setDisabled(checkedCount >= 2 && !cb.checked);
+    });
   }
 
   checkRemoveCC201() {
     if (this.isShowErrorCannotRemoveAllTickets) {
       this.isCanNotSelectedRemoveTicketCC4K = !this.isCanNotSelectedRemoveTicketCC4K;
+      this.isCanNotSelectedRemoveTicketCreditCashService = !this.isCanNotSelectedRemoveTicketCreditCashService;
     }
   }
 
   checkRemoveCC4K() {
     if (this.isShowErrorCannotRemoveAllTickets) {
       this.isCanNotSelectedRemoveTicketCC201 = !this.isCanNotSelectedRemoveTicketCC201;
+      this.isCanNotSelectedRemoveTicketCreditCashService = !this.isCanNotSelectedRemoveTicketCreditCashService;
     }
   }
 
   checkCreditCashService() {
     if (this.isShowErrorCannotRemoveAllTickets) {
-      this.isCanNotSelectedRemoveTicketCreditCashService = !this.isCanNotSelectedRemoveTicketCreditCashService;
+      this.isCanNotSelectedRemoveTicketCC4K = !this.isCanNotSelectedRemoveTicketCC4K;
+      this.isCanNotSelectedRemoveTicketCC201 = !this.isCanNotSelectedRemoveTicketCC201;
     }
   }
 
-  private isAllTicketsOfCustomerClass(transIdList: string[], ticketsList: string[]): boolean {
-    if (transIdList.filter(x => !ticketsList?.includes(x)).length > 0) {
+  private isAllTicketsCanRemove(originalTransIds: string[], compareTransIds: string[]): boolean {
+    if (originalTransIds.filter(x => !compareTransIds?.includes(x)).length > 0) {
       return false;
     }
     return true;
