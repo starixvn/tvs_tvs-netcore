@@ -9,6 +9,9 @@
 .advanced-mode {
   margin-bottom: 10px;
 
+  .bet-team-item :hover {
+    background-color: #e0e0e0;
+  }
   .dropdown-item-adv {
     display: flex;
     width: 185px;

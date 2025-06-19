@@ -3,18 +3,22 @@ import { MultipleSelection } from '../../multiple-selection/multiple-selection';
 import { AdvancedModeConstants } from '../advanced-mode.constants';
 
 export class Item {
+  index: number;
   name: string;
   value: string;
   flag: boolean;
   isChecked: boolean;
   xmlAttribute: string;
+  isMultiple: boolean;
 
-  constructor(name: string, value: string, flag: boolean, xmlAttribute: string) {
+  constructor(index: number, name: string, value: string, flag: boolean, xmlAttribute: string, isMultiple: boolean) {
+    this.index = index;
     this.name = name;
     this.value = value;
     this.flag = flag;
     this.isChecked = false;
     this.xmlAttribute = xmlAttribute;
+    this.isMultiple = isMultiple;
   }
 }
 
@@ -89,6 +93,7 @@ export class CheckedBetType extends BetTeamResult {
 }
 
 export class BetTeam {
+  index: number;
   name: string;
   value: string;
   type: number;
@@ -103,15 +108,16 @@ export class BetTeam {
   isShowMultiSelectionList: boolean;
 
   constructor(
-    commonInfo: [string, string, number, string],
+    commonInfo: [number, string, string, number, string],
     selections: Selection[],
     items: Item[],
     inputs: Item[],
     isShowMultiSelectionList: boolean) {
-    this.name = commonInfo[0];
-    this.value = commonInfo[1];
-    this.type = commonInfo[2];
-    this.betTypes = commonInfo[3];
+    this.index = commonInfo[0];
+    this.name = commonInfo[1];
+    this.value = commonInfo[2];
+    this.type = commonInfo[3];
+    this.betTypes = commonInfo[4];
     this.isShowMultiSelectionList = isShowMultiSelectionList;
     this.renderSelections(selections);
     this.renderItems(items);
@@ -149,20 +155,20 @@ export class BetTeam {
   renderItems(items: Item[]) {
     this.items = [];
     if (items !== null) {
-      items.forEach(item => {
-        const temp = new Item(item.name, item.value, item.flag, item.xmlAttribute);
+      for (const [index, item] of items.entries()) {
+        const temp = new Item(index, item.name, item.value, item.flag, item.xmlAttribute, item.isMultiple);
         this.items.push(temp);
-      });
+      };
     }
   }
 
   private renderInputs(inputs: Item[]) {
     this.inputs = [];
     if (inputs !== null) {
-      inputs.forEach(input => {
-        const temp = new Item(input.name, input.value, input.flag, input.xmlAttribute);
+      for (const [index, input] of inputs.entries()) {
+        const temp = new Item(index, input.name, input.value, input.flag, input.xmlAttribute, input.isMultiple);
         this.inputs.push(temp);
-      });
+      };
     }
   }
 
@@ -271,7 +277,7 @@ export class BetTeam {
     if (item.name === 'All') {
       return true;
     }
-    
+
     return name === 'HT:' ? this.handler416WithNameIsHT(item) : this.handler416WithNameIsNotHT(item);
   }
 
@@ -385,9 +391,7 @@ export class BetTeam {
     if (this.inputs.length > 0) {
       this.inputs.forEach(input => {
         let value = input.value;
-        if (this.type === 7 && AdvancedModeConstants.BETTYPES_SABA_TIME_MACHINE.split(',').includes(id)) {
-          value = value.replace(/&/g, ',');
-        }
+        value = value.replace(/&/g, ',');
         this.updateResult(result, input.xmlAttribute, value);
       });
     }
@@ -437,7 +441,7 @@ export class BetTeam {
         .map(item => item.value)
         .join(',');
   }
-  
+
   updateResult(result: BetTeamResult, attribute: string, value: string) { // NOSONAR
     switch (attribute) {
       case 'BetTeam':
@@ -551,7 +555,7 @@ export class BetTeam {
     }
 
     return ballValue.length === 0 ? `_${overValue}__`: `_${overValue}${ballValue}`
-    
+
   }
 
   private updateForBetType9089(result: BetTeamResult, betTypeId: string): void { // format "Set" attribute: 8XXYY

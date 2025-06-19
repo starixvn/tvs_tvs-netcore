@@ -19,8 +19,8 @@
           "options": {
             "aot": true,
             "outputPath": "dist",
-            "index": "src/home-page/index.html",
-            "main": "src/home-page/main.ts",
+            "index": "src/void-single-bet/index.html",
+            "main": "src/void-single-bet/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],

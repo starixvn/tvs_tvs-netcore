@@ -56,7 +56,7 @@
                 <div>
                   PH - Single Count: <strong>{{logInfo.logInfoDetail.poolHouseSingleCount}}</strong>
                   @if (isShowCountInfo(logInfo.logInfoDetail.poolHouseCashOutCount,
-                  logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.instantlySettleCount)) {
+                  logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount)) {
                   <span class="text-red"
                     [innerHTML]="countInfoContent(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
                   </span>
