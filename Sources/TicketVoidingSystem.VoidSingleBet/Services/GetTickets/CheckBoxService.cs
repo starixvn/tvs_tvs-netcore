@@ -20,7 +20,7 @@ public class CheckBoxServiceImp : CheckBoxService
 
         if (betTypesSaba.Contains(item.BetType))
         {
-            return IsDisableBetTypesSabaTicket(permission);
+            return IsDisableBetTypesSabaTicket(item, permission);
         }
 
         if (DefaultEnable(item.GroupName, permission))
@@ -41,9 +41,10 @@ public class CheckBoxServiceImp : CheckBoxService
         return permission.ReadOnly || item.MainTransId > 0 && item.MainTransId != item.TransId;
     }
 
-    private static bool IsDisableBetTypesSabaTicket(UserPermission permission)
+    private static bool IsDisableBetTypesSabaTicket(GetTicketModel item, UserPermission permission)
     {
-        return !permission.InstantlySettledTicket && !permission.SettledTicket;
+        return CheckStatus(item) && !permission.InstantlySettledTicket
+                           && !permission.SettledTicket;
     }
 
     private static bool DefaultEnable(string groupName, UserPermission permission)
