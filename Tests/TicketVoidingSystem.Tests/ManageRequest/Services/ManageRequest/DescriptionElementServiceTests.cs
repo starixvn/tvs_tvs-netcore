@@ -228,7 +228,7 @@ public class DescriptionElementServiceTests
     {
         // Arrange
         const string expectedResult =
-            "<div class=\"text-primary\"><div class=\"void-wrong-score\">Void Accept Time - Void Wrong Score: <span class=\"wrong-score\">0-0<span></div></div>";
+            "<div class=\"text-primary\"><div class=\"void-wrong-score\">Void Accept Time - Wrong Score: <span class=\"wrong-score\">0-0<span></div></div>";
         var descriptionService = new DescriptionElementServiceImp();
 
         // Act
@@ -243,7 +243,7 @@ public class DescriptionElementServiceTests
     {
         // Arrange
         const string expectedResult =
-            "<div class=\"text-success\"><div class=\"void-wrong-score\">Void Trans Time - Void Wrong Score: <span class=\"wrong-score\">0-0<span></div></div>";
+            "<div class=\"text-success\"><div class=\"void-wrong-score\">Void Trans Time - Wrong Score: <span class=\"wrong-score\">0-0<span></div></div>";
         var descriptionService = new DescriptionElementServiceImp();
 
         // Act
