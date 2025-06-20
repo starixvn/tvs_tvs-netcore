@@ -101,7 +101,7 @@
                     <td><div [innerHTML]="ticket.betType | sanitizeHtml"></div></td>
                     <td class="text-end"><div [innerHTML]="ticket.odds | sanitizeHtml"></div></td>
                     <td class="text-end"><div [innerHTML]="ticket.stake | sanitizeHtml"></div></td>
-                    <td><div>{{ticket.winLoss}}</div></td>
+                    <td><div [innerHTML]="ticket.winLoss | sanitizeHtml"></div></td>
                     <td><div>{{ticket.currency}}</div></td>
                     <td><div [innerHTML]="ticket.status | sanitizeHtml"></div></td>
                     <td><div [innerHTML]="ticket.secondAcceptFlag | sanitizeHtml"></div></td>

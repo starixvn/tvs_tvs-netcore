@@ -55,8 +55,8 @@ export class VoidTicketsService {
 
     createCheckingPermissionModel(ticketsViewModel: TicketsViewModel, matchViewModel: MatchModel) {
         const checkingPermissionModel = new CheckingPermissionModel();
-        checkingPermissionModel.setParam(ticketsViewModel.getAllTicket(), matchViewModel.matchId,
-            'void-by-bet-id-check-void-bet-permission', true, StaticService.checkHandlingCashOutAsUnSettledTicketByFunction(FunctionConst.SINGLE), false);
+        checkingPermissionModel.setParam(ticketsViewModel.getAllTicket(), matchViewModel?.matchId,
+            'void-by-bet-id-check-void-bet-permission', true, false, false);
 
         return checkingPermissionModel;
     }

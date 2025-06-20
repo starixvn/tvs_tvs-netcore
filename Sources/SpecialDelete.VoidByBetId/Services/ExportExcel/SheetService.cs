@@ -34,11 +34,12 @@ public class SheetServiceImp(
                 No = index++,
                 BetId = ticketDetail.BetId.LineBreak(),
                 TransDate = ticketDetail.TransDate,
+
                 Member = ticketDetail.Member.LineBreak(),
                 BetType = ticketDetail.BetType.LineBreak(),
                 Odds = ticketDetail.Odds.DefaultText(),
                 Stake = ticketDetail.Stake.StakeText(),
-                WinLoss = ticketDetail.WinLoss.DefaultText(),
+                WinLoss = ticketDetail.WinLoss.LineBreak(),
                 Currency = ticketDetail.Currency.DefaultText(),
                 Status = ticketDetail.Status.DefaultText(),
                 Sa = item.SecAcceptFlag ? "√" : string.Empty,

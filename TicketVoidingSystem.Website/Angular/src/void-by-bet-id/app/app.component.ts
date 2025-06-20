@@ -124,6 +124,7 @@ export class AppComponent implements OnInit {
       this.messagesComponent.initialMessage = new Message();
     }
     this.filterComponent.resetAllItemsToValid();
+    this.confirmationComponent.clearData();
   }
 
   showConfirmBeforeVoid() {

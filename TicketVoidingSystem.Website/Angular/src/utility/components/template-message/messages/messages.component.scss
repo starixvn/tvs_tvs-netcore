@@ -36,6 +36,9 @@
 
     .header-language {
       background-color: #cccccc;
+      .required {
+        color: red;
+      }
     }
 
     .header-other-language {

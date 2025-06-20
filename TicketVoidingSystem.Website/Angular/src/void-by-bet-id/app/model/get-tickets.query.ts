@@ -37,5 +37,21 @@ export class TicketsViewModel extends TicketsModel {
             this.groups.push(group);
           });
         this.changeIconCheckBox();
+        this.checkedSpecialTicket(this.groups);
+
     }   
+
+    private checkedSpecialTicket(groups: GroupModel[]) {
+        groups.forEach(group => {
+            group.tickets.forEach(ticket => {
+                ticket.isChecked = !this.isGroupSpecial(group.name) && !ticket.isDisable;
+            });
+            group.setIsCheckAll();
+        });
+    }
+
+    private isGroupSpecial(groupName: string): boolean {
+        const groupSpecial = ['betfair', 'parlay', 'phone-betting'];
+        return groupSpecial.some(x => groupName.toLowerCase().includes(x.toLowerCase()));
+    }
 }
