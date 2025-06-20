@@ -9,8 +9,6 @@ import { VoidTicketsRequest } from "../model/void-by-bet-id.model";
 import { PasswordService } from '../../../utility/services/password.service';
 import { SubIssueType } from "../../../utility/models/issue-type.model";
 import { CheckingPermissionModel } from "../../../utility/models/checking-permission.model";
-import { StaticService } from "../../../utility/services/static.service";
-import { FunctionConst } from "../../../utility/constants/config";
 
 interface VoidBetRequestParams {
     ticketsViewModel: TicketsViewModel;
@@ -36,7 +34,7 @@ export class VoidTicketsService {
         request.reason = params.confirmationComponent.confirmation.reason;
         request.reasonSC = params.confirmationComponent.confirmation.reasonSC;
         request.match = params.matchViewModel;
-        request.abnormalBetType = Number(params.filterComponent.abnormalBetType);
+        request.abnormalBetType = params.filterComponent.abnormalBetType;
         request.message = params.messagesComponent.message;
         request.guid = `VoidByBetId-${Guid.create().toString()}`;
         this.mapSubIssueType(request, params.selectedSubIssueTypeId, params.subIssueTypes);
