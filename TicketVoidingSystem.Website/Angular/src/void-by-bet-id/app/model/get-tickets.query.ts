@@ -51,7 +51,7 @@ export class TicketsViewModel extends TicketsModel {
     }
 
     private isGroupSpecial(groupName: string): boolean {
-        const groupSpecial = ['betfair', 'parlay', 'phone-betting'];
+        const groupSpecial = ['betfair', 'parlay', 'phone betting'];
         return groupSpecial.some(x => groupName.toLowerCase().includes(x.toLowerCase()));
     }
 }
