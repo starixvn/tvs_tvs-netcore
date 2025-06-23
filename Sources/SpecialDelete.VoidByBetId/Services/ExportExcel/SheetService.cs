@@ -58,9 +58,16 @@ public class SheetServiceImp(
     {
         const int startRow = 5;
         var lastRow = worksheet.Cells["A:A"].Where(c => c.Value != null).Max(c => c.Start.Row);
+
+        worksheet.Cells.Style.WrapText = true;
+        worksheet.Cells[$"A{startRow}:N{lastRow}"].Style.Font.Name = "Tahoma";
+        worksheet.Cells[$"A{startRow}:N{lastRow}"].Style.Font.Size = 8;
+        worksheet.Cells[$"A{startRow}:N{lastRow}"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+        worksheet.Cells[$"A{startRow}:A{lastRow}"].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+        worksheet.Cells[$"A{startRow}:N{lastRow}"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
         worksheet.HighlightFont($"H5:H{lastRow}", "LEFT(H5,1)=\"-\"", Color.Red);
         worksheet.HighlightFont($"F5:F{lastRow}", "LEFT(F5,1)=\"-\"", Color.Red);
-        worksheet.Cells.Style.WrapText = true;
+
         HighlightBackground(worksheet, startRow, lastRow);
     }
 
