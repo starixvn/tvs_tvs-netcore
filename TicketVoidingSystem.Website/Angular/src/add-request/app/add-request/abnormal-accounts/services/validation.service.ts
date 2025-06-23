@@ -100,6 +100,7 @@ export class ValidationService {
       toDate: moment(args.abnormalAccountModel.toDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
       isVoidAllArchivedTickets: args.primitiveProps.permission.isVoidAllArchivedTickets,
       accountWinlostModels: this.isAutoVoidWithPolicy(args.actionId) ? args.abnormalAccountModel.accountWinlostModels : null,
+      isRemoveCreditCashService: args.primitiveProps.isRemoveCreditCashService,
     };
     const results = await this.addRequestApiService.checkValidUsernames(query);
 

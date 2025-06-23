@@ -15,7 +15,6 @@ public class AbnormalAccountViewModel
     public int SubIssueTypeId { get; set; }
 
     public bool? IsVoidAllArchivedTickets { get; set; }
-    public bool? IsRemoveAgencyCashService { get; set; }
 
     public IEnumerable<AccountWinlostModel>? AccountWinlostModels { get; set; }
 

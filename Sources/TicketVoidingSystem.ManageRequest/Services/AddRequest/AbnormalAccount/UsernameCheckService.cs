@@ -62,6 +62,7 @@ public class UsernameCheckServiceImp(IDynamicRepository repository)
             MatchIds = JoinNonEmptyValues(results, x => x.MatchIds),
             UnMarkTransIds = JoinNonEmptyValues(results, x => x.UnMarkTransIds),
             MarkTransIds = JoinNonEmptyValues(results, x => x.MarkTransIds),
+            UsernamesOfCreditCashService = JoinNonEmptyValues(results, x => x.UsernamesOfCreditCashService),
         };
     }
 
@@ -112,6 +113,7 @@ public class UsernameCheckServiceImp(IDynamicRepository repository)
             StatusIds = request.StatusIds,
             AdjustVoidLimit = adjustVoidLimitJson,
             IsVoidAllArchivedTickets = request.IsVoidAllArchivedTickets,
+            IsRemoveCreditCashService = request.IsRemoveCreditCashService
         };
     }
 }

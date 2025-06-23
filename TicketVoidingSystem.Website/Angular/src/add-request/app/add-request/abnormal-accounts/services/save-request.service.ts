@@ -113,9 +113,13 @@ export class SaveRequestService {
     return model;
   }
 
+  isCheckedRemoveCreditCashService(confirmAbnormalBetModel: ConfirmAddRequestModel) {
+    return confirmAbnormalBetModel.checkBoxConfirmModel && confirmAbnormalBetModel.checkBoxConfirmModel.items?.find(x => x.key === 'usernames-of-credit-cash-service')?.value;
+  }
+
   private getTransIdsForSaveRequest(confirmAbnormalBetModel: ConfirmAddRequestModel, originalUsernames: string, usernamesOfCreditCashService: string): string {
     let usernames = originalUsernames.split(',');
-    if (confirmAbnormalBetModel.checkBoxConfirmModel && confirmAbnormalBetModel.checkBoxConfirmModel.items?.find(x => x.key === 'usernames-of-credit-cash-service')?.value) {
+    if (this.isCheckedRemoveCreditCashService(confirmAbnormalBetModel)) {
       usernames = usernames.filter(x => !(usernamesOfCreditCashService.split(',').includes(x)));
     }
     return usernames.join(',');

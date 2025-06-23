@@ -11,6 +11,7 @@ export interface CheckValidUsernamesQuery {
   toDate: string;
   isVoidAllArchivedTickets: boolean;
   accountWinlostModels: AccountWinlostModel[];
+  isRemoveCreditCashService: boolean;
 }
 
 

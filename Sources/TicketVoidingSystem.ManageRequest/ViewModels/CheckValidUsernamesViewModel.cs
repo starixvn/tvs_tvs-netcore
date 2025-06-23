@@ -24,6 +24,8 @@ public class ValidationInfo
     public string UnMarkTransIds { get; set; }
 
     public string MarkTransIds { get; set; }
+
+    public string UsernamesOfCreditCashService { get; set; }
 }
 
 public class CheckUsernamesInDatabaseResult
