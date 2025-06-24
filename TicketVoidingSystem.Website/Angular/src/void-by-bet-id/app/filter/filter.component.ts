@@ -7,6 +7,7 @@ import { AppService } from '../app.service';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ValidationService } from '../services/validation.service';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
   standalone: true,
@@ -27,6 +28,7 @@ export class FilterComponent implements OnInit, OnChanges {
   appService = inject(AppService);
   validationService = inject(ValidationService);
   element = inject(ElementRef);
+  clipboardService = inject(ClipboardService);
 
   tooltip = new Tooltip();
   remark: string[];
@@ -97,5 +99,10 @@ export class FilterComponent implements OnInit, OnChanges {
     else if (this.isAbnormalBet) {
       this.abnormalBetType = "0";
     }
+  }
+
+  copyClipboard(): void {
+    this.clipboardService.copyFromContent(this.affectedLicensees);
+    alert('The Licensee list has been copied to clipboard.');
   }
 }

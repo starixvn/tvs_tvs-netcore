@@ -42,5 +42,12 @@
     max-height: 382px;
     overflow-y: auto;
     overflow-x: hidden;
+
+    .licensees-list {
+      font-style: italic;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }

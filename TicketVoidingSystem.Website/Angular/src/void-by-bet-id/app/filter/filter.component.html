@@ -44,7 +44,7 @@
         @if (affectedLicensees?.length > 0) {
             <div class="affected-licensees ms-3">
                <span>Attn: system will notify affected tickets to these Licensee(s): </span><br />
-               <span><strong>{{affectedLicensees}}</strong></span>
+               <span class="licensees-list" (click)="copyClipboard()"><strong>{{affectedLicensees}}</strong></span>
            </div>
         }
         
