@@ -24,6 +24,10 @@ export class RequestDescriptionService {
       requestDetailId: requestDetailId
     };
     const copyInfoResponse = await this.commonService.copyRequestInfo(query);
+    if(!copyInfoResponse){
+      alert('Copy request information was not successful. Please refresh Manage Request page and try again.');
+      return;
+    }
     this.clipboardService.copyFromContent(this.createContentCopy(copyInfoResponse));
     alert(`Request No.${requestId} has been copied to clipboard.`);
     this.appComponent.logAccessAction('CopyRequestInfo');

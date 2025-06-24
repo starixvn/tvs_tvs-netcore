@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
@@ -20,6 +19,10 @@ public class CopyRequestInfoHandler(CopyRequestInfoService copyRequestInfoServic
     public async Task<CopyRequestInfoResponse> Handle(CopyRequestInfoRequest request, CancellationToken cancellationToken)
     {
         var (requestInfo, betTypeTickets) = await copyRequestInfoService.GetCopyInfo(request.MatchId, request.RequestId, request.RequestDetailId);
+        if (requestInfo == null)
+        {
+            return null;
+        }
         requestInfo.GlobalShowTime = requestInfo.GlobalShowTime.ZoneManila();
         copyRequestInfoService.UpdateMatchInfo(request.MatchId, requestInfo);
         copyRequestInfoService.UpdateBetTypeName(betTypeTickets);
