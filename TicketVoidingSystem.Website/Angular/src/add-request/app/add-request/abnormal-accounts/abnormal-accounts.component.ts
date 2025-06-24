@@ -146,6 +146,7 @@ export class AbnormalAccountsComponent implements OnInit {
     this.primitiveProps.isShowAccountWinLost = false;
     this.primitiveProps.isShowError = false;
     this.primitiveProps.validAccountWinlostModels = [];
+    this.primitiveProps.isRemoveCreditCashService = false;
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
   }
 
@@ -169,7 +170,7 @@ export class AbnormalAccountsComponent implements OnInit {
     arg.actionIdOfFirstTimeAccess = this.actionIdOfFirstTimeAccess;
     arg.filter = this.filter;
     arg.others = this.others;
-    this.primitiveProps.isRemoveCreditCashService = this.saveRequestService.isCheckedRemoveCreditCashService(this.confirmAddRequest);
+    this.primitiveProps.isRemoveCreditCashService = this.saveRequestService.isCheckedRemoveCreditCashService(this.confirmAddRequest) ?? false;
     arg.primitiveProps = this.primitiveProps;
     arg.addRequestStore = this.addRequestStore;
     arg.abnormalAccountModel = this.abnormalAccountModel;

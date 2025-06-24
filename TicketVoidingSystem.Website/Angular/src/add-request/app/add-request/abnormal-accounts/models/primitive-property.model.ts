@@ -17,5 +17,5 @@ export class PrimitiveProperty {
   numberOfTicketsExistedInRequest: number;
   usernamesOfCreditCashService: string;
   isCheckedShowAdjustAccount: boolean;
-  isRemoveCreditCashService: boolean;
+  isRemoveCreditCashService = false;
 }
