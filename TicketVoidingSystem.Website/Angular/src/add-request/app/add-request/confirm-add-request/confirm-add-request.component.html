@@ -21,6 +21,20 @@
               <div>Action: <strong>{{actionName}}</strong></div>
             </div>
           </div>
+          @if (model.checkBoxConfirmModel && model.checkBoxConfirmModel.items?.length > 0) {
+          <div class="mb-2 check-box-confirm">
+            <div [innerHTML]="model.checkBoxConfirmModel.title"></div>
+            <div class="ms-2">
+              @for (item of model.checkBoxConfirmModel.items; track item) {
+              <div [innerHTML]="item.message"></div>
+              <div class="form-check align-self-end">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="item.value" [id]="item.key">
+                <label class="form-check-label" [for]="item.key">{{item.label}}</label>
+              </div>
+              }
+            </div>
+          </div>
+          }
           @if (model.extraWarningModel) {
           <div class="mb-2 extra-warning">
             <div>{{model.extraWarningModel.title}}</div>

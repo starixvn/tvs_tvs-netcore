@@ -27,6 +27,7 @@ export class ValidationAbnormalAccount {
   invalidUserName: string;
   matchIds: string;
   numberOfTickets: number;
+  usernamesOfCreditCashService: string;
   isExceededTotalUsernames: boolean;
   transInfo: string;
   isTicketLimitExceeded: boolean;

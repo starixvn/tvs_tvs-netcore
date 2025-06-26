@@ -78,6 +78,7 @@ export class ValidationService {
       return {
         isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames),
         numberOfTicketsExistedInRequest: viewModel.validation.numberOfTickets,
+        usernamesOfCreditCashService: viewModel.validation.usernamesOfCreditCashService,
         transInfoAddRequestModel: viewModel.transInfoAddRequestModel,
         accountWinlostModels: viewModel.accountWinlostModels
       } as ValidationBusinessRuleOutput;

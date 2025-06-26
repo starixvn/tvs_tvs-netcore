@@ -29,7 +29,7 @@ public class ValidationAbnormalBet
 
     public string TransIdsOfCustomerClass4K { get; set; }
 
-    public string TransIdsCreditCashService { get; set; }
+    public string TransIdsOfCreditCashService { get; set; }
 
     public string NonLiveTransIds { get; set; }
 

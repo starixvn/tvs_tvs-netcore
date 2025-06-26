@@ -4,6 +4,8 @@ import { UsernamesComponent } from '../../../../../utility/components/user-names
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
+import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
+import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { PopupService } from '../../services/popup.service';
 import { AccountWinlostModel } from '../models/account-winlost.model';
@@ -38,6 +40,7 @@ export class SaveRequestService {
     args.primitiveProps.validAccountWinlostModels = this.getAccountWinlostWhenSaveRequest(args.primitiveProps.validAccountWinlostModels, validation.accountWinlostModels);
     args.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
     args.primitiveProps.numberOfTicketsExistedInRequest = validation.numberOfTicketsExistedInRequest;
+    args.primitiveProps.usernamesOfCreditCashService = validation.usernamesOfCreditCashService;
     args.addRequestStore.changeBlockingUiStatus(false);
 
     return validation.isValid;
@@ -59,6 +62,7 @@ export class SaveRequestService {
     if (!arg.filter.isVoided) {
       arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
       arg.confirmAddRequest.extraWarningModel = this.abnormalAccountService.getExtraWarningModel(arg.primitiveProps.numberOfTicketsExistedInRequest);
+      arg.confirmAddRequest.checkBoxConfirmModel = this.abnormalAccountService.getCheckBoxConfirmModel(arg.primitiveProps.usernamesOfCreditCashService);
     }
     arg.confirmAddRequest.isOpen = true;
     arg.confirmAddRequest.requestId = arg.requestId;
@@ -96,11 +100,25 @@ export class SaveRequestService {
     query.actionId = model.filter.action;
     query.isTest = model.filter.isTest;
     query.isVoided = model.filter.isVoided;
-    query.abnormalAccountInfo = model.abnormalAccountModel;
+    query.abnormalAccountInfo = this.createAbnormalAccountModel(model);
     query.decidedBy = model.others.decidedBy;
     query.remark = model.others.remark;
 
     return query;
+  }
+
+  private createAbnormalAccountModel(args: SaveRequestArg): AbnormalAccountModel {
+    const model = _.clone(args.abnormalAccountModel);
+    model.usernames = this.getTransIdsForSaveRequest(args.confirmAddRequest, args.abnormalAccountModel.usernames, args.primitiveProps.usernamesOfCreditCashService);
+    return model;
+  }
+
+  private getTransIdsForSaveRequest(confirmAbnormalBetModel: ConfirmAddRequestModel, originalUsernames: string, usernamesOfCreditCashService: string): string {
+    let usernames = originalUsernames.split(',');
+    if (confirmAbnormalBetModel.checkBoxConfirmModel && confirmAbnormalBetModel.checkBoxConfirmModel.items?.find(x => x.key === 'usernames-of-credit-cash-service')?.value) {
+      usernames = usernames.filter(x => !(usernamesOfCreditCashService.split(',').includes(x)));
+    }
+    return usernames.join(',');
   }
 
   private cancelValidateUsernamesWhenFocusOut(primitiveProps: PrimitiveProperty, usernamesComponent: UsernamesComponent) {

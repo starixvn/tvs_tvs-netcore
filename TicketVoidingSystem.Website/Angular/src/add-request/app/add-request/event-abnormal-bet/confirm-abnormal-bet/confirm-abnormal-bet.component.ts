@@ -97,7 +97,7 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
     const checkedCount = checkboxStates.filter(cb => cb.checked).length;
 
     checkboxStates.forEach(cb => {
-      cb.setDisabled(checkedCount >= 2 && !cb.checked);
+      cb.setDisabled(checkedCount >= 2 && !cb.checked && this.isShowErrorCannotRemoveAllTickets);
     });
   }
 
