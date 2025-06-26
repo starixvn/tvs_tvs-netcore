@@ -363,7 +363,6 @@
         <Setting Key="DBSITE01.NAP_SpecialDelete_VoidBetIdList_Upd" SpName="NAP_SpecialDelete_VoidBetIdList_Upd" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSITE02.NAP_SpecialDelete_VoidBetIdList_Upd" SpName="NAP_SpecialDelete_VoidBetIdList_Upd" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSITE03.NAP_SpecialDelete_VoidBetIdList_Upd" SpName="NAP_SpecialDelete_VoidBetIdList_Upd" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
-        <Setting Key="NAP_CustomerSelInfoByUsername" SpName="NAP_CustomerSelInfoByUsername" DbName="DBACC.bodb02.wsv_nap" TimeOut="600" />
     </Function>
     <Function Name="CashOutTransaction">
         <Setting Key="DBCTG.NAP_SpecialDelete_VoidCashOutTransaction_Select" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />

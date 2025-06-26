@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SpecialDelete.VoidByBetId.Models;
 using SpecialDelete.VoidByBetId.Repositories;
-using SpecialDelete.VoidByBetId.Services;
 using SpecialDelete.VoidByBetId.Services.ExportExcel;
 using SpecialDelete.VoidByBetId.Services.GetTickets;
 using SpecialDelete.VoidByBetId.Services.VoidTickets;
@@ -23,6 +22,5 @@ public static class VoidByBetId
         services.AddTransient<VoidByBetIdRepository, VoidByBetIdRepositoryImp>();
         services.AddTransient<WorkSheetService<GetTicketsQuery>, SheetControlImp>();
         services.AddTransient<SheetService, SheetServiceImp>();
-        services.AddTransient<RemarkService, RemarkServiceImp>();
     }
 }

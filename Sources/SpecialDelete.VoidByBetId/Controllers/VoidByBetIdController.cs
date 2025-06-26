@@ -12,6 +12,15 @@ namespace SpecialDelete.VoidByBetId.Controllers;
 [Route("api/[controller]/[action]")]
 public class VoidByBetIdController(IMediator mediator) : ControllerBase
 {
+    [HttpGet]
+    [SkipLogging]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID, Policy = Constant.Policy.Read)]
+    public async Task<IActionResult> GetRemark() => Ok(await mediator.Send(new GetRemarkRequest()));
+
+    [HttpPost]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID, Policy = Constant.Policy.Read)]
+    public async Task<IActionResult> GetTickets(GetTicketsRequest request) => Ok(await mediator.Send(request));
+
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID)]
     public async Task<IActionResult> ExportExcel(ExportExcelRequest request)
@@ -21,14 +30,9 @@ public class VoidByBetIdController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
-    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID)]
-    public async Task<JsonResult> GetTickets(GetTicketsRequest request) => this.JsonResultPascalCase(await mediator.Send(request));
-
-    [HttpPost]
-    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID)]
-    public async Task<JsonResult> CheckUsername(CheckUserNameRequest request) => this.JsonResultPascalCase(await mediator.Send(request));
-
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID, Policy = Constant.Policy.Host)]
-    [HttpPost]
-    public async Task<JsonResult> VoidBet(VoidTicketsRequest request) => this.JsonResultPascalCase(await mediator.Send(request));
+    public async Task<IActionResult> VoidBet(VoidTicketsRequest request) => Ok(await mediator.Send(request));
+
+    [HttpGet]
+    public async Task<IActionResult> GetAbnormalBetSubIssueTypes() => Ok(await mediator.Send(new GetAbnormalBetSubIssueTypesRequest()));
 }

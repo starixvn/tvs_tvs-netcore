@@ -1,0 +1,53 @@
+.filter {
+  background-color: #ebebeb;
+  margin: 0 10px;
+  padding: 5px 10px 10px 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+
+  .remark {
+    background-color: #ebebeb;
+    padding: 0 0 8px 0;
+    color: #ed1c24;
+
+    span {
+      display: block;
+    }
+  }
+
+  .title-input {
+    width: 100px;
+  }
+
+  .radio-red {
+    color: #ed1c24;
+    font-weight: bold;
+  }
+
+  .form-check-input {
+    border: 1px solid;
+  }
+
+  .btn-remove-invalid {
+    height: 32px !important;
+  }
+
+  .affected-licensees {
+    background-color: #b4f0c6;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    height: fit-content;
+    max-width: 500px;
+    max-height: 382px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .licensees-list {
+      font-style: italic;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

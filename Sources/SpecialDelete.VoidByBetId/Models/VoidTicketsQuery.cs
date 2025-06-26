@@ -11,8 +11,6 @@ public class VoidTicketsQuery
 
     public IEnumerable<BetId> TransIdCrickets { get; set; }
 
-    public string NegativeBalanceUsers { get; set; }
-
     public string Username { get; set; }
 
     public string Password { get; set; }
@@ -31,27 +29,7 @@ public class VoidTicketsQuery
 
     public string? SubIssueTypeNameCS { get; set; }
 
-    public string? FilterUserName { get; set; }
-
-    public string? Products { get; set; }
-
-    public string? StatusIds { get; set; }
-
-    public DateTime? FromDate { get; set; }
-
-    public DateTime? ToDate { get; set; }
-
-    public string VoidFromTime { get; set; }
-
-    public string VoidToTime { get; set; }
-
-    public string VoidFromDate { get; set; }
-
-    public string VoidToDate { get; set; }
+    public byte? AbnormalBetType { get; set; }
 
     public Match? Match { get; set; }
-
-    public bool IsFilterByBetId { get; set; }
-
-    public byte? AbnormalBetType { get; set; }
 }

@@ -60,7 +60,6 @@ public class VoidTicketsRequestTest
             Tickets = tickets,
             TransIdCrickets = tickets,
             Match = new Match { SportType = 207, HomeId = 1, AwayId = 1 },
-            IsFilterByBetId = true,
             Guid = "1"
         };
         handleService.VoidTickets(Arg.Any<VoidTicketsRequest>())
@@ -90,8 +89,7 @@ public class VoidTicketsRequestTest
         var query = new VoidTicketsRequest
         {
             Tickets = tickets,
-            TransIdCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } },
-            IsFilterByBetId = true
+            TransIdCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } }
         };
         netPositionService.UpdateNetPosition(Arg.Any<IEnumerable<BetId>>(), "VOID").ReturnsForAnyArgs(false);
 
@@ -123,8 +121,7 @@ public class VoidTicketsRequestTest
         var query = new VoidTicketsRequest
         {
             Tickets = tickets,
-            TransIdCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } },
-            IsFilterByBetId = true
+            TransIdCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } }
         };
 
         handleService.CreateWarningMessage(Arg.Any<string>()).ReturnsForAnyArgs(new List<Result>());

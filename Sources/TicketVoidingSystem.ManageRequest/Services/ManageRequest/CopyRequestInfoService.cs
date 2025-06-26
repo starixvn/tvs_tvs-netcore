@@ -1,12 +1,11 @@
 ﻿using Fanex.BetList.Core.Entities;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.ViewModels.BetTypes;
+using Match = TicketVoidingSystem.Models.Match;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
@@ -38,9 +37,15 @@ public class CopyRequestInfoServiceImp(
         };
 
         var (requestInfos, betTypeTickets) = await repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(criteria);
+        if (!requestInfos.Any())
+        {
+            return (null, null);
+        }
+
         var firstRequest = requestInfos.First();
         firstRequest.Operators = requestExtraInfoXmlService.ParseXmlToOperators(firstRequest.OperatorInfo);
         requestExtraInfoXmlService.UpdateRequestInfoForCopy(firstRequest.IssueTypeId, firstRequest);
+
         return (firstRequest, betTypeTickets);
     }
 

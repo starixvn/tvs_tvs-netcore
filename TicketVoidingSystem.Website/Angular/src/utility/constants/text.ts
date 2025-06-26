@@ -14,11 +14,8 @@ export class TEXT {
     static readonly REQUIRED_CORRECT_ODDS = 'Invalid Correct Odds.';
     static readonly REQUIRED_SPREAD = 'Invalid Spread.';
 
-    static readonly INVALID_FROMBETID = 'Invalid From BetID.';
-    static readonly INVALID_TOBETID = 'Invalid To BetID.';
     static readonly INVALID_BETIDS = 'Invalid BetID(s) are highlighted in RED.';
     static readonly REQUIRED_MATCHID = 'MatchId is required.';
-    static readonly REQUIRED_BETIDS = 'Bet ID is required.';
     static readonly REQUIRED_FROMBETID = 'From BetID is required.';
     static readonly REQUIRED_TOBETID = 'To BetID is required.';
     static readonly REQUIRED_REQUEST_ID = 'Request ID is required.';
@@ -54,7 +51,6 @@ export class TEXT {
     static readonly INVALID_ITALIAN = 'You must include @@ in Italian message for replacing ticket number.';
     static readonly INVALID_SPANISH = 'You must include @@ in Spanish message for replacing ticket number.';
 
-    static readonly CONFIRM_NEGATIVE_CUSTORMER = 'This action could lead to a negative amount of Bet Credit of the following customers: ';
     static readonly CONFIRM_VOID_TICKET = 'Are you sure you want to void selected tickets?';
     static readonly REQUEST_CONFIRMED_SUCCESSFULLY = 'Your request has been confirmed.';
     static readonly CONFIRM_VOID_TICKET_IN_PAGE = 'Only selected tickets on present page will be voided. Are you sure you want to proceed?';

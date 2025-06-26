@@ -1,31 +1,30 @@
 ﻿.confirm-delete {
-  margin: 10px;
-  padding: 10px;
-  float: left;
-  border-width: 2px;
-  border-style: groove;
-  border-color: threedface;
-  border-image: initial;
+    margin: 5px 10px;
+    float: left;
 
-  legend {
-    font-weight: bold;
-    width: auto;
-  }
-
-  table {
-    tr {
-      td:first-child {
-        min-width: 140px;
-      }
-
-      textarea {
-        width: 500px;
-        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-      }
-
-      input[disabled] {
-        cursor: not-allowed;
-      }
+    legend {
+        font-weight: bold;
     }
-  }
+
+    .required {
+        color: red;
+    }
+
+    table {
+        tr {
+            td:first-child {
+                min-width: 110px;
+            }
+
+            textarea, input[type="text"], input[type="password"] {
+                width: 400px;
+                height: 29px;
+                margin-bottom: 5px;
+            }
+
+            input[disabled] {
+                cursor: not-allowed;
+            }
+        }
+    }
 }

@@ -34,7 +34,7 @@ public class ConditionServiceTest
         var service = new ConditionServiceImp();
 
         // Act
-        var isDisable = service.IsDisableCheckBox(model.Item, model.Permission, model.IsVoidByBetId);
+        var isDisable = service.IsDisableCheckBox(model.Item, model.Permission);
 
         // Assert
         Assert.Equal(model.Expected, isDisable);

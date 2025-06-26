@@ -8,13 +8,11 @@ public class TicketsViewModel
     public string InvalidTransIds { get; set; }
     public string MovedTransIds { get; set; }
     public IEnumerable<BetId> Tickets { get; set; }
-    public int TotalItem { get; set; }
+    public int TotalItems { get; set; }
     public int SingleCount { get; set; }
     public int ParlayCount { get; set; }
-    public string FromTime { get; set; }
-    public string ToTime { get; set; }
-    public string FromDate { get; set; }
-    public string ToDate { get; set; }
+    public DateTime? FromTransTime { get; set; }
+    public DateTime? ToTransTime { get; set; }
     public string LicenseesName { get; set; }
     public int MatchId { get; set; }
 }

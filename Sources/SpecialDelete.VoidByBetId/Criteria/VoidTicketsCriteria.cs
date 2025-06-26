@@ -22,15 +22,6 @@ public class VoidTicketsCriteria : CriteriaBase
 
     public byte? AbnormalBetType { get; set; }
 
-    public string FilterUserName { get; set; }
-
-    public string Products { get; set; }
-
-    public string StatusIds { get; set; }
-
-    public DateTime? FromDate { get; set; }
-
-    public DateTime? ToDate { get; set; }
 
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }

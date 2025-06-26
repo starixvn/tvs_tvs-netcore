@@ -59,7 +59,7 @@ export class LABELS {
   static readonly INVALID_BET_ID = 'Invalid BetID.';
   static readonly CONFIRM_CHECK_BY = 'Are you sure you want to verify request ';
   static readonly CONFIRM_UNCHECK_BY = 'Are you sure you want to unverify request ';
-  static readonly CONFIRM_NEGATIVE_CUSTORMER = 'This action could lead to a negative amount of Bet Credit of the following customers: ';
+  static readonly CONFIRM_NEGATIVE_CUSTOMER = `This action could lead to a negative amount of Bet Credit of the following customers: {0}`;
   static readonly CONFIRM_VOID_ALL_TICKETS = 'Are you sure you want to proceed? Please confirm and wait for the notification.';
   static readonly CONFIRM_MARK_TICKET = 'Are you sure you want to mark tickets?';
   static readonly CONFIRM_UNMARK_TICKET = 'Are you sure you want to unmark tickets?';

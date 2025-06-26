@@ -127,17 +127,32 @@ const editRequest = {
   transformFolder: '../wwwroot/dist/ticket-voiding-system/edit-request',
   indexEJSPath: './src/edit-request/index.ejs'
 };
+
+const voidByBetId = {
+  pageName: 'VoidByBetId',
+  tsconfigFiles: [
+    'void-by-bet-id/main.ts',
+    'polyfills.ts'
+  ],
+  deployUrl: 'dist/void-by-bet-id/',
+  index: 'src/void-by-bet-id/index.cshtml',
+  main: 'src/void-by-bet-id/main.ts',
+  transformFolder: '../wwwroot/dist/void-by-bet-id',
+  indexEJSPath: './src/void-by-bet-id/index.ejs'
+};
+
 const configPages = [
   //homePage,
   //manageVoidServices,
   //abExceptionList,
   //markTickets,
   //ticketListing,
-  //voidSingleBet,
+  voidSingleBet,
   //voidRequest,
-  manageRequest,
-  addRequest,
-  editRequest
+  //manageRequest,
+  //addRequest,
+  //editRequest,
+  voidByBetId
 ];
 
 module.exports = configPages;

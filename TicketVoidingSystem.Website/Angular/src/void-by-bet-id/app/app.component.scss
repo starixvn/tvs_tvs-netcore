@@ -1,0 +1,18 @@
+::ng-deep {
+    .fieldset legend {
+        margin-bottom: 0px !important;
+
+    }
+}
+
+
+.abnormal-bet-reason {
+    width: 220px; 
+    padding: 8px 8px 12px 8px; 
+    margin: 10px;
+
+    .legend {
+        font-weight: bold;
+        margin-bottom: 0;
+    }
+}

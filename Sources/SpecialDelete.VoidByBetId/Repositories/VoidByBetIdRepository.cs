@@ -92,7 +92,7 @@ public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository reposit
         {
             return 0;
         }
-        return (int)(matchIds.Count() == 1 ? matchIds.First() : 0);
+        return (int)(matchIds.Count() == 1 ? matchIds.First() : 0)!;
     }
 
     private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query)
@@ -106,11 +106,6 @@ public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository reposit
             ReasonSC = query.ReasonSC,
             Ip = sessionService.GetClientIp(),
             AbnormalBetType = query.AbnormalBetType,
-            FilterUserName = query.FilterUserName,
-            Products = query.Products,
-            StatusIds = query.StatusIds,
-            FromDate = query.FromDate,
-            ToDate = query.ToDate
         };
     }
 }

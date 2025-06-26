@@ -15,32 +15,6 @@ namespace TicketVoidingSystem.Tests.VoidByBetId.Services.GetTickets;
 [Category("VoidByBetId")]
 public class GetTicketsServiceTest
 {
-    private static GetTicketsServiceImp CreateService(VoidByBetIdRepository repository)
-    {
-        var sessionService = Substitute.For<SessionService>();
-        var ticketHtmlService = Substitute.For<TicketService>();
-        return new GetTicketsServiceImp(
-            repository,
-            sessionService,
-            ticketHtmlService);
-    }
-
-    [Fact]
-    public async Task GetTickets_ValidQueryModel_CallGetTicketsByRepository()
-    {
-        // Arrange
-        var query = new GetTicketsQuery { CustId = "1" };
-        var repository = Substitute.For<VoidByBetIdRepository>();
-        var service = CreateService(repository);
-
-        // Act
-        await service.GetTickets(query);
-
-        // Assert
-        await repository.Received()
-            .GetTickets(Arg.Is<GetTicketsQuery>(x => x.CustId == query.CustId));
-    }
-
     [Fact]
     public async Task AssignData_HasTicketsInGroup_CallGetTicketFromTicketHtml()
     {
@@ -54,17 +28,17 @@ public class GetTicketsServiceTest
         var sessionService = Substitute.For<SessionService>();
         var ticketHtmlService = Substitute.For<TicketService>();
         ticketHtmlService
-            .GetTicket(Arg.Any<GetTicketModel>(), Arg.Any<UserPermission>(), false)
+            .GetTicket(Arg.Any<GetTicketModel>(), Arg.Any<UserPermission>())
             .Returns(new TicketViewModel());
         var service = new GetTicketsServiceImp(repository, sessionService, ticketHtmlService);
 
         // Act
-        await service.AssignData(tickets, false);
+        await service.AssignData(tickets);
 
         // Assert
         ticketHtmlService
             .Received()
-            .GetTicket(Arg.Is<GetTicketModel>(x => x.TransId == transId), Arg.Any<UserPermission>(), false);
+            .GetTicket(Arg.Is<GetTicketModel>(x => x.TransId == transId), Arg.Any<UserPermission>());
     }
 
     [Fact]
@@ -78,11 +52,42 @@ public class GetTicketsServiceTest
         var service = new GetTicketsServiceImp(repository, sessionService, ticketHtmlService);
 
         // Act
-        await service.AssignData(tickets, false);
+        await service.AssignData(tickets);
 
         // Assert
         ticketHtmlService
             .DidNotReceive()
-            .GetTicket(Arg.Any<GetTicketModel>(), Arg.Any<UserPermission>(), false);
+            .GetTicket(Arg.Any<GetTicketModel>(), Arg.Any<UserPermission>());
+    }
+
+    [Fact]
+    public async Task GetTickets_ShouldCallRepositoryAndReturnCorrectData()
+    {
+        // Arrange
+        var query = new GetTicketsQuery();
+        var expectedTickets = new List<GetTicketModel>();
+        const string expectedInvalidTransIds = "123,456";
+        const string expectedMovedTransIds = "789";
+        const int expectedMatchId = 1;
+
+        var repository = Substitute.For<VoidByBetIdRepository>();
+        var sessionService = Substitute.For<SessionService>();
+        var ticketHtmlService = Substitute.For<TicketService>();
+
+        repository
+            .GetTickets(query)
+            .Returns((expectedTickets, expectedInvalidTransIds, expectedMovedTransIds, expectedMatchId));
+
+        var service = new GetTicketsServiceImp(repository, sessionService, ticketHtmlService);
+
+        // Act
+        var result = await service.GetTickets(query);
+
+        // Assert
+        await repository.Received(1).GetTickets(query);
+        Assert.Equal(expectedTickets, result.Tickets);
+        Assert.Equal(expectedInvalidTransIds, result.InvalidTransIds);
+        Assert.Equal(expectedMovedTransIds, result.MovedTransIds);
+        Assert.Equal(expectedMatchId, result.matchId);
     }
 }

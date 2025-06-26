@@ -5,6 +5,7 @@
     font-weight: bold;
     padding: 0 10px;
     margin-bottom: 5px;
+    text-align: center;
   }
 
   table {
@@ -35,6 +36,9 @@
 
     .header-language {
       background-color: #cccccc;
+      .required {
+        color: red;
+      }
     }
 
     .header-other-language {

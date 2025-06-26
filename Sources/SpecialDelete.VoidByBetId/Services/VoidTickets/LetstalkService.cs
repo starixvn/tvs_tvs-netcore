@@ -27,23 +27,14 @@ public class LetstalkServiceImp(
     {
         var results = new List<Result>();
         var infoForLetstalk = mapper.Map<TicketInfoForLetstalk>(query);
-        if (query.IsFilterByBetId)
+        if (query.Match != null)
         {
-            if (query.Match != null)
-            {
-                results.AddRange(await notificationLetstalkService.SendToGroupVoidSettledBets(infoForLetstalk, model.Tickets));
-            }
-            else
-            {
-                infoForLetstalk.IsCheckMainParlay = true;
-                results.AddRange(await SendLetstalkWithMultiMessage(model.Tickets, infoForLetstalk));
-            }
+            results.AddRange(await notificationLetstalkService.SendToGroupVoidSettledBets(infoForLetstalk, model.Tickets));
         }
         else
         {
             infoForLetstalk.IsCheckMainParlay = true;
-            infoForLetstalk.IsMemberTemplate = true;
-            results.AddRange(await notificationLetstalkService.SendToGroupVoidSettledBets(infoForLetstalk, model.Tickets));
+            results.AddRange(await SendLetstalkWithMultiMessage(model.Tickets, infoForLetstalk));
         }
 
         return results;

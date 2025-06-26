@@ -106,18 +106,6 @@ export class WrongScoreService {
     return data;
   }
 
-  mapWrongScoreModel(originWrongScoreModels: WrongScoreModel[],wrongScoreModels: WrongScoreModel[]): void {
-    originWrongScoreModels.forEach(x => {
-      const model = wrongScoreModels.find(y => y.scoreId === x.scoreId);
-      if (model) {
-        model.isActive = x.isActive;
-      } else {
-        wrongScoreModels.push(_.cloneDeep(x));
-      }
-    });
-    wrongScoreModels = _.orderBy(_.uniqBy(wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
-  }
-
   updateByOriginWrongScoreModel(originWrongScoreModels: WrongScoreModel[], wrongScoreModels: WrongScoreModel[]) {
     originWrongScoreModels.forEach(x => {
       if (!wrongScoreModels.some(y => y.scoreId === x.scoreId)) {

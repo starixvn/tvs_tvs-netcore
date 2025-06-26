@@ -10,7 +10,7 @@ import { TemplateService } from '../../utility/components/template-message/templ
 import { FilterComponent } from './filter/filter.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { GetTicketsQuery, FilterParams } from './models/query.model';
-import { TicketsModel } from './tickets/tickets.model';
+import { TicketsModel } from '../../utility/components/tickets/tickets.model';
 import { MatchModel } from '../../utility/models/match.model';
 import { Result } from '../../utility/models/result';
 import * as _ from 'lodash';

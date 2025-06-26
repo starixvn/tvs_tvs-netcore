@@ -40,7 +40,7 @@ public class MapTicketServiceImp(
     private TicketViewModel MapToTicketViewModel(DetailTicketModel item)
     {
         var ticket = MapFromBetListToTicketViewModel(item);
-        ticket.SecondAcceptFlag = item.SecAcceptFlag ? "<span class='icon-tick'></span>" : string.Empty;
+        ticket.SecondAcceptFlag = item.SecAcceptFlag ? "<i class=\"fa-solid fa-check\"></i>" : string.Empty;
         ticket.WinLoss = CreateWinLossHtml(item.Status, item.WinLost);
         ticket.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
         ticket.BetId = item.TransId.ToString();
@@ -124,7 +124,6 @@ public class MapTicketServiceImp(
         var comboParlayNames = betListService.GetComboParlayName(ticket);
         ticket = SetSubTicket(item);
         return comboParlayNames + betListService.BuildChoice(ticket, ticketHelper, null, false);
-
     }
 
     private Ticket SetMainTicket(DetailTicketModel item)

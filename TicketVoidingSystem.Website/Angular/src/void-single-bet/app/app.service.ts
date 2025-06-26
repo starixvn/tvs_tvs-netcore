@@ -6,7 +6,7 @@ import { Result } from '../../utility/models/result';
 import { CommonService } from '../../utility/services/common.service';
 import { HttpService } from '../../utility/services/http.service';
 import { GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
-import { TicketsModel } from './tickets/tickets.model';
+import { TicketsModel } from '../../utility/components/tickets/tickets.model';
 
 @Injectable({
   providedIn: 'root'

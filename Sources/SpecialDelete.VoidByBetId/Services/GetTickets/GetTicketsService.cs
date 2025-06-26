@@ -12,7 +12,7 @@ public interface GetTicketsService
 {
     Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int matchId)> GetTickets(GetTicketsQuery query);
 
-    Task<Group<TicketViewModel>> AssignData(Group<GetTicketModel> groupTicket, bool isVoidByBetId);
+    Task<Group<TicketViewModel>> AssignData(Group<GetTicketModel> groupTicket);
 }
 
 public class GetTicketsServiceImp(
@@ -26,7 +26,7 @@ public class GetTicketsServiceImp(
         return await repository.GetTickets(query);
     }
 
-    public async Task<Group<TicketViewModel>> AssignData(Group<GetTicketModel> groupTicket, bool isVoidByBetId)
+    public async Task<Group<TicketViewModel>> AssignData(Group<GetTicketModel> groupTicket)
     {
         var permission = new UserPermission
         {
@@ -38,7 +38,7 @@ public class GetTicketsServiceImp(
         var index = 1;
         foreach (var item in groupTicket.Tickets)
         {
-            var ticket = ticketHtmlService.GetTicket(item, permission, isVoidByBetId);
+            var ticket = ticketHtmlService.GetTicket(item, permission);
             ticket.No = index++;
             tickets.Add(ticket);
         }

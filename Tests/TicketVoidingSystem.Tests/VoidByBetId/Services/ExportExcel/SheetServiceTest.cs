@@ -28,7 +28,7 @@ public class SheetServiceTest
                 Odds = string.Empty,
                 Stake = string.Empty,
                 Status = string.Empty,
-                WinLost = string.Empty
+                WinLoss = string.Empty
             });
         var service = new SheetServiceImp(getTicketsService, ticketService);
 

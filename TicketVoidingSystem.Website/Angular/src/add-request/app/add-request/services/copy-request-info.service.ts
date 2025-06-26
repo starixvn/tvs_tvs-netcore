@@ -18,6 +18,9 @@ export class CopyRequestInfoService {
       matchId: matchId
     };
     const copyRequestResponse = await this.commonService.copyRequestInfo(query);
+    if(!copyRequestResponse){
+      return;
+    }
     const emailContent = this.createContentEmail(copyRequestResponse, operatorsList);
     const type = "text/html";
     const blob = new Blob([emailContent], { type });
@@ -32,6 +35,9 @@ export class CopyRequestInfoService {
       logInfoDetails: logInfoDetail
     };
     const copyRequestResponse = await this.commonService.copyRequestInfo(query);
+    if(!copyRequestResponse){
+      return;
+    }
     navigator.clipboard.writeText(this.createContentLetsTalk(copyRequestResponse, logInfoDetail, operatorsList));
   }
 

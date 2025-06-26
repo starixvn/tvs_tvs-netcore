@@ -8,9 +8,9 @@ import { CommonService } from '../../utility/services/common.service';
 import { HttpService } from '../../utility/services/http.service';
 import { AppService } from './app.service';
 import { GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
-import { GroupModel } from './tickets/group.model';
-import { TicketModel } from './tickets/ticket.model';
-import { TicketsModel } from './tickets/tickets.model';
+import { GroupModel } from '../../utility/components/tickets/group.model';
+import { TicketModel } from '../../utility/components/tickets/ticket.model';
+import { TicketsModel } from '../../utility/components/tickets/tickets.model';
 
 jest.mock('../../utility/services/http.service');
 

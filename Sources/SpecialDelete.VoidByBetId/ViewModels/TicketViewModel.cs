@@ -8,11 +8,11 @@ public class TicketViewModel
 
     public string Value { get; set; }
 
-    public string Player { get; set; }
+    public string Member { get; set; }
 
     public string TransDate { get; set; }
 
-    public int BetType { get; set; }
+    public string BetType { get; set; }
 
     public string Choice { get; set; }
 
@@ -22,7 +22,7 @@ public class TicketViewModel
 
     public string Status { get; set; }
 
-    public string WinLost { get; set; }
+    public string WinLoss { get; set; }
 
     public bool IsDisable { get; set; }
 
@@ -33,4 +33,12 @@ public class TicketViewModel
     public bool IsMarked { get; set; }
 
     public int SiteDbGroupId { get; set; }
+
+    public string Currency { get; set; }
+
+    public string Handicap { get; set; }
+
+    public string Score { get; set; }
+
+    public string SecondAcceptFlag { get; set; } = "";
 }
