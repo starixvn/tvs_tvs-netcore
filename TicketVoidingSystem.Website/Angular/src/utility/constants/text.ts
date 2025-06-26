@@ -51,7 +51,6 @@ export class TEXT {
     static readonly INVALID_ITALIAN = 'You must include @@ in Italian message for replacing ticket number.';
     static readonly INVALID_SPANISH = 'You must include @@ in Spanish message for replacing ticket number.';
 
-    static readonly CONFIRM_NEGATIVE_CUSTORMER = 'This action could lead to a negative amount of Bet Credit of the following customers: ';
     static readonly CONFIRM_VOID_TICKET = 'Are you sure you want to void selected tickets?';
     static readonly REQUEST_CONFIRMED_SUCCESSFULLY = 'Your request has been confirmed.';
     static readonly CONFIRM_VOID_TICKET_IN_PAGE = 'Only selected tickets on present page will be voided. Are you sure you want to proceed?';

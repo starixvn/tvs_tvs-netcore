@@ -115,4 +115,8 @@ export class TicketsModel {
     getNumberOfCheckedTickets(): number {
         return this.groups.reduce((count, group) => count + group.getCheckedTickets().length, 0);
     }
+
+    getCheckedBetIds(): string {
+        return this.groups.flatMap(group => group.getEnableTickets()).map(x => x.transId).join(',');
+    }
 }

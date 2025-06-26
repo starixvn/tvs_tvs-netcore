@@ -4,7 +4,7 @@ import { GetTicketsQuery, TicketsViewModel } from './model/get-tickets.query';
 import { CommonService } from '../../utility/services/common.service';
 import { SubIssueType } from '../../utility/components/template-message/template-message/template-setting.model';
 import { Result } from '../../utility/models/result';
-import { VoidTicketsRequest } from './model/void-by-bet-id.model';
+import { NegativeBalanceModel, VoidTicketsRequest } from './model/void-by-bet-id.model';
 
 @Injectable({
   providedIn: 'root'
@@ -37,4 +37,7 @@ export class AppService {
     return this.httpService.downloadFile(query, 'api/VoidByBetId/ExportExcel');
   }
 
+  async checkNegativeBalance(transIds: string): Promise<NegativeBalanceModel[]> {
+    return this.httpService.postJson<{transIds: string}, NegativeBalanceModel[]>({transIds: transIds}, 'api/SharedApi/CheckNegativeBalance');
+  }
 }

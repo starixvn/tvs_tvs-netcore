@@ -32,6 +32,7 @@ import { ValidationService } from './services/validation.service';
 import { CommonService } from '../../utility/services/common.service';
 import { VoidTicketsService } from './services/void-tickets.service';
 import { Message } from '../../utility/components/template-message/messages/message';
+import { LABELS } from 'src/utility/constants/labels';
 
 @Component({
   standalone: true,
@@ -127,8 +128,14 @@ export class AppComponent implements OnInit {
     this.confirmationComponent.clearData();
   }
 
-  showConfirmBeforeVoid() {
-    this.modal.open('Void Bet Confirm', TEXT.CONFIRM_VOID_TICKET);
+  async showConfirmBeforeVoid() {
+    let usersNegativeCredit = await this.checkNegativeBetCredit();
+    let message = TEXT.CONFIRM_VOID_TICKET;
+    if(usersNegativeCredit) {
+      message = `${LABELS.CONFIRM_NEGATIVE_CUSTOMER.replace('{0}', usersNegativeCredit)}<br>${message}`;
+    }
+
+    this.modal.open('Void Bet Confirm', message);
   }
 
   async voidBet() {
@@ -136,6 +143,12 @@ export class AppComponent implements OnInit {
       return;
     }
     this.showConfirmBeforeVoid();
+  }
+
+  async checkNegativeBetCredit(): Promise<string> {
+    const request = await this.appService.checkNegativeBalance(this.ticketsViewModel.getCheckedBetIds());
+
+    return request?.map(item => item.userName).join(', ');
   }
 
   async voidTickets() {

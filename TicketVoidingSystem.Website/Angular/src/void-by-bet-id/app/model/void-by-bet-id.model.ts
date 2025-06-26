@@ -27,3 +27,9 @@ export class VoidTicketsRequest {
     subIssueTypeName: string;
     subIssueTypeNameCS: string;
 }
+
+export class NegativeBalanceModel {
+    custId: number;
+    userName: string;
+    site: string;
+}
