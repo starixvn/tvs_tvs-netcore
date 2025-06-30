@@ -1,12 +1,14 @@
 import { inject, Injectable } from "@angular/core";
-import { EventLeagueComponent } from "src/utility/components/event-league/event-league.component";
 import { BetIdsComponent } from "../../../../../utility/components/bet-ids/bet-ids.component";
+import { Tooltip } from "../../../../../utility/components/tooltip/tooltip.model";
 import { LABELS } from "../../../../../utility/constants/labels";
+import { TEXT } from "../../../../../utility/constants/text";
 import { AddRequestApiService } from "../../add-request-api.service";
 import { PermissionAddRequest } from "../../models/permission-add-request.model";
 import { RecoverTicketModel } from "../../models/recover-ticket.model";
 import { CheckRecoverTicketResult } from "../models/check-recover-ticket-result.model";
 import { CheckRecoverTicketQuery } from "../models/check-recover-ticket.query";
+import { PrimitiveProperty } from "../models/primitive-property.model";
 import { ValidationBusinessRuleOutput } from "../models/validation.model";
 
 @Injectable()
@@ -14,18 +16,20 @@ export class ValidationService {
   private readonly addRequestApiService = inject(AddRequestApiService);
 
   public async checkBusinessRule(betIdsComponent: BetIdsComponent, recoverTicketModel: RecoverTicketModel,
-    requestId: number, permission: PermissionAddRequest, eventLeagueComponent: EventLeagueComponent): Promise<ValidationBusinessRuleOutput> {
-    if (!betIdsComponent.isHasBetId()) {
+    requestId: number, primitiveProps: PrimitiveProperty, tooltip: Tooltip): Promise<ValidationBusinessRuleOutput> {
+
+    if (recoverTicketModel.filterBy === 1 && !primitiveProps.isMatchIdValid) {
+      tooltip.display('match-id', TEXT.INVALID_MATCHID);
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
 
-    if (recoverTicketModel.filterBy === 1 &&  !eventLeagueComponent?.isMatchIdValid()) {
+    if (!betIdsComponent.isHasBetId()) {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
 
     betIdsComponent.groupNumber.resetAllItemsToValid();
     betIdsComponent.groupNumber.checkDuplicatedItems();
-    const validationResult = await this.checkRecoverTicket(betIdsComponent, recoverTicketModel, requestId, permission);
+    const validationResult = await this.checkRecoverTicket(betIdsComponent, recoverTicketModel, requestId, primitiveProps.permission);
     if (validationResult === null) {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }

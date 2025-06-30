@@ -147,12 +147,12 @@ const configPages = [
   //abExceptionList,
   //markTickets,
   //ticketListing,
-  voidSingleBet,
+  //voidSingleBet,
   //voidRequest,
   //manageRequest,
-  //addRequest,
-  //editRequest,
-  voidByBetId
+  addRequest,
+  editRequest,
+  //voidByBetId
 ];
 
 module.exports = configPages;

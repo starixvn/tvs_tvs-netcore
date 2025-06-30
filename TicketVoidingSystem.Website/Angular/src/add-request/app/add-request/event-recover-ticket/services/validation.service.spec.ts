@@ -1,14 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import * as _ from 'lodash';
+import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupNumber } from '../../../../../utility/components/bet-ids/bet-ids.model';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { FilterModel } from '../../filter/filter.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { RecoverTicketModel } from '../../models/recover-ticket.model';
 import { CheckRecoverTicketResult } from '../models/check-recover-ticket-result.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
 import { ValidationService } from './validation.service';
 
 class Helper {
@@ -53,15 +54,16 @@ describe('ValidationService', () => {
         productIds: []
       } as unknown as RecoverTicketModel;
 
-      const mockFilter = {} as FilterModel;
-      const mockPermission = {} as PermissionAddRequest;
+      const mockPrimitiveProps = { permission: {} as PermissionAddRequest } as PrimitiveProperty;
+      const mockTooltip = {} as Tooltip;
 
       // Act
       const result = await service.checkBusinessRule(
         mockBetIdsComponent,
         mockRecoverTicketModel,
         123,
-        mockPermission
+        mockPrimitiveProps,
+        mockTooltip
       );
 
       // Assert
@@ -87,13 +89,8 @@ describe('ValidationService', () => {
         productIds: ['1', '2']
       } as unknown as RecoverTicketModel;
 
-      const mockFilter = {
-        subIssueTypeId: '1'
-      } as FilterModel;
-
-      const mockPermission = {
-        isVoidAllArchivedTickets: false
-      } as PermissionAddRequest;
+      const mockPrimitiveProps = { permission: {} as PermissionAddRequest } as PrimitiveProperty;
+      const mockTooltip = {} as Tooltip;
 
       jest.spyOn(addRequestApiService, 'checkRecoverTicket').mockResolvedValue(null);
 
@@ -102,7 +99,8 @@ describe('ValidationService', () => {
         mockBetIdsComponent,
         mockRecoverTicketModel,
         123,
-        mockPermission
+        mockPrimitiveProps,
+        mockTooltip
       );
 
       // Assert
@@ -132,13 +130,9 @@ describe('ValidationService', () => {
         productIds: ['1', '2']
       } as unknown as RecoverTicketModel;
 
-      const mockFilter = {
-        subIssueTypeId: '1'
-      } as FilterModel;
 
-      const mockPermission = {
-        isVoidAllArchivedTickets: false
-      } as PermissionAddRequest;
+      const mockPrimitiveProps = { permission: {} as PermissionAddRequest } as PrimitiveProperty;
+      const mockTooltip = {} as Tooltip;
 
       const mockValidationResult = {
         existingReqTransIds: '123',
@@ -155,7 +149,8 @@ describe('ValidationService', () => {
         mockBetIdsComponent,
         mockRecoverTicketModel,
         123,
-        mockPermission
+        mockPrimitiveProps,
+        mockTooltip
       );
 
       // Assert
@@ -170,10 +165,12 @@ describe('ValidationService', () => {
 
   it('#checkBusinessRule should return validation model with invalid', async () => {
     const mockIsHasBetId = jest.fn().mockImplementation(() => false);
+    const mockPrimitiveProps = { permission: {} as PermissionAddRequest } as PrimitiveProperty;
+    const mockTooltip = {} as Tooltip;
     const betIdsComponent = {} as BetIdsComponent;
     betIdsComponent.isHasBetId = mockIsHasBetId;
     service['highlightInvalidTransIds'] = jest.fn();
-    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, new PermissionAddRequest());
+    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, mockPrimitiveProps, mockTooltip);
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(result.isValid).toBe(false);
@@ -184,17 +181,18 @@ describe('ValidationService', () => {
     const mockGroupNumberResetAllItemsToValid = jest.fn();
     const mockGroupNumberCheckDuplicatedItems = jest.fn();
     const mockGroupNumberGetAllBetIds = jest.fn();
+    const mockPrimitiveProps = { permission: {} as PermissionAddRequest } as PrimitiveProperty;
+    const mockTooltip = {} as Tooltip;
     const betIdsComponent = {} as BetIdsComponent;
     betIdsComponent.isHasBetId = mockIsHasBetId;
     betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
     betIdsComponent.groupNumber = new GroupNumber();
     betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
     betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
-    const addRequestApiService = {} as AddRequestApiService;
     addRequestApiService.checkRecoverTicket = jest.fn().mockImplementation(() => null);
     service['highlightInvalidTransIds'] = jest.fn();
 
-    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, new PermissionAddRequest());
+    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, mockPrimitiveProps, mockTooltip);
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
@@ -211,6 +209,8 @@ describe('ValidationService', () => {
     const mockGroupNumberCheckDuplicatedItems = jest.fn();
     const mockGroupNumberGetAllBetIds = jest.fn();
     const mockIsAllBetIdsValid = jest.fn().mockImplementation(() => false);
+    const mockPrimitiveProps = { permission: {} as PermissionAddRequest } as PrimitiveProperty;
+    const mockTooltip = {} as Tooltip;
     const betIdsComponent = {} as BetIdsComponent;
     betIdsComponent.isHasBetId = mockIsHasBetId;
     betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
@@ -218,11 +218,10 @@ describe('ValidationService', () => {
     betIdsComponent.groupNumber = new GroupNumber();
     betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
     betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
-    const addRequestApiService = {} as AddRequestApiService;
     addRequestApiService.checkRecoverTicket = jest.fn().mockImplementation(() => results);
     service['highlightInvalidTransIds'] = jest.fn();
 
-    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, new PermissionAddRequest());
+    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, mockPrimitiveProps, mockTooltip);
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
@@ -239,6 +238,8 @@ describe('ValidationService', () => {
     const mockGroupNumberCheckDuplicatedItems = jest.fn();
     const mockGroupNumberGetAllBetIds = jest.fn().mockImplementation(() => ['123', '456']);
     const mockIsAllBetIdsValid = jest.fn().mockImplementation(() => true);
+    const mockPrimitiveProps = { permission: {} as PermissionAddRequest } as PrimitiveProperty;
+    const mockTooltip = {} as Tooltip;
     const betIdsComponent = {} as BetIdsComponent;
     betIdsComponent.isHasBetId = mockIsHasBetId;
     betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
@@ -251,7 +252,7 @@ describe('ValidationService', () => {
 
     jest.spyOn(addRequestApiService, 'checkRecoverTicket').mockResolvedValue(results);
 
-    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, new PermissionAddRequest());
+    const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, mockPrimitiveProps, mockTooltip);
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);

@@ -15,9 +15,8 @@
         Sub Parlay
       </label>
     </div>
-    <event-league  #leagueEvent [hidden]="!isSubParlay" [isEdit]="isEdit" (changeEvent)="changeMatchEvent()"
-      [matchId]="recoverTicketModel.matchId" [isShowLeague]="false" [isShowSportType]="false">
-    </event-league>
+    <input type="text" class="form-control form-control-sm match-id" [(ngModel)]="recoverTicketModel.matchId"
+      [disabled]="!isSubParlay" [hidden]="!isSubParlay" [placeholder]="'Match ID'" (blur)="onBlurMatchId()">
   </div>
   <label class="col-form-label-sm">Bet ID(s)</label>
   <div [blockUi]="primitiveProps.isBlockBetIds">
@@ -28,3 +27,4 @@
     </bet-ids>
   </div>
 </div>
+<tooltip [tooltip]="tooltip"></tooltip>
