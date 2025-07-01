@@ -61,7 +61,8 @@ export class ValidationService {
       isValid: args.betIdsComponent.isAllBetIdsValid(),
       warningModel: checkTransIdViewModel.validation,
       transInfoAddRequestModel: checkTransIdViewModel.transInfoAddRequestModel,
-      abnormalBetTicketRequests: checkTransIdViewModel.abnormalBetTicketRequests
+      abnormalBetTicketRequests: checkTransIdViewModel.abnormalBetTicketRequests,
+      infoSiteDBDownModel: checkTransIdViewModel.infoSiteDBDownModel
     } as ValidationBusinessRuleOutput;
   }
 
@@ -82,7 +83,9 @@ export class ValidationService {
     this.highlightSecondGroupError(model, betIdsComponent);
   }
 
-  private highlightFirstGroupError(model: ValidationAbnormalBet, betIdsComponent: BetIdsComponent, isHasPermissionAddSettledTicket: boolean, actionId: string): void {
+  private highlightFirstGroupError(model: ValidationAbnormalBet, betIdsComponent: BetIdsComponent, isHasPermissionAddSettledTicket: boolean, 
+    actionId: string): void {
+      console.log("model", model);
     if (model.invalidTransIds?.length > 0) {
       betIdsComponent.groupNumber.updateInvalidItems(model.invalidTransIds, LABELS.INVALID_TICKETS);
     }
@@ -97,6 +100,9 @@ export class ValidationService {
     }
     if (model.unsupportedTransIds?.length > 0) {
       betIdsComponent.groupNumber.updateInvalidItems(model.unsupportedTransIds, LABELS.INVALID_UNSUPPORTED_TICKETS);
+    }
+    if (model.transIdsOfSiteDBDown?.length > 0) {
+      betIdsComponent.groupNumber.updateWarningSiteDBDown(model.transIdsOfSiteDBDown, LABELS.INVALID_SITE_DB_DOWN);
     }
   }
 

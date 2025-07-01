@@ -16,4 +16,5 @@ export class SaveRequestArg {
   confirmAbnormalBetModel: ConfirmAbnormalBetModel;
   confirmAbnormalBetComponent: ConfirmAbnormalBetComponent;
   addRequestStore: AddRequestStore;
+  siteDBDownInfoJson?: string;
 }

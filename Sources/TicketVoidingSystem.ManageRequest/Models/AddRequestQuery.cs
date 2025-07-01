@@ -40,6 +40,8 @@ public class AddRequestQuery
 
     public string TransInfoJson { get; set; }
 
+    public string? SiteDBDownInfoJson { get; set; }
+
     public IEnumerable<WrongScoreInfoViewModel>? WrongScoreInfo { get; set; }
 
     public AbnormalAccountViewModel? AbnormalAccountInfo { get; set; }

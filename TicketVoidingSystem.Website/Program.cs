@@ -3,6 +3,7 @@ using Fanex.Data;
 using Fanex.Logging.Sentry.RavenClient;
 using Fanex.NAP.Client;
 using Fanex.NAP.Client.Attributes;
+using Fanex.SiteDbConnectionManager.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,6 +64,7 @@ services.AddControllersWithViews(options =>
 }).AddSessionStateTempDataProvider();
 
 services.AddWebOptimizer();
+services.AddSiteDbConnectionManager();
 
 // Build app
 var app = builder.Build();

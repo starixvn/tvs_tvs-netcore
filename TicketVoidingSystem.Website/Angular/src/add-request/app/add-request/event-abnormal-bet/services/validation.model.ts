@@ -1,4 +1,5 @@
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
+import { InfoSiteDBDownModel } from '../../components/info-site-db-down/info-site-db-down.model';
 import { AbnormalBetModel } from '../../models/abnormal-bet.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
@@ -22,4 +23,5 @@ export class ValidationBusinessRuleOutput {
   warningModel: ValidationAbnormalBet;
   transInfoAddRequestModel: TransInfoAddRequestModel;
   abnormalBetTicketRequests: AbnormalBetTicketViewModel[];
+  infoSiteDBDownModel: InfoSiteDBDownModel;
 }

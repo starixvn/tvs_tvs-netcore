@@ -6,6 +6,7 @@ export class CSSCLASS {
     public static get MOVED(): string { return 'item-number-move-bet'; }
     public static get SELECTED(): string { return 'item-number-selected'; }
     public static get DIFFERENT(): string { return 'item-number-selected'; }
+    public static get SITE_DB_DOWN(): string { return 'item-number-selected'; }
 }
 
 export class GroupNumber {
@@ -66,6 +67,14 @@ export class GroupNumber {
         }
     }
 
+    updateWarningSiteDBDown(text: string, tooltipText?: string) {
+        if (StaticService.isStringHasLength(text)) {
+            const siteDbDownItems = text.split(',');
+            this.items.forEach(item => {
+                this.setItemWarning(siteDbDownItems, item, CSSCLASS.SITE_DB_DOWN, tooltipText);
+            });
+        }
+    }
     updateInvalidItems(text: string, tooltipText?: string) {
         if (StaticService.isStringHasLength(text)) {
             const invalidItems = text.split(',');
@@ -143,7 +152,14 @@ export class GroupNumber {
             }
         });
     }
-
+    private setItemWarning(warningList: string[], item: NumberItem, css: string, toolTipText = '') {
+        if (warningList.some(warningItem => warningItem === item.value)) {
+            item.cssClass = css;
+            item.defaultClass = css;
+            item.isShowTooltip = toolTipText.length > 0;
+            item.tooltipText = toolTipText;
+        }
+    }
     private setItemInvalid(invalidList: string[], item: NumberItem, css: string, toolTipText = '') {
         if (invalidList.some(invalidItem => invalidItem === item.value)) {
             item.cssClass = css;

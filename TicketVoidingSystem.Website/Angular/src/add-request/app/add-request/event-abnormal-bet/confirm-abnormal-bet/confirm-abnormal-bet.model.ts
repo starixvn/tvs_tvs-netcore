@@ -13,7 +13,9 @@ export class ConfirmAbnormalBetModel {
     settledTickets: string;
     ticketsOfCustomerClass201: string;
     ticketsOfCustomerClass4K: string;
+    isHasAffectedTicketSiteDBDown: boolean;
     ticketsOfCreditCashService: string;
+    ticketsOfSiteDBDown?: string;
 
     issueTypeName: string;
     subIssueTypeName: string;

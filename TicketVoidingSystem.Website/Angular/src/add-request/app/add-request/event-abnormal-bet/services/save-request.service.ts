@@ -38,6 +38,7 @@ export class SaveRequestService {
     query.decidedBy = args.others.decidedBy;
     query.remark = args.others.remark;
     query.transInfoJson = args.primitiveProps.transInfoAddRequestModel?.transInfoJson;
+    query.siteDBDownInfoJson = args.siteDBDownInfoJson;
 
     return query;
   }
@@ -52,6 +53,12 @@ export class SaveRequestService {
     }
     if (confirmAbnormalBetModel.ticketsOfCreditCashService && confirmAbnormalBetComponent.model.checkboxState[CheckboxType.CREDIT_CASH_SERVICE]) {
       transIdsList = transIdsList.filter(x => !(confirmAbnormalBetModel.ticketsOfCreditCashService).split(',').includes(x));
+    }
+    if (confirmAbnormalBetComponent.isMarkTicketSiteDbDown) {
+      transIdsList = transIdsList.filter(x => !(confirmAbnormalBetModel.ticketsOfSiteDBDown).split(',').includes(x));
+    }
+    if (confirmAbnormalBetModel.ticketsOfSiteDBDown) {
+      transIdsList = transIdsList.filter(x => !(confirmAbnormalBetModel.ticketsOfSiteDBDown).split(',').includes(x));
     }
     return transIdsList.join(',');
   }

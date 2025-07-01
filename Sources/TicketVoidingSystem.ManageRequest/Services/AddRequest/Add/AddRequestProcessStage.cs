@@ -25,7 +25,8 @@ public class AddRequestProcessStageImp(
     SendLetstalkAfterAddService sendLetstalkAfterAddService,
     GetUpdateResultService getUpdateResultService,
     CompressDataService compressDataService,
-    NotificationService notificationService)
+    NotificationService notificationService,
+    PendingMarkTicketsService pendingMarkTicketsService)
     : AddRequestProcessStage
 {
     // NOSONAR
@@ -39,6 +40,7 @@ public class AddRequestProcessStageImp(
         notificationService.ExecuteBackground(()
             => notificationService.InsertNotification(NotificationType.Notification,
                 MessageHelper.CreateAddRequestSuccessfully(requestId), NotificationTargetType.IgnoreCurrentUser, requestId));
+        await pendingMarkTicketsService.PendingMarkTickets(requestId, query.SiteDBDownInfoJson);
 
         return getUpdateResultService.CreateSuccessResult(requestId, GetMatchIdAfterAddRequest(query));
     }

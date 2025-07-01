@@ -21,13 +21,15 @@ import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
+import { InfoSiteDBDownModel } from '../components/info-site-db-down/info-site-db-down.model';
 
 @Component({
   selector: 'event-abnormal-bet',
   templateUrl: './event-abnormal-bet.component.html',
   styleUrls: ['./event-abnormal-bet.component.scss'],
   standalone: true,
-  imports: [FormsModule, BetIdsComponent, ConfirmAbnormalBetComponent, BlockUiDirective, CommonModule],
+  imports: [FormsModule, BetIdsComponent, ConfirmAbnormalBetComponent, BlockUiDirective, CommonModule, InfoSiteDBDownComponent],
   providers: [SaveRequestService, ValidationService]
 })
 export class EventAbnormalBetComponent implements OnInit {
@@ -43,6 +45,7 @@ export class EventAbnormalBetComponent implements OnInit {
   @ViewChild('betIds') betIdsComponent: BetIdsComponent;
   @ViewChild('confirmAbnormalBetComponent') confirmAbnormalBetComponent: ConfirmAbnormalBetComponent;
 
+  infoSiteDBDownModel: InfoSiteDBDownModel;
   primitiveProps = new PrimitiveProperty();
   permission = new PermissionAddRequest();
   confirmAbnormalBetModel = new ConfirmAbnormalBetModel();
@@ -154,6 +157,8 @@ export class EventAbnormalBetComponent implements OnInit {
     this.confirmAbnormalBetModel.transIds = this.betIdsComponent.getAllBetIds();
     this.confirmAbnormalBetModel.requestId = this.requestId;
     this.confirmAbnormalBetModel.requestedBy = this.requestedBy;
+    this.confirmAbnormalBetModel.isHasAffectedTicketSiteDBDown = this.infoSiteDBDownModel != null;
+    this.confirmAbnormalBetModel.ticketsOfSiteDBDown = validationResult.transIdsOfSiteDBDown;
     this.confirmAbnormalBetModel = _.clone(this.confirmAbnormalBetModel);
   }
 
@@ -177,7 +182,8 @@ export class EventAbnormalBetComponent implements OnInit {
     const validation = await this.validationService.checkValidBusinessRule(args);
     this.exportTickets = validation.abnormalBetTicketRequests;
     this.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
-
+    this.infoSiteDBDownModel = validation.infoSiteDBDownModel;
+    
     return validation;
   }
 
@@ -192,6 +198,9 @@ export class EventAbnormalBetComponent implements OnInit {
     args.confirmAbnormalBetModel = this.confirmAbnormalBetModel;
     args.confirmAbnormalBetComponent = this.confirmAbnormalBetComponent;
     args.addRequestStore = this.addRequestStore;
+    if (this.confirmAbnormalBetComponent.isMarkTicketSiteDbDown) {
+      args.siteDBDownInfoJson = this.infoSiteDBDownModel.siteDBDownInfoJson;
+    }
 
     await this.saveRequestService.executeSave(args);
   }

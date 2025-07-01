@@ -24,6 +24,8 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
   ticketsOfCreditCashService: string;
   isShowErrorCannotRemoveAllTickets = false;
   isConfirmCalculator = true;
+  isMarkTicketSiteDbDown = false;
+  isHasAffectedTicketSiteDBDown = false;
 
   onCheckboxToggle(key: CheckboxType): void {
     this.model.checkboxState[key] = !this.model.checkboxState[key];

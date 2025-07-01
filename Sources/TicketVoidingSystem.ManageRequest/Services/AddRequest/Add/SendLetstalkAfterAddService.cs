@@ -47,7 +47,7 @@ public class SendLetstalkAfterAddServiceImp(
         }
     }
 
-    private string CreateContent(AbnormalBetViewModel model, SendLetstalkModel sendLetstalkModel, int requestId)
+    private string CreateContent(AbnormalBetViewModel model, SendLetsTalkModel sendLetstalkModel, int requestId)
     {
         var content = new StringBuilder();
         content.AppendLine($"Request ID: {requestId}");

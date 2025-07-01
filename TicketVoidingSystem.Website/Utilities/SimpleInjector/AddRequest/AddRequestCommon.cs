@@ -37,6 +37,9 @@ public static class AddRequestCommon
         services.AddTransient<GetDecidedByService, GetDecidedByServiceImp>();
         services.AddTransient<CheckProviderMistakeTicketsService, CheckProviderMistakeTicketsServiceImp>();
         services.AddTransient<AddRequestAutoVoidProviderMistakeService, AddRequestAutoVoidProviderMistakeServiceImp>();
+        services.AddTransient<PendingMarkTicketsService, PendingMarkTicketsServiceImp>();
+        services.AddTransient<GetInfoSiteDbDownService, GetInfoSiteDbDownServiceImp>();
+
         services.RegisterAbnormalBetServices();
         services.RegisterAbnormalAccountServices();
     }

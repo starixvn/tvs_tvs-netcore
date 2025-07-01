@@ -57,6 +57,7 @@ export class LABELS {
   static readonly INVALID_SPANISH = 'You must include @@ in Spanish message for replacing ticket number.';
   static readonly INVALID_MATCH = 'Invalid match';
   static readonly INVALID_BET_ID = 'Invalid BetID.';
+  static readonly INVALID_SITE_DB_DOWN = 'Ticket of siteDB down';
   static readonly CONFIRM_CHECK_BY = 'Are you sure you want to verify request ';
   static readonly CONFIRM_UNCHECK_BY = 'Are you sure you want to unverify request ';
   static readonly CONFIRM_NEGATIVE_CUSTOMER = `This action could lead to a negative amount of Bet Credit of the following customers: {0}`;
