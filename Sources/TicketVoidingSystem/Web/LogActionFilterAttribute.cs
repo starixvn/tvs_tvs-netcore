@@ -32,10 +32,9 @@ public class LogActionFilterAttribute(ILogger logger) : ActionFilterAttribute
 
         var requestMethod = httpContext.Request.Method;
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine($"{requestMethod}-{httpContext.Request.GetDisplayUrl()} - {httpContext.User.Identity?.Name} - {DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss}");
+        stringBuilder.AppendLine($"{requestMethod}-{httpContext.Request.GetDisplayUrl()} - {httpContext.User.Identity?.Name} - " +
+                                 $"{DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss} - {JsonSerializer.Serialize(context.ActionArguments)}");
         stringBuilder.AppendLine($"UserAgent: {httpContext.Request.Headers["User-Agent"]}");
-        stringBuilder.AppendLine($"Params: {JsonSerializer.Serialize(context.ActionArguments)}");
-
         httpContext.Items["request-log"] = stringBuilder.ToString();
         httpContext.Items["timer"] = Stopwatch.StartNew();
         base.OnActionExecuting(context);
