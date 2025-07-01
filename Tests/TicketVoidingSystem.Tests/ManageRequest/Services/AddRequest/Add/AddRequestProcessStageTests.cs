@@ -41,7 +41,7 @@ public class AddRequestProcessStageTests
         var compressDataService = Substitute.For<CompressDataService>();
         var notificationService = Substitute.For<NotificationService>();
         service = new AddRequestProcessStageImp(mapper, repository, sessionService, accountWinLostService, insertAutoVoidRequestQueueService,
-            sendLetstalkAfterAddService, getUpdateResultService, compressDataService, notificationService);
+            sendLetstalkAfterAddService, getUpdateResultService, compressDataService, notificationService, null);
     }
 
     [Fact]

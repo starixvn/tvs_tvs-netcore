@@ -1,4 +1,5 @@
 ﻿using Fanex.Data.Repository;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
@@ -25,12 +26,14 @@ public class CheckValidTransIdsServiceImp(
         var (matchInfoAddRequests, validationAbnormalBets, transInfoAddRequests, abnormalBetTicketRequests, sendLetsTalkModels)
             = await CheckValidTransIdsAllSite(request);
 
+        var validationAbnormalBet = MapValidationAbnormalBet(validationAbnormalBets);
+        var ticketRequests = MapAbnormalBetTicketRequests(abnormalBetTicketRequests, validationAbnormalBet.InvalidTransIds);
         var viewModel = new CheckValidTransIdsViewModel
         {
             Matches = matchInfoAddRequestService.UpdateDataFromRemotingRef(matchInfoAddRequests),
-            Validation = MapValidationAbnormalBet(validationAbnormalBets),
+            Validation = validationAbnormalBet,
             TransInfoAddRequestModel = GetTransInfoAddRequestModel(transInfoAddRequests),
-            AbnormalBetTicketRequests = mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(abnormalBetTicketRequests),
+            AbnormalBetTicketRequests = mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(ticketRequests),
             SendLetstalkModels = MapSendLetsTalkModels(sendLetsTalkModels),
             InfoSiteDBDownModel = getTicketsSiteDbDown.GetInfoSiteDBDown(transInfoAddRequests)
         };
@@ -38,7 +41,22 @@ public class CheckValidTransIdsServiceImp(
         return viewModel;
     }
 
-    protected virtual async Task<(IEnumerable<MatchInfoAddRequest>, IEnumerable<ValidationAbnormalBet>, IEnumerable<TransInfoAddRequestModel>, IEnumerable<GetAbnormalBetTicketModel>, IEnumerable<SendLetsTalkModel>)> CheckValidTransIdsAllSite(CheckValidTransIdsModel request)
+    protected virtual IEnumerable<GetAbnormalBetTicketModel> MapAbnormalBetTicketRequests(IEnumerable<GetAbnormalBetTicketModel> abnormalBetTicketRequests, string invalidTransIds)
+    {
+        var result = new List<GetAbnormalBetTicketModel>();
+        var validTickets = abnormalBetTicketRequests.Where(x => x.RemarkId == 0);
+        var invalidTickets = abnormalBetTicketRequests.Where(x => invalidTransIds.Contains(x.TransId.ToString()));
+        var otherTickets = abnormalBetTicketRequests.Where(x => x.RemarkId > RemarkConstant.InvalidTicketId);
+
+        result.AddRange(validTickets);
+        result.AddRange(invalidTickets);
+        result.AddRange(otherTickets);
+
+        return result.DistinctBy(x => x.TransId);
+    }
+
+    protected virtual async Task<(IEnumerable<MatchInfoAddRequest>, IEnumerable<ValidationAbnormalBet>, IEnumerable<TransInfoAddRequestModel>,
+            IEnumerable<GetAbnormalBetTicketModel>, IEnumerable<SendLetsTalkModel>)> CheckValidTransIdsAllSite(CheckValidTransIdsModel request)
     {
         var onlineServer = await checkServerStatusService.GetOnlineServer();
         var currentOnlineServerId = string.Join(",", onlineServer.Select(x => x.Id));
@@ -56,7 +74,7 @@ public class CheckValidTransIdsServiceImp(
         var matchInfoAddRequests = results.SelectMany(x => x.Item1).DistinctBy(x => x.MatchId);
         var validationAbnormalBets = results.SelectMany(x => x.Item2);
         var transInfoAddRequests = results.SelectMany(x => x.Item3);
-        var abnormalBetTicketRequests = results.SelectMany(x => x.Item4).Distinct();
+        var abnormalBetTicketRequests = results.SelectMany(x => x.Item4);
         var sendLetsTalkModels = results.SelectMany(x => x.Item5);
 
         return (matchInfoAddRequests, validationAbnormalBets, transInfoAddRequests, abnormalBetTicketRequests, sendLetsTalkModels);
@@ -94,12 +112,14 @@ public class CheckValidTransIdsServiceImp(
     protected virtual ValidationAbnormalBet MapValidationAbnormalBet(IEnumerable<ValidationAbnormalBet> validationAbnormalBets)
     {
         if (!validationAbnormalBets.Any())
+        {
             return new ValidationAbnormalBet();
+        }
 
         var result = new ValidationAbnormalBet
         {
             InvalidTransIds = Helper.GetIntersectTransIdString(validationAbnormalBets.Select(x => x.InvalidTransIds)),
-            MovedTransIds = Helper.GetIntersectTransIdString(validationAbnormalBets.Select(x => x.MovedTransIds)),
+            MovedTransIds = Helper.GetUnionTransIdString(validationAbnormalBets.Select(x => x.MovedTransIds)),
             DifferentMatchTransIds = Helper.GetUnionTransIdString(validationAbnormalBets.Select(x => x.DifferentMatchTransIds)),
             SettledTransIds = Helper.GetUnionTransIdString(validationAbnormalBets.Select(x => x.SettledTransIds)),
             UnsupportedTransIds = Helper.GetUnionTransIdString(validationAbnormalBets.Select(x => x.UnsupportedTransIds)),
@@ -110,7 +130,7 @@ public class CheckValidTransIdsServiceImp(
             TransIdsOfCreditCashService = Helper.GetUnionTransIdString(validationAbnormalBets.Select(x => x.TransIdsOfCreditCashService)),
             NonLiveTransIds = Helper.GetUnionTransIdString(validationAbnormalBets.Select(x => x.NonLiveTransIds)),
             DifferentLiveScoreTransIds = Helper.GetUnionTransIdString(validationAbnormalBets.Select(x => x.DifferentLiveScoreTransIds)),
-            ABWhiteListTransIds = Helper.GetIntersectTransIdString(validationAbnormalBets.Select(x => x.ABWhiteListTransIds)),
+            ABWhiteListTransIds = Helper.GetUnionTransIdString(validationAbnormalBets.Select(x => x.ABWhiteListTransIds)),
             IsHasWarningRemovedTickets = validationAbnormalBets.Any(x => x.IsHasWarningRemovedTickets),
             TransIdsOfSiteDBDown = validationAbnormalBets.FirstOrDefault(x => x.TransIdsOfSiteDBDown != null)?.TransIdsOfSiteDBDown
         };

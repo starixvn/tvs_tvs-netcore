@@ -41,18 +41,13 @@ export class GroupNumber {
     }
 
     checkValidItems(): number {
-        let result = 0;
         if (this.items.length === 0) {
-            return result;
-        } else {
-            result = 2;
-            this.items.forEach(item => {
-                if (!item.isValid) {
-                    result = 1;
-                }
-            });
-            return result;
+            return 0;
         }
+
+        let allTicketValid = this.items.every(x => x.isValid);
+        let isHasValidTicketNotSiteDbDown = this.items.some(x => x.isValid && x.cssClass != CSSCLASS.SITE_DB_DOWN);
+        return allTicketValid && isHasValidTicketNotSiteDbDown ? 2 : 1;
     }
 
     checkDuplicatedItems(): void {
@@ -132,12 +127,12 @@ export class GroupNumber {
 
     removeByValue(value: string) {
         this.items.filter(item => item.value === value)
-        .forEach(x => {
-            const index = this.items.indexOf(x);
-            if (index > -1) {
-                this.items.splice(index, 1);
-            }
-        });
+            .forEach(x => {
+                const index = this.items.indexOf(x);
+                if (index > -1) {
+                    this.items.splice(index, 1);
+                }
+            });
     }
 
     resetAllItemsToValid() {
@@ -154,6 +149,7 @@ export class GroupNumber {
     }
     private setItemWarning(warningList: string[], item: NumberItem, css: string, toolTipText = '') {
         if (warningList.some(warningItem => warningItem === item.value)) {
+
             item.cssClass = css;
             item.defaultClass = css;
             item.isShowTooltip = toolTipText.length > 0;

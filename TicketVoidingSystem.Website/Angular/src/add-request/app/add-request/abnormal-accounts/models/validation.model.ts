@@ -25,7 +25,7 @@ export class ValidationBusinessRuleArgs {
 export class ValidationBusinessRuleOutput {
   isValid: boolean;
   numberOfTicketsExistedInRequest: number;
-  usernamesOfCreditCashService: string;
+  usernamesOfCreditCashService?: string;
   transInfoAddRequestModel: TransInfoAddRequestModel;
   accountWinlostModels: AccountWinlostModel[];
   isWarringTooHighTickets: boolean;

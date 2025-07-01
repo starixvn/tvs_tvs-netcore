@@ -9,12 +9,12 @@ public class GetInfoSiteDbDownServiceImp : GetInfoSiteDbDownService
 {
     public InfoSiteDBDownModel GetInfoSiteDBDown(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
     {
-        if (transInfoAddRequests.All(x => x.SiteDBDownInfoJson == null))
+        if (transInfoAddRequests.All(x => string.IsNullOrEmpty(x.SiteDBDownInfoJson)))
         {
             return null;
         }
 
-        var siteDBDownInfo = transInfoAddRequests.FirstOrDefault(x => x.SiteDBDownInfoJson != null);
+        var siteDBDownInfo = transInfoAddRequests.First(x => x.SiteDBDownInfoJson != null);
 
         var infoSiteDBDown = new InfoSiteDBDownModel
         {

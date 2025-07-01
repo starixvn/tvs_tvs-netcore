@@ -84,7 +84,7 @@
           <div class="text-red">Please remind this request {{model.requestId}} is confirmed by {{model.requestedBy}}.
           </div>
           }
-          @if (isHasAffectedTicketSiteDBDown) {
+          @if (model.isHasAffectedTicketSiteDBDown) {
             <div class="mg-top-10">
               <label><input type="checkbox"
                   [(ngModel)]="isMarkTicketSiteDbDown"/> 
