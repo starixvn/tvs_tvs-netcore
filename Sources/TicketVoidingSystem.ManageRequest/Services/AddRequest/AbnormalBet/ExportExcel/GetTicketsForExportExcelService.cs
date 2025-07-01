@@ -1,6 +1,5 @@
 ﻿using Epplus.Mapper.Extensions;
 using OfficeOpenXml;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;

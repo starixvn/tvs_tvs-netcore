@@ -51,7 +51,8 @@ public class CellServiceImp : CellService
             { $"Q2=\"{RemarkConstant.DifferentLiveScore}\"", Color.Red },
             { $"Q2=\"{RemarkConstant.AbWhiteListTransIds}\"", Color.Red },
             { $"Q2=\"{RemarkConstant.MovedOrDuplicatedTicket}\"", Color.Orange },
-            { $"Q2=\"{RemarkConstant.DifferentMatch}\"", Color.DeepSkyBlue }
+            { $"Q2=\"{RemarkConstant.DifferentMatch}\"", Color.DeepSkyBlue },
+            { $"Q2=\"{RemarkConstant.TicketSiteDbDown}\"", Color.DeepSkyBlue }
         };
 
         foreach (var entry in conditionColorMap)

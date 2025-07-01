@@ -22,23 +22,8 @@ public class CheckValidTransIdsServiceImp(
 {
     public async Task<CheckValidTransIdsViewModel> CheckValidTransIds(CheckValidTransIdsModel request)
     {
-        var onlineServer = await checkServerStatusService.GetOnlineServer();
-        var currentOnlineServerId = string.Join(",", onlineServer.Select(x => x.Id));
-
-        var criteria = GetCheckValidTransIdsCriteria(request, currentOnlineServerId);
-
-        var tasks = onlineServer.Select(server =>
-        {
-            criteria.SiteDbGroupId = server.Id;
-            return repository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet, TransInfoAddRequestModel, GetAbnormalBetTicketModel, SendLetsTalkModel>(criteria);
-        });
-        var results = await Task.WhenAll(tasks);
-
-        var matchInfoAddRequests = results.SelectMany(x => x.Item1).DistinctBy(x => x.MatchId);
-        var validationAbnormalBets = results.SelectMany(x => x.Item2);
-        var transInfoAddRequests = results.SelectMany(x => x.Item3);
-        var abnormalBetTicketRequests = results.SelectMany(x => x.Item4).Distinct();
-        var sendLetsTalkModels = results.SelectMany(x => x.Item5);
+        var (matchInfoAddRequests, validationAbnormalBets, transInfoAddRequests, abnormalBetTicketRequests, sendLetsTalkModels)
+            = await CheckValidTransIdsAllSite(request);
 
         var viewModel = new CheckValidTransIdsViewModel
         {
@@ -51,6 +36,30 @@ public class CheckValidTransIdsServiceImp(
         };
 
         return viewModel;
+    }
+
+    protected virtual async Task<(IEnumerable<MatchInfoAddRequest>, IEnumerable<ValidationAbnormalBet>, IEnumerable<TransInfoAddRequestModel>, IEnumerable<GetAbnormalBetTicketModel>, IEnumerable<SendLetsTalkModel>)> CheckValidTransIdsAllSite(CheckValidTransIdsModel request)
+    {
+        var onlineServer = await checkServerStatusService.GetOnlineServer();
+        var currentOnlineServerId = string.Join(",", onlineServer.Select(x => x.Id));
+
+        var criteria = GetCheckValidTransIdsCriteria(request, currentOnlineServerId);
+
+        var tasks = onlineServer.Select(server =>
+        {
+            criteria.SiteDbGroupId = server.Id;
+            return repository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet, TransInfoAddRequestModel, GetAbnormalBetTicketModel, SendLetsTalkModel>(criteria);
+        });
+
+        var results = await Task.WhenAll(tasks);
+
+        var matchInfoAddRequests = results.SelectMany(x => x.Item1).DistinctBy(x => x.MatchId);
+        var validationAbnormalBets = results.SelectMany(x => x.Item2);
+        var transInfoAddRequests = results.SelectMany(x => x.Item3);
+        var abnormalBetTicketRequests = results.SelectMany(x => x.Item4).Distinct();
+        var sendLetsTalkModels = results.SelectMany(x => x.Item5);
+
+        return (matchInfoAddRequests, validationAbnormalBets, transInfoAddRequests, abnormalBetTicketRequests, sendLetsTalkModels);
     }
 
     protected virtual IEnumerable<SendLetsTalkModel> MapSendLetsTalkModels(IEnumerable<SendLetsTalkModel> sendLetsTalkModels)
