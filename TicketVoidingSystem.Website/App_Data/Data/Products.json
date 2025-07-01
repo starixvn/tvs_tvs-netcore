@@ -254,6 +254,10 @@
         {
           "Name": "ClotPlay",
           "Value": "109"
+        },
+        {
+          "Name": "GPI Lottery",
+          "Value": "84"
         }
       ]
     },
