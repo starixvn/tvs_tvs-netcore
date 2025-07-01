@@ -8,6 +8,7 @@ using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.AspNetCore;
 using Fanex.MailDeliver.MailClient;
 using Fanex.RemotingRef;
+using Fanex.SiteDbConnectionManager.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -123,6 +124,17 @@ public static class ServiceCollectionExtension
             options.Configuration.Password = AppSettingService.AppSetting.RedisConfig.Password;
             options.Configuration.DefaultDatabase = AppSettingService.AppSetting.RedisConfig.DefaultDatabase;
             options.Configuration.ChannelPrefix = RedisChannel.Literal(AppSettingService.AppSetting.RedisConfig.SignalRChannelPrefix);
+        });
+    }
+
+    public static void AddTvsSiteDbStatus(this IServiceCollection services)
+    {
+        services.AddSiteDbConnectionManager();
+        services.AddSingleton<IConnectionMultiplexer>(sp =>
+        {
+            var config = LazyRedisMultiplexer.GetRedisConfig();
+            config.ChannelPrefix = RedisChannel.Literal(AppSettingService.AppSetting.RedisConfig.SignalRChannelPrefix);
+            return ConnectionMultiplexer.Connect(config);
         });
     }
 
