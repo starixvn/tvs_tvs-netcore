@@ -20,7 +20,6 @@ import { ChildMatchModel } from '../models/related-event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
 import { TvDetectionModel } from '../components/tv-detection/tv-detection.model';
-import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -28,7 +27,7 @@ class Helper {
   static readonly fakeRequestedBy = 'testUser';
   static readonly fakeFilterModel: FilterModel = {
     issueTypeId: '1',
-    subIssueTypeId: '1',
+    subIssueTypeId: '15',
     action: '1',
     isTest: true,
     isVoided: false,
@@ -41,7 +40,7 @@ class Helper {
     sportType: 1,
     isMainMatch: true,
     eventDate: new Date(),
-    subIssueTypeId: 1,
+    subIssueTypeId: 15,
     filterFromTransTime: '',
     filterToTransTime: '',
     isCheckedVar: false,
@@ -115,7 +114,7 @@ describe('EventRedCardComponent', () => {
       matchId: 123,
       eventDate: new Date(),
       sportType: 1,
-      subIssueTypeId: 1,
+      subIssueTypeId: 15,
       voidTimeArea: {},
       tvDetectionModel: new TvDetectionModel(),
       isMainMatch: true,
@@ -168,7 +167,6 @@ describe('EventRedCardComponent', () => {
 
     // Assert
     expect(component.primitiveProps.isShowRelatedEvents).toBeFalsy();
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalled();
     expect(component.filter.isChangeSubTypeManual).toBeFalsy();
   });
 
@@ -210,7 +208,7 @@ describe('EventRedCardComponent', () => {
       isShowValidation: false,
       eventDate: new Date(),
       sportType: 1,
-      subIssueTypeId: 1,
+      subIssueTypeId: 15,
       voidTimeArea: {},
       tvDetectionModel: new TvDetectionModel()
     } as unknown as LogInfoRelatedEvent;
@@ -259,7 +257,7 @@ describe('EventRedCardComponent', () => {
         isShowValidation: false,
         isCheckedVar: false,
         sportType: 1,
-        subIssueTypeId: 1,
+        subIssueTypeId: 15,
         voidTimeArea: {},
         tvDetectionModel: new TvDetectionModel()
       } as unknown as LogInfoRelatedEvent,
@@ -273,7 +271,7 @@ describe('EventRedCardComponent', () => {
         isShowValidation: false,
         isCheckedVar: false,
         sportType: 1,
-        subIssueTypeId: 1,
+        subIssueTypeId: 15,
         voidTimeArea: {},
         tvDetectionModel: new TvDetectionModel()
       } as unknown as LogInfoRelatedEvent
@@ -409,21 +407,12 @@ describe('EventRedCardComponent', () => {
     expect(component.isDisabledLinkMatches()).toBeTruthy();
   });
 
-  it('should reset log info and hide all events', () => {
-    // Act
-    component.resetLogInfoAndHideAllEvents();
-
-    // Assert
-    expect(component.primitiveProps.isShowRelatedEvents).toBeFalsy();
-    expect(component.primitiveProps.isShowLogInfoMainMatch).toBeFalsy();
-  });
-
   it('should handle var check value change', () => {
     // Arrange
     component.mainEvent = {
       isCheckedVar: null,
       isHighLightVarCheck: true,
-      subIssueTypeId: 1,
+      subIssueTypeId: 15,
       voidTimeArea: {},
       tvDetectionModel: new TvDetectionModel()
     } as unknown as LogInfoRelatedEvent;
@@ -440,7 +429,7 @@ describe('EventRedCardComponent', () => {
     // Arrange
     component.mainEvent = {
       logInfoDetail: new LogInfoDetail(),
-      subIssueTypeId: 1,
+      subIssueTypeId: 15,
       voidTimeArea: {},
       tvDetectionModel: new TvDetectionModel()
     } as unknown as LogInfoRelatedEvent;

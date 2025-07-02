@@ -175,28 +175,6 @@ describe('LogInfoService', () => {
     });
   });
 
-  describe('resetAllEventBeforeSearch', () => {
-    it('should reset all events before search', () => {
-      // Arrange
-      const events: LogInfoRelatedEvent[] = [{
-        matchId: Helper.fakeMatchId,
-        subIssueTypeId: 2,
-        voidTimeArea: Helper.fakeDefaultFilterTimeWithAllowance,
-        logInfoDetail: Helper.fakeLogInfoDetail,
-        messageValidationLogInfo: []
-      } as LogInfoRelatedEvent];
-
-      // Act
-      service.resetAllEventBeforeSearch(events, Helper.fakeDefaultFilterTimeWithAllowance, 1);
-
-      // Assert
-      expect(events[0].subIssueTypeId).toBe(1);
-      expect(events[0].logInfoDetail).toBeNull();
-      expect(events[0].messageValidationLogInfo).toBeNull();
-      expect(events[0].voidTimeArea).toEqual(Helper.fakeDefaultFilterTimeWithAllowance);
-    });
-  });
-
   describe('resetLogInfoOfEvent', () => {
     it('should reset log info of events', () => {
       // Arrange
@@ -212,28 +190,6 @@ describe('LogInfoService', () => {
       // Assert
       expect(events[0].logInfoDetail).toBeNull();
       expect(events[0].messageValidationLogInfo).toBeNull();
-    });
-  });
-
-  describe('resetVoidTimeArea', () => {
-    it('should reset void time area of events', () => {
-      // Arrange
-      const events: LogInfoRelatedEvent[] = [{
-        matchId: Helper.fakeMatchId,
-        voidTimeArea: {
-          fromDateTime: '2024-03-20T09:00:00',
-          toDateTime: '2024-03-20T10:00:00',
-          saTime: 30,
-          aaTime: 15,
-          paTime: 5
-        } as FilterTimeWithAllowance
-      } as LogInfoRelatedEvent];
-
-      // Act
-      service.resetVoidTimeArea(events, Helper.fakeDefaultFilterTimeWithAllowance);
-
-      // Assert
-      expect(events[0].voidTimeArea).toEqual(Helper.fakeDefaultFilterTimeWithAllowance);
     });
   });
 

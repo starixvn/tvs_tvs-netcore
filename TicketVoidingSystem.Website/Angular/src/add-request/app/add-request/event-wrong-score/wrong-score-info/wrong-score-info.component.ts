@@ -17,6 +17,7 @@ import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
 import { WrongScoreService } from '../services/wrong-score.service';
 import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
+import { GetLogInfoParams } from '../models/get-log-info-params.model';
 
 @Component({
   standalone: true,
@@ -92,7 +93,7 @@ export class WrongScoreInfoComponent implements OnInit {
   private async handleUnCheckedScore(): Promise<void> {
     this.checkScoreEvent.emit();
     this.wrongScoreService.setNullAllowanceTime(this.wrongScoreModel);
-    this.logInfoService.clearDataValidation([this.wrongScoreModel]);
+    this.logInfoService.clearDataValidation([this.wrongScoreModel], [], null);
     const originWrongScoreModel = this.originWrongScoreModels.find(x => x.scoreId === this.wrongScoreModel.scoreId);
     if (this.validationService.isLastScore(this.wrongScoreModel, this.originWrongScoreModels)) {
       this.wrongScoreModel.filterFromTransTime = originWrongScoreModel.filterFromTransTime;
@@ -104,7 +105,7 @@ export class WrongScoreInfoComponent implements OnInit {
   }
 
   async refreshLogInfo(): Promise<void> {
-    this.logInfoService.clearDataValidation([this.wrongScoreModel]);
+    this.logInfoService.clearDataValidation([this.wrongScoreModel], [], null);
     if (!this.isValidDateTime()) {
       return;
     }
@@ -112,9 +113,19 @@ export class WrongScoreInfoComponent implements OnInit {
       this.selectedWrongScores.push(this.wrongScoreModel);
     }
     this.isBlock = true;
-    await this.logInfoService.getLogInfo(this.isEdit, this.requestId, this.filter, this.primitiveProps, this.selectedWrongScores, this.matchId, null);
+    await this.logInfoService.getLogInfo(this.createGetLogInfoParams());
     this.isBlock = false;
     this.isCollapse = false;
+  }
+
+  createGetLogInfoParams(): GetLogInfoParams {
+    return {
+      isEdit: this.isEdit,
+      requestId: this.requestId,
+      filter: this.filter,
+      primitiveProps: this.primitiveProps,
+      wrongScoreModels: this.selectedWrongScores
+    };
   }
 
   public isValidDateTime(): boolean {
@@ -145,7 +156,7 @@ export class WrongScoreInfoComponent implements OnInit {
 
   /* istanbul ignore next */
   public clearDataValidation(): void {
-    this.logInfoService.clearDataValidation([this.wrongScoreModel]);
+    this.logInfoService.clearDataValidation([this.wrongScoreModel], [], null);
   }
 
   /* istanbul ignore next */

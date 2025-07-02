@@ -6,7 +6,6 @@ import { DateTimeFormat, TimeZone } from '../../../../../utility/constants/confi
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import moment from 'moment-timezone';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
 import { EventEmitter, QueryList } from '@angular/core';
 
@@ -46,6 +45,10 @@ describe('WrongScoreService', () => {
       // Assert
       expect(result).toBeInstanceOf(FilterTimeWithAllowance);
       expect(result.fromDateTime).toBe(expectedFromTime);
+      expect(result.toDateTime).toBeDefined();
+      expect(result.aaTime).toBeUndefined();
+      expect(result.paTime).toBeUndefined();
+      expect(result.saTime).toBeUndefined();
     });
   });
 
@@ -70,6 +73,22 @@ describe('WrongScoreService', () => {
       expect(result.paTime).toBe(wrongScoreModel.paTime);
       expect(result.saTime).toBe(wrongScoreModel.saTime);
     });
+
+    it('should handle null values in wrong score model', () => {
+      // Arrange
+      const wrongScoreModel = new WrongScoreModel();
+
+      // Act
+      const result = service.getFilterWrongScore(wrongScoreModel);
+
+      // Assert
+      expect(result).toBeInstanceOf(FilterTimeWithAllowance);
+      expect(result.fromDateTime).toBeUndefined();
+      expect(result.toDateTime).toBeUndefined();
+      expect(result.aaTime).toBeUndefined();
+      expect(result.paTime).toBeUndefined();
+      expect(result.saTime).toBeUndefined();
+    });
   });
 
   describe('createMainWrongScoreModel', () => {
@@ -92,6 +111,23 @@ describe('WrongScoreService', () => {
       expect(result.aaTime).toBe(filterWrongScore.aaTime);
       expect(result.paTime).toBe(filterWrongScore.paTime);
       expect(result.saTime).toBe(filterWrongScore.saTime);
+      expect(result.isChecked).toBeTruthy();
+    });
+
+    it('should handle null values in filter', () => {
+      // Arrange
+      const filterWrongScore = new FilterTimeWithAllowance();
+
+      // Act
+      const result = service.createMainWrongScoreModel(filterWrongScore);
+
+      // Assert
+      expect(result).toBeInstanceOf(WrongScoreModel);
+      expect(result.filterFromTransTime).toBeUndefined();
+      expect(result.filterToTransTime).toBeUndefined();
+      expect(result.aaTime).toBeUndefined();
+      expect(result.paTime).toBeUndefined();
+      expect(result.saTime).toBeUndefined();
       expect(result.isChecked).toBeTruthy();
     });
   });
@@ -128,6 +164,7 @@ describe('WrongScoreService', () => {
       // Assert
       expect(updateByOriginWrongScoreModelEvent.emit).toHaveBeenCalled();
       expect(originWrongScoreModels.length).toBe(2);
+      expect(originWrongScoreModels[0].filterToTransTime).toBe('2024-01-01 02:00:00');
     });
 
     it('should get last time ticket when no new data', async () => {
@@ -161,6 +198,30 @@ describe('WrongScoreService', () => {
       expect(mockAddRequestApiService.getLastTimeScore).toHaveBeenCalled();
       expect(wrongScoreModel.filterToTransTime).toBe(mockLastTimeScore.lastTime);
     });
+
+    it('should handle API errors gracefully', async () => {
+      // Arrange
+      const originWrongScoreModels = [new WrongScoreModel()];
+      originWrongScoreModels[0].scoreId = 1;
+      const wrongScoreModel = new WrongScoreModel();
+      wrongScoreModel.scoreId = 1;
+      const updateByOriginWrongScoreModelEvent = { emit: jest.fn() } as unknown as EventEmitter<WrongScoreModel[]>;
+      const matchId = 1;
+      const actionId = 1;
+      const filterBy = 1;
+
+      mockAddRequestApiService.getWrongScores.mockRejectedValue(new Error('API Error'));
+
+      // Act & Assert
+      await expect(service.handleCheckedLastScore(
+        originWrongScoreModels,
+        wrongScoreModel,
+        updateByOriginWrongScoreModelEvent,
+        matchId,
+        actionId,
+        filterBy
+      )).rejects.toThrow('API Error');
+    });
   });
 
   describe('setNullAllowanceTime', () => {
@@ -170,6 +231,19 @@ describe('WrongScoreService', () => {
       wrongScoreModel.aaTime = 1;
       wrongScoreModel.paTime = 2;
       wrongScoreModel.saTime = 3;
+
+      // Act
+      service.setNullAllowanceTime(wrongScoreModel);
+
+      // Assert
+      expect(wrongScoreModel.aaTime).toBeNull();
+      expect(wrongScoreModel.paTime).toBeNull();
+      expect(wrongScoreModel.saTime).toBeNull();
+    });
+
+    it('should handle model with null values', () => {
+      // Arrange
+      const wrongScoreModel = new WrongScoreModel();
 
       // Act
       service.setNullAllowanceTime(wrongScoreModel);
@@ -197,6 +271,21 @@ describe('WrongScoreService', () => {
       // Assert
       expect(result.length).toBe(2);
       expect(result.every(x => x.wrongScoreModel.isChecked)).toBeTruthy();
+    });
+
+    it('should return empty array when no components are checked', () => {
+      // Arrange
+      const components = new QueryList<WrongScoreInfoComponent>();
+      components.reset([
+        { wrongScoreModel: { isChecked: false } } as WrongScoreInfoComponent,
+        { wrongScoreModel: { isChecked: false } } as WrongScoreInfoComponent
+      ]);
+
+      // Act
+      const result = service.getSelectedWrongScoreComponents(components);
+
+      // Assert
+      expect(result.length).toBe(0);
     });
   });
 
@@ -228,62 +317,51 @@ describe('WrongScoreService', () => {
       expect(mockAddRequestApiService.getWrongScores).toHaveBeenCalledWith(matchId);
       expect(result).toEqual(mockWrongScores);
     });
-  });
 
-  describe('mapWrongScoreModel', () => {
-    it('should map and update wrong score models', () => {
+    it('should handle API errors', async () => {
       // Arrange
-      const originWrongScoreModels = [
-        new WrongScoreModel(),
-        new WrongScoreModel()
-      ];
-      originWrongScoreModels[0].scoreId = 1;
-      originWrongScoreModels[0].isActive = true;
-      originWrongScoreModels[1].scoreId = 2;
-      originWrongScoreModels[1].isActive = false;
+      const matchId = 1;
+      mockAddRequestApiService.getWrongScores.mockRejectedValue(new Error('API Error'));
 
-      const wrongScoreModels = [
-        new WrongScoreModel(),
-        new WrongScoreModel()
-      ];
-      wrongScoreModels[0].scoreId = 1;
-      wrongScoreModels[0].isActive = false;
-      wrongScoreModels[1].scoreId = 3;
-      wrongScoreModels[1].isActive = true;
-
-      // Act
-      service.mapWrongScoreModel(originWrongScoreModels, wrongScoreModels);
-
-      // Assert
-      expect(wrongScoreModels.length).toBe(3);
-      expect(wrongScoreModels.find(x => x.scoreId === 1).isActive).toBeTruthy();
+      // Act & Assert
+      await expect(service.callApiGetWrongScores(matchId)).rejects.toThrow('API Error');
     });
   });
 
   describe('updateByOriginWrongScoreModel', () => {
-    it('should update wrong score models with new models from origin', () => {
+    it('should update wrong score models with new data', () => {
       // Arrange
       const originWrongScoreModels = [
         new WrongScoreModel(),
         new WrongScoreModel()
       ];
       originWrongScoreModels[0].scoreId = 1;
-      originWrongScoreModels[0].isActive = true;
       originWrongScoreModels[1].scoreId = 2;
-      originWrongScoreModels[1].isActive = false;
 
       const wrongScoreModels = [
         new WrongScoreModel()
       ];
       wrongScoreModels[0].scoreId = 1;
-      wrongScoreModels[0].isActive = false;
 
       // Act
       service.updateByOriginWrongScoreModel(originWrongScoreModels, wrongScoreModels);
 
       // Assert
       expect(wrongScoreModels.length).toBe(2);
-      expect(wrongScoreModels.find(x => x.scoreId === 2)).toBeDefined();
+      expect(wrongScoreModels[0].scoreId).toBe(1);
+      expect(wrongScoreModels[1].scoreId).toBe(2);
+    });
+
+    it('should handle empty arrays', () => {
+      // Arrange
+      const originWrongScoreModels: WrongScoreModel[] = [];
+      const wrongScoreModels: WrongScoreModel[] = [];
+
+      // Act
+      service.updateByOriginWrongScoreModel(originWrongScoreModels, wrongScoreModels);
+
+      // Assert
+      expect(wrongScoreModels.length).toBe(0);
     });
   });
 
@@ -291,31 +369,41 @@ describe('WrongScoreService', () => {
     it('should return formatted time range for selected scores', () => {
       // Arrange
       const wrongScoreModels = [
-        new WrongScoreModel(),
-        new WrongScoreModel()
+        {
+          isChecked: true,
+          logInfoDetail: {
+            voidFromTime: new Date('2024-01-01 00:00:00'),
+            voidToTime: new Date('2024-01-01 01:00:00')
+          }
+        } as WrongScoreModel,
+        {
+          isChecked: true,
+          logInfoDetail: {
+            voidFromTime: new Date('2024-01-01 01:00:00'),
+            voidToTime: new Date('2024-01-01 02:00:00')
+          }
+        } as WrongScoreModel
       ];
-      wrongScoreModels[0].isChecked = true;
-      wrongScoreModels[0].logInfoDetail = {
-        matchId: 1,
-        liveScores: '',
-        voidFromTime: new Date('2024-01-01 00:00:00'),
-        voidToTime: new Date('2024-01-01 00:00:00'),
-        transVoidToTime: new Date('2024-01-01 00:00:00')
-      } as LogInfoDetail;
-      wrongScoreModels[1].isChecked = true;
-      wrongScoreModels[1].logInfoDetail = {
-        matchId: 1,
-        liveScores: '',
-        voidFromTime: new Date('2024-01-01 00:00:00'),
-        voidToTime: new Date('2024-01-01 01:00:00'),
-        transVoidToTime: new Date('2024-01-01 00:00:00')
-      } as LogInfoDetail;
 
       // Act
       const result = service.getTimeSelectedScore(wrongScoreModels);
 
       // Assert
-      expect(result).toBe('2024/01/01 12:00:00.000 AM - 2024/01/01 01:00:00.000 AM');
+      expect(result).toBe('2024/01/01 12:00:00.000 AM - 2024/01/01 02:00:00.000 AM');
+    });
+
+    it('should handle models without log info detail', () => {
+      // Arrange
+      const wrongScoreModels = [
+        { isChecked: true } as WrongScoreModel,
+        { isChecked: true } as WrongScoreModel
+      ];
+
+      // Act
+      const result = service.getTimeSelectedScore(wrongScoreModels);
+
+      // Assert
+      expect(result).toBe(' - ');
     });
   });
 
@@ -329,6 +417,17 @@ describe('WrongScoreService', () => {
 
       // Assert
       expect(result).toBe('2024/01/01 12:00:00.000 AM');
+    });
+
+    it('should handle invalid date', () => {
+      // Arrange
+      const date = new Date('invalid-date');
+
+      // Act
+      const result = service.displayFullDateTimeFormat(date);
+
+      // Assert
+      expect(result).toBe('Invalid date');
     });
   });
 });

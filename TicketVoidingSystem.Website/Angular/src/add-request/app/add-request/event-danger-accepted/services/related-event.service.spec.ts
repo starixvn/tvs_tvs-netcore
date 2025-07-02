@@ -2,694 +2,313 @@ import { TestBed } from '@angular/core/testing';
 import { RelatedEventService } from './related-event.service';
 import { ValidationService } from './validation.service';
 import { LogInfoService } from './log-info.service';
-import { AddRequestStore } from '../../add-request.store';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { AddRelatedEventArg } from '../../models/add-related-event.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { FilterModel } from '../../filter/filter.model';
 import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { MatchType } from '../../../../../utility/constants/config';
+import { MatchType, SubIssueTypeGroup } from '../../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { ValidationMessage } from '../../models/get-log-info.model';
-import { GetChildMatchQuery } from '../../models/get-child-match.query';
-import { BehaviorSubject, Subject } from 'rxjs';
 import { EventDangerAcceptedService } from './event-danger-accepted.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 
+class Helper {
+  static readonly fakeChildMatchModel = {
+    matchId: 1,
+    matchCode: 'matchCode',
+    leagueName: 'leagueName',
+    matchEvent: 'matchEvent',
+    matchType: MatchType.LINK,
+    sportType: 1,
+  } as ChildMatchModel;
+
+  static readonly fakeFilterTimeWithAllowance = {
+    fromDateTime: '2025-07-01 10:00:00',
+    toDateTime: '2024-011-01 11:00:00',
+    aaTime: 5,
+    paTime: 5,
+    saTime: 5
+  } as FilterTimeWithAllowance;
+
+  static readonly fakeLogInfoRelatedEvent = {
+    logInfoDetail: { matchId: 1 } as LogInfoDetail,
+    messageValidationLogInfo: [],
+    voidTimeArea: Helper.fakeFilterTimeWithAllowance,
+    subIssueTypeId: 1
+  } as unknown as LogInfoRelatedEvent;
+}
 describe('RelatedEventService', () => {
   let service: RelatedEventService;
   let validationService: ValidationService;
   let logInfoService: LogInfoService;
   let addRequestApiService: AddRequestApiService;
+  let eventDangerAcceptedService: EventDangerAcceptedService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        RelatedEventService,
-        {
-          provide: ValidationService,
-          useValue: {
-            isValidInputRelatedEvent: jest.fn(),
-            isHasAllowanceTime: jest.fn()
-          }
-        },
-        {
-          provide: LogInfoService,
-          useValue: {
-            getLogInfo: jest.fn(),
-            updateIsCheckedVar: jest.fn()
-          }
-        },
-        {
-          provide: AddRequestStore,
-          useValue: {}
-        },
-        {
-          provide: AddRequestApiService,
-          useValue: {
-            getChildMatches: jest.fn()
-          }
-        },
-        {
-          provide: EventDangerAcceptedService,
-        }
-      ]
+      imports: [TestingModule],
+      providers: [RelatedEventService, AddRequestApiService, ValidationService, LogInfoService, EventDangerAcceptedService]
     });
 
     service = TestBed.inject(RelatedEventService);
     validationService = TestBed.inject(ValidationService);
     logInfoService = TestBed.inject(LogInfoService);
     addRequestApiService = TestBed.inject(AddRequestApiService);
+    eventDangerAcceptedService = TestBed.inject(EventDangerAcceptedService);
   });
 
-  describe('addRelatedEventByInput', () => {
-    it('should display required message when inputRelatedMatchId is empty', async () => {
-      const arg = {
-        primitiveProps: {
-          inputRelatedMatchId: null,
-          isBlock: false,
-          filterBy: 1
-        } as PrimitiveProperty,
-        tooltip: { display: jest.fn() } as unknown as Tooltip,
-        inputMatchIdClass: 'test-class',
-        allEvents: [],
-        filter: {
-          issueTypeId: '1'
-        } as FilterModel,
-        mainEvent: {
-          eventDate: new Date('2024-01-01'),
-          sportType: 1,
-          subIssueTypeId: 1,
-          isCheckedVar: true,
-          isMainMatch: true
-        } as LogInfoRelatedEvent,
-        isEdit: false,
-        requestId: 1,
-        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
-        addRequestStore: {
-          savingRequestStatusSubject: new BehaviorSubject(false),
-          checkValidSubIssueTypeInFilterSubject: new Subject(),
-          allowanceTimeSubject: new Subject(),
-          blockingUiStatusSubject: new BehaviorSubject([]),
-          changeActionWaitingToManualEditPageSubject: new BehaviorSubject(false),
-          abnormalFilterBySubject: new Subject(),
-          startTimeFilterTicket: new Date(),
-          getStartTimeFilterTicket: new Date(),
-          changeStartTimeFilterAnalysis: () => {},
-          savingRequestStatus: new BehaviorSubject(false).asObservable(),
-          changeSavingRequestStatus: () => {},
-          getAllowanceTimeSubject: new Subject().asObservable(),
-          changeAllowanceTime: () => {},
-          blockingUiStatus: new BehaviorSubject([]).asObservable(),
-          changeBlockingUiStatus: () => {},
-          getChangeActionWaitingToManualEditPageSubject: new BehaviorSubject(false).asObservable(),
-          changeActionWaitingToManualEditPage: () => {},
-          getAbnormalFilterBySubject: new Subject().asObservable(),
-          changeAbnormalFilterBy: () => {},
-          getCheckValidSubIssueTypeInFilterSubject: new Subject().asObservable(),
-          checkValidSubIssueTypeInFilter: () => {}
-        } as unknown as AddRequestStore,
-        originalRelatedEvents: [],
-        subIssueTypeId: '1'
-      } as AddRelatedEventArg;
-
-      await service.addRelatedEventByInput(arg);
-
-      expect(arg.tooltip.display).toHaveBeenCalledWith('test-class', LABELS.REQUIRED_MATCHID);
-      expect(arg.primitiveProps.isBlock).toBe(false);
-    });
-
-    it('should display invalid message when getChildMatches returns empty array', async () => {
-      const arg = {
-        primitiveProps: {
-          inputRelatedMatchId: 123,
-          isBlock: false,
-          filterBy: 1
-        } as PrimitiveProperty,
-        tooltip: { display: jest.fn() } as unknown as Tooltip,
-        inputMatchIdClass: 'test-class',
-        allEvents: [],
-        filter: {
-          issueTypeId: '1'
-        } as FilterModel,
-        mainEvent: {
-          eventDate: new Date('2024-01-01'),
-          sportType: 1,
-          subIssueTypeId: 1,
-          isCheckedVar: true,
-          isMainMatch: true
-        } as LogInfoRelatedEvent,
-        isEdit: false,
-        requestId: 1,
-        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
-        addRequestStore: {
-          savingRequestStatusSubject: new BehaviorSubject(false),
-          checkValidSubIssueTypeInFilterSubject: new Subject(),
-          allowanceTimeSubject: new Subject(),
-          blockingUiStatusSubject: new BehaviorSubject([]),
-          changeActionWaitingToManualEditPageSubject: new BehaviorSubject(false),
-          abnormalFilterBySubject: new Subject(),
-          startTimeFilterTicket: new Date(),
-          getStartTimeFilterTicket: new Date(),
-          changeStartTimeFilterAnalysis: () => {},
-          savingRequestStatus: new BehaviorSubject(false).asObservable(),
-          changeSavingRequestStatus: () => {},
-          getAllowanceTimeSubject: new Subject().asObservable(),
-          changeAllowanceTime: () => {},
-          blockingUiStatus: new BehaviorSubject([]).asObservable(),
-          changeBlockingUiStatus: () => {},
-          getChangeActionWaitingToManualEditPageSubject: new BehaviorSubject(false).asObservable(),
-          changeActionWaitingToManualEditPage: () => {},
-          getAbnormalFilterBySubject: new Subject().asObservable(),
-          changeAbnormalFilterBy: () => {},
-          getCheckValidSubIssueTypeInFilterSubject: new Subject().asObservable(),
-          checkValidSubIssueTypeInFilter: () => {}
-        } as unknown as AddRequestStore,
-        originalRelatedEvents: [],
-        subIssueTypeId: '1'
-      } as AddRelatedEventArg;
-
-      jest.spyOn(validationService, 'isValidInputRelatedEvent').mockReturnValue(true);
-      service['getChildMatches'] =jest.fn().mockResolvedValue([]);
-
-      await service.addRelatedEventByInput(arg);
-
-      expect(arg.tooltip.display).toHaveBeenCalledWith('test-class', LABELS.INVALID_MATCHID);
-      expect(arg.primitiveProps.isBlock).toBe(false);
-    });
-
-    it('should add new events when getChildMatches returns valid data', async () => {
-      const arg = {
-        primitiveProps: {
-          inputRelatedMatchId: 123,
-          isBlock: false,
-          filterBy: 1
-        } as PrimitiveProperty,
-        tooltip: { display: jest.fn() } as unknown as Tooltip,
-        inputMatchIdClass: 'test-class',
-        allEvents: [],
-        filter: {
-          issueTypeId: '1'
-        } as FilterModel,
-        mainEvent: {
-          eventDate: new Date('2024-01-01'),
-          sportType: 1,
-          subIssueTypeId: 1,
-          isCheckedVar: true,
-          isMainMatch: true
-        } as LogInfoRelatedEvent,
-        isEdit: false,
-        requestId: 1,
-        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
-        addRequestStore: {
-          savingRequestStatusSubject: new BehaviorSubject(false),
-          checkValidSubIssueTypeInFilterSubject: new Subject(),
-          allowanceTimeSubject: new Subject(),
-          blockingUiStatusSubject: new BehaviorSubject([]),
-          changeActionWaitingToManualEditPageSubject: new BehaviorSubject(false),
-          abnormalFilterBySubject: new Subject(),
-          startTimeFilterTicket: new Date(),
-          getStartTimeFilterTicket: new Date(),
-          changeStartTimeFilterAnalysis: () => {},
-          savingRequestStatus: new BehaviorSubject(false).asObservable(),
-          changeSavingRequestStatus: () => {},
-          getAllowanceTimeSubject: new Subject().asObservable(),
-          changeAllowanceTime: () => {},
-          blockingUiStatus: new BehaviorSubject([]).asObservable(),
-          changeBlockingUiStatus: () => {},
-          getChangeActionWaitingToManualEditPageSubject: new BehaviorSubject(false).asObservable(),
-          changeActionWaitingToManualEditPage: () => {},
-          getAbnormalFilterBySubject: new Subject().asObservable(),
-          changeAbnormalFilterBy: () => {},
-          getCheckValidSubIssueTypeInFilterSubject: new Subject().asObservable(),
-          checkValidSubIssueTypeInFilter: () => {}
-        } as unknown as AddRequestStore,
-        originalRelatedEvents: [],
-        subIssueTypeId: '1'
-      } as AddRelatedEventArg;
-
-      const mockChildMatches = [
-        {
-          matchId: 123,
-          matchCode: 'TEST123',
-          leagueName: 'Test League',
-          matchEvent: 'Test Event',
-          matchType: MatchType.LINK,
-          isChecked: true
-        }
-      ] as ChildMatchModel[];
-
-      jest.spyOn(validationService, 'isValidInputRelatedEvent').mockReturnValue(true);
-      service['getChildMatches'] = jest.fn().mockResolvedValue(mockChildMatches);
-      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
-      jest.spyOn(logInfoService, 'updateIsCheckedVar');
-
-      await service.addRelatedEventByInput(arg);
-
-      expect(arg.allEvents.length).toBe(1);
-      expect(arg.allEvents[0].matchId).toBe(123);
-      expect(arg.allEvents[0].matchCode).toBe('TEST123');
-      expect(arg.primitiveProps.isBlock).toBe(false);
-      expect(arg.primitiveProps.inputRelatedMatchId).toBeNull();
-      expect(logInfoService.getLogInfo).toHaveBeenCalled();
-      expect(logInfoService.updateIsCheckedVar).toHaveBeenCalled();
-    });
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  describe('getDataWhenSearch', () => {
-    it('should add new events and update existing events', async () => {
-      const relatedEvents = [
+  describe('assignChildMatchToLogInfoModel', () => {
+    it('should return empty array when models is empty', () => {
+      const result = service.assignChildMatchToLogInfoModel([], null, 1);
+      expect(result.length).toEqual(0);
+    });
+
+    it('should return list of LogInfoRelatedEvent expected', () => {
+      // Arrange
+      const models = [Helper.fakeChildMatchModel];
+      const expected = [
         {
           matchId: 1,
-          matchCode: 'TEST1',
-          leagueName: 'Test League',
-          matchEvent: 'Test Event',
-          matchType: MatchType.LINK,
-          isChecked: true
-        },
-        {
-          matchId: 2,
-          matchCode: 'TEST2',
-          leagueName: 'Test League',
-          matchEvent: 'Test Event',
-          matchType: MatchType.LINK,
-          isChecked: true
-        }
-      ] as ChildMatchModel[];
-
-      const arg = {
-        allEvents: [
-          {
-            matchId: 1,
-            logInfoDetail: null,
-            messageValidationLogInfo: null,
-            voidTimeArea: null,
-            subIssueTypeId: 1,
-            leagueName: 'Test League',
-            isMainMatch: true,
-            eventName: 'Test Event',
-            tvDetectionModel: null,
-            sportType: 1
-          }
-        ],
-        primitiveProps: {
-          isShowLogInfoMainMatch: false,
-          filterBy: 1
-        } as PrimitiveProperty,
-        filter: {
-          issueTypeId: '1'
-        } as FilterModel,
-        mainEvent: {
-          eventDate: new Date('2024-01-01'),
-          sportType: 1,
+          matchCode: 'matchCode',
+          leagueName: 'leagueName',
+          eventName: '1 - matchEvent',
+          isMainMatch: false,
           subIssueTypeId: 1,
-          leagueName: 'Test League',
-          isMainMatch: true
-        } as LogInfoRelatedEvent,
-        isEdit: false,
-        requestId: 1,
-        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
-        addRequestStore: {
-          savingRequestStatusSubject: new BehaviorSubject(false),
-          checkValidSubIssueTypeInFilterSubject: new Subject(),
-          allowanceTimeSubject: new Subject(),
-          blockingUiStatusSubject: new BehaviorSubject([]),
-          changeActionWaitingToManualEditPageSubject: new BehaviorSubject(false),
-          abnormalFilterBySubject: new Subject(),
-          startTimeFilterTicket: new Date(),
-          getStartTimeFilterTicket: new Date(),
-          changeStartTimeFilterAnalysis: () => {},
-          savingRequestStatus: new BehaviorSubject(false).asObservable(),
-          changeSavingRequestStatus: () => {},
-          getAllowanceTimeSubject: new Subject().asObservable(),
-          changeAllowanceTime: () => {},
-          blockingUiStatus: new BehaviorSubject([]).asObservable(),
-          changeBlockingUiStatus: () => {},
-          getChangeActionWaitingToManualEditPageSubject: new BehaviorSubject(false).asObservable(),
-          changeActionWaitingToManualEditPage: () => {},
-          getAbnormalFilterBySubject: new Subject().asObservable(),
-          changeAbnormalFilterBy: () => {},
-          getCheckValidSubIssueTypeInFilterSubject: new Subject().asObservable(),
-          checkValidSubIssueTypeInFilter: () => {}
-        } as unknown as AddRequestStore,
-        originalRelatedEvents: [],
-        subIssueTypeId: '1'
-      } as AddRelatedEventArg;
-
-      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
-      service['preparingModelGetLogInfo'] = jest.fn().mockResolvedValue([
-        {
-          matchId: 1,
-          logInfoDetail: {
-            matchId: 1,
-            liveScores: '',
-            singleCount: 0,
-            cashOutCount: 0,
-            settleCount: 0,
-            instantlySettleCount: 0,
-            mainParlayCount: 0,
-            cancelCashOutCount: 0,
-            voidFromTime: new Date('2024-01-01 10:00:00'),
-            voidToTime: new Date('2024-01-01 11:00:00'),
-            transVoidToTime: new Date('2024-01-01 11:00:00'),
-            isHasWarningRangeTime: false,
-            scoreNormalTicket: '0',
-            scoreOfMatch: '0',
-            minTransId: '0',
-            actionType: ''
-          } as LogInfoDetail,
-          messageValidationLogInfo: [
-            {
-              type: 'error',
-              content: 'test',
-              isError: true,
-              reason: 'test'
-            } as ValidationMessage
-          ],
-          voidTimeArea: {
-            fromDateTime: '2024-01-01 10:00:00',
-            toDateTime: '2024-01-01 11:00:00',
-            aaTime: 5,
-            paTime: 5,
-            saTime: 5
-          } as FilterTimeWithAllowance,
-          subIssueTypeId: 1,
-          leagueName: 'Test League',
-          isMainMatch: true,
-          eventName: 'Test Event',
-          tvDetectionModel: null,
+          voidTimeArea: Helper.fakeFilterTimeWithAllowance,
+          logInfoDetail: null,
+          messageValidationLogInfo: null,
           sportType: 1
-        },
-        {
-          matchId: 2,
-          logInfoDetail: {
-            matchId: 2,
-            liveScores: '',
-            singleCount: 0,
-            cashOutCount: 0,
-            settleCount: 0,
-            instantlySettleCount: 0,
-            mainParlayCount: 0,
-            cancelCashOutCount: 0,
-            voidFromTime: new Date('2024-01-01 10:00:00'),
-            voidToTime: new Date('2024-01-01 11:00:00'),
-            transVoidToTime: new Date('2024-01-01 11:00:00'),
-            isHasWarningRangeTime: false,
-            scoreNormalTicket: '0',
-            scoreOfMatch: '0',
-            minTransId: '0',
-            actionType: ''
-          } as LogInfoDetail,
-          messageValidationLogInfo: [
-            {
-              type: 'error',
-              content: 'test',
-              isError: true,
-              reason: 'test'
-            } as ValidationMessage
-          ],
-          voidTimeArea: {
-            fromDateTime: '2024-01-01 10:00:00',
-            toDateTime: '2024-01-01 11:00:00',
-            aaTime: 5,
-            paTime: 5,
-            saTime: 5
-          } as FilterTimeWithAllowance,
-          subIssueTypeId: 1,
-          leagueName: 'Test League',
-          isMainMatch: true,
-          eventName: 'Test Event',
-          tvDetectionModel: null,
-          sportType: 1
-        }
-      ]);
+        }] as unknown as LogInfoRelatedEvent[];
 
-      await service.getDataWhenSearch(relatedEvents, arg);
+      // Act
+      const result = service.assignChildMatchToLogInfoModel(models, Helper.fakeFilterTimeWithAllowance, 1);
 
-      expect(arg.allEvents.length).toBe(2);
-      expect(arg.allEvents[0].logInfoDetail).toBeDefined();
-      expect(arg.allEvents[1].logInfoDetail).toBeDefined();
-      expect(logInfoService.getLogInfo).toHaveBeenCalled();
+      // Assert
+      expect(result.length).toEqual(1);
+      expect(result[0]).toEqual(expected[0]);
     });
   });
 
-  describe('preparingModelGetLogInfo', () => {
-    it('should return events with new child events', async () => {
-      const relatedEvents = [
-        {
-          matchId: 1,
-          matchCode: 'TEST1',
-          leagueName: 'Test League',
-          matchEvent: 'Test Event',
-          matchType: MatchType.LINK,
-          isChecked: true
-        },
-        {
-          matchId: 2,
-          matchCode: 'TEST2',
-          leagueName: 'Test League',
-          matchEvent: 'Test Event',
-          matchType: MatchType.LINK,
-          isChecked: true
-        }
-      ] as ChildMatchModel[];
+  describe('isAutoSelectMatch', () => {
+    it('should return true when subIssueTypeId is in SUBTYPE_AUTO_SELECT_LIST and matchType is ChildMatch', () => {
+      // Arrange
+      const subIssueTypeAutoSelectList = SubIssueTypeGroup.SUBTYPE_AUTO_SELECT_LIST;
 
-      const arg = {
-        allEvents: [
-          {
-            matchId: 1,
-            leagueName: 'Test League',
-            isMainMatch: true,
-            eventName: 'Test Event',
-            tvDetectionModel: null,
-            sportType: 1
-          }
-        ],
-        mainEvent: {
-          subIssueTypeId: 1
-        } as LogInfoRelatedEvent,
-        defaultFilterTimeWithAllowance: {} as FilterTimeWithAllowance,
-        addRequestStore: {
-          savingRequestStatusSubject: new BehaviorSubject(false),
-          checkValidSubIssueTypeInFilterSubject: new Subject(),
-          allowanceTimeSubject: new Subject(),
-          blockingUiStatusSubject: new BehaviorSubject([]),
-          changeActionWaitingToManualEditPageSubject: new BehaviorSubject(false),
-          abnormalFilterBySubject: new Subject(),
-          startTimeFilterTicket: new Date(),
-          getStartTimeFilterTicket: new Date(),
-          changeStartTimeFilterAnalysis: () => {},
-          savingRequestStatus: new BehaviorSubject(false).asObservable(),
-          changeSavingRequestStatus: () => {},
-          getAllowanceTimeSubject: new Subject().asObservable(),
-          changeAllowanceTime: () => {},
-          blockingUiStatus: new BehaviorSubject([]).asObservable(),
-          changeBlockingUiStatus: () => {},
-          getChangeActionWaitingToManualEditPageSubject: new BehaviorSubject(false).asObservable(),
-          changeActionWaitingToManualEditPage: () => {},
-          getAbnormalFilterBySubject: new Subject().asObservable(),
-          changeAbnormalFilterBy: () => {}
-        } as unknown as AddRequestStore,
-        originalRelatedEvents: [],
-        subIssueTypeId: '1'
-      } as AddRelatedEventArg;
-      addRequestApiService.getSubIssueTypeLinkMatch = jest.fn().mockResolvedValue(relatedEvents);
-      const result = await service['preparingModelGetLogInfo'](relatedEvents, arg);
+      // Act & Assert
+      subIssueTypeAutoSelectList.forEach(subIssueTypeId => {
+        const result = service['isAutoSelectMatch'](subIssueTypeId.toString(), MatchType.CHILD, null);
+        expect(result).toEqual(true);
+      });
+    });
 
-      expect(result.length).toBe(2);
-      expect(result[0].matchId).toBe(1);
-      expect(result[1].matchId).toBe(2);
+    it('should return true when matchInput is child match and matchType is LinkMatch', () => {
+      // Arrange
+      const mainEvent = { parentId: 1, matchId: 2 } as LogInfoRelatedEvent;
+
+      // Act
+      const result = service['isAutoSelectMatch']('1', MatchType.LINK, mainEvent);
+
+      // Assert
+      expect(result).toEqual(true);
+    });
+
+    it('should return false when matchInput is main match and subIssueTypeId not in SUBTYPE_AUTO_SELECT_LIST', () => {
+      // Arrange
+      const mainEvent = { parentId: 1, matchId: 1 } as LogInfoRelatedEvent;
+      const matchType = [MatchType.NORMAL, MatchType.CHILD, MatchType.LINK];
+
+      // Act & Assert
+      matchType.forEach(matchType => {
+        const result = service['isAutoSelectMatch']('1', matchType, mainEvent);
+        expect(result).toEqual(false);
+      });
     });
   });
 
   describe('addNewRelatedEventHaveTicketOrUpdateExistedEvent', () => {
     it('should add new event when event does not exist and has logInfoDetail', () => {
-      const eventsGetLogInfo = [
-        {
-          matchId: 1,
-          logInfoDetail: {
-            matchId: 1,
-            isHasWarningRangeTime: false,
-            scoreNormalTicket: '0',
-            scoreOfMatch: '0',
-            minTransId: '0'
-          } as LogInfoDetail,
-          messageValidationLogInfo: [
-            {
-              type: 'error',
-              content: 'test',
-              isError: true,
-              reason: 'test'
-            } as ValidationMessage
-          ],
-          voidTimeArea: {
-            fromDateTime: '2024-01-01 10:00:00',
-            toDateTime: '2024-01-01 11:00:00',
-            aaTime: 5,
-            paTime: 5,
-            saTime: 5
-          } as FilterTimeWithAllowance,
-          subIssueTypeId: 1,
-          isMainMatch: true,
-          sportType: 1,
-          leagueName: '',
-          eventName: '',
-          tvDetectionModel: null
-        }
-      ] as LogInfoRelatedEvent[];
+      // Arrange
+      const eventsGetLogInfo = [Helper.fakeLogInfoRelatedEvent] as LogInfoRelatedEvent[];
+      const originalAllEvents = [];
 
-      const originalAllEvents: LogInfoRelatedEvent[] = [];
-
+      // Act
       service['addNewRelatedEventHaveTicketOrUpdateExistedEvent'](eventsGetLogInfo, originalAllEvents);
 
-      expect(originalAllEvents.length).toBe(1);
-      expect(originalAllEvents[0].matchId).toBe(1);
-      expect(originalAllEvents[0].logInfoDetail).toBeDefined();
+      // Assert
+      expect(originalAllEvents.length).toEqual(1);
+      expect(originalAllEvents).toEqual(eventsGetLogInfo);
     });
 
-    it('should update existing event when event exists', () => {
-      const eventsGetLogInfo = [
-        {
-          matchId: 1,
-          logInfoDetail: {
-            matchId: 1,
-            isHasWarningRangeTime: false,
-            scoreNormalTicket: '0',
-            scoreOfMatch: '0',
-            minTransId: '0'
-          } as LogInfoDetail,
-          messageValidationLogInfo: [
-            {
-              type: 'error',
-              content: 'new',
-              isError: true,
-              reason: 'new'
-            } as ValidationMessage
-          ],
-          voidTimeArea: {
-            fromDateTime: '2024-01-01 10:00:00',
-            toDateTime: '2024-01-01 11:00:00',
-            aaTime: 5,
-            paTime: 5,
-            saTime: 5
-          } as FilterTimeWithAllowance,
-          subIssueTypeId: 2,
-          isMainMatch: true,
-          sportType: 1,
-          leagueName: '',
-          eventName: '',
-          tvDetectionModel: null
-        }
-      ] as LogInfoRelatedEvent[];
+    it('should update existed event when event exists and has logInfoDetail', () => {
+      // Arrange
+      const eventsGetLogInfo = [Helper.fakeLogInfoRelatedEvent] as LogInfoRelatedEvent[];
+      eventsGetLogInfo[0].logInfoDetail.matchId = 2;
+      const originalAllEvents = [Helper.fakeLogInfoRelatedEvent] as LogInfoRelatedEvent[];
+      originalAllEvents[0].logInfoDetail.matchId = 2;
 
-      const originalAllEvents: LogInfoRelatedEvent[] = [
-        {
-          matchId: 1,
-          logInfoDetail: {
-            matchId: 1,
-            isHasWarningRangeTime: false,
-            scoreNormalTicket: '0',
-            scoreOfMatch: '0',
-            minTransId: '0'
-          } as LogInfoDetail,
-          messageValidationLogInfo: [
-            {
-              type: 'error',
-              content: 'old',
-              isError: true,
-              reason: 'old'
-            } as ValidationMessage
-          ],
-          voidTimeArea: {
-            fromDateTime: '2024-01-01 10:00:00',
-            toDateTime: '2024-01-01 11:00:00',
-            aaTime: 5,
-            paTime: 5,
-            saTime: 5
-          } as FilterTimeWithAllowance,
-          subIssueTypeId: 1,
-          isMainMatch: true,
-          sportType: 1,
-          leagueName: '',
-          eventName: '',
-          tvDetectionModel: null
-        }
-      ];
-
+      // Act
       service['addNewRelatedEventHaveTicketOrUpdateExistedEvent'](eventsGetLogInfo, originalAllEvents);
 
-      expect(originalAllEvents.length).toBe(1);
-      expect(originalAllEvents[0].logInfoDetail).toBeDefined();
-      expect(originalAllEvents[0].voidTimeArea).toBeDefined();
-      expect(originalAllEvents[0].subIssueTypeId).toBe(2);
+      // Assert
+      expect(originalAllEvents[0].logInfoDetail.matchId).toEqual(2);
     });
   });
 
-  describe('getChildMatches', () => {
-    it('should call addRequestApiService.getChildMatches with correct parameters and return result', async () => {
-      const query = {
-        matchId: 123,
-        issueTypeId: 1,
-        subIssueTypeId: '2',
-        isMainMatch: true,
-        eventDate: '2024-01-01',
-        sportType: 1
-      } as GetChildMatchQuery;
+  describe('preparingModelGetLogInfo', () => {
+    it('should only prepare model for old events when not have new event need auto select', async () => {
+      // Arrange
+      const relatedEvents = [Helper.fakeChildMatchModel] as ChildMatchModel[];
+      const arg = {
+        allEvents: [Helper.fakeLogInfoRelatedEvent],
+        filter: {},
+        mainEvent: Helper.fakeLogInfoRelatedEvent,
+        defaultFilterTimeWithAllowance: Helper.fakeFilterTimeWithAllowance
+      } as AddRelatedEventArg;
 
-      const expectedResult = [
-        {
-          matchId: 1,
-          matchCode: 'TEST1',
-          leagueName: 'Test League',
-          matchEvent: 'Test Event',
-          matchType: MatchType.LINK,
-          isChecked: true
-        }
-      ] as ChildMatchModel[];
+      eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime = jest.fn();
+      
+      // Test case 1: matchId = 1 (same as existing event), subIssueTypeId = 1 (not in auto select list)
+      arg.filter.subIssueTypeId = '1';
+      relatedEvents[0].matchId = 1;
 
-      jest.spyOn(addRequestApiService, 'getChildMatches').mockResolvedValue(expectedResult);
+      const result1 = await service['preparingModelGetLogInfo'](relatedEvents, arg);
+      expect(result1.length).toEqual(1);
+      expect(result1[0].logInfoDetail.matchId).toEqual(2);
 
-      const result = await service.getChildMatches(query);
+      // Test case 2: matchId = 2 (different from existing event), subIssueTypeId = 1 (not in auto select list)
+      arg.filter.subIssueTypeId = '1';
+      relatedEvents[0].matchId = 2;
 
-      expect(addRequestApiService.getChildMatches).toHaveBeenCalledWith(query);
-      expect(result).toEqual(expectedResult);
+      const result2 = await service['preparingModelGetLogInfo'](relatedEvents, arg);
+      expect(result2.length).toEqual(1);
+      expect(result2[0].logInfoDetail.matchId).toEqual(2);
     });
 
-    it('should handle empty result from addRequestApiService.getChildMatches', async () => {
-      const query = {
-        matchId: 123,
-        issueTypeId: 1,
-        subIssueTypeId: '2',
-        isMainMatch: true,
-        eventDate: '2024-01-01',
-        sportType: 1
-      } as GetChildMatchQuery;
+    it('should prepare model for new event when have new event need auto select', async () => {
+      // Arrange
+      const relatedEvents = [Helper.fakeChildMatchModel] as ChildMatchModel[];
+      relatedEvents[0].matchId = 2;
+      relatedEvents[0].matchType = MatchType.CHILD;
+      
+      const arg = {
+        allEvents: [Helper.fakeLogInfoRelatedEvent],
+        filter: { subIssueTypeId: '4' }, // 4 is in SUBTYPE_AUTO_SELECT_LIST
+        mainEvent: Helper.fakeLogInfoRelatedEvent,
+        defaultFilterTimeWithAllowance: Helper.fakeFilterTimeWithAllowance
+      } as AddRelatedEventArg;
+      
+      eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime = jest.fn();
 
-      jest.spyOn(addRequestApiService, 'getChildMatches').mockResolvedValue([]);
+      // Act
+      const result = await service['preparingModelGetLogInfo'](relatedEvents, arg);
 
-      const result = await service.getChildMatches(query);
+      // Assert
+      expect(result.length).toEqual(2);
+      expect(result[0].logInfoDetail.matchId).toEqual(2);
+      expect(result[1].matchId).toEqual(2);
+    });
+  });
 
-      expect(addRequestApiService.getChildMatches).toHaveBeenCalledWith(query);
-      expect(result).toEqual([]);
+  describe('getDataWhenSearch', () => {
+    it('should call functions expected', async () => {
+      // Arrange
+      service['preparingModelGetLogInfo'] = jest.fn().mockResolvedValue([Helper.fakeLogInfoRelatedEvent]);
+      logInfoService.getLogInfo = jest.fn();
+      service['addNewRelatedEventHaveTicketOrUpdateExistedEvent'] = jest.fn();
+
+      // Act
+      await service.getDataWhenSearch([Helper.fakeChildMatchModel], {} as AddRelatedEventArg);
+
+      // Assert
+      expect(service['preparingModelGetLogInfo']).toHaveBeenCalled();
+      expect(logInfoService.getLogInfo).toHaveBeenCalled();
+      expect(service['addNewRelatedEventHaveTicketOrUpdateExistedEvent']).toHaveBeenCalled();
+    });
+  });
+
+  describe('addRelatedEventByInput', () => {
+    it('should display required message when inputRelatedMatchId is empty', async () => {
+      const arg = {
+        primitiveProps: { inputRelatedMatchId: null } as PrimitiveProperty,
+        tooltip: { display: jest.fn() } as unknown as Tooltip,
+        inputMatchIdClass: 'test-class'
+      } as AddRelatedEventArg;
+
+      await service.addRelatedEventByInput(arg);
+
+      expect(arg.tooltip.display).toHaveBeenCalledWith('test-class', LABELS.REQUIRED_MATCHID);
     });
 
-    it('should propagate error from addRequestApiService.getChildMatches', async () => {
-      const query = {
-        matchId: 123,
-        issueTypeId: 1,
-        subIssueTypeId: '2',
-        isMainMatch: true,
-        eventDate: '2024-01-01',
-        sportType: 1
-      } as GetChildMatchQuery;
+    it('should not getLogInfo when InValidInputRelatedEvent', async () => {
+      // Arrange
+      const arg = {
+        primitiveProps: { inputRelatedMatchId: 123 },
+      } as unknown as AddRelatedEventArg;
+      validationService.isValidInputRelatedEvent = jest.fn().mockReturnValue(false);
+      logInfoService.getLogInfo = jest.fn();
 
-      const error = new Error('API Error');
-      jest.spyOn(addRequestApiService, 'getChildMatches').mockRejectedValue(error);
+      // Act
+      await service.addRelatedEventByInput(arg);
 
-      await expect(service.getChildMatches(query)).rejects.toThrow('API Error');
+      // Assert
+      expect(logInfoService.getLogInfo).not.toHaveBeenCalled();
+    });
+
+    it('should display invalid message when getChildMatches returns empty array', async () => {
+      // Arrange
+      const arg = {
+        tooltip: { display: jest.fn() },
+        primitiveProps: { inputRelatedMatchId: 123 },
+        inputMatchIdClass: 'test-class',
+        mainEvent: {},
+        filter: { issueTypeId: '1' }
+      } as unknown as AddRelatedEventArg;
+      arg.mainEvent = {} as LogInfoRelatedEvent;
+      validationService.isValidInputRelatedEvent = jest.fn().mockReturnValue(true);
+      const resultGetChildMatches = [[], null, undefined];
+
+      // Act & Assert
+      resultGetChildMatches.forEach(async x => {
+        addRequestApiService.getChildMatches = jest.fn().mockResolvedValue(x);
+        await service.addRelatedEventByInput(arg);
+
+        expect(arg.tooltip.display).toHaveBeenCalledWith('test-class', LABELS.INVALID_MATCHID);
+        expect(arg.primitiveProps.isBlock).toBe(false);
+      });
+    });
+
+    it('should getLogInfo success when matchId input is valid', async () => {
+      // Arrange
+      const arg = {
+        tooltip: { display: jest.fn() },
+        primitiveProps: { inputRelatedMatchId: 123 },
+        inputMatchIdClass: 'test-class',
+        mainEvent: {},
+        filter: { issueTypeId: '1' },
+        allEvents: []
+      } as unknown as AddRelatedEventArg;
+      const resultGetChildMatches = [Helper.fakeChildMatchModel];
+
+      validationService.isValidInputRelatedEvent = jest.fn().mockReturnValue(true);
+      addRequestApiService.getChildMatches = jest.fn().mockResolvedValue(resultGetChildMatches);
+      logInfoService.updateIsCheckedVar = jest.fn();
+      eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime = jest.fn();
+      logInfoService.getLogInfo = jest.fn();
+      service['assignChildMatchToLogInfoModel'] = jest.fn().mockReturnValue([Helper.fakeLogInfoRelatedEvent]);
+
+      // Act
+      await service.addRelatedEventByInput(arg);
+
+      // Assert
+      expect(logInfoService.getLogInfo).toHaveBeenCalled();
+      expect(arg.primitiveProps.inputRelatedMatchId).toBeNull();
     });
   });
 });

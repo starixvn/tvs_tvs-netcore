@@ -18,5 +18,4 @@ export class AddRelatedEventArg {
   addRequestStore: AddRequestStore;
   inputMatchIdClass: string;
   originalRelatedEvents: ChildMatchModel[];
-  subIssueTypeId: string;
 }

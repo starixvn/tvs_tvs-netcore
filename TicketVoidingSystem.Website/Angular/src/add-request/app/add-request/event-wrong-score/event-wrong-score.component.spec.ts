@@ -22,7 +22,10 @@ import { QueryList, SimpleChange } from '@angular/core';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
-import { FilterTimeWithAllowanceComponent } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
+import { RelatedEventsComponent } from './related-events/related-events.component';
+import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { SubIssueTypeRelatedEvent } from './models/subIssue-type-related-event.model';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -42,9 +45,22 @@ class Helper {
     matchId: 123,
     sportType: 1,
     isMainMatch: true,
-    eventDate: new Date()
+    eventDate: new Date(),
+    scoreId: 1,
+    isChecked: true,
+    logInfoDetail: {
+      matchId: 123,
+      singleCount: 1,
+      mainParlayCount: 2,
+      cancelCashOutCount: 0
+    } as LogInfoDetail
   }] as WrongScoreModel[];
   static readonly fakeIssueTypes = new IssueTypes();
+  static readonly fakeLogInfoRelatedEvent: LogInfoRelatedEvent = {
+    matchId: 123,
+    isMainMatch: true,
+    subIssueTypeId: 1
+  } as LogInfoRelatedEvent;
 }
 
 describe('EventWrongScoreComponent', () => {
@@ -53,9 +69,9 @@ describe('EventWrongScoreComponent', () => {
   let validationService: ValidationService;
   let eventWrongScoreService: EventWrongScoreService;
   let wrongScoreService: WrongScoreService;
-  let relatedEventService: RelatedEventService;
   let editRequestService: EditRequestService;
   let addRequestStore: AddRequestStore;
+  let saveRequestService: SaveRequestService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -77,10 +93,21 @@ describe('EventWrongScoreComponent', () => {
     validationService = fixture.debugElement.injector.get(ValidationService);
     eventWrongScoreService = fixture.debugElement.injector.get(EventWrongScoreService);
     wrongScoreService = fixture.debugElement.injector.get(WrongScoreService);
-    relatedEventService = fixture.debugElement.injector.get(RelatedEventService);
     editRequestService = fixture.debugElement.injector.get(EditRequestService);
     addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
+    saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
     component = fixture.componentInstance;
+
+    const mockRelatedEventsComponent = {
+      resetData: jest.fn(),
+      getDataWhenSearch: jest.fn().mockResolvedValue(undefined),
+      logInfoComponents: new QueryList<LogInfoRelatedEventComponent>(),
+      relatedEvents: [],
+      filter: Helper.fakeFilterModel,
+      isEdit: false,
+      primitiveProps: component.primitiveProps
+    };
+    component.relatedEventsComponent = mockRelatedEventsComponent as unknown as RelatedEventsComponent;
   });
 
   it('should create', () => {
@@ -105,7 +132,7 @@ describe('EventWrongScoreComponent', () => {
     // Arrange
     component.isEdit = true;
     component.wrongScoreModels = Helper.fakeWrongScoreModel;
-    component.mainEvent = Helper.fakeWrongScoreModel[0];
+    component.mainEvent = Helper.fakeLogInfoRelatedEvent;
     editRequestService.getMainWrongScoreModel = jest.fn().mockReturnValue(Helper.fakeWrongScoreModel[0]);
     editRequestService.assignPrimitivePropsEditRequest = jest.fn();
     wrongScoreService.getFilterWrongScore = jest.fn().mockReturnValue({});
@@ -141,6 +168,7 @@ describe('EventWrongScoreComponent', () => {
     expect(eventWrongScoreService.resetPrimitiveProperty).toHaveBeenCalled();
     expect(component.tvDetectionComponent.initDefaultValues).toHaveBeenCalled();
     expect(component.filter.isChangeSubTypeManual).toBeFalsy();
+    expect(component.relatedEventsComponent.resetData).toHaveBeenCalled();
   });
 
   it('should handle search event with validation', async () => {
@@ -148,38 +176,23 @@ describe('EventWrongScoreComponent', () => {
     component.eventLeagueComponent = {} as EventLeagueComponent;
     component.filterWrongScoreComponent = {} as FilterWrongScoreComponent;
     component.tvDetectionComponent = {} as TvDetectionComponent;
-    const logInfoRelatedEventComponent = {
-      filterTimeWithAllowanceComponent: {} as FilterTimeWithAllowanceComponent
-    } as LogInfoRelatedEventComponent;
-    logInfoRelatedEventComponent.filterTimeWithAllowanceComponent.updateData = jest.fn();
-    logInfoRelatedEventComponent.showValidationDetail = jest.fn();
-    component.logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
-    component.logInfoComponents.reset([logInfoRelatedEventComponent]);
-    const wrongScoreInfoComponent = {
-      filter: Helper.fakeFilterModel,
-      wrongScoreModel: Helper.fakeWrongScoreModel[0]
-    } as WrongScoreInfoComponent;
     component.wrongScoreInfoComponents = new QueryList<WrongScoreInfoComponent>();
-    component.wrongScoreInfoComponents.reset([wrongScoreInfoComponent]);
+    component.wrongScoreInfoComponents.reset([]);
     validationService.validateCommonData = jest.fn().mockReturnValue(true);
     validationService.isValidAllSubIssueType = jest.fn().mockReturnValue(true);
     component.primitiveProps.filterBy = TVSRequestFilterBy.CHECK_TIME;
     component.wrongScoreModels = [];
-    wrongScoreService.createMainWrongScoreModel = jest.fn().mockReturnValue({});
-    relatedEventService.getGetInfoChildMatch = jest.fn().mockResolvedValue([]);
-    relatedEventService.getDataRelatedEventWhenSearch = jest.fn().mockResolvedValue(undefined);
-    eventWrongScoreService.isHasRelatedEvent = jest.fn().mockReturnValue(true);
-    component.mainEvent = Helper.fakeWrongScoreModel[0];
+    component.mainEvent = Helper.fakeLogInfoRelatedEvent;
     component.filter = Helper.fakeFilterModel;
+    component.filter.subIssueTypeId = '1';
+    jest.spyOn(SubIssueTypeRelatedEvent, 'isHasRelatedEvent').mockReturnValue(true);
 
     // Act
     await component.handleSearchEvent();
 
     // Assert
     expect(validationService.validateCommonData).toHaveBeenCalled();
-    expect(wrongScoreService.createMainWrongScoreModel).toHaveBeenCalled();
-    expect(relatedEventService.getGetInfoChildMatch).toHaveBeenCalled();
-    expect(relatedEventService.getDataRelatedEventWhenSearch).toHaveBeenCalled();
+    expect(component.relatedEventsComponent.getDataWhenSearch).toHaveBeenCalled();
     expect(component.primitiveProps.isShowRelatedEvents).toBeTruthy();
   });
 
@@ -213,6 +226,7 @@ describe('EventWrongScoreComponent', () => {
     expect(component.matchId).toBe(123);
     expect(eventWrongScoreService.updateMainMatch).toHaveBeenCalled();
     expect(component.updateMatchId.emit).toHaveBeenCalledWith(matchInfo);
+    expect(component.relatedEventsComponent.resetData).toHaveBeenCalled();
   });
 
   it('should reset data', () => {
@@ -223,8 +237,7 @@ describe('EventWrongScoreComponent', () => {
     expect(component.wrongScoreModels).toEqual([]);
     expect(component.primitiveProps.isShowActualScore).toBeFalsy();
     expect(component.primitiveProps.actualScore).toBe('');
-    expect(component.allRelatedEvents).toEqual([]);
-    expect(component.relatedEvents).toEqual([]);
+    expect(component.relatedEventsComponent.resetData).toHaveBeenCalled();
   });
 
   it('should validate var check', () => {
@@ -247,31 +260,112 @@ describe('EventWrongScoreComponent', () => {
     // Arrange
     const wrongScoreModels = [
       { isChecked: true },
-      { isChecked: false, isMainMatch: true }
+      { isChecked: false }
     ] as WrongScoreModel[];
 
     // Act
     const result = component.getSelectedWrongScores(wrongScoreModels);
 
     // Assert
-    expect(result.length).toBe(2);
+    expect(result.length).toBe(1);
     expect(result[0].isChecked).toBeTruthy();
-    expect(result[1].isMainMatch).toBeTruthy();
+  });
+
+  it('should get single count selected score', () => {
+    // Arrange
+    component.wrongScoreModels = Helper.fakeWrongScoreModel;
+
+    // Act
+    const result = component.getSingleCountSelectedScore(component.wrongScoreModels);
+
+    // Assert
+    expect(result).toBe(1);
+  });
+
+  it('should get parlay count selected score', () => {
+    // Arrange
+    component.wrongScoreModels = Helper.fakeWrongScoreModel;
+
+    // Act
+    const result = component.getParlayCountSelectedScore(component.wrongScoreModels);
+
+    // Assert
+    expect(result).toBe(2);
+  });
+
+  it('should get cancel cash out count selected score', () => {
+    // Arrange
+    component.wrongScoreModels = Helper.fakeWrongScoreModel;
+
+    // Act
+    const result = component.getCancelCashOutCountSelectedScore(component.wrongScoreModels);
+
+    // Assert
+    expect(result).toBe(0);
   });
 
   it('should update status button save request', () => {
     // Arrange
-    component.wrongScoreModels = [
-      { isChecked: false },
-      { isChecked: false }
-    ] as WrongScoreModel[];
+    component.wrongScoreModels = Helper.fakeWrongScoreModel;
+    component.mainEvent = Helper.fakeLogInfoRelatedEvent;
     addRequestStore.changeSavingRequestStatus = jest.fn();
 
     // Act
     component.updateStatusButtonSaveRequest();
 
     // Assert
-    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
+  });
+
+  it('should show var check when sub issue type is valid', () => {
+    // Arrange
+    component.filter = Helper.fakeFilterModel;
+    component.filter.subIssueTypeId = '1';
+
+    // Act
+    const result = component.isShowVarCheck();
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('should change var check value', () => {
+    // Arrange
+    const isVarChecked = true;
+
+    // Act
+    component.changeVarCheckValue(isVarChecked);
+
+    // Assert
+    expect(component.primitiveProps.isCheckedVar).toBe(isVarChecked);
+    expect(component.primitiveProps.isHighLightVarCheck).toBeFalsy();
+  });
+
+  it('should show log info selected scores when multiple scores are selected', () => {
+    // Arrange
+    component.wrongScoreModels = [
+      { isChecked: true },
+      { isChecked: true }
+    ] as WrongScoreModel[];
+    component.primitiveProps.filterBy = TVSRequestFilterBy.TRANS_TIME;
+
+    // Act
+    const result = component.isShowLogInfoSelectedScores(component.wrongScoreModels);
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('should get log info detail', () => {
+    // Arrange
+    component.wrongScoreModels = Helper.fakeWrongScoreModel;
+
+    // Act
+    const result = component.getLogInfoDetail();
+
+    // Assert
+    expect(result.length).toBe(1);
+    expect(result[0].matchId).toBe(123);
   });
 });
 

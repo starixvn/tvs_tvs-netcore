@@ -38,48 +38,29 @@ class Helper {
     model.isActive = true;
     model.wrongScore = '';
     model.subIssueTypeId = 1;
-    model.filterFromTransTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    model.filterToTransTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    model.filterFromTransTime = moment("2024-03-20 10:00:00").format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    model.filterToTransTime = moment("2024-03-20 11:00:00").format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
     const logInfoDetail = new LogInfoDetail();
     logInfoDetail.matchId = 123;
-    logInfoDetail.liveScores = '';
-    logInfoDetail.voidFromTime = new Date();
-    logInfoDetail.voidToTime = new Date();
-    logInfoDetail.transVoidToTime = new Date();
+    logInfoDetail.voidFromTime = new Date("2024-03-20 10:00:00");
+    logInfoDetail.voidToTime = new Date("2024-03-20 11:00:00");
+    logInfoDetail.transVoidToTime = new Date("2024-03-20 11:00:00");
     logInfoDetail.singleCount = 0;
     logInfoDetail.cashOutCount = 0;
     logInfoDetail.settleCount = 0;
     logInfoDetail.instantlySettleCount = 0;
-    logInfoDetail.mainParlayCount = 0;
-    logInfoDetail.cancelCashOutCount = 0;
-    logInfoDetail.scoreNormalTicket = '';
-    logInfoDetail.scoreOfMatch = '';
-    logInfoDetail.minTransId = '';
-    logInfoDetail.actionType = '';
-    logInfoDetail.isHasWarningRangeTime = false;
     model.logInfoDetail = logInfoDetail;
-
     model.messageValidationLogInfo = [];
     model.actualScore = '';
     model.matchId = 123;
     model.isChecked = false;
-    model.eventDate = new Date();
-    model.voidFromTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    model.voidToTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    model.aaTime = 0;
-    model.paTime = 0;
-    model.saTime = 0;
+    model.eventDate = new Date("2024-03-20 10:00:00");
+    model.voidFromTime = moment("2024-03-20 10:00:00").format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    model.voidToTime = moment("2024-03-20 11:00:00").format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     model.filterBy = 1;
-    model.isCheckedVar = false;
-    model.tvDetectionValue = 0;
-    model.serviceAcceptTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    model.actualTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    model.minuteOffset = '0';
-    model.secondOffset = '0';
     model.sportType = 1;
     model.isMainMatch = true;
-    model.matchType = 1;
 
     return model;
   }
@@ -270,25 +251,29 @@ describe('WrongScoreInfoComponent', () => {
     // Arrange
     component.fromTimeComponent = {} as DateFullTimeNewComponent;
     component.toTimeComponent = {} as DateFullTimeNewComponent;
-    component.fromTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(true);
-    component.toTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(true);
     component.fromTimeComponent.isTimeValid = jest.fn().mockReturnValue(true);
     component.toTimeComponent.isTimeValid = jest.fn().mockReturnValue(true);
-    jest.spyOn(wrongScoreService, 'getDurationTime').mockReturnValue('1:00');
+    component.wrongScoreModel.filterFromTransTime = '2024-03-20 10:00:00';
+    component.wrongScoreModel.filterToTransTime = '2024-03-20 11:00:00';
+    jest.spyOn(wrongScoreService, 'getDurationTime').mockReturnValue('1:00:00');
 
     // Act
     const result = component.getDurationTime();
 
     // Assert
-    expect(result).toBe('1:00');
+    expect(result).toBe('1:00:00');
+    expect(wrongScoreService.getDurationTime).toHaveBeenCalledWith(
+      component.wrongScoreModel.filterFromTransTime,
+      component.wrongScoreModel.filterToTransTime
+    );
   });
 
-  it('should return "-" when time is invalid', () => {
+  it('should return dash when time is invalid', () => {
     // Arrange
     component.fromTimeComponent = {} as DateFullTimeNewComponent;
     component.toTimeComponent = {} as DateFullTimeNewComponent;
     component.fromTimeComponent.isTimeValid = jest.fn().mockReturnValue(false);
-    component.toTimeComponent.isTimeValid = jest.fn().mockReturnValue(false);
+    component.toTimeComponent.isTimeValid = jest.fn().mockReturnValue(true);
 
     // Act
     const result = component.getDurationTime();
@@ -297,11 +282,11 @@ describe('WrongScoreInfoComponent', () => {
     expect(result).toBe('-');
   });
 
-  it('should show warning for special bet type', () => {
+  it('should show warning for special bet type when void time is before filter time', () => {
     // Arrange
-    const voidFromTime = moment().subtract(1, 'hour').toDate();
-    component.wrongScoreModel.logInfoDetail.voidFromTime = voidFromTime;
-    component.wrongScoreModel.filterFromTransTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    component.wrongScoreModel.logInfoDetail = new LogInfoDetail();
+    component.wrongScoreModel.logInfoDetail.voidFromTime = new Date('2024-03-20 09:00:00');
+    component.wrongScoreModel.filterFromTransTime = '2024-03-20 10:00:00';
 
     // Act
     const result = component.isShowWarningSpecialBetType();
@@ -310,11 +295,11 @@ describe('WrongScoreInfoComponent', () => {
     expect(result).toBeTruthy();
   });
 
-  it('should not show warning for special bet type when times are valid', () => {
+  it('should not show warning for special bet type when void time is after filter time', () => {
     // Arrange
-    const voidFromTime = moment().add(1, 'hour').toDate();
-    component.wrongScoreModel.logInfoDetail.voidFromTime = voidFromTime;
-    component.wrongScoreModel.filterFromTransTime = moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    component.wrongScoreModel.logInfoDetail = new LogInfoDetail();
+    component.wrongScoreModel.logInfoDetail.voidFromTime = new Date('2024-03-20 11:00:00');
+    component.wrongScoreModel.filterFromTransTime = '2024-03-20 10:00:00';
 
     // Act
     const result = component.isShowWarningSpecialBetType();
@@ -323,19 +308,162 @@ describe('WrongScoreInfoComponent', () => {
     expect(result).toBeFalsy();
   });
 
-  it('should show count info when counts are valid', () => {
+  it('should show count info when any count is greater than 0', () => {
     // Act
-    const result = component.isShowCountInfo(1, 2, 3);
+    const result = component.isShowCountInfo(1, 0, 0);
 
     // Assert
     expect(result).toBeTruthy();
   });
 
-  it('should get count info content', () => {
+  it('should not show count info when all counts are 0', () => {
     // Act
-    const result = component.countInfoContent(1, 2, 3);
+    const result = component.isShowCountInfo(0, 0, 0);
 
     // Assert
-    expect(result).toBeDefined();
+    expect(result).toBeFalsy();
+  });
+
+  it('should create get log info params correctly', () => {
+    // Arrange
+    component.isEdit = true;
+    component.requestId = 123;
+    component.filter = Helper.fakeFilterModel;
+    component.primitiveProps = Helper.fakePrimitiveProps;
+    component.selectedWrongScores = [Helper.getFakeWrongScoreModel()];
+
+    // Act
+    const result = component.createGetLogInfoParams();
+
+    // Assert
+    expect(result).toEqual({
+      isEdit: true,
+      requestId: 123,
+      filter: Helper.fakeFilterModel,
+      primitiveProps: Helper.fakePrimitiveProps,
+      wrongScoreModels: [Helper.getFakeWrongScoreModel()]
+    });
+  });
+
+  it('should validate date time correctly', () => {
+    // Arrange
+    component.fromTimeComponent = {} as DateFullTimeNewComponent;
+    component.toTimeComponent = {} as DateFullTimeNewComponent;
+    component.fromTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(true);
+    component.toTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(true);
+    jest.spyOn(validationService, 'isValidToDateTime').mockReturnValue(true);
+    jest.spyOn(validationService, 'isFromTimeSameOrBeforeToTime').mockReturnValue(true);
+    jest.spyOn(validationService, 'isFromTimeSameOrAfterDefaultValue').mockReturnValue(true);
+    jest.spyOn(validationService, 'isToTimeSmallerThanFromTimeNextScore').mockReturnValue(true);
+
+    // Act
+    const result = component.isValidDateTime();
+
+    // Assert
+    expect(result).toBeTruthy();
+    expect(component.fromTimeComponent.validateWithTooltip).toHaveBeenCalled();
+    expect(validationService.isValidToDateTime).toHaveBeenCalled();
+    expect(validationService.isFromTimeSameOrBeforeToTime).toHaveBeenCalled();
+    expect(validationService.isFromTimeSameOrAfterDefaultValue).toHaveBeenCalled();
+    expect(validationService.isToTimeSmallerThanFromTimeNextScore).toHaveBeenCalled();
+  });
+
+  it('should show log info when log info detail exists', () => {
+    // Arrange
+    component.wrongScoreModel.logInfoDetail = new LogInfoDetail();
+    component.wrongScoreModel.messageValidationLogInfo = [];
+
+    // Act
+    const result = component.isShowLogInfo();
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('should show log info when message validation exists', () => {
+    // Arrange
+    component.wrongScoreModel.logInfoDetail = null;
+    component.wrongScoreModel.messageValidationLogInfo = [{
+      isError: true,
+      reason: 'Error message',
+      isShowPopup: false
+    }];
+
+    // Act
+    const result = component.isShowLogInfo();
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('should not show log info when no log info detail and no message validation', () => {
+    // Arrange
+    component.wrongScoreModel.logInfoDetail = null;
+    component.wrongScoreModel.messageValidationLogInfo = [];
+
+    // Act
+    const result = component.isShowLogInfo();
+
+    // Assert
+    expect(result).toBeFalsy();
+  });
+
+  it('should show label only for first index', () => {
+    // Arrange
+    component.index = 0;
+
+    // Act
+    const result = component.isShowLabel();
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('should not show label for other indices', () => {
+    // Arrange
+    component.index = 1;
+
+    // Act
+    const result = component.isShowLabel();
+
+    // Assert
+    expect(result).toBeFalsy();
+  });
+
+  it('should clear data validation', () => {
+    // Arrange
+    jest.spyOn(logInfoService, 'clearDataValidation');
+
+    // Act
+    component.clearDataValidation();
+
+    // Assert
+    expect(logInfoService.clearDataValidation).toHaveBeenCalledWith(
+      [component.wrongScoreModel],
+      [],
+      null
+    );
+  });
+
+  it('should set null allowance time', () => {
+    // Arrange
+    jest.spyOn(wrongScoreService, 'setNullAllowanceTime');
+
+    // Act
+    component.setNullAllowanceTime();
+
+    // Assert
+    expect(wrongScoreService.setNullAllowanceTime).toHaveBeenCalledWith(component.wrongScoreModel);
+  });
+
+  it('should display full date time format correctly', () => {
+    // Arrange
+    const date = new Date('2024-03-20 10:00:00');
+
+    // Act
+    const result = component.displayFullDateTimeFormat(date);
+
+    // Assert
+    expect(result).toBe('2024/03/20 10:00:00.000 AM');
   });
 });

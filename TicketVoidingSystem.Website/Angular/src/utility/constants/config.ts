@@ -357,6 +357,13 @@ export class SubIssueTypeGroup {
     SubIssueTypeConstant.WRONG_INDICATION_SCORE_NO_ONWARDS,
     SubIssueTypeConstant.WRONG_INDICATION_SCORE_ONWARDS
   ];
+
+  static readonly SUBTYPE_AUTO_SELECT_LIST = [
+    SubIssueTypeConstant.RED_CARD_VAR_HOME,
+    SubIssueTypeConstant.RED_CARD_VAR_AWAY,
+    SubIssueTypeConstant._2YC_HOME,
+    SubIssueTypeConstant._2YC_AWAY
+  ];
 }
 
 export class FunctionConst {

@@ -28,5 +28,4 @@ export class WrongScoreModel {
     secondOffset: string;
     sportType: number;
     isMainMatch: boolean;
-    matchType: number;
 }

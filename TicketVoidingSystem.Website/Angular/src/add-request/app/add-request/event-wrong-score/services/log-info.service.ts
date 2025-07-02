@@ -5,13 +5,13 @@ import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { FilterModel } from '../../filter/filter.model';
 import { GetLogInfoQuery } from '../../models/add-request.query';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { GetLogInfoModel } from '../../models/get-log-info.model';
-import { PrimitiveProperty, WrongScoreGetLogInfoQuery } from '../event-wrong-score.model';
+import { WrongScoreGetLogInfoQuery } from '../event-wrong-score.model';
 import { EventWrongScoreService } from './event-wrong-score.service';
 import { ValidationService } from './validation.service';
+import { GetLogInfoParams } from '../models/get-log-info-params.model';
 
 @Injectable()
 export class LogInfoService {
@@ -19,68 +19,83 @@ export class LogInfoService {
   private readonly validationService = inject(ValidationService);
   private readonly eventWrongScoreService = inject(EventWrongScoreService);
 
-  async getLogInfo(isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty,
-    wrongScoreModels: WrongScoreModel[], mainMatchId: number, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): Promise<void> {
-    const getLogInfoQuery = this.initGetLogInfoQueries(isEdit, requestId, filter, wrongScoreModels, mainMatchId, defaultFilterTimeWithAllowance);
+  async getLogInfo(params: GetLogInfoParams): Promise<void> {
+    const getLogInfoQuery = this.initGetLogInfoQueries(params);
     const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
-    primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
+    params.primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
 
-    primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME
-      ? this.assignResultsGetLogInfoRelatedEvent(viewModel.getLogInfoModels, wrongScoreModels)
-      : this.assignResultsGetLogInfoToListModel(viewModel.getLogInfoModels, wrongScoreModels);
+    params.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME
+      ? this.assignResultsGetLogInfoRelatedEvent(viewModel.getLogInfoModels, params)
+      : this.assignResultsGetLogInfoToListModel(viewModel.getLogInfoModels, params.wrongScoreModels);
   }
 
-  mapRelatedEventToWrongScoreModel(logInfoRelatedEvent: LogInfoRelatedEvent, defaultFilterTimeWithAllowance: FilterTimeWithAllowance) {
-    const wrongScoreModel = new WrongScoreModel();
-    wrongScoreModel.filterFromTransTime = this.validationService.isHasAllowanceTime(logInfoRelatedEvent)
-      ? defaultFilterTimeWithAllowance.fromDateTime : logInfoRelatedEvent.voidTimeArea.fromDateTime;
-    wrongScoreModel.filterToTransTime =this.validationService.isHasAllowanceTime(logInfoRelatedEvent)
-      ? defaultFilterTimeWithAllowance.toDateTime : logInfoRelatedEvent.voidTimeArea.toDateTime;
-    wrongScoreModel.matchId = logInfoRelatedEvent.matchId;
-    wrongScoreModel.filterBy = this.eventWrongScoreService.getFilterByBaseOnSubIssueType(logInfoRelatedEvent.subIssueTypeId.toString());
-    wrongScoreModel.subIssueTypeId = logInfoRelatedEvent.subIssueTypeId;
-    wrongScoreModel.aaTime = logInfoRelatedEvent.voidTimeArea.aaTime;
-    wrongScoreModel.paTime = logInfoRelatedEvent.voidTimeArea.paTime;
-    wrongScoreModel.saTime = logInfoRelatedEvent.voidTimeArea.saTime;
+  mapWrongScoreGetLogInfoQuery(wrongScoreModel: WrongScoreModel, filterBy: number, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): WrongScoreGetLogInfoQuery {
+    const wrongScoreGetLogInfoQuery = new WrongScoreGetLogInfoQuery();
+    wrongScoreGetLogInfoQuery.scoreId = wrongScoreModel.scoreId;
+    wrongScoreGetLogInfoQuery.matchId = wrongScoreModel.matchId;
+    wrongScoreGetLogInfoQuery.filterBy = filterBy;
+    wrongScoreGetLogInfoQuery.subIssueTypeId = wrongScoreModel.subIssueTypeId;
 
-    return wrongScoreModel;
+    if (wrongScoreModel.filterBy === TVSRequestFilterBy.CHECK_TIME) {
+      wrongScoreGetLogInfoQuery.filterFromTransTime = defaultFilterTimeWithAllowance.fromDateTime;
+      wrongScoreGetLogInfoQuery.filterToTransTime = defaultFilterTimeWithAllowance.toDateTime;
+      wrongScoreGetLogInfoQuery.aaTime = wrongScoreModel.aaTime;
+      wrongScoreGetLogInfoQuery.paTime = wrongScoreModel.paTime;
+      wrongScoreGetLogInfoQuery.saTime = wrongScoreModel.saTime;
+    }
+    else {
+      wrongScoreGetLogInfoQuery.filterFromTransTime = wrongScoreModel.filterFromTransTime;
+      wrongScoreGetLogInfoQuery.filterToTransTime = wrongScoreModel.filterToTransTime;
+    }
+
+    return wrongScoreGetLogInfoQuery;
   }
 
-  private getWrongScoreModel(filter: FilterModel, wrongScoreModels: WrongScoreModel[], mainMatchId: number, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): WrongScoreGetLogInfoQuery[] {
-    return wrongScoreModels.map(x => {
-      const filterBy = this.eventWrongScoreService.getFilterByBaseOnSubIssueType(filter.subIssueTypeId);
-      const wrongScoreGetLogInfoQuery = new WrongScoreGetLogInfoQuery();
-      if (this.validationService.isHasAllowanceTimeWrongScoreModel(x) && x.filterBy === TVSRequestFilterBy.CHECK_TIME) {
-        wrongScoreGetLogInfoQuery.filterFromTransTime = defaultFilterTimeWithAllowance.fromDateTime;
-        wrongScoreGetLogInfoQuery.filterToTransTime = defaultFilterTimeWithAllowance.toDateTime;
-      }
-      else {
-        wrongScoreGetLogInfoQuery.filterFromTransTime = x.filterFromTransTime;
-        wrongScoreGetLogInfoQuery.filterToTransTime = x.filterToTransTime;
-      }
-      wrongScoreGetLogInfoQuery.scoreId = x.scoreId;
-      wrongScoreGetLogInfoQuery.matchId = x.matchId ? x.matchId : mainMatchId;
-      wrongScoreGetLogInfoQuery.wrongScore = x.wrongScore;
-      wrongScoreGetLogInfoQuery.filterBy = filterBy;
-      wrongScoreGetLogInfoQuery.subIssueTypeId = x.subIssueTypeId ? x.subIssueTypeId : Number(filter.subIssueTypeId);
-      wrongScoreGetLogInfoQuery.aaTime = x.aaTime;
-      wrongScoreGetLogInfoQuery.paTime = x.paTime;
-      wrongScoreGetLogInfoQuery.saTime = x.saTime;
-
-      return wrongScoreGetLogInfoQuery;
+  getWrongScoreQueryHasManyScores(params: GetLogInfoParams, filterBy: number): WrongScoreGetLogInfoQuery[] {
+    return params.wrongScoreModels.map(x => {
+      return this.mapWrongScoreGetLogInfoQuery(x, filterBy, params.defaultFilterTimeWithAllowance);
     });
   }
 
+  getWrongScoreQueryHasRelatedEvent(params: GetLogInfoParams, filterBy: number): WrongScoreGetLogInfoQuery[] {
+    const allEvents = [params.mainEvent, ...params.relatedEvents]
+    const relatedEventsGetLogInfoQuery = allEvents.map(event => {
+      const wrongScoreGetLogInfoQuery = new WrongScoreGetLogInfoQuery();
+      wrongScoreGetLogInfoQuery.filterFromTransTime = event.isMainMatch || this.validationService.isHasAllowanceTime(event) ? params.defaultFilterTimeWithAllowance.fromDateTime : event.voidTimeArea.fromDateTime,
+        wrongScoreGetLogInfoQuery.filterToTransTime = event.isMainMatch || this.validationService.isHasAllowanceTime(event) ? params.defaultFilterTimeWithAllowance.toDateTime : event.voidTimeArea.toDateTime,
+        wrongScoreGetLogInfoQuery.matchId = event.matchId,
+        wrongScoreGetLogInfoQuery.filterBy = filterBy,
+        wrongScoreGetLogInfoQuery.subIssueTypeId = event.subIssueTypeId,
+        wrongScoreGetLogInfoQuery.aaTime = event.isMainMatch ? params.defaultFilterTimeWithAllowance.aaTime : event.voidTimeArea.aaTime,
+        wrongScoreGetLogInfoQuery.paTime = event.isMainMatch ? params.defaultFilterTimeWithAllowance.paTime : event.voidTimeArea.paTime,
+        wrongScoreGetLogInfoQuery.saTime = event.isMainMatch ? params.defaultFilterTimeWithAllowance.saTime : event.voidTimeArea.saTime
+
+      return wrongScoreGetLogInfoQuery;
+    });
+
+    return relatedEventsGetLogInfoQuery;
+  }
+
+  private getWrongScoreModel(params: GetLogInfoParams): WrongScoreGetLogInfoQuery[] {
+    const filterBy = this.eventWrongScoreService.getFilterByBaseOnSubIssueType(params.filter.subIssueTypeId);
+
+    if (params.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME) {
+      return this.getWrongScoreQueryHasRelatedEvent(params, filterBy);
+    }
+    else {
+      return this.getWrongScoreQueryHasManyScores(params, filterBy);
+    }
+  }
+
   /* istanbul ignore next */
-  public initGetLogInfoQueries(isEdit: boolean, requestId: number, filter: FilterModel,
-    wrongScoreModels: WrongScoreModel[], mainMatchId: number, defaultFilterTimeWithAllowance: FilterTimeWithAllowance): GetLogInfoQuery {
-    const getWrongScoreModels = this.getWrongScoreModel(filter, wrongScoreModels, mainMatchId, defaultFilterTimeWithAllowance);
+  public initGetLogInfoQueries(params: GetLogInfoParams): GetLogInfoQuery {
+    const getWrongScoreModels = this.getWrongScoreModel(params);
 
     const query: GetLogInfoQuery = {
-      requestId: isEdit ? requestId : null,
-      actionId: Number(filter.action),
-      issueTypeId: Number(filter.issueTypeId),
-      subIssueTypeId: Number(filter.subIssueTypeId),
+      requestId: params.isEdit ? params.requestId : null,
+      actionId: Number(params.filter.action),
+      issueTypeId: Number(params.filter.issueTypeId),
+      subIssueTypeId: Number(params.filter.subIssueTypeId),
       wrongScoreModels: getWrongScoreModels,
       isShowLogOnly: false,
     };
@@ -88,10 +103,13 @@ export class LogInfoService {
     return query;
   }
 
-  private assignResultsGetLogInfoRelatedEvent(logInfoModels: GetLogInfoModel[], wrongScoreModels: WrongScoreModel[]): void {
-    logInfoModels.forEach(model => {
-      const wrongScoreModel = wrongScoreModels.find(y => y.matchId === model.matchId);
-      this.assignResultsGetLogInfoToModel(model, wrongScoreModel);
+  private assignResultsGetLogInfoRelatedEvent(logInfoModels: GetLogInfoModel[], params: GetLogInfoParams): void {
+    const logInfoMainEvent = logInfoModels.find(x => x.matchId === params.mainEvent.matchId);
+    this.assignResultsGetLogInfoForRelatedEvent(logInfoMainEvent, params.mainEvent);
+
+    params.relatedEvents.forEach(event => {
+      const logInfoRelatedEvent = logInfoModels.find(x => x.matchId === event.matchId);
+      this.assignResultsGetLogInfoForRelatedEvent(logInfoRelatedEvent, event);
     });
   }
 
@@ -111,9 +129,18 @@ export class LogInfoService {
     wrongScoreModel.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel, wrongScoreModel.filterFromTransTime, wrongScoreModel.saTime);
   }
 
+  assignResultsGetLogInfoForRelatedEvent(logInfoModel: GetLogInfoModel, event: LogInfoRelatedEvent): void {
+    event.logInfoDetail = logInfoModel.logInfoDetail;
+    event.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel, event.voidTimeArea.fromDateTime, event.voidTimeArea.saTime);
+    if (this.validationService.isHasAllowanceTime(event) && logInfoModel.logInfoDetail) {
+      event.voidTimeArea.fromDateTime = moment(logInfoModel.logInfoDetail.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+      event.voidTimeArea.toDateTime = moment(logInfoModel.logInfoDetail.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    }
+  }
+
   /* istanbul ignore next */
-  public clearDataValidation(wrongScoreModels: WrongScoreModel[], events?: LogInfoRelatedEvent[]) {
-    wrongScoreModels.forEach(x => {
+  public clearDataValidation(wrongScoreModels: WrongScoreModel[], events: LogInfoRelatedEvent[], mainEvent: LogInfoRelatedEvent) {
+    wrongScoreModels?.forEach(x => {
       x.logInfoDetail = null;
       x.messageValidationLogInfo = null;
       x.voidFromTime = null;
@@ -122,6 +149,11 @@ export class LogInfoService {
     events?.forEach(x => {
       x.logInfoDetail = null;
       x.messageValidationLogInfo = null;
-    })
+    });
+
+    if (mainEvent) {
+      mainEvent.logInfoDetail = null;
+      mainEvent.messageValidationLogInfo = null;
+    }
   }
 }

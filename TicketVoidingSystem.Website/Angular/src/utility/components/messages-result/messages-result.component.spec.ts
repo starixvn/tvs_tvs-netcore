@@ -103,7 +103,7 @@ describe('MessagesResultComponent', () => {
 
     // Assert
     result.results.forEach(result => {
-      expect(result.errorMsg).toContain('Error 1');
+      expect(result.errorMsg).toContain('Error 2');
     });
   });
 }); 

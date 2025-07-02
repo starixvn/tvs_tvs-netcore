@@ -27,7 +27,7 @@
   <filter-time-area #filterTimeArea [isDisabled]="!isExistMatchEvent() || filter.isVoided" [isEdit]="isEdit"
     [tvDetectionValue]="mainEvent.tvDetectionModel.tvDetectionValue" [isVoided]="filter.isVoided"
     [(filterBy)]="primitiveProps.filterBy" [filterTimeWithAllowanceModel]="defaultFilterTimeWithAllowance"
-    (changeFilterEvent)="resetLogInfoAndHideAllEvents()">
+    (changeFilterEvent)="resetDateAfterChangeFilter()">
   </filter-time-area>
 
   <div class="mb-3">

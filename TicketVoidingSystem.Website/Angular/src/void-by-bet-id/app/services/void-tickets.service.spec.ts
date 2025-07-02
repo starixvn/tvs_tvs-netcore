@@ -77,7 +77,7 @@ describe('VoidTicketsService', () => {
       expect(result.reason).toBe('test reason');
       expect(result.reasonSC).toBe('test reason SC');
       expect(result.match).toEqual({ matchId: '123' });
-      expect(result.abnormalBetType).toBe(1);
+      expect(result.abnormalBetType).toBe("1");
       expect(result.message).toBe('test message');
       expect(result.guid).toContain('VoidByBetId-');
       expect(result.issueTypeId).toBe(11);

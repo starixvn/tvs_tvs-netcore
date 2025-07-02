@@ -5,8 +5,24 @@ import { AppComponent } from './app.component';
 import { AppService } from './app.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../utility/modules/testing.module';
+import { EventEmitter } from '@angular/core';
 
 jest.mock('../../utility/services/signal-r.service.native');
+
+// Mock SignalRService với các EventEmitter cần thiết
+const mockSignalRService = {
+  hubConnection: null,
+  requestStatusChange: new EventEmitter(),
+  notificationChange: new EventEmitter(),
+  notificationIconClass: new EventEmitter(),
+  toastr: null,
+  initializeConnection: jest.fn().mockResolvedValue(undefined),
+  registerEvent: jest.fn(),
+  registerReceiveRequestStatusModelEvent: jest.fn(),
+  registerReceiveNotification: jest.fn(),
+  configToastr: jest.fn()
+};
+
 class Helper {
   static readonly url = 'http://localhost:60196/415421';
   static readonly fakeRequestId = 50121;
@@ -41,7 +57,7 @@ class Helper {
     wrongOuModels: [],
     wrongOddsModels: [],
     reducedOverModels: [],
-    duplicateTicketsModel: null
+    duplicateTicketsModel: null,
   };
 }
 
@@ -50,11 +66,15 @@ describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
 
   beforeEach(async () => {
+    // Setup mock cho SignalRService
+    (SignalRService as jest.MockedClass<typeof SignalRService>).mockImplementation(() => mockSignalRService as any);
+
     await TestBed.configureTestingModule({
-      imports: [
-        TestingModule
-      ],
-      providers: [AppService, SignalRService]
+      imports: [TestingModule],
+      providers: [
+        AppService, 
+        { provide: SignalRService, useValue: mockSignalRService }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
@@ -85,8 +105,7 @@ describe('AppComponent', () => {
   });
 
   it('isLikelyVoidDangerAccepted should return true for danger accepted', async () => {
-    component.requestDetail = Helper.fakeRequestDetailViewModel;
-    component.requestDetail.request.issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
+    component.issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
 
     const actual = component.isLikelyVoidDangerAccepted();
 

@@ -22,8 +22,9 @@ export class ValidationBusinessRuleArgs {
   addRequestStore: AddRequestStore;
   filterWrongScoreComponent: FilterWrongScoreComponent;
   tvDetectionComponent: TvDetectionComponent;
-  allSelectedEvents: LogInfoRelatedEvent[];
+  relatedEvents?: LogInfoRelatedEvent[];
   defaultFilterTimeWithAllowance: FilterTimeWithAllowance;
+  mainEvent?: LogInfoRelatedEvent;
 }
 
 export class ValidationBusinessRuleOutput {

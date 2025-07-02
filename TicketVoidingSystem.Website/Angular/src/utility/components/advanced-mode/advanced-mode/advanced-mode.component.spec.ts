@@ -81,7 +81,7 @@ describe('AdvancedModeComponent', () => {
     component.matchId = Helper.fakeMatchId;
     component.allBetTypes = Helper.fakeBetTypes;
     const mockBetTeams = [
-      new BetTeam(['Test', '1', 1, '1'], [], [], [], false)
+      new BetTeam([0, 'Test', '1', 1, '1'], [], [], [], false)
     ];
     advancedModeService.getBetTeams = jest.fn().mockResolvedValue(mockBetTeams);
     commonService.getOddsInfoSpecialBetTypes = jest.fn().mockResolvedValue([]);
@@ -110,7 +110,7 @@ describe('AdvancedModeComponent', () => {
         oddsInfo: '1.5'
       }
     ];
-    const mockBetTeam = new BetTeam(['Test', '216', 1, '216'], [], [], [], false);
+    const mockBetTeam = new BetTeam([0, 'Test', '216', 1, '216'], [], [], [], false);
     const mockMultiSelection = {
       name: 'test',
       value: 'test',
@@ -139,7 +139,7 @@ describe('AdvancedModeComponent', () => {
   it('should render bet teams correctly', () => {
     // Arrange
     const mockBetTeams = [
-      new BetTeam(['Test', '1', 1, '1'], [], [], [], false)
+      new BetTeam([0, 'Test', '1', 1, '1'], [], [], [], false)
     ];
 
     // Act
@@ -229,7 +229,7 @@ describe('AdvancedModeComponent', () => {
   it('should validate bet types correctly', () => {
     // Arrange
     component.betTeams = [
-      new BetTeam(['Test', '1', 1, '1'], [], [], [], false)
+      new BetTeam([0, 'Test', '1', 1, '1'], [], [], [], false)
     ];
     component.allBetTypes = Helper.fakeBetTypes;
 
@@ -243,7 +243,7 @@ describe('AdvancedModeComponent', () => {
   it('should handle bet type changes correctly', () => {
     // Arrange
     const betType = Helper.fakeBetTypes[0];
-    const betTeam = new BetTeam(['Test', '1', 1, '1'], [], [], [], false);
+    const betTeam = new BetTeam([0, 'Test', '1', 1, '1'], [], [], [], false);
 
     // Act
     component['changeBetTeam'](betType, betTeam);
@@ -254,16 +254,16 @@ describe('AdvancedModeComponent', () => {
 
   it('should handle multiple decimal input change', () => {
     // Arrange
+    const testCase = [{valueInput:'1.5&2', expected:0}, {valueInput:'1', expected:0}, {valueInput:'a3', expected:1}];
     const betTypeId = '228';
-    const value = '1.5';
     const className = 'test-class';
     component.tooltip.display = jest.fn();
     component.tooltip.hide = jest.fn();
 
-    // Act
-    component.onChangeInputMultipleDecimal(betTypeId, value, className);
-
-    // Assert
-    expect(component.tooltip.hide).toHaveBeenCalled();
+    // Act and Assert
+    testCase.forEach(testCase => {
+      component['validateInputMultipleDecimal'](betTypeId, testCase.valueInput, className);
+      expect(component.tooltip.display).toHaveBeenCalledTimes(testCase.expected);
+    });
   });
 }); 

@@ -117,6 +117,6 @@ export class TicketsModel {
     }
 
     getCheckedBetIds(): string {
-        return this.groups.flatMap(group => group.getEnableTickets()).map(x => x.transId).join(',');
+        return this.groups?.flatMap(group => group.getEnableTickets()).map(x => x.transId).join(',') ?? '';
     }
 }

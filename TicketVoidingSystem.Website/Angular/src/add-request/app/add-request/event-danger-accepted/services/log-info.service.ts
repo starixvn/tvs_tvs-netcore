@@ -71,6 +71,7 @@ export class LogInfoService {
           event.voidTimeArea.toDateTime = moment(logInfo.logInfoDetail.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
           event.voidTimeArea.fromDateTime = moment(logInfo.logInfoDetail.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
         }
+        
         if (logInfo.logInfoDetail) {
           event.logInfoDetail.isHasWarningRangeTime = this.validationService.isHasWarningRangeTime(defaultFilterTimeWithAllowance.fromDateTime, logInfo.logInfoDetail?.transVoidToTime);
         }
@@ -83,25 +84,6 @@ export class LogInfoService {
     events.forEach(event => {
       event.logInfoDetail = null;
       event.messageValidationLogInfo = null;
-    });
-  }
-
-  public resetVoidTimeArea(events: LogInfoRelatedEvent[], defaultFilter: FilterTimeWithAllowance) {
-    events.forEach(event => {
-      event.voidTimeArea = {
-        saTime: defaultFilter.saTime,
-        aaTime: defaultFilter.aaTime,
-        paTime: defaultFilter.paTime,
-        fromDateTime: defaultFilter.fromDateTime,
-        toDateTime: defaultFilter.toDateTime
-      } as FilterTimeWithAllowance;
-    });
-  }
-
-  public resetIsCheckedVar(events: LogInfoRelatedEvent[]) {
-    events.forEach(event => {
-      event.isCheckedVar = null;
-      event.isHighLightVarCheck = null;
     });
   }
 

@@ -1,0 +1,62 @@
+@media only screen and (max-width: 1134px) {
+  .log-info {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 1134px) {
+  .log-info {
+    width: 1065px;
+  }
+}
+
+.log-info {
+  background-color: #fffef4;
+  width: 791px;
+  border: 1px solid #c6c8ca;
+  padding: 10px;
+}
+
+.text-red {
+  color: red;
+}
+
+.error-text {
+  color: #ed1c24;
+}
+
+
+.icon-warning-message,
+.icon-error-message {
+  padding-top: 2px;
+  width: 19px;
+}
+
+.icon-warning-message {
+  color: #cfb107;
+}
+
+.warning-text {
+  color: #856404;
+}
+
+.warning-text-shorten {
+  color: #856404;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.highlight-min-aa {
+  color: #ffc90e;
+}
+
+.highlight-min-sa {
+  color: #6699FF;
+}
+
+.highlight-min-pa {
+  color: #00d943;
+}

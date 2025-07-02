@@ -6,7 +6,7 @@ exports[`AppComponent AppComponent should init match snapshot 1`] = `
   isBlockUI={[Function Boolean]}
   isReadyRender="false"
   requestDetail={[Function RequestDetailViewModel]}
-  signalRService={[Function SignalRService]}
+  signalRService={[Function Object]}
 >
   <menu-bar>
     <div
@@ -21,45 +21,56 @@ exports[`AppComponent AppComponent should init match snapshot 1`] = `
         >
         </a>
         <div
-          class="user-info"
+          class="right-content"
         >
           <div
-            class="dropdown"
+            class="notification-wrapper"
+          >
+            <i
+              class="fa-solid fa-bell notification-icon"
+            />
+          </div>
+          <div
+            class="user-info"
           >
             <div
-              class="dropdown-user-info"
+              class="dropdown"
             >
-              <i
-                class="fa-solid fa-user"
-              />
-                Welcome,  
-              <span
-                class="user-name"
+              <div
+                class="dropdown-user-info"
               >
-              </span>
-              <i
-                class="fa-solid fa-sort-down"
-              />
-            </div>
-            <div
-              class="dropdown-content"
-            >
-              <li>
-                <a
-                  class="nav-link"
-                  href="Auth/ChangePassword"
+                <i
+                  class="fa-solid fa-user"
+                />
+                  Welcome,  
+                <span
+                  class="user-name"
                 >
-                  Change Password
-                </a>
-              </li>
-              <li>
-                <a
-                  class="nav-link"
-                  href="Auth/LogOut"
-                >
-                  Sign Out
-                </a>
-              </li>
+                </span>
+                <i
+                  class="fa-solid fa-sort-down"
+                />
+              </div>
+              <div
+                class="dropdown-content"
+              >
+                <li>
+                  <a
+                    class="nav-link"
+                    href="Auth/ChangePassword"
+                  >
+                    Change Password
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="nav-link"
+                    href="Auth/LogOut"
+                  >
+                    Sign Out
+                  </a>
+                </li>
+              </div>
             </div>
           </div>
         </div>
@@ -82,6 +93,8 @@ exports[`AppComponent AppComponent should init match snapshot 1`] = `
         </div>
       </nav>
     </div>
+    <notification-popup>
+    </notification-popup>
   </menu-bar><div
     class="title"
   >

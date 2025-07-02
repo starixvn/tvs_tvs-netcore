@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, SimpleChanges,OnChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import moment from 'moment-timezone';
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
@@ -15,7 +15,7 @@ import { TvDetectionService } from './tv-detection.service';
   standalone: true,
   imports: [FormsModule, TooltipComponent, CommonModule]
 })
-export class TvDetectionComponent implements OnInit {
+export class TvDetectionComponent implements OnInit, OnChanges {
   @Input() disabled: boolean;
   @Input() isEdit: boolean;
   @Input() model = new TvDetectionModel();
@@ -27,6 +27,12 @@ export class TvDetectionComponent implements OnInit {
 
   constructor() {
     this.tooltip.element = this.element;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['model']) {
+      this.isCheckedTvDetection = this.model.tvDetectionValue === TvDetectionType.SLOW || this.model.tvDetectionValue === TvDetectionType.FAST;
+    }
   }
 
   ngOnInit(): void {

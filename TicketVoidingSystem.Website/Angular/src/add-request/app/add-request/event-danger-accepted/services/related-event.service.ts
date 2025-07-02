@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment';
-import { DateTimeFormat, MatchType } from '../../../../../utility/constants/config';
+import { DateTimeFormat, MatchType, SubIssueTypeGroup } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
@@ -19,10 +19,6 @@ export class RelatedEventService {
   private readonly validationService = inject(ValidationService);
   private readonly logInfoService = inject(LogInfoService);
   private readonly eventDangerAcceptedService = inject(EventDangerAcceptedService);
-
-  async getChildMatches(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
-    return this.addRequestApiService.getChildMatches(query);
-  }
 
   assignChildMatchToLogInfoModel(models: ChildMatchModel[], defaultFilter: FilterTimeWithAllowance, defaultSubIssueTypeId: number): LogInfoRelatedEvent[] {
     const newEvents = models
@@ -67,7 +63,7 @@ export class RelatedEventService {
       query.isMainMatch = false;
       query.sportType = arg.mainEvent.sportType;
 
-      const models = await this.getChildMatches(query);
+      const models = await this.addRequestApiService.getChildMatches(query);
       if (!models ||models.length === 0) {
         arg.tooltip.display(arg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         arg.primitiveProps.isBlock = false;
@@ -92,13 +88,18 @@ export class RelatedEventService {
   }
 
   private async preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<LogInfoRelatedEvent[]> {
-    const newChildEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
+    const newChildEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && this.isAutoSelectMatch(arg.filter.subIssueTypeId, x.matchType, arg.mainEvent));
     const newEvents = this.assignChildMatchToLogInfoModel(newChildEvents, arg.defaultFilterTimeWithAllowance, arg.mainEvent.subIssueTypeId);
     const eventsGetLogInfo = _.cloneDeep(arg.allEvents);
     eventsGetLogInfo.push(...newEvents);
     await this.eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime(eventsGetLogInfo, arg.mainEvent, relatedEvents, arg.defaultFilterTimeWithAllowance);
 
     return eventsGetLogInfo;
+  }
+
+  private isAutoSelectMatch(subIssueTypeId: string, matchType: number, mainEvent: LogInfoRelatedEvent): boolean { 
+    return (SubIssueTypeGroup.SUBTYPE_AUTO_SELECT_LIST.includes(Number(subIssueTypeId)) && matchType === MatchType.CHILD)
+      || (mainEvent.parentId != mainEvent.matchId && matchType === MatchType.LINK);
   }
 
   private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: LogInfoRelatedEvent[], originalAllEvents: LogInfoRelatedEvent[]): void {

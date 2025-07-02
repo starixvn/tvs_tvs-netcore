@@ -222,7 +222,7 @@ describe('FilterComponent', () => {
       expect(component.abnormalBetType).toBeNull();
     });
 
-    it('should set abnormalBetType to "0" when includeMainParlay is false', () => {
+    it('should set abnormalBetType is null when includeMainParlay is false', () => {
       // Arrange
       component.includeMainParlay = false;
       component.abnormalBetType = null;
@@ -231,7 +231,7 @@ describe('FilterComponent', () => {
       component.changeAbnormalBetType();
 
       // Assert
-      expect(component.abnormalBetType).toBe('0');
+      expect(component.abnormalBetType).toBeNull();
     });
   });
 });

@@ -4,32 +4,37 @@ import { ValidationService } from './validation.service';
 import { AddRequestService } from '../../add-request.service';
 import { LogInfoService } from './log-info.service';
 import { PopupService } from '../../services/popup.service';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { SaveRequestArg } from './save-request.model';
+import { CreateMapService } from './create-map.service';
+import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
-import { AddRequestQuery } from '../../models/add-request.query';
-import { TvDetectionType } from '../../../../../utility/constants/config';
-import { ValidationBusinessRuleArgs } from './validation.model';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
   let validationService: ValidationService;
   let addRequestService: AddRequestService;
-  let logInfoService: LogInfoService;
   let popupService: PopupService;
+  let createMapService: CreateMapService;
+
+  const mockAddRequestStore = {
+    changeSavingRequestStatus: jest.fn(),
+    changeBlockingUiStatus: jest.fn()
+  };
+
+  const mockTooltip = {
+    display: jest.fn()
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TestingModule],
       providers: [
         SaveRequestService,
         {
           provide: ValidationService,
           useValue: {
             validateCommonData: jest.fn(),
-            isValidAllScores: jest.fn()
+            isAllWrongScoreModelsValid: jest.fn()
           }
         },
         {
@@ -42,7 +47,6 @@ describe('SaveRequestService', () => {
           provide: LogInfoService,
           useValue: {
             clearDataValidation: jest.fn(),
-            mapRelatedEventToWrongScoreModel: jest.fn(),
             getLogInfo: jest.fn()
           }
         },
@@ -51,6 +55,14 @@ describe('SaveRequestService', () => {
           useValue: {
             showError: jest.fn()
           }
+        },
+        {
+          provide: CreateMapService,
+          useValue: {
+            createGetLogInfoParams: jest.fn(),
+            mapRelatedEventToWrongScoreModel: jest.fn(),
+            mapWrongScoreSaveRequestModel: jest.fn()
+          }
         }
       ]
     });
@@ -58,337 +70,131 @@ describe('SaveRequestService', () => {
     service = TestBed.inject(SaveRequestService);
     validationService = TestBed.inject(ValidationService);
     addRequestService = TestBed.inject(AddRequestService);
-    logInfoService = TestBed.inject(LogInfoService);
     popupService = TestBed.inject(PopupService);
-  });
-
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+    createMapService = TestBed.inject(CreateMapService);
   });
 
   describe('onYesConfirmAddRequest', () => {
-    it('should save request directly when isVoided is true', async () => {
-      // Arrange
-      const args: SaveRequestArg = {
-        isVoided: true,
-        addRequestStore: {
-          changeSavingRequestStatus: jest.fn(),
-          changeBlockingUiStatus: jest.fn()
-        }
-      } as unknown as SaveRequestArg;
+    it('should save request when validation is valid', async () => {
+      const args = {
+        isVoided: false,
+        addRequestStore: mockAddRequestStore,
+        primitiveProps: { actualScore: '1-0' },
+        filter: {issueType: 3, subIssueTypeId: '4',
+        filterBy: TVSRequestFilterBy.CHECK_TIME},
+        others: {},
+        wrongScoreModels: [],
+        relatedEvents: []
+      };
+      (validationService.validateCommonData as jest.Mock).mockReturnValue(true);
+      (validationService.isAllWrongScoreModelsValid as jest.Mock).mockReturnValue(true);
+      (addRequestService.executeSaveRequest as jest.Mock).mockResolvedValue(undefined);
 
-      jest.spyOn(service, 'saveRequest').mockResolvedValue();
+      await service.onYesConfirmAddRequest(args as any);
 
-      // Act
-      await service.onYesConfirmAddRequest(args);
-
-      // Assert
-      expect(service.saveRequest).toHaveBeenCalledWith(args);
+      expect(addRequestService.executeSaveRequest).toHaveBeenCalled();
     });
 
-    it('should save request when validation passes', async () => {
-      // Arrange
-      const args: SaveRequestArg = {
+    it('should show error when validation is invalid', async () => {
+      const args = {
         isVoided: false,
-        addRequestStore: {
-          changeSavingRequestStatus: jest.fn(),
-          changeBlockingUiStatus: jest.fn()
-        }
-      } as unknown as SaveRequestArg;
-      service['checkValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue({ isValid: true, transInfo: '' });
+        addRequestStore: mockAddRequestStore
+      };
+      (validationService.validateCommonData as jest.Mock).mockReturnValue(false);
 
-      jest.spyOn(service, 'saveRequest').mockResolvedValue();
+      await service.onYesConfirmAddRequest(args as any);
 
-      // Act
-      await service.onYesConfirmAddRequest(args);
-
-      // Assert
-      expect(service.saveRequest).toHaveBeenCalledWith(args);
-    });
-
-    it('should show error when validation fails', async () => {
-      // Arrange
-      const args: SaveRequestArg = {
-        isVoided: false,
-        addRequestStore: {
-          changeSavingRequestStatus: jest.fn(),
-          changeBlockingUiStatus: jest.fn()
-        }
-      } as unknown as SaveRequestArg;
-      service['checkValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue({ isValid: false, transInfo: '' });
-
-      // Act
-      await service.onYesConfirmAddRequest(args);
-
-      // Assert
       expect(popupService.showError).toHaveBeenCalledWith('There are some invalid in this request, please check again!');
-      expect(args.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
-    });
-  });
-
-  describe('saveRequest', () => {
-    it('should execute save request with correct parameters', async () => {
-      // Arrange
-      const mockWrongScoreModel = {
-        matchId: 1,
-        actualScore: '1-0',
-        filterBy: 1,
-        subIssueTypeId: 1,
-        isCheckedVar: false,
-        tvDetectionValue: TvDetectionType.NONE,
-        isMainMatch: true
-      } as WrongScoreModel;
-
-      const args: SaveRequestArg = {
-        isEdit: false,
-        requestId: 123,
-        addRequestStore: {
-          changeBlockingUiStatus: jest.fn()
-        },
-        filter: {
-          issueTypeId: 1,
-          subIssueTypeId: '2',
-          action: '3',
-          isTest: true,
-          isVoided: false
-        },
-        others: {
-          mistakenBy: 1,
-          decidedBy: 2,
-          operatorsList: [1, 2],
-          provider: 'provider',
-          source: 'source',
-          remark: 'remark'
-        },
-        primitiveProps: {
-          transInfoAddRequestModel: {
-            transInfoJson: 'json',
-            unMarkTransIds: [1],
-            markTransIds: [2]
-          },
-          actualScore: '1-0',
-          isCheckedVar: false
-        },
-        allSelectedEvents: [],
-        wrongScoreModels: [mockWrongScoreModel],
-        leagueEventWrongScoreComponent: {
-          selectedMatch: { matchId: 1 }
-        },
-        tvDetectionComponent: {
-          tvDetectionValue: TvDetectionType.NONE
-        },
-        tvDetectionModel: {
-          tvDetectionValue: TvDetectionType.NONE,
-          serviceAcceptTime: new Date(),
-          actualTime: new Date()
-        }
-      } as unknown as SaveRequestArg;
-
-      // Act
-      await service.saveRequest(args);
-
-      // Assert
-      expect(args.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
-      expect(addRequestService.executeSaveRequest).toHaveBeenCalledWith(
-        args.isEdit,
-        args.requestId,
-        expect.any(AddRequestQuery),
-        args.addRequestStore
-      );
-      expect(args.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+      expect(mockAddRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
     });
   });
 
   describe('checkValidationBeforeSaveRequest', () => {
-    it('should return invalid when validateCommonData returns false', async () => {
-      // Arrange
-      const args: ValidationBusinessRuleArgs = {
-        addRequestStore: {
-          changeSavingRequestStatus: jest.fn(),
-          changeBlockingUiStatus: jest.fn()
-        },
+    it('should return invalid when common data validation fails', async () => {
+      const args = {
+        addRequestStore: mockAddRequestStore,
         filter: {},
         leagueEventWrongScoreComponent: {},
         filterWrongScoreComponent: {},
         wrongScoreInfoComponents: [],
         tvDetectionComponent: {}
-      } as unknown as ValidationBusinessRuleArgs;
-
+      };
       (validationService.validateCommonData as jest.Mock).mockReturnValue(false);
 
-      // Act
-      const result = await service.checkValidationBeforeSaveRequest(args);
+      const result = await service.checkValidationBeforeSaveRequest(args as any);
 
-      // Assert
       expect(result.isValid).toBeFalsy();
     });
 
-    it('should return invalid when actualScore is missing', async () => {
-      // Arrange
-      const args: ValidationBusinessRuleArgs = {
-        addRequestStore: {
-          changeSavingRequestStatus: jest.fn(),
-          changeBlockingUiStatus: jest.fn()
-        },
+    it('should return invalid when actual score is missing', async () => {
+      const args = {
+        addRequestStore: mockAddRequestStore,
         filter: {},
         leagueEventWrongScoreComponent: {},
         filterWrongScoreComponent: {},
         wrongScoreInfoComponents: [],
         tvDetectionComponent: {},
-        primitiveProps: {
-          actualScore: null
-        },
-        tooltip: {
-          display: jest.fn()
-        }
-      } as unknown as ValidationBusinessRuleArgs;
-
+        primitiveProps: { actualScore: null },
+        tooltip: mockTooltip
+      };
       (validationService.validateCommonData as jest.Mock).mockReturnValue(true);
 
-      // Act
-      const result = await service.checkValidationBeforeSaveRequest(args);
+      const result = await service.checkValidationBeforeSaveRequest(args as any);
 
-      // Assert
       expect(result.isValid).toBeFalsy();
-      expect(args.tooltip.display).toHaveBeenCalledWith('input-actual-score', LABELS.REQUIRED_ACTUAL_SCORE);
+      expect(mockTooltip.display).toHaveBeenCalledWith('input-actual-score', LABELS.REQUIRED_ACTUAL_SCORE);
     });
+  });
 
-    it('should return invalid when isValidAllScores returns false', async () => {
-      // Arrange
-      const mockWrongScoreModel = {
-        matchId: 1,
-        actualScore: '1-0',
-        filterBy: 1,
-        subIssueTypeId: 1,
-        isCheckedVar: false,
-        tvDetectionValue: TvDetectionType.NONE,
-        isMainMatch: true
-      } as WrongScoreModel;
+  describe('getWrongScoresHasRelatedEvent', () => {
+    it('should map related events to wrong score models', () => {
+      const args = {
+        mainEvent: { id: 1 },
+        relatedEvents: [{ id: 2 }]
+      };
+      const mockWrongScoreModel = new WrongScoreModel();
+      mockWrongScoreModel.matchId = 1;
+      mockWrongScoreModel.actualScore = '1-0';
+      mockWrongScoreModel.filterBy = TVSRequestFilterBy.CHECK_TIME;
+      mockWrongScoreModel.subIssueTypeId = 1;
+      mockWrongScoreModel.isCheckedVar = false;
+      mockWrongScoreModel.tvDetectionValue = 0;
+      mockWrongScoreModel.isMainMatch = true;
+      mockWrongScoreModel.logInfoDetail = new LogInfoDetail();
 
-      const args: ValidationBusinessRuleArgs = {
-        addRequestStore: {
-          changeSavingRequestStatus: jest.fn(),
-          changeBlockingUiStatus: jest.fn()
-        },
-        filter: {},
-        leagueEventWrongScoreComponent: {},
-        filterWrongScoreComponent: {},
-        wrongScoreInfoComponents: [],
-        tvDetectionComponent: {},
-        primitiveProps: {
-          actualScore: '1-0'
-        },
-        wrongScoreModels: [mockWrongScoreModel],
-        allSelectedEvents: [],
-        defaultFilterTimeWithAllowance: new FilterTimeWithAllowance(),
-        isEdit: false,
-        requestId: 123
-      } as unknown as ValidationBusinessRuleArgs;
+      (createMapService.mapRelatedEventToWrongScoreModel as jest.Mock).mockReturnValue(mockWrongScoreModel);
 
-      (validationService.validateCommonData as jest.Mock).mockReturnValue(true);
-      (validationService.isValidAllScores as jest.Mock).mockReturnValue(false);
-      (logInfoService.mapRelatedEventToWrongScoreModel as jest.Mock).mockReturnValue(mockWrongScoreModel);
+      const result = service.getWrongScoresHasRelatedEvent(args as any);
 
-      // Act
-      const result = await service.checkValidationBeforeSaveRequest(args);
-
-      // Assert
-      expect(result.isValid).toBeFalsy();
+      expect(result.length).toBe(2);
+      expect(createMapService.mapRelatedEventToWrongScoreModel).toHaveBeenCalledTimes(2);
     });
+  });
 
-    it('should return valid when all validations pass', async () => {
-      // Arrange
-      const mockWrongScoreModel = {
-        matchId: 1,
-        actualScore: '1-0',
-        filterBy: 1,
-        subIssueTypeId: 1,
-        isCheckedVar: false,
-        tvDetectionValue: TvDetectionType.NONE,
-        isMainMatch: true
-      } as WrongScoreModel;
+  describe('getWrongScoresHasManyScores', () => {
+    it('should map wrong score models with log info', () => {
+      const args = {
+        wrongScoreModels: [
+          { logInfoDetail: new LogInfoDetail() },
+          { logInfoDetail: null }
+        ]
+      };
+      const mockWrongScoreModel = new WrongScoreModel();
+      mockWrongScoreModel.matchId = 1;
+      mockWrongScoreModel.actualScore = '1-0';
+      mockWrongScoreModel.filterBy = TVSRequestFilterBy.CHECK_TIME;
+      mockWrongScoreModel.subIssueTypeId = 1;
+      mockWrongScoreModel.isCheckedVar = false;
+      mockWrongScoreModel.tvDetectionValue = 0;
+      mockWrongScoreModel.isMainMatch = true;
+      mockWrongScoreModel.logInfoDetail = new LogInfoDetail();
 
-      const args: ValidationBusinessRuleArgs = {
-        addRequestStore: {
-          changeSavingRequestStatus: jest.fn(),
-          changeBlockingUiStatus: jest.fn()
-        },
-        filter: {},
-        leagueEventWrongScoreComponent: {},
-        filterWrongScoreComponent: {},
-        wrongScoreInfoComponents: [],
-        tvDetectionComponent: {},
-        primitiveProps: {
-          actualScore: '1-0'
-        },
-        wrongScoreModels: [mockWrongScoreModel],
-        allSelectedEvents: [],
-        defaultFilterTimeWithAllowance: new FilterTimeWithAllowance(),
-        isEdit: false,
-        requestId: 123
-      } as unknown as ValidationBusinessRuleArgs;
+      (createMapService.mapWrongScoreSaveRequestModel as jest.Mock).mockReturnValue(mockWrongScoreModel);
 
-      (validationService.validateCommonData as jest.Mock).mockReturnValue(true);
-      (validationService.isValidAllScores as jest.Mock).mockReturnValue(true);
-      (logInfoService.mapRelatedEventToWrongScoreModel as jest.Mock).mockReturnValue(mockWrongScoreModel);
+      const result = service.getWrongScoresHasManyScores(args as any);
 
-      // Act
-      const result = await service.checkValidationBeforeSaveRequest(args);
-
-      // Assert
-      expect(result.isValid).toBeTruthy();
-      expect(result.transInfo).toBe('');
-    });
-
-    it('should update wrongScoreModels with related events', async () => {
-      // Arrange
-      const mockWrongScoreModel = {
-        matchId: 1,
-        actualScore: '1-0',
-        filterBy: 1,
-        subIssueTypeId: 1,
-        isCheckedVar: false,
-        tvDetectionValue: TvDetectionType.NONE,
-        isMainMatch: true
-      } as WrongScoreModel;
-
-      const args: ValidationBusinessRuleArgs = {
-        addRequestStore: {
-          changeSavingRequestStatus: jest.fn(),
-          changeBlockingUiStatus: jest.fn()
-        },
-        filter: {
-          subIssueTypeId: '1'
-        },
-        leagueEventWrongScoreComponent: {
-          selectedMatch: { matchId: 1 }
-        },
-        filterWrongScoreComponent: {},
-        wrongScoreInfoComponents: [],
-        tvDetectionComponent: {},
-        primitiveProps: {
-          actualScore: '1-0',
-          filterBy: 1,
-          isCheckedVar: false
-        },
-        wrongScoreModels: [mockWrongScoreModel],
-        allSelectedEvents: [],
-        defaultFilterTimeWithAllowance: new FilterTimeWithAllowance(),
-        tvDetectionModel: {
-          tvDetectionValue: TvDetectionType.NONE
-        }
-      } as unknown as ValidationBusinessRuleArgs;
-
-      (validationService.validateCommonData as jest.Mock).mockReturnValue(true);
-      (validationService.isValidAllScores as jest.Mock).mockReturnValue(true);
-      (logInfoService.mapRelatedEventToWrongScoreModel as jest.Mock).mockReturnValue(mockWrongScoreModel);
-
-      // Act
-      const result = await service.checkValidationBeforeSaveRequest(args);
-
-      // Assert
-      expect(result.isValid).toBeTruthy();
-      expect(args.wrongScoreModels).toContain(mockWrongScoreModel);
+      expect(result.length).toBe(1);
+      expect(createMapService.mapWrongScoreSaveRequestModel).toHaveBeenCalledTimes(1);
     });
   });
 });

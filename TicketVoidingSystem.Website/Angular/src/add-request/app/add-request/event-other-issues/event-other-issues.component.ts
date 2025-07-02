@@ -24,7 +24,6 @@ import { EventOtherIssuesService } from './services/event-other-issues.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { StaticService } from 'src/utility/services/static.service';
 
 @Component({
   selector: 'event-other-issues',

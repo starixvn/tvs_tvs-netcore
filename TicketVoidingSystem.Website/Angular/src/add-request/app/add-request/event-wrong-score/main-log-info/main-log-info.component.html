@@ -1,0 +1,47 @@
+@if(isShowLogInfo()) {
+  <div class="main-log-info mb-3">
+    <label class="col-form-label-sm"><strong>Main Event - Log Info</strong></label>
+    <div class="log-info">
+      @if (logInfo.logInfoDetail) {
+      <div>
+        <span>Live Score: </span><strong>{{logInfo.logInfoDetail.liveScores}}</strong>.
+        Void Accept Time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} -
+          {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
+        Affected Single Count: <strong>{{logInfo.logInfoDetail.singleCount}}</strong>
+        @if (isShowCountInfo(logInfo.logInfoDetail.cashOutCount,
+        logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount)) {
+        <span class="text-red"
+          [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>
+        },
+        Parlay Count: <strong>{{logInfo.logInfoDetail.mainParlayCount}}</strong>,
+        Min Time: <strong
+          [ngClass]="getHighlightMinTimeClass(logInfo.logInfoDetail.highlightMinTime)">{{displayMinTime(logInfo.logInfoDetail.highlightMinTime)}}</strong>,
+        TransId: <strong
+          [ngClass]="getHighlightMinTimeClass(logInfo.logInfoDetail.highlightMinTime)">{{logInfo.logInfoDetail.minTransId}}</strong>
+        {{logInfo.logInfoDetail.actionType}}<br />
+        Cancel Cash Out: <strong>{{logInfo.logInfoDetail.cancelCashOutCount}}</strong>
+      </div>
+      }
+      @if (logInfo.messageValidationLogInfo) {
+      <div class="message">
+        @for (msg of logInfo.messageValidationLogInfo; track msg) {
+        <span>
+          @if (msg.isError) {
+          <div class="error-text">
+            <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>{{msg.reason}}
+          </div>
+          }
+          @if (!msg.isError) {
+          <div [ngClass]="msg.isShowPopup ? 'warning-text-shorten' : 'warning-text'"
+            (click)="msg.isShowPopup && openPopupTransIds(msg.requestId, msg.transIds)">
+            <i class="fa fa-exclamation-triangle icon-warning-message" aria-hidden="true"></i>{{msg.reason}}
+          </div>
+          }
+        </span>
+        }
+      </div>
+      }
+    </div>
+  </div>
+}
+
