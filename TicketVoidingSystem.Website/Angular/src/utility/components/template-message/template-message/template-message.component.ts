@@ -214,7 +214,6 @@ export class TemplateMessageComponent implements OnChanges {
   issueTypeUpdateSpecialBetTypeTvs(): boolean {
     return this.isTVSVoidPage() && (StaticService.isOtherIssues(this.issueTypeId)
       || StaticService.isWrongMarketOffered(this.issueTypeId)
-      || StaticService.isTechnicalError(this.issueTypeId)
       || StaticService.isWrongOddsSportsBook(this.issueTypeId)
       || StaticService.isWrongHDP(this.issueTypeId)
       || StaticService.isWrongOU(this.issueTypeId)
@@ -224,7 +223,6 @@ export class TemplateMessageComponent implements OnChanges {
   issueTypeUpdateSpecialBetTypeVoidSingleBet(): boolean {
     return this.isVoidSinglePage() && (
       StaticService.isWrongMarketOffered(this.issueTypeId) ||
-      StaticService.isTechnicalError(this.issueTypeId) ||
       StaticService.isWrongOddsSportsBook(this.issueTypeId) ||
       StaticService.isWrongHDP(this.issueTypeId) ||
       StaticService.isWrongQuarterHDP(this.issueTypeId) ||
