@@ -11,8 +11,8 @@ import moment from 'moment-timezone';
 
 class Helper {
   static readonly fakeFilterWrongOddsModel = {
-    filterFromTransTime: moment().format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
-    filterToTransTime: moment().add(1, 'hour').format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
+    filterFromTransTime: moment('2025-06-19 10:00:00').format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
+    filterToTransTime: moment('2025-06-19 11:00:00').format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
     spread: '0.5',
     allowanceRate: '1',
     correctOddsHomeOver: '1.5',

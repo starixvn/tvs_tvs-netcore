@@ -8,14 +8,14 @@ import { FilterWrongScoreComponent } from '../filter-wrong-score/filter-wrong-sc
 import { TvDetectionComponent } from '../../components/tv-detection/tv-detection.component';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { TVSRequestActionType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { QueryList } from '@angular/core';
 import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { ValidationBusinessRuleArgs } from '../models/validation.model';
+import { PrimitiveProperty } from '../event-wrong-score.model';
 
 describe('ValidationService', () => {
   let service: ValidationService;
@@ -130,10 +130,6 @@ describe('ValidationService', () => {
         wrongScore: '',
         subIssueTypeId: 1,
         filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
         messageValidationLogInfo: [{ isError: false, reason: '' }],
         logInfoDetail: null
       } as WrongScoreModel;
@@ -145,10 +141,6 @@ describe('ValidationService', () => {
         wrongScore: '',
         subIssueTypeId: 1,
         filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
         messageValidationLogInfo: [{ isError: false, reason: '' }],
         logInfoDetail: null
       } as WrongScoreModel;
@@ -173,10 +165,6 @@ describe('ValidationService', () => {
         wrongScore: '',
         subIssueTypeId: 1,
         filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
         messageValidationLogInfo: [{ isError: false, reason: '' }],
         logInfoDetail: null
       } as WrongScoreModel;
@@ -188,10 +176,6 @@ describe('ValidationService', () => {
         wrongScore: '',
         subIssueTypeId: 1,
         filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
         messageValidationLogInfo: [{ isError: false, reason: '' }],
         logInfoDetail: null
       } as WrongScoreModel;
@@ -218,10 +202,6 @@ describe('ValidationService', () => {
         subIssueTypeId: 1,
         filterFromTransTime: '',
         filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
         messageValidationLogInfo: [{ isError: false, reason: '' }],
         logInfoDetail: null
       } as WrongScoreModel;
@@ -233,10 +213,6 @@ describe('ValidationService', () => {
         subIssueTypeId: 1,
         filterFromTransTime: '',
         filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
         messageValidationLogInfo: [{ isError: false, reason: '' }],
         logInfoDetail: null
       } as WrongScoreModel;
@@ -248,10 +224,6 @@ describe('ValidationService', () => {
         subIssueTypeId: 1,
         filterFromTransTime: '',
         filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
         messageValidationLogInfo: [{ isError: false, reason: '' }],
         logInfoDetail: null
       } as WrongScoreModel;
@@ -276,10 +248,6 @@ describe('ValidationService', () => {
         wrongScore: '',
         subIssueTypeId: 1,
         filterFromTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
         messageValidationLogInfo: [{ isError: false, reason: '' }],
         logInfoDetail: null
       } as WrongScoreModel;
@@ -291,10 +259,6 @@ describe('ValidationService', () => {
         wrongScore: '',
         subIssueTypeId: 1,
         filterFromTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
         messageValidationLogInfo: [{ isError: false, reason: '' }],
         logInfoDetail: null
       } as WrongScoreModel;
@@ -306,10 +270,6 @@ describe('ValidationService', () => {
         wrongScore: '',
         subIssueTypeId: 1,
         filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
         messageValidationLogInfo: [{ isError: false, reason: '' }],
         logInfoDetail: null
       } as WrongScoreModel;
@@ -326,25 +286,80 @@ describe('ValidationService', () => {
     });
   });
 
+  describe('isAllWrongScoreModelsValid', () => {
+    it('should return true when filterBy is CHECK_TIME and all events are valid', () => {
+      // Arrange
+      const args: ValidationBusinessRuleArgs = {
+        primitiveProps: {
+          filterBy: TVSRequestFilterBy.CHECK_TIME
+        },
+        mainEvent: {
+          isMainMatch: true,
+          messageValidationLogInfo: [{ isError: false }]
+        } as LogInfoRelatedEvent,
+        relatedEvents: [{
+          isMainMatch: false,
+          messageValidationLogInfo: [{ isError: false }]
+        } as LogInfoRelatedEvent],
+        wrongScoreModels: []
+      } as unknown as ValidationBusinessRuleArgs;
+
+      // Act
+      const result = service.isAllWrongScoreModelsValid(args);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false when filterBy is CHECK_TIME and main event has error', () => {
+      // Arrange
+      const args: ValidationBusinessRuleArgs = {
+        primitiveProps: {
+          filterBy: TVSRequestFilterBy.CHECK_TIME
+        },
+        mainEvent: {
+          isMainMatch: true,
+          messageValidationLogInfo: [{ isError: true }]
+        } as LogInfoRelatedEvent,
+        relatedEvents: [],
+        wrongScoreModels: []
+      } as unknown as ValidationBusinessRuleArgs;
+
+      // Act
+      const result = service.isAllWrongScoreModelsValid(args);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
+
+    it('should return true when filterBy is not CHECK_TIME and at least one score is valid', () => {
+      // Arrange
+      const args = {
+        primitiveProps: {
+          filterBy: TVSRequestFilterBy.TRANS_TIME
+        } as unknown as PrimitiveProperty,
+        mainEvent: null,
+        relatedEvents: [],
+        wrongScoreModels: [{
+          messageValidationLogInfo: [{ isError: false }]
+        }]
+      } as unknown as ValidationBusinessRuleArgs;
+
+      // Act
+      const result = service.isAllWrongScoreModelsValid(args);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+  });
+
   describe('isValidAllScores', () => {
     it('should return true when at least one score has no errors', () => {
       // Arrange
-      const wrongScoreModel = {
-        scoreId: 1,
-        isActive: true,
-        wrongScore: '',
-        subIssueTypeId: 1,
-        filterFromTransTime: '',
-        filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
-        messageValidationLogInfo: [{ isError: false, reason: '' }],
-        logInfoDetail: null
-      } as WrongScoreModel;
-
-      const wrongScores = [wrongScoreModel];
+      const wrongScores = [
+        { messageValidationLogInfo: [{ isError: true }] },
+        { messageValidationLogInfo: [{ isError: false }] }
+      ] as WrongScoreModel[];
 
       // Act
       const result = service.isValidAllScores(wrongScores);
@@ -355,22 +370,10 @@ describe('ValidationService', () => {
 
     it('should return false when all scores have errors', () => {
       // Arrange
-      const wrongScoreModel = {
-        scoreId: 1,
-        isActive: true,
-        wrongScore: '',
-        subIssueTypeId: 1,
-        filterFromTransTime: '',
-        filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
-        messageValidationLogInfo: [{ isError: true, reason: '' }],
-        logInfoDetail: null
-      } as WrongScoreModel;
-
-      const wrongScores = [wrongScoreModel];
+      const wrongScores = [
+        { messageValidationLogInfo: [{ isError: true }] },
+        { messageValidationLogInfo: [{ isError: true }] }
+      ] as WrongScoreModel[];
 
       // Act
       const result = service.isValidAllScores(wrongScores);
@@ -381,11 +384,11 @@ describe('ValidationService', () => {
   });
 
   describe('isHasWarningEditTakeNoteRequest', () => {
-    it('should return true when editing take note request', () => {
+    it('should return true when editing take note request with different action ID', () => {
       // Arrange
       const isEdit = true;
       const currentActionId = TVSRequestActionType.TAKE_NOTE_ID.toString();
-      const actionIdOfFirstTime = '1';
+      const actionIdOfFirstTime = '3';
 
       // Act
       const result = service.isHasWarningEditTakeNoteRequest(isEdit, currentActionId, actionIdOfFirstTime);
@@ -394,11 +397,11 @@ describe('ValidationService', () => {
       expect(result).toBeTruthy();
     });
 
-    it('should return false when not editing take note request', () => {
+    it('should return false when not editing', () => {
       // Arrange
-      const isEdit = true;
-      const currentActionId = '1';
-      const actionIdOfFirstTime = '1';
+      const isEdit = false;
+      const currentActionId = TVSRequestActionType.TAKE_NOTE_ID.toString();
+      const actionIdOfFirstTime = '2';
 
       // Act
       const result = service.isHasWarningEditTakeNoteRequest(isEdit, currentActionId, actionIdOfFirstTime);
@@ -409,158 +412,73 @@ describe('ValidationService', () => {
   });
 
   describe('isValidationHasWarningTicket', () => {
-    it('should return true when at least one score has validation messages', () => {
+    it('should return true when wrong score models have validation messages', () => {
       // Arrange
-      const wrongScoreModel = {
-        scoreId: 1,
-        isActive: true,
-        wrongScore: '',
-        subIssueTypeId: 1,
-        filterFromTransTime: '',
-        filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
-        messageValidationLogInfo: [{ isError: true, reason: '' }],
-        logInfoDetail: null
-      } as WrongScoreModel;
-
-      const wrongScoreModels = [wrongScoreModel];
+      const wrongScoreModels = [{
+        messageValidationLogInfo: [{ isError: true }]
+      }] as WrongScoreModel[];
+      const relatedEvents = [] as LogInfoRelatedEvent[];
 
       // Act
-      const result = service.isValidationHasWarningTicket(wrongScoreModels);
+      const result = service.isValidationHasWarningTicket(wrongScoreModels, relatedEvents);
 
       // Assert
       expect(result).toBeTruthy();
     });
 
-    it('should return false when no scores have validation messages', () => {
+    it('should return true when related events have validation messages', () => {
       // Arrange
-      const wrongScoreModel = {
-        scoreId: 1,
-        isActive: true,
-        wrongScore: '',
-        subIssueTypeId: 1,
-        filterFromTransTime: '',
-        filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
-        messageValidationLogInfo: [],
-        logInfoDetail: null
-      } as WrongScoreModel;
-
-      const wrongScoreModels = [wrongScoreModel];
+      const wrongScoreModels = [] as WrongScoreModel[];
+      const relatedEvents = [{
+        messageValidationLogInfo: [{ isError: true }]
+      }] as LogInfoRelatedEvent[];
 
       // Act
-      const result = service.isValidationHasWarningTicket(wrongScoreModels);
+      const result = service.isValidationHasWarningTicket(wrongScoreModels, relatedEvents);
 
       // Assert
-      expect(result).toBeFalsy();
+      expect(result).toBeTruthy();
     });
   });
 
   describe('isHasWarningSettledTicket', () => {
-    it('should return true when at least one score has settled tickets', () => {
+    it('should return true when wrong score models have settled tickets', () => {
       // Arrange
-      const wrongScoreModel = {
-        scoreId: 1,
-        isActive: true,
-        wrongScore: '',
-        subIssueTypeId: 1,
-        filterFromTransTime: '',
-        filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
-        messageValidationLogInfo: [],
-      } as WrongScoreModel;
-      wrongScoreModel.logInfoDetail = {
-        matchId: 1,
-        liveScores: [],
-        voidFromTime: '',
-        voidToTime: '',
-        settleCount: 1,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
-        messageValidationLogInfo: [],
-        isActive: true,
-        isChecked: false,
-        isDisabled: false,
-        isEdit: false,
-        isMainMatch: false,
-        leagueName: '',
-        eventName: '',
-        subIssueTypeId: 1,
-        voidTimeArea: { aaTime: null, paTime: null, saTime: null }
-      } as unknown as LogInfoDetail;
-      const wrongScoreModels = [wrongScoreModel];
+      const wrongScoreModels = [{
+        logInfoDetail: { settleCount: 1 }
+      }] as WrongScoreModel[];
+      const relatedEvents = [] as LogInfoRelatedEvent[];
 
       // Act
-      const result = service.isHasWarningSettledTicket(wrongScoreModels);
+      const result = service.isHasWarningSettledTicket(wrongScoreModels, relatedEvents);
 
       // Assert
       expect(result).toBeTruthy();
     });
 
-    it('should return false when no scores have settled tickets', () => {
+    it('should return true when related events have settled tickets', () => {
       // Arrange
-      const wrongScoreModel = {
-        scoreId: 1,
-        isActive: true,
-        wrongScore: '',
-        subIssueTypeId: 1,
-        filterFromTransTime: '',
-        filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
-        messageValidationLogInfo: [],
-        logInfoDetail: {
-          matchId: 1,
-          liveScores: [],
-          voidFromTime: '',
-          voidToTime: '',
-          settleCount: 0,
-          aaTime: null,
-          paTime: null,
-          saTime: null,
-          messageValidationLogInfo: [],
-          isActive: true,
-          isChecked: false,
-          isDisabled: false,
-          isEdit: false,
-          isMainMatch: false,
-          leagueName: '',
-          eventName: '',
-          subIssueTypeId: 1,
-          voidTimeArea: { aaTime: null, paTime: null, saTime: null } as FilterTimeWithAllowance
-        } as unknown as LogInfoDetail
-      } as WrongScoreModel;
-
-      const wrongScoreModels = [wrongScoreModel];
+      const wrongScoreModels = [] as WrongScoreModel[];
+      const relatedEvents = [{
+        logInfoDetail: { settleCount: 1 }
+      }] as LogInfoRelatedEvent[];
 
       // Act
-      const result = service.isHasWarningSettledTicket(wrongScoreModels);
+      const result = service.isHasWarningSettledTicket(wrongScoreModels, relatedEvents);
 
       // Assert
-      expect(result).toBeFalsy();
+      expect(result).toBeTruthy();
     });
   });
 
   describe('isHasAllowanceTime', () => {
     it('should return true when event has allowance time', () => {
       // Arrange
-      const event: LogInfoRelatedEvent = {
+      const event = {
         voidTimeArea: {
           aaTime: 1,
-          paTime: 2,
-          saTime: 3
+          paTime: 0,
+          saTime: 0
         }
       } as LogInfoRelatedEvent;
 
@@ -573,7 +491,7 @@ describe('ValidationService', () => {
 
     it('should return true when all allowance times are 0', () => {
       // Arrange
-      const event: LogInfoRelatedEvent = {
+      const event = {
         voidTimeArea: {
           aaTime: 0,
           paTime: 0,
@@ -590,7 +508,7 @@ describe('ValidationService', () => {
 
     it('should return false when no allowance time is set', () => {
       // Arrange
-      const event: LogInfoRelatedEvent = {
+      const event = {
         voidTimeArea: {
           aaTime: null,
           paTime: null,
@@ -606,78 +524,84 @@ describe('ValidationService', () => {
     });
   });
 
-  describe('isValidAllSubIssueType', () => {
-    it('should return true when all components have subIssueTypeId', () => {
+  describe('isHasAllowanceTimeWrongScoreModel', () => {
+    it('should return true when model has allowance time', () => {
       // Arrange
-      const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
-      const components = [
-        {
-          isEdit: false,
-          requestId: 1,
-          isMainMatch: false,
-          isDisabled: false,
-          leagueName: '',
-          eventName: '',
-          subIssueTypeId: 1,
-          voidTimeArea: { aaTime: null, paTime: null, saTime: null } as FilterTimeWithAllowance,
-          logInfo: { subIssueTypeId: 1 },
-          showTooltipSubType: jest.fn()
-        } as unknown as LogInfoRelatedEventComponent,
-        {
-          isEdit: false,
-          requestId: 1,
-          isMainMatch: false,
-          isDisabled: false,
-          leagueName: '',
-          eventName: '',
-          subIssueTypeId: 2,
-          voidTimeArea: { aaTime: null, paTime: null, saTime: null },
-          logInfo: { subIssueTypeId: 2 },
-          showTooltipSubType: jest.fn()
-        } as unknown as LogInfoRelatedEventComponent
-      ];
-      logInfoComponents.reset(components);
+      const model = {
+        aaTime: 1,
+        paTime: 0,
+        saTime: 0
+      } as WrongScoreModel;
 
       // Act
-      const result = service.isValidAllSubIssueType(logInfoComponents);
+      const result = service.isHasAllowanceTimeWrongScoreModel(model);
 
       // Assert
       expect(result).toBeTruthy();
     });
 
-    it('should return false and show tooltip when a component is missing subIssueTypeId', () => {
+    it('should return true when all allowance times are 0', () => {
       // Arrange
-      const logInfoComponents = new QueryList<LogInfoRelatedEventComponent>();
-      const components = [
-        {
-          isEdit: false,
-          requestId: 1,
-          isMainMatch: false,
-          isDisabled: false,
-          leagueName: '',
-          eventName: '',
-          subIssueTypeId: 1,
-          voidTimeArea: { aaTime: null, paTime: null, saTime: null },
-          logInfo: { subIssueTypeId: 1 },
-          showTooltipSubType: jest.fn()
-        } as unknown as LogInfoRelatedEventComponent,
-        {
-          isEdit: false,
-          requestId: 1,
-          isMainMatch: false,
-          isDisabled: false,
-          leagueName: '',
-          eventName: '',
-          subIssueTypeId: null,
-          voidTimeArea: { aaTime: null, paTime: null, saTime: null },
-          logInfo: { subIssueTypeId: null },
-          showTooltipSubType: jest.fn()
-        } as unknown as LogInfoRelatedEventComponent
-      ];
-      logInfoComponents.reset(components);
+      const model = {
+        aaTime: 0,
+        paTime: 0,
+        saTime: 0
+      } as WrongScoreModel;
 
       // Act
-      const result = service.isValidAllSubIssueType(logInfoComponents);
+      const result = service.isHasAllowanceTimeWrongScoreModel(model);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false when no allowance time is set', () => {
+      // Arrange
+      const model = {
+        aaTime: null,
+        paTime: null,
+        saTime: null
+      } as WrongScoreModel;
+
+      // Act
+      const result = service.isHasAllowanceTimeWrongScoreModel(model);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
+  });
+
+  describe('isValidAllSubIssueType', () => {
+    it('should return true when all components have subIssueTypeId', () => {
+      // Arrange
+      const components = [
+        { logInfo: { subIssueTypeId: 1 }, showTooltipSubType: jest.fn() },
+        { logInfo: { subIssueTypeId: 2 }, showTooltipSubType: jest.fn() }
+      ] as unknown as LogInfoRelatedEventComponent[];
+
+      const queryList = new QueryList<LogInfoRelatedEventComponent>();
+      queryList.reset(components);
+
+      // Act
+      const result = service.isValidAllSubIssueType(queryList);
+
+      // Assert
+      expect(result).toBeTruthy();
+      components.forEach(comp => expect(comp.showTooltipSubType).not.toHaveBeenCalled());
+    });
+
+    it('should return false and show tooltip when any component is missing subIssueTypeId', () => {
+      // Arrange
+      const components = [
+        { logInfo: { subIssueTypeId: 1 }, showTooltipSubType: jest.fn() },
+        { logInfo: { subIssueTypeId: null }, showTooltipSubType: jest.fn() }
+      ] as unknown as LogInfoRelatedEventComponent[];
+
+      const queryList = new QueryList<LogInfoRelatedEventComponent>();
+      queryList.reset(components);
+
+      // Act
+      const result = service.isValidAllSubIssueType(queryList);
 
       // Assert
       expect(result).toBeFalsy();
@@ -685,32 +609,8 @@ describe('ValidationService', () => {
     });
   });
 
-  describe('isSubTypeFilterByAcceptedTime', () => {
-    it('should return true when subIssueTypeId is in the map', () => {
-      // Arrange
-      const subIssueTypeId = SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_NO_ONWARDS;
-
-      // Act
-      const result = service.isSubTypeFilterByAcceptedTime(subIssueTypeId.toString());
-
-      // Assert
-      expect(result).toBeTruthy();
-    });
-
-    it('should return false when subIssueTypeId is not in the map', () => {
-      // Arrange
-      const subIssueTypeId = '999';
-
-      // Act
-      const result = service.isSubTypeFilterByAcceptedTime(subIssueTypeId);
-
-      // Assert
-      expect(result).toBeFalsy();
-    });
-  });
-
   describe('isSubTypeFilterByTransTimeAndAcceptedTime', () => {
-    it('should return true for valid sub issue types', () => {
+    it('should return true for WRONG_INDICATION_SWAP_TEAM_SCORE_NO_ONWARDS', () => {
       // Arrange
       const subIssueTypeId = SubIssueTypeConstant.WRONG_INDICATION_SWAP_TEAM_SCORE_NO_ONWARDS.toString();
 
@@ -721,7 +621,18 @@ describe('ValidationService', () => {
       expect(result).toBeTruthy();
     });
 
-    it('should return false for invalid sub issue types', () => {
+    it('should return true for WRONG_INDICATION_SWAP_TEAM_SCORE_ONWARDS', () => {
+      // Arrange
+      const subIssueTypeId = SubIssueTypeConstant.WRONG_INDICATION_SWAP_TEAM_SCORE_ONWARDS.toString();
+
+      // Act
+      const result = service.isSubTypeFilterByTransTimeAndAcceptedTime(subIssueTypeId);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false for other sub issue types', () => {
       // Arrange
       const subIssueTypeId = '999';
 
@@ -736,51 +647,11 @@ describe('ValidationService', () => {
   describe('isLastScore', () => {
     it('should return true when score is the last one', () => {
       // Arrange
-      const wrongScoreModel = {
-        scoreId: 2,
-        isActive: true,
-        wrongScore: '',
-        subIssueTypeId: 1,
-        filterFromTransTime: '',
-        filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
-        messageValidationLogInfo: [{ isError: false, reason: '' }],
-        logInfoDetail: null
-      } as WrongScoreModel;
-
+      const wrongScoreModel = { scoreId: 2 } as WrongScoreModel;
       const originWrongScoreModels = [
-        {
-          scoreId: 1,
-          isActive: true,
-          wrongScore: '',
-          subIssueTypeId: 1,
-          filterFromTransTime: '',
-          filterToTransTime: '',
-          isChecked: false,
-          aaTime: null,
-          paTime: null,
-          saTime: null,
-          messageValidationLogInfo: [],
-          logInfoDetail: null
-        } as WrongScoreModel,
-        {
-          scoreId: 2,
-          isActive: true,
-          wrongScore: '',
-          subIssueTypeId: 1,
-          filterFromTransTime: '',
-          filterToTransTime: '',
-          isChecked: false,
-          aaTime: null,
-          paTime: null,
-          saTime: null,
-          messageValidationLogInfo: [{ isError: false, reason: '' }],
-          logInfoDetail: null
-        } as WrongScoreModel
-      ];
+        { scoreId: 1 },
+        { scoreId: 2 }
+      ] as WrongScoreModel[];
 
       // Act
       const result = service.isLastScore(wrongScoreModel, originWrongScoreModels);
@@ -791,51 +662,11 @@ describe('ValidationService', () => {
 
     it('should return false when score is not the last one', () => {
       // Arrange
-      const wrongScoreModel = {
-        scoreId: 1,
-        isActive: true,
-        wrongScore: '',
-        subIssueTypeId: 1,
-        filterFromTransTime: '',
-        filterToTransTime: '',
-        isChecked: false,
-        aaTime: null,
-        paTime: null,
-        saTime: null,
-        messageValidationLogInfo: [{ isError: false, reason: '' }],
-        logInfoDetail: null
-      } as WrongScoreModel;
-
+      const wrongScoreModel = { scoreId: 1 } as WrongScoreModel;
       const originWrongScoreModels = [
-        {
-          scoreId: 1,
-          isActive: true,
-          wrongScore: '',
-          subIssueTypeId: 1,
-          filterFromTransTime: '',
-          filterToTransTime: '',
-          isChecked: false,
-          aaTime: null,
-          paTime: null,
-          saTime: null,
-          messageValidationLogInfo: [],
-          logInfoDetail: null
-        } as WrongScoreModel,
-        {
-          scoreId: 2,
-          isActive: true,
-          wrongScore: '',
-          subIssueTypeId: 1,
-          filterFromTransTime: '',
-          filterToTransTime: '',
-          isChecked: false,
-          aaTime: null,
-          paTime: null,
-          saTime: null,
-          messageValidationLogInfo: [{ isError: false, reason: '' }],
-          logInfoDetail: null
-        } as WrongScoreModel
-      ];
+        { scoreId: 1 },
+        { scoreId: 2 }
+      ] as WrongScoreModel[];
 
       // Act
       const result = service.isLastScore(wrongScoreModel, originWrongScoreModels);
@@ -859,19 +690,6 @@ describe('ValidationService', () => {
       expect(result).toBeTruthy();
     });
 
-    it('should return false when editing by same user', () => {
-      // Arrange
-      const isEdit = true;
-      const editingBy = 1;
-      const createdBy = 1;
-
-      // Act
-      const result = service.isEditingByAnotherUser(isEdit, editingBy, createdBy);
-
-      // Assert
-      expect(result).toBeFalsy();
-    });
-
     it('should return false when not editing', () => {
       // Arrange
       const isEdit = false;
@@ -884,15 +702,28 @@ describe('ValidationService', () => {
       // Assert
       expect(result).toBeFalsy();
     });
+
+    it('should return false when editing by same user', () => {
+      // Arrange
+      const isEdit = true;
+      const editingBy = 1;
+      const createdBy = 1;
+
+      // Act
+      const result = service.isEditingByAnotherUser(isEdit, editingBy, createdBy);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
   });
 
   describe('isValidInputRelatedEvent', () => {
-    it('should return false when input matchId equals main matchId', () => {
+    it('should return false when input match ID equals main match ID', () => {
       // Arrange
       const inputMatchId = 1;
       const inputMatchIdClass = 'input-match-id';
       const mainMatchId = 1;
-      const allEvents = [];
+      const allEvents = [] as LogInfoRelatedEvent[];
       const tooltip = { display: jest.fn() } as unknown as Tooltip;
 
       // Act
@@ -903,21 +734,14 @@ describe('ValidationService', () => {
       expect(tooltip.display).toHaveBeenCalledWith(inputMatchIdClass, LABELS.INVALID_MATCHID);
     });
 
-    it('should return false when matchId exists in list', () => {
+    it('should return false when input match ID exists in related events', () => {
       // Arrange
       const inputMatchId = 2;
       const inputMatchIdClass = 'input-match-id';
       const mainMatchId = 1;
       const allEvents = [
-        {
-          isMainMatch: false,
-          matchId: 2,
-          leagueName: '',
-          eventName: '',
-          subIssueTypeId: 1,
-          voidTimeArea: { aaTime: null, paTime: null, saTime: null }
-        } as LogInfoRelatedEvent
-      ];
+        { isMainMatch: false, matchId: 2 }
+      ] as LogInfoRelatedEvent[];
       const tooltip = { display: jest.fn() } as unknown as Tooltip;
 
       // Act
@@ -928,21 +752,14 @@ describe('ValidationService', () => {
       expect(tooltip.display).toHaveBeenCalledWith(inputMatchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
     });
 
-    it('should return true when input is valid', () => {
+    it('should return true when input match ID is valid', () => {
       // Arrange
       const inputMatchId = 2;
       const inputMatchIdClass = 'input-match-id';
       const mainMatchId = 1;
       const allEvents = [
-        {
-          isMainMatch: false,
-          matchId: 3,
-          leagueName: '',
-          eventName: '',
-          subIssueTypeId: 1,
-          voidTimeArea: { aaTime: null, paTime: null, saTime: null }
-        } as LogInfoRelatedEvent
-      ];
+        { isMainMatch: false, matchId: 3 }
+      ] as LogInfoRelatedEvent[];
       const tooltip = { display: jest.fn() } as unknown as Tooltip;
 
       // Act

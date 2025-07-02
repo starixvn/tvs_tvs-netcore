@@ -8,7 +8,6 @@ import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { PasswordService } from '../../utility/services/password.service';
 import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { FilterComponent } from './filter/filter.component';
-import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { GetTicketsQuery, FilterParams } from './models/query.model';
 import { TicketsModel } from '../../utility/components/tickets/tickets.model';
 import { MatchModel } from '../../utility/models/match.model';
@@ -19,7 +18,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PagingModel } from '../../utility/components/paging/paging.model';
 import { SportType } from '../../utility/constants/sport.constant';
 import { BetID } from '../../utility/models/bet-id.model';
-import { GroupModel } from './tickets/group.model';
+import { ConfirmationComponent } from '../../utility/components/confirmation/confirmation.component';
+import { GroupModel } from '../../utility/components/tickets/group.model';
 
 class Helper {
   static readonly fakeMatchModel = {
@@ -120,23 +120,9 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        TestingModule,
-        ToastrModule.forRoot(),
-        BrowserAnimationsModule,
-        FilterComponent,
-        ConfirmationComponent,
-        AppComponent
-      ],
-      declarations: [],
-      providers: [
-        AppService,
-        BlockUiService,
-        ModalService,
-        SignalRService,
-        PasswordService,
-        TemplateService,
-      ]
+      imports: [ TestingModule, ToastrModule.forRoot(), BrowserAnimationsModule,
+        FilterComponent, ConfirmationComponent, AppComponent ],
+      providers: [ AppService, BlockUiService, ModalService, SignalRService, PasswordService, TemplateService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);

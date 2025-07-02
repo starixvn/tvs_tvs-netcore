@@ -1,16 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { ConfirmationComponent } from './confirmation.component';
-import { LABELS } from '../../../utility/constants/labels';
-import { VoidedReason } from '../../../utility/models/reason.model';
+import { TEXT } from '../../../utility/constants/text';
 import { EventEmitter } from '@angular/core';
 
 class Helper {
   static readonly fakeUserName = 'testUser';
-  static readonly fakeVoidReason: VoidedReason = {
-    reasonEnglish: 'Test Reason',
-    reasonChineseSimplified: '测试原因'
-  } as VoidedReason;
 }
 
 describe('ConfirmationComponent', () => {
@@ -34,31 +29,29 @@ describe('ConfirmationComponent', () => {
   it('should initialize with default values', () => {
     expect(component.confirmation.userName).toBe(Helper.fakeUserName);
     expect(component.confirmation.userPassword).toBe('');
-    expect(component.confirmation.voidReason).toEqual({
-      reasonEnglish: '',
-      reasonChineseSimplified: ''
-    });
-    expect(component.isDisabledButton).toBeFalsy();
+    expect(component.confirmation.reason).toBe('');
+    expect(component.confirmation.reasonSC).toBe('');
+    expect(component.isShowConfirm).toBeUndefined();
   });
 
-  it('should emit voidAll event when voidAllPage is called', () => {
+  it('should emit voidEvent when voidBet is called', () => {
     // Arrange
-    component.voidAll = {
+    component.voidEvent = {
       emit: jest.fn()
     } as unknown as EventEmitter<boolean>;
 
     // Act
-    component.voidAllPage();
+    component.voidBet();
 
     // Assert
-    expect(component.voidAll.emit).toHaveBeenCalledWith(true);
+    expect(component.voidEvent.emit).toHaveBeenCalledWith(true);
   });
 
   describe('checkValidation', () => {
-    it('should return false and display tooltip when reasonEnglish is empty', () => {
+    it('should return false and display tooltip when reason is empty', () => {
       // Arrange
-      component.confirmation.voidReason.reasonEnglish = '';
-      component.confirmation.voidReason.reasonChineseSimplified = '测试原因';
+      component.confirmation.reason = '';
+      component.confirmation.reasonSC = '测试原因';
       component.confirmation.userPassword = 'password';
       component.tooltip.display = jest.fn();
 
@@ -67,13 +60,13 @@ describe('ConfirmationComponent', () => {
 
       // Assert
       expect(result).toBeFalsy();
-      expect(component.tooltip.display).toHaveBeenCalledWith('reason', LABELS.INPUT_REASON);
+      expect(component.tooltip.display).toHaveBeenCalledWith('reason', TEXT.INPUT_REASON);
     });
 
-    it('should return false and display tooltip when reasonChineseSimplified is empty', () => {
+    it('should return false and display tooltip when reasonSC is empty', () => {
       // Arrange
-      component.confirmation.voidReason.reasonEnglish = 'Test Reason';
-      component.confirmation.voidReason.reasonChineseSimplified = '';
+      component.confirmation.reason = 'Test Reason';
+      component.confirmation.reasonSC = '';
       component.confirmation.userPassword = 'password';
       component.tooltip.display = jest.fn();
 
@@ -82,13 +75,13 @@ describe('ConfirmationComponent', () => {
 
       // Assert
       expect(result).toBeFalsy();
-      expect(component.tooltip.display).toHaveBeenCalledWith('reasonSC', LABELS.INPUT_REASON);
+      expect(component.tooltip.display).toHaveBeenCalledWith('reasonSC', TEXT.INPUT_REASON);
     });
 
     it('should return false and display tooltip when password is empty', () => {
       // Arrange
-      component.confirmation.voidReason.reasonEnglish = 'Test Reason';
-      component.confirmation.voidReason.reasonChineseSimplified = '测试原因';
+      component.confirmation.reason = 'Test Reason';
+      component.confirmation.reasonSC = '测试原因';
       component.confirmation.userPassword = '';
       component.tooltip.display = jest.fn();
 
@@ -97,13 +90,13 @@ describe('ConfirmationComponent', () => {
 
       // Assert
       expect(result).toBeFalsy();
-      expect(component.tooltip.display).toHaveBeenCalledWith('password', LABELS.INPUT_PASSWORD);
+      expect(component.tooltip.display).toHaveBeenCalledWith('password', TEXT.INPUT_PASSWORD);
     });
 
     it('should return true when all fields are valid', () => {
       // Arrange
-      component.confirmation.voidReason.reasonEnglish = 'Test Reason';
-      component.confirmation.voidReason.reasonChineseSimplified = '测试原因';
+      component.confirmation.reason = 'Test Reason';
+      component.confirmation.reasonSC = '测试原因';
       component.confirmation.userPassword = 'password';
       component.tooltip.display = jest.fn();
 
@@ -119,16 +112,16 @@ describe('ConfirmationComponent', () => {
   describe('clearData', () => {
     it('should clear all form data', () => {
       // Arrange
-      component.confirmation.voidReason.reasonEnglish = 'Test Reason';
-      component.confirmation.voidReason.reasonChineseSimplified = '测试原因';
+      component.confirmation.reason = 'Test Reason';
+      component.confirmation.reasonSC = '测试原因';
       component.confirmation.userPassword = 'password';
 
       // Act
       component.clearData();
 
       // Assert
-      expect(component.confirmation.voidReason.reasonEnglish).toBe('');
-      expect(component.confirmation.voidReason.reasonChineseSimplified).toBe('');
+      expect(component.confirmation.reason).toBe('');
+      expect(component.confirmation.reasonSC).toBe('');
       expect(component.confirmation.userPassword).toBe('');
     });
   });

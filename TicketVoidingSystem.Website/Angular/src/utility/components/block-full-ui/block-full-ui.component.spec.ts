@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
 import { BlockFullUiComponent } from './block-full-ui.component';
 
 describe('BlockFullUiComponent', () => {
@@ -7,9 +6,7 @@ describe('BlockFullUiComponent', () => {
   let fixture: ComponentFixture<BlockFullUiComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ BlockFullUiComponent ]
-    })
+    TestBed.configureTestingModule({})
     .compileComponents();
   }));
 

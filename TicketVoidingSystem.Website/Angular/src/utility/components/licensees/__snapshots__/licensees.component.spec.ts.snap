@@ -32,3 +32,176 @@ exports[`LicenseesComponent #LicenseesComponent init should match snapshot 1`] =
   </licensees>
 </ng-component>
 `;
+
+exports[`LicenseesComponent should match snapshot when component is initialized 1`] = `
+<licensees
+  checkAllLicensee={[Function Boolean]}
+  groupLicenseesChange={[Function EventEmitter_]}
+  model={[Function GroupLicenseeModel]}
+>
+  <div
+    class="group-licensee area-filter"
+  >
+    <table>
+      <thead>
+        <tr>
+          <th
+            colspan="2"
+            scope="col"
+          >
+            <label>
+              <input
+                class="check-group-licensee ng-untouched ng-pristine ng-valid"
+                type="checkbox"
+              />
+               All Licensees 
+            </label>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</licensees>
+`;
+
+exports[`LicenseesComponent should match snapshot when disabled is true 1`] = `
+<licensees
+  checkAllLicensee={[Function Boolean]}
+  disabled={[Function Boolean]}
+  groupLicenseesChange={[Function EventEmitter_]}
+  model={[Function GroupLicenseeModel]}
+>
+  <div
+    class="group-licensee area-filter"
+  >
+    <table>
+      <thead>
+        <tr>
+          <th
+            colspan="2"
+            scope="col"
+          >
+            <label>
+              <input
+                class="check-group-licensee ng-untouched ng-pristine ng-valid"
+                type="checkbox"
+              />
+               All Licensees 
+            </label>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</licensees>
+`;
+
+exports[`LicenseesComponent should match snapshot with model data 1`] = `
+<licensees
+  checkAllLicensee={[Function Boolean]}
+  groupLicenseesChange={[Function EventEmitter_]}
+  model={[Function GroupLicenseeModel]}
+>
+  <div
+    class="group-licensee area-filter"
+  >
+    <table>
+      <thead>
+        <tr>
+          <th
+            colspan="2"
+            scope="col"
+          >
+            <label>
+              <input
+                class="check-group-licensee ng-untouched ng-pristine ng-valid"
+                type="checkbox"
+              />
+               All Licensees 
+            </label>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span
+              class="icon-collapse"
+            />
+            <label>
+              <input
+                class="ng-untouched ng-pristine ng-valid"
+                type="checkbox"
+              />
+               China rules 
+            </label>
+          </td>
+          <td>
+            <div
+              class="licensee-in-group hide"
+            >
+              <div
+                class="licensee"
+              >
+                <label>
+                  <input
+                    class="ng-untouched ng-pristine ng-valid"
+                    type="checkbox"
+                  />
+                   123456betwin 
+                </label>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span
+              class="icon-collapse"
+            />
+            <label>
+              <input
+                class="ng-untouched ng-pristine ng-valid"
+                type="checkbox"
+              />
+               Asia rules 
+            </label>
+          </td>
+          <td>
+            <div
+              class="licensee-in-group hide"
+            >
+              <div
+                class="licensee"
+              >
+                <label>
+                  <input
+                    class="ng-untouched ng-pristine ng-valid"
+                    type="checkbox"
+                  />
+                   SENIBET 
+                </label>
+              </div>
+              <div
+                class="licensee"
+              >
+                <label>
+                  <input
+                    class="ng-untouched ng-pristine ng-valid"
+                    type="checkbox"
+                  />
+                   SUNGAME 
+                </label>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</licensees>
+`;

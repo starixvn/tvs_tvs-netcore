@@ -2,7 +2,7 @@
 import { TestingModule } from '../../modules/testing.module';
 import { TicketsComponent } from './tickets.component';
 import { TicketsModel } from './tickets.model';
-import { PagingModel } from '../paging/paging/paging.model';
+import { PagingModel } from '../paging/paging.model';
 
 class Helper {
   static readonly fakeTicketsModel: TicketsModel = {

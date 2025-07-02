@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { IssueTypeComponent } from './issue-type.component';
 
 describe('IssueTypeComponent', () => {
@@ -7,9 +6,7 @@ describe('IssueTypeComponent', () => {
   let fixture: ComponentFixture<IssueTypeComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ IssueTypeComponent ]
-    })
+    await TestBed.configureTestingModule({})
     .compileComponents();
   });
 

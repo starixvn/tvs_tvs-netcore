@@ -11,7 +11,7 @@ import { ValidationService } from './validation.service';
 import { WrongScoreService } from './wrong-score.service';
 import { SubIssueTypeRelatedEvent } from '../models/subIssue-type-related-event.model';
 import { ConfirmWrongScoreModel } from '../confirm-wrong-score/confirm-wrong-score.model';
-import { LABELS } from 'src/utility/constants/labels';
+import { LABELS } from '../../../../../utility/constants/labels';
 import { UpdateConfirmInfoArgs } from '../models/confirm-wrong-score.model';
 
 @Injectable()

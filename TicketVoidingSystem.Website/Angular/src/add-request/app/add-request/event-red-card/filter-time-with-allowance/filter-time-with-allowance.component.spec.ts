@@ -25,6 +25,10 @@ class Helper {
     const currentMoment = this.getCurrentMoment();
     return new NgbDate(currentMoment.year(), currentMoment.month() + 1, currentMoment.date());
   }
+
+  static getValidTimeFormat() {
+    return moment.utc().tz(TimeZone.AMERICA_CARACAS).format(DateTimeFormat.TIME_FORMAT);
+  }
 }
 
 describe('FilterTimeWithAllowanceComponent', () => {
@@ -90,8 +94,8 @@ describe('FilterTimeWithAllowanceComponent', () => {
 
   it('should clear time when change action waiting to manual void', () => {
     // Arrange
-    component.fromTime = '10:00';
-    component.toTime = '11:00';
+    component.fromTime = '10:00:00.000 AM';
+    component.toTime = '11:00:00.000 AM';
 
     // Act
     component.clearTimeWhenChangeActionWaitingToManualVoid();
@@ -105,7 +109,7 @@ describe('FilterTimeWithAllowanceComponent', () => {
     // Arrange
     const currentMoment = Helper.getCurrentMoment();
     component.fromDate = Helper.getCurrentNgbDate();
-    component.fromTime = currentMoment.format(DateTimeFormat.TIME_FORMAT);
+    component.fromTime = Helper.getValidTimeFormat();
     component.tooltip.element = mockElementRef;
     component.filterTimeWithAllowanceModel = Helper.fakeFilterTimeWithAllowance;
 
@@ -120,7 +124,7 @@ describe('FilterTimeWithAllowanceComponent', () => {
     // Arrange
     const currentMoment = Helper.getCurrentMoment();
     component.toDate = Helper.getCurrentNgbDate();
-    component.toTime = currentMoment.format(DateTimeFormat.TIME_FORMAT);
+    component.toTime = Helper.getValidTimeFormat();
     component.tooltip.element = mockElementRef;
     component.filterTimeWithAllowanceModel = Helper.fakeFilterTimeWithAllowance;
 
@@ -136,8 +140,8 @@ describe('FilterTimeWithAllowanceComponent', () => {
     const currentMoment = Helper.getCurrentMoment();
     component.fromDate = Helper.getCurrentNgbDate();
     component.toDate = Helper.getCurrentNgbDate();
-    component.fromTime = '25:00';
-    component.toTime = currentMoment.format(DateTimeFormat.TIME_FORMAT);
+    component.fromTime = '25:00:00.000 AM';
+    component.toTime = Helper.getValidTimeFormat();
     component.tooltip.element = mockElementRef;
     component.filterTimeWithAllowanceModel = Helper.fakeFilterTimeWithAllowance;
 
@@ -153,14 +157,17 @@ describe('FilterTimeWithAllowanceComponent', () => {
   it('should validate time range correctly', () => {
     // Arrange
     const currentMoment = Helper.getCurrentMoment();
+    const toMoment = moment(currentMoment).add(1, 'hour');
     component.fromDate = Helper.getCurrentNgbDate();
-    component.toDate = Helper.getCurrentNgbDate();
+    if (toMoment.date() !== currentMoment.date()) {
+      component.toDate = new NgbDate(toMoment.year(), toMoment.month() + 1, toMoment.date());
+    } else {
+      component.toDate = Helper.getCurrentNgbDate();
+    }
     component.fromTime = currentMoment.format(DateTimeFormat.TIME_FORMAT);
-    component.toTime = currentMoment.add(1, 'hour').format(DateTimeFormat.TIME_FORMAT);
+    component.toTime = toMoment.format(DateTimeFormat.TIME_FORMAT);
     component.tooltip.element = mockElementRef;
     component.filterTimeWithAllowanceModel = Helper.fakeFilterTimeWithAllowance;
-    component.filterTimeWithAllowanceModel.fromDateTime = moment(`${currentMoment.format('YYYY-MM-DD')} ${component.fromTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    component.filterTimeWithAllowanceModel.toDateTime = moment(`${currentMoment.format('YYYY-MM-DD')} ${component.toTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
     // Act
     const result = component.isValid();
@@ -172,14 +179,22 @@ describe('FilterTimeWithAllowanceComponent', () => {
   it('should validate invalid time range', () => {
     // Arrange
     const currentMoment = Helper.getCurrentMoment();
-    component.fromDate = Helper.getCurrentNgbDate();
-    component.toDate = Helper.getCurrentNgbDate();
-    component.fromTime = currentMoment.add(3, 'hours').format(DateTimeFormat.TIME_FORMAT);
-    component.toTime = currentMoment.subtract(1, 'hour').format(DateTimeFormat.TIME_FORMAT);
+    const fromMoment = moment(currentMoment).add(3, 'hours');
+    const toMoment = moment(currentMoment).add(1, 'hour');
+    if (fromMoment.date() !== currentMoment.date()) {
+      component.fromDate = new NgbDate(fromMoment.year(), fromMoment.month() + 1, fromMoment.date());
+    } else {
+      component.fromDate = Helper.getCurrentNgbDate();
+    }
+    if (toMoment.date() !== currentMoment.date()) {
+      component.toDate = new NgbDate(toMoment.year(), toMoment.month() + 1, toMoment.date());
+    } else {
+      component.toDate = Helper.getCurrentNgbDate();
+    }
+    component.fromTime = fromMoment.format(DateTimeFormat.TIME_FORMAT);
+    component.toTime = toMoment.format(DateTimeFormat.TIME_FORMAT);
     component.tooltip.element = mockElementRef;
     component.filterTimeWithAllowanceModel = Helper.fakeFilterTimeWithAllowance;
-    component.filterTimeWithAllowanceModel.fromDateTime = moment(`${currentMoment.format('YYYY-MM-DD')} ${component.fromTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    component.filterTimeWithAllowanceModel.toDateTime = moment(`${currentMoment.format('YYYY-MM-DD')} ${component.toTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
     // Act
     const result = component.isValid();
@@ -191,13 +206,16 @@ describe('FilterTimeWithAllowanceComponent', () => {
   it('should calculate duration time correctly', () => {
     // Arrange
     const currentMoment = Helper.getCurrentMoment();
+    const toMoment = moment(currentMoment).add(1, 'hour');
     component.fromDate = Helper.getCurrentNgbDate();
-    component.toDate = Helper.getCurrentNgbDate();
+    if (toMoment.date() !== currentMoment.date()) {
+      component.toDate = new NgbDate(toMoment.year(), toMoment.month() + 1, toMoment.date());
+    } else {
+      component.toDate = Helper.getCurrentNgbDate();
+    }
     component.fromTime = currentMoment.format(DateTimeFormat.TIME_FORMAT);
-    component.toTime = currentMoment.add(1, 'hour').format(DateTimeFormat.TIME_FORMAT);
+    component.toTime = toMoment.format(DateTimeFormat.TIME_FORMAT);
     component.filterTimeWithAllowanceModel = Helper.fakeFilterTimeWithAllowance;
-    component.filterTimeWithAllowanceModel.fromDateTime = moment(`${currentMoment.format('YYYY-MM-DD')} ${component.fromTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    component.filterTimeWithAllowanceModel.toDateTime = moment(`${currentMoment.format('YYYY-MM-DD')} ${component.toTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
     // Act
     const duration = component.getDurationTime();
@@ -209,10 +227,11 @@ describe('FilterTimeWithAllowanceComponent', () => {
   it('should emit change filter time event', () => {
     // Arrange
     const currentMoment = Helper.getCurrentMoment();
+    const toMoment = moment(currentMoment).add(1, 'hour');
     component.fromDate = Helper.getCurrentNgbDate();
     component.toDate = Helper.getCurrentNgbDate();
     component.fromTime = currentMoment.format(DateTimeFormat.TIME_FORMAT);
-    component.toTime = currentMoment.add(1, 'hour').format(DateTimeFormat.TIME_FORMAT);
+    component.toTime = toMoment.format(DateTimeFormat.TIME_FORMAT);
     component.changeFilterTimeEvent = {
       emit: jest.fn()
     } as any;
@@ -231,10 +250,11 @@ describe('FilterTimeWithAllowanceComponent', () => {
   it('should clear setting time when use in log info', () => {
     // Arrange
     const currentMoment = Helper.getCurrentMoment();
+    const toMoment = moment(currentMoment).add(1, 'hour');
     component.fromDate = Helper.getCurrentNgbDate();
     component.toDate = Helper.getCurrentNgbDate();
     component.fromTime = currentMoment.format(DateTimeFormat.TIME_FORMAT);
-    component.toTime = currentMoment.add(1, 'hour').format(DateTimeFormat.TIME_FORMAT);
+    component.toTime = toMoment.format(DateTimeFormat.TIME_FORMAT);
     component.isUseInLogInfo = true;
     component.filterTimeWithAllowanceModel = Helper.fakeFilterTimeWithAllowance;
     component.filterTimeWithAllowanceModel.aaTime = 10;
@@ -253,13 +273,16 @@ describe('FilterTimeWithAllowanceComponent', () => {
   it('should validate setting time correctly', () => {
     // Arrange
     const currentMoment = Helper.getCurrentMoment();
+    const toMoment = moment(currentMoment).add(1, 'hour');
     component.fromDate = Helper.getCurrentNgbDate();
-    component.toDate = Helper.getCurrentNgbDate();
+    if (toMoment.date() !== currentMoment.date()) {
+      component.toDate = new NgbDate(toMoment.year(), toMoment.month() + 1, toMoment.date());
+    } else {
+      component.toDate = Helper.getCurrentNgbDate();
+    }
     component.fromTime = currentMoment.format(DateTimeFormat.TIME_FORMAT);
-    component.toTime = currentMoment.add(1, 'hour').format(DateTimeFormat.TIME_FORMAT);
+    component.toTime = toMoment.format(DateTimeFormat.TIME_FORMAT);
     component.filterTimeWithAllowanceModel = Helper.fakeFilterTimeWithAllowance;
-    component.filterTimeWithAllowanceModel.fromDateTime = moment(`${currentMoment.format('YYYY-MM-DD')} ${component.fromTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    component.filterTimeWithAllowanceModel.toDateTime = moment(`${currentMoment.format('YYYY-MM-DD')} ${component.toTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     component.filterTimeWithAllowanceModel.aaTime = 10;
     component.filterTimeWithAllowanceModel.paTime = 20;
     component.filterTimeWithAllowanceModel.saTime = 30;
@@ -275,13 +298,12 @@ describe('FilterTimeWithAllowanceComponent', () => {
   it('should validate invalid setting time', () => {
     // Arrange
     const currentMoment = Helper.getCurrentMoment();
+    const toMoment = moment(currentMoment).add(1, 'hour');
     component.fromDate = Helper.getCurrentNgbDate();
     component.toDate = Helper.getCurrentNgbDate();
     component.fromTime = currentMoment.format(DateTimeFormat.TIME_FORMAT);
-    component.toTime = currentMoment.add(1, 'hour').format(DateTimeFormat.TIME_FORMAT);
+    component.toTime = toMoment.format(DateTimeFormat.TIME_FORMAT);
     component.filterTimeWithAllowanceModel = Helper.fakeFilterTimeWithAllowance;
-    component.filterTimeWithAllowanceModel.fromDateTime = moment(`${currentMoment.format('YYYY-MM-DD')} ${component.fromTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    component.filterTimeWithAllowanceModel.toDateTime = moment(`${currentMoment.format('YYYY-MM-DD')} ${component.toTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     component.filterTimeWithAllowanceModel.aaTime = 10;
     component.filterTimeWithAllowanceModel.paTime = null;
     component.filterTimeWithAllowanceModel.saTime = 30;

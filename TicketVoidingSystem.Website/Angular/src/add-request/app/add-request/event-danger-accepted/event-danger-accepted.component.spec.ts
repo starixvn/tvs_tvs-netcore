@@ -25,6 +25,7 @@ import { EventLeagueComponent } from '../../../../utility/components/event-leagu
 import { MatchModel } from '../../../../utility/models/match.model';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
 import { MatchType } from '../../../../utility/constants/config';
+import { AddRequestApiService } from '../add-request-api.service';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -112,6 +113,7 @@ describe('EventDangerAcceptedComponent', () => {
   let addRequestStore: AddRequestStore;
   let relatedEventService: RelatedEventService;
   let eventDangerAcceptedService: EventDangerAcceptedService;
+  let addRequestApiService: AddRequestApiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -124,7 +126,8 @@ describe('EventDangerAcceptedComponent', () => {
         SaveRequestService,
         AddRequestStore,
         RelatedEventService,
-        EventDangerAcceptedService
+        EventDangerAcceptedService,
+        AddRequestApiService
       ]
     }).compileComponents();
 
@@ -135,6 +138,7 @@ describe('EventDangerAcceptedComponent', () => {
     addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
     relatedEventService = fixture.debugElement.injector.get(RelatedEventService);
     eventDangerAcceptedService = fixture.debugElement.injector.get(EventDangerAcceptedService);
+    addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
     component = fixture.componentInstance;
     component.mainEvent = Helper.fakeLogInfoRedCard;
   });
@@ -182,7 +186,7 @@ describe('EventDangerAcceptedComponent', () => {
     addRequestStore.getAllowanceTimeSubject.subscribe = jest.fn();
     eventDangerAcceptedService.updateDefaultFilterTime = jest.fn();
     eventDangerAcceptedService.assignModelsToEvents = jest.fn();
-    relatedEventService.getChildMatches = jest.fn();
+    addRequestApiService.getChildMatches = jest.fn();
     component.isEdit = true;
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.isMainMatch = true;
@@ -194,7 +198,7 @@ describe('EventDangerAcceptedComponent', () => {
 
     // Assert
     expect(eventDangerAcceptedService.updateDefaultFilterTime).toHaveBeenCalledTimes(1);
-    expect(relatedEventService.getChildMatches).toHaveBeenCalledTimes(1);
+    expect(addRequestApiService.getChildMatches).toHaveBeenCalledTimes(1);
     expect(eventDangerAcceptedService.assignModelsToEvents).toHaveBeenCalledTimes(1);
   });
 
@@ -260,7 +264,7 @@ describe('EventDangerAcceptedComponent', () => {
     logInfoService.updateIsCheckedVar = jest.fn();
     addRequestStore.changeBlockingUiStatus = jest.fn();
     addRequestStore.changeSavingRequestStatus = jest.fn();
-    relatedEventService.getChildMatches = jest.fn().mockReturnValue([]);
+    addRequestApiService.getChildMatches = jest.fn().mockReturnValue([]);
     relatedEventService.getDataWhenSearch = jest.fn();
     component.filter = Helper.fakeFilterModel;
     const logInfoRelatedEventComponent = {} as LogInfoRelatedEventComponent;
@@ -278,7 +282,7 @@ describe('EventDangerAcceptedComponent', () => {
     // Assert
     expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
     expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
-    expect(relatedEventService.getChildMatches).toHaveBeenCalledTimes(1);
+    expect(addRequestApiService.getChildMatches).toHaveBeenCalledTimes(1);
     expect(relatedEventService.getDataWhenSearch).toHaveBeenCalledTimes(1);
     expect(logInfoService.updateIsCheckedVar).toHaveBeenCalledTimes(1);
     expect(component.primitiveProps.isShowLogInfoMainMatch).toBeTruthy();
@@ -307,8 +311,7 @@ describe('EventDangerAcceptedComponent', () => {
     // Assert
     expect(component.primitiveProps.isShowLogInfoMainMatch).toBeFalsy();
     expect(component.primitiveProps.isShowRelatedEvents).toBeFalsy();
-    expect(component.allSelectedEvents.length).toBe(0);
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledWith([]);
+    expect(component.allSelectedEvents.length).toBe(1);
     expect(component.mainEvent.matchId).toBe(123);
     expect(component.mainEvent.eventName).toBe('Test Match');
     expect(component.mainEvent.leagueName).toBe('Test League');
@@ -352,7 +355,6 @@ describe('EventDangerAcceptedComponent', () => {
     // Assert
     expect(component.primitiveProps.isShowLogInfoMainMatch).toBeFalsy();
     expect(component.primitiveProps.isShowRelatedEvents).toBeFalsy();
-    expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledWith(component.allSelectedEvents);
   });
 
   it('#saveRequest should call saveRequestService', () => {

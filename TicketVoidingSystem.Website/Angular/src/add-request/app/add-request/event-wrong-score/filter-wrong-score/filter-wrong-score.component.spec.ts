@@ -9,6 +9,8 @@ import { DateFullTimeNewComponent } from '../../../../../utility/components/date
 import { AllowanceTimeComponent } from '../allowance-time/allowance-time.component';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import moment from 'moment-timezone';
+import { TvDetectionService } from '../../../../../manage-request/app/request-list/services/tv-detection.service';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 
 class Helper {
   static getFakeFilterTimeWithAllowance(): FilterTimeWithAllowance {
@@ -55,146 +57,214 @@ describe('FilterWrongScoreComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get TV detection class', () => {
-    // Act
-    const result = component.getTvDetectionClass();
+  describe('getTvDetectionClass', () => {
+    it('should return correct class for different TV detection values', () => {
+      // Test case 1: No detection
+      component.tvDetectionValue = 0;
+      expect(component.getTvDetectionClass()).toBe(TvDetectionService.getTvDetectionClass(0));
 
-    // Assert
-    expect(result).toBeDefined();
+      // Test case 2: Low detection
+      component.tvDetectionValue = 1;
+      expect(component.getTvDetectionClass()).toBe(TvDetectionService.getTvDetectionClass(1));
+
+      // Test case 3: Medium detection
+      component.tvDetectionValue = 2;
+      expect(component.getTvDetectionClass()).toBe(TvDetectionService.getTvDetectionClass(2));
+
+      // Test case 4: High detection
+      component.tvDetectionValue = 3;
+      expect(component.getTvDetectionClass()).toBe(TvDetectionService.getTvDetectionClass(3));
+    });
   });
 
-  it('should emit change filter event and update allowance times', () => {
-    // Arrange
-    component.allowanceTimeComponent = {
-      aaTime: 1,
-      paTime: 2,
-      saTime: 3
-    } as AllowanceTimeComponent;
+  describe('changeFilter', () => {
+    it('should emit change filter event and update allowance times', () => {
+      // Arrange
+      component.allowanceTimeComponent = {
+        aaTime: '1',
+        paTime: '2',
+        saTime: '3',
+        isDisabled: false,
+        changeModel: jest.fn(),
+        tooltip: new Tooltip(),
+        element: null,
+        isValidAllowanceTime: jest.fn(),
+        validateWithTooltip: jest.fn()
+      } as unknown as AllowanceTimeComponent;
 
-    jest.spyOn(component.changeFilterEvent, 'emit');
-    jest.spyOn(addRequestStore, 'changeSavingRequestStatus');
+      jest.spyOn(component.changeFilterEvent, 'emit');
+      jest.spyOn(addRequestStore, 'changeSavingRequestStatus');
 
-    // Act
-    component.changeFilter();
+      // Act
+      component.changeFilter();
 
-    // Assert
-    expect(component.changeFilterEvent.emit).toHaveBeenCalled();
-    expect(component.filterWrongScoreModel.aaTime).toBe(1);
-    expect(component.filterWrongScoreModel.paTime).toBe(2);
-    expect(component.filterWrongScoreModel.saTime).toBe(3);
-    expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+      // Assert
+      expect(component.changeFilterEvent.emit).toHaveBeenCalled();
+      expect(component.filterWrongScoreModel.aaTime).toBe(1);
+      expect(component.filterWrongScoreModel.paTime).toBe(2);
+      expect(component.filterWrongScoreModel.saTime).toBe(3);
+      expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
+    });
+
+    it('should handle string values for allowance times', () => {
+      // Arrange
+      component.allowanceTimeComponent = {
+        aaTime: '10',
+        paTime: '20',
+        saTime: '30',
+        isDisabled: false,
+        changeModel: jest.fn(),
+        tooltip: new Tooltip(),
+        element: null,
+        isValidAllowanceTime: jest.fn(),
+        validateWithTooltip: jest.fn()
+      } as unknown as AllowanceTimeComponent;
+
+      // Act
+      component.changeFilter();
+
+      // Assert
+      expect(component.filterWrongScoreModel.aaTime).toBe(10);
+      expect(component.filterWrongScoreModel.paTime).toBe(20);
+      expect(component.filterWrongScoreModel.saTime).toBe(30);
+    });
   });
 
-  it('should return duration time when time is valid', () => {
-    // Arrange
-    component.fromTimeComponent = {
-      isTimeValid: jest.fn().mockReturnValue(true)
-    } as unknown as DateFullTimeNewComponent;
-    component.toTimeComponent = {
-      isTimeValid: jest.fn().mockReturnValue(true)
-    } as unknown as DateFullTimeNewComponent;
-    jest.spyOn(wrongScoreService, 'getDurationTime').mockReturnValue('1:00');
+  describe('getDurationTime', () => {
+    it('should return duration time when time is valid', () => {
+      // Arrange
+      component.fromTimeComponent = {
+        isTimeValid: jest.fn().mockReturnValue(true)
+      } as unknown as DateFullTimeNewComponent;
+      component.toTimeComponent = {
+        isTimeValid: jest.fn().mockReturnValue(true)
+      } as unknown as DateFullTimeNewComponent;
+      jest.spyOn(wrongScoreService, 'getDurationTime').mockReturnValue('1:00');
 
-    // Act
-    const result = component.getDurationTime();
+      // Act
+      const result = component.getDurationTime();
 
-    // Assert
-    expect(result).toBe('1:00');
+      // Assert
+      expect(result).toBe('1:00');
+      expect(wrongScoreService.getDurationTime).toHaveBeenCalledWith(
+        component.filterWrongScoreModel.fromDateTime,
+        component.filterWrongScoreModel.toDateTime
+      );
+    });
+
+    it('should return "-" when from time is invalid', () => {
+      // Arrange
+      component.fromTimeComponent = {
+        isTimeValid: jest.fn().mockReturnValue(false)
+      } as unknown as DateFullTimeNewComponent;
+      component.toTimeComponent = {
+        isTimeValid: jest.fn().mockReturnValue(true)
+      } as unknown as DateFullTimeNewComponent;
+
+      // Act
+      const result = component.getDurationTime();
+
+      // Assert
+      expect(result).toBe('-');
+    });
+
+    it('should return "-" when to time is invalid', () => {
+      // Arrange
+      component.fromTimeComponent = {
+        isTimeValid: jest.fn().mockReturnValue(true)
+      } as unknown as DateFullTimeNewComponent;
+      component.toTimeComponent = {
+        isTimeValid: jest.fn().mockReturnValue(false)
+      } as unknown as DateFullTimeNewComponent;
+
+      // Act
+      const result = component.getDurationTime();
+
+      // Assert
+      expect(result).toBe('-');
+    });
   });
 
-  it('should return "-" when time is invalid', () => {
-    // Arrange
-    component.fromTimeComponent = {
-      isTimeValid: jest.fn().mockReturnValue(false)
-    } as unknown as DateFullTimeNewComponent;
-    component.toTimeComponent = {
-      isTimeValid: jest.fn().mockReturnValue(false)
-    } as unknown as DateFullTimeNewComponent;
+  describe('isValid', () => {
+    beforeEach(() => {
+      component.fromTimeComponent = {
+        validateWithTooltip: jest.fn().mockReturnValue(true)
+      } as unknown as DateFullTimeNewComponent;
+      component.toTimeComponent = {
+        validateWithTooltip: jest.fn().mockReturnValue(true)
+      } as unknown as DateFullTimeNewComponent;
+      component.allowanceTimeComponent = {
+        isValidAllowanceTime: jest.fn().mockReturnValue(true)
+      } as unknown as AllowanceTimeComponent;
+      jest.spyOn(validationService, 'isFromTimeSameOrBeforeToTime').mockReturnValue(true);
+    });
 
-    // Act
-    const result = component.getDurationTime();
+    it('should return true when all validations pass', () => {
+      // Act
+      const result = component.isValid();
 
-    // Assert
-    expect(result).toBe('-');
-  });
+      // Assert
+      expect(result).toBeTruthy();
+      expect(component.fromTimeComponent.validateWithTooltip).toHaveBeenCalled();
+      expect(component.toTimeComponent.validateWithTooltip).toHaveBeenCalled();
+      expect(validationService.isFromTimeSameOrBeforeToTime).toHaveBeenCalledWith(
+        component.filterWrongScoreModel.fromDateTime,
+        component.filterWrongScoreModel.toDateTime,
+        component.tooltip
+      );
+      expect(component.allowanceTimeComponent.isValidAllowanceTime).toHaveBeenCalled();
+    });
 
-  it('should return true when all validations pass', () => {
-    // Arrange
-    component.fromTimeComponent = {
-      validateWithTooltip: jest.fn().mockReturnValue(true)
-    } as unknown as DateFullTimeNewComponent;
-    component.toTimeComponent = {
-      validateWithTooltip: jest.fn().mockReturnValue(true)
-    } as unknown as DateFullTimeNewComponent;
-    component.allowanceTimeComponent = {
-      isValidAllowanceTime: jest.fn().mockReturnValue(true)
-    } as unknown as AllowanceTimeComponent;
-    jest.spyOn(validationService, 'isFromTimeSameOrBeforeToTime').mockReturnValue(true);
+    it('should return false when from time validation fails', () => {
+      // Arrange
+      component.fromTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(false);
 
-    // Act
-    const result = component.isValid();
+      // Act
+      const result = component.isValid();
 
-    // Assert
-    expect(result).toBeTruthy();
-  });
+      // Assert
+      expect(result).toBeFalsy();
+      expect(component.fromTimeComponent.validateWithTooltip).toHaveBeenCalled();
+      expect(component.toTimeComponent.validateWithTooltip).not.toHaveBeenCalled();
+    });
 
-  it('should return false when time validation fails', () => {
-    // Arrange
-    component.fromTimeComponent = {
-      validateWithTooltip: jest.fn().mockReturnValue(false)
-    } as unknown as DateFullTimeNewComponent;
-    component.toTimeComponent = {
-      validateWithTooltip: jest.fn().mockReturnValue(true)
-    } as unknown as DateFullTimeNewComponent;
-    component.allowanceTimeComponent = {
-      isValidAllowanceTime: jest.fn().mockReturnValue(true)
-    } as unknown as AllowanceTimeComponent;
-    jest.spyOn(validationService, 'isFromTimeSameOrBeforeToTime').mockReturnValue(true);
+    it('should return false when to time validation fails', () => {
+      // Arrange
+      component.toTimeComponent.validateWithTooltip = jest.fn().mockReturnValue(false);
 
-    // Act
-    const result = component.isValid();
+      // Act
+      const result = component.isValid();
 
-    // Assert
-    expect(result).toBeFalsy();
-  });
+      // Assert
+      expect(result).toBeFalsy();
+      expect(component.fromTimeComponent.validateWithTooltip).toHaveBeenCalled();
+      expect(component.toTimeComponent.validateWithTooltip).toHaveBeenCalled();
+      expect(validationService.isFromTimeSameOrBeforeToTime).not.toHaveBeenCalled();
+    });
 
-  it('should return false when from time is after to time', () => {
-    // Arrange
-    component.fromTimeComponent = {
-      validateWithTooltip: jest.fn().mockReturnValue(true)
-    } as unknown as DateFullTimeNewComponent;
-    component.toTimeComponent = {
-      validateWithTooltip: jest.fn().mockReturnValue(true)
-    } as unknown as DateFullTimeNewComponent;
-    component.allowanceTimeComponent = {
-      isValidAllowanceTime: jest.fn().mockReturnValue(true)
-    } as unknown as AllowanceTimeComponent;
-    jest.spyOn(validationService, 'isFromTimeSameOrBeforeToTime').mockReturnValue(false);
+    it('should return false when from time is after to time', () => {
+      // Arrange
+      validationService.isFromTimeSameOrBeforeToTime = jest.fn().mockReturnValue(false);
 
-    // Act
-    const result = component.isValid();
+      // Act
+      const result = component.isValid();
 
-    // Assert
-    expect(result).toBeFalsy();
-  });
+      // Assert
+      expect(result).toBeFalsy();
+      expect(validationService.isFromTimeSameOrBeforeToTime).toHaveBeenCalled();
+      expect(component.allowanceTimeComponent.isValidAllowanceTime).not.toHaveBeenCalled();
+    });
 
-  it('should return false when allowance time validation fails', () => {
-    // Arrange
-    component.fromTimeComponent = {
-      validateWithTooltip: jest.fn().mockReturnValue(true)
-    } as unknown as DateFullTimeNewComponent;
-    component.toTimeComponent = {
-      validateWithTooltip: jest.fn().mockReturnValue(true)
-    } as unknown as DateFullTimeNewComponent;
-    component.allowanceTimeComponent = {
-      isValidAllowanceTime: jest.fn().mockReturnValue(false)
-    } as unknown as AllowanceTimeComponent;
-    jest.spyOn(validationService, 'isFromTimeSameOrBeforeToTime').mockReturnValue(true);
+    it('should return false when allowance time validation fails', () => {
+      // Arrange
+      component.allowanceTimeComponent.isValidAllowanceTime = jest.fn().mockReturnValue(false);
 
-    // Act
-    const result = component.isValid();
+      // Act
+      const result = component.isValid();
 
-    // Assert
-    expect(result).toBeFalsy();
+      // Assert
+      expect(result).toBeFalsy();
+      expect(component.allowanceTimeComponent.isValidAllowanceTime).toHaveBeenCalled();
+    });
   });
 });

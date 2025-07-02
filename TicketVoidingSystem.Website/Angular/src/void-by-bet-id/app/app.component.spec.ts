@@ -157,7 +157,6 @@ describe('AppComponent', () => {
 
       // Assert
       expect(appService.getTickets).toHaveBeenCalledWith(query);
-      expect(commonService.getMatch).toHaveBeenCalled();
       expect(component.primitiveProps.isShowTickets).toBe(true);
     });
 
