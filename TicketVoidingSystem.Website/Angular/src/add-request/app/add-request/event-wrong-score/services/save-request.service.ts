@@ -50,7 +50,7 @@ export class SaveRequestService {
     }
 
     args.addRequestStore.changeBlockingUiStatus(true);
-    this.logInfoService.clearDataValidation(args.wrongScoreModels, args.relatedEvents, args.mainEvent);
+    this.logInfoService.clearDataValidation(args.wrongScoreModels, [], null);
     await this.logInfoService.getLogInfo(this.createMapService.createGetLogInfoParams(args));
     args.addRequestStore.changeBlockingUiStatus(false);
     if (!this.validationService.isAllWrongScoreModelsValid(args)) {

@@ -40,6 +40,7 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
+import { AddRequestApiService } from '../add-request-api.service';
 @Component({
   standalone: true,
   selector: 'event-danger-accepted',
@@ -93,7 +94,8 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   private readonly addRequestStore = inject(AddRequestStore);
   private readonly relatedEventService = inject(RelatedEventService);
   private readonly eventDangerAcceptedService = inject(EventDangerAcceptedService);
-
+  private readonly addRequestApiService = inject(AddRequestApiService);
+  
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -101,11 +103,17 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
       this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
-      this.resetLogInfoAndHideAllEvents();
-      this.logInfoService.resetVoidTimeArea(this.allSelectedEvents, this.defaultFilterTimeWithAllowance);
-      this.logInfoService.resetIsCheckedVar(this.allSelectedEvents);
+      this.resetDateAfterChangeFilter();
       this.filter.isChangeSubTypeManual = false;
     }
+  }
+
+  resetDateAfterChangeFilter(){
+    this.relatedEvents = [];
+    this.mainEvent.logInfoDetail = null;
+    this.allSelectedEvents = [this.mainEvent];
+    this.primitiveProps.isShowLogInfoMainMatch = false;
+    this.primitiveProps.isShowRelatedEvents = false;
   }
 
   async ngOnInit(): Promise<void> {
@@ -118,7 +126,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
       this.eventDangerAcceptedService.assignModelsToEvents(this.allSelectedEvents, this.dangerAcceptedModels, this.primitiveProps, this.addRequestStore);
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
       this.eventDangerAcceptedService.updateDefaultFilterTime(this.defaultFilterTimeWithAllowance, this.dangerAcceptedModels);
-      this.relatedEvents = await this.relatedEventService.getChildMatches(this.createGetChildMatchesQuery());
+      this.relatedEvents = await this.addRequestApiService.getChildMatches(this.createGetChildMatchesQuery());
       this.primitiveProps.isShowLogInfoMainMatch = true;
       this.primitiveProps.isShowRelatedEvents = true;
     } else {
@@ -133,8 +141,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   }
 
   async handleSearchEvent(): Promise<void> {
-    this.primitiveProps.isShowLogInfoMainMatch = false;
-
+    this.resetDateAfterChangeFilter();
     if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.filterTimeAreaComponent,
       this.logInfoComponents, this.addRequestStore, this.tvDetectionComponent)) {
       return;
@@ -146,7 +153,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     }
 
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.relatedEvents = await this.relatedEventService.getChildMatches(this.createGetChildMatchesQuery());
+    this.relatedEvents = await this.addRequestApiService.getChildMatches(this.createGetChildMatchesQuery());
     await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
     this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     this.logInfoComponents.forEach(x => {
@@ -172,27 +179,19 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   }
 
   changeMatchEvent(): void {
-    this.primitiveProps.isShowLogInfoMainMatch = false;
-    this.primitiveProps.isShowRelatedEvents = false;
-    this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
-    this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
+    this.resetDateAfterChangeFilter();
     this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
     this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
     this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
     this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
     this.mainEvent.eventDate = this.eventLeagueComponent?.selectedMatch.eventDate;
     this.mainEvent.sportType = this.eventLeagueComponent?.selectedMatch.sportType;
+    this.mainEvent.parentId = this.eventLeagueComponent?.selectedMatch.parentId;
     this.updateMatchId.emit(this.eventLeagueComponent?.selectedMatch);
   }
 
   isExistMatchEvent(): boolean {
     return (this.mainEvent.matchId) ? true : false;
-  }
-
-  resetLogInfoAndHideAllEvents() {
-    this.primitiveProps.isShowLogInfoMainMatch = false;
-    this.primitiveProps.isShowRelatedEvents = false;
-    this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
   }
 
   async saveRequest(): Promise<void> {
@@ -261,7 +260,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   actualTimeChange(actualTime: string) {
     this.filterTimeAreaComponent.filterTimeWithAllowanceComponent.fromTime = moment(actualTime, DateTimeFormat.SIMPLE_TIME_FORMAT)
       .format(DateTimeFormat.TIME_FORMAT);
-    this.resetLogInfoAndHideAllEvents();
+    this.resetDateAfterChangeFilter();
   }
 
   private initSaveRequestInput() {
@@ -316,4 +315,5 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   public getLogInfoDetail(): LogInfoDetail[] {
     return [this.mainEvent.logInfoDetail];
   }
+
 }

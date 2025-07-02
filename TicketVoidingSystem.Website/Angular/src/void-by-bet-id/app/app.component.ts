@@ -32,7 +32,7 @@ import { ValidationService } from './services/validation.service';
 import { CommonService } from '../../utility/services/common.service';
 import { VoidTicketsService } from './services/void-tickets.service';
 import { Message } from '../../utility/components/template-message/messages/message';
-import { LABELS } from 'src/utility/constants/labels';
+import { LABELS } from '../../utility/constants/labels';
 
 @Component({
   standalone: true,

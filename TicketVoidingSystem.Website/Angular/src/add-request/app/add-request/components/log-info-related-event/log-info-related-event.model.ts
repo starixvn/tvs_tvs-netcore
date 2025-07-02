@@ -18,6 +18,7 @@ export class LogInfoRelatedEvent {
   tvDetectionModel = new TvDetectionModel();
   eventDate?: Date;
   sportType: number;
+  parentId?: number;
 }
 
 export class BaseLogInfoQuery {

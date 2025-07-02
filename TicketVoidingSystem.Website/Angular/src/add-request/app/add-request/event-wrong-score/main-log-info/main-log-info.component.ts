@@ -3,7 +3,7 @@ import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log
 import { CommonModule } from '@angular/common';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import moment from 'moment';
-import { StaticService } from 'src/utility/services/static.service';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { EventWrongScoreService } from '../services/event-wrong-score.service';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
@@ -14,7 +14,7 @@ import _ from 'lodash';
   selector: 'main-log-info',
   templateUrl: './main-log-info.component.html',
   styleUrl: './main-log-info.component.scss',
-  imports: [CommonModule, SanitizeHtmlPipe],
+  imports: [CommonModule, SanitizeHtmlPipe]
 })
 export class MainLogInfoComponent {
   @Input() logInfo: LogInfoRelatedEvent;

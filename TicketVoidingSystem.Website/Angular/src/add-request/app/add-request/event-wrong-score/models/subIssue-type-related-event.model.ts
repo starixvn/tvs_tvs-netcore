@@ -1,4 +1,4 @@
-import { SubIssueTypeConstant } from "src/utility/constants/sub-issue-type.constant";
+import { SubIssueTypeConstant } from "../../../../../utility/constants/sub-issue-type.constant";
 
 export class SubIssueTypeRelatedEvent{
   static readonly SubIssueTypeMapHasRelatedEvent = new Map<number, number>([

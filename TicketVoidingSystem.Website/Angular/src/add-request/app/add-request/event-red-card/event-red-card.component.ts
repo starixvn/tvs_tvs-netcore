@@ -94,11 +94,17 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
       this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
-      this.resetLogInfoAndHideAllEvents();
-      this.logInfoService.resetVoidTimeArea(this.allSelectedEvents, this.defaultFilterTimeWithAllowance);
-      this.logInfoService.resetIsCheckedVar(this.allSelectedEvents);
+      this.resetDateAfterChangeFilter();
       this.filter.isChangeSubTypeManual = false;
     }
+  }
+
+  resetDateAfterChangeFilter(){
+    this.relatedEvents = [];
+    this.mainEvent.logInfoDetail = null;
+    this.allSelectedEvents = [this.mainEvent];
+    this.primitiveProps.isShowLogInfoMainMatch = false;
+    this.primitiveProps.isShowRelatedEvents = false;
   }
 
   async ngOnInit(): Promise<void> {
@@ -137,7 +143,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   }
 
   async handleSearchEvent(): Promise<void> {
-    this.primitiveProps.isShowLogInfoMainMatch = false;
+    this.resetDateAfterChangeFilter();
 
     if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.filterTimeAreaComponent,
       this.logInfoComponents, this.addRequestStore, this.tvDetectionComponent)) {
@@ -164,27 +170,19 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   }
 
   changeMatchEvent(): void {
-    this.primitiveProps.isShowLogInfoMainMatch = false;
-    this.primitiveProps.isShowRelatedEvents = false;
-    this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
-    this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
+    this.resetDateAfterChangeFilter();
     this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
     this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
     this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
     this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
     this.mainEvent.eventDate = this.eventLeagueComponent?.selectedMatch.eventDate;
     this.mainEvent.sportType = this.eventLeagueComponent?.selectedMatch.sportType;
+    this.mainEvent.parentId = this.eventLeagueComponent?.selectedMatch.parentId;
     this.updateMatchId.emit(this.eventLeagueComponent?.selectedMatch);
   }
 
   isExistMatchEvent(): boolean {
     return (this.mainEvent.matchId) ? true : false;
-  }
-
-  resetLogInfoAndHideAllEvents() {
-    this.primitiveProps.isShowLogInfoMainMatch = false;
-    this.primitiveProps.isShowRelatedEvents = false;
-    this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
   }
 
   async saveRequest(): Promise<void> {
@@ -253,7 +251,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   actualTimeChange(actualTime: string) {
     this.filterTimeAreaComponent.filterTimeWithAllowanceComponent.fromTime = moment(actualTime, DateTimeFormat.SIMPLE_TIME_FORMAT)
       .format(DateTimeFormat.TIME_FORMAT);
-    this.resetLogInfoAndHideAllEvents();
+    this.resetDateAfterChangeFilter();
   }
 
   private initSaveRequestInput() {

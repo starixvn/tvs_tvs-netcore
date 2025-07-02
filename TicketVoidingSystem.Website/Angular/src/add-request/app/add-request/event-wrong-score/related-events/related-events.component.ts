@@ -124,5 +124,6 @@ export class RelatedEventsComponent {
     this.relatedEvents = [];
     this.childEvents = [];
     this.addChildMatchModel = new AddChildMatchModel();
+    this.primitiveProps.isShowRelatedEvents = false;
   }
 }

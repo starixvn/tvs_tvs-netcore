@@ -183,52 +183,6 @@ describe('LogInfoService', () => {
     });
   });
 
-  describe('resetVoidTimeArea', () => {
-    it('should reset voidTimeArea of all events with default filter values', () => {
-      const events = [
-        {
-          matchId: 1,
-          voidTimeArea: {
-            fromDateTime: 'old-date',
-            toDateTime: 'old-date',
-            aaTime: 1,
-            paTime: 1,
-            saTime: 1
-          }
-        }
-      ] as LogInfoRelatedEvent[];
-
-      const defaultFilter = {
-        fromDateTime: '2024-01-01 10:00:00',
-        toDateTime: '2024-01-01 11:00:00',
-        aaTime: 5,
-        paTime: 5,
-        saTime: 5
-      } as FilterTimeWithAllowance;
-
-      service.resetVoidTimeArea(events, defaultFilter);
-
-      expect(events[0].voidTimeArea).toEqual(defaultFilter);
-    });
-  });
-
-  describe('resetIsCheckedVar', () => {
-    it('should reset isCheckedVar and isHighLightVarCheck of all events', () => {
-      const events = [
-        {
-          matchId: 1,
-          isCheckedVar: true,
-          isHighLightVarCheck: true
-        }
-      ] as LogInfoRelatedEvent[];
-
-      service.resetIsCheckedVar(events);
-
-      expect(events[0].isCheckedVar).toBeNull();
-      expect(events[0].isHighLightVarCheck).toBeNull();
-    });
-  });
-
   describe('updateIsCheckedVar', () => {
     it('should update isCheckedVar and isHighLightVarCheck based on StaticService.isShowVarCheck', () => {
       const events = [

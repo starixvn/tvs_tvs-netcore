@@ -117,10 +117,10 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
     });
     if (this.isEdit) {
       const mainWrongScoreModel = this.editRequestService.getMainWrongScoreModel(this.wrongScoreModels);
-      this.mainEvent = this.createMapService.assignMainEvent(mainWrongScoreModel);
-      this.matchId = this.mainEvent.matchId;
+      this.matchId = mainWrongScoreModel.matchId;
       this.editRequestService.assignPrimitivePropsEditRequest(mainWrongScoreModel, this.primitiveProps);
       if (this.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME) {
+        this.mainEvent = this.createMapService.assignMainEvent(mainWrongScoreModel);
         this.tvDetectionModel = this.eventWrongScoreService.getTvDetectionModel(mainWrongScoreModel);
       }
       else {
@@ -187,6 +187,8 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   public resetData(): void {
+    this.mainEvent.logInfoDetail = null;
+    this.mainEvent.messageValidationLogInfo = [];
     this.wrongScoreModels = [];
     this.primitiveProps.isShowActualScore = false;
     this.primitiveProps.actualScore = '';
@@ -198,6 +200,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   public async saveRequest(): Promise<void> {
+    this.relatedEvents = this.relatedEventsComponent.relatedEvents;
     if (!this.validateVarCheck()) {
       this.addRequestStore.changeSavingRequestStatus(false);
       return;

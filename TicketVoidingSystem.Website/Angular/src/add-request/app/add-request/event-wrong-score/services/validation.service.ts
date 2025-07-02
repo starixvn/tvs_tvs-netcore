@@ -94,19 +94,18 @@ export class ValidationService {
 
   isAllWrongScoreModelsValid(args: ValidationBusinessRuleArgs): boolean {
     if(args.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME){
-      return this.isValidAllEventCheckTime([args.mainEvent, ...args.relatedEvents]);
+      return this.isValidAllEventCheckTime(args.mainEvent, args.relatedEvents);
     }
     return this.isValidAllScores(args.wrongScoreModels);
   }
 
-  private isValidAllEventCheckTime(events: LogInfoRelatedEvent[]): boolean {
-    const mainEvent = events.find(x => x.isMainMatch);
-    if (mainEvent.messageValidationLogInfo?.some(x => x.isError)) {
+  private isValidAllEventCheckTime(mainEvent: LogInfoRelatedEvent, relatedEvents: LogInfoRelatedEvent[]): boolean {
+    if (mainEvent?.messageValidationLogInfo?.some(x => x.isError)) {
       return false;
       }
 
-      events.filter(x => !x.isMainMatch).forEach(x => {
-        if (x.messageValidationLogInfo?.some(y => y.isError && !y.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE))) {
+      relatedEvents.filter(x => !x.isMainMatch).forEach(x => {
+        if (x?.messageValidationLogInfo?.some(y => y.isError && !y.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE))) {
           return false;
         }
       });

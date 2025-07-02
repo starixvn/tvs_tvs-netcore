@@ -24,12 +24,12 @@ export class NgSelectTreeViewComponent {
   }
 
   private unCheckOtherItem(selectedItem: NgSelectMixtureItem) {
-    this.items.filter(x => x.value !== selectedItem.value).forEach(x => x.checked = false);
+    this.items?.filter(x => x.value !== selectedItem.value).forEach(x => x.checked = false);
   }
 
   public handleClickChildItem() {
     this.emitChildEvent.emit();
-    this.items.filter(x => x.isSingleSelect()).forEach(x => x.checked = false);
+    this.items?.filter(x => x.isSingleSelect()).forEach(x => x.checked = false);
   }
 
   public checkFromChildEvent(item: NgSelectMixtureItem) {

@@ -114,15 +114,20 @@ export class CreateMapService {
   }
 
   createGetLogInfoParams(args: AddRelatedEventArg | ValidationBusinessRuleArgs): GetLogInfoParams {
-    return {
+    const getLogInfoParams: GetLogInfoParams = {
       isEdit: args.isEdit,
       requestId: args.requestId,
       filter: args.filter,
       primitiveProps: args.primitiveProps,
-      wrongScoreModels: [],
       mainEvent: args.mainEvent,
       relatedEvents: args.relatedEvents,
       defaultFilterTimeWithAllowance: args.defaultFilterTimeWithAllowance
     };
+    
+    if(args instanceof ValidationBusinessRuleArgs) {
+      getLogInfoParams.wrongScoreModels = args.wrongScoreModels;
+    }
+
+    return getLogInfoParams;
   }
 }

@@ -20,10 +20,6 @@ export class RelatedEventService {
   private readonly logInfoService = inject(LogInfoService);
   private readonly eventDangerAcceptedService = inject(EventDangerAcceptedService);
 
-  async getChildMatches(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
-    return this.addRequestApiService.getChildMatches(query);
-  }
-
   assignChildMatchToLogInfoModel(models: ChildMatchModel[], defaultFilter: FilterTimeWithAllowance, defaultSubIssueTypeId: number): LogInfoRelatedEvent[] {
     const newEvents = models
       .map(x => {
@@ -67,7 +63,7 @@ export class RelatedEventService {
       query.isMainMatch = false;
       query.sportType = arg.mainEvent.sportType;
 
-      const models = await this.getChildMatches(query);
+      const models = await this.addRequestApiService.getChildMatches(query);
       if (!models ||models.length === 0) {
         arg.tooltip.display(arg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         arg.primitiveProps.isBlock = false;
@@ -92,7 +88,7 @@ export class RelatedEventService {
   }
 
   private async preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<LogInfoRelatedEvent[]> {
-    const newChildEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && this.isAutoSelectMatch(arg.filter.subIssueTypeId, x.matchType));
+    const newChildEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && this.isAutoSelectMatch(arg.filter.subIssueTypeId, x.matchType, arg.mainEvent));
     const newEvents = this.assignChildMatchToLogInfoModel(newChildEvents, arg.defaultFilterTimeWithAllowance, arg.mainEvent.subIssueTypeId);
     const eventsGetLogInfo = _.cloneDeep(arg.allEvents);
     eventsGetLogInfo.push(...newEvents);
@@ -101,8 +97,9 @@ export class RelatedEventService {
     return eventsGetLogInfo;
   }
 
-  isAutoSelectMatch(subIssueTypeId: string, matchType: number): boolean {
-    return SubIssueTypeGroup.SUBTYPE_AUTO_SELECT_LIST.includes(Number(subIssueTypeId)) || matchType === MatchType.LINK;
+  private isAutoSelectMatch(subIssueTypeId: string, matchType: number, mainEvent: LogInfoRelatedEvent): boolean { 
+    return (SubIssueTypeGroup.SUBTYPE_AUTO_SELECT_LIST.includes(Number(subIssueTypeId)) && matchType === MatchType.CHILD)
+      || (mainEvent.parentId != mainEvent.matchId && matchType === MatchType.LINK);
   }
 
   private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: LogInfoRelatedEvent[], originalAllEvents: LogInfoRelatedEvent[]): void {

@@ -80,34 +80,10 @@ export class LogInfoService {
     });
   }
 
-  resetAllEventBeforeSearch(events: LogInfoRelatedEvent[], defaultFilter: FilterTimeWithAllowance, defaultSubIssueTypeId: number): void {
-    this.resetSubIssueTypeOfEvent(events, defaultSubIssueTypeId);
-    this.resetLogInfoOfEvent(events);
-    this.resetVoidTimeArea(events, defaultFilter);
-  }
-
   public resetLogInfoOfEvent(events: LogInfoRelatedEvent[]): void {
     events.forEach(event => {
       event.logInfoDetail = null;
       event.messageValidationLogInfo = null;
-    });
-  }
-
-  private resetSubIssueTypeOfEvent(events: LogInfoRelatedEvent[], subIssueType: number) {
-    events.forEach(event => {
-      event.subIssueTypeId = subIssueType;
-    });
-  }
-
-  public resetVoidTimeArea(events: LogInfoRelatedEvent[], defaultFilter: FilterTimeWithAllowance) {
-    events.forEach(event => {
-      event.voidTimeArea = {
-        saTime: defaultFilter.saTime,
-        aaTime: defaultFilter.aaTime,
-        paTime: defaultFilter.paTime,
-        fromDateTime: defaultFilter.fromDateTime,
-        toDateTime: defaultFilter.toDateTime
-      } as FilterTimeWithAllowance;
     });
   }
 

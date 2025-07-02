@@ -409,15 +409,6 @@ describe('EventRedCardComponent', () => {
     expect(component.isDisabledLinkMatches()).toBeTruthy();
   });
 
-  it('should reset log info and hide all events', () => {
-    // Act
-    component.resetLogInfoAndHideAllEvents();
-
-    // Assert
-    expect(component.primitiveProps.isShowRelatedEvents).toBeFalsy();
-    expect(component.primitiveProps.isShowLogInfoMainMatch).toBeFalsy();
-  });
-
   it('should handle var check value change', () => {
     // Arrange
     component.mainEvent = {

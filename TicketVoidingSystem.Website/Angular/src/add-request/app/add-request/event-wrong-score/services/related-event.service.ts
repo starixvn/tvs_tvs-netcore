@@ -70,7 +70,7 @@ export class RelatedEventService {
   }
   
   async updateEventAutoGetLinkMatch(childEvents: ChildMatchModel[], arg: AddRelatedEventArg) {
-    const newLinkEvents = childEvents.filter(x => !arg.relatedEvents.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
+    const newLinkEvents = childEvents.filter(x => !arg.relatedEvents.some(y => y.matchId === x.matchId) && this.isAutoSelectMatch(arg.mainEvent, x.matchType));
     let subTypeLinkMatches = await this.getSubIssueTypeLinkMatch(Number(arg.filter.subIssueTypeId), newLinkEvents.map(x => x.matchId).join(','));
 
     subTypeLinkMatches.forEach(x => {
@@ -80,6 +80,10 @@ export class RelatedEventService {
         arg.relatedEvents.push(newRelatedEvent);
       }
     });
+  }
+
+  private isAutoSelectMatch(mainEvent: LogInfoRelatedEvent, matchType: number): boolean {
+    return mainEvent.parentId != mainEvent.matchId && matchType === MatchType.LINK;
   }
 
   async getGetInfoChildMatch(matchId: number, isMainMatch: boolean, sportType: number, eventDate?: string): Promise<ChildMatchModel[]> {
@@ -97,9 +101,6 @@ export class RelatedEventService {
   public async getDataRelatedEventWhenSearch(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<void> {
     await this.updateEventAutoGetLinkMatch(relatedEvents, arg);
     await this.logInfoService.getLogInfo(this.createMapService.createGetLogInfoParams(arg));
-    if(!allOldEvents || allOldEvents.length === 0){
-      return;
-    }
   }
 
   async assignModelsToEvents(allEvents: LogInfoRelatedEvent[], wrongScoreModels: WrongScoreModel[], allChildEvent: ChildMatchModel[], eventDate: Date) {

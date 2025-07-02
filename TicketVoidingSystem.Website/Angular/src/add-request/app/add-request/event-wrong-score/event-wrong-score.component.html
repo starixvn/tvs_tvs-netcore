@@ -76,10 +76,6 @@
     [mainEvent]="mainEvent"></related-events>
 </div>
 
-<!-- <add-child-match [relatedEvents]="childEvents" (selectedEventsChange)="saveRelatedEvent($event)"
-  [model]="addChildMatchModel">
-</add-child-match> -->
-
 <confirm-wrong-score [model]="confirmWrongScoreModel" (close)="triggerCloseEvent()"
   (save)="onYesConfirmAddRequest()"></confirm-wrong-score>
 <tooltip [tooltip]="tooltip"></tooltip>

@@ -24,7 +24,7 @@ import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
-import { SanitizeHtmlPipe } from 'src/utility/modules/sanitize-html.pipe';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   selector: 'log-info-wrong-ou',

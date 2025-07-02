@@ -33,6 +33,7 @@ export class EventWrongScoreService {
     mainEvent.matchId = selectedMatch.matchId;
     mainEvent.eventDate = selectedMatch.eventDate;
     mainEvent.sportType = selectedMatch.sportType;
+    mainEvent.parentId = selectedMatch.parentId;
   }
 
   resetPrimitiveProperty(primitiveProps: PrimitiveProperty, subIssueTypeId: string) {

@@ -12,6 +12,5 @@ export class GetLogInfoParams {
   wrongScoreModels?: WrongScoreModel[];
   mainEvent?: LogInfoRelatedEvent;
   relatedEvents?: LogInfoRelatedEvent[];
-  // mainMatchId: number;
   defaultFilterTimeWithAllowance?: FilterTimeWithAllowance;
 }

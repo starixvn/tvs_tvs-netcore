@@ -145,10 +145,8 @@ describe('EventDangerAcceptedComponent', () => {
 
   it('should call resetVoidTimeArea when filter changes and isChangeSubTypeManual is true', async() => {
     // Arrange
-    logInfoService.resetVoidTimeArea = jest.fn();
-    logInfoService.resetIsCheckedVar = jest.fn();
     component.filter = Helper.fakeFilterModel;
-    component.resetLogInfoAndHideAllEvents = jest.fn();
+    component.resetDateAfterChangeFilter = jest.fn();
     const changes = {
       'filter': new SimpleChange({}, {isChangeSubTypeManual: true, subIssueTypeId: 1}, true)
     };
@@ -157,20 +155,16 @@ describe('EventDangerAcceptedComponent', () => {
     component.ngOnChanges(changes);
 
     // Assert
-    expect(logInfoService.resetVoidTimeArea).toHaveBeenCalled();
-    expect(logInfoService.resetIsCheckedVar).toHaveBeenCalled();
-    expect(component.resetLogInfoAndHideAllEvents).toHaveBeenCalled();
+    expect(component.resetDateAfterChangeFilter).toHaveBeenCalled();
     expect(component.filter.isChangeSubTypeManual).toBeFalsy();
     expect(component.filter.subIssueTypeId).toBe("1");
   });
 
   it('should not call resetVoidTimeArea when filter changes and isChangeSubTypeManual is false', async() => {
     // Arrange
-    logInfoService.resetVoidTimeArea = jest.fn();
-    logInfoService.resetIsCheckedVar = jest.fn();
     component.filter = Helper.fakeFilterModel;
     component.filter.isChangeSubTypeManual = false;
-    component.resetLogInfoAndHideAllEvents = jest.fn();
+    component.resetDateAfterChangeFilter = jest.fn();
     const changes = {
       'filter': new SimpleChange({}, {isChangeSubTypeManual: true, subIssueTypeId: 1}, true)
     };
@@ -179,9 +173,7 @@ describe('EventDangerAcceptedComponent', () => {
     component.ngOnChanges(changes);
 
     // Assert
-    expect(logInfoService.resetVoidTimeArea).toHaveBeenCalledTimes(0);
-    expect(logInfoService.resetIsCheckedVar).toHaveBeenCalledTimes(0);
-    expect(component.resetLogInfoAndHideAllEvents).toHaveBeenCalledTimes(0); 
+    expect(component.resetDateAfterChangeFilter).toHaveBeenCalledTimes(0); 
   });
 
   it('#ngOnInit should be call #updateDefaultFilterTime when edit request', async () => {
@@ -355,7 +347,7 @@ describe('EventDangerAcceptedComponent', () => {
     component.allSelectedEvents = [Helper.fakeLogInfoRedCard];
 
     // Action
-    component.resetLogInfoAndHideAllEvents();
+    component.resetDateAfterChangeFilter();
 
     // Assert
     expect(component.primitiveProps.isShowLogInfoMainMatch).toBeFalsy();
