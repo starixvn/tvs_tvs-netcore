@@ -14,11 +14,11 @@ public interface NotificationLetstalkService
 {
     Task<IEnumerable<Result>> SendToGroupVoidSettledBets(TicketInfoForLetstalk ticketInfo, IEnumerable<TicketEmailModel> tickets);
 
-    Task<Result> SendToGroupTicketListing(string content, LetstalkAttachment attachment);
+    Task<Result> SendToGroupTicketListing(string content, LetstalkAttachment attachment, bool isHasUusTicket);
 
-    Task<Result> SendToGroupTicketListing777(string content, LetstalkAttachment attachment);
+    Task<Result> SendToGroupTicketListing777(string content, LetstalkAttachment attachment, bool isHasUusTicket);
 
-    Task<Result> SendToGroupAbnormalBetRequest(string subject, string content, LetstalkAttachment attachment);
+    Task<Result> SendToGroupAbnormalBetRequest(string subject, string content, bool isHasUusTicket);
 }
 
 public class NotificationLetstalkServiceImp(
@@ -41,42 +41,42 @@ public class NotificationLetstalkServiceImp(
         return await groupVoidSettledBetService.SendMessageWithTicketInfo(letstalkModel, ticketInfo, tickets);
     }
 
-    public async Task<Result> SendToGroupTicketListing(string content, LetstalkAttachment attachment)
+    public async Task<Result> SendToGroupTicketListing(string content, LetstalkAttachment attachment, bool isHasUusTicket)
     {
         var letstalkModel = new LetstalkModel
         {
             TargetName = TargetName,
             Content = content,
             Subject = "Result Amendment Notification - Credit",
-            Group = AppSettingService.AppSetting.LetstalkConfig.TicketListingAlert
+            Group = GroupFactory.GetGroup(LetstalkGroupType.TicketListingAlert, isHasUusTicket)
         };
 
         return await groupTicketListingService.SendMessage(letstalkModel, attachment);
     }
 
-    public async Task<Result> SendToGroupTicketListing777(string content, LetstalkAttachment attachment)
+    public async Task<Result> SendToGroupTicketListing777(string content, LetstalkAttachment attachment, bool isHasUusTicket)
     {
         var letstalkModel = new LetstalkModel
         {
             TargetName = TargetName,
             Content = content,
             Subject = "Result Amendment Notification - Credit (777)",
-            Group = AppSettingService.AppSetting.LetstalkConfig.TicketListingAlert777
+            Group = GroupFactory.GetGroup(LetstalkGroupType.TicketListingAlert777, isHasUusTicket)
         };
 
         return await groupTicketListingService.SendMessage(letstalkModel, attachment);
     }
 
-    public async Task<Result> SendToGroupAbnormalBetRequest(string subject, string content, LetstalkAttachment attachment)
+    public async Task<Result> SendToGroupAbnormalBetRequest(string subject, string content, bool isHasUusTicket)
     {
         var letstalkModel = new LetstalkModel
         {
             TargetName = TargetName,
+            Content = content,
             Subject = subject,
-            Group = AppSettingService.AppSetting.LetstalkConfig.AbnormalBetRequest,
-            Content = content
+            Group = GroupFactory.GetGroup(LetstalkGroupType.AbnormalBetRequest, isHasUusTicket)
         };
 
-        return await groupAbnormalBetRequestService.SendMessage(letstalkModel, attachment);
+        return await groupAbnormalBetRequestService.SendMessage(letstalkModel, null);
     }
 }
