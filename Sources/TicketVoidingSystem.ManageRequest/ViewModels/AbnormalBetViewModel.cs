@@ -1,6 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
-
-namespace TicketVoidingSystem.ManageRequest.ViewModels;
+﻿namespace TicketVoidingSystem.ManageRequest.ViewModels;
 
 public class AbnormalBetViewModel
 {
@@ -13,6 +11,8 @@ public class AbnormalBetViewModel
     public string SubIssueTypeName { get; set; }
 
     public bool IsConfirmCalculator { get; set; }
+
+    public string? ABWhiteListTransIds { get; set; }
 
     public IEnumerable<MatchInfoAddRequest>? Matches { get; set; }
 

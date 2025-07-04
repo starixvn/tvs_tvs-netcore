@@ -9,4 +9,5 @@ export class AbnormalBetModel {
   subIssueTypeId: number;
   isConfirmCalculator: boolean;
   subIssueTypeName: string;
+  abWhiteListTransIds?: string;
 }

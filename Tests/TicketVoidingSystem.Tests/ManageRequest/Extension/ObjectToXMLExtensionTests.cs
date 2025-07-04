@@ -1042,7 +1042,7 @@ public class ObjectToXmlExtensionFacts
             FilterBy = 0,
             SubIssueTypeId = 1
         };
-        const string expected = "<root><r TransIds='123' FilterBy='0' SubIssueTypeId='1' /></root>";
+        const string expected = "<root><r TransIds='123' FilterBy='0' SubIssueTypeId='1' ABWhiteListTransIds='' /></root>";
 
         // Act
         var actual = models.ToEventAbnormalBetXml();

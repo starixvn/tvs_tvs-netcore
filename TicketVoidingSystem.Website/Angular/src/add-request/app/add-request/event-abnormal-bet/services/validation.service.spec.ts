@@ -140,7 +140,10 @@ describe('ValidationService', () => {
         groupNumber: {
           resetAllItemsToValid: () => {},
           checkDuplicatedItems: () => {},
-          updateInvalidItems: jest.fn()
+          updateInvalidItems: jest.fn(),
+          updateMoved: jest.fn(),
+          updateDifferent: jest.fn(),
+          updateWarningSiteDBDown: jest.fn()
         },
         isAllBetIdsValid: () => true,
         getAllBetIds: () => ['123', '456'],

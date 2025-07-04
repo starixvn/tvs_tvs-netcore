@@ -376,7 +376,8 @@ public class GetRequestServiceImp(
             TransIds = firstModel.TransIds,
             FilterBy = firstModel.FilterBy,
             SubIssueTypeId = firstModel.SubIssueTypeId,
-            Matches = matches
+            Matches = matches,
+            ABWhiteListTransIds = firstModel.ABWhiteListTransIds
         };
     }
 

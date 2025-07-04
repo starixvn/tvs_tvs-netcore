@@ -377,7 +377,8 @@ public static class ObjectToXMLExtension
     {
         var stringBuilder = $"<r TransIds='{model.TransIds}' "
                             + $"FilterBy='{model.FilterBy}' "
-                            + $"SubIssueTypeId='{model.SubIssueTypeId}' />";
+                            + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                            + $"ABWhiteListTransIds='{model.ABWhiteListTransIds}' />";
 
         return $"<root>{stringBuilder.Trim()}</root>";
     }

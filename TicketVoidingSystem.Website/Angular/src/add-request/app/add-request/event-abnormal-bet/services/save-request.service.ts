@@ -73,6 +73,7 @@ export class SaveRequestService {
     model.isConfirmCalculator = args.confirmAbnormalBetComponent.isConfirmCalculator;
     model.subIssueTypeName = args.filter.subIssueTypes
       ? args.filter.subIssueTypes.find(x => x.subIssueTypeId.toString() === args.filter.subIssueTypeId).subIssueTypeName : null;
+    model.abWhiteListTransIds = args.abWhiteListTransIds;
 
     return model;
   }

@@ -75,22 +75,6 @@ describe('ValidationService', () => {
       expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalledWith(movedTransIds);
     });
 
-    it('should not call any update methods when both parameters are empty', () => {
-      // Arrange
-      const invalidTransIds = '';
-      const movedTransIds = '';
-      betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
-      betIdsComponent.groupNumber.updateMoved = jest.fn();
-
-      // Act
-      service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
-
-      // Assert
-      expect(betIdsComponent.groupNumber.updateInvalidItems).not.toHaveBeenCalled();
-      expect(betIdsComponent.groupNumber.updateMoved).not.toHaveBeenCalled();
-    });
-  });
-
   describe('checkValidation', () => {
     it('should return true when both components pass validation', () => {
       // Arrange

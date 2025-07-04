@@ -53,9 +53,8 @@
     }
   </div>
   }
-
-  <info-site-db-down [infoSiteDBDownModel]="infoSiteDBDownModel">
-  </info-site-db-down>
+  <ab-exception-list #abExceptionList [betIds]="abnormalBetModel.abWhiteListTransIds"></ab-exception-list>
+  <info-site-db-down [infoSiteDBDownModel]="infoSiteDBDownModel"></info-site-db-down>
 </div>
 
 <confirm-abnormal-bet #confirmAbnormalBetComponent [model]="confirmAbnormalBetModel" (close)="triggerCloseEvent()"

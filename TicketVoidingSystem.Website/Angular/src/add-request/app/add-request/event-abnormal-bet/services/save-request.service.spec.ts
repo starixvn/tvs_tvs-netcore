@@ -70,7 +70,7 @@ describe('SaveRequestService', () => {
       mockAbnormalBetModel.transIds = '1,2,3,4,5,6,7,8,9';
       mockAbnormalBetModel.filterBy = 1;
 
-      const mockArgs: SaveRequestArg = {
+      const mockArgs = {
         isEdit: false,
         requestId: 1,
         addRequestStore: mockAddRequestStore,
@@ -97,7 +97,7 @@ describe('SaveRequestService', () => {
         abnormalBetModel: mockAbnormalBetModel,
         confirmAbnormalBetModel: new ConfirmAbnormalBetModel(),
         confirmAbnormalBetComponent: new ConfirmAbnormalBetComponent()
-      };
+      } as unknown as SaveRequestArg;
 
       jest.spyOn(addRequestService, 'executeSaveRequest');
 

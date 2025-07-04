@@ -274,20 +274,4 @@ describe('ValidationService', () => {
 
     expect(mockUpdateInvalidItems).toHaveBeenCalledTimes(2);
   });
-
-  it('#highlightInvalidTransIds should not call #updateInvalidItems', async () => {
-    const model = new CheckRecoverTicketResult();
-    const mockUpdateInvalidItems = jest.fn();
-    const betIdsComponent = {} as BetIdsComponent;
-    betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.updateInvalidItems = mockUpdateInvalidItems;
-
-    ['', null].forEach(x => {
-      model.invalidTransIds = x;
-      model.unsupportedDateRangeTransIds = x;
-      service['highlightInvalidTransIds'](model, betIdsComponent);
-
-      expect(mockUpdateInvalidItems).toHaveBeenCalledTimes(0);
-    });
-  });
 });

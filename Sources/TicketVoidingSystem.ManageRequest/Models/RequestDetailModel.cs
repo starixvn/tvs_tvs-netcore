@@ -135,6 +135,10 @@ public class RequestEventModel
 
     // Wrong HDP / Wrong OU
     public string FilterBetIdX { get; set; }
+
     public string FilterBetIdY { get; set; }
     public string FilterBetTypeId { get; set; }
+
+    // Abnormal Bet
+    public string? ABWhiteListTransIds { get; set; }
 }
