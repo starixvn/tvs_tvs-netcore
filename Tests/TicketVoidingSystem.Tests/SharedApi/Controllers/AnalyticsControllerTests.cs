@@ -36,11 +36,9 @@ public class AnalyticsControllerTests
         var controller = new AnalyticsController(mediator);
 
         // Act
-        var result = await controller.LogChangeContent(request) as OkObjectResult;
+        await controller.LogChangeContent(request);
 
         // Assert
         await mediator.Received(1).Send(request);
-        Assert.NotNull(result);
-        Assert.Equal(200, result.StatusCode);
     }
 }

@@ -39,6 +39,6 @@ public class LogAccessFunctionHandlerTests
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await userActionLogService.Received(1).LogAccessFunction(functionName);
+        userActionLogService.Received(1).LogAccessFunction(functionName);
     }
 }

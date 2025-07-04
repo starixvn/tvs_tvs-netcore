@@ -22,9 +22,9 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("")]
     [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ABExceptionList, Policy = Constant.Policy.Read)]
-    public async Task<IActionResult> ABExceptionList()
+    public IActionResult ABExceptionList()
     {
-        await userActionLogService.LogAccessFunction(nameof(ABExceptionList));
+        userActionLogService.LogAccessFunction(nameof(ABExceptionList));
         return View("~/wwwroot/dist/ab-exception-list/index.cshtml");
     }
 
@@ -38,16 +38,16 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
             return View("~/Views/Auth/AccessDenied.cshtml");
         }
 
-        await userActionLogService.LogAccessFunction(nameof(VoidRequest));
+        userActionLogService.LogAccessFunction(nameof(VoidRequest));
         return View("~/wwwroot/dist/ticket-voiding-system/void-request/index.cshtml");
     }
 
     [HttpGet]
     [Route("")]
     [Route("Index")]
-    public async Task<ActionResult> ManageRequest()
+    public IActionResult ManageRequest()
     {
-        await userActionLogService.LogAccessFunction(nameof(ManageRequest));
+        userActionLogService.LogAccessFunction(nameof(ManageRequest));
         return View("~/wwwroot/dist/ticket-voiding-system/manage-request/index.cshtml");
     }
 
