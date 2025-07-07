@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Fanex.LetstalkService.Client.Models;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models.Letstalk;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.Letstalk.GroupAbnormalBetRequest;
@@ -31,11 +33,12 @@ public class NotificationLetstalkServiceImp(
 
     public async Task<IEnumerable<Result>> SendToGroupVoidSettledBets(TicketInfoForLetstalk ticketInfo, IEnumerable<TicketEmailModel> tickets)
     {
+        var isHasUusTicket = tickets.Any(ticket => ticket.Currency is CurrencyConstant.UusId);
         var letstalkModel = new LetstalkModel
         {
             TargetName = TargetName,
             Subject = "Void Settled Bet Notification",
-            Group = AppSettingService.AppSetting.LetstalkConfig.VoidSettledBets
+            Group = GroupFactory.GetGroup(LetstalkGroupType.VoidSettledBets, isHasUusTicket)
         };
 
         return await groupVoidSettledBetService.SendMessageWithTicketInfo(letstalkModel, ticketInfo, tickets);

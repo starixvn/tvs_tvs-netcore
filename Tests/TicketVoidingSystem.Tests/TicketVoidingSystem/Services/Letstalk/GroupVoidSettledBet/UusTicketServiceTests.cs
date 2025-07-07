@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupV
 
 public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
 {
-    private readonly UusTicketServiceImp uusTicketService = new();
+    private readonly ValidationTicketServiceImp validationTicketService = new();
 
     [Fact]
     public void IsValidCashOut_TicketIsNotCashOut_ReturnFalse()
@@ -20,7 +20,7 @@ public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
         };
 
         // Act
-        var result = uusTicketService.IsValidCashOut(ticket);
+        var result = validationTicketService.IsValidCashOut(ticket);
 
         // Assert
         Assert.False(result);
@@ -41,7 +41,7 @@ public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
         AppSettingService.AppSetting.LetstalkConfig.IsProdEnv = true;
 
         // Act
-        var result = uusTicketService.IsValidCashOut(ticket);
+        var result = validationTicketService.IsValidCashOut(ticket);
 
         // Assert
         Assert.Equal(expected, result);
@@ -58,7 +58,7 @@ public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
         };
 
         // Act
-        var result = uusTicketService.IsValidSettledSingleTicket(ticket);
+        var result = validationTicketService.IsValidSettledSingleTicket(ticket);
 
         // Assert
         Assert.False(result);
@@ -76,7 +76,7 @@ public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
         };
 
         // Act
-        var result = uusTicketService.IsValidSettledSingleTicket(ticket);
+        var result = validationTicketService.IsValidSettledSingleTicket(ticket);
 
         // Assert
         Assert.False(result);
@@ -94,7 +94,7 @@ public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
         };
 
         // Act
-        var result = uusTicketService.IsValidSettledSingleTicket(ticket);
+        var result = validationTicketService.IsValidSettledSingleTicket(ticket);
 
         // Assert
         Assert.False(result);
@@ -115,7 +115,7 @@ public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
         };
 
         // Act
-        var result = uusTicketService.IsValidSettledParlayTicket(ticket, true);
+        var result = validationTicketService.IsValidSettledParlayTicket(ticket, true);
 
         // Assert
         Assert.Equal(expected, result);
@@ -135,7 +135,7 @@ public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
         };
 
         // Act
-        var result = uusTicketService.IsValidSettledParlayTicket(ticket, false);
+        var result = validationTicketService.IsValidSettledParlayTicket(ticket, false);
 
         // Assert
         Assert.Equal(expected, result);
@@ -157,7 +157,7 @@ public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
         AppSettingService.AppSetting.LetstalkConfig.IsProdEnv = true;
 
         // Act
-        var result = uusTicketService.IsValidSettledParlayTicket(ticket, true);
+        var result = validationTicketService.IsValidSettledParlayTicket(ticket, true);
 
         // Assert
         Assert.Equal(expected, result);

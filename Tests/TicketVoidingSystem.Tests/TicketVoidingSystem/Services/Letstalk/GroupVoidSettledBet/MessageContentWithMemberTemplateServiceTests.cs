@@ -14,12 +14,12 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupV
 public class MessageContentWithMemberTemplateServiceTests
 {
     private readonly MessageContentWithMemberTemplateServiceImp service;
-    private readonly UusTicketService uusTicketService;
+    private readonly ValidationTicketService validationTicketService;
 
     public MessageContentWithMemberTemplateServiceTests()
     {
-        uusTicketService = Substitute.For<UusTicketService>();
-        service = new MessageContentWithMemberTemplateServiceImp(uusTicketService);
+        validationTicketService = Substitute.For<ValidationTicketService>();
+        service = new MessageContentWithMemberTemplateServiceImp(validationTicketService);
     }
 
     [Fact]
@@ -87,9 +87,9 @@ public class MessageContentWithMemberTemplateServiceTests
                       + $"Outstanding: Single Count: {countInfo.OutstandingSingleCount}, Parlay Count: {countInfo.OutstandingParlayCount}){Environment.NewLine}";
         var expected = $"{content}{userNames}";
 
-        uusTicketService.IsValidSettledSingleTicket(Arg.Any<TicketEmailModel>()).Returns(true);
-        uusTicketService.IsValidSettledParlayTicket(Arg.Any<TicketEmailModel>(), Arg.Any<bool>()).Returns(true);
-        uusTicketService.IsValidCashOut(Arg.Any<TicketEmailModel>()).ReturnsForAnyArgs(true);
+        validationTicketService.IsValidSettledSingleTicket(Arg.Any<TicketEmailModel>()).Returns(true);
+        validationTicketService.IsValidSettledParlayTicket(Arg.Any<TicketEmailModel>(), Arg.Any<bool>()).Returns(true);
+        validationTicketService.IsValidCashOut(Arg.Any<TicketEmailModel>()).ReturnsForAnyArgs(true);
 
         // Act
         var result = service.Create(model, tickets);
@@ -243,9 +243,9 @@ public class MessageContentWithMemberTemplateServiceTests
             }
         };
 
-        uusTicketService.IsValidSettledSingleTicket(Arg.Any<TicketEmailModel>()).Returns(true);
-        uusTicketService.IsValidSettledParlayTicket(Arg.Any<TicketEmailModel>(), Arg.Any<bool>()).Returns(false);
-        uusTicketService.IsValidCashOut(Arg.Any<TicketEmailModel>()).ReturnsForAnyArgs(false);
+        validationTicketService.IsValidSettledSingleTicket(Arg.Any<TicketEmailModel>()).Returns(true);
+        validationTicketService.IsValidSettledParlayTicket(Arg.Any<TicketEmailModel>(), Arg.Any<bool>()).Returns(false);
+        validationTicketService.IsValidCashOut(Arg.Any<TicketEmailModel>()).ReturnsForAnyArgs(false);
 
         // Act
         var result = service.Create(model, tickets);
