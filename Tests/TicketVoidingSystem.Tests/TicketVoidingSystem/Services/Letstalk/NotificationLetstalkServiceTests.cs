@@ -54,7 +54,7 @@ public class NotificationLetstalkServiceTests : IClassFixture<AppSettingFixture>
         var attachment = new LetstalkAttachment();
 
         // Act
-        _ = await service.SendToGroupTicketListing(content, attachment);
+        _ = await service.SendToGroupTicketListing(content, attachment, true);
 
         // Assert
         await groupTicketListingService.Received(1).SendMessage(Arg.Any<LetstalkModel>(), attachment);
@@ -67,7 +67,7 @@ public class NotificationLetstalkServiceTests : IClassFixture<AppSettingFixture>
         var attachment = new LetstalkAttachment();
 
         // Act
-        _ = await service.SendToGroupAbnormalBetRequest("", "", attachment);
+        _ = await service.SendToGroupAbnormalBetRequest("", "", true);
 
         // Assert
         await groupAbnormalBetRequestService.Received(1).SendMessage(Arg.Any<LetstalkModel>(), Arg.Any<LetstalkAttachment>());
@@ -78,7 +78,7 @@ public class NotificationLetstalkServiceTests : IClassFixture<AppSettingFixture>
     {
         // Arrange
         // Act
-        _ = await service.SendToGroupTicketListing777(default, default);
+        _ = await service.SendToGroupTicketListing777(default, default, default);
 
         // Assert
         await groupTicketListingService.Received(1).SendMessage(Arg.Any<LetstalkModel>(), Arg.Any<LetstalkAttachment>());

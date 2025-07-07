@@ -46,7 +46,7 @@ public class SendLetstalkAfterAddServiceTests
 
         // Assert
         await notificationLetstalkService.Received(1)
-            .SendToGroupAbnormalBetRequest(Arg.Any<string>(), Arg.Any<string>(), null);
+            .SendToGroupAbnormalBetRequest(Arg.Any<string>(), Arg.Any<string>(), true);
     }
 
     [Fact]
@@ -59,6 +59,6 @@ public class SendLetstalkAfterAddServiceTests
 
         // Assert
         await notificationLetstalkService.Received(0)
-            .SendToGroupAbnormalBetRequest(Arg.Any<string>(), Arg.Any<string>(), null);
+            .SendToGroupAbnormalBetRequest(Arg.Any<string>(), Arg.Any<string>(), true);
     }
 }

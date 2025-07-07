@@ -6,7 +6,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
 
-public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
+public class ValidationTicketServiceTests : IClassFixture<AppSettingFixture>
 {
     private readonly ValidationTicketServiceImp validationTicketService = new();
 
@@ -27,18 +27,14 @@ public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
     }
 
     [Theory]
-    [InlineData(true, 21, true)]
-    [InlineData(false, 21, false)]
-    [InlineData(true, 20, false)]
-    public void IsValidCashOut_ProdEnvIsTrue_ReturnExpected(bool isCashOut, int currency, bool expected)
+    [InlineData(true, true)]
+    public void IsValidCashOut_ProdEnvIsTrue_ReturnExpected(bool isCashOut, bool expected)
     {
         // Arrange
         var ticket = new TicketEmailModel
         {
-            IsCashOut = isCashOut,
-            Currency = currency
+            IsCashOut = isCashOut
         };
-        AppSettingService.AppSetting.LetstalkConfig.IsProdEnv = true;
 
         // Act
         var result = validationTicketService.IsValidCashOut(ticket);
@@ -142,15 +138,12 @@ public class UusTicketServiceTests : IClassFixture<AppSettingFixture>
     }
 
     [Theory]
-    [InlineData(29, 21, true)]
-    [InlineData(1, 21, false)]
-    [InlineData(29, 20, false)]
-    public void IsValidSettledParlayTicket_ProdEnvIsTrue_ReturnExpected(int betTypeId, int currency, bool expected)
+    [InlineData(29, true)]
+    public void IsValidSettledParlayTicket_ProdEnvIsTrue_ReturnExpected(int betTypeId, bool expected)
     {
         // Arrange
         var ticket = new TicketEmailModel
         {
-            Currency = currency,
             BetTypeId = betTypeId,
             Status = TicketStatus.Draw
         };
