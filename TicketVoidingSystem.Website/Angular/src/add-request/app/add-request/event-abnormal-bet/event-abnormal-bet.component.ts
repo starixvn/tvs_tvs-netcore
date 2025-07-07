@@ -199,7 +199,7 @@ export class EventAbnormalBetComponent implements OnInit {
     args.confirmAbnormalBetComponent = this.confirmAbnormalBetComponent;
     args.addRequestStore = this.addRequestStore;
     if (this.confirmAbnormalBetComponent.isMarkTicketSiteDbDown) {
-      args.siteDBDownInfoJson = this.infoSiteDBDownModel.siteDBDownInfoJson;
+      args.siteDBDownInfoJson = this.infoSiteDBDownModel?.siteDBDownInfoJson;
     }
 
     await this.saveRequestService.executeSave(args);

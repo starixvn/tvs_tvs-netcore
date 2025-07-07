@@ -18,7 +18,6 @@ export class InfoSiteDBDownComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['infoSiteDBDownModel']) {
-      console.log('infoSiteDBDownModel', this.infoSiteDBDownModel);
       this.isSiteDBDown = this.affectedTicketOfSiteDBDown();
     }
   }

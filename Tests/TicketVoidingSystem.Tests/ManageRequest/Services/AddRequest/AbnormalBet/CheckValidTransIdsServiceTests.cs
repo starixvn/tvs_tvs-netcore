@@ -277,7 +277,7 @@ public class CheckValidTransIdsServiceTests
         Assert.Equal("123,456,789,100", result.RemoveTransIds);
         Assert.Equal("789,100,200", result.UnMarkTransIds);
         Assert.Equal("100,200", result.MarkTransIds);
-        Assert.Equal("json1,json2", result.TransInfoJson); // Should only include non-empty MarkTransIds
+        Assert.Equal("json1,json2,json3", result.TransInfoJson); // Should only include non-empty MarkTransIds
     }
 
     [Fact]

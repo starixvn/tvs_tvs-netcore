@@ -105,7 +105,7 @@ public class CheckValidTransIdsServiceImp(
             RemoveTransIds = Helper.GetUnionTransIdString(transInfoAddRequests.Select(x => x.RemoveTransIds)),
             UnMarkTransIds = Helper.GetUnionTransIdString(transInfoAddRequests.Select(x => x.UnMarkTransIds)),
             MarkTransIds = Helper.GetUnionTransIdString(transInfoAddRequests.Select(x => x.MarkTransIds)),
-            TransInfoJson = string.Join(",", transInfoAddRequests.Where(x => !string.IsNullOrEmpty(x.MarkTransIds)).Select(x => x.TransInfoJson))
+            TransInfoJson = string.Join(",", transInfoAddRequests.Where(x => !string.IsNullOrEmpty(x.TransInfoJson)).Select(x => x.TransInfoJson))
         };
     }
 
