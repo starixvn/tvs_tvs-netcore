@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
@@ -45,7 +45,6 @@ export class EventAbnormalBetComponent implements OnInit {
   @Input() abnormalBetModel = new AbnormalBetModel();
   @ViewChild('betIds') betIdsComponent: BetIdsComponent;
   @ViewChild('confirmAbnormalBetComponent') confirmAbnormalBetComponent: ConfirmAbnormalBetComponent;
-  @ViewChild('abExceptionList') abExceptionList: AbExceptionListComponent;
 
   infoSiteDBDownModel: InfoSiteDBDownModel;
   primitiveProps = new PrimitiveProperty();
@@ -62,8 +61,7 @@ export class EventAbnormalBetComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
-      this.abnormalBetModel.abWhiteListTransIds = this.primitiveProps.abWhiteListTransIds;
-      this.abExceptionList.removeAllItems();
+      this.abnormalBetModel.abWhiteListTransIds = '';
       this.filter.isChangeSubTypeManual = false;
     }
   }
@@ -71,8 +69,13 @@ export class EventAbnormalBetComponent implements OnInit {
     if (!this.isEdit) {
       this.abnormalBetModel.filterBy = AbnormalFilterBy.SINGLE;
     }
+
     this.addRequestStore.changeAbnormalFilterBy(this.abnormalBetModel.filterBy);
     this.permission = await this.addRequestApiService.getPermissionAddRequest();
+  }
+
+  changeAbExceptionList(betIds: string) {
+    this.abnormalBetModel.abWhiteListTransIds = betIds;
   }
 
   isShowButtonExportTicket(): boolean {
@@ -118,8 +121,9 @@ export class EventAbnormalBetComponent implements OnInit {
 
   public removeInvalidTransIds(): void {
     this.betIdsComponent.removeTransId(this.primitiveProps.invalidTransIds);
-    this.abnormalBetModel.abWhiteListTransIds = this.primitiveProps.abWhiteListTransIds;
-    this.primitiveProps.abWhiteListTransIds = null;
+    this.abnormalBetModel.abWhiteListTransIds = this.abnormalBetModel.abWhiteListTransIds ? this.abnormalBetModel.abWhiteListTransIds + ',' + this.primitiveProps.abWhiteListTransIds
+      : this.primitiveProps.abWhiteListTransIds;
+    this.primitiveProps.abWhiteListTransIds = '';
     this.primitiveProps.isShowButtonRemoveInvalid = false;
     const invalidTransIds = this.primitiveProps.invalidTransIds.split(',');
     this.exportTickets = this.exportTickets.filter(x => !(invalidTransIds.includes(x.betId)));
@@ -213,7 +217,7 @@ export class EventAbnormalBetComponent implements OnInit {
     if (this.confirmAbnormalBetComponent.isMarkTicketSiteDbDown) {
       args.siteDBDownInfoJson = this.infoSiteDBDownModel?.siteDBDownInfoJson;
     }
-    args.abWhiteListTransIds = this.abExceptionList?.getAllTransIds();
+    args.abWhiteListTransIds = this.abnormalBetModel.abWhiteListTransIds;
 
     await this.saveRequestService.executeSave(args);
   }

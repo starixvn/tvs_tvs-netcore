@@ -4,6 +4,19 @@
   align-items: center;
 }
 
+.disabled-input {
+  background-color: #e9ecef !important;
+  opacity: 1;
+
+  .item-number {
+    background-color: #e9ecef !important;
+  }
+}
+
+.point-event-none {
+  pointer-events: none !important;
+}
+
 .ab-exception-list-items {
     max-height: 478px;
     overflow: auto;
