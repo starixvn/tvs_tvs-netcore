@@ -1,7 +1,8 @@
 import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet.component';
-import { CheckboxType, ConfirmAbnormalBetModel } from './confirm-abnormal-bet.model';
+import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet.model';
+import { CheckboxType } from '../../../../../utility/constants/config';
 
 class ConfirmAbnormalBetTestHelper {
   static createBaseModel(): ConfirmAbnormalBetModel {
@@ -130,7 +131,7 @@ describe('ConfirmAbnormalBetComponent', () => {
 
     // Assert
     expect(component.isShowErrorCannotRemoveAllTickets).toBeTruthy();
-    expect(component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_201]).toBeFalsy();
+    expect(component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_201]).toBeTruthy();
   });
 
   it('should handle all tickets of customer class 4K', () => {
@@ -146,7 +147,7 @@ describe('ConfirmAbnormalBetComponent', () => {
 
     // Assert
     expect(component.isShowErrorCannotRemoveAllTickets).toBeTruthy();
-    expect(component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_4K]).toBeFalsy();
+    expect(component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_4K]).toBeTruthy();
   });
 
   it('should handle all tickets of both customer classes', () => {
@@ -170,7 +171,7 @@ describe('ConfirmAbnormalBetComponent', () => {
     // Assert
     expect(component.isShowErrorCannotRemoveAllTickets).toBeTruthy();
     expect(component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_201]).toBeTruthy();
-    expect(component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_4K]).toBeFalsy();
+    expect(component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_4K]).toBeTruthy();
   });
 
   it('should handle checkbox toggle', () => {
@@ -189,57 +190,6 @@ describe('ConfirmAbnormalBetComponent', () => {
 
     // Assert
     expect(component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_201]).toBeTruthy();
-  });
-
-  it('should handle isCheckboxDisabled', () => {
-    // Arrange
-    const model = new ConfirmAbnormalBetModel();
-    model.transIds = '7,8,9,10';
-    model.ticketsOfCustomerClass201 = '7,8,9';
-    model.ticketsOfCustomerClass4K = '10';
-    model.ticketsOfCreditCashService = '';
-    component.model = model;
-
-    // Set checkboxes manually since ngOnChanges won't be called
-    component.model.checkboxes = {
-      [CheckboxType.CUSTOMER_CLASS_201]: model.ticketsOfCustomerClass201,
-      [CheckboxType.CUSTOMER_CLASS_4K]: model.ticketsOfCustomerClass4K,
-      [CheckboxType.CREDIT_CASH_SERVICE]: model.ticketsOfCreditCashService,
-    };
-
-    // Debug: Let's see what happens
-    console.log('transIds:', model.transIds);
-    console.log('ticketsOfCustomerClass201:', model.ticketsOfCustomerClass201);
-    console.log('ticketsOfCustomerClass4K:', model.ticketsOfCustomerClass4K);
-    console.log('isCheckboxDisabled CUSTOMER_CLASS_201:', component.isCheckboxDisabled(CheckboxType.CUSTOMER_CLASS_201));
-    console.log('isCheckboxDisabled CUSTOMER_CLASS_4K:', component.isCheckboxDisabled(CheckboxType.CUSTOMER_CLASS_4K));
-
-    // Act & Assert
-    // Based on the logic: if checking CUSTOMER_CLASS_201 (7,8,9) would remove all tickets from transIds (7,8,9,10)
-    // Then remaining would be [10], so length > 0, so should return false (not disabled)
-    // But we expect it to be disabled, so our test data is wrong
-    expect(component.isCheckboxDisabled(CheckboxType.CUSTOMER_CLASS_201)).toBeFalsy(); // Fixed expectation
-    expect(component.isCheckboxDisabled(CheckboxType.CUSTOMER_CLASS_4K)).toBeFalsy();
-  });
-
-  it('should handle isCheckboxDisabled when all tickets would be removed', () => {
-    // Arrange - This should actually disable the checkbox
-    const model = new ConfirmAbnormalBetModel();
-    model.transIds = '7,8,9';
-    model.ticketsOfCustomerClass201 = '7,8,9';
-    model.ticketsOfCustomerClass4K = '';
-    model.ticketsOfCreditCashService = '';
-    component.model = model;
-
-    component.model.checkboxes = {
-      [CheckboxType.CUSTOMER_CLASS_201]: model.ticketsOfCustomerClass201,
-      [CheckboxType.CUSTOMER_CLASS_4K]: model.ticketsOfCustomerClass4K,
-      [CheckboxType.CREDIT_CASH_SERVICE]: model.ticketsOfCreditCashService,
-    };
-
-    // Act & Assert
-    // When checking CUSTOMER_CLASS_201 would remove ALL tickets, it should be disabled
-    expect(component.isCheckboxDisabled(CheckboxType.CUSTOMER_CLASS_201)).toBeTruthy();
   });
 
   it('should handle closeClick', () => {
@@ -301,5 +251,41 @@ describe('ConfirmAbnormalBetComponent', () => {
     expect(component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_201]).toBeTruthy();
     expect(component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_4K]).toBeTruthy();
     expect(component.model.checkboxState[CheckboxType.CREDIT_CASH_SERVICE]).toBeTruthy();
+  });
+
+  it('should check if at least one checkbox is checked', () => {
+    // Arrange
+    component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_201] = true;
+    component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_4K] = false;
+    component.model.checkboxState[CheckboxType.CREDIT_CASH_SERVICE] = false;
+
+    // Act & Assert
+    expect(component.isExistAtleastOneCheckboxChecked()).toBeTruthy();
+
+    // Arrange - no checkboxes checked
+    component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_201] = false;
+    component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_4K] = false;
+    component.model.checkboxState[CheckboxType.CREDIT_CASH_SERVICE] = false;
+
+    // Act & Assert
+    expect(component.isExistAtleastOneCheckboxChecked()).toBeFalsy();
+  });
+
+  it('should check if OK button is disabled when all tickets can be removed', () => {
+    // Arrange - all tickets can be removed
+    component.model.transIds = '7,8,9';
+    component.model.checkboxes[CheckboxType.CUSTOMER_CLASS_201] = '7,8,9';
+    component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_201] = true;
+
+    // Act & Assert
+    expect(component.isOkButtonDisabled()).toBeTruthy();
+
+    // Arrange - not all tickets can be removed
+    component.model.transIds = '7,8,9,10';
+    component.model.checkboxes[CheckboxType.CUSTOMER_CLASS_201] = '7,8,9';
+    component.model.checkboxState[CheckboxType.CUSTOMER_CLASS_201] = true;
+
+    // Act & Assert
+    expect(component.isOkButtonDisabled()).toBeFalsy();
   });
 });

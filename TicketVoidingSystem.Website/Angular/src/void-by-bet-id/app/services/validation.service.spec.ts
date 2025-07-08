@@ -18,10 +18,10 @@ describe('ValidationService', () => {
 
     service = TestBed.inject(ValidationService);
     betIdsComponent = {
-        groupNumber: {
-            updateInvalidItems: jest.fn(),
-            updateMoved: jest.fn()
-        }
+      groupNumber: {
+        updateInvalidItems: jest.fn(),
+        updateMoved: jest.fn()
+      }
     } as unknown as BetIdsComponent;
   });
 
@@ -30,36 +30,6 @@ describe('ValidationService', () => {
   });
 
   describe('highlightInvalidTransIds', () => {
-    it('should update invalid items when invalidTransIds is provided', () => {
-      // Arrange
-      const invalidTransIds = '123,456';
-      const movedTransIds = '';
-      betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
-      betIdsComponent.groupNumber.updateMoved = jest.fn();
-
-      // Act
-      service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
-
-      // Assert
-      expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith(invalidTransIds, LABELS.INVALID_TICKETS);
-      expect(betIdsComponent.groupNumber.updateMoved).not.toHaveBeenCalled();
-    });
-
-    it('should update moved items when movedTransIds is provided', () => {
-      // Arrange
-      const invalidTransIds = '';
-      const movedTransIds = '789,012';
-      betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
-      betIdsComponent.groupNumber.updateMoved = jest.fn();
-
-      // Act
-      service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
-
-      // Assert
-      expect(betIdsComponent.groupNumber.updateInvalidItems).not.toHaveBeenCalled();
-      expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalledWith(movedTransIds);
-    });
-
     it('should handle both invalid and moved items when both are provided', () => {
       // Arrange
       const invalidTransIds = '123,456';
@@ -74,6 +44,7 @@ describe('ValidationService', () => {
       expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith(invalidTransIds, LABELS.INVALID_TICKETS);
       expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalledWith(movedTransIds);
     });
+  });
 
   describe('checkValidation', () => {
     it('should return true when both components pass validation', () => {

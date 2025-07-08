@@ -20,6 +20,7 @@ import { ChildMatchModel } from '../models/related-event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
 import { TvDetectionModel } from '../components/tv-detection/tv-detection.model';
+import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -172,7 +173,23 @@ describe('EventRedCardComponent', () => {
 
   it('should handle search event with validation', async () => {
     // Arrange
-    component.eventLeagueComponent = {} as EventLeagueComponent;
+    component.eventLeagueComponent = {
+      selectedMatch: {
+        parentId: 456,
+        matchId: 123,
+        name: 'Test Match',
+        leagueName: 'Test League',
+        matchCode: 'TEST123',
+        eventDate: new Date(),
+        sportType: 1
+      }
+    } as EventLeagueComponent;
+    component.filterTimeAreaComponent = {
+      filterTimeWithAllowanceComponent: {
+        updateData: jest.fn()
+      }
+    } as any;
+    component.tvDetectionComponent = {} as any;
     const logInfoComponent = {
       isMainMatch: true,
       logInfo: { isShowValidation: false },
@@ -197,6 +214,8 @@ describe('EventRedCardComponent', () => {
     validationService.validateCommonData = jest.fn().mockReturnValue(true);
     logInfoService.getLogInfo = jest.fn().mockResolvedValue(undefined);
     relatedEventService.getChildMatches = jest.fn().mockResolvedValue([]);
+    relatedEventService.getDataWhenSearch = jest.fn().mockResolvedValue(undefined);
+    logInfoService.updateIsCheckedVar = jest.fn();
     component.mainEvent = {
       matchId: 123,
       matchCode: 'TEST123',
@@ -213,15 +232,97 @@ describe('EventRedCardComponent', () => {
       tvDetectionModel: new TvDetectionModel()
     } as unknown as LogInfoRelatedEvent;
     component.filter = Helper.fakeFilterModel;
+    component.allSelectedEvents = [component.mainEvent];
+    addRequestStore.changeBlockingUiStatus = jest.fn();
+    addRequestStore.changeSavingRequestStatus = jest.fn();
 
     // Act
     await component.handleSearchEvent();
 
     // Assert
     expect(validationService.validateCommonData).toHaveBeenCalled();
-    expect(logInfoService.getLogInfo).toHaveBeenCalled();
+    expect(relatedEventService.getChildMatches).toHaveBeenCalled();
+    expect(relatedEventService.getDataWhenSearch).toHaveBeenCalled();
+    expect(logInfoService.updateIsCheckedVar).toHaveBeenCalled();
     expect(component.primitiveProps.isShowRelatedEvents).toBeTruthy();
     expect(logInfoComponent.showValidationDetail).toHaveBeenCalled();
+    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+  });
+
+  it('should handle search event with validation failure', async () => {
+    // Arrange
+    component.eventLeagueComponent = {
+      selectedMatch: {
+        parentId: 456,
+        matchId: 123,
+        name: 'Test Match',
+        leagueName: 'Test League',
+        matchCode: 'TEST123',
+        eventDate: new Date(),
+        sportType: 1
+      }
+    } as EventLeagueComponent;
+    component.filterTimeAreaComponent = {
+      filterTimeWithAllowanceComponent: {
+        updateData: jest.fn()
+      }
+    } as any;
+    component.tvDetectionComponent = {} as any;
+    validationService.validateCommonData = jest.fn().mockReturnValue(false);
+    component.mainEvent = {
+      matchId: 123,
+      isCheckedVar: null,
+      subIssueTypeId: 15,
+      voidTimeArea: {},
+      tvDetectionModel: new TvDetectionModel()
+    } as unknown as LogInfoRelatedEvent;
+    component.filter = Helper.fakeFilterModel;
+
+    // Act
+    await component.handleSearchEvent();
+
+    // Assert
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(component.primitiveProps.isShowRelatedEvents).toBeFalsy();
+  });
+
+  it('should handle search event with var check validation failure', async () => {
+    // Arrange
+    component.eventLeagueComponent = {
+      selectedMatch: {
+        parentId: 456,
+        matchId: 123,
+        name: 'Test Match',
+        leagueName: 'Test League',
+        matchCode: 'TEST123',
+        eventDate: new Date(),
+        sportType: 1
+      }
+    } as EventLeagueComponent;
+    component.filterTimeAreaComponent = {
+      filterTimeWithAllowanceComponent: {
+        updateData: jest.fn()
+      }
+    } as any;
+    component.tvDetectionComponent = {} as any;
+    validationService.validateCommonData = jest.fn().mockReturnValue(true);
+    component.mainEvent = {
+      matchId: 123,
+      isCheckedVar: null,
+      subIssueTypeId: 15,
+      voidTimeArea: {},
+      tvDetectionModel: new TvDetectionModel()
+    } as unknown as LogInfoRelatedEvent;
+    component.filter = Helper.fakeFilterModel;
+    jest.spyOn(component, 'isShowVarCheck').mockReturnValue(true);
+
+    // Act
+    await component.handleSearchEvent();
+
+    // Assert
+    expect(validationService.validateCommonData).toHaveBeenCalled();
+    expect(component.mainEvent.isHighLightVarCheck).toBeTruthy();
+    expect(component.primitiveProps.isShowRelatedEvents).toBeFalsy();
   });
 
   it('should handle match event change', () => {
@@ -439,5 +540,173 @@ describe('EventRedCardComponent', () => {
 
     // Assert
     expect(result).toEqual([component.mainEvent.logInfoDetail]);
+  });
+
+  it('should save related event', async () => {
+    // Arrange
+    const selectedRelatedEvents = [
+      {
+        matchId: 123,
+        matchType: MatchType.CHILD,
+        isChecked: true,
+        matchCode: 'TEST123',
+        leagueName: 'Test League',
+        matchEvent: 'Test Event'
+      } as ChildMatchModel
+    ];
+    component.allSelectedEvents = [
+      {
+        matchId: 456,
+        isMainMatch: true,
+        eventName: 'Test Event 2',
+        leagueName: 'Test League',
+        matchCode: 'TEST456',
+        logInfoDetail: new LogInfoDetail(),
+        isShowValidation: false,
+        isCheckedVar: false,
+        sportType: 1,
+        subIssueTypeId: 15,
+        voidTimeArea: {},
+        tvDetectionModel: new TvDetectionModel()
+      } as unknown as LogInfoRelatedEvent
+    ];
+    component.relatedEvents = [
+      {
+        matchId: 123,
+        matchType: MatchType.CHILD,
+        isChecked: false,
+        matchCode: 'TEST123',
+        leagueName: 'Test League',
+        matchEvent: 'Test Event'
+      } as ChildMatchModel
+    ];
+    component.mainEvent = {
+      matchId: 456,
+      isMainMatch: true,
+      isCheckedVar: false,
+      subIssueTypeId: 15,
+      voidTimeArea: {},
+      tvDetectionModel: new TvDetectionModel()
+    } as unknown as LogInfoRelatedEvent;
+    component.defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
+    component.addChildMatchModel = new AddChildMatchModel();
+    component.addChildMatchModel.matchType = MatchType.CHILD;
+    relatedEventService.assignChildMatchToLogInfoModel = jest.fn().mockReturnValue([
+      {
+        matchId: 123,
+        isMainMatch: false,
+        eventName: 'Test Event',
+        leagueName: 'Test League',
+        matchCode: 'TEST123',
+        logInfoDetail: new LogInfoDetail(),
+        isShowValidation: false,
+        isCheckedVar: false,
+        sportType: 1,
+        subIssueTypeId: 15,
+        voidTimeArea: {},
+        tvDetectionModel: new TvDetectionModel()
+      } as unknown as LogInfoRelatedEvent
+    ]);
+    eventRedCardService.updateSubIssueTypeAndAllowanceTime = jest.fn().mockResolvedValue(undefined);
+    logInfoService.getLogInfo = jest.fn().mockResolvedValue(undefined);
+    logInfoService.updateIsCheckedVar = jest.fn();
+
+    // Act
+    await component.saveRelatedEvent(selectedRelatedEvents);
+
+    // Assert
+    expect(relatedEventService.assignChildMatchToLogInfoModel).toHaveBeenCalled();
+    expect(eventRedCardService.updateSubIssueTypeAndAllowanceTime).toHaveBeenCalled();
+    expect(logInfoService.getLogInfo).toHaveBeenCalled();
+    expect(logInfoService.updateIsCheckedVar).toHaveBeenCalled();
+    expect(component.primitiveProps.isShowRelatedEvents).toBeTruthy();
+    expect(component.primitiveProps.isBlock).toBeFalsy();
+  });
+
+  it('should handle click add related event', async () => {
+    // Arrange
+    component.allSelectedEvents = [
+      {
+        matchId: 123,
+        isMainMatch: true,
+        eventName: 'Test Event',
+        leagueName: 'Test League',
+        matchCode: 'TEST123',
+        logInfoDetail: new LogInfoDetail(),
+        isShowValidation: false,
+        isCheckedVar: false,
+        sportType: 1,
+        subIssueTypeId: 15,
+        voidTimeArea: {},
+        tvDetectionModel: new TvDetectionModel()
+      } as unknown as LogInfoRelatedEvent
+    ];
+    relatedEventService.addRelatedEventByInput = jest.fn().mockResolvedValue(undefined);
+
+    // Act
+    await component.handleClickAddRelatedEvent();
+
+    // Assert
+    expect(relatedEventService.addRelatedEventByInput).toHaveBeenCalled();
+  });
+
+  it('should show add child match modal', () => {
+    // Arrange
+    const matchType = MatchType.CHILD;
+    component.allSelectedEvents = [
+      {
+        matchId: 123,
+        isMainMatch: true,
+        eventName: 'Test Event',
+        leagueName: 'Test League',
+        matchCode: 'TEST123',
+        logInfoDetail: new LogInfoDetail(),
+        isShowValidation: false,
+        isCheckedVar: false,
+        sportType: 1,
+        subIssueTypeId: 15,
+        voidTimeArea: {},
+        tvDetectionModel: new TvDetectionModel()
+      } as unknown as LogInfoRelatedEvent
+    ];
+
+    // Act
+    component.showAddChildMatchModal(matchType);
+
+    // Assert
+    expect(component.addChildMatchModel.selectedMatchIds).toEqual([123]);
+    expect(component.addChildMatchModel.matchType).toBe(matchType);
+    expect(component.addChildMatchModel.isOpen).toBeTruthy();
+  });
+
+  it('should handle actual time change', () => {
+    // Arrange
+    const actualTime = '14:30';
+    component.filterTimeAreaComponent = {
+      filterTimeWithAllowanceComponent: {
+        fromTime: ''
+      }
+    } as any;
+    component.mainEvent = {
+      matchId: 123,
+      isMainMatch: true,
+      eventName: 'Test Event',
+      leagueName: 'Test League',
+      matchCode: 'TEST123',
+      logInfoDetail: new LogInfoDetail(),
+      isShowValidation: false,
+      isCheckedVar: false,
+      sportType: 1,
+      subIssueTypeId: 15,
+      voidTimeArea: {},
+      tvDetectionModel: new TvDetectionModel()
+    } as unknown as LogInfoRelatedEvent;
+
+    // Act
+    component.actualTimeChange(actualTime);
+
+    // Assert
+    expect(component.filterTimeAreaComponent.filterTimeWithAllowanceComponent.fromTime).toBeDefined();
+    expect(component.relatedEvents).toEqual([]);
   });
 });

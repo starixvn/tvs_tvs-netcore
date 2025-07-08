@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ValidationService } from './validation.service';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { CheckboxType, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { ValidationAbnormalBet } from '../event-abnormal-bet.model';
@@ -34,8 +34,13 @@ describe('ValidationService', () => {
       } as unknown as BetIdsComponent;
 
       const mockConfirmAbnormalBetComponent = {
-        isRemoveCustomerClass201: true,
-        isRemoveCustomerClass4K: false
+        model: {
+          checkboxState: {
+            [CheckboxType.CUSTOMER_CLASS_201]: true,
+            [CheckboxType.CUSTOMER_CLASS_4K]: false,
+            [CheckboxType.CREDIT_CASH_SERVICE]: false
+          }
+        }
       };
 
       const mockPermission = {
@@ -71,6 +76,7 @@ describe('ValidationService', () => {
         subIssueTypeId: 1,
         isRemoveCustomerClass201: true,
         isRemoveCustomerClass4K: false,
+        isRemoveCreditCashService: false,
         isAddSettledTickets: true,
         isVoidAllArchivedTickets: false
       });
@@ -94,6 +100,15 @@ describe('ValidationService', () => {
         },
         issueTypeId: '1',
         isValidateFromConfirmPopup: false,
+        confirmAbnormalBetComponent: {
+          model: {
+            checkboxState: {
+              [CheckboxType.CUSTOMER_CLASS_201]: false,
+              [CheckboxType.CUSTOMER_CLASS_4K]: false,
+              [CheckboxType.CREDIT_CASH_SERVICE]: false
+            }
+          }
+        },
         permission: {
           isAddSettledTickets: true,
           isVoidAllArchivedTickets: false
@@ -162,6 +177,15 @@ describe('ValidationService', () => {
         },
         issueTypeId: '1',
         isValidateFromConfirmPopup: false,
+        confirmAbnormalBetComponent: {
+          model: {
+            checkboxState: {
+              [CheckboxType.CUSTOMER_CLASS_201]: false,
+              [CheckboxType.CUSTOMER_CLASS_4K]: false,
+              [CheckboxType.CREDIT_CASH_SERVICE]: false
+            }
+          }
+        },
         permission: {
           isAddSettledTickets: true,
           isVoidAllArchivedTickets: false

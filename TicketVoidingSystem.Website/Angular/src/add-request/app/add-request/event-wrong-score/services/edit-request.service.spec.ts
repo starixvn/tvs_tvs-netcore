@@ -105,7 +105,6 @@ describe('EditRequestService', () => {
   let service: EditRequestService;
   let relatedEventService: jest.Mocked<RelatedEventService>;
   let wrongScoreService: jest.Mocked<WrongScoreService>;
-  let eventWrongScoreService: jest.Mocked<EventWrongScoreService>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -127,7 +126,6 @@ describe('EditRequestService', () => {
     service = TestBed.inject(EditRequestService);
     relatedEventService = TestBed.inject(RelatedEventService) as jest.Mocked<RelatedEventService>;
     wrongScoreService = TestBed.inject(WrongScoreService) as jest.Mocked<WrongScoreService>;
-    eventWrongScoreService = TestBed.inject(EventWrongScoreService) as jest.Mocked<EventWrongScoreService>;
   });
 
   it('should be created', () => {
@@ -150,7 +148,6 @@ describe('EditRequestService', () => {
       expect(primitiveProps.filterBy).toBe(mainEvent.filterBy);
       expect(primitiveProps.isShowActualScore).toBe(true);
       expect(primitiveProps.isCheckedVar).toBe(mainEvent.isCheckedVar);
-      expect(primitiveProps.isHighLightVarCheck).toBe(!mainEvent.isCheckedVar);
       expect(primitiveProps.isShowRelatedEvents).toBe(mockIsHasRelatedEvent);
       expect(SubIssueTypeRelatedEvent.isHasRelatedEvent).toHaveBeenCalledWith(Number(mainEvent.subIssueTypeId));
     });
@@ -167,7 +164,6 @@ describe('EditRequestService', () => {
 
       // Assert
       expect(primitiveProps.isCheckedVar).toBe(true);
-      expect(primitiveProps.isHighLightVarCheck).toBe(false);
     });
 
     it('should handle isCheckedVar as false', () => {
@@ -182,7 +178,6 @@ describe('EditRequestService', () => {
 
       // Assert
       expect(primitiveProps.isCheckedVar).toBe(false);
-      expect(primitiveProps.isHighLightVarCheck).toBe(true);
     });
   });
 

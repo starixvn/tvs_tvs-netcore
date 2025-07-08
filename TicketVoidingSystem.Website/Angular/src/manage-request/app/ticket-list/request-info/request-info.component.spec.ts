@@ -33,13 +33,46 @@ describe('RequestInfoComponent', () => {
     component = fixture.componentInstance;
   });
 
-  const fakeTicketListModal = { matchId: 1 } as TicketListModal;
-  const fakeGeneralInfoViewModel =
-    { generalInfoModel: { voidingHistoryIds: "2", singleTransIds: "1, 2", recoveredTimeString: "" } as GeneralInfo } as GeneralInfoViewModel;
-  const fakeModel = { request: { issueTypeId: 1 }, abnormalBetModel: { filterBy: 1 }, duplicateTicketsModel: { filterBy: 1 } } as RequestDetailViewModel;
+  const fakeTicketListModal = {
+    open: true,
+    requestId: 1,
+    matchId: 1,
+    requestDetailId: 1,
+    tabInfoRequest: []
+  } as TicketListModal;
+  const fakeGeneralInfoViewModel = {
+    generalInfoModel: {
+      voidingHistoryIds: "2",
+      recoveredTimeString: "",
+      voidedTimeString: "",
+      totalTicketsProcessed: 0,
+      totalCancelCashOutProcessed: 0,
+      decidedBy: "",
+      requestedBy: "",
+      negativeBalanceUsers: "",
+      licenseeNames: "",
+      cancelCashOutLicenseesName: "",
+      generalBetTypeCombinations: "",
+      scoreResult: "",
+      reason: ""
+    } as GeneralInfo,
+    userVoidMessages: [],
+    succeedEmails: [],
+    failedEmails: []
+  } as GeneralInfoViewModel;
+  const fakeModel = {
+    requestId: 1,
+    request: { issueTypeId: 1, requestId: 1 },
+    abnormalBetModel: { filterBy: 1 },
+    duplicateTicketsModel: { filterBy: 1 },
+    event: { matchId: 1 }
+  } as RequestDetailViewModel;
   const fakeIssue = {
-    name: 'Abnormal', subIssueTypeId: 27, issueTypeId: 11,
-    subIssueTypeName: 'Abnormal', subIssueTypeNameCS: '非正常'
+    name: 'Abnormal',
+    subIssueTypeId: 27,
+    issueTypeId: 11,
+    subIssueTypeName: 'Abnormal',
+    subIssueTypeNameCS: '非正常'
   } as IssueInfo;
 
 
@@ -60,7 +93,14 @@ describe('RequestInfoComponent', () => {
 
   it('#getTickets should has getTickets', async () => {
     // Arrange
-    const tickets = { totalTicketsProcessed: 1 } as TicketsModel;
+    const tickets = {
+      totalTicketsProcessed: 1,
+      totalCancelCashOutProcessed: 0,
+      licenseeNames: "",
+      cancelCashOutLicenseesName: "",
+      generalBetTypeCombinations: "",
+      groups: []
+    } as TicketsModel;
     appService.getVoidedTickets = jest.fn().mockReturnValue(tickets);
     component.ticketListModal = fakeTicketListModal;
     component.generalInfoViewModel = fakeGeneralInfoViewModel;
@@ -118,7 +158,12 @@ describe('RequestInfoComponent', () => {
     component.issue.issueTypeId = 1;
     component.model = fakeModel;
     const matchId = 56839;
-    const match = { matchId: 56839 } as MatchModel;
+    const match = {
+      matchId: 56839,
+      matchCode: "TEST001",
+      leagueName: "Test League",
+      matchEvent: "Test Event"
+    } as MatchModel;
     commonService.getMatch = jest.fn().mockResolvedValue(match);
 
     // Action

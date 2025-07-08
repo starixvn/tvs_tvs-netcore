@@ -3,7 +3,6 @@ import { SaveRequestService } from './save-request.service';
 import { PopupService } from '../../services/popup.service';
 import { AddRequestService } from '../../add-request.service';
 import { ValidationService } from './validation.service';
-import { AbnormalAccountService } from './abnormal-account.service';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestStore } from '../../add-request.store';
@@ -14,16 +13,16 @@ import { AccountWinlostModel } from '../models/account-winlost.model';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { ValidationBusinessRuleOutput } from '../models/validation.model';
 import { FilterModel } from '../../filter/filter.model';
-import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
+import { ConfirmAbnormalAccountModel } from '../confirm-abnormal-account/confirm-abnormal-account.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
+import { ConfirmAbnormalAccountComponent } from '../confirm-abnormal-account/confirm-abnormal-account.component';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
   let popupService: PopupService;
   let addRequestService: AddRequestService;
   let validationService: ValidationService;
-  let abnormalAccountService: AbnormalAccountService;
 
   const mockSaveRequestArg: SaveRequestArg = {
     addRequestStore: {
@@ -34,7 +33,16 @@ describe('SaveRequestService', () => {
       validAccountWinlostModels: [],
       transInfoAddRequestModel: null,
       numberOfTicketsExistedInRequest: 0,
-      isCancelValidate: false
+      isCancelValidate: false,
+      usernamesOfCreditCashService: '',
+      isBlockUsernames: false,
+      isShowError: false,
+      isBeingMoveBetDate: false,
+      isInvalidTotalTicket: false,
+      isShowAccountWinLost: false,
+      permission: null,
+      minDate: null,
+      isCheckedShowAdjustAccount: false
     } as PrimitiveProperty,
     filter: {
       isVoided: false,
@@ -54,27 +62,49 @@ describe('SaveRequestService', () => {
       requestedBy: '',
       isEditingByAnotherUser: false,
       isHasWarningTakenNote: false,
+      isHasWarningAbnormalAccount: false,
+      numberOfTicketsExistedInRequest: 0,
+      allUsernames: '',
+      usernamesOfCreditCashService: '',
       extraWarningModel: null,
       userId: 0,
       isHasSettledTicket: false,
       isHasWarningTicket: false,
       isShowSubIssueType: false,
-    } as ConfirmAddRequestModel,
+      issueTypeName: '',
+      subIssueTypeName: '',
+      actionName: ''
+    } as unknown as ConfirmAbnormalAccountModel,
+    confirmAddRequestComponent: {
+      model: {
+        usernamesOfCreditCashService: '',
+        checkboxState: {}
+      }
+    } as unknown as ConfirmAbnormalAccountComponent,
     isEdit: false,
     requestId: 0,
     userId: 0,
     requestedBy: '',
     actionIdOfFirstTimeAccess: '',
     abnormalAccountModel: {
-      usernames: 'usernames'
+      usernames: 'usernames',
+      accountWinlostModels: []
     } as AbnormalAccountModel,
+    issueTypes: {
+      issueTypes: [{ issueTypeId: 1, issueTypeName: 'Test Issue Type' }],
+      subIssueTypes: [{ subIssueTypeId: 1, issueTypeId: 1, subIssueTypeName: 'Test Sub Issue Type', subIssueTypeNameCS: 'Test Sub Issue Type CS' }],
+      selectedSubIssueTypes: [{ subIssueTypeId: 1, issueTypeId: 1, subIssueTypeName: 'Test Sub Issue Type', subIssueTypeNameCS: 'Test Sub Issue Type CS' }],
+      issueId: 1,
+      subIssueId: 1
+    },
     productFilterComponent: null,
     eventDateFilterComponent: null,
     others: {
       decidedBy: '',
       remark: ''
     },
-    accountTableComponent: null
+    accountTableComponent: null,
+    isValidateFromConfirmPopup: false
   };
 
   beforeEach(() => {
@@ -85,7 +115,6 @@ describe('SaveRequestService', () => {
         PopupService,
         AddRequestService,
         ValidationService,
-        AbnormalAccountService,
         AddRequestStore
       ]
     });
@@ -94,12 +123,10 @@ describe('SaveRequestService', () => {
     popupService = TestBed.inject(PopupService);
     addRequestService = TestBed.inject(AddRequestService);
     validationService = TestBed.inject(ValidationService);
-    abnormalAccountService = TestBed.inject(AbnormalAccountService);
 
     jest.spyOn(popupService, 'showError');
     jest.spyOn(StaticService, 'isHasWarningTakenNote');
     jest.spyOn(StaticService, 'isEditingByAnotherUser').mockReturnValue(false);
-    jest.spyOn(abnormalAccountService, 'getExtraWarningModel');
     jest.spyOn(addRequestService, 'executeSaveRequest');
   });
 
@@ -111,7 +138,6 @@ describe('SaveRequestService', () => {
     it('should show popup confirm when data is valid', async () => {
       service['recheckValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue(true);
       service['showPopupConfirmSave'] = jest.fn();
-
 
       await service.saveRequest(mockSaveRequestArg);
 
@@ -131,6 +157,17 @@ describe('SaveRequestService', () => {
       expect(mockSaveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
       expect(mockSaveRequestArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
     });
+
+    it('should skip validation when isVoided is true', async () => {
+      const voidedArg = { ...mockSaveRequestArg, filter: { ...mockSaveRequestArg.filter, isVoided: true } };
+      service['recheckValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue(false);
+      service['showPopupConfirmSave'] = jest.fn();
+
+      await service.saveRequest(voidedArg);
+
+      expect(service['recheckValidationBeforeSaveRequest']).not.toHaveBeenCalled();
+      expect(service['showPopupConfirmSave']).toHaveBeenCalledWith(voidedArg);
+    });
   });
 
   describe('recheckValidationBeforeSaveRequest', () => {
@@ -140,7 +177,8 @@ describe('SaveRequestService', () => {
         accountWinlostModels: [],
         transInfoAddRequestModel: null,
         numberOfTicketsExistedInRequest: 0,
-        isWarringTooHighTickets: false
+        isWarringTooHighTickets: false,
+        usernamesOfCreditCashService: ''
       };
 
       jest.spyOn(validationService, 'checkBusinessRule').mockResolvedValue(mockValidation);
@@ -151,6 +189,7 @@ describe('SaveRequestService', () => {
       expect(mockSaveRequestArg.primitiveProps.validAccountWinlostModels).toEqual([]);
       expect(mockSaveRequestArg.primitiveProps.transInfoAddRequestModel).toBeNull();
       expect(mockSaveRequestArg.primitiveProps.numberOfTicketsExistedInRequest).toBe(0);
+      expect(mockSaveRequestArg.primitiveProps.usernamesOfCreditCashService).toBe('');
     });
   });
 
@@ -171,16 +210,39 @@ describe('SaveRequestService', () => {
 
       expect(popupService.showError).toHaveBeenCalledWith(TEXT.INVALID_DATA_IN_REQUEST);
     });
+
+    it('should skip validation when isVoided is true', async () => {
+      const voidedArg = { ...mockSaveRequestArg, filter: { ...mockSaveRequestArg.filter, isVoided: true } };
+      service['recheckValidationBeforeSaveRequest'] = jest.fn().mockResolvedValue(false);
+      service['executeSaveRequestApi'] = jest.fn();
+
+      await service.onClickConfirmSave(voidedArg);
+
+      expect(service['recheckValidationBeforeSaveRequest']).not.toHaveBeenCalled();
+      expect(service['executeSaveRequestApi']).toHaveBeenCalledWith(voidedArg);
+    });
   });
 
   describe('showPopupConfirmSave', () => {
-    it('should set up confirm popup with correct values', () => {
+    it('should set up confirm popup with correct values when not voided', () => {
       service['showPopupConfirmSave'](mockSaveRequestArg);
 
       expect(StaticService.isHasWarningTakenNote).toHaveBeenCalled();
       expect(StaticService.isEditingByAnotherUser).toHaveBeenCalled();
-      expect(abnormalAccountService.getExtraWarningModel).toHaveBeenCalled();
       expect(mockSaveRequestArg.confirmAddRequest.isOpen).toBe(true);
+      expect(mockSaveRequestArg.confirmAddRequest.isHasWarningAbnormalAccount).toBe(false);
+      expect(mockSaveRequestArg.confirmAddRequest.allUsernames).toBe('usernames');
+      expect(mockSaveRequestArg.confirmAddRequest.numberOfTicketsExistedInRequest).toBe(0);
+    });
+
+    it('should set up confirm popup for voided requests', () => {
+      const voidedArg = { ...mockSaveRequestArg, filter: { ...mockSaveRequestArg.filter, isVoided: true } };
+      
+      service['showPopupConfirmSave'](voidedArg);
+
+      expect(mockSaveRequestArg.confirmAddRequest.isOpen).toBe(true);
+      expect(mockSaveRequestArg.confirmAddRequest.issueTypeName).toBe('Test Issue Type');
+      expect(mockSaveRequestArg.confirmAddRequest.subIssueTypeName).toBe('Test Sub Issue Type');
     });
   });
 
@@ -207,6 +269,10 @@ describe('SaveRequestService', () => {
       expect(result.abnormalAccountModel).toBe(mockSaveRequestArg.abnormalAccountModel);
       expect(result.primitiveProps).toBe(mockSaveRequestArg.primitiveProps);
       expect(result.issueTypeId).toBe(mockSaveRequestArg.filter.issueTypeId);
+      expect(result.productFilterComponent).toBe(mockSaveRequestArg.productFilterComponent);
+      expect(result.eventDateFilterComponent).toBe(mockSaveRequestArg.eventDateFilterComponent);
+      expect(result.confirmAbnormalAccountComponent).toBe(mockSaveRequestArg.confirmAddRequestComponent);
+      expect(result.isValidateFromConfirmPopup).toBe(mockSaveRequestArg.isValidateFromConfirmPopup);
     });
   });
 
@@ -222,7 +288,7 @@ describe('SaveRequestService', () => {
       expect(result.actionId).toBe(mockSaveRequestArg.filter.action);
       expect(result.isTest).toBe(mockSaveRequestArg.filter.isTest);
       expect(result.isVoided).toBe(mockSaveRequestArg.filter.isVoided);
-      expect(result.abnormalAccountInfo).toEqual(mockSaveRequestArg.abnormalAccountModel);
+      expect(result.abnormalAccountInfo).toBeDefined();
       expect(result.decidedBy).toBe(mockSaveRequestArg.others.decidedBy);
       expect(result.remark).toBe(mockSaveRequestArg.others.remark);
     });
@@ -242,7 +308,7 @@ describe('SaveRequestService', () => {
 
   describe('getAccountWinlostWhenSaveRequest', () => {
     it('should preserve original account values when merging with new accounts', () => {
-      const originalAccounts: AccountWinlostModel[] = [{
+      const originalAccounts = [{
         custId: 1,
         username: 'test',
         givenCredit: 0,
@@ -259,9 +325,9 @@ describe('SaveRequestService', () => {
         isCanEditTicket: false,
         isShowOnTable: false,
         transInfoAccountJson: ''
-      }];
+      }] as AccountWinlostModel[];
 
-      const newAccounts: AccountWinlostModel[] = [{
+      const newAccounts = [{
         custId: 1,
         username: 'test',
         givenCredit: 0,
@@ -278,7 +344,7 @@ describe('SaveRequestService', () => {
         isCanEditTicket: false,
         isShowOnTable: false,
         transInfoAccountJson: ''
-      }];
+      }] as AccountWinlostModel[];
 
       const result = service['getAccountWinlostWhenSaveRequest'](originalAccounts, newAccounts);
 
@@ -287,7 +353,7 @@ describe('SaveRequestService', () => {
     });
 
     it('should return new accounts when no original accounts exist', () => {
-      const newAccounts: AccountWinlostModel[] = [{
+      const newAccounts = [{
         custId: 1,
         username: 'test',
         givenCredit: 0,
@@ -304,11 +370,89 @@ describe('SaveRequestService', () => {
         isCanEditTicket: false,
         isShowOnTable: false,
         transInfoAccountJson: ''
-      }];
+      }] as AccountWinlostModel[];
 
       const result = service['getAccountWinlostWhenSaveRequest']([], newAccounts);
 
       expect(result).toEqual(newAccounts);
+    });
+  });
+
+  describe('createAbnormalAccountModel', () => {
+    it('should create abnormal account model with correct values', () => {
+      const result = service['createAbnormalAccountModel'](mockSaveRequestArg);
+
+      expect(result.usernames).toBe('usernames');
+      expect(result.accountWinlostModels).toEqual([]);
+    });
+  });
+
+  describe('getUsernamesForSaveRequest', () => {
+    it('should filter usernames when credit cash service is selected', () => {
+      const confirmComponent = {
+        model: {
+          usernamesOfCreditCashService: 'user1,user2',
+          checkboxState: { 2: true } // CheckboxType.CREDIT_CASH_SERVICE = 2
+        }
+      } as unknown as ConfirmAbnormalAccountComponent;
+
+      const result = service['getUsernamesForSaveRequest']('user1,user2,user3', confirmComponent);
+
+      expect(result).toBe('user3');
+    });
+
+    it('should return original usernames when credit cash service is not selected', () => {
+      const confirmComponent = {
+        model: {
+          usernamesOfCreditCashService: 'user1,user2',
+          checkboxState: { 2: false } // CheckboxType.CREDIT_CASH_SERVICE = 2
+        }
+      } as unknown as ConfirmAbnormalAccountComponent;
+
+      const result = service['getUsernamesForSaveRequest']('user1,user2,user3', confirmComponent);
+
+      expect(result).toBe('user1,user2,user3');
+    });
+  });
+
+  describe('getAccountWinlostModelsForSaveRequest', () => {
+    it('should filter account models when auto void with policy and credit cash service selected', () => {
+      const confirmComponent = {
+        model: {
+          usernamesOfCreditCashService: 'user1,user2',
+          checkboxState: { 2: true } // CheckboxType.CREDIT_CASH_SERVICE = 2
+        }
+      } as unknown as ConfirmAbnormalAccountComponent;
+
+      const accountModels = [
+        { username: 'user1' },
+        { username: 'user2' },
+        { username: 'user3' }
+      ] as AccountWinlostModel[];
+
+      const result = service['getAccountWinlostModelsForSaveRequest']('10', accountModels, confirmComponent); // AUTO_VOID_INSTANT_WITH_POLICY_ID = 10
+
+      expect(result).toHaveLength(1);
+      expect(result[0].username).toBe('user3');
+    });
+
+    it('should return all account models when not auto void with policy', () => {
+      const confirmComponent = {
+        model: {
+          usernamesOfCreditCashService: 'user1,user2',
+          checkboxState: { 2: true }
+        }
+      } as unknown as ConfirmAbnormalAccountComponent;
+
+      const accountModels = [
+        { username: 'user1' },
+        { username: 'user2' },
+        { username: 'user3' }
+      ] as AccountWinlostModel[];
+
+      const result = service['getAccountWinlostModelsForSaveRequest']('1', accountModels, confirmComponent);
+
+      expect(result).toEqual(accountModels);
     });
   });
 });

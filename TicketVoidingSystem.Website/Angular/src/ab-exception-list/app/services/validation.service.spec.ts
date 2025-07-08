@@ -26,7 +26,7 @@ describe('ValidationService', () => {
 
 
   it('#validateUsernames should call #checkValidItems when username is empty', async () => {
-    const usernamesComponent = new UsernamesComponent(null);
+    const usernamesComponent = TestBed.createComponent(UsernamesComponent).componentInstance;
     usernamesComponent.checkValidItems = jest.fn().mockReturnValue(true);
     const result = await validationService.validateUsernames('', usernamesComponent);
 
@@ -35,7 +35,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateUsernames should call #checkValidItems when have error invalidUsernames', async () => {
-    const usernamesComponent = new UsernamesComponent(null);
+    const usernamesComponent = TestBed.createComponent(UsernamesComponent).componentInstance;
     usernamesComponent.groupUsername = new GroupUsername();
     usernamesComponent.groupUsername.resetAllValue = jest.fn();
     usernamesComponent.groupUsername.updateInvalid = jest.fn();
@@ -55,7 +55,7 @@ describe('ValidationService', () => {
   });
 
   it('#validateUsernames should call #checkValidItems when have not error', async () => {
-    const usernamesComponent = new UsernamesComponent(null);
+    const usernamesComponent = TestBed.createComponent(UsernamesComponent).componentInstance;
     usernamesComponent.groupUsername = new GroupUsername();
     usernamesComponent.groupUsername.resetAllValue = jest.fn();
     usernamesComponent.checkValidItems = jest.fn().mockReturnValue(true);

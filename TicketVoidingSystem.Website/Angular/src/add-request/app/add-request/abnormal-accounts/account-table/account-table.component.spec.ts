@@ -35,6 +35,7 @@ class Helper {
   static readonly fakeAccountWinlostModel: AccountWinlostModel = {
     custId: 123,
     adjustVoidLimit: 1000,
+    oldAdjustVoidLimit: 1000,
     adjustVoidLimitString: '1,000',
     isShowInput: false,
     isShowOnTable: true,
@@ -102,13 +103,12 @@ describe('AccountTableComponent', () => {
     expect(component.isShowTooltip).toBeFalsy();
     expect(component.isCancelRecalculateAmount).toBeFalsy();
     expect(component.isCheckedShowAdjustAccount).toBeFalsy();
-    expect(component.previousAdjustVoidLimit).toBeNull();
   });
 
   it('should handle reCalculate with valid input', async () => {
     // Arrange
     const account = { ...Helper.fakeAccountWinlostModel };
-    const previousAdjustVoid = 500; // Khác với adjustVoidLimit của account
+    account.oldAdjustVoidLimit = 500; // Khác với adjustVoidLimit của account
     const index = 0;
     component.isCancelRecalculateAmount = false;
     component.requestId = Helper.fakeRequestId;
@@ -128,7 +128,8 @@ describe('AccountTableComponent', () => {
       currentWinning: 0,
       estimateVoidAmount: 0,
       estimateVoidAmountUnEditableTickets: 0,
-      adjustVoidLimit: 1000
+      adjustVoidLimit: 1000,
+      oldAdjustVoidLimit: 1000
     };
 
     jest.spyOn(validationService, 'getValidation').mockResolvedValue({
@@ -139,11 +140,10 @@ describe('AccountTableComponent', () => {
     } as CheckUsernamesViewModel);
 
     // Act
-    await component.reCalculate(account, previousAdjustVoid, index);
+    await component.reCalculate(account, index);
 
     // Assert
     expect(account.isShowInput).toBeFalsy();
-    expect(component.previousAdjustVoidLimit).toBe(1000);
     expect(validationService.getValidation).toHaveBeenCalled();
     expect(account.currentLosing).toBe(-600);
     expect(account.winLostAfterVoid).toBe(-100);
@@ -154,11 +154,11 @@ describe('AccountTableComponent', () => {
   it('should handle reCalculate with same adjustVoidLimit', async () => {
     // Arrange
     const account = { ...Helper.fakeAccountWinlostModel };
-    const previousAdjustVoid = 1000;
+    account.oldAdjustVoidLimit = 1000;
     account.adjustVoidLimit = 1000;
 
     // Act
-    await component.reCalculate(account, previousAdjustVoid, 0);
+    await component.reCalculate(account, 0);
 
     // Assert
     expect(component.isCancelRecalculateAmount).toBeFalsy();
