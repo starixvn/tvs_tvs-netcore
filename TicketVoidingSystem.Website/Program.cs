@@ -37,6 +37,7 @@ services.AddFanexLogSentry(configuration);
 services.AddRemotingRef();
 services.AddNapClient(configuration);
 services.AddOneBookUmForWeb(configuration);
+services.AddHealthChecks();
 services.AddLetstalk();
 services.AddCoreServices(configuration);
 services.AddBusinessServices();
@@ -78,6 +79,7 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
+app.MapHealthChecks("/healthz");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
