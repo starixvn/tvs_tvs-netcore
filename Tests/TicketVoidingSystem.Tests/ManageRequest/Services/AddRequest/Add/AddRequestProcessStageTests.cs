@@ -22,10 +22,10 @@ public class AddRequestProcessStageTests
 {
     private readonly IMapper mapper;
     private readonly SessionService sessionService;
-    private readonly LoggingService loggingService;
     private readonly AccountWinLostService accountWinLostService;
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
     private readonly GetUpdateResultService getUpdateResultService;
+    private readonly PendingMarkTicketsService pendingMarkTicketsService;
     private readonly AddRequestProcessStageImp service;
 
     public AddRequestProcessStageTests()
@@ -33,22 +33,21 @@ public class AddRequestProcessStageTests
         mapper = Substitute.For<IMapper>();
         var repository = Substitute.For<IDynamicRepository>();
         sessionService = Substitute.For<SessionService>();
-        loggingService = Substitute.For<LoggingService>();
         accountWinLostService = Substitute.For<AccountWinLostService>();
         insertAutoVoidRequestQueueService = Substitute.For<InsertAutoVoidRequestQueueService>();
         var sendLetstalkAfterAddService = Substitute.For<SendLetstalkAfterAddService>();
         getUpdateResultService = Substitute.For<GetUpdateResultService>();
         var compressDataService = Substitute.For<CompressDataService>();
         var notificationService = Substitute.For<NotificationService>();
+        pendingMarkTicketsService = Substitute.For<PendingMarkTicketsService>();
         service = new AddRequestProcessStageImp(mapper, repository, sessionService, accountWinLostService, insertAutoVoidRequestQueueService,
-            sendLetstalkAfterAddService, getUpdateResultService, compressDataService, notificationService, null);
+            sendLetstalkAfterAddService, getUpdateResultService, compressDataService, notificationService, pendingMarkTicketsService);
     }
 
     [Fact]
     public async Task Execute_IssueTypeIsWrongScore_AddRequestIsSuccessful()
     {
         // Arrange
-        List<long> markedTicketsSuccessful = [1, 2];
         var query = new AddRequestQuery
         {
             IssueTypeId = 3,
@@ -62,7 +61,8 @@ public class AddRequestProcessStageTests
                 VoidFromTime = DateTimeOffset.MinValue.DateTime,
                 VoidToTime = DateTimeOffset.MinValue.DateTime,
                 MatchId = 456
-            }]
+            }],
+            SiteDBDownInfoJson = "test-site-db-down-info"
         };
 
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
@@ -75,13 +75,13 @@ public class AddRequestProcessStageTests
 
         // Assert
         Assert.True(result.IsSuccessful);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
     }
 
     [Fact]
     public async Task Execute_IssueTypeIsWrongHdp_AddRequestIsSuccessful()
     {
         // Arrange
-        List<long> markedTicketsSuccessful = [1, 2];
         var query = new AddRequestQuery
         {
             IssueTypeId = 4,
@@ -94,7 +94,8 @@ public class AddRequestProcessStageTests
                 FilterToTransTime = DateTimeOffset.MinValue.DateTime,
                 MatchId = 456,
                 IsMainMatch = true
-            }]
+            }],
+            SiteDBDownInfoJson = "test-site-db-down-info"
         };
 
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
@@ -107,13 +108,13 @@ public class AddRequestProcessStageTests
 
         // Assert
         Assert.True(result.IsSuccessful);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
     }
 
     [Fact]
     public async Task Execute_IssueTypeIsAbnormalAccount_AddRequestIsSuccessful()
     {
         // Arrange
-        List<long> markedTicketsSuccessful = [1, 2];
         var query = new AddRequestQuery
         {
             IssueTypeId = 13,
@@ -125,7 +126,8 @@ public class AddRequestProcessStageTests
                 ToDate = DateTimeOffset.MinValue.DateTime,
                 AccountWinlostModels = []
             },
-            ActionId = ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
+            ActionId = ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId,
+            SiteDBDownInfoJson = "test-site-db-down-info"
         };
 
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
@@ -139,13 +141,13 @@ public class AddRequestProcessStageTests
         // Assert
         Assert.True(result.IsSuccessful);
         await accountWinLostService.Received(1).SaveAccountWinLost(1, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
     }
 
     [Fact]
     public async Task Execute_IssueTypeIsDangerAccepted_AddRequestIsSuccessful()
     {
         // Arrange
-        List<long> markedTicketsSuccessful = [1, 2];
         var query = new AddRequestQuery
         {
             IssueTypeId = 1,
@@ -160,7 +162,8 @@ public class AddRequestProcessStageTests
                 VoidToTime = DateTimeOffset.MinValue.DateTime,
                 MatchId = 456,
                 IsMainMatch = true
-            }]
+            }],
+            SiteDBDownInfoJson = "test-site-db-down-info"
         };
 
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
@@ -173,6 +176,7 @@ public class AddRequestProcessStageTests
 
         // Assert
         Assert.True(result.IsSuccessful);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
     }
 
     [Theory]
@@ -195,7 +199,6 @@ public class AddRequestProcessStageTests
     public async Task Execute_ValidData_AddRequestIsSuccessful(int issueTypeId)
     {
         // Arrange
-        List<long> markedTicketsSuccessful = [1, 2];
         var query = new AddRequestQuery
         {
             IssueTypeId = issueTypeId,
@@ -231,7 +234,8 @@ public class AddRequestProcessStageTests
                 LogInfoDetail = new LogInfoDetail()
             },
             WrongOfferedNameInfo = new WrongOfferedNameViewModel { MatchId = 456 },
-            RecoverTicketInfo = new RecoverTicketViewModel()
+            RecoverTicketInfo = new RecoverTicketViewModel(),
+            SiteDBDownInfoJson = "test-site-db-down-info"
         };
 
         mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
@@ -244,5 +248,74 @@ public class AddRequestProcessStageTests
 
         // Assert
         Assert.True(result.IsSuccessful);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
+    }
+
+    [Fact]
+    public async Task Execute_WithEmptySiteDBDownInfoJson_PendingMarkTicketsIsStillCalled()
+    {
+        // Arrange
+        var query = new AddRequestQuery
+        {
+            IssueTypeId = 3,
+            MatchId = 456,
+            OperatorsList = [new OperatorQuery { OperatorId = 1 }],
+            WrongScoreInfo = [new WrongScoreInfoViewModel
+            {
+                LogInfoDetail = new LogInfoDetail{HighlightMinTime = DateTimeOffset.MinValue.DateTime},
+                FilterFromTransTime = DateTimeOffset.MinValue.DateTime,
+                FilterToTransTime = DateTimeOffset.MinValue.DateTime,
+                VoidFromTime = DateTimeOffset.MinValue.DateTime,
+                VoidToTime = DateTimeOffset.MinValue.DateTime,
+                MatchId = 456
+            }],
+            SiteDBDownInfoJson = ""
+        };
+
+        mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
+        sessionService.GetClientIp().Returns("127.00.17");
+        insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
+        getUpdateResultService.CreateSuccessResult(1, "456").Returns(new Result());
+
+        // Act
+        var result = await service.Execute(query);
+
+        // Assert
+        Assert.True(result.IsSuccessful);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
+    }
+
+    [Fact]
+    public async Task Execute_WithNullSiteDBDownInfoJson_PendingMarkTicketsIsStillCalled()
+    {
+        // Arrange
+        var query = new AddRequestQuery
+        {
+            IssueTypeId = 3,
+            MatchId = 456,
+            OperatorsList = [new OperatorQuery { OperatorId = 1 }],
+            WrongScoreInfo = [new WrongScoreInfoViewModel
+            {
+                LogInfoDetail = new LogInfoDetail{HighlightMinTime = DateTimeOffset.MinValue.DateTime},
+                FilterFromTransTime = DateTimeOffset.MinValue.DateTime,
+                FilterToTransTime = DateTimeOffset.MinValue.DateTime,
+                VoidFromTime = DateTimeOffset.MinValue.DateTime,
+                VoidToTime = DateTimeOffset.MinValue.DateTime,
+                MatchId = 456
+            }],
+            SiteDBDownInfoJson = null
+        };
+
+        mapper.Map<AddRequestCommand>(query).Returns(new AddRequestCommand { RequestId = 1 });
+        sessionService.GetClientIp().Returns("127.00.17");
+        insertAutoVoidRequestQueueService.GetMatchIdsInRequest(query.AbnormalBetInfo, query.EarlyKickOffInfo, query.WrongOfferedNameInfo);
+        getUpdateResultService.CreateSuccessResult(1, "456").Returns(new Result());
+
+        // Act
+        var result = await service.Execute(query);
+
+        // Assert
+        Assert.True(result.IsSuccessful);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
     }
 }

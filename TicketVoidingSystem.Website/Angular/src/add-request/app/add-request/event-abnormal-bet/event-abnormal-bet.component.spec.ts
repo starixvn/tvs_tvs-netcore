@@ -45,25 +45,17 @@ describe('EventAbnormalBetComponent', () => {
   let fixture: ComponentFixture<EventAbnormalBetComponent>;
   let addRequestApiService: AddRequestApiService;
   let addRequestStore: AddRequestStore;
-  let saveRequestService: SaveRequestService;
   let validationService: ValidationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestingModule],
-      providers: [
-        AddRequestApiService,
-        AddRequestStore,
-        PopupService,
-        SaveRequestService,
-        ValidationService
-      ]
+      providers: [ AddRequestApiService, AddRequestStore, PopupService, SaveRequestService, ValidationService ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(EventAbnormalBetComponent);
     addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
     addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
-    saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
     validationService = fixture.debugElement.injector.get(ValidationService);
     component = fixture.componentInstance;
 
