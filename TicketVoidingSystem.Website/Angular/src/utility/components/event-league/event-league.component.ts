@@ -24,6 +24,7 @@ import { ValidationService } from './validation.service';
 export class EventLeagueComponent implements OnChanges {
   @Input() isEdit: boolean;
   @Input() matchId: number;
+  @Input() isShowLeague = true;
   @Input() isShowSportType = true;
   @Input() subIssueTypeId?: string;
   @Output() changeEvent = new EventEmitter<MatchModel>();

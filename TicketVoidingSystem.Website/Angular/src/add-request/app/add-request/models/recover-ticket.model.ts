@@ -3,4 +3,5 @@ export class RecoverTicketModel {
   filterBy: number;
   productIds: string;
   subIssueTypeId: number;
+  matchId: number;
 }

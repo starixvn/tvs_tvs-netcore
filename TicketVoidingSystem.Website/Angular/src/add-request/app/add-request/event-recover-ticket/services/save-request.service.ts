@@ -24,7 +24,8 @@ export class SaveRequestService {
 
   private async recheckBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
     arg.addRequestStore.changeBlockingUiStatus(true);
-    const result = await this.validationService.checkBusinessRule(arg.betIdsComponent, arg.recoverTicketModel, arg.filter, arg.requestId, arg.primitiveProps.permission);
+    const result = await this.validationService.checkBusinessRule(arg.betIdsComponent, arg.recoverTicketModel,
+      arg.requestId, arg.primitiveProps, arg.tooltip);
     arg.primitiveProps.transInfoJson = result.transInfoJson;
     arg.primitiveProps.unMarkTransIds = result.unMarkTransIds;
     arg.addRequestStore.changeBlockingUiStatus(false);

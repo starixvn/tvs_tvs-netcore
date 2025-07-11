@@ -32,8 +32,6 @@ public class GeneralInfoModel
 
     public string VoidingHistoryIds { get; set; }
 
-    public string SingleTransIds { get; set; }
-
     public DateTime RecoveredTime { get; set; }
 
     public string RecoveredTimeString { get; set; }

@@ -165,8 +165,8 @@ export class CommonService {
     return this.httpService.postJson(query, `api/ManageRequest/CopyRequestInfo`);
   }
 
-  async getMatchInfoAddRequestTvs(matchId: number): Promise<MatchInfoViewModel> {
-    return this.httpService.postJson({ matchId }, 'api/MatchInfo/GetInfoForAddRequest');
+  async getMatchInfoAddRequestTvs(matchId: number, productIds: string = null): Promise<MatchInfoViewModel> {
+    return this.httpService.postJson({ matchId, productIds }, 'api/MatchInfo/GetInfoForAddRequest');
   }
 
   async getMatchInfoAddRequest(matchId: number, sportType: number, ): Promise<MatchInfoViewModel> {

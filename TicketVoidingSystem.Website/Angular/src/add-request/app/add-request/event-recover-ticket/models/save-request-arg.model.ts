@@ -1,4 +1,5 @@
 import { BetIdsComponent } from "../../../../../utility/components/bet-ids/bet-ids.component";
+import { Tooltip } from "../../../../../utility/components/tooltip/tooltip.model";
 import { AddRequestStore } from "../../add-request.store";
 import { FilterModel } from "../../filter/filter.model";
 import { RecoverTicketModel } from "../../models/recover-ticket.model";
@@ -16,4 +17,5 @@ export class SaveRequestArg {
   betIdsComponent: BetIdsComponent;
   addRequestStore: AddRequestStore;
   primitiveProps: PrimitiveProperty;
+  tooltip: Tooltip;
 }

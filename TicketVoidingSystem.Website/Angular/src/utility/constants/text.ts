@@ -4,7 +4,7 @@
 }
 
 export class TEXT {
-    static readonly INVALID_MATCHID = 'Invalid MatchId.';
+    static readonly INVALID_MATCHID = 'Invalid MatchId';
     static readonly INVALID_HDP = 'Invalid HDP!';
     static readonly INVALID_OU = 'Invalid OU!';
     static readonly INVALID_INPUT = 'Invalid Input.';

@@ -1,7 +1,11 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbAccordionConfig, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
+import { IssueTypeComponent } from '../../../../utility/components/issue-type/issue-type.component';
 import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { IssueInfo } from '../../../../utility/models/issue-type.model';
@@ -11,16 +15,12 @@ import { StaticService } from '../../../../utility/services/static.service';
 import { AppService } from '../../app.service';
 import { BriefInfo } from '../../models/brief-info.model';
 import { GetGeneralInfoQuery } from '../../models/get-general-info.query';
+import { MatchInfoComponent } from '../match-info/match-info.component';
 import { TabInfoRequest, TicketListModal } from '../ticket-list.modal';
+import { TicketsComponent } from '../tickets/tickets.component';
 import { TicketsModel } from '../tickets/tickets.model';
 import { TicketsQuery } from '../tickets/tickets.query';
 import { GeneralInfoViewModel } from './request-info.model';
-import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
-import { MatchInfoComponent } from '../match-info/match-info.component';
-import { TicketsComponent } from '../tickets/tickets.component';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { IssueTypeComponent } from '../../../../utility/components/issue-type/issue-type.component';
 
 @Component({
   standalone: true,
@@ -51,7 +51,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   briefInfoModels: BriefInfo[] = [];
   match = new MatchModel();
   issue = new IssueInfo();
-  
+
   constructor(
     config: NgbAccordionConfig) {
     config.closeOthers = true;
@@ -86,7 +86,6 @@ export class RequestInfoComponent implements OnInit, OnChanges {
       issueTypeId: this.model.request.issueTypeId,
       pageIndex: this.paging.page - 1,
       pageSize: this.paging.pageSize,
-      singleTransIds: this.generalInfoViewModel.generalInfoModel.singleTransIds,
       recoverTime: this.generalInfoViewModel.generalInfoModel.recoveredTimeString
     };
     this.tickets = await this.appService.getVoidedTickets(this.query);

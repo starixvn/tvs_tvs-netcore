@@ -7,6 +7,7 @@ public class GetMatchInfoAddRequestCriteria : CriteriaBase
 {
     public DateTime? EventDate { get; set; }
     public int? SportType { get; set; }
+    public string ProductIds { get; set; }
     public int? MatchId { get; set; }
     public int ErrorCode { get; set; }
     public string ErrorMsg { get; set; }

@@ -16,7 +16,5 @@ public class GetVoidedTicketsQuery
 
     public bool IsCreditOnly { get; set; }
 
-    public string SingleTransIds { get; set; }
-
     public string RecoverTime { get; set; }
 }

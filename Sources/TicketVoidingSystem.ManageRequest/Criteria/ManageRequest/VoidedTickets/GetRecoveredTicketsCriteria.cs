@@ -6,7 +6,7 @@ namespace TicketVoidingSystem.ManageRequest.Criteria.ManageRequest.VoidedTickets
 
 public class GetRecoveredTicketsCriteria : CriteriaBase
 {
-    public string SingleTransIds { get; set; }
+    public int RequestId { get; set; }
 
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }

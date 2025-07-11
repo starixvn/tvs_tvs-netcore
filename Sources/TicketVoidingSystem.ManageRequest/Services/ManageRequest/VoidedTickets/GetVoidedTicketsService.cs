@@ -3,7 +3,6 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest.VoidedTickets;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
@@ -42,7 +41,7 @@ public class GetVoidedTicketsServiceImp(IDynamicRepository repository, IMapper m
     {
         var criteria = new GetRecoveredTicketsCriteria
         {
-            SingleTransIds = query.SingleTransIds
+            RequestId = query.RequestId,
         };
 
         var tasks = SiteDbGroupConstant.ServerList

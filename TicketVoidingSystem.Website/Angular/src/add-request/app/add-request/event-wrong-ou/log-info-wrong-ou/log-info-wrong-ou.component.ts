@@ -7,6 +7,7 @@ import { BlockUiDirective } from '../../../../../utility/components/block-ui/blo
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { SportType } from '../../../../../utility/constants/sport.constant';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
@@ -24,7 +25,6 @@ import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
-import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   selector: 'log-info-wrong-ou',

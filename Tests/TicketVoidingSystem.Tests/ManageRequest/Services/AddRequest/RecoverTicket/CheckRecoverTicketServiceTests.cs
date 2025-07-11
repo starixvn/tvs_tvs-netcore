@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.RecoverTicket;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using Xunit;
@@ -15,14 +12,12 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.RecoverTic
 public class CheckRecoverTicketServiceTests
 {
     private readonly IDynamicRepository repository;
-    private readonly GetTransInfoService getTransInfoService;
     private readonly CheckRecoverTicketServiceImp service;
 
     public CheckRecoverTicketServiceTests()
     {
         repository = Substitute.For<IDynamicRepository>();
-        getTransInfoService = Substitute.For<GetTransInfoService>();
-        service = new CheckRecoverTicketServiceImp(repository, getTransInfoService);
+        service = new CheckRecoverTicketServiceImp(repository);
     }
 
     [Fact]
@@ -35,17 +30,16 @@ public class CheckRecoverTicketServiceTests
             ExistingReqTransIds = "1",
             InvalidTransIds = "1",
             TransInfoJson = "1",
-            UnsupportedDateRangeTransIds = "1"
+            UnsupportedDateRangeTransIds = "1",
+            UnMarkTransIds = ""
         };
-        getTransInfoService.GetTransInfoJson(null).ReturnsForAnyArgs(new List<string>());
         repository.GetAsync<CheckRecoverTicketViewModel>(null).ReturnsForAnyArgs(viewModels);
 
         // Act
         var actual = await service.CheckRecoverTicket(request);
 
         // Assert
-        await repository.Received(1).GetAsync<CheckRecoverTicketViewModel>(Arg.Any<CheckRecoverTicketCriteria>());
-        await getTransInfoService.Received(1).GetTransInfoJson(Arg.Any<GetTransInfoQuery>());
-        Assert.Equal(actual, viewModels);
+        await repository.Received().GetAsync<CheckRecoverTicketViewModel>(Arg.Any<CheckRecoverTicketCriteria>());
+        AssertExtension.Equal(actual, viewModels);
     }
 }

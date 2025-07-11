@@ -1,57 +1,36 @@
 ﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.ViewModels;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.RecoverTicket;
 
 public interface CheckRecoverTicketService
 {
-    Task<CheckRecoverTicketViewModel> CheckRecoverTicket(CheckRecoverTicketModel request);
+    Task<CheckRecoverTicketViewModel> CheckRecoverTicket(CheckRecoverTicketCriteria criteria);
 }
 
-public class CheckRecoverTicketServiceImp(IDynamicRepository repository, GetTransInfoService getTransInfoService)
+public class CheckRecoverTicketServiceImp(IDynamicRepository repository)
     : CheckRecoverTicketService
 {
-    public async Task<CheckRecoverTicketViewModel> CheckRecoverTicket(CheckRecoverTicketModel request)
+    public async Task<CheckRecoverTicketViewModel> CheckRecoverTicket(CheckRecoverTicketCriteria criteria)
     {
-        var transInfoJsonList = await GetTransInfoJson(request);
-        var criteria = await CreateRecoverTicketCriteria(request, transInfoJsonList);
-
-        return await repository.GetAsync<CheckRecoverTicketViewModel>(criteria);
-    }
-
-    private static Task<CheckRecoverTicketCriteria> CreateRecoverTicketCriteria(CheckRecoverTicketModel message, IEnumerable<string> transInfoJsonList)
-    {
-        var criteria = new CheckRecoverTicketCriteria
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            TransIds = message.TransIds,
-            RequestId = message.RequestId,
-            FilterBy = message.FilterBy,
-            ProductIds = message.ProductIds,
-            IsVoidAllArchivedTickets = message.IsVoidAllArchivedTickets,
-            TransInfoJson = string.Join(",", transInfoJsonList)
+            criteria.SiteDbGroupId = server.Id;
+            return repository.GetAsync<CheckRecoverTicketViewModel>(criteria);
+        });
+
+        var resultTasks = await Task.WhenAll(tasks);
+        var model = new CheckRecoverTicketViewModel
+        {
+            ExistingReqTransIds = Helper.GetUnionTransIdString(resultTasks.Select(x => x.ExistingReqTransIds)),
+            UnsupportedDateRangeTransIds = Helper.GetUnionTransIdString(resultTasks.Select(x => x.UnsupportedDateRangeTransIds)),
+            UnMarkTransIds = Helper.GetUnionTransIdString(resultTasks.Select(x => x.UnMarkTransIds)),
+            TransInfoJson = Helper.GetUnionTransIdString(resultTasks.Select(x => x.TransInfoJson)),
+            InvalidTransIds = Helper.GetIntersectTransIdString(resultTasks.Select(x => x.InvalidTransIds)),
         };
 
-        return Task.FromResult(criteria);
-    }
-
-    private async Task<IEnumerable<string>> GetTransInfoJson(CheckRecoverTicketModel model)
-    {
-        var getTransInfoQuery = new GetTransInfoQuery
-        {
-            IssueTypeId = IssueTypeConstant.RecoverTicket,
-            RecoverTicketModel = new RecoverTicketViewModel
-            {
-                TransIds = model.TransIds,
-                FilterBy = model.FilterBy,
-                ProductIds = model.ProductIds,
-                SubIssueTypeId = model.SubIssueTypeId
-            }
-        };
-        var transInfoJsonList = await getTransInfoService.GetTransInfoJson(getTransInfoQuery);
-
-        return transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x));
+        return model;
     }
 }
