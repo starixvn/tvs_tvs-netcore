@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import moment from 'moment-timezone';
 import { UsernamesComponent } from '../../../../../utility/components/user-names/user-names.component';
-import { DateTimeFormat, TVSRequestActionType } from '../../../../../utility/constants/config';
+import { CheckboxType, DateTimeFormat, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { EventDateFilterComponent } from '../event-date-filter/event-date-filter.component';
 import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from '../models/check-username.model';
@@ -100,7 +100,7 @@ export class ValidationService {
       toDate: moment(args.abnormalAccountModel.toDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
       isVoidAllArchivedTickets: args.primitiveProps.permission.isVoidAllArchivedTickets,
       accountWinlostModels: this.isAutoVoidWithPolicy(args.actionId) ? args.abnormalAccountModel.accountWinlostModels : null,
-      isRemoveCreditCashService: args.primitiveProps.isRemoveCreditCashService
+      isRemoveCreditCashService: args.isValidateFromConfirmPopup ? args.confirmAbnormalAccountComponent.model.checkboxState[CheckboxType.CREDIT_CASH_SERVICE] : false,
     };
     const results = await this.addRequestApiService.checkValidUsernames(query);
 

@@ -35,7 +35,8 @@
               "moment-timezone",
               "guid-typescript"
             ],
-            "scripts": []
+            "scripts": [],
+            "sourceMap": true
           },
           "configurations": {
             "production": {

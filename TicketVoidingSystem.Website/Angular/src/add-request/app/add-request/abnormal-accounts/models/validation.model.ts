@@ -2,6 +2,7 @@ import { UsernamesComponent } from "../../../../../utility/components/user-names
 import { AbnormalAccountModel } from "../../models/abnormal-account.model";
 import { TransInfoAddRequestModel } from "../../models/trans-info-add-request.model";
 import { AccountTableComponent } from "../account-table/account-table.component";
+import { ConfirmAbnormalAccountComponent } from "../confirm-abnormal-account/confirm-abnormal-account.component";
 import { EventDateFilterComponent } from "../event-date-filter/event-date-filter.component";
 import { ProductFilterComponent } from "../product-filter/product-filter.component";
 import { AccountWinlostModel } from "./account-winlost.model";
@@ -17,6 +18,8 @@ export class ValidationBusinessRuleArgs {
   accountTableComponent: AccountTableComponent;
   primitiveProps: PrimitiveProperty;
   abnormalAccountModel: AbnormalAccountModel;
+  isValidateFromConfirmPopup: boolean;
+  confirmAbnormalAccountComponent: ConfirmAbnormalAccountComponent;
 }
 
 export class ValidationBusinessRuleOutput {

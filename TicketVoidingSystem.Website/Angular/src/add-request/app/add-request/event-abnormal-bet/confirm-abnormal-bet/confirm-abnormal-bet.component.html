@@ -36,8 +36,9 @@
             <div class="mg-left-17 mg-top-10">- CUSTOMER CLASS=201: <b>{{ticketsOfCustomerClass201}}</b>
             </div>
             <div class="mg-left-17 mg-top-10">
-              <label><input type="checkbox" [disabled]="isCanNotSelectedRemoveTicketCC201"
-                  [(ngModel)]="isRemoveCustomerClass201" (change)="onCheckboxChange()" /> Remove ticket(s) of Customer
+              <label><input type="checkbox"
+                  [checked]="model.checkboxState[checkboxType.CUSTOMER_CLASS_201]"
+                  (change)="onCheckboxToggle(checkboxType.CUSTOMER_CLASS_201)" /> Remove ticket(s) of Customer
                 Class = 201</label><br />
             </div>
           </div>
@@ -47,8 +48,9 @@
             <div class="mg-left-17 mg-top-10">- CUSTOMER CLASS=4000: <b>{{ticketsOfCustomerClass4K}}</b>
             </div>
             <div class="mg-left-17 mg-top-10">
-              <label><input type="checkbox" [disabled]="isCanNotSelectedRemoveTicketCC4K"
-                  [(ngModel)]="isRemoveCustomerClass4K" (change)="onCheckboxChange()" /> Remove ticket(s) of Customer
+              <label><input type="checkbox"
+                [checked]="model.checkboxState[checkboxType.CUSTOMER_CLASS_4K]"
+                (change)="onCheckboxToggle(checkboxType.CUSTOMER_CLASS_4K)" /> Remove ticket(s) of Customer
                 Class = 4000</label><br />
             </div>
           </div>
@@ -58,8 +60,9 @@
               <div class="mg-left-17 mg-top-10">- CREDIT (CASH SERVICE): <b>{{ticketsOfCreditCashService}}</b>
               </div>
               <div class="mg-left-17 mg-top-10">
-                <label><input type="checkbox" [disabled]="isCanNotSelectedRemoveTicketCreditCashService"
-                    [(ngModel)]="isRemoveCreditCashService" (change)="onCheckboxChange()" /> Remove ticket(s) of Credit (cash service)
+                <label><input type="checkbox"
+                  [checked]="model.checkboxState[checkboxType.CREDIT_CASH_SERVICE]"
+                  (change)="onCheckboxToggle(checkboxType.CREDIT_CASH_SERVICE)" /> Remove ticket(s) of Credit (cash service)
                   </label><br />
               </div>
             </div>
@@ -68,7 +71,7 @@
           <span class="text-error">Cannot remove all tickets from request</span>
           }
           }
-          @if (model.isHasWarningEditTakeNoteRequest || model.isHasWarningRemovedTickets) {
+          @if (model.isHasWarningEditTakeNoteRequest || model.isHasWarningRemovedTickets || isExistAtleastOneCheckboxChecked()) {
           <div>Take note or removed ticket(s) will be unmarked.</div>
           @if (isEdit) {
           <div class="mg-left-17 mg-top-10">
@@ -85,7 +88,7 @@
             WITH ABOVE INFO?</div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn confirm" (click)="saveClick()">OK</button>
+          <button type="button" class="btn confirm" [disabled]="isOkButtonDisabled()" (click)="saveClick()">OK</button>
           <button type="button" class="btn cancel" (click)="closeClick()">Cancel</button>
         </div>
       </div>

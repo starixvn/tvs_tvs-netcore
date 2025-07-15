@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { CheckboxType, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
@@ -20,9 +20,9 @@ export class ValidationService {
       filterBy: args.abnormalBetModel.filterBy,
       issueTypeId: Number(args.issueTypeId),
       subIssueTypeId: Number(args.abnormalBetModel.subIssueTypeId),
-      isRemoveCustomerClass201: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCustomerClass201 : false,
-      isRemoveCustomerClass4K: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCustomerClass4K : false,
-      isRemoveCreditCashService: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCreditCashService : false,
+      isRemoveCustomerClass201: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.model.checkboxState[CheckboxType.CUSTOMER_CLASS_201] : false,
+      isRemoveCustomerClass4K: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.model.checkboxState[CheckboxType.CUSTOMER_CLASS_4K] : false,
+      isRemoveCreditCashService: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.model.checkboxState[CheckboxType.CREDIT_CASH_SERVICE] : false,
       isAddSettledTickets: args.permission.isAddSettledTickets,
       isVoidAllArchivedTickets: args.permission.isVoidAllArchivedTickets
     } as CheckTransIdsQuery;
