@@ -43,11 +43,15 @@ export class ObjectService {
     return StaticService.isArchivedTicket(detailViewModel.request.issueTypeId) && detailViewModel.event.filterBy === TVSRequestFilterBy.ABNORMAL;
   }
 
+  getMainMatchIdWrongScore(detailViewModel: RequestDetailViewModel): number {
+    return detailViewModel.wrongScoreModels[0].filterBy === TVSRequestFilterBy.CHECK_TIME 
+      ? detailViewModel.wrongScoreModels.find(x => x.isMainMatch).matchId : detailViewModel.wrongScoreModels[0].matchId;
+  }
   private mapEvent(args: MapEventArg) { // NOSONAR
     const checkIssueType = StaticService.checkAllIssueTypes(args.detailViewModel.request.issueTypeId);
     if (checkIssueType.isWrongScore) {
       args.requestModel.wrongScoreModels = args.detailViewModel.wrongScoreModels;
-      args.primitiveProperty.matchId = args.detailViewModel.wrongScoreModels[0].matchId;
+      args.primitiveProperty.matchId = this.getMainMatchIdWrongScore(args.detailViewModel);
     } else if (checkIssueType.isDangerAccepted) {
       args.requestModel.dangerAcceptedModels = args.detailViewModel.dangerAcceptedModels;
       args.primitiveProperty.matchId = args.detailViewModel.dangerAcceptedModels.find(x => x.isMainMatch).matchId;
