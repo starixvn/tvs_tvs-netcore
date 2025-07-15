@@ -8,56 +8,59 @@ namespace TicketVoidingSystem.SharedApi.Services.Analytics;
 
 public interface UserActionLogService
 {
-    Task<bool> LogAccessFunction(string functionName);
+    bool LogAccessFunction(string functionName);
 
-    Task<bool> LogChangeContent(string functionName, string logContent);
+    void LogChangeContent(string functionName, string logContent);
 }
 
 public class UserActionLogServiceImp(
     SessionService sessionService,
-    IDynamicRepository repository,
-    LoggingService loggingService)
+    IDynamicRepository repository)
     : UserActionLogService
 {
-    public async Task<bool> LogAccessFunction(string functionName)
+    public bool LogAccessFunction(string functionName)
     {
-        try
+        Task.Run(async () =>
         {
-            var criteria = new UserActionLogUpdateCriteria
+            try
             {
-                IsActionCount = true,
-                UserId = sessionService.UserId,
-                FunctionName = functionName
-            };
+                var criteria = new UserActionLogUpdateCriteria
+                {
+                    IsActionCount = true,
+                    UserId = sessionService.UserId,
+                    FunctionName = functionName
+                };
 
-            await repository.ExecuteAsync(criteria);
-            return true;
-        }
-        catch (Exception e)
-        {
-            await loggingService.ErrorAsync(nameof(LogAccessFunction), e);
-            return false;
-        }
+                await repository.ExecuteAsync(criteria);
+            }
+            catch
+            {
+                // Silently ignore any errors in background logging
+            }
+        });
+
+        return true;
     }
 
-    public async Task<bool> LogChangeContent(string functionName, string logContent)
+    public void LogChangeContent(string functionName, string logContent)
     {
-        try
+        Task.Run(async () =>
         {
-            var criteria = new UserActionLogUpdateCriteria
+            try
             {
-                IsActionCount = false,
-                UserId = sessionService.UserId,
-                FunctionName = functionName,
-                LogContent = logContent
-            };
-            await repository.ExecuteAsync(criteria);
-            return true;
-        }
-        catch (Exception e)
-        {
-            await loggingService.ErrorAsync(nameof(LogChangeContent), e);
-            return false;
-        }
+                var criteria = new UserActionLogUpdateCriteria
+                {
+                    IsActionCount = false,
+                    UserId = sessionService.UserId,
+                    FunctionName = functionName,
+                    LogContent = logContent
+                };
+                await repository.ExecuteAsync(criteria);
+            }
+            catch
+            {
+                // Silently ignore any errors in background logging
+            }
+        });
     }
 }

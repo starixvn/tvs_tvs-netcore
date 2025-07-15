@@ -52,7 +52,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="ONEbook.UM" Version="3.2.4" />
+    <PackageReference Include="ONEbook.UM" Version="3.2.6" />
     <PackageReference Include="codeessentials.WebOptimizer.Dotless" Version="3.1.0" />
   </ItemGroup>
   <ItemGroup>

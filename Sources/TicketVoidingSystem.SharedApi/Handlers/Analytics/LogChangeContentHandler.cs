@@ -5,7 +5,7 @@ using TicketVoidingSystem.SharedApi.Services.Analytics;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.Analytics;
 
-public class LogChangeContentRequest : IRequest<bool>
+public class LogChangeContentRequest : IRequest
 {
     public string FunctionName { get; set; }
 
@@ -13,10 +13,11 @@ public class LogChangeContentRequest : IRequest<bool>
 }
 
 public class LogChangeContentHandler(UserActionLogService userActionLogService)
-    : IRequestHandler<LogChangeContentRequest, bool>
+    : IRequestHandler<LogChangeContentRequest>
 {
-    public async Task<bool> Handle(LogChangeContentRequest request, CancellationToken cancellationToken)
+    public Task Handle(LogChangeContentRequest request, CancellationToken cancellationToken)
     {
-        return await userActionLogService.LogChangeContent(request.FunctionName, request.LogContent);
+        userActionLogService.LogChangeContent(request.FunctionName, request.LogContent);
+        return Task.CompletedTask;
     }
 }

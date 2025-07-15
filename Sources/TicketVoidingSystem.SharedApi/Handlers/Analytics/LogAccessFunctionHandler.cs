@@ -13,8 +13,9 @@ public class LogAccessFunctionRequest : IRequest<bool>
 public class LogAccessFunctionHandler(UserActionLogService userActionLogService)
     : IRequestHandler<LogAccessFunctionRequest, bool>
 {
-    public async Task<bool> Handle(LogAccessFunctionRequest request, CancellationToken cancellationToken)
+    public Task<bool> Handle(LogAccessFunctionRequest request, CancellationToken cancellationToken)
     {
-        return await userActionLogService.LogAccessFunction(request.FunctionName);
+        var result = userActionLogService.LogAccessFunction(request.FunctionName);
+        return Task.FromResult(result);
     }
 }

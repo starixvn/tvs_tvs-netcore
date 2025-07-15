@@ -22,14 +22,13 @@ public class LogChangeContentHandlerTests
         };
 
         var userActionLogService = Substitute.For<UserActionLogService>();
-        userActionLogService.LogChangeContent(functionName, logContent).Returns(true);
 
         var handler = new LogChangeContentHandler(userActionLogService);
 
         // Act
-        var result = await handler.Handle(request, CancellationToken.None);
+        await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        Assert.True(result);
+        userActionLogService.Received(1).LogChangeContent(Arg.Any<string>(), Arg.Any<string>());
     }
 }

@@ -14,9 +14,9 @@ public class MenuController(UserActionLogService userActionLogService) : Control
     [Route("[action]")]
     [Route("[action]/Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketListing, Policy = Constant.Policy.Read)]
-    public async Task<IActionResult> TicketListing()
+    public IActionResult TicketListing()
     {
-        await userActionLogService.LogAccessFunction(nameof(TicketListing));
+        userActionLogService.LogAccessFunction(nameof(TicketListing));
         return View("~/wwwroot/dist/ticket-listing/index.cshtml");
     }
 
@@ -24,9 +24,9 @@ public class MenuController(UserActionLogService userActionLogService) : Control
     [Route("[action]")]
     [Route("[action]/Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.UploadBatchMsg, Policy = Constant.Policy.Read)]
-    public async Task<IActionResult> UploadBatchMessage()
+    public IActionResult UploadBatchMessage()
     {
-        await userActionLogService.LogAccessFunction(nameof(UploadBatchMessage));
+        userActionLogService.LogAccessFunction(nameof(UploadBatchMessage));
         ViewBag.IsPageUsingJquery = true;
         return View("~/Views/UploadBatchMessage/Index.cshtml");
     }
@@ -35,9 +35,9 @@ public class MenuController(UserActionLogService userActionLogService) : Control
     [Route("VirtualSports/[action]")]
     [Route("VirtualSports/[action]/Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidParlaySubBet, Policy = Constant.Policy.Read)]
-    public async Task<IActionResult> VoidParlaySubBet()
+    public IActionResult VoidParlaySubBet()
     {
-        await userActionLogService.LogAccessFunction(nameof(VoidParlaySubBet));
+        userActionLogService.LogAccessFunction(nameof(VoidParlaySubBet));
         return View("~/wwwroot/dist/old-page/void-parlay-sub-virtual-sports/index.cshtml");
     }
 
@@ -45,9 +45,9 @@ public class MenuController(UserActionLogService userActionLogService) : Control
     [Route("VirtualSports/[action]")]
     [Route("VirtualSports/[action]/Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverVirtualSportsBet, Policy = Constant.Policy.Read)]
-    public async Task<IActionResult> RecoverVirtualSportsBet()
+    public IActionResult RecoverVirtualSportsBet()
     {
-        await userActionLogService.LogAccessFunction(nameof(RecoverVirtualSportsBet));
+        userActionLogService.LogAccessFunction(nameof(RecoverVirtualSportsBet));
         return View("~/wwwroot/dist/old-page/recover-virtual-sports-bet/index.cshtml");
     }
 
@@ -55,9 +55,9 @@ public class MenuController(UserActionLogService userActionLogService) : Control
     [Route("[action]")]
     [Route("[action]/Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverByBetID, Policy = Constant.Policy.Read)]
-    public async Task<IActionResult> RecoverByBetId()
+    public IActionResult RecoverByBetId()
     {
-        await userActionLogService.LogAccessFunction(nameof(RecoverByBetId));
+        userActionLogService.LogAccessFunction(nameof(RecoverByBetId));
         return View("~/wwwroot/dist/old-page/recover-by-betid/index.cshtml");
     }
 
@@ -65,9 +65,9 @@ public class MenuController(UserActionLogService userActionLogService) : Control
     [Route("[action]")]
     [Route("[action]/Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidNumberGameBet, Policy = Constant.Policy.Read)]
-    public async Task<IActionResult> VoidNumberGameBet()
+    public IActionResult VoidNumberGameBet()
     {
-        await userActionLogService.LogAccessFunction(nameof(VoidNumberGameBet));
+        userActionLogService.LogAccessFunction(nameof(VoidNumberGameBet));
         return View("~/wwwroot/dist/old-page/void-number-game-bet/index.cshtml");
     }
 }
