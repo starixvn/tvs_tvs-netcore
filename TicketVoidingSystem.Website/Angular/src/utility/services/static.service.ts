@@ -1,7 +1,7 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import moment, { Moment } from 'moment-timezone';
 import { GetLogInfoModel, ValidationMessage } from '../../add-request/app/add-request/models/get-log-info.model';
-import { RequestDetailViewModel } from '../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../add-request-new/events/models/request.model copy';
 import { ModalType } from '../components/modal/modal.model';
 import { ModalService } from '../components/modal/modal.service';
 import { MultipleSelection } from '../components/multiple-selection/multiple-selection';

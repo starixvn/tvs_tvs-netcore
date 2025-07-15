@@ -1,0 +1,50 @@
+import { inject, Injectable } from "@angular/core";
+import { CheckTicket14Query } from "../models/check-ticket14.query";
+import { CheckTickets14Result } from "../models/check-tickets14-result.model";
+import { ValidationBusinessRuleOutput } from "../models/validation.model";
+import { BetIdsComponent } from "../../../../../../utility/components/bet-ids/bet-ids.component";
+import { PermissionAddRequest } from "../../../../../../add-request-new/events/models/permission-add-request.model";
+import { EventTicket14ApiService } from "../../event-ticket14-api.service";
+import { LABELS } from "../../../../../../utility/constants/labels";
+
+@Injectable()
+export class ValidationService {
+  private readonly eventTicket14ApiService = inject(EventTicket14ApiService);
+
+  public async checkBusinessRule(betIdsComponent: BetIdsComponent, permission: PermissionAddRequest): Promise<ValidationBusinessRuleOutput> {
+    if (!betIdsComponent.isHasBetId()) {
+      return { isValid: false } as ValidationBusinessRuleOutput;
+    }
+
+    betIdsComponent.groupNumber.resetAllItemsToValid();
+    betIdsComponent.groupNumber.checkDuplicatedItems();
+    const validationResult = await this.checkTickets14(betIdsComponent, permission);
+    if (validationResult === null) {
+      return { isValid: false } as ValidationBusinessRuleOutput;
+    }
+
+    this.highlightInvalidTransIds(validationResult, betIdsComponent);
+    return {
+      isValid: betIdsComponent.isAllBetIdsValid(),
+      transInfoJson: validationResult.transInfoJson
+     } as ValidationBusinessRuleOutput;
+  }
+
+  private async checkTickets14(betIdsComponent: BetIdsComponent, permission: PermissionAddRequest): Promise<CheckTickets14Result>{
+    const query: CheckTicket14Query = {
+      transIds: betIdsComponent.getAllBetIds(),
+      isVoidAllArchivedTickets: permission.isVoidAllArchivedTickets
+    };
+
+    return this.eventTicket14ApiService.checkTickets14(query);
+  }
+
+  private highlightInvalidTransIds(validationResult: CheckTickets14Result, betIdsComponent: BetIdsComponent): void {
+    if (validationResult.invalidTransIds?.length > 0) {
+      betIdsComponent.groupNumber.updateInvalidItems(validationResult.invalidTransIds, LABELS.INVALID_TICKETS);
+    }
+    if (validationResult.unsupportedDateRangeTransIds?.length > 0) {
+      betIdsComponent.groupNumber.updateInvalidItems(validationResult.unsupportedDateRangeTransIds, LABELS.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
+    }
+  }
+}

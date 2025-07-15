@@ -234,8 +234,14 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   openRequestDetails(requestId: number, eventDate: Date, issueTypeId: number, createdDate: Date, details?: DetailRequestModel[]) {
+    const IssueTypeHasNewUrl = [IssueTypeConstant.ARCHIVED_TICKET];
     if (this.checkCanEdit(eventDate, issueTypeId, createdDate, details)) {
-      window.open(`${document.body.getAttribute('root-url')}TicketVoidingSystem/EditRequest/Index/${requestId}`, '_blank');
+      if (IssueTypeHasNewUrl.includes(issueTypeId.toString())) {
+        const url = IssueTypeConstant.NAVIGATE_EDIT_REQUEST.get(issueTypeId.toString());
+        window.open(`${document.body.getAttribute('root-url')}${url}/${requestId}`, '_blank');
+      } else {
+        window.open(`${document.body.getAttribute('root-url')}TicketVoidingSystem/EditRequest/Index/${requestId}`, '_blank');
+      }
     }
   }
 

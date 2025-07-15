@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <filter>
+    <div
+      class="filter"
+    >
+      <div
+        class="d-flex flex-wrap"
+      >
+        <div
+          class="filter-issue-type me-4"
+        >
+          <label
+            class="col-form-label-sm"
+          >
+            Issue Type
+          </label>
+          <div
+            class="input-issue-type"
+          >
+            <ng-select
+              bindlabel="issueTypeName"
+              bindvalue="issueTypeId"
+              class="custom-sm ng-untouched ng-pristine ng-valid"
+            />
+          </div>
+        </div>
+        <div
+          class="filter-action me-4"
+        >
+          <label
+            class="col-form-label-sm"
+          >
+            Action
+          </label>
+          <div
+            class="input-action"
+          >
+            <ng-select
+              bindlabel="name"
+              bindvalue="value"
+              class="custom-sm ng-untouched ng-pristine ng-valid"
+            />
+          </div>
+        </div>
+        <div
+          class="d-flex"
+        >
+          <div
+            class="d-flex align-items-end"
+          >
+            <div
+              class="form-check form-check-inline form-control-sm checkbox-test"
+            >
+              <input
+                aria-label="Checkbox for following text input"
+                class="me-1 ng-untouched ng-pristine ng-valid"
+                id="chk-is-test"
+                name="checkbox-test"
+                type="checkbox"
+              />
+              <label
+                class="form-check-label"
+                for="chk-is-test"
+              >
+                is Test
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <sub-issue-type-dialog />
+  </filter>
+</ng-component>
+`;

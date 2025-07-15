@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { ObjectService } from './object.service';
-import { TestingModule } from '../../../utility/modules/testing.module';
-import { StaticService } from '../../../utility/services/static.service';
-import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
-import { RequestDetailViewModel } from '../request.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { FilterModel } from '../../../add-request/app/add-request/filter/filter.model';
-import { TVSRequestFilterBy } from '../../../utility/constants/config';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { StaticService } from '../../../../utility/services/static.service';
+import { RequestModel } from '../../../../add-request/app/add-request/models/request.model';
+import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { PrimitiveProperty } from '../../../../edit-request/app/models/primitive-property.model';
+import { FilterModel } from '../../../../add-request/app/add-request/filter/filter.model';
+import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 
 jest.mock('../../../utility/services/static.service', () => ({
   StaticService: {

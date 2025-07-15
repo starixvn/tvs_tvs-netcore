@@ -59,6 +59,17 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
         return View("~/wwwroot/dist/ticket-voiding-system/add-request/index.cshtml");
     }
 
+    [HttpGet]
+    [Route("")]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/Index/{id}")]
+    [Route("Edit/{id}")]
+    public ActionResult ArchivedTicket(int id)
+    {
+        return View("~/wwwroot/dist/ticket-voiding-system/add-request/archived-ticket/index.cshtml");
+    }
+
     [HttpPost]
     [Route("")]
     [AllowAnonymous]

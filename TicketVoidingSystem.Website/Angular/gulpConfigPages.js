@@ -141,6 +141,32 @@ const voidByBetId = {
   indexEJSPath: './src/void-by-bet-id/index.ejs'
 };
 
+const addRequestNavigation = {
+  pageName: 'AddRequestNavigation',
+  tsconfigFiles: [
+    'add-request-new/navigation/main.ts',
+    'polyfills.ts'
+  ],
+  deployUrl: 'dist/add-request-new/navigation/',
+  index: 'src/add-request-new/navigation/index.cshtml',
+  main: 'src/add-request-new/navigation/main.ts',
+  transformFolder: '../wwwroot/dist/add-request-new/navigation',
+  indexEJSPath: './src/add-request-new/navigation/index.ejs'
+};
+
+const addRequestArchivedTicket = {
+  pageName: 'AddRequestArchivedTicket',
+  tsconfigFiles: [
+    'add-request-new/events/archived-ticket/main.ts',
+    'polyfills.ts'
+  ],
+  deployUrl: 'dist/ticket-voiding-system/add-request/archived-ticket/',
+  index: 'src/add-request-new/events/archived-ticket/index.cshtml',
+  main: 'src/add-request-new/events/archived-ticket/main.ts',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/add-request/archived-ticket',
+  indexEJSPath: './src/add-request-new/events/archived-ticket/index.ejs'
+};
+
 const configPages = [
   //homePage,
   //manageVoidServices,
@@ -153,6 +179,7 @@ const configPages = [
   addRequest,
   editRequest,
   //voidByBetId
+  addRequestArchivedTicket
 ];
 
 module.exports = configPages;

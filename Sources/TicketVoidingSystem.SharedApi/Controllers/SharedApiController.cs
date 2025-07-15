@@ -49,6 +49,11 @@ public class SharedApiController(IMediator mediator, IHttpContextAccessor httpCo
     public async Task<IActionResult> GetIssueTypes() => Ok(await mediator.Send(new GetIssueTypesRequest()));
 
     [HttpGet]
+    [Route("{id}")]
+    [SkipLogging]
+    public async Task<IActionResult> GetSubIssueType(int id) => Ok(await mediator.Send(new GetSubIssueTypeRequest { IssueTypeId = id }));
+
+    [HttpGet]
     [SkipLogging]
     public async Task<IActionResult> GetIssueTypePermissionList() => Ok(await mediator.Send(new GetIssueTypePermissionListRequest()));
 

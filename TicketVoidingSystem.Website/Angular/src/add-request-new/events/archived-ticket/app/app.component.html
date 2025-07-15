@@ -1,0 +1,29 @@
+<event-base-layout
+  #eventBaseLayout
+  [issueTypeId]="issueTypeId"
+  (filterChange)="updateFilter($event)"
+  (saveRequest)="saveRequest()"
+  [model]="model"
+  (reloadBaseData)="reloadBaseData()"
+>
+@if(isDataReady){
+  <!-- Event content template -->
+  <ng-template #eventContent>
+    <event-ticket14
+      #eventTicket14
+      [isEdit]="isEdit"
+      [requestId]="requestId"
+      [filter]="model.filter"
+      [eventTicket14Model]="model.eventTicket14Model"
+      [others]="model.others"
+    >
+    </event-ticket14>
+  </ng-template>
+
+  <!-- Others content template -->
+  <ng-template #othersContent>
+    <others-abnormal-bet [isEdit]="isEdit" [model]="model.others">
+    </others-abnormal-bet>
+  </ng-template>
+}
+</event-base-layout>

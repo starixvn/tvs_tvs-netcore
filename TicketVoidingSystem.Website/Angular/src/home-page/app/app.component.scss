@@ -1,9 +1,47 @@
-﻿h2 {
+﻿.title {
   line-height: 40px;
-  margin: 40px 0;
+  margin: 40px 12px;
   font-size: 29.25px;
   font-family: inherit;
   font-weight: bold;
   line-height: 20px;
-  color: inherit;
+  color: #5471b7;
+  font-size: 2rem;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: #5471b7;
+  font-weight: bold;
+  margin: 16px 0 12px 0;
+}
+
+.container {
+  margin-left: 10px;
+
+  .btn-outline-primary {
+      width: 200px;
+  }
+
+  .blue-line {
+      border-top: 3px solid #0d6efd;
+  }
+
+  .issue-types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+    
+    .btn {
+      border-color: var(--bs-btn-border-color);
+      margin: 0;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+  }
 }

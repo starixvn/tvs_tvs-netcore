@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { FilterModel } from '../../../add-request/app/add-request/filter/filter.model';
-import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
-import { TVSRequestFilterBy } from '../../../utility/constants/config';
-import { StaticService } from '../../../utility/services/static.service';
-import { MapEventArg } from '../models/map-event.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { RequestDetailViewModel } from '../request.model';
+import { TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { StaticService } from '../../../../utility/services/static.service';
+import { RequestModel } from '../../models/request.model';
+import { RequestDetailViewModel } from '../../models/request.model copy';
+import { PrimitiveProperty } from '../../models/primitive-property.model';
+import { MapEventArg } from '../../models/edit/map-event.model';
+import { FilterModel } from '../../../../add-request-new/component/filter/filter.model';
 
 @Injectable({
   providedIn: 'root'

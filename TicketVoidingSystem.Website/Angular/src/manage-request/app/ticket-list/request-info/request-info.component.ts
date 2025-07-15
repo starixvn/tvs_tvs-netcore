@@ -3,7 +3,7 @@ import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, Simp
 import { FormsModule } from '@angular/forms';
 import { NgbAccordionConfig, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
+import { RequestEventModel } from '../../../../edit-request/app/request.model';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { IssueTypeComponent } from '../../../../utility/components/issue-type/issue-type.component';
 import { PagingModel } from '../../../../utility/components/paging/paging.model';
@@ -21,6 +21,7 @@ import { TicketsComponent } from '../tickets/tickets.component';
 import { TicketsModel } from '../tickets/tickets.model';
 import { TicketsQuery } from '../tickets/tickets.query';
 import { GeneralInfoViewModel } from './request-info.model';
+import { RequestDetailViewModel } from '../../../../add-request-new/events/models/request.model copy';
 
 @Component({
   standalone: true,

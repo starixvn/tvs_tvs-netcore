@@ -1,3 +1,15 @@
 <menu-bar></menu-bar>
-<h2>Ticket Control System</h2>
-<block-full-ui [isBlock]="isBlockingUi"></block-full-ui>
+
+<h2 class="title">Ticket Voiding System</h2>
+
+<div class="container">
+  <div class="subtitle">
+    Most Used Issue Types
+  </div>
+  <hr class="blue-line" />
+  <div class="issue-types-grid">
+    @for (issueType of issueTypePermissionList; track issueType.issueTypeId) {
+      <button class="btn btn-outline-primary btn-sm" (click)="navigateToIssueType(issueType.issueTypeId)"><b>{{issueType.issueTypeName}}</b></button>
+    }
+  </div>
+</div>

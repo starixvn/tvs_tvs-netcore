@@ -1,36 +1,33 @@
-import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, inject } from '@angular/core';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
-import { AppStore } from './app.store';
-import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
+import { CommonService } from '../../utility/services/common.service';
+import { IssueType } from '../../utility/models/issue-type.model';
+import { IssueTypeConstant } from '../../utility/constants/issue-type.constant';
 
 @Component({
   standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [MenuBarComponent, BlockFullUiComponent]
+  imports: [MenuBarComponent]
 })
-export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
-  isBlockingUi = true;
-  blockingUiSubscription: Subscription;
+export class AppComponent{
   signalRService = inject(SignalRService);
-  homePageStore = inject(AppStore);
+  commonService = inject(CommonService);
+
+  issueTypePermissionList: IssueType[];
 
   async ngOnInit() {
-    this.blockingUiSubscription = this.homePageStore.blockingUiStatus.subscribe(status => {
-      this.isBlockingUi = status;
-    });
-    this.homePageStore.changeBlockingUiStatus(true);
+    this.issueTypePermissionList = await this.commonService.getIssueTypePermissionList();
+
     await this.signalRService.initializeConnection();
   }
-
-  ngOnDestroy(): void {
-    this.blockingUiSubscription?.unsubscribe();
-  }
-
-  ngAfterViewInit() {
-    this.homePageStore.changeBlockingUiStatus(false);
+  
+  navigateToIssueType(issueTypeId: number) {
+    const url = IssueTypeConstant.NAVIGATE_ADD_REQUEST.get(issueTypeId.toString());
+    if (url) {
+      window.open(`${document.body.getAttribute('root-url')}${url}`, '_blank');
+    }
   }
 }

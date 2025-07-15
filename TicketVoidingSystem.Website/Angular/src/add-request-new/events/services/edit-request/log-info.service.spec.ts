@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { LogInfoService } from './log-info.service';
-import { CommonService } from '../../../utility/services/common.service';
-import { StaticService } from '../../../utility/services/static.service';
-import { MappingModelStaticService } from '../../../utility/services/mapping-model-static.service';
-import { LogInfoArg } from '../models/log-info.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { RequestDetailViewModel } from '../request.model';
-import { CheckIssueTypeObjectType } from '../../../utility/models/check-issue-type.model';
+import { CommonService } from '../../../../utility/services/common.service';
+import { StaticService } from '../../../../utility/services/static.service';
+import { MappingModelStaticService } from '../../../../utility/services/mapping-model-static.service';
+import { LogInfoArg } from '../../../../edit-request/app/models/log-info.model';
+import { PrimitiveProperty } from '../../../../edit-request/app/models/primitive-property.model';
+import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { CheckIssueTypeObjectType } from '../../../../utility/models/check-issue-type.model';
 
 describe('LogInfoService', () => {
   let service: LogInfoService;
