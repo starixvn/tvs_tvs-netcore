@@ -135,8 +135,11 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   public async ngAfterViewInit(): Promise<void> {
-    if (this.isEdit && this.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME) {
-      this.relatedEvents = await this.editRequestService.getAllRelatedEvents(this.wrongScoreModels, this.mainEvent, this.relatedEventsComponent.childEvents);
+    if (this.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME) {
+      this.mainEvent.isMainMatch = true;
+      if (this.isEdit) {
+        this.relatedEvents = await this.editRequestService.getAllRelatedEvents(this.wrongScoreModels, this.mainEvent, this.relatedEventsComponent.childEvents);
+      }
     }
   }
 

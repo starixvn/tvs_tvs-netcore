@@ -107,7 +107,8 @@ export class CreateMapService {
       matchId: event.matchId,
       subIssueTypeId: event.subIssueTypeId,
       eventDate: event.eventDate,
-      sportType: event.sportType
+      sportType: event.sportType,
+      isMainMatch: true
     } as LogInfoRelatedEvent;
 
     return logInfoRelatedEventModel;
