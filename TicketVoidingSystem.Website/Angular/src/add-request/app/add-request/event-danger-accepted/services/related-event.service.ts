@@ -99,7 +99,7 @@ export class RelatedEventService {
 
   private isAutoSelectMatch(subIssueTypeId: string, matchType: number, mainEvent: LogInfoRelatedEvent): boolean { 
     return (SubIssueTypeGroup.SUBTYPE_AUTO_SELECT_LIST.includes(Number(subIssueTypeId)) && matchType === MatchType.CHILD)
-      || (mainEvent.parentId != mainEvent.matchId && matchType === MatchType.LINK);
+      || (mainEvent.parentId !== mainEvent.matchId && matchType === MatchType.LINK);
   }
 
   private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: LogInfoRelatedEvent[], originalAllEvents: LogInfoRelatedEvent[]): void {

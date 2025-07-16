@@ -153,6 +153,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     }
 
     this.addRequestStore.changeBlockingUiStatus(true);
+    this.mainEvent.parentId = this.eventLeagueComponent?.selectedMatch.parentId;
     this.relatedEvents = await this.addRequestApiService.getChildMatches(this.createGetChildMatchesQuery());
     await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
     this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);

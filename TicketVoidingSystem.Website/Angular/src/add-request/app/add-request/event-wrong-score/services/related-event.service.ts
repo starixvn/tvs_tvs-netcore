@@ -83,7 +83,7 @@ export class RelatedEventService {
   }
 
   private isAutoSelectMatch(mainEvent: LogInfoRelatedEvent, matchType: number): boolean {
-    return mainEvent.parentId != mainEvent.matchId && matchType === MatchType.LINK;
+    return mainEvent.parentId !== mainEvent.matchId && matchType === MatchType.LINK;
   }
 
   async getGetInfoChildMatch(matchId: number, isMainMatch: boolean, sportType: number, eventDate?: string): Promise<ChildMatchModel[]> {
@@ -126,7 +126,8 @@ export class RelatedEventService {
       logInfoRelatedEventModel.leagueName = eventChild.leagueName;
       logInfoRelatedEventModel.eventName = `${eventChild.matchId} - ${eventChild.matchEvent}`;
       logInfoRelatedEventModel.sportType = eventChild.sportType;
-
+      logInfoRelatedEventModel.isMainMatch = false;
+      
     return logInfoRelatedEventModel;
   }
 }
