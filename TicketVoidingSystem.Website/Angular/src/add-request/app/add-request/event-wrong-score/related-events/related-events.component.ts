@@ -113,7 +113,6 @@ export class RelatedEventsComponent {
     this.childEvents = await this.relatedEventService.getGetInfoChildMatch(this.mainEvent.matchId, true, this.mainEvent.sportType, this.mainEvent.eventDate.toString());
     await this.relatedEventService.getDataRelatedEventWhenSearch(this.childEvents, this.initAddRelatedEventArgs());
     this.relatedEvents = _.orderBy(_.uniqBy(this.relatedEvents, x => x.matchId), ['matchCode'], ['asc']);
-    console.log("this.relatedEvents",this.relatedEvents)
     this.logInfoComponents.forEach(x => {
       x.filterTimeWithAllowanceComponent?.updateData();
       x.showValidationDetail();

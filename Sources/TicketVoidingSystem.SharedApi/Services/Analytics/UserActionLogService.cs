@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SharedApi.Criteria.Analytics;

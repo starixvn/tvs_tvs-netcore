@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Fanex.NAP.Client.Attributes;
+﻿using Fanex.NAP.Client.Attributes;
 using Fanex.NAP.Client.Helpers.Business;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.SharedApi.Services.Analytics;

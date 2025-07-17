@@ -74,7 +74,7 @@ export class CreateMapService {
     wrongScoreModel.minuteOffset = args.tvDetectionModel.minuteOffset;
     wrongScoreModel.secondOffset = args.tvDetectionModel.secondOffset;
     wrongScoreModel.serviceAcceptTime = args.tvDetectionModel.serviceAcceptTime;
-    wrongScoreModel.isCheckedVar = args.primitiveProps.isCheckedVar;
+    wrongScoreModel.isCheckedVar = logInfoRelatedEvent.isMainMatch ? args.primitiveProps.isCheckedVar : false;
     wrongScoreModel.tvDetectionValue = args.tvDetectionModel.tvDetectionValue;
 
     return wrongScoreModel;

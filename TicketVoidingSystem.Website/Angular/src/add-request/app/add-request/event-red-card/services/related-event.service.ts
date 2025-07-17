@@ -102,7 +102,7 @@ export class RelatedEventService {
   }
   
   private isAutoSelectMatch(mainEvent: LogInfoRelatedEvent, matchType: number): boolean {
-    return mainEvent.parentId != mainEvent.matchId && matchType === MatchType.LINK;
+    return mainEvent.parentId !== mainEvent.matchId && matchType === MatchType.LINK;
   }
 
   private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: LogInfoRelatedEvent[], originalAllEvents: LogInfoRelatedEvent[]): void {
