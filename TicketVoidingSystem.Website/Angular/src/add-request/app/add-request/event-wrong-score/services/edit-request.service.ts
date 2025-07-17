@@ -19,7 +19,6 @@ export class EditRequestService {
     primitiveProps.filterBy = mainEvent.filterBy;
     primitiveProps.isShowActualScore = true;
     primitiveProps.isCheckedVar = mainEvent.isCheckedVar;
-    primitiveProps.isHighLightVarCheck = !mainEvent.isCheckedVar;
     primitiveProps.isShowRelatedEvents = SubIssueTypeRelatedEvent.isHasRelatedEvent(Number(mainEvent.subIssueTypeId));
   }
 
