@@ -11,7 +11,7 @@ public interface MessageContentWithMemberTemplateService
     IList<string> Create(TicketInfoForLetstalk model, IEnumerable<TicketEmailModel> tickets);
 }
 
-public class MessageContentWithMemberTemplateServiceImp(UusTicketService uusTicketService)
+public class MessageContentWithMemberTemplateServiceImp(ValidationTicketService validationTicketService)
     : MessageContentWithMemberTemplateService
 {
     private const int MaxContent = 1024;
@@ -42,11 +42,11 @@ public class MessageContentWithMemberTemplateServiceImp(UusTicketService uusTick
         {
             UpdateCountSingleInstant(countInfo, ticket);
 
-            if (uusTicketService.IsValidCashOut(ticket))
+            if (validationTicketService.IsValidCashOut(ticket))
             {
                 countInfo.CashOutCount++;
             }
-            if (uusTicketService.IsValidSettledParlayTicket(ticket, model.IsCheckMainParlay))
+            if (validationTicketService.IsValidSettledParlayTicket(ticket, model.IsCheckMainParlay))
             {
                 countInfo.ParlayCount++;
             }
@@ -69,7 +69,7 @@ public class MessageContentWithMemberTemplateServiceImp(UusTicketService uusTick
 
     private void UpdateCountSingleInstant(TicketCountInfo countInfo, TicketEmailModel ticket)
     {
-        if (!uusTicketService.IsValidSettledSingleTicket(ticket))
+        if (!validationTicketService.IsValidSettledSingleTicket(ticket))
         {
             return;
         }

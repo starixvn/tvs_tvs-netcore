@@ -36,12 +36,12 @@ public static class TicketVoidingSystemService
         services.AddSingleton<ResultCacheService, ResultCacheServiceImp>();
         services.AddTransient<NotificationService, NotificationServiceImp>();
         services.AddSingleton<OperatorKeyEncryptionService, OperatorKeyEncryptionServiceImp>();
-        
+
         //Letstalk
         services.AddSingleton<LetstalkClientService, LetstalkClientServiceImp>();
         services.AddSingleton<LetstalkSingleMessageService, LetstalkSingleMessageServiceImp>();
         services.AddSingleton<NotificationLetstalkService, NotificationLetstalkServiceImp>();
-        services.AddSingleton<UusTicketService, UusTicketServiceImp>();
+        services.AddSingleton<ValidationTicketService, ValidationTicketServiceImp>();
         services.AddSingleton<MessageContentSingleService, MessageContentSingleServiceImp>();
         services.AddSingleton<MessageContentWithMemberTemplateService, MessageContentWithMemberTemplateServiceImp>();
         services.AddSingleton<GroupVoidSettledBetService, GroupVoidSettledBetServiceImp>();
@@ -87,6 +87,5 @@ public static class TicketVoidingSystemService
 
         // SignalR
         services.AddSingleton<NotificationSignalRService, NotificationSignalRServiceImp>();
-
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.Letstalk;
 
@@ -39,12 +38,12 @@ public class SendLetstalkAfterAddServiceImp(
     {
         foreach (var sendLetstalkModel in model.SendLetstalkModels)
         {
-            if (sendLetstalkModel.IsHasUusTickets)
-            {
-                continue;
-            }
+            //if (sendLetstalkModel.IsHasUusTickets)
+            //{
+            //    continue;
+            //}
             var content = CreateContent(model, sendLetstalkModel, requestId);
-            await notificationLetstalkService.SendToGroupAbnormalBetRequest(CreateSubject(model), content, null);
+            await notificationLetstalkService.SendToGroupAbnormalBetRequest(CreateSubject(model), content, sendLetstalkModel.IsHasUusTickets);
         }
     }
 

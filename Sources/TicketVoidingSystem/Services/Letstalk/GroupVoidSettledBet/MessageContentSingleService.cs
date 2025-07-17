@@ -10,7 +10,7 @@ public interface MessageContentSingleService
     string Create(TicketInfoForLetstalk model, IEnumerable<TicketEmailModel> tickets);
 }
 
-public class MessageContentSingleServiceImp(UusTicketService uusTicketService) : MessageContentSingleService
+public class MessageContentSingleServiceImp(ValidationTicketService validationTicketService) : MessageContentSingleService
 {
     public string Create(TicketInfoForLetstalk model, IEnumerable<TicketEmailModel> tickets)
     {
@@ -37,14 +37,14 @@ public class MessageContentSingleServiceImp(UusTicketService uusTicketService) :
         var countInfo = new TicketCountInfo();
         foreach (var ticket in tickets)
         {
-            if (!ticket.IsMixParlay && uusTicketService.IsValidSettledSingleTicket(ticket))
+            if (!ticket.IsMixParlay && validationTicketService.IsValidSettledSingleTicket(ticket))
             {
                 countInfo.InstantOUCount += ticket.IsInstantSettlementTicket ? 1 : 0;
                 countInfo.SingleCount += !ticket.IsInstantSettlementTicket ? 1 : 0;
             }
 
-            countInfo.CashOutCount += uusTicketService.IsValidCashOut(ticket) ? 1 : 0;
-            countInfo.ParlayCount += uusTicketService.IsValidSettledParlayTicket(ticket, model.IsCheckMainParlay) ? 1 : 0;
+            countInfo.CashOutCount += validationTicketService.IsValidCashOut(ticket) ? 1 : 0;
+            countInfo.ParlayCount += validationTicketService.IsValidSettledParlayTicket(ticket, model.IsCheckMainParlay) ? 1 : 0;
         }
 
         return countInfo;
