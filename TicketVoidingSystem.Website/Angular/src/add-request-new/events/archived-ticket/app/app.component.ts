@@ -7,13 +7,15 @@ import { EventTicket14Component } from './event-ticket14/event-ticket14.componen
 import { OthersAbnormalBetComponent } from '../../../../add-request-new/component/others-abnormal-bet/others-abnormal-bet.component';
 import { EventBaseLayoutComponent } from '../../../../add-request-new/component/event-base-layout/event-base-layout.component';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  imports: [EventBaseLayoutComponent, CommonModule, EventTicket14Component, OthersAbnormalBetComponent],
+  imports: [EventBaseLayoutComponent, CommonModule, EventTicket14Component, OthersAbnormalBetComponent, 
+    NgxSkeletonLoaderModule],
 })
 export class AppComponent  {
     @ViewChild('eventTicket14') eventTicket14Component: EventTicket14Component;

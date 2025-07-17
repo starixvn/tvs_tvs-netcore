@@ -113,5 +113,15 @@ export class IssueTypeConstant {
     [IssueTypeConstant.MATCH_COMPLETED, 'TicketVoidingSystem/MatchCompleted/Edit'],
     [IssueTypeConstant.MATCH_EARLY_COMPLETED, 'TicketVoidingSystem/MatchEarlyCompleted/Edit']
   ]);
+
+  static getIssueTypeFromUrl(url: string): string {    
+    [...this.NAVIGATE_ADD_REQUEST.entries(), ...this.NAVIGATE_EDIT_REQUEST.entries()].forEach(([key, value]) => {
+      if (url.includes(value)) {
+        return key;
+      }
+    });
+
+    return '';
+  }
 }
 
