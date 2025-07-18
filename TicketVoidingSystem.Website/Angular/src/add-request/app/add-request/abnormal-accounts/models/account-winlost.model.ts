@@ -15,4 +15,5 @@ export class AccountWinlostModel {
   isCanEditTicket: boolean;
   isShowOnTable: boolean;
   transInfoAccountJson: string;
+  oldAdjustVoidLimit: number;
 }

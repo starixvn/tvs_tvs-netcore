@@ -114,7 +114,7 @@
               @if (item.isShowInput) {
               <input (mouseup)="adjustInputFocus($event)" class="form-control form-control-sm adjust-gv{{i}}"
                 type="text" [(ngModel)]="item.adjustVoidLimit" (ngModelChange)="onChangeAdjustGV(item, i)"
-                [disabled]="filter.isVoided" (blur)="reCalculate(item, previousAdjustVoidLimit, i)" />
+                [disabled]="filter.isVoided" (blur)="reCalculate(item, i)" />
               }
             </div>
           </td>
