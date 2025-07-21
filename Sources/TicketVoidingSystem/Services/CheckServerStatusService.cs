@@ -17,11 +17,16 @@ public class CheckServerStatusServiceImp(SiteDbClientService siteDbClientService
     public async Task<List<SiteDbGroupModel>> GetOnlineServer()
     {
         var onlineServer = await siteDbClientService.GetActiveSiteDbAsync();
-        return onlineServer.Select(x => new SiteDbGroupModel
-        {
-            Id = x.SiteDbGroupId,
-            IsOnline = x.Status,
-            ServerName = SiteDbGroupConstant.AllSiteDb.Find(y => y.Id == x.SiteDbGroupId)?.ServerName
-        }).ToList();
+        var ignoreSiteDbList = !string.IsNullOrWhiteSpace(AppSettingService.AppSetting?.IgnoreSiteDb)
+            ? AppSettingService.AppSetting.IgnoreSiteDb.Split(',').Select(int.Parse)
+            : new List<int>();
+
+        return onlineServer.Where(site => ignoreSiteDbList.All(y => y != site.SiteDbGroupId))
+            .Select(x => new SiteDbGroupModel
+            {
+                Id = x.SiteDbGroupId,
+                IsOnline = x.Status,
+                ServerName = SiteDbGroupConstant.AllSiteDb.Find(y => y.Id == x.SiteDbGroupId)?.ServerName
+            }).ToList();
     }
 }
