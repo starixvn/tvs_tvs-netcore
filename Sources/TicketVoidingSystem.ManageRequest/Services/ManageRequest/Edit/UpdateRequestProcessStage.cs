@@ -26,7 +26,8 @@ public class UpdateRequestProcessStageImp(
     InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
     GetUpdateResultService getUpdateResultService,
     CompressDataService compressDataService,
-    NotificationService notificationService)
+    NotificationService notificationService,
+    PendingMarkTicketsService pendingMarkTicketsService)
     : UpdateRequestProcessStage
 {
     public async Task<Result> Execute(EditRequestQuery query)
@@ -42,6 +43,8 @@ public class UpdateRequestProcessStageImp(
         notificationService.ExecuteBackground(()
             => notificationService.InsertNotification(NotificationType.Notification,
                 MessageHelper.CreateEditRequestSuccessfully(query.RequestId, sessionService.UserName), NotificationTargetType.IgnoreCurrentUser, query.RequestId));
+
+        await pendingMarkTicketsService.PendingMarkTickets(query.RequestId, query.SiteDBDownInfoJson);
 
         return getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString());
     }
