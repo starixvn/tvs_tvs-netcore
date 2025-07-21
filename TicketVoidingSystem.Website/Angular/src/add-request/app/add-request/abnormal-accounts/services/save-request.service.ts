@@ -9,7 +9,6 @@ import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { PopupService } from '../../services/popup.service';
 import { ConfirmAbnormalAccountComponent } from '../confirm-abnormal-account/confirm-abnormal-account.component';
-import { ConfirmAbnormalAccountModel } from '../confirm-abnormal-account/confirm-abnormal-account.model';
 import { AccountWinlostModel } from '../models/account-winlost.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request.model';
@@ -55,6 +54,7 @@ export class SaveRequestService {
     if (isDataValidAgain) {
       await this.executeSaveRequestApi(arg);
     } else {
+      arg.addRequestStore.changeSavingRequestStatus(false);
       this.popupService.showError(TEXT.INVALID_DATA_IN_REQUEST);
     }
     arg.addRequestStore.changeBlockingUiStatus(false);
@@ -119,16 +119,28 @@ export class SaveRequestService {
 
   private createAbnormalAccountModel(args: SaveRequestArg): AbnormalAccountModel {
     const model = _.clone(args.abnormalAccountModel);
-    model.usernames = this.getUsernamesForSaveRequest(args.confirmAddRequest, args.abnormalAccountModel.usernames, args.confirmAddRequestComponent);
+    model.usernames = this.getUsernamesForSaveRequest(args.abnormalAccountModel.usernames, args.confirmAddRequestComponent);
+    model.accountWinlostModels
+      = this.getAccountWinlostModelsForSaveRequest(args.filter.action, args.abnormalAccountModel.accountWinlostModels, args.confirmAddRequestComponent);
+
     return model;
   }
 
-  private getUsernamesForSaveRequest(confirmModel: ConfirmAbnormalAccountModel, originalUsernames: string, confirmComponent: ConfirmAbnormalAccountComponent): string {
+  private getUsernamesForSaveRequest(originalUsernames: string, confirmComponent: ConfirmAbnormalAccountComponent): string {
     let usernames = originalUsernames.split(',');
-    if (confirmModel.usernamesOfCreditCashService && confirmComponent.model.checkboxState[CheckboxType.CREDIT_CASH_SERVICE]) {
-      usernames = usernames.filter(x => !(confirmModel.usernamesOfCreditCashService).split(',').includes(x));
+    if (confirmComponent.model.usernamesOfCreditCashService && confirmComponent.model.checkboxState[CheckboxType.CREDIT_CASH_SERVICE]) {
+      usernames = usernames.filter(x => !(confirmComponent.model.usernamesOfCreditCashService).split(',').includes(x));
     }
     return usernames.join(',');
+  }
+
+  private getAccountWinlostModelsForSaveRequest(voidAction: string, accountWinlostModels: AccountWinlostModel[],
+    confirmComponent: ConfirmAbnormalAccountComponent): AccountWinlostModel[] {
+    if (voidAction === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString() && confirmComponent.model.usernamesOfCreditCashService
+      && confirmComponent.model.checkboxState[CheckboxType.CREDIT_CASH_SERVICE]) {
+      return accountWinlostModels.filter(x => !(confirmComponent.model.usernamesOfCreditCashService).split(',').includes(x.username));
+    }
+    return accountWinlostModels;
   }
 
   private cancelValidateUsernamesWhenFocusOut(primitiveProps: PrimitiveProperty, usernamesComponent: UsernamesComponent) {
