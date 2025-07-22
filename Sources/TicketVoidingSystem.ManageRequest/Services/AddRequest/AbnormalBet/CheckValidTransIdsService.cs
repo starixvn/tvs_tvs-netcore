@@ -45,14 +45,14 @@ public class CheckValidTransIdsServiceImp(
     {
         var result = new List<GetAbnormalBetTicketModel>();
         var validTickets = abnormalBetTicketRequests.Where(x => x.RemarkId == 0);
-        var invalidTickets = abnormalBetTicketRequests.Where(x => invalidTransIds.Contains(x.TransId.ToString()));
+        var invalidTickets = abnormalBetTicketRequests.Where(x => invalidTransIds.Contains(x.TransId.ToString())).DistinctBy(x => x.TransId);
         var otherTickets = abnormalBetTicketRequests.Where(x => x.RemarkId > RemarkConstant.InvalidTicketId);
 
         result.AddRange(validTickets);
         result.AddRange(invalidTickets);
         result.AddRange(otherTickets);
 
-        return result.DistinctBy(x => x.TransId);
+        return result;
     }
 
     protected virtual async Task<(IEnumerable<MatchInfoAddRequest>, IEnumerable<ValidationAbnormalBet>, IEnumerable<TransInfoAddRequestModel>,
