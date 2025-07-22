@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { AddRequestApiService } from 'src/add-request-new/events/services/add-request-api.service';
 import { FilterComponent } from '../../../add-request-new/component/filter/filter.component';
 import { FilterModel } from '../../../add-request-new/component/filter/filter.model';
 import { IssueTypes } from '../../../add-request-new/component/filter/issue-types.model';
 import { RequestModel } from '../../../add-request-new/events/models/request.model';
+import { AddRequestApiService } from '../../../add-request-new/events/services/add-request-api.service';
 import { AddRequestStore } from '../../../add-request-new/events/services/add-request.store';
 import { CopyRequestInfoService } from '../../../add-request-new/events/services/copy-request-info.service';
 import { BlockFullUiComponent } from '../../../utility/components/block-full-ui/block-full-ui.component';
@@ -79,7 +79,6 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
 
   async ngOnInit(): Promise<void> {
     this.isLoadingData = true;
-    await this.eventBaseService.checkPermissionIssueType(Number(this.issueTypeId));
     this.issueTypes.issueId = Number(this.issueTypeId);
     this.initBaseData();
 
