@@ -1,32 +1,26 @@
-<event-base-layout
-  #eventBaseLayout
+<event-base-layout #eventBaseLayout
   [issueTypeId]="issueTypeId"
-  (filterChange)="updateFilter($event)"
   (saveRequest)="saveRequest()"
   [model]="model"
-  (reloadBaseData)="reloadBaseData()"
->
-  @if(!isDataReady){
-    <ngx-skeleton-loader count="5" appearance="line" [theme]="{ height: '30px', 'margin-bottom': '10px' }"></ngx-skeleton-loader>
-  }
-  @if(isDataReady){
-    <!-- Event content template -->
-    <ng-template #eventContent>
-      <event-ticket14
-        #eventTicket14
-        [isEdit]="isEdit"
-        [requestId]="requestId"
-        [filter]="model.filter"
-        [eventTicket14Model]="model.eventTicket14Model"
-        [others]="model.others"
-      >
-      </event-ticket14>
-    </ng-template>
-
-    <!-- Others content template -->
-    <ng-template #othersContent>
-      <others-abnormal-bet [isEdit]="isEdit" [model]="model.others">
-      </others-abnormal-bet>
-    </ng-template>
-  }
+  [eventHeight]="'581px'"
+  [eventContent]="eventContent"
+  [othersContent]="othersContent">
 </event-base-layout>
+
+<ng-template #eventContent let-eventModel="eventModel" let-isEdit="isEdit" let-requestId="requestId"
+  let-filterModel="filterModel" let-otherModel="otherModel">
+  <event-ticket14
+    #eventTicket14
+    [isEdit]="isEdit"
+    [requestId]="requestId"
+    [filter]="filterModel"
+    [eventTicket14Model]="eventModel"
+    [others]="otherModel"
+  >
+  </event-ticket14>
+</ng-template>
+
+<ng-template #othersContent let-otherModel="otherModel" let-isEdit="isEdit">
+  <others-abnormal-bet [isEdit]="isEdit" [model]="otherModel">
+  </others-abnormal-bet>
+</ng-template>

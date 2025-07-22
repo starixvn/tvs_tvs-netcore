@@ -1,6 +1,7 @@
 @{
 Layout = "~/Views/Shared/_LayoutAngular.cshtml";
-ViewBag.Title = "Add Request Ticket Voiding";
+var isEditMode = Context.Request.Path.Value?.ToLower().Contains("/edit/") == true;
+ViewBag.Title = isEditMode ? "Edit Request Ticket Voiding" : "Add Request Ticket Voiding";
 }
 @section Head {
 <% files.css.forEach(function(css){ %>

@@ -176,8 +176,8 @@ const configPages = [
   //voidSingleBet,
   //voidRequest,
   //manageRequest,
-  addRequest,
-  editRequest,
+  //addRequest,
+  //editRequest,
   //voidByBetId
   addRequestArchivedTicket
 ];

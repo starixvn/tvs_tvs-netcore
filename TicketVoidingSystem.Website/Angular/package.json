@@ -44,7 +44,7 @@
     "moment-timezone": "^0.5.45",
     "ngx-autosize": "^2.0.4",
     "ngx-clipboard": "^16.0.0",
-    "ngx-skeleton-loader": "^11.2.1",
+    "ngx-skeleton-loader": "^10.0.0",
     "ngx-toastr": "^19.0.0",
     "rxjs": "^7.8.1",
     "ts-jest": "^29.2.5",

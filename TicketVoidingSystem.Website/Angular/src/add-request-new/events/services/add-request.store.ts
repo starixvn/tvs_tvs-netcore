@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { AllowanceTime } from '../../../utility/models/allowance-time.model';
 
 @Injectable({
@@ -13,6 +13,12 @@ export class AddRequestStore {
   private readonly changeActionWaitingToManualEditPageSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private readonly abnormalFilterBySubject: Subject<number> = new Subject();
   private startTimeFilterTicket: Date;
+
+   get isBlocking(): Observable<boolean> {
+    return this.blockingUiStatusSubject.pipe(
+      map(statusArray => statusArray.length > 0)
+    );
+  }
 
   get getStartTimeFilterTicket(): Date {
     return this.startTimeFilterTicket;
