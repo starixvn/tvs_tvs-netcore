@@ -67,6 +67,7 @@ export class SaveRequestService {
     arg.confirmRedCard.isHasSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);
     arg.confirmRedCard.isHasWarningTicket = arg.allEvents.some(x => x.messageValidationLogInfo?.length > 0);
     arg.confirmRedCard.isShowSubIssueType = true;
+    arg.confirmRedCard.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel.siteDBDownInfoJson.length > 0;
     arg.confirmRedCard.isOpen = true;
     arg.confirmRedCard = _.clone(arg.confirmRedCard);
   }
@@ -116,6 +117,7 @@ export class SaveRequestService {
     query.provider = arg.others.provider;
     query.source = arg.others.source;
     query.remark = arg.others.remark;
+    query.siteDBDownInfoJson = arg.confirmRedCard.isMarkTicketSiteDbDown ? arg.primitiveProps.infoSiteDBDownModel.siteDBDownInfoJson : null;
 
     if (!arg.filter.isVoided) {
       query.redCardInfo = arg.allEvents.filter(x => x.logInfoDetail).map(x => {
