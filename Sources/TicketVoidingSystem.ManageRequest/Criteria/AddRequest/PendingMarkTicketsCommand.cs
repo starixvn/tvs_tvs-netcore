@@ -6,6 +6,8 @@ public class PendingMarkTicketsCommand : NonQueryCommand
 {
     public int RequestId { get; set; }
 
+    public int? ActionId { get; set; }
+
     public string SiteDBDownInfoJson { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_PendingMarkTickets_Insert";

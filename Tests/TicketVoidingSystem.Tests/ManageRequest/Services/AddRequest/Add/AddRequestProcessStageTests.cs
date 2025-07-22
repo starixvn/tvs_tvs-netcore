@@ -75,7 +75,7 @@ public class AddRequestProcessStageTests
 
         // Assert
         Assert.True(result.IsSuccessful);
-        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson, 1, false);
     }
 
     [Fact]
@@ -108,7 +108,7 @@ public class AddRequestProcessStageTests
 
         // Assert
         Assert.True(result.IsSuccessful);
-        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson, 1, false);
     }
 
     [Fact]
@@ -141,7 +141,7 @@ public class AddRequestProcessStageTests
         // Assert
         Assert.True(result.IsSuccessful);
         await accountWinLostService.Received(1).SaveAccountWinLost(1, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
-        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson, 1, false);
     }
 
     [Fact]
@@ -176,7 +176,7 @@ public class AddRequestProcessStageTests
 
         // Assert
         Assert.True(result.IsSuccessful);
-        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson, 1, false);
     }
 
     [Theory]
@@ -248,7 +248,7 @@ public class AddRequestProcessStageTests
 
         // Assert
         Assert.True(result.IsSuccessful);
-        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson, 1, false);
     }
 
     [Fact]
@@ -282,7 +282,7 @@ public class AddRequestProcessStageTests
 
         // Assert
         Assert.True(result.IsSuccessful);
-        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson, 1, false);
     }
 
     [Fact]
@@ -316,6 +316,6 @@ public class AddRequestProcessStageTests
 
         // Assert
         Assert.True(result.IsSuccessful);
-        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson);
+        await pendingMarkTicketsService.Received(1).PendingMarkTickets(1, query.SiteDBDownInfoJson, 1, false);
     }
 }

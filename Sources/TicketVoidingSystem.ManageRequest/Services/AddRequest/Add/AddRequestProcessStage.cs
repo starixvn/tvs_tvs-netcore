@@ -40,7 +40,7 @@ public class AddRequestProcessStageImp(
         notificationService.ExecuteBackground(()
             => notificationService.InsertNotification(NotificationType.Notification,
                 MessageHelper.CreateAddRequestSuccessfully(requestId), NotificationTargetType.IgnoreCurrentUser, requestId));
-        await pendingMarkTicketsService.PendingMarkTickets(requestId, query.SiteDBDownInfoJson);
+        await pendingMarkTicketsService.PendingMarkTickets(requestId, query.SiteDBDownInfoJson, query.ActionId, false);
 
         return getUpdateResultService.CreateSuccessResult(requestId, GetMatchIdAfterAddRequest(query));
     }

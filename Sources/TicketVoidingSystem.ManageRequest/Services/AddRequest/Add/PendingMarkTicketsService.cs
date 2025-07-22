@@ -1,26 +1,35 @@
 using Fanex.Data.Repository;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
 public interface PendingMarkTicketsService
 {
-    Task PendingMarkTickets(int requestId, string siteDBDownInfoJson);
+    Task PendingMarkTickets(int requestId, string siteDBDownInfoJson, int? actionId, bool isUpdateRequest);
 }
 
 public class PendingMarkTicketsServiceImp(IDynamicRepository repository) : PendingMarkTicketsService
 {
-    public async Task PendingMarkTickets(int requestId, string siteDBDownInfoJson)
+    public async Task PendingMarkTickets(int requestId, string siteDBDownInfoJson, int? actionId, bool isUpdateRequest)
     {
-        if (!string.IsNullOrEmpty(siteDBDownInfoJson))
+        if (string.IsNullOrEmpty(siteDBDownInfoJson) || (actionId is ActionVoidRequestConstant.TakeNoteId && !isUpdateRequest))
         {
-            var command = new PendingMarkTicketsCommand
-            {
-                RequestId = requestId,
-                SiteDBDownInfoJson = siteDBDownInfoJson
-            };
-
-            await repository.ExecuteAsync(command);
+            return;
         }
+
+        await Execute(requestId, siteDBDownInfoJson, actionId);
+    }
+
+    private async Task Execute(int requestId, string siteDBDownInfoJson, int? actionId)
+    {
+        var command = new PendingMarkTicketsCommand
+        {
+            RequestId = requestId,
+            ActionId = actionId,
+            SiteDBDownInfoJson = siteDBDownInfoJson
+        };
+
+        await repository.ExecuteAsync(command);
     }
 }
