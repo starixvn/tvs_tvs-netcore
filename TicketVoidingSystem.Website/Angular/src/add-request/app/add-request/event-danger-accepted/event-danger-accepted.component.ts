@@ -41,6 +41,8 @@ import { ValidationService } from './services/validation.service';
 import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { AddRequestApiService } from '../add-request-api.service';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
+
 @Component({
   standalone: true,
   selector: 'event-danger-accepted',
@@ -48,7 +50,7 @@ import { AddRequestApiService } from '../add-request-api.service';
   styleUrls: ['./event-danger-accepted.component.scss'],
   imports: [FormsModule, CommonModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiDirective,
     TvDetectionComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent, 
-    ConfirmDangerAcceptedComponent, OnlyNumberDirective],
+    ConfirmDangerAcceptedComponent, OnlyNumberDirective, InfoSiteDBDownComponent],
   providers: [
     LogInfoService,
     ValidationService,
@@ -118,6 +120,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     this.allSelectedEvents = [this.mainEvent];
     this.primitiveProps.isShowLogInfoMainMatch = false;
     this.primitiveProps.isShowRelatedEvents = false;
+    this.clearInfoSiteDBDownModel();
   }
 
   async ngOnInit(): Promise<void> {
@@ -226,6 +229,8 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
       this.allSelectedEvents.push(...newEvents);
       this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     }
+
+    this.clearInfoSiteDBDownModel();
     this.primitiveProps.isShowRelatedEvents = true;
     this.primitiveProps.isBlock = false;
   }
@@ -237,6 +242,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
 
   handleDeleteEvent(matchId: number): void {
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.matchId !== matchId || x.isMainMatch);
+    this.clearInfoSiteDBDownModel();
   }
 
   showAddChildMatchModal(matchType: number) {
@@ -323,4 +329,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     return [this.mainEvent.logInfoDetail];
   }
 
+  clearInfoSiteDBDownModel(): void {
+    this.primitiveProps.infoSiteDBDownModel = null;
+  }
 }

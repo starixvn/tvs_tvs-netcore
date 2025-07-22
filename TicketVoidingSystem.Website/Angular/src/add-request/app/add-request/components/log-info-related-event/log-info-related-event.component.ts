@@ -44,6 +44,7 @@ export class LogInfoRelatedEventComponent {
   @Input() logInfo: LogInfoRelatedEvent;
   @Input() defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
   @Output() deleteEvent = new EventEmitter<number>();
+  @Output() clearInfoSiteDBDownModel = new EventEmitter<void>();
   @ViewChild('filterTimeWithAllowance') filterTimeWithAllowanceComponent: FilterTimeWithAllowanceComponent;
 
   isBlock = false;
@@ -96,6 +97,7 @@ export class LogInfoRelatedEventComponent {
     }
 
     this.isShowValidation = false;
+    this.clearInfoSiteDBDownModel.emit();
   }
 
   showValidationDetail() {

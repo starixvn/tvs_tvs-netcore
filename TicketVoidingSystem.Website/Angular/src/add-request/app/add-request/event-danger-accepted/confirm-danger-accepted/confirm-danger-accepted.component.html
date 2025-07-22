@@ -48,6 +48,13 @@
               or Red Card issue type.</div>
             }
           </div>
+          @if (model.isHasAffectedTicketSiteDBDown) {
+            <div class="mg-top-10">
+              <label><input type="checkbox"
+                  [(ngModel)]="model.isMarkTicketSiteDbDown"/> 
+                  Mark ticket(s) of the siteDB down to prevent settling, and void them later.</label>
+            </div>
+          }
           <div class="mg-top-10"><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS
             WITH ABOVE INFO?</div>
         </div>

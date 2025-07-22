@@ -77,7 +77,7 @@ export class SaveRequestService {
       (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) ? true : false;
       arg.confirmDangerAccepted.isHasWarningRangeTime = arg.allEvents.some(x => x.logInfoDetail?.isHasWarningRangeTime)
     }
-
+    arg.confirmDangerAccepted.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel.siteDBDownInfoJson.length > 0;
     arg.confirmDangerAccepted.requestId = arg.requestId;
     arg.confirmDangerAccepted.requestedBy = arg.requestedBy;
     arg.confirmDangerAccepted.isEditingByAnotherUser =
@@ -133,6 +133,7 @@ export class SaveRequestService {
     query.decidedBy = arg.others.decidedBy;
     query.source = arg.others.source;
     query.remark = arg.others.remark;
+    query.siteDBDownInfoJson = arg.confirmDangerAccepted.isMarkTicketSiteDbDown ? arg.primitiveProps.infoSiteDBDownModel.siteDBDownInfoJson : null;
 
     if (!arg.filter.isVoided) {
       query.dangerAcceptedInfo = arg.allEvents.filter(x => x.logInfoDetail).map(x => {

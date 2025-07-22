@@ -35,13 +35,17 @@
       (click)="handleSearchEvent()">Search</button>
   </div>
 
+  <info-site-db-down [infoSiteDBDownModel]="primitiveProps.infoSiteDBDownModel">
+  </info-site-db-down>
+  
   @if (primitiveProps.isShowLogInfoMainMatch) {
   <div class="main-match-log-info mb-3">
     <label class="col-form-label-sm"><strong>Main Event - Log Info</strong></label>
     <log-info-related-event #logInfo [isMainMatch]="true" [isEdit]="isEdit" [filterBy]="primitiveProps.filterBy"
       [transInfoAddRequestModel]="primitiveProps.transInfoAddRequestModel" [requestId]="requestId"
       [isDisabled]="filter.isVoided" [subIssueTypes]="issueTypes.subIssueTypes"
-      [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance" [logInfo]="mainEvent" [filter]="filter">
+      [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance" [logInfo]="mainEvent" [filter]="filter"
+      (clearInfoSiteDBDownModel)="clearInfoSiteDBDownModel()">
     </log-info-related-event>
   </div>
   }
@@ -77,7 +81,7 @@
           [transInfoAddRequestModel]="primitiveProps.transInfoAddRequestModel" [requestId]="requestId"
           [isDisabled]="filter.isVoided" [subIssueTypes]="issueTypes.subIssueTypes"
           [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance" [logInfo]="allSelectedEvents[i]"
-          [filter]="filter" (deleteEvent)="handleDeleteEvent($event)">
+          [filter]="filter" (deleteEvent)="handleDeleteEvent($event)" (clearInfoSiteDBDownModel)="clearInfoSiteDBDownModel()">
         </log-info-related-event>
         }
       </div>
