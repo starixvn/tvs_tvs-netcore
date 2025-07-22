@@ -16,6 +16,8 @@ public class GetVoidTimeByAllowanceSettingCriteria : CriteriaBase
 
     public string? WrongScoreInfo { get; set; }
 
+    public string OnlineServerId { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 
