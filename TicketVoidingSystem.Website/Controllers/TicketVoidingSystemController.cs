@@ -60,11 +60,10 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     }
 
     [HttpGet]
-    [Route("")]
     [Route("Add")]
     [Route("Add/Index")]
-    [Route("Edit/Index/{id}")]
     [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.ArchivedTicket, Constant.Policy.Read)]
     public ActionResult ArchivedTicket(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/add-request/archived-ticket/index.cshtml");
