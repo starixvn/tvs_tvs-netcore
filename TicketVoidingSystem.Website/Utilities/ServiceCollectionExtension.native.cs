@@ -44,6 +44,7 @@ using TicketVoidingSystem.ManageVoidServices.Controllers;
 using TicketVoidingSystem.MarkTickets;
 using TicketVoidingSystem.MarkTickets.Controllers;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using TicketVoidingSystem.SharedApi;
 using TicketVoidingSystem.SharedApi.Controllers;
 using TicketVoidingSystem.SignalR;
@@ -118,6 +119,12 @@ public static class ServiceCollectionExtension
         });
     }
 
+    public static void AddTvsSiteDbStatus(this IServiceCollection services)
+    {
+        services.AddSiteDbConnectionManager();
+        services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(LazyRedisMultiplexer.GetRedisConfig()));
+    }
+
     public static void AddTvsSignalR(this IServiceCollection services)
     {
         services.AddSignalR().AddStackExchangeRedis(options =>
@@ -129,15 +136,10 @@ public static class ServiceCollectionExtension
         });
     }
 
-    public static void AddTvsSiteDbStatus(this IServiceCollection services)
+    public static void AddOnlineServerRepository(this IServiceCollection services)
     {
-        services.AddSiteDbConnectionManager();
-        services.AddSingleton<IConnectionMultiplexer>(sp =>
-        {
-            var config = LazyRedisMultiplexer.GetRedisConfig();
-            config.ChannelPrefix = RedisChannel.Literal(AppSettingService.AppSetting.RedisConfig.SignalRChannelPrefix);
-            return ConnectionMultiplexer.Connect(config);
-        });
+        services.AddSingleton<OnlineServerRepositoryService, OnlineServerRepositoryServiceImp>();
+        services.AddScoped<OnlineServerRepository, OnlineServerRepositoryImp>();
     }
 
     public static void AddRemotingRef(this IServiceCollection services)
