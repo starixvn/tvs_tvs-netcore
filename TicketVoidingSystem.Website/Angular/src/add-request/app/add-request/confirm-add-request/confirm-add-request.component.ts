@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Selection } from '../../../../utility/models/selection.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { ConfirmAddRequestModel } from './confirm-add-request.model';
@@ -7,7 +9,8 @@ import { ConfirmAddRequestModel } from './confirm-add-request.model';
     selector: 'confirm-add-request',
     templateUrl: './confirm-add-request.component.html',
     styleUrls: ['./confirm-add-request.component.scss'],
-    standalone: true
+    standalone: true,
+    imports: [CommonModule, FormsModule]
 })
 export class ConfirmAddRequestComponent implements OnChanges {
   @Input() model = new ConfirmAddRequestModel();

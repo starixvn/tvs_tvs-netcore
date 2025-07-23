@@ -11,6 +11,7 @@ export interface CheckValidUsernamesQuery {
   toDate: string;
   isVoidAllArchivedTickets: boolean;
   accountWinlostModels: AccountWinlostModel[];
+  isRemoveCreditCashService: boolean;
 }
 
 
@@ -27,6 +28,7 @@ export class ValidationAbnormalAccount {
   invalidUserName: string;
   matchIds: string;
   numberOfTickets: number;
+  usernamesOfCreditCashService: string;
   isExceededTotalUsernames: boolean;
   transInfo: string;
   isTicketLimitExceeded: boolean;

@@ -24,6 +24,8 @@ public class CheckValidUsernamesCriteria : CriteriaBase
 
     public bool IsVoidAllArchivedTickets { get; set; }
 
+    public bool IsRemoveCreditCashService { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

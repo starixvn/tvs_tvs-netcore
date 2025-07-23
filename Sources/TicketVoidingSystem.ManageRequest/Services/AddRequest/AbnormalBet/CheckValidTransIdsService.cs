@@ -1,8 +1,6 @@
 ﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet;
 
@@ -59,6 +57,7 @@ public class CheckValidTransIdsServiceImp(
             SubIssueTypeId = message.SubIssueTypeId,
             IsRemoveCustomerClass201 = message.IsRemoveCustomerClass201,
             IsRemoveCustomerClass4K = message.IsRemoveCustomerClass4K,
+            isRemoveCreditCashService = message.IsRemoveCreditCashService,
             IsAddSettledTickets = message.IsAddSettledTickets,
             IsVoidAllArchivedTickets = message.IsVoidAllArchivedTickets,
             TransInfoJson = string.Join(",", transInfoJsonList)

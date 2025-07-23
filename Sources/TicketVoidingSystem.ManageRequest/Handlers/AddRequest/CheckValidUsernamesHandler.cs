@@ -25,6 +25,8 @@ public class CheckValidUsernamesRequest : IRequest<CheckValidUsernamesViewModel>
 
     public bool IsVoidAllArchivedTickets { get; set; }
 
+    public bool IsRemoveCreditCashService { get; set; }
+
     public IEnumerable<AccountWinlostModel>? AccountWinlostModels { get; set; }
 }
 

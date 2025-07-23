@@ -258,6 +258,12 @@ export class ABExceptionListVoidVIP {
   ];
 }
 
+export enum CheckboxType {
+  CUSTOMER_CLASS_201,
+  CUSTOMER_CLASS_4K,
+  CREDIT_CASH_SERVICE
+}
+
 export class TimeZone {
   static readonly AMERICA_CARACAS = 'America/Caracas';
   static readonly ASIA_MANILA = 'Asia/Manila';

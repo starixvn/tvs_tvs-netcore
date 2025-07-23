@@ -18,6 +18,8 @@ public class CheckValidTransIdsCriteria : CriteriaBase
 
     public bool IsRemoveCustomerClass4K { get; set; }
 
+    public bool isRemoveCreditCashService { get; set; }
+
     public bool IsAddSettledTickets { get; set; }
 
     public bool IsVoidAllArchivedTickets { get; set; }

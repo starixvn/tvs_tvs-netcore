@@ -1,3 +1,5 @@
+import { CheckboxType } from '../../../../../utility/constants/config';
+
 export class ConfirmAbnormalBetModel {
     isOpenDialog: boolean;
     isHasWarningForAbnormalBet: boolean;
@@ -11,8 +13,21 @@ export class ConfirmAbnormalBetModel {
     settledTickets: string;
     ticketsOfCustomerClass201: string;
     ticketsOfCustomerClass4K: string;
-    
+    ticketsOfCreditCashService: string;
+
     issueTypeName: string;
     subIssueTypeName: string;
     actionName: string;
+
+    checkboxState: Record<string, boolean> = {
+        [CheckboxType.CUSTOMER_CLASS_201]: false,
+        [CheckboxType.CUSTOMER_CLASS_4K]: false,
+        [CheckboxType.CREDIT_CASH_SERVICE]: false,
+    };
+
+    checkboxes: Record<string, string> = {
+        [CheckboxType.CUSTOMER_CLASS_201]: '',
+        [CheckboxType.CUSTOMER_CLASS_4K]: '',
+        [CheckboxType.CREDIT_CASH_SERVICE]: '',
+    };
 }

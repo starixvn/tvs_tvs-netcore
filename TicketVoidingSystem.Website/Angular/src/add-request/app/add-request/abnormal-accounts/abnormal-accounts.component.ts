@@ -2,12 +2,11 @@ import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
-import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
-import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
@@ -15,27 +14,26 @@ import { OthersModel } from '../others/others.model';
 import { AccountAffectedTicketComponent } from './account-affected-ticket/account-affected-ticket.component';
 import { AccountAffectedTicketModel } from './account-affected-ticket/account-affected-ticket.model';
 import { AccountTableComponent } from './account-table/account-table.component';
+import { ConfirmAbnormalAccountComponent } from './confirm-abnormal-account/confirm-abnormal-account.component';
+import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request.model';
 import { ValidationBusinessRuleArgs } from './models/validation.model';
 import { ProductFilterComponent } from './product-filter/product-filter.component';
-import { AbnormalAccountService } from './services/abnormal-account.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
   selector: 'abnormal-accounts',
   templateUrl: './abnormal-accounts.component.html',
   styleUrls: ['./abnormal-accounts.component.scss'],
   standalone: true,
-  imports: [NgbModule, FormsModule, ConfirmAddRequestComponent, UsernamesComponent, ProductFilterComponent,
-    EventDateFilterComponent, AccountTableComponent, AccountAffectedTicketComponent, BlockUiDirective],
+  imports: [NgbModule, FormsModule, UsernamesComponent, ProductFilterComponent,
+    EventDateFilterComponent, AccountTableComponent, AccountAffectedTicketComponent, BlockUiDirective, ConfirmAbnormalAccountComponent],
   providers: [
     SaveRequestService,
-    ValidationService,
-    AbnormalAccountService
+    ValidationService
   ]
 })
 export class AbnormalAccountsComponent implements OnInit {
@@ -53,9 +51,10 @@ export class AbnormalAccountsComponent implements OnInit {
   @ViewChild('products') productFilterComponent: ProductFilterComponent;
   @ViewChild('eventDate') eventDateFilterComponent: EventDateFilterComponent;
   @ViewChild('accountTable') accountTableComponent: AccountTableComponent;
+  @ViewChild('confirmAddRequestComponent') confirmAddRequestComponent: ConfirmAbnormalAccountComponent;
 
   primitiveProps = new PrimitiveProperty();
-  confirmAddRequest = new ConfirmAddRequestModel();
+  confirmAddRequest = new ConfirmAbnormalAccountModel();
   accountAffectedTicketModel = new AccountAffectedTicketModel();
   private readonly addRequestStore = inject(AddRequestStore);
   private readonly saveRequestService = inject(SaveRequestService);
@@ -179,6 +178,8 @@ export class AbnormalAccountsComponent implements OnInit {
     arg.eventDateFilterComponent = this.eventDateFilterComponent;
     arg.accountTableComponent = this.accountTableComponent;
     arg.confirmAddRequest = this.confirmAddRequest;
+    arg.confirmAddRequestComponent = this.confirmAddRequestComponent;
+    arg.issueTypes = this.issueTypes;
 
     return arg;
   }

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { MatchIdConstant } from '../../../../../utility/constants/config';
+import { CheckboxType, MatchIdConstant } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
 import { AbnormalBetModel } from '../../models/abnormal-bet.model';
@@ -44,11 +44,14 @@ export class SaveRequestService {
 
   private getTransIdsForSaveRequest(confirmAbnormalBetModel: ConfirmAbnormalBetModel, confirmAbnormalBetComponent: ConfirmAbnormalBetComponent, transIds: string): string {
     let transIdsList = transIds.split(',');
-    if (confirmAbnormalBetModel.ticketsOfCustomerClass4K && confirmAbnormalBetComponent.isRemoveCustomerClass4K) {
+    if (confirmAbnormalBetModel.ticketsOfCustomerClass4K && confirmAbnormalBetComponent.model.checkboxState[CheckboxType.CUSTOMER_CLASS_4K]) {
       transIdsList = transIdsList.filter(x => !(confirmAbnormalBetModel.ticketsOfCustomerClass4K).split(',').includes(x));
     }
-    if (confirmAbnormalBetModel.ticketsOfCustomerClass201 && confirmAbnormalBetComponent.isRemoveCustomerClass201) {
+    if (confirmAbnormalBetModel.ticketsOfCustomerClass201 && confirmAbnormalBetComponent.model.checkboxState[CheckboxType.CUSTOMER_CLASS_201]) {
       transIdsList = transIdsList.filter(x => !(confirmAbnormalBetModel.ticketsOfCustomerClass201).split(',').includes(x));
+    }
+    if (confirmAbnormalBetModel.ticketsOfCreditCashService && confirmAbnormalBetComponent.model.checkboxState[CheckboxType.CREDIT_CASH_SERVICE]) {
+      transIdsList = transIdsList.filter(x => !(confirmAbnormalBetModel.ticketsOfCreditCashService).split(',').includes(x));
     }
     return transIdsList.join(',');
   }
