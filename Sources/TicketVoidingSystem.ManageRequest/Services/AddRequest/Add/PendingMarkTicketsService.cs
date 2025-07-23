@@ -13,12 +13,24 @@ public class PendingMarkTicketsServiceImp(IDynamicRepository repository) : Pendi
 {
     public async Task PendingMarkTickets(int requestId, string siteDBDownInfoJson, int? actionId, bool isUpdateRequest)
     {
-        if (string.IsNullOrEmpty(siteDBDownInfoJson) || (actionId is ActionVoidRequestConstant.TakeNoteId && !isUpdateRequest))
+        if (isUpdateRequest && actionId is ActionVoidRequestConstant.TakeNoteId)
         {
-            return;
+            await DeletePendingMarkTickets(requestId, actionId);
         }
+        else
+        {
+            if (string.IsNullOrEmpty(siteDBDownInfoJson))
+            {
+                return;
+            }
 
-        await Execute(requestId, siteDBDownInfoJson, actionId);
+            await Execute(requestId, siteDBDownInfoJson, actionId);
+        }
+    }
+
+    private async Task DeletePendingMarkTickets(int requestId, int? actionId)
+    {
+        await Execute(requestId, null, actionId);
     }
 
     private async Task Execute(int requestId, string siteDBDownInfoJson, int? actionId)

@@ -44,7 +44,7 @@ public class UpdateRequestProcessStageImp(
             => notificationService.InsertNotification(NotificationType.Notification,
                 MessageHelper.CreateEditRequestSuccessfully(query.RequestId, sessionService.UserName), NotificationTargetType.IgnoreCurrentUser, query.RequestId));
 
-        await pendingMarkTicketsService.PendingMarkTickets(query.RequestId, query.SiteDBDownInfoJson, query.ActionId, false);
+        await pendingMarkTicketsService.PendingMarkTickets(query.RequestId, query.SiteDBDownInfoJson, query.ActionId, true);
 
         return getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString());
     }
