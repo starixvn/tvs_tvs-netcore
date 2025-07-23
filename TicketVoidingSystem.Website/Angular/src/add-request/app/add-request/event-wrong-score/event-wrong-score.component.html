@@ -31,7 +31,8 @@
       Search
     </button>
   </div>
-
+  <info-site-db-down [infoSiteDBDownModel]="primitiveProps.infoSiteDBDownModel">
+  </info-site-db-down>
   <main-log-info [logInfo]="mainEvent"></main-log-info>
 
   @if (primitiveProps.filterBy !== 2) {
@@ -73,7 +74,7 @@
   <related-events #relatedEvent [relatedEvents]="relatedEvents" [filter]="filter" [isEdit]="isEdit"
     [primitiveProps]="primitiveProps" [issueTypes]="issueTypes"
     [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance" [requestId]="requestId"
-    [mainEvent]="mainEvent"></related-events>
+    [mainEvent]="mainEvent" (clearInfoSiteDBDownModel)="clearInfoSiteDBDownModel()"></related-events>
 </div>
 
 <confirm-wrong-score [model]="confirmWrongScoreModel" (close)="triggerCloseEvent()"

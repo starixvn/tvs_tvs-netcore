@@ -80,6 +80,7 @@ export class SaveRequestService {
     query.provider = args.others.provider;
     query.source = args.others.source;
     query.remark = args.others.remark;
+    query.siteDBDownInfoJson = args.isMarkTicketSiteDbDown ? args.primitiveProps.infoSiteDBDownModel.siteDBDownInfoJson : null;
 
     if (!args.filter.isVoided) {
       query.wrongScoreInfo = args.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME 

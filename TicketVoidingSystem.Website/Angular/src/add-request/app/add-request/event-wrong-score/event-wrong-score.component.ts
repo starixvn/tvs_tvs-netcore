@@ -42,6 +42,7 @@ import { SubIssueTypeRelatedEvent } from './models/subIssue-type-related-event.m
 import { CreateMapService } from './services/create-map.service';
 import { UpdateConfirmInfoArgs } from './models/confirm-wrong-score.model';
 import { RelatedEventsComponent } from './related-events/related-events.component';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
 
 @Component({
   standalone: true,
@@ -49,7 +50,7 @@ import { RelatedEventsComponent } from './related-events/related-events.componen
   templateUrl: './event-wrong-score.component.html',
   styleUrls: ['./event-wrong-score.component.scss'],
   imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, ConfirmWrongScoreComponent, 
-    CommonModule, FormsModule, TooltipComponent, BlockUiDirective, MainLogInfoComponent, RelatedEventsComponent],
+    CommonModule, FormsModule, TooltipComponent, BlockUiDirective, MainLogInfoComponent, RelatedEventsComponent, InfoSiteDBDownComponent],
   providers: [CreateMapService,  EventWrongScoreService, LogInfoService, SaveRequestService, ValidationService, WrongScoreService,
     RelatedEventService, EditRequestService, TvDetectionService]
 })
@@ -197,6 +198,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
     this.primitiveProps.isShowActualScore = false;
     this.primitiveProps.actualScore = '';
     this.relatedEventsComponent.resetData();
+    this.clearInfoSiteDBDownModel();
   }
 
   public triggerCloseEvent() {
@@ -239,7 +241,8 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
       actionIdOfFirstTimeAccess: this.actionIdOfFirstTimeAccess,
       relatedEvents: this.relatedEvents,
       mainEvent: this.mainEvent,
-      wrongScoreModels: this.wrongScoreModels
+      wrongScoreModels: this.wrongScoreModels,
+      infoSiteDBDownModel: this.primitiveProps.infoSiteDBDownModel
     };
     
     this.eventWrongScoreService.updateInfoConfirm(this.confirmWrongScoreModel, updateInfoArgs);
@@ -267,7 +270,8 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
     args.issueTypes = this.issueTypes;
     args.tvDetectionModel = this.tvDetectionModel;
     args.isVoided = this.isVoided;
-
+    args.isMarkTicketSiteDbDown = this.confirmWrongScoreModel.isMarkTicketSiteDbDown;
+    
     return args;
   }
 
@@ -357,5 +361,9 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
 
   public getLogInfoDetail(): LogInfoDetail[] {
     return this.wrongScoreModels.filter(x => x.isChecked || !x.isMainMatch).map(x => x.logInfoDetail);
+  }
+
+  clearInfoSiteDBDownModel(): void {
+    this.primitiveProps.infoSiteDBDownModel = null;
   }
 }

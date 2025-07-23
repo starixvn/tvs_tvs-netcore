@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Input, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -36,13 +36,13 @@ export class RelatedEventsComponent {
   @Input() requestId: number;
   @Input() mainEvent: LogInfoRelatedEvent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRelatedEventComponent>;
-
+  @Output() clearInfoSiteDBDownModel = new EventEmitter<void>();
+  
   childEvents: ChildMatchModel[] = [];
   tooltip = new Tooltip(); 
   addChildMatchModel = new AddChildMatchModel();
   
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
-
   private readonly element = inject(ElementRef);
   private readonly relatedEventService = inject(RelatedEventService);
   private readonly eventWrongScoreService = inject(EventWrongScoreService);
@@ -95,6 +95,7 @@ export class RelatedEventsComponent {
   
   handleDeleteEvent(matchId: number): void {
     this.relatedEvents = this.relatedEvents.filter(x => x.matchId !== matchId);
+    this.clearInfoSiteDBDownModelEvent();
   }
 
   async saveRelatedEvent(selectedRelatedEvents: ChildMatchModel[]): Promise<void> {
@@ -105,7 +106,7 @@ export class RelatedEventsComponent {
       await this.relatedEventService.addEventByInputAndSelected(newChildEvents, this.initAddRelatedEventArgs());
       this.relatedEvents = _.orderBy(_.uniqBy(this.relatedEvents, x => x.matchId), ['matchCode'], ['asc']);
     }
-
+    this.clearInfoSiteDBDownModelEvent();
     this.primitiveProps.isBlock = false;
   }
 
@@ -124,5 +125,9 @@ export class RelatedEventsComponent {
     this.childEvents = [];
     this.addChildMatchModel = new AddChildMatchModel();
     this.primitiveProps.isShowRelatedEvents = false;
+  }
+
+  clearInfoSiteDBDownModelEvent(): void {
+    this.clearInfoSiteDBDownModel.emit();
   }
 }
