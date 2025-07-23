@@ -2,6 +2,7 @@
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
@@ -11,17 +12,12 @@ public interface GetVoidTimeByAllowanceSettingService
     Task<IEnumerable<VoidTimeByAllowanceSetting>> Get(GetLogInfoQuery query);
 }
 
-public class GetVoidTimeByAllowanceSettingServiceImp(IDynamicRepository repository) : GetVoidTimeByAllowanceSettingService
+public class GetVoidTimeByAllowanceSettingServiceImp(IDynamicRepository repository, OnlineServerRepository onlineServerRepository) : GetVoidTimeByAllowanceSettingService
 {
     public async Task<IEnumerable<VoidTimeByAllowanceSetting>> Get(GetLogInfoQuery query)
     {
         var criteria = CreateCriteria(query);
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
-        {
-            criteria.SiteDbGroupId = server.Id;
-            return repository.FetchAsync<VoidTimeByAllowanceSetting>(criteria);
-        });
-        var models = (await Task.WhenAll(tasks)).SelectMany(x => x);
+        var models = await onlineServerRepository.FetchAsync<VoidTimeByAllowanceSetting>(criteria);
         HttpContextHelper.SetExtraLog("GetVoidTimeByAllowanceSetting", models);
 
         return GetResults(query, models);

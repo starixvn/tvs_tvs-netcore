@@ -52,6 +52,8 @@ public class GetLogInfoCriteria : CriteriaBase
 
     public string? MatchEarlyCompletedInfo { get; set; }
 
+    public string OnlineServerId { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

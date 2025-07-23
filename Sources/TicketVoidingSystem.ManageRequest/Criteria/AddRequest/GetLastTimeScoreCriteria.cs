@@ -14,6 +14,8 @@ public class GetLastTimeScoreCriteria : CriteriaBase
 
     public int FilterBy { get; set; }
 
+    public string OnlineServerId { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

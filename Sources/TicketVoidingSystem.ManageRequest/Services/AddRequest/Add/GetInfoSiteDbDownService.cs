@@ -5,9 +5,9 @@ public interface GetInfoSiteDbDownService
     InfoSiteDBDownModel GetInfoSiteDBDown(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests);
 }
 
-public class GetInfoSiteDbDownServiceImp : GetInfoSiteDbDownService
+public static class InfoSiteDbDownHelper
 {
-    public InfoSiteDBDownModel GetInfoSiteDBDown(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
+    public static InfoSiteDBDownModel Get(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
     {
         if (transInfoAddRequests.All(x => string.IsNullOrEmpty(x.SiteDBDownInfoJson)))
         {
