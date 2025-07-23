@@ -26,6 +26,7 @@ import { EventWrongMarketOfferedService } from './services/event-wrong-market-of
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
 
 @Component({
   selector: 'event-wrong-market-offered',
@@ -33,7 +34,7 @@ import { ValidationService } from './services/validation.service';
   styleUrls: ['./event-wrong-market-offered.component.scss'],
   standalone: true,
   imports: [EventLeagueComponent, FilterTimeComponent, AdvancedModeAddRequestComponent, FormsModule,
-    LogInfoWrongMarketOfferedComponent, ConfirmAddRequestComponent],
+    LogInfoWrongMarketOfferedComponent, ConfirmAddRequestComponent, InfoSiteDBDownComponent],
   providers: [LogInfoService, SaveRequestService, ValidationService, EventWrongMarketOfferedService]
 })
 export class EventWrongMarketOfferedComponent implements OnInit {
@@ -149,6 +150,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   resetLogInfo(): void {
     this.primitivePropertyEvent.isShowErrorNoBetType = false;
     this.primitivePropertyEvent.isShowValidation = false;
+    this.primitivePropertyEvent.infoSiteDBDownModel = null;
   }
 
   updateDataWhenEditRequest(): void {
