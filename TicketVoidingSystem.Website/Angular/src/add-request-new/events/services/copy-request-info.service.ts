@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import moment from 'moment-timezone';
+import dayjs from 'dayjs';
+import { OperatorInfo, OperatorType } from '../../../add-request-new/component/others/others.model';
 import { AcceptType, DateTimeFormat } from '../../../utility/constants/config';
 import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { CommonService } from '../../../utility/services/common.service';
-import { OperatorInfo, OperatorType } from '../../../add-request-new/component/others/others.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +42,7 @@ export class CopyRequestInfoService {
   }
 
   private createContentLetsTalk(copyRequestResponse: CopyRequestInfoResponse, logInfoDetail: LogInfoDetail[], operatorsList: OperatorInfo[]): string {
-    const momentGlobalShowTime = moment(copyRequestResponse.requestInfo.globalShowTime);
+    const momentGlobalShowTime = dayjs(copyRequestResponse.requestInfo.globalShowTime);
     const content = `Date: ${momentGlobalShowTime.format(DateTimeFormat.DATE_MONTH_YEAR)}\n`
       + `Time (GMT+8): ${momentGlobalShowTime.format(DateTimeFormat.SHORT_TIME_FORMAT)}\n`
       + `League: ${copyRequestResponse.requestInfo.leagueName}\n`
@@ -64,7 +64,7 @@ export class CopyRequestInfoService {
     let voidInfo = '';
     logInfoDetails.forEach(x => {
       const minTimeValue = this.getMinTime(x);
-      const item = `From: ${moment(x.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} To: ${moment(x.voidToTime).format(DateTimeFormat.TIME_FORMAT)}\n`
+      const item = `From: ${dayjs(x.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} To: ${dayjs(x.voidToTime).format(DateTimeFormat.TIME_FORMAT)}\n`
         + `Live Score: ${x.liveScores}. Affected Single Count: ${x.singleCount}, Parlay Count: ${x.mainParlayCount}, Min Time: ${minTimeValue}\n`
         + `Cancel Cash Out: ${x.cancelCashOutCount}`
 
@@ -76,7 +76,7 @@ export class CopyRequestInfoService {
 
   private getMinTime(logInfoDetail: LogInfoDetail): string {
     if (logInfoDetail.highlightAcceptType && logInfoDetail.highlightMinTime) {
-      return `${moment(logInfoDetail.highlightMinTime).format(DateTimeFormat.TIME_FORMAT)} - ${this.getAcceptType(logInfoDetail.highlightAcceptType)}`;
+      return `${dayjs(logInfoDetail.highlightMinTime).format(DateTimeFormat.TIME_FORMAT)} - ${this.getAcceptType(logInfoDetail.highlightAcceptType)}`;
     }
 
     return '-';
@@ -97,7 +97,7 @@ export class CopyRequestInfoService {
   }
 
   private createContentEmail(copyRequestResponse: CopyRequestInfoResponse, operatorsList: OperatorInfo[]): string {
-    const momentGlobalShowTime = moment(copyRequestResponse.requestInfo.globalShowTime);
+    const momentGlobalShowTime = dayjs(copyRequestResponse.requestInfo.globalShowTime);
     const content =
       `<table border=\"1\" style=\"border-collapse: collapse;\">`
       + `<tr><th>No.</th><th>Label</th><th>Info</th></tr>`

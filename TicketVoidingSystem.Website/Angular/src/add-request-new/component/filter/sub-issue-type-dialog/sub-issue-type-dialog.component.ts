@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery } from '../../../../add-request-new/events/models/sub-type-note.model';
+import { AddRequestApiService } from '../../../../add-request-new/events/services/add-request-api.service';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { SubIssueTypeGroup } from '../../../../utility/constants/config';
 import { StaticService } from '../../../../utility/services/static.service';
-import { AddRequestApiService } from '../../../../add-request-new/events/services/add-request-api.service';
-import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery } from '../../../../add-request-new/events/models/sub-type-note.model';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog.model';
 import { Button, Category, GroupButton } from './sub-issue-type-json.model';
 import SubIssueTypeDangerAcceptedConfig from './sub-type-danger-accepted.json';
@@ -89,7 +89,7 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
   }
 
   private getSubIssueTypeWrongScoreConfig(): Category[] {
-    const subIssueTypeWrongScoreConfig = _.cloneDeep(SubIssueTypeWrongScoreConfig);
+    const subIssueTypeWrongScoreConfig = cloneDeep(SubIssueTypeWrongScoreConfig);
     const mainCategoryName = "Main Event";
     if (this.isMainEvent) {
       const mainEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName === mainCategoryName);

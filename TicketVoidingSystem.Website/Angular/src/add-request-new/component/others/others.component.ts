@@ -3,12 +3,12 @@ import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, Simp
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import * as _ from 'lodash';
+import groupBy from 'lodash/groupBy';
 import { StaticService } from '../../../utility/services/static.service';
+import { AddRequestApiService } from '../../events/services/add-request-api.service';
+import { AddRequestStore } from '../../events/services/add-request.store';
 import { GroupOperator, OperatorDefault, OperatorInfo, OthersModel } from './others.model';
 import { OthersService } from './others.service';
-import { AddRequestStore } from '../../events/services/add-request.store';
-import { AddRequestApiService } from '../../events/services/add-request-api.service';
 
 @Component({
     selector: 'others',
@@ -58,7 +58,7 @@ export class OthersComponent implements OnChanges, OnInit {
 
   private intDefaultValueGroupOperators() {
     this.groupOperators = [];
-    const groups = _.groupBy(this.operators, 'groupName');
+    const groups = groupBy(this.operators, 'groupName');
     for (const groupName in groups) {
       if (groups.hasOwnProperty(groupName)) {
         const group = new GroupOperator(groupName, groups[groupName]);

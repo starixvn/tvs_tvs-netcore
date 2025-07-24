@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 import { CheckingPermissionModel } from '../../models/checking-permission.model';
 import { CommonService } from '../../services/common.service';
 import { ModalContentComponent } from './modal-content/modal-content.component';
@@ -30,7 +31,7 @@ export class ModalService {
 
   confirm(data: IModal, onYes?: () => void, onNo?: () => void) {
     data.title =
-      _.isNull(data.title) || _.isUndefined(data.title)
+      isNull(data.title) || isUndefined(data.title)
         ? 'Confirm'
         : data.title;
     data.type = ModalType.Confirm;
@@ -47,7 +48,7 @@ export class ModalService {
 
   confirmWithThreeButton(data: IModal, onYes?: () => void, onNo?: () => void,  onCancel?: () => void) {
     data.title =
-      _.isNull(data.title) || _.isUndefined(data.title)
+      isNull(data.title) || isUndefined(data.title)
         ? 'Confirm'
         : data.title;
     data.type = ModalType.ConfirmThreeButton;
@@ -100,7 +101,7 @@ export class ModalService {
   }
 
   private executeMethodUndefinedable(method?: () => void): void {
-    if (!_.isUndefined(method)) {
+    if (!isUndefined(method)) {
       method();
     }
   }

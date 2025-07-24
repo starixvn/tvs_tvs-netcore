@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import moment from 'moment-timezone';
+import dayjs from 'dayjs';
 import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoViewModel } from '../../add-request/app/add-request/models/get-log-info.model';
 import { HdpFilterBetType } from '../../add-request/app/add-request/models/hdp-filter-betType.model';
@@ -194,6 +194,6 @@ export class CommonService {
 
 export class CommonStaticService {
   static convertToStrictTimeFormat(sourceTime: string, format: string): string {
-    return moment(sourceTime.trim(), format, true).format(format);
+    return dayjs(sourceTime.trim(), format).format(format);
   }
 }

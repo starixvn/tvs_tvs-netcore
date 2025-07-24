@@ -2,8 +2,17 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import * as _ from 'lodash';
+import clone from 'lodash/clone';
+import isUndefined from 'lodash/isUndefined';
 import { Subscription } from 'rxjs';
+import { TVSRequestActionType } from '../../../utility/constants/config';
+import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
+import { AllowanceTime } from '../../../utility/models/allowance-time.model';
+import { IssueType } from '../../../utility/models/issue-type.model';
+import { Selection } from '../../../utility/models/selection.model';
+import { StaticService } from '../../../utility/services/static.service';
+import { AddRequestStore } from '../../events/services/add-request.store';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
@@ -12,14 +21,6 @@ import { SubIssueTypeDialogComponent } from './sub-issue-type-dialog/sub-issue-t
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog/sub-issue-type-dialog.model';
 import { Category } from './sub-issue-type-dialog/sub-issue-type-json.model';
 import SubIssueTypeDangerAcceptedConfig from './sub-issue-type-dialog/sub-type-danger-accepted.json';
-import { TVSRequestActionType } from '../../../utility/constants/config';
-import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
-import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
-import { AllowanceTime } from '../../../utility/models/allowance-time.model';
-import { StaticService } from '../../../utility/services/static.service';
-import { AddRequestStore } from '../../events/services/add-request.store';
-import { IssueType } from '../../../utility/models/issue-type.model';
-import { Selection } from '../../../utility/models/selection.model';
 
 @Component({
   selector: 'filter',
@@ -155,7 +156,7 @@ export class FilterComponent implements OnInit, OnChanges {
   openDialog(): void {
     this.subIssueTypeDialogModel.isOpen = true;
     this.subIssueTypeDialogModel.issueTypeId = this.model.issueTypeId;
-    this.subIssueTypeDialogModel = _.clone(this.subIssueTypeDialogModel);
+    this.subIssueTypeDialogModel = clone(this.subIssueTypeDialogModel);
   }
 
   private setWidthControlByIssueType(): void {
@@ -264,8 +265,8 @@ export class FilterComponent implements OnInit, OnChanges {
     }
     
     const sub = this.issueTypes.subIssueTypes.find(x => x.subIssueTypeId === Number(this.model.subIssueTypeId));
-    this.issueTypes.issueId = _.isUndefined(sub) ? this.issueTypes.issueId : sub.issueTypeId;
-    this.issueTypes.subIssueId = _.isUndefined(sub) ? this.issueTypes.issueId : sub.subIssueTypeId;
+    this.issueTypes.issueId = isUndefined(sub) ? this.issueTypes.issueId : sub.issueTypeId;
+    this.issueTypes.subIssueId = isUndefined(sub) ? this.issueTypes.issueId : sub.subIssueTypeId;
     this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => !this.ignoreSubIssueType.includes(x.subIssueTypeId));
   }
 
