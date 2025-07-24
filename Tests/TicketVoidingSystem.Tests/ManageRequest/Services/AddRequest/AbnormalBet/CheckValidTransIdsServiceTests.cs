@@ -29,9 +29,9 @@ public class TestableCheckValidTransIdsServiceImp(
         return MapValidationAbnormalBet(validationAbnormalBets);
     }
 
-    public IEnumerable<GetAbnormalBetTicketModel> TestMapAbnormalBetTicketRequests(IEnumerable<GetAbnormalBetTicketModel> abnormalBetTicketRequests, string invalidTransIds)
+    public IEnumerable<GetAbnormalBetTicketModel> TestMapAbnormalBetTicketRequests(IEnumerable<GetAbnormalBetTicketModel> abnormalBetTicketRequests)
     {
-        return MapAbnormalBetTicketRequests(abnormalBetTicketRequests, invalidTransIds);
+        return MapAbnormalBetTicketRequests(abnormalBetTicketRequests);
     }
 
     public IEnumerable<SendLetsTalkModel> TestMapSendLetsTalkModels(IEnumerable<SendLetsTalkModel> sendLetsTalkModels)
@@ -172,18 +172,18 @@ public class CheckValidTransIdsServiceTests
         {
             new() { TransId = 123, RemarkId = 0 }, // Valid ticket
             new() { TransId = 456, RemarkId = 0 }, // Valid ticket
-            new() { TransId = 789, RemarkId = 1 }, // Invalid ticket (should be included if in invalidTransIds)
+            new() { TransId = 789, RemarkId = 1 }, // Valid ticket
             new() { TransId = 100, RemarkId = 2 }, // Other ticket (RemarkId > 1)
             new() { TransId = 200, RemarkId = 3 }, // Other ticket (RemarkId > 1)
             new() { TransId = 123, RemarkId = 0 }  // Duplicate TransId
         };
 
         // Act
-        var result = service.TestMapAbnormalBetTicketRequests(abnormalBetTicketRequests, "789,100");
+        var result = service.TestMapAbnormalBetTicketRequests(abnormalBetTicketRequests);
 
         // Assert
         var resultList = result.ToList();
-        Assert.Equal(7, resultList.Count); // Should have 5 unique tickets
+        Assert.Equal(6, resultList.Count); // Should have 5 unique tickets
         Assert.Contains(resultList, x => x.TransId == 123 && x.RemarkId == 0);
         Assert.Contains(resultList, x => x.TransId == 456 && x.RemarkId == 0);
         Assert.Contains(resultList, x => x.TransId == 789 && x.RemarkId == 1);
@@ -198,17 +198,16 @@ public class CheckValidTransIdsServiceTests
         var abnormalBetTicketRequests = new List<GetAbnormalBetTicketModel>
         {
             new() { TransId = 123, RemarkId = 0 }, // Valid ticket
-            new() { TransId = 456, RemarkId = 1 }, // Invalid ticket (but not in invalidTransIds)
+            new() { TransId = 456, RemarkId = 1 }, // Invalid ticket
             new() { TransId = 789, RemarkId = 2 }, // Other ticket
         };
-        var invalidTransIds = "";
 
         // Act
-        var result = service.TestMapAbnormalBetTicketRequests(abnormalBetTicketRequests, invalidTransIds);
+        var result = service.TestMapAbnormalBetTicketRequests(abnormalBetTicketRequests);
 
         // Assert
         var resultList = result.ToList();
-        Assert.Equal(2, resultList.Count); // Should have 2 tickets (valid + other)
+        Assert.Equal(3, resultList.Count);
         Assert.Contains(resultList, x => x.TransId == 123 && x.RemarkId == 0);
         Assert.Contains(resultList, x => x.TransId == 789 && x.RemarkId == 2);
     }

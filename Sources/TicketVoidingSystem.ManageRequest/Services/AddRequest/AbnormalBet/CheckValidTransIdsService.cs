@@ -26,12 +26,11 @@ public class CheckValidTransIdsServiceImp(
         var (matchInfoAddRequests, validationAbnormalBets, transInfoAddRequests, abnormalBetTicketRequests, sendLetsTalkModels)
             = await CheckValidTransIdsAllSite(request);
 
-        var validationAbnormalBet = MapValidationAbnormalBet(validationAbnormalBets);
-        var ticketRequests = MapAbnormalBetTicketRequests(abnormalBetTicketRequests, validationAbnormalBet.InvalidTransIds);
+        var ticketRequests = MapAbnormalBetTicketRequests(abnormalBetTicketRequests);
         var viewModel = new CheckValidTransIdsViewModel
         {
             Matches = matchInfoAddRequestService.UpdateDataFromRemotingRef(matchInfoAddRequests),
-            Validation = validationAbnormalBet,
+            Validation = MapValidationAbnormalBet(validationAbnormalBets),
             TransInfoAddRequestModel = GetTransInfoAddRequestModel(transInfoAddRequests),
             AbnormalBetTicketRequests = mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(ticketRequests),
             SendLetstalkModels = MapSendLetsTalkModels(sendLetsTalkModels),
@@ -41,16 +40,21 @@ public class CheckValidTransIdsServiceImp(
         return viewModel;
     }
 
-    protected virtual IEnumerable<GetAbnormalBetTicketModel> MapAbnormalBetTicketRequests(IEnumerable<GetAbnormalBetTicketModel> abnormalBetTicketRequests, string invalidTransIds)
+    protected virtual bool IsInvalidTicket(GetAbnormalBetTicketModel ticket, IEnumerable<GetAbnormalBetTicketModel> validTickets, IEnumerable<GetAbnormalBetTicketModel> otherTickets)
+    {
+        return validTickets.All(x => x.TransId != ticket.TransId) && otherTickets.All(x => x.TransId != ticket.TransId);
+    }
+
+    protected virtual IEnumerable<GetAbnormalBetTicketModel> MapAbnormalBetTicketRequests(IEnumerable<GetAbnormalBetTicketModel> abnormalBetTicketRequests)
     {
         var result = new List<GetAbnormalBetTicketModel>();
         var validTickets = abnormalBetTicketRequests.Where(x => x.RemarkId == 0);
-        var invalidTickets = abnormalBetTicketRequests.Where(x => invalidTransIds.Contains(x.TransId.ToString())).DistinctBy(x => x.TransId);
         var otherTickets = abnormalBetTicketRequests.Where(x => x.RemarkId > RemarkConstant.InvalidTicketId);
+        var isInvalidTickets = abnormalBetTicketRequests.Where(x => IsInvalidTicket(x, validTickets, otherTickets)).DistinctBy(x => x.TransId);
 
         result.AddRange(validTickets);
-        result.AddRange(invalidTickets);
         result.AddRange(otherTickets);
+        result.AddRange(isInvalidTickets);
 
         return result;
     }
