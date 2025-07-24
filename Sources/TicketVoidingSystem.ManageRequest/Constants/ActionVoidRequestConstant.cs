@@ -15,6 +15,7 @@ public static class ActionVoidRequestConstant
     public const byte AutoVoidAllResultKeyedId = 9;
     public const byte AutoVoidAllInstantWithPolicyId = 10;
     public const byte AutoRecoverId = 11;
+    public const byte TakeNoteId = 2;
 
     public static IEnumerable<QueueAutoVoidModel> QueueAutoVoidList =>
         new List<QueueAutoVoidModel>

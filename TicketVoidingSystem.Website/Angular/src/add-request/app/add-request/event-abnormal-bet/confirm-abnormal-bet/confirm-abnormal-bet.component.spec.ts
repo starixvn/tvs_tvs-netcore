@@ -1,18 +1,80 @@
 import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet.component';
 import { CheckboxType, ConfirmAbnormalBetModel } from './confirm-abnormal-bet.model';
+
+class ConfirmAbnormalBetTestHelper {
+  static createBaseModel(): ConfirmAbnormalBetModel {
+    const model = new ConfirmAbnormalBetModel();
+    model.isOpenDialog = true;
+    model.isHasWarningForAbnormalBet = true;
+    model.isHasWarningEditTakeNoteRequest = false;
+    model.isHasWarningRemovedTickets = false;
+    model.isEditingByAnotherUser = false;
+    model.transIds = '';
+    model.requestId = 0;
+    model.requestedBy = '';
+    model.ticketsOfVIPCustomer = '';
+    model.settledTickets = '';
+    model.ticketsOfCustomerClass201 = '';
+    model.ticketsOfCustomerClass4K = '';
+    model.isHasAffectedTicketSiteDBDown = false;
+    model.ticketsOfCreditCashService = '';
+    model.ticketsOfSiteDBDown = '';
+    model.issueTypeName = '';
+    model.subIssueTypeName = '';
+    model.actionName = '';
+    return model;
+  }
+
+  static createModelWithWarningData(): ConfirmAbnormalBetModel {
+    const model = this.createBaseModel();
+    model.ticketsOfVIPCustomer = '1,2,3';
+    model.settledTickets = '4,5,6';
+    model.ticketsOfCustomerClass201 = '7,8,9';
+    model.ticketsOfCustomerClass4K = '10,11,12';
+    model.transIds = '7,8,9,10,11,12';
+    return model;
+  }
+
+  static createModelWithAllCC201Tickets(): ConfirmAbnormalBetModel {
+    const model = this.createBaseModel();
+    model.transIds = '7,8,9';
+    model.ticketsOfCustomerClass201 = '7,8,9';
+    return model;
+  }
+
+  static createModelWithAllCC4KTickets(): ConfirmAbnormalBetModel {
+    const model = this.createBaseModel();
+    model.transIds = '10,11,12';
+    model.ticketsOfCustomerClass4K = '10,11,12';
+    return model;
+  }
+
+  static createModelWithAllTicketsBothClasses(): ConfirmAbnormalBetModel {
+    const model = this.createBaseModel();
+    model.transIds = '7,8,9,10,11,12';
+    model.ticketsOfCustomerClass201 = '7,8,9';
+    model.ticketsOfCustomerClass4K = '10,11,12';
+    return model;
+  }
+
+  static createSimpleChange(currentValue: any): SimpleChange {
+    return {
+      currentValue: currentValue,
+      previousValue: null,
+      firstChange: true,
+      isFirstChange: () => true
+    } as SimpleChange;
+  }
+}
 
 describe('ConfirmAbnormalBetComponent', () => {
   let component: ConfirmAbnormalBetComponent;
   let fixture: ComponentFixture<ConfirmAbnormalBetComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestingModule, ConfirmAbnormalBetComponent],
-      providers: []
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
 
     fixture = TestBed.createComponent(ConfirmAbnormalBetComponent);
     component = fixture.componentInstance;
@@ -32,13 +94,7 @@ describe('ConfirmAbnormalBetComponent', () => {
 
   it('should update data when model changes and has warning', () => {
     // Arrange
-    const model = new ConfirmAbnormalBetModel();
-    model.isOpenDialog = true;
-    model.isHasWarningForAbnormalBet = true;
-    model.ticketsOfVIPCustomer = '1,2,3';
-    model.settledTickets = '4,5,6';
-    model.ticketsOfCustomerClass201 = '7,8,9';
-    model.ticketsOfCustomerClass4K = '10,11,12';
+    const model = ConfirmAbnormalBetTestHelper.createModelWithWarningData();
     model.ticketsOfCreditCashService = '13,14,15';
     model.transIds = '7,8,9,10,11,12,13,14,15';
 
@@ -63,25 +119,13 @@ describe('ConfirmAbnormalBetComponent', () => {
 
   it('should handle all tickets of customer class 201', () => {
     // Arrange
-    const model = new ConfirmAbnormalBetModel();
-    model.isOpenDialog = true;
-    model.isHasWarningForAbnormalBet = true;
-    model.transIds = '7,8,9';
-    model.ticketsOfCustomerClass201 = '7,8,9';
-    model.ticketsOfCustomerClass4K = '';
+    const model = ConfirmAbnormalBetTestHelper.createModelWithAllCC201Tickets();
     model.ticketsOfCreditCashService = '';
-    model.ticketsOfVIPCustomer = '';
-    model.settledTickets = '';
 
     // Act
     component.model = model;
     component.ngOnChanges({
-      model: {
-        currentValue: model,
-        previousValue: null,
-        firstChange: true,
-        isFirstChange: () => true
-      } as SimpleChange
+      model: ConfirmAbnormalBetTestHelper.createSimpleChange(model)
     });
 
     // Assert
@@ -91,25 +135,13 @@ describe('ConfirmAbnormalBetComponent', () => {
 
   it('should handle all tickets of customer class 4K', () => {
     // Arrange
-    const model = new ConfirmAbnormalBetModel();
-    model.isOpenDialog = true;
-    model.isHasWarningForAbnormalBet = true;
-    model.transIds = '10,11,12';
-    model.ticketsOfCustomerClass201 = '';
-    model.ticketsOfCustomerClass4K = '10,11,12';
+    const model = ConfirmAbnormalBetTestHelper.createModelWithAllCC4KTickets();
     model.ticketsOfCreditCashService = '';
-    model.ticketsOfVIPCustomer = '';
-    model.settledTickets = '';
 
     // Act
     component.model = model;
     component.ngOnChanges({
-      model: {
-        currentValue: model,
-        previousValue: null,
-        firstChange: true,
-        isFirstChange: () => true
-      } as SimpleChange
+      model: ConfirmAbnormalBetTestHelper.createSimpleChange(model)
     });
 
     // Assert
@@ -119,25 +151,13 @@ describe('ConfirmAbnormalBetComponent', () => {
 
   it('should handle all tickets of both customer classes', () => {
     // Arrange
-    const model = new ConfirmAbnormalBetModel();
-    model.isOpenDialog = true;
-    model.isHasWarningForAbnormalBet = true;
-    model.transIds = '7,8,9,10,11,12';
-    model.ticketsOfCustomerClass201 = '7,8,9';
-    model.ticketsOfCustomerClass4K = '10,11,12';
+    const model = ConfirmAbnormalBetTestHelper.createModelWithAllTicketsBothClasses();
     model.ticketsOfCreditCashService = '';
-    model.ticketsOfVIPCustomer = '';
-    model.settledTickets = '';
 
     // Act
     component.model = model;
     component.ngOnChanges({
-      model: {
-        currentValue: model,
-        previousValue: null,
-        firstChange: true,
-        isFirstChange: () => true
-      } as SimpleChange
+      model: ConfirmAbnormalBetTestHelper.createSimpleChange(model)
     });
 
     // Set checkboxes manually for direct call

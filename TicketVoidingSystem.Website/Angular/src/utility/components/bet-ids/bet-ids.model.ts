@@ -6,6 +6,7 @@ export class CSSCLASS {
     public static get MOVED(): string { return 'item-number-move-bet'; }
     public static get SELECTED(): string { return 'item-number-selected'; }
     public static get DIFFERENT(): string { return 'item-number-selected'; }
+    public static get SITE_DB_DOWN(): string { return 'item-number-selected'; }
 }
 
 export class GroupNumber {
@@ -40,18 +41,13 @@ export class GroupNumber {
     }
 
     checkValidItems(): number {
-        let result = 0;
         if (this.items.length === 0) {
-            return result;
-        } else {
-            result = 2;
-            this.items.forEach(item => {
-                if (!item.isValid) {
-                    result = 1;
-                }
-            });
-            return result;
+            return 0;
         }
+
+        let allTicketValid = this.items.every(x => x.isValid);
+        let isHasValidTicketNotSiteDbDown = this.items.some(x => x.isValid && x.cssClass != CSSCLASS.SITE_DB_DOWN);
+        return allTicketValid && isHasValidTicketNotSiteDbDown ? 2 : 1;
     }
 
     checkDuplicatedItems(): void {
@@ -66,6 +62,14 @@ export class GroupNumber {
         }
     }
 
+    updateWarningSiteDBDown(text: string, tooltipText?: string) {
+        if (StaticService.isStringHasLength(text)) {
+            const siteDbDownItems = text.split(',');
+            this.items.forEach(item => {
+                this.setItemWarning(siteDbDownItems, item, CSSCLASS.SITE_DB_DOWN, tooltipText);
+            });
+        }
+    }
     updateInvalidItems(text: string, tooltipText?: string) {
         if (StaticService.isStringHasLength(text)) {
             const invalidItems = text.split(',');
@@ -123,12 +127,12 @@ export class GroupNumber {
 
     removeByValue(value: string) {
         this.items.filter(item => item.value === value)
-        .forEach(x => {
-            const index = this.items.indexOf(x);
-            if (index > -1) {
-                this.items.splice(index, 1);
-            }
-        });
+            .forEach(x => {
+                const index = this.items.indexOf(x);
+                if (index > -1) {
+                    this.items.splice(index, 1);
+                }
+            });
     }
 
     resetAllItemsToValid() {
@@ -143,7 +147,15 @@ export class GroupNumber {
             }
         });
     }
+    private setItemWarning(warningList: string[], item: NumberItem, css: string, toolTipText = '') {
+        if (warningList.some(warningItem => warningItem === item.value)) {
 
+            item.cssClass = css;
+            item.defaultClass = css;
+            item.isShowTooltip = toolTipText.length > 0;
+            item.tooltipText = toolTipText;
+        }
+    }
     private setItemInvalid(invalidList: string[], item: NumberItem, css: string, toolTipText = '') {
         if (invalidList.some(invalidItem => invalidItem === item.value)) {
             item.cssClass = css;

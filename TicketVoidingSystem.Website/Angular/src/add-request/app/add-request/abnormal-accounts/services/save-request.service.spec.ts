@@ -16,6 +16,7 @@ import { ValidationBusinessRuleOutput } from '../models/validation.model';
 import { FilterModel } from '../../filter/filter.model';
 import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
@@ -57,14 +58,16 @@ describe('SaveRequestService', () => {
       userId: 0,
       isHasSettledTicket: false,
       isHasWarningTicket: false,
-      isShowSubIssueType: false
+      isShowSubIssueType: false,
     } as ConfirmAddRequestModel,
     isEdit: false,
     requestId: 0,
     userId: 0,
     requestedBy: '',
     actionIdOfFirstTimeAccess: '',
-    abnormalAccountModel: null,
+    abnormalAccountModel: {
+      usernames: 'usernames'
+    } as AbnormalAccountModel,
     productFilterComponent: null,
     eventDateFilterComponent: null,
     others: {
@@ -219,7 +222,7 @@ describe('SaveRequestService', () => {
       expect(result.actionId).toBe(mockSaveRequestArg.filter.action);
       expect(result.isTest).toBe(mockSaveRequestArg.filter.isTest);
       expect(result.isVoided).toBe(mockSaveRequestArg.filter.isVoided);
-      expect(result.abnormalAccountInfo).toBe(mockSaveRequestArg.abnormalAccountModel);
+      expect(result.abnormalAccountInfo).toEqual(mockSaveRequestArg.abnormalAccountModel);
       expect(result.decidedBy).toBe(mockSaveRequestArg.others.decidedBy);
       expect(result.remark).toBe(mockSaveRequestArg.others.remark);
     });

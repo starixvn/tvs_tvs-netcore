@@ -57,16 +57,8 @@ export class ValidationService {
   }
 
   private highlightInvalidTransIds(validationResult: CheckRecoverTicketResult, betIdsComponent: BetIdsComponent): void {
-    if (validationResult.existingReqTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateInvalidItems(validationResult.existingReqTransIds, LABELS.INVALID_EXISTING_ON_OTHER_REQUEST);
-    }
-
-    if (validationResult.invalidTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateInvalidItems(validationResult.invalidTransIds, LABELS.INVALID_TICKETS);
-    }
-
-    if (validationResult.unsupportedDateRangeTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateMoved(validationResult.unsupportedDateRangeTransIds);
-    }
+    betIdsComponent.groupNumber.updateInvalidItems(validationResult.existingReqTransIds, LABELS.INVALID_EXISTING_ON_OTHER_REQUEST);
+    betIdsComponent.groupNumber.updateInvalidItems(validationResult.invalidTransIds, LABELS.INVALID_TICKETS);
+    betIdsComponent.groupNumber.updateMoved(validationResult.unsupportedDateRangeTransIds);
   }
 }

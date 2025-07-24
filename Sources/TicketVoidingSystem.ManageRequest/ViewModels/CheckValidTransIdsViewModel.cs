@@ -6,7 +6,8 @@ public class CheckValidTransIdsViewModel
     public IEnumerable<MatchInfoAddRequest> Matches { get; set; }
     public TransInfoAddRequestModel TransInfoAddRequestModel { get; set; }
     public IEnumerable<AbnormalBetTicketViewModel> AbnormalBetTicketRequests { get; set; }
-    public IEnumerable<SendLetstalkModel> SendLetstalkModels { get; set; }
+    public IEnumerable<SendLetsTalkModel> SendLetstalkModels { get; set; }
+    public InfoSiteDBDownModel InfoSiteDBDownModel { get; set; }
 }
 
 public class ValidationAbnormalBet
@@ -31,6 +32,8 @@ public class ValidationAbnormalBet
 
     public string TransIdsOfCreditCashService { get; set; }
 
+    public string TransIdsOfSiteDBDown { get; set; }
+
     public string NonLiveTransIds { get; set; }
 
     public string DifferentLiveScoreTransIds { get; set; }
@@ -40,7 +43,7 @@ public class ValidationAbnormalBet
     public bool IsHasWarningRemovedTickets { get; set; }
 }
 
-public class SendLetstalkModel
+public class SendLetsTalkModel
 {
     public int MatchId { get; set; }
 

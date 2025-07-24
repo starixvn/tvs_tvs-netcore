@@ -76,6 +76,8 @@ export class AddRequestQuery {
   unMarkTransIds: string;
   markTransIds: string;
   removeTransIds: string;
+
+  siteDBDownInfoJson?: string;
 }
 
 export interface CheckValidTransIdQuery {

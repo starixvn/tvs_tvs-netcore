@@ -5,7 +5,6 @@ using Fanex.BetList.Core.TicketHelper;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 

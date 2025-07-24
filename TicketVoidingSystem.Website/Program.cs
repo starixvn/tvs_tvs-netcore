@@ -3,6 +3,7 @@ using Fanex.Data;
 using Fanex.Logging.Sentry.RavenClient;
 using Fanex.NAP.Client;
 using Fanex.NAP.Client.Attributes;
+using Fanex.SiteDbConnectionManager.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,6 +47,7 @@ services.AddFanexMailService();
 services.AddMediatR();
 services.AddAutoMapper();
 services.AddTvsSignalR();
+services.AddTvsSiteDbStatus();
 services.AddHttpContextAccessor();
 services.AddResponseCompression(options => { options.MimeTypes = ["text/html", "text/css", "application/javascript", "application/json"]; });
 services.AddRazorPages();
@@ -62,6 +64,7 @@ services.AddControllersWithViews(options =>
 }).AddSessionStateTempDataProvider();
 
 services.AddWebOptimizer();
+services.AddSiteDbConnectionManager();
 
 // Build app
 var app = builder.Build();

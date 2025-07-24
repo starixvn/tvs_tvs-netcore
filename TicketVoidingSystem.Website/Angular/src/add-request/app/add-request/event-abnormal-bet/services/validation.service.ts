@@ -11,7 +11,7 @@ import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './vali
 export class ValidationService {
   private readonly addRequestApiService = inject(AddRequestApiService);
 
-  initCheckAbnormalBetTransIdsQuery(args: ValidationBusinessRuleArgs): CheckTransIdsQuery{
+  initCheckAbnormalBetTransIdsQuery(args: ValidationBusinessRuleArgs): CheckTransIdsQuery {
     const transIds = args.betIdsComponent.getAllBetIds();
     return {
       transIds: transIds,
@@ -28,7 +28,7 @@ export class ValidationService {
     } as CheckTransIdsQuery;
   }
 
-  async exportExcelAbnormalBetTickets(args: ValidationBusinessRuleArgs){
+  async exportExcelAbnormalBetTickets(args: ValidationBusinessRuleArgs) {
     const query = this.initCheckAbnormalBetTransIdsQuery(args);
     await this.addRequestApiService.exportExcelAbnormalBetTickets(query);
   }
@@ -61,7 +61,8 @@ export class ValidationService {
       isValid: args.betIdsComponent.isAllBetIdsValid(),
       warningModel: checkTransIdViewModel.validation,
       transInfoAddRequestModel: checkTransIdViewModel.transInfoAddRequestModel,
-      abnormalBetTicketRequests: checkTransIdViewModel.abnormalBetTicketRequests
+      abnormalBetTicketRequests: checkTransIdViewModel.abnormalBetTicketRequests,
+      infoSiteDBDownModel: checkTransIdViewModel.infoSiteDBDownModel
     } as ValidationBusinessRuleOutput;
   }
 
@@ -78,41 +79,18 @@ export class ValidationService {
   }
 
   private highlightInvalidTransIds(model: ValidationAbnormalBet, betIdsComponent: BetIdsComponent, isHasPermissionAddSettledTicket: boolean, actionId: string): void {
-    this.highlightFirstGroupError(model, betIdsComponent, isHasPermissionAddSettledTicket, actionId);
-    this.highlightSecondGroupError(model, betIdsComponent);
-  }
-
-  private highlightFirstGroupError(model: ValidationAbnormalBet, betIdsComponent: BetIdsComponent, isHasPermissionAddSettledTicket: boolean, actionId: string): void {
-    if (model.invalidTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateInvalidItems(model.invalidTransIds, LABELS.INVALID_TICKETS);
+    betIdsComponent.groupNumber.updateInvalidItems(model.invalidTransIds, LABELS.INVALID_TICKETS);  // RemarkId = 1
+    betIdsComponent.groupNumber.updateMoved(model.movedTransIds);  // RemarkId = 2
+    betIdsComponent.groupNumber.updateDifferent(model.differentMatchTransIds);  // RemarkId = 3
+    if (!isHasPermissionAddSettledTicket || actionId === TVSRequestActionType.AUTO_VOID_WINNING_ID.toString()) {
+      betIdsComponent.groupNumber.updateInvalidItems(model.settledTransIds, LABELS.INVALID_SETTLED_TICKETS);  // RemarkId = 4
     }
-    if (model.movedTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateMoved(model.movedTransIds);
-    }
-    if (model.differentMatchTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateDifferent(model.differentMatchTransIds);
-    }
-    if (model.settledTransIds?.length > 0 && (!isHasPermissionAddSettledTicket || actionId === TVSRequestActionType.AUTO_VOID_WINNING_ID.toString())) {
-      betIdsComponent.groupNumber.updateInvalidItems(model.settledTransIds, LABELS.INVALID_SETTLED_TICKETS);
-    }
-    if (model.unsupportedTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateInvalidItems(model.unsupportedTransIds, LABELS.INVALID_UNSUPPORTED_TICKETS);
-    }
-  }
-
-  private highlightSecondGroupError(model: ValidationAbnormalBet, betIdsComponent: BetIdsComponent): void {
-    if (model.existingReqTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateInvalidItems(model.existingReqTransIds, LABELS.INVALID_EXISTING_ON_OTHER_REQUEST);
-    }
-    if (model.nonLiveTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateInvalidItems(model.nonLiveTransIds, LABELS.INVALID_NONLIVE_TICKETS);
-    }
-    if (model.differentLiveScoreTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateInvalidItems(model.differentLiveScoreTransIds, LABELS.INVALID_DIFFERENT_LIVE_SCORE);
-    }
-    if (model.abWhiteListTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateInvalidItems(model.abWhiteListTransIds, LABELS.INVALID_AB_WHITE_LIST_TICKETS);
-    }
+    betIdsComponent.groupNumber.updateInvalidItems(model.unsupportedTransIds, LABELS.INVALID_UNSUPPORTED_TICKETS);  // RemarkId = 5
+    betIdsComponent.groupNumber.updateInvalidItems(model.existingReqTransIds, LABELS.INVALID_EXISTING_ON_OTHER_REQUEST);  // RemarkId = 6
+    betIdsComponent.groupNumber.updateInvalidItems(model.nonLiveTransIds, LABELS.INVALID_NONLIVE_TICKETS);  // RemarkId = 7
+    betIdsComponent.groupNumber.updateInvalidItems(model.differentLiveScoreTransIds, LABELS.INVALID_DIFFERENT_LIVE_SCORE);  // RemarkId = 8
+    betIdsComponent.groupNumber.updateInvalidItems(model.abWhiteListTransIds, LABELS.INVALID_AB_WHITE_LIST_TICKETS);  // RemarkId = 9
+    betIdsComponent.groupNumber.updateWarningSiteDBDown(model.transIdsOfSiteDBDown, LABELS.INVALID_SITE_DB_DOWN); // RemarkId = 10
   }
 
   private checkCanAddSettledTickets(permission: PermissionAddRequest, actionId: string): boolean {
@@ -125,11 +103,11 @@ export class ValidationService {
 
   private checkCanShowButtonRemove(model: ValidationAbnormalBet, isHasPermissionAddSettledTicket: boolean, transIdsAreNotNumber: string): boolean { // NOSONAR
     if (model.invalidTransIds || (model.settledTransIds && !isHasPermissionAddSettledTicket) || model.unsupportedTransIds || model.existingReqTransIds
-     || model.nonLiveTransIds || model.differentLiveScoreTransIds || model.abWhiteListTransIds || transIdsAreNotNumber) {
-        return true;
-      }
+      || model.nonLiveTransIds || model.differentLiveScoreTransIds || model.abWhiteListTransIds || transIdsAreNotNumber) {
+      return true;
+    }
 
-      return false;
+    return false;
   }
 
   private getInvalidTransIds(model: ValidationAbnormalBet, isHasPermissionAddSettledTicket: boolean, transIdsAreNotNumber: string): string { // NOSONAR

@@ -33,7 +33,6 @@ import { PrimitiveProperty } from './model/void-by-bet-id.model';
 import { TemplateMessageService } from './services/template-message.service';
 import { ValidationService } from './services/validation.service';
 import { VoidTicketsService } from './services/void-tickets.service';
-import { LABELS } from '../../utility/constants/labels';
 
 @Component({
   standalone: true,

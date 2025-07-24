@@ -46,6 +46,8 @@ public class EditRequestQuery
 
     public int? FilterBy { get; set; }
 
+    public string? SiteDBDownInfoJson { get; set; }
+
     public AbnormalAccountViewModel? AbnormalAccountInfo { get; set; }
 
     public IEnumerable<WrongScoreInfoViewModel>? WrongScoreInfo { get; set; }

@@ -1,4 +1,5 @@
 import { MatchInfo } from "../../../../utility/models/event.model";
+import { InfoSiteDBDownModel } from "../components/info-site-db-down/info-site-db-down.model";
 import { TransInfoAddRequestModel } from "../models/trans-info-add-request.model";
 
 export class PrimitiveProperty {
@@ -29,6 +30,7 @@ export class CheckTransIdsViewModel {
   validation: ValidationAbnormalBet;
   abnormalBetTicketRequests: AbnormalBetTicketViewModel[];
   sendLetstalkModels: SendLetstalkModel[];
+  infoSiteDBDownModel: InfoSiteDBDownModel;
 }
 
 export class ValidationAbnormalBet {
@@ -47,8 +49,8 @@ export class ValidationAbnormalBet {
   abWhiteListTransIds: string;
   isHasWarningRemovedTickets: boolean;
   isHasUusTickets: boolean;
+  transIdsOfSiteDBDown?: string;
 }
-
 
 export interface SendLetstalkModel {
   matchId: number;

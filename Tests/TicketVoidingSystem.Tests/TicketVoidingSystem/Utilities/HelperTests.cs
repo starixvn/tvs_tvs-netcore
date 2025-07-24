@@ -1,4 +1,5 @@
-﻿using TicketVoidingSystem.Utilities;
+﻿using System.Collections.Generic;
+using TicketVoidingSystem.Utilities;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Utilities;
@@ -16,5 +17,28 @@ public class HelperTests : IClassFixture<AppSettingFixture>, IClassFixture<Remot
 
         // Assert
         Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void GetIntersectTransIdString_Return_IntersectTransIdString()
+    {
+        var testCase1 = new List<string>(){
+            "123,456,789,100",
+            "123,789, 100",
+            "456,789",
+        };
+        var testCase2 = new List<string>(){
+            "123,456,789,100",
+            "123,456,789,100",
+            "123,789",
+        };
+        var testCase3 = new List<string>(){
+            "",
+            "",
+            "123",
+        };
+        Assert.Equal("789", Helper.GetIntersectTransIdString(testCase1));
+        Assert.Equal("123,789", Helper.GetIntersectTransIdString(testCase2));
+        Assert.Equal("", Helper.GetIntersectTransIdString(testCase3));
     }
 }

@@ -54,11 +54,6 @@ public static class LogInfoHelper
         };
     }
 
-    public static IEnumerable<BetTypeTicketsInfo> CombineBetTypeTickets(IEnumerable<BetTypeTicketsInfo> betTypeTickets, Func<BetTypeTicketsInfo, bool> filter)
-    {
-        return betTypeTickets.Where(filter);
-    }
-
     public static LogInfoDetail CombineLogInfoDetail(IEnumerable<Validation> validations, IEnumerable<LogInfoDetail> logInfoDetails, Func<LogInfoDetail, bool> filter)
     {
         var selectedItems = logInfoDetails.Where(filter).ToList();

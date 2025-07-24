@@ -34,7 +34,7 @@ public class SendLetstalkAfterAddServiceTests
             FilterBy = filterBy,
             Matches = new List<MatchInfoAddRequest> { new() { MatchId = 1 } },
             SubIssueTypeId = subIssueTypeId,
-            SendLetstalkModels = new List<SendLetstalkModel>
+            SendLetstalkModels = new List<SendLetsTalkModel>
             {
                 new (){ IsHasUusTickets = false, MatchId = 1 },
                 new (){ IsHasUusTickets = true, MatchId = 1 }

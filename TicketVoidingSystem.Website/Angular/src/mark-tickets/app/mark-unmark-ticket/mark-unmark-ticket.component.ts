@@ -104,17 +104,9 @@ export class MarkUnmarkTicketComponent {
       this.ticketsModel.initData(data);
       this.paging.total = data.totalItems;
       if (this.query.searchBy === FilterSearchBy.BET_IDS) {
-        if (data.invalidTransIds) {
-          this.filterTickets.betIdsComponent.groupNumber.updateInvalidItems(data.invalidTransIds);
-        }
-
-        if (data.markedTransIds) {
-          this.filterTickets.betIdsComponent.groupNumber.updateInvalidItems(data.markedTransIds);
-        }
-
-        if (data.movedTransIds) {
-          this.filterTickets.betIdsComponent.groupNumber.updateMoved(data.movedTransIds);
-        }
+        this.filterTickets.betIdsComponent.groupNumber.updateInvalidItems(data.invalidTransIds);
+        this.filterTickets.betIdsComponent.groupNumber.updateInvalidItems(data.markedTransIds);
+        this.filterTickets.betIdsComponent.groupNumber.updateMoved(data.movedTransIds);
       }
     } catch {
       this.isShowTickets = false;

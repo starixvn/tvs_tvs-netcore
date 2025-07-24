@@ -16,5 +16,5 @@ public class AbnormalBetViewModel
 
     public IEnumerable<MatchInfoAddRequest>? Matches { get; set; }
 
-    public IEnumerable<SendLetstalkModel> SendLetstalkModels { get; set; }
+    public IEnumerable<SendLetsTalkModel> SendLetstalkModels { get; set; }
 }

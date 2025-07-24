@@ -1,127 +1,383 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
-using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
-using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.ViewModels;
+using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.AbnormalBet;
 
+public class TestableCheckValidTransIdsServiceImp(
+    IDynamicRepository repository,
+    MatchInfoAddRequestService matchInfoAddRequestService,
+    MapAbnormalBetTicketsExcelService mapTicketsExcelService,
+    CheckServerStatusService checkServerStatusService,
+    GetInfoSiteDbDownService getInfoSiteDbDownService)
+    : CheckValidTransIdsServiceImp(repository, matchInfoAddRequestService, mapTicketsExcelService,
+        checkServerStatusService, getInfoSiteDbDownService)
+{
+    public ValidationAbnormalBet TestMapValidationAbnormalBet(IEnumerable<ValidationAbnormalBet> validationAbnormalBets)
+    {
+        return MapValidationAbnormalBet(validationAbnormalBets);
+    }
+
+    public IEnumerable<GetAbnormalBetTicketModel> TestMapAbnormalBetTicketRequests(IEnumerable<GetAbnormalBetTicketModel> abnormalBetTicketRequests, string invalidTransIds)
+    {
+        return MapAbnormalBetTicketRequests(abnormalBetTicketRequests, invalidTransIds);
+    }
+
+    public IEnumerable<SendLetsTalkModel> TestMapSendLetsTalkModels(IEnumerable<SendLetsTalkModel> sendLetsTalkModels)
+    {
+        return MapSendLetsTalkModels(sendLetsTalkModels);
+    }
+
+    public TransInfoAddRequestModel TestGetTransInfoAddRequestModel(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
+    {
+        return GetTransInfoAddRequestModel(transInfoAddRequests);
+    }
+}
+
 public class CheckValidTransIdsServiceTests
 {
-    private readonly GetTransInfoService getTransInfoService;
     private readonly MapAbnormalBetTicketsExcelService mapTicketsExcelService;
     private readonly MatchInfoAddRequestService matchInfoAddRequestService;
+    private readonly CheckServerStatusService checkServerStatusService;
+    private readonly GetInfoSiteDbDownService getInfoSiteDbDownService;
     private readonly IDynamicRepository repository;
-    private readonly CheckValidTransIdsService service;
+    private readonly TestableCheckValidTransIdsServiceImp service;
 
     public CheckValidTransIdsServiceTests()
     {
         repository = Substitute.For<IDynamicRepository>();
         matchInfoAddRequestService = Substitute.For<MatchInfoAddRequestService>();
-        getTransInfoService = Substitute.For<GetTransInfoService>();
         mapTicketsExcelService = Substitute.For<MapAbnormalBetTicketsExcelService>();
+        checkServerStatusService = Substitute.For<CheckServerStatusService>();
+        getInfoSiteDbDownService = Substitute.For<GetInfoSiteDbDownService>();
 
-        service = new CheckValidTransIdsServiceImp(repository, matchInfoAddRequestService, getTransInfoService,
-            mapTicketsExcelService);
+        service = new TestableCheckValidTransIdsServiceImp(repository, matchInfoAddRequestService,
+            mapTicketsExcelService, checkServerStatusService, getInfoSiteDbDownService);
     }
 
     [Fact]
-    public async Task CheckValidTransIds_Successful_ReturnModelExpected()
+    public void MapValidationAbnormalBet_Should_Return_ModelExpected()
     {
         // Arrange
-        var request = new CheckValidTransIdsRequest();
-        var validation = new ValidationAbnormalBet();
-        var transInfoAddRequestModel = new TransInfoAddRequestModel { UnMarkTransIds = "123", RemoveTransIds = "123", MarkTransIds = "456" };
-        var matchInfoAddRequests = new[] { new MatchInfoAddRequest() };
-        var validationAbnormalBets = new[] { validation };
-        var transInfoAddRequestModels = new[] { transInfoAddRequestModel };
-        var transInfoJsonOutputList = new[] { "123" };
-        var abnormalBetTicketRequests = new[] { new GetAbnormalBetTicketModel() };
-        var sendLetstalkModels = new[] { new SendLetstalkModel() };
-        var abnormalBetTicketModels = new List<AbnormalBetTicketViewModel> { new() };
-        var match = new MatchInfoAddRequest();
-
-        matchInfoAddRequestService.UpdateDataFromRemotingRef(Arg.Any<MatchInfoAddRequest>())
-            .ReturnsForAnyArgs(match);
-        repository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet, TransInfoAddRequestModel, string, GetAbnormalBetTicketModel, SendLetstalkModel>(Arg.Any<CheckValidTransIdsCriteria>())
-            .ReturnsForAnyArgs((matchInfoAddRequests, validationAbnormalBets, transInfoAddRequestModels, transInfoJsonOutputList, abnormalBetTicketRequests, sendLetstalkModels));
-        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>())
-            .ReturnsForAnyArgs(new List<string> { "123", "" });
-        mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(Arg.Any<IEnumerable<GetAbnormalBetTicketModel>>())
-            .ReturnsForAnyArgs(abnormalBetTicketModels);
-
-        var viewModel = new CheckValidTransIdsViewModel
-        {
-            Matches = new List<MatchInfoAddRequest>(),
-            Validation = validation,
-            TransInfoAddRequestModel = new TransInfoAddRequestModel
-            {
-                RemoveTransIds = "123",
-                UnMarkTransIds = "123",
-                MarkTransIds = "456",
-                TransInfoJson = "123"
+        var validationAbnormalBets = new List<ValidationAbnormalBet>(){
+            new (){
+                InvalidTransIds = "123,456,789,100",
+                MovedTransIds = "123,456,789,100",
+                ABWhiteListTransIds = "",
+                DifferentMatchTransIds = "123",
+                SettledTransIds = "100",
+                IsHasWarningRemovedTickets = true,
             },
-            AbnormalBetTicketRequests = abnormalBetTicketModels,
-            SendLetstalkModels = sendLetstalkModels
+            new (){
+                InvalidTransIds = "123,789, 100",
+                MovedTransIds = "123,456,789,100",
+                ABWhiteListTransIds = "",
+                DifferentMatchTransIds = "789,100",
+                SettledTransIds = "",
+                IsHasWarningRemovedTickets = false,
+            },
+            new (){
+                InvalidTransIds = "456,789",
+                MovedTransIds = "123,456,789,100",
+                ABWhiteListTransIds = "",
+                DifferentMatchTransIds = "789",
+                SettledTransIds = "123",
+                IsHasWarningRemovedTickets = false,
+            }
+        };
+        var modelExpected = new ValidationAbnormalBet
+        {
+            InvalidTransIds = "789",
+            MovedTransIds = "123,456,789,100",
+            ABWhiteListTransIds = "",
+            DifferentMatchTransIds = "123,789,100",
+            SettledTransIds = "100,123",
+            IsHasWarningRemovedTickets = true,
         };
 
         // Act
-        var actual = await service.CheckValidTransIds(request);
+        var result = service.TestMapValidationAbnormalBet(validationAbnormalBets);
 
         // Assert
-        AssertExtension.Equal(viewModel, actual);
+        Assert.Equal(modelExpected.InvalidTransIds, result.InvalidTransIds);
+        Assert.Equal(modelExpected.MovedTransIds, result.MovedTransIds);
+        Assert.Equal(modelExpected.ABWhiteListTransIds, result.ABWhiteListTransIds);
+        Assert.Equal(modelExpected.DifferentMatchTransIds, result.DifferentMatchTransIds);
+        Assert.Equal(modelExpected.SettledTransIds, result.SettledTransIds);
+        Assert.Equal(modelExpected.IsHasWarningRemovedTickets, result.IsHasWarningRemovedTickets);
     }
 
     [Fact]
-    public async Task CheckValidTransIds_NoHasTransInfoAddRequestModel_ReturnModelExpected()
+    public void MapValidationAbnormalBet_EmptyList_Should_Return_EmptyModel()
     {
         // Arrange
-        var request = new CheckValidTransIdsRequest();
-        var validation = new ValidationAbnormalBet();
-        var matchInfoAddRequests = new[] { new MatchInfoAddRequest() };
-        var validationAbnormalBets = new[] { validation };
-        var transInfoAddRequestModels = new[] { new TransInfoAddRequestModel() };
-        var transInfoJsonOutputList = new[] { "123" };
-        var abnormalBetTicketRequests = new[] { new GetAbnormalBetTicketModel() };
-        var sendLetstalkModels = new[] { new SendLetstalkModel() };
-        var abnormalBetTicketModels = new List<AbnormalBetTicketViewModel>();
-        var match = new MatchInfoAddRequest();
+        var validationAbnormalBets = new List<ValidationAbnormalBet>();
 
-        matchInfoAddRequestService.UpdateDataFromRemotingRef(Arg.Any<MatchInfoAddRequest>())
-            .ReturnsForAnyArgs(match);
-        repository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet, TransInfoAddRequestModel, string, GetAbnormalBetTicketModel, SendLetstalkModel>(Arg.Any<CheckValidTransIdsCriteria>())
-            .ReturnsForAnyArgs((matchInfoAddRequests, validationAbnormalBets, transInfoAddRequestModels, transInfoJsonOutputList, abnormalBetTicketRequests, sendLetstalkModels));
-        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>())
-            .ReturnsForAnyArgs(new List<string> { "123", "" });
-        mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(Arg.Any<IEnumerable<GetAbnormalBetTicketModel>>())
-            .ReturnsForAnyArgs(abnormalBetTicketModels);
+        // Act
+        var result = service.TestMapValidationAbnormalBet(validationAbnormalBets);
 
-        var viewModel = new CheckValidTransIdsViewModel
+        // Assert
+        Assert.NotNull(result);
+        Assert.Null(result.InvalidTransIds);
+        Assert.Null(result.MovedTransIds);
+        Assert.Null(result.ABWhiteListTransIds);
+        Assert.Null(result.DifferentMatchTransIds);
+        Assert.Null(result.SettledTransIds);
+        Assert.False(result.IsHasWarningRemovedTickets);
+    }
+
+    [Fact]
+    public void MapValidationAbnormalBet_SingleItem_Should_Return_SameItem()
+    {
+        // Arrange
+        var validationAbnormalBet = new ValidationAbnormalBet
         {
-            Matches = new List<MatchInfoAddRequest>(),
-            Validation = validation,
-            TransInfoAddRequestModel = new TransInfoAddRequestModel
-            {
-                RemoveTransIds = null,
-                UnMarkTransIds = null,
-                MarkTransIds = null,
-                TransInfoJson = "123"
-            },
-            AbnormalBetTicketRequests = abnormalBetTicketModels,
-            SendLetstalkModels = sendLetstalkModels
+            InvalidTransIds = "123,456",
+            MovedTransIds = "789,100",
+            ABWhiteListTransIds = "111,222",
+            DifferentMatchTransIds = "333,444",
+            SettledTransIds = "555,666",
+            IsHasWarningRemovedTickets = true
+        };
+        var validationAbnormalBets = new List<ValidationAbnormalBet> { validationAbnormalBet };
+
+        // Act
+        var result = service.TestMapValidationAbnormalBet(validationAbnormalBets);
+
+        // Assert
+        Assert.Equal(validationAbnormalBet.InvalidTransIds, result.InvalidTransIds);
+        Assert.Equal(validationAbnormalBet.MovedTransIds, result.MovedTransIds);
+        Assert.Equal(validationAbnormalBet.ABWhiteListTransIds, result.ABWhiteListTransIds);
+        Assert.Equal(validationAbnormalBet.DifferentMatchTransIds, result.DifferentMatchTransIds);
+        Assert.Equal(validationAbnormalBet.SettledTransIds, result.SettledTransIds);
+        Assert.Equal(validationAbnormalBet.IsHasWarningRemovedTickets, result.IsHasWarningRemovedTickets);
+    }
+
+    [Fact]
+    public void MapAbnormalBetTicketRequests_Should_Return_CorrectTickets()
+    {
+        // Arrange
+        var abnormalBetTicketRequests = new List<GetAbnormalBetTicketModel>
+        {
+            new() { TransId = 123, RemarkId = 0 }, // Valid ticket
+            new() { TransId = 456, RemarkId = 0 }, // Valid ticket
+            new() { TransId = 789, RemarkId = 1 }, // Invalid ticket (should be included if in invalidTransIds)
+            new() { TransId = 100, RemarkId = 2 }, // Other ticket (RemarkId > 1)
+            new() { TransId = 200, RemarkId = 3 }, // Other ticket (RemarkId > 1)
+            new() { TransId = 123, RemarkId = 0 }  // Duplicate TransId
+        };
+        var invalidTransIds = "789,100";
+
+        // Act
+        var result = service.TestMapAbnormalBetTicketRequests(abnormalBetTicketRequests, invalidTransIds);
+
+        // Assert
+        var resultList = result.ToList();
+        Assert.Equal(5, resultList.Count); // Should have 5 unique tickets
+        Assert.Contains(resultList, x => x.TransId == 123 && x.RemarkId == 0);
+        Assert.Contains(resultList, x => x.TransId == 456 && x.RemarkId == 0);
+        Assert.Contains(resultList, x => x.TransId == 789 && x.RemarkId == 1);
+        Assert.Contains(resultList, x => x.TransId == 100 && x.RemarkId == 2);
+        Assert.Contains(resultList, x => x.TransId == 200 && x.RemarkId == 3);
+    }
+
+    [Fact]
+    public void MapAbnormalBetTicketRequests_EmptyInvalidTransIds_Should_Return_ValidAndOtherTickets()
+    {
+        // Arrange
+        var abnormalBetTicketRequests = new List<GetAbnormalBetTicketModel>
+        {
+            new() { TransId = 123, RemarkId = 0 }, // Valid ticket
+            new() { TransId = 456, RemarkId = 1 }, // Invalid ticket (but not in invalidTransIds)
+            new() { TransId = 789, RemarkId = 2 }, // Other ticket
+        };
+        var invalidTransIds = "";
+
+        // Act
+        var result = service.TestMapAbnormalBetTicketRequests(abnormalBetTicketRequests, invalidTransIds);
+
+        // Assert
+        var resultList = result.ToList();
+        Assert.Equal(2, resultList.Count); // Should have 2 tickets (valid + other)
+        Assert.Contains(resultList, x => x.TransId == 123 && x.RemarkId == 0);
+        Assert.Contains(resultList, x => x.TransId == 789 && x.RemarkId == 2);
+    }
+
+    [Fact]
+    public void MapSendLetsTalkModels_Should_Group_By_MatchId()
+    {
+        // Arrange
+        var sendLetsTalkModels = new List<SendLetsTalkModel>
+        {
+            new() { MatchId = 1, IsHasUusTickets = true, ListBetType = "Type1", ListBetTeam = "Team1" },
+            new() { MatchId = 1, IsHasUusTickets = false, ListBetType = "Type2", ListBetTeam = "Team2" },
+            new() { MatchId = 2, IsHasUusTickets = true, ListBetType = "Type3", ListBetTeam = "Team3" },
+            new() { MatchId = 2, IsHasUusTickets = false, ListBetType = "Type4", ListBetTeam = "Team4" },
         };
 
         // Act
-        var actual = await service.CheckValidTransIds(request);
+        var result = service.TestMapSendLetsTalkModels(sendLetsTalkModels);
 
         // Assert
-        AssertExtension.Equal(viewModel, actual);
+        var resultList = result.ToList();
+        Assert.Equal(2, resultList.Count);
+
+        var match1 = resultList.First(x => x.MatchId == 1);
+        Assert.Equal(1, match1.MatchId);
+        Assert.True(match1.IsHasUusTickets); // Should be true because at least one has IsHasUusTickets = true
+        Assert.Equal("Type1,Type2", match1.ListBetType);
+        Assert.Equal("Team1,Team2", match1.ListBetTeam);
+
+        var match2 = resultList.First(x => x.MatchId == 2);
+        Assert.Equal(2, match2.MatchId);
+        Assert.True(match2.IsHasUusTickets);
+        Assert.Equal("Type3,Type4", match2.ListBetType);
+        Assert.Equal("Team3,Team4", match2.ListBetTeam);
+    }
+
+    [Fact]
+    public void MapSendLetsTalkModels_EmptyList_Should_Return_EmptyList()
+    {
+        // Arrange
+        var sendLetsTalkModels = new List<SendLetsTalkModel>();
+
+        // Act
+        var result = service.TestMapSendLetsTalkModels(sendLetsTalkModels);
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void GetTransInfoAddRequestModel_Should_Combine_All_Properties()
+    {
+        // Arrange
+        var transInfoAddRequests = new List<TransInfoAddRequestModel>
+        {
+            new() { RemoveTransIds = "123,456", UnMarkTransIds = "789", MarkTransIds = "100", TransInfoJson = "json1" },
+            new() { RemoveTransIds = "456,789", UnMarkTransIds = "100", MarkTransIds = "200", TransInfoJson = "json2" },
+            new() { RemoveTransIds = "789,100", UnMarkTransIds = "200", MarkTransIds = "", TransInfoJson = "json3" }, // Empty MarkTransIds
+        };
+
+        // Act
+        var result = service.TestGetTransInfoAddRequestModel(transInfoAddRequests);
+
+        // Assert
+        Assert.Equal("123,456,789,100", result.RemoveTransIds);
+        Assert.Equal("789,100,200", result.UnMarkTransIds);
+        Assert.Equal("100,200", result.MarkTransIds);
+        Assert.Equal("json1,json2,json3", result.TransInfoJson); // Should only include non-empty MarkTransIds
+    }
+
+    [Fact]
+    public void GetTransInfoAddRequestModel_EmptyList_Should_Return_EmptyModel()
+    {
+        // Arrange
+        var transInfoAddRequests = new List<TransInfoAddRequestModel>();
+
+        // Act
+        var result = service.TestGetTransInfoAddRequestModel(transInfoAddRequests);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal("", result.RemoveTransIds);
+        Assert.Equal("", result.UnMarkTransIds);
+        Assert.Equal("", result.MarkTransIds);
+        Assert.Equal("", result.TransInfoJson);
+    }
+
+    [Fact]
+    public async Task CheckValidTransIds_Should_Return_CompleteViewModel()
+    {
+        // Arrange
+        var request = new CheckValidTransIdsModel
+        {
+            TransIds = "123,456,789",
+            IssueTypeId = 1,
+            SubIssueTypeId = 1,
+            RequestId = 1,
+            ActionId = 1,
+            FilterBy = 1,
+            IsRemoveCustomerClass201 = false,
+            IsRemoveCustomerClass4K = false,
+            IsRemoveCreditCashService = false,
+            IsAddSettledTickets = false,
+            IsVoidAllArchivedTickets = false
+        };
+
+        var onlineServers = new List<SiteDbGroupModel>
+        {
+            new() { Id = 1 },
+            new() { Id = 2 }
+        };
+        var matchInfoAddRequests = new List<MatchInfoAddRequest> { new() { MatchId = 1 } };
+        var validationAbnormalBets = new List<ValidationAbnormalBet> { new() { InvalidTransIds = "123" } };
+        var transInfoAddRequests = new List<TransInfoAddRequestModel> { new() { RemoveTransIds = "123" } };
+        var abnormalBetTicketRequests = new List<GetAbnormalBetTicketModel> { new() { TransId = 123 } };
+        var sendLetsTalkModels = new List<SendLetsTalkModel> { new() { MatchId = 1 } };
+
+        checkServerStatusService.GetOnlineServer().Returns(Task.FromResult(onlineServers));
+        repository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet, TransInfoAddRequestModel, GetAbnormalBetTicketModel, SendLetsTalkModel>(Arg.Any<ICriteria>())
+            .Returns(Task.FromResult(((IEnumerable<MatchInfoAddRequest>)matchInfoAddRequests,
+                                    (IEnumerable<ValidationAbnormalBet>)validationAbnormalBets,
+                                    (IEnumerable<TransInfoAddRequestModel>)transInfoAddRequests,
+                                    (IEnumerable<GetAbnormalBetTicketModel>)abnormalBetTicketRequests,
+                                    (IEnumerable<SendLetsTalkModel>)sendLetsTalkModels)));
+
+        matchInfoAddRequestService.UpdateDataFromRemotingRef(Arg.Any<IEnumerable<MatchInfoAddRequest>>()).Returns(matchInfoAddRequests);
+        mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(Arg.Any<IEnumerable<GetAbnormalBetTicketModel>>()).Returns(new List<AbnormalBetTicketViewModel>());
+        getInfoSiteDbDownService.GetInfoSiteDBDown(Arg.Any<IEnumerable<TransInfoAddRequestModel>>()).Returns(new InfoSiteDBDownModel());
+
+        // Act
+        var result = await service.CheckValidTransIds(request);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.NotNull(result.Matches);
+        Assert.NotNull(result.Validation);
+        Assert.NotNull(result.TransInfoAddRequestModel);
+        Assert.NotNull(result.AbnormalBetTicketRequests);
+        Assert.NotNull(result.SendLetstalkModels);
+        Assert.NotNull(result.InfoSiteDBDownModel);
+    }
+
+    [Fact]
+    public async Task CheckValidTransIds_EmptyOnlineServers_Should_Return_EmptyViewModel()
+    {
+        // Arrange
+        var request = new CheckValidTransIdsModel
+        {
+            TransIds = "123,456,789",
+            IssueTypeId = 1,
+            SubIssueTypeId = 1,
+            RequestId = 1,
+            ActionId = 1
+        };
+
+        var onlineServers = new List<SiteDbGroupModel>();
+        checkServerStatusService.GetOnlineServer().Returns(Task.FromResult(onlineServers));
+
+        // Act
+        var result = await service.CheckValidTransIds(request);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result.Matches);
+        Assert.NotNull(result.Validation);
+        Assert.NotNull(result.TransInfoAddRequestModel);
+        Assert.Empty(result.AbnormalBetTicketRequests);
+        Assert.Empty(result.SendLetstalkModels);
+        Assert.Null(result.InfoSiteDBDownModel);
     }
 }
