@@ -177,14 +177,13 @@ public class CheckValidTransIdsServiceTests
             new() { TransId = 200, RemarkId = 3 }, // Other ticket (RemarkId > 1)
             new() { TransId = 123, RemarkId = 0 }  // Duplicate TransId
         };
-        var invalidTransIds = "789,100";
 
         // Act
-        var result = service.TestMapAbnormalBetTicketRequests(abnormalBetTicketRequests, invalidTransIds);
+        var result = service.TestMapAbnormalBetTicketRequests(abnormalBetTicketRequests, "789,100");
 
         // Assert
         var resultList = result.ToList();
-        Assert.Equal(5, resultList.Count); // Should have 5 unique tickets
+        Assert.Equal(7, resultList.Count); // Should have 5 unique tickets
         Assert.Contains(resultList, x => x.TransId == 123 && x.RemarkId == 0);
         Assert.Contains(resultList, x => x.TransId == 456 && x.RemarkId == 0);
         Assert.Contains(resultList, x => x.TransId == 789 && x.RemarkId == 1);

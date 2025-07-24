@@ -17,4 +17,5 @@ export class SaveRequestArg {
   confirmAbnormalBetComponent: ConfirmAbnormalBetComponent;
   addRequestStore: AddRequestStore;
   siteDBDownInfoJson?: string;
+  abWhiteListTransIds?: string;
 }

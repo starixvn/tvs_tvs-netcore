@@ -53,9 +53,9 @@
     }
   </div>
   }
-
-  <info-site-db-down [infoSiteDBDownModel]="infoSiteDBDownModel">
-  </info-site-db-down>
+  <ab-exception-list #abExceptionList [isVoided]="filter.isVoided" [betIds]="abnormalBetModel.abWhiteListTransIds"
+    (changeAbExceptionList)="changeAbExceptionList($event)"></ab-exception-list>
+  <info-site-db-down [infoSiteDBDownModel]="infoSiteDBDownModel"></info-site-db-down>
 </div>
 
 <confirm-abnormal-bet #confirmAbnormalBetComponent [model]="confirmAbnormalBetModel" (close)="triggerCloseEvent()"

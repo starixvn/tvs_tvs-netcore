@@ -9,7 +9,9 @@ export class PrimitiveProperty {
   isHasUusTickets: boolean;
   transInfoAddRequestModel: TransInfoAddRequestModel;
   isBlockUI = false;
+  abWhiteListTransIds: string;
 }
+
 export interface CheckTransIdsQuery {
   transIds: string;
   requestId?: number;

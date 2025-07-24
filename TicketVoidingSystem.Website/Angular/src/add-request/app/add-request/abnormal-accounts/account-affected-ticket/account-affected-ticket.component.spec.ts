@@ -28,7 +28,8 @@ class Helper {
     isShowInput: true,
     isCanEditTicket: true,
     isShowOnTable: true,
-    transInfoAccountJson: '{}'
+    transInfoAccountJson: '{}',
+    oldAdjustVoidLimit: 500
   };
 
   static readonly fakeTicketTableViewModel = {
@@ -156,7 +157,8 @@ describe('AccountAffectedTicketComponent', () => {
       currentLosing: -200,
       currentWinning: 300,
       estimateVoidAmount: 0,
-      winLostAfterVoid: 0
+      winLostAfterVoid: 0,
+      oldAdjustVoidLimit: 500
     };
     component.tempAdjustedAccounts.accountWinlostTables = [accountWinlostModel];
     const newWinlost = new bigDecimal(50);

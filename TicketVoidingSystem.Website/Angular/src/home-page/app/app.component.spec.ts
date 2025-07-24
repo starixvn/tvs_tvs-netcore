@@ -1,72 +1,60 @@
-import { ElementRef, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ElementRef } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { Shallow } from 'shallow-render';
-import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
-import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
 import { AppStore } from './app.store';
 
 jest.mock('../../utility/services/signal-r.service.native');
-class Helper {
-}
 
 describe('AppComponent', () => { 
-  @NgModule({
-    declarations: [
-      MenuBarComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      BlockFullUiComponent
-    ],
-    providers: [
-      SignalRService,
-      AppStore
-    ]
-  })
-  class AppModuleTest { }
-
   let shallow: Shallow<AppComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(AppComponent, AppModuleTest)
+    shallow = new Shallow(AppComponent)
       .dontMock(NgbModule)
-      .mock(ElementRef, {});
+      .mock(ElementRef, {})
+      .provideMock({ provide: SignalRService, useValue: { initializeConnection: jest.fn() } })
+      .provideMock({ provide: AppStore, useValue: { 
+        changeBlockingUiStatus: jest.fn(),
+        blockingUiStatus: { subscribe: jest.fn() }
+      }});
   });
 
   it('#AppComponent init should match snapshot', async () => {
-    const { fixture } = await shallow
-    .mock(AppStore, { changeBlockingUiStatus: jest.fn() })
-    .render();
+    const { fixture } = await shallow.render();
 
     expect(fixture).toMatchSnapshot();
   });
 
   it('#ngOnInit should call #initializeConnection', async () => {
-    const homePageStore = new AppStore();
-    const signalRService = new SignalRService(null);
-    signalRService.initializeConnection = jest.fn();
-    homePageStore.changeBlockingUiStatus = jest.fn();
-    homePageStore.blockingUiStatus.subscribe = jest.fn();
+    const { instance } = await shallow.render();
+    
+    // Mock the injected services
+    const mockSignalRService = { initializeConnection: jest.fn() };
+    const mockHomePageStore = { 
+      changeBlockingUiStatus: jest.fn(),
+      blockingUiStatus: { subscribe: jest.fn().mockReturnValue(new Subscription()) }
+    };
+    
+    (instance as any).signalRService = mockSignalRService;
+    (instance as any).homePageStore = mockHomePageStore;
 
-    const component = new AppComponent(signalRService, homePageStore);
+    await instance.ngOnInit();
 
-    component.ngOnInit();
-
-    expect(homePageStore.changeBlockingUiStatus).toHaveBeenCalledTimes(1);
-    expect(signalRService.initializeConnection).toHaveBeenCalledTimes(1);
+    expect(mockHomePageStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+    expect(mockSignalRService.initializeConnection).toHaveBeenCalled();
   });
 
   it('#ngOnDestroy should call #blockingUiSubscription?.unsubscribe', async () => {
-    const component = new AppComponent(null, null);
-    component.blockingUiSubscription = new Subscription();
-    component.blockingUiSubscription.unsubscribe = jest.fn();
-    component.ngOnDestroy();
+    const { instance } = await shallow.render();
+    const mockSubscription = new Subscription();
+    mockSubscription.unsubscribe = jest.fn();
+    instance.blockingUiSubscription = mockSubscription;
+    
+    instance.ngOnDestroy();
 
-    expect(component.blockingUiSubscription.unsubscribe).toHaveBeenCalledTimes(1);
+    expect(mockSubscription.unsubscribe).toHaveBeenCalled();
   });
 });

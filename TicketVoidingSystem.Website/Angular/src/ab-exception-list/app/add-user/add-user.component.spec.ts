@@ -3,8 +3,6 @@ import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { UsernamesComponent } from '../../../utility/components/user-names/user-names.component';
-import { GroupUsername } from '../../../utility/components/user-names/user-names.model';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { AddUserComponent } from './../add-user/add-user.component';
 import { AddUserModel } from './../add-user/add-user.model';
@@ -55,10 +53,16 @@ describe('AddUserComponent', () => {
   });
 
   it('should call services correctly on clickSave', async () => {
-    const mockUsernamesComponent = new UsernamesComponent(null);
-    mockUsernamesComponent.groupUsername = new GroupUsername();
-    mockUsernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('testUser');
-    component.usernamesComponent = mockUsernamesComponent;
+    // Tạo mock object thay vì UsernamesComponent trực tiếp
+    const mockGroupUsername = {
+      getAllValue: jest.fn().mockReturnValue('testUser')
+    };
+    
+    const mockUsernamesComponent = {
+      groupUsername: mockGroupUsername
+    };
+    
+    component.usernamesComponent = mockUsernamesComponent as any;
     userService.addUsers = jest.fn();
     validationService.validateUsernames = jest.fn().mockResolvedValue(true);
 
@@ -76,10 +80,16 @@ describe('AddUserComponent', () => {
   });
 
   it('should validate usernames on afterFocusOutBetIds', async () => {
-    const mockUsernamesComponent = new UsernamesComponent(null);
-    mockUsernamesComponent.groupUsername = new GroupUsername();
-    mockUsernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('testUser');
-    component.usernamesComponent = mockUsernamesComponent;
+    // Tạo mock object thay vì UsernamesComponent trực tiếp
+    const mockGroupUsername = {
+      getAllValue: jest.fn().mockReturnValue('testUser')
+    };
+    
+    const mockUsernamesComponent = {
+      groupUsername: mockGroupUsername
+    };
+    
+    component.usernamesComponent = mockUsernamesComponent as any;
     validationService.validateUsernames = jest.fn().mockResolvedValue(true);
 
     await component.afterFocusOutBetIds();

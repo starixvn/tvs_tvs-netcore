@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CheckboxType } from 'src/utility/constants/config';
+import { CheckboxType } from '../../../../../utility/constants/config';
 import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account.model';
 
 @Component({

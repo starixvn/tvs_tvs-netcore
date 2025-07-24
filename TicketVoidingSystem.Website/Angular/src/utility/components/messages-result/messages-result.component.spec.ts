@@ -76,8 +76,8 @@ describe('MessagesResultComponent', () => {
     });
 
     // Assert
-    expect(result.results[0].errorMsg).toBe('Original error message');
-    expect(result.results[1].errorMsg).toBe('Another error message');
+    expect(result.results[0].errorMsg).toBe('Some tickets cannot be processed because: Original error message');
+    expect(result.results[1].errorMsg).toBe('Some tickets cannot be processed because: Another error message');
     expect(result.results[2].errorMsg).toBe('Non-lock match error');
   });
 
@@ -102,8 +102,11 @@ describe('MessagesResultComponent', () => {
     });
 
     // Assert
-    result.results.forEach(result => {
-      expect(result.errorMsg).toContain('Error 2');
-    });
+    // Check that all lock match error codes have the prefix added
+    expect(result.results[0].errorMsg).toBe('Some tickets cannot be processed because: Error 1');
+    expect(result.results[1].errorMsg).toBe('Some tickets cannot be processed because: Error 2');
+    expect(result.results[2].errorMsg).toBe('Some tickets cannot be processed because: Error 3');
+    expect(result.results[3].errorMsg).toBe('Some tickets cannot be processed because: Error 4');
+    expect(result.results[4].errorMsg).toBe('Some tickets cannot be processed because: Error 5');
   });
 }); 

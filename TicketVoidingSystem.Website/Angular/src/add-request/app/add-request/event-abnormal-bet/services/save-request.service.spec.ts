@@ -12,6 +12,7 @@ import { FilterModel } from '../../filter/filter.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { OthersModel } from '../../others/others.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { CheckboxType } from '../../../../../utility/constants/config';
 
 jest.mock('../../../../../utility/services/static.service', () => ({
   StaticService: {
@@ -70,7 +71,7 @@ describe('SaveRequestService', () => {
       mockAbnormalBetModel.transIds = '1,2,3,4,5,6,7,8,9';
       mockAbnormalBetModel.filterBy = 1;
 
-      const mockArgs: SaveRequestArg = {
+      const mockArgs = {
         isEdit: false,
         requestId: 1,
         addRequestStore: mockAddRequestStore,
@@ -97,7 +98,7 @@ describe('SaveRequestService', () => {
         abnormalBetModel: mockAbnormalBetModel,
         confirmAbnormalBetModel: new ConfirmAbnormalBetModel(),
         confirmAbnormalBetComponent: new ConfirmAbnormalBetComponent()
-      };
+      } as unknown as SaveRequestArg;
 
       jest.spyOn(addRequestService, 'executeSaveRequest');
 
@@ -197,12 +198,15 @@ describe('SaveRequestService', () => {
   });
 
   describe('getTransIdsForSaveRequest', () => {
-    it('should filter out class 4K tickets when isRemoveCustomerClass4K is true', () => {
+    it('should filter out class 4K tickets when checkbox is checked', () => {
       // Arrange
       const confirmAbnormalBetModel = new ConfirmAbnormalBetModel();
       confirmAbnormalBetModel.ticketsOfCustomerClass4K = '1,2,3';
       const confirmAbnormalBetComponent = new ConfirmAbnormalBetComponent();
-      confirmAbnormalBetComponent.isRemoveCustomerClass4K = true;
+      confirmAbnormalBetComponent.model = new ConfirmAbnormalBetModel();
+      confirmAbnormalBetComponent.model.checkboxState = {
+        [CheckboxType.CUSTOMER_CLASS_4K]: true
+      };
       const transIds = '1,2,3,4,5,6';
 
       // Act
@@ -216,12 +220,15 @@ describe('SaveRequestService', () => {
       expect(result).toBe('4,5,6');
     });
 
-    it('should filter out class 201 tickets when isRemoveCustomerClass201 is true', () => {
+    it('should filter out class 201 tickets when checkbox is checked', () => {
       // Arrange
       const confirmAbnormalBetModel = new ConfirmAbnormalBetModel();
       confirmAbnormalBetModel.ticketsOfCustomerClass201 = '4,5,6';
       const confirmAbnormalBetComponent = new ConfirmAbnormalBetComponent();
-      confirmAbnormalBetComponent.isRemoveCustomerClass201 = true;
+      confirmAbnormalBetComponent.model = new ConfirmAbnormalBetModel();
+      confirmAbnormalBetComponent.model.checkboxState = {
+        [CheckboxType.CUSTOMER_CLASS_201]: true
+      };
       const transIds = '1,2,3,4,5,6';
 
       // Act

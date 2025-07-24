@@ -5,7 +5,6 @@ import { AddRequestStore } from '../add-request.store';
 import { AddRequestApiService } from '../add-request-api.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { AbnormalAccountService } from './services/abnormal-account.service';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { OthersModel } from '../others/others.model';
@@ -39,7 +38,6 @@ describe('AbnormalAccountsComponent', () => {
   let addRequestApiService: AddRequestApiService;
   let saveRequestService: SaveRequestService;
   let validationService: ValidationService;
-  let abnormalAccountService: AbnormalAccountService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -48,8 +46,7 @@ describe('AbnormalAccountsComponent', () => {
         AddRequestStore,
         AddRequestApiService,
         SaveRequestService,
-        ValidationService,
-        AbnormalAccountService
+        ValidationService
       ]
     }).compileComponents();
 
@@ -58,7 +55,6 @@ describe('AbnormalAccountsComponent', () => {
     addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
     saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
     validationService = fixture.debugElement.injector.get(ValidationService);
-    abnormalAccountService = fixture.debugElement.injector.get(AbnormalAccountService);
     component = fixture.componentInstance;
     
     // Khởi tạo các giá trị mặc định cho component
@@ -194,6 +190,7 @@ describe('AbnormalAccountsComponent', () => {
           username: 'test1',
           givenCredit: 0,
           adjustVoidLimit: 0,
+          oldAdjustVoidLimit: 0,
           currentWinning: 0,
           currentLosing: 0,
           isEditedTicket: false,
@@ -212,6 +209,7 @@ describe('AbnormalAccountsComponent', () => {
           username: 'test2',
           givenCredit: 0,
           adjustVoidLimit: 0,
+          oldAdjustVoidLimit: 0,
           currentWinning: 0,
           currentLosing: 0,
           isEditedTicket: false,
@@ -244,6 +242,7 @@ describe('AbnormalAccountsComponent', () => {
           username: 'test1',
           givenCredit: 0,
           adjustVoidLimit: 0,
+          oldAdjustVoidLimit: 0,
           currentWinning: 0,
           currentLosing: 0,
           isEditedTicket: false,
@@ -262,6 +261,7 @@ describe('AbnormalAccountsComponent', () => {
           username: 'test2',
           givenCredit: 0,
           adjustVoidLimit: 0,
+          oldAdjustVoidLimit: 0,
           currentWinning: 0,
           currentLosing: 0,
           isEditedTicket: false,

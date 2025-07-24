@@ -21,6 +21,7 @@ import { MatchModel } from '../../../utility/models/match.model';
 import { FilterEvent } from './filter.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TestingModule } from '../../../utility/modules/testing.module';
+import { AppComponent } from '../app.component';
 
 class Helper {
   static readonly mockLicensees = [
@@ -124,19 +125,11 @@ describe('FilterComponent', () => {
   let fixture: ComponentFixture<FilterComponent>;
   let appService: AppService;
   let commonService: CommonService;
+  let blockUiService: BlockUiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        CommonModule,
-        FormsModule,
-        NgSelectModule,
-        AdvancedModeComponent,
-        GroupBetTypesComponent,
-        BetTypesComponent,
-        BetTypesVirtualSportComponent,
-        DateFullTimeNewComponent,
-        TooltipComponent,
         TestingModule
       ],
       providers: [
@@ -151,15 +144,16 @@ describe('FilterComponent', () => {
           getBetTypesVirtualSports: jest.fn().mockResolvedValue(Helper.mockGroupBetTypes)
         }},
         { provide: BlockUiService, useValue: { start: jest.fn(), stop: jest.fn() }},
-        { provide: ElementRef, useValue: { nativeElement: document.createElement('div') }}
+        { provide: ElementRef, useValue: { nativeElement: document.createElement('div') }},
+        { provide: AppComponent, useValue: {}}
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(FilterComponent);
     component = fixture.componentInstance;
-    
-    appService = fixture.debugElement.injector.get(AppService);
-    commonService = fixture.debugElement.injector.get(CommonService);
+    appService = TestBed.inject(AppService);
+    commonService = TestBed.inject(CommonService);
+    blockUiService = TestBed.inject(BlockUiService);
 
     // Initialize searchEvent
     component.searchEvent = new EventEmitter<FilterEvent>();
@@ -215,7 +209,7 @@ describe('FilterComponent', () => {
     component.singleOrSubParlay = 'All';
     component.checkMatch = '';
     component.searchEvent = new EventEmitter<FilterEvent>();
-
+    component.appComponent.logAccessAction = jest.fn();
     jest.spyOn(component, 'validateProduct').mockReturnValue(true);
     jest.spyOn(component, 'validateBetTypes').mockReturnValue(true);
 

@@ -109,7 +109,7 @@ describe('ValidationService', () => {
   describe('checkBusinessRule', () => {
     it('should call checkValidUsernames and set isShowAccountWinLost to true', async () => {
       // Arrange
-      const args: ValidationBusinessRuleArgs = {
+      const args = {
         usernamesComponent,
         productFilterComponent,
         eventDateFilterComponent,
@@ -145,7 +145,7 @@ describe('ValidationService', () => {
           numberOfTicketsExistedInRequest: 0,
           isCheckedShowAdjustAccount: false
         } as unknown as PrimitiveProperty
-      };
+      } as unknown as ValidationBusinessRuleArgs;
 
       // Act
       await service.checkBusinessRule(args);
@@ -158,7 +158,7 @@ describe('ValidationService', () => {
   describe('checkValidUsernames', () => {
     it('should return invalid when isCancelValidate is true', async () => {
       // Arrange
-      const args: ValidationBusinessRuleArgs = {
+      const args = {
         usernamesComponent,
         productFilterComponent,
         eventDateFilterComponent,
@@ -194,7 +194,7 @@ describe('ValidationService', () => {
           numberOfTicketsExistedInRequest: 0,
           isCheckedShowAdjustAccount: false
         } as unknown as PrimitiveProperty
-      };
+      } as unknown as ValidationBusinessRuleArgs;
 
       // Act
       const result = await service.checkValidUsernames(args);
@@ -206,7 +206,7 @@ describe('ValidationService', () => {
 
     it('should handle ticket limit exceeded case', async () => {
       // Arrange
-      const args: ValidationBusinessRuleArgs = {
+      const args = {
         usernamesComponent,
         productFilterComponent,
         eventDateFilterComponent,
@@ -242,7 +242,7 @@ describe('ValidationService', () => {
           numberOfTicketsExistedInRequest: 0,
           isCheckedShowAdjustAccount: false
         } as unknown as PrimitiveProperty
-      };
+      } as unknown as ValidationBusinessRuleArgs;
 
       const mockResponse: CheckUsernamesViewModel = {
         validation: {

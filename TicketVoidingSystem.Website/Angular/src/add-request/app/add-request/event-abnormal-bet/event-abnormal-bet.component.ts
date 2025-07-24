@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
@@ -23,13 +23,14 @@ import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './serv
 import { ValidationService } from './services/validation.service';
 import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
 import { InfoSiteDBDownModel } from '../components/info-site-db-down/info-site-db-down.model';
+import { AbExceptionListComponent } from './ab-exception-list/ab-exception-list.component';
 
 @Component({
   selector: 'event-abnormal-bet',
   templateUrl: './event-abnormal-bet.component.html',
   styleUrls: ['./event-abnormal-bet.component.scss'],
   standalone: true,
-  imports: [FormsModule, BetIdsComponent, ConfirmAbnormalBetComponent, BlockUiDirective, CommonModule, InfoSiteDBDownComponent],
+  imports: [FormsModule, BetIdsComponent, ConfirmAbnormalBetComponent, BlockUiDirective, CommonModule, InfoSiteDBDownComponent, AbExceptionListComponent],
   providers: [SaveRequestService, ValidationService]
 })
 export class EventAbnormalBetComponent implements OnInit {
@@ -58,12 +59,23 @@ export class EventAbnormalBetComponent implements OnInit {
   private readonly addRequestStore = inject(AddRequestStore);
   private readonly addRequestApiService = inject(AddRequestApiService);
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['filter'] && this.filter.isChangeSubTypeManual) {
+      this.abnormalBetModel.abWhiteListTransIds = '';
+      this.filter.isChangeSubTypeManual = false;
+    }
+  }
   async ngOnInit(): Promise<void> {
     if (!this.isEdit) {
       this.abnormalBetModel.filterBy = AbnormalFilterBy.SINGLE;
     }
+
     this.addRequestStore.changeAbnormalFilterBy(this.abnormalBetModel.filterBy);
     this.permission = await this.addRequestApiService.getPermissionAddRequest();
+  }
+
+  changeAbExceptionList(betIds: string) {
+    this.abnormalBetModel.abWhiteListTransIds = betIds;
   }
 
   isShowButtonExportTicket(): boolean {
@@ -109,6 +121,9 @@ export class EventAbnormalBetComponent implements OnInit {
 
   public removeInvalidTransIds(): void {
     this.betIdsComponent.removeTransId(this.primitiveProps.invalidTransIds);
+    this.abnormalBetModel.abWhiteListTransIds = this.abnormalBetModel.abWhiteListTransIds ? this.abnormalBetModel.abWhiteListTransIds + ',' + this.primitiveProps.abWhiteListTransIds
+      : this.primitiveProps.abWhiteListTransIds;
+    this.primitiveProps.abWhiteListTransIds = '';
     this.primitiveProps.isShowButtonRemoveInvalid = false;
     const invalidTransIds = this.primitiveProps.invalidTransIds.split(',');
     this.exportTickets = this.exportTickets.filter(x => !(invalidTransIds.includes(x.betId)));
@@ -183,7 +198,8 @@ export class EventAbnormalBetComponent implements OnInit {
     this.exportTickets = validation.abnormalBetTicketRequests;
     this.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
     this.infoSiteDBDownModel = validation.infoSiteDBDownModel;
-    
+    this.primitiveProps.abWhiteListTransIds = validation.warningModel?.abWhiteListTransIds;
+
     return validation;
   }
 
@@ -201,6 +217,7 @@ export class EventAbnormalBetComponent implements OnInit {
     if (this.confirmAbnormalBetComponent.isMarkTicketSiteDbDown) {
       args.siteDBDownInfoJson = this.infoSiteDBDownModel?.siteDBDownInfoJson;
     }
+    args.abWhiteListTransIds = this.abnormalBetModel.abWhiteListTransIds;
 
     await this.saveRequestService.executeSave(args);
   }
