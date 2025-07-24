@@ -36,16 +36,16 @@ export class AbExceptionListComponent {
   }
 
   private updateGroupItems() {
-    if(this.betIds?.length === 0) {
+    if (!this.betIds || this.betIds.length === 0) {
       this.groupNumber.items = [];
+      return;
     }
 
     const items = this.betIds.split(',').filter(x => x?.length > 0);
-    console.log(items);
-      items.forEach(item => {
-        if (!this.groupNumber.items.find(x => x.value === item)) {
-          this.groupNumber.items.push(new NumberItem(item));
-        }
-      });
+    items.forEach(item => {
+      if (!this.groupNumber.items.find(x => x.value === item)) {
+        this.groupNumber.items.push(new NumberItem(item));
+      }
+    });
   }
 }

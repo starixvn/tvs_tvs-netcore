@@ -38,10 +38,6 @@ public class SendLetstalkAfterAddServiceImp(
     {
         foreach (var sendLetstalkModel in model.SendLetstalkModels)
         {
-            //if (sendLetstalkModel.IsHasUusTickets)
-            //{
-            //    continue;
-            //}
             var content = CreateContent(model, sendLetstalkModel, requestId);
             await notificationLetstalkService.SendToGroupAbnormalBetRequest(CreateSubject(model), content, sendLetstalkModel.IsHasUusTickets);
         }
