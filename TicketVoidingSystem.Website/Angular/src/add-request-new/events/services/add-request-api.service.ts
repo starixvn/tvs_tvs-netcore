@@ -48,10 +48,6 @@ export class AddRequestApiService {
   async getRequestById(id: number): Promise<RequestDetailViewModel> {
     return this.httpService.getJson(`api/ManageRequest/GetRequest/${id}`);
   }
-
-  async getSubIssueTypes(issueTypeId: number): Promise<IssueTypes> {
-    return this.httpService.getJson(`api/SharedApi/GetSubIssueType/${issueTypeId}`);
-  }
   
   // /* istanbul ignore next */
   // async getWrongScores(matchId: number): Promise<WrongScoreModel[]> {

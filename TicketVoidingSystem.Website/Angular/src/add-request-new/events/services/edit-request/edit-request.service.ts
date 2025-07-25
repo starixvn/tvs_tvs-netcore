@@ -1,7 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { EventBaseService } from '../../../../add-request-new/component/event-base-layout/event-base.service';
-import { SignalRService } from '../../../../utility/services/signal-r.service.native';
-import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { RequestModel } from '../../models/request.model';
 import { AddRequestApiService } from '../add-request-api.service';
 import { LogInfoService } from './log-info.service';
@@ -12,7 +10,6 @@ import { ObjectService } from './object.service';
 })
 export class EditRequestService {
   private readonly addRequestApiService = inject(AddRequestApiService);
-  private readonly signalRService = inject(SignalRService);
   private readonly logInfoService = inject(LogInfoService);
   private readonly objectService = inject(ObjectService);
   private readonly eventBaseService = inject(EventBaseService);
@@ -29,15 +26,14 @@ export class EditRequestService {
     return pathname.includes('/edit/');
   }
 
-  async getDataEditRequest(requestId: number, requestModel: RequestModel, primitiveProperty: PrimitiveProperty){
+  async getDataEditRequest(requestId: number, requestModel: RequestModel){
     const detailViewModel = await this.addRequestApiService.getRequestById(requestId);
     if (detailViewModel === null) {
       this.eventBaseService.backToAccessDeniedPage();
     } else {
-      primitiveProperty = this.objectService.getPrimitiveProperty(detailViewModel, requestId);
+      const primitiveProperty = this.objectService.getPrimitiveProperty(detailViewModel, requestId);
       await this.logInfoService.getLogInfo(primitiveProperty, detailViewModel);
       this.objectService.mapRequestModel(requestModel, detailViewModel, primitiveProperty);
     }
-
   }
 }

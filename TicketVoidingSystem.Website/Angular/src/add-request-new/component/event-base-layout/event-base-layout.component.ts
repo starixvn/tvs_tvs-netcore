@@ -5,7 +5,6 @@ import { FilterComponent } from '../../../add-request-new/component/filter/filte
 import { FilterModel } from '../../../add-request-new/component/filter/filter.model';
 import { IssueTypes } from '../../../add-request-new/component/filter/issue-types.model';
 import { RequestModel } from '../../../add-request-new/events/models/request.model';
-import { AddRequestApiService } from '../../../add-request-new/events/services/add-request-api.service';
 import { AddRequestStore } from '../../../add-request-new/events/services/add-request.store';
 import { CopyRequestInfoService } from '../../../add-request-new/events/services/copy-request-info.service';
 import { BlockFullUiComponent } from '../../../utility/components/block-full-ui/block-full-ui.component';
@@ -15,7 +14,6 @@ import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { SignalRService } from '../../../utility/services/signal-r.service.native';
 import { StaticService } from '../../../utility/services/static.service';
-import { PrimitiveProperty } from '../../events/models/primitive-property.model';
 import { EditRequestService } from '../../events/services/edit-request/edit-request.service';
 import { LogAnalysisService } from '../../events/services/log-analysis.service';
 import { AddRequestSkeletonComponent } from '../add-request-skeleton/add-request-skeleton.component';
@@ -48,7 +46,6 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   isDisabledSaveButton = false;
   isLoadingData = true;
   issueTypes = new IssueTypes();
-  primitiveProperty = new PrimitiveProperty();
   savingRequestSubscription: Subscription;
   blockingUiSubscription: Subscription;
   abnormalFilterBySubscription = new Subscription();
@@ -61,7 +58,6 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   private readonly addRequestStore = inject(AddRequestStore);
   private readonly copyRequestInfoService = inject(CopyRequestInfoService);
   private readonly eventBaseService = inject(EventBaseService);
-  private readonly addRequestApiService = inject(AddRequestApiService);
   private readonly commonService = inject(CommonService);
   private readonly logAnalysisService = inject(LogAnalysisService);
 
@@ -79,9 +75,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
 
   async ngOnInit(): Promise<void> {
     this.isLoadingData = true;
-    this.issueTypes.issueId = Number(this.issueTypeId);
-    this.initBaseData();
-
+    await this.initBaseData();
     this.savingRequestSubscription = this.addRequestStore.savingRequestStatus.subscribe(status => {
       this.isDisabledSaveButton = status;
     });
@@ -99,12 +93,12 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
 
   async runAsyncData(): Promise<void> {
     const promises: Promise<any>[] = [
-      this.addRequestApiService.getSubIssueTypes(Number(this.issueTypeId)),
+      this.eventBaseService.getSubIssueTypes(Number(this.issueTypeId)),
       this.commonService.getVoidActions()
     ];
 
     if (this.isEdit) {
-      promises.push(this.editRequestService.getDataEditRequest(this.requestId, this.model, this.primitiveProperty));
+      promises.push(this.editRequestService.getDataEditRequest(this.requestId, this.model));
     }
 
     const [allIssueTypes, originActions] = await Promise.all(promises);
@@ -148,13 +142,12 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
     this.filterModel = filterModel;
   }
 
-  public async onSaveRequest(): Promise<void> { // NOSONAR
+  public async onSaveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.isDisabledSaveButton = true;
     this.saveRequest.emit();
     this.addRequestStore.changeBlockingUiStatus(false);
   }
-
 
   public getEventLabel(): string {
     if (StaticService.isAbnormalAccount(this.model.filter.issueTypeId)) {
@@ -167,7 +160,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
 
   async onCopyEmailRequestInfo(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.copyRequestInfoService.copyEmailRequestInfo(this.requestId, this.primitiveProperty.matchId, this.model.others.operatorsList);
+    this.copyRequestInfoService.copyEmailRequestInfo(this.requestId, this.model.eventDetail.matchId, this.model.others.operatorsList);
     this.addRequestStore.changeBlockingUiStatus(false);
     alert(`Request No.${this.requestId} has been copied to clipboard.`);
   }

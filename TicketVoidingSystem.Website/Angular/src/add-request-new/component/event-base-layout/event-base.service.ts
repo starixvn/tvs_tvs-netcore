@@ -1,14 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { IssueTypes } from '../../../add-request/app/add-request/filter/issue-types.model';
+import { CommonService } from '../../../utility/services/common.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventBaseService {
-  public isEdit: boolean = false;
-  public isBlock: boolean = false;
-  public isDisabledSaveButton: boolean = false;
-  public savingRequestSubscription: Subscription;
+  commonService = inject(CommonService);
 
   public backToAccessDeniedPage() {
     window.location.assign(`Home/AccessDenied`);
@@ -18,7 +16,12 @@ export class EventBaseService {
     window.location.assign(`TicketVoidingSystem/ManageRequest/Index`);
   }
 
-  public destroy(): void {
-    this.savingRequestSubscription?.unsubscribe();
+  public async getSubIssueTypes(issueTypeId: number): Promise<IssueTypes> {
+    const data = await this.commonService.getIssueTypes();
+
+    return {
+      issueTypes: data.issueTypes.filter(x => x.issueTypeId === issueTypeId),
+      subIssueTypes: data.subIssueTypes.filter(x => x.issueTypeId === issueTypeId),
+    } as IssueTypes;
   }
 }

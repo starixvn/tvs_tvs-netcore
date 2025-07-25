@@ -65,16 +65,6 @@ export class FilterComponent implements OnInit, OnChanges {
       }
       this.setWidthControlByIssueType();
     }
-    
-    // // Xử lý khi originActions hoặc issueTypes được load từ component cha
-    // if ((changes['originActions'] || changes['issueTypes']) && 
-    //     this.originActions && 
-    //     this.issueTypes && 
-    //     this.issueTypes.subIssueTypes && 
-    //     this.issueTypes.subIssueTypes.length > 0) {
-    //   this.updateCurrentAction();
-    //   this.setWidthControlByIssueType();
-    // }
   }
 
   ngOnInit() {
