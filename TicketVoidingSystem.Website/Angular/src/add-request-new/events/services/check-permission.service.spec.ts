@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CheckAddPermissionService } from './check-permission.service';
-import { TestingModule } from '../../../../utility/modules/testing.module';
-import { TVSRequestActionType } from '../../../../utility/constants/config';
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { TVSRequestActionType } from '../../../utility/constants/config';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { PopupService } from './popup.service';
 

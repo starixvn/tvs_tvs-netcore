@@ -8,7 +8,7 @@ import { PrimitiveProperty } from '../../../../edit-request/app/models/primitive
 import { FilterModel } from '../../../../add-request/app/add-request/filter/filter.model';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 
-jest.mock('../../../utility/services/static.service', () => ({
+jest.mock('../../../../utility/services/static.service', () => ({
   StaticService: {
     getSubIssueTypeId: jest.fn(),
     isArchivedTicket: jest.fn(),

@@ -5,7 +5,7 @@ module.exports = {
   preset: 'jest-preset-angular',
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: [
-    '<rootDir>/src/add-request/app/add-request/event-recover-ticket/**/*.spec.ts',
+    '<rootDir>/src/add-request-new/**/*.spec.ts',
     // '<rootDir>/src/add-request/app/add-request/event-danger-accepted/**/*.spec.ts',
     //'<rootDir>/src/add-request/app/add-request/event-not-participate/**/*.spec.ts',
     //'<rootDir>/src/add-request/app/add-request/abnormal-accounts/account-table/account-table.component.spec.ts',

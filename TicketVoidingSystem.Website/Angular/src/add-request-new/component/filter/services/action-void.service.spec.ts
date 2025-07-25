@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { ActionVoidService } from './action-void.service';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { AbnormalFilterBy, ActionVoidByIssueTypeConst, TVSRequestActionType } from '../../../../../utility/constants/config';
-import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
-import { Selection } from '../../../../../utility/models/selection.model';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { AbnormalFilterBy, ActionVoidByIssueTypeConst, TVSRequestActionType } from '../../../../utility/constants/config';
+import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
+import { Selection } from '../../../../utility/models/selection.model';
 
 describe('ActionVoidService', () => {
   let service: ActionVoidService;

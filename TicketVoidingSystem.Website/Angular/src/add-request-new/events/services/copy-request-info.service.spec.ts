@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CopyRequestInfoService } from './copy-request-info.service';
-import { TestingModule } from '../../../../utility/modules/testing.module';
-import { CommonService } from '../../../../utility/services/common.service';
-import { AcceptType } from '../../../../utility/constants/config';
-import { CopyRequestInfoResponse } from '../../../../utility/models/copy-request-info.query';
-import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { OperatorInfo, OperatorType } from '../others/others.model';
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { CommonService } from '../../../utility/services/common.service';
+import { AcceptType } from '../../../utility/constants/config';
+import { CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
+import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
+import { OperatorInfo, OperatorType } from '../../component/others/others.model';
 
 describe('CopyRequestInfoService', () => {
   let service: CopyRequestInfoService;

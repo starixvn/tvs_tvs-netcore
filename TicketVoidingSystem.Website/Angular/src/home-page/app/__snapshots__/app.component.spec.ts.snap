@@ -4,10 +4,27 @@ exports[`AppComponent #AppComponent init should match snapshot 1`] = `
 <ng-component>
   <app-root>
     <menu-bar />
-    <h2>
-      Ticket Control System
+    <h2
+      class="title"
+    >
+      Ticket Voiding System
     </h2>
-    <block-full-ui />
+    <div
+      class="container"
+    >
+      <div
+        class="subtitle"
+      >
+         Most Used Issue Types 
+      </div>
+      <hr
+        class="blue-line"
+      />
+      <div
+        class="issue-types-grid"
+      >
+      </div>
+    </div>
   </app-root>
 </ng-component>
 `;

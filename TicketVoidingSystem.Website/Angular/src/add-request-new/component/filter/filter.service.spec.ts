@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { FilterService } from './filter.service';
-import { HttpService } from '../../../../utility/services/http.service';
-import { TestingModule } from '../../../../utility/modules/testing.module';
+import { HttpService } from '../../../utility/services/http.service';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { IssueTypes } from './issue-types.model';
-import { IssueType, SubIssueType } from '../../../../utility/models/issue-type.model';
 
 describe('FilterService', () => {
   let service: FilterService;

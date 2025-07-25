@@ -1,5 +1,5 @@
-import { FilterModel } from 'src/add-request-new/component/filter/filter.model';
-import { Result } from 'src/utility/models/result';
+import { FilterModel } from '../../component/filter/filter.model';
+import { Result } from '../../../utility/models/result';
 import { AbnormalAccountModel } from './abnormal-account.model';
 import { AbnormalBetModel } from './abnormal-bet.model';
 import { EventDetailModel } from './event-detail.model';
@@ -19,7 +19,7 @@ import { WrongOfferedNameModel } from './event-wrong-offered-name.model';
 import { WrongOuModel } from './event-wrong-ou.model';
 import { WrongScoreModel } from './event-wrong-score.model';
 import { RecoverTicketModel } from './recover-ticket.model';
-import { OthersModel } from 'src/add-request-new/component/others/others.model';
+import { OthersModel } from '../../component/others/others.model';
 
 export class RequestModel { // Rename AddRequestModel or remove this
   filter: FilterModel;

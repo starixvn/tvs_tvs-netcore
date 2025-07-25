@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { OthersAbnormalBetComponent } from './others-abnormal-bet.component';
-import { OthersModel } from '../../others/others.model';
+import { OthersModel } from '../others/others.model';
 
 describe('OthersAbnormalBetComponent', () => {
   let component: OthersAbnormalBetComponent;

@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { SubIssueTypeDialogComponent } from './sub-issue-type-dialog.component';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { StaticService } from '../../../../../utility/services/static.service';
+import { AddRequestApiService } from '../../../events/services/add-request-api.service';
+import { StaticService } from '../../../../utility/services/static.service';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog.model';
 import { SimpleChange } from '@angular/core';
-import { SubIssueTypeGroup } from '../../../../../utility/constants/config';
+import { SubIssueTypeGroup } from '../../../../utility/constants/config';
 import { Button, GroupButton } from './sub-issue-type-json.model';
 
 class Helper {

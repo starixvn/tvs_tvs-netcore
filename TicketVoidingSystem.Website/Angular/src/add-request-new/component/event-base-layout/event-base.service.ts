@@ -20,8 +20,8 @@ export class EventBaseService {
     const data = await this.commonService.getIssueTypes();
 
     return {
-      issueTypes: data.issueTypes.filter(x => x.issueTypeId === issueTypeId),
-      subIssueTypes: data.subIssueTypes.filter(x => x.issueTypeId === issueTypeId),
+      issueTypes: data.issueTypes?.filter(x => x.issueTypeId === issueTypeId) ?? [],
+      subIssueTypes: data.subIssueTypes?.filter(x => x.issueTypeId === issueTypeId) ?? [],
     } as IssueTypes;
   }
 }

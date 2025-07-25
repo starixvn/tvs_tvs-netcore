@@ -2,13 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { AddRequestService } from './add-request.service';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { AddRequestApiService } from './add-request-api.service';
-import { PopupService } from './services/popup.service';
 import { CommonService } from '../../../utility/services/common.service';
 import { AddRequestStore } from './add-request.store';
-import { AddRequestQuery } from './models/add-request.query';
 import { Result } from '../../../utility/models/result';
-import { AddRequestResultModel } from './models/request.model';
 import { LABELS } from '../../../utility/constants/labels';
+import { AddRequestQuery } from '../models/add-request.query';
+import { AddRequestResultModel } from '../models/request.model';
+import { PopupService } from './popup.service';
 
 describe('AddRequestService', () => {
   let service: AddRequestService;

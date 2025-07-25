@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { PopupService } from './popup.service';
-import { TestingModule } from '../../../../utility/modules/testing.module';
-import { ModalService } from '../../../../utility/components/modal/modal.service';
-import { ModalType } from '../../../../utility/components/modal/modal.model';
-import { LABELS } from '../../../../utility/constants/labels';
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { ModalService } from '../../../utility/components/modal/modal.service';
+import { ModalType } from '../../../utility/components/modal/modal.model';
+import { LABELS } from '../../../utility/constants/labels';
 import { AddRequestQuery } from '../models/add-request.query';
 import { AddRequestResultModel } from '../models/request.model';
-import { Result } from '../../../../utility/models/result';
-import { StaticService } from '../../../../utility/services/static.service';
+import { Result } from '../../../utility/models/result';
+import { StaticService } from '../../../utility/services/static.service';
 
 describe('PopupService', () => {
   let service: PopupService;

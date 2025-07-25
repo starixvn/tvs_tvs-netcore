@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { OthersService } from './others.service';
-import { TestingModule } from '../../../../utility/modules/testing.module';
-import { HttpService } from '../../../../utility/services/http.service';
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { HttpService } from '../../../utility/services/http.service';
 import { OperatorInfo, Provider } from './others.model';
 
 describe('OthersService', () => {

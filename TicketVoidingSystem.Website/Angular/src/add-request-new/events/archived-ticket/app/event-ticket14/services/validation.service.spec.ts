@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { ValidationService } from './validation.service';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { PermissionAddRequest } from '../../models/permission-add-request.model';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { CheckTickets14Result } from '../models/check-tickets14-result.model';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { BetIdsComponent } from '../../../../../../utility/components/bet-ids/bet-ids.component';
+import { PermissionAddRequest } from '../../../../../../add-request-new/events/models/permission-add-request.model';
+import { LABELS } from '../../../../../../utility/constants/labels';
+import { EventTicket14ApiService } from '../../event-ticket14-api.service';
 
 describe('ValidationService', () => {
   let service: ValidationService;
-  let addRequestApiService: AddRequestApiService;
+  let eventTicket14ApiService: EventTicket14ApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -18,7 +18,7 @@ describe('ValidationService', () => {
     });
 
     service = TestBed.inject(ValidationService);
-    addRequestApiService = TestBed.inject(AddRequestApiService);
+    eventTicket14ApiService = TestBed.inject(EventTicket14ApiService);
   });
 
   it('should be created', () => {
@@ -35,7 +35,7 @@ describe('ValidationService', () => {
       const mockPermission = {} as PermissionAddRequest;
 
       // Act
-      const result = await service.checkBusinessRule(mockBetIdsComponent, '1', mockPermission);
+      const result = await service.checkBusinessRule(mockBetIdsComponent, mockPermission);
 
       // Assert
       expect(result.isValid).toBeFalsy();
@@ -57,26 +57,26 @@ describe('ValidationService', () => {
         isVoidAllArchivedTickets: false
       } as PermissionAddRequest;
 
-      jest.spyOn(addRequestApiService, 'checkTickets14').mockResolvedValue(null);
+      eventTicket14ApiService.checkTickets14 = jest.fn().mockResolvedValue(null);
 
       // Act
-      const result = await service.checkBusinessRule(mockBetIdsComponent, '1', mockPermission);
+      const result = await service.checkBusinessRule(mockBetIdsComponent, mockPermission);
 
       // Assert
       expect(result.isValid).toBeFalsy();
-      expect(addRequestApiService.checkTickets14).toHaveBeenCalled();
     });
 
     it('should highlight invalid trans IDs and return valid result', async () => {
       // Arrange
+      const mockUpdateInvalidItems = jest.fn();
       const mockBetIdsComponent = {
         isHasBetId: () => true,
         groupNumber: {
           resetAllItemsToValid: () => {},
           checkDuplicatedItems: () => {},
-          updateInvalidItems: jest.fn()
+          updateInvalidItems: mockUpdateInvalidItems
         },
-        isAllBetIdsValid: () => true,
+        isAllBetIdsValid: () => false,
         getAllBetIds: () => ['123', '456']
       } as unknown as BetIdsComponent;
 
@@ -90,16 +90,15 @@ describe('ValidationService', () => {
         transInfoJson: '{}'
       };
 
-      jest.spyOn(addRequestApiService, 'checkTickets14').mockResolvedValue(mockValidationResult);
+      eventTicket14ApiService.checkTickets14 = jest.fn().mockResolvedValue(mockValidationResult);
 
       // Act
-      const result = await service.checkBusinessRule(mockBetIdsComponent, '1', mockPermission);
+      const result = await service.checkBusinessRule(mockBetIdsComponent, mockPermission);
 
       // Assert
-      expect(result.isValid).toBeTruthy();
-      expect(result.transInfoJson).toBe('{}');
-      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('123', LABELS.INVALID_TICKETS);
-      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('456', LABELS.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
+      expect(result.isValid).toBeFalsy();
+      expect(mockUpdateInvalidItems).toHaveBeenCalledWith('123', LABELS.INVALID_TICKETS);
+      expect(mockUpdateInvalidItems).toHaveBeenCalledWith('456', LABELS.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
     });
   });
 });

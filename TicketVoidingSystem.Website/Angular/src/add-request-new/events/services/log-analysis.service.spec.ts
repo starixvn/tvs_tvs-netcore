@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { LogAnalysisService } from './log-analysis.service';
-import { CommonService } from '../../../../utility/services/common.service';
-import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
-import { TestingModule } from '../../../../utility/modules/testing.module';
+import { CommonService } from '../../../utility/services/common.service';
+import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { TestingModule } from '../../../utility/modules/testing.module';
 
 describe('LogAnalysisService', () => {
   let service: LogAnalysisService;
