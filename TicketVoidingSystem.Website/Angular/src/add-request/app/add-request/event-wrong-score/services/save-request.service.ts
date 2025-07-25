@@ -50,7 +50,8 @@ export class SaveRequestService {
     }
 
     args.addRequestStore.changeBlockingUiStatus(true);
-    this.logInfoService.clearDataValidation(args.wrongScoreModels, [], null);
+    this.logInfoService.clearDataValidation(args.wrongScoreModels, args.relatedEvents, args.mainEvent);
+    args.primitiveProps.infoSiteDBDownModel = null;
     await this.logInfoService.getLogInfo(this.createMapService.createGetLogInfoParams(args));
     args.addRequestStore.changeBlockingUiStatus(false);
     if (!this.validationService.isAllWrongScoreModelsValid(args)) {
@@ -80,11 +81,11 @@ export class SaveRequestService {
     query.provider = args.others.provider;
     query.source = args.others.source;
     query.remark = args.others.remark;
-    query.siteDBDownInfoJson = args.isMarkTicketSiteDbDown ? args.primitiveProps.infoSiteDBDownModel.siteDBDownInfoJson : null;
 
     if (!args.filter.isVoided) {
       query.wrongScoreInfo = args.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME 
         ? this.getWrongScoresHasRelatedEvent(args) : this.getWrongScoresHasManyScores(args);
+      query.siteDBDownInfoJson = args.isMarkTicketSiteDbDown ? args.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;

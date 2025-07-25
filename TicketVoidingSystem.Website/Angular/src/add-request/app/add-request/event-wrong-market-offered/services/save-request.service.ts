@@ -39,6 +39,7 @@ export class SaveRequestService {
 
     argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(true);
     argWrongMarketOffered.primitiveProps.isShowValidation = false;
+    argWrongMarketOffered.primitiveProps.infoSiteDBDownModel = null;
     await this.logInfoService.getLogInfo(argWrongMarketOffered.logInfoEvent, argWrongMarketOffered.isEdit, argWrongMarketOffered.requestId, argWrongMarketOffered.filter, argWrongMarketOffered.primitiveProps);
     argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(false);
     argWrongMarketOffered.primitiveProps.isShowValidation = true;
@@ -74,7 +75,7 @@ export class SaveRequestService {
     arg.confirmAddRequest.requestId = arg.requestId;
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
-    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel.siteDBDownInfoJson.length > 0;
+    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
 
     arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
   }
@@ -91,10 +92,11 @@ export class SaveRequestService {
     query.mistakenBy = argWrongMarketOffered.others.mistakenBy;
     query.decidedBy = argWrongMarketOffered.others.decidedBy;
     query.remark = argWrongMarketOffered.others.remark;
-    query.siteDBDownInfoJson = argWrongMarketOffered.confirmAddRequest.isMarkTicketSiteDbDown ? argWrongMarketOffered.primitiveProps.infoSiteDBDownModel.siteDBDownInfoJson : null;
-
+    
     if (!argWrongMarketOffered.filter.isVoided) {
       query.wrongMarketOfferedInfo = this.eventWrongMarketOfferedService.getWrongMarketOfferedModel(Number(argWrongMarketOffered.filter.subIssueTypeId), argWrongMarketOffered.logInfoEvent);
+      query.siteDBDownInfoJson = argWrongMarketOffered.confirmAddRequest.isMarkTicketSiteDbDown && argWrongMarketOffered.confirmAddRequest.isHasAffectedTicketSiteDBDown
+        ? argWrongMarketOffered.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;

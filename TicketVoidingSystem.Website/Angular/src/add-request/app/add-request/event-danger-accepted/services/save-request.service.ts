@@ -31,6 +31,7 @@ export class SaveRequestService {
     }
 
     arg.primitiveProps.isShowLogInfoMainMatch = false;
+    arg.primitiveProps.infoSiteDBDownModel = null;
     arg.addRequestStore.changeBlockingUiStatus(true);
     await this.logInfoService.getLogInfo(arg.allEvents, arg.primitiveProps, arg.isEdit, arg.requestId, arg.filter, arg.defaultFilterTimeWithAllowance);
     arg.logInfoComponents.forEach(x => {
@@ -77,7 +78,7 @@ export class SaveRequestService {
       (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) ? true : false;
       arg.confirmDangerAccepted.isHasWarningRangeTime = arg.allEvents.some(x => x.logInfoDetail?.isHasWarningRangeTime)
     }
-    arg.confirmDangerAccepted.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel.siteDBDownInfoJson.length > 0;
+    arg.confirmDangerAccepted.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
     arg.confirmDangerAccepted.requestId = arg.requestId;
     arg.confirmDangerAccepted.requestedBy = arg.requestedBy;
     arg.confirmDangerAccepted.isEditingByAnotherUser =
@@ -126,19 +127,19 @@ export class SaveRequestService {
     query.isTest = arg.filter.isTest;
     query.actionId = arg.filter.action;
     query.isVoided = arg.filter.isVoided;
-
     query.mistakenBy = arg.others.mistakenBy;
     query.operatorsList = arg.others.operatorsList;
     query.provider = arg.others.provider;
     query.decidedBy = arg.others.decidedBy;
     query.source = arg.others.source;
     query.remark = arg.others.remark;
-    query.siteDBDownInfoJson = arg.confirmDangerAccepted.isMarkTicketSiteDbDown ? arg.primitiveProps.infoSiteDBDownModel.siteDBDownInfoJson : null;
-
+    
     if (!arg.filter.isVoided) {
       query.dangerAcceptedInfo = arg.allEvents.filter(x => x.logInfoDetail).map(x => {
         return this.assignEventToModel(x, arg, arg.allEvents.find(y => y.isMainMatch).tvDetectionModel);
       });
+      query.siteDBDownInfoJson = arg.confirmDangerAccepted.isMarkTicketSiteDbDown && arg.confirmDangerAccepted.isHasAffectedTicketSiteDBDown 
+        ? arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;

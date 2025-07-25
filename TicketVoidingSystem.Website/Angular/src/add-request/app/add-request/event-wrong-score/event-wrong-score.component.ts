@@ -270,7 +270,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
     args.issueTypes = this.issueTypes;
     args.tvDetectionModel = this.tvDetectionModel;
     args.isVoided = this.isVoided;
-    args.isMarkTicketSiteDbDown = this.confirmWrongScoreModel.isMarkTicketSiteDbDown;
+    args.isMarkTicketSiteDbDown = this.confirmWrongScoreModel.isMarkTicketSiteDbDown && this.confirmWrongScoreModel.isHasAffectedTicketSiteDBDown;
     
     return args;
   }

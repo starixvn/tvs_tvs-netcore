@@ -104,6 +104,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   async clickSearch(): Promise<void> {
     this.logInfoEvent.betTeamsResult = this.advancedMode.getCheckedBetTypes();
     this.primitivePropertyEvent.isShowValidation = false;
+    this.primitivePropertyEvent.infoSiteDBDownModel = null;
     if (!this.validationService.validateCommonData(this.eventLeague, this.filterTimeComponent, this.advancedMode)) {
       return;
     }
@@ -123,6 +124,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
 
   async changeMatchEvent(): Promise<void> {
     this.primitivePropertyEvent.isShowValidation = false;
+    this.primitivePropertyEvent.infoSiteDBDownModel = null;
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     if (this.eventLeague?.selectedMatch.matchId) {
