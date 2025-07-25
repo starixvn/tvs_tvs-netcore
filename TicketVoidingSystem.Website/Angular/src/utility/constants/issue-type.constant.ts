@@ -57,7 +57,7 @@ export class IssueTypeConstant {
   ]);
 
   static readonly NAVIGATE_ADD_REQUEST = new Map<string, string>([
-    [IssueTypeConstant.ABNORMAL_BET, 'TicketVoidingSystem/ArchivedTicket/Add'],
+    [IssueTypeConstant.ABNORMAL_BET, 'TicketVoidingSystem/AbnormalBet/Add'],
     [IssueTypeConstant.ABNORMAL_ACCOUNT, 'TicketVoidingSystem/AbnormalAccount/Add'],
     [IssueTypeConstant.EARLY_KICK_OFF, 'TicketVoidingSystem/EarlyKickOff/Add'],
     [IssueTypeConstant.WRONG_KICK_OFF, 'TicketVoidingSystem/WrongKickOff/Add'],
