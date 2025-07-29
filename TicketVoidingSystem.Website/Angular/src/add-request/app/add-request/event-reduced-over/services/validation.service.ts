@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { PrimitivePropertyItem } from '../filter-reduced-over-item/filter-reduced-over-item.model';
 import { FilterReducedOverComponent } from '../filter-reduced-over/filter-reduced-over.component';
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
 
 @Injectable()
 export class ValidationService {
@@ -93,15 +91,5 @@ export class ValidationService {
 
   public isValidLogInfoEvent(logInfoReducedOver: LogInfoReducedOver): boolean {
     return !logInfoReducedOver.messageValidationLogInfo.some(y => y.isError);
-  }
-
-  public checkCanShowConfirmationReducedOver(argReducedOver: SaveRequestArg): boolean {
-    const isHasSettledTicket = argReducedOver.logInfoEvent.logInfoDetail.settleCount > 0;
-    const isHasWarningTicket = argReducedOver.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError);
-    const isEditingByAnotherUser = argReducedOver.isEdit && argReducedOver.userId !== Number(document.getElementById('body').getAttribute('user-id'));
-    const isHasWarningTakenNote = argReducedOver.isEdit
-      && argReducedOver.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && argReducedOver.filter.action !== argReducedOver.actionIdOfFirstTimeAccess;
-
-    return isHasSettledTicket || isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;
   }
 }
