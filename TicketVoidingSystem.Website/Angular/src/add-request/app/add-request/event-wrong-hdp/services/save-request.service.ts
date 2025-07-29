@@ -23,6 +23,7 @@ export class SaveRequestService {
   async recheckLogInfoBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
     arg.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
+    arg.primitiveProps.isShowRelatedEvents = false;
 
     if (!this.validationService.validateCommonData(arg.eventLeagueComponent, arg.logInfoComponents)) {
       return false;
@@ -32,6 +33,7 @@ export class SaveRequestService {
     arg.mainEvent.linkedLogsViewModel = await this.eventWrongHdpService.getLinkedLog(arg.mainEvent, arg.filter);
     await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
     arg.logInfoComponents.forEach(x => x.logInfo.isShowValidation = true);
+    arg.primitiveProps.isShowInfoSiteDBDown = true;
     arg.primitiveProps.isShowRelatedEvents = true;
     arg.addRequestStore.changeBlockingUiStatus(false);
 
@@ -46,43 +48,11 @@ export class SaveRequestService {
     const isDataValid = arg.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(arg);
     arg.addRequestStore.changeBlockingUiStatus(true);
     if (isDataValid) {
-      this.proceedSaveRequest(arg);
+      this.showPopupConfirmSave(arg);
     } else {
       arg.addRequestStore.changeSavingRequestStatus(false);
     }
     arg.addRequestStore.changeBlockingUiStatus(false);
-  }
-
-  private proceedSaveRequest(arg: SaveRequestArg) {
-    if (this.validationService.checkCanShowConfirmation(arg)) {
-      this.popupService.showConfirm(
-        this.getMessageConfirmation(arg),
-        async () => {
-          await this.onClickConfirmSave(arg);
-        },
-        () => {
-          arg.addRequestStore.changeSavingRequestStatus(false);
-        });
-    } else {
-      this.executeSaveRequestApi(arg);
-    }
-  }
-
-  private getMessageConfirmation(arg: SaveRequestArg): string {
-    let message = '';
-    if (arg.allEvents.some(x => x.messageValidationLogInfo?.some(y => !y.isError))) {
-      message = `${message}<div>There are some warnings in this request.</div>`;
-    }
-
-    if (arg.isEdit && arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) {
-      message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;
-    }
-
-    if (arg.isEdit && arg.userId !== Number(document.getElementById('body').getAttribute('user-id'))) {
-      message = `${message}<div style="color:red">Please remind this request ${arg.requestId} is confirmed by ${arg.requestedBy}.</div>`;
-    }
-
-    return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
   }
 
   private async executeSaveRequestApi(args: SaveRequestArg): Promise<void> {
@@ -90,7 +60,7 @@ export class SaveRequestService {
     await this.addRequestService.executeSaveRequest(args.isEdit, args.requestId, query, args.addRequestStore);
   }
 
-  private async onClickConfirmSave(arg: SaveRequestArg) {
+  async onClickConfirmSave(arg: SaveRequestArg) {
     // validate again for make sure
     const isDataValidAgain = arg.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(arg);
     arg.addRequestStore.changeBlockingUiStatus(true);
@@ -126,6 +96,9 @@ export class SaveRequestService {
       } else {
         query.wrong1stHdpInfo = wrongHdpInfo;
       }
+
+      query.siteDBDownInfoJson = arg.confirmAddRequest.isMarkTicketSiteDbDown && arg.confirmAddRequest.isHasAffectedTicketSiteDBDown
+        ? arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;
@@ -158,5 +131,18 @@ export class SaveRequestService {
     }
 
     return model;
+  }
+
+  private showPopupConfirmSave(arg: SaveRequestArg) {
+    if (!arg.filter.isVoided) {
+      arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
+      arg.confirmAddRequest.isHasSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);;
+      arg.confirmAddRequest.isHasWarningTicket = arg.allEvents.some(x => x.messageValidationLogInfo?.some(y => !y.isError));
+    }
+    arg.confirmAddRequest.isOpen = true;
+    arg.confirmAddRequest.requestId = arg.requestId;
+    arg.confirmAddRequest.requestedBy = arg.requestedBy;
+    arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
+    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
   }
 }

@@ -32,6 +32,7 @@ export class SaveRequestService {
   async recheckLogInfoBeforeSaveRequest(argWrongOddsSportsBook: SaveRequestArg): Promise<boolean> {
     argWrongOddsSportsBook.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoWrongOddsSportsBookService.resetLogInfoOfEvent(argWrongOddsSportsBook.logInfoEvent);
+    argWrongOddsSportsBook.primitiveProps.infoSiteDBDownModel = null;
 
     if (!this.validationService.validateCommonData(argWrongOddsSportsBook.eventLeagueComponent, argWrongOddsSportsBook.filterWrongOddsSportsBookComponent, argWrongOddsSportsBook.advancedModeComponent)) {
       return false;
@@ -64,6 +65,7 @@ export class SaveRequestService {
     arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
     arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoDetail?.settleCount > 0;
     arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.messageValidationLogInfo?.length > 0;
+    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
     arg.confirmAddRequest.isOpen = true;
     arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
   }
@@ -100,6 +102,8 @@ export class SaveRequestService {
     if (!argWrongOddsSportsBook.filter.isVoided) {
       query.wrongOddsSportsBookInfo = this.eventWrongOddsSportsBookService.getWrongOddsSportsBookModel(
         argWrongOddsSportsBook.logInfoEvent, argWrongOddsSportsBook.filter.subIssueTypeId);
+      query.siteDBDownInfoJson = argWrongOddsSportsBook.confirmAddRequest.isMarkTicketSiteDbDown && argWrongOddsSportsBook.confirmAddRequest.isHasAffectedTicketSiteDBDown
+        ? argWrongOddsSportsBook.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;

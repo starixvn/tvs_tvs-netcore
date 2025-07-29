@@ -5,6 +5,7 @@ import { LogInfoWrongHdpComponent } from "../log-info-wrong-hdp/log-info-wrong-h
 import { LogInfoWrongHdp } from "./log-info-wrong-hdp.model";
 import { PrimitiveProperty } from "./primitive-property.model";
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { ConfirmAddRequestModel } from "../../confirm-add-request/confirm-add-request.model";
 
 export class SaveRequestArg {
   requestId: number;  
@@ -20,4 +21,5 @@ export class SaveRequestArg {
   eventLeagueComponent: EventLeagueComponent;
   logInfoComponents: LogInfoWrongHdpComponent[];
   addRequestStore: AddRequestStore;
+  confirmAddRequest: ConfirmAddRequestModel;
 }

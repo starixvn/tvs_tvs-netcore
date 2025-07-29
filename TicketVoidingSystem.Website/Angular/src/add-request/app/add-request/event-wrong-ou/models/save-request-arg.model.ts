@@ -5,6 +5,7 @@ import { LogInfoWrongOuComponent } from "../log-info-wrong-ou/log-info-wrong-ou.
 import { LogInfoWrongOu } from "./log-info-wrong-ou.model";
 import { PrimitiveProperty } from "./primitive-property.model";
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { ConfirmAddRequestModel } from "../../confirm-add-request/confirm-add-request.model";
 
 export class SaveRequestArg {
   requestId: number;
@@ -20,4 +21,5 @@ export class SaveRequestArg {
   eventLeagueComponent: EventLeagueComponent;
   logInfoComponents: LogInfoWrongOuComponent[];
   addRequestStore: AddRequestStore;
+  confirmAddRequest: ConfirmAddRequestModel;
 }

@@ -5,6 +5,7 @@ import { FilterWrongOddsComponent } from "../filter-wrong-odds/filter-wrong-odds
 import { LogInfoWrongOdds } from "./log-info-wrong-odds.model";
 import { PrimitiveProperty } from "./primitive-property.model";
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { ConfirmAddRequestModel } from "../../confirm-add-request/confirm-add-request.model";
 
 export class SaveRequestArg {
   requestId: number;
@@ -19,4 +20,5 @@ export class SaveRequestArg {
   eventLeagueComponent: EventLeagueComponent;
   filterWrongOddsComponent: FilterWrongOddsComponent;
   addRequestStore: AddRequestStore;
+  confirmAddRequest: ConfirmAddRequestModel;
 }
