@@ -144,10 +144,6 @@ export class EventReducedOverComponent implements OnInit {
     this.addRequestStore.changeSavingRequestStatus(false);
   }
 
-  clearInfoSiteDBDownModel(): void {
-    this.primitivePropertyEvent.infoSiteDBDownModel = null;
-  }
-
   public resetLogInfoOfEvent(): void {
     this.primitivePropertyEvent.infoSiteDBDownModel = null;
     this.primitivePropertyEvent.isShowValidation = false;

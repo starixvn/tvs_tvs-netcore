@@ -39,6 +39,7 @@ export class SaveRequestService {
 
     argOtherIssues.addRequestStore.changeBlockingUiStatus(true);
     argOtherIssues.primitiveProps.isShowValidation = false;
+    argOtherIssues.primitiveProps.infoSiteDBDownModel = null;
     await this.logInfoOtherIssuesService.getLogInfo(argOtherIssues.logInfoEvent, argOtherIssues.requestId, argOtherIssues.filter, argOtherIssues.primitiveProps);
 
     if (!this.validationService.isAccountHasAddRequestPermission(argOtherIssues.filter.action, argOtherIssues.logInfoEvent.isHasInstantlySettledTicket,
@@ -77,6 +78,7 @@ export class SaveRequestService {
     arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoDetail?.settleCount > 0;
     arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.messageValidationLogInfo?.length > 0;
     arg.confirmAddRequest.isShowSubIssueType = !StaticService.isMatchEarlyCompleted(arg.filter.issueTypeId);
+    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
     arg.confirmAddRequest.isOpen = true;
     arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
   }
@@ -106,6 +108,8 @@ export class SaveRequestService {
       } else {
         query.matchEarlyCompletedInfo = otherIssuesInfo;
       }
+      query.siteDBDownInfoJson = argOtherIssues.confirmAddRequest.isMarkTicketSiteDbDown && argOtherIssues.confirmAddRequest.isHasAffectedTicketSiteDBDown
+        ? argOtherIssues.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;
