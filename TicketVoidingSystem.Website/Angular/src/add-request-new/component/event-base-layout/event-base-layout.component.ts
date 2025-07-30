@@ -40,7 +40,6 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   title: string;
   isEdit = false;
   requestId: number;
-  filterModel = new FilterModel();
   showCopyInfoButtons = false;
   isCollapse = false;
   isDisabledSaveButton = false;
@@ -69,7 +68,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
       otherModel: this.model.others,
       isEdit: this.isEdit,
       requestId: this.requestId,
-      filterModel: this.filterModel
+      filterModel: this.model.filter
     };
   }
 
@@ -139,7 +138,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   public updateModel(filterModel: FilterModel): void {
-    this.filterModel = filterModel;
+    this.model.filter = filterModel;
   }
 
   public async onSaveRequest(): Promise<void> {

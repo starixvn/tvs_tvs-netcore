@@ -255,16 +255,6 @@ describe('EventBaseLayoutComponent', () => {
     });
   });
 
-  describe('updateModel', () => {
-    it('should update filterModel', () => {
-      const newFilterModel = Helper.getFakeFilterModel();
-      
-      component.updateModel(newFilterModel);
-
-      expect(component.filterModel).toBe(newFilterModel);
-    });
-  });
-
   describe('onSaveRequest', () => {
     beforeEach(() => {
       jest.spyOn(addRequestStore, 'changeBlockingUiStatus').mockImplementation();
@@ -373,7 +363,7 @@ describe('EventBaseLayoutComponent', () => {
       component.model = Helper.getFakeRequestModel();
       component.isEdit = true;
       component.requestId = 123;
-      component.filterModel = Helper.getFakeFilterModel();
+      component.model.filter = Helper.getFakeFilterModel();
 
       const result = component.contextData;
 
@@ -382,7 +372,7 @@ describe('EventBaseLayoutComponent', () => {
         otherModel: component.model.others,
         isEdit: component.isEdit,
         requestId: component.requestId,
-        filterModel: component.filterModel
+        filterModel: component.model.filter
       });
     });
   });
