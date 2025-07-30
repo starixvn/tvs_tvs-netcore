@@ -1,19 +1,15 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
+﻿using TicketVoidingSystem.Criteria.OnlineServer;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 
-public class TicketVoidingGetBetTypesHaveTicketsCriteria : CriteriaBase
+public class TicketVoidingGetBetTypesHaveTicketsCriteriaBase : OnlineServerCriteriaBase
 {
     public int MatchId { get; set; }
 
     public string? TimeRangeJson { get; set; }
 
     public bool IsGetCancelCashOut { get; set; }
-
-    [SpParam(Ignored = true)]
-    public int SiteDbGroupId { get; set; }
 
     public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_GetBetTypesHaveTickets");
 

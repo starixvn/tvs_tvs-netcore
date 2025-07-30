@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Fanex.Data.Repository;
 using NSubstitute;
+using TicketVoidingSystem.Criteria.OnlineServer;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet;
@@ -312,7 +312,7 @@ public class CheckValidTransIdsServiceTests
         var sendLetsTalkModels = new List<SendLetsTalkModel> { new() { MatchId = 1 } };
 
         onlineServerRepository.GetOnlineServerIds().Returns("1,2");
-        onlineServerRepository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet, TransInfoAddRequestModel, GetAbnormalBetTicketModel, SendLetsTalkModel>(Arg.Any<ICriteria>())
+        onlineServerRepository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet, TransInfoAddRequestModel, GetAbnormalBetTicketModel, SendLetsTalkModel>(Arg.Any<IOnlineServerCriteria>())
             .Returns(Task.FromResult(((IEnumerable<MatchInfoAddRequest>)matchInfoAddRequests,
                                     (IEnumerable<ValidationAbnormalBet>)validationAbnormalBets,
                                     (IEnumerable<TransInfoAddRequestModel>)transInfoAddRequests,
@@ -332,7 +332,6 @@ public class CheckValidTransIdsServiceTests
         Assert.NotNull(result.TransInfoAddRequestModel);
         Assert.NotNull(result.AbnormalBetTicketRequests);
         Assert.NotNull(result.SendLetstalkModels);
-        Assert.NotNull(result.InfoSiteDBDownModel);
     }
 
     [Fact]
@@ -347,7 +346,8 @@ public class CheckValidTransIdsServiceTests
             RequestId = 1,
             ActionId = 1
         };
-        onlineServerRepository.GetOnlineServerIds().Returns("");
+        onlineServerRepository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet,
+            TransInfoAddRequestModel, GetAbnormalBetTicketModel, SendLetsTalkModel>(default).ReturnsForAnyArgs(([], [], [], [], []));
 
         // Act
         var result = await service.CheckValidTransIds(request);

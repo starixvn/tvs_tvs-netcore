@@ -331,11 +331,11 @@ public class LogInfoServiceImp(
         ];
     }
 
-    private async Task<GetLogInfoCriteria> GetLogInfoCriteria(GetLogInfoQuery query) //NOSONAR
+    private async Task<GetLogInfoCriteriaBase> GetLogInfoCriteria(GetLogInfoQuery query) //NOSONAR
     {
         var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
 
-        var criteria = mapper.Map<GetLogInfoCriteria>(query);
+        var criteria = mapper.Map<GetLogInfoCriteriaBase>(query);
         criteria.UserId = session.UserId;
         criteria.KickOffInfo = query.EarlyKickOffModels?.ToKickOffInfoXml();
         criteria.WrongScoreInfo = query.WrongScoreModels?.ToWrongScoreInfoXml();

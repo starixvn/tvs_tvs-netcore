@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
+using TicketVoidingSystem.Criteria.OnlineServer;
 
 namespace TicketVoidingSystem.Services.OnlineServerRepository;
 
@@ -10,24 +11,24 @@ public interface OnlineServerRepository
     /// <summary>
     /// Execute FetchAsync on all online servers and flatten results
     /// </summary>
-    Task<IEnumerable<T>> FetchAsync<T>(ICriteria criteria);
+    Task<IEnumerable<T>> FetchAsync<T>(IOnlineServerCriteria criteria);
 
     /// <summary>
     /// Execute FetchMultipleAsync on all online servers for 2 types and flatten results
     /// </summary>
-    Task<(IEnumerable<T1>, IEnumerable<T2>)> FetchMultipleAsync<T1, T2>(ICriteria criteria);
+    Task<(IEnumerable<T1>, IEnumerable<T2>)> FetchMultipleAsync<T1, T2>(IOnlineServerCriteria criteria);
 
     /// <summary>
     /// Execute FetchMultipleAsync on all online servers for 3 types and flatten results
     /// </summary>
-    Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>)> FetchMultipleAsync<T1, T2, T3>(ICriteria criteria);
+    Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>)> FetchMultipleAsync<T1, T2, T3>(IOnlineServerCriteria criteria);
 
     /// <summary>
     /// Execute FetchMultipleAsync on all online servers for 4 types and flatten results
     /// </summary>
 #pragma warning disable S2436
 
-    Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>)> FetchMultipleAsync<T1, T2, T3, T4>(ICriteria criteria);
+    Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>)> FetchMultipleAsync<T1, T2, T3, T4>(IOnlineServerCriteria criteria);
 
 #pragma warning restore S2436
 
@@ -36,14 +37,14 @@ public interface OnlineServerRepository
     /// </summary>
 #pragma warning disable S2436
 
-    Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>)> FetchMultipleAsync<T1, T2, T3, T4, T5>(ICriteria criteria);
+    Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>)> FetchMultipleAsync<T1, T2, T3, T4, T5>(IOnlineServerCriteria criteria);
 
 #pragma warning restore S2436
 
     /// <summary>
     /// Execute ExecuteAsync on all online servers
     /// </summary>
-    Task<List<int>> ExecuteAsync(INonQueryCommand command);
+    Task<List<int>> ExecuteAsync(IOnlineServerNonQueryCommand command);
 
     /// <summary>
     /// Return Online Server IDs as a comma-separated string
@@ -52,21 +53,21 @@ public interface OnlineServerRepository
 }
 
 public class OnlineServerRepositoryImp(IDynamicRepository repository,
-    OnlineServerRepositoryService onlineServerService)
+    OnlineServerRepositoryBaseService onlineServerBaseService)
     : OnlineServerRepository
 {
-    public async Task<IEnumerable<T>> FetchAsync<T>(ICriteria criteria)
+    public async Task<IEnumerable<T>> FetchAsync<T>(IOnlineServerCriteria criteria)
     {
-        var results = await onlineServerService.ExecuteAsync(criteria,
-            async (serverCriteria) => await repository.FetchAsync<T>((ICriteria)serverCriteria));
+        var results = await onlineServerBaseService.ExecuteAsync(criteria,
+            async (serverCriteria) => await repository.FetchAsync<T>(serverCriteria));
 
         return results.SelectMany(x => x);
     }
 
-    public async Task<(IEnumerable<T1>, IEnumerable<T2>)> FetchMultipleAsync<T1, T2>(ICriteria criteria)
+    public async Task<(IEnumerable<T1>, IEnumerable<T2>)> FetchMultipleAsync<T1, T2>(IOnlineServerCriteria criteria)
     {
-        var results = await onlineServerService.ExecuteAsync(criteria,
-            async (serverCriteria) => await repository.FetchMultipleAsync<T1, T2>((ICriteria)serverCriteria));
+        var results = await onlineServerBaseService.ExecuteAsync(criteria,
+            async (serverCriteria) => await repository.FetchMultipleAsync<T1, T2>(serverCriteria));
 
         var item1Results = results.SelectMany(x => x.Item1);
         var item2Results = results.SelectMany(x => x.Item2);
@@ -74,10 +75,10 @@ public class OnlineServerRepositoryImp(IDynamicRepository repository,
         return (item1Results, item2Results);
     }
 
-    public async Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>)> FetchMultipleAsync<T1, T2, T3>(ICriteria criteria)
+    public async Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>)> FetchMultipleAsync<T1, T2, T3>(IOnlineServerCriteria criteria)
     {
-        var results = await onlineServerService.ExecuteAsync(criteria,
-            async (serverCriteria) => await repository.FetchMultipleAsync<T1, T2, T3>((ICriteria)serverCriteria));
+        var results = await onlineServerBaseService.ExecuteAsync(criteria,
+            async (serverCriteria) => await repository.FetchMultipleAsync<T1, T2, T3>(serverCriteria));
 
         var item1Results = results.SelectMany(x => x.Item1);
         var item2Results = results.SelectMany(x => x.Item2);
@@ -88,11 +89,11 @@ public class OnlineServerRepositoryImp(IDynamicRepository repository,
 
 #pragma warning disable S2436
 
-    public async Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>)> FetchMultipleAsync<T1, T2, T3, T4>(ICriteria criteria)
+    public async Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>)> FetchMultipleAsync<T1, T2, T3, T4>(IOnlineServerCriteria criteria)
 #pragma warning restore S2436
     {
-        var results = await onlineServerService.ExecuteAsync(criteria,
-            async (serverCriteria) => await repository.FetchMultipleAsync<T1, T2, T3, T4>((ICriteria)serverCriteria));
+        var results = await onlineServerBaseService.ExecuteAsync(criteria,
+            async (serverCriteria) => await repository.FetchMultipleAsync<T1, T2, T3, T4>(serverCriteria));
 
         var item1Results = results.SelectMany(x => x.Item1);
         var item2Results = results.SelectMany(x => x.Item2);
@@ -104,11 +105,11 @@ public class OnlineServerRepositoryImp(IDynamicRepository repository,
 
 #pragma warning disable S2436
 
-    public async Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>)> FetchMultipleAsync<T1, T2, T3, T4, T5>(ICriteria criteria)
+    public async Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>)> FetchMultipleAsync<T1, T2, T3, T4, T5>(IOnlineServerCriteria criteria)
 #pragma warning restore S2436
     {
-        var results = await onlineServerService.ExecuteAsync(criteria,
-            async (serverCriteria) => await repository.FetchMultipleAsync<T1, T2, T3, T4, T5>((ICriteria)serverCriteria));
+        var results = await onlineServerBaseService.ExecuteAsync(criteria,
+            async (serverCriteria) => await repository.FetchMultipleAsync<T1, T2, T3, T4, T5>(serverCriteria));
 
         var item1Results = results.SelectMany(x => x.Item1);
         var item2Results = results.SelectMany(x => x.Item2);
@@ -119,14 +120,14 @@ public class OnlineServerRepositoryImp(IDynamicRepository repository,
         return (item1Results, item2Results, item3Results, item4Results, item5Results);
     }
 
-    public async Task<List<int>> ExecuteAsync(INonQueryCommand command)
+    public async Task<List<int>> ExecuteAsync(IOnlineServerNonQueryCommand command)
     {
-        return await onlineServerService.ExecuteAsync(command,
-            async (serverCommand) => await repository.ExecuteAsync((INonQueryCommand)serverCommand));
+        return await onlineServerBaseService.ExecuteAsync(command,
+            async (serverCommand) => await repository.ExecuteAsync(serverCommand));
     }
 
     public async Task<string> GetOnlineServerIds()
     {
-        return await onlineServerService.GetOnlineServerIds();
+        return await onlineServerBaseService.GetOnlineServerIds();
     }
 }

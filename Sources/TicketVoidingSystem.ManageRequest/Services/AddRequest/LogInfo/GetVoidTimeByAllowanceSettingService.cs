@@ -1,5 +1,4 @@
-﻿using Fanex.Data.Repository;
-using TicketVoidingSystem.Constants;
+﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.Services.OnlineServerRepository;
@@ -12,7 +11,7 @@ public interface GetVoidTimeByAllowanceSettingService
     Task<IEnumerable<VoidTimeByAllowanceSetting>> Get(GetLogInfoQuery query);
 }
 
-public class GetVoidTimeByAllowanceSettingServiceImp(IDynamicRepository repository, OnlineServerRepository onlineServerRepository) : GetVoidTimeByAllowanceSettingService
+public class GetVoidTimeByAllowanceSettingServiceImp(OnlineServerRepository onlineServerRepository) : GetVoidTimeByAllowanceSettingService
 {
     public async Task<IEnumerable<VoidTimeByAllowanceSetting>> Get(GetLogInfoQuery query)
     {
@@ -23,9 +22,9 @@ public class GetVoidTimeByAllowanceSettingServiceImp(IDynamicRepository reposito
         return GetResults(query, models);
     }
 
-    private GetVoidTimeByAllowanceSettingCriteria CreateCriteria(GetLogInfoQuery query)
+    private static GetVoidTimeByAllowanceSettingCriteriaBase CreateCriteria(GetLogInfoQuery query)
     {
-        var criteria = new GetVoidTimeByAllowanceSettingCriteria
+        var criteria = new GetVoidTimeByAllowanceSettingCriteriaBase
         {
             ActionId = query.ActionId,
             IssueTypeId = query.IssueTypeId,

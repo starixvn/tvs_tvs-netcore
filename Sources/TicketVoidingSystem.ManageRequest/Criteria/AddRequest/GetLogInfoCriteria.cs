@@ -1,10 +1,9 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
+﻿using TicketVoidingSystem.Criteria.OnlineServer;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
-public class GetLogInfoCriteria : CriteriaBase
+public class GetLogInfoCriteriaBase : OnlineServerCriteriaBase
 {
     public bool? IsShowLogOnly { get; set; }
 
@@ -53,9 +52,6 @@ public class GetLogInfoCriteria : CriteriaBase
     public string? MatchEarlyCompletedInfo { get; set; }
 
     public string OnlineServerId { get; set; }
-
-    [SpParam(Ignored = true)]
-    public int SiteDbGroupId { get; set; }
 
     public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_LogInfo_Select");
 

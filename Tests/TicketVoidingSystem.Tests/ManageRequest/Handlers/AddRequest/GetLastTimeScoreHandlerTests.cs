@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest;
@@ -13,12 +13,11 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest;
 public class GetLastTimeScoreHandlerTests : IClassFixture<AppSettingFixture>
 {
     private readonly GetLastTimeScoreHandler handler;
-    private readonly IDynamicRepository repository;
+    private readonly OnlineServerRepository onlineServerRepository = Substitute.For<OnlineServerRepository>();
 
     public GetLastTimeScoreHandlerTests()
     {
-        repository = Substitute.For<IDynamicRepository>();
-        handler = new GetLastTimeScoreHandler(repository);
+        handler = new GetLastTimeScoreHandler(onlineServerRepository);
     }
 
     [Fact]
@@ -33,9 +32,8 @@ public class GetLastTimeScoreHandlerTests : IClassFixture<AppSettingFixture>
             ScoreId = 1,
             FilterFromTransTime = new DateTime(2022, 2, 2, 2, 2, 2)
         };
-        repository.GetAsync<GetLastTimeScoreViewModel>(Arg.Any<GetLastTimeScoreCriteria>()).ReturnsForAnyArgs(
-            new GetLastTimeScoreViewModel
-            { LastTime = new DateTime(2022, 2, 2, 2, 2, 2) });
+        onlineServerRepository.FetchAsync<GetLastTimeScoreViewModel>(Arg.Any<GetLastTimeScoreCriteriaBase>()).ReturnsForAnyArgs(
+            [new GetLastTimeScoreViewModel { LastTime = new DateTime(2022, 2, 2, 2, 2, 2) }]);
 
         var viewModel = new GetLastTimeScoreViewModel
         {

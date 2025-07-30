@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.BetList.Core.Entities;
-using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
@@ -15,27 +14,23 @@ using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LogInfo;
 
 public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
+    private readonly IMapper mapper = Substitute.For<IMapper>();
+    private readonly OnlineServerRepository repository = Substitute.For<OnlineServerRepository>();
+    private readonly SessionService session = Substitute.For<SessionService>();
+    private readonly GetVoidTimeByAllowanceSettingService getVoidTimeByAllowanceSettingService = Substitute.For<GetVoidTimeByAllowanceSettingService>();
+    private readonly BetListService betListService = Substitute.For<BetListService>();
+    private readonly CopyRequestInfoService copyRequestInfoService = Substitute.For<CopyRequestInfoService>();
     private readonly LogInfoServiceImp service;
-    private readonly SessionService session;
-    private readonly GetVoidTimeByAllowanceSettingService getVoidTimeByAllowanceSettingService;
-    private readonly BetListService betListService;
 
     public LogInfoServiceTests()
     {
-        mapper = Substitute.For<IMapper>();
-        repository = Substitute.For<IDynamicRepository>();
-        session = Substitute.For<SessionService>();
-        getVoidTimeByAllowanceSettingService = Substitute.For<GetVoidTimeByAllowanceSettingService>();
-        betListService = Substitute.For<BetListService>();
-        var copyRequestInfoService = Substitute.For<CopyRequestInfoService>();
         service = new LogInfoServiceImp(mapper, repository, session, betListService, copyRequestInfoService, getVoidTimeByAllowanceSettingService);
     }
 
@@ -88,7 +83,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(default)
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
-        mapper.Map<GetLogInfoCriteria>(default).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        mapper.Map<GetLogInfoCriteriaBase>(default).ReturnsForAnyArgs(new GetLogInfoCriteriaBase());
 
         // Act
         var actual = await service.Get(request);
@@ -145,10 +140,10 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             RedCardModels = new List<DangerAcceptedViewModel> { new() { MatchId = matchId } },
             DangerAcceptedModels = new List<DangerAcceptedViewModel> { new() { MatchId = matchId } }
         };
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteriaBase>())
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
-        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        mapper.Map<GetLogInfoCriteriaBase>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteriaBase());
 
         // Act
         var actual = await service.Get(request);
@@ -186,10 +181,10 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             EarlyKickOffModels = new List<EarlyKickOffViewModel> { new() { MatchId = matchId } },
             NotParticipateModels = new List<NotParticipateViewModel> { new() { MatchId = matchId } }
         };
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteriaBase>())
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
-        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        mapper.Map<GetLogInfoCriteriaBase>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteriaBase());
 
         // Act
         var actual = await service.Get(request);
@@ -231,10 +226,10 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             }
         };
 
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteriaBase>())
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
-        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        mapper.Map<GetLogInfoCriteriaBase>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteriaBase());
         betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("Test Bet Type");
 
         // Act
@@ -272,10 +267,10 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             }
         };
 
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteriaBase>())
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
-        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        mapper.Map<GetLogInfoCriteriaBase>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteriaBase());
 
         // Act
         var actual = await service.Get(request);
@@ -284,7 +279,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         // Assert
         Assert.Single(actual.GetLogInfoModels);
         Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
-        Assert.Equal(4, logInfoModel.TicketRequest.Count());
+        Assert.Single(logInfoModel.TicketRequest);
         Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
     }
 
@@ -314,10 +309,10 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             }
         };
 
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteriaBase>())
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
-        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        mapper.Map<GetLogInfoCriteriaBase>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteriaBase());
 
         // Act
         var actual = await service.Get(request);
@@ -356,10 +351,10 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             }
         };
 
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteriaBase>())
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
-        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        mapper.Map<GetLogInfoCriteriaBase>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteriaBase());
 
         // Act
         var actual = await service.Get(request);
@@ -398,10 +393,10 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             }
         };
 
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteriaBase>())
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
-        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        mapper.Map<GetLogInfoCriteriaBase>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteriaBase());
         betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("Test Bet Type");
 
         // Act
@@ -442,10 +437,10 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             }
         };
 
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteriaBase>())
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
-        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        mapper.Map<GetLogInfoCriteriaBase>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteriaBase());
         betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("Test Bet Type");
 
         // Act
@@ -482,10 +477,10 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             MatchId = matchId
         };
 
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteria>())
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(Arg.Any<GetLogInfoCriteriaBase>())
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
-        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        mapper.Map<GetLogInfoCriteriaBase>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteriaBase());
 
         // Act
         var actual = await service.Get(request);

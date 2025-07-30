@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
 using TicketVoidingSystem.SharedApi.Services.BetTypes;
@@ -13,13 +14,13 @@ namespace TicketVoidingSystem.Tests.SharedApi.Services.BetTypes;
 
 public class BetTypesRepositoryTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {
-    private readonly IDynamicRepository repository;
+    private readonly IDynamicRepository repository = Substitute.For<IDynamicRepository>();
+    private readonly OnlineServerRepository onlineServerRepository = Substitute.For<OnlineServerRepository>();
     private readonly BetTypesRepositoryImp service;
 
     public BetTypesRepositoryTests()
     {
-        repository = Substitute.For<IDynamicRepository>();
-        service = new BetTypesRepositoryImp(repository);
+        service = new BetTypesRepositoryImp(repository, onlineServerRepository);
     }
 
     [Fact]
@@ -94,14 +95,14 @@ public class BetTypesRepositoryTests : IClassFixture<AppSettingFixture>, IClassF
     {
         // Arrange
         var data = new List<BetTypeModel> { new() };
-        repository.FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteria>())
+        onlineServerRepository.FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteriaBase>())
             .ReturnsForAnyArgs(data);
 
         // Act
         _ = await service.GetBetTypesHaveTicketsForTvs(1, false, null);
 
         // Assert
-        await repository.Received().FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteria>());
+        await onlineServerRepository.Received().FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteriaBase>());
     }
 
     [Fact]

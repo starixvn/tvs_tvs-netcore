@@ -1,10 +1,9 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
+﻿using TicketVoidingSystem.Criteria.OnlineServer;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
-public class GetVoidTimeByAllowanceSettingCriteria : CriteriaBase
+public class GetVoidTimeByAllowanceSettingCriteriaBase : OnlineServerCriteriaBase
 {
     public int? ActionId { get; set; }
 
@@ -17,9 +16,6 @@ public class GetVoidTimeByAllowanceSettingCriteria : CriteriaBase
     public string? WrongScoreInfo { get; set; }
 
     public string OnlineServerId { get; set; }
-
-    [SpParam(Ignored = true)]
-    public int SiteDbGroupId { get; set; }
 
     public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_VoidTimeByAllowanceSetting_Select");
 
