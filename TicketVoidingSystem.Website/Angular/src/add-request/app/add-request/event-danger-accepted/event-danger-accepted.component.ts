@@ -96,6 +96,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   private readonly eventDangerAcceptedService = inject(EventDangerAcceptedService);
   private readonly addRequestApiService = inject(AddRequestApiService);
   
+
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -104,6 +105,8 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
       this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
       this.resetDateAfterChangeFilter();
+      this.logInfoService.resetVoidTimeArea(this.allSelectedEvents, this.defaultFilterTimeWithAllowance);
+      this.logInfoService.resetIsCheckedVar(this.allSelectedEvents);
       this.filter.isChangeSubTypeManual = false;
     }
   }
@@ -111,6 +114,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   resetDateAfterChangeFilter(){
     this.relatedEvents = [];
     this.mainEvent.logInfoDetail = null;
+    this.mainEvent.messageValidationLogInfo = null;
     this.allSelectedEvents = [this.mainEvent];
     this.primitiveProps.isShowLogInfoMainMatch = false;
     this.primitiveProps.isShowRelatedEvents = false;
@@ -141,7 +145,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   }
 
   async handleSearchEvent(): Promise<void> {
-    this.resetDateAfterChangeFilter();
+    this.primitiveProps.isShowLogInfoMainMatch = false;
     if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.filterTimeAreaComponent,
       this.logInfoComponents, this.addRequestStore, this.tvDetectionComponent)) {
       return;
@@ -261,7 +265,9 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   actualTimeChange(actualTime: string) {
     this.filterTimeAreaComponent.filterTimeWithAllowanceComponent.fromTime = moment(actualTime, DateTimeFormat.SIMPLE_TIME_FORMAT)
       .format(DateTimeFormat.TIME_FORMAT);
-    this.resetDateAfterChangeFilter();
+      this.primitiveProps.isShowLogInfoMainMatch = false;
+      this.primitiveProps.isShowRelatedEvents = false;
+      this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
   }
 
   private initSaveRequestInput() {

@@ -94,6 +94,18 @@ export class LogInfoService {
     });
   }
 
+  public resetVoidTimeArea(events: LogInfoRelatedEvent[], defaultFilter: FilterTimeWithAllowance) {
+    events.forEach(event => {
+      event.voidTimeArea = {
+        saTime: defaultFilter.saTime,
+        aaTime: defaultFilter.aaTime,
+        paTime: defaultFilter.paTime,
+        fromDateTime: defaultFilter.fromDateTime,
+        toDateTime: defaultFilter.toDateTime
+      } as FilterTimeWithAllowance;
+    });
+  }
+  
   public updateIsCheckedVar(events: LogInfoRelatedEvent[], isVarChecked: boolean) {
     events.forEach(event => {
       event.isCheckedVar = StaticService.isShowVarCheck(event.subIssueTypeId) ? isVarChecked : null;
