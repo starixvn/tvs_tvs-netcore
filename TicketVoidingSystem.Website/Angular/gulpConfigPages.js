@@ -168,7 +168,7 @@ const addRequestArchivedTicket = {
 };
 
 const configPages = [
-  //homePage,
+  homePage,
   //manageVoidServices,
   //abExceptionList,
   //markTickets,
@@ -179,7 +179,7 @@ const configPages = [
   //addRequest,
   //editRequest,
   //voidByBetId
-  addRequestArchivedTicket
+  //addRequestArchivedTicket
 ];
 
 module.exports = configPages;

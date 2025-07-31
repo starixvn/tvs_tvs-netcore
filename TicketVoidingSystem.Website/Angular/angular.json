@@ -19,8 +19,8 @@
           "options": {
             "aot": true,
             "outputPath": "dist",
-            "index": "src/add-request-new/events/archived-ticket/index.html",
-            "main": "src/add-request-new/events/archived-ticket/main.ts",
+            "index": "src/home-page/index.html",
+            "main": "src/home-page/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],

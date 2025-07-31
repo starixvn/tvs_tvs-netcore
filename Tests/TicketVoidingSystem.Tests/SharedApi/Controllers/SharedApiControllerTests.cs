@@ -131,4 +131,15 @@ public class SharedApiControllerTests
         // Assert
         await mediator.Received().Send(Arg.Any<GetCurrenciesRequest>());
     }
+
+    [Fact]
+    public async Task GetIssueTypeHomePage_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        // Act
+        await controller.GetIssueTypeHomePage(new GetIssueTypeHomePageRequest());
+
+        // Assert
+        await mediator.Received().Send(Arg.Any<GetIssueTypeHomePageRequest>());
+    }
 }

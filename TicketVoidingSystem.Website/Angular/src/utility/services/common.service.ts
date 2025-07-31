@@ -169,7 +169,7 @@ export class CommonService {
     return this.httpService.postJson({ matchId, productIds }, 'api/MatchInfo/GetInfoForAddRequest');
   }
 
-  async getMatchInfoAddRequest(matchId: number, sportType: number, ): Promise<MatchInfoViewModel> {
+  async getMatchInfoAddRequest(matchId: number, sportType: number): Promise<MatchInfoViewModel> {
     return this.httpService.postJson({ sportType, matchId }, 'api/MatchInfo/GetInfoForAddRequest');
   }
 
