@@ -168,14 +168,14 @@ const addRequestArchivedTicket = {
 };
 
 const configPages = [
-  homePage,
+  //homePage,
   //manageVoidServices,
   //abExceptionList,
   //markTickets,
   //ticketListing,
   //voidSingleBet,
   //voidRequest,
-  //manageRequest,
+  manageRequest,
   //addRequest,
   //editRequest,
   //voidByBetId
