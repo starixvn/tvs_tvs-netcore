@@ -1,7 +1,6 @@
 ﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -61,7 +60,7 @@ public class MarkTicketsServiceImp(
             await loggingService.ErrorAsync(e);
             return new MarkTicketsResult
             {
-                MarkedResults = new List<Result> { new() { ErrorCode = 1, ErrorMsg = e.Message } },
+                MarkedResults = [new() { ErrorCode = 1, ErrorMsg = e.Message }],
                 MarkedTickets = []
             };
         }

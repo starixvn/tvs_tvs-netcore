@@ -1,6 +1,5 @@
 ﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.Services;
 using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Models;
 
@@ -11,7 +10,7 @@ public interface InsertToAmendmentTableStage
     Task<IEnumerable<LicenseeFile>> Execute(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery);
 }
 
-public class InsertToAmendmentTableStageImp(IDynamicRepository repository, LoggingService loggingService)
+public class InsertToAmendmentTableStageImp(IDynamicRepository repository)
     : InsertToAmendmentTableStage
 {
     public async Task<IEnumerable<LicenseeFile>> Execute(ExcelOicModel ticketsJson, SendFileQuery sendFileQuery)

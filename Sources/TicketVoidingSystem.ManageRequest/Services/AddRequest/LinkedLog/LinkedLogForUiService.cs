@@ -1,6 +1,5 @@
 ﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
@@ -34,14 +33,14 @@ public class LinkedLogForUIServiceImp : LinkedLogForUIService
                 {
                     IsAffectedGroup = isAffectedGroup,
                     GroupName = GetGroupNameById(response.LinkGroup),
-                    LogsData = new List<string> { BuildLogsData(response, issueTypeId, subIssueTypeId) }
+                    LogsData = [BuildLogsData(response, issueTypeId, subIssueTypeId)]
                 })
                 .FirstOrDefault());
     }
 
     internal virtual void AddDefaultGroupForDisplay(List<GroupLinkedLogUI> groupLinkedLogUI, int issueTypeId, int subIssueTypeId)
     {
-        if (!groupLinkedLogUI.Any())
+        if (groupLinkedLogUI.Count != 0)
         {
             groupLinkedLogUI.Add(new GroupLinkedLogUI { IsAffectedGroup = false, GroupName = Get1X2GroupNameForIssueType(issueTypeId, subIssueTypeId) });
             groupLinkedLogUI.Add(new GroupLinkedLogUI { IsAffectedGroup = false, GroupName = LinkedLogApiConstant.GroupNameAio });

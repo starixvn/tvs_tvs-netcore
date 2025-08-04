@@ -1,7 +1,6 @@
-﻿using Fanex.Data.Repository;
-using System.Text;
+﻿using System.Text;
+using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 

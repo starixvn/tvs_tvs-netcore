@@ -1,5 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.Models;
+﻿using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest.ViewModels;
 

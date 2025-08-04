@@ -1,7 +1,6 @@
 ﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 
@@ -36,7 +35,6 @@ public class CheckPermissionOnRequestServiceImp(IDynamicRepository repository, S
         var permissionConfig = PermissionIssueTypeConfig.MappingList.First(x => x.IssueTypeId == issueTypeId);
 
         return await sessionService.HasPermission(permissionConfig.FunctionKey, Constant.Policy.Read);
-
     }
 
     public async Task<VoidPermission> GetVoidPermission()

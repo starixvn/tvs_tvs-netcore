@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
@@ -29,7 +28,7 @@ public class GetMaxBetAndSpreadHandler(OWPHttpClientService owpHttpClientService
 
         int[] subIssueTypeIdsWrongOdds = [SubIssueTypeConstant.Handicap, SubIssueTypeConstant.FirstHalfHandicap, SubIssueTypeConstant.OverUnder, SubIssueTypeConstant.FirstHalfOverUnder];
 
-        return subIssueTypeIdsWrongOdds.Select(subIssueTypeId => GetOddsInfo(maxBetSpreadInfo, subIssueTypeId)).ToList();
+        return [.. subIssueTypeIdsWrongOdds.Select(subIssueTypeId => GetOddsInfo(maxBetSpreadInfo, subIssueTypeId))];
     }
 
     private static OddsInfoModel GetOddsInfo(OWPMaxBetAndSpreadInfo maxBetSpreadInfo, int subIssueTypeId)

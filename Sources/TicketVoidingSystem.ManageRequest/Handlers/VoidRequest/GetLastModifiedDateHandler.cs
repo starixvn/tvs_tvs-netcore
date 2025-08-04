@@ -1,7 +1,6 @@
 ﻿using Fanex.Data.Repository;
 using MediatR;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 

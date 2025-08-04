@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Models.Parameters;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListExcel;

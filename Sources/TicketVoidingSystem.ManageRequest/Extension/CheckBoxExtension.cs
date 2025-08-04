@@ -1,5 +1,4 @@
 ﻿using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Extension;
 
@@ -56,7 +55,7 @@ public static class CheckBoxExtension
     private static bool DefaultEnable(string groupName, VoidPermission permission)
     {
         const string instantSettlement = "(instant settlement)";
-        if (groupName.ToLowerInvariant().Contains(instantSettlement))
+        if (groupName.Contains(instantSettlement, StringComparison.InvariantCultureIgnoreCase))
         {
             return permission.InstantlySettled || permission.Settled;
         }

@@ -13,7 +13,7 @@ public class GetProductsHandler : IRequestHandler<GetProductRequest, IEnumerable
         return await Task.FromResult(GetProductsFromJsonFile());
     }
 
-    private static IEnumerable<Group> GetProductsFromJsonFile()
+    private static List<Group> GetProductsFromJsonFile()
     {
         const string jsonPath = "App_Data/Data/Products.json";
         return Helper.DeserializeJsonFileToObject<Products>(jsonPath).Groups;

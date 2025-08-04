@@ -2,7 +2,6 @@
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
@@ -65,7 +64,7 @@ public class InsertAutoVoidRequestQueueServiceImp(IDynamicRepository repository)
         if (abnormalBetInfo != null)
         {
             return abnormalBetInfo.FilterBy is FilterByConstant.MixParlay or FilterByConstant.SystemParlay
-                ? new List<int> { BetTypeConstant.SystemParlay }
+                ? [BetTypeConstant.SystemParlay]
                 : abnormalBetInfo.Matches?.Select(x => x.MatchId);
         }
 

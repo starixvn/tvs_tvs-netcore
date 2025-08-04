@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Models.Parameters;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
@@ -22,7 +21,7 @@ public class GetTicketsHandler(
     {
         var model = new TicketsViewModel();
         var data = await getTicketsService.GetTickets(request);
-        var groups = GenerateGroup(data.ToList(), request).Where(item => item.Tickets.Any());
+        var groups = GenerateGroup([.. data], request).Where(item => item.Tickets.Any());
         var match = request.Match?.MatchId == 0 ? null : request.Match;
         var voidPermission = await checkPermissionOnRequestService.GetVoidPermission();
 
@@ -32,7 +31,7 @@ public class GetTicketsHandler(
         return model;
     }
 
-    private IEnumerable<Group<GetTicketModel>> GenerateGroup(IEnumerable<GetTicketModel> data, GetTicketsRequest message)
+    private List<Group<GetTicketModel>> GenerateGroup(IEnumerable<GetTicketModel> data, GetTicketsRequest message)
     {
         var tickets = pagingService.Paging(data, message.PageIndex, message.PageSize);
         if (!tickets.Any())
@@ -46,11 +45,11 @@ public class GetTicketsHandler(
         var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
 
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-        if (creditParlayTickets.Any())
+        if (creditParlayTickets.Count != 0)
         {
             groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
-        if (depositParlayTickets.Any())
+        if (depositParlayTickets.Count != 0)
         {
             groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }
@@ -68,11 +67,11 @@ public class GetTicketsHandler(
         var singleTickets = originalTickets.Where(ticket => !ticket.IsMixParlay);
 
         var allGroups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-        if (creditParlayTickets.Any())
+        if (creditParlayTickets.Count != 0)
         {
             allGroups.Add(new Group<GetTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
-        if (depositParlayTickets.Any())
+        if (depositParlayTickets.Count != 0)
         {
             allGroups.Add(new Group<GetTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }
@@ -85,7 +84,7 @@ public class GetTicketsHandler(
         }
     }
 
-    private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(GetTicketsRequest request, IEnumerable<Group<GetTicketModel>> groups, Match match, VoidPermission voidPermission)
+    private List<Group<TicketViewModel>> MapToGroupTicketViewModel(GetTicketsRequest request, IEnumerable<Group<GetTicketModel>> groups, Match match, VoidPermission voidPermission)
     {
         var startIndex = request.PageIndex * request.PageSize + 1;
         var currentGroups = new List<Group<TicketViewModel>>();

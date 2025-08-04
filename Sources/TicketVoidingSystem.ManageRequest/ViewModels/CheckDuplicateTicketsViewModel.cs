@@ -1,6 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
-
-namespace TicketVoidingSystem.ManageRequest.ViewModels;
+﻿namespace TicketVoidingSystem.ManageRequest.ViewModels;
 
 public class CheckDuplicateTicketsViewModel
 {

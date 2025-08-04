@@ -1,6 +1,4 @@
 ﻿using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
@@ -29,11 +27,11 @@ public class MapTicketsServiceImp(PagingService pagingService, MapFromBetListSer
         var depositParlayTickets = parlayTickets.Where(ticket => ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
         var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-        if (creditParlayTickets.Any())
+        if (creditParlayTickets.Count != 0)
         {
             groups.Add(new Group<VoidedTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
-        if (depositParlayTickets.Any())
+        if (depositParlayTickets.Count != 0)
         {
             groups.Add(new Group<VoidedTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }
@@ -69,11 +67,11 @@ public class MapTicketsServiceImp(PagingService pagingService, MapFromBetListSer
         var depositParlayTickets = parlayTickets.Where(ticket => ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
         var singleTickets = originalTickets.Where(ticket => !ticket.IsMixParlay);
         var allGroups = pagingService.Groups(singleTickets, t => t.GroupName).ToList();
-        if (creditParlayTickets.Any())
+        if (creditParlayTickets.Count != 0)
         {
             allGroups.Add(new Group<VoidedTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
-        if (depositParlayTickets.Any())
+        if (depositParlayTickets.Count != 0)
         {
             allGroups.Add(new Group<VoidedTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }

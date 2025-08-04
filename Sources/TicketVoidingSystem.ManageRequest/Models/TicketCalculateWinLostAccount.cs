@@ -17,18 +17,6 @@ public class TicketCalculateWinLostAccount : GetTicketModel
     }
 }
 
-public class TicketAddRequestJson
-{
-    public int mid { get; set; }
-    public long t { get; set; }
-    public int c { get; set; }
-    public int btype { get; set; }
-    public int? bid { get; set; }
-    public bool isP { get; set; }
-    public int sitedb { get; set; }
-    public bool isV14 { get; set; }
-}
-
 public class OrderedTickets
 {
     public IEnumerable<TicketCalculateWinLostAccount> Descending { get; set; }

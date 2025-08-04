@@ -3,7 +3,6 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
@@ -29,7 +28,7 @@ public class ReCalculateTicketsServiceImp(
             {
                 var matchId = abnormalBetInfo.FilterBy is FilterByConstant.MixParlay or FilterByConstant.SystemParlay ? 29 : 0;
 
-                results = (await ExecuteParallel(matchId, transIds)).ToList();
+                results = [.. await ExecuteParallel(matchId, transIds)];
             }
         }
         catch (Exception e)

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;

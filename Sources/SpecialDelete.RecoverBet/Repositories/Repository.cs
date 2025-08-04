@@ -95,7 +95,7 @@ public class Repository(IDynamicRepository repository, SessionService sessionSer
 
         return new GetTicketsModel
         {
-            Tickets = tickets.ToList(),
+            Tickets = [.. tickets],
             InvalidTrans = invalidTransIdsViewModel
         };
     }

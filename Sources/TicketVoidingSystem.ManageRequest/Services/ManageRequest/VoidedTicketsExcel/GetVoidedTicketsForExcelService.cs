@@ -1,5 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
+﻿using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTicketsExcel;

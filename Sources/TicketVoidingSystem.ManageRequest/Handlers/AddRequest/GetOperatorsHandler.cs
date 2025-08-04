@@ -2,7 +2,6 @@
 using MediatR;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
@@ -17,7 +16,7 @@ public class GetOperatorsHandler(IDynamicRepository repository)
         if (!string.IsNullOrWhiteSpace(request.MatchIds))
         {
             var data = await repository.FetchAsync<OperatorInfoModel>(request);
-            operators = UpdateViewModel(data).ToList();
+            operators = [.. UpdateViewModel(data)];
         }
 
         operators.Insert(0, OperatorConstant.SuspenderNA);
@@ -29,7 +28,7 @@ public class GetOperatorsHandler(IDynamicRepository repository)
     {
         if (!data.Any())
         {
-            return new List<OperatorInfo?>();
+            return [];
         }
 
         return data.SelectMany(item => new[] { BuildTraderInfo(item), BuildSuspenderInfo(item) })

@@ -52,11 +52,11 @@ public class CheckBoxExtensionTests
     }
 
     [Theory]
-    [InlineData("(instant settlement)", true, false, false)]
-    [InlineData("(instant settlement)", false, true, false)]
-    [InlineData("(instant settlement)", false, false, true)]
-    [InlineData("(instant settlement)", true, true, false)]
-    [InlineData("(instant)", true, true, false)]
+    [InlineData("(Instant settlement)", true, false, false)]
+    [InlineData("(INSTANT settlement)", false, true, false)]
+    [InlineData("(instant SETTLEMEMT)", false, false, true)]
+    [InlineData("(instant Settlement)", true, true, false)]
+    [InlineData("(INSTANT)", true, true, false)]
     public void IsDisable_ReturnsFalse_WithCheckDefaultEnable(string groupName, bool instantlySettled, bool settled,
         bool expected)
     {

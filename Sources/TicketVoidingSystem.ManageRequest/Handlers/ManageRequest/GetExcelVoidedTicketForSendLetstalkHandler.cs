@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;

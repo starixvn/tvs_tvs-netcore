@@ -2,9 +2,7 @@
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
@@ -36,11 +34,11 @@ public class MapTicketsExcelServiceImp(
         var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
 
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-        if (creditParlayTickets.Any())
+        if (creditParlayTickets.Count != 0)
         {
             groups.Add(new Group<VoidedTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
-        if (depositParlayTickets.Any())
+        if (depositParlayTickets.Count != 0)
         {
             groups.Add(new Group<VoidedTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }

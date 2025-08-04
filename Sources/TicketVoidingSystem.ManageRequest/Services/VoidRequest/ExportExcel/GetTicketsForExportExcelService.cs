@@ -2,7 +2,6 @@
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
@@ -39,7 +38,7 @@ public class GetTicketsForExportExcelServiceImp(
         return groupsExcelTickets;
     }
 
-    private IEnumerable<Group<GetTicketModel>> GenerateGroupsTickets(IEnumerable<GetTicketModel> tickets)
+    private List<Group<GetTicketModel>> GenerateGroupsTickets(IEnumerable<GetTicketModel> tickets)
     {
         if (!tickets.Any())
         {
@@ -52,11 +51,11 @@ public class GetTicketsForExportExcelServiceImp(
         var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
 
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-        if (creditParlayTickets.Any())
+        if (creditParlayTickets.Count != 0)
         {
             groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Credit, Tickets = creditParlayTickets });
         }
-        if (depositParlayTickets.Any())
+        if (depositParlayTickets.Count != 0)
         {
             groups.Add(new Group<GetTicketModel> { Name = GroupTicket.Deposit, Tickets = depositParlayTickets });
         }
