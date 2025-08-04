@@ -42,7 +42,7 @@ public class CheckValidTransIdsServiceImp(
         return validTickets.All(x => x.TransId != ticket.TransId) && otherTickets.All(x => x.TransId != ticket.TransId);
     }
 
-    private static List<GetAbnormalBetTicketModel> MapAbnormalBetTicketRequests(IEnumerable<GetAbnormalBetTicketModel> abnormalBetTicketRequests)
+    public static List<GetAbnormalBetTicketModel> MapAbnormalBetTicketRequests(IEnumerable<GetAbnormalBetTicketModel> abnormalBetTicketRequests)
     {
         var result = new List<GetAbnormalBetTicketModel>();
         var validTickets = abnormalBetTicketRequests.Where(x => x.RemarkId == 0);
@@ -70,7 +70,7 @@ public class CheckValidTransIdsServiceImp(
         return (distinctMatchInfoAddRequests, validationAbnormalBets, transInfoAddRequests, abnormalBetTicketRequests, sendLetsTalkModels);
     }
 
-    private static List<SendLetsTalkModel> MapSendLetsTalkModels(IEnumerable<SendLetsTalkModel> sendLetsTalkModels)
+    public static List<SendLetsTalkModel> MapSendLetsTalkModels(IEnumerable<SendLetsTalkModel> sendLetsTalkModels)
     {
         var groups = sendLetsTalkModels.GroupBy(x => x.MatchId);
         var result = new List<SendLetsTalkModel>();
@@ -88,7 +88,7 @@ public class CheckValidTransIdsServiceImp(
         return result;
     }
 
-    private static TransInfoAddRequestModel GetTransInfoAddRequestModel(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
+    public static TransInfoAddRequestModel GetTransInfoAddRequestModel(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
     {
         return new TransInfoAddRequestModel
         {
@@ -99,7 +99,7 @@ public class CheckValidTransIdsServiceImp(
         };
     }
 
-    private static ValidationAbnormalBet MapValidationAbnormalBet(IEnumerable<ValidationAbnormalBet> validationAbnormalBets)
+    public static ValidationAbnormalBet MapValidationAbnormalBet(IEnumerable<ValidationAbnormalBet> validationAbnormalBets)
     {
         if (!validationAbnormalBets.Any())
         {

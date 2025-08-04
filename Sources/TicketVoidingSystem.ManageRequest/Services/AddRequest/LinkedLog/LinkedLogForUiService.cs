@@ -40,7 +40,7 @@ public class LinkedLogForUIServiceImp : LinkedLogForUIService
 
     internal virtual void AddDefaultGroupForDisplay(List<GroupLinkedLogUI> groupLinkedLogUI, int issueTypeId, int subIssueTypeId)
     {
-        if (groupLinkedLogUI.Count != 0)
+        if (groupLinkedLogUI.Count == 0)
         {
             groupLinkedLogUI.Add(new GroupLinkedLogUI { IsAffectedGroup = false, GroupName = Get1X2GroupNameForIssueType(issueTypeId, subIssueTypeId) });
             groupLinkedLogUI.Add(new GroupLinkedLogUI { IsAffectedGroup = false, GroupName = LinkedLogApiConstant.GroupNameAio });

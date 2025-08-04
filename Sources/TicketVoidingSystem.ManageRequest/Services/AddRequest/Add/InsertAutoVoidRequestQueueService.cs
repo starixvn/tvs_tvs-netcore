@@ -64,7 +64,7 @@ public class InsertAutoVoidRequestQueueServiceImp(IDynamicRepository repository)
         if (abnormalBetInfo != null)
         {
             return abnormalBetInfo.FilterBy is FilterByConstant.MixParlay or FilterByConstant.SystemParlay
-                ? [BetTypeConstant.SystemParlay]
+                ? new List<int> { BetTypeConstant.SystemParlay }
                 : abnormalBetInfo.Matches?.Select(x => x.MatchId);
         }
 
