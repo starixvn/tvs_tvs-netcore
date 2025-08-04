@@ -1,10 +1,5 @@
 ﻿namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
-public interface GetInfoSiteDbDownService
-{
-    InfoSiteDBDownModel GetInfoSiteDBDown(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests);
-}
-
 public static class InfoSiteDbDownHelper
 {
     public static InfoSiteDBDownModel Get(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
@@ -20,8 +15,23 @@ public static class InfoSiteDbDownHelper
             SingleCount = siteDBDownInfo.SingleCount,
             ParlayCount = siteDBDownInfo.ParlayCount,
             CancelCashOutCount = siteDBDownInfo.CancelCashOutCount,
-            Usernames = siteDBDownInfo.UserNames,
-            SiteDBDownInfoJson = siteDBDownInfo.SiteDBDownInfoJson,
+            SiteDBDownInfoJson = siteDBDownInfo.SiteDBDownInfoJson
+        };
+
+        return infoSiteDBDown;
+    }
+
+    public static InfoSiteDBDownModel GetModelForAbnormalAccount(ValidationInfo validationResult)
+    {
+        if (string.IsNullOrWhiteSpace(validationResult.SiteDBDownInfoJson))
+        {
+            return null;
+        }
+;
+        var infoSiteDBDown = new InfoSiteDBDownModel
+        {
+            Usernames = validationResult.SiteDBDownUserNames,
+            SiteDBDownInfoJson = validationResult.SiteDBDownInfoJson,
         };
 
         return infoSiteDBDown;

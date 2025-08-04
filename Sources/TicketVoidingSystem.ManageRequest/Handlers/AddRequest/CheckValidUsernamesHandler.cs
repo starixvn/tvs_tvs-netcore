@@ -4,6 +4,7 @@ using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
@@ -56,7 +57,8 @@ public class CheckValidUsernamesHandler(
                 MarkTransIds = usernameInfo.ValidationResult.MarkTransIds,
                 TransInfoJson = GetOutputTransInfoAddRequest(request, usernameInfo, calcVoidResult.VoidTickets)
             },
-            AccountWinlostModels = calcVoidResult.Accounts
+            AccountWinlostModels = calcVoidResult.Accounts,
+            InfoSiteDBDownModel = InfoSiteDbDownHelper.GetModelForAbnormalAccount(usernameInfo.ValidationResult)
         };
 
         ClearVoidTicketsInAccounts(calcVoidResult.Accounts);

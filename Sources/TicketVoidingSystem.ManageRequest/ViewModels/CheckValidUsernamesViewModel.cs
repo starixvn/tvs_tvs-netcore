@@ -5,6 +5,7 @@ public class CheckValidUsernamesViewModel
     public TransInfoAddRequestModel TransInfoAddRequestModel { get; set; }
     public ValidationInfo Validation { get; set; }
     public IEnumerable<AccountWinlostModel> AccountWinlostModels { get; set; }
+    public InfoSiteDBDownModel InfoSiteDBDownModel { get; set; }
 }
 
 public class ValidationInfo
@@ -26,6 +27,10 @@ public class ValidationInfo
     public string MarkTransIds { get; set; }
 
     public string UsernamesOfCreditCashService { get; set; }
+
+    public string SiteDBDownUserNames { get; set; }
+
+    public string SiteDBDownInfoJson { get; set; }
 }
 
 public class CheckUsernamesInDatabaseResult

@@ -11,7 +11,8 @@ export class ConfirmAbnormalAccountModel {
   numberOfTicketsExistedInRequest: number;
   allUsernames: string;
   usernamesOfCreditCashService: string;
-
+  isHasAffectedTicketSiteDBDown: boolean;
+  isMarkTicketSiteDbDown: boolean = true;
   issueTypeName: string;
   subIssueTypeName: string;
   actionName: string;

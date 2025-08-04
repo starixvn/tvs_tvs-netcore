@@ -56,6 +56,7 @@ export class AccountTableComponent {
 
   async reCalculate(account: AccountWinlostModel, index: number) {
     account.isShowInput = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
     if (this.isCancelRecalculateAmount || account.oldAdjustVoidLimit === account.adjustVoidLimit) {
       this.isCancelRecalculateAmount = false;
       return;
@@ -69,6 +70,7 @@ export class AccountTableComponent {
     await this.delayForEventFocus();
     this.addRequestStore.changeBlockingUiStatus(true);
     const viewModel = await this.validationService.getValidation(this.createValidationBusinessRuleArgs(account));
+    this.primitiveProps.infoSiteDBDownModel = viewModel.infoSiteDBDownModel;
     const updatedAccountAmount = viewModel.accountWinlostModels.find(x => x.custId === account.custId);
     if (updatedAccountAmount) {
       account.isShowOnTable = (!this.primitiveProps.isCheckedShowAdjustAccount && !updatedAccountAmount.isCanEditTicket) || updatedAccountAmount.isCanEditTicket;

@@ -1,10 +1,10 @@
 ﻿using Fanex.Data;
-using Fanex.Data.Repository;
+using TicketVoidingSystem.Criteria.OnlineServer;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
-public class CheckValidUsernamesCriteria : CriteriaBase
+public class CheckValidUsernamesCriteria : OnlineServerCriteriaBase
 {
     public string Usernames { get; set; }
 

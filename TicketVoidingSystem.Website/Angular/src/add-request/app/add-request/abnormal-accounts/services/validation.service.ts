@@ -27,6 +27,8 @@ export class ValidationService {
     const usernames = args.usernamesComponent.groupUsername.getAllValue();
     try {
       args.primitiveProps.isShowError = false;
+      args.primitiveProps.infoSiteDBDownModel = null;
+
       if (args.primitiveProps.isCancelValidate) {
         args.primitiveProps.isCancelValidate = false;
         return { isValid: false } as ValidationBusinessRuleOutput;
@@ -46,11 +48,11 @@ export class ValidationService {
       }
 
       const viewModel = await this.getValidation(args);
+      args.primitiveProps.infoSiteDBDownModel = viewModel.infoSiteDBDownModel;
       if(viewModel.validation.isTicketLimitExceeded){
         args.usernamesComponent.showErrorTicketLimitExceeded();
         return { isValid: false } as ValidationBusinessRuleOutput;
       }
-
       const invalidUsernames = viewModel.validation.invalidUserName;
       if (invalidUsernames) {
         return {

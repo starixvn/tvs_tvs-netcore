@@ -1,26 +1,26 @@
-﻿using Fanex.Data.Repository;
-using NSubstitute;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.ViewModels;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.AbnormalAccount;
 
 public class UsernameCheckServiceTests
 {
-    private readonly IDynamicRepository repository;
+    private readonly OnlineServerRepository onlineServerRepository;
     private readonly UsernameCheckServiceImp service;
 
     public UsernameCheckServiceTests()
     {
-        repository = Substitute.For<IDynamicRepository>();
-        service = new UsernameCheckServiceImp(repository);
+        onlineServerRepository = Substitute.For<OnlineServerRepository>();
+        service = new UsernameCheckServiceImp(onlineServerRepository);
     }
 
     [Fact]
@@ -31,17 +31,17 @@ public class UsernameCheckServiceTests
         var accounts = new List<AccountWinlostModel> { new() { Username = "1123" } };
 
         var request = new CheckValidUsernamesRequest { RequestId = 1 };
-        repository.FetchMultipleAsync<ValidationInfo, TicketCalculateWinLostAccount, AccountWinlostModel>(Arg.Any<CheckValidUsernamesCriteria>())
+        onlineServerRepository.FetchMultipleAsync<ValidationInfo, TicketCalculateWinLostAccount, AccountWinlostModel>(Arg.Any<CheckValidUsernamesCriteria>())
             .ReturnsForAnyArgs((validationInfo, ticketCalculateWinLostAccount, accounts));
 
         // Act
         var actual = await service.GetUsernameInformation(request);
 
         // Assert
-        await repository.Received().FetchMultipleAsync<ValidationInfo, TicketCalculateWinLostAccount, AccountWinlostModel>
+        await onlineServerRepository.Received().FetchMultipleAsync<ValidationInfo, TicketCalculateWinLostAccount, AccountWinlostModel>
             (Arg.Any<CheckValidUsernamesCriteria>());
         Assert.Equal("1123", actual.AccountWinlost.First().Username);
-        Assert.Equal("1121,1121,1121,1121", actual.ValidationResult.InvalidUserName);
-        Assert.Equal("2,2,2,2", actual.ValidationResult.MarkTransIds);
+        Assert.Equal("1121", actual.ValidationResult.InvalidUserName);
+        Assert.Equal("2", actual.ValidationResult.MarkTransIds);
     }
 }
