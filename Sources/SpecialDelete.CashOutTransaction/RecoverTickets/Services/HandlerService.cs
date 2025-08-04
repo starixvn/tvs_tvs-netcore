@@ -2,6 +2,7 @@
 using SpecialDelete.CashOutTransaction.Common.ViewModels;
 using SpecialDelete.CashOutTransaction.RecoverTickets.Models;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services;
@@ -118,10 +119,10 @@ public class HandlerServiceImp(
     {
         try
         {
-            var basketballTickets = tickets.Where(x => x.SportTypeId == SportTypeConstant.Basketball);
-            if (basketballTickets.Any())
+            var jackTimeCashOutTickets = tickets.Where(x => JackTimeCashOutExtension.IsHasJackTimeCashOut(x.SportTypeId, x.ExtraInfo));
+            if (jackTimeCashOutTickets.Any())
             {
-                var requestModel = new CashOutApiModel { VoidBetInfos = basketballTickets.Select(x => new VoidBetInfo { TransId = x.TransId.ToString(), CustId = x.CustId.ToString() }) };
+                var requestModel = new CashOutApiModel { VoidBetInfos = jackTimeCashOutTickets.Select(x => new VoidBetInfo { TransId = x.TransId.ToString(), CustId = x.CustId.ToString() }) };
                 await cashOutApiService.UndoVoidBet(requestModel);
             }
         }

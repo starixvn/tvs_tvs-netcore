@@ -43,7 +43,7 @@ public class AfterVoidServiceImp(
 
     private async Task<IEnumerable<Result>> ExecuteWhenHaveVoidTickets(VoidTicketsQuery query, VoidTicketsModel voidResult, string warningCricket)
     {
-        await cashOutApiService.VoidBetForCashOutBasketball(voidResult.Tickets);
+        await cashOutApiService.VoidBet(voidResult.Tickets);
 
         var results = new List<Result>();
         try

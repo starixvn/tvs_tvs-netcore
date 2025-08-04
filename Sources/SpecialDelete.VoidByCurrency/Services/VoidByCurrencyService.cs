@@ -91,7 +91,7 @@ public class VoidByCurrencyServiceImp(
             return [];
         }
 
-        await cashOutApiService.VoidBetForCashOutBasketball(model.Tickets);
+        await cashOutApiService.VoidBet(model.Tickets);
 
         return await ContactUser(query, model);
     }

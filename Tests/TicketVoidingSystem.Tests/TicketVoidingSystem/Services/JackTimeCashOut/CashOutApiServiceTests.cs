@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
@@ -56,15 +55,15 @@ public class CashOutApiServiceTests
         // Arrange
         var tickets = new List<TicketEmailModel>
         {
-            new() { IsCashOut = true, SportTypeId = SportTypeConstant.Basketball, TransId = 1, CustId = 1 },
-            new() { IsCashOut = true, SportTypeId = SportTypeConstant.Basketball, TransId = 2, CustId = 2 },
+            new() { IsCashOut = true, SportTypeId = SportTypeConstant.Basketball, TransId = 1, CustId = 1, ExtraInfo = "<p25 jtseqid='1'/>" },
+            new() { IsCashOut = true, SportTypeId = SportTypeConstant.Basketball, TransId = 2, CustId = 2, ExtraInfo = "<p25 jtseqid='1'/>" },
             new() { IsCashOut = false, SportTypeId = SportTypeConstant.Basketball, TransId = 2, CustId = 2 },
-            new() { IsCashOut = true, SportTypeId = SportTypeConstant.CashOut, TransId = 2, CustId = 2 },
+            new() { IsCashOut = true, SportTypeId = SportTypeConstant.CashOut, TransId = 2, CustId = 2, ExtraInfo = "<p25 jtseqid='1'/>" },
             new() { IsCashOut = false, SportTypeId = SportTypeConstant.CashOut  , TransId = 2, CustId = 2 }
         };
 
         // Act
-        await service.VoidBetForCashOutBasketball(tickets);
+        await service.VoidBet(tickets);
 
         // Assert
         await cashOutHttpClientService.Received(1).PostRequest("VoidBet", Arg.Any<CashOutApiModel>());
@@ -82,21 +81,9 @@ public class CashOutApiServiceTests
         };
 
         // Act
-        await service.VoidBetForCashOutBasketball(tickets);
+        await service.VoidBet(tickets);
 
         // Assert
         await cashOutHttpClientService.Received(0).PostRequest("VoidBet", Arg.Any<CashOutApiModel>());
-    }
-
-    [Fact]
-    public async Task VoidBetForCashOutBasketball_HasTicketsIsNull_HasErrorAsync()
-    {
-        // Arrange
-
-        // Act
-        await service.VoidBetForCashOutBasketball(null);
-
-        // Assert
-        await loggingService.Received(1).ErrorAsync("VoidBetForCashOutBasketball", Arg.Any<Exception>());
     }
 }

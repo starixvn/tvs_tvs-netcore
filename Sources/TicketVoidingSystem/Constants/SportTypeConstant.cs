@@ -7,7 +7,7 @@ public static class SportTypeConstant
 {
     public const int Sportsbook = 0;
 
-    public const int VirtualSports = 1;
+    public const int Soccer = 1;
 
     public const int CashOut = 5;
 
