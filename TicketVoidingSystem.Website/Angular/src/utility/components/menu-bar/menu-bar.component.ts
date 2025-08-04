@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import orderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 import { Subscription } from 'rxjs';
-import { SignalRService } from '../../../utility/services/signal-r.service.native';
 import { CommonService } from '../../../utility/services/common.service';
+import { SignalRService } from '../../../utility/services/signal-r.service.native';
 import { NotificationPopupComponent } from '../notification-popup/notification-popup.component';
 import { NotificationPopupService } from '../notification-popup/notification-popup.service';
 import { MenuItem } from './menu-bar.model';
@@ -35,10 +36,10 @@ export class MenuBarComponent implements OnInit {
     const model = await this.commonService.getNapUserInfo();
     if (model) {
       this.username = model.userName;
-      this.menuItems = _.orderBy(_.uniqBy(model.menuItem.filter(x => x.parentId <= 0), x => x.id), ['displayOrder'], ['asc']);
+      this.menuItems = orderBy(uniqBy(model.menuItem.filter(x => x.parentId <= 0), x => x.id), ['displayOrder'], ['asc']);
       this.menuItems.forEach(t => {
         t.items = model.menuItem.filter(z => z.parentId === t.id);
-        t.items = _.orderBy(_.uniqBy(t.items, x => x.id), ['displayOrder'], ['asc']);
+        t.items = orderBy(uniqBy(t.items, x => x.id), ['displayOrder'], ['asc']);
       });
       this.isBlock = false;
     }

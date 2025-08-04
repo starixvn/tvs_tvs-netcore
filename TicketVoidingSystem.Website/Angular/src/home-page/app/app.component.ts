@@ -1,36 +1,23 @@
-import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { SignalRService } from '../../utility/services/signal-r.service.native';
-import { AppStore } from './app.store';
-import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
+import { Component, inject } from '@angular/core';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
+import { SignalRService } from '../../utility/services/signal-r.service.native';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 @Component({
   standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [MenuBarComponent, BlockFullUiComponent]
+  imports: [MenuBarComponent]
 })
-export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
-  isBlockingUi = true;
-  blockingUiSubscription: Subscription;
+export class AppComponent{
   signalRService = inject(SignalRService);
-  homePageStore = inject(AppStore);
-
   async ngOnInit() {
-    this.blockingUiSubscription = this.homePageStore.blockingUiStatus.subscribe(status => {
-      this.isBlockingUi = status;
-    });
-    this.homePageStore.changeBlockingUiStatus(true);
     await this.signalRService.initializeConnection();
-  }
-
-  ngOnDestroy(): void {
-    this.blockingUiSubscription?.unsubscribe();
-  }
-
-  ngAfterViewInit() {
-    this.homePageStore.changeBlockingUiStatus(false);
   }
 }

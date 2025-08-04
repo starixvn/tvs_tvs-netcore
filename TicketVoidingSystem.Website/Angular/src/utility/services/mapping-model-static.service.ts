@@ -1,4 +1,5 @@
-import * as _ from "lodash";
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 import { EarlyKickOffGetLogInfoQuery } from "../../add-request/app/add-request/event-early-kick-off/models/get-log-info.query";
 import { NotParticipateGetLogInfoQuery } from "../../add-request/app/add-request/event-not-participate/models/get-log-info.query";
 import { OtherIssuesGetLogInfoQuery } from "../../add-request/app/add-request/event-other-issues/models/get-log-info.query";
@@ -29,7 +30,7 @@ import { StaticService } from "./static.service";
 
 export class MappingModelStaticService {
   static buildRedCardGetLogInfoModel(redCardModels: RedCardModel[]): RedCardGetLogInfoQuery[] {
-    if (_.isNull(redCardModels) || _.isUndefined(redCardModels)) {
+    if (isNull(redCardModels) || isUndefined(redCardModels)) {
       return null;
     }
 
@@ -43,7 +44,7 @@ export class MappingModelStaticService {
   }
 
   static buildWrongScoreGetLogInfoModel(wrongScoreModels: WrongScoreModel[]): WrongScoreGetLogInfoQuery[] {
-    if (_.isNull(wrongScoreModels) || _.isUndefined(wrongScoreModels)) {
+    if (isNull(wrongScoreModels) || isUndefined(wrongScoreModels)) {
       return null;
     }
 
@@ -59,7 +60,7 @@ export class MappingModelStaticService {
   }
 
   static buildWrongHdpGetLogInfoModel(wrongHdpModels: WrongHdpModel[]): WrongHdpGetLogInfoQuery[] {
-    if (_.isNull(wrongHdpModels) || _.isUndefined(wrongHdpModels)) {
+    if (isNull(wrongHdpModels) || isUndefined(wrongHdpModels)) {
       return null;
     }
 
@@ -83,7 +84,7 @@ export class MappingModelStaticService {
   }
 
   static buildWrongOuGetLogInfoModel(wrongOuModels: WrongOuModel[]): WrongOuGetLogInfoQuery[] {
-    if (_.isNull(wrongOuModels) || _.isUndefined(wrongOuModels)) {
+    if (isNull(wrongOuModels) || isUndefined(wrongOuModels)) {
       return null;
     }
 
@@ -105,7 +106,7 @@ export class MappingModelStaticService {
   }
 
   static buildWrongOddsGetLogInfoModel(wrongOuModels: WrongOddsModel[]): WrongOddsGetLogInfoQuery[] {
-    if (_.isNull(wrongOuModels) || _.isUndefined(wrongOuModels)) {
+    if (isNull(wrongOuModels) || isUndefined(wrongOuModels)) {
       return null;
     }
 
@@ -133,7 +134,7 @@ export class MappingModelStaticService {
   }
 
   static buildReducedOverGetLogInfoModel(reducedOverModels: ReducedOverModel[]): ReducedOverGetLogInfoQuery[] {
-    if (_.isNull(reducedOverModels) || _.isUndefined(reducedOverModels)) {
+    if (isNull(reducedOverModels) || isUndefined(reducedOverModels)) {
       return null;
     }
 
@@ -151,7 +152,7 @@ export class MappingModelStaticService {
   }
 
   static buildNotParticipateGetLogInfoModel(notParticipateModels: NotParticipateModel[]): NotParticipateGetLogInfoQuery[] {
-    if (_.isNull(notParticipateModels) || _.isUndefined(notParticipateModels)) {
+    if (isNull(notParticipateModels) || isUndefined(notParticipateModels)) {
       return null;
     }
 
@@ -164,7 +165,7 @@ export class MappingModelStaticService {
   }
 
   static buidEarlyKickOffGetLogInfoModel(earlyKickOffModels: EarlyKickOffModel[]): EarlyKickOffGetLogInfoQuery[] {
-    if (_.isNull(earlyKickOffModels) || _.isUndefined(earlyKickOffModels)) {
+    if (isNull(earlyKickOffModels) || isUndefined(earlyKickOffModels)) {
       return null;
     }
 
@@ -177,7 +178,7 @@ export class MappingModelStaticService {
   }
 
   static buildWrongMarketOfferedGetLogInfoModels(models: WrongMarketOfferedModel[]): WrongMarketOfferedGetLogInfoQuery[] {
-    if (_.isNull(models) || _.isUndefined(models)) {
+    if (isNull(models) || isUndefined(models)) {
       return null;
     }
 
@@ -192,7 +193,7 @@ export class MappingModelStaticService {
   }
 
   static buildWrongOfferedNameGetLogInfoModel(model: WrongOfferedNameModel): WrongOfferedNameGetLogInfoQuery {
-    if (_.isNull(model) || _.isUndefined(model)) {
+    if (isNull(model) || isUndefined(model)) {
       return null;
     }
 
@@ -205,7 +206,7 @@ export class MappingModelStaticService {
   }
 
   static buildWrongOddsSportsBookGetLogInfoModel(model: WrongOddsSportsBookModel): WrongOddsSportsBookGetLogInfoQuery {
-    if (_.isNull(model) || _.isUndefined(model)) {
+    if (isNull(model) || isUndefined(model)) {
       return null;
     }
 
@@ -225,7 +226,7 @@ export class MappingModelStaticService {
   }
 
   static buildOtherIssuesGetLogInfoModel(model: OtherIssuesModel): OtherIssuesGetLogInfoQuery {
-    if (_.isNull(model) || _.isUndefined(model)) {
+    if (isNull(model) || isUndefined(model)) {
       return null;
     }
 
@@ -242,7 +243,7 @@ export class MappingModelStaticService {
   }
 
   static buildTechnicalErrorGetLogInfoModel(model: TechnicalErrorModel): TechnicalErrorGetLogInfoQuery {
-    if (_.isNull(model) || _.isUndefined(model)) {
+    if (isNull(model) || isUndefined(model)) {
       return null;
     }
 

@@ -1,0 +1,52 @@
+<menu-bar></menu-bar>
+
+@if(!isLoadingData){
+<div class="title">{{ title }}</div>
+
+<div class="body bg-gray mg-10">
+  <filter #filter [isEdit]="isEdit" [(model)]="model.filter" [(issueTypes)]="issueTypes" [isExternalUrl]="isExternalUrl"
+    (modelChange)="updateModel($event)" [issueTypeId]="issueTypeId" [originActions]="originActions">
+  </filter>
+
+  <div class="event">
+    <div class="list-group">
+      <div class="list-group-item list-group-item-primary flex-column align-items-start pointer"
+        [ngClass]="{'border-bottom-radius':isCollapse}" (click)="isCollapse=!isCollapse">
+        <em class="fa" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
+        <strong>&nbsp;{{getEventLabel()}}</strong>
+      </div>
+      <div class="list-group-item flex-column align-items-start wrapper-tooltip" [hidden]="isCollapse">
+        <!-- Inject Event content-->
+        <ng-container *ngTemplateOutlet="eventContent, context: contextData"></ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- Others section (optional) -->
+  <ng-container *ngTemplateOutlet="othersContent, context: {otherModel: model.others, isEdit: isEdit}"></ng-container>
+
+  <div class="search mg-top-10 d-flex justify-content-between">
+    <div class="d-flex">
+      <button type="submit" class="btn btn-primary btn-sm mg-right-10" (mousedown)="$event.preventDefault()"
+        [disabled]="isDisabledSaveButton" (click)="!isDisabledSaveButton && onSaveRequest()">
+        Save
+      </button>
+      <button type="submit" class="btn btn-danger btn-sm" [disabled]="isDisabledSaveButton"
+        (click)="backToManagePage()">Back
+      </button>
+    </div>
+
+    <!-- Copy info buttons (optional) -->
+    @if(showCopyInfoButtons){
+    <div *ngIf="showCopyInfoButtons" class="d-flex align-content-end">
+      <div class="icon-letstalk icon-copy-info" (click)="onCopyLetsTalkRequestInfo()"></div>
+      <div class="icon-mail icon-copy-info" (click)="onCopyEmailRequestInfo()"></div>
+    </div>
+    }
+  </div>
+</div>
+} @else {
+  <add-request-skeleton [eventHeight]="eventHeight"></add-request-skeleton>
+}
+
+<block-full-ui [isBlock]="isLoadingData || (isBlock$ | async)"></block-full-ui>

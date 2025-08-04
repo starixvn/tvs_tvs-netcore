@@ -60,4 +60,7 @@ public class SharedApiController(IMediator mediator, IHttpContextAccessor httpCo
 
     [HttpGet]
     public async Task<IActionResult> GetCurrencies() => Ok(await mediator.Send(new GetCurrenciesRequest()));
+
+    [HttpPost]
+    public async Task<IActionResult> GetIssueTypeHomePage(GetIssueTypeHomePageRequest request) => Ok(await mediator.Send(request));
 }

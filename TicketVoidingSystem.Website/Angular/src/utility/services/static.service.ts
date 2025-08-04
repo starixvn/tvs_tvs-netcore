@@ -1,7 +1,7 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import moment, { Moment } from 'moment-timezone';
+import dayjs from 'dayjs';
+import { RequestDetailViewModel } from '../../add-request-new/events/models/request.model copy';
 import { GetLogInfoModel, ValidationMessage } from '../../add-request/app/add-request/models/get-log-info.model';
-import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { ModalType } from '../components/modal/modal.model';
 import { ModalService } from '../components/modal/modal.service';
 import { MultipleSelection } from '../components/multiple-selection/multiple-selection';
@@ -272,13 +272,12 @@ export class StaticService {
   }
 
   static isFromTimeSameOrBeforeToTime(fromDateTime: string, toDateTime: string, tooltip: Tooltip, fromDateTimeClass: string): boolean {
-    const momentFromDateTime = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    const momentToDateTime = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    if (!momentFromDateTime.isSameOrBefore(momentToDateTime)) {
+    const from = dayjs(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const to = dayjs(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    if (!from.isBefore(to) && !from.isSame(to)) {
       tooltip.display(fromDateTimeClass, LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
       return false;
     }
-
     return true;
   }
 
@@ -378,8 +377,8 @@ export class StaticService {
     if (logInfoModel.validation.isExistsSecondAccept) {
       const toDateTimeExist = new Date(filterFromTime);
       toDateTimeExist.setSeconds(Number(secondAcceptValue) + toDateTimeExist.getSeconds());
-      const fromTime = `${moment(logInfoModel.logInfoDetail.highlightMinTime).format(DateTimeFormat.TIME_FORMAT)}`;
-      const toTime = `${moment(toDateTimeExist).format(DateTimeFormat.TIME_FORMAT)}`;
+      const fromTime = dayjs(logInfoModel.logInfoDetail.highlightMinTime).format(DateTimeFormat.TIME_FORMAT);
+      const toTime = dayjs(toDateTimeExist).format(DateTimeFormat.TIME_FORMAT);
 
       messageList.push({
         isError: false,
@@ -418,9 +417,9 @@ export class StaticService {
     return multipleSelection;
   }
 
-  static getDurations(fromTime: Moment, toTime: Moment): string {
+  static getDurations(fromTime: any, toTime: any): string {
     const MILLISECONDS_IN_A_MINUTE = 60000;
-    const durations = toTime.diff(fromTime);
+    const durations = dayjs(toTime).diff(dayjs(fromTime));
     const minutes = Math.floor(durations / MILLISECONDS_IN_A_MINUTE);
     const seconds = ((durations % MILLISECONDS_IN_A_MINUTE) / 1000).toFixed(0);
 

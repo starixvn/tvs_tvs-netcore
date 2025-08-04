@@ -1,11 +1,15 @@
 import { inject, Injectable } from '@angular/core';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { EventType } from '../../../../../utility/constants/sport.constant';
 import { Message } from '../../messages/message';
 import { FormatDateTime, SubIssueTypeId, TemplateContentConst, TemplateReplace } from '../template.const';
 import { TemplateValue } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 @Injectable(
   { providedIn: 'root' }
@@ -51,7 +55,7 @@ export class ReplaceEventTypeService {
     ];
 
     const isSpecialIssueType = issueTypes.includes(issueTypeId.toString()) || (issueTypeId.toString() === IssueTypeConstant.OTHER_ISSUES && subIssueTypeS.includes(subIssueTypeId));
-    const isDateMismatched = templateValue.eventDate !== moment.utc().tz('America/Caracas').format(FormatDateTime.EVENT_DATE);
+    const isDateMismatched = templateValue.eventDate !== dayjs().tz('America/Caracas').format(FormatDateTime.EVENT_DATE);
 
     if (isSpecialIssueType && isDateMismatched) {
       return false;

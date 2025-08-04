@@ -1,0 +1,18 @@
+@{
+Layout = "~/Views/Shared/_LayoutAngular.cshtml";
+var isEditMode = Context.Request.Path.Value?.ToLower().Contains("/edit/") == true;
+ViewBag.Title = isEditMode ? "Edit Request Ticket Voiding" : "Add Request Ticket Voiding";
+}
+@section Head {
+
+<link href="dist/ticket-voiding-system/add-request/archived-ticket/styles.css?8d07af97c68b65a7" rel="stylesheet" />
+
+}
+<app-root></app-root>
+
+<script src="dist/ticket-voiding-system/add-request/archived-ticket/runtime.js?d6798104a63cc61b"></script>
+
+<script src="dist/ticket-voiding-system/add-request/archived-ticket/polyfills.js?6d2f7e0938193000"></script>
+
+<script src="dist/ticket-voiding-system/add-request/archived-ticket/main.js?13db332cc7a591ab"></script>
+

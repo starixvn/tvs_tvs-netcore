@@ -10,6 +10,7 @@ using Fanex.MailDeliver.MailClient;
 using Fanex.RemotingRef;
 using Fanex.SiteDbConnectionManager.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
@@ -51,6 +52,7 @@ using TicketVoidingSystem.TicketListing.Controllers;
 using TicketVoidingSystem.Utilities;
 using TicketVoidingSystem.VoidSingleBet;
 using TicketVoidingSystem.VoidSingleBet.Controllers;
+using TicketVoidingSystem.Web;
 using TicketVoidingSystem.Website.Utilities.CustomServices;
 using TicketVoidingSystem.Website.Utilities.SimpleInjector;
 using TicketVoidingSystem.Website.Utilities.SimpleInjector.AddRequest;
@@ -164,6 +166,12 @@ public static class ServiceCollectionExtension
     {
         AppSettings.AppMailId = AppSettingService.AppSetting.FanexMailService.AppMailId;
         AppSettings.AppMailAddress = AppSettingService.AppSetting.FanexMailService.AppMailAddress;
+    }
+
+    public static void AddIssueTypeAuth(this IServiceCollection services)
+    {
+        services.AddAuthorization();
+        services.AddScoped<IAuthorizationHandler, IssueTypeAuthorizationHandler>();
     }
 
     public static void AddBusinessServices(this IServiceCollection services)

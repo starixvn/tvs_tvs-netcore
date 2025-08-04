@@ -1,0 +1,472 @@
+[
+  {
+    "categoryName": "Main Event",
+    "isShowCategoryName": true,
+    "isCollapse": false,
+    "groups": [
+      {
+        "groupId": 27,
+        "name": "No indication Home/Away Goal (No Onwards)<div class='text-danger'>Filter by Accept Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 7,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 94,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "5",
+        "description": [
+          "Provider missed or delayed Score show by more than one (1) minute.",
+          "=> Missed update Home/Away score -> But there is happened score awarded.",
+          "Att: Actual Goal compare last ticket trans.time base on 1 min to use message type.",
+          "Over 1 min consider wrong score/Missed > Goal 10:00:00, last ticket trans.time 10:01:00.",
+          "Within 1mins consider danger accept Goal 10:00:00, last ticket trans.time 10:00:20.",
+          "* Home Missed > Request Home. Away Missed > Request Away."
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 28,
+        "name": "No indication Home/Away Goal (Onwards)<div class='text-danger'>Filter by Accept Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 35,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 95,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "5",
+        "description": [
+          "Provider missed or delayed Score show by more than one (1) minute.",
+          "=> Missed update Home/Away score -> But there is happened score awarded.",
+          "Att: Actual Goal compare last ticket trans.time base on 1 min to use message type.",
+          "Over 1 min consider wrong score/Missed > Goal 10:00:00, last ticket trans.time 10:01:00.",
+          "Within 1mins consider danger accept Goal 10:00:00, last ticket trans.time 10:00:20.",
+          "* Home Missed > Request Home. Away Missed > Request Away."
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 35,
+        "name": "No Indication Home/Away Corner (No Onwards)<div class='text-danger'>Filter by Accept Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 132,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 134,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "Provider missed or delayed Score show by more than one (1) minute.",
+          "=> Missed update Home/Away score -> But there is happened score awarded.",
+          "Att: Actual Corner compare last ticket trans.time base on 1 min to use message type.",
+          "Over 1 min consider wrong score/Missed > Corner 10:00:00, last ticket trans.time 10:01:00.",
+          "Within 1mins consider danger accept Corner 10:00:00, last ticket trans.time 10:00:20.",
+          "* Home Missed > Request Home. Away Missed > Request Away."
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 36,
+        "name": "No Indication Home/Away Corner (Onwards)<div class='text-danger'>Filter by Accept Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 133,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 135,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "Provider missed or delayed Score show by more than one (1) minute.",
+          "=> Missed update Home/Away score -> But there is happened score awarded.",
+          "Att: Actual Corner compare last ticket trans.time base on 1 min to use message type.",
+          "Over 1 min consider wrong score/Missed > Corner 10:00:00, last ticket trans.time 10:01:00.",
+          "Within 1mins consider danger accept Corner 10:00:00, last ticket trans.time 10:00:20.",
+          "* Home Missed > Request Home. Away Missed > Request Away."
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 37,
+        "name": "No Indication Home/Away Goal Kick (No Onwards)<div class='text-danger'>Filter by Accept Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 136,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 138,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "Provider missed or delayed Score show by more than one (1) minute.",
+          "=> Missed update Home/Away score -> But there is happened score awarded.",
+          "Att: Actual Goal Kick compare last ticket trans.time base on 1 min to use message type.",
+          "Over 1 min consider wrong score/Missed > Goal Kick 10:00:00, last ticket trans.time 10:01:00.",
+          "Within 1mins consider danger accept Goal Kick 10:00:00, last ticket trans.time 10:00:20.",
+          "* Home Missed > Request Home. Away Missed > Request Away."
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 38,
+        "name": "No Indication Home/Away Goal Kick (Onwards)<div class='text-danger'>Filter by Accept Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 137,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 139,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "Provider missed or delayed Score show by more than one (1) minute.",
+          "=> Missed update Home/Away score -> But there is happened score awarded.",
+          "Att: Actual Goal Kick compare last ticket trans.time base on 1 min to use message type.",
+          "Over 1 min consider wrong score/Missed > Goal Kick 10:00:00, last ticket trans.time 10:01:00.",
+          "Within 1mins consider danger accept Goal Kick 10:00:00, last ticket trans.time 10:00:20.",
+          "* Home Missed > Request Home. Away Missed > Request Away."
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 29,
+        "name": "No indication Home/Away Booking (No Onwards)<div class='text-danger'>Filter by Accept Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 112,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 114,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "Provider missed or delayed Score show by more than one (1) minute.",
+          "=> Missed update Home/Away score -> But there is happened score awarded.",
+          "Att: Actual Booking compare last ticket trans.time base on 1 min to use message type.",
+          "Over 1 min consider wrong score/Missed > Booking 10:00:00, last ticket trans.time 10:01:00.",
+          "Within 1mins consider danger accept Booking 10:00:00, last ticket trans.time 10:00:20.",
+          "* Home Missed > Request Home. Away Missed > Request Away."
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 30,
+        "name": "No indication Home/Away Booking (Onwards)<div class='text-danger'>Filter by Accept Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 113,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 115,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "Provider missed or delayed Score show by more than one (1) minute.",
+          "=> Missed update Home/Away score -> But there is happened score awarded.",
+          "Att: Actual Booking compare last ticket trans.time base on 1 min to use message type.",
+          "Over 1 min consider wrong score/Missed > Booking 10:00:00, last ticket trans.time 10:01:00.",
+          "Within 1mins consider danger accept Booking 10:00:00, last ticket trans.time 10:00:20.",
+          "* Home Missed > Request Home. Away Missed > Request Away."
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 31,
+        "name": "Wrong Indication Goal (No Onwards)<div class='text-danger'>Filter by Trans Time",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 96,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "",
+        "pa": "",
+        "sa": "",
+        "description": [
+          "Provider wrong display Home/Away Score and/or in fact there is no Score awarded.",
+          "=> Wrong update Home/Away score -> But there is 'No Score' awarded.",
+          "Example: 0-0 to 0-1, Cancel Goal, all 0-1 need void all. Single team O/U home team score 0-0 accept after Goal valid.",
+          "<span class='text-danger'>We use transtime to void, TVS will auto detect wrong score range time.</span>"
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 32,
+        "name": "Wrong Indication Goal (Onwards)<div class='text-danger'>Filter by Trans Time",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 97,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "",
+        "pa": "",
+        "sa": "",
+        "description": [
+          "Provider wrong display Home/Away Score and/or in fact there is no Score awarded.",
+          "=> Wrong update Home/Away score -> But there is 'No Score' awarded.",
+          "Example: 0-0 to 0-1, Cancel Goal, all 0-1 need void all. Single team O/U home team score 0-0 accept after Goal valid.",
+          "<span class='text-danger'>We use transtime to void, TVS will auto detect wrong score range time.</span>"
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 33,
+        "name": "Wrong Indication Swap Team Score (No Onwards)<div class='text-danger'>Filter by Trans Time & Accept Time",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 98,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "",
+        "pa": "",
+        "sa": "",
+        "description": [
+          "Provider wrong display Swap Team Score.",
+          "=> Wrong update Away Score -> Correct there is Home Score awarded. So Single team O/U home team admin will wrong accept.",
+          "Example: 0-0 to 0-1 wrong update, Correct is 1-0, need void all ticket. Single team O/U home team score 0-0 accept after Goal is wrong, need void all."
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 34,
+        "name": "Wrong Indication Swap Team Score (Onwards)<div class='text-danger'>Filter by Trans Time & Accept Time",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 99,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "",
+        "pa": "",
+        "sa": "",
+        "description": [
+          "Provider wrong display Swap Team Score.",
+          "=> Wrong update Away Score -> Correct there is Home Score awarded. So Single team O/U home team admin will wrong accept.",
+          "Example: 0-0 to 0-1 wrong update, Correct is 1-0, need void all ticket. Single team O/U home team score 0-0 accept after Goal is wrong, need void all."
+        ],
+        "note":"",
+        "noteEditable": false
+      }
+    ]
+  },
+  {
+    "categoryName": "Related Event",
+    "isShowCategoryName": true,
+    "isCollapse": true,
+    "groups": [
+      {
+        "groupId": 39,
+        "name": "Next Goal",
+        "iconClass": "",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 140,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 141,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 145,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "5",
+        "description": [
+          "Goal: Select Subtype Next Goal, Message-Match completed",
+          "<span class='text-danger'>*Red Card, 2YC (Select Subtype same main match, use Message-Danger accept)</span>"
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 40,
+        "name": "Next Corner",
+        "iconClass": "",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 142,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 143,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 147,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "*Possible Corner (Select Subtype Next Corner, use Message-Match completed)",
+          "*Ball out the end line (Select Subtype Next Corner, use Message-Match completed)",
+          "<span class='text-danger'>*Not use for Red Card, 2YC (Select Subtype same main match #4, use Message-Danger accept)</span>"
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 41,
+        "name": "Next Booking",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 144,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "All Subtypes use Next Booking, Message-Match completed:",
+          "*Provider show YC/RC",
+          "*Referee judge YC/RC (Follow booking time)",
+          "*Foul > VAR > YC/RC (Follow foul time)"
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 42,
+        "name": "Next Goal Kick",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 146,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "*Goal Kick (Select Subtype Next Goal Kick, use Message-Match completed)",
+          "*Ball out the end line (Select Subtype Next Goal Kick, use Message-Match completed)",
+          "<span class='text-danger'>*Not use for Red Card, 2YC (Select Subtype same main match #4, use Message-Danger accept)</span>"
+        ],
+        "note":"",
+        "noteEditable": false
+      }
+    ]
+  }
+]

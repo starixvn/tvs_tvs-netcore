@@ -55,5 +55,73 @@ export class IssueTypeConstant {
     [IssueTypeConstant.MATCH_COMPLETED, 'MATCH_COMPLETED'],
     [IssueTypeConstant.MATCH_EARLY_COMPLETED, 'MATCH_EARLY_COMPLETED']
   ]);
+
+  static readonly NAVIGATE_ADD_REQUEST = new Map<string, string>([
+    [IssueTypeConstant.ABNORMAL_BET, 'TicketVoidingSystem/AbnormalBet/Add'],
+    [IssueTypeConstant.ABNORMAL_ACCOUNT, 'TicketVoidingSystem/AbnormalAccount/Add'],
+    [IssueTypeConstant.EARLY_KICK_OFF, 'TicketVoidingSystem/EarlyKickOff/Add'],
+    [IssueTypeConstant.WRONG_KICK_OFF, 'TicketVoidingSystem/WrongKickOff/Add'],
+    [IssueTypeConstant.DANGER_ACCEPTED, 'TicketVoidingSystem/DangerAccepted/Add'],
+    [IssueTypeConstant.RED_CARD, 'TicketVoidingSystem/RedCard/Add'],
+    [IssueTypeConstant.WRONG_ODDS, 'TicketVoidingSystem/WrongOdds/Add'],
+    [IssueTypeConstant.WRONG_SCORE, 'TicketVoidingSystem/WrongScore/Add'],
+    [IssueTypeConstant.WRONG_OU, 'TicketVoidingSystem/WrongOU/Add'],
+    [IssueTypeConstant.WRONG_1ST_OU, 'TicketVoidingSystem/Wrong1stOU/Add'],
+    [IssueTypeConstant.WRONG_HDP, 'TicketVoidingSystem/WrongHDP/Add'],
+    [IssueTypeConstant.WRONG_1ST_HDP, 'TicketVoidingSystem/Wrong1stHDP/Add'],
+    [IssueTypeConstant.WRONG_QUARTER_HDP, 'TicketVoidingSystem/WrongQuarterHDP/Add'],
+    [IssueTypeConstant.ARCHIVED_TICKET, 'TicketVoidingSystem/ArchivedTicket/Add'],
+    [IssueTypeConstant.OTHER_ISSUES, 'TicketVoidingSystem/OtherIssues/Add'],
+    [IssueTypeConstant.REDUCED_OVER, 'TicketVoidingSystem/ReducedOver/Add'],
+    [IssueTypeConstant.DUPLICATE_TICKETS, 'TicketVoidingSystem/DuplicateTickets/Add'],
+    [IssueTypeConstant.NOT_PARTICIPATE, 'TicketVoidingSystem/NotParticipate/Add'],
+    [IssueTypeConstant.RECOVER_TICKET, 'TicketVoidingSystem/RecoverTicket/Add'],
+    [IssueTypeConstant.ABANDONED, 'TicketVoidingSystem/Abandoned/Add'],
+    [IssueTypeConstant.WRONG_MARKET_OFFERED, 'TicketVoidingSystem/WrongMarketOffered/Add'],
+    [IssueTypeConstant.TECHNICAL_ERROR, 'TicketVoidingSystem/TechnicalError/Add'],
+    [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK, 'TicketVoidingSystem/WrongOddsSportsBook/Add'],
+    [IssueTypeConstant.WRONG_OFFERED_NAME, 'TicketVoidingSystem/WrongOfferedName/Add'],
+    [IssueTypeConstant.MATCH_COMPLETED, 'TicketVoidingSystem/MatchCompleted/Add'],
+    [IssueTypeConstant.MATCH_EARLY_COMPLETED, 'TicketVoidingSystem/MatchEarlyCompleted/Add']
+  ]);
+
+  static readonly NAVIGATE_EDIT_REQUEST = new Map<string, string>([
+    [IssueTypeConstant.ABNORMAL_BET, 'TicketVoidingSystem/ArchivedTicket/Edit'],
+    [IssueTypeConstant.ABNORMAL_ACCOUNT, 'TicketVoidingSystem/AbnormalAccount/Edit'],
+    [IssueTypeConstant.EARLY_KICK_OFF, 'TicketVoidingSystem/EarlyKickOff/Edit'],
+    [IssueTypeConstant.WRONG_KICK_OFF, 'TicketVoidingSystem/WrongKickOff/Edit'],
+    [IssueTypeConstant.DANGER_ACCEPTED, 'TicketVoidingSystem/DangerAccepted/Edit'],
+    [IssueTypeConstant.RED_CARD, 'TicketVoidingSystem/RedCard/Edit'],
+    [IssueTypeConstant.WRONG_ODDS, 'TicketVoidingSystem/WrongOdds/Edit'],
+    [IssueTypeConstant.WRONG_SCORE, 'TicketVoidingSystem/WrongScore/Edit'],
+    [IssueTypeConstant.WRONG_OU, 'TicketVoidingSystem/WrongOU/Edit'],
+    [IssueTypeConstant.WRONG_1ST_OU, 'TicketVoidingSystem/Wrong1stOU/Edit'],
+    [IssueTypeConstant.WRONG_HDP, 'TicketVoidingSystem/WrongHDP/Edit'],
+    [IssueTypeConstant.WRONG_1ST_HDP, 'TicketVoidingSystem/Wrong1stHDP/Edit'],
+    [IssueTypeConstant.WRONG_QUARTER_HDP, 'TicketVoidingSystem/WrongQuarterHDP/Edit'],
+    [IssueTypeConstant.ARCHIVED_TICKET, 'TicketVoidingSystem/ArchivedTicket/Edit'],
+    [IssueTypeConstant.OTHER_ISSUES, 'TicketVoidingSystem/OtherIssues/Edit'],
+    [IssueTypeConstant.REDUCED_OVER, 'TicketVoidingSystem/ReducedOver/Edit'],
+    [IssueTypeConstant.DUPLICATE_TICKETS, 'TicketVoidingSystem/DuplicateTickets/Edit'],
+    [IssueTypeConstant.NOT_PARTICIPATE, 'TicketVoidingSystem/NotParticipate/Edit'],
+    [IssueTypeConstant.RECOVER_TICKET, 'TicketVoidingSystem/RecoverTicket/Edit'],
+    [IssueTypeConstant.ABANDONED, 'TicketVoidingSystem/Abandoned/Edit'],
+    [IssueTypeConstant.WRONG_MARKET_OFFERED, 'TicketVoidingSystem/WrongMarketOffered/Edit'],
+    [IssueTypeConstant.TECHNICAL_ERROR, 'TicketVoidingSystem/TechnicalError/Edit'],
+    [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK, 'TicketVoidingSystem/WrongOddsSportsBook/Edit'],
+    [IssueTypeConstant.WRONG_OFFERED_NAME, 'TicketVoidingSystem/WrongOfferedName/Edit'],
+    [IssueTypeConstant.MATCH_COMPLETED, 'TicketVoidingSystem/MatchCompleted/Edit'],
+    [IssueTypeConstant.MATCH_EARLY_COMPLETED, 'TicketVoidingSystem/MatchEarlyCompleted/Edit']
+  ]);
+
+  static getIssueTypeFromUrl(url: string): string {    
+    [...this.NAVIGATE_ADD_REQUEST.entries(), ...this.NAVIGATE_EDIT_REQUEST.entries()].forEach(([key, value]) => {
+      if (url.includes(value)) {
+        return key;
+      }
+    });
+
+    return '';
+  }
 }
 

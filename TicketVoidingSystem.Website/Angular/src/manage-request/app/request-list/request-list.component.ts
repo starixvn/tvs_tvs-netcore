@@ -1,28 +1,28 @@
-import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
+import { PagingComponent } from '../../../utility/components/paging/paging.component';
 import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../utility/constants/labels';
+import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { RequestStatus } from '../../../utility/models/signal-r.model';
+import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 import { StaticService } from '../../../utility/services/static.service';
+import { TicketListComponent } from '../ticket-list/ticket-list.component';
 import { TabInfoRequest, TicketListModal } from '../ticket-list/ticket-list.modal';
 import { CommonService } from './../../../utility/services/common.service';
 import { AppService } from './../app.service';
 import { PermissionManage } from './../models/permission-manage.model';
 import { DetailRequestModel, RequestModel } from './request.model';
 import { RequestDescriptionService } from './services/request-description.service';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { PagingComponent } from '../../../utility/components/paging/paging.component';
-import { TicketListComponent } from '../ticket-list/ticket-list.component';
-import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 
 @Component({
   standalone: true,

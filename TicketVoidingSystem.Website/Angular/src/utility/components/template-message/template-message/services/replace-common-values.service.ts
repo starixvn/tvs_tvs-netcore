@@ -1,10 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import { OrdinalNumberConstant } from '../../../../constants/ordinal-number.constant';
 import { Message } from '../../messages/message';
 import { FormatDateTime, TemplateContentConst, TemplateReplace } from '../template.const';
 import { TemplateContent, TemplateValue } from '../template.model';
 import { ReplaceMessageService } from './replace-message.service';
-import { OrdinalNumberConstant } from '../../../../constants/ordinal-number.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -37,20 +37,20 @@ export class ReplaceCommonValuesService {
     if(!templateValue.isVoidByBetId) {
       kickOffTimeDateGMT8.setHours(kickOffTimeDateGMT8.getHours() - 12);
     }
-    const eventDate = moment(kickOffTimeDateGMT8).format(FormatDateTime.EVENT_DATE);
+    const eventDate = dayjs(kickOffTimeDateGMT8).format(FormatDateTime.EVENT_DATE);
     this.replaceMessageService.replaceAll(outputMessage, TemplateReplace.EVENT_DATE, eventDate);
   }
 
   public replaceKickOffTime(templateValue: TemplateValue, outputMessage: Message): void {
     const dateKickOffTime = new Date(templateValue?.kickOffTime);
-    const kickOffTime = moment(dateKickOffTime.setSeconds(dateKickOffTime.getSeconds() - 1)).format(FormatDateTime.DATE_TIME);
+    const kickOffTime = dayjs(dateKickOffTime.setSeconds(dateKickOffTime.getSeconds() - 1)).format(FormatDateTime.DATE_TIME);
     const replacedContent: TemplateContent = {
       msgEnglish: `${kickOffTime} ${TemplateContentConst.GMT_8.msgEnglish}`,
       msgChineseTraditional: `${kickOffTime} ${TemplateContentConst.GMT_8.msgChineseTraditional}`,
       msgChineseSimplified: `${kickOffTime} ${TemplateContentConst.GMT_8.msgChineseSimplified}`,
       msgChineseNewSimplified: `${kickOffTime} ${TemplateContentConst.GMT_8.msgChineseNewSimplified}`
     };
-    
+
     this.replaceMessageService.replaceEachLanguage(outputMessage, TemplateReplace.KO_TIME, replacedContent);
   }
 
