@@ -21,9 +21,9 @@
               <span class="text-red"
                 [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml">
               </span>
-              }&nbsp;
+              }
               @if (!filter.isVoided) {
-              <span class="ticket-details" (click)="showAffectedTicketsDetails()">Details</span>
+              &nbsp;<span class="ticket-details" (click)="showAffectedTicketsDetails()">Details</span>
               }<br />
             </ng-container>
             <ng-container class="pool-house-count">
@@ -34,9 +34,9 @@
                 [innerHTML]="countInfoContent(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
               </span>
               },
-              Parlay Count: <strong>{{logInfo.logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
+              Parlay Count: <strong>{{logInfo.logInfoDetail.poolHouseMainParlayCount}}</strong>
               @if (!filter.isVoided) {
-              <span class="ticket-details" (click)="openPoolHouseDetails()">Details</span>
+              &nbsp;<span class="ticket-details" (click)="openPoolHouseDetails()">Details</span>
               }
               @if (!logInfo.logInfoDetail && !filter.isVoided) {
               <span class="ticket-details" (click)="openPoolHouseDetails()">PH Details</span>

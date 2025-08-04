@@ -272,8 +272,8 @@ export class StaticService {
   }
 
   static isFromTimeSameOrBeforeToTime(fromDateTime: string, toDateTime: string, tooltip: Tooltip, fromDateTimeClass: string): boolean {
-    const from = dayjs(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    const to = dayjs(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const from = dayjs(fromDateTime);
+    const to = dayjs(toDateTime);
     if (!from.isBefore(to) && !from.isSame(to)) {
       tooltip.display(fromDateTimeClass, LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
       return false;

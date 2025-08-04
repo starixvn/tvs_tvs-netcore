@@ -37,6 +37,7 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValue
   @Input() readonly = true;
   @Input() timeClass = '';
   @Input() timeFormat = DateTimeFormat.TIME_FORMAT;
+  @Input() dateTimeFormatInput = DateTimeFormat.DATE_TIME_FORMAT_24H;
 
   tooltip = new Tooltip();
   date: NgbDate;
@@ -77,7 +78,7 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValue
   updateData() {
     this.timeZone = 'America/Caracas';
     this.dateTimeFormat = `YYYY/MM/DD ${this.timeFormat}`;
-    const dayjsDateTime = dayjs(this._dateTime, this.dateTimeFormat);
+    const dayjsDateTime = dayjs(this._dateTime, this.dateTimeFormatInput);
     this.date = new NgbDate(dayjsDateTime.year(), dayjsDateTime.month() + 1, dayjsDateTime.date());
     this.time = dayjsDateTime.format(this.timeFormat);
   }

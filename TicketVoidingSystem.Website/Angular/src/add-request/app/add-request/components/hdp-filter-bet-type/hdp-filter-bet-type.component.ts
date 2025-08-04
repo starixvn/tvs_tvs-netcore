@@ -1,7 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 import { HdpFilterBetType } from '../../models/hdp-filter-betType.model';
 import { HdpFilterBetTypeService } from './hdp-filter-bet-type.service';
@@ -40,8 +39,8 @@ export class HdpFilterBetTypeComponent implements OnChanges {
   }
 
   private refreshAllFilterBetType() {
-    if (this.allFilterBetType) {
-      this.filterBetTypeId = this.allFilterBetType?.[0].betType;
+    if (this.allFilterBetType?.length > 0) {
+      this.filterBetTypeId = this.allFilterBetType[0].betType;
       this.allFilterBetType[0].isChecked = true;
     }
     this.onChangeFilter();
@@ -61,9 +60,5 @@ export class HdpFilterBetTypeComponent implements OnChanges {
   onChangeFilter() {
     this.hdpFilterBetTypeService.updateAllFilterBetTypeData(this.allFilterBetType, this.filterBetType);
     this.changeEvent.emit();
-  }
-
-  iddShowFilterBetType() {
-    return StaticService.isWrongHDP(this.issueTypeId) || StaticService.isWrongOU(this.issueTypeId);
   }
 }
