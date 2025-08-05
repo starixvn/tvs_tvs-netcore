@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ClipboardService } from 'ngx-clipboard';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { LicenseeAffectedListComponent } from './licensee-affected-list.component';
-import { ClipboardService } from 'ngx-clipboard';
 import { AffectedLicensee } from './licensee-affected-list.model';
 
 describe('LicenseeAffectedListComponent', () => {
@@ -110,7 +110,7 @@ describe('LicenseeAffectedListComponent', () => {
   it('should copy text to clipboard and show alert', () => {
     // Arrange
     const mockCopyFromContent = jest.spyOn(clipboardService, 'copyFromContent');
-    const mockAlert = jest.spyOn(window, 'alert');
+    window.alert = jest.fn();
     const testText = 'test text';
 
     // Act
@@ -118,6 +118,6 @@ describe('LicenseeAffectedListComponent', () => {
 
     // Assert
     expect(mockCopyFromContent).toHaveBeenCalledWith(testText);
-    expect(mockAlert).toHaveBeenCalledWith('The Licensee list has been copied to clipboard.');
+    expect(window.alert).toHaveBeenCalledWith('The Licensee list has been copied to clipboard.');
   });
 });

@@ -1,12 +1,12 @@
+import { EventEmitter } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TOAST_CONFIG, ToastrModule, ToastrService } from 'ngx-toastr';
 import { TestingModule } from '../../../utility/modules/testing.module';
-import { MenuBarComponent } from './menu-bar.component';
 import { CommonService } from '../../../utility/services/common.service';
 import { SignalRService } from '../../../utility/services/signal-r.service.native';
 import { NotificationPopupService } from '../notification-popup/notification-popup.service';
-import { EventEmitter } from '@angular/core';
-import { ToastrModule, ToastrService, TOAST_CONFIG } from 'ngx-toastr';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MenuBarComponent } from './menu-bar.component';
 
 class Helper {
   static readonly fakeUserInfo = {
@@ -82,7 +82,7 @@ describe('MenuBarComponent', () => {
   it('should initialize with default values', async () => {
     // Arrange
     document.body.setAttribute('root-url', '/test');
-    commonService.getNapUserInfo = jest.fn().mockResolvedValue(Helper.fakeUserInfo);
+    commonService.getNapUserInfo = jest.fn().mockReturnValue(Helper.fakeUserInfo);
 
     // Act
     await component.ngOnInit();

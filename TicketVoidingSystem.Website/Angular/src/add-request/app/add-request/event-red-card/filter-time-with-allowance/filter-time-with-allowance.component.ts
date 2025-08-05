@@ -8,10 +8,10 @@ import { TooltipComponent } from '../../../../../utility/components/tooltip/tool
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TimeZone } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
+import { OnlyNumberDirective } from '../../../../../utility/directives/number.directive';
 import { CommonStaticService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance.model';
-import { OnlyNumberDirective } from '../../../../../utility/directives/number.directive';
 
 @Component({
   standalone: true,

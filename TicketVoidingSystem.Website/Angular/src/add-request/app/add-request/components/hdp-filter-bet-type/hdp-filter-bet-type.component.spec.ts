@@ -1,10 +1,10 @@
+import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { HdpFilterBetTypeComponent } from './hdp-filter-bet-type.component';
-import { HdpFilterBetTypeService } from './hdp-filter-bet-type.service';
 import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 import { HdpFilterBetType } from '../../models/hdp-filter-betType.model';
-import { SimpleChange } from '@angular/core';
+import { HdpFilterBetTypeComponent } from './hdp-filter-bet-type.component';
+import { HdpFilterBetTypeService } from './hdp-filter-bet-type.service';
 
 class Helper {
   static readonly fakeSportTypeId = 1;

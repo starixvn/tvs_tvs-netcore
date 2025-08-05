@@ -1,16 +1,16 @@
+import { EventEmitter, SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../utility/modules/testing.module';
-import { FilterTicketsComponent } from './filter-tickets.component';
-import { CommonService } from '../../../../utility/services/common.service';
-import { HttpService } from '../../../../utility/services/http.service';
-import { GetTicketsQuery } from '../../models/query.model';
-import { FilterSearchBy } from './filter.model';
-import { MatchIdComponent } from './match-id/match-id.component';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupLicensee, Licensee } from '../../../../utility/components/licensees/licensees.model';
 import { BalanceUp } from '../../../../utility/models/balance-up.model';
 import { Currency } from '../../../../utility/models/currency.model';
-import { SimpleChange, EventEmitter } from '@angular/core';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { CommonService } from '../../../../utility/services/common.service';
+import { HttpService } from '../../../../utility/services/http.service';
+import { GetTicketsQuery } from '../../models/query.model';
+import { FilterTicketsComponent } from './filter-tickets.component';
+import { FilterSearchBy } from './filter.model';
+import { MatchIdComponent } from './match-id/match-id.component';
 
 class Helper {
   static readonly fakeBalanceUp: BalanceUp = {
@@ -134,7 +134,7 @@ describe('FilterTicketsComponent', () => {
   it('should initialize data correctly for internal URL', async () => {
     // Arrange
     component.isExternalUrl = false;
-    commonService.getBalanceUpZoneManila = jest.fn().mockImplementation(() => Helper.fakeBalanceUp);
+    commonService.getBalanceUpZoneManila = jest.fn().mockReturnValue(Helper.fakeBalanceUp);
     const element = document.createElement('body');
     element.setAttribute('id', 'body');
     element.setAttribute('user-id', '8');
@@ -258,7 +258,7 @@ describe('FilterTicketsComponent', () => {
 
     // Assert
     expect(component.changeSearchBy).toHaveBeenCalledWith('0');
-    
+
     // Cleanup
     fixture.debugElement.nativeElement.removeChild(element);
   });

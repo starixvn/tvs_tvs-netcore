@@ -5,14 +5,14 @@ module.exports = {
   preset: 'jest-preset-angular',
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: [
-    '<rootDir>/src/home-page/**/*.spec.ts',
+    '<rootDir>/src/**/*.spec.ts',
   ],
   testPathIgnorePatterns: [
     '<rootDir>/src/manage-void-services/',
-    // '<rootDir>/src/utility/',
+    '<rootDir>/src/add-request-new/',
   ],
   setupFilesAfterEnv : ['<rootDir>/test-setup.ts'],
-  collectCoverage: false,
+  collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts'],
   //collectCoverageFrom: ['src/ab-white-list/**/*.ts'],
   coveragePathIgnorePatterns: ['.spec.ts', '.module.ts', 'src/polyfills.ts', 'main.ts', 'model.ts', 'query.ts'],

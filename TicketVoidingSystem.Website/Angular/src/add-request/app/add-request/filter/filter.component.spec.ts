@@ -1,9 +1,11 @@
 import { SimpleChange } from '@angular/core';
-import * as _ from 'lodash';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportInfo } from '../../../../utility/models/event.model';
 import { IssueType } from '../../../../utility/models/issue-type.model';
 import { Selection } from '../../../../utility/models/selection.model';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
 import { LogAnalysisService } from '../services/log-analysis.service';
@@ -11,10 +13,7 @@ import { FilterComponent } from './filter.component';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../utility/modules/testing.module';
 import { ActionVoidService } from './services/action-void.service';
-import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog/sub-issue-type-dialog.model';
 
 class Helper {
@@ -118,6 +117,7 @@ describe('FilterComponent', () => {
     actionVoidService = fixture.debugElement.injector.get(ActionVoidService);
     logAnalysisService = fixture.debugElement.injector.get(LogAnalysisService);
     component = fixture.componentInstance;
+    component.backToAccessDeniedPage = jest.fn();
   });
 
   describe('Component Creation', () => {

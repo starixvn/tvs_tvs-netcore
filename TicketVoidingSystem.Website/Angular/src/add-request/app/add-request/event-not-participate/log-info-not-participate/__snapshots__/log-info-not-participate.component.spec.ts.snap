@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`LogInfoNotParticipateComponent LogInfoNotParticipateComponent init should match snapshot 1`] = `
-LogInfoNotParticipateComponent {
-  "modalService": null,
-  "primitiveProps": PrimitivePropertyEvent {},
-}
-`;

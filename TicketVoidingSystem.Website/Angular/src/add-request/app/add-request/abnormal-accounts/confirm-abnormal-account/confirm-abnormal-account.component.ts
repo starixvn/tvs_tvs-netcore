@@ -31,10 +31,6 @@ export class ConfirmAbnormalAccountComponent implements OnChanges {
     }
   }
 
-  test() {
-    console.log(this.model);
-  }
-
   private updateData(): void {
     if (this.model.isHasWarningAbnormalAccount) {
       this.usernamesOfCreditCashService = this.model.usernamesOfCreditCashService.replaceAll(',', ', ');

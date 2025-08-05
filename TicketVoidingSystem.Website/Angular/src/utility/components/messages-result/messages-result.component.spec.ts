@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../utility/modules/testing.module';
-import { MessagesResultComponent } from './messages-result.component';
-import { MessagesResult } from './messages-result';
 import { SimpleChange } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Result } from 'src/utility/models/result';
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { MessagesResult } from './messages-result';
+import { MessagesResultComponent } from './messages-result.component';
 
 describe('MessagesResultComponent', () => {
   let component: MessagesResultComponent;
@@ -65,6 +65,7 @@ describe('MessagesResultComponent', () => {
       { errorCode: 101, errorMsg: 'Another error message' },
       { errorCode: 999, errorMsg: 'Non-lock match error' }
     ] as unknown as Result<string>[];
+    component.messagesResult = result;
 
     // Act
     component.ngOnChanges({
@@ -76,9 +77,9 @@ describe('MessagesResultComponent', () => {
     });
 
     // Assert
-    expect(result.results[0].errorMsg).toBe('Some tickets cannot be processed because: Original error message');
-    expect(result.results[1].errorMsg).toBe('Some tickets cannot be processed because: Another error message');
-    expect(result.results[2].errorMsg).toBe('Non-lock match error');
+    expect(component.messagesResult.results[0].errorMsg).toBe('Some tickets cannot be processed because: Original error message');
+    expect(component.messagesResult.results[1].errorMsg).toBe('Some tickets cannot be processed because: Another error message');
+    expect(component.messagesResult.results[2].errorMsg).toBe('Non-lock match error');
   });
 
   it('should handle all lock match error codes', () => {
@@ -91,6 +92,7 @@ describe('MessagesResultComponent', () => {
       { errorCode: 103, errorMsg: 'Error 4' },
       { errorCode: 102, errorMsg: 'Error 5' }
     ] as unknown as Result<string>[];
+    component.messagesResult = result;
 
     // Act
     component.ngOnChanges({

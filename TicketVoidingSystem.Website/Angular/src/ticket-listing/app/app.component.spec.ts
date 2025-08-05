@@ -1,35 +1,36 @@
+import { CommonModule } from '@angular/common';
+import { ElementRef, EventEmitter } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
-import { AppService } from './app.service';
-import { ModalService } from '../../utility/components/modal/modal.service';
+import { RouterModule } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
-import { SignalRService } from '../../utility/services/signal-r.service.native';
+import { BetTypesModel } from '../../utility/components/bettypes/bettypes.model';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
-import { FilterEvent } from './filter/filter.model';
-import { MatchModel } from '../../utility/models/match.model';
-import { SummaryItemViewModel, SummaryItem } from './summary/summary.model';
-import { GetTicketsDetailModel, GetTicketsDetailQuery, AmendmentReponse, CommonQuery } from './models/query.model';
+import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
+import { NapUserInfoModel } from '../../utility/components/menu-bar/menu-bar.model';
+import { ModalService } from '../../utility/components/modal/modal.service';
+import { NotificationPopupService } from '../../utility/components/notification-popup/notification-popup.service';
+import { Notification } from '../../utility/components/notification/notification';
+import { NotificationComponent } from '../../utility/components/notification/notification.component';
+import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';
 import { Product } from '../../utility/constants/config';
 import { SportType } from '../../utility/constants/sport.constant';
 import { CONFIG, TEXT } from '../../utility/constants/text';
-import { Notification } from '../../utility/components/notification/notification';
-import { MessagesResponse } from './messages-response/messages-response.model';
+import { MatchModel } from '../../utility/models/match.model';
 import { Result } from '../../utility/models/result';
-import { HttpService } from '../../utility/services/http.service';
-import { ElementRef, EventEmitter } from '@angular/core';
-import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { CommonService } from '../../utility/services/common.service';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { HttpService } from '../../utility/services/http.service';
+import { SignalRService } from '../../utility/services/signal-r.service.native';
+import { AppComponent } from './app.component';
+import { AppService } from './app.service';
 import { FilterComponent } from './filter/filter.component';
-import { TicketsComponent } from './tickets/tickets.component';
+import { FilterEvent } from './filter/filter.model';
 import { MessagesResponseComponent } from './messages-response/messages-response.component';
-import { NotificationComponent } from '../../utility/components/notification/notification.component';
-import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
-import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';
+import { MessagesResponse } from './messages-response/messages-response.model';
+import { AmendmentReponse, CommonQuery, GetTicketsDetailModel, GetTicketsDetailQuery } from './models/query.model';
 import { SummaryComponent } from './summary/summary.component';
-import { NapUserInfoModel } from '../../utility/components/menu-bar/menu-bar.model';
-import { BetTypesModel } from '../../utility/components/bettypes/bettypes.model';
+import { SummaryItem, SummaryItemViewModel } from './summary/summary.model';
+import { TicketsComponent } from './tickets/tickets.component';
 
 // Mock window.alert
 window.alert = jest.fn();
@@ -205,16 +206,25 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommonModule, RouterModule, MenuBarComponent, FilterComponent, TicketsComponent, MessagesResponseComponent, 
+      imports: [CommonModule, RouterModule, MenuBarComponent, FilterComponent, TicketsComponent, MessagesResponseComponent,
         NotificationComponent, MatchDetailComponent, TooltipComponent, SummaryComponent],
       providers: [
         { provide: HttpService, useValue: {
           get: jest.fn(), post: jest.fn(),
           getJson: jest.fn().mockReturnValue(Promise.resolve({}))
         } },
-        { provide: SignalRService, useValue: { initializeConnection: jest.fn() } },
+        { provide: SignalRService, useValue: {
+          initializeConnection: jest.fn(),
+          notificationChange: { pipe: jest.fn().mockReturnValue({ subscribe: jest.fn() }) },
+          notificationIconClass: { subscribe: jest.fn().mockReturnValue({ unsubscribe: jest.fn() }) }
+        } },
+        { provide: NotificationPopupService, useValue: {
+          isOpen$: { pipe: jest.fn().mockReturnValue({ subscribe: jest.fn() }) },
+          toggle: jest.fn(),
+          get: jest.fn().mockResolvedValue([])
+        } },
         { provide: ModalService, useValue: { open: jest.fn(), confirm: jest.fn() } },
-        { provide: AppService, useValue: { 
+        { provide: AppService, useValue: {
           getSummary: jest.fn(), getTicketsDetail: jest.fn(), exportExcel: jest.fn(),
           sendCreditDataToLetstalk: jest.fn(), sendDataToOic: jest.fn(), getLicensees: jest.fn().mockResolvedValue([])
         }},
@@ -233,7 +243,7 @@ describe('AppComponent', () => {
     component = fixture.componentInstance;
     component.matchViewModel = Helper.mockMatchViewModel;
     component.getTicketsDetailQuery = Helper.mockGetTicketsDetailQuery;
-    
+
     // Get services from injector
     appService = fixture.debugElement.injector.get(AppService);
     clipboardService = fixture.debugElement.injector.get(ClipboardService);
