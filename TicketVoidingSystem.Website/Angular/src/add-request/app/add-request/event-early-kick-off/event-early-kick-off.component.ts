@@ -42,6 +42,7 @@ import { SaveRequestService } from './services/save-request.service';
 import { SearchEventService } from './services/search-event.service';
 import { ValidationService } from './services/validation.service';
 import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
 
 @Component({
   selector: 'event-early-kick-off',
@@ -49,7 +50,7 @@ import { OnlyNumberDirective } from '../../../../utility/directives/number.direc
   styleUrls: ['./event-early-kick-off.component.scss'],
   standalone: true,
   imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, DateFullTimeNewComponent,
-    LogInfoEkoComponent, AddChildMatchComponent, ConfirmEkoComponent, OnlyNumberDirective],
+    LogInfoEkoComponent, AddChildMatchComponent, ConfirmEkoComponent, OnlyNumberDirective, InfoSiteDBDownComponent],
   providers: [EventEarlyKickOffService, LogInfoService, SaveRequestService,
     ValidationService, RelatedEventService, SearchEventService, CheckAddPermissionService]
 })
@@ -96,6 +97,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
       this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
       this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
       this.primitiveProps.isShowLogInfoEvents = false;
+      this.primitiveProps.infoSiteDBDownModel = null;
     }
   }
 
@@ -131,6 +133,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
 
   public changeMatchEvent(): void {
     this.primitiveProps.isShowLogInfoEvents = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
 
@@ -146,6 +149,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
 
   public changeKickOffTime(): void {
     this.primitiveProps.isShowLogInfoEvents = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
     if (this.kickOffTimeComponent.isTimeValid()) {
       this.allSelectedEvents.forEach(x => {
         const dateTime = this.kickOffTimeComponent.getDateTime();
@@ -248,11 +252,13 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
       this.allSelectedEvents.push(...newEvents);
       this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     }
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
   public handleDeleteEvent(matchId: number): void {
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.matchId !== matchId || x.isMainMatch);
+    this.primitiveProps.infoSiteDBDownModel = null;
   }
 
   public isDisabledChildMatches(): boolean {
@@ -269,6 +275,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
 
   public resetAllData(): void {
     this.primitiveProps.isShowLogInfoEvents = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.allSelectedEvents = [];
   }
 

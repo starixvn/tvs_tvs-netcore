@@ -26,6 +26,7 @@ export class SearchEventService {
     }
 
     arg.primitiveProps.isShowLogInfoEvents = false;
+    arg.primitiveProps.infoSiteDBDownModel = null;
     await this.getLogInfoForAllEvents(arg, newestRelatedEvents);
     arg.allEvents = _.orderBy(_.uniqBy(arg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
 
@@ -44,6 +45,7 @@ export class SearchEventService {
     this.logInfoService.assignResultLogInfoToEvents(arg.allEvents, getLogInfoResult.getLogInfoModels);
 
     arg.primitiveProps.transInfoAddRequestModel = getLogInfoResult.transInfoAddRequestModel;
+    arg.primitiveProps.infoSiteDBDownModel = getLogInfoResult.infoSiteDBDownModel;
   }
 
   private addNewestChildEventsToAllSelectedEvents(arg: SaveRequestArg, newestRelatedEvents: ChildMatchModel[]): void {

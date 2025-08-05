@@ -33,7 +33,7 @@ export class SaveRequestService {
   async recheckLogInfoBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
     arg.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
-
+    arg.primitiveProps.infoSiteDBDownModel = null;
     if (!this.validationService.validateCommonData(arg.eventLeagueComponent, arg.kickOffTimeComponent)) {
       return false;
     }
@@ -42,7 +42,7 @@ export class SaveRequestService {
     const getLogInfoResult = await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter);
     this.logInfoService.assignResultLogInfoToEvents(arg.allEvents, getLogInfoResult.getLogInfoModels);
     arg.primitiveProps.transInfoAddRequestModel = getLogInfoResult.transInfoAddRequestModel;
-
+    arg.primitiveProps.infoSiteDBDownModel = getLogInfoResult.infoSiteDBDownModel;
 
     if (!this.checkPermissionService.isAccountHasAddRequestPermission(arg.filter.action,
       arg.allEvents.some(x => x.isHasInstantlySettledTicket), arg.allEvents.some(x => x.isHasSettledTicket), arg.permission)) {
@@ -96,6 +96,8 @@ export class SaveRequestService {
     query.transInfoJson = args.primitiveProps.transInfoAddRequestModel?.transInfoJson;
     if (!args.filter.isVoided) {
       query.earlyKickOffInfo = args.allEvents.filter(x => !x.isInvalidTotalTickets).map(x => this.getEarlyKickOffModel(x, args.filter.subIssueTypeId));
+      query.siteDBDownInfoJson = args.confirmEarlyKickOff.isMarkTicketSiteDbDown && args.confirmEarlyKickOff.isHasAffectedTicketSiteDBDown
+        ? args.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;
@@ -132,6 +134,7 @@ export class SaveRequestService {
     arg.confirmEarlyKickOff.isEditingByAnotherUser = this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);
     arg.confirmEarlyKickOff.isHasSettledTicket = arg.allEvents.some(x => x.isHasSettledTicket);
     arg.confirmEarlyKickOff.isOpenDialog = true;
+    arg.confirmEarlyKickOff.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
     arg.confirmEarlyKickOff = _.clone(arg.confirmEarlyKickOff);
   }
 }

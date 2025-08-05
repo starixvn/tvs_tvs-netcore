@@ -13,6 +13,8 @@
   <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
     (click)="handleSearchEvent()">Search</button>
 </div>
+<info-site-db-down [infoSiteDBDownModel]="primitiveProps.infoSiteDBDownModel">
+</info-site-db-down>
 @if (primitiveProps.isShowLogInfoEvents) {
 <div>
   <div class="main-match-log-info mb-3">
