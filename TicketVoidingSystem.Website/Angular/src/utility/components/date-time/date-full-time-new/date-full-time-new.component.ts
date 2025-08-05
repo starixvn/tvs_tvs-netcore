@@ -25,7 +25,7 @@ import { DatePickerComponent } from '../date-picker/date-picker.component';
   ]
 })
 export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValueAccessor {
-  @Input() index: number = null;
+  @Input() index: number = 0;
   @Input() timeZone: string;
   @Input() isDisabled = false;
   @Input() maxDate: NgbDate;
@@ -122,6 +122,10 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValue
   }
 
   onBlur() {
+    const isTimeValid = this.validateWithTooltip();
+    if (isTimeValid) {
+      this.onChangeModel();
+    }
     this._onTouched();
   }
 
