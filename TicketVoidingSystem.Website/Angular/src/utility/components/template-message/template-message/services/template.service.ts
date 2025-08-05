@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import dayjs from 'dayjs';
+import moment from 'moment-timezone';
 import { MatchModel } from '../../../../models/match.model';
 import { FormatDateTime } from '../template.const';
 import { TemplateValue } from '../template.model';
@@ -34,7 +34,7 @@ export class TemplateService {
         msgChineseSimplified: match.leagueNameSimplified,
         msgChineseNewSimplified: match.leagueNameNewSimplified
       },
-      eventDate: dayjs(new Date(match.eventDate)).format(FormatDateTime.EVENT_DATE),
+      eventDate: moment(new Date(match.eventDate)).format(FormatDateTime.EVENT_DATE),
       sportTypeId: match.sportType,
       matchId: match.matchId,
       match: match,

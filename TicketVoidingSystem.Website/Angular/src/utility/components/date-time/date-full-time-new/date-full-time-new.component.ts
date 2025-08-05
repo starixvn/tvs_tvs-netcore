@@ -2,15 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
+import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { CommonStaticService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { DatePickerComponent } from '../date-picker/date-picker.component';
-dayjs.extend(customParseFormat);
 
 @Component({
   standalone: true,
@@ -37,7 +35,6 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValue
   @Input() readonly = true;
   @Input() timeClass = '';
   @Input() timeFormat = DateTimeFormat.TIME_FORMAT;
-  @Input() dateTimeFormatInput = DateTimeFormat.DATE_TIME_FORMAT_24H;
 
   tooltip = new Tooltip();
   date: NgbDate;
@@ -78,14 +75,14 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValue
   updateData() {
     this.timeZone = 'America/Caracas';
     this.dateTimeFormat = `YYYY/MM/DD ${this.timeFormat}`;
-    const dayjsDateTime = dayjs(this._dateTime, this.dateTimeFormatInput);
-    this.date = new NgbDate(dayjsDateTime.year(), dayjsDateTime.month() + 1, dayjsDateTime.date());
-    this.time = dayjsDateTime.format(this.timeFormat);
+    const momentDateTime = moment(this._dateTime, this.dateTimeFormat);
+    this.date = new NgbDate(momentDateTime.year(), momentDateTime.month() + 1, momentDateTime.date());
+    this.time = momentDateTime.format(this.timeFormat);
   }
 
   onChangeModel() {
     this.time = CommonStaticService.convertToStrictTimeFormat(this.time, this.timeFormat);
-    this._dateTime = dayjs(`${StaticService.convertToFullDate(this.date)} ${this.time}`, this.dateTimeFormat).format(this.dateTimeFormat);
+    this._dateTime = moment(`${StaticService.convertToFullDate(this.date)} ${this.time}`, this.dateTimeFormat, true).format(this.dateTimeFormat);
     this._onChange(this._dateTime);
   }
 
@@ -102,8 +99,8 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValue
   }
 
   isTimeValid() {
-    const timeDayjs = dayjs(this.time.trim(), this.timeFormat);
-    if (!timeDayjs.isValid()) {
+    const timeMoment = moment(this.time.trim(), this.timeFormat, true);
+    if (!timeMoment.isValid()) {
       return false;
     }
     return true;
@@ -111,7 +108,7 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValue
 
   onChangeTime(newTime: string) {
     if (this.isPasteTimeEvent && this.isPasteCorrectTime(newTime)) {
-      this.time = dayjs(newTime.trim(), this.ALLOWED_TIME_FORMATS).format(this.timeFormat);
+      this.time = moment(newTime.trim(), this.ALLOWED_TIME_FORMATS, true).format(this.timeFormat);
     }
     this.isPasteTimeEvent = false;
   }
@@ -121,7 +118,7 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValue
   }
 
   isPasteCorrectTime(time: string) {
-    return dayjs(time.trim(), this.ALLOWED_TIME_FORMATS).isValid();
+    return moment(time.trim(), this.ALLOWED_TIME_FORMATS, true).isValid();
   }
 
   onBlur() {

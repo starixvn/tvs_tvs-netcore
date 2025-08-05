@@ -1,5 +1,5 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import dayjs from 'dayjs';
+import moment, { Moment } from 'moment-timezone';
 import { RequestDetailViewModel } from '../../add-request-new/events/models/request.model copy';
 import { GetLogInfoModel, ValidationMessage } from '../../add-request/app/add-request/models/get-log-info.model';
 import { ModalType } from '../components/modal/modal.model';
@@ -272,12 +272,13 @@ export class StaticService {
   }
 
   static isFromTimeSameOrBeforeToTime(fromDateTime: string, toDateTime: string, tooltip: Tooltip, fromDateTimeClass: string): boolean {
-    const from = dayjs(fromDateTime);
-    const to = dayjs(toDateTime);
-    if (!from.isBefore(to) && !from.isSame(to)) {
+    const momentFromDateTime = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const momentToDateTime = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    if (!momentFromDateTime.isSameOrBefore(momentToDateTime)) {
       tooltip.display(fromDateTimeClass, LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
       return false;
     }
+
     return true;
   }
 
@@ -377,8 +378,8 @@ export class StaticService {
     if (logInfoModel.validation.isExistsSecondAccept) {
       const toDateTimeExist = new Date(filterFromTime);
       toDateTimeExist.setSeconds(Number(secondAcceptValue) + toDateTimeExist.getSeconds());
-      const fromTime = dayjs(logInfoModel.logInfoDetail.highlightMinTime).format(DateTimeFormat.TIME_FORMAT);
-      const toTime = dayjs(toDateTimeExist).format(DateTimeFormat.TIME_FORMAT);
+      const fromTime = `${moment(logInfoModel.logInfoDetail.highlightMinTime).format(DateTimeFormat.TIME_FORMAT)}`;
+      const toTime = `${moment(toDateTimeExist).format(DateTimeFormat.TIME_FORMAT)}`;
 
       messageList.push({
         isError: false,
@@ -417,9 +418,9 @@ export class StaticService {
     return multipleSelection;
   }
 
-  static getDurations(fromTime: any, toTime: any): string {
+  static getDurations(fromTime: Moment, toTime: Moment): string {
     const MILLISECONDS_IN_A_MINUTE = 60000;
-    const durations = dayjs(toTime).diff(dayjs(fromTime));
+    const durations = toTime.diff(fromTime);
     const minutes = Math.floor(durations / MILLISECONDS_IN_A_MINUTE);
     const seconds = ((durations % MILLISECONDS_IN_A_MINUTE) / 1000).toFixed(0);
 

@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { OrdinalNumberConstant } from '../../../../constants/ordinal-number.constant';
 import { Message } from '../../messages/message';
 import { FormatDateTime, TemplateContentConst, TemplateReplace } from '../template.const';
@@ -37,13 +37,13 @@ export class ReplaceCommonValuesService {
     if(!templateValue.isVoidByBetId) {
       kickOffTimeDateGMT8.setHours(kickOffTimeDateGMT8.getHours() - 12);
     }
-    const eventDate = dayjs(kickOffTimeDateGMT8).format(FormatDateTime.EVENT_DATE);
+    const eventDate = moment(kickOffTimeDateGMT8).format(FormatDateTime.EVENT_DATE);
     this.replaceMessageService.replaceAll(outputMessage, TemplateReplace.EVENT_DATE, eventDate);
   }
 
   public replaceKickOffTime(templateValue: TemplateValue, outputMessage: Message): void {
     const dateKickOffTime = new Date(templateValue?.kickOffTime);
-    const kickOffTime = dayjs(dateKickOffTime.setSeconds(dateKickOffTime.getSeconds() - 1)).format(FormatDateTime.DATE_TIME);
+    const kickOffTime = moment(dateKickOffTime.setSeconds(dateKickOffTime.getSeconds() - 1)).format(FormatDateTime.DATE_TIME);
     const replacedContent: TemplateContent = {
       msgEnglish: `${kickOffTime} ${TemplateContentConst.GMT_8.msgEnglish}`,
       msgChineseTraditional: `${kickOffTime} ${TemplateContentConst.GMT_8.msgChineseTraditional}`,
