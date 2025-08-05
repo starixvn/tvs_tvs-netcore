@@ -160,10 +160,10 @@ const addRequestArchivedTicket = {
     'add-request-new/events/archived-ticket/main.ts',
     'polyfills.ts'
   ],
-  deployUrl: 'dist/ticket-voiding-system/add-request/archived-ticket/',
+  deployUrl: 'dist/ticket-voiding-system/archived-ticket/',
   index: 'src/add-request-new/events/archived-ticket/index.cshtml',
   main: 'src/add-request-new/events/archived-ticket/main.ts',
-  transformFolder: '../wwwroot/dist/ticket-voiding-system/add-request/archived-ticket',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/archived-ticket',
   indexEJSPath: './src/add-request-new/events/archived-ticket/index.ejs'
 };
 
@@ -175,9 +175,9 @@ const configPages = [
   //ticketListing,
   //voidSingleBet,
   //voidRequest,
-  manageRequest,
-  //addRequest,
-  //editRequest,
+  //manageRequest,
+  addRequest,
+  editRequest,
   //voidByBetId
   //addRequestArchivedTicket
 ];
