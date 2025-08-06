@@ -26,7 +26,7 @@ public class GetLastTimeScoreHandler(OnlineServerRepository onlineServerReposito
     private async Task<GetLastTimeScoreViewModel> GetTimeByServer(int siteDbGroupId, GetLastTimeScoreRequest request)
     {
         var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
-        var criteria = new GetLastTimeScoreCriteriaBase
+        var criteria = new GetLastTimeScoreCriteria
         {
             SiteDbGroupId = siteDbGroupId,
             MatchId = request.MatchId,

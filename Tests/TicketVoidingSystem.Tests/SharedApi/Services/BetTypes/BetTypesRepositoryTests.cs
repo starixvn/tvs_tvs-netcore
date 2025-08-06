@@ -95,14 +95,14 @@ public class BetTypesRepositoryTests : IClassFixture<AppSettingFixture>, IClassF
     {
         // Arrange
         var data = new List<BetTypeModel> { new() };
-        onlineServerRepository.FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteriaBase>())
+        onlineServerRepository.FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteria>())
             .ReturnsForAnyArgs(data);
 
         // Act
         _ = await service.GetBetTypesHaveTicketsForTvs(1, false, null);
 
         // Assert
-        await onlineServerRepository.Received().FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteriaBase>());
+        await onlineServerRepository.Received().FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteria>());
     }
 
     [Fact]

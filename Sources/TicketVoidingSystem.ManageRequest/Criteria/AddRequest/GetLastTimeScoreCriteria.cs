@@ -3,7 +3,7 @@ using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
-public class GetLastTimeScoreCriteriaBase : OnlineServerCriteriaBase
+public class GetLastTimeScoreCriteria : OnlineServerCriteriaBase
 {
     public int MatchId { get; set; }
 

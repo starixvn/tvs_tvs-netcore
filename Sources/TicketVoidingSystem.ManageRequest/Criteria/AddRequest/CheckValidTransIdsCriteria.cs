@@ -3,7 +3,7 @@ using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
-public class CheckValidTransIdsCriteriaBase : OnlineServerCriteriaBase
+public class CheckValidTransIdsCriteria : OnlineServerCriteriaBase
 {
     public string TransIds { get; set; }
 

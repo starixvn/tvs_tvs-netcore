@@ -32,7 +32,7 @@ public class GetLastTimeScoreHandlerTests : IClassFixture<AppSettingFixture>
             ScoreId = 1,
             FilterFromTransTime = new DateTime(2022, 2, 2, 2, 2, 2)
         };
-        onlineServerRepository.FetchAsync<GetLastTimeScoreViewModel>(Arg.Any<GetLastTimeScoreCriteriaBase>()).ReturnsForAnyArgs(
+        onlineServerRepository.FetchAsync<GetLastTimeScoreViewModel>(Arg.Any<GetLastTimeScoreCriteria>()).ReturnsForAnyArgs(
             [new GetLastTimeScoreViewModel { LastTime = new DateTime(2022, 2, 2, 2, 2, 2) }]);
 
         var viewModel = new GetLastTimeScoreViewModel

@@ -110,11 +110,14 @@ public class BetTypesRepositoryImp(IDynamicRepository repository, OnlineServerRe
 
     public async Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId, bool isGetCancelCashOut, IEnumerable<TimeRangeModel>? timeRanges)
     {
-        var criteria = new TicketVoidingGetBetTypesHaveTicketsCriteriaBase
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
+
+        var criteria = new TicketVoidingGetBetTypesHaveTicketsCriteria
         {
             MatchId = matchId,
             IsGetCancelCashOut = isGetCancelCashOut,
-            TimeRangeJson = timeRanges != null ? JsonSerializer.Serialize(timeRanges) : null
+            TimeRangeJson = timeRanges != null ? JsonSerializer.Serialize(timeRanges) : null,
+            OnlineServerId = currentOnlineServerId
         };
 
         return await onlineServerRepository.FetchAsync<BetTypeModel>(criteria);

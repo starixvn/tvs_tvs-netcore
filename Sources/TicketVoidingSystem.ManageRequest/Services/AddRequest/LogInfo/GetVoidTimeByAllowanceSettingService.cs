@@ -15,24 +15,24 @@ public class GetVoidTimeByAllowanceSettingServiceImp(OnlineServerRepository onli
 {
     public async Task<IEnumerable<VoidTimeByAllowanceSetting>> Get(GetLogInfoQuery query)
     {
-        var criteria = await CreateCriteriaAsync(query);
+        var criteria = await CreateCriteria(query);
         var models = await onlineServerRepository.FetchAsync<VoidTimeByAllowanceSetting>(criteria);
         HttpContextHelper.SetExtraLog("GetVoidTimeByAllowanceSetting", models);
 
         return GetResults(query, models);
     }
 
-    private async Task<GetVoidTimeByAllowanceSettingCriteriaBase> CreateCriteriaAsync(GetLogInfoQuery query)
+    private async Task<GetVoidTimeByAllowanceSettingCriteria> CreateCriteria(GetLogInfoQuery query)
     {
         var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
-        var criteria = new GetVoidTimeByAllowanceSettingCriteriaBase
+        var criteria = new GetVoidTimeByAllowanceSettingCriteria
         {
             ActionId = query.ActionId,
             IssueTypeId = query.IssueTypeId,
             WrongScoreInfo = query.WrongScoreModels?.ToWrongScoreInfoXml(),
             DangerAcceptedInfo = query.DangerAcceptedModels?.ToDangerAcceptedInfoXml(),
             RedCardInfo = query.RedCardModels?.ToDangerAcceptedInfoXml(),
-            OnlineServerId = currentOnlineServerId,
+            OnlineServerId = currentOnlineServerId
         };
 
         return criteria;

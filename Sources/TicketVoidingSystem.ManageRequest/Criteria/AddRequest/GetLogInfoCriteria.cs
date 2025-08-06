@@ -3,7 +3,7 @@ using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
-public class GetLogInfoCriteriaBase : OnlineServerCriteriaBase
+public class GetLogInfoCriteria : OnlineServerCriteriaBase
 {
     public bool? IsShowLogOnly { get; set; }
 

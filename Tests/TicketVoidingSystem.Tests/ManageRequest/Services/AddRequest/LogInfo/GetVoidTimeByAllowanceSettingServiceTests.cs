@@ -52,7 +52,7 @@ public class GetVoidTimeByAllowanceSettingServiceTests
         var actual = await service.Get(query);
 
         // Assert
-        await onlineServerRepository.Received().FetchAsync<VoidTimeByAllowanceSetting>(Arg.Is<GetVoidTimeByAllowanceSettingCriteriaBase>(x
+        await onlineServerRepository.Received().FetchAsync<VoidTimeByAllowanceSetting>(Arg.Is<GetVoidTimeByAllowanceSettingCriteria>(x
             => x.IssueTypeId == IssueTypeConstant.DangerAccepted));
         AssertExtension.Equal(expected, actual);
     }
@@ -92,7 +92,7 @@ public class GetVoidTimeByAllowanceSettingServiceTests
         var actual = await service.Get(query);
 
         // Assert
-        await onlineServerRepository.Received().FetchAsync<VoidTimeByAllowanceSetting>(Arg.Is<GetVoidTimeByAllowanceSettingCriteriaBase>(x
+        await onlineServerRepository.Received().FetchAsync<VoidTimeByAllowanceSetting>(Arg.Is<GetVoidTimeByAllowanceSettingCriteria>(x
             => x.IssueTypeId == IssueTypeConstant.RedCard));
         AssertExtension.Equal(expected, actual);
     }
@@ -132,7 +132,7 @@ public class GetVoidTimeByAllowanceSettingServiceTests
         var actual = await service.Get(query);
 
         // Assert
-        await onlineServerRepository.Received().FetchAsync<VoidTimeByAllowanceSetting>(Arg.Is<GetVoidTimeByAllowanceSettingCriteriaBase>(x
+        await onlineServerRepository.Received().FetchAsync<VoidTimeByAllowanceSetting>(Arg.Is<GetVoidTimeByAllowanceSettingCriteria>(x
             => x.IssueTypeId == IssueTypeConstant.WrongScore));
         AssertExtension.Equal(expected, actual);
     }

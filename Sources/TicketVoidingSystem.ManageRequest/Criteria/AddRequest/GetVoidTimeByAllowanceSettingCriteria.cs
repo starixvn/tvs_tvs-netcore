@@ -3,7 +3,7 @@ using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
-public class GetVoidTimeByAllowanceSettingCriteriaBase : OnlineServerCriteriaBase
+public class GetVoidTimeByAllowanceSettingCriteria : OnlineServerCriteriaBase
 {
     public int? ActionId { get; set; }
 

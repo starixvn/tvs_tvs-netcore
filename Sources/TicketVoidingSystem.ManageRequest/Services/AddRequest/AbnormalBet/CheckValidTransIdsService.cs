@@ -128,11 +128,11 @@ public class CheckValidTransIdsServiceImp(
         return result;
     }
 
-    private async Task<CheckValidTransIdsCriteriaBase> GetCheckValidTransIdsCriteria(CheckValidTransIdsModel message)
+    private async Task<CheckValidTransIdsCriteria> GetCheckValidTransIdsCriteria(CheckValidTransIdsModel message)
     {
         var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
 
-        var criteria = new CheckValidTransIdsCriteriaBase
+        var criteria = new CheckValidTransIdsCriteria
         {
             TransIds = message.TransIds,
             RequestId = message.RequestId,
