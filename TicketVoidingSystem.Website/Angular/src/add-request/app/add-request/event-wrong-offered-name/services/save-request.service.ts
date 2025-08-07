@@ -39,6 +39,7 @@ export class SaveRequestService {
 
     argWrongOfferedName.addRequestStore.changeBlockingUiStatus(true);
     argWrongOfferedName.primitiveProps.isShowLogInfo = false;
+    argWrongOfferedName.primitiveProps.infoSiteDBDownModel = null;
     await this.logInfoService.getLogInfo(argWrongOfferedName.logInfoEvent, argWrongOfferedName.isEdit, argWrongOfferedName.requestId,
       argWrongOfferedName.filter, argWrongOfferedName.primitiveProps);
 
@@ -74,6 +75,7 @@ export class SaveRequestService {
     arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoDetail?.settleCount > 0;
     arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.messageValidationLogInfo?.length > 0;
     arg.confirmAddRequest.isShowSubIssueType = true;
+    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
     arg.confirmAddRequest.isOpen = true;
     arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
   }
@@ -98,6 +100,8 @@ export class SaveRequestService {
     if (!argWrongOfferedName.filter.isVoided) {
       query.wrongOfferedNameInfo = this.eventWrongOfferedNameService.initWrongMarketOfferedModel(
         Number(argWrongOfferedName.filter.subIssueTypeId), argWrongOfferedName.logInfoEvent);
+      query.siteDBDownInfoJson = argWrongOfferedName.confirmAddRequest.isMarkTicketSiteDbDown && argWrongOfferedName.confirmAddRequest.isHasAffectedTicketSiteDBDown
+        ? argWrongOfferedName.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;
