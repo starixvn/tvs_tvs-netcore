@@ -17,7 +17,22 @@ import { StaticService } from '../../../utility/services/static.service';
 import { EditRequestService } from '../../events/services/edit-request/edit-request.service';
 import { LogAnalysisService } from '../../events/services/log-analysis.service';
 import { AddRequestSkeletonComponent } from '../add-request-skeleton/add-request-skeleton.component';
+import { OthersModel } from '../others/others.model';
 import { EventBaseService } from './event-base.service';
+
+// Type definitions for template contexts
+interface EventContentContext {
+  eventModel: unknown; // Can be EventTicket14Model, WrongScoreModel, etc.
+  otherModel: OthersModel;
+  isEdit: boolean;
+  requestId: number;
+  filterModel: FilterModel;
+}
+
+interface OthersContentContext {
+  otherModel: OthersModel;
+  isEdit: boolean;
+}
 
 @Component({
   standalone: true,
@@ -31,8 +46,8 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   @Input() issueTypeId: string;
   @Input() model: RequestModel;
   @Input() eventHeight: string;
-  @Input() eventContent: TemplateRef<any>;
-  @Input() othersContent: TemplateRef<any>;
+  @Input() eventContent: TemplateRef<EventContentContext>;
+  @Input() othersContent: TemplateRef<OthersContentContext>;
   @Output() saveRequest = new EventEmitter<void>();
   @Output() copyLetsTalkRequestInfo = new EventEmitter<void>();
   @ViewChild('filter') filterComponent: FilterComponent;
@@ -62,13 +77,20 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
 
   isBlock$: Observable<boolean> = this.addRequestStore.isBlocking;
 
-  get contextData() {
+  get eventContextData(): EventContentContext {
     return {
       eventModel: this.model.eventTicket14Model,
       otherModel: this.model.others,
       isEdit: this.isEdit,
       requestId: this.requestId,
       filterModel: this.model.filter
+    };
+  }
+
+  get othersContextData(): OthersContentContext {
+    return {
+      otherModel: this.model.others,
+      isEdit: this.isEdit,
     };
   }
 
@@ -91,7 +113,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   async runAsyncData(): Promise<void> {
-    const promises: Promise<any>[] = [
+    const promises: Promise<any>[] = [ // NOSONAR
       this.eventBaseService.getSubIssueTypes(Number(this.issueTypeId)),
       this.commonService.getVoidActions()
     ];

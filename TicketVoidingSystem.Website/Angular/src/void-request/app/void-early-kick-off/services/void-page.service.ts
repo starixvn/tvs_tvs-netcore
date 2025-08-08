@@ -67,6 +67,8 @@ export class VoidPageService {
         subIssueTypeId: requestDetail.wrongOfferedNameModel.subIssueTypeId
       }] as BasicRequestInfo[];
     }
+
+    return [];
   }
 
   private getSubIssueTypeModel(subIssueTypeId: number, issueTypes: IssueTypesModel): SubIssueType {

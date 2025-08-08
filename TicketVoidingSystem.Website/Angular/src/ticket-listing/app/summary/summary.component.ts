@@ -1,10 +1,10 @@
-﻿import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange, inject } from '@angular/core';
+﻿import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { ClipboardService } from 'ngx-clipboard';
 import { SpecialPlatform } from '../../../utility/constants/special-platform.constant';
 import { SummaryItem } from './summary.model';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
@@ -79,7 +79,7 @@ export class SummaryComponent implements OnChanges {
   updateAffectedLicensees() {
     const model = Number(this.groupBy) === 0 ? this.items : this.itemsGroupByLicensee;
     this.affectedLicensees = model
-      .filter(x => x.isChecked && x.name !== 'Credit' && !x.isChinaView && x.specialPlatform !== SpecialPlatform.Jolly_Sports && x.specialPlatform !== SpecialPlatform.Jolly_Sports_CV)
+      .filter(x => x.isChecked && x.name !== 'Credit' && !x.isChinaView && x.specialPlatform !== SpecialPlatform.JOLLY_SPORTS && x.specialPlatform !== SpecialPlatform.JOLLY_SPORTS_CV)
       .map(x => x.licenseeName)
       .join(', ');
 
@@ -89,12 +89,12 @@ export class SummaryComponent implements OnChanges {
       .join(', ');
 
     this.jollyViewLicensees = model
-      .filter(x => x.isChecked && x.specialPlatform === SpecialPlatform.Jolly_Sports)
+      .filter(x => x.isChecked && x.specialPlatform === SpecialPlatform.JOLLY_SPORTS)
       .map(x => x.licenseeName)
       .join(', ');
 
       this.jollySportCvLicensees = model
-      .filter(x => x.isChecked && x.specialPlatform === SpecialPlatform.Jolly_Sports_CV)
+      .filter(x => x.isChecked && x.specialPlatform === SpecialPlatform.JOLLY_SPORTS_CV)
       .map(x => x.licenseeName)
       .join(', ');
   }
@@ -104,7 +104,7 @@ export class SummaryComponent implements OnChanges {
     this.totalBetCountOfCredit = _.sumBy(creditGroups, 'total');
 
     const normalLicenseeGroups = _.reject(this.itemsGroupByLicensee, function (o) {
-      return o.name === 'Credit' || o.isChinaView || o.specialPlatform === SpecialPlatform.Jolly_Sports || o.specialPlatform === SpecialPlatform.Jolly_Sports_CV;
+      return o.name === 'Credit' || o.isChinaView || o.specialPlatform === SpecialPlatform.JOLLY_SPORTS || o.specialPlatform === SpecialPlatform.JOLLY_SPORTS_CV;
     });
     this.totalBetCountOfNormalLicensee = _.sumBy(normalLicenseeGroups, 'total');
     this.totalLicenseeCountOfNormal = normalLicenseeGroups.length;
@@ -140,9 +140,9 @@ export class SummaryComponent implements OnChanges {
   }
 
   isShowAffectedLicensees(): boolean {
-    return this.isShowSend && (this.affectedLicensees.length > 0 
-      || this.chinaViewLicensees.length > 0 
-      || this.jollyViewLicensees.length > 0 
+    return this.isShowSend && (this.affectedLicensees.length > 0
+      || this.chinaViewLicensees.length > 0
+      || this.jollyViewLicensees.length > 0
       || this.jollySportCvLicensees.length > 0);
   }
 }

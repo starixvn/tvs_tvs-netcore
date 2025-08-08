@@ -93,7 +93,7 @@ export class FilterComponent implements OnInit {
   isCheckTime = true;
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
   private readonly BET_ITEM_SUB_PARLAY = 'Sub Parlay';
-  
+
   element = inject(ElementRef);
   appService = inject(AppService);
   commonService = inject(CommonService);
@@ -105,7 +105,7 @@ export class FilterComponent implements OnInit {
   async ngOnInit() {
     await this.initFilter();
   }
-  
+
   renderComboParlay() {
     this.comboParlay = ComboParlayConstants.ComboParlay;
     this.selectedComboParlay = [];
@@ -403,7 +403,7 @@ export class FilterComponent implements OnInit {
         return;
       }
       this.checkBetTypeByCondition(BetTypeAutoCheckBySubIssue.WRONG_QUARTER_OU);
-    } 
+    }
     else {
       if (this.eventType.value === "0") {
         this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_OU_NON_LIVE);
@@ -579,7 +579,7 @@ export class FilterComponent implements OnInit {
       return false;
     }
     if (this.isSelectionNotValid()) {
-      this.tooltip.display('selection-dropdown-sub-parlay', TEXT.INVALID_SELECTION);
+      this.tooltip.display('selection-dropdown-sub-parlay', TEXT.SELECT_AT_LEAST_ONE_OPTION);
       return false;
     }
     return this.groupBetTypesComponent.validate() && this.advancedModeComponent.validate();

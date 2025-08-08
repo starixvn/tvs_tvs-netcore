@@ -17,13 +17,13 @@
       </div>
       <div class="list-group-item flex-column align-items-start wrapper-tooltip" [hidden]="isCollapse">
         <!-- Inject Event content-->
-        <ng-container *ngTemplateOutlet="eventContent, context: contextData"></ng-container>
+        <ng-container *ngTemplateOutlet="eventContent, context: eventContextData"></ng-container>
       </div>
     </div>
   </div>
 
   <!-- Others section (optional) -->
-  <ng-container *ngTemplateOutlet="othersContent, context: {otherModel: model.others, isEdit: isEdit}"></ng-container>
+  <ng-container *ngTemplateOutlet="othersContent, context: othersContextData"></ng-container>
 
   <div class="search mg-top-10 d-flex justify-content-between">
     <div class="d-flex">

@@ -89,7 +89,7 @@ export class HdpFilterBetTypeService {
         valueInputX = valueInputX.replaceAll('_', '');
         return isNaN(parseInt(valueInputX, 10)) ? "" : parseInt(valueInputX, 10).toString();
       case 'yy':
-        let valueInputY = filterBetType.filterBetIdY;
+        const valueInputY = filterBetType.filterBetIdY;
         return isNaN(parseInt(valueInputY, 10)) ? "" : parseInt(valueInputY, 10).toString();
       default:
         return "";

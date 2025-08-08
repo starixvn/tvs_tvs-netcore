@@ -204,13 +204,13 @@ export class UsernamesComponent implements OnChanges {
 
   isShowButtonRemoveInvalid() {
     const validIndex = this.groupUsername.checkValidItems();
-    return this.isAbException && validIndex == 2;
+    return this.isAbException && validIndex === 2;
   }
 
   removeInvalidUserNames() {
     this.groupUsername.removeExistedUsernames();
-    let usernames = this.groupUsername.getAllValue();
-    let duplicatedItems = this.groupUsername.getDuplicatedItems(usernames);
+    const usernames = this.groupUsername.getAllValue();
+    const duplicatedItems = this.groupUsername.getDuplicatedItems(usernames);
     this.groupUsername.removeInvalidUsernames();
     duplicatedItems.forEach(x => this.addItem(x, true))
   }

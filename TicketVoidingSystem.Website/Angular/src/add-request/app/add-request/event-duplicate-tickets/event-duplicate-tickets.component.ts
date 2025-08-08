@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { AbnormalFilterBy, MatchIdConstant, TVSRequestActionType } from '../../../../utility/constants/config';
@@ -16,7 +17,6 @@ import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 @Component({
   selector: 'event-duplicate-tickets',
   templateUrl: './event-duplicate-tickets.component.html',
@@ -113,7 +113,7 @@ export class EventDuplicateTicketsComponent implements OnInit {
   }
 
   private async checkValidBusinessRule(): Promise<boolean> {
-    let args = this.initSaveRequestInput();
+    const args = this.initSaveRequestInput();
     const validation = await this.validationService.checkValidBusinessRule(args);
     if (this.duplicateTicketsModel.filterBy === AbnormalFilterBy.SINGLE) {
       this.duplicateTicketsModel.name = args.duplicateTicketsModel.name;

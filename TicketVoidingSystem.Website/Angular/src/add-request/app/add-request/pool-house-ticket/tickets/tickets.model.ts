@@ -47,10 +47,9 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
 
   checkAllTicketsForPoolHousePopup() {
     this.groups.forEach(group => {
-      let indexTicket = 0;
-      group.tickets.forEach(y => {
+      group.tickets.forEach((y, idx) => {
         y.isChecked = group.name !== 'Others';
-        y.no = ++indexTicket;
+        y.no = idx + 1;
       });
       group.isCheckAll = group.tickets.length === group.getCheckedTickets().length;
     });
@@ -70,7 +69,12 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
       let indexTicket = 0;
       group.tickets.forEach(y => {
         y.isChecked = betTypeNames.includes(y.isParlay ? y.subBetType : y.betType);
-        y.no = y.isChecked ? ++indexTicket: indexTicket;
+        if (y.isChecked) {
+          ++indexTicket;
+          y.no = indexTicket;
+        } else {
+          y.no = indexTicket;
+        }
       });
       group.displayTotalTickets = group.getCheckedTickets().length;
       group.isCheckAll = group.tickets.length === group.displayTotalTickets;
@@ -82,8 +86,14 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
       let indexTicket = 0;
       group.tickets.forEach(y => {
         y.isChecked = this.isCheckedTicket(y, checkedBetTypes);
-        y.no = y.isChecked ? ++indexTicket : indexTicket;
+        if (y.isChecked) {
+          ++indexTicket;
+          y.no = indexTicket;
+        } else {
+          y.no = indexTicket;
+        }
       });
+
       group.displayTotalTickets = group.getCheckedTickets().length;
       group.isCheckAll = group.tickets.length === group.displayTotalTickets;
     });

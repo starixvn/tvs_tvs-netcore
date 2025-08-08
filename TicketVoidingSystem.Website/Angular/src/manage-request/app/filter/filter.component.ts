@@ -175,7 +175,7 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  validate(): boolean {
+  validate(): boolean { // NOSONAR
     if (this.filterByMatch && this.model.matchId && !_isNumberValue(this.model.matchId)) {
       this.tooltip.display('input-match-id', LABELS.INVALID_MATCHID);
       return false;

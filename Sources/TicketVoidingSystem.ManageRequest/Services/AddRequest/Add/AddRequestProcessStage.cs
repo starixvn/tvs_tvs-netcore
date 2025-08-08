@@ -103,7 +103,7 @@ public class AddRequestProcessStageImp( // NOSONAR
             IssueTypeConstant.WrongScore => string.Join(", ", query.WrongScoreInfo.Select(x => x.MatchId).Distinct()),
             IssueTypeConstant.EarlyKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
             IssueTypeConstant.WrongKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
-            IssueTypeConstant.AbnormalBet => query.AbnormalBetInfo?.Matches?.Count() > 0
+            IssueTypeConstant.AbnormalBet => query.AbnormalBetInfo?.Matches?.Any() == true
                 ? string.Join(", ", query.AbnormalBetInfo.Matches.Select(x => x.MatchId))
                 : BetTypeConstant.SystemParlay.ToString(),
             IssueTypeConstant.DuplicateTickets => query.DuplicateTicketsInfo?.MatchId.ToString(),

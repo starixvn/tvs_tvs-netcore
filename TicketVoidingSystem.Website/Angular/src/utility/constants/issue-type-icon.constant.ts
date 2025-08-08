@@ -5,6 +5,7 @@ export class IssueTypeIconConstant {
    * Maps issue type IDs to FontAwesome icon classes
    * Used for displaying icons on the home page
    */
+  static readonly HDP_ICON = 'fas fa-balance-scale';
   static readonly ISSUE_TYPE_ICONS = new Map<string, string>([
     [IssueTypeConstant.ABNORMAL_BET, 'fas fa-exclamation-triangle'],
     [IssueTypeConstant.ABNORMAL_ACCOUNT, 'fas fa-user-shield'],
@@ -16,9 +17,9 @@ export class IssueTypeIconConstant {
     [IssueTypeConstant.WRONG_SCORE, 'fas fa-list-ol'],
     [IssueTypeConstant.WRONG_OU, 'fas fa-equals'],
     [IssueTypeConstant.WRONG_1ST_OU, 'fas fa-equals'],
-    [IssueTypeConstant.WRONG_HDP, 'fas fa-balance-scale'],
-    [IssueTypeConstant.WRONG_1ST_HDP, 'fas fa-balance-scale'],
-    [IssueTypeConstant.WRONG_QUARTER_HDP, 'fas fa-balance-scale'],
+    [IssueTypeConstant.WRONG_HDP, this.HDP_ICON],
+    [IssueTypeConstant.WRONG_1ST_HDP, this.HDP_ICON],
+    [IssueTypeConstant.WRONG_QUARTER_HDP, this.HDP_ICON],
     [IssueTypeConstant.ARCHIVED_TICKET, 'fas fa-archive'],
     [IssueTypeConstant.OTHER_ISSUES, 'fas fa-ellipsis-h'],
     [IssueTypeConstant.REDUCED_OVER, 'fas fa-minus-circle'],

@@ -47,40 +47,46 @@ export class ServiceStatusConstant {
     static readonly Failed = 3;
     static readonly VoidDone = 12;
 
+    static readonly NewString = '0 - New';
+    static readonly RunningString = '1 - Running';
+    static readonly DoneString = '2 - Done';
+    static readonly FailedString = '3 - Failed';
+    static readonly VoidDoneString = '12 - Void Done';
+
     static readonly AfterVoidSelection = [
-        { name: '1 - Running', value: ServiceStatusConstant.Running },
-        { name: '2 - Done', value: ServiceStatusConstant.Done },
-        { name: '3 - Failed', value: ServiceStatusConstant.Failed }
+        { name: ServiceStatusConstant.RunningString, value: ServiceStatusConstant.Running },
+        { name: ServiceStatusConstant.DoneString, value: ServiceStatusConstant.Done },
+        { name: ServiceStatusConstant.FailedString, value: ServiceStatusConstant.Failed }
     ];
 
     static readonly AutoVoidRequestQueueSelection = [
-        { name: '0 - New', value: ServiceStatusConstant.New },
-        { name: '2 - Done', value: ServiceStatusConstant.Done },
-        { name: '3 - Failed', value: ServiceStatusConstant.Failed }
+        { name: ServiceStatusConstant.NewString, value: ServiceStatusConstant.New },
+        { name: ServiceStatusConstant.DoneString, value: ServiceStatusConstant.Done },
+        { name: ServiceStatusConstant.FailedString, value: ServiceStatusConstant.Failed }
     ];
 
     static readonly TicketVoidingQueueSelection = [
-        { name: '1 - Running', value: ServiceStatusConstant.Running },
-        { name: '2 - Done', value: ServiceStatusConstant.Done },
-        { name: '3 - Failed', value: ServiceStatusConstant.Failed }
+        { name: ServiceStatusConstant.RunningString, value: ServiceStatusConstant.Running },
+        { name: ServiceStatusConstant.DoneString, value: ServiceStatusConstant.Done },
+        { name: ServiceStatusConstant.FailedString, value: ServiceStatusConstant.Failed }
     ];
 
     static readonly VoidServiceSelection = [
-        { name: '1 - Running', value: ServiceStatusConstant.Running },
-        { name: '12 - Void Done', value: ServiceStatusConstant.VoidDone },
-        { name: '2 - Done All', value: ServiceStatusConstant.Done },
-        { name: '3 - Failed', value: ServiceStatusConstant.Failed }
+        { name: ServiceStatusConstant.RunningString, value: ServiceStatusConstant.Running },
+        { name: ServiceStatusConstant.VoidDoneString, value: ServiceStatusConstant.VoidDone },
+        { name: ServiceStatusConstant.DoneString, value: ServiceStatusConstant.Done },
+        { name: ServiceStatusConstant.FailedString, value: ServiceStatusConstant.Failed }
     ];
 
     static readonly VoidingHistorySelection = [
-        { name: '1 - Running', value: ServiceStatusConstant.Running },
-        { name: '2 - Done', value: ServiceStatusConstant.Done },
-        { name: '3 - Failed', value: ServiceStatusConstant.Failed }
+        { name: ServiceStatusConstant.RunningString, value: ServiceStatusConstant.Running },
+        { name: ServiceStatusConstant.DoneString, value: ServiceStatusConstant.Done },
+        { name: ServiceStatusConstant.FailedString, value: ServiceStatusConstant.Failed }
     ];
-    
+
     static readonly LetsTalkSelection = [
-        { name: '1 - Running', value: ServiceStatusConstant.Running },
-        { name: '2 - Done', value: ServiceStatusConstant.Done },
-        { name: '3 - Failed', value: ServiceStatusConstant.Failed }
+        { name: ServiceStatusConstant.RunningString, value: ServiceStatusConstant.Running },
+        { name: ServiceStatusConstant.DoneString, value: ServiceStatusConstant.Done },
+        { name: ServiceStatusConstant.FailedString, value: ServiceStatusConstant.Failed }
     ];
 }

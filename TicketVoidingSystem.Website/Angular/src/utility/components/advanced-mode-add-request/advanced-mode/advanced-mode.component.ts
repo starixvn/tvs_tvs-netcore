@@ -300,7 +300,7 @@ export class AdvancedModeComponent {
         this.showTooltipWhenCollapsed();
       } else {
         const className = `bet-team-${betTeamIndex}-selection-${selection.index}`;
-        this.tooltip.display(className, LABELS.SELECT_AT_LEAST_ONE_OPTION);
+        this.tooltip.display(className, TEXT.SELECT_AT_LEAST_ONE_OPTION);
       }
       return false;
     }

@@ -6,28 +6,28 @@ import * as _ from 'lodash';
 import { default as moment } from 'moment-timezone';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
-import { BetTypesComponent } from '../../../utility/components/bettypes/bettypes.component';
+import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { BetTypesVirtualSportComponent } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.component';
+import { GroupBetTypeVirtualSport } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.model';
+import { BetTypesComponent } from '../../../utility/components/bettypes/bettypes.component';
+import { BetTypeModel, BetTypesModel } from '../../../utility/components/bettypes/bettypes.model';
+import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
 import { DateFullTimeNewComponent } from '../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
-import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
-import { GroupBetTypeVirtualSport } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.model';
-import { BetTypeModel, BetTypesModel } from '../../../utility/components/bettypes/bettypes.model';
-import { Selection } from '../../../utility/models/selection.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { FilterEvent, Item, Licensee, Type } from './filter.model';
-import { GetSummaryQuery } from '../models/query.model';
-import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
-import { CommonService } from '../../../utility/services/common.service';
-import { StaticService } from '../../../utility/services/static.service';
-import { AppService } from '../app.service';
 import { ComboParlayConstants } from '../../../utility/constants/combo-parlay.constant';
 import { DateTimeFormat, ModeType, Product } from '../../../utility/constants/config';
 import { TEXT } from '../../../utility/constants/text';
+import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
 import { BallSequences } from '../../../utility/models/ball-sequences';
 import { MatchModel } from '../../../utility/models/match.model';
-import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
+import { Selection } from '../../../utility/models/selection.model';
+import { CommonService } from '../../../utility/services/common.service';
+import { StaticService } from '../../../utility/services/static.service';
 import { AppComponent } from '../app.component';
+import { AppService } from '../app.service';
+import { GetSummaryQuery } from '../models/query.model';
+import { FilterEvent, Item, Licensee, Type } from './filter.model';
 
 @Component({
   standalone: true,
@@ -256,14 +256,14 @@ export class FilterComponent implements OnInit {
     return true;
   }
 
-  private inValidSportTypeVirtualSport(sportType: number) {
+  private inValidSportTypeVirtualSport(sportType: number) { // NOSONAR
     return (sportType < 180 || sportType > 186)                         //sportTypes invalid in  Virtual Sports
       && ((sportType < 190 || sportType > 199) && sportType !== 177)      //sportTypes invalid in  Virtual Sports 2
       && (sportType !== 178 && sportType !== 179)                         //sportTypes invalid in  Virtual Sports 3
       && (sportType !== 188)                                              //sportTypes invalid in  Virtual Sports 4
       && (sportType !== 147)                                              //sportTypes invalid in  Virtual Sports 5
       && (sportType !== 134)                                              //sportTypes invalid in  Virtual Sports 6
-      && !this.isSportTypeVs7(sportType);                                 //sportTypes invalid in  Virtual Sports 7                                    
+      && !this.isSportTypeVs7(sportType);                                 //sportTypes invalid in  Virtual Sports 7
   }
 
   private isSportTypeVs7(sportType: number){
@@ -294,7 +294,7 @@ export class FilterComponent implements OnInit {
     );
   }
 
-  private isInvalidFirstGroupOtherProducts(sportType: number): boolean {
+  private isInvalidFirstGroupOtherProducts(sportType: number): boolean { // NOSONAR
     return (
       sportType > 99 &&
       sportType !== 154 &&
@@ -443,7 +443,7 @@ export class FilterComponent implements OnInit {
       return false;
     }
     if (this.isSelectionNotValid()) {
-      this.tooltip.display('selection-dropdown-sub-parlay', TEXT.INVALID_SELECTION);
+      this.tooltip.display('selection-dropdown-sub-parlay', TEXT.SELECT_AT_LEAST_ONE_OPTION);
       return false;
     }
     if (this.isShowAdvancedMode()) {

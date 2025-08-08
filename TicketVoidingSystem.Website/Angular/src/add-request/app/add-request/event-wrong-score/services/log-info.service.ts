@@ -9,9 +9,9 @@ import { GetLogInfoQuery } from '../../models/add-request.query';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { GetLogInfoModel } from '../../models/get-log-info.model';
 import { WrongScoreGetLogInfoQuery } from '../event-wrong-score.model';
+import { GetLogInfoParams } from '../models/get-log-info-params.model';
 import { EventWrongScoreService } from './event-wrong-score.service';
 import { ValidationService } from './validation.service';
-import { GetLogInfoParams } from '../models/get-log-info-params.model';
 
 @Injectable()
 export class LogInfoService {
@@ -62,14 +62,14 @@ export class LogInfoService {
     const allEvents = [params.mainEvent, ...params.relatedEvents]
     const relatedEventsGetLogInfoQuery = allEvents.map(event => {
       const wrongScoreGetLogInfoQuery = new WrongScoreGetLogInfoQuery();
-      wrongScoreGetLogInfoQuery.filterFromTransTime = event.isMainMatch || this.validationService.isHasAllowanceTime(event) ? params.defaultFilterTimeWithAllowance.fromDateTime : event.voidTimeArea.fromDateTime,
-        wrongScoreGetLogInfoQuery.filterToTransTime = event.isMainMatch || this.validationService.isHasAllowanceTime(event) ? params.defaultFilterTimeWithAllowance.toDateTime : event.voidTimeArea.toDateTime,
-        wrongScoreGetLogInfoQuery.matchId = event.matchId,
-        wrongScoreGetLogInfoQuery.filterBy = filterBy,
-        wrongScoreGetLogInfoQuery.subIssueTypeId = event.subIssueTypeId,
-        wrongScoreGetLogInfoQuery.aaTime = event.isMainMatch ? params.defaultFilterTimeWithAllowance.aaTime : event.voidTimeArea.aaTime,
-        wrongScoreGetLogInfoQuery.paTime = event.isMainMatch ? params.defaultFilterTimeWithAllowance.paTime : event.voidTimeArea.paTime,
-        wrongScoreGetLogInfoQuery.saTime = event.isMainMatch ? params.defaultFilterTimeWithAllowance.saTime : event.voidTimeArea.saTime
+      wrongScoreGetLogInfoQuery.filterFromTransTime = event.isMainMatch || this.validationService.isHasAllowanceTime(event) ? params.defaultFilterTimeWithAllowance.fromDateTime : event.voidTimeArea.fromDateTime;
+      wrongScoreGetLogInfoQuery.filterToTransTime = event.isMainMatch || this.validationService.isHasAllowanceTime(event) ? params.defaultFilterTimeWithAllowance.toDateTime : event.voidTimeArea.toDateTime;
+      wrongScoreGetLogInfoQuery.matchId = event.matchId;
+      wrongScoreGetLogInfoQuery.filterBy = filterBy;
+      wrongScoreGetLogInfoQuery.subIssueTypeId = event.subIssueTypeId;
+      wrongScoreGetLogInfoQuery.aaTime = event.isMainMatch ? params.defaultFilterTimeWithAllowance.aaTime : event.voidTimeArea.aaTime;
+      wrongScoreGetLogInfoQuery.paTime = event.isMainMatch ? params.defaultFilterTimeWithAllowance.paTime : event.voidTimeArea.paTime;
+      wrongScoreGetLogInfoQuery.saTime = event.isMainMatch ? params.defaultFilterTimeWithAllowance.saTime : event.voidTimeArea.saTime;
 
       return wrongScoreGetLogInfoQuery;
     });

@@ -70,7 +70,7 @@ export class RelatedEventService {
   
   async updateEventAutoGetLinkMatch(childEvents: ChildMatchModel[], arg: AddRelatedEventArg) {
     const newLinkEvents = childEvents.filter(x => !arg.relatedEvents.some(y => y.matchId === x.matchId) && this.isAutoSelectMatch(arg.mainEvent, x.matchType));
-    let subTypeLinkMatches = await this.getSubIssueTypeLinkMatch(Number(arg.filter.subIssueTypeId), newLinkEvents.map(x => x.matchId).join(','));
+    const subTypeLinkMatches = await this.getSubIssueTypeLinkMatch(Number(arg.filter.subIssueTypeId), newLinkEvents.map(x => x.matchId).join(','));
 
     subTypeLinkMatches.forEach(x => {
       if (SubIssueTypeRelatedEvent.isLinkMatchSubIssueTypeAutoAdd(x.subIssueTypeId)) {

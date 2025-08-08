@@ -26,7 +26,7 @@ export class InfoSiteDBDownComponent implements OnChanges {
     if(!this.infoSiteDBDownModel){
       return false;
     }
-    
+
     this.sumAffectedSingleCount = this.infoSiteDBDownModel.singleCount;
     this.sumAffectedParlayCount = this.infoSiteDBDownModel.parlayCount;
     this.sumAffectedCCOCount = this.infoSiteDBDownModel.cancelCashOutCount;
@@ -40,7 +40,7 @@ export class InfoSiteDBDownComponent implements OnChanges {
   }
 
   private affectedTicketInfo(): string {
-    let affectedTickets = [];
+    const affectedTickets = [];
     if(this.sumAffectedSingleCount > 0){
       affectedTickets.push(`Single Count: <strong>${this.sumAffectedSingleCount}</strong>`);
     }
@@ -52,7 +52,7 @@ export class InfoSiteDBDownComponent implements OnChanges {
     if(this.sumAffectedCCOCount > 0){
       affectedTickets.push(`Cancel Cash Out Count: <strong>${this.sumAffectedCCOCount}</strong>`);
     }
-    
+
     return `Affected ${affectedTickets.join(', ')}`;
   }
 

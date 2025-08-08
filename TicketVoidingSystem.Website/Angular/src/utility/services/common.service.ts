@@ -175,18 +175,16 @@ export class CommonService {
 
   async logAccessFunction(functionName: string): Promise<boolean> {
     try {
-      return await this.httpService.postJson<any, boolean>({ functionName }, 'api/Analytics/LogAccessFunction');
+      return await this.httpService.postJson({ functionName }, 'api/Analytics/LogAccessFunction');
     } catch (error) {
-      console.log(error);
       return false;
     }
   }
 
   async logChangeContent(functionName: string, logContent?: string): Promise<boolean> {
     try {
-      return await this.httpService.postJson<any, boolean>({ functionName, logContent }, 'api/Analytics/LogChangeContent');
+      return await this.httpService.postJson({ functionName, logContent }, 'api/Analytics/LogChangeContent');
     } catch (error) {
-      console.log(error);
       return false;
     }
   }

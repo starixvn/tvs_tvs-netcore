@@ -1,36 +1,36 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
+import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
+import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { Notification } from '../../utility/components/notification/notification';
+import { NotificationComponent } from '../../utility/components/notification/notification.component';
 import { PagingModel } from '../../utility/components/paging/paging.model';
+import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../utility/components/tooltip/tooltip.model';
 import { Product } from '../../utility/constants/config';
 import { SpecialPlatform } from '../../utility/constants/special-platform.constant';
 import { SportType } from '../../utility/constants/sport.constant';
 import { CONFIG, TEXT } from '../../utility/constants/text';
+import { CommonService } from '../../utility/services/common.service';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { MatchModel } from './../../utility/models/match.model';
 import { AppService } from './app.service';
+import { FilterComponent } from './filter/filter.component';
 import { FilterEvent } from './filter/filter.model';
+import { MessagesResponseComponent } from './messages-response/messages-response.component';
 import { MessagesResponse } from './messages-response/messages-response.model';
 import { AmendmentReponse, CommonQuery, ExportExcelQuery, GetTicketsDetailQuery, LicenseeFile, SendFileQuery } from './models/query.model';
 import { SummaryComponent } from './summary/summary.component';
 import { SummaryItem, SummaryItemViewModel } from './summary/summary.model';
 import { TicketsModel } from './tickets/ticket.model';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { FilterComponent } from './filter/filter.component';
 import { TicketsComponent } from './tickets/tickets.component';
-import { MessagesResponseComponent } from './messages-response/messages-response.component';
-import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { NotificationComponent } from '../../utility/components/notification/notification.component';
-import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
-import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';
-import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
-import { CommonService } from '../../utility/services/common.service';
 
 @Component({
   standalone: true,
@@ -173,7 +173,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     return this.commonQuery.singleOrSubParlay;
   }
-  
+
   async pagingSearchTicket(pagingEvent: PagingModel) {
     this.getTicketsDetailQuery.pageIndex = pagingEvent.page - 1;
     this.getTicketsDetailQuery.pageSize = pagingEvent.pageSize;
@@ -311,10 +311,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (response.isChinaView) {
       return 'China View Licensee: ';
     }
-    if (response.specialPlatform === SpecialPlatform.Jolly_Sports_CV) {
+    if (response.specialPlatform === SpecialPlatform.JOLLY_SPORTS_CV) {
       return 'JollySportsCV Licensee: ';
     }
-    return response.specialPlatform === SpecialPlatform.Jolly_Sports ? 'Jolly Sports Licensee: ' : 'Normal Licensee: ';
+    return response.specialPlatform === SpecialPlatform.JOLLY_SPORTS ? 'Jolly Sports Licensee: ' : 'Normal Licensee: ';
   }
 
   public async resendData(result: AmendmentReponse): Promise<void> {
@@ -333,7 +333,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     alert('The bet type list has been copied to clipboard.');
   }
 
-  
+
   async logAccessAction(actionName: string): Promise<void> {
     await this.commonService.logAccessFunction(`TicketListing/${actionName}`);
   }

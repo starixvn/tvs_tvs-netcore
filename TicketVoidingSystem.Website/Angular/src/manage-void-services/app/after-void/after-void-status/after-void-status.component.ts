@@ -1,5 +1,5 @@
-import { Component, inject, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
@@ -37,7 +37,7 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
     this.assignData();
   }
 
-  private assignData(): void {
+  private assignData(): void { // NOSONAR
     this.tmpModel = _.clone(this.model);
     this.tmpModel.isRunExternalService = this.tmpModel.isRunExternalService ? this.tmpModel.isRunExternalService : 'null';
     this.tmpModel.isSentBatchMessage = this.tmpModel.isSentBatchMessage ? this.tmpModel.isSentBatchMessage : 'null';

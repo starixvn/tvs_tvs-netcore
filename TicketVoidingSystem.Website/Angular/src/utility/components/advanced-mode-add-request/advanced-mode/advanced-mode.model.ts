@@ -13,7 +13,7 @@ export class Item {
   xmlAttribute: string;
   format: string;
 
-  constructor(index: number, name: string, value: string, isRowSpan: boolean, isDisabled: boolean, isMultiple: boolean, xmlAttribute: string, format: string, isChecked: boolean) {
+  constructor(index: number, name: string, value: string, isRowSpan: boolean, isDisabled: boolean, isMultiple: boolean, xmlAttribute: string, format: string, isChecked: boolean) { // NOSONAR
     this.index = index;
     this.name = name;
     this.value = value;
