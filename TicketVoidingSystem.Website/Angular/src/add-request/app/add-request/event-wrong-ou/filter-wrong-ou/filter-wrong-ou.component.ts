@@ -102,4 +102,8 @@ export class FilterWrongOuComponent {
   public emitRefreshEvent(): void {
     this.refreshEvent.emit();
   }
+
+  isShowFilterBetType(){
+    return StaticService.isWrongOU(this.filter.issueTypeId);
+  }
 }

@@ -135,4 +135,8 @@ export class FilterWithHdpComponent implements OnInit {
   public isSubTypeWrongHdpOrWrong1stHdp(): boolean {
     return this.validationService.isSubTypeWrongHdpOrWrong1stHdp(this.filter.subIssueTypeId);
   }
+
+  isShowFilterBetType(): boolean {
+    return StaticService.isWrongHDP(this.filter.issueTypeId);
+  }
 }

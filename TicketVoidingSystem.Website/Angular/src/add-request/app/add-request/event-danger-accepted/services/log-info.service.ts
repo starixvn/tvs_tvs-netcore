@@ -93,4 +93,23 @@ export class LogInfoService {
       event.isHighLightVarCheck = false;
     });
   }
+
+  public resetVoidTimeArea(events: LogInfoRelatedEvent[], defaultFilter: FilterTimeWithAllowance) {
+    events.forEach(event => {
+      event.voidTimeArea = {
+        saTime: defaultFilter.saTime,
+        aaTime: defaultFilter.aaTime,
+        paTime: defaultFilter.paTime,
+        fromDateTime: defaultFilter.fromDateTime,
+        toDateTime: defaultFilter.toDateTime
+      } as FilterTimeWithAllowance;
+    });
+  }
+
+  public resetIsCheckedVar(events: LogInfoRelatedEvent[]) {
+    events.forEach(event => {
+      event.isCheckedVar = null;
+      event.isHighLightVarCheck = null;
+    });
+  }
 }

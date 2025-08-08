@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { EventType } from '../../../../../utility/constants/sport.constant';
 import { Message } from '../../messages/message';
 import { FormatDateTime, MessageTemplateId, TemplateContentConst, TemplateReplace } from '../template.const';
@@ -24,11 +24,11 @@ export class ReplacePlacedFromTimeRangeService {
   private readonly replaceMessageService = inject(ReplaceMessageService);
 
   public execute(templateValue: TemplateValue, outputMessage: Message, messageTemplateId: number): void {
-    const isTheSameDay = dayjs(new Date(templateValue.fromTransTime)).format('DD/MM') === dayjs(new Date(templateValue.toTransTime)).format('DD/MM');
-    const fromTime = dayjs(new Date(templateValue.fromTransTime)).format(FormatDateTime.DATE_TIME);
+    const isTheSameDay = moment(new Date(templateValue.fromTransTime)).format('DD/MM') === moment(new Date(templateValue.toTransTime)).format('DD/MM');
+    const fromTime = moment(new Date(templateValue.fromTransTime)).format(FormatDateTime.DATE_TIME);
     const toTime = isTheSameDay ?
-      dayjs(new Date(templateValue.toTransTime)).format(FormatDateTime.TIME)
-      : dayjs(new Date(templateValue.toTransTime)).format(FormatDateTime.DATE_TIME);
+      moment(new Date(templateValue.toTransTime)).format(FormatDateTime.TIME)
+      : moment(new Date(templateValue.toTransTime)).format(FormatDateTime.DATE_TIME);
 
     const timeRange = `${fromTime} - ${toTime} `;
     this.replacePlacedFromTimeRange(templateValue, outputMessage, timeRange, messageTemplateId);

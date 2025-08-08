@@ -98,4 +98,6 @@ public class Match
     public string VendorMatchId { get; set; }
 
     public string RaceId { get; set; }
+
+    public bool IsSpecialChildMatch { get; set; }
 }

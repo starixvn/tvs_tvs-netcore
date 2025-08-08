@@ -7,8 +7,8 @@
     </div>
     <div class="d-flex me-2">
       <label class="col-form-label-sm me-2">To</label>
-      <date-full-time-new #toTimeComponent class="to-date-time" [isDisabled]="isDisabled" (ngModelChange)="changeFilter()"
-        [(ngModel)]="filterWithHdpModel.filterToTransTime">
+      <date-full-time-new #toTimeComponent class="to-date-time" [isDisabled]="isDisabled"
+        (ngModelChange)="changeFilter()" [(ngModel)]="filterWithHdpModel.filterToTransTime">
       </date-full-time-new>
     </div>
     <div class="d-flex align-items-center">
@@ -19,9 +19,11 @@
   </div>
 </div>
 
-<hdp-filter-bet-type [sportTypeId]="sportTypeId" [issueTypeId]="filter.issueTypeId"
-  [filterBetType]="filterWithHdpModel.filterBetType" [isDisabled]="isDisabled" (changeEvent)="changeFilter()">
-</hdp-filter-bet-type>
+@if(isShowFilterBetType()){
+  <hdp-filter-bet-type [sportTypeId]="sportTypeId" [issueTypeId]="filter.issueTypeId"
+    [filterBetType]="filterWithHdpModel.filterBetType" [isDisabled]="isDisabled" (changeEvent)="changeFilter()">
+  </hdp-filter-bet-type>
+}
 
 <div class="d-flex">
   <div class="me-2 d-flex">

@@ -6,7 +6,7 @@
     <input type="text" class="form-control form-control-sm time-input{{index}} {{timeClass}}"
       [style.width.px]="withOfTime" [(ngModel)]="time" placeholder="HH:mm:ss.SSS AM/PM"
       (ngModelChange)="onChangeTime($event)" [disabled]="isDisabled" (paste)="onPasteTime()"
-      (blur)="onBlur();onChangeModel()" />
+      (blur)="onBlur()" />
   </div>
 </div>
 <tooltip [tooltip]="tooltip"></tooltip>

@@ -66,7 +66,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [IssueTypeAuth(SpecialDeleteFunctionKeys.ArchivedTicket, Constant.Policy.Read)]
     public ActionResult ArchivedTicket(int id)
     {
-        return View("~/wwwroot/dist/ticket-voiding-system/add-request/archived-ticket/index.cshtml");
+        return View("~/wwwroot/dist/ticket-voiding-system/archived-ticket/index.cshtml");
     }
 
     [HttpPost]
