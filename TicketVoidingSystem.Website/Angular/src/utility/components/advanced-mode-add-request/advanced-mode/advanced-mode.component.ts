@@ -48,7 +48,7 @@ export class AdvancedModeComponent {
   private readonly element = inject(ElementRef);
   private readonly commonService = inject(CommonService);
   private readonly service = inject(AdvancedModeService);
-  
+
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -91,9 +91,12 @@ export class AdvancedModeComponent {
   }
 
   async getBetTeam() {
-    this.baseBetTeams = this.baseBetTeams.length > 0
-      ? this.baseBetTeams
-      : await this.service.getBetTeamsAddRequest();
+    if (this.baseBetTeams.length > 0) {
+      return;
+    }
+
+    const result = await this.service.getBetTeamsAddRequest();
+    this.baseBetTeams = result || [];
   }
 
   clearBetTeam() {

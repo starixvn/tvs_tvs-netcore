@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { RelatedEventService } from './related-event.service';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { ValidationService } from './validation.service';
+import { MatchType } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
-import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
-import { MatchType } from '../../../../../utility/constants/config';
 import { AddRelatedEventArg } from '../models/add-related-event-arg.model';
-import { LABELS } from '../../../../../utility/constants/labels';
-import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
+import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
+import { RelatedEventService } from './related-event.service';
+import { ValidationService } from './validation.service';
 
 describe('RelatedEventService', () => {
   let service: RelatedEventService;
@@ -65,7 +65,7 @@ describe('RelatedEventService', () => {
           sportType: 1,
           matchType: MatchType.NORMAL,
           isChecked: false
-        }
+        } as ChildMatchModel
       ] as ChildMatchModel [];
 
       (addRequestApiService.getChildMatches as jest.Mock).mockResolvedValue(expectedResult);
@@ -92,7 +92,6 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false,
           isSpecialChildMatch: false
-        }
       ] as ChildMatchModel[];
 
       const defaultFilter = new FilterWrongOuModel();
@@ -123,7 +122,7 @@ describe('RelatedEventService', () => {
           sportType: 1,
           matchType: MatchType.NORMAL,
           isChecked: false
-        }
+        } as ChildMatchModel
       ] as ChildMatchModel[];
 
       const defaultFilter = new FilterWrongOuModel();
@@ -239,7 +238,6 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false,
           isSpecialChildMatch: false
-        }
       ] as ChildMatchModel[];
 
       (validationService.isValidInputRelatedEvent as jest.Mock).mockReturnValue(true);

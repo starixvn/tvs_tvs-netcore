@@ -1,18 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { RelatedEventService } from './related-event.service';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { ValidationService } from './validation.service';
+import { MatchType } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { AddRelatedEventArg } from '../../models/add-related-event.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { MatchType } from '../../../../../utility/constants/config';
-import { AddRelatedEventArg } from '../../models/add-related-event.model';
-import { LABELS } from '../../../../../utility/constants/labels';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { EventRedCardService } from './event-red-card.service';
 import { LogInfoService } from './log-info.service';
-import * as _ from 'lodash';
+import { RelatedEventService } from './related-event.service';
+import { ValidationService } from './validation.service';
 
 describe('RelatedEventService', () => {
   let service: RelatedEventService;
@@ -86,7 +85,6 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false,
           isSpecialChildMatch: false
-        }
       ] as ChildMatchModel[];
 
       (addRequestApiService.getChildMatches as jest.Mock).mockResolvedValue(expectedResult);
@@ -113,7 +111,6 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false,
           isSpecialChildMatch: false
-        }
       ] as ChildMatchModel[];
 
       const defaultFilter: FilterTimeWithAllowance = {
@@ -253,7 +250,6 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false,
           isSpecialChildMatch: false
-        }
       ] as ChildMatchModel[];
 
       (validationService.isValidInputRelatedEvent as jest.Mock).mockReturnValue(true);
@@ -333,7 +329,6 @@ describe('RelatedEventService', () => {
           matchType: MatchType.LINK,
           isChecked: false,
           isSpecialChildMatch: false
-        }
       ] as ChildMatchModel[];
 
       const arg: AddRelatedEventArg = {

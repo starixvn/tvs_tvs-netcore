@@ -16,7 +16,7 @@ public interface AddRequestProcessStage
     Task<Result> Execute(AddRequestQuery query);
 }
 
-public class AddRequestProcessStageImp(
+public class AddRequestProcessStageImp( // NOSONAR
     IMapper mapper,
     IDynamicRepository repository,
     SessionService sessionService,
@@ -29,8 +29,6 @@ public class AddRequestProcessStageImp(
     PendingMarkTicketsService pendingMarkTicketsService)
     : AddRequestProcessStage
 {
-    // NOSONAR
-
     public async Task<Result> Execute(AddRequestQuery query)
     {
         var requestId = await ExecuteAddRequest(query);

@@ -1,26 +1,25 @@
 import { TestBed } from '@angular/core/testing';
-import { RelatedEventService } from './related-event.service';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { LogInfoService } from './log-info.service';
-import { ValidationService } from './validation.service';
+import moment from 'moment-timezone';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
+import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { FilterModel } from '../../filter/filter.model';
+import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { WrongScoreModel } from '../../models/event-wrong-score.model';
-import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
-import { MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { SubIssueTypeLinkMatch } from '../../models/sub-type-link-match.model';
-import { AddRelatedEventArg } from '../models/add-related-event.model';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { LABELS } from '../../../../../utility/constants/labels';
-import { CreateMapService } from './create-map.service';
-import { FilterModel } from '../../filter/filter.model';
 import { PrimitiveProperty } from '../event-wrong-score.model';
-import { DateTimeFormat } from '../../../../../utility/constants/config';
-import moment from 'moment-timezone';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { AddRelatedEventArg } from '../models/add-related-event.model';
+import { CreateMapService } from './create-map.service';
+import { LogInfoService } from './log-info.service';
+import { RelatedEventService } from './related-event.service';
+import { ValidationService } from './validation.service';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -100,7 +99,7 @@ class Helper {
         inputRelatedMatchId: null,
         isBlock: false
       } as PrimitiveProperty,
-      
+
       tooltip: {
         className: '',
         message: '',
@@ -112,7 +111,7 @@ class Helper {
         hide: jest.fn(),
         severity: 'error'
       } as unknown as Tooltip,
-      
+
       inputMatchIdClass: 'test-class',
       mainEvent: this.getFakeLogInfoRelatedEvent(),
       relatedEvents: [],

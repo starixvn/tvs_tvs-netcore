@@ -65,6 +65,7 @@ describe('FilterTicketsComponent', () => {
   let commonService: CommonService;
 
   beforeEach(async () => {
+    document.body.innerHTML = '<div id="body" user-id="8"></div>';
     await TestBed.configureTestingModule({
       imports: [TestingModule],
       providers: [
@@ -80,11 +81,6 @@ describe('FilterTicketsComponent', () => {
     // Mock EventEmitter
     component.changeSearch = new EventEmitter();
     component.searchEvent = new EventEmitter();
-
-    // Mock DOM element
-    const element = document.createElement('div');
-    element.innerHTML = '<input id="inlineRadio-0" type="radio">';
-    document.body.appendChild(element);
   });
 
   it('should create', () => {
@@ -96,6 +92,7 @@ describe('FilterTicketsComponent', () => {
     component.initData = jest.fn();
     component.initCurrency = jest.fn();
     component.renderGroupLicensees = jest.fn();
+    commonService.getBalanceUpZoneManila = jest.fn().mockReturnValue(Helper.fakeBalanceUp);
 
     // Act
     await component.ngOnInit();

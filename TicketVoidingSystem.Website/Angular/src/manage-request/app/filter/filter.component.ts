@@ -6,22 +6,22 @@ import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
-import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ManageRequestStatus } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
 import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
 import { TEXT } from '../../../utility/constants/text';
+import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
-import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
 
 @Component({
   standalone: true,
@@ -75,14 +75,20 @@ export class FilterComponent implements OnInit {
     this.statusSelectList = ManageRequestStatus.MULTIPLE_OPTIONS;
     this.selectedStatus = ManageRequestStatus.DEFAULT_STATUS;
     this.products = FilterService.initMultiSelectProduct();
+    await this.getBalanceUp();
     await this.setIssueTypeSelectList();
     this.initDefaultFilter();
     this.updateSubByIssue();
-    const balanceUp = await this.commonService.getBalanceUp();
-    this.bUDay = new Date(balanceUp.balanceUpDay);
     this.checkAutoRefresh();
     await this.clickSearch();
     this.updateMissingInfo.emit(this.model.isDisplayMissingInfo);
+  }
+
+  async getBalanceUp() {
+    const balanceUp = await this.commonService.getBalanceUp();
+    if (balanceUp) {
+      this.bUDay = new Date(balanceUp.balanceUpDay);
+    }
   }
 
   controlFilter(value: string) {

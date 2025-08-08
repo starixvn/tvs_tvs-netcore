@@ -1,6 +1,7 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import moment from "moment";
 import { AdvancedModeConstants } from '../../../utility/components/advanced-mode/advanced-mode.constants';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
@@ -8,11 +9,14 @@ import { CheckedBetType, GetPlayersQuery, OddsInfo } from '../../../utility/comp
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { DateFullTimeNewComponent } from '../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
 import { PagingConstant } from '../../../utility/components/paging/paging.model';
 import { TemplateContent } from '../../../utility/components/template-message/template-message/template.model';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { BetTypeAutoCheckByIssue, BetTypeAutoCheckBySubIssue, BetTypeAutoUnCheckByIssue } from '../../../utility/constants/bettype-auto-check-list.constant';
 import { ComboParlayConstants } from '../../../utility/constants/combo-parlay.constant';
@@ -21,19 +25,15 @@ import { IssueTypeConstant } from '../../../utility/constants/issue-type.constan
 import { SportType } from '../../../utility/constants/sport.constant';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 import { TEXT } from '../../../utility/constants/text';
+import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
+import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { StaticService } from '../../../utility/services/static.service';
 import { AppService } from '../app.service';
 import { GetTicketsQuery } from '../models/query.model';
 import { Bet, Item, Type } from './filter.model';
-import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
-import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
-import { Selection } from '../../../utility/models/selection.model';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
-import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
 
 @Component({
   standalone: true,
@@ -156,7 +156,9 @@ export class FilterComponent implements OnInit {
       IssueTypeConstant.WRONG_OFFERED_NAME
     ]
     const data = await this.commonService.getIssueTypes();
-    data.issueTypes = data.issueTypes.filter(x => !hiddenIssueTypes.includes(x.issueTypeId.toString()));
+    if (data && data.issueTypes) {
+      data.issueTypes = data.issueTypes.filter(x => !hiddenIssueTypes.includes(x.issueTypeId.toString()));
+    }
     this.issueTypeModel = data;
   }
 
@@ -169,8 +171,10 @@ export class FilterComponent implements OnInit {
   }
 
   private renderIssueType(): void {
-    this.issueType.items = this.issueTypeModel.issueTypes.map(({ issueTypeId, issueTypeName }) => ({ value: issueTypeId.toString(), name: issueTypeName }));
-    this.issueType.value = this.issueType.items[0].value;
+    if (this.issueTypeModel && this.issueTypeModel.issueTypes) {
+      this.issueType.items = this.issueTypeModel.issueTypes.map(({ issueTypeId, issueTypeName }) => ({ value: issueTypeId.toString(), name: issueTypeName }));
+      this.issueType.value = this.issueType.items[0].value;
+    }
   }
 
   private renderSubIssueType(): void {

@@ -157,7 +157,8 @@ export class NotificationPopupComponent {
   }
 
   private async getNotifications() {
-    this.notifications = await this.notificationService.get();
+    const result = await this.notificationService.get();
+    this.notifications = result || [];
     this.updateGroupedNotifications();
   }
 }

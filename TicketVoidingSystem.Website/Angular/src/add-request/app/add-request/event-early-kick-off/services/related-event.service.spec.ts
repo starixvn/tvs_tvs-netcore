@@ -1,19 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { RelatedEventService } from './related-event.service';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { ValidationService } from './validation.service';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { GetChildMatchQuery } from '../../models/get-child-match.query';
-import { ChildMatchModel } from '../../models/related-event.model';
 import { MatchType } from '../../../../../utility/constants/config';
-import { AddRelatedEventArg } from '../models/add-related-event.model';
 import { LABELS } from '../../../../../utility/constants/labels';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { GetChildMatchQuery } from '../../models/get-child-match.query';
+import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../models/get-log-info.model';
+import { ChildMatchModel } from '../../models/related-event.model';
+import { AddRelatedEventArg } from '../models/add-related-event.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { LogInfoService } from './log-info.service';
-import { GetLogInfoViewModel } from '../../models/get-log-info.model';
-import { GetLogInfoModel } from '../../models/get-log-info.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { Validation } from '../../models/get-log-info.model';
+import { RelatedEventService } from './related-event.service';
+import { ValidationService } from './validation.service';
 
 describe('RelatedEventService', () => {
   let service: RelatedEventService;
@@ -78,7 +76,7 @@ describe('RelatedEventService', () => {
           sportType: 1,
           matchType: MatchType.NORMAL,
           isChecked: false
-        }
+        } as ChildMatchModel
       ] as ChildMatchModel [];
 
       (addRequestApiService.getChildMatches as jest.Mock).mockResolvedValue(expectedResult);
@@ -104,7 +102,7 @@ describe('RelatedEventService', () => {
           sportType: 1,
           matchType: MatchType.NORMAL,
           isChecked: false
-        }
+        } as ChildMatchModel
       ] as ChildMatchModel [];
 
       const mainEvent = {
@@ -283,7 +281,7 @@ describe('RelatedEventService', () => {
           sportType: 1,
           matchType: MatchType.NORMAL,
           isChecked: false
-        }
+        } as ChildMatchModel
       ] as ChildMatchModel [];
 
       const mockLogInfoResponse = {

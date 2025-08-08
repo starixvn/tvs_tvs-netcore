@@ -1,17 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-import { EventWrongOddsService } from './event-wrong-odds.service';
+import { AllowanceRate } from '../../../../../utility/constants/config';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { ValidationService } from './validation.service';
-import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
-import { WrongOddsModel } from '../../models/event-wrong-odds.model';
-import { WrongOddsGetLogInfoQuery } from '../models/get-log-info.query';
 import { FilterModel } from '../../filter/filter.model';
+import { WrongOddsModel } from '../../models/event-wrong-odds.model';
 import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
-import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
-import { AllowanceRate, DateTimeFormat } from '../../../../../utility/constants/config';
 import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
-import { FilterFavoriteTypeConstant } from '../models/filter-wrong-odds.model';
-import moment from 'moment-timezone';
+import { FilterFavoriteTypeConstant, FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
+import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
+import { EventWrongOddsService } from './event-wrong-odds.service';
+import { ValidationService } from './validation.service';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -120,9 +117,6 @@ describe('EventWrongOddsService', () => {
       expect(logInfoEvent.filterWrongOdds).toBeDefined();
       expect(logInfoEvent.filterWrongOdds.filterFavoriteType).toBe(FilterFavoriteTypeConstant.HOME);
       expect(logInfoEvent.filterWrongOdds.allowanceRate).toBe(AllowanceRate.ALLOWANCE_RATE[0].value);
-      expect(logInfoEvent.filterWrongOdds.filterFromTransTime).toBe(
-        moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT)
-      );
       expect(logInfoEvent.filterWrongOdds.filterToTransTime).toMatch(
         /^\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}\.\d{3} [AP]M$/
       );

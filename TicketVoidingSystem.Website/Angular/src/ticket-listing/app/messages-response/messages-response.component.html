@@ -7,7 +7,7 @@
         <span class="messages-results-cancel" (click)="messagesResponse.isShow = false">&times;</span>
       </div>
       <div class="messages-results-body">
-        @for (result of messagesResponse.results; track result) {
+        @for (result of messagesResponse.results; track $index; let indexResult = $index) {
           <div class="message">
             @if (result.code == -9999) {
               <div class="detail-text">

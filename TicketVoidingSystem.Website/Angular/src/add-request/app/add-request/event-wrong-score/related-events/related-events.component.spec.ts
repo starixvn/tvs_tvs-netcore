@@ -1,24 +1,23 @@
+import { QueryList } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { RelatedEventsComponent } from './related-events.component';
-import { RelatedEventService } from '../services/related-event.service';
-import { EventWrongScoreService } from '../services/event-wrong-score.service';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { FilterModel } from '../../filter/filter.model';
-import { IssueTypes } from '../../filter/issue-types.model';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { PrimitiveProperty } from '../event-wrong-score.model';
-import { ChildMatchModel } from '../../models/related-event.model';
-import { MatchType } from '../../../../../utility/constants/config';
 import { AddChildMatchModel } from '../../../../../utility/components/add-child-match/add-child-match.model';
-import _ from 'lodash';
-import { LogInfoService } from '../services/log-info.service';
-import { ValidationService } from '../services/validation.service';
-import { WrongScoreService } from '../services/wrong-score.service';
-import { CreateMapService } from '../services/create-map.service';
+import { MatchType } from '../../../../../utility/constants/config';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
-import { QueryList } from '@angular/core';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { FilterModel } from '../../filter/filter.model';
+import { IssueTypes } from '../../filter/issue-types.model';
+import { ChildMatchModel } from '../../models/related-event.model';
+import { PrimitiveProperty } from '../event-wrong-score.model';
+import { CreateMapService } from '../services/create-map.service';
+import { EventWrongScoreService } from '../services/event-wrong-score.service';
+import { LogInfoService } from '../services/log-info.service';
+import { RelatedEventService } from '../services/related-event.service';
+import { ValidationService } from '../services/validation.service';
+import { WrongScoreService } from '../services/wrong-score.service';
+import { RelatedEventsComponent } from './related-events.component';
 
 class Helper {
   static getFakeLogInfoRelatedEvent(): LogInfoRelatedEvent {
@@ -212,11 +211,11 @@ describe('RelatedEventsComponent', () => {
     it('should update related events and add new events', async () => {
       // Arrange
       const selectedRelatedEvents = [
-        { 
-          matchId: 1, 
-          matchCode: 'TEST001', 
-          aa: '0', 
-          pa: '0', 
+        {
+          matchId: 1,
+          matchCode: 'TEST001',
+          aa: '0',
+          pa: '0',
           sa: '0',
           isChecked: false,
           matchType: MatchType.CHILD,
@@ -224,11 +223,11 @@ describe('RelatedEventsComponent', () => {
           matchEvent: '',
           isSpecialChildMatch: false
         } as ChildMatchModel,
-        { 
-          matchId: 2, 
-          matchCode: 'TEST002', 
-          aa: '0', 
-          pa: '0', 
+        {
+          matchId: 2,
+          matchCode: 'TEST002',
+          aa: '0',
+          pa: '0',
           sa: '0',
           isChecked: false,
           matchType: MatchType.CHILD,

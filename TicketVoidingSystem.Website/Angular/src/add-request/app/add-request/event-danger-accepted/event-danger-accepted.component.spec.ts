@@ -1,11 +1,20 @@
 import { QueryList, SimpleChange } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as _ from 'lodash';
-import { TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { Subscription } from 'rxjs';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../utility/models/match.model';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
-import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
+import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
+import { FilterTimeWithAllowanceComponent } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
+import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { FilterModel } from '../filter/filter.model';
 import { RedCardModel } from '../models/event-red-card.model';
 import { ValidationMessage } from '../models/get-log-info.model';
@@ -16,16 +25,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../utility/modules/testing.module';
-import { Subscription } from 'rxjs';
-import { LogInfoRelatedEventComponent } from '../components/log-info-related-event/log-info-related-event.component';
-import { FilterTimeWithAllowanceComponent } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
-import { MatchType } from '../../../../utility/constants/config';
-import { AddRequestApiService } from '../add-request-api.service';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -644,7 +643,7 @@ describe('EventDangerAcceptedComponent', () => {
           matchCode: 'TEST1',
           leagueName: 'Test League',
           matchEvent: 'Test Event'
-        }
+        } as ChildMatchModel
       ] as ChildMatchModel[];
       component.allSelectedEvents = [
         {
@@ -671,7 +670,7 @@ describe('EventDangerAcceptedComponent', () => {
           matchCode: 'TEST2',
           leagueName: 'Test League',
           matchEvent: 'Test Event'
-        }
+        } as ChildMatchModel
       ] as ChildMatchModel[];
       component.filter = {
         action: '1',
@@ -730,7 +729,7 @@ describe('EventDangerAcceptedComponent', () => {
           matchCode: 'TEST1',
           leagueName: 'Test League',
           matchEvent: 'Test Event'
-        }
+        } as ChildMatchModel
       ] as ChildMatchModel[];
       component.allSelectedEvents = [
         {
@@ -776,7 +775,7 @@ describe('EventDangerAcceptedComponent', () => {
           matchCode: 'TEST1',
           leagueName: 'Test League',
           matchEvent: 'Test Event'
-        }
+        } as ChildMatchModel
       ] as ChildMatchModel[];
       component.allSelectedEvents = [
         {
@@ -824,7 +823,7 @@ describe('EventDangerAcceptedComponent', () => {
           matchCode: 'TEST1',
           leagueName: 'Test League',
           matchEvent: 'Test Event'
-        }
+        } as ChildMatchModel
       ] as ChildMatchModel[];
       component.allSelectedEvents = [
         {
@@ -868,7 +867,7 @@ describe('EventDangerAcceptedComponent', () => {
           matchCode: 'B',
           leagueName: 'Test League',
           matchEvent: 'Test Event'
-        }
+        } as ChildMatchModel
       ] as ChildMatchModel[];
       component.allSelectedEvents = [
         {
@@ -913,7 +912,7 @@ describe('EventDangerAcceptedComponent', () => {
           matchCode: 'TEST1',
           leagueName: 'Test League',
           matchEvent: 'Test Event'
-        }
+        } as ChildMatchModel
       ] as ChildMatchModel[];
       component.filter = {
         action: '1',
