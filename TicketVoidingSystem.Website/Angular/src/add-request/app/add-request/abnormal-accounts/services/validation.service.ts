@@ -41,6 +41,7 @@ export class ValidationService {
       if (usernames.length === 0) {
         return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
       }
+
       args.usernamesComponent.groupUsername.resetAllValue();
       if (args.usernamesComponent.groupUsername.getDuplicatedItems(usernames).length > 0) {
         args.usernamesComponent.groupUsername.updateDuplicatedItems(usernames);
@@ -48,11 +49,20 @@ export class ValidationService {
       }
 
       const viewModel = await this.getValidation(args);
+
       args.primitiveProps.infoSiteDBDownModel = viewModel.infoSiteDBDownModel;
+      if (viewModel.infoSiteDBDownModel) {
+        args.usernamesComponent.groupUsername.updateWarningSiteDBDown(viewModel.infoSiteDBDownModel.usernames);
+        if(args.usernamesComponent.isAllUsernamesOffSiteDbDown()){
+          return { isValid: false } as ValidationBusinessRuleOutput;
+        }
+      }
+
       if(viewModel.validation.isTicketLimitExceeded){
         args.usernamesComponent.showErrorTicketLimitExceeded();
         return { isValid: false } as ValidationBusinessRuleOutput;
       }
+      
       const invalidUsernames = viewModel.validation.invalidUserName;
       if (invalidUsernames) {
         return {
@@ -67,6 +77,7 @@ export class ValidationService {
           accountWinlostModels: viewModel.accountWinlostModels
         } as ValidationBusinessRuleOutput;
       }
+
       if (viewModel.validation.isBeingMoveBetDate || viewModel.validation.isInvalidTotalTicket) {
         args.primitiveProps.isShowError = true;
         args.primitiveProps.isBeingMoveBetDate = viewModel.validation.isBeingMoveBetDate;

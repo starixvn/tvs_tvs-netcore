@@ -121,17 +121,20 @@ export class SaveRequestService {
 
   private createAbnormalAccountModel(args: SaveRequestArg): AbnormalAccountModel {
     const model = _.clone(args.abnormalAccountModel);
-    model.usernames = this.getUsernamesForSaveRequest(args.abnormalAccountModel.usernames, args.confirmAddRequestComponent);
+    model.usernames = this.getUsernamesForSaveRequest(args.abnormalAccountModel.usernames, args.confirmAddRequestComponent, args.primitiveProps.infoSiteDBDownModel?.usernames);
     model.accountWinlostModels
       = this.getAccountWinlostModelsForSaveRequest(args.filter.action, args.abnormalAccountModel.accountWinlostModels, args.confirmAddRequestComponent);
 
     return model;
   }
 
-  private getUsernamesForSaveRequest(originalUsernames: string, confirmComponent: ConfirmAbnormalAccountComponent): string {
+  private getUsernamesForSaveRequest(originalUsernames: string, confirmComponent: ConfirmAbnormalAccountComponent, siteDBDownUserNames: string): string {
     let usernames = originalUsernames.split(',');
     if (confirmComponent.model.usernamesOfCreditCashService && confirmComponent.model.checkboxState[CheckboxType.CREDIT_CASH_SERVICE]) {
       usernames = usernames.filter(x => !(confirmComponent.model.usernamesOfCreditCashService).split(',').includes(x));
+    }
+    if (siteDBDownUserNames) {
+      usernames = usernames.filter(x => !(siteDBDownUserNames).split(',').includes(x));
     }
     return usernames.join(',');
   }
