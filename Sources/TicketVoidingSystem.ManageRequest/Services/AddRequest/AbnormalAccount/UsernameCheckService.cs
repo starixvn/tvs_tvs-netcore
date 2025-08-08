@@ -31,7 +31,7 @@ public class UsernameCheckServiceImp(OnlineServerRepository onlineServerReposito
     {
         var accountAdjustments = GetAccountAdjustments(request.AccountWinlostModels);
         var adjustVoidLimitJson = accountAdjustments.ToJson();
-        var criteria = CreateCriteria(request, adjustVoidLimitJson);
+        var criteria = await CreateCriteria(request, adjustVoidLimitJson);
         var (validationResults, ticketResults, accountResults) =
             await onlineServerRepository.FetchMultipleAsync<ValidationInfo, TicketCalculateWinLostAccount, AccountWinlostModel>(criteria);
 
@@ -91,8 +91,10 @@ public class UsernameCheckServiceImp(OnlineServerRepository onlineServerReposito
         });
     }
 
-    private static CheckValidUsernamesCriteria CreateCriteria(CheckValidUsernamesRequest request, string adjustVoidLimitJson)
+    private async Task<CheckValidUsernamesCriteria> CreateCriteria(CheckValidUsernamesRequest request, string adjustVoidLimitJson)
     {
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
+
         return new CheckValidUsernamesCriteria
         {
             Usernames = request.Usernames,
@@ -104,7 +106,8 @@ public class UsernameCheckServiceImp(OnlineServerRepository onlineServerReposito
             StatusIds = request.StatusIds,
             AdjustVoidLimit = adjustVoidLimitJson,
             IsVoidAllArchivedTickets = request.IsVoidAllArchivedTickets,
-            IsRemoveCreditCashService = request.IsRemoveCreditCashService
+            IsRemoveCreditCashService = request.IsRemoveCreditCashService,
+            OnlineServerId = currentOnlineServerId
         };
     }
 }
