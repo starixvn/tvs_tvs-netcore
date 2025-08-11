@@ -35,5 +35,14 @@ export class TableTicketsModel {
       const group = new GroupModel(item.name, item.tickets, item.displayTotalTickets);
       this.groups.push(group);
     });
+    this.updateTicketNo();
+  }
+
+  private updateTicketNo() {
+    this.groups.forEach(group => {
+        group.tickets.forEach((ticket, index) => {
+            ticket.no = index + 1;
+        });
+    });
   }
 }
