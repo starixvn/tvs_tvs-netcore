@@ -56,7 +56,7 @@ describe('RelatedEventService', () => {
         sportType: 1
       };
 
-      const expectedResult: ChildMatchModel[] = [
+      const expectedResult = [
         {
           matchId: 123,
           matchCode: 'MATCH123',
@@ -66,7 +66,7 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false
         }
-      ];
+      ] as ChildMatchModel [];
 
       (addRequestApiService.getChildMatches as jest.Mock).mockResolvedValue(expectedResult);
 
@@ -82,7 +82,7 @@ describe('RelatedEventService', () => {
   describe('updateEvents', () => {
     it('should update events with default filter when filter times are not provided', () => {
       // Arrange
-      const models: ChildMatchModel[] = [
+      const models = [
         {
           matchId: 123,
           matchCode: 'MATCH123',
@@ -90,9 +90,10 @@ describe('RelatedEventService', () => {
           leagueName: 'League 1',
           sportType: 1,
           matchType: MatchType.NORMAL,
-          isChecked: false
+          isChecked: false,
+          isSpecialChildMatch: false
         }
-      ];
+      ] as ChildMatchModel[];
 
       const defaultFilter = new FilterWrongOuModel();
       defaultFilter.filterFromTransTime = null;
@@ -113,7 +114,7 @@ describe('RelatedEventService', () => {
 
     it('should update events with provided filter times', () => {
       // Arrange
-      const models: ChildMatchModel[] = [
+      const models = [
         {
           matchId: 123,
           matchCode: 'MATCH123',
@@ -123,7 +124,7 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false
         }
-      ];
+      ] as ChildMatchModel[];
 
       const defaultFilter = new FilterWrongOuModel();
       defaultFilter.filterFromTransTime = '2024-03-20T00:00:00';
@@ -228,7 +229,7 @@ describe('RelatedEventService', () => {
 
       arg.defaultFilterWrongOuModel.filterBetType = new FilterBetType();
 
-      const childMatches: ChildMatchModel[] = [
+      const childMatches = [
         {
           matchId: 123,
           matchCode: 'MATCH123',
@@ -236,9 +237,10 @@ describe('RelatedEventService', () => {
           leagueName: 'League 1',
           sportType: 1,
           matchType: MatchType.NORMAL,
-          isChecked: false
+          isChecked: false,
+          isSpecialChildMatch: false
         }
-      ];
+      ] as ChildMatchModel[];
 
       (validationService.isValidInputRelatedEvent as jest.Mock).mockReturnValue(true);
       (addRequestApiService.getChildMatches as jest.Mock).mockResolvedValue(childMatches);

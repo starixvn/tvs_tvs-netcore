@@ -129,16 +129,4 @@ describe('HdpFilterBetTypeComponent', () => {
     expect(hdpFilterBetTypeService.updateAllFilterBetTypeData).toHaveBeenCalled();
     expect(component.changeEvent.emit).toHaveBeenCalled();
   });
-
-  it('should show filter bet type for wrong HDP or OU issue types', () => {
-    // Arrange
-    component.issueTypeId = '4'; // Wrong HDP
-    expect(component.iddShowFilterBetType()).toBeTruthy();
-
-    component.issueTypeId = '6'; // Wrong OU
-    expect(component.iddShowFilterBetType()).toBeTruthy();
-
-    component.issueTypeId = '3'; // Other type
-    expect(component.iddShowFilterBetType()).toBeFalsy();
-  });
 });

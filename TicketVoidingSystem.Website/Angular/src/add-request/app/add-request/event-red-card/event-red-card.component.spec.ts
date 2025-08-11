@@ -21,6 +21,7 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
 import { TvDetectionModel } from '../components/tv-detection/tv-detection.model';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { PrimitiveProperty } from '../components/log-info-related-event/primitive-property.model';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -109,7 +110,7 @@ describe('EventRedCardComponent', () => {
       transInfoAddRequestModel: null,
       isShowLogInfoMainMatch: false,
       filterBy: 0
-    };
+    } as unknown as PrimitiveProperty;
     component.filter = Helper.fakeFilterModel;
     component.mainEvent = {
       matchId: 123,

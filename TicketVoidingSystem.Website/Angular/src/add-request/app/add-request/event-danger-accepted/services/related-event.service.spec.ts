@@ -103,7 +103,7 @@ describe('RelatedEventService', () => {
 
       // Act & Assert
       subIssueTypeAutoSelectList.forEach(subIssueTypeId => {
-        const result = service['isAutoSelectMatch'](subIssueTypeId.toString(), MatchType.CHILD, null);
+        const result = service['isAutoSelectMatch'](subIssueTypeId.toString(), MatchType.CHILD, null, true);
         expect(result).toEqual(true);
       });
     });
@@ -113,7 +113,7 @@ describe('RelatedEventService', () => {
       const mainEvent = { parentId: 1, matchId: 2 } as LogInfoRelatedEvent;
 
       // Act
-      const result = service['isAutoSelectMatch']('1', MatchType.LINK, mainEvent);
+      const result = service['isAutoSelectMatch']('1', MatchType.LINK, mainEvent, false);
 
       // Assert
       expect(result).toEqual(true);
@@ -126,7 +126,7 @@ describe('RelatedEventService', () => {
 
       // Act & Assert
       matchType.forEach(matchType => {
-        const result = service['isAutoSelectMatch']('1', matchType, mainEvent);
+        const result = service['isAutoSelectMatch']('1', matchType, mainEvent, false);
         expect(result).toEqual(false);
       });
     });
@@ -210,9 +210,8 @@ describe('RelatedEventService', () => {
       const result = await service['preparingModelGetLogInfo'](relatedEvents, arg);
 
       // Assert
-      expect(result.length).toEqual(2);
+      expect(result.length).toEqual(1);
       expect(result[0].logInfoDetail.matchId).toEqual(2);
-      expect(result[1].matchId).toEqual(2);
     });
   });
 

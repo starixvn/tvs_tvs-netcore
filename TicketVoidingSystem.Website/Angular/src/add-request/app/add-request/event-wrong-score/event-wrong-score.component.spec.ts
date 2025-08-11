@@ -185,6 +185,7 @@ describe('EventWrongScoreComponent', () => {
     component.mainEvent = Helper.fakeLogInfoRelatedEvent;
     component.filter = Helper.fakeFilterModel;
     component.filter.subIssueTypeId = '1';
+    component.eventLeagueComponent.selectedMatch = {matchId: 123, parentId: 123} as MatchModel;
     jest.spyOn(SubIssueTypeRelatedEvent, 'isHasRelatedEvent').mockReturnValue(true);
 
     // Act

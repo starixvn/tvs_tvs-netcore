@@ -4,7 +4,7 @@ import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
 import { FilterModel } from '../../filter/filter.model';
-import { GetLogInfoModel } from '../../models/get-log-info.model';
+import { GetLogInfoModel, GetLogInfoViewModel } from '../../models/get-log-info.model';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
@@ -85,8 +85,9 @@ describe('LogInfoService', () => {
           },
           logInfoDetail: null,
           ticketRequest: []
-        }]
-      };
+        }],
+        infoSiteDBDownModel: null
+      } as GetLogInfoViewModel;
 
       jest.spyOn(commonService, 'getLogInfo').mockResolvedValue(mockViewModel);
       jest.spyOn(eventWrongOddsSportsBookService, 'getWrongOddsSportsBookGetLogInfoModel').mockReturnValue({

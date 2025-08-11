@@ -80,7 +80,7 @@ describe('LogInfoService', () => {
         isShowPopup: false
       };
 
-      const mockViewModel: GetLogInfoViewModel = {
+      const mockViewModel = {
         transInfoAddRequestModel: mockTransInfoAddRequestModel,
         getLogInfoModels: [{
           matchId: 123,
@@ -95,8 +95,9 @@ describe('LogInfoService', () => {
             isHasInstantlySettledTicket: false
           },
           ticketRequest: null
-        }]
-      };
+        }],
+        infoSiteDBDownModel: null
+      } as GetLogInfoViewModel;
 
       jest.spyOn(commonService, 'getLogInfo').mockResolvedValue(mockViewModel);
       jest.spyOn(eventNotParticipateService, 'getNotParticipateGetLogInfoModel').mockReturnValue([]);

@@ -221,7 +221,8 @@ describe('RelatedEventsComponent', () => {
           isChecked: false,
           matchType: MatchType.CHILD,
           leagueName: '',
-          matchEvent: ''
+          matchEvent: '',
+          isSpecialChildMatch: false
         } as ChildMatchModel,
         { 
           matchId: 2, 
@@ -232,7 +233,8 @@ describe('RelatedEventsComponent', () => {
           isChecked: false,
           matchType: MatchType.CHILD,
           leagueName: '',
-          matchEvent: ''
+          matchEvent: '',
+          isSpecialChildMatch: false
         } as ChildMatchModel
       ];
       component.relatedEvents = [{ matchId: 1 } as LogInfoRelatedEvent];

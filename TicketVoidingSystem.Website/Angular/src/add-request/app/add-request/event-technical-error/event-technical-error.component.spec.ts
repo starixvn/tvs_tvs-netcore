@@ -15,6 +15,7 @@ import { LogInfoTechnicalError } from './models/log-info-technical-error.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { FilterTechnicalErrorModel } from './models/filter-technical-error.model';
 import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
+import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -171,7 +172,7 @@ describe('EventTechnicalErrorComponent', () => {
     component.actionIdOfFirstTimeAccess = 'test';
     component.others = Helper.fakeOthersModel;
     component.filter = Helper.fakeFilterModel;
-    component.primitivePropertyEvent = { isShowValidation: true, isShowBetTypeCount: true, isShowErrorNoBetType: true, transInfoAddRequestModel: {} as TransInfoAddRequestModel };
+    component.primitivePropertyEvent = { isShowValidation: true, isShowBetTypeCount: true, isShowErrorNoBetType: true, transInfoAddRequestModel: {} as TransInfoAddRequestModel, infoSiteDBDownModel: null } as PrimitivePropertyEvent;
     component.filterTimeComponent = {} as any;
     component.eventLeague = {} as EventLeagueComponent;
     component.logInfoEvent = new LogInfoTechnicalError();

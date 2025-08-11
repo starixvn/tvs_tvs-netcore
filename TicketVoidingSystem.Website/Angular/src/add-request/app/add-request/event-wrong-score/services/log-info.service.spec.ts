@@ -57,7 +57,8 @@ describe('LogInfoService', () => {
         actualScore: '',
         isShowActualScore: false,
         transInfoAddRequestModel: null,
-        isShowRelatedEvents: false
+        isShowRelatedEvents: false,
+        infoSiteDBDownModel: null
       };
       params.mainEvent = new LogInfoRelatedEvent();
       params.mainEvent.matchId = 1;
@@ -105,7 +106,8 @@ describe('LogInfoService', () => {
         actualScore: '',
         isShowActualScore: false,
         transInfoAddRequestModel: null,
-        isShowRelatedEvents: false
+        isShowRelatedEvents: false,
+        infoSiteDBDownModel: null
       };
       params.wrongScoreModels = [new WrongScoreModel()];
       params.wrongScoreModels[0].matchId = 1;

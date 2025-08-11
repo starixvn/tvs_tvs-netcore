@@ -208,7 +208,8 @@ describe('SaveRequestService', () => {
         logInfoEvent: {},
         eventLeagueComponent: { isMatchIdValid: () => true },
         filterTimeComponent: { isValidity: () => true },
-        advancedModeComponent: {}
+        advancedModeComponent: {},
+        confirmAddRequest: {} as ConfirmAddRequestModel
       } as unknown as SaveRequestArg;
 
       jest.spyOn(eventTechnicalErrorService, 'getTechnicalErrorModel').mockReturnValue({} as TechnicalErrorModel);

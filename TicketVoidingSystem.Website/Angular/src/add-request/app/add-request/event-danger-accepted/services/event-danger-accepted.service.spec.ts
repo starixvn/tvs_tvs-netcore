@@ -238,7 +238,7 @@ describe('EventDangerAcceptedService', () => {
       ] as LogInfoRelatedEvent[];
 
       const mainEvent = allEvents[0];
-      const relatedEvents: ChildMatchModel[] = [
+      const relatedEvents = [
         {
           matchId: 2,
           matchType: MatchType.LINK,
@@ -247,7 +247,7 @@ describe('EventDangerAcceptedService', () => {
           leagueName: 'Test League',
           matchEvent: 'Test Event'
         }
-      ];
+      ] as ChildMatchModel[];
 
       const defaultFilter = {
         fromDateTime: '2024-01-01 10:00:00',

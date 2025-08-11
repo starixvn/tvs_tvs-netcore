@@ -502,6 +502,7 @@ describe('SaveRequestService', () => {
 
     it('should set warningRelatedEvents when there are events with NO_VALID_TICKETS_IN_RANGE message', () => {
       const arg = {
+        primitiveProps: {} as PrimitiveProperty,
         filter: {
           isVoided: false,
           issueTypeId: '1',
@@ -540,6 +541,7 @@ describe('SaveRequestService', () => {
 
     it('should set isHasSettledTicket when there are events with settleCount > 0', () => {
       const arg = {
+        primitiveProps: {} as PrimitiveProperty,
         filter: {
           isVoided: false,
           issueTypeId: '1',
@@ -575,6 +577,7 @@ describe('SaveRequestService', () => {
 
     it('should set isHasWarningEvent when there are events with non-error messages', () => {
       const arg = {
+        primitiveProps: {} as PrimitiveProperty,
         filter: {
           isVoided: false,
           issueTypeId: '1',
@@ -612,6 +615,7 @@ describe('SaveRequestService', () => {
 
     it('should set isHasWarningEditTakeNoteRequest when action is TAKE_NOTE_ID and different from actionIdOfFirstTimeAccess', () => {
       const arg = {
+        primitiveProps: {} as PrimitiveProperty,
         filter: {
           isVoided: false,
           issueTypeId: '1',
@@ -640,6 +644,7 @@ describe('SaveRequestService', () => {
 
     it('should set isHasWarningRangeTime when there are events with isHasWarningRangeTime true', () => {
       const arg = {
+        primitiveProps: {} as PrimitiveProperty,
         filter: {
           isVoided: false,
           issueTypeId: '1',
@@ -675,6 +680,7 @@ describe('SaveRequestService', () => {
 
     it('should set requestId and requestedBy from arg', () => {
       const arg = {
+        primitiveProps: {} as PrimitiveProperty,
         filter: {
           isVoided: false,
           issueTypeId: '1',
@@ -704,6 +710,7 @@ describe('SaveRequestService', () => {
 
     it('should set isEditingByAnotherUser based on validationService result', () => {
       const arg = {
+        primitiveProps: {} as PrimitiveProperty,
         filter: {
           isVoided: false,
           issueTypeId: '1',
@@ -734,6 +741,7 @@ describe('SaveRequestService', () => {
 
     it('should set issueTypeName and subIssueTypeName from issueTypes', () => {
       const arg = {
+        primitiveProps: {} as PrimitiveProperty,
         filter: {
           isVoided: false,
           issueTypeId: '1',
@@ -765,6 +773,7 @@ describe('SaveRequestService', () => {
 
     it('should set isOpenDialog to true and clone confirmDangerAccepted', () => {
       const arg = {
+        primitiveProps: {} as PrimitiveProperty,
         filter: {
           isVoided: false,
           issueTypeId: '1',
@@ -792,6 +801,7 @@ describe('SaveRequestService', () => {
 
     it('should not set warning flags when filter.isVoided is true', () => {
       const arg = {
+        primitiveProps: {} as PrimitiveProperty,
         filter: {
           isVoided: true,
           issueTypeId: '1',

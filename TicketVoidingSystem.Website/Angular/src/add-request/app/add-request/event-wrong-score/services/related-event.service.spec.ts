@@ -71,7 +71,7 @@ class Helper {
       sportType: 1,
       matchType: MatchType.NORMAL,
       isChecked: false
-    };
+    } as ChildMatchModel;
   }
 
   static getFakeLogInfoRelatedEvent(): LogInfoRelatedEvent {
@@ -231,15 +231,16 @@ describe('RelatedEventService', () => {
 
   describe('updateEventAutoGetLinkMatch', () => {
     it('should add new link events that are not in relatedEvents', async () => {
-      const childEvents: ChildMatchModel[] = [{
+      const childEvents = [{
         matchId: 789,
         matchCode: 'MATCH789',
         matchEvent: 'Team E vs Team F',
         leagueName: 'League 3',
         sportType: 1,
         matchType: MatchType.LINK,
-        isChecked: false
-      }];
+        isChecked: false,
+        isSpecialChildMatch: false
+      }] as ChildMatchModel[];
 
       const arg = Helper.getFakeAddRelatedEventArg();
 
