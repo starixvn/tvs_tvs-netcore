@@ -332,6 +332,38 @@ describe('ValidationService', () => {
       expect(result).toBeFalsy();
     });
 
+    it('isValidAllEventCheckTime should return false when filterBy is CHECK_TIME and child event has error', () => {
+      // Arrange
+      const mainEvent = {} as LogInfoRelatedEvent;
+      const relatedEvents = [{ messageValidationLogInfo: [{ isError: true, reason: 'exit in another request' }] }, { messageValidationLogInfo: [{ isError: true, reason: 'No valid tickets found in the current range' }] }] as LogInfoRelatedEvent[];
+      
+      // Act
+      const result = service['isValidAllEventCheckTime'](mainEvent, relatedEvents);
+
+      // Assert
+      expect(result).toBeFalsy();
+    });
+
+    it('should return true when filterBy is CHECK_TIME and child event has error No valid tickets', () => {
+      // Arrange
+      const args: ValidationBusinessRuleArgs = {
+        primitiveProps: {
+          filterBy: TVSRequestFilterBy.CHECK_TIME
+        },
+        mainEvent: {
+          isMainMatch: true,
+          messageValidationLogInfo: []
+        } as LogInfoRelatedEvent,
+        relatedEvents: [{ messageValidationLogInfo: [{ isError: true, reason: 'No valid tickets found in the current range' }]},] as unknown as LogInfoRelatedEvent[],
+      } as unknown as ValidationBusinessRuleArgs;
+
+      // Act
+      const result = service.isAllWrongScoreModelsValid(args);
+
+      // Assert
+      expect(result).toBeTruthy();
+    });
+
     it('should return true when filterBy is not CHECK_TIME and at least one score is valid', () => {
       // Arrange
       const args = {
