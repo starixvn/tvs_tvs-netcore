@@ -58,7 +58,7 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
 
   async initData() {
     await this.getBalanceUp();
-    const userName = document.getElementById('body').getAttribute('user-id');
+    const userName = document?.getElementById('body')?.getAttribute('user-id');
     this.markedByOptions = [{name: '<<<< Me >>>>', value: userName}, {name: 'All', value: '0'}];
     this.model.markedBy = this.markedByOptions[0].value;
     if (this.isExternalUrl) {
@@ -77,9 +77,15 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
 
   async initCurrency() {
     this.currencies.items = await this.commonService.getCurrencies();
-    this.currencies.items.forEach(x => x.group = 'All');
-    this.currencies.selected = this.currencies.items.map(x => x.id);
-    this.model.currencyIds = this.currencies.selected.join(',');
+    if (this.currencies.items && this.currencies.items.length > 0) {
+      this.currencies.items.forEach(x => x.group = 'All');
+      this.currencies.selected = this.currencies.items.map(x => x.id);
+      this.model.currencyIds = this.currencies.selected.join(',');
+    } else {
+      this.currencies.items = [];
+      this.currencies.selected = [];
+      this.model.currencyIds = '';
+    }
   }
 
   changeTab() {
@@ -93,7 +99,11 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
 
   async renderGroupLicensees() {
     const data = await this.commonService.getGroupLicensees();
-    this.groupLicenseeModel = new GroupLicenseeModel(data, true);
+    if (data && data.length > 0) {
+      this.groupLicenseeModel = new GroupLicenseeModel(data, true);
+    } else {
+      this.groupLicenseeModel = new GroupLicenseeModel([], true);
+    }
   }
 
   changeSearchBy(value: string) {

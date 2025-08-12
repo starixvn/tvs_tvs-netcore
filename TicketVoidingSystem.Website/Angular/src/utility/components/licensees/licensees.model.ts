@@ -4,7 +4,7 @@ export class GroupLicenseeModel {
 
   constructor(groupLicensees: GroupLicensee[], isChecked: boolean) {
     this.isChecked = isChecked;
-    this.groupLicensees = groupLicensees.map(x => new GroupLicensee(x.groupName, x.licensees, isChecked));
+    this.groupLicensees = (groupLicensees || []).map(x => new GroupLicensee(x.groupName, x.licensees, isChecked));
   }
 
   changeCheckAllLicensee() {

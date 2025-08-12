@@ -65,7 +65,6 @@ describe('FilterTicketsComponent', () => {
   let commonService: CommonService;
 
   beforeEach(async () => {
-    document.body.innerHTML = '<div id="body" user-id="8"></div>';
     await TestBed.configureTestingModule({
       imports: [TestingModule],
       providers: [
@@ -81,6 +80,12 @@ describe('FilterTicketsComponent', () => {
     // Mock EventEmitter
     component.changeSearch = new EventEmitter();
     component.searchEvent = new EventEmitter();
+
+     // Mock document.getElementById
+     const bodyElement = document.createElement('div');
+     bodyElement.id = 'body';
+     bodyElement.setAttribute('user-id', '8');
+     document.body.appendChild(bodyElement);
   });
 
   it('should create', () => {
@@ -181,6 +186,56 @@ describe('FilterTicketsComponent', () => {
     expect(component.currencies.items.length).toBe(6);
     expect(component.currencies.selected.length).toBe(6);
     expect(component.model.currencyIds).toBe('13,81,20,90,86,9');
+  });
+
+  it('should handle null currency data', async () => {
+    // Arrange
+    commonService.getCurrencies = jest.fn().mockReturnValue(null);
+
+    // Act
+    await component.initCurrency();
+
+    // Assert
+    expect(component.currencies.items).toEqual([]);
+    expect(component.currencies.selected).toEqual([]);
+    expect(component.model.currencyIds).toBe('');
+  });
+
+  it('should handle empty currency array', async () => {
+    // Arrange
+    commonService.getCurrencies = jest.fn().mockReturnValue([]);
+
+    // Act
+    await component.initCurrency();
+
+    // Assert
+    expect(component.currencies.items).toEqual([]);
+    expect(component.currencies.selected).toEqual([]);
+    expect(component.model.currencyIds).toBe('');
+  });
+
+  it('should handle null group licensees data', async () => {
+    // Arrange
+    commonService.getGroupLicensees = jest.fn().mockReturnValue(null);
+
+    // Act
+    await component.renderGroupLicensees();
+
+    // Assert
+    expect(component.groupLicenseeModel.groupLicensees).toEqual([]);
+    expect(component.groupLicenseeModel.isChecked).toBe(true);
+  });
+
+  it('should handle empty group licensees array', async () => {
+    // Arrange
+    commonService.getGroupLicensees = jest.fn().mockReturnValue([]);
+
+    // Act
+    await component.renderGroupLicensees();
+
+    // Assert
+    expect(component.groupLicenseeModel.groupLicensees).toEqual([]);
+    expect(component.groupLicenseeModel.isChecked).toBe(true);
   });
 
   it('should validate search by match ID', async () => {
