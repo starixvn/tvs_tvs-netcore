@@ -69,6 +69,7 @@ export class RequestInfoForCopy {
   toOddsNotVoidAwayUnder?: string;
   correctOddsHomeOver?: string;
   correctOddsAwayUnder?: string;
+  wrongOu?: string;
 }
 
 export class BetTypeTicketsInfo {
