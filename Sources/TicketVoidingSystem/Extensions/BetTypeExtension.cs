@@ -82,8 +82,10 @@ public static class BetTypeExtension
 
     public static bool IsVirtualSport6BetType(this int id)
     {
-        List<int> betTypesVirtualSport6 = [13000, 13001, 13002, 13003, 13004, 13005, 13006, 13007, 13008, 13009, 13010, 13011];
-        return betTypesVirtualSport6.Contains(id);
+        const int FirstBetTypeVirtualSport6 = 13000;
+        const int LastBetTypeVirtualSport6 = 13199;
+
+        return id is >= FirstBetTypeVirtualSport6 and <= LastBetTypeVirtualSport6;
     }
 
     public static bool IsVirtualSport2(this int sportTypeId)    // Sport Type of VirtualSport2 except 177, 198
