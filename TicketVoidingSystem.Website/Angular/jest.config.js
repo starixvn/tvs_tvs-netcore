@@ -14,6 +14,7 @@ module.exports = {
   setupFilesAfterEnv : ['<rootDir>/test-setup.ts'],
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts'],
+  maxWorkers: 1,
   //collectCoverageFrom: ['src/ab-white-list/**/*.ts'],
   coveragePathIgnorePatterns: ['.spec.ts', '.module.ts', 'src/polyfills.ts', 'main.ts', 'model.ts', 'query.ts'],
   coverageReporters: ['html', ['lcovonly', { 'projectRoot': '../../' }]],
