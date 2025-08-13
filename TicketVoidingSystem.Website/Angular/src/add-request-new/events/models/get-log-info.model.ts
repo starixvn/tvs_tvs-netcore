@@ -1,3 +1,4 @@
+import { InfoSiteDBDownModel } from '../../../add-request-new/component/info-site-db-down/info-site-db-down.model';
 import { Item } from '../../../utility/models/item.model';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { TransInfoAddRequestModel } from './trans-info-add-request.model';
@@ -5,6 +6,7 @@ import { TransInfoAddRequestModel } from './trans-info-add-request.model';
 export class GetLogInfoViewModel {
   getLogInfoModels: GetLogInfoModel[];
   transInfoAddRequestModel: TransInfoAddRequestModel;
+  infoSiteDBDownModel: InfoSiteDBDownModel;
 }
 
 export class GetLogInfoModel {

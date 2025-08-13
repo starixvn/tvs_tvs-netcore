@@ -1,0 +1,6 @@
+@if (isSiteDBDown) {
+<div class="site-db-down">
+    <div>SiteDB is down, TVS cannot add ticket of the siteDB into request.</div>
+    <div [innerHTML]="affectedSiteInfo()"></div>
+</div>
+}
