@@ -175,9 +175,9 @@ const configPages = [
   //ticketListing,
   //voidSingleBet,
   //voidRequest,
-  //manageRequest,
-  addRequest,
-  editRequest,
+  manageRequest,
+  // addRequest,
+  // editRequest,
   //voidByBetId
   //addRequestArchivedTicket
 ];
