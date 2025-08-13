@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListExcel;
 

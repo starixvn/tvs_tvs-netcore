@@ -276,17 +276,17 @@ export class AdvancedModeComponent implements OnChanges {
       if (betTeam.getItemsValue() === '' && betTeam.type !== AdvancedModeConstants.BETTEAM_TYPE_4) {
         result = false;
         this.isShowContent = true;
-        this.tooltip.display(`bet-team-${betTeam.index}`, LABELS.SELECT_AT_LEAST_ONE_OPTION);
+        this.tooltip.display(`bet-team-${betTeam.index}`, TEXT.SELECT_AT_LEAST_ONE_OPTION);
       } else if (this.checkMultiSelectionListBetTeam(betTeam) && result) {
         const invalidSelection = betTeam.multiSelectionList.find(x => x.multipleSelect.getValueItems() === '')
         result = false;
         this.isShowContent = true;
-        this.tooltip.display(`multiple-selection-${betTeam.index}-selection-${betTeam.multiSelectionList.indexOf(invalidSelection)}`, LABELS.SELECT_AT_LEAST_ONE_OPTION);
+        this.tooltip.display(`multiple-selection-${betTeam.index}-selection-${betTeam.multiSelectionList.indexOf(invalidSelection)}`, TEXT.SELECT_AT_LEAST_ONE_OPTION);
       } else if (this.checkMultiSelectionInSelection(betTeam) && result) {
         const invalidSelection = betTeam.selections.find(x => x.multiSelection.multipleSelect.getValueItems() === '')
         result = false;
         this.isShowContent = true;
-        this.tooltip.display(`multiple-selection-${betTeam.index}-selection-${betTeam.selections.indexOf(invalidSelection)}`, LABELS.SELECT_AT_LEAST_ONE_OPTION);
+        this.tooltip.display(`multiple-selection-${betTeam.index}-selection-${betTeam.selections.indexOf(invalidSelection)}`, TEXT.SELECT_AT_LEAST_ONE_OPTION);
       } else if (!this.isValidInputs(betTeam) && result) {
         result = false;
         this.isShowContent = true;
@@ -306,7 +306,7 @@ export class AdvancedModeComponent implements OnChanges {
         if (betTeam.multiSelectionList[i].multipleSelect !== undefined && betTeam.multiSelectionList[i].multipleSelect.getValueItems() === '' && result) {
           result = false;
           this.isShowContent = true;
-          this.tooltip.display(`multiple-selection-list-${i}`, TEXT.NO_BET_TEAM);
+          this.tooltip.display(`multiple-selection-list-${i}`, TEXT.SELECT_AT_LEAST_ONE_OPTION);
         }
       }
     }

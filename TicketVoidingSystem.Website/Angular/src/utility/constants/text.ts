@@ -29,7 +29,6 @@ export class TEXT {
     static readonly EMPTY_CURRENCY = 'At least one Currency must be selected.';
     static readonly EMPTY_TICKET = 'At least one ticket must be selected.';
     static readonly EMPTY_BETTYPE = 'At least one bettype must be selected.';
-    static readonly EMPTY_SELECT = 'Please select at least one option!';
     static readonly INVALID_TRANSDATE = 'Invalid Trans Date';
     static readonly EVENT_HAS_NO_TICKET = 'The event has no ticket.';
     static readonly AB_WHITE_LIST_ADDED_SUCCESS = 'Added User(s) successfully';
@@ -71,7 +70,7 @@ export class TEXT {
     static readonly NO_BETTYPE = 'No bet type is offered for the inputted matchid.';
     static readonly NO_PARLAY_BETTYPE = 'No Parlay bet type is offered for the inputted matchid.';
 
-    static readonly NO_BET_TEAM = 'Please select at least one option!';
+    static readonly SELECT_AT_LEAST_ONE_OPTION = 'Please select at least one option!';
 
     static readonly EXPORT_EXCEL_LIMITED = 'We regret to inform you that data collected for this report exceeded the web site ' +
     'rendering capability (> ' + CONFIG.EXPORT_EXCEL_LIMITED.toString() + ' tickets). Please contact IT for help. Thank you!';
@@ -82,6 +81,5 @@ export class TEXT {
 
     static readonly NOTIFY_RECOVER_SETTLED_MATCH = 'The selected ticket(s) will return to "Running" status, ' +
     'please resettle the match(es) to calculate it again.';
-    static readonly INVALID_SELECTION = 'Please select at least one option!';
     static readonly THERE_ARE_INVALID_FIELDS = 'There are invalid fields';
 }

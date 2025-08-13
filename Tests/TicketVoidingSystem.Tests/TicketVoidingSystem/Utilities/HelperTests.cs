@@ -22,17 +22,20 @@ public class HelperTests : IClassFixture<AppSettingFixture>, IClassFixture<Remot
     [Fact]
     public void GetIntersectTransIdString_Return_IntersectTransIdString()
     {
-        var testCase1 = new List<string>(){
+        var testCase1 = new List<string>
+        {
             "123,456,789,100",
             "123,789, 100",
             "456,789",
         };
-        var testCase2 = new List<string>(){
+        var testCase2 = new List<string>
+        {
             "123,456,789,100",
             "123,456,789,100",
             "123,789",
         };
-        var testCase3 = new List<string>(){
+        var testCase3 = new List<string>
+        {
             "",
             "",
             "123",
@@ -45,17 +48,20 @@ public class HelperTests : IClassFixture<AppSettingFixture>, IClassFixture<Remot
     [Fact]
     public void GetUnionTransIdString_Return_IntersectTransIdString()
     {
-        var testCase1 = new List<string>(){
+        var testCase1 = new List<string>
+        {
             "123,456,789,100",
             "123,789,100",
             "456,789",
         };
-        var testCase2 = new List<string>(){
+        var testCase2 = new List<string>
+        {
             "456,789",
             "456,789",
             "123,789",
         };
-        var testCase3 = new List<string>(){
+        var testCase3 = new List<string>
+        {
             "",
             "",
             "123",

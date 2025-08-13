@@ -1,6 +1,5 @@
 ﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.Services.BetTypes;
 using TicketVoidingSystem.SharedApi.ViewModels.BetTypes;

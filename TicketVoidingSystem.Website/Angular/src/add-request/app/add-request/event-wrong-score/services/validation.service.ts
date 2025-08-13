@@ -104,15 +104,13 @@ export class ValidationService {
       return false;
       }
 
-      relatedEvents.filter(x => !x.isMainMatch).forEach(x => {
-        if (x?.messageValidationLogInfo?.some(y => y.isError && !y.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE))) {
-          return false;
-        }
-      });
-
-      return true;
+    return !relatedEvents.some(x => this.isInValidEventCheckWarning(x));
   }
   
+  private isInValidEventCheckWarning(event: LogInfoRelatedEvent): boolean {
+    return event?.messageValidationLogInfo?.some(x => x.isError && !x.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE));
+  }
+
   public isValidAllScores(wrongScores: WrongScoreModel[]): boolean {
     return wrongScores.some(x => x.messageValidationLogInfo?.every(y => !y.isError));
   }

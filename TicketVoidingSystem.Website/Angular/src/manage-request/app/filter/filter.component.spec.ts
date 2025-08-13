@@ -1,14 +1,14 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
 import { ManageRequestStatus } from '../../../utility/constants/config';
 import { BalanceUp } from '../../../utility/models/balance-up.model';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonService } from '../../../utility/services/common.service';
 import { FilterComponent } from './filter.component';
 import { FilterModel } from './filter.model';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../utility/modules/testing.module';
 
 class Helper {
   static readonly fakeDate = '2020-11-09 12:08:49.737';
@@ -107,6 +107,20 @@ class Helper {
   static readonly date = 6;
 }
 
+const store: Record<string, string> = {};
+
+const localStorageMock = {
+  getItem: jest.fn((key: string) => store[key] || null),
+  setItem: jest.fn((key: string, value: string) => {
+    store[key] = value;
+  }),
+};
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+  writable: true
+});
+
 describe('FilterComponent', () => {
   let component: FilterComponent;
   let fixture: ComponentFixture<FilterComponent>;
@@ -124,6 +138,7 @@ describe('FilterComponent', () => {
     fixture = TestBed.createComponent(FilterComponent);
     commonService = fixture.debugElement.injector.get(CommonService);
     component = fixture.componentInstance;
+    component.tooltip.display = jest.fn();
   });
 
   it('#ngOnInit should call expected function', async () => {

@@ -1,6 +1,5 @@
 ﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 

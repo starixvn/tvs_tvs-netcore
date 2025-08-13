@@ -25,7 +25,7 @@ public class EditRequestServiceTests
     {
         // Arrange
         var query = new EditRequestQuery { MarkTransIds = "1,2,2", IssueTypeId = 1 };
-        var markTicketResult = new MarkTicketsResult() { MarkedResults = [], MarkedTickets = [] };
+        var markTicketResult = new MarkTicketsResult { MarkedResults = [], MarkedTickets = [] };
         var resultMarkTicket = new Result { ErrorMsg = "Has Error Mark Tickets", ErrorCode = 1 };
         marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds).Returns(markTicketResult);
         getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService)).Returns(resultMarkTicket);
@@ -45,7 +45,7 @@ public class EditRequestServiceTests
     {
         // Arrange
         var query = new EditRequestQuery { MarkTransIds = "1,2,2", IssueTypeId = 1 };
-        var markTicketResult = new MarkTicketsResult() { MarkedResults = [], MarkedTickets = [] };
+        var markTicketResult = new MarkTicketsResult { MarkedResults = [], MarkedTickets = [] };
         var reCalcTicketError = new Result { ErrorMsg = "Has Error ReCalculate Ticket", ErrorCode = 1 };
         List<Result> reCalcTicketsAbnormalResults = [new()];
         marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds).Returns(markTicketResult);

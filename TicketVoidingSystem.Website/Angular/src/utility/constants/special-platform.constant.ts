@@ -1,5 +1,5 @@
 export class SpecialPlatform {
-  static readonly Normal_Site = 0;
-  static readonly Jolly_Sports = 2;
-  static readonly Jolly_Sports_CV = 3;
+  static readonly NORMAL_SITE = 0;
+  static readonly JOLLY_SPORTS = 2;
+  static readonly JOLLY_SPORTS_CV = 3;
 }

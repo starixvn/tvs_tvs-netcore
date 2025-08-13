@@ -13,7 +13,7 @@ export class SummaryItem {
   isShow: boolean;
   specialPlatform: number;
 
-  constructor(name: string, total: number, isChinaView: boolean, licenseeName: string, betTypes: string, items: SummaryItem[], betTypeName: string, specialPlatform: number) {
+  constructor(name: string, total: number, isChinaView: boolean, licenseeName: string, betTypes: string, items: SummaryItem[], betTypeName: string, specialPlatform: number) { // NOSONAR
     this.name = name;
     this.total = total;
     this.isChinaView = isChinaView;

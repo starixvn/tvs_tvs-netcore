@@ -2,7 +2,6 @@
 using MediatR;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
@@ -43,7 +42,7 @@ public class GetBriefInfoHandler(IDynamicRepository repository)
         return briefInfoModels;
     }
 
-    public BriefInfoModel GetBriefInfoModel(int? matchId, IEnumerable<TicketLicenseeModel> licensees, IEnumerable<UserVoidMessage> userVoidMessages)
+    public static BriefInfoModel GetBriefInfoModel(int? matchId, IEnumerable<TicketLicenseeModel> licensees, IEnumerable<UserVoidMessage> userVoidMessages)
     {
         return new BriefInfoModel
         {

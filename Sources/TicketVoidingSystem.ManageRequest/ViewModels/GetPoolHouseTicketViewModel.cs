@@ -1,5 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.SharedApi.Models.BetTypes;
+﻿using TicketVoidingSystem.SharedApi.Models.BetTypes;
 
 namespace TicketVoidingSystem.ManageRequest.ViewModels;
 

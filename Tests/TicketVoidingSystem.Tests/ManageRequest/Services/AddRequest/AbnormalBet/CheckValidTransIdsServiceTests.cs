@@ -7,53 +7,31 @@ using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.ViewModels;
+using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.AbnormalBet;
 
-public class TestableCheckValidTransIdsServiceImp(
-    OnlineServerRepository onlineServerRepository,
-    MatchInfoAddRequestService matchInfoAddRequestService,
-    MapAbnormalBetTicketsExcelService mapTicketsExcelService)
-    : CheckValidTransIdsServiceImp(onlineServerRepository, matchInfoAddRequestService, mapTicketsExcelService)
-{
-    public ValidationAbnormalBet TestMapValidationAbnormalBet(IEnumerable<ValidationAbnormalBet> validationAbnormalBets)
-    {
-        return MapValidationAbnormalBet(validationAbnormalBets);
-    }
-
-    public IEnumerable<GetAbnormalBetTicketModel> TestMapAbnormalBetTicketRequests(IEnumerable<GetAbnormalBetTicketModel> abnormalBetTicketRequests)
-    {
-        return MapAbnormalBetTicketRequests(abnormalBetTicketRequests);
-    }
-
-    public IEnumerable<SendLetsTalkModel> TestMapSendLetsTalkModels(IEnumerable<SendLetsTalkModel> sendLetsTalkModels)
-    {
-        return MapSendLetsTalkModels(sendLetsTalkModels);
-    }
-
-    public TransInfoAddRequestModel TestGetTransInfoAddRequestModel(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
-    {
-        return GetTransInfoAddRequestModel(transInfoAddRequests);
-    }
-}
-
 public class CheckValidTransIdsServiceTests
 {
     private readonly MapAbnormalBetTicketsExcelService mapTicketsExcelService;
     private readonly MatchInfoAddRequestService matchInfoAddRequestService;
+    private readonly GetInfoSiteDbDownService getInfoSiteDbDownService;
     private readonly OnlineServerRepository onlineServerRepository;
-    private readonly TestableCheckValidTransIdsServiceImp service;
+    private readonly CheckValidTransIdsServiceImp service;
 
     public CheckValidTransIdsServiceTests()
     {
         onlineServerRepository = Substitute.For<OnlineServerRepository>();
         matchInfoAddRequestService = Substitute.For<MatchInfoAddRequestService>();
         mapTicketsExcelService = Substitute.For<MapAbnormalBetTicketsExcelService>();
+        getInfoSiteDbDownService = Substitute.For<GetInfoSiteDbDownService>();
 
-        service = new TestableCheckValidTransIdsServiceImp(onlineServerRepository, matchInfoAddRequestService, mapTicketsExcelService);
+        service = new CheckValidTransIdsServiceImp(onlineServerRepository, matchInfoAddRequestService,
+            mapTicketsExcelService);
     }
 
     [Fact]
@@ -98,7 +76,7 @@ public class CheckValidTransIdsServiceTests
         };
 
         // Act
-        var result = service.TestMapValidationAbnormalBet(validationAbnormalBets);
+        var result = CheckValidTransIdsServiceImp.MapValidationAbnormalBet(validationAbnormalBets);
 
         // Assert
         Assert.Equal(modelExpected.InvalidTransIds, result.InvalidTransIds);
@@ -116,7 +94,7 @@ public class CheckValidTransIdsServiceTests
         var validationAbnormalBets = new List<ValidationAbnormalBet>();
 
         // Act
-        var result = service.TestMapValidationAbnormalBet(validationAbnormalBets);
+        var result = CheckValidTransIdsServiceImp.MapValidationAbnormalBet(validationAbnormalBets);
 
         // Assert
         Assert.NotNull(result);
@@ -144,7 +122,7 @@ public class CheckValidTransIdsServiceTests
         var validationAbnormalBets = new List<ValidationAbnormalBet> { validationAbnormalBet };
 
         // Act
-        var result = service.TestMapValidationAbnormalBet(validationAbnormalBets);
+        var result = CheckValidTransIdsServiceImp.MapValidationAbnormalBet(validationAbnormalBets);
 
         // Assert
         Assert.Equal(validationAbnormalBet.InvalidTransIds, result.InvalidTransIds);
@@ -170,7 +148,7 @@ public class CheckValidTransIdsServiceTests
         };
 
         // Act
-        var result = service.TestMapAbnormalBetTicketRequests(abnormalBetTicketRequests);
+        var result = CheckValidTransIdsServiceImp.MapAbnormalBetTicketRequests(abnormalBetTicketRequests);
 
         // Assert
         var resultList = result.ToList();
@@ -194,7 +172,7 @@ public class CheckValidTransIdsServiceTests
         };
 
         // Act
-        var result = service.TestMapAbnormalBetTicketRequests(abnormalBetTicketRequests);
+        var result = CheckValidTransIdsServiceImp.MapAbnormalBetTicketRequests(abnormalBetTicketRequests);
 
         // Assert
         var resultList = result.ToList();
@@ -216,7 +194,7 @@ public class CheckValidTransIdsServiceTests
         };
 
         // Act
-        var result = service.TestMapSendLetsTalkModels(sendLetsTalkModels);
+        var result = CheckValidTransIdsServiceImp.MapSendLetsTalkModels(sendLetsTalkModels);
 
         // Assert
         var resultList = result.ToList();
@@ -242,7 +220,7 @@ public class CheckValidTransIdsServiceTests
         var sendLetsTalkModels = new List<SendLetsTalkModel>();
 
         // Act
-        var result = service.TestMapSendLetsTalkModels(sendLetsTalkModels);
+        var result = CheckValidTransIdsServiceImp.MapSendLetsTalkModels(sendLetsTalkModels);
 
         // Assert
         Assert.Empty(result);
@@ -260,7 +238,7 @@ public class CheckValidTransIdsServiceTests
         };
 
         // Act
-        var result = service.TestGetTransInfoAddRequestModel(transInfoAddRequests);
+        var result = CheckValidTransIdsServiceImp.GetTransInfoAddRequestModel(transInfoAddRequests);
 
         // Assert
         Assert.Equal("123,456,789,100", result.RemoveTransIds);
@@ -276,7 +254,7 @@ public class CheckValidTransIdsServiceTests
         var transInfoAddRequests = new List<TransInfoAddRequestModel>();
 
         // Act
-        var result = service.TestGetTransInfoAddRequestModel(transInfoAddRequests);
+        var result = CheckValidTransIdsServiceImp.GetTransInfoAddRequestModel(transInfoAddRequests);
 
         // Assert
         Assert.NotNull(result);
@@ -305,13 +283,17 @@ public class CheckValidTransIdsServiceTests
             IsVoidAllArchivedTickets = false
         };
 
+        var onlineServers = new List<SiteDbGroupModel>
+        {
+            new() { Id = 1 },
+            new() { Id = 2 }
+        };
         var matchInfoAddRequests = new List<MatchInfoAddRequest> { new() { MatchId = 1 } };
         var validationAbnormalBets = new List<ValidationAbnormalBet> { new() { InvalidTransIds = "123" } };
         var transInfoAddRequests = new List<TransInfoAddRequestModel> { new() { RemoveTransIds = "123" } };
         var abnormalBetTicketRequests = new List<GetAbnormalBetTicketModel> { new() { TransId = 123 } };
         var sendLetsTalkModels = new List<SendLetsTalkModel> { new() { MatchId = 1 } };
 
-        onlineServerRepository.GetOnlineServerIds().Returns("1,2");
         onlineServerRepository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet, TransInfoAddRequestModel, GetAbnormalBetTicketModel, SendLetsTalkModel>(Arg.Any<IOnlineServerCriteria>())
             .Returns(Task.FromResult(((IEnumerable<MatchInfoAddRequest>)matchInfoAddRequests,
                                     (IEnumerable<ValidationAbnormalBet>)validationAbnormalBets,
@@ -321,6 +303,7 @@ public class CheckValidTransIdsServiceTests
 
         matchInfoAddRequestService.UpdateDataFromRemotingRef(Arg.Any<IEnumerable<MatchInfoAddRequest>>()).Returns(matchInfoAddRequests);
         mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(Arg.Any<IEnumerable<GetAbnormalBetTicketModel>>()).Returns(new List<AbnormalBetTicketViewModel>());
+        getInfoSiteDbDownService.GetInfoSiteDBDown(Arg.Any<IEnumerable<TransInfoAddRequestModel>>()).Returns(new InfoSiteDBDownModel());
 
         // Act
         var result = await service.CheckValidTransIds(request);
@@ -332,33 +315,5 @@ public class CheckValidTransIdsServiceTests
         Assert.NotNull(result.TransInfoAddRequestModel);
         Assert.NotNull(result.AbnormalBetTicketRequests);
         Assert.NotNull(result.SendLetstalkModels);
-    }
-
-    [Fact]
-    public async Task CheckValidTransIds_EmptyOnlineServers_Should_Return_EmptyViewModel()
-    {
-        // Arrange
-        var request = new CheckValidTransIdsModel
-        {
-            TransIds = "123,456,789",
-            IssueTypeId = 1,
-            SubIssueTypeId = 1,
-            RequestId = 1,
-            ActionId = 1
-        };
-        onlineServerRepository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet,
-            TransInfoAddRequestModel, GetAbnormalBetTicketModel, SendLetsTalkModel>(default).ReturnsForAnyArgs(([], [], [], [], []));
-
-        // Act
-        var result = await service.CheckValidTransIds(request);
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Empty(result.Matches);
-        Assert.NotNull(result.Validation);
-        Assert.NotNull(result.TransInfoAddRequestModel);
-        Assert.Empty(result.AbnormalBetTicketRequests);
-        Assert.Empty(result.SendLetstalkModels);
-        Assert.Null(result.InfoSiteDBDownModel);
     }
 }

@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { DateTimeFormat } from '../../../../utility/constants/config';
 import { TestingModule } from '../../../../utility/modules/testing.module';
 import { DateFullTimeNewComponent } from './date-full-time-new.component';
-import { DateTimeFormat } from '../../../../utility/constants/config';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 
 class Helper {
   static readonly fakeDateTime = '2024/03/20 10:30:00';
@@ -149,13 +149,16 @@ describe('DateFullTimeNewComponent', () => {
   it('should handle onBlur correctly', () => {
     // Arrange
     const mockOnTouched = jest.fn();
+    const validateWithTooltip = jest.fn().mockReturnValue(false);
     component.registerOnTouched(mockOnTouched);
+    component.validateWithTooltip = validateWithTooltip;
 
     // Act
     component.onBlur();
 
     // Assert
     expect(mockOnTouched).toHaveBeenCalled();
+    expect(validateWithTooltip).toHaveBeenCalled();
   });
 
   it('should handle validateWithTooltip correctly', () => {

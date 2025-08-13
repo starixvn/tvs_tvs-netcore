@@ -37,12 +37,12 @@ public class CheckValidTransIdsServiceImp(
         return viewModel;
     }
 
-    protected virtual bool IsInvalidTicket(GetAbnormalBetTicketModel ticket, IEnumerable<GetAbnormalBetTicketModel> validTickets, IEnumerable<GetAbnormalBetTicketModel> otherTickets)
+    private static bool IsInvalidTicket(GetAbnormalBetTicketModel ticket, IEnumerable<GetAbnormalBetTicketModel> validTickets, IEnumerable<GetAbnormalBetTicketModel> otherTickets)
     {
         return validTickets.All(x => x.TransId != ticket.TransId) && otherTickets.All(x => x.TransId != ticket.TransId);
     }
 
-    protected virtual IEnumerable<GetAbnormalBetTicketModel> MapAbnormalBetTicketRequests(IEnumerable<GetAbnormalBetTicketModel> abnormalBetTicketRequests)
+    public static List<GetAbnormalBetTicketModel> MapAbnormalBetTicketRequests(IEnumerable<GetAbnormalBetTicketModel> abnormalBetTicketRequests)
     {
         var result = new List<GetAbnormalBetTicketModel>();
         var validTickets = abnormalBetTicketRequests.Where(x => x.RemarkId == 0);
@@ -56,7 +56,7 @@ public class CheckValidTransIdsServiceImp(
         return result;
     }
 
-    protected virtual async Task<(IEnumerable<MatchInfoAddRequest>, IEnumerable<ValidationAbnormalBet>, IEnumerable<TransInfoAddRequestModel>,
+    private async Task<(IEnumerable<MatchInfoAddRequest>, IEnumerable<ValidationAbnormalBet>, IEnumerable<TransInfoAddRequestModel>,
             IEnumerable<GetAbnormalBetTicketModel>, IEnumerable<SendLetsTalkModel>)> CheckValidTransIdsAllSite(CheckValidTransIdsModel request)
     {
         var criteria = await GetCheckValidTransIdsCriteria(request);
@@ -70,7 +70,7 @@ public class CheckValidTransIdsServiceImp(
         return (distinctMatchInfoAddRequests, validationAbnormalBets, transInfoAddRequests, abnormalBetTicketRequests, sendLetsTalkModels);
     }
 
-    protected virtual IEnumerable<SendLetsTalkModel> MapSendLetsTalkModels(IEnumerable<SendLetsTalkModel> sendLetsTalkModels)
+    public static List<SendLetsTalkModel> MapSendLetsTalkModels(IEnumerable<SendLetsTalkModel> sendLetsTalkModels)
     {
         var groups = sendLetsTalkModels.GroupBy(x => x.MatchId);
         var result = new List<SendLetsTalkModel>();
@@ -88,7 +88,7 @@ public class CheckValidTransIdsServiceImp(
         return result;
     }
 
-    protected virtual TransInfoAddRequestModel GetTransInfoAddRequestModel(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
+    public static TransInfoAddRequestModel GetTransInfoAddRequestModel(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
     {
         return new TransInfoAddRequestModel
         {
@@ -99,7 +99,7 @@ public class CheckValidTransIdsServiceImp(
         };
     }
 
-    protected virtual ValidationAbnormalBet MapValidationAbnormalBet(IEnumerable<ValidationAbnormalBet> validationAbnormalBets)
+    public static ValidationAbnormalBet MapValidationAbnormalBet(IEnumerable<ValidationAbnormalBet> validationAbnormalBets)
     {
         if (!validationAbnormalBets.Any())
         {

@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { LogInfoRelatedEventComponent } from './log-info-related-event.component';
-import { LogInfoRelatedEventService } from './log-info-related-event.service';
+import moment from 'moment-timezone';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { StaticService } from '../../../../../utility/services/static.service';
-import { FilterModel } from '../../filter/filter.model';
-import { LogInfoRelatedEvent } from './log-info-related-event.model';
-import { SubIssueType } from '../../../../../utility/models/issue-type.model';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { AcceptType, DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
-import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';
+import { SubIssueType } from '../../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import moment from 'moment-timezone';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { FilterModel } from '../../filter/filter.model';
+import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';
+import { LogInfoRelatedEventComponent } from './log-info-related-event.component';
+import { LogInfoRelatedEvent } from './log-info-related-event.model';
+import { LogInfoRelatedEventService } from './log-info-related-event.service';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -69,6 +69,7 @@ describe('LogInfoRelatedEventComponent', () => {
     fixture = TestBed.createComponent(LogInfoRelatedEventComponent);
     logInfoRelatedEventService = fixture.debugElement.injector.get(LogInfoRelatedEventService);
     component = fixture.componentInstance;
+    component.tooltip.display = jest.fn();
   });
 
   it('should create', () => {

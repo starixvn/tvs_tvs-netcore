@@ -24,7 +24,7 @@ export class MenuBarComponent implements OnInit {
   rootUrl = '/';
   notificationIconClass = '';
   notificationIconClassSubscription: Subscription;
-  private notificationTimer: any;
+  private notificationTimer: ReturnType<typeof setTimeout>;
 
   notificationService = inject(NotificationPopupService);
   commonService = inject(CommonService);

@@ -2,7 +2,6 @@
 using MediatR;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services.BetList;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;

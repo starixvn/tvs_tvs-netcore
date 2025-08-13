@@ -2,8 +2,6 @@
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;

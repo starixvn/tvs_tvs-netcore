@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import _ from 'lodash';
 import moment from 'moment';
 import { DateTimeFormat, MatchType } from '../../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
@@ -11,10 +10,10 @@ import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../models/sub-type-link-match.model';
 import { AddRelatedEventArg } from '../models/add-related-event.model';
-import { LogInfoService } from './log-info.service';
-import { ValidationService } from './validation.service';
 import { SubIssueTypeRelatedEvent } from '../models/subIssue-type-related-event.model';
 import { CreateMapService } from './create-map.service';
+import { LogInfoService } from './log-info.service';
+import { ValidationService } from './validation.service';
 
 @Injectable()
 export class RelatedEventService {
@@ -71,7 +70,7 @@ export class RelatedEventService {
   
   async updateEventAutoGetLinkMatch(childEvents: ChildMatchModel[], arg: AddRelatedEventArg) {
     const newLinkEvents = childEvents.filter(x => !arg.relatedEvents.some(y => y.matchId === x.matchId) && this.isAutoSelectMatch(arg.mainEvent, x.matchType));
-    let subTypeLinkMatches = await this.getSubIssueTypeLinkMatch(Number(arg.filter.subIssueTypeId), newLinkEvents.map(x => x.matchId).join(','));
+    const subTypeLinkMatches = await this.getSubIssueTypeLinkMatch(Number(arg.filter.subIssueTypeId), newLinkEvents.map(x => x.matchId).join(','));
 
     subTypeLinkMatches.forEach(x => {
       if (SubIssueTypeRelatedEvent.isLinkMatchSubIssueTypeAutoAdd(x.subIssueTypeId)) {
@@ -89,7 +88,7 @@ export class RelatedEventService {
   async getGetInfoChildMatch(matchId: number, isMainMatch: boolean, sportType: number, eventDate?: string): Promise<ChildMatchModel[]> {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(IssueTypeConstant.WRONG_SCORE);
-    query.eventDate = eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+    query.eventDate = eventDate ? moment(eventDate, DateTimeFormat.FULL_DATE_TIME_FORMAT).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
     query.matchId = matchId;
     query.isMainMatch = isMainMatch;
     query.sportType = sportType;

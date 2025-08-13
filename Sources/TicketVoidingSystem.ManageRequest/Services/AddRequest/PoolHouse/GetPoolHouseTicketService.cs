@@ -3,8 +3,6 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.PoolHouse;
@@ -64,7 +62,7 @@ public class GetPoolHouseTicketServiceImp(IMapper mapper, IDynamicRepository rep
             .Select(group => new GroupBetTypeModel
             {
                 GroupName = group.Key,
-                BetTypes = group.ToList()
+                BetTypes = [.. group]
             })
             .OrderBy(gr => gr.GroupName);
     }

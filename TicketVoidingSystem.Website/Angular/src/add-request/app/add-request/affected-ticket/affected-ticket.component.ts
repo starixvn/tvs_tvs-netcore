@@ -58,7 +58,7 @@ export class AffectedTicketComponent implements OnChanges {
     if (this.tickets.groups.length > 0) {
       const betTypes = this.tickets.groups.flatMap(group =>
         group.tickets.map(x => {
-          let betType = x.isParlay ? x.subBetType : x.betType;
+          const betType = x.isParlay ? x.subBetType : x.betType;
           return new ItemsSelect(0, betType, betType, true, true, true, [])
         })
       );

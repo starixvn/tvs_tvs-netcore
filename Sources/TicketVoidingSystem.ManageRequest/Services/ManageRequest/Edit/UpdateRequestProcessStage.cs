@@ -18,7 +18,7 @@ public interface UpdateRequestProcessStage
     Task<Result> Execute(EditRequestQuery query);
 }
 
-public class UpdateRequestProcessStageImp(
+public class UpdateRequestProcessStageImp( // NOSONAR
     IMapper mapper,
     IDynamicRepository repository,
     AccountWinLostService accountWinLostService,

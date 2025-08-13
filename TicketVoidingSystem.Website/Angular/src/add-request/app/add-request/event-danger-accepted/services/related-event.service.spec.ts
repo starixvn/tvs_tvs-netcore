@@ -1,19 +1,19 @@
 import { TestBed } from '@angular/core/testing';
-import { RelatedEventService } from './related-event.service';
-import { ValidationService } from './validation.service';
-import { LogInfoService } from './log-info.service';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { ChildMatchModel } from '../../models/related-event.model';
-import { AddRelatedEventArg } from '../../models/add-related-event.model';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
-import { LABELS } from '../../../../../utility/constants/labels';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, SubIssueTypeGroup } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { EventDangerAcceptedService } from './event-danger-accepted.service';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { AddRelatedEventArg } from '../../models/add-related-event.model';
+import { ChildMatchModel } from '../../models/related-event.model';
+import { EventDangerAcceptedService } from './event-danger-accepted.service';
+import { LogInfoService } from './log-info.service';
+import { RelatedEventService } from './related-event.service';
+import { ValidationService } from './validation.service';
 
 class Helper {
   static readonly fakeChildMatchModel = {
@@ -103,7 +103,7 @@ describe('RelatedEventService', () => {
 
       // Act & Assert
       subIssueTypeAutoSelectList.forEach(subIssueTypeId => {
-        const result = service['isAutoSelectMatch'](subIssueTypeId.toString(), MatchType.CHILD, null, true);
+        const result = service['isAutoSelectMatch'](subIssueTypeId.toString(), MatchType.CHILD, new LogInfoRelatedEvent(), true);
         expect(result).toEqual(true);
       });
     });

@@ -2,7 +2,6 @@
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.AccountWinLostExcel;
 

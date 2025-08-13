@@ -1,8 +1,7 @@
-import _ from 'lodash';
-import { TvDetection, TvDetectionType, TVSRequestFilterBy } from '../../../../utility/constants/config';
-import { RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';
-import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import moment from 'moment';
+import { TvDetection, TvDetectionType, TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
+import { RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';
 import { StaticService } from '../../../../utility/services/static.service';
 
 export class TvDetectionService {
@@ -26,13 +25,13 @@ export class TvDetectionService {
 
     return `${requestInfo.provider}${tvDetectionInfo}`
   }
-  
+
   static getTvDetection(requestInfo: RequestInfoForCopy){
     if(!StaticService.isDangerAccepted(requestInfo.issueTypeId) && !StaticService.isRedCard(requestInfo.issueTypeId)
       && !(StaticService.isWrongScore(requestInfo.issueTypeId) && requestInfo.filterBy === TVSRequestFilterBy.CHECK_TIME)) {
       return '';
     }
-    
+
     return `\nTV Detection: ${requestInfo.tvDetectionValue === TvDetectionType.NONE ? TvDetection.OFF : TvDetection.ON}\n`
       + this.getTvDetectionTime(requestInfo)
       + ` This check time start void (${requestInfo.minAcceptType})`;
@@ -49,13 +48,13 @@ export class TvDetectionService {
   }
 
   private static getTvDetectionTimeOn(requestInfo: RequestInfoForCopy){
-    let time = Number(requestInfo.minuteOffset) !== 0 ? `${requestInfo.minuteOffset}m${requestInfo.secondOffset}s`: `${requestInfo.secondOffset}s`;
+    const time = Number(requestInfo.minuteOffset) !== 0 ? `${requestInfo.minuteOffset}m${requestInfo.secondOffset}s`: `${requestInfo.secondOffset}s`;
     const serviceAcceptTime = moment(requestInfo.serviceAcceptTime, "hh:mm:ss A").format("hh:mm:ss");;
 
     if(requestInfo.tvDetectionValue === TvDetectionType.FAST){
       const sumTimeError = this.addSecondsToTime(serviceAcceptTime, Number(requestInfo.minuteOffset), Number(requestInfo.secondOffset));
-      const sumAllowanceTime = this.addSecondsToTime(sumTimeError, 0, requestInfo.minAllowanceTime);
-      return `${serviceAcceptTime}(TV) + ${time}(Fast) = ${sumTimeError} + ${requestInfo.minAllowanceTime}s = ${sumAllowanceTime}`;
+      const sumAllowanceTimeFast = this.addSecondsToTime(sumTimeError, 0, requestInfo.minAllowanceTime);
+      return `${serviceAcceptTime}(TV) + ${time}(Fast) = ${sumTimeError} + ${requestInfo.minAllowanceTime}s = ${sumAllowanceTimeFast}`;
     }
 
     const subTimeError = this.addSecondsToTime(serviceAcceptTime, -Number(requestInfo.minuteOffset), -Number(requestInfo.secondOffset));

@@ -6,7 +6,9 @@ import * as _ from 'lodash';
 import { SortingComponent } from '../../../../../utility/components/sorting/sorting.component';
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { TicketStatus } from '../../../../../utility/constants/config';
 import { RegexConstant } from '../../../../../utility/constants/regex';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
@@ -17,8 +19,6 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { ValidationBusinessRuleArgs } from '../models/validation.model';
 import { ValidationService } from '../services/validation.service';
 import DescriptionTableAdjustVoidConfig from './describe-table-adjust-void.json';
-import { TicketStatus } from '../../../../../utility/constants/config';
-import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
     selector: 'account-table',
@@ -35,7 +35,7 @@ export class AccountTableComponent {
   @Input() accountWinlostModels: AccountWinlostModel[];
   @Input() permission: PermissionAddRequest;
   @Input() primitiveProps: PrimitiveProperty;
-  @Input() isShowTooltip: boolean = false;
+  @Input() isShowTooltip = false;
   @Output() reCalculateByAccountEvent = new EventEmitter<number>();
   @Output() openPopupAdjustTicketEvent = new EventEmitter<number>();
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;

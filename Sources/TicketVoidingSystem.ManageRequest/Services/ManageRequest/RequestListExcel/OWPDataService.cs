@@ -2,7 +2,6 @@
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListExcel;

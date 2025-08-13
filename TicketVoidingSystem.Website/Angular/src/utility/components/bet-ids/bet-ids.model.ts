@@ -1,12 +1,13 @@
 import { StaticService } from "../../services/static.service";
 
 export class CSSCLASS {
+    static readonly ITEM_NUMBER_VALID = 'item-number-valid';
     public static get VALID(): string { return 'item-number-valid'; }
     public static get INVALID(): string { return 'item-number-invalid'; }
     public static get MOVED(): string { return 'item-number-move-bet'; }
-    public static get SELECTED(): string { return 'item-number-selected'; }
-    public static get DIFFERENT(): string { return 'item-number-selected'; }
-    public static get SITE_DB_DOWN(): string { return 'item-number-selected'; }
+    public static get SELECTED(): string { return CSSCLASS.ITEM_NUMBER_VALID; }
+    public static get DIFFERENT(): string { return CSSCLASS.ITEM_NUMBER_VALID; }
+    public static get SITE_DB_DOWN(): string { return CSSCLASS.ITEM_NUMBER_VALID; }
 }
 
 export class GroupNumber {
@@ -45,8 +46,8 @@ export class GroupNumber {
             return 0;
         }
 
-        let allTicketValid = this.items.every(x => x.isValid);
-        let isHasValidTicketNotSiteDbDown = this.items.some(x => x.isValid && x.cssClass != CSSCLASS.SITE_DB_DOWN);
+        const allTicketValid = this.items.every(x => x.isValid);
+        const isHasValidTicketNotSiteDbDown = this.items.some(x => x.isValid && x.cssClass !== CSSCLASS.SITE_DB_DOWN);
         return allTicketValid && isHasValidTicketNotSiteDbDown ? 2 : 1;
     }
 

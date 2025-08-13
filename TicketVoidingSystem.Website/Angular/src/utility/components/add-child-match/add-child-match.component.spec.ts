@@ -1,10 +1,10 @@
+import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ChildMatchModel } from '../../../add-request/app/add-request/models/related-event.model';
+import { MatchType } from '../../constants/config';
 import { TestingModule } from '../../modules/testing.module';
 import { AddChildMatchComponent } from './add-child-match.component';
-import { ChildMatchModel } from '../../../add-request/app/add-request/models/related-event.model';
 import { AddChildMatchModel } from './add-child-match.model';
-import { SimpleChange } from '@angular/core';
-import { MatchType } from '../../constants/config';
 
 class Helper {
   static readonly fakeChildMatchModel: ChildMatchModel[] = [
@@ -14,7 +14,8 @@ class Helper {
       isChecked: false,
       matchCode: 'TEST1',
       leagueName: 'Test League',
-      matchEvent: 'Test Event'
+      matchEvent: 'Test Event',
+      isSpecialChildMatch: false
     },
     {
       matchId: 2,
@@ -22,7 +23,8 @@ class Helper {
       isChecked: false,
       matchCode: 'TEST2',
       leagueName: 'Test League',
-      matchEvent: 'Test Event'
+      matchEvent: 'Test Event',
+      isSpecialChildMatch: false
     }
   ];
 

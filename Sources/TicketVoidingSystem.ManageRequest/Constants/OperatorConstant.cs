@@ -1,6 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.Models;
-
-namespace TicketVoidingSystem.ManageRequest.Constants;
+﻿namespace TicketVoidingSystem.ManageRequest.Constants;
 
 public static class OperatorConstant
 {

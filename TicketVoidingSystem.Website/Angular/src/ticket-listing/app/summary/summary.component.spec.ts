@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { SummaryComponent } from './summary.component';
-import { SummaryItem } from './summary.model';
 import { ClipboardService } from 'ngx-clipboard';
 import { SpecialPlatform } from '../../../utility/constants/special-platform.constant';
+import { SummaryComponent } from './summary.component';
+import { SummaryItem } from './summary.model';
 
 class Helper {
   static createMockSummaryItem(overrides: Partial<SummaryItem> = {}) {
@@ -34,12 +34,12 @@ class Helper {
   });
 
   static readonly mockSummaryItemJollySport = Helper.createMockSummaryItem({
-    specialPlatform: SpecialPlatform.Jolly_Sports,
+    specialPlatform: SpecialPlatform.JOLLY_SPORTS,
     licenseeName: 'Jolly Sport Licensee'
   });
 
   static readonly mockSummaryItemJollySportCV = Helper.createMockSummaryItem({
-    specialPlatform: SpecialPlatform.Jolly_Sports_CV,
+    specialPlatform: SpecialPlatform.JOLLY_SPORTS_CV,
     licenseeName: 'Jolly Sport CV Licensee'
   });
 
@@ -83,13 +83,13 @@ describe('SummaryComponent', () => {
     component.display = true;
     component.items = [Helper.mockSummaryItem];
     component.itemsGroupByLicensee = [Helper.mockSummaryItem];
-    
+
     // Act
     component.ngOnChanges({
       items: { currentValue: component.items, previousValue: null, firstChange: true, isFirstChange: () => true },
       itemsGroupByLicensee: { currentValue: component.itemsGroupByLicensee, previousValue: null, firstChange: true, isFirstChange: () => true }
     });
-    
+
     // Assert
     expect(component.affectedLicensees).toBe('Test Licensee');
     expect(component.totalBetCountOfNormalLicensee).toBe(100);
@@ -99,10 +99,10 @@ describe('SummaryComponent', () => {
   it('#getWidth should return correct width when showSendColumn is true', () => {
     // Arrange
     component.showSendColumn = true;
-    
+
     // Act
     const width = component.getWidth();
-    
+
     // Assert
     expect(width).toBe('746px');
   });
@@ -110,10 +110,10 @@ describe('SummaryComponent', () => {
   it('#getWidth should return correct width when showSendColumn is false', () => {
     // Arrange
     component.showSendColumn = false;
-    
+
     // Act
     const width = component.getWidth();
-    
+
     // Assert
     expect(width).toBe('607px');
   });
@@ -121,10 +121,10 @@ describe('SummaryComponent', () => {
   it('#getTicketsDetail should emit getTicketsEvent with item', () => {
     // Arrange
     component.getTicketsEvent = { emit: jest.fn() } as any;
-    
+
     // Act
     component.getTicketsDetail(Helper.mockSummaryItem);
-    
+
     // Assert
     expect(component.getTicketsEvent.emit).toHaveBeenCalledWith(Helper.mockSummaryItem);
   });
@@ -132,10 +132,10 @@ describe('SummaryComponent', () => {
   it('#exportExcel should emit exportExcelEvent with item', () => {
     // Arrange
     component.exportExcelEvent = { emit: jest.fn() } as any;
-    
+
     // Act
     component.exportExcel(Helper.mockSummaryItem);
-    
+
     // Assert
     expect(component.exportExcelEvent.emit).toHaveBeenCalledWith(Helper.mockSummaryItem);
   });
@@ -147,10 +147,10 @@ describe('SummaryComponent', () => {
       Helper.createMockSummaryItem({ isChecked: false })
     ];
     component.checkedAll = true;
-    
+
     // Act
     component.changedCheckAll();
-    
+
     // Assert
     expect(component.items[0].isChecked).toBe(true);
     expect(component.items[1].isChecked).toBe(true);
@@ -163,10 +163,10 @@ describe('SummaryComponent', () => {
       Helper.createMockSummaryItem({ isChecked: true }),
       Helper.createMockSummaryItem({ isChecked: false })
     ];
-    
+
     // Act
     component.changedCheckItem();
-    
+
     // Assert
     expect(component.checkedAll).toBe(false);
     expect(component.isShowSend).toBe(true);
@@ -181,10 +181,10 @@ describe('SummaryComponent', () => {
       Helper.mockSummaryItemJollySportCV
     ];
     component.groupBy = 0;
-    
+
     // Act
     component.updateAffectedLicensees();
-    
+
     // Assert
     expect(component.affectedLicensees).toBe('Test Licensee');
     expect(component.chinaViewLicensees).toBe('China Licensee');
@@ -201,10 +201,10 @@ describe('SummaryComponent', () => {
       Helper.mockSummaryItemJollySport,
       Helper.mockSummaryItemJollySportCV
     ];
-    
+
     // Act
     component.updateTotalBetCount();
-    
+
     // Assert
     expect(component.totalBetCountOfCredit).toBe(100);
     expect(component.totalBetCountOfNormalLicensee).toBe(100);
@@ -225,10 +225,10 @@ describe('SummaryComponent', () => {
       Helper.createMockSummaryItem({ isChecked: false })
     ];
     component.sendExcelFileEvent = { emit: jest.fn() } as any;
-    
+
     // Act
     component.sendExcelFile();
-    
+
     // Assert
     expect(component.sendExcelFileEvent.emit).toHaveBeenCalledWith([Helper.mockSummaryItem]);
   });
@@ -236,10 +236,10 @@ describe('SummaryComponent', () => {
   it('#sendCreditDataToLetstalk should emit sendCreditToLetstalk with item', () => {
     // Arrange
     component.sendCreditToLetstalk = { emit: jest.fn() } as any;
-    
+
     // Act
     component.sendCreditDataToLetstalk(Helper.mockSummaryItem);
-    
+
     // Assert
     expect(component.sendCreditToLetstalk.emit).toHaveBeenCalledWith(Helper.mockSummaryItem);
   });
@@ -249,10 +249,10 @@ describe('SummaryComponent', () => {
     const mockText = 'Test Text';
     window.alert = jest.fn();
     clipboardService.copyFromContent = jest.fn();
-    
+
     // Act
     component.copyClipboard(mockText);
-    
+
     // Assert
     expect(clipboardService.copyFromContent).toHaveBeenCalledWith(mockText);
     expect(window.alert).toHaveBeenCalledWith('The Licensee list has been copied to clipboard.');
@@ -266,7 +266,7 @@ describe('SummaryComponent', () => {
 
     // Act
     const result = component.isShowAffectedLicensees();
-    
+
     // Assert
     expect(result).toBe(true);
   });
@@ -278,10 +278,10 @@ describe('SummaryComponent', () => {
     component.chinaViewLicensees = '';
     component.jollyViewLicensees = '';
     component.jollySportCvLicensees = '';
-    
+
     // Act
     const result = component.isShowAffectedLicensees();
-    
+
     // Assert
     expect(result).toBe(false);
   });

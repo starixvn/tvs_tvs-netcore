@@ -38,7 +38,7 @@ export class FilterWrongOfferedNameService {
 
   autoCheckLicensees(groups: GroupLicensee[], filterWrongOfferedName: FilterWrongOfferedNameModel, filterRequest: FilterModel): GroupLicenseeModel {
     let groupLicenseesModel: GroupLicenseeModel;
-    
+
     if (this.validationService.isSubTypeChinese(filterRequest.subIssueTypeId)) {
       groupLicenseesModel = new GroupLicenseeModel(groups, false);
       const groupChinaRules = groupLicenseesModel.groupLicensees.find(x => x.groupName === 'China rules');
@@ -49,7 +49,7 @@ export class FilterWrongOfferedNameService {
     } else {
       groupLicenseesModel = new GroupLicenseeModel(groups, true);
     }
-    
+
     filterWrongOfferedName.licenseeNames = groupLicenseesModel.getCheckedLicensees().map(x => x.name);
 
     return groupLicenseesModel;
@@ -66,12 +66,12 @@ export class FilterWrongOfferedNameService {
 
   isValidity(filterWrongOfferedName: FilterWrongOfferedNameModel, tooltip: Tooltip): boolean {
     if (filterWrongOfferedName.currencyIds.length === 0) {
-      tooltip.display(this.FILTER_CURRENCY_DROPDOWN, TEXT.EMPTY_SELECT);
+      tooltip.display(this.FILTER_CURRENCY_DROPDOWN, TEXT.SELECT_AT_LEAST_ONE_OPTION);
       return false;
     }
 
     if (filterWrongOfferedName.licenseeNames.length === 0) {
-      tooltip.display(this.GROUP_LICENSEE, TEXT.EMPTY_SELECT);
+      tooltip.display(this.GROUP_LICENSEE, TEXT.SELECT_AT_LEAST_ONE_OPTION);
       return false;
     }
 

@@ -1,16 +1,16 @@
+import { EventEmitter, SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../utility/modules/testing.module';
-import { FilterTicketsComponent } from './filter-tickets.component';
-import { CommonService } from '../../../../utility/services/common.service';
-import { HttpService } from '../../../../utility/services/http.service';
-import { GetTicketsQuery } from '../../models/query.model';
-import { FilterSearchBy } from './filter.model';
-import { MatchIdComponent } from './match-id/match-id.component';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupLicensee, Licensee } from '../../../../utility/components/licensees/licensees.model';
 import { BalanceUp } from '../../../../utility/models/balance-up.model';
 import { Currency } from '../../../../utility/models/currency.model';
-import { SimpleChange, EventEmitter } from '@angular/core';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { CommonService } from '../../../../utility/services/common.service';
+import { HttpService } from '../../../../utility/services/http.service';
+import { GetTicketsQuery } from '../../models/query.model';
+import { FilterTicketsComponent } from './filter-tickets.component';
+import { FilterSearchBy } from './filter.model';
+import { MatchIdComponent } from './match-id/match-id.component';
 
 class Helper {
   static readonly fakeBalanceUp: BalanceUp = {
@@ -81,10 +81,11 @@ describe('FilterTicketsComponent', () => {
     component.changeSearch = new EventEmitter();
     component.searchEvent = new EventEmitter();
 
-    // Mock DOM element
-    const element = document.createElement('div');
-    element.innerHTML = '<input id="inlineRadio-0" type="radio">';
-    document.body.appendChild(element);
+     // Mock document.getElementById
+     const bodyElement = document.createElement('div');
+     bodyElement.id = 'body';
+     bodyElement.setAttribute('user-id', '8');
+     document.body.appendChild(bodyElement);
   });
 
   it('should create', () => {
@@ -96,6 +97,7 @@ describe('FilterTicketsComponent', () => {
     component.initData = jest.fn();
     component.initCurrency = jest.fn();
     component.renderGroupLicensees = jest.fn();
+    commonService.getBalanceUpZoneManila = jest.fn().mockReturnValue(Helper.fakeBalanceUp);
 
     // Act
     await component.ngOnInit();
@@ -134,7 +136,7 @@ describe('FilterTicketsComponent', () => {
   it('should initialize data correctly for internal URL', async () => {
     // Arrange
     component.isExternalUrl = false;
-    commonService.getBalanceUpZoneManila = jest.fn().mockImplementation(() => Helper.fakeBalanceUp);
+    commonService.getBalanceUpZoneManila = jest.fn().mockReturnValue(Helper.fakeBalanceUp);
     const element = document.createElement('body');
     element.setAttribute('id', 'body');
     element.setAttribute('user-id', '8');
@@ -184,6 +186,56 @@ describe('FilterTicketsComponent', () => {
     expect(component.currencies.items.length).toBe(6);
     expect(component.currencies.selected.length).toBe(6);
     expect(component.model.currencyIds).toBe('13,81,20,90,86,9');
+  });
+
+  it('should handle null currency data', async () => {
+    // Arrange
+    commonService.getCurrencies = jest.fn().mockReturnValue(null);
+
+    // Act
+    await component.initCurrency();
+
+    // Assert
+    expect(component.currencies.items).toEqual([]);
+    expect(component.currencies.selected).toEqual([]);
+    expect(component.model.currencyIds).toBe('');
+  });
+
+  it('should handle empty currency array', async () => {
+    // Arrange
+    commonService.getCurrencies = jest.fn().mockReturnValue([]);
+
+    // Act
+    await component.initCurrency();
+
+    // Assert
+    expect(component.currencies.items).toEqual([]);
+    expect(component.currencies.selected).toEqual([]);
+    expect(component.model.currencyIds).toBe('');
+  });
+
+  it('should handle null group licensees data', async () => {
+    // Arrange
+    commonService.getGroupLicensees = jest.fn().mockReturnValue(null);
+
+    // Act
+    await component.renderGroupLicensees();
+
+    // Assert
+    expect(component.groupLicenseeModel.groupLicensees).toEqual([]);
+    expect(component.groupLicenseeModel.isChecked).toBe(true);
+  });
+
+  it('should handle empty group licensees array', async () => {
+    // Arrange
+    commonService.getGroupLicensees = jest.fn().mockReturnValue([]);
+
+    // Act
+    await component.renderGroupLicensees();
+
+    // Assert
+    expect(component.groupLicenseeModel.groupLicensees).toEqual([]);
+    expect(component.groupLicenseeModel.isChecked).toBe(true);
   });
 
   it('should validate search by match ID', async () => {
@@ -258,7 +310,7 @@ describe('FilterTicketsComponent', () => {
 
     // Assert
     expect(component.changeSearchBy).toHaveBeenCalledWith('0');
-    
+
     // Cleanup
     fixture.debugElement.nativeElement.removeChild(element);
   });

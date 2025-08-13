@@ -1,5 +1,4 @@
 ﻿using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
@@ -28,7 +27,7 @@ public class MapTicketsServiceImp : MapTicketsService
             });
         }
 
-        return ArraySegment<RequestDetailTicketModel>.Empty;
+        return [];
     }
 
     public IEnumerable<RequestDetailTicketModel> SetVoidingTypeForTickets(CheckTicketValidationOutput validation)

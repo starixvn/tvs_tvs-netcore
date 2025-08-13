@@ -111,17 +111,7 @@ export class IssueTypeConstant {
     [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK, 'TicketVoidingSystem/WrongOddsSportsBook/Edit'],
     [IssueTypeConstant.WRONG_OFFERED_NAME, 'TicketVoidingSystem/WrongOfferedName/Edit'],
     [IssueTypeConstant.MATCH_COMPLETED, 'TicketVoidingSystem/MatchCompleted/Edit'],
-    [IssueTypeConstant.MATCH_EARLY_COMPLETED, 'TicketVoidingSystem/MatchEarlyCompleted/Edit']
+    [IssueTypeConstant.MATCH_EARLY_COMPLETED, 'TicketVoidingSystem/MatchsEarlyCompleted/Edit']
   ]);
-
-  static getIssueTypeFromUrl(url: string): string {    
-    [...this.NAVIGATE_ADD_REQUEST.entries(), ...this.NAVIGATE_EDIT_REQUEST.entries()].forEach(([key, value]) => {
-      if (url.includes(value)) {
-        return key;
-      }
-    });
-
-    return '';
-  }
 }
 

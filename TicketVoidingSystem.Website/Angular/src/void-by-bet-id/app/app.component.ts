@@ -129,7 +129,7 @@ export class AppComponent implements OnInit {
   }
 
   async showConfirmBeforeVoid() {
-    let usersNegativeCredit = await this.checkNegativeBetCredit();
+    const usersNegativeCredit = await this.checkNegativeBetCredit();
     let message = TEXT.CONFIRM_VOID_TICKET;
     if(usersNegativeCredit) {
       message = `${LABELS.CONFIRM_NEGATIVE_CUSTOMER.replace('{0}', usersNegativeCredit)}<br>${message}`;

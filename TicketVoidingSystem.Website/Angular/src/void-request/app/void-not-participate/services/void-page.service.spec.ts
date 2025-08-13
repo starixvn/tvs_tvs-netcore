@@ -1,17 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
-import { TestingModule } from '../../../../utility/modules/testing.module';
 import { NotParticipateModel } from '../../../../add-request/app/add-request/models/event-not-participate.model';
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
 import { PlayerName, RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { Result } from '../../../../utility/models/result';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../utility/services/common.service';
 import { CommonPrimitiveProperty } from '../../models/common-primitive-property.model';
 import { TicketsService } from '../../services/tickets.service';
@@ -130,6 +130,7 @@ class Helper {
   static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {
     transInfoAddRequestModel: new TransInfoAddRequestModel(),
     getLogInfoModels: [Helper.fakeGetLogInfoModel],
+    infoSiteDBDownModel: null
   };
 }
 

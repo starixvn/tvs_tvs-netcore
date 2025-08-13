@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
-using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
@@ -23,7 +21,7 @@ public class GetVoidedTicketsHandler(
             TotalCancelCashOutProcessed = voidedTickets.Count(x => x.IsCancelCashOut),
             LicenseeNames = CombineLicensee(voidedTickets),
             CancelCashOutLicenseesName = CombineCancelCashOutLicensee(voidedTickets),
-            Groups = new List<Group<VoidedTicketViewModel>>()
+            Groups = []
         };
 
         await UpdateGroupTickets(viewModel, request, voidedTickets);
@@ -47,7 +45,7 @@ public class GetVoidedTicketsHandler(
 
     private static string CombineLicensee(IEnumerable<VoidedTicketModel> tickets)
     {
-        var licensees = tickets.Where(item => item.GroupName.IndexOf("Deposit", StringComparison.CurrentCultureIgnoreCase) >= 0)
+        var licensees = tickets.Where(item => item.GroupName.Contains("Deposit", StringComparison.CurrentCultureIgnoreCase))
             .Select(item => item.LicenseeName).Distinct();
 
         return string.Join(", ", licensees);
@@ -55,7 +53,7 @@ public class GetVoidedTicketsHandler(
 
     private static string CombineCancelCashOutLicensee(IEnumerable<VoidedTicketModel> tickets)
     {
-        var licensees = tickets.Where(item => item.IsCancelCashOut && item.GroupName.IndexOf("Deposit", StringComparison.CurrentCultureIgnoreCase) >= 0)
+        var licensees = tickets.Where(item => item.IsCancelCashOut && item.GroupName.Contains("Deposit", StringComparison.CurrentCultureIgnoreCase))
             .Select(item => item.LicenseeName).Distinct();
 
         return string.Join(", ", licensees);

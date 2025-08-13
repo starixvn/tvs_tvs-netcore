@@ -48,7 +48,7 @@ export class AdvancedModeComponent {
   private readonly element = inject(ElementRef);
   private readonly commonService = inject(CommonService);
   private readonly service = inject(AdvancedModeService);
-  
+
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -91,9 +91,12 @@ export class AdvancedModeComponent {
   }
 
   async getBetTeam() {
-    this.baseBetTeams = this.baseBetTeams.length > 0
-      ? this.baseBetTeams
-      : await this.service.getBetTeamsAddRequest();
+    if (this.baseBetTeams.length > 0) {
+      return;
+    }
+
+    const result = await this.service.getBetTeamsAddRequest();
+    this.baseBetTeams = result || [];
   }
 
   clearBetTeam() {
@@ -297,7 +300,7 @@ export class AdvancedModeComponent {
         this.showTooltipWhenCollapsed();
       } else {
         const className = `bet-team-${betTeamIndex}-selection-${selection.index}`;
-        this.tooltip.display(className, LABELS.SELECT_AT_LEAST_ONE_OPTION);
+        this.tooltip.display(className, TEXT.SELECT_AT_LEAST_ONE_OPTION);
       }
       return false;
     }

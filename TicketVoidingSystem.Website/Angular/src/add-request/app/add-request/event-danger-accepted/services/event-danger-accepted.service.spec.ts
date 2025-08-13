@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { EventDangerAcceptedService } from './event-danger-accepted.service';
-import { ValidationService } from './validation.service';
+import { MatchType } from '../../../../../utility/constants/config';
+import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { PrimitiveProperty } from '../../components/log-info-related-event/primitive-property.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { RedCardModel } from '../../models/event-red-card.model';
 import { ChildMatchModel } from '../../models/related-event.model';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { MatchType } from '../../../../../utility/constants/config';
-import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { EventDangerAcceptedService } from './event-danger-accepted.service';
+import { ValidationService } from './validation.service';
 
 describe('EventDangerAcceptedService', () => {
   let service: EventDangerAcceptedService;
@@ -245,7 +245,8 @@ describe('EventDangerAcceptedService', () => {
           isChecked: true,
           matchCode: 'TEST2',
           leagueName: 'Test League',
-          matchEvent: 'Test Event'
+          matchEvent: 'Test Event',
+          isSpecialChildMatch: false
         }
       ] as ChildMatchModel[];
 

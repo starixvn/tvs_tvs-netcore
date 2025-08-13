@@ -1,6 +1,5 @@
 ﻿using Fanex.NAP.Client.Helpers.Business;
 using MediatR;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 

@@ -175,7 +175,7 @@ export class StaticService {
     return `${ngbDate.year}/${transformMonth}/${transformDay}`;
   }
 
-  static getSubIssueTypeId(requestDetail: RequestDetailViewModel, matchId?: number): number {
+  static getSubIssueTypeId(requestDetail: RequestDetailViewModel, matchId?: number): number { // NOSONAR
     if (this.isWrongScore(requestDetail.request.issueTypeId)) {
       return matchId ? requestDetail.wrongScoreModels.find(x => x.matchId === matchId).subIssueTypeId
         : requestDetail.wrongScoreModels[0].subIssueTypeId;

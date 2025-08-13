@@ -1,6 +1,4 @@
-﻿using TicketVoidingSystem.ManageRequest.ViewModels;
-
-namespace TicketVoidingSystem.ManageRequest.Models;
+﻿namespace TicketVoidingSystem.ManageRequest.Models;
 
 public class GetPoolHouseTicketQuery
 {

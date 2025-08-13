@@ -1,15 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-import { RelatedEventService } from './related-event.service';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { ValidationService } from './validation.service';
+import { MatchType } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../../add-request-api.service';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
-import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
-import { MatchType } from '../../../../../utility/constants/config';
 import { AddRelatedEventArg } from '../models/add-related-event-arg.model';
-import { LABELS } from '../../../../../utility/constants/labels';
-import { FilterBetType } from '../models/filter-with-hdp.model';
+import { FilterBetType, FilterWithHdpModel } from '../models/filter-with-hdp.model';
+import { RelatedEventService } from './related-event.service';
+import { ValidationService } from './validation.service';
 
 describe('RelatedEventService', () => {
   let service: RelatedEventService;

@@ -1,5 +1,4 @@
 ﻿using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -39,7 +38,7 @@ public class GeneratePoolHouseTicketServiceImp(MapTicketsService mapTicketsServi
         return viewModel;
     }
 
-    private IEnumerable<Group<GetTicketModel>> GenerateTicketGroups(List<GetTicketModel> tickets)
+    private List<Group<GetTicketModel>> GenerateTicketGroups(List<GetTicketModel> tickets)
     {
         if (tickets.Count == 0)
         {
@@ -53,26 +52,26 @@ public class GeneratePoolHouseTicketServiceImp(MapTicketsService mapTicketsServi
         return groups;
     }
 
-    private TicketGroups SeparateTicketsByType(IEnumerable<GetTicketModel> tickets)
+    private static TicketGroups SeparateTicketsByType(IEnumerable<GetTicketModel> tickets)
     {
         var parlayTickets = tickets.Where(ticket =>
             IsParlayPoolHouseTicket(ticket.IsMixParlay, ticket.GroupName)).ToList();
 
         return new TicketGroups
         {
-            CreditParlay = parlayTickets
+            CreditParlay = [.. parlayTickets
                 .Where(t => !t.IsDeposit)
-                .OrderBy(t => t.TransId).ToList(),
+                .OrderBy(t => t.TransId)],
 
-            DepositParlay = parlayTickets
+            DepositParlay = [.. parlayTickets
                 .Where(t => t.IsDeposit)
-                .OrderBy(t => t.TransId).ToList(),
+                .OrderBy(t => t.TransId)],
 
-            Others = tickets
+            Others = [.. tickets
                 .Where(t => t.GroupName == OthersGroupName)
-                .OrderBy(t => t.TransId).ToList(),
+                .OrderBy(t => t.TransId)],
 
-            Single = tickets.Where(t => !t.IsMixParlay && t.GroupName != OthersGroupName).ToList()
+            Single = [.. tickets.Where(t => !t.IsMixParlay && t.GroupName != OthersGroupName)]
         };
     }
 

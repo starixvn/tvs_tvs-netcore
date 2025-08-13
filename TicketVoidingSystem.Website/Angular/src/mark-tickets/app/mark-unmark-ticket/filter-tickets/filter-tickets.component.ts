@@ -1,7 +1,13 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, 
-  ViewChild, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges,
+  ViewChild, inject
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { GroupLicenseeModel } from '../../../../utility/components/licensees/licensees.model';
 import { PagingConstant } from '../../../../utility/components/paging/paging.model';
 import { Selection } from '../../../../utility/models/selection.model';
@@ -9,10 +15,6 @@ import { CommonService } from '../../../../utility/services/common.service';
 import { GetTicketsQuery } from '../../models/query.model';
 import { Currencies, FilterSearchBy } from './filter.model';
 import { MatchIdComponent } from './match-id/match-id.component';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 
 @Component({
   standalone: true,
@@ -55,10 +57,8 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
   }
 
   async initData() {
-    const balanceUp = await this.commonService.getBalanceUpZoneManila();
-    const moveBetDay = new Date(balanceUp.moveBetsDay);
-    this.moveBetNgbDate = new NgbDate(moveBetDay.getFullYear(), moveBetDay.getMonth() + 1, moveBetDay.getDate() + 1);
-    const userName = document.getElementById('body').getAttribute('user-id');
+    await this.getBalanceUp();
+    const userName = document?.getElementById('body')?.getAttribute('user-id');
     this.markedByOptions = [{name: '<<<< Me >>>>', value: userName}, {name: 'All', value: '0'}];
     this.model.markedBy = this.markedByOptions[0].value;
     if (this.isExternalUrl) {
@@ -67,11 +67,25 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
     }
   }
 
+  async getBalanceUp() {
+    const balanceUp = await this.commonService.getBalanceUpZoneManila();
+    if (balanceUp) {
+      const moveBetDay = new Date(balanceUp.moveBetsDay);
+      this.moveBetNgbDate = new NgbDate(moveBetDay.getFullYear(), moveBetDay.getMonth() + 1, moveBetDay.getDate() + 1);
+    }
+  }
+
   async initCurrency() {
     this.currencies.items = await this.commonService.getCurrencies();
-    this.currencies.items.forEach(x => x.group = 'All');
-    this.currencies.selected = this.currencies.items.map(x => x.id);
-    this.model.currencyIds = this.currencies.selected.join(',');
+    if (this.currencies.items && this.currencies.items.length > 0) {
+      this.currencies.items.forEach(x => x.group = 'All');
+      this.currencies.selected = this.currencies.items.map(x => x.id);
+      this.model.currencyIds = this.currencies.selected.join(',');
+    } else {
+      this.currencies.items = [];
+      this.currencies.selected = [];
+      this.model.currencyIds = '';
+    }
   }
 
   changeTab() {
@@ -85,7 +99,11 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
 
   async renderGroupLicensees() {
     const data = await this.commonService.getGroupLicensees();
-    this.groupLicenseeModel = new GroupLicenseeModel(data, true);
+    if (data && data.length > 0) {
+      this.groupLicenseeModel = new GroupLicenseeModel(data, true);
+    } else {
+      this.groupLicenseeModel = new GroupLicenseeModel([], true);
+    }
   }
 
   changeSearchBy(value: string) {

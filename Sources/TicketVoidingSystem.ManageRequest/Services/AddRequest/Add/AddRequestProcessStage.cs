@@ -16,7 +16,7 @@ public interface AddRequestProcessStage
     Task<Result> Execute(AddRequestQuery query);
 }
 
-public class AddRequestProcessStageImp(
+public class AddRequestProcessStageImp( // NOSONAR
     IMapper mapper,
     IDynamicRepository repository,
     SessionService sessionService,
@@ -29,8 +29,6 @@ public class AddRequestProcessStageImp(
     PendingMarkTicketsService pendingMarkTicketsService)
     : AddRequestProcessStage
 {
-    // NOSONAR
-
     public async Task<Result> Execute(AddRequestQuery query)
     {
         var requestId = await ExecuteAddRequest(query);
@@ -105,7 +103,7 @@ public class AddRequestProcessStageImp(
             IssueTypeConstant.WrongScore => string.Join(", ", query.WrongScoreInfo.Select(x => x.MatchId).Distinct()),
             IssueTypeConstant.EarlyKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
             IssueTypeConstant.WrongKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
-            IssueTypeConstant.AbnormalBet => query.AbnormalBetInfo?.Matches?.Count() > 0
+            IssueTypeConstant.AbnormalBet => query.AbnormalBetInfo?.Matches?.Any() == true
                 ? string.Join(", ", query.AbnormalBetInfo.Matches.Select(x => x.MatchId))
                 : BetTypeConstant.SystemParlay.ToString(),
             IssueTypeConstant.DuplicateTickets => query.DuplicateTicketsInfo?.MatchId.ToString(),

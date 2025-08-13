@@ -76,7 +76,7 @@ public class GetInfoTicketsForMessageImp(SpecialBetTypeContentService specialBet
         return IsGroupBetTypeHandicap(allTickets) ? GetHdpValuesHandicap(allTickets) : string.Empty;
     }
 
-    protected virtual bool IsGroupBetTypeHandicap(IEnumerable<GetTicketModel> allTickets)
+    private static bool IsGroupBetTypeHandicap(IEnumerable<GetTicketModel> allTickets)
     {
         return allTickets.All(x => x.GroupBetTypeId is BetTypeConstant.Handicap);
     }
