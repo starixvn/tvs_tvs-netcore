@@ -89,42 +89,18 @@ class Helper {
     messageValidationLogInfo: Helper.fakeValidationMessage,
     sportType: 0
   } as LogInfoRelatedEvent;
-  static readonly fakeChildMatchModel: ChildMatchModel = {
+  static readonly fakeChildMatchModel = {
     matchId: Helper.fakeMatchId,
     matchCode: '222',
     matchEvent: 'TestC - vs - Real Madrid (V)',
     isChecked: true,
     matchType: MatchType.LINK,
-    leagueName: '',
-    name: '',
     homeId: 0,
-    homeName: '',
-    homeNameNewSimplified: '',
-    homeNameSimplified: '',
-    homeNameTraditional: '',
     awayId: 0,
-    awayName: '',
-    awayNameNewSimplified: '',
-    awayNameSimplified: '',
-    awayNameTraditional: '',
-    eventDate: undefined,
-    dateTime: undefined,
     leagueId: 0,
     leagueGroupId: 0,
-    leagueNameNewSimplified: '',
-    leagueNameSimplified: '',
-    leagueNameTraditional: '',
-    matchEventSimplified: '',
-    matchEventNewSimplified: '',
-    kickOffTime: '',
-    startTime: undefined,
-    endTime: undefined,
     sportType: 0,
-    sportTypeName: '',
-    sportTypeNameNewSimplified: '',
-    sportTypeNameSimplified: '',
-    sportTypeNameTraditional: ''
-  };
+  } as ChildMatchModel;
   static readonly fakeSubIssueTypeLinkMatch: SubIssueTypeLinkMatch = {
     matchId: Helper.fakeMatchId,
     subIssueTypeId: 26

@@ -1,9 +1,8 @@
-﻿using Fanex.Data.Repository;
-using TicketVoidingSystem.ManageRequest.Constants;
+﻿using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
-using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet;
@@ -14,11 +13,9 @@ public interface CheckValidTransIdsService
 }
 
 public class CheckValidTransIdsServiceImp(
-    IDynamicRepository repository,
+    OnlineServerRepository onlineServerRepository,
     MatchInfoAddRequestService matchInfoAddRequestService,
-    MapAbnormalBetTicketsExcelService mapTicketsExcelService,
-    CheckServerStatusService checkServerStatusService,
-    GetInfoSiteDbDownService getTicketsSiteDbDown)
+    MapAbnormalBetTicketsExcelService mapTicketsExcelService)
     : CheckValidTransIdsService
 {
     public async Task<CheckValidTransIdsViewModel> CheckValidTransIds(CheckValidTransIdsModel request)
@@ -34,7 +31,7 @@ public class CheckValidTransIdsServiceImp(
             TransInfoAddRequestModel = GetTransInfoAddRequestModel(transInfoAddRequests),
             AbnormalBetTicketRequests = mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(ticketRequests),
             SendLetstalkModels = MapSendLetsTalkModels(sendLetsTalkModels),
-            InfoSiteDBDownModel = getTicketsSiteDbDown.GetInfoSiteDBDown(transInfoAddRequests)
+            InfoSiteDBDownModel = InfoSiteDbDownHelper.Get(transInfoAddRequests)
         };
 
         return viewModel;
@@ -62,26 +59,15 @@ public class CheckValidTransIdsServiceImp(
     protected virtual async Task<(IEnumerable<MatchInfoAddRequest>, IEnumerable<ValidationAbnormalBet>, IEnumerable<TransInfoAddRequestModel>,
             IEnumerable<GetAbnormalBetTicketModel>, IEnumerable<SendLetsTalkModel>)> CheckValidTransIdsAllSite(CheckValidTransIdsModel request)
     {
-        var onlineServer = await checkServerStatusService.GetOnlineServer();
-        var currentOnlineServerId = string.Join(",", onlineServer.Select(x => x.Id));
+        var criteria = await GetCheckValidTransIdsCriteria(request);
 
-        var criteria = GetCheckValidTransIdsCriteria(request, currentOnlineServerId);
+        var (matchInfoAddRequests, validationAbnormalBets, transInfoAddRequests, abnormalBetTicketRequests, sendLetsTalkModels) =
+            await onlineServerRepository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet,
+                TransInfoAddRequestModel, GetAbnormalBetTicketModel, SendLetsTalkModel>(criteria);
 
-        var tasks = onlineServer.Select(server =>
-        {
-            criteria.SiteDbGroupId = server.Id;
-            return repository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet, TransInfoAddRequestModel, GetAbnormalBetTicketModel, SendLetsTalkModel>(criteria);
-        });
+        var distinctMatchInfoAddRequests = matchInfoAddRequests.DistinctBy(x => x.MatchId);
 
-        var results = await Task.WhenAll(tasks);
-
-        var matchInfoAddRequests = results.SelectMany(x => x.Item1).DistinctBy(x => x.MatchId);
-        var validationAbnormalBets = results.SelectMany(x => x.Item2);
-        var transInfoAddRequests = results.SelectMany(x => x.Item3);
-        var abnormalBetTicketRequests = results.SelectMany(x => x.Item4);
-        var sendLetsTalkModels = results.SelectMany(x => x.Item5);
-
-        return (matchInfoAddRequests, validationAbnormalBets, transInfoAddRequests, abnormalBetTicketRequests, sendLetsTalkModels);
+        return (distinctMatchInfoAddRequests, validationAbnormalBets, transInfoAddRequests, abnormalBetTicketRequests, sendLetsTalkModels);
     }
 
     protected virtual IEnumerable<SendLetsTalkModel> MapSendLetsTalkModels(IEnumerable<SendLetsTalkModel> sendLetsTalkModels)
@@ -142,8 +128,10 @@ public class CheckValidTransIdsServiceImp(
         return result;
     }
 
-    private static CheckValidTransIdsCriteria GetCheckValidTransIdsCriteria(CheckValidTransIdsModel message, string onlineServerId)
+    private async Task<CheckValidTransIdsCriteria> GetCheckValidTransIdsCriteria(CheckValidTransIdsModel message)
     {
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
+
         var criteria = new CheckValidTransIdsCriteria
         {
             TransIds = message.TransIds,
@@ -156,7 +144,7 @@ public class CheckValidTransIdsServiceImp(
             isRemoveCreditCashService = message.IsRemoveCreditCashService,
             IsAddSettledTickets = message.IsAddSettledTickets,
             IsVoidAllArchivedTickets = message.IsVoidAllArchivedTickets,
-            OnlineServerId = onlineServerId
+            OnlineServerId = currentOnlineServerId
         };
 
         return criteria;

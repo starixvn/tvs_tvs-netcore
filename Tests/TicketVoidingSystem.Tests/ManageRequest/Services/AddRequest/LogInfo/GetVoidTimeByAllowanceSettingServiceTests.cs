@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 using TicketVoidingSystem.ManageRequest.ViewModels;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LogInfo;
 
 public class GetVoidTimeByAllowanceSettingServiceTests
 {
-    private readonly IDynamicRepository dynamicRepository = Substitute.For<IDynamicRepository>();
+    private readonly OnlineServerRepository onlineServerRepository = Substitute.For<OnlineServerRepository>();
     public GetVoidTimeByAllowanceSettingService service;
 
     [Fact]
@@ -45,14 +45,14 @@ public class GetVoidTimeByAllowanceSettingServiceTests
             },
         };
 
-        dynamicRepository.FetchAsync<VoidTimeByAllowanceSetting>(default).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
-        service = new GetVoidTimeByAllowanceSettingServiceImp(dynamicRepository);
+        onlineServerRepository.FetchAsync<VoidTimeByAllowanceSetting>(default).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
+        service = new GetVoidTimeByAllowanceSettingServiceImp(onlineServerRepository);
 
         // Act
         var actual = await service.Get(query);
 
         // Assert
-        await dynamicRepository.Received().FetchAsync<VoidTimeByAllowanceSetting>(Arg.Is<GetVoidTimeByAllowanceSettingCriteria>(x
+        await onlineServerRepository.Received().FetchAsync<VoidTimeByAllowanceSetting>(Arg.Is<GetVoidTimeByAllowanceSettingCriteria>(x
             => x.IssueTypeId == IssueTypeConstant.DangerAccepted));
         AssertExtension.Equal(expected, actual);
     }
@@ -85,14 +85,14 @@ public class GetVoidTimeByAllowanceSettingServiceTests
             },
         };
 
-        dynamicRepository.FetchAsync<VoidTimeByAllowanceSetting>(default).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
-        service = new GetVoidTimeByAllowanceSettingServiceImp(dynamicRepository);
+        onlineServerRepository.FetchAsync<VoidTimeByAllowanceSetting>(default).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
+        service = new GetVoidTimeByAllowanceSettingServiceImp(onlineServerRepository);
 
         // Act
         var actual = await service.Get(query);
 
         // Assert
-        await dynamicRepository.Received().FetchAsync<VoidTimeByAllowanceSetting>(Arg.Is<GetVoidTimeByAllowanceSettingCriteria>(x
+        await onlineServerRepository.Received().FetchAsync<VoidTimeByAllowanceSetting>(Arg.Is<GetVoidTimeByAllowanceSettingCriteria>(x
             => x.IssueTypeId == IssueTypeConstant.RedCard));
         AssertExtension.Equal(expected, actual);
     }
@@ -125,14 +125,14 @@ public class GetVoidTimeByAllowanceSettingServiceTests
             },
         };
 
-        dynamicRepository.FetchAsync<VoidTimeByAllowanceSetting>(default).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
-        service = new GetVoidTimeByAllowanceSettingServiceImp(dynamicRepository);
+        onlineServerRepository.FetchAsync<VoidTimeByAllowanceSetting>(default).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
+        service = new GetVoidTimeByAllowanceSettingServiceImp(onlineServerRepository);
 
         // Act
         var actual = await service.Get(query);
 
         // Assert
-        await dynamicRepository.Received().FetchAsync<VoidTimeByAllowanceSetting>(Arg.Is<GetVoidTimeByAllowanceSettingCriteria>(x
+        await onlineServerRepository.Received().FetchAsync<VoidTimeByAllowanceSetting>(Arg.Is<GetVoidTimeByAllowanceSettingCriteria>(x
             => x.IssueTypeId == IssueTypeConstant.WrongScore));
         AssertExtension.Equal(expected, actual);
     }

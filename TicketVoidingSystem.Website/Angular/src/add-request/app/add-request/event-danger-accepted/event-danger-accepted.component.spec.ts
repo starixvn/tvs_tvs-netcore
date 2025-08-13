@@ -599,7 +599,8 @@ describe('EventDangerAcceptedComponent', () => {
           unMarkTransIds: null,
           markTransIds: null,
           removeTransIds: null
-        }
+        },
+        infoSiteDBDownModel: null
       };
       component.addChildMatchModel = {
         matchType: MatchType.LINK,
@@ -617,6 +618,7 @@ describe('EventDangerAcceptedComponent', () => {
           subIssueTypeId: 1
         }
       ]);
+
       jest.spyOn(logInfoService['commonService'], 'getLogInfo').mockResolvedValue({
         transInfoAddRequestModel: {
           transInfoJson: null,
@@ -624,7 +626,8 @@ describe('EventDangerAcceptedComponent', () => {
           markTransIds: null,
           removeTransIds: null
         },
-        getLogInfoModels: []
+        getLogInfoModels: [],
+        infoSiteDBDownModel: null
       });
       jest.spyOn(eventDangerAcceptedService, 'updateSubIssueTypeAndAllowanceTime').mockResolvedValue(undefined);
       jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue(undefined);
@@ -633,7 +636,7 @@ describe('EventDangerAcceptedComponent', () => {
 
     it('should filter out events that are not in selectedRelatedEvents and not main match', async () => {
       // Arrange
-      const selectedRelatedEvents: ChildMatchModel[] = [
+      const selectedRelatedEvents = [
         {
           matchId: 1,
           matchType: MatchType.LINK,
@@ -642,7 +645,7 @@ describe('EventDangerAcceptedComponent', () => {
           leagueName: 'Test League',
           matchEvent: 'Test Event'
         }
-      ];
+      ] as ChildMatchModel[];
       component.allSelectedEvents = [
         {
           matchId: 1,
@@ -669,7 +672,7 @@ describe('EventDangerAcceptedComponent', () => {
           leagueName: 'Test League',
           matchEvent: 'Test Event'
         }
-      ];
+      ] as ChildMatchModel[];
       component.filter = {
         action: '1',
         issueTypeId: '1',
@@ -719,7 +722,7 @@ describe('EventDangerAcceptedComponent', () => {
 
     it('should call updateSubIssueTypeAndAllowanceTime when adding new events', async () => {
       // Arrange
-      const selectedRelatedEvents: ChildMatchModel[] = [
+      const selectedRelatedEvents = [
         {
           matchId: 1,
           matchType: MatchType.LINK,
@@ -728,7 +731,7 @@ describe('EventDangerAcceptedComponent', () => {
           leagueName: 'Test League',
           matchEvent: 'Test Event'
         }
-      ];
+      ] as ChildMatchModel[];
       component.allSelectedEvents = [
         {
           matchId: 2,
@@ -765,7 +768,7 @@ describe('EventDangerAcceptedComponent', () => {
 
     it('should call getLogInfo when adding new events', async () => {
       // Arrange
-      const selectedRelatedEvents: ChildMatchModel[] = [
+      const selectedRelatedEvents = [
         {
           matchId: 1,
           matchType: MatchType.LINK,
@@ -774,7 +777,7 @@ describe('EventDangerAcceptedComponent', () => {
           leagueName: 'Test League',
           matchEvent: 'Test Event'
         }
-      ];
+      ] as ChildMatchModel[];
       component.allSelectedEvents = [
         {
           matchId: 2,
@@ -813,7 +816,7 @@ describe('EventDangerAcceptedComponent', () => {
 
     it('should call updateIsCheckedVar when adding new events', async () => {
       // Arrange
-      const selectedRelatedEvents: ChildMatchModel[] = [
+      const selectedRelatedEvents = [
         {
           matchId: 1,
           matchType: MatchType.LINK,
@@ -822,7 +825,7 @@ describe('EventDangerAcceptedComponent', () => {
           leagueName: 'Test League',
           matchEvent: 'Test Event'
         }
-      ];
+      ] as ChildMatchModel[];
       component.allSelectedEvents = [
         {
           matchId: 2,
@@ -857,7 +860,7 @@ describe('EventDangerAcceptedComponent', () => {
 
     it('should sort and deduplicate allSelectedEvents after adding new events', async () => {
       // Arrange
-      const selectedRelatedEvents: ChildMatchModel[] = [
+      const selectedRelatedEvents = [
         {
           matchId: 1,
           matchType: MatchType.LINK,
@@ -866,7 +869,7 @@ describe('EventDangerAcceptedComponent', () => {
           leagueName: 'Test League',
           matchEvent: 'Test Event'
         }
-      ];
+      ] as ChildMatchModel[];
       component.allSelectedEvents = [
         {
           matchId: 2,
@@ -902,7 +905,7 @@ describe('EventDangerAcceptedComponent', () => {
 
     it('should set isShowRelatedEvents to true after processing', async () => {
       // Arrange
-      const selectedRelatedEvents: ChildMatchModel[] = [
+      const selectedRelatedEvents = [
         {
           matchId: 1,
           matchType: MatchType.LINK,
@@ -911,7 +914,7 @@ describe('EventDangerAcceptedComponent', () => {
           leagueName: 'Test League',
           matchEvent: 'Test Event'
         }
-      ];
+      ] as ChildMatchModel[];
       component.filter = {
         action: '1',
         issueTypeId: '1',

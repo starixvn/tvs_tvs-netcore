@@ -11,6 +11,7 @@ import { GetLogInfoQuery } from '../../models/add-request.query';
 import { RedCardGetLogInfoQuery } from '../../models/event-red-card.model';
 import { GetLogInfoModel } from '../../models/get-log-info.model';
 import { ValidationService } from './validation.service';
+import { InfoSiteDBDownModel } from '../../components/info-site-db-down/info-site-db-down.model';
 
 @Injectable()
 export class LogInfoService {
@@ -23,6 +24,8 @@ export class LogInfoService {
     const logInfoViewModel = await this.commonService.getLogInfo(getLogInfoQuery);
 
     primitiveProps.transInfoAddRequestModel = logInfoViewModel.transInfoAddRequestModel;
+    primitiveProps.infoSiteDBDownModel = logInfoViewModel.infoSiteDBDownModel;
+    
     this.assignResultLogInfoToEvents(allEvents, logInfoViewModel.getLogInfoModels, defaultFilterTimeWithAllowance);
   }
 

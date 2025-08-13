@@ -10,4 +10,6 @@ export class ConfirmDangerAcceptedModel {
   isEditingByAnotherUser: boolean;
   warningRelatedEvents: string[] = [];
   isHasWarningRangeTime: boolean;
+  isHasAffectedTicketSiteDBDown: boolean;
+  isMarkTicketSiteDbDown: boolean = true;
 }

@@ -11,6 +11,8 @@ export class ConfirmAddRequestModel {
   isHasWarningTakenNote: boolean;
   isEditingByAnotherUser: boolean;
   isShowSubIssueType: boolean;
+  isHasAffectedTicketSiteDBDown: boolean;
+  isMarkTicketSiteDbDown: boolean = true;
 }
 
 export class ExtraWarningModel {

@@ -23,7 +23,8 @@ export class LogInfoService {
     const getLogInfoQuery = this.initGetLogInfoQueries(params);
     const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
     params.primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
-
+    params.primitiveProps.infoSiteDBDownModel = viewModel.infoSiteDBDownModel;
+    
     params.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME
       ? this.assignResultsGetLogInfoRelatedEvent(viewModel.getLogInfoModels, params)
       : this.assignResultsGetLogInfoToListModel(viewModel.getLogInfoModels, params.wrongScoreModels);

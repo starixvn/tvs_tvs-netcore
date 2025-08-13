@@ -41,6 +41,7 @@ import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
 
 @Component({
   selector: 'event-red-card',
@@ -48,7 +49,8 @@ import { OnlyNumberDirective } from '../../../../utility/directives/number.direc
   styleUrls: ['./event-red-card.component.scss'],
   standalone: true,
   imports: [FormsModule, CommonModule, EventLeagueComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent,
-    NgSelectModule, NgbModule, TooltipComponent, BlockUiDirective, ConfirmAddRequestComponent, TvDetectionComponent, OnlyNumberDirective],
+    NgSelectModule, NgbModule, TooltipComponent, BlockUiDirective, ConfirmAddRequestComponent, TvDetectionComponent, OnlyNumberDirective,
+    InfoSiteDBDownComponent],
   providers: [EventRedCardService, LogInfoService, SaveRequestService, ValidationService, RelatedEventService, TvDetectionService]
 })
 export class EventRedCardComponent implements OnInit, OnChanges {
@@ -108,6 +110,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     this.allSelectedEvents = [this.mainEvent];
     this.primitiveProps.isShowLogInfoMainMatch = false;
     this.primitiveProps.isShowRelatedEvents = false;
+    this.clearInfoSiteDBDownModel();
   }
 
   async ngOnInit(): Promise<void> {
@@ -147,7 +150,6 @@ export class EventRedCardComponent implements OnInit, OnChanges {
 
   async handleSearchEvent(): Promise<void> {
     this.primitiveProps.isShowLogInfoMainMatch = false;
-
     if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.filterTimeAreaComponent,
       this.logInfoComponents, this.addRequestStore, this.tvDetectionComponent)) {
       return;
@@ -216,6 +218,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
       this.allSelectedEvents.push(...newEvents);
       this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     }
+    this.clearInfoSiteDBDownModel();
     this.primitiveProps.isShowRelatedEvents = true;
     this.primitiveProps.isBlock = false;
   }
@@ -227,6 +230,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
 
   handleDeleteEvent(matchId: number): void {
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.matchId !== matchId || x.isMainMatch);
+    this.clearInfoSiteDBDownModel();
   }
 
   showAddChildMatchModal(matchType: number) {
@@ -310,5 +314,9 @@ export class EventRedCardComponent implements OnInit, OnChanges {
 
   public getLogInfoDetail(): LogInfoDetail[] {
     return [this.mainEvent.logInfoDetail];
+  }
+
+  clearInfoSiteDBDownModel(): void {
+    this.primitiveProps.infoSiteDBDownModel = null;
   }
 }

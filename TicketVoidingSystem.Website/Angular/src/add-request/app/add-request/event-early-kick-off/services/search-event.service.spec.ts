@@ -65,7 +65,7 @@ describe('SearchEventService', () => {
 
       jest.spyOn(validationService, 'validateCommonData').mockReturnValue(false);
       jest.spyOn(logInfoService, 'resetLogInfoOfEvent');
-      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue({ getLogInfoModels: [], transInfoAddRequestModel: {} as TransInfoAddRequestModel });
+      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue({ getLogInfoModels: [], transInfoAddRequestModel: {} as TransInfoAddRequestModel, infoSiteDBDownModel: null } as GetLogInfoViewModel);
       jest.spyOn(logInfoService, 'assignResultLogInfoToEvents');
       jest.spyOn(checkPermissionService, 'isAccountHasAddRequestPermission').mockReturnValue(true);
 
@@ -124,7 +124,7 @@ describe('SearchEventService', () => {
           }
         ], 
         transInfoAddRequestModel: {} as TransInfoAddRequestModel 
-      });
+      } as GetLogInfoViewModel);
       jest.spyOn(logInfoService, 'assignResultLogInfoToEvents');
       jest.spyOn(checkPermissionService, 'isAccountHasAddRequestPermission').mockReturnValue(false);
 
@@ -182,7 +182,7 @@ describe('SearchEventService', () => {
           }
         ], 
         transInfoAddRequestModel: {} as TransInfoAddRequestModel 
-      });
+      } as GetLogInfoViewModel);
       jest.spyOn(logInfoService, 'assignResultLogInfoToEvents');
       jest.spyOn(checkPermissionService, 'isAccountHasAddRequestPermission').mockReturnValue(true);
 

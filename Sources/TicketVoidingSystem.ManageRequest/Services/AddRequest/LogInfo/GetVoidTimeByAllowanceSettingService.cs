@@ -1,7 +1,7 @@
-﻿using Fanex.Data.Repository;
-using TicketVoidingSystem.Constants;
+﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
@@ -11,31 +11,28 @@ public interface GetVoidTimeByAllowanceSettingService
     Task<IEnumerable<VoidTimeByAllowanceSetting>> Get(GetLogInfoQuery query);
 }
 
-public class GetVoidTimeByAllowanceSettingServiceImp(IDynamicRepository repository) : GetVoidTimeByAllowanceSettingService
+public class GetVoidTimeByAllowanceSettingServiceImp(OnlineServerRepository onlineServerRepository) : GetVoidTimeByAllowanceSettingService
 {
     public async Task<IEnumerable<VoidTimeByAllowanceSetting>> Get(GetLogInfoQuery query)
     {
-        var criteria = CreateCriteria(query);
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
-        {
-            criteria.SiteDbGroupId = server.Id;
-            return repository.FetchAsync<VoidTimeByAllowanceSetting>(criteria);
-        });
-        var models = (await Task.WhenAll(tasks)).SelectMany(x => x);
+        var criteria = await CreateCriteria(query);
+        var models = await onlineServerRepository.FetchAsync<VoidTimeByAllowanceSetting>(criteria);
         HttpContextHelper.SetExtraLog("GetVoidTimeByAllowanceSetting", models);
 
         return GetResults(query, models);
     }
 
-    private GetVoidTimeByAllowanceSettingCriteria CreateCriteria(GetLogInfoQuery query)
+    private async Task<GetVoidTimeByAllowanceSettingCriteria> CreateCriteria(GetLogInfoQuery query)
     {
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
         var criteria = new GetVoidTimeByAllowanceSettingCriteria
         {
             ActionId = query.ActionId,
             IssueTypeId = query.IssueTypeId,
             WrongScoreInfo = query.WrongScoreModels?.ToWrongScoreInfoXml(),
             DangerAcceptedInfo = query.DangerAcceptedModels?.ToDangerAcceptedInfoXml(),
-            RedCardInfo = query.RedCardModels?.ToDangerAcceptedInfoXml()
+            RedCardInfo = query.RedCardModels?.ToDangerAcceptedInfoXml(),
+            OnlineServerId = currentOnlineServerId
         };
 
         return criteria;

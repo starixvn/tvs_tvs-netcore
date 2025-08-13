@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using Fanex.BetList.Core.Entities;
-using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 
@@ -17,7 +18,7 @@ public interface LogInfoService
 
 public class LogInfoServiceImp(
     IMapper mapper,
-    IDynamicRepository repository,
+    OnlineServerRepository onlineServerRepository,
     SessionService session,
     BetListService betListService,
     CopyRequestInfoService copyRequestInfoService,
@@ -30,7 +31,8 @@ public class LogInfoServiceImp(
         return new GetLogInfoViewModel
         {
             GetLogInfoModels = logInfoModels,
-            TransInfoAddRequestModel = LogInfoHelper.CombineTransInfoAddRequest(logInfoAllServers.TransInfoAddRequests)
+            TransInfoAddRequestModel = LogInfoHelper.CombineTransInfoAddRequest(logInfoAllServers.TransInfoAddRequests),
+            InfoSiteDBDownModel = InfoSiteDbDownHelper.Get(logInfoAllServers.TransInfoAddRequests)
         };
     }
 
@@ -42,21 +44,18 @@ public class LogInfoServiceImp(
             query = LogInfoHelper.UpdateVoidTimeIssueTypeHasAllowanceSetting(query, models);
         }
 
-        var criteria = GetLogInfoCriteria(query);
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
-        {
-            criteria.SiteDbGroupId = server.Id;
-            return repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(criteria);
-        });
-        var results = await Task.WhenAll(tasks);
+        var criteria = await GetLogInfoCriteria(query);
+
+        var results =
+            await onlineServerRepository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(criteria);
 
         return new LogInfoResult
         {
-            Validations = results.SelectMany(x => x.Item1),
-            TicketRequests = results.SelectMany(x => x.Item2),
-            LogInfoDetails = results.SelectMany(x => x.Item3),
-            TransInfoAddRequests = results.SelectMany(x => x.Item4),
-            BetTypeTickets = LogInfoHelper.CombineBetTypes(results.SelectMany(x => x.Item5))
+            Validations = results.Item1,
+            TicketRequests = results.Item2,
+            LogInfoDetails = results.Item3,
+            TransInfoAddRequests = results.Item4,
+            BetTypeTickets = LogInfoHelper.CombineBetTypes(results.Item5)
         };
     }
 
@@ -332,8 +331,10 @@ public class LogInfoServiceImp(
         ];
     }
 
-    private GetLogInfoCriteria GetLogInfoCriteria(GetLogInfoQuery query) //NOSONAR
+    private async Task<GetLogInfoCriteria> GetLogInfoCriteria(GetLogInfoQuery query) //NOSONAR
     {
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
+
         var criteria = mapper.Map<GetLogInfoCriteria>(query);
         criteria.UserId = session.UserId;
         criteria.KickOffInfo = query.EarlyKickOffModels?.ToKickOffInfoXml();
@@ -353,6 +354,7 @@ public class LogInfoServiceImp(
         criteria.WrongOfferedNameInfo = query.WrongOfferedNameModel?.ToWrongOfferedNameInfoXml();
         criteria.OtherIssuesInfo = query.OtherIssuesModel?.ToOtherIssuesInfoXml();
         criteria.MatchEarlyCompletedInfo = query.MatchEarlyCompletedModel?.ToMatchEarlyCompletedInfoXml();
+        criteria.OnlineServerId = currentOnlineServerId;
 
         return criteria;
     }

@@ -30,6 +30,7 @@ export class SaveRequestService {
     }
 
     arg.primitiveProps.isShowLogInfoMainMatch = false;
+    arg.primitiveProps.infoSiteDBDownModel = null;
     arg.addRequestStore.changeBlockingUiStatus(true);
     await this.logInfoService.getLogInfo(arg.allEvents, arg.primitiveProps, arg.isEdit, arg.requestId, arg.filter, arg.defaultFilterTimeWithAllowance);
     arg.logInfoComponents.forEach(x => {
@@ -67,6 +68,7 @@ export class SaveRequestService {
     arg.confirmRedCard.isHasSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);
     arg.confirmRedCard.isHasWarningTicket = arg.allEvents.some(x => x.messageValidationLogInfo?.length > 0);
     arg.confirmRedCard.isShowSubIssueType = true;
+    arg.confirmRedCard.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
     arg.confirmRedCard.isOpen = true;
     arg.confirmRedCard = _.clone(arg.confirmRedCard);
   }
@@ -91,7 +93,7 @@ export class SaveRequestService {
   private validateVarCheck(allEvents: LogInfoRelatedEvent[]): boolean {
     let isSelectedVarAllEvents = true;
     allEvents.forEach(x => {
-      if(StaticService.isShowVarCheck(x.subIssueTypeId) && (_.isNull(x.isCheckedVar) || _.isUndefined(x.isCheckedVar))) {
+      if (StaticService.isShowVarCheck(x.subIssueTypeId) && (_.isNull(x.isCheckedVar) || _.isUndefined(x.isCheckedVar))) {
         x.isHighLightVarCheck = true;
         isSelectedVarAllEvents = false;
       }
@@ -109,18 +111,19 @@ export class SaveRequestService {
     query.actionId = arg.filter.action;
     query.isTest = arg.filter.isTest;
     query.isVoided = arg.filter.isVoided;
-
     query.mistakenBy = arg.others.mistakenBy;
     query.decidedBy = arg.others.decidedBy;
     query.operatorsList = arg.others.operatorsList;
     query.provider = arg.others.provider;
     query.source = arg.others.source;
     query.remark = arg.others.remark;
-
+    
     if (!arg.filter.isVoided) {
       query.redCardInfo = arg.allEvents.filter(x => x.logInfoDetail).map(x => {
         return this.assignEventToModel(x, arg, arg.allEvents.find(y => y.isMainMatch).tvDetectionModel);
       });
+      query.siteDBDownInfoJson = arg.confirmRedCard.isMarkTicketSiteDbDown && arg.confirmRedCard.isHasAffectedTicketSiteDBDown 
+        ? arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;

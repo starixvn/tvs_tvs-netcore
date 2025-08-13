@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.BetList.Core.Entities;
-using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
@@ -15,27 +14,23 @@ using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LogInfo;
 
 public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
+    private readonly IMapper mapper = Substitute.For<IMapper>();
+    private readonly OnlineServerRepository repository = Substitute.For<OnlineServerRepository>();
+    private readonly SessionService session = Substitute.For<SessionService>();
+    private readonly GetVoidTimeByAllowanceSettingService getVoidTimeByAllowanceSettingService = Substitute.For<GetVoidTimeByAllowanceSettingService>();
+    private readonly BetListService betListService = Substitute.For<BetListService>();
+    private readonly CopyRequestInfoService copyRequestInfoService = Substitute.For<CopyRequestInfoService>();
     private readonly LogInfoServiceImp service;
-    private readonly SessionService session;
-    private readonly GetVoidTimeByAllowanceSettingService getVoidTimeByAllowanceSettingService;
-    private readonly BetListService betListService;
 
     public LogInfoServiceTests()
     {
-        mapper = Substitute.For<IMapper>();
-        repository = Substitute.For<IDynamicRepository>();
-        session = Substitute.For<SessionService>();
-        getVoidTimeByAllowanceSettingService = Substitute.For<GetVoidTimeByAllowanceSettingService>();
-        betListService = Substitute.For<BetListService>();
-        var copyRequestInfoService = Substitute.For<CopyRequestInfoService>();
         service = new LogInfoServiceImp(mapper, repository, session, betListService, copyRequestInfoService, getVoidTimeByAllowanceSettingService);
     }
 
@@ -284,7 +279,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         // Assert
         Assert.Single(actual.GetLogInfoModels);
         Assert.Equal(validation.MatchId, logInfoModel.Validation.MatchId);
-        Assert.Equal(4, logInfoModel.TicketRequest.Count());
+        Assert.Single(logInfoModel.TicketRequest);
         Assert.Equal(logInfo.MatchId, logInfoModel.LogInfoDetail.MatchId);
     }
 

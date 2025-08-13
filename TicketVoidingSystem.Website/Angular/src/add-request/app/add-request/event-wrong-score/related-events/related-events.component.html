@@ -29,7 +29,7 @@
                     [transInfoAddRequestModel]="primitiveProps.transInfoAddRequestModel" [requestId]="requestId"
                     [isDisabled]="filter.isVoided" [subIssueTypes]="issueTypes.subIssueTypes"
                     [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance" [logInfo]="relatedEvents[i]"
-                    [filter]="filter" (deleteEvent)="handleDeleteEvent($event)">
+                    [filter]="filter" (deleteEvent)="handleDeleteEvent($event)" (clearInfoSiteDBDownModel)="clearInfoSiteDBDownModelEvent()">
                 </log-info-related-event>
             </div>
             }

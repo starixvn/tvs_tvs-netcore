@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
 using TicketVoidingSystem.SharedApi.ViewModels.BetTypes;
@@ -27,7 +28,7 @@ public interface BetTypesRepository
     IList<GroupBetTypeVoidParlayVirtualSport> GetVoidParlayVirtualSportsBetTypes();
 }
 
-public class BetTypesRepositoryImp(IDynamicRepository repository) : BetTypesRepository
+public class BetTypesRepositoryImp(IDynamicRepository repository, OnlineServerRepository onlineServerRepository) : BetTypesRepository
 {
     public async Task<GroupBetTypesViewModel> GetGroupBetTypes(string betTypesHaveTickets, int matchId, byte mode)
     {
@@ -109,26 +110,17 @@ public class BetTypesRepositoryImp(IDynamicRepository repository) : BetTypesRepo
 
     public async Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId, bool isGetCancelCashOut, IEnumerable<TimeRangeModel>? timeRanges)
     {
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
+
         var criteria = new TicketVoidingGetBetTypesHaveTicketsCriteria
         {
             MatchId = matchId,
             IsGetCancelCashOut = isGetCancelCashOut,
-            TimeRangeJson = timeRanges != null ? JsonSerializer.Serialize(timeRanges) : null
+            TimeRangeJson = timeRanges != null ? JsonSerializer.Serialize(timeRanges) : null,
+            OnlineServerId = currentOnlineServerId
         };
-        var betTypesAllServers = new List<BetTypeModel>();
-        var fetchTasks = SiteDbGroupConstant.ServerList
-            .Select(server => FetchDataAsync(server.Id, criteria));
-        var fetchedData = await Task.WhenAll(fetchTasks);
 
-        betTypesAllServers.AddRange(fetchedData.SelectMany(x => x));
-
-        return betTypesAllServers;
-    }
-
-    private async Task<IEnumerable<BetTypeModel>> FetchDataAsync(int siteDbGroupId, TicketVoidingGetBetTypesHaveTicketsCriteria criteria)
-    {
-        criteria.SiteDbGroupId = siteDbGroupId;
-        return await repository.FetchAsync<BetTypeModel>(criteria);
+        return await onlineServerRepository.FetchAsync<BetTypeModel>(criteria);
     }
 
     public IList<GroupBetTypeVoidParlayVirtualSport> GetVoidParlayVirtualSportsBetTypes()

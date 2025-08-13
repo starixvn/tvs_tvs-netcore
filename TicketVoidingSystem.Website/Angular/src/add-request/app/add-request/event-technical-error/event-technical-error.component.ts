@@ -25,6 +25,7 @@ import { EventTechnicalErrorService } from './services/event-technical-error.ser
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
 
 @Component({
   selector: 'event-technical-error',
@@ -32,7 +33,7 @@ import { ValidationService } from './services/validation.service';
   styleUrls: ['./event-technical-error.component.scss'],
   standalone: true,
   imports: [EventLeagueComponent, AdvancedModeAddRequestComponent, FilterTimeTechnicalErrorComponent,
-    LogInfoTechnicalErrorComponent, ConfirmAddRequestComponent],
+    LogInfoTechnicalErrorComponent, ConfirmAddRequestComponent, InfoSiteDBDownComponent],
   providers: [SaveRequestService, ValidationService, LogInfoService, EventTechnicalErrorService]
 })
 export class EventTechnicalErrorComponent implements OnInit {
@@ -114,6 +115,7 @@ export class EventTechnicalErrorComponent implements OnInit {
   resetLogInfo(): void {
     this.primitivePropertyEvent.isShowErrorNoBetType = false;
     this.primitivePropertyEvent.isShowValidation = false;
+    this.primitivePropertyEvent.infoSiteDBDownModel = null;
   }
 
   async refreshEvent() {
@@ -134,6 +136,7 @@ export class EventTechnicalErrorComponent implements OnInit {
 
   async clickSearch(): Promise<void> {
     this.logInfoEvent.betTeamsResult = this.advancedMode.getCheckedBetTypes();
+    this.primitivePropertyEvent.infoSiteDBDownModel = null;
     this.primitivePropertyEvent.isShowValidation = false;
     if (!this.validationService.validateCommonData(this.eventLeague, this.filterTimeComponent, this.advancedMode)) {
       return;
@@ -170,6 +173,7 @@ export class EventTechnicalErrorComponent implements OnInit {
 
   async changeMatchEvent(): Promise<void> {
     this.primitivePropertyEvent.isShowValidation = false;
+    this.primitivePropertyEvent.infoSiteDBDownModel = null;
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     if (this.eventLeague?.selectedMatch.matchId) {

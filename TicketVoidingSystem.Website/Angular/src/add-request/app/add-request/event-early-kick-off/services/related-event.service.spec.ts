@@ -69,7 +69,7 @@ describe('RelatedEventService', () => {
         sportType: 1
       };
 
-      const expectedResult: ChildMatchModel[] = [
+      const expectedResult = [
         {
           matchId: 123,
           matchCode: 'MATCH123',
@@ -79,7 +79,7 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false
         }
-      ];
+      ] as ChildMatchModel [];
 
       (addRequestApiService.getChildMatches as jest.Mock).mockResolvedValue(expectedResult);
 
@@ -95,7 +95,7 @@ describe('RelatedEventService', () => {
   describe('mapChildMatchesToEvents', () => {
     it('should map child matches to events correctly', () => {
       // Arrange
-      const models: ChildMatchModel[] = [
+      const models = [
         {
           matchId: 123,
           matchCode: 'MATCH123',
@@ -105,7 +105,7 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false
         }
-      ];
+      ] as ChildMatchModel [];
 
       const mainEvent = {
         matchId: 456,
@@ -134,7 +134,7 @@ describe('RelatedEventService', () => {
   describe('mapChildMatchToMatchModel', () => {
     it('should map child match to match model correctly', () => {
       // Arrange
-      const childMatch: ChildMatchModel = {
+      const childMatch = {
         matchId: 123,
         matchCode: 'MATCH123',
         matchEvent: 'Team A vs Team B',
@@ -162,7 +162,7 @@ describe('RelatedEventService', () => {
         leagueNameNewSimplified: 'League 1',
         leagueGroupId: 1,
         parentId: 456
-      };
+      } as ChildMatchModel;
 
       const eventDate = '2024-03-20T10:00:00';
 
@@ -274,7 +274,7 @@ describe('RelatedEventService', () => {
         requestId: 1
       } as unknown as AddRelatedEventArg;
 
-      const childMatches: ChildMatchModel[] = [
+      const childMatches = [
         {
           matchId: 123,
           matchCode: 'MATCH123',
@@ -284,7 +284,7 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false
         }
-      ];
+      ] as ChildMatchModel [];
 
       const mockLogInfoResponse = {
         getLogInfoModels: [{

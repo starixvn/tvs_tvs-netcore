@@ -40,6 +40,7 @@ export class SaveRequestService {
 
     argTechnicalError.addRequestStore.changeBlockingUiStatus(true);
     argTechnicalError.primitiveProps.isShowValidation = false;
+    argTechnicalError.primitiveProps.infoSiteDBDownModel = null;
     await this.logInfoTechnicalErrorService.getLogInfo(argTechnicalError.logInfoEvent, argTechnicalError.isEdit, argTechnicalError.requestId, argTechnicalError.filter, argTechnicalError.primitiveProps);
     argTechnicalError.addRequestStore.changeBlockingUiStatus(false);
     argTechnicalError.primitiveProps.isShowValidation = true;
@@ -57,6 +58,8 @@ export class SaveRequestService {
     arg.confirmAddRequest.requestId = arg.requestId;
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
+    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
+
     arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
     arg.confirmAddRequest =  new ConfirmAddRequestModel();
   }
@@ -87,13 +90,14 @@ export class SaveRequestService {
     query.isTest = argTechnicalError.filter.isTest;
     query.actionId = argTechnicalError.filter.action;
     query.isVoided = argTechnicalError.filter.isVoided;
-
     query.mistakenBy = argTechnicalError.others.mistakenBy;
     query.decidedBy = argTechnicalError.others.decidedBy;
     query.remark = argTechnicalError.others.remark;
-
+    
     if (!argTechnicalError.filter.isVoided) {
       query.technicalErrorInfo = this.eventTechnicalErrorService.getTechnicalErrorModel(Number(argTechnicalError.filter.subIssueTypeId), argTechnicalError.logInfoEvent);
+      query.siteDBDownInfoJson = argTechnicalError.confirmAddRequest.isMarkTicketSiteDbDown && argTechnicalError.confirmAddRequest.isHasAffectedTicketSiteDBDown
+        ? argTechnicalError.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;

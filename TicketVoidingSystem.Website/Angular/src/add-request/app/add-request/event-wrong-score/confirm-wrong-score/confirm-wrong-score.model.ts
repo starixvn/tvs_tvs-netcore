@@ -10,4 +10,6 @@ export class ConfirmWrongScoreModel {
   requestedBy: string;
   warningRelatedEvents: string[] = [];
   warningExcludedScores: string[];
+  isHasAffectedTicketSiteDBDown: boolean;
+  isMarkTicketSiteDbDown: boolean = true;
 }

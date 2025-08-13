@@ -13,6 +13,7 @@ public class GetLogInfoModel
 
 public class GetLogInfoViewModel
 {
+    public InfoSiteDBDownModel InfoSiteDBDownModel { get; set; }
     public IEnumerable<GetLogInfoModel>? GetLogInfoModels { get; set; }
     public TransInfoAddRequestModel? TransInfoAddRequestModel { get; set; }
 }

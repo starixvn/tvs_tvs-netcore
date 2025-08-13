@@ -36,7 +36,6 @@ public static class TicketVoidingSystemService
         services.AddSingleton<ResultCacheService, ResultCacheServiceImp>();
         services.AddTransient<NotificationService, NotificationServiceImp>();
         services.AddSingleton<OperatorKeyEncryptionService, OperatorKeyEncryptionServiceImp>();
-        services.AddSingleton<CheckServerStatusService, CheckServerStatusServiceImp>();
 
         //Letstalk
         services.AddSingleton<LetstalkClientService, LetstalkClientServiceImp>();

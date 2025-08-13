@@ -25,6 +25,7 @@ export class ValidationBusinessRuleArgs {
   relatedEvents?: LogInfoRelatedEvent[];
   defaultFilterTimeWithAllowance: FilterTimeWithAllowance;
   mainEvent?: LogInfoRelatedEvent;
+  isMarkTicketSiteDbDown: boolean;
 }
 
 export class ValidationBusinessRuleOutput {
