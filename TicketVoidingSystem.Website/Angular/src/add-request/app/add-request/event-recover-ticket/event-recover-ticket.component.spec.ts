@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { TestingModule } from '../../../../utility/modules/testing.module';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';

@@ -1,4 +1,16 @@
-import { OperatorInfo } from 'src/add-request-new/component/others/others.model';
+import { OperatorInfo } from '../../../add-request-new/component/others/others.model';
+import { EarlyKickOffGetLogInfoQuery } from '../../../add-request/app/add-request/event-early-kick-off/models/get-log-info.query';
+import { NotParticipateGetLogInfoQuery } from '../../../add-request/app/add-request/event-not-participate/models/get-log-info.query';
+import { OtherIssuesGetLogInfoQuery } from '../../../add-request/app/add-request/event-other-issues/models/get-log-info.query';
+import { ReducedOverGetLogInfoQuery } from '../../../add-request/app/add-request/event-reduced-over/models/get-log-info.query';
+import { TechnicalErrorGetLogInfoQuery } from '../../../add-request/app/add-request/event-technical-error/models/get-log-info.query';
+import { WrongHdpGetLogInfoQuery } from '../../../add-request/app/add-request/event-wrong-hdp/models/get-log-info.query';
+import { WrongMarketOfferedGetLogInfoQuery } from '../../../add-request/app/add-request/event-wrong-market-offered/models/get-log-info.query';
+import { WrongOddsSportsBookGetLogInfoQuery } from '../../../add-request/app/add-request/event-wrong-odds-sports-book/models/get-log-info.query';
+import { WrongOddsGetLogInfoQuery } from '../../../add-request/app/add-request/event-wrong-odds/models/get-log-info.query';
+import { WrongOfferedNameGetLogInfoQuery } from '../../../add-request/app/add-request/event-wrong-offered-name/models/get-log-info.query';
+import { WrongOuGetLogInfoQuery } from '../../../add-request/app/add-request/event-wrong-ou/models/get-log-info.query';
+import { WrongScoreGetLogInfoQuery } from '../../../add-request/app/add-request/event-wrong-score/event-wrong-score.model';
 import { AbnormalAccountModel } from './abnormal-account.model';
 import { AbnormalBetModel } from './abnormal-bet.model';
 import { DuplicateTicketsModel } from './event-duplicate-tickets.model';
@@ -16,18 +28,6 @@ import { WrongOfferedNameModel } from './event-wrong-offered-name.model';
 import { WrongOuModel } from './event-wrong-ou.model';
 import { WrongScoreModel } from './event-wrong-score.model';
 import { RecoverTicketModel } from './recover-ticket.model';
-import { EarlyKickOffGetLogInfoQuery } from 'src/add-request/app/add-request/event-early-kick-off/models/get-log-info.query';
-import { NotParticipateGetLogInfoQuery } from 'src/add-request/app/add-request/event-not-participate/models/get-log-info.query';
-import { OtherIssuesGetLogInfoQuery } from 'src/add-request/app/add-request/event-other-issues/models/get-log-info.query';
-import { ReducedOverGetLogInfoQuery } from 'src/add-request/app/add-request/event-reduced-over/models/get-log-info.query';
-import { TechnicalErrorGetLogInfoQuery } from 'src/add-request/app/add-request/event-technical-error/models/get-log-info.query';
-import { WrongHdpGetLogInfoQuery } from 'src/add-request/app/add-request/event-wrong-hdp/models/get-log-info.query';
-import { WrongMarketOfferedGetLogInfoQuery } from 'src/add-request/app/add-request/event-wrong-market-offered/models/get-log-info.query';
-import { WrongOddsSportsBookGetLogInfoQuery } from 'src/add-request/app/add-request/event-wrong-odds-sports-book/models/get-log-info.query';
-import { WrongOddsGetLogInfoQuery } from 'src/add-request/app/add-request/event-wrong-odds/models/get-log-info.query';
-import { WrongOfferedNameGetLogInfoQuery } from 'src/add-request/app/add-request/event-wrong-offered-name/models/get-log-info.query';
-import { WrongOuGetLogInfoQuery } from 'src/add-request/app/add-request/event-wrong-ou/models/get-log-info.query';
-import { WrongScoreGetLogInfoQuery } from 'src/add-request/app/add-request/event-wrong-score/event-wrong-score.model';
 
 export class AddRequestQuery {
   guid: string;
