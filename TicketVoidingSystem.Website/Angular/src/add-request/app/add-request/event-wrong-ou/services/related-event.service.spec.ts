@@ -92,6 +92,7 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false,
           isSpecialChildMatch: false
+        }
       ] as ChildMatchModel[];
 
       const defaultFilter = new FilterWrongOuModel();
@@ -238,6 +239,7 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false,
           isSpecialChildMatch: false
+        }
       ] as ChildMatchModel[];
 
       (validationService.isValidInputRelatedEvent as jest.Mock).mockReturnValue(true);

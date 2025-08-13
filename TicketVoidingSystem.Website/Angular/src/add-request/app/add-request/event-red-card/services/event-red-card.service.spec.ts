@@ -101,8 +101,6 @@ class Helper {
     leagueGroupId: 0,
     sportType: 0,
   } as ChildMatchModel;
-    sportTypeNameTraditional: '',
-    isSpecialChildMatch: false
   static readonly fakeSubIssueTypeLinkMatch: SubIssueTypeLinkMatch = {
     matchId: Helper.fakeMatchId,
     subIssueTypeId: 26

@@ -85,6 +85,7 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false,
           isSpecialChildMatch: false
+        }
       ] as ChildMatchModel[];
 
       (addRequestApiService.getChildMatches as jest.Mock).mockResolvedValue(expectedResult);
@@ -111,6 +112,7 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false,
           isSpecialChildMatch: false
+        }
       ] as ChildMatchModel[];
 
       const defaultFilter: FilterTimeWithAllowance = {
@@ -250,6 +252,7 @@ describe('RelatedEventService', () => {
           matchType: MatchType.NORMAL,
           isChecked: false,
           isSpecialChildMatch: false
+        }
       ] as ChildMatchModel[];
 
       (validationService.isValidInputRelatedEvent as jest.Mock).mockReturnValue(true);
@@ -329,6 +332,7 @@ describe('RelatedEventService', () => {
           matchType: MatchType.LINK,
           isChecked: false,
           isSpecialChildMatch: false
+        }
       ] as ChildMatchModel[];
 
       const arg: AddRelatedEventArg = {

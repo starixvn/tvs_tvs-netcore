@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import * as _ from 'lodash';
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
@@ -22,7 +23,6 @@ import { TicketsService } from '../../services/tickets.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { TemplateMessageService } from './template-message.service';
 import { VoidPageService } from './void-page.service';
-import { TestBed } from '@angular/core/testing';
 
 class Helper {
   static readonly fakeRequestId = 50121;
@@ -257,7 +257,8 @@ describe('VoidPageService', () => {
     const getLogInfoModels = [new GetLogInfoModel()];
     const viewModel: GetLogInfoViewModel = {
       getLogInfoModels: getLogInfoModels,
-      transInfoAddRequestModel: new TransInfoAddRequestModel()
+      transInfoAddRequestModel: new TransInfoAddRequestModel(),
+      infoSiteDBDownModel: null
     };
     commonService.getLogInfo = jest.fn().mockResolvedValue(viewModel);
     [

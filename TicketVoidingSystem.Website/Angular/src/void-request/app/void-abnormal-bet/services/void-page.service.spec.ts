@@ -123,6 +123,7 @@ class Helper {
   static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {
     transInfoAddRequestModel: new TransInfoAddRequestModel(),
     getLogInfoModels: [Helper.fakeGetLogInfoModel],
+    infoSiteDBDownModel: null
   };
 }
 
@@ -138,7 +139,7 @@ describe('VoidPageService', () => {
             VoidPageService,
             {
               provide: CommonService, useValue: {
-                getIssueTypes: jest.fn().mockReturnValue(Helper.fakeIssueTypesModel), 
+                getIssueTypes: jest.fn().mockReturnValue(Helper.fakeIssueTypesModel),
                 getMatch: jest.fn(), getVoidedReason: jest.fn().mockResolvedValue({reasonEnglish: "Void"} as VoidedReason)
               }
             },

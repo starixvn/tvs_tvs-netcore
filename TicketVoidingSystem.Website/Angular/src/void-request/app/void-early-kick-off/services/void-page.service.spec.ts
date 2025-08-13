@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { EarlyKickOffModel } from '../../../../add-request/app/add-request/models/event-eko.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
@@ -8,6 +9,7 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { Result } from '../../../../utility/models/result';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../utility/services/common.service';
 import { BasicRequestInfo } from '../../models/basic-request-info.model';
 import { TicketsService } from '../../services/tickets.service';
@@ -15,8 +17,6 @@ import { TicketsModel } from '../../tickets-list/tickets.model';
 import { VoidPageEarlyKickOffModel } from '../models/void-page-early-kick-off.model';
 import { TemplateMessageService } from './template-message.service';
 import { VoidPageService } from './void-page.service';
-import { TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../utility/modules/testing.module';
 
 class Helper {
   static readonly fakeResultError: Result<null> = {
@@ -115,6 +115,7 @@ class Helper {
   static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {
     transInfoAddRequestModel: new TransInfoAddRequestModel(),
     getLogInfoModels: [Helper.fakeGetLogInfoModel],
+    infoSiteDBDownModel: null
   };
 }
 

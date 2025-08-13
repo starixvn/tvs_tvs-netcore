@@ -247,6 +247,7 @@ describe('EventDangerAcceptedService', () => {
           leagueName: 'Test League',
           matchEvent: 'Test Event',
           isSpecialChildMatch: false
+        }
       ] as ChildMatchModel[];
 
       const defaultFilter = {
