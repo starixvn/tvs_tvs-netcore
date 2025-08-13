@@ -3,7 +3,6 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
@@ -66,15 +65,18 @@ public class InsertQueueServiceImp(
 
     private static string GetTransIdsInsertVoidingHistory(int issueTypeId, IEnumerable<RequestDetailTicketModel> mergeTicketsForInsertQueue)
     {
-        if (!mergeTicketsForInsertQueue.Any())
+        if (!mergeTicketsForInsertQueue.Any() || !issueTypeId.IsWrongMarketOffered())
         {
             return null;
         }
 
-        var parlayTableTickets = string.Join(",", mergeTicketsForInsertQueue.Where(x => x.VoidingTypeId is VoidingTypeConstant.Parlay).Select(x => x.TransId));
-        var singleTableTickets = string.Join(",", mergeTicketsForInsertQueue.Where(x => x.VoidingTypeId is not VoidingTypeConstant.Parlay).Select(x => x.TransId));
+        var firstParlayTickets = mergeTicketsForInsertQueue.FirstOrDefault(x => x.VoidingTypeId is VoidingTypeConstant.Parlay)?.TransId;
+        var firstSingleTableTickets = mergeTicketsForInsertQueue.FirstOrDefault(x => x.VoidingTypeId is not VoidingTypeConstant.Parlay)?.TransId;
 
-        return issueTypeId.IsWrongMarketOffered()
-            ? JsonSerializer.Serialize(new { SingleTransIds = singleTableTickets, ParlayTransIds = parlayTableTickets }) : null;
+        return JsonSerializer.Serialize(new
+        {
+            SingleTransIds = firstSingleTableTickets is not null ? firstSingleTableTickets.ToString() : "",
+            ParlayTransIds = firstParlayTickets is not null ? firstParlayTickets.ToString() : ""
+        });
     }
 }
