@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { CreateMapService } from './create-map.service';
-import { ValidationService } from './validation.service';
+import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { ChildMatchModel } from '../../models/related-event.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
-import { SaveRequestArg } from '../models/save-request.model';
-import { AddRelatedEventArg } from '../models/add-related-event.model';
-import { ValidationBusinessRuleArgs } from '../models/validation.model';
-import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
+import { ChildMatchModel } from '../../models/related-event.model';
 import { PrimitiveProperty } from '../event-wrong-score.model';
-import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
+import { AddRelatedEventArg } from '../models/add-related-event.model';
+import { SaveRequestArg } from '../models/save-request.model';
+import { ValidationBusinessRuleArgs } from '../models/validation.model';
+import { CreateMapService } from './create-map.service';
+import { ValidationService } from './validation.service';
 
 // Mock the JSON config
 jest.mock('../../filter/sub-issue-type-dialog/sub-type-wrong-score.json', () => ([

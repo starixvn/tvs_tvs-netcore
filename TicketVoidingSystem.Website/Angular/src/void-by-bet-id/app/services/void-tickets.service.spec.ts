@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { VoidTicketsService } from './void-tickets.service';
-import { PasswordService } from '../../../utility/services/password.service';
-import { TicketsViewModel } from '../model/get-tickets.query';
-import { MatchModel } from '../../../utility/models/match.model';
-import { FilterComponent } from '../filter/filter.component';
 import { ConfirmationComponent } from '../../../utility/components/confirmation/confirmation.component';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
+import { GroupModel } from '../../../utility/components/tickets/group.model';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
-import { VoidTicketsRequest } from '../model/void-by-bet-id.model';
+import { MatchModel } from '../../../utility/models/match.model';
 import { TestingModule } from '../../../utility/modules/testing.module';
-import { GroupModel } from 'src/utility/components/tickets/group.model';
+import { PasswordService } from '../../../utility/services/password.service';
+import { FilterComponent } from '../filter/filter.component';
+import { TicketsViewModel } from '../model/get-tickets.query';
+import { VoidTicketsRequest } from '../model/void-by-bet-id.model';
+import { VoidTicketsService } from './void-tickets.service';
 
 describe('VoidTicketsService', () => {
   let service: VoidTicketsService;
@@ -143,4 +143,4 @@ describe('VoidTicketsService', () => {
       expect(result.matchId).toBe('123');
     });
   });
-}); 
+});

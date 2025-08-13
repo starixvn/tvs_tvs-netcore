@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import * as _ from 'lodash';
-import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupNumber } from '../../../../../utility/components/bet-ids/bet-ids.model';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AddRequestApiService } from '../../add-request-api.service';

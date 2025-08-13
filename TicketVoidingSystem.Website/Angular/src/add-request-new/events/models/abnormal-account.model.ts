@@ -1,5 +1,5 @@
-import { TicketAdjustedAccountModel } from "src/add-request/app/add-request/abnormal-accounts/account-affected-ticket/account-affected-ticket.model";
-import { AccountWinlostModel } from "src/add-request/app/add-request/abnormal-accounts/models/account-winlost.model";
+import { TicketAdjustedAccountModel } from "../../../add-request/app/add-request/abnormal-accounts/account-affected-ticket/account-affected-ticket.model";
+import { AccountWinlostModel } from "../../../add-request/app/add-request/abnormal-accounts/models/account-winlost.model";
 
 export class AbnormalAccountModel {
   usernames: string;

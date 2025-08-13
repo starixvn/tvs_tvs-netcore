@@ -1,6 +1,6 @@
 import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Result } from 'src/utility/models/result';
+import { Result } from '../../../utility/models/result';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { MessagesResult } from './messages-result';
 import { MessagesResultComponent } from './messages-result.component';
@@ -111,4 +111,4 @@ describe('MessagesResultComponent', () => {
     expect(result.results[3].errorMsg).toBe('Some tickets cannot be processed because: Error 4');
     expect(result.results[4].errorMsg).toBe('Some tickets cannot be processed because: Error 5');
   });
-}); 
+});
