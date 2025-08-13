@@ -12,7 +12,7 @@ export class ConfirmAddRequestModel {
   isEditingByAnotherUser: boolean;
   isShowSubIssueType: boolean;
   isHasAffectedTicketSiteDBDown: boolean;
-  isMarkTicketSiteDbDown: boolean = true;
+  isMarkTicketSiteDbDown = true;
 }
 
 export class ExtraWarningModel {

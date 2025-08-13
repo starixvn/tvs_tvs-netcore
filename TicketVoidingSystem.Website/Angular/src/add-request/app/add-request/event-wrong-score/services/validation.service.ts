@@ -104,10 +104,10 @@ export class ValidationService {
       return false;
       }
 
-    return !relatedEvents.some(x => this.isValidEventCheckWarning(x));
+    return !relatedEvents.some(x => this.isInValidEventCheckWarning(x));
   }
   
-  private isValidEventCheckWarning(event: LogInfoRelatedEvent): boolean {
+  private isInValidEventCheckWarning(event: LogInfoRelatedEvent): boolean {
     return event?.messageValidationLogInfo?.some(x => x.isError && !x.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE));
   }
 
