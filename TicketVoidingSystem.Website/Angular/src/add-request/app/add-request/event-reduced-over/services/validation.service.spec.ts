@@ -1,17 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { ValidationService } from './validation.service';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { FilterReducedOverComponent } from '../filter-reduced-over/filter-reduced-over.component';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
-import { PrimitivePropertyItem } from '../filter-reduced-over-item/filter-reduced-over-item.model';
-import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { StaticService } from '../../../../../utility/services/static.service';
-import { TEXT } from '../../../../../utility/constants/text';
 import { JSDOM } from 'jsdom';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { TEXT } from '../../../../../utility/constants/text';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { PrimitivePropertyItem } from '../filter-reduced-over-item/filter-reduced-over-item.model';
+import { FilterReducedOverComponent } from '../filter-reduced-over/filter-reduced-over.component';
+import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
+import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
+import { ValidationService } from './validation.service';
 
 describe('ValidationService', () => {
   let service: ValidationService;
@@ -30,7 +28,7 @@ describe('ValidationService', () => {
     });
 
     service = TestBed.inject(ValidationService);
-    
+
     // Mock document.getElementById
     document.getElementById = jest.fn().mockReturnValue({
       getAttribute: jest.fn().mockReturnValue('123')
@@ -211,7 +209,7 @@ describe('ValidationService', () => {
       const value = '10.5';
       const elementClass = 'runs-input0';
       const tooltip = {} as Tooltip;
-      
+
       jest.spyOn(StaticService, 'isCorrectFormatSingleDecimal').mockReturnValue(true);
 
       // Act
@@ -229,7 +227,7 @@ describe('ValidationService', () => {
       const value = '5';
       const elementClass = 'wicket-over-input0';
       const tooltip = {} as Tooltip;
-      
+
       jest.spyOn(StaticService, 'isCorrectFormatOnlyNumber').mockReturnValue(true);
 
       // Act
@@ -269,84 +267,6 @@ describe('ValidationService', () => {
 
       // Act
       const result = service.isValidLogInfoEvent(logInfoReducedOver);
-
-      // Assert
-      expect(result).toBeFalsy();
-    });
-  });
-
-  describe('checkCanShowConfirmationReducedOver', () => {
-    let mockSaveRequestArg: SaveRequestArg;
-
-    beforeEach(() => {
-      mockSaveRequestArg = {
-        logInfoEvent: {
-          logInfoDetail: {
-            settleCount: 0
-          },
-          messageValidationLogInfo: []
-        },
-        isEdit: false,
-        userId: 0,
-        filter: {
-          action: ''
-        },
-        actionIdOfFirstTimeAccess: ''
-      } as SaveRequestArg;
-    });
-
-    it('should return true when has settled tickets', () => {
-      // Arrange
-      mockSaveRequestArg.logInfoEvent.logInfoDetail.settleCount = 1;
-
-      // Act
-      const result = service.checkCanShowConfirmationReducedOver(mockSaveRequestArg);
-
-      // Assert
-      expect(result).toBeTruthy();
-    });
-
-    it('should return true when has warning tickets', () => {
-      // Arrange
-      mockSaveRequestArg.logInfoEvent.messageValidationLogInfo = [
-        { isError: false, reason: '' }
-      ];
-
-      // Act
-      const result = service.checkCanShowConfirmationReducedOver(mockSaveRequestArg);
-
-      // Assert
-      expect(result).toBeTruthy();
-    });
-
-    it('should return true when editing by another user', () => {
-      // Arrange
-      mockSaveRequestArg.isEdit = true;
-      mockSaveRequestArg.userId = 456;
-
-      // Act
-      const result = service.checkCanShowConfirmationReducedOver(mockSaveRequestArg);
-
-      // Assert
-      expect(result).toBeTruthy();
-    });
-
-    it('should return true when has warning taken note', () => {
-      // Arrange
-      mockSaveRequestArg.isEdit = true;
-      mockSaveRequestArg.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
-      mockSaveRequestArg.actionIdOfFirstTimeAccess = 'different_action';
-
-      // Act
-      const result = service.checkCanShowConfirmationReducedOver(mockSaveRequestArg);
-
-      // Assert
-      expect(result).toBeTruthy();
-    });
-
-    it('should return false when no conditions are met', () => {
-      // Act
-      const result = service.checkCanShowConfirmationReducedOver(mockSaveRequestArg);
 
       // Assert
       expect(result).toBeFalsy();

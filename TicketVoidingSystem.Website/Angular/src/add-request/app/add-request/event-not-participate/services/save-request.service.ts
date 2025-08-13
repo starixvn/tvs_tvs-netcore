@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { StaticService } from 'src/utility/services/static.service';
 import { TEXT } from '../../../../../utility/constants/text';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { PopupService } from '../../services/popup.service';
