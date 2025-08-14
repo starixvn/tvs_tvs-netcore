@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { TVSRequestFilterBy } from '../../../../../../utility/constants/config';
 import { LABELS } from '../../../../../../utility/constants/labels';
-import { AddRequestQuery } from '../../../../models/add-request.query';
-import { AddRequestService } from '../../../../services/add-request.service';
-import { PopupService } from '../../../../services/popup.service';
+import { AddRequestQuery } from '../../../../../models/add-request.query';
+import { AddRequestService } from '../../../../../services/add-request.service';
+import { PopupService } from '../../../../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from '../models/validation.model';
 import { CreateMapService } from './create-map.service';
@@ -18,7 +18,7 @@ export class SaveRequestService {
   private readonly logInfoService = inject(LogInfoService);
   private readonly popupService = inject(PopupService);
   private readonly createMapService = inject(CreateMapService);
-  
+
   async onYesConfirmAddRequest(args: SaveRequestArg): Promise<void> {
     // validate again
     const validation = args.isVoided ? { isValid: true } as ValidationBusinessRuleOutput : await this.checkValidationBeforeSaveRequest(args as ValidationBusinessRuleArgs);
@@ -83,7 +83,7 @@ export class SaveRequestService {
     query.remark = args.others.remark;
 
     if (!args.filter.isVoided) {
-      query.wrongScoreInfo = args.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME 
+      query.wrongScoreInfo = args.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME
         ? this.getWrongScoresHasRelatedEvent(args) : this.getWrongScoresHasManyScores(args);
       query.siteDBDownInfoJson = args.isMarkTicketSiteDbDown ? args.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }

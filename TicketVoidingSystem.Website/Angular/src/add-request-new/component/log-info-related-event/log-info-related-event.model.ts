@@ -1,6 +1,6 @@
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
-import { ValidationMessage } from '../../events/models/get-log-info.model';
 import { FilterTimeWithAllowance } from '../../events/red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { ValidationMessage } from '../../models/get-log-info.model';
 import { TvDetectionModel } from '../tv-detection/tv-detection.model';
 
 export class LogInfoRelatedEvent {

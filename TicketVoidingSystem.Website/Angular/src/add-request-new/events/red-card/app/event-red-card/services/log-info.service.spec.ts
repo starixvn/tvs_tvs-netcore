@@ -5,8 +5,8 @@ import { StaticService } from '../../../../../../utility/services/static.service
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { PrimitiveProperty } from '../../../../../component/log-info-related-event/primitive-property.model';
-import { GetLogInfoViewModel } from '../../../../models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../../../models/trans-info-add-request.model';
+import { GetLogInfoViewModel } from '../../../../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../../../../models/trans-info-add-request.model';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';

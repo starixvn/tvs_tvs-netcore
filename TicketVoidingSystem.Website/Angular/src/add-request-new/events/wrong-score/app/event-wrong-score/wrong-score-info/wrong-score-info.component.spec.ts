@@ -9,9 +9,9 @@ import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../../../utility/services/common.service';
 import { FilterModel } from '../../../../../component/filter/filter.model';
-import { WrongScoreModel } from '../../../../models/event-wrong-score.model';
-import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../../../models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../../../models/trans-info-add-request.model';
+import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
+import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../../../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../../../../models/trans-info-add-request.model';
 import { PrimitiveProperty } from '../event-wrong-score.model';
 import { EventWrongScoreService } from '../services/event-wrong-score.service';
 import { LogInfoService } from '../services/log-info.service';

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
+import { AddRequestQuery } from '../../../../../models/add-request.query';
+import { AddRequestService } from '../../../../../services/add-request.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
-import { AddRequestService } from '../../../../../../add-request-new/events/services/add-request.service';
-import { AddRequestQuery } from '../../../../../../add-request-new/events/models/add-request.query';
 
 @Injectable()
 export class SaveRequestService {

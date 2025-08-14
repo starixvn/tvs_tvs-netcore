@@ -3,9 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import moment from 'moment-timezone';
 import { DateTimeFormat, TimeZone } from '../../../../../../utility/constants/config';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { WrongScoreModel } from '../../../../models/event-wrong-score.model';
+import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { AddRequestApiService } from '../../../../services/add-request-api.service';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
 import { WrongScoreService } from './wrong-score.service';
 
@@ -180,7 +180,7 @@ describe('WrongScoreService', () => {
 
       const mockWrongScores = [{ scoreId: 1, filterToTransTime: '2024-01-01 02:00:00' }];
       mockAddRequestApiService.getWrongScores.mockResolvedValue(mockWrongScores);
-      
+
       const mockLastTimeScore = { lastTime: '2024-01-01 02:00:00' };
       mockAddRequestApiService.getLastTimeScore.mockResolvedValue(mockLastTimeScore);
 

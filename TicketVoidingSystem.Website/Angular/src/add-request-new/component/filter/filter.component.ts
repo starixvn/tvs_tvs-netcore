@@ -5,6 +5,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import clone from 'lodash/clone';
 import isUndefined from 'lodash/isUndefined';
 import { Subscription } from 'rxjs';
+import { AddRequestStore } from '../../../add-request-new/services/add-request.store';
 import { TVSRequestActionType } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
@@ -12,7 +13,6 @@ import { AllowanceTime } from '../../../utility/models/allowance-time.model';
 import { IssueType } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { StaticService } from '../../../utility/services/static.service';
-import { AddRequestStore } from '../../events/services/add-request.store';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
@@ -139,6 +139,7 @@ export class FilterComponent implements OnInit, OnChanges {
     }
     this.addRequestStore.changeAllowanceTime(this.subIssueTypeDialogModel.allowanceTime);
     this.issueTypes.subIssueId = subIssueTypeId;
+    this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.subIssueTypeId === subIssueTypeId);
     this.isHighlightSubType = false;
     this.updateModel(true);
   }
@@ -189,7 +190,7 @@ export class FilterComponent implements OnInit, OnChanges {
     if (!this.originActions || !this.issueTypes.issueId) {
       return;
     }
-    
+
     this.model.actions = this.actionVoidService.getVoidActionsSelectionByIssueType(this.issueTypes.issueId, this.abnormalFilterBy, this.isEdit, this.model.action, this.originActions);
     this.model.action = this.isEdit || (this.isExternalUrl && this.model.action) ? this.model.action : this.model.actions[0].value;
   }
@@ -199,6 +200,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.model.issueTypeId = this.issueTypes.issueId?.toString();
     this.model.subIssueTypeId = this.issueTypes.subIssueId?.toString();
     this.model.subIssueTypes = this.issueTypes.selectedSubIssueTypes;
+    this.model = clone(this.model);
     this.modelChange.emit(this.model);
   }
 
@@ -288,8 +290,7 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.WRONG_MARKET_OFFERED,
       IssueTypeConstant.TECHNICAL_ERROR
     ]
-    return this.issueTypes.selectedSubIssueTypes.length > 1
-      && !issueTypeNotShowSubType.includes(this.issueTypes.issueId?.toString());
+    return !issueTypeNotShowSubType.includes(this.issueTypes.issueId?.toString());
   }
 
   public isDisableActionVoid(): boolean {

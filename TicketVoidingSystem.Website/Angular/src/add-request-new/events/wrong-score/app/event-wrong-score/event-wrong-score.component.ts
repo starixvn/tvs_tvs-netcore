@@ -21,9 +21,9 @@ import { OthersModel } from '../../../../component/others/others.model';
 import { TvDetectionComponent } from '../../../../component/tv-detection/tv-detection.component';
 import { TvDetectionModel } from '../../../../component/tv-detection/tv-detection.model';
 import { TvDetectionService } from '../../../../component/tv-detection/tv-detection.service';
-import { WrongScoreModel } from '../../../models/event-wrong-score.model';
+import { WrongScoreModel } from '../../../../models/event-wrong-score.model';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { FilterTimeWithAllowance } from '../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { AddRequestStore } from '../../../services/add-request.store';
 import { ConfirmWrongScoreComponent } from './confirm-wrong-score/confirm-wrong-score.component';
 import { ConfirmWrongScoreModel } from './confirm-wrong-score/confirm-wrong-score.model';
 import { PrimitiveProperty } from './event-wrong-score.model';
@@ -49,7 +49,7 @@ import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.com
   selector: 'event-wrong-score',
   templateUrl: './event-wrong-score.component.html',
   styleUrls: ['./event-wrong-score.component.scss'],
-  imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, ConfirmWrongScoreComponent, 
+  imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, ConfirmWrongScoreComponent,
     CommonModule, FormsModule, TooltipComponent, BlockUiDirective, MainLogInfoComponent, RelatedEventsComponent, InfoSiteDBDownComponent],
   providers: [CreateMapService,  EventWrongScoreService, LogInfoService, SaveRequestService, ValidationService, WrongScoreService,
     RelatedEventService, EditRequestService, TvDetectionService]
@@ -96,7 +96,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   private readonly editRequestService = inject(EditRequestService);
   private readonly eventWrongScoreService = inject(EventWrongScoreService);
   private readonly createMapService = inject(CreateMapService);
-  
+
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -244,7 +244,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
       wrongScoreModels: this.wrongScoreModels,
       infoSiteDBDownModel: this.primitiveProps.infoSiteDBDownModel
     };
-    
+
     this.eventWrongScoreService.updateInfoConfirm(this.confirmWrongScoreModel, updateInfoArgs);
     this.confirmWrongScoreModel = _.clone(this.confirmWrongScoreModel);
   }
@@ -271,7 +271,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
     args.tvDetectionModel = this.tvDetectionModel;
     args.isVoided = this.isVoided;
     args.isMarkTicketSiteDbDown = this.confirmWrongScoreModel.isMarkTicketSiteDbDown && this.confirmWrongScoreModel.isHasAffectedTicketSiteDBDown;
-    
+
     return args;
   }
 

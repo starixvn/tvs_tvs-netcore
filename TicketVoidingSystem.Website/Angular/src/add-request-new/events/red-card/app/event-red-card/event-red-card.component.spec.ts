@@ -12,9 +12,9 @@ import { LogInfoRelatedEvent } from '../../../../component/log-info-related-even
 import { PrimitiveProperty } from '../../../../component/log-info-related-event/primitive-property.model';
 import { OthersModel } from '../../../../component/others/others.model';
 import { TvDetectionModel } from '../../../../component/tv-detection/tv-detection.model';
-import { RedCardModel } from '../../../models/event-red-card.model';
-import { ChildMatchModel } from '../../../models/related-event.model';
-import { AddRequestStore } from '../../../services/add-request.store';
+import { RedCardModel } from '../../../../models/event-red-card.model';
+import { ChildMatchModel } from '../../../../models/related-event.model';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { EventRedCardComponent } from './event-red-card.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
 import { EventRedCardService } from './services/event-red-card.service';

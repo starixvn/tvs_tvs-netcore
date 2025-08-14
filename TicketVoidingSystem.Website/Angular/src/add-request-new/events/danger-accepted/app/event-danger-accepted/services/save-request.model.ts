@@ -7,9 +7,9 @@ import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-e
 import { PrimitiveProperty } from '../../../../../component/log-info-related-event/primitive-property.model';
 import { OthersModel } from '../../../../../component/others/others.model';
 import { TvDetectionComponent } from '../../../../../component/tv-detection/tv-detection.component';
+import { AddRequestStore } from '../../../../../services/add-request.store';
 import { FilterTimeAreaComponent } from '../../../../red-card/app/event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { AddRequestStore } from '../../../../services/add-request.store';
 import { ConfirmDangerAcceptedModel } from '../confirm-danger-accepted/confirm-danger-accepted.model';
 
 export class SaveRequestArg {

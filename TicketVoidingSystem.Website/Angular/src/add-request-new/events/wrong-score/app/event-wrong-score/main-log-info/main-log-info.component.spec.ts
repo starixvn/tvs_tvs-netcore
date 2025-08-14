@@ -5,7 +5,7 @@ import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { StaticService } from '../../../../../../utility/services/static.service';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
-import { ValidationMessage } from '../../../../../events/models/get-log-info.model';
+import { ValidationMessage } from '../../../../../models/get-log-info.model';
 import { EventWrongScoreService } from '../services/event-wrong-score.service';
 import { ValidationService } from '../services/validation.service';
 import { WrongScoreService } from '../services/wrong-score.service';

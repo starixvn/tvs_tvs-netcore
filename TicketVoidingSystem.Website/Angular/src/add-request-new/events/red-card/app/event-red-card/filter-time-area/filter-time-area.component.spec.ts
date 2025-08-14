@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import { BehaviorSubject } from 'rxjs';
 import { DateTimeFormat, TimeZone } from '../../../../../../utility/constants/config';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { AddRequestStore } from '../../../../services/add-request.store';
+import { AddRequestStore } from '../../../../../services/add-request.store';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
 import { FilterTimeAreaComponent } from './filter-time-area.component';
 

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../utility/modules/testing.module';
-import { EventBaseLayoutComponent } from './event-base-layout.component';
-import { RequestModel } from '../../events/models/request.model';
-import { FilterModel } from '../filter/filter.model';
-import { IssueTypes } from '../filter/issue-types.model';
+import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { Selection } from '../../../utility/models/selection.model';
-import { AddRequestStore } from '../../events/services/add-request.store';
-import { EditRequestService } from '../../events/services/edit-request/edit-request.service';
-import { CopyRequestInfoService } from '../../events/services/copy-request-info.service';
-import { EventBaseService } from './event-base.service';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonService } from '../../../utility/services/common.service';
-import { LogAnalysisService } from '../../events/services/log-analysis.service';
 import { SignalRService } from '../../../utility/services/signal-r.service.native';
 import { StaticService } from '../../../utility/services/static.service';
-import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { AddRequestStore } from '../../events/services/add-request.store';
+import { CopyRequestInfoService } from '../../events/services/copy-request-info.service';
+import { EditRequestService } from '../../events/services/edit-request/edit-request.service';
+import { LogAnalysisService } from '../../events/services/log-analysis.service';
+import { RequestModel } from '../../models/request.model';
 import { FilterComponent } from '../filter/filter.component';
+import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
+import { EventBaseLayoutComponent } from './event-base-layout.component';
+import { EventBaseService } from './event-base.service';
 
 
 class Helper {
@@ -103,7 +103,7 @@ describe('EventBaseLayoutComponent', () => {
       jest.spyOn(component, 'checkShowCopyInfoButton').mockImplementation();
       jest.spyOn(signalRService, 'initializeConnection').mockImplementation();
       jest.spyOn(logAnalysisService, 'writeLogAccessFunction').mockImplementation();
-      
+
       // Mock the savingRequestStatus as an Observable with subscribe method
       const mockSavingRequestStatus = {
         subscribe: jest.fn().mockReturnValue({ unsubscribe: jest.fn() })
@@ -231,7 +231,7 @@ describe('EventBaseLayoutComponent', () => {
       component.filterComponent = {
         checkValidSubIssueType: jest.fn()
       } as unknown as FilterComponent;
-      
+
       // Mock the getCheckValidSubIssueTypeInFilterSubject as an Observable with subscribe method
       const mockCheckValidSubject = {
         subscribe: jest.fn().mockReturnValue({ unsubscribe: jest.fn() })
@@ -376,4 +376,4 @@ describe('EventBaseLayoutComponent', () => {
       });
     });
   });
-}); 
+});

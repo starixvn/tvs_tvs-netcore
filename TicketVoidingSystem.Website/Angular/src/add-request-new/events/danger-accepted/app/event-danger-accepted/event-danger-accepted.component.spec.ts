@@ -11,14 +11,14 @@ import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { FilterModel } from '../../../../component/filter/filter.model';
 import { LogInfoRelatedEventComponent } from '../../../../component/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../../../../component/log-info-related-event/log-info-related-event.model';
-import { RedCardModel } from '../../../models/event-red-card.model';
-import { ValidationMessage } from '../../../models/get-log-info.model';
-import { ChildMatchModel } from '../../../models/related-event.model';
+import { RedCardModel } from '../../../../models/event-red-card.model';
+import { ValidationMessage } from '../../../../models/get-log-info.model';
+import { ChildMatchModel } from '../../../../models/related-event.model';
+import { AddRequestApiService } from '../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { FilterTimeAreaComponent } from '../../../red-card/app/event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowanceComponent } from '../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from '../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { AddRequestApiService } from '../../../services/add-request-api.service';
-import { AddRequestStore } from '../../../services/add-request.store';
 import { EventDangerAcceptedComponent } from './event-danger-accepted.component';
 import { EventDangerAcceptedService } from './services/event-danger-accepted.service';
 import { LogInfoService } from './services/log-info.service';
@@ -215,7 +215,7 @@ describe('EventDangerAcceptedComponent', () => {
     expect(eventDangerAcceptedService.initDefaultMainEvent).toHaveBeenCalledTimes(1);
     expect(eventDangerAcceptedService.initDefaultFilterTime).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#ngOnDestroy should call #unsubscribe', async () => {
     // Arrange
     component.getAllowanceTimeSubscription = new Subscription();

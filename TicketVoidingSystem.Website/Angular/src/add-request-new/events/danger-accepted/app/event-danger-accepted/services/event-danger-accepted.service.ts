@@ -7,12 +7,12 @@ import SubIssueTypeDangerAcceptedConfig from '../../../../../component/filter/su
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { PrimitiveProperty } from '../../../../../component/log-info-related-event/primitive-property.model';
 import { TvDetectionModel } from '../../../../../component/tv-detection/tv-detection.model';
-import { RedCardModel } from '../../../../models/event-red-card.model';
-import { ChildMatchModel } from '../../../../models/related-event.model';
-import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../../../models/sub-type-link-match.model';
+import { RedCardModel } from '../../../../../models/event-red-card.model';
+import { ChildMatchModel } from '../../../../../models/related-event.model';
+import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../../../../models/sub-type-link-match.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../../services/add-request.store';
 import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { AddRequestApiService } from '../../../../services/add-request-api.service';
-import { AddRequestStore } from '../../../../services/add-request.store';
 import { ValidationService } from './validation.service';
 
 @Injectable()

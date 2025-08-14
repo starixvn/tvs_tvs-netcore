@@ -19,8 +19,8 @@
           "options": {
             "aot": true,
             "outputPath": "dist",
-            "index": "src/home-page/index.html",
-            "main": "src/home-page/main.ts",
+            "index": "src/add-request-new/shared/index.html",
+            "main": "src/add-request-new/events/danger-accepted/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],

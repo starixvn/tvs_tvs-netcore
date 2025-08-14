@@ -6,10 +6,10 @@ import SubIssueTypeRedCardConfig from '../../../../../component/filter/sub-issue
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { PrimitiveProperty } from '../../../../../component/log-info-related-event/primitive-property.model';
 import { TvDetectionModel } from '../../../../../component/tv-detection/tv-detection.model';
-import { RedCardModel } from '../../../../models/event-red-card.model';
-import { ChildMatchModel } from '../../../../models/related-event.model';
-import { SubIssueTypeLinkMatch } from '../../../../models/sub-type-link-match.model';
-import { AddRequestStore } from '../../../../services/add-request.store';
+import { RedCardModel } from '../../../../../models/event-red-card.model';
+import { ChildMatchModel } from '../../../../../models/related-event.model';
+import { SubIssueTypeLinkMatch } from '../../../../../models/sub-type-link-match.model';
+import { AddRequestStore } from '../../../../../services/add-request.store';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
 
 @Injectable()

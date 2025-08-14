@@ -6,9 +6,9 @@ import { StaticService } from '../../../../../../utility/services/static.service
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { PrimitiveProperty } from '../../../../../component/log-info-related-event/primitive-property.model';
-import { GetLogInfoQuery } from '../../../../models/add-request.query';
-import { RedCardGetLogInfoQuery } from '../../../../models/event-red-card.model';
-import { GetLogInfoModel } from '../../../../models/get-log-info.model';
+import { GetLogInfoQuery } from '../../../../../models/add-request.query';
+import { RedCardGetLogInfoQuery } from '../../../../../models/event-red-card.model';
+import { GetLogInfoModel } from '../../../../../models/get-log-info.model';
 import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { ValidationService } from './validation.service';
 

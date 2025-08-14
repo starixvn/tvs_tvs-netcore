@@ -1,17 +1,17 @@
 import { Component, inject, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
+import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
+import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
+import { FilterModel } from '../../../../component/filter/filter.model';
+import { OthersModel } from '../../../../component/others/others.model';
+import { EventTicket14Model } from '../../../../models/event-ticket-14.model';
+import { AddRequestApiService } from '../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
-import { EventTicket14Model } from '../../../../events/models/event-ticket-14.model';
-import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
-import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
-import { FilterModel } from '../../../../component/filter/filter.model';
-import { AddRequestStore } from '../../../../events/services/add-request.store';
-import { AddRequestApiService } from '../../../../events/services/add-request-api.service';
-import { OthersModel } from '../../../../component/others/others.model';
 
 @Component({
     selector: 'event-ticket14',

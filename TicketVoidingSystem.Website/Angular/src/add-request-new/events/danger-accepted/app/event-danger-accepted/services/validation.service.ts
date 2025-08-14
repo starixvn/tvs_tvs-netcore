@@ -8,8 +8,8 @@ import { FilterModel } from '../../../../../component/filter/filter.model';
 import { LogInfoRelatedEventComponent } from '../../../../../component/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { TvDetectionComponent } from '../../../../../component/tv-detection/tv-detection.component';
+import { AddRequestStore } from '../../../../../services/add-request.store';
 import { FilterTimeAreaComponent } from '../../../../red-card/app/event-red-card/filter-time-area/filter-time-area.component';
-import { AddRequestStore } from '../../../../services/add-request.store';
 
 @Injectable()
 export class ValidationService {

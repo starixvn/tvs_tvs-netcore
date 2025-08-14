@@ -1,0 +1,50 @@
+import { inject, Injectable } from '@angular/core';
+import { AddRequestApiService } from '../add-request-api.service';
+import { LogInfoTicketsQuery } from '../models/live-game-early-ticket.model';
+import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
+import { BetTypeCountModel, GroupBetTypeCountModel } from '../models/get-log-info.model';
+import * as _ from 'lodash';
+import { Item } from '../../../../utility/models/item.model';
+
+@Injectable()
+export class AffectedTicketService {
+  private readonly addRequestApiService = inject(AddRequestApiService);
+
+  async getAffectedTickets(issueTypeId: number, logInfoTicketsJson: string) {
+    const ticketsLogInfo = new TicketsModel();
+    if (logInfoTicketsJson) {
+      const query: LogInfoTicketsQuery = {
+        logInfoTicketsJson: logInfoTicketsJson,
+        issueTypeId: issueTypeId
+      };
+      const result = await this.addRequestApiService.GetLogInfoTickets(query);
+      ticketsLogInfo.initData(result);
+    }
+
+    return ticketsLogInfo;
+  }
+
+  updateBetTypeCountModel(betTypeCount: BetTypeCountModel[]): GroupBetTypeCountModel[] {
+    const groupBetTypesCount: GroupBetTypeCountModel[] = [];
+    const groupBetTypes = _.groupBy(betTypeCount, item => `"${item.betTypeId}+${item.betId}"`);
+    for (const key in groupBetTypes) {
+      const values = groupBetTypes[key];
+
+      const childBetTypes = values
+        .filter(item => item.playerName)
+        .map(item => {
+          return {
+            name: `${item.playerName} - ${item.ticketsCount} ticket(s)`
+          } as Item;
+        });
+      const group: GroupBetTypeCountModel = {
+        name: values[0].playerName ? `${values[0].betTypeName}:` : `${values[0].betTypeName} - ${values[0].ticketsCount} ticket(s)`,
+        items: childBetTypes
+      };
+
+      groupBetTypesCount.push(group);
+    };
+
+    return groupBetTypesCount;
+  }
+}

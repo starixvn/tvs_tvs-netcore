@@ -12,8 +12,8 @@ import { LogInfoRelatedEvent } from '../../../../component/log-info-related-even
 import { OthersModel } from '../../../../component/others/others.model';
 import { TvDetectionComponent } from '../../../../component/tv-detection/tv-detection.component';
 import { TvDetectionService } from '../../../../component/tv-detection/tv-detection.service';
-import { WrongScoreModel } from '../../../models/event-wrong-score.model';
-import { AddRequestStore } from '../../../services/add-request.store';
+import { WrongScoreModel } from '../../../../models/event-wrong-score.model';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { EventWrongScoreComponent } from './event-wrong-score.component';
 import { FilterWrongScoreComponent } from './filter-wrong-score/filter-wrong-score.component';
 import { SubIssueTypeRelatedEvent } from './models/subIssue-type-related-event.model';

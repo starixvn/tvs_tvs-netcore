@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { ValidationService } from './validation.service';
-import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { CheckTickets14Result } from '../models/check-tickets14-result.model';
 import { BetIdsComponent } from '../../../../../../utility/components/bet-ids/bet-ids.component';
-import { PermissionAddRequest } from '../../../../../../add-request-new/events/models/permission-add-request.model';
 import { LABELS } from '../../../../../../utility/constants/labels';
-import { EventTicket14ApiService } from '../../event-ticket14-api.service';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { PermissionAddRequest } from '../../../../../models/permission-add-request.model';
+import { AppService } from '../../app.service';
+import { CheckTickets14Result } from '../models/check-tickets14-result.model';
+import { ValidationService } from './validation.service';
 
 describe('ValidationService', () => {
   let service: ValidationService;
-  let eventTicket14ApiService: EventTicket14ApiService;
+  let eventTicket14ApiService: AppService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -18,7 +18,7 @@ describe('ValidationService', () => {
     });
 
     service = TestBed.inject(ValidationService);
-    eventTicket14ApiService = TestBed.inject(EventTicket14ApiService);
+    eventTicket14ApiService = TestBed.inject(AppService);
   });
 
   it('should be created', () => {

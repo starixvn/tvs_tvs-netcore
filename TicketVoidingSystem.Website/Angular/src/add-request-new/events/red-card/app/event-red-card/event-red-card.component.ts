@@ -29,11 +29,11 @@ import { PrimitiveProperty } from '../../../../component/log-info-related-event/
 import { OthersModel } from '../../../../component/others/others.model';
 import { TvDetectionComponent } from '../../../../component/tv-detection/tv-detection.component';
 import { TvDetectionService } from '../../../../component/tv-detection/tv-detection.service';
-import { AddRelatedEventArg } from '../../../models/add-related-event.model';
-import { RedCardModel } from '../../../models/event-red-card.model';
-import { GetChildMatchQuery } from '../../../models/get-child-match.query';
-import { ChildMatchModel } from '../../../models/related-event.model';
-import { AddRequestStore } from '../../../services/add-request.store';
+import { AddRelatedEventArg } from '../../../../models/add-related-event.model';
+import { RedCardModel } from '../../../../models/event-red-card.model';
+import { GetChildMatchQuery } from '../../../../models/get-child-match.query';
+import { ChildMatchModel } from '../../../../models/related-event.model';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
 import { EventRedCardService } from './services/event-red-card.service';

@@ -1,8 +1,8 @@
 import { FilterModel } from "../../../../../../add-request-new/component/filter/filter.model";
-import { PrimitiveProperty } from "./primitive-property.model";
-import { EventTicket14Model } from "../../../../../../add-request-new/events/models/event-ticket-14.model";
 import { OthersModel } from "../../../../../../add-request-new/component/others/others.model";
-import { AddRequestStore } from "../../../../../../add-request-new/events/services/add-request.store";
+import { EventTicket14Model } from "../../../../../models/event-ticket-14.model";
+import { AddRequestStore } from "../../../../../services/add-request.store";
+import { PrimitiveProperty } from "./primitive-property.model";
 
 export class SaveRequestArg {
   requestId?: number;

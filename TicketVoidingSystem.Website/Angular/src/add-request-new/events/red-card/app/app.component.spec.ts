@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EventBaseLayoutComponent } from '../../../../add-request-new/component/event-base-layout/event-base-layout.component';
 import { OthersAbnormalBetComponent } from '../../../../add-request-new/component/others-abnormal-bet/others-abnormal-bet.component';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
-import { RequestModel } from '../../models/request.model';
+import { RequestModel } from '../../../models/request.model';
 import { AppComponent } from './app.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 

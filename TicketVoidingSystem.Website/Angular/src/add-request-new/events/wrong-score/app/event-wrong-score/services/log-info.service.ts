@@ -4,9 +4,9 @@ import { DateTimeFormat, TVSRequestFilterBy } from '../../../../../../utility/co
 import { CommonService } from '../../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../../utility/services/static.service';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
-import { GetLogInfoQuery } from '../../../../models/add-request.query';
-import { WrongScoreModel } from '../../../../models/event-wrong-score.model';
-import { GetLogInfoModel } from '../../../../models/get-log-info.model';
+import { GetLogInfoQuery } from '../../../../../models/add-request.query';
+import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
+import { GetLogInfoModel } from '../../../../../models/get-log-info.model';
 import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { WrongScoreGetLogInfoQuery } from '../event-wrong-score.model';
 import { GetLogInfoParams } from '../models/get-log-info-params.model';

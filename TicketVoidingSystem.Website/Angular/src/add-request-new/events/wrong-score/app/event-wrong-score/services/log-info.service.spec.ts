@@ -5,8 +5,8 @@ import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.
 import { CommonService } from '../../../../../../utility/services/common.service';
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
-import { WrongScoreModel } from '../../../../models/event-wrong-score.model';
-import { GetLogInfoModel, ValidationMessage } from '../../../../models/get-log-info.model';
+import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
+import { GetLogInfoModel, ValidationMessage } from '../../../../../models/get-log-info.model';
 import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { GetLogInfoParams } from '../models/get-log-info-params.model';
 import { EventWrongScoreService } from './event-wrong-score.service';

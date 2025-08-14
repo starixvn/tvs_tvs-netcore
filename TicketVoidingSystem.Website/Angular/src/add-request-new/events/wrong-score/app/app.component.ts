@@ -4,13 +4,12 @@ import { OthersComponent } from 'src/add-request-new/component/others/others.com
 import { EventWrongScoreComponent } from 'src/add-request/app/add-request/event-wrong-score/event-wrong-score.component';
 import { EventBaseLayoutComponent } from '../../../../add-request-new/component/event-base-layout/event-base-layout.component';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
-import { RequestModel } from '../../models/request.model';
+import { RequestModel } from '../../../models/request.model';
 
 @Component({
   standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
   imports: [EventBaseLayoutComponent, CommonModule, EventWrongScoreComponent, OthersComponent],
 })
 export class AppComponent {

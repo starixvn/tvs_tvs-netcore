@@ -167,6 +167,19 @@ const addRequestArchivedTicket = {
   indexEJSPath: './src/add-request-new/events/archived-ticket/index.ejs'
 };
 
+const dangerAccepted = {
+  pageName: 'DangerAccepted',
+  tsconfigFiles: [
+    'add-request-new/events/danger-accepted/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/danger-accepted/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/danger-accepted/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/danger-accepted'
+};
+
 const configPages = [
   //homePage,
   //manageVoidServices,
@@ -180,6 +193,7 @@ const configPages = [
   // editRequest,
   //voidByBetId
   //addRequestArchivedTicket
+  dangerAccepted
 ];
 
 module.exports = configPages;

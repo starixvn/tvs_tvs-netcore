@@ -1,0 +1,26 @@
+<event-base-layout #eventBaseLayout
+  [issueTypeId]="issueTypeId"
+  (saveRequest)="saveRequest()"
+  [model]="model"
+  [eventHeight]="'581px'"
+  [eventContent]="eventContent"
+  [othersContent]="othersContent">
+</event-base-layout>
+
+<ng-template #eventContent let-eventModel="eventModel" let-isEdit="isEdit" let-requestId="requestId"
+  let-filterModel="filterModel" let-otherModel="otherModel">
+  <event-danger-accepted
+    #eventDangerAccepted
+    [isEdit]="isEdit"
+    [requestId]="requestId"
+    [filter]="filterModel"
+    [dangerAcceptedModels]="eventModel"
+    [others]="otherModel"
+  >
+  </event-danger-accepted>
+</ng-template>
+
+<ng-template #othersContent let-otherModel="otherModel" let-isEdit="isEdit">
+  <others-abnormal-bet [isEdit]="isEdit" [model]="otherModel">
+  </others-abnormal-bet>
+</ng-template>

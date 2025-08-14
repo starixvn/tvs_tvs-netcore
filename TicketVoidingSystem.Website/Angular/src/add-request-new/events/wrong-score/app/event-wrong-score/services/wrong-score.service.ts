@@ -3,10 +3,10 @@ import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateTimeFormat, TimeZone } from '../../../../../../utility/constants/config';
 import { StaticService } from '../../../../../../utility/services/static.service';
-import { WrongScoreModel } from '../../../../models/event-wrong-score.model';
-import { LastTimeScore, LastTimeScoreQuery } from '../../../../models/last-time-score.model';
+import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
+import { LastTimeScore, LastTimeScoreQuery } from '../../../../../models/last-time-score.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { AddRequestApiService } from '../../../../services/add-request-api.service';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
 
 @Injectable()

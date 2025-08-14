@@ -7,11 +7,11 @@ import { FilterModel } from '../../../../../component/filter/filter.model';
 import { GroupButton } from '../../../../../component/filter/sub-issue-type-dialog/sub-issue-type-json.model';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { PrimitiveProperty } from '../../../../../component/log-info-related-event/primitive-property.model';
-import { RedCardModel } from '../../../../models/event-red-card.model';
-import { ValidationMessage } from '../../../../models/get-log-info.model';
-import { ChildMatchModel } from '../../../../models/related-event.model';
-import { SubIssueTypeLinkMatch } from '../../../../models/sub-type-link-match.model';
-import { AddRequestStore } from '../../../../services/add-request.store';
+import { RedCardModel } from '../../../../../models/event-red-card.model';
+import { ValidationMessage } from '../../../../../models/get-log-info.model';
+import { ChildMatchModel } from '../../../../../models/related-event.model';
+import { SubIssueTypeLinkMatch } from '../../../../../models/sub-type-link-match.model';
+import { AddRequestStore } from '../../../../../services/add-request.store';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
 import { EventRedCardService } from './event-red-card.service';
 

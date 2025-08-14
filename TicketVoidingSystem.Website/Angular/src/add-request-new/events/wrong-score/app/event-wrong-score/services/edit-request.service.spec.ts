@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { TVSRequestFilterBy } from '../../../../../../utility/constants/config';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
-import { WrongScoreModel } from '../../../../models/event-wrong-score.model';
-import { ChildMatchModel } from '../../../../models/related-event.model';
+import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
+import { ChildMatchModel } from '../../../../../models/related-event.model';
 import { PrimitiveProperty } from '../event-wrong-score.model';
 import { SubIssueTypeRelatedEvent } from '../models/subIssue-type-related-event.model';
 import { EditRequestService } from './edit-request.service';

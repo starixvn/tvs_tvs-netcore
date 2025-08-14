@@ -12,7 +12,7 @@ import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { SanitizeHtmlPipe } from '../../../../../../utility/modules/sanitize-html.pipe';
 import { StaticService } from '../../../../../../utility/services/static.service';
 import { FilterModel } from '../../../../../component/filter/filter.model';
-import { WrongScoreModel } from '../../../../models/event-wrong-score.model';
+import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
 import { PrimitiveProperty } from '../event-wrong-score.model';
 import { GetLogInfoParams } from '../models/get-log-info-params.model';
 import { LogInfoService } from '../services/log-info.service';

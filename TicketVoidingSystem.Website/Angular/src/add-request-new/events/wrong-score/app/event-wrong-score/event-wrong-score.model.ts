@@ -1,9 +1,9 @@
-import { InfoSiteDBDownModel } from "../components/info-site-db-down/info-site-db-down.model";
-import { TransInfoAddRequestModel } from "../models/trans-info-add-request.model";
+import { InfoSiteDBDownModel } from '../../../../component/info-site-db-down/info-site-db-down.model';
+import { TransInfoAddRequestModel } from '../../../../models/trans-info-add-request.model';
 
 export class PrimitiveProperty {
   filterBy: number;
-  isBlock = false;  
+  isBlock = false;
   actualScore: string;
   isShowActualScore: boolean;
   transInfoAddRequestModel: TransInfoAddRequestModel;

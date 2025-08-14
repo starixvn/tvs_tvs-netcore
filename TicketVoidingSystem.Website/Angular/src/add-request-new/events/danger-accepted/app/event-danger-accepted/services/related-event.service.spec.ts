@@ -6,10 +6,10 @@ import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { PrimitiveProperty } from '../../../../../component/log-info-related-event/primitive-property.model';
-import { AddRelatedEventArg } from '../../../../models/add-related-event.model';
-import { ChildMatchModel } from '../../../../models/related-event.model';
+import { AddRelatedEventArg } from '../../../../../models/add-related-event.model';
+import { ChildMatchModel } from '../../../../../models/related-event.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { AddRequestApiService } from '../../../../services/add-request-api.service';
 import { EventDangerAcceptedService } from './event-danger-accepted.service';
 import { LogInfoService } from './log-info.service';
 import { RelatedEventService } from './related-event.service';

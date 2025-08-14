@@ -13,11 +13,11 @@ import { PrimitiveProperty } from '../../../../../component/log-info-related-eve
 import { OthersModel } from '../../../../../component/others/others.model';
 import { TvDetectionComponent } from '../../../../../component/tv-detection/tv-detection.component';
 import { TvDetectionModel } from '../../../../../component/tv-detection/tv-detection.model';
+import { AddRequestService } from '../../../../../services/add-request.service';
+import { AddRequestStore } from '../../../../../services/add-request.store';
+import { PopupService } from '../../../../../services/popup.service';
 import { FilterTimeAreaComponent } from '../../../../red-card/app/event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { AddRequestService } from '../../../../services/add-request.service';
-import { AddRequestStore } from '../../../../services/add-request.store';
-import { PopupService } from '../../../../services/popup.service';
 import { ConfirmDangerAcceptedModel } from '../confirm-danger-accepted/confirm-danger-accepted.model';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestArg } from './save-request.model';

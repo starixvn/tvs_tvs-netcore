@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { EventTicket14Component } from './event-ticket14.component';
-import { ValidationService } from './services/validation.service';
-import { SaveRequestService } from './services/save-request.service';
 import { FilterModel } from '../../../../../add-request-new/component/filter/filter.model';
 import { OthersModel } from '../../../../../add-request-new/component/others/others.model';
-import { EventTicket14Model } from '../../../../../add-request-new/events/models/event-ticket-14.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
-import { AddRequestStore } from '../../../../../add-request-new/events/services/add-request.store';
-import { AddRequestApiService } from '../../../../../add-request-new/events/services/add-request-api.service';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { EventTicket14Model } from '../../../../models/event-ticket-14.model';
+import { AddRequestApiService } from '../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../services/add-request.store';
+import { EventTicket14Component } from './event-ticket14.component';
 import { PrimitiveProperty } from './models/primitive-property.model';
+import { SaveRequestService } from './services/save-request.service';
+import { ValidationService } from './services/validation.service';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -55,7 +55,7 @@ describe('EventTicket14Component', () => {
     addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
     component = fixture.componentInstance;
     component.primitiveProps = new PrimitiveProperty();
-    
+
     // Khởi tạo các thuộc tính cần thiết để tránh lỗi template
     component.filter = Helper.fakeFilterModel;
     component.eventTicket14Model = Helper.fakeEventTicket14Model;
@@ -249,7 +249,7 @@ describe('EventTicket14Component', () => {
       });
     });
   });
-    
+
   describe('Input Properties', () => {
     it('should handle isEdit input', () => {
       // Arrange & Act

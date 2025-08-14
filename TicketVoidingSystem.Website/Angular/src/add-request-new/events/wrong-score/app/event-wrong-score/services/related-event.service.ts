@@ -4,11 +4,11 @@ import { DateTimeFormat, MatchType } from '../../../../../../utility/constants/c
 import { IssueTypeConstant } from '../../../../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../../../../utility/constants/labels';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
-import { WrongScoreModel } from '../../../../models/event-wrong-score.model';
-import { GetChildMatchQuery } from '../../../../models/get-child-match.query';
-import { ChildMatchModel } from '../../../../models/related-event.model';
-import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../../../models/sub-type-link-match.model';
-import { AddRequestApiService } from '../../../../services/add-request-api.service';
+import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
+import { GetChildMatchQuery } from '../../../../../models/get-child-match.query';
+import { ChildMatchModel } from '../../../../../models/related-event.model';
+import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../../../../models/sub-type-link-match.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { AddRelatedEventArg } from '../models/add-related-event.model';
 import { SubIssueTypeRelatedEvent } from '../models/subIssue-type-related-event.model';
 import { CreateMapService } from './create-map.service';
@@ -67,7 +67,7 @@ export class RelatedEventService {
     });
     await this.logInfoService.getLogInfo(this.createMapService.createGetLogInfoParams(arg));
   }
-  
+
   async updateEventAutoGetLinkMatch(childEvents: ChildMatchModel[], arg: AddRelatedEventArg) {
     const newLinkEvents = childEvents.filter(x => !arg.relatedEvents.some(y => y.matchId === x.matchId) && this.isAutoSelectMatch(arg.mainEvent, x.matchType));
     const subTypeLinkMatches = await this.getSubIssueTypeLinkMatch(Number(arg.filter.subIssueTypeId), newLinkEvents.map(x => x.matchId).join(','));
@@ -126,7 +126,7 @@ export class RelatedEventService {
       logInfoRelatedEventModel.eventName = `${eventChild.matchId} - ${eventChild.matchEvent}`;
       logInfoRelatedEventModel.sportType = eventChild.sportType;
       logInfoRelatedEventModel.isMainMatch = false;
-      
+
     return logInfoRelatedEventModel;
   }
 }

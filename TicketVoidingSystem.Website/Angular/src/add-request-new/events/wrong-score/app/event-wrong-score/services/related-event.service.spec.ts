@@ -8,12 +8,12 @@ import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
-import { WrongScoreModel } from '../../../../models/event-wrong-score.model';
-import { GetChildMatchQuery } from '../../../../models/get-child-match.query';
-import { ChildMatchModel } from '../../../../models/related-event.model';
-import { SubIssueTypeLinkMatch } from '../../../../models/sub-type-link-match.model';
+import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
+import { GetChildMatchQuery } from '../../../../../models/get-child-match.query';
+import { ChildMatchModel } from '../../../../../models/related-event.model';
+import { SubIssueTypeLinkMatch } from '../../../../../models/sub-type-link-match.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { AddRequestApiService } from '../../../../services/add-request-api.service';
 import { PrimitiveProperty } from '../event-wrong-score.model';
 import { AddRelatedEventArg } from '../models/add-related-event.model';
 import { CreateMapService } from './create-map.service';

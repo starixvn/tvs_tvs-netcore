@@ -6,7 +6,7 @@ import { StaticService } from '../../../../../../utility/services/static.service
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { PrimitiveProperty } from '../../../../../component/log-info-related-event/primitive-property.model';
-import { GetLogInfoModel, GetLogInfoViewModel, ValidationMessage } from '../../../../models/get-log-info.model';
+import { GetLogInfoModel, GetLogInfoViewModel, ValidationMessage } from '../../../../../models/get-log-info.model';
 import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';

@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EventBaseLayoutComponent } from '../../../../add-request-new/component/event-base-layout/event-base-layout.component';
 import { OthersAbnormalBetComponent } from '../../../../add-request-new/component/others-abnormal-bet/others-abnormal-bet.component';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
-import { RequestModel } from '../../models/request.model';
+import { RequestModel } from '../../../models/request.model';
 import { AppComponent } from './app.component';
-import { EventDangerAcceptedComponent } from './event-danger-accepted/event-danger-accepted.component';
+import { EventWrongScoreComponent } from './event-wrong-score/event-wrong-score.component';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -16,7 +16,7 @@ describe('AppComponent', () => {
         AppComponent,
         EventBaseLayoutComponent,
         OthersAbnormalBetComponent,
-        EventDangerAcceptedComponent
+        EventWrongScoreComponent
       ]
     }).compileComponents();
 
@@ -30,7 +30,7 @@ describe('AppComponent', () => {
   });
 
   it('should have correct issue type', () => {
-    expect(component.issueTypeId).toBe(IssueTypeConstant.DANGER_ACCEPTED);
+    expect(component.issueTypeId).toBe(IssueTypeConstant.WRONG_SCORE);
   });
 
   it('should have RequestModel instance', () => {

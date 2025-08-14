@@ -7,7 +7,7 @@ import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-e
 import { PrimitiveProperty } from '../../../../../component/log-info-related-event/primitive-property.model';
 import { OthersModel } from '../../../../../component/others/others.model';
 import { TvDetectionComponent } from '../../../../../component/tv-detection/tv-detection.component';
-import { AddRequestStore } from '../../../../services/add-request.store';
+import { AddRequestStore } from '../../../../../services/add-request.store';
 import { FilterTimeAreaComponent } from '../filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
 

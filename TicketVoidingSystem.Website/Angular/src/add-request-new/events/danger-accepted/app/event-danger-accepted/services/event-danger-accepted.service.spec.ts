@@ -4,11 +4,11 @@ import { SubIssueTypeConstant } from '../../../../../../utility/constants/sub-is
 import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { PrimitiveProperty } from '../../../../../component/log-info-related-event/primitive-property.model';
-import { RedCardModel } from '../../../../models/event-red-card.model';
-import { ChildMatchModel } from '../../../../models/related-event.model';
+import { RedCardModel } from '../../../../../models/event-red-card.model';
+import { ChildMatchModel } from '../../../../../models/related-event.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../../services/add-request.store';
 import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { AddRequestApiService } from '../../../../services/add-request-api.service';
-import { AddRequestStore } from '../../../../services/add-request.store';
 import { EventDangerAcceptedService } from './event-danger-accepted.service';
 import { ValidationService } from './validation.service';
 

@@ -10,8 +10,8 @@ import { FilterModel } from '../../../../../component/filter/filter.model';
 import { LogInfoRelatedEventComponent } from '../../../../../component/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { TvDetectionComponent } from '../../../../../component/tv-detection/tv-detection.component';
-import { WrongScoreModel } from '../../../../models/event-wrong-score.model';
-import { AddRequestStore } from '../../../../services/add-request.store';
+import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
+import { AddRequestStore } from '../../../../../services/add-request.store';
 import { PrimitiveProperty } from '../event-wrong-score.model';
 import { FilterWrongScoreComponent } from '../filter-wrong-score/filter-wrong-score.component';
 import { ValidationBusinessRuleArgs } from '../models/validation.model';
@@ -336,7 +336,7 @@ describe('ValidationService', () => {
       // Arrange
       const mainEvent = {} as LogInfoRelatedEvent;
       const relatedEvents = [{ messageValidationLogInfo: [{ isError: true, reason: 'exit in another request' }] }, { messageValidationLogInfo: [{ isError: true, reason: 'No valid tickets found in the current range' }] }] as LogInfoRelatedEvent[];
-      
+
       // Act
       const result = service['isValidAllEventCheckTime'](mainEvent, relatedEvents);
 
