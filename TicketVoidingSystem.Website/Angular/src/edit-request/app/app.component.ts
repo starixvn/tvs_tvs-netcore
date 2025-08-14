@@ -1,4 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { LogInfoService } from '../../add-request-new/services/edit-request/log-info.service';
+import { ObjectService } from '../../add-request-new/services/edit-request/object.service';
 import { AddRequestComponent } from '../../add-request/app/add-request/add-request.component';
 import { RequestModel } from '../../add-request/app/add-request/models/request.model';
 import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
@@ -7,8 +9,6 @@ import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppService } from './app.service';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { RequestDetailViewModel } from './request.model';
-import { LogInfoService } from '../../add-request-new/events/services/edit-request/log-info.service';
-import { ObjectService } from '../../add-request-new/events/services/edit-request/object.service';
 
 @Component({
   standalone: true,

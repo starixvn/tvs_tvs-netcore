@@ -2,7 +2,7 @@
   [issueTypeId]="issueTypeId"
   (saveRequest)="saveRequest()"
   [model]="model"
-  [eventHeight]="'581px'"
+  [eventHeight]="'730px'"
   [eventContent]="eventContent"
   [othersContent]="othersContent">
 </event-base-layout>
@@ -16,11 +16,15 @@
     [filter]="filterModel"
     [dangerAcceptedModels]="eventModel"
     [others]="otherModel"
-  >
+    (updateMatchId)="eventBaseLayout.updateMatchInfo($event)">
   </event-danger-accepted>
 </ng-template>
 
-<ng-template #othersContent let-otherModel="otherModel" let-isEdit="isEdit">
-  <others-abnormal-bet [isEdit]="isEdit" [model]="otherModel">
-  </others-abnormal-bet>
+<ng-template #othersContent let-otherModel="otherModel" let-isEdit="isEdit" let-matchId="matchId" let-parentMatchId="parentMatchId">
+  <others [isEdit]="isEdit"
+    [(model)]="model.others"
+    [matchId]="matchId"
+    [parentMatchId]="parentMatchId"
+    [issueTypeId]="model.filter.issueTypeId">
+  </others>
 </ng-template>

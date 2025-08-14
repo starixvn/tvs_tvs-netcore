@@ -7,6 +7,7 @@ import { IssueTypes } from '../../../add-request-new/component/filter/issue-type
 import { BlockFullUiComponent } from '../../../utility/components/block-full-ui/block-full-ui.component';
 import { MenuBarComponent } from '../../../utility/components/menu-bar/menu-bar.component';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { MatchModel } from '../../../utility/models/match.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { SignalRService } from '../../../utility/services/signal-r.service.native';
@@ -32,6 +33,8 @@ interface EventContentContext {
 interface OthersContentContext {
   otherModel: OthersModel;
   isEdit: boolean;
+  matchId: number;
+  parentMatchId: number;
 }
 
 @Component({
@@ -66,6 +69,8 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   checkValidSubIssueTypeInFilterSubscription: Subscription;
   originActions: Selection[] = [];
   accessIssueTypeCount = new Map<string, number>();
+  matchId: number = null;
+  parentMatchId: number = null;
 
   private readonly signalRService = inject(SignalRService);
   private readonly editRequestService = inject(EditRequestService);
@@ -91,6 +96,8 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
     return {
       otherModel: this.model.others,
       isEdit: this.isEdit,
+      matchId: this.matchId,
+      parentMatchId: this.parentMatchId
     };
   }
 
@@ -161,6 +168,11 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
 
   public updateModel(filterModel: FilterModel): void {
     this.model.filter = filterModel;
+  }
+
+  public updateMatchInfo(matchModel: MatchModel): void {
+    this.matchId = matchModel.matchId;
+    this.parentMatchId = matchModel.parentId;
   }
 
   public async onSaveRequest(): Promise<void> {

@@ -16,11 +16,15 @@
     [filter]="filterModel"
     [redCardModels]="eventModel"
     [others]="otherModel"
-  >
+    (updateMatchId)="eventBaseLayout.updateMatchInfo($event)">
   </event-red-card>
 </ng-template>
 
-<ng-template #othersContent let-otherModel="otherModel" let-isEdit="isEdit">
-  <others-abnormal-bet [isEdit]="isEdit" [model]="otherModel">
-  </others-abnormal-bet>
+<ng-template #othersContent let-otherModel="otherModel" let-isEdit="isEdit" let-matchId="matchId" let-parentMatchId="parentMatchId">
+  <others [isEdit]="isEdit"
+    [(model)]="model.others"
+    [matchId]="matchId"
+    [parentMatchId]="parentMatchId"
+    [issueTypeId]="model.filter.issueTypeId">
+  </others>
 </ng-template>
