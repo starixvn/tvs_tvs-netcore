@@ -9,12 +9,11 @@ public static class InfoSiteDbDownHelper
 {
     public static InfoSiteDBDownModel Get(IEnumerable<TransInfoAddRequestModel> transInfoAddRequests)
     {
-        if (transInfoAddRequests.All(x => string.IsNullOrEmpty(x.SiteDBDownInfoJson)))
+        var siteDBDownInfo = transInfoAddRequests.FirstOrDefault(IsHasInfoSiteDbDown);
+        if (siteDBDownInfo == null)
         {
             return null;
         }
-
-        var siteDBDownInfo = transInfoAddRequests.First(x => x.SiteDBDownInfoJson != null);
 
         var infoSiteDBDown = new InfoSiteDBDownModel
         {
@@ -26,5 +25,16 @@ public static class InfoSiteDbDownHelper
         };
 
         return infoSiteDBDown;
+    }
+
+    private static bool IsHasInfoSiteDbDown(TransInfoAddRequestModel model)
+    {
+        if (model == null)
+        {
+            return false;
+        }
+
+        return model.SingleCount + model.ParlayCount + model.CancelCashOutCount > 0
+            || !string.IsNullOrEmpty(model.UserNames);
     }
 }
