@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import dayjs from 'dayjs';
 import { Guid } from 'guid-typescript';
 import { LABELS } from '../../utility/constants/labels';
 import { Result } from '../../utility/models/result';
@@ -10,12 +9,12 @@ import { AddRequestResultModel } from '../models/request.model';
 import { AddRequestApiService } from './add-request-api.service';
 import { AddRequestStore } from './add-request.store';
 import { PopupService } from './popup.service';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AddRequestService {
-
   private readonly addRequestApiService = inject(AddRequestApiService);
   private readonly popupService = inject(PopupService);
   private readonly commonService = inject(CommonService);
@@ -87,6 +86,6 @@ export class AddRequestService {
 
   private getTimeFilterTicket(addRequestStore: AddRequestStore): number {
     const startTime = addRequestStore.getStartTimeFilterTicket;
-    return dayjs().diff(dayjs(startTime), 'second');
+    return moment(new Date()).diff(moment(startTime), 'seconds');
   }
 }
