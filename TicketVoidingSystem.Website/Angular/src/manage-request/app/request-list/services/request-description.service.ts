@@ -171,10 +171,8 @@ export class RequestDescriptionService {
   }
 
   private isShowLiveScores(requestInfo: RequestInfoForCopy): boolean {
-    const handicapSubIssueTypeId = 6;
-    const _1hHandicapSubIssueTypeId = 119;
     const isWrongOddsShowLiveScores = requestInfo.issueTypeId.toString() === IssueTypeConstant.WRONG_ODDS
-    && (requestInfo.subIssueTypeId === handicapSubIssueTypeId || requestInfo.subIssueTypeId === _1hHandicapSubIssueTypeId);
+    && (requestInfo.subIssueTypeId === SubIssueTypeConstant.HANDICAP || requestInfo.subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_HANDICAP);
     const isHandicapShowLiveScores = [IssueTypeConstant.WRONG_HDP, IssueTypeConstant.WRONG_1ST_HDP].includes(requestInfo.issueTypeId.toString());
     const isWrongOuShowLiveScores = [IssueTypeConstant.WRONG_OU, IssueTypeConstant.WRONG_1ST_OU].includes(requestInfo.issueTypeId.toString());
 
@@ -190,17 +188,21 @@ export class RequestDescriptionService {
   }
 
   private generateOddsContentWrongOdds(requestInfo: RequestInfoForCopy): string {
-    const handicapSubIssueTypeId = 6;
-    const _1hHandicapSubIssueTypeId = 119;
-    if(requestInfo.subIssueTypeId === handicapSubIssueTypeId || requestInfo.subIssueTypeId === _1hHandicapSubIssueTypeId){
-      return `Wrong Odds: Home >= ${requestInfo.toOddsNotVoidHomeOver} & =< ${requestInfo.fromOddsNotVoidHomeOver}, `
-      + `Away >= ${requestInfo.toOddsNotVoidAwayUnder} & =< ${requestInfo.fromOddsNotVoidAwayUnder}\n`
-      + `Correct Odds: Home ${requestInfo.correctOddsHomeOver}, Away ${requestInfo.correctOddsAwayUnder}\n`;
+    if(requestInfo.subIssueTypeId === SubIssueTypeConstant.HANDICAP || requestInfo.subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_HANDICAP){
+      return `Wrong Odds:\n`
+      + `Home: >= ${requestInfo.toOddsNotVoidHomeOver} & =< ${requestInfo.fromOddsNotVoidHomeOver}\n`
+      + `Away: >= ${requestInfo.toOddsNotVoidAwayUnder} & =< ${requestInfo.fromOddsNotVoidAwayUnder}\n`
+      + `Correct Odds:\n`
+      + `Home: ${requestInfo.correctOddsHomeOver}\n`
+      + `Away: ${requestInfo.correctOddsAwayUnder}\n`;
     }
 
-    return `Wrong Odds: Over >= ${requestInfo.toOddsNotVoidHomeOver} & =< ${requestInfo.fromOddsNotVoidHomeOver}, `
-      + `Under >= ${requestInfo.toOddsNotVoidAwayUnder} & =< ${requestInfo.fromOddsNotVoidAwayUnder}\n`
-      + `Correct Odds: Over ${requestInfo.correctOddsHomeOver}, Under ${requestInfo.correctOddsAwayUnder}\n`;
+    return `Wrong Odds:\n`
+      + `Over: >= ${requestInfo.toOddsNotVoidHomeOver} & =< ${requestInfo.fromOddsNotVoidHomeOver}\n`
+      + `Under: >= ${requestInfo.toOddsNotVoidAwayUnder} & =< ${requestInfo.fromOddsNotVoidAwayUnder}\n`
+      + `Correct Odds:\n`
+      + `Over: ${requestInfo.correctOddsHomeOver}\n`
+      + `Under: ${requestInfo.correctOddsAwayUnder}\n`;
   }
 
   private iddShowOnlyIssueTypeName(copyInfoResponse: CopyRequestInfoResponse){
@@ -220,7 +222,7 @@ export class RequestDescriptionService {
       + `Match: ${copyInfoResponse.requestInfo.matchEvent}\n`
       + `Match ID: ${copyInfoResponse.requestInfo.matchId}\n`
       + `Request No: ${copyInfoResponse.requestInfo.requestId}\n`
-      + `Issue Type: ${issueTypeName}\n`
+      + `Issue Type: ${issueTypeName}` + this.generateInputtedOuValue(copyInfoResponse.requestInfo) + '\n'
       + this.generateMistakenBy(copyInfoResponse.requestInfo, isShowMistakenBy)
       + betTypeContent
       + oddsContent
@@ -230,6 +232,14 @@ export class RequestDescriptionService {
       + this.generateLiveScores(copyInfoResponse.requestInfo);
 
     return content;
+  }
+
+  private generateInputtedOuValue(requestInfo: RequestInfoForCopy): string {
+    const subTypeOverUnder = [SubIssueTypeConstant.OVER_UNDER, SubIssueTypeConstant.FIRST_HALF_OVER_UNDER];
+    if(requestInfo.issueTypeId.toString() === IssueTypeConstant.WRONG_ODDS && subTypeOverUnder.includes(requestInfo.subIssueTypeId)){
+      return ` @${requestInfo.wrongOu}`;
+    }
+    return '';
   }
 
   private generateRemark(requestInfo: RequestInfoForCopy): string {

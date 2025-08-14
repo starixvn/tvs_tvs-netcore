@@ -99,4 +99,5 @@ public class RequestInfoForCopy
     public string? CorrectOddsHomeOver { get; set; }
     public string? CorrectOddsAwayUnder { get; set; }
     public int? SubIssueTypeId { get; set; }
+    public string? WrongOu { get; set; }
 }
