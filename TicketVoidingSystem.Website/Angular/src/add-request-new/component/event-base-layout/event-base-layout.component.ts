@@ -20,6 +20,7 @@ import { LogAnalysisService } from '../../services/log-analysis.service';
 import { AddRequestSkeletonComponent } from '../add-request-skeleton/add-request-skeleton.component';
 import { OthersModel } from '../others/others.model';
 import { EventBaseService } from './event-base.service';
+import { PrimitiveProperty } from 'src/add-request-new/events/models/primitive-property.model';
 
 // Type definitions for template contexts
 interface EventContentContext {
@@ -48,6 +49,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   @Input() isExternalUrl = false;
   @Input() issueTypeId: string;
   @Input() model: RequestModel;
+  @Input() primitiveProperty: PrimitiveProperty;
   @Input() eventHeight: string;
   @Input() eventContent: TemplateRef<EventContentContext>;
   @Input() othersContent: TemplateRef<OthersContentContext>;
@@ -126,7 +128,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
     ];
 
     if (this.isEdit) {
-      promises.push(this.editRequestService.getDataEditRequest(this.requestId, this.model));
+      promises.push(this.editRequestService.getDataEditRequest(this.requestId, this.model, this.primitiveProperty));
     }
 
     const [allIssueTypes, originActions] = await Promise.all(promises);

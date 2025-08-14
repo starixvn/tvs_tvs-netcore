@@ -4,6 +4,8 @@ import { RequestModel } from '../../models/request.model';
 import { AddRequestApiService } from '../add-request-api.service';
 import { LogInfoService } from './log-info.service';
 import { ObjectService } from './object.service';
+import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { PrimitiveProperty } from '../../../add-request-new/models/primitive-property.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,14 +28,27 @@ export class EditRequestService {
     return pathname.includes('/edit/');
   }
 
-  async getDataEditRequest(requestId: number, requestModel: RequestModel){
+  async getDataEditRequest(requestId: number, requestModel: RequestModel, primitiveProperty: PrimitiveProperty){
     const detailViewModel = await this.addRequestApiService.getRequestById(requestId);
     if (detailViewModel === null) {
       this.eventBaseService.backToAccessDeniedPage();
     } else {
-      const primitiveProperty = this.objectService.getPrimitiveProperty(detailViewModel, requestId);
+      const newPrimitiveProperty = this.objectService.getPrimitiveProperty(detailViewModel, requestId);
+      Object.assign(primitiveProperty, newPrimitiveProperty);
       await this.logInfoService.getLogInfo(primitiveProperty, detailViewModel);
       this.objectService.mapRequestModel(requestModel, detailViewModel, primitiveProperty);
     }
+  }
+
+  getIssueTypeId(): string | undefined {
+    const url = window.location.href.toLowerCase();
+    
+    for (const [key, value] of IssueTypeConstant.NAVIGATE_ADD_REQUEST.entries()) {
+      if (url.includes(value.toLowerCase())) {
+        return key;
+      }
+    }
+    
+    this.eventBaseService.backToAccessDeniedPage();
   }
 }
