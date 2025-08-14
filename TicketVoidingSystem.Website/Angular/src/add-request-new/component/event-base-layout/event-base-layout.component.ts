@@ -20,7 +20,7 @@ import { LogAnalysisService } from '../../services/log-analysis.service';
 import { AddRequestSkeletonComponent } from '../add-request-skeleton/add-request-skeleton.component';
 import { OthersModel } from '../others/others.model';
 import { EventBaseService } from './event-base.service';
-import { PrimitiveProperty } from 'src/add-request-new/events/models/primitive-property.model';
+import { PrimitiveProperty } from '../../models/primitive-property.model';
 
 // Type definitions for template contexts
 interface EventContentContext {
@@ -29,6 +29,7 @@ interface EventContentContext {
   isEdit: boolean;
   requestId: number;
   filterModel: FilterModel;
+  primitiveProperty: PrimitiveProperty;
 }
 
 interface OthersContentContext {
@@ -49,7 +50,6 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   @Input() isExternalUrl = false;
   @Input() issueTypeId: string;
   @Input() model: RequestModel;
-  @Input() primitiveProperty: PrimitiveProperty;
   @Input() eventHeight: string;
   @Input() eventContent: TemplateRef<EventContentContext>;
   @Input() othersContent: TemplateRef<OthersContentContext>;
@@ -73,6 +73,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   accessIssueTypeCount = new Map<string, number>();
   matchId: number = null;
   parentMatchId: number = null;
+  primitiveProperty: PrimitiveProperty;
 
   private readonly signalRService = inject(SignalRService);
   private readonly editRequestService = inject(EditRequestService);
@@ -90,7 +91,8 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
       otherModel: this.model.others,
       isEdit: this.isEdit,
       requestId: this.requestId,
-      filterModel: this.model.filter
+      filterModel: this.model.filter,
+      primitiveProperty: this.primitiveProperty
     };
   }
 

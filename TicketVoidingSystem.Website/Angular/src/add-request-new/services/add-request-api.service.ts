@@ -14,6 +14,10 @@ import { RequestDetailViewModel } from '../models/request-detail.model';
 import { AddRequestResultModel } from '../models/request.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../models/sub-type-link-match.model';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from '../models/sub-type-note.model';
+import { LinkedLogsViewModel } from '../component/pool-house-ticket/linked-log/linked-log.model';
+import { GetLinkedLogQuery } from '../component/pool-house-ticket/linked-log/linked-log.model';
+import { PoolHouseTicketViewModel } from '../component/pool-house-ticket/pool-house-ticket.model';
+import { GetPoolHouseTicketQuery } from '../component/pool-house-ticket/pool-house-ticket.model';
 
 @Injectable({
   providedIn: 'root'
@@ -83,6 +87,17 @@ export class AddRequestApiService {
     return this.httpService.postJson<CheckTransIdsQuery, CheckTransIdsViewModel>(query, 'api/AddRequest/CheckValidTransIdsRequest');
   }
 
+  
+  /* istanbul ignore next */
+  async getLinkedLogs(query: GetLinkedLogQuery): Promise<LinkedLogsViewModel> {
+    return this.httpService.postJson<GetLinkedLogQuery, LinkedLogsViewModel>(query, 'api/AddRequest/GetLinkedLog');
+  }
+  
+  /* istanbul ignore next */
+  async getPoolHouseTickets(query: GetPoolHouseTicketQuery): Promise<PoolHouseTicketViewModel> {
+    return this.httpService.postJson<GetPoolHouseTicketQuery, PoolHouseTicketViewModel>(query, 'api/AddRequest/GetPoolHouseTickets');
+  }
+
   /* istanbul ignore next */
   // async checkDuplicateTickets(query: CheckDuplicateTicketsQuery): Promise<CheckDuplicateTicketsViewModel> {
   //   return this.httpService.postJson<CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel>(query, 'api/AddRequest/CheckDuplicateTickets');
@@ -91,16 +106,6 @@ export class AddRequestApiService {
   /* istanbul ignore next */
   // async checkValidUsernames(query: CheckValidUsernamesQuery): Promise<CheckUsernamesViewModel> {
   //   return this.httpService.postJson<CheckValidUsernamesQuery, CheckUsernamesViewModel>(query, 'api/AddRequest/CheckValidUsernames');
-  // }
-
-  /* istanbul ignore next */
-  // async getPoolHouseTickets(query: GetPoolHouseTicketQuery): Promise<PoolHouseTicketViewModel> {
-  //   return this.httpService.postJson<GetPoolHouseTicketQuery, PoolHouseTicketViewModel>(query, 'api/AddRequest/GetPoolHouseTickets');
-  // }
-
-  /* istanbul ignore next */
-  // async getLinkedLogs(query: GetLinkedLogQuery): Promise<LinkedLogsViewModel> {
-  //   return this.httpService.postJson<GetLinkedLogQuery, LinkedLogsViewModel>(query, 'api/AddRequest/GetLinkedLog');
   // }
 
 
