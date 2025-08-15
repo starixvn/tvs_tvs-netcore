@@ -1,22 +1,22 @@
-import { Component, ElementRef, EventEmitter, inject, Input, Output, QueryList, ViewChildren } from '@angular/core';
-import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
-import { FilterModel } from '../../filter/filter.model';
-import { IssueTypes } from '../../filter/issue-types.model';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { PrimitiveProperty } from '../event-wrong-score.model';
-import { RelatedEventService } from '../services/related-event.service';
-import { AddRelatedEventArg } from '../models/add-related-event.model';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { ChildMatchModel } from '../../models/related-event.model';
-import { MatchType } from '../../../../../utility/constants/config';
-import { AddChildMatchModel } from '../../../../../utility/components/add-child-match/add-child-match.model';
-import { AddChildMatchComponent } from '../../../../../utility/components/add-child-match/add-child-match.component';
-import { EventWrongScoreService } from '../services/event-wrong-score.service';
 import _ from 'lodash';
-import { OnlyNumberDirective } from '../../../../../utility/directives/number.directive';
+import { AddChildMatchComponent } from '../../../../../../utility/components/add-child-match/add-child-match.component';
+import { AddChildMatchModel } from '../../../../../../utility/components/add-child-match/add-child-match.model';
+import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
+import { MatchType } from '../../../../../../utility/constants/config';
+import { OnlyNumberDirective } from '../../../../../../utility/directives/number.directive';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { IssueTypes } from '../../../../../component/filter/issue-types.model';
+import { LogInfoRelatedEventComponent } from '../../../../../component/log-info-related-event/log-info-related-event.component';
+import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
+import { FilterTimeWithAllowance } from '../../../../../events/red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { ChildMatchModel } from '../../../../../models/related-event.model';
+import { PrimitiveProperty } from '../event-wrong-score.model';
+import { AddRelatedEventArg } from '../models/add-related-event.model';
+import { EventWrongScoreService } from '../services/event-wrong-score.service';
+import { RelatedEventService } from '../services/related-event.service';
 
 @Component({
   standalone: true,

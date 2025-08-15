@@ -5,8 +5,8 @@ import { TvDetectionService } from '../../../../../../manage-request/app/request
 import { DateFullTimeNewComponent } from '../../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { TooltipComponent } from '../../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
-import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { AddRequestStore } from '../../../../services/add-request.store';
+import { FilterTimeWithAllowance } from '../../../../../events/red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { AddRequestStore } from '../../../../../services/add-request.store';
 import { AllowanceTimeComponent } from '../allowance-time/allowance-time.component';
 import { ValidationService } from '../services/validation.service';
 import { WrongScoreService } from '../services/wrong-score.service';

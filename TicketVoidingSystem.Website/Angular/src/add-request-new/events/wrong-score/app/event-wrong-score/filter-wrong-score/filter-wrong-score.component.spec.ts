@@ -5,8 +5,8 @@ import { DateFullTimeNewComponent } from '../../../../../../utility/components/d
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { FilterTimeWithAllowance } from '../../../../red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { AddRequestStore } from '../../../../services/add-request.store';
+import { FilterTimeWithAllowance } from '../../../../../events/red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { AddRequestStore } from '../../../../../services/add-request.store';
 import { AllowanceTimeComponent } from '../allowance-time/allowance-time.component';
 import { ValidationService } from '../services/validation.service';
 import { WrongScoreService } from '../services/wrong-score.service';
