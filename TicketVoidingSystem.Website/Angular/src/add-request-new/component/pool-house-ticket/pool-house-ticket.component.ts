@@ -3,11 +3,11 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
-import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
-import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
-import { MultipleSelectionComponent } from '../../../../utility/components/multiple-selection/multiple-selection.component';
-import { StaticService } from '../../../../utility/services/static.service';
+import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
+import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
+import { StaticService } from '../../../utility/services/static.service';
 import { GroupBettypesPoolHouseComponent } from './group-bettypes-pool-house/group-bettypes-pool-house.component';
 import { GroupBetType, GroupBetTypesModel } from './group-bettypes-pool-house/group-bettypes-pool-house.model';
 import { LinkedLogComponent } from './linked-log/linked-log.component';
