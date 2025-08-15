@@ -7,6 +7,7 @@ import { GroupBetTypesAddRequestModel } from '../../../../../utility/components/
 import { GetBetTypesQuery, TimeRangeModel } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { DateTimeFormat, ModeType } from '../../../../../utility/constants/config';
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { ConfirmAddRequestComponent } from '../../../../component/confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../../../../component/confirm-add-request/confirm-add-request.model';
@@ -46,7 +47,7 @@ export class EventTechnicalErrorComponent implements OnInit {
   @Input() technicalErrorModel: TechnicalErrorModel;
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
-  @Output() updateMatchId = new EventEmitter<number>();
+  @Output() updateMatchId = new EventEmitter<MatchModel>();
   @ViewChild('eventLeague') eventLeague: EventLeagueComponent;
   @ViewChild('advancedMode') advancedMode: AdvancedModeAddRequestComponent;
   @ViewChild('filterTime') filterTimeComponent: FilterTimeTechnicalErrorComponent;
@@ -174,7 +175,7 @@ export class EventTechnicalErrorComponent implements OnInit {
   async changeMatchEvent(): Promise<void> {
     this.primitivePropertyEvent.isShowValidation = false;
     this.primitivePropertyEvent.infoSiteDBDownModel = null;
-    this.updateMatchId.emit(this.logInfoEvent.matchId);
+    this.updateMatchId.emit(this.eventLeague?.selectedMatch);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     if (this.eventLeague?.selectedMatch.matchId) {
       this.logInfoEvent.matchId = this.eventLeague.selectedMatch.matchId;

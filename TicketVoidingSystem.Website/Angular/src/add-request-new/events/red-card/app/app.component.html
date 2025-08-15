@@ -7,24 +7,28 @@
   [othersContent]="othersContent">
 </event-base-layout>
 
-<ng-template #eventContent let-eventModel="eventModel" let-isEdit="isEdit" let-requestId="requestId"
+<ng-template #eventContent let-eventModel="eventModel" let-primitiveProperty="primitiveProperty"
   let-filterModel="filterModel" let-otherModel="otherModel">
   <event-red-card
     #eventRedCard
-    [isEdit]="isEdit"
-    [requestId]="requestId"
+    [isEdit]="primitiveProperty.isEdit"
+    [requestId]="primitiveProperty.requestId"
     [filter]="filterModel"
     [redCardModels]="eventModel"
     [others]="otherModel"
+    [issueTypes]="primitiveProperty.issueTypes"
+    [userId]="primitiveProperty.userId"
+    [requestedBy]="primitiveProperty.requestedBy"
+    [actionIdOfFirstTimeAccess]="primitiveProperty.actionIdOfFirstTimeAccess"
     (updateMatchId)="eventBaseLayout.updateMatchInfo($event)">
   </event-red-card>
 </ng-template>
 
-<ng-template #othersContent let-otherModel="otherModel" let-isEdit="isEdit" let-matchId="matchId" let-parentMatchId="parentMatchId">
-  <others [isEdit]="isEdit"
-    [(model)]="model.others"
-    [matchId]="matchId"
-    [parentMatchId]="parentMatchId"
-    [issueTypeId]="model.filter.issueTypeId">
+<ng-template #othersContent let-otherModel="otherModel" let-primitiveProperty="primitiveProperty">
+  <others [isEdit]="primitiveProperty.isEdit"
+    [model]="otherModel"
+    [matchId]="primitiveProperty.matchId"
+    [parentMatchId]="primitiveProperty.parentMatchId"
+    [issueTypeId]="issueTypeId">
   </others>
 </ng-template>

@@ -7,12 +7,11 @@
   [othersContent]="othersContent">
 </event-base-layout>
 
-<ng-template #eventContent let-eventModel="eventModel" let-isEdit="isEdit" let-requestId="requestId"
-  let-filterModel="filterModel" let-otherModel="otherModel">
+<ng-template #eventContent let-eventModel="eventModel" let-primitiveProperty="primitiveProperty" let-filterModel="filterModel" let-otherModel="otherModel">
   <event-ticket14
     #eventTicket14
-    [isEdit]="isEdit"
-    [requestId]="requestId"
+    [isEdit]="primitiveProperty.isEdit"
+    [requestId]="primitiveProperty.requestId"
     [filter]="filterModel"
     [eventTicket14Model]="eventModel"
     [others]="otherModel"
