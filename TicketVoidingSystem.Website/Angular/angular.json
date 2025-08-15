@@ -20,7 +20,7 @@
             "aot": true,
             "outputPath": "dist",
             "index": "src/add-request-new/shared/index.html",
-            "main": "src/add-request-new/events/danger-accepted/main.ts",
+            "main": "src/add-request-new/events/red-card/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],

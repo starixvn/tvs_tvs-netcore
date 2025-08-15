@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { CheckIssueTypeObjectType } from 'src/utility/models/check-issue-type.model';
 import { LogInfoArg } from '../../../add-request-new/models/edit/log-info.model';
+import { CheckIssueTypeObjectType } from '../../../utility/models/check-issue-type.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { MappingModelStaticService } from '../../../utility/services/mapping-model-static.service';
 import { StaticService } from '../../../utility/services/static.service';

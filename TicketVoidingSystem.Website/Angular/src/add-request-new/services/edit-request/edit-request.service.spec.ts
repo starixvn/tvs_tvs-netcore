@@ -242,7 +242,8 @@ describe('EditRequestService', () => {
           transIds: '123,456'
         }
       } as RequestDetailViewModel;
-      mockPrimitiveProperty = {
+
+      const mockPrimitiveProperty = {
         matchId: 1,
         userId: 1,
         requestedBy: 'testuser',
@@ -261,7 +262,7 @@ describe('EditRequestService', () => {
       (logInfoService.getLogInfo as jest.Mock).mockResolvedValue(undefined);
 
       // Act
-      await service.getDataEditRequest(requestId, mockRequestModel);
+      await service.getDataEditRequest(requestId, mockRequestModel, new PrimitiveProperty());
 
       // Assert
       expect(addRequestApiService.getRequestById).toHaveBeenCalledWith(requestId);
@@ -277,7 +278,7 @@ describe('EditRequestService', () => {
       (addRequestApiService.getRequestById as jest.Mock).mockResolvedValue(null);
 
       // Act
-      await service.getDataEditRequest(requestId, mockRequestModel);
+      await service.getDataEditRequest(requestId, mockRequestModel, new PrimitiveProperty());
 
       // Assert
       expect(addRequestApiService.getRequestById).toHaveBeenCalledWith(requestId);
@@ -294,7 +295,7 @@ describe('EditRequestService', () => {
       (logInfoService.getLogInfo as jest.Mock).mockResolvedValue(undefined);
 
       // Act
-      await service.getDataEditRequest(requestId, mockRequestModel);
+      await service.getDataEditRequest(requestId, mockRequestModel, new PrimitiveProperty());
 
       // Assert
       expect(addRequestApiService.getRequestById).toHaveBeenCalledWith(requestId);
@@ -310,7 +311,7 @@ describe('EditRequestService', () => {
       (logInfoService.getLogInfo as jest.Mock).mockResolvedValue(undefined);
 
       // Act
-      await service.getDataEditRequest(requestId, mockRequestModel);
+      await service.getDataEditRequest(requestId, mockRequestModel, new PrimitiveProperty());
 
       // Assert
       expect(addRequestApiService.getRequestById).toHaveBeenCalledWith(requestId);
@@ -325,7 +326,7 @@ describe('EditRequestService', () => {
       (logInfoService.getLogInfo as jest.Mock).mockResolvedValue(undefined);
 
       // Act
-      await service.getDataEditRequest(requestId, differentRequestModel);
+      await service.getDataEditRequest(requestId, differentRequestModel, new PrimitiveProperty());
 
       // Assert
       expect(objectService.mapRequestModel).toHaveBeenCalledWith(differentRequestModel, mockDetailViewModel, mockPrimitiveProperty);

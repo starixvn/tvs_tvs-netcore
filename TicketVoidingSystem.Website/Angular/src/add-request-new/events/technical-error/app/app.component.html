@@ -7,7 +7,7 @@
   [othersContent]="othersContent">
 </event-base-layout>
 
-<ng-template #eventContent let-eventModel="eventModel" let-primitiveProperty="primitiveProperty"
+<ng-template #eventContent let-eventModel="eventModel" let-issueTypes="issueTypes" let-primitiveProperty="primitiveProperty"
   let-filterModel="filterModel" let-otherModel="otherModel">
   <event-technical-error
     #eventTechnicalError
@@ -16,7 +16,7 @@
     [filter]="filterModel"
     [technicalErrorModel]="eventModel"
     [others]="otherModel"
-    [issueTypes]="primitiveProperty.issueTypes"
+    [issueTypes]="issueTypes"
     [userId]="primitiveProperty.userId"
     [requestedBy]="primitiveProperty.requestedBy"
     [actionIdOfFirstTimeAccess]="primitiveProperty.actionIdOfFirstTimeAccess"

@@ -167,6 +167,45 @@ const addRequestArchivedTicket = {
   indexEJSPath: './src/add-request-new/events/archived-ticket/index.ejs'
 };
 
+const redCard = {
+  pageName: 'RedCard',
+  tsconfigFiles: [
+    'add-request-new/events/red-card/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/red-card/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/red-card/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/red-card'
+};
+
+const wrongScore = {
+  pageName: 'WrongScore',
+  tsconfigFiles: [
+    'add-request-new/events/wrong-score/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/wrong-score/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/wrong-score/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/wrong-score'
+};
+
+const technicalError = {
+  pageName: 'TechnicalError',
+  tsconfigFiles: [
+    'add-request-new/events/technical-error/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/technical-error/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/technical-error/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/technical-error'
+};
+
 const dangerAccepted = {
   pageName: 'DangerAccepted',
   tsconfigFiles: [
@@ -193,7 +232,10 @@ const configPages = [
   // editRequest,
   //voidByBetId
   //addRequestArchivedTicket
-  dangerAccepted
+  //dangerAccepted,
+  //redCard,
+  wrongScore,
+  technicalError
 ];
 
 module.exports = configPages;

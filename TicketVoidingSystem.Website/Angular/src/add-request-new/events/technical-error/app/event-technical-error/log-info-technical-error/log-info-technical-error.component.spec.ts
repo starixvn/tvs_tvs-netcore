@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AffectedTicketService } from 'src/add-request/app/add-request/affected-ticket/affected-ticket.service';
-import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
-import { TestingModule } from 'src/utility/modules/testing.module';
-import { StaticService } from 'src/utility/services/static.service';
+import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { StaticService } from '../../../../../../utility/services/static.service';
+import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
 import { LogInfoTechnicalError } from '../models/log-info-technical-error.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { LogInfoTechnicalErrorComponent } from './log-info-technical-error.component';

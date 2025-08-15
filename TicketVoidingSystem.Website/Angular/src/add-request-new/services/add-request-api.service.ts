@@ -1,8 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { CheckTransIdsQuery, CheckTransIdsViewModel } from 'src/add-request/app/add-request/event-abnormal-bet/event-abnormal-bet.model';
-import { TicketsModel } from 'src/mark-tickets/app/tickets-list/tickets.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
+import { GetLinkedLogQuery, LinkedLogsViewModel } from '../component/pool-house-ticket/linked-log/linked-log.model';
+import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel } from '../component/pool-house-ticket/pool-house-ticket.model';
+import { TicketsModel } from '../component/pool-house-ticket/tickets/tickets.model';
 import { AddRequestQuery } from '../models/add-request.query';
 import { WrongScoreModel } from '../models/event-wrong-score.model';
 import { GetChildMatchQuery } from '../models/get-child-match.query';
@@ -14,10 +16,6 @@ import { RequestDetailViewModel } from '../models/request-detail.model';
 import { AddRequestResultModel } from '../models/request.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../models/sub-type-link-match.model';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from '../models/sub-type-note.model';
-import { LinkedLogsViewModel } from '../component/pool-house-ticket/linked-log/linked-log.model';
-import { GetLinkedLogQuery } from '../component/pool-house-ticket/linked-log/linked-log.model';
-import { PoolHouseTicketViewModel } from '../component/pool-house-ticket/pool-house-ticket.model';
-import { GetPoolHouseTicketQuery } from '../component/pool-house-ticket/pool-house-ticket.model';
 
 @Injectable({
   providedIn: 'root'
