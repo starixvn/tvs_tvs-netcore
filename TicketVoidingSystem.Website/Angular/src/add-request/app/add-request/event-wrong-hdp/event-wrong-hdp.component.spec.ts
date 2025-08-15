@@ -20,6 +20,8 @@ import { ChildMatchModel } from '../models/related-event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { LinkedLogsViewModel } from '../pool-house-ticket/linked-log/linked-log.model';
 import { FilterWithHdpModel } from './models/filter-with-hdp.model';
+import { InfoSiteDBDownModel } from '../components/info-site-db-down/info-site-db-down.model';
+import { PrimitiveProperty } from './models/primitive-property.model';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -116,8 +118,10 @@ describe('EventWrongHdpComponent', () => {
         isShowRelatedEvents: false,
         isBlock: false,
         inputRelatedMatchId: '',
-        transInfoAddRequestModel: null
-    };
+        transInfoAddRequestModel: null,
+        infoSiteDBDownModel: new InfoSiteDBDownModel(),
+        isShowInfoSiteDBDown: false
+    } as PrimitiveProperty;
     eventWrongHdpService.assignModelsToEvents = jest.fn();
     relatedEventService.getChildMatches = jest.fn().mockResolvedValue([
         {

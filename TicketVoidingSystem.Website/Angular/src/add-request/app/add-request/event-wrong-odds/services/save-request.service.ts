@@ -9,7 +9,7 @@ import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventWrongOddsService } from './event-wrong-odds.service';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
-import { StaticService } from 'src/utility/services/static.service';
+import { StaticService } from '../../../../../utility/services/static.service';
 
 @Injectable()
 export class SaveRequestService {

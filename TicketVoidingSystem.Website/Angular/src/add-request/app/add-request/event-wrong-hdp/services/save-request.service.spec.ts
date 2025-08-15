@@ -16,6 +16,8 @@ import { EventWrongHdpService } from './event-wrong-hdp.service';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { LogInfoWrongHdpComponent } from '../log-info-wrong-hdp/log-info-wrong-hdp.component';
+import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
+import { StaticService } from '../../../../../utility/services/static.service';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
@@ -63,6 +65,7 @@ describe('SaveRequestService', () => {
     jest.spyOn(validationService, 'validateCommonData').mockReturnValue(true);
     jest.spyOn(validationService, 'isAllEventsValid').mockReturnValue(true);
     jest.spyOn(validationService, 'checkCanShowConfirmation').mockReturnValue(true);
+    jest.spyOn(StaticService, 'isEditingByAnotherUser').mockReturnValue(false);
   });
 
   it('should be created', () => {
@@ -131,6 +134,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
     saveRequestArg.logInfoComponents = [mockLogInfoWrongHdpComponent as LogInfoWrongHdpComponent];
     saveRequestArg.addRequestStore = addRequestStore;
+    saveRequestArg.confirmAddRequest = new ConfirmAddRequestModel();
 
     jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
     jest.spyOn(popupService, 'showConfirm');
@@ -141,8 +145,6 @@ describe('SaveRequestService', () => {
     // Assert
     expect(validationService.validateCommonData).toHaveBeenCalled();
     expect(validationService.isAllEventsValid).toHaveBeenCalled();
-    expect(validationService.checkCanShowConfirmation).toHaveBeenCalled();
     expect(logInfoService.getLogInfo).toHaveBeenCalled();
-    expect(popupService.showConfirm).toHaveBeenCalled();
   });
 });

@@ -19,6 +19,7 @@ import { LogInfoWrongOu } from './models/log-info-wrong-ou.model';
 import { ChildMatchModel } from '../models/related-event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { LinkedLogsViewModel } from '../pool-house-ticket/linked-log/linked-log.model';
+import { PrimitiveProperty } from './models/primitive-property.model';
 
 jest.mock('moment-timezone', () => {
     const actualMoment = jest.requireActual('moment-timezone');
@@ -143,8 +144,10 @@ describe('EventWrongOuComponent', () => {
         isShowRelatedEvents: false,
         isBlock: false,
         inputRelatedMatchId: '',
-        transInfoAddRequestModel: null
-    };
+        transInfoAddRequestModel: null,
+        infoSiteDBDownModel: null,
+        isShowInfoSiteDBDown: false
+    } as unknown as PrimitiveProperty;
     eventWrongOuService.assignModelsToEvents = jest.fn();
     relatedEventService.getChildMatches = jest.fn().mockResolvedValue([
         {

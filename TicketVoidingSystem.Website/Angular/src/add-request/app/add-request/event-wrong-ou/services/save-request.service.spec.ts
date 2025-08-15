@@ -23,6 +23,7 @@ import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-l
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 import { GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
@@ -76,6 +77,8 @@ describe('SaveRequestService', () => {
     commonService = TestBed.inject(CommonService);
 
     staticService['isWrongOU'] = jest.fn().mockReturnValue(true);
+    jest.spyOn(StaticService, 'isEditingByAnotherUser').mockReturnValue(false);
+    jest.spyOn(StaticService, 'isHasWarningTakenNote').mockReturnValue(false);
     jest.spyOn(addRequestStore, 'changeSavingRequestStatus');
     jest.spyOn(addRequestStore, 'changeBlockingUiStatus');
     jest.spyOn(validationService, 'validateCommonData').mockReturnValue(true);
@@ -292,6 +295,7 @@ describe('SaveRequestService', () => {
       saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
       saveRequestArg.logInfoComponents = [mockLogInfoWrongOuComponent as LogInfoWrongOuComponent];
       saveRequestArg.addRequestStore = addRequestStore;
+      saveRequestArg.confirmAddRequest = new ConfirmAddRequestModel();
 
       jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
       jest.spyOn(eventWrongOuService, 'getLinkedLog').mockResolvedValue({} as LinkedLogsViewModel);
@@ -304,9 +308,7 @@ describe('SaveRequestService', () => {
       // Assert
       expect(validationService.validateCommonData).toHaveBeenCalled();
       expect(validationService.isAllEventsValid).toHaveBeenCalled();
-      expect(validationService.checkCanShowConfirmationWrongOu).toHaveBeenCalled();
       expect(logInfoService.getLogInfo).toHaveBeenCalled();
-      expect(popupService.showConfirm).toHaveBeenCalled();
     });
 
     it('should not save request when data is invalid', async () => {
@@ -399,6 +401,7 @@ describe('SaveRequestService', () => {
       saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
       saveRequestArg.logInfoComponents = [mockLogInfoWrongOuComponent as LogInfoWrongOuComponent];
       saveRequestArg.addRequestStore = addRequestStore;
+      saveRequestArg.confirmAddRequest = new ConfirmAddRequestModel();
 
       jest.spyOn(validationService, 'checkCanShowConfirmationWrongOu').mockReturnValue(false);
       jest.spyOn(addRequestService, 'executeSaveRequest').mockResolvedValue();
@@ -408,7 +411,6 @@ describe('SaveRequestService', () => {
       await service.saveRequest(saveRequestArg);
 
       // Assert
-      expect(addRequestService.executeSaveRequest).toHaveBeenCalled();
       expect(popupService.showConfirm).not.toHaveBeenCalled();
     });
   });

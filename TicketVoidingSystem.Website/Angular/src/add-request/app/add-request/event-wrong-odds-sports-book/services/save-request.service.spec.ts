@@ -181,7 +181,8 @@ describe('SaveRequestService', () => {
           logInfoDetail: { settleCount: 1 },
           messageValidationLogInfo: ['warning1']
         },
-        confirmAddRequest: {}
+        confirmAddRequest: {},
+        primitiveProps: {}
       } as unknown as SaveRequestArg;
 
       jest.spyOn(StaticService, 'isEditingByAnotherUser').mockReturnValue(true);
@@ -281,7 +282,10 @@ describe('SaveRequestService', () => {
           decidedBy: 'user2',
           remark: 'remark'
         },
-        logInfoEvent: {}
+        logInfoEvent: {},
+        confirmAddRequest: {
+          isOpen: false
+        }
       } as unknown as SaveRequestArg;
 
       jest.spyOn(eventWrongOddsSportsBookService, 'getWrongOddsSportsBookModel').mockReturnValue({} as unknown as WrongOddsSportsBookModel);
