@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Criteria.OnlineServer;
+using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.Services.OnlineServerRepository;
 
@@ -50,6 +51,11 @@ public interface OnlineServerRepository
     /// Return Online Server IDs as a comma-separated string
     /// </summary>
     Task<string> GetOnlineServerIds();
+
+    /// <summary>
+    /// Return list of online server IDs as models
+    /// </summary>
+    Task<IEnumerable<SiteDbGroupModel>> GetOnlineServerIdsModel();
 }
 
 public class OnlineServerRepositoryImp(IDynamicRepository repository,
@@ -129,5 +135,10 @@ public class OnlineServerRepositoryImp(IDynamicRepository repository,
     public async Task<string> GetOnlineServerIds()
     {
         return await onlineServerBaseService.GetOnlineServerIds();
+    }
+
+    public async Task<IEnumerable<SiteDbGroupModel>> GetOnlineServerIdsModel()
+    {
+        return await onlineServerBaseService.GetOnlineServerIdsModel();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
@@ -10,7 +10,7 @@ public interface GetTicketsService
     Task<IEnumerable<GetTicketModel>> GetTickets(GetTicketsQuery query);
 }
 
-public class GetTicketsServiceImp(IMapper mapper, IDynamicRepository repository)
+public class GetTicketsServiceImp(IMapper mapper, OnlineServerRepository onlineServerRepository)
     : GetTicketsService
 {
     public async Task<IEnumerable<GetTicketModel>> GetTickets(GetTicketsQuery query)
@@ -37,29 +37,23 @@ public class GetTicketsServiceImp(IMapper mapper, IDynamicRepository repository)
 
     private async Task<IEnumerable<GetTicketModel>> GetBetTransTicket(GetTicketsQuery query)
     {
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
         var criteria = mapper.Map<GetTicketsCriteria>(query);
         criteria.MatchId = query.Match?.MatchId ?? 0;
+        criteria.OnlineServerIds = currentOnlineServerId;
 
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
-        {
-            criteria.SiteDbGroupId = server.Id;
-            return repository.FetchAsync<GetTicketModel>(criteria);
-        });
+        var tickets = await onlineServerRepository.FetchAsync<GetTicketModel>(criteria);
 
-        var tickets = await Task.WhenAll(tasks);
-        return tickets.SelectMany(x => x).OrderBy(x => x.IsMixParlay);
+        return tickets.OrderBy(x => x.IsMixParlay);
     }
 
     private async Task<IEnumerable<GetTicketModel>> GetBetTrans14Ticket(GetTicketsQuery query)
     {
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
         var criteria = mapper.Map<GetBetTrans14TicketsCriteria>(query);
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
-        {
-            criteria.SiteDbGroupId = server.Id;
-            return repository.FetchAsync<GetTicketModel>(criteria);
-        });
+        criteria.OnlineServerIds = currentOnlineServerId;
+        var tickets = await onlineServerRepository.FetchAsync<GetTicketModel>(criteria);
 
-        var tickets = await Task.WhenAll(tasks);
-        return tickets.SelectMany(x => x).OrderBy(x => x.IsMixParlay);
+        return tickets.OrderBy(x => x.IsMixParlay);
     }
 }
