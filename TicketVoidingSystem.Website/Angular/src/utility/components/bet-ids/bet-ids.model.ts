@@ -1,13 +1,13 @@
-import { StaticService } from "../../services/static.service";
+import { StaticService } from "../../services/static.service"; 
 
 export class CSSCLASS {
-    static readonly ITEM_NUMBER_VALID = 'item-number-valid';
+    static readonly ITEM_NUMBER_SELECTED = 'item-number-selected';
     public static get VALID(): string { return 'item-number-valid'; }
     public static get INVALID(): string { return 'item-number-invalid'; }
     public static get MOVED(): string { return 'item-number-move-bet'; }
-    public static get SELECTED(): string { return CSSCLASS.ITEM_NUMBER_VALID; }
-    public static get DIFFERENT(): string { return CSSCLASS.ITEM_NUMBER_VALID; }
-    public static get SITE_DB_DOWN(): string { return CSSCLASS.ITEM_NUMBER_VALID; }
+    public static get SELECTED(): string { return CSSCLASS.ITEM_NUMBER_SELECTED; }
+    public static get DIFFERENT(): string { return CSSCLASS.ITEM_NUMBER_SELECTED; }
+    public static get SITE_DB_DOWN(): string { return CSSCLASS.ITEM_NUMBER_SELECTED; }
 }
 
 export class GroupNumber {
