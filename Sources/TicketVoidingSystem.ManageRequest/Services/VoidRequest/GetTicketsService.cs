@@ -40,7 +40,7 @@ public class GetTicketsServiceImp(IMapper mapper, OnlineServerRepository onlineS
         var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
         var criteria = mapper.Map<GetTicketsCriteria>(query);
         criteria.MatchId = query.Match?.MatchId ?? 0;
-        criteria.OnlineServerIds = currentOnlineServerId;
+        criteria.OnlineServerId = currentOnlineServerId;
 
         var tickets = await onlineServerRepository.FetchAsync<GetTicketModel>(criteria);
 
@@ -51,7 +51,7 @@ public class GetTicketsServiceImp(IMapper mapper, OnlineServerRepository onlineS
     {
         var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
         var criteria = mapper.Map<GetBetTrans14TicketsCriteria>(query);
-        criteria.OnlineServerIds = currentOnlineServerId;
+        criteria.OnlineServerId = currentOnlineServerId;
         var tickets = await onlineServerRepository.FetchAsync<GetTicketModel>(criteria);
 
         return tickets.OrderBy(x => x.IsMixParlay);

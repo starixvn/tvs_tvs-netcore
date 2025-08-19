@@ -13,7 +13,7 @@ public class GetTicketsCriteria : OnlineServerCriteriaBase
 
     public int? RequestDetailId { get; set; }
 
-    public string OnlineServerIds { get; set; }
+    public string OnlineServerId { get; set; }
 
     public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_Void_Select");
 
