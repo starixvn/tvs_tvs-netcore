@@ -38,6 +38,7 @@
     "dayjs": "^1.11.13",
     "file-saver": "^2.0.0",
     "file-saver-es": "^2.0.5",
+    "glob": "^11.0.3",
     "guid-typescript": "^1.0.9",
     "js-big-decimal": "^2.2.0",
     "lodash": "^4.17.21",

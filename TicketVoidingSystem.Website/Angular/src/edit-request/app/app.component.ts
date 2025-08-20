@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { PrimitiveProperty } from '../../add-request-new/models/primitive-property.model';
 import { LogInfoService } from '../../add-request-new/services/edit-request/log-info.service';
 import { ObjectService } from '../../add-request-new/services/edit-request/object.service';
 import { AddRequestComponent } from '../../add-request/app/add-request/add-request.component';
@@ -7,7 +8,6 @@ import { BlockFullUiComponent } from '../../utility/components/block-full-ui/blo
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppService } from './app.service';
-import { PrimitiveProperty } from './models/primitive-property.model';
 import { RequestDetailViewModel } from './request.model';
 
 @Component({
