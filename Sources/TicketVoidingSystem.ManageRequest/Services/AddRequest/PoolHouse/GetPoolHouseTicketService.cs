@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Fanex.Data.Repository;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.PoolHouse;
@@ -12,7 +11,7 @@ public interface GetPoolHouseTicketService
     Task<GetPoolHouseTicketViewModel> Get(GetPoolHouseTicketQuery query);
 }
 
-public class GetPoolHouseTicketServiceImp(IMapper mapper, IDynamicRepository repository, GeneratePoolHouseTicketService ticketGenerator)
+public class GetPoolHouseTicketServiceImp(IMapper mapper, OnlineServerRepository onlineServerRepository, GeneratePoolHouseTicketService ticketGenerator)
     : GetPoolHouseTicketService
 {
     private const string OthersGroupName = "Others";
@@ -34,16 +33,12 @@ public class GetPoolHouseTicketServiceImp(IMapper mapper, IDynamicRepository rep
     private async Task<(IEnumerable<BetTypeModel>, IEnumerable<GetTicketModel>)> GetPoolHouseTicketAllServer(GetPoolHouseTicketQuery query)
     {
         var criteria = CreateGetPoolHouseTicketCriteria(query);
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
-        {
-            criteria.SiteDbGroupId = server.Id;
-            return repository.FetchMultipleAsync<BetTypeModel, GetTicketModel>(criteria);
-        });
-        var results = await Task.WhenAll(tasks);
+
+        var results = await onlineServerRepository.FetchMultipleAsync<BetTypeModel, GetTicketModel>(criteria);
 
         return (
-            results.SelectMany(x => x.Item1).DistinctBy(x => x.Id),
-            results.SelectMany(x => x.Item2).DistinctBy(x => x.TransId)
+            results.Item1.DistinctBy(x => x.Id),
+            results.Item2.DistinctBy(x => x.TransId)
         );
     }
 
