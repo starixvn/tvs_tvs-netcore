@@ -43,14 +43,14 @@ class Helper {
     isHasInstantlySettledTicket: false
   } as LogInfoWrongOfferedName;
 
-  static readonly fakePrimitiveProps: PrimitiveProperty = {
+  static readonly fakePrimitiveProps = {
     isShowRelatedEvents: false,
     isBlock: false,
     inputRelatedMatchId: '',
     transInfoAddRequestModel: null,
     isShowLogInfo: false,
     transInfoAddRequest: null
-  } as PrimitiveProperty;
+  } as unknown as PrimitiveProperty;
 }
 
 describe('LogInfoWrongOfferedNameComponent', () => {

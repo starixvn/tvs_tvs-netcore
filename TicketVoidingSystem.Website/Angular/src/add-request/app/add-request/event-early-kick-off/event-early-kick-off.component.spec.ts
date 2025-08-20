@@ -136,7 +136,8 @@ describe('EventEarlyKickOffComponent', () => {
     component.primitiveProps = {
       isShowLogInfoEvents: false,
       inputRelatedMatchId: '',
-      transInfoAddRequestModel: null
+      transInfoAddRequestModel: null,
+      infoSiteDBDownModel: null
     };
     eventEarlyKickOffService.assignModelsToEvents = jest.fn();
     relatedEventService.getChildMatches = jest.fn().mockResolvedValue([

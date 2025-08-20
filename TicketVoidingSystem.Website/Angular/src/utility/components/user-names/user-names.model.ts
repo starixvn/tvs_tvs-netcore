@@ -1,4 +1,4 @@
-import { LABELS } from "src/utility/constants/labels";
+import { LABELS } from "../../constants/labels";
 
 export class CSSCLASS {
     public static get VALID(): string { return 'item-username-valid'; }

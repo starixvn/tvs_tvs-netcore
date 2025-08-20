@@ -83,6 +83,7 @@ describe('AccountTableComponent', () => {
     addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
     addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
     component = fixture.componentInstance;
+    component.primitiveProps = Helper.fakePrimitiveProperty;
   });
 
   it('should create', () => {
@@ -156,6 +157,7 @@ describe('AccountTableComponent', () => {
     const account = { ...Helper.fakeAccountWinlostModel };
     account.oldAdjustVoidLimit = 1000;
     account.adjustVoidLimit = 1000;
+    component.primitiveProps = Helper.fakePrimitiveProperty;
 
     // Act
     await component.reCalculate(account, 0);

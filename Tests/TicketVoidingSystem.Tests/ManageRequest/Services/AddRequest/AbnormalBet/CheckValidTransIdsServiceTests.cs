@@ -7,7 +7,6 @@ using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.OnlineServerRepository;
@@ -19,7 +18,6 @@ public class CheckValidTransIdsServiceTests
 {
     private readonly MapAbnormalBetTicketsExcelService mapTicketsExcelService;
     private readonly MatchInfoAddRequestService matchInfoAddRequestService;
-    private readonly GetInfoSiteDbDownService getInfoSiteDbDownService;
     private readonly OnlineServerRepository onlineServerRepository;
     private readonly CheckValidTransIdsServiceImp service;
 
@@ -28,7 +26,6 @@ public class CheckValidTransIdsServiceTests
         onlineServerRepository = Substitute.For<OnlineServerRepository>();
         matchInfoAddRequestService = Substitute.For<MatchInfoAddRequestService>();
         mapTicketsExcelService = Substitute.For<MapAbnormalBetTicketsExcelService>();
-        getInfoSiteDbDownService = Substitute.For<GetInfoSiteDbDownService>();
 
         service = new CheckValidTransIdsServiceImp(onlineServerRepository, matchInfoAddRequestService,
             mapTicketsExcelService);
@@ -303,7 +300,6 @@ public class CheckValidTransIdsServiceTests
 
         matchInfoAddRequestService.UpdateDataFromRemotingRef(Arg.Any<IEnumerable<MatchInfoAddRequest>>()).Returns(matchInfoAddRequests);
         mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(Arg.Any<IEnumerable<GetAbnormalBetTicketModel>>()).Returns(new List<AbnormalBetTicketViewModel>());
-        getInfoSiteDbDownService.GetInfoSiteDBDown(Arg.Any<IEnumerable<TransInfoAddRequestModel>>()).Returns(new InfoSiteDBDownModel());
 
         // Act
         var result = await service.CheckValidTransIds(request);

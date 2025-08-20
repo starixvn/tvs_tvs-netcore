@@ -244,7 +244,7 @@ describe('ValidationService', () => {
         } as unknown as PrimitiveProperty
       } as unknown as ValidationBusinessRuleArgs;
 
-      const mockResponse: CheckUsernamesViewModel = {
+      const mockResponse = {
         validation: {
           isTicketLimitExceeded: true,
           invalidUserName: null,
@@ -257,8 +257,9 @@ describe('ValidationService', () => {
           transInfo: null
         } as unknown as ValidationAbnormalAccount,
         accountWinlostModels: [],
-        transInfoAddRequestModel: null
-      };
+        transInfoAddRequestModel: null,
+        infoSiteDBDownModel: null
+      } as unknown as CheckUsernamesViewModel;
 
       addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
       productFilterComponent.isValidComponent.mockReturnValue(true);
