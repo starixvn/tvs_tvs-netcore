@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { AffectedTicketService } from './affected-ticket.service';
-import { TestingModule } from '../../../../utility/modules/testing.module';
-import { AddRequestApiService } from '../add-request-api.service';
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../../services/add-request-api.service';
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
 
 describe('AffectedTicketService', () => {

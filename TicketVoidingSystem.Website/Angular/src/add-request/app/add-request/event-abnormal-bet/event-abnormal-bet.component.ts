@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';

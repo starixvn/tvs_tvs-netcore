@@ -19,22 +19,8 @@ import { CopyRequestInfoService } from '../../services/copy-request-info.service
 import { EditRequestService } from '../../services/edit-request/edit-request.service';
 import { LogAnalysisService } from '../../services/log-analysis.service';
 import { AddRequestSkeletonComponent } from '../add-request-skeleton/add-request-skeleton.component';
-import { OthersModel } from '../others/others.model';
 import { EventBaseService } from './event-base.service';
-
-// Type definitions for template contexts
-interface EventContentContext {
-  eventModel: unknown; // Can be EventTicket14Model, WrongScoreModel, etc.
-  otherModel: OthersModel;
-  filterModel: FilterModel;
-  issueTypes: IssueTypes;
-  primitiveProperty: PrimitiveProperty;
-}
-
-interface OthersContentContext {
-  otherModel: OthersModel;
-  primitiveProperty: PrimitiveProperty;
-}
+import { EventContentContext, OthersContentContext } from './base.model';
 
 @Component({
   standalone: true,
@@ -75,12 +61,24 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
 
   get eventContextData(): EventContentContext {
     return {
-      eventModel: this.model.eventTicket14Model,
+      eventModel: this.getEventModelByIssueType(),
       otherModel: this.model.others,
       filterModel: this.model.filter,
       issueTypes: this.issueTypes,
       primitiveProperty: this.primitiveProperty
     };
+  }
+
+  private getEventModelByIssueType(): unknown {
+    switch (this.issueTypeId) {
+      case IssueTypeConstant.WRONG_HDP:
+      case IssueTypeConstant.WRONG_1ST_HDP:
+        return this.model.wrongHdpModels;
+      case IssueTypeConstant.ARCHIVED_TICKET:
+        return this.model.eventTicket14Model;
+      default:
+        return this.model.eventTicket14Model;
+    }
   }
 
   get othersContextData(): OthersContentContext {
@@ -124,7 +122,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   initStaticData() {
-    this.primitiveProperty.isEdit = this.editRequestService.isActionEditRequest();
+    this.primitiveProperty.isEdit = window.isEdit.toString().toLowerCase() === 'true';
     if (this.primitiveProperty.isEdit) {
       this.primitiveProperty.requestId = this.editRequestService.getRequestId();
       this.primitiveProperty.title = `Home / Manage Request / Edit Request - ${this.primitiveProperty.requestId}`;

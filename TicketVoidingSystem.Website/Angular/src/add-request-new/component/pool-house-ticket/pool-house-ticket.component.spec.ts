@@ -1,12 +1,12 @@
-import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../utility/modules/testing.module';
-import { StaticService } from '../../../utility/services/static.service';
-import { BetType, GroupBetType, GroupBetTypesModel } from './group-bettypes-pool-house/group-bettypes-pool-house.model';
 import { PoolHouseTicketComponent } from './pool-house-ticket.component';
-import { PoolHouseTicketValue } from './pool-house-ticket.constant';
+import { StaticService } from '../../../utility/services/static.service';
+import { SimpleChange } from '@angular/core';
 import { PoolHouseTicketsModel } from './pool-house-ticket.model';
+import { GroupBetTypesModel, GroupBetType, BetType } from './group-bettypes-pool-house/group-bettypes-pool-house.model';
 import { TicketsModel } from './tickets/tickets.model';
+import { PoolHouseTicketValue } from './pool-house-ticket.constant';
 
 class Helper {
   static readonly fakePoolHouseTicketsModel = new PoolHouseTicketsModel();

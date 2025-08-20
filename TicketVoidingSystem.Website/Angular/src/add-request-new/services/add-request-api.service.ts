@@ -1,10 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { CheckTransIdsQuery, CheckTransIdsViewModel } from 'src/add-request/app/add-request/event-abnormal-bet/event-abnormal-bet.model';
+import { TicketsModel } from '../component/pool-house-ticket/tickets/tickets.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
-import { GetLinkedLogQuery, LinkedLogsViewModel } from '../component/pool-house-ticket/linked-log/linked-log.model';
-import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel } from '../component/pool-house-ticket/pool-house-ticket.model';
-import { TicketsModel } from '../component/pool-house-ticket/tickets/tickets.model';
 import { AddRequestQuery } from '../models/add-request.query';
 import { WrongScoreModel } from '../models/event-wrong-score.model';
 import { GetChildMatchQuery } from '../models/get-child-match.query';
@@ -16,6 +14,10 @@ import { RequestDetailViewModel } from '../models/request-detail.model';
 import { AddRequestResultModel } from '../models/request.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../models/sub-type-link-match.model';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from '../models/sub-type-note.model';
+import { LinkedLogsViewModel } from '../component/pool-house-ticket/linked-log/linked-log.model';
+import { GetLinkedLogQuery } from '../component/pool-house-ticket/linked-log/linked-log.model';
+import { PoolHouseTicketViewModel } from '../component/pool-house-ticket/pool-house-ticket.model';
+import { GetPoolHouseTicketQuery } from '../component/pool-house-ticket/pool-house-ticket.model';
 
 @Injectable({
   providedIn: 'root'
@@ -96,6 +98,11 @@ export class AddRequestApiService {
     return this.httpService.postJson<GetPoolHouseTicketQuery, PoolHouseTicketViewModel>(query, 'api/AddRequest/GetPoolHouseTickets');
   }
 
+  
+  /* istanbul ignore next */
+  async GetLogInfoTickets(query: LogInfoTicketsQuery): Promise<TicketsModel> {
+    return this.httpService.postJson(query, 'api/AddRequest/GetLogInfoTickets');
+  }
   /* istanbul ignore next */
   // async checkDuplicateTickets(query: CheckDuplicateTicketsQuery): Promise<CheckDuplicateTicketsViewModel> {
   //   return this.httpService.postJson<CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel>(query, 'api/AddRequest/CheckDuplicateTickets');
@@ -141,12 +148,6 @@ export class AddRequestApiService {
   // async getMaxBetAndSpreadOfEvent(query: MaxBetAndSpreadQuery): Promise<MaxBetAndSpreadInfo[]> {
   //   return this.httpService.postJson(query, 'api/AddRequest/GetMaxBetAndSpread');
   // }
-
-  /* istanbul ignore next */
-  async GetLogInfoTickets(query: LogInfoTicketsQuery): Promise<TicketsModel> {
-    return this.httpService.postJson(query, 'api/AddRequest/GetLogInfoTickets');
-  }
-
 
   /* istanbul ignore next */
   // async GetTicketsAbnormalAccount(custId: number, transInfoJson: string): Promise<TicketTableViewModel> {

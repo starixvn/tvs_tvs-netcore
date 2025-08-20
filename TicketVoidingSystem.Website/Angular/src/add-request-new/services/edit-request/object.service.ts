@@ -24,7 +24,8 @@ export class ObjectService {
     primitiveProperty.sportType = detailViewModel.request.sportType;
     primitiveProperty.requestId = requestId;
     primitiveProperty.actionIdOfFirstTimeAccess = detailViewModel.request.actionId.toString();
-
+    primitiveProperty.isEdit = true;
+    
     return primitiveProperty;
   }
 
