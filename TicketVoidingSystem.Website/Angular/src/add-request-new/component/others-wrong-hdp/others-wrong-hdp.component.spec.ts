@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../utility/modules/testing.module';
-import { OthersModel } from '../others/others.model';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { OthersWrongHdpComponent } from './others-wrong-hdp.component';
+import { OthersModel } from '../../../../../component/others/others.model';
 
 describe('OthersWrongHdpComponent', () => {
   let component: OthersWrongHdpComponent;

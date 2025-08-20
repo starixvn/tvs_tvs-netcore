@@ -10,7 +10,6 @@ import { EventTicket14Component } from './event-ticket14/event-ticket14.componen
   standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
   imports: [EventBaseLayoutComponent, CommonModule, EventTicket14Component, OthersAbnormalBetComponent],
 })
 export class AppComponent {

@@ -1,6 +1,0 @@
-﻿@{
-    Layout = "~/Views/Shared/_LayoutAngular.cshtml";
-    var isEditMode = Context.Request.Path.Value?.ToLower().Contains("/edit/") == true;
-    ViewBag.Title = isEditMode ? "Edit Request" : "Add Request";
-}
-<app-root></app-root>
