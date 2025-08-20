@@ -26,12 +26,13 @@ public class CheckTicketsStatusServiceImp(IDynamicRepository repository, OnlineS
         {
             OnlineServerId = string.Join(",", currentOnlineServers.Select(x => x.Id))
         };
-
+        var isHasTicketServerDown = tickets.Select(x => x.SiteDbGroupId).Distinct()
+            .Any(y => !currentOnlineServers.Select(t => t.Id).Contains(y));
         var tasks = currentOnlineServers.Select(server =>
         {
             var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == server.Id);
             var cancelCashOutTicketsInSiteDb = cancelCashOutTickets.Where(x => x.SiteDbGroupId == server.Id);
-            if (!ticketsInSiteDb.Any() && !cancelCashOutTicketsInSiteDb.Any())
+            if (!isHasTicketServerDown || (!ticketsInSiteDb.Any() && !cancelCashOutTicketsInSiteDb.Any()))
             {
                 return Task.FromResult(string.Empty);
             }
