@@ -12,7 +12,7 @@ export class ConfirmAbnormalAccountModel {
   allUsernames: string;
   usernamesOfCreditCashService: string;
   isHasAffectedTicketSiteDBDown: boolean;
-  isMarkTicketSiteDbDown: boolean = true;
+  isMarkTicketSiteDbDown = true;
   issueTypeName: string;
   subIssueTypeName: string;
   actionName: string;

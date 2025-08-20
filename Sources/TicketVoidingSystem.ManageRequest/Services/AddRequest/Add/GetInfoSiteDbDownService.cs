@@ -27,7 +27,7 @@ public static class InfoSiteDbDownHelper
         {
             return null;
         }
-;
+
         var infoSiteDBDown = new InfoSiteDBDownModel
         {
             Usernames = validationResult.SiteDBDownUserNames,

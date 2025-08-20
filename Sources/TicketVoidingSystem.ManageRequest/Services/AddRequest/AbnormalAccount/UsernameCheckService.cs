@@ -42,7 +42,7 @@ public class UsernameCheckServiceImp(OnlineServerRepository onlineServerReposito
     private static ValidationInfo CreateValidationResult(IEnumerable<ValidationInfo> validationResults)
     {
         var results = validationResults.ToList();
-        var siteDBDownInfo = results.FirstOrDefault(x => x.SiteDBDownInfoJson != null);
+        var siteDBDownInfo = results.Find(x => x.SiteDBDownInfoJson != null);
 
         return new ValidationInfo
         {

@@ -10,5 +10,5 @@ export class ConfirmEarlyKickOffModel {
   isHasSettledTicket: boolean;
   warningRelatedEvents: string[] = [];
   isHasAffectedTicketSiteDBDown: boolean;
-  isMarkTicketSiteDbDown: boolean = true;
+  isMarkTicketSiteDbDown = true;
 }
