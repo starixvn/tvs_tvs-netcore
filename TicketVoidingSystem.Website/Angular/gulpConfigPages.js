@@ -227,7 +227,7 @@ const configPages = [
   //ticketListing,
   //voidSingleBet,
   //voidRequest,
-  manageRequest,
+  //manageRequest,
   // addRequest,
   // editRequest,
   //voidByBetId
@@ -235,7 +235,7 @@ const configPages = [
   //dangerAccepted,
   //redCard,
   wrongScore,
-  technicalError
+  //technicalError
 ];
 
 module.exports = configPages;

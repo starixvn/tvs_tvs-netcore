@@ -19,8 +19,8 @@ import { CopyRequestInfoService } from '../../services/copy-request-info.service
 import { EditRequestService } from '../../services/edit-request/edit-request.service';
 import { LogAnalysisService } from '../../services/log-analysis.service';
 import { AddRequestSkeletonComponent } from '../add-request-skeleton/add-request-skeleton.component';
-import { EventBaseService } from './event-base.service';
 import { EventContentContext, OthersContentContext } from './base.model';
+import { EventBaseService } from './event-base.service';
 
 @Component({
   standalone: true,
@@ -76,6 +76,14 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
         return this.model.wrongHdpModels;
       case IssueTypeConstant.ARCHIVED_TICKET:
         return this.model.eventTicket14Model;
+      case IssueTypeConstant.WRONG_SCORE:
+        return this.model.wrongScoreModels;
+      case IssueTypeConstant.DANGER_ACCEPTED:
+        return this.model.dangerAcceptedModels;
+      case IssueTypeConstant.RED_CARD:
+        return this.model.redCardModel;
+      case IssueTypeConstant.TECHNICAL_ERROR:
+        return this.model.technicalErrorModel;
       default:
         return this.model.eventTicket14Model;
     }
@@ -122,7 +130,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   initStaticData() {
-    this.primitiveProperty.isEdit = window.isEdit.toString().toLowerCase() === 'true';
+    this.primitiveProperty.isEdit = this.editRequestService.isActionEditRequest();
     if (this.primitiveProperty.isEdit) {
       this.primitiveProperty.requestId = this.editRequestService.getRequestId();
       this.primitiveProperty.title = `Home / Manage Request / Edit Request - ${this.primitiveProperty.requestId}`;

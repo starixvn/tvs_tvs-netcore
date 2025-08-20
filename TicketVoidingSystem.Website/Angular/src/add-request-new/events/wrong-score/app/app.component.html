@@ -26,6 +26,10 @@
 </ng-template>
 
 <ng-template #othersContent let-otherModel="otherModel" let-primitiveProperty="primitiveProperty">
-  <others [isEdit]="primitiveProperty.isEdit" [model]="otherModel">
+  <others [isEdit]="primitiveProperty.isEdit"
+    [model]="otherModel"
+    [matchId]="primitiveProperty.matchId"
+    [parentMatchId]="primitiveProperty.parentMatchId"
+    [issueTypeId]="issueTypeId">
   </others>
 </ng-template>
