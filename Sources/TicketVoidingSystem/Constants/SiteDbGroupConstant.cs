@@ -7,10 +7,10 @@ namespace TicketVoidingSystem.Constants;
 
 public static class SiteDbGroupConstant
 {
-    private const int CentralDb = 0;
-    private const int SiteDb1 = 1;
-    private const int SiteDb2 = 2;
-    private const int SiteDb3 = 3;
+    public const int CentralDb = 0;
+    public const int SiteDb1 = 1;
+    public const int SiteDb2 = 2;
+    public const int SiteDb3 = 3;
 
     public static readonly List<SiteDbGroupModel> AllSiteDb =
     [

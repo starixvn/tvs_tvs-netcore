@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.OnlineServerRepository;
 using TicketVoidingSystem.SharedApi.Criteria.Permission;
@@ -26,25 +27,33 @@ public class CheckTicketsStatusServiceImp(IDynamicRepository repository, OnlineS
         {
             OnlineServerId = string.Join(",", currentOnlineServers.Select(x => x.Id))
         };
-        var isHasTicketServerDown = tickets.Select(x => x.SiteDbGroupId).Distinct()
-            .Any(y => !currentOnlineServers.Select(t => t.Id).Contains(y));
+        var ticketsServerDown = tickets.Where(x => !currentOnlineServers.Select(t => t.Id).Contains(x.SiteDbGroupId));
         var tasks = currentOnlineServers.Select(server =>
         {
             var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == server.Id);
             var cancelCashOutTicketsInSiteDb = cancelCashOutTickets.Where(x => x.SiteDbGroupId == server.Id);
-            if (!isHasTicketServerDown || (!ticketsInSiteDb.Any() && !cancelCashOutTicketsInSiteDb.Any()))
+            if ((server.Id is SiteDbGroupConstant.CentralDb && ticketsServerDown.Any())
+                || ticketsInSiteDb.Any()
+                || cancelCashOutTicketsInSiteDb.Any())
             {
-                return Task.FromResult(string.Empty);
+                criteria.SiteDbGroupId = server.Id;
+                criteria.TransIds = GetTransIds(ticketsServerDown, ticketsInSiteDb, server.Id);
+                criteria.CancelCashOutTransIds = Helper.JoinBetIdList(cancelCashOutTicketsInSiteDb);
+
+                return repository.GetAsync<string>(criteria);
             }
 
-            criteria.SiteDbGroupId = server.Id;
-            criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
-            criteria.CancelCashOutTransIds = Helper.JoinBetIdList(cancelCashOutTicketsInSiteDb);
-
-            return repository.GetAsync<string>(criteria);
+            return Task.FromResult(string.Empty);
         });
 
         var transInfoJsonList = await Task.WhenAll(tasks);
         return string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
+    }
+
+    private static string GetTransIds(IEnumerable<BetId> ticketsServerDown, IEnumerable<BetId> ticketsInSiteDb, int currentServerId)
+    {
+        return currentServerId is SiteDbGroupConstant.CentralDb && ticketsServerDown.Any()
+            ? Helper.JoinBetIdList([.. ticketsServerDown, .. ticketsInSiteDb])
+            : Helper.JoinBetIdList([.. ticketsInSiteDb]);
     }
 }
