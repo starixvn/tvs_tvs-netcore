@@ -54,7 +54,7 @@ export class RequestDescriptionService {
   }
 
   private createReducedOversOrAbandonedContent(copyInfoResponse: CopyRequestInfoResponse): string {
-    const groupBetTypes = this.cloneGroupBetTypes(copyInfoResponse.betTypeTickets);
+    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, item => `"${item.betTypeId}+${item.inputtedRuns}+${item.betId}"`);
     let outputContent = '';
 
     for (const key in groupBetTypes) {
