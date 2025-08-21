@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { FilterComponent } from '../../../add-request-new/component/filter/filter.component';
-import { FilterModel } from '../../../add-request-new/component/filter/filter.model';
-import { IssueTypes } from '../../../add-request-new/component/filter/issue-types.model';
+import { FilterComponent } from '../../component/filter/filter.component';
+import { FilterModel } from '../../component/filter/filter.model';
+import { IssueTypes } from '../../component/filter/issue-types.model';
 import { BlockFullUiComponent } from '../../../utility/components/block-full-ui/block-full-ui.component';
 import { MenuBarComponent } from '../../../utility/components/menu-bar/menu-bar.component';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
@@ -61,32 +61,12 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
 
   get eventContextData(): EventContentContext {
     return {
-      eventModel: this.getEventModelByIssueType(),
+      eventModel: this.eventBaseService.getEventModelByIssueType(this.issueTypeId, this.model),
       otherModel: this.model.others,
       filterModel: this.model.filter,
       issueTypes: this.issueTypes,
       primitiveProperty: this.primitiveProperty
     };
-  }
-
-  private getEventModelByIssueType(): unknown {
-    switch (this.issueTypeId) {
-      case IssueTypeConstant.WRONG_HDP:
-      case IssueTypeConstant.WRONG_1ST_HDP:
-        return this.model.wrongHdpModels;
-      case IssueTypeConstant.ARCHIVED_TICKET:
-        return this.model.eventTicket14Model;
-      case IssueTypeConstant.WRONG_SCORE:
-        return this.model.wrongScoreModels;
-      case IssueTypeConstant.DANGER_ACCEPTED:
-        return this.model.dangerAcceptedModels;
-      case IssueTypeConstant.RED_CARD:
-        return this.model.redCardModel;
-      case IssueTypeConstant.TECHNICAL_ERROR:
-        return this.model.technicalErrorModel;
-      default:
-        return this.model.eventTicket14Model;
-    }
   }
 
   get othersContextData(): OthersContentContext {

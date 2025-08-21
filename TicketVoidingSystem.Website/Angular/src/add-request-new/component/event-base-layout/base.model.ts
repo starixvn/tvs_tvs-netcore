@@ -1,5 +1,5 @@
-import { FilterModel } from '../../../add-request-new/component/filter/filter.model';
-import { IssueTypes } from '../../../add-request-new/component/filter/issue-types.model';
+import { FilterModel } from '../../component/filter/filter.model';
+import { IssueTypes } from '../../component/filter/issue-types.model';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { OthersModel } from '../others/others.model';
 
@@ -20,6 +20,5 @@ export interface OthersContentContext {
 declare global {
     interface Window {
         issueTypeId?: string;
-        isEdit?: boolean;
     }
 }

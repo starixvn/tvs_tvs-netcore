@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, ViewChild } from '@angular/core';
-import { EventBaseLayoutComponent } from '../../../../add-request-new/component/event-base-layout/event-base-layout.component';
+import { EventBaseLayoutComponent } from '../../../component/event-base-layout/event-base-layout.component';
 import { OthersWrongHdpComponent } from '../../../component/others-wrong-hdp/others-wrong-hdp.component';
 import { EditRequestService } from '../../../services/edit-request/edit-request.service';
 import { RequestModel } from '../../../models/request.model';

@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, ViewChild, OnInit } from '@angular/core';
-import { EventBaseLayoutComponent } from '../../../../add-request-new/component/event-base-layout/event-base-layout.component';
+import { EventBaseLayoutComponent } from '../../../component/event-base-layout/event-base-layout.component';
 import { EventWrongHdpComponent } from './event-wrong-hdp/event-wrong-hdp.component';
 import { OthersWrongHdpComponent } from '../../../component/others-wrong-hdp/others-wrong-hdp.component';
 import { EditRequestService } from '../../../services/edit-request/edit-request.service';
 import { RequestModel } from '../../../models/request.model';
 import { PrimitiveProperty } from '../../../models/primitive-property.model';
-import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
+import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 
 @Component({
   standalone: true,

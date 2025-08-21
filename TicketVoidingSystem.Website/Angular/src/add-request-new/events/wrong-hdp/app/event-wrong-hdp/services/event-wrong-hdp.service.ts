@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import { DateTimeFormat } from "../../../../../../utility/constants/config";
 import { SportType } from "../../../../../../utility/constants/sport.constant";
 import { AddRequestApiService } from "../../../../../services/add-request-api.service";
-import { FilterModel } from "../../../../../../add-request-new/component/filter/filter.model";
+import { FilterModel } from "../../../../../component/filter/filter.model";
 import { WrongHdpModel } from "../../../../../models/event-wrong-hdp.model";
 import { GetLinkedLogQuery, LinkedLogsViewModel } from "../../../../../component/pool-house-ticket/linked-log/linked-log.model";
 import { PoolHouseTicketValue } from "../../../../../component/pool-house-ticket/pool-house-ticket.constant";

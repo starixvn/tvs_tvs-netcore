@@ -16,6 +16,7 @@ import { RequestDetailViewModel } from '../models/request-detail.model';
 import { AddRequestResultModel } from '../models/request.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../models/sub-type-link-match.model';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from '../models/sub-type-note.model';
+import { MaxBetAndSpreadInfo, MaxBetAndSpreadQuery } from '../events/wrong-odds/app/event-wrong-odds/models/filter-wrong-odds.model';
 
 @Injectable({
   providedIn: 'root'
@@ -101,6 +102,13 @@ export class AddRequestApiService {
   async GetLogInfoTickets(query: LogInfoTicketsQuery): Promise<TicketsModel> {
     return this.httpService.postJson(query, 'api/AddRequest/GetLogInfoTickets');
   }
+
+  
+  /* istanbul ignore next */
+  async getMaxBetAndSpreadOfEvent(query: MaxBetAndSpreadQuery): Promise<MaxBetAndSpreadInfo[]> {
+    return this.httpService.postJson(query, 'api/AddRequest/GetMaxBetAndSpread');
+  }
+
   /* istanbul ignore next */
   // async checkDuplicateTickets(query: CheckDuplicateTicketsQuery): Promise<CheckDuplicateTicketsViewModel> {
   //   return this.httpService.postJson<CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel>(query, 'api/AddRequest/CheckDuplicateTickets');
@@ -140,11 +148,6 @@ export class AddRequestApiService {
   // /* istanbul ignore next */
   // async checkRecoverTicket(query: CheckRecoverTicketQuery): Promise<CheckRecoverTicketResult> {
   //   return this.httpService.postJson<CheckRecoverTicketQuery, CheckRecoverTicketResult>(query, 'api/AddRequest/CheckRecoverTicket');
-  // }
-
-  // /* istanbul ignore next */
-  // async getMaxBetAndSpreadOfEvent(query: MaxBetAndSpreadQuery): Promise<MaxBetAndSpreadInfo[]> {
-  //   return this.httpService.postJson(query, 'api/AddRequest/GetMaxBetAndSpread');
   // }
 
   /* istanbul ignore next */

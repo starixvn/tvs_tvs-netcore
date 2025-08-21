@@ -10,7 +10,6 @@ ViewBag.Title = isEditMode ? "Edit Request Ticket Voiding" : "Add Request Ticket
 }
 <script>
     window.issueTypeId = '@(ViewBag.IssueTypeId?.ToString() ?? "")';
-    window.isEdit = '@isEditMode';
 </script>
 <app-root></app-root>
 <% files.js.forEach(function(js){ %>

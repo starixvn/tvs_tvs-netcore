@@ -1,6 +1,6 @@
 import { QueryList } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FilterTimeWithAllowance } from '../../../../../../add-request-new/events/red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
+import { FilterTimeWithAllowance } from '../../../../../events/red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { AddChildMatchModel } from '../../../../../../utility/components/add-child-match/add-child-match.model';
 import { MatchType } from '../../../../../../utility/constants/config';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';

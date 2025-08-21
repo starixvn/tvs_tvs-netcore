@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { EventBaseLayoutComponent } from '../../../../add-request-new/component/event-base-layout/event-base-layout.component';
-import { OthersAbnormalBetComponent } from '../../../../add-request-new/component/others-abnormal-bet/others-abnormal-bet.component';
+import { EventBaseLayoutComponent } from '../../../component/event-base-layout/event-base-layout.component';
+import { OthersAbnormalBetComponent } from '../../../component/others-abnormal-bet/others-abnormal-bet.component';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { RequestModel } from '../../../models/request.model';
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';

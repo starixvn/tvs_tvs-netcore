@@ -7,9 +7,9 @@ import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { RelatedEventService } from './services/related-event.service';
 import { AddRequestStore } from '../../../../services/add-request.store';
-import { FilterModel } from '../../../../../add-request-new/component/filter/filter.model';
+import { FilterModel } from '../../../../component/filter/filter.model';
 import { WrongHdpModel } from '../../../../models/event-wrong-hdp.model';
-import { OthersModel } from '../../../../../add-request-new/component/others/others.model';
+import { OthersModel } from '../../../../component/others/others.model';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { QueryList, SimpleChange } from '@angular/core';
@@ -18,7 +18,7 @@ import { MatchType } from '../../../../../utility/constants/config';
 import { LogInfoWrongHdp } from './models/log-info-wrong-hdp.model';
 import { ChildMatchModel } from '../../../../models/related-event.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { LinkedLogsViewModel } from '../../../../../add-request-new/component/pool-house-ticket/linked-log/linked-log.model';
+import { LinkedLogsViewModel } from '../../../../component/pool-house-ticket/linked-log/linked-log.model';
 import { FilterWithHdpModel } from './models/filter-with-hdp.model';
 
 class Helper {

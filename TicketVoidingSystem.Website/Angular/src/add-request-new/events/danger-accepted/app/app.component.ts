@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { EventBaseLayoutComponent } from '../../../../add-request-new/component/event-base-layout/event-base-layout.component';
+import { EventBaseLayoutComponent } from '../../../component/event-base-layout/event-base-layout.component';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { OthersComponent } from '../../../component/others/others.component';
 import { RequestModel } from '../../../models/request.model';
