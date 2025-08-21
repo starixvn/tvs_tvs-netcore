@@ -86,7 +86,7 @@ export class SaveRequestService {
     arg.confirmDangerAccepted.isEditingByAnotherUser =
       this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);
     arg.confirmDangerAccepted.issueTypeName = arg.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === arg.filter.issueTypeId).issueTypeName;
-    arg.confirmDangerAccepted.subIssueTypeName = arg.issueTypes.selectedSubIssueTypes.find(x => x.subIssueTypeId.toString() === arg.filter.subIssueTypeId).subIssueTypeName;
+    arg.confirmDangerAccepted.subIssueTypeName = arg.issueTypes.subIssueTypes.find(x => x.subIssueTypeId.toString() === arg.filter.subIssueTypeId).subIssueTypeName;
     arg.confirmDangerAccepted.isOpenDialog = true;
     arg.confirmDangerAccepted = clone(arg.confirmDangerAccepted);
   }

@@ -262,7 +262,7 @@ describe('EventWrongScoreService', () => {
         requestedBy: 'User',
         issueTypes: {
           issueTypes: [{ issueTypeId: 1, issueTypeName: 'Issue 1' }],
-          selectedSubIssueTypes: [{
+          subIssueTypes: [{
             subIssueTypeId: 2,
             subIssueTypeName: 'Sub Issue 1',
             issueTypeId: 1,

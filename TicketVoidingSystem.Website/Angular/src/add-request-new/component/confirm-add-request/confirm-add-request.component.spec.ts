@@ -1,23 +1,23 @@
+import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Selection } from '../../../../utility/models/selection.model';
 import { TestingModule } from '../../../../utility/modules/testing.module';
+import { IssueTypes } from '../filter/issue-types.model';
 import { ConfirmAddRequestComponent } from './confirm-add-request.component';
 import { ConfirmAddRequestModel } from './confirm-add-request.model';
-import { IssueTypes } from '../filter/issue-types.model';
-import { Selection } from '../../../../utility/models/selection.model';
-import { SimpleChange } from '@angular/core';
 
 class Helper {
   static readonly fakeIssueTypes: IssueTypes = {
     issueId: 1,
     subIssueId: 1,
-    selectedSubIssueTypes: [],
+    subIssueTypes: [],
     issueTypes: [
       { issueTypeId: 1, issueTypeName: 'Test Issue Type' }
     ],
     subIssueTypes: [
-      { 
+      {
         issueTypeId: 1,
-        subIssueTypeId: 1, 
+        subIssueTypeId: 1,
         subIssueTypeName: 'Test Sub Issue Type',
         subIssueTypeNameCS: 'Test Sub Issue Type CS'
       }

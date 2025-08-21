@@ -206,7 +206,7 @@ describe('SaveRequestService', () => {
             issueTypeId: 1,
             issueTypeName: 'Test Issue Type'
           }],
-          selectedSubIssueTypes: [{
+          subIssueTypes: [{
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type',
             issueTypeId: 1,
@@ -527,7 +527,7 @@ describe('SaveRequestService', () => {
             issueTypeId: 1,
             issueTypeName: 'Test Issue Type'
           }],
-          selectedSubIssueTypes: [{
+          subIssueTypes: [{
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
@@ -563,7 +563,7 @@ describe('SaveRequestService', () => {
             issueTypeId: 1,
             issueTypeName: 'Test Issue Type'
           }],
-          selectedSubIssueTypes: [{
+          subIssueTypes: [{
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
@@ -601,7 +601,7 @@ describe('SaveRequestService', () => {
             issueTypeId: 1,
             issueTypeName: 'Test Issue Type'
           }],
-          selectedSubIssueTypes: [{
+          subIssueTypes: [{
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
@@ -630,7 +630,7 @@ describe('SaveRequestService', () => {
             issueTypeId: 1,
             issueTypeName: 'Test Issue Type'
           }],
-          selectedSubIssueTypes: [{
+          subIssueTypes: [{
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
@@ -666,7 +666,7 @@ describe('SaveRequestService', () => {
             issueTypeId: 1,
             issueTypeName: 'Test Issue Type'
           }],
-          selectedSubIssueTypes: [{
+          subIssueTypes: [{
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
@@ -695,7 +695,7 @@ describe('SaveRequestService', () => {
             issueTypeId: 1,
             issueTypeName: 'Test Issue Type'
           }],
-          selectedSubIssueTypes: [{
+          subIssueTypes: [{
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
@@ -725,7 +725,7 @@ describe('SaveRequestService', () => {
             issueTypeId: 1,
             issueTypeName: 'Test Issue Type'
           }],
-          selectedSubIssueTypes: [{
+          subIssueTypes: [{
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
@@ -755,7 +755,7 @@ describe('SaveRequestService', () => {
               issueTypeName: 'Test Issue Type'
             }
           ],
-          selectedSubIssueTypes: [
+          subIssueTypes: [
             {
               subIssueTypeId: 2,
               subIssueTypeName: 'Test Sub Issue Type'
@@ -786,7 +786,7 @@ describe('SaveRequestService', () => {
             issueTypeId: 1,
             issueTypeName: 'Test Issue Type'
           }],
-          selectedSubIssueTypes: [{
+          subIssueTypes: [{
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]
@@ -830,7 +830,7 @@ describe('SaveRequestService', () => {
             issueTypeId: 1,
             issueTypeName: 'Test Issue Type'
           }],
-          selectedSubIssueTypes: [{
+          subIssueTypes: [{
             subIssueTypeId: 1,
             subIssueTypeName: 'Test Sub Issue Type'
           }]

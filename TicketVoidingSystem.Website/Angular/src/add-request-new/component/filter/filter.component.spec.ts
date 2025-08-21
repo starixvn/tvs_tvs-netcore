@@ -23,7 +23,7 @@ class Helper {
       { subIssueTypeId: 13, issueTypeId: 8, subIssueTypeName: 'Live', subIssueTypeNameCS: null }
     ],
     issueId: 0,
-    selectedSubIssueTypes: [],
+    subIssueTypes: [],
     subIssueId: 0
   };
 
@@ -125,7 +125,7 @@ describe('FilterComponent', () => {
         subIssueTypeName: 'Non Live',
         subIssueTypeNameCS: null
       }];
-      component.issueTypes.selectedSubIssueTypes = [{
+      component.issueTypes.subIssueTypes = [{
         subIssueTypeId: 12,
         issueTypeId: 8,
         subIssueTypeName: 'Non Live',
@@ -145,7 +145,7 @@ describe('FilterComponent', () => {
       // Arrange
       component.issueTypes = Helper.fakeIssueTypes;
       component.issueTypes.subIssueId = 12;
-      component.issueTypes.selectedSubIssueTypes = [{
+      component.issueTypes.subIssueTypes = [{
         subIssueTypeId: 12,
         issueTypeId: 8,
         subIssueTypeName: 'Non Live',
@@ -391,7 +391,7 @@ describe('FilterComponent', () => {
     it('should show sub type when multiple sub types available', () => {
       // Arrange
       component.issueTypes = Helper.fakeIssueTypes;
-      component.issueTypes.selectedSubIssueTypes = [
+      component.issueTypes.subIssueTypes = [
         { subIssueTypeId: 12, issueTypeId: 8, subIssueTypeName: 'Non Live', subIssueTypeNameCS: null },
         { subIssueTypeId: 13, issueTypeId: 8, subIssueTypeName: 'Live', subIssueTypeNameCS: null }
       ];
@@ -407,7 +407,7 @@ describe('FilterComponent', () => {
     it('should not show sub type for wrong OU', () => {
       // Arrange
       component.issueTypes = Helper.fakeIssueTypes;
-      component.issueTypes.selectedSubIssueTypes = [
+      component.issueTypes.subIssueTypes = [
         { subIssueTypeId: 12, issueTypeId: 8, subIssueTypeName: 'Non Live', subIssueTypeNameCS: null },
         { subIssueTypeId: 13, issueTypeId: 8, subIssueTypeName: 'Live', subIssueTypeNameCS: null }
       ];
@@ -423,7 +423,7 @@ describe('FilterComponent', () => {
     it('should not show sub type when only one sub type available', () => {
       // Arrange
       component.issueTypes = Helper.fakeIssueTypes;
-      component.issueTypes.selectedSubIssueTypes = [
+      component.issueTypes.subIssueTypes = [
         { subIssueTypeId: 12, issueTypeId: 8, subIssueTypeName: 'Non Live', subIssueTypeNameCS: null }
       ];
 
