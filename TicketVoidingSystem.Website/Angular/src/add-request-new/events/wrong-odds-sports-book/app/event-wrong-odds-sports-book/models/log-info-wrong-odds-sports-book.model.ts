@@ -1,0 +1,16 @@
+import { ValidationMessage } from "../../../../../models/get-log-info.model";
+import { BetTeamAddRequestResult } from "../../../../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.model";
+import { LogInfoDetail } from "../../../../../../utility/models/log-info-detail.model";
+import { Selection } from "../../../../../../utility/models/selection.model";
+import { FilterWrongOddsSportsBookModel } from "./filter-wrong-odds-sports-book.model";
+
+export class LogInfoWrongOddsSportsBook {
+  matchId: number;
+  filterWrongOddsSportsBook = new FilterWrongOddsSportsBookModel();
+  logInfoDetail = new LogInfoDetail();
+  messageValidationLogInfo?: ValidationMessage[];
+  betTeamsResult: BetTeamAddRequestResult[];
+  isHasSettledTicket: boolean;
+  isHasInstantlySettledTicket: boolean;
+  allBetTypesSelection: Selection[];
+}

@@ -1,0 +1,133 @@
+<label class="col-form-label-sm">Filter</label>
+<div class="filter mb-2">
+  <div class="mb-2">
+    <div class="filter-time d-flex">
+      <div class="me-3">
+        <date-full-time-new #fromTimeComponent class="from-date-time" [isDisabled]="isDisabled"
+          (ngModelChange)="changeFilter()" [(ngModel)]="filterWrongOddsModel.filterFromTransTime">
+        </date-full-time-new>
+      </div>
+      <div class="d-flex me-2">
+        <label class="col-form-label-sm me-2 pl-3">To</label>
+        <date-full-time-new #toTimeComponent class="to-date-time" [isDisabled]="isDisabled"
+          (ngModelChange)="changeFilter()" [(ngModel)]="filterWrongOddsModel.filterToTransTime">
+        </date-full-time-new>
+      </div>
+      <div class="d-flex align-items-center">
+        <label class="col-form-label-sm duration">
+          (Duration:&nbsp;<span class="bold">{{getDurationTime()}}</span>)
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex line-2 mb-2">
+    @if (!isSubTypeOuOr1stOu()) {
+    <div class="filter-favorite-type">
+      <ng-select class="custom-sm" [items]="filterFavoriteType.items" bindLabel="name" bindValue="value"
+        [disabled]="isDisabled" [(ngModel)]="filterWrongOddsModel.filterFavoriteType" [clearable]="false"
+        (change)="changeFilter()">
+      </ng-select>
+      <div class="input-group input-group-sm div-input favorite-input">
+        <input type="text" [(ngModel)]="filterWrongOddsModel.favoriteValue"
+          (change)="changeFilter();isCorrectFormatSingleDecimal(filterWrongOddsModel.favoriteValue, 'favorite-input')"
+          class="form-control" [disabled]="isDisabled">
+      </div>
+    </div>
+    }
+    @if (isSubTypeOuOr1stOu()) {
+    <div class="filter-ou-type">
+      <span class="input-group-text border-radius-right-0">Wrong OU</span>
+      <div class="input-group input-group-sm div-input ou-input filter-lable">
+        <input type="text" [(ngModel)]="filterWrongOddsModel.wrongOU"
+          (change)="changeFilter();isCorrectFormatSingleDecimal(filterWrongOddsModel.wrongOU, 'ou-input')"
+          class="form-control" [disabled]="isDisabled">
+      </div>
+    </div>
+    }
+    <div class="filter-live-indicator filter-right">
+      <div class="form-check me-1">
+        <input class="form-check-input" type="radio" name="radio-live-indicator" id="none-live" [disabled]="isDisabled"
+          [(ngModel)]="filterWrongOddsModel.liveIndicator" [value]="0" (change)="changeFilter()">
+        <label class="form-check-label" for="none-live">
+          Non-Live
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="radio-live-indicator" id="live" [disabled]="isDisabled"
+          [(ngModel)]="filterWrongOddsModel.liveIndicator" [value]="1" (change)="changeFilter()">
+        <label class="form-check-label" for="live">
+          Live
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-spread input-group input-group-sm d-flex me-2 mb-2">
+    <div class="spread">
+      <div class="input-correct-odds d-flex">
+        <div class="input-group-prepend">
+          <span class="input-group-text border-radius-right-0">Spread</span>
+        </div>
+        <div class="input-group-sm div-input spread-input me-2">
+          <input type="text" [(ngModel)]="filterWrongOddsModel.spread" (change)="changeFilter();isValidSpread()"
+            (change)="changeSpread()" class="form-control border-radius-left-0" [disabled]="isDisabled">
+        </div>
+      </div>
+    </div>
+    <div class="allowance-rate">
+      <div class="input-correct-odds d-flex">
+        <div class="input-group-prepend">
+          <span class="input-group-text filter-right border-radius-right-0">Allowance Rate</span>
+        </div>
+        <ng-select class="input-group-sm div-input me-2" [items]="allowanceRates" bindLabel="name" bindValue="value"
+          [disabled]="isDisabled" (change)="changeFilter()" [(ngModel)]="filterWrongOddsModel.allowanceRate"
+          [clearable]="false" [searchable]="false">
+        </ng-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-correct-odds input-group input-group-sm d-flex me-2">
+    <div class="malay-odds">
+      @if (!isSubTypeOuOr1stOu()) {
+      <span>Home Team (Malay Odds)</span>
+      }
+      @if (isSubTypeOuOr1stOu()) {
+      <span>Over (Malay Odds)</span>
+      }
+      <div class="input-correct-odds d-flex">
+        <div class="input-group-prepend">
+          <span class="input-group-text border-radius-right-0">
+            Correct Odds
+          </span>
+        </div>
+        <div class="input-group-sm div-input correct-odds-input me-2">
+          <input type="text" [(ngModel)]="filterWrongOddsModel.correctOddsHomeOver" [disabled]="isDisabled"
+            (change)="changeFilter();isValidFilterCorrectOdds()" (change)="changeCorrectOdds()"
+            class="form-control border-radius-left-0">
+        </div>
+      </div>
+    </div>
+    <div class="malay-odds filter-right">
+      @if (!isSubTypeOuOr1stOu()) {
+      <span>Away Team</span>
+      }
+      @if (isSubTypeOuOr1stOu()) {
+      <span>Under</span>
+      }
+      <div class="input-correct-odds d-flex">
+        <div class="input-group-prepend">
+          <span class="input-group-text border-radius-right-0">
+            Correct Odds
+          </span>
+        </div>
+        <div class="input-group-sm div-input me-2">
+          <input type="text" [(ngModel)]="filterWrongOddsModel.correctOddsAwayUnder"
+            class="form-control border-radius-left-0 disabled" [disabled]="true">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<tooltip [tooltip]="tooltip"></tooltip>

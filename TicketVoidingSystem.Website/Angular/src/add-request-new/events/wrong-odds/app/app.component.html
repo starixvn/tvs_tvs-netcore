@@ -1,0 +1,17 @@
+<event-base-layout #eventBaseLayout [issueTypeId]="issueTypeId" (saveRequest)="saveRequest()" [model]="model"
+  [eventHeight]="'581px'" [eventContent]="eventContent" [othersContent]="othersContent">
+</event-base-layout>
+
+<ng-template #eventContent let-eventModel="eventModel" let-filterModel="filterModel" let-otherModel="otherModel"
+  let-primitiveProperty="primitiveProperty">
+  <event-wrong-odds #eventWrongOdds [userId]="primitiveProperty.userId" [requestedBy]="primitiveProperty.requestedBy"
+    [actionIdOfFirstTimeAccess]="primitiveProperty.actionIdOfFirstTimeAccess" [isEdit]="primitiveProperty.isEdit"
+    [others]="otherModel" [requestId]="primitiveProperty.requestId" [filter]="filterModel"
+    [wrongOddsModels]="eventModel">
+  </event-wrong-odds>
+</ng-template>
+
+<ng-template #othersContent let-otherModel="otherModel" let-primitiveProperty="primitiveProperty">
+  <others-wrong-hdp [isEdit]="primitiveProperty.isEdit" [model]="otherModel">
+  </others-wrong-hdp>
+</ng-template>
