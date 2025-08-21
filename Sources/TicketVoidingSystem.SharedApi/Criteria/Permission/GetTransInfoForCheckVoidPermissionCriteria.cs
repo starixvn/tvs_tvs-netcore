@@ -8,6 +8,7 @@ public class GetTransInfoForCheckVoidPermissionCriteria : CriteriaBase
 {
     public string TransIds { get; set; }
     public string CancelCashOutTransIds { get; set; }
+    public string OnlineServerId { get; set; }
 
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }

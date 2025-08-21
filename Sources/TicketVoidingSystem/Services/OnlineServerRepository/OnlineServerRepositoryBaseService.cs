@@ -59,6 +59,11 @@ public interface OnlineServerRepositoryBaseService
     /// Return Online Server IDs as a comma-separated string
     /// </summary>
     Task<string> GetOnlineServerIds();
+
+    /// <summary>
+    /// Return list of online server IDs as models
+    /// </summary>
+    Task<IEnumerable<SiteDbGroupModel>> GetOnlineServerIdsModel();
 }
 
 public class OnlineServerRepositoryBaseServiceImp(SiteDbClientService siteDbClientService)
@@ -172,6 +177,11 @@ public class OnlineServerRepositoryBaseServiceImp(SiteDbClientService siteDbClie
     {
         var onlineServers = await GetOnlineServer();
         return string.Join(",", onlineServers.Select(x => x.Id));
+    }
+
+    public async Task<IEnumerable<SiteDbGroupModel>> GetOnlineServerIdsModel()
+    {
+        return await GetOnlineServer();
     }
 
     private async Task<List<SiteDbGroupModel>> GetOnlineServer()

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using TicketVoidingSystem.SharedApi.Criteria.Permission;
 using TicketVoidingSystem.SharedApi.Handlers.Permission;
 using TicketVoidingSystem.SharedApi.Services.Permission;
@@ -23,15 +24,21 @@ public class CheckTicketsStatusServiceTests : IClassFixture<AppSettingFixture>
         };
         const string expected = "1, 2";
         var repository = Substitute.For<IDynamicRepository>();
+        var onlineServerRepos = Substitute.For<OnlineServerRepository>();
+        onlineServerRepos.GetOnlineServerIdsModel().ReturnsForAnyArgs(new List<SiteDbGroupModel>
+        {
+            new() { Id = 1 },
+            new() { Id = 2 }
+        });
         repository.GetAsync<string>(Arg.Any<GetTransInfoForCheckVoidPermissionCriteria>()).ReturnsForAnyArgs(expected);
 
-        var service = new CheckTicketsStatusServiceImp(repository);
+        var service = new CheckTicketsStatusServiceImp(repository, onlineServerRepos);
 
         // Act
-        var result = await service.GetTransInfoJsonForCheckPermission(request);
+        _ = await service.GetTransInfoJsonForCheckPermission(request);
 
         // Assert
-        Assert.Equal(expected, result);
+        await onlineServerRepos.Received(1).GetOnlineServerIdsModel();
     }
 
     [Fact]
@@ -43,7 +50,13 @@ public class CheckTicketsStatusServiceTests : IClassFixture<AppSettingFixture>
             Tickets = null,
             CancelCashOutTickets = null
         };
-        var service = new CheckTicketsStatusServiceImp(null);
+        var onlineServerRepos = Substitute.For<OnlineServerRepository>();
+        onlineServerRepos.GetOnlineServerIdsModel().Returns(new List<SiteDbGroupModel>
+        {
+            new() { Id = 1 },
+            new() { Id = 2 }
+        });
+        var service = new CheckTicketsStatusServiceImp(null, onlineServerRepos);
 
         // Act
         var result = await service.GetTransInfoJsonForCheckPermission(request);

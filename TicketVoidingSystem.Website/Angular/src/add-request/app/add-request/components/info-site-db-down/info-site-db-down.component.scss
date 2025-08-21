@@ -5,4 +5,27 @@
     margin-top: 12px;
     margin-bottom: 6px;
     max-width: 1065px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    
+    div {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        overflow: hidden;
+        
+        &:has([innerHTML]) {
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    }
+    
+    ::ng-deep {
+        .site-db-down div {
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+    }
 }

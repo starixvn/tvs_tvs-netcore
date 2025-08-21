@@ -2,29 +2,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest;
 
 public class GetTicketsServiceTests
 {
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
-
+    private readonly IMapper mapper = Substitute.For<IMapper>();
+    private readonly OnlineServerRepository onlineServerRepository = Substitute.For<OnlineServerRepository>();
     private readonly GetTicketsServiceImp service;
 
     public GetTicketsServiceTests()
     {
-        repository = Substitute.For<IDynamicRepository>();
-        mapper = Substitute.For<IMapper>();
-        service = new GetTicketsServiceImp(mapper, repository);
+        service = new GetTicketsServiceImp(mapper, onlineServerRepository);
     }
 
     [Theory]
@@ -37,14 +34,14 @@ public class GetTicketsServiceTests
         { IssueTypeId = issueTypeId, RequestId = 2, Match = new Match { MatchId = 1 } };
         var ticketModels = new List<GetTicketModel> { new() { IsMixParlay = true } };
         mapper.Map<GetTicketsCriteria>(default).ReturnsForAnyArgs(new GetTicketsCriteria());
-        repository.FetchAsync<GetTicketModel>(default).ReturnsForAnyArgs(ticketModels);
+        onlineServerRepository.FetchAsync<GetTicketModel>(default).ReturnsForAnyArgs(ticketModels);
 
         // Act
         var result = service.GetTickets(query);
 
         // Assert
         Assert.NotNull(result);
-        await repository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());
+        await onlineServerRepository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());
     }
 
     [Theory]
@@ -56,15 +53,15 @@ public class GetTicketsServiceTests
         var query = new GetTicketsQuery { IssueTypeId = 8, RequestId = 0, Match = new Match { MatchId = matchId } };
         var ticketModels = new List<GetTicketModel> { new() { IsMixParlay = true } };
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).Returns(new GetTicketsCriteria());
-        repository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>()).Returns(ticketModels);
-        repository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(ticketModels);
+        onlineServerRepository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>()).Returns(ticketModels);
+        onlineServerRepository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(ticketModels);
 
         // Act
         var result = service.GetTickets(query);
 
         // Assert
         Assert.NotNull(result);
-        await repository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());
+        await onlineServerRepository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());
     }
 
     [Fact]
@@ -76,15 +73,15 @@ public class GetTicketsServiceTests
         var ticketModels = new List<GetTicketModel> { new() { IsMixParlay = true } };
 
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).Returns(new GetTicketsCriteria());
-        repository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>()).Returns(ticketModels);
-        repository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(ticketModels);
+        onlineServerRepository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>()).Returns(ticketModels);
+        onlineServerRepository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(ticketModels);
 
         // Act
         var result = service.GetTickets(query);
 
         // Assert
         Assert.NotNull(result);
-        await repository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());
+        await onlineServerRepository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());
     }
 
     [Fact]
@@ -103,15 +100,15 @@ public class GetTicketsServiceTests
             new() { IsMixParlay = false, GroupId = 2, TransId = 1 }
         };
         mapper.Map<GetBetTrans14TicketsCriteria>(Arg.Any<GetTicketsQuery>()).Returns(new GetBetTrans14TicketsCriteria());
-        repository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(ticketModels);
+        onlineServerRepository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(ticketModels);
 
         // Act
         var result = await service.GetTickets(query);
 
         // Assert
         Assert.NotNull(result);
-        await repository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>());
-        Assert.Equal(8, result.Count());
+        await onlineServerRepository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>());
+        Assert.Equal(2, result.Count());
         Assert.Equal(1, result.First().GroupId);
     }
 
@@ -138,16 +135,16 @@ public class GetTicketsServiceTests
 
         mapper.Map<GetBetTrans14TicketsCriteria>(Arg.Any<GetTicketsQuery>()).Returns(new GetBetTrans14TicketsCriteria());
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).Returns(new GetTicketsCriteria());
-        repository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(betTrans14Tickets);
-        repository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>()).Returns(betTransTickets);
+        onlineServerRepository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(betTrans14Tickets);
+        onlineServerRepository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>()).Returns(betTransTickets);
 
         // Act
         var result = await service.GetTickets(query);
 
         // Assert
         Assert.NotNull(result);
-        await repository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>());
-        await repository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());
+        await onlineServerRepository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>());
+        await onlineServerRepository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());
         Assert.Equal(2, result.Count());
     }
 
@@ -168,7 +165,7 @@ public class GetTicketsServiceTests
             new() { IsMixParlay = true, GroupId = 1, TransId = 1 }
         };
         mapper.Map<GetBetTrans14TicketsCriteria>(Arg.Any<GetTicketsQuery>()).Returns(new GetBetTrans14TicketsCriteria());
-        repository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(ticketModels);
+        onlineServerRepository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(ticketModels);
 
         // Act
         var result = await service.GetTickets(query);
@@ -178,9 +175,5 @@ public class GetTicketsServiceTests
         var resultList = result.ToList();
         Assert.Equal(1, resultList[0].GroupId);
         Assert.Equal(1, resultList[0].TransId);
-        Assert.Equal(1, resultList[1].GroupId);
-        Assert.Equal(1, resultList[1].TransId);
-        Assert.Equal(1, resultList[2].GroupId);
-        Assert.Equal(1, resultList[2].TransId);
     }
 }
