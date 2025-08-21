@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import { clone, orderBy, uniqBy } from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
 import { AddChildMatchComponent } from '../../../../../utility/components/add-child-match/add-child-match.component';
@@ -163,7 +163,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     this.mainEvent.parentId = this.eventLeagueComponent?.selectedMatch.parentId;
     this.relatedEvents = await this.addRequestApiService.getChildMatches(this.createGetChildMatchesQuery());
     await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
-    this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    this.allSelectedEvents = orderBy(uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     this.logInfoComponents.forEach(x => {
       x.filterTimeWithAllowanceComponent?.updateData();
       x.showValidationDetail();
@@ -227,7 +227,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
       await this.logInfoService.getLogInfo(newEvents, this.primitiveProps, this.isEdit, this.requestId, this.filter, this.defaultFilterTimeWithAllowance);
       this.logInfoService.updateIsCheckedVar(newEvents, this.mainEvent.isCheckedVar);
       this.allSelectedEvents.push(...newEvents);
-      this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+      this.allSelectedEvents = orderBy(uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     }
 
     this.clearInfoSiteDBDownModel();
@@ -237,7 +237,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
 
   async handleClickAddRelatedEvent(): Promise<void> {
     await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
-    this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    this.allSelectedEvents = orderBy(uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
   }
 
   handleDeleteEvent(matchId: number): void {
@@ -249,7 +249,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     this.addChildMatchModel.selectedMatchIds = this.allSelectedEvents.map(x => x.matchId);
     this.addChildMatchModel.matchType = matchType;
     this.addChildMatchModel.isOpen = true;
-    this.addChildMatchModel = _.clone(this.addChildMatchModel);
+    this.addChildMatchModel = clone(this.addChildMatchModel);
   }
 
   countChildMatches(): number {

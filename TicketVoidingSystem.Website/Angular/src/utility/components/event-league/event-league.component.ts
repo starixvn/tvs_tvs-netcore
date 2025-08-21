@@ -2,7 +2,7 @@ import { _isNumberValue } from '@angular/cdk/coercion';
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import * as _ from 'lodash';
+import { isEmpty, isNull } from 'lodash';
 import { Subscription, timer } from 'rxjs';
 import { AddRequestStore } from '../../../add-request/app/add-request/add-request.store';
 import { LABELS } from '../../../utility/constants/labels';
@@ -74,7 +74,7 @@ export class EventLeagueComponent implements OnChanges {
     }
 
     this.delayForSearchSubscription = this.observableTimer.subscribe(async () => {
-      if (_.isNull(keyword.term) || _.isEmpty(keyword.term)) {
+      if (isNull(keyword.term) || isEmpty(keyword.term)) {
         this.validationMessage = '';
       } else if (_isNumberValue(keyword.term)) {
         const model = await this.commonService.getMatchInfoAddRequestTvs(Number(keyword.term));

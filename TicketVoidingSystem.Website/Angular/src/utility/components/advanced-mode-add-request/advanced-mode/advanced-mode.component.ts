@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import { groupBy, isEqual, uniqWith } from 'lodash';
 import { Subscription, timer } from 'rxjs';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TEXT } from '../../../../utility/constants/text';
@@ -230,7 +230,7 @@ export class AdvancedModeComponent {
   }
 
   private updatePlayerCricket(oddsInfo: OddsInfo[]): void {
-    const groupBetTypes = _.groupBy(oddsInfo, 'betTypeId');
+    const groupBetTypes = groupBy(oddsInfo, 'betTypeId');
     for (const betTypeId in groupBetTypes) {
       const items = this.getItemsPlayerSelection(betTypeId, groupBetTypes[betTypeId]);
       this.baseSpecialBetTypeCricket.push(new Selection(0, '', `${betTypeId}`, items, true, null));
@@ -257,7 +257,7 @@ export class AdvancedModeComponent {
         .filter(x => betTeam.betTypes.includes(x.value))
         .flatMap(x => x.items);
 
-      playerSelection.items = _.uniqWith(validItems, _.isEqual);
+      playerSelection.items = uniqWith(validItems, isEqual);
 
       betTeam.selections
         .filter(x => x.name === 'Player')

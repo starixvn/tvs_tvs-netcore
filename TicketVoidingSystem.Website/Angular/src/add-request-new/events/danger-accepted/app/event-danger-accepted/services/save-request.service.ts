@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
+import { clone, isNull, isUndefined } from 'lodash';
 import { TvDetectionType, TVSRequestActionType } from '../../../../../../utility/constants/config';
 import { LABELS } from '../../../../../../utility/constants/labels';
 import { TEXT } from '../../../../../../utility/constants/text';
@@ -86,7 +86,7 @@ export class SaveRequestService {
     arg.confirmDangerAccepted.issueTypeName = arg.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === arg.filter.issueTypeId).issueTypeName;
     arg.confirmDangerAccepted.subIssueTypeName = arg.issueTypes.selectedSubIssueTypes.find(x => x.subIssueTypeId.toString() === arg.filter.subIssueTypeId).subIssueTypeName;
     arg.confirmDangerAccepted.isOpenDialog = true;
-    arg.confirmDangerAccepted = _.clone(arg.confirmDangerAccepted);
+    arg.confirmDangerAccepted = clone(arg.confirmDangerAccepted);
   }
 
   async executeSaveRequestApi(args: SaveRequestArg): Promise<void> {
@@ -109,7 +109,7 @@ export class SaveRequestService {
   private validateVarCheck(allEvents: LogInfoRelatedEvent[]): boolean {
     let isSelectedVarAllEvents = true;
     allEvents.forEach(x => {
-      if(StaticService.isShowVarCheck(x.subIssueTypeId) && (_.isNull(x.isCheckedVar) || _.isUndefined(x.isCheckedVar))) {
+      if(StaticService.isShowVarCheck(x.subIssueTypeId) && (isNull(x.isCheckedVar) || isUndefined(x.isCheckedVar))) {
         x.isHighLightVarCheck = true;
         isSelectedVarAllEvents = false;
       }

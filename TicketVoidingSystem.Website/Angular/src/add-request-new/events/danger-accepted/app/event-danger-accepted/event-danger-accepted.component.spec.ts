@@ -1,6 +1,6 @@
 import { QueryList, SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import { Subscription } from 'rxjs';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
@@ -187,7 +187,7 @@ describe('EventDangerAcceptedComponent', () => {
     eventDangerAcceptedService.assignModelsToEvents = jest.fn();
     addRequestApiService.getChildMatches = jest.fn();
     component.isEdit = true;
-    const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
+    const mainEvent = cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.isMainMatch = true;
     component.allSelectedEvents = [mainEvent];
     component.filter = {issueTypeId: "1"} as FilterModel;

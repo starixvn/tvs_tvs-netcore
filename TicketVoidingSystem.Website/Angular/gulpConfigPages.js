@@ -232,9 +232,9 @@ const configPages = [
   // editRequest,
   //voidByBetId
   //addRequestArchivedTicket
-  //dangerAccepted,
+  dangerAccepted,
   //redCard,
-  wrongScore,
+  //wrongScore,
   //technicalError
 ];
 

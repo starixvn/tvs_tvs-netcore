@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import moment from 'moment';
 import { DateTimeFormat, MatchType, SubIssueTypeGroup } from '../../../../../../utility/constants/config';
 import { LABELS } from '../../../../../../utility/constants/labels';
@@ -91,7 +91,7 @@ export class RelatedEventService {
     const newChildEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId)
       && this.isAutoSelectMatch(arg.filter.subIssueTypeId, x.matchType, arg.mainEvent, x.isSpecialChildMatch));
     const newEvents = this.assignChildMatchToLogInfoModel(newChildEvents, arg.defaultFilterTimeWithAllowance, arg.mainEvent.subIssueTypeId);
-    const eventsGetLogInfo = _.cloneDeep(arg.allEvents);
+    const eventsGetLogInfo = cloneDeep(arg.allEvents);
     eventsGetLogInfo.push(...newEvents);
     await this.eventDangerAcceptedService.updateSubIssueTypeAndAllowanceTime(eventsGetLogInfo, arg.mainEvent, relatedEvents, arg.defaultFilterTimeWithAllowance);
 

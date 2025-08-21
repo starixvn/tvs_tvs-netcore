@@ -1,6 +1,6 @@
 import { QueryList } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import * as _ from 'lodash';
+import { clone } from 'lodash';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
 import { TVSRequestActionType } from '../../../../../../utility/constants/config';
 import { LABELS } from '../../../../../../utility/constants/labels';
@@ -796,7 +796,7 @@ describe('SaveRequestService', () => {
       service['showPopupConfirmSave'](arg);
 
       expect(arg.confirmDangerAccepted.isOpenDialog).toBe(true);
-      expect(arg.confirmDangerAccepted).not.toBe(_.clone(arg.confirmDangerAccepted));
+      expect(arg.confirmDangerAccepted).not.toBe(clone(arg.confirmDangerAccepted));
     });
 
     it('should not set warning flags when filter.isVoided is true', () => {
