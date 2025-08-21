@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject, Input, OnChanges, SimpleChange, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { assignIn, groupBy, isEqual, uniqWith } from 'lodash';
+import assignIn from 'lodash/assignIn';
+import groupBy from 'lodash/groupBy';
+import isEqual from 'lodash/isEqual';
+import uniqWith from 'lodash/uniqWith';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TEXT } from '../../../../utility/constants/text';
 import { DecimalOnlyDirective, MultipleDecimalDirective, } from '../../../../utility/directives/numbers-only.directive';

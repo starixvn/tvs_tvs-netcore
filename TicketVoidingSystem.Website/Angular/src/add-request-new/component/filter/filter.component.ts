@@ -154,7 +154,7 @@ export class FilterComponent implements OnInit, OnChanges {
     if (!this.model.issueTypeId) {
       return;
     }
-    
+
     const widthMapping: { [key: number]: { [key: string]: number } } = {
       [IssueTypeConstant.DANGER_ACCEPTED]: { subIssueType: 300, action: 150, sport: 150 },
       [IssueTypeConstant.EARLY_KICK_OFF]: { subIssueType: 150, action: 170, sport: 220 },
@@ -244,7 +244,7 @@ export class FilterComponent implements OnInit, OnChanges {
       if (!this.issueTypes.subIssueTypes || this.issueTypes.subIssueTypes.length === 0) {
         return;
       }
-      
+
       this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes
         .filter(x => !this.ignoreSubIssueType.includes(x.subIssueTypeId));
       this.issueTypes.subIssueId = this.issueTypes.selectedSubIssueTypes[0].subIssueTypeId;
@@ -255,7 +255,7 @@ export class FilterComponent implements OnInit, OnChanges {
     if (!this.issueTypes.subIssueTypes || this.issueTypes.subIssueTypes.length === 0) {
       return;
     }
-    
+
     const sub = this.issueTypes.subIssueTypes.find(x => x.subIssueTypeId === Number(this.model.subIssueTypeId));
     this.issueTypes.issueId = isUndefined(sub) ? this.issueTypes.issueId : sub.issueTypeId;
     this.issueTypes.subIssueId = isUndefined(sub) ? this.issueTypes.issueId : sub.subIssueTypeId;

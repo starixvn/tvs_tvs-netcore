@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import { LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
-import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
-import { BetTypeCountModel, GroupBetTypeCountModel } from '../../models/get-log-info.model';
-import * as _ from 'lodash';
+import groupBy from 'lodash/groupBy';
 import { Item } from '../../../utility/models/item.model';
+import { BetTypeCountModel, GroupBetTypeCountModel } from '../../models/get-log-info.model';
+import { LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
 import { AddRequestApiService } from '../../services/add-request-api.service';
+import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
 
 @Injectable()
 export class AffectedTicketService {
@@ -26,7 +26,7 @@ export class AffectedTicketService {
 
   updateBetTypeCountModel(betTypeCount: BetTypeCountModel[]): GroupBetTypeCountModel[] {
     const groupBetTypesCount: GroupBetTypeCountModel[] = [];
-    const groupBetTypes = _.groupBy(betTypeCount, item => `"${item.betTypeId}+${item.betId}"`);
+    const groupBetTypes = groupBy(betTypeCount, item => `"${item.betTypeId}+${item.betId}"`);
     for (const key in groupBetTypes) {
       const values = groupBetTypes[key];
 

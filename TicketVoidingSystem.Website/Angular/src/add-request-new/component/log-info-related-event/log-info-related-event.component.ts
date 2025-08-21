@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import clone from 'lodash/clone';
+import isNull from 'lodash/isNull';
 import moment from 'moment-timezone';
 import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
 import { ModalService } from '../../../utility/components/modal/modal.service';
@@ -117,7 +118,7 @@ export class LogInfoRelatedEventComponent {
   openDialog(): void {
     this.subIssueTypeDialogModel.isOpen = true;
     this.subIssueTypeDialogModel.issueTypeId = this.filter.issueTypeId;
-    this.subIssueTypeDialogModel = _.clone(this.subIssueTypeDialogModel);
+    this.subIssueTypeDialogModel = clone(this.subIssueTypeDialogModel);
   }
 
   handleDeleteEvent(matchId: number) {
@@ -167,7 +168,7 @@ export class LogInfoRelatedEventComponent {
   }
 
   displayMinTime(minTime?: Date): string {
-    if (_.isNull(minTime)) {
+    if (isNull(minTime)) {
       return '-';
     }
     return (this.acceptTypeName) ? `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)} - ${this.acceptTypeName}` :

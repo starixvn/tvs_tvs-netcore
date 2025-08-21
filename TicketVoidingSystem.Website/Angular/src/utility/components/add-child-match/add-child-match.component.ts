@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { clone } from 'lodash';
+import clone from 'lodash/clone';
 import { ChildMatchModel } from '../../../add-request-new/models/related-event.model';
 import { BlockUiDirective } from '../block-ui/block-ui.directive';
 import { AddChildMatchModel } from './add-child-match.model';

@@ -1,6 +1,6 @@
 ﻿import { Component, ElementRef, inject, Input, OnChanges, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import { Product } from '../../constants/config';
 import { TEXT } from '../../constants/text';
 import { TooltipComponent } from '../tooltip/tooltip.component';

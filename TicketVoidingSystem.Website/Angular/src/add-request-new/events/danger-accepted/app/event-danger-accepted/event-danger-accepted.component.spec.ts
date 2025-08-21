@@ -1,6 +1,6 @@
 import { QueryList, SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { Subscription } from 'rxjs';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';

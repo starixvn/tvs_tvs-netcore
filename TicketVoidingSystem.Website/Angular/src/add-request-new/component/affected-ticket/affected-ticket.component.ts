@@ -1,5 +1,6 @@
 import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import uniqBy from 'lodash/uniqBy';
 import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
@@ -34,7 +35,7 @@ export class AffectedTicketComponent implements OnChanges {
     if (changes['model'] && this.model.isOpen) {
       this.blockBetList = true;
       this.tickets = await this.affectedTicketService.getAffectedTickets(this.model.issueTypeId, this.model.logInfoTicketsJson);
-      this.otherTickets.groups = _.cloneDeep(this.tickets.groupOtherTickets);
+      this.otherTickets.groups = cloneDeep(this.tickets.groupOtherTickets);
       this.otherTickets.checkAllTickets();
 
       this.initFilterBetTypes();
@@ -63,7 +64,7 @@ export class AffectedTicketComponent implements OnChanges {
         })
       );
       const filterBetTypes = StaticService.initDefaultMultipleSelection('280px', 1);
-      filterBetTypes.items = _.uniqBy(betTypes, 'text');
+      filterBetTypes.items = uniqBy(betTypes, 'text');
 
       this.filterBetTypes = filterBetTypes;
     }

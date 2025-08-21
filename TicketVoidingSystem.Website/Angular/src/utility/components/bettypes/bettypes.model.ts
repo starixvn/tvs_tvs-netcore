@@ -1,4 +1,4 @@
-﻿import { isUndefined } from 'lodash';
+﻿import isUndefined from 'lodash/isUndefined';
 import { Product } from '../../constants/config';
 import { Result } from '../../models/result';
 import { PrimaryBetType } from '../advanced-mode/group-bettypes/group-bettypes.model';

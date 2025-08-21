@@ -30,7 +30,7 @@
     "@ng-select/ng-select": "^13.9.1",
     "@popperjs/core": "^2.11.8",
     "@types/file-saver": "^2.0.0",
-    "@types/lodash": "^4.17.14",
+    "@types/lodash": "^4.17.20",
     "ajv": "^6.10.2",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",

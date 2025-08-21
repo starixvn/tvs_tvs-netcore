@@ -1,5 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { clone, isNull, isUndefined } from 'lodash';
+import clone from 'lodash/clone';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 import { TvDetectionType, TVSRequestActionType } from '../../../../../../utility/constants/config';
 import { LABELS } from '../../../../../../utility/constants/labels';
 import { TEXT } from '../../../../../../utility/constants/text';

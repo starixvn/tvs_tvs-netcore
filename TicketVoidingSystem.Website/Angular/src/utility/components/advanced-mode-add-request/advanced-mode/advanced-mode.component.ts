@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { groupBy, isEqual, uniqWith } from 'lodash';
+import groupBy from 'lodash/groupBy';
+import isEqual from 'lodash/isEqual';
+import uniqWith from 'lodash/uniqWith';
 import { Subscription, timer } from 'rxjs';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TEXT } from '../../../../utility/constants/text';

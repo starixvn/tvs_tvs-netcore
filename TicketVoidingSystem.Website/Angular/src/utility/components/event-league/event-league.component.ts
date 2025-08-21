@@ -2,7 +2,8 @@ import { _isNumberValue } from '@angular/cdk/coercion';
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { isEmpty, isNull } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import isNull from 'lodash/isNull';
 import { Subscription, timer } from 'rxjs';
 import { AddRequestStore } from '../../../add-request/app/add-request/add-request.store';
 import { LABELS } from '../../../utility/constants/labels';
@@ -28,7 +29,7 @@ export class EventLeagueComponent implements OnChanges {
   @Input() isShowSportType = true;
   @Input() subIssueTypeId?: string;
   @Output() changeEvent = new EventEmitter<MatchModel>();
-  
+
   selectedMatch = new MatchModel();
   matches: MatchModel[];
   isBlock: boolean;
@@ -36,7 +37,7 @@ export class EventLeagueComponent implements OnChanges {
   validationMessage: string;
   warningSubType: string;
   isShowWarningSubType = false;
-  
+
   private delayForSearchSubscription: Subscription;
   private readonly observableTimer = timer(300);
   private readonly addRequestStore = inject(AddRequestStore);

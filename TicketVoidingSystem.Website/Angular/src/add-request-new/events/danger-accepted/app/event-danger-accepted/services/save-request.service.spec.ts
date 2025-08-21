@@ -1,6 +1,6 @@
 import { QueryList } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { clone } from 'lodash';
+import clone from 'lodash/clone';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
 import { TVSRequestActionType } from '../../../../../../utility/constants/config';
 import { LABELS } from '../../../../../../utility/constants/labels';

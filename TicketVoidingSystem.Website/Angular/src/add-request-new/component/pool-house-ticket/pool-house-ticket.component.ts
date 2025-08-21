@@ -2,7 +2,8 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import flatten from 'lodash/flatten';
+import uniq from 'lodash/uniq';
 import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
@@ -109,7 +110,7 @@ export class PoolHouseTicketComponent implements OnChanges {
   }
 
   private getCheckedBetTypes(): string {
-    const checkedBetTypes = (_.uniq(_.flatten(this.affectedSection.groupBetTypesModel.groupBetTypes.map(x => x.betTypes))))
+    const checkedBetTypes = (uniq(flatten(this.affectedSection.groupBetTypesModel.groupBetTypes.map(x => x.betTypes))))
       .filter(x => x.isChecked)
       .map(x => x.id);
 

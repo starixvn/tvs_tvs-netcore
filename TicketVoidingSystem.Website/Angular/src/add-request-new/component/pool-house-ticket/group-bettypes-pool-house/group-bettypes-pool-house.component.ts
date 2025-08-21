@@ -2,7 +2,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { GroupBetTypesModel } from './group-bettypes-pool-house.model';
@@ -27,7 +28,7 @@ export class GroupBettypesPoolHouseComponent implements OnInit {
   }
 
   public isShowGroupBetTypes(group: GroupBetTypesModel): boolean {
-    return !_.isNull(group) && !_.isUndefined(group) && group.groupBetTypes?.length > 0;
+    return !isNull(group) && !isUndefined(group) && group.groupBetTypes?.length > 0;
   }
 
   public changedBetTypes() {

@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnChanges, SimpleChange, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { AbnormalFilterBy, FunctionConst } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { EventType } from '../../../../utility/constants/sport.constant';

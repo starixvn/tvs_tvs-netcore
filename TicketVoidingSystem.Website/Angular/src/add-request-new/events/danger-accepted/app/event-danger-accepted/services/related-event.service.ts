@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import moment from 'moment';
 import { DateTimeFormat, MatchType, SubIssueTypeGroup } from '../../../../../../utility/constants/config';
 import { LABELS } from '../../../../../../utility/constants/labels';
