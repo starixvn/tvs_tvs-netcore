@@ -106,8 +106,10 @@ class Helper {
       unMarkTransIds: null,
       markTransIds: null,
       removeTransIds: null
-    }
-  } as PrimitiveProperty;
+    },
+    infoSiteDBDownModel: null,
+    isShowInfoSiteDBDown: false
+  } as unknown as PrimitiveProperty;
 }
 
 describe('LogInfoWrongOddsComponent', () => {

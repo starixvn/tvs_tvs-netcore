@@ -130,6 +130,7 @@ export class LogInfoWrongHdpComponent {
     this.logInfo.isShowValidation = false;
     this.logInfo.logInfoDetail = null;
     this.logInfo.messageValidationLogInfo = null;
+    this.primitiveProps.isShowInfoSiteDBDown = false;
   }
 
   public resetPoolHouseCheckedBetTypes(): void {

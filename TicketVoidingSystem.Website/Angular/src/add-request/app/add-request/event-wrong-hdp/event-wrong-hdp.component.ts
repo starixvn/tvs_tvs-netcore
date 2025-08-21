@@ -27,21 +27,19 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
+import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
+import { IssueTypes } from '../filter/issue-types.model';
 
 @Component({
   selector: 'event-wrong-hdp',
   templateUrl: './event-wrong-hdp.component.html',
   styleUrls: ['./event-wrong-hdp.component.scss'],
   standalone: true,
-  imports: [EventLeagueComponent, LogInfoWrongHdpComponent, AddChildMatchComponent, FormsModule, TooltipComponent, 
-    BlockUiDirective, OnlyNumberDirective],
-  providers: [
-    EventWrongHdpService,
-    LogInfoService,
-    RelatedEventService,
-    SaveRequestService,
-    ValidationService
-  ]
+  imports: [EventLeagueComponent, LogInfoWrongHdpComponent, AddChildMatchComponent, FormsModule, TooltipComponent,
+    BlockUiDirective, OnlyNumberDirective, InfoSiteDBDownComponent, ConfirmAddRequestComponent],
+  providers: [EventWrongHdpService, LogInfoService, RelatedEventService, SaveRequestService, ValidationService]
 })
 export class EventWrongHdpComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -53,6 +51,7 @@ export class EventWrongHdpComponent implements OnInit {
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() wrongHdpModels: WrongHdpModel[] = [];
+  @Input() issueTypes = new IssueTypes();
   @Output() updateMatchId = new EventEmitter<number>();
   @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoWrongHdpComponent>;
@@ -63,6 +62,8 @@ export class EventWrongHdpComponent implements OnInit {
   addChildMatchModel = new AddChildMatchModel();
   primitiveProps = new PrimitiveProperty();
   tooltip = new Tooltip();
+  confirmAddRequest = new ConfirmAddRequestModel();
+
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
   private readonly element = inject(ElementRef);
   private readonly logInfoService = inject(LogInfoService);
@@ -112,10 +113,10 @@ export class EventWrongHdpComponent implements OnInit {
   }
 
   public async handleSearchEvent(): Promise<void> {
+    this.primitiveProps.isShowInfoSiteDBDown = false;
     this.logInfoService.resetLogInfoOfEvent([this.mainEvent]);
     const mainLogInfo = this.logInfoComponents.find(x => x.isMainMatch);
     mainLogInfo.logInfo.isShowValidation = false;
-
     if (!this.validationService.validateCommonData(this.eventLeagueComponent, [mainLogInfo])) {
       return;
     }
@@ -133,6 +134,7 @@ export class EventWrongHdpComponent implements OnInit {
 
   public changeMatchEvent(): void {
     this.primitiveProps.isShowRelatedEvents = false;
+    this.primitiveProps.isShowInfoSiteDBDown = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
     this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
@@ -163,10 +165,12 @@ export class EventWrongHdpComponent implements OnInit {
     this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     this.primitiveProps.isShowRelatedEvents = true;
     this.primitiveProps.isBlock = false;
+    this.primitiveProps.isShowInfoSiteDBDown = false;
   }
 
   public handleDeleteEvent(matchId: number): void {
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.matchId !== matchId || x.isMainMatch);
+      this.primitiveProps.isShowInfoSiteDBDown = false;
   }
 
   public async handleClickAddRelatedEvent(): Promise<void> {
@@ -175,6 +179,7 @@ export class EventWrongHdpComponent implements OnInit {
 
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
+    this.primitiveProps.isShowInfoSiteDBDown = false;
     this.logInfoComponents.forEach(x => x.logInfo.isShowValidation = false);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
     this.addRequestStore.changeBlockingUiStatus(false);
@@ -182,11 +187,13 @@ export class EventWrongHdpComponent implements OnInit {
 
   private resetLogInfoAndHideEvents() {
     this.primitiveProps.isShowRelatedEvents = false;
+    this.primitiveProps.isShowInfoSiteDBDown = false;
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
   }
 
   public resetAllData(): void {
     this.primitiveProps.isShowRelatedEvents = false;
+    this.primitiveProps.isShowInfoSiteDBDown = false;
     this.allSelectedEvents = [];
   }
 
@@ -205,6 +212,7 @@ export class EventWrongHdpComponent implements OnInit {
     arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.logInfoComponents = this.logInfoComponents.toArray();
     arg.addRequestStore = this.addRequestStore;
+    arg.confirmAddRequest = this.confirmAddRequest;
 
     return arg;
   }
@@ -240,5 +248,13 @@ export class EventWrongHdpComponent implements OnInit {
 
   public isDisabledLinkMatches(): boolean {
     return this.filter.isVoided || this.relatedEvents.filter(x => x.matchType === MatchType.LINK).length === 0;
+  }
+
+  async onClickConfirmSaveRequest() {
+    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
+  }
+
+  onClickCancelSaveRequest() {
+    this.addRequestStore.changeSavingRequestStatus(false);
   }
 }

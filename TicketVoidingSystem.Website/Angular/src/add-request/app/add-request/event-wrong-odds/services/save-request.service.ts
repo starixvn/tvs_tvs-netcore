@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
@@ -10,6 +9,7 @@ import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventWrongOddsService } from './event-wrong-odds.service';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
+import { StaticService } from '../../../../../utility/services/static.service';
 
 @Injectable()
 export class SaveRequestService {
@@ -23,16 +23,31 @@ export class SaveRequestService {
     const isDataValid = argWrongOdds.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argWrongOdds);
     argWrongOdds.addRequestStore.changeBlockingUiStatus(true);
     if (isDataValid) {
-      this.proceedSaveRequest(argWrongOdds);
+      this.showPopupConfirmSave(argWrongOdds);
     } else {
       argWrongOdds.addRequestStore.changeSavingRequestStatus(false);
     }
     argWrongOdds.addRequestStore.changeBlockingUiStatus(false);
   }
 
+  
+  private showPopupConfirmSave(arg: SaveRequestArg) {
+    if (!arg.filter.isVoided) {
+      arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
+      arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoDetail?.settleCount > 0;
+      arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.messageValidationLogInfo?.length > 0;
+    }
+    arg.confirmAddRequest.isOpen = true;
+    arg.confirmAddRequest.requestId = arg.requestId;
+    arg.confirmAddRequest.requestedBy = arg.requestedBy;
+    arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
+    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
+  }
+
   async recheckLogInfoBeforeSaveRequest(argWrongOdds: SaveRequestArg): Promise<boolean> {
     argWrongOdds.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoWrongOddsService.resetLogInfoOfEvent(argWrongOdds.logInfoEvent);
+    argWrongOdds.primitiveProps.infoSiteDBDownModel = null;
     argWrongOdds.logInfoEvent.isShowValidation = false;
 
     if (!this.validationService.validateCommonData(argWrongOdds.eventLeagueComponent, argWrongOdds.filterWrongOddsComponent)) {
@@ -48,45 +63,12 @@ export class SaveRequestService {
     return this.validationService.isValidLogInfoEvent(argWrongOdds.logInfoEvent);
   }
 
-  private proceedSaveRequest(arg: SaveRequestArg) {
-    if (this.validationService.checkCanShowConfirmationWrongOdds(arg)) {
-      this.popupService.showConfirm(
-        this.getMessageConfirmationWrongOdds(arg),
-        async () => {
-          await this.onClickConfirmSave(arg);
-        },
-        () => {
-          arg.addRequestStore.changeSavingRequestStatus(false);
-        });
-    } else {
-      this.executeSaveRequestApi(arg);
-    }
-  }
-
-  private getMessageConfirmationWrongOdds(argWrongOdds: SaveRequestArg): string {
-    let message = '';
-    if (argWrongOdds.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError)) {
-      message = `${message}<div>There are some warnings in this request.</div>`;
-    }
-
-    if (argWrongOdds.isEdit && argWrongOdds.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString()
-      && argWrongOdds.filter.action !== argWrongOdds.actionIdOfFirstTimeAccess) {
-      message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;
-    }
-
-    if (argWrongOdds.isEdit && argWrongOdds.userId !== Number(document.getElementById('body').getAttribute('user-id'))) {
-      message = `${message}<div style="color:red">Please remind this request ${argWrongOdds.requestId} is confirmed by ${argWrongOdds.requestedBy}.</div>`;
-    }
-
-    return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
-  }
-
   private async executeSaveRequestApi(argWrongOdds: SaveRequestArg): Promise<void> {
     const query = this.initAddRequestQuery(argWrongOdds);
     await this.addRequestService.executeSaveRequest(argWrongOdds.isEdit, argWrongOdds.requestId, query, argWrongOdds.addRequestStore);
   }
 
-  private async onClickConfirmSave(argWrongOdds: SaveRequestArg) {
+  async onClickConfirmSave(argWrongOdds: SaveRequestArg) {
     // validate again for make sure
     const isDataValidAgain = argWrongOdds.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argWrongOdds);
     argWrongOdds.addRequestStore.changeBlockingUiStatus(true);
@@ -114,6 +96,8 @@ export class SaveRequestService {
 
     if (!argWrongOdds.filter.isVoided) {
       query.wrongOddsInfo = this.getWrongOddsInfo(argWrongOdds.logInfoEvent, argWrongOdds.filter.subIssueTypeId);
+      query.siteDBDownInfoJson = argWrongOdds.confirmAddRequest.isMarkTicketSiteDbDown && argWrongOdds.confirmAddRequest.isHasAffectedTicketSiteDBDown
+        ? argWrongOdds.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;

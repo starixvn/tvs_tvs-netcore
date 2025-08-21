@@ -29,13 +29,14 @@ import { EventWrongOddsSportsBookService } from './services/event-wrong-odds-spo
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
 
 @Component({
   selector: 'event-wrong-odds-sports-book',
   templateUrl: './event-wrong-odds-sports-book.component.html',
   styleUrls: ['./event-wrong-odds-sports-book.component.scss'],
   standalone: true,
-  imports: [EventLeagueComponent, FilterWrongOddsSportsBookComponent, FormsModule,
+  imports: [EventLeagueComponent, FilterWrongOddsSportsBookComponent, FormsModule, InfoSiteDBDownComponent,
     LogInfoWrongOddsSportsBookComponent, AdvancedModeAddRequestComponent, ConfirmAddRequestComponent],
   providers: [EventWrongOddsSportsBookService, LogInfoService, SaveRequestService, ValidationService,
     CheckAddPermissionService
@@ -115,6 +116,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
   async handleSearchEvent(): Promise<void> {
     this.logInfoEvent.betTeamsResult = this.advancedMode.getCheckedBetTypes();
     this.primitiveProps.isShowValidation = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.filterWrongOddsSportsBookComponent, this.advancedMode)) {
       return;
@@ -155,6 +157,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
   resetLogInfo(): void {
     this.primitiveProps.isShowErrorNoBetType = false;
     this.primitiveProps.isShowValidation = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
   }
 
@@ -189,6 +192,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
 
   public async changeMatchEvent(): Promise<void> {
     this.primitiveProps.isShowValidation = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     if (this.eventLeagueComponent?.selectedMatch.matchId) {

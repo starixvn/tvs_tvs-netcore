@@ -84,7 +84,8 @@
                 [filter]="model.filter"
                 [issueTypeId]="model.filter.issueTypeId"
                 [wrongHdpModels]="model.wrongHdpModels"
-                (updateMatchId)="updateMatchId($event)">
+                (updateMatchId)="updateMatchId($event)"
+                [issueTypes]="issueTypes">
               </event-wrong-hdp>
             }
             @if (checkAllIssueTypes().isWrongOU || checkAllIssueTypes().isWrong1stOU) {
@@ -98,7 +99,8 @@
                 [filter]="model.filter"
                 [issueTypeId]="model.filter.issueTypeId"
                 [wrongOuModels]="model.wrongOuModels"
-                (updateMatchId)="updateMatchId($event)">
+                (updateMatchId)="updateMatchId($event)"
+                [issueTypes]="issueTypes">
               </event-wrong-ou>
             }
             @if (checkAllIssueTypes().isAbnormalAccount) {
@@ -150,7 +152,8 @@
                 [requestId]="requestId"
                 [filter]="model.filter"
                 [wrongOddsModels]="model.wrongOddsModels"
-                (updateMatchId)="updateMatchId($event)">
+                (updateMatchId)="updateMatchId($event)"
+                [issueTypes]="issueTypes">
               </event-wrong-odds>
             }
             @if (checkAllIssueTypes().isReducedOver || checkAllIssueTypes().isAbandoned) {

@@ -45,7 +45,7 @@
                 <span class="text-red"
                   [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml">
                 </span>
-                }&nbsp;
+                }<span>&nbsp;</span>
                 @if (!filter.isVoided) {
                 <span class="ticket-details" (click)="showAffectedTicketsDetails()">Details</span>
                 }<br />
