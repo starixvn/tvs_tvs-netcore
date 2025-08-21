@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { LABELS } from '../../constants/labels';
 import { TooltipComponent } from '../tooltip/tooltip.component';
 import { Tooltip } from '../tooltip/tooltip.model';
@@ -13,7 +13,7 @@ import { GroupNumber, NumberItem } from './bet-ids.model';
   templateUrl: './bet-ids.component.html',
   styleUrls: ['./bet-ids.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, TooltipComponent, CommonModule, NgbModule]
+  imports: [FormsModule, TooltipComponent, CommonModule, NgbTooltip]
 })
 export class BetIdsComponent implements OnInit {
   private readonly errorTooltipClassName = 'invalid-data';

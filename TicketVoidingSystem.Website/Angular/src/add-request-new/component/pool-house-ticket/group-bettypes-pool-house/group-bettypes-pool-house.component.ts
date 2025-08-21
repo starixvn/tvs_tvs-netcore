@@ -1,7 +1,7 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import isNull from 'lodash/isNull';
 import isUndefined from 'lodash/isUndefined';
 import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
@@ -13,7 +13,7 @@ import { GroupBetTypesModel } from './group-bettypes-pool-house.model';
   templateUrl: './group-bettypes-pool-house.component.html',
   styleUrls: ['./group-bettypes-pool-house.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgbModule, TooltipComponent]
+  imports: [FormsModule, TooltipComponent, NgbCollapseModule]
 })
 export class GroupBettypesPoolHouseComponent implements OnInit {
   @Input() affectedGroupBetTypesModel: GroupBetTypesModel;

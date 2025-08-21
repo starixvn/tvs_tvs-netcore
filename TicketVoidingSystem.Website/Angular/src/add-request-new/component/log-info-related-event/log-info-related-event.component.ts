@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import clone from 'lodash/clone';
 import isNull from 'lodash/isNull';
 import moment from 'moment-timezone';
@@ -29,7 +28,7 @@ import { PrimitiveProperty } from './primitive-property.model';
   selector: 'log-info-related-event',
   templateUrl: './log-info-related-event.component.html',
   styleUrls: ['./log-info-related-event.component.scss'],
-  imports: [CommonModule, FormsModule, TooltipComponent, NgbModule, SubIssueTypeDialogComponent,
+  imports: [CommonModule, FormsModule, TooltipComponent, SubIssueTypeDialogComponent,
     FilterTimeWithAllowanceComponent, BlockUiDirective, SanitizeHtmlPipe],
   providers: [LogInfoRelatedEventService]
 })

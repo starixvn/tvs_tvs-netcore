@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import clone from 'lodash/clone';
 import orderBy from 'lodash/orderBy';
 import uniqBy from 'lodash/uniqBy';
@@ -50,9 +50,9 @@ import { ValidationService } from './services/validation.service';
   selector: 'event-danger-accepted',
   templateUrl: './event-danger-accepted.component.html',
   styleUrls: ['./event-danger-accepted.component.scss'],
-  imports: [FormsModule, CommonModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiDirective,
+  imports: [FormsModule, CommonModule, TooltipComponent, EventLeagueComponent, BlockUiDirective,
     TvDetectionComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent,
-    ConfirmDangerAcceptedComponent, OnlyNumberDirective, InfoSiteDBDownComponent],
+    ConfirmDangerAcceptedComponent, OnlyNumberDirective, InfoSiteDBDownComponent, NgbCollapseModule],
   providers: [
     LogInfoService,
     ValidationService,
