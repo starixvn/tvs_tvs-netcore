@@ -8,10 +8,16 @@ ViewBag.Title = isEditMode ? "Edit Request Ticket Voiding" : "Add Request Ticket
 <link href="dist/ticket-voiding-system/danger-accepted/styles.css?8d07af97c68b65a7" rel="stylesheet" />
 
 }
+<script>
+    window.issueTypeId = '@(ViewBag.IssueTypeId?.ToString() ?? "")';
+    window.isEdit = '@isEditMode';
+</script>
 <app-root></app-root>
 
 <script src="dist/ticket-voiding-system/danger-accepted/runtime.js?d6798104a63cc61b"></script>
 
 <script src="dist/ticket-voiding-system/danger-accepted/polyfills.js?6d2f7e0938193000"></script>
 
-<script src="dist/ticket-voiding-system/danger-accepted/main.js?f0744b6f6ceefdf9"></script>
+<script src="dist/ticket-voiding-system/danger-accepted/main.js?41e6b813dcd1a2b3"></script>
+
+
