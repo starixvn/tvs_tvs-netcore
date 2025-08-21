@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
 import { isNull } from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { ModalService } from '../../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { SanitizeHtmlPipe } from '../../../../../../utility/modules/sanitize-html.pipe';

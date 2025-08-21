@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { ModalService } from '../../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';

@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import _ from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
 import { FilterOddsTypeConstant } from '../../../../add-request/app/add-request/event-wrong-odds-sports-book/models/filter-wrong-odds-sports-book.model';
 import { DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
@@ -243,7 +243,7 @@ export class RequestDescriptionService {
   }
 
   private generateRemark(requestInfo: RequestInfoForCopy): string {
-    const IssueTypesShowRemark = [IssueTypeConstant.WRONG_KICK_OFF, IssueTypeConstant.TECHNICAL_ERROR, 
+    const IssueTypesShowRemark = [IssueTypeConstant.WRONG_KICK_OFF, IssueTypeConstant.TECHNICAL_ERROR,
       IssueTypeConstant.REDUCED_OVER, IssueTypeConstant.ABANDONED, IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK,
       IssueTypeConstant.NOT_PARTICIPATE, IssueTypeConstant.MATCH_EARLY_COMPLETED];
     if(requestInfo.remark && IssueTypesShowRemark.includes(requestInfo.issueTypeId.toString())){

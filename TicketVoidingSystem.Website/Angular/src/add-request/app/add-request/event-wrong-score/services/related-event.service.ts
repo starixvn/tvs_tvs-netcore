@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { DateTimeFormat, MatchType } from '../../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../../../utility/constants/labels';
@@ -67,7 +67,7 @@ export class RelatedEventService {
     });
     await this.logInfoService.getLogInfo(this.createMapService.createGetLogInfoParams(arg));
   }
-  
+
   async updateEventAutoGetLinkMatch(childEvents: ChildMatchModel[], arg: AddRelatedEventArg) {
     const newLinkEvents = childEvents.filter(x => !arg.relatedEvents.some(y => y.matchId === x.matchId) && this.isAutoSelectMatch(arg.mainEvent, x.matchType));
     const subTypeLinkMatches = await this.getSubIssueTypeLinkMatch(Number(arg.filter.subIssueTypeId), newLinkEvents.map(x => x.matchId).join(','));
@@ -126,7 +126,7 @@ export class RelatedEventService {
       logInfoRelatedEventModel.eventName = `${eventChild.matchId} - ${eventChild.matchEvent}`;
       logInfoRelatedEventModel.sportType = eventChild.sportType;
       logInfoRelatedEventModel.isMainMatch = false;
-      
+
     return logInfoRelatedEventModel;
   }
 }

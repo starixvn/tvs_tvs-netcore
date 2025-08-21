@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
+import moment from 'moment-timezone';
 import { LABELS } from '../../utility/constants/labels';
 import { Result } from '../../utility/models/result';
 import { CommonService } from '../../utility/services/common.service';
@@ -9,7 +10,6 @@ import { AddRequestResultModel } from '../models/request.model';
 import { AddRequestApiService } from './add-request-api.service';
 import { AddRequestStore } from './add-request.store';
 import { PopupService } from './popup.service';
-import moment from 'moment';
 
 @Injectable({
   providedIn: 'root'

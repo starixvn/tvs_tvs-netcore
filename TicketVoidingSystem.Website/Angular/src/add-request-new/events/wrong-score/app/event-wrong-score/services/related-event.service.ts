@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { DateTimeFormat, MatchType } from '../../../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../../../../utility/constants/labels';

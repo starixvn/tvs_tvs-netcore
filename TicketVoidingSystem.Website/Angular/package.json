@@ -43,7 +43,6 @@
     "js-big-decimal": "^2.2.0",
     "lodash": "^4.17.21",
     "minimatch": "^3.0.4",
-    "moment": "^2.24.0",
     "moment-timezone": "^0.5.45",
     "ngx-autosize": "^2.0.4",
     "ngx-clipboard": "^16.0.0",

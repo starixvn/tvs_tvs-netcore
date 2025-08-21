@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { OrdinalNumberConstant } from '../../../../constants/ordinal-number.constant';
 import { Message } from '../../messages/message';
 import { FormatDateTime, TemplateContentConst, TemplateReplace } from '../template.const';

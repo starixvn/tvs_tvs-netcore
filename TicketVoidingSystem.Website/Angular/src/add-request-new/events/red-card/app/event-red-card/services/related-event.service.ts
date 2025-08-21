@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { DateTimeFormat, MatchType } from '../../../../../../utility/constants/config';
 import { LABELS } from '../../../../../../utility/constants/labels';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';

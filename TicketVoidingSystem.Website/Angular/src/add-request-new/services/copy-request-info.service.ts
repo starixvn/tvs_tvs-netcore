@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
+import moment from 'moment-timezone';
 import { AcceptType, DateTimeFormat } from '../../utility/constants/config';
 import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../../utility/models/copy-request-info.query';
 import { LogInfoDetail } from '../../utility/models/log-info-detail.model';
 import { CommonService } from '../../utility/services/common.service';
 import { OperatorInfo, OperatorType } from '../component/others/others.model';
-import moment from 'moment';
 
 @Injectable({
   providedIn: 'root'

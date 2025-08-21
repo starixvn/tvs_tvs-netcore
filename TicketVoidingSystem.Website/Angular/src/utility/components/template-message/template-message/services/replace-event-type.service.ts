@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { EventType } from '../../../../../utility/constants/sport.constant';
 import { Message } from '../../messages/message';
