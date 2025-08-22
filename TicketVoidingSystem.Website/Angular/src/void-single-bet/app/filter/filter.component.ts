@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import moment from "moment";
+import moment from 'moment-timezone';
 import { AdvancedModeConstants } from '../../../utility/components/advanced-mode/advanced-mode.constants';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { CheckedBetType, GetPlayersQuery, OddsInfo } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';

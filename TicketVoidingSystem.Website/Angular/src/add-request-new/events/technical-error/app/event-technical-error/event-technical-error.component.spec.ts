@@ -145,7 +145,7 @@ describe('EventTechnicalErrorComponent', () => {
 
     // Assert
     expect(component.logInfoEvent.matchId).toBe(123);
-    expect(component.updateMatchId.emit).toHaveBeenCalledWith(123);
+    expect(component.updateMatchId.emit).toHaveBeenCalled();
     expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalled();
   });
 

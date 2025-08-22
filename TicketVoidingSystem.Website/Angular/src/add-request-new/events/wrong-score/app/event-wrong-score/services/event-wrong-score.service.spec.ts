@@ -268,7 +268,6 @@ describe('EventWrongScoreService', () => {
             issueTypeId: 1,
             subIssueTypeNameCS: 'Sub Issue 1 CS'
           }],
-          subIssueTypes: [],
           issueId: 1,
           subIssueId: 2
         },

@@ -25,7 +25,7 @@ import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
 
 // Mock StaticService
-jest.mock('../../../../../utility/services/static.service', () => ({
+jest.mock('../../../../../../utility/services/static.service', () => ({
   StaticService: {
     isEditingByAnotherUser: jest.fn().mockReturnValue(false),
     isHasWarningTakenNote: jest.fn().mockReturnValue(false),

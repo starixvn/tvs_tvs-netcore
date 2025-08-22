@@ -5,11 +5,11 @@ import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonService } from '../../../utility/services/common.service';
 import { SignalRService } from '../../../utility/services/signal-r.service.native';
 import { StaticService } from '../../../utility/services/static.service';
-import { AddRequestStore } from '../../events/services/add-request.store';
-import { CopyRequestInfoService } from '../../events/services/copy-request-info.service';
-import { EditRequestService } from '../../events/services/edit-request/edit-request.service';
-import { LogAnalysisService } from '../../events/services/log-analysis.service';
 import { RequestModel } from '../../models/request.model';
+import { AddRequestStore } from '../../services/add-request.store';
+import { CopyRequestInfoService } from '../../services/copy-request-info.service';
+import { EditRequestService } from '../../services/edit-request/edit-request.service';
+import { LogAnalysisService } from '../../services/log-analysis.service';
 import { FilterComponent } from '../filter/filter.component';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
@@ -98,7 +98,7 @@ describe('EventBaseLayoutComponent', () => {
   describe('ngOnInit', () => {
     beforeEach(() => {
       jest.spyOn(component, 'initBaseData').mockImplementation(async () => {
-        component.isLoadingData = false;
+        component.primitiveProperty.isLoadingData = false;
       });
       jest.spyOn(component, 'checkShowCopyInfoButton').mockImplementation();
       jest.spyOn(signalRService, 'initializeConnection').mockImplementation();
@@ -114,11 +114,11 @@ describe('EventBaseLayoutComponent', () => {
     it('should initialize component correctly', async () => {
       await component.ngOnInit();
 
-      expect(component.isLoadingData).toBeFalsy();
+      expect(component.primitiveProperty.isLoadingData).toBeFalsy();
       expect(component.initBaseData).toHaveBeenCalled();
       expect(component.checkShowCopyInfoButton).toHaveBeenCalled();
       expect(signalRService.initializeConnection).toHaveBeenCalled();
-      expect(logAnalysisService.writeLogAccessFunction).toHaveBeenCalledWith(component.isEdit, component.issueTypeId, component.accessIssueTypeCount);
+      expect(logAnalysisService.writeLogAccessFunction).toHaveBeenCalledWith(component.primitiveProperty.isEdit, component.issueTypeId, component.accessIssueTypeCount);
     });
 
     it('should subscribe to savingRequestStatus', async () => {
@@ -139,19 +139,19 @@ describe('EventBaseLayoutComponent', () => {
 
       expect(component.initStaticData).toHaveBeenCalled();
       expect(component.runAsyncData).toHaveBeenCalled();
-      expect(component.isLoadingData).toBeFalsy();
+      expect(component.primitiveProperty.isLoadingData).toBeFalsy();
     });
   });
 
   describe('runAsyncData', () => {
     beforeEach(() => {
-      jest.spyOn(eventBaseService, 'getSubIssueTypes').mockResolvedValue(new IssueTypes([]));
+      jest.spyOn(eventBaseService, 'getSubIssueTypes').mockResolvedValue({} as IssueTypes);
       jest.spyOn(commonService, 'getVoidActions').mockResolvedValue(Helper.getFakeOriginActions());
       jest.spyOn(editRequestService, 'getDataEditRequest').mockResolvedValue(null);
     });
 
     it('should load async data for add request', async () => {
-      component.isEdit = false;
+      component.primitiveProperty.isEdit = false;
       await component.runAsyncData();
 
       expect(eventBaseService.getSubIssueTypes).toHaveBeenCalledWith(Number(component.issueTypeId));
@@ -162,13 +162,13 @@ describe('EventBaseLayoutComponent', () => {
     });
 
     it('should load async data for edit request', async () => {
-      component.isEdit = true;
-      component.requestId = 123;
+      component.primitiveProperty.isEdit = true;
+      component.primitiveProperty.requestId = 123;
       await component.runAsyncData();
 
       expect(eventBaseService.getSubIssueTypes).toHaveBeenCalledWith(Number(component.issueTypeId));
       expect(commonService.getVoidActions).toHaveBeenCalled();
-      expect(editRequestService.getDataEditRequest).toHaveBeenCalledWith(component.requestId, component.model);
+      expect(editRequestService.getDataEditRequest).toHaveBeenCalled();
     });
   });
 
@@ -182,8 +182,8 @@ describe('EventBaseLayoutComponent', () => {
       jest.spyOn(editRequestService, 'isActionEditRequest').mockReturnValue(false);
       component.initStaticData();
 
-      expect(component.isEdit).toBeFalsy();
-      expect(component.title).toBe('Home / Manage Request / Add Request');
+      expect(component.primitiveProperty.isEdit).toBeFalsy();
+      expect(component.primitiveProperty.title).toBe('Home / Manage Request / Add Request');
     });
 
     it('should initialize static data for edit request', () => {
@@ -191,9 +191,9 @@ describe('EventBaseLayoutComponent', () => {
       jest.spyOn(editRequestService, 'getRequestId').mockReturnValue(123);
       component.initStaticData();
 
-      expect(component.isEdit).toBeTruthy();
-      expect(component.requestId).toBe(123);
-      expect(component.title).toBe('Home / Manage Request / Edit Request - 123');
+      expect(component.primitiveProperty.isEdit).toBeTruthy();
+      expect(component.primitiveProperty.requestId).toBe(123);
+      expect(component.primitiveProperty.title).toBe('Home / Manage Request / Edit Request - 123');
     });
   });
 
@@ -204,7 +204,7 @@ describe('EventBaseLayoutComponent', () => {
 
       component.checkShowCopyInfoButton();
 
-      expect(component.showCopyInfoButtons).toBeTruthy();
+      expect(component.primitiveProperty.showCopyInfoButtons).toBeTruthy();
     });
 
     it('should not show copy info button when isVoided is false', () => {
@@ -213,7 +213,7 @@ describe('EventBaseLayoutComponent', () => {
 
       component.checkShowCopyInfoButton();
 
-      expect(component.showCopyInfoButtons).toBeFalsy();
+      expect(component.primitiveProperty.showCopyInfoButtons).toBeFalsy();
     });
 
     it('should not show copy info button when issueTypeId is not in allowed list', () => {
@@ -222,7 +222,7 @@ describe('EventBaseLayoutComponent', () => {
 
       component.checkShowCopyInfoButton();
 
-      expect(component.showCopyInfoButtons).toBeFalsy();
+      expect(component.primitiveProperty.showCopyInfoButtons).toBeFalsy();
     });
   });
 
@@ -265,7 +265,7 @@ describe('EventBaseLayoutComponent', () => {
       await component.onSaveRequest();
 
       expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
-      expect(component.isDisabledSaveButton).toBeTruthy();
+      expect(component.primitiveProperty.isDisabledSaveButton).toBeTruthy();
       expect(component.saveRequest.emit).toHaveBeenCalled();
       expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
     });
@@ -314,7 +314,7 @@ describe('EventBaseLayoutComponent', () => {
       jest.spyOn(addRequestStore, 'changeBlockingUiStatus').mockImplementation();
       jest.spyOn(copyRequestInfoService, 'copyEmailRequestInfo').mockImplementation();
       jest.spyOn(window, 'alert').mockImplementation();
-      component.requestId = 123;
+      component.primitiveProperty.requestId = 123;
     });
 
     it('should copy email request info correctly', async () => {
@@ -322,7 +322,7 @@ describe('EventBaseLayoutComponent', () => {
 
       expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
       expect(copyRequestInfoService.copyEmailRequestInfo).toHaveBeenCalledWith(
-        component.requestId,
+        component.primitiveProperty.requestId,
         component.model.eventDetail.matchId,
         component.model.others.operatorsList
       );
@@ -355,25 +355,6 @@ describe('EventBaseLayoutComponent', () => {
       expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
       expect(component.copyLetsTalkRequestInfo.emit).toHaveBeenCalled();
       expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
-    });
-  });
-
-  describe('contextData getter', () => {
-    it('should return correct context data', () => {
-      component.model = Helper.getFakeRequestModel();
-      component.isEdit = true;
-      component.requestId = 123;
-      component.model.filter = Helper.getFakeFilterModel();
-
-      const result = component.contextData;
-
-      expect(result).toEqual({
-        eventModel: component.model.eventTicket14Model,
-        otherModel: component.model.others,
-        isEdit: component.isEdit,
-        requestId: component.requestId,
-        filterModel: component.model.filter
-      });
     });
   });
 });

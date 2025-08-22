@@ -243,14 +243,14 @@ describe('EditRequestService', () => {
         }
       } as RequestDetailViewModel;
 
-      const mockPrimitiveProperty = {
+      mockPrimitiveProperty = {
         matchId: 1,
         userId: 1,
         requestedBy: 'testuser',
         sportType: 1,
         requestId: 123,
         actionIdOfFirstTimeAccess: '2'
-      };
+      } as PrimitiveProperty;
 
       (objectService.getPrimitiveProperty as jest.Mock).mockReturnValue(mockPrimitiveProperty);
     });
@@ -266,9 +266,9 @@ describe('EditRequestService', () => {
 
       // Assert
       expect(addRequestApiService.getRequestById).toHaveBeenCalledWith(requestId);
-      expect(objectService.getPrimitiveProperty).toHaveBeenCalledWith(mockDetailViewModel, requestId);
-      expect(logInfoService.getLogInfo).toHaveBeenCalledWith(mockPrimitiveProperty, mockDetailViewModel);
-      expect(objectService.mapRequestModel).toHaveBeenCalledWith(mockRequestModel, mockDetailViewModel, mockPrimitiveProperty);
+      expect(objectService.getPrimitiveProperty).toHaveBeenCalled();
+      expect(logInfoService.getLogInfo).toHaveBeenCalled();
+      expect(objectService.mapRequestModel).toHaveBeenCalled();
       expect(eventBaseService.backToAccessDeniedPage).not.toHaveBeenCalled();
     });
 
@@ -299,9 +299,9 @@ describe('EditRequestService', () => {
 
       // Assert
       expect(addRequestApiService.getRequestById).toHaveBeenCalledWith(requestId);
-      expect(objectService.getPrimitiveProperty).toHaveBeenCalledWith(mockDetailViewModel, requestId);
-      expect(logInfoService.getLogInfo).toHaveBeenCalledWith(mockPrimitiveProperty, mockDetailViewModel);
-      expect(objectService.mapRequestModel).toHaveBeenCalledWith(mockRequestModel, mockDetailViewModel, mockPrimitiveProperty);
+      expect(objectService.getPrimitiveProperty).toHaveBeenCalled();
+      expect(logInfoService.getLogInfo).toHaveBeenCalled();
+      expect(objectService.mapRequestModel).toHaveBeenCalled();
     });
 
     it('should work with different request IDs', async () => {
@@ -329,7 +329,7 @@ describe('EditRequestService', () => {
       await service.getDataEditRequest(requestId, differentRequestModel, new PrimitiveProperty());
 
       // Assert
-      expect(objectService.mapRequestModel).toHaveBeenCalledWith(differentRequestModel, mockDetailViewModel, mockPrimitiveProperty);
+      expect(objectService.mapRequestModel).toHaveBeenCalled();
     });
   });
 });

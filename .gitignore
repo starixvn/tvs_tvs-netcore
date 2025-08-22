@@ -47,6 +47,7 @@ MSBUILD.SUMMARY.email
 SUMMARY.DISPLAY.xml
 /packages
 .vs/config/applicationhost.config
+stats.json
 node_modules
 typings
 

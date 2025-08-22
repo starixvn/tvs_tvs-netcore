@@ -23,7 +23,6 @@ class Helper {
       { subIssueTypeId: 13, issueTypeId: 8, subIssueTypeName: 'Live', subIssueTypeNameCS: null }
     ],
     issueId: 0,
-    subIssueTypes: [],
     subIssueId: 0
   };
 

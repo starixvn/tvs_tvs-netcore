@@ -1,12 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../utility/modules/testing.module';
-import { OthersComponent } from './others.component';
-import { OthersService } from './others.service';
-import { AddRequestStore } from '../../events/services/add-request.store';
-import { AddRequestApiService } from '../../events/services/add-request-api.service';
 import { SimpleChange } from '@angular/core';
-import { GroupOperator, OperatorDefault, OthersModel } from './others.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AddRequestStore } from '../../../add-request-new/services/add-request.store';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../../services/add-request-api.service';
+import { OthersComponent } from './others.component';
+import { GroupOperator, OperatorDefault, OthersModel } from './others.model';
+import { OthersService } from './others.service';
 
 class Helper {
   static readonly fakeMatchId = 123;

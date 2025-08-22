@@ -39,7 +39,6 @@ describe('FilterService', () => {
           }
         ],
         issueId: 1,
-        subIssueTypes: [],
         subIssueId: 1
       };
 

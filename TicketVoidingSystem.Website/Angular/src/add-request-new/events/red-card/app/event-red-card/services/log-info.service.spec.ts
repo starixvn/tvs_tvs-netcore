@@ -11,7 +11,7 @@ import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-ti
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
-jest.mock('../../../../../utility/services/static.service', () => ({
+jest.mock('../../../../../../utility/services/static.service', () => ({
   StaticService: {
     isRedCard: jest.fn(),
     isDangerAccepted: jest.fn(),

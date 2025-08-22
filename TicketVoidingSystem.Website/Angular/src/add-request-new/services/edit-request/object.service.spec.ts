@@ -8,7 +8,7 @@ import { RequestDetailViewModel } from '../../models/request-detail.model';
 import { RequestModel } from '../../models/request.model';
 import { ObjectService } from './object.service';
 
-jest.mock('../../../../utility/services/static.service', () => ({
+jest.mock('../../../utility/services/static.service', () => ({
   StaticService: {
     getSubIssueTypeId: jest.fn(),
     isArchivedTicket: jest.fn(),
@@ -103,24 +103,25 @@ describe('ObjectService', () => {
         request: {
           userId: 123,
           requestedBy: 'testUser',
-          sportType: 'football',
+          sportType: 1,
           actionId: 1
         }
       } as unknown as RequestDetailViewModel;
 
       const requestId = 456;
+      const primitiveProperty = new PrimitiveProperty();
+      primitiveProperty.requestId = requestId;
+      primitiveProperty.actionIdOfFirstTimeAccess = '1';
+      primitiveProperty.userId = 123;
+      primitiveProperty.requestedBy = 'testUser';
+      primitiveProperty.sportType = 1;
+      primitiveProperty.isEdit = true;
 
       // Act
       const result = service.getPrimitiveProperty(detailViewModel, requestId);
 
       // Assert
-      expect(result).toEqual({
-        userId: 123,
-        requestedBy: 'testUser',
-        sportType: 'football',
-        requestId: 456,
-        actionIdOfFirstTimeAccess: '1'
-      } as unknown as PrimitiveProperty);
+      expect(result).toEqual(primitiveProperty);
     });
   });
 
