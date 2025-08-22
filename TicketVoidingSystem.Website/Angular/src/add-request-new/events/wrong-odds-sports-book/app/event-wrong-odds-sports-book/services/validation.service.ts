@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 import { AdvancedModeAddRequestComponent } from '../../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
@@ -69,7 +70,7 @@ export class ValidationService {
   }
 
   private isValidFilterLiveIndicator(filter: FilterWrongOddsSportsBookModel, tooltip: Tooltip): boolean {
-    if (_.isNull(filter.liveIndicator) || _.isUndefined(filter.liveIndicator)) {
+    if (isNull(filter.liveIndicator) || isUndefined(filter.liveIndicator)) {
       tooltip.display(this.FILTER_LIVE_INDICATOR_CLASS, TEXT.REQUIRED_FIELD);
       return false;
     }

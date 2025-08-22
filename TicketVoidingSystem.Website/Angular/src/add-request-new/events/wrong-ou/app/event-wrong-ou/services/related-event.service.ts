@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
+import orderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { LABELS } from '../../../../../../utility/constants/labels';
@@ -75,7 +76,7 @@ export class RelatedEventService {
       }
       const newEvents = this.updateEvents(models, addRelatedEventArg.defaultFilterWrongOuModel);
       addRelatedEventArg.allEvents.push(...newEvents);
-      addRelatedEventArg.allEvents = _.orderBy(_.uniqBy(addRelatedEventArg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
+      addRelatedEventArg.allEvents = orderBy(uniqBy(addRelatedEventArg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
       addRelatedEventArg.primitiveProps.isBlock = false;
       addRelatedEventArg.primitiveProps.isShowRelatedEvents = true;
       addRelatedEventArg.primitiveProps.inputRelatedMatchId = null;

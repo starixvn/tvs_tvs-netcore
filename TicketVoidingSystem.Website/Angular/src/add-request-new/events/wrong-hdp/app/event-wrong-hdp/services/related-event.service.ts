@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import orderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { LABELS } from '../../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../../../../services/add-request-api.service';
@@ -73,7 +74,7 @@ export class RelatedEventService {
       }
       const newEvents = this.updateEvents(models, model.defaultFilterWithHdpModel);
       model.allEvents.push(...newEvents);
-      model.allEvents = _.orderBy(_.uniqBy(model.allEvents, x => x.matchId), ['matchCode'], ['asc']);
+      model.allEvents = orderBy(uniqBy(model.allEvents, x => x.matchId), ['matchCode'], ['asc']);
       model.primitiveProps.isBlock = false;
       model.primitiveProps.isShowRelatedEvents = true;
       model.primitiveProps.inputRelatedMatchId = null;

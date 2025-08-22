@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 import moment from 'moment-timezone';
 import { DateFullTimeNewComponent } from '../../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { TooltipComponent } from '../../../../../../utility/components/tooltip/tooltip.component';
@@ -112,7 +113,7 @@ export class FilterWithHdpComponent implements OnInit {
   }
 
   private isValidLiveIndicator(): boolean {
-    if (_.isNull(this.filterWithHdpModel.liveIndicator) || _.isUndefined(this.filterWithHdpModel.liveIndicator)) {
+    if (isNull(this.filterWithHdpModel.liveIndicator) || isUndefined(this.filterWithHdpModel.liveIndicator)) {
       this.tooltip.display('radio-liveindicator', TEXT.REQUIRED_FIELD);
       return false;
     }

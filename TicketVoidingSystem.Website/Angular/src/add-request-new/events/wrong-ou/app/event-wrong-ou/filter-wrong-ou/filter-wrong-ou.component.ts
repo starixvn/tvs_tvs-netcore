@@ -1,7 +1,8 @@
 
 import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 import moment from 'moment-timezone';
 import { DateFullTimeNewComponent } from '../../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { TooltipComponent } from '../../../../../../utility/components/tooltip/tooltip.component';
@@ -73,7 +74,7 @@ export class FilterWrongOuComponent {
   }
 
   private isValidLiveIndicator(): boolean {
-    if (_.isNull(this.filterWrongOuModel.liveIndicator) || _.isUndefined(this.filterWrongOuModel.liveIndicator)) {
+    if (isNull(this.filterWrongOuModel.liveIndicator) || isUndefined(this.filterWrongOuModel.liveIndicator)) {
       this.tooltip.display('radio-liveindicator', TEXT.REQUIRED_FIELD);
       return false;
     }

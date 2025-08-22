@@ -2,7 +2,9 @@
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import orderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
+import clone from 'lodash/clone';
 import moment from 'moment-timezone';
 import { AddChildMatchComponent } from '../../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../../utility/components/add-child-match/add-child-match.model';
@@ -142,7 +144,7 @@ export class EventWrongOuComponent implements OnInit {
     this.addChildMatchModel.selectedMatchIds = this.allSelectedEvents.map(x => x.matchId);
     this.addChildMatchModel.matchType = matchTypeId;
     this.addChildMatchModel.isOpen = true;
-    this.addChildMatchModel = _.clone(this.addChildMatchModel);
+    this.addChildMatchModel = clone(this.addChildMatchModel);
   }
 
   public async saveRelatedEvent(selectedEvents: ChildMatchModel[]): Promise<void> {
@@ -154,7 +156,7 @@ export class EventWrongOuComponent implements OnInit {
     const newChildEvents = selectedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
     const newEvents = this.relatedEventService.updateEvents(newChildEvents, this.mainEvent.filterWrongOu);
     this.allSelectedEvents.push(...newEvents);
-    this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    this.allSelectedEvents = orderBy(uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     this.primitiveProps.isShowRelatedEvents = true;
     this.primitiveProps.isBlock = false;
   }

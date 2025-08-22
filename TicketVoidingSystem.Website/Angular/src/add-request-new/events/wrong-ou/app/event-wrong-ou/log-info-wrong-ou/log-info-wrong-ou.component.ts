@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import clone from 'lodash/clone';
 import moment from 'moment-timezone';
 import { BlockUiDirective } from '../../../../../../utility/components/block-ui/block-ui.directive';
 import { ModalService } from '../../../../../../utility/components/modal/modal.service';
@@ -113,7 +113,7 @@ export class LogInfoWrongOuComponent implements OnInit {
     this.affectedTicketsModel.issueTypeId = Number(this.filter.issueTypeId);
     this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
     this.affectedTicketsModel.isOpen = true;
-    this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
+    this.affectedTicketsModel = clone(this.affectedTicketsModel);
   }
 
   public async openPoolHouseDetails(): Promise<void> {
@@ -134,7 +134,7 @@ export class LogInfoWrongOuComponent implements OnInit {
     this.poolHouseTicketsModel.otherTickets = viewModel.otherTickets;
     this.poolHouseTicketsModel.checkedBetTypes = this.logInfo.poolHouseCheckedBetTypes;
     this.poolHouseTicketsModel.isOpen = true;
-    this.poolHouseTicketsModel = _.clone(this.poolHouseTicketsModel);
+    this.poolHouseTicketsModel = clone(this.poolHouseTicketsModel);
   }
 
   public handleDeleteEvent(matchId: number) {

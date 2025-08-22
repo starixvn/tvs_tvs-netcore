@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
+import clone from 'lodash/clone';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { StaticService } from '../../../../../../utility/services/static.service';
 import { AddRequestService } from '../../../../../services/add-request.service';
@@ -65,7 +65,7 @@ export class SaveRequestService {
     arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoDetail?.settleCount > 0;
     arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.messageValidationLogInfo?.length > 0;
     arg.confirmAddRequest.isOpen = true;
-    arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
+    arg.confirmAddRequest = clone(arg.confirmAddRequest);
   }
 
   private async executeSaveRequestApi(argWrongOddsSportsBook: SaveRequestArg): Promise<void> {
