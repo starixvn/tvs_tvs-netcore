@@ -6,7 +6,7 @@ import { CommonService } from '../../../utility/services/common.service';
 import { AddRequestStore } from '../../../add-request/app/add-request/add-request.store';
 import { MatchModel } from '../../../utility/models/match.model';
 import { SimpleChange } from '@angular/core';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT } from '../../../utility/constants/text';
 
 class Helper {
   static readonly fakeMatchId = 123;
@@ -111,7 +111,7 @@ describe('EventLeagueComponent', () => {
 
     // Assert
     expect(component.matches).toEqual([]);
-    expect(component.validationMessage).toBe(LABELS.INVALID_MATCHID);
+    expect(component.validationMessage).toBe(TEXT.INVALID_MATCHID);
   });
 
   it('should handle search match with empty term', async () => {
@@ -150,7 +150,7 @@ describe('EventLeagueComponent', () => {
 
     // Assert
     expect(result).toBeFalsy();
-    expect(component.tooltip.display).toHaveBeenCalledWith('match-id', LABELS.REQUIRED_MATCHID);
+    expect(component.tooltip.display).toHaveBeenCalledWith('match-id', TEXT.REQUIRED_MATCHID);
   });
 
   it('should update info with only one match', () => {

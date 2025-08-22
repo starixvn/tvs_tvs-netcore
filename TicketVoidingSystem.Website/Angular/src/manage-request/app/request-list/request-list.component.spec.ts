@@ -7,7 +7,7 @@ import { BlockUiService } from '../../../utility/components/block-ui/block-ui.se
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT} from '../../../utility/constants/text';
 import { CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Result } from '../../../utility/models/result';
@@ -366,7 +366,7 @@ describe('RequestListComponent', () => {
     const mockModalServiceConfirm = jest.spyOn(modalService, 'confirm').mockImplementation(jest.fn());
     const confirmModal = {
       title: 'Check By Confirm',
-      message: `${LABELS.CONFIRM_CHECK_BY}<strong>${Helper.fakeRequestModelList[0].requestId}</strong>?`
+      message: `${TEXT.CONFIRM_CHECK_BY}<strong>${Helper.fakeRequestModelList[0].requestId}</strong>?`
     };
 
     // Act
@@ -392,7 +392,7 @@ describe('RequestListComponent', () => {
     const mockModalServiceConfirm = jest.spyOn(modalService, 'confirm').mockImplementation(jest.fn());
     const confirmModal = {
       title: 'UnCheck By Confirm',
-      message: `${LABELS.CONFIRM_UNCHECK_BY}<strong>${Helper.fakeRequestModelList[1].requestId}</strong>?`
+      message: `${TEXT.CONFIRM_UNCHECK_BY}<strong>${Helper.fakeRequestModelList[1].requestId}</strong>?`
     };
 
     // Act

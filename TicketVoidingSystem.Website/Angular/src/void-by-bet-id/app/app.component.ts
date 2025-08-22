@@ -19,7 +19,6 @@ import { TemplateValue } from '../../utility/components/template-message/templat
 import { TicketsComponent } from '../../utility/components/tickets/tickets.component';
 import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../utility/components/tooltip/tooltip.model';
-import { LABELS } from '../../utility/constants/labels';
 import { TEXT } from '../../utility/constants/text';
 import { MatchModel } from '../../utility/models/match.model';
 import { Result } from '../../utility/models/result';
@@ -132,7 +131,7 @@ export class AppComponent implements OnInit {
     const usersNegativeCredit = await this.checkNegativeBetCredit();
     let message = TEXT.CONFIRM_VOID_TICKET;
     if(usersNegativeCredit) {
-      message = `${LABELS.CONFIRM_NEGATIVE_CUSTOMER.replace('{0}', usersNegativeCredit)}<br>${message}`;
+      message = `${TEXT.CONFIRM_NEGATIVE_CUSTOMER.replace('{0}', usersNegativeCredit)}<br>${message}`;
     }
 
     this.modal.open('Void Bet Confirm', message);

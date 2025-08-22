@@ -7,7 +7,7 @@ import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 
 describe('ValidationService', () => {
   let service: ValidationService;
@@ -111,7 +111,7 @@ describe('ValidationService', () => {
 
       // Assert
       expect(result).toBe(false);
-      expect(mockTooltip.display).toHaveBeenCalledWith(matchIdClass, LABELS.INVALID_MATCHID);
+      expect(mockTooltip.display).toHaveBeenCalledWith(matchIdClass, TEXT.INVALID_MATCHID);
     });
 
     it('should return false when input matchId already exists in related events', () => {
@@ -129,7 +129,7 @@ describe('ValidationService', () => {
 
       // Assert
       expect(result).toBe(false);
-      expect(mockTooltip.display).toHaveBeenCalledWith(matchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+      expect(mockTooltip.display).toHaveBeenCalledWith(matchIdClass, TEXT.MATCH_ID_EXISTS_IN_LIST);
     });
 
     it('should return true when input matchId is valid', () => {

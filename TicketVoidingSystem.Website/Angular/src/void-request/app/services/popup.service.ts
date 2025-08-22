@@ -2,7 +2,6 @@ import { inject, Injectable} from '@angular/core';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
-import { LABELS } from '../../../utility/constants/labels';
 import { TEXT } from '../../../utility/constants/text';
 import { Result } from '../../../utility/models/result';
 import { VoidMatch } from '../models/void-match.model';
@@ -32,7 +31,7 @@ export class PopupService {
 
   showWarningExportExcel() {
     const header = 'Export Excel Result';
-    const body = LABELS.EXPORT_LARGE_FILE;
+    const body = TEXT.EXPORT_LARGE_FILE;
     this.modalService.open({ title: header, message: body, type: ModalType.Warning });
   }
 

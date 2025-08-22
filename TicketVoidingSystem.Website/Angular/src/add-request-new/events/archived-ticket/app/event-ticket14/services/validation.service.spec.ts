@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { BetIdsComponent } from '../../../../../../utility/components/bet-ids/bet-ids.component';
-import { LABELS } from '../../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../../utility/constants/text';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { PermissionAddRequest } from '../../../../../models/permission-add-request.model';
 import { AppService } from '../../app.service';
@@ -97,8 +97,8 @@ describe('ValidationService', () => {
 
       // Assert
       expect(result.isValid).toBeFalsy();
-      expect(mockUpdateInvalidItems).toHaveBeenCalledWith('123', LABELS.INVALID_TICKETS);
-      expect(mockUpdateInvalidItems).toHaveBeenCalledWith('456', LABELS.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
+      expect(mockUpdateInvalidItems).toHaveBeenCalledWith('123', TEXT.INVALID_TICKETS);
+      expect(mockUpdateInvalidItems).toHaveBeenCalledWith('456', TEXT.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
     });
   });
 });

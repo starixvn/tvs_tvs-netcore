@@ -3,7 +3,6 @@ import moment from 'moment-timezone';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TeamFavorite, TVSRequestActionType } from '../../../../../../utility/constants/config';
-import { LABELS } from '../../../../../../utility/constants/labels';
 import { SubIssueTypeConstant } from '../../../../../../utility/constants/sub-issue-type.constant';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { StaticService } from '../../../../../../utility/services/static.service';
@@ -36,7 +35,7 @@ export class ValidationService {
     const fromDateTime = moment(filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const toDateTime = moment(filterToTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     if (!fromDateTime.isSameOrBefore(toDateTime)) {
-      tooltip.display(this.FROM_DATE_TIME_CLASS, LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
+      tooltip.display(this.FROM_DATE_TIME_CLASS, TEXT.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
       return false;
     }
 
@@ -45,11 +44,11 @@ export class ValidationService {
 
   public isValidInputRelatedEvent(inputMatchId: number, matchIdInputClass: string, allEvents: LogInfoWrongHdp[], tooltip: Tooltip): boolean {
     if (inputMatchId === allEvents.find(x => x.isMainMatch).matchId) {
-      tooltip.display(matchIdInputClass, LABELS.INVALID_MATCHID);
+      tooltip.display(matchIdInputClass, TEXT.INVALID_MATCHID);
       return false;
     }
     if (allEvents.filter(x => !x.isMainMatch).some(x => x.matchId === inputMatchId)) {
-      tooltip.display(matchIdInputClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+      tooltip.display(matchIdInputClass, TEXT.MATCH_ID_EXISTS_IN_LIST);
       return false;
     }
 
@@ -66,19 +65,19 @@ export class ValidationService {
 
   public isValidHdpWithSubTypeWrongHdpOrWrong1stHdp(teamFavorite: number, filterWithHdpModel: FilterWithHdpModel, tooltip: Tooltip): boolean {
     if (teamFavorite === TeamFavorite.HOME && !filterWithHdpModel.homeFavorite) {
-      tooltip.display(this.INPUT_HOME_FAVORITE_CLASS, LABELS.REQUIRED_HOME_FAVORITE);
+      tooltip.display(this.INPUT_HOME_FAVORITE_CLASS, TEXT.REQUIRED_HOME_FAVORITE);
 
       return false;
     }
 
     if (teamFavorite === TeamFavorite.AWAY && !filterWithHdpModel.awayFavorite) {
-      tooltip.display(this.INPUT_AWAY_FAVORITE_CLASS, LABELS.REQUIRED_AWAY_FAVORITE);
+      tooltip.display(this.INPUT_AWAY_FAVORITE_CLASS, TEXT.REQUIRED_AWAY_FAVORITE);
 
       return false;
     }
 
     if (!filterWithHdpModel.actualMarket) {
-      tooltip.display(this.INPUT_ACTUAL_MARKET_CLASS, LABELS.REQUIRED_ACTUAL_MARKET);
+      tooltip.display(this.INPUT_ACTUAL_MARKET_CLASS, TEXT.REQUIRED_ACTUAL_MARKET);
 
       return false;
     }
@@ -98,7 +97,7 @@ export class ValidationService {
 
   public isValidHdpWithSubTypeHomeAwayVirtualHedReverse(filterWithHdpModel: FilterWithHdpModel, tooltip: Tooltip): boolean {
     if (!filterWithHdpModel.hdpValue){
-      tooltip.display(this.INPUT_HDP_VALUE_CLASS, LABELS.REQUIRED_HDP_VALUE);
+      tooltip.display(this.INPUT_HDP_VALUE_CLASS, TEXT.REQUIRED_HDP_VALUE);
 
       return false;
     }

@@ -5,7 +5,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { ProductFilter, TicketStatus, TVSRequestActionType } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../utility/constants/text';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 
 @Component({
@@ -50,14 +50,14 @@ export class ProductFilterComponent implements OnInit {
 
   isValidComponent(): boolean {
     if (this.selectedProducts.length === 0) {
-      this.tooltip.display(this.PRODUCT_CLASS, LABELS.REQUIRED_PRODUCT);
+      this.tooltip.display(this.PRODUCT_CLASS, TEXT.REQUIRED_PRODUCT);
       return false;
     } else {
       this.abnormalAccountModel.productIds = this.selectedProducts.join(',');
     }
 
     if (this.selectedTicketStatus.length === 0) {
-      this.tooltip.display(this.TICKET_STATUS_CLASS, LABELS.REQUIRED_TICKET_STATUS);
+      this.tooltip.display(this.TICKET_STATUS_CLASS, TEXT.REQUIRED_TICKET_STATUS);
       return false;
     } else {
       this.abnormalAccountModel.statusIds = this.selectedTicketStatus.join(',');

@@ -2,7 +2,7 @@ import { QueryList } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
-import { LABELS } from '../../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { LogInfoRelatedEventComponent } from '../../../../../component/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
@@ -166,7 +166,7 @@ describe('ValidationService', () => {
       const result = service.isValidInputRelatedEvent(1, 'test-class', allEvents, tooltip);
 
       expect(result).toBe(false);
-      expect(tooltip.display).toHaveBeenCalledWith('test-class', LABELS.INVALID_MATCHID);
+      expect(tooltip.display).toHaveBeenCalledWith('test-class', TEXT.INVALID_MATCHID);
     });
 
     it('should return false when matchId exists in non-main matches', () => {
@@ -178,7 +178,7 @@ describe('ValidationService', () => {
       const result = service.isValidInputRelatedEvent(2, 'test-class', allEvents, tooltip);
 
       expect(result).toBe(false);
-      expect(tooltip.display).toHaveBeenCalledWith('test-class', LABELS.MATCH_ID_EXISTS_IN_LIST);
+      expect(tooltip.display).toHaveBeenCalledWith('test-class', TEXT.MATCH_ID_EXISTS_IN_LIST);
     });
   });
 

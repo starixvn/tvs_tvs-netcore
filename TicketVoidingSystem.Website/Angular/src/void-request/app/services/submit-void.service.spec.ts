@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT } from '../../../utility/constants/text';
 import { MatchModel } from '../../../utility/models/match.model';
 import { VoidedReason } from '../../../utility/models/reason.model';
 import { Result } from '../../../utility/models/result';
@@ -51,7 +51,7 @@ describe('SubmitVoidService', () => {
 
   it('#submitVoid should call #validationService.checkValidationBeforeVoid & return with succesful', async () => {
     const spyShowConfirm = jest.spyOn(popupService, 'showVoidBetConfirm').mockImplementation(() => { });
-    const confirmMessage = `<div>${LABELS.CONFIRM_VOID_ALL_TICKETS}</div>`;
+    const confirmMessage = `<div>${TEXT.CONFIRM_VOID_ALL_TICKETS}</div>`;
     const validation = new Result<null>();
     validation.isSuccessful = true;
     submitVoidService['checkValidationBeforeVoid'] = jest.fn().mockReturnValue(validation);
@@ -163,7 +163,7 @@ describe('SubmitVoidService', () => {
     const result = submitVoidService['checkValidationBeforeVoid']([voidPage], null);
 
     expect(result.errorCode).toBe(1);
-    expect(result.errorMsg).toBe(LABELS.ALL_TICKETS_VOIDED);
+    expect(result.errorMsg).toBe(TEXT.ALL_TICKETS_VOIDED);
   });
 
   it('#checkValidationBeforeVoid should return result fail when messageComponent.checkValidation false', async () => {

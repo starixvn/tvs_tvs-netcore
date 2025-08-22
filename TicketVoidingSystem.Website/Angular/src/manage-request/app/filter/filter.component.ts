@@ -13,7 +13,6 @@ import { MultipleSelectionComponent } from '../../../utility/components/multiple
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ManageRequestStatus } from '../../../utility/constants/config';
-import { LABELS } from '../../../utility/constants/labels';
 import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
 import { TEXT } from '../../../utility/constants/text';
 import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
@@ -178,17 +177,17 @@ export class FilterComponent implements OnInit {
 
   validate(): boolean { // NOSONAR
     if (this.filterByMatch && this.model.matchId && !_isNumberValue(this.model.matchId)) {
-      this.tooltip.display('input-match-id', LABELS.INVALID_MATCHID);
+      this.tooltip.display('input-match-id', TEXT.INVALID_MATCHID);
       return false;
     }
 
     if (!this.filterByMatch && (isUndefined(this.model.requestId) || isEmpty(this.model.requestId))) {
-      this.tooltip.display('input-request-id', LABELS.EMPTY_REQUEST);
+      this.tooltip.display('input-request-id', TEXT.EMPTY_REQUEST);
       return false;
     }
 
     if (!this.filterByMatch && !_isNumberValue(this.model.requestId)) {
-      this.tooltip.display('input-request-id', LABELS.INVALID_REQUESTID);
+      this.tooltip.display('input-request-id', TEXT.INVALID_REQUESTID);
       return false;
     }
 

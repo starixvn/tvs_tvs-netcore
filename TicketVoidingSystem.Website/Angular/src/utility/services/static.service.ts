@@ -8,7 +8,7 @@ import { MultipleSelection } from '../components/multiple-selection/multiple-sel
 import { Tooltip } from '../components/tooltip/tooltip.model';
 import { AbnormalFilterBy, DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType } from '../constants/config';
 import { IssueTypeConstant } from '../constants/issue-type.constant';
-import { LABELS } from '../constants/labels';
+import { TEXT } from '../constants/text';
 import { RegexConstant } from '../constants/regex';
 import { CheckIssueTypeObjectType } from '../models/check-issue-type.model';
 
@@ -275,7 +275,7 @@ export class StaticService {
     const momentFromDateTime = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const momentToDateTime = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     if (!momentFromDateTime.isSameOrBefore(momentToDateTime)) {
-      tooltip.display(fromDateTimeClass, LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
+      tooltip.display(fromDateTimeClass, TEXT.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
       return false;
     }
 
@@ -371,7 +371,7 @@ export class StaticService {
     if (logInfoModel.validation.isInvalidTotalTickets) {
       messageList.push({
         isError: true,
-        reason: LABELS.NO_VALID_TICKETS_IN_RANGE
+        reason: TEXT.NO_VALID_TICKETS_IN_RANGE
       });
     }
 

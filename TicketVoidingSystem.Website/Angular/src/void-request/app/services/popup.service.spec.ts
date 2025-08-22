@@ -1,6 +1,5 @@
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
-import { LABELS } from '../../../utility/constants/labels';
 import { TEXT } from '../../../utility/constants/text';
 import { Result } from '../../../utility/models/result';
 import { PopupService } from './popup.service';
@@ -72,7 +71,7 @@ describe('PopupService', () => {
     const spyModalServiceOpen = jest.spyOn(modalService, 'open').mockImplementation(() => { });
     const confirmModal = {
       title: 'Export Excel Result',
-      message: LABELS.EXPORT_LARGE_FILE,
+      message: TEXT.EXPORT_LARGE_FILE,
       type: ModalType.Warning
     };
 

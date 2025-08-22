@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { BetIdsComponent } from "../../../../../../utility/components/bet-ids/bet-ids.component";
-import { LABELS } from "../../../../../../utility/constants/labels";
+import { TEXT } from "../../../../../../utility/constants/text";
 import { PermissionAddRequest } from "../../../../../models/permission-add-request.model";
 import { AppService } from "../../app.service";
 import { CheckTicket14Query } from "../models/check-ticket14.query";
@@ -40,7 +40,7 @@ export class ValidationService {
   }
 
   private highlightInvalidTransIds(validationResult: CheckTickets14Result, betIdsComponent: BetIdsComponent): void {
-    betIdsComponent.groupNumber.updateInvalidItems(validationResult.invalidTransIds, LABELS.INVALID_TICKETS);
-    betIdsComponent.groupNumber.updateInvalidItems(validationResult.unsupportedDateRangeTransIds, LABELS.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
+    betIdsComponent.groupNumber.updateInvalidItems(validationResult.invalidTransIds, TEXT.INVALID_TICKETS);
+    betIdsComponent.groupNumber.updateInvalidItems(validationResult.unsupportedDateRangeTransIds, TEXT.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
   }
 }

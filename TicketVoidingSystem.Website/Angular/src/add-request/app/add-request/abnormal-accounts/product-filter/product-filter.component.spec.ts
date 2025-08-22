@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { ProductFilterComponent } from './product-filter.component';
 import { ProductFilter, TicketStatus, TVSRequestActionType } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../utility/constants/text';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 import { EventEmitter, SimpleChange } from '@angular/core';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
@@ -102,7 +102,7 @@ describe('ProductFilterComponent', () => {
 
     // Assert
     expect(result).toBeFalsy();
-    expect(component.tooltip.display).toHaveBeenCalledWith('product', LABELS.REQUIRED_PRODUCT);
+    expect(component.tooltip.display).toHaveBeenCalledWith('product', TEXT.REQUIRED_PRODUCT);
   });
 
   it('should validate component with empty ticket status', () => {
@@ -116,7 +116,7 @@ describe('ProductFilterComponent', () => {
 
     // Assert
     expect(result).toBeFalsy();
-    expect(component.tooltip.display).toHaveBeenCalledWith('ticket-status', LABELS.REQUIRED_TICKET_STATUS);
+    expect(component.tooltip.display).toHaveBeenCalledWith('ticket-status', TEXT.REQUIRED_TICKET_STATUS);
   });
 
   it('should validate component with valid data', () => {

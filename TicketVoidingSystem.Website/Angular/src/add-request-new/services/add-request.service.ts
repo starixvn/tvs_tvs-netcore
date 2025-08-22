@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import moment from 'moment-timezone';
-import { LABELS } from '../../utility/constants/labels';
+import { TEXT } from '../../utility/constants/text';
 import { Result } from '../../utility/models/result';
 import { CommonService } from '../../utility/services/common.service';
 import { StaticService } from '../../utility/services/static.service';
@@ -59,7 +59,7 @@ export class AddRequestService {
     if (addResult.isSuccessful) {
       this.popupService.showAddedRequestSuccessful(query, addResult.data, () => this.reloadPageOrBackToManagePage(query.issueTypeId))
     } else {
-      this.popupService.showSaveRequestError(query, addResult, LABELS.ADD_REQUEST_RESULT_TITLE);
+      this.popupService.showSaveRequestError(query, addResult, TEXT.ADD_REQUEST_RESULT_TITLE);
     }
 
     addRequestStore.changeSavingRequestStatus(false);
@@ -72,7 +72,7 @@ export class AddRequestService {
     if (result.isSuccessful) {
       this.popupService.showEditedRequestSuccessful(query, result.data, () => this.reloadPageOrBackToManagePage(query.issueTypeId));
     } else {
-      this.popupService.showSaveRequestError(query, result, LABELS.EDIT_REQUEST_RESULT_TITLE);
+      this.popupService.showSaveRequestError(query, result, TEXT.EDIT_REQUEST_RESULT_TITLE);
     }
 
     addRequestStore.changeSavingRequestStatus(false);

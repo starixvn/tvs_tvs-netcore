@@ -3,7 +3,7 @@ import { DateFullTimeNewComponent } from '../../../../../utility/components/date
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 
@@ -24,11 +24,11 @@ export class ValidationService {
 
   public isValidInputRelatedEvent(inputMatchId: number, matchIdClass: string, allEvents: LogInfoEarlyKickOff[], tooltip: Tooltip): boolean {
     if (inputMatchId === allEvents.find(x => x.isMainMatch).matchId) {
-      tooltip.display(matchIdClass, LABELS.INVALID_MATCHID);
+      tooltip.display(matchIdClass, TEXT.INVALID_MATCHID);
       return false;
     }
     if (allEvents.filter(x => !x.isMainMatch).some(x => x.matchId === inputMatchId)) {
-      tooltip.display(matchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+      tooltip.display(matchIdClass, TEXT.MATCH_ID_EXISTS_IN_LIST);
       return false;
     }
 

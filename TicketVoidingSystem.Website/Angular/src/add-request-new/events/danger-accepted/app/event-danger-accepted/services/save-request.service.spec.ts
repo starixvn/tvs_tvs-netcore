@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import clone from 'lodash/clone';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
 import { TVSRequestActionType } from '../../../../../../utility/constants/config';
-import { LABELS } from '../../../../../../utility/constants/labels';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { IssueTypes } from '../../../../../component/filter/issue-types.model';
@@ -514,7 +513,7 @@ describe('SaveRequestService', () => {
             eventName: 'Event 1',
             messageValidationLogInfo: [
               {
-                reason: LABELS.NO_VALID_TICKETS_IN_RANGE
+                reason: TEXT.NO_VALID_TICKETS_IN_RANGE
               }
             ]
           } as LogInfoRelatedEvent
@@ -813,7 +812,7 @@ describe('SaveRequestService', () => {
             eventName: 'Event 1',
             messageValidationLogInfo: [
               {
-                reason: LABELS.NO_VALID_TICKETS_IN_RANGE
+                reason: TEXT.NO_VALID_TICKETS_IN_RANGE
               }
             ],
             logInfoDetail: {

@@ -5,7 +5,7 @@ import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging.model';
 import { ErrorCodeLockMatch } from '../../../utility/constants/config';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT} from '../../../utility/constants/text';
 import { CheckingPermissionModel } from '../../../utility/models/checking-permission.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { CommonService } from '../../../utility/services/common.service';
@@ -180,7 +180,7 @@ export class MarkUnmarkTicketComponent {
     const maxPagingItems = 100000;
     if (this.paging.total > maxPagingItems) {
       const header = 'Export Excel Result';
-      const body = LABELS.EXPORT_LARGE_FILE;
+      const body = TEXT.EXPORT_LARGE_FILE;
       this.modalService.open({ title: header, message: body, type: ModalType.Warning });
     } else {
       this.isBlockTickets = true;
@@ -213,10 +213,10 @@ export class MarkUnmarkTicketComponent {
     let isMarked = true;
     let body: string;
     if (this.query.status === '0') {
-      body = LABELS.CONFIRM_MARK_TICKET;
+      body = TEXT.CONFIRM_MARK_TICKET;
       isMarked = true;
     } else {
-      body = LABELS.CONFIRM_UNMARK_TICKET;
+      body = TEXT.CONFIRM_UNMARK_TICKET;
       isMarked = false;
     }
     this.modalService.confirm({ title: header, message: body, type: ModalType.Confirm }, async () => {
@@ -249,7 +249,7 @@ export class MarkUnmarkTicketComponent {
 
   async confirmUpdateAllMarkedTickets(matches: AllMarkedTicketModel[]) {
     const header = 'Mark/Unmark All Tickets';
-    const body = LABELS.CONFIRM_UNMARK_TICKET;
+    const body = TEXT.CONFIRM_UNMARK_TICKET;
     this.modalService.confirm(
       {
         title: header,

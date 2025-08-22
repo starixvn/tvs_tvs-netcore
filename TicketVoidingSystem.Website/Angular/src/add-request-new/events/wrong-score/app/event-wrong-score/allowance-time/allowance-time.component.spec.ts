@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { jest } from '@jest/globals';
 import { TooltipComponent } from '../../../../../../utility/components/tooltip/tooltip.component';
-import { LABELS } from '../../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { AllowanceTimeComponent } from './allowance-time.component';
 
 describe('AllowanceTimeComponent', () => {
@@ -81,7 +81,7 @@ describe('AllowanceTimeComponent', () => {
       const result = component.isValidAllowanceTime();
 
       expect(result).toBeFalsy();
-      expect(displaySpy).toHaveBeenCalledWith('allowance-time', LABELS.INVALID_SETTING_TIME);
+      expect(displaySpy).toHaveBeenCalledWith('allowance-time', TEXT.INVALID_SETTING_TIME);
     });
 
     it('should return false and display tooltip when only aaTime is set', () => {
@@ -93,7 +93,7 @@ describe('AllowanceTimeComponent', () => {
       const result = component.isValidAllowanceTime();
 
       expect(result).toBeFalsy();
-      expect(displaySpy).toHaveBeenCalledWith('allowance-time', LABELS.INVALID_SETTING_TIME);
+      expect(displaySpy).toHaveBeenCalledWith('allowance-time', TEXT.INVALID_SETTING_TIME);
     });
 
     it('should return false and display tooltip when only paTime is set', () => {
@@ -105,7 +105,7 @@ describe('AllowanceTimeComponent', () => {
       const result = component.isValidAllowanceTime();
 
       expect(result).toBeFalsy();
-      expect(displaySpy).toHaveBeenCalledWith('allowance-time', LABELS.INVALID_SETTING_TIME);
+      expect(displaySpy).toHaveBeenCalledWith('allowance-time', TEXT.INVALID_SETTING_TIME);
     });
 
     it('should return false and display tooltip when only saTime is set', () => {
@@ -117,7 +117,7 @@ describe('AllowanceTimeComponent', () => {
       const result = component.isValidAllowanceTime();
 
       expect(result).toBeFalsy();
-      expect(displaySpy).toHaveBeenCalledWith('allowance-time', LABELS.INVALID_SETTING_TIME);
+      expect(displaySpy).toHaveBeenCalledWith('allowance-time', TEXT.INVALID_SETTING_TIME);
     });
   });
 });

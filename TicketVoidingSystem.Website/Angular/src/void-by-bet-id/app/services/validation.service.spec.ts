@@ -3,7 +3,7 @@ import { ValidationService } from './validation.service';
 import { BetIdsComponent } from '../../../utility/components/bet-ids/bet-ids.component';
 import { ConfirmationComponent } from '../../../utility/components/confirmation/confirmation.component';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT } from '../../../utility/constants/text';
 import { TestingModule } from '../../../utility/modules/testing.module';
 
 describe('ValidationService', () => {
@@ -41,7 +41,7 @@ describe('ValidationService', () => {
       service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
 
       // Assert
-      expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith(invalidTransIds, LABELS.INVALID_TICKETS);
+      expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith(invalidTransIds, TEXT.INVALID_TICKETS);
       expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalledWith(movedTransIds);
     });
   });

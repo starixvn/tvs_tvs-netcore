@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TvDetectionType, TVSRequestActionType } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
@@ -67,7 +66,7 @@ export class SaveRequestService {
     if (!arg.filter.isVoided) {
       arg.allEvents.filter(x => !x.isMainMatch).forEach(y => {
         y.messageValidationLogInfo.forEach(t => {
-          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+          if (t.reason.includes(TEXT.NO_VALID_TICKETS_IN_RANGE)) {
             arg.confirmDangerAccepted.warningRelatedEvents.push(y.eventName);
           }
         });

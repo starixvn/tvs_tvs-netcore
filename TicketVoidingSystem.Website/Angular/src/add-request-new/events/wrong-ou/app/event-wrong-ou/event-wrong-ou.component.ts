@@ -1,7 +1,6 @@
 
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import orderBy from 'lodash/orderBy';
 import uniqBy from 'lodash/uniqBy';
 import clone from 'lodash/clone';
@@ -36,7 +35,7 @@ import { OnlyNumberDirective } from '../../../../../utility/directives/number.di
   templateUrl: './event-wrong-ou.component.html',
   styleUrls: ['./event-wrong-ou.component.scss'],
   standalone: true,
-  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiDirective, AddChildMatchComponent, 
+  imports: [FormsModule, TooltipComponent, EventLeagueComponent, BlockUiDirective, AddChildMatchComponent, 
     LogInfoWrongOuComponent, OnlyNumberDirective],
   providers: [EventWrongOuService, LogInfoService, RelatedEventService, SaveRequestService, ValidationService ]
 })

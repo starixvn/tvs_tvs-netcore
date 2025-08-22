@@ -5,7 +5,7 @@ import { BaseTicketsListComponent } from '../../../utility/components/base-ticke
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT} from '../../../utility/constants/text';
 import { MarkedTicketQuery } from '../models/query.model';
 import { DataPermission } from '../models/result.model';
 import { TicketsModel } from './tickets.model';
@@ -41,7 +41,7 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
   markSelectedTicketsOnPage(): void {
     const tickets = this.model.getTicketsParam();
     if (tickets.length === 0) {
-      this.tooltip.display('invalid-data', LABELS.EMPTY_TICKET);
+      this.tooltip.display('invalid-data', TEXT.EMPTY_TICKET);
     } else {
       this.markedTicketsQuery.tickets = tickets;
       this.markedTicketsQuery.checkPermissionTickets = this.model.getAllTickets();
@@ -52,7 +52,7 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
   markSelectedTicketsAllPage(): void {
     const tickets = this.model.getTicketsParamWithAllPage();
     if (tickets.length === 0) {
-      this.tooltip.display('invalid-data', LABELS.EMPTY_TICKET);
+      this.tooltip.display('invalid-data', TEXT.EMPTY_TICKET);
     } else {
       this.markedTicketsQuery.tickets = tickets;
       this.markedTicketsQuery.checkPermissionTickets = this.model.getAllTickets();

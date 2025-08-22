@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../../utility/modules/testing.module';
 import { GroupBetTypesComponent } from './group-bet-types.component';
 import { GroupBetTypesAddRequestModel, GroupBetTypeAddRequest, BetTypeAddRequest } from './group-bet-types.model';
-import { LABELS } from '../../../../utility/constants/labels';
+import { TEXT} from '../../../../utility/constants/text';
 import { EventEmitter } from '@angular/core';
 
 class Helper {
@@ -127,7 +127,7 @@ describe('GroupBetTypesComponent', () => {
 
       // Assert
       expect(result).toBeFalsy();
-      expect(component.tooltip.display).toHaveBeenCalledWith('group-bettypes-all-checkbox', LABELS.NO_CHECKED_BETTYPE);
+      expect(component.tooltip.display).toHaveBeenCalledWith('group-bettypes-all-checkbox', TEXT.NO_CHECKED_BETTYPE);
     });
 
     it('should return true when at least one bet type is checked', () => {

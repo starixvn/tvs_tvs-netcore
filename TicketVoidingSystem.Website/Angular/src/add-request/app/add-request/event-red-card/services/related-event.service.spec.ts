@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MatchType } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../utility/constants/text';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
@@ -161,7 +161,7 @@ describe('RelatedEventService', () => {
       await service.addRelatedEventByInput(arg);
 
       // Assert
-      expect(arg.tooltip.display).toHaveBeenCalledWith('input-match-id', LABELS.REQUIRED_MATCHID);
+      expect(arg.tooltip.display).toHaveBeenCalledWith('input-match-id', TEXT.REQUIRED_MATCHID);
     });
 
     it('should validate input related event', async () => {
@@ -314,7 +314,7 @@ describe('RelatedEventService', () => {
       await service.addRelatedEventByInput(arg);
 
       // Assert
-      expect(arg.tooltip.display).toHaveBeenCalledWith('input-match-id', LABELS.INVALID_MATCHID);
+      expect(arg.tooltip.display).toHaveBeenCalledWith('input-match-id', TEXT.INVALID_MATCHID);
       expect(arg.primitiveProps.isBlock).toBe(false);
     });
   });

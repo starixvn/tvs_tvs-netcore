@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import clone from 'lodash/clone';
 import orderBy from 'lodash/orderBy';
@@ -15,7 +14,7 @@ import { EventLeagueComponent } from '../../../../../utility/components/event-le
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import { OnlyNumberDirective } from '../../../../../utility/directives/number.directive';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
@@ -52,7 +51,7 @@ import { ValidationService } from './services/validation.service';
   styleUrls: ['./event-red-card.component.scss'],
   standalone: true,
   imports: [FormsModule, CommonModule, EventLeagueComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent,
-    NgSelectModule, NgbModule, TooltipComponent, BlockUiDirective, ConfirmAddRequestComponent, TvDetectionComponent, OnlyNumberDirective,
+    NgSelectModule, TooltipComponent, BlockUiDirective, ConfirmAddRequestComponent, TvDetectionComponent, OnlyNumberDirective,
     InfoSiteDBDownComponent],
   providers: [EventRedCardService, LogInfoService, SaveRequestService, ValidationService, RelatedEventService, TvDetectionService]
 })
@@ -81,7 +80,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   allSelectedEvents: LogInfoRelatedEvent[] = [];
   relatedEvents: ChildMatchModel[] = [];
   addChildMatchModel = new AddChildMatchModel();
-  tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
+  tooltipVarMessage = TEXT.SELECTED_VAR_OPTIONS;
   getAllowanceTimeSubscription: Subscription;
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
   private readonly element = inject(ElementRef);

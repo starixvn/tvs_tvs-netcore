@@ -1,7 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { BetIdsComponent } from "../../../../../utility/components/bet-ids/bet-ids.component";
 import { Tooltip } from "../../../../../utility/components/tooltip/tooltip.model";
-import { LABELS } from "../../../../../utility/constants/labels";
 import { TEXT } from "../../../../../utility/constants/text";
 import { AddRequestApiService } from "../../add-request-api.service";
 import { PermissionAddRequest } from "../../models/permission-add-request.model";
@@ -57,8 +56,8 @@ export class ValidationService {
   }
 
   private highlightInvalidTransIds(validationResult: CheckRecoverTicketResult, betIdsComponent: BetIdsComponent): void {
-    betIdsComponent.groupNumber.updateInvalidItems(validationResult.existingReqTransIds, LABELS.INVALID_EXISTING_ON_OTHER_REQUEST);
-    betIdsComponent.groupNumber.updateInvalidItems(validationResult.invalidTransIds, LABELS.INVALID_TICKETS);
+    betIdsComponent.groupNumber.updateInvalidItems(validationResult.existingReqTransIds, TEXT.INVALID_EXISTING_ON_OTHER_REQUEST);
+    betIdsComponent.groupNumber.updateInvalidItems(validationResult.invalidTransIds, TEXT.INVALID_TICKETS);
     betIdsComponent.groupNumber.updateMoved(validationResult.unsupportedDateRangeTransIds);
   }
 }

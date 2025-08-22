@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
 import { Product } from '../../../../utility/constants/config';
-import { LABELS } from '../../../../utility/constants/labels';
+import { TEXT} from '../../../../utility/constants/text';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { BetType, GroupBetType, GroupBetTypesModel } from './group-bettypes.model';
 import { CommonModule } from '@angular/common';
@@ -56,7 +56,7 @@ export class GroupBetTypesComponent implements OnInit, OnChanges {
   validate(): boolean {
     const result = this.model.getCheckedBetTypes().length > 0;
     if (!result) {
-      this.tooltip.display('group-bettypes-all-checkbox', LABELS.NO_CHECKED_BETTYPE);
+      this.tooltip.display('group-bettypes-all-checkbox', TEXT.NO_CHECKED_BETTYPE);
     }
 
     return result;

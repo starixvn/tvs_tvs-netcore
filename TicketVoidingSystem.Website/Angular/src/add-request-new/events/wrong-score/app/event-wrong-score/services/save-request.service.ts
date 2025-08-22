@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { TVSRequestFilterBy } from '../../../../../../utility/constants/config';
-import { LABELS } from '../../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../../utility/constants/text';
 import { AddRequestQuery } from '../../../../../models/add-request.query';
 import { AddRequestService } from '../../../../../services/add-request.service';
 import { PopupService } from '../../../../../services/popup.service';
@@ -45,7 +45,7 @@ export class SaveRequestService {
     }
 
     if (!args.primitiveProps.actualScore) {
-      args.tooltip.display(this.ACTUAL_SCORE_CLASS, LABELS.REQUIRED_ACTUAL_SCORE);
+      args.tooltip.display(this.ACTUAL_SCORE_CLASS, TEXT.REQUIRED_ACTUAL_SCORE);
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
 

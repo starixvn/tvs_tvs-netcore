@@ -3,7 +3,7 @@ import { ClipboardService } from 'ngx-clipboard';
 import { Subscription, timer } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT } from '../../../utility/constants/text';
 import { IssueTypesModel, SubIssueType } from '../../../utility/models/issue-type.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { MessageAreaComponent } from '../message-area/message-area.component';
@@ -70,7 +70,7 @@ export class VoidPageCommonService {
   onClickVoidAllMatches(voidPageItems: VoidPageCommonItem[], messageAreaComponents: MessageAreaComponent[],
     afterLoadUnderneathDataSubscription: Subscription, primitiveProperty: CommonPrimitiveProperty, tooltip: Tooltip): void {
     if (!primitiveProperty.userPassword) {
-      tooltip.display('password', LABELS.INPUT_PASSWORD);
+      tooltip.display('password', TEXT.INPUT_PASSWORD);
       return;
     }
 

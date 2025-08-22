@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType, TVSRequestFilterBy } from '../../../../../../utility/constants/config';
-import { LABELS } from '../../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { SubIssueTypeConstant } from '../../../../../../utility/constants/sub-issue-type.constant';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { FilterModel } from '../../../../../component/filter/filter.model';
@@ -116,7 +116,7 @@ describe('ValidationService', () => {
 
       // Assert
       expect(result).toBeFalsy();
-      expect(tooltip.display).toHaveBeenCalledWith('from-date-time', LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
+      expect(tooltip.display).toHaveBeenCalledWith('from-date-time', TEXT.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
     });
   });
 
@@ -188,7 +188,7 @@ describe('ValidationService', () => {
 
       // Assert
       expect(result).toBeFalsy();
-      expect(tooltip.display).toHaveBeenCalledWith('from-date-time', LABELS.FROM_TIME_MUST_GREATER_THAN_DEFAULT);
+      expect(tooltip.display).toHaveBeenCalledWith('from-date-time', TEXT.FROM_TIME_MUST_GREATER_THAN_DEFAULT);
     });
   });
 
@@ -282,7 +282,7 @@ describe('ValidationService', () => {
 
       // Assert
       expect(result).toBeFalsy();
-      expect(tooltip.display).toHaveBeenCalledWith('to-date-time', LABELS.TO_TIME_MUST_SMALLER_THAN_FOLLOWING_CONSECUTIVE_FROM_TIME);
+      expect(tooltip.display).toHaveBeenCalledWith('to-date-time', TEXT.TO_TIME_MUST_SMALLER_THAN_FOLLOWING_CONSECUTIVE_FROM_TIME);
     });
   });
 
@@ -763,7 +763,7 @@ describe('ValidationService', () => {
 
       // Assert
       expect(result).toBeFalsy();
-      expect(tooltip.display).toHaveBeenCalledWith(inputMatchIdClass, LABELS.INVALID_MATCHID);
+      expect(tooltip.display).toHaveBeenCalledWith(inputMatchIdClass, TEXT.INVALID_MATCHID);
     });
 
     it('should return false when input match ID exists in related events', () => {
@@ -781,7 +781,7 @@ describe('ValidationService', () => {
 
       // Assert
       expect(result).toBeFalsy();
-      expect(tooltip.display).toHaveBeenCalledWith(inputMatchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+      expect(tooltip.display).toHaveBeenCalledWith(inputMatchIdClass, TEXT.MATCH_ID_EXISTS_IN_LIST);
     });
 
     it('should return true when input match ID is valid', () => {

@@ -3,7 +3,6 @@ import clone from 'lodash/clone';
 import isNull from 'lodash/isNull';
 import isUndefined from 'lodash/isUndefined';
 import { TvDetectionType, TVSRequestActionType } from '../../../../../../utility/constants/config';
-import { LABELS } from '../../../../../../utility/constants/labels';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { StaticService } from '../../../../../../utility/services/static.service';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
@@ -69,7 +68,7 @@ export class SaveRequestService {
     if (!arg.filter.isVoided) {
       arg.allEvents.filter(x => !x.isMainMatch).forEach(y => {
         y.messageValidationLogInfo.forEach(t => {
-          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+          if (t.reason.includes(TEXT.NO_VALID_TICKETS_IN_RANGE)) {
             arg.confirmDangerAccepted.warningRelatedEvents.push(y.eventName);
           }
         });

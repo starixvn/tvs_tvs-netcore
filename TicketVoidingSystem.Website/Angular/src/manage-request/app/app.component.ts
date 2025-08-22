@@ -8,7 +8,7 @@ import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.com
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../utility/constants/config';
-import { LABELS } from '../../utility/constants/labels';
+import { TEXT} from '../../utility/constants/text';
 import { Selection } from '../../utility/models/selection.model';
 import { RequestStatus } from '../../utility/models/signal-r.model';
 import { CommonService } from '../../utility/services/common.service';
@@ -79,7 +79,7 @@ export class AppComponent implements OnInit {
     if (!this.isReloading && !this.filter.requestId && !this.filter.matchId && this.isDateBeforeBUDay(this.filter.ngbFromDate)) {
       this.modalService.confirm({
         title: 'Message from webpage',
-        message: LABELS.EXPORT_FROMDATE_BEFORE_BALANCEDAY
+        message: TEXT.EXPORT_FROMDATE_BEFORE_BALANCEDAY
       }, () => this.exportExcel(), async () => window.location.reload());
     } else {
       await this.getRequest();

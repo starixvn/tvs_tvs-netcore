@@ -4,7 +4,7 @@ import { FilterTimeComponent } from './filter-time.component';
 import { EventWrongMarketOfferedService } from '../services/event-wrong-market-offfered.service';
 import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-offered.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import moment from 'moment-timezone';
 
 class Helper {
@@ -150,7 +150,7 @@ describe('FilterTimeComponent', () => {
 
     // Assert
     expect(result).toBeFalsy();
-    expect(mockFilterItemComponents[0].tooltip.display).toHaveBeenCalledWith('to-date-time-1', LABELS.TO_TIME_MUST_SMALLER_THAN_NEXT_FROM_TIME);
+    expect(mockFilterItemComponents[0].tooltip.display).toHaveBeenCalledWith('to-date-time-1', TEXT.TO_TIME_MUST_SMALLER_THAN_NEXT_FROM_TIME);
   });
 
   it('should re-render IDs after adding/removing items', () => {

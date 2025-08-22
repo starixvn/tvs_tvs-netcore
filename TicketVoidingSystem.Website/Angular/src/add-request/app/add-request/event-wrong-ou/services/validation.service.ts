@@ -3,7 +3,6 @@ import moment from 'moment-timezone';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TVSRequestActionType } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { LogInfoWrongOuComponent } from '../log-info-wrong-ou/log-info-wrong-ou.component';
@@ -33,7 +32,7 @@ export class ValidationService {
     const fromDateTime = moment(fromTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const toDateTime = moment(toTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     if (!fromDateTime.isSameOrBefore(toDateTime)) {
-      tooltip.display(this.FROM_DATE_TIME_CLASS, LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
+      tooltip.display(this.FROM_DATE_TIME_CLASS, TEXT.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
       return false;
     }
 
@@ -42,11 +41,11 @@ export class ValidationService {
 
   public isValidInputRelatedEvent(inputMatchId: number, matchIdClass: string, allEvents: LogInfoWrongOu[], tooltip: Tooltip): boolean {
     if (inputMatchId === allEvents.find(x => x.isMainMatch).matchId) {
-      tooltip.display(matchIdClass, LABELS.INVALID_MATCHID);
+      tooltip.display(matchIdClass, TEXT.INVALID_MATCHID);
       return false;
     }
     if (allEvents.filter(x => !x.isMainMatch).some(x => x.matchId === inputMatchId)) {
-      tooltip.display(matchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+      tooltip.display(matchIdClass, TEXT.MATCH_ID_EXISTS_IN_LIST);
       return false;
     }
 
@@ -63,13 +62,13 @@ export class ValidationService {
 
   public isValidHdp(filterWrongOuModel: FilterWrongOuModel, tooltip: Tooltip): boolean {
     if (!filterWrongOuModel.wrongMarket) {
-      tooltip.display(this.INPUT_WRONG_MARKET_CLASS, LABELS.REQUIRED_WRONG_MARKET);
+      tooltip.display(this.INPUT_WRONG_MARKET_CLASS, TEXT.REQUIRED_WRONG_MARKET);
 
       return false;
     }
 
     if (!filterWrongOuModel.actualMarket) {
-      tooltip.display(this.INPUT_ACTUAL_MARKET_CLASS, LABELS.REQUIRED_ACTUAL_MARKET);
+      tooltip.display(this.INPUT_ACTUAL_MARKET_CLASS, TEXT.REQUIRED_ACTUAL_MARKET);
 
       return false;
     }

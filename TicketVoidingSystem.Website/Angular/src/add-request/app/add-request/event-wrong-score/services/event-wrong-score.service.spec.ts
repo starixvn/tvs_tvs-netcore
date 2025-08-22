@@ -11,7 +11,7 @@ import { AcceptType, TVSRequestFilterBy } from '../../../../../utility/constants
 import { PrimitiveProperty } from '../event-wrong-score.model';
 import { ConfirmWrongScoreModel } from '../confirm-wrong-score/confirm-wrong-score.model';
 import { UpdateConfirmInfoArgs } from '../models/confirm-wrong-score.model';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 
 describe('EventWrongScoreService', () => {
   let service: EventWrongScoreService;
@@ -200,7 +200,7 @@ describe('EventWrongScoreService', () => {
         relatedEvents: [
           { 
             eventName: 'Event 1',
-            messageValidationLogInfo: [{ reason: LABELS.NO_VALID_TICKETS_IN_RANGE }]
+            messageValidationLogInfo: [{ reason: TEXT.NO_VALID_TICKETS_IN_RANGE }]
           }
         ],
         mainEvent: { messageValidationLogInfo: [] },

@@ -13,6 +13,7 @@ import { UpdateConfirmInfoArgs } from '../models/confirm-wrong-score.model';
 import { SubIssueTypeRelatedEvent } from '../models/subIssue-type-related-event.model';
 import { ValidationService } from './validation.service';
 import { WrongScoreService } from './wrong-score.service';
+import { TEXT } from '../../../../../utility/constants/text';
 
 @Injectable()
 export class EventWrongScoreService {
@@ -95,14 +96,14 @@ export class EventWrongScoreService {
     if (!args.filter.isVoided) {
       args.relatedEvents.forEach(x => {
         x.messageValidationLogInfo?.forEach(t => {
-          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+          if (t.reason.includes(TEXT.NO_VALID_TICKETS_IN_RANGE)) {
             confirmWrongScoreModel.warningRelatedEvents.push(x.eventName);
           }
         });
       });
       args.wrongScoreModels.forEach(y => {
         y.messageValidationLogInfo?.forEach(t => {
-          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+          if (t.reason.includes(TEXT.NO_VALID_TICKETS_IN_RANGE)) {
             confirmWrongScoreModel.warningExcludedScores.push(y.wrongScore);
           }
         });

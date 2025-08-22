@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 import isNull from 'lodash/isNull';
 import { Subscription, timer } from 'rxjs';
 import { AddRequestStore } from '../../../add-request/app/add-request/add-request.store';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT } from '../../../utility/constants/text';
 import { MatchModel } from '../../../utility/models/match.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { TooltipComponent } from '../tooltip/tooltip.component';
@@ -87,7 +87,7 @@ export class EventLeagueComponent implements OnChanges {
         }
       } else {
         this.matches = [];
-        this.validationMessage = LABELS.INVALID_MATCHID;
+        this.validationMessage = TEXT.INVALID_MATCHID;
       }
 
       this.isBlock = false;
@@ -121,7 +121,7 @@ export class EventLeagueComponent implements OnChanges {
 
   isMatchIdValid(): boolean {
     if (!this.selectedMatch.matchId) {
-      this.tooltip.display('match-id', LABELS.REQUIRED_MATCHID);
+      this.tooltip.display('match-id', TEXT.REQUIRED_MATCHID);
       return false;
     } else {
       return true;

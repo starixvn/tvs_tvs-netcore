@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../utility/constants/text';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterBetType } from '../../event-wrong-hdp/models/filter-with-hdp.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
@@ -53,7 +53,7 @@ export class RelatedEventService {
 
   async addRelatedEventByInput(addRelatedEventArg: AddRelatedEventArg): Promise<void> {
     if (!addRelatedEventArg.primitiveProps.inputRelatedMatchId) {
-      addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.REQUIRED_MATCHID);
+      addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, TEXT.REQUIRED_MATCHID);
     } else {
       const matchId = Number(addRelatedEventArg.primitiveProps.inputRelatedMatchId);
       if (!this.validationService.isValidInputRelatedEvent(matchId, addRelatedEventArg.inputMatchIdClass, addRelatedEventArg.allEvents, addRelatedEventArg.tooltip)) {
@@ -69,7 +69,7 @@ export class RelatedEventService {
 
       const models = await this.getChildMatches(query);
       if (!models || models.length === 0) {
-        addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.INVALID_MATCHID);
+        addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, TEXT.INVALID_MATCHID);
         addRelatedEventArg.primitiveProps.isBlock = false;
         return;
       }

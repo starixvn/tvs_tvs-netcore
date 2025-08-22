@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { AcceptType, TVSRequestFilterBy } from '../../../../../../utility/constants/config';
-import { LABELS } from '../../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { MatchModel } from '../../../../../../utility/models/match.model';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { TvDetectionModel } from '../../../../../component/tv-detection/tv-detection.model';
@@ -200,7 +200,7 @@ describe('EventWrongScoreService', () => {
         relatedEvents: [
           {
             eventName: 'Event 1',
-            messageValidationLogInfo: [{ reason: LABELS.NO_VALID_TICKETS_IN_RANGE }]
+            messageValidationLogInfo: [{ reason: TEXT.NO_VALID_TICKETS_IN_RANGE }]
           }
         ],
         mainEvent: { messageValidationLogInfo: [] },

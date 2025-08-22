@@ -5,7 +5,7 @@ import { DateFullTimeNewComponent } from '../../../../../utility/components/date
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TVSRequestActionType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { AddRequestStore } from '../../add-request.store';
 import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
@@ -57,7 +57,7 @@ export class ValidationService {
     const fromDateTime = moment(filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const toDateTime = moment(filterToTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     if (!fromDateTime.isSameOrBefore(toDateTime)) {
-      tooltip.display(this.FROM_DATE_TIME_CLASS, LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
+      tooltip.display(this.FROM_DATE_TIME_CLASS, TEXT.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
       return false;
     }
 
@@ -69,7 +69,7 @@ export class ValidationService {
     const momentDefaultFromTime = moment(_.find(originWrongScoreModels, { scoreId: wrongScoreModel.scoreId }).filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
     if (momentFromTime.isBefore(momentDefaultFromTime)) {
-      tooltip.display(this.FROM_DATE_TIME_CLASS, LABELS.FROM_TIME_MUST_GREATER_THAN_DEFAULT);
+      tooltip.display(this.FROM_DATE_TIME_CLASS, TEXT.FROM_TIME_MUST_GREATER_THAN_DEFAULT);
       return false;
     }
 
@@ -85,7 +85,7 @@ export class ValidationService {
     const momentFromTimeNextScore = moment(originWrongScoreModels[index + 1].filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const comparingFromTimeNextScore = momentFromTimeNextScore.subtract(2, 'milliseconds').format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     if (momentToTime.isSameOrAfter(moment(comparingFromTimeNextScore, DateTimeFormat.FULL_DATE_TIME_FORMAT))) {
-      tooltip.display(this.TO_DATE_TIME_CLASS, LABELS.TO_TIME_MUST_SMALLER_THAN_FOLLOWING_CONSECUTIVE_FROM_TIME);
+      tooltip.display(this.TO_DATE_TIME_CLASS, TEXT.TO_TIME_MUST_SMALLER_THAN_FOLLOWING_CONSECUTIVE_FROM_TIME);
       return false;
     }
 
@@ -108,7 +108,7 @@ export class ValidationService {
   }
   
   private isInValidEventCheckWarning(event: LogInfoRelatedEvent): boolean {
-    return event?.messageValidationLogInfo?.some(x => x.isError && !x.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE));
+    return event?.messageValidationLogInfo?.some(x => x.isError && !x.reason.includes(TEXT.NO_VALID_TICKETS_IN_RANGE));
   }
 
   public isValidAllScores(wrongScores: WrongScoreModel[]): boolean {
@@ -170,11 +170,11 @@ export class ValidationService {
 
   isValidInputRelatedEvent(inputMatchId: number, inputMatchIdClass: string, mainMatchId: number, allEvents: LogInfoRelatedEvent[], tooltip: Tooltip): boolean {
     if (inputMatchId === mainMatchId) {
-      tooltip.display(inputMatchIdClass, LABELS.INVALID_MATCHID);
+      tooltip.display(inputMatchIdClass, TEXT.INVALID_MATCHID);
       return false;
     }
     if (allEvents.filter(x => !x.isMainMatch).some(x => x.matchId === inputMatchId)) {
-      tooltip.display(inputMatchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+      tooltip.display(inputMatchIdClass, TEXT.MATCH_ID_EXISTS_IN_LIST);
       return false;
     }
 

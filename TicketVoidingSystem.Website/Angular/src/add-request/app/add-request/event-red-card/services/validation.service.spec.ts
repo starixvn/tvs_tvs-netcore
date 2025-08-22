@@ -3,7 +3,7 @@ import { ValidationService } from './validation.service';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import { AddRequestStore } from '../../add-request.store';
 import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
@@ -334,7 +334,7 @@ describe('ValidationService', () => {
 
       // Assert
       expect(result).toBe(false);
-      expect(mockTooltip.display).toHaveBeenCalledWith(inputMatchIdClass, LABELS.INVALID_MATCHID);
+      expect(mockTooltip.display).toHaveBeenCalledWith(inputMatchIdClass, TEXT.INVALID_MATCHID);
     });
 
     it('should return false when input matchId already exists in related events', () => {
@@ -352,7 +352,7 @@ describe('ValidationService', () => {
 
       // Assert
       expect(result).toBe(false);
-      expect(mockTooltip.display).toHaveBeenCalledWith(inputMatchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+      expect(mockTooltip.display).toHaveBeenCalledWith(inputMatchIdClass, TEXT.MATCH_ID_EXISTS_IN_LIST);
     });
 
     it('should return true when input matchId is valid', () => {
@@ -407,7 +407,7 @@ describe('ValidationService', () => {
       // Arrange
       const event = {
         isMainMatch: false,
-        messageValidationLogInfo: [{ isError: true, reason: LABELS.NO_VALID_TICKETS_IN_RANGE }]
+        messageValidationLogInfo: [{ isError: true, reason: TEXT.NO_VALID_TICKETS_IN_RANGE }]
       } as LogInfoRelatedEvent;
 
       // Act

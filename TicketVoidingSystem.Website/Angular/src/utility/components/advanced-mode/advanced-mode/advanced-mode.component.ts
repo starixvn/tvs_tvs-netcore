@@ -5,8 +5,7 @@ import assignIn from 'lodash/assignIn';
 import groupBy from 'lodash/groupBy';
 import isEqual from 'lodash/isEqual';
 import uniqWith from 'lodash/uniqWith';
-import { LABELS } from '../../../../utility/constants/labels';
-import { TEXT } from '../../../../utility/constants/text';
+import { TEXT} from '../../../../utility/constants/text';
 import { DecimalOnlyDirective, MultipleDecimalDirective, } from '../../../../utility/directives/numbers-only.directive';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
@@ -229,7 +228,7 @@ export class AdvancedModeComponent implements OnChanges {
         this.showTooltipWhenCollapsed();
       } else {
         const className = `bet-team-${betTeamIndex}-input-${inputIndex}`;
-        this.tooltip.display(className, LABELS.INVALID_VALUE);
+        this.tooltip.display(className, TEXT.INVALID_VALUE);
       }
       return false;
     }
@@ -242,7 +241,7 @@ export class AdvancedModeComponent implements OnChanges {
   }
 
   private validateInputMultipleDecimal(betTypeId: string, value: string, className: string): boolean {
-    const errorText = betTypeId === '228' ? LABELS.INVALID_VALUE : LABELS.INVALID_HDP;
+    const errorText = betTypeId === '228' ? TEXT.INVALID_VALUE : TEXT.INVALID_HDP;
     if (value && !StaticService.isCorrectRegexMultipleDecimal(value)) {
       this.tooltip.display(className, errorText);
       return false;

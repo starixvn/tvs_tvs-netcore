@@ -6,7 +6,7 @@ import { DatePickerComponent } from '../../../../../utility/components/date-time
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 
@@ -63,7 +63,7 @@ export class EventDateFilterComponent implements OnInit {
       return true;
     }
 
-    this.tooltip.display(this.TO_DATE_CLASS, LABELS.INVALID_TO_DATE);
+    this.tooltip.display(this.TO_DATE_CLASS, TEXT.INVALID_TO_DATE);
     return false;
   }
 

@@ -11,10 +11,9 @@ import { TvDetectionComponent } from '../../components/tv-detection/tv-detection
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterModel } from '../../filter/filter.model';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
-import { TEXT } from '../../../../../utility/constants/text';
 import { SaveRequestArg } from './save-request.model';
 import { ConfirmDangerAcceptedModel } from '../confirm-danger-accepted/confirm-danger-accepted.model';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { IssueTypes } from '../../filter/issue-types.model';
 import { OthersModel } from '../../others/others.model';
@@ -514,7 +513,7 @@ describe('SaveRequestService', () => {
             eventName: 'Event 1',
             messageValidationLogInfo: [
               {
-                reason: LABELS.NO_VALID_TICKETS_IN_RANGE
+                reason: TEXT.NO_VALID_TICKETS_IN_RANGE
               }
             ]
           } as LogInfoRelatedEvent
@@ -813,7 +812,7 @@ describe('SaveRequestService', () => {
             eventName: 'Event 1',
             messageValidationLogInfo: [
               {
-                reason: LABELS.NO_VALID_TICKETS_IN_RANGE
+                reason: TEXT.NO_VALID_TICKETS_IN_RANGE
               }
             ],
             logInfoDetail: {

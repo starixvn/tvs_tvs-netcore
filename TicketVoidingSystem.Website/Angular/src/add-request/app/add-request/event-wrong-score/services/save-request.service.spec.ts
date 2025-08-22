@@ -6,7 +6,7 @@ import { LogInfoService } from './log-info.service';
 import { PopupService } from '../../services/popup.service';
 import { CreateMapService } from './create-map.service';
 import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../utility/constants/text';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 
@@ -142,7 +142,7 @@ describe('SaveRequestService', () => {
       const result = await service.checkValidationBeforeSaveRequest(args as any);
 
       expect(result.isValid).toBeFalsy();
-      expect(mockTooltip.display).toHaveBeenCalledWith('input-actual-score', LABELS.REQUIRED_ACTUAL_SCORE);
+      expect(mockTooltip.display).toHaveBeenCalledWith('input-actual-score', TEXT.REQUIRED_ACTUAL_SCORE);
     });
   });
 

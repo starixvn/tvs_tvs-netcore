@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import cloneDeep from 'lodash/cloneDeep';
-import { LABELS } from '../../../../utility/constants/labels';
+import { TEXT } from '../../../../utility/constants/text';
 import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { BetTypeAddRequest, GroupBetTypeAddRequest, GroupBetTypesAddRequestModel } from './group-bet-types.model';
@@ -55,7 +55,7 @@ export class GroupBetTypesComponent {
     if (this.model.groupBetTypes.length === 0) {
       return false;
     } else if (this.model.groupBetTypes.every(x => x.betTypes.every(y => !y.isChecked))) {
-      this.tooltip.display('group-bettypes-all-checkbox', LABELS.NO_CHECKED_BETTYPE);
+      this.tooltip.display('group-bettypes-all-checkbox', TEXT.NO_CHECKED_BETTYPE);
       return false;
     }
 

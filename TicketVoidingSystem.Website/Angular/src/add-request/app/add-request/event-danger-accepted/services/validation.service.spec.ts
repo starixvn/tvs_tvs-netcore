@@ -7,7 +7,7 @@ import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import { LogInfoRelatedEventComponent } from '../../components/log-info-related-event/log-info-related-event.component';
 import { QueryList } from '@angular/core';
 
@@ -166,7 +166,7 @@ describe('ValidationService', () => {
       const result = service.isValidInputRelatedEvent(1, 'test-class', allEvents, tooltip);
 
       expect(result).toBe(false);
-      expect(tooltip.display).toHaveBeenCalledWith('test-class', LABELS.INVALID_MATCHID);
+      expect(tooltip.display).toHaveBeenCalledWith('test-class', TEXT.INVALID_MATCHID);
     });
 
     it('should return false when matchId exists in non-main matches', () => {
@@ -178,7 +178,7 @@ describe('ValidationService', () => {
       const result = service.isValidInputRelatedEvent(2, 'test-class', allEvents, tooltip);
 
       expect(result).toBe(false);
-      expect(tooltip.display).toHaveBeenCalledWith('test-class', LABELS.MATCH_ID_EXISTS_IN_LIST);
+      expect(tooltip.display).toHaveBeenCalledWith('test-class', TEXT.MATCH_ID_EXISTS_IN_LIST);
     });
   });
 

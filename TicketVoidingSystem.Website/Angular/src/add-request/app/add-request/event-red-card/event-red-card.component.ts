@@ -30,7 +30,7 @@ import { GetChildMatchQuery } from '../models/get-child-match.query';
 import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { LABELS } from '../../../../utility/constants/labels';
+import { TEXT } from '../../../../utility/constants/text';
 import { StaticService } from '../../../../utility/services/static.service';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
@@ -78,7 +78,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   allSelectedEvents: LogInfoRelatedEvent[] = [];
   relatedEvents: ChildMatchModel[] = [];
   addChildMatchModel = new AddChildMatchModel();
-  tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
+  tooltipVarMessage = TEXT.SELECTED_VAR_OPTIONS;
   getAllowanceTimeSubscription: Subscription;
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
   private readonly element = inject(ElementRef);

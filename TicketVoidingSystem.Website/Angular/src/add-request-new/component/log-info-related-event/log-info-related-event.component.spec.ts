@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import moment from 'moment-timezone';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { AcceptType, DateTimeFormat } from '../../../utility/constants/config';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT } from '../../../utility/constants/text';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { TestingModule } from '../../../utility/modules/testing.module';
@@ -79,7 +79,7 @@ describe('LogInfoRelatedEventComponent', () => {
   it('should initialize with default values', () => {
     expect(component.isBlock).toBeFalsy();
     expect(component.isShowValidation).toBeTruthy();
-    expect(component.tooltipVarMessage).toBe(LABELS.SELECTED_VAR_OPTIONS);
+    expect(component.tooltipVarMessage).toBe(TEXT.SELECTED_VAR_OPTIONS);
     expect(component.acceptTypeName).toBe('');
   });
 
@@ -91,7 +91,7 @@ describe('LogInfoRelatedEventComponent', () => {
     component.showTooltipSubType();
 
     // Assert
-    expect(component.tooltip.display).toHaveBeenCalledWith('btn-select-sub-type', LABELS.REQUIRED_SUB_TYPE);
+    expect(component.tooltip.display).toHaveBeenCalledWith('btn-select-sub-type', TEXT.REQUIRED_SUB_TYPE);
   });
 
   it('should refresh log info when sub issue type is selected', async () => {
@@ -124,7 +124,7 @@ describe('LogInfoRelatedEventComponent', () => {
     await component.refreshLogInfo();
 
     // Assert
-    expect(component.tooltip.display).toHaveBeenCalledWith('btn-select-sub-type', LABELS.REQUIRED_SUB_TYPE);
+    expect(component.tooltip.display).toHaveBeenCalledWith('btn-select-sub-type', TEXT.REQUIRED_SUB_TYPE);
     expect(component.isBlock).toBeFalsy();
   });
 

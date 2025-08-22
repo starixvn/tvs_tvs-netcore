@@ -6,7 +6,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { PagingConstant } from '../../../../utility/components/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
-import { LABELS } from '../../../../utility/constants/labels';
+import { TEXT} from '../../../../utility/constants/text';
 import { GetLogsQuery } from '../../models/query.model';
 import { CheckValidateService } from '../../services/check-validate.service';
 import { FilterAction, FilterDate } from './filter-logs.model';
@@ -59,7 +59,7 @@ export class FilterLogsComponent implements OnInit {
       const query = this.getParams();
       this.searchEvent.emit(query);
     } else {
-      this.tooltip.display('match-id', LABELS.INVALID_MATCHID);
+      this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
     }
   }
 
