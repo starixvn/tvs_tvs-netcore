@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbAccordionConfig, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import isNil from 'lodash/isNil';
 import isUndefined from 'lodash/isUndefined';
+import { AutosizeModule } from 'ngx-autosize';
 import { RequestDetailViewModel } from '../../../../add-request-new/events/models/request.model copy';
 import { RequestEventModel } from '../../../../edit-request/app/request.model';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
@@ -29,7 +30,7 @@ import { GeneralInfoViewModel } from './request-info.model';
   selector: 'request-info',
   templateUrl: './request-info.component.html',
   styleUrls: ['./request-info.component.scss'],
-  imports: [BlockUiDirective, MatchInfoComponent, IssueTypeComponent, TicketsComponent, FormsModule, NgbNavModule, CommonModule ]
+  imports: [BlockUiDirective, MatchInfoComponent, IssueTypeComponent, TicketsComponent, FormsModule, NgbNavModule, CommonModule, AutosizeModule ]
 })
 export class RequestInfoComponent implements OnInit, OnChanges {
   @Input() ticketListModal: TicketListModal;
