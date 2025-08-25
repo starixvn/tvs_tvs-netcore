@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import _ from 'lodash';
+import groupBy from 'lodash/groupBy';
 import moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
 import { FilterOddsTypeConstant } from '../../../../add-request/app/add-request/event-wrong-odds-sports-book/models/filter-wrong-odds-sports-book.model';
@@ -54,7 +54,7 @@ export class RequestDescriptionService {
   }
 
   private createReducedOversOrAbandonedContent(copyInfoResponse: CopyRequestInfoResponse): string {
-    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, item => `"${item.betTypeId}+${item.inputtedRuns}+${item.betId}"`);
+    const groupBetTypes = groupBy(copyInfoResponse.betTypeTickets, item => `"${item.betTypeId}+${item.inputtedRuns}+${item.betId}"`);
     let outputContent = '';
 
     for (const key in groupBetTypes) {
@@ -72,7 +72,7 @@ export class RequestDescriptionService {
   }
 
   cloneGroupBetTypes(betTypeTickets: BetTypeTicketsInfo[]) {
-    return _.groupBy(betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
+    return groupBy(betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
   }
 
   private createNotParticipateContent(copyInfoResponse: CopyRequestInfoResponse): string {

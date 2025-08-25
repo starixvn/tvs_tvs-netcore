@@ -1,26 +1,26 @@
 import { EventEmitter, SimpleChange } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import '@angular/localize/init';
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import { ClipboardService } from 'ngx-clipboard';
+import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../utility/constants/labels';
+import { CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Result } from '../../../utility/models/result';
 import { Selection } from '../../../utility/models/selection.model';
 import { RequestSimpleInfo, RequestStatus } from '../../../utility/models/signal-r.model';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonService } from '../../../utility/services/common.service';
+import { AppComponent } from '../app.component';
 import { AppService } from '../app.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { RequestListComponent } from './request-list.component';
 import { DetailRequestModel, RequestModel } from './request.model';
 import { RequestDescriptionService } from './services/request-description.service';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../utility/modules/testing.module';
-import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
-import { AppComponent } from '../app.component';
-import { ClipboardService } from 'ngx-clipboard';
-import { CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
 
 class Helper {
   static readonly titleSelector = '.title-request-list-label';
@@ -567,8 +567,8 @@ describe('RequestListComponent', () => {
 
   it('#updateRequestStatus should update data when is Danger Accepted', async () => {
     // Arrange
-    const fakeRequestModelList = _.cloneDeep(Helper.fakeRequestModelList);
-    const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
+    const fakeRequestModelList = cloneDeep(Helper.fakeRequestModelList);
+    const fakeRequestStatus = cloneDeep(Helper.fakeRequestStatus);
     fakeRequestStatus[0].requestId = 1000;
     fakeRequestModelList[0].requestId = 1000;
     const detailRequestModel = new DetailRequestModel();
@@ -588,7 +588,7 @@ describe('RequestListComponent', () => {
 
   it('#updateRequestStatus should update data when is not Danger Accepted', async () => {
     // Arrange
-    const fakeRequestModelList = _.cloneDeep(Helper.fakeRequestModelList);
+    const fakeRequestModelList = cloneDeep(Helper.fakeRequestModelList);
     const detailRequestModel = new DetailRequestModel();
     detailRequestModel.matchId = Helper.matchId;
     fakeRequestModelList.forEach(x => {
@@ -606,7 +606,7 @@ describe('RequestListComponent', () => {
 
   it('#updateRequestStatus should not update data when have not SimpleInfo', async () => {
     // Arrange
-    const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
+    const fakeRequestStatus = cloneDeep(Helper.fakeRequestStatus);
     fakeRequestStatus.forEach(x => x.simpleInfo = null);
     component['isDifferenceByMatchId'] = jest.fn();
 
@@ -619,7 +619,7 @@ describe('RequestListComponent', () => {
 
   it('#updateRequestStatus should not update data when have not request', async () => {
     // Arrange
-    const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
+    const fakeRequestStatus = cloneDeep(Helper.fakeRequestStatus);
     fakeRequestStatus.forEach(x => x.requestId = 10000);
     component['isDifferenceByMatchId'] = jest.fn();
 
