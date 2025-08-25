@@ -233,9 +233,9 @@ const configPages = [
   //voidByBetId
   //addRequestArchivedTicket
   dangerAccepted,
-  //redCard,
-  //wrongScore,
-  //technicalError
+  redCard,
+  wrongScore,
+  technicalError
 ];
 
 module.exports = configPages;
